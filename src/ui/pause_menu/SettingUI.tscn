@@ -1,0 +1,586 @@
+[gd_scene load_steps=3 format=3 uid="uid://biqm56x6ewbmo"]
+
+[ext_resource type="Script" path="res://src/ui/pause_menu/setting_ui.gd" id="1_05qbb"]
+[ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="2_b71wb"]
+
+[node name="SettingUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_05qbb")
+keybind_button_prefab = ExtResource("2_b71wb")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 72.0
+offset_top = -95.0
+offset_right = 193.0
+offset_bottom = 95.0
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="ControlOption" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Control
+"
+
+[node name="GraphicOption" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Graphic"
+
+[node name="AudioOption" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Audio"
+
+[node name="TabContainer" type="TabContainer" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -416.0
+offset_top = -256.0
+offset_right = 416.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+tab_alignment = 1
+current_tab = 0
+tabs_visible = false
+
+[node name="Control" type="Control" parent="TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Title" type="Label" parent="TabContainer/Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -71.0
+offset_right = 71.0
+offset_bottom = 55.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "Control"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Control"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 80.0
+offset_right = -32.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="MouseSens" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
+layout_mode = 0
+offset_right = 220.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Mouse Sensitivity
+"
+
+[node name="MouseSenSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+min_value = 1.0
+value = 1.0
+
+[node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -66.0
+offset_top = -12.0
+offset_right = 14.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="KeybindingSection" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.498039, 0.498039, 0.498039, 1)
+theme_override_font_sizes/font_size = 26
+text = "Keybindings"
+horizontal_alignment = 1
+
+[node name="ResetKeybindButton" type="Button" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 26
+text = "Reset to default"
+
+[node name="Graphic" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Title" type="Label" parent="TabContainer/Graphic"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -71.0
+offset_right = 71.0
+offset_bottom = 55.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "Graphic"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Graphic"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 80.0
+offset_right = 800.0
+offset_bottom = 472.0
+theme_override_constants/separation = 10
+
+[node name="FOV" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/FOV"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "FOV"
+
+[node name="FOVSlider" type="HSlider" parent="TabContainer/Graphic/VBoxContainer/FOV"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+min_value = 60.0
+max_value = 120.0
+value = 60.0
+
+[node name="Value" type="Label" parent="TabContainer/Graphic/VBoxContainer/FOV"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -66.0
+offset_top = -12.0
+offset_right = 14.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="CameraTilt" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/CameraTilt"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Camera tilt"
+
+[node name="CameraTiltToggle" type="CheckButton" parent="TabContainer/Graphic/VBoxContainer/CameraTilt"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="FPSLimit" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/FPSLimit"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "FPS limit"
+
+[node name="FPSLimitOptionButton" type="OptionButton" parent="TabContainer/Graphic/VBoxContainer/FPSLimit"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 4.0
+offset_right = 403.0
+offset_bottom = 35.0
+selected = 2
+allow_reselect = true
+item_count = 6
+popup/item_0/text = "30"
+popup/item_1/text = "60"
+popup/item_1/id = 1
+popup/item_2/text = "120"
+popup/item_2/id = 2
+popup/item_3/text = "144"
+popup/item_3/id = 3
+popup/item_4/text = "240"
+popup/item_4/id = 4
+popup/item_5/text = "No limit"
+popup/item_5/id = 5
+
+[node name="Vsync" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/Vsync"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "V-sync"
+
+[node name="VsyncOptionButton" type="OptionButton" parent="TabContainer/Graphic/VBoxContainer/Vsync"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 2.0
+offset_right = 410.0
+offset_bottom = 33.0
+selected = 1
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "Disabled"
+popup/item_1/text = "Enabled"
+popup/item_1/id = 1
+popup/item_2/text = "Adaptive"
+popup/item_2/id = 2
+
+[node name="WindowMode" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/WindowMode"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Window mode"
+
+[node name="WindowModeOptionButton" type="OptionButton" parent="TabContainer/Graphic/VBoxContainer/WindowMode"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 2.0
+offset_right = 410.0
+offset_bottom = 33.0
+selected = 1
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "Fullscreen"
+popup/item_1/text = "Windowed"
+popup/item_1/id = 1
+popup/item_2/text = "Borderless windowed"
+popup/item_2/id = 2
+
+[node name="Resolution" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/Resolution"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Resolution"
+
+[node name="ResolutionOptionButton" type="OptionButton" parent="TabContainer/Graphic/VBoxContainer/Resolution"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 2.0
+offset_right = 410.0
+offset_bottom = 33.0
+selected = 4
+allow_reselect = true
+item_count = 6
+popup/item_0/text = "2560x1440"
+popup/item_1/text = "1920x1080"
+popup/item_1/id = 1
+popup/item_2/text = "1440x900"
+popup/item_2/id = 2
+popup/item_3/text = "1366x768"
+popup/item_3/id = 3
+popup/item_4/text = "1280x720"
+popup/item_4/id = 4
+popup/item_5/text = "1024x768"
+popup/item_5/id = 5
+
+[node name="Scaling3D" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/Scaling3D"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "3D Scaling"
+
+[node name="Scaling3DSlider" type="HSlider" parent="TabContainer/Graphic/VBoxContainer/Scaling3D"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+min_value = 25.0
+step = 5.0
+value = 100.0
+
+[node name="Value" type="Label" parent="TabContainer/Graphic/VBoxContainer/Scaling3D"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100%"
+horizontal_alignment = 1
+
+[node name="Audio" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Title" type="Label" parent="TabContainer/Audio"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -71.0
+offset_right = 71.0
+offset_bottom = 55.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "Audio"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Audio"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 80.0
+offset_right = 800.0
+offset_bottom = 472.0
+theme_override_constants/separation = 10
+
+[node name="Master" type="Control" parent="TabContainer/Audio/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Audio/VBoxContainer/Master"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Master
+"
+
+[node name="MasterSlider" type="HSlider" parent="TabContainer/Audio/VBoxContainer/Master"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+
+[node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/Master"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="BGM" type="Control" parent="TabContainer/Audio/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Audio/VBoxContainer/BGM"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "BGM"
+
+[node name="BGMSlider" type="HSlider" parent="TabContainer/Audio/VBoxContainer/BGM"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+
+[node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/BGM"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="SFX" type="Control" parent="TabContainer/Audio/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Audio/VBoxContainer/SFX"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "SFX"
+
+[node name="SFXSlider" type="HSlider" parent="TabContainer/Audio/VBoxContainer/SFX"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+
+[node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/SFX"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="UI" type="Control" parent="TabContainer/Audio/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Audio/VBoxContainer/UI"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "UI"
+
+[node name="UISlider" type="HSlider" parent="TabContainer/Audio/VBoxContainer/UI"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+
+[node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/UI"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 2
+offset_left = 72.0
+offset_top = 104.0
+offset_right = 193.0
+offset_bottom = 154.0
+theme_override_font_sizes/font_size = 30
+text = "<< Back"
+
+[connection signal="mouse_entered" from="VBoxContainer/ControlOption" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="VBoxContainer/ControlOption" to="." method="_on_control_option_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/GraphicOption" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="VBoxContainer/GraphicOption" to="." method="_on_graphic_option_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/AudioOption" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="VBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/ResetKeybindButton" to="." method="_on_reset_keybind_button_mouse_entered"]
+[connection signal="pressed" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/ResetKeybindButton" to="." method="_on_reset_keybind_button_pressed"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="_on_fov_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle" to="." method="_on_camera_tilt_toggle_toggled"]
+[connection signal="item_selected" from="TabContainer/Graphic/VBoxContainer/FPSLimit/FPSLimitOptionButton" to="." method="_on_fps_limit_option_button_item_selected"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/FPSLimit/FPSLimitOptionButton" to="." method="play_button_hover_sfx"]
+[connection signal="item_selected" from="TabContainer/Graphic/VBoxContainer/Vsync/VsyncOptionButton" to="." method="_on_vsync_option_button_item_selected"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/Vsync/VsyncOptionButton" to="." method="play_button_hover_sfx"]
+[connection signal="item_selected" from="TabContainer/Graphic/VBoxContainer/WindowMode/WindowModeOptionButton" to="." method="_on_window_mode_option_button_item_selected"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/WindowMode/WindowModeOptionButton" to="." method="play_button_hover_sfx"]
+[connection signal="item_selected" from="TabContainer/Graphic/VBoxContainer/Resolution/ResolutionOptionButton" to="." method="_on_resolution_option_button_item_selected"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/Resolution/ResolutionOptionButton" to="." method="play_button_hover_sfx"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider" to="." method="_on_scaling_3d_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/Master/MasterSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/Master/MasterSlider" to="." method="_on_master_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/BGM/BGMSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/BGM/BGMSlider" to="." method="_on_bgm_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/SFX/SFXSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/SFX/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
+[connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

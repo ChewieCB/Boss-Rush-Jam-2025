@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b1f4r5ikvdo6j"]
+[gd_scene load_steps=11 format=3 uid="uid://b1f4r5ikvdo6j"]
 
 [ext_resource type="Texture2D" uid="uid://dda5ai5yfv010" path="res://assets/temp_carpet.jpg" id="1_ccdck"]
 [ext_resource type="FontFile" uid="uid://bqfms27vmrtfe" path="res://assets/fonts/casino/Casino3DMarquee.ttf" id="1_f0cjk"]
@@ -23,6 +23,10 @@ default_font = ExtResource("2_ynyhp")
 default_font_size = 128
 
 [sub_resource type="Theme" id="Theme_pkmso"]
+default_font = ExtResource("3_3pcwx")
+default_font_size = 64
+
+[sub_resource type="Theme" id="Theme_p6btx"]
 default_font = ExtResource("3_3pcwx")
 default_font_size = 64
 
@@ -55,10 +59,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -567.0
-offset_top = -301.0
-offset_right = 567.0
-offset_bottom = 301.0
+offset_left = -593.0
+offset_top = -486.0
+offset_right = 593.0
+offset_bottom = 70.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_0apva")
@@ -98,3 +102,24 @@ theme = SubResource("Theme_pkmso")
 bbcode_enabled = true
 text = "[center]v0.0.0[/center]"
 scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -286.0
+offset_top = 96.0
+offset_right = 286.0
+offset_bottom = 503.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button1" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_p6btx")
+text = "Test_PlayerMovement"
+
+[connection signal="pressed" from="VBoxContainer/Button1" to="." method="_on_button_1_pressed"]
