@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=15 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="Texture2D" uid="uid://t7scpy3771o6" path="res://src/player/assets/blob_shadow.png" id="3_tgexf"]
@@ -12,9 +12,12 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_dkhcu"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="10_g5bf6"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f0s2u"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_o6vus"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_w3btf"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_gkhtt"]
+size = Vector3(0.75, 0.75, 0.25)
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_rl0vi")
@@ -24,10 +27,18 @@ max_air_jump = 1
 aim_ray_prefab = ExtResource("5_dqbuo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("CapsuleShape3D_f0s2u")
+shape = SubResource("CapsuleShape3D_le58x")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("CapsuleMesh_o6vus")
+[node name="DebugMeshes" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="DebugMeshes"]
+mesh = SubResource("CapsuleMesh_w3btf")
+skeleton = NodePath("../..")
+
+[node name="FacingDir" type="MeshInstance3D" parent="DebugMeshes"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -4.37114e-08, -1)
+mesh = SubResource("PrismMesh_gkhtt")
+skeleton = NodePath("../..")
 
 [node name="WallRaycast" type="RayCast3D" parent="."]
 target_position = Vector3(0, 0, -1)

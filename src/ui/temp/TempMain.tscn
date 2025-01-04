@@ -122,4 +122,10 @@ layout_mode = 2
 theme = SubResource("Theme_p6btx")
 text = "Test_PlayerMovement"
 
+[node name="Button2" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_p6btx")
+text = "Test_Trenchbroom"
+
 [connection signal="pressed" from="VBoxContainer/Button1" to="." method="_on_button_1_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button2" to="." method="_on_button_2_pressed"]

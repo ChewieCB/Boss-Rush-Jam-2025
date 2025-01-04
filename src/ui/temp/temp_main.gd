@@ -10,3 +10,7 @@ func _ready() -> void:
 
 func _on_button_1_pressed() -> void:
 	get_tree().change_scene_to_file("res://src/player/test_scenes/Test_PlayerMovement.tscn")
+
+
+func _on_button_2_pressed() -> void:
+	get_tree().change_scene_to_file("res://src/maps/Test_FuncGodotMap.tscn")
