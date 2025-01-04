@@ -73,7 +73,7 @@ func _ready() -> void:
 	get_viewport().set_scaling_3d_scale(GameManager.scaling_3d / 100.0)
 	scaling_3d_slider.value = GameManager.scaling_3d
 	scaling_3d_value.text = "{0}%".format([GameManager.scaling_3d])
-	
+
 	# TODO - update these to use the more recent SoundManager version (or downgrade SoundManager)
 	#SoundManager.set_master_volume(GameManager.master_audio / 100.0)
 	#SoundManager.set_music_volume(GameManager.bgm_audio / 100.0)
@@ -155,11 +155,9 @@ func _on_resolution_option_button_item_selected(index: int) -> void:
 	centre_window()
 
 func _on_master_slider_value_changed(value: float) -> void:
-	pass
-	# FIXME
-	#SoundManager.set_master_volume(value / 100.0)
-	#master_value.text = "{0}".format([value])
-	#GameManager.master_audio = value
+	SoundManager.set_master_volume(value / 100.0)
+	master_value.text = "{0}".format([value])
+	GameManager.master_audio = value
 
 func _on_ui_slider_value_changed(value: float) -> void:
 	SoundManager.set_sound_volume(value / 100.0)
