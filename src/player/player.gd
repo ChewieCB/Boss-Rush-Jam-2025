@@ -9,6 +9,7 @@ class_name Player
 
 @onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
 @onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
+@onready var debug_meshes: Node3D = $DebugMeshes
 @onready var dash_duration_timer: Timer = $DashDuration
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var neck: Node3D = $Neck
@@ -65,6 +66,8 @@ var slide_dir := Vector2(0, 0)
 
 func _ready():
 	GameManager.player = self
+	for mesh in debug_meshes.get_children():
+		mesh.visible = false
 	player_camera.set_fov(GameManager.camera_fov)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	last_dashed_timestamp = 0

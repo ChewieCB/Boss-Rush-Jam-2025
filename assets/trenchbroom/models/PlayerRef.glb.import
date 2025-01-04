@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://00irytato1f0"
-path="res://.godot/imported/player_ref.glb-b8223848b88a949cd24cd343d4513380.scn"
+uid="uid://clbaaauxjb4o0"
+path="res://.godot/imported/PlayerRef.glb-1706aaa2fa6fbf78e99a83602b2be0ed.scn"
 
 [deps]
 
-source_file="res://assets/trenchbroom_models/player_ref.glb"
-dest_files=["res://.godot/imported/player_ref.glb-b8223848b88a949cd24cd343d4513380.scn"]
+source_file="res://assets/trenchbroom/models/PlayerRef.glb"
+dest_files=["res://.godot/imported/PlayerRef.glb-1706aaa2fa6fbf78e99a83602b2be0ed.scn"]
 
 [params]
 
