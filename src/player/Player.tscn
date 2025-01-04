@@ -1,11 +1,12 @@
-[gd_scene load_steps=14 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=17 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
+[ext_resource type="Script" path="res://src/player/shakeable_camera.gd" id="3_cy2wl"]
 [ext_resource type="Texture2D" uid="uid://t7scpy3771o6" path="res://src/player/assets/blob_shadow.png" id="3_tgexf"]
-[ext_resource type="PackedScene" uid="uid://by6prw5q6j6sk" path="res://src/player/ShakeableCamera.tscn" id="4_37fec"]
 [ext_resource type="Texture2D" uid="uid://cl0jqrjnnsy7n" path="res://src/player/assets/default_crosshair.png" id="4_ymis7"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="5_dqbuo"]
 [ext_resource type="Texture2D" uid="uid://coblcfhc2qgbt" path="res://src/player/assets/hitmarker_lg.png" id="5_nkt42"]
+[ext_resource type="PackedScene" uid="uid://de36wdf6rkio" path="res://src/player/gun/Shotgun.tscn" id="6_mlgd0"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="6_t33b7"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_1276k"]
 [ext_resource type="PackedScene" uid="uid://byj1y3wrwtdtq" path="res://src/ui/pause_menu/PauseUI.tscn" id="7_db7x8"]
@@ -15,6 +16,12 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f0s2u"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_o6vus"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cda8p"]
+noise_type = 0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sjjg0"]
+size = Vector3(0.5, 0.5, 0.5)
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_rl0vi")
@@ -27,6 +34,7 @@ aim_ray_prefab = ExtResource("5_dqbuo")
 shape = SubResource("CapsuleShape3D_f0s2u")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("CapsuleMesh_o6vus")
 
 [node name="WallRaycast" type="RayCast3D" parent="."]
@@ -36,8 +44,18 @@ debug_shape_thickness = 5
 
 [node name="Neck" type="Node3D" parent="."]
 
-[node name="ShakeableCamera" parent="Neck" instance=ExtResource("4_37fec")]
+[node name="ShakeableCamera" type="Area3D" parent="Neck"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
+script = ExtResource("3_cy2wl")
+noise = SubResource("FastNoiseLite_cda8p")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Neck/ShakeableCamera"]
+shape = SubResource("BoxShape3D_sjjg0")
+
+[node name="Camera3D" type="Camera3D" parent="Neck/ShakeableCamera"]
+current = true
+fov = 90.0
+near = 0.02
 
 [node name="AimRecticle" type="TextureRect" parent="Neck/ShakeableCamera"]
 anchors_preset = 8
@@ -80,6 +98,9 @@ HSpeed: 0 u/s"
 
 [node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
+
+[node name="Shotgun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("6_mlgd0")]
+transform = Transform3D(0.959201, 0, 0.282727, 0, 1, 0, -0.282727, 0, 0.959201, 0.244493, 0, 0.23962)
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
 

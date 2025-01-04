@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://ptb63xpipbk1"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spinning_gun_barrel.gd" id="1_jtdmw"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
+height = 0.5
+
+[node name="ProjectileCountBarrel" type="Node3D"]
+script = ExtResource("1_jtdmw")
+barrel_name = "Projectile Count"
+possible_values = Array[String](["-50% projectile", "+0 projectile", "+25% projectile", "+50% projectile", "+1 projectile", "+100% projectile", "-1 projectile"])
+
+[node name="Model" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
+mesh = SubResource("CylinderMesh_sfbyw")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0311846, 0)
+text = "+2 projectile"
+horizontal_alignment = 2

@@ -73,6 +73,9 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseMotion:
 		rotate_player(event)
+
+	if event.is_action_pressed("spin_reload"):
+		spin_reload()
 	
 	if event.is_action_pressed("dash"):
 		if last_dashed_timestamp + dash_cd * 1000 <= Time.get_ticks_msec():
@@ -142,7 +145,7 @@ func _physics_process(delta):
 	move_and_slide()
 
 	show_debug_label()
-	var gun_sway_velocity = velocity * transform.basis
+	# var gun_sway_velocity = velocity * transform.basis
 	#if not is_swapping_gun:
 		#gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
 	camera_control(delta)
@@ -171,6 +174,10 @@ func jump(multiplier = 1.0):
 	is_dashing = false
 	is_sliding = false
 
+
+func spin_reload():
+	var gun: Gun = gun_container.get_child(0)
+	gun.spin_all_barrels()
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
