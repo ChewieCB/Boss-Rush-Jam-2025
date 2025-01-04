@@ -1,8 +1,10 @@
 extends CharacterBody3D
+class_name BossCore
 
 @export var navigation_component: NavigationComponent
 @export var health_component: HealthComponent
 
+@onready var sprite: Sprite3D = $Sprite3D
 @onready var debug_mesh: MeshInstance3D = $DebugMesh
 @onready var state_chart: StateChart = $StateChart
 
@@ -27,8 +29,9 @@ var vel_vertical: float = 0
 
 
 func _ready() -> void:
-	pass
-	#debug_mesh.visible = false
+	health_component.health_changed.connect(_on_health_changed)
+	health_component.died.connect(_on_died)
+	debug_mesh.visible = false
 
 
 func _physics_process(delta: float) -> void:
@@ -72,7 +75,25 @@ func _on_movement_walking_state_physics_processing(delta: float) -> void:
 	if target:
 		if self.global_position.distance_to(target.global_position) > 10:
 			state_chart.send_event("stop_moving")
-	pass
-	#if target:
-		#var rot_to_target: float = self.global_position.angle_to(target.global_position)
-		#self.rotation = lerp(self.rotation, rot_to_target, delta * 10)
+
+
+func _on_health_changed(new_health: float, prev_health: float) -> void:
+	if new_health < prev_health:
+		state_chart.send_event("start_damage")
+
+
+func _on_died() -> void:
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+
+
+func _on_health_hit_state_entered() -> void:
+	sprite.modulate = Color.RED
+	await get_tree().create_timer(0.05).timeout
+	state_chart.send_event("end_damage")
+
+func _on_health_hit_state_exited() -> void:
+	sprite.modulate = Color.WHITE
+
+func _on_health_dead_state_entered() -> void:
+	sprite.modulate = Color.DARK_SLATE_BLUE

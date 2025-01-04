@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bwei3cifjg1sq"]
+[gd_scene load_steps=9 format=3 uid="uid://bwei3cifjg1sq"]
 
 [ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="1_8ja47"]
 [ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="1_ef7fu"]
@@ -6,6 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="3_cwsn4"]
 [ext_resource type="Texture2D" uid="uid://ut34yvp7hhr5" path="res://src/ui/common/assets/kenney_borders/default/Divider Fade/divider-fade-000.png" id="4_8xujt"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="5_wos4h"]
+
+[sub_resource type="Theme" id="Theme_y0f30"]
+default_font = ExtResource("5_wos4h")
 
 [sub_resource type="Theme" id="Theme_gqrbp"]
 default_font = ExtResource("5_wos4h")
@@ -41,6 +44,18 @@ theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
+
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/MarginContainer"]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_y0f30")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "10,000/10,000"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HealthBar" type="TextureProgressBar" parent="VBoxContainer/MarginContainer2/MarginContainer"]
 custom_minimum_size = Vector2(240, 20)
@@ -124,3 +139,5 @@ texture = ExtResource("4_8xujt")
 expand_mode = 3
 stretch_mode = 5
 flip_h = true
+
+[connection signal="timeout" from="VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer" to="." method="_on_timer_timeout"]

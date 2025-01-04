@@ -8,6 +8,7 @@ extends MarginContainer
 @onready var timer: Timer = $VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer
 @onready var heath_bar: TextureProgressBar = $VBoxContainer/MarginContainer2/MarginContainer/HealthBar
 @onready var damage_bar: TextureProgressBar = $VBoxContainer/MarginContainer2/MarginContainer/HealthBar/DamageBar
+@onready var health_label: Label = $VBoxContainer/MarginContainer2/MarginContainer/Label
 
 
 func _ready() -> void:
@@ -23,10 +24,12 @@ func init_health_ui(_health) -> void:
 	heath_bar.value = _health
 	damage_bar.max_value = _health
 	damage_bar.value = _health
+	health_label.text = "%s/%s" % [heath_bar.value, heath_bar.max_value]
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	heath_bar.value = new_health
+	health_label.text = "%s/%s" % [heath_bar.value, heath_bar.max_value]
 	
 	if new_health < prev_health:
 		timer.start()

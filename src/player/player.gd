@@ -83,7 +83,13 @@ func _input(event):
 			is_dashing = true
 			vel_vertical = 0
 			dash_duration_timer.start()
-
+	
+	if event.is_action_released("shoot"):
+		# Raycast to target and damage them if hit
+		if aim_ray.is_colliding():
+			var target = aim_ray.get_collider()
+			if target is CharacterBody3D:
+				target.health_component.damage(10)
 
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)

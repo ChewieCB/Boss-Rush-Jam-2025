@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=18 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Texture2D" uid="uid://l708f35ye0ad" path="res://src/bosses/base/assets/umby_boss_sprite_placeholder.png" id="1_lhq8s"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="7_0t8qy"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="8_lsrry"]
 [ext_resource type="PackedScene" uid="uid://e7b51y76wxn3" path="res://src/components/navigation/NavigationComponent.tscn" id="9_cunyl"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="11_j156m"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="12_1g6yn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_w7fni"]
 size = Vector3(2.5, 4.8, 2.5)
@@ -20,6 +22,14 @@ size = Vector3(2.5, 4.8, 2.5)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a1ebn"]
 transparency = 1
 albedo_color = Color(1, 0, 0, 0.337255)
+
+[sub_resource type="Resource" id="Resource_vq1e8"]
+script = ExtResource("11_j156m")
+state = NodePath("../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_o1b2s"]
+script = ExtResource("12_1g6yn")
+guard = SubResource("Resource_vq1e8")
 
 [node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
 collision_layer = 4
@@ -70,6 +80,7 @@ script = ExtResource("7_0t8qy")
 script = ExtResource("8_lsrry")
 to = NodePath("../../Walking")
 event = &"start_moving"
+guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
 [node name="Walking" type="Node" parent="StateChart/Root/Movement"]
@@ -141,3 +152,6 @@ debug_path_custom_color = Color(1, 0, 0, 1)
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]
