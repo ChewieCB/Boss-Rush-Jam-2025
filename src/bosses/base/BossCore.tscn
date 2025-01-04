@@ -53,7 +53,7 @@ mesh = SubResource("BoxMesh_rkhu1")
 surface_material_override/0 = SubResource("StandardMaterial3D_a1ebn")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_fy6mc")]
-max_health = 50.0
+max_health = 600.0
 
 [node name="NavigationComponent" parent="." node_paths=PackedStringArray("nav_agent") instance=ExtResource("9_cunyl")]
 nav_agent = NodePath("../NavigationAgent3D")
@@ -83,6 +83,27 @@ event = &"start_moving"
 guard = SubResource("Resource_o1b2s")
 delay_in_seconds = "0.0"
 
+[node name="toTargeting" type="Node" parent="StateChart/Root/Movement/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Targeting")
+event = &"start_targeting"
+delay_in_seconds = "0.0"
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("7_0t8qy")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Movement/Targeting"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Idle")
+event = &"stop_moving"
+delay_in_seconds = "0.0"
+
+[node name="toWalking" type="Node" parent="StateChart/Root/Movement/Targeting"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Walking")
+event = &"start_moving"
+delay_in_seconds = "0.0"
+
 [node name="Walking" type="Node" parent="StateChart/Root/Movement"]
 script = ExtResource("7_0t8qy")
 
@@ -92,12 +113,90 @@ to = NodePath("../../Idle")
 event = &"stop_moving"
 delay_in_seconds = "0.0"
 
-[node name="Attack" type="Node" parent="StateChart/Root"]
+[node name="toTargeting" type="Node" parent="StateChart/Root/Movement/Walking"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Targeting")
+event = &"start_targeting"
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root"]
 script = ExtResource("6_nojwf")
 initial_state = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="StateChart/Root/Attack"]
+[node name="Idle" type="Node" parent="StateChart/Root/Attacking"]
 script = ExtResource("7_0t8qy")
+
+[node name="toBuildup" type="Node" parent="StateChart/Root/Attacking/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Buildup")
+event = &"attack_buildup"
+delay_in_seconds = "0.0"
+
+[node name="toTelegraph" type="Node" parent="StateChart/Root/Attacking/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Telegraph")
+event = &"attack_telegraph"
+delay_in_seconds = "0.0"
+
+[node name="toAttack" type="Node" parent="StateChart/Root/Attacking/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Attack")
+event = &"attack_start"
+delay_in_seconds = "0.0"
+
+[node name="Buildup" type="Node" parent="StateChart/Root/Attacking"]
+script = ExtResource("7_0t8qy")
+
+[node name="toTelegraph" type="Node" parent="StateChart/Root/Attacking/Buildup"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Telegraph")
+event = &"attack_telegraph"
+delay_in_seconds = "0.0"
+
+[node name="toAttack" type="Node" parent="StateChart/Root/Attacking/Buildup"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Attack")
+event = &"attack_start"
+delay_in_seconds = "0.0"
+
+[node name="toCooldown" type="Node" parent="StateChart/Root/Attacking/Buildup"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Cooldown")
+event = &"attack_interrupt"
+delay_in_seconds = "0.0"
+
+[node name="Telegraph" type="Node" parent="StateChart/Root/Attacking"]
+script = ExtResource("7_0t8qy")
+
+[node name="toAttack" type="Node" parent="StateChart/Root/Attacking/Telegraph"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Attack")
+event = &"attack_start"
+delay_in_seconds = "0.0"
+
+[node name="toCooldown" type="Node" parent="StateChart/Root/Attacking/Telegraph"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Cooldown")
+event = &"attack_interrupt"
+delay_in_seconds = "0.0"
+
+[node name="Attack" type="Node" parent="StateChart/Root/Attacking"]
+script = ExtResource("7_0t8qy")
+
+[node name="toCooldown" type="Node" parent="StateChart/Root/Attacking/Attack"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Cooldown")
+event = &"attack_end"
+delay_in_seconds = "0.0"
+
+[node name="Cooldown" type="Node" parent="StateChart/Root/Attacking"]
+script = ExtResource("7_0t8qy")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Attacking/Cooldown"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Idle")
+event = &"cooldown_end"
+delay_in_seconds = "0.0"
 
 [node name="Health" type="Node" parent="StateChart/Root"]
 script = ExtResource("6_nojwf")
@@ -150,6 +249,8 @@ debug_path_custom_color = Color(1, 0, 0, 1)
 
 [connection signal="state_entered" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Targeting" to="." method="_on_movement_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Targeting" to="." method="_on_movement_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_entered"]

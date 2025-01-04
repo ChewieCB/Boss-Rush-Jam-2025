@@ -11,7 +11,8 @@ class_name BossCore
 @onready var health_ui = $BossHealthUI/BossHealthContainer
 
 const MAX_SPEED: float = 5.0
-const TURN_SPEED: float = 7.5
+const TURN_SPEED_FAST: float = 7.5
+const TURN_SPEED_SLOW: float = 5.0
 const MAX_FALL_SPEED: float = 50.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 8
@@ -31,25 +32,25 @@ var vel_vertical: float = 0
 func _ready() -> void:
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
-	debug_mesh.visible = false
+	#debug_mesh.visible = false
 
 
 func _physics_process(delta: float) -> void:
-	if target:
-		var direction: Vector3 = self.global_position.direction_to(target.global_position)
-		self.rotation.y = lerp_angle(
-			self.rotation.y,atan2(
-				-direction.x, -direction.z
-			),
-			delta * TURN_SPEED
-		)
-		print(self.global_position.distance_to(target.global_position))
-	
 	vel_vertical -= GRAVITY * delta
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	velocity.y = vel_vertical
 	
 	move_and_slide()
+
+
+func _turn_towards_target(speed: float, delta: float) -> void:
+	var direction: Vector3 = self.global_position.direction_to(target.global_position)
+	self.rotation.y = lerp_angle(
+		self.rotation.y,atan2(
+			-direction.x, -direction.z
+		),
+		delta * speed
+	)
 
 
 ## ======== State Chart Methods ========
@@ -64,10 +65,15 @@ func _on_movement_idle_state_physics_processing(delta: float) -> void:
 		velocity.x = lerp(velocity.x, 0.0, delta)
 	if velocity.z > 0.0:
 		velocity.z = lerp(velocity.z, 0.0, delta)
-	
+
+#### TARGETING
+func _on_movement_targeting_state_entered() -> void:
+	navigation_component.disable()
+
+func _on_movement_targeting_state_physics_processing(delta: float) -> void:
 	if target:
-		if self.global_position.distance_to(target.global_position) <= 15:
-			state_chart.send_event("start_moving")
+		_turn_towards_target(TURN_SPEED_FAST, delta)
+
 
 #### WALKING
 func _on_movement_walking_state_entered() -> void:
@@ -75,8 +81,7 @@ func _on_movement_walking_state_entered() -> void:
 
 func _on_movement_walking_state_physics_processing(delta: float) -> void:
 	if target:
-		if self.global_position.distance_to(target.global_position) > 10:
-			state_chart.send_event("stop_moving")
+		_turn_towards_target(TURN_SPEED_SLOW, delta)
 
 ### HEALTH --------------------------------
 #### HIT
