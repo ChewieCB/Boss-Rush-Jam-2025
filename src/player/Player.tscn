@@ -1,0 +1,161 @@
+[gd_scene load_steps=14 format=3 uid="uid://7s75qf3um0h0"]
+
+[ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
+[ext_resource type="Texture2D" uid="uid://t7scpy3771o6" path="res://src/player/assets/blob_shadow.png" id="3_tgexf"]
+[ext_resource type="PackedScene" uid="uid://by6prw5q6j6sk" path="res://src/player/ShakeableCamera.tscn" id="4_37fec"]
+[ext_resource type="Texture2D" uid="uid://cl0jqrjnnsy7n" path="res://src/player/assets/default_crosshair.png" id="4_ymis7"]
+[ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="5_dqbuo"]
+[ext_resource type="Texture2D" uid="uid://coblcfhc2qgbt" path="res://src/player/assets/hitmarker_lg.png" id="5_nkt42"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="6_t33b7"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_1276k"]
+[ext_resource type="PackedScene" uid="uid://byj1y3wrwtdtq" path="res://src/ui/pause_menu/PauseUI.tscn" id="7_db7x8"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_dkhcu"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="10_g5bf6"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f0s2u"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_o6vus"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_rl0vi")
+can_wall_jump = true
+can_wall_cling = true
+max_air_jump = 1
+aim_ray_prefab = ExtResource("5_dqbuo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_f0s2u")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_o6vus")
+
+[node name="WallRaycast" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -1)
+debug_shape_custom_color = Color(1, 0.988235, 0, 1)
+debug_shape_thickness = 5
+
+[node name="Neck" type="Node3D" parent="."]
+
+[node name="ShakeableCamera" parent="Neck" instance=ExtResource("4_37fec")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
+
+[node name="AimRecticle" type="TextureRect" parent="Neck/ShakeableCamera"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ymis7")
+
+[node name="HitMarker" type="TextureRect" parent="Neck/ShakeableCamera"]
+modulate = Color(1, 0.976471, 0.388235, 1)
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_nkt42")
+
+[node name="DebugLabel" type="Label" parent="Neck/ShakeableCamera"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 192.0
+offset_bottom = 64.0
+theme_override_font_sizes/font_size = 12
+text = "VSpeed: 0 u/s
+HSpeed: 0 u/s"
+
+[node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
+
+[node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
+
+[node name="DashDuration" type="Timer" parent="."]
+editor_description = "How long the dash action last"
+wait_time = 0.2
+one_shot = true
+
+[node name="CoyoteTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="Decal" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.27613, 0)
+texture_albedo = ExtResource("3_tgexf")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("6_t33b7")
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("7_1276k")
+initial_state = NodePath("Grounded")
+
+[node name="Grounded" type="Node" parent="StateChart/Root"]
+editor_description = "This state is active when the player is on the ground."
+script = ExtResource("8_dkhcu")
+
+[node name="onJump" type="Node" parent="StateChart/Root/Grounded"]
+editor_description = "When jumping become airborne and enable double-jump."
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Airborne")
+event = &"jump"
+delay_in_seconds = "0.0"
+
+[node name="onAirborne" type="Node" parent="StateChart/Root/Grounded"]
+editor_description = "When becoming airborne (e.g. through falling) move to airborne state."
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Airborne")
+event = &"airborne"
+delay_in_seconds = "0.0"
+
+[node name="Airborne" type="Node" parent="StateChart/Root"]
+script = ExtResource("8_dkhcu")
+
+[node name="onGrounded" type="Node" parent="StateChart/Root/Airborne"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Grounded")
+event = &"grounded"
+delay_in_seconds = "0.0"
+
+[node name="onWallcling" type="Node" parent="StateChart/Root/Airborne"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Wallcling")
+event = &"wallcling"
+delay_in_seconds = "0.0"
+
+[node name="Wallcling" type="Node" parent="StateChart/Root"]
+script = ExtResource("8_dkhcu")
+
+[node name="onStopWallcling" type="Node" parent="StateChart/Root/Wallcling"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Airborne")
+event = &"stop_wallcling"
+delay_in_seconds = "0.0"
+
+[connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
+[connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
+[connection signal="state_input" from="StateChart/Root/Grounded" to="." method="_on_grounded_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Grounded" to="." method="_on_grounded_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_entered"]
+[connection signal="state_input" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Wallcling" to="." method="_on_wallcling_state_entered"]
+[connection signal="state_input" from="StateChart/Root/Wallcling" to="." method="_on_wallcling_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Wallcling" to="." method="_on_wallcling_state_physics_processing"]

@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnuglobw5ctj7"]
+
+[ext_resource type="Script" path="res://src/ui/common/keybind_button/keybind_button.gd" id="1_4qnba"]
+
+[node name="KeybindButton" type="HBoxContainer"]
+script = ExtResource("1_4qnba")
+
+[node name="ActionLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Move forward"
+
+[node name="Spacer" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="."]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "W"
