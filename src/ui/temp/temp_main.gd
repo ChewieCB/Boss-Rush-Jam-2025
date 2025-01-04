@@ -14,3 +14,7 @@ func _on_button_1_pressed() -> void:
 
 func _on_button_2_pressed() -> void:
 	get_tree().change_scene_to_file("res://src/maps/Test_FuncGodotMap.tscn")
+
+
+func _on_button_3_pressed() -> void:
+	get_tree().change_scene_to_file("res://src/bosses/base/test/Test_BossCore.tscn")
