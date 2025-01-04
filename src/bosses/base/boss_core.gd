@@ -52,9 +52,12 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
+## ======== State Chart Methods ========
+
+### MOVEMENT --------------------------------
+#### IDLE
 func _on_movement_idle_state_entered() -> void:
 	navigation_component.disable()
-
 
 func _on_movement_idle_state_physics_processing(delta: float) -> void:
 	if velocity.x > 0.0:
@@ -66,16 +69,31 @@ func _on_movement_idle_state_physics_processing(delta: float) -> void:
 		if self.global_position.distance_to(target.global_position) <= 15:
 			state_chart.send_event("start_moving")
 
-
+#### WALKING
 func _on_movement_walking_state_entered() -> void:
 	navigation_component.enable()
-
 
 func _on_movement_walking_state_physics_processing(delta: float) -> void:
 	if target:
 		if self.global_position.distance_to(target.global_position) > 10:
 			state_chart.send_event("stop_moving")
 
+### HEALTH --------------------------------
+#### HIT
+func _on_health_hit_state_entered() -> void:
+	sprite.modulate = Color.RED
+	await get_tree().create_timer(0.05).timeout
+	state_chart.send_event("end_damage")
+
+func _on_health_hit_state_exited() -> void:
+	sprite.modulate = Color.WHITE
+
+#### DEAD
+func _on_health_dead_state_entered() -> void:
+	sprite.modulate = Color.DARK_SLATE_BLUE
+
+
+## ======== Signal Callback Methods ========
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
@@ -85,15 +103,3 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 func _on_died() -> void:
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
-
-
-func _on_health_hit_state_entered() -> void:
-	sprite.modulate = Color.RED
-	await get_tree().create_timer(0.05).timeout
-	state_chart.send_event("end_damage")
-
-func _on_health_hit_state_exited() -> void:
-	sprite.modulate = Color.WHITE
-
-func _on_health_dead_state_entered() -> void:
-	sprite.modulate = Color.DARK_SLATE_BLUE

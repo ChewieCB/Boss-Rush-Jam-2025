@@ -4,6 +4,7 @@ extends Control
 
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	var project_version = ProjectSettings.get_setting("application/config/version")
 	version_label.text = "[center]%s[/center]" % [project_version]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=4 uid="uid://c0jbn3uu8t7po"]
+[gd_scene load_steps=52 format=4 uid="uid://c0jbn3uu8t7po"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_1ruok"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_wv0si"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="4_tbjgr"]
 [ext_resource type="Material" uid="uid://bqo8bvip58l8" path="res://assets/textures/placeholder/texture_orange_02.tres" id="5_0ljig"]
 [ext_resource type="Material" uid="uid://coo1y5tjcwlec" path="res://assets/textures/placeholder/texture_dark_03.tres" id="6_02vf7"]
+
+[sub_resource type="GDScript" id="GDScript_gm5s8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cravt"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -190,6 +192,7 @@ points = PackedVector3Array(-15.5, 0, 15.5, -15.5, -0.5, 15.5, 14.5, -0.5, 15.5,
 points = PackedVector3Array(-16.5, 11, 15.5, -16.5, 0, 15.5, -15.5, 0, 15.5, -15.5, 11, 15.5, -16.5, 11, 30.5, -16.5, 0, 30.5, -15.5, 0, 30.5, -15.5, 11, 30.5)
 
 [node name="TestFuncGodotMap" type="Node3D"]
+script = SubResource("GDScript_gm5s8")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)

@@ -53,7 +53,7 @@ mesh = SubResource("BoxMesh_rkhu1")
 surface_material_override/0 = SubResource("StandardMaterial3D_a1ebn")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_fy6mc")]
-max_health = 500.0
+max_health = 50.0
 
 [node name="NavigationComponent" parent="." node_paths=PackedStringArray("nav_agent") instance=ExtResource("9_cunyl")]
 nav_agent = NodePath("../NavigationAgent3D")
