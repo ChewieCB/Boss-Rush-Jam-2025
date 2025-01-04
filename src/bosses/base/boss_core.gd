@@ -1,9 +1,12 @@
 extends CharacterBody3D
 
 @export var navigation_component: NavigationComponent
+@export var health_component: HealthComponent
 
 @onready var debug_mesh: MeshInstance3D = $DebugMesh
 @onready var state_chart: StateChart = $StateChart
+
+@onready var health_ui = $BossHealthUI/BossHealthContainer
 
 const MAX_SPEED: float = 5.0
 const TURN_SPEED: float = 7.5

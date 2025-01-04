@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=14 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Texture2D" uid="uid://l708f35ye0ad" path="res://src/bosses/base/assets/umby_boss_sprite_placeholder.png" id="1_lhq8s"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_fy6mc"]
 [ext_resource type="PackedScene" uid="uid://bwei3cifjg1sq" path="res://src/ui/boss/BossHealthBar.tscn" id="3_ybtoo"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_sfdil"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="5_oy1aj"]
@@ -20,11 +21,12 @@ size = Vector3(2.5, 4.8, 2.5)
 transparency = 1
 albedo_color = Color(1, 0, 0, 0.337255)
 
-[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component")]
+[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
 collision_layer = 4
 collision_mask = 27
 script = ExtResource("1_tem3i")
 navigation_component = NodePath("NavigationComponent")
+health_component = NodePath("HealthComponent")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
@@ -40,12 +42,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 mesh = SubResource("BoxMesh_rkhu1")
 surface_material_override/0 = SubResource("StandardMaterial3D_a1ebn")
 
+[node name="HealthComponent" parent="." instance=ExtResource("3_fy6mc")]
+max_health = 500.0
+
 [node name="NavigationComponent" parent="." node_paths=PackedStringArray("nav_agent") instance=ExtResource("9_cunyl")]
 nav_agent = NodePath("../NavigationAgent3D")
 
 [node name="BossHealthUI" type="CanvasLayer" parent="."]
 
-[node name="CrusaderHealthContainer" parent="BossHealthUI" instance=ExtResource("3_ybtoo")]
+[node name="BossHealthContainer" parent="BossHealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("3_ybtoo")]
+health_component = NodePath("../../HealthComponent")
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("4_sfdil")
