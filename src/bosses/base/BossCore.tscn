@@ -98,9 +98,11 @@ nav_agent = NodePath("../NavigationAgent3D")
 health_component = NodePath("../../HealthComponent")
 
 [node name="StateChartDebugger" parent="BossHealthUI" instance=ExtResource("6_4cg3x")]
+visible = false
 offset_left = 1312.0
 offset_top = 8.0
 offset_bottom = -438.0
+enabled = false
 initial_node_to_watch = NodePath("../../StateChart")
 
 [node name="StateChart" type="Node" parent="."]
@@ -312,6 +314,13 @@ event = &"start_ranged_attack"
 guard = SubResource("Resource_8m7u0")
 delay_in_seconds = "0.0"
 
+[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/Inactive"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../AreaDenial")
+event = &"start_area_attack"
+guard = SubResource("Resource_8m7u0")
+delay_in_seconds = "0.0"
+
 [node name="ChasePlayer" type="Node" parent="StateChart/Root/Phase"]
 script = ExtResource("6_nojwf")
 initial_state = NodePath("TargetPlayer")
@@ -353,6 +362,13 @@ delay_in_seconds = "0.0"
 script = ExtResource("8_lsrry")
 to = NodePath("../../RangedProjectiles")
 event = &"start_ranged_attack"
+guard = SubResource("Resource_8m7u0")
+delay_in_seconds = "0.0"
+
+[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../AreaDenial")
+event = &"start_area_attack"
 guard = SubResource("Resource_8m7u0")
 delay_in_seconds = "0.0"
 
@@ -400,6 +416,58 @@ event = &"start_chase_attack"
 guard = SubResource("Resource_vcpbr")
 delay_in_seconds = "0.0"
 
+[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../AreaDenial")
+event = &"start_area_attack"
+guard = SubResource("Resource_8m7u0")
+delay_in_seconds = "0.0"
+
+[node name="AreaDenial" type="Node" parent="StateChart/Root/Phase"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("MoveToCenter")
+
+[node name="MoveToCenter" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
+script = ExtResource("7_0t8qy")
+
+[node name="toSpawnDamageAreas" type="Node" parent="StateChart/Root/Phase/AreaDenial/MoveToCenter"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../SpawnDamageAreas")
+event = &"start_area_attack"
+delay_in_seconds = "0.0"
+
+[node name="SpawnDamageAreas" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
+script = ExtResource("7_0t8qy")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AreaDenial/SpawnDamageAreas"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Recover")
+event = &"finish_area_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
+script = ExtResource("7_0t8qy")
+
+[node name="toMoveToCenter" type="Node" parent="StateChart/Root/Phase/AreaDenial/Recover"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../MoveToCenter")
+event = &"change_position"
+delay_in_seconds = "0.0"
+
+[node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../ChasePlayer")
+event = &"start_chase_attack"
+guard = SubResource("Resource_vcpbr")
+delay_in_seconds = "0.0"
+
+[node name="toRangedProjectiles" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../RangedProjectiles")
+event = &"start_ranged_attack"
+guard = SubResource("Resource_8m7u0")
+delay_in_seconds = "0.0"
+
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 debug_path_custom_color = Color(1, 0, 0, 1)
 
@@ -445,3 +513,7 @@ uppercase = true
 [connection signal="state_exited" from="StateChart/Root/Phase/RangedProjectiles/MoveToCenter" to="." method="_on_phase_ranged_projectiles_move_to_center_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/FireProjectiles" to="." method="_on_phase_ranged_projectiles_fire_projectiles_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/Recover" to="." method="_on_phase_ranged_projectiles_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/MoveToCenter" to="." method="_on_phase_area_denial_move_to_center_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/AreaDenial/MoveToCenter" to="." method="_on_phase_area_denial_move_to_center_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/SpawnDamageAreas" to="." method="_on_phase_area_denial_spawn_damage_areas_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/Recover" to="." method="_on_phase_area_denial_recover_state_entered"]

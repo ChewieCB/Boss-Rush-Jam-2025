@@ -147,9 +147,10 @@ shape = SubResource("ConvexPolygonShape3D_6cxk4")
 [node name="entity_1_PlayerRef" parent="FuncGodotMap" instance=ExtResource("4_pbctu")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.25, 1.75, -0.25)
 
-[node name="entity_2_BossCoreRef" parent="FuncGodotMap" node_paths=PackedStringArray("move_points", "target") instance=ExtResource("5_b7p74")]
+[node name="entity_2_BossCoreRef" parent="FuncGodotMap" node_paths=PackedStringArray("move_points", "area_point", "target") instance=ExtResource("5_b7p74")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 4.36273, 25.5)
 move_points = [NodePath("../../BossPositions/Marker3D"), NodePath("../../BossPositions/Marker3D2"), NodePath("../../BossPositions/Marker3D4"), NodePath("../../BossPositions/Marker3D5")]
+area_point = NodePath("../../BossPositions/Marker3D5")
 target = NodePath("../entity_1_PlayerRef")
 
 [node name="group_1_walls" type="Node3D" parent="FuncGodotMap"]
