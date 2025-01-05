@@ -56,7 +56,7 @@ var is_sliding: bool:
 			else:
 				player_camera.add_long_trauma(-SLIDE_SHAKE_TRAUMA)
 		is_sliding = value
-		
+
 var bonus_speed: float = 0
 
 var raw_input_dir := Vector2(0, 0)
@@ -83,20 +83,20 @@ func _ready():
 func _input(event):
 	if controls_disabled:
 		return
-	
+
 	if event is InputEventMouseMotion:
 		rotate_player(event)
 
 	if event.is_action_pressed("spin_reload"):
 		spin_reload()
-	
+
 	if event.is_action_pressed("dash"):
 		if last_dashed_timestamp + dash_cd * 1000 <= Time.get_ticks_msec():
 			last_dashed_timestamp = Time.get_ticks_msec()
 			is_dashing = true
 			vel_vertical = 0
 			dash_duration_timer.start()
-	
+
 	if event.is_action_released("shoot"):
 		# Raycast to target and damage them if hit
 		if aim_ray.is_colliding():
@@ -116,7 +116,7 @@ func _physics_process(delta):
 			if raw_input_dir == Vector2.ZERO:
 				raw_input_dir = Vector2(0, -1)
 				input_dir = raw_input_dir.rotated(-rotation.y)
-		
+
 		if not is_dashing and not is_sliding:
 			raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 			input_dir = raw_input_dir.rotated(-rotation.y)

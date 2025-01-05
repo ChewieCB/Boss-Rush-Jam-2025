@@ -32,16 +32,19 @@ script = ExtResource("1_kygto")
 
 [node name="Stock" type="MeshInstance3D" parent="BaseGunModel"]
 transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, 0)
+cast_shadow = 0
 mesh = SubResource("BoxMesh_1tkvt")
 skeleton = NodePath("../..")
 
 [node name="Handle" type="MeshInstance3D" parent="BaseGunModel"]
 transform = Transform3D(0.274991, -0.00181464, -0.00139499, -0.00010688, 0.15724, -0.225611, 0.00228637, 0.225604, 0.157234, 0, -0.169017, 0.26881)
+cast_shadow = 0
 mesh = SubResource("BoxMesh_eu8nr")
 skeleton = NodePath("../..")
 
 [node name="Pump" type="MeshInstance3D" parent="BaseGunModel"]
 transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, -0.113422, -0.213009)
+cast_shadow = 0
 mesh = SubResource("BoxMesh_7lbcv")
 skeleton = NodePath("../..")
 

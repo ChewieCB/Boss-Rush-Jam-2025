@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://d0uqv7xitfwnt"]
+
+[ext_resource type="Script" path="res://src/player/test_scenes/dummy.gd" id="1_jubxk"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="1_sx18x"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uok4q"]
+size = Vector3(1, 2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_asko3"]
+albedo_color = Color(1, 0.13926, 0.116876, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8yaim"]
+material = SubResource("StandardMaterial3D_asko3")
+size = Vector3(1, 2, 1)
+
+[node name="Dummy" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
+collision_layer = 4
+collision_mask = 27
+script = ExtResource("1_jubxk")
+health_component = NodePath("HealthComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_uok4q")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_8yaim")
+
+[node name="DamageLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.89639, 0)
+pixel_size = 0.01
+billboard = 1
+text = "Shoot me"
+font_size = 40
+outline_size = 20
+
+[node name="HappyFaceLabel" type="Label3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0.587421, 0.560004)
+pixel_size = 0.01
+text = ": )"
+font_size = 40
+outline_size = 20
+
+[node name="SadFaceLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.587421, 0.560004)
+visible = false
+pixel_size = 0.01
+text = "T.T"
+font_size = 40
+outline_size = 20
+
+[node name="HealthComponent" parent="." instance=ExtResource("1_sx18x")]
+max_health = 99999.0
+
+[node name="ResetTotalDamageTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="ResetTotalDamageTimer" to="." method="_on_reset_total_damage_timer_timeout"]

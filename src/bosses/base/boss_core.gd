@@ -40,7 +40,7 @@ func _physics_process(delta: float) -> void:
 	vel_vertical -= GRAVITY * delta
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	velocity.y = vel_vertical
-	
+
 	move_and_slide()
 
 
@@ -94,7 +94,7 @@ func _on_movement_charging_state_entered() -> void:
 func _on_movement_charging_state_physics_processing(delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, 0.08)
 	velocity.z = lerp(velocity.z, 0.0, 0.08)
-	
+
 	if velocity.x == 0 and velocity.z == 0:
 		state_chart.send_event("end_charge")
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=27 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="Script" path="res://src/player/shakeable_camera.gd" id="3_cy2wl"]
@@ -25,14 +25,14 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_w3btf"]
 
+[sub_resource type="PrismMesh" id="PrismMesh_gkhtt"]
+size = Vector3(0.75, 0.75, 0.25)
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_cda8p"]
 noise_type = 0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sjjg0"]
 size = Vector3(0.5, 0.5, 0.5)
-
-[sub_resource type="PrismMesh" id="PrismMesh_gkhtt"]
-size = Vector3(0.75, 0.75, 0.25)
 
 [sub_resource type="Theme" id="Theme_y0f30"]
 default_font = ExtResource("10_4wdls")
