@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=24 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_e4bmr"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="12_edjma"]
 [ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="13_vpw76"]
 [ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -125,6 +126,7 @@ texture_albedo = ExtResource("3_tgexf")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
+z_index = 2
 
 [node name="PlayerHealthBarUI" type="MarginContainer" parent="UI" node_paths=PackedStringArray("health_component")]
 anchors_preset = 3
@@ -136,6 +138,7 @@ offset_left = -538.0
 offset_top = -171.0
 grow_horizontal = 0
 grow_vertical = 0
+mouse_filter = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 16
@@ -208,64 +211,102 @@ wait_time = 0.4
 one_shot = true
 
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
+z_as_relative = false
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")
 
 [node name="Root" type="Node" parent="StateChart"]
-script = ExtResource("7_1276k")
-initial_state = NodePath("Grounded")
+script = ExtResource("16_7a84q")
 
-[node name="Grounded" type="Node" parent="StateChart/Root"]
+[node name="Movement" type="Node" parent="StateChart/Root"]
+script = ExtResource("7_1276k")
+initial_state = NodePath("Wallcling")
+
+[node name="Grounded" type="Node" parent="StateChart/Root/Movement"]
 editor_description = "This state is active when the player is on the ground."
 script = ExtResource("8_dkhcu")
 
-[node name="onJump" type="Node" parent="StateChart/Root/Grounded"]
+[node name="onJump" type="Node" parent="StateChart/Root/Movement/Grounded"]
 editor_description = "When jumping become airborne and enable double-jump."
 script = ExtResource("10_g5bf6")
 to = NodePath("../../Airborne")
 event = &"jump"
 delay_in_seconds = "0.0"
 
-[node name="onAirborne" type="Node" parent="StateChart/Root/Grounded"]
+[node name="onAirborne" type="Node" parent="StateChart/Root/Movement/Grounded"]
 editor_description = "When becoming airborne (e.g. through falling) move to airborne state."
 script = ExtResource("10_g5bf6")
 to = NodePath("../../Airborne")
 event = &"airborne"
 delay_in_seconds = "0.0"
 
-[node name="Airborne" type="Node" parent="StateChart/Root"]
+[node name="Airborne" type="Node" parent="StateChart/Root/Movement"]
 script = ExtResource("8_dkhcu")
 
-[node name="onGrounded" type="Node" parent="StateChart/Root/Airborne"]
+[node name="onGrounded" type="Node" parent="StateChart/Root/Movement/Airborne"]
 script = ExtResource("10_g5bf6")
 to = NodePath("../../Grounded")
 event = &"grounded"
 delay_in_seconds = "0.0"
 
-[node name="onWallcling" type="Node" parent="StateChart/Root/Airborne"]
+[node name="onWallcling" type="Node" parent="StateChart/Root/Movement/Airborne"]
 script = ExtResource("10_g5bf6")
 to = NodePath("../../Wallcling")
 event = &"wallcling"
 delay_in_seconds = "0.0"
 
-[node name="Wallcling" type="Node" parent="StateChart/Root"]
+[node name="Wallcling" type="Node" parent="StateChart/Root/Movement"]
 script = ExtResource("8_dkhcu")
 
-[node name="onStopWallcling" type="Node" parent="StateChart/Root/Wallcling"]
+[node name="onStopWallcling" type="Node" parent="StateChart/Root/Movement/Wallcling"]
 script = ExtResource("10_g5bf6")
 to = NodePath("../../Airborne")
 event = &"stop_wallcling"
 delay_in_seconds = "0.0"
 
+[node name="Health" type="Node" parent="StateChart/Root"]
+script = ExtResource("7_1276k")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Health"]
+script = ExtResource("8_dkhcu")
+
+[node name="toHurt" type="Node" parent="StateChart/Root/Health/Idle"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Hurt")
+event = &"start_damage"
+delay_in_seconds = "0.0"
+
+[node name="Hurt" type="Node" parent="StateChart/Root/Health"]
+script = ExtResource("8_dkhcu")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Health/Hurt"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Idle")
+event = &"end_damage"
+delay_in_seconds = "0.0"
+
+[node name="toDead" type="Node" parent="StateChart/Root/Health/Hurt"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Dead")
+event = &"death"
+delay_in_seconds = "0.0"
+
+[node name="Dead" type="Node" parent="StateChart/Root/Health"]
+script = ExtResource("8_dkhcu")
+
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
 [connection signal="timeout" from="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer" to="UI/PlayerHealthBarUI" method="_on_timer_timeout"]
-[connection signal="state_input" from="StateChart/Root/Grounded" to="." method="_on_grounded_state_input"]
-[connection signal="state_physics_processing" from="StateChart/Root/Grounded" to="." method="_on_grounded_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_entered"]
-[connection signal="state_input" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_input"]
-[connection signal="state_physics_processing" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Wallcling" to="." method="_on_wallcling_state_entered"]
-[connection signal="state_input" from="StateChart/Root/Wallcling" to="." method="_on_wallcling_state_input"]
-[connection signal="state_physics_processing" from="StateChart/Root/Wallcling" to="." method="_on_wallcling_state_physics_processing"]
+[connection signal="state_input" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Airborne" to="." method="_on_airborne_state_entered"]
+[connection signal="state_input" from="StateChart/Root/Movement/Airborne" to="." method="_on_airborne_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Airborne" to="." method="_on_airborne_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Wallcling" to="." method="_on_wallcling_state_entered"]
+[connection signal="state_input" from="StateChart/Root/Movement/Wallcling" to="." method="_on_wallcling_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Wallcling" to="." method="_on_wallcling_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Health/Hurt" to="." method="_on_health_hurt_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_physics_processing"]

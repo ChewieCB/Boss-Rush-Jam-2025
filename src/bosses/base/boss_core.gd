@@ -135,4 +135,4 @@ func _on_died() -> void:
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	if body == target:
-		target.health_component.damage(10)
+		target.health_component.damage(40)

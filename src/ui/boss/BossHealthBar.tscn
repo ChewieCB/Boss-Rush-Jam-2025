@@ -25,6 +25,7 @@ offset_left = -554.0
 offset_right = 554.0
 offset_bottom = 153.0
 grow_horizontal = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 16

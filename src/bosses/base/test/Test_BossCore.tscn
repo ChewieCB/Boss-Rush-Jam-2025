@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=4 uid="uid://l3qbb2s01cj3"]
+[gd_scene load_steps=27 format=4 uid="uid://l3qbb2s01cj3"]
 
 [ext_resource type="Script" path="res://src/bosses/base/test/test_boss_core.gd" id="1_1g7ni"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_u8ere"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="4_pbctu"]
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="5_b7p74"]
 [ext_resource type="FontFile" uid="uid://bs58em2h8opfu" path="res://assets/fonts/BLACKJAC.TTF" id="7_p6dir"]
+[ext_resource type="Script" path="res://src/bosses/base/test/end_panel_ui.gd" id="7_pijg0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lqnun"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -93,9 +94,10 @@ data = PackedVector3Array(-6.75, -0.5, -22.25, 6.75, -0.5, -22.25, 6.75, 0.5, -2
 default_font = ExtResource("7_p6dir")
 default_font_size = 128
 
-[node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss")]
+[node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss", "player")]
 script = ExtResource("1_1g7ni")
 boss = NodePath("FuncGodotMap/entity_2_BossCoreRef")
+player = NodePath("FuncGodotMap/entity_1_PlayerRef")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
@@ -144,7 +146,6 @@ shape = SubResource("ConvexPolygonShape3D_6cxk4")
 
 [node name="entity_1_PlayerRef" parent="FuncGodotMap" instance=ExtResource("4_pbctu")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.25, 1.75, -0.25)
-dash_cd = 0.5
 
 [node name="entity_2_BossCoreRef" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("5_b7p74")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 4.36273, 25.5)
@@ -183,6 +184,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7_pijg0")
 
 [node name="PanelContainer" type="PanelContainer" parent="UI/BossDefeatedUI"]
 layout_mode = 1
@@ -197,9 +200,11 @@ offset_right = 390.5
 offset_bottom = 179.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="UI/BossDefeatedUI/PanelContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme = SubResource("Theme_iqhj3")
 bbcode_enabled = true
 text = "[center]STANK DEFEATED[/center]"

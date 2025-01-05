@@ -6,3 +6,7 @@ extends Control
 
 func hurt() -> void:
 	anim_player.play("hurt")
+
+
+func dead() -> void:
+	anim_player.play("dead")
