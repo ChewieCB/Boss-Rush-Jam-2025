@@ -104,6 +104,12 @@ to = NodePath("../../Walking")
 event = &"start_moving"
 delay_in_seconds = "0.0"
 
+[node name="toCharging" type="Node" parent="StateChart/Root/Movement/Targeting"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Charging")
+event = &"start_charge"
+delay_in_seconds = "1.0"
+
 [node name="Walking" type="Node" parent="StateChart/Root/Movement"]
 script = ExtResource("7_0t8qy")
 
@@ -117,6 +123,15 @@ delay_in_seconds = "0.0"
 script = ExtResource("8_lsrry")
 to = NodePath("../../Targeting")
 event = &"start_targeting"
+delay_in_seconds = "0.0"
+
+[node name="Charging" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("7_0t8qy")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Movement/Charging"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Idle")
+event = &"end_charge"
 delay_in_seconds = "0.0"
 
 [node name="Attacking" type="Node" parent="StateChart/Root"]
@@ -253,6 +268,9 @@ debug_path_custom_color = Color(1, 0, 0, 1)
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Targeting" to="." method="_on_movement_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]

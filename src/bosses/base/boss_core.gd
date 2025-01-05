@@ -74,7 +74,6 @@ func _on_movement_targeting_state_physics_processing(delta: float) -> void:
 	if target:
 		_turn_towards_target(TURN_SPEED_FAST, delta)
 
-
 #### WALKING
 func _on_movement_walking_state_entered() -> void:
 	navigation_component.enable()
@@ -82,6 +81,25 @@ func _on_movement_walking_state_entered() -> void:
 func _on_movement_walking_state_physics_processing(delta: float) -> void:
 	if target:
 		_turn_towards_target(TURN_SPEED_SLOW, delta)
+
+#### CHARGING
+func _on_movement_charging_state_entered() -> void:
+	navigation_component.disable()
+	var charge_dir = -self.global_basis.z
+	var charge_impulse = self.global_position.distance_to(target.global_position) * 6
+	velocity += charge_dir * charge_impulse
+
+func _on_movement_charging_state_physics_processing(delta: float) -> void:
+	velocity.x = lerp(velocity.x, 0.0, 0.08)
+	velocity.z = lerp(velocity.z, 0.0, 0.08)
+	
+	if velocity.x == 0 and velocity.z == 0:
+		state_chart.send_event("end_charge")
+
+func _on_movement_charging_state_exited() -> void:
+	await get_tree().create_timer(0.5).timeout
+	state_chart.send_event("start_targeting")
+
 
 ### HEALTH --------------------------------
 #### HIT
