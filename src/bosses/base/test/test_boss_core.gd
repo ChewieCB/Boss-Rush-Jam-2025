@@ -11,11 +11,13 @@ func _ready() -> void:
 
 
 func _on_boss_defeated() -> void:
+	pass
 	win_ui.win()
 	show_end_panel()
 
 
 func _on_player_death() -> void:
+	pass
 	win_ui.lose()
 	show_end_panel()
 
