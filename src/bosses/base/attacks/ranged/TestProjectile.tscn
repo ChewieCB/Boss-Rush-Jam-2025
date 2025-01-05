@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://cjklncq8p42y1"]
+
+[ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="1_ql635"]
+[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/test_projectile.gd" id="1_ye752"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_so2kb"]
+
+[node name="TestProjectile" type="Area3D"]
+collision_layer = 8
+collision_mask = 7
+script = ExtResource("1_ye752")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+modulate = Color(1, 0.933333, 0, 1)
+billboard = 1
+texture = ExtResource("1_ql635")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_so2kb")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
