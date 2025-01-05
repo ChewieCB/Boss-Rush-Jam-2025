@@ -117,6 +117,15 @@ func _on_health_hit_state_exited() -> void:
 func _on_health_dead_state_entered() -> void:
 	sprite.modulate = Color.DARK_SLATE_BLUE
 
+### ATTACKING --------------------------------
+#### TELEGRAPH
+func _on_attack_telegraph_state_entered() -> void:
+	sprite.modulate = Color.CYAN
+
+
+func _on_attack_telegraph_state_exited() -> void:
+	sprite.modulate = Color.WHITE
+
 
 ## ======== Signal Callback Methods ========
 
@@ -152,6 +161,9 @@ func _on_phase_target_player_state_entered() -> void:
 	debug_state_label.text = "Chase | Targeting"
 	state_chart.send_event("start_targeting")
 	await get_tree().create_timer(2.0).timeout
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(0.15).timeout
+	state_chart.send_event("attack_start")
 	state_chart.send_event("charge_player")
 
 func _on_phase_chase_player_charge_state_entered() -> void:
@@ -160,10 +172,12 @@ func _on_phase_chase_player_charge_state_entered() -> void:
 	state_chart.send_event("start_charge")
 
 func _on_phase_chase_player_recover_state_entered() -> void:
-	debug_state_label.text = "Chase | Recovering"
 	sprite.modulate = Color.YELLOW
+	debug_state_label.text = "Chase | Recovering"
+	state_chart.send_event("attack_end")
 	await get_tree().create_timer(1.2).timeout
+	state_chart.send_event("cooldown_end")
 	state_chart.send_event("end_recovery")
 
-func _on_phase_chase_player_recover_state_exited() -> void:
-	sprite.modulate = Color.WHITE
+#func _on_phase_chase_player_recover_state_exited() -> void:
+	#sprite.modulate = Color.WHITE
