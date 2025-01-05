@@ -1,0 +1,289 @@
+[gd_scene load_steps=19 format=3 uid="uid://ii5ocgeg86yx"]
+
+[ext_resource type="Texture2D" uid="uid://l708f35ye0ad" path="res://src/bosses/base/assets/umby_boss_sprite_placeholder.png" id="1_lhq8s"]
+[ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_fy6mc"]
+[ext_resource type="PackedScene" uid="uid://bwei3cifjg1sq" path="res://src/ui/boss/BossHealthBar.tscn" id="3_ybtoo"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_sfdil"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="5_oy1aj"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_nojwf"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="7_0t8qy"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="8_lsrry"]
+[ext_resource type="PackedScene" uid="uid://e7b51y76wxn3" path="res://src/components/navigation/NavigationComponent.tscn" id="9_cunyl"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="11_j156m"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="12_1g6yn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w7fni"]
+size = Vector3(2.5, 4.8, 2.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rkhu1"]
+size = Vector3(2.5, 4.8, 2.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a1ebn"]
+transparency = 1
+albedo_color = Color(1, 0, 0, 0.337255)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d0jfy"]
+size = Vector3(3, 2.2, 3)
+
+[sub_resource type="Resource" id="Resource_vq1e8"]
+script = ExtResource("11_j156m")
+state = NodePath("../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_o1b2s"]
+script = ExtResource("12_1g6yn")
+guard = SubResource("Resource_vq1e8")
+
+[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
+collision_layer = 4
+collision_mask = 27
+script = ExtResource("1_tem3i")
+navigation_component = NodePath("NavigationComponent")
+health_component = NodePath("HealthComponent")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+billboard = 2
+texture = ExtResource("1_lhq8s")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0393372, 2.43881, 0.0647888)
+shape = SubResource("BoxShape3D_w7fni")
+
+[node name="DebugMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+mesh = SubResource("BoxMesh_rkhu1")
+surface_material_override/0 = SubResource("StandardMaterial3D_a1ebn")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
+shape = SubResource("BoxShape3D_d0jfy")
+
+[node name="HealthComponent" parent="." instance=ExtResource("3_fy6mc")]
+max_health = 600.0
+
+[node name="NavigationComponent" parent="." node_paths=PackedStringArray("nav_agent") instance=ExtResource("9_cunyl")]
+nav_agent = NodePath("../NavigationAgent3D")
+
+[node name="BossHealthUI" type="CanvasLayer" parent="."]
+
+[node name="BossHealthContainer" parent="BossHealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("3_ybtoo")]
+health_component = NodePath("../../HealthComponent")
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("4_sfdil")
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("5_oy1aj")
+
+[node name="Movement" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("7_0t8qy")
+
+[node name="toWalking" type="Node" parent="StateChart/Root/Movement/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Walking")
+event = &"start_moving"
+guard = SubResource("Resource_o1b2s")
+delay_in_seconds = "0.0"
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Movement/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Targeting")
+event = &"start_targeting"
+delay_in_seconds = "0.0"
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("7_0t8qy")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Movement/Targeting"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Idle")
+event = &"stop_moving"
+delay_in_seconds = "0.0"
+
+[node name="toWalking" type="Node" parent="StateChart/Root/Movement/Targeting"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Walking")
+event = &"start_moving"
+delay_in_seconds = "0.0"
+
+[node name="toCharging" type="Node" parent="StateChart/Root/Movement/Targeting"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Charging")
+event = &"start_charge"
+delay_in_seconds = "1.0"
+
+[node name="Walking" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("7_0t8qy")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Movement/Walking"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Idle")
+event = &"stop_moving"
+delay_in_seconds = "0.0"
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Movement/Walking"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Targeting")
+event = &"start_targeting"
+delay_in_seconds = "0.0"
+
+[node name="Charging" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("7_0t8qy")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Movement/Charging"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Idle")
+event = &"end_charge"
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Attacking"]
+script = ExtResource("7_0t8qy")
+
+[node name="toBuildup" type="Node" parent="StateChart/Root/Attacking/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Buildup")
+event = &"attack_buildup"
+delay_in_seconds = "0.0"
+
+[node name="toTelegraph" type="Node" parent="StateChart/Root/Attacking/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Telegraph")
+event = &"attack_telegraph"
+delay_in_seconds = "0.0"
+
+[node name="toAttack" type="Node" parent="StateChart/Root/Attacking/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Attack")
+event = &"attack_start"
+delay_in_seconds = "0.0"
+
+[node name="Buildup" type="Node" parent="StateChart/Root/Attacking"]
+script = ExtResource("7_0t8qy")
+
+[node name="toTelegraph" type="Node" parent="StateChart/Root/Attacking/Buildup"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Telegraph")
+event = &"attack_telegraph"
+delay_in_seconds = "0.0"
+
+[node name="toAttack" type="Node" parent="StateChart/Root/Attacking/Buildup"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Attack")
+event = &"attack_start"
+delay_in_seconds = "0.0"
+
+[node name="toCooldown" type="Node" parent="StateChart/Root/Attacking/Buildup"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Cooldown")
+event = &"attack_interrupt"
+delay_in_seconds = "0.0"
+
+[node name="Telegraph" type="Node" parent="StateChart/Root/Attacking"]
+script = ExtResource("7_0t8qy")
+
+[node name="toAttack" type="Node" parent="StateChart/Root/Attacking/Telegraph"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Attack")
+event = &"attack_start"
+delay_in_seconds = "0.0"
+
+[node name="toCooldown" type="Node" parent="StateChart/Root/Attacking/Telegraph"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Cooldown")
+event = &"attack_interrupt"
+delay_in_seconds = "0.0"
+
+[node name="Attack" type="Node" parent="StateChart/Root/Attacking"]
+script = ExtResource("7_0t8qy")
+
+[node name="toCooldown" type="Node" parent="StateChart/Root/Attacking/Attack"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Cooldown")
+event = &"attack_end"
+delay_in_seconds = "0.0"
+
+[node name="Cooldown" type="Node" parent="StateChart/Root/Attacking"]
+script = ExtResource("7_0t8qy")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Attacking/Cooldown"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Idle")
+event = &"cooldown_end"
+delay_in_seconds = "0.0"
+
+[node name="Health" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Health"]
+script = ExtResource("7_0t8qy")
+
+[node name="toHit" type="Node" parent="StateChart/Root/Health/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Hit")
+event = &"start_damage"
+delay_in_seconds = "0.0"
+
+[node name="Hit" type="Node" parent="StateChart/Root/Health"]
+script = ExtResource("7_0t8qy")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Health/Hit"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Idle")
+event = &"end_damage"
+delay_in_seconds = "0.0"
+
+[node name="toDead" type="Node" parent="StateChart/Root/Health/Hit"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Dead")
+event = &"death"
+delay_in_seconds = "0.0"
+
+[node name="Dead" type="Node" parent="StateChart/Root/Health"]
+script = ExtResource("7_0t8qy")
+
+[node name="Status" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Status"]
+script = ExtResource("7_0t8qy")
+
+[node name="Phase" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("Chase")
+
+[node name="Chase" type="Node" parent="StateChart/Root/Phase"]
+script = ExtResource("7_0t8qy")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+debug_enabled = true
+debug_path_custom_color = Color(1, 0, 0, 1)
+
+[connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Targeting" to="." method="_on_movement_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Targeting" to="." method="_on_movement_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]

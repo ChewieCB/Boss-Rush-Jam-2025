@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=4 format=3 uid="uid://bb5aobsi08anx"]
+[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=5 format=3 uid="uid://bb5aobsi08anx"]
 
 [ext_resource type="Resource" uid="uid://dq458eynubrqg" path="res://assets/trenchbroom/PlayerRef.tres" id="1_aaqsq"]
 [ext_resource type="Resource" uid="uid://crgpdahjaj" path="res://addons/func_godot/fgd/func_godot_fgd.tres" id="1_v87b8"]
 [ext_resource type="Script" path="res://addons/func_godot/src/fgd/func_godot_fgd_file.gd" id="2_daboe"]
+[ext_resource type="Resource" uid="uid://2crk7qhsib3" path="res://assets/trenchbroom/BossCoreRef.tres" id="3_rueox"]
 
 [resource]
 script = ExtResource("2_daboe")
@@ -10,4 +11,4 @@ export_file = false
 target_map_editor = 1
 fgd_name = "FuncGodot"
 base_fgd_files = Array[Resource]([ExtResource("1_v87b8")])
-entity_definitions = Array[Resource]([ExtResource("1_aaqsq")])
+entity_definitions = Array[Resource]([ExtResource("1_aaqsq"), ExtResource("3_rueox")])
