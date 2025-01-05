@@ -8,6 +8,7 @@ class_name Player
 @export var aim_ray_prefab: PackedScene
 
 @export var health_component: HealthComponent
+@onready var hurt_overlay: Control = $UI/HurtOverlay
 
 @onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
 @onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
@@ -297,6 +298,7 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
+		hurt_overlay.hurt()
 
 
 func _on_died() -> void:

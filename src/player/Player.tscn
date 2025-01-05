@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=23 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_e4bmr"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="11_grp47"]
 [ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="12_edjma"]
 [ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="13_vpw76"]
+[ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -205,6 +206,8 @@ tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 [node name="Timer" type="Timer" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
 wait_time = 0.4
 one_shot = true
+
+[node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")
