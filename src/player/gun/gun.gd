@@ -1,17 +1,175 @@
 extends Node3D
 class_name Gun
 
+@export var gun_name: String
+@export_multiline var description: String
+
+@export var base_damage = 10
+@export var base_projectile_amount = 1
+## Shot per second
+@export var base_firerate = 2
+@export var base_magazine_size = 10
+## How spread out projectile can be from the aim center
+@export var spread_angle = 0
+## Projectile dont have travel time. Shot enemy is instanly damaged. If this ticked, ignore projectile_speed
+@export var is_hitscan: bool
+## How fast projectile travel. Ignored if is_hitscan ticked
+@export var base_projectile_speed: float = 100
+
+@export var aim_ray_prefab: PackedScene
+@export var projectile_prefab: PackedScene
+
 @onready var barrel_container = $Barrel
 @onready var loading_label: Label3D = $PlaceholderUI/ReloadLabel
+@onready var bullet_start_pos = $BulletStartPos
+
+var magazine_ammo_left = 0
+var is_reloading = false
+var time_since_last_shot = 0
+var installed_barrels: Array[SpinningGunBarrelInterface] = []
+
+# Modify-able by barrels
+# We won't modify them in this script
+var n_ammo_consume = 1
+var modified_damage
+var modified_projectile_amount
+var modified_firerate
+var modified_magazine_size
+
+
+const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.02
 
 func _ready() -> void:
 	loading_label.visible = false
-
-func spin_all_barrels():
-	loading_label.visible = true
+	magazine_ammo_left = base_magazine_size
 	for child in barrel_container.get_children():
-		child.start_spin()
+		child.owner_gun = self
+		installed_barrels.append(child)
+
+	modified_damage = base_damage
+	modified_projectile_amount = base_projectile_amount
+	modified_firerate = base_firerate
+	modified_magazine_size = base_magazine_size
+
+func _process(delta: float) -> void:
+	time_since_last_shot += delta
+
+func shoot(aim_ray: RayCast3D):
+	if magazine_ammo_left <= 0:
+		reload()
+		return
+
+	var can_fire = true
+	for barrel in installed_barrels:
+		can_fire = can_fire and barrel.on_fire_attempt()
+	if not can_fire:
+		return
+
+	for barrel in installed_barrels:
+		barrel.on_fire_rate_check()
+
+	var time_until_next_shot = 1.0 / modified_firerate
+	if time_until_next_shot > time_since_last_shot:
+		return
+
+	for barrel in installed_barrels:
+		barrel.on_prepare_to_fire()
+
+	for i in range(modified_projectile_amount):
+		for barrel in installed_barrels:
+			barrel.on_projectile_spawn()
+
+		for barrel in installed_barrels:
+			barrel.on_damage_calculation()
+
+		if is_hitscan:
+			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_start_pos.global_position
+			# var spread_direction = get_spread_direction(aim_direction)
+			create_hitscan_attack(bullet_start_pos.global_position, aim_direction)
+
+		# TODO:
+		# var projectile = null
+		# projectile.impact.connect(check_barrel_effect_on_projectile_impact)
+		# projectile.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
+
+	time_since_last_shot = 0
+	magazine_ammo_left -= n_ammo_consume
+	for barrel in installed_barrels:
+		barrel.on_ammo_consumed()
+	if magazine_ammo_left <= 0:
+		for barrel in installed_barrels:
+			barrel.on_clip_empty()
+	print("MAGAZINE: {0}/{1}".format([magazine_ammo_left, modified_magazine_size]))
+
+
+func create_hitscan_attack(start_pos: Vector3, direction: Vector3):
+	var hitscan_ray: AimRay = aim_ray_prefab.instantiate()
+	get_parent().add_child(hitscan_ray)
+	hitscan_ray.global_position = start_pos
+	hitscan_ray.look_at(start_pos + direction)
+	var projectile_inst: BaseProjectile = projectile_prefab.instantiate()
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	if hitscan_ray.is_colliding():
+		var target = hitscan_ray.get_collider()
+		var hitscan_col_point = hitscan_ray.get_collision_point()
+		var hitscan_col_normal = hitscan_ray.get_collision_normal()
+		projectile_inst.init(start_pos, hitscan_col_point)
+		GameManager.player.get_parent().add_child(projectile_inst)
+		if target is CharacterBody3D:
+			target.health_component.damage(modified_damage)
+			for barrel in installed_barrels:
+				barrel.on_damage_applied()
+		else:
+			# Hit wall/obstacle
+			projectile_inst.create_spark(hitscan_col_point, hitscan_col_normal)
+		# This is for ricohect. Not yet implemented
+		# if bounce_left > 0:
+		# 	create_hitscan_attack(hitscan_col_point, direction.bounce(hitscan_col_normal), bounce_left - 1, gun_projectile, damage)
+	else:
+		projectile_inst.init(start_pos, hitscan_ray.aim_ray_end.global_position)
+		GameManager.player.get_parent().add_child(projectile_inst)
+	hitscan_ray.call_deferred("queue_free")
+
+
+func check_barrel_effect_on_projectile_impact():
+	for barrel in installed_barrels:
+		barrel.on_projectile_impact()
+
+func check_barrel_effect_on_projectile_destroyed():
+	for barrel in installed_barrels:
+		barrel.on_projectile_destroyed()
+
+
+func reload():
+	for barrel in installed_barrels:
+		barrel.on_reload_start()
+
+	is_reloading = true
+	loading_label.visible = true
+	for barrel in installed_barrels:
+		barrel.start_spin()
 	await get_tree().create_timer(1).timeout
 	loading_label.visible = false
-	for child in barrel_container.get_children():
-		child.stop_spin()
+	for barrel in installed_barrels:
+		barrel.stop_spin()
+	is_reloading = false
+
+	for barrel in installed_barrels:
+		barrel.on_reload_end()
+
+	magazine_ammo_left = modified_magazine_size
+
+func get_spread_direction(center_direction: Vector3) -> Vector3:
+	# Convert spread angle to radians
+	var max_radians = deg_to_rad(spread_angle)
+
+	# Generate random rotation within the spread cone
+	var random_yaw = randf_range(-max_radians, max_radians)
+	var random_pitch = randf_range(-max_radians, max_radians)
+
+	# Create a rotation basis
+	var spread_rotation = Basis(Vector3.UP, random_yaw) * Basis(Vector3.RIGHT, random_pitch)
+
+	# Apply the rotation to the center direction
+	return (spread_rotation * center_direction).normalized()

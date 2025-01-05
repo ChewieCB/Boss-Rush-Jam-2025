@@ -68,6 +68,9 @@ var slide_dir := Vector2(0, 0)
 
 var controls_disabled: bool = false
 
+var gun_container_original_pos: Vector3
+var current_gun_slot = 0
+var is_swapping_gun = false
 
 func _ready():
 	GameManager.player = self
@@ -78,6 +81,7 @@ func _ready():
 	last_dashed_timestamp = 0
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
+	gun_container_original_pos = gun_container.position
 
 
 func _input(event):
@@ -99,10 +103,9 @@ func _input(event):
 
 	if event.is_action_released("shoot"):
 		# Raycast to target and damage them if hit
-		if aim_ray.is_colliding():
-			var target = aim_ray.get_collider()
-			if target is CharacterBody3D:
-				target.health_component.damage(10)
+		var gun: Gun = gun_container.get_child(0)
+		gun.shoot(aim_ray)
+
 
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
@@ -168,8 +171,8 @@ func _physics_process(delta):
 
 		show_debug_label()
 		var gun_sway_velocity = velocity * transform.basis
-		#if not is_swapping_gun:
-			#gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
+		if not is_swapping_gun:
+			gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
 	camera_control(delta)
 
 
@@ -199,7 +202,7 @@ func jump(multiplier = 1.0):
 
 func spin_reload():
 	var gun: Gun = gun_container.get_child(0)
-	gun.spin_all_barrels()
+	gun.reload()
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))

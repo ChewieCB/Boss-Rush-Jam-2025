@@ -1,8 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://de36wdf6rkio"]
+[gd_scene load_steps=12 format=3 uid="uid://de36wdf6rkio"]
 
 [ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="1_do4in"]
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_kygto"]
+[ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="2_l7ggu"]
 [ext_resource type="Script" path="res://src/player/barrel/spinning_gun_barrel.gd" id="2_s76xp"]
+[ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="3_3ea0a"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
 albedo_color = Color(1, 0.568275, 0.171359, 1)
@@ -27,6 +29,9 @@ height = 0.5
 
 [node name="Shotgun" type="Node3D"]
 script = ExtResource("1_kygto")
+is_hitscan = true
+aim_ray_prefab = ExtResource("2_l7ggu")
+projectile_prefab = ExtResource("3_3ea0a")
 
 [node name="BaseGunModel" type="Node3D" parent="."]
 
@@ -90,3 +95,8 @@ transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 
 visible = false
 pixel_size = 0.003
 text = "Reloading..."
+
+[node name="FireRateTimer" type="Timer" parent="."]
+
+[node name="BulletStartPos" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.454098)
