@@ -6,9 +6,10 @@ class_name BossCore
 
 @onready var sprite: Sprite3D = $Sprite3D
 @onready var debug_mesh: MeshInstance3D = $DebugMesh
+@onready var debug_state_label: Label3D = $DebugStateLabel
 @onready var state_chart: StateChart = $StateChart
-@onready var hurtbox: Area3D = $Hurtbox
 
+@onready var hurtbox: Area3D = $Hurtbox
 @onready var health_ui = $BossHealthUI/BossHealthContainer
 
 const MAX_SPEED: float = 5.0
@@ -100,8 +101,6 @@ func _on_movement_charging_state_physics_processing(delta: float) -> void:
 
 func _on_movement_charging_state_exited() -> void:
 	hurtbox.monitoring = false
-	await get_tree().create_timer(0.5).timeout
-	state_chart.send_event("start_targeting")
 
 
 ### HEALTH --------------------------------
@@ -124,8 +123,9 @@ func _on_health_dead_state_entered() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
-		state_chart.send_event("start_targeting")
-		state_chart.send_event("start_charge")
+		if prev_health == health_component.max_health:
+			# TODO - replace with function to decide which attack to do
+			state_chart.send_event("start_chase_attack")
 
 
 func _on_died() -> void:
@@ -136,3 +136,30 @@ func _on_died() -> void:
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	if body == target:
 		target.health_component.damage(40)
+
+
+func _on_phase_inactive_state_entered() -> void:
+	debug_state_label.text = "Inactive"
+	sprite.modulate = Color.DIM_GRAY
+
+
+func _on_phase_target_player_state_entered() -> void:
+	sprite.modulate = Color.WHITE
+	debug_state_label.text = "Chase | Targeting"
+	state_chart.send_event("start_targeting")
+	await get_tree().create_timer(2.0).timeout
+	state_chart.send_event("charge_player")
+
+func _on_phase_chase_player_charge_state_entered() -> void:
+	sprite.modulate = Color.ORANGE
+	debug_state_label.text = "Chase | Charging"
+	state_chart.send_event("start_charge")
+
+func _on_chase_player_recover_state_entered() -> void:
+	debug_state_label.text = "Chase | Recovering"
+	sprite.modulate = Color.YELLOW
+	await get_tree().create_timer(1.2).timeout
+	state_chart.send_event("end_recovery")
+
+func _on_chase_player_recover_state_exited() -> void:
+	sprite.modulate = Color.WHITE
