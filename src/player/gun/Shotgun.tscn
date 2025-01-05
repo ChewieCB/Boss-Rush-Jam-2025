@@ -29,6 +29,8 @@ height = 0.5
 
 [node name="Shotgun" type="Node3D"]
 script = ExtResource("1_kygto")
+base_projectile_amount = 8
+spread_angle = 8
 is_hitscan = true
 aim_ray_prefab = ExtResource("2_l7ggu")
 projectile_prefab = ExtResource("3_3ea0a")

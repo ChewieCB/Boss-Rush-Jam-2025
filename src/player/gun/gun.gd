@@ -15,13 +15,16 @@ class_name Gun
 @export var is_hitscan: bool
 ## How fast projectile travel. Ignored if is_hitscan ticked
 @export var base_projectile_speed: float = 100
+@export var recoil_amount: float = 0.03
+## How much screenshake when player shot
+@export var screenshake_amount: float = 0.2
 
 @export var aim_ray_prefab: PackedScene
 @export var projectile_prefab: PackedScene
 
 @onready var barrel_container = $Barrel
 @onready var loading_label: Label3D = $PlaceholderUI/ReloadLabel
-@onready var bullet_start_pos = $BulletStartPos
+@onready var bullet_spawn_marker = $BulletStartPos
 
 var magazine_ammo_left = 0
 var is_reloading = false
@@ -38,6 +41,7 @@ var modified_magazine_size
 
 
 const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.02
+const BULLET_SPAWN_POS_VARIATION = 10
 
 func _ready() -> void:
 	loading_label.visible = false
@@ -75,6 +79,13 @@ func shoot(aim_ray: RayCast3D):
 	for barrel in installed_barrels:
 		barrel.on_prepare_to_fire()
 
+	# Screenshake
+	GameManager.player.player_camera.add_trauma(screenshake_amount)
+	# Recoil
+	GameManager.player.player_camera.rotate_x(recoil_amount)
+	GameManager.player.player_camera.rotate_y(randf_range(-recoil_amount, recoil_amount))
+
+
 	for i in range(modified_projectile_amount):
 		for barrel in installed_barrels:
 			barrel.on_projectile_spawn()
@@ -83,9 +94,13 @@ func shoot(aim_ray: RayCast3D):
 			barrel.on_damage_calculation()
 
 		if is_hitscan:
-			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_start_pos.global_position
-			# var spread_direction = get_spread_direction(aim_direction)
-			create_hitscan_attack(bullet_start_pos.global_position, aim_direction)
+			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
+			var spread_direction = get_spread_direction(aim_direction)
+			var bullet_start_pos = bullet_spawn_marker.global_position
+			# Randomize bullet start pos a bit for automatic weapon
+			# bullet_start_pos.x += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
+			# bullet_start_pos.y += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
+			create_hitscan_attack(bullet_start_pos, spread_direction)
 
 		# TODO:
 		# var projectile = null

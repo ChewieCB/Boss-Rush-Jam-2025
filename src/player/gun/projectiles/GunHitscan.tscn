@@ -17,6 +17,7 @@ emission_energy_multiplier = 4.0
 material_override = SubResource("StandardMaterial3D_18s4u")
 mesh = SubResource("BoxMesh_yehfg")
 script = ExtResource("1_uqjuh")
+thickness = 2
 spark_effect = ExtResource("2_ddxwb")
 
 [node name="Timer" type="Timer" parent="."]

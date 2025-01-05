@@ -101,15 +101,13 @@ func _input(event):
 			vel_vertical = 0
 			dash_duration_timer.start()
 
-	if event.is_action_released("shoot"):
-		# Raycast to target and damage them if hit
-		var gun: Gun = gun_container.get_child(0)
-		gun.shoot(aim_ray)
-
-
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 
+	if Input.is_action_pressed("shoot"):
+		# Raycast to target and damage them if hit
+		var gun: Gun = gun_container.get_child(0)
+		gun.shoot(aim_ray)
 
 func _physics_process(delta):
 	if controls_disabled:
