@@ -29,7 +29,7 @@ class_name Gun
 var magazine_ammo_left = 0
 var is_reloading = false
 var time_since_last_shot = 0
-var installed_barrels: Array[SpinningGunBarrelInterface] = []
+var installed_barrels: Array[SpinBarrelInterface] = []
 
 # Modify-able by barrels
 # We won't modify them in this script
@@ -52,17 +52,14 @@ func _ready() -> void:
 	for child in barrel_container.get_children():
 		child.owner_gun = self
 		installed_barrels.append(child)
-
-	modified_damage = base_damage
-	modified_projectile_amount = base_projectile_amount
-	modified_firerate = base_firerate
-	modified_magazine_size = base_magazine_size
-	
+	reset_modifier()
 
 func _process(delta: float) -> void:
 	time_since_last_shot += delta
 
 func shoot(aim_ray: RayCast3D):
+	if is_reloading:
+		return
 	if magazine_ammo_left <= 0:
 		reload()
 		return
@@ -82,13 +79,13 @@ func shoot(aim_ray: RayCast3D):
 
 	for barrel in installed_barrels:
 		barrel.on_prepare_to_fire()
+		await barrel.modification_completed
 
 	# Screenshake
 	GameManager.player.player_camera.add_trauma(screenshake_amount)
 	# Recoil
 	GameManager.player.player_camera.rotate_x(recoil_amount)
 	GameManager.player.player_camera.rotate_y(randf_range(-recoil_amount, recoil_amount))
-
 
 	for i in range(modified_projectile_amount):
 		for barrel in installed_barrels:
@@ -119,6 +116,7 @@ func shoot(aim_ray: RayCast3D):
 		for barrel in installed_barrels:
 			barrel.on_clip_empty()
 	gun_shot.emit()
+	reset_modifier()
 
 
 func create_hitscan_attack(start_pos: Vector3, direction: Vector3):
@@ -167,6 +165,7 @@ func reload():
 
 	is_reloading = true
 	loading_label.visible = true
+	reset_modifier()
 	for barrel in installed_barrels:
 		barrel.start_spin()
 	await get_tree().create_timer(1).timeout
@@ -180,6 +179,13 @@ func reload():
 
 	magazine_ammo_left = modified_magazine_size
 	gun_reloaded.emit()
+
+func reset_modifier():
+	n_ammo_consume = 1
+	modified_damage = base_damage
+	modified_projectile_amount = base_projectile_amount
+	modified_firerate = base_firerate
+	modified_magazine_size = base_magazine_size
 
 func get_spread_direction(center_direction: Vector3) -> Vector3:
 	# Convert spread angle to radians

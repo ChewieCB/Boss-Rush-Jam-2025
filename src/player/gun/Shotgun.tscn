@@ -1,9 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://de36wdf6rkio"]
+[gd_scene load_steps=10 format=3 uid="uid://de36wdf6rkio"]
 
 [ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="1_do4in"]
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_kygto"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="2_l7ggu"]
-[ext_resource type="Script" path="res://src/player/barrel/spinning_gun_barrel.gd" id="2_s76xp"]
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="3_3ea0a"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
@@ -24,11 +23,10 @@ albedo_color = Color(0.5, 0.284137, 0.0856795, 1)
 material = SubResource("StandardMaterial3D_f0tbl")
 size = Vector3(0.795, 0.415, 1.005)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
-height = 0.5
-
 [node name="Shotgun" type="Node3D"]
 script = ExtResource("1_kygto")
+gun_name = "Shotgun"
+description = "The usual shotgun"
 base_projectile_amount = 8
 spread_angle = 8
 is_hitscan = true
@@ -60,35 +58,11 @@ skeleton = NodePath("../..")
 [node name="ProjectileCountBarrel" parent="Barrel" instance=ExtResource("1_do4in")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.268329)
 
-[node name="DamageModifierBarrel" type="Node3D" parent="Barrel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.170182)
-script = ExtResource("2_s76xp")
-barrel_name = "DamageModifier"
-possible_values = Array[String](["-20% damage", "+5% damage", "+10% damage", "+20% damage", "+25% damage", "+25% damage", "+50% damage", "+100% damage"])
+[node name="ProjectileCountBarrel2" parent="Barrel" instance=ExtResource("1_do4in")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.175189)
 
-[node name="Model" type="MeshInstance3D" parent="Barrel/DamageModifierBarrel"]
-transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
-mesh = SubResource("CylinderMesh_sfbyw")
-
-[node name="Label3D" type="Label3D" parent="Barrel/DamageModifierBarrel"]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.155303, 0.0311846, 0)
-text = "+2 projectile"
-horizontal_alignment = 2
-
-[node name="VitalityModifierBarrel" type="Node3D" parent="Barrel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0745511)
-script = ExtResource("2_s76xp")
-barrel_name = "VitalityModifier"
-possible_values = Array[String](["-1 hp on MISS", "+1 hp on HIT", "+5 hp on KILL", "+2 hp on CRIT", "+1% hp on HIT"])
-
-[node name="Model" type="MeshInstance3D" parent="Barrel/VitalityModifierBarrel"]
-transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
-mesh = SubResource("CylinderMesh_sfbyw")
-
-[node name="Label3D" type="Label3D" parent="Barrel/VitalityModifierBarrel"]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.150666, 0.0311846, 0)
-text = "+2 projectile"
-horizontal_alignment = 2
+[node name="ProjectileCountBarrel3" parent="Barrel" instance=ExtResource("1_do4in")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0834185)
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 

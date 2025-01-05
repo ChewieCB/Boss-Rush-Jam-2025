@@ -127,7 +127,6 @@ transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
 
 [node name="Shotgun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("6_mlgd0")]
 transform = Transform3D(0.959201, 0, 0.282727, 0, 1, 0, -0.282727, 0, 0.959201, 0.244493, 0, 0.23962)
-gun_name = "Shotgun"
 description = "The usual shotgun."
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
@@ -235,7 +234,7 @@ one_shot = true
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
 
-[node name="GunUI" type="Label" parent="UI"]
+[node name="MagazineUI" type="Label" parent="UI"]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -251,6 +250,24 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 6
 theme_override_font_sizes/font_size = 50
 text = "10/10"
+horizontal_alignment = 2
+
+[node name="HardcodedGunInfo" type="Label" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -199.0
+offset_top = 25.0
+offset_right = -29.0
+offset_bottom = 202.0
+grow_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 30
+text = "Base value of Shotgun
+projectile: 8
+damage: 10
+firerate: 2/s"
 horizontal_alignment = 2
 
 [node name="StateChart" type="Node" parent="."]

@@ -22,7 +22,7 @@ class_name Player
 @onready var gun_container = $Neck/ShakeableCamera/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeableCamera/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
-@onready var magazine_label: Label = $UI/GunUI
+@onready var magazine_label: Label = $UI/MagazineUI
 
 const MAX_SPEED: float = 8.0
 const MAX_FALL_SPEED: float = 50.0
