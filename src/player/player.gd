@@ -7,6 +7,8 @@ class_name Player
 @export var dash_cd: float = 0.5
 @export var aim_ray_prefab: PackedScene
 
+@export var health_component: HealthComponent
+
 @onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
 @onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
 @onready var debug_meshes: Node3D = $DebugMeshes
@@ -71,6 +73,8 @@ func _ready():
 	player_camera.set_fov(GameManager.camera_fov)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	last_dashed_timestamp = 0
+	health_component.health_changed.connect(_on_health_changed)
+	health_component.died.connect(_on_died)
 
 
 func _input(event):
@@ -288,3 +292,12 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 			# Jump away from wall
 			vel_horizontal += Vector2(wall_normal.x, wall_normal.z) * 16
 			jump(0.8)
+
+
+func _on_health_changed(new_health: float, prev_health: float) -> void:
+	if new_health < prev_health:
+		state_chart.send_event("start_damage")
+
+
+func _on_died() -> void:
+	state_chart.send_event("death")

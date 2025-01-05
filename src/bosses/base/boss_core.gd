@@ -7,6 +7,7 @@ class_name BossCore
 @onready var sprite: Sprite3D = $Sprite3D
 @onready var debug_mesh: MeshInstance3D = $DebugMesh
 @onready var state_chart: StateChart = $StateChart
+@onready var hurtbox: Area3D = $Hurtbox
 
 @onready var health_ui = $BossHealthUI/BossHealthContainer
 
@@ -85,6 +86,7 @@ func _on_movement_walking_state_physics_processing(delta: float) -> void:
 #### CHARGING
 func _on_movement_charging_state_entered() -> void:
 	navigation_component.disable()
+	hurtbox.monitoring = true
 	var charge_dir = -self.global_basis.z
 	var charge_impulse = self.global_position.distance_to(target.global_position) * 6
 	velocity += charge_dir * charge_impulse
@@ -97,6 +99,7 @@ func _on_movement_charging_state_physics_processing(delta: float) -> void:
 		state_chart.send_event("end_charge")
 
 func _on_movement_charging_state_exited() -> void:
+	hurtbox.monitoring = false
 	await get_tree().create_timer(0.5).timeout
 	state_chart.send_event("start_targeting")
 
@@ -121,8 +124,15 @@ func _on_health_dead_state_entered() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
+		state_chart.send_event("start_targeting")
+		state_chart.send_event("start_charge")
 
 
 func _on_died() -> void:
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
+
+
+func _on_hurtbox_body_entered(body: Node3D) -> void:
+	if body == target:
+		target.health_component.damage(10)
