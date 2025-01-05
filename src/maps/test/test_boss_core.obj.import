@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dfypaxf2ttxp6"
+path="res://.godot/imported/test_boss_core.obj-c39f76e263cd8ae83c4530459a8fb84f.mesh"
+
+[deps]
+
+files=["res://.godot/imported/test_boss_core.obj-c39f76e263cd8ae83c4530459a8fb84f.mesh"]
+
+source_file="res://src/maps/test/test_boss_core.obj"
+dest_files=["res://.godot/imported/test_boss_core.obj-c39f76e263cd8ae83c4530459a8fb84f.mesh", "res://.godot/imported/test_boss_core.obj-c39f76e263cd8ae83c4530459a8fb84f.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
