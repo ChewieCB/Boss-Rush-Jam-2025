@@ -39,6 +39,9 @@ var modified_projectile_amount
 var modified_firerate
 var modified_magazine_size
 
+signal gun_shot
+signal gun_reloaded
+
 
 const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.02
 const BULLET_SPAWN_POS_VARIATION = 10
@@ -54,6 +57,7 @@ func _ready() -> void:
 	modified_projectile_amount = base_projectile_amount
 	modified_firerate = base_firerate
 	modified_magazine_size = base_magazine_size
+	
 
 func _process(delta: float) -> void:
 	time_since_last_shot += delta
@@ -114,7 +118,7 @@ func shoot(aim_ray: RayCast3D):
 	if magazine_ammo_left <= 0:
 		for barrel in installed_barrels:
 			barrel.on_clip_empty()
-	print("MAGAZINE: {0}/{1}".format([magazine_ammo_left, modified_magazine_size]))
+	gun_shot.emit()
 
 
 func create_hitscan_attack(start_pos: Vector3, direction: Vector3):
@@ -133,6 +137,7 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3):
 		GameManager.player.get_parent().add_child(projectile_inst)
 		if target is CharacterBody3D:
 			target.health_component.damage(modified_damage)
+			projectile_inst.create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 			for barrel in installed_barrels:
 				barrel.on_damage_applied()
 		else:
@@ -174,6 +179,7 @@ func reload():
 		barrel.on_reload_end()
 
 	magazine_ammo_left = modified_magazine_size
+	gun_reloaded.emit()
 
 func get_spread_direction(center_direction: Vector3) -> Vector3:
 	# Convert spread angle to radians

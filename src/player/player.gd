@@ -22,7 +22,7 @@ class_name Player
 @onready var gun_container = $Neck/ShakeableCamera/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeableCamera/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
-
+@onready var magazine_label: Label = $UI/GunUI
 
 const MAX_SPEED: float = 8.0
 const MAX_FALL_SPEED: float = 50.0
@@ -83,6 +83,9 @@ func _ready():
 	health_component.died.connect(_on_died)
 	gun_container_original_pos = gun_container.position
 
+	var gun: Gun = gun_container.get_child(0)
+	gun.gun_shot.connect(update_hud)
+	gun.gun_reloaded.connect(update_hud)
 
 func _input(event):
 	if controls_disabled:
@@ -172,6 +175,10 @@ func _physics_process(delta):
 		if not is_swapping_gun:
 			gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
 	camera_control(delta)
+
+func update_hud():
+	var gun: Gun = gun_container.get_child(0)
+	magazine_label.text = "{0}/{1}".format([gun.magazine_ammo_left, gun.modified_magazine_size])
 
 
 func show_debug_label():

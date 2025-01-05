@@ -235,6 +235,24 @@ one_shot = true
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
 
+[node name="GunUI" type="Label" parent="UI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -162.0
+offset_top = -89.0
+offset_right = -28.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 50
+text = "10/10"
+horizontal_alignment = 2
+
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")
 
