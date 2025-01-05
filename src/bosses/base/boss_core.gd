@@ -131,6 +131,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 func _on_died() -> void:
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
 
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
@@ -138,11 +139,14 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 		target.health_component.damage(40)
 
 
+### ATTACK PHASES --------------------------------
+#### INACTIVE
 func _on_phase_inactive_state_entered() -> void:
 	debug_state_label.text = "Inactive"
 	sprite.modulate = Color.DIM_GRAY
 
 
+#### CHASE PLAYER
 func _on_phase_target_player_state_entered() -> void:
 	sprite.modulate = Color.WHITE
 	debug_state_label.text = "Chase | Targeting"
@@ -155,11 +159,11 @@ func _on_phase_chase_player_charge_state_entered() -> void:
 	debug_state_label.text = "Chase | Charging"
 	state_chart.send_event("start_charge")
 
-func _on_chase_player_recover_state_entered() -> void:
+func _on_phase_chase_player_recover_state_entered() -> void:
 	debug_state_label.text = "Chase | Recovering"
 	sprite.modulate = Color.YELLOW
 	await get_tree().create_timer(1.2).timeout
 	state_chart.send_event("end_recovery")
 
-func _on_chase_player_recover_state_exited() -> void:
+func _on_phase_chase_player_recover_state_exited() -> void:
 	sprite.modulate = Color.WHITE

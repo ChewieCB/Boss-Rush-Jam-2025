@@ -326,6 +326,12 @@ to = NodePath("../../TargetPlayer")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 debug_enabled = true
 debug_path_custom_color = Color(1, 0, 0, 1)
@@ -355,5 +361,5 @@ uppercase = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/TargetPlayer" to="." method="_on_phase_target_player_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/Charge" to="." method="_on_phase_chase_player_charge_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/Recover" to="." method="_on_chase_player_recover_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Phase/ChasePlayer/Recover" to="." method="_on_chase_player_recover_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/Recover" to="." method="_on_phase_chase_player_recover_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/ChasePlayer/Recover" to="." method="_on_phase_chase_player_recover_state_exited"]
