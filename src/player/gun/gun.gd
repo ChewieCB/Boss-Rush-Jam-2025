@@ -92,7 +92,6 @@ func shoot(aim_ray: RayCast3D):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_calculation()
 
-	print("n_shot_repeat ", n_shot_repeat)
 	for i in range(n_shot_repeat):
 
 		for j in range(modified_projectile_amount):
@@ -171,6 +170,8 @@ func check_barrel_effect_on_projectile_destroyed():
 
 
 func reload():
+	if is_jammed:
+		return
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
 
@@ -194,7 +195,6 @@ func reload():
 	gun_reloaded.emit()
 
 func reset_modifier():
-	print("RESET MODIFIER")
 	n_ammo_consume = 1
 	n_shot_repeat = 1
 	modified_damage = base_damage
