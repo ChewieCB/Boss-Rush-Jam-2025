@@ -5,9 +5,9 @@ extends Node3D
 
 @onready var win_ui: Control = $UI/BossDefeatedUI
 
-#func _ready() -> void:
-	#boss.health_component.died.connect(_on_boss_defeated)
-	#player.health_component.died.connect(_on_player_death)
+func _ready() -> void:
+	boss.health_component.died.connect(_on_boss_defeated)
+	player.health_component.died.connect(_on_player_death)
 
 
 func _on_boss_defeated() -> void:
