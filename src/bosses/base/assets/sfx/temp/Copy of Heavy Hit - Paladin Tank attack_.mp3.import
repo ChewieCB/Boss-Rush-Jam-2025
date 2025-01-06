@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://3p8sq5hywihn"
+path="res://.godot/imported/Copy of Heavy Hit - Paladin Tank attack_.mp3-ca5b2fb18c0c7a12d3dc595dcd4d877b.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/base/assets/sfx/temp/Copy of Heavy Hit - Paladin Tank attack_.mp3"
+dest_files=["res://.godot/imported/Copy of Heavy Hit - Paladin Tank attack_.mp3-ca5b2fb18c0c7a12d3dc595dcd4d877b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

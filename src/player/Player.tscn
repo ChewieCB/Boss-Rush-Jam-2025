@@ -1,0 +1,392 @@
+[gd_scene load_steps=37 format=3 uid="uid://7s75qf3um0h0"]
+
+[ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
+[ext_resource type="AudioStream" uid="uid://dkjvdnf0hufiv" path="res://src/player/assets/sfx/temp/Player_damaged_1.mp3" id="2_kd0pf"]
+[ext_resource type="Script" path="res://src/player/shakeable_camera.gd" id="3_cy2wl"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_e4bmr"]
+[ext_resource type="AudioStream" uid="uid://cnmljmkqgwgmi" path="res://src/player/assets/sfx/temp/Player_damaged_2.mp3" id="3_pveus"]
+[ext_resource type="Texture2D" uid="uid://t7scpy3771o6" path="res://src/player/assets/blob_shadow.png" id="3_tgexf"]
+[ext_resource type="AudioStream" uid="uid://c17out3b37w2o" path="res://src/player/assets/sfx/temp/Player_damaged_3.mp3" id="4_aesbc"]
+[ext_resource type="Texture2D" uid="uid://cl0jqrjnnsy7n" path="res://src/player/assets/default_crosshair.png" id="4_ymis7"]
+[ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="5_dqbuo"]
+[ext_resource type="AudioStream" uid="uid://cyhmrif4rli4i" path="res://src/player/assets/sfx/temp/Player_damaged_4.mp3" id="5_fd78g"]
+[ext_resource type="Texture2D" uid="uid://coblcfhc2qgbt" path="res://src/player/assets/hitmarker_lg.png" id="5_nkt42"]
+[ext_resource type="AudioStream" uid="uid://chxvv0tfaasnw" path="res://src/player/assets/sfx/temp/Player_damaged_5.mp3" id="6_8bniu"]
+[ext_resource type="PackedScene" uid="uid://de36wdf6rkio" path="res://src/player/gun/Shotgun.tscn" id="6_mlgd0"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="6_t33b7"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_1276k"]
+[ext_resource type="PackedScene" uid="uid://byj1y3wrwtdtq" path="res://src/ui/pause_menu/PauseUI.tscn" id="7_db7x8"]
+[ext_resource type="AudioStream" uid="uid://ultwfhksuadr" path="res://src/player/assets/sfx/temp/Player_Damaged_bonus.mp3" id="7_rcwb7"]
+[ext_resource type="AudioStream" uid="uid://ccfcawm3u1r2e" path="res://src/player/assets/sfx/temp/Player_dead_1.mp3" id="8_0q120"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_dkhcu"]
+[ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="9_dmp1b"]
+[ext_resource type="AudioStream" uid="uid://dn4a4q1mrg1pv" path="res://src/player/assets/sfx/temp/Player_dead_2.mp3" id="9_n6gsv"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="10_4wdls"]
+[ext_resource type="AudioStream" uid="uid://b7lqglnhl2llk" path="res://src/player/assets/sfx/temp/dash1.wav" id="10_ak4r0"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="10_g5bf6"]
+[ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="11_grp47"]
+[ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="12_edjma"]
+[ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="13_vpw76"]
+[ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_w3btf"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_gkhtt"]
+size = Vector3(0.75, 0.75, 0.25)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cda8p"]
+noise_type = 0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sjjg0"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="Theme" id="Theme_y0f30"]
+default_font = ExtResource("10_4wdls")
+
+[sub_resource type="Theme" id="Theme_l1wiy"]
+default_font = ExtResource("10_4wdls")
+default_font_size = 32
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
+collision_layer = 2
+collision_mask = 29
+script = ExtResource("1_rl0vi")
+TEMP_sfx_hurt = Array[AudioStream]([ExtResource("2_kd0pf"), ExtResource("3_pveus"), ExtResource("4_aesbc"), ExtResource("5_fd78g"), ExtResource("6_8bniu"), ExtResource("7_rcwb7")])
+TEMP_sfx_dead = Array[AudioStream]([ExtResource("8_0q120"), ExtResource("9_n6gsv")])
+TEMP_sfx_dash = ExtResource("10_ak4r0")
+can_wall_jump = true
+can_wall_cling = true
+max_air_jump = 1
+aim_ray_prefab = ExtResource("5_dqbuo")
+health_component = NodePath("HealthComponent")
+
+[node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_le58x")
+
+[node name="DebugMeshes" type="Node3D" parent="."]
+visible = false
+
+[node name="Body" type="MeshInstance3D" parent="DebugMeshes"]
+mesh = SubResource("CapsuleMesh_w3btf")
+skeleton = NodePath("../..")
+
+[node name="FacingDir" type="MeshInstance3D" parent="DebugMeshes"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -4.37114e-08, -1)
+mesh = SubResource("PrismMesh_gkhtt")
+skeleton = NodePath("../..")
+
+[node name="WallRaycast" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -1)
+debug_shape_custom_color = Color(1, 0.988235, 0, 1)
+debug_shape_thickness = 5
+
+[node name="Neck" type="Node3D" parent="."]
+
+[node name="ShakeableCamera" type="Area3D" parent="Neck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
+script = ExtResource("3_cy2wl")
+noise = SubResource("FastNoiseLite_cda8p")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Neck/ShakeableCamera"]
+shape = SubResource("BoxShape3D_sjjg0")
+
+[node name="Camera3D" type="Camera3D" parent="Neck/ShakeableCamera"]
+current = true
+fov = 90.0
+near = 0.02
+
+[node name="AimRecticle" type="TextureRect" parent="Neck/ShakeableCamera"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ymis7")
+
+[node name="HitMarker" type="TextureRect" parent="Neck/ShakeableCamera"]
+modulate = Color(1, 0.976471, 0.388235, 1)
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_nkt42")
+
+[node name="DebugLabel" type="Label" parent="Neck/ShakeableCamera"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 192.0
+offset_bottom = 64.0
+theme_override_font_sizes/font_size = 12
+text = "VSpeed: 0 u/s
+HSpeed: 0 u/s"
+
+[node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
+
+[node name="Shotgun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("6_mlgd0")]
+transform = Transform3D(0.959201, 0, 0.282727, 0, 1, 0, -0.282727, 0, 0.959201, 0.244493, 0, 0.23962)
+description = "The usual shotgun."
+
+[node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
+
+[node name="DashDuration" type="Timer" parent="."]
+editor_description = "How long the dash action last"
+wait_time = 0.2
+one_shot = true
+
+[node name="CoyoteTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="Decal" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.27613, 0)
+texture_albedo = ExtResource("3_tgexf")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
+z_index = 2
+
+[node name="PlayerHealthBarUI" type="MarginContainer" parent="UI" node_paths=PackedStringArray("health_component")]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -538.0
+offset_top = -171.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+script = ExtResource("9_dmp1b")
+health_component = NodePath("../../HealthComponent")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PlayerHealthBarUI"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer2" type="MarginContainer" parent="UI/PlayerHealthBarUI/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Label" type="Label" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
+visible = false
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_y0f30")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "10,000/10,000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthBar" type="TextureProgressBar" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
+custom_minimum_size = Vector2(240, 20)
+layout_mode = 2
+size_flags_vertical = 4
+value = 40.0
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_over = ExtResource("11_grp47")
+texture_progress = ExtResource("12_edjma")
+tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
+
+[node name="DamageBar" type="TextureProgressBar" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 60.0
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_under = ExtResource("13_vpw76")
+texture_progress = ExtResource("13_vpw76")
+tint_under = Color(0.113725, 0.113725, 0.113725, 1)
+tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
+
+[node name="Timer" type="Timer" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
+wait_time = 0.4
+one_shot = true
+
+[node name="MagazineUI" type="Label" parent="UI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -178.0
+offset_top = -89.0
+offset_right = -28.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = SubResource("Theme_l1wiy")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 50
+text = "10/10"
+horizontal_alignment = 2
+
+[node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
+z_as_relative = false
+
+[node name="HardcodedGunInfo" type="Label" parent="UI"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -199.0
+offset_top = 25.0
+offset_right = -29.0
+offset_bottom = 202.0
+grow_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 30
+text = "Base value of Shotgun
+projectile: 8
+damage: 10
+firerate: 2/s"
+horizontal_alignment = 2
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("6_t33b7")
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("16_7a84q")
+
+[node name="Movement" type="Node" parent="StateChart/Root"]
+script = ExtResource("7_1276k")
+initial_state = NodePath("Wallcling")
+
+[node name="Grounded" type="Node" parent="StateChart/Root/Movement"]
+editor_description = "This state is active when the player is on the ground."
+script = ExtResource("8_dkhcu")
+
+[node name="onJump" type="Node" parent="StateChart/Root/Movement/Grounded"]
+editor_description = "When jumping become airborne and enable double-jump."
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Airborne")
+event = &"jump"
+delay_in_seconds = "0.0"
+
+[node name="onAirborne" type="Node" parent="StateChart/Root/Movement/Grounded"]
+editor_description = "When becoming airborne (e.g. through falling) move to airborne state."
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Airborne")
+event = &"airborne"
+delay_in_seconds = "0.0"
+
+[node name="Airborne" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("8_dkhcu")
+
+[node name="onGrounded" type="Node" parent="StateChart/Root/Movement/Airborne"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Grounded")
+event = &"grounded"
+delay_in_seconds = "0.0"
+
+[node name="onWallcling" type="Node" parent="StateChart/Root/Movement/Airborne"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Wallcling")
+event = &"wallcling"
+delay_in_seconds = "0.0"
+
+[node name="Wallcling" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("8_dkhcu")
+
+[node name="onStopWallcling" type="Node" parent="StateChart/Root/Movement/Wallcling"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Airborne")
+event = &"stop_wallcling"
+delay_in_seconds = "0.0"
+
+[node name="Health" type="Node" parent="StateChart/Root"]
+script = ExtResource("7_1276k")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Health"]
+script = ExtResource("8_dkhcu")
+
+[node name="toHurt" type="Node" parent="StateChart/Root/Health/Idle"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Hurt")
+event = &"start_damage"
+delay_in_seconds = "0.0"
+
+[node name="Hurt" type="Node" parent="StateChart/Root/Health"]
+script = ExtResource("8_dkhcu")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Health/Hurt"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Idle")
+event = &"end_damage"
+delay_in_seconds = "0.0"
+
+[node name="toDead" type="Node" parent="StateChart/Root/Health/Hurt"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Dead")
+event = &"death"
+delay_in_seconds = "0.0"
+
+[node name="Dead" type="Node" parent="StateChart/Root/Health"]
+script = ExtResource("8_dkhcu")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1, 0.2)
+light_color = Color(0.78, 0.897333, 1, 1)
+
+[connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
+[connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
+[connection signal="timeout" from="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer" to="UI/PlayerHealthBarUI" method="_on_timer_timeout"]
+[connection signal="state_input" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Airborne" to="." method="_on_airborne_state_entered"]
+[connection signal="state_input" from="StateChart/Root/Movement/Airborne" to="." method="_on_airborne_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Airborne" to="." method="_on_airborne_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Wallcling" to="." method="_on_wallcling_state_entered"]
+[connection signal="state_input" from="StateChart/Root/Movement/Wallcling" to="." method="_on_wallcling_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Wallcling" to="." method="_on_wallcling_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Health/Hurt" to="." method="_on_health_hurt_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_physics_processing"]

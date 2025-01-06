@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://bboeh48xujyik"]
+
+[ext_resource type="Script" path="res://src/bosses/base/test/end_panel_ui.gd" id="1_75thx"]
+[ext_resource type="FontFile" uid="uid://bs58em2h8opfu" path="res://assets/fonts/BLACKJAC.TTF" id="2_rfed8"]
+
+[sub_resource type="Theme" id="Theme_5idyq"]
+default_font = ExtResource("2_rfed8")
+default_font_size = 128
+
+[node name="BossDefeatedUI" type="Control"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_75thx")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -390.5
+offset_top = -179.0
+offset_right = 390.5
+offset_bottom = 179.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme = SubResource("Theme_5idyq")
+bbcode_enabled = true
+text = "[center]STANK DEFEATED[/center]"
+fit_content = true
+scroll_active = false

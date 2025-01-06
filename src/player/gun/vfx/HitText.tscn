@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://b052m61k5ht8i"]
+
+[ext_resource type="FontFile" uid="uid://br6qj15d4hopj" path="res://assets/fonts/BLACR___.TTF" id="1_cx0fs"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/hit_text.gd" id="2_b2ayu"]
+
+[node name="HitText" type="Label3D"]
+billboard = 1
+text = "TEST TEXT"
+font = ExtResource("1_cx0fs")
+font_size = 128
+outline_size = 64
+script = ExtResource("2_b2ayu")
