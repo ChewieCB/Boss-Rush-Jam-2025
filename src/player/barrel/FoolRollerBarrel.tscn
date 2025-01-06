@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://dmgm77t2sxoc5"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_iw80l"]
+[ext_resource type="Script" path="res://src/player/barrel/ammo_leech_effect.gd" id="2_psr82"]
+[ext_resource type="Script" path="res://src/player/barrel/multishot_effect.gd" id="3_bgcdx"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
+height = 0.5
+
+[node name="FoolRoller" type="Node3D"]
+script = ExtResource("1_iw80l")
+barrel_name = "FoolRoller"
+
+[node name="Model" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
+mesh = SubResource("CylinderMesh_sfbyw")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0311846, 0)
+text = "10% ammo refund on hit
+-10% damage"
+horizontal_alignment = 2
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="AmmoLeechEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_psr82")
+refund_chance = 20.0
+flat_damage_modify = -25
+display_text = "20% refund ammo on hit
+-25% damage"
+
+[node name="DoubleTapEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_bgcdx")
+ammo_consumed = 2
+shot_count = 2
+display_text = "Double Tap"

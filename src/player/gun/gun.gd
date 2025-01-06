@@ -34,6 +34,7 @@ var installed_barrels: Array[SpinBarrel] = []
 # Modify-able by barrels
 # We won't modify them in this script
 var n_ammo_consume = 1
+var n_shot_repeat = 1
 var modified_damage
 var modified_projectile_amount
 var modified_firerate
@@ -43,7 +44,7 @@ signal gun_shot
 signal gun_reloaded
 
 
-const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.02
+const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.15
 const BULLET_SPAWN_POS_VARIATION = 10
 
 func _ready() -> void:
@@ -89,26 +90,29 @@ func shoot(aim_ray: RayCast3D):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_calculation()
 
+	print("n_shot_repeat ", n_shot_repeat)
+	for i in range(n_shot_repeat):
 
-	for i in range(modified_projectile_amount):
-		for barrel in installed_barrels:
-			barrel.get_active_effect().on_projectile_spawn()
+		for j in range(modified_projectile_amount):
+			for barrel in installed_barrels:
+				barrel.get_active_effect().on_projectile_spawn()
 
-		if is_hitscan:
-			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
-			var spread_direction = get_spread_direction(aim_direction)
-			var bullet_start_pos = bullet_spawn_marker.global_position
-			# Randomize bullet start pos a bit for automatic weapon
-			# bullet_start_pos.x += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
-			# bullet_start_pos.y += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
-			create_hitscan_attack(bullet_start_pos, spread_direction, modified_damage)
+			if is_hitscan:
+				var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
+				var spread_direction = get_spread_direction(aim_direction)
+				var bullet_start_pos = bullet_spawn_marker.global_position
+				# Randomize bullet start pos a bit for automatic weapon
+				# bullet_start_pos.x += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
+				# bullet_start_pos.y += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
+				create_hitscan_attack(bullet_start_pos, spread_direction, modified_damage)
 
-		# TODO:
-		# var projectile = null
-		# projectile.impact.connect(check_barrel_effect_on_projectile_impact)
-		# projectile.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
+			# TODO:
+			# var projectile = null
+			# projectile.impact.connect(check_barrel_effect_on_projectile_impact)
+			# projectile.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
+		time_since_last_shot = 0
+		await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
 
-	time_since_last_shot = 0
 	magazine_ammo_left -= n_ammo_consume
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_ammo_consumed()
@@ -184,7 +188,9 @@ func reload():
 	gun_reloaded.emit()
 
 func reset_modifier():
+	print("RESET MODIFIER")
 	n_ammo_consume = 1
+	n_shot_repeat = 1
 	modified_damage = base_damage
 	modified_projectile_amount = base_projectile_amount
 	modified_firerate = base_firerate
