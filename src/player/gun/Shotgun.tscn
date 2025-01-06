@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://de36wdf6rkio"]
+[gd_scene load_steps=11 format=3 uid="uid://de36wdf6rkio"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_kygto"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="2_l7ggu"]
-[ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="3_3ea0a"]
-[ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="5_70soy"]
+[ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="3_wypyb"]
+[ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="4_6s01h"]
+[ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="5_lelmw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
 albedo_color = Color(1, 0.568275, 0.171359, 1)
@@ -29,9 +30,9 @@ gun_name = "Shotgun"
 description = "The usual shotgun"
 base_projectile_amount = 8
 spread_angle = 8
-is_hitscan = true
+base_projectile_speed = 50.0
 aim_ray_prefab = ExtResource("2_l7ggu")
-projectile_prefab = ExtResource("3_3ea0a")
+projectile_prefab = ExtResource("3_wypyb")
 
 [node name="BaseGunModel" type="Node3D" parent="."]
 
@@ -55,14 +56,10 @@ skeleton = NodePath("../..")
 
 [node name="Barrel" type="Node3D" parent="."]
 
-[node name="FoolRoller" parent="Barrel" instance=ExtResource("5_70soy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.307668)
+[node name="ProjectileCountBarrel" parent="Barrel" instance=ExtResource("4_6s01h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.32368)
 
-[node name="FoolRoller2" parent="Barrel" instance=ExtResource("5_70soy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.167926)
-
-[node name="FoolRoller3" parent="Barrel" instance=ExtResource("5_70soy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0223119)
+[node name="FoolRoller" parent="Barrel" instance=ExtResource("5_lelmw")]
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 

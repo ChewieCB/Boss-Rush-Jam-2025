@@ -1,9 +1,8 @@
 extends BaseProjectile
 class_name GunHitscan
 
-@export var thickness = 4
-@export var spark_effect: PackedScene
-@export var generic_blood_splatter: PackedScene
+## Only affect visual
+@export var thickness = 1
 
 @onready var shot_flash_start = $ShotFlashStart
 
@@ -32,30 +31,6 @@ func _process(delta):
 
 func get_projectile_color() -> Color:
 	return material_override.albedo_color
-
-func create_spark(pos: Vector3, normal: Vector3):
-	var spark_inst = spark_effect.instantiate()
-	get_parent().add_child(spark_inst)
-	spark_inst.global_position = pos
-
-	if normal.is_equal_approx(Vector3.DOWN):
-		spark_inst.rotation_degrees.x = -90
-	elif normal.is_equal_approx(Vector3.UP):
-		spark_inst.rotation_degrees.x = 90
-	else:
-		spark_inst.look_at(pos + normal, Vector3.UP)
-
-func create_blood_splatter(pos: Vector3, normal: Vector3):
-	var blood_inst = generic_blood_splatter.instantiate()
-	get_parent().add_child(blood_inst)
-	blood_inst.global_position = pos
-
-	if normal.is_equal_approx(Vector3.DOWN):
-		blood_inst.rotation_degrees.x = -90
-	elif normal.is_equal_approx(Vector3.UP):
-		blood_inst.rotation_degrees.x = 90
-	else:
-		blood_inst.look_at(pos + normal, Vector3.UP)
 
 func _on_timer_timeout():
 	queue_free()

@@ -13,7 +13,8 @@ class_name Gun
 @export var spread_angle = 0
 ## Projectile dont have travel time. Shot enemy is instanly damaged. If this ticked, ignore projectile_speed
 @export var is_hitscan: bool
-## How fast projectile travel. Ignored if is_hitscan ticked
+## How fast projectile travel. Ignored if is_hitscan ticked. Shouldn't higher than 100 or collision detecion
+## will be an issue
 @export var base_projectile_speed: float = 100
 @export var recoil_amount: float = 0.03
 ## How much screenshake when player shot
@@ -41,6 +42,7 @@ var modified_damage
 var modified_projectile_amount
 var modified_firerate
 var modified_magazine_size
+var modified_projectile_speed
 
 signal gun_shot
 signal gun_reloaded
@@ -92,20 +94,21 @@ func shoot(aim_ray: RayCast3D):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_calculation()
 
+	var bullet_start_pos = bullet_spawn_marker.global_position
 	for i in range(n_shot_repeat):
-
 		for j in range(modified_projectile_amount):
+
 			for barrel in installed_barrels:
 				barrel.get_active_effect().on_projectile_spawn()
-
+			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
+			var spread_direction = get_spread_direction(aim_direction)
+			# Randomize bullet start pos a bit for automatic weapon
+			# bullet_start_pos.x += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
+			# bullet_start_pos.y += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
 			if is_hitscan:
-				var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
-				var spread_direction = get_spread_direction(aim_direction)
-				var bullet_start_pos = bullet_spawn_marker.global_position
-				# Randomize bullet start pos a bit for automatic weapon
-				# bullet_start_pos.x += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
-				# bullet_start_pos.y += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
 				create_hitscan_attack(bullet_start_pos, spread_direction, modified_damage)
+			else:
+				create_projectile_attack(bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 
 			# TODO:
 			# var projectile = null
@@ -129,15 +132,15 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
 	get_parent().add_child(hitscan_ray)
 	hitscan_ray.global_position = start_pos
 	hitscan_ray.look_at(start_pos + direction)
-	var projectile_inst: BaseProjectile = projectile_prefab.instantiate()
+	var projectile_inst: GunHitscan = projectile_prefab.instantiate()
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	if hitscan_ray.is_colliding():
 		var target = hitscan_ray.get_collider()
 		var hitscan_col_point = hitscan_ray.get_collision_point()
 		var hitscan_col_normal = hitscan_ray.get_collision_normal()
-		projectile_inst.init(start_pos, hitscan_col_point)
 		GameManager.player.get_parent().add_child(projectile_inst)
+		projectile_inst.init(start_pos, hitscan_col_point)
 		if target is CharacterBody3D:
 			target.health_component.damage(damage)
 			projectile_inst.create_blood_splatter(hitscan_col_point, hitscan_col_normal)
@@ -151,9 +154,15 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
 		# if bounce_left > 0:
 		# 	create_hitscan_attack(hitscan_col_point, direction.bounce(hitscan_col_normal), bounce_left - 1, gun_projectile, damage)
 	else:
-		projectile_inst.init(start_pos, hitscan_ray.aim_ray_end.global_position)
 		GameManager.player.get_parent().add_child(projectile_inst)
+		projectile_inst.init(start_pos, hitscan_ray.aim_ray_end.global_position)
 	hitscan_ray.call_deferred("queue_free")
+
+
+func create_projectile_attack(start_pos: Vector3, direction: Vector3, damage: int, speed: float):
+	var projectile_inst: GunProjectile = projectile_prefab.instantiate()
+	GameManager.player.get_parent().add_child(projectile_inst)
+	projectile_inst.init(start_pos, start_pos + direction, damage, speed)
 
 
 func check_barrel_effect_on_projectile_impact():
@@ -198,6 +207,7 @@ func reset_modifier():
 	modified_projectile_amount = base_projectile_amount
 	modified_firerate = base_firerate
 	modified_magazine_size = base_magazine_size
+	modified_projectile_speed = base_projectile_speed
 
 
 func jam_the_gun(duration: float = 1.0):
