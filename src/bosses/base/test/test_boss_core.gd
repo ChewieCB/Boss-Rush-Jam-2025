@@ -5,9 +5,9 @@ extends Node3D
 
 @onready var win_ui: Control = $UI/BossDefeatedUI
 
-func _ready() -> void:
-	boss.health_component.died.connect(_on_boss_defeated)
-	player.health_component.died.connect(_on_player_death)
+#func _ready() -> void:
+	#boss.health_component.died.connect(_on_boss_defeated)
+	#player.health_component.died.connect(_on_player_death)
 
 
 func _on_boss_defeated() -> void:
@@ -35,3 +35,8 @@ func show_end_panel() -> void:
 
 func _return_to_main() -> void:
 	get_tree().change_scene_to_file("res://src/ui/temp/TempMain.tscn")
+
+
+func _on_area_3d_body_entered(body: Node3D) -> void:
+	if body is BossCore:
+		body.jump()

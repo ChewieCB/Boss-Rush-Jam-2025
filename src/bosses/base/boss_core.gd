@@ -90,6 +90,10 @@ func _physics_process(delta: float) -> void:
 	]
 
 
+func jump(multiplier = 1.0):
+	vel_vertical = JUMP_FORCE * multiplier
+
+
 func _turn_towards_target(speed: float, delta: float) -> void:
 	var direction: Vector3 = self.global_position.direction_to(target.global_position)
 	self.rotation.y = lerp_angle(
@@ -128,12 +132,13 @@ func change_phase() -> void:
 		possible_phases.erase("start_area_attack")
 	
 	# If the player is further away, prioritise charges and area attacks
-	if dist_to_target >= 20:
+	if dist_to_target >= 30:
 		possible_phases.append("start_chase_attack")
 		possible_phases.append("start_chase_attack")
 		possible_phases.append("start_chase_attack")
 	# If the player is closer, prioritise ranged attacks
 	else:
+		possible_phases.append("start_ranged_attack")
 		possible_phases.append("start_ranged_attack")
 		possible_phases.append("start_ranged_attack")
 	
@@ -396,9 +401,10 @@ func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
 		mesh.height = 0.5
 		mesh.material = sphere_mat
 		
-		sphere_mat.transparency = true
+		#sphere_mat.transparency = true
+		sphere_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 		sphere_mat.cull_mode = 2
-		sphere_mat.albedo_color = Color(Color.RED, 0.2)
+		sphere_mat.albedo_color = Color(Color.RED)
 		
 		# Animate the visual
 		var tween = get_tree().create_tween()

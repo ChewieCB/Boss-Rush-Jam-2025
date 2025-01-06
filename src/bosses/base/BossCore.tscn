@@ -16,8 +16,9 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="12_1g6yn"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="13_ai5vk"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_w7fni"]
-size = Vector3(2.5, 4.8, 2.5)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m057l"]
+radius = 1.0
+height = 4.6
 
 [sub_resource type="BoxMesh" id="BoxMesh_rkhu1"]
 size = Vector3(2.5, 4.8, 2.5)
@@ -69,8 +70,8 @@ billboard = 2
 texture = ExtResource("1_lhq8s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0393372, 2.43881, 0.0647888)
-shape = SubResource("BoxShape3D_w7fni")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
+shape = SubResource("CapsuleShape3D_m057l")
 
 [node name="DebugMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
@@ -469,7 +470,10 @@ guard = SubResource("Resource_8m7u0")
 delay_in_seconds = "0.0"
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+keep_y_velocity = false
+debug_enabled = true
 debug_path_custom_color = Color(1, 0, 0, 1)
+debug_path_custom_point_size = 8.0
 
 [node name="DebugStateLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
