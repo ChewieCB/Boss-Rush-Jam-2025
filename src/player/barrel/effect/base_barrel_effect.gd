@@ -56,6 +56,7 @@ func on_projectile_travel_tick():
 func on_projectile_impact():
 	return
 
+## This is similar to `on_projectile_impact` so maybe we should just use that instead
 func on_projectile_destroyed():
 	return
 

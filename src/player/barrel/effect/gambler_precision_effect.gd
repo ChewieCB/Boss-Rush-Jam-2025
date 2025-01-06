@@ -12,11 +12,6 @@ func on_prepare_to_fire():
 
 func on_ammo_consumed():
 	super()
-	if missed:
-		var roll = randi_range(1, 100)
-		if roll <= jam_chance_if_missed:
-			owner_barrel.owner_gun.jam_the_gun(2)
-	missed = false
 
 func on_clip_empty():
 	super()
@@ -38,6 +33,11 @@ func on_projectile_travel_tick():
 
 func on_projectile_impact():
 	super()
+	if missed:
+		var roll = randi_range(1, 100)
+		if roll <= jam_chance_if_missed:
+			owner_barrel.owner_gun.jam_the_gun(2)
+	missed = false
 
 func on_projectile_destroyed():
 	super()

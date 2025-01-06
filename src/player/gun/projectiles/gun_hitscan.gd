@@ -7,7 +7,7 @@ class_name GunHitscan
 @onready var shot_flash_start = $ShotFlashStart
 
 var alpha = 1.0
-var fade_speed = 4.0
+var fade_speed = 2.0
 
 func _ready():
 	var dup_mat = material_override.duplicate()
@@ -17,8 +17,7 @@ func _ready():
 		shot_flash_start.rotate_z(rotate_amount)
 		shot_flash_start.modulate = material_override.albedo_color
 
-func init(pos1: Vector3, pos2: Vector3, _fade_speed: float = 4.0):
-	fade_speed = _fade_speed
+func init(pos1: Vector3, pos2: Vector3):
 	self.scale = Vector3(0.01 * thickness, 0.01 * thickness, pos1.distance_to(pos2))
 	self.look_at_from_position((pos1 + pos2) / 2, pos2, Vector3.UP)
 

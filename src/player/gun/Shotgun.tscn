@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://de36wdf6rkio"]
+[gd_scene load_steps=12 format=3 uid="uid://de36wdf6rkio"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_kygto"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="2_l7ggu"]
+[ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="3_8nt2m"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="3_wypyb"]
 [ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="4_6s01h"]
 [ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="5_lelmw"]
@@ -32,6 +33,7 @@ base_projectile_amount = 8
 spread_angle = 8
 base_projectile_speed = 50.0
 aim_ray_prefab = ExtResource("2_l7ggu")
+hiscan_prefab = ExtResource("3_8nt2m")
 projectile_prefab = ExtResource("3_wypyb")
 
 [node name="BaseGunModel" type="Node3D" parent="."]

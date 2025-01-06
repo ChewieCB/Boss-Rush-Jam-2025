@@ -6,6 +6,9 @@ class_name GunProjectile
 
 @onready var raycast: RayCast3D = $RayCast3D
 
+signal damage_applied
+signal impacted
+
 var projectile_speed = 100
 var damage = 1
 var found_hitscal_col = false
@@ -37,9 +40,11 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	projectile_speed = 0
 	if body is CharacterBody3D:
 		body.health_component.damage(damage)
+		damage_applied.emit()
 		if found_hitscal_col:
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 	else:
 		if found_hitscal_col:
 			create_spark(hitscan_col_point, hitscan_col_normal)
+	impacted.emit()
 	call_deferred("queue_free")
