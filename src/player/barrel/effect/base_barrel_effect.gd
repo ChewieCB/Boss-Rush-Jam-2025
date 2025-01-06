@@ -1,7 +1,9 @@
 extends Node
 class_name BaseBarrelEffect
 
-@export_multiline var display_text: String
+@export_multiline var display_text_title: String
+@export_multiline var display_text_tag: String
+@export_multiline var display_text_desc: String
 
 var owner_barrel: SpinBarrel
 ## This variable is to prevent a single shot trigger the effect multiple times.
