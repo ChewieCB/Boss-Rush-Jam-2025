@@ -8,6 +8,7 @@ class_name GunProjectile
 
 signal damage_applied
 signal impacted
+signal destroyed
 
 var projectile_speed = 100
 var damage = 1
@@ -33,7 +34,8 @@ func init(pos1: Vector3, pos2: Vector3, _damage: int, _speed: float):
 		found_hitscal_col = true
 
 func _on_life_timer_timeout() -> void:
-	queue_free()
+	destroyed.emit()
+	call_deferred("queue_free")
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
@@ -47,4 +49,5 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		if found_hitscal_col:
 			create_spark(hitscan_col_point, hitscan_col_normal)
 	impacted.emit()
+	destroyed.emit()
 	call_deferred("queue_free")

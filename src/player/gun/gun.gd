@@ -70,6 +70,8 @@ func shoot(aim_ray: RayCast3D):
 		reload()
 		return
 
+	reset_modifier()
+
 	var can_fire = true
 	for barrel in installed_barrels:
 		can_fire = can_fire and barrel.get_active_effect().on_fire_attempt()
@@ -125,7 +127,6 @@ func shoot(aim_ray: RayCast3D):
 		for barrel in installed_barrels:
 			barrel.get_active_effect().on_clip_empty()
 	gun_shot.emit()
-	reset_modifier()
 
 
 func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
@@ -162,6 +163,8 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
 		projectile_inst.init(start_pos, hitscan_ray.aim_ray_end.global_position)
 		# GameManager.player.add_child(projectile_inst)
 		# projectile_inst.init(bullet_spawn_marker.global_position, hitscan_ray.aim_ray_end.global_position)
+
+	check_barrel_effect_on_projectile_destroyed()
 	hitscan_ray.call_deferred("queue_free")
 
 
@@ -171,6 +174,7 @@ func create_projectile_attack(start_pos: Vector3, direction: Vector3, damage: in
 	projectile_inst.init(start_pos, start_pos + direction, damage, speed)
 	projectile_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
 	projectile_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
+	projectile_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 
 func check_barrel_effect_on_damage_applied():
 	for barrel in installed_barrels:
@@ -179,6 +183,12 @@ func check_barrel_effect_on_damage_applied():
 func check_barrel_effect_on_projectile_impact():
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_projectile_impact()
+
+func check_barrel_effect_on_projectile_destroyed():
+	print("FAFAFAFAFAF")
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_projectile_destroyed()
+
 
 func reload():
 	if is_jammed:

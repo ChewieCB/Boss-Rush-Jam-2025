@@ -12,7 +12,7 @@ shader = ExtResource("1_1gwnq")
 shader_parameter/origin_position = null
 shader_parameter/fade_distance = 10.0
 shader_parameter/fade_multiplier = 1.0
-shader_parameter/color = Color(1, 0.574468, 0.159575, 1)
+shader_parameter/color = Color(1, 0.791493, 0, 1)
 shader_parameter/taper_amount = -2.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_yehfg"]
