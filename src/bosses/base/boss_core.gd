@@ -424,10 +424,10 @@ func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
 		mesh.height = 0.5
 		mesh.material = sphere_mat
 		
-		#sphere_mat.transparency = true
+		sphere_mat.transparency = true
 		sphere_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 		sphere_mat.cull_mode = 2
-		sphere_mat.albedo_color = Color(Color.RED)
+		sphere_mat.albedo_color = Color(Color.RED, 0.25)
 		
 		# Animate the visual
 		var tween = get_tree().create_tween()
