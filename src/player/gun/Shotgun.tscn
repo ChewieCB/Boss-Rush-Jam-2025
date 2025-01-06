@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://de36wdf6rkio"]
+[gd_scene load_steps=11 format=3 uid="uid://de36wdf6rkio"]
 
 [ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="1_do4in"]
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_kygto"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="2_l7ggu"]
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="3_3ea0a"]
+[ext_resource type="PackedScene" uid="uid://dt50r5mlotk1h" path="res://src/player/barrel/AmmoLeechBarrel.tscn" id="5_utg7o"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
 albedo_color = Color(1, 0.568275, 0.171359, 1)
@@ -58,11 +59,8 @@ skeleton = NodePath("../..")
 [node name="ProjectileCountBarrel" parent="Barrel" instance=ExtResource("1_do4in")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.268329)
 
-[node name="ProjectileCountBarrel2" parent="Barrel" instance=ExtResource("1_do4in")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.175189)
-
-[node name="ProjectileCountBarrel3" parent="Barrel" instance=ExtResource("1_do4in")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0834185)
+[node name="AmmoLeechBarrel" parent="Barrel" instance=ExtResource("5_utg7o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0751555)
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 

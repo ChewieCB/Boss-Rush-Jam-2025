@@ -79,7 +79,6 @@ func shoot(aim_ray: RayCast3D):
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_prepare_to_fire()
-		await barrel.get_active_effect().modification_completed
 
 	# Screenshake
 	GameManager.player.player_camera.add_trauma(screenshake_amount)
@@ -87,12 +86,13 @@ func shoot(aim_ray: RayCast3D):
 	GameManager.player.player_camera.rotate_x(recoil_amount)
 	GameManager.player.player_camera.rotate_y(randf_range(-recoil_amount, recoil_amount))
 
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_damage_calculation()
+
+
 	for i in range(modified_projectile_amount):
 		for barrel in installed_barrels:
 			barrel.get_active_effect().on_projectile_spawn()
-
-		for barrel in installed_barrels:
-			barrel.get_active_effect().on_damage_calculation()
 
 		if is_hitscan:
 			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
@@ -101,7 +101,7 @@ func shoot(aim_ray: RayCast3D):
 			# Randomize bullet start pos a bit for automatic weapon
 			# bullet_start_pos.x += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
 			# bullet_start_pos.y += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
-			create_hitscan_attack(bullet_start_pos, spread_direction)
+			create_hitscan_attack(bullet_start_pos, spread_direction, modified_damage)
 
 		# TODO:
 		# var projectile = null
@@ -119,7 +119,7 @@ func shoot(aim_ray: RayCast3D):
 	reset_modifier()
 
 
-func create_hitscan_attack(start_pos: Vector3, direction: Vector3):
+func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
 	var hitscan_ray: AimRay = aim_ray_prefab.instantiate()
 	get_parent().add_child(hitscan_ray)
 	hitscan_ray.global_position = start_pos
@@ -134,10 +134,11 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3):
 		projectile_inst.init(start_pos, hitscan_col_point)
 		GameManager.player.get_parent().add_child(projectile_inst)
 		if target is CharacterBody3D:
-			target.health_component.damage(modified_damage)
+			target.health_component.damage(damage)
 			projectile_inst.create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 			for barrel in installed_barrels:
 				barrel.get_active_effect().on_damage_applied()
+
 		else:
 			# Hit wall/obstacle
 			projectile_inst.create_spark(hitscan_col_point, hitscan_col_normal)
@@ -153,6 +154,7 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3):
 func check_barrel_effect_on_projectile_impact():
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_projectile_impact()
+
 
 func check_barrel_effect_on_projectile_destroyed():
 	for barrel in installed_barrels:
@@ -176,6 +178,7 @@ func reload():
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
+
 
 	magazine_ammo_left = modified_magazine_size
 	gun_reloaded.emit()

@@ -1,17 +1,18 @@
 extends Node
 class_name BaseBarrelEffect
 
-@export var display_text: String
+@export_multiline var display_text: String
 
 var owner_barrel: SpinBarrel
-
-# Emit this signal after every hook to prevent race condition
-signal modification_completed
+## This variable is to prevent a single shot trigger the effect multiple times.
+## Usually common case with shotgun with or gun with lots of projectile count.
+## For example, a shotgun with 20 projectile counts may trigger refund bullet 
+## effect up to 20 times, while only cost 1 ammo, in a single shot.
+var triggered_this_shot = false
 
 ## This will be alway called first. Check if can be shot.
 ## [Ex: Check for jamming chance / overheat / or simply not enough bullet left.]
 func on_fire_attempt() -> bool:
-	modification_completed.emit()
 	return true
 
 ## Modify the fire rate conditionally.

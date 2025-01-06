@@ -6,11 +6,10 @@ extends BaseBarrelEffect
 
 func on_prepare_to_fire():
 	super()
-	print("on_prepare_to_fire with {0}".format([display_text]))
+	# print("on_prepare_to_fire with {0}".format([display_text]))
 	owner_barrel.owner_gun.modified_projectile_amount += flat_amount
 	owner_barrel.owner_gun.modified_projectile_amount = round(owner_barrel.owner_gun.modified_projectile_amount * (1 + (perc_amount / 100.0)))
-	print("projectile: {0}".format([owner_barrel.owner_gun.modified_projectile_amount]))
-	modification_completed.emit()
+	# print("projectile: {0}".format([owner_barrel.owner_gun.modified_projectile_amount]))
 
 
 func on_ammo_consumed():
