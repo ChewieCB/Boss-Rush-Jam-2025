@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dmgm77t2sxoc5"]
+[gd_scene load_steps=7 format=3 uid="uid://dmgm77t2sxoc5"]
 
 [ext_resource type="Script" path="res://src/player/barrel/effect/spin_barrel.gd" id="1_iw80l"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_16rmq"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/ammo_leech_effect.gd" id="2_psr82"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/multishot_effect.gd" id="3_bgcdx"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/gambler_precision_effect.gd" id="4_s01a7"]
@@ -16,11 +17,33 @@ barrel_name = "FoolRoller"
 transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
 mesh = SubResource("CylinderMesh_sfbyw")
 
-[node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0311846, 0)
+[node name="EffectName" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.109181, -0.0166867)
+modulate = Color(1, 0.883, 0.22, 1)
+text = "DOUBLE TAP"
+font = ExtResource("2_16rmq")
+font_size = 64
+outline_size = 32
+horizontal_alignment = 2
+
+[node name="EffectTag" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0716908, -0.00866602)
+modulate = Color(0.87, 0.76328, 0.6699, 1)
+text = "Both barrels!"
+font = ExtResource("2_16rmq")
+font_size = 40
+outline_size = 16
+horizontal_alignment = 2
+
+[node name="EffectDesc" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0575581, -0.00564242)
+modulate = Color(0.46, 0.46, 0.46, 1)
 text = "10% ammo refund on hit
 -10% damage"
+font = ExtResource("2_16rmq")
+font_size = 24
 horizontal_alignment = 2
+vertical_alignment = 0
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
@@ -28,18 +51,24 @@ horizontal_alignment = 2
 script = ExtResource("2_psr82")
 refund_chance = 20.0
 perc_damage_modify = -25.0
-display_text = "20% refund ammo on hit
--25% damage"
+display_text_title = "AMMO LEECH"
+display_text_tag = "Take back those puny bullets!"
+display_text_desc = "20% chance to refund ammo on hit
+-25% damage per shot"
 
 [node name="DoubleTapEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_bgcdx")
 ammo_consumed = 2
 shot_count = 2
-display_text = "Double Tap"
+display_text_title = "DOUBLE TAP"
+display_text_tag = "Both barrels!"
+display_text_desc = "Fire 2 shots at once"
 
 [node name="GamblerPrecision" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_s01a7")
 crit_chance = 50.0
-jam_chance_if_missed = 25.0
-display_text = "50% Crit x2 damage
-25% jam if missed"
+jam_chance_if_missed = 50.0
+display_text_title = "GAMBLER'S PRECISION"
+display_text_tag = "Are you feeling lucky?"
+display_text_desc = "50% chance to crit on hit
+50% chance to jam on miss"

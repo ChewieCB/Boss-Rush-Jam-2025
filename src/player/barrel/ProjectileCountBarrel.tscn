@@ -24,49 +24,39 @@ horizontal_alignment = 2
 [node name="ProjectileCountEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 flat_amount = -2
-display_text = "-2 projectile"
 
 [node name="ProjectileCountEffect2" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 flat_amount = -1
-display_text = "-1 projectile"
 
 [node name="ProjectileCountEffect3" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 flat_amount = 1
-display_text = "+1 projectile"
 
 [node name="ProjectileCountEffect8" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 flat_amount = 1
-display_text = "+1 projectile"
 
 [node name="ProjectileCountEffect4" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 flat_amount = 2
-display_text = "+2 projectile"
 
 [node name="ProjectileCountEffect5" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 perc_amount = -25.0
-display_text = "-25% projectile"
 
 [node name="ProjectileCountEffect6" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 perc_amount = -50.0
-display_text = "-50% projectile"
 
 [node name="ProjectileCountEffect7" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 perc_amount = 25.0
-display_text = "+25% projectile"
 
 [node name="ProjectileCountEffect9" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 perc_amount = 50.0
-display_text = "+50% projectile"
 
 [node name="ProjectileCountEffect10" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 perc_amount = 100.0
-display_text = "+100% projectile"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://de36wdf6rkio"]
+[gd_scene load_steps=18 format=3 uid="uid://de36wdf6rkio"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_kygto"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="2_l7ggu"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="5_lelmw"]
 [ext_resource type="AudioStream" uid="uid://csslo4nsdbmmp" path="res://src/player/gun/assets/sfx/temp/Recover_ammp.mp3" id="6_ursny"]
 [ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="7_8iawc"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="12_cpflw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
 albedo_color = Color(1, 0.568275, 0.171359, 1)
@@ -80,6 +81,7 @@ transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 
 visible = false
 pixel_size = 0.003
 text = "Reloading..."
+font = ExtResource("12_cpflw")
 
 [node name="JamTimer" type="Timer" parent="."]
 one_shot = true
