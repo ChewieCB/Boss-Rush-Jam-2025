@@ -17,6 +17,7 @@ class_name BossCore
 var max_sequential_phases: int = 3
 var charge_phase_count: int = 0
 var ranged_phase_count: int = 0
+var area_phase_count: int = 0
 
 # Charge Attack
 # TODO - make this adjustable via resources
@@ -30,8 +31,25 @@ var ranged_phase_count: int = 0
 var projectile_round_count: int = 0
 @export var max_projectile_rounds: int = 2
 
-# Point Movement
 @export var move_points: Array[Marker3D]
+@export var area_point: Marker3D
+
+# Area Attack
+# TODO - make this adjustable via resources
+@export var area_damage: float = 25.0
+@export var areas_per_phase: int = 6
+@export var delay_per_area: float = 0.0
+var areas_finished: int = 0:
+	set(value):
+		areas_finished = value
+		if areas_finished == areas_per_phase:
+			state_chart.send_event("finish_area_attack")
+			areas_finished = 0
+var area_round_count: int = 0
+@export var max_area_rounds: int = 2
+#
+@export var area_size: float = 16.0
+@export var area_rings: int = 1
 
 @onready var hurtbox: Area3D = $Hurtbox
 @onready var health_ui = $BossHealthUI/BossHealthContainer
@@ -72,6 +90,10 @@ func _physics_process(delta: float) -> void:
 	]
 
 
+func jump(multiplier = 1.0):
+	vel_vertical = JUMP_FORCE * multiplier
+
+
 func _turn_towards_target(speed: float, delta: float) -> void:
 	var direction: Vector3 = self.global_position.direction_to(target.global_position)
 	self.rotation.y = lerp_angle(
@@ -80,6 +102,48 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 		),
 		delta * speed
 	)
+
+
+func change_phase() -> void:
+	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var possible_phases = [
+		"start_chase_attack",
+		"start_ranged_attack",
+		"start_area_attack"
+	]
+	if ranged_phase_count == max_sequential_phases:
+		possible_phases.erase("start_ranged_attack")
+		ranged_phase_count = 0
+	if charge_phase_count == max_sequential_phases:
+		possible_phases.erase("start_chase_attack")
+		charge_phase_count = 0
+	if area_phase_count == max_sequential_phases:
+		possible_phases.erase("start_area_attack")
+		area_phase_count = 0
+	
+	# If we've somehow exluded all of the possible phases, 
+	# the counters have been reset so just call this method again.
+	if possible_phases == []:
+		change_phase()
+		return
+	
+	# If the player is too close, don't do area attacks
+	if dist_to_target <= area_size / 2:
+		possible_phases.erase("start_area_attack")
+	
+	# If the player is further away, prioritise charges and area attacks
+	if dist_to_target >= 30:
+		possible_phases.append("start_chase_attack")
+		possible_phases.append("start_chase_attack")
+		possible_phases.append("start_chase_attack")
+	# If the player is closer, prioritise ranged attacks
+	else:
+		possible_phases.append("start_ranged_attack")
+		possible_phases.append("start_ranged_attack")
+		possible_phases.append("start_ranged_attack")
+	
+	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
+	state_chart.send_event(new_phase)
 
 
 ## ======== State Chart Methods ========
@@ -160,12 +224,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
 		if prev_health == health_component.max_health:
-			# TODO - replace with function to decide which attack to do
-			var phase_chance: float = randf()
-			if phase_chance < 0.5:
-				state_chart.send_event("start_chase_attack")
-			else:
-				state_chart.send_event("start_ranged_attack")
+			change_phase()
 
 
 func _on_died() -> void:
@@ -213,10 +272,6 @@ func _on_phase_chase_player_recover_state_entered() -> void:
 	charge_phase_count += 1
 	change_phase()
 	state_chart.send_event("end_recovery")
-
-
-#func _on_phase_chase_player_recover_state_exited() -> void:
-	#sprite.modulate = Color.WHITE
 
 
 #### RANGED PROJECTILES
@@ -283,21 +338,101 @@ func _on_phase_ranged_projectiles_recover_state_entered() -> void:
 	change_phase()
 	state_chart.send_event("change_position")
 
+#### AREA DENIAL
+func _on_phase_area_denial_move_to_center_state_entered() -> void:
+	sprite.modulate = Color.BLUE_VIOLET
+	debug_state_label.text = "Area | Moving"
+	
+	MAX_SPEED *= 2
+	cached_target = target
+	target = area_point
+	state_chart.send_event("start_moving")
+	await navigation_component.nav_agent.navigation_finished
+	
+	state_chart.send_event("start_area_attack")
 
-func change_phase() -> void:
-	if ranged_phase_count == max_sequential_phases:
-		state_chart.send_event("start_chase_attack")
-		ranged_phase_count = 0
-	elif charge_phase_count == max_sequential_phases:
-		state_chart.send_event("start_ranged_attack")
-		charge_phase_count = 0
-	elif self.global_position.distance_to(target.global_position) >= 20:
-		if randf() < 0.75:
-			state_chart.send_event("start_chase_attack")
-		else:
-			state_chart.send_event("start_ranged_attack")
-	else:
-		if randf() < 0.65:
-			state_chart.send_event("start_ranged_attack")
-		else:
-			state_chart.send_event("start_chase_attack")
+func _on_phase_area_denial_move_to_center_state_exited() -> void:
+	target = cached_target
+	MAX_SPEED /= 2
+	state_chart.send_event("stop_moving")
+
+func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
+	sprite.modulate = Color.ORANGE
+	debug_state_label.text = "Area | Spawning"
+	var angle_increment: float =  2 * PI / areas_per_phase
+	var initial_point: Vector3 = target.global_position
+	initial_point.y = self.global_position.y
+	
+	for i in areas_per_phase:
+		var angle = angle_increment * i
+		var dir = initial_point - self.global_position
+		var adjusted_dir = dir.rotated(Vector3.UP, angle)
+		var area_pos: Vector3 = self.global_position + adjusted_dir
+		
+		# Generate a collider
+		var area_collider := Area3D.new()
+		var area_collider_shape := CollisionShape3D.new()
+		var collider_shape := CylinderShape3D.new()
+		collider_shape.radius = area_size / 2
+		collider_shape.height = 64.0
+		area_collider_shape.shape = collider_shape
+		area_collider.add_child(area_collider_shape)
+		area_collider.collision_layer = 0
+		area_collider.collision_mask = pow(2, 2-1)
+		area_collider.monitoring = true
+		
+		get_tree().get_root().add_child(area_collider)
+		
+		area_collider.global_position = area_pos
+		
+		var debug_mesh_instance = MeshInstance3D.new()
+		var mesh = CylinderMesh.new()
+		var sphere_mat = ORMMaterial3D.new()
+		
+		# Generate a visual
+		get_tree().get_root().add_child(debug_mesh_instance)
+		
+		debug_mesh_instance.mesh = mesh
+		debug_mesh_instance.cast_shadow = false
+		debug_mesh_instance.global_position = area_pos
+		
+		mesh.bottom_radius = 0.01
+		mesh.top_radius = 0.01
+		mesh.height = 0.5
+		mesh.material = sphere_mat
+		
+		#sphere_mat.transparency = true
+		sphere_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		sphere_mat.cull_mode = 2
+		sphere_mat.albedo_color = Color(Color.RED)
+		
+		# Animate the visual
+		var tween = get_tree().create_tween()
+		tween.tween_property(mesh, "bottom_radius", area_size / 2, 3.0)
+		tween.parallel().tween_property(mesh, "top_radius", area_size / 2, 3.0)
+		tween.tween_callback(
+			func():
+				var height_tween = get_tree().create_tween()
+				# Check if player is in area
+				#area_collider.monitoring = true
+				var bodies = area_collider.get_overlapping_bodies()
+				for body in bodies:
+					body.health_component.damage(area_damage) 
+				height_tween.tween_property(mesh, "height", 64.0 / 2, 0.2).set_trans(Tween.TRANS_EXPO)
+				height_tween.tween_callback(
+					func():
+						debug_mesh_instance.queue_free()
+						area_collider.queue_free()
+						areas_finished += 1
+				)
+		)
+
+func _on_phase_area_denial_recover_state_entered() -> void:
+	sprite.modulate = Color.YELLOW
+	debug_state_label.text = "Area | Recovering"
+	
+	state_chart.send_event("attack_end")
+	area_phase_count += 1
+	await get_tree().create_timer(attack_recovery_time).timeout
+	change_phase()
+	state_chart.send_event("change_position")
