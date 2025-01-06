@@ -4,6 +4,14 @@ class_name Gun
 @export var gun_name: String
 @export_multiline var description: String
 
+## TEMP SFX PLS CHANGE
+@export var TEMP_sfx_shoot: AudioStream
+@export var TEMP_sfx_dry: AudioStream
+@export var TEMP_sfx_reload: AudioStream
+@export var TEMP_sfx_click: AudioStream
+@export var TEMP_regain_ammo: AudioStream
+@export var TEMP_crit: AudioStream
+
 @export var base_damage = 10
 @export var base_projectile_amount = 1
 ## Shot per second
@@ -65,8 +73,10 @@ func _process(delta: float) -> void:
 
 func shoot(aim_ray: RayCast3D):
 	if is_reloading or is_jammed:
+		SoundManager.play_sound(TEMP_sfx_dry)
 		return
 	if magazine_ammo_left <= 0:
+		SoundManager.play_sound(TEMP_sfx_dry)
 		reload()
 		return
 
@@ -76,6 +86,7 @@ func shoot(aim_ray: RayCast3D):
 	for barrel in installed_barrels:
 		can_fire = can_fire and barrel.get_active_effect().on_fire_attempt()
 	if not can_fire:
+		SoundManager.play_sound(TEMP_sfx_dry)
 		return
 
 	for barrel in installed_barrels:
@@ -99,6 +110,7 @@ func shoot(aim_ray: RayCast3D):
 
 	var bullet_start_pos = bullet_spawn_marker.global_position
 	for i in range(n_shot_repeat):
+		SoundManager.play_sound(TEMP_sfx_shoot)
 		for j in range(modified_projectile_amount):
 
 			for barrel in installed_barrels:
@@ -185,18 +197,19 @@ func check_barrel_effect_on_projectile_impact():
 		barrel.get_active_effect().on_projectile_impact()
 
 func check_barrel_effect_on_projectile_destroyed():
-	print("FAFAFAFAFAF")
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_projectile_destroyed()
 
 
 func reload():
 	if is_jammed:
+		SoundManager.play_sound(TEMP_sfx_dry)
 		return
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
 
 	is_reloading = true
+	SoundManager.play_sound(TEMP_sfx_reload)
 	show_gun_status("Reloading...")
 	reset_modifier()
 	for barrel in installed_barrels:
@@ -204,6 +217,7 @@ func reload():
 	await get_tree().create_timer(1).timeout
 	gun_status_label.visible = false
 	for barrel in installed_barrels:
+		SoundManager.play_sound(TEMP_sfx_click)
 		barrel.stop_spin()
 	is_reloading = false
 
@@ -235,11 +249,13 @@ func jam_the_gun(duration: float = 1.0):
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
 func regain_ammo(ammo: int) -> void:
 	show_gun_status("Regained +%s ammo" % [ammo], Color.CYAN)
+	SoundManager.play_sound(TEMP_regain_ammo)
 
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
 func crit_damage(damage: int) -> void:
 	show_gun_status("CRIT! %s damage" % [damage], Color.RED)
+	SoundManager.play_sound(TEMP_crit)
 
 
 func show_gun_status(text: String, color: Color = Color.WHITE, duration: float = 0.4) -> void:
@@ -257,6 +273,7 @@ func show_gun_status(text: String, color: Color = Color.WHITE, duration: float =
 
 func _on_jam_timer_timeout() -> void:
 	is_jammed = false
+	gun_status_label.visible = false
 
 
 func get_spread_direction(center_direction: Vector3) -> Vector3:

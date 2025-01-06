@@ -1,6 +1,16 @@
 extends CharacterBody3D
 class_name BossCore
 
+## TEMP SFX REPLACE THESE
+@export var TEMP_sfx_awaken: AudioStream
+@export var TEMP_sfx_hit: Array[AudioStream]
+@export var TEMP_sfx_death: AudioStream
+@export var TEMP_sfx_area_1: AudioStream
+@export var TEMP_sfx_area_2: AudioStream
+@export var TEMP_sfx_projectile: AudioStream
+@export var TEMP_sfx_charge: AudioStream
+@export var TEMP_sfx_charge_impact: AudioStream
+
 @export var navigation_component: NavigationComponent
 @export var health_component: HealthComponent
 
@@ -107,6 +117,7 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 
 
 func activate() -> void:
+	SoundManager.play_sound(TEMP_sfx_awaken)
 	change_phase()
 
 
@@ -229,6 +240,7 @@ func _on_attack_telegraph_state_exited() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
+		SoundManager.play_sound_with_pitch(TEMP_sfx_hit.pick_random(), randf_range(0.7, 1.2))
 
 
 func _on_died() -> void:
@@ -238,6 +250,7 @@ func _on_died() -> void:
 
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
+	SoundManager.play_sound(TEMP_sfx_charge_impact)
 	if body == target:
 		target.health_component.damage(40)
 
@@ -262,6 +275,7 @@ func _on_phase_target_player_state_entered() -> void:
 	state_chart.send_event("charge_player")
 
 func _on_phase_chase_player_charge_state_entered() -> void:
+	SoundManager.play_sound(TEMP_sfx_charge)
 	sprite.modulate = Color.ORANGE
 	debug_state_label.text = "Chase | Charging"
 	state_chart.send_event("start_charge")
@@ -319,6 +333,7 @@ func _on_phase_ranged_projectiles_fire_projectiles_state_entered() -> void:
 		get_parent().get_parent().add_child(projectile)
 		projectile.global_position = self.global_position + Vector3(0, 3, 0)
 		projectile.look_at(target.global_position, Vector3.UP)
+		SoundManager.play_sound(TEMP_sfx_projectile)
 	
 	await get_tree().create_timer(delay_per_projectile).timeout
 	state_chart.send_event("end_projectiles")
@@ -368,6 +383,7 @@ func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
 	var initial_point: Vector3 = target.global_position
 	initial_point.y = self.global_position.y
 	
+	SoundManager.play_sound(TEMP_sfx_area_1)
 	for i in areas_per_phase:
 		var angle = angle_increment * i
 		var dir = initial_point - self.global_position
@@ -426,11 +442,13 @@ func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
 				height_tween.tween_property(mesh, "height", 64.0 / 2, 0.2).set_trans(Tween.TRANS_EXPO)
 				height_tween.tween_callback(
 					func():
+						SoundManager.play_sound(TEMP_sfx_area_2)
 						debug_mesh_instance.queue_free()
 						area_collider.queue_free()
 						areas_finished += 1
 				)
 		)
+
 
 func _on_phase_area_denial_recover_state_entered() -> void:
 	sprite.modulate = Color.YELLOW

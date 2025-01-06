@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ch0bkn7t2rb4i"
+path="res://.godot/imported/Hit 3.mp3-3e932801cebb104e56442d9c3991ca83.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/base/assets/sfx/temp/Hit 3.mp3"
+dest_files=["res://.godot/imported/Hit 3.mp3-3e932801cebb104e56442d9c3991ca83.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

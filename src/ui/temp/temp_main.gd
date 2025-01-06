@@ -1,10 +1,13 @@
 extends Control
 
+@export var TEMP_bgm: AudioStream
+
 @onready var version_label: RichTextLabel = $Panel/MarginContainer/VBoxContainer/VBoxContainer/BuildNumber
 
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	SoundManager.play_music(TEMP_bgm)
 	var project_version = ProjectSettings.get_setting("application/config/version")
 	version_label.text = "[center]%s[/center]" % [project_version]
 

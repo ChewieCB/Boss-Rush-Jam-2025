@@ -1,6 +1,11 @@
 extends CharacterBody3D
 class_name Player
 
+## TEMP SFX PLS CHANGE
+@export var TEMP_sfx_hurt: Array[AudioStream]
+@export var TEMP_sfx_dead: Array[AudioStream]
+@export var TEMP_sfx_dash: AudioStream
+
 @export var can_wall_jump: bool
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
@@ -101,6 +106,7 @@ func _input(event):
 		if last_dashed_timestamp + dash_cd * 1000 <= Time.get_ticks_msec():
 			last_dashed_timestamp = Time.get_ticks_msec()
 			is_dashing = true
+			SoundManager.play_sound_with_pitch(TEMP_sfx_dash, randf_range(0.8, 1.1))
 			vel_vertical = 0
 			dash_duration_timer.start()
 
@@ -321,12 +327,14 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
+		SoundManager.play_sound(TEMP_sfx_hurt.pick_random())
 		if new_health > 0:
 			state_chart.send_event("end_damage")
 
 
 func _on_died() -> void:
 	state_chart.send_event("death")
+	SoundManager.play_sound(TEMP_sfx_dead.pick_random())
 
 
 func _on_health_hurt_state_entered() -> void:
