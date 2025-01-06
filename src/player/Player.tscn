@@ -53,6 +53,7 @@ health_component = NodePath("HealthComponent")
 shape = SubResource("CapsuleShape3D_le58x")
 
 [node name="DebugMeshes" type="Node3D" parent="."]
+visible = false
 
 [node name="Body" type="MeshInstance3D" parent="DebugMeshes"]
 mesh = SubResource("CapsuleMesh_w3btf")
@@ -352,6 +353,10 @@ delay_in_seconds = "0.0"
 
 [node name="Dead" type="Node" parent="StateChart/Root/Health"]
 script = ExtResource("8_dkhcu")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1, 0.2)
+light_color = Color(0.78, 0.897333, 1, 1)
 
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
