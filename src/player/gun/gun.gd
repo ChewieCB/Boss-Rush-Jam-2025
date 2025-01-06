@@ -197,8 +197,7 @@ func reload():
 		barrel.get_active_effect().on_reload_start()
 
 	is_reloading = true
-	gun_status_label.text = "Reloading..."
-	gun_status_label.visible = true
+	show_gun_status("Reloading...")
 	reset_modifier()
 	for barrel in installed_barrels:
 		barrel.start_spin()
@@ -215,6 +214,7 @@ func reload():
 	magazine_ammo_left = modified_magazine_size
 	gun_reloaded.emit()
 
+
 func reset_modifier():
 	n_ammo_consume = 1
 	n_shot_repeat = 1
@@ -226,14 +226,36 @@ func reset_modifier():
 
 
 func jam_the_gun(duration: float = 1.0):
-	gun_status_label.text = "Jamming..."
-	gun_status_label.visible = true
+	show_gun_status("Jammed...", Color.DIM_GRAY, duration)
+	
 	jam_timer.start(duration)
 	is_jammed = true
 
 
+# TODO - debug use only: make better, more interesting UI effects and hooks for this
+func regain_ammo(ammo: int) -> void:
+	show_gun_status("Regained +%s ammo" % [ammo], Color.CYAN)
+
+
+# TODO - debug use only: make better, more interesting UI effects and hooks for this
+func crit_damage(damage: int) -> void:
+	show_gun_status("CRIT! %s damage" % [damage], Color.RED)
+
+
+func show_gun_status(text: String, color: Color = Color.WHITE, duration: float = 0.4) -> void:
+	gun_status_label.modulate = color
+	gun_status_label.text = text
+	
+	gun_status_label.visible = true
+	gun_status_label.modulate = Color(color, 0)
+	
+	var tween = get_tree().create_tween()
+	tween.tween_property(gun_status_label, "modulate", Color(color, 1.0), 0.4)
+	await get_tree().create_timer(duration).timeout
+	tween.tween_property(gun_status_label, "modulate:a", 0, 1.0)
+
+
 func _on_jam_timer_timeout() -> void:
-	gun_status_label.visible = false
 	is_jammed = false
 
 

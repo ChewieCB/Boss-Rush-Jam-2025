@@ -75,6 +75,7 @@ shape = SubResource("CapsuleShape3D_m057l")
 
 [node name="DebugMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+visible = false
 mesh = SubResource("BoxMesh_rkhu1")
 surface_material_override/0 = SubResource("StandardMaterial3D_a1ebn")
 
@@ -479,6 +480,7 @@ debug_path_custom_point_size = 8.0
 
 [node name="DebugStateLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+visible = false
 billboard = 1
 text = "INACTIVE"
 font = ExtResource("13_ai5vk")
@@ -488,6 +490,7 @@ uppercase = true
 
 [node name="DebugDistanceLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4, 0)
+visible = false
 billboard = 1
 text = "INACTIVE"
 font = ExtResource("13_ai5vk")

@@ -54,6 +54,7 @@ func on_damage_calculation():
 	var roll = randi_range(1, 100)
 	if roll <= crit_chance:
 		owner_barrel.owner_gun.modified_damage = owner_barrel.owner_gun.modified_damage * 2
+		owner_barrel.owner_gun.crit_damage(owner_barrel.owner_gun.modified_damage)
 
 func on_damage_applied():
 	super()

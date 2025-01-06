@@ -2,6 +2,7 @@ extends MeshInstance3D
 class_name BaseProjectile
 
 @export var spark_effect: PackedScene
+@export var text_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
 
 func create_spark(pos: Vector3, normal: Vector3):
@@ -27,3 +28,21 @@ func create_blood_splatter(pos: Vector3, normal: Vector3):
 		blood_inst.rotation_degrees.x = 90
 	else:
 		blood_inst.look_at(pos + normal, Vector3.UP)
+
+
+func create_text(pos: Vector3, normal: Vector3, 
+text: String, color: Color = Color.WHITE, size: float = 92.0) -> void:
+	var text_inst = text_effect.instantiate()
+	get_parent().add_child(text_inst)
+	text_inst.text = text
+	text_inst.modulate = color
+	text_inst.font_size = size
+	text_inst.outline_size = size / 2
+	text_inst.global_position = pos
+
+	if normal.is_equal_approx(Vector3.DOWN):
+		text_inst.rotation_degrees.x = -90
+	elif normal.is_equal_approx(Vector3.UP):
+		text_inst.rotation_degrees.x = 90
+	else:
+		text_inst.look_at(pos + normal, Vector3.UP)

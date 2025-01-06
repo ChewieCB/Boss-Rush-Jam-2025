@@ -8,7 +8,6 @@ default_font = ExtResource("2_rfed8")
 default_font_size = 128
 
 [node name="BossDefeatedUI" type="Control"]
-visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15

@@ -170,7 +170,7 @@ func _physics_process(delta):
 		velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * bonus_speed
 		move_and_slide()
 
-		show_debug_label()
+		#show_debug_label()
 		var gun_sway_velocity = velocity * transform.basis
 		if not is_swapping_gun:
 			gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)

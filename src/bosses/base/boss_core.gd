@@ -106,6 +106,10 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 	)
 
 
+func activate() -> void:
+	change_phase()
+
+
 func change_phase() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
@@ -225,8 +229,6 @@ func _on_attack_telegraph_state_exited() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
-		if prev_health == health_component.max_health:
-			change_phase()
 
 
 func _on_died() -> void:

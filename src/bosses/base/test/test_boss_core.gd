@@ -4,6 +4,7 @@ extends Node3D
 @export var player: Player
 
 @onready var win_ui: Control = $UI/BossDefeatedUI
+@onready var boss_trigger: Area3D = $BossTriggerVolume
 
 func _ready() -> void:
 	boss.health_component.died.connect(_on_boss_defeated)
@@ -30,13 +31,23 @@ func show_end_panel() -> void:
 	await get_tree().create_timer(5.0).timeout
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	tween.tween_callback(_return_to_main)
+	tween.tween_callback(_reload_scene)
 
 
 func _return_to_main() -> void:
 	get_tree().change_scene_to_file("res://src/ui/temp/TempMain.tscn")
 
 
+func _reload_scene() -> void:
+	get_tree().reload_current_scene()
+
+
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is BossCore:
 		body.jump()
+
+
+func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
+	if body is Player:
+		boss.activate()
+		boss_trigger.queue_free()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=28 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="Script" path="res://src/player/shakeable_camera.gd" id="3_cy2wl"]
@@ -36,6 +36,10 @@ size = Vector3(0.5, 0.5, 0.5)
 
 [sub_resource type="Theme" id="Theme_y0f30"]
 default_font = ExtResource("10_4wdls")
+
+[sub_resource type="Theme" id="Theme_l1wiy"]
+default_font = ExtResource("10_4wdls")
+default_font_size = 32
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
 collision_layer = 2
@@ -247,6 +251,7 @@ offset_right = -28.0
 offset_bottom = -20.0
 grow_horizontal = 0
 grow_vertical = 0
+theme = SubResource("Theme_l1wiy")
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 6
 theme_override_font_sizes/font_size = 50
@@ -254,6 +259,7 @@ text = "10/10"
 horizontal_alignment = 2
 
 [node name="HardcodedGunInfo" type="Label" parent="UI"]
+visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
