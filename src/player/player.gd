@@ -113,6 +113,9 @@ func _input(event):
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 
+	if controls_disabled:
+		return
+	
 	if Input.is_action_pressed("shoot"):
 		# Raycast to target and damage them if hit
 		var gun: Gun = gun_container.get_child(0)
