@@ -29,7 +29,7 @@ class_name Gun
 var magazine_ammo_left = 0
 var is_reloading = false
 var time_since_last_shot = 0
-var installed_barrels: Array[SpinBarrelInterface] = []
+var installed_barrels: Array[SpinBarrel] = []
 
 # Modify-able by barrels
 # We won't modify them in this script
@@ -66,20 +66,20 @@ func shoot(aim_ray: RayCast3D):
 
 	var can_fire = true
 	for barrel in installed_barrels:
-		can_fire = can_fire and barrel.on_fire_attempt()
+		can_fire = can_fire and barrel.get_active_effect().on_fire_attempt()
 	if not can_fire:
 		return
 
 	for barrel in installed_barrels:
-		barrel.on_fire_rate_check()
+		barrel.get_active_effect().on_fire_rate_check()
 
 	var time_until_next_shot = 1.0 / modified_firerate
 	if time_until_next_shot > time_since_last_shot:
 		return
 
 	for barrel in installed_barrels:
-		barrel.on_prepare_to_fire()
-		await barrel.modification_completed
+		barrel.get_active_effect().on_prepare_to_fire()
+		await barrel.get_active_effect().modification_completed
 
 	# Screenshake
 	GameManager.player.player_camera.add_trauma(screenshake_amount)
@@ -89,10 +89,10 @@ func shoot(aim_ray: RayCast3D):
 
 	for i in range(modified_projectile_amount):
 		for barrel in installed_barrels:
-			barrel.on_projectile_spawn()
+			barrel.get_active_effect().on_projectile_spawn()
 
 		for barrel in installed_barrels:
-			barrel.on_damage_calculation()
+			barrel.get_active_effect().on_damage_calculation()
 
 		if is_hitscan:
 			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
@@ -111,10 +111,10 @@ func shoot(aim_ray: RayCast3D):
 	time_since_last_shot = 0
 	magazine_ammo_left -= n_ammo_consume
 	for barrel in installed_barrels:
-		barrel.on_ammo_consumed()
+		barrel.get_active_effect().on_ammo_consumed()
 	if magazine_ammo_left <= 0:
 		for barrel in installed_barrels:
-			barrel.on_clip_empty()
+			barrel.get_active_effect().on_clip_empty()
 	gun_shot.emit()
 	reset_modifier()
 
@@ -137,7 +137,7 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3):
 			target.health_component.damage(modified_damage)
 			projectile_inst.create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 			for barrel in installed_barrels:
-				barrel.on_damage_applied()
+				barrel.get_active_effect().on_damage_applied()
 		else:
 			# Hit wall/obstacle
 			projectile_inst.create_spark(hitscan_col_point, hitscan_col_normal)
@@ -152,16 +152,16 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3):
 
 func check_barrel_effect_on_projectile_impact():
 	for barrel in installed_barrels:
-		barrel.on_projectile_impact()
+		barrel.get_active_effect().on_projectile_impact()
 
 func check_barrel_effect_on_projectile_destroyed():
 	for barrel in installed_barrels:
-		barrel.on_projectile_destroyed()
+		barrel.get_active_effect().on_projectile_destroyed()
 
 
 func reload():
 	for barrel in installed_barrels:
-		barrel.on_reload_start()
+		barrel.get_active_effect().on_reload_start()
 
 	is_reloading = true
 	loading_label.visible = true
@@ -175,7 +175,7 @@ func reload():
 	is_reloading = false
 
 	for barrel in installed_barrels:
-		barrel.on_reload_end()
+		barrel.get_active_effect().on_reload_end()
 
 	magazine_ammo_left = modified_magazine_size
 	gun_reloaded.emit()
