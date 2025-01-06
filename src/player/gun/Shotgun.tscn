@@ -1,0 +1,80 @@
+[gd_scene load_steps=12 format=3 uid="uid://de36wdf6rkio"]
+
+[ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_kygto"]
+[ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="2_l7ggu"]
+[ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="3_8nt2m"]
+[ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="3_wypyb"]
+[ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="4_6s01h"]
+[ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="5_lelmw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
+albedo_color = Color(1, 0.568275, 0.171359, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1tkvt"]
+material = SubResource("StandardMaterial3D_kthsi")
+size = Vector3(0.7, 0.8, 3.16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_eu8nr"]
+material = SubResource("StandardMaterial3D_kthsi")
+size = Vector3(0.385, 0.615, 1.005)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f0tbl"]
+albedo_color = Color(0.5, 0.284137, 0.0856795, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7lbcv"]
+material = SubResource("StandardMaterial3D_f0tbl")
+size = Vector3(0.795, 0.415, 1.005)
+
+[node name="Shotgun" type="Node3D"]
+script = ExtResource("1_kygto")
+gun_name = "Shotgun"
+description = "The usual shotgun"
+base_projectile_amount = 8
+spread_angle = 8
+base_projectile_speed = 50.0
+aim_ray_prefab = ExtResource("2_l7ggu")
+hiscan_prefab = ExtResource("3_8nt2m")
+projectile_prefab = ExtResource("3_wypyb")
+
+[node name="BaseGunModel" type="Node3D" parent="."]
+
+[node name="Stock" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_1tkvt")
+skeleton = NodePath("../..")
+
+[node name="Handle" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.274991, -0.00181464, -0.00139499, -0.00010688, 0.15724, -0.225611, 0.00228637, 0.225604, 0.157234, 0, -0.169017, 0.26881)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_eu8nr")
+skeleton = NodePath("../..")
+
+[node name="Pump" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, -0.113422, -0.213009)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_7lbcv")
+skeleton = NodePath("../..")
+
+[node name="Barrel" type="Node3D" parent="."]
+
+[node name="ProjectileCountBarrel" parent="Barrel" instance=ExtResource("4_6s01h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.32368)
+
+[node name="FoolRoller" parent="Barrel" instance=ExtResource("5_lelmw")]
+
+[node name="PlaceholderUI" type="Node3D" parent="."]
+
+[node name="StatusLabel" type="Label3D" parent="PlaceholderUI"]
+transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 0, 0.173749, -0.184751)
+visible = false
+pixel_size = 0.003
+text = "Reloading..."
+
+[node name="JamTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="BulletStartPos" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.454098)
+
+[connection signal="timeout" from="JamTimer" to="." method="_on_jam_timer_timeout"]

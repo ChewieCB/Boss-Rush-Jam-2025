@@ -1,12 +1,13 @@
-[gd_scene load_steps=24 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=27 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
+[ext_resource type="Script" path="res://src/player/shakeable_camera.gd" id="3_cy2wl"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_e4bmr"]
 [ext_resource type="Texture2D" uid="uid://t7scpy3771o6" path="res://src/player/assets/blob_shadow.png" id="3_tgexf"]
-[ext_resource type="PackedScene" uid="uid://by6prw5q6j6sk" path="res://src/player/ShakeableCamera.tscn" id="4_37fec"]
 [ext_resource type="Texture2D" uid="uid://cl0jqrjnnsy7n" path="res://src/player/assets/default_crosshair.png" id="4_ymis7"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="5_dqbuo"]
 [ext_resource type="Texture2D" uid="uid://coblcfhc2qgbt" path="res://src/player/assets/hitmarker_lg.png" id="5_nkt42"]
+[ext_resource type="PackedScene" uid="uid://de36wdf6rkio" path="res://src/player/gun/Shotgun.tscn" id="6_mlgd0"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="6_t33b7"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_1276k"]
 [ext_resource type="PackedScene" uid="uid://byj1y3wrwtdtq" path="res://src/ui/pause_menu/PauseUI.tscn" id="7_db7x8"]
@@ -26,6 +27,12 @@
 
 [sub_resource type="PrismMesh" id="PrismMesh_gkhtt"]
 size = Vector3(0.75, 0.75, 0.25)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_cda8p"]
+noise_type = 0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sjjg0"]
+size = Vector3(0.5, 0.5, 0.5)
 
 [sub_resource type="Theme" id="Theme_y0f30"]
 default_font = ExtResource("10_4wdls")
@@ -63,8 +70,18 @@ debug_shape_thickness = 5
 
 [node name="Neck" type="Node3D" parent="."]
 
-[node name="ShakeableCamera" parent="Neck" instance=ExtResource("4_37fec")]
+[node name="ShakeableCamera" type="Area3D" parent="Neck"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
+script = ExtResource("3_cy2wl")
+noise = SubResource("FastNoiseLite_cda8p")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Neck/ShakeableCamera"]
+shape = SubResource("BoxShape3D_sjjg0")
+
+[node name="Camera3D" type="Camera3D" parent="Neck/ShakeableCamera"]
+current = true
+fov = 90.0
+near = 0.02
 
 [node name="AimRecticle" type="TextureRect" parent="Neck/ShakeableCamera"]
 anchors_preset = 8
@@ -107,6 +124,10 @@ HSpeed: 0 u/s"
 
 [node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
+
+[node name="Shotgun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("6_mlgd0")]
+transform = Transform3D(0.959201, 0, 0.282727, 0, 1, 0, -0.282727, 0, 0.959201, 0.244493, 0, 0.23962)
+description = "The usual shotgun."
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
 
@@ -212,6 +233,42 @@ one_shot = true
 
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
+
+[node name="MagazineUI" type="Label" parent="UI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -162.0
+offset_top = -89.0
+offset_right = -28.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 50
+text = "10/10"
+horizontal_alignment = 2
+
+[node name="HardcodedGunInfo" type="Label" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -199.0
+offset_top = 25.0
+offset_right = -29.0
+offset_bottom = 202.0
+grow_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 30
+text = "Base value of Shotgun
+projectile: 8
+damage: 10
+firerate: 2/s"
+horizontal_alignment = 2
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")

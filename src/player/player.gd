@@ -22,7 +22,7 @@ class_name Player
 @onready var gun_container = $Neck/ShakeableCamera/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeableCamera/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
-
+@onready var magazine_label: Label = $UI/MagazineUI
 
 const MAX_SPEED: float = 8.0
 const MAX_FALL_SPEED: float = 50.0
@@ -56,7 +56,7 @@ var is_sliding: bool:
 			else:
 				player_camera.add_long_trauma(-SLIDE_SHAKE_TRAUMA)
 		is_sliding = value
-		
+
 var bonus_speed: float = 0
 
 var raw_input_dir := Vector2(0, 0)
@@ -68,6 +68,9 @@ var slide_dir := Vector2(0, 0)
 
 var controls_disabled: bool = false
 
+var gun_container_original_pos: Vector3
+var current_gun_slot = 0
+var is_swapping_gun = false
 
 func _ready():
 	GameManager.player = self
@@ -78,32 +81,36 @@ func _ready():
 	last_dashed_timestamp = 0
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
+	gun_container_original_pos = gun_container.position
 
+	var gun: Gun = gun_container.get_child(0)
+	gun.gun_shot.connect(update_hud)
+	gun.gun_reloaded.connect(update_hud)
 
 func _input(event):
 	if controls_disabled:
 		return
-	
+
 	if event is InputEventMouseMotion:
 		rotate_player(event)
-	
+
+	if event.is_action_pressed("spin_reload"):
+		spin_reload()
+
 	if event.is_action_pressed("dash"):
 		if last_dashed_timestamp + dash_cd * 1000 <= Time.get_ticks_msec():
 			last_dashed_timestamp = Time.get_ticks_msec()
 			is_dashing = true
 			vel_vertical = 0
 			dash_duration_timer.start()
-	
-	if event.is_action_released("shoot"):
-		# Raycast to target and damage them if hit
-		if aim_ray.is_colliding():
-			var target = aim_ray.get_collider()
-			if target is CharacterBody3D:
-				target.health_component.damage(10)
 
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 
+	if Input.is_action_pressed("shoot"):
+		# Raycast to target and damage them if hit
+		var gun: Gun = gun_container.get_child(0)
+		gun.shoot(aim_ray)
 
 func _physics_process(delta):
 	if controls_disabled:
@@ -113,7 +120,7 @@ func _physics_process(delta):
 			if raw_input_dir == Vector2.ZERO:
 				raw_input_dir = Vector2(0, -1)
 				input_dir = raw_input_dir.rotated(-rotation.y)
-		
+
 		if not is_dashing and not is_sliding:
 			raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 			input_dir = raw_input_dir.rotated(-rotation.y)
@@ -165,9 +172,13 @@ func _physics_process(delta):
 
 		show_debug_label()
 		var gun_sway_velocity = velocity * transform.basis
-		#if not is_swapping_gun:
-			#gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
+		if not is_swapping_gun:
+			gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
 	camera_control(delta)
+
+func update_hud():
+	var gun: Gun = gun_container.get_child(0)
+	magazine_label.text = "{0}/{1}".format([gun.magazine_ammo_left, gun.modified_magazine_size])
 
 
 func show_debug_label():
@@ -193,6 +204,10 @@ func jump(multiplier = 1.0):
 	is_dashing = false
 	is_sliding = false
 
+
+func spin_reload():
+	var gun: Gun = gun_container.get_child(0)
+	gun.reload()
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))

@@ -151,7 +151,7 @@ func set_music_volume(volume_between_0_and_1: float) -> void:
 
 
 func play_music(resource: AudioStream, crossfade_duration: float = 0.0, override_bus: String = "") -> AudioStreamPlayer:
-	return music.play(resource, 0.0,  0.0, crossfade_duration, override_bus)
+	return music.play(resource, 0.0, 0.0, crossfade_duration, override_bus)
 
 
 func play_music_from_position(resource: AudioStream, position: float = 0.0, crossfade_duration: float = 0.0, override_bus: String = "") -> AudioStreamPlayer:
@@ -205,6 +205,11 @@ func stop_music(fade_out_duration: float = 0.0) -> void:
 func set_default_music_bus(bus: String) -> void:
 	music.bus = bus
 
+func get_master_volume() -> float:
+	return db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")))
+
+func set_master_volume(volume_between_0_and_1) -> void:
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear_to_db(volume_between_0_and_1))
 
 #endregion
 
