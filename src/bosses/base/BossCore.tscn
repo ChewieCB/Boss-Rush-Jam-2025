@@ -108,7 +108,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
 shape = SubResource("BoxShape3D_d0jfy")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_fy6mc")]
-max_health = 2000.0
+max_health = 3000.0
 
 [node name="NavigationComponent" parent="." node_paths=PackedStringArray("nav_agent") instance=ExtResource("9_cunyl")]
 nav_agent = NodePath("../NavigationAgent3D")

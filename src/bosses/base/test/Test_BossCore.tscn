@@ -849,4 +849,11 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.5, 0)
 shape = SubResource("BoxShape3D_hteaf")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 38, 18)
+light_energy = 3.0
+light_volumetric_fog_energy = 4.0
+light_negative = true
+omni_range = 7.0
+
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]
