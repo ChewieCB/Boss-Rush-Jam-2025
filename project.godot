@@ -91,3 +91,7 @@ shoot={
 3d_physics/layer_4="Projectile"
 2d_physics/layer_5="Pickup"
 3d_physics/layer_5="Pickups"
+
+[navigation]
+
+3d/default_cell_size=0.13
