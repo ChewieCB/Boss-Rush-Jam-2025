@@ -1,0 +1,26 @@
+[remap]
+
+importer="2d_array_texture"
+type="CompressedTexture2DArray"
+uid="uid://gjr8koph0uya"
+path="res://.godot/imported/Test_BossCore.exr-643592258010bb57dc0cc055800d4a76.ctexarray"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://src/bosses/base/test/Test_BossCore.exr"
+dest_files=["res://.godot/imported/Test_BossCore.exr-643592258010bb57dc0cc055800d4a76.ctexarray"]
+
+[params]
+
+compress/mode=3
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/channel_pack=1
+mipmaps/generate=false
+mipmaps/limit=-1
+slices/horizontal=1
+slices/vertical=2
