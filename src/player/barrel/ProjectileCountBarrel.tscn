@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://ptb63xpipbk1"]
 
-[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_vvrge"]
-[ext_resource type="Script" path="res://src/player/barrel/projectile_count_effect.gd" id="2_6irkf"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/spin_barrel.gd" id="1_vvrge"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/projectile_count_effect.gd" id="2_6irkf"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
 height = 0.5

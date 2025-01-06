@@ -23,11 +23,13 @@ class_name Gun
 @export var projectile_prefab: PackedScene
 
 @onready var barrel_container = $Barrel
-@onready var loading_label: Label3D = $PlaceholderUI/ReloadLabel
+@onready var gun_status_label: Label3D = $PlaceholderUI/StatusLabel
 @onready var bullet_spawn_marker = $BulletStartPos
+@onready var jam_timer: Timer = $JamTimer
 
 var magazine_ammo_left = 0
 var is_reloading = false
+var is_jammed = false
 var time_since_last_shot = 0
 var installed_barrels: Array[SpinBarrel] = []
 
@@ -48,7 +50,7 @@ const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.15
 const BULLET_SPAWN_POS_VARIATION = 10
 
 func _ready() -> void:
-	loading_label.visible = false
+	gun_status_label.visible = false
 	magazine_ammo_left = base_magazine_size
 	for child in barrel_container.get_children():
 		child.owner_gun = self
@@ -59,7 +61,7 @@ func _process(delta: float) -> void:
 	time_since_last_shot += delta
 
 func shoot(aim_ray: RayCast3D):
-	if is_reloading:
+	if is_reloading or is_jammed:
 		return
 	if magazine_ammo_left <= 0:
 		reload()
@@ -112,6 +114,9 @@ func shoot(aim_ray: RayCast3D):
 			# projectile.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 		time_since_last_shot = 0
 		await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
+
+		for barrel in installed_barrels:
+			barrel.get_active_effect().on_ammo_consumed()
 
 	magazine_ammo_left -= n_ammo_consume
 	for barrel in installed_barrels:
@@ -170,12 +175,13 @@ func reload():
 		barrel.get_active_effect().on_reload_start()
 
 	is_reloading = true
-	loading_label.visible = true
+	gun_status_label.text = "Reloading..."
+	gun_status_label.visible = true
 	reset_modifier()
 	for barrel in installed_barrels:
 		barrel.start_spin()
 	await get_tree().create_timer(1).timeout
-	loading_label.visible = false
+	gun_status_label.visible = false
 	for barrel in installed_barrels:
 		barrel.stop_spin()
 	is_reloading = false
@@ -195,6 +201,19 @@ func reset_modifier():
 	modified_projectile_amount = base_projectile_amount
 	modified_firerate = base_firerate
 	modified_magazine_size = base_magazine_size
+
+
+func jam_the_gun(duration: float = 1.0):
+	gun_status_label.text = "Jamming..."
+	gun_status_label.visible = true
+	jam_timer.start(duration)
+	is_jammed = true
+
+
+func _on_jam_timer_timeout() -> void:
+	gun_status_label.visible = false
+	is_jammed = false
+
 
 func get_spread_direction(center_direction: Vector3) -> Vector3:
 	# Convert spread angle to radians

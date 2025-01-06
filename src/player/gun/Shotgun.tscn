@@ -60,16 +60,20 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.268329)
 
 [node name="FoolRoller" parent="Barrel" instance=ExtResource("5_70soy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.162054)
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 
-[node name="ReloadLabel" type="Label3D" parent="PlaceholderUI"]
+[node name="StatusLabel" type="Label3D" parent="PlaceholderUI"]
 transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 0, 0.173749, -0.184751)
 visible = false
 pixel_size = 0.003
 text = "Reloading..."
 
-[node name="FireRateTimer" type="Timer" parent="."]
+[node name="JamTimer" type="Timer" parent="."]
+one_shot = true
 
 [node name="BulletStartPos" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.454098)
+
+[connection signal="timeout" from="JamTimer" to="." method="_on_jam_timer_timeout"]
