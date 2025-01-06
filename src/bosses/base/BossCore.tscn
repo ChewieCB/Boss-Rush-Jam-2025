@@ -471,7 +471,6 @@ delay_in_seconds = "0.0"
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 keep_y_velocity = false
-debug_enabled = true
 debug_path_custom_color = Color(1, 0, 0, 1)
 debug_path_custom_point_size = 8.0
 
