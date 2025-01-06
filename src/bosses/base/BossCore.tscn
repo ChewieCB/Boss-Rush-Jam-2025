@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=39 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Texture2D" uid="uid://l708f35ye0ad" path="res://src/bosses/base/assets/umby_boss_sprite_placeholder.png" id="1_lhq8s"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
@@ -26,6 +26,7 @@
 [ext_resource type="AudioStream" uid="uid://3p8sq5hywihn" path="res://src/bosses/base/assets/sfx/temp/Copy of Heavy Hit - Paladin Tank attack_.mp3" id="11_2mj0o"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="11_j156m"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="12_1g6yn"]
+[ext_resource type="AudioStream" uid="uid://c7aydtbbovsbu" path="res://src/bosses/base/assets/sfx/temp/Blade Scrape.mp3" id="12_egg5k"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="13_ai5vk"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m057l"]
@@ -75,6 +76,7 @@ TEMP_sfx_hit = Array[AudioStream]([ExtResource("2_ooio7"), ExtResource("3_js8yl"
 TEMP_sfx_area_1 = ExtResource("9_na3j5")
 TEMP_sfx_area_2 = ExtResource("10_b4sbu")
 TEMP_sfx_projectile = ExtResource("9_h0e05")
+TEMP_sfx_telegraph = ExtResource("12_egg5k")
 TEMP_sfx_charge = ExtResource("10_0w6pv")
 TEMP_sfx_charge_impact = ExtResource("11_2mj0o")
 navigation_component = NodePath("NavigationComponent")

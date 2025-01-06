@@ -268,7 +268,7 @@ func show_gun_status(text: String, color: Color = Color.WHITE, duration: float =
 	var tween = get_tree().create_tween()
 	tween.tween_property(gun_status_label, "modulate", Color(color, 1.0), 0.4)
 	await get_tree().create_timer(duration).timeout
-	tween.tween_property(gun_status_label, "modulate:a", 0, 1.0)
+	#tween.tween_property(gun_status_label, "modulate:a", 0, 1.0)
 
 
 func _on_jam_timer_timeout() -> void:

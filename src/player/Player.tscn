@@ -248,16 +248,13 @@ tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 wait_time = 0.4
 one_shot = true
 
-[node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
-z_as_relative = false
-
 [node name="MagazineUI" type="Label" parent="UI"]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -162.0
+offset_left = -178.0
 offset_top = -89.0
 offset_right = -28.0
 offset_bottom = -20.0
@@ -269,6 +266,9 @@ theme_override_constants/shadow_outline_size = 6
 theme_override_font_sizes/font_size = 50
 text = "10/10"
 horizontal_alignment = 2
+
+[node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
+z_as_relative = false
 
 [node name="HardcodedGunInfo" type="Label" parent="UI"]
 visible = false

@@ -8,6 +8,7 @@ class_name BossCore
 @export var TEMP_sfx_area_1: AudioStream
 @export var TEMP_sfx_area_2: AudioStream
 @export var TEMP_sfx_projectile: AudioStream
+@export var TEMP_sfx_telegraph: AudioStream
 @export var TEMP_sfx_charge: AudioStream
 @export var TEMP_sfx_charge_impact: AudioStream
 
@@ -228,6 +229,7 @@ func _on_health_dead_state_entered() -> void:
 ### ATTACKING --------------------------------
 #### TELEGRAPH
 func _on_attack_telegraph_state_entered() -> void:
+	SoundManager.play_sound(TEMP_sfx_telegraph)
 	sprite.modulate = Color.CYAN
 
 
