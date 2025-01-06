@@ -125,7 +125,6 @@ func shoot(aim_ray: RayCast3D):
 
 
 func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
-	print("Damage", damage)
 	var hitscan_ray: AimRay = aim_ray_prefab.instantiate()
 	get_parent().add_child(hitscan_ray)
 	hitscan_ray.global_position = start_pos
