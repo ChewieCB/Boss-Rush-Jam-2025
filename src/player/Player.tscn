@@ -1,19 +1,28 @@
-[gd_scene load_steps=27 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=37 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
+[ext_resource type="AudioStream" uid="uid://dkjvdnf0hufiv" path="res://src/player/assets/sfx/temp/Player_damaged_1.mp3" id="2_kd0pf"]
 [ext_resource type="Script" path="res://src/player/shakeable_camera.gd" id="3_cy2wl"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_e4bmr"]
+[ext_resource type="AudioStream" uid="uid://cnmljmkqgwgmi" path="res://src/player/assets/sfx/temp/Player_damaged_2.mp3" id="3_pveus"]
 [ext_resource type="Texture2D" uid="uid://t7scpy3771o6" path="res://src/player/assets/blob_shadow.png" id="3_tgexf"]
+[ext_resource type="AudioStream" uid="uid://c17out3b37w2o" path="res://src/player/assets/sfx/temp/Player_damaged_3.mp3" id="4_aesbc"]
 [ext_resource type="Texture2D" uid="uid://cl0jqrjnnsy7n" path="res://src/player/assets/default_crosshair.png" id="4_ymis7"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="5_dqbuo"]
+[ext_resource type="AudioStream" uid="uid://cyhmrif4rli4i" path="res://src/player/assets/sfx/temp/Player_damaged_4.mp3" id="5_fd78g"]
 [ext_resource type="Texture2D" uid="uid://coblcfhc2qgbt" path="res://src/player/assets/hitmarker_lg.png" id="5_nkt42"]
+[ext_resource type="AudioStream" uid="uid://chxvv0tfaasnw" path="res://src/player/assets/sfx/temp/Player_damaged_5.mp3" id="6_8bniu"]
 [ext_resource type="PackedScene" uid="uid://de36wdf6rkio" path="res://src/player/gun/Shotgun.tscn" id="6_mlgd0"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="6_t33b7"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_1276k"]
 [ext_resource type="PackedScene" uid="uid://byj1y3wrwtdtq" path="res://src/ui/pause_menu/PauseUI.tscn" id="7_db7x8"]
+[ext_resource type="AudioStream" uid="uid://ultwfhksuadr" path="res://src/player/assets/sfx/temp/Player_Damaged_bonus.mp3" id="7_rcwb7"]
+[ext_resource type="AudioStream" uid="uid://ccfcawm3u1r2e" path="res://src/player/assets/sfx/temp/Player_dead_1.mp3" id="8_0q120"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_dkhcu"]
 [ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="9_dmp1b"]
+[ext_resource type="AudioStream" uid="uid://dn4a4q1mrg1pv" path="res://src/player/assets/sfx/temp/Player_dead_2.mp3" id="9_n6gsv"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="10_4wdls"]
+[ext_resource type="AudioStream" uid="uid://b7lqglnhl2llk" path="res://src/player/assets/sfx/temp/dash1.wav" id="10_ak4r0"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="10_g5bf6"]
 [ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="11_grp47"]
 [ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="12_edjma"]
@@ -37,10 +46,17 @@ size = Vector3(0.5, 0.5, 0.5)
 [sub_resource type="Theme" id="Theme_y0f30"]
 default_font = ExtResource("10_4wdls")
 
+[sub_resource type="Theme" id="Theme_l1wiy"]
+default_font = ExtResource("10_4wdls")
+default_font_size = 32
+
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
 collision_layer = 2
 collision_mask = 29
 script = ExtResource("1_rl0vi")
+TEMP_sfx_hurt = Array[AudioStream]([ExtResource("2_kd0pf"), ExtResource("3_pveus"), ExtResource("4_aesbc"), ExtResource("5_fd78g"), ExtResource("6_8bniu"), ExtResource("7_rcwb7")])
+TEMP_sfx_dead = Array[AudioStream]([ExtResource("8_0q120"), ExtResource("9_n6gsv")])
+TEMP_sfx_dash = ExtResource("10_ak4r0")
 can_wall_jump = true
 can_wall_cling = true
 max_air_jump = 1
@@ -53,6 +69,7 @@ health_component = NodePath("HealthComponent")
 shape = SubResource("CapsuleShape3D_le58x")
 
 [node name="DebugMeshes" type="Node3D" parent="."]
+visible = false
 
 [node name="Body" type="MeshInstance3D" parent="DebugMeshes"]
 mesh = SubResource("CapsuleMesh_w3btf")
@@ -231,28 +248,30 @@ tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 wait_time = 0.4
 one_shot = true
 
-[node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
-z_as_relative = false
-
 [node name="MagazineUI" type="Label" parent="UI"]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -162.0
+offset_left = -178.0
 offset_top = -89.0
 offset_right = -28.0
 offset_bottom = -20.0
 grow_horizontal = 0
 grow_vertical = 0
+theme = SubResource("Theme_l1wiy")
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 6
 theme_override_font_sizes/font_size = 50
 text = "10/10"
 horizontal_alignment = 2
 
+[node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
+z_as_relative = false
+
 [node name="HardcodedGunInfo" type="Label" parent="UI"]
+visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -352,6 +371,10 @@ delay_in_seconds = "0.0"
 
 [node name="Dead" type="Node" parent="StateChart/Root/Health"]
 script = ExtResource("8_dkhcu")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1, 0.2)
+light_color = Color(0.78, 0.897333, 1, 1)
 
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]

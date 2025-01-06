@@ -49,6 +49,7 @@ func on_damage_applied():
 	# print("on_damage_applied with {0}, rolled {1}".format([display_text, roll]))
 	if roll <= refund_chance:
 		owner_barrel.owner_gun.magazine_ammo_left = clamp(0, owner_barrel.owner_gun.magazine_ammo_left + 1, owner_barrel.owner_gun.modified_magazine_size)
+		owner_barrel.owner_gun.regain_ammo(1)
 		# print("ammo refuned")
 
 func on_enemy_killed():

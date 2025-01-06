@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://guegep2ueo26"]
+[gd_scene load_steps=8 format=3 uid="uid://guegep2ueo26"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_projectile.gd" id="1_x0ax1"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_bxb8l"]
 [ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_7tm1i"]
+[ext_resource type="PackedScene" uid="uid://b052m61k5ht8i" path="res://src/player/gun/vfx/HitText.tscn" id="3_bu72r"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u7eax"]
 albedo_color = Color(1, 0.668348, 0, 1)
@@ -20,6 +21,7 @@ radius = 0.2
 mesh = SubResource("BoxMesh_ptj85")
 script = ExtResource("1_x0ax1")
 spark_effect = ExtResource("2_bxb8l")
+text_effect = ExtResource("3_bu72r")
 generic_blood_splatter = ExtResource("3_7tm1i")
 
 [node name="Area3D" type="Area3D" parent="."]

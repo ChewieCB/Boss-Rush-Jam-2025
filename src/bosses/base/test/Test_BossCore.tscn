@@ -1,4 +1,4 @@
-[gd_scene load_steps=120 format=4 uid="uid://2q4ssotscvd5"]
+[gd_scene load_steps=121 format=4 uid="uid://2q4ssotscvd5"]
 
 [ext_resource type="Script" path="res://src/bosses/base/test/test_boss_core.gd" id="1_pgc5k"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="2_5mq86"]
@@ -394,6 +394,9 @@ indices = PackedInt32Array(0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_eniqi"]
 data = PackedVector3Array(31.25, 0.25, -12.75, 31.25, 0.25, 11.25, -31.25, 0.25, 11.25, 31.25, 0.25, -12.75, -31.25, 0.25, 11.25, -31.25, 0.25, -12.75, 9.25, 0.25, -16.75, 9.25, 0.25, -12.75, -8.75, 0.25, -12.75, 9.25, 0.25, -16.75, -8.75, 0.25, -12.75, -8.75, 0.25, -16.75, -12.75, 0.25, -16.75, -12.75, 0.25, -12.75, -31.25, 0.25, -12.75, -12.75, 0.25, -16.75, -31.25, 0.25, -12.75, -31.25, 0.25, -16.75, 18.75, 0.25, -30.25, 31.25, 0.25, -17.75, 31.25, 0.25, -16.75, 18.75, 0.25, -30.25, 31.25, 0.25, -16.75, -31.25, 0.25, -16.75, 18.75, 0.25, -30.25, -31.25, 0.25, -16.75, -31.25, 0.25, -17.75, 18.75, 0.25, -30.25, -31.25, 0.25, -17.75, -18.75, 0.25, -30.25, 31.25, 0.25, -16.75, 31.25, 0.25, -12.75, 13.25, 0.25, -12.75, 31.25, 0.25, -16.75, 13.25, 0.25, -12.75, 13.25, 0.25, -16.75, 31.25, 0.25, 15.25, 31.25, 0.25, 17.75, 18.75, 0.25, 30.25, 31.25, 0.25, 15.25, 18.75, 0.25, 30.25, -18.75, 0.25, 30.25, 31.25, 0.25, 15.25, -18.75, 0.25, 30.25, -31.25, 0.25, 17.75, 31.25, 0.25, 15.25, -31.25, 0.25, 17.75, -31.25, 0.25, 15.25, 31.25, 0.25, 11.25, 31.25, 0.25, 15.25, 13.25, 0.25, 15.25, 31.25, 0.25, 11.25, 13.25, 0.25, 15.25, 13.25, 0.25, 11.25, 9.25, 0.25, 11.25, 9.25, 0.25, 15.25, -8.75, 0.25, 15.25, 9.25, 0.25, 11.25, -8.75, 0.25, 15.25, -8.75, 0.25, 11.25, -12.75, 0.25, 11.25, -12.75, 0.25, 15.25, -31.25, 0.25, 15.25, -12.75, 0.25, 11.25, -31.25, 0.25, 15.25, -31.25, 0.25, 11.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hteaf"]
+size = Vector3(16, 5, 16)
 
 [node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss", "player")]
 script = ExtResource("1_pgc5k")
@@ -836,3 +839,21 @@ entProperties = {
 "marker_group": "ranged",
 "origin": "584 40 24"
 }
+
+[node name="BossTriggerVolume" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 8.5, 17)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossTriggerVolume"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.5, 0)
+shape = SubResource("BoxShape3D_hteaf")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 38, 18)
+light_energy = 3.0
+light_volumetric_fog_energy = 4.0
+light_negative = true
+omni_range = 7.0
+
+[connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

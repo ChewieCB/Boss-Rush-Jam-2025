@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bcippputkq3ih"
+path="res://.godot/imported/Whoosh .mp3-e5ec1f1a93a4ff8cc614d2273c542eaf.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/base/assets/sfx/temp/Whoosh .mp3"
+dest_files=["res://.godot/imported/Whoosh .mp3-e5ec1f1a93a4ff8cc614d2273c542eaf.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,11 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://de36wdf6rkio"]
+[gd_scene load_steps=17 format=3 uid="uid://de36wdf6rkio"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_kygto"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="2_l7ggu"]
+[ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_wip6c"]
+[ext_resource type="AudioStream" uid="uid://bxq16mdpw6cvr" path="res://src/player/gun/assets/sfx/temp/Shotgun_Dry_Fire.mp3" id="3_6qpgo"]
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="3_8nt2m"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="3_wypyb"]
-[ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="4_6s01h"]
+[ext_resource type="AudioStream" uid="uid://d1ho6twusx65t" path="res://src/player/gun/assets/sfx/temp/Shotgun_Load_Shell.mp3" id="4_okctn"]
+[ext_resource type="AudioStream" uid="uid://d3psu8yx8uldk" path="res://src/player/gun/assets/sfx/temp/Shotgun_Cock_only.mp3" id="5_4dvs2"]
 [ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="5_lelmw"]
+[ext_resource type="AudioStream" uid="uid://csslo4nsdbmmp" path="res://src/player/gun/assets/sfx/temp/Recover_ammp.mp3" id="6_ursny"]
+[ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="7_8iawc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
 albedo_color = Color(1, 0.568275, 0.171359, 1)
@@ -29,7 +34,14 @@ size = Vector3(0.795, 0.415, 1.005)
 script = ExtResource("1_kygto")
 gun_name = "Shotgun"
 description = "The usual shotgun"
+TEMP_sfx_shoot = ExtResource("2_wip6c")
+TEMP_sfx_dry = ExtResource("3_6qpgo")
+TEMP_sfx_reload = ExtResource("4_okctn")
+TEMP_sfx_click = ExtResource("5_4dvs2")
+TEMP_regain_ammo = ExtResource("6_ursny")
+TEMP_crit = ExtResource("7_8iawc")
 base_projectile_amount = 8
+base_magazine_size = 5
 spread_angle = 8
 base_projectile_speed = 50.0
 aim_ray_prefab = ExtResource("2_l7ggu")
@@ -58,10 +70,8 @@ skeleton = NodePath("../..")
 
 [node name="Barrel" type="Node3D" parent="."]
 
-[node name="ProjectileCountBarrel" parent="Barrel" instance=ExtResource("4_6s01h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.32368)
-
 [node name="FoolRoller" parent="Barrel" instance=ExtResource("5_lelmw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 

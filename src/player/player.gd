@@ -1,6 +1,11 @@
 extends CharacterBody3D
 class_name Player
 
+## TEMP SFX PLS CHANGE
+@export var TEMP_sfx_hurt: Array[AudioStream]
+@export var TEMP_sfx_dead: Array[AudioStream]
+@export var TEMP_sfx_dash: AudioStream
+
 @export var can_wall_jump: bool
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
@@ -101,12 +106,16 @@ func _input(event):
 		if last_dashed_timestamp + dash_cd * 1000 <= Time.get_ticks_msec():
 			last_dashed_timestamp = Time.get_ticks_msec()
 			is_dashing = true
+			SoundManager.play_sound_with_pitch(TEMP_sfx_dash, randf_range(0.8, 1.1))
 			vel_vertical = 0
 			dash_duration_timer.start()
 
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 
+	if controls_disabled:
+		return
+	
 	if Input.is_action_pressed("shoot"):
 		# Raycast to target and damage them if hit
 		var gun: Gun = gun_container.get_child(0)
@@ -170,7 +179,7 @@ func _physics_process(delta):
 		velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * bonus_speed
 		move_and_slide()
 
-		show_debug_label()
+		#show_debug_label()
 		var gun_sway_velocity = velocity * transform.basis
 		if not is_swapping_gun:
 			gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
@@ -321,12 +330,14 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
+		SoundManager.play_sound(TEMP_sfx_hurt.pick_random())
 		if new_health > 0:
 			state_chart.send_event("end_damage")
 
 
 func _on_died() -> void:
 	state_chart.send_event("death")
+	SoundManager.play_sound(TEMP_sfx_dead.pick_random())
 
 
 func _on_health_hurt_state_entered() -> void:

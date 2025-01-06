@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://b1f4r5ikvdo6j"]
+[gd_scene load_steps=12 format=3 uid="uid://b1f4r5ikvdo6j"]
 
 [ext_resource type="Texture2D" uid="uid://dda5ai5yfv010" path="res://assets/temp_carpet.jpg" id="1_ccdck"]
 [ext_resource type="FontFile" uid="uid://bqfms27vmrtfe" path="res://assets/fonts/casino/Casino3DMarquee.ttf" id="1_f0cjk"]
 [ext_resource type="Script" path="res://src/ui/temp/temp_main.gd" id="1_q2w4p"]
+[ext_resource type="AudioStream" uid="uid://coyh1k757v4k8" path="res://assets/music/WANTED 0.1.mp3" id="2_le6am"]
 [ext_resource type="FontFile" uid="uid://cm028vstjup4r" path="res://assets/fonts/RoyalFlush-Regular.ttf" id="2_ynyhp"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="3_3pcwx"]
 
@@ -41,6 +42,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_q2w4p")
+TEMP_bgm = ExtResource("2_le6am")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
