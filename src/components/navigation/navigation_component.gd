@@ -18,7 +18,8 @@ signal pathfinding_ready
 var target: Node3D:
 	set(value):
 		target = value
-		nav_agent.set_target_position(target.global_position)
+		set_nav_target_position(target.global_position)
+		#nav_agent.set_target_position(target.global_position)
 var path: PackedVector3Array
 var nav_map_rid: RID
 var nav_agent_rid: RID
@@ -81,6 +82,7 @@ func _physics_process(delta) -> void:
 func set_nav_target_position(pos: Vector3) -> void:
 	if pos != nav_agent.target_position:
 		nav_agent.target_position = pos
+		await nav_agent.path_changed
 
 
 func get_new_nav_agent_velocity() -> Vector3:

@@ -31,8 +31,8 @@ var area_phase_count: int = 0
 var projectile_round_count: int = 0
 @export var max_projectile_rounds: int = 2
 
-@export var move_points: Array[Marker3D]
-@export var area_point: Marker3D
+var ranged_move_points: Array[Node]
+var area_move_points: Array[Node]
 
 # Area Attack
 # TODO - make this adjustable via resources
@@ -77,6 +77,8 @@ func _ready() -> void:
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	#debug_mesh.visible = false
+	ranged_move_points = get_tree().get_nodes_in_group("boss_ranged_marker")
+	area_move_points = get_tree().get_nodes_in_group("boss_area_marker")
 
 
 func _physics_process(delta: float) -> void:
@@ -281,7 +283,7 @@ func _on_phase_ranged_projectiles_move_to_center_state_entered() -> void:
 	
 	MAX_SPEED *= 2
 	
-	var valid_move_points = move_points.duplicate()
+	var valid_move_points = ranged_move_points.duplicate()
 	valid_move_points.sort_custom(
 		func(a, b):
 			var a_dist: float = self.global_position.distance_to(a.global_position)
@@ -345,7 +347,8 @@ func _on_phase_area_denial_move_to_center_state_entered() -> void:
 	
 	MAX_SPEED *= 2
 	cached_target = target
-	target = area_point
+	# TODO - add code to vary move points if more than one
+	target = area_move_points[0]
 	state_chart.send_event("start_moving")
 	await navigation_component.nav_agent.navigation_finished
 	
