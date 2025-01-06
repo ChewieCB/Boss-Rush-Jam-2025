@@ -27,7 +27,7 @@ horizontal_alignment = 2
 [node name="AmmoLeechEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_psr82")
 refund_chance = 20.0
-flat_damage_modify = -25
+perc_damage_modify = -25.0
 display_text = "20% refund ammo on hit
 -25% damage"
 

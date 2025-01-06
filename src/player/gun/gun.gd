@@ -114,9 +114,6 @@ func shoot(aim_ray: RayCast3D):
 		time_since_last_shot = 0
 		await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
 
-		for barrel in installed_barrels:
-			barrel.get_active_effect().on_ammo_consumed()
-
 	magazine_ammo_left -= n_ammo_consume
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_ammo_consumed()
@@ -128,6 +125,7 @@ func shoot(aim_ray: RayCast3D):
 
 
 func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
+	print("Damage", damage)
 	var hitscan_ray: AimRay = aim_ray_prefab.instantiate()
 	get_parent().add_child(hitscan_ray)
 	hitscan_ray.global_position = start_pos

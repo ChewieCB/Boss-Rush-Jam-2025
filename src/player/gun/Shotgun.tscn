@@ -1,6 +1,5 @@
-[gd_scene load_steps=11 format=3 uid="uid://de36wdf6rkio"]
+[gd_scene load_steps=10 format=3 uid="uid://de36wdf6rkio"]
 
-[ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="1_do4in"]
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_kygto"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="2_l7ggu"]
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="3_3ea0a"]
@@ -56,11 +55,14 @@ skeleton = NodePath("../..")
 
 [node name="Barrel" type="Node3D" parent="."]
 
-[node name="ProjectileCountBarrel" parent="Barrel" instance=ExtResource("1_do4in")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.268329)
-
 [node name="FoolRoller" parent="Barrel" instance=ExtResource("5_70soy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.162054)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.307668)
+
+[node name="FoolRoller2" parent="Barrel" instance=ExtResource("5_70soy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.167926)
+
+[node name="FoolRoller3" parent="Barrel" instance=ExtResource("5_70soy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0223119)
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 
