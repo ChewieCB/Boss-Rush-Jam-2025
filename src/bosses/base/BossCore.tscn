@@ -1,20 +1,24 @@
-[gd_scene load_steps=19 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=26 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Texture2D" uid="uid://l708f35ye0ad" path="res://src/bosses/base/assets/umby_boss_sprite_placeholder.png" id="1_lhq8s"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
+[ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="2_s3pnh"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_fy6mc"]
 [ext_resource type="PackedScene" uid="uid://bwei3cifjg1sq" path="res://src/ui/boss/BossHealthBar.tscn" id="3_ybtoo"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_sfdil"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="5_oy1aj"]
+[ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="6_4cg3x"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_nojwf"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="7_0t8qy"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="8_lsrry"]
 [ext_resource type="PackedScene" uid="uid://e7b51y76wxn3" path="res://src/components/navigation/NavigationComponent.tscn" id="9_cunyl"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="11_j156m"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="12_1g6yn"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="13_ai5vk"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_w7fni"]
-size = Vector3(2.5, 4.8, 2.5)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m057l"]
+radius = 1.0
+height = 4.6
 
 [sub_resource type="BoxMesh" id="BoxMesh_rkhu1"]
 size = Vector3(2.5, 4.8, 2.5)
@@ -34,12 +38,31 @@ state = NodePath("../../../Health/Dead")
 script = ExtResource("12_1g6yn")
 guard = SubResource("Resource_vq1e8")
 
+[sub_resource type="Resource" id="Resource_b8dnc"]
+script = ExtResource("11_j156m")
+state = NodePath("../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_vcpbr"]
+script = ExtResource("12_1g6yn")
+guard = SubResource("Resource_b8dnc")
+
+[sub_resource type="Resource" id="Resource_2ueik"]
+script = ExtResource("11_j156m")
+state = NodePath("../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_8m7u0"]
+script = ExtResource("12_1g6yn")
+guard = SubResource("Resource_2ueik")
+
 [node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
 collision_layer = 4
 collision_mask = 27
 script = ExtResource("1_tem3i")
 navigation_component = NodePath("NavigationComponent")
 health_component = NodePath("HealthComponent")
+attack_recovery_time = 0.65
+projectile_scene = ExtResource("2_s3pnh")
+delay_per_projectile = 0.25
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
@@ -47,8 +70,8 @@ billboard = 2
 texture = ExtResource("1_lhq8s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0393372, 2.43881, 0.0647888)
-shape = SubResource("BoxShape3D_w7fni")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
+shape = SubResource("CapsuleShape3D_m057l")
 
 [node name="DebugMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
@@ -65,7 +88,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
 shape = SubResource("BoxShape3D_d0jfy")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_fy6mc")]
-max_health = 600.0
+max_health = 2000.0
 
 [node name="NavigationComponent" parent="." node_paths=PackedStringArray("nav_agent") instance=ExtResource("9_cunyl")]
 nav_agent = NodePath("../NavigationAgent3D")
@@ -74,6 +97,14 @@ nav_agent = NodePath("../NavigationAgent3D")
 
 [node name="BossHealthContainer" parent="BossHealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("3_ybtoo")]
 health_component = NodePath("../../HealthComponent")
+
+[node name="StateChartDebugger" parent="BossHealthUI" instance=ExtResource("6_4cg3x")]
+visible = false
+offset_left = 1312.0
+offset_top = 8.0
+offset_bottom = -438.0
+enabled = false
+initial_node_to_watch = NodePath("../../StateChart")
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("4_sfdil")
@@ -120,7 +151,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("8_lsrry")
 to = NodePath("../../Charging")
 event = &"start_charge"
-delay_in_seconds = "1.0"
+delay_in_seconds = "0.0"
 
 [node name="Walking" type="Node" parent="StateChart/Root/Movement"]
 script = ExtResource("7_0t8qy")
@@ -265,14 +296,201 @@ script = ExtResource("7_0t8qy")
 
 [node name="Phase" type="Node" parent="StateChart/Root"]
 script = ExtResource("6_nojwf")
-initial_state = NodePath("Chase")
+initial_state = NodePath("Inactive")
 
-[node name="Chase" type="Node" parent="StateChart/Root/Phase"]
+[node name="Inactive" type="Node" parent="StateChart/Root/Phase"]
 script = ExtResource("7_0t8qy")
 
+[node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/Inactive"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../ChasePlayer")
+event = &"start_chase_attack"
+guard = SubResource("Resource_vcpbr")
+delay_in_seconds = "0.0"
+
+[node name="toRangedProjectiles" type="Node" parent="StateChart/Root/Phase/Inactive"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../RangedProjectiles")
+event = &"start_ranged_attack"
+guard = SubResource("Resource_8m7u0")
+delay_in_seconds = "0.0"
+
+[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/Inactive"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../AreaDenial")
+event = &"start_area_attack"
+guard = SubResource("Resource_8m7u0")
+delay_in_seconds = "0.0"
+
+[node name="ChasePlayer" type="Node" parent="StateChart/Root/Phase"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("TargetPlayer")
+
+[node name="TargetPlayer" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
+script = ExtResource("7_0t8qy")
+
+[node name="toCharge" type="Node" parent="StateChart/Root/Phase/ChasePlayer/TargetPlayer"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Charge")
+event = &"charge_player"
+delay_in_seconds = "0.0"
+
+[node name="Charge" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
+script = ExtResource("7_0t8qy")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/ChasePlayer/Charge"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Recover")
+event = &"end_charge"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
+script = ExtResource("7_0t8qy")
+
+[node name="toTargetPlayer" type="Node" parent="StateChart/Root/Phase/ChasePlayer/Recover"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../TargetPlayer")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toRangedProjectiles" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../RangedProjectiles")
+event = &"start_ranged_attack"
+guard = SubResource("Resource_8m7u0")
+delay_in_seconds = "0.0"
+
+[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../AreaDenial")
+event = &"start_area_attack"
+guard = SubResource("Resource_8m7u0")
+delay_in_seconds = "0.0"
+
+[node name="RangedProjectiles" type="Node" parent="StateChart/Root/Phase"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("MoveToCenter")
+
+[node name="MoveToCenter" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
+script = ExtResource("7_0t8qy")
+
+[node name="toFireProjectiles" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/MoveToCenter"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../FireProjectiles")
+event = &"start_projectiles"
+delay_in_seconds = "0.0"
+
+[node name="FireProjectiles" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
+script = ExtResource("7_0t8qy")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/FireProjectiles"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Recover")
+event = &"end_projectiles"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
+script = ExtResource("7_0t8qy")
+
+[node name="toMoveToCenter" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/Recover"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../MoveToCenter")
+event = &"change_position"
+delay_in_seconds = "0.0"
+
+[node name="toFireProjectiles" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/Recover"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../FireProjectiles")
+event = &"fire_again"
+delay_in_seconds = "0.0"
+
+[node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../ChasePlayer")
+event = &"start_chase_attack"
+guard = SubResource("Resource_vcpbr")
+delay_in_seconds = "0.0"
+
+[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../AreaDenial")
+event = &"start_area_attack"
+guard = SubResource("Resource_8m7u0")
+delay_in_seconds = "0.0"
+
+[node name="AreaDenial" type="Node" parent="StateChart/Root/Phase"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("MoveToCenter")
+
+[node name="MoveToCenter" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
+script = ExtResource("7_0t8qy")
+
+[node name="toSpawnDamageAreas" type="Node" parent="StateChart/Root/Phase/AreaDenial/MoveToCenter"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../SpawnDamageAreas")
+event = &"start_area_attack"
+delay_in_seconds = "0.0"
+
+[node name="SpawnDamageAreas" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
+script = ExtResource("7_0t8qy")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AreaDenial/SpawnDamageAreas"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Recover")
+event = &"finish_area_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
+script = ExtResource("7_0t8qy")
+
+[node name="toMoveToCenter" type="Node" parent="StateChart/Root/Phase/AreaDenial/Recover"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../MoveToCenter")
+event = &"change_position"
+delay_in_seconds = "0.0"
+
+[node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../ChasePlayer")
+event = &"start_chase_attack"
+guard = SubResource("Resource_vcpbr")
+delay_in_seconds = "0.0"
+
+[node name="toRangedProjectiles" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../RangedProjectiles")
+event = &"start_ranged_attack"
+guard = SubResource("Resource_8m7u0")
+delay_in_seconds = "0.0"
+
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
-debug_enabled = true
+keep_y_velocity = false
 debug_path_custom_color = Color(1, 0, 0, 1)
+debug_path_custom_point_size = 8.0
+
+[node name="DebugStateLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+billboard = 1
+text = "INACTIVE"
+font = ExtResource("13_ai5vk")
+font_size = 128
+outline_size = 32
+uppercase = true
+
+[node name="DebugDistanceLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4, 0)
+billboard = 1
+text = "INACTIVE"
+font = ExtResource("13_ai5vk")
+font_size = 128
+outline_size = 32
+uppercase = true
 
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_entered"]
@@ -284,6 +502,21 @@ debug_path_custom_color = Color(1, 0, 0, 1)
 [connection signal="state_entered" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Attacking/Telegraph" to="." method="_on_attack_telegraph_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Attacking/Telegraph" to="." method="_on_attack_telegraph_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/TargetPlayer" to="." method="_on_phase_target_player_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/Charge" to="." method="_on_phase_chase_player_charge_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/Recover" to="." method="_on_phase_chase_player_recover_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/ChasePlayer/Recover" to="." method="_on_phase_chase_player_recover_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/MoveToCenter" to="." method="_on_phase_ranged_projectiles_move_to_center_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/RangedProjectiles/MoveToCenter" to="." method="_on_phase_ranged_projectiles_move_to_center_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/FireProjectiles" to="." method="_on_phase_ranged_projectiles_fire_projectiles_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/Recover" to="." method="_on_phase_ranged_projectiles_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/MoveToCenter" to="." method="_on_phase_area_denial_move_to_center_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/AreaDenial/MoveToCenter" to="." method="_on_phase_area_denial_move_to_center_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/SpawnDamageAreas" to="." method="_on_phase_area_denial_spawn_damage_areas_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/Recover" to="." method="_on_phase_area_denial_recover_state_entered"]
