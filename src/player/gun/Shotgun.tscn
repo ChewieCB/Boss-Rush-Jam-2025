@@ -31,6 +31,7 @@ gun_name = "Shotgun"
 description = "The usual shotgun"
 base_projectile_amount = 8
 spread_angle = 8
+is_hitscan = true
 base_projectile_speed = 50.0
 aim_ray_prefab = ExtResource("2_l7ggu")
 hiscan_prefab = ExtResource("3_8nt2m")

@@ -128,7 +128,6 @@ transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
 [node name="Shotgun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("6_mlgd0")]
 transform = Transform3D(0.959201, 0, 0.282727, 0, 1, 0, -0.282727, 0, 0.959201, 0.244493, 0, 0.23962)
 description = "The usual shotgun."
-is_hitscan = null
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
 
