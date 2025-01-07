@@ -87,6 +87,10 @@ func shoot(aim_ray: RayCast3D):
 		reload()
 		return
 
+	var time_until_next_shot = 1.0 / modified_firerate
+	if time_until_next_shot > time_since_last_shot:
+		return
+
 	reset_modifier()
 
 	var can_fire = true
@@ -99,9 +103,6 @@ func shoot(aim_ray: RayCast3D):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_fire_rate_check()
 
-	var time_until_next_shot = 1.0 / modified_firerate
-	if time_until_next_shot > time_since_last_shot:
-		return
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_prepare_to_fire()
