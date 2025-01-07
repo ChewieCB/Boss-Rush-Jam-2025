@@ -5,6 +5,7 @@
 
 [node name="HitText" type="Label3D"]
 billboard = 1
+no_depth_test = true
 text = "TEST TEXT"
 font = ExtResource("1_cx0fs")
 font_size = 128

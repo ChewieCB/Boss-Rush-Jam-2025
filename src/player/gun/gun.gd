@@ -18,7 +18,7 @@ class_name Gun
 @export var base_firerate = 2
 @export var base_magazine_size = 10
 ## How spread out projectile can be from the aim center
-@export var spread_angle = 0
+@export var base_spread_angle = 0
 ## Projectile dont have travel time. Shot enemy is instanly damaged. If this ticked, ignore projectile_speed
 @export var is_hitscan: bool
 ## How fast projectile travel. Ignored if is_hitscan ticked. Shouldn't higher than 100 or collision detecion
@@ -36,6 +36,7 @@ class_name Gun
 @onready var gun_status_label: Label3D = $PlaceholderUI/StatusLabel
 @onready var bullet_spawn_marker = $BulletStartPos
 @onready var jam_timer: Timer = $JamTimer
+@onready var failed_shoot_sfx_timer: Timer = $FailToShootSFXTimer
 
 var magazine_ammo_left = 0
 var is_reloading = false
@@ -52,6 +53,8 @@ var modified_projectile_amount
 var modified_firerate
 var modified_magazine_size
 var modified_projectile_speed
+var modified_is_hitscan
+var modified_spread_angle
 
 signal gun_shot
 signal gun_reloaded
@@ -67,16 +70,20 @@ func _ready() -> void:
 		child.owner_gun = self
 		installed_barrels.append(child)
 	reset_modifier()
+	await get_tree().physics_frame
+	await get_tree().physics_frame
 
 func _process(delta: float) -> void:
 	time_since_last_shot += delta
 
+
+## Return true if shot successful
 func shoot(aim_ray: RayCast3D):
 	if is_reloading or is_jammed:
-		SoundManager.play_sound(TEMP_sfx_dry)
+		play_failed_shoot_sfx()
 		return
 	if magazine_ammo_left <= 0:
-		SoundManager.play_sound(TEMP_sfx_dry)
+		play_failed_shoot_sfx()
 		reload()
 		return
 
@@ -86,7 +93,7 @@ func shoot(aim_ray: RayCast3D):
 	for barrel in installed_barrels:
 		can_fire = can_fire and barrel.get_active_effect().on_fire_attempt()
 	if not can_fire:
-		SoundManager.play_sound(TEMP_sfx_dry)
+		play_failed_shoot_sfx()
 		return
 
 	for barrel in installed_barrels:
@@ -108,8 +115,8 @@ func shoot(aim_ray: RayCast3D):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_calculation()
 
-	var bullet_start_pos = bullet_spawn_marker.global_position
 	for i in range(n_shot_repeat):
+		var bullet_start_pos = bullet_spawn_marker.global_position
 		SoundManager.play_sound(TEMP_sfx_shoot)
 		for j in range(modified_projectile_amount):
 
@@ -120,7 +127,7 @@ func shoot(aim_ray: RayCast3D):
 			# Randomize bullet start pos a bit for automatic weapon
 			# bullet_start_pos.x += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
 			# bullet_start_pos.y += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
-			if is_hitscan:
+			if modified_is_hitscan:
 				create_hitscan_attack(bullet_start_pos, spread_direction, modified_damage)
 			else:
 				create_projectile_attack(bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
@@ -160,6 +167,7 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
 		if target is CharacterBody3D:
 			target.health_component.damage(damage)
 			projectile_inst.create_blood_splatter(hitscan_col_point, hitscan_col_normal)
+			projectile_inst.create_text(hitscan_col_point, hitscan_col_normal, str(damage), Color.ORANGE)
 			check_barrel_effect_on_damage_applied()
 		else:
 			# Hit wall/obstacle
@@ -203,7 +211,7 @@ func check_barrel_effect_on_projectile_destroyed():
 
 func reload():
 	if is_jammed:
-		SoundManager.play_sound(TEMP_sfx_dry)
+		play_failed_shoot_sfx()
 		return
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
@@ -211,7 +219,7 @@ func reload():
 	is_reloading = true
 	SoundManager.play_sound(TEMP_sfx_reload)
 	show_gun_status("Reloading...")
-	reset_modifier()
+	reset_modifier(true)
 	for barrel in installed_barrels:
 		barrel.start_spin()
 	await get_tree().create_timer(1).timeout
@@ -224,19 +232,21 @@ func reload():
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
 
-
 	magazine_ammo_left = modified_magazine_size
 	gun_reloaded.emit()
 
 
-func reset_modifier():
+func reset_modifier(reload_reset = false):
 	n_ammo_consume = 1
 	n_shot_repeat = 1
 	modified_damage = base_damage
 	modified_projectile_amount = base_projectile_amount
 	modified_firerate = base_firerate
-	modified_magazine_size = base_magazine_size
 	modified_projectile_speed = base_projectile_speed
+	modified_is_hitscan = is_hitscan
+	modified_spread_angle = base_spread_angle
+	if reload_reset:
+		modified_magazine_size = base_magazine_size
 
 
 func jam_the_gun(duration: float = 1.0):
@@ -278,7 +288,7 @@ func _on_jam_timer_timeout() -> void:
 
 func get_spread_direction(center_direction: Vector3) -> Vector3:
 	# Convert spread angle to radians
-	var max_radians = deg_to_rad(spread_angle)
+	var max_radians = deg_to_rad(modified_spread_angle)
 
 	# Generate random rotation within the spread cone
 	var random_yaw = randf_range(-max_radians, max_radians)
@@ -289,3 +299,8 @@ func get_spread_direction(center_direction: Vector3) -> Vector3:
 
 	# Apply the rotation to the center direction
 	return (spread_rotation * center_direction).normalized()
+
+func play_failed_shoot_sfx():
+	if failed_shoot_sfx_timer.is_stopped():
+		SoundManager.play_sound(TEMP_sfx_dry)
+		failed_shoot_sfx_timer.start()

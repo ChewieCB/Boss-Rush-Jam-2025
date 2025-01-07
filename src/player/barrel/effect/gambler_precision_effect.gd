@@ -45,9 +45,9 @@ func on_projectile_destroyed():
 	# We only check for missed after all projectiles destroyed
 	if projectile_count == owner_barrel.owner_gun.modified_projectile_amount:
 		if hit_count <= 0:
-			# var roll = randi_range(1, 100)
-			# if roll <= jam_chance_if_missed:
-			owner_barrel.owner_gun.jam_the_gun(2)
+			var roll = randi_range(1, 100)
+			if roll <= jam_chance_if_missed:
+				owner_barrel.owner_gun.jam_the_gun(2)
 
 func on_damage_calculation():
 	super()
