@@ -41,7 +41,7 @@ func on_projectile_impact():
 func on_projectile_destroyed():
 	super()
 	projectile_count += 1
-	print("projectile_count {0}, modified_projectile_amount{1}".format([projectile_count, owner_barrel.owner_gun.modified_projectile_amount]))
+	# print("projectile_count {0}, modified_projectile_amount{1}".format([projectile_count, owner_barrel.owner_gun.modified_projectile_amount]))
 	# We only check for missed after all projectiles destroyed
 	if projectile_count == owner_barrel.owner_gun.modified_projectile_amount:
 		if hit_count <= 0:

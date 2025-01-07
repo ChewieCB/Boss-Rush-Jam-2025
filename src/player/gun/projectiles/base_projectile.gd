@@ -30,15 +30,19 @@ func create_blood_splatter(pos: Vector3, normal: Vector3):
 		blood_inst.look_at(pos + normal, Vector3.UP)
 
 
-func create_text(pos: Vector3, normal: Vector3, 
+func create_text(pos: Vector3, normal: Vector3,
 text: String, color: Color = Color.WHITE, size: float = 92.0) -> void:
 	var text_inst = text_effect.instantiate()
 	get_parent().add_child(text_inst)
+	var variance = 0.5
+	var rand_x = randf_range(-variance, variance)
+	var rand_y = randf_range(-variance, variance)
+	var rand_z = randf_range(-variance, variance)
 	text_inst.text = text
 	text_inst.modulate = color
 	text_inst.font_size = size
 	text_inst.outline_size = size / 2
-	text_inst.global_position = pos
+	text_inst.global_position = pos + Vector3(rand_x, rand_y, rand_z)
 
 	if normal.is_equal_approx(Vector3.DOWN):
 		text_inst.rotation_degrees.x = -90
