@@ -72,6 +72,7 @@ func _ready() -> void:
 	reset_modifier()
 	await get_tree().physics_frame
 	await get_tree().physics_frame
+	reload()
 
 func _process(delta: float) -> void:
 	time_since_last_shot += delta

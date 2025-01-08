@@ -142,7 +142,7 @@ HSpeed: 0 u/s"
 [node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
 
-[node name="BankGun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("17_2uqul")]
+[node name="BlankGun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("17_2uqul")]
 transform = Transform3D(0.997227, 0, 0.0744218, 0, 1, 0, -0.0744218, 0, 0.997227, 0.219443, 0, 0.194852)
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]

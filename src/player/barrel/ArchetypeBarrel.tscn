@@ -132,7 +132,7 @@ new_value = 1.0
 [node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
 script = ExtResource("2_soqa0")
 attribute = 7
-new_value = 0.2
+new_value = 0.5
 
 [node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
 script = ExtResource("2_soqa0")

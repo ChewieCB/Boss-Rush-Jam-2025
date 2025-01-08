@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://d2tb8ogqlaxhy"]
+[gd_scene load_steps=24 format=3 uid="uid://d2tb8ogqlaxhy"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_wwe7d"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_5dqrq"]
@@ -11,9 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="9_tyti4"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="10_vvihl"]
 [ext_resource type="PackedScene" uid="uid://d1r8em3of5o8n" path="res://src/player/barrel/ArchetypeBarrel.tscn" id="11_1c3f4"]
-[ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="12_qmed7"]
+[ext_resource type="PackedScene" uid="uid://dpen2bnsec184" path="res://src/player/barrel/TestBarrel.tscn" id="11_2x54p"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="12_ukph6"]
-[ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="13_xstnx"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
 albedo_color = Color(0.459708, 0.464844, 0.460992, 1)
@@ -109,13 +108,9 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0330088, 0)
 
 [node name="ArchetypeBarrel" parent="Barrel" instance=ExtResource("11_1c3f4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0653502, -0.125377)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06337, -0.114858)
 
-[node name="ProjectileCountBarrel" parent="Barrel" instance=ExtResource("12_qmed7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00792122, -0.0237506)
-
-[node name="FoolRoller" parent="Barrel" instance=ExtResource("13_xstnx")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0297047, 0.0792125)
+[node name="TestBarrel" parent="Barrel" instance=ExtResource("11_2x54p")]
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 
