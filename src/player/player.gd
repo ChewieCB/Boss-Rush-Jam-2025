@@ -116,6 +116,12 @@ func _process(delta):
 	if controls_disabled:
 		return
 	
+	if Input.is_action_just_pressed("interact"):
+		if aim_ray.is_colliding():
+			var interact_collider = aim_ray.get_collider()
+			if interact_collider is ElevatorButton:
+				interact_collider.interact()
+	
 	if Input.is_action_pressed("shoot"):
 		# Raycast to target and damage them if hit
 		var gun: Gun = gun_container.get_child(0)

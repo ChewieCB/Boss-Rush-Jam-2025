@@ -44,15 +44,23 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Settings"
 
-[node name="ExitButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+[node name="LobbyButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
-text = "Exit"
+text = "Return to
+Lobby"
+
+[node name="QuitButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Quit"
 
 [node name="SettingUI" parent="." instance=ExtResource("1_oj67h")]
 layout_mode = 1
 
 [connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="_on_setting_button_mouse_entered"]
 [connection signal="pressed" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="_on_setting_button_pressed"]
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/ExitButton" to="." method="_on_exit_button_mouse_entered"]
-[connection signal="pressed" from="PauseOptionBG/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/LobbyButton" to="." method="_on_setting_button_mouse_entered"]
+[connection signal="pressed" from="PauseOptionBG/VBoxContainer/LobbyButton" to="." method="_on_lobby_button_pressed"]
+[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="_on_exit_button_mouse_entered"]
+[connection signal="pressed" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="_on_exit_button_pressed"]

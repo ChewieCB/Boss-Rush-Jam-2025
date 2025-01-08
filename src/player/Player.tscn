@@ -146,6 +146,8 @@ transform = Transform3D(0.959201, 0, 0.282727, 0, 1, 0, -0.282727, 0, 0.959201, 
 description = "The usual shotgun."
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
+collision_mask = 61
+collide_with_areas = true
 
 [node name="DashDuration" type="Timer" parent="."]
 editor_description = "How long the dash action last"

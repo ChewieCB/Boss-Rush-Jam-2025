@@ -42,6 +42,11 @@ func _on_setting_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 
 
+func _on_lobby_button_pressed() -> void:
+	SoundManager.play_button_click_sfx()
+	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
+
+
 func _on_exit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 	get_tree().quit()
