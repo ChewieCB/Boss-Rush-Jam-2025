@@ -49,6 +49,6 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	else:
 		if found_hitscal_col:
 			create_spark(hitscan_col_point, hitscan_col_normal)
-	impacted.emit()
+	impacted.emit(true, global_position)
 	destroyed.emit()
 	call_deferred("queue_free")

@@ -74,10 +74,9 @@ func on_projectile_spawn():
 func on_projectile_travel_tick():
 	return
 
-func on_projectile_impact():
+func on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	return
 
-## This is similar to `on_projectile_impact` so maybe we should just use that instead
 func on_projectile_destroyed():
 	return
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dpen2bnsec184"]
+[gd_scene load_steps=10 format=3 uid="uid://dpen2bnsec184"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_yw1x6"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_awqjb"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_ks4de"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/ramp_up_effect.gd" id="6_8tw5q"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="6_h8x52"]
+[ext_resource type="Script" path="res://src/player/barrel/explosive_bullet_effect.gd" id="7_dvgxq"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX.tscn" id="8_87hu2"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
 height = 0.5
@@ -87,3 +89,10 @@ script = ExtResource("5_ks4de")
 attribute = 8
 modify_value = 200.0
 is_perc = true
+
+[node name="ExplosiveBulletEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("7_dvgxq")
+explosion_vfx = ExtResource("8_87hu2")
+display_text_title = "Explosive bullet"
+display_text_tag = "Don't hurt yourself!"
+display_text_desc = "Make bullets go boom"

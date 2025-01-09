@@ -177,7 +177,7 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
 			# Hit wall/obstacle
 			projectile_inst.create_spark(hitscan_col_point, hitscan_col_normal)
 
-		check_barrel_effect_on_projectile_impact()
+		check_barrel_effect_on_projectile_impact(true, hitscan_col_point)
 
 		# This is for ricochet. Not yet implemented
 		# if bounce_left > 0:
@@ -204,9 +204,9 @@ func check_barrel_effect_on_damage_applied():
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_applied()
 
-func check_barrel_effect_on_projectile_impact():
+func check_barrel_effect_on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
-		barrel.get_active_effect().on_projectile_impact()
+		barrel.get_active_effect().on_projectile_impact(_has_pos, _pos)
 
 func check_barrel_effect_on_projectile_destroyed():
 	for barrel in installed_barrels:
