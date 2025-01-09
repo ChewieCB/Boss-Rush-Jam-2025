@@ -8,6 +8,7 @@ var display_barrels: Array = []
 
 
 func _ready() -> void:
+	get_tree().paused = false
 	SoundManager.play_music(bgm, 0.25)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)

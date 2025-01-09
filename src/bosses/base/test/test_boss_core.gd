@@ -17,6 +17,7 @@ func _ready() -> void:
 	player.global_position = player_start_pos
 	player.rotation = GameManager.cached_player_rotation
 	player.player_camera.rotation = GameManager.cached_camera_rotation
+	elevator_doors.open()
 
 func _on_boss_defeated() -> void:
 	pass

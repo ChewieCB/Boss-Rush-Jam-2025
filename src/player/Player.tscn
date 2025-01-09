@@ -114,7 +114,7 @@ grow_vertical = 2
 texture = ExtResource("4_ymis7")
 
 [node name="HitMarker" type="TextureRect" parent="Neck/ShakeableCamera"]
-modulate = Color(1, 0.976471, 0.388235, 1)
+modulate = Color(1, 0.979667, 0.39, 0)
 texture_filter = 1
 anchors_preset = 8
 anchor_left = 0.5

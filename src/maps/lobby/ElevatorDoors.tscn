@@ -1,7 +1,9 @@
-[gd_scene load_steps=11 format=4 uid="uid://c1douwk7psgv6"]
+[gd_scene load_steps=13 format=4 uid="uid://c1douwk7psgv6"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/elevator_doors.gd" id="1_b0055"]
 [ext_resource type="Material" uid="uid://bd30fi2gcimy1" path="res://assets/textures/placeholder/texture_green_green_green_06.tres" id="1_kssio"]
+[ext_resource type="AudioStream" uid="uid://c2puwhx3tyoi7" path="res://src/maps/lobby/assets/Door_open.mp3" id="2_cc4b8"]
+[ext_resource type="AudioStream" uid="uid://dbmwfc5gmshj4" path="res://src/maps/lobby/assets/Door_close.mp3" id="3_vb3ud"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_kntoj"]
 _surfaces = [{
@@ -133,6 +135,8 @@ _data = {
 
 [node name="ElevatorDoors" type="Node3D"]
 script = ExtResource("1_b0055")
+TEMP_sfx_open = ExtResource("2_cc4b8")
+TEMP_sfx_close = ExtResource("3_vb3ud")
 metadata/_tb_type = "_tb_group"
 
 [node name="DoorL" type="StaticBody3D" parent="."]
