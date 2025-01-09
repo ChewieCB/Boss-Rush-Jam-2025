@@ -1,7 +1,8 @@
-[gd_scene load_steps=143 format=4 uid="uid://2q4ssotscvd5"]
+[gd_scene load_steps=144 format=4 uid="uid://2q4ssotscvd5"]
 
 [ext_resource type="Script" path="res://src/bosses/base/test/test_boss_core.gd" id="1_pgc5k"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="2_5mq86"]
+[ext_resource type="AudioStream" uid="uid://coyh1k757v4k8" path="res://assets/music/WANTED 0.1.mp3" id="2_24ryt"]
 [ext_resource type="LightmapGIData" uid="uid://bei114xif3db4" path="res://src/bosses/base/test/Test_BossCore.lmbake" id="2_tb1hd"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="3_8kb16"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="4_gonij"]
@@ -500,6 +501,7 @@ data = PackedVector3Array(31.25, 0.25, -12.75, 31.25, 0.25, 11.25, -31.25, 0.25,
 
 [node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss", "player")]
 script = ExtResource("1_pgc5k")
+bgm = ExtResource("2_24ryt")
 boss = NodePath("FuncGodotMap/entity_17_BossCoreRef")
 player = NodePath("FuncGodotMap/entity_4_PlayerRef")
 

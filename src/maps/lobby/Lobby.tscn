@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
+[ext_resource type="AudioStream" uid="uid://dicdq7rntf3to" path="res://src/maps/lobby/assets/lobby_bgm.mp3" id="2_0e0uc"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_1bpti"]
-[ext_resource type="AudioStream" uid="uid://coyh1k757v4k8" path="res://assets/music/WANTED 0.1.mp3" id="2_g15bv"]
 [ext_resource type="LightmapGIData" uid="uid://ds8fdm645i322" path="res://src/maps/lobby/Lobby.lmbake" id="2_wjq6h"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="3_cmr84"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_nbyib"]
@@ -1010,7 +1010,7 @@ points = PackedVector3Array(-10, -0.4375, 5.5, -10, -0.875, 5.5, -8, -0.875, 5.5
 
 [node name="Lobby" type="Node3D" node_paths=PackedStringArray("elevator_doors", "elevator_buttons")]
 script = ExtResource("1_ywg7j")
-TEMP_bgm = ExtResource("2_g15bv")
+bgm = ExtResource("2_0e0uc")
 elevator_doors = NodePath("FuncGodotMap/group_575_ElevatorButton/entity_26_ElevatorDoors")
 elevator_buttons = [NodePath("FuncGodotMap/group_575_ElevatorButton/entity_25_ElevatorButton"), NodePath("FuncGodotMap/group_575_ElevatorButton/entity_27_ElevatorButton"), NodePath("FuncGodotMap/group_575_ElevatorButton/entity_28_ElevatorButton"), NodePath("FuncGodotMap/group_575_ElevatorButton/entity_29_ElevatorButton"), NodePath("FuncGodotMap/group_575_ElevatorButton/entity_30_ElevatorButton"), NodePath("FuncGodotMap/group_575_ElevatorButton/entity_31_ElevatorButton")]
 

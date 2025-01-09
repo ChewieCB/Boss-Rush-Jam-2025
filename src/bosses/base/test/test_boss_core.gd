@@ -1,5 +1,7 @@
 extends Node3D
 
+@export var bgm: AudioStream
+
 @export var boss: BossCore
 @export var player: Player
 

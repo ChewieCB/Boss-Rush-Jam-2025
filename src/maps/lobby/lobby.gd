@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var TEMP_bgm: AudioStream
+@export var bgm: AudioStream
 @export var elevator_doors: ElevatorDoors
 @export var elevator_buttons: Array[ElevatorButton]
 
@@ -8,7 +8,7 @@ var display_barrels: Array = []
 
 
 func _ready() -> void:
-	SoundManager.play_music(TEMP_bgm)
+	SoundManager.play_music(bgm)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
 	for node in $DisplayBarrels.get_children():
@@ -32,6 +32,8 @@ func _on_level_select(level_path: String) -> void:
 	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
 	# HACK - do this properly with dynamic loading of scenes
 	GameManager.transition_player_rotation = GameManager.player.rotation
+	var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1) 
+	SoundManager.play_music(new_bgm, 0.25)
 	get_tree().change_scene_to_packed(loaded_scene)
 
 
