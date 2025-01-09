@@ -23,10 +23,16 @@ func _process(delta: float) -> void:
 
 
 func _on_level_select(level_path: String) -> void:
+	ResourceLoader.load_threaded_request(level_path)
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
-	await get_tree().create_timer(3.0).timeout
-	get_tree().change_scene_to_file(level_path)
+	while ResourceLoader.load_threaded_get_status(level_path) != ResourceLoader.THREAD_LOAD_LOADED:
+		print("loading")
+	print("loaded")
+	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
+	# HACK - do this properly with dynamic loading of scenes
+	GameManager.transition_player_rotation = GameManager.player.rotation
+	get_tree().change_scene_to_packed(loaded_scene)
 
 
 func _on_door_transition_area_body_entered(body: Node3D) -> void:

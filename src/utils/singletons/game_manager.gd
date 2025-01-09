@@ -8,6 +8,8 @@ const RESOLUTION_ARRAY = [
 
 var pause_ui: PauseUI
 var player: Player
+# HACK - do this dynamically with level loading/unloading in the elevator
+var transition_player_rotation: Vector3
 
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
