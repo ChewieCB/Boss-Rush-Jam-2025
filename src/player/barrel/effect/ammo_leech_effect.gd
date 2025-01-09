@@ -6,36 +6,6 @@ extends BaseBarrelEffect
 ## In %, so 50 = 50%
 @export var perc_damage_modify: float
 
-func on_prepare_to_fire():
-	super()
-
-func on_ammo_consumed():
-	super()
-
-func on_clip_empty():
-	super()
-
-func on_reload_start():
-	super()
-
-func on_reload_end():
-	super()
-
-func on_reload_interrupted():
-	super()
-
-func on_projectile_spawn():
-	super()
-
-func on_projectile_travel_tick():
-	super()
-
-func on_projectile_impact():
-	super()
-
-func on_projectile_destroyed():
-	super()
-
 func on_damage_calculation():
 	super()
 	# print("on_damage_calculation with {0}".format([display_text]))
@@ -51,12 +21,3 @@ func on_damage_applied():
 		owner_barrel.owner_gun.magazine_ammo_left = clamp(0, owner_barrel.owner_gun.magazine_ammo_left + 1, owner_barrel.owner_gun.modified_magazine_size)
 		owner_barrel.owner_gun.regain_ammo(1)
 		# print("ammo refuned")
-
-func on_enemy_killed():
-	super()
-
-func on_status_effect_tick():
-	super()
-
-func on_weapon_switched_to():
-	super()

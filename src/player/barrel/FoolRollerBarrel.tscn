@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dmgm77t2sxoc5"]
 
-[ext_resource type="Script" path="res://src/player/barrel/effect/spin_barrel.gd" id="1_iw80l"]
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_iw80l"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_16rmq"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/ammo_leech_effect.gd" id="2_psr82"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/multishot_effect.gd" id="3_bgcdx"]

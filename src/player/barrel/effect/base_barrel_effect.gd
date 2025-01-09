@@ -12,7 +12,26 @@ var owner_barrel: SpinBarrel
 ## effect up to 20 times, while only cost 1 ammo, in a single shot.
 var triggered_this_shot = false
 
-## This will be alway called first. Check if can be shot.
+func calculate_new_value(old_value: float, modify_value: float, is_perc: bool, rounding: bool = true):
+	var new_value = 0
+	if is_perc:
+		new_value = old_value * (1 + (modify_value / 100.0))
+	else:
+		new_value = old_value + modify_value
+
+	if rounding:
+		new_value = round(new_value)
+	return new_value
+
+## Call when player start to hold or click LMB (or shoot button)
+func on_trigger_pulled():
+	return
+
+## Call when player released LMB (or shoot button)
+func on_trigger_released():
+	return
+
+## Check if can be shot.
 ## [Ex: Check for jamming chance / overheat / or simply not enough bullet left.]
 func on_fire_attempt() -> bool:
 	return true

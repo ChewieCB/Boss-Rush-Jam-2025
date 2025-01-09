@@ -76,6 +76,7 @@ var controls_disabled: bool = false
 var gun_container_original_pos: Vector3
 var current_gun_slot = 0
 var is_swapping_gun = false
+var current_gun: Gun = null
 
 func _ready():
 	GameManager.player = self
@@ -88,9 +89,9 @@ func _ready():
 	health_component.died.connect(_on_died)
 	gun_container_original_pos = gun_container.position
 
-	var gun: Gun = gun_container.get_child(0)
-	gun.gun_shot.connect(update_hud)
-	gun.gun_reloaded.connect(update_hud)
+	current_gun = gun_container.get_child(0)
+	current_gun.gun_shot.connect(update_hud)
+	current_gun.gun_reloaded.connect(update_hud)
 
 func _input(event):
 	if controls_disabled:
@@ -115,11 +116,14 @@ func _process(delta):
 
 	if controls_disabled:
 		return
-	
+
 	if Input.is_action_pressed("shoot"):
 		# Raycast to target and damage them if hit
-		var gun: Gun = gun_container.get_child(0)
-		gun.shoot(aim_ray)
+		current_gun.pull_trigger()
+		current_gun.shoot(aim_ray)
+
+	if Input.is_action_just_released("shoot"):
+		current_gun.release_trigger()
 
 func _physics_process(delta):
 	if controls_disabled:
@@ -186,8 +190,7 @@ func _physics_process(delta):
 	camera_control(delta)
 
 func update_hud():
-	var gun: Gun = gun_container.get_child(0)
-	magazine_label.text = "{0}/{1}".format([gun.magazine_ammo_left, gun.modified_magazine_size])
+	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
 
 
 func show_debug_label():
@@ -215,8 +218,7 @@ func jump(multiplier = 1.0):
 
 
 func spin_reload():
-	var gun: Gun = gun_container.get_child(0)
-	gun.reload()
+	current_gun.reload()
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))

@@ -13,31 +13,6 @@ func on_prepare_to_fire():
 	hit_count = 0
 	projectile_count = 0
 
-func on_ammo_consumed():
-	super()
-
-func on_clip_empty():
-	super()
-
-func on_reload_start():
-	super()
-
-func on_reload_end():
-	super()
-
-func on_reload_interrupted():
-	super()
-
-func on_projectile_spawn():
-	super()
-
-func on_projectile_travel_tick():
-	super()
-
-func on_projectile_impact():
-	super()
-
-
 func on_projectile_destroyed():
 	super()
 	projectile_count += 1
@@ -59,12 +34,3 @@ func on_damage_calculation():
 func on_damage_applied():
 	super()
 	hit_count += 1
-
-func on_enemy_killed():
-	super()
-
-func on_status_effect_tick():
-	super()
-
-func on_weapon_switched_to():
-	super()

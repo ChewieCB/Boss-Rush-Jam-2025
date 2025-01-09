@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://d1r8em3of5o8n"]
 
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="1_8li6c"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/spin_barrel.gd" id="1_ctp8d"]
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_ctp8d"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="2_soqa0"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="4_3e4ye"]
 

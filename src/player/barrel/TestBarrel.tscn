@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dpen2bnsec184"]
+[gd_scene load_steps=8 format=3 uid="uid://dpen2bnsec184"]
 
-[ext_resource type="Script" path="res://src/player/barrel/effect/spin_barrel.gd" id="1_yw1x6"]
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_yw1x6"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_awqjb"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_r0qpf"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_ks4de"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/ramp_up_effect.gd" id="6_8tw5q"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="6_h8x52"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
@@ -46,6 +47,16 @@ horizontal_alignment = 2
 vertical_alignment = 0
 
 [node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="RampUpEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("6_8tw5q")
+bonus_firerate_per_interval = 5.0
+interval_time = 0.2
+is_perc = true
+display_text_title = "Ramp up"
+display_text_tag = "Keep shooting"
+display_text_desc = "+5% firerate per 0.2s
+non-stop shooting"
 
 [node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("6_h8x52")

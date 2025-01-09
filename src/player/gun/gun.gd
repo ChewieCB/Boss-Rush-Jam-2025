@@ -44,6 +44,7 @@ var is_reloading = false
 var is_jammed = false
 var time_since_last_shot = 0
 var installed_barrels: Array[SpinBarrel] = []
+var is_trigger_pulled = false
 
 # Modify-able by barrels
 # We won't modify them in this script
@@ -105,7 +106,6 @@ func shoot(aim_ray: RayCast3D):
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_fire_rate_check()
-
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_prepare_to_fire()
@@ -212,6 +212,18 @@ func check_barrel_effect_on_projectile_destroyed():
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_projectile_destroyed()
 
+func pull_trigger():
+	if not is_trigger_pulled:
+		is_trigger_pulled = true
+		for barrel in installed_barrels:
+			barrel.get_active_effect().on_trigger_pulled()
+
+func release_trigger():
+	if is_trigger_pulled:
+		is_trigger_pulled = false
+		for barrel in installed_barrels:
+			barrel.get_active_effect().on_trigger_released()
+
 
 func reload():
 	if is_reloading:
@@ -219,6 +231,8 @@ func reload():
 	if is_jammed:
 		play_failed_shoot_sfx()
 		return
+	
+	release_trigger()
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()

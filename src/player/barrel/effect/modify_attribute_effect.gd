@@ -17,39 +17,34 @@ enum AttributeNameEnum {
 @export var modify_value: float
 @export var is_perc: bool
 
-func calculate_new_value(old_value):
-	var new_value = 0
-	if is_perc:
-		new_value = round(old_value * (1 + (modify_value / 100.0)))
-	else:
-		new_value = old_value + modify_value
-	return new_value
-
 
 func on_fire_rate_check():
 	super()
 	match attribute:
 		AttributeNameEnum.FIRERATE:
-			owner_barrel.owner_gun.modified_firerate = calculate_new_value(owner_barrel.owner_gun.modified_firerate)
+			owner_barrel.owner_gun.modified_firerate = calculate_new_value(
+				owner_barrel.owner_gun.modified_firerate, modify_value, is_perc, false)
 
 func on_prepare_to_fire():
 	super()
 	match attribute:
 		AttributeNameEnum.DAMAGE:
-			owner_barrel.owner_gun.modified_damage = calculate_new_value(owner_barrel.owner_gun.modified_damage)
+			owner_barrel.owner_gun.modified_damage = calculate_new_value(
+				owner_barrel.owner_gun.modified_damage, modify_value, is_perc)
 		AttributeNameEnum.PROJECTILE_AMOUNT:
-			owner_barrel.owner_gun.modified_projectile_amount = calculate_new_value(owner_barrel.owner_gun.modified_projectile_amount)
+			owner_barrel.owner_gun.modified_projectile_amount = calculate_new_value(
+				owner_barrel.owner_gun.modified_projectile_amount, modify_value, is_perc)
 		AttributeNameEnum.PROJECTILE_SPEED:
-			owner_barrel.owner_gun.modified_projectile_speed = calculate_new_value(owner_barrel.owner_gun.modified_projectile_speed)
-		AttributeNameEnum.MAGAZINE_SIZE:
-			owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(owner_barrel.owner_gun.modified_magazine_size)
+			owner_barrel.owner_gun.modified_projectile_speed = calculate_new_value(
+				owner_barrel.owner_gun.modified_projectile_speed, modify_value, is_perc, false)
 		AttributeNameEnum.IS_HITSCAN:
 			var res = true
 			if modify_value == 0:
 				res = false
 			owner_barrel.owner_gun.modified_is_hitscan = res
 		AttributeNameEnum.SPREAD_ANGLE:
-			owner_barrel.owner_gun.modified_spread_angle = calculate_new_value(owner_barrel.owner_gun.modified_spread_angle)
+			owner_barrel.owner_gun.modified_spread_angle = calculate_new_value(
+				owner_barrel.owner_gun.modified_spread_angle, modify_value, is_perc, false)
 
 func on_ammo_consumed():
 	super()
@@ -61,13 +56,15 @@ func on_reload_start():
 	super()
 	match attribute:
 		AttributeNameEnum.RELOAD_TIME:
-			owner_barrel.owner_gun.modified_reload_time = calculate_new_value(owner_barrel.owner_gun.modified_reload_time)
+			owner_barrel.owner_gun.modified_reload_time = calculate_new_value(
+				owner_barrel.owner_gun.modified_reload_time, modify_value, is_perc, false)
 
 func on_reload_end():
 	super()
 	match attribute:
 		AttributeNameEnum.MAGAZINE_SIZE:
-			owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(owner_barrel.owner_gun.modified_magazine_size)
+			owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(
+				owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc)
 
 func on_reload_interrupted():
 	super()
