@@ -107,6 +107,14 @@ func jump(multiplier = 1.0):
 	vel_vertical = JUMP_FORCE * multiplier
 
 
+func show_health() -> void:
+	health_ui.show_ui()
+
+
+func hide_health() -> void:
+	health_ui.hide_ui()
+
+
 func _turn_towards_target(speed: float, delta: float) -> void:
 	var direction: Vector3 = self.global_position.direction_to(target.global_position)
 	self.rotation.y = lerp_angle(
@@ -118,6 +126,7 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 
 
 func activate() -> void:
+	show_health()
 	SoundManager.play_sound(TEMP_sfx_awaken)
 	change_phase()
 

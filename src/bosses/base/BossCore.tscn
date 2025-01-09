@@ -501,7 +501,6 @@ debug_path_custom_point_size = 8.0
 
 [node name="DebugStateLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
-visible = false
 billboard = 1
 text = "INACTIVE"
 font = ExtResource("13_ai5vk")
@@ -511,7 +510,6 @@ uppercase = true
 
 [node name="DebugDistanceLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4, 0)
-visible = false
 billboard = 1
 text = "INACTIVE"
 font = ExtResource("13_ai5vk")
