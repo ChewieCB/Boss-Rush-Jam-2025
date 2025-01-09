@@ -73,7 +73,7 @@ new_value = 2.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
 script = ExtResource("2_soqa0")
 attribute = 1
-new_value = 6.0
+new_value = 8.0
 
 [node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
 script = ExtResource("2_soqa0")

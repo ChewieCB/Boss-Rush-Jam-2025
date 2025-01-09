@@ -17,6 +17,7 @@ class_name Gun
 ## Shot per second
 @export var base_firerate = 2
 @export var base_magazine_size = 10
+@export var base_reload_time = 1
 ## How spread out projectile can be from the aim center
 @export var base_spread_angle = 0
 ## Projectile dont have travel time. Shot enemy is instanly damaged. If this ticked, ignore projectile_speed
@@ -55,6 +56,7 @@ var modified_magazine_size
 var modified_projectile_speed
 var modified_is_hitscan
 var modified_spread_angle
+var modified_reload_time
 
 signal gun_shot
 signal gun_reloaded
@@ -69,7 +71,7 @@ func _ready() -> void:
 	for child in barrel_container.get_children():
 		child.owner_gun = self
 		installed_barrels.append(child)
-	reset_modifier()
+	reset_modifier(true)
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	reload()
@@ -212,19 +214,22 @@ func check_barrel_effect_on_projectile_destroyed():
 
 
 func reload():
+	if is_reloading:
+		return
 	if is_jammed:
 		play_failed_shoot_sfx()
 		return
+
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
 
 	is_reloading = true
 	SoundManager.play_sound(TEMP_sfx_reload)
 	show_gun_status("Reloading...")
-	reset_modifier(true)
 	for barrel in installed_barrels:
 		barrel.start_spin()
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(modified_reload_time).timeout
+	reset_modifier(true)
 	gun_status_label.visible = false
 	for barrel in installed_barrels:
 		SoundManager.play_sound(TEMP_sfx_click)
@@ -248,6 +253,7 @@ func reset_modifier(reload_reset = false):
 	modified_is_hitscan = is_hitscan
 	modified_spread_angle = base_spread_angle
 	if reload_reset:
+		modified_reload_time = base_reload_time
 		modified_magazine_size = base_magazine_size
 
 

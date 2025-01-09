@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dpen2bnsec184"]
+[gd_scene load_steps=7 format=3 uid="uid://dpen2bnsec184"]
 
 [ext_resource type="Script" path="res://src/player/barrel/effect/spin_barrel.gd" id="1_yw1x6"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_awqjb"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_r0qpf"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_ks4de"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="6_h8x52"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
@@ -55,3 +57,22 @@ display_text_title = "Hyperfocus"
 display_text_tag = "Take position and start blasting!"
 display_text_desc = "-50% spread, +25% damage when stationary
 +100% spread, -25% damage when moving"
+
+[node name="ExtendedDrumEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("4_r0qpf")
+display_text_title = "Extended Drum"
+display_text_tag = "More dakka!"
+display_text_desc = "+100% magazine size
++200% reload time"
+
+[node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ExtendedDrumEffect"]
+script = ExtResource("5_ks4de")
+attribute = 5
+modify_value = 100.0
+is_perc = true
+
+[node name="ModifyReloadTime" type="Node3D" parent="EffectContainer/ExtendedDrumEffect"]
+script = ExtResource("5_ks4de")
+attribute = 8
+modify_value = 200.0
+is_perc = true

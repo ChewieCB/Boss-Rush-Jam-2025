@@ -8,7 +8,8 @@ enum AttributeNameEnum {
 	FIRERATE,
 	MAGAZINE_SIZE,
 	IS_HITSCAN,
-	SPREAD_ANGLE
+	SPREAD_ANGLE,
+	RELOAD_TIME
 }
 
 @export var attribute: AttributeNameEnum
@@ -49,6 +50,9 @@ func on_clip_empty():
 
 func on_reload_start():
 	super()
+	match attribute:
+		AttributeNameEnum.RELOAD_TIME:
+			owner_barrel.owner_gun.modified_reload_time = new_value
 
 func on_reload_end():
 	super()
