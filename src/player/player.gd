@@ -91,9 +91,6 @@ func _ready():
 	var gun: Gun = gun_container.get_child(0)
 	gun.gun_shot.connect(update_hud)
 	gun.gun_reloaded.connect(update_hud)
-	
-	if GameManager.transition_player_rotation != self.rotation:
-		self.rotation = GameManager.transition_player_rotation
 
 
 func _input(event):

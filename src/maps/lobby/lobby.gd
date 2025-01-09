@@ -8,7 +8,7 @@ var display_barrels: Array = []
 
 
 func _ready() -> void:
-	SoundManager.play_music(bgm)
+	SoundManager.play_music(bgm, 0.25)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
 	for node in $DisplayBarrels.get_children():
@@ -26,12 +26,15 @@ func _on_level_select(level_path: String) -> void:
 	ResourceLoader.load_threaded_request(level_path)
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
+	# Wait until the level has been loaded on another thread
 	while ResourceLoader.load_threaded_get_status(level_path) != ResourceLoader.THREAD_LOAD_LOADED:
-		print("loading")
-	print("loaded")
+		pass
 	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
 	# HACK - do this properly with dynamic loading of scenes
-	GameManager.transition_player_rotation = GameManager.player.rotation
+	# Get the player's position relative to the elevator doors
+	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
+	GameManager.cached_player_rotation = GameManager.player.rotation
+	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
 	var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1) 
 	SoundManager.play_music(new_bgm, 0.25)
 	get_tree().change_scene_to_packed(loaded_scene)

@@ -68,7 +68,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_fp4cj"]
 resource_name = "close"
-length = 0.5
+length = 1.2
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
