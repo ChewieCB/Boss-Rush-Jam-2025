@@ -15,7 +15,7 @@
 [ext_resource type="Material" uid="uid://ds3c45rpls1jp" path="res://assets/textures/placeholder/texture_orange_09.tres" id="7_vkni2"]
 [ext_resource type="Material" uid="uid://cf17nn7fy22gn" path="res://assets/textures/placeholder/texture_orange_08.tres" id="8_jigje"]
 [ext_resource type="Material" uid="uid://d0lnpev1a8x7j" path="res://assets/textures/placeholder/texture_green_green_green_02.tres" id="13_prodx"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/spin_barrel.gd" id="14_jusgg"]
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="14_jusgg"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="15_4ent0"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="15_yjc1i"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/ammo_leech_effect.gd" id="16_8vrb3"]
