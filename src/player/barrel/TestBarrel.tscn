@@ -15,7 +15,7 @@ height = 0.5
 
 [node name="TestBarrel" type="Node3D"]
 script = ExtResource("1_yw1x6")
-barrel_name = "FoolRoller"
+barrel_name = "Test"
 
 [node name="Model" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)

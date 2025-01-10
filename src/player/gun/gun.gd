@@ -141,7 +141,8 @@ func shoot(aim_ray: RayCast3D):
 			# projectile.impact.connect(check_barrel_effect_on_projectile_impact)
 			# projectile.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 		time_since_last_shot = 0
-		await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
+		if n_shot_repeat > 1:
+			await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
 
 	magazine_ammo_left -= n_ammo_consume
 	for barrel in installed_barrels:
@@ -257,7 +258,6 @@ func reload():
 
 
 func reset_modifier(reload_reset = false):
-	print("RESET MODIFIER ", reload_reset)
 	n_ammo_consume = 1
 	n_shot_repeat = 1
 	modified_damage = base_damage

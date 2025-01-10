@@ -17,7 +17,7 @@ tonemap_mode = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36m72"]
 transparency = 1
-albedo_color = Color(0.858824, 0.521569, 0.137255, 0.752941)
+albedo_color = Color(0.858824, 0.521569, 0.137255, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_oe1jg"]
 top_radius = 4.0

@@ -43,7 +43,6 @@ func on_reload_start():
 	super()
 	if is_ramping_up:
 		is_ramping_up = false
-		owner_barrel.owner_gun.modified_firerate = original_firerate
 		current_bonus_firerate = 0
 		timer = 0
 		print("is_ramping_up FALSE")

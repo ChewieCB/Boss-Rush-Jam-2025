@@ -111,6 +111,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0330088, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06337, -0.114858)
 
 [node name="TestBarrel" parent="Barrel" instance=ExtResource("11_2x54p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0144995)
+
+[node name="TestBarrel2" parent="Barrel" instance=ExtResource("11_2x54p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0371052, 0.0841617)
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 
