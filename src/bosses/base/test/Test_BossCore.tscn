@@ -23,12 +23,12 @@
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[sub_resource type="Sky" id="Sky_g35dj"]
+[sub_resource type="Sky" id="Sky_lesp8"]
 sky_material = SubResource("ProceduralSkyMaterial_ydocc")
 
 [sub_resource type="Environment" id="Environment_jn580"]
 background_mode = 1
-sky = SubResource("Sky_g35dj")
+sky = SubResource("Sky_lesp8")
 tonemap_mode = 2
 glow_enabled = true
 volumetric_fog_enabled = true
@@ -927,6 +927,7 @@ metadata/_tb_type = "_tb_group"
 
 [node name="entity_4_PlayerRef" parent="FuncGodotMap" instance=ExtResource("8_pclyy")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 1, 43.75, 22.25)
+dash_cd = 0.5
 
 [node name="group_10_CeilingLight" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
