@@ -28,7 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="13_vpw76"]
 [ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
-[ext_resource type="PackedScene" uid="uid://bts86xaas3n3i" path="res://src/player/gun/ReallyLongGun.tscn" id="16_agn7j"]
+[ext_resource type="PackedScene" uid="uid://d2tb8ogqlaxhy" path="res://src/player/gun/BlankGun.tscn" id="17_2uqul"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -141,7 +141,7 @@ HSpeed: 0 u/s"
 [node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
 
-[node name="ReallyLongGun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("16_agn7j")]
+[node name="BlankGun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("17_2uqul")]
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
 collision_mask = 61
