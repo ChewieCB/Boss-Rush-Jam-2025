@@ -1,21 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://bwei3cifjg1sq"]
+[gd_scene load_steps=11 format=3 uid="uid://dxau0o2083o1d"]
 
-[ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="1_8ja47"]
-[ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="1_ef7fu"]
-[ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="2_wavg1"]
-[ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="3_cwsn4"]
-[ext_resource type="Texture2D" uid="uid://ut34yvp7hhr5" path="res://src/ui/common/assets/kenney_borders/default/Divider Fade/divider-fade-000.png" id="4_8xujt"]
-[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="5_wos4h"]
+[ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="1_7ylc6"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_or76n"]
+[ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="3_5c7eo"]
+[ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="4_ikhrn"]
+[ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="5_22g2g"]
 
 [sub_resource type="Theme" id="Theme_y0f30"]
-default_font = ExtResource("5_wos4h")
-
-[sub_resource type="Theme" id="Theme_gqrbp"]
-default_font = ExtResource("5_wos4h")
-default_font_size = 64
-Label/colors/font_color = Color(1, 1, 1, 1)
-Label/colors/font_outline_color = Color(0, 0, 0, 1)
-Label/constants/outline_size = 2
+default_font = ExtResource("2_or76n")
 
 [sub_resource type="Animation" id="Animation_2hhba"]
 length = 0.001
@@ -109,21 +101,17 @@ _data = {
 "show": SubResource("Animation_obhyq")
 }
 
-[node name="BossHealthBarUI" type="MarginContainer"]
+[node name="PlayerHealthBarUI" type="MarginContainer"]
 modulate = Color(1, 1, 1, 0)
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -554.0
-offset_right = 554.0
-offset_bottom = 169.0
-grow_horizontal = 2
+offset_left = 406.0
+offset_right = 944.0
+offset_bottom = 171.0
 mouse_filter = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
-script = ExtResource("1_8ja47")
+script = ExtResource("1_7ylc6")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -140,6 +128,7 @@ theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
 [node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/MarginContainer"]
+visible = false
 z_index = 1
 layout_mode = 2
 size_flags_horizontal = 4
@@ -161,8 +150,8 @@ stretch_margin_left = 20
 stretch_margin_top = 20
 stretch_margin_right = 20
 stretch_margin_bottom = 20
-texture_over = ExtResource("1_ef7fu")
-texture_progress = ExtResource("2_wavg1")
+texture_over = ExtResource("3_5c7eo")
+texture_progress = ExtResource("4_ikhrn")
 tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
 
 [node name="DamageBar" type="TextureProgressBar" parent="VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
@@ -179,60 +168,14 @@ stretch_margin_left = 20
 stretch_margin_top = 20
 stretch_margin_right = 20
 stretch_margin_bottom = 20
-texture_under = ExtResource("3_cwsn4")
-texture_progress = ExtResource("3_cwsn4")
+texture_under = ExtResource("5_22g2g")
+texture_progress = ExtResource("5_22g2g")
 tint_under = Color(0.113725, 0.113725, 0.113725, 1)
 tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 
 [node name="Timer" type="Timer" parent="VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
 wait_time = 0.4
 one_shot = true
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 64
-theme_override_constants/margin_right = 64
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("4_8xujt")
-expand_mode = 3
-stretch_mode = 5
-
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_right = 32
-
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2"]
-layout_mode = 2
-theme = SubResource("Theme_gqrbp")
-text = "Umby the stinky"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer3"]
-layout_mode = 2
-size_flags_horizontal = 3
-texture = ExtResource("4_8xujt")
-expand_mode = 3
-stretch_mode = 5
-flip_h = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

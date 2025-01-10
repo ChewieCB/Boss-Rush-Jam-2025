@@ -63,7 +63,7 @@ var area_round_count: int = 0
 @export var area_rings: int = 1
 
 @onready var hurtbox: Area3D = $Hurtbox
-@onready var health_ui = $BossHealthUI/BossHealthContainer
+@onready var health_ui = $BossHealthUI/HealthUI/BossHealthContainer
 
 var MAX_SPEED: float = 5.0
 const TURN_SPEED_FAST: float = 7.5

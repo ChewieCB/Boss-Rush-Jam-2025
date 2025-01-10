@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=33 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://dkjvdnf0hufiv" path="res://src/player/assets/sfx/temp/Player_damaged_1.mp3" id="2_kd0pf"]
@@ -18,17 +18,14 @@
 [ext_resource type="AudioStream" uid="uid://ultwfhksuadr" path="res://src/player/assets/sfx/temp/Player_Damaged_bonus.mp3" id="7_rcwb7"]
 [ext_resource type="AudioStream" uid="uid://ccfcawm3u1r2e" path="res://src/player/assets/sfx/temp/Player_dead_1.mp3" id="8_0q120"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_dkhcu"]
-[ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="9_dmp1b"]
 [ext_resource type="AudioStream" uid="uid://dn4a4q1mrg1pv" path="res://src/player/assets/sfx/temp/Player_dead_2.mp3" id="9_n6gsv"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="10_4wdls"]
 [ext_resource type="AudioStream" uid="uid://b7lqglnhl2llk" path="res://src/player/assets/sfx/temp/dash1.wav" id="10_ak4r0"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="10_g5bf6"]
-[ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="11_grp47"]
-[ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="12_edjma"]
-[ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="13_vpw76"]
 [ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
 [ext_resource type="PackedScene" uid="uid://d2tb8ogqlaxhy" path="res://src/player/gun/BlankGun.tscn" id="17_2uqul"]
+[ext_resource type="PackedScene" uid="uid://dxau0o2083o1d" path="res://src/ui/player/PlayerHealthBarUI.tscn" id="19_n1ar7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -42,9 +39,6 @@ noise_type = 0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sjjg0"]
 size = Vector3(0.5, 0.5, 0.5)
-
-[sub_resource type="Theme" id="Theme_y0f30"]
-default_font = ExtResource("10_4wdls")
 
 [sub_resource type="Theme" id="Theme_l1wiy"]
 default_font = ExtResource("10_4wdls")
@@ -165,87 +159,23 @@ texture_albedo = ExtResource("3_tgexf")
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
 z_index = 2
 
-[node name="PlayerHealthBarUI" type="MarginContainer" parent="UI" node_paths=PackedStringArray("health_component")]
+[node name="HealthUI" type="Control" parent="UI"]
+layout_mode = 3
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -538.0
-offset_top = -171.0
+offset_left = -548.0
+offset_top = -179.0
 grow_horizontal = 0
 grow_vertical = 0
-mouse_filter = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-script = ExtResource("9_dmp1b")
-health_component = NodePath("../../HealthComponent")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/PlayerHealthBarUI"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="MarginContainer2" type="MarginContainer" parent="UI/PlayerHealthBarUI/VBoxContainer"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2"]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="Label" type="Label" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
-visible = false
-z_index = 1
-layout_mode = 2
-size_flags_horizontal = 4
-theme = SubResource("Theme_y0f30")
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-text = "10,000/10,000"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HealthBar" type="TextureProgressBar" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
-custom_minimum_size = Vector2(240, 20)
-layout_mode = 2
-size_flags_vertical = 4
-value = 40.0
-nine_patch_stretch = true
-stretch_margin_left = 20
-stretch_margin_top = 20
-stretch_margin_right = 20
-stretch_margin_bottom = 20
-texture_over = ExtResource("11_grp47")
-texture_progress = ExtResource("12_edjma")
-tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
-
-[node name="DamageBar" type="TextureProgressBar" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
-z_index = -1
+[node name="PlayerHealthBarUI" parent="UI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("19_n1ar7")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-value = 60.0
-nine_patch_stretch = true
-stretch_margin_left = 20
-stretch_margin_top = 20
-stretch_margin_right = 20
-stretch_margin_bottom = 20
-texture_under = ExtResource("13_vpw76")
-texture_progress = ExtResource("13_vpw76")
-tint_under = Color(0.113725, 0.113725, 0.113725, 1)
-tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
-
-[node name="Timer" type="Timer" parent="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
-wait_time = 0.4
-one_shot = true
+offset_left = 0.0
+offset_right = 538.0
+health_component = NodePath("../../../HealthComponent")
 
 [node name="MagazineUI" type="Label" parent="UI"]
 anchors_preset = 3
@@ -377,7 +307,6 @@ light_color = Color(0.78, 0.897333, 1, 1)
 
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
-[connection signal="timeout" from="UI/PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer" to="UI/PlayerHealthBarUI" method="_on_timer_timeout"]
 [connection signal="state_input" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_input"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Airborne" to="." method="_on_airborne_state_entered"]
