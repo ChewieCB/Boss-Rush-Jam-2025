@@ -20,13 +20,13 @@ var current_health: float:
 		var prev_health = current_health
 		current_health = clamp(value, 0, max_health)
 		var diff = current_health - prev_health
-		emit_signal("health_diff", diff)
-		emit_signal("health_changed", current_health, prev_health)
+		health_diff.emit(diff)
+		health_changed.emit(current_health, prev_health)
 		if current_health == 0:
-			emit_signal("died")
+			died.emit()
 			has_died = true
 		if diff < 0:
-			emit_signal("hurt")
+			hurt.emit()
 var has_died: bool = false
 
 
