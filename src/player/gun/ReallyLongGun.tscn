@@ -1,0 +1,187 @@
+[gd_scene load_steps=32 format=3 uid="uid://bts86xaas3n3i"]
+
+[ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_0n66a"]
+[ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_bc4lk"]
+[ext_resource type="AudioStream" uid="uid://bxq16mdpw6cvr" path="res://src/player/gun/assets/sfx/temp/Shotgun_Dry_Fire.mp3" id="3_gbwla"]
+[ext_resource type="AudioStream" uid="uid://d1ho6twusx65t" path="res://src/player/gun/assets/sfx/temp/Shotgun_Load_Shell.mp3" id="4_wvohi"]
+[ext_resource type="AudioStream" uid="uid://d3psu8yx8uldk" path="res://src/player/gun/assets/sfx/temp/Shotgun_Cock_only.mp3" id="5_3gru0"]
+[ext_resource type="AudioStream" uid="uid://csslo4nsdbmmp" path="res://src/player/gun/assets/sfx/temp/Recover_ammp.mp3" id="6_v0i03"]
+[ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="7_je6wd"]
+[ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="8_kxnf5"]
+[ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="9_hndtc"]
+[ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="10_j7b0c"]
+[ext_resource type="PackedScene" uid="uid://d1r8em3of5o8n" path="res://src/player/barrel/ArchetypeBarrel.tscn" id="11_ydgr1"]
+[ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="12_0rhql"]
+[ext_resource type="PackedScene" uid="uid://dy7nqvo7uq1ti" path="res://src/player/barrel/DynamicAdvantageBarrel.tscn" id="13_rysq0"]
+[ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="14_xud8m"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="15_ljrm7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_id0bl"]
+albedo_color = Color(0.459708, 0.464844, 0.460992, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4ak2x"]
+material = SubResource("StandardMaterial3D_id0bl")
+size = Vector3(0.4, 0.7, 2.01)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ncy71"]
+albedo_color = Color(0.459708, 0.464844, 0.460992, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0b0lg"]
+material = SubResource("StandardMaterial3D_ncy71")
+size = Vector3(0.4, 0.45, 2.315)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q07xh"]
+albedo_color = Color(0.459708, 0.464844, 0.460992, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qiy2h"]
+material = SubResource("StandardMaterial3D_q07xh")
+size = Vector3(0.4, 0.19, 1.04)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cecyl"]
+albedo_color = Color(0.459708, 0.464844, 0.460992, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g3fra"]
+material = SubResource("StandardMaterial3D_cecyl")
+size = Vector3(0.4, 0.96, 0.675)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vos44"]
+albedo_color = Color(0.459708, 0.464844, 0.460992, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mq46v"]
+material = SubResource("StandardMaterial3D_vos44")
+size = Vector3(0.4, 0.465, 1.015)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ptuqj"]
+albedo_color = Color(0.258827, 0.261719, 0.25955, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nx1oc"]
+material = SubResource("StandardMaterial3D_ptuqj")
+size = Vector3(0.18, 0.165, 1.735)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j5ay7"]
+albedo_color = Color(0.204744, 0.207031, 0.205316, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_s3nk1"]
+material = SubResource("StandardMaterial3D_j5ay7")
+size = Vector3(0.2, 0.365, 1.005)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lpar1"]
+albedo_color = Color(0.660156, 0.0952974, 0.0608013, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tmjxd"]
+material = SubResource("StandardMaterial3D_lpar1")
+size = Vector3(0.265, 0.785, 0.4)
+
+[node name="ReallyLongGun" type="Node3D"]
+script = ExtResource("1_0n66a")
+gun_name = "Really Long gun"
+description = "Congrats on unlock it. Now go get creative!"
+TEMP_sfx_shoot = ExtResource("2_bc4lk")
+TEMP_sfx_dry = ExtResource("3_gbwla")
+TEMP_sfx_reload = ExtResource("4_wvohi")
+TEMP_sfx_click = ExtResource("5_3gru0")
+TEMP_regain_ammo = ExtResource("6_v0i03")
+TEMP_crit = ExtResource("7_je6wd")
+base_spread_angle = 1
+base_projectile_speed = 50.0
+aim_ray_prefab = ExtResource("8_kxnf5")
+hiscan_prefab = ExtResource("9_hndtc")
+projectile_prefab = ExtResource("10_j7b0c")
+
+[node name="BaseGunModel" type="Node3D" parent="."]
+
+[node name="Stock" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, -0.0213057)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_4ak2x")
+skeleton = NodePath("../..")
+
+[node name="Stock2" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, -0.493892)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_0b0lg")
+skeleton = NodePath("../..")
+
+[node name="Stock5" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, 0.446469)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_qiy2h")
+skeleton = NodePath("../..")
+
+[node name="Stock4" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, 0.549328)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_g3fra")
+skeleton = NodePath("../..")
+
+[node name="Stock3" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, 0.193996)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_mq46v")
+skeleton = NodePath("../..")
+
+[node name="Muzzle" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, -1.00392)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_nx1oc")
+skeleton = NodePath("../..")
+
+[node name="Handle" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.274991, -0.00181464, -0.00139499, -0.00010688, 0.15724, -0.225611, 0.00228637, 0.225604, 0.157234, 0, -0.104705, 0.208809)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_s3nk1")
+skeleton = NodePath("../..")
+
+[node name="Pump" type="MeshInstance3D" parent="BaseGunModel"]
+transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, -0.139416, -0.113008)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_tmjxd")
+skeleton = NodePath("../..")
+
+[node name="Barrel" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0330088, 0)
+
+[node name="ArchetypeBarrel" parent="Barrel" instance=ExtResource("11_ydgr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0124304, -0.709546)
+
+[node name="FoolRoller" parent="Barrel" instance=ExtResource("12_0rhql")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00903028, -0.53898)
+
+[node name="FoolRoller2" parent="Barrel" instance=ExtResource("12_0rhql")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00903028, -0.384479)
+
+[node name="DynamicAdvantageBarrel" parent="Barrel" instance=ExtResource("13_rysq0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0101938, -0.210226)
+
+[node name="DynamicAdvantageBarrel2" parent="Barrel" instance=ExtResource("13_rysq0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0101938, -0.0828916)
+
+[node name="ProjectileCountBarrel" parent="Barrel" instance=ExtResource("14_xud8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00793256, 0.0701138)
+
+[node name="ProjectileCountBarrel2" parent="Barrel" instance=ExtResource("14_xud8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00793256, 0.161795)
+
+[node name="ProjectileCountBarrel3" parent="Barrel" instance=ExtResource("14_xud8m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00793256, 0.25008)
+
+[node name="PlaceholderUI" type="Node3D" parent="."]
+
+[node name="StatusLabel" type="Label3D" parent="PlaceholderUI"]
+transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 0, 0.147637, -0.013829)
+visible = false
+pixel_size = 0.003
+text = "Reloading..."
+font = ExtResource("15_ljrm7")
+
+[node name="JamTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="BulletStartPos" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.3038)
+
+[node name="FailToShootSFXTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="JamTimer" to="." method="_on_jam_timer_timeout"]
