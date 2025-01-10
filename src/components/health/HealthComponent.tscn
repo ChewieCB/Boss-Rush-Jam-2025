@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cbxu7ttnfnrmt"]
+[gd_scene load_steps=3 format=3 uid="uid://cbxu7ttnfnrmt"]
 
 [ext_resource type="Script" path="res://src/components/health/health_component.gd" id="1_1vcae"]
+[ext_resource type="PackedScene" uid="uid://b052m61k5ht8i" path="res://src/player/gun/vfx/HitText.tscn" id="2_4trho"]
 
 [node name="HealthComponent" type="Node3D"]
 script = ExtResource("1_1vcae")
+text_effect = ExtResource("2_4trho")

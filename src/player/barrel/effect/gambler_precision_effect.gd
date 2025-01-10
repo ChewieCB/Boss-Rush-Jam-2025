@@ -13,41 +13,16 @@ func on_prepare_to_fire():
 	hit_count = 0
 	projectile_count = 0
 
-func on_ammo_consumed():
-	super()
-
-func on_clip_empty():
-	super()
-
-func on_reload_start():
-	super()
-
-func on_reload_end():
-	super()
-
-func on_reload_interrupted():
-	super()
-
-func on_projectile_spawn():
-	super()
-
-func on_projectile_travel_tick():
-	super()
-
-func on_projectile_impact():
-	super()
-
-
 func on_projectile_destroyed():
 	super()
 	projectile_count += 1
-	print("projectile_count {0}, modified_projectile_amount{1}".format([projectile_count, owner_barrel.owner_gun.modified_projectile_amount]))
+	# print("projectile_count {0}, modified_projectile_amount{1}".format([projectile_count, owner_barrel.owner_gun.modified_projectile_amount]))
 	# We only check for missed after all projectiles destroyed
 	if projectile_count == owner_barrel.owner_gun.modified_projectile_amount:
 		if hit_count <= 0:
-			# var roll = randi_range(1, 100)
-			# if roll <= jam_chance_if_missed:
-			owner_barrel.owner_gun.jam_the_gun(2)
+			var roll = randi_range(1, 100)
+			if roll <= jam_chance_if_missed:
+				owner_barrel.owner_gun.jam_the_gun(2)
 
 func on_damage_calculation():
 	super()
@@ -59,12 +34,3 @@ func on_damage_calculation():
 func on_damage_applied():
 	super()
 	hit_count += 1
-
-func on_enemy_killed():
-	super()
-
-func on_status_effect_tick():
-	super()
-
-func on_weapon_switched_to():
-	super()

@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://ptb63xpipbk1"]
+[gd_scene load_steps=5 format=3 uid="uid://ptb63xpipbk1"]
 
-[ext_resource type="Script" path="res://src/player/barrel/effect/spin_barrel.gd" id="1_vvrge"]
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_vvrge"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/projectile_count_effect.gd" id="2_6irkf"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_b283x"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
 height = 0.5
@@ -14,49 +15,77 @@ barrel_name = "Projectile Count"
 transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
 mesh = SubResource("CylinderMesh_sfbyw")
 
-[node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0311846, 0)
-text = "+2 projectile"
+[node name="EffectName" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.109181, -0.0166867)
+modulate = Color(1, 0.883, 0.22, 1)
+text = "DOUBLE TAP"
+font = ExtResource("2_b283x")
+font_size = 64
+outline_size = 32
 horizontal_alignment = 2
+
+[node name="EffectTag" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0716908, -0.00866602)
+modulate = Color(0.87, 0.76328, 0.6699, 1)
+text = "Both barrels!"
+font = ExtResource("2_b283x")
+font_size = 40
+outline_size = 16
+horizontal_alignment = 2
+
+[node name="EffectDesc" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0575581, -0.00564242)
+modulate = Color(0.46, 0.46, 0.46, 1)
+text = "10% ammo refund on hit
+-10% damage"
+font = ExtResource("2_b283x")
+font_size = 24
+horizontal_alignment = 2
+vertical_alignment = 0
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="ProjectileCountEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 flat_amount = -2
+display_text_title = "-2 projectile"
 
 [node name="ProjectileCountEffect2" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 flat_amount = -1
+display_text_title = "-1 projectile"
 
 [node name="ProjectileCountEffect3" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 flat_amount = 1
-
-[node name="ProjectileCountEffect8" type="Node3D" parent="EffectContainer"]
-script = ExtResource("2_6irkf")
-flat_amount = 1
+display_text_title = "+1 projectile"
 
 [node name="ProjectileCountEffect4" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 flat_amount = 2
+display_text_title = "+2 projectile"
 
 [node name="ProjectileCountEffect5" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 perc_amount = -25.0
+display_text_title = "-25% projectile"
 
 [node name="ProjectileCountEffect6" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 perc_amount = -50.0
+display_text_title = "-50% projectile"
 
 [node name="ProjectileCountEffect7" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 perc_amount = 25.0
+display_text_title = "+25% projectile"
 
 [node name="ProjectileCountEffect9" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 perc_amount = 50.0
+display_text_title = "+50% projectile"
 
 [node name="ProjectileCountEffect10" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_6irkf")
 perc_amount = 100.0
+display_text_title = "+100% projectile"

@@ -12,7 +12,6 @@
 [ext_resource type="AudioStream" uid="uid://cyhmrif4rli4i" path="res://src/player/assets/sfx/temp/Player_damaged_4.mp3" id="5_fd78g"]
 [ext_resource type="Texture2D" uid="uid://coblcfhc2qgbt" path="res://src/player/assets/hitmarker_lg.png" id="5_nkt42"]
 [ext_resource type="AudioStream" uid="uid://chxvv0tfaasnw" path="res://src/player/assets/sfx/temp/Player_damaged_5.mp3" id="6_8bniu"]
-[ext_resource type="PackedScene" uid="uid://de36wdf6rkio" path="res://src/player/gun/Shotgun.tscn" id="6_mlgd0"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="6_t33b7"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_1276k"]
 [ext_resource type="PackedScene" uid="uid://byj1y3wrwtdtq" path="res://src/ui/pause_menu/PauseUI.tscn" id="7_db7x8"]
@@ -29,6 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="13_vpw76"]
 [ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
+[ext_resource type="PackedScene" uid="uid://d2tb8ogqlaxhy" path="res://src/player/gun/BlankGun.tscn" id="17_2uqul"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -139,11 +139,9 @@ text = "VSpeed: 0 u/s
 HSpeed: 0 u/s"
 
 [node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
+transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
 
-[node name="Shotgun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("6_mlgd0")]
-transform = Transform3D(0.959201, 0, 0.282727, 0, 1, 0, -0.282727, 0, 0.959201, 0.244493, 0, 0.23962)
-description = "The usual shotgun."
+[node name="BlankGun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("17_2uqul")]
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
 collision_mask = 61
