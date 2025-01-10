@@ -1,10 +1,14 @@
 extends MarginContainer
 class_name HealthBar
 
+signal show
+signal hide
+
 @export_category("Components")
 @export var health_component: HealthComponent
 
 @export var show_on_ready: bool = true
+@export var animate_show_hide: bool = true
 @export var hide_ui_on_death: bool = false
 
 @onready var timer: Timer = $VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer
@@ -33,11 +37,19 @@ func init_health_ui(_health) -> void:
 
 
 func show_ui() -> void:
-	anim_player.play("show")
+	if animate_show_hide:
+		anim_player.play("show")
+	else:
+		anim_player.play("visible")
+	show.emit()
 
 
 func hide_ui() -> void:
-	anim_player.play("hide")
+	if animate_show_hide:
+		anim_player.play("hide")
+	else:
+		anim_player.play("invisible")
+	hide.emit()
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:

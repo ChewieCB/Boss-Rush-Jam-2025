@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bwei3cifjg1sq"]
+[gd_scene load_steps=15 format=3 uid="uid://bwei3cifjg1sq"]
 
 [ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="1_8ja47"]
 [ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="1_ef7fu"]
@@ -73,6 +73,34 @@ tracks/1/keys = {
 "values": [Vector2(0, 0), Vector2(0, 40)]
 }
 
+[sub_resource type="Animation" id="Animation_4hfm4"]
+resource_name = "invisible"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(406, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_obhyq"]
 resource_name = "show"
 length = 0.6
@@ -102,11 +130,41 @@ tracks/1/keys = {
 "values": [Vector2(0, 40), Vector2(0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_rstvx"]
+resource_name = "visible"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(406, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_shbci"]
 _data = {
 "RESET": SubResource("Animation_2hhba"),
 "hide": SubResource("Animation_7v0y5"),
-"show": SubResource("Animation_obhyq")
+"invisible": SubResource("Animation_4hfm4"),
+"show": SubResource("Animation_obhyq"),
+"visible": SubResource("Animation_rstvx")
 }
 
 [node name="BossHealthBarUI" type="MarginContainer"]

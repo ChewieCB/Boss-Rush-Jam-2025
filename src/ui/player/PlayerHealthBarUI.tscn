@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dxau0o2083o1d"]
+[gd_scene load_steps=13 format=3 uid="uid://dxau0o2083o1d"]
 
 [ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="1_7ylc6"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_or76n"]
@@ -65,6 +65,34 @@ tracks/1/keys = {
 "values": [Vector2(0, 0), Vector2(0, 40)]
 }
 
+[sub_resource type="Animation" id="Animation_4hfm4"]
+resource_name = "invisible"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_obhyq"]
 resource_name = "show"
 length = 0.6
@@ -94,11 +122,41 @@ tracks/1/keys = {
 "values": [Vector2(0, 40), Vector2(0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_rstvx"]
+resource_name = "visible"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_shbci"]
 _data = {
 "RESET": SubResource("Animation_2hhba"),
 "hide": SubResource("Animation_7v0y5"),
-"show": SubResource("Animation_obhyq")
+"invisible": SubResource("Animation_4hfm4"),
+"show": SubResource("Animation_obhyq"),
+"visible": SubResource("Animation_rstvx")
 }
 
 [node name="PlayerHealthBarUI" type="MarginContainer"]
@@ -112,6 +170,7 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 script = ExtResource("1_7ylc6")
+animate_show_hide = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
