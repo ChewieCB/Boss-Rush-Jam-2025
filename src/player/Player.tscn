@@ -69,7 +69,6 @@ health_component = NodePath("HealthComponent")
 shape = SubResource("CapsuleShape3D_le58x")
 
 [node name="DebugMeshes" type="Node3D" parent="."]
-visible = false
 
 [node name="Body" type="MeshInstance3D" parent="DebugMeshes"]
 mesh = SubResource("CapsuleMesh_w3btf")
@@ -115,7 +114,7 @@ grow_vertical = 2
 texture = ExtResource("4_ymis7")
 
 [node name="HitMarker" type="TextureRect" parent="Neck/ShakeableCamera"]
-modulate = Color(1, 0.976471, 0.388235, 1)
+modulate = Color(1, 0.979667, 0.39, 0)
 texture_filter = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -146,6 +145,8 @@ transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
 transform = Transform3D(0.997227, 0, 0.0744218, 0, 1, 0, -0.0744218, 0, 0.997227, 0.219443, 0, 0.194852)
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
+collision_mask = 61
+collide_with_areas = true
 
 [node name="DashDuration" type="Timer" parent="."]
 editor_description = "How long the dash action last"
