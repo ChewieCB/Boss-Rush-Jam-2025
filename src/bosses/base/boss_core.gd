@@ -63,7 +63,7 @@ var area_round_count: int = 0
 @export var area_rings: int = 1
 
 @onready var hurtbox: Area3D = $Hurtbox
-@onready var health_ui = $BossHealthUI/BossHealthContainer
+@onready var health_ui = $UI/HealthUI/BossHealthContainer
 
 var MAX_SPEED: float = 5.0
 const TURN_SPEED_FAST: float = 7.5
@@ -210,7 +210,7 @@ func _on_movement_charging_state_entered() -> void:
 	var charge_impulse = self.global_position.distance_to(target.global_position) * 8
 	velocity += charge_dir * charge_impulse
 
-func _on_movement_charging_state_physics_processing(delta: float) -> void:
+func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, 0.08)
 	velocity.z = lerp(velocity.z, 0.0, 0.08)
 
@@ -410,7 +410,7 @@ func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
 		area_collider_shape.shape = collider_shape
 		area_collider.add_child(area_collider_shape)
 		area_collider.collision_layer = 0
-		area_collider.collision_mask = pow(2, 2-1)
+		area_collider.collision_mask = 2  # Player
 		area_collider.monitoring = true
 		
 		get_tree().get_root().add_child(area_collider)

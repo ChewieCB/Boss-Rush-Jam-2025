@@ -78,6 +78,7 @@ var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
 
+
 func _ready():
 	GameManager.player = self
 	for mesh in debug_meshes.get_children():

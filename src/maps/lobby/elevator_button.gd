@@ -25,7 +25,7 @@ func _ready() -> void:
 func interact() -> void:
 	anim_player.play("push")
 	if linked_level:
-		emit_signal("pushed", linked_level)
+		pushed.emit(linked_level)
 
 
 func _func_godot_apply_properties(properties: Dictionary) -> void:

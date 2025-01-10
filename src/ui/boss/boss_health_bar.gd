@@ -1,8 +1,14 @@
 extends MarginContainer
+class_name HealthBar
+
+signal show
+signal hide
 
 @export_category("Components")
 @export var health_component: HealthComponent
 
+@export var show_on_ready: bool = true
+@export var animate_show_hide: bool = true
 @export var hide_ui_on_death: bool = false
 
 @onready var timer: Timer = $VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer
@@ -11,12 +17,15 @@ extends MarginContainer
 @onready var health_label: Label = $VBoxContainer/MarginContainer2/MarginContainer/Label
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
+
 func _ready() -> void:
 	await get_owner().ready
 	if health_component:
 		init_health_ui(health_component.current_health)
 		health_component.health_changed.connect(_on_health_changed)
 		health_component.died.connect(_on_died)
+	if show_on_ready:
+		show_ui()
 
 
 func init_health_ui(_health) -> void:
@@ -28,11 +37,19 @@ func init_health_ui(_health) -> void:
 
 
 func show_ui() -> void:
-	anim_player.play("show")
+	if animate_show_hide:
+		anim_player.play("show")
+	else:
+		anim_player.play("visible")
+	show.emit()
 
 
 func hide_ui() -> void:
-	anim_player.play("hide")
+	if animate_show_hide:
+		anim_player.play("hide")
+	else:
+		anim_player.play("invisible")
+	hide.emit()
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
@@ -47,8 +64,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 func _on_died() -> void:
 	if hide_ui_on_death:
-		heath_bar.visible = false
-	# TODO - animations
+		hide_ui()
 
 
 func _on_timer_timeout():
