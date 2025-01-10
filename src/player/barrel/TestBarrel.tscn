@@ -51,15 +51,6 @@ vertical_alignment = 0
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
-[node name="ExplosiveBulletEffect" type="Node3D" parent="EffectContainer"]
-script = ExtResource("7_dvgxq")
-damage = 10
-explosion_damage = ExtResource("8_f0yx1")
-explosion_vfx = ExtResource("5_viqge")
-display_text_title = "Explosive bullet"
-display_text_tag = "Don't hurt yourself!"
-display_text_desc = "Make bullets go boom"
-
 [node name="RampUpEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("6_8tw5q")
 bonus_firerate_per_interval = 5.0
@@ -69,17 +60,6 @@ display_text_title = "Ramp up"
 display_text_tag = "Keep shooting"
 display_text_desc = "+5% firerate per 0.2s
 non-stop shooting"
-
-[node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
-script = ExtResource("6_h8x52")
-modify_perc_spread_stationary = -50.0
-modify_perc_damage_stationary = 25.0
-modify_perc_spread_moving = 100.0
-modify_perc_damage_moving = -25.0
-display_text_title = "Hyperfocus"
-display_text_tag = "Take position and start blasting!"
-display_text_desc = "-50% spread, +25% damage when stationary
-+100% spread, -25% damage when moving"
 
 [node name="ExtendedDrumEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_r0qpf")
@@ -99,3 +79,23 @@ script = ExtResource("5_ks4de")
 attribute = 8
 modify_value = 200.0
 is_perc = true
+
+[node name="ExplosiveBulletEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("7_dvgxq")
+damage = 10
+explosion_damage = ExtResource("8_f0yx1")
+explosion_vfx = ExtResource("5_viqge")
+display_text_title = "Explosive bullet"
+display_text_tag = "Don't hurt yourself!"
+display_text_desc = "Make bullets go boom"
+
+[node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("6_h8x52")
+modify_perc_spread_stationary = -50.0
+modify_perc_damage_stationary = 25.0
+modify_perc_spread_moving = 100.0
+modify_perc_damage_moving = -25.0
+display_text_title = "Hyperfocus"
+display_text_tag = "Take position and start blasting!"
+display_text_desc = "-50% spread, +25% damage when stationary
++100% spread, -25% damage when moving"

@@ -32,8 +32,6 @@ func on_prepare_to_fire():
 			owner_barrel.owner_gun.modified_projectile_amount = new_value
 		AttributeNameEnum.PROJECTILE_SPEED:
 			owner_barrel.owner_gun.modified_projectile_speed = new_value
-		AttributeNameEnum.MAGAZINE_SIZE:
-			owner_barrel.owner_gun.modified_magazine_size = new_value
 		AttributeNameEnum.IS_HITSCAN:
 			var res = true
 			if new_value == 0:

@@ -257,6 +257,7 @@ func reload():
 
 
 func reset_modifier(reload_reset = false):
+	print("RESET MODIFIER ", reload_reset)
 	n_ammo_consume = 1
 	n_shot_repeat = 1
 	modified_damage = base_damage
