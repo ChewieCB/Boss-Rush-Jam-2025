@@ -45,7 +45,6 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		damage_applied.emit()
 		if found_hitscal_col:
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
-			create_text(hitscan_col_point, hitscan_col_normal, str(damage), Color.ORANGE)
 	else:
 		if found_hitscal_col:
 			create_spark(hitscan_col_point, hitscan_col_normal)

@@ -171,7 +171,6 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
 		if target is CharacterBody3D:
 			target.health_component.damage(damage)
 			projectile_inst.create_blood_splatter(hitscan_col_point, hitscan_col_normal)
-			projectile_inst.create_text(hitscan_col_point, hitscan_col_normal, str(damage), Color.ORANGE)
 			check_barrel_effect_on_damage_applied()
 		else:
 			# Hit wall/obstacle
