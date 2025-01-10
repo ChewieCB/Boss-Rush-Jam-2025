@@ -116,9 +116,9 @@ text_effect_location = NodePath("../DamageTextMarker")
 [node name="NavigationComponent" parent="." node_paths=PackedStringArray("nav_agent") instance=ExtResource("9_cunyl")]
 nav_agent = NodePath("../NavigationAgent3D")
 
-[node name="BossHealthUI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="."]
 
-[node name="HealthUI" type="Control" parent="BossHealthUI"]
+[node name="HealthUI" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 5
 anchor_left = 0.5
@@ -128,15 +128,17 @@ offset_right = 486.0
 offset_bottom = 168.0
 grow_horizontal = 2
 
-[node name="BossHealthContainer" parent="BossHealthUI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("3_ybtoo")]
+[node name="BossHealthContainer" parent="UI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("3_ybtoo")]
 layout_mode = 1
-offset_left = -80.0
-offset_right = 1028.0
+offset_left = -486.0
+offset_top = 40.0
+offset_right = 622.0
+offset_bottom = 209.0
 health_component = NodePath("../../../HealthComponent")
 show_on_ready = false
 hide_ui_on_death = true
 
-[node name="StateChartDebugger" parent="BossHealthUI" instance=ExtResource("6_4cg3x")]
+[node name="StateChartDebugger" parent="UI" instance=ExtResource("6_4cg3x")]
 visible = false
 offset_left = 1312.0
 offset_top = 8.0
