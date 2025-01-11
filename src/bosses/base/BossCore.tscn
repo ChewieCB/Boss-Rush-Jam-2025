@@ -130,8 +130,6 @@ grow_horizontal = 2
 
 [node name="BossHealthContainer" parent="UI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("3_ybtoo")]
 layout_mode = 1
-offset_left = -80.0
-offset_right = 1028.0
 boss_name = "Umby the Stinky"
 health_component = NodePath("../../../HealthComponent")
 show_on_ready = false
