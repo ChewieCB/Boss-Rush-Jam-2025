@@ -2,11 +2,13 @@ extends BaseProjectile
 class_name GunHitscan
 
 ## Only affect visual
-@export var thickness = 1
+@export var thickness = 10
 
 @onready var shot_flash_start = $ShotFlashStart
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $Timer
+@onready var mesh: MeshInstance3D = $MeshInstance3D
+@onready var nearby_enemy_check_area: Area3D = $NearbyEnemyCheckArea3D
 
 var alpha = 1.0
 var fade_speed = 2.0
@@ -22,31 +24,38 @@ const RICO_START_POS_OFFSET_MODIFIER = 0.01
 const HITSCAN_HOMING_STRENTH_MODIFIER = 2
 
 func _ready():
-	var dup_mat = material_override.duplicate()
-	material_override = dup_mat
+	var dup_mat = mesh.material_override.duplicate()
+	mesh.material_override = dup_mat
 	if shot_flash_start:
 		var rotate_amount = randi_range(0, 90)
 		shot_flash_start.rotate_z(rotate_amount)
-		shot_flash_start.modulate = material_override.get_shader_parameter("color")
+		shot_flash_start.modulate = mesh.material_override.get_shader_parameter("color")
 
 func _process(delta):
 	alpha -= delta * fade_speed
 	alpha = clamp(alpha, 0, 1)
-	material_override.set_shader_parameter("fade_multiplier", alpha)
+	mesh.material_override.set_shader_parameter("fade_multiplier", alpha)
 	if shot_flash_start:
 		shot_flash_start.modulate.a = clamp(alpha, 0, 1)
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _max_range: float):
+	visible = false
+	global_position = start_pos
+
 	# For homing stuff
 	if homing_strength > 0:
-		var front_area: Area3D = GameManager.player.get_node("Neck/FrontEnemyCheckArea3D")
+		await get_tree().physics_frame
+		await get_tree().physics_frame
 		var min_distance = 999999
 		var test_dist = 0
 		var test_dir = 0
-		for body in front_area.get_overlapping_bodies():
-			test_dist = start_pos.distance_to(body.global_position)
-			test_dir = start_pos.direction_to(body.global_position)
+		for body in nearby_enemy_check_area.get_overlapping_bodies():
+			var target_pos = body.global_position
+			if body.get_node("BodyCenter"):
+				target_pos = body.get_node("BodyCenter").global_position
+			test_dist = start_pos.distance_to(target_pos)
+			test_dir = start_pos.direction_to(target_pos)
 			var deg_diff = angle_between_vectors(dir, test_dir)
 			if test_dist < min_distance and deg_diff < homing_strength * HITSCAN_HOMING_STRENTH_MODIFIER:
 				homing_target = body
@@ -59,7 +68,6 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		current_dir = dir
 
 	# Normal hitscan start here
-	visible = false
 	life_timer.start()
 	damage = _damage
 	ricochet_count_left = ricochet_count
@@ -89,16 +97,16 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		end_pos = start_pos + current_dir * max_range
 
 	var distance = start_pos.distance_to(end_pos)
-	position += current_dir * (distance / 2.0)
-	self.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)
+	mesh.global_position += current_dir * (distance / 2.0)
+	mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)
 	if is_ricochet_shot:
-		material_override.set_shader_parameter("enable_fade", false)
-		material_override.set_shader_parameter("enable_taper", false)
+		mesh.material_override.set_shader_parameter("enable_fade", false)
+		mesh.material_override.set_shader_parameter("enable_taper", false)
 	else:
-		material_override.set_shader_parameter("enable_fade", true)
-		material_override.set_shader_parameter("enable_taper", true)
-		material_override.set_shader_parameter("fade_distance", distance / 4)
-		material_override.set_shader_parameter("origin_position", start_pos)
+		mesh.material_override.set_shader_parameter("enable_fade", true)
+		mesh.material_override.set_shader_parameter("enable_taper", true)
+		mesh.material_override.set_shader_parameter("fade_distance", distance / 4)
+		mesh.material_override.set_shader_parameter("origin_position", start_pos)
 	visible = true
 
 
@@ -110,6 +118,7 @@ func ricochet():
 	GameManager.player.get_parent().add_child(new_hitscan_inst)
 	new_hitscan_inst.owner_gun = owner_gun
 	new_hitscan_inst.is_ricochet_shot = true
+	new_hitscan_inst.homing_strength = homing_strength
 	var new_dir = current_dir.bounce(hitscan_col_normal)
 	# Offset a bit to prevent stuck inside collision body
 	var new_start_pos = hitscan_col_point - current_dir * RICO_START_POS_OFFSET_MODIFIER
@@ -120,7 +129,7 @@ func ricochet():
 
 
 func get_projectile_color() -> Color:
-	return material_override.get_shader_parameter("color")
+	return mesh.material_override.get_shader_parameter("color")
 
 func _on_timer_timeout():
 	destroyed.emit()

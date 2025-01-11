@@ -113,9 +113,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000881709, -0.135539)
 [node name="TrickshotBarrel" parent="Barrel" instance=ExtResource("12_06gif")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0183202)
 
-[node name="TrickshotBarrel2" parent="Barrel" instance=ExtResource("12_06gif")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.100347)
-
 [node name="PlaceholderUI" type="Node3D" parent="."]
 
 [node name="StatusLabel" type="Label3D" parent="PlaceholderUI"]

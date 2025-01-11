@@ -57,4 +57,6 @@ one_shot = true
 
 [node name="DamageTextMarker" type="Marker3D" parent="."]
 
+[node name="BodyCenter" type="Marker3D" parent="."]
+
 [connection signal="timeout" from="ResetTotalDamageTimer" to="." method="_on_reset_total_damage_timer_timeout"]

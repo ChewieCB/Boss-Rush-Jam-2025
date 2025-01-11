@@ -1,9 +1,6 @@
 extends BaseProjectile
 class_name GunProjectile
 
-## Affect both visual and collision
-@export var thickness = 1
-
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
 

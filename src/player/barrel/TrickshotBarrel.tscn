@@ -64,7 +64,7 @@ attribute = 1
 modify_value = -30.0
 is_perc = true
 
-[node name="RicochetBullet" type="Node3D" parent="EffectContainer"]
+[node name="RicochetBullet" type="Node3D" parent="."]
 script = ExtResource("3_8iiph")
 attribute = 9
 modify_value = 3.0

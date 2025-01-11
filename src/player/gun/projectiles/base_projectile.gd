@@ -1,4 +1,4 @@
-extends MeshInstance3D
+extends Node3D
 class_name BaseProjectile
 
 @export var spark_effect: PackedScene
