@@ -63,7 +63,7 @@ signal gun_shot
 signal gun_reloaded
 
 
-const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.15
+const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.1
 const BULLET_SPAWN_POS_VARIATION = 10
 
 func _ready() -> void:
@@ -112,9 +112,6 @@ func shoot(aim_ray: RayCast3D):
 
 	# Screenshake
 	GameManager.player.player_camera.add_trauma(screenshake_amount)
-	# Recoil
-	GameManager.player.player_camera.rotate_x(recoil_amount)
-	GameManager.player.player_camera.rotate_y(randf_range(-recoil_amount, recoil_amount))
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_calculation()
@@ -141,16 +138,24 @@ func shoot(aim_ray: RayCast3D):
 			# projectile.impact.connect(check_barrel_effect_on_projectile_impact)
 			# projectile.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 		time_since_last_shot = 0
-		if n_shot_repeat > 1:
+		# Recoil
+		GameManager.player.player_camera.rotate_x(recoil_amount)
+		GameManager.player.player_camera.rotate_y(randf_range(-recoil_amount, recoil_amount))
+
+		magazine_ammo_left -= n_ammo_consume
+		for barrel in installed_barrels:
+			barrel.get_active_effect().on_ammo_consumed()
+		if magazine_ammo_left <= 0 and i < n_shot_repeat - 1:
+			break
+
+		gun_shot.emit()
+		
+		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
 			await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
 
-	magazine_ammo_left -= n_ammo_consume
-	for barrel in installed_barrels:
-		barrel.get_active_effect().on_ammo_consumed()
 	if magazine_ammo_left <= 0:
 		for barrel in installed_barrels:
 			barrel.get_active_effect().on_clip_empty()
-	gun_shot.emit()
 
 
 func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int, max_range: float = 500):

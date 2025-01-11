@@ -58,11 +58,10 @@ display_text_desc = "20% chance to refund ammo on hit
 
 [node name="DoubleTapEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_bgcdx")
-ammo_consumed_modify = 1
-shot_count_modify = 1
+shot_count_per_trigger_modify = 1
 display_text_title = "DOUBLE TAP"
 display_text_tag = "Both barrels!"
-display_text_desc = "Fire 2 shots at once"
+display_text_desc = "Fire 2 shots in quick succession"
 
 [node name="GamblerPrecision" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_s01a7")
