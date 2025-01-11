@@ -3,6 +3,8 @@ extends BossCore
 
 @onready var debug_phase_label: Label3D = $DebugPhaseLabel
 
+@onready var shields_parent: Node3D = $Shields
+
 var wheel_rotation_speed: float = 0.6
 @export var barrier_sweep_speed: float = 1.7
 
@@ -10,6 +12,7 @@ var wheel_rotation_speed: float = 0.6
 func _ready() -> void:
 	GRAVITY = 0.0
 	hurtbox.visible = false
+	shields_parent.position.y -= 30.0
 	super()
 
 
@@ -21,7 +24,7 @@ func activate() -> void:
 
 
 func change_phase_1() -> void:
-	state_chart.send_event("start_barrier_attack")
+	state_chart.send_event("start_shields_attack")
 
 
 func change_phase() -> void:
@@ -116,3 +119,23 @@ func _on_damage_barrier_recover_state_entered() -> void:
 	change_phase_1()
 	state_chart.send_event("restart_targeting")
 	# TODO - add fire again option
+
+
+func _on_shields_targeting_state_entered() -> void:
+	debug_state_label.text = "Shields | Targeting"
+	state_chart.send_event("start_targeting")
+	await get_tree().create_timer(2.0).timeout
+	state_chart.send_event("spawn_shields")
+
+
+func _on_shields_spawn_shields_state_entered() -> void:
+	shields_parent.visible = true
+	var tween = get_tree().create_tween()
+	tween.tween_property(shields_parent, "position:y", 0, 0.8).set_trans(Tween.TRANS_SINE)
+	# TODO - spawn variable number of shields and set rotation
+	# TODO - add projectile/wave attack at the same time?
+	pass # Replace with function body.
+
+
+func _on_shields_spawn_shields_state_physics_processing(delta: float) -> void:
+	shields_parent.rotation.y += delta * wheel_rotation_speed

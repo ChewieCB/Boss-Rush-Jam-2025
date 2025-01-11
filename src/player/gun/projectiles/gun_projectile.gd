@@ -46,6 +46,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		if found_hitscal_col:
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 	else:
+		if body is Shield:
+			body.impact(self.global_position)
 		if found_hitscal_col:
 			create_spark(hitscan_col_point, hitscan_col_normal)
 	impacted.emit(true, global_position)

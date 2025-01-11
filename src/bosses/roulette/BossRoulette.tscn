@@ -1,9 +1,10 @@
-[gd_scene load_steps=17 format=3 uid="uid://dd7xt2ptfqbkw"]
+[gd_scene load_steps=18 format=3 uid="uid://dd7xt2ptfqbkw"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_jhwuw"]
 [ext_resource type="Script" path="res://src/bosses/roulette/boss_roulette.gd" id="2_m116k"]
 [ext_resource type="AudioStream" uid="uid://8pnijh5qqiyv" path="res://src/bosses/base/assets/sfx/temp/Copy of Death Knight 1.mp3" id="3_m1gak"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_3xtcm"]
+[ext_resource type="PackedScene" uid="uid://yjhwpjyorotf" path="res://src/bosses/roulette/BossShield.tscn" id="4_bcfal"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="5_m3ad2"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="6_lkakv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_yu3uh"]
@@ -75,6 +76,14 @@ shape = SubResource("BoxShape3D_6q8u4")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Hurtbox" index="1"]
 mesh = SubResource("BoxMesh_n2kfn")
 
+[node name="Shields" type="Node3D" parent="." index="4"]
+
+[node name="Shield1" parent="Shields" index="0" instance=ExtResource("4_bcfal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -4)
+
+[node name="Shield2" parent="Shields" index="1" instance=ExtResource("4_bcfal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 4)
+
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Malina, Center of Attention"
 
@@ -101,7 +110,7 @@ delay_in_seconds = "0.0"
 
 [node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="1"]
 script = ExtResource("7_yu3uh")
-initial_state = NodePath("DamageBarrier")
+initial_state = NodePath("Shields")
 
 [node name="DamageBarrier" type="Node" parent="StateChart/Root/Phase/Phase1" index="0"]
 script = ExtResource("7_yu3uh")
@@ -288,7 +297,7 @@ to = NodePath("..")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="DebugPhaseLabel" type="Label3D" parent="." index="9"]
+[node name="DebugPhaseLabel" type="Label3D" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, 0)
 billboard = 1
 no_depth_test = true
@@ -298,11 +307,11 @@ font_size = 128
 outline_size = 32
 uppercase = true
 
-[node name="DebugStateLabel" parent="." index="10"]
+[node name="DebugStateLabel" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, 0)
 no_depth_test = true
 
-[node name="DebugDistanceLabel" parent="." index="11"]
+[node name="DebugDistanceLabel" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, 0)
 no_depth_test = true
 
@@ -311,3 +320,6 @@ no_depth_test = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/Recover" to="." method="_on_damage_barrier_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Shields/Targeting" to="." method="_on_shields_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Shields/SpawnShields" to="." method="_on_shields_spawn_shields_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/Shields/SpawnShields" to="." method="_on_shields_spawn_shields_state_physics_processing"]
