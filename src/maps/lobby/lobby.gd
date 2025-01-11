@@ -38,7 +38,8 @@ func _on_level_select(level_path: String) -> void:
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
 	var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
 	SoundManager.play_music(new_bgm, 0.25)
-	get_tree().change_scene_to_packed(loaded_scene)
+	if is_inside_tree():
+		get_tree().change_scene_to_packed(loaded_scene)
 
 
 func _on_door_transition_area_body_entered(body: Node3D) -> void:

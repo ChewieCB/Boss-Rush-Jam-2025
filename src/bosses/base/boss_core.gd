@@ -49,6 +49,7 @@ var area_move_points: Array[Node]
 # TODO - make this adjustable via resources
 @export var area_damage: float = 25.0
 @export var areas_per_phase: int = 6
+@export var area_spawn_time: float = 1.5
 @export var delay_per_area: float = 0.0
 var areas_finished: int = 0:
 	set(value):
@@ -61,6 +62,8 @@ var area_round_count: int = 0
 #
 @export var area_size: float = 16.0
 @export var area_rings: int = 1
+# For cleanup on scene change
+var spawned_area_objects = []
 
 @onready var hurtbox: Area3D = $Hurtbox
 @onready var health_ui = $UI/HealthUI/BossHealthContainer
@@ -157,6 +160,9 @@ func change_phase() -> void:
 	# If the player is too close, don't do area attacks
 	if dist_to_target <= area_size / 2:
 		possible_phases.erase("start_area_attack")
+	else:
+		#possible_phases.erase("start_area_attack")
+		possible_phases.append("start_area_attack")
 	
 	# If the player is further away, prioritise charges and area attacks
 	if dist_to_target >= 30:
@@ -168,9 +174,17 @@ func change_phase() -> void:
 		possible_phases.append("start_ranged_attack")
 		possible_phases.append("start_ranged_attack")
 		possible_phases.append("start_ranged_attack")
+		possible_phases.append("start_area_attack")
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	state_chart.send_event(new_phase)
+
+
+func _exit_tree() -> void:
+	for object in spawned_area_objects:
+		for node in object:
+			if is_instance_valid(node):
+				node.queue_free()
 
 
 ## ======== State Chart Methods ========
@@ -401,6 +415,9 @@ func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
 		var adjusted_dir = dir.rotated(Vector3.UP, angle)
 		var area_pos: Vector3 = self.global_position + adjusted_dir
 		
+		if delay_per_area > 0.0:
+			await get_tree().create_timer(delay_per_area * i).timeout
+		
 		# Generate a collider
 		var area_collider := Area3D.new()
 		var area_collider_shape := CollisionShape3D.new()
@@ -421,6 +438,8 @@ func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
 		var mesh = CylinderMesh.new()
 		var sphere_mat = ORMMaterial3D.new()
 		
+		spawned_area_objects.append([area_collider, debug_mesh_instance])
+		
 		# Generate a visual
 		get_tree().get_root().add_child(debug_mesh_instance)
 		
@@ -440,8 +459,8 @@ func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
 		
 		# Animate the visual
 		var tween = get_tree().create_tween()
-		tween.tween_property(mesh, "bottom_radius", area_size / 2, 3.0)
-		tween.parallel().tween_property(mesh, "top_radius", area_size / 2, 3.0)
+		tween.tween_property(mesh, "bottom_radius", area_size / 2, area_spawn_time)
+		tween.parallel().tween_property(mesh, "top_radius", area_size / 2, area_spawn_time)
 		tween.tween_callback(
 			func():
 				var height_tween = get_tree().create_tween()
@@ -466,6 +485,14 @@ func _on_phase_area_denial_recover_state_entered() -> void:
 	debug_state_label.text = "Area | Recovering"
 	
 	state_chart.send_event("attack_end")
+	area_round_count += 1
+	
+	if area_round_count < max_area_rounds:
+		var fire_again_chance: float = randf()
+		if fire_again_chance < 0.85:
+			state_chart.send_event("fire_again")
+			return
+	
 	area_phase_count += 1
 	await get_tree().create_timer(attack_recovery_time).timeout
 	change_phase()

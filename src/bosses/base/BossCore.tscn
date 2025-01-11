@@ -493,6 +493,12 @@ to = NodePath("../../MoveToCenter")
 event = &"change_position"
 delay_in_seconds = "0.0"
 
+[node name="toSpawnDamageAreas" type="Node" parent="StateChart/Root/Phase/AreaDenial/Recover"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../SpawnDamageAreas")
+event = &"fire_again"
+delay_in_seconds = "0.0"
+
 [node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../ChasePlayer")
