@@ -153,49 +153,19 @@ func shoot(aim_ray: RayCast3D):
 	gun_shot.emit()
 
 
-func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
-	var hitscan_ray: AimRay = aim_ray_prefab.instantiate()
-	get_parent().add_child(hitscan_ray)
-	hitscan_ray.global_position = start_pos
-	hitscan_ray.look_at(start_pos + direction)
+func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int, max_range: float = 500):
 	var projectile_inst: GunHitscan = hiscan_prefab.instantiate()
-	await get_tree().physics_frame
-	await get_tree().physics_frame
-	if hitscan_ray.is_colliding():
-		var target = hitscan_ray.get_collider()
-		var hitscan_col_point = hitscan_ray.get_collision_point()
-		var hitscan_col_normal = hitscan_ray.get_collision_normal()
-		GameManager.player.get_parent().add_child(projectile_inst)
-		projectile_inst.init(start_pos, hitscan_col_point)
-		# GameManager.player.add_child(projectile_inst)
-		# projectile_inst.init(bullet_spawn_marker.global_position, hitscan_col_point)
-		if target is CharacterBody3D:
-			target.health_component.damage(damage)
-			projectile_inst.create_blood_splatter(hitscan_col_point, hitscan_col_normal)
-			check_barrel_effect_on_damage_applied()
-		else:
-			# Hit wall/obstacle
-			projectile_inst.create_spark(hitscan_col_point, hitscan_col_normal)
-
-		check_barrel_effect_on_projectile_impact(true, hitscan_col_point)
-
-		# This is for ricochet. Not yet implemented
-		# if bounce_left > 0:
-		# 	create_hitscan_attack(hitscan_col_point, direction.bounce(hitscan_col_normal), bounce_left - 1, gun_projectile, damage)
-	else:
-		GameManager.player.get_parent().add_child(projectile_inst)
-		projectile_inst.init(start_pos, hitscan_ray.aim_ray_end.global_position)
-		# GameManager.player.add_child(projectile_inst)
-		# projectile_inst.init(bullet_spawn_marker.global_position, hitscan_ray.aim_ray_end.global_position)
-
-	check_barrel_effect_on_projectile_destroyed()
-	hitscan_ray.call_deferred("queue_free")
+	GameManager.player.get_parent().add_child(projectile_inst)
+	projectile_inst.init(start_pos, direction, damage, max_range)
+	projectile_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
+	projectile_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
+	projectile_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 
 
 func create_projectile_attack(start_pos: Vector3, direction: Vector3, damage: int, speed: float):
 	var projectile_inst: GunProjectile = projectile_prefab.instantiate()
 	GameManager.player.get_parent().add_child(projectile_inst)
-	projectile_inst.init(start_pos, start_pos + direction, damage, speed)
+	projectile_inst.init(start_pos, direction, damage, speed)
 	projectile_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
 	projectile_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
 	projectile_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)

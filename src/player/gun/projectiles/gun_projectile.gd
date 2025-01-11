@@ -20,10 +20,10 @@ func _physics_process(delta: float) -> void:
 	global_position -= transform.basis.z * projectile_speed * delta
 
 
-func init(pos1: Vector3, pos2: Vector3, _damage: int, _speed: float):
+func init(start_pos: Vector3, direction: Vector3, _damage: int, _speed: float):
 	projectile_speed = _speed
 	damage = _damage
-	look_at_from_position(pos1, pos2)
+	look_at_from_position(start_pos, start_pos + direction)
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
