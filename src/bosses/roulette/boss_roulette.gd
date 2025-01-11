@@ -3,10 +3,8 @@ extends BossCore
 
 @onready var debug_phase_label: Label3D = $DebugPhaseLabel
 
+var wheel_rotation_speed: float = 0.6
 @export var barrier_sweep_speed: float = 1.7
-
-
-var current_turn_speed: float = TURN_SPEED_SLOW
 
 
 func _ready() -> void:
@@ -73,8 +71,7 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 
 func _on_movement_targeting_state_physics_processing(delta: float) -> void:
 	if target:
-		_turn_towards_target(current_turn_speed, delta)
-
+		_turn_towards_target(wheel_rotation_speed, delta)
 
 
 func _on_phase_1_state_entered() -> void:
@@ -111,7 +108,6 @@ func _on_damage_barrier_spawn_barrier_state_entered() -> void:
 func _on_damage_barrier_spawn_barrier_state_exited() -> void:
 	hurtbox.visible = false
 	hurtbox.monitoring = false
-	current_turn_speed = TURN_SPEED_SLOW
 
 
 func _on_damage_barrier_recover_state_entered() -> void:

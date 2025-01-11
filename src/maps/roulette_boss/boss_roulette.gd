@@ -6,6 +6,10 @@ extends Node3D
 @export var player: Player
 @export var elevator_doors: ElevatorDoors
 @export var floor_pivot: AnimatableBody3D
+@export var ROTATION_SPEED: float = 0.6:
+	set(value):
+		ROTATION_SPEED = value
+		boss.wheel_rotation_speed = ROTATION_SPEED
 # Floor segments array stores tuples of [mesh, collider] since we separate them
 # for the purposes of the AnimatableBody3D rotation
 var floor_segments: Array
@@ -39,7 +43,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta) -> void:
-	floor_pivot.rotation.y += delta
+	floor_pivot.rotation.y += ROTATION_SPEED * delta
 	
 	if Input.is_action_just_released("interact"):
 		if floor_segments.size() > 0:
