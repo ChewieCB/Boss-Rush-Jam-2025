@@ -133,7 +133,6 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 func activate() -> void:
 	show_health()
 	SoundManager.play_sound(TEMP_sfx_awaken)
-	change_phase()
 
 
 func change_phase() -> void:

@@ -2,6 +2,11 @@ extends BossCore
 class_name BossTest
 
 
+func activate() -> void:
+	super()
+	change_phase()
+
+
 ### ATTACK PHASES --------------------------------
 #### INACTIVE
 func _on_phase_inactive_state_entered() -> void:
