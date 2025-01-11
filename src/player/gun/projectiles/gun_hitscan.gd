@@ -6,18 +6,18 @@ class_name GunHitscan
 
 @onready var shot_flash_start = $ShotFlashStart
 @onready var raycast: RayCast3D = $RayCast3D
+@onready var life_timer: Timer = $Timer
 
-signal damage_applied
-signal impacted
-signal destroyed
-
-var damage = 1
 var alpha = 1.0
 var fade_speed = 4.0
 var found_hitscal_col = false
 var hitscan_col_point = Vector3.ZERO
 var hitscan_col_normal = Vector3.ZERO
 var end_pos
+var current_dir
+var max_range
+
+const DELAY_BETWEEN_RICO = 0.05
 
 func _ready():
 	var dup_mat = material_override.duplicate()
@@ -27,15 +27,29 @@ func _ready():
 		shot_flash_start.rotate_z(rotate_amount)
 		shot_flash_start.modulate = material_override.get_shader_parameter("color")
 
-func init(start_pos: Vector3, dir: Vector3, _damage: int, max_range: float):
+func _process(delta):
+	alpha -= delta * fade_speed
+	alpha = clamp(alpha, 0, 1)
+	material_override.set_shader_parameter("fade_multiplier", alpha)
+	if shot_flash_start:
+		shot_flash_start.modulate.a = clamp(alpha, 0, 1)
+
+
+func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _max_range: float):
+	visible = false
+	life_timer.start()
+	current_dir = dir
 	damage = _damage
-	raycast.target_position.z = -abs(max_range)
-	self.look_at_from_position(start_pos, start_pos + dir, Vector3.UP)
+	ricochet_count_left = ricochet_count
+	max_range = _max_range
+	raycast.target_position.z = -abs(_max_range)
+	self.look_at_from_position(start_pos, start_pos + dir * _max_range, Vector3.UP)
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 
 	if raycast.is_colliding():
+		found_hitscal_col = true
 		impacted.emit()
 		var target = raycast.get_collider()
 		hitscan_col_point = raycast.get_collision_point()
@@ -47,22 +61,38 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, max_range: float):
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 		else:
 			create_spark(hitscan_col_point, hitscan_col_normal)
-
+		if ricochet_count_left > 0:
+			ricochet()
 	else:
 		end_pos = start_pos + dir * max_range
 
 	var distance = start_pos.distance_to(end_pos)
+	position += current_dir * (distance / 2.0)
 	self.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)
-	material_override.set_shader_parameter("fade_distance", distance / 4)
-	material_override.set_shader_parameter("origin_position", start_pos)
+	if is_ricochet_shot:
+		material_override.set_shader_parameter("enable_fade", false)
+		material_override.set_shader_parameter("enable_taper", false)
+	else:
+		material_override.set_shader_parameter("enable_fade", true)
+		material_override.set_shader_parameter("enable_taper", true)
+		material_override.set_shader_parameter("fade_distance", distance / 4)
+		material_override.set_shader_parameter("origin_position", start_pos)
+	visible = true
 
 
-func _process(delta):
-	alpha -= delta * fade_speed
-	alpha = clamp(alpha, 0, 1)
-	material_override.set_shader_parameter("fade_multiplier", alpha)
-	if shot_flash_start:
-		shot_flash_start.modulate.a = clamp(alpha, 0, 1)
+func ricochet():
+	super()
+	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
+	found_hitscal_col = false
+	var new_hitscan_inst: GunHitscan = self.duplicate()
+	GameManager.player.get_parent().add_child(new_hitscan_inst)
+	new_hitscan_inst.owner_gun = owner_gun
+	new_hitscan_inst.is_ricochet_shot = true
+	new_hitscan_inst.init(hitscan_col_point, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, max_range)
+	new_hitscan_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
+	new_hitscan_inst.impacted.connect(owner_gun.check_barrel_effect_on_projectile_impact)
+	new_hitscan_inst.destroyed.connect(owner_gun.check_barrel_effect_on_projectile_destroyed)
+
 
 func get_projectile_color() -> Color:
 	return material_override.get_shader_parameter("color")

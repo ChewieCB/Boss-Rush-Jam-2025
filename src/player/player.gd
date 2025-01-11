@@ -94,7 +94,6 @@ func _ready():
 	current_gun.gun_shot.connect(update_hud)
 	current_gun.gun_reloaded.connect(update_hud)
 
-
 func _input(event):
 	if controls_disabled:
 		return

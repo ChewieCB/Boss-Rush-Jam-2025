@@ -9,7 +9,7 @@
 [sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
 height = 0.5
 
-[node name="FoolRoller" type="Node3D"]
+[node name="FoolRollerBarrel" type="Node3D"]
 script = ExtResource("1_iw80l")
 barrel_name = "Fool Roller"
 

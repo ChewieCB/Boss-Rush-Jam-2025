@@ -81,65 +81,65 @@ script = ExtResource("2_soqa0")
 attribute = 5
 new_value = 5.0
 
-[node name="CompoundEffectSMG" type="Node3D" parent="EffectContainer"]
+[node name="CompoundEffectSMG" type="Node3D" parent="."]
 script = ExtResource("1_8li6c")
 display_text_title = " Archetype: SMG"
 display_text_tag = "Spray and pray!"
 
-[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetProjectileCount" type="Node3D" parent="CompoundEffectSMG"]
 script = ExtResource("2_soqa0")
 attribute = 2
 new_value = 1.0
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetFirerate" type="Node3D" parent="CompoundEffectSMG"]
 script = ExtResource("2_soqa0")
 attribute = 4
 new_value = 10.0
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetHitscan" type="Node3D" parent="CompoundEffectSMG"]
 script = ExtResource("2_soqa0")
 attribute = 6
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetSpread" type="Node3D" parent="CompoundEffectSMG"]
 script = ExtResource("2_soqa0")
 attribute = 7
 new_value = 2.0
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetDamage" type="Node3D" parent="CompoundEffectSMG"]
 script = ExtResource("2_soqa0")
 attribute = 1
 new_value = 8.0
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetMagazine" type="Node3D" parent="CompoundEffectSMG"]
 script = ExtResource("2_soqa0")
 attribute = 5
 new_value = 30.0
 
-[node name="CompoundEffectShotgun" type="Node3D" parent="EffectContainer"]
+[node name="CompoundEffectShotgun" type="Node3D" parent="."]
 script = ExtResource("1_8li6c")
 display_text_title = "Archetype: Shotgun"
 display_text_tag = "Strong at close range!"
 
-[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetProjectileCount" type="Node3D" parent="CompoundEffectShotgun"]
 script = ExtResource("2_soqa0")
 attribute = 2
 new_value = 8.0
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetFirerate" type="Node3D" parent="CompoundEffectShotgun"]
 script = ExtResource("2_soqa0")
 attribute = 4
 new_value = 2.0
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetHitscan" type="Node3D" parent="CompoundEffectShotgun"]
 script = ExtResource("2_soqa0")
 attribute = 6
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetSpread" type="Node3D" parent="CompoundEffectShotgun"]
 script = ExtResource("2_soqa0")
 attribute = 7
 new_value = 8.0
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetMagazine" type="Node3D" parent="CompoundEffectShotgun"]
 script = ExtResource("2_soqa0")
 attribute = 5
 new_value = 10.0

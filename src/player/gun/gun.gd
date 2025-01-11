@@ -58,6 +58,7 @@ var modified_projectile_speed
 var modified_is_hitscan
 var modified_spread_angle
 var modified_reload_time
+var modified_ricochet_count = 0
 
 signal gun_shot
 signal gun_reloaded
@@ -119,8 +120,8 @@ func shoot(aim_ray: RayCast3D):
 	for i in range(n_shot_repeat):
 		var bullet_start_pos = bullet_spawn_marker.global_position
 		SoundManager.play_sound(TEMP_sfx_shoot)
-		for j in range(modified_projectile_amount):
 
+		for j in range(modified_projectile_amount):
 			for barrel in installed_barrels:
 				barrel.get_active_effect().on_projectile_spawn()
 			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
@@ -133,10 +134,6 @@ func shoot(aim_ray: RayCast3D):
 			else:
 				create_projectile_attack(bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 
-			# TODO:
-			# var projectile = null
-			# projectile.impact.connect(check_barrel_effect_on_projectile_impact)
-			# projectile.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 		time_since_last_shot = 0
 		# Recoil
 		GameManager.player.player_camera.rotate_x(recoil_amount)
@@ -160,8 +157,9 @@ func shoot(aim_ray: RayCast3D):
 
 func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int, max_range: float = 500):
 	var projectile_inst: GunHitscan = hiscan_prefab.instantiate()
+	projectile_inst.owner_gun = self
 	GameManager.player.get_parent().add_child(projectile_inst)
-	projectile_inst.init(start_pos, direction, damage, max_range)
+	projectile_inst.init(start_pos, direction, damage, modified_ricochet_count, max_range)
 	projectile_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
 	projectile_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
 	projectile_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
@@ -169,8 +167,9 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int, 
 
 func create_projectile_attack(start_pos: Vector3, direction: Vector3, damage: int, speed: float):
 	var projectile_inst: GunProjectile = projectile_prefab.instantiate()
+	projectile_inst.owner_gun = self
 	GameManager.player.get_parent().add_child(projectile_inst)
-	projectile_inst.init(start_pos, direction, damage, speed)
+	projectile_inst.init(start_pos, direction, damage, modified_ricochet_count, speed)
 	projectile_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
 	projectile_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
 	projectile_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
@@ -241,6 +240,7 @@ func reset_modifier(reload_reset = false):
 	modified_projectile_speed = base_projectile_speed
 	modified_is_hitscan = is_hitscan
 	modified_spread_angle = base_spread_angle
+	modified_ricochet_count = 0
 	if reload_reset:
 		modified_reload_time = base_reload_time
 		modified_magazine_size = base_magazine_size
