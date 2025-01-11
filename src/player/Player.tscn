@@ -173,6 +173,8 @@ grow_vertical = 0
 
 [node name="PlayerHealthBarUI" parent="UI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("19_n1ar7")]
 layout_mode = 1
+offset_left = 0.0
+offset_right = 538.0
 health_component = NodePath("../../../HealthComponent")
 
 [node name="MagazineUI" type="Label" parent="UI"]
