@@ -18,6 +18,7 @@ var current_dir
 var max_range
 
 const DELAY_BETWEEN_RICO = 0.05
+const RICO_START_POS_OFFSET_MODIFIER = 0.01
 
 func _ready():
 	var dup_mat = material_override.duplicate()
@@ -88,7 +89,10 @@ func ricochet():
 	GameManager.player.get_parent().add_child(new_hitscan_inst)
 	new_hitscan_inst.owner_gun = owner_gun
 	new_hitscan_inst.is_ricochet_shot = true
-	new_hitscan_inst.init(hitscan_col_point, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, max_range)
+	var new_dir = current_dir.bounce(hitscan_col_normal)
+	# Offset a bit to prevent stuck inside collision body
+	var new_start_pos = hitscan_col_point - current_dir * RICO_START_POS_OFFSET_MODIFIER
+	new_hitscan_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, max_range)
 	new_hitscan_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
 	new_hitscan_inst.impacted.connect(owner_gun.check_barrel_effect_on_projectile_impact)
 	new_hitscan_inst.destroyed.connect(owner_gun.check_barrel_effect_on_projectile_destroyed)

@@ -7,7 +7,7 @@
 size = Vector3(1, 2, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_asko3"]
-albedo_color = Color(1, 0.13926, 0.116876, 1)
+albedo_color = Color(1, 0.141176, 0.117647, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_8yaim"]
 material = SubResource("StandardMaterial3D_asko3")

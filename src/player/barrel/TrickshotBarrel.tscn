@@ -48,7 +48,7 @@ vertical_alignment = 0
 [node name="ModifyRicochetCount" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_8iiph")
 attribute = 9
-modify_value = 2.0
+modify_value = 3.0
 display_text_title = "Ricochet Bullet"
 display_text_tag = "Make stylish shot"
-display_text_desc = "+2 richochet count"
+display_text_desc = "+3 richochet count"

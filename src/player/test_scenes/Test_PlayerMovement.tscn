@@ -96,6 +96,12 @@ use_collision = true
 size = Vector3(25.6065, 1.52936, 23.7671)
 material = SubResource("StandardMaterial3D_36m72")
 
+[node name="CSGBox3D11" type="CSGBox3D" parent="."]
+transform = Transform3D(0.651927, -0.536187, 0.536187, 0, 0.707107, 0.707107, -0.758282, -0.460982, 0.460982, -0.984107, 13.36, -13.8563)
+use_collision = true
+size = Vector3(15.9293, 1.52936, 11.8049)
+material = SubResource("StandardMaterial3D_36m72")
+
 [node name="Player" parent="." instance=ExtResource("1_h4pew")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 
