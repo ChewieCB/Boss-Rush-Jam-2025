@@ -14,7 +14,7 @@ var floor_segments: Array
 @onready var boss_trigger: Area3D = $BossTriggerVolume
 
 func _ready() -> void:
-	#boss.health_component.died.connect(_on_boss_defeated)
+	boss.health_component.died.connect(_on_boss_defeated)
 	player.health_component.died.connect(_on_player_death)
 	
 	# Build the animatable body's collision from each wheel segment collider
@@ -99,3 +99,10 @@ func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	if body is Player:
 		boss.activate()
 		boss_trigger.queue_free()
+
+
+func _on_killbox_area_body_entered(body: Node3D) -> void:
+	if body.health_component:
+		body.health_component.damage(9999999)
+	else:
+		body.queue_free()

@@ -82,15 +82,17 @@ var vel_vertical: float = 0
 @export var target: Node3D:
 	set(value):
 		target = value
-		if not target.is_node_ready():
-			await target.ready
-		navigation_component.target = target
+		if target:
+			if not target.is_node_ready():
+				await target.ready
+			navigation_component.target = target
 var cached_target: Node3D
 
 func _ready() -> void:
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	#debug_mesh.visible = false
+	await owner.ready
 	ranged_move_points = get_tree().get_nodes_in_group("boss_ranged_marker")
 	area_move_points = get_tree().get_nodes_in_group("boss_area_marker")
 
@@ -336,11 +338,14 @@ func _on_phase_ranged_projectiles_move_to_center_state_entered() -> void:
 	valid_move_points.pop_front()
 	
 	cached_target = target
-	target = valid_move_points[0]
-	state_chart.send_event("start_moving")
-	
-	await navigation_component.nav_agent.navigation_finished
-	state_chart.send_event("start_projectiles")
+	if valid_move_points:
+		target = valid_move_points[0]
+		state_chart.send_event("start_moving")
+		
+		await navigation_component.nav_agent.navigation_finished
+		state_chart.send_event("start_projectiles")
+	else:
+		change_phase()
 
 func _on_phase_ranged_projectiles_move_to_center_state_exited() -> void:
 	target = cached_target

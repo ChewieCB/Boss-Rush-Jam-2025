@@ -137,6 +137,8 @@ func _process(delta):
 
 func _physics_process(delta):
 	if controls_disabled:
+		velocity = Vector3(0, -GRAVITY, 0)
+		move_and_slide()
 		return
 	else:
 		if is_dashing:
