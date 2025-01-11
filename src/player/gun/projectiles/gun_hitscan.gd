@@ -19,6 +19,7 @@ var max_range
 
 const DELAY_BETWEEN_RICO = 0.05
 const RICO_START_POS_OFFSET_MODIFIER = 0.01
+const HITSCAN_HOMING_STRENTH_MODIFIER = 2
 
 func _ready():
 	var dup_mat = material_override.duplicate()
@@ -37,14 +38,34 @@ func _process(delta):
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _max_range: float):
+	# For homing stuff
+	if homing_strength > 0:
+		var front_area: Area3D = GameManager.player.get_node("Neck/FrontEnemyCheckArea3D")
+		var min_distance = 999999
+		var test_dist = 0
+		var test_dir = 0
+		for body in front_area.get_overlapping_bodies():
+			test_dist = start_pos.distance_to(body.global_position)
+			test_dir = start_pos.direction_to(body.global_position)
+			var deg_diff = angle_between_vectors(dir, test_dir)
+			if test_dist < min_distance and deg_diff < homing_strength * HITSCAN_HOMING_STRENTH_MODIFIER:
+				homing_target = body
+				min_distance = test_dist
+		if homing_target:
+			current_dir = test_dir
+		else:
+			current_dir = dir
+	else:
+		current_dir = dir
+
+	# Normal hitscan start here
 	visible = false
 	life_timer.start()
-	current_dir = dir
 	damage = _damage
 	ricochet_count_left = ricochet_count
 	max_range = _max_range
 	raycast.target_position.z = -abs(_max_range)
-	self.look_at_from_position(start_pos, start_pos + dir * _max_range, Vector3.UP)
+	self.look_at_from_position(start_pos, start_pos + current_dir * _max_range, Vector3.UP)
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -65,7 +86,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		if ricochet_count_left > 0:
 			ricochet()
 	else:
-		end_pos = start_pos + dir * max_range
+		end_pos = start_pos + current_dir * max_range
 
 	var distance = start_pos.distance_to(end_pos)
 	position += current_dir * (distance / 2.0)
@@ -104,3 +125,21 @@ func get_projectile_color() -> Color:
 func _on_timer_timeout():
 	destroyed.emit()
 	queue_free()
+
+
+func angle_between_vectors(vec1: Vector3, vec2: Vector3) -> float:
+	# Normalize the vectors
+	var vec1_normalized = vec1.normalized()
+	var vec2_normalized = vec2.normalized()
+	
+	# Calculate the dot product
+	var dot_product = vec1_normalized.dot(vec2_normalized)
+	
+	# Clamp the dot product to avoid floating-point errors (to keep it between -1 and 1)
+	dot_product = clamp(dot_product, -1.0, 1.0)
+	
+	# Calculate the angle in radians
+	var angle_radians = acos(dot_product)
+	
+	# Convert the angle to degrees
+	return rad_to_deg(angle_radians)
