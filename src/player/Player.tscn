@@ -58,7 +58,6 @@ aim_ray_prefab = ExtResource("5_dqbuo")
 health_component = NodePath("HealthComponent")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
-max_health = 100000.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_le58x")
@@ -174,8 +173,6 @@ grow_vertical = 0
 
 [node name="PlayerHealthBarUI" parent="UI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("19_n1ar7")]
 layout_mode = 1
-offset_left = 0.0
-offset_right = 538.0
 health_component = NodePath("../../../HealthComponent")
 
 [node name="MagazineUI" type="Label" parent="UI"]

@@ -94,10 +94,10 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		if ricochet_count_left > 0:
 			ricochet()
 	else:
-		end_pos = start_pos + current_dir * max_range
+		end_pos = start_pos + current_dir * 50
 
 	var distance = start_pos.distance_to(end_pos)
-	mesh.global_position += current_dir * (distance / 2.0)
+	position += current_dir * (distance / 2.0)
 	mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)
 	if is_ricochet_shot:
 		mesh.material_override.set_shader_parameter("enable_fade", false)

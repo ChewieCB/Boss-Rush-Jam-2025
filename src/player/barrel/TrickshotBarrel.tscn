@@ -47,6 +47,14 @@ vertical_alignment = 0
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
+[node name="RicochetBullet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_8iiph")
+attribute = 9
+modify_value = 3.0
+display_text_title = "Ricochet Bullet"
+display_text_tag = "Make stylish shot"
+display_text_desc = "+3 richochet count"
+
 [node name="HomingBulletEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_khhtx")
 display_text_title = "Homing bullet"
@@ -63,11 +71,3 @@ script = ExtResource("3_8iiph")
 attribute = 1
 modify_value = -30.0
 is_perc = true
-
-[node name="RicochetBullet" type="Node3D" parent="."]
-script = ExtResource("3_8iiph")
-attribute = 9
-modify_value = 3.0
-display_text_title = "Ricochet Bullet"
-display_text_tag = "Make stylish shot"
-display_text_desc = "+3 richochet count"
