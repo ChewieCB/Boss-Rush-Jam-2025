@@ -8,7 +8,7 @@ extends Node3D
 @export var floor_pivot: AnimatableBody3D
 # Floor segments array stores tuples of [mesh, collider] since we separate them
 # for the purposes of the AnimatableBody3D rotation
-@export var floor_segments: Array
+var floor_segments: Array
 
 @onready var win_ui: Control = $UI/BossDefeatedUI
 @onready var boss_trigger: Area3D = $BossTriggerVolume

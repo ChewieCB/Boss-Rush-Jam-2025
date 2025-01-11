@@ -74,7 +74,7 @@ const TURN_SPEED_SLOW: float = 5.0
 const MAX_FALL_SPEED: float = 50.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 8
-const GRAVITY: float = 14
+var GRAVITY: float = 14
 
 var vel_vertical: float = 0
 
