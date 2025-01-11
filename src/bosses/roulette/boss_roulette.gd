@@ -5,10 +5,18 @@ extends BossCore
 
 var wheel_rotation_speed: float = 0.6
 
+
+@export var barrier_phase_count: int = 2
+@export var shields_phase_count: int = 1
+
+# Barrier
+@export var barrier_sweep_speed: float = 1.7
+
 # Shields
 @onready var shields_parent: Node3D = $Shields
 @export var shield_scene: PackedScene
-@export var barrier_sweep_speed: float = 1.7
+@export var shields_max_time: float = 12.0
+@onready var shields_timer: Timer = $ShieldsTimer
 @export var shield_count: int = 4
 @export var shield_distance: float = 6.0
 @export var shield_height: float = 3.3
@@ -18,6 +26,7 @@ func _ready() -> void:
 	GRAVITY = 0.0
 	hurtbox.visible = false
 	shields_parent.position.y -= 30.0
+	shields_timer.wait_time = shields_max_time
 	super()
 
 
@@ -25,11 +34,31 @@ func _ready() -> void:
 func activate() -> void:
 	super()
 	state_chart.send_event("start_phase_1")
+	change_phase_1()
 	#change_phase()
 
 
 func change_phase_1() -> void:
-	state_chart.send_event("start_shields_attack")
+	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var possible_phases = [
+		"start_barrier_attack",
+		"start_shields_attack",
+	]
+	if barrier_phase_count == max_sequential_phases:
+		possible_phases.erase("start_barrier_attack")
+		barrier_phase_count = 0
+	if shields_phase_count == max_sequential_phases:
+		possible_phases.erase("start_shields_attack")
+		shields_phase_count = 0
+	
+	# If we've somehow exluded all of the possible phases, 
+	# the counters have been reset so just call this method again.
+	if possible_phases == []:
+		change_phase_1()
+		return
+	
+	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
+	state_chart.send_event(new_phase)
 
 
 func change_phase() -> void:
@@ -150,6 +179,8 @@ func _on_shields_spawn_shields_state_entered() -> void:
 	shields_parent.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(shields_parent, "position:y", 0, 0.8).set_trans(Tween.TRANS_SINE)
+	tween.tween_callback(shields_timer.start)
+	
 	# TODO - add projectile/wave attack at the same time?
 
 
@@ -159,4 +190,28 @@ func _check_shields() -> void:
 
 
 func _on_shields_spawn_shields_state_physics_processing(delta: float) -> void:
-	shields_parent.rotation.y += delta * wheel_rotation_speed * 2 
+	shields_parent.rotation.y += delta * wheel_rotation_speed * 4
+
+
+func _on_shields_recover_state_entered() -> void:
+	debug_state_label.text = "Shields | Recover"
+	await get_tree().create_timer(attack_recovery_time).timeout
+	change_phase_1()
+	state_chart.send_event("restart_targeting")
+
+
+func _on_shields_timer_timeout() -> void:
+	state_chart.send_event("shields_timeout")
+
+
+func _on_shields_absorb_state_entered() -> void:
+	var health_regained: float = 0.0
+	for shield in shields_parent.get_children():
+		health_regained += shield.health_component.current_health
+		var tween = get_tree().create_tween()
+		tween.tween_property(shield, "position", Vector3(0, shield_height, 0), 0.3).set_trans(Tween.TRANS_SINE)
+		tween.parallel().tween_property(shield, "scale", Vector3(0, 0, 0), 0.3).set_trans(Tween.TRANS_SINE)
+		tween.tween_callback(shield.queue_free)
+		tween.tween_callback(health_component.heal.bind(health_regained))
+		await tween.finished
+	state_chart.send_event("shields_absorbed")

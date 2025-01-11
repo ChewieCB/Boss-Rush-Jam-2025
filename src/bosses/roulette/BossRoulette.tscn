@@ -43,8 +43,11 @@ guard = SubResource("Resource_2in8l")
 collision_mask = 26
 motion_mode = 1
 script = ExtResource("2_m116k")
-shield_scene = ExtResource("4_bcfal")
+barrier_phase_count = 2
+shields_phase_count = 1
 barrier_sweep_speed = 1.7
+shield_scene = ExtResource("4_bcfal")
+shields_max_time = 12.0
 shield_count = 4
 shield_distance = 6.0
 shield_height = 3.3
@@ -175,13 +178,28 @@ delay_in_seconds = "0.0"
 [node name="SpawnShields" type="Node" parent="StateChart/Root/Phase/Phase1/Shields" index="1"]
 script = ExtResource("8_edit5")
 
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/Shields/SpawnShields" index="0"]
+[node name="toAbsorb" type="Node" parent="StateChart/Root/Phase/Phase1/Shields/SpawnShields" index="0"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../Absorb")
+event = &"shields_timeout"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/Shields/SpawnShields" index="1"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Recover")
 event = &"shields_destroyed"
 delay_in_seconds = "0.0"
 
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/Shields" index="2"]
+[node name="Absorb" type="Node" parent="StateChart/Root/Phase/Phase1/Shields" index="2"]
+script = ExtResource("8_edit5")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/Shields/Absorb" index="0"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../Recover")
+event = &"shields_absorbed"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/Shields" index="3"]
 script = ExtResource("8_edit5")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/Shields/Recover" index="0"]
@@ -190,13 +208,13 @@ to = NodePath("../../Targeting")
 event = &"restart_targeting"
 delay_in_seconds = "0.0"
 
-[node name="toDamageBarrier" type="Node" parent="StateChart/Root/Phase/Phase1/Shields" index="3"]
+[node name="toDamageBarrier" type="Node" parent="StateChart/Root/Phase/Phase1/Shields" index="4"]
 script = ExtResource("4_3xtcm")
 to = NodePath("..")
 event = &"start_barrier_attack"
 delay_in_seconds = "0.0"
 
-[node name="toBallProjectile" type="Node" parent="StateChart/Root/Phase/Phase1/Shields" index="4"]
+[node name="toBallProjectile" type="Node" parent="StateChart/Root/Phase/Phase1/Shields" index="5"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../BallProjectile")
 event = &"start_ball_attack"
@@ -313,6 +331,9 @@ no_depth_test = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, 0)
 no_depth_test = true
 
+[node name="ShieldsTimer" type="Timer" parent="." index="14"]
+one_shot = true
+
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/Targeting" to="." method="_on_damage_barrier_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_entered"]
@@ -321,3 +342,6 @@ no_depth_test = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Shields/Targeting" to="." method="_on_shields_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Shields/SpawnShields" to="." method="_on_shields_spawn_shields_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/Shields/SpawnShields" to="." method="_on_shields_spawn_shields_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Shields/Absorb" to="." method="_on_shields_absorb_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Shields/Recover" to="." method="_on_shields_recover_state_entered"]
+[connection signal="timeout" from="ShieldsTimer" to="." method="_on_shields_timer_timeout"]
