@@ -26,7 +26,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_3ch4f")
 mesh = SubResource("BoxMesh_yehfg")
 script = ExtResource("1_uqjuh")
-thickness = 4
+thickness = 10
 spark_effect = ExtResource("2_ddxwb")
 generic_blood_splatter = ExtResource("3_7xxrk")
 

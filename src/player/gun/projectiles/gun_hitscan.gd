@@ -9,7 +9,7 @@ class_name GunHitscan
 @onready var life_timer: Timer = $Timer
 
 var alpha = 1.0
-var fade_speed = 4.0
+var fade_speed = 2.0
 var found_hitscal_col = false
 var hitscan_col_point = Vector3.ZERO
 var hitscan_col_normal = Vector3.ZERO
