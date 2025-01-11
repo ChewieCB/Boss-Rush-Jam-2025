@@ -37,9 +37,9 @@ func _on_level_select(level_path: String) -> void:
 	GameManager.cached_player_rotation = GameManager.player.rotation
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
 	if is_inside_tree():
-		#var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1) 
-		#if new_bgm:
-			#SoundManager.play_music(new_bgm, 0.25)
+		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1) 
+		if new_bgm:
+			SoundManager.play_music(new_bgm, 0.25)
 		get_tree().change_scene_to_packed(loaded_scene)
 
 
