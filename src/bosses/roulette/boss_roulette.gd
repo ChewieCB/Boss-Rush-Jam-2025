@@ -3,10 +3,15 @@ extends BossCore
 
 @onready var debug_phase_label: Label3D = $DebugPhaseLabel
 
-@onready var shields_parent: Node3D = $Shields
-
 var wheel_rotation_speed: float = 0.6
+
+# Shields
+@onready var shields_parent: Node3D = $Shields
+@export var shield_scene: PackedScene
 @export var barrier_sweep_speed: float = 1.7
+@export var shield_count: int = 4
+@export var shield_distance: float = 6.0
+@export var shield_height: float = 3.3
 
 
 func _ready() -> void:
@@ -129,13 +134,29 @@ func _on_shields_targeting_state_entered() -> void:
 
 
 func _on_shields_spawn_shields_state_entered() -> void:
+	var rotation_increment: float = 2 * PI / shield_count
+	for i in shield_count:
+		var new_shield: Shield = shield_scene.instantiate()
+		shields_parent.add_child(new_shield)
+		new_shield.position.z = shield_distance
+		new_shield.position.y = shield_height
+		# Rotate the shield around the parent node as a pivot point
+		new_shield.global_translate(-shields_parent.global_position)
+		new_shield.transform = new_shield.transform.rotated(Vector3.UP, -rotation_increment * (i+1))
+		new_shield.global_translate(shields_parent.global_position)
+		
+		new_shield.destroyed.connect(_check_shields)
+		
 	shields_parent.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(shields_parent, "position:y", 0, 0.8).set_trans(Tween.TRANS_SINE)
-	# TODO - spawn variable number of shields and set rotation
 	# TODO - add projectile/wave attack at the same time?
-	pass # Replace with function body.
+
+
+func _check_shields() -> void:
+	if shields_parent.get_child_count() == 0:
+		state_chart.send_event("shields_destroyed")
 
 
 func _on_shields_spawn_shields_state_physics_processing(delta: float) -> void:
-	shields_parent.rotation.y += delta * wheel_rotation_speed
+	shields_parent.rotation.y += delta * wheel_rotation_speed * 2 

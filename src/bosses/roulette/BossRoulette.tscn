@@ -43,7 +43,11 @@ guard = SubResource("Resource_2in8l")
 collision_mask = 26
 motion_mode = 1
 script = ExtResource("2_m116k")
+shield_scene = ExtResource("4_bcfal")
 barrier_sweep_speed = 1.7
+shield_count = 4
+shield_distance = 6.0
+shield_height = 3.3
 TEMP_sfx_death = ExtResource("3_m1gak")
 TEMP_sfx_area_1 = null
 TEMP_sfx_area_2 = null
@@ -77,12 +81,6 @@ shape = SubResource("BoxShape3D_6q8u4")
 mesh = SubResource("BoxMesh_n2kfn")
 
 [node name="Shields" type="Node3D" parent="." index="4"]
-
-[node name="Shield1" parent="Shields" index="0" instance=ExtResource("4_bcfal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -4)
-
-[node name="Shield2" parent="Shields" index="1" instance=ExtResource("4_bcfal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 4)
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Malina, Center of Attention"

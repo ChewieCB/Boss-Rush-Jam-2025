@@ -3842,6 +3842,7 @@ metadata/_tb_type = "_tb_group"
 
 [node name="entity_56_BossRoulette" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("20_xl4ng")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.40625, 0)
+shield_distance = 6.0
 target = NodePath("../entity_1_PlayerRef")
 
 [node name="entity_57_BossPositionMarker" type="Marker3D" parent="FuncGodotMap"]

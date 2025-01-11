@@ -1,6 +1,7 @@
 extends BaseProjectile
 class_name GunProjectile
 
+
 ## Affect both visual and collision
 @export var thickness = 1
 
@@ -48,6 +49,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
+			body.health_component.damage(damage)
 		if found_hitscal_col:
 			create_spark(hitscan_col_point, hitscan_col_normal)
 	impacted.emit(true, global_position)
