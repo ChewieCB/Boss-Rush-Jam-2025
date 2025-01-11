@@ -12,6 +12,9 @@ var damage = 1
 var ricochet_count_left = 0
 var owner_gun: Gun
 var is_ricochet_shot = false
+var homing_strength = 0 # radius to search for enemy
+var homing_locked_in = false
+var homing_target = null
 
 func create_spark(pos: Vector3, normal: Vector3):
 	var spark_inst = spark_effect.instantiate()

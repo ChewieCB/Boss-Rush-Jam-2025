@@ -59,6 +59,7 @@ var modified_is_hitscan
 var modified_spread_angle
 var modified_reload_time
 var modified_ricochet_count = 0
+var modified_homing_strength: float = 0 # radius to search for enemy
 
 signal gun_shot
 signal gun_reloaded
@@ -158,6 +159,7 @@ func shoot(aim_ray: RayCast3D):
 func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int, max_range: float = 500):
 	var projectile_inst: GunHitscan = hiscan_prefab.instantiate()
 	projectile_inst.owner_gun = self
+	projectile_inst.homing_strength = modified_homing_strength
 	GameManager.player.get_parent().add_child(projectile_inst)
 	projectile_inst.init(start_pos, direction, damage, modified_ricochet_count, max_range)
 	projectile_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
@@ -168,6 +170,7 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int, 
 func create_projectile_attack(start_pos: Vector3, direction: Vector3, damage: int, speed: float):
 	var projectile_inst: GunProjectile = projectile_prefab.instantiate()
 	projectile_inst.owner_gun = self
+	projectile_inst.homing_strength = modified_homing_strength
 	GameManager.player.get_parent().add_child(projectile_inst)
 	projectile_inst.init(start_pos, direction, damage, modified_ricochet_count, speed)
 	projectile_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
@@ -241,6 +244,7 @@ func reset_modifier(reload_reset = false):
 	modified_is_hitscan = is_hitscan
 	modified_spread_angle = base_spread_angle
 	modified_ricochet_count = 0
+	modified_homing_strength = 0
 	if reload_reset:
 		modified_reload_time = base_reload_time
 		modified_magazine_size = base_magazine_size
