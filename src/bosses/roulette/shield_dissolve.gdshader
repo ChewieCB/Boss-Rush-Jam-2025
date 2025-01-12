@@ -15,7 +15,7 @@ uniform float dissolve_amount : hint_range(0,1);
 void fragment() {
 	vec4 albedo_tex = texture(texture_albedo,UV);
 	ALBEDO = albedo.rgb * albedo_tex.rgb;
-	
+
 	float sample = texture(dissolve_texture, UV).r;
 	float emission_value = 1.0 - smoothstep(dissolve_amount, dissolve_amount + burn_size, sample);
 	EMISSION = vec3(emission_value * emission_amount * emission_color.rgb);

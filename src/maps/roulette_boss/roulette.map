@@ -5340,3 +5340,146 @@
 ( 16 0 327 ) ( 15.454813220625056 -4.141104721640318 199 ) ( 15.454813220625056 -4.1411047216403745 327 ) placeholder/texture_light_07 [ -8.81583794386405 13.35219088193121 0 521.57007 ] [ 0 0 -0.5 451.5 ] 0 1 1
 }
 }
+// entity 68
+{
+"classname" "BossPositionMarker"
+"origin" "520 888 -45"
+"marker_group" "area"
+}
+// entity 69
+{
+"classname" "BossPositionMarker"
+"origin" "6.33321 1029.03 -45"
+"marker_group" "area"
+"angle" "30"
+}
+// entity 70
+{
+"classname" "BossPositionMarker"
+"origin" "-509.03 894.333 -45"
+"marker_group" "area"
+"angle" "60"
+}
+// entity 71
+{
+"classname" "BossPositionMarker"
+"origin" "-888 520 -45"
+"marker_group" "area"
+"angle" "90"
+}
+// entity 72
+{
+"classname" "BossPositionMarker"
+"origin" "-1029.03 6.33321 -45"
+"marker_group" "area"
+"angle" "120"
+}
+// entity 73
+{
+"classname" "BossPositionMarker"
+"origin" "-894.333 -509.03 -45"
+"marker_group" "area"
+"angle" "150"
+}
+// entity 74
+{
+"classname" "BossPositionMarker"
+"origin" "-520 -888 -45"
+"marker_group" "area"
+"angle" "180"
+}
+// entity 75
+{
+"classname" "BossPositionMarker"
+"origin" "-6.33321 -1029.03 -45"
+"marker_group" "area"
+"angle" "210"
+}
+// entity 76
+{
+"classname" "BossPositionMarker"
+"origin" "509.03 -894.333 -45"
+"marker_group" "area"
+"angle" "240"
+}
+// entity 77
+{
+"classname" "BossPositionMarker"
+"origin" "888 -520 -45"
+"marker_group" "area"
+"angle" "270"
+}
+// entity 78
+{
+"classname" "BossPositionMarker"
+"origin" "1029.03 -6.33321 -45"
+"marker_group" "area"
+"angle" "300"
+}
+// entity 79
+{
+"classname" "BossPositionMarker"
+"origin" "894.333 509.03 -45"
+"marker_group" "area"
+"angle" "330"
+}
+// entity 80
+{
+"classname" "BossPositionMarker"
+"origin" "0 -1152 310"
+"marker_group" "ball"
+}
+// entity 81
+{
+"classname" "BossPositionMarker"
+"origin" "814.587 -814.587 310"
+"angle" "45"
+"marker_group" "ball"
+}
+// entity 82
+{
+"classname" "BossPositionMarker"
+"origin" "814.587 814.587 310"
+"angle" "135"
+"marker_group" "ball"
+}
+// entity 83
+{
+"classname" "BossPositionMarker"
+"origin" "0 1152 310"
+"angle" "180"
+"marker_group" "ball"
+}
+// entity 84
+{
+"classname" "BossPositionMarker"
+"origin" "-814.587 814.587 310"
+"angle" "225"
+"marker_group" "ball"
+}
+// entity 85
+{
+"classname" "BossPositionMarker"
+"origin" "-1152 0 310"
+"angle" "270"
+"marker_group" "ball"
+}
+// entity 86
+{
+"classname" "BossPositionMarker"
+"origin" "-814.587 -814.587 310"
+"angle" "315"
+"marker_group" "ball"
+}
+// entity 87
+{
+"classname" "BossPositionMarker"
+"origin" "-1152 0 310"
+"angle" "270"
+}
+// entity 88
+{
+"classname" "BossPositionMarker"
+"origin" "0 1152 310"
+"angle" "180"
+}
