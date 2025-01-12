@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
-[ext_resource type="AudioStream" uid="uid://dicdq7rntf3to" path="res://src/maps/lobby/assets/lobby_bgm.mp3" id="2_0e0uc"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_1bpti"]
+[ext_resource type="AudioStream" uid="uid://ckv4chaww5i6c" path="res://assets/music/brj25_lobby011.mp3" id="2_gqehv"]
 [ext_resource type="LightmapGIData" uid="uid://ds8fdm645i322" path="res://src/maps/lobby/Lobby.lmbake" id="2_wjq6h"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="3_cmr84"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_nbyib"]
@@ -1250,7 +1250,7 @@ points = PackedVector3Array(-3, 2, 8, -3, -0.875, 8, -2, -0.875, 8, -2, 2, 8, -3
 
 [node name="Lobby" type="Node3D" node_paths=PackedStringArray("elevator_doors", "elevator_buttons")]
 script = ExtResource("1_ywg7j")
-bgm = ExtResource("2_0e0uc")
+bgm = ExtResource("2_gqehv")
 elevator_doors = NodePath("FuncGodotMap/group_627_Elevator/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/entity_29_ElevatorDoors")
 elevator_buttons = [NodePath("FuncGodotMap/group_627_Elevator/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton/entity_33_ElevatorButton"), NodePath("FuncGodotMap/group_627_Elevator/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton/entity_34_ElevatorButton"), NodePath("FuncGodotMap/group_627_Elevator/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton/entity_35_ElevatorButton"), NodePath("FuncGodotMap/group_627_Elevator/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton/entity_36_ElevatorButton"), NodePath("FuncGodotMap/group_627_Elevator/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton/entity_37_ElevatorButton"), NodePath("FuncGodotMap/group_627_Elevator/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton/entity_38_ElevatorButton")]
 

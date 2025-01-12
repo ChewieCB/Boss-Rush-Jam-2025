@@ -1,10 +1,9 @@
-[gd_scene load_steps=533 format=4 uid="uid://hnh6snsnvx1p"]
+[gd_scene load_steps=532 format=4 uid="uid://hnh6snsnvx1p"]
 
 [ext_resource type="LightmapGIData" uid="uid://cm40gu7sl57sg" path="res://src/maps/roulette_boss/BossRoulette.lmbake" id="1_ddfrs"]
 [ext_resource type="Script" path="res://src/maps/roulette_boss/boss_roulette.gd" id="1_of6pu"]
-[ext_resource type="AudioStream" uid="uid://coyh1k757v4k8" path="res://assets/music/WANTED 0.1.mp3" id="2_4euol"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="2_bnhua"]
-[ext_resource type="PackedScene" uid="uid://cpicsh5bemc0b" path="res://src/bosses/roulette/RouletteBall.tscn" id="3_wk1wj"]
+[ext_resource type="AudioStream" uid="uid://fq71s50v8yd7" path="res://assets/music/brj25_balrog03.mp3" id="2_cdhrj"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="3_wl5og"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="4_xrxe8"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="5_qwl1h"]
@@ -2014,12 +2013,11 @@ _surfaces = [{
 
 [node name="BossRoulette" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors", "floor_pivot")]
 script = ExtResource("1_of6pu")
-bgm = ExtResource("2_4euol")
+bgm = ExtResource("2_cdhrj")
 boss = NodePath("FuncGodotMap/entity_56_BossRoulette")
 player = NodePath("FuncGodotMap/entity_1_PlayerRef")
 elevator_doors = NodePath("FuncGodotMap/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_627_Elevator/group_629_ElevatorPrefab/group_628_ElevatorPrefab/group_626_Elevator/entity_8_ElevatorDoors")
 floor_pivot = NodePath("FuncGodotMap/group_645_WheelFloor")
-ball_scene = ExtResource("3_wk1wj")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
@@ -3834,10 +3832,6 @@ metadata/_tb_type = "_tb_group"
 [node name="group_673_Tunnel" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_56_BossRoulette" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("20_xl4ng")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.40625, 0)
-target = NodePath("../entity_1_PlayerRef")
-
 [node name="entity_57_BossPositionMarker" type="Marker3D" parent="FuncGodotMap"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.40625, 0)
 script = ExtResource("21_l85qe")
@@ -4105,6 +4099,12 @@ entProperties = {
 "marker_group": "",
 "origin": "0 1152 310"
 }
+
+[node name="entity_56_BossRoulette" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("20_xl4ng")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.40625, 0)
+barrier_phase_count = 3
+shields_spawn_cooldown = 15.0
+target = NodePath("../entity_1_PlayerRef")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]
 [connection signal="body_entered" from="KillboxArea" to="." method="_on_killbox_area_body_entered"]

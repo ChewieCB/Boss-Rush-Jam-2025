@@ -26,7 +26,7 @@ func impact(impact_pos: Vector3) -> void:
 	_points.push(to_local(impact_pos))
 
 
-func _on_health_changed(new_health: float, prev_health: float) -> void:
+func _on_health_changed(new_health: float, _prev_health: float) -> void:
 	# Map the current health to max health and change the shield colour from
 	# blue to yellow to orange to red
 	var health_perc: float = new_health / health_component.max_health

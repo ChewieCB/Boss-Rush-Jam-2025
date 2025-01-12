@@ -6,7 +6,6 @@ extends Node3D
 @export var player: Player
 @export var elevator_doors: ElevatorDoors
 @export var floor_pivot: AnimatableBody3D
-var ball_spawn_positions: Array
 @export var ROTATION_SPEED: float = 0.6:
 	set(value):
 		ROTATION_SPEED = value
@@ -15,12 +14,9 @@ var ball_spawn_positions: Array
 # for the purposes of the AnimatableBody3D rotation
 var floor_segments: Array
 
-@export var ball_scene: PackedScene
-
 @onready var win_ui: Control = $UI/BossDefeatedUI
 @onready var boss_trigger: Area3D = $BossTriggerVolume
 
-@onready var test_ball = $BallTest
 
 func _ready() -> void:
 	boss.health_component.died.connect(_on_boss_defeated)
@@ -38,8 +34,6 @@ func _ready() -> void:
 		
 		floor_segments.append([mesh, new_collider])
 	
-	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
-	
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
 		var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
 		player.global_position = player_start_pos
@@ -52,27 +46,16 @@ func _ready() -> void:
 func _physics_process(delta) -> void:
 	floor_pivot.rotation.y += ROTATION_SPEED * delta
 	
-	if Input.is_action_just_pressed("interact"):
-		# Ball test code
-		spawn_balls(1)
-		#print(test_ball.global_position)
-		#test_ball.apply_impulse(Vector3.BACK * 200)
-		#print(test_ball.global_position)
+	#if Input.is_action_just_pressed("interact"):
+		## Ball test code
+		#spawn_balls(1)
+
 		# Floor segment test code
 		#if floor_segments.size() > 0:
 			#var idx: int = randi_range(0, floor_segments.size() - 1)
 			#var segment_arr = floor_segments[idx]
 			#floor_segments.remove_at(idx)
 			#drop_floor_segment(segment_arr)
-
-
-func spawn_balls(count: int) -> void:
-	for i in count:
-		var spawn = ball_spawn_positions.pick_random()
-		var new_ball = ball_scene.instantiate()
-		new_ball.global_position = spawn.global_position
-		get_tree().get_root().add_child(new_ball)
-		new_ball.apply_central_force(spawn.global_position.direction_to(Vector3.ZERO) * 600)
 
 
 func drop_floor_segment(segment_arr: Array) -> void:
@@ -86,13 +69,11 @@ func drop_floor_segment(segment_arr: Array) -> void:
 
 
 func _on_boss_defeated() -> void:
-	pass
 	win_ui.win()
 	show_end_panel()
 
 
 func _on_player_death() -> void:
-	pass
 	win_ui.lose()
 	show_end_panel()
 

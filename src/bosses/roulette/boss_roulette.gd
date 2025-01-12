@@ -6,8 +6,10 @@ extends BossCore
 var wheel_rotation_speed: float = 0.6
 
 
-@export var barrier_phase_count: int = 2
+@export var barrier_phase_count: int = 3
 @export var shields_phase_count: int = 1
+@export var ball_phase_count: int = 2
+var previous_phase: String
 
 # Barrier
 @export var barrier_sweep_speed: float = 1.7
@@ -15,20 +17,32 @@ var wheel_rotation_speed: float = 0.6
 # Shields
 @onready var shields_parent: Node3D = $Shields
 @export var shield_scene: PackedScene
+@export var shields_spawn_cooldown: float = 15.0
 @export var shields_max_time: float = 12.0
-@onready var shields_timer: Timer = $ShieldsTimer
-@export var shield_count: int = 4
+@onready var shields_spawn_timer: Timer = $ShieldsSpawnTimer
+@onready var shields_absorb_timer: Timer = $ShieldsAbsorbTimer
+@export var shield_count: int = 5
 @export var shield_distance: float = 6.0
 @export var shield_height: float = 3.3
 
+# Balls
+@export var ball_scene: PackedScene
+var ball_spawn_positions: Array
+var last_spawn: Node3D
+@export var balls_to_spawn: int = 3
+@export var max_ball_lifetime: float = 10.0
+var active_balls: Array = []
+
 
 func _ready() -> void:
+	randomize()
 	GRAVITY = 0.0
 	hurtbox.visible = false
 	shields_parent.position.y -= 30.0
-	shields_timer.wait_time = shields_max_time
+	shields_spawn_timer.wait_time = shields_spawn_cooldown
+	shields_absorb_timer.wait_time = shields_max_time
+	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
 	super()
-
 
 
 func activate() -> void:
@@ -39,17 +53,16 @@ func activate() -> void:
 
 
 func change_phase_1() -> void:
-	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_barrier_attack",
-		"start_shields_attack",
+		"start_ball_attack",
 	]
 	if barrier_phase_count == max_sequential_phases:
 		possible_phases.erase("start_barrier_attack")
 		barrier_phase_count = 0
-	if shields_phase_count == max_sequential_phases:
-		possible_phases.erase("start_shields_attack")
-		shields_phase_count = 0
+	if ball_phase_count == max_sequential_phases:
+		possible_phases.erase("start_ball_attack")
+		ball_phase_count = 0
 	
 	# If we've somehow exluded all of the possible phases, 
 	# the counters have been reset so just call this method again.
@@ -57,44 +70,39 @@ func change_phase_1() -> void:
 		change_phase_1()
 		return
 	
+	for phase in possible_phases.duplicate():
+		if phase != previous_phase:
+			possible_phases.append(phase)
+	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
+	previous_phase = new_phase
+	print(new_phase)
 	state_chart.send_event(new_phase)
 
 
-func change_phase() -> void:
-	var dist_to_target = self.global_position.distance_to(target.global_position)
-	var possible_phases = [
-		"start_ranged_attack",
-		"start_area_attack"
-	]
-	if ranged_phase_count == max_sequential_phases:
-		possible_phases.erase("start_ranged_attack")
-		ranged_phase_count = 0
-	if area_phase_count == max_sequential_phases:
-		possible_phases.erase("start_area_attack")
-		area_phase_count = 0
+func spawn_ball() -> RouletteBall:
+	var spawns_furthest = ball_spawn_positions.duplicate()
+	if last_spawn:
+		spawns_furthest = spawns_furthest.filter(func(x): return x != last_spawn)
+	spawns_furthest.sort_custom(
+		func(a, b):
+			var a_dist = a.global_position.distance_to(target.global_position)
+			var b_dist = b.global_position.distance_to(target.global_position)
+			if a_dist > b_dist:
+				return true
+			return false
+	)
+	var spawn = spawns_furthest.pop_front()
+	last_spawn = spawn
+	var new_ball: RouletteBall = ball_scene.instantiate()
 	
-	# If we've somehow exluded all of the possible phases, 
-	# the counters have been reset so just call this method again.
-	if possible_phases == []:
-		change_phase()
-		return
+	get_tree().get_root().add_child(new_ball)
+	new_ball.global_position = spawn.global_position
+	new_ball.target = target
+	new_ball.apply_central_force(spawn.global_position.direction_to(Vector3.ZERO) * 500)
 	
-	# If the player is too close, don't do area attacks
-	if dist_to_target <= area_size / 2:
-		possible_phases.erase("start_area_attack")
-	else:
-		#possible_phases.erase("start_area_attack")
-		possible_phases.append("start_area_attack")
-	
-	# If the player is further away, prioritise charges and area attacks
-	possible_phases.append("start_ranged_attack")
-	possible_phases.append("start_ranged_attack")
-	possible_phases.append("start_ranged_attack")
-	possible_phases.append("start_area_attack")
-	
-	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
-	state_chart.send_event(new_phase)
+	active_balls.append(new_ball)
+	return new_ball
 
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
@@ -106,6 +114,8 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 		hurtbox.set_deferred("monitoring", true)
 
 
+## State behaviour
+
 func _on_movement_targeting_state_physics_processing(delta: float) -> void:
 	if target:
 		_turn_towards_target(wheel_rotation_speed, delta)
@@ -113,6 +123,7 @@ func _on_movement_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_phase_1_state_entered() -> void:
 	debug_phase_label.text = "Phase 1"
+	state_chart.send_event("start_shields")
 
 
 func _on_damage_barrier_targeting_state_entered() -> void:
@@ -121,7 +132,6 @@ func _on_damage_barrier_targeting_state_entered() -> void:
 	hurtbox.visible = true
 	await get_tree().create_timer(2.0).timeout
 	state_chart.send_event("barrier_attack")
-
 
 func _on_damage_barrier_spawn_barrier_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Barrier"
@@ -141,14 +151,13 @@ func _on_damage_barrier_spawn_barrier_state_entered() -> void:
 	await tween.finished
 	state_chart.send_event("barrier_attack_end")
 
-
 func _on_damage_barrier_spawn_barrier_state_exited() -> void:
 	hurtbox.visible = false
 	hurtbox.monitoring = false
 
-
 func _on_damage_barrier_recover_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Recover"
+	barrier_phase_count += 1
 	await get_tree().create_timer(attack_recovery_time).timeout
 	change_phase_1()
 	state_chart.send_event("restart_targeting")
@@ -156,11 +165,9 @@ func _on_damage_barrier_recover_state_entered() -> void:
 
 
 func _on_shields_targeting_state_entered() -> void:
-	debug_state_label.text = "Shields | Targeting"
 	state_chart.send_event("start_targeting")
-	await get_tree().create_timer(2.0).timeout
+	#await get_tree().create_timer(2.0).timeout
 	state_chart.send_event("spawn_shields")
-
 
 func _on_shields_spawn_shields_state_entered() -> void:
 	var rotation_increment: float = 2 * PI / shield_count
@@ -179,30 +186,23 @@ func _on_shields_spawn_shields_state_entered() -> void:
 	shields_parent.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(shields_parent, "position:y", 0, 0.8).set_trans(Tween.TRANS_SINE)
-	tween.tween_callback(shields_timer.start)
+	tween.tween_callback(shields_absorb_timer.start)
 	
 	# TODO - add projectile/wave attack at the same time?
-
 
 func _check_shields() -> void:
 	if shields_parent.get_child_count() == 0:
 		state_chart.send_event("shields_destroyed")
 
-
 func _on_shields_spawn_shields_state_physics_processing(delta: float) -> void:
 	shields_parent.rotation.y += delta * wheel_rotation_speed * 4
 
+func _on_shields_spawn_timer_timeout() -> void:
+	if health_component.current_health < health_component.max_health:
+		state_chart.send_event("start_shields")
 
-func _on_shields_recover_state_entered() -> void:
-	debug_state_label.text = "Shields | Recover"
-	await get_tree().create_timer(attack_recovery_time).timeout
-	change_phase_1()
-	state_chart.send_event("restart_targeting")
-
-
-func _on_shields_timer_timeout() -> void:
+func _on_shields_absorb_timer_timeout() -> void:
 	state_chart.send_event("shields_timeout")
-
 
 func _on_shields_absorb_state_entered() -> void:
 	var health_regained: float = 0.0
@@ -215,3 +215,37 @@ func _on_shields_absorb_state_entered() -> void:
 		tween.tween_callback(health_component.heal.bind(health_regained))
 		await tween.finished
 	state_chart.send_event("shields_absorbed")
+
+func _on_shields_recover_state_entered() -> void:
+	shields_phase_count += 1
+	await get_tree().create_timer(attack_recovery_time).timeout
+	shields_spawn_timer.start()
+	state_chart.send_event("end_shields")
+
+#
+func _on_ball_projectile_targeting_state_entered() -> void:
+	debug_state_label.text = "Multiball | Targeting"
+	state_chart.send_event("start_targeting")
+	#await get_tree().create_timer(1.4).timeout
+	state_chart.send_event("launch_balls")
+
+func _on_ball_projectile_launch_balls_state_entered() -> void:
+	debug_state_label.text = "Multiball | Launching"
+	for i in balls_to_spawn:
+		var ball = spawn_ball()
+		ball.destroyed.connect(_on_ball_destroyed)
+	await get_tree().create_timer(max_ball_lifetime).timeout
+	for ball in active_balls:
+		ball.destroy()
+
+func _on_ball_destroyed(ball: RouletteBall) -> void:
+	active_balls.erase(ball)
+	if active_balls.size() == 0:
+		state_chart.send_event("balls_destroyed")
+
+func _on_ball_projectile_recover_state_entered() -> void:
+	debug_state_label.text = "Multiball | Recovering"
+	ball_phase_count += 1
+	await get_tree().create_timer(attack_recovery_time).timeout
+	change_phase_1()
+	state_chart.send_event("end_recovery")
