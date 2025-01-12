@@ -1,4 +1,4 @@
-[gd_scene load_steps=532 format=4 uid="uid://hnh6snsnvx1p"]
+[gd_scene load_steps=533 format=4 uid="uid://hnh6snsnvx1p"]
 
 [ext_resource type="LightmapGIData" uid="uid://cm40gu7sl57sg" path="res://src/maps/roulette_boss/BossRoulette.lmbake" id="1_ddfrs"]
 [ext_resource type="Script" path="res://src/maps/roulette_boss/boss_roulette.gd" id="1_of6pu"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="13_g0y6e"]
 [ext_resource type="Material" uid="uid://buxdsvn8edclc" path="res://assets/textures/placeholder/texture_dark_08.tres" id="13_wxaqo"]
 [ext_resource type="Material" uid="uid://k8kn6ux1fgrn" path="res://assets/textures/placeholder/texture_green_green_green_12.tres" id="14_srv0g"]
+[ext_resource type="Material" uid="uid://boemicqsapjag" path="res://src/maps/roulette_boss/assets/VoidMaterial.tres" id="16_g1cc1"]
 [ext_resource type="Material" uid="uid://b8afntkd7fyiv" path="res://assets/textures/placeholder/texture_red_10.tres" id="17_o25vb"]
 [ext_resource type="PackedScene" uid="uid://dd7xt2ptfqbkw" path="res://src/bosses/roulette/BossRoulette.tscn" id="20_xl4ng"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_position_marker.gd" id="21_l85qe"]
@@ -2108,6 +2109,7 @@ collision_mask = 0
 
 [node name="entity_0_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_0_worldspawn"]
 mesh = SubResource("ArrayMesh_dcfa1")
+surface_material_override/7 = ExtResource("16_g1cc1")
 
 [node name="entity_0_occluder_instance" type="OccluderInstance3D" parent="FuncGodotMap/entity_0_worldspawn"]
 occluder = SubResource("ArrayOccluder3D_gs6h0")
@@ -4102,9 +4104,8 @@ entProperties = {
 
 [node name="entity_56_BossRoulette" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("20_xl4ng")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.40625, 0)
-max_wave_radius = 24.0
-wave_time = 1.4
-wave_height = 1.0
+shield_count = 4
+balls_to_spawn_phase_1 = 1
 target = NodePath("../entity_1_PlayerRef")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

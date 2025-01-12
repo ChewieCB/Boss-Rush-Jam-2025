@@ -34,7 +34,7 @@ script = ExtResource("1_onkcb")
 homing_delay = 2.0
 radial_force_magnitude = 1800.0
 central_force_magnitude = 4000.0
-homing_force_magnitude = 6000.0
+homing_force_magnitude = 5800.0
 health_component = NodePath("HealthComponent")
 explosion_scene = ExtResource("2_3sdjd")
 spark_scene = ExtResource("3_g45k2")
@@ -49,5 +49,6 @@ shape = SubResource("SphereShape3D_hwqll")
 one_shot = true
 
 [node name="HealthComponent" parent="." instance=ExtResource("4_elsvf")]
+max_health = 50.0
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

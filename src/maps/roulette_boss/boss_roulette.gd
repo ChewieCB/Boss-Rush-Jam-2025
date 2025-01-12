@@ -10,6 +10,7 @@ extends Node3D
 	set(value):
 		ROTATION_SPEED = value
 		boss.wheel_rotation_speed = ROTATION_SPEED
+var goal_rotation_speed: float = ROTATION_SPEED : set = set_goal_rotation_speed
 # Floor segments array stores tuples of [mesh, collider] since we separate them
 # for the purposes of the AnimatableBody3D rotation
 var floor_segments: Array
@@ -20,6 +21,7 @@ var floor_segments: Array
 
 func _ready() -> void:
 	boss.health_component.died.connect(_on_boss_defeated)
+	boss.change_wheel_speed.connect(set_goal_rotation_speed)
 	player.health_component.died.connect(_on_player_death)
 	
 	# Build the animatable body's collision from each wheel segment collider
@@ -33,6 +35,7 @@ func _ready() -> void:
 		collider.disabled = true
 		
 		floor_segments.append([mesh, new_collider])
+	boss.floor_segments = floor_segments
 	
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
 		var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
@@ -44,6 +47,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta) -> void:
+	if ROTATION_SPEED != goal_rotation_speed:
+		ROTATION_SPEED = lerp(ROTATION_SPEED, goal_rotation_speed, delta)
 	floor_pivot.rotation.y += ROTATION_SPEED * delta
 	
 	#if Input.is_action_just_pressed("interact"):
@@ -68,14 +73,8 @@ func shove_player(shove_force: float = 25.0) -> void:
 	player.dash_disabled = false
 
 
-func drop_floor_segment(segment_arr: Array) -> void:
-	var mesh: MeshInstance3D = segment_arr[0]
-	var collider: CollisionShape3D = segment_arr[1]
-	collider.disabled = true
-	var tween = get_tree().create_tween()
-	tween.tween_property(mesh, "position:y", mesh.position.y - 20.0, 0.6)
-	tween.tween_callback(mesh.queue_free)
-	tween.tween_callback(collider.queue_free)
+func set_goal_rotation_speed(value: float) -> void:
+	goal_rotation_speed = value
 
 
 func _on_boss_defeated() -> void:

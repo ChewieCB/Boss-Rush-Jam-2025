@@ -234,11 +234,12 @@ func jump(multiplier = 1.0):
 		var angular_velocity = cached_angular_velocity
 		var pos_relative_to_center = self.global_position
 		var linear_velocity = angular_velocity.cross(pos_relative_to_center)
+		var velocity_to_center = self.global_position.direction_to(Vector3.ZERO) * 10.0
 		
 		vel_horizontal += Vector2(
 			linear_velocity.x,
 			linear_velocity.z
-		) * angular_momentum_multiplier
+		) * angular_momentum_multiplier + Vector2(velocity_to_center.x, velocity_to_center.z)
 	
 	jumped = true
 	state_chart.send_event("jump")
