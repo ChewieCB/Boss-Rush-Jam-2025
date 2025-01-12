@@ -50,6 +50,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		if body is Shield:
 			body.impact(self.global_position)
 			body.health_component.damage(damage)
+		elif body is RouletteBall:
+			body.health_component.damage(damage)
 		if found_hitscal_col:
 			create_spark(hitscan_col_point, hitscan_col_normal)
 	impacted.emit(true, global_position)

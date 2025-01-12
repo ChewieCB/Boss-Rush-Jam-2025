@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://dtf2h2dydbopt"]
+[gd_scene load_steps=8 format=3 uid="uid://dtf2h2dydbopt"]
 
 [ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="1_1gwnq"]
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_hitscan.gd" id="1_uqjuh"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_ddxwb"]
 [ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_7xxrk"]
 [ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="3_d15wr"]
-[ext_resource type="PackedScene" uid="uid://b052m61k5ht8i" path="res://src/player/gun/vfx/HitText.tscn" id="4_c5f2b"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ch4f"]
 render_priority = 0
@@ -25,7 +24,6 @@ mesh = SubResource("BoxMesh_yehfg")
 script = ExtResource("1_uqjuh")
 thickness = 4
 spark_effect = ExtResource("2_ddxwb")
-text_effect = ExtResource("4_c5f2b")
 generic_blood_splatter = ExtResource("3_7xxrk")
 
 [node name="Timer" type="Timer" parent="."]

@@ -24,7 +24,7 @@ generic_blood_splatter = ExtResource("3_7tm1i")
 
 [node name="Area3D" type="Area3D" parent="."]
 collision_layer = 0
-collision_mask = 29
+collision_mask = 93
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("SphereShape3D_t27v6")

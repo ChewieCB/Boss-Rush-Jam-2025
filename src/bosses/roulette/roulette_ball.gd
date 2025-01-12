@@ -19,11 +19,13 @@ var collision_count: int = 0
 @onready var material: StandardMaterial3D = mesh.mesh.material
 @onready var homing_timer: Timer = $Timer
 
+@export var health_component: HealthComponent
 @export var explosion_scene: PackedScene
 @export var spark_scene: PackedScene
 
 
 func _ready() -> void:
+	health_component.died.connect(destroy)
 	homing_timer.wait_time = homing_delay
 	homing_timer.start()
 
@@ -45,6 +47,12 @@ func _physics_process(_delta: float) -> void:
 		apply_central_force(central_force / 2)
 	else:
 		apply_central_force(central_force)
+
+
+func spark(spark_pos: Vector3) -> void:
+	var spark_vfx = spark_scene.instantiate()
+	get_tree().get_root().add_child(spark_vfx)
+	spark_vfx.global_position = spark_pos
 
 
 func destroy() -> void:
@@ -69,18 +77,17 @@ func _on_body_entered(body: Node) -> void:
 	if body == target:
 		target.health_component.damage(damage)
 		destroy()
+	if body is BaseProjectile:
+		pass
 	else:
 		# Only increment environment collisions if the normal of the collision is not vertical
 		var collision_normal = body_state.get_contact_local_normal(0)
 		if collision_normal == Vector3.UP:
 			pass
 		else:
-			collision_count += 1
-			
-			var spark_vfx = spark_scene.instantiate()
-			get_tree().get_root().add_child(spark_vfx)
 			var spark_pos: Vector3 = body_state.get_contact_collider_position(0)
-			spark_vfx.global_position = spark_pos
+			spark(spark_pos)
 			
+			collision_count += 1
 			if collision_count == max_collisions:
 				destroy()
