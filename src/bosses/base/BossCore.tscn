@@ -349,6 +349,10 @@ outline_size = 32
 uppercase = true
 
 [node name="DamageTextMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5112, 0)
+
+[node name="BodyCenter" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.28097, 0)
 
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_entered"]

@@ -46,6 +46,41 @@ vertical_alignment = 0
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
+[node name="CompoundEffectRailgun" type="Node3D" parent="EffectContainer"]
+script = ExtResource("1_8li6c")
+display_text_title = "Archetype: Railgun"
+display_text_tag = "Precision is important!"
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 4
+new_value = 1.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 7
+new_value = 0.5
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 1
+new_value = 100.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 5
+new_value = 5.0
+
 [node name="CompoundEffectSMG" type="Node3D" parent="EffectContainer"]
 script = ExtResource("1_8li6c")
 display_text_title = " Archetype: SMG"
@@ -108,38 +143,3 @@ new_value = 8.0
 script = ExtResource("2_soqa0")
 attribute = 5
 new_value = 10.0
-
-[node name="CompoundEffectRailgun" type="Node3D" parent="EffectContainer"]
-script = ExtResource("1_8li6c")
-display_text_title = "Archetype: Railgun"
-display_text_tag = "Precision is important!"
-
-[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
-script = ExtResource("2_soqa0")
-attribute = 2
-new_value = 1.0
-
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
-script = ExtResource("2_soqa0")
-attribute = 4
-new_value = 1.0
-
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
-script = ExtResource("2_soqa0")
-attribute = 6
-new_value = 1.0
-
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
-script = ExtResource("2_soqa0")
-attribute = 7
-new_value = 0.5
-
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
-script = ExtResource("2_soqa0")
-attribute = 1
-new_value = 100.0
-
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
-script = ExtResource("2_soqa0")
-attribute = 5
-new_value = 5.0

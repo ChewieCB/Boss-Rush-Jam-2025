@@ -58,12 +58,14 @@ var modified_projectile_speed
 var modified_is_hitscan
 var modified_spread_angle
 var modified_reload_time
+var modified_ricochet_count = 0
+var modified_homing_strength: float = 0 # radius to search for enemy
 
 signal gun_shot
 signal gun_reloaded
 
 
-const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.15
+const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.1
 const BULLET_SPAWN_POS_VARIATION = 10
 
 func _ready() -> void:
@@ -112,9 +114,6 @@ func shoot(aim_ray: RayCast3D):
 
 	# Screenshake
 	GameManager.player.player_camera.add_trauma(screenshake_amount)
-	# Recoil
-	GameManager.player.player_camera.rotate_x(recoil_amount)
-	GameManager.player.player_camera.rotate_y(randf_range(-recoil_amount, recoil_amount))
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_calculation()
@@ -122,8 +121,8 @@ func shoot(aim_ray: RayCast3D):
 	for i in range(n_shot_repeat):
 		var bullet_start_pos = bullet_spawn_marker.global_position
 		SoundManager.play_sound(TEMP_sfx_shoot)
-		for j in range(modified_projectile_amount):
 
+		for j in range(modified_projectile_amount):
 			for barrel in installed_barrels:
 				barrel.get_active_effect().on_projectile_spawn()
 			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
@@ -136,66 +135,44 @@ func shoot(aim_ray: RayCast3D):
 			else:
 				create_projectile_attack(bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 
-			# TODO:
-			# var projectile = null
-			# projectile.impact.connect(check_barrel_effect_on_projectile_impact)
-			# projectile.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 		time_since_last_shot = 0
-		if n_shot_repeat > 1:
+		# Recoil
+		GameManager.player.player_camera.rotate_x(recoil_amount)
+		GameManager.player.player_camera.rotate_y(randf_range(-recoil_amount, recoil_amount))
+
+		magazine_ammo_left -= n_ammo_consume
+		for barrel in installed_barrels:
+			barrel.get_active_effect().on_ammo_consumed()
+		if magazine_ammo_left <= 0 and i < n_shot_repeat - 1:
+			break
+
+		gun_shot.emit()
+		
+		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
 			await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
 
-	magazine_ammo_left -= n_ammo_consume
-	for barrel in installed_barrels:
-		barrel.get_active_effect().on_ammo_consumed()
 	if magazine_ammo_left <= 0:
 		for barrel in installed_barrels:
 			barrel.get_active_effect().on_clip_empty()
-	gun_shot.emit()
 
 
-func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int):
-	var hitscan_ray: AimRay = aim_ray_prefab.instantiate()
-	get_parent().add_child(hitscan_ray)
-	hitscan_ray.global_position = start_pos
-	hitscan_ray.look_at(start_pos + direction)
+func create_hitscan_attack(start_pos: Vector3, direction: Vector3, damage: int, max_range: float = 500):
 	var projectile_inst: GunHitscan = hiscan_prefab.instantiate()
-	await get_tree().physics_frame
-	await get_tree().physics_frame
-	if hitscan_ray.is_colliding():
-		var target = hitscan_ray.get_collider()
-		var hitscan_col_point = hitscan_ray.get_collision_point()
-		var hitscan_col_normal = hitscan_ray.get_collision_normal()
-		GameManager.player.get_parent().add_child(projectile_inst)
-		projectile_inst.init(start_pos, hitscan_col_point)
-		# GameManager.player.add_child(projectile_inst)
-		# projectile_inst.init(bullet_spawn_marker.global_position, hitscan_col_point)
-		if target is CharacterBody3D:
-			target.health_component.damage(damage)
-			projectile_inst.create_blood_splatter(hitscan_col_point, hitscan_col_normal)
-			check_barrel_effect_on_damage_applied()
-		else:
-			# Hit wall/obstacle
-			projectile_inst.create_spark(hitscan_col_point, hitscan_col_normal)
-
-		check_barrel_effect_on_projectile_impact(true, hitscan_col_point)
-
-		# This is for ricochet. Not yet implemented
-		# if bounce_left > 0:
-		# 	create_hitscan_attack(hitscan_col_point, direction.bounce(hitscan_col_normal), bounce_left - 1, gun_projectile, damage)
-	else:
-		GameManager.player.get_parent().add_child(projectile_inst)
-		projectile_inst.init(start_pos, hitscan_ray.aim_ray_end.global_position)
-		# GameManager.player.add_child(projectile_inst)
-		# projectile_inst.init(bullet_spawn_marker.global_position, hitscan_ray.aim_ray_end.global_position)
-
-	check_barrel_effect_on_projectile_destroyed()
-	hitscan_ray.call_deferred("queue_free")
+	projectile_inst.owner_gun = self
+	projectile_inst.homing_strength = modified_homing_strength
+	GameManager.player.get_parent().add_child(projectile_inst)
+	projectile_inst.init(start_pos, direction, damage, modified_ricochet_count, max_range)
+	projectile_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
+	projectile_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
+	projectile_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 
 
 func create_projectile_attack(start_pos: Vector3, direction: Vector3, damage: int, speed: float):
 	var projectile_inst: GunProjectile = projectile_prefab.instantiate()
+	projectile_inst.owner_gun = self
+	projectile_inst.homing_strength = modified_homing_strength
 	GameManager.player.get_parent().add_child(projectile_inst)
-	projectile_inst.init(start_pos, start_pos + direction, damage, speed)
+	projectile_inst.init(start_pos, direction, damage, modified_ricochet_count, speed)
 	projectile_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
 	projectile_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
 	projectile_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
@@ -266,6 +243,8 @@ func reset_modifier(reload_reset = false):
 	modified_projectile_speed = base_projectile_speed
 	modified_is_hitscan = is_hitscan
 	modified_spread_angle = base_spread_angle
+	modified_ricochet_count = 0
+	modified_homing_strength = 0
 	if reload_reset:
 		modified_reload_time = base_reload_time
 		modified_magazine_size = base_magazine_size
