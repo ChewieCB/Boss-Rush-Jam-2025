@@ -58,6 +58,16 @@ func _physics_process(delta) -> void:
 			#drop_floor_segment(segment_arr)
 
 
+func shove_player(shove_force: float = 25.0) -> void:
+	var shove_vector = player.global_position.direction_to(boss.global_position)
+	player.dash_disabled = true
+	#player.velocity = Vector3.ZERO
+	player.vel_horizontal += Vector2(shove_vector.x, shove_vector.z) * shove_force 
+	player.vel_vertical += shove_vector.y * shove_force 
+	await get_tree().create_timer(0.5).timeout
+	player.dash_disabled = false
+
+
 func drop_floor_segment(segment_arr: Array) -> void:
 	var mesh: MeshInstance3D = segment_arr[0]
 	var collider: CollisionShape3D = segment_arr[1]
@@ -106,6 +116,7 @@ func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	if body is Player:
 		boss.activate()
 		boss_trigger.queue_free()
+		shove_player()
 
 
 func _on_killbox_area_body_entered(body: Node3D) -> void:

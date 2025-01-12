@@ -1,10 +1,8 @@
 extends BossCore
 
-
 @onready var debug_phase_label: Label3D = $DebugPhaseLabel
 
 var wheel_rotation_speed: float = 0.6
-
 
 @export var barrier_phase_count: int = 3
 @export var shields_phase_count: int = 1
@@ -33,6 +31,14 @@ var last_spawn: Node3D
 @export var max_ball_lifetime: float = 10.0
 var active_balls: Array = []
 
+# Pushback Wave
+@export var max_wave_radius: float = 32.0
+@export var max_center_pushback_radius: float = 8.0
+@export var wave_time: float = 0.8
+@export var wave_height: float = 1.5
+@export var wave_pushback_force: float = 35.0
+@export var wave_damage: float = 10.0
+
 
 func _ready() -> void:
 	randomize()
@@ -56,6 +62,7 @@ func change_phase_1() -> void:
 	var possible_phases = [
 		"start_barrier_attack",
 		"start_ball_attack",
+		"start_pushback_attack",
 	]
 	if barrier_phase_count == max_sequential_phases:
 		possible_phases.erase("start_barrier_attack")
@@ -255,3 +262,98 @@ func _on_ball_projectile_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 	change_phase_1()
 	state_chart.send_event("end_recovery")
+
+
+func _on_pushback_wave_spawn_wave_state_entered() -> void:
+	debug_state_label.text = "Pushback | Wave"
+	
+	var wave_attack_callback: Callable = func():
+		state_chart.send_event("finish_wave")
+	_spawn_center_wave(max_wave_radius, wave_time, wave_height, wave_attack_callback)
+
+func _on_wave_collision(body: Node3D) -> void:
+	if body is Player:
+		_pushback_effect(body)
+
+func _spawn_center_wave(
+	max_radius: float, 
+	spawned_wave_time: float = wave_time, 
+	spawned_wave_height: float = wave_height, 
+	callback: Callable = func(): pass
+) -> void:
+	SoundManager.play_sound(TEMP_sfx_area_1)
+	var area_pos: Vector3 = Vector3.ZERO
+	area_pos.y -= wave_height / 2
+	
+	# Generate a collider
+	var area_collider := Area3D.new()
+	var area_collider_shape := CollisionShape3D.new()
+	var collider_shape := CylinderShape3D.new()
+	collider_shape.radius = 0.01
+	collider_shape.height = spawned_wave_height
+	area_collider_shape.shape = collider_shape
+	area_collider.add_child(area_collider_shape)
+	area_collider.collision_layer = 0
+	area_collider.collision_mask = 2  # Player
+	area_collider.monitoring = true
+	
+	get_tree().get_root().add_child(area_collider)
+	
+	area_collider.global_position = area_pos
+	area_collider.body_entered.connect(_on_wave_collision)
+	
+	var debug_mesh_instance = MeshInstance3D.new()
+	var mesh = CylinderMesh.new()
+	var sphere_mat = ORMMaterial3D.new()
+	
+	spawned_area_objects.append([area_collider, debug_mesh_instance])
+	
+	# Generate a visual
+	get_tree().get_root().add_child(debug_mesh_instance)
+	
+	debug_mesh_instance.mesh = mesh
+	debug_mesh_instance.cast_shadow = false
+	debug_mesh_instance.global_position = area_pos
+	
+	mesh.bottom_radius = 0.01
+	mesh.top_radius = 0.01
+	mesh.height = spawned_wave_height
+	mesh.material = sphere_mat
+	
+	sphere_mat.transparency = true
+	sphere_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	sphere_mat.cull_mode = 2
+	sphere_mat.albedo_color = Color(Color.CYAN, 0.5)
+	
+	# Animate the visual
+	var tween = get_tree().create_tween()
+	tween.tween_property(mesh, "bottom_radius", max_radius, spawned_wave_time)
+	tween.parallel().tween_property(mesh, "top_radius", max_radius, spawned_wave_time)
+	tween.parallel().tween_property(area_collider_shape.shape, "radius", max_radius, spawned_wave_time)
+	tween.tween_callback(func():
+		debug_mesh_instance.queue_free()
+		area_collider.queue_free()
+	)
+	tween.tween_callback(callback)
+
+func _pushback_effect(body: Node3D) -> void:
+	body.health_component.damage(wave_damage)
+	var pushback_vector = self.global_position.direction_to(body.global_position)
+	
+	body.velocity = Vector3.ZERO
+	body.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * wave_pushback_force 
+	body.vel_vertical += pushback_vector.y * wave_pushback_force 
+
+func _on_pushback_wave_recover_state_entered() -> void:
+	debug_state_label.text = "Pushback | Recovering"
+	await get_tree().create_timer(attack_recovery_time).timeout
+	change_phase_1()
+	state_chart.send_event("end_recovery")
+
+func _on_pushback_area_body_entered(body: Node3D) -> void:
+	if body is Player:
+		wave_damage /= 10.0
+		body.dash_disabled = true
+		var callback = func(): body.dash_disabled = false
+		_spawn_center_wave(max_center_pushback_radius, 0.1, 58, callback)
+		wave_damage *= 10.0

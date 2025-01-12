@@ -41,7 +41,7 @@ volumetric_fog_emission = Color(0.85098, 0.960784, 1, 1)
 volumetric_fog_emission_energy = 0.3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e3mt6"]
-size = Vector3(5, 5, 7)
+size = Vector3(5, 5, 13.7744)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_towa0"]
 height = 9.0
@@ -2087,7 +2087,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BossTriggerVolume"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1.38721)
 shape = SubResource("BoxShape3D_e3mt6")
 
 [node name="KillboxArea" type="Area3D" parent="."]

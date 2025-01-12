@@ -74,6 +74,7 @@ var current_air_jump_count: int = 0
 var slide_dir := Vector2(0, 0)
 
 var controls_disabled: bool = false
+var dash_disabled: bool = false
 
 var gun_container_original_pos: Vector3
 var current_gun_slot = 0
@@ -108,6 +109,8 @@ func _input(event):
 		spin_reload()
 
 	if event.is_action_pressed("dash"):
+		if dash_disabled:
+			return
 		if last_dashed_timestamp + dash_cd * 1000 <= Time.get_ticks_msec():
 			last_dashed_timestamp = Time.get_ticks_msec()
 			is_dashing = true

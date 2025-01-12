@@ -38,6 +38,8 @@ func _physics_process(_delta: float) -> void:
 	apply_central_force(ball_force)
 	
 	if target and homing_timer.is_stopped():
+		if not is_instance_valid(target):
+			return
 		var homing_force = self.global_position.direction_to(target.global_position) * homing_force_magnitude
 		apply_central_force(homing_force)
 		apply_central_force(central_force / 2)
