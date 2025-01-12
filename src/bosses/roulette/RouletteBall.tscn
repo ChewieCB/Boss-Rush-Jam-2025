@@ -1,10 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://cpicsh5bemc0b"]
+[gd_scene load_steps=8 format=3 uid="uid://cpicsh5bemc0b"]
 
 [ext_resource type="Script" path="res://src/bosses/roulette/roulette_ball.gd" id="1_onkcb"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_3sdjd"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="3_g45k2"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_sw7i0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_llmv6"]
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.5
 
 [sub_resource type="SphereMesh" id="SphereMesh_q2wve"]
 material = SubResource("StandardMaterial3D_llmv6")
@@ -17,17 +22,20 @@ rings = 12
 radius = 2.0
 
 [node name="BallTest" type="RigidBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17.0645, -26.2048)
 collision_layer = 64
-collision_mask = 71
+collision_mask = 67
 mass = 50.0
 physics_material_override = SubResource("PhysicsMaterial_sw7i0")
 gravity_scale = 4.0
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_onkcb")
-homing_delay = 1.5
-homing_force_magnitude = 6800.0
+homing_delay = 2.0
+radial_force_magnitude = 1800.0
+central_force_magnitude = 4000.0
+homing_force_magnitude = 6000.0
+explosion_scene = ExtResource("2_3sdjd")
+spark_scene = ExtResource("3_g45k2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_q2wve")

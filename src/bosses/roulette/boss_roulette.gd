@@ -8,7 +8,7 @@ var wheel_rotation_speed: float = 0.6
 
 @export var barrier_phase_count: int = 3
 @export var shields_phase_count: int = 1
-@export var ball_phase_count: int = 2
+@export var ball_phase_count: int = 1
 var previous_phase: String
 
 # Barrier
@@ -29,7 +29,7 @@ var previous_phase: String
 @export var ball_scene: PackedScene
 var ball_spawn_positions: Array
 var last_spawn: Node3D
-@export var balls_to_spawn: int = 3
+@export var balls_to_spawn: int = 1
 @export var max_ball_lifetime: float = 10.0
 var active_balls: Array = []
 
@@ -81,18 +81,24 @@ func change_phase_1() -> void:
 
 
 func spawn_ball() -> RouletteBall:
-	var spawns_furthest = ball_spawn_positions.duplicate()
+	var spawn: Node3D
 	if last_spawn:
-		spawns_furthest = spawns_furthest.filter(func(x): return x != last_spawn)
-	spawns_furthest.sort_custom(
-		func(a, b):
-			var a_dist = a.global_position.distance_to(target.global_position)
-			var b_dist = b.global_position.distance_to(target.global_position)
-			if a_dist > b_dist:
-				return true
-			return false
-	)
-	var spawn = spawns_furthest.pop_front()
+		var last_spawn_idx = ball_spawn_positions.find(last_spawn)
+		var new_idx = last_spawn_idx + 2
+		if new_idx > ball_spawn_positions.size() - 1:
+			new_idx -= ball_spawn_positions.size() - 1
+		spawn = ball_spawn_positions[new_idx]
+	else:
+		var spawns_furthest = ball_spawn_positions.duplicate()
+		spawns_furthest.sort_custom(
+			func(a, b):
+				var a_dist = a.global_position.distance_to(target.global_position)
+				var b_dist = b.global_position.distance_to(target.global_position)
+				if a_dist > b_dist:
+					return true
+				return false
+		)
+		spawn = spawns_furthest.front()
 	last_spawn = spawn
 	var new_ball: RouletteBall = ball_scene.instantiate()
 	
