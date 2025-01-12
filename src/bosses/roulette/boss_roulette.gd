@@ -32,10 +32,10 @@ var last_spawn: Node3D
 var active_balls: Array = []
 
 # Pushback Wave
-@export var max_wave_radius: float = 32.0
+@export var max_wave_radius: float = 24.0
 @export var max_center_pushback_radius: float = 8.0
-@export var wave_time: float = 0.8
-@export var wave_height: float = 1.5
+@export var wave_time: float = 1.4
+@export var wave_height: float = 1.0
 @export var wave_pushback_force: float = 35.0
 @export var wave_damage: float = 10.0
 
@@ -59,6 +59,7 @@ func activate() -> void:
 
 
 func change_phase_1() -> void:
+	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_barrier_attack",
 		"start_ball_attack",
@@ -76,6 +77,29 @@ func change_phase_1() -> void:
 	if possible_phases == []:
 		change_phase_1()
 		return
+	
+	# If the player is too close, don't do area attacks
+	if dist_to_target >= max_wave_radius:
+		possible_phases.erase("start_pushback_attack")
+	else:
+		possible_phases.append("start_pushback_attack")
+		possible_phases.append("start_pushback_attack")
+		possible_phases.append("start_pushback_attack")
+		possible_phases.append("start_pushback_attack")
+		possible_phases.append("start_pushback_attack")
+		possible_phases.append("start_pushback_attack")
+	
+	# If the player is further away, prioritise charges and area attacks
+	if dist_to_target >= 30:
+		possible_phases.append("start_ball_attack")
+		possible_phases.append("start_ball_attack")
+		possible_phases.append("start_ball_attack")
+	# If the player is closer, prioritise ranged attacks
+	else:
+		possible_phases.append("start_barrier_attack")
+		possible_phases.append("start_barrier_attack")
+		possible_phases.append("start_ball_attack")
+		possible_phases.append("start_ball_attack")
 	
 	for phase in possible_phases.duplicate():
 		if phase != previous_phase:
@@ -143,7 +167,10 @@ func _on_damage_barrier_targeting_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Targeting"
 	state_chart.send_event("start_targeting")
 	hurtbox.visible = true
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(0.8).timeout
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(charge_telegraph_time).timeout
+	state_chart.send_event("attack_start")
 	state_chart.send_event("barrier_attack")
 
 func _on_damage_barrier_spawn_barrier_state_entered() -> void:
@@ -267,6 +294,9 @@ func _on_ball_projectile_recover_state_entered() -> void:
 func _on_pushback_wave_spawn_wave_state_entered() -> void:
 	debug_state_label.text = "Pushback | Wave"
 	
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(charge_telegraph_time).timeout
+	state_chart.send_event("attack_start")
 	var wave_attack_callback: Callable = func():
 		state_chart.send_event("finish_wave")
 	_spawn_center_wave(max_wave_radius, wave_time, wave_height, wave_attack_callback)
@@ -283,7 +313,7 @@ func _spawn_center_wave(
 ) -> void:
 	SoundManager.play_sound(TEMP_sfx_area_1)
 	var area_pos: Vector3 = Vector3.ZERO
-	area_pos.y -= wave_height / 2
+	area_pos.y -= wave_height
 	
 	# Generate a collider
 	var area_collider := Area3D.new()
@@ -354,6 +384,7 @@ func _on_pushback_area_body_entered(body: Node3D) -> void:
 	if body is Player:
 		wave_damage /= 10.0
 		body.dash_disabled = true
-		var callback = func(): body.dash_disabled = false
-		_spawn_center_wave(max_center_pushback_radius, 0.1, 58, callback)
+		_spawn_center_wave(max_center_pushback_radius, 0.1, 58)
 		wave_damage *= 10.0
+		await get_tree().create_timer(0.8).timeout
+		body.dash_disabled = false

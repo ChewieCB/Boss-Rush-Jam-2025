@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dd7xt2ptfqbkw"]
+[gd_scene load_steps=23 format=3 uid="uid://dd7xt2ptfqbkw"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_jhwuw"]
 [ext_resource type="Script" path="res://src/bosses/roulette/boss_roulette.gd" id="2_m116k"]
@@ -52,6 +52,10 @@ guard = SubResource("Resource_2in8l")
 height = 58.0
 radius = 7.0
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_cbruj"]
+height = 58.0
+radius = 6.0
+
 [node name="BossRoulette" instance=ExtResource("1_jhwuw")]
 collision_mask = 26
 motion_mode = 1
@@ -68,11 +72,11 @@ shield_distance = 6.0
 shield_height = 3.3
 ball_scene = ExtResource("4_pnl31")
 balls_to_spawn = 3
-max_ball_lifetime = 11.0
-max_wave_radius = 32.0
+max_ball_lifetime = 8.0
+max_wave_radius = 24.0
 max_center_pushback_radius = 8.0
-wave_time = 0.8
-wave_height = 1.5
+wave_time = 1.4
+wave_height = 1.0
 wave_pushback_force = 35.0
 wave_damage = 10.0
 TEMP_sfx_death = ExtResource("3_m1gak")
@@ -453,6 +457,13 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PushbackArea" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 29, 0)
 shape = SubResource("CylinderShape3D_7wlfa")
+
+[node name="CenterBlocker" type="StaticBody3D" parent="." index="17"]
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CenterBlocker" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 29, 0)
+shape = SubResource("CylinderShape3D_cbruj")
 
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/Targeting" to="." method="_on_shields_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/SpawnShields" to="." method="_on_shields_spawn_shields_state_entered"]
