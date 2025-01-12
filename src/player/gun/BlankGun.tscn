@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://d2tb8ogqlaxhy"]
+[gd_scene load_steps=25 format=3 uid="uid://d2tb8ogqlaxhy"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_wwe7d"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_5dqrq"]
@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://d1r8em3of5o8n" path="res://src/player/barrel/ArchetypeBarrel.tscn" id="11_1c3f4"]
 [ext_resource type="PackedScene" uid="uid://cp0e7vka232ws" path="res://src/player/barrel/TrickshotBarrel.tscn" id="12_06gif"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="12_ukph6"]
+[ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="13_4ecyt"]
+[ext_resource type="PackedScene" uid="uid://dy7nqvo7uq1ti" path="res://src/player/barrel/DynamicAdvantageBarrel.tscn" id="13_4flyn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
 albedo_color = Color(0.459708, 0.464844, 0.460992, 1)
@@ -108,10 +110,13 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0330088, 0)
 
 [node name="ArchetypeBarrel" parent="Barrel" instance=ExtResource("11_1c3f4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000881709, -0.135539)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.137539, -0.13597)
 
 [node name="TrickshotBarrel" parent="Barrel" instance=ExtResource("12_06gif")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0571951)
+
+[node name="FoolRoller" parent="Barrel" instance=ExtResource("13_4ecyt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0668007, -0.0265605)
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 

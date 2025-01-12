@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=8 format=3 uid="uid://bb5aobsi08anx"]
+[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=9 format=3 uid="uid://bb5aobsi08anx"]
 
 [ext_resource type="Resource" uid="uid://dq458eynubrqg" path="res://assets/trenchbroom/PlayerRef.tres" id="1_aaqsq"]
 [ext_resource type="Resource" uid="uid://crgpdahjaj" path="res://addons/func_godot/fgd/func_godot_fgd.tres" id="1_v87b8"]
 [ext_resource type="Script" path="res://addons/func_godot/src/fgd/func_godot_fgd_file.gd" id="2_daboe"]
-[ext_resource type="Resource" uid="uid://2crk7qhsib3" path="res://assets/trenchbroom/BossCoreRef.tres" id="3_rueox"]
 [ext_resource type="Resource" uid="uid://b85tg00v4yi81" path="res://assets/trenchbroom/BossMarker.tres" id="4_jt43q"]
 [ext_resource type="Resource" uid="uid://dcn8o1nutbiin" path="res://assets/trenchbroom/ElevatorButton.tres" id="5_s6gss"]
 [ext_resource type="Resource" uid="uid://c5jfvwm8lp6jt" path="res://assets/trenchbroom/ElevatorDoors.tres" id="6_8ycue"]
+[ext_resource type="Resource" uid="uid://dhd5cfecqe7iu" path="res://assets/trenchbroom/BossTest.tres" id="7_8kdmy"]
+[ext_resource type="Resource" uid="uid://d014js6ak2jgh" path="res://assets/trenchbroom/BossRoulette.tres" id="7_ls432"]
 
 [resource]
 script = ExtResource("2_daboe")
@@ -14,4 +15,4 @@ export_file = false
 target_map_editor = 1
 fgd_name = "FuncGodot"
 base_fgd_files = Array[Resource]([ExtResource("1_v87b8")])
-entity_definitions = Array[Resource]([ExtResource("1_aaqsq"), ExtResource("3_rueox"), ExtResource("4_jt43q"), ExtResource("6_8ycue"), ExtResource("5_s6gss")])
+entity_definitions = Array[Resource]([ExtResource("1_aaqsq"), ExtResource("4_jt43q"), ExtResource("6_8ycue"), ExtResource("5_s6gss"), ExtResource("7_ls432"), ExtResource("7_8kdmy")])

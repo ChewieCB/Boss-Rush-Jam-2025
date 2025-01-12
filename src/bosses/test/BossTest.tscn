@@ -1,0 +1,220 @@
+[gd_scene load_steps=13 format=3 uid="uid://qv0vpmt70kws"]
+
+[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_35rb8"]
+[ext_resource type="Script" path="res://src/bosses/test/boss_test.gd" id="2_t8yjh"]
+[ext_resource type="AudioStream" uid="uid://8pnijh5qqiyv" path="res://src/bosses/base/assets/sfx/temp/Copy of Death Knight 1.mp3" id="3_6x5nd"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="3_p1uc1"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="4_oiifk"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="5_y1s41"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_hwjid"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="7_xwrw7"]
+
+[sub_resource type="Resource" id="Resource_b8dnc"]
+script = ExtResource("4_oiifk")
+state = NodePath("../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_yx44c"]
+script = ExtResource("5_y1s41")
+guard = SubResource("Resource_b8dnc")
+
+[sub_resource type="Resource" id="Resource_2ueik"]
+script = ExtResource("4_oiifk")
+state = NodePath("../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_jdig8"]
+script = ExtResource("5_y1s41")
+guard = SubResource("Resource_2ueik")
+
+[node name="BossTest" instance=ExtResource("1_35rb8")]
+script = ExtResource("2_t8yjh")
+TEMP_sfx_death = ExtResource("3_6x5nd")
+charge_telegraph_time = 0.3
+
+[node name="DebugMesh" parent="." index="2"]
+visible = true
+
+[node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../ChasePlayer")
+event = &"start_chase_attack"
+guard = SubResource("Resource_yx44c")
+delay_in_seconds = "0.0"
+
+[node name="toRangedProjectiles" type="Node" parent="StateChart/Root/Phase/Inactive" index="1"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../RangedProjectiles")
+event = &"start_ranged_attack"
+guard = SubResource("Resource_jdig8")
+delay_in_seconds = "0.0"
+
+[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/Inactive" index="2"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../AreaDenial")
+event = &"start_area_attack"
+guard = SubResource("Resource_jdig8")
+delay_in_seconds = "0.0"
+
+[node name="ChasePlayer" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("6_hwjid")
+initial_state = NodePath("TargetPlayer")
+
+[node name="TargetPlayer" type="Node" parent="StateChart/Root/Phase/ChasePlayer" index="0"]
+script = ExtResource("7_xwrw7")
+
+[node name="toCharge" type="Node" parent="StateChart/Root/Phase/ChasePlayer/TargetPlayer" index="0"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../Charge")
+event = &"charge_player"
+delay_in_seconds = "0.0"
+
+[node name="Charge" type="Node" parent="StateChart/Root/Phase/ChasePlayer" index="1"]
+script = ExtResource("7_xwrw7")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/ChasePlayer/Charge" index="0"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../Recover")
+event = &"end_charge"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/ChasePlayer" index="2"]
+script = ExtResource("7_xwrw7")
+
+[node name="toTargetPlayer" type="Node" parent="StateChart/Root/Phase/ChasePlayer/Recover" index="0"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../TargetPlayer")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/ChasePlayer" index="3"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toRangedProjectiles" type="Node" parent="StateChart/Root/Phase/ChasePlayer" index="4"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../RangedProjectiles")
+event = &"start_ranged_attack"
+guard = SubResource("Resource_jdig8")
+delay_in_seconds = "0.0"
+
+[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/ChasePlayer" index="5"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../AreaDenial")
+event = &"start_area_attack"
+guard = SubResource("Resource_jdig8")
+delay_in_seconds = "0.0"
+
+[node name="RangedProjectiles" type="Node" parent="StateChart/Root/Phase" index="2"]
+script = ExtResource("6_hwjid")
+initial_state = NodePath("MoveToCenter")
+
+[node name="MoveToCenter" type="Node" parent="StateChart/Root/Phase/RangedProjectiles" index="0"]
+script = ExtResource("7_xwrw7")
+
+[node name="toFireProjectiles" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/MoveToCenter" index="0"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../FireProjectiles")
+event = &"start_projectiles"
+delay_in_seconds = "0.0"
+
+[node name="FireProjectiles" type="Node" parent="StateChart/Root/Phase/RangedProjectiles" index="1"]
+script = ExtResource("7_xwrw7")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/FireProjectiles" index="0"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../Recover")
+event = &"end_projectiles"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/RangedProjectiles" index="2"]
+script = ExtResource("7_xwrw7")
+
+[node name="toMoveToCenter" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/Recover" index="0"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../MoveToCenter")
+event = &"change_position"
+delay_in_seconds = "0.0"
+
+[node name="toFireProjectiles" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/Recover" index="1"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../FireProjectiles")
+event = &"fire_again"
+delay_in_seconds = "0.0"
+
+[node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/RangedProjectiles" index="3"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../ChasePlayer")
+event = &"start_chase_attack"
+guard = SubResource("Resource_yx44c")
+delay_in_seconds = "0.0"
+
+[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/RangedProjectiles" index="4"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../AreaDenial")
+event = &"start_area_attack"
+guard = SubResource("Resource_jdig8")
+delay_in_seconds = "0.0"
+
+[node name="AreaDenial" type="Node" parent="StateChart/Root/Phase" index="3"]
+script = ExtResource("6_hwjid")
+initial_state = NodePath("MoveToCenter")
+
+[node name="MoveToCenter" type="Node" parent="StateChart/Root/Phase/AreaDenial" index="0"]
+script = ExtResource("7_xwrw7")
+
+[node name="toSpawnDamageAreas" type="Node" parent="StateChart/Root/Phase/AreaDenial/MoveToCenter" index="0"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../SpawnDamageAreas")
+event = &"start_area_attack"
+delay_in_seconds = "0.0"
+
+[node name="SpawnDamageAreas" type="Node" parent="StateChart/Root/Phase/AreaDenial" index="1"]
+script = ExtResource("7_xwrw7")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AreaDenial/SpawnDamageAreas" index="0"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../Recover")
+event = &"finish_area_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/AreaDenial" index="2"]
+script = ExtResource("7_xwrw7")
+
+[node name="toMoveToCenter" type="Node" parent="StateChart/Root/Phase/AreaDenial/Recover" index="0"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../MoveToCenter")
+event = &"change_position"
+delay_in_seconds = "0.0"
+
+[node name="toSpawnDamageAreas" type="Node" parent="StateChart/Root/Phase/AreaDenial/Recover" index="1"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../SpawnDamageAreas")
+event = &"fire_again"
+delay_in_seconds = "0.0"
+
+[node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/AreaDenial" index="3"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../ChasePlayer")
+event = &"start_chase_attack"
+guard = SubResource("Resource_yx44c")
+delay_in_seconds = "0.0"
+
+[node name="toRangedProjectiles" type="Node" parent="StateChart/Root/Phase/AreaDenial" index="4"]
+script = ExtResource("3_p1uc1")
+to = NodePath("../../RangedProjectiles")
+event = &"start_ranged_attack"
+guard = SubResource("Resource_jdig8")
+delay_in_seconds = "0.0"
+
+[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/TargetPlayer" to="." method="_on_phase_target_player_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/Charge" to="." method="_on_phase_chase_player_charge_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/Recover" to="." method="_on_phase_chase_player_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/MoveToCenter" to="." method="_on_phase_ranged_projectiles_move_to_center_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/RangedProjectiles/MoveToCenter" to="." method="_on_phase_ranged_projectiles_move_to_center_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/FireProjectiles" to="." method="_on_phase_ranged_projectiles_fire_projectiles_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/Recover" to="." method="_on_phase_ranged_projectiles_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/MoveToCenter" to="." method="_on_phase_area_denial_move_to_center_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/AreaDenial/MoveToCenter" to="." method="_on_phase_area_denial_move_to_center_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/SpawnDamageAreas" to="." method="_on_phase_area_denial_spawn_damage_areas_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/Recover" to="." method="_on_phase_area_denial_recover_state_entered"]

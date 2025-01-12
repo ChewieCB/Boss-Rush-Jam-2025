@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://boemicqsapjag"]
+
+[ext_resource type="Shader" path="res://src/maps/roulette_boss/void_shader.gdshader" id="1_2v0p3"]
+[ext_resource type="Texture2D" uid="uid://blm66cqdis6a4" path="res://assets/textures/temp_void.png" id="2_2ilwi"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_2v0p3")
+shader_parameter/warp_ScreenSpace = true
+shader_parameter/texture_albedo = ExtResource("2_2ilwi")

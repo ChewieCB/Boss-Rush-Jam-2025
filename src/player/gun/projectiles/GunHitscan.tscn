@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dtf2h2dydbopt"]
+[gd_scene load_steps=8 format=3 uid="uid://dtf2h2dydbopt"]
 
 [ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="1_1gwnq"]
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_hitscan.gd" id="1_uqjuh"]

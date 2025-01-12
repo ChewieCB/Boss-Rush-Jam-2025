@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://pneqnqaigv43"
+path="res://.godot/imported/roulette.map-8bb3ce82f1665471e4954dc88f3f94a3.tres"
+
+[deps]
+
+source_file="res://src/maps/roulette_boss/roulette.map"
+dest_files=["res://.godot/imported/roulette.map-8bb3ce82f1665471e4954dc88f3f94a3.tres"]
+
+[params]
+
