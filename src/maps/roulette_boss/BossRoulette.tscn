@@ -2086,6 +2086,7 @@ omni_range = 10.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13, 38)
 collision_layer = 0
 collision_mask = 2
+monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BossTriggerVolume"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1.38721)
@@ -4104,8 +4105,6 @@ entProperties = {
 
 [node name="entity_56_BossRoulette" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("20_xl4ng")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.40625, 0)
-shield_count = 4
-balls_to_spawn_phase_1 = 1
 target = NodePath("../entity_1_PlayerRef")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

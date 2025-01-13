@@ -10,7 +10,7 @@ class_name Player
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
 @export var dash_cd: float = 0.5
-@export var angular_momentum_multiplier = 1.3
+@export var angular_momentum_multiplier = 0.4
 @export var aim_ray_prefab: PackedScene
 
 @export var health_component: HealthComponent
@@ -52,7 +52,6 @@ var jumped: bool = false
 var can_coyote_jump: bool = false
 var vel_horizontal := Vector2(0, 0)
 var vel_vertical: float = 0
-var cached_angular_velocity: Vector3
 
 var is_dashing: bool = false
 var is_sliding: bool:
@@ -195,10 +194,20 @@ func _physics_process(delta):
 
 		var velocity_dir = velocity.normalized()
 		velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * bonus_speed
+		
+		# Let the player ignore the wheelspin if they are moving
+		var floor_velocity = get_platform_velocity()
+		if floor_velocity and input_dir != Vector2.ZERO:
+			var dir_weight = input_dir.dot(Vector2(
+				floor_velocity.normalized().x,
+				floor_velocity.normalized().z,
+				)
+			)
+			print(dir_weight)
+			velocity += floor_velocity * dir_weight
+		
 		move_and_slide()
 		
-		cached_angular_velocity = get_platform_angular_velocity()
-
 		#show_debug_label()
 		var gun_sway_velocity = velocity * transform.basis
 		if not is_swapping_gun:
@@ -229,16 +238,16 @@ func jump(multiplier = 1.0):
 	vel_vertical = JUMP_FORCE * multiplier
 	
 	# Conserve angular momentum when jumping off spinning objevts
-	if cached_angular_velocity:
-		var angular_velocity = cached_angular_velocity
-		var pos_relative_to_center = self.global_position
-		var linear_velocity = angular_velocity.cross(pos_relative_to_center)
-		var velocity_to_center = self.global_position.direction_to(Vector3.ZERO) * 10.0
-		
-		vel_horizontal += Vector2(
-			linear_velocity.x,
-			linear_velocity.z
-		) * angular_momentum_multiplier + Vector2(velocity_to_center.x, velocity_to_center.z)
+	#if cached_angular_velocity:
+		#var angular_velocity = cached_angular_velocity
+		#var pos_relative_to_center = self.global_position
+		#var linear_velocity = angular_velocity.cross(pos_relative_to_center)
+		#var velocity_to_center = self.global_position.direction_to(Vector3.ZERO) * 10.0
+		#
+		#vel_horizontal += Vector2(
+			#linear_velocity.x,
+			#linear_velocity.z
+		#) * angular_momentum_multiplier + Vector2(velocity_to_center.x, velocity_to_center.z)
 	
 	jumped = true
 	state_chart.send_event("jump")

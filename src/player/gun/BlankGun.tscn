@@ -14,7 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://cp0e7vka232ws" path="res://src/player/barrel/TrickshotBarrel.tscn" id="12_06gif"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="12_ukph6"]
 [ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="13_4ecyt"]
-[ext_resource type="PackedScene" uid="uid://dy7nqvo7uq1ti" path="res://src/player/barrel/DynamicAdvantageBarrel.tscn" id="13_4flyn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
 albedo_color = Color(0.459708, 0.464844, 0.460992, 1)
