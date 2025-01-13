@@ -4104,6 +4104,7 @@ entProperties = {
 
 [node name="entity_56_BossRoulette" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("20_xl4ng")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.40625, 0)
+current_phase = 1
 barrier_sweep_time = 1.7
 target = NodePath("../entity_1_PlayerRef")
 

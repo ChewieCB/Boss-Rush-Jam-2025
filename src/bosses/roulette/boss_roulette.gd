@@ -6,6 +6,8 @@ signal change_wheel_speed(speed: float)
 @onready var hurtbox_mesh: MeshInstance3D = hurtbox.get_node("MeshInstance3D")
 var wheel_rotation_speed: float = 0.0
 
+@export var current_phase: int = 1
+
 @export_category("Attacks")
 @export var barrier_phase_count: int = 3
 @export var shields_phase_count: int = 1
@@ -42,6 +44,7 @@ var active_balls: Array = []
 @export var wave_height: float = 1.0
 @export var wave_pushback_force: float = 35.0
 @export var wave_damage: float = 10.0
+@export var wave_material: ShaderMaterial
 @export_subgroup("Center Pushback")
 @export var max_center_pushback_radius: float = 8.0
 # Drop Segments
@@ -77,8 +80,18 @@ func activate() -> void:
 	state_chart.send_event("start_phase_2")
 
 
+func select_attack() -> void:
+	match current_phase:
+		1:
+			select_attack_phase_1()
+		2:
+			select_attack_phase_2()
+		_:
+			push_error("Invalid phase %s" % current_phase)
+
+
 # TODO - condense this logic to be quicker and easier to configure attack chances
-func change_phase_1() -> void:
+func select_attack_phase_1() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_barrier_attack",
@@ -94,7 +107,7 @@ func change_phase_1() -> void:
 	# If we've somehow exluded all of the possible phases, 
 	# the counters have been reset so just call this method again.
 	if possible_phases == []:
-		change_phase_1()
+		select_attack()
 		return
 	
 	for phase in possible_phases.duplicate():
@@ -106,11 +119,11 @@ func change_phase_1() -> void:
 	state_chart.send_event(new_phase)
 
 
-func change_phase_2() -> void:
+func select_attack_phase_2() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
-		#"start_pushback_attack",
-		"start_barrier_attack",
+		"start_pushback_attack",
+		#"start_barrier_attack",
 	]
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	print(new_phase)
@@ -122,11 +135,12 @@ func _check_shields() -> void:
 		state_chart.send_event("shields_destroyed")
 
 
-func barrier_glow(value: float, target_color: Color):
-	var current_color: Color = hurtbox_mesh.mesh.material.get("shader_parameter/color")
+func material_glow(value: float, material: Material, target_color: Color):
+	var current_color: Color = material.get("shader_parameter/color")
 	var lerp_color := target_color.lerp(current_color, value)
-	hurtbox_mesh.mesh.material.set("shader_parameter/color", lerp_color)
-	hurtbox_mesh.mesh.material.next_pass.emission = lerp_color
+	material.set("shader_parameter/color", lerp_color)
+	if material.next_pass:
+		material.next_pass.emission = lerp_color
 
 
 func sweep_barrier(
@@ -140,8 +154,8 @@ func sweep_barrier(
 		state_chart.send_event("attack_telegraph")
 		var telegraph_tween = get_tree().create_tween()
 		var barrier_color = hurtbox_mesh.mesh.material.get("shader_parameter/color")
-		telegraph_tween.tween_method(barrier_glow.bind(Color.RED), 0, 1, telegraph_delay/2)
-		telegraph_tween.chain().tween_method(barrier_glow.bind(barrier_color), 0, 1, telegraph_delay/2)
+		telegraph_tween.tween_method(material_glow.bind(hurtbox_mesh.mesh.material, Color.RED), 0, 1, telegraph_delay/2)
+		telegraph_tween.chain().tween_method(material_glow.bind(hurtbox_mesh.mesh.material, barrier_color), 0, 1, telegraph_delay/2)
 		await telegraph_tween.finished
 		state_chart.send_event("attack_start")
 		
@@ -197,9 +211,9 @@ func spawn_center_wave(
 	max_radius: float, 
 	spawned_wave_time: float = wave_time, 
 	spawned_wave_height: float = wave_height, 
+	telegraph: bool = false,
 	callback: Callable = func(): pass
 ) -> void:
-	SoundManager.play_sound(TEMP_sfx_area_1)
 	var area_pos: Vector3 = Vector3.ZERO
 	area_pos.y -= wave_height
 	
@@ -222,7 +236,6 @@ func spawn_center_wave(
 	
 	var debug_mesh_instance = MeshInstance3D.new()
 	var mesh = CylinderMesh.new()
-	var sphere_mat = ORMMaterial3D.new()
 	
 	spawned_area_objects.append([area_collider, debug_mesh_instance])
 	
@@ -233,15 +246,27 @@ func spawn_center_wave(
 	debug_mesh_instance.cast_shadow = false
 	debug_mesh_instance.global_position = area_pos
 	
-	mesh.bottom_radius = 0.01
-	mesh.top_radius = 0.01
+	mesh.bottom_radius = 0.0
+	mesh.top_radius = 0.0
 	mesh.height = spawned_wave_height
-	mesh.material = sphere_mat
+	mesh.material = wave_material
 	
-	sphere_mat.transparency = true
-	sphere_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	sphere_mat.cull_mode = 2
-	sphere_mat.albedo_color = Color(Color.CYAN, 0.5)
+	if telegraph:
+		state_chart.send_event("attack_telegraph")
+		var telegraph_tween = get_tree().create_tween()
+		var mesh_color: Color = debug_mesh_instance.mesh.material.get("shader_parameter/color")
+		
+		telegraph_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", 6.0, telegraph_time/2)
+		telegraph_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", 6.0, telegraph_time/2)
+		telegraph_tween.parallel().tween_method(material_glow.bind(debug_mesh_instance.mesh.material, Color.RED), 0, 1, telegraph_time/2)
+		telegraph_tween.chain().tween_property(debug_mesh_instance, "mesh:bottom_radius", 1.0, telegraph_time/2)
+		telegraph_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", 1.0, telegraph_time/2)
+		telegraph_tween.parallel().tween_method(material_glow.bind(debug_mesh_instance.mesh.material, mesh_color), 0, 1, telegraph_time/2)
+		await telegraph_tween.finished
+	
+	state_chart.send_event("attack_start")
+	var wave_attack_callback: Callable = func():
+		state_chart.send_event("finish_wave")
 	
 	# Animate the visual
 	var tween = get_tree().create_tween()
@@ -303,8 +328,10 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
-	if new_health < health_component.max_health * 0.5:
+	if new_health <= health_component.max_health * 0.66:
 		state_chart.send_event("start_phase_2")
+	elif new_health < health_component.max_health * 0.33:
+		state_chart.send_event("start_phase_3")
 
 func _on_pushback_area_body_entered(body: Node3D) -> void:
 	if body is Player:
@@ -392,7 +419,8 @@ func _on_phase_1_state_entered() -> void:
 	debug_phase_label.text = "Phase 1"
 	change_wheel_speed.emit(0.6)
 	wheel_rotation_speed = 0.6
-	change_phase_1()
+	current_phase = 1
+	select_attack()
 
 #### Phase 1 | Barrier Sweep
 func _on_damage_barrier_targeting_state_entered() -> void:
@@ -429,7 +457,7 @@ func _on_damage_barrier_recover_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Recover"
 	barrier_phase_count += 1
 	await get_tree().create_timer(attack_recovery_time * 2).timeout
-	change_phase_1()
+	select_attack()
 	state_chart.send_event("end_recovery")
 
 
@@ -458,7 +486,7 @@ func _on_ball_projectile_recover_state_entered() -> void:
 	debug_state_label.text = "Multiball | Recovering"
 	ball_phase_count += 1
 	await get_tree().create_timer(attack_recovery_time).timeout
-	change_phase_1()
+	select_attack()
 	state_chart.send_event("end_recovery")
 
 
@@ -472,24 +500,31 @@ func _on_phase_2_state_entered() -> void:
 	change_wheel_speed.emit(0.8)
 	wheel_rotation_speed = 0.8
 	state_chart.send_event("start_shields")
-	change_phase_2()
+	current_phase = 2
+	select_attack()
 
 
 #### Phase 2 | Shockwave
-func _on_pushback_wave_spawn_wave_state_entered() -> void:
-	debug_state_label.text = "Pushback | Wave"
+func _on_phase_2_pushback_wave_targeting_state_entered() -> void:
+	debug_state_label.text = "Shockwave | Targeting"
+	state_chart.send_event("start_targeting")
+	await get_tree().create_timer(1.2).timeout
+	state_chart.send_event("start_wave")
+
+func _on_phase_2_pushback_wave_spawn_wave_state_entered() -> void:
+	debug_state_label.text = "Shockwave | Burst"
 	
 	state_chart.send_event("attack_telegraph")
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
 	var wave_attack_callback: Callable = func():
 		state_chart.send_event("finish_wave")
-	spawn_center_wave(max_wave_radius, wave_time, wave_height, wave_attack_callback)
+	spawn_center_wave(max_wave_radius, wave_time, wave_height, true, wave_attack_callback)
 
-func _on_pushback_wave_recover_state_entered() -> void:
-	debug_state_label.text = "Pushback | Recovering"
+func _on_phase_2_pushback_wave_recover_state_entered() -> void:
+	debug_state_label.text = "Shockwave | Recovering"
 	await get_tree().create_timer(attack_recovery_time).timeout
-	change_phase_1()
+	select_attack()
 	state_chart.send_event("end_recovery")
 
 
@@ -615,5 +650,5 @@ func _on_phase_3_dropping_segments_recover_state_entered() -> void:
 	debug_state_label.text = "Segment Drop | Recover"
 	#drop_phase_count += 1
 	await get_tree().create_timer(attack_recovery_time).timeout
-	change_phase_2()
+	select_attack()
 	state_chart.send_event("end_recovery")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dd7xt2ptfqbkw"]
+[gd_scene load_steps=25 format=3 uid="uid://dd7xt2ptfqbkw"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_jhwuw"]
 [ext_resource type="Script" path="res://src/bosses/roulette/boss_roulette.gd" id="2_m116k"]
@@ -7,9 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://yjhwpjyorotf" path="res://src/bosses/roulette/BossShield.tscn" id="4_bcfal"]
 [ext_resource type="PackedScene" uid="uid://cpicsh5bemc0b" path="res://src/bosses/roulette/RouletteBall.tscn" id="4_pnl31"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="5_m3ad2"]
+[ext_resource type="Material" uid="uid://voft28so03rt" path="res://src/bosses/roulette/BarrierMatBlue.tres" id="5_tmeqi"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="6_lkakv"]
 [ext_resource type="Texture2D" uid="uid://cw2qiop6puebo" path="res://src/bosses/base/assets/malina_boss_sprite_placeholder.png" id="6_p3iyj"]
-[ext_resource type="Material" uid="uid://dt63xhaj0rbay" path="res://src/bosses/roulette/shield_mat.tres" id="7_05v1l"]
+[ext_resource type="Material" uid="uid://bl2wsskw41kaa" path="res://src/bosses/roulette/BarrierMat.tres" id="7_nq11i"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_yu3uh"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_edit5"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="9_7dg1x"]
@@ -27,7 +28,7 @@ height = 6.6
 size = Vector3(35, 2, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_n2kfn"]
-material = ExtResource("7_05v1l")
+material = ExtResource("7_nq11i")
 size = Vector3(35, 3, 1)
 
 [sub_resource type="Resource" id="Resource_31yl5"]
@@ -58,6 +59,7 @@ radius = 6.0
 collision_mask = 26
 motion_mode = 1
 script = ExtResource("2_m116k")
+current_phase = 2
 barrier_phase_count = 3
 shields_phase_count = 1
 ball_phase_count = 1
@@ -78,6 +80,7 @@ wave_time = 1.4
 wave_height = 1.0
 wave_pushback_force = 35.0
 wave_damage = 10.0
+wave_material = ExtResource("5_tmeqi")
 max_center_pushback_radius = 8.0
 drop_delay = 0.5
 drop_time = 1.0
@@ -398,7 +401,7 @@ delay_in_seconds = "0.0"
 
 [node name="PushbackWave" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
 script = ExtResource("7_yu3uh")
-initial_state = NodePath("SpawnWave")
+initial_state = NodePath("Targeting")
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/PushbackWave" index="0"]
 script = ExtResource("8_edit5")
@@ -568,8 +571,9 @@ shape = SubResource("CylinderShape3D_cbruj")
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_phase_2_damage_barrier_spawn_barrier_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/Recover" to="." method="_on_damage_barrier_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Targeting" to="." method="_on_phase_2_pushback_wave_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/SpawnWave" to="." method="_on_phase_2_pushback_wave_spawn_wave_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Recover" to="." method="_on_damage_barrier_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Recover" to="." method="_on_phase_2_pushback_wave_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" to="." method="_on_phase_2_dropping_segments_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" to="." method="_on_phase_2_dropping_segments_dropping_state_entered"]
