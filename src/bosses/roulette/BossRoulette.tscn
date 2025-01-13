@@ -61,9 +61,11 @@ collision_mask = 26
 motion_mode = 1
 script = ExtResource("2_m116k")
 current_phase = 1
-barrier_phase_count = 3
-shields_phase_count = 1
-ball_phase_count = 1
+max_barrier_phase_count = 2
+max_shockwave_phase_count = 2
+max_shields_phase_count = 1
+max_ball_phase_count = 1
+max_drop_phase_count = 2
 shield_scene = ExtResource("4_bcfal")
 shields_spawn_cooldown = 15.0
 shields_max_time = 12.0
@@ -75,7 +77,7 @@ barrier_sweep_time = 2.2
 ball_scene = ExtResource("4_pnl31")
 balls_to_spawn_phase_1 = 3
 balls_to_spawn_phase_2 = 6
-balls_to_spawn_phase_3 = 3
+balls_to_spawn_phase_3 = 11
 ball_attack_delay = 1.0
 max_ball_lifetime = 8.0
 max_wave_radius = 24.0
@@ -134,7 +136,7 @@ shape = SubResource("BoxShape3D_6q8u4")
 [node name="Shields" type="Node3D" parent="." index="4"]
 
 [node name="HealthComponent" parent="." index="5"]
-max_health = 10000.0
+max_health = 8500.0
 
 [node name="NavigationComponent" parent="." index="6"]
 enabled = false
@@ -687,6 +689,7 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/Absorb" to="." method="_on_shields_absorb_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/Recover" to="." method="_on_shields_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase1/DamageBarrier" to="." method="_on_damage_barrier_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/Targeting" to="." method="_on_damage_barrier_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/SpawnBarrier" to="." method="_on_phase_1_damage_barrier_spawn_barrier_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_exited"]
@@ -706,9 +709,11 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" to="." method="_on_phase_3_dropping_segments_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" to="." method="_on_phase_3_dropping_segments_dropping_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Recover" to="." method="_on_phase_3_dropping_segments_recover_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Targeting" to="." method="_on_ball_projectile_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Targeting" to="." method="_on_phase_3_ball_projectile_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Recover" to="." method="_on_ball_projectile_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Recover" to="." method="_on_phase_3_projectile_balls_recover_state_entered"]
 [connection signal="timeout" from="ShieldsAbsorbTimer" to="." method="_on_shields_absorb_timer_timeout"]
 [connection signal="timeout" from="ShieldsSpawnTimer" to="." method="_on_shields_spawn_timer_timeout"]
 [connection signal="body_entered" from="PushbackArea" to="." method="_on_pushback_area_body_entered"]
