@@ -4,7 +4,7 @@ class_name RouletteBall
 signal destroyed(ball: RouletteBall)
 
 var body_state: PhysicsDirectBodyState3D
-@export var max_collisions: int = 50
+@export var max_collisions: int = -1
 var collision_count: int = 0
 
 @export var damage: float = 15
@@ -89,5 +89,5 @@ func _on_body_entered(body: Node) -> void:
 			spark(spark_pos)
 			
 			collision_count += 1
-			if collision_count == max_collisions:
+			if collision_count == max_collisions and max_collisions > 0:
 				destroy()

@@ -31,16 +31,19 @@ var previous_phase: String
 # Multiball
 @export_group("Multiball")
 @export var ball_scene: PackedScene
-@export var balls_to_spawn_phase_1: int = 1
-@export var balls_to_spawn_phase_2: int = 3
+@export var balls_to_spawn_phase_1: int = 3
+@export var balls_to_spawn_phase_2: int = 6
+@export var balls_to_spawn_phase_3: int = 3
+@export var ball_attack_delay: float = 1.0
 @export var max_ball_lifetime: float = 10.0
+@onready var ball_kill_timer: Timer = $BallKillTimer
+var active_balls: Array = []
 var ball_spawn_positions: Array
 var last_spawn: Node3D
-var active_balls: Array = []
 # Shockwave
 @export_group("Shockwave")
 @export var max_wave_radius: float = 24.0
-@export var wave_time: float = 1.4
+@export var wave_time: float = 0.7
 @export var wave_height: float = 1.0
 @export var wave_pushback_force: float = 35.0
 @export var wave_damage: float = 10.0
@@ -51,13 +54,9 @@ var active_balls: Array = []
 @export_group("Drop Segments")
 @export var drop_delay: float = 0.5
 @export var drop_time: float = 1.0
-@export var return_time: float = 3.0
+@export var drop_return_delay: float = 1.5
 var floor_segments: Array
-var segments_dropped_count: int = 0:
-	set(value):
-		segments_dropped_count = value
-		if segments_dropped_count == 0:
-			state_chart.send_event("stop_drop")
+var dropped_segments: Array
 
 
 func _ready() -> void:
@@ -70,14 +69,24 @@ func _ready() -> void:
 	shields_absorb_timer.wait_time = shields_max_time
 	
 	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
+	ball_kill_timer.wait_time = max_ball_lifetime
 	
 	super()
 
 
+func _physics_process(delta: float) -> void:
+	super(delta)
+
+
 func activate() -> void:
 	super()
-	#state_chart.send_event("start_phase_1")
-	state_chart.send_event("start_phase_2")
+	match current_phase:
+		1:
+			state_chart.send_event("start_phase_1")
+		2:
+			state_chart.send_event("start_phase_2")
+		3:
+			state_chart.send_event("start_phase_3")
 
 
 func select_attack() -> void:
@@ -86,6 +95,8 @@ func select_attack() -> void:
 			select_attack_phase_1()
 		2:
 			select_attack_phase_2()
+		3:
+			select_attack_phase_3()
 		_:
 			push_error("Invalid phase %s" % current_phase)
 
@@ -123,8 +134,32 @@ func select_attack_phase_2() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_pushback_attack",
-		#"start_barrier_attack",
+		"start_barrier_attack",
 	]
+	
+	for phase in possible_phases.duplicate():
+		if phase != previous_phase:
+			possible_phases.append(phase)
+	
+	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
+	print(new_phase)
+	state_chart.send_event(new_phase)
+
+
+func select_attack_phase_3() -> void:
+	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var possible_phases = [
+		"start_drop_attack",
+	]
+	
+	for phase in possible_phases.duplicate():
+		if phase != previous_phase:
+			possible_phases.append(phase)
+	
+	if active_balls.size() < balls_to_spawn_phase_3:
+		possible_phases.append("start_ball_attack")
+		possible_phases.append("start_ball_attack")
+	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	print(new_phase)
 	state_chart.send_event(new_phase)
@@ -176,7 +211,7 @@ func sweep_barrier(
 	return true
 
 
-func spawn_ball() -> RouletteBall:
+func spawn_ball(_target: Node3D = target, spawn_force: float = 500) -> RouletteBall:
 	var spawn: Node3D
 	if last_spawn:
 		var last_spawn_idx = ball_spawn_positions.find(last_spawn)
@@ -200,11 +235,16 @@ func spawn_ball() -> RouletteBall:
 	
 	get_tree().get_root().add_child(new_ball)
 	new_ball.global_position = spawn.global_position
-	new_ball.target = target
-	new_ball.apply_central_force(spawn.global_position.direction_to(Vector3.ZERO) * 500)
+	new_ball.target = _target
+	new_ball.apply_central_force(spawn.global_position.direction_to(Vector3.ZERO) * spawn_force)
 	
 	active_balls.append(new_ball)
 	return new_ball
+
+
+func destroy_active_balls() -> void:
+	for ball in active_balls:
+		ball.destroy()
 
 
 func spawn_center_wave(
@@ -233,6 +273,7 @@ func spawn_center_wave(
 	
 	area_collider.global_position = area_pos
 	area_collider.body_entered.connect(_on_wave_collision)
+	area_collider.body_entered.connect(area_collider.queue_free)
 	
 	var debug_mesh_instance = MeshInstance3D.new()
 	var mesh = CylinderMesh.new()
@@ -252,16 +293,17 @@ func spawn_center_wave(
 	mesh.material = wave_material
 	
 	if telegraph:
-		state_chart.send_event("attack_telegraph")
 		var telegraph_tween = get_tree().create_tween()
 		var mesh_color: Color = debug_mesh_instance.mesh.material.get("shader_parameter/color")
 		
-		telegraph_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", 6.0, telegraph_time/2)
-		telegraph_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", 6.0, telegraph_time/2)
-		telegraph_tween.parallel().tween_method(material_glow.bind(debug_mesh_instance.mesh.material, Color.RED), 0, 1, telegraph_time/2)
-		telegraph_tween.chain().tween_property(debug_mesh_instance, "mesh:bottom_radius", 1.0, telegraph_time/2)
-		telegraph_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", 1.0, telegraph_time/2)
-		telegraph_tween.parallel().tween_method(material_glow.bind(debug_mesh_instance.mesh.material, mesh_color), 0, 1, telegraph_time/2)
+		telegraph_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", 6.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+		telegraph_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", 6.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+		telegraph_tween.parallel().tween_method(material_glow.bind(debug_mesh_instance.mesh.material, Color.RED), 0, 1, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+		telegraph_tween.parallel().tween_callback(func(): state_chart.send_event("attack_telegraph")).set_delay(0)
+		telegraph_tween.chain().tween_property(debug_mesh_instance, "mesh:bottom_radius", 1.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+		telegraph_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", 1.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+		telegraph_tween.parallel().tween_method(material_glow.bind(debug_mesh_instance.mesh.material, mesh_color), 0, 1, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+		
 		await telegraph_tween.finished
 	
 	state_chart.send_event("attack_start")
@@ -269,6 +311,7 @@ func spawn_center_wave(
 		state_chart.send_event("finish_wave")
 	
 	# Animate the visual
+	SoundManager.play_sound(TEMP_sfx_area_1)
 	var tween = get_tree().create_tween()
 	tween.tween_property(mesh, "bottom_radius", max_radius, spawned_wave_time)
 	tween.parallel().tween_property(mesh, "top_radius", max_radius, spawned_wave_time)
@@ -293,24 +336,38 @@ func drop_floor_segment(segment_arr: Array) -> void:
 	var mesh: MeshInstance3D = segment_arr[0]
 	var collider: CollisionShape3D = segment_arr[1]
 	collider.disabled = true
+	
 	var tween = get_tree().create_tween()
-	var cached_mesh_y = mesh.position.y
-	var cached_collider_y = collider.position.y
 	tween.tween_property(mesh, "position:y", mesh.position.y - 20.0, drop_time)
 	tween.parallel().tween_property(mesh, "scale", Vector3.ZERO, drop_time)
 	tween.parallel().tween_property(collider, "position:y", collider.position.y - 20.0, drop_time)
-	tween.tween_callback(func():
-		segments_dropped_count += 1
-		mesh.visible = false
-		await get_tree().create_timer(return_time).timeout
-		collider.disabled = false
-		mesh.visible = true
-		var return_tween = get_tree().create_tween()
-		return_tween.tween_property(mesh, "position:y", cached_mesh_y, drop_time)
-		return_tween.parallel().tween_property(mesh, "scale", Vector3(1, 1, 1), drop_time)
-		return_tween.parallel().tween_property(collider, "position:y", cached_collider_y, drop_time)
-		return_tween.tween_callback(func(): segments_dropped_count -= 1)
-	)
+	dropped_segments.append(segment_arr)
+
+
+func return_floor_segment(segment_arr: Array) -> void:
+	var mesh: MeshInstance3D = segment_arr[0]
+	var collider: CollisionShape3D = segment_arr[1]
+	collider.disabled = false
+	mesh.visible = true
+	var tween = get_tree().create_tween()
+	tween.tween_property(mesh, "position:y", mesh.position.y + 20.0, drop_time)
+	tween.parallel().tween_property(mesh, "scale", Vector3(1, 1, 1), drop_time)
+	tween.parallel().tween_property(collider, "position:y", collider.position.y + 20.0, drop_time)
+
+
+func shake_segment(segment: MeshInstance3D, shake_count: int = 30, shake_amount: float = 0.3) -> bool:
+	var tween = get_tree().create_tween()
+	var cached_mesh_pos = segment.position
+	for j in shake_count:
+		tween.tween_property(
+			segment, 
+			"position",
+			Vector3(0, randf_range(-shake_amount, shake_amount), 0), 
+			0.05
+		).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_ELASTIC)
+	await tween.finished
+	segment.position = cached_mesh_pos
+	return true
 
 
 ## ======== Signal Callback Methods ========
@@ -328,10 +385,11 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
-	if new_health <= health_component.max_health * 0.66:
-		state_chart.send_event("start_phase_2")
-	elif new_health < health_component.max_health * 0.33:
+	if new_health < health_component.max_health * 0.40:
 		state_chart.send_event("start_phase_3")
+	elif new_health <= health_component.max_health * 0.75:
+		state_chart.send_event("start_phase_2")
+	
 
 func _on_pushback_area_body_entered(body: Node3D) -> void:
 	if body is Player:
@@ -359,7 +417,7 @@ func _on_wave_collision(body: Node3D) -> void:
 
 #### Any Phase | Shields
 func _on_shields_targeting_state_entered() -> void:
-	state_chart.send_event("start_targeting")
+	#state_chart.send_event("start_targeting")
 	#await get_tree().create_timer(2.0).timeout
 	state_chart.send_event("spawn_shields")
 
@@ -395,6 +453,8 @@ func _on_shields_absorb_timer_timeout() -> void:
 func _on_shields_absorb_state_entered() -> void:
 	var health_regained: float = 0.0
 	for shield in shields_parent.get_children():
+		if not is_instance_valid(shield):
+			continue
 		health_regained += shield.health_component.current_health
 		var tween = get_tree().create_tween()
 		tween.tween_property(shield, "position", Vector3(0, shield_height, 0), 0.3).set_trans(Tween.TRANS_SINE)
@@ -441,7 +501,7 @@ func _on_damage_barrier_targeting_state_entered() -> void:
 func _on_phase_1_damage_barrier_spawn_barrier_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Sweep"
 	
-	var sweep_count: int = 2 if randf() < 0.25 else 1
+	var sweep_count: int = 2 if randf() < 0.5 else 1
 	await sweep_barrier(sweep_count)
 	
 	state_chart.send_event("barrier_attack_end")
@@ -464,8 +524,8 @@ func _on_damage_barrier_recover_state_entered() -> void:
 #### Phase 1 | Multiball
 func _on_ball_projectile_targeting_state_entered() -> void:
 	debug_state_label.text = "Multiball | Targeting"
-	state_chart.send_event("start_targeting")
-	#await get_tree().create_timer(1.4).timeout
+	#state_chart.send_event("start_targeting")
+	await get_tree().create_timer(ball_attack_delay).timeout
 	state_chart.send_event("launch_balls")
 
 func _on_ball_projectile_launch_balls_state_entered() -> void:
@@ -473,9 +533,7 @@ func _on_ball_projectile_launch_balls_state_entered() -> void:
 	for i in balls_to_spawn_phase_1:
 		var ball = spawn_ball()
 		ball.destroyed.connect(_on_ball_destroyed)
-	await get_tree().create_timer(max_ball_lifetime).timeout
-	for ball in active_balls:
-		ball.destroy()
+	ball_kill_timer.start(max_ball_lifetime)
 
 func _on_ball_destroyed(ball: RouletteBall) -> void:
 	active_balls.erase(ball)
@@ -496,10 +554,25 @@ func _on_ball_projectile_recover_state_entered() -> void:
 # Sweep
 
 func _on_phase_2_state_entered() -> void:
+	state_chart.send_event("barrier_attack_end")
+	destroy_active_balls()
+	ball_kill_timer.stop()
+	
 	debug_phase_label.text = "Phase 2"
-	change_wheel_speed.emit(0.8)
-	wheel_rotation_speed = 0.8
+	change_wheel_speed.emit(0.7)
+	wheel_rotation_speed = 0.7
+	
 	state_chart.send_event("start_shields")
+	
+	# Mostly for decorative effect, roulette balls that circle the walls of the arena
+	for i in balls_to_spawn_phase_2:
+		var ball = spawn_ball(null, 50.0)
+		ball.health_component.is_invincible = true
+		ball.max_collisions = -1
+		ball.radial_force_magnitude = 3500.0
+		ball.central_force_magnitude = -500.0
+		ball.destroyed.connect(_on_ball_destroyed)
+	
 	current_phase = 2
 	select_attack()
 
@@ -507,45 +580,22 @@ func _on_phase_2_state_entered() -> void:
 #### Phase 2 | Shockwave
 func _on_phase_2_pushback_wave_targeting_state_entered() -> void:
 	debug_state_label.text = "Shockwave | Targeting"
-	state_chart.send_event("start_targeting")
 	await get_tree().create_timer(1.2).timeout
 	state_chart.send_event("start_wave")
 
 func _on_phase_2_pushback_wave_spawn_wave_state_entered() -> void:
 	debug_state_label.text = "Shockwave | Burst"
 	
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time).timeout
-	state_chart.send_event("attack_start")
 	var wave_attack_callback: Callable = func():
 		state_chart.send_event("finish_wave")
 	spawn_center_wave(max_wave_radius, wave_time, wave_height, true, wave_attack_callback)
 
 func _on_phase_2_pushback_wave_recover_state_entered() -> void:
 	debug_state_label.text = "Shockwave | Recovering"
+	state_chart.send_event("attack_end_now")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	select_attack()
 	state_chart.send_event("end_recovery")
-
-
-# TODO - add multiball as a wildcard this phase? 
-# i.e. spawns the balls and then immediately moves on to another attack 
-#func _on_phase_2_barrier_balls_launch_balls_state_entered() -> void:
-	#debug_state_label.text = "BarrierBall | Launching Balls"
-	#for i in balls_to_spawn_phase_2:
-		#var ball = spawn_ball()
-		#ball.destroyed.connect(_on_ball_destroyed)
-	#
-	#hurtbox.visible = true
-	#state_chart.send_event("attack_telegraph")
-	#await get_tree().create_timer(telegraph_time).timeout
-	#state_chart.send_event("attack_start")
-	#state_chart.send_event("barrier_attack")
-#
-#func _on_phase_2_barrier_balls_launch_balls_state_exited() -> void:
-	#await get_tree().create_timer(max_ball_lifetime).timeout
-	#for ball in active_balls:
-		#ball.destroy()
 
 
 ### Phase 2 | Barrier Sweep
@@ -560,7 +610,7 @@ func _on_phase_2_damage_barrier_spawn_barrier_state_entered() -> void:
 	var label_suffix: String = " (Slow)"
 	
 	var chance: float = randf()
-	if chance < 0.25:
+	if chance < 0.4:
 		sweep_count = 3
 		sweep_rotation = TAU
 		speed_multiplier = 1.1
@@ -579,20 +629,35 @@ func _on_phase_2_damage_barrier_spawn_barrier_state_entered() -> void:
 # Segment Drop
 
 func _on_phase_3_state_entered() -> void:
-	pass # Replace with function body.
+	state_chart.send_event("barrier_attack_end")
+	destroy_active_balls()
+	
+	debug_phase_label.text = "Phase 3"
+	
+	change_wheel_speed.emit(0.8)
+	wheel_rotation_speed = 0.8
+	current_phase = 3
+	
+	# Mostly for decorative effect, roulette balls that circle the walls of the arena
+	for i in 11:
+		var ball = spawn_ball(null, 50.0)
+		ball.health_component.is_invincible = true
+		ball.max_collisions = -1
+		ball.radial_force_magnitude = 3500.0
+		ball.central_force_magnitude = -500.0
+		ball.destroyed.connect(_on_ball_destroyed)
+	
+	select_attack()
 
 
 ### Phase 3 | Segment Drop
 func _on_phase_3_dropping_segments_targeting_state_entered() -> void:
 	debug_state_label.text = "Segment Drop | Targeting"
-	state_chart.send_event("start_targeting")
 	await get_tree().create_timer(1.5).timeout
 	state_chart.send_event("start_drop")
 
 func _on_phase_3_dropping_segments_dropping_state_entered() -> void:
 	debug_state_label.text = "Segment Drop | Dropping"
-	var shake_count: int = 20
-	var shake: float = 0.4
 	var drop_count: int = 4
 	var segments_to_drop = floor_segments.duplicate()
 	# TODO - move this logic into discrete methods for different drop behaviour
@@ -631,24 +696,30 @@ func _on_phase_3_dropping_segments_dropping_state_entered() -> void:
 						return true
 					return false
 		)
-		var tween = get_tree().create_tween()
+		
 		var segment_mesh = segments_to_drop.front()[0]
-		var cached_mesh_pos = segment_mesh.position
-		for j in shake_count:
-			tween.tween_property(
-				segment_mesh, 
-				"position",
-				Vector3(0, randf_range(-shake, shake), 0), 
-				0.05
-			)
-		await tween.finished
-		segment_mesh.position = cached_mesh_pos
+		await shake_segment(segment_mesh)
 		drop_floor_segment(segments_to_drop.pop_front())
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(drop_delay).timeout
+	
+	await get_tree().create_timer(drop_return_delay).timeout
+	state_chart.send_event("stop_drop")
 
 func _on_phase_3_dropping_segments_recover_state_entered() -> void:
 	debug_state_label.text = "Segment Drop | Recover"
-	#drop_phase_count += 1
-	await get_tree().create_timer(attack_recovery_time).timeout
+	for i in range(dropped_segments.size()):
+		return_floor_segment(dropped_segments.pop_front())
+	
+	await get_tree().create_timer(attack_recovery_time * 2).timeout
+	
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+### Phase 3 | Multiball
+func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
+	debug_state_label.text = "Multiball | Launching"
+	for i in balls_to_spawn_phase_3 - active_balls.size():
+		var ball = spawn_ball()
+		ball.destroyed.connect(_on_ball_destroyed)
+	
+	state_chart.send_event("end_balls_launch")
