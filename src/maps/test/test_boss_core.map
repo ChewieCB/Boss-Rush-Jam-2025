@@ -1399,3 +1399,8 @@
 "origin" "640 32 1364"
 "_tb_group" "625"
 }
+// entity 33
+{
+"classname" "BossTest"
+"origin" "-184 40 24"
+}
