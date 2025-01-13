@@ -25,6 +25,7 @@ func _ready() -> void:
 	for child in effect_container.get_children():
 		child.owner_barrel = self
 		effect_list.append(child)
+	instant_spin()
 
 
 func start_spin():
