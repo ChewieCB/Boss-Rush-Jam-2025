@@ -8,10 +8,10 @@
 script = ExtResource("3_curd4")
 barrel_id = 6
 barrel_name = "Trickshot"
-barrel_desc = "[b]Projectile Count Barrel[/b]
+barrel_desc = "[b]Trickshot Barrel[/b]
 Make your bullet move in amazing ways.
 
-Possible roll:
+Possible rolls:
 [ul]
 Ricochet: Bullets bounce of walls and enemies.
 Homing: Bullets homing toward enemies, but significantly reduced damage.

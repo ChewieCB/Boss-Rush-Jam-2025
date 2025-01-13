@@ -42,6 +42,8 @@ func add_barrel_to_inventory(data: BarrelDataResource):
 	inventory_barrels.append(data)
 
 func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
+	if player.current_gun.is_reloading:
+		return
 	if len(equipped_barrels) >= player.current_gun.max_barrels:
 		return
 	var found_data: BarrelDataResource = null
@@ -55,6 +57,8 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
 		GameManager.player.current_gun.install_barrel(found_data.barrel_prefab)
 
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
+	if player.current_gun.is_reloading:
+		return
 	var found_data: BarrelDataResource = null
 	for data in equipped_barrels:
 		if data.barrel_id == search_barrel_id:

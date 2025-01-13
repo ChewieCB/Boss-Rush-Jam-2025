@@ -11,7 +11,7 @@ barrel_name = "Archetype"
 barrel_desc = "[b]Archetype Barrel[/b]
 Change the innate nature of the gun. Ideally put this barrel at the first position.
 
-Possible roll:
+Possible rolls:
 [ul]
 SMG: High firerate and magazine. Low damage.
 Shotgun: High damage and multiple projectiles, but high spread.

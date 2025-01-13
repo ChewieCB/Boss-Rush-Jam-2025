@@ -315,6 +315,7 @@ func install_barrel(barrel_prefab: PackedScene):
 			child.add_child(barrel_inst)
 			# installed_barrels.append(barrel_inst)
 			break
+	magazine_ammo_left = 0
 	recheck_installed_barrels()
 
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):

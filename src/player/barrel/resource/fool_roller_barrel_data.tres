@@ -11,7 +11,7 @@ barrel_name = "Fool Roller"
 barrel_desc = "[b]Fool Roller Barrel[/b]
 Add some strange effects to your gun.
 
-Possible roll:
+Possible rolls:
 [ul]
 Double Tap: Shot in burst of two.
 Ammo Leech: Small chance to refund ammo on hit, but reduce your damage.
