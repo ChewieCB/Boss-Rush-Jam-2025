@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=34 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://dkjvdnf0hufiv" path="res://src/player/assets/sfx/temp/Player_damaged_1.mp3" id="2_kd0pf"]
@@ -26,6 +26,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
 [ext_resource type="PackedScene" uid="uid://d2tb8ogqlaxhy" path="res://src/player/gun/BlankGun.tscn" id="17_2uqul"]
 [ext_resource type="PackedScene" uid="uid://dxau0o2083o1d" path="res://src/ui/player/PlayerHealthBarUI.tscn" id="19_n1ar7"]
+[ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="22_qf5o4"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -157,7 +158,8 @@ texture_albedo = ExtResource("3_tgexf")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
-z_index = 2
+visible = false
+z_index = 10
 
 [node name="HealthUI" type="Control" parent="UI"]
 layout_mode = 3
@@ -200,7 +202,6 @@ horizontal_alignment = 2
 z_as_relative = false
 
 [node name="HardcodedGunInfo" type="Label" parent="UI"]
-visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -217,6 +218,8 @@ projectile: 8
 damage: 10
 firerate: 2/s"
 horizontal_alignment = 2
+
+[node name="InventoryUI" parent="UI" instance=ExtResource("22_qf5o4")]
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")

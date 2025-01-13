@@ -8,7 +8,10 @@ const RESOLUTION_ARRAY = [
 
 var pause_ui: PauseUI
 var player: Player
-var last_looked_at_enemy
+
+var equipped_barrels: Array[BarrelDataResource] = []
+var inventory_barrels: Array[BarrelDataResource] = []
+
 # HACK - do this dynamically with level loading/unloading in the elevator
 var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3

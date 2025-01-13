@@ -11,9 +11,10 @@ class_name Player
 @export var max_air_jump = 2
 @export var dash_cd: float = 0.5
 @export var aim_ray_prefab: PackedScene
-
 @export var health_component: HealthComponent
+
 @onready var hurt_overlay: Control = $UI/HurtOverlay
+@onready var inventory_ui: InventoryUI = $UI/InventoryUI
 
 @onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
 @onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
@@ -98,7 +99,10 @@ func _input(event):
 	if controls_disabled:
 		return
 
-	if event is InputEventMouseMotion:
+	if event.is_action_pressed("open_inventory"):
+		inventory_ui.toggle()
+
+	if event is InputEventMouseMotion and not inventory_ui.visible:
 		rotate_player(event)
 
 	if event.is_action_pressed("spin_reload"):

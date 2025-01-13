@@ -13,7 +13,9 @@ var effect_list: Array[BaseBarrelEffect] = []
 var spin_interval_timer = 0
 var is_spinning = false
 var chosen_id = 0
+var is_equipped = false
 
+ 
 const SPIN_INTERVAL = 0.1
 
 func _ready() -> void:

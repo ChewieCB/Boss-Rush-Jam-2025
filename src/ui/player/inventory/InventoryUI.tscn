@@ -1,0 +1,208 @@
+[gd_scene load_steps=3 format=3 uid="uid://gwlfcdvj2q8w"]
+
+[ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_r38si"]
+[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="1_vlm2x"]
+
+[node name="InventoryUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_r38si")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 120.0
+offset_top = 128.0
+offset_right = -128.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.584314)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_vlm2x")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -256.0
+offset_top = 144.0
+offset_right = 255.0
+offset_bottom = 227.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 60
+text = "Inventory"
+horizontal_alignment = 1
+
+[node name="EquipTitle" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -640.0
+offset_top = 256.0
+offset_right = -129.0
+offset_bottom = 312.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "Equipped (0/3)"
+horizontal_alignment = 1
+
+[node name="InventoryTitle" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 144.0
+offset_top = 256.0
+offset_right = 655.0
+offset_bottom = 311.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "In bag"
+horizontal_alignment = 1
+
+[node name="EquippedBarrelContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+offset_left = 192.0
+offset_top = 320.0
+offset_right = 960.0
+offset_bottom = 420.0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="EquippedBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect2" type="ColorRect" parent="EquippedBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect3" type="ColorRect" parent="EquippedBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 192.0
+offset_top = 552.0
+offset_right = 960.0
+offset_bottom = 896.0
+color = Color(0.505882, 0.505882, 0.505882, 0.27451)
+
+[node name="Barrel Description" type="RichTextLabel" parent="ColorRect2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "[b]Fool Roller Barrel[/b]
+Short explanation
+
+Possible roll:
+- Roll A: explain explain explain explain explain explain explain explain explain explain explain explain explain 
+- Roll B: explainexplain explain explain explain explain explain explain explain 
+- Roll C: explain explain explain explain explain explain explain explain explain explain explain explain explain "
+
+[node name="InventoryBarrelContainer" type="GridContainer" parent="."]
+layout_mode = 0
+offset_left = 1024.0
+offset_top = 320.0
+offset_right = 1724.0
+offset_bottom = 896.0
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 6
+
+[node name="ColorRect" type="ColorRect" parent="InventoryBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect2" type="ColorRect" parent="InventoryBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect3" type="ColorRect" parent="InventoryBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect4" type="ColorRect" parent="InventoryBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect5" type="ColorRect" parent="InventoryBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect6" type="ColorRect" parent="InventoryBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect7" type="ColorRect" parent="InventoryBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect8" type="ColorRect" parent="InventoryBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect9" type="ColorRect" parent="InventoryBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect10" type="ColorRect" parent="InventoryBarrelContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
