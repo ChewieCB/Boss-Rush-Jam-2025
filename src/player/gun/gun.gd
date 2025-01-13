@@ -316,6 +316,8 @@ func install_barrel(barrel_prefab: PackedScene):
 			# installed_barrels.append(barrel_inst)
 			break
 	magazine_ammo_left = 0
+	# This is just to force magazein UI update
+	gun_reloaded.emit()
 	recheck_installed_barrels()
 
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
