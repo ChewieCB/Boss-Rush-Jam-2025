@@ -79,6 +79,8 @@ var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
 
+var is_in_inventory = false
+
 
 func _ready():
 	GameManager.player = self
@@ -102,7 +104,10 @@ func _input(event):
 	if event.is_action_pressed("open_inventory"):
 		inventory_ui.toggle()
 
-	if event is InputEventMouseMotion and not inventory_ui.visible:
+	if is_in_inventory:
+		return
+
+	if event is InputEventMouseMotion:
 		rotate_player(event)
 
 	if event.is_action_pressed("spin_reload"):
@@ -116,18 +121,19 @@ func _input(event):
 			vel_vertical = 0
 			dash_duration_timer.start()
 
-func _process(delta):
-	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
-
-	if controls_disabled:
-		return
-
 	if Input.is_action_just_pressed("interact"):
 		if aim_ray.is_colliding():
 			var interact_collider = aim_ray.get_collider()
-			if interact_collider is ElevatorButton:
-				interact_collider.interact()
-	
+			if interact_collider:
+				if interact_collider.has_method("interact"):
+					interact_collider.interact()
+
+func _process(delta):
+	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
+
+	if controls_disabled or is_in_inventory:
+		return
+
 	if Input.is_action_pressed("shoot"):
 		# Raycast to target and damage them if hit
 		current_gun.pull_trigger()
@@ -139,65 +145,66 @@ func _process(delta):
 func _physics_process(delta):
 	if controls_disabled:
 		return
-	else:
-		if is_dashing:
-			if raw_input_dir == Vector2.ZERO:
-				raw_input_dir = Vector2(0, -1)
-				input_dir = raw_input_dir.rotated(-rotation.y)
 
-		if not is_dashing and not is_sliding:
-			raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	if is_dashing:
+		if raw_input_dir == Vector2.ZERO:
+			raw_input_dir = Vector2(0, -1)
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
-		# If the next line is for grounded only, we will have bunnyhop tech
-		# If not move, gradually reduce movespeed to 0 (speed decay)
-		vel_horizontal -= vel_horizontal.normalized() * (ACCEL_RATE / 2) * delta
-		# Stand still
-		if vel_horizontal.length_squared() < 1.0 and input_dir.length_squared() < 0.01:
-			vel_horizontal = Vector2.ZERO
+	if not is_dashing and not is_sliding and not is_in_inventory:
+		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		input_dir = raw_input_dir.rotated(-rotation.y)
 
+	# If the next line is for grounded only, we will have bunnyhop tech
+	# If not move, gradually reduce movespeed to 0 (speed decay)
+	vel_horizontal -= vel_horizontal.normalized() * (ACCEL_RATE / 2) * delta
+	# Stand still
+	if vel_horizontal.length_squared() < 1.0 and input_dir.length_squared() < 0.01:
+		vel_horizontal = Vector2.ZERO
+
+	if is_on_floor():
+		state_chart.send_event("grounded")
+		current_air_jump_count = 0
+		if vel_vertical < 0:
+			if vel_vertical < -FALL_SPEED_TO_SHAKE_CAMERA:
+				player_camera.add_trauma(HEAVY_FALL_SHAKE_TRAUMA)
+			jumped = false
+			vel_vertical = 0
+	else:
+		state_chart.send_event("airborne")
+
+	# Use the next line will make player move faster when strafing + rotate camera
+	# var current_speed = vel_horizontal.dot(input_dir)
+	var current_speed = vel_horizontal.length()
+	var add_speed = clamp(MAX_SPEED - current_speed, 0.0, ACCEL_RATE * delta)
+
+	if is_dashing or is_sliding:
+		vel_horizontal = input_dir * MAX_SPEED
+	else:
+		vel_horizontal += input_dir * add_speed
+
+	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y)
+
+	# Bonus speed
+	if is_dashing:
+		bonus_speed = DASH_SPEED
+	elif is_sliding:
+		bonus_speed = SLIDE_SPEED
+	else:
 		if is_on_floor():
-			state_chart.send_event("grounded")
-			current_air_jump_count = 0
-			if vel_vertical < 0:
-				if vel_vertical < -FALL_SPEED_TO_SHAKE_CAMERA:
-					player_camera.add_trauma(HEAVY_FALL_SHAKE_TRAUMA)
-				jumped = false
-				vel_vertical = 0
+			bonus_speed = lerpf(bonus_speed, 0, delta * 9)
 		else:
-			state_chart.send_event("airborne")
+			bonus_speed = lerpf(bonus_speed, 0, delta * 3)
 
-		# Use the next line will make player move faster when strafing + rotate camera
-		# var current_speed = vel_horizontal.dot(input_dir)
-		var current_speed = vel_horizontal.length()
-		var add_speed = clamp(MAX_SPEED - current_speed, 0.0, ACCEL_RATE * delta)
+	var velocity_dir = velocity.normalized()
+	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * bonus_speed
 
-		if is_dashing or is_sliding:
-			vel_horizontal = input_dir * MAX_SPEED
-		else:
-			vel_horizontal += input_dir * add_speed
+	#show_debug_label()
+	var gun_sway_velocity = velocity * transform.basis
+	if not is_swapping_gun:
+		gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
 
-		velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y)
-
-		# Bonus speed
-		if is_dashing:
-			bonus_speed = DASH_SPEED
-		elif is_sliding:
-			bonus_speed = SLIDE_SPEED
-		else:
-			if is_on_floor():
-				bonus_speed = lerpf(bonus_speed, 0, delta * 9)
-			else:
-				bonus_speed = lerpf(bonus_speed, 0, delta * 3)
-
-		var velocity_dir = velocity.normalized()
-		velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * bonus_speed
-		move_and_slide()
-
-		#show_debug_label()
-		var gun_sway_velocity = velocity * transform.basis
-		if not is_swapping_gun:
-			gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
+	move_and_slide()
 	camera_control(delta)
 
 func update_hud():

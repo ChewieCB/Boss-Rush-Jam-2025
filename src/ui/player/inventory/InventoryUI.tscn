@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://gwlfcdvj2q8w"]
+[gd_scene load_steps=4 format=3 uid="uid://gwlfcdvj2q8w"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_r38si"]
 [ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="1_vlm2x"]
+[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="3_775rd"]
 
 [node name="InventoryUI" type="Control"]
 layout_mode = 3
@@ -11,6 +12,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_r38si")
+barrel_item_ui_prefab = ExtResource("3_775rd")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -52,70 +54,67 @@ theme_override_font_sizes/font_size = 60
 text = "Inventory"
 horizontal_alignment = 1
 
-[node name="EquipTitle" type="Label" parent="."]
+[node name="EquipBarrelSection" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 192.0
+offset_top = -284.0
+offset_right = 960.0
+offset_bottom = 356.0
+grow_vertical = 2
+
+[node name="EquipTitle" type="Label" parent="EquipBarrelSection"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -640.0
-offset_top = 256.0
-offset_right = -129.0
-offset_bottom = 312.0
+offset_left = -255.5
+offset_right = 255.5
+offset_bottom = 56.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 40
 text = "Equipped (0/3)"
 horizontal_alignment = 1
 
-[node name="InventoryTitle" type="Label" parent="."]
+[node name="EquippedBarrelContainer" type="HBoxContainer" parent="EquipBarrelSection"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = 144.0
-offset_top = 256.0
-offset_right = 655.0
-offset_bottom = 311.0
+offset_left = -384.0
+offset_top = 64.0
+offset_right = 384.0
+offset_bottom = 164.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 40
-text = "In bag"
-horizontal_alignment = 1
-
-[node name="EquippedBarrelContainer" type="HBoxContainer" parent="."]
-layout_mode = 1
-offset_left = 192.0
-offset_top = 320.0
-offset_right = 960.0
-offset_bottom = 420.0
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="ColorRect" type="ColorRect" parent="EquippedBarrelContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="BarrelItemUI" parent="EquipBarrelSection/EquippedBarrelContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
-[node name="ColorRect2" type="ColorRect" parent="EquippedBarrelContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="BarrelItemUI2" parent="EquipBarrelSection/EquippedBarrelContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
-[node name="ColorRect3" type="ColorRect" parent="EquippedBarrelContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="BarrelItemUI3" parent="EquipBarrelSection/EquippedBarrelContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
-[node name="ColorRect2" type="ColorRect" parent="."]
-layout_mode = 0
-offset_left = 192.0
-offset_top = 552.0
-offset_right = 960.0
-offset_bottom = 896.0
+[node name="BarrelDescription" type="ColorRect" parent="EquipBarrelSection"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -384.0
+offset_top = -344.0
+offset_right = 384.0
+grow_horizontal = 2
+grow_vertical = 0
 color = Color(0.505882, 0.505882, 0.505882, 0.27451)
 
-[node name="Barrel Description" type="RichTextLabel" parent="ColorRect2"]
+[node name="RichTextLabel" type="RichTextLabel" parent="EquipBarrelSection/BarrelDescription"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -137,71 +136,95 @@ Possible roll:
 - Roll B: explainexplain explain explain explain explain explain explain explain 
 - Roll C: explain explain explain explain explain explain explain explain explain explain explain explain explain "
 
-[node name="InventoryBarrelContainer" type="GridContainer" parent="."]
-layout_mode = 0
-offset_left = 1024.0
-offset_top = 320.0
-offset_right = 1724.0
-offset_bottom = 896.0
+[node name="InventoryBarrelSection" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -896.0
+offset_top = -284.0
+offset_right = -192.0
+offset_bottom = 356.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="InventoryTitle" type="Label" parent="InventoryBarrelSection"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -59.0
+offset_right = 59.0
+offset_bottom = 55.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "In bag"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="InventoryBarrelSection"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -296.0
+offset_top = -576.0
+offset_right = 296.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="GridContainer" type="GridContainer" parent="InventoryBarrelSection/ScrollContainer"]
+layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
-columns = 6
+columns = 5
 
-[node name="ColorRect" type="ColorRect" parent="InventoryBarrelContainer"]
+[node name="ColorRect" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ColorRect2" type="ColorRect" parent="InventoryBarrelContainer"]
+[node name="ColorRect2" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ColorRect3" type="ColorRect" parent="InventoryBarrelContainer"]
+[node name="ColorRect3" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ColorRect4" type="ColorRect" parent="InventoryBarrelContainer"]
+[node name="ColorRect4" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ColorRect5" type="ColorRect" parent="InventoryBarrelContainer"]
+[node name="ColorRect5" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ColorRect6" type="ColorRect" parent="InventoryBarrelContainer"]
+[node name="ColorRect6" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ColorRect7" type="ColorRect" parent="InventoryBarrelContainer"]
+[node name="ColorRect7" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ColorRect8" type="ColorRect" parent="InventoryBarrelContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="ColorRect9" type="ColorRect" parent="InventoryBarrelContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="ColorRect10" type="ColorRect" parent="InventoryBarrelContainer"]
+[node name="ColorRect8" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 4

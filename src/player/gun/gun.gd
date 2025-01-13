@@ -12,6 +12,7 @@ class_name Gun
 @export var TEMP_regain_ammo: AudioStream
 @export var TEMP_crit: AudioStream
 
+@export var max_barrels = 3
 @export var base_damage = 10
 @export var base_projectile_amount = 1
 ## Shot per second

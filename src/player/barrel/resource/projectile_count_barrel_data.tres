@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://yx1psxr1obhn"]
+
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="1_s8fki"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="1_wfrwi"]
+[ext_resource type="PackedScene" uid="uid://ptb63xpipbk1" path="res://src/player/barrel/ProjectileCountBarrel.tscn" id="2_ig8cv"]
+
+[resource]
+script = ExtResource("1_s8fki")
+barrel_id = 5
+barrel_name = "Projectile Count"
+barrel_desc = "[b]Projectile Count Barrel[/b]
+Short explanation
+
+Possible roll:
+[ul]
+-2 projectile
+-1 projectile
++1 projectile
++2 projectile
+-25% projectile
+-50% projectile
++25% projectile
++50% projectile
++100% projectile
+[/ul]"
+barrel_image = ExtResource("1_wfrwi")
+barrel_prefab = ExtResource("2_ig8cv")

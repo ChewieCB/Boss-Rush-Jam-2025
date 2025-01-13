@@ -1,6 +1,7 @@
 extends Node3D
 class_name SpinBarrel
 
+## Maybe dont use this variable here, use in the BarrelDataResource file instead
 @export var barrel_name: String
 
 @onready var effect_container: Node3D = $EffectContainer

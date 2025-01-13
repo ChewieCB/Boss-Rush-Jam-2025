@@ -12,5 +12,7 @@ enum BarrelIdEnum {
 }
 
 @export var barrel_id: BarrelIdEnum
-@export var image_icon: Texture2D
-@export var prefab: PackedScene
+@export var barrel_name: String
+@export_multiline var barrel_desc: String
+@export var barrel_image: Texture2D
+@export var barrel_prefab: PackedScene
