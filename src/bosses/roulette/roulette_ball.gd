@@ -44,7 +44,7 @@ func _physics_process(_delta: float) -> void:
 			return
 		var homing_force = self.global_position.direction_to(target.global_position) * homing_force_magnitude
 		apply_central_force(homing_force)
-		apply_central_force(central_force / 2)
+		apply_central_force(central_force)
 	else:
 		apply_central_force(central_force)
 
