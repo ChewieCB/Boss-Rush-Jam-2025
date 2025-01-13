@@ -203,7 +203,6 @@ func _physics_process(delta):
 				floor_velocity.normalized().z,
 				)
 			)
-			print(dir_weight)
 			velocity += floor_velocity * dir_weight
 		
 		move_and_slide()

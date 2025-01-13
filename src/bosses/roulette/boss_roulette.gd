@@ -73,8 +73,8 @@ func _ready() -> void:
 
 func activate() -> void:
 	super()
-	state_chart.send_event("start_phase_1")
-	#state_chart.send_event("start_phase_2")
+	#state_chart.send_event("start_phase_1")
+	state_chart.send_event("start_phase_2")
 
 
 # TODO - condense this logic to be quicker and easier to configure attack chances
@@ -82,7 +82,7 @@ func change_phase_1() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_barrier_attack",
-		#"start_ball_attack",
+		"start_ball_attack",
 	]
 	if barrier_phase_count == max_sequential_phases:
 		possible_phases.erase("start_barrier_attack")
@@ -97,18 +97,6 @@ func change_phase_1() -> void:
 		change_phase_1()
 		return
 	
-	## If the player is further away, prioritise charges and area attacks
-	#if dist_to_target >= 30:
-		#possible_phases.append("start_ball_attack")
-		#possible_phases.append("start_ball_attack")
-		#possible_phases.append("start_ball_attack")
-	## If the player is closer, prioritise ranged attacks
-	#else:
-		#possible_phases.append("start_barrier_attack")
-		#possible_phases.append("start_barrier_attack")
-		#possible_phases.append("start_ball_attack")
-		#possible_phases.append("start_ball_attack")
-	
 	for phase in possible_phases.duplicate():
 		if phase != previous_phase:
 			possible_phases.append(phase)
@@ -121,8 +109,8 @@ func change_phase_1() -> void:
 func change_phase_2() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
-		"start_barrier_balls_attack",
-		"start_pushback_attack",
+		#"start_pushback_attack",
+		"start_barrier_attack",
 	]
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	print(new_phase)
@@ -143,7 +131,7 @@ func barrier_glow(value: float, target_color: Color):
 
 func sweep_barrier(
 	sweeps: int = 1,
-	rotation: float = TAU, 
+	sweep_rotation: float = TAU, 
 	speed_multiplier: float = 1.0,
 	telegraph_delay: float = telegraph_time,
 	time_between_sweeps: float = 1.0,
@@ -162,8 +150,8 @@ func sweep_barrier(
 		tween.tween_property(
 			self, 
 			"rotation:y", 
-			self.rotation.y + rotation, 
-			barrier_sweep_time * speed_multiplier
+			self.rotation.y + sweep_rotation, 
+			barrier_sweep_time * (sweep_rotation / TAU) / speed_multiplier
 		).set_ease(Tween.EASE_IN)
 		
 		await tween.finished
@@ -422,7 +410,7 @@ func _on_damage_barrier_targeting_state_entered() -> void:
 	await get_tree().create_timer(barrier_targeting_delay).timeout
 	state_chart.send_event("barrier_attack_start")
 
-func _on_damage_barrier_spawn_barrier_state_entered() -> void:
+func _on_phase_1_damage_barrier_spawn_barrier_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Sweep"
 	
 	var sweep_count: int = 2 if randf() < 0.25 else 1
@@ -442,7 +430,7 @@ func _on_damage_barrier_recover_state_entered() -> void:
 	barrier_phase_count += 1
 	await get_tree().create_timer(attack_recovery_time * 2).timeout
 	change_phase_1()
-	state_chart.send_event("restart_targeting")
+	state_chart.send_event("end_recovery")
 
 
 #### Phase 1 | Multiball
@@ -505,13 +493,6 @@ func _on_pushback_wave_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-### Phase 2 | Barrier Sweep
-func _on_phase_2_damage_barrier_targeting_state_entered() -> void:
-	debug_state_label.text = "BarrierBall | Targeting"
-	state_chart.send_event("start_targeting")
-	await get_tree().create_timer(0.8).timeout
-	state_chart.send_event("launch_balls")
-
 # TODO - add multiball as a wildcard this phase? 
 # i.e. spawns the balls and then immediately moves on to another attack 
 #func _on_phase_2_barrier_balls_launch_balls_state_entered() -> void:
@@ -531,18 +512,29 @@ func _on_phase_2_damage_barrier_targeting_state_entered() -> void:
 	#for ball in active_balls:
 		#ball.destroy()
 
+
+### Phase 2 | Barrier Sweep
+# Uses the same methods as the first phase, except for the spawn_barrier
+# enter state where we can tweak the actual sweep behaviours
 func _on_phase_2_damage_barrier_spawn_barrier_state_entered() -> void:
-	debug_state_label.text = "BarrierBall | Barrier Attack"
-	sweep_barrier()
-
-
-func _on_phase_2_damage_barrier_recover_state_entered() -> void:
-	hurtbox.visible = false
-	debug_state_label.text = "Barrier | Recover"
-	barrier_phase_count += 1
-	await get_tree().create_timer(attack_recovery_time).timeout
-	change_phase_2()
-	state_chart.send_event("end_recovery")
+	# 75% chance of 4 slow double sweeps around the wheel
+	# 25% chance of 3 rapid single sweeps
+	var sweep_count: int = 1
+	var sweep_rotation: float = TAU * 2
+	var speed_multiplier: float = 0.5
+	var label_suffix: String = " (Slow)"
+	
+	var chance: float = randf()
+	if chance < 0.25:
+		sweep_count = 3
+		sweep_rotation = TAU
+		speed_multiplier = 1.1
+		label_suffix = " (Fast)"
+	
+	debug_state_label.text = "Barrier | Sweep" + label_suffix
+	await sweep_barrier(sweep_count, sweep_rotation, speed_multiplier)
+	
+	state_chart.send_event("barrier_attack_end")
 
 
 #### PHASE 3 ==========================

@@ -263,24 +263,13 @@ script = ExtResource("8_edit5")
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/DamageBarrier/Recover" index="0"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Targeting")
-event = &"restart_targeting"
-delay_in_seconds = "0.0"
-
-[node name="toSpawnBarrier" type="Node" parent="StateChart/Root/Phase/Phase1/DamageBarrier/Recover" index="1"]
-script = ExtResource("4_3xtcm")
-to = NodePath("../../SpawnBarrier")
-event = &"fire_again"
+event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="toBallProjectile" type="Node" parent="StateChart/Root/Phase/Phase1/DamageBarrier" index="3"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../BallProjectile")
 event = &"start_ball_attack"
-delay_in_seconds = "0.0"
-
-[node name="toPushbackWave" type="Node" parent="StateChart/Root/Phase/Phase1/DamageBarrier" index="4"]
-script = ExtResource("4_3xtcm")
-event = &"start_pushback_attack"
 delay_in_seconds = "0.0"
 
 [node name="BallProjectile" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
@@ -438,6 +427,12 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
+[node name="toDamageBarrier" type="Node" parent="StateChart/Root/Phase/Phase2/PushbackWave" index="3"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../DamageBarrier")
+event = &"start_barrier_attack"
+delay_in_seconds = "0.0"
+
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Phase1")
@@ -562,7 +557,7 @@ shape = SubResource("CylinderShape3D_cbruj")
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/Recover" to="." method="_on_shields_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/Targeting" to="." method="_on_damage_barrier_targeting_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/SpawnBarrier" to="." method="_on_phase_1_damage_barrier_spawn_barrier_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/Recover" to="." method="_on_damage_barrier_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BallProjectile/Targeting" to="." method="_on_ball_projectile_targeting_state_entered"]
@@ -570,11 +565,11 @@ shape = SubResource("CylinderShape3D_cbruj")
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BallProjectile/Recover" to="." method="_on_ball_projectile_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/Targeting" to="." method="_on_damage_barrier_targeting_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_phase_2_damage_barrier_spawn_barrier_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/Recover" to="." method="_on_damage_barrier_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/SpawnWave" to="." method="_on_phase_2_pushback_wave_spawn_wave_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Recover" to="." method="_on_phase_2_pushback_wave_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Recover" to="." method="_on_damage_barrier_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" to="." method="_on_phase_2_dropping_segments_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" to="." method="_on_phase_2_dropping_segments_dropping_state_entered"]
