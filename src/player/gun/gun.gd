@@ -72,7 +72,7 @@ const BULLET_SPAWN_POS_VARIATION = 10
 func _ready() -> void:
 	gun_status_label.visible = false
 	magazine_ammo_left = base_magazine_size
-	recheck_installed_barrels()
+	reinstall_barrels()
 	reset_modifier(true)
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -146,7 +146,7 @@ func shoot(aim_ray: RayCast3D):
 			break
 
 		gun_shot.emit()
-		
+
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
 			await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
 
@@ -207,7 +207,7 @@ func reload():
 	if is_jammed:
 		play_failed_shoot_sfx()
 		return
-	
+
 	release_trigger()
 
 	for barrel in installed_barrels:
@@ -251,7 +251,7 @@ func reset_modifier(reload_reset = false):
 
 func jam_the_gun(duration: float = 1.0):
 	show_gun_status("Jammed...", Color.DIM_GRAY, duration)
-	
+
 	jam_timer.start(duration)
 	is_jammed = true
 
@@ -271,10 +271,10 @@ func crit_damage(damage: int) -> void:
 func show_gun_status(text: String, color: Color = Color.WHITE, duration: float = 0.4) -> void:
 	gun_status_label.modulate = color
 	gun_status_label.text = text
-	
+
 	gun_status_label.visible = true
 	gun_status_label.modulate = Color(color, 0)
-	
+
 	var tween = get_tree().create_tween()
 	tween.tween_property(gun_status_label, "modulate", Color(color, 1.0), 0.4)
 	await get_tree().create_timer(duration).timeout
@@ -330,7 +330,6 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
 				break
 	await get_tree().process_frame
 	await get_tree().process_frame
-
 	recheck_installed_barrels()
 
 func recheck_installed_barrels():
@@ -340,3 +339,13 @@ func recheck_installed_barrels():
 			var barrel = child.get_child(0)
 			barrel.owner_gun = self
 			installed_barrels.append(barrel)
+
+
+## Use after change scene
+func reinstall_barrels():
+	for i in range(len(GameManager.equipped_barrels)):
+		var barrel_inst: SpinBarrel = GameManager.equipped_barrels[i].barrel_prefab.instantiate()
+		barrel_container.get_child(i).add_child(barrel_inst)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	recheck_installed_barrels()
