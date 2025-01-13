@@ -6,7 +6,7 @@ extends Node3D
 @export var player: Player
 @export var elevator_doors: ElevatorDoors
 @export var floor_pivot: AnimatableBody3D
-@export var ROTATION_SPEED: float = 0.6:
+@export var ROTATION_SPEED: float = 0.0:
 	set(value):
 		ROTATION_SPEED = value
 		boss.wheel_rotation_speed = ROTATION_SPEED
@@ -50,7 +50,7 @@ func _physics_process(delta) -> void:
 	if ROTATION_SPEED != goal_rotation_speed:
 		ROTATION_SPEED = lerp(ROTATION_SPEED, goal_rotation_speed, delta)
 	floor_pivot.rotation.y += ROTATION_SPEED * delta
-	
+	boss.wheel_rotation_speed = ROTATION_SPEED
 	#if Input.is_action_just_pressed("interact"):
 		## Ball test code
 		#spawn_balls(1)

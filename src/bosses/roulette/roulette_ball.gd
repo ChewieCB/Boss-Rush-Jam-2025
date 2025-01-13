@@ -4,7 +4,7 @@ class_name RouletteBall
 signal destroyed(ball: RouletteBall)
 
 var body_state: PhysicsDirectBodyState3D
-@export var max_collisions: int = 50
+@export var max_collisions: int = -1
 var collision_count: int = 0
 
 @export var damage: float = 15
@@ -44,7 +44,7 @@ func _physics_process(_delta: float) -> void:
 			return
 		var homing_force = self.global_position.direction_to(target.global_position) * homing_force_magnitude
 		apply_central_force(homing_force)
-		apply_central_force(central_force / 2)
+		apply_central_force(central_force)
 	else:
 		apply_central_force(central_force)
 
@@ -89,5 +89,5 @@ func _on_body_entered(body: Node) -> void:
 			spark(spark_pos)
 			
 			collision_count += 1
-			if collision_count == max_collisions:
+			if collision_count == max_collisions and max_collisions > 0:
 				destroy()

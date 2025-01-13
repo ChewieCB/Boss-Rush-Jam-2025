@@ -5,7 +5,7 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_kw4fx")
-shader_parameter/color = Color(0.414498, 0.914219, 0.864149, 1)
+shader_parameter/color = Color(0.188235, 0.698039, 0.901961, 1)
 shader_parameter/fresnel_sharpness = 1.0
 shader_parameter/extend_distance = 0.0
 shader_parameter/impact_points = null

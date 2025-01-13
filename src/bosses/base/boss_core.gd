@@ -32,7 +32,7 @@ var area_phase_count: int = 0
 
 # Charge Attack
 # TODO - make this adjustable via resources
-@export var charge_telegraph_time: float = 0.25
+@export var telegraph_time: float = 0.25
 
 # Projectile Attack
 # TODO - make this adjustable via resources

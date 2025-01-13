@@ -213,16 +213,14 @@ func _physics_process(delta):
 			floor_velocity.normalized().x,
 			floor_velocity.normalized().z,
 			)
-		)
-		print(dir_weight)
-		velocity += floor_velocity * dir_weight
-
-	#show_debug_label()
-	var gun_sway_velocity = velocity * transform.basis
-	if not is_swapping_gun:
-		gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
-
-	move_and_slide()
+			velocity += floor_velocity * dir_weight
+		
+		move_and_slide()
+		
+		#show_debug_label()
+		var gun_sway_velocity = velocity * transform.basis
+		if not is_swapping_gun:
+			gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
 	camera_control(delta)
 
 func update_hud():
