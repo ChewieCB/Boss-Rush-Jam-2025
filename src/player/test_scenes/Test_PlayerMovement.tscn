@@ -1,8 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=13 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="PackedScene" uid="uid://d0uqv7xitfwnt" path="res://src/player/test_scenes/Dummy.tscn" id="2_lrk4j"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="3_g5u1p"]
+[ext_resource type="Resource" uid="uid://yx1psxr1obhn" path="res://src/player/barrel/resource/projectile_count_barrel_data.tres" id="4_h0d4u"]
+[ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="5_bi1qm"]
+[ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="6_1a2ul"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -57,12 +60,6 @@ material = SubResource("StandardMaterial3D_36m72")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="."]
 transform = Transform3D(0.816702, 0, 0.57706, 0, 1, 0, -0.57706, 0, 0.816702, -25.0659, 4.92087, -2.56013)
-use_collision = true
-size = Vector3(10, 10, 10)
-material = SubResource("StandardMaterial3D_36m72")
-
-[node name="CSGBox3D5" type="CSGBox3D" parent="."]
-transform = Transform3D(0.816702, 0, 0.57706, 0, 1, 0, -0.57706, 0, 0.816702, 20.832, 4.92087, 24.9786)
 use_collision = true
 size = Vector3(10, 10, 10)
 material = SubResource("StandardMaterial3D_36m72")
@@ -123,9 +120,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 0)
 
 [node name="BarrelItemPickup2" parent="." instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 2.57001)
+data = ExtResource("4_h0d4u")
 
 [node name="BarrelItemPickup3" parent="." instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 3.93916)
+data = ExtResource("5_bi1qm")
 
 [node name="BarrelItemPickup4" parent="." instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 5.02901)
+data = ExtResource("6_1a2ul")

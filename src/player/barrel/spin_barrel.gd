@@ -15,7 +15,7 @@ var is_spinning = false
 var chosen_id = 0
 var is_equipped = false
 
- 
+
 const SPIN_INTERVAL = 0.1
 
 func _ready() -> void:
@@ -25,7 +25,6 @@ func _ready() -> void:
 	for child in effect_container.get_children():
 		child.owner_barrel = self
 		effect_list.append(child)
-	instant_spin()
 
 
 func start_spin():

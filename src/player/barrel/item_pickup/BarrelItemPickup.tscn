@@ -1,7 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://b2ciesqygpo5a"]
+[gd_scene load_steps=9 format=3 uid="uid://b2ciesqygpo5a"]
 
 [ext_resource type="Script" path="res://src/player/barrel/item_pickup/barrel_item_pickup.gd" id="1_l8r1a"]
-[ext_resource type="Resource" uid="uid://yx1psxr1obhn" path="res://src/player/barrel/resource/projectile_count_barrel_data.tres" id="2_sfs6r"]
+[ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrrel_data.tres" id="2_15nf5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8mavw"]
+resource_local_to_scene = true
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_y5dr1"]
 height = 0.5
@@ -75,10 +78,11 @@ collision_layer = 32
 collision_mask = 2
 monitoring = false
 script = ExtResource("1_l8r1a")
-data = ExtResource("2_sfs6r")
+data = ExtResource("2_15nf5")
 
 [node name="Model" type="MeshInstance3D" parent="."]
 transform = Transform3D(-1.81e-06, -0.5, -1.81e-06, 0, -1.81e-06, 0.5, -0.5, 1.81e-06, 6.55216e-12, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_8mavw")
 mesh = SubResource("CylinderMesh_y5dr1")
 
 [node name="Label3D" type="Label3D" parent="Model"]

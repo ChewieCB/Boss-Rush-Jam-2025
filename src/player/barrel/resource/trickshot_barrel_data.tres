@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dpcckljfou2kt"]
+
+[ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="1_qqx0r"]
+[ext_resource type="PackedScene" uid="uid://cp0e7vka232ws" path="res://src/player/barrel/TrickshotBarrel.tscn" id="2_pg4nx"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_curd4"]
+
+[resource]
+script = ExtResource("3_curd4")
+barrel_id = 6
+barrel_name = "Trickshot"
+barrel_desc = "[b]Projectile Count Barrel[/b]
+Make your bullet move in amazing ways.
+
+Possible roll:
+[ul]
+Ricochet: Bullets bounce of walls and enemies.
+Homing: Bullets homing toward enemies, but significantly reduced damage.
+[/ul]"
+barrel_image = ExtResource("1_qqx0r")
+barrel_prefab = ExtResource("2_pg4nx")
