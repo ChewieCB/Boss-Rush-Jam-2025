@@ -52,6 +52,7 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
 		inventory_barrels.erase(found_data)
 		equipped_barrels.append(found_data)
 		GameManager.player.inventory_ui.full_refresh_ui()
+		GameManager.player.current_gun.install_barrel(found_data.barrel_prefab)
 
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
 	var found_data: BarrelDataResource = null
@@ -62,3 +63,4 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
 		equipped_barrels.erase(found_data)
 		inventory_barrels.append(found_data)
 		GameManager.player.inventory_ui.full_refresh_ui()
+		GameManager.player.current_gun.remove_barrel(search_barrel_id)

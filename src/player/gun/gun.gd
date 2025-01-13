@@ -72,9 +72,7 @@ const BULLET_SPAWN_POS_VARIATION = 10
 func _ready() -> void:
 	gun_status_label.visible = false
 	magazine_ammo_left = base_magazine_size
-	for child in barrel_container.get_children():
-		child.owner_gun = self
-		installed_barrels.append(child)
+	recheck_installed_barrels()
 	reset_modifier(true)
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -306,3 +304,36 @@ func play_failed_shoot_sfx():
 	if failed_shoot_sfx_timer.is_stopped():
 		SoundManager.play_sound(TEMP_sfx_dry)
 		failed_shoot_sfx_timer.start()
+
+
+func install_barrel(barrel_prefab: PackedScene):
+	if len(installed_barrels) >= max_barrels:
+		return
+	var barrel_inst = barrel_prefab.instantiate()
+	for child in barrel_container.get_children():
+		if child.get_child_count() == 0:
+			child.add_child(barrel_inst)
+			# installed_barrels.append(barrel_inst)
+			break
+	recheck_installed_barrels()
+
+func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
+	for child in barrel_container.get_children():
+		if child.get_child_count() > 0:
+			var barrel: SpinBarrel = child.get_child(0)
+			if barrel.barrel_id == search_barrel_id:
+				# installed_barrels.erase(barrel)
+				barrel.queue_free()
+				break
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	recheck_installed_barrels()
+
+func recheck_installed_barrels():
+	installed_barrels = []
+	for child in barrel_container.get_children():
+		if child.get_child_count() > 0:
+			var barrel = child.get_child(0)
+			barrel.owner_gun = self
+			installed_barrels.append(barrel)

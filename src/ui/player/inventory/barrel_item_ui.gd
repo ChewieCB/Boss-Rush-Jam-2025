@@ -5,6 +5,7 @@ extends TextureRect
 var data: BarrelDataResource
 var clicked_once = false
 var is_equipped = false
+var connected_barrel_prefab_instance: SpinBarrel = null
 
 func init(_data: BarrelDataResource, _is_equipped):
 	data = _data
@@ -26,7 +27,7 @@ func _on_button_pressed() -> void:
 		if is_equipped:
 			GameManager.remove_barrel(data.barrel_id)
 		else:
-			GameManager.equip_barrel(data.barrel_id)
+			connected_barrel_prefab_instance = GameManager.equip_barrel(data.barrel_id)
 
 
 func unselected():

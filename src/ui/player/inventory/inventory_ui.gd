@@ -9,7 +9,6 @@ class_name InventoryUI
 @onready var inventory_barrel_container: GridContainer = $InventoryBarrelSection/ScrollContainer/GridContainer
 
 var current_selected_item_ui = null
-var connected_barrel_prefab_instance: SpinBarrel = null
 
 func _ready() -> void:
 	visible = false

@@ -9,7 +9,7 @@ height = 0.5
 
 [node name="ProjectileCountBarrel" type="Node3D"]
 script = ExtResource("1_vvrge")
-barrel_name = "Projectile Count"
+barrel_id = 5
 
 [node name="Model" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
