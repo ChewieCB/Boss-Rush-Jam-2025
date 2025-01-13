@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="5_m3ad2"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="6_lkakv"]
 [ext_resource type="Texture2D" uid="uid://cw2qiop6puebo" path="res://src/bosses/base/assets/malina_boss_sprite_placeholder.png" id="6_p3iyj"]
+[ext_resource type="Material" uid="uid://dt63xhaj0rbay" path="res://src/bosses/roulette/shield_mat.tres" id="7_05v1l"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_yu3uh"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_edit5"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="9_7dg1x"]
@@ -23,15 +24,11 @@ bottom_radius = 2.0
 height = 6.6
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6q8u4"]
-size = Vector3(35, 2.5, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uasru"]
-transparency = 1
-albedo_color = Color(0.2573, 0.79182, 0.83, 0.85098)
+size = Vector3(35, 2, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_n2kfn"]
-material = SubResource("StandardMaterial3D_uasru")
-size = Vector3(35, 2.5, 1)
+material = ExtResource("7_05v1l")
+size = Vector3(35, 3, 1)
 
 [sub_resource type="Resource" id="Resource_31yl5"]
 script = ExtResource("5_m3ad2")
@@ -70,7 +67,8 @@ shields_max_time = 12.0
 shield_count = 4
 shield_distance = 6.0
 shield_height = 3.3
-barrier_sweep_speed = 1.7
+barrier_targeting_delay = 2.0
+barrier_sweep_time = 2.2
 ball_scene = ExtResource("4_pnl31")
 balls_to_spawn_phase_1 = 3
 balls_to_spawn_phase_2 = 3
@@ -91,6 +89,7 @@ TEMP_sfx_projectile = null
 TEMP_sfx_charge = null
 TEMP_sfx_charge_impact = null
 attack_recovery_time = 1.0
+telegraph_time = 0.45
 projectile_scene = null
 delay_per_projectile = 0.6
 
@@ -108,22 +107,23 @@ visible = true
 mesh = SubResource("CylinderMesh_ljrhi")
 
 [node name="Hurtbox" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, -1.25, 0)
 collision_mask = 66
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, -0.5, 0)
 shape = SubResource("BoxShape3D_6q8u4")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Hurtbox" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 0)
 mesh = SubResource("BoxMesh_n2kfn")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Hurtbox" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 0)
+collision_layer = 0
 collision_mask = 64
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox/StaticBody3D" index="0"]
 shape = SubResource("BoxShape3D_6q8u4")
-disabled = true
 
 [node name="Shields" type="Node3D" parent="." index="4"]
 
@@ -235,11 +235,6 @@ to = NodePath("../../BallProjectile")
 event = &"start_ball_attack"
 delay_in_seconds = "0.0"
 
-[node name="toPushbackWave" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="2"]
-script = ExtResource("4_3xtcm")
-event = &"start_pushback_attack"
-delay_in_seconds = "0.0"
-
 [node name="DamageBarrier" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
 script = ExtResource("7_yu3uh")
 initial_state = NodePath("Targeting")
@@ -250,7 +245,7 @@ script = ExtResource("8_edit5")
 [node name="toSpawnBarrier" type="Node" parent="StateChart/Root/Phase/Phase1/DamageBarrier/Targeting" index="0"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../SpawnBarrier")
-event = &"barrier_attack"
+event = &"barrier_attack_start"
 delay_in_seconds = "0.0"
 
 [node name="SpawnBarrier" type="Node" parent="StateChart/Root/Phase/Phase1/DamageBarrier" index="1"]

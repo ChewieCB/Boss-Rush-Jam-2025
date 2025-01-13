@@ -28,7 +28,6 @@ guard = SubResource("Resource_2ueik")
 [node name="BossTest" instance=ExtResource("1_35rb8")]
 script = ExtResource("2_t8yjh")
 TEMP_sfx_death = ExtResource("3_6x5nd")
-charge_telegraph_time = 0.3
 
 [node name="DebugMesh" parent="." index="2"]
 visible = true

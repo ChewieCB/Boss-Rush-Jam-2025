@@ -3,6 +3,7 @@ extends BossCore
 signal change_wheel_speed(speed: float)
 
 @onready var debug_phase_label: Label3D = $DebugPhaseLabel
+@onready var hurtbox_mesh: MeshInstance3D = hurtbox.get_node("MeshInstance3D")
 var wheel_rotation_speed: float = 0.0
 
 @export_category("Attacks")
@@ -10,7 +11,6 @@ var wheel_rotation_speed: float = 0.0
 @export var shields_phase_count: int = 1
 @export var ball_phase_count: int = 1
 var previous_phase: String
-
 # Shields
 @export_group("Shields")
 @onready var shields_parent: Node3D = $Shields
@@ -24,7 +24,8 @@ var previous_phase: String
 @export var shield_height: float = 3.3
 # Barrier
 @export_group("Barrier Sweep")
-@export var barrier_sweep_speed: float = 1.7
+@export var barrier_targeting_delay: float = 2.0
+@export var barrier_sweep_time: float = 1.7
 # Multiball
 @export_group("Multiball")
 @export var ball_scene: PackedScene
@@ -81,7 +82,7 @@ func change_phase_1() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_barrier_attack",
-		"start_ball_attack",
+		#"start_ball_attack",
 	]
 	if barrier_phase_count == max_sequential_phases:
 		possible_phases.erase("start_barrier_attack")
@@ -96,17 +97,17 @@ func change_phase_1() -> void:
 		change_phase_1()
 		return
 	
-	# If the player is further away, prioritise charges and area attacks
-	if dist_to_target >= 30:
-		possible_phases.append("start_ball_attack")
-		possible_phases.append("start_ball_attack")
-		possible_phases.append("start_ball_attack")
-	# If the player is closer, prioritise ranged attacks
-	else:
-		possible_phases.append("start_barrier_attack")
-		possible_phases.append("start_barrier_attack")
-		possible_phases.append("start_ball_attack")
-		possible_phases.append("start_ball_attack")
+	## If the player is further away, prioritise charges and area attacks
+	#if dist_to_target >= 30:
+		#possible_phases.append("start_ball_attack")
+		#possible_phases.append("start_ball_attack")
+		#possible_phases.append("start_ball_attack")
+	## If the player is closer, prioritise ranged attacks
+	#else:
+		#possible_phases.append("start_barrier_attack")
+		#possible_phases.append("start_barrier_attack")
+		#possible_phases.append("start_ball_attack")
+		#possible_phases.append("start_ball_attack")
 	
 	for phase in possible_phases.duplicate():
 		if phase != previous_phase:
@@ -131,6 +132,46 @@ func change_phase_2() -> void:
 func _check_shields() -> void:
 	if shields_parent.get_child_count() == 0:
 		state_chart.send_event("shields_destroyed")
+
+
+func barrier_glow(value: float, target_color: Color):
+	var current_color: Color = hurtbox_mesh.mesh.material.get("shader_parameter/color")
+	var lerp_color := target_color.lerp(current_color, value)
+	hurtbox_mesh.mesh.material.set("shader_parameter/color", lerp_color)
+	hurtbox_mesh.mesh.material.next_pass.emission = lerp_color
+
+
+func sweep_barrier(
+	sweeps: int = 1,
+	rotation: float = TAU, 
+	speed_multiplier: float = 1.0,
+	telegraph_delay: float = telegraph_time,
+	time_between_sweeps: float = 1.0,
+) -> bool:
+	for i in sweeps:
+		state_chart.send_event("attack_telegraph")
+		var telegraph_tween = get_tree().create_tween()
+		var barrier_color = hurtbox_mesh.mesh.material.get("shader_parameter/color")
+		telegraph_tween.tween_method(barrier_glow.bind(Color.RED), 0, 1, telegraph_delay/2)
+		telegraph_tween.chain().tween_method(barrier_glow.bind(barrier_color), 0, 1, telegraph_delay/2)
+		await telegraph_tween.finished
+		state_chart.send_event("attack_start")
+		
+		hurtbox.monitoring = true
+		var tween = get_tree().create_tween()
+		tween.tween_property(
+			self, 
+			"rotation:y", 
+			self.rotation.y + rotation, 
+			barrier_sweep_time * speed_multiplier
+		).set_ease(Tween.EASE_IN)
+		
+		await tween.finished
+		hurtbox.monitoring = false
+		state_chart.send_event("attack_end_now")
+	await get_tree().create_timer(time_between_sweeps).timeout
+	
+	return true
 
 
 func spawn_ball() -> RouletteBall:
@@ -369,42 +410,39 @@ func _on_phase_1_state_entered() -> void:
 func _on_damage_barrier_targeting_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Targeting"
 	state_chart.send_event("start_targeting")
+	
+	var tween = get_tree().create_tween()
+	hurtbox_mesh.position.x = 0
+	hurtbox_mesh.mesh.size.x = 0
 	hurtbox.visible = true
-	await get_tree().create_timer(0.8).timeout
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(charge_telegraph_time).timeout
-	state_chart.send_event("attack_start")
-	state_chart.send_event("barrier_attack")
+	tween.tween_property(hurtbox_mesh, "position:x", 17, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 35, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	await tween.finished
+	
+	await get_tree().create_timer(barrier_targeting_delay).timeout
+	state_chart.send_event("barrier_attack_start")
 
 func _on_damage_barrier_spawn_barrier_state_entered() -> void:
-	debug_state_label.text = "Damage Barrier | Barrier"
+	debug_state_label.text = "Damage Barrier | Sweep"
 	
-	hurtbox.monitoring = true
+	var sweep_count: int = 2 if randf() < 0.25 else 1
+	await sweep_barrier(sweep_count)
 	
-	# TODO - add telegraphing for each sweep
-	var tween = get_tree().create_tween()
-	tween.tween_property(
-		self, "rotation:y", self.rotation.y + 2*PI, barrier_sweep_speed
-	).set_ease(Tween.EASE_IN_OUT)
-	tween.tween_interval(1.0)
-	tween.tween_property(
-		self, "rotation:y", self.rotation.y + 2*PI, barrier_sweep_speed
-	).set_ease(Tween.EASE_IN_OUT)
-	
-	await tween.finished
 	state_chart.send_event("barrier_attack_end")
 
 func _on_damage_barrier_spawn_barrier_state_exited() -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(hurtbox_mesh, "position:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
+	tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
+	await tween.finished
 	hurtbox.visible = false
-	hurtbox.monitoring = false
 
 func _on_damage_barrier_recover_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Recover"
 	barrier_phase_count += 1
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time * 2).timeout
 	change_phase_1()
 	state_chart.send_event("restart_targeting")
-	# TODO - add fire again option
 
 
 #### Phase 1 | Multiball
@@ -454,7 +492,7 @@ func _on_pushback_wave_spawn_wave_state_entered() -> void:
 	debug_state_label.text = "Pushback | Wave"
 	
 	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(charge_telegraph_time).timeout
+	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
 	var wave_attack_callback: Callable = func():
 		state_chart.send_event("finish_wave")
@@ -484,7 +522,7 @@ func _on_phase_2_damage_barrier_targeting_state_entered() -> void:
 	#
 	#hurtbox.visible = true
 	#state_chart.send_event("attack_telegraph")
-	#await get_tree().create_timer(charge_telegraph_time).timeout
+	#await get_tree().create_timer(telegraph_time).timeout
 	#state_chart.send_event("attack_start")
 	#state_chart.send_event("barrier_attack")
 #
@@ -495,24 +533,12 @@ func _on_phase_2_damage_barrier_targeting_state_entered() -> void:
 
 func _on_phase_2_damage_barrier_spawn_barrier_state_entered() -> void:
 	debug_state_label.text = "BarrierBall | Barrier Attack"
-	
-	hurtbox.monitoring = true
-	
-	# TODO - add telegraphing for each sweep
-	var tween = get_tree().create_tween()
-	tween.tween_property(
-		self, "rotation:y", self.rotation.y + 2*PI, barrier_sweep_speed
-	).set_ease(Tween.EASE_IN)
-	tween.tween_interval(1.0)
-	tween.tween_property(
-		self, "rotation:y", self.rotation.y + 2*PI, barrier_sweep_speed
-	).set_ease(Tween.EASE_IN)
-	
-	await tween.finished
+	sweep_barrier()
+
 
 func _on_phase_2_damage_barrier_recover_state_entered() -> void:
 	hurtbox.visible = false
-	debug_state_label.text = "Barrier Balls | Recover"
+	debug_state_label.text = "Barrier | Recover"
 	barrier_phase_count += 1
 	await get_tree().create_timer(attack_recovery_time).timeout
 	change_phase_2()

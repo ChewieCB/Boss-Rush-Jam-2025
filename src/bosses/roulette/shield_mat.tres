@@ -1,11 +1,19 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dt63xhaj0rbay"]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dt63xhaj0rbay"]
 
 [ext_resource type="Shader" path="res://src/bosses/roulette/shield_impacts.gdshader" id="1_kw4fx"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.403922)
+emission_enabled = true
+emission = Color(0.839216, 0.588235, 0, 1)
+emission_energy_multiplier = 2.0
+
 [resource]
 render_priority = 0
+next_pass = SubResource("StandardMaterial3D_e3170")
 shader = ExtResource("1_kw4fx")
-shader_parameter/color = Color(0.414498, 0.914219, 0.864149, 1)
+shader_parameter/color = Color(0.84, 0.588, 0, 1)
 shader_parameter/fresnel_sharpness = 1.0
 shader_parameter/extend_distance = 0.0
 shader_parameter/impact_points = null

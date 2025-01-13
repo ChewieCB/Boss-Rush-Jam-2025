@@ -22,7 +22,7 @@ func _on_phase_target_player_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	await get_tree().create_timer(2.0).timeout
 	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(charge_telegraph_time).timeout
+	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
 	state_chart.send_event("charge_player")
 
