@@ -103,9 +103,6 @@ func _physics_process(delta: float) -> void:
 	velocity.y = vel_vertical
 
 	move_and_slide()
-	debug_dist_label.text = "(%su)" % [
-		round(self.global_position.distance_to(target.global_position))
-	]
 
 
 func jump(multiplier = 1.0):

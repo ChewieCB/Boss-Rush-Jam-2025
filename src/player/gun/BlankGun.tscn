@@ -1,6 +1,5 @@
 [gd_scene load_steps=22 format=3 uid="uid://d2tb8ogqlaxhy"]
 
-
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_wwe7d"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_5dqrq"]
 [ext_resource type="AudioStream" uid="uid://bxq16mdpw6cvr" path="res://src/player/gun/assets/sfx/temp/Shotgun_Dry_Fire.mp3" id="3_nou6i"]
@@ -11,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="8_aly8k"]
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="9_tyti4"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="10_vvihl"]
-
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="12_ukph6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
