@@ -60,10 +60,13 @@ func _ready() -> void:
 	randomize()
 	GRAVITY = 0.0
 	hurtbox.visible = false
+	
 	shields_parent.position.y -= 30.0
 	shields_spawn_timer.wait_time = shields_spawn_cooldown
 	shields_absorb_timer.wait_time = shields_max_time
+	
 	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
+	
 	super()
 
 
@@ -123,6 +126,11 @@ func change_phase_2() -> void:
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	print(new_phase)
 	state_chart.send_event(new_phase)
+
+
+func _check_shields() -> void:
+	if shields_parent.get_child_count() == 0:
+		state_chart.send_event("shields_destroyed")
 
 
 func spawn_ball() -> RouletteBall:
@@ -318,10 +326,6 @@ func _on_shields_spawn_shields_state_entered() -> void:
 	tween.tween_property(shields_parent, "position:y", 0, 0.8).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(shields_absorb_timer.start)
 
-func _check_shields() -> void:
-	if shields_parent.get_child_count() == 0:
-		state_chart.send_event("shields_destroyed")
-
 func _on_shields_spawn_shields_state_physics_processing(delta: float) -> void:
 	shields_parent.rotation.y += delta * wheel_rotation_speed * 4
 
@@ -352,6 +356,9 @@ func _on_shields_recover_state_entered() -> void:
 
 
 #### PHASE 1 ==========================
+# Sweep
+# Multiball
+
 func _on_phase_1_state_entered() -> void:
 	debug_phase_label.text = "Phase 1"
 	change_wheel_speed.emit(0.6)
@@ -429,7 +436,20 @@ func _on_ball_projectile_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-#### Phase X | Shockwave
+#### PHASE 2 ==========================
+# Shields 
+# Shockwave
+# Sweep
+
+func _on_phase_2_state_entered() -> void:
+	debug_phase_label.text = "Phase 2"
+	change_wheel_speed.emit(0.8)
+	wheel_rotation_speed = 0.8
+	state_chart.send_event("start_shields")
+	change_phase_2()
+
+
+#### Phase 2 | Shockwave
 func _on_pushback_wave_spawn_wave_state_entered() -> void:
 	debug_state_label.text = "Pushback | Wave"
 	
@@ -446,40 +466,34 @@ func _on_pushback_wave_recover_state_entered() -> void:
 	change_phase_1()
 	state_chart.send_event("end_recovery")
 
-###
 
-func _on_phase_2_state_entered() -> void:
-	debug_phase_label.text = "Phase 2"
-	change_wheel_speed.emit(0.8)
-	wheel_rotation_speed = 0.8
-	state_chart.send_event("start_shields")
-	change_phase_2()
-
-#
-func _on_phase_2_barrier_balls_targeting_state_entered() -> void:
+### Phase 2 | Barrier Sweep
+func _on_phase_2_damage_barrier_targeting_state_entered() -> void:
 	debug_state_label.text = "BarrierBall | Targeting"
 	state_chart.send_event("start_targeting")
 	await get_tree().create_timer(0.8).timeout
 	state_chart.send_event("launch_balls")
 
-func _on_phase_2_barrier_balls_launch_balls_state_entered() -> void:
-	debug_state_label.text = "BarrierBall | Launching Balls"
-	for i in balls_to_spawn_phase_2:
-		var ball = spawn_ball()
-		ball.destroyed.connect(_on_ball_destroyed)
-	
-	hurtbox.visible = true
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(charge_telegraph_time).timeout
-	state_chart.send_event("attack_start")
-	state_chart.send_event("barrier_attack")
+# TODO - add multiball as a wildcard this phase? 
+# i.e. spawns the balls and then immediately moves on to another attack 
+#func _on_phase_2_barrier_balls_launch_balls_state_entered() -> void:
+	#debug_state_label.text = "BarrierBall | Launching Balls"
+	#for i in balls_to_spawn_phase_2:
+		#var ball = spawn_ball()
+		#ball.destroyed.connect(_on_ball_destroyed)
+	#
+	#hurtbox.visible = true
+	#state_chart.send_event("attack_telegraph")
+	#await get_tree().create_timer(charge_telegraph_time).timeout
+	#state_chart.send_event("attack_start")
+	#state_chart.send_event("barrier_attack")
+#
+#func _on_phase_2_barrier_balls_launch_balls_state_exited() -> void:
+	#await get_tree().create_timer(max_ball_lifetime).timeout
+	#for ball in active_balls:
+		#ball.destroy()
 
-func _on_phase_2_barrier_balls_launch_balls_state_exited() -> void:
-	await get_tree().create_timer(max_ball_lifetime).timeout
-	for ball in active_balls:
-		ball.destroy()
-
-func _on_phase_2_barrier_balls_spawn_barrier_state_entered() -> void:
+func _on_phase_2_damage_barrier_spawn_barrier_state_entered() -> void:
 	debug_state_label.text = "BarrierBall | Barrier Attack"
 	
 	hurtbox.monitoring = true
@@ -496,7 +510,7 @@ func _on_phase_2_barrier_balls_spawn_barrier_state_entered() -> void:
 	
 	await tween.finished
 
-func _on_phase_2_barrier_balls_recover_state_entered() -> void:
+func _on_phase_2_damage_barrier_recover_state_entered() -> void:
 	hurtbox.visible = false
 	debug_state_label.text = "Barrier Balls | Recover"
 	barrier_phase_count += 1
@@ -505,19 +519,30 @@ func _on_phase_2_barrier_balls_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-#
-func _on_phase_2_dropping_segments_targeting_state_entered() -> void:
+#### PHASE 3 ==========================
+# Shields 
+# Sweep
+# Multiball
+# Segment Drop
+
+func _on_phase_3_state_entered() -> void:
+	pass # Replace with function body.
+
+
+### Phase 3 | Segment Drop
+func _on_phase_3_dropping_segments_targeting_state_entered() -> void:
 	debug_state_label.text = "Segment Drop | Targeting"
 	state_chart.send_event("start_targeting")
 	await get_tree().create_timer(1.5).timeout
 	state_chart.send_event("start_drop")
 
-func _on_phase_2_dropping_segments_dropping_state_entered() -> void:
+func _on_phase_3_dropping_segments_dropping_state_entered() -> void:
 	debug_state_label.text = "Segment Drop | Dropping"
 	var shake_count: int = 20
 	var shake: float = 0.4
 	var drop_count: int = 4
 	var segments_to_drop = floor_segments.duplicate()
+	# TODO - move this logic into discrete methods for different drop behaviour
 	# Get random segment
 	# Pattern 1 - alternating segments
 	#var chance: float = randf()
@@ -568,27 +593,9 @@ func _on_phase_2_dropping_segments_dropping_state_entered() -> void:
 		drop_floor_segment(segments_to_drop.pop_front())
 		await get_tree().create_timer(1.5).timeout
 
-func _on_phase_2_dropping_segments_recover_state_entered() -> void:
+func _on_phase_3_dropping_segments_recover_state_entered() -> void:
 	debug_state_label.text = "Segment Drop | Recover"
 	#drop_phase_count += 1
-	await get_tree().create_timer(attack_recovery_time).timeout
-	change_phase_2()
-	state_chart.send_event("end_recovery")
-
-
-func _on_phase_2_pushback_wave_spawn_wave_state_entered() -> void:
-	debug_state_label.text = "Pushback | Wave"
-	
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(charge_telegraph_time).timeout
-	state_chart.send_event("attack_start")
-	var wave_attack_callback: Callable = func():
-		state_chart.send_event("finish_wave")
-	spawn_center_wave(max_wave_radius, wave_time, wave_height, wave_attack_callback)
-
-
-func _on_phase_2_pushback_wave_recover_state_entered() -> void:
-	debug_state_label.text = "Pushback | Recovering"
 	await get_tree().create_timer(attack_recovery_time).timeout
 	change_phase_2()
 	state_chart.send_event("end_recovery")

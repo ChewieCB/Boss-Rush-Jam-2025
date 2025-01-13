@@ -379,7 +379,7 @@ script = ExtResource("8_edit5")
 [node name="toSpawnBarrier" type="Node" parent="StateChart/Root/Phase/Phase2/DamageBarrier/Targeting" index="0"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../SpawnBarrier")
-event = &"barrier_attack"
+event = &"barrier_attack_start"
 delay_in_seconds = "0.0"
 
 [node name="SpawnBarrier" type="Node" parent="StateChart/Root/Phase/Phase2/DamageBarrier" index="1"]
@@ -397,7 +397,7 @@ script = ExtResource("8_edit5")
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/DamageBarrier/Recover" index="0"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Targeting")
-event = &"restart_targeting"
+event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="toSpawnBarrier" type="Node" parent="StateChart/Root/Phase/Phase2/DamageBarrier/Recover" index="1"]
@@ -580,6 +580,7 @@ shape = SubResource("CylinderShape3D_cbruj")
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/Recover" to="." method="_on_damage_barrier_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/SpawnWave" to="." method="_on_phase_2_pushback_wave_spawn_wave_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Recover" to="." method="_on_phase_2_pushback_wave_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" to="." method="_on_phase_2_dropping_segments_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" to="." method="_on_phase_2_dropping_segments_dropping_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Recover" to="." method="_on_phase_2_dropping_segments_recover_state_entered"]
