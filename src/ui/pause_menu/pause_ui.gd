@@ -21,6 +21,7 @@ func _input(event: InputEvent) -> void:
 			return_to_pause_menu()
 		else:
 			SoundManager.play_button_click_sfx()
+			GameManager.player.inventory_ui.close()
 			is_paused = not is_paused
 			get_tree().paused = is_paused
 			visible = is_paused

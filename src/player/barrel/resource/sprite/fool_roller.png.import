@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfqbqk3lshl2m"
-path.s3tc="res://.godot/imported/square.png-8c21c9e985b1315db9a852d63ed5ae02.s3tc.ctex"
+uid="uid://dgs1f84cmjl1q"
+path.s3tc="res://.godot/imported/fool_roller.png-11f9ed084df1569c256843ef9fdb61ed.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/sprite/placeholder/square.png"
-dest_files=["res://.godot/imported/square.png-8c21c9e985b1315db9a852d63ed5ae02.s3tc.ctex"]
+source_file="res://src/player/barrel/resource/sprite/fool_roller.png"
+dest_files=["res://.godot/imported/fool_roller.png-11f9ed084df1569c256843ef9fdb61ed.s3tc.ctex"]
 
 [params]
 

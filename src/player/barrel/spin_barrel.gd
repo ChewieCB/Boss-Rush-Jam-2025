@@ -1,7 +1,7 @@
 extends Node3D
 class_name SpinBarrel
 
-@export var barrel_name: String
+@export var barrel_id: BarrelDataResource.BarrelIdEnum
 
 @onready var effect_container: Node3D = $EffectContainer
 @onready var display_label_title: Label3D = $EffectName
@@ -13,13 +13,20 @@ var effect_list: Array[BaseBarrelEffect] = []
 var spin_interval_timer = 0
 var is_spinning = false
 var chosen_id = 0
+var is_equipped = false
+
 
 const SPIN_INTERVAL = 0.1
 
 func _ready() -> void:
+	display_label_title.text = ""
+	display_label_tag.text = ""
+	display_label_desc.text = ""
 	for child in effect_container.get_children():
 		child.owner_barrel = self
 		effect_list.append(child)
+	instant_spin()
+
 
 func start_spin():
 	is_spinning = true

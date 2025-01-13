@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -8,7 +8,10 @@ const RESOLUTION_ARRAY = [
 
 var pause_ui: PauseUI
 var player: Player
-var last_looked_at_enemy
+
+var equipped_barrels: Array[BarrelDataResource] = []
+var inventory_barrels: Array[BarrelDataResource] = []
+
 # HACK - do this dynamically with level loading/unloading in the elevator
 var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3
@@ -33,3 +36,35 @@ var scaling_3d: float = 100.0
 @export_range(0, 100, 0.1) var bgm_audio: float = 100
 @export_range(0, 100, 0.1) var sfx_audio: float = 100
 @export_range(0, 100, 0.1) var ui_audio: float = 100
+
+
+func add_barrel_to_inventory(data: BarrelDataResource):
+	inventory_barrels.append(data)
+
+func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
+	if player.current_gun.is_reloading:
+		return
+	if len(equipped_barrels) >= player.current_gun.max_barrels:
+		return
+	var found_data: BarrelDataResource = null
+	for data in inventory_barrels:
+		if data.barrel_id == search_barrel_id:
+			found_data = data
+	if found_data:
+		inventory_barrels.erase(found_data)
+		equipped_barrels.append(found_data)
+		GameManager.player.inventory_ui.full_refresh_ui()
+		GameManager.player.current_gun.install_barrel(found_data.barrel_prefab)
+
+func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
+	if player.current_gun.is_reloading:
+		return
+	var found_data: BarrelDataResource = null
+	for data in equipped_barrels:
+		if data.barrel_id == search_barrel_id:
+			found_data = data
+	if found_data:
+		equipped_barrels.erase(found_data)
+		inventory_barrels.append(found_data)
+		GameManager.player.inventory_ui.full_refresh_ui()
+		GameManager.player.current_gun.remove_barrel(search_barrel_id)
