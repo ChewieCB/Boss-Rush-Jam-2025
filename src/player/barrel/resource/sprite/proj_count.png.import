@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfqbqk3lshl2m"
-path.s3tc="res://.godot/imported/square.png-8c21c9e985b1315db9a852d63ed5ae02.s3tc.ctex"
+uid="uid://be6rclkcr7kf4"
+path.s3tc="res://.godot/imported/proj_count.png-b957dbbf994b0bf2e2d77431204e21e5.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/sprite/placeholder/square.png"
-dest_files=["res://.godot/imported/square.png-8c21c9e985b1315db9a852d63ed5ae02.s3tc.ctex"]
+source_file="res://src/player/barrel/resource/sprite/proj_count.png"
+dest_files=["res://.godot/imported/proj_count.png-b957dbbf994b0bf2e2d77431204e21e5.s3tc.ctex"]
 
 [params]
 
