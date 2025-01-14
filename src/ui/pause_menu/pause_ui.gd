@@ -21,6 +21,7 @@ func _input(event: InputEvent) -> void:
 			return_to_pause_menu()
 		else:
 			SoundManager.play_button_click_sfx()
+			GameManager.player.inventory_ui.close()
 			is_paused = not is_paused
 			get_tree().paused = is_paused
 			visible = is_paused
@@ -40,6 +41,11 @@ func _on_setting_button_pressed() -> void:
 	is_in_submenu = true
 	pause_option_list.visible = false
 	SoundManager.play_button_click_sfx()
+
+
+func _on_lobby_button_pressed() -> void:
+	SoundManager.play_button_click_sfx()
+	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
 
 
 func _on_exit_button_pressed() -> void:

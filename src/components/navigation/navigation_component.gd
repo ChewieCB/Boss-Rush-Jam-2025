@@ -41,7 +41,7 @@ func _wait_for_navigation_setup() -> void:
 	query.collide_with_bodies = true
 	query.collide_with_areas = true
 	# TODO - make some global vars to track the collision layers
-	query.collision_mask = pow(2, 2-1)
+	query.collision_mask = 2  # Player
 	query.shape = SphereShape3D.new()
 	query.shape.radius = search_radius
 	query.transform = Transform3D.IDENTITY
@@ -57,10 +57,10 @@ func _wait_for_navigation_setup() -> void:
 	#NavigationServer3D.map_changed.connect(_on_map_changed)
 	
 	process_mode = Node.PROCESS_MODE_INHERIT
-	emit_signal("pathfinding_ready")
+	pathfinding_ready.emit()
 
 
-func _physics_process(delta) -> void:
+func _physics_process(_delta) -> void:
 	if is_enabled():
 		# Do not query when the map has never synchronized and is empty.
 		if NavigationServer3D.map_get_iteration_id(nav_agent.get_navigation_map()) == 0:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=35 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Texture2D" uid="uid://l708f35ye0ad" path="res://src/bosses/base/assets/umby_boss_sprite_placeholder.png" id="1_lhq8s"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
@@ -51,22 +51,6 @@ state = NodePath("../../../Health/Dead")
 script = ExtResource("12_1g6yn")
 guard = SubResource("Resource_vq1e8")
 
-[sub_resource type="Resource" id="Resource_b8dnc"]
-script = ExtResource("11_j156m")
-state = NodePath("../../../Health/Dead")
-
-[sub_resource type="Resource" id="Resource_vcpbr"]
-script = ExtResource("12_1g6yn")
-guard = SubResource("Resource_b8dnc")
-
-[sub_resource type="Resource" id="Resource_2ueik"]
-script = ExtResource("11_j156m")
-state = NodePath("../../../Health/Dead")
-
-[sub_resource type="Resource" id="Resource_8m7u0"]
-script = ExtResource("12_1g6yn")
-guard = SubResource("Resource_2ueik")
-
 [node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
 collision_layer = 4
 collision_mask = 27
@@ -83,7 +67,7 @@ navigation_component = NodePath("NavigationComponent")
 health_component = NodePath("HealthComponent")
 attack_recovery_time = 0.65
 projectile_scene = ExtResource("2_s3pnh")
-delay_per_projectile = 0.25
+delay_per_projectile = 0.3
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
@@ -109,18 +93,33 @@ monitoring = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2)
 shape = SubResource("BoxShape3D_d0jfy")
 
-[node name="HealthComponent" parent="." instance=ExtResource("3_fy6mc")]
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("text_effect_location") instance=ExtResource("3_fy6mc")]
 max_health = 3000.0
+text_effect_location = NodePath("../DamageTextMarker")
 
 [node name="NavigationComponent" parent="." node_paths=PackedStringArray("nav_agent") instance=ExtResource("9_cunyl")]
 nav_agent = NodePath("../NavigationAgent3D")
 
-[node name="BossHealthUI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="."]
 
-[node name="BossHealthContainer" parent="BossHealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("3_ybtoo")]
-health_component = NodePath("../../HealthComponent")
+[node name="HealthUI" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -486.0
+offset_right = 486.0
+offset_bottom = 168.0
+grow_horizontal = 2
 
-[node name="StateChartDebugger" parent="BossHealthUI" instance=ExtResource("6_4cg3x")]
+[node name="BossHealthContainer" parent="UI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("3_ybtoo")]
+layout_mode = 1
+boss_name = "Umby the Stinky"
+health_component = NodePath("../../../HealthComponent")
+show_on_ready = false
+hide_ui_on_death = true
+
+[node name="StateChartDebugger" parent="UI" instance=ExtResource("6_4cg3x")]
 visible = false
 offset_left = 1312.0
 offset_top = 8.0
@@ -269,6 +268,12 @@ to = NodePath("../../Cooldown")
 event = &"attack_end"
 delay_in_seconds = "0.0"
 
+[node name="toIdle" type="Node" parent="StateChart/Root/Attacking/Attack"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Idle")
+event = &"attack_end_now"
+delay_in_seconds = "0.0"
+
 [node name="Cooldown" type="Node" parent="StateChart/Root/Attacking"]
 script = ExtResource("7_0t8qy")
 
@@ -323,174 +328,6 @@ initial_state = NodePath("Inactive")
 [node name="Inactive" type="Node" parent="StateChart/Root/Phase"]
 script = ExtResource("7_0t8qy")
 
-[node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/Inactive"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../ChasePlayer")
-event = &"start_chase_attack"
-guard = SubResource("Resource_vcpbr")
-delay_in_seconds = "0.0"
-
-[node name="toRangedProjectiles" type="Node" parent="StateChart/Root/Phase/Inactive"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../RangedProjectiles")
-event = &"start_ranged_attack"
-guard = SubResource("Resource_8m7u0")
-delay_in_seconds = "0.0"
-
-[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/Inactive"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../AreaDenial")
-event = &"start_area_attack"
-guard = SubResource("Resource_8m7u0")
-delay_in_seconds = "0.0"
-
-[node name="ChasePlayer" type="Node" parent="StateChart/Root/Phase"]
-script = ExtResource("6_nojwf")
-initial_state = NodePath("TargetPlayer")
-
-[node name="TargetPlayer" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
-script = ExtResource("7_0t8qy")
-
-[node name="toCharge" type="Node" parent="StateChart/Root/Phase/ChasePlayer/TargetPlayer"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../Charge")
-event = &"charge_player"
-delay_in_seconds = "0.0"
-
-[node name="Charge" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
-script = ExtResource("7_0t8qy")
-
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/ChasePlayer/Charge"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../Recover")
-event = &"end_charge"
-delay_in_seconds = "0.0"
-
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
-script = ExtResource("7_0t8qy")
-
-[node name="toTargetPlayer" type="Node" parent="StateChart/Root/Phase/ChasePlayer/Recover"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../TargetPlayer")
-event = &"end_recovery"
-delay_in_seconds = "0.0"
-
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../Inactive")
-event = &"deactivate"
-delay_in_seconds = "0.0"
-
-[node name="toRangedProjectiles" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../RangedProjectiles")
-event = &"start_ranged_attack"
-guard = SubResource("Resource_8m7u0")
-delay_in_seconds = "0.0"
-
-[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/ChasePlayer"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../AreaDenial")
-event = &"start_area_attack"
-guard = SubResource("Resource_8m7u0")
-delay_in_seconds = "0.0"
-
-[node name="RangedProjectiles" type="Node" parent="StateChart/Root/Phase"]
-script = ExtResource("6_nojwf")
-initial_state = NodePath("MoveToCenter")
-
-[node name="MoveToCenter" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
-script = ExtResource("7_0t8qy")
-
-[node name="toFireProjectiles" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/MoveToCenter"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../FireProjectiles")
-event = &"start_projectiles"
-delay_in_seconds = "0.0"
-
-[node name="FireProjectiles" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
-script = ExtResource("7_0t8qy")
-
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/FireProjectiles"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../Recover")
-event = &"end_projectiles"
-delay_in_seconds = "0.0"
-
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
-script = ExtResource("7_0t8qy")
-
-[node name="toMoveToCenter" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/Recover"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../MoveToCenter")
-event = &"change_position"
-delay_in_seconds = "0.0"
-
-[node name="toFireProjectiles" type="Node" parent="StateChart/Root/Phase/RangedProjectiles/Recover"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../FireProjectiles")
-event = &"fire_again"
-delay_in_seconds = "0.0"
-
-[node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../ChasePlayer")
-event = &"start_chase_attack"
-guard = SubResource("Resource_vcpbr")
-delay_in_seconds = "0.0"
-
-[node name="toAreaDenial" type="Node" parent="StateChart/Root/Phase/RangedProjectiles"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../AreaDenial")
-event = &"start_area_attack"
-guard = SubResource("Resource_8m7u0")
-delay_in_seconds = "0.0"
-
-[node name="AreaDenial" type="Node" parent="StateChart/Root/Phase"]
-script = ExtResource("6_nojwf")
-initial_state = NodePath("MoveToCenter")
-
-[node name="MoveToCenter" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
-script = ExtResource("7_0t8qy")
-
-[node name="toSpawnDamageAreas" type="Node" parent="StateChart/Root/Phase/AreaDenial/MoveToCenter"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../SpawnDamageAreas")
-event = &"start_area_attack"
-delay_in_seconds = "0.0"
-
-[node name="SpawnDamageAreas" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
-script = ExtResource("7_0t8qy")
-
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AreaDenial/SpawnDamageAreas"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../Recover")
-event = &"finish_area_attack"
-delay_in_seconds = "0.0"
-
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
-script = ExtResource("7_0t8qy")
-
-[node name="toMoveToCenter" type="Node" parent="StateChart/Root/Phase/AreaDenial/Recover"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../MoveToCenter")
-event = &"change_position"
-delay_in_seconds = "0.0"
-
-[node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../ChasePlayer")
-event = &"start_chase_attack"
-guard = SubResource("Resource_vcpbr")
-delay_in_seconds = "0.0"
-
-[node name="toRangedProjectiles" type="Node" parent="StateChart/Root/Phase/AreaDenial"]
-script = ExtResource("8_lsrry")
-to = NodePath("../../RangedProjectiles")
-event = &"start_ranged_attack"
-guard = SubResource("Resource_8m7u0")
-delay_in_seconds = "0.0"
-
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_desired_distance = 0.5
 target_desired_distance = 0.25
@@ -501,7 +338,6 @@ debug_path_custom_point_size = 8.0
 
 [node name="DebugStateLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
-visible = false
 billboard = 1
 text = "INACTIVE"
 font = ExtResource("13_ai5vk")
@@ -511,13 +347,18 @@ uppercase = true
 
 [node name="DebugDistanceLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4, 0)
-visible = false
 billboard = 1
 text = "INACTIVE"
 font = ExtResource("13_ai5vk")
 font_size = 128
 outline_size = 32
 uppercase = true
+
+[node name="DamageTextMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5112, 0)
+
+[node name="BodyCenter" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.28097, 0)
 
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_entered"]
@@ -535,15 +376,3 @@ uppercase = true
 [connection signal="state_exited" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/TargetPlayer" to="." method="_on_phase_target_player_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/Charge" to="." method="_on_phase_chase_player_charge_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/ChasePlayer/Recover" to="." method="_on_phase_chase_player_recover_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Phase/ChasePlayer/Recover" to="." method="_on_phase_chase_player_recover_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/MoveToCenter" to="." method="_on_phase_ranged_projectiles_move_to_center_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Phase/RangedProjectiles/MoveToCenter" to="." method="_on_phase_ranged_projectiles_move_to_center_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/FireProjectiles" to="." method="_on_phase_ranged_projectiles_fire_projectiles_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/RangedProjectiles/Recover" to="." method="_on_phase_ranged_projectiles_recover_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/MoveToCenter" to="." method="_on_phase_area_denial_move_to_center_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Phase/AreaDenial/MoveToCenter" to="." method="_on_phase_area_denial_move_to_center_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/SpawnDamageAreas" to="." method="_on_phase_area_denial_spawn_damage_areas_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AreaDenial/Recover" to="." method="_on_phase_area_denial_recover_state_entered"]

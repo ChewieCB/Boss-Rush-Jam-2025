@@ -1,0 +1,104 @@
+[gd_scene load_steps=5 format=3 uid="uid://d1r8em3of5o8n"]
+
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="1_8li6c"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/spin_barrel.gd" id="1_e7lk2"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="2_soqa0"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
+height = 0.5
+
+[node name="ArchetypeBarrel" type="Node3D"]
+script = ExtResource("1_e7lk2")
+
+[node name="Model" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
+mesh = SubResource("CylinderMesh_sfbyw")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0311846, 0)
+text = "+2 projectile"
+horizontal_alignment = 2
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CompoundEffectSMG" type="Node3D" parent="EffectContainer"]
+script = ExtResource("1_8li6c")
+display_text_title = " Archetype: SMG"
+display_text_tag = "Spray and pray!"
+
+[node name="SetProjectileCountTo1" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+script = ExtResource("2_soqa0")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerateTo5" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+script = ExtResource("2_soqa0")
+attribute = 4
+new_value = 10.0
+
+[node name="SetNotHitscan" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+script = ExtResource("2_soqa0")
+attribute = 6
+
+[node name="SetSpreadTo2" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+script = ExtResource("2_soqa0")
+attribute = 7
+new_value = 2.0
+
+[node name="SetDamageTo6" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+script = ExtResource("2_soqa0")
+attribute = 1
+new_value = 6.0
+
+[node name="CompoundEffectShotgun" type="Node3D" parent="EffectContainer"]
+script = ExtResource("1_8li6c")
+display_text_title = "Archetype: Shotgun"
+display_text_tag = "Strong at close range!"
+
+[node name="SetProjectileCountTo8" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+script = ExtResource("2_soqa0")
+attribute = 2
+new_value = 8.0
+
+[node name="SetFirerateTo2" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+script = ExtResource("2_soqa0")
+attribute = 4
+new_value = 2.0
+
+[node name="SetNotHitscan" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+script = ExtResource("2_soqa0")
+attribute = 6
+
+[node name="SetSpreadTo8" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+script = ExtResource("2_soqa0")
+attribute = 7
+new_value = 8.0
+
+[node name="CompoundEffectRailgun" type="Node3D" parent="EffectContainer"]
+script = ExtResource("1_8li6c")
+display_text_title = "Archetype: Railgun"
+display_text_tag = "Precision is important!"
+
+[node name="SetProjectileCountTo1" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 2
+new_value = 8.0
+
+[node name="SetFirerateTo0_5" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 4
+new_value = 0.5
+
+[node name="SetIsHitscan" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpreadTo0" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 7
+
+[node name="SetDamageTo100" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+script = ExtResource("2_soqa0")
+attribute = 1
+new_value = 100.0

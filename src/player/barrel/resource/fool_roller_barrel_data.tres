@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dhsc2lynivmc0"]
+
+[ext_resource type="Texture2D" uid="uid://dgs1f84cmjl1q" path="res://src/player/barrel/resource/sprite/fool_roller.png" id="1_0ubde"]
+[ext_resource type="PackedScene" uid="uid://dmgm77t2sxoc5" path="res://src/player/barrel/FoolRollerBarrel.tscn" id="2_gxri0"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_pahdn"]
+
+[resource]
+script = ExtResource("3_pahdn")
+barrel_id = 4
+barrel_name = "Fool Roller"
+barrel_desc = "[b]Fool Roller Barrel[/b]
+Add some strange effects to your gun.
+
+Possible rolls:
+[ul]
+Double Tap: Shot in burst of two.
+Ammo Leech: Small chance to refund ammo on hit, but reduce your damage.
+Gambler's Precision: Chance to crit on hit and jam gun on miss.
+[/ul]"
+barrel_image = ExtResource("1_0ubde")
+barrel_prefab = ExtResource("2_gxri0")

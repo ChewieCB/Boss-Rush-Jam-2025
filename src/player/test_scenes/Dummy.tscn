@@ -7,7 +7,7 @@
 size = Vector3(1, 2, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_asko3"]
-albedo_color = Color(1, 0.13926, 0.116876, 1)
+albedo_color = Color(1, 0.141176, 0.117647, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_8yaim"]
 material = SubResource("StandardMaterial3D_asko3")
@@ -48,10 +48,15 @@ text = "T.T"
 font_size = 40
 outline_size = 20
 
-[node name="HealthComponent" parent="." instance=ExtResource("1_sx18x")]
-max_health = 99999.0
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("text_effect_location") instance=ExtResource("1_sx18x")]
+max_health = 999999.0
+text_effect_location = NodePath("../DamageTextMarker")
 
 [node name="ResetTotalDamageTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="DamageTextMarker" type="Marker3D" parent="."]
+
+[node name="BodyCenter" type="Marker3D" parent="."]
 
 [connection signal="timeout" from="ResetTotalDamageTimer" to="." method="_on_reset_total_damage_timer_timeout"]

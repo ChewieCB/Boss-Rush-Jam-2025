@@ -1,7 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=13 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="PackedScene" uid="uid://d0uqv7xitfwnt" path="res://src/player/test_scenes/Dummy.tscn" id="2_lrk4j"]
+[ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="3_g5u1p"]
+[ext_resource type="Resource" uid="uid://yx1psxr1obhn" path="res://src/player/barrel/resource/projectile_count_barrel_data.tres" id="4_h0d4u"]
+[ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="5_bi1qm"]
+[ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="6_1a2ul"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -17,7 +21,7 @@ tonemap_mode = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36m72"]
 transparency = 1
-albedo_color = Color(0.858824, 0.521569, 0.137255, 0.752941)
+albedo_color = Color(0.858824, 0.521569, 0.137255, 0.768627)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_oe1jg"]
 top_radius = 4.0
@@ -49,19 +53,13 @@ size = Vector3(10, 10, 10)
 material = SubResource("StandardMaterial3D_36m72")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="."]
-transform = Transform3D(0.816702, 0, 0.57706, 0, 1, 0, -0.57706, 0, 0.816702, 31.3229, 4.92087, -16.1109)
+transform = Transform3D(0.816702, 0, 0.57706, 0, 1, 0, -0.57706, 0, 0.816702, 29.1085, 4.92087, 4.95324)
 use_collision = true
 size = Vector3(10, 10, 10)
 material = SubResource("StandardMaterial3D_36m72")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="."]
 transform = Transform3D(0.816702, 0, 0.57706, 0, 1, 0, -0.57706, 0, 0.816702, -25.0659, 4.92087, -2.56013)
-use_collision = true
-size = Vector3(10, 10, 10)
-material = SubResource("StandardMaterial3D_36m72")
-
-[node name="CSGBox3D5" type="CSGBox3D" parent="."]
-transform = Transform3D(0.816702, 0, 0.57706, 0, 1, 0, -0.57706, 0, 0.816702, 20.832, 4.92087, 24.9786)
 use_collision = true
 size = Vector3(10, 10, 10)
 material = SubResource("StandardMaterial3D_36m72")
@@ -73,9 +71,33 @@ size = Vector3(10, 10, 10)
 material = SubResource("StandardMaterial3D_36m72")
 
 [node name="CSGBox3D7" type="CSGBox3D" parent="."]
-transform = Transform3D(0.74943, 0, -0.662084, 0, 1, 0, 0.662084, 0, 0.74943, 9.90389, 4.92087, -39.0599)
+transform = Transform3D(0.74943, 0, -0.662084, 0, 1, 0, 0.662084, 0, 0.74943, 12.2054, 9.02551, -35.9304)
 use_collision = true
-size = Vector3(10, 10, 10)
+size = Vector3(4.43213, 20.2905, 23.3564)
+material = SubResource("StandardMaterial3D_36m72")
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="."]
+transform = Transform3D(0.74943, 0, -0.662084, 0, 1, 0, 0.662084, 0, 0.74943, 30.9365, 9.1051, -19.4058)
+use_collision = true
+size = Vector3(4.43213, 20.1313, 23.3564)
+material = SubResource("StandardMaterial3D_36m72")
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="."]
+transform = Transform3D(0.74943, 0, -0.662084, 0, 1, 0, 0.662084, 0, 0.74943, 30.2666, 9.14759, -36.8465)
+use_collision = true
+size = Vector3(28.3526, 20.0463, 2.27496)
+material = SubResource("StandardMaterial3D_36m72")
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="."]
+transform = Transform3D(0.74943, 0, -0.662084, 0, 1, 0, 0.662084, 0, 0.74943, 21.1274, 18.4061, -27.8635)
+use_collision = true
+size = Vector3(25.6065, 1.52936, 23.7671)
+material = SubResource("StandardMaterial3D_36m72")
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="."]
+transform = Transform3D(0.651927, -0.536187, 0.536187, 0, 0.707107, 0.707107, -0.758282, -0.460982, 0.460982, -0.984107, 13.36, -13.8563)
+use_collision = true
+size = Vector3(15.9293, 1.52936, 11.8049)
 material = SubResource("StandardMaterial3D_36m72")
 
 [node name="Player" parent="." instance=ExtResource("1_h4pew")]
@@ -92,3 +114,18 @@ mesh = SubResource("CylinderMesh_oe1jg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("CylinderShape3D_63wrj")
+
+[node name="BarrelItemPickup" parent="." instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 0)
+
+[node name="BarrelItemPickup2" parent="." instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 2.57001)
+data = ExtResource("4_h0d4u")
+
+[node name="BarrelItemPickup3" parent="." instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 3.93916)
+data = ExtResource("5_bi1qm")
+
+[node name="BarrelItemPickup4" parent="." instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 5.02901)
+data = ExtResource("6_1a2ul")

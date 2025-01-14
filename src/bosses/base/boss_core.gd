@@ -32,7 +32,7 @@ var area_phase_count: int = 0
 
 # Charge Attack
 # TODO - make this adjustable via resources
-@export var charge_telegraph_time: float = 0.25
+@export var telegraph_time: float = 0.25
 
 # Projectile Attack
 # TODO - make this adjustable via resources
@@ -49,6 +49,7 @@ var area_move_points: Array[Node]
 # TODO - make this adjustable via resources
 @export var area_damage: float = 25.0
 @export var areas_per_phase: int = 6
+@export var area_spawn_time: float = 1.5
 @export var delay_per_area: float = 0.0
 var areas_finished: int = 0:
 	set(value):
@@ -61,9 +62,11 @@ var area_round_count: int = 0
 #
 @export var area_size: float = 16.0
 @export var area_rings: int = 1
+# For cleanup on scene change
+var spawned_area_objects = []
 
 @onready var hurtbox: Area3D = $Hurtbox
-@onready var health_ui = $BossHealthUI/BossHealthContainer
+@onready var health_ui = $UI/HealthUI/BossHealthContainer
 
 var MAX_SPEED: float = 5.0
 const TURN_SPEED_FAST: float = 7.5
@@ -71,7 +74,7 @@ const TURN_SPEED_SLOW: float = 5.0
 const MAX_FALL_SPEED: float = 50.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 8
-const GRAVITY: float = 14
+var GRAVITY: float = 14
 
 var vel_vertical: float = 0
 
@@ -79,15 +82,17 @@ var vel_vertical: float = 0
 @export var target: Node3D:
 	set(value):
 		target = value
-		if not target.is_node_ready():
-			await target.ready
-		navigation_component.target = target
+		if target:
+			if not target.is_node_ready():
+				await target.ready
+			navigation_component.target = target
 var cached_target: Node3D
 
 func _ready() -> void:
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	#debug_mesh.visible = false
+	await owner.ready
 	ranged_move_points = get_tree().get_nodes_in_group("boss_ranged_marker")
 	area_move_points = get_tree().get_nodes_in_group("boss_area_marker")
 
@@ -98,13 +103,18 @@ func _physics_process(delta: float) -> void:
 	velocity.y = vel_vertical
 
 	move_and_slide()
-	debug_dist_label.text = "(%su)" % [
-		round(self.global_position.distance_to(target.global_position))
-	]
 
 
 func jump(multiplier = 1.0):
 	vel_vertical = JUMP_FORCE * multiplier
+
+
+func show_health() -> void:
+	health_ui.show_ui()
+
+
+func hide_health() -> void:
+	health_ui.hide_ui()
 
 
 func _turn_towards_target(speed: float, delta: float) -> void:
@@ -118,8 +128,8 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 
 
 func activate() -> void:
+	show_health()
 	SoundManager.play_sound(TEMP_sfx_awaken)
-	change_phase()
 
 
 func change_phase() -> void:
@@ -148,6 +158,9 @@ func change_phase() -> void:
 	# If the player is too close, don't do area attacks
 	if dist_to_target <= area_size / 2:
 		possible_phases.erase("start_area_attack")
+	else:
+		#possible_phases.erase("start_area_attack")
+		possible_phases.append("start_area_attack")
 	
 	# If the player is further away, prioritise charges and area attacks
 	if dist_to_target >= 30:
@@ -159,9 +172,17 @@ func change_phase() -> void:
 		possible_phases.append("start_ranged_attack")
 		possible_phases.append("start_ranged_attack")
 		possible_phases.append("start_ranged_attack")
+		possible_phases.append("start_area_attack")
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	state_chart.send_event(new_phase)
+
+
+func _exit_tree() -> void:
+	for object in spawned_area_objects:
+		for node in object:
+			if is_instance_valid(node):
+				node.queue_free()
 
 
 ## ======== State Chart Methods ========
@@ -201,9 +222,9 @@ func _on_movement_charging_state_entered() -> void:
 	var charge_impulse = self.global_position.distance_to(target.global_position) * 8
 	velocity += charge_dir * charge_impulse
 
-func _on_movement_charging_state_physics_processing(delta: float) -> void:
-	velocity.x = lerp(velocity.x, 0.0, 0.08)
-	velocity.z = lerp(velocity.z, 0.0, 0.08)
+func _on_movement_charging_state_physics_processing(_delta: float) -> void:
+	velocity.x = lerp(velocity.x, 0.0, 0.05)
+	velocity.z = lerp(velocity.z, 0.0, 0.05)
 
 	if velocity.x == 0 and velocity.z == 0:
 		state_chart.send_event("end_charge")
@@ -255,209 +276,3 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 	SoundManager.play_sound(TEMP_sfx_charge_impact)
 	if body == target:
 		target.health_component.damage(40)
-
-
-### ATTACK PHASES --------------------------------
-#### INACTIVE
-func _on_phase_inactive_state_entered() -> void:
-	debug_state_label.text = "Inactive"
-	sprite.modulate = Color.DIM_GRAY
-
-
-#### CHASE PLAYER
-func _on_phase_target_player_state_entered() -> void:
-	sprite.modulate = Color.WHITE
-	debug_state_label.text = "Chase | Targeting"
-	
-	state_chart.send_event("start_targeting")
-	await get_tree().create_timer(2.0).timeout
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(charge_telegraph_time).timeout
-	state_chart.send_event("attack_start")
-	state_chart.send_event("charge_player")
-
-func _on_phase_chase_player_charge_state_entered() -> void:
-	SoundManager.play_sound(TEMP_sfx_charge)
-	sprite.modulate = Color.ORANGE
-	debug_state_label.text = "Chase | Charging"
-	state_chart.send_event("start_charge")
-
-func _on_phase_chase_player_recover_state_entered() -> void:
-	sprite.modulate = Color.YELLOW
-	debug_state_label.text = "Chase | Recovering"
-	state_chart.send_event("attack_end")
-	await get_tree().create_timer(attack_recovery_time).timeout
-	
-	state_chart.send_event("cooldown_end")
-	charge_phase_count += 1
-	change_phase()
-	state_chart.send_event("end_recovery")
-
-
-#### RANGED PROJECTILES
-func _on_phase_ranged_projectiles_move_to_center_state_entered() -> void:
-	sprite.modulate = Color.YELLOW
-	debug_state_label.text = "Projectiles | Moving"
-	
-	MAX_SPEED *= 2
-	
-	var valid_move_points = ranged_move_points.duplicate()
-	valid_move_points.sort_custom(
-		func(a, b):
-			var a_dist: float = self.global_position.distance_to(a.global_position)
-			var b_dist: float = self.global_position.distance_to(b.global_position)
-			if a_dist < b_dist:
-				return true
-			return false
-	)
-	valid_move_points.pop_front()
-	
-	cached_target = target
-	target = valid_move_points[0]
-	state_chart.send_event("start_moving")
-	
-	await navigation_component.nav_agent.navigation_finished
-	state_chart.send_event("start_projectiles")
-
-func _on_phase_ranged_projectiles_move_to_center_state_exited() -> void:
-	target = cached_target
-	MAX_SPEED /= 2
-
-func _on_phase_ranged_projectiles_fire_projectiles_state_entered() -> void:
-	sprite.modulate = Color.ORANGE
-	debug_state_label.text = "Projectiles | Firing"
-	
-	state_chart.send_event("start_targeting")
-	
-	for i in projectiles_per_phase:
-		await get_tree().create_timer(delay_per_projectile).timeout
-		var projectile: TestProjectile = projectile_scene.instantiate()
-		get_parent().get_parent().add_child(projectile)
-		projectile.global_position = self.global_position + Vector3(0, 3, 0)
-		projectile.look_at(target.global_position, Vector3.UP)
-		SoundManager.play_sound(TEMP_sfx_projectile)
-	
-	await get_tree().create_timer(delay_per_projectile).timeout
-	state_chart.send_event("end_projectiles")
-
-func _on_phase_ranged_projectiles_recover_state_entered() -> void:
-	sprite.modulate = Color.YELLOW
-	debug_state_label.text = "Projectiles | Recovering"
-	
-	state_chart.send_event("attack_end")
-	projectile_round_count += 1
-	await get_tree().create_timer(attack_recovery_time).timeout
-	state_chart.send_event("cooldown_end")
-	
-	if projectile_round_count < max_projectile_rounds:
-		var fire_again_chance: float = randf()
-		if fire_again_chance < 0.55:
-			state_chart.send_event("fire_again")
-			return
-	
-	ranged_phase_count += 1
-	change_phase()
-	state_chart.send_event("change_position")
-
-#### AREA DENIAL
-func _on_phase_area_denial_move_to_center_state_entered() -> void:
-	sprite.modulate = Color.BLUE_VIOLET
-	debug_state_label.text = "Area | Moving"
-	
-	MAX_SPEED *= 2
-	cached_target = target
-	# TODO - add code to vary move points if more than one
-	target = area_move_points[0]
-	state_chart.send_event("start_moving")
-	await navigation_component.nav_agent.navigation_finished
-	
-	state_chart.send_event("start_area_attack")
-
-func _on_phase_area_denial_move_to_center_state_exited() -> void:
-	target = cached_target
-	MAX_SPEED /= 2
-	state_chart.send_event("stop_moving")
-
-func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
-	sprite.modulate = Color.ORANGE
-	debug_state_label.text = "Area | Spawning"
-	var angle_increment: float =  2 * PI / areas_per_phase
-	var initial_point: Vector3 = target.global_position
-	initial_point.y = self.global_position.y
-	
-	SoundManager.play_sound(TEMP_sfx_area_1)
-	for i in areas_per_phase:
-		var angle = angle_increment * i
-		var dir = initial_point - self.global_position
-		var adjusted_dir = dir.rotated(Vector3.UP, angle)
-		var area_pos: Vector3 = self.global_position + adjusted_dir
-		
-		# Generate a collider
-		var area_collider := Area3D.new()
-		var area_collider_shape := CollisionShape3D.new()
-		var collider_shape := CylinderShape3D.new()
-		collider_shape.radius = area_size / 2
-		collider_shape.height = 64.0
-		area_collider_shape.shape = collider_shape
-		area_collider.add_child(area_collider_shape)
-		area_collider.collision_layer = 0
-		area_collider.collision_mask = pow(2, 2-1)
-		area_collider.monitoring = true
-		
-		get_tree().get_root().add_child(area_collider)
-		
-		area_collider.global_position = area_pos
-		
-		var debug_mesh_instance = MeshInstance3D.new()
-		var mesh = CylinderMesh.new()
-		var sphere_mat = ORMMaterial3D.new()
-		
-		# Generate a visual
-		get_tree().get_root().add_child(debug_mesh_instance)
-		
-		debug_mesh_instance.mesh = mesh
-		debug_mesh_instance.cast_shadow = false
-		debug_mesh_instance.global_position = area_pos
-		
-		mesh.bottom_radius = 0.01
-		mesh.top_radius = 0.01
-		mesh.height = 0.5
-		mesh.material = sphere_mat
-		
-		sphere_mat.transparency = true
-		sphere_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		sphere_mat.cull_mode = 2
-		sphere_mat.albedo_color = Color(Color.RED, 0.25)
-		
-		# Animate the visual
-		var tween = get_tree().create_tween()
-		tween.tween_property(mesh, "bottom_radius", area_size / 2, 3.0)
-		tween.parallel().tween_property(mesh, "top_radius", area_size / 2, 3.0)
-		tween.tween_callback(
-			func():
-				var height_tween = get_tree().create_tween()
-				# Check if player is in area
-				#area_collider.monitoring = true
-				var bodies = area_collider.get_overlapping_bodies()
-				for body in bodies:
-					body.health_component.damage(area_damage) 
-				height_tween.tween_property(mesh, "height", 64.0 / 2, 0.2).set_trans(Tween.TRANS_EXPO)
-				height_tween.tween_callback(
-					func():
-						SoundManager.play_sound(TEMP_sfx_area_2)
-						debug_mesh_instance.queue_free()
-						area_collider.queue_free()
-						areas_finished += 1
-				)
-		)
-
-
-func _on_phase_area_denial_recover_state_entered() -> void:
-	sprite.modulate = Color.YELLOW
-	debug_state_label.text = "Area | Recovering"
-	
-	state_chart.send_event("attack_end")
-	area_phase_count += 1
-	await get_tree().create_timer(attack_recovery_time).timeout
-	change_phase()
-	state_chart.send_event("change_position")

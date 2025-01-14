@@ -1,0 +1,26 @@
+[remap]
+
+importer="2d_array_texture"
+type="CompressedTexture2DArray"
+uid="uid://ciim6ubwd3tgl"
+path="res://.godot/imported/BossRoulette.exr-653a947807aa67ba6a961204e8f68c11.ctexarray"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://src/maps/roulette_boss/BossRoulette.exr"
+dest_files=["res://.godot/imported/BossRoulette.exr-653a947807aa67ba6a961204e8f68c11.ctexarray"]
+
+[params]
+
+compress/mode=3
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/channel_pack=1
+mipmaps/generate=false
+mipmaps/limit=-1
+slices/horizontal=1
+slices/vertical=2

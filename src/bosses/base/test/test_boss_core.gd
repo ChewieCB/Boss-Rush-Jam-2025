@@ -1,7 +1,10 @@
 extends Node3D
 
+@export var bgm: AudioStream
+
 @export var boss: BossCore
 @export var player: Player
+@export var elevator_doors: ElevatorDoors
 
 @onready var win_ui: Control = $UI/BossDefeatedUI
 @onready var boss_trigger: Area3D = $BossTriggerVolume
@@ -9,7 +12,12 @@ extends Node3D
 func _ready() -> void:
 	boss.health_component.died.connect(_on_boss_defeated)
 	player.health_component.died.connect(_on_player_death)
-
+	
+	var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
+	player.global_position = player_start_pos
+	player.rotation = GameManager.cached_player_rotation
+	player.player_camera.rotation = GameManager.cached_camera_rotation
+	elevator_doors.open()
 
 func _on_boss_defeated() -> void:
 	pass
@@ -31,7 +39,7 @@ func show_end_panel() -> void:
 	await get_tree().create_timer(5.0).timeout
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	tween.tween_callback(_reload_scene)
+	tween.tween_callback(func(): get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn"))
 
 
 func _return_to_main() -> void:
