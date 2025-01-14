@@ -169,7 +169,7 @@ func select_attack_phase_3() -> void:
 		"start_ball_attack",
 	]
 	
-	if previous_phase:
+	if previous_phase and possible_phases.size() > 1:
 		possible_phases.erase(previous_phase)
 	
 	#if drop_phase_count == max_drop_phase_count:
@@ -796,12 +796,12 @@ func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
 				return true
 			return false
 	)
-	for i in range(balls_to_attack_phase_3): 
+	for i in range(balls_to_attack_phase_3 - active_balls.size()): 
 		var ball = spawn_ball()
 		ball.is_flaming = true
 		ball = _set_ball_active_params(ball)
-		ball.central_force_magnitude = 10000.0
-		#ball.homing_force_magnitude = 10000.0
+		ball.central_force_magnitude = 9000.0
+		ball.homing_force_magnitude = 6500.0
 		active_balls.push_back(ball)
 		ball.apply_central_force(ball.global_position.direction_to(target.global_position) * 2500)
 		await get_tree().create_timer(0.5).timeout
