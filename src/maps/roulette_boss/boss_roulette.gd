@@ -119,7 +119,9 @@ func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 
 
 func _on_killbox_area_body_entered(body: Node3D) -> void:
-	if body.health_component:
+	if body is RouletteBall:
+		body.destroy()
+	elif body.health_component:
 		body.health_component.damage(9999999)
 	else:
 		body.queue_free()

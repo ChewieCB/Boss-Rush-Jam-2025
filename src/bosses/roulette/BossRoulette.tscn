@@ -60,7 +60,7 @@ radius = 6.0
 collision_mask = 26
 motion_mode = 1
 script = ExtResource("2_m116k")
-current_phase = 1
+current_phase = 3
 max_barrier_phase_count = 2
 max_shockwave_phase_count = 2
 max_shields_phase_count = 1
@@ -78,6 +78,7 @@ ball_scene = ExtResource("4_pnl31")
 balls_to_spawn_phase_1 = 3
 balls_to_spawn_phase_2 = 6
 balls_to_spawn_phase_3 = 11
+balls_to_attack_phase_3 = 3
 ball_attack_delay = 1.0
 max_ball_lifetime = 8.0
 max_wave_radius = 24.0
@@ -712,9 +713,7 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Targeting" to="." method="_on_phase_3_ball_projectile_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Recover" to="." method="_on_ball_projectile_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Recover" to="." method="_on_phase_3_projectile_balls_recover_state_entered"]
 [connection signal="timeout" from="ShieldsAbsorbTimer" to="." method="_on_shields_absorb_timer_timeout"]
 [connection signal="timeout" from="ShieldsSpawnTimer" to="." method="_on_shields_spawn_timer_timeout"]
 [connection signal="body_entered" from="PushbackArea" to="." method="_on_pushback_area_body_entered"]
-[connection signal="timeout" from="BallKillTimer" to="." method="destroy_active_balls"]

@@ -42,12 +42,14 @@ var previous_phase: String
 @export var balls_to_spawn_phase_1: int = 3
 @export var balls_to_spawn_phase_2: int = 6
 @export var balls_to_spawn_phase_3: int = 11
+@export var balls_to_attack_phase_3: int = 3
 @export var ball_attack_delay: float = 1.0
-@export var max_ball_lifetime: float = 10.0
+@export var max_ball_lifetime: float = 8.0
 @onready var ball_kill_timer: Timer = $BallKillTimer
 var active_balls: Array = []
+var passive_balls: Array = []
 var ball_spawn_positions: Array
-var last_spawn: Node3D
+var available_spawns: Array
 # Shockwave
 @export_group("Shockwave")
 @export var max_wave_radius: float = 24.0
@@ -77,7 +79,9 @@ func _ready() -> void:
 	shields_absorb_timer.wait_time = shields_max_time
 	
 	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
+	available_spawns = ball_spawn_positions.duplicate()
 	ball_kill_timer.wait_time = max_ball_lifetime
+	ball_kill_timer.timeout.connect(destroy_balls.bind(active_balls))
 	
 	super()
 
@@ -165,19 +169,22 @@ func select_attack_phase_3() -> void:
 		"start_ball_attack",
 	]
 	
-	if drop_phase_count == max_drop_phase_count:
-		possible_phases.erase("start_drop_attack")
-		drop_phase_count = 0
-	if ball_phase_count == max_ball_phase_count:
-		possible_phases.erase("start_ball_attack")
-		ball_phase_count = 0
+	if previous_phase:
+		possible_phases.erase(previous_phase)
 	
-	for phase in possible_phases.duplicate():
-		if phase != previous_phase:
-			possible_phases.append(phase)
-	
-	if active_balls.size() < balls_to_spawn_phase_3:
-		possible_phases.append("start_ball_attack")
+	#if drop_phase_count == max_drop_phase_count:
+		#possible_phases.erase("start_drop_attack")
+		#drop_phase_count = 0
+	#if ball_phase_count == max_ball_phase_count:
+		#possible_phases.erase("start_ball_attack")
+		#ball_phase_count = 0
+	#
+	#for phase in possible_phases.duplicate():
+		#if phase != previous_phase:
+			#possible_phases.append(phase)
+	#
+	#if active_balls.size() < balls_to_spawn_phase_3:
+		#possible_phases.append("start_ball_attack")
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	previous_phase = new_phase
@@ -230,40 +237,65 @@ func sweep_barrier(
 	return true
 
 
-func spawn_ball(_target: Node3D = target, spawn_force: float = 500) -> RouletteBall:
+func spawn_ball(
+	_target: Node3D = target, 
+	spawn_force: float = 500, 
+	ball_arr: Array = active_balls,
+	ball_prop_func: Callable = _set_ball_active_params
+) -> RouletteBall:
 	var spawn: Node3D
-	if last_spawn:
-		var last_spawn_idx = ball_spawn_positions.find(last_spawn)
-		var new_idx = last_spawn_idx + 2
-		if new_idx > ball_spawn_positions.size() - 1:
-			new_idx -= ball_spawn_positions.size() - 1
-		spawn = ball_spawn_positions[new_idx]
-	else:
-		var spawns_furthest = ball_spawn_positions.duplicate()
-		spawns_furthest.sort_custom(
-			func(a, b):
-				var a_dist = a.global_position.distance_to(target.global_position)
-				var b_dist = b.global_position.distance_to(target.global_position)
-				if a_dist > b_dist:
-					return true
-				return false
-		)
-		spawn = spawns_furthest.front()
-	last_spawn = spawn
+	if available_spawns.size() == 0:
+		available_spawns = ball_spawn_positions.duplicate()
+	available_spawns.sort_custom(
+		func(a, b):
+			var a_dist = a.global_position.distance_to(target.global_position)
+			var b_dist = b.global_position.distance_to(target.global_position)
+			if a_dist > b_dist:
+				return true
+			return false
+	)
+	spawn = available_spawns.pop_front()
+	
 	var new_ball: RouletteBall = ball_scene.instantiate()
-	
 	get_tree().get_root().add_child(new_ball)
+	new_ball = ball_prop_func.call(new_ball, _target)
 	new_ball.global_position = spawn.global_position
-	new_ball.target = _target
-	new_ball.apply_central_force(spawn.global_position.direction_to(Vector3.ZERO) * spawn_force)
+	new_ball.look_at(Vector3.ZERO)
+	new_ball.destroyed.connect(_on_ball_destroyed)
 	
-	active_balls.append(new_ball)
+	var spawn_force_vector: Vector3 = spawn.global_position.direction_to(Vector3.ZERO)
+	spawn_force_vector.y = 0
+	new_ball.apply_central_force(spawn_force_vector * spawn_force)
+	
+	ball_arr.append(new_ball)
 	return new_ball
 
+func _set_ball_active_params(ball: RouletteBall, _target: Node3D = target) -> RouletteBall:
+	ball.target = _target
+	ball.health_component.is_invincible = false
+	ball.max_collisions = 30
+	ball.radial_force_magnitude = 2500.0
+	ball.central_force_magnitude = 10000.0
+	ball.homing_force_magnitude = 7500.0
+	return ball
 
-func destroy_active_balls() -> void:
-	for ball in active_balls:
-		ball.destroy()
+func _set_ball_passive_params(ball: RouletteBall, _target: Node3D) -> RouletteBall:
+	ball.target = null
+	ball.health_component.is_invincible = true
+	ball.max_collisions = -1
+	ball.radial_force_magnitude = 3500.0
+	ball.central_force_magnitude = 500.0
+	ball.homing_force_magnitude = 0.0
+	#ball.radial_force_magnitude = 3500.0
+	
+	return ball
+
+
+func destroy_balls(ball_arr: Array) -> void:
+	for i in ball_arr.size() - 1:
+		var ball = ball_arr.pop_front()
+		if is_instance_valid(ball):
+			ball.destroy()
 
 
 func spawn_center_wave(
@@ -412,7 +444,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 
 func _on_died() -> void:
-	destroy_active_balls()
+	destroy_balls(active_balls)
+	destroy_balls(passive_balls)
 	state_chart.send_event("stop_drop")
 	super()
 
@@ -567,10 +600,10 @@ func _on_ball_projectile_launch_balls_state_entered() -> void:
 	debug_state_label.text = "Multiball | Launching"
 	for i in balls_to_spawn_phase_1:
 		var ball = spawn_ball()
-		ball.destroyed.connect(_on_ball_destroyed)
 	ball_kill_timer.start(max_ball_lifetime)
 
 func _on_ball_destroyed(ball: RouletteBall) -> void:
+	print("Ball destroyed")
 	active_balls.erase(ball)
 	if active_balls.size() == 0:
 		state_chart.send_event("balls_destroyed")
@@ -590,7 +623,7 @@ func _on_ball_projectile_recover_state_entered() -> void:
 
 func _on_phase_2_state_entered() -> void:
 	state_chart.send_event("barrier_attack_end")
-	destroy_active_balls()
+	destroy_balls(active_balls)
 	ball_kill_timer.stop()
 	
 	debug_phase_label.text = "Phase 2"
@@ -601,12 +634,9 @@ func _on_phase_2_state_entered() -> void:
 	
 	# Mostly for decorative effect, roulette balls that circle the walls of the arena
 	for i in balls_to_spawn_phase_2:
-		var ball = spawn_ball(null, 50.0)
-		ball.health_component.is_invincible = true
-		ball.max_collisions = -1
-		ball.radial_force_magnitude = 3500.0
-		ball.central_force_magnitude = -500.0
-		ball.destroyed.connect(_on_ball_destroyed)
+		var ball = spawn_ball(null, 500.0, passive_balls, _set_ball_passive_params)
+		var tween = get_tree().create_tween()
+		tween.tween_property(ball, "central_force_magnitude", -200, 2.0)
 	
 	current_phase = 2
 	select_attack()
@@ -675,11 +705,7 @@ func _on_phase_3_state_entered() -> void:
 	
 	# Mostly for decorative effect, roulette balls that circle the walls of the arena
 	for i in balls_to_spawn_phase_3 - active_balls.size():
-		var ball = spawn_ball(null, 50.0)
-		ball.max_collisions = -1
-		ball.radial_force_magnitude = 3500.0
-		ball.central_force_magnitude = -500.0
-		ball.destroyed.connect(_on_ball_destroyed)
+		spawn_ball(null, 500.0, passive_balls, _set_ball_passive_params)
 	
 	#select_attack()
 	await get_tree().create_timer(1.5).timeout
@@ -751,6 +777,7 @@ func _on_phase_3_dropping_segments_recover_state_entered() -> void:
 	select_attack()
 	state_chart.send_event("end_recovery")
 
+
 ### Phase 3 | Multiball
 func _on_phase_3_ball_projectile_targeting_state_entered() -> void:
 	debug_state_label.text = "Multiball | Targeting"
@@ -760,29 +787,30 @@ func _on_phase_3_ball_projectile_targeting_state_entered() -> void:
 func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
 	debug_state_label.text = "Multiball | Launching"
 	
-	for ball in active_balls:
-		ball.target = target
-		ball.radial_force_magnitude = 2500
-		ball.central_force_magnitude = 10000
-		ball.homing_force_magnitude = 7500
-		ball.apply_central_force(ball.global_position.direction_to(Vector3.ZERO) * 5000)
+	# Get the balls furthest from the player so they can see them when they shift
+	passive_balls.sort_custom(
+		func(a, b):
+			var a_dist: float = a.global_position.distance_to(target.global_position)
+			var b_dist: float = b.global_position.distance_to(target.global_position)
+			if a_dist > b_dist:
+				return true
+			return false
+	)
+	for i in range(balls_to_attack_phase_3): 
+		var ball = spawn_ball()
+		ball.is_flaming = true
+		ball = _set_ball_active_params(ball)
+		ball.central_force_magnitude = 10000.0
+		#ball.homing_force_magnitude = 10000.0
+		active_balls.push_back(ball)
+		ball.apply_central_force(ball.global_position.direction_to(target.global_position) * 2500)
+		await get_tree().create_timer(0.5).timeout
 	
 	state_chart.send_event("end_balls_launch")
 
 func _on_phase_3_ball_projectile_launch_balls_state_exited() -> void:
 	await get_tree().create_timer(8.0).timeout
-	for ball in active_balls:
-		ball.target = null
-		ball.radial_force_magnitude = 3500.0
-		ball.central_force_magnitude = -500.0
-	
-	if active_balls.size() < balls_to_spawn_phase_3:
-		for i in range(balls_to_spawn_phase_3):
-			var ball = spawn_ball(null, 50.0)
-			ball.max_collisions = -1
-			ball.radial_force_magnitude = 3500.0
-			ball.central_force_magnitude = -500.0
-			ball.destroyed.connect(_on_ball_destroyed)
+	destroy_balls(active_balls)
 
 func _on_phase_3_projectile_balls_recover_state_entered() -> void:
 	debug_state_label.text = "Multiball | Recovering"
