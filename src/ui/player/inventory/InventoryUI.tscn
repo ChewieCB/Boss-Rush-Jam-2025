@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://gwlfcdvj2q8w"]
+[gd_scene load_steps=5 format=3 uid="uid://gwlfcdvj2q8w"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_r38si"]
 [ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="1_vlm2x"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="3_775rd"]
+[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="4_ayxuj"]
 
 [node name="InventoryUI" type="Control"]
 layout_mode = 3
@@ -28,6 +29,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.584314)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Background"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -136,6 +138,20 @@ Possible roll:
 - Roll B: explainexplain explain explain explain explain explain explain explain 
 - Roll C: explain explain explain explain explain explain explain explain explain explain explain explain explain "
 
+[node name="NinePatchRect" type="NinePatchRect" parent="EquipBarrelSection/BarrelDescription"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ayxuj")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
 [node name="InventoryBarrelSection" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 6
@@ -182,50 +198,11 @@ theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 5
 
-[node name="ColorRect" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="BarrelItemUI" parent="InventoryBarrelSection/ScrollContainer/GridContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
-[node name="ColorRect2" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="BarrelItemUI2" parent="InventoryBarrelSection/ScrollContainer/GridContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
-[node name="ColorRect3" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="BarrelItemUI3" parent="InventoryBarrelSection/ScrollContainer/GridContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="ColorRect4" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="ColorRect5" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="ColorRect6" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="ColorRect7" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="ColorRect8" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4

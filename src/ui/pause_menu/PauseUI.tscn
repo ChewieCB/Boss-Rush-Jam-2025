@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://byj1y3wrwtdtq"]
+[gd_scene load_steps=4 format=3 uid="uid://byj1y3wrwtdtq"]
 
 [ext_resource type="PackedScene" uid="uid://biqm56x6ewbmo" path="res://src/ui/pause_menu/SettingUI.tscn" id="1_oj67h"]
 [ext_resource type="Script" path="res://src/ui/pause_menu/pause_ui.gd" id="1_y22bm"]
+[ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="2_cl7if"]
 
 [node name="PauseUI" type="Control"]
 process_mode = 3
@@ -19,7 +20,7 @@ layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 64.0
-offset_right = 320.0
+offset_right = 448.0
 grow_vertical = 2
 mouse_filter = 1
 color = Color(0, 0, 0, 0.733333)
@@ -31,9 +32,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -81.0
-offset_top = -200.0
-offset_right = 81.0
+offset_left = -128.0
+offset_top = -330.0
+offset_right = 128.0
 offset_bottom = -70.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -44,18 +45,61 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Settings"
 
+[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/SettingButton"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_cl7if")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
 [node name="LobbyButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Return to
 Lobby"
 
+[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/LobbyButton"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_cl7if")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
 [node name="QuitButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Quit"
 
+[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/QuitButton"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_cl7if")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
 [node name="SettingUI" parent="." instance=ExtResource("1_oj67h")]
+visible = false
 layout_mode = 1
 
 [connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="_on_setting_button_mouse_entered"]
