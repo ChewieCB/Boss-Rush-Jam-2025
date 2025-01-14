@@ -1,0 +1,149 @@
+[gd_scene load_steps=6 format=3 uid="uid://bjcvwkqb8mks4"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_41m3f"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_m8ifo"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_eatto"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_cnlm3"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
+height = 0.5
+
+[node name="ArchetypeShotgunSpecBarrel" type="Node3D"]
+script = ExtResource("1_41m3f")
+barrel_id = 7
+
+[node name="Model" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
+mesh = SubResource("CylinderMesh_sfbyw")
+
+[node name="EffectName" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.109181, -0.0166867)
+modulate = Color(1, 0.883, 0.22, 1)
+text = "DOUBLE TAP"
+font = ExtResource("2_m8ifo")
+font_size = 64
+outline_size = 32
+horizontal_alignment = 2
+
+[node name="EffectTag" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0716908, -0.00866602)
+modulate = Color(0.87, 0.76328, 0.6699, 1)
+text = "Both barrels!"
+font = ExtResource("2_m8ifo")
+font_size = 40
+outline_size = 16
+horizontal_alignment = 2
+
+[node name="EffectDesc" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0575581, -0.00564242)
+modulate = Color(0.46, 0.46, 0.46, 1)
+text = "10% ammo refund on hit
+-10% damage"
+font = ExtResource("2_m8ifo")
+font_size = 24
+horizontal_alignment = 2
+vertical_alignment = 0
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CompoundEffectCombat" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_eatto")
+display_text_title = "Archetype: Combat Shotgun"
+display_text_tag = "Fire faster and more ammo"
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 2
+new_value = 6.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 4
+new_value = 4.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 7
+new_value = 5.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 5
+new_value = 12.0
+
+[node name="CompoundEffectDoubleBarrel" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_eatto")
+display_text_title = "Archetype: Double-Barrel Shotgun"
+display_text_tag = "Come close for a huge burst"
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 1
+new_value = 15.0
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 2
+new_value = 12.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 4
+new_value = 20.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 7
+new_value = 14.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 5
+new_value = 2.0
+
+[node name="CompoundEffectSlug" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_eatto")
+display_text_title = "Archetype: Slug Shotgun"
+display_text_tag = "We have Railgun at home"
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 1
+new_value = 80.0
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 3
+new_value = 100.0
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 4
+new_value = 1.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 7
+new_value = 1.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 5
+new_value = 6.0

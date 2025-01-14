@@ -1,4 +1,4 @@
-[gd_scene load_steps=372 format=4 uid="uid://v6jgq46mkg4n"]
+[gd_scene load_steps=373 format=4 uid="uid://v6jgq46mkg4n"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
@@ -26,6 +26,7 @@
 [ext_resource type="Resource" uid="uid://yx1psxr1obhn" path="res://src/player/barrel/resource/projectile_count_barrel_data.tres" id="24_mcow2"]
 [ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="25_7gqm2"]
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="26_p0fyp"]
+[ext_resource type="Resource" uid="uid://dpcew656ofo1q" path="res://src/player/barrel/resource/archetype_shotgun_spec_barrrel_data.tres" id="27_ektoj"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ckxgb"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -3056,6 +3057,7 @@ data = ExtResource("26_p0fyp")
 
 [node name="BarrelItemPickup5" parent="." instance=ExtResource("23_txe2q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.42993, -0.00971878, -10.3546)
+data = ExtResource("27_ektoj")
 
 [node name="BarrelItemPickup6" parent="." instance=ExtResource("23_txe2q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.42993, -0.00971878, -7.78461)

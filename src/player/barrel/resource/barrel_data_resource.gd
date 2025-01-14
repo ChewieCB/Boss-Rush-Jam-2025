@@ -1,6 +1,7 @@
 extends Resource
 class_name BarrelDataResource
 
+## Keep adding at the bottmom, dont add at the middle of list
 enum BarrelIdEnum {
     NONE,
     TEST,
@@ -9,6 +10,7 @@ enum BarrelIdEnum {
     FOOL_ROLLER,
     PROJECTILE_COUNT,
     TRICKSHOT,
+    ARCHETYPE_SHOTGUN_SPEC
 }
 
 @export var barrel_id: BarrelIdEnum
