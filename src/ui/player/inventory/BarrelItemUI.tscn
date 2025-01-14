@@ -12,6 +12,7 @@ offset_bottom = 100.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("1_tbrlo")
+expand_mode = 1
 script = ExtResource("2_2nkrm")
 
 [node name="Button" type="Button" parent="."]

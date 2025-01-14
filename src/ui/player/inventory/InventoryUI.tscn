@@ -206,3 +206,9 @@ layout_mode = 2
 
 [node name="BarrelItemUI3" parent="InventoryBarrelSection/ScrollContainer/GridContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
+
+[node name="BarrelItemUI4" parent="InventoryBarrelSection/ScrollContainer/GridContainer" instance=ExtResource("3_775rd")]
+layout_mode = 2
+
+[node name="BarrelItemUI5" parent="InventoryBarrelSection/ScrollContainer/GridContainer" instance=ExtResource("3_775rd")]
+layout_mode = 2
