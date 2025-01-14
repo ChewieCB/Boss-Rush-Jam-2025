@@ -115,7 +115,7 @@ func select_attack_phase_1() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_barrier_attack",
-		"start_ball_attack",
+		#"start_ball_attack",
 	]
 	if barrier_phase_count == max_barrier_phase_count:
 		possible_phases.erase("start_barrier_attack")
@@ -478,8 +478,6 @@ func _on_wave_collision(body: Node3D) -> void:
 
 #### Any Phase | Shields
 func _on_shields_targeting_state_entered() -> void:
-	#state_chart.send_event("start_targeting")
-	#await get_tree().create_timer(2.0).timeout
 	state_chart.send_event("spawn_shields")
 
 func _on_shields_spawn_shields_state_entered() -> void:
@@ -546,7 +544,10 @@ func _on_phase_1_state_entered() -> void:
 #### Phase 1 | Barrier Sweep
 func _on_damage_barrier_targeting_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Targeting"
-	state_chart.send_event("start_targeting")
+	
+	# Rotate so that the barrier always starts in the same position relative to the player
+	look_at(target.global_position)
+	self.rotation.x = 0
 	
 	var tween = get_tree().create_tween()
 	hurtbox_mesh.position.x = 0
@@ -594,7 +595,6 @@ func _on_damage_barrier_state_exited() -> void:
 #### Phase 1 | Multiball
 func _on_ball_projectile_targeting_state_entered() -> void:
 	debug_state_label.text = "Multiball | Targeting"
-	#state_chart.send_event("start_targeting")
 	await get_tree().create_timer(ball_attack_delay).timeout
 	state_chart.send_event("launch_balls")
 
