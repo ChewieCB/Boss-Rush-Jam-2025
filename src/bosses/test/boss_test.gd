@@ -2,6 +2,12 @@ extends BossCore
 class_name BossTest
 
 
+func _ready() -> void:
+	super()
+	ranged_move_points = get_tree().get_nodes_in_group("boss_ranged_marker")
+	area_move_points = get_tree().get_nodes_in_group("boss_area_marker")
+
+
 func activate() -> void:
 	super()
 	change_phase()

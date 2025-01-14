@@ -89,12 +89,11 @@ var vel_vertical: float = 0
 var cached_target: Node3D
 
 func _ready() -> void:
+	randomize()
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	#debug_mesh.visible = false
 	await owner.ready
-	ranged_move_points = get_tree().get_nodes_in_group("boss_ranged_marker")
-	area_move_points = get_tree().get_nodes_in_group("boss_area_marker")
 
 
 func _physics_process(delta: float) -> void:

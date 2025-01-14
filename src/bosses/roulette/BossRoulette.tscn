@@ -61,6 +61,8 @@ collision_mask = 26
 motion_mode = 1
 script = ExtResource("2_m116k")
 current_phase = 1
+phase_2_health_percentage_trigger = 0.66
+phase_3_health_percentage_trigger = 0.33
 max_barrier_phase_count = 2
 max_shockwave_phase_count = 2
 max_shields_phase_count = 1
@@ -137,7 +139,7 @@ shape = SubResource("BoxShape3D_6q8u4")
 [node name="Shields" type="Node3D" parent="." index="4"]
 
 [node name="HealthComponent" parent="." index="5"]
-max_health = 8500.0
+max_health = 10000.0
 
 [node name="NavigationComponent" parent="." index="6"]
 enabled = false
@@ -781,3 +783,4 @@ one_shot = true
 [connection signal="timeout" from="ShieldsAbsorbTimer" to="." method="_on_shields_absorb_timer_timeout"]
 [connection signal="timeout" from="ShieldsSpawnTimer" to="." method="_on_shields_spawn_timer_timeout"]
 [connection signal="body_entered" from="PushbackArea" to="." method="_on_pushback_area_body_entered"]
+[connection signal="timeout" from="BallKillTimer" to="." method="_on_ball_kill_timer_timeout"]

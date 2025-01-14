@@ -6,8 +6,10 @@ signal change_wheel_speed(speed: float)
 @onready var hurtbox_mesh: MeshInstance3D = hurtbox.get_node("MeshInstance3D")
 var wheel_rotation_speed: float = 0.0
 
+@export_category("Phases")
 @export var current_phase: int = 1
-
+@export var phase_2_health_percentage_trigger: float = 0.66
+@export var phase_3_health_percentage_trigger: float = 0.33
 @export_category("Attacks")
 @export var max_barrier_phase_count: int = 2
 var barrier_phase_count: int = 0
@@ -70,7 +72,7 @@ var dropped_segments: Array
 
 
 func _ready() -> void:
-	randomize()
+	super()
 	GRAVITY = 0.0
 	hurtbox.visible = false
 	
@@ -81,13 +83,6 @@ func _ready() -> void:
 	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
 	available_spawns = ball_spawn_positions.duplicate()
 	ball_kill_timer.wait_time = max_ball_lifetime
-	ball_kill_timer.timeout.connect(destroy_balls.bind(active_balls))
-	
-	super()
-
-
-func _physics_process(delta: float) -> void:
-	super(delta)
 
 
 func activate() -> void:
@@ -294,10 +289,10 @@ func _set_ball_passive_params(ball: RouletteBall, _target: Node3D) -> RouletteBa
 
 
 func destroy_balls(ball_arr: Array) -> void:
-	for i in ball_arr.size() - 1:
-		var ball = ball_arr.pop_front()
+	for ball in ball_arr:
 		if is_instance_valid(ball):
 			ball.destroy()
+	ball_arr = []
 
 
 func spawn_center_wave(
@@ -437,11 +432,16 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 		var impulse = Vector3.UP
 		body.apply_central_force(impulse * 3000)
 
+
+func _on_ball_kill_timer_timeout() -> void:
+	destroy_balls(active_balls)
+
+
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
-	if new_health < health_component.max_health * 0.40 and current_phase == 2:
+	if new_health < health_component.max_health * phase_3_health_percentage_trigger and current_phase == 2:
 		state_chart.send_event("start_phase_3")
-	elif new_health <= health_component.max_health * 0.75 and current_phase == 1:
+	elif new_health < health_component.max_health * phase_2_health_percentage_trigger and current_phase == 1:
 		state_chart.send_event("start_phase_2")
 
 
@@ -541,7 +541,7 @@ func _on_phase_1_state_entered() -> void:
 	change_wheel_speed.emit(0.6)
 	wheel_rotation_speed = 0.6
 	current_phase = 1
-	select_attack()
+	state_chart.send_event("start_ball_attack")
 
 #### Phase 1 | Barrier Sweep
 func _on_damage_barrier_targeting_state_entered() -> void:
@@ -640,7 +640,7 @@ func _on_phase_2_state_entered() -> void:
 		tween.tween_property(ball, "central_force_magnitude", -200, 2.0)
 	
 	current_phase = 2
-	select_attack()
+	state_chart.send_event("start_pushback_attack")
 
 
 #### Phase 2 | Shockwave
@@ -708,9 +708,7 @@ func _on_phase_3_state_entered() -> void:
 	for i in balls_to_spawn_phase_3 - active_balls.size():
 		spawn_ball(null, 500.0, passive_balls, _set_ball_passive_params)
 	
-	#select_attack()
-	await get_tree().create_timer(1.5).timeout
-	state_chart.send_event("start_ball_attack")
+	state_chart.send_event("start_drop_attack")
 
 
 ### Phase 3 | Segment Drop
