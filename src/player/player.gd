@@ -16,6 +16,7 @@ class_name Player
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
 @onready var inventory_ui: InventoryUI = $UI/InventoryUI
+@onready var interact_ui: Label = $UI/InteractUI
 
 @onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
 @onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
@@ -43,6 +44,7 @@ const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
 const RECOIL_COEFFICIENT: float = 10
 const BULLET_SPAWN_POS_VARIATION: float = 10
+const INTERACT_DISTANCE = 3
 
 const DASH_SPEED: float = 15
 const SLIDE_SPEED: float = 5
@@ -82,6 +84,7 @@ var is_swapping_gun = false
 var current_gun: Gun = null
 
 var is_in_inventory = false
+var object_to_be_interacted = null
 
 
 func _ready():
@@ -94,7 +97,7 @@ func _ready():
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	gun_container_original_pos = gun_container.position
-
+	interact_ui.visible = false
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_hud)
 	current_gun.gun_reloaded.connect(update_hud)
@@ -126,14 +129,26 @@ func _input(event):
 			dash_duration_timer.start()
 
 	if Input.is_action_just_pressed("interact"):
-		if aim_ray.is_colliding():
-			var interact_collider = aim_ray.get_collider()
-			if interact_collider:
-				if interact_collider.has_method("interact"):
-					interact_collider.interact()
+		if object_to_be_interacted:
+			object_to_be_interacted.interact()
 
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
+
+	if aim_ray.is_colliding():
+		var interact_collider = aim_ray.get_collider()
+		if interact_collider and \
+			interact_collider.has_method("interact") and \
+			interact_collider.global_position.distance_to(global_position) <= INTERACT_DISTANCE:
+			object_to_be_interacted = interact_collider
+			interact_ui.visible = true
+		else:
+			object_to_be_interacted = null
+			interact_ui.visible = false
+	else:
+		object_to_be_interacted = null
+		interact_ui.visible = false
+
 
 	if controls_disabled or is_in_inventory:
 		return
