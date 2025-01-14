@@ -548,6 +548,12 @@ to = NodePath("../../BallProjectile")
 event = &"start_ball_attack"
 delay_in_seconds = "0.0"
 
+[node name="toPushbackWave" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="2"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../PushbackWave")
+event = &"start_pushback_attack"
+delay_in_seconds = "0.0"
+
 [node name="DroppingSegments" type="Node" parent="StateChart/Root/Phase/Phase3" index="1"]
 script = ExtResource("7_yu3uh")
 initial_state = NodePath("Targeting")
@@ -583,6 +589,12 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_3xtcm")
 to = NodePath("../../BallProjectile")
 event = &"start_ball_attack"
+delay_in_seconds = "0.0"
+
+[node name="toPushbackWave" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="4"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../PushbackWave")
+event = &"start_pushback_attack"
 delay_in_seconds = "0.0"
 
 [node name="BallProjectile" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
@@ -622,21 +634,70 @@ to = NodePath("../../DroppingSegments")
 event = &"start_drop_attack"
 delay_in_seconds = "0.0"
 
-[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
+[node name="toPushbackWave" type="Node" parent="StateChart/Root/Phase/Phase3/BallProjectile" index="4"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../PushbackWave")
+event = &"start_pushback_attack"
+delay_in_seconds = "0.0"
+
+[node name="PushbackWave" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
+script = ExtResource("7_yu3uh")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave" index="0"]
+script = ExtResource("8_edit5")
+
+[node name="toSpawnWave" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave/Targeting" index="0"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../SpawnWave")
+event = &"start_wave"
+delay_in_seconds = "0.0"
+
+[node name="SpawnWave" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave" index="1"]
+script = ExtResource("8_edit5")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave/SpawnWave" index="0"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../Recover")
+event = &"finish_wave"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave" index="2"]
+script = ExtResource("8_edit5")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave/Recover" index="0"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toDroppingSegments" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave" index="3"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../DroppingSegments")
+event = &"start_drop_attack"
+delay_in_seconds = "0.0"
+
+[node name="toBallProjectile" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave" index="4"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../BallProjectile")
+event = &"start_ball_attack"
+delay_in_seconds = "0.0"
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Phase3" index="4"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Phase1")
 event = &"start_phase_1"
 guard = SubResource("Resource_o74tk")
 delay_in_seconds = "0.0"
 
-[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase3" index="4"]
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase3" index="5"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Phase2")
 event = &"start_phase_2"
 guard = SubResource("Resource_o74tk")
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3" index="5"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3" index="6"]
 script = ExtResource("4_3xtcm")
 to = NodePath("..")
 event = &"deactivate"
@@ -714,6 +775,9 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Recover" to="." method="_on_phase_3_projectile_balls_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/PushbackWave/Targeting" to="." method="_on_phase_2_pushback_wave_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/PushbackWave/SpawnWave" to="." method="_on_phase_2_pushback_wave_spawn_wave_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/PushbackWave/Recover" to="." method="_on_phase_2_pushback_wave_recover_state_entered"]
 [connection signal="timeout" from="ShieldsAbsorbTimer" to="." method="_on_shields_absorb_timer_timeout"]
 [connection signal="timeout" from="ShieldsSpawnTimer" to="." method="_on_shields_spawn_timer_timeout"]
 [connection signal="body_entered" from="PushbackArea" to="." method="_on_pushback_area_body_entered"]

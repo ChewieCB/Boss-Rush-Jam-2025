@@ -167,6 +167,7 @@ func select_attack_phase_3() -> void:
 	var possible_phases = [
 		"start_drop_attack",
 		"start_ball_attack",
+		"start_pushback_attack",
 	]
 	
 	if previous_phase and possible_phases.size() > 1:
@@ -183,11 +184,12 @@ func select_attack_phase_3() -> void:
 		#if phase != previous_phase:
 			#possible_phases.append(phase)
 	#
-	#if active_balls.size() < balls_to_spawn_phase_3:
-		#possible_phases.append("start_ball_attack")
+	if active_balls.size() < balls_to_spawn_phase_3:
+		possible_phases.append("start_ball_attack")
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	previous_phase = new_phase
+	print(new_phase)
 	state_chart.send_event(new_phase)
 
 
@@ -603,7 +605,6 @@ func _on_ball_projectile_launch_balls_state_entered() -> void:
 	ball_kill_timer.start(max_ball_lifetime)
 
 func _on_ball_destroyed(ball: RouletteBall) -> void:
-	print("Ball destroyed")
 	active_balls.erase(ball)
 	if active_balls.size() == 0:
 		state_chart.send_event("balls_destroyed")
