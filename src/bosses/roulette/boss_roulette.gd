@@ -67,7 +67,9 @@ var available_spawns: Array
 @export_group("Drop Segments")
 @export var drop_delay: float = 0.5
 @export var drop_time: float = 1.0
-@export var drop_return_delay: float = 1.5
+@export var drop_return_delay: float = 3.0
+@onready var drop_return_timer: Timer = $StateChart/Root/Phase/Phase3/DroppingSegments/DropReturnTimer
+@onready var drop_floor_tween: Tween
 var floor_segments: Array
 var dropped_segments: Array
 
@@ -160,8 +162,10 @@ func select_attack_phase_3() -> void:
 	var possible_phases = [
 		"start_drop_attack",
 		"start_ball_attack",
-		"start_pushback_attack",
 	]
+	
+	if randf() < 0.25:
+		possible_phases.append("start_pushback_attack")
 	
 	if previous_phase and possible_phases.size() > 1:
 		possible_phases.erase(previous_phase)
@@ -177,8 +181,6 @@ func select_attack_phase_3() -> void:
 		#if phase != previous_phase:
 			#possible_phases.append(phase)
 	#
-	if active_balls.size() < balls_to_spawn_phase_3:
-		possible_phases.append("start_ball_attack")
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	previous_phase = new_phase
@@ -383,10 +385,10 @@ func drop_floor_segment(segment_arr: Array) -> void:
 	var collider: CollisionShape3D = segment_arr[1]
 	collider.disabled = true
 	
-	var tween = get_tree().create_tween()
-	tween.tween_property(mesh, "position:y", mesh.position.y - 20.0, drop_time)
-	tween.parallel().tween_property(mesh, "scale", Vector3.ZERO, drop_time)
-	tween.parallel().tween_property(collider, "position:y", collider.position.y - 20.0, drop_time)
+	drop_floor_tween = get_tree().create_tween()
+	drop_floor_tween.tween_property(mesh, "position:y", mesh.position.y - 20.0, drop_time)
+	drop_floor_tween.parallel().tween_property(mesh, "scale", Vector3.ZERO, drop_time)
+	drop_floor_tween.parallel().tween_property(collider, "position:y", collider.position.y - 20.0, drop_time)
 	dropped_segments.append(segment_arr)
 
 
@@ -465,7 +467,14 @@ func change_phase(new_phase: int) -> void:
 func _on_died() -> void:
 	destroy_balls(active_balls)
 	destroy_balls(passive_balls)
-	state_chart.send_event("stop_drop")
+	
+	drop_return_timer.stop()
+	drop_floor_tween.kill()
+	for segment in dropped_segments:
+		return_floor_segment(segment)
+	dropped_segments = []
+	
+	state_chart.send_event("deactivate")
 	super()
 
 
@@ -798,16 +807,17 @@ func _on_phase_3_dropping_segments_dropping_state_entered() -> void:
 		drop_floor_segment(segments_to_drop.pop_front())
 		await get_tree().create_timer(drop_delay).timeout
 	
-	await get_tree().create_timer(drop_return_delay).timeout
+	drop_return_timer.start(drop_return_delay)
 	state_chart.send_event("stop_drop")
 	state_chart.send_event("attack_end")
 
-func _on_phase_3_dropping_segments_recover_state_entered() -> void:
-	debug_state_label.text = "Segment Drop | Recover"
+func _on_drop_return_timer_timeout() -> void:
 	for i in range(dropped_segments.size()):
 		return_floor_segment(dropped_segments.pop_front())
-	
-	await get_tree().create_timer(attack_recovery_time * 2).timeout
+
+func _on_phase_3_dropping_segments_recover_state_entered() -> void:
+	debug_state_label.text = "Segment Drop | Recover"
+	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
 	select_attack()
 	state_chart.send_event("end_recovery")

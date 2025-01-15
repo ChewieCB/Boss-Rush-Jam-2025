@@ -67,7 +67,7 @@ radius = 6.0
 collision_mask = 26
 motion_mode = 1
 script = ExtResource("2_m116k")
-current_phase = 2
+current_phase = 3
 phase_2_health_percentage_trigger = 0.66
 phase_3_health_percentage_trigger = 0.33
 max_barrier_phase_count = 2
@@ -99,7 +99,7 @@ wave_material = ExtResource("5_tmeqi")
 max_center_pushback_radius = 8.0
 drop_delay = 0.5
 drop_time = 1.0
-drop_return_delay = 1.5
+drop_return_delay = 4.0
 TEMP_sfx_death = ExtResource("3_m1gak")
 TEMP_sfx_area_1 = ExtResource("7_3dh61")
 TEMP_sfx_area_2 = null
@@ -565,7 +565,13 @@ initial_state = NodePath("Targeting")
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="0"]
 script = ExtResource("8_edit5")
 
-[node name="toDropping" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" index="0"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" index="0"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../../Idle")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toDropping" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" index="1"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Dropping")
 event = &"start_drop"
@@ -580,6 +586,12 @@ to = NodePath("../../Recover")
 event = &"stop_drop"
 delay_in_seconds = "0.0"
 
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" index="1"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../../Idle")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="2"]
 script = ExtResource("8_edit5")
 
@@ -587,6 +599,12 @@ script = ExtResource("8_edit5")
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments/Recover" index="1"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../../Idle")
+event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="toBallProjectile" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="3"]
@@ -600,6 +618,9 @@ script = ExtResource("4_3xtcm")
 to = NodePath("../../PushbackWave")
 event = &"start_pushback_attack"
 delay_in_seconds = "0.0"
+
+[node name="DropReturnTimer" type="Timer" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="5"]
+one_shot = true
 
 [node name="BallProjectile" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
 script = ExtResource("7_yu3uh")
@@ -759,9 +780,13 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/SpawnWave" to="." method="_on_phase_2_pushback_wave_spawn_wave_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Recover" to="." method="_on_phase_2_pushback_wave_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase3/DroppingSegments" to="." method="_on_dropping_segments_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" to="." method="_on_phase_3_dropping_segments_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" to="." method="_on_phase_3_dropping_segments_dropping_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" to="." method="_on_phase_3_dropping_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Recover" to="." method="_on_phase_3_dropping_segments_recover_state_entered"]
+[connection signal="timeout" from="StateChart/Root/Phase/Phase3/DroppingSegments/DropReturnTimer" to="." method="_on_drop_return_timer_timeout"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase3/BallProjectile" to="." method="_on_ball_projectile_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Targeting" to="." method="_on_phase_3_ball_projectile_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_exited"]
