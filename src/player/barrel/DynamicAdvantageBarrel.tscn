@@ -1,7 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://dy7nqvo7uq1ti"]
+[gd_scene load_steps=10 format=3 uid="uid://dy7nqvo7uq1ti"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_54i25"]
-[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_v2cse"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/ramp_up_effect.gd" id="3_w70eq"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_k0t2c"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_ky52g"]
@@ -25,7 +24,6 @@ mesh = SubResource("CylinderMesh_sfbyw")
 transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.109181, -0.0166867)
 modulate = Color(1, 0.883, 0.22, 1)
 text = "DOUBLE TAP"
-font = ExtResource("2_v2cse")
 font_size = 64
 outline_size = 32
 horizontal_alignment = 2
@@ -34,7 +32,6 @@ horizontal_alignment = 2
 transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0716908, -0.00866602)
 modulate = Color(0.87, 0.76328, 0.6699, 1)
 text = "Both barrels!"
-font = ExtResource("2_v2cse")
 font_size = 40
 outline_size = 16
 horizontal_alignment = 2
@@ -44,7 +41,6 @@ transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146
 modulate = Color(0.46, 0.46, 0.46, 1)
 text = "10% ammo refund on hit
 -10% damage"
-font = ExtResource("2_v2cse")
 font_size = 24
 horizontal_alignment = 2
 vertical_alignment = 0
