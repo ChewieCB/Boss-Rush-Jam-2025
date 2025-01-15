@@ -619,9 +619,6 @@ to = NodePath("../../PushbackWave")
 event = &"start_pushback_attack"
 delay_in_seconds = "0.0"
 
-[node name="DropReturnTimer" type="Timer" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="5"]
-one_shot = true
-
 [node name="BallProjectile" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
 script = ExtResource("7_yu3uh")
 initial_state = NodePath("Targeting")
@@ -785,7 +782,6 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" to="." method="_on_phase_3_dropping_segments_dropping_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" to="." method="_on_phase_3_dropping_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Recover" to="." method="_on_phase_3_dropping_segments_recover_state_entered"]
-[connection signal="timeout" from="StateChart/Root/Phase/Phase3/DroppingSegments/DropReturnTimer" to="." method="_on_drop_return_timer_timeout"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase3/BallProjectile" to="." method="_on_ball_projectile_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Targeting" to="." method="_on_phase_3_ball_projectile_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_entered"]
