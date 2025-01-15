@@ -89,12 +89,11 @@ var vel_vertical: float = 0
 var cached_target: Node3D
 
 func _ready() -> void:
+	randomize()
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	#debug_mesh.visible = false
 	await owner.ready
-	ranged_move_points = get_tree().get_nodes_in_group("boss_ranged_marker")
-	area_move_points = get_tree().get_nodes_in_group("boss_area_marker")
 
 
 func _physics_process(delta: float) -> void:
@@ -132,7 +131,7 @@ func activate() -> void:
 	SoundManager.play_sound(TEMP_sfx_awaken)
 
 
-func change_phase() -> void:
+func select_attack() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_chase_attack",
@@ -152,7 +151,7 @@ func change_phase() -> void:
 	# If we've somehow exluded all of the possible phases, 
 	# the counters have been reset so just call this method again.
 	if possible_phases == []:
-		change_phase()
+		select_attack()
 		return
 	
 	# If the player is too close, don't do area attacks

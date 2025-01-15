@@ -2,9 +2,15 @@ extends BossCore
 class_name BossTest
 
 
+func _ready() -> void:
+	super()
+	ranged_move_points = get_tree().get_nodes_in_group("boss_ranged_marker")
+	area_move_points = get_tree().get_nodes_in_group("boss_area_marker")
+
+
 func activate() -> void:
 	super()
-	change_phase()
+	select_attack()
 
 
 ### ATTACK PHASES --------------------------------
@@ -40,7 +46,7 @@ func _on_phase_chase_player_recover_state_entered() -> void:
 	
 	state_chart.send_event("cooldown_end")
 	charge_phase_count += 1
-	change_phase()
+	select_attack()
 	state_chart.send_event("end_recovery")
 
 
@@ -70,7 +76,7 @@ func _on_phase_ranged_projectiles_move_to_center_state_entered() -> void:
 		await navigation_component.nav_agent.navigation_finished
 		state_chart.send_event("start_projectiles")
 	else:
-		change_phase()
+		select_attack()
 
 func _on_phase_ranged_projectiles_move_to_center_state_exited() -> void:
 	target = cached_target
@@ -109,7 +115,7 @@ func _on_phase_ranged_projectiles_recover_state_entered() -> void:
 			return
 	
 	ranged_phase_count += 1
-	change_phase()
+	select_attack()
 	state_chart.send_event("change_position")
 
 #### AREA DENIAL
@@ -225,5 +231,5 @@ func _on_phase_area_denial_recover_state_entered() -> void:
 	
 	area_phase_count += 1
 	await get_tree().create_timer(attack_recovery_time).timeout
-	change_phase()
+	select_attack()
 	state_chart.send_event("change_position")

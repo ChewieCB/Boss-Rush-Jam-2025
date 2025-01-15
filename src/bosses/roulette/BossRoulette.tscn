@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dd7xt2ptfqbkw"]
+[gd_scene load_steps=30 format=3 uid="uid://dd7xt2ptfqbkw"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_jhwuw"]
 [ext_resource type="Script" path="res://src/bosses/roulette/boss_roulette.gd" id="2_m116k"]
@@ -15,6 +15,9 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_yu3uh"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_edit5"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="9_7dg1x"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/guard.gd" id="15_rx3ud"]
+[ext_resource type="Resource" uid="uid://dlnn1fr5bmklq" path="res://src/bosses/MidAttackPhaseChangeGuard.tres" id="16_4livr"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/any_of_guard.gd" id="17_dqgtw"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_obnfo"]
 height = 6.6
@@ -40,13 +43,17 @@ state = NodePath("../../../Health/Dead")
 script = ExtResource("6_lkakv")
 guard = SubResource("Resource_31yl5")
 
-[sub_resource type="Resource" id="Resource_2in8l"]
+[sub_resource type="Resource" id="Resource_pfh5s"]
 script = ExtResource("5_m3ad2")
 state = NodePath("../../../Health/Dead")
 
-[sub_resource type="Resource" id="Resource_o74tk"]
+[sub_resource type="Resource" id="Resource_5sx0t"]
 script = ExtResource("6_lkakv")
-guard = SubResource("Resource_2in8l")
+guard = SubResource("Resource_pfh5s")
+
+[sub_resource type="Resource" id="Resource_1qhp4"]
+script = ExtResource("17_dqgtw")
+guards = Array[ExtResource("15_rx3ud")]([SubResource("Resource_5sx0t"), ExtResource("16_4livr")])
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_7wlfa"]
 height = 58.0
@@ -60,7 +67,9 @@ radius = 6.0
 collision_mask = 26
 motion_mode = 1
 script = ExtResource("2_m116k")
-current_phase = 1
+current_phase = 3
+phase_2_health_percentage_trigger = 0.66
+phase_3_health_percentage_trigger = 0.33
 max_barrier_phase_count = 2
 max_shockwave_phase_count = 2
 max_shields_phase_count = 1
@@ -78,6 +87,7 @@ ball_scene = ExtResource("4_pnl31")
 balls_to_spawn_phase_1 = 3
 balls_to_spawn_phase_2 = 6
 balls_to_spawn_phase_3 = 11
+balls_to_attack_phase_3 = 3
 ball_attack_delay = 1.0
 max_ball_lifetime = 8.0
 max_wave_radius = 24.0
@@ -89,7 +99,7 @@ wave_material = ExtResource("5_tmeqi")
 max_center_pushback_radius = 8.0
 drop_delay = 0.5
 drop_time = 1.0
-drop_return_delay = 1.5
+drop_return_delay = 4.0
 TEMP_sfx_death = ExtResource("3_m1gak")
 TEMP_sfx_area_1 = ExtResource("7_3dh61")
 TEMP_sfx_area_2 = null
@@ -136,13 +146,19 @@ shape = SubResource("BoxShape3D_6q8u4")
 [node name="Shields" type="Node3D" parent="." index="4"]
 
 [node name="HealthComponent" parent="." index="5"]
-max_health = 8500.0
+max_health = 2000.0
 
 [node name="NavigationComponent" parent="." index="6"]
 enabled = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Malina, Center of Attention"
+
+[node name="toTelegraph" type="Node" parent="StateChart/Root/Attacking/Cooldown" index="1"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../Telegraph")
+event = &"attack_telegraph"
+delay_in_seconds = "0.0"
 
 [node name="toShields" type="Node" parent="StateChart/Root/Status/Idle" index="0"]
 script = ExtResource("4_3xtcm")
@@ -207,21 +223,21 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Phase1")
 event = &"start_phase_1"
-guard = SubResource("Resource_o74tk")
+guard = SubResource("Resource_1qhp4")
 delay_in_seconds = "0.0"
 
 [node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Inactive" index="1"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Phase2")
 event = &"start_phase_2"
-guard = SubResource("Resource_o74tk")
+guard = SubResource("Resource_1qhp4")
 delay_in_seconds = "0.0"
 
 [node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Inactive" index="2"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Phase3")
 event = &"start_phase_3"
-guard = SubResource("Resource_o74tk")
+guard = SubResource("Resource_1qhp4")
 delay_in_seconds = "0.0"
 
 [node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="1"]
@@ -328,24 +344,17 @@ script = ExtResource("4_3xtcm")
 event = &"start_pushback_attack"
 delay_in_seconds = "0.0"
 
-[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
-script = ExtResource("4_3xtcm")
-to = NodePath("../../Phase2")
-event = &"start_phase_2"
-guard = SubResource("Resource_o74tk")
-delay_in_seconds = "0.0"
-
-[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
-script = ExtResource("4_3xtcm")
-to = NodePath("../../Phase3")
-event = &"start_phase_3"
-guard = SubResource("Resource_o74tk")
-delay_in_seconds = "0.0"
-
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
 script = ExtResource("4_3xtcm")
 to = NodePath("..")
 event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../Phase2")
+event = &"start_phase_2"
+guard = SubResource("Resource_1qhp4")
 delay_in_seconds = "0.0"
 
 [node name="Phase2" type="Node" parent="StateChart/Root/Phase" index="2"]
@@ -421,6 +430,9 @@ script = ExtResource("4_3xtcm")
 to = NodePath("../../DropSegment")
 event = &"start_drop_attack"
 delay_in_seconds = "0.0"
+
+[node name="BarrierTargetingTimer" type="Timer" parent="StateChart/Root/Phase/Phase2/DamageBarrier" index="5"]
+one_shot = true
 
 [node name="PushbackWave" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
 script = ExtResource("7_yu3uh")
@@ -508,24 +520,17 @@ to = NodePath("../../DamageBarrier")
 event = &"start_barrier_attack"
 delay_in_seconds = "0.0"
 
-[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Phase2" index="4"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="4"]
 script = ExtResource("4_3xtcm")
-to = NodePath("../../Phase1")
-event = &"start_phase_1"
-guard = SubResource("Resource_o74tk")
+to = NodePath("..")
+event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Phase2" index="5"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Phase3")
 event = &"start_phase_3"
-guard = SubResource("Resource_o74tk")
-delay_in_seconds = "0.0"
-
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="6"]
-script = ExtResource("4_3xtcm")
-to = NodePath("..")
-event = &"deactivate"
+guard = SubResource("Resource_1qhp4")
 delay_in_seconds = "0.0"
 
 [node name="Phase3" type="Node" parent="StateChart/Root/Phase" index="3"]
@@ -547,6 +552,12 @@ to = NodePath("../../BallProjectile")
 event = &"start_ball_attack"
 delay_in_seconds = "0.0"
 
+[node name="toPushbackWave" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="2"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../PushbackWave")
+event = &"start_pushback_attack"
+delay_in_seconds = "0.0"
+
 [node name="DroppingSegments" type="Node" parent="StateChart/Root/Phase/Phase3" index="1"]
 script = ExtResource("7_yu3uh")
 initial_state = NodePath("Targeting")
@@ -554,7 +565,13 @@ initial_state = NodePath("Targeting")
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="0"]
 script = ExtResource("8_edit5")
 
-[node name="toDropping" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" index="0"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" index="0"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../../Idle")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toDropping" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" index="1"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Dropping")
 event = &"start_drop"
@@ -569,6 +586,12 @@ to = NodePath("../../Recover")
 event = &"stop_drop"
 delay_in_seconds = "0.0"
 
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" index="1"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../../Idle")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="2"]
 script = ExtResource("8_edit5")
 
@@ -578,11 +601,26 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments/Recover" index="1"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../../Idle")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
 [node name="toBallProjectile" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="3"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../BallProjectile")
 event = &"start_ball_attack"
 delay_in_seconds = "0.0"
+
+[node name="toPushbackWave" type="Node" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="4"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../PushbackWave")
+event = &"start_pushback_attack"
+delay_in_seconds = "0.0"
+
+[node name="DropReturnTimer" type="Timer" parent="StateChart/Root/Phase/Phase3/DroppingSegments" index="5"]
+one_shot = true
 
 [node name="BallProjectile" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
 script = ExtResource("7_yu3uh")
@@ -621,21 +659,56 @@ to = NodePath("../../DroppingSegments")
 event = &"start_drop_attack"
 delay_in_seconds = "0.0"
 
-[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
+[node name="toPushbackWave" type="Node" parent="StateChart/Root/Phase/Phase3/BallProjectile" index="4"]
 script = ExtResource("4_3xtcm")
-to = NodePath("../../Phase1")
-event = &"start_phase_1"
-guard = SubResource("Resource_o74tk")
+to = NodePath("../../PushbackWave")
+event = &"start_pushback_attack"
 delay_in_seconds = "0.0"
 
-[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase3" index="4"]
+[node name="PushbackWave" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
+script = ExtResource("7_yu3uh")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave" index="0"]
+script = ExtResource("8_edit5")
+
+[node name="toSpawnWave" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave/Targeting" index="0"]
 script = ExtResource("4_3xtcm")
-to = NodePath("../../Phase2")
-event = &"start_phase_2"
-guard = SubResource("Resource_o74tk")
+to = NodePath("../../SpawnWave")
+event = &"start_wave"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3" index="5"]
+[node name="SpawnWave" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave" index="1"]
+script = ExtResource("8_edit5")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave/SpawnWave" index="0"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../Recover")
+event = &"finish_wave"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave" index="2"]
+script = ExtResource("8_edit5")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave/Recover" index="0"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toDroppingSegments" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave" index="3"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../DroppingSegments")
+event = &"start_drop_attack"
+delay_in_seconds = "0.0"
+
+[node name="toBallProjectile" type="Node" parent="StateChart/Root/Phase/Phase3/PushbackWave" index="4"]
+script = ExtResource("4_3xtcm")
+to = NodePath("../../BallProjectile")
+event = &"start_ball_attack"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3" index="4"]
 script = ExtResource("4_3xtcm")
 to = NodePath("..")
 event = &"deactivate"
@@ -702,19 +775,26 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_phase_2_damage_barrier_spawn_barrier_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/Recover" to="." method="_on_damage_barrier_recover_state_entered"]
+[connection signal="timeout" from="StateChart/Root/Phase/Phase2/DamageBarrier/BarrierTargetingTimer" to="." method="_on_barrier_targeting_timer_timeout"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Targeting" to="." method="_on_phase_2_pushback_wave_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/SpawnWave" to="." method="_on_phase_2_pushback_wave_spawn_wave_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Recover" to="." method="_on_phase_2_pushback_wave_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase3/DroppingSegments" to="." method="_on_dropping_segments_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Targeting" to="." method="_on_phase_3_dropping_segments_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" to="." method="_on_phase_3_dropping_segments_dropping_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase3/DroppingSegments/Dropping" to="." method="_on_phase_3_dropping_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/DroppingSegments/Recover" to="." method="_on_phase_3_dropping_segments_recover_state_entered"]
+[connection signal="timeout" from="StateChart/Root/Phase/Phase3/DroppingSegments/DropReturnTimer" to="." method="_on_drop_return_timer_timeout"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase3/BallProjectile" to="." method="_on_ball_projectile_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Targeting" to="." method="_on_phase_3_ball_projectile_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase3/BallProjectile/LaunchBalls" to="." method="_on_phase_3_ball_projectile_launch_balls_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Recover" to="." method="_on_ball_projectile_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BallProjectile/Recover" to="." method="_on_phase_3_projectile_balls_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/PushbackWave/Targeting" to="." method="_on_phase_2_pushback_wave_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/PushbackWave/SpawnWave" to="." method="_on_phase_2_pushback_wave_spawn_wave_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/PushbackWave/Recover" to="." method="_on_phase_2_pushback_wave_recover_state_entered"]
 [connection signal="timeout" from="ShieldsAbsorbTimer" to="." method="_on_shields_absorb_timer_timeout"]
 [connection signal="timeout" from="ShieldsSpawnTimer" to="." method="_on_shields_spawn_timer_timeout"]
 [connection signal="body_entered" from="PushbackArea" to="." method="_on_pushback_area_body_entered"]
-[connection signal="timeout" from="BallKillTimer" to="." method="destroy_active_balls"]
+[connection signal="timeout" from="BallKillTimer" to="." method="_on_ball_kill_timer_timeout"]
