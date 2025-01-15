@@ -464,7 +464,7 @@ func change_phase(new_phase: int) -> void:
 
 
 func _on_died() -> void:
-	state_chart.send_event("deactivate")
+	super()
 	destroy_balls(active_balls)
 	destroy_balls(passive_balls)
 	
@@ -478,8 +478,6 @@ func _on_died() -> void:
 		else:
 			segment[0].global_position.y = segment[2]
 	dropped_segments = []
-	
-	super()
 
 
 func _on_pushback_area_body_entered(body: Node3D) -> void:
