@@ -5332,8 +5332,6 @@ metadata/_tb_type = "_tb_group"
 
 [node name="entity_86_BossRoulette" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("20_xl4ng")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.40625, 0)
-phase_2_health_percentage_trigger = 0.66
-phase_3_health_percentage_trigger = 0.33
 drop_return_delay = 3.0
 target = NodePath("../entity_11_PlayerRef")
 

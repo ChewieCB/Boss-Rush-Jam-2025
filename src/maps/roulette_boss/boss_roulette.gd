@@ -34,7 +34,7 @@ func _ready() -> void:
 		new_collider.global_position += static_body.global_position
 		collider.disabled = true
 		
-		floor_segments.append([mesh, new_collider])
+		floor_segments.append([mesh, new_collider, mesh.global_position.y])
 	boss.floor_segments = floor_segments
 	
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
@@ -51,16 +51,6 @@ func _physics_process(delta) -> void:
 		ROTATION_SPEED = lerp(ROTATION_SPEED, goal_rotation_speed, delta)
 	floor_pivot.rotation.y += ROTATION_SPEED * delta
 	boss.wheel_rotation_speed = ROTATION_SPEED
-	#if Input.is_action_just_pressed("interact"):
-		## Ball test code
-		#spawn_balls(1)
-
-		# Floor segment test code
-		#if floor_segments.size() > 0:
-			#var idx: int = randi_range(0, floor_segments.size() - 1)
-			#var segment_arr = floor_segments[idx]
-			#floor_segments.remove_at(idx)
-			#drop_floor_segment(segment_arr)
 
 
 func shove_player(shove_force: float = 25.0) -> void:

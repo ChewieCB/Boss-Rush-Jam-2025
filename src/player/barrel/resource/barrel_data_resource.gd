@@ -2,13 +2,13 @@ extends Resource
 class_name BarrelDataResource
 
 enum BarrelIdEnum {
-    NONE,
-    TEST,
-    ARCHETYPE,
-    DYNAMIC_ADVANTAGE,
-    FOOL_ROLLER,
-    PROJECTILE_COUNT,
-    TRICKSHOT,
+	NONE,
+	TEST,
+	ARCHETYPE,
+	DYNAMIC_ADVANTAGE,
+	FOOL_ROLLER,
+	PROJECTILE_COUNT,
+	TRICKSHOT,
 }
 
 @export var barrel_id: BarrelIdEnum
