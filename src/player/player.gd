@@ -31,6 +31,7 @@ class_name Player
 @onready var aim_ray: AimRay = $Neck/ShakeableCamera/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
 @onready var magazine_label: Label = $UI/GunUI/MagazineUI
+@onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
 
 const MAX_SPEED: float = 8.0
 const MAX_FALL_SPEED: float = 50.0
@@ -229,9 +230,9 @@ func _physics_process(delta):
 			floor_velocity.normalized().z,
 		))
 		velocity += floor_velocity * dir_weight
-		
+
 	move_and_slide()
-	
+
 	#show_debug_label()
 	var gun_sway_velocity = velocity * transform.basis
 	if not is_swapping_gun:
@@ -240,7 +241,17 @@ func _physics_process(delta):
 
 func update_hud():
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
-
+	for i in range(current_gun.max_barrels):
+		var effect_ui = all_barrel_effect_ui.get_child(i)
+		if current_gun.get_node("Barrel").get_child(i).get_child_count() > 0:
+			var barrel: SpinBarrel = current_gun.get_node("Barrel").get_child(i).get_child(0)
+			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
+			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
+			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+		else:
+			effect_ui.get_node("Title").text = ""
+			effect_ui.get_node("Tag").text = ""
+			effect_ui.get_node("Desc").text = ""
 
 func show_debug_label():
 	var h_speed = snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.1)
@@ -260,7 +271,7 @@ func show_debug_label():
 
 func jump(multiplier = 1.0):
 	vel_vertical = JUMP_FORCE * multiplier
-	
+
 	# Conserve angular momentum when jumping off spinning objevts
 	#if cached_angular_velocity:
 		#var angular_velocity = cached_angular_velocity
@@ -272,7 +283,7 @@ func jump(multiplier = 1.0):
 			#linear_velocity.x,
 			#linear_velocity.z
 		#) * angular_momentum_multiplier + Vector2(velocity_to_center.x, velocity_to_center.z)
-	
+
 	jumped = true
 	state_chart.send_event("jump")
 	is_dashing = false
