@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dd7xt2ptfqbkw"]
+[gd_scene load_steps=33 format=3 uid="uid://dd7xt2ptfqbkw"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_jhwuw"]
 [ext_resource type="Script" path="res://src/bosses/roulette/boss_roulette.gd" id="2_m116k"]
@@ -13,12 +13,20 @@
 [ext_resource type="AudioStream" uid="uid://db2criyne5nvh" path="res://src/bosses/base/assets/sfx/temp/whoosh2_clipped.wav" id="7_3dh61"]
 [ext_resource type="Material" uid="uid://bl2wsskw41kaa" path="res://src/bosses/roulette/BarrierMat.tres" id="7_nq11i"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_yu3uh"]
+[ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="8_2hac0"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_edit5"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="9_7dg1x"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/guard.gd" id="15_rx3ud"]
 [ext_resource type="Resource" uid="uid://dlnn1fr5bmklq" path="res://src/bosses/MidAttackPhaseChangeGuard.tres" id="16_4livr"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/any_of_guard.gd" id="17_dqgtw"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="18_m5pf4"]
+
+[sub_resource type="Curve3D" id="Curve3D_jeonh"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 9.18, 0, 0, 2, 0, 0, 3.39, 0, 0, 0, 0, 0, 0, -6),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_obnfo"]
 height = 6.6
@@ -68,7 +76,7 @@ radius = 6.0
 collision_mask = 26
 motion_mode = 1
 script = ExtResource("2_m116k")
-current_phase = 3
+current_phase = 1
 phase_2_health_percentage_trigger = 0.66
 phase_3_health_percentage_trigger = 0.33
 max_barrier_phase_count = 2
@@ -112,20 +120,32 @@ telegraph_time = 0.45
 projectile_scene = null
 delay_per_projectile = 0.6
 
-[node name="Sprite3D" parent="." index="0"]
+[node name="BarrelSpawnPath" type="Path3D" parent="." index="0"]
+curve = SubResource("Curve3D_jeonh")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="BarrelSpawnPath" index="0"]
+transform = Transform3D(-4.37112e-08, 1, -4.37112e-08, 0, -4.37114e-08, -0.999995, -0.999995, -4.37114e-08, 1.91068e-15, 0, 2, 0)
+loop = false
+tilt_enabled = false
+
+[node name="BarrelItemPickup" parent="BarrelSpawnPath/PathFollow3D" index="0" instance=ExtResource("8_2hac0")]
+
+[node name="Sprite3D" parent="." index="1"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 3.58166, 0)
 texture = ExtResource("6_p3iyj")
 
-[node name="CollisionShape3D" parent="." index="1"]
+[node name="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
 shape = SubResource("CylinderShape3D_obnfo")
 
-[node name="DebugMesh" parent="." index="2"]
+[node name="DebugMesh" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
 visible = true
 mesh = SubResource("CylinderMesh_ljrhi")
 
-[node name="Hurtbox" parent="." index="3"]
+[node name="Shields" type="Node3D" parent="." index="4"]
+
+[node name="Hurtbox" parent="." index="5"]
 collision_mask = 66
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
@@ -144,19 +164,14 @@ collision_mask = 64
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox/StaticBody3D" index="0"]
 shape = SubResource("BoxShape3D_6q8u4")
 
-[node name="Shields" type="Node3D" parent="." index="4"]
+[node name="HealthComponent" parent="." index="6"]
+max_health = 10000.0
 
-[node name="HealthComponent" parent="." index="5"]
-max_health = 1.0
-
-[node name="NavigationComponent" parent="." index="6"]
+[node name="NavigationComponent" parent="." index="7"]
 enabled = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Malina, Center of Attention"
-
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
 
 [node name="toTelegraph" type="Node" parent="StateChart/Root/Attacking/Cooldown" index="1"]
 script = ExtResource("4_3xtcm")
@@ -434,9 +449,6 @@ script = ExtResource("4_3xtcm")
 to = NodePath("../../DropSegment")
 event = &"start_drop_attack"
 delay_in_seconds = "0.0"
-
-[node name="BarrierTargetingTimer" type="Timer" parent="StateChart/Root/Phase/Phase2/DamageBarrier" index="5"]
-one_shot = true
 
 [node name="PushbackWave" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
 script = ExtResource("7_yu3uh")
@@ -734,11 +746,11 @@ font_size = 128
 outline_size = 32
 uppercase = true
 
-[node name="DebugStateLabel" parent="." index="11"]
+[node name="DebugStateLabel" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, 0)
 no_depth_test = true
 
-[node name="DebugDistanceLabel" parent="." index="12"]
+[node name="DebugDistanceLabel" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, 0)
 no_depth_test = true
 
@@ -763,7 +775,10 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 29, 0)
 shape = SubResource("CylinderShape3D_cbruj")
 
-[node name="BallKillTimer" type="Timer" parent="." index="19"]
+[node name="BarrierTargetingTimer" type="Timer" parent="." index="19"]
+one_shot = true
+
+[node name="BallKillTimer" type="Timer" parent="." index="20"]
 one_shot = true
 
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/Targeting" to="." method="_on_shields_targeting_state_entered"]
@@ -785,7 +800,6 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_phase_2_damage_barrier_spawn_barrier_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/Recover" to="." method="_on_damage_barrier_recover_state_entered"]
-[connection signal="timeout" from="StateChart/Root/Phase/Phase2/DamageBarrier/BarrierTargetingTimer" to="." method="_on_barrier_targeting_timer_timeout"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Targeting" to="." method="_on_phase_2_pushback_wave_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/SpawnWave" to="." method="_on_phase_2_pushback_wave_spawn_wave_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PushbackWave/Recover" to="." method="_on_phase_2_pushback_wave_recover_state_entered"]
@@ -806,4 +820,5 @@ one_shot = true
 [connection signal="timeout" from="ShieldsAbsorbTimer" to="." method="_on_shields_absorb_timer_timeout"]
 [connection signal="timeout" from="ShieldsSpawnTimer" to="." method="_on_shields_spawn_timer_timeout"]
 [connection signal="body_entered" from="PushbackArea" to="." method="_on_pushback_area_body_entered"]
+[connection signal="timeout" from="BarrierTargetingTimer" to="." method="_on_barrier_targeting_timer_timeout"]
 [connection signal="timeout" from="BallKillTimer" to="." method="_on_ball_kill_timer_timeout"]

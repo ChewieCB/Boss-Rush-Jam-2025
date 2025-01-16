@@ -38,7 +38,7 @@ var previous_phase: String
 @export_group("Barrier Sweep")
 @export var barrier_targeting_delay: float = 2.0
 @export var barrier_sweep_time: float = 1.7
-@onready var barrier_targeting_timer = $StateChart/Root/Phase/Phase2/DamageBarrier/BarrierTargetingTimer
+@onready var barrier_targeting_timer = $BarrierTargetingTimer
 # Multiball
 @export_group("Multiball")
 @export var ball_scene: PackedScene
@@ -120,13 +120,12 @@ func select_attack_phase_1() -> void:
 	
 	# If we've somehow exluded all of the possible phases, 
 	# the counters have been reset so just call this method again.
-	if possible_phases == []:
-		select_attack()
-		return
+	#if possible_phases == []:
+		#select_attack()
+		#return
 	
-	for phase in possible_phases.duplicate():
-		if phase != previous_phase:
-			possible_phases.append(phase)
+	if previous_phase:
+		possible_phases.erase(previous_phase)
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	previous_phase = new_phase
@@ -147,9 +146,8 @@ func select_attack_phase_2() -> void:
 		#possible_phases.erase("start_pushback_attack")
 		#shockwave_phase_count = 0
 		
-	for phase in possible_phases.duplicate():
-		if phase != previous_phase:
-			possible_phases.append(phase)
+	if previous_phase:
+		possible_phases.erase(previous_phase)
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	previous_phase = new_phase
@@ -624,13 +622,13 @@ func _on_damage_barrier_recover_state_entered() -> void:
 
 func _on_damage_barrier_state_exited() -> void:
 	barrier_targeting_timer.stop()
+	state_chart.send_event("attack_end_now")
 	if hurtbox.visible:
 		var tween = get_tree().create_tween()
 		tween.tween_property(hurtbox_mesh, "position:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
 		tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
 		await tween.finished
 		hurtbox.visible = false
-	state_chart.send_event("attack_end_now")
 
 
 #### Phase 1 | Multiball
