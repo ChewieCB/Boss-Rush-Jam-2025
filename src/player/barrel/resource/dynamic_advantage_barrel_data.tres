@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=3 format=3 uid="uid://d2i2i2rrbo2v0"]
+
+[ext_resource type="PackedScene" uid="uid://dy7nqvo7uq1ti" path="res://src/player/barrel/DynamicAdvantageBarrel.tscn" id="1_nrto8"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="1_wmb4n"]
+
+[resource]
+script = ExtResource("1_wmb4n")
+barrel_id = 3
+barrel_name = "Lmao dunno"
+barrel_desc = ""
+barrel_prefab = ExtResource("1_nrto8")
