@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://dnoww0ohavrbt"
+path="res://.godot/imported/pit-crash.map-5606e1d705ab3c9118f8b40b445091ec.tres"
+
+[deps]
+
+source_file="res://src/maps/pit_boss/pit-crash.map"
+dest_files=["res://.godot/imported/pit-crash.map-5606e1d705ab3c9118f8b40b445091ec.tres"]
+
+[params]
+

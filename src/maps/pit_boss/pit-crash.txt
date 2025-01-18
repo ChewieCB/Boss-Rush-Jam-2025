@@ -1,0 +1,10 @@
+OS:	Manjaro Linux
+Qt:	5.15.14
+GL_VENDOR:	NVIDIA Corporation
+GL_RENDERER:	NVIDIA GeForce RTX 3060/PCIe/SSE2
+GL_VERSION:	4.6.0 NVIDIA 550.100
+TrenchBroom Version:	2023.1
+TrenchBroom Build:	v2023.1-510-g279aea18f Release Linux-
+Reason:	Surface index is out of bounds
+Stack trace:
+<uncaught exception>

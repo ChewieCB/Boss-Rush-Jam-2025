@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rdph0stj6u77"
-path.s3tc="res://.godot/imported/texture_green_green_green_01.png-bc2eed9b6fd2f32c0b598c78b4ab9238.s3tc.ctex"
+uid="uid://b31wk2rcrvdbp"
+path.s3tc="res://.godot/imported/juni_boss_sprite_placeholder.png-8a35864334e185d274a4c51378478a6b.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/placeholder/texture_green_green_green_01.png"
-dest_files=["res://.godot/imported/texture_green_green_green_01.png-bc2eed9b6fd2f32c0b598c78b4ab9238.s3tc.ctex"]
+source_file="res://src/bosses/base/assets/juni_boss_sprite_placeholder.png"
+dest_files=["res://.godot/imported/juni_boss_sprite_placeholder.png-8a35864334e185d274a4c51378478a6b.s3tc.ctex"]
 
 [params]
 
