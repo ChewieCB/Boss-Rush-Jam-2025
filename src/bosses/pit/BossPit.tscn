@@ -1,12 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=6 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
 [ext_resource type="Texture2D" uid="uid://b31wk2rcrvdbp" path="res://src/bosses/base/assets/juni_boss_sprite_placeholder.png" id="2_dnkm2"]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ijkfg"]
+radius = 1.0
+height = 4.6
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_jlq7w"]
-radius = 1.7
-height = 5.4
+radius = 1.0
+height = 4.6
 
 [node name="BossPit" instance=ExtResource("1_opefu")]
 script = ExtResource("2_a8b8q")
@@ -27,12 +31,15 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 2.8, 0)
 texture = ExtResource("2_dnkm2")
 
 [node name="CollisionShape3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
+shape = SubResource("CapsuleShape3D_ijkfg")
 
 [node name="DebugMesh" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
 visible = true
 mesh = SubResource("CapsuleMesh_jlq7w")
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
 
 [node name="DebugStateLabel" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)

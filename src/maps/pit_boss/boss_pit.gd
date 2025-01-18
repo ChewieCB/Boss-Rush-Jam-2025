@@ -2,9 +2,12 @@ extends Node3D
 
 @export var bgm: AudioStream
 
+@onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
+
 @onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
+var nav_region: NavigationRegion3D
 
 
 func _ready() -> void:
@@ -18,3 +21,31 @@ func _ready() -> void:
 		player.player_camera.rotation = GameManager.cached_camera_rotation
 	
 	elevator_doors.open()
+	
+	await get_tree().physics_frame
+	generate_navigation()
+
+
+func generate_navigation() -> void:
+	nav_region = NavigationRegion3D.new()
+	var nav_mesh := NavigationMesh.new()
+	nav_mesh.agent_radius = 1.5
+	nav_mesh.agent_height = 0.0
+	nav_region.navigation_mesh = nav_mesh
+	
+	func_godot_parent.add_child(nav_region)
+	func_godot_parent.move_child(nav_region, 0)
+	
+	var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
+	func_godot_parent.remove_child(worldspawn_mesh)
+	nav_region.add_child(worldspawn_mesh)
+	nav_region.move_child(worldspawn_mesh, 0)
+	
+	var cover_objects := find_children("*", "CoverSpawnPoint")
+	for object in cover_objects:
+		var cover = object.get_child(0)
+		object.remove_child(cover)
+		nav_region.add_child(cover)
+		cover.global_position = object.global_position
+	
+	nav_region.bake_navigation_mesh()
