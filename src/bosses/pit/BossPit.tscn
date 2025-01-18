@@ -1,8 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=15 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
 [ext_resource type="Texture2D" uid="uid://b31wk2rcrvdbp" path="res://src/bosses/base/assets/juni_boss_sprite_placeholder.png" id="2_dnkm2"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_akhww"]
+[ext_resource type="Texture2D" uid="uid://bpkl437wqw2kh" path="res://src/bosses/base/assets/juni_boss_face_lunge.png" id="4_nd84x"]
+[ext_resource type="Texture2D" uid="uid://dqopqwf4syxsn" path="res://src/bosses/base/assets/juni_boss_face_swipe.png" id="4_qi0bj"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bjod6"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_bqowf"]
+[ext_resource type="Texture2D" uid="uid://dasca74no7m2t" path="res://src/bosses/base/assets/juni_boss_face_uppercut.png" id="5_i6at3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ijkfg"]
 radius = 1.0
@@ -12,8 +18,21 @@ height = 4.6
 radius = 1.0
 height = 4.6
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ssqae"]
+size = Vector3(3, 3.6, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_n64vh"]
+size = Vector3(3, 3.6, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q0jwb"]
+transparency = 1
+albedo_color = Color(1, 0, 0, 0.337255)
+
 [node name="BossPit" instance=ExtResource("1_opefu")]
 script = ExtResource("2_a8b8q")
+swipe_debug = ExtResource("4_qi0bj")
+lunge_debug = ExtResource("4_nd84x")
+uppercut_debug = ExtResource("5_i6at3")
 TEMP_sfx_awaken = null
 TEMP_sfx_hit = Array[AudioStream]([])
 TEMP_sfx_area_1 = null
@@ -30,6 +49,12 @@ delay_per_projectile = 0.6
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 2.8, 0)
 texture = ExtResource("2_dnkm2")
 
+[node name="FaceSprite" type="Sprite3D" parent="Sprite3D" index="0"]
+visible = false
+sorting_offset = 0.1
+billboard = 2
+texture = ExtResource("4_qi0bj")
+
 [node name="CollisionShape3D" parent="." index="1"]
 shape = SubResource("CapsuleShape3D_ijkfg")
 
@@ -38,11 +63,102 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
 visible = true
 mesh = SubResource("CapsuleMesh_jlq7w")
 
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.5)
+shape = SubResource("BoxShape3D_ssqae")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Hurtbox" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.5)
+visible = false
+mesh = SubResource("BoxMesh_n64vh")
+surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
+
+[node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
+boss_name = "Juni"
+
 [node name="StateChartDebugger" parent="UI" index="1"]
 enabled = true
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Phase 1")
+event = &"start_phase_1"
+delay_in_seconds = "0.0"
+
+[node name="Phase 1" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("MeleeCombo")
+
+[node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase 1" index="0"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toSwipe" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Swipe")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Swipe" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Swipe" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Lunge" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toUppercut" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Lunge" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Uppercut")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Lunge" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Uppercut" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="3"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Uppercut" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="4"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
 
 [node name="DebugStateLabel" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 
 [node name="DebugDistanceLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, 0)
+
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Targeting" to="." method="_on_phase_1_melee_combo_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Targeting" to="." method="_on_phase_1_melee_combo_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Swipe" to="." method="_on_phase_1_melee_combo_swipe_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Lunge" to="." method="_on_phase_1_melee_combo_lunge_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Uppercut" to="." method="_on_phase_1_melee_combo_uppercut_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Recover" to="." method="_on_phase_1_melee_combo_recover_state_entered"]

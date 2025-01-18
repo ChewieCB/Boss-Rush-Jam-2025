@@ -1770,6 +1770,9 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 1, 58
 
 [node name="entity_5_PitBoss" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("11_hqgyr")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 0)
+swipe_debug = null
+lunge_debug = null
+uppercut_debug = null
 target = NodePath("../entity_4_PlayerRef")
 
 [node name="group_640_FloorQuarter" type="Node3D" parent="FuncGodotMap"]
