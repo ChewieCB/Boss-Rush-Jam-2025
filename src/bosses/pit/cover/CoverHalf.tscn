@@ -1,6 +1,8 @@
-[gd_scene load_steps=4 format=4 uid="uid://83k3of5xh1gr"]
+[gd_scene load_steps=6 format=4 uid="uid://83k3of5xh1gr"]
 
+[ext_resource type="Script" path="res://src/bosses/pit/cover/cover.gd" id="1_1n7st"]
 [ext_resource type="Material" uid="uid://q778hp4rpyl4" path="res://assets/textures/placeholder/texture_green_green_green_13.tres" id="1_emeij"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_yln0c"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_eaptb"]
 _surfaces = [{
@@ -22,6 +24,8 @@ size = Vector3(7.99808, 1.47815, 1.99595)
 
 [node name="CoverHalf" type="StaticBody3D"]
 collision_mask = 78
+script = ExtResource("1_1n7st")
+explosion_vfx = ExtResource("2_yln0c")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.749947, 0)

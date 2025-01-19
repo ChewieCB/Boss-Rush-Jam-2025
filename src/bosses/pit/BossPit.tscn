@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=22 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -10,6 +10,9 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_bqowf"]
 [ext_resource type="Texture2D" uid="uid://dasca74no7m2t" path="res://src/bosses/base/assets/juni_boss_face_uppercut.png" id="5_i6at3"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_g5e5v"]
+size = Vector3(0.6, 2, 0.6)
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ijkfg"]
 radius = 1.0
 height = 4.6
@@ -18,21 +21,398 @@ height = 4.6
 radius = 1.0
 height = 4.6
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ssqae"]
-size = Vector3(3, 3.6, 2)
+[sub_resource type="BoxShape3D" id="BoxShape3D_pi7fj"]
+size = Vector3(3, 3.6, 4)
 
 [sub_resource type="BoxMesh" id="BoxMesh_n64vh"]
-size = Vector3(3, 3.6, 2)
+size = Vector3(3, 3.6, 4)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q0jwb"]
 transparency = 1
 albedo_color = Color(1, 0, 0, 0.337255)
+
+[sub_resource type="Animation" id="Animation_bc730"]
+resource_name = "swipe"
+length = 0.7
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ArmsDEbug/ArmsDebugL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.35, 0.6),
+"transitions": PackedFloat32Array(1.56917, 1, 0.297302, 2.21914, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.212914, -0.914184, -0.383807), Vector3(0.212914, -0.914184, -0.383807), Vector3(0.212914, 2.48921, -0.383807), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugR:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.35, 0.6),
+"transitions": PackedFloat32Array(1.56917, 1, 0.297, 2.21, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.349066, 0), Vector3(0, -0.349066, 0), Vector3(0.123098, 1.14212, 0.124042), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugL:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.35, 0.6),
+"transitions": PackedFloat32Array(1.56917, 1, 0.297302, 2.21914, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.4, -0.4, -0.8), Vector3(-0.4, -0.4, -0.8), Vector3(-0.4, -0.4, 0.4), Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugR:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.35, 0.6),
+"transitions": PackedFloat32Array(1.56917, 1, 0.297, 2.21, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.3), Vector3(0, 0, -0.3), Vector3(0.5, 0, -0.2), Vector3(0, 0, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [15.0],
+"method": &"damage_in_hurtbox"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_6jtcq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ArmsDEbug/ArmsDebugL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugR:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugR:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugL:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.447021, 2.84312, 0.761648)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.94809, 2.26694, -0.0607154)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.221657, -0.338953, 0.903109)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2.05191, 2.26694, 0.0392845)]
+}
+
+[sub_resource type="Animation" id="Animation_3v14a"]
+resource_name = "lunge"
+length = 0.95
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ArmsDEbug/ArmsDebugL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5, 0.95),
+"transitions": PackedFloat32Array(3.13834, 0.378929, 3.4822, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.13446, 1.19437e-07, -1.87479e-07), Vector3(1.13446, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugR:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5, 0.95),
+"transitions": PackedFloat32Array(3.13834, 0.378, 3.48, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.13446, 1.19437e-07, -1.87479e-07), Vector3(1.13446, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugL:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5, 0.95),
+"transitions": PackedFloat32Array(3.13834, 0.378929, 3.4822, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-2.53526e-07, 1.7, 2.9), Vector3(0, 1.7, -2.9), Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugR:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5, 0.95),
+"transitions": PackedFloat32Array(3.13834, 0.378, 3.48, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-2.53526e-07, 1.7, 2.9), Vector3(0, 1.7, -2.9), Vector3(0, 0, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.35),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"lunge"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_xr3uq"]
+resource_name = "uppercut"
+length = 0.6
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [15.0, 15.0],
+"method": &"uppercut"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.07053, 1),
+"update": 0,
+"values": [Vector3(0.447021, 2.84312, 0.761648), Vector3(2.62847, 4.15214, 1.02276), Vector3(0.447021, 2.84312, 0.761648)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.07053, 1),
+"update": 0,
+"values": [Vector3(0.221657, -0.338953, 0.903109), Vector3(-2.39634, -0.338594, 0.640536), Vector3(0.221657, -0.338953, 0.903109)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.07053, 1),
+"update": 0,
+"values": [Vector3(-1.94809, 2.26694, -0.0607154), Vector3(-1.24809, 3.26694, 1.03929), Vector3(-1.94809, 2.26694, -0.0607154)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.07053, 1),
+"update": 0,
+"values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 2.26694, 0.0392845)]
+}
+
+[sub_resource type="Animation" id="Animation_qtmfa"]
+resource_name = "hook"
+length = 0.7
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ArmsDEbug/ArmsDebugL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.45, 0.7),
+"transitions": PackedFloat32Array(2.07053, 0.378929, 2.92817, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.18405, 0.802729, -0.187249), Vector3(0.36383, -0.745749, -0.0919494), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugR:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.45, 0.7),
+"transitions": PackedFloat32Array(2.07053, 0.378929, 2.92817, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.393066, 0.769608, 0.355359), Vector3(0.238195, -1.25529, 0.577745), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugL:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.45, 0.7),
+"transitions": PackedFloat32Array(2.07053, 0.378929, 2.92817, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(3.36774e-08, 0, -0.3), Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugR:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.45, 0.7),
+"transitions": PackedFloat32Array(2.07053, 0.378929, 2.92817, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.5, 0, -1.1), Vector3(2.3, 0, -0.0999998), Vector3(0, 0, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.35),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [15.0],
+"method": &"damage_in_hurtbox"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_iyws4"]
+_data = {
+"RESET": SubResource("Animation_6jtcq"),
+"hook": SubResource("Animation_qtmfa"),
+"lunge": SubResource("Animation_3v14a"),
+"swipe": SubResource("Animation_bc730"),
+"uppercut": SubResource("Animation_xr3uq")
+}
 
 [node name="BossPit" instance=ExtResource("1_opefu")]
 script = ExtResource("2_a8b8q")
 swipe_debug = ExtResource("4_qi0bj")
 lunge_debug = ExtResource("4_nd84x")
 uppercut_debug = ExtResource("5_i6at3")
+FRICTION = 0.05
 TEMP_sfx_awaken = null
 TEMP_sfx_hit = Array[AudioStream]([])
 TEMP_sfx_area_1 = null
@@ -45,39 +425,55 @@ attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.6
 
-[node name="Sprite3D" parent="." index="0"]
+[node name="ArmsDEbug" type="Node3D" parent="." index="0"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="ArmsDebugL" type="Node3D" parent="ArmsDEbug" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugL" index="0"]
+transform = Transform3D(-0.905967, 1.1274, 0.397749, 0.933456, 0.978883, -0.648422, -0.746918, -0.144111, -1.29281, -1.94809, 2.26694, -0.0607154)
+mesh = SubResource("BoxMesh_g5e5v")
+skeleton = NodePath("../../../Sprite3D")
+
+[node name="ArmsDebugR" type="Node3D" parent="ArmsDEbug" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugR" index="0"]
+transform = Transform3D(0.789811, -1.17876, -0.486548, 1.14907, 0.906034, -0.32977, 0.553032, -0.19908, 1.38004, 2.05191, 2.26694, 0.0392845)
+mesh = SubResource("BoxMesh_g5e5v")
+skeleton = NodePath("../../../Sprite3D")
+
+[node name="Sprite3D" parent="." index="1"]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 2.8, 0)
 texture = ExtResource("2_dnkm2")
 
 [node name="FaceSprite" type="Sprite3D" parent="Sprite3D" index="0"]
-visible = false
 sorting_offset = 0.1
 billboard = 2
-texture = ExtResource("4_qi0bj")
 
-[node name="CollisionShape3D" parent="." index="1"]
+[node name="CollisionShape3D" parent="." index="2"]
 shape = SubResource("CapsuleShape3D_ijkfg")
 
-[node name="DebugMesh" parent="." index="2"]
+[node name="DebugMesh" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
 visible = true
 mesh = SubResource("CapsuleMesh_jlq7w")
 
+[node name="Hurtbox" parent="." index="4"]
+collision_mask = 3
+
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.5)
-shape = SubResource("BoxShape3D_ssqae")
+shape = SubResource("BoxShape3D_pi7fj")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Hurtbox" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.5)
-visible = false
 mesh = SubResource("BoxMesh_n64vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Juni"
-
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("4_akhww")
@@ -105,19 +501,46 @@ delay_in_seconds = "0.0"
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="1"]
 script = ExtResource("5_bjod6")
 
-[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Swipe" index="0"]
+[node name="toHook" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Swipe" index="0"]
 script = ExtResource("4_akhww")
-to = NodePath("../../Lunge")
+to = NodePath("../../Hook")
 event = &"melee_attack"
 delay_in_seconds = "0.0"
 
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Swipe" index="1"]
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Swipe" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Swipe" index="2"]
 script = ExtResource("4_akhww")
 to = NodePath("../../Recover")
 event = &"combo_end"
 delay_in_seconds = "0.0"
 
-[node name="Lunge" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="2"]
+[node name="Hook" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toUppercut" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Hook" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Uppercut")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Hook" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Hook" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Lunge" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="3"]
 script = ExtResource("5_bjod6")
 
 [node name="toUppercut" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Lunge" index="0"]
@@ -132,16 +555,31 @@ to = NodePath("../../Recover")
 event = &"combo_end"
 delay_in_seconds = "0.0"
 
-[node name="Uppercut" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="3"]
+[node name="Uppercut" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="4"]
 script = ExtResource("5_bjod6")
 
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Uppercut" index="0"]
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Uppercut" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Uppercut" index="1"]
 script = ExtResource("4_akhww")
 to = NodePath("../../Recover")
 event = &"combo_end"
 delay_in_seconds = "0.0"
 
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="4"]
+[node name="AirSlam" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="5"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/AirSlam" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="6"]
 script = ExtResource("5_bjod6")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo/Recover" index="0"]
@@ -150,15 +588,25 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="DebugStateLabel" parent="." index="9"]
+[node name="NavigationAgent3D" parent="." index="9"]
+debug_enabled = true
+
+[node name="DebugStateLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 
-[node name="DebugDistanceLabel" parent="." index="10"]
+[node name="DebugDistanceLabel" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="14"]
+libraries = {
+"": SubResource("AnimationLibrary_iyws4")
+}
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Targeting" to="." method="_on_phase_1_melee_combo_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Targeting" to="." method="_on_phase_1_melee_combo_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Swipe" to="." method="_on_phase_1_melee_combo_swipe_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Hook" to="." method="_on_phase_1_melee_combo_hook_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Lunge" to="." method="_on_phase_1_melee_combo_lunge_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Uppercut" to="." method="_on_phase_1_melee_combo_uppercut_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/AirSlam" to="." method="_on_phase_1_melee_combo_air_slam_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/MeleeCombo/Recover" to="." method="_on_phase_1_melee_combo_recover_state_entered"]

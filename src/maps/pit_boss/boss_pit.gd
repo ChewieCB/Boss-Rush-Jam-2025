@@ -3,6 +3,7 @@ extends Node3D
 @export var bgm: AudioStream
 
 @onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
+@onready var boss_trigger: Area3D = $BossTrigger
 
 @onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
@@ -29,8 +30,8 @@ func _ready() -> void:
 func generate_navigation() -> void:
 	nav_region = NavigationRegion3D.new()
 	var nav_mesh := NavigationMesh.new()
-	nav_mesh.agent_radius = 1.5
-	nav_mesh.agent_height = 0.0
+	#nav_mesh.agent_radius = 1.2
+	#nav_mesh.agent_height = 1.0
 	nav_region.navigation_mesh = nav_mesh
 	
 	func_godot_parent.add_child(nav_region)
@@ -47,5 +48,11 @@ func generate_navigation() -> void:
 		object.remove_child(cover)
 		nav_region.add_child(cover)
 		cover.global_position = object.global_position
+		cover.cover_destroyed.connect(nav_region.bake_navigation_mesh)
 	
 	nav_region.bake_navigation_mesh()
+
+
+func _on_boss_trigger_body_entered(body: Node3D) -> void:
+	boss.activate()
+	boss_trigger.queue_free()

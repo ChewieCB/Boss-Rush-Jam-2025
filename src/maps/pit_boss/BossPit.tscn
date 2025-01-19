@@ -1,4 +1,4 @@
-[gd_scene load_steps=283 format=4 uid="uid://ct3oq6juhe7y4"]
+[gd_scene load_steps=284 format=4 uid="uid://ct3oq6juhe7y4"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_vfcr2"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/boss_pit.gd" id="1_ymudn"]
@@ -949,6 +949,9 @@ _surfaces = [{
 "vertex_data": PackedByteArray("AACAwAAAQD8AAIC/AACAwAAAQL8AAIC/AACAQAAAQL8AAIC/AACAQAAAQD8AAIC/AACAwAAAQD8AAIC/AACAwAAAQD8AAIA/AACAwAAAQL8AAIA/AACAwAAAQL8AAIC/AACAQAAAQL8AAIC/AACAwAAAQL8AAIC/AACAwAAAQL8AAIA/AACAQAAAQL8AAIA/AACAQAAAQD8AAIC/AACAQAAAQD8AAIA/AACAwAAAQD8AAIA/AACAwAAAQD8AAIC/AACAQAAAQD8AAIC/AACAQAAAQL8AAIC/AACAQAAAQL8AAIA/AACAQAAAQD8AAIA/AACAwAAAQD8AAIA/AACAQAAAQD8AAIA/AACAQAAAQL8AAIA/AACAwAAAQL8AAIA//////wAA/7//////AAD/v/////8AAP+//////wAA/78AAP9//3//vwAA/3//f/+/AAD/f/9//78AAP9//3//v/9/AAD/f/+//38AAP9//7//fwAA/3//v/9/AAD/f/+//3//////////f/////////9//////////3////////////9//////////3//////////f/////////9///////9//3////+//3//f////7//f/9/////v/9//3////+/")
 }]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_o52qx"]
+size = Vector3(9, 5, 5)
+
 [node name="BossPit" type="Node3D"]
 script = ExtResource("1_ymudn")
 bgm = ExtResource("2_sx666")
@@ -1768,6 +1771,9 @@ mesh = SubResource("ArrayMesh_mwhgg")
 [node name="entity_4_PlayerRef" parent="FuncGodotMap" instance=ExtResource("7_qgbx4")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 1, 58.75)
 
+[node name="HealthComponent" parent="FuncGodotMap/entity_4_PlayerRef" index="0"]
+max_health = 10000.0
+
 [node name="entity_5_PitBoss" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("11_hqgyr")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 0)
 swipe_debug = null
@@ -1954,3 +1960,13 @@ transform = Transform3D(-0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926
 
 [node name="entity_49_CoverSpawnPoint" parent="FuncGodotMap" instance=ExtResource("19_vy68e")]
 transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 4, 0, -20)
+
+[node name="BossTrigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 30.9)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossTrigger"]
+shape = SubResource("BoxShape3D_o52qx")
+
+[connection signal="body_entered" from="BossTrigger" to="." method="_on_boss_trigger_body_entered"]
+
+[editable path="FuncGodotMap/entity_4_PlayerRef"]

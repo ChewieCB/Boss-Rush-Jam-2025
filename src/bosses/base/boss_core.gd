@@ -104,7 +104,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-func jump(multiplier = 1.0):
+func jump(multiplier = 1.0) -> void:
 	vel_vertical = JUMP_FORCE * multiplier
 
 
