@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://c5jfvwm8lp6jt" path="res://assets/trenchbroom/ElevatorDoors.tres" id="6_8ycue"]
 [ext_resource type="Resource" uid="uid://dhd5cfecqe7iu" path="res://assets/trenchbroom/BossTest.tres" id="7_8kdmy"]
 [ext_resource type="Resource" uid="uid://d014js6ak2jgh" path="res://assets/trenchbroom/BossRoulette.tres" id="7_ls432"]
-[ext_resource type="Resource" uid="uid://bmsjmrndyrogj" path="res://assets/trenchbroom/RouletteBall.tres" id="8_tfoyg"]
+[ext_resource type="Resource" path="res://assets/trenchbroom/RouletteBall.tres" id="8_tfoyg"]
 
 [resource]
 script = ExtResource("2_daboe")
