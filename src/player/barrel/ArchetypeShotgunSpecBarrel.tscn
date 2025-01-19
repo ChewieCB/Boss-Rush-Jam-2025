@@ -13,6 +13,7 @@ barrel_id = 7
 
 [node name="Model" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
+visible = false
 mesh = SubResource("CylinderMesh_sfbyw")
 
 [node name="EffectName" type="Label3D" parent="."]
@@ -55,7 +56,7 @@ new_value = 6.0
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
 script = ExtResource("4_cnlm3")
 attribute = 4
-new_value = 4.0
+new_value = 3.5
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
 script = ExtResource("4_cnlm3")
@@ -70,6 +71,11 @@ new_value = 5.0
 script = ExtResource("4_cnlm3")
 attribute = 5
 new_value = 12.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 1
+new_value = 9.0
 
 [node name="CompoundEffectDoubleBarrel" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_eatto")
@@ -89,7 +95,7 @@ new_value = 12.0
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
 script = ExtResource("4_cnlm3")
 attribute = 4
-new_value = 20.0
+new_value = 10.0
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
 script = ExtResource("4_cnlm3")
