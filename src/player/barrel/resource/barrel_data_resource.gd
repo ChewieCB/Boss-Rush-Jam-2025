@@ -1,7 +1,7 @@
 extends Resource
 class_name BarrelDataResource
 
-## Keep adding at the bottmom, dont add at the middle of list
+## Keep adding new item at the bottom, dont add at the middle of list
 enum BarrelIdEnum {
     NONE,
     TEST,

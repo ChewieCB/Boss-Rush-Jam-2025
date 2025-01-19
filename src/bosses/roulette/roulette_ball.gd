@@ -14,8 +14,13 @@ var collision_count: int = 0
 @export var radial_force_magnitude: float = 1700
 @export var central_force_magnitude: float = 3800
 @export var homing_force_magnitude: float = 5550
+@export var is_flaming: bool = false:
+	set(value):
+		is_flaming = value
+		fire_mesh.visible = is_flaming
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
+@onready var fire_mesh: MeshInstance3D = $FireMesh
 @onready var material: StandardMaterial3D = mesh.mesh.material
 @onready var homing_timer: Timer = $Timer
 
