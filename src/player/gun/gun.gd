@@ -39,6 +39,7 @@ class_name Gun
 @onready var bullet_spawn_marker = $BulletStartPos
 @onready var jam_timer: Timer = $JamTimer
 @onready var failed_shoot_sfx_timer: Timer = $FailToShootSFXTimer
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 var magazine_ammo_left = 0
 var is_reloading = false
@@ -213,6 +214,7 @@ func reload():
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
 
+	anim_player.play("reload")
 	is_reloading = true
 	SoundManager.play_sound(TEMP_sfx_reload)
 	show_gun_status("Reloading...")
@@ -224,6 +226,7 @@ func reload():
 	for barrel in installed_barrels:
 		SoundManager.play_sound(TEMP_sfx_click)
 		barrel.stop_spin()
+	anim_player.play("idle")
 	is_reloading = false
 
 	for barrel in installed_barrels:

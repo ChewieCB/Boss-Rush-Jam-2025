@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://biqm56x6ewbmo"]
+[gd_scene load_steps=5 format=3 uid="uid://biqm56x6ewbmo"]
 
 [ext_resource type="Script" path="res://src/ui/pause_menu/setting_ui.gd" id="1_05qbb"]
 [ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="2_b71wb"]
+[ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_1sxb2"]
+[ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="3_ogivf"]
 
 [node name="SettingUI" type="Control"]
 layout_mode = 3
@@ -13,33 +15,106 @@ grow_vertical = 2
 script = ExtResource("1_05qbb")
 keybind_button_prefab = ExtResource("2_b71wb")
 
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 256.0
+offset_top = -16.0
+offset_right = 552.0
+offset_bottom = 1088.0
+color = Color(0, 0, 0, 0.733333)
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 2
+offset_left = 296.0
+offset_top = 288.0
+offset_right = 504.0
+offset_bottom = 351.0
+theme_override_font_sizes/font_size = 40
+text = "<< Back "
+
+[node name="NinePatchRect" type="NinePatchRect" parent="BackButton"]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ogivf")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 72.0
-offset_top = -95.0
-offset_right = 193.0
-offset_bottom = 95.0
+offset_left = 296.0
+offset_top = -92.0
+offset_right = 504.0
+offset_bottom = 117.0
 grow_vertical = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 10
 
 [node name="ControlOption" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Control
+theme_override_font_sizes/font_size = 40
+text = "Control 
 "
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/ControlOption"]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ogivf")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
 [node name="GraphicOption" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 40
 text = "Graphic"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/GraphicOption"]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ogivf")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
 [node name="AudioOption" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 40
 text = "Audio"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/AudioOption"]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ogivf")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
 [node name="TabContainer" type="TabContainer" parent="."]
 custom_minimum_size = Vector2(100, 100)
@@ -49,10 +124,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -416.0
-offset_top = -256.0
-offset_right = 416.0
-offset_bottom = 256.0
+offset_left = -320.0
+offset_top = -260.0
+offset_right = 512.0
+offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
@@ -68,12 +143,14 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -71.0
-offset_right = 71.0
-offset_bottom = 55.0
+offset_left = -72.0
+offset_top = 16.0
+offset_right = 72.0
+offset_bottom = 71.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 40
 text = "Control"
+horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Control"]
 custom_minimum_size = Vector2(0, 100)
@@ -160,12 +237,14 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -71.0
-offset_right = 71.0
-offset_bottom = 55.0
+offset_left = -75.5
+offset_top = 16.0
+offset_right = 75.5
+offset_bottom = 71.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 40
 text = "Graphic"
+horizontal_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Graphic"]
 layout_mode = 0
@@ -394,11 +473,13 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -71.0
+offset_top = 16.0
 offset_right = 71.0
-offset_bottom = 55.0
+offset_bottom = 71.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 40
 text = "Audio"
+horizontal_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Audio"]
 layout_mode = 0
@@ -541,15 +622,28 @@ grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
-[node name="BackButton" type="Button" parent="."]
-layout_mode = 2
-offset_left = 72.0
-offset_top = 104.0
-offset_right = 193.0
-offset_bottom = 154.0
-theme_override_font_sizes/font_size = 30
-text = "<< Back"
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -260.0
+offset_right = 512.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_1sxb2")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
+[connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/ControlOption" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="VBoxContainer/ControlOption" to="." method="_on_control_option_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/GraphicOption" to="." method="play_button_hover_sfx"]
@@ -582,5 +676,3 @@ text = "<< Back"
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/SFX/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
-[connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

@@ -1,14 +1,16 @@
 extends Resource
 class_name BarrelDataResource
 
+## Keep adding new item at the bottom, dont add at the middle of list
 enum BarrelIdEnum {
-	NONE,
-	TEST,
-	ARCHETYPE,
-	DYNAMIC_ADVANTAGE,
-	FOOL_ROLLER,
-	PROJECTILE_COUNT,
-	TRICKSHOT,
+    NONE,
+    TEST,
+    ARCHETYPE,
+    DYNAMIC_ADVANTAGE,
+    FOOL_ROLLER,
+    PROJECTILE_COUNT,
+    TRICKSHOT,
+    ARCHETYPE_SHOTGUN_SPEC
 }
 
 @export var barrel_id: BarrelIdEnum
