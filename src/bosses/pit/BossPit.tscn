@@ -674,7 +674,6 @@ shape = SubResource("BoxShape3D_pi7fj")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Hurtbox" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.5)
-visible = false
 mesh = SubResource("BoxMesh_n64vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
 

@@ -42,7 +42,7 @@ func destroy_cover(body: Node3D) -> void:
 	if body is Cover:
 		body.destroy()
 		lunge_friction = FRICTION * 4
-		hurtbox.monitoring = false
+		hurtbox.set_deferred("monitoring", false)
 
 func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, lunge_friction)
@@ -59,12 +59,12 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 func _on_movement_charging_state_exited() -> void:
 	hurtbox.body_entered.disconnect(destroy_cover)
 	lunge_friction = FRICTION
-	hurtbox.monitoring = true
+	hurtbox.set_deferred("monitoring", true)
 
 
 func _on_phase_1_melee_combo_targeting_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Targeting"
-	hurtbox.monitoring = true
+	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
 
 func _on_phase_1_melee_combo_targeting_state_physics_processing(delta: float) -> void:
@@ -197,6 +197,8 @@ func _on_phase_1_melee_combo_air_slam_state_entered() -> void:
 	anim_player.play("air_slam")
 	await anim_player.animation_finished
 	
+	hurtbox.body_entered.connect(_air_slam_damage)
+	
 	anim_player.play("air_slam_attack")
 	await anim_player.animation_finished
 	
@@ -207,6 +209,7 @@ func _on_phase_1_melee_combo_air_slam_state_physics_processing(delta: float) -> 
 	#velocity.z = lerp(velocity.z, 0.0, lunge_friction)
 	if anim_player.is_playing():
 		await anim_player.animation_finished
+	
 	if is_on_floor():
 		#state_chart.send_event("combo_end")
 		state_chart.send_event("aoe_burst")
@@ -219,16 +222,17 @@ func air_slam_jump(jump_force: float) -> void:
 	state_chart.send_event("start_targeting")
 
 func air_slam_attack(damage: float, slam_force: float) -> void:
-	var floor_target: Vector3 = target.global_position
-	floor_target.y = 0
-	var charge_dir = self.global_position.direction_to(floor_target)
+	var charge_dir = self.global_position.direction_to(target.global_position)
 	velocity += charge_dir * 35#charge_impulse
-	
-	if target in hurtbox.get_overlapping_bodies():
-		target.health_component.damage(15)
-		target.velocity = Vector3.ZERO
-		target.vel_vertical -= 65.0
-		hurtbox.monitoring = false
+	vel_vertical -= 35.0
+
+func _air_slam_damage(body: Node3D) -> void:
+	if body == target:
+		body.health_component.damage(15)
+		body.velocity = Vector3.ZERO
+		body.vel_vertical -= 65.0
+		hurtbox.set_deferred("monitoring", false)
+		hurtbox.body_entered.disconnect(_air_slam_damage)
 
 
 func _on_melee_combo_ground_pound_state_entered() -> void:
