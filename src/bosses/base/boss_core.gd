@@ -202,6 +202,10 @@ func _on_movement_targeting_state_entered() -> void:
 	navigation_component.disable()
 
 func _on_movement_targeting_state_physics_processing(delta: float) -> void:
+	if velocity.x > 0.0:
+		velocity.x = lerp(velocity.x, 0.0, delta)
+	if velocity.z > 0.0:
+		velocity.z = lerp(velocity.z, 0.0, delta)
 	if target:
 		_turn_towards_target(TURN_SPEED_FAST, delta)
 
