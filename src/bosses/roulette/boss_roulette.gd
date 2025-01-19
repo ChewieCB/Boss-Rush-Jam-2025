@@ -7,7 +7,6 @@ signal change_wheel_speed(speed: float)
 var wheel_rotation_speed: float = 0.0
 
 @export_category("Phases")
-@export var current_phase: int = 1
 @export var phase_2_health_percentage_trigger: float = 0.66
 @export var phase_3_health_percentage_trigger: float = 0.33
 @export_category("Attacks")

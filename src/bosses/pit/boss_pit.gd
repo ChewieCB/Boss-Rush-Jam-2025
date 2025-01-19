@@ -9,6 +9,9 @@ class_name BossPit
 var lunge_friction: float = FRICTION
 @export var lunge_force: float = 6.0
 
+@export var AIR_SLAM_DROP: float = 35.0
+var air_slam_drop: float = AIR_SLAM_DROP
+
 
 @export var wave_material: ShaderMaterial
 
@@ -25,6 +28,20 @@ func activate() -> void:
 func _physics_process(delta: float) -> void:
 	super(delta)
 	debug_dist_label.text = str(self.global_position.distance_to(target.global_position))
+
+
+
+func select_attack_phase_1() -> void:
+	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var possible_phases = [
+		"start_melee_combo_attack",
+		"start_close_distance_attack",
+	]
+	
+	if dist_to_target > 22:
+		state_chart.send_event("start_close_distance_attack")
+	else:
+		state_chart.send_event("start_melee_combo_attack")
 
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
@@ -62,6 +79,14 @@ func _on_movement_charging_state_exited() -> void:
 	hurtbox.set_deferred("monitoring", true)
 
 
+#######
+
+func _on_phase_1_state_entered() -> void:
+	#debug_phase_label.text = "Phase 1"
+	current_phase = 1
+	state_chart.send_event("start_melee_combo_attack")
+
+
 func _on_phase_1_melee_combo_targeting_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Targeting"
 	hurtbox.set_deferred("monitoring", true)
@@ -71,6 +96,8 @@ func _on_phase_1_melee_combo_targeting_state_physics_processing(delta: float) ->
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("start_attack")
 		#state_chart.send_event("melee_attack")
+	elif self.global_position.distance_to(target.global_position) > 22:
+		select_attack()
 
 
 func _on_phase_1_melee_combo_swipe_state_entered() -> void:
@@ -223,8 +250,9 @@ func air_slam_jump(jump_force: float) -> void:
 
 func air_slam_attack(damage: float, slam_force: float) -> void:
 	var charge_dir = self.global_position.direction_to(target.global_position)
-	velocity += charge_dir * 35#charge_impulse
-	vel_vertical -= 35.0
+	var charge_impulse = self.global_position.distance_to(target.global_position) * 2
+	velocity += charge_dir * charge_impulse
+	vel_vertical -= air_slam_drop
 
 func _air_slam_damage(body: Node3D) -> void:
 	if body == target:
@@ -239,9 +267,8 @@ func _on_melee_combo_ground_pound_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Ground Pound"
 	state_chart.send_event("stop_moving")
 	velocity = Vector3.ZERO
-	var wave_callback: Callable = func(): 
-		state_chart.send_event("combo_end")
-	spawn_center_wave(10.0, 0.8, 2.0, false, wave_callback)
+	spawn_center_wave(10.0, 0.8, 2.0, false)
+	state_chart.send_event("combo_end")
 
 
 func _on_phase_1_melee_combo_recover_state_entered() -> void:
@@ -249,6 +276,8 @@ func _on_phase_1_melee_combo_recover_state_entered() -> void:
 	#hurtbox.monitoring = false
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
+	hurtbox.set_deferred("monitoring", true)
+	select_attack()
 	state_chart.send_event("end_recovery")
 
 
@@ -334,3 +363,19 @@ func _on_wave_collision(body: Node3D) -> void:
 		body.health_component.damage(10)
 	elif body is Cover:
 		destroy_cover(body)
+
+
+func _on_air_slam_targeting_state_entered() -> void:
+	debug_state_label.text = "Air Slam | Targeting"
+	hurtbox.set_deferred("monitoring", true)
+	state_chart.send_event("start_targeting")
+	await get_tree().create_timer(1.0).timeout
+	state_chart.send_event("start_attack")
+
+
+func _on_air_slam_state_entered() -> void:
+	air_slam_drop = AIR_SLAM_DROP * 0.7
+
+
+func _on_air_slam_state_exited() -> void:
+	air_slam_drop = AIR_SLAM_DROP

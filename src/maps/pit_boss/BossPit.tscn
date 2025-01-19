@@ -1777,6 +1777,7 @@ max_health = 200.0
 
 [node name="entity_5_PitBoss" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("11_hqgyr")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 0)
+AIR_SLAM_DROP = 35.0
 wave_material = ExtResource("17_061uj")
 target = NodePath("../entity_4_PlayerRef")
 
