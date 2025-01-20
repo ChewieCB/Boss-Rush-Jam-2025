@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://c5utciavm70ve"]
+
+[ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="1_po6rx"]
+[ext_resource type="PackedScene" uid="uid://cywwydmxkbh4x" path="res://src/player/barrel/RouletteBossBarrel.tscn" id="2_y352h"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_fs5il"]
+
+[resource]
+script = ExtResource("3_fs5il")
+barrel_id = 8
+barrel_name = "Roulette"
+barrel_desc = "[b]Roulette Barrel[/b]
+From the Roulette boss
+
+Possible rolls:
+[ul]
+Ball Bullet: shoot huge ball,affectedby gravity.
+
+[/ul]"
+barrel_image = ExtResource("1_po6rx")
+barrel_prefab = ExtResource("2_y352h")

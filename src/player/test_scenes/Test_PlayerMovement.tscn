@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=14 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="PackedScene" uid="uid://d0uqv7xitfwnt" path="res://src/player/test_scenes/Dummy.tscn" id="2_lrk4j"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://yx1psxr1obhn" path="res://src/player/barrel/resource/projectile_count_barrel_data.tres" id="4_h0d4u"]
 [ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="5_bi1qm"]
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="6_1a2ul"]
+[ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel.tres" id="7_2srjf"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -129,3 +130,7 @@ data = ExtResource("5_bi1qm")
 [node name="BarrelItemPickup4" parent="." instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 5.02901)
 data = ExtResource("6_1a2ul")
+
+[node name="BarrelItemPickup5" parent="." instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 5.96152)
+data = ExtResource("7_2srjf")

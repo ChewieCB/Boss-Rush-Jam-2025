@@ -1,0 +1,82 @@
+[gd_scene load_steps=12 format=3 uid="uid://r58hv7fv4nab"]
+
+[ext_resource type="Script" path="res://src/player/gun/projectiles/ball_projectile.gd" id="1_f5td2"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_au05s"]
+[ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_4ks7h"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_4r3ns"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vxqtr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7iyn6"]
+albedo_color = Color(0.582031, 0.582031, 0.582031, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_o7o6l"]
+material = SubResource("StandardMaterial3D_7iyn6")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_uqtnl"]
+radius = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bye4v"]
+transparency = 1
+albedo_color = Color(0.964844, 1, 0.929688, 0.713726)
+emission_enabled = true
+emission = Color(1, 0.731834, 0.032858, 1)
+
+[sub_resource type="Curve" id="Curve_inxyf"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_r3pcc"]
+radius = 4.0
+
+[node name="BallProjectile" type="RigidBody3D"]
+collision_layer = 0
+collision_mask = 5
+script = ExtResource("1_f5td2")
+spark_effect = ExtResource("2_au05s")
+generic_blood_splatter = ExtResource("3_4ks7h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_vxqtr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_o7o6l")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 93
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_uqtnl")
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.610737)
+target_position = Vector3(0, 0, -100)
+collision_mask = 29
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+material_override = SubResource("StandardMaterial3D_bye4v")
+skeleton = NodePath("../../MeshInstance3D")
+script = ExtResource("4_4r3ns")
+segments = 10
+width_profile = SubResource("Curve_inxyf")
+
+[node name="HomingArea3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HomingArea3D"]
+shape = SubResource("SphereShape3D_r3pcc")
+
+[connection signal="impacted" from="." to="." method="_on_impacted"]
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
+[connection signal="body_entered" from="HomingArea3D" to="." method="_on_homing_area_3d_body_entered"]
