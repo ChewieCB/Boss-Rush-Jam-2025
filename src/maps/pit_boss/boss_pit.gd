@@ -8,11 +8,14 @@ extends Node3D
 @onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
+@onready var turret_spawns: Array = find_children("*", "TurretSpawnPoint")
+
 var nav_region: NavigationRegion3D
 
 
 func _ready() -> void:
 	#boss.health_component.died.connect(_on_boss_defeated)
+	boss.turret_spawns = turret_spawns
 	#player.health_component.died.connect(_on_player_death)
 	
 	if GameManager.cached_player_pos_relative_to_elevator_doors:

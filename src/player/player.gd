@@ -32,6 +32,7 @@ class_name Player
 @onready var magazine_label: Label = $UI/MagazineUI
 
 const MAX_SPEED: float = 8.0
+var max_speed: float = MAX_SPEED
 const MAX_FALL_SPEED: float = 50.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 8
@@ -183,10 +184,10 @@ func _physics_process(delta):
 	# Use the next line will make player move faster when strafing + rotate camera
 	# var current_speed = vel_horizontal.dot(input_dir)
 	var current_speed = vel_horizontal.length()
-	var add_speed = clamp(MAX_SPEED - current_speed, 0.0, ACCEL_RATE * delta)
+	var add_speed = clamp(max_speed - current_speed, 0.0, ACCEL_RATE * delta)
 
 	if is_dashing or is_sliding:
-		vel_horizontal = input_dir * MAX_SPEED
+		vel_horizontal = input_dir * max_speed
 	else:
 		vel_horizontal += input_dir * add_speed
 
@@ -262,6 +263,13 @@ func jump(multiplier = 1.0):
 	state_chart.send_event("jump")
 	is_dashing = false
 	is_sliding = false
+
+
+func stun(time: float) -> void:
+	max_speed = MAX_SPEED / 4
+	hurt_overlay.stun(time)
+	await get_tree().create_timer(time).timeout
+	max_speed = MAX_SPEED
 
 
 func spin_reload():

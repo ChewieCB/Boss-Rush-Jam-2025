@@ -7,13 +7,18 @@ class_name BossPit
 
 @export var FRICTION: float = 0.05
 var lunge_friction: float = FRICTION
-@export var lunge_force: float = 6.0
+@export var lunge_force: float = 7.50
 
 @export var AIR_SLAM_DROP: float = 35.0
 var air_slam_drop: float = AIR_SLAM_DROP
 
-
 @export var wave_material: ShaderMaterial
+
+var turret_spawns: Array = []:
+	set(value):
+		turret_spawns = value
+		valid_spawns = turret_spawns.duplicate()
+var valid_spawns: Array
 
 @onready var face_sprite: Sprite3D = $Sprite3D/FaceSprite
 @onready var melee_attack_debug_mesh: MeshInstance3D = $Hurtbox/MeshInstance3D
@@ -23,6 +28,7 @@ var air_slam_drop: float = AIR_SLAM_DROP
 func activate() -> void:
 	super()
 	state_chart.send_event("start_phase_1")
+	spawn_turrets(3)
 
 
 func _physics_process(delta: float) -> void:
@@ -35,11 +41,14 @@ func select_attack_phase_1() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_melee_combo_attack",
-		"start_close_distance_attack",
+		"start_close_distance_attack_close",
+		"start_close_distance_attack_far",
 	]
 	
-	if dist_to_target > 22:
-		state_chart.send_event("start_close_distance_attack")
+	if dist_to_target > 10:
+		state_chart.send_event("start_close_distance_attack_close")
+	elif dist_to_target > 20:
+		state_chart.send_event("start_close_distance_attack_far")
 	else:
 		state_chart.send_event("start_melee_combo_attack")
 
@@ -69,6 +78,8 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 		for body in hurtbox.get_overlapping_bodies():
 			if body is Cover:
 				destroy_cover(body)
+			elif body == target:
+				damage_in_hurtbox(0.0, true)
 
 	if velocity.x == 0 and velocity.z == 0:
 		state_chart.send_event("end_charge")
@@ -78,13 +89,26 @@ func _on_movement_charging_state_exited() -> void:
 	lunge_friction = FRICTION
 	hurtbox.set_deferred("monitoring", true)
 
+#####
+
+func spawn_turrets(count: int) -> void:
+	for i in count:
+		if valid_spawns.size() > 0:
+			var spawn_idx: int = randi_range(0, valid_spawns.size() - 1)
+			var spawn: TurretSpawnPoint = valid_spawns.pop_at(spawn_idx)
+			var turret = spawn.spawn_turret(target)
+			turret.health_component.died.connect(_on_turret_destroyed)
+
+func _on_turret_destroyed(turret: PitTurret) -> void:
+	var turret_spawn = turret.get_parent()
+	valid_spawns.push_back(turret_spawn)
 
 #######
 
 func _on_phase_1_state_entered() -> void:
 	#debug_phase_label.text = "Phase 1"
 	current_phase = 1
-	state_chart.send_event("start_melee_combo_attack")
+	state_chart.send_event("start_close_distance_attack_far")
 
 
 func _on_phase_1_melee_combo_targeting_state_entered() -> void:
@@ -140,32 +164,25 @@ func _on_phase_1_melee_combo_hook_state_entered() -> void:
 		state_chart.send_event("combo_end")
 
 
-func damage_in_hurtbox(damage: float) -> void:
+func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
 	if target in hurtbox.get_overlapping_bodies():
 		target.health_component.damage(damage)
+		if stun:
+			target.stun(1.2)
 
 
 func _on_phase_1_melee_combo_lunge_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Lunge"
 	
 	state_chart.send_event("start_targeting")
-	#melee_attack_debug_mesh.visible = true
-	#await get_tree().create_timer(0.5).timeout
 	
 	face_sprite.texture = lunge_debug
 	anim_player.play("lunge")
 	await $StateChart/Root/Movement/Charging.state_exited
 	state_chart.send_event("stop_moving")
-	#await anim_player.animation_finished
-	#state_chart.send_event("stop_moving")
-	#state_chart.send_event("start_targeting")
-	
-	#await get_tree().create_timer(0.5).timeout
+
 	face_sprite.texture = null
-	#melee_attack_debug_mesh.visible = false
-	#state_chart.send_event("start_targeting")
-	#await get_tree().create_timer(0.5).timeout
-	# TODO - if player is within range, uppercut them
+	
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_attack")
 	else:
@@ -248,9 +265,9 @@ func air_slam_jump(jump_force: float) -> void:
 	vel_vertical += jump_force
 	state_chart.send_event("start_targeting")
 
-func air_slam_attack(damage: float, slam_force: float) -> void:
-	var charge_dir = self.global_position.direction_to(target.global_position)
-	var charge_impulse = self.global_position.distance_to(target.global_position) * 2
+func air_slam_attack(damage: float, slam_force: float, target_pos: Vector3 = target.global_position) -> void:
+	var charge_dir = self.global_position.direction_to(target_pos)
+	var charge_impulse = self.global_position.distance_to(target_pos) * 2
 	velocity += charge_dir * charge_impulse
 	vel_vertical -= air_slam_drop
 
@@ -380,3 +397,33 @@ func _on_air_slam_state_entered() -> void:
 
 func _on_air_slam_state_exited() -> void:
 	air_slam_drop = AIR_SLAM_DROP
+
+
+
+func _on_phase_1_lunge_targeting_state_entered() -> void:
+	debug_state_label.text = "Lunge | Targeting"
+	hurtbox.set_deferred("monitoring", true)
+	state_chart.send_event("start_moving")
+	state_chart.send_event("close_distance")
+
+func _on_phase_1_lunge_state_entered() -> void:
+	debug_state_label.text = "Lunge | Attack"
+	
+	state_chart.send_event("start_targeting")
+	
+	face_sprite.texture = lunge_debug
+	anim_player.play("lunge")
+	await $StateChart/Root/Movement/Charging.state_exited
+	state_chart.send_event("stop_moving")
+
+	face_sprite.texture = null
+	state_chart.send_event("combo_end")
+
+func _on_phase_1_lunge_recover_state_entered() -> void:
+	debug_state_label.text = "Lunge | Recovery"
+	#hurtbox.monitoring = false
+	state_chart.send_event("stop_moving")
+	await get_tree().create_timer(attack_recovery_time).timeout
+	hurtbox.set_deferred("monitoring", true)
+	select_attack()
+	state_chart.send_event("end_recovery")

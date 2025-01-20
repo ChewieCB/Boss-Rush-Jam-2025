@@ -6,14 +6,14 @@ class_name PitTurret
 @onready var head: Node3D = $Body/Head
 @onready var dome_mesh: MeshInstance3D = $Body/Dome
 @onready var dome_collider: CollisionShape3D = $DomeCollider
+@onready var aim_ray: RayCast3D = $Body/Head/RayCast3D
 
 @onready var health_component: HealthComponent = $HealthComponent
 
-@export var elevation_speed_deg: float = 50.0
-@export var rotation_speed_deg: float = 50.0
+@export var elevation_speed_deg: float = 30.0
+@export var rotation_speed_deg: float = 30.0
 
 @export var target: Node3D
-@export var aim_rays: Array[RayCast3D]
 
 @onready var elevation_speed: float = deg_to_rad(elevation_speed_deg)
 @onready var rotation_speed: float = deg_to_rad(rotation_speed_deg)
@@ -21,18 +21,15 @@ class_name PitTurret
 
 func _physics_process(delta: float) -> void:
 	#if target:
-	rotate_and_elevate(delta, target.global_position)
+	rotate_and_elevate(delta, target.global_position + Vector3(0, 0.5, 0))
 	
-	for ray in aim_rays:
-		var aim_collision = ray.get_collider()
-		if aim_collision == target:
-			dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
-			break
-		elif aim_collision != null:
-			dome_mesh.mesh.surface_get_material(0).albedo_color = Color.YELLOW
-			break
-		else:
-			dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
+	var aim_collision = aim_ray.get_collider()
+	if aim_collision == target:
+		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
+	elif aim_collision != null:
+		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.YELLOW
+	else:
+		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
 
 
 func rotate_and_elevate(delta: float, target_pos: Vector3) -> void:

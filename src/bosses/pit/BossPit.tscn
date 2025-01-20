@@ -616,7 +616,7 @@ swipe_debug = ExtResource("4_qi0bj")
 lunge_debug = ExtResource("4_nd84x")
 uppercut_debug = ExtResource("5_i6at3")
 FRICTION = 0.05
-lunge_force = 6.0
+lunge_force = 7.5
 AIR_SLAM_DROP = 35.0
 wave_material = SubResource("ShaderMaterial_2s76u")
 TEMP_sfx_awaken = null
@@ -704,7 +704,13 @@ delay_in_seconds = "0.0"
 [node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase 1/Idle" index="1"]
 script = ExtResource("4_akhww")
 to = NodePath("../../AirSlam")
-event = &"start_close_distance_attack"
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase 1/Idle" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"start_close_distance_attack_close"
 delay_in_seconds = "0.0"
 
 [node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase 1" index="1"]
@@ -828,7 +834,13 @@ delay_in_seconds = "0.0"
 [node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="8"]
 script = ExtResource("4_akhww")
 to = NodePath("../../AirSlam")
-event = &"start_close_distance_attack"
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase 1/MeleeCombo" index="9"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"start_close_distance_attack_close"
 delay_in_seconds = "0.0"
 
 [node name="AirSlam" type="Node" parent="StateChart/Root/Phase/Phase 1" index="2"]
@@ -877,6 +889,55 @@ to = NodePath("../../MeleeCombo")
 event = &"start_melee_combo_attack"
 delay_in_seconds = "0.0"
 
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase 1/AirSlam" index="5"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="Lunge" type="Node" parent="StateChart/Root/Phase/Phase 1" index="3"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase 1/Lunge" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase 1/Lunge/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="Lunge" type="Node" parent="StateChart/Root/Phase/Phase 1/Lunge" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase 1/Lunge/Lunge" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase 1/Lunge" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase 1/Lunge/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase 1/Lunge" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase 1/Lunge" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeCombo")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
 [node name="DebugStateLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 
@@ -906,3 +967,6 @@ libraries = {
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase 1/AirSlam/AirSlam" to="." method="_on_phase_1_melee_combo_air_slam_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/AirSlam/GroundPound" to="." method="_on_melee_combo_ground_pound_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/AirSlam/Recover" to="." method="_on_phase_1_melee_combo_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/Lunge/Targeting" to="." method="_on_phase_1_lunge_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/Lunge/Lunge" to="." method="_on_phase_1_lunge_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase 1/Lunge/Recover" to="." method="_on_phase_1_lunge_recover_state_entered"]

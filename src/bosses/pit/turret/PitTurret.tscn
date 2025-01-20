@@ -1,13 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://dmhl0n57v7a5e"]
+[gd_scene load_steps=10 format=3 uid="uid://dmhl0n57v7a5e"]
 
-[ext_resource type="Script" path="res://src/bosses/pit/pit_turret.gd" id="1_56juh"]
+[ext_resource type="Script" path="res://src/bosses/pit/turret/pit_turret.gd" id="1_56juh"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_nwx76"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_oqn11"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="4_b87ak"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p1ida"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ur1ra"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_3mpgo"]
-material = SubResource("StandardMaterial3D_p1ida")
+material = SubResource("StandardMaterial3D_ur1ra")
 radius = 1.75
 height = 1.75
 is_hemisphere = true
@@ -22,34 +23,29 @@ size = Vector3(2, 0.35, 0.35)
 size = Vector3(3.5, 2, 3.5)
 
 [node name="PitTurret" type="StaticBody3D"]
+transform = Transform3D(-1, 7.64274e-15, 8.74228e-08, 0, -1, 8.74228e-08, 8.74228e-08, 8.74228e-08, 1, 0, 0, 0)
 collision_layer = 64
 collision_mask = 11
 script = ExtResource("1_56juh")
 
 [node name="Body" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Dome" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("SphereMesh_3mpgo")
 skeleton = NodePath("../..")
 
 [node name="Head" type="Node3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Barrel1" type="MeshInstance3D" parent="Body/Head"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, 0.5, 0.5, 2.4)
 mesh = SubResource("BoxMesh_7p546")
 
-[node name="RayCast3D" type="RayCast3D" parent="Body/Head/Barrel1"]
-target_position = Vector3(-100, 0, 0)
-collision_mask = 3
-
 [node name="Barrel2" type="MeshInstance3D" parent="Body/Head"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, -0.5, 0.5, 2.4)
 mesh = SubResource("BoxMesh_7p546")
 
-[node name="RayCast3D" type="RayCast3D" parent="Body/Head/Barrel2"]
+[node name="RayCast3D" type="RayCast3D" parent="Body/Head"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, 0, 0.5, 2.4)
 target_position = Vector3(-100, 0, 0)
 collision_mask = 3
 
@@ -61,3 +57,6 @@ shape = SubResource("BoxShape3D_8wfl4")
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("2_oqn11")
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("4_b87ak")
