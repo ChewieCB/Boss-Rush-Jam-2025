@@ -1,0 +1,246 @@
+[gd_scene load_steps=14 format=3 uid="uid://burh3udob1t32"]
+
+[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7qur5"]
+[ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_l4r8d"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_tbpt7"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_vjmyh"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_75mh0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dnveo"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_lki4d"]
+material = SubResource("StandardMaterial3D_dnveo")
+radius = 6.0
+height = 6.0
+radial_segments = 12
+rings = 12
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15xga"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_2qbsv"]
+material = SubResource("StandardMaterial3D_15xga")
+radius = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ook83"]
+radius = 7.0
+
+[sub_resource type="Animation" id="Animation_lmydu"]
+resource_name = "intro_look_at_player"
+length = 0.6
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body/Head:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(0.297302, 1),
+"update": 0,
+"values": [Vector3(1.8326, 0, 0), Vector3(0.436332, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_sq5t5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body/Head:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7pmgg"]
+_data = {
+"RESET": SubResource("Animation_sq5t5"),
+"intro_look_at_player": SubResource("Animation_lmydu")
+}
+
+[node name="Surveillance" instance=ExtResource("1_7qur5")]
+motion_mode = 1
+script = ExtResource("2_l4r8d")
+elevation_speed_deg = 25.0
+rotation_speed_deg = 25.0
+turrets_to_spawn = 2
+TEMP_sfx_awaken = null
+TEMP_sfx_hit = Array[AudioStream]([])
+TEMP_sfx_area_1 = null
+TEMP_sfx_area_2 = null
+TEMP_sfx_projectile = null
+TEMP_sfx_telegraph = null
+TEMP_sfx_charge = null
+TEMP_sfx_charge_impact = null
+attack_recovery_time = 0.5
+projectile_scene = null
+delay_per_projectile = 0.6
+
+[node name="Body" type="Node3D" parent="." index="0"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body" index="0"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0)
+mesh = SubResource("SphereMesh_lki4d")
+skeleton = NodePath("../../..")
+
+[node name="Head" type="Node3D" parent="Body" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body/Head" index="0"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 6)
+mesh = SubResource("SphereMesh_2qbsv")
+skeleton = NodePath("../../MeshInstance3D")
+
+[node name="RayCast3D" type="RayCast3D" parent="Body/Head" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+target_position = Vector3(0, 0, 100)
+collision_mask = 71
+
+[node name="Sprite3D" parent="." index="1"]
+visible = false
+
+[node name="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("SphereShape3D_ook83")
+
+[node name="Hurtbox" parent="." index="4"]
+visible = false
+
+[node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
+offset_bottom = 281.0
+theme_override_constants/margin_top = 144
+boss_name = "Surveillance"
+
+[node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("3_tbpt7")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase1" index="0"]
+script = ExtResource("4_vjmyh")
+
+[node name="toSpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../SpawnTurrets")
+event = &"start_spawn_turrets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../LaserBeam")
+event = &"start_laser_attack"
+delay_in_seconds = "0.0"
+
+[node name="toDownwardSpike" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="2"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../DownwardSpike")
+event = &"start_spike_attack"
+delay_in_seconds = "0.0"
+
+[node name="SpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
+script = ExtResource("3_tbpt7")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/SpawnTurrets" index="0"]
+script = ExtResource("4_vjmyh")
+
+[node name="toSpawning" type="Node" parent="StateChart/Root/Phase/Phase1/SpawnTurrets/Targeting" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Spawning")
+event = &"spawn_turrets"
+delay_in_seconds = "0.0"
+
+[node name="Spawning" type="Node" parent="StateChart/Root/Phase/Phase1/SpawnTurrets" index="1"]
+script = ExtResource("4_vjmyh")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/SpawnTurrets/Spawning" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Recover")
+event = &"stop_spawning"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/SpawnTurrets" index="2"]
+script = ExtResource("4_vjmyh")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/SpawnTurrets/Recover" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase1/SpawnTurrets" index="3"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../LaserBeam")
+event = &"start_laser_attack"
+delay_in_seconds = "0.0"
+
+[node name="toDownwardSpike" type="Node" parent="StateChart/Root/Phase/Phase1/SpawnTurrets" index="4"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../DownwardSpike")
+event = &"start_spike_attack"
+delay_in_seconds = "0.0"
+
+[node name="LaserBeam" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
+script = ExtResource("3_tbpt7")
+
+[node name="toSpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase1/LaserBeam" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../SpawnTurrets")
+event = &"start_spawn_turrets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toDownwardSpike" type="Node" parent="StateChart/Root/Phase/Phase1/LaserBeam" index="1"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../DownwardSpike")
+event = &"start_spike_attack"
+delay_in_seconds = "0.0"
+
+[node name="DownwardSpike" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+script = ExtResource("3_tbpt7")
+
+[node name="toSpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase1/DownwardSpike" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../SpawnTurrets")
+event = &"start_spawn_turrets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase1/DownwardSpike" index="1"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../LaserBeam")
+event = &"start_laser_attack"
+delay_in_seconds = "0.0"
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase" index="2"]
+script = ExtResource("5_75mh0")
+to = NodePath("../Phase1")
+event = &"start_phase_1"
+delay_in_seconds = "0.0"
+
+[node name="DebugStateLabel" parent="." index="10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 0)
+
+[node name="DebugDistanceLabel" parent="." index="11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.6, 0)
+
+[node name="DamageTextMarker" parent="." index="12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4888, 0)
+
+[node name="BodyCenter" parent="." index="13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.71903, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="14"]
+libraries = {
+"": SubResource("AnimationLibrary_7pmgg")
+}
+
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SpawnTurrets/Targeting" to="." method="_on_spawn_turrets_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/SpawnTurrets/Targeting" to="." method="_on_spawn_turrets_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SpawnTurrets/Spawning" to="." method="_on_spawn_turrets_spawning_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SpawnTurrets/Recover" to="." method="_on_spawn_turrets_recover_state_entered"]

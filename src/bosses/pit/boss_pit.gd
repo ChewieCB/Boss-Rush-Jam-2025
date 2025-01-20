@@ -5,20 +5,20 @@ class_name BossPit
 @export var lunge_debug: CompressedTexture2D
 @export var uppercut_debug: CompressedTexture2D
 
+@export_category("Phases")
+@export var phase_2_health_percentage_trigger: float = 0.66
+@export var phase_3_health_percentage_trigger: float = 0.33
+
 @export var FRICTION: float = 0.05
 var lunge_friction: float = FRICTION
-@export var lunge_force: float = 7.50
+@export var lunge_force: float = 4.50
+@onready var lunge_timer: Timer = $LungeCooldown
+@export var lunge_cooldown: float = 15.0
 
 @export var AIR_SLAM_DROP: float = 35.0
 var air_slam_drop: float = AIR_SLAM_DROP
 
 @export var wave_material: ShaderMaterial
-
-var turret_spawns: Array = []:
-	set(value):
-		turret_spawns = value
-		valid_spawns = turret_spawns.duplicate()
-var valid_spawns: Array
 
 @onready var face_sprite: Sprite3D = $Sprite3D/FaceSprite
 @onready var melee_attack_debug_mesh: MeshInstance3D = $Hurtbox/MeshInstance3D
@@ -28,13 +28,21 @@ var valid_spawns: Array
 func activate() -> void:
 	super()
 	state_chart.send_event("start_phase_1")
-	spawn_turrets(1)
 
 
 func _physics_process(delta: float) -> void:
 	super(delta)
 	debug_dist_label.text = str(self.global_position.distance_to(target.global_position))
 
+
+func select_attack() -> void:
+	match current_phase:
+		1:
+			select_attack_phase_1()
+		2:
+			select_attack_phase_2()
+		_:
+			push_error("Invalid phase %s" % current_phase)
 
 
 func select_attack_phase_1() -> void:
@@ -45,13 +53,28 @@ func select_attack_phase_1() -> void:
 		"start_close_distance_attack_far",
 	]
 	
-	if dist_to_target > 10:
+	if dist_to_target > 10 and lunge_timer.is_stopped():
 		state_chart.send_event("start_close_distance_attack_close")
-	elif dist_to_target > 20:
+	elif dist_to_target > 16:
 		state_chart.send_event("start_close_distance_attack_far")
 	else:
 		state_chart.send_event("start_melee_combo_attack")
 
+
+func select_attack_phase_2() -> void:
+	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var possible_phases = [
+		"start_hammer_ground_attack",
+	]
+	
+	state_chart.send_event("start_melee_start_hammer_ground_attack")
+
+
+func _on_health_changed(new_health: float, prev_health: float) -> void:
+	super(new_health, prev_health)
+	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
+		state_chart.send_event("start_phase_2")
+		
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	pass
@@ -61,13 +84,13 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 
 
 func _on_movement_charging_state_entered() -> void:
-	hurtbox.monitoring = true
+	#hurtbox.set_deferred("monitoring", true)
 	hurtbox.body_entered.connect(destroy_cover)
 
 func destroy_cover(body: Node3D) -> void:
 	if body is Cover:
 		body.destroy()
-		lunge_friction = FRICTION * 4
+		#lunge_friction = FRICTION * 4
 		#hurtbox.set_deferred("monitoring", false)
 
 func _on_movement_charging_state_physics_processing(_delta: float) -> void:
@@ -79,7 +102,10 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 			if body is Cover:
 				destroy_cover(body)
 			elif body == target:
-				damage_in_hurtbox(0.0, true)
+				damage_in_hurtbox(5.0, true)
+				velocity.x = 0
+				velocity.z = 0
+				state_chart.send_event("end_charge")
 
 	if velocity.x == 0 and velocity.z == 0:
 		state_chart.send_event("end_charge")
@@ -87,21 +113,9 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 func _on_movement_charging_state_exited() -> void:
 	hurtbox.body_entered.disconnect(destroy_cover)
 	lunge_friction = FRICTION
-	#hurtbox.set_deferred("monitoring", true)
+	hurtbox.set_deferred("monitoring", true)
 
 #####
-
-func spawn_turrets(count: int) -> void:
-	for i in count:
-		if valid_spawns.size() > 0:
-			var spawn_idx: int = randi_range(0, valid_spawns.size() - 1)
-			var spawn: TurretSpawnPoint = valid_spawns.pop_at(spawn_idx)
-			var turret = spawn.spawn_turret(target)
-			turret.health_component.died.connect(_on_turret_destroyed)
-
-func _on_turret_destroyed(turret: PitTurret) -> void:
-	var turret_spawn = turret.get_parent()
-	valid_spawns.push_back(turret_spawn)
 
 #######
 
@@ -424,6 +438,35 @@ func _on_phase_1_lunge_recover_state_entered() -> void:
 	#hurtbox.set_deferred("monitoring", false)
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
+	lunge_timer.start(lunge_cooldown)
 	#hurtbox.set_deferred("monitoring", true)
+	select_attack()
+	state_chart.send_event("end_recovery")
+
+
+func _on_phase_2_state_entered() -> void:
+	current_phase = 2
+	state_chart.send_event("start_hammer_ground_attack")
+
+
+func _on_hammer_ground_targeting_state_entered() -> void:
+	debug_state_label.text = "Hammer Ground | Targeting"
+	#hurtbox.set_deferred("monitoring", true)
+	state_chart.send_event("start_targeting")
+	await get_tree().create_timer(0.5).timeout
+	state_chart.send_event("start_attack")
+
+
+func _on_hammer_ground_hammering_state_entered() -> void:
+	debug_state_label.text = "Hammer Ground | Hammering"
+	anim_player.play("hammer_ground")
+	await anim_player.animation_finished
+	state_chart.send_event("end_attack")
+
+
+func _on_hammer_ground_recover_state_entered() -> void:
+	debug_state_label.text = "Hammer Ground | Recovery"
+	state_chart.send_event("stop_moving")
+	await get_tree().create_timer(attack_recovery_time).timeout
 	select_attack()
 	state_chart.send_event("end_recovery")

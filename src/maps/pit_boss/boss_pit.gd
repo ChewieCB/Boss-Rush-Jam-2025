@@ -5,7 +5,8 @@ extends Node3D
 @onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
 @onready var boss_trigger: Area3D = $BossTrigger
 
-@onready var boss: BossCore = find_children("*", "BossCore").front()
+@export var pit_boss: BossPit
+@export var surveillance_boss: BossSurveillance
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 @onready var turret_spawns: Array = find_children("*", "TurretSpawnPoint")
@@ -15,7 +16,7 @@ var nav_region: NavigationRegion3D
 
 func _ready() -> void:
 	#boss.health_component.died.connect(_on_boss_defeated)
-	boss.turret_spawns = turret_spawns
+	surveillance_boss.turret_spawns = turret_spawns
 	#player.health_component.died.connect(_on_player_death)
 	
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
@@ -58,5 +59,7 @@ func generate_navigation() -> void:
 
 func _on_boss_trigger_body_entered(body: Node3D) -> void:
 	if body is Player:
-		boss.activate()
+		surveillance_boss.activate()
+		await surveillance_boss.anim_player.animation_finished
+		pit_boss.activate()
 		boss_trigger.queue_free()

@@ -1,6 +1,8 @@
 extends StaticBody3D
 class_name PitTurret
 
+signal destroyed(turret: PitTurret)
+
 @export var TEMP_sfx_projectile: AudioStream
 
 
@@ -22,6 +24,8 @@ class_name PitTurret
 
 @onready var elevation_speed: float = deg_to_rad(elevation_speed_deg)
 @onready var rotation_speed: float = deg_to_rad(rotation_speed_deg)
+
+@export var explosion_scene: PackedScene
 
 @export var projectile_scene: PackedScene
 @export var projectile_spawns: Array[Marker3D]
@@ -98,13 +102,13 @@ func get_angle_to_target(seeker_pos: Vector3, target_pos: Vector3, facing_dir: V
 func _on_standard_attack_state_physics_processing(delta: float) -> void:
 	rotate_and_elevate(delta, target.global_position + Vector3(0, 1.0, 0))
 	
-	var aim_collision = aim_ray.get_collider()
-	if aim_collision == target:
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
-	elif aim_collision != null:
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.YELLOW
-	else:
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
+	#var aim_collision = aim_ray.get_collider()
+	#if aim_collision == target:
+		#dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
+	#elif aim_collision != null:
+		#dome_mesh.mesh.surface_get_material(0).albedo_color = Color.YELLOW
+	#else:
+		#dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
 
 func _on_standard_attack_targeting_state_entered() -> void:
 	debug_state_label.text = "Standard Attack | Targeting"
@@ -142,3 +146,21 @@ func _on_standard_attack_recovering_state_entered() -> void:
 
 func _on_standard_attack_recovering_state_exited() -> void:
 	elevation_speed = deg_to_rad(elevation_speed_deg)
+
+
+func _on_health_component_health_changed(new_health: float, prev_health: float) -> void:
+	if new_health < prev_health:
+		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
+		await get_tree().create_timer(0.05).timeout
+		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
+
+
+func _on_health_component_died() -> void:
+	var explosion_vfx = explosion_scene.instantiate()
+	get_tree().get_root().add_child(explosion_vfx)
+	explosion_vfx.global_position = self.global_position
+	
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "scale", Vector3.ZERO, 0.4).set_trans(Tween.TRANS_SINE)
+	tween.tween_callback(destroyed.emit.bind(self))
+	tween.tween_callback(self.queue_free)

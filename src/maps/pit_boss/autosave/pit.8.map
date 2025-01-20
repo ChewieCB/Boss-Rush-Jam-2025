@@ -2810,13 +2810,13 @@
 // entity 46
 {
 "classname" "CoverSpawnPoint"
-"origin" "-640 -256 0"
+"origin" "-640 -128 0"
 "angle" "15"
 }
 // entity 47
 {
 "classname" "CoverSpawnPoint"
-"origin" "-640 256 0"
+"origin" "-640 128 0"
 "angle" "345"
 }
 // entity 48
@@ -2910,7 +2910,6 @@
 "classname" "CoverSpawnPoint"
 "origin" "-384 0 0"
 "angle" "225"
-"cover_type" "half"
 }
 // entity 63
 {
