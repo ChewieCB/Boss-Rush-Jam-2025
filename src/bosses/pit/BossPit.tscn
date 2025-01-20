@@ -758,7 +758,7 @@ mesh = SubResource("BoxMesh_n64vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
-boss_name = "Juni"
+boss_name = "Pit Boss"
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("4_akhww")

@@ -20,7 +20,7 @@
 [ext_resource type="Material" uid="uid://q778hp4rpyl4" path="res://assets/textures/placeholder/texture_green_green_green_13.tres" id="15_5t7py"]
 [ext_resource type="PackedScene" uid="uid://2ss8hk0shm7i" path="res://src/bosses/pit/cover/CoverSpawnPoint.tscn" id="19_vy68e"]
 [ext_resource type="PackedScene" uid="uid://ch37egcj2scio" path="res://src/bosses/pit/turret/TurretSpawnPoint.tscn" id="20_egqlc"]
-[ext_resource type="PackedScene" uid="uid://burh3udob1t32" path="res://src/bosses/pit/BossSurveillance.tscn" id="21_fvq6t"]
+[ext_resource type="PackedScene" uid="uid://burh3udob1t32" path="res://src/bosses/pit/surveillance/BossSurveillance.tscn" id="21_fvq6t"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eyfm3"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)

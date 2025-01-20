@@ -24,6 +24,10 @@ var turret_look_target: Node3D
 @export var turrets_to_spawn: int = 2
 var spawned_turrets_count: int = 0
 
+# Beam
+@onready var laser_mesh: MeshInstance3D = $Body/Head/RayCast3D/LaserMesh
+@onready var laser_particles: GPUParticles3D = $Body/Head/RayCast3D/LaserMesh/LaserEndParticles
+
 
 func _ready() -> void:
 	GRAVITY = 0
@@ -117,7 +121,8 @@ func _on_health_hit_state_exited() -> void:
 #####
 
 func _on_phase_1_state_entered() -> void:
-	state_chart.send_event("start_spawn_turrets_attack")
+	#state_chart.send_event("start_spawn_turrets_attack")
+	state_chart.send_event("start_laser_attack")
 
 func _on_phase_1_state_physics_processing(delta: float) -> void:
 	pass
@@ -166,3 +171,60 @@ func _on_spawn_turrets_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+######
+
+
+func _on_laser_beam_startup_state_entered() -> void:
+	# Look down to the center
+	var tween = get_tree().create_tween()
+	var look_position: Vector3 = self.global_position
+	look_position.y = 0
+	tween.tween_method(
+			rotate_and_elevate.bind(get_physics_process_delta_time()),
+			target.global_position, 
+			look_position,
+			0.4, 
+		)
+	await tween.finished
+	
+	# Start up the laser
+	var cast_point: Vector3
+	aim_ray.force_raycast_update()
+	if aim_ray.is_colliding():
+		cast_point = aim_ray.get_collision_point()
+		var dist_to_cast: float = self.global_position.distance_to(cast_point)
+		tween = get_tree().create_tween()
+		tween.tween_property(laser_mesh.mesh, "height", dist_to_cast, 0.4)
+		tween.parallel().tween_property(laser_mesh, "position:z", dist_to_cast / 2, 0.4)
+		
+		await tween.finished
+	
+		laser_particles.global_position = cast_point
+		laser_particles.emitting = true
+		state_chart.send_event("start_beam")
+
+func _on_laser_beam_startup_state_physics_processing(delta: float) -> void:
+	pass
+
+
+func _on_laser_beam_targeting_state_entered() -> void:
+	debug_state_label.text = "Laser Beam | Targeting"
+	
+	elevation_speed = deg_to_rad(elevation_speed_deg * 0.45)
+	rotation_speed = deg_to_rad(rotation_speed_deg * 0.45)
+
+func _on_laser_beam_targeting_state_physics_processing(delta: float) -> void:
+	rotate_and_elevate(target.global_position, delta)
+	var cast_point: Vector3
+	aim_ray.force_raycast_update()
+	if aim_ray.is_colliding():
+		cast_point = aim_ray.get_collision_point()
+		var dist_to_cast: float = self.global_position.distance_to(cast_point)
+		laser_mesh.mesh.height = dist_to_cast 
+		laser_mesh.position.z = dist_to_cast / 2
+		laser_particles.global_position = cast_point
+
+
+	# TODO - find the player's position and do some sweeping arcs towards them
