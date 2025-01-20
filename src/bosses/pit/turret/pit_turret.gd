@@ -1,12 +1,17 @@
 extends StaticBody3D
 class_name PitTurret
 
+@export var TEMP_sfx_projectile: AudioStream
+
 
 @onready var body: Node3D = $Body
 @onready var head: Node3D = $Body/Head
 @onready var dome_mesh: MeshInstance3D = $Body/Dome
 @onready var dome_collider: CollisionShape3D = $DomeCollider
 @onready var aim_ray: RayCast3D = $Body/Head/RayCast3D
+
+@onready var debug_state_label: Label3D = $Label3D
+@onready var state_chart: StateChart = $StateChart
 
 @onready var health_component: HealthComponent = $HealthComponent
 
@@ -18,18 +23,15 @@ class_name PitTurret
 @onready var elevation_speed: float = deg_to_rad(elevation_speed_deg)
 @onready var rotation_speed: float = deg_to_rad(rotation_speed_deg)
 
+@export var projectile_scene: PackedScene
+@export var projectile_spawns: Array[Marker3D]
+@export var projectiles_per_attack: int = 3
+@export var delay_per_projectile: float = 0.6
 
-func _physics_process(delta: float) -> void:
-	#if target:
-	rotate_and_elevate(delta, target.global_position + Vector3(0, 0.5, 0))
-	
-	var aim_collision = aim_ray.get_collider()
-	if aim_collision == target:
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
-	elif aim_collision != null:
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.YELLOW
-	else:
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
+
+#func _physics_process(delta: float) -> void:
+	##if target:
+	#
 
 
 func rotate_and_elevate(delta: float, target_pos: Vector3) -> void:
@@ -91,3 +93,52 @@ func get_angle_to_target(seeker_pos: Vector3, target_pos: Vector3, facing_dir: V
 	facing_dir = facing_dir.normalized()
 	dir_to = dir_to.normalized()
 	return acos(facing_dir.dot(dir_to))
+
+
+func _on_standard_attack_state_physics_processing(delta: float) -> void:
+	rotate_and_elevate(delta, target.global_position + Vector3(0, 1.0, 0))
+	
+	var aim_collision = aim_ray.get_collider()
+	if aim_collision == target:
+		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
+	elif aim_collision != null:
+		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.YELLOW
+	else:
+		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
+
+func _on_standard_attack_targeting_state_entered() -> void:
+	debug_state_label.text = "Standard Attack | Targeting"
+
+func _on_standard_attack_targeting_state_physics_processing(delta: float) -> void:
+	var aim_collision = aim_ray.get_collider()
+	if aim_collision == target:
+		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
+		state_chart.send_event("start_firing")
+
+
+func _on_standard_attack_firing_state_entered() -> void:
+	debug_state_label.text = "Standard Attack | Firing"
+	
+	for i in projectiles_per_attack:
+		await get_tree().create_timer(delay_per_projectile).timeout
+		for spawn in projectile_spawns:
+			var projectile: TestProjectile = projectile_scene.instantiate()
+			get_parent().get_parent().add_child(projectile)
+			projectile.global_position = spawn.global_position
+			projectile.look_at(target.global_position)
+			projectile.projectile_speed = 50.0
+			SoundManager.play_sound(TEMP_sfx_projectile)
+	
+	await get_tree().create_timer(delay_per_projectile).timeout
+	state_chart.send_event("stop_firing")
+
+
+func _on_standard_attack_recovering_state_entered() -> void:
+	debug_state_label.text = "Standard Attack | Recovering"
+	elevation_speed = deg_to_rad(elevation_speed_deg / 2)
+	await get_tree().create_timer(0.6).timeout
+	state_chart.send_event("end_recovery")
+	
+
+func _on_standard_attack_recovering_state_exited() -> void:
+	elevation_speed = deg_to_rad(elevation_speed_deg)

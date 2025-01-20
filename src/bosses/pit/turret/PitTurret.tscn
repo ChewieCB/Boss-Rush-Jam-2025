@@ -1,9 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://dmhl0n57v7a5e"]
+[gd_scene load_steps=14 format=3 uid="uid://dmhl0n57v7a5e"]
 
 [ext_resource type="Script" path="res://src/bosses/pit/turret/pit_turret.gd" id="1_56juh"]
+[ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="2_gbo06"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_nwx76"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_oqn11"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="4_b87ak"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_lku4f"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_m3qs5"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_dtgn0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ur1ra"]
 
@@ -22,11 +26,13 @@ size = Vector3(2, 0.35, 0.35)
 [sub_resource type="BoxShape3D" id="BoxShape3D_8wfl4"]
 size = Vector3(3.5, 2, 3.5)
 
-[node name="PitTurret" type="StaticBody3D"]
+[node name="PitTurret" type="StaticBody3D" node_paths=PackedStringArray("projectile_spawns")]
 transform = Transform3D(-1, 7.64274e-15, 8.74228e-08, 0, -1, 8.74228e-08, 8.74228e-08, 8.74228e-08, 1, 0, 0, 0)
 collision_layer = 64
 collision_mask = 11
 script = ExtResource("1_56juh")
+projectile_scene = ExtResource("2_gbo06")
+projectile_spawns = [NodePath("Body/Head/Barrel1/Marker3D"), NodePath("Body/Head/Barrel2/Marker3D")]
 
 [node name="Body" type="Node3D" parent="."]
 
@@ -40,9 +46,15 @@ skeleton = NodePath("../..")
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, 0.5, 0.5, 2.4)
 mesh = SubResource("BoxMesh_7p546")
 
+[node name="Marker3D" type="Marker3D" parent="Body/Head/Barrel1"]
+transform = Transform3D(4.37114e-08, -3.82137e-15, -1, -8.74228e-08, -1, 0, -1, 8.74227e-08, -4.37114e-08, -1.4, 1.19209e-07, 2.98023e-08)
+
 [node name="Barrel2" type="MeshInstance3D" parent="Body/Head"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, -0.5, 0.5, 2.4)
 mesh = SubResource("BoxMesh_7p546")
+
+[node name="Marker3D" type="Marker3D" parent="Body/Head/Barrel2"]
+transform = Transform3D(4.37114e-08, -3.82137e-15, -1, -8.74227e-08, -1, 0, -1, 8.74227e-08, -4.37114e-08, -1.4, 1.19209e-07, 0)
 
 [node name="RayCast3D" type="RayCast3D" parent="Body/Head"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, 0, 0.5, 2.4)
@@ -60,3 +72,67 @@ script = ExtResource("2_oqn11")
 
 [node name="Root" type="Node" parent="StateChart"]
 script = ExtResource("4_b87ak")
+
+[node name="Phase" type="Node" parent="StateChart/Root"]
+script = ExtResource("5_lku4f")
+initial_state = NodePath("StandardAttack")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase"]
+script = ExtResource("6_m3qs5")
+
+[node name="toStandardAttack" type="Node" parent="StateChart/Root/Phase/Idle"]
+script = ExtResource("7_dtgn0")
+to = NodePath("../../StandardAttack")
+event = &"start_standard_attack"
+delay_in_seconds = "0.0"
+
+[node name="StandardAttack" type="Node" parent="StateChart/Root/Phase"]
+script = ExtResource("5_lku4f")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/StandardAttack"]
+script = ExtResource("6_m3qs5")
+
+[node name="toFiring" type="Node" parent="StateChart/Root/Phase/StandardAttack/Targeting"]
+script = ExtResource("7_dtgn0")
+to = NodePath("../../Firing")
+event = &"start_firing"
+delay_in_seconds = "0.0"
+
+[node name="Firing" type="Node" parent="StateChart/Root/Phase/StandardAttack"]
+script = ExtResource("6_m3qs5")
+
+[node name="toRecovering" type="Node" parent="StateChart/Root/Phase/StandardAttack/Firing"]
+script = ExtResource("7_dtgn0")
+to = NodePath("../../Recovering")
+event = &"stop_firing"
+delay_in_seconds = "0.0"
+
+[node name="Recovering" type="Node" parent="StateChart/Root/Phase/StandardAttack"]
+script = ExtResource("6_m3qs5")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/StandardAttack/Recovering"]
+script = ExtResource("7_dtgn0")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/StandardAttack"]
+script = ExtResource("7_dtgn0")
+to = NodePath("../../Idle")
+event = &"stop_attack"
+delay_in_seconds = "0.0"
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 1.74846e-07)
+billboard = 1
+text = "STATE LABEL"
+font_size = 128
+outline_size = 48
+
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/StandardAttack" to="." method="_on_standard_attack_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/StandardAttack/Targeting" to="." method="_on_standard_attack_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/StandardAttack/Targeting" to="." method="_on_standard_attack_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/StandardAttack/Firing" to="." method="_on_standard_attack_firing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/StandardAttack/Recovering" to="." method="_on_standard_attack_recovering_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/StandardAttack/Recovering" to="." method="_on_standard_attack_recovering_state_exited"]

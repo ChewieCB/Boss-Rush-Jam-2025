@@ -267,9 +267,11 @@ func jump(multiplier = 1.0):
 
 func stun(time: float) -> void:
 	max_speed = MAX_SPEED / 4
+	dash_disabled = true
 	hurt_overlay.stun(time)
 	await get_tree().create_timer(time).timeout
 	max_speed = MAX_SPEED
+	dash_disabled = false
 
 
 func spin_reload():

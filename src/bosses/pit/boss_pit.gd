@@ -28,7 +28,7 @@ var valid_spawns: Array
 func activate() -> void:
 	super()
 	state_chart.send_event("start_phase_1")
-	spawn_turrets(3)
+	spawn_turrets(1)
 
 
 func _physics_process(delta: float) -> void:
