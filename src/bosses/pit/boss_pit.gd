@@ -68,7 +68,7 @@ func destroy_cover(body: Node3D) -> void:
 	if body is Cover:
 		body.destroy()
 		lunge_friction = FRICTION * 4
-		hurtbox.set_deferred("monitoring", false)
+		#hurtbox.set_deferred("monitoring", false)
 
 func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, lunge_friction)
@@ -87,7 +87,7 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 func _on_movement_charging_state_exited() -> void:
 	hurtbox.body_entered.disconnect(destroy_cover)
 	lunge_friction = FRICTION
-	hurtbox.set_deferred("monitoring", true)
+	#hurtbox.set_deferred("monitoring", true)
 
 #####
 
@@ -113,7 +113,7 @@ func _on_phase_1_state_entered() -> void:
 
 func _on_phase_1_melee_combo_targeting_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Targeting"
-	hurtbox.set_deferred("monitoring", true)
+	#hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
 
 func _on_phase_1_melee_combo_targeting_state_physics_processing(delta: float) -> void:
@@ -276,7 +276,7 @@ func _air_slam_damage(body: Node3D) -> void:
 		body.health_component.damage(15)
 		body.velocity = Vector3.ZERO
 		body.vel_vertical -= 65.0
-		hurtbox.set_deferred("monitoring", false)
+		#hurtbox.set_deferred("monitoring", false)
 		hurtbox.body_entered.disconnect(_air_slam_damage)
 
 
@@ -294,7 +294,7 @@ func _on_phase_1_melee_combo_recover_state_entered() -> void:
 	#hurtbox.monitoring = false
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
-	hurtbox.set_deferred("monitoring", true)
+	#hurtbox.set_deferred("monitoring", true)
 	select_attack()
 	state_chart.send_event("end_recovery")
 
@@ -385,14 +385,14 @@ func _on_wave_collision(body: Node3D) -> void:
 
 func _on_air_slam_targeting_state_entered() -> void:
 	debug_state_label.text = "Air Slam | Targeting"
-	hurtbox.set_deferred("monitoring", true)
+	#hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_targeting")
 	await get_tree().create_timer(1.0).timeout
 	state_chart.send_event("start_attack")
 
 
 func _on_air_slam_state_entered() -> void:
-	air_slam_drop = AIR_SLAM_DROP * 0.7
+	air_slam_drop = AIR_SLAM_DROP# * 0.7
 
 
 func _on_air_slam_state_exited() -> void:
@@ -402,7 +402,7 @@ func _on_air_slam_state_exited() -> void:
 
 func _on_phase_1_lunge_targeting_state_entered() -> void:
 	debug_state_label.text = "Lunge | Targeting"
-	hurtbox.set_deferred("monitoring", true)
+	#hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
 	state_chart.send_event("close_distance")
 
@@ -421,9 +421,9 @@ func _on_phase_1_lunge_state_entered() -> void:
 
 func _on_phase_1_lunge_recover_state_entered() -> void:
 	debug_state_label.text = "Lunge | Recovery"
-	#hurtbox.monitoring = false
+	#hurtbox.set_deferred("monitoring", false)
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
-	hurtbox.set_deferred("monitoring", true)
+	#hurtbox.set_deferred("monitoring", true)
 	select_attack()
 	state_chart.send_event("end_recovery")

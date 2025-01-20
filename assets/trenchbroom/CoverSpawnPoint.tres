@@ -16,12 +16,15 @@ classname = "CoverSpawnPoint"
 description = ""
 func_godot_internal = false
 base_classes = Array[Resource]([])
-class_properties = {}
+class_properties = {
+"cover_type": ""
+}
 class_property_descriptions = {}
 auto_apply_to_matching_node_properties = false
 meta_properties = {
 "color": Color(0.8, 0.8, 0.8, 1),
-"size": AABB(-8, -8, -8, 8, 8, 8)
+"size": AABB(-8, -8, -8, 8, 8, 8),
+"studio": "\"assets/trenchbroom/models/CoverSpawnPoint.glb\""
 }
 node_class = ""
 name_property = ""

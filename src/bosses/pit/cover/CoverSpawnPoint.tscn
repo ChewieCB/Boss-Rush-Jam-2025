@@ -7,4 +7,14 @@
 
 [node name="CoverSpawnPoint" type="Node3D"]
 script = ExtResource("1_7sw7r")
-cover_scenes = Array[PackedScene]([ExtResource("2_608rq"), ExtResource("3_73k3j"), ExtResource("4_emwjt")])
+cover_scenes = {
+"column": ExtResource("4_emwjt"),
+"full": ExtResource("2_608rq"),
+"half": ExtResource("3_73k3j")
+}
+cover_spawn_weights = {
+"column": 0.15,
+"full": 0.5,
+"half": 0.35
+}
+entProperties = {}
