@@ -1,4 +1,4 @@
-[gd_scene load_steps=285 format=4 uid="uid://ct3oq6juhe7y4"]
+[gd_scene load_steps=286 format=4 uid="uid://ct3oq6juhe7y4"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_vfcr2"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/boss_pit.gd" id="1_ymudn"]
@@ -20,6 +20,7 @@
 [ext_resource type="Material" uid="uid://q778hp4rpyl4" path="res://assets/textures/placeholder/texture_green_green_green_13.tres" id="15_5t7py"]
 [ext_resource type="Material" uid="uid://bl2wsskw41kaa" path="res://src/bosses/roulette/BarrierMat.tres" id="17_061uj"]
 [ext_resource type="PackedScene" uid="uid://2ss8hk0shm7i" path="res://src/bosses/pit/cover/CoverSpawnPoint.tscn" id="19_vy68e"]
+[ext_resource type="PackedScene" uid="uid://dmhl0n57v7a5e" path="res://src/bosses/pit/PitTurret.tscn" id="21_fr2i8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eyfm3"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -1777,7 +1778,6 @@ max_health = 200.0
 
 [node name="entity_5_PitBoss" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("11_hqgyr")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 0)
-AIR_SLAM_DROP = 35.0
 wave_material = ExtResource("17_061uj")
 target = NodePath("../entity_4_PlayerRef")
 
@@ -1968,6 +1968,10 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BossTrigger"]
 shape = SubResource("BoxShape3D_o52qx")
+
+[node name="PitTurret" parent="." node_paths=PackedStringArray("target") instance=ExtResource("21_fr2i8")]
+transform = Transform3D(-0.707107, 0, 0.707107, 6.18172e-08, -1, 6.18172e-08, 0.707107, 8.74228e-08, 0.707107, 8.34643, 11.5484, 24.3464)
+target = NodePath("../FuncGodotMap/entity_4_PlayerRef")
 
 [connection signal="body_entered" from="BossTrigger" to="." method="_on_boss_trigger_body_entered"]
 

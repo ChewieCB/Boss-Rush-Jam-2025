@@ -1,0 +1,63 @@
+[gd_scene load_steps=9 format=3 uid="uid://dmhl0n57v7a5e"]
+
+[ext_resource type="Script" path="res://src/bosses/pit/pit_turret.gd" id="1_56juh"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_nwx76"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_oqn11"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p1ida"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_3mpgo"]
+material = SubResource("StandardMaterial3D_p1ida")
+radius = 1.75
+height = 1.75
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tmp0t"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7p546"]
+material = SubResource("StandardMaterial3D_tmp0t")
+size = Vector3(2, 0.35, 0.35)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8wfl4"]
+size = Vector3(3.5, 2, 3.5)
+
+[node name="PitTurret" type="StaticBody3D"]
+collision_layer = 64
+collision_mask = 11
+script = ExtResource("1_56juh")
+
+[node name="Body" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Dome" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("SphereMesh_3mpgo")
+skeleton = NodePath("../..")
+
+[node name="Head" type="Node3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Barrel1" type="MeshInstance3D" parent="Body/Head"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, 0.5, 0.5, 2.4)
+mesh = SubResource("BoxMesh_7p546")
+
+[node name="RayCast3D" type="RayCast3D" parent="Body/Head/Barrel1"]
+target_position = Vector3(-100, 0, 0)
+collision_mask = 3
+
+[node name="Barrel2" type="MeshInstance3D" parent="Body/Head"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, -0.5, 0.5, 2.4)
+mesh = SubResource("BoxMesh_7p546")
+
+[node name="RayCast3D" type="RayCast3D" parent="Body/Head/Barrel2"]
+target_position = Vector3(-100, 0, 0)
+collision_mask = 3
+
+[node name="DomeCollider" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_8wfl4")
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_nwx76")]
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("2_oqn11")

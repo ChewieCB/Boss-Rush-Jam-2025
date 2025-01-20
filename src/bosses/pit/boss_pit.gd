@@ -267,8 +267,9 @@ func _on_melee_combo_ground_pound_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Ground Pound"
 	state_chart.send_event("stop_moving")
 	velocity = Vector3.ZERO
-	spawn_center_wave(10.0, 0.8, 2.0, false)
-	state_chart.send_event("combo_end")
+	var wave_callback: Callable = func(): 
+		state_chart.send_event("combo_end")
+	spawn_center_wave(10.0, 0.8, 2.0, false, wave_callback)
 
 
 func _on_phase_1_melee_combo_recover_state_entered() -> void:

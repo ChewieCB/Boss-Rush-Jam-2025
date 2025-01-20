@@ -645,7 +645,7 @@ skeleton = NodePath("../../../Sprite3D")
 [node name="ArmsDebugR" type="Node3D" parent="ArmsDEbug" index="1"]
 
 [node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugR" index="0"]
-transform = Transform3D(0.789814, -1.17876, -0.486546, 1.14907, 0.906037, -0.329769, 0.553033, -0.19908, 1.38004, 2.05191, 2.26694, 0.0392845)
+transform = Transform3D(0.789815, -1.17876, -0.486546, 1.14907, 0.906037, -0.329769, 0.553033, -0.19908, 1.38004, 2.05191, 2.26694, 0.0392845)
 mesh = SubResource("BoxMesh_g5e5v")
 skeleton = NodePath("../../../Sprite3D")
 
@@ -675,6 +675,7 @@ shape = SubResource("BoxShape3D_pi7fj")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Hurtbox" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.5)
+visible = false
 mesh = SubResource("BoxMesh_n64vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
 
@@ -875,9 +876,6 @@ script = ExtResource("4_akhww")
 to = NodePath("../../MeleeCombo")
 event = &"start_melee_combo_attack"
 delay_in_seconds = "0.0"
-
-[node name="NavigationAgent3D" parent="." index="9"]
-debug_enabled = true
 
 [node name="DebugStateLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
