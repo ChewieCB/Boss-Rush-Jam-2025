@@ -33,6 +33,8 @@ class_name Player
 @onready var magazine_label: Label = $UI/GunUI/MagazineUI
 @onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
 
+signal movement_dashed
+
 const MAX_SPEED: float = 8.0
 const MAX_FALL_SPEED: float = 50.0
 const ACCEL_RATE: float = 40.0
@@ -67,7 +69,9 @@ var is_sliding: bool:
 				player_camera.add_long_trauma(-SLIDE_SHAKE_TRAUMA)
 		is_sliding = value
 
-var bonus_speed: float = 0
+var internal_bonus_speed: float = 0
+var run_speed_modifier: float = 1
+var dash_slide_speed_modifier: float = 1
 
 var raw_input_dir := Vector2(0, 0)
 var input_dir := Vector2(0, 0)
@@ -128,6 +132,7 @@ func _input(event):
 			SoundManager.play_sound_with_pitch(TEMP_sfx_dash, randf_range(0.8, 1.1))
 			vel_vertical = 0
 			dash_duration_timer.start()
+			movement_dashed.emit()
 
 	if Input.is_action_just_pressed("interact"):
 		if object_to_be_interacted:
@@ -206,21 +211,21 @@ func _physics_process(delta):
 	else:
 		vel_horizontal += input_dir * add_speed
 
-	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y)
+	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * run_speed_modifier
 
 	# Bonus speed
 	if is_dashing:
-		bonus_speed = DASH_SPEED
+		internal_bonus_speed = DASH_SPEED
 	elif is_sliding:
-		bonus_speed = SLIDE_SPEED
+		internal_bonus_speed = SLIDE_SPEED
 	else:
 		if is_on_floor():
-			bonus_speed = lerpf(bonus_speed, 0, delta * 9)
+			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 9)
 		else:
-			bonus_speed = lerpf(bonus_speed, 0, delta * 3)
+			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 3)
 
 	var velocity_dir = velocity.normalized()
-	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * bonus_speed
+	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * dash_slide_speed_modifier
 
 	# Let the player ignore the wheelspin if they are moving
 	var floor_velocity = get_platform_velocity()

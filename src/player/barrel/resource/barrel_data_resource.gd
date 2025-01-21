@@ -14,6 +14,7 @@ enum BarrelIdEnum {
     ROULETTE_BOSS,
     ARCHETYPE_RAILGUN_SPEC,
     ARCHETYPE_AUTOMATIC_SPEC,
+    PIT_BOSS_BARREL,
 }
 
 @export var barrel_id: BarrelIdEnum

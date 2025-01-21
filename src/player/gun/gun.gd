@@ -190,6 +190,10 @@ func check_barrel_effect_on_projectile_destroyed():
     for barrel in installed_barrels:
         barrel.get_active_effect().on_projectile_destroyed()
 
+func check_barrel_effect_on_dash_movement():
+    for barrel in installed_barrels:
+        barrel.get_active_effect().on_dash_movement()
+
 func pull_trigger():
     if not is_trigger_pulled:
         is_trigger_pulled = true

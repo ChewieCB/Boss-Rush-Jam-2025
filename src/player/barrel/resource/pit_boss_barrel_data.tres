@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=3 format=3 uid="uid://c4mbv2plccfx7"]
+
+[ext_resource type="PackedScene" uid="uid://erwchuovt4x0" path="res://src/player/barrel/PitBossBarrel.tscn" id="1_24mrw"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_w6n65"]
+
+[resource]
+script = ExtResource("3_w6n65")
+barrel_id = 11
+barrel_name = "Pit Boss"
+barrel_desc = "[b]Pit Boss Barrel[/b]
+Barrel collected from the Pit Boss. Grant you ability similar to its owner.
+
+Possible rolls:
+[ul]
+Empowered Dash: Gain bonus dash speed for a short amount of time after you shoot a bullet.
+
+[/ul]"
+barrel_prefab = ExtResource("1_24mrw")
