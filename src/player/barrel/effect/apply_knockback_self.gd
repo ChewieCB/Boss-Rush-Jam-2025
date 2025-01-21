@@ -5,7 +5,7 @@ extends BaseBarrelEffect
 # TBH, it should be on_projectile_spawn, but that can get
 # out of hand quickly with multishot weapon
 
-const VERTICAL_COEFFICIENT = 0.2
+const VERTICAL_COEFFICIENT = 0.4
 
 func on_ammo_consumed():
     var backward_direction = GameManager.player.transform.basis.z

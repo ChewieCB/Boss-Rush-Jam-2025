@@ -26,7 +26,7 @@ radius = 500.0
 
 [node name="GunHitscan" type="Node3D"]
 script = ExtResource("1_gwc3y")
-thickness = 20
+thickness = 30
 fade_speed = 1.0
 spark_effect = ExtResource("2_ircxh")
 generic_blood_splatter = ExtResource("3_vqvrn")
