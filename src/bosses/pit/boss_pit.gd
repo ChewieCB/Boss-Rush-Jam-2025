@@ -10,15 +10,25 @@ class_name BossPit
 @export var phase_3_health_percentage_trigger: float = 0.33
 
 @export var FRICTION: float = 0.05
-var lunge_friction: float = FRICTION
-@export var lunge_force: float = 4.50
-@onready var lunge_timer: Timer = $LungeCooldown
-@export var lunge_cooldown: float = 15.0
 
-@export var AIR_SLAM_DROP: float = 35.0
+@export_group("Attacks")
+@export_subgroup("Swipe")
+@export var swipe_damage: float = 7.0
+@export_subgroup("Hook")
+@export var hook_damage: float = 8.0
+@export_subgroup("Uppercut")
+@export var uppercut_damage: float = 5.0
+@export_subgroup("Air Slam")
 var air_slam_drop: float = AIR_SLAM_DROP
-
+@export var AIR_SLAM_DROP: float = 35.0
+@export var air_slam_damage: float = 15.0
 @export var wave_material: ShaderMaterial
+@export_subgroup("Lunge")
+var lunge_friction: float = FRICTION
+@export var lunge_damage: float = 5.0
+@export var lunge_force: float = 4.50
+@export var lunge_cooldown: float = 15.0
+@onready var lunge_timer: Timer = $LungeCooldown
 
 @onready var face_sprite: Sprite3D = $Sprite3D/FaceSprite
 @onready var melee_attack_debug_mesh: MeshInstance3D = $Hurtbox/MeshInstance3D
@@ -85,13 +95,14 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 
 func _on_movement_charging_state_entered() -> void:
 	#hurtbox.set_deferred("monitoring", true)
+	hurtbox.monitoring = true
 	hurtbox.body_entered.connect(destroy_cover)
 
 func destroy_cover(body: Node3D) -> void:
 	if body is Cover:
 		body.destroy()
 		#lunge_friction = FRICTION * 4
-		#hurtbox.set_deferred("monitoring", false)
+		hurtbox.monitoring = false
 
 func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, lunge_friction)
@@ -102,7 +113,8 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 			if body is Cover:
 				destroy_cover(body)
 			elif body == target:
-				damage_in_hurtbox(5.0, true)
+				damage_in_hurtbox(lunge_damage, true)
+				hurtbox.monitoring = false
 				velocity.x = 0
 				velocity.z = 0
 				state_chart.send_event("end_charge")
@@ -113,7 +125,8 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 func _on_movement_charging_state_exited() -> void:
 	hurtbox.body_entered.disconnect(destroy_cover)
 	lunge_friction = FRICTION
-	hurtbox.set_deferred("monitoring", true)
+	hurtbox.monitoring = true
+	#hurtbox.set_deferred("monitoring", true)
 
 #####
 
@@ -157,6 +170,9 @@ func _on_phase_1_melee_combo_swipe_state_entered() -> void:
 	else:
 		state_chart.send_event("combo_end")
 
+func swipe() -> void:
+	target.health_component.damage(swipe_damage)
+
 
 func _on_phase_1_melee_combo_hook_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Hook"
@@ -177,6 +193,8 @@ func _on_phase_1_melee_combo_hook_state_entered() -> void:
 	else:
 		state_chart.send_event("combo_end")
 
+func hook() -> void:
+	target.health_component.damage(hook_damage)
 
 func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
 	if target in hurtbox.get_overlapping_bodies():
@@ -219,7 +237,7 @@ func _on_phase_1_melee_combo_uppercut_state_entered() -> void:
 	await anim_player.animation_finished
 	
 	if target in hurtbox.get_overlapping_bodies():
-		target.health_component.damage(10)
+		target.health_component.damage(uppercut_damage)
 		target.velocity = Vector3.ZERO
 		target.vel_vertical += 25.0
 	
@@ -239,9 +257,9 @@ func _on_phase_1_melee_combo_uppercut_state_entered() -> void:
 	else:
 		state_chart.send_event("combo_end")
 
-func uppercut(damage: float, uppercut_force: float) -> void:
+func uppercut(uppercut_force: float) -> void:
 	if target in hurtbox.get_overlapping_bodies():
-		target.health_component.damage(damage)
+		target.health_component.damage(uppercut_damage)
 		target.velocity = Vector3.ZERO
 		target.vel_vertical += uppercut_force
 
@@ -287,7 +305,7 @@ func air_slam_attack(damage: float, slam_force: float, target_pos: Vector3 = tar
 
 func _air_slam_damage(body: Node3D) -> void:
 	if body == target:
-		body.health_component.damage(15)
+		body.health_component.damage(air_slam_damage)
 		body.velocity = Vector3.ZERO
 		body.vel_vertical -= 65.0
 		#hurtbox.set_deferred("monitoring", false)

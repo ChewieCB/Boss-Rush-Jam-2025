@@ -98,7 +98,7 @@ TEMP_sfx_projectile = null
 TEMP_sfx_telegraph = null
 TEMP_sfx_charge = null
 TEMP_sfx_charge_impact = null
-attack_recovery_time = 0.5
+attack_recovery_time = 0.7
 projectile_scene = null
 delay_per_projectile = 0.6
 

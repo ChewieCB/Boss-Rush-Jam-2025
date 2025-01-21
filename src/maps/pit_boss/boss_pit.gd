@@ -34,7 +34,7 @@ func _ready() -> void:
 func generate_navigation() -> void:
 	nav_region = NavigationRegion3D.new()
 	var nav_mesh := NavigationMesh.new()
-	#nav_mesh.agent_radius = 1.2
+	nav_mesh.agent_radius = 1.2
 	#nav_mesh.agent_height = 1.0
 	nav_region.navigation_mesh = nav_mesh
 	
@@ -60,5 +60,5 @@ func generate_navigation() -> void:
 func _on_boss_trigger_body_entered(body: Node3D) -> void:
 	if body is Player:
 		surveillance_boss.activate()
-		pit_boss.activate()
+		#pit_boss.activate()
 		boss_trigger.queue_free()

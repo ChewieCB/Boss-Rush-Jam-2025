@@ -13,6 +13,7 @@ class_name BossSurveillance
 @onready var aim_ray: RayCast3D = $Body/Head/RayCast3D
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
+var previous_phase: String
 
 # Turrets
 var turret_spawns: Array:
@@ -57,10 +58,12 @@ func select_attack_phase_1() -> void:
 		"start_laser_attack",
 	]
 	
-	if randf() < 0.5:
-		state_chart.send_event("start_spawn_turrets_attack")
-	else:
-		state_chart.send_event("start_laser_attack")
+	if previous_phase:
+		possible_phases.erase(previous_phase)
+	
+	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
+	previous_phase = new_phase
+	state_chart.send_event(new_phase)
 
 
 func rotate_and_elevate(target_pos: Vector3, delta: float) -> void:
@@ -139,8 +142,7 @@ func _on_health_hit_state_exited() -> void:
 #####
 
 func _on_phase_1_state_entered() -> void:
-	#state_chart.send_event("start_spawn_turrets_attack")
-	state_chart.send_event("start_laser_attack")
+	select_attack()
 
 func _on_phase_1_state_physics_processing(delta: float) -> void:
 	pass
@@ -149,6 +151,7 @@ func _on_phase_1_state_physics_processing(delta: float) -> void:
 func _on_turret_destroyed(turret: PitTurret) -> void:
 	var turret_spawn = turret.get_parent()
 	valid_spawns.push_back(turret_spawn)
+	spawned_turrets_count -= 1
 
 
 func _on_spawn_turrets_targeting_state_entered() -> void:
@@ -177,7 +180,7 @@ func _on_spawn_turrets_spawning_state_entered() -> void:
 		)
 		await tween.finished
 		var turret = turret_look_target.spawn_turret(target)
-		turret.health_component.died.connect(_on_turret_destroyed)
+		turret.destroyed.connect(_on_turret_destroyed)
 		spawned_turrets_count += 1
 	turret_look_target = null
 	state_chart.send_event("stop_spawning")
@@ -314,30 +317,6 @@ func _on_laser_beam_recover_state_entered() -> void:
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
-
-
-
-func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInstance3D:
-	# Will usually work, but you might need to adjust this.
-	var scene_root = get_tree().root.get_children()[0]
-	# Create sphere with low detail of size.
-	var sphere = SphereMesh.new()
-	sphere.radial_segments = 4
-	sphere.rings = 4
-	sphere.radius = size
-	sphere.height = size * 2
-	# Bright red material (unshaded).
-	var material = StandardMaterial3D.new()
-	material.albedo_color = color
-	material.flags_unshaded = true
-	sphere.surface_set_material(0, material)
-
-	# Add to meshinstance in the right place.
-	var node = MeshInstance3D.new()
-	node.mesh = sphere
-	node.global_transform.origin = location
-	scene_root.add_child(node)
-	return node
 
 
 func _on_laser_hurtbox_body_entered(body: Node3D) -> void:

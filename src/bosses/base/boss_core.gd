@@ -70,7 +70,7 @@ var spawned_area_objects = []
 @onready var hurtbox: Area3D = $Hurtbox
 @onready var health_ui = $UI/HealthUI/BossHealthContainer
 
-var MAX_SPEED: float = 5.0
+@export var MAX_SPEED: float = 5.0
 const TURN_SPEED_FAST: float = 7.5
 const TURN_SPEED_SLOW: float = 5.0
 const MAX_FALL_SPEED: float = 50.0

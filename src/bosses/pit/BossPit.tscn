@@ -466,8 +466,8 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0.35),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [15.0],
-"method": &"damage_in_hurtbox"
+"args": [],
+"method": &"hook"
 }]
 }
 
@@ -600,8 +600,8 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0.25),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [15.0],
-"method": &"damage_in_hurtbox"
+"args": [],
+"method": &"swipe"
 }]
 }
 
@@ -619,7 +619,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0.15),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [15.0, 15.0],
+"args": [15.0],
 "method": &"uppercut"
 }]
 }
@@ -693,10 +693,15 @@ uppercut_debug = ExtResource("5_i6at3")
 phase_2_health_percentage_trigger = 0.66
 phase_3_health_percentage_trigger = 0.33
 FRICTION = 0.05
-lunge_force = 4.5
-lunge_cooldown = 15.0
+swipe_damage = 7.0
+hook_damage = 8.0
+uppercut_damage = 5.0
 AIR_SLAM_DROP = 35.0
+air_slam_damage = 15.0
 wave_material = SubResource("ShaderMaterial_2s76u")
+lunge_damage = 5.0
+lunge_force = 6.0
+lunge_cooldown = 8.5
 TEMP_sfx_awaken = null
 TEMP_sfx_hit = Array[AudioStream]([])
 TEMP_sfx_area_1 = null
@@ -708,6 +713,7 @@ TEMP_sfx_charge_impact = null
 attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.6
+MAX_SPEED = 6.0
 
 [node name="ArmsDEbug" type="Node3D" parent="." index="0"]
 transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, 0, 0, 0)
@@ -757,6 +763,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.5)
 visible = false
 mesh = SubResource("BoxMesh_n64vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
+
+[node name="HealthComponent" parent="." index="5"]
+max_health = 7000.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"
