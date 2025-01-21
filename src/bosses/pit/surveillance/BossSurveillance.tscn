@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://burh3udob1t32"]
+[gd_scene load_steps=18 format=3 uid="uid://burh3udob1t32"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7qur5"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_l4r8d"]
@@ -24,8 +24,13 @@ albedo_color = Color(0, 0, 0, 1)
 material = SubResource("StandardMaterial3D_15xga")
 radius = 1.0
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_iosat"]
+height = 0.1
+radius = 0.3
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0r83n"]
 transparency = 1
+cull_mode = 2
 albedo_color = Color(1, 0.17, 0.17, 0.980392)
 emission_enabled = true
 emission = Color(1, 0.168627, 0.168627, 1)
@@ -39,6 +44,21 @@ height = 0.1
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ook83"]
 radius = 7.0
+
+[sub_resource type="Animation" id="Animation_sq5t5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body/Head:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_lmydu"]
 resource_name = "intro_look_at_player"
@@ -57,21 +77,6 @@ tracks/0/keys = {
 "values": [Vector3(1.8326, 0, 0), Vector3(0.436332, 0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_sq5t5"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Body/Head:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7pmgg"]
 _data = {
 "RESET": SubResource("Animation_sq5t5"),
@@ -84,6 +89,7 @@ script = ExtResource("2_l4r8d")
 elevation_speed_deg = 25.0
 rotation_speed_deg = 25.0
 turrets_to_spawn = 2
+beam_sweeps_per_attack = 4
 TEMP_sfx_awaken = null
 TEMP_sfx_hit = Array[AudioStream]([])
 TEMP_sfx_area_1 = null
@@ -104,7 +110,6 @@ mesh = SubResource("SphereMesh_lki4d")
 skeleton = NodePath("../../..")
 
 [node name="Head" type="Node3D" parent="Body" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body/Head" index="0"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 6)
@@ -116,12 +121,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
 target_position = Vector3(0, 0, 500)
 collision_mask = 71
 
-[node name="LaserMesh" type="MeshInstance3D" parent="Body/Head/RayCast3D" index="0"]
+[node name="Area3D" type="Area3D" parent="Body/Head/RayCast3D" index="0"]
+collision_layer = 8
+collision_mask = 67
+
+[node name="LaserCollider" type="CollisionShape3D" parent="Body/Head/RayCast3D/Area3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_iosat")
+
+[node name="LaserMesh" type="MeshInstance3D" parent="Body/Head/RayCast3D/Area3D" index="1"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.4)
 mesh = SubResource("CylinderMesh_m2l2m")
+skeleton = NodePath("../..")
 
-[node name="LaserEndParticles" parent="Body/Head/RayCast3D/LaserMesh" index="0" instance=ExtResource("3_duvt5")]
-transform = Transform3D(2, 0, 0, 0, -8.74228e-08, -2, 0, 2, -8.74228e-08, 0, 8, 0)
+[node name="LaserEndParticles" parent="Body/Head/RayCast3D/Area3D/LaserMesh" index="0" instance=ExtResource("3_duvt5")]
+transform = Transform3D(2, 0, 0, 0, -8.74228e-08, -2, 0, 2, -8.74228e-08, 0, 0, 0)
 
 [node name="Sprite3D" parent="." index="1"]
 visible = false
@@ -296,6 +310,7 @@ libraries = {
 "": SubResource("AnimationLibrary_7pmgg")
 }
 
+[connection signal="body_entered" from="Body/Head/RayCast3D/Area3D" to="." method="_on_laser_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SpawnTurrets/Targeting" to="." method="_on_spawn_turrets_targeting_state_entered"]
@@ -306,3 +321,6 @@ libraries = {
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/LaserBeam/Startup" to="." method="_on_laser_beam_startup_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserBeam/Targeting" to="." method="_on_laser_beam_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/LaserBeam/Targeting" to="." method="_on_laser_beam_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserBeam/SweepBeam" to="." method="_on_laser_beam_sweep_beam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/LaserBeam/SweepBeam" to="." method="_on_laser_beam_sweep_beam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserBeam/Recover" to="." method="_on_laser_beam_recover_state_entered"]

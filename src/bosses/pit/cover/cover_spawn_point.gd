@@ -21,7 +21,9 @@ func _ready() -> void:
 		return
 	
 	cover_type = entProperties["cover_type"]
-	
+
+
+func spawn_cover() -> Cover:
 	var cover: PackedScene
 	if cover_type:
 		cover = cover_scenes[cover_type]
@@ -45,3 +47,6 @@ func _ready() -> void:
 	var mesh_size = cover_instance.mesh.get_aabb().size
 	cover_instance.global_position = self.global_position - Vector3(0, mesh_size.y, 0)
 	tween.tween_property(cover_instance, "global_position:y", self.global_position.y, 3.5)
+	
+	return cover_instance
+	

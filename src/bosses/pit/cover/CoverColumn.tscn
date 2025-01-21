@@ -23,6 +23,7 @@ _surfaces = [{
 size = Vector3(3.004, 14.5, 2.92831)
 
 [node name="CoverColumn" type="StaticBody3D"]
+collision_layer = 64
 collision_mask = 78
 script = ExtResource("1_iibnv")
 explosion_vfx = ExtResource("2_baljf")

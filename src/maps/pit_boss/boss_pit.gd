@@ -48,7 +48,7 @@ func generate_navigation() -> void:
 	
 	var cover_objects := find_children("*", "CoverSpawnPoint")
 	for object in cover_objects:
-		var cover = object.get_child(0)
+		var cover = object.spawn_cover()
 		object.remove_child(cover)
 		nav_region.add_child(cover)
 		cover.global_position = object.global_position
@@ -60,6 +60,5 @@ func generate_navigation() -> void:
 func _on_boss_trigger_body_entered(body: Node3D) -> void:
 	if body is Player:
 		surveillance_boss.activate()
-		await surveillance_boss.anim_player.animation_finished
-		pit_boss.activate()
+		#pit_boss.activate()
 		boss_trigger.queue_free()

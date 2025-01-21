@@ -25,8 +25,13 @@ var turret_look_target: Node3D
 var spawned_turrets_count: int = 0
 
 # Beam
-@onready var laser_mesh: MeshInstance3D = $Body/Head/RayCast3D/LaserMesh
-@onready var laser_particles: GPUParticles3D = $Body/Head/RayCast3D/LaserMesh/LaserEndParticles
+@onready var laser_area: Area3D = $Body/Head/RayCast3D/Area3D
+@onready var laser_collider: CollisionShape3D = $Body/Head/RayCast3D/Area3D/LaserCollider
+@onready var laser_mesh: MeshInstance3D = $Body/Head/RayCast3D/Area3D/LaserMesh
+@onready var laser_particles: GPUParticles3D = $Body/Head/RayCast3D/Area3D/LaserMesh/LaserEndParticles
+var beam_target: Vector3
+@export var beam_sweeps_per_attack: int = 4
+var beam_sweep_count: int = 0
 
 
 func _ready() -> void:
@@ -43,6 +48,19 @@ func activate() -> void:
 	anim_player.play("intro_look_at_player")
 	await anim_player.animation_finished
 	state_chart.send_event("start_phase_1")
+
+
+func select_attack_phase_1() -> void:
+	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var possible_phases = [
+		"start_spawn_turrets_attack",
+		"start_laser_attack",
+	]
+	
+	if randf() < 0.5:
+		state_chart.send_event("start_spawn_turrets_attack")
+	else:
+		state_chart.send_event("start_laser_attack")
 
 
 func rotate_and_elevate(target_pos: Vector3, delta: float) -> void:
@@ -198,6 +216,8 @@ func _on_laser_beam_startup_state_entered() -> void:
 		tween = get_tree().create_tween()
 		tween.tween_property(laser_mesh.mesh, "height", dist_to_cast, 0.4)
 		tween.parallel().tween_property(laser_mesh, "position:z", dist_to_cast / 2, 0.4)
+		tween.parallel().tween_property(laser_collider.shape, "height", dist_to_cast, 0.4)
+		tween.parallel().tween_property(laser_collider, "position:z", dist_to_cast / 2, 0.4)
 		
 		await tween.finished
 	
@@ -212,8 +232,11 @@ func _on_laser_beam_startup_state_physics_processing(delta: float) -> void:
 func _on_laser_beam_targeting_state_entered() -> void:
 	debug_state_label.text = "Laser Beam | Targeting"
 	
-	elevation_speed = deg_to_rad(elevation_speed_deg * 0.45)
-	rotation_speed = deg_to_rad(rotation_speed_deg * 0.45)
+	elevation_speed = deg_to_rad(elevation_speed_deg * 0.65)
+	rotation_speed = deg_to_rad(rotation_speed_deg * 0.65)
+	
+	await get_tree().create_timer(2.1).timeout
+	state_chart.send_event("sweep_beam")
 
 func _on_laser_beam_targeting_state_physics_processing(delta: float) -> void:
 	rotate_and_elevate(target.global_position, delta)
@@ -224,7 +247,102 @@ func _on_laser_beam_targeting_state_physics_processing(delta: float) -> void:
 		var dist_to_cast: float = self.global_position.distance_to(cast_point)
 		laser_mesh.mesh.height = dist_to_cast 
 		laser_mesh.position.z = dist_to_cast / 2
+		laser_collider.shape.height = dist_to_cast
+		laser_collider.position.z = dist_to_cast / 2
 		laser_particles.global_position = cast_point
 
 
-	# TODO - find the player's position and do some sweeping arcs towards them
+func _on_laser_beam_sweep_beam_state_entered() -> void:
+	debug_state_label.text = "Laser Beam | Sweep"
+	# TODO - add telegraphing to the sweep attack
+	var tween = get_tree().create_tween()
+	tween.tween_property(laser_mesh.mesh, "top_radius", 1.5, 0.8)
+	tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 1.5, 0.8)
+	tween.parallel().tween_property(laser_particles, "scale", Vector3(3, 3, 3), 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "top_radius", 1.5, 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "bottom_radius", 1.5, 0.8)
+	
+	# TODO - glow the laser to indicate sweep start
+	await get_tree().create_timer(telegraph_time).timeout
+	elevation_speed = deg_to_rad(elevation_speed_deg * 1.0)
+	rotation_speed = deg_to_rad(rotation_speed_deg * 1.0)
+	
+	# Sweep towards the player's position
+	beam_target = target.global_position
+
+
+func _on_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
+	rotate_and_elevate(beam_target, delta)
+	
+	var cast_point: Vector3
+	aim_ray.force_raycast_update()
+	if aim_ray.is_colliding():
+		cast_point = aim_ray.get_collision_point()
+		var dist_to_cast: float = self.global_position.distance_to(cast_point)
+		laser_mesh.mesh.height = dist_to_cast 
+		laser_mesh.position.z = dist_to_cast / 2
+		laser_particles.global_position = cast_point
+		
+		var aim_dir = aim_ray.global_basis.z
+		var target_dir = (beam_target - self.global_position).normalized()
+		if aim_dir.dot(target_dir) > 0.99:
+			if beam_sweep_count <= beam_sweeps_per_attack:
+				beam_target = target.global_position
+				beam_sweep_count += 1
+				await get_tree().create_timer(1.6).timeout
+			else:
+				beam_sweep_count = 0
+				state_chart.send_event("end_beam")
+
+
+func _on_laser_beam_recover_state_entered() -> void:
+	debug_state_label.text = "Laser Beam | Recovering"
+	
+	var tween = get_tree().create_tween()
+	tween.tween_property(laser_mesh.mesh, "height", 0.1, 0.4)
+	tween.parallel().tween_property(laser_mesh, "position:z", 0.4, 0.4)
+	tween.parallel().tween_property(laser_collider.shape, "height", 0.1, 0.4)
+	tween.parallel().tween_property(laser_collider, "position:z", 0.4, 0.4)
+	tween.parallel().tween_property(laser_mesh.mesh, "top_radius", 0.3, 0.8)
+	tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 0.3, 0.8)
+	tween.parallel().tween_property(laser_particles, "scale", Vector3(1, 1, 1), 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "top_radius", 0.3, 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "bottom_radius", 0.3, 0.8)
+	
+	await tween.finished
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	select_attack()
+	state_chart.send_event("end_recovery")
+
+
+
+func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInstance3D:
+	# Will usually work, but you might need to adjust this.
+	var scene_root = get_tree().root.get_children()[0]
+	# Create sphere with low detail of size.
+	var sphere = SphereMesh.new()
+	sphere.radial_segments = 4
+	sphere.rings = 4
+	sphere.radius = size
+	sphere.height = size * 2
+	# Bright red material (unshaded).
+	var material = StandardMaterial3D.new()
+	material.albedo_color = color
+	material.flags_unshaded = true
+	sphere.surface_set_material(0, material)
+
+	# Add to meshinstance in the right place.
+	var node = MeshInstance3D.new()
+	node.mesh = sphere
+	node.global_transform.origin = location
+	scene_root.add_child(node)
+	return node
+
+
+func _on_laser_hurtbox_body_entered(body: Node3D) -> void:
+	if body == target:
+		target.health_component.damage(10)
+		laser_area.monitoring = false
+		await get_tree().create_timer(0.4).timeout
+		laser_area.monitoring = true
