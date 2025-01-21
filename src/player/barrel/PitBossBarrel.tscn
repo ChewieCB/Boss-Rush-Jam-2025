@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://erwchuovt4x0"]
+[gd_scene load_steps=6 format=3 uid="uid://erwchuovt4x0"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_dicom"]
 [ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_q81t8"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/speed_burst_effect.gd" id="3_u0w13"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/recovery_effect.gd" id="4_croek"]
+[ext_resource type="PackedScene" uid="uid://d4fgeytwm1c2r" path="res://src/player/gun/vfx/HealBarrier.tscn" id="5_bj72g"]
 
 [node name="PitBossBarrel" type="Node3D"]
 script = ExtResource("1_dicom")
@@ -18,3 +20,12 @@ bonus_dash_speed_perc = 100.0
 display_text_title = "Empowered Dash"
 display_text_tag = "Shoot n Dash!"
 display_text_desc = "+100% dash speed after shot"
+
+[node name="Determination" type="Node3D" parent="EffectContainer"]
+script = ExtResource("4_croek")
+heal_barrier_prefab = ExtResource("5_bj72g")
+heal_amount = 2
+heal_interval = 5.0
+display_text_title = "Determination"
+display_text_tag = "Don't give up"
+display_text_desc = "Regain 2 hp every 5s"

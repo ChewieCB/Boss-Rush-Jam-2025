@@ -8,11 +8,12 @@ extends BaseBarrelEffect
 var timer: Timer
 
 func _ready():
-    timer = Timer.new()
-    timer.wait_time = 1
-    timer.one_shot = true
-    add_child(timer)
-    timer.timeout.connect(stop_speed_bonus)
+    if timer == null:
+        timer = Timer.new()
+        timer.wait_time = 1
+        timer.one_shot = true
+        add_child(timer)
+        timer.timeout.connect(stop_speed_bonus)
 
 
 func on_ammo_consumed():
