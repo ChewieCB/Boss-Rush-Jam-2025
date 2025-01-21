@@ -333,7 +333,7 @@ func spawn_center_wave(
 	area_collider_shape.shape = collider_shape
 	area_collider.add_child(area_collider_shape)
 	area_collider.collision_layer = 0
-	area_collider.collision_mask = pow(2, 1-1) + pow(2, 2-1)  # Player
+	area_collider.collision_mask = pow(2, 1-1) + pow(2, 2-1) + pow(2, 7-1) # Player
 	area_collider.monitoring = true
 	
 	get_tree().get_root().add_child(area_collider)

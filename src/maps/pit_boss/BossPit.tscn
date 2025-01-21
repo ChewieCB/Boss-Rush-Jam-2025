@@ -991,7 +991,6 @@ shape = SubResource("BoxShape3D_o52qx")
 
 [node name="Surveillance" parent="." node_paths=PackedStringArray("target") instance=ExtResource("21_fvq6t")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19.5333, 0)
-beam_sweeps_per_attack = 4
 target = NodePath("../FuncGodotMap/entity_4_PlayerRef")
 
 [node name="FuncGodotMap" type="Node3D" parent="."]
