@@ -1,11 +1,13 @@
 extends TextureRect
 
 @onready var button: Button = $Button
+@onready var border_selected = $BorderSelected
 
 var data: BarrelDataResource
 var clicked_once = false
 var is_equipped = false
 var connected_barrel_prefab_instance: SpinBarrel = null
+
 
 func init(_data: BarrelDataResource, _is_equipped):
 	data = _data
@@ -23,6 +25,7 @@ func _on_button_pressed() -> void:
 		else:
 			button.text = "Equip?"
 		clicked_once = true
+		border_selected.visible = true
 	else:
 		if is_equipped:
 			GameManager.remove_barrel(data.barrel_id)
@@ -32,4 +35,5 @@ func _on_button_pressed() -> void:
 
 func unselected():
 	clicked_once = false
+	border_selected.visible = false
 	button.text = ""

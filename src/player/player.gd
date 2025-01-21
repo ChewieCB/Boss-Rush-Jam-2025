@@ -16,6 +16,7 @@ class_name Player
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
 @onready var inventory_ui: InventoryUI = $UI/InventoryUI
+@onready var interact_ui: Label = $UI/InteractUI
 
 @onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
 @onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
@@ -29,7 +30,10 @@ class_name Player
 @onready var gun_container = $Neck/ShakeableCamera/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeableCamera/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
-@onready var magazine_label: Label = $UI/MagazineUI
+@onready var magazine_label: Label = $UI/GunUI/MagazineUI
+@onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
+
+signal movement_dashed
 
 const MAX_SPEED: float = 8.0
 var max_speed: float = MAX_SPEED
@@ -44,6 +48,7 @@ const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
 const RECOIL_COEFFICIENT: float = 10
 const BULLET_SPAWN_POS_VARIATION: float = 10
+const INTERACT_DISTANCE = 3
 
 const DASH_SPEED: float = 15
 const SLIDE_SPEED: float = 5
@@ -65,7 +70,9 @@ var is_sliding: bool:
 				player_camera.add_long_trauma(-SLIDE_SHAKE_TRAUMA)
 		is_sliding = value
 
-var bonus_speed: float = 0
+var internal_bonus_speed: float = 0
+var run_speed_modifier: float = 1
+var dash_slide_speed_modifier: float = 1
 
 var raw_input_dir := Vector2(0, 0)
 var input_dir := Vector2(0, 0)
@@ -83,6 +90,7 @@ var is_swapping_gun = false
 var current_gun: Gun = null
 
 var is_in_inventory = false
+var object_to_be_interacted = null
 
 
 func _ready():
@@ -95,7 +103,7 @@ func _ready():
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	gun_container_original_pos = gun_container.position
-
+	interact_ui.visible = false
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_hud)
 	current_gun.gun_reloaded.connect(update_hud)
@@ -125,16 +133,29 @@ func _input(event):
 			SoundManager.play_sound_with_pitch(TEMP_sfx_dash, randf_range(0.8, 1.1))
 			vel_vertical = 0
 			dash_duration_timer.start()
+			movement_dashed.emit()
 
 	if Input.is_action_just_pressed("interact"):
-		if aim_ray.is_colliding():
-			var interact_collider = aim_ray.get_collider()
-			if interact_collider:
-				if interact_collider.has_method("interact"):
-					interact_collider.interact()
+		if object_to_be_interacted:
+			object_to_be_interacted.interact()
 
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
+
+	if aim_ray.is_colliding():
+		var interact_collider = aim_ray.get_collider()
+		if interact_collider and \
+			interact_collider.has_method("interact") and \
+			interact_collider.global_position.distance_to(global_position) <= INTERACT_DISTANCE:
+			object_to_be_interacted = interact_collider
+			interact_ui.visible = true
+		else:
+			object_to_be_interacted = null
+			interact_ui.visible = false
+	else:
+		object_to_be_interacted = null
+		interact_ui.visible = false
+
 
 	if controls_disabled or is_in_inventory:
 		return
@@ -191,21 +212,21 @@ func _physics_process(delta):
 	else:
 		vel_horizontal += input_dir * add_speed
 
-	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y)
+	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * run_speed_modifier
 
 	# Bonus speed
 	if is_dashing:
-		bonus_speed = DASH_SPEED
+		internal_bonus_speed = DASH_SPEED
 	elif is_sliding:
-		bonus_speed = SLIDE_SPEED
+		internal_bonus_speed = SLIDE_SPEED
 	else:
 		if is_on_floor():
-			bonus_speed = lerpf(bonus_speed, 0, delta * 9)
+			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 9)
 		else:
-			bonus_speed = lerpf(bonus_speed, 0, delta * 3)
+			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 3)
 
 	var velocity_dir = velocity.normalized()
-	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * bonus_speed
+	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * dash_slide_speed_modifier
 
 	# Let the player ignore the wheelspin if they are moving
 	var floor_velocity = get_platform_velocity()
@@ -215,9 +236,9 @@ func _physics_process(delta):
 			floor_velocity.normalized().z,
 		))
 		velocity += floor_velocity * dir_weight
-		
+
 	move_and_slide()
-	
+
 	#show_debug_label()
 	var gun_sway_velocity = velocity * transform.basis
 	if not is_swapping_gun:
@@ -226,7 +247,17 @@ func _physics_process(delta):
 
 func update_hud():
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
-
+	for i in range(current_gun.max_barrels):
+		var effect_ui = all_barrel_effect_ui.get_child(i)
+		if current_gun.get_node("Barrel").get_child(i).get_child_count() > 0:
+			var barrel: SpinBarrel = current_gun.get_node("Barrel").get_child(i).get_child(0)
+			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
+			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
+			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+		else:
+			effect_ui.get_node("Title").text = ""
+			effect_ui.get_node("Tag").text = ""
+			effect_ui.get_node("Desc").text = ""
 
 func show_debug_label():
 	var h_speed = snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.1)
@@ -246,7 +277,7 @@ func show_debug_label():
 
 func jump(multiplier = 1.0):
 	vel_vertical = JUMP_FORCE * multiplier
-	
+
 	# Conserve angular momentum when jumping off spinning objevts
 	#if cached_angular_velocity:
 		#var angular_velocity = cached_angular_velocity
@@ -258,7 +289,7 @@ func jump(multiplier = 1.0):
 			#linear_velocity.x,
 			#linear_velocity.z
 		#) * angular_momentum_multiplier + Vector2(velocity_to_center.x, velocity_to_center.z)
-	
+
 	jumped = true
 	state_chart.send_event("jump")
 	is_dashing = false
@@ -308,6 +339,10 @@ func ground_slam():
 	vel_horizontal = Vector2.ZERO
 	vel_vertical -= SLAM_SPEED
 
+
+func apply_impulse_to_player(impulse_force: Vector3):
+	vel_vertical = impulse_force.y
+	vel_horizontal = Vector2(impulse_force.x, impulse_force.z)
 
 func _on_dash_duration_timeout() -> void:
 	is_dashing = false

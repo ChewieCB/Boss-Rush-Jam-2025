@@ -29,18 +29,18 @@ class_name SettingUI
 
 var pause_ui: PauseUI
 var keybindable_action_list = {
-	"up": "Move forward",
-	"down": "Move backward",
-	"left": "Move left",
-	"right": "Move right",
+	"move_up": "Move forward",
+	"move_down": "Move backward",
+	"move_left": "Move left",
+	"move_right": "Move right",
 	"jump": "Jump",
 	"dash": "Dash",
-	"pause_menu": "Pause",
-	"primary_attack": "Primary attack",
-	"secondary_attack": "Secondary attack",
 	"crouch": "Crouch/Slam",
-	"weapon_slot_1": "Weapon slot 1",
-	"weapon_slot_2": "Weapon slot 2",
+	"pause_menu": "Pause",
+	"shoot": "Shoot",
+	"spin_reload": "Reload",
+	"interact": "Interact",
+	"open_inventory": "Open inventory",
 }
 var is_remapping = false
 var action_to_remap = null

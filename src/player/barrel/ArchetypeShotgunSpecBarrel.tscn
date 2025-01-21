@@ -1,0 +1,121 @@
+[gd_scene load_steps=5 format=3 uid="uid://bjcvwkqb8mks4"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_41m3f"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_8sd3q"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_eatto"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_cnlm3"]
+
+[node name="ArchetypeShotgunSpecBarrel" type="Node3D"]
+script = ExtResource("1_41m3f")
+barrel_id = 7
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_8sd3q")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CompoundEffectCombat" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_eatto")
+display_text_title = "Archetype: Combat Shotgun"
+display_text_tag = "Fire faster and more ammo"
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 2
+new_value = 6.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 4
+new_value = 3.5
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 7
+new_value = 5.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 5
+new_value = 12.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectCombat"]
+script = ExtResource("4_cnlm3")
+attribute = 1
+new_value = 9.0
+
+[node name="CompoundEffectDoubleBarrel" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_eatto")
+display_text_title = "Archetype: Double-Barrel Shotgun"
+display_text_tag = "Come close for a huge burst"
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 1
+new_value = 15.0
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 2
+new_value = 12.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 4
+new_value = 10.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 7
+new_value = 14.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectDoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 5
+new_value = 2.0
+
+[node name="CompoundEffectSlug" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_eatto")
+display_text_title = "Archetype: Slug Shotgun"
+display_text_tag = "We have Railgun at home"
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 1
+new_value = 80.0
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 3
+new_value = 100.0
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 4
+new_value = 1.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 7
+new_value = 1.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectSlug"]
+script = ExtResource("4_cnlm3")
+attribute = 5
+new_value = 6.0

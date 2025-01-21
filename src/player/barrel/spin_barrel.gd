@@ -4,9 +4,9 @@ class_name SpinBarrel
 @export var barrel_id: BarrelDataResource.BarrelIdEnum
 
 @onready var effect_container: Node3D = $EffectContainer
-@onready var display_label_title: Label3D = $EffectName
-@onready var display_label_tag: Label3D = $EffectTag
-@onready var display_label_desc: Label3D = $EffectDesc
+@onready var display_label_title: Label3D = $CommonBarrelComponent/EffectName
+@onready var display_label_tag: Label3D = $CommonBarrelComponent/EffectTag
+@onready var display_label_desc: Label3D = $CommonBarrelComponent/EffectDesc
 
 var owner_gun: Gun
 var effect_list: Array[BaseBarrelEffect] = []
@@ -14,7 +14,6 @@ var spin_interval_timer = 0
 var is_spinning = false
 var chosen_id = 0
 var is_equipped = false
-
 
 const SPIN_INTERVAL = 0.1
 
@@ -43,15 +42,15 @@ func _process(delta: float) -> void:
 		spin_interval_timer = 0
 		chosen_id = randi_range(0, len(effect_list) - 1)
 		display_label_title.text = effect_list[chosen_id].display_text_title
-		display_label_tag.text = effect_list[chosen_id].display_text_tag
-		display_label_desc.text = effect_list[chosen_id].display_text_desc
+		# display_label_tag.text = effect_list[chosen_id].display_text_tag
+		# display_label_desc.text = effect_list[chosen_id].display_text_desc
 
 
 func instant_spin():
 	chosen_id = randi_range(0, len(effect_list) - 1)
 	display_label_title.text = effect_list[chosen_id].display_text_title
-	display_label_tag.text = effect_list[chosen_id].display_text_tag
-	display_label_desc.text = effect_list[chosen_id].display_text_desc
+	# display_label_tag.text = effect_list[chosen_id].display_text_tag
+	# display_label_desc.text = effect_list[chosen_id].display_text_desc
 
 
 func get_active_effect():

@@ -15,3 +15,5 @@ func _ready() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		body.health_component.damage(damage, Color.ORANGE)
+		if body is Player:
+			body.apply_impulse_to_player(global_position.direction_to(body.global_position) * damage)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://d2tb8ogqlaxhy"]
+[gd_scene load_steps=18 format=3 uid="uid://d2tb8ogqlaxhy"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_wwe7d"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_5dqrq"]
@@ -10,43 +10,61 @@
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="8_aly8k"]
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="9_tyti4"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="10_vvihl"]
+[ext_resource type="Texture2D" uid="uid://bfpeuoq5yy6or" path="res://src/player/gun/assets/sprite/main_gun.png" id="11_6pl01"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="12_ukph6"]
+[ext_resource type="Texture2D" uid="uid://dg31yrcemit6r" path="res://src/player/gun/assets/sprite/main_gun_spin.png" id="13_bsnxc"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kthsi"]
-albedo_color = Color(0.459708, 0.464844, 0.460992, 1)
+[sub_resource type="Animation" id="Animation_e0o34"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GunSprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_6pl01")]
+}
 
-[sub_resource type="BoxMesh" id="BoxMesh_1tkvt"]
-material = SubResource("StandardMaterial3D_kthsi")
-size = Vector3(0.4, 0.7, 1.27)
+[sub_resource type="Animation" id="Animation_24itk"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GunSprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_6pl01")]
+}
 
-[sub_resource type="BoxMesh" id="BoxMesh_d3cgv"]
-material = SubResource("StandardMaterial3D_kthsi")
-size = Vector3(0.4, 0.345, 1.535)
+[sub_resource type="Animation" id="Animation_sr8b4"]
+resource_name = "reload"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GunSprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("13_bsnxc")]
+}
 
-[sub_resource type="BoxMesh" id="BoxMesh_jeuj8"]
-material = SubResource("StandardMaterial3D_kthsi")
-size = Vector3(0.4, 0.465, 1.015)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kk4xv"]
-albedo_color = Color(0.258827, 0.261719, 0.25955, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_j3ph8"]
-material = SubResource("StandardMaterial3D_kk4xv")
-size = Vector3(0.18, 0.165, 1.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uibc1"]
-albedo_color = Color(0.204744, 0.207031, 0.205316, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_eu8nr"]
-material = SubResource("StandardMaterial3D_uibc1")
-size = Vector3(0.2, 0.365, 1.005)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n86vd"]
-albedo_color = Color(0.660156, 0.0952974, 0.0608013, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_ls478"]
-material = SubResource("StandardMaterial3D_n86vd")
-size = Vector3(0.265, 0.785, 0.4)
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mu0sm"]
+_data = {
+"RESET": SubResource("Animation_e0o34"),
+"idle": SubResource("Animation_24itk"),
+"reload": SubResource("Animation_sr8b4")
+}
 
 [node name="BlankGun" type="Node3D"]
 script = ExtResource("1_wwe7d")
@@ -58,49 +76,13 @@ TEMP_sfx_reload = ExtResource("4_f5wda")
 TEMP_sfx_click = ExtResource("5_8nbf7")
 TEMP_regain_ammo = ExtResource("6_gecfl")
 TEMP_crit = ExtResource("7_p32ub")
-base_spread_angle = 1
-base_projectile_speed = 50.0
 aim_ray_prefab = ExtResource("8_aly8k")
-hiscan_prefab = ExtResource("9_tyti4")
+hitscan_prefab = ExtResource("9_tyti4")
 projectile_prefab = ExtResource("10_vvihl")
 
-[node name="BaseGunModel" type="Node3D" parent="."]
-
-[node name="Stock" type="MeshInstance3D" parent="BaseGunModel"]
-transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, -0.0213057)
-cast_shadow = 0
-mesh = SubResource("BoxMesh_1tkvt")
-skeleton = NodePath("../..")
-
-[node name="Stock2" type="MeshInstance3D" parent="BaseGunModel"]
-transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, -0.137203)
-cast_shadow = 0
-mesh = SubResource("BoxMesh_d3cgv")
-skeleton = NodePath("../..")
-
-[node name="Stock3" type="MeshInstance3D" parent="BaseGunModel"]
-transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, 0.193996)
-cast_shadow = 0
-mesh = SubResource("BoxMesh_jeuj8")
-skeleton = NodePath("../..")
-
-[node name="Muzzle" type="MeshInstance3D" parent="BaseGunModel"]
-transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, 0, -0.46126)
-cast_shadow = 0
-mesh = SubResource("BoxMesh_j3ph8")
-skeleton = NodePath("../..")
-
-[node name="Handle" type="MeshInstance3D" parent="BaseGunModel"]
-transform = Transform3D(0.274991, -0.00181464, -0.00139499, -0.00010688, 0.15724, -0.225611, 0.00228637, 0.225604, 0.157234, 0, -0.104705, 0.208809)
-cast_shadow = 0
-mesh = SubResource("BoxMesh_eu8nr")
-skeleton = NodePath("../..")
-
-[node name="Pump" type="MeshInstance3D" parent="BaseGunModel"]
-transform = Transform3D(0.275, 0, 0, 0, 0.275, 0, 0, 0, 0.275, 0, -0.139416, -0.113008)
-cast_shadow = 0
-mesh = SubResource("BoxMesh_ls478")
-skeleton = NodePath("../..")
+[node name="GunSprite" type="Sprite3D" parent="."]
+transform = Transform3D(0.22, 0, 0, 0, 0.22, 0, 0, 0, 0.22, 0.325627, -0.314052, -0.342251)
+texture = ExtResource("11_6pl01")
 
 [node name="Barrel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0330088, 0)
@@ -109,10 +91,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0330088, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.132691)
 
 [node name="Slot2" type="Node3D" parent="Barrel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0161818)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0360075)
 
 [node name="Slot3" type="Node3D" parent="Barrel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0981699)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.174082)
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 
@@ -127,10 +109,16 @@ font = ExtResource("12_ukph6")
 one_shot = true
 
 [node name="BulletStartPos" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.722011)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.773927)
 
 [node name="FailToShootSFXTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_mu0sm")
+}
+autoplay = "idle"
 
 [connection signal="timeout" from="JamTimer" to="." method="_on_jam_timer_timeout"]
