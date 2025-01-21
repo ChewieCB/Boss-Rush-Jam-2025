@@ -361,10 +361,8 @@ func spawn_center_wave(
 	tween.tween_property(mesh, "bottom_radius", max_radius, spawned_wave_time)
 	tween.parallel().tween_property(mesh, "top_radius", max_radius, spawned_wave_time)
 	tween.parallel().tween_property(area_collider_shape.shape, "radius", max_radius, spawned_wave_time)
-	tween.tween_callback(func():
-		debug_mesh_instance.queue_free()
-		area_collider.queue_free()
-	)
+	tween.tween_callback(debug_mesh_instance.queue_free)
+	tween.tween_callback(area_collider.queue_free)
 	tween.tween_callback(callback)
 
 
