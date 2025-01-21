@@ -1,0 +1,160 @@
+[gd_scene load_steps=5 format=3 uid="uid://b5kgqq11ren8y"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_jqac0"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_0df2h"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_tarn7"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_p3s2o"]
+
+[node name="ArchetypeAutomaticSpecBarrel" type="Node3D"]
+script = ExtResource("1_jqac0")
+barrel_id = 10
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_0df2h")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CompoundEffectAmericanRifle" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_tarn7")
+display_text_title = "Archetype: American Rifle"
+display_text_tag = "Easy to control"
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 4
+new_value = 11.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 7
+new_value = 1.5
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 5
+new_value = 30.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 1
+new_value = 9.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 11
+new_value = 0.03
+
+[node name="CompoundEffectRussianRifle" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_tarn7")
+display_text_title = "Archetype: Russian Rifle"
+display_text_tag = "Hard to master"
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 4
+new_value = 10.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 7
+new_value = 2.5
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 5
+new_value = 30.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 1
+new_value = 16.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 11
+new_value = 0.06
+
+[node name="CompoundEffectVectorSMG" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_tarn7")
+display_text_title = "Archetype: Vector SMG"
+display_text_tag = "Very fast firerate"
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+script = ExtResource("4_p3s2o")
+attribute = 4
+new_value = 20.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+script = ExtResource("4_p3s2o")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+script = ExtResource("4_p3s2o")
+attribute = 7
+new_value = 1.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+script = ExtResource("4_p3s2o")
+attribute = 5
+new_value = 25.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+script = ExtResource("4_p3s2o")
+attribute = 1
+new_value = 8.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+script = ExtResource("4_p3s2o")
+attribute = 11
+new_value = 0.01
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+script = ExtResource("4_p3s2o")
+attribute = 8
+new_value = 0.5
+
+[node name="CompoundEffectLMG" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_tarn7")
+display_text_title = "Archetype: LMG"
+display_text_tag = "Dakka forever"
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+script = ExtResource("4_p3s2o")
+attribute = 4
+new_value = 7.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+script = ExtResource("4_p3s2o")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+script = ExtResource("4_p3s2o")
+attribute = 7
+new_value = 3.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+script = ExtResource("4_p3s2o")
+attribute = 5
+new_value = 100.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+script = ExtResource("4_p3s2o")
+attribute = 1
+new_value = 15.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+script = ExtResource("4_p3s2o")
+attribute = 11
+new_value = 0.04
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+script = ExtResource("4_p3s2o")
+attribute = 8
+new_value = 2.0

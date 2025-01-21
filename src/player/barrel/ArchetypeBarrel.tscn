@@ -2,44 +2,14 @@
 
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="1_8li6c"]
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_ctp8d"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_hpbf5"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="2_soqa0"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
-height = 0.5
 
 [node name="ArchetypeBarrel" type="Node3D"]
 script = ExtResource("1_ctp8d")
 barrel_id = 2
 
-[node name="Model" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
-visible = false
-mesh = SubResource("CylinderMesh_sfbyw")
-
-[node name="EffectName" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.109181, -0.0166867)
-modulate = Color(1, 0.883, 0.22, 1)
-text = "DOUBLE TAP"
-font_size = 64
-outline_size = 32
-horizontal_alignment = 2
-
-[node name="EffectTag" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0716908, -0.00866602)
-modulate = Color(0.87, 0.76328, 0.6699, 1)
-text = "Both barrels!"
-font_size = 40
-outline_size = 16
-horizontal_alignment = 2
-
-[node name="EffectDesc" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0575581, -0.00564242)
-modulate = Color(0.46, 0.46, 0.46, 1)
-text = "10% ammo refund on hit
--10% damage"
-font_size = 24
-horizontal_alignment = 2
-vertical_alignment = 0
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_hpbf5")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
@@ -139,4 +109,9 @@ new_value = 8.0
 [node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
 script = ExtResource("2_soqa0")
 attribute = 5
+new_value = 10.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+script = ExtResource("2_soqa0")
+attribute = 1
 new_value = 10.0

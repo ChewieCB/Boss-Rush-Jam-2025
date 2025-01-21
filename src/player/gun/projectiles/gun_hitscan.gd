@@ -3,6 +3,7 @@ class_name GunHitscan
 
 ## Only affect visual
 @export var thickness = 10
+@export var fade_speed = 2.0
 
 @onready var shot_flash_start = $ShotFlashStart
 @onready var raycast: RayCast3D = $RayCast3D
@@ -11,13 +12,13 @@ class_name GunHitscan
 @onready var nearby_enemy_check_area: Area3D = $NearbyEnemyCheckArea3D
 
 var alpha = 1.0
-var fade_speed = 2.0
 var found_hitscal_col = false
 var hitscan_col_point = Vector3.ZERO
 var hitscan_col_normal = Vector3.ZERO
 var end_pos
 var current_dir
 var max_range
+var speed
 
 const DELAY_BETWEEN_RICO = 0.05
 const RICO_START_POS_OFFSET_MODIFIER = 0.01
@@ -39,7 +40,7 @@ func _process(delta):
 		shot_flash_start.modulate.a = clamp(alpha, 0, 1)
 
 
-func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _max_range: float):
+func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
 	visible = false
 	global_position = start_pos
 
@@ -70,6 +71,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	# Normal hitscan start here
 	life_timer.start()
 	damage = _damage
+	speed = _speed
 	ricochet_count_left = ricochet_count
 	max_range = _max_range
 	raycast.target_position.z = -abs(_max_range)
@@ -80,11 +82,11 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 	if raycast.is_colliding():
 		found_hitscal_col = true
-		impacted.emit()
 		var target = raycast.get_collider()
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
 		end_pos = hitscan_col_point
+		impacted.emit(true, hitscan_col_point)
 		if target is CharacterBody3D:
 			target.health_component.damage(damage)
 			damage_applied.emit()
@@ -122,7 +124,7 @@ func ricochet():
 	var new_dir = current_dir.bounce(hitscan_col_normal)
 	# Offset a bit to prevent stuck inside collision body
 	var new_start_pos = hitscan_col_point - current_dir * RICO_START_POS_OFFSET_MODIFIER
-	new_hitscan_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, max_range)
+	new_hitscan_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, speed, max_range)
 	new_hitscan_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
 	new_hitscan_inst.impacted.connect(owner_gun.check_barrel_effect_on_projectile_impact)
 	new_hitscan_inst.destroyed.connect(owner_gun.check_barrel_effect_on_projectile_destroyed)

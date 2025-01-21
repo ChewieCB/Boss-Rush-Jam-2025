@@ -14,8 +14,8 @@
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="12_ukph6"]
 [ext_resource type="Texture2D" uid="uid://dg31yrcemit6r" path="res://src/player/gun/assets/sprite/main_gun_spin.png" id="13_bsnxc"]
 
-[sub_resource type="Animation" id="Animation_24itk"]
-resource_name = "idle"
+[sub_resource type="Animation" id="Animation_e0o34"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -29,8 +29,8 @@ tracks/0/keys = {
 "values": [ExtResource("11_6pl01")]
 }
 
-[sub_resource type="Animation" id="Animation_e0o34"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_24itk"]
+resource_name = "idle"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -76,10 +76,8 @@ TEMP_sfx_reload = ExtResource("4_f5wda")
 TEMP_sfx_click = ExtResource("5_8nbf7")
 TEMP_regain_ammo = ExtResource("6_gecfl")
 TEMP_crit = ExtResource("7_p32ub")
-base_spread_angle = 1
-base_projectile_speed = 50.0
 aim_ray_prefab = ExtResource("8_aly8k")
-hiscan_prefab = ExtResource("9_tyti4")
+hitscan_prefab = ExtResource("9_tyti4")
 projectile_prefab = ExtResource("10_vvihl")
 
 [node name="GunSprite" type="Sprite3D" parent="."]

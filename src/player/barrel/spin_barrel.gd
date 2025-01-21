@@ -4,9 +4,9 @@ class_name SpinBarrel
 @export var barrel_id: BarrelDataResource.BarrelIdEnum
 
 @onready var effect_container: Node3D = $EffectContainer
-@onready var display_label_title: Label3D = $EffectName
-@onready var display_label_tag: Label3D = $EffectTag
-@onready var display_label_desc: Label3D = $EffectDesc
+@onready var display_label_title: Label3D = $CommonBarrelComponent/EffectName
+@onready var display_label_tag: Label3D = $CommonBarrelComponent/EffectTag
+@onready var display_label_desc: Label3D = $CommonBarrelComponent/EffectDesc
 
 var owner_gun: Gun
 var effect_list: Array[BaseBarrelEffect] = []

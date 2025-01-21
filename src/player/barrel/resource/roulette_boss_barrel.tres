@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://c5utciavm70ve"]
+
+[ext_resource type="Texture2D" uid="uid://b7hso0a7iuqfi" path="res://src/player/barrel/resource/sprite/roulette.png" id="1_lmo6o"]
+[ext_resource type="PackedScene" uid="uid://cywwydmxkbh4x" path="res://src/player/barrel/RouletteBossBarrel.tscn" id="2_y352h"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_fs5il"]
+
+[resource]
+script = ExtResource("3_fs5il")
+barrel_id = 8
+barrel_name = "Roulette Boss"
+barrel_desc = "[b]Roulette Boss Barrel[/b]
+Barrel collected from the Roulette dealer. Grant you ability similar to its owner.
+
+Possible rolls:
+[ul]
+Ball Bullet: shoot huge ball that affected by gravity. Increased damage but decreased projectile count.
+Newton's Third Law: Knock you back when shoot. Increased damage and recoil, decreased firerate.
+Protective Barrier: A group of blue shields circle you, grant you damage resistance.
+[/ul]"
+barrel_image = ExtResource("1_lmo6o")
+barrel_prefab = ExtResource("2_y352h")
