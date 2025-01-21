@@ -63,6 +63,8 @@ var modified_reload_time
 var modified_ricochet_count = 0
 var modified_homing_strength: float = 0 # radius to search for enemy
 var modified_projectile_prefab: PackedScene = null
+var modified_recoil
+var modified_screenshake
 
 signal gun_shot
 signal gun_reloaded
@@ -114,7 +116,7 @@ func shoot(aim_ray: RayCast3D):
         barrel.get_active_effect().on_prepare_to_fire()
 
     # Screenshake
-    GameManager.player.player_camera.add_trauma(screenshake_amount)
+    GameManager.player.player_camera.add_trauma(modified_screenshake)
 
     for barrel in installed_barrels:
         barrel.get_active_effect().on_damage_calculation()
@@ -128,9 +130,6 @@ func shoot(aim_ray: RayCast3D):
                 barrel.get_active_effect().on_projectile_spawn()
             var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
             var spread_direction = get_spread_direction(aim_direction)
-            # Randomize bullet start pos a bit for automatic weapon
-            # bullet_start_pos.x += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
-            # bullet_start_pos.y += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
             if modified_projectile_prefab:
                 create_gun_attack(modified_projectile_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
             elif modified_is_hitscan:
@@ -140,8 +139,8 @@ func shoot(aim_ray: RayCast3D):
 
         time_since_last_shot = 0
         # Recoil
-        GameManager.player.player_camera.rotate_x(recoil_amount)
-        GameManager.player.player_camera.rotate_y(randf_range(-recoil_amount, recoil_amount))
+        GameManager.player.player_camera.rotate_x(modified_recoil)
+        GameManager.player.player_camera.rotate_y(randf_range(-modified_recoil, modified_recoil))
 
         magazine_ammo_left -= n_ammo_consume
         for barrel in installed_barrels:
@@ -164,11 +163,10 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
     bullet_inst.owner_gun = self
     bullet_inst.homing_strength = modified_homing_strength
     GameManager.player.get_parent().add_child(bullet_inst)
-    bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
     bullet_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
     bullet_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
     bullet_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
-
+    bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
 # func create_projectile_attack(start_pos: Vector3, direction: Vector3, damage: int, speed: float):
 #     var projectile_inst: GunProjectile = projectile_prefab.instantiate()
@@ -250,6 +248,8 @@ func reset_modifier(reload_reset = false):
     modified_spread_angle = base_spread_angle
     modified_ricochet_count = 0
     modified_homing_strength = 0
+    modified_recoil = recoil_amount
+    modified_screenshake = screenshake_amount
     if reload_reset:
         modified_reload_time = base_reload_time
         modified_magazine_size = base_magazine_size

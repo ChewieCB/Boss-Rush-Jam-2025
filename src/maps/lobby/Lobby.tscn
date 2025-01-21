@@ -1,4 +1,4 @@
-[gd_scene load_steps=369 format=4 uid="uid://v6jgq46mkg4n"]
+[gd_scene load_steps=370 format=4 uid="uid://v6jgq46mkg4n"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="16_33d8s"]
 [ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel.tres" id="23_jjwcg"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="23_txe2q"]
+[ext_resource type="Resource" uid="uid://di2x3xsnfojlh" path="res://src/player/barrel/resource/archetype_railgun_spec_barrrel_data.tres" id="23_v2ql1"]
 [ext_resource type="Resource" uid="uid://yx1psxr1obhn" path="res://src/player/barrel/resource/projectile_count_barrel_data.tres" id="24_mcow2"]
 [ext_resource type="Resource" uid="uid://d2i2i2rrbo2v0" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="24_qiobp"]
 [ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="25_7gqm2"]
@@ -2532,6 +2533,10 @@ data = ExtResource("26_p0fyp")
 [node name="BarrelItemPickup5" parent="." instance=ExtResource("23_txe2q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.42993, -0.00971878, -10.3546)
 data = ExtResource("27_ektoj")
+
+[node name="BarrelItemPickup9" parent="." instance=ExtResource("23_txe2q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.42993, -0.00971878, -11.7079)
+data = ExtResource("23_v2ql1")
 
 [node name="BarrelItemPickup6" parent="." instance=ExtResource("23_txe2q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.42993, -0.00971878, -7.78461)

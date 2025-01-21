@@ -1,0 +1,139 @@
+[gd_scene load_steps=7 format=3 uid="uid://ckiren6h4keb6"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_5qelq"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_yw7pw"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_w2hft"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_3n82e"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="5_uqnjt"]
+[ext_resource type="PackedScene" uid="uid://w52vphhedtws" path="res://src/player/gun/projectiles/RailcannonHitscan.tscn" id="6_3vdu1"]
+
+[node name="ArchetypeRailgunSpecBarrel" type="Node3D"]
+script = ExtResource("1_5qelq")
+barrel_id = 9
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_yw7pw")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CompoundEffectGaussRifle" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_w2hft")
+display_text_title = "Archetype: Gauss Rifle"
+display_text_tag = "Fire faster and more ammo"
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 4
+new_value = 5.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 7
+new_value = 0.5
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 5
+new_value = 20.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 1
+new_value = 15.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 11
+new_value = 0.01
+
+[node name="CompoundEffectScatterBeam" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_w2hft")
+display_text_title = "Archetype: Scatter Beam"
+display_text_tag = "Closer...closer..."
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 1
+new_value = 14.0
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 2
+new_value = 7.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 4
+new_value = 1.5
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 7
+new_value = 7.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 5
+new_value = 7.0
+
+[node name="CompoundEffectRailcannon" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_w2hft")
+display_text_title = "Archetype: Railcannon"
+display_text_tag = "Don't miss it!"
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 1
+new_value = 420.0
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 4
+new_value = 0.5
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 7
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 5
+new_value = 1.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 11
+new_value = 0.1
+
+[node name="SetScreenshake" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 12
+new_value = 2.0
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 8
+new_value = 2.0
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("5_uqnjt")
+new_prefab = ExtResource("6_3vdu1")

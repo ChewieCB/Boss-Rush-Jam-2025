@@ -11,7 +11,9 @@ enum BarrelIdEnum {
     PROJECTILE_COUNT,
     TRICKSHOT,
     ARCHETYPE_SHOTGUN_SPEC,
-    ROULETTE_BOSS
+    ROULETTE_BOSS,
+    ARCHETYPE_RAILGUN_SPEC,
+    ARCHETYPE_AUTOMATIC_SPEC,
 }
 
 @export var barrel_id: BarrelIdEnum
