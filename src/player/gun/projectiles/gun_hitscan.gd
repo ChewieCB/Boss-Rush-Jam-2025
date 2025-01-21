@@ -3,6 +3,7 @@ class_name GunHitscan
 
 ## Only affect visual
 @export var thickness = 10
+@export var fade_speed = 2.0
 
 @onready var shot_flash_start = $ShotFlashStart
 @onready var raycast: RayCast3D = $RayCast3D
@@ -11,7 +12,6 @@ class_name GunHitscan
 @onready var nearby_enemy_check_area: Area3D = $NearbyEnemyCheckArea3D
 
 var alpha = 1.0
-var fade_speed = 2.0
 var found_hitscal_col = false
 var hitscan_col_point = Vector3.ZERO
 var hitscan_col_normal = Vector3.ZERO
@@ -82,11 +82,11 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 	if raycast.is_colliding():
 		found_hitscal_col = true
-		impacted.emit()
 		var target = raycast.get_collider()
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
 		end_pos = hitscan_col_point
+		impacted.emit(true, hitscan_col_point)
 		if target is CharacterBody3D:
 			target.health_component.damage(damage)
 			damage_applied.emit()
