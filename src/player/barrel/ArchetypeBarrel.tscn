@@ -110,3 +110,8 @@ new_value = 8.0
 script = ExtResource("2_soqa0")
 attribute = 5
 new_value = 10.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+script = ExtResource("2_soqa0")
+attribute = 1
+new_value = 10.0

@@ -100,3 +100,8 @@ libraries = {
 }
 autoplay = "spin"
 speed_scale = 0.5
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1, 0.2)
+light_color = Color(1, 0.975097, 0.325903, 1)
+omni_range = 3.0

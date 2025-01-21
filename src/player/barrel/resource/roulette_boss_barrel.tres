@@ -7,8 +7,8 @@
 [resource]
 script = ExtResource("3_fs5il")
 barrel_id = 8
-barrel_name = "Roulette"
-barrel_desc = "[b]Roulette Barrel[/b]
+barrel_name = "Roulette Boss"
+barrel_desc = "[b]Roulette Boss Barrel[/b]
 Barrel collected from the Roulette dealer. Grant you ability similar to its owner.
 
 Possible rolls:
