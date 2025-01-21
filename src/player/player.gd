@@ -325,6 +325,10 @@ func ground_slam():
 	vel_vertical -= SLAM_SPEED
 
 
+func apply_impulse_to_player(impulse_force: Vector3):
+	vel_vertical += impulse_force.y
+	vel_horizontal += Vector2(impulse_force.x, impulse_force.z)
+
 func _on_dash_duration_timeout() -> void:
 	is_dashing = false
 
