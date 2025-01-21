@@ -57,17 +57,18 @@ func on_ammo_consumed():
 func on_clip_empty():
 	return
 
-## Cal after started reload (and start the barrel spin).
+## Call after started reload (and start the barrel spin).
 func on_reload_start():
 	return
 
-## Cal after finished reload (and stopped spinning).
+## Call after finished reload (and stopped spinning).
 func on_reload_end():
 	return
 
 func on_reload_interrupted():
 	return
 
+## When bullet spawned / actual shooting happened
 func on_projectile_spawn():
 	return
 

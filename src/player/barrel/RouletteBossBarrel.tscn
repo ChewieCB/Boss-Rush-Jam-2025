@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cywwydmxkbh4x"]
+[gd_scene load_steps=8 format=3 uid="uid://cywwydmxkbh4x"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_w6qw3"]
 [ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_2un3s"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_rhvms"]
 [ext_resource type="PackedScene" uid="uid://r58hv7fv4nab" path="res://src/player/gun/projectiles/BallProjectile.tscn" id="4_fpaqy"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_2bruo"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/apply_knockback_self.gd" id="7_wghk1"]
 
 [node name="RouletteBossBarrel" type="Node3D"]
 script = ExtResource("1_w6qw3")
@@ -37,3 +38,26 @@ script = ExtResource("6_2bruo")
 attribute = 1
 modify_value = 100.0
 is_perc = true
+
+[node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_rhvms")
+display_text_title = "Newton's Third Law"
+display_text_tag = "Knock yourself back when shoot"
+display_text_desc = "+50% damage
+-25% firerate"
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
+script = ExtResource("6_2bruo")
+attribute = 1
+modify_value = 50.0
+is_perc = true
+
+[node name="ModifyFirerate" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
+script = ExtResource("6_2bruo")
+attribute = 4
+modify_value = -25.0
+is_perc = true
+
+[node name="ApplyKnockbackSelf" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
+script = ExtResource("7_wghk1")
+force = 10.0
