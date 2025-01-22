@@ -33,6 +33,7 @@ var spawned_turrets_count: int = 0
 var beam_target: Vector3
 @export var beam_sweeps_per_attack: int = 4
 var beam_sweep_count: int = 0
+@export var beam_sweep_delay: float = 1.2
 
 # Barrier Cage
 @export var barrier_cage_radius: float = 24.0
@@ -65,11 +66,11 @@ func select_attack_phase_1() -> void:
 	var possible_phases = [
 		#"start_spawn_turrets_attack",
 		"start_laser_attack",
-		#"start_barrier_cage_attack",
+		"start_barrier_cage_attack",
 	]
 	
-	#if previous_phase:
-		#possible_phases.erase(previous_phase)
+	if previous_phase:
+		possible_phases.erase(previous_phase)
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	previous_phase = new_phase
@@ -274,8 +275,15 @@ func _on_laser_beam_targeting_state_entered() -> void:
 	elevation_speed = deg_to_rad(elevation_speed_deg * 0.65)
 	rotation_speed = deg_to_rad(rotation_speed_deg * 0.65)
 	
-	await get_tree().create_timer(2.1).timeout
-	state_chart.send_event("sweep_beam")
+	await get_tree().create_timer(beam_sweep_delay).timeout
+	
+	if beam_sweep_count < beam_sweeps_per_attack:
+		beam_target = target.global_position
+		beam_sweep_count += 1
+		state_chart.send_event("sweep_beam")
+	else:
+		beam_sweep_count = 0
+		state_chart.send_event("end_beam")
 
 func _on_laser_beam_targeting_state_physics_processing(delta: float) -> void:
 	rotate_and_elevate(target.global_position, delta)
@@ -322,16 +330,10 @@ func _on_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
 		laser_mesh.position.z = dist_to_cast / 2
 		laser_particles.global_position = cast_point
 		
-		var aim_dir = aim_ray.global_basis.z
+		var aim_dir = aim_ray.global_basis.z.normalized()
 		var target_dir = (beam_target - aim_ray.global_position).normalized()
-		if aim_dir.dot(target_dir) > 0.99:
-			if beam_sweep_count <= beam_sweeps_per_attack:
-				beam_target = target.global_position
-				beam_sweep_count += 1
-				await get_tree().create_timer(1.6).timeout
-			else:
-				beam_sweep_count = 0
-				state_chart.send_event("end_beam")
+		if aim_dir.dot(target_dir) > 0.999:
+			state_chart.send_event("end_sweep")
 
 
 func _on_laser_beam_recover_state_entered() -> void:

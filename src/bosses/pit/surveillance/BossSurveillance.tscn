@@ -41,7 +41,7 @@ emission_energy_multiplier = 10.0
 material = SubResource("StandardMaterial3D_0r83n")
 top_radius = 0.3
 bottom_radius = 0.3
-height = 20.0
+height = 0.001
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_tvwto"]
 material = ExtResource("3_kymb3")
@@ -101,6 +101,7 @@ elevation_speed_deg = 25.0
 rotation_speed_deg = 25.0
 turrets_to_spawn = 2
 beam_sweeps_per_attack = 4
+beam_sweep_delay = 1.2
 barrier_cage_radius = 16.0
 barrier_cage_reflect_force = 12.0
 barrier_cage_time = 12.0
@@ -145,7 +146,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 shape = SubResource("CylinderShape3D_iosat")
 
 [node name="LaserMesh" type="MeshInstance3D" parent="Body/Head/RayCast3D/Area3D" index="1"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 9.6)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.4)
 mesh = SubResource("CylinderMesh_m2l2m")
 skeleton = NodePath("../..")
 
@@ -228,13 +229,19 @@ to = NodePath("../../SweepBeam")
 event = &"sweep_beam"
 delay_in_seconds = "0.0"
 
-[node name="SweepBeam" type="Node" parent="StateChart/Root/Phase/Phase1/LaserBeam" index="2"]
-script = ExtResource("4_vjmyh")
-
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/LaserBeam/SweepBeam" index="0"]
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/LaserBeam/Targeting" index="1"]
 script = ExtResource("5_75mh0")
 to = NodePath("../../Recover")
 event = &"end_beam"
+delay_in_seconds = "0.0"
+
+[node name="SweepBeam" type="Node" parent="StateChart/Root/Phase/Phase1/LaserBeam" index="2"]
+script = ExtResource("4_vjmyh")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/LaserBeam/SweepBeam" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Targeting")
+event = &"end_sweep"
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/LaserBeam" index="3"]
