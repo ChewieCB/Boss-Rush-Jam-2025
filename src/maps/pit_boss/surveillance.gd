@@ -34,6 +34,15 @@ var beam_target: Vector3
 @export var beam_sweeps_per_attack: int = 4
 var beam_sweep_count: int = 0
 
+# Barrier Cage
+@export var barrier_cage_radius: float = 24.0
+@export var barrier_cage_reflect_force: float = 12.0
+@export var barrier_cage_time: float = 12.0
+@export var barrier_cage_material: Material
+@onready var barrier_cage_area: Area3D = $BarrierCageArea
+@onready var barrier_cage_collider: CollisionShape3D = $BarrierCageArea/CollisionShape3D
+@onready var barrier_cage_mesh: MeshInstance3D = $BarrierCageArea/MeshInstance3D
+
 
 func _ready() -> void:
 	GRAVITY = 0
@@ -54,8 +63,9 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
-		"start_spawn_turrets_attack",
+		#"start_spawn_turrets_attack",
 		"start_laser_attack",
+		"start_barrier_cage_attack",
 	]
 	
 	if previous_phase:
@@ -313,6 +323,7 @@ func _on_laser_beam_recover_state_entered() -> void:
 	tween.parallel().tween_property(laser_collider.shape, "bottom_radius", 0.3, 0.8)
 	
 	await tween.finished
+	laser_particles.emitting = false
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	select_attack()
@@ -325,3 +336,61 @@ func _on_laser_hurtbox_body_entered(body: Node3D) -> void:
 		laser_area.monitoring = false
 		await get_tree().create_timer(0.4).timeout
 		laser_area.monitoring = true
+
+##### Barrier Cage
+
+func _on_barrier_cage_targeting_state_entered() -> void:
+	debug_state_label.text = "Barrier Cage | Targeting"
+	
+	elevation_speed = deg_to_rad(elevation_speed_deg)
+	rotation_speed = deg_to_rad(rotation_speed_deg)
+	
+	await get_tree().create_timer(0.3).timeout
+	state_chart.send_event("spawn_cage")
+
+
+func _on_barrier_cage_spawn_cage_state_entered() -> void:
+	debug_state_label.text = "Barrier Cage | Spawning"
+	barrier_cage_area.visible = true
+	barrier_cage_area.monitoring = true
+	
+	var cage_tween = get_tree().create_tween()
+	barrier_cage_mesh.mesh.top_radius = 42.0
+	barrier_cage_mesh.mesh.bottom_radius = 42.0
+	barrier_cage_collider.shape.radius = 42.0
+	cage_tween.tween_property(barrier_cage_mesh.mesh, "top_radius", barrier_cage_radius, 0.8)
+	cage_tween.parallel().tween_property(barrier_cage_mesh.mesh, "bottom_radius", barrier_cage_radius, 0.8)
+	cage_tween.parallel().tween_property(barrier_cage_collider.shape, "radius", barrier_cage_radius, 0.8)
+	await cage_tween.finished
+	
+	await get_tree().create_timer(barrier_cage_time).timeout
+	state_chart.send_event("end_cage")
+
+
+func _on_barrier_cage_spawn_cage_state_exited() -> void:
+	barrier_cage_area.monitoring = false
+	
+	var cage_tween = get_tree().create_tween()
+	cage_tween.tween_property(barrier_cage_mesh.mesh, "top_radius", 42.0, 0.8)
+	cage_tween.parallel().tween_property(barrier_cage_mesh.mesh, "bottom_radius", 42.0, 0.8)
+	cage_tween.parallel().tween_property(barrier_cage_collider.shape, "radius", 42.0, 0.8)
+	await cage_tween.finished
+	
+	barrier_cage_area.visible = false
+	
+	
+
+
+func _on_barrier_cage_recover_state_entered() -> void:
+	debug_state_label.text = "Barrier Cage | Recovering"
+	await get_tree().create_timer(attack_recovery_time).timeout
+	select_attack()
+	state_chart.send_event("end_recovery")
+
+
+func _on_barrier_cage_area_body_exited(body: Node3D) -> void:
+	if body is Player or body is BossCore:
+		var reflect_dir = body.global_position.direction_to(Vector3.ZERO)
+		var barrer_point: Vector3 = -reflect_dir * barrier_cage_radius
+		body.global_position.x = barrer_point.x
+		body.global_position.z = barrer_point.z

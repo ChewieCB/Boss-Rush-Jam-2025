@@ -60,5 +60,5 @@ func generate_navigation() -> void:
 func _on_boss_trigger_body_entered(body: Node3D) -> void:
 	if body is Player:
 		surveillance_boss.activate()
-		#pit_boss.activate()
+		pit_boss.activate()
 		boss_trigger.queue_free()
