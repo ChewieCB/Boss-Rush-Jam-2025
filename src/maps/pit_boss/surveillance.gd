@@ -65,11 +65,11 @@ func select_attack_phase_1() -> void:
 	var possible_phases = [
 		#"start_spawn_turrets_attack",
 		"start_laser_attack",
-		"start_barrier_cage_attack",
+		#"start_barrier_cage_attack",
 	]
 	
-	if previous_phase:
-		possible_phases.erase(previous_phase)
+	#if previous_phase:
+		#possible_phases.erase(previous_phase)
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	previous_phase = new_phase
@@ -228,15 +228,41 @@ func _on_laser_beam_startup_state_entered() -> void:
 		var dist_to_cast: float = self.global_position.distance_to(cast_point)
 		tween = get_tree().create_tween()
 		tween.tween_property(laser_mesh.mesh, "height", dist_to_cast, 0.4)
-		tween.parallel().tween_property(laser_mesh, "position:z", dist_to_cast / 2, 0.4)
+		tween.parallel().tween_property(laser_mesh, "position:z", dist_to_cast / 2 - 0.4, 0.4)
 		tween.parallel().tween_property(laser_collider.shape, "height", dist_to_cast, 0.4)
-		tween.parallel().tween_property(laser_collider, "position:z", dist_to_cast / 2, 0.4)
+		tween.parallel().tween_property(laser_collider, "position:z", dist_to_cast / 2 - 0.4, 0.4)
 		
 		await tween.finished
 	
 		laser_particles.global_position = cast_point
 		laser_particles.emitting = true
 		state_chart.send_event("start_beam")
+
+
+# Add a debug sphere at global location.
+func draw_debug_sphere(location, size):
+	# Will usually work, but you might need to adjust this.
+	var scene_root = get_tree().root.get_children()[0]
+	# Create sphere with low detail of size.
+	var sphere = SphereMesh.new()
+	sphere.radial_segments = 4
+	sphere.rings = 4
+	sphere.radius = size
+	sphere.height = size * 2
+	# Bright red material (unshaded).
+	var material = StandardMaterial3D.new()
+	material.albedo_color = Color(1, 0, 0)
+	material.flags_unshaded = true
+	sphere.surface_set_material(0, material)
+
+	# Add to meshinstance in the right place.
+	var node = MeshInstance3D.new()
+	node.mesh = sphere
+	node.global_transform.origin = location
+	scene_root.add_child(node)
+	
+	return node
+
 
 func _on_laser_beam_startup_state_physics_processing(delta: float) -> void:
 	pass
@@ -257,7 +283,7 @@ func _on_laser_beam_targeting_state_physics_processing(delta: float) -> void:
 	aim_ray.force_raycast_update()
 	if aim_ray.is_colliding():
 		cast_point = aim_ray.get_collision_point()
-		var dist_to_cast: float = self.global_position.distance_to(cast_point)
+		var dist_to_cast: float = aim_ray.global_position.distance_to(cast_point)
 		laser_mesh.mesh.height = dist_to_cast 
 		laser_mesh.position.z = dist_to_cast / 2
 		laser_collider.shape.height = dist_to_cast
@@ -291,13 +317,13 @@ func _on_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
 	aim_ray.force_raycast_update()
 	if aim_ray.is_colliding():
 		cast_point = aim_ray.get_collision_point()
-		var dist_to_cast: float = self.global_position.distance_to(cast_point)
+		var dist_to_cast: float = aim_ray.global_position.distance_to(cast_point)
 		laser_mesh.mesh.height = dist_to_cast 
 		laser_mesh.position.z = dist_to_cast / 2
 		laser_particles.global_position = cast_point
 		
 		var aim_dir = aim_ray.global_basis.z
-		var target_dir = (beam_target - self.global_position).normalized()
+		var target_dir = (beam_target - aim_ray.global_position).normalized()
 		if aim_dir.dot(target_dir) > 0.99:
 			if beam_sweep_count <= beam_sweeps_per_attack:
 				beam_target = target.global_position
@@ -393,3 +419,7 @@ func _on_barrier_cage_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+#func _on_laser_beam_state_physics_processing(delta: float) -> void:
+	#draw_debug_sphere(aim_ray.get_collision_point(), 0.5)
