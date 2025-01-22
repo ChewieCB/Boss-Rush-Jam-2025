@@ -12,6 +12,8 @@ extends Node3D
 @onready var turret_spawns: Array = find_children("*", "TurretSpawnPoint")
 
 var nav_region: NavigationRegion3D
+var cover_spawn_points: Array = []
+var cover_objects: Array = []
 
 
 func _ready() -> void:
@@ -46,19 +48,36 @@ func generate_navigation() -> void:
 	nav_region.add_child(worldspawn_mesh)
 	nav_region.move_child(worldspawn_mesh, 0)
 	
-	var cover_objects := find_children("*", "CoverSpawnPoint")
-	for object in cover_objects:
-		var cover = object.spawn_cover()
-		object.remove_child(cover)
-		nav_region.add_child(cover)
-		cover.global_position = object.global_position
-		cover.cover_destroyed.connect(nav_region.bake_navigation_mesh)
+	cover_spawn_points = find_children("*", "CoverSpawnPoint")
 	
 	nav_region.bake_navigation_mesh()
 
 
+func spawn_cover() -> void:
+	for object in cover_spawn_points:
+		var cover = object.spawn_cover()
+		object.remove_child(cover)
+		nav_region.add_child(cover)
+		cover.global_position = object.global_position
+		cover.show_cover()
+		cover.cover_destroyed.connect(nav_region.bake_navigation_mesh)
+		cover.cover_destroyed.connect(_on_cover_destroyed)
+		cover_objects.append(cover)
+
+
+func _on_cover_destroyed(cover: Cover) -> void:
+	cover_objects.erase(cover)
+	if cover_objects.size() < cover_spawn_points.size() / 2:
+		for object in cover_objects:
+			cover.cover_destroyed.disconnect(_on_cover_destroyed)
+			object.destroy()
+		await get_tree().create_timer(0.2).timeout
+		spawn_cover()
+
+
 func _on_boss_trigger_body_entered(body: Node3D) -> void:
 	if body is Player:
+		spawn_cover()
 		surveillance_boss.activate()
 		pit_boss.activate()
 		boss_trigger.queue_free()
