@@ -45,13 +45,13 @@ height = 0.1
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_tvwto"]
 material = ExtResource("3_kymb3")
-top_radius = 24.0
-bottom_radius = 24.0
+top_radius = 42.0
+bottom_radius = 42.0
 height = 32.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_o7mde"]
 height = 32.0
-radius = 24.0
+radius = 42.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ook83"]
 radius = 7.0
@@ -304,6 +304,12 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
+[node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase1/BarrierCage" index="3"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../LaserBeam")
+event = &"start_laser_attack"
+delay_in_seconds = "0.0"
+
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase" index="2"]
 script = ExtResource("5_75mh0")
 to = NodePath("../Phase1")
@@ -372,7 +378,6 @@ libraries = {
 }
 
 [connection signal="body_entered" from="Body/Head/RayCast3D/Area3D" to="." method="_on_laser_hurtbox_body_entered"]
-[connection signal="body_exited" from="BarrierCageArea" to="." method="_on_barrier_cage_area_body_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserBeam/Startup" to="." method="_on_laser_beam_startup_state_entered"]
@@ -382,6 +387,7 @@ libraries = {
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserBeam/SweepBeam" to="." method="_on_laser_beam_sweep_beam_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/LaserBeam/SweepBeam" to="." method="_on_laser_beam_sweep_beam_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserBeam/Recover" to="." method="_on_laser_beam_recover_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/BarrierCage" to="." method="_on_barrier_cage_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BarrierCage/Targeting" to="." method="_on_barrier_cage_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BarrierCage/SpawnCage" to="." method="_on_barrier_cage_spawn_cage_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1/BarrierCage/SpawnCage" to="." method="_on_barrier_cage_spawn_cage_state_exited"]

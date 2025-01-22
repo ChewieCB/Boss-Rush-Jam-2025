@@ -339,6 +339,18 @@ func _on_laser_hurtbox_body_entered(body: Node3D) -> void:
 
 ##### Barrier Cage
 
+func _on_barrier_cage_state_physics_processing(delta: float) -> void:
+	rotate_and_elevate(target.global_position, delta)
+	var target_floor_pos = target.global_position
+	target_floor_pos.y = 0
+	var current_cage_radius: float = barrier_cage_collider.shape.radius
+	if target_floor_pos.distance_to(Vector3.ZERO) > current_cage_radius:
+		var reflect_dir = target.global_position.direction_to(Vector3.ZERO)
+		var barrer_point: Vector3 = -reflect_dir * current_cage_radius
+		target.global_position.x = barrer_point.x
+		target.global_position.z = barrer_point.z
+
+
 func _on_barrier_cage_targeting_state_entered() -> void:
 	debug_state_label.text = "Barrier Cage | Targeting"
 	
@@ -355,9 +367,6 @@ func _on_barrier_cage_spawn_cage_state_entered() -> void:
 	barrier_cage_area.monitoring = true
 	
 	var cage_tween = get_tree().create_tween()
-	barrier_cage_mesh.mesh.top_radius = 42.0
-	barrier_cage_mesh.mesh.bottom_radius = 42.0
-	barrier_cage_collider.shape.radius = 42.0
 	cage_tween.tween_property(barrier_cage_mesh.mesh, "top_radius", barrier_cage_radius, 0.8)
 	cage_tween.parallel().tween_property(barrier_cage_mesh.mesh, "bottom_radius", barrier_cage_radius, 0.8)
 	cage_tween.parallel().tween_property(barrier_cage_collider.shape, "radius", barrier_cage_radius, 0.8)
@@ -377,8 +386,6 @@ func _on_barrier_cage_spawn_cage_state_exited() -> void:
 	await cage_tween.finished
 	
 	barrier_cage_area.visible = false
-	
-	
 
 
 func _on_barrier_cage_recover_state_entered() -> void:
@@ -386,11 +393,3 @@ func _on_barrier_cage_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 	select_attack()
 	state_chart.send_event("end_recovery")
-
-
-func _on_barrier_cage_area_body_exited(body: Node3D) -> void:
-	if body is Player or body is BossCore:
-		var reflect_dir = body.global_position.direction_to(Vector3.ZERO)
-		var barrer_point: Vector3 = -reflect_dir * barrier_cage_radius
-		body.global_position.x = barrer_point.x
-		body.global_position.z = barrer_point.z
