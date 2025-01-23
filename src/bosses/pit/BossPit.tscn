@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=30 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -673,11 +673,103 @@ tracks/4/keys = {
 "values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 2.26694, 0.0392845)]
 }
 
+[sub_resource type="Animation" id="Animation_qkirm"]
+resource_name = "air_slam_intro"
+length = 0.6
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true, Vector3(0, 0, 0)],
+"method": &"air_slam_jump"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(0.447021, 2.84312, 0.761648), Vector3(2.34766, 3.98364, 0.989149), Vector3(0.447021, 2.84312, 0.761648), Vector3(0.447021, 2.84312, 0.761648)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(0.221657, -0.338953, 0.903109), Vector3(-2.05934, -0.33864, 0.674336), Vector3(0.221657, -0.338953, 0.903109), Vector3(0.221657, -0.338953, 0.903109)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(-1.94809, 2.26694, -0.0607154), Vector3(-1.3382, 3.13822, 0.897693), Vector3(-1.94809, 2.26694, -0.0607154), Vector3(-1.94809, 2.26694, -0.0607154)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.87765, 3.13822, 0.910556), Vector3(2.05191, 2.26694, 0.0392845), Vector3(2.05191, 2.26694, 0.0392845)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ArmsDEbug:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6),
+"transitions": PackedFloat32Array(2.46229, 0.482968, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 1.6), Vector3(0, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ArmsDEbug:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6),
+"transitions": PackedFloat32Array(2.46229, 0.482968, 1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(0.698132, -3.14159, 1.26701e-07), Vector3(0, -3.14159, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_iyws4"]
 _data = {
 "RESET": SubResource("Animation_6jtcq"),
 "air_slam": SubResource("Animation_kjge0"),
 "air_slam_attack": SubResource("Animation_rk1lk"),
+"air_slam_intro": SubResource("Animation_qkirm"),
 "hammer_ground": SubResource("Animation_eetrs"),
 "hook": SubResource("Animation_qtmfa"),
 "lunge": SubResource("Animation_3v14a"),
@@ -696,6 +788,8 @@ phase_2_health_percentage_trigger = 0.5
 swipe_damage = 7.0
 hook_damage = 8.0
 uppercut_damage = 5.0
+air_slam_jump_force = 50.0
+air_slam_jump_height = 20.0
 AIR_SLAM_DROP = 75.0
 air_slam_damage = 15.0
 FRICTION = 0.05
@@ -1839,7 +1933,7 @@ libraries = {
 [node name="LungeCooldown" type="Timer" parent="." index="16"]
 one_shot = true
 
-[connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/AirSlam" to="." method="_on_air_slam_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/AirSlam" to="." method="_on_intro_air_slam_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/IntroAirSlam/AirSlam" to="." method="_on_air_slam_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/GroundPound" to="." method="_on_ground_pound_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/Recover" to="." method="_on_intro_air_slam_recover_state_entered"]

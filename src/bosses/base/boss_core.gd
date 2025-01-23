@@ -204,6 +204,13 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 func _on_movement_charging_state_exited() -> void:
 	hurtbox.monitoring = false
 
+#### CHARGING
+func _on_movement_jumping_state_entered() -> void:
+	pass # Replace with function body.
+
+func _on_movement_jumping_state_physics_processing(delta: float) -> void:
+	pass # Replace with function body.
+
 
 ### HEALTH --------------------------------
 #### HIT

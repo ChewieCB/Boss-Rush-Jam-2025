@@ -153,6 +153,12 @@ to = NodePath("../../Targeting")
 event = &"start_targeting"
 delay_in_seconds = "0.0"
 
+[node name="toJumping" type="Node" parent="StateChart/Root/Movement/Idle"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Jumping")
+event = &"start_jumping"
+delay_in_seconds = "0.0"
+
 [node name="Targeting" type="Node" parent="StateChart/Root/Movement"]
 script = ExtResource("7_0t8qy")
 
@@ -174,6 +180,12 @@ to = NodePath("../../Charging")
 event = &"start_charge"
 delay_in_seconds = "0.0"
 
+[node name="toJumping" type="Node" parent="StateChart/Root/Movement/Targeting"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Jumping")
+event = &"start_jumping"
+delay_in_seconds = "0.0"
+
 [node name="Walking" type="Node" parent="StateChart/Root/Movement"]
 script = ExtResource("7_0t8qy")
 
@@ -189,6 +201,12 @@ to = NodePath("../../Targeting")
 event = &"start_targeting"
 delay_in_seconds = "0.0"
 
+[node name="toJumping" type="Node" parent="StateChart/Root/Movement/Walking"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Jumping")
+event = &"start_jumping"
+delay_in_seconds = "0.0"
+
 [node name="Charging" type="Node" parent="StateChart/Root/Movement"]
 script = ExtResource("7_0t8qy")
 
@@ -196,6 +214,21 @@ script = ExtResource("7_0t8qy")
 script = ExtResource("8_lsrry")
 to = NodePath("../../Idle")
 event = &"end_charge"
+delay_in_seconds = "0.0"
+
+[node name="toJumping" type="Node" parent="StateChart/Root/Movement/Charging"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Jumping")
+event = &"start_jumping"
+delay_in_seconds = "0.0"
+
+[node name="Jumping" type="Node" parent="StateChart/Root/Movement"]
+script = ExtResource("7_0t8qy")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Movement/Jumping"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Idle")
+event = &"end_jumping"
 delay_in_seconds = "0.0"
 
 [node name="Attacking" type="Node" parent="StateChart/Root"]
@@ -370,6 +403,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.28097, 0)
 [connection signal="state_entered" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Charging" to="." method="_on_movement_charging_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Jumping" to="." method="_on_movement_jumping_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Jumping" to="." method="_on_movement_jumping_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Attacking/Telegraph" to="." method="_on_attack_telegraph_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attacking/Telegraph" to="." method="_on_attack_telegraph_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Health/Hit" to="." method="_on_health_hit_state_entered"]

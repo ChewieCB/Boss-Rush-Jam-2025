@@ -20,6 +20,11 @@ class_name BossPit
 @export_subgroup("Uppercut")
 @export var uppercut_damage: float = 5.0
 @export_subgroup("Air Slam")
+@export var air_slam_jump_force: float = 50.0
+@export var air_slam_jump_height: float = 20.0
+var debug_trajectory_mesh: MeshInstance3D
+
+
 var air_slam_drop: float = AIR_SLAM_DROP
 @export var AIR_SLAM_DROP: float = 75.0
 @export var air_slam_damage: float = 15.0
@@ -42,6 +47,9 @@ var lunge_friction: float = FRICTION
 func _ready() -> void:
 	super()
 	surveillance_boss.health_component.died.connect(_on_surveillance_died)
+	debug_trajectory_mesh = MeshInstance3D.new()
+	debug_trajectory_mesh.mesh = ImmediateMesh.new()
+	get_tree().get_root().add_child(debug_trajectory_mesh)
 
 func activate() -> void:
 	super()
@@ -49,8 +57,11 @@ func activate() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	super(delta)
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+	
 	debug_dist_label.text = str(self.global_position.distance_to(target.global_position))
+	#_debug_air_slam_trajectory()
 
 
 func select_attack() -> void:
@@ -378,26 +389,93 @@ func _on_melee_combo_lunge_state_entered() -> void:
 
 
 #### Air Slam
-func air_slam_jump(jump_force: float = 65.0) -> void:
-	state_chart.send_event("stop_moving")
-	self.velocity += self.global_basis.z * 5.5
-	vel_vertical += jump_force
-	state_chart.send_event("start_targeting")
 
+func air_slam_trajectory(goal_pos: Vector3 = Vector3.ZERO, debug: bool = false) -> Vector3:
+	var start_pos = self.global_position
+	var highest_y = max(start_pos.y, goal_pos.y)
+	var jump_height = surveillance_boss.global_position.y - 12.0 - 2.0
+	var apex_y = highest_y + jump_height
+	
+	var velocity_v: float = sqrt(
+		2 * GRAVITY * (apex_y - start_pos.y)
+	)
+	
+	# TODO - make time_up and time_down configurable so we can set a jump time
+	var time_up: float = velocity_v / GRAVITY
+	var time_down: float = sqrt(2.0 * (apex_y - goal_pos.y) / GRAVITY)
+	var time: float = time_up + time_down
+	
+	var displacement_xz: Vector2 = Vector2(goal_pos.x, goal_pos.z) - Vector2(start_pos.x, start_pos.z)
+	var horizontal_distance: float = displacement_xz.length()
+	var velocity_h = horizontal_distance / time
+	var horizontal_dir: Vector2 = displacement_xz.normalized()
+	
+	var initial_velocity := Vector3(
+		horizontal_dir.x * velocity_h,
+		velocity_v,
+		horizontal_dir.y * velocity_h,
+	)
+	
+	# Drawing
+	if debug:
+		var tstep: float = 0.05
+		var line_start: Vector3 = start_pos
+		var line_end: Vector3 = goal_pos
+		var trajectory_points: Array = []
+		
+		for i in range(1, 151):
+			var t = time * float(i) / float(151)
+			var x = start_pos.x + initial_velocity.x * t
+			var y = start_pos.y + initial_velocity.y * t - 0.5 * GRAVITY * t * t
+			var z = start_pos.z + initial_velocity.z * t
+			trajectory_points.append(Vector3(x, y, z))
+		
+		debug_trajectory_mesh.mesh.clear_surfaces()
+		debug_trajectory_mesh.mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
+		for p in trajectory_points:
+			debug_trajectory_mesh.mesh.surface_set_color(Color.RED)
+			debug_trajectory_mesh.mesh.surface_add_vertex(p)
+		debug_trajectory_mesh.mesh.surface_end()
+		
+	return initial_velocity
+
+
+func air_slam_jump(debug: bool = false, goal_position: Vector3 = target.global_position) -> void:
+	state_chart.send_event("start_jumping")
+	self.velocity = air_slam_trajectory(goal_position, debug)
+
+# TODO - deprecated?
 func air_slam_attack(damage: float, slam_force: float, target_pos: Vector3 = slam_target_pos) -> void:
 	# TODO - replace this with a properly configurable trajectory
 	var charge_dir = self.global_position.direction_to(target_pos)
 	var charge_impulse = self.global_position.distance_to(target_pos)
-	velocity += charge_dir * charge_impulse
-	vel_vertical -= air_slam_drop
+	#velocity += charge_dir * charge_impulse
+	#vel_vertical -= air_slam_drop
 
 func _air_slam_damage(body: Node3D) -> void:
 	if body == target:
 		body.health_component.damage(air_slam_damage)
-		body.velocity = Vector3.ZERO
-		body.vel_vertical -= 65.0
+		#body.velocity = Vector3.ZERO
+		#body.vel_vertical -= 65.0
 		#hurtbox.set_deferred("monitoring", false)
 		hurtbox.body_entered.disconnect(_air_slam_damage)
+
+
+func _on_intro_air_slam_state_entered() -> void:
+	debug_state_label.text = "Intro Air Slam"
+	
+	state_chart.send_event("start_targeting")
+	
+	face_sprite.texture = uppercut_debug
+	anim_player.play("air_slam_intro")
+	await anim_player.animation_finished
+	
+	hurtbox.body_entered.connect(_air_slam_damage)
+	
+	anim_player.play("air_slam_attack")
+	await anim_player.animation_finished
+	
+	face_sprite.texture = null
 
 
 func _on_air_slam_state_entered() -> void:
@@ -417,8 +495,6 @@ func _on_air_slam_state_entered() -> void:
 	face_sprite.texture = null
 
 func _on_air_slam_state_physics_processing(delta: float) -> void:
-	velocity.x = lerp(velocity.x, 0.0, lunge_friction)
-	velocity.z = lerp(velocity.z, 0.0, lunge_friction)
 	
 	if anim_player.is_playing():
 		await anim_player.animation_finished
@@ -426,7 +502,7 @@ func _on_air_slam_state_physics_processing(delta: float) -> void:
 	if is_on_floor():
 		#state_chart.send_event("combo_end")
 		state_chart.send_event("aoe_burst")
-		state_chart.send_event("stop_moving")
+		state_chart.send_event("end_jumping")
 
 
 #### Ground Pound
@@ -434,6 +510,7 @@ func _on_air_slam_state_physics_processing(delta: float) -> void:
 func _on_ground_pound_state_entered() -> void:
 	debug_state_label.text = "Ground Pound"
 	state_chart.send_event("stop_moving")
+	debug_trajectory_mesh.mesh.clear_surfaces()
 	velocity = Vector3.ZERO
 	var wave_callback: Callable = func(): 
 		state_chart.send_event("combo_end")
