@@ -67,12 +67,13 @@ func spawn_cover() -> void:
 
 func _on_cover_destroyed(cover: Cover) -> void:
 	cover_objects.erase(cover)
-	if cover_objects.size() < cover_spawn_points.size() / 2:
-		for object in cover_objects:
-			cover.cover_destroyed.disconnect(_on_cover_destroyed)
-			object.destroy()
-		await get_tree().create_timer(0.2).timeout
-		spawn_cover()
+	# TODO - fix cover respawning, currently generating all cover at all points :/
+	#if cover_objects.size() < cover_spawn_points.size() / 2:
+		#for object in cover_objects:
+			#cover.cover_destroyed.disconnect(_on_cover_destroyed)
+			#object.destroy()
+		#await get_tree().create_timer(0.2).timeout
+		#spawn_cover()
 
 
 func _on_boss_trigger_body_entered(body: Node3D) -> void:

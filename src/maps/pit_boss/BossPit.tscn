@@ -1812,8 +1812,12 @@ mesh = SubResource("ArrayMesh_nu7ls")
 [node name="entity_4_PlayerRef" parent="FuncGodotMap" instance=ExtResource("7_qgbx4")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 1, 58.75)
 
-[node name="entity_5_PitBoss" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("11_hqgyr")]
+[node name="HealthComponent" parent="FuncGodotMap/entity_4_PlayerRef" index="0"]
+max_health = 1000.0
+
+[node name="entity_5_PitBoss" parent="FuncGodotMap" node_paths=PackedStringArray("surveillance_boss", "target") instance=ExtResource("11_hqgyr")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, -28.75)
+surveillance_boss = NodePath("../../Surveillance")
 target = NodePath("../entity_4_PlayerRef")
 
 [node name="group_637_Elevator" type="Node3D" parent="FuncGodotMap"]
@@ -2177,3 +2181,5 @@ entProperties = {
 metadata/_tb_type = "_tb_group"
 
 [connection signal="body_entered" from="BossTrigger" to="." method="_on_boss_trigger_body_entered"]
+
+[editable path="FuncGodotMap/entity_4_PlayerRef"]
