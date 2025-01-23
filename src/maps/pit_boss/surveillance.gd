@@ -46,6 +46,7 @@ var beam_sweep_count: int = 0
 
 
 func _ready() -> void:
+	super()
 	GRAVITY = 0
 	head.rotate_x(PI)
 
@@ -315,10 +316,11 @@ func _on_laser_beam_sweep_beam_state_entered() -> void:
 	rotation_speed = deg_to_rad(rotation_speed_deg * 1.0)
 	
 	# Sweep towards the player's position
-	beam_target = target.global_position
+	#beam_target = target.global_position
 
 
 func _on_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
+	beam_target = target.global_position
 	rotate_and_elevate(beam_target, delta)
 	
 	var cast_point: Vector3
@@ -425,3 +427,31 @@ func _on_barrier_cage_recover_state_entered() -> void:
 
 #func _on_laser_beam_state_physics_processing(delta: float) -> void:
 	#draw_debug_sphere(aim_ray.get_collision_point(), 0.5)
+
+
+func _on_laser_beam_state_exited() -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(laser_mesh.mesh, "height", 0.1, 0.4)
+	tween.parallel().tween_property(laser_mesh, "position:z", 0.4, 0.4)
+	tween.parallel().tween_property(laser_collider.shape, "height", 0.1, 0.4)
+	tween.parallel().tween_property(laser_collider, "position:z", 0.4, 0.4)
+	tween.parallel().tween_property(laser_mesh.mesh, "top_radius", 0.3, 0.8)
+	tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 0.3, 0.8)
+	tween.parallel().tween_property(laser_particles, "scale", Vector3(1, 1, 1), 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "top_radius", 0.3, 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "bottom_radius", 0.3, 0.8)
+	
+	await tween.finished
+	laser_particles.emitting = false
+
+
+func _on_barrier_cage_state_exited() -> void:
+	barrier_cage_area.monitoring = false
+	
+	var cage_tween = get_tree().create_tween()
+	cage_tween.tween_property(barrier_cage_mesh.mesh, "top_radius", 42.0, 0.8)
+	cage_tween.parallel().tween_property(barrier_cage_mesh.mesh, "bottom_radius", 42.0, 0.8)
+	cage_tween.parallel().tween_property(barrier_cage_collider.shape, "radius", 42.0, 0.8)
+	await cage_tween.finished
+	
+	barrier_cage_area.visible = false
