@@ -216,6 +216,12 @@ to = NodePath("../../Idle")
 event = &"end_charge"
 delay_in_seconds = "0.0"
 
+[node name="toTargeting" type="Node" parent="StateChart/Root/Movement/Charging"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Targeting")
+event = &"start_targeting"
+delay_in_seconds = "0.0"
+
 [node name="toJumping" type="Node" parent="StateChart/Root/Movement/Charging"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../Jumping")
