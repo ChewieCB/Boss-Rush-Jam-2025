@@ -22,12 +22,13 @@ signal charge_ended
 @export_subgroup("Uppercut")
 @export var uppercut_damage: float = 5.0
 @export_subgroup("Air Slam")
-@export var air_slam_jump_force: float = 50.0
-@export var air_slam_jump_height: float = 20.0
+#@export var air_slam_jump_force: float = 50.0
+#@export var air_slam_jump_height: float = 20.0
 var debug_trajectory_mesh: MeshInstance3D
 @export var air_slam_damage: float = 15.0
 var slam_target_pos := Vector3.ZERO
 @export_subgroup("Ground Pound")
+@export var ground_pound_wave_radius: float = 16.0
 @export_subgroup("Lunge")
 @export var lunge_friction: float = 0.05
 @export var lunge_damage: float = 5.0
@@ -111,10 +112,10 @@ func select_attack_phase_3() -> void:
 		"start_close_distance_attack_far",
 	]
 	
-	if dist_to_target > 5 and lunge_timer.is_stopped():
-		state_chart.send_event("start_close_distance_attack_close")
-	elif dist_to_target > 12:
+	if dist_to_target > 12:
 		state_chart.send_event("start_close_distance_attack_far")
+	elif dist_to_target > 5 and lunge_timer.is_stopped():
+		state_chart.send_event("start_close_distance_attack_close")
 	else:
 		if randf() < 0.3 and dist_to_target < 10.0:
 			state_chart.send_event("start_melee_start_hammer_ground_attack")
@@ -204,6 +205,8 @@ func uppercut(uppercut_force: float) -> void:
 		target.health_component.damage(uppercut_damage)
 		target.velocity = Vector3.ZERO
 		target.vel_vertical += uppercut_force
+		var xz_force := Vector2(-self.global_basis.z.x, -self.global_basis.z.z)
+		target.vel_horizontal += xz_force * 11.0
 
 
 func lunge() -> void:
@@ -387,10 +390,19 @@ func _on_melee_combo_lunge_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	
 	face_sprite.texture = lunge_debug
+	if $StateChart/Root/Movement/Charging.active:
+		#print("Waiting for current charge to finish")
+		await charge_ended
+	if anim_player.is_playing():
+		#print("Waiting for anim player to finish")
+		await anim_player.animation_finished
+	#print("Lunge animation playing")
 	anim_player.play("lunge")
-	await $StateChart/Root/Movement/Charging.state_exited
-	state_chart.send_event("stop_moving")
+	
+	await charge_ended
+	#print("Charge ended")
 
+	state_chart.send_event("stop_moving")
 	face_sprite.texture = null
 	
 	if target in hurtbox.get_overlapping_bodies():
@@ -455,27 +467,25 @@ func air_slam_jump(debug: bool = false, goal_position: Vector3 = target.global_p
 	state_chart.send_event("start_jumping")
 	self.velocity = air_slam_trajectory(goal_position, debug)
 
-# TODO - deprecated?
-func air_slam_attack(damage: float, slam_force: float, target_pos: Vector3 = slam_target_pos) -> void:
+func air_slam_attack(slam_force: float, target_pos: Vector3 = slam_target_pos) -> void:
 	# TODO - replace this with a properly configurable trajectory
-	var charge_dir = self.global_position.direction_to(target_pos)
-	var charge_impulse = self.global_position.distance_to(target_pos)
-	#velocity += charge_dir * charge_impulse
-	#vel_vertical -= air_slam_drop
+	target.health_component.damage(air_slam_damage)
+	target.vel_vertical -= slam_force
+	self.vel_vertical -= slam_force
 
 func _air_slam_damage(body: Node3D) -> void:
 	if body == target:
-		body.health_component.damage(air_slam_damage)
-		#body.velocity = Vector3.ZERO
-		#body.vel_vertical -= 65.0
-		#hurtbox.set_deferred("monitoring", false)
+		hurtbox.set_deferred("monitoring", false)
+		target.velocity = Vector3.ZERO
+		self.velocity = Vector3.ZERO
+		anim_player.play("air_slam_attack")
 		hurtbox.body_entered.disconnect(_air_slam_damage)
 
 
 func _on_intro_air_slam_state_entered() -> void:
 	debug_state_label.text = "Intro Air Slam"
 	
-	hurtbox.call_deferred("monitoring", true)
+	hurtbox.call_deferred("monitoring", false)
 	state_chart.send_event("start_targeting")
 	
 	face_sprite.texture = uppercut_debug
@@ -483,9 +493,6 @@ func _on_intro_air_slam_state_entered() -> void:
 	await anim_player.animation_finished
 	
 	hurtbox.body_entered.connect(_air_slam_damage)
-	
-	anim_player.play("air_slam_attack")
-	await anim_player.animation_finished
 	
 	face_sprite.texture = null
 
@@ -497,11 +504,8 @@ func _on_air_slam_state_entered() -> void:
 	
 	face_sprite.texture = uppercut_debug
 	anim_player.play("air_slam")
-	await anim_player.animation_finished
-	
 	hurtbox.body_entered.connect(_air_slam_damage)
-	
-	anim_player.play("air_slam_attack")
+	hurtbox.call_deferred("monitoring", true)
 	await anim_player.animation_finished
 	
 	face_sprite.texture = null
@@ -526,7 +530,7 @@ func _on_ground_pound_state_entered() -> void:
 	velocity = Vector3.ZERO
 	var wave_callback: Callable = func(): 
 		state_chart.send_event("combo_end")
-	spawn_center_wave(10.0, 0.8, 2.0, false, wave_callback)
+	spawn_center_wave(ground_pound_wave_radius, 0.8, 2.0, false, wave_callback)
 
 
 # TODO - rework and clean this up for the slam 
@@ -673,3 +677,8 @@ func _on_hammer_ground_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+func _on_inactive_state_entered() -> void:
+	velocity.x = 0
+	velocity.z = 0

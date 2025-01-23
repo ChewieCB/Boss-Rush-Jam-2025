@@ -280,7 +280,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0.35),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [20.0, 50.0],
+"args": [40.0],
 "method": &"air_slam_attack"
 }]
 }
@@ -789,9 +789,8 @@ phase_2_health_percentage_trigger = 0.5
 swipe_damage = 7.0
 hook_damage = 8.0
 uppercut_damage = 5.0
-air_slam_jump_force = 50.0
-air_slam_jump_height = 20.0
 air_slam_damage = 15.0
+ground_pound_wave_radius = 16.0
 lunge_friction = 0.05
 lunge_damage = 5.0
 lunge_force = 6.5
@@ -860,13 +859,10 @@ mesh = SubResource("BoxMesh_n64vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
 
 [node name="HealthComponent" parent="." index="5"]
-max_health = 500.0
+max_health = 6000.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"
-
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
 
 [node name="toIntroAirSlam" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("4_akhww")
@@ -1338,24 +1334,28 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../MeleeComboComplex")
 event = &"start_melee_combo_attack"
+guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
 [node name="toLungeCloser" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="1"]
 script = ExtResource("4_akhww")
 to = NodePath("../../LungeCloser")
 event = &"start_close_distance_attack_close"
+guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
 [node name="toAirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="2"]
 script = ExtResource("4_akhww")
 to = NodePath("../../AirSlamCloser")
 event = &"start_close_distance_attack_far"
+guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
 [node name="toHammerGround" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="3"]
 script = ExtResource("4_akhww")
 to = NodePath("../../HammerGround")
 event = &"start_hammer_ground_attack"
+guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
 [node name="MeleeComboComplex" type="Node" parent="StateChart/Root/Phase/Phase3" index="1"]
@@ -1419,6 +1419,7 @@ script = ExtResource("5_bjod6")
 [node name="toUppercut" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Lunge" index="0"]
 script = ExtResource("4_akhww")
 to = NodePath("../../Uppercut")
+event = &"melee_attack"
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Lunge" index="1"]
@@ -1980,6 +1981,7 @@ libraries = {
 [node name="LungeCooldown" type="Timer" parent="." index="16"]
 one_shot = true
 
+[connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_inactive_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/AirSlam" to="." method="_on_intro_air_slam_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/IntroAirSlam/AirSlam" to="." method="_on_air_slam_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/GroundPound" to="." method="_on_ground_pound_state_entered"]

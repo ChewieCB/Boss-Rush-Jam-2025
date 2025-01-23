@@ -1816,6 +1816,7 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 1, 58
 [node name="entity_5_PitBoss" parent="FuncGodotMap" node_paths=PackedStringArray("surveillance_boss", "target") instance=ExtResource("11_hqgyr")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 5.5, -34.25)
 surveillance_boss = NodePath("../../BossSurveillance")
+ground_pound_wave_radius = 16.0
 FRICTION = 1.0
 target = NodePath("../entity_4_PlayerRef")
 
