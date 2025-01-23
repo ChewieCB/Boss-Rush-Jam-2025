@@ -1,6 +1,8 @@
 extends BossCore
 class_name BossPit
 
+signal charge_ended
+
 @export_category("Display")
 @export var swipe_debug: CompressedTexture2D
 @export var lunge_debug: CompressedTexture2D
@@ -23,18 +25,13 @@ class_name BossPit
 @export var air_slam_jump_force: float = 50.0
 @export var air_slam_jump_height: float = 20.0
 var debug_trajectory_mesh: MeshInstance3D
-
-
-var air_slam_drop: float = AIR_SLAM_DROP
-@export var AIR_SLAM_DROP: float = 75.0
 @export var air_slam_damage: float = 15.0
 var slam_target_pos := Vector3.ZERO
 @export_subgroup("Ground Pound")
 @export_subgroup("Lunge")
-@export var FRICTION: float = 0.05
-var lunge_friction: float = FRICTION
+@export var lunge_friction: float = 0.05
 @export var lunge_damage: float = 5.0
-@export var lunge_force: float = 4.50
+@export var lunge_force: float = 6.5
 @export var lunge_cooldown: float = 15.0
 @onready var lunge_timer: Timer = $LungeCooldown
 
@@ -119,10 +116,10 @@ func select_attack_phase_3() -> void:
 	elif dist_to_target > 12:
 		state_chart.send_event("start_close_distance_attack_far")
 	else:
-		if randf() < 0.5:
-			state_chart.send_event("start_melee_combo_attack")
-		else:
+		if randf() < 0.3 and dist_to_target < 10.0:
 			state_chart.send_event("start_melee_start_hammer_ground_attack")
+		else:
+			state_chart.send_event("start_melee_combo_attack")
 
 
 ## ======== Signal Callback Methods ========
@@ -148,15 +145,13 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 
 
 func _on_movement_charging_state_entered() -> void:
-	#hurtbox.set_deferred("monitoring", true)
-	hurtbox.monitoring = true
+	hurtbox.set_deferred("monitoring", true)
 	hurtbox.body_entered.connect(destroy_cover)
 
 func destroy_cover(body: Node3D) -> void:
 	if body is Cover:
 		body.destroy()
-		#lunge_friction = FRICTION * 4
-		hurtbox.monitoring = false
+		hurtbox.set_deferred("monitoring", false)
 
 func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, lunge_friction)
@@ -169,19 +164,23 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 				destroy_cover(body)
 			elif body == target:
 				damage_in_hurtbox(lunge_damage)
-				hurtbox.monitoring = false
+				hurtbox.set_deferred("monitoring", false)
 				velocity.x = 0
 				velocity.z = 0
+				#print("Velocity halted due to collision: %s" % velocity)
 				state_chart.send_event("end_charge")
-
-	if velocity.x == 0 and velocity.z == 0:
+				return
+	
+	if abs(velocity.x) < 0.1 and abs(velocity.z) < 0.1:
+		velocity.x = 0
+		velocity.z = 0
+		#print("Velocity halted due to friction: %s" % velocity)
 		state_chart.send_event("end_charge")
 
 func _on_movement_charging_state_exited() -> void:
+	charge_ended.emit()
 	hurtbox.body_entered.disconnect(destroy_cover)
-	lunge_friction = FRICTION
-	hurtbox.monitoring = true
-	#hurtbox.set_deferred("monitoring", true)
+	hurtbox.set_deferred("monitoring", true)
 
 ### ATTACK PHASES --------------------------------
 
@@ -208,9 +207,11 @@ func uppercut(uppercut_force: float) -> void:
 
 
 func lunge() -> void:
+	#print("Lunge function entered")
 	var charge_dir = -self.global_basis.z
-	var charge_impulse = self.global_position.distance_to(target.global_position) * lunge_force
+	var charge_impulse = max(self.global_position.distance_to(target.global_position), 1) * lunge_force
 	velocity += charge_dir * charge_impulse
+	#print("Lunged with vector: %s, velocity = %s" % [charge_impulse, velocity])
 	state_chart.send_event("start_charge")
 
 
@@ -240,7 +241,7 @@ func _on_phase_1_state_entered() -> void:
 func _on_melee_combo_targeting_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Targeting"
 	hurtbox.set_deferred("monitoring", true)
-	state_chart.send_event("start_targeting")
+	state_chart.send_event("start_moving")
 
 func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
 	if target in hurtbox.get_overlapping_bodies():
@@ -253,7 +254,9 @@ func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
 func _on_melee_combo_swipe_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Swipe"
 	
-	state_chart.send_event("start_targeting")
+	state_chart.send_event("stop_moving")
+	velocity.x = 0
+	velocity.z = 0
 	
 	face_sprite.texture = swipe_debug
 	anim_player.play("swipe")
@@ -341,10 +344,18 @@ func _on_lunge_closer_attack_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	
 	face_sprite.texture = lunge_debug
+	if $StateChart/Root/Movement/Charging.active:
+		#print("Waiting for current charge to finish")
+		await charge_ended
+	if anim_player.is_playing():
+		#print("Waiting for anim player to finish")
+		await anim_player.animation_finished
+	#print("Lunge animation playing")
 	anim_player.play("lunge")
 	
-	await $StateChart/Root/Movement/Charging.state_exited
-	
+	await charge_ended
+	#print("Charge ended")
+
 	state_chart.send_event("stop_moving")
 	face_sprite.texture = null
 	
@@ -353,7 +364,7 @@ func _on_lunge_closer_attack_state_entered() -> void:
 
 func _on_lunge_closer_recover_state_entered() -> void:
 	debug_state_label.text = "Lunge | Recovery"
-	
+	#print("Lunge ended - recovering")
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
@@ -464,6 +475,7 @@ func _air_slam_damage(body: Node3D) -> void:
 func _on_intro_air_slam_state_entered() -> void:
 	debug_state_label.text = "Intro Air Slam"
 	
+	hurtbox.call_deferred("monitoring", true)
 	state_chart.send_event("start_targeting")
 	
 	face_sprite.texture = uppercut_debug
@@ -623,16 +635,17 @@ func _on_air_slam_closer_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	# Hammer Ground follow up if the player doesn't escape
-	var horizontal_distance = Vector2(
-		self.global_position.x, 
-		self.global_position.z
-	).distance_to(Vector2(
-		target.global_position.x,
-		target.global_position.z
-	))
-	if horizontal_distance < 16:
-		state_chart.send_event("start_hammer_ground_attack")
-		return
+	if current_phase > 2:
+		var horizontal_distance = Vector2(
+			self.global_position.x, 
+			self.global_position.z
+		).distance_to(Vector2(
+			target.global_position.x,
+			target.global_position.z
+		))
+		if horizontal_distance < 16:
+			state_chart.send_event("start_hammer_ground_attack")
+			return
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
