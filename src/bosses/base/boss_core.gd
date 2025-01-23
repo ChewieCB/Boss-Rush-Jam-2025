@@ -71,6 +71,7 @@ var spawned_area_objects = []
 @onready var health_ui = $UI/HealthUI/BossHealthContainer
 
 @export var MAX_SPEED: float = 5.0
+@export var FRICTION: float = 1.0
 const TURN_SPEED_FAST: float = 7.5
 const TURN_SPEED_SLOW: float = 5.0
 const MAX_FALL_SPEED: float = 50.0
@@ -162,9 +163,9 @@ func _on_movement_idle_state_entered() -> void:
 
 func _on_movement_idle_state_physics_processing(delta: float) -> void:
 	if velocity.x > 0.0:
-		velocity.x = lerp(velocity.x, 0.0, delta)
+		velocity.x = lerp(velocity.x, 0.0, delta * FRICTION)
 	if velocity.z > 0.0:
-		velocity.z = lerp(velocity.z, 0.0, delta)
+		velocity.z = lerp(velocity.z, 0.0, delta * FRICTION)
 
 #### TARGETING
 func _on_movement_targeting_state_entered() -> void:
@@ -172,9 +173,9 @@ func _on_movement_targeting_state_entered() -> void:
 
 func _on_movement_targeting_state_physics_processing(delta: float) -> void:
 	if velocity.x > 0.0:
-		velocity.x = lerp(velocity.x, 0.0, delta)
+		velocity.x = lerp(velocity.x, 0.0, delta * FRICTION)
 	if velocity.z > 0.0:
-		velocity.z = lerp(velocity.z, 0.0, delta)
+		velocity.z = lerp(velocity.z, 0.0, delta * FRICTION)
 	if target:
 		_turn_towards_target(TURN_SPEED_FAST, delta)
 
