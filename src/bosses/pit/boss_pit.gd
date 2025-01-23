@@ -239,8 +239,8 @@ func _on_phase_1_state_entered() -> void:
 # TARGETING
 func _on_melee_combo_targeting_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Targeting"
-	#hurtbox.set_deferred("monitoring", true)
-	state_chart.send_event("start_moving")
+	hurtbox.set_deferred("monitoring", true)
+	state_chart.send_event("start_targeting")
 
 func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
 	if target in hurtbox.get_overlapping_bodies():
@@ -440,7 +440,7 @@ func air_slam_trajectory(goal_pos: Vector3 = Vector3.ZERO, debug: bool = false) 
 	return initial_velocity
 
 
-func air_slam_jump(debug: bool = false, goal_position: Vector3 = target.global_position) -> void:
+func air_slam_jump(debug: bool = false, goal_position: Vector3 = target.global_position + self.global_basis.z * 0.5) -> void:
 	state_chart.send_event("start_jumping")
 	self.velocity = air_slam_trajectory(goal_position, debug)
 

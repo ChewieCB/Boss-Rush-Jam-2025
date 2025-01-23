@@ -33,9 +33,9 @@ radius = 0.3
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0r83n"]
 transparency = 1
 cull_mode = 2
-albedo_color = Color(1, 0.17, 0.17, 0.980392)
+albedo_color = Color(0.71, 0.0355, 0.0355, 0.486275)
 emission_enabled = true
-emission = Color(1, 0.168627, 0.168627, 1)
+emission = Color(0.85, 0.00849999, 0.00849999, 1)
 emission_energy_multiplier = 10.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_m2l2m"]

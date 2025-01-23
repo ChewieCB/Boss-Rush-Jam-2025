@@ -33,6 +33,7 @@ sky_material = SubResource("ProceduralSkyMaterial_eyfm3")
 background_mode = 2
 sky = SubResource("Sky_dvfj1")
 tonemap_mode = 2
+glow_enabled = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o52qx"]
 size = Vector3(9, 5, 5)

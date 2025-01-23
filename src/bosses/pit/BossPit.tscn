@@ -864,9 +864,6 @@ max_health = 500.0
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"
 
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
-
 [node name="toIntroAirSlam" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("4_akhww")
 to = NodePath("../../IntroAirSlam")
@@ -920,6 +917,12 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../../Phase1")
 event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/IntroAirSlam" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Phase3")
+event = &"start_phase_3"
 delay_in_seconds = "0.0"
 
 [node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="2"]
@@ -1351,7 +1354,13 @@ to = NodePath("../../Hook")
 event = &"melee_attack"
 delay_in_seconds = "0.0"
 
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Swipe" index="1"]
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Swipe" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Swipe" index="2"]
 script = ExtResource("4_akhww")
 to = NodePath("../../Recover")
 event = &"combo_end"
@@ -1366,7 +1375,13 @@ to = NodePath("../../Uppercut")
 event = &"melee_attack"
 delay_in_seconds = "0.0"
 
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" index="1"]
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" index="2"]
 script = ExtResource("4_akhww")
 to = NodePath("../../Recover")
 event = &"combo_end"
@@ -1973,16 +1988,18 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/Lunge" to="." method="_on_melee_combo_lunge_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/Uppercut" to="." method="_on_melee_combo_uppercut_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/AirSlam" to="." method="_on_air_slam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/AirSlam" to="." method="_on_air_slam_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/GroundPound" to="." method="_on_ground_pound_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/Recover" to="." method="_on_melee_combo_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/HammerGround/Targeting" to="." method="_on_hammer_ground_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/HammerGround/Hammering" to="." method="_on_hammer_ground_hammering_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/HammerGround/Recover" to="." method="_on_hammer_ground_recover_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/LungeCloser/Targeting" to="." method="_on_phase_1_lunge_targeting_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/LungeCloser/Attack" to="." method="_on_phase_1_lunge_attack_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/LungeCloser/Recover" to="." method="_on_phase_1_lunge_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/LungeCloser/Targeting" to="." method="_on_lunge_closer_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/LungeCloser/Attack" to="." method="_on_lunge_closer_attack_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/LungeCloser/Recover" to="." method="_on_lunge_closer_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/AirSlamCloser/Targeting" to="." method="_on_air_slam_closer_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/AirSlamCloser/AirSlam" to="." method="_on_air_slam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/AirSlamCloser/AirSlam" to="." method="_on_air_slam_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/AirSlamCloser/GroundPound" to="." method="_on_ground_pound_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/AirSlamCloser/Recover" to="." method="_on_air_slam_closer_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD" to="." method="_on_phase_1_state_entered"]
