@@ -55,7 +55,6 @@ aim_ray_prefab = ExtResource("5_dqbuo")
 health_component = NodePath("HealthComponent")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
-max_health = 1000.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_le58x")

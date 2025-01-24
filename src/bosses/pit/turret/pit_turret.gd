@@ -130,7 +130,7 @@ func _on_standard_attack_firing_state_entered() -> void:
 			get_parent().get_parent().add_child(projectile)
 			projectile.global_position = spawn.global_position
 			projectile.look_at(target.global_position)
-			projectile.projectile_speed = 50.0
+			projectile.projectile_speed = 42.0
 			SoundManager.play_sound(TEMP_sfx_projectile)
 	
 	await get_tree().create_timer(delay_per_projectile).timeout
