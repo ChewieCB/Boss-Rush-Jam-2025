@@ -19,8 +19,8 @@ var cover_objects: Array = []
 
 
 func _ready() -> void:
-	pit_boss.health_component.died.connect(_on_boss_defeated)
-	surveillance_boss.health_component.died.connect(_on_boss_defeated)
+	pit_boss.health_component.died.connect(_on_boss_died.bind(pit_boss))
+	surveillance_boss.health_component.died.connect(_on_boss_died.bind(surveillance_boss))
 	surveillance_boss.turret_spawns = turret_spawns
 	player.health_component.died.connect(_on_player_death)
 	
@@ -41,11 +41,16 @@ func _on_player_death() -> void:
 	show_end_panel()
 
 
-func _on_boss_defeated() -> void:
+func _on_boss_died(boss: BossCore) -> void:
 	dead_boss_count += 1
 	if dead_boss_count == 2:
-		win_ui.win()
-		show_end_panel()
+		boss.defeated.connect(_on_bosses_defeated)
+		boss.drop_barrel()
+
+
+func _on_bosses_defeated(boss: BossCore) -> void:
+	win_ui.win()
+	show_end_panel()
 
 
 func show_end_panel() -> void:

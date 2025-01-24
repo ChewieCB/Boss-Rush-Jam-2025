@@ -174,6 +174,12 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
+func _on_died() -> void:
+	eye_mesh.mesh.material.albedo_color = Color.PURPLE
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
+
 func _on_health_hit_state_entered() -> void:
 	eye_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
 	sprite.modulate = Color.RED

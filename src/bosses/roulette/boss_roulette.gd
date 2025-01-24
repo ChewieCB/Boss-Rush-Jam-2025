@@ -459,11 +459,11 @@ func change_phase(new_phase: int) -> void:
 
 func _on_died() -> void:
 	super()
+	destroy_balls(active_balls)
+	destroy_balls(passive_balls)
 	pushback_area.set_deferred("monitoring", false)
 	change_wheel_speed.emit(0.0)
 	wheel_rotation_speed = 0.0
-	destroy_balls(active_balls)
-	destroy_balls(passive_balls)
 	
 	if drop_floor_tween:
 		await drop_floor_tween.step_finished
