@@ -1,8 +1,9 @@
 extends Node3D
 
 @export var bgm: AudioStream
-@export var elevator_doors: ElevatorDoors
-@export var elevator_buttons: Array[ElevatorButton]
+
+@onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
+@onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
 
 var display_barrels: Array = []
 
@@ -12,15 +13,6 @@ func _ready() -> void:
 	SoundManager.play_music(bgm, 0.25)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
-	for node in $DisplayBarrels.get_children():
-		var model = node.get_node("Model")
-		model.rotation_degrees.y = randf_range(0, 360)
-		display_barrels.append(model)
-
-
-func _process(delta: float) -> void:
-	for node in display_barrels:
-		node.rotation.y += delta
 
 
 func _on_level_select(level_path: String) -> void:

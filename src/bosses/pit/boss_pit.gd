@@ -24,7 +24,6 @@ signal charge_ended
 @export_subgroup("Air Slam")
 #@export var air_slam_jump_force: float = 50.0
 #@export var air_slam_jump_height: float = 20.0
-var debug_trajectory_mesh: MeshInstance3D
 @export var air_slam_damage: float = 15.0
 var slam_target_pos := Vector3.ZERO
 @export_subgroup("Ground Pound")
@@ -45,9 +44,6 @@ var slam_target_pos := Vector3.ZERO
 func _ready() -> void:
 	super()
 	surveillance_boss.health_component.died.connect(_on_surveillance_died)
-	debug_trajectory_mesh = MeshInstance3D.new()
-	debug_trajectory_mesh.mesh = ImmediateMesh.new()
-	get_tree().get_root().add_child(debug_trajectory_mesh)
 
 func activate() -> void:
 	super()
@@ -130,6 +126,10 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
+func _on_died() -> void:
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
 
 func _on_surveillance_died() -> void:
 	state_chart.send_event("start_phase_3")

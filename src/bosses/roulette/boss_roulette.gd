@@ -61,6 +61,7 @@ var available_spawns: Array
 @export var wave_damage: float = 10.0
 @export var wave_material: ShaderMaterial
 @export_subgroup("Center Pushback")
+@onready var pushback_area: Area3D = $PushbackArea
 @export var max_center_pushback_radius: float = 8.0
 # Drop Segments
 @export_group("Drop Segments")
@@ -460,6 +461,9 @@ func _on_died() -> void:
 	super()
 	destroy_balls(active_balls)
 	destroy_balls(passive_balls)
+	pushback_area.set_deferred("monitoring", false)
+	change_wheel_speed.emit(0.0)
+	wheel_rotation_speed = 0.0
 	
 	if drop_floor_tween:
 		await drop_floor_tween.step_finished

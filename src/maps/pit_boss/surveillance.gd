@@ -174,6 +174,12 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
+func _on_died() -> void:
+	eye_mesh.mesh.material.albedo_color = Color.PURPLE
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
+
 func _on_health_hit_state_entered() -> void:
 	eye_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
 	sprite.modulate = Color.RED
@@ -226,7 +232,7 @@ func _on_laser_beam_startup_state_entered() -> void:
 
 
 # Add a debug sphere at global location.
-func draw_debug_sphere(location, size):
+func draw_debug_sphere(location, size, color):
 	# Will usually work, but you might need to adjust this.
 	var scene_root = get_tree().root.get_children()[0]
 	# Create sphere with low detail of size.
@@ -237,7 +243,7 @@ func draw_debug_sphere(location, size):
 	sphere.height = size * 2
 	# Bright red material (unshaded).
 	var material = StandardMaterial3D.new()
-	material.albedo_color = Color(1, 0, 0)
+	material.albedo_color = color
 	material.flags_unshaded = true
 	sphere.surface_set_material(0, material)
 

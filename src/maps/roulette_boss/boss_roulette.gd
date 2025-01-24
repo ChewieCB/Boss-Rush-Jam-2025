@@ -20,7 +20,7 @@ var floor_segments: Array
 
 
 func _ready() -> void:
-	boss.health_component.died.connect(_on_boss_defeated)
+	boss.defeated.connect(_on_boss_defeated)
 	boss.change_wheel_speed.connect(set_goal_rotation_speed)
 	player.health_component.died.connect(_on_player_death)
 	
@@ -67,7 +67,7 @@ func set_goal_rotation_speed(value: float) -> void:
 	goal_rotation_speed = value
 
 
-func _on_boss_defeated() -> void:
+func _on_boss_defeated(_boss: BossCore) -> void:
 	win_ui.win()
 	show_end_panel()
 
@@ -85,8 +85,11 @@ func show_end_panel() -> void:
 	await get_tree().create_timer(5.0).timeout
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	tween.tween_callback(func(): get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn"))
+	tween.tween_callback(_return_to_lobby)
 
+
+func _return_to_lobby() -> void:
+	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
 
 func _return_to_main() -> void:
 	get_tree().change_scene_to_file("res://src/ui/temp/TempMain.tscn")
