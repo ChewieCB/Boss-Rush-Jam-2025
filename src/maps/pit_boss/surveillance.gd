@@ -52,7 +52,7 @@ func _ready() -> void:
 	head.rotate_x(PI)
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	pass
 
 
@@ -76,7 +76,7 @@ func select_attack() -> void:
 
 
 func select_attack_phase_1() -> void:
-	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_laser_attack",
 		"start_barrier_cage_attack",
@@ -91,7 +91,7 @@ func select_attack_phase_1() -> void:
 
 
 func select_attack_phase_2() -> void:
-	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_spawn_turrets_attack",
 		"start_laser_attack",
@@ -189,7 +189,7 @@ func _on_phase_1_state_entered() -> void:
 	current_phase = 1
 	select_attack()
 
-func _on_phase_1_state_physics_processing(delta: float) -> void:
+func _on_phase_1_state_physics_processing(_delta: float) -> void:
 	pass
 
 #### Phase 1 | Laser Beam
@@ -250,7 +250,7 @@ func draw_debug_sphere(location, size):
 	return node
 
 
-func _on_laser_beam_startup_state_physics_processing(delta: float) -> void:
+func _on_laser_beam_startup_state_physics_processing(_delta: float) -> void:
 	pass
 
 
@@ -291,8 +291,7 @@ func _on_phase_1_laser_beam_sweep_beam_state_entered() -> void:
 	tween.tween_property(laser_mesh.mesh, "top_radius", 1.5, 0.8)
 	tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 1.5, 0.8)
 	tween.parallel().tween_property(laser_particles, "scale", Vector3(3, 3, 3), 0.8)
-	tween.parallel().tween_property(laser_collider.shape, "top_radius", 1.5, 0.8)
-	tween.parallel().tween_property(laser_collider.shape, "bottom_radius", 1.5, 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "radius", 1.5, 0.8)
 	
 	# TODO - glow the laser to indicate sweep start
 	await get_tree().create_timer(telegraph_time).timeout
@@ -328,8 +327,7 @@ func _on_phase_2_laser_beam_sweep_beam_state_entered() -> void:
 	tween.tween_property(laser_mesh.mesh, "top_radius", 1.5, 0.8)
 	tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 1.5, 0.8)
 	tween.parallel().tween_property(laser_particles, "scale", Vector3(3, 3, 3), 0.8)
-	tween.parallel().tween_property(laser_collider.shape, "top_radius", 1.5, 0.8)
-	tween.parallel().tween_property(laser_collider.shape, "bottom_radius", 1.5, 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "radius", 1.5, 0.8)
 	
 	# TODO - glow the laser to indicate sweep start
 	await get_tree().create_timer(telegraph_time).timeout
@@ -373,8 +371,7 @@ func _on_laser_beam_recover_state_entered() -> void:
 	tween.parallel().tween_property(laser_mesh.mesh, "top_radius", 0.3, 0.8)
 	tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 0.3, 0.8)
 	tween.parallel().tween_property(laser_particles, "scale", Vector3(1, 1, 1), 0.8)
-	tween.parallel().tween_property(laser_collider.shape, "top_radius", 0.3, 0.8)
-	tween.parallel().tween_property(laser_collider.shape, "bottom_radius", 0.3, 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "radius", 0.3, 0.8)
 	
 	await tween.finished
 	laser_particles.emitting = false
@@ -384,10 +381,10 @@ func _on_laser_beam_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-func _on_laser_hurtbox_body_entered(body: Node3D) -> void:
-	if body == target:
+func _on_laser_hurtbox_body_entered(_body: Node3D) -> void:
+	if _body == target:
 		target.health_component.damage(10)
-		laser_area.monitoring = false
+		laser_area.set_deferred("monitoring", false)
 		await get_tree().create_timer(0.4).timeout
 		laser_area.monitoring = true
 
@@ -462,8 +459,7 @@ func _on_laser_beam_state_exited() -> void:
 	tween.parallel().tween_property(laser_mesh.mesh, "top_radius", 0.3, 0.8)
 	tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 0.3, 0.8)
 	tween.parallel().tween_property(laser_particles, "scale", Vector3(1, 1, 1), 0.8)
-	tween.parallel().tween_property(laser_collider.shape, "top_radius", 0.3, 0.8)
-	tween.parallel().tween_property(laser_collider.shape, "bottom_radius", 0.3, 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "radius", 0.3, 0.8)
 	
 	await tween.finished
 	laser_particles.emitting = false
@@ -486,7 +482,7 @@ func _on_phase_2_state_entered() -> void:
 	current_phase = 2
 	select_attack()
 
-func _on_phase_2_state_physics_processing(delta: float) -> void:
+func _on_phase_2_state_physics_processing(_delta: float) -> void:
 	pass
 
 

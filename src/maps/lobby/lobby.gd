@@ -30,12 +30,12 @@ func _on_level_select(level_path: String) -> void:
 	# Wait until the level has been loaded on another thread
 	while ResourceLoader.load_threaded_get_status(level_path) != ResourceLoader.THREAD_LOAD_LOADED:
 		pass
-	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
-	# HACK - do this properly with dynamic loading of scenes
 	# Get the player's position relative to the elevator doors
 	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
 	GameManager.cached_player_rotation = GameManager.player.rotation
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
+	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
+	# HACK - do this properly with dynamic loading of scenes
   
 	if is_inside_tree():
 		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1) 

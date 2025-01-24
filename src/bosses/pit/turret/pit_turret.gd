@@ -113,7 +113,7 @@ func _on_standard_attack_state_physics_processing(delta: float) -> void:
 func _on_standard_attack_targeting_state_entered() -> void:
 	debug_state_label.text = "Standard Attack | Targeting"
 
-func _on_standard_attack_targeting_state_physics_processing(delta: float) -> void:
+func _on_standard_attack_targeting_state_physics_processing(_delta: float) -> void:
 	var aim_collision = aim_ray.get_collider()
 	if aim_collision == target:
 		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED

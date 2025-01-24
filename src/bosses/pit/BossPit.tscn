@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=34 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -10,6 +10,9 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_bqowf"]
 [ext_resource type="Texture2D" uid="uid://dasca74no7m2t" path="res://src/bosses/base/assets/juni_boss_face_uppercut.png" id="5_i6at3"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/shield_impacts.gdshader" id="6_l4p06"]
+[ext_resource type="AudioStream" uid="uid://db2criyne5nvh" path="res://src/bosses/base/assets/sfx/temp/whoosh2_clipped.wav" id="7_7wexv"]
+[ext_resource type="AudioStream" uid="uid://wetpevehhwx1" path="res://src/bosses/base/assets/sfx/temp/weird_summon_clipped.wav" id="8_ulaw4"]
+[ext_resource type="AudioStream" uid="uid://bxeo1ync2wkuj" path="res://src/bosses/base/assets/sfx/temp/dash6.wav" id="9_6e01o"]
 [ext_resource type="Resource" uid="uid://c05iaeuuv1ym1" path="res://src/bosses/NotDeadGuard.tres" id="9_juug2"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_el2h4"]
 
@@ -786,23 +789,18 @@ lunge_debug = ExtResource("4_nd84x")
 uppercut_debug = ExtResource("5_i6at3")
 wave_material = SubResource("ShaderMaterial_2s76u")
 phase_2_health_percentage_trigger = 0.5
-swipe_damage = 7.0
-hook_damage = 8.0
+swipe_damage = 5.0
+hook_damage = 5.0
 uppercut_damage = 5.0
-air_slam_damage = 15.0
+air_slam_damage = 10.0
 ground_pound_wave_radius = 16.0
 lunge_friction = 0.05
 lunge_damage = 5.0
 lunge_force = 6.5
 lunge_cooldown = 8.5
-TEMP_sfx_awaken = null
-TEMP_sfx_hit = Array[AudioStream]([])
-TEMP_sfx_area_1 = null
-TEMP_sfx_area_2 = null
-TEMP_sfx_projectile = null
-TEMP_sfx_telegraph = null
-TEMP_sfx_charge = null
-TEMP_sfx_charge_impact = null
+TEMP_sfx_area_1 = ExtResource("7_7wexv")
+TEMP_sfx_area_2 = ExtResource("8_ulaw4")
+TEMP_sfx_projectile = ExtResource("9_6e01o")
 attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.6

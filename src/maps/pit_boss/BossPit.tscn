@@ -1,9 +1,10 @@
-[gd_scene load_steps=290 format=4 uid="uid://ct3oq6juhe7y4"]
+[gd_scene load_steps=291 format=4 uid="uid://ct3oq6juhe7y4"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_vfcr2"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/boss_pit.gd" id="1_ymudn"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_hhc2p"]
 [ext_resource type="AudioStream" uid="uid://coyh1k757v4k8" path="res://assets/music/WANTED 0.1.mp3" id="2_sx666"]
+[ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="3_nqcqn"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_w7aip"]
 [ext_resource type="Material" uid="uid://coo1y5tjcwlec" path="res://assets/textures/placeholder/texture_dark_03.tres" id="4_h2odb"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="4_tvaml"]
@@ -972,6 +973,10 @@ script = ExtResource("1_ymudn")
 bgm = ExtResource("2_sx666")
 pit_boss = NodePath("FuncGodotMap/entity_5_PitBoss")
 surveillance_boss = NodePath("FuncGodotMap/entity_58_BossSurveillance")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="BossDefeatedUI" parent="UI" instance=ExtResource("3_nqcqn")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
