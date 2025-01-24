@@ -145,6 +145,30 @@ func activate() -> void:
 	SoundManager.play_sound(TEMP_sfx_awaken)
 
 
+func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInstance3D:
+	# Will usually work, but you might need to adjust this.
+	var scene_root = get_tree().root.get_children()[0]
+	# Create sphere with low detail of size.
+	var sphere = SphereMesh.new()
+	sphere.radial_segments = 4
+	sphere.rings = 4
+	sphere.radius = size
+	sphere.height = size * 2
+	# Bright red material (unshaded).
+	var material = StandardMaterial3D.new()
+	material.albedo_color = color
+	material.flags_unshaded = true
+	sphere.surface_set_material(0, material)
+	
+	# Add to meshinstance in the right place.
+	var node = MeshInstance3D.new()
+	node.mesh = sphere
+	node.global_transform.origin = location
+	scene_root.add_child(node)
+	
+	return node
+
+
 func drop_barrel() -> void:
 	# Check if we've already given the player this barrel
 	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
@@ -164,9 +188,7 @@ func drop_barrel() -> void:
 	else:
 		collider_height = collider.shape.height
 	var start_pos: Vector3 = self.global_position + Vector3(0, collider_height / 2, 0)
-	var goal_dir: Vector3 = start_pos.direction_to(target.global_position)
-	var goal_dist: float = start_pos.distance_to(target.global_position)
-	var goal_pos: Vector3 = goal_dir * goal_dist * 0.65
+	var goal_pos: Vector3 = start_pos.lerp(target.global_position, 0.7)
 	
 	# Snap to floor
 	var space_state = get_world_3d().direct_space_state
@@ -182,7 +204,12 @@ func drop_barrel() -> void:
 	# Generate path to follow
 	var path = Path3D.new()
 	var curve = Curve3D.new()
-	var mid_point: Vector3 = goal_dir * goal_dist * 0.4 + Vector3(0, 5.0, 0)
+	var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5) + Vector3(0, 5.0, 0)
+	
+	#draw_debug_sphere(start_pos, 0.5, Color.GREEN)
+	#draw_debug_sphere(goal_pos, 0.5, Color.YELLOW)
+	#draw_debug_sphere(mid_point, 0.5, Color.ORANGE)
+	#draw_debug_sphere(target.global_position, 0.5, Color.RED)
 	
 	# Calculate bezier control points
 	var out_0 = (mid_point - start_pos) * 0.6667
@@ -192,8 +219,9 @@ func drop_barrel() -> void:
 	path.curve = curve
 	
 	# Add the path to the scene
-	get_tree().get_root().add_child(path)
-	path.global_position = self.global_position
+	var scene_root = get_tree().root.get_children()[0]
+	scene_root.add_child(path)
+	#path.global_position = self.global_position
 	var path_follow = PathFollow3D.new()
 	path.add_child(path_follow)
 	
@@ -203,15 +231,18 @@ func drop_barrel() -> void:
 	
 	# Connect the barrel pickup to the end of the level
 	barrel.collected.connect(_on_barrel_collected)
-	barrel.collected.connect(
-		func():
-			get_tree().get_root().remove_child(path)
-			path.queue_free()
-	)
 	
 	# Throw the barrel towards the player in an arc using kinematics
 	var tween = get_tree().create_tween()
 	tween.tween_property(path_follow, "progress_ratio", 1.0, 1.4).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	tween.tween_callback(
+		func():
+			path_follow.remove_child(barrel)
+			scene_root.add_child(barrel)
+			barrel.global_position = goal_pos
+			scene_root.remove_child(path)
+			path.queue_free()
+	)
 
 
 func _on_barrel_collected(data: BarrelDataResource) -> void:

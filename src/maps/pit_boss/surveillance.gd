@@ -232,7 +232,7 @@ func _on_laser_beam_startup_state_entered() -> void:
 
 
 # Add a debug sphere at global location.
-func draw_debug_sphere(location, size):
+func draw_debug_sphere(location, size, color):
 	# Will usually work, but you might need to adjust this.
 	var scene_root = get_tree().root.get_children()[0]
 	# Create sphere with low detail of size.
@@ -243,7 +243,7 @@ func draw_debug_sphere(location, size):
 	sphere.height = size * 2
 	# Bright red material (unshaded).
 	var material = StandardMaterial3D.new()
-	material.albedo_color = Color(1, 0, 0)
+	material.albedo_color = color
 	material.flags_unshaded = true
 	sphere.surface_set_material(0, material)
 
