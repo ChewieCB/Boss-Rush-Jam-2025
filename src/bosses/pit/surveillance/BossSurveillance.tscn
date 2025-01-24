@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_vjmyh"]
 [ext_resource type="AudioStream" uid="uid://wetpevehhwx1" path="res://src/bosses/base/assets/sfx/temp/weird_summon_clipped.wav" id="5_0c38w"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_75mh0"]
-[ext_resource type="Resource" uid="uid://c05iaeuuv1ym1" path="res://src/bosses/NotDeadGuard.tres" id="6_fjks3"]
+[ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="6_fjks3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dnveo"]
 

@@ -20,7 +20,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	for node in display_barrels:
-		node.rotation.y += delta
+		if is_instance_valid(node):
+			node.rotation.y += delta
 
 
 func _on_level_select(level_path: String) -> void:

@@ -13,7 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://db2criyne5nvh" path="res://src/bosses/base/assets/sfx/temp/whoosh2_clipped.wav" id="7_7wexv"]
 [ext_resource type="AudioStream" uid="uid://wetpevehhwx1" path="res://src/bosses/base/assets/sfx/temp/weird_summon_clipped.wav" id="8_ulaw4"]
 [ext_resource type="AudioStream" uid="uid://bxeo1ync2wkuj" path="res://src/bosses/base/assets/sfx/temp/dash6.wav" id="9_6e01o"]
-[ext_resource type="Resource" uid="uid://c05iaeuuv1ym1" path="res://src/bosses/NotDeadGuard.tres" id="9_juug2"]
+[ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="9_juug2"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_el2h4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
