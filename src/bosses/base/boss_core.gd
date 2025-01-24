@@ -1,6 +1,13 @@
 extends CharacterBody3D
 class_name BossCore
 
+signal defeated
+
+@export_category("Barrels")
+@export var barrel_to_drop: BarrelDataResource
+@export var barrel_pickup_scene: PackedScene
+var debug_trajectory_mesh: MeshInstance3D
+
 ## TEMP SFX REPLACE THESE
 @export var TEMP_sfx_awaken: AudioStream
 @export var TEMP_sfx_hit: Array[AudioStream]
@@ -67,6 +74,7 @@ var area_round_count: int = 0
 # For cleanup on scene change
 var spawned_area_objects = []
 
+@onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var hurtbox: Area3D = $Hurtbox
 @onready var health_ui = $UI/HealthUI/BossHealthContainer
 
@@ -95,6 +103,9 @@ func _ready() -> void:
 	randomize()
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
+	debug_trajectory_mesh = MeshInstance3D.new()
+	debug_trajectory_mesh.mesh = ImmediateMesh.new()
+	get_tree().get_root().add_child(debug_trajectory_mesh)
 	#debug_mesh.visible = false
 	await owner.ready
 
@@ -132,6 +143,77 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 func activate() -> void:
 	show_health()
 	SoundManager.play_sound(TEMP_sfx_awaken)
+
+
+func drop_barrel() -> void:
+	# Check if we've already given the player this barrel
+	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
+		push_warning("Barrel [%s] already collected, exiting level." % barrel_to_drop.barrel_name)
+		# If we don't have a barrel to spawn, emit the signal to end the level
+		defeated.emit()
+		return
+	
+	# Instance a pickup object with the barrel data
+	var barrel = barrel_pickup_scene.instantiate()
+	barrel.data = barrel_to_drop
+	
+	# Calculate a path for the barrel to move
+	var start_pos: Vector3 = self.global_position + Vector3(0, collider.shape.height / 2, 0)
+	var goal_dir: Vector3 = start_pos.direction_to(target.global_position)
+	var goal_dist: float = start_pos.distance_to(target.global_position)
+	var goal_pos: Vector3 = goal_dir * goal_dist * 0.65
+	
+	# Snap to floor
+	var space_state = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(
+		goal_pos, 
+		goal_pos - Vector3(0, 100, 0),
+		pow(2, 1-1) + pow(2, 7-1)
+	)
+	var result = space_state.intersect_ray(query)
+	goal_pos.y = result.position.y + 1.5
+	
+	# Generate path to follow
+	var path = Path3D.new()
+	var curve = Curve3D.new()
+	var mid_point: Vector3 = goal_dir * goal_dist * 0.4 + Vector3(0, 5.0, 0)
+	
+	# Calculate bezier control points
+	var out_0 = (mid_point - start_pos) * 0.6667
+	var in_1 = (mid_point - goal_pos) * 0.6667
+	curve.add_point(start_pos, Vector3.ZERO, out_0)
+	curve.add_point(goal_pos, in_1, Vector3.ZERO)
+	path.curve = curve
+	
+	# Add the path to the scene
+	get_tree().get_root().add_child(path)
+	path.global_position = self.global_position
+	var path_follow = PathFollow3D.new()
+	path.add_child(path_follow)
+	
+	# Add the barrel to the path
+	path_follow.add_child(barrel)
+	barrel.global_position = path_follow.global_position
+	
+	# Connect the barrel pickup to the end of the level
+	barrel.collected.connect(_on_barrel_collected)
+	barrel.collected.connect(
+		func():
+			get_tree().get_root().remove_child(path)
+			path.queue_free()
+	)
+	
+	# Throw the barrel towards the player in an arc using kinematics
+	var tween = get_tree().create_tween()
+	tween.tween_property(path_follow, "progress_ratio", 1.0, 1.4).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+
+
+func _on_barrel_collected(data: BarrelDataResource) -> void:
+	# TODO - show UI with new barrel effects
+	#
+	# Wait for player to click continue
+	#
+	defeated.emit()
 
 
 func select_attack() -> void:
@@ -250,6 +332,7 @@ func _on_died() -> void:
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
+	drop_barrel()
 
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:

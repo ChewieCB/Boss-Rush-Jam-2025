@@ -20,7 +20,7 @@ var floor_segments: Array
 
 
 func _ready() -> void:
-	boss.health_component.died.connect(_on_boss_defeated)
+	boss.defeated.connect(_on_boss_defeated)
 	boss.change_wheel_speed.connect(set_goal_rotation_speed)
 	player.health_component.died.connect(_on_player_death)
 	

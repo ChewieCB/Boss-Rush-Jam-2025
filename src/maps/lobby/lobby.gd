@@ -18,12 +18,6 @@ func _ready() -> void:
 		display_barrels.append(model)
 
 
-func _process(delta: float) -> void:
-	for node in display_barrels:
-		if is_instance_valid(node):
-			node.rotation.y += delta
-
-
 func _on_level_select(level_path: String) -> void:
 	ResourceLoader.load_threaded_request(level_path)
 	elevator_doors.close()

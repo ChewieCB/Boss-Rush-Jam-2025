@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://dd7xt2ptfqbkw"]
+[gd_scene load_steps=32 format=3 uid="uid://dd7xt2ptfqbkw"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_jhwuw"]
 [ext_resource type="Script" path="res://src/bosses/roulette/boss_roulette.gd" id="2_m116k"]
@@ -8,25 +8,18 @@
 [ext_resource type="PackedScene" uid="uid://cpicsh5bemc0b" path="res://src/bosses/roulette/RouletteBall.tscn" id="4_pnl31"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="5_m3ad2"]
 [ext_resource type="Material" uid="uid://voft28so03rt" path="res://src/bosses/roulette/BarrierMatBlue.tres" id="5_tmeqi"]
+[ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel.tres" id="6_7xocg"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="6_lkakv"]
 [ext_resource type="Texture2D" uid="uid://cw2qiop6puebo" path="res://src/bosses/base/assets/malina_boss_sprite_placeholder.png" id="6_p3iyj"]
 [ext_resource type="AudioStream" uid="uid://db2criyne5nvh" path="res://src/bosses/base/assets/sfx/temp/whoosh2_clipped.wav" id="7_3dh61"]
 [ext_resource type="Material" uid="uid://bl2wsskw41kaa" path="res://src/bosses/roulette/BarrierMat.tres" id="7_nq11i"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_yu3uh"]
-[ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="8_2hac0"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_edit5"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="9_7dg1x"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/guard.gd" id="15_rx3ud"]
 [ext_resource type="Resource" uid="uid://dlnn1fr5bmklq" path="res://src/bosses/MidAttackPhaseChangeGuard.tres" id="16_4livr"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/any_of_guard.gd" id="17_dqgtw"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="18_m5pf4"]
-
-[sub_resource type="Curve3D" id="Curve3D_jeonh"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 9.18, 0, 0, 2, 0, 0, 3.39, 0, 0, 0, 0, 0, 0, -6),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_obnfo"]
 height = 6.6
@@ -108,6 +101,7 @@ max_center_pushback_radius = 8.0
 drop_delay = 0.5
 drop_time = 1.0
 drop_return_delay = 4.0
+barrel_to_drop = ExtResource("6_7xocg")
 TEMP_sfx_death = ExtResource("3_m1gak")
 TEMP_sfx_area_1 = ExtResource("7_3dh61")
 TEMP_sfx_area_2 = null
@@ -119,32 +113,22 @@ telegraph_time = 0.45
 projectile_scene = null
 delay_per_projectile = 0.6
 
-[node name="BarrelSpawnPath" type="Path3D" parent="." index="0"]
-curve = SubResource("Curve3D_jeonh")
-
-[node name="PathFollow3D" type="PathFollow3D" parent="BarrelSpawnPath" index="0"]
-transform = Transform3D(-4.37112e-08, 1, -4.37112e-08, 0, -4.37114e-08, -0.999995, -0.999995, -4.37114e-08, 1.91068e-15, 0, 2, 0)
-loop = false
-tilt_enabled = false
-
-[node name="BarrelItemPickup" parent="BarrelSpawnPath/PathFollow3D" index="0" instance=ExtResource("8_2hac0")]
-
-[node name="Sprite3D" parent="." index="1"]
+[node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 3.58166, 0)
 texture = ExtResource("6_p3iyj")
 
-[node name="CollisionShape3D" parent="." index="2"]
+[node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
 shape = SubResource("CylinderShape3D_obnfo")
 
-[node name="DebugMesh" parent="." index="3"]
+[node name="DebugMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
 visible = true
 mesh = SubResource("CylinderMesh_ljrhi")
 
-[node name="Shields" type="Node3D" parent="." index="4"]
+[node name="Shields" type="Node3D" parent="." index="3"]
 
-[node name="Hurtbox" parent="." index="5"]
+[node name="Hurtbox" parent="." index="4"]
 collision_mask = 66
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
@@ -163,14 +147,14 @@ collision_mask = 64
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox/StaticBody3D" index="0"]
 shape = SubResource("BoxShape3D_6q8u4")
 
-[node name="HealthComponent" parent="." index="6"]
-max_health = 10000.0
-
-[node name="NavigationComponent" parent="." index="7"]
+[node name="NavigationComponent" parent="." index="6"]
 enabled = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Malina, Center of Attention"
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
 
 [node name="toTelegraph" type="Node" parent="StateChart/Root/Attacking/Cooldown" index="1"]
 script = ExtResource("4_3xtcm")
@@ -269,12 +253,14 @@ script = ExtResource("8_edit5")
 script = ExtResource("4_3xtcm")
 to = NodePath("../../DamageBarrier")
 event = &"start_barrier_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="toBallProjectile" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../BallProjectile")
 event = &"start_ball_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="DamageBarrier" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
@@ -288,6 +274,7 @@ script = ExtResource("8_edit5")
 script = ExtResource("4_3xtcm")
 to = NodePath("../../SpawnBarrier")
 event = &"barrier_attack_start"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/DamageBarrier/Targeting" index="1"]
@@ -318,6 +305,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_3xtcm")
 to = NodePath("../../BallProjectile")
 event = &"start_ball_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="BallProjectile" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
@@ -355,11 +343,13 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_3xtcm")
 to = NodePath("../../DamageBarrier")
 event = &"start_barrier_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="toPushbackWave" type="Node" parent="StateChart/Root/Phase/Phase1/BallProjectile" index="4"]
 script = ExtResource("4_3xtcm")
 event = &"start_pushback_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
@@ -386,18 +376,21 @@ script = ExtResource("8_edit5")
 script = ExtResource("4_3xtcm")
 to = NodePath("../../PushbackWave")
 event = &"start_pushback_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="toDamageBarrier" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="1"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../DamageBarrier")
 event = &"start_barrier_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="toDropSegment" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="2"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../DropSegment")
 event = &"start_drop_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="DamageBarrier" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
@@ -441,12 +434,14 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_3xtcm")
 to = NodePath("../../PushbackWave")
 event = &"start_pushback_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="toDropSegment" type="Node" parent="StateChart/Root/Phase/Phase2/DamageBarrier" index="4"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../DropSegment")
 event = &"start_drop_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="PushbackWave" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
@@ -484,12 +479,14 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_3xtcm")
 to = NodePath("../../DamageBarrier")
 event = &"start_barrier_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="toDropSegment" type="Node" parent="StateChart/Root/Phase/Phase2/PushbackWave" index="4"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../DropSegment")
 event = &"start_drop_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="DropSegment" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
@@ -527,12 +524,14 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_3xtcm")
 to = NodePath("../../PushbackWave")
 event = &"start_pushback_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="toDamageBarrier" type="Node" parent="StateChart/Root/Phase/Phase2/DropSegment" index="4"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../DamageBarrier")
 event = &"start_barrier_attack"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="4"]
@@ -735,7 +734,7 @@ to = NodePath("..")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="DebugPhaseLabel" type="Label3D" parent="." index="10"]
+[node name="DebugPhaseLabel" type="Label3D" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, 0)
 billboard = 1
 no_depth_test = true
@@ -745,20 +744,20 @@ font_size = 128
 outline_size = 32
 uppercase = true
 
-[node name="DebugStateLabel" parent="." index="12"]
+[node name="DebugStateLabel" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, 0)
 no_depth_test = true
 
-[node name="DebugDistanceLabel" parent="." index="13"]
+[node name="DebugDistanceLabel" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, 0)
 no_depth_test = true
 
-[node name="ShieldsAbsorbTimer" type="Timer" parent="." index="14"]
+[node name="ShieldsAbsorbTimer" type="Timer" parent="." index="13"]
 one_shot = true
 
-[node name="ShieldsSpawnTimer" type="Timer" parent="." index="15"]
+[node name="ShieldsSpawnTimer" type="Timer" parent="." index="14"]
 
-[node name="PushbackArea" type="Area3D" parent="." index="16"]
+[node name="PushbackArea" type="Area3D" parent="." index="15"]
 collision_layer = 0
 collision_mask = 2
 
@@ -766,7 +765,7 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 29, 0)
 shape = SubResource("CylinderShape3D_7wlfa")
 
-[node name="CenterBlocker" type="StaticBody3D" parent="." index="17"]
+[node name="CenterBlocker" type="StaticBody3D" parent="." index="16"]
 collision_layer = 0
 collision_mask = 2
 
@@ -774,10 +773,10 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 29, 0)
 shape = SubResource("CylinderShape3D_cbruj")
 
-[node name="BarrierTargetingTimer" type="Timer" parent="." index="19"]
+[node name="BarrierTargetingTimer" type="Timer" parent="." index="18"]
 one_shot = true
 
-[node name="BallKillTimer" type="Timer" parent="." index="20"]
+[node name="BallKillTimer" type="Timer" parent="." index="19"]
 one_shot = true
 
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/Targeting" to="." method="_on_shields_targeting_state_entered"]
