@@ -1,0 +1,197 @@
+Renderer info: NVIDIA GeForce RTX 3060/PCIe/SSE2 version 4.6.0 NVIDIA 550.100 from NVIDIA Corporation
+Depth buffer bits: 24
+Multisampling enabled
+Adding file system path "/usr/share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/."
+Loading document from /home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/misc/elevator_prefab.map
+Adding file system path "/usr/share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/."
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/assets"
+Loaded entity definition file FuncGodot.fgd
+Loaded texture collection '"textures"'
+Loaded texture collection '"textures/placeholder"'
+Loaded texture collection '"textures/special"'
+Loaded "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/misc/elevator_prefab.map" in 237ms
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossTest.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 4 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 5 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/RouletteBall.glb', loading fallback texture
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/misc/elevator_prefab.map" in 3ms
+Renderer info: NVIDIA GeForce RTX 3060/PCIe/SSE2 version 4.6.0 NVIDIA 550.100 from NVIDIA Corporation
+Depth buffer bits: 24
+Multisampling enabled
+Adding file system path "/usr/share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/."
+Loading document from /home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/lobby/lobby.map
+Adding file system path "/usr/share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/."
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/assets"
+Loaded entity definition file FuncGodot.fgd
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 4 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 5 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+Loaded texture collection '"textures"'
+Loaded texture collection '"textures/placeholder"'
+Loaded texture collection '"textures/special"'
+Loaded "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/lobby/lobby.map" in 228ms
+Parsed successfully as Valve entities (unknown position)
+Parsed successfully as Valve entities (unknown position)
+Could not paste linked groups: Inconsistent linked group structure
+Could not paste linked groups: Inconsistent linked group structure
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/lobby/lobby.map" in 4ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/misc/elevator_prefab.map" in 8ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/misc/elevator_prefab.map" in 3ms
+Renderer info: NVIDIA GeForce RTX 3060/PCIe/SSE2 version 4.6.0 NVIDIA 550.100 from NVIDIA Corporation
+Depth buffer bits: 24
+Multisampling enabled
+Adding file system path "/usr/share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/."
+Loading document from /home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/roulette_boss/roulette.map
+Adding file system path "/usr/share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/."
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/assets"
+Loaded entity definition file FuncGodot.fgd
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 4 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 5 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+Loaded texture collection '"textures"'
+Loaded texture collection '"textures/placeholder"'
+Loaded texture collection '"textures/special"'
+Loaded "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/roulette_boss/roulette.map" in 250ms
+Renderer info: NVIDIA GeForce RTX 3060/PCIe/SSE2 version 4.6.0 NVIDIA 550.100 from NVIDIA Corporation
+Depth buffer bits: 24
+Multisampling enabled
+Adding file system path "/usr/share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/."
+Creating new document
+Loaded entity definition file FuncGodot.fgd
+Loaded texture collection '"textures"'
+Adding file system path "/usr/share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/."
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/assets"
+Reloading texture collections
+Loaded texture collection '"textures"'
+Loaded texture collection '"textures/placeholder"'
+Loaded texture collection '"textures/special"'
+Reloading entity definitions
+Loaded entity definition file FuncGodot.fgd
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossTest.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 4 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 5 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/RouletteBall.glb', loading fallback texture
+Could not clip brush: Brush is empty
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/pit_boss/pit.map" in 8ms
+Parsed successfully as Valve entities (unknown position)
+Parsed successfully as Valve entities (unknown position)
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/pit_boss/pit.map" in 3ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/pit_boss/pit.map" in 2ms
+Renderer info: NVIDIA GeForce RTX 3060/PCIe/SSE2 version 4.6.0 NVIDIA 550.100 from NVIDIA Corporation
+Depth buffer bits: 24
+Multisampling enabled
+Adding file system path "/usr/share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/."
+Loading document from /home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/lobby/lobby.map
+Adding file system path "/usr/share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/."
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/assets"
+Loaded entity definition file FuncGodot.fgd
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 4 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 5 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+Loaded texture collection '"textures"'
+Loaded texture collection '"textures/placeholder"'
+Loaded texture collection '"textures/special"'
+Loaded "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/lobby/lobby.map" in 241ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/pit_boss/pit.map" in 8ms
+Created autosave backup at "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/pit_boss/autosave/pit.1.map"
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/pit_boss/pit.map" in 2ms
+Could not clip brush: Brush is empty
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/pit_boss/pit.map" in 3ms
+Could not clip brush: Brush is empty
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/pit_boss/pit.map" in 2ms
+Created autosave backup at "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/pit_boss/autosave/pit.2.map"
+Could not clip brush: Brush is empty
+Could not clip brush: Brush is empty
+Could not clip brush: Brush is empty
+Could not clip brush: Brush is empty
+Could not clip brush: Brush is empty
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/pit_boss/pit.map" in 3ms
+Reloading texture collections
+Loaded texture collection '"textures"'
+Loaded texture collection '"textures/placeholder"'
+Loaded texture collection '"textures/special"'
+Reloading entity definitions
+Loaded entity definition file FuncGodot.fgd
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 4 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 5 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossTest.glb', loading fallback texture
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Failed to construct entity model renderer for ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}, check the skin and frame indices
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/RouletteBall.glb', loading fallback texture
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Could not load entity model frame ModelSpecification{path: "assets/trenchbroom/models/PitBoss.glb", skinIndex: 0, frameIndex: 0}: Could not load model assets/trenchbroom/models/PitBoss.glb: Assimp couldn't import model from 'assets/trenchbroom/models/PitBoss.glb': Model has no vertices. (So no valid bounding box.)
+Reloading texture collections
+Loaded texture collection '"textures"'
+Loaded texture collection '"textures/placeholder"'
+Loaded texture collection '"textures/special"'

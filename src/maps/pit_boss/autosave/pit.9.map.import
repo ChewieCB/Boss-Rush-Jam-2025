@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://dj6pfx85cfdfl"
+path="res://.godot/imported/pit.9.map-4e873890a4d66879d6028eb0ec063c5e.tres"
+
+[deps]
+
+source_file="res://src/maps/pit_boss/autosave/pit.9.map"
+dest_files=["res://.godot/imported/pit.9.map-4e873890a4d66879d6028eb0ec063c5e.tres"]
+
+[params]
+

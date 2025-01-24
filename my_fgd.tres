@@ -1,14 +1,21 @@
-[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=10 format=3 uid="uid://bb5aobsi08anx"]
+[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=17 format=3 uid="uid://bb5aobsi08anx"]
 
 [ext_resource type="Resource" uid="uid://dq458eynubrqg" path="res://assets/trenchbroom/PlayerRef.tres" id="1_aaqsq"]
 [ext_resource type="Resource" uid="uid://crgpdahjaj" path="res://addons/func_godot/fgd/func_godot_fgd.tres" id="1_v87b8"]
 [ext_resource type="Script" path="res://addons/func_godot/src/fgd/func_godot_fgd_file.gd" id="2_daboe"]
+[ext_resource type="Resource" uid="uid://c4v5aixq78dmd" path="res://assets/trenchbroom/BossSurveillance.tres" id="2_fkeva"]
 [ext_resource type="Resource" uid="uid://b85tg00v4yi81" path="res://assets/trenchbroom/BossMarker.tres" id="4_jt43q"]
 [ext_resource type="Resource" uid="uid://dcn8o1nutbiin" path="res://assets/trenchbroom/ElevatorButton.tres" id="5_s6gss"]
 [ext_resource type="Resource" uid="uid://c5jfvwm8lp6jt" path="res://assets/trenchbroom/ElevatorDoors.tres" id="6_8ycue"]
 [ext_resource type="Resource" uid="uid://dhd5cfecqe7iu" path="res://assets/trenchbroom/BossTest.tres" id="7_8kdmy"]
 [ext_resource type="Resource" uid="uid://d014js6ak2jgh" path="res://assets/trenchbroom/BossRoulette.tres" id="7_ls432"]
-[ext_resource type="Resource" path="res://assets/trenchbroom/RouletteBall.tres" id="8_tfoyg"]
+[ext_resource type="Resource" uid="uid://bmsjmrndyrogj" path="res://assets/trenchbroom/RouletteBall.tres" id="8_tfoyg"]
+[ext_resource type="Resource" uid="uid://d3u7xyae4x18a" path="res://assets/trenchbroom/BossPit.tres" id="9_geeyq"]
+[ext_resource type="Resource" uid="uid://bvv1kmehbn86" path="res://assets/trenchbroom/CoverColumn.tres" id="10_1fjbd"]
+[ext_resource type="Resource" uid="uid://631n2m70t34k" path="res://assets/trenchbroom/CoverFull.tres" id="11_os4xu"]
+[ext_resource type="Resource" uid="uid://cfqrc0bgny2xj" path="res://assets/trenchbroom/CoverHalf.tres" id="12_8ses4"]
+[ext_resource type="Resource" uid="uid://bc5dmbk2icg86" path="res://assets/trenchbroom/CoverSpawnPoint.tres" id="13_w55fb"]
+[ext_resource type="Resource" uid="uid://h25xigyqkxet" path="res://assets/trenchbroom/TurretSpawnPoint.tres" id="14_75rhd"]
 
 [resource]
 script = ExtResource("2_daboe")
@@ -16,4 +23,4 @@ export_file = false
 target_map_editor = 1
 fgd_name = "FuncGodot"
 base_fgd_files = Array[Resource]([ExtResource("1_v87b8")])
-entity_definitions = Array[Resource]([ExtResource("1_aaqsq"), ExtResource("4_jt43q"), ExtResource("6_8ycue"), ExtResource("5_s6gss"), ExtResource("7_ls432"), ExtResource("7_8kdmy"), ExtResource("8_tfoyg")])
+entity_definitions = Array[Resource]([ExtResource("1_aaqsq"), ExtResource("4_jt43q"), ExtResource("6_8ycue"), ExtResource("5_s6gss"), ExtResource("7_ls432"), ExtResource("7_8kdmy"), ExtResource("8_tfoyg"), ExtResource("9_geeyq"), ExtResource("10_1fjbd"), ExtResource("11_os4xu"), ExtResource("12_8ses4"), ExtResource("13_w55fb"), ExtResource("14_75rhd"), ExtResource("2_fkeva")])

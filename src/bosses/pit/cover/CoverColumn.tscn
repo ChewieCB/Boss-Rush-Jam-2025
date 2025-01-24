@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=4 uid="uid://dggs1mnis3x6x"]
+
+[ext_resource type="Script" path="res://src/bosses/pit/cover/cover.gd" id="1_iibnv"]
+[ext_resource type="Material" uid="uid://q778hp4rpyl4" path="res://assets/textures/placeholder/texture_green_green_green_13.tres" id="1_uwnqr"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_baljf"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_4pfod"]
+_surfaces = [{
+"aabb": AABB(-1.5, -7.25, -1.5, 3, 14.5, 3),
+"attribute_data": PackedByteArray("AACcwAAAcL8AAJzAAAAAvQAAosAAAAC9AACiwAAAcL8AAIC+AABwvwAAgL0AAHC/AACAvQAAAL0AAIC+AAAAvQAAgL4AAKJAAACAvgAAnEAAAIC9AACcQAAAgL0AAKJAAACAPgAAokAAAIA9AACiQAAAgD0AAJxAAACAPgAAnEAAAIA+AABwvwAAgD4AAAC9AACAPQAAAL0AAIA9AABwvwAAnEAAAHC/AACiQAAAcL8AAKJAAAAAvQAAnEAAAAC9"),
+"format": 34359742487,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcA"),
+"material": ExtResource("1_uwnqr"),
+"name": "placeholder/texture_green_green_green_13",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AADAvwAA6EAAAMC/AADAvwAA6MAAAMC/AADAPwAA6MAAAMC/AADAPwAA6EAAAMC/AADAvwAA6EAAAMC/AADAvwAA6EAAAMA/AADAvwAA6MAAAMA/AADAvwAA6MAAAMC/AADAPwAA6MAAAMC/AADAvwAA6MAAAMC/AADAvwAA6MAAAMA/AADAPwAA6MAAAMA/AADAPwAA6EAAAMC/AADAPwAA6EAAAMA/AADAvwAA6EAAAMA/AADAvwAA6EAAAMC/AADAPwAA6EAAAMC/AADAPwAA6MAAAMC/AADAPwAA6MAAAMA/AADAPwAA6EAAAMA/AADAvwAA6EAAAMA/AADAPwAA6EAAAMA/AADAPwAA6MAAAMA/AADAvwAA6MAAAMA//////wAA/7//////AAD/v/////8AAP+//////wAA/78AAP9//3//vwAA/3//f/+/AAD/f/9//78AAP9//3//v/9/AAD/f/+//38AAP9//7//fwAA/3//v/9/AAD/f/+//3//////////f/////////9//////////3////////////9//////////3//////////f/////////9///////9//3////+//3//f////7//f/9/////v/9//3////+/")
+}]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nhm5x"]
+size = Vector3(3.004, 14.5, 2.92831)
+
+[node name="CoverColumn" type="StaticBody3D"]
+collision_layer = 64
+collision_mask = 78
+script = ExtResource("1_iibnv")
+explosion_vfx = ExtResource("2_baljf")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2548, 0)
+cast_shadow = 2
+gi_mode = 0
+mesh = SubResource("ArrayMesh_4pfod")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0174316, 7.2548, -0.00953674)
+shape = SubResource("BoxShape3D_nhm5x")

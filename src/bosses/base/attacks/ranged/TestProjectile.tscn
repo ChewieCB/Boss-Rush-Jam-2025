@@ -9,6 +9,7 @@
 collision_layer = 8
 collision_mask = 7
 script = ExtResource("1_ye752")
+projectile_damage = 2.0
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 modulate = Color(1, 0.933333, 0, 1)

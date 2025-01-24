@@ -76,7 +76,6 @@ radius = 6.0
 collision_mask = 26
 motion_mode = 1
 script = ExtResource("2_m116k")
-current_phase = 1
 phase_2_health_percentage_trigger = 0.66
 phase_3_health_percentage_trigger = 0.33
 max_barrier_phase_count = 2

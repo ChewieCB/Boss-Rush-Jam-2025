@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="NotGuard" load_steps=4 format=3 uid="uid://cc1k5wphwlecg"]
+[gd_resource type="Resource" script_class="NotGuard" load_steps=4 format=3 uid="uid://c05iaeuuv1ym1"]
 
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="1_1wrc2"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="2_yrnkq"]

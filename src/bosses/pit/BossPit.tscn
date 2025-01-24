@@ -1,0 +1,2063 @@
+[gd_scene load_steps=31 format=3 uid="uid://c0rwch0vd24ro"]
+
+[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
+[ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
+[ext_resource type="Texture2D" uid="uid://b31wk2rcrvdbp" path="res://src/bosses/base/assets/juni_boss_sprite_placeholder.png" id="2_dnkm2"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_akhww"]
+[ext_resource type="Texture2D" uid="uid://bpkl437wqw2kh" path="res://src/bosses/base/assets/juni_boss_face_lunge.png" id="4_nd84x"]
+[ext_resource type="Texture2D" uid="uid://dqopqwf4syxsn" path="res://src/bosses/base/assets/juni_boss_face_swipe.png" id="4_qi0bj"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bjod6"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_bqowf"]
+[ext_resource type="Texture2D" uid="uid://dasca74no7m2t" path="res://src/bosses/base/assets/juni_boss_face_uppercut.png" id="5_i6at3"]
+[ext_resource type="Shader" path="res://src/bosses/roulette/shield_impacts.gdshader" id="6_l4p06"]
+[ext_resource type="Resource" uid="uid://c05iaeuuv1ym1" path="res://src/bosses/NotDeadGuard.tres" id="9_juug2"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_el2h4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.403922)
+emission_enabled = true
+emission = Color(0.839216, 0.588235, 0, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2s76u"]
+render_priority = 0
+next_pass = SubResource("StandardMaterial3D_e3170")
+shader = ExtResource("6_l4p06")
+shader_parameter/color = Color(0.84, 0.588, 0, 1)
+shader_parameter/fresnel_sharpness = 1.0
+shader_parameter/extend_distance = 0.0
+shader_parameter/impact_points = null
+shader_parameter/impact_size = 1.0
+shader_parameter/impact_falloff_sharpness = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_g5e5v"]
+size = Vector3(0.6, 2, 0.6)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ijkfg"]
+radius = 1.0
+height = 4.6
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jlq7w"]
+radius = 1.0
+height = 4.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pi7fj"]
+size = Vector3(3, 3.6, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_n64vh"]
+size = Vector3(3, 3.6, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q0jwb"]
+transparency = 1
+albedo_color = Color(1, 0, 0, 0.337255)
+
+[sub_resource type="Animation" id="Animation_6jtcq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ArmsDEbug/ArmsDebugL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugR:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugR:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugL:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.447021, 2.84312, 0.761648)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-1.94809, 2.26694, -0.0607154)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.221657, -0.338953, 0.903109)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2.05191, 2.26694, 0.0392845)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("ArmsDEbug:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("ArmsDEbug:rotation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kjge0"]
+resource_name = "air_slam"
+length = 0.6
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"air_slam_jump"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(0.447021, 2.84312, 0.761648), Vector3(2.34766, 3.98364, 0.989149), Vector3(0.447021, 2.84312, 0.761648), Vector3(0.447021, 2.84312, 0.761648)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(0.221657, -0.338953, 0.903109), Vector3(-2.05934, -0.33864, 0.674336), Vector3(0.221657, -0.338953, 0.903109), Vector3(0.221657, -0.338953, 0.903109)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(-1.94809, 2.26694, -0.0607154), Vector3(-1.3382, 3.13822, 0.897693), Vector3(-1.94809, 2.26694, -0.0607154), Vector3(-1.94809, 2.26694, -0.0607154)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.87765, 3.13822, 0.910556), Vector3(2.05191, 2.26694, 0.0392845), Vector3(2.05191, 2.26694, 0.0392845)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ArmsDEbug:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6),
+"transitions": PackedFloat32Array(2.46229, 0.482968, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 1.6), Vector3(0, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ArmsDEbug:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6),
+"transitions": PackedFloat32Array(2.46229, 0.482968, 1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(0.698132, -3.14159, 1.26701e-07), Vector3(0, -3.14159, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_rk1lk"]
+resource_name = "air_slam_attack"
+length = 0.8
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.35),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [40.0],
+"method": &"air_slam_attack"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8),
+"transitions": PackedFloat32Array(1.93187, 0.196146, 1),
+"update": 0,
+"values": [Vector3(0.447021, 2.84312, 0.761648), Vector3(2.62847, 4.15214, 1.02276), Vector3(0.447021, 2.84312, 0.761648)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8),
+"transitions": PackedFloat32Array(1.93187, 0.196146, 1),
+"update": 0,
+"values": [Vector3(0.221657, -0.338953, 0.903109), Vector3(-2.39634, -0.338594, 0.640536), Vector3(0.221657, -0.338953, 0.903109)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8),
+"transitions": PackedFloat32Array(1.93187, 0.196146, 1),
+"update": 0,
+"values": [Vector3(-1.94809, 2.26694, -0.0607154), Vector3(-1.24809, 3.26694, 1.03929), Vector3(-1.94809, 2.26694, -0.0607154)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8),
+"transitions": PackedFloat32Array(1.93187, 0.196146, 1),
+"update": 0,
+"values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 2.26694, 0.0392845)]
+}
+
+[sub_resource type="Animation" id="Animation_qkirm"]
+resource_name = "air_slam_intro"
+length = 0.6
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true, Vector3(0, 0, 0)],
+"method": &"air_slam_jump"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(0.447021, 2.84312, 0.761648), Vector3(2.34766, 3.98364, 0.989149), Vector3(0.447021, 2.84312, 0.761648), Vector3(0.447021, 2.84312, 0.761648)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(0.221657, -0.338953, 0.903109), Vector3(-2.05934, -0.33864, 0.674336), Vector3(0.221657, -0.338953, 0.903109), Vector3(0.221657, -0.338953, 0.903109)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(-1.94809, 2.26694, -0.0607154), Vector3(-1.3382, 3.13822, 0.897693), Vector3(-1.94809, 2.26694, -0.0607154), Vector3(-1.94809, 2.26694, -0.0607154)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.21914, 0.535887, 1),
+"update": 0,
+"values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.87765, 3.13822, 0.910556), Vector3(2.05191, 2.26694, 0.0392845), Vector3(2.05191, 2.26694, 0.0392845)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ArmsDEbug:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6),
+"transitions": PackedFloat32Array(2.46229, 0.482968, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 1.6), Vector3(0, 0, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ArmsDEbug:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6),
+"transitions": PackedFloat32Array(2.46229, 0.482968, 1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(0.698132, -3.14159, 1.26701e-07), Vector3(0, -3.14159, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_eetrs"]
+resource_name = "hammer_ground"
+length = 2.5
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.6, 1.05, 1.65),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [8.0, 0.45, 2.0],
+"method": &"spawn_center_wave"
+}, {
+"args": [12.0, 0.6, 2.0],
+"method": &"spawn_center_wave"
+}, {
+"args": [16.0, 0.75, 2.0],
+"method": &"spawn_center_wave"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.6, 0.85, 1.05, 1.4, 1.65, 2.5),
+"transitions": PackedFloat32Array(1.7411, 0.435275, 1.62451, 2.07053, 1.62451, 2.07053, 1.8025, 1.7411),
+"update": 0,
+"values": [Vector3(0.447021, 2.84312, 0.761648), Vector3(2.62847, 4.15214, 1.02276), Vector3(1.01306, 2.61684, 0.437318), Vector3(2.62847, 4.15214, 1.02276), Vector3(1.01306, 2.61684, 0.437318), Vector3(2.62847, 4.15214, 1.02276), Vector3(1.01306, 2.61684, 0.437318), Vector3(0.447021, 2.84312, 0.761648)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.6, 0.85, 1.05, 1.4, 1.65, 2.5),
+"transitions": PackedFloat32Array(1.7411, 0.435275, 1.62451, 2.07053, 1.62451, 2.07053, 1.8025, 1.7411),
+"update": 0,
+"values": [Vector3(0.221657, -0.338953, 0.903109), Vector3(-2.39634, -0.338594, 0.640536), Vector3(-0.355032, -0.35324, 1.10794), Vector3(-2.39634, -0.338594, 0.640536), Vector3(-0.355032, -0.35324, 1.10794), Vector3(-2.39634, -0.338594, 0.640536), Vector3(-0.355032, -0.35324, 1.10794), Vector3(0.221657, -0.338953, 0.903109)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.6, 0.85, 1.05, 1.4, 1.65, 2.5),
+"transitions": PackedFloat32Array(1.7411, 0.435275, 1.62451, 2.07053, 1.62451, 2.07053, 1.8025, 1.7411),
+"update": 0,
+"values": [Vector3(-1.94809, 2.26694, -0.0607154), Vector3(-1.24809, 3.26694, 1.03929), Vector3(-1.94809, 1.13826, 0.548327), Vector3(-1.24809, 3.26694, 1.03929), Vector3(-1.94809, 1.13826, 0.548327), Vector3(-1.24809, 3.26694, 1.03929), Vector3(-1.94809, 1.13826, 0.548327), Vector3(-1.94809, 2.26694, -0.0607154)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.6, 0.85, 1.05, 1.4, 1.65, 2.5),
+"transitions": PackedFloat32Array(1.7411, 0.435275, 1.62451, 2.07053, 1.62451, 2.07053, 1.8025, 1.7411),
+"update": 0,
+"values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 1.19562, 0.630243), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 1.19562, 0.630243), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 1.19562, 0.630243), Vector3(2.05191, 2.26694, 0.0392845)]
+}
+
+[sub_resource type="Animation" id="Animation_qtmfa"]
+resource_name = "hook"
+length = 0.7
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ArmsDEbug/ArmsDebugL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.45, 0.7),
+"transitions": PackedFloat32Array(2.07053, 0.378929, 2.92817, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.18405, 0.802729, -0.187249), Vector3(0.36383, -0.745749, -0.0919494), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugR:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.45, 0.7),
+"transitions": PackedFloat32Array(2.07053, 0.378929, 2.92817, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.393066, 0.769608, 0.355359), Vector3(0.238195, -1.25529, 0.577745), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugL:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.45, 0.7),
+"transitions": PackedFloat32Array(2.07053, 0.378929, 2.92817, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(3.36774e-08, 0, -0.3), Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugR:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.45, 0.7),
+"transitions": PackedFloat32Array(2.07053, 0.378929, 2.92817, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.5, 0, -1.1), Vector3(2.3, 0, -0.0999998), Vector3(0, 0, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.35),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hook"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_3v14a"]
+resource_name = "lunge"
+length = 0.95
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ArmsDEbug/ArmsDebugL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5, 0.95),
+"transitions": PackedFloat32Array(3.13834, 0.378929, 3.4822, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.13446, 1.19437e-07, -1.87479e-07), Vector3(1.13446, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugR:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5, 0.95),
+"transitions": PackedFloat32Array(3.13834, 0.378, 3.48, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.13446, 1.19437e-07, -1.87479e-07), Vector3(1.13446, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugL:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5, 0.95),
+"transitions": PackedFloat32Array(3.13834, 0.378929, 3.4822, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-2.53526e-07, 1.7, 2.9), Vector3(0, 1.7, -2.9), Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugR:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5, 0.95),
+"transitions": PackedFloat32Array(3.13834, 0.378, 3.48, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-2.53526e-07, 1.7, 2.9), Vector3(0, 1.7, -2.9), Vector3(0, 0, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.35),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"lunge"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_bc730"]
+resource_name = "swipe"
+length = 0.7
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ArmsDEbug/ArmsDebugL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.35, 0.6),
+"transitions": PackedFloat32Array(1.56917, 1, 0.297302, 2.21914, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.212914, -0.914184, -0.383807), Vector3(0.212914, -0.914184, -0.383807), Vector3(0.212914, 2.48921, -0.383807), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugR:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.35, 0.6),
+"transitions": PackedFloat32Array(1.56917, 1, 0.297, 2.21, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.349066, 0), Vector3(0, -0.349066, 0), Vector3(0.123098, 1.14212, 0.124042), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugL:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.35, 0.6),
+"transitions": PackedFloat32Array(1.56917, 1, 0.297302, 2.21914, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.4, -0.4, -0.8), Vector3(-0.4, -0.4, -0.8), Vector3(-0.4, -0.4, 0.4), Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugR:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.35, 0.6),
+"transitions": PackedFloat32Array(1.56917, 1, 0.297, 2.21, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.3), Vector3(0, 0, -0.3), Vector3(0.5, 0, -0.2), Vector3(0, 0, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"swipe"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_xr3uq"]
+resource_name = "uppercut"
+length = 0.6
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [15.0],
+"method": &"uppercut"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.07053, 1),
+"update": 0,
+"values": [Vector3(0.447021, 2.84312, 0.761648), Vector3(2.62847, 4.15214, 1.02276), Vector3(0.447021, 2.84312, 0.761648)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.07053, 1),
+"update": 0,
+"values": [Vector3(0.221657, -0.338953, 0.903109), Vector3(-2.39634, -0.338594, 0.640536), Vector3(0.221657, -0.338953, 0.903109)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ArmsDEbug/ArmsDebugL/Mesh:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.07053, 1),
+"update": 0,
+"values": [Vector3(-1.94809, 2.26694, -0.0607154), Vector3(-1.24809, 3.26694, 1.03929), Vector3(-1.94809, 2.26694, -0.0607154)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ArmsDEbug/ArmsDebugR/Mesh:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.6),
+"transitions": PackedFloat32Array(0.535887, 2.07053, 1),
+"update": 0,
+"values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 2.26694, 0.0392845)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_iyws4"]
+_data = {
+"RESET": SubResource("Animation_6jtcq"),
+"air_slam": SubResource("Animation_kjge0"),
+"air_slam_attack": SubResource("Animation_rk1lk"),
+"air_slam_intro": SubResource("Animation_qkirm"),
+"hammer_ground": SubResource("Animation_eetrs"),
+"hook": SubResource("Animation_qtmfa"),
+"lunge": SubResource("Animation_3v14a"),
+"swipe": SubResource("Animation_bc730"),
+"uppercut": SubResource("Animation_xr3uq")
+}
+
+[node name="BossPit" instance=ExtResource("1_opefu")]
+collision_mask = 91
+script = ExtResource("2_a8b8q")
+swipe_debug = ExtResource("4_qi0bj")
+lunge_debug = ExtResource("4_nd84x")
+uppercut_debug = ExtResource("5_i6at3")
+wave_material = SubResource("ShaderMaterial_2s76u")
+phase_2_health_percentage_trigger = 0.5
+swipe_damage = 7.0
+hook_damage = 8.0
+uppercut_damage = 5.0
+air_slam_damage = 15.0
+ground_pound_wave_radius = 16.0
+lunge_friction = 0.05
+lunge_damage = 5.0
+lunge_force = 6.5
+lunge_cooldown = 8.5
+TEMP_sfx_awaken = null
+TEMP_sfx_hit = Array[AudioStream]([])
+TEMP_sfx_area_1 = null
+TEMP_sfx_area_2 = null
+TEMP_sfx_projectile = null
+TEMP_sfx_telegraph = null
+TEMP_sfx_charge = null
+TEMP_sfx_charge_impact = null
+attack_recovery_time = 0.5
+projectile_scene = null
+delay_per_projectile = 0.6
+MAX_SPEED = 6.0
+FRICTION = 4.0
+
+[node name="ArmsDEbug" type="Node3D" parent="." index="0"]
+transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, 0, 0, 0)
+
+[node name="ArmsDebugL" type="Node3D" parent="ArmsDEbug" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugL" index="0"]
+transform = Transform3D(-0.905967, 1.1274, 0.39775, 0.933456, 0.978886, -0.648424, -0.746919, -0.144112, -1.29281, -1.94809, 2.26694, -0.0607154)
+mesh = SubResource("BoxMesh_g5e5v")
+skeleton = NodePath("../../../Sprite3D")
+
+[node name="ArmsDebugR" type="Node3D" parent="ArmsDEbug" index="1"]
+
+[node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugR" index="0"]
+transform = Transform3D(0.789815, -1.17876, -0.486546, 1.14907, 0.906037, -0.329768, 0.553034, -0.19908, 1.38004, 2.05191, 2.26694, 0.0392845)
+mesh = SubResource("BoxMesh_g5e5v")
+skeleton = NodePath("../../../Sprite3D")
+
+[node name="Sprite3D" parent="." index="1"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 2.8, 0)
+texture = ExtResource("2_dnkm2")
+
+[node name="FaceSprite" type="Sprite3D" parent="Sprite3D" index="0"]
+sorting_offset = 0.1
+billboard = 2
+texture = ExtResource("5_i6at3")
+
+[node name="CollisionShape3D" parent="." index="2"]
+shape = SubResource("CapsuleShape3D_ijkfg")
+
+[node name="DebugMesh" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
+visible = true
+mesh = SubResource("CapsuleMesh_jlq7w")
+
+[node name="Hurtbox" parent="." index="4"]
+collision_mask = 67
+monitoring = true
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -2)
+shape = SubResource("BoxShape3D_pi7fj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Hurtbox" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.5)
+visible = false
+mesh = SubResource("BoxMesh_n64vh")
+surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
+
+[node name="HealthComponent" parent="." index="5"]
+max_health = 4800.0
+
+[node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
+boss_name = "Pit Boss"
+
+[node name="toIntroAirSlam" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../IntroAirSlam")
+event = &"intro_slam"
+guard = ExtResource("9_juug2")
+delay_in_seconds = "0.0"
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Phase1")
+event = &"start_phase_1"
+guard = ExtResource("9_juug2")
+delay_in_seconds = "0.0"
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Inactive" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Phase2")
+event = &"start_phase_2"
+guard = ExtResource("9_juug2")
+delay_in_seconds = "0.0"
+
+[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Inactive" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Phase3")
+event = &"start_phase_3"
+guard = ExtResource("9_juug2")
+delay_in_seconds = "0.0"
+
+[node name="IntroAirSlam" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("AirSlam")
+
+[node name="AirSlam" type="Node" parent="StateChart/Root/Phase/IntroAirSlam" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toGroundPound" type="Node" parent="StateChart/Root/Phase/IntroAirSlam/AirSlam" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../GroundPound")
+event = &"aoe_burst"
+delay_in_seconds = "0.0"
+
+[node name="GroundPound" type="Node" parent="StateChart/Root/Phase/IntroAirSlam" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/IntroAirSlam/GroundPound" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/IntroAirSlam" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/IntroAirSlam/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../../Phase1")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/IntroAirSlam" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Phase3")
+event = &"start_phase_3"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/IntroAirSlam" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="2"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase1" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toMeleeComboBasic" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeComboBasic")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLungeCloser" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../LungeCloser")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="MeleeComboBasic" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeComboBasic" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toSwipe" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeComboBasic/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Swipe")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeComboBasic" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toHook" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeComboBasic/Swipe" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Hook")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeComboBasic/Swipe" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Hook" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeComboBasic" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeComboBasic/Hook" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeComboBasic" index="3"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeComboBasic/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toLungeCloser" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeComboBasic" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../LungeCloser")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="LungeCloser" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/LungeCloser" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase1/LungeCloser/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Attack")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="Attack" type="Node" parent="StateChart/Root/Phase/Phase1/LungeCloser" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/LungeCloser/Attack" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/LungeCloser" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/LungeCloser/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toMeleeComboBasic" type="Node" parent="StateChart/Root/Phase/Phase1/LungeCloser" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeComboBasic")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Phase2")
+event = &"start_phase_2"
+delay_in_seconds = "0.0"
+
+[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Phase3")
+event = &"start_phase_3"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="Phase2" type="Node" parent="StateChart/Root/Phase" index="3"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("MeleeComboComplex")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase2" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toMeleeComboComplex" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeComboComplex")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLungeCloser" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../LungeCloser")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="toAirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlamCloser")
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="MeleeComboComplex" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toSwipe" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Swipe")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toHook" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Swipe" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Hook")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Swipe" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Swipe" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Hook" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toUppercut" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Hook" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Uppercut")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Hook" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Hook" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Lunge" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex" index="3"]
+script = ExtResource("5_bjod6")
+
+[node name="toUppercut" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Lunge" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Uppercut")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Lunge" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Uppercut" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex" index="4"]
+script = ExtResource("5_bjod6")
+
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Uppercut" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Uppercut" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="AirSlam" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex" index="5"]
+script = ExtResource("5_bjod6")
+
+[node name="toGroundPound" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/AirSlam" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../GroundPound")
+event = &"aoe_burst"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/AirSlam" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="GroundPound" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex" index="6"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/GroundPound" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex" index="7"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toLungeCloser" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex" index="8"]
+script = ExtResource("4_akhww")
+to = NodePath("../../LungeCloser")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="toAirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase2/MeleeComboComplex" index="9"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlamCloser")
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="LungeCloser" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/LungeCloser" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase2/LungeCloser/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Attack")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="Attack" type="Node" parent="StateChart/Root/Phase/Phase2/LungeCloser" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/LungeCloser/Attack" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/LungeCloser" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/LungeCloser/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toMeleeComboComplex" type="Node" parent="StateChart/Root/Phase/Phase2/LungeCloser" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeComboComplex")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toAirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase2/LungeCloser" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlamCloser")
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="AirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/AirSlamCloser" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase2/AirSlamCloser/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="AirSlam" type="Node" parent="StateChart/Root/Phase/Phase2/AirSlamCloser" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toGroundPound" type="Node" parent="StateChart/Root/Phase/Phase2/AirSlamCloser/AirSlam" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../GroundPound")
+event = &"aoe_burst"
+delay_in_seconds = "0.0"
+
+[node name="GroundPound" type="Node" parent="StateChart/Root/Phase/Phase2/AirSlamCloser" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/AirSlamCloser/GroundPound" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/AirSlamCloser" index="3"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/AirSlamCloser/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toMeleeComboComplex" type="Node" parent="StateChart/Root/Phase/Phase2/AirSlamCloser" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeComboComplex")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLungeCloser" type="Node" parent="StateChart/Root/Phase/Phase2/AirSlamCloser" index="5"]
+script = ExtResource("4_akhww")
+to = NodePath("../../LungeCloser")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Phase2" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Phase3")
+event = &"start_phase_3"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="5"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="Phase3" type="Node" parent="StateChart/Root/Phase" index="4"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("HammerGround")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase3" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toMeleeComboComplex" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeComboComplex")
+event = &"start_melee_combo_attack"
+guard = ExtResource("9_juug2")
+delay_in_seconds = "0.0"
+
+[node name="toLungeCloser" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../LungeCloser")
+event = &"start_close_distance_attack_close"
+guard = ExtResource("9_juug2")
+delay_in_seconds = "0.0"
+
+[node name="toAirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlamCloser")
+event = &"start_close_distance_attack_far"
+guard = ExtResource("9_juug2")
+delay_in_seconds = "0.0"
+
+[node name="toHammerGround" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../HammerGround")
+event = &"start_hammer_ground_attack"
+guard = ExtResource("9_juug2")
+delay_in_seconds = "0.0"
+
+[node name="MeleeComboComplex" type="Node" parent="StateChart/Root/Phase/Phase3" index="1"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toSwipe" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Swipe")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toHook" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Swipe" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Hook")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Swipe" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Swipe" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Hook" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toUppercut" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Uppercut")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Lunge" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="3"]
+script = ExtResource("5_bjod6")
+
+[node name="toUppercut" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Lunge" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Uppercut")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Lunge" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Uppercut" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="4"]
+script = ExtResource("5_bjod6")
+
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Uppercut" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Uppercut" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="AirSlam" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="5"]
+script = ExtResource("5_bjod6")
+
+[node name="toGroundPound" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/AirSlam" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../GroundPound")
+event = &"aoe_burst"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/AirSlam" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="GroundPound" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="6"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/GroundPound" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="7"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toLungeCloser" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="8"]
+script = ExtResource("4_akhww")
+to = NodePath("../../LungeCloser")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="toAirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="9"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlamCloser")
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="toHammerGround" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="10"]
+script = ExtResource("4_akhww")
+to = NodePath("../../HammerGround")
+event = &"start_hammer_ground_attack"
+delay_in_seconds = "0.0"
+
+[node name="HammerGround" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toHammering" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Hammering")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Hammering" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround/Hammering" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"end_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toMeleeComboComplex" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeComboComplex")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLungeCloser" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../LungeCloser")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="toAirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround" index="5"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlamCloser")
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="LungeCloser" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Attack")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="Attack" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser/Attack" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toMeleeComboComplex" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeComboComplex")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toHammerGround" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../HammerGround")
+event = &"start_hammer_ground_attack"
+delay_in_seconds = "0.0"
+
+[node name="toAirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser" index="5"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlamCloser")
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="AirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase3" index="4"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="AirSlam" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toGroundPound" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser/AirSlam" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../GroundPound")
+event = &"aoe_burst"
+delay_in_seconds = "0.0"
+
+[node name="GroundPound" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser/GroundPound" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser" index="3"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toMeleeComboComplex" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeComboComplex")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLungeCloser" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser" index="5"]
+script = ExtResource("4_akhww")
+to = NodePath("../../LungeCloser")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="toHammerGround" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser" index="6"]
+script = ExtResource("4_akhww")
+to = NodePath("../../HammerGround")
+event = &"start_hammer_ground_attack"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3" index="5"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="Phase1OLD" type="Node" parent="StateChart/Root/Phase" index="5"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase1OLD" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Idle" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeCombo")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Idle" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Idle" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1OLD" index="1"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toSwipe" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Swipe")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toHook" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Swipe" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Hook")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Swipe" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Swipe" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Hook" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toUppercut" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Hook" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Uppercut")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Hook" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Hook" index="2"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Lunge" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo" index="3"]
+script = ExtResource("5_bjod6")
+
+[node name="toUppercut" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Lunge" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Uppercut")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Lunge" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Uppercut" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo" index="4"]
+script = ExtResource("5_bjod6")
+
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Uppercut" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Uppercut" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="AirSlam" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo" index="5"]
+script = ExtResource("5_bjod6")
+
+[node name="toGroundPound" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/AirSlam" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../GroundPound")
+event = &"aoe_burst"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/AirSlam" index="1"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="GroundPound" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo" index="6"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/GroundPound" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo" index="7"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo" index="8"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase1OLD/MeleeCombo" index="9"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="AirSlam" type="Node" parent="StateChart/Root/Phase/Phase1OLD" index="2"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1OLD/AirSlam" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase1OLD/AirSlam/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="AirSlam" type="Node" parent="StateChart/Root/Phase/Phase1OLD/AirSlam" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toGroundPound" type="Node" parent="StateChart/Root/Phase/Phase1OLD/AirSlam/AirSlam" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../GroundPound")
+event = &"aoe_burst"
+delay_in_seconds = "0.0"
+
+[node name="GroundPound" type="Node" parent="StateChart/Root/Phase/Phase1OLD/AirSlam" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/AirSlam/GroundPound" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/AirSlam" index="3"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1OLD/AirSlam/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1OLD/AirSlam" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeCombo")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase1OLD/AirSlam" index="5"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"start_close_distance_attack_close"
+delay_in_seconds = "0.0"
+
+[node name="Lunge" type="Node" parent="StateChart/Root/Phase/Phase1OLD" index="3"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Lunge" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Lunge/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Lunge")
+event = &"close_distance"
+delay_in_seconds = "0.0"
+
+[node name="Lunge" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Lunge" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Lunge/Lunge" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Lunge" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Lunge/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toAirSlam" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Lunge" index="3"]
+script = ExtResource("4_akhww")
+to = NodePath("../../AirSlam")
+event = &"start_close_distance_attack_far"
+delay_in_seconds = "0.0"
+
+[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1OLD/Lunge" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../MeleeCombo")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1OLD" index="4"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Phase2OLD")
+event = &"start_phase_2"
+delay_in_seconds = "0.0"
+
+[node name="Phase2OLD" type="Node" parent="StateChart/Root/Phase" index="6"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase2OLD" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toHammerGround" type="Node" parent="StateChart/Root/Phase/Phase2OLD/Idle" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../HammerGround")
+event = &"start_hammer_ground_attack"
+delay_in_seconds = "0.0"
+
+[node name="HammerGround" type="Node" parent="StateChart/Root/Phase/Phase2OLD" index="1"]
+script = ExtResource("5_bqowf")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2OLD/HammerGround" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toHammering" type="Node" parent="StateChart/Root/Phase/Phase2OLD/HammerGround/Targeting" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Hammering")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Hammering" type="Node" parent="StateChart/Root/Phase/Phase2OLD/HammerGround" index="1"]
+script = ExtResource("5_bjod6")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2OLD/HammerGround/Hammering" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Recover")
+event = &"end_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2OLD/HammerGround" index="2"]
+script = ExtResource("5_bjod6")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2OLD/HammerGround/Recover" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="DebugPhaseLabel" type="Label3D" parent="." index="10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.7, 0)
+billboard = 1
+text = "PHASE"
+font = ExtResource("11_el2h4")
+font_size = 128
+outline_size = 32
+uppercase = true
+
+[node name="DebugStateLabel" parent="." index="11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+text = "STATE"
+
+[node name="DebugDistanceLabel" parent="." index="12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, 0)
+text = "DISTANCE"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="15"]
+libraries = {
+"": SubResource("AnimationLibrary_iyws4")
+}
+
+[node name="LungeCooldown" type="Timer" parent="." index="16"]
+one_shot = true
+
+[connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_inactive_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/AirSlam" to="." method="_on_intro_air_slam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/IntroAirSlam/AirSlam" to="." method="_on_air_slam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/GroundPound" to="." method="_on_ground_pound_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/Recover" to="." method="_on_intro_air_slam_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeComboBasic/Targeting" to="." method="_on_melee_combo_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeComboBasic/Targeting" to="." method="_on_melee_combo_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeComboBasic/Swipe" to="." method="_on_melee_combo_swipe_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeComboBasic/Hook" to="." method="_on_melee_combo_hook_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeComboBasic/Recover" to="." method="_on_melee_combo_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LungeCloser/Targeting" to="." method="_on_lunge_closer_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LungeCloser/Attack" to="." method="_on_lunge_closer_attack_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LungeCloser/Recover" to="." method="_on_lunge_closer_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/MeleeComboComplex/Targeting" to="." method="_on_melee_combo_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/MeleeComboComplex/Targeting" to="." method="_on_melee_combo_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/MeleeComboComplex/Swipe" to="." method="_on_melee_combo_swipe_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/MeleeComboComplex/Hook" to="." method="_on_melee_combo_hook_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/MeleeComboComplex/Lunge" to="." method="_on_melee_combo_lunge_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/MeleeComboComplex/Uppercut" to="." method="_on_melee_combo_uppercut_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/MeleeComboComplex/AirSlam" to="." method="_on_air_slam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/MeleeComboComplex/AirSlam" to="." method="_on_air_slam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/MeleeComboComplex/GroundPound" to="." method="_on_ground_pound_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/MeleeComboComplex/Recover" to="." method="_on_melee_combo_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LungeCloser/Targeting" to="." method="_on_lunge_closer_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LungeCloser/Attack" to="." method="_on_lunge_closer_attack_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LungeCloser/Recover" to="." method="_on_lunge_closer_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/AirSlamCloser/Targeting" to="." method="_on_air_slam_closer_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/AirSlamCloser/AirSlam" to="." method="_on_air_slam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/AirSlamCloser/AirSlam" to="." method="_on_air_slam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/AirSlamCloser/GroundPound" to="." method="_on_ground_pound_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/AirSlamCloser/Recover" to="." method="_on_air_slam_closer_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/Targeting" to="." method="_on_melee_combo_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/Targeting" to="." method="_on_melee_combo_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/Swipe" to="." method="_on_melee_combo_swipe_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" to="." method="_on_melee_combo_hook_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/Lunge" to="." method="_on_melee_combo_lunge_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/Uppercut" to="." method="_on_melee_combo_uppercut_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/AirSlam" to="." method="_on_air_slam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/AirSlam" to="." method="_on_air_slam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/GroundPound" to="." method="_on_ground_pound_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/MeleeComboComplex/Recover" to="." method="_on_melee_combo_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/HammerGround/Targeting" to="." method="_on_hammer_ground_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/HammerGround/Hammering" to="." method="_on_hammer_ground_hammering_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/HammerGround/Recover" to="." method="_on_hammer_ground_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/LungeCloser/Targeting" to="." method="_on_lunge_closer_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/LungeCloser/Attack" to="." method="_on_lunge_closer_attack_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/LungeCloser/Recover" to="." method="_on_lunge_closer_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/AirSlamCloser/Targeting" to="." method="_on_air_slam_closer_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/AirSlamCloser/AirSlam" to="." method="_on_air_slam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/AirSlamCloser/AirSlam" to="." method="_on_air_slam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/AirSlamCloser/GroundPound" to="." method="_on_ground_pound_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/AirSlamCloser/Recover" to="." method="_on_air_slam_closer_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD" to="." method="_on_phase_1_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Targeting" to="." method="_on_phase_1_melee_combo_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Targeting" to="." method="_on_phase_1_melee_combo_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Swipe" to="." method="_on_phase_1_melee_combo_swipe_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Hook" to="." method="_on_phase_1_melee_combo_hook_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Lunge" to="." method="_on_phase_1_melee_combo_lunge_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Uppercut" to="." method="_on_phase_1_melee_combo_uppercut_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/MeleeCombo/AirSlam" to="." method="_on_phase_1_melee_combo_air_slam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1OLD/MeleeCombo/AirSlam" to="." method="_on_phase_1_melee_combo_air_slam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/MeleeCombo/GroundPound" to="." method="_on_melee_combo_ground_pound_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/MeleeCombo/Recover" to="." method="_on_phase_1_melee_combo_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/AirSlam" to="." method="_on_air_slam_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase1OLD/AirSlam" to="." method="_on_air_slam_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/AirSlam/Targeting" to="." method="_on_air_slam_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/AirSlam/AirSlam" to="." method="_on_phase_1_melee_combo_air_slam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1OLD/AirSlam/AirSlam" to="." method="_on_phase_1_melee_combo_air_slam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/AirSlam/GroundPound" to="." method="_on_melee_combo_ground_pound_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/AirSlam/Recover" to="." method="_on_phase_1_melee_combo_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/Lunge/Targeting" to="." method="_on_phase_1_lunge_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/Lunge/Lunge" to="." method="_on_phase_1_lunge_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1OLD/Lunge/Recover" to="." method="_on_phase_1_lunge_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2OLD" to="." method="_on_phase_2_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2OLD/HammerGround/Targeting" to="." method="_on_hammer_ground_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2OLD/HammerGround/Hammering" to="." method="_on_hammer_ground_hammering_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2OLD/HammerGround/Recover" to="." method="_on_hammer_ground_recover_state_entered"]

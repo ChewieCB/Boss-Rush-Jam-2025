@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bjaq7wtuojgjb"]
+[gd_scene load_steps=16 format=3 uid="uid://bjaq7wtuojgjb"]
 
 [ext_resource type="Script" path="res://src/ui/player/hurt_screen/hurt_overlay.gd" id="1_46sc2"]
 [ext_resource type="Shader" path="res://assets/shaders/blur_vignette.gdshader" id="1_ovsjd"]
@@ -6,6 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://bxdks60f0n75y" path="res://src/ui/player/hurt_screen/assets/screen_overlays/debris2 Blood Overlay V2.png" id="3_qnulk"]
 [ext_resource type="Texture2D" uid="uid://dqr10nkw51o64" path="res://src/ui/player/hurt_screen/assets/screen_overlays/Blood Cloud Blood Overlay V2.png" id="4_nh1ch"]
 [ext_resource type="Texture2D" uid="uid://bcam3ekfkj7n1" path="res://src/ui/player/hurt_screen/assets/screen_overlays/debris2 Blood Overlay.png" id="5_1hqwy"]
+[ext_resource type="Shader" path="res://src/ui/player/hurt_screen/stun.gdshader" id="7_r3k8y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ikw13"]
+shader = ExtResource("7_r3k8y")
+shader_parameter/sigma = 3.3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g1tba"]
 shader = ExtResource("1_ovsjd")
@@ -77,6 +82,18 @@ tracks/4/path = NodePath("BloodDead2:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("StunShader:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -188,11 +205,40 @@ tracks/2/keys = {
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_k1lnr"]
+resource_name = "stun"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HurtVignette:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1, 1),
+"transitions": PackedFloat32Array(1.62, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StunShader:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ahuvs"]
 _data = {
 "RESET": SubResource("Animation_sfdsr"),
 "dead": SubResource("Animation_jrtqo"),
-"hurt": SubResource("Animation_fklgp")
+"hurt": SubResource("Animation_fklgp"),
+"stun": SubResource("Animation_k1lnr")
 }
 
 [node name="HurtOverlay" type="Control"]
@@ -204,6 +250,18 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_46sc2")
+
+[node name="StunShader" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+material = SubResource("ShaderMaterial_ikw13")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0.301961)
 
 [node name="HurtBlur" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
