@@ -179,13 +179,13 @@ shape = SubResource("SphereShape3D_ook83")
 [node name="Hurtbox" parent="." index="5"]
 visible = false
 
+[node name="HealthComponent" parent="." index="6"]
+max_health = 5000.0
+
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 offset_bottom = 281.0
 theme_override_constants/margin_top = 144
 boss_name = "Surveillance"
-
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("5_75mh0")

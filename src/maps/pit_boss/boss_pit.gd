@@ -60,20 +60,29 @@ func spawn_cover() -> void:
 		nav_region.add_child(cover)
 		cover.global_position = object.global_position
 		cover.show_cover()
-		cover.cover_destroyed.connect(nav_region.bake_navigation_mesh)
+		cover.cover_destroyed.connect(func(x): nav_region.bake_navigation_mesh())
 		cover.cover_destroyed.connect(_on_cover_destroyed)
 		cover_objects.append(cover)
 
 
 func _on_cover_destroyed(cover: Cover) -> void:
 	cover_objects.erase(cover)
-	# TODO - fix cover respawning, currently generating all cover at all points :/
-	#if cover_objects.size() < cover_spawn_points.size() / 2:
-		#for object in cover_objects:
-			#cover.cover_destroyed.disconnect(_on_cover_destroyed)
-			#object.destroy()
-		#await get_tree().create_timer(0.2).timeout
-		#spawn_cover()
+	nav_region.bake_navigation_mesh()
+	await get_tree().create_timer(randf_range(8.0, 14.0)).timeout
+	
+	var spawn = cover_spawn_points.filter(func(x): return x.current_cover == cover).front()
+	spawn.current_cover = null
+	
+	var new_cover = spawn.spawn_cover()
+	spawn.remove_child(new_cover)
+	nav_region.add_child(new_cover)
+	new_cover.global_position = spawn.global_position
+	new_cover.show_cover()
+	new_cover.cover_destroyed.connect(nav_region.bake_navigation_mesh)
+	new_cover.cover_destroyed.connect(_on_cover_destroyed)
+	cover_objects.append(new_cover)
+	
+	nav_region.bake_navigation_mesh()
 
 
 func _on_boss_trigger_body_entered(body: Node3D) -> void:

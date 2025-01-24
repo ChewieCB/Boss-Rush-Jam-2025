@@ -10,6 +10,7 @@ class_name CoverSpawnPoint
 }
 
 var cover_type: String
+var current_cover: Cover
 
 
 func _func_godot_apply_properties(properties: Dictionary) -> void:
@@ -42,5 +43,7 @@ func spawn_cover() -> Cover:
 	var cover_instance = cover.instantiate()
 	add_child(cover_instance)
 	cover_instance.rotation.y = randf_range(0, 2*PI) #self.rotation.y
+	
+	current_cover = cover_instance
 	
 	return cover_instance
