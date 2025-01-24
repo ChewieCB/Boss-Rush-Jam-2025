@@ -1,7 +1,7 @@
 extends CharacterBody3D
 class_name BossCore
 
-signal defeated
+signal defeated(boss: BossCore)
 
 @export_category("Barrels")
 @export var barrel_to_drop: BarrelDataResource
@@ -150,7 +150,7 @@ func drop_barrel() -> void:
 	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
 		push_warning("Barrel [%s] already collected, exiting level." % barrel_to_drop.barrel_name)
 		# If we don't have a barrel to spawn, emit the signal to end the level
-		defeated.emit()
+		defeated.emit(self)
 		return
 	
 	# Instance a pickup object with the barrel data
@@ -158,7 +158,12 @@ func drop_barrel() -> void:
 	barrel.data = barrel_to_drop
 	
 	# Calculate a path for the barrel to move
-	var start_pos: Vector3 = self.global_position + Vector3(0, collider.shape.height / 2, 0)
+	var collider_height: float
+	if collider.shape is SphereShape3D:
+		collider_height = collider.shape.radius
+	else:
+		collider_height = collider.shape.height
+	var start_pos: Vector3 = self.global_position + Vector3(0, collider_height / 2, 0)
 	var goal_dir: Vector3 = start_pos.direction_to(target.global_position)
 	var goal_dist: float = start_pos.distance_to(target.global_position)
 	var goal_pos: Vector3 = goal_dir * goal_dist * 0.65
@@ -213,7 +218,7 @@ func _on_barrel_collected(data: BarrelDataResource) -> void:
 	#
 	# Wait for player to click continue
 	#
-	defeated.emit()
+	defeated.emit(self)
 
 
 func select_attack() -> void:

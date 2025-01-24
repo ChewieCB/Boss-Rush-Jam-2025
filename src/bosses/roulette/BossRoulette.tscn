@@ -147,6 +147,9 @@ collision_mask = 64
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox/StaticBody3D" index="0"]
 shape = SubResource("BoxShape3D_6q8u4")
 
+[node name="HealthComponent" parent="." index="5"]
+max_health = 5.0
+
 [node name="NavigationComponent" parent="." index="6"]
 enabled = false
 
@@ -343,12 +346,6 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_3xtcm")
 to = NodePath("../../DamageBarrier")
 event = &"start_barrier_attack"
-guard = ExtResource("18_m5pf4")
-delay_in_seconds = "0.0"
-
-[node name="toPushbackWave" type="Node" parent="StateChart/Root/Phase/Phase1/BallProjectile" index="4"]
-script = ExtResource("4_3xtcm")
-event = &"start_pushback_attack"
 guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 

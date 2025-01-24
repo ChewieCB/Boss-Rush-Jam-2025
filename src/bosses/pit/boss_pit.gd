@@ -126,6 +126,10 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
+func _on_died() -> void:
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
 
 func _on_surveillance_died() -> void:
 	state_chart.send_event("start_phase_3")

@@ -1816,7 +1816,6 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 1, 58
 [node name="entity_5_PitBoss" parent="FuncGodotMap" node_paths=PackedStringArray("surveillance_boss", "target") instance=ExtResource("16_gmu4j")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 5.5, -34.25)
 surveillance_boss = NodePath("../entity_58_BossSurveillance")
-barrel_pickup_scene = null
 target = NodePath("../entity_4_PlayerRef")
 
 [node name="group_637_Elevator" type="Node3D" parent="FuncGodotMap"]
@@ -2127,7 +2126,6 @@ metadata/_tb_type = "_tb_group"
 
 [node name="entity_58_BossSurveillance" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("21_27bb6")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 19.5, 0)
-barrel_pickup_scene = null
 target = NodePath("../entity_4_PlayerRef")
 
 [connection signal="body_entered" from="BossTrigger" to="." method="_on_boss_trigger_body_entered"]

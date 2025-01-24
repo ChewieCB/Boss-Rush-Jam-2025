@@ -67,7 +67,7 @@ func set_goal_rotation_speed(value: float) -> void:
 	goal_rotation_speed = value
 
 
-func _on_boss_defeated() -> void:
+func _on_boss_defeated(_boss: BossCore) -> void:
 	win_ui.win()
 	show_end_panel()
 
