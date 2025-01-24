@@ -3,10 +3,12 @@ extends Node3D
 @export var bgm: AudioStream
 
 @onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
+@onready var win_ui: Control = $UI/BossDefeatedUI
 @onready var boss_trigger: Area3D = $BossTrigger
 
 @export var pit_boss: BossPit
 @export var surveillance_boss: BossSurveillance
+var dead_boss_count: int = 0
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 @onready var turret_spawns: Array = find_children("*", "TurretSpawnPoint")
@@ -17,9 +19,10 @@ var cover_objects: Array = []
 
 
 func _ready() -> void:
-	#boss.health_component.died.connect(_on_boss_defeated)
+	pit_boss.health_component.died.connect(_on_boss_defeated)
+	surveillance_boss.health_component.died.connect(_on_boss_defeated)
 	surveillance_boss.turret_spawns = turret_spawns
-	#player.health_component.died.connect(_on_player_death)
+	player.health_component.died.connect(_on_player_death)
 	
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
 		var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
@@ -31,6 +34,38 @@ func _ready() -> void:
 	
 	await get_tree().physics_frame
 	generate_navigation()
+
+
+func _on_player_death() -> void:
+	win_ui.lose()
+	show_end_panel()
+
+
+func _on_boss_defeated() -> void:
+	dead_boss_count += 1
+	if dead_boss_count == 2:
+		win_ui.win()
+		show_end_panel()
+
+
+func show_end_panel() -> void:
+	win_ui.visible = true
+	var tween = get_tree().create_tween()
+	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
+	await tween.finished
+	await get_tree().create_timer(5.0).timeout
+	tween = get_tree().create_tween()
+	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
+	tween.tween_callback(func(): get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn"))
+
+
+func _return_to_main() -> void:
+	get_tree().change_scene_to_file("res://src/ui/temp/TempMain.tscn")
+
+
+func _reload_scene() -> void:
+	get_tree().reload_current_scene()
+
 
 
 func generate_navigation() -> void:
