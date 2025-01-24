@@ -95,14 +95,15 @@ _data = {
 "intro_look_at_player": SubResource("Animation_lmydu")
 }
 
-[node name="Surveillance" instance=ExtResource("1_7qur5")]
+[node name="BossSurveillance" instance=ExtResource("1_7qur5")]
 motion_mode = 1
 script = ExtResource("2_l4r8d")
 elevation_speed_deg = 25.0
 rotation_speed_deg = 25.0
+phase_2_health_percentage_trigger = 0.5
 turrets_to_spawn = 2
 beam_sweeps_per_attack = 4
-beam_sweep_delay = 1.2
+beam_sweep_delay = 0.7
 barrier_cage_radius = 16.0
 barrier_cage_reflect_force = 12.0
 barrier_cage_time = 12.0
@@ -182,6 +183,9 @@ visible = false
 offset_bottom = 281.0
 theme_override_constants/margin_top = 144
 boss_name = "Surveillance"
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("5_75mh0")
@@ -356,6 +360,13 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Phase2")
+event = &"start_phase_2"
+guard = ExtResource("6_fjks3")
+delay_in_seconds = "0.0"
+
 [node name="Phase2" type="Node" parent="StateChart/Root/Phase" index="2"]
 script = ExtResource("3_tbpt7")
 initial_state = NodePath("SpawnTurrets")
@@ -369,7 +380,89 @@ to = NodePath("../../SpawnTurrets")
 event = &"start_spawn_turrets_attack"
 delay_in_seconds = "0.0"
 
-[node name="SpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
+[node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="1"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../LaserBeam")
+event = &"start_laser_attack"
+delay_in_seconds = "0.0"
+
+[node name="LaserBeam" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
+script = ExtResource("3_tbpt7")
+initial_state = NodePath("Startup")
+
+[node name="Startup" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam" index="0"]
+script = ExtResource("4_vjmyh")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam/Startup" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Targeting")
+event = &"start_beam"
+delay_in_seconds = "0.0"
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam" index="1"]
+script = ExtResource("4_vjmyh")
+
+[node name="toSweepBeam" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam/Targeting" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../SweepBeam")
+event = &"sweep_beam"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam/Targeting" index="1"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Recover")
+event = &"end_beam"
+delay_in_seconds = "0.0"
+
+[node name="SweepBeam" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam" index="2"]
+script = ExtResource("4_vjmyh")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam/SweepBeam" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Targeting")
+event = &"end_sweep"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam/SweepBeam" index="1"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam" index="3"]
+script = ExtResource("4_vjmyh")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam/Recover" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Startup")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam" index="4"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toDownwardSpike" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam" index="5"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../DownwardSpike")
+event = &"start_spike_attack"
+delay_in_seconds = "0.0"
+
+[node name="toBarrierCage" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam" index="6"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../BarrierCage")
+event = &"start_barrier_cage_attack"
+delay_in_seconds = "0.0"
+
+[node name="toSpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam" index="7"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../SpawnTurrets")
+event = &"start_spawn_turrets_attack"
+delay_in_seconds = "0.0"
+
+[node name="SpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
 script = ExtResource("3_tbpt7")
 initial_state = NodePath("Targeting")
 
@@ -400,7 +493,62 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
+[node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase2/SpawnTurrets" index="3"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../LaserBeam")
+event = &"start_laser_attack"
+delay_in_seconds = "0.0"
+
+[node name="BarrierCage" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
+script = ExtResource("3_tbpt7")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/BarrierCage" index="0"]
+script = ExtResource("4_vjmyh")
+
+[node name="toSpawnCage" type="Node" parent="StateChart/Root/Phase/Phase2/BarrierCage/Targeting" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../SpawnCage")
+event = &"spawn_cage"
+delay_in_seconds = "0.0"
+
+[node name="SpawnCage" type="Node" parent="StateChart/Root/Phase/Phase2/BarrierCage" index="1"]
+script = ExtResource("4_vjmyh")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/BarrierCage/SpawnCage" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Recover")
+event = &"end_cage"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/BarrierCage" index="2"]
+script = ExtResource("4_vjmyh")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/BarrierCage/Recover" index="0"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2/BarrierCage" index="3"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase2/BarrierCage" index="4"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../LaserBeam")
+event = &"start_laser_attack"
+delay_in_seconds = "0.0"
+
+[node name="toSpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase2/BarrierCage" index="5"]
+script = ExtResource("5_75mh0")
+to = NodePath("../../SpawnTurrets")
+event = &"start_spawn_turrets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="4"]
 script = ExtResource("5_75mh0")
 to = NodePath("../../Inactive")
 event = &"deactivate"
@@ -432,8 +580,8 @@ libraries = {
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/LaserBeam/Startup" to="." method="_on_laser_beam_startup_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserBeam/Targeting" to="." method="_on_laser_beam_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/LaserBeam/Targeting" to="." method="_on_laser_beam_targeting_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserBeam/SweepBeam" to="." method="_on_laser_beam_sweep_beam_state_entered"]
-[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/LaserBeam/SweepBeam" to="." method="_on_laser_beam_sweep_beam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserBeam/SweepBeam" to="." method="_on_phase_1_laser_beam_sweep_beam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/LaserBeam/SweepBeam" to="." method="_on_phase_1_laser_beam_sweep_beam_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserBeam/Recover" to="." method="_on_laser_beam_recover_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1/BarrierCage" to="." method="_on_barrier_cage_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/BarrierCage" to="." method="_on_barrier_cage_state_physics_processing"]
@@ -441,7 +589,24 @@ libraries = {
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BarrierCage/SpawnCage" to="." method="_on_barrier_cage_spawn_cage_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1/BarrierCage/SpawnCage" to="." method="_on_barrier_cage_spawn_cage_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BarrierCage/Recover" to="." method="_on_barrier_cage_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_physics_processing"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase2/LaserBeam" to="." method="_on_laser_beam_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/LaserBeam" to="." method="_on_laser_beam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LaserBeam/Startup" to="." method="_on_laser_beam_startup_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/LaserBeam/Startup" to="." method="_on_laser_beam_startup_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LaserBeam/Targeting" to="." method="_on_laser_beam_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/LaserBeam/Targeting" to="." method="_on_laser_beam_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LaserBeam/SweepBeam" to="." method="_on_phase_2_laser_beam_sweep_beam_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/LaserBeam/SweepBeam" to="." method="_on_phase_2_laser_beam_sweep_beam_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LaserBeam/Recover" to="." method="_on_laser_beam_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SpawnTurrets/Targeting" to="." method="_on_spawn_turrets_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/SpawnTurrets/Targeting" to="." method="_on_spawn_turrets_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SpawnTurrets/Spawning" to="." method="_on_spawn_turrets_spawning_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SpawnTurrets/Recover" to="." method="_on_spawn_turrets_recover_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase2/BarrierCage" to="." method="_on_barrier_cage_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/BarrierCage" to="." method="_on_barrier_cage_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BarrierCage/Targeting" to="." method="_on_barrier_cage_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BarrierCage/SpawnCage" to="." method="_on_barrier_cage_spawn_cage_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase2/BarrierCage/SpawnCage" to="." method="_on_barrier_cage_spawn_cage_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BarrierCage/Recover" to="." method="_on_barrier_cage_recover_state_entered"]

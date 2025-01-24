@@ -14,6 +14,7 @@ class_name BossSurveillance
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 var previous_phase: String
+@export var phase_2_health_percentage_trigger: float = 0.5
 
 # Turrets
 var turret_spawns: Array:
@@ -33,7 +34,7 @@ var spawned_turrets_count: int = 0
 var beam_target: Vector3
 @export var beam_sweeps_per_attack: int = 4
 var beam_sweep_count: int = 0
-@export var beam_sweep_delay: float = 1.2
+@export var beam_sweep_delay: float = 0.7
 
 # Barrier Cage
 @export var barrier_cage_radius: float = 24.0
@@ -62,10 +63,37 @@ func activate() -> void:
 	state_chart.send_event("start_phase_1")
 
 
+func select_attack() -> void:
+	match current_phase:
+		1:
+			select_attack_phase_1()
+		2:
+			select_attack_phase_2()
+		#3:
+			#select_attack_phase_3()
+		_:
+			push_error("Invalid phase %s" % current_phase)
+
+
 func select_attack_phase_1() -> void:
 	var dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
-		#"start_spawn_turrets_attack",
+		"start_laser_attack",
+		"start_barrier_cage_attack",
+	]
+	
+	if previous_phase:
+		possible_phases.erase(previous_phase)
+	
+	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
+	previous_phase = new_phase
+	state_chart.send_event(new_phase)
+
+
+func select_attack_phase_2() -> void:
+	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var possible_phases = [
+		"start_spawn_turrets_attack",
 		"start_laser_attack",
 		"start_barrier_cage_attack",
 	]
@@ -141,6 +169,11 @@ func get_angle_to_target(seeker_pos: Vector3, target_pos: Vector3, facing_dir: V
 
 #####
 
+func _on_health_changed(new_health: float, prev_health: float) -> void:
+	super(new_health, prev_health)
+	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
+		state_chart.send_event("start_phase_2")
+
 func _on_health_hit_state_entered() -> void:
 	eye_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
 	sprite.modulate = Color.RED
@@ -151,64 +184,15 @@ func _on_health_hit_state_exited() -> void:
 	eye_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
 
 
-#####
-
+#### PHASE 1 ==========================
 func _on_phase_1_state_entered() -> void:
+	current_phase = 1
 	select_attack()
 
 func _on_phase_1_state_physics_processing(delta: float) -> void:
 	pass
 
-
-func _on_turret_destroyed(turret: PitTurret) -> void:
-	var turret_spawn = turret.get_parent()
-	valid_spawns.push_back(turret_spawn)
-	spawned_turrets_count -= 1
-
-
-func _on_spawn_turrets_targeting_state_entered() -> void:
-	debug_state_label.text = "Spawn Turrets | Targeting"
-	await get_tree().create_timer(attack_recovery_time).timeout
-	state_chart.send_event("spawn_turrets")
-
-func _on_spawn_turrets_targeting_state_physics_processing(delta: float) -> void:
-	rotate_and_elevate(target.global_position, delta)
-
-
-func _on_spawn_turrets_spawning_state_entered() -> void:
-	debug_state_label.text = "Spawn Turrets | Spawning"
-	
-	for i in turrets_to_spawn:
-		if spawned_turrets_count >= turrets_to_spawn:
-			break
-		var idx: int = randi_range(0, valid_spawns.size() - 1)
-		turret_look_target = valid_spawns.pop_at(idx)
-		var tween = get_tree().create_tween()
-		tween.tween_method(
-			rotate_and_elevate.bind(get_physics_process_delta_time()),
-			target.global_position, 
-			turret_look_target.global_position,
-			0.6, 
-		)
-		await tween.finished
-		var turret = turret_look_target.spawn_turret(target)
-		turret.destroyed.connect(_on_turret_destroyed)
-		spawned_turrets_count += 1
-	turret_look_target = null
-	state_chart.send_event("stop_spawning")
-
-
-func _on_spawn_turrets_recover_state_entered() -> void:
-	debug_state_label.text = "Spawn Turrets | Recovering"
-	valid_spawns = turret_spawns.duplicate()
-	await get_tree().create_timer(attack_recovery_time).timeout
-	select_attack()
-	state_chart.send_event("end_recovery")
-
-
-######
-
-
+#### Phase 1 | Laser Beam
 func _on_laser_beam_startup_state_entered() -> void:
 	# Look down to the center
 	var tween = get_tree().create_tween()
@@ -300,7 +284,44 @@ func _on_laser_beam_targeting_state_physics_processing(delta: float) -> void:
 		laser_particles.global_position = cast_point
 
 
-func _on_laser_beam_sweep_beam_state_entered() -> void:
+func _on_phase_1_laser_beam_sweep_beam_state_entered() -> void:
+	debug_state_label.text = "Laser Beam | Sweep"
+	# TODO - add telegraphing to the sweep attack
+	var tween = get_tree().create_tween()
+	tween.tween_property(laser_mesh.mesh, "top_radius", 1.5, 0.8)
+	tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 1.5, 0.8)
+	tween.parallel().tween_property(laser_particles, "scale", Vector3(3, 3, 3), 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "top_radius", 1.5, 0.8)
+	tween.parallel().tween_property(laser_collider.shape, "bottom_radius", 1.5, 0.8)
+	
+	# TODO - glow the laser to indicate sweep start
+	await get_tree().create_timer(telegraph_time).timeout
+	elevation_speed = deg_to_rad(elevation_speed_deg * 0.64)
+	rotation_speed = deg_to_rad(rotation_speed_deg * 0.64)
+	
+	# Sweep towards the player's position
+	beam_target = target.global_position
+
+func _on_phase_1_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
+	#beam_target = target.global_position
+	rotate_and_elevate(beam_target, delta)
+	
+	var cast_point: Vector3
+	aim_ray.force_raycast_update()
+	if aim_ray.is_colliding():
+		cast_point = aim_ray.get_collision_point()
+		var dist_to_cast: float = aim_ray.global_position.distance_to(cast_point)
+		laser_mesh.mesh.height = dist_to_cast 
+		laser_mesh.position.z = dist_to_cast / 2
+		laser_particles.global_position = cast_point
+		
+		var aim_dir = aim_ray.global_basis.z.normalized()
+		var target_dir = (beam_target - aim_ray.global_position).normalized()
+		if aim_dir.dot(target_dir) > 0.999:
+			state_chart.send_event("end_sweep")
+
+
+func _on_phase_2_laser_beam_sweep_beam_state_entered() -> void:
 	debug_state_label.text = "Laser Beam | Sweep"
 	# TODO - add telegraphing to the sweep attack
 	var tween = get_tree().create_tween()
@@ -318,11 +339,14 @@ func _on_laser_beam_sweep_beam_state_entered() -> void:
 	# Sweep towards the player's position
 	beam_target = target.global_position
 
-
-func _on_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
-	#beam_target = target.global_position
-	rotate_and_elevate(beam_target, delta)
+func _on_phase_2_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:	
+	# Update target every 6 frames to lag behind a bit
+	#if Engine.get_physics_frames() % 20 == 0:
+	beam_target = target.global_position
+		#draw_debug_sphere(beam_target, 0.5)
 	
+	rotate_and_elevate(beam_target, delta)
+
 	var cast_point: Vector3
 	aim_ray.force_raycast_update()
 	if aim_ray.is_colliding():
@@ -455,3 +479,57 @@ func _on_barrier_cage_state_exited() -> void:
 	await cage_tween.finished
 	
 	barrier_cage_area.visible = false
+
+
+#### PHASE 2 ==========================
+func _on_phase_2_state_entered() -> void:
+	current_phase = 2
+	select_attack()
+
+func _on_phase_2_state_physics_processing(delta: float) -> void:
+	pass
+
+
+#### Phase 2 | Spawn Turrets
+
+func _on_turret_destroyed(turret: PitTurret) -> void:
+	var turret_spawn = turret.get_parent()
+	valid_spawns.push_back(turret_spawn)
+	spawned_turrets_count -= 1
+
+func _on_spawn_turrets_targeting_state_entered() -> void:
+	debug_state_label.text = "Spawn Turrets | Targeting"
+	await get_tree().create_timer(attack_recovery_time).timeout
+	state_chart.send_event("spawn_turrets")
+
+func _on_spawn_turrets_targeting_state_physics_processing(delta: float) -> void:
+	rotate_and_elevate(target.global_position, delta)
+
+func _on_spawn_turrets_spawning_state_entered() -> void:
+	debug_state_label.text = "Spawn Turrets | Spawning"
+	
+	for i in turrets_to_spawn:
+		if spawned_turrets_count >= turrets_to_spawn:
+			break
+		var idx: int = randi_range(0, valid_spawns.size() - 1)
+		turret_look_target = valid_spawns.pop_at(idx)
+		var tween = get_tree().create_tween()
+		tween.tween_method(
+			rotate_and_elevate.bind(get_physics_process_delta_time()),
+			target.global_position, 
+			turret_look_target.global_position,
+			0.6, 
+		)
+		await tween.finished
+		var turret = turret_look_target.spawn_turret(target)
+		turret.destroyed.connect(_on_turret_destroyed)
+		spawned_turrets_count += 1
+	turret_look_target = null
+	state_chart.send_event("stop_spawning")
+
+func _on_spawn_turrets_recover_state_entered() -> void:
+	debug_state_label.text = "Spawn Turrets | Recovering"
+	valid_spawns = turret_spawns.duplicate()
+	await get_tree().create_timer(attack_recovery_time).timeout
+	select_attack()
+	state_chart.send_event("end_recovery")

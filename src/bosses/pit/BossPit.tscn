@@ -859,7 +859,7 @@ mesh = SubResource("BoxMesh_n64vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
 
 [node name="HealthComponent" parent="." index="5"]
-max_health = 6000.0
+max_health = 4800.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"
