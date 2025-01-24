@@ -105,7 +105,7 @@ func select_attack() -> void:
 
 # TODO - condense this logic to be quicker and easier to configure attack chances
 func select_attack_phase_1() -> void:
-	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_barrier_attack",
 		"start_ball_attack",
@@ -132,7 +132,7 @@ func select_attack_phase_1() -> void:
 
 
 func select_attack_phase_2() -> void:
-	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_pushback_attack",
 		"start_barrier_attack",
@@ -154,7 +154,7 @@ func select_attack_phase_2() -> void:
 
 
 func select_attack_phase_3() -> void:
-	var dist_to_target = self.global_position.distance_to(target.global_position)
+	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_drop_attack",
 		"start_ball_attack",
@@ -351,8 +351,6 @@ func spawn_center_wave(
 		await telegraph_tween.finished
 	
 	state_chart.send_event("attack_start")
-	var wave_attack_callback: Callable = func():
-		state_chart.send_event("finish_wave")
 	
 	# Animate the visual
 	SoundManager.play_sound(TEMP_sfx_area_1)

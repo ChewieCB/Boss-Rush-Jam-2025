@@ -1,11 +1,13 @@
-[gd_scene load_steps=22 format=3 uid="uid://burh3udob1t32"]
+[gd_scene load_steps=24 format=3 uid="uid://burh3udob1t32"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7qur5"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_l4r8d"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="3_duvt5"]
 [ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="3_kymb3"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_tbpt7"]
+[ext_resource type="AudioStream" uid="uid://db2criyne5nvh" path="res://src/bosses/base/assets/sfx/temp/whoosh2_clipped.wav" id="4_tplth"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_vjmyh"]
+[ext_resource type="AudioStream" uid="uid://wetpevehhwx1" path="res://src/bosses/base/assets/sfx/temp/weird_summon_clipped.wav" id="5_0c38w"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_75mh0"]
 [ext_resource type="Resource" uid="uid://c05iaeuuv1ym1" path="res://src/bosses/NotDeadGuard.tres" id="6_fjks3"]
 
@@ -108,14 +110,9 @@ barrier_cage_radius = 16.0
 barrier_cage_reflect_force = 12.0
 barrier_cage_time = 12.0
 barrier_cage_material = ExtResource("3_kymb3")
-TEMP_sfx_awaken = null
-TEMP_sfx_hit = Array[AudioStream]([])
-TEMP_sfx_area_1 = null
-TEMP_sfx_area_2 = null
+TEMP_sfx_area_1 = ExtResource("4_tplth")
+TEMP_sfx_area_2 = ExtResource("5_0c38w")
 TEMP_sfx_projectile = null
-TEMP_sfx_telegraph = null
-TEMP_sfx_charge = null
-TEMP_sfx_charge_impact = null
 attack_recovery_time = 0.7
 projectile_scene = null
 delay_per_projectile = 0.6

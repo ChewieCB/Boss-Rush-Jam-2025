@@ -30,13 +30,13 @@ func spawn_cover() -> Cover:
 		cover = cover_scenes[cover_type]
 	else:
 		var sum_of_weight: float = 0.0
-		var chance: float = randf()
 		for weight in cover_spawn_weights.values():
 			sum_of_weight += weight
-		for cover_type in cover_spawn_weights:
-			var spawn_weight = cover_spawn_weights[cover_type]
+		var chance: float = randf_range(0, sum_of_weight)
+		for _cover_type in cover_spawn_weights:
+			var spawn_weight = cover_spawn_weights[_cover_type]
 			if chance < spawn_weight:
-				cover = cover_scenes[cover_type]
+				cover = cover_scenes[_cover_type]
 				break
 			chance -= spawn_weight
 

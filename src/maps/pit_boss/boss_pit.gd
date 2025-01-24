@@ -67,7 +67,6 @@ func _reload_scene() -> void:
 	get_tree().reload_current_scene()
 
 
-
 func generate_navigation() -> void:
 	nav_region = NavigationRegion3D.new()
 	var nav_mesh := NavigationMesh.new()
@@ -85,7 +84,7 @@ func generate_navigation() -> void:
 	
 	cover_spawn_points = find_children("*", "CoverSpawnPoint")
 	
-	nav_region.bake_navigation_mesh()
+	_rebake_nav()
 
 
 func spawn_cover() -> void:
@@ -95,17 +94,22 @@ func spawn_cover() -> void:
 		nav_region.add_child(cover)
 		cover.global_position = object.global_position
 		cover.show_cover()
-		cover.cover_destroyed.connect(func(x): nav_region.bake_navigation_mesh())
 		cover.cover_destroyed.connect(_on_cover_destroyed)
 		cover_objects.append(cover)
 
 
-func _on_cover_destroyed(cover: Cover) -> void:
-	cover_objects.erase(cover)
+func _rebake_nav() -> void:
+	if nav_region.is_baking():
+		await nav_region.bake_finished
 	nav_region.bake_navigation_mesh()
+
+
+func _on_cover_destroyed(cover: Cover) -> void:
+	var spawn = cover_spawn_points.filter(func(x): return x.current_cover == cover).front()
+	cover_objects.erase(cover)
+	_rebake_nav()
 	await get_tree().create_timer(randf_range(8.0, 14.0)).timeout
 	
-	var spawn = cover_spawn_points.filter(func(x): return x.current_cover == cover).front()
 	spawn.current_cover = null
 	
 	var new_cover = spawn.spawn_cover()
@@ -113,7 +117,6 @@ func _on_cover_destroyed(cover: Cover) -> void:
 	nav_region.add_child(new_cover)
 	new_cover.global_position = spawn.global_position
 	new_cover.show_cover()
-	new_cover.cover_destroyed.connect(nav_region.bake_navigation_mesh)
 	new_cover.cover_destroyed.connect(_on_cover_destroyed)
 	cover_objects.append(new_cover)
 	
