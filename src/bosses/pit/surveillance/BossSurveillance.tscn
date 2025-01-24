@@ -179,7 +179,7 @@ shape = SubResource("SphereShape3D_ook83")
 visible = false
 
 [node name="HealthComponent" parent="." index="6"]
-max_health = 5.0
+max_health = 2500.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 offset_bottom = 281.0

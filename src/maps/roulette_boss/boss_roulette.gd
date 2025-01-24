@@ -89,7 +89,7 @@ func show_end_panel() -> void:
 
 
 func _return_to_lobby() -> void:
-	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn"))
+	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
 
 func _return_to_main() -> void:
 	get_tree().change_scene_to_file("res://src/ui/temp/TempMain.tscn")

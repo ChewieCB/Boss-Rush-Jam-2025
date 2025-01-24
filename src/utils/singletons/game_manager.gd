@@ -40,7 +40,7 @@ var scaling_3d: float = 100.0
 
 func add_barrel_to_inventory(data: BarrelDataResource):
 	if data in inventory_barrels:
-		push_error("Barrel [%s] already collected!" % data.barrel_name)
+		push_warning("Barrel [%s] already collected!" % data.barrel_name)
 		return
 	inventory_barrels.append(data)
 
