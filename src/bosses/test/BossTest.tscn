@@ -34,6 +34,9 @@ TEMP_sfx_death = ExtResource("3_6x5nd")
 [node name="DebugMesh" parent="." index="2"]
 visible = true
 
+[node name="HealthComponent" parent="." index="4"]
+max_health = 5.0
+
 [node name="toChasePlayer" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_p1uc1")
 to = NodePath("../../ChasePlayer")

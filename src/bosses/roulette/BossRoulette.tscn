@@ -147,6 +147,9 @@ collision_mask = 64
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox/StaticBody3D" index="0"]
 shape = SubResource("BoxShape3D_6q8u4")
 
+[node name="HealthComponent" parent="." index="5"]
+max_health = 5.0
+
 [node name="NavigationComponent" parent="." index="6"]
 enabled = false
 
