@@ -71,7 +71,7 @@ func _physics_process(_delta) -> void:
 			return
 			#target = _get_target()
 		
-		set_nav_target_position(target.global_position)
+		#set_nav_target_position(target.global_position)
 		var new_velocity = get_new_nav_agent_velocity()
 		if nav_agent.avoidance_enabled:
 			nav_agent.set_velocity(new_velocity)

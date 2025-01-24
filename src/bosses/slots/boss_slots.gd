@@ -1,17 +1,38 @@
 extends BossCore
-class_name BossTest
+class_name BossSlots
 
 
-func _ready() -> void:
-	super()
-	ranged_move_points = get_tree().get_nodes_in_group("boss_ranged_marker")
-	area_move_points = get_tree().get_nodes_in_group("boss_area_marker")
+@onready var projectile_marker_pivot: Node3D = $MarkerPivot
+@onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
+@onready var slot_icons_parent: Node3D = $SlotIcons
+
+@export_category("Spin Slots")
+@export_subgroup("Slot Icons")
+@export var icon_coin: Texture
+@export var icon_bell: Texture
+@export var icon_diamond: Texture
+@export var icon_bar: Texture
+@export var icon_cherry: Texture
+@onready var slot_icons: Array[Texture] = [
+	icon_coin, icon_bell, icon_diamond, icon_bar, icon_cherry
+]
 
 
 func activate() -> void:
 	super()
+	state_chart.send_event("start_phase_1")
+
+
+func _physics_process(delta: float) -> void:
+	orbit_player(delta)
+	super(delta)
+	projectile_marker_pivot.look_at(target.global_position)
+	slot_icons_parent.look_at(target.global_position)
+
+
+func select_attack_phase_1() -> void:
 	navigation_component.enable()
-	select_attack()
+	state_chart.send_event("start_spin_slots")
 
 
 ### ATTACK PHASES --------------------------------
@@ -20,13 +41,96 @@ func _on_phase_inactive_state_entered() -> void:
 	debug_state_label.text = "Inactive"
 	sprite.modulate = Color.DIM_GRAY
 
+func _on_phase_inactive_state_exited() -> void:
+	sprite.modulate = Color.WHITE
+
+
+#### PHASE 1
+
+func _on_phase_1_state_entered() -> void:
+	current_phase = 1
+	select_attack()
+
+
+# Orbiting movement
+var angle_speed = 1.0  # radians/second
+var orbit_angle = 0.0  # track this over time
+var desired_distance: float = 10.0
+
+func orbit_player(delta) -> void:
+	orbit_angle += angle_speed * delta
+	# offset in XZ-plane
+	var offset_x = cos(orbit_angle) * desired_distance
+	var offset_z = sin(orbit_angle) * desired_distance
+	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	# Pathfind to orbit_pos
+	navigation_component.set_nav_target_position(orbit_pos)
+
 
 #### SPIN SLOTS
 # TODO - Telegraph before each attack with animation
+func _on_spin_slots_targeting_state_entered() -> void:
+	debug_state_label.text = "Spin Slots | Targeting"
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(2.0).timeout
+	state_chart.send_event("start_slots")
+
+func _on_spin_slots_spinning_state_entered() -> void:
+	debug_state_label.text = "Spin Slots | Spinning"
+	for slot_sprite in slot_icons_parent.get_children():
+		slot_sprite.texture = slot_icons.pick_random()
+	
+	# TODO - randomize attack choice
+	var next_attack_idx: int = randi_range(0, slot_icons.size() - 1)
+	var next_attack_texture: Texture = slot_icons[next_attack_idx]
+	
+	# Spinning
+	for i in range(20):
+		for slot_sprite in slot_icons_parent.get_children():
+			var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
+			var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size() - 1) 
+			slot_sprite.texture = slot_icons[new_idx]
+		await get_tree().create_timer(0.1).timeout
+	# Settle each roller one by one
+	for i in range(slot_icons_parent.get_child_count()):
+		while not slot_icons_parent.get_child(i).texture == next_attack_texture:
+			for slot_sprite in slot_icons_parent.get_children():
+				var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
+				var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size() - 1) 
+				slot_sprite.texture = slot_icons[new_idx]
+	
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time).timeout
+	
+	state_chart.send_event("attack_start")
+	state_chart.send_event("end_slots")
+
+func _on_spin_slots_recover_state_entered() -> void:
+	debug_state_label.text = "Spin Slots | Recovering"
+	state_chart.send_event("attack_end")
+	
+	for slot_sprite in slot_icons_parent.get_children():
+		slot_sprite.texture = icon_coin
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("cooldown_end")
+	select_attack()
+	state_chart.send_event("end_recovery")
+
 
 #### COIN BURST - RICOCHET IN PHASE 2
 # 3 Coins on rollers
 # TODO - Rapid fire coin projectiles 
+func fire_projectile(projectile_scene: PackedScene) -> BaseProjectile:
+	var projectile: BaseProjectile = projectile_scene.instantiate()
+	get_tree().root.get_child(0).add_child(projectile)
+	projectile.global_position = projectile_spawn_marker.global_position
+	projectile.look_at(target.global_position, Vector3.UP)
+	SoundManager.play_sound(TEMP_sfx_projectile)
+	return projectile
 
 #### BELL DROP
 # 3 Bells on rollers

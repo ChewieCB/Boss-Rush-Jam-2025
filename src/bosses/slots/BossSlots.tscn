@@ -1,0 +1,362 @@
+[gd_scene load_steps=20 format=3 uid="uid://dhnc4yyqwf2fa"]
+
+[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
+[ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
+[ext_resource type="Texture2D" uid="uid://bbblp8vkvd3no" path="res://src/bosses/slots/assets/icons/temp/flip_full.png" id="3_say4o"]
+[ext_resource type="Texture2D" uid="uid://v67yeqhnxlbd" path="res://src/bosses/slots/assets/icons/temp/suit_diamonds.png" id="4_6oj0s"]
+[ext_resource type="Texture2D" uid="uid://8rlesfd54n8r" path="res://src/bosses/slots/assets/icons/temp/suit_hearts.png" id="4_oaydl"]
+[ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="5_3q2k6"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_lu46i"]
+[ext_resource type="Texture2D" uid="uid://bgeh57tcie1pi" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss.png" id="5_wqq5t"]
+[ext_resource type="Texture2D" uid="uid://cw6dplkvdrqcc" path="res://src/bosses/slots/assets/icons/temp/shield.png" id="6_opr8o"]
+[ext_resource type="Texture2D" uid="uid://bc7ur1o66fgkl" path="res://src/bosses/slots/assets/icons/temp/fire.png" id="7_ri7nv"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="8_0tk6i"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_5a0pq"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_rw4en"]
+radius = 1.7
+
+[sub_resource type="SphereMesh" id="SphereMesh_unuxb"]
+radius = 1.7
+height = 3.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xfm7o"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_lr0sl"]
+material = SubResource("StandardMaterial3D_xfm7o")
+radius = 0.35
+height = 0.7
+
+[sub_resource type="Animation" id="Animation_uf2b5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.5, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.2, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MarkerPivot:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 3.6, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1e422"]
+resource_name = "float"
+length = 1.2
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
+"transitions": PackedFloat32Array(0.63728, 1.27456, 0.707107, 1.31951, 1),
+"update": 0,
+"values": [Vector3(0, 3.5, 0), Vector3(0, 3.7, 0), Vector3(0, 3.5, 0), Vector3(0, 3.3, 0), Vector3(0, 3.5, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
+"transitions": PackedFloat32Array(0.63728, 1.27456, 0.707107, 1.31951, 1),
+"update": 0,
+"values": [Vector3(0, 3.5, 0), Vector3(0, 3.7, 0), Vector3(0, 3.5, 0), Vector3(0, 3.3, 0), Vector3(0, 3.5, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MarkerPivot:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
+"transitions": PackedFloat32Array(0.63728, 1.27456, 0.707107, 1.31951, 1),
+"update": 0,
+"values": [Vector3(0, 3.6, 0), Vector3(0, 3.8, 0), Vector3(0, 3.6, 0), Vector3(0, 3.4, 0), Vector3(0, 3.6, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_33bk0"]
+_data = {
+"RESET": SubResource("Animation_uf2b5"),
+"float": SubResource("Animation_1e422")
+}
+
+[node name="BossSlots" instance=ExtResource("1_qxyx0")]
+motion_mode = 1
+script = ExtResource("2_b0b3s")
+icon_coin = ExtResource("3_say4o")
+icon_bell = ExtResource("4_oaydl")
+icon_diamond = ExtResource("4_6oj0s")
+icon_bar = ExtResource("6_opr8o")
+icon_cherry = ExtResource("7_ri7nv")
+barrel_pickup_scene = null
+TEMP_sfx_awaken = null
+TEMP_sfx_hit = Array[AudioStream]([])
+TEMP_sfx_area_1 = null
+TEMP_sfx_area_2 = null
+TEMP_sfx_projectile = null
+TEMP_sfx_telegraph = null
+TEMP_sfx_charge = null
+TEMP_sfx_charge_impact = null
+attack_recovery_time = 0.5
+projectile_scene = null
+delay_per_projectile = 0.6
+GRAVITY = 0.0
+
+[node name="Sprite3D" parent="." index="0"]
+texture = ExtResource("5_wqq5t")
+
+[node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+shape = SubResource("SphereShape3D_rw4en")
+
+[node name="DebugMesh" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+visible = true
+mesh = SubResource("SphereMesh_unuxb")
+
+[node name="MarkerPivot" type="Node3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
+
+[node name="Marker3D" type="Marker3D" parent="MarkerPivot" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MarkerPivot/Marker3D" index="0"]
+mesh = SubResource("SphereMesh_lr0sl")
+
+[node name="SlotIcons" type="Node3D" parent="." index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
+
+[node name="Sprite3D" type="Sprite3D" parent="SlotIcons" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+billboard = 2
+texture = ExtResource("4_6oj0s")
+
+[node name="Sprite3D2" type="Sprite3D" parent="SlotIcons" index="1"]
+billboard = 2
+texture = ExtResource("4_6oj0s")
+
+[node name="Sprite3D3" type="Sprite3D" parent="SlotIcons" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+billboard = 2
+texture = ExtResource("4_6oj0s")
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Phase1")
+event = &"start_phase_1"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Inactive" index="1"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Phase2")
+event = &"start_phase_2"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("8_0tk6i")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase1" index="0"]
+script = ExtResource("9_5a0pq")
+
+[node name="toSpinSlots" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../SpinSlots")
+event = &"start_spin_slots"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toCoinProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../CoinProjectiles")
+event = &"start_coin_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toBellDrop" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="2"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../BellDrop")
+event = &"start_bell_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="3"]
+script = ExtResource("5_lu46i")
+event = &"start_level_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="SpinSlots" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
+script = ExtResource("8_0tk6i")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/SpinSlots" index="0"]
+script = ExtResource("9_5a0pq")
+
+[node name="toSpinning" type="Node" parent="StateChart/Root/Phase/Phase1/SpinSlots/Targeting" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Spinning")
+event = &"start_slots"
+delay_in_seconds = "0.0"
+
+[node name="Spinning" type="Node" parent="StateChart/Root/Phase/Phase1/SpinSlots" index="1"]
+script = ExtResource("9_5a0pq")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/SpinSlots/Spinning" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Recover")
+event = &"end_slots"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/SpinSlots" index="2"]
+script = ExtResource("9_5a0pq")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/SpinSlots/Recover" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toCoinProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/SpinSlots" index="3"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../CoinProjectiles")
+event = &"start_coin_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toBellDrop" type="Node" parent="StateChart/Root/Phase/Phase1/SpinSlots" index="4"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../BellDrop")
+event = &"start_bell_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1/SpinSlots" index="5"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../LeverSwipe")
+event = &"start_level_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="CoinProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
+script = ExtResource("8_0tk6i")
+initial_state = NodePath("../BellDrop")
+
+[node name="toSpinSlots" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../SpinSlots")
+event = &"start_spin_slots"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="BellDrop" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+script = ExtResource("8_0tk6i")
+
+[node name="toSpinSlots" type="Node" parent="StateChart/Root/Phase/Phase1/BellDrop" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../SpinSlots")
+event = &"start_spin_slots"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="LeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+script = ExtResource("8_0tk6i")
+
+[node name="toSpinSlots" type="Node" parent="StateChart/Root/Phase/Phase1/LeverSwipe" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../SpinSlots")
+event = &"start_spin_slots"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toCoinProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/LeverSwipe" index="1"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../CoinProjectiles")
+event = &"start_coin_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toBellDrop" type="Node" parent="StateChart/Root/Phase/Phase1/LeverSwipe" index="2"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../BellDrop")
+event = &"start_bell_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Phase2")
+event = &"start_phase_2"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="Phase2" type="Node" parent="StateChart/Root/Phase" index="2"]
+script = ExtResource("8_0tk6i")
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Phase2" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Phase1")
+event = &"start_phase_1"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="15"]
+libraries = {
+"": SubResource("AnimationLibrary_33bk0")
+}
+autoplay = "float"
+
+[connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SpinSlots/Targeting" to="." method="_on_spin_slots_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SpinSlots/Spinning" to="." method="_on_spin_slots_spinning_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SpinSlots/Recover" to="." method="_on_spin_slots_recover_state_entered"]

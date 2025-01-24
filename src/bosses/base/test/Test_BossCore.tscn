@@ -16,7 +16,7 @@
 [ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="11_ya0fm"]
 [ext_resource type="Material" uid="uid://ds3c45rpls1jp" path="res://assets/textures/placeholder/texture_orange_09.tres" id="13_qqlmj"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="16_x3m7m"]
-[ext_resource type="PackedScene" uid="uid://qv0vpmt70kws" path="res://src/bosses/test/BossTest.tscn" id="18_3rwve"]
+[ext_resource type="PackedScene" uid="uid://dhnc4yyqwf2fa" path="res://src/bosses/slots/BossSlots.tscn" id="18_6tv2n"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="18_ctxtr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ydocc"]
@@ -509,7 +509,7 @@ data = PackedVector3Array(31.25, 0.25, -12.75, 31.25, 0.25, 11.25, -31.25, 0.25,
 [node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors")]
 script = ExtResource("1_pgc5k")
 bgm = ExtResource("2_24ryt")
-boss = NodePath("FuncGodotMap/entity_33_BossTest")
+boss = NodePath("BossSlots")
 player = NodePath("FuncGodotMap/entity_4_PlayerRef")
 elevator_doors = NodePath("FuncGodotMap/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_576_Elevator/group_625_Elevator/entity_32_ElevatorDoors")
 
@@ -1104,8 +1104,8 @@ metadata/_tb_type = "_tb_group"
 [node name="entity_32_ElevatorDoors" parent="FuncGodotMap/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_576_Elevator/group_625_Elevator" instance=ExtResource("18_ctxtr")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1, 42.625, 20)
 
-[node name="entity_33_BossTest" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("18_3rwve")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.25, 0.75, -5.75)
-target = NodePath("../entity_4_PlayerRef")
+[node name="BossSlots" parent="." node_paths=PackedStringArray("target") instance=ExtResource("18_6tv2n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+target = NodePath("../FuncGodotMap/entity_4_PlayerRef")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]
