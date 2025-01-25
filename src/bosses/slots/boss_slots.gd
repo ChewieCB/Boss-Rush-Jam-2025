@@ -465,7 +465,6 @@ func _on_charge_charging_state_physics_processing(delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, 0.05)
 	velocity.z = lerp(velocity.z, 0.0, 0.05)
 
-	print(velocity)
 	if abs(velocity.x) < 0.1 and abs(velocity.z) < 0.1:
 		velocity.x = 0
 		velocity.z = 0
