@@ -51,3 +51,8 @@ func _return_to_main() -> void:
 
 func _reload_scene() -> void:
 	get_tree().reload_current_scene()
+
+func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
+	if body is Player:
+		boss.activate()
+		boss_trigger.queue_free()

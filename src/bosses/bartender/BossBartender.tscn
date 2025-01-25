@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://uwn1wb0neu46"]
+
+[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
+[ext_resource type="Texture2D" uid="uid://dk2026rggy1tx" path="res://src/bosses/bartender/bartender.jpg" id="2_yuiw5"]
+
+[node name="BossBartender" instance=ExtResource("1_bp57a")]
+
+[node name="Sprite3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1.795, 0, 0, 0, 1, 0, 1.96009, 0)
+texture = ExtResource("2_yuiw5")
+
+[node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
+boss_name = "Bart the Bartender"
