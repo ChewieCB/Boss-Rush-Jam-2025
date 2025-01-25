@@ -5,7 +5,7 @@ signal charge_lined_up
 
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
-@onready var slot_icons_parent: Node3D = $SlotIcons
+@onready var slot_icons_parent: Node3D = $Sprite3D/SlotIcons
 
 var prev_phase
 
@@ -74,13 +74,13 @@ func _physics_process(delta: float) -> void:
 func select_attack_phase_1() -> void:
 	var possible_phases = [
 		# Tuples of event string and icon index 
-		#["start_coin_attack", 0],
-		#["start_bell_attack", 1],
+		["start_coin_attack", 0],
+		["start_bell_attack", 1],
 		["start_charge_attack", 2],
 		#"start_lever_attack", # TODO - only triggers in close range as a reaction
 	]
-	#if prev_phase:
-		#possible_phases.erase(prev_phase)
+	if prev_phase:
+		possible_phases.erase(prev_phase)
 	# TODO - add random weighting
 	var new_phase = possible_phases.pick_random()
 	prev_phase = new_phase
@@ -176,7 +176,7 @@ func _on_spin_slots_recover_state_entered() -> void:
 
 #### COIN BURST - RICOCHET IN PHASE 2
 # 3 Coins on rollers
-# TODO - Rapid fire coin projectiles 
+# Rapid fire coin projectiles 
 
 func fire_projectile(projectile_scene: PackedScene) -> BaseProjectile:
 	var projectile := projectile_scene.instantiate()
@@ -229,8 +229,7 @@ func _on_coin_projectiles_recover_state_entered() -> void:
 
 #### BELL DROP
 # 3 Bells on rollers
-# TODO - Single large AoE bell drops from ceiling
-
+# Single large AoE bell drops from ceiling
 func drop_shadow(
 	target_pos: Vector3,
 	max_radius: float, 
@@ -316,7 +315,7 @@ func _on_bell_drop_recover_state_entered() -> void:
 
 
 #### LEVER SWIPE
-# TODO - Whacks player with slot level arm if they get too close
+# Whacks player with slot level arm if they get too close
 func _on_lever_swipe_targeting_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Targeting"
 	
@@ -403,7 +402,6 @@ func _on_lever_swipe_recover_state_entered() -> void:
 
 #### CHARGE/HEADBUTT
 # 3 BARs on rollers
-# TODO - Existing charge behaviour
 func _on_charge_targeting_state_entered() -> void:
 	debug_state_label.text = "Charge | Targeting"
 	
@@ -481,7 +479,7 @@ func _on_charge_recover_state_entered() -> void:
 	desired_height = DESIRED_HEIGHT
 	drop_factor = DROP_FACTOR
 	
-	hurtbox.set_deferred("monitoring", false)
+	hurtbox.set_deferred("monitoring", true)
 	if hurtbox.body_entered.is_connected(_on_charge_collision):
 		hurtbox.body_entered.disconnect(_on_charge_collision)
 	
@@ -495,129 +493,3 @@ func _on_charge_recover_state_entered() -> void:
 #### CHERRY BOMB
 # 3 Cherries on rollers
 # TODO - Bouncing explosive projectiles
-
-
-
-
-
-
-
-#### CHASE PLAYER
-
-
-
-#### AREA DENIAL
-func _on_phase_area_denial_move_to_center_state_entered() -> void:
-	sprite.modulate = Color.BLUE_VIOLET
-	debug_state_label.text = "Area | Moving"
-	
-	MAX_SPEED *= 2
-	cached_target = target
-	# TODO - add code to vary move points if more than one
-	target = area_move_points[0]
-	state_chart.send_event("start_moving")
-	await navigation_component.nav_agent.navigation_finished
-	
-	state_chart.send_event("start_area_attack")
-
-func _on_phase_area_denial_move_to_center_state_exited() -> void:
-	target = cached_target
-	MAX_SPEED /= 2
-	state_chart.send_event("stop_moving")
-
-func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
-	sprite.modulate = Color.ORANGE
-	debug_state_label.text = "Area | Spawning"
-	var angle_increment: float =  2 * PI / areas_per_phase
-	var initial_point: Vector3 = target.global_position
-	initial_point.y = self.global_position.y
-	
-	SoundManager.play_sound(TEMP_sfx_area_1)
-	for i in areas_per_phase:
-		var angle = angle_increment * i
-		var dir = initial_point - self.global_position
-		var adjusted_dir = dir.rotated(Vector3.UP, angle)
-		var area_pos: Vector3 = self.global_position + adjusted_dir
-		
-		if delay_per_area > 0.0:
-			await get_tree().create_timer(delay_per_area * i).timeout
-		
-		# Generate a collider
-		var area_collider := Area3D.new()
-		var area_collider_shape := CollisionShape3D.new()
-		var collider_shape := CylinderShape3D.new()
-		collider_shape.radius = area_size / 2
-		collider_shape.height = 64.0
-		area_collider_shape.shape = collider_shape
-		area_collider.add_child(area_collider_shape)
-		area_collider.collision_layer = 0
-		area_collider.collision_mask = 2  # Player
-		area_collider.monitoring = true
-		
-		get_tree().get_root().add_child(area_collider)
-		
-		area_collider.global_position = area_pos
-		
-		var debug_mesh_instance = MeshInstance3D.new()
-		var mesh = CylinderMesh.new()
-		var sphere_mat = ORMMaterial3D.new()
-		
-		spawned_area_objects.append([area_collider, debug_mesh_instance])
-		
-		# Generate a visual
-		get_tree().get_root().add_child(debug_mesh_instance)
-		
-		debug_mesh_instance.mesh = mesh
-		debug_mesh_instance.cast_shadow = false
-		debug_mesh_instance.global_position = area_pos
-		
-		mesh.bottom_radius = 0.01
-		mesh.top_radius = 0.01
-		mesh.height = 0.5
-		mesh.material = sphere_mat
-		
-		sphere_mat.transparency = true
-		sphere_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		sphere_mat.cull_mode = 2
-		sphere_mat.albedo_color = Color(Color.RED, 0.25)
-		
-		# Animate the visual
-		var tween = get_tree().create_tween()
-		tween.tween_property(mesh, "bottom_radius", area_size / 2, area_spawn_time)
-		tween.parallel().tween_property(mesh, "top_radius", area_size / 2, area_spawn_time)
-		tween.tween_callback(
-			func():
-				var height_tween = get_tree().create_tween()
-				# Check if player is in area
-				#area_collider.monitoring = true
-				var bodies = area_collider.get_overlapping_bodies()
-				for body in bodies:
-					body.health_component.damage(area_damage) 
-				height_tween.tween_property(mesh, "height", 64.0 / 2, 0.2).set_trans(Tween.TRANS_EXPO)
-				height_tween.tween_callback(
-					func():
-						SoundManager.play_sound(TEMP_sfx_area_2)
-						debug_mesh_instance.queue_free()
-						area_collider.queue_free()
-						areas_finished += 1
-				)
-		)
-
-
-func _on_phase_area_denial_recover_state_entered() -> void:
-	sprite.modulate = Color.YELLOW
-	debug_state_label.text = "Area | Recovering"
-	
-	state_chart.send_event("attack_end")
-	area_round_count += 1
-	
-	if area_round_count < max_area_rounds:
-		var fire_again_chance: float = randf()
-		if fire_again_chance < 0.85:
-			state_chart.send_event("fire_again")
-			return
-	
-	area_phase_count += 1
-	await get_tree().create_timer(attack_recovery_time).timeout
-	select_attack()
-	state_chart.send_event("change_position")

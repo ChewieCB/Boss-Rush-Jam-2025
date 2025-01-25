@@ -170,6 +170,23 @@ GRAVITY = 0.0
 [node name="Sprite3D" parent="." index="0"]
 texture = ExtResource("5_wqq5t")
 
+[node name="SlotIcons" type="Node3D" parent="Sprite3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+
+[node name="Sprite3D" type="Sprite3D" parent="Sprite3D/SlotIcons" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+billboard = 2
+texture = ExtResource("4_6oj0s")
+
+[node name="Sprite3D2" type="Sprite3D" parent="Sprite3D/SlotIcons" index="1"]
+billboard = 2
+texture = ExtResource("4_6oj0s")
+
+[node name="Sprite3D3" type="Sprite3D" parent="Sprite3D/SlotIcons" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+billboard = 2
+texture = ExtResource("4_6oj0s")
+
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
 shape = SubResource("SphereShape3D_rw4en")
@@ -188,24 +205,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, 0)
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MarkerPivot/Marker3D" index="0"]
 mesh = SubResource("SphereMesh_lr0sl")
 
-[node name="SlotIcons" type="Node3D" parent="." index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
-
-[node name="Sprite3D" type="Sprite3D" parent="SlotIcons" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
-billboard = 2
-texture = ExtResource("4_6oj0s")
-
-[node name="Sprite3D2" type="Sprite3D" parent="SlotIcons" index="1"]
-billboard = 2
-texture = ExtResource("4_6oj0s")
-
-[node name="Sprite3D3" type="Sprite3D" parent="SlotIcons" index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
-billboard = 2
-texture = ExtResource("4_6oj0s")
-
-[node name="Hurtbox" parent="." index="5"]
+[node name="Hurtbox" parent="." index="4"]
 monitoring = true
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
@@ -580,13 +580,13 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="DebugStateLabel" parent="." index="11"]
+[node name="DebugStateLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.3, 0)
 
-[node name="DebugDistanceLabel" parent="." index="12"]
+[node name="DebugDistanceLabel" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="15"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="14"]
 libraries = {
 "": SubResource("AnimationLibrary_33bk0")
 }
