@@ -9,11 +9,12 @@
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_3xt22"]
 radius = 1.0
 
-[node name="BellAttack" type="CharacterBody3D"]
+[node name="BellAttack" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
 collision_layer = 64
 collision_mask = 78
 slide_on_ceiling = false
 script = ExtResource("1_c4e2b")
+health_component = NodePath("HealthComponent")
 explosion_scene = ExtResource("2_m8nuh")
 spark_scene = ExtResource("3_hwuru")
 

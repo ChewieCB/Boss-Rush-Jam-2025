@@ -1109,7 +1109,6 @@ metadata/_tb_type = "_tb_group"
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1, 42.625, 20)
 
 [node name="BossSlots" parent="." node_paths=PackedStringArray("target") instance=ExtResource("18_6tv2n")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9, -5)
 target = NodePath("../FuncGodotMap/entity_4_PlayerRef")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

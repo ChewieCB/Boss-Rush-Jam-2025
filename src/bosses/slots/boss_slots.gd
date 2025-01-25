@@ -41,7 +41,7 @@ var next_attack_texture: Texture
 @export var drop_shadow_material: Material
 @export var bell_shadow_time: float = 1.4
 @export var bell_spawn_area_radius: float = 28.0
-@export var bells_to_spawn: int = 4
+@export var bells_to_spawn: int = 6
 var bell_spawn_points: Array = []
 @export_group("Lever Swipe")
 @export var swipe_damage: float = 5.0
@@ -77,14 +77,13 @@ func _physics_process(delta: float) -> void:
 
 func select_attack_phase_1() -> void:
 	var possible_phases = [
-		# Tuples of event string and icon index 
-		#["start_coin_attack", 0],
+		# Tuples of event string and icon windex 
+		["start_coin_attack", 0],
 		["start_bell_attack", 1],
-		#["start_charge_attack", 2],
-		#"start_lever_attack", # TODO - only triggers in close range as a reaction
+		["start_charge_attack", 2],
 	]
-	#if prev_phase:
-		#possible_phases.erase(prev_phase)
+	if prev_phase:
+		possible_phases.erase(prev_phase)
 	# TODO - add random weighting
 	var new_phase = possible_phases.pick_random()
 	prev_phase = new_phase
