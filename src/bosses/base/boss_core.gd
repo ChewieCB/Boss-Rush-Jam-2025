@@ -42,6 +42,7 @@ var area_phase_count: int = 0
 # Charge Attack
 # TODO - make this adjustable via resources
 @export var telegraph_time: float = 0.25
+@export var charge_force: float = 8.0
 
 # Projectile Attack
 # TODO - make this adjustable via resources
@@ -310,7 +311,7 @@ func _on_movement_charging_state_entered() -> void:
 	navigation_component.disable()
 	hurtbox.monitoring = true
 	var charge_dir = -self.global_basis.z
-	var charge_impulse = self.global_position.distance_to(target.global_position) * 8
+	var charge_impulse = self.global_position.distance_to(target.global_position) * charge_force
 	velocity += charge_dir * charge_impulse
 
 func _on_movement_charging_state_physics_processing(_delta: float) -> void:

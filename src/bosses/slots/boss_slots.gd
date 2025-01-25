@@ -1,6 +1,8 @@
 extends BossCore
 class_name BossSlots
 
+signal charge_lined_up
+
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
 @onready var slot_icons_parent: Node3D = $SlotIcons
@@ -8,7 +10,12 @@ class_name BossSlots
 var prev_phase
 
 @export_group("Movement")
-@export var desired_distance: float = 10.0
+@export var DESIRED_DISTANCE: float = 10.0
+@export var desired_distance: float = DESIRED_DISTANCE
+@export var DESIRED_HEIGHT: float = 3.1
+var desired_height: float = DESIRED_HEIGHT
+@export var DROP_FACTOR: float = 1.0
+var drop_factor: float = DROP_FACTOR
 @export_subgroup("Orbiting")
 @export var angle_speed = 1.0  # radians/second
 @export var orbit_angle = 0.0  # track this over time
@@ -19,11 +26,11 @@ var next_attack_texture: Texture
 @export_subgroup("Slot Icons")
 @export var icon_coin: Texture
 @export var icon_bell: Texture
-@export var icon_diamond: Texture
 @export var icon_bar: Texture
+@export var icon_diamond: Texture
 @export var icon_cherry: Texture
 @onready var slot_icons: Array[Texture] = [
-	icon_coin, icon_bell, icon_diamond, icon_bar, icon_cherry
+	icon_coin, icon_bell, icon_bar, icon_diamond, icon_cherry
 ]
 @export_group("Coin Burst")
 @export var coin_projectile: PackedScene
@@ -36,6 +43,11 @@ var next_attack_texture: Texture
 @export var swipe_damage: float = 5.0
 @export var swipe_knockback: float = 50.0
 @export var swipe_dodge_speed: float = 10.0
+@export_group("Charge")
+@export var charge_damage: float = 10.0
+@export var charge_knockback: float = 50.0
+@export var min_charge_distance: float = 10.0
+var charge_locked: bool = false
 
 
 func activate() -> void:
@@ -52,17 +64,23 @@ func _physics_process(delta: float) -> void:
 		if target in hurtbox.get_overlapping_bodies():
 			# TODO - add cooldown
 			state_chart.send_event("start_lever_attack")
+	
+	if self.global_position.y > desired_height:
+		self.global_position.y -= delta * drop_factor
+	elif self.global_position.y < desired_height:
+		self.global_position.y += delta * drop_factor
 
 
 func select_attack_phase_1() -> void:
 	var possible_phases = [
 		# Tuples of event string and icon index 
-		["start_coin_attack", 0],
-		["start_bell_attack", 1],
+		#["start_coin_attack", 0],
+		#["start_bell_attack", 1],
+		["start_charge_attack", 2],
 		#"start_lever_attack", # TODO - only triggers in close range as a reaction
 	]
-	if prev_phase:
-		possible_phases.erase(prev_phase)
+	#if prev_phase:
+		#possible_phases.erase(prev_phase)
 	# TODO - add random weighting
 	var new_phase = possible_phases.pick_random()
 	prev_phase = new_phase
@@ -260,7 +278,7 @@ func _on_bell_drop_state_physics_processing(delta: float) -> void:
 	orbit_player(delta)
 
 func _on_bell_drop_state_exited() -> void:
-	desired_distance = 10.0
+	desired_distance = DESIRED_DISTANCE
 
 
 func _on_bell_drop_targeting_state_entered() -> void:
@@ -386,6 +404,93 @@ func _on_lever_swipe_recover_state_entered() -> void:
 #### CHARGE/HEADBUTT
 # 3 BARs on rollers
 # TODO - Existing charge behaviour
+func _on_charge_targeting_state_entered() -> void:
+	debug_state_label.text = "Charge | Targeting"
+	
+	navigation_component.enable()
+	desired_distance = min_charge_distance * 2
+	MAX_SPEED *= 1.6
+	charge_locked = false
+	state_chart.send_event("start_moving")
+	
+	await charge_lined_up
+	#velocity = Vector3.ZERO
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time * 2).timeout
+	state_chart.send_event("start_charge_attack")
+
+func _on_charge_targeting_state_physics_processing(delta: float) -> void:
+	if not charge_locked:
+		var space_state = get_world_3d().direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(
+			self.global_position, 
+			target.global_position,
+			pow(2, 1-1) + pow(2, 2-1) + pow(2, 7-1)
+		)
+		var result =  space_state.intersect_ray(query)
+		
+		if self.global_position.distance_to(target.global_position) >= min_charge_distance:
+			if result == null or result.collider == target:
+				state_chart.send_event("stop_moving")
+				charge_lined_up.emit()
+				charge_locked = true
+				return
+		
+		orbit_player(delta)
+
+func _on_charge_charging_state_entered() -> void:
+	debug_state_label.text = "Charge | Charging"
+	state_chart.send_event("attack_start")
+	
+	MAX_SPEED /= 1.6
+	desired_height = 0.2
+	drop_factor = 12.0
+	
+	navigation_component.disable()
+	hurtbox.set_deferred("monitoring", true)
+	hurtbox.body_entered.connect(_on_charge_collision)
+	var charge_dir = self.global_position.direction_to(target.global_position)
+	var charge_impulse = self.global_position.distance_to(target.global_position) * charge_force
+	velocity += charge_dir * charge_impulse
+	SoundManager.play_sound(TEMP_sfx_charge)
+
+func _on_charge_collision(body: Node3D) -> void:
+	if body == target:
+		velocity = Vector3.ZERO
+		body.health_component.damage(charge_damage)
+		hurtbox.body_entered.disconnect(_on_charge_collision)
+		hurtbox.set_deferred("monitoring", false)
+
+func _on_charge_charging_state_physics_processing(delta: float) -> void:
+	velocity.x = lerp(velocity.x, 0.0, 0.05)
+	velocity.z = lerp(velocity.z, 0.0, 0.05)
+
+	print(velocity)
+	if abs(velocity.x) < 0.1 and abs(velocity.z) < 0.1:
+		velocity.x = 0
+		velocity.z = 0
+		state_chart.send_event("end_charge_attack")
+	elif is_on_floor():
+		state_chart.send_event("end_charge_attack")
+
+func _on_charge_recover_state_entered() -> void:
+	debug_state_label.text = "Charge | Recovering"
+	state_chart.send_event("attack_end")
+	navigation_component.enable()
+	
+	desired_distance = DESIRED_DISTANCE
+	desired_height = DESIRED_HEIGHT
+	drop_factor = DROP_FACTOR
+	
+	hurtbox.set_deferred("monitoring", false)
+	if hurtbox.body_entered.is_connected(_on_charge_collision):
+		hurtbox.body_entered.disconnect(_on_charge_collision)
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("cooldown_end")
+	select_attack()
+	state_chart.send_event("end_recovery")
 
 
 #### CHERRY BOMB
@@ -399,33 +504,7 @@ func _on_lever_swipe_recover_state_entered() -> void:
 
 
 #### CHASE PLAYER
-func _on_phase_target_player_state_entered() -> void:
-	sprite.modulate = Color.WHITE
-	debug_state_label.text = "Chase | Targeting"
-	
-	state_chart.send_event("start_targeting")
-	await get_tree().create_timer(2.0).timeout
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time).timeout
-	state_chart.send_event("attack_start")
-	state_chart.send_event("charge_player")
 
-func _on_phase_chase_player_charge_state_entered() -> void:
-	SoundManager.play_sound(TEMP_sfx_charge)
-	sprite.modulate = Color.ORANGE
-	debug_state_label.text = "Chase | Charging"
-	state_chart.send_event("start_charge")
-
-func _on_phase_chase_player_recover_state_entered() -> void:
-	sprite.modulate = Color.YELLOW
-	debug_state_label.text = "Chase | Recovering"
-	state_chart.send_event("attack_end")
-	await get_tree().create_timer(attack_recovery_time).timeout
-	
-	state_chart.send_event("cooldown_end")
-	charge_phase_count += 1
-	select_attack()
-	state_chart.send_event("end_recovery")
 
 
 #### AREA DENIAL

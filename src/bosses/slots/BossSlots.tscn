@@ -130,13 +130,16 @@ _data = {
 [node name="BossSlots" instance=ExtResource("1_qxyx0")]
 motion_mode = 1
 script = ExtResource("2_b0b3s")
-desired_distance = 10.0
+DESIRED_DISTANCE = 10.0
+desired_distance = null
+DESIRED_HEIGHT = 3.1
+DROP_FACTOR = 1.0
 angle_speed = 1.0
 orbit_angle = 0.0
 icon_coin = ExtResource("3_say4o")
 icon_bell = ExtResource("4_oaydl")
-icon_diamond = ExtResource("4_6oj0s")
 icon_bar = ExtResource("6_opr8o")
+icon_diamond = ExtResource("4_6oj0s")
 icon_cherry = ExtResource("7_ri7nv")
 coin_projectile = ExtResource("8_dcrya")
 num_bursts = 2
@@ -146,6 +149,9 @@ drop_shadow_material = SubResource("ShaderMaterial_o7nhx")
 swipe_damage = 5.0
 swipe_knockback = 50.0
 swipe_dodge_speed = 10.0
+charge_damage = 10.0
+charge_knockback = 50.0
+min_charge_distance = 10.0
 barrel_pickup_scene = null
 TEMP_sfx_awaken = null
 TEMP_sfx_hit = Array[AudioStream]([])
@@ -156,6 +162,7 @@ TEMP_sfx_telegraph = null
 TEMP_sfx_charge = null
 TEMP_sfx_charge_impact = null
 attack_recovery_time = 0.5
+telegraph_time = 0.4
 projectiles_per_phase = 8
 delay_per_projectile = 0.2
 GRAVITY = 0.0
@@ -168,7 +175,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
 shape = SubResource("SphereShape3D_rw4en")
 
 [node name="DebugMesh" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 visible = true
 mesh = SubResource("SphereMesh_unuxb")
 
@@ -182,7 +189,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, 0)
 mesh = SubResource("SphereMesh_lr0sl")
 
 [node name="SlotIcons" type="Node3D" parent="." index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 
 [node name="Sprite3D" type="Sprite3D" parent="SlotIcons" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
@@ -203,6 +210,9 @@ monitoring = true
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Slotty 2 Hotty"
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("5_lu46i")
@@ -250,6 +260,13 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_lu46i")
 to = NodePath("../../LeverSwipe")
 event = &"start_lever_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toCharge" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="4"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Charge")
+event = &"start_charge_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
@@ -302,6 +319,13 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_lu46i")
 to = NodePath("../../LeverSwipe")
 event = &"start_level_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toCharge" type="Node" parent="StateChart/Root/Phase/Phase1/SpinSlots" index="6"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Charge")
+event = &"start_charge_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
@@ -437,7 +461,45 @@ event = &"start_lever_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="LeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+[node name="Charge" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+script = ExtResource("8_0tk6i")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/Charge" index="0"]
+script = ExtResource("9_5a0pq")
+
+[node name="toCharging" type="Node" parent="StateChart/Root/Phase/Phase1/Charge/Targeting" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Charging")
+event = &"start_charge_attack"
+delay_in_seconds = "0.0"
+
+[node name="Charging" type="Node" parent="StateChart/Root/Phase/Phase1/Charge" index="1"]
+script = ExtResource("9_5a0pq")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/Charge/Charging" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Recover")
+event = &"end_charge_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/Charge" index="2"]
+script = ExtResource("9_5a0pq")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/Charge/Recover" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toSpinSlots" type="Node" parent="StateChart/Root/Phase/Phase1/Charge" index="3"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../SpinSlots")
+event = &"start_spin_slots"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="LeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
 script = ExtResource("8_0tk6i")
 initial_state = NodePath("Targeting")
 
@@ -489,13 +551,13 @@ event = &"start_bell_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="7"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../Phase2")
 event = &"start_phase_2"
@@ -517,6 +579,12 @@ script = ExtResource("5_lu46i")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
+
+[node name="DebugStateLabel" parent="." index="11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.3, 0)
+
+[node name="DebugDistanceLabel" parent="." index="12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="15"]
 libraries = {
@@ -540,6 +608,11 @@ autoplay = "float"
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BellDrop/Targeting" to="." method="_on_bell_drop_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BellDrop/Dropping" to="." method="_on_bell_drop_dropping_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BellDrop/Recover" to="." method="_on_bell_drop_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Charge/Targeting" to="." method="_on_charge_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/Charge/Targeting" to="." method="_on_charge_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Charge/Charging" to="." method="_on_charge_charging_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/Charge/Charging" to="." method="_on_charge_charging_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Charge/Recover" to="." method="_on_charge_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LeverSwipe/Targeting" to="." method="_on_lever_swipe_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LeverSwipe/Swipe" to="." method="_on_lever_swipe_swipe_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LeverSwipe/Recover" to="." method="_on_lever_swipe_recover_state_entered"]
