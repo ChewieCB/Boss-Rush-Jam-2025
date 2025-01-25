@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=21 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://cw6dplkvdrqcc" path="res://src/bosses/slots/assets/icons/temp/shield.png" id="6_opr8o"]
 [ext_resource type="Texture2D" uid="uid://bc7ur1o66fgkl" path="res://src/bosses/slots/assets/icons/temp/fire.png" id="7_ri7nv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="8_0tk6i"]
+[ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="8_dcrya"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_5a0pq"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_rw4en"]
@@ -123,6 +124,9 @@ icon_bell = ExtResource("4_oaydl")
 icon_diamond = ExtResource("4_6oj0s")
 icon_bar = ExtResource("6_opr8o")
 icon_cherry = ExtResource("7_ri7nv")
+coin_projectile = ExtResource("8_dcrya")
+num_bursts = 2
+delay_between_burst = 0.6
 barrel_pickup_scene = null
 TEMP_sfx_awaken = null
 TEMP_sfx_hit = Array[AudioStream]([])
@@ -133,8 +137,8 @@ TEMP_sfx_telegraph = null
 TEMP_sfx_charge = null
 TEMP_sfx_charge_impact = null
 attack_recovery_time = 0.5
-projectile_scene = null
-delay_per_projectile = 0.6
+projectiles_per_phase = 8
+delay_per_projectile = 0.2
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
@@ -219,7 +223,8 @@ delay_in_seconds = "0.0"
 
 [node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="3"]
 script = ExtResource("5_lu46i")
-event = &"start_level_attack"
+to = NodePath("../../LeverSwipe")
+event = &"start_lever_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
@@ -277,9 +282,36 @@ delay_in_seconds = "0.0"
 
 [node name="CoinProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
 script = ExtResource("8_0tk6i")
-initial_state = NodePath("../BellDrop")
+initial_state = NodePath("Targeting")
 
-[node name="toSpinSlots" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles" index="0"]
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles" index="0"]
+script = ExtResource("9_5a0pq")
+
+[node name="toShooting" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles/Targeting" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Shooting")
+event = &"start_shooting"
+delay_in_seconds = "0.0"
+
+[node name="Shooting" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles" index="1"]
+script = ExtResource("9_5a0pq")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles/Shooting" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Recover")
+event = &"stop_shooting"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles" index="2"]
+script = ExtResource("9_5a0pq")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles/Recover" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toSpinSlots" type="Node" parent="StateChart/Root/Phase/Phase1/CoinProjectiles" index="3"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../SpinSlots")
 event = &"start_spin_slots"
@@ -357,6 +389,11 @@ autoplay = "float"
 
 [connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/SpinSlots" to="." method="_on_spin_slots_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SpinSlots/Targeting" to="." method="_on_spin_slots_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SpinSlots/Spinning" to="." method="_on_spin_slots_spinning_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SpinSlots/Recover" to="." method="_on_spin_slots_recover_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/CoinProjectiles" to="." method="_on_coin_projectiles_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/CoinProjectiles/Targeting" to="." method="_on_coin_projectiles_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/CoinProjectiles/Shooting" to="." method="_on_coin_projectiles_shooting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/CoinProjectiles/Recover" to="." method="_on_coin_projectiles_recover_state_entered"]

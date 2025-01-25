@@ -1,12 +1,14 @@
 extends BossCore
 class_name BossSlots
 
-
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
 @onready var slot_icons_parent: Node3D = $SlotIcons
 
 @export_category("Spin Slots")
+var next_attack: String
+var next_attack_idx: int
+var next_attack_texture: Texture
 @export_subgroup("Slot Icons")
 @export var icon_coin: Texture
 @export var icon_bell: Texture
@@ -16,6 +18,10 @@ class_name BossSlots
 @onready var slot_icons: Array[Texture] = [
 	icon_coin, icon_bell, icon_diamond, icon_bar, icon_cherry
 ]
+@export_group("Coin Burst")
+@export var coin_projectile: PackedScene
+@export var num_bursts: int = 1
+@export var delay_between_burst: float = 0.6
 
 
 func activate() -> void:
@@ -24,14 +30,22 @@ func activate() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	orbit_player(delta)
 	super(delta)
 	projectile_marker_pivot.look_at(target.global_position)
 	slot_icons_parent.look_at(target.global_position)
 
 
 func select_attack_phase_1() -> void:
-	navigation_component.enable()
+	var possible_phases = [
+		# Tuples of event string and icon index 
+		["start_coin_attack", 0],
+		#["start_bell_attack", 1],
+		#"start_lever_attack", # TODO - only triggers in close range as a reaction
+	]
+	# TODO - add random weighting
+	var new_phase = possible_phases.pick_random()
+	next_attack = new_phase[0]
+	next_attack_idx = new_phase[1]
 	state_chart.send_event("start_spin_slots")
 
 
@@ -69,6 +83,10 @@ func orbit_player(delta) -> void:
 
 #### SPIN SLOTS
 # TODO - Telegraph before each attack with animation
+
+func _on_spin_slots_state_physics_processing(delta: float) -> void:
+	orbit_player(delta)
+
 func _on_spin_slots_targeting_state_entered() -> void:
 	debug_state_label.text = "Spin Slots | Targeting"
 	
@@ -82,9 +100,7 @@ func _on_spin_slots_spinning_state_entered() -> void:
 	for slot_sprite in slot_icons_parent.get_children():
 		slot_sprite.texture = slot_icons.pick_random()
 	
-	# TODO - randomize attack choice
-	var next_attack_idx: int = randi_range(0, slot_icons.size() - 1)
-	var next_attack_texture: Texture = slot_icons[next_attack_idx]
+	next_attack_texture = slot_icons[next_attack_idx]
 	
 	# Spinning
 	for i in range(20):
@@ -117,20 +133,71 @@ func _on_spin_slots_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	state_chart.send_event("cooldown_end")
-	select_attack()
+	state_chart.send_event(next_attack)
 	state_chart.send_event("end_recovery")
 
 
 #### COIN BURST - RICOCHET IN PHASE 2
 # 3 Coins on rollers
 # TODO - Rapid fire coin projectiles 
+
 func fire_projectile(projectile_scene: PackedScene) -> BaseProjectile:
-	var projectile: BaseProjectile = projectile_scene.instantiate()
+	var projectile := projectile_scene.instantiate()
 	get_tree().root.get_child(0).add_child(projectile)
 	projectile.global_position = projectile_spawn_marker.global_position
 	projectile.look_at(target.global_position, Vector3.UP)
 	SoundManager.play_sound(TEMP_sfx_projectile)
 	return projectile
+
+
+func _on_coin_projectiles_state_physics_processing(delta: float) -> void:
+	orbit_player(delta)
+
+
+func _on_coin_projectiles_targeting_state_entered() -> void:
+	debug_state_label.text = "Coin Burst | Targeting"
+	
+	state_chart.send_event("start_moving")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(0.8).timeout
+	state_chart.send_event("start_shooting")
+
+
+func _on_coin_projectiles_shooting_state_entered() -> void:
+	debug_state_label.text = "Coin Burst | Shooting"
+	
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time).timeout
+	state_chart.send_event("attack_start")
+	
+	for i in num_bursts:
+		for j in projectiles_per_phase:
+			await get_tree().create_timer(delay_per_projectile).timeout
+			fire_projectile(coin_projectile)
+		await get_tree().create_timer(delay_between_burst).timeout
+	
+	state_chart.send_event("stop_shooting")
+
+
+func _on_coin_projectiles_recover_state_entered() -> void:
+	debug_state_label.text = "Coin Burst | Recovering"
+	
+	state_chart.send_event("attack_end")
+	projectile_round_count += 1
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("cooldown_end")
+	
+	#if projectile_round_count < max_projectile_rounds:
+		#var fire_again_chance: float = randf()
+		#if fire_again_chance < 0.55:
+			#state_chart.send_event("fire_again")
+			#return
+	
+	select_attack()
+	state_chart.send_event("end_recovery")
+
 
 #### BELL DROP
 # 3 Bells on rollers
