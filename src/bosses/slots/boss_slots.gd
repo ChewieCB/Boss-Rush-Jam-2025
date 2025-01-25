@@ -39,6 +39,7 @@ var next_attack_texture: Texture
 @export_group("Bell Drop")
 @export var bell_scene: PackedScene
 @export var drop_shadow_material: Material
+@export var bell_shadow_time: float = 1.4
 @export_group("Lever Swipe")
 @export var swipe_damage: float = 5.0
 @export var swipe_knockback: float = 50.0
@@ -74,13 +75,13 @@ func _physics_process(delta: float) -> void:
 func select_attack_phase_1() -> void:
 	var possible_phases = [
 		# Tuples of event string and icon index 
-		["start_coin_attack", 0],
+		#["start_coin_attack", 0],
 		["start_bell_attack", 1],
-		["start_charge_attack", 2],
+		#["start_charge_attack", 2],
 		#"start_lever_attack", # TODO - only triggers in close range as a reaction
 	]
-	if prev_phase:
-		possible_phases.erase(prev_phase)
+	#if prev_phase:
+		#possible_phases.erase(prev_phase)
 	# TODO - add random weighting
 	var new_phase = possible_phases.pick_random()
 	prev_phase = new_phase
@@ -268,6 +269,30 @@ func drop_shadow(
 	shadow_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", max_radius, drop_time)#.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
 	shadow_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", max_radius, drop_time)#.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
 	shadow_tween.tween_callback(debug_mesh_instance.queue_free)
+	shadow_tween.tween_callback(spawn_bell.bind(target_pos, max_radius))
+
+
+func spawn_bell(pos: Vector3, size: float) -> void:
+	var space_state = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(
+		pos, 
+		pos + Vector3(0, 400, 0),
+		pow(2, 1-1),
+	)
+	var result = space_state.intersect_ray(query)
+	if result:
+		pos.y = result.position.y
+	
+	var bell = bell_scene.instantiate()
+	get_tree().root.get_child(2).add_child(bell)
+	bell.global_position = pos
+	bell.mesh.scale *= size
+	bell.collider.shape.radius = size
+	bell.collider.shape.height = size * 2
+	bell.collider.position.y = size / 2
+	bell.hurtbox_collider.shape.radius = size
+	bell.hurtbox_collider.shape.height = size * 2
+	bell.hurtbox_collider.position.y = size / 2
 
 
 func _on_bell_drop_state_entered() -> void:
@@ -297,7 +322,7 @@ func _on_bell_drop_dropping_state_entered() -> void:
 	state_chart.send_event("attack_start")
 	
 	# TODO - spawn shadow/mesh to show AoE, grow in size as it drops
-	drop_shadow(target.global_position, 8.0, 4.0)
+	drop_shadow(target.global_position, 6.0, bell_shadow_time)
 	# TODO - spawn mesh that drops down and crashes, dealing damage
 	#
 	state_chart.send_event("finish_drop")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=24 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="8_dcrya"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/shield_impacts.gdshader" id="9_1g4bc"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_5a0pq"]
+[ext_resource type="PackedScene" uid="uid://bacaewb7dl2l6" path="res://src/bosses/slots/bell/BellAttack.tscn" id="9_6qwni"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
 render_priority = 0
@@ -144,8 +145,9 @@ icon_cherry = ExtResource("7_ri7nv")
 coin_projectile = ExtResource("8_dcrya")
 num_bursts = 2
 delay_between_burst = 0.6
-bell_scene = null
+bell_scene = ExtResource("9_6qwni")
 drop_shadow_material = SubResource("ShaderMaterial_o7nhx")
+bell_shadow_time = 1.4
 swipe_damage = 5.0
 swipe_knockback = 50.0
 swipe_dodge_speed = 10.0

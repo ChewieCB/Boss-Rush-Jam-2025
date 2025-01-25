@@ -513,6 +513,10 @@ boss = NodePath("BossSlots")
 player = NodePath("FuncGodotMap/entity_4_PlayerRef")
 elevator_doors = NodePath("FuncGodotMap/group_624_ElevatorPrefab/group_619_ElevatorPrefab/group_576_Elevator/group_625_Elevator/entity_32_ElevatorDoors")
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_jn580")
 
@@ -1106,11 +1110,6 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1, 42.
 
 [node name="BossSlots" parent="." node_paths=PackedStringArray("target") instance=ExtResource("18_6tv2n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.9, -5)
-DESIRED_DISTANCE = 10.0
-desired_distance = null
-DESIRED_HEIGHT = 3.1
-DROP_FACTOR = 1.0
-min_charge_distance = 10.0
 target = NodePath("../FuncGodotMap/entity_4_PlayerRef")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]
