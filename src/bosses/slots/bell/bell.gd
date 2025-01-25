@@ -12,7 +12,7 @@ var floor_y: float
 @onready var hurtbox: Area3D = $Hurtbox
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 
-#@export var health_component: HealthComponent
+@export var health_component: HealthComponent
 @export var explosion_scene: PackedScene
 @export var spark_scene: PackedScene
 
@@ -29,7 +29,8 @@ func _ready() -> void:
 		floor_y = result.position.y
 	
 	var tween = get_tree().create_tween()
-	tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:a", 255, 0.3).set_trans(Tween.TRANS_EXPO)
+	mesh.mesh.surface_get_material(0).albedo_color = Color("#b08137")
+	#tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:a", 255, 0.3).set_trans(Tween.TRANS_EXPO)
 	
 	for i in range(3):
 		var pos = self.global_position - self.global_basis.z.rotated(

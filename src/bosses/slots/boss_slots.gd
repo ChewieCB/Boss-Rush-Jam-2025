@@ -40,6 +40,9 @@ var next_attack_texture: Texture
 @export var bell_scene: PackedScene
 @export var drop_shadow_material: Material
 @export var bell_shadow_time: float = 1.4
+@export var bell_spawn_area_radius: float = 28.0
+@export var bells_to_spawn: int = 4
+var bell_spawn_points: Array = []
 @export_group("Lever Swipe")
 @export var swipe_damage: float = 5.0
 @export var swipe_knockback: float = 50.0
@@ -321,11 +324,26 @@ func _on_bell_drop_dropping_state_entered() -> void:
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
 	
-	# TODO - spawn shadow/mesh to show AoE, grow in size as it drops
-	drop_shadow(target.global_position, 6.0, bell_shadow_time)
-	# TODO - spawn mesh that drops down and crashes, dealing damage
-	#
+	# Get a bunch of evenly distributed points clamped to the navmesh
+	bell_spawn_points = Poisson.generate_points_for_circle(
+		Vector2(1, 18),  # Annoyingly off center due to bad mapping lol
+		bell_spawn_area_radius,
+		30,
+		15,
+		Vector2(target.global_position.x, target.global_position.z),
+		bells_to_spawn,
+	)
+	bell_spawn_points.insert(0, Vector2(target.global_position.x, target.global_position.z))
 	state_chart.send_event("finish_drop")
+
+
+func _on_bell_drop_dropping_state_exited() -> void:
+	for point in bell_spawn_points:
+		var spawn := Vector3(point.x, 1.0, point.y)
+		# Spawn shadow/mesh to show AoE, grow in size as it drops
+		drop_shadow(spawn, 6.0, bell_shadow_time)
+		# TODO - spawn mesh that drops down and crashes, dealing damage
+		await get_tree().create_timer(0.2).timeout
 
 
 func _on_bell_drop_recover_state_entered() -> void:
