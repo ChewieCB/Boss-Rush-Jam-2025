@@ -257,11 +257,17 @@ func select_attack() -> void:
 	match current_phase:
 		1:
 			select_attack_phase_1()
+		2:
+			select_attack_phase_2()
 		_:
 			push_error("Invalid phase %s" % current_phase)
 
 
 func select_attack_phase_1() -> void:
+	pass
+
+
+func select_attack_phase_2() -> void:
 	pass
 
 

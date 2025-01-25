@@ -34,6 +34,7 @@ var next_attack_texture: Texture
 ]
 @export_group("Coin Burst")
 @export var coin_projectile: PackedScene
+@export var coin_shots_per_burst: int = 8
 @export var num_bursts: int = 1
 @export var delay_between_burst: float = 0.6
 @export_group("Bell Drop")
@@ -52,11 +53,15 @@ var bell_spawn_points: Array = []
 @export var charge_knockback: float = 50.0
 @export var min_charge_distance: float = 10.0
 var charge_locked: bool = false
+@export_group("Homing Diamonds")
+@export var diamond_projectile: PackedScene
+@export var diamond_shots_per_attack: int = 12
+@export var diamond_shot_time: float = 1.3
 
 
 func activate() -> void:
 	super()
-	state_chart.send_event("start_phase_1")
+	state_chart.send_event("start_phase_2")
 
 
 func _physics_process(delta: float) -> void:
@@ -84,6 +89,25 @@ func select_attack_phase_1() -> void:
 	]
 	if prev_phase:
 		possible_phases.erase(prev_phase)
+	# TODO - add random weighting
+	var new_phase = possible_phases.pick_random()
+	prev_phase = new_phase
+	next_attack = new_phase[0]
+	next_attack_idx = new_phase[1]
+	state_chart.send_event("start_spin_slots")
+
+
+func select_attack_phase_2() -> void:
+	var possible_phases = [
+		# Tuples of event string and icon windex 
+		#["start_coin_attack", 0],
+		#["start_bell_attack", 1],
+		#["start_charge_attack", 2],
+		["start_diamond_attack", 3],
+		#["start_cherry_attack", 4],
+	]
+	#if prev_phase:
+		#possible_phases.erase(prev_phase)
 	# TODO - add random weighting
 	var new_phase = possible_phases.pick_random()
 	prev_phase = new_phase
@@ -211,7 +235,7 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 	state_chart.send_event("attack_start")
 	
 	for i in num_bursts:
-		for j in projectiles_per_phase:
+		for j in coin_shots_per_burst:
 			await get_tree().create_timer(delay_per_projectile).timeout
 			fire_projectile(coin_projectile)
 		await get_tree().create_timer(delay_between_burst).timeout
@@ -436,11 +460,53 @@ func _on_lever_swipe_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
+#### PHASE 2
+#
+func _on_phase_2_state_entered() -> void:
+	current_phase = 2
+	select_attack()
 
 
 #### DIAMOND SCATTERSHOT
 # 3 Diamonds on rollers
-# TODO - Homing diamond projectile, fired in a spiral/radial pattern from boss
+# Homing diamond projectile, fired in a spiral/radial pattern from boss
+func _on_homing_projectiles_state_physics_processing(delta: float) -> void:
+	orbit_player(delta)
+
+
+func _on_homing_projectiles_targeting_state_entered() -> void:
+	debug_state_label.text = "Diamond Scattershot | Targeting"
+	
+	state_chart.send_event("start_moving")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(0.8).timeout
+	state_chart.send_event("start_shooting")
+
+
+func _on_homing_projectiles_shooting_state_entered() -> void:
+	debug_state_label.text = "Diamond Scattershot | Shooting"
+	# Fire out projctiles in a spiral, each projectile homes in on the player
+	for i in range(diamond_shots_per_attack):
+		await get_tree().create_timer(diamond_shot_time/diamond_shots_per_attack).timeout
+		var projectile := diamond_projectile.instantiate()
+		#get_tree().root.get_child(2).
+		get_parent().add_child(projectile)
+		projectile.global_position = projectile_spawn_marker.global_position
+		projectile.target = target
+		projectile.global_rotation.y = self.global_rotation.y + (2*PI/diamond_shots_per_attack) * i+1
+		SoundManager.play_sound(TEMP_sfx_projectile)
+	#
+	state_chart.send_event("stop_shooting")
+
+func _on_homing_projectiles_recover_state_entered() -> void:
+	debug_state_label.text = "Diamond Scattershot | Recovering"
+	
+	state_chart.send_event("attack_end")
+	await get_tree().create_timer(attack_recovery_time).timeout
+	state_chart.send_event("cooldown_end")
+	
+	select_attack()
+	state_chart.send_event("end_recovery")
 
 #### CHARGE/HEADBUTT
 # 3 BARs on rollers
