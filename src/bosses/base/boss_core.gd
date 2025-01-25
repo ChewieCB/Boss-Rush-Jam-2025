@@ -100,6 +100,7 @@ var vel_vertical: float = 0
 			navigation_component.target = target
 var cached_target: Node3D
 
+
 func _ready() -> void:
 	randomize()
 	health_component.health_changed.connect(_on_health_changed)

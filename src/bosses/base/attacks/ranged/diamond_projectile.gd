@@ -5,7 +5,7 @@ class_name DiamondProjectile
 @onready var homing_delay_timer: Timer = $HomingDelay
 @onready var homing_timer: Timer = $HomingTimer
 
-@export var damage: float = 10.0
+@export var damage: float = 3.0
 @export var speed: float = 35.0
 @export var rotation_speed: float = 25.0
 @export var target: CharacterBody3D

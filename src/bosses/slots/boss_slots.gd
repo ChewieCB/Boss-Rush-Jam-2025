@@ -8,6 +8,10 @@ signal charge_lined_up
 @onready var slot_icons_parent: Node3D = $Sprite3D/SlotIcons
 
 var prev_phase
+@export var phase_2_health_percentage_trigger: float = 0.5
+
+@export var SLOT_TICKS: int = 20
+var slot_ticks: int = SLOT_TICKS
 
 @export_group("Movement")
 @export var DESIRED_DISTANCE: float = 10.0
@@ -57,11 +61,19 @@ var charge_locked: bool = false
 @export var diamond_projectile: PackedScene
 @export var diamond_shots_per_attack: int = 12
 @export var diamond_shot_time: float = 1.3
+@export_group("Cherry Bombs")
+@export var bomb_projectile: PackedScene
+@export var bombs_per_attack: int = 5
+@export var bomb_drop_delay: float = 0.4
+@export var bomb_fuse_time: float = 1.3
+@export var bomb_impulse: float = 100000.0
+
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 
 func activate() -> void:
 	super()
-	state_chart.send_event("start_phase_2")
+	state_chart.send_event("start_phase_1")
 
 
 func _physics_process(delta: float) -> void:
@@ -101,13 +113,13 @@ func select_attack_phase_2() -> void:
 	var possible_phases = [
 		# Tuples of event string and icon windex 
 		#["start_coin_attack", 0],
-		#["start_bell_attack", 1],
-		#["start_charge_attack", 2],
+		["start_bell_attack", 1],
+		["start_charge_attack", 2],
 		["start_diamond_attack", 3],
-		#["start_cherry_attack", 4],
+		["start_bomb_attack", 4],
 	]
-	#if prev_phase:
-		#possible_phases.erase(prev_phase)
+	if prev_phase:
+		possible_phases.erase(prev_phase)
 	# TODO - add random weighting
 	var new_phase = possible_phases.pick_random()
 	prev_phase = new_phase
@@ -115,6 +127,19 @@ func select_attack_phase_2() -> void:
 	next_attack_idx = new_phase[1]
 	state_chart.send_event("start_spin_slots")
 
+
+func _on_health_changed(new_health: float, prev_health: float) -> void:
+	super(new_health, prev_health)
+	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
+		state_chart.send_event("start_phase_2")
+
+
+func _on_died() -> void:
+	super()
+	anim_player.stop()
+	set_physics_process(false)
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	pass
@@ -169,7 +194,7 @@ func _on_spin_slots_spinning_state_entered() -> void:
 	next_attack_texture = slot_icons[next_attack_idx]
 	
 	# Spinning
-	for i in range(20):
+	for i in range(slot_ticks):
 		for slot_sprite in slot_icons_parent.get_children():
 			var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
 			var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size() - 1) 
@@ -181,11 +206,8 @@ func _on_spin_slots_spinning_state_entered() -> void:
 			for j in range(i, slot_icons_parent.get_child_count()):
 				var slot_sprite = slot_icons_parent.get_child(j)
 				var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
-				var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size() - 1) 
+				var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size()) 
 				slot_sprite.texture = slot_icons[new_idx]
-	
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time).timeout
 	
 	state_chart.send_event("attack_start")
 	state_chart.send_event("end_slots")
@@ -464,6 +486,7 @@ func _on_lever_swipe_recover_state_entered() -> void:
 #
 func _on_phase_2_state_entered() -> void:
 	current_phase = 2
+	slot_ticks /= 4
 	select_attack()
 
 
@@ -493,7 +516,7 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 		get_parent().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.target = target
-		projectile.global_rotation.y = self.global_rotation.y + (2*PI/diamond_shots_per_attack) * i+1
+		projectile.global_rotation.y = self.global_rotation.y
 		SoundManager.play_sound(TEMP_sfx_projectile)
 	#
 	state_chart.send_event("stop_shooting")
@@ -600,4 +623,67 @@ func _on_charge_recover_state_entered() -> void:
 
 #### CHERRY BOMB
 # 3 Cherries on rollers
-# TODO - Bouncing explosive projectiles
+# Bouncing explosive projectiles
+func _on_cherry_bombs_state_entered() -> void:
+	MAX_SPEED *= 1.6
+	desired_distance = 15.0
+
+func _on_cherry_bombs_state_physics_processing(delta: float) -> void:
+	orbit_player(delta)
+
+func _on_cherry_bombs_state_exited() -> void:
+	MAX_SPEED /= 1.6
+	desired_distance = DESIRED_DISTANCE
+	
+
+func _on_cherry_bombs_targeting_state_entered() -> void:
+	debug_state_label.text = "Cherry Bomb | Targeting"
+	
+	desired_height = 4.3
+	drop_factor = 8.0
+	
+	state_chart.send_event("start_moving")
+	state_chart.send_event("attack_buildup")
+
+
+func _on_cherry_bombs_targeting_state_physics_processing(delta: float) -> void:
+	# FIXME - make the boss move closer to the player
+	if self.global_position.distance_to(target.global_position) < 15:
+		state_chart.send_event("start_dropping_bombs")
+
+
+func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
+	debug_state_label.text = "Cherry Bomb | Dropping"
+	state_chart.send_event("attack_start")
+	state_chart.send_event("start_targeting")
+	
+	var dir_counter: int = -1
+	for i in range(bombs_per_attack):
+		await get_tree().create_timer(bomb_drop_delay).timeout
+		var projectile := bomb_projectile.instantiate() as RigidBody3D
+		#get_tree().root.get_child(2).
+		projectile.fuse_time = bomb_fuse_time
+		get_parent().add_child(projectile)
+		projectile.global_position = projectile_spawn_marker.global_position
+		projectile.global_rotation.y = self.global_rotation.y + (PI/8 * dir_counter)
+		projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
+		SoundManager.play_sound(TEMP_sfx_projectile)
+		
+		dir_counter += 1
+		dir_counter = wrapi(dir_counter, -1, 2)
+	
+	state_chart.send_event("stop_dropping_bombs")
+
+
+func _on_cherry_bombs_recover_state_entered() -> void:
+	debug_state_label.text = "Cherry Bomb | Recovering"
+	state_chart.send_event("attack_end")
+	
+	desired_height = DESIRED_HEIGHT
+	drop_factor = DROP_FACTOR
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("cooldown_end")
+	select_attack()
+	state_chart.send_event("end_recovery")

@@ -1109,8 +1109,11 @@ metadata/_tb_type = "_tb_group"
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1, 42.625, 20)
 
 [node name="BossSlots" parent="." node_paths=PackedStringArray("target") instance=ExtResource("18_6tv2n")]
-diamond_shots_per_attack = 12
-diamond_shot_time = 1.3
+phase_2_health_percentage_trigger = 0.5
+SLOT_TICKS = 20
+bomb_drop_delay = 0.4
+bomb_fuse_time = 1.3
+bomb_impulse = 100000.0
 target = NodePath("../FuncGodotMap/entity_4_PlayerRef")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

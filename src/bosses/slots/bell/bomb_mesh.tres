@@ -22,6 +22,7 @@ _surfaces = [{
 blend_shape_mode = 0
 
 [resource]
+resource_local_to_scene = true
 resource_name = "Bomb_NurbsPath_Mesh-Mesh"
 _surfaces = [{
 "aabb": AABB(-0.143604, -0.19144, -0.143069, 0.28179, 0.432032, 0.286138),
