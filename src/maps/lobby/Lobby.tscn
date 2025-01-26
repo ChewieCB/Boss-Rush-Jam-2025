@@ -1,4 +1,4 @@
-[gd_scene load_steps=388 format=4 uid="uid://v6jgq46mkg4n"]
+[gd_scene load_steps=389 format=4 uid="uid://v6jgq46mkg4n"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
@@ -1327,6 +1327,9 @@ points = PackedVector3Array(-2, -0.875, 7.5, -2, -1.875, 7.5, 2, -1.875, 7.5, 2,
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_w6jdt"]
 points = PackedVector3Array(-3, 2, 8, -3, -0.875, 8, -2, -0.875, 8, -2, 2, 8, -3, 2, 12, -3, -0.875, 12, -2, -0.875, 12, -2, 2, 12)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_l477v"]
+size = Vector3(5.8, 5.3, 9.8)
+
 [node name="Lobby" type="Node3D"]
 script = ExtResource("1_ywg7j")
 bgm = ExtResource("2_gqehv")
@@ -2592,3 +2595,14 @@ entProperties = {
 
 [node name="group_10_Elevator" type="Node3D" parent="FuncGodotMap/group_627_Elevator/group_624_ElevatorPrefab/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator"]
 metadata/_tb_type = "_tb_group"
+
+[node name="DoorTransitionArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorTransitionArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 7.6)
+shape = SubResource("BoxShape3D_l477v")
+
+[connection signal="body_entered" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_entered"]
+[connection signal="body_exited" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_exited"]

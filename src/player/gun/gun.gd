@@ -319,6 +319,7 @@ func reload():
 		barrel.stop_spin()
 	SoundManager.stop_sound(TEMP_sfx_reload)
 	anim_player.play("%s_barrel_idle" % barrel_count)
+	anim_player.play("reload_foregrip")
 	is_reloading = false
 
 	for barrel in installed_barrels:

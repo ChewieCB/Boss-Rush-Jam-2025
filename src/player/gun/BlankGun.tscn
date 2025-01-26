@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://d2tb8ogqlaxhy"]
+[gd_scene load_steps=26 format=3 uid="uid://d2tb8ogqlaxhy"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_wwe7d"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_5dqrq"]
@@ -20,9 +20,8 @@
 [ext_resource type="Texture2D" uid="uid://by0lemq6eskdv" path="res://src/player/gun/assets/sprite/1_barrel/1_barrel_idle.png" id="11_fxa2h"]
 [ext_resource type="Texture2D" uid="uid://cxph8tgp4srjf" path="res://src/player/gun/assets/sprite/3_barrel/3_barrel_reload_1.png" id="11_j27yv"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="12_ukph6"]
-[ext_resource type="Texture2D" uid="uid://c600di4xi6ren" path="res://src/player/gun/assets/sprite/3_barrel_reload_frame_0.png" id="13_wi4hg"]
 [ext_resource type="AudioStream" uid="uid://cqdjicto0uwp2" path="res://src/player/gun/assets/sfx/reloading/slot_roller.mp3" id="14_2r0ft"]
-[ext_resource type="Texture2D" uid="uid://csaxvd31b2ikx" path="res://src/player/gun/assets/sprite/3_barrel_reload_frame_1.png" id="14_ej6ro"]
+[ext_resource type="Texture2D" uid="uid://dtoaa4uxyaeqm" path="res://src/player/gun/assets/sprite/gun_foregrip.png" id="21_4uwvq"]
 
 [sub_resource type="Animation" id="Animation_e0o34"]
 length = 0.001
@@ -38,45 +37,40 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("11_fxa2h")]
 }
-
-[sub_resource type="Animation" id="Animation_24itk"]
-resource_name = "idle"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("GunSprite:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GunSprite/ForegripSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("11_fxa2h")]
+"update": 0,
+"values": [Vector3(0.301, -0.349, -0.522)]
 }
 
-[sub_resource type="Animation" id="Animation_sr8b4"]
-resource_name = "reload"
-length = 0.2
-loop_mode = 1
+[sub_resource type="Animation" id="Animation_jbnd2"]
+resource_name = "reload_foregrip"
+length = 0.3
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("GunSprite:texture")
+tracks/0/path = NodePath("GunSprite/ForegripSprite:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(0.329877, 1.7411, 1),
 "update": 0,
-"values": [ExtResource("13_wi4hg"), ExtResource("14_ej6ro"), ExtResource("13_wi4hg"), ExtResource("14_ej6ro"), ExtResource("13_wi4hg")]
+"values": [Vector3(0.301, -0.349, -0.522), Vector3(0.256, -0.194, -1.487), Vector3(0.301, -0.349, -0.522)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mu0sm"]
 _data = {
 "RESET": SubResource("Animation_e0o34"),
-"idle": SubResource("Animation_24itk"),
-"reload": SubResource("Animation_sr8b4")
+"reload_foregrip": SubResource("Animation_jbnd2")
 }
 
 [node name="BlankGun" type="Node3D"]
@@ -106,6 +100,12 @@ projectile_prefab = ExtResource("10_vvihl")
 [node name="GunSprite" type="Sprite3D" parent="."]
 transform = Transform3D(0.22, 0, 0, 0, 0.22, 0, 0, 0, 0.22, 0.325627, -0.314052, -0.342251)
 texture = ExtResource("11_fxa2h")
+
+[node name="ForegripSprite" type="Sprite3D" parent="GunSprite"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.301, -0.349, -0.522)
+billboard = 1
+render_priority = 1
+texture = ExtResource("21_4uwvq")
 
 [node name="Barrel" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0330088, 0)
@@ -142,6 +142,5 @@ one_shot = true
 libraries = {
 "": SubResource("AnimationLibrary_mu0sm")
 }
-autoplay = "idle"
 
 [connection signal="timeout" from="JamTimer" to="." method="_on_jam_timer_timeout"]
