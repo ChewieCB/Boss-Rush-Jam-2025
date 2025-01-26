@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://i3coc5gtyk0w"
+path="res://.godot/imported/SNIPER SHOT 2.mp3-d8681d5c111999746fa658de0d956a4a.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 2.mp3"
+dest_files=["res://.godot/imported/SNIPER SHOT 2.mp3-d8681d5c111999746fa658de0d956a4a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

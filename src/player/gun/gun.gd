@@ -4,7 +4,6 @@ class_name Gun
 @export var gun_name: String
 @export_multiline var description: String
 
-
 ## SPRITES
 @onready var gun_sprite: Sprite3D = $GunSprite
 @export_group("Sprites")
@@ -23,8 +22,7 @@ class_name Gun
 @export var reload_frame_0_3_barrel: Texture
 @export var reload_frame_1_3_barrel: Texture
 
-
-
+@export_group("SFX")
 ## TEMP SFX PLS CHANGE
 @export var TEMP_sfx_shoot: AudioStream
 @export var TEMP_sfx_dry: AudioStream
@@ -33,6 +31,7 @@ class_name Gun
 @export var TEMP_regain_ammo: AudioStream
 @export var TEMP_crit: AudioStream
 
+@export_group("Gun Properties")
 @export var max_barrels = 3
 @export var base_damage = 20
 @export var base_projectile_amount = 1
@@ -51,6 +50,7 @@ class_name Gun
 ## How much screenshake when player shot
 @export var screenshake_amount: float = 0.2
 
+@export_group("Prefab Scenes")
 @export var aim_ray_prefab: PackedScene
 @export var hitscan_prefab: PackedScene
 @export var projectile_prefab: PackedScene
@@ -209,7 +209,6 @@ func shoot(aim_ray: RayCast3D):
 
 	for i in range(n_shot_repeat):
 		var bullet_start_pos = bullet_spawn_marker.global_position
-		SoundManager.play_sound(TEMP_sfx_shoot)
 
 		for j in range(modified_projectile_amount):
 			for barrel in installed_barrels:
@@ -317,8 +316,8 @@ func reload():
 	reset_modifier(true)
 	gun_status_label.visible = false
 	for barrel in installed_barrels:
-		SoundManager.play_sound(TEMP_sfx_click)
 		barrel.stop_spin()
+	SoundManager.stop_sound(TEMP_sfx_reload)
 	anim_player.play("%s_barrel_idle" % barrel_count)
 	is_reloading = false
 
