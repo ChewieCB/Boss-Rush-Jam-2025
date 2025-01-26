@@ -10,6 +10,7 @@ signal pathfinding_ready
 @export var current_speed: float = 10.0
 @export var acceleration: float = 7.0
 @export_category("Target Finding")
+@export var follow_target: bool = true
 @export var search_radius: float = 128
 @export var max_intersect_results := 8
 @export_category("Avoidance")
@@ -69,9 +70,9 @@ func _physics_process(_delta) -> void:
 			return
 		if not target:
 			return
-			#target = _get_target()
 		
-		#set_nav_target_position(target.global_position)
+		if follow_target:
+			set_nav_target_position(target.global_position)
 		var new_velocity = get_new_nav_agent_velocity()
 		if nav_agent.avoidance_enabled:
 			nav_agent.set_velocity(new_velocity)
@@ -99,6 +100,8 @@ func get_new_nav_agent_velocity() -> Vector3:
 
 func _on_velocity_computed(safe_velocity: Vector3) -> void:
 	if is_enabled():
+		#if ignore_y_movement:
+			#safe_velocity.y = 0
 		entity.velocity = safe_velocity
 		entity.velocity = entity.velocity.move_toward(safe_velocity, 0.25)
 		entity.move_and_slide()

@@ -13,7 +13,7 @@ albedo_color = Color(1, 0.766048, 0, 0.713726)
 emission_enabled = true
 emission = Color(1, 0.731834, 0.032858, 1)
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_x31c8"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_vomel"]
 
 [sub_resource type="Curve" id="Curve_my72y"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -43,7 +43,7 @@ autostart = true
 [node name="Trail3D" type="MeshInstance3D" parent="Trail"]
 top_level = true
 material_override = SubResource("StandardMaterial3D_mcyja")
-mesh = SubResource("ImmediateMesh_x31c8")
+mesh = SubResource("ImmediateMesh_vomel")
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("3_dflu1")
 segments = 10

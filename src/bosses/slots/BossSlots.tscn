@@ -146,6 +146,7 @@ DESIRED_HEIGHT = 3.1
 DROP_FACTOR = 1.0
 angle_speed = 1.0
 orbit_angle = 0.0
+orbit_radius = 20.0
 icon_coin = ExtResource("3_say4o")
 icon_bell = ExtResource("4_oaydl")
 icon_bar = ExtResource("6_opr8o")
@@ -174,6 +175,7 @@ bombs_per_attack = 5
 bomb_drop_delay = 0.4
 bomb_fuse_time = 1.3
 bomb_impulse = 100000.0
+max_drop_distance = 20.0
 barrel_to_drop = ExtResource("11_5va1t")
 TEMP_sfx_area_1 = ExtResource("11_nlkmt")
 TEMP_sfx_area_2 = ExtResource("12_su6vu")
@@ -225,6 +227,9 @@ mesh = SubResource("SphereMesh_lr0sl")
 
 [node name="Hurtbox" parent="." index="4"]
 monitoring = true
+
+[node name="NavigationComponent" parent="." index="6"]
+follow_target = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Slotty 2 Hotty"

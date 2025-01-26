@@ -2,6 +2,7 @@ extends BossCore
 class_name BossSlots
 
 signal charge_lined_up
+signal desired_height_reached
 
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
@@ -21,8 +22,9 @@ var desired_height: float = DESIRED_HEIGHT
 @export var DROP_FACTOR: float = 1.0
 var drop_factor: float = DROP_FACTOR
 @export_subgroup("Orbiting")
-@export var angle_speed = 1.0  # radians/second
-@export var orbit_angle = 0.0  # track this over time
+@export var angle_speed: float = 1.0  # radians/second
+@export var orbit_angle: float = 0.0  # track this over time
+@export var orbit_radius: float = 20.0
 @export_group("Spin Slots")
 var next_attack: String
 var next_attack_idx: int
@@ -67,13 +69,16 @@ var charge_locked: bool = false
 @export var bomb_drop_delay: float = 0.4
 @export var bomb_fuse_time: float = 1.3
 @export var bomb_impulse: float = 100000.0
+@export var max_drop_distance: float = 20.0
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 
 func activate() -> void:
 	super()
-	state_chart.send_event("start_phase_1")
+	navigation_component.follow_target = false
+	navigation_component.enable()
+	state_chart.send_event("start_phase_2")
 
 
 func _physics_process(delta: float) -> void:
@@ -90,6 +95,9 @@ func _physics_process(delta: float) -> void:
 		self.global_position.y -= delta * drop_factor
 	elif self.global_position.y < desired_height:
 		self.global_position.y += delta * drop_factor
+	
+	if abs(self.global_position.y - desired_height) < 0.1:
+		desired_height_reached.emit()
 
 
 func select_attack_phase_1() -> void:
@@ -113,13 +121,13 @@ func select_attack_phase_2() -> void:
 	var possible_phases = [
 		# Tuples of event string and icon windex 
 		#["start_coin_attack", 0],
-		["start_bell_attack", 1],
-		["start_charge_attack", 2],
-		["start_diamond_attack", 3],
+		#["start_bell_attack", 1],
+		#["start_charge_attack", 2],
+		#["start_diamond_attack", 3],
 		["start_bomb_attack", 4],
 	]
-	if prev_phase:
-		possible_phases.erase(prev_phase)
+	#if prev_phase:
+		#possible_phases.erase(prev_phase)
 	# TODO - add random weighting
 	var new_phase = possible_phases.pick_random()
 	prev_phase = new_phase
@@ -162,11 +170,28 @@ func _on_phase_1_state_entered() -> void:
 	select_attack()
 
 
-func orbit_player(delta) -> void:
+func orbit_player(delta: float) -> void:
 	orbit_angle += angle_speed * delta
 	# offset in XZ-plane
 	var offset_x = cos(orbit_angle) * desired_distance
 	var offset_z = sin(orbit_angle) * desired_distance
+	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	# Pathfind to orbit_pos
+	navigation_component.set_nav_target_position(orbit_pos)
+
+
+func orbit_towards_player(
+	delta: float, approach_speed: float = 1.0, min_radius: float = 10.0
+) -> void:
+	orbit_angle += angle_speed * delta
+	
+	orbit_radius -= approach_speed * delta
+	if min_radius:
+		orbit_radius = max(orbit_radius, min_radius)
+	
+	# offset in XZ-plane
+	var offset_x = cos(orbit_angle) * orbit_radius
+	var offset_z = sin(orbit_angle) * orbit_radius
 	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
@@ -183,7 +208,6 @@ func _on_spin_slots_targeting_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
-	#await get_tree().create_timer(2.0).timeout
 	state_chart.send_event("start_slots")
 
 func _on_spin_slots_spinning_state_entered() -> void:
@@ -624,38 +648,32 @@ func _on_charge_recover_state_entered() -> void:
 #### CHERRY BOMB
 # 3 Cherries on rollers
 # Bouncing explosive projectiles
-func _on_cherry_bombs_state_entered() -> void:
-	MAX_SPEED *= 1.6
-	desired_distance = 15.0
-
 func _on_cherry_bombs_state_physics_processing(delta: float) -> void:
-	orbit_player(delta)
-
-func _on_cherry_bombs_state_exited() -> void:
-	MAX_SPEED /= 1.6
-	desired_distance = DESIRED_DISTANCE
-	
+	pass
 
 func _on_cherry_bombs_targeting_state_entered() -> void:
 	debug_state_label.text = "Cherry Bomb | Targeting"
-	
-	desired_height = 4.3
-	drop_factor = 8.0
 	
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 
 
 func _on_cherry_bombs_targeting_state_physics_processing(delta: float) -> void:
-	# FIXME - make the boss move closer to the player
-	if self.global_position.distance_to(target.global_position) < 15:
+	if self.global_position.distance_to(target.global_position) <= max_drop_distance:
 		state_chart.send_event("start_dropping_bombs")
 
 
 func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 	debug_state_label.text = "Cherry Bomb | Dropping"
-	state_chart.send_event("attack_start")
+	desired_height = 4.3
+	drop_factor = 3.0
+	MAX_SPEED *= 1.6
+	navigation_component.follow_target = true
+	
 	state_chart.send_event("start_targeting")
+	await desired_height_reached
+	
+	state_chart.send_event("attack_start")
 	
 	var dir_counter: int = -1
 	for i in range(bombs_per_attack):
@@ -679,8 +697,12 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 	debug_state_label.text = "Cherry Bomb | Recovering"
 	state_chart.send_event("attack_end")
 	
-	desired_height = DESIRED_HEIGHT
+	navigation_component.follow_target = false
 	drop_factor = DROP_FACTOR
+	desired_height = DESIRED_HEIGHT
+	MAX_SPEED /= 2.0
+	
+	await desired_height_reached
 	
 	await get_tree().create_timer(attack_recovery_time).timeout
 	

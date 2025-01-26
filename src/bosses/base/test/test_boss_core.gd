@@ -9,6 +9,7 @@ extends Node3D
 @onready var win_ui: Control = $UI/BossDefeatedUI
 @onready var boss_trigger: Area3D = $BossTriggerVolume
 
+
 func _ready() -> void:
 	boss.defeated.connect(_on_boss_defeated)
 	player.health_component.died.connect(_on_player_death)
