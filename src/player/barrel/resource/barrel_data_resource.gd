@@ -21,4 +21,5 @@ enum BarrelIdEnum {
 @export var barrel_name: String
 @export_multiline var barrel_desc: String
 @export var barrel_image: Texture2D
+@export var barrel_cost: int = 200
 @export var barrel_prefab: PackedScene
