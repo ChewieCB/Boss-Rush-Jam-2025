@@ -647,9 +647,6 @@ func _on_charge_recover_state_entered() -> void:
 #### CHERRY BOMB
 # 3 Cherries on rollers
 # Bouncing explosive projectiles
-func _on_cherry_bombs_state_physics_processing(delta: float) -> void:
-	pass
-
 func _on_cherry_bombs_targeting_state_entered() -> void:
 	debug_state_label.text = "Cherry Bomb | Targeting"
 	
