@@ -2,7 +2,7 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kyuox"]
 resource_name = "phong1SG"
-albedo_color = Color(0.151704, 0.151704, 0.151704, 1)
+albedo_color = Color(0.152, 0.152, 0.152, 1)
 roughness = 0.9367
 emission_enabled = true
 

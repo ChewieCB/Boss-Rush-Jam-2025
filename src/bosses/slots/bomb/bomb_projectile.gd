@@ -24,11 +24,11 @@ func _ready() -> void:
 	timer.start(fuse_time)
 	
 	var tick_time: float = fuse_time / ticks
-	var mesh_color: Color = mesh.mesh.surface_get_material(0).albedo_color
 	for i in range(ticks):
 		var tween = get_tree().create_tween()
-		tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 255 * 0.65, tick_time / 2).set_trans(Tween.TRANS_CIRC)
-		tween.chain().tween_property(mesh.mesh.surface_get_material(0), "albedo_color", mesh_color, tick_time / 2).set_trans(Tween.TRANS_EXPO)
+		tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 1.0, tick_time / 2).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
+		tween.chain().tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 0.152, tick_time / 2).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+		await tween.finished
 
 
 func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):

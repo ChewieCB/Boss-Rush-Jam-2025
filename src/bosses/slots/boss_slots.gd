@@ -67,7 +67,7 @@ var charge_locked: bool = false
 @export var bomb_projectile: PackedScene
 @export var bombs_per_attack: int = 5
 @export var bomb_drop_delay: float = 0.4
-@export var bomb_fuse_time: float = 1.3
+@export var bomb_fuse_time: float = 2.5
 @export var bomb_impulse: float = 100000.0
 @export var max_drop_distance: float = 20.0
 
@@ -78,7 +78,7 @@ func activate() -> void:
 	super()
 	navigation_component.follow_target = false
 	navigation_component.enable()
-	state_chart.send_event("start_phase_2")
+	state_chart.send_event("start_phase_1")
 
 
 func _physics_process(delta: float) -> void:
@@ -120,14 +120,13 @@ func select_attack_phase_1() -> void:
 func select_attack_phase_2() -> void:
 	var possible_phases = [
 		# Tuples of event string and icon windex 
-		#["start_coin_attack", 0],
-		#["start_bell_attack", 1],
-		#["start_charge_attack", 2],
-		#["start_diamond_attack", 3],
+		["start_bell_attack", 1],
+		["start_charge_attack", 2],
+		["start_diamond_attack", 3],
 		["start_bomb_attack", 4],
 	]
-	#if prev_phase:
-		#possible_phases.erase(prev_phase)
+	if prev_phase:
+		possible_phases.erase(prev_phase)
 	# TODO - add random weighting
 	var new_phase = possible_phases.pick_random()
 	prev_phase = new_phase
