@@ -18,8 +18,7 @@ var shop_barrels: Array[BarrelDataResource] = []
 @export var starting_barrels: Array[BarrelDataResource]
 @export var starting_shop_barrels: Array[BarrelDataResource]
 
-# TODO - update UI when changed
-var player_currency: int = 500:
+@export var player_currency: int = 200:
 	set(value):
 		player_currency = value
 		currency_changed.emit(player_currency)
@@ -65,7 +64,7 @@ func add_barrel_to_inventory(data: BarrelDataResource):
 
 
 func purchase_barrel(data: BarrelDataResource) -> bool:
-	if data.barrel_cost < player_currency:
+	if data.barrel_cost <= player_currency:
 		player_currency -= data.barrel_cost
 		inventory_barrels.append(data)
 		shop_barrels.erase(data)

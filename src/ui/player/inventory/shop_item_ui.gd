@@ -16,13 +16,13 @@ var is_disabled: bool = false:
 			barrel_ui.modulate = Color.DIM_GRAY
 			price_icon.modulate = Color.DIM_GRAY
 			price_label.modulate = Color.DIM_GRAY
-			button.disabled = true
+			#button.disabled = true
 		else:
 			# Grey out the text and texture, disable the button
 			barrel_ui.modulate = Color.WHITE
 			price_icon.modulate = Color.WHITE
 			price_label.modulate = Color.WHITE
-			button.disabled = false
+			#button.disabled = false
 var is_purchased: bool = false:
 	set(value):
 		is_purchased = value
@@ -35,18 +35,20 @@ func init(_data: BarrelDataResource, _is_purchased):
 	data = _data
 	is_purchased = _is_purchased
 	barrel_ui.texture = data.barrel_image
+	price_label.text = str(data.barrel_cost)
 
 
 func _on_button_pressed() -> void:
-	if is_disabled:
-		return
 	if not clicked_once:
 		if (GameManager.player.inventory_ui.current_selected_item_ui != null):
 			GameManager.player.inventory_ui.current_selected_item_ui.unselected()
 		GameManager.player.inventory_ui.current_selected_item_ui = self
 		GameManager.player.inventory_ui.update_description(data.barrel_desc)
 		if not is_purchased:
-			button.text = "Purchase?"
+			if is_disabled:
+				button.text = "Not enough\nchips!"
+			else:
+				button.text = "Purchase?"
 		clicked_once = true
 		border_selected.visible = true
 	else:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=34 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://dkjvdnf0hufiv" path="res://src/player/assets/sfx/temp/Player_damaged_1.mp3" id="2_kd0pf"]
@@ -27,6 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://dxau0o2083o1d" path="res://src/ui/player/PlayerHealthBarUI.tscn" id="19_n1ar7"]
 [ext_resource type="PackedScene" uid="uid://xtemm86x5ftx" path="res://src/ui/player/EffectDetailUI.tscn" id="20_ic8us"]
 [ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="22_qf5o4"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="23_xgmby"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -119,15 +120,6 @@ offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_nkt42")
-
-[node name="DebugLabel" type="Label" parent="Neck/ShakeableCamera"]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 192.0
-offset_bottom = 64.0
-theme_override_font_sizes/font_size = 12
-text = "VSpeed: 0 u/s
-HSpeed: 0 u/s"
 
 [node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
@@ -252,7 +244,8 @@ layout_mode = 2
 z_as_relative = false
 
 [node name="InventoryUI" parent="UI" instance=ExtResource("22_qf5o4")]
-visible = false
+
+[node name="CurrencyUI" parent="UI" instance=ExtResource("23_xgmby")]
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")
