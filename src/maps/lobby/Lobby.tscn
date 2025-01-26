@@ -1,4 +1,4 @@
-[gd_scene load_steps=390 format=4 uid="uid://v6jgq46mkg4n"]
+[gd_scene load_steps=388 format=4 uid="uid://v6jgq46mkg4n"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
@@ -18,7 +18,6 @@
 [ext_resource type="Material" uid="uid://bnwpgixup0n8o" path="res://assets/textures/temp_void.tres" id="13_50d1e"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="15_4ent0"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="16_33d8s"]
-[ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="23_txe2q"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ckxgb"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -37,9 +36,6 @@ volumetric_fog_density = 0.01
 volumetric_fog_albedo = Color(0.85, 0.9625, 1, 1)
 volumetric_fog_emission = Color(0.85098, 0.960784, 1, 1)
 volumetric_fog_emission_energy = 0.3
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_6b7sp"]
-size = Vector3(7, 5.3, 10)
 
 [sub_resource type="Animation" id="Animation_w4xhq"]
 length = 0.001
@@ -1344,20 +1340,6 @@ bounces = 4
 interior = true
 light_data = ExtResource("2_wjq6h")
 
-[node name="DisplayBarrels" type="Node3D" parent="."]
-
-[node name="BarrelItemPickup" parent="DisplayBarrels" instance=ExtResource("23_txe2q")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 4)
-
-[node name="DoorTransitionArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorTransitionArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, 1.6)
-shape = SubResource("BoxShape3D_6b7sp")
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("")
 libraries = {
@@ -2610,6 +2592,3 @@ entProperties = {
 
 [node name="group_10_Elevator" type="Node3D" parent="FuncGodotMap/group_627_Elevator/group_624_ElevatorPrefab/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator"]
 metadata/_tb_type = "_tb_group"
-
-[connection signal="body_entered" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_entered"]
-[connection signal="body_exited" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_exited"]

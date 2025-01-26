@@ -51,7 +51,7 @@ var scaling_3d: float = 100.0
 
 func _ready() -> void:
 	for data in starting_barrels:
-		inventory_barrels.append(data)
+		equipped_barrels.append(data)
 	for data in starting_shop_barrels:
 		shop_barrels.append(data)
 
