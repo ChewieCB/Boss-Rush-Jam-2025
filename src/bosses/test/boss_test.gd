@@ -10,6 +10,7 @@ func _ready() -> void:
 
 func activate() -> void:
 	super()
+	navigation_component.enable()
 	select_attack()
 
 
@@ -18,6 +19,38 @@ func activate() -> void:
 func _on_phase_inactive_state_entered() -> void:
 	debug_state_label.text = "Inactive"
 	sprite.modulate = Color.DIM_GRAY
+
+
+#### SPIN SLOTS
+# TODO - Telegraph before each attack with animation
+
+#### COIN BURST - RICOCHET IN PHASE 2
+# 3 Coins on rollers
+# TODO - Rapid fire coin projectiles 
+
+#### BELL DROP
+# 3 Bells on rollers
+# TODO - Single large AoE bell drops from ceiling
+
+#### DIAMOND SCATTERSHOT
+# 3 Diamonds on rollers
+# TODO - Homing diamond projectile, fired in a spiral/radial pattern from boss
+
+#### CHARGE/HEADBUTT
+# 3 BARs on rollers
+# TODO - Existing charge behaviour
+
+#### LEVER SWIPE
+# TODO - Whacks player with slot level arm if they get too close
+
+#### CHERRY BOMB
+# 3 Cherries on rollers
+# TODO - Bouncing explosive projectiles
+
+
+
+
+
 
 
 #### CHASE PLAYER

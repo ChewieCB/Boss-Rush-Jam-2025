@@ -554,15 +554,15 @@ func spawn_center_wave(
 	collider_shape.height = spawned_wave_height
 	area_collider_shape.shape = collider_shape
 	area_collider.add_child(area_collider_shape)
-	area_collider.collision_layer = 0
-	area_collider.collision_mask = pow(2, 1-1) + pow(2, 2-1) + pow(2, 7-1) # Player
+	area_collider.collision_layer = pow(2, 7)
+	area_collider.collision_mask = pow(2, 2-1) + pow(2, 7-1) # Player & Cover
 	area_collider.monitoring = true
 	
 	get_tree().get_root().add_child(area_collider)
 	
 	area_collider.global_position = area_pos
 	area_collider.body_entered.connect(_on_wave_collision)
-	area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
+	#area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
 	
 	var debug_mesh_instance = MeshInstance3D.new()
 	var mesh = CylinderMesh.new()
