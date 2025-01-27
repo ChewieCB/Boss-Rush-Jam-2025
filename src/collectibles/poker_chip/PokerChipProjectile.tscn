@@ -20,7 +20,7 @@ albedo_color = Color(1, 0.766048, 0, 0.713726)
 emission_enabled = true
 emission = Color(1, 0.731834, 0.032858, 1)
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_776oo"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_c5h2l"]
 
 [sub_resource type="Curve" id="Curve_3o5j5"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -28,7 +28,6 @@ point_count = 2
 
 [node name="PokerChipProjectile" type="RigidBody3D"]
 collision_layer = 16
-collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_ipprj")
 script = ExtResource("1_1s0ep")
 
@@ -52,7 +51,7 @@ shape = SubResource("SphereShape3D_ib1tb")
 [node name="Trail3D" type="MeshInstance3D" parent="Trail"]
 top_level = true
 material_override = SubResource("StandardMaterial3D_id061")
-mesh = SubResource("ImmediateMesh_776oo")
+mesh = SubResource("ImmediateMesh_c5h2l")
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("3_12jep")
 segments = 10

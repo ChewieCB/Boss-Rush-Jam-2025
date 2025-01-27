@@ -108,6 +108,7 @@ func _ready() -> void:
 	reset_modifier(true)
 	await get_tree().physics_frame
 	await get_tree().physics_frame
+	recheck_installed_barrels()
 	reload()
 
 
@@ -419,6 +420,7 @@ func install_barrel(barrel_prefab: PackedScene):
 	gun_reloaded.emit()
 	recheck_installed_barrels()
 
+
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
 	for child in barrel_container.get_children():
 		if child.get_child_count() > 0:
@@ -427,9 +429,8 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
 				# installed_barrels.erase(barrel)
 				barrel.queue_free()
 				break
-	await get_tree().process_frame
-	await get_tree().process_frame
 	recheck_installed_barrels()
+
 
 func recheck_installed_barrels():
 	installed_barrels = []
@@ -447,6 +448,6 @@ func reinstall_barrels():
 	for i in range(len(GameManager.equipped_barrels)):
 		var barrel_inst: SpinBarrel = GameManager.equipped_barrels[i].barrel_prefab.instantiate()
 		barrel_container.get_child(i).add_child(barrel_inst)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	#await get_tree().process_frame
+	#await get_tree().process_frame
 	recheck_installed_barrels()
