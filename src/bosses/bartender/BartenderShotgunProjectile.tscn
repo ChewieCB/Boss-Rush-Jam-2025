@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cx7dytvoa0h3h"]
+[gd_scene load_steps=10 format=3 uid="uid://cx7dytvoa0h3h"]
 
 [ext_resource type="Script" path="res://src/bosses/bartender/bartender_shotgun_projectile.gd" id="1_44j7o"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_11gin"]
@@ -16,6 +16,8 @@ size = Vector3(0.05, 0.05, 0.1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_t27v6"]
 radius = 0.2
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_810gr"]
 
 [sub_resource type="Curve" id="Curve_inxyf"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -48,7 +50,9 @@ collision_mask = 29
 [node name="Trail" type="Node3D" parent="."]
 
 [node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
 material_override = SubResource("StandardMaterial3D_c8gkq")
+mesh = SubResource("ImmediateMesh_810gr")
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("4_t5jn8")
 segments = 10

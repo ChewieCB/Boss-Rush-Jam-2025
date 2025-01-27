@@ -1,18 +1,18 @@
 [gd_scene load_steps=87 format=4 uid="uid://bm3l5if407n6l"]
 
-[ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="1_i5vv4"]
-[ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="4_jsh1c"]
-[ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="5_4aic8"]
-[ext_resource type="Texture2D" uid="uid://cyg2snr1w5xw5" path="res://addons/func_godot/textures/default_texture.png" id="5_it6ua"]
-[ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="6_gguit"]
-[ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="7_ehqix"]
-[ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="11_7l8i2"]
-[ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="11_27x0f"]
-[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="12_hscmp"]
-[ext_resource type="Material" uid="uid://ds3c45rpls1jp" path="res://assets/textures/placeholder/texture_orange_09.tres" id="13_bloba"]
-[ext_resource type="PackedScene" uid="uid://uwn1wb0neu46" path="res://src/bosses/bartender/BossBartender.tscn" id="13_tcolk"]
-[ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="16_76fle"]
-[ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="17_kbf0j"]
+[ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="1_fk3ye"]
+[ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="2_ajswq"]
+[ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="3_th36c"]
+[ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="4_md8wb"]
+[ext_resource type="Texture2D" uid="uid://cyg2snr1w5xw5" path="res://addons/func_godot/textures/default_texture.png" id="5_jjkrh"]
+[ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="6_ryixa"]
+[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="7_2alyt"]
+[ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="8_jg1u0"]
+[ext_resource type="Material" uid="uid://ds3c45rpls1jp" path="res://assets/textures/placeholder/texture_orange_09.tres" id="9_wgomx"]
+[ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="10_arlkl"]
+[ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="11_1gkm3"]
+[ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="12_878lo"]
+[ext_resource type="PackedScene" uid="uid://uwn1wb0neu46" path="res://src/bosses/bartender/BossBartender.tscn" id="13_ci071"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ydocc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -40,7 +40,7 @@ vertices = PackedVector3Array(-25.25, 7.75, -15.5, -25.25, 8, -15, -10.5, 8, -15
 polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(0, 6, 2), PackedInt32Array(2, 6, 3), PackedInt32Array(3, 6, 4), PackedInt32Array(4, 6, 5), PackedInt32Array(5, 6, 0), PackedInt32Array(7, 5, 8), PackedInt32Array(8, 5, 0), PackedInt32Array(12, 11, 9), PackedInt32Array(9, 11, 10), PackedInt32Array(15, 14, 13), PackedInt32Array(13, 19, 15), PackedInt32Array(15, 19, 16), PackedInt32Array(16, 19, 17), PackedInt32Array(17, 19, 18), PackedInt32Array(18, 19, 13), PackedInt32Array(21, 20, 16), PackedInt32Array(16, 20, 15), PackedInt32Array(23, 22, 24), PackedInt32Array(24, 22, 25), PackedInt32Array(28, 27, 26), PackedInt32Array(30, 29, 31), PackedInt32Array(31, 29, 32), PackedInt32Array(33, 35, 34), PackedInt32Array(34, 35, 32), PackedInt32Array(26, 35, 28), PackedInt32Array(28, 35, 36), PackedInt32Array(36, 35, 37), PackedInt32Array(38, 36, 39), PackedInt32Array(39, 36, 37), PackedInt32Array(32, 35, 25), PackedInt32Array(25, 35, 26), PackedInt32Array(22, 31, 32), PackedInt32Array(25, 22, 32), PackedInt32Array(41, 40, 42), PackedInt32Array(42, 40, 43), PackedInt32Array(45, 44, 46), PackedInt32Array(46, 44, 47), PackedInt32Array(42, 43, 44), PackedInt32Array(44, 43, 47), PackedInt32Array(49, 48, 50), PackedInt32Array(50, 48, 53), PackedInt32Array(50, 53, 52), PackedInt32Array(50, 52, 51), PackedInt32Array(55, 54, 56), PackedInt32Array(56, 54, 57), PackedInt32Array(57, 54, 58), PackedInt32Array(58, 54, 28), PackedInt32Array(58, 53, 57), PackedInt32Array(57, 53, 48), PackedInt32Array(54, 27, 28), PackedInt32Array(62, 61, 59), PackedInt32Array(59, 61, 60), PackedInt32Array(66, 65, 63), PackedInt32Array(63, 65, 64), PackedInt32Array(70, 69, 67), PackedInt32Array(67, 69, 68), PackedInt32Array(71, 49, 50), PackedInt32Array(24, 72, 23), PackedInt32Array(23, 72, 73), PackedInt32Array(74, 73, 75), PackedInt32Array(75, 73, 76), PackedInt32Array(76, 73, 77), PackedInt32Array(77, 73, 78), PackedInt32Array(73, 72, 78), PackedInt32Array(82, 71, 79), PackedInt32Array(79, 71, 80), PackedInt32Array(80, 71, 81), PackedInt32Array(81, 71, 50), PackedInt32Array(55, 56, 78), PackedInt32Array(78, 56, 77), PackedInt32Array(77, 82, 76), PackedInt32Array(76, 82, 79), PackedInt32Array(86, 85, 83), PackedInt32Array(83, 85, 84), PackedInt32Array(90, 89, 87), PackedInt32Array(87, 89, 88), PackedInt32Array(91, 80, 81), PackedInt32Array(74, 75, 92), PackedInt32Array(92, 75, 93), PackedInt32Array(95, 94, 93), PackedInt32Array(93, 94, 29), PackedInt32Array(29, 30, 96), PackedInt32Array(91, 81, 95), PackedInt32Array(95, 81, 94), PackedInt32Array(92, 93, 96), PackedInt32Array(96, 93, 29), PackedInt32Array(100, 99, 97), PackedInt32Array(97, 99, 98), PackedInt32Array(102, 101, 34), PackedInt32Array(34, 101, 33), PackedInt32Array(105, 104, 103), PackedInt32Array(105, 103, 106), PackedInt32Array(106, 103, 107), PackedInt32Array(109, 106, 108), PackedInt32Array(108, 106, 107)]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hhhyg"]
-albedo_texture = ExtResource("5_it6ua")
+albedo_texture = ExtResource("5_jjkrh")
 metallic_specular = 0.0
 texture_filter = 2
 
@@ -63,7 +63,7 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 42,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsA"),
-"material": ExtResource("7_ehqix"),
+"material": ExtResource("6_ryixa"),
 "name": "placeholder/texture_dark_07",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -75,7 +75,7 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 102,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAHAAdAB4AHAAeAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8AMAAxADIAMAAyADMANAA1ADYANAA2ADcAOAA5ADoAOAA6ADsAPAA9AD4APAA+AD8AQABBAEIAQABCAEMA"),
-"material": ExtResource("12_hscmp"),
+"material": ExtResource("7_2alyt"),
 "name": "placeholder/texture_light_07",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -87,7 +87,7 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 72,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAHAAdAB4AHAAeAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8A"),
-"material": ExtResource("11_27x0f"),
+"material": ExtResource("8_jg1u0"),
 "name": "placeholder/texture_dark_02",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -99,7 +99,7 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 6,
 "index_data": PackedByteArray("AAABAAIAAAACAAMA"),
-"material": ExtResource("13_bloba"),
+"material": ExtResource("9_wgomx"),
 "name": "placeholder/texture_orange_09",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -307,7 +307,7 @@ points = PackedVector3Array(19, 1, -25.5, 19, 0, -25.5, 19.5, 0, -25.5, 19.5, 1,
 points = PackedVector3Array(17, 1.5, -27.5, 17, 1, -27.5, 19.5, 1, -27.5, 19.5, 1.5, -27.5, 17, 1.5, -25, 17, 1, -25, 19.5, 1, -25, 19.5, 1.5, -25)
 
 [node name="BartenderBoss" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors")]
-script = ExtResource("1_i5vv4")
+script = ExtResource("1_fk3ye")
 boss = NodePath("BossBartender")
 player = NodePath("NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/entity_2_PlayerRef")
 elevator_doors = NodePath("NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/entity_5_ElevatorDoors")
@@ -326,7 +326,7 @@ interior = true
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="BossDefeatedUI" parent="UI" instance=ExtResource("4_jsh1c")]
+[node name="BossDefeatedUI" parent="UI" instance=ExtResource("2_ajswq")]
 
 [node name="BossTriggerVolume" type="Area3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.171486, 0.811382, -14.6338)
@@ -341,9 +341,9 @@ shape = SubResource("BoxShape3D_7vlia")
 navigation_mesh = SubResource("NavigationMesh_uh3cf")
 
 [node name="FuncGodotMap" type="Node3D" parent="NavigationRegion3D"]
-script = ExtResource("5_4aic8")
+script = ExtResource("3_th36c")
 local_map_file = "res://src/maps/bartender_boss/bartender.map"
-map_settings = ExtResource("6_gguit")
+map_settings = ExtResource("4_md8wb")
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="NavigationRegion3D/FuncGodotMap"]
 collision_mask = 0
@@ -552,7 +552,7 @@ shape = SubResource("ConvexPolygonShape3D_uag8d")
 [node name="group_628_ElevatorPrefab" type="Node3D" parent="NavigationRegion3D/FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_2_PlayerRef" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab" instance=ExtResource("11_7l8i2")]
+[node name="entity_2_PlayerRef" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab" instance=ExtResource("10_arlkl")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0.25, 1.4375, -0.25)
 
 [node name="group_619_ElevatorPrefab" type="Node3D" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab"]
@@ -561,7 +561,7 @@ metadata/_tb_type = "_tb_group"
 [node name="group_626_Elevator" type="Node3D" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_5_ElevatorDoors" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator" instance=ExtResource("17_kbf0j")]
+[node name="entity_5_ElevatorDoors" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator" instance=ExtResource("11_1gkm3")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.125, -2.25)
 
 [node name="group_625_Elevator" type="Node3D" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator"]
@@ -573,7 +573,7 @@ metadata/_tb_type = "_tb_group"
 [node name="group_575_ElevatorButton" type="Node3D" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_9_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("16_76fle")]
+[node name="entity_9_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("12_878lo")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.84375, 2.3125, 1.875)
 entProperties = {
 "_tb_group": "575",
@@ -583,7 +583,7 @@ entProperties = {
 "origin": "60 27 74"
 }
 
-[node name="entity_10_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("16_76fle")]
+[node name="entity_10_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("12_878lo")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.84375, 1.8125, 1.875)
 entProperties = {
 "_tb_group": "575",
@@ -593,7 +593,7 @@ entProperties = {
 "origin": "60 27 58"
 }
 
-[node name="entity_11_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("16_76fle")]
+[node name="entity_11_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("12_878lo")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.84375, 1.3125, 1.875)
 entProperties = {
 "_tb_group": "575",
@@ -603,7 +603,7 @@ entProperties = {
 "origin": "60 27 42"
 }
 
-[node name="entity_12_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("16_76fle")]
+[node name="entity_12_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("12_878lo")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.90625, 1.3125, 1.875)
 entProperties = {
 "_tb_group": "575",
@@ -613,7 +613,7 @@ entProperties = {
 "origin": "60 -29 42"
 }
 
-[node name="entity_13_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("16_76fle")]
+[node name="entity_13_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("12_878lo")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.90625, 1.8125, 1.875)
 entProperties = {
 "_tb_group": "575",
@@ -623,7 +623,7 @@ entProperties = {
 "origin": "60 -29 58"
 }
 
-[node name="entity_14_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("16_76fle")]
+[node name="entity_14_ElevatorButton" parent="NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/group_575_ElevatorButton" instance=ExtResource("12_878lo")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.90625, 2.3125, 1.875)
 entProperties = {
 "_tb_group": "575",
@@ -672,10 +672,17 @@ light_color = Color(0.813401, 0.433048, 0.281874, 1)
 light_energy = 3.0
 omni_range = 20.0
 
-[node name="BossBartender" parent="." node_paths=PackedStringArray("target") instance=ExtResource("13_tcolk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -44.9891)
+[node name="BossBartender" parent="." node_paths=PackedStringArray("target") instance=ExtResource("13_ci071")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -44.9891)
 target = NodePath("../NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/entity_2_PlayerRef")
 
 [node name="BossMoveMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.4755, 0.330918, -45.1419)
+
+[node name="BossMoveMarker2" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.397888, 0.330918, -45.1419)
+
+[node name="BossMoveMarker3" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.9523, 0.330918, -45.1419)
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

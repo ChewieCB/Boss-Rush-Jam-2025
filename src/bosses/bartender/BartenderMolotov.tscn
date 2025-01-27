@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://bkbyk7x5yc34u"]
+
+[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_13d0f"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_de81d"]
+transparency = 1
+albedo_color = Color(0.290196, 0.501961, 0, 0.690196)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_r4evi"]
+material = SubResource("StandardMaterial3D_de81d")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.2
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4x8tl"]
+albedo_color = Color(0.708216, 0.26761, 4.81307e-07, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_yd6sl"]
+material = SubResource("StandardMaterial3D_4x8tl")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.15
+radial_segments = 16
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_r13qw"]
+
+[node name="BartenderMolotov" instance=ExtResource("1_13d0f")]
+collision_mask = 3
+
+[node name="MeshInstance3D" parent="." index="1"]
+mesh = SubResource("CylinderMesh_r4evi")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0102412, 0)
+mesh = SubResource("CylinderMesh_yd6sl")
+skeleton = NodePath("../../..")
+
+[node name="Trail3D" parent="Trail" index="0"]
+mesh = SubResource("ImmediateMesh_r13qw")
