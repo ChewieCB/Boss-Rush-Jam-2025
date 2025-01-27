@@ -3,11 +3,17 @@ class_name BossCore
 
 signal defeated(boss: BossCore)
 
+@export var chip_scene: PackedScene
+@export var chip_spawn_chance: float = 0.4
+@export var chip_spawn_force: float = 700.0
+
 @export_category("Barrels")
 @export var barrel_to_drop: BarrelDataResource
 @export var barrel_pickup_scene: PackedScene
 var debug_trajectory_mesh: MeshInstance3D
 
+
+@export_category("SFX")
 ## TEMP SFX REPLACE THESE
 @export var TEMP_sfx_awaken: AudioStream
 @export var TEMP_sfx_hit: Array[AudioStream]
@@ -370,6 +376,15 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
 		SoundManager.play_sound_with_pitch(TEMP_sfx_hit.pick_random(), randf_range(0.7, 1.2))
+	if new_health < prev_health:
+		if randf() < chip_spawn_chance:
+			var chip = chip_scene.instantiate() as RigidBody3D
+			get_tree().root.get_child(-1).add_child(chip)
+			chip.global_position = self.global_position
+			chip.rotate_y(randf_range(0, 2*PI))
+			chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+			chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+			
 
 
 func _on_died() -> void:

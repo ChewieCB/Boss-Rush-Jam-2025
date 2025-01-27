@@ -48,7 +48,7 @@ const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
 const RECOIL_COEFFICIENT: float = 10
 const BULLET_SPAWN_POS_VARIATION: float = 10
-const INTERACT_DISTANCE = 3
+const INTERACT_DISTANCE = 5
 
 const DASH_SPEED: float = 15
 const SLIDE_SPEED: float = 5
@@ -112,8 +112,8 @@ func _input(event):
 	if controls_disabled:
 		return
 
-	if event.is_action_pressed("open_inventory"):
-		inventory_ui.toggle()
+	#if event.is_action_pressed("open_inventory"):
+		#inventory_ui.toggle()
 
 	if is_in_inventory:
 		return
@@ -138,6 +138,7 @@ func _input(event):
 	if Input.is_action_just_pressed("interact"):
 		if object_to_be_interacted:
 			object_to_be_interacted.interact()
+			get_viewport().set_input_as_handled()
 
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)

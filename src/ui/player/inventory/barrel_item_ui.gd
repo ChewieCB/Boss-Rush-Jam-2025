@@ -14,6 +14,7 @@ func init(_data: BarrelDataResource, _is_equipped):
 	is_equipped = _is_equipped
 	texture = data.barrel_image
 
+
 func _on_button_pressed() -> void:
 	if not clicked_once:
 		if (GameManager.player.inventory_ui.current_selected_item_ui != null):

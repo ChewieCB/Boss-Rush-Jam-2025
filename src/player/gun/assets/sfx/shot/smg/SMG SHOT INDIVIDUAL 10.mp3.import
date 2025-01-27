@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dyfxmxnbwiup4"
+path="res://.godot/imported/SMG SHOT INDIVIDUAL 10.mp3-a0cf3e337bf08e455febb4962ae2b8f7.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3"
+dest_files=["res://.godot/imported/SMG SHOT INDIVIDUAL 10.mp3-a0cf3e337bf08e455febb4962ae2b8f7.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
