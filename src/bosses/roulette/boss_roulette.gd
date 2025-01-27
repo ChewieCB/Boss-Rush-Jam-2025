@@ -3,6 +3,7 @@ extends BossCore
 signal change_wheel_speed(speed: float)
 
 @onready var debug_phase_label: Label3D = $DebugPhaseLabel
+@onready var held_ball_marker_pivot: Node3D = $HeldBallPivot
 @onready var hurtbox_mesh: MeshInstance3D = hurtbox.get_node("MeshInstance3D")
 var wheel_rotation_speed: float = 0.0
 
@@ -85,6 +86,11 @@ func _ready() -> void:
 	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
 	available_spawns = ball_spawn_positions.duplicate()
 	ball_kill_timer.wait_time = max_ball_lifetime
+
+
+func _physics_process(delta: float) -> void:
+	super(delta)
+	held_ball_marker_pivot.look_at(target.global_position)
 
 
 func activate() -> void:
