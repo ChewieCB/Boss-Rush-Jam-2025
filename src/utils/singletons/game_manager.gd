@@ -1,6 +1,8 @@
 extends Node
 
 signal currency_changed(new_currency: int)
+signal barrel_purchased(barrel_data: BarrelDataResource)
+signal barrel_too_expensive(barrel_data: BarrelDataResource)
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -69,7 +71,9 @@ func purchase_barrel(data: BarrelDataResource) -> bool:
 		inventory_barrels.append(data)
 		shop_barrels.erase(data)
 		GameManager.player.inventory_ui.full_refresh_ui()
+		barrel_purchased.emit(data)
 		return true
+	barrel_too_expensive.emit(data)
 	return false
 
 

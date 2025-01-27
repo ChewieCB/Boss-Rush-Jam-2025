@@ -143,7 +143,6 @@ func create_gun_anims(barrel_count: int, idle_texture: Texture, reload_textures:
 	var idle_anim := Animation.new()
 	idle_anim.step = 0.05
 	idle_anim.length = 0.1
-	idle_anim.loop = true
 	
 	var idle_texture_track_idx = idle_anim.add_track(Animation.TYPE_VALUE)
 	idle_anim.track_set_path(idle_texture_track_idx, sprite_texture_path)
@@ -319,6 +318,7 @@ func reload():
 		barrel.stop_spin()
 	SoundManager.stop_sound(TEMP_sfx_reload)
 	anim_player.play("%s_barrel_idle" % barrel_count)
+	await anim_player.animation_finished
 	anim_player.play("reload_foregrip")
 	is_reloading = false
 

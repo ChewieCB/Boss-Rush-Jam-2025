@@ -25,6 +25,13 @@ func toggle():
 		open()
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if visible:
+		if event.is_action_pressed("interact") or event.is_action_pressed("ui_cancel"):
+			close()
+			get_viewport().set_input_as_handled()
+
+
 func full_refresh_ui():
 	barrel_desc.text = ""
 	for child in equip_barrel_container.get_children():
@@ -58,11 +65,11 @@ func open():
 	full_refresh_ui()
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
-	Engine.time_scale = 0.2
+	#Engine.time_scale = 0.2
 	GameManager.player.is_in_inventory = true
 
 func close():
 	visible = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	Engine.time_scale = 1
+	#Engine.time_scale = 1
 	GameManager.player.is_in_inventory = false

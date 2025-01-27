@@ -1,4 +1,4 @@
-[gd_scene load_steps=389 format=4 uid="uid://v6jgq46mkg4n"]
+[gd_scene load_steps=390 format=4 uid="uid://v6jgq46mkg4n"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
@@ -18,6 +18,7 @@
 [ext_resource type="Material" uid="uid://bnwpgixup0n8o" path="res://assets/textures/temp_void.tres" id="13_50d1e"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="15_4ent0"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="16_33d8s"]
+[ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="19_fr53g"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ckxgb"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -2603,6 +2604,10 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DoorTransitionArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 7.6)
 shape = SubResource("BoxShape3D_l477v")
+
+[node name="Vendor" parent="." node_paths=PackedStringArray("player") instance=ExtResource("19_fr53g")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12.4, 1.6, -8.4)
+player = NodePath("../FuncGodotMap/entity_1_PlayerRef")
 
 [connection signal="body_entered" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_entered"]
 [connection signal="body_exited" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_exited"]
