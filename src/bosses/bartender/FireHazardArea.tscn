@@ -1,10 +1,12 @@
-[gd_scene load_steps=22 format=3 uid="uid://ovfcjowsr7df"]
+[gd_scene load_steps=21 format=3 uid="uid://ovfcjowsr7df"]
 
-[ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="1_kcn1y"]
 [ext_resource type="Script" path="res://src/bosses/bartender/fire_hazard_area.gd" id="1_xogw5"]
+[ext_resource type="Texture2D" uid="uid://csksvkj83ajtj" path="res://src/bosses/bartender/fire_sprite.png" id="2_73ktq"]
+[ext_resource type="Texture2D" uid="uid://bus2aoy40njv1" path="res://src/bosses/bartender/puddle.png" id="3_h2ljg"]
 
 [sub_resource type="Gradient" id="Gradient_samdw"]
-colors = PackedColorArray(0.678431, 0, 0, 1, 0.823513, 0.825153, 0.62919, 1)
+offsets = PackedFloat32Array(0, 0.797015, 1)
+colors = PackedColorArray(0.678431, 0, 0, 1, 0.823529, 0.823529, 0.627451, 1, 0.823529, 0.823529, 0.627451, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_3c13r"]
 gradient = SubResource("Gradient_samdw")
@@ -17,37 +19,31 @@ point_count = 2
 [sub_resource type="CurveTexture" id="CurveTexture_iskqs"]
 curve = SubResource("Curve_7fxc7")
 
-[sub_resource type="Curve" id="Curve_8uuhk"]
-_data = [Vector2(1e-05, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_p1qhi"]
-curve = SubResource("Curve_8uuhk")
-
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dq4mg"]
-emission_shape_scale = Vector3(2, 1, 2)
+emission_shape_scale = Vector3(2, 0.25, 2)
 emission_shape = 6
 emission_ring_axis = Vector3(0, 1, 0)
 emission_ring_height = 1.0
 emission_ring_radius = 1.0
 emission_ring_inner_radius = 0.0
-gravity = Vector3(0, 2, 0)
+gravity = Vector3(0, 0.2, 0)
 scale_min = 0.75
 scale_max = 1.5
-scale_curve = SubResource("CurveTexture_p1qhi")
 color = Color(0.892114, 0.748462, 0, 1)
 color_ramp = SubResource("GradientTexture1D_3c13r")
 emission_curve = SubResource("CurveTexture_iskqs")
+anim_speed_min = 0.5
+anim_speed_max = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dmqvj"]
 transparency = 1
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("1_kcn1y")
+albedo_texture = ExtResource("2_73ktq")
 billboard_mode = 3
 billboard_keep_scale = true
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
+particles_anim_h_frames = 4
+particles_anim_v_frames = 3
+particles_anim_loop = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_5nj2i"]
 material = SubResource("StandardMaterial3D_dmqvj")
@@ -122,6 +118,11 @@ visibility_aabb = AABB(-4.96533, -2.36527, -3.67267, 9.45307, 5.961, 8.53309)
 process_material = SubResource("ParticleProcessMaterial_ycs0i")
 draw_pass_1 = SubResource("QuadMesh_rnvrd")
 
+[node name="Puddle" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.1, 0)
+modulate = Color(0.211765, 0, 0.0901961, 1)
+texture = ExtResource("3_h2ljg")
+
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 light_color = Color(0.841752, 0.337685, 0, 1)
 light_energy = 5.0
@@ -142,6 +143,7 @@ wait_time = 5.0
 one_shot = true
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -0.2, 0)
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

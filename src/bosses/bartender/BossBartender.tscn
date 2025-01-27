@@ -2,13 +2,13 @@
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
-[ext_resource type="Texture2D" uid="uid://dk2026rggy1tx" path="res://src/bosses/bartender/bartender.jpg" id="2_yuiw5"]
 [ext_resource type="PackedScene" uid="uid://cx7dytvoa0h3h" path="res://src/bosses/bartender/BartenderShotgunProjectile.tscn" id="3_ycarf"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_dheml"]
 [ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="4_vwmjv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_2jcim"]
 [ext_resource type="PackedScene" uid="uid://bkbyk7x5yc34u" path="res://src/bosses/bartender/BartenderMolotov.tscn" id="5_e3e4s"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_kkb22"]
+[ext_resource type="Texture2D" uid="uid://b41us6y851cfv" path="res://src/bosses/bartender/bartender.png" id="6_ky2ag"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_p0ajt"]
 radius = 8.0
@@ -28,8 +28,8 @@ slow_bottle_prefab = null
 telegraph_time = 0.5
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(1, 0, 0, 0, 1.795, 0, 0, 0, 1, 0, 1.96009, 0)
-texture = ExtResource("2_yuiw5")
+transform = Transform3D(1, 0, 0, 0, 1.2, 0, 0, 0, 1, 0, 2.1, 0)
+texture = ExtResource("6_ky2ag")
 
 [node name="Hurtbox" parent="." index="3"]
 visible = false

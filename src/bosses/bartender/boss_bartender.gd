@@ -147,6 +147,16 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0):
 		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
 		bottle_inst.init(modified_spawn_pos, spreaded_direction, proj_damage, throw_force)
 
+
+func throw_concoction_bottle():
+	var possible_bottle_prefab = [
+		molotov_prefab,
+		poison_bottle_prefab,
+		slow_bottle_prefab
+	]
+	var chosen_prefab = possible_bottle_prefab.pick_random()
+	return
+
 func _on_throw_broken_bottle_state_entered() -> void:
 	debug_state_label.text = "Throw broken bottle"
 	await get_tree().create_timer(1).timeout
