@@ -1,33 +1,55 @@
-[gd_scene load_steps=34 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=56 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
-[ext_resource type="AudioStream" uid="uid://dkjvdnf0hufiv" path="res://src/player/assets/sfx/temp/Player_damaged_1.mp3" id="2_kd0pf"]
+[ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
+[ext_resource type="AudioStream" uid="uid://14a1e70swgdk" path="res://src/player/assets/sfx/VOICE LINES/OWW!.mp3" id="2_cpvt1"]
 [ext_resource type="Script" path="res://src/player/shakeable_camera.gd" id="3_cy2wl"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_e4bmr"]
-[ext_resource type="AudioStream" uid="uid://cnmljmkqgwgmi" path="res://src/player/assets/sfx/temp/Player_damaged_2.mp3" id="3_pveus"]
+[ext_resource type="AudioStream" uid="uid://bubn8d8stors5" path="res://src/player/assets/sfx/RUNNING/Running Individual 1.mp3" id="3_hiqt7"]
+[ext_resource type="AudioStream" uid="uid://bkin5hht4n4iw" path="res://src/player/assets/sfx/VOICE LINES/URGH 1.mp3" id="3_lb5n1"]
 [ext_resource type="Texture2D" uid="uid://t7scpy3771o6" path="res://src/player/assets/blob_shadow.png" id="3_tgexf"]
-[ext_resource type="AudioStream" uid="uid://c17out3b37w2o" path="res://src/player/assets/sfx/temp/Player_damaged_3.mp3" id="4_aesbc"]
+[ext_resource type="AudioStream" uid="uid://coawgt6udli0p" path="res://src/player/assets/sfx/RUNNING/Running Individual 2.mp3" id="4_a4xoc"]
+[ext_resource type="AudioStream" uid="uid://cwxjqohvo2mt3" path="res://src/player/assets/sfx/VOICE LINES/URGH 2.mp3" id="4_broo0"]
 [ext_resource type="Texture2D" uid="uid://cl0jqrjnnsy7n" path="res://src/player/assets/default_crosshair.png" id="4_ymis7"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="5_dqbuo"]
-[ext_resource type="AudioStream" uid="uid://cyhmrif4rli4i" path="res://src/player/assets/sfx/temp/Player_damaged_4.mp3" id="5_fd78g"]
+[ext_resource type="AudioStream" uid="uid://cqf8726jy0x0r" path="res://src/player/assets/sfx/VOICE LINES/URGH 3.mp3" id="5_lkuup"]
 [ext_resource type="Texture2D" uid="uid://coblcfhc2qgbt" path="res://src/player/assets/hitmarker_lg.png" id="5_nkt42"]
-[ext_resource type="AudioStream" uid="uid://chxvv0tfaasnw" path="res://src/player/assets/sfx/temp/Player_damaged_5.mp3" id="6_8bniu"]
+[ext_resource type="AudioStream" uid="uid://043buavuippq" path="res://src/player/assets/sfx/RUNNING/Running Individual 3.mp3" id="5_pg460"]
+[ext_resource type="AudioStream" uid="uid://bihmdowosqtpc" path="res://src/player/assets/sfx/RUNNING/Running Individual 4.mp3" id="6_320sy"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="6_t33b7"]
+[ext_resource type="AudioStream" uid="uid://itnieslv461" path="res://src/player/assets/sfx/VOICE LINES/URGH 4.mp3" id="6_vqbwb"]
+[ext_resource type="AudioStream" uid="uid://dqke72p5y15dw" path="res://src/player/assets/sfx/RUNNING/Running Individual 5.mp3" id="7_2he1w"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_1276k"]
 [ext_resource type="PackedScene" uid="uid://byj1y3wrwtdtq" path="res://src/ui/pause_menu/PauseUI.tscn" id="7_db7x8"]
-[ext_resource type="AudioStream" uid="uid://ultwfhksuadr" path="res://src/player/assets/sfx/temp/Player_Damaged_bonus.mp3" id="7_rcwb7"]
-[ext_resource type="AudioStream" uid="uid://ccfcawm3u1r2e" path="res://src/player/assets/sfx/temp/Player_dead_1.mp3" id="8_0q120"]
+[ext_resource type="AudioStream" uid="uid://yt0vwld82nxd" path="res://src/player/assets/sfx/VOICE LINES/Death 1.mp3" id="7_lluik"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_dkhcu"]
-[ext_resource type="AudioStream" uid="uid://dn4a4q1mrg1pv" path="res://src/player/assets/sfx/temp/Player_dead_2.mp3" id="9_n6gsv"]
-[ext_resource type="AudioStream" uid="uid://b7lqglnhl2llk" path="res://src/player/assets/sfx/temp/dash1.wav" id="10_ak4r0"]
+[ext_resource type="AudioStream" uid="uid://ww4j6l5sb4o3" path="res://src/player/assets/sfx/VOICE LINES/DEATH 2.mp3" id="8_h2aj6"]
+[ext_resource type="AudioStream" uid="uid://xry4bkqlifml" path="res://src/player/assets/sfx/RUNNING/Running Individual 6.mp3" id="8_kw11m"]
+[ext_resource type="AudioStream" uid="uid://dfka5lcswosia" path="res://src/player/assets/sfx/RUNNING/Running Individual 7.mp3" id="9_qmrha"]
+[ext_resource type="AudioStream" uid="uid://bnmhb1pcrco2q" path="res://src/player/assets/sfx/VOICE LINES/DEATH 3.mp3" id="9_wamw4"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="10_g5bf6"]
+[ext_resource type="AudioStream" uid="uid://b5qhakfhohemg" path="res://src/player/assets/sfx/VOICE LINES/DEATH 4.mp3" id="10_mowd1"]
+[ext_resource type="AudioStream" uid="uid://ca0lxnf1w8ufu" path="res://src/player/assets/sfx/RUNNING/Running Individual 8.mp3" id="10_njsu2"]
+[ext_resource type="AudioStream" uid="uid://ds6ft76jc0nrp" path="res://src/player/assets/sfx/RUNNING/Running Individual 9.mp3" id="11_1jfcb"]
+[ext_resource type="AudioStream" uid="uid://bvncm3v3v2dq7" path="res://src/bosses/roulette/assets/sfx/Falling Death 1.wav" id="11_qp0vt"]
+[ext_resource type="AudioStream" uid="uid://bf4cejah4dxaw" path="res://src/player/assets/sfx/RUNNING/Running Individual 10.mp3" id="12_8gaey"]
+[ext_resource type="AudioStream" uid="uid://wm873qkywncp" path="res://src/player/assets/sfx/RUNNING/Running Individual 11.mp3" id="13_hisam"]
 [ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
+[ext_resource type="AudioStream" uid="uid://4qf6uf8inc1v" path="res://src/player/assets/sfx/RUNNING/Running Individual 12.mp3" id="14_rd2i6"]
+[ext_resource type="AudioStream" uid="uid://clrb5tuaish36" path="res://src/player/assets/sfx/RUNNING/Running Individual 13.mp3" id="15_w5gjb"]
 [ext_resource type="PackedScene" uid="uid://d2tb8ogqlaxhy" path="res://src/player/gun/BlankGun.tscn" id="16_1gnyn"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
+[ext_resource type="AudioStream" uid="uid://l2hmqeiq76ff" path="res://src/player/assets/sfx/RUNNING/Running Individual 14.mp3" id="16_tto8i"]
 [ext_resource type="PackedScene" uid="uid://dxau0o2083o1d" path="res://src/ui/player/PlayerHealthBarUI.tscn" id="19_n1ar7"]
 [ext_resource type="PackedScene" uid="uid://xtemm86x5ftx" path="res://src/ui/player/EffectDetailUI.tscn" id="20_ic8us"]
 [ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="22_qf5o4"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="23_xgmby"]
+[ext_resource type="AudioStream" uid="uid://bmdb3aap303b0" path="res://src/player/assets/sfx/CROUCH.mp3" id="26_skrud"]
+[ext_resource type="AudioStream" uid="uid://dckgsngjsbl02" path="res://src/player/assets/sfx/STAND.mp3" id="27_6gtc3"]
+[ext_resource type="AudioStream" uid="uid://bwepo6qinnaup" path="res://src/player/assets/sfx/JUMP FROM GROUND.mp3" id="28_k5crr"]
+[ext_resource type="AudioStream" uid="uid://cjcluk6lldawc" path="res://src/player/assets/sfx/JUMP IN AIR.mp3" id="29_xv6x8"]
+[ext_resource type="AudioStream" uid="uid://ckr1r101hscjl" path="res://src/player/assets/sfx/Floor Dash.mp3" id="30_on7sg"]
+[ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="31_pnqxi"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -46,9 +68,17 @@ size = Vector3(0.5, 0.5, 0.5)
 collision_layer = 2
 collision_mask = 93
 script = ExtResource("1_rl0vi")
-TEMP_sfx_hurt = Array[AudioStream]([ExtResource("2_kd0pf"), ExtResource("3_pveus"), ExtResource("4_aesbc"), ExtResource("5_fd78g"), ExtResource("6_8bniu"), ExtResource("7_rcwb7")])
-TEMP_sfx_dead = Array[AudioStream]([ExtResource("8_0q120"), ExtResource("9_n6gsv")])
-TEMP_sfx_dash = ExtResource("10_ak4r0")
+sfx_hurt = Array[AudioStream]([ExtResource("2_cpvt1"), ExtResource("3_lb5n1"), ExtResource("4_broo0"), ExtResource("5_lkuup"), ExtResource("6_vqbwb")])
+sfx_dead = Array[AudioStream]([ExtResource("7_lluik"), ExtResource("8_h2aj6"), ExtResource("9_wamw4"), ExtResource("10_mowd1")])
+sfx_dead_falling = Array[AudioStream]([ExtResource("11_qp0vt")])
+sfx_movement_loop = ExtResource("2_5ndff")
+sfx_movement_steps = Array[AudioStream]([ExtResource("3_hiqt7"), ExtResource("4_a4xoc"), ExtResource("5_pg460"), ExtResource("6_320sy"), ExtResource("7_2he1w"), ExtResource("8_kw11m"), ExtResource("9_qmrha"), ExtResource("10_njsu2"), ExtResource("11_1jfcb"), ExtResource("12_8gaey"), ExtResource("13_hisam"), ExtResource("14_rd2i6"), ExtResource("15_w5gjb"), ExtResource("16_tto8i")])
+sfx_crouch = Array[AudioStream]([ExtResource("26_skrud")])
+sfx_stand = Array[AudioStream]([ExtResource("27_6gtc3")])
+sfx_jump_ground = Array[AudioStream]([ExtResource("28_k5crr")])
+sfx_jump_air = Array[AudioStream]([ExtResource("29_xv6x8")])
+sfx_dash_floor = Array[AudioStream]([ExtResource("30_on7sg")])
+sfx_dash_air = Array[AudioStream]([ExtResource("31_pnqxi")])
 can_wall_jump = true
 can_wall_cling = true
 max_air_jump = 1

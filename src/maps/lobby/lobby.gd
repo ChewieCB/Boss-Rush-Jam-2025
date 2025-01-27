@@ -10,7 +10,7 @@ var display_barrels: Array = []
 
 func _ready() -> void:
 	get_tree().paused = false
-	SoundManager.play_music(bgm, 0.25)
+	SoundManager.play_music(bgm, 0.25, "BGM")
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
 
@@ -32,7 +32,7 @@ func _on_level_select(level_path: String) -> void:
 	if is_inside_tree():
 		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1) 
 		if new_bgm:
-			SoundManager.play_music(new_bgm, 0.25)
+			SoundManager.play_music(new_bgm, 0.25, "BGM")
 		get_tree().change_scene_to_packed(loaded_scene)
 
 

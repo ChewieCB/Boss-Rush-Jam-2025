@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://chkipxd8ctjen"]
 
 [ext_resource type="Script" path="res://src/player/shield_rotate.gd" id="1_io408"]
-[ext_resource type="Material" uid="uid://dt63xhaj0rbay" path="res://src/bosses/roulette/shield_mat.tres" id="2_db15k"]
-[ext_resource type="Shader" path="res://src/bosses/roulette/shield_impacts.gdshader" id="3_rbxyo"]
+[ext_resource type="Material" uid="uid://dt63xhaj0rbay" path="res://src/bosses/roulette/assets/materials/shield_mat.tres" id="2_db15k"]
+[ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="3_rbxyo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w800b"]
 render_priority = 0

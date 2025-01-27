@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ca0lxnf1w8ufu"
+path="res://.godot/imported/Running Individual 8.mp3-089084573df24d809b603be912efe3b4.mp3str"
+
+[deps]
+
+source_file="res://src/player/assets/sfx/RUNNING/Running Individual 8.mp3"
+dest_files=["res://.godot/imported/Running Individual 8.mp3-089084573df24d809b603be912efe3b4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

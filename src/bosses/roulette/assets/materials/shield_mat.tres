@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dt63xhaj0rbay"]
+
+[ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="1_kw4fx"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_kw4fx")
+shader_parameter/color = Color(0.188235, 0.698039, 0.901961, 1)
+shader_parameter/fresnel_sharpness = 1.0
+shader_parameter/extend_distance = 0.0
+shader_parameter/impact_points = null
+shader_parameter/impact_size = 1.0
+shader_parameter/impact_falloff_sharpness = 1.0

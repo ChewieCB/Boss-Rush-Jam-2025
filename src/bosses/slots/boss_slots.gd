@@ -255,7 +255,7 @@ func fire_projectile(projectile_scene: PackedScene) -> BaseProjectile:
 	get_tree().root.get_child(0).add_child(projectile)
 	projectile.global_position = projectile_spawn_marker.global_position
 	projectile.look_at(target.global_position, Vector3.UP)
-	SoundManager.play_sound(TEMP_sfx_projectile)
+	#SoundManager.play_sound(TEMP_sfx_projectile)
 	return projectile
 
 
@@ -540,7 +540,7 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.target = target
 		projectile.global_rotation.y = self.global_rotation.y
-		SoundManager.play_sound(TEMP_sfx_projectile)
+		#SoundManager.play_sound(TEMP_sfx_projectile)
 	#
 	state_chart.send_event("stop_shooting")
 
@@ -604,7 +604,7 @@ func _on_charge_charging_state_entered() -> void:
 	var charge_dir = self.global_position.direction_to(target.global_position)
 	var charge_impulse = self.global_position.distance_to(target.global_position) * charge_force
 	velocity += charge_dir * charge_impulse
-	SoundManager.play_sound(TEMP_sfx_charge)
+	#SoundManager.play_sound(TEMP_sfx_charge)
 
 func _on_charge_collision(body: Node3D) -> void:
 	if body == target:
@@ -681,7 +681,7 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.global_rotation.y = self.global_rotation.y + (PI/8 * dir_counter)
 		projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
-		SoundManager.play_sound(TEMP_sfx_projectile)
+		#SoundManager.play_sound(TEMP_sfx_projectile)
 		
 		dir_counter += 1
 		dir_counter = wrapi(dir_counter, -1, 2)

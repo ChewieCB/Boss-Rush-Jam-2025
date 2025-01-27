@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://14a1e70swgdk"
+path="res://.godot/imported/OWW!.mp3-f42169d6ff6a099379b74b0b0ccc2c6f.mp3str"
+
+[deps]
+
+source_file="res://src/player/assets/sfx/VOICE LINES/OWW!.mp3"
+dest_files=["res://.godot/imported/OWW!.mp3-f42169d6ff6a099379b74b0b0ccc2c6f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

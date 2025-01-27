@@ -14,16 +14,10 @@ var debug_trajectory_mesh: MeshInstance3D
 
 
 @export_category("SFX")
-## TEMP SFX REPLACE THESE
-@export var TEMP_sfx_awaken: AudioStream
-@export var TEMP_sfx_hit: Array[AudioStream]
-@export var TEMP_sfx_death: AudioStream
-@export var TEMP_sfx_area_1: AudioStream
-@export var TEMP_sfx_area_2: AudioStream
-@export var TEMP_sfx_projectile: AudioStream
-@export var TEMP_sfx_telegraph: AudioStream
-@export var TEMP_sfx_charge: AudioStream
-@export var TEMP_sfx_charge_impact: AudioStream
+@export var sfx_awaken: AudioStream
+@export var sfx_hit: Array[AudioStream]
+@export var sfx_death: AudioStream
+@export var sfx_telegraph: AudioStream
 
 @export var navigation_component: NavigationComponent
 @export var health_component: HealthComponent
@@ -46,12 +40,10 @@ var ranged_phase_count: int = 0
 var area_phase_count: int = 0
 
 # Charge Attack
-# TODO - make this adjustable via resources
 @export var telegraph_time: float = 0.25
 @export var charge_force: float = 8.0
 
 # Projectile Attack
-# TODO - make this adjustable via resources
 @export var projectile_scene: PackedScene
 @export var projectiles_per_phase: int = 5
 @export var delay_per_projectile: float = 0.6
@@ -62,7 +54,6 @@ var ranged_move_points: Array[Node]
 var area_move_points: Array[Node]
 
 # Area Attack
-# TODO - make this adjustable via resources
 @export var area_damage: float = 25.0
 @export var areas_per_phase: int = 6
 @export var area_spawn_time: float = 1.5
@@ -150,7 +141,7 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 
 func activate() -> void:
 	show_health()
-	SoundManager.play_sound(TEMP_sfx_awaken)
+	SoundManager.play_sound(sfx_awaken, "SFX")
 
 
 func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInstance3D:
@@ -362,7 +353,7 @@ func _on_health_dead_state_entered() -> void:
 ### ATTACKING --------------------------------
 #### TELEGRAPH
 func _on_attack_telegraph_state_entered() -> void:
-	SoundManager.play_sound(TEMP_sfx_telegraph)
+	SoundManager.play_sound(sfx_telegraph, "SFX")
 	sprite.modulate = Color.CYAN
 
 
@@ -375,7 +366,7 @@ func _on_attack_telegraph_state_exited() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
-		SoundManager.play_sound_with_pitch(TEMP_sfx_hit.pick_random(), randf_range(0.7, 1.2))
+		#SoundManager.play_sound_with_pitch(sfx_hit.pick_random(), randf_range(0.7, 1.2), "SFX")
 	if new_health < prev_health:
 		if randf() < chip_spawn_chance:
 			var chip = chip_scene.instantiate() as RigidBody3D
@@ -395,6 +386,4 @@ func _on_died() -> void:
 
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
-	SoundManager.play_sound(TEMP_sfx_charge_impact)
-	if body == target:
-		target.health_component.damage(40)
+	pass
