@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=35 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://dkjvdnf0hufiv" path="res://src/player/assets/sfx/temp/Player_damaged_1.mp3" id="2_kd0pf"]
@@ -21,6 +21,7 @@
 [ext_resource type="AudioStream" uid="uid://dn4a4q1mrg1pv" path="res://src/player/assets/sfx/temp/Player_dead_2.mp3" id="9_n6gsv"]
 [ext_resource type="AudioStream" uid="uid://b7lqglnhl2llk" path="res://src/player/assets/sfx/temp/dash1.wav" id="10_ak4r0"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="10_g5bf6"]
+[ext_resource type="AudioStream" uid="uid://bvncm3v3v2dq7" path="res://src/bosses/roulette/assets/sfx/Falling Death 1.wav" id="11_qp0vt"]
 [ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
 [ext_resource type="PackedScene" uid="uid://d2tb8ogqlaxhy" path="res://src/player/gun/BlankGun.tscn" id="16_1gnyn"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
@@ -49,6 +50,7 @@ script = ExtResource("1_rl0vi")
 TEMP_sfx_hurt = Array[AudioStream]([ExtResource("2_kd0pf"), ExtResource("3_pveus"), ExtResource("4_aesbc"), ExtResource("5_fd78g"), ExtResource("6_8bniu"), ExtResource("7_rcwb7")])
 TEMP_sfx_dead = Array[AudioStream]([ExtResource("8_0q120"), ExtResource("9_n6gsv")])
 TEMP_sfx_dash = ExtResource("10_ak4r0")
+falling_death_sfx = Array[AudioStream]([ExtResource("11_qp0vt")])
 can_wall_jump = true
 can_wall_cling = true
 max_air_jump = 1

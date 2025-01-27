@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bc7ur1o66fgkl" path="res://src/bosses/slots/assets/icons/temp/fire.png" id="7_ri7nv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="8_0tk6i"]
 [ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="8_dcrya"]
-[ext_resource type="Shader" path="res://src/bosses/roulette/shield_impacts.gdshader" id="9_1g4bc"]
+[ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="9_1g4bc"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_5a0pq"]
 [ext_resource type="PackedScene" uid="uid://bacaewb7dl2l6" path="res://src/bosses/slots/bell/BellAttack.tscn" id="9_6qwni"]
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="11_5va1t"]

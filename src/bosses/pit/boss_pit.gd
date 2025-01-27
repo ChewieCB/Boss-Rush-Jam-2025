@@ -600,7 +600,7 @@ func spawn_center_wave(
 		state_chart.send_event("finish_wave")
 	
 	# Animate the visual
-	SoundManager.play_sound(TEMP_sfx_area_1)
+	#SoundManager.play_sound(TEMP_sfx_area_1)
 	var tween = get_tree().create_tween()
 	tween.tween_property(mesh, "bottom_radius", max_radius, spawned_wave_time)
 	tween.parallel().tween_property(mesh, "top_radius", max_radius, spawned_wave_time)

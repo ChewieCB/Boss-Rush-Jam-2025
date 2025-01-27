@@ -5,6 +5,7 @@ class_name Player
 @export var TEMP_sfx_hurt: Array[AudioStream]
 @export var TEMP_sfx_dead: Array[AudioStream]
 @export var TEMP_sfx_dash: AudioStream
+@export var falling_death_sfx: Array[AudioStream]
 
 @export var can_wall_jump: bool
 @export var can_wall_cling: bool
@@ -433,6 +434,12 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 func _on_died() -> void:
 	state_chart.send_event("death")
 	SoundManager.play_sound(TEMP_sfx_dead.pick_random())
+
+
+func fall_death() -> void:
+	#health_component.current_health = 0
+	state_chart.send_event("death")
+	SoundManager.play_sound(falling_death_sfx.pick_random(), "SFX")
 
 
 func _on_health_hurt_state_entered() -> void:

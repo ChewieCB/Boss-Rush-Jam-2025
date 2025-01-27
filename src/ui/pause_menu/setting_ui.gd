@@ -155,22 +155,22 @@ func _on_resolution_option_button_item_selected(index: int) -> void:
 	centre_window()
 
 func _on_master_slider_value_changed(value: float) -> void:
-	SoundManager.set_master_volume(value / 100.0)
+	AudioServer.set_bus_volume_db(0, linear_to_db(value/100.0))
 	master_value.text = "{0}".format([value])
 	GameManager.master_audio = value
 
 func _on_ui_slider_value_changed(value: float) -> void:
-	SoundManager.set_sound_volume(value / 100.0)
+	AudioServer.set_bus_volume_db(3, linear_to_db(value/100.0))
 	ui_value.text = "{0}".format([value])
 	GameManager.ui_audio = value
 
 func _on_sfx_slider_value_changed(value: float) -> void:
-	SoundManager.set_sound_volume(value / 100.0)
+	AudioServer.set_bus_volume_db(2, linear_to_db(value/100.0))
 	sfx_value.text = "{0}".format([value])
 	GameManager.sfx_audio = value
 
 func _on_bgm_slider_value_changed(value: float) -> void:
-	SoundManager.set_music_volume(value / 100.0)
+	AudioServer.set_bus_volume_db(1, linear_to_db(value/100.0))
 	bgm_value.text = "{0}".format([value])
 	GameManager.bgm_audio = value
 

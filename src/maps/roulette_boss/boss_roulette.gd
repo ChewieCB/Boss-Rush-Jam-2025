@@ -18,6 +18,9 @@ var floor_segments: Array
 @onready var win_ui: Control = $UI/BossDefeatedUI
 @onready var boss_trigger: Area3D = $BossTriggerVolume
 
+@export var sfx_ambience: Array[AudioStream]
+var current_sfx_ambient: AudioStream
+
 
 func _ready() -> void:
 	boss.defeated.connect(_on_boss_defeated)
@@ -68,6 +71,7 @@ func set_goal_rotation_speed(value: float) -> void:
 
 
 func _on_boss_defeated(_boss: BossCore) -> void:
+	SoundManager.stop_ambient_sound(current_sfx_ambient, 0.5)
 	win_ui.win()
 	show_end_panel()
 
@@ -106,6 +110,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 
 func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	if body is Player:
+		current_sfx_ambient = sfx_ambience.pick_random()
+		SoundManager.play_ambient_sound(current_sfx_ambient, 0.5, "Ambience")
 		boss.activate()
 		boss_trigger.queue_free()
 		shove_player()
@@ -115,6 +121,9 @@ func _on_killbox_area_body_entered(body: Node3D) -> void:
 	if body is RouletteBall:
 		body.destroy()
 	elif "health_component" in body:
-		body.health_component.damage(9999999)
+		if body is Player:
+			body.fall_death()
+		else:
+			body.health_component.damage(9999999)
 	else:
 		body.queue_free()
