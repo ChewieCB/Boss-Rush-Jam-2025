@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://yt0vwld82nxd"
+path="res://.godot/imported/Death 1.mp3-67d5010c04518832d786c784d0a83555.mp3str"
+
+[deps]
+
+source_file="res://src/player/assets/sfx/VOICE LINES/Death 1.mp3"
+dest_files=["res://.godot/imported/Death 1.mp3-67d5010c04518832d786c784d0a83555.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

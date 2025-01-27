@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cjcluk6lldawc"
+path="res://.godot/imported/JUMP IN AIR.mp3-c0fa52e595f3b1293ff6cf56845f1fb8.mp3str"
+
+[deps]
+
+source_file="res://src/player/assets/sfx/JUMP IN AIR.mp3"
+dest_files=["res://.godot/imported/JUMP IN AIR.mp3-c0fa52e595f3b1293ff6cf56845f1fb8.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

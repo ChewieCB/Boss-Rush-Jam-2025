@@ -366,7 +366,7 @@ func _on_attack_telegraph_state_exited() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
-		SoundManager.play_sound_with_pitch(sfx_hit.pick_random(), randf_range(0.7, 1.2), "SFX")
+		#SoundManager.play_sound_with_pitch(sfx_hit.pick_random(), randf_range(0.7, 1.2), "SFX")
 	if new_health < prev_health:
 		if randf() < chip_spawn_chance:
 			var chip = chip_scene.instantiate() as RigidBody3D

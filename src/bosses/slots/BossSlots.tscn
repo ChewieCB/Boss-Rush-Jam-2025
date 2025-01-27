@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=27 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -17,11 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://bacaewb7dl2l6" path="res://src/bosses/slots/bell/BellAttack.tscn" id="9_6qwni"]
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="11_5va1t"]
 [ext_resource type="PackedScene" uid="uid://40024fnpmf14" path="res://src/bosses/base/attacks/ranged/DiamondProjectile.tscn" id="11_dqr52"]
-[ext_resource type="AudioStream" uid="uid://db2criyne5nvh" path="res://src/bosses/base/assets/sfx/temp/whoosh2_clipped.wav" id="11_nlkmt"]
-[ext_resource type="AudioStream" uid="uid://wetpevehhwx1" path="res://src/bosses/base/assets/sfx/temp/weird_summon_clipped.wav" id="12_su6vu"]
 [ext_resource type="PackedScene" uid="uid://yw8o87v7ydx1" path="res://src/bosses/slots/bomb/BombProjectile.tscn" id="12_xbq02"]
-[ext_resource type="AudioStream" uid="uid://bxeo1ync2wkuj" path="res://src/bosses/base/assets/sfx/temp/dash6.wav" id="14_hetrm"]
-[ext_resource type="AudioStream" uid="uid://bcippputkq3ih" path="res://src/bosses/base/assets/sfx/temp/Whoosh .mp3" id="15_fswyj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
 render_priority = 0
@@ -177,10 +173,6 @@ bomb_fuse_time = 2.5
 bomb_impulse = 170000.0
 max_drop_distance = 20.0
 barrel_to_drop = ExtResource("11_5va1t")
-TEMP_sfx_area_1 = ExtResource("11_nlkmt")
-TEMP_sfx_area_2 = ExtResource("12_su6vu")
-TEMP_sfx_projectile = ExtResource("14_hetrm")
-TEMP_sfx_charge = ExtResource("15_fswyj")
 attack_recovery_time = 0.5
 telegraph_time = 0.4
 projectiles_per_phase = 8

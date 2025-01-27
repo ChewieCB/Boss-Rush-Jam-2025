@@ -308,7 +308,7 @@ func reload():
 		anim_player.play("%s_barrel_reload" % barrel_count)
 	
 	is_reloading = true
-	SoundManager.play_sound(TEMP_sfx_reload)
+	SoundManager.play_sound(TEMP_sfx_reload, "Gun")
 	show_gun_status("Reloading...")
 	for barrel in installed_barrels:
 		barrel.start_spin()
@@ -359,13 +359,13 @@ func jam_the_gun(duration: float = 1.0):
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
 func regain_ammo(ammo: int) -> void:
 	show_gun_status("Regained +%s ammo" % [ammo], Color.CYAN)
-	SoundManager.play_sound(TEMP_regain_ammo)
+	SoundManager.play_sound(TEMP_regain_ammo, "Gun")
 
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
 func crit_damage(damage: int) -> void:
 	show_gun_status("CRIT! %s damage" % [damage], Color.RED)
-	SoundManager.play_sound(TEMP_crit)
+	SoundManager.play_sound(TEMP_crit, "Gun")
 
 
 func show_gun_status(text: String, color: Color = Color.WHITE, duration: float = 0.4) -> void:
@@ -402,7 +402,7 @@ func get_spread_direction(center_direction: Vector3) -> Vector3:
 
 func play_failed_shoot_sfx():
 	if failed_shoot_sfx_timer.is_stopped():
-		SoundManager.play_sound(TEMP_sfx_dry)
+		SoundManager.play_sound(TEMP_sfx_dry, "Gun")
 		failed_shoot_sfx_timer.start()
 
 

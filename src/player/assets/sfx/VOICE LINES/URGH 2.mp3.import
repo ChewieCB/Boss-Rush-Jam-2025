@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cwxjqohvo2mt3"
+path="res://.godot/imported/URGH 2.mp3-1bd5463bbfa653ec8c70ee3533d32bb0.mp3str"
+
+[deps]
+
+source_file="res://src/player/assets/sfx/VOICE LINES/URGH 2.mp3"
+dest_files=["res://.godot/imported/URGH 2.mp3-1bd5463bbfa653ec8c70ee3533d32bb0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
