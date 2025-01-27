@@ -1,6 +1,6 @@
 [gd_scene load_steps=87 format=4 uid="uid://bm3l5if407n6l"]
 
-[ext_resource type="Script" path="res://src/maps/bartender_boss/bartender_boss.gd" id="1_i5vv4"]
+[ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="1_i5vv4"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="4_jsh1c"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="5_4aic8"]
 [ext_resource type="Texture2D" uid="uid://cyg2snr1w5xw5" path="res://addons/func_godot/textures/default_texture.png" id="5_it6ua"]
@@ -672,7 +672,10 @@ light_color = Color(0.813401, 0.433048, 0.281874, 1)
 light_energy = 3.0
 omni_range = 20.0
 
-[node name="BossBartender" parent="." instance=ExtResource("13_tcolk")]
+[node name="BossBartender" parent="." node_paths=PackedStringArray("target") instance=ExtResource("13_tcolk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -44.9891)
+target = NodePath("../NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/entity_2_PlayerRef")
+
+[node name="BossMoveMarker" type="Marker3D" parent="."]
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

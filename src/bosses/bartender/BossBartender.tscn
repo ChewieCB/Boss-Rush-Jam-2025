@@ -1,9 +1,29 @@
-[gd_scene load_steps=3 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=10 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
+[ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
 [ext_resource type="Texture2D" uid="uid://dk2026rggy1tx" path="res://src/bosses/bartender/bartender.jpg" id="2_yuiw5"]
+[ext_resource type="PackedScene" uid="uid://cx7dytvoa0h3h" path="res://src/bosses/bartender/BartenderShotgunProjectile.tscn" id="3_ycarf"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_dheml"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_2jcim"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_kkb22"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_k0le6"]
+height = 8.0
+radius = 6.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_dpsmo"]
+size = Vector3(1, 1, 4.1)
 
 [node name="BossBartender" instance=ExtResource("1_bp57a")]
+script = ExtResource("2_ns3xp")
+phase_2_health_percentage_trigger = 0.5
+phase_3_health_percentage_trigger = 0.2
+shotgun_proj_prefab = ExtResource("3_ycarf")
+molotov_prefab = null
+poison_smoke_prefab = null
+slow_smoke_prefab = null
+telegraph_time = 0.5
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1.795, 0, 0, 0, 1, 0, 1.96009, 0)
@@ -11,3 +31,151 @@ texture = ExtResource("2_yuiw5")
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Bart the Bartender"
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Phase1")
+event = &"start_phase_1"
+delay_in_seconds = "0.0"
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Inactive" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Phase2")
+event = &"start_phase_2"
+delay_in_seconds = "0.0"
+
+[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Inactive" index="2"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Phase3")
+event = &"start_phase_3"
+delay_in_seconds = "0.0"
+
+[node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase1" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ThrowBrokenBottle")
+event = &"start_throw_broken_bottle"
+delay_in_seconds = "0.0"
+
+[node name="toThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ThrowConcoction")
+event = &"start_throw_concoction"
+delay_in_seconds = "0.0"
+
+[node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="2"]
+script = ExtResource("4_dheml")
+to = NodePath("../../BrewDrink")
+event = &"start_brew_drink"
+delay_in_seconds = "0.0"
+
+[node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="3"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ShotgunBlast")
+event = &"start_shotgun_blast"
+delay_in_seconds = "0.0"
+
+[node name="ThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="ThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="BrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="ShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Phase2")
+event = &"start_phase_2"
+delay_in_seconds = "0.0"
+
+[node name="Phase2" type="Node" parent="StateChart/Root/Phase" index="2"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase2" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="Phase3" type="Node" parent="StateChart/Root/Phase" index="3"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase3" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="ShotgunTriggerArea" type="Area3D" parent="." index="13"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShotgunTriggerArea" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.77062, 0)
+shape = SubResource("CylinderShape3D_k0le6")
+
+[node name="MixingSpriteHolder" type="Node3D" parent="." index="14"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.61227, -0.37315)
+
+[node name="ProjectileSpawnPos" type="Marker3D" parent="." index="15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.08068, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="16"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95419, -2.00394)
+mesh = SubResource("BoxMesh_dpsmo")
+
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Idle" to="." method="_on_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" to="." method="_on_throw_broken_bottle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowConcoction" to="." method="_on_throw_concoction_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BrewDrink" to="." method="_on_brew_drink_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunBlast" to="." method="_on_shotgun_blast_state_entered"]
+[connection signal="body_entered" from="ShotgunTriggerArea" to="." method="_on_shotgun_trigger_area_body_entered"]
