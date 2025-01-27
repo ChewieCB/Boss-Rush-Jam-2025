@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=4 uid="uid://bm3l5if407n6l"]
+[gd_scene load_steps=88 format=4 uid="uid://bm3l5if407n6l"]
 
 [ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="1_fk3ye"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="2_ajswq"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="11_1gkm3"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="12_878lo"]
 [ext_resource type="PackedScene" uid="uid://uwn1wb0neu46" path="res://src/bosses/bartender/BossBartender.tscn" id="13_ci071"]
+[ext_resource type="PackedScene" uid="uid://ovfcjowsr7df" path="res://src/bosses/bartender/FireHazardArea.tscn" id="14_knvot"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ydocc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -684,5 +685,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.397888, 0.330918, -45.1419
 
 [node name="BossMoveMarker3" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.9523, 0.330918, -45.1419)
+
+[node name="FireEffect" parent="." instance=ExtResource("14_knvot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.07788, 9.92146, -45.2922)
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

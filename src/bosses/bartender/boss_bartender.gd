@@ -134,7 +134,10 @@ func _on_shotgun_blast_state_entered() -> void:
 
 func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0):
 	var proj_damage = 10
-	var throw_force = proj_spawn_pos.distance_to(target.global_position) * 1.2
+	var throw_force = proj_spawn_pos.distance_to(target.global_position)
+	# Magic number that make bartender throw better
+	if throw_force >= 20:
+		throw_force *= 0.8
 	var aim_direction = proj_spawn_pos.direction_to(target.global_position)
 	aim_direction += Vector3(0, 0.2, 0) # Make it upward a bit
 	var modified_spawn_pos = proj_spawn_pos + aim_direction # Avoid stuck inside boss body
@@ -155,8 +158,8 @@ func _on_throw_broken_bottle_state_entered() -> void:
 func _on_throw_concoction_state_entered() -> void:
 	debug_state_label.text = "Throw concoction"
 	await get_tree().create_timer(1).timeout
-	# Do sth
-	throw_bottle(empty_bottle_prefab)
+	# Choose a random bottle and then throw
+	throw_bottle(molotov_prefab)
 
 	await get_tree().create_timer(1).timeout
 	state_chart.send_event("return_idle")

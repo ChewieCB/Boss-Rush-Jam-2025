@@ -44,7 +44,6 @@ point_count = 2
 [node name="BartenderBottle" type="RigidBody3D"]
 collision_layer = 0
 collision_mask = 3
-angular_velocity = Vector3(3.14159, 0, 0)
 script = ExtResource("1_7et0k")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

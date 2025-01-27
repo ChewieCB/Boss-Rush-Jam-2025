@@ -1,0 +1,149 @@
+[gd_scene load_steps=22 format=3 uid="uid://ovfcjowsr7df"]
+
+[ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="1_kcn1y"]
+[ext_resource type="Script" path="res://src/bosses/bartender/fire_hazard_area.gd" id="1_xogw5"]
+
+[sub_resource type="Gradient" id="Gradient_samdw"]
+colors = PackedColorArray(0.678431, 0, 0, 1, 0.823513, 0.825153, 0.62919, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3c13r"]
+gradient = SubResource("Gradient_samdw")
+
+[sub_resource type="Curve" id="Curve_7fxc7"]
+max_value = 5.0
+_data = [Vector2(0, 5), 0.0, 0.0, 0, 0, Vector2(1, 2.53209), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_iskqs"]
+curve = SubResource("Curve_7fxc7")
+
+[sub_resource type="Curve" id="Curve_8uuhk"]
+_data = [Vector2(1e-05, 1), 0.0, 0.0, 0, 0, Vector2(0.99999, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_p1qhi"]
+curve = SubResource("Curve_8uuhk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dq4mg"]
+emission_shape_scale = Vector3(2, 1, 2)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+gravity = Vector3(0, 2, 0)
+scale_min = 0.75
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_p1qhi")
+color = Color(0.892114, 0.748462, 0, 1)
+color_ramp = SubResource("GradientTexture1D_3c13r")
+emission_curve = SubResource("CurveTexture_iskqs")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dmqvj"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_kcn1y")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_5nj2i"]
+material = SubResource("StandardMaterial3D_dmqvj")
+
+[sub_resource type="Gradient" id="Gradient_damr1"]
+offsets = PackedFloat32Array(0, 0.626866, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.223529, 0.223529, 0.223529, 0.866667, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gkd1y"]
+gradient = SubResource("Gradient_damr1")
+
+[sub_resource type="CurveTexture" id="CurveTexture_fxfwl"]
+
+[sub_resource type="Curve" id="Curve_qe2jg"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.253012, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_b1xbx"]
+curve = SubResource("Curve_qe2jg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ycs0i"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
+gravity = Vector3(0, 4, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_b1xbx")
+color = Color(0.41519, 0.27585, 4.33177e-07, 1)
+color_ramp = SubResource("GradientTexture1D_gkd1y")
+emission_curve = SubResource("CurveTexture_fxfwl")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_26vrp"]
+load_path = "res://.godot/imported/circle.png-2a7d29501a90d369c65cabf8eff5784a.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0pci"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("CompressedTexture2D_26vrp")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_rnvrd"]
+material = SubResource("StandardMaterial3D_a0pci")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wi5mc"]
+radius = 2.0
+
+[node name="FireHazardArea" type="Node3D"]
+script = ExtResource("1_xogw5")
+
+[node name="Fire" type="GPUParticles3D" parent="."]
+amount = 40
+lifetime = 2.0
+visibility_aabb = AABB(-1.38918, -0.968294, -1.48039, 2.88104, 3.91074, 2.85323)
+process_material = SubResource("ParticleProcessMaterial_dq4mg")
+draw_pass_1 = SubResource("QuadMesh_5nj2i")
+
+[node name="Smoke" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3607, 0)
+amount = 20
+lifetime = 2.0
+explosiveness = 0.2
+visibility_aabb = AABB(-4.96533, -2.36527, -3.67267, 9.45307, 5.961, 8.53309)
+process_material = SubResource("ParticleProcessMaterial_ycs0i")
+draw_pass_1 = SubResource("QuadMesh_rnvrd")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.841752, 0.337685, 0, 1)
+light_energy = 5.0
+omni_range = 10.0
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 70
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_wi5mc")
+
+[node name="DoTTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
+[connection signal="timeout" from="DoTTimer" to="." method="_on_damage_timer_timeout"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]

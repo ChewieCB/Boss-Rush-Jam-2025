@@ -1,7 +1,8 @@
 extends RigidBody3D
 
-@onready var life_timer: Timer = $LifeTimer
 @export var break_effect_prefab: PackedScene
+
+@onready var life_timer: Timer = $LifeTimer
 
 var damage
 var projectile_speed = 100
@@ -21,22 +22,26 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, _speed: float):
 
 
 func _on_life_timer_timeout() -> void:
+	spawn_break_effect()
 	call_deferred("queue_free")
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		body.health_component.damage(damage)
-		spawn_break_effect()
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
 			body.health_component.damage(damage)
 		elif body is RouletteBall:
 			body.health_component.damage(damage)
-		spawn_break_effect()
+
+	spawn_break_effect()
 	call_deferred("queue_free")
 
 func spawn_break_effect():
 	if break_effect_prefab == null:
 		return
-	return
+	var inst = break_effect_prefab.instantiate()
+	# Spawn in world environment
+	GameManager.player.get_parent().add_child(inst)
+	inst.position = global_position - current_dir
