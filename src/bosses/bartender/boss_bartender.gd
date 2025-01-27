@@ -11,11 +11,19 @@ extends BossCore
 @export var poison_bottle_prefab: PackedScene
 @export var slow_bottle_prefab: PackedScene
 
+@export_category("Drinks")
+@export var defense_icon: Texture2D
+## Received damage will multiply with this value
+@export var defense_buff_resistance = 0.5
+
+@onready var buff_expire_timer: Timer = $BuffExpireTimer
 @onready var proj_spawn_marker = $ProjectileSpawnPos
+@onready var status_icon: Sprite3D = $StatusIcon
 
 var previous_attack: String
 var player_is_near = false
 var proj_spawn_pos
+var current_buff: String = ""
 
 const DIFFICULTY_LV = 1
 
@@ -79,7 +87,7 @@ func select_attack_phase_1() -> void:
 		"start_shotgun_blast"
 	]
 
-	# Avoid use same attack twice in a row
+	# Avoid use same attack twice in a row (except concoction)
 	if previous_attack:
 		possible_attacks.erase(previous_attack)
 	
@@ -159,6 +167,24 @@ func throw_concoction_bottle():
 	var chosen_prefab = possible_bottle_prefab.pick_random()
 	throw_bottle(chosen_prefab)
 
+## Choose a random drink to brew and buff
+func brew_drink():
+	var possible_drink = [
+		"defense",
+		# "heal",
+		# "speed",
+		# "strength",
+	]
+	var chosen_drink = possible_drink.pick_random()
+	# I want boss to stack buffs, but due to time constraint (and possible bugs)
+	# boss can only just have 1 buff ongoing
+	reset_buff()
+	match chosen_drink:
+		"defense":
+			status_icon.texture = defense_icon
+			health_component.modified_resistance = defense_buff_resistance
+			buff_expire_timer.start()
+
 func _on_throw_broken_bottle_state_entered() -> void:
 	debug_state_label.text = "Throw broken bottle"
 	await get_tree().create_timer(1).timeout
@@ -180,9 +206,7 @@ func _on_throw_concoction_state_entered() -> void:
 func _on_brew_drink_state_entered() -> void:
 	debug_state_label.text = "Brew drink"
 	await get_tree().create_timer(1).timeout
-	# Do sth
-	throw_bottle(empty_bottle_prefab)
-
+	brew_drink()
 	await get_tree().create_timer(1).timeout
 	state_chart.send_event("return_idle")
 
@@ -196,3 +220,11 @@ func _on_shotgun_trigger_area_body_entered(body: Node3D) -> void:
 func _on_shotgun_trigger_area_body_exited(body: Node3D) -> void:
 	if body is Player:
 		player_is_near = false
+
+func reset_buff():
+	status_icon.texture = null
+	health_component.modified_resistance = 1
+
+
+func _on_buff_expire_timer_timeout() -> void:
+	reset_buff()
