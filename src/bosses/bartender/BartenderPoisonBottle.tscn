@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://cujkupeiuhqjh"]
+
+[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_e7xao"]
+[ext_resource type="PackedScene" uid="uid://dqw4c2ldowow3" path="res://src/bosses/bartender/PoisonHazardArea.tscn" id="2_62kvn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3tqx"]
+transparency = 1
+albedo_color = Color(0.272776, 0.7926, 0.306752, 0.576471)
+emission_enabled = true
+emission = Color(0.368498, 0.830594, 0.199277, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_r13qw"]
+
+[node name="BartenderPoisonBottle" instance=ExtResource("1_e7xao")]
+break_effect_prefab = ExtResource("2_62kvn")
+
+[node name="Trail3D" parent="Trail" index="0"]
+material_override = SubResource("StandardMaterial3D_e3tqx")
+mesh = SubResource("ImmediateMesh_r13qw")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="5"]
+light_color = Color(0.0580966, 0.38672, 0.190045, 1)
+light_energy = 2.0

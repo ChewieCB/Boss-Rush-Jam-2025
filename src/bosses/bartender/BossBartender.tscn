@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=13 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="4_vwmjv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_2jcim"]
 [ext_resource type="PackedScene" uid="uid://bkbyk7x5yc34u" path="res://src/bosses/bartender/BartenderMolotov.tscn" id="5_e3e4s"]
+[ext_resource type="PackedScene" uid="uid://cujkupeiuhqjh" path="res://src/bosses/bartender/BartenderPoisonBottle.tscn" id="6_ei8fn"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_kkb22"]
 [ext_resource type="Texture2D" uid="uid://b41us6y851cfv" path="res://src/bosses/bartender/bartender.png" id="6_ky2ag"]
 
@@ -23,7 +24,7 @@ phase_3_health_percentage_trigger = 0.2
 shotgun_proj_prefab = ExtResource("3_ycarf")
 empty_bottle_prefab = ExtResource("4_vwmjv")
 molotov_prefab = ExtResource("5_e3e4s")
-poison_bottle_prefab = null
+poison_bottle_prefab = ExtResource("6_ei8fn")
 slow_bottle_prefab = null
 telegraph_time = 0.5
 
@@ -175,6 +176,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.61227, -0.37315)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.90389, -1.1636)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ProjectileSpawnPos" index="0"]
+visible = false
 mesh = SubResource("BoxMesh_dpsmo")
 skeleton = NodePath("../..")
 

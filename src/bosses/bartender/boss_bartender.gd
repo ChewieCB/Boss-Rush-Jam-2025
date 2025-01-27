@@ -74,6 +74,7 @@ func select_attack_phase_1() -> void:
 	var possible_attacks = [
 		"start_throw_broken_bottle",
 		"start_throw_concoction",
+		"start_throw_concoction",
 		"start_brew_drink",
 		"start_shotgun_blast"
 	]
@@ -136,7 +137,7 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0):
 	var proj_damage = 10
 	var throw_force = proj_spawn_pos.distance_to(target.global_position)
 	# Magic number that make bartender throw better
-	if throw_force >= 20:
+	if throw_force >= 30:
 		throw_force *= 0.8
 	var aim_direction = proj_spawn_pos.direction_to(target.global_position)
 	aim_direction += Vector3(0, 0.2, 0) # Make it upward a bit
@@ -148,19 +149,22 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0):
 		bottle_inst.init(modified_spawn_pos, spreaded_direction, proj_damage, throw_force)
 
 
+## Choose a random bottle then throw
 func throw_concoction_bottle():
 	var possible_bottle_prefab = [
 		molotov_prefab,
 		poison_bottle_prefab,
-		slow_bottle_prefab
+		# slow_bottle_prefab
 	]
 	var chosen_prefab = possible_bottle_prefab.pick_random()
-	return
+	throw_bottle(chosen_prefab)
 
 func _on_throw_broken_bottle_state_entered() -> void:
 	debug_state_label.text = "Throw broken bottle"
 	await get_tree().create_timer(1).timeout
-	throw_bottle(empty_bottle_prefab, 3, 8)
+	var n_bottle = randi_range(3, 6)
+	var spread = randf_range(4, 10)
+	throw_bottle(empty_bottle_prefab, n_bottle, spread)
 	await get_tree().create_timer(1).timeout
 	state_chart.send_event("return_idle")
 
@@ -168,9 +172,7 @@ func _on_throw_broken_bottle_state_entered() -> void:
 func _on_throw_concoction_state_entered() -> void:
 	debug_state_label.text = "Throw concoction"
 	await get_tree().create_timer(1).timeout
-	# Choose a random bottle and then throw
-	throw_bottle(molotov_prefab)
-
+	throw_concoction_bottle()
 	await get_tree().create_timer(1).timeout
 	state_chart.send_event("return_idle")
 
