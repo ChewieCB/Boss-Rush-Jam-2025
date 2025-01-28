@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b5u11ya8wqrke"
+path="res://.godot/imported/AIR DASH.mp3-1068d3382570899611d306a87cc2e05b.mp3str"
+
+[deps]
+
+source_file="res://src/player/assets/sfx/AIR DASH.mp3"
+dest_files=["res://.godot/imported/AIR DASH.mp3-1068d3382570899611d306a87cc2e05b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

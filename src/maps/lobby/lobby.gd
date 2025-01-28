@@ -1,26 +1,18 @@
 extends Node3D
 
 @export var bgm: AudioStream
-@export var elevator_doors: ElevatorDoors
-@export var elevator_buttons: Array[ElevatorButton]
+
+@onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
+@onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
 
 var display_barrels: Array = []
 
 
 func _ready() -> void:
 	get_tree().paused = false
-	SoundManager.play_music(bgm, 0.25)
+	SoundManager.play_music(bgm, 0.25, "BGM")
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
-	for node in $DisplayBarrels.get_children():
-		var model = node.get_node("Model")
-		model.rotation_degrees.y = randf_range(0, 360)
-		display_barrels.append(model)
-
-
-func _process(delta: float) -> void:
-	for node in display_barrels:
-		node.rotation.y += delta
 
 
 func _on_level_select(level_path: String) -> void:
@@ -40,7 +32,7 @@ func _on_level_select(level_path: String) -> void:
 	if is_inside_tree():
 		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1) 
 		if new_bgm:
-			SoundManager.play_music(new_bgm, 0.25)
+			SoundManager.play_music(new_bgm, 0.25, "BGM")
 		get_tree().change_scene_to_packed(loaded_scene)
 
 

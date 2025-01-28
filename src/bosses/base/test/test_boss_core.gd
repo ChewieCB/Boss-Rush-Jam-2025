@@ -9,8 +9,9 @@ extends Node3D
 @onready var win_ui: Control = $UI/BossDefeatedUI
 @onready var boss_trigger: Area3D = $BossTriggerVolume
 
+
 func _ready() -> void:
-	boss.health_component.died.connect(_on_boss_defeated)
+	boss.defeated.connect(_on_boss_defeated)
 	player.health_component.died.connect(_on_player_death)
 	
 	var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
@@ -19,14 +20,13 @@ func _ready() -> void:
 	player.player_camera.rotation = GameManager.cached_camera_rotation
 	elevator_doors.open()
 
-func _on_boss_defeated() -> void:
-	pass
+
+func _on_boss_defeated(_boss: BossCore) -> void:
 	win_ui.win()
 	show_end_panel()
 
 
 func _on_player_death() -> void:
-	pass
 	win_ui.lose()
 	show_end_panel()
 

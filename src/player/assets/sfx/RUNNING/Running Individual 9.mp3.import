@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ds6ft76jc0nrp"
+path="res://.godot/imported/Running Individual 9.mp3-b1fcd266f73232b48ecec64dcf956b57.mp3str"
+
+[deps]
+
+source_file="res://src/player/assets/sfx/RUNNING/Running Individual 9.mp3"
+dest_files=["res://.godot/imported/Running Individual 9.mp3-b1fcd266f73232b48ecec64dcf956b57.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

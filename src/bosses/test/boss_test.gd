@@ -10,6 +10,7 @@ func _ready() -> void:
 
 func activate() -> void:
 	super()
+	navigation_component.enable()
 	select_attack()
 
 
@@ -18,6 +19,38 @@ func activate() -> void:
 func _on_phase_inactive_state_entered() -> void:
 	debug_state_label.text = "Inactive"
 	sprite.modulate = Color.DIM_GRAY
+
+
+#### SPIN SLOTS
+# TODO - Telegraph before each attack with animation
+
+#### COIN BURST - RICOCHET IN PHASE 2
+# 3 Coins on rollers
+# TODO - Rapid fire coin projectiles 
+
+#### BELL DROP
+# 3 Bells on rollers
+# TODO - Single large AoE bell drops from ceiling
+
+#### DIAMOND SCATTERSHOT
+# 3 Diamonds on rollers
+# TODO - Homing diamond projectile, fired in a spiral/radial pattern from boss
+
+#### CHARGE/HEADBUTT
+# 3 BARs on rollers
+# TODO - Existing charge behaviour
+
+#### LEVER SWIPE
+# TODO - Whacks player with slot level arm if they get too close
+
+#### CHERRY BOMB
+# 3 Cherries on rollers
+# TODO - Bouncing explosive projectiles
+
+
+
+
+
 
 
 #### CHASE PLAYER
@@ -33,7 +66,7 @@ func _on_phase_target_player_state_entered() -> void:
 	state_chart.send_event("charge_player")
 
 func _on_phase_chase_player_charge_state_entered() -> void:
-	SoundManager.play_sound(TEMP_sfx_charge)
+	#SoundManager.play_sound(TEMP_sfx_charge)
 	sprite.modulate = Color.ORANGE
 	debug_state_label.text = "Chase | Charging"
 	state_chart.send_event("start_charge")
@@ -94,7 +127,7 @@ func _on_phase_ranged_projectiles_fire_projectiles_state_entered() -> void:
 		get_parent().get_parent().add_child(projectile)
 		projectile.global_position = self.global_position + Vector3(0, 3, 0)
 		projectile.look_at(target.global_position, Vector3.UP)
-		SoundManager.play_sound(TEMP_sfx_projectile)
+		#SoundManager.play_sound(TEMP_sfx_projectile)
 	
 	await get_tree().create_timer(delay_per_projectile).timeout
 	state_chart.send_event("end_projectiles")
@@ -144,7 +177,7 @@ func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
 	var initial_point: Vector3 = target.global_position
 	initial_point.y = self.global_position.y
 	
-	SoundManager.play_sound(TEMP_sfx_area_1)
+	#SoundManager.play_sound(TEMP_sfx_area_1)
 	for i in areas_per_phase:
 		var angle = angle_increment * i
 		var dir = initial_point - self.global_position
@@ -208,7 +241,7 @@ func _on_phase_area_denial_spawn_damage_areas_state_entered() -> void:
 				height_tween.tween_property(mesh, "height", 64.0 / 2, 0.2).set_trans(Tween.TRANS_EXPO)
 				height_tween.tween_callback(
 					func():
-						SoundManager.play_sound(TEMP_sfx_area_2)
+						#SoundManager.play_sound(TEMP_sfx_area_2)
 						debug_mesh_instance.queue_free()
 						area_collider.queue_free()
 						areas_finished += 1

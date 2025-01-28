@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://bacaewb7dl2l6"]
+
+[ext_resource type="Script" path="res://src/bosses/slots/bell/bell.gd" id="1_c4e2b"]
+[ext_resource type="ArrayMesh" uid="uid://dq3mrfaleu5xm" path="res://src/bosses/slots/bell/bell_mesh_2.tres" id="1_qcd24"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_m8nuh"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="3_hwuru"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="5_mcym8"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_3xt22"]
+radius = 1.0
+
+[node name="BellAttack" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
+collision_layer = 64
+collision_mask = 78
+slide_on_ceiling = false
+script = ExtResource("1_c4e2b")
+health_component = NodePath("HealthComponent")
+explosion_scene = ExtResource("2_m8nuh")
+spark_scene = ExtResource("3_hwuru")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(312, 0, 0, 0, -1.3638e-05, 312, 0, -312, -1.3638e-05, 0, 0, 0)
+mesh = ExtResource("1_qcd24")
+
+[node name="Hurtbox" type="Area3D" parent="."]
+collision_layer = 64
+collision_mask = 79
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_3xt22")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_3xt22")
+
+[node name="HealthComponent" parent="." instance=ExtResource("5_mcym8")]
+
+[connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]

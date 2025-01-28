@@ -18,9 +18,9 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GameManager="*res://src/utils/singletons/game_manager.gd"
 SoundManager="*res://addons/sound_manager/sound_manager.gd"
 GunUtils="*res://src/utils/gun_utils.gd"
+GameManager="*res://src/utils/singletons/GameManager.tscn"
 
 [debug]
 

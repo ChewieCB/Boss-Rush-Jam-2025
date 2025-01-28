@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=3 uid="uid://40024fnpmf14"]
+
+[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/diamond_projectile.gd" id="1_ifpu3"]
+[ext_resource type="Texture2D" uid="uid://btm33u0b7ner2" path="res://src/bosses/base/attacks/ranged/tileBlue_64.png" id="1_tb6pl"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_11y2m"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_64cb7"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_umuy3"]
+radius = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_usbrc"]
+transparency = 1
+albedo_color = Color(1, 0.766048, 0, 0.713726)
+emission_enabled = true
+emission = Color(1, 0.731834, 0.032858, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_dkih7"]
+
+[sub_resource type="Curve" id="Curve_ierie"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="DiamondProjectile" type="Area3D"]
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("1_ifpu3")
+spark_effect = ExtResource("2_64cb7")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+billboard = 1
+texture = ExtResource("1_tb6pl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_umuy3")
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_usbrc")
+mesh = SubResource("ImmediateMesh_dkih7")
+skeleton = NodePath("../../MeshInstance3D")
+script = ExtResource("2_11y2m")
+segments = 10
+base_width = 0.1
+width_profile = SubResource("Curve_ierie")
+
+[node name="HomingDelay" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="HomingTimer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
+[connection signal="timeout" from="HomingDelay" to="." method="_on_homing_delay_timeout"]

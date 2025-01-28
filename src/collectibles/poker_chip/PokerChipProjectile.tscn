@@ -1,0 +1,61 @@
+[gd_scene load_steps=10 format=3 uid="uid://b3x1bn1jpkwjo"]
+
+[ext_resource type="Script" path="res://src/collectibles/poker_chip/poker_chip_projectile.gd" id="1_1s0ep"]
+[ext_resource type="Texture2D" uid="uid://dcylc4mw40djy" path="res://src/collectibles/poker_chip/assets/coin_30.png" id="2_ykt64"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_12jep"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ipprj"]
+friction = 0.4
+bounce = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_npndf"]
+radius = 0.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ib1tb"]
+radius = 10.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_id061"]
+transparency = 1
+albedo_color = Color(1, 0.766048, 0, 0.713726)
+emission_enabled = true
+emission = Color(1, 0.731834, 0.032858, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_c5h2l"]
+
+[sub_resource type="Curve" id="Curve_3o5j5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="PokerChipProjectile" type="RigidBody3D"]
+collision_layer = 16
+physics_material_override = SubResource("PhysicsMaterial_ipprj")
+script = ExtResource("1_1s0ep")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+billboard = 1
+texture = ExtResource("2_ykt64")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_npndf")
+
+[node name="PickupArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 34
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PickupArea"]
+shape = SubResource("SphereShape3D_ib1tb")
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_id061")
+mesh = SubResource("ImmediateMesh_c5h2l")
+skeleton = NodePath("../../MeshInstance3D")
+script = ExtResource("3_12jep")
+segments = 10
+base_width = 0.1
+width_profile = SubResource("Curve_3o5j5")
+
+[connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]

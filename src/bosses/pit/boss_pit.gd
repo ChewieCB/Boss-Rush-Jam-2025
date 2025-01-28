@@ -24,7 +24,6 @@ signal charge_ended
 @export_subgroup("Air Slam")
 #@export var air_slam_jump_force: float = 50.0
 #@export var air_slam_jump_height: float = 20.0
-var debug_trajectory_mesh: MeshInstance3D
 @export var air_slam_damage: float = 15.0
 var slam_target_pos := Vector3.ZERO
 @export_subgroup("Ground Pound")
@@ -45,9 +44,6 @@ var slam_target_pos := Vector3.ZERO
 func _ready() -> void:
 	super()
 	surveillance_boss.health_component.died.connect(_on_surveillance_died)
-	debug_trajectory_mesh = MeshInstance3D.new()
-	debug_trajectory_mesh.mesh = ImmediateMesh.new()
-	get_tree().get_root().add_child(debug_trajectory_mesh)
 
 func activate() -> void:
 	super()
@@ -130,6 +126,10 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
+func _on_died() -> void:
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
 
 func _on_surveillance_died() -> void:
 	state_chart.send_event("start_phase_3")
@@ -554,15 +554,15 @@ func spawn_center_wave(
 	collider_shape.height = spawned_wave_height
 	area_collider_shape.shape = collider_shape
 	area_collider.add_child(area_collider_shape)
-	area_collider.collision_layer = 0
-	area_collider.collision_mask = pow(2, 1-1) + pow(2, 2-1) + pow(2, 7-1) # Player
+	area_collider.collision_layer = pow(2, 7)
+	area_collider.collision_mask = pow(2, 2-1) + pow(2, 7-1) # Player & Cover
 	area_collider.monitoring = true
 	
 	get_tree().get_root().add_child(area_collider)
 	
 	area_collider.global_position = area_pos
 	area_collider.body_entered.connect(_on_wave_collision)
-	area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
+	#area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
 	
 	var debug_mesh_instance = MeshInstance3D.new()
 	var mesh = CylinderMesh.new()
@@ -600,7 +600,7 @@ func spawn_center_wave(
 		state_chart.send_event("finish_wave")
 	
 	# Animate the visual
-	SoundManager.play_sound(TEMP_sfx_area_1)
+	#SoundManager.play_sound(TEMP_sfx_area_1)
 	var tween = get_tree().create_tween()
 	tween.tween_property(mesh, "bottom_radius", max_radius, spawned_wave_time)
 	tween.parallel().tween_property(mesh, "top_radius", max_radius, spawned_wave_time)

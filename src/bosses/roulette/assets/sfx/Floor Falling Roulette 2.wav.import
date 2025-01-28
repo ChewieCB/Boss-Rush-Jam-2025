@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bb665hvagsw1k"
+path="res://.godot/imported/Floor Falling Roulette 2.wav-37462d947dd251c9d77a9bcbaf42f741.sample"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Floor Falling Roulette 2.wav"
+dest_files=["res://.godot/imported/Floor Falling Roulette 2.wav-37462d947dd251c9d77a9bcbaf42f741.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

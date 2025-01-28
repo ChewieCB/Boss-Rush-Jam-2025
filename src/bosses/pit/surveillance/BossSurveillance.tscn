@@ -1,15 +1,16 @@
-[gd_scene load_steps=24 format=3 uid="uid://burh3udob1t32"]
+[gd_scene load_steps=25 format=3 uid="uid://burh3udob1t32"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7qur5"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_l4r8d"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="3_duvt5"]
 [ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="3_kymb3"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_tbpt7"]
+[ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="4_e13kv"]
 [ext_resource type="AudioStream" uid="uid://db2criyne5nvh" path="res://src/bosses/base/assets/sfx/temp/whoosh2_clipped.wav" id="4_tplth"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_vjmyh"]
 [ext_resource type="AudioStream" uid="uid://wetpevehhwx1" path="res://src/bosses/base/assets/sfx/temp/weird_summon_clipped.wav" id="5_0c38w"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_75mh0"]
-[ext_resource type="Resource" uid="uid://c05iaeuuv1ym1" path="res://src/bosses/NotDeadGuard.tres" id="6_fjks3"]
+[ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="6_fjks3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dnveo"]
 
@@ -110,6 +111,7 @@ barrier_cage_radius = 16.0
 barrier_cage_reflect_force = 12.0
 barrier_cage_time = 12.0
 barrier_cage_material = ExtResource("3_kymb3")
+barrel_to_drop = ExtResource("4_e13kv")
 TEMP_sfx_area_1 = ExtResource("4_tplth")
 TEMP_sfx_area_2 = ExtResource("5_0c38w")
 TEMP_sfx_projectile = null
@@ -177,7 +179,7 @@ shape = SubResource("SphereShape3D_ook83")
 visible = false
 
 [node name="HealthComponent" parent="." index="6"]
-max_health = 5000.0
+max_health = 2500.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 offset_bottom = 281.0
@@ -209,18 +211,21 @@ script = ExtResource("4_vjmyh")
 script = ExtResource("5_75mh0")
 to = NodePath("../../LaserBeam")
 event = &"start_laser_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="toDownwardSpike" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
 script = ExtResource("5_75mh0")
 to = NodePath("../../DownwardSpike")
 event = &"start_spike_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="toBarrierCage" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="2"]
 script = ExtResource("5_75mh0")
 to = NodePath("../../BarrierCage")
 event = &"start_barrier_cage_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="LaserBeam" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
@@ -285,12 +290,14 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_75mh0")
 to = NodePath("../../DownwardSpike")
 event = &"start_spike_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="toBarrierCage" type="Node" parent="StateChart/Root/Phase/Phase1/LaserBeam" index="6"]
 script = ExtResource("5_75mh0")
 to = NodePath("../../BarrierCage")
 event = &"start_barrier_cage_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="DownwardSpike" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
@@ -349,6 +356,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_75mh0")
 to = NodePath("../../LaserBeam")
 event = &"start_laser_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
@@ -375,12 +383,14 @@ script = ExtResource("4_vjmyh")
 script = ExtResource("5_75mh0")
 to = NodePath("../../SpawnTurrets")
 event = &"start_spawn_turrets_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="1"]
 script = ExtResource("5_75mh0")
 to = NodePath("../../LaserBeam")
 event = &"start_laser_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="LaserBeam" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
@@ -451,12 +461,14 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_75mh0")
 to = NodePath("../../BarrierCage")
 event = &"start_barrier_cage_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="toSpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase2/LaserBeam" index="7"]
 script = ExtResource("5_75mh0")
 to = NodePath("../../SpawnTurrets")
 event = &"start_spawn_turrets_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="SpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
@@ -494,6 +506,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_75mh0")
 to = NodePath("../../LaserBeam")
 event = &"start_laser_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="BarrierCage" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
@@ -537,12 +550,14 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_75mh0")
 to = NodePath("../../LaserBeam")
 event = &"start_laser_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="toSpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase2/BarrierCage" index="5"]
 script = ExtResource("5_75mh0")
 to = NodePath("../../SpawnTurrets")
 event = &"start_spawn_turrets_attack"
+guard = ExtResource("6_fjks3")
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="4"]

@@ -1,7 +1,9 @@
-[gd_scene load_steps=35 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=37 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Texture2D" uid="uid://l708f35ye0ad" path="res://src/bosses/base/assets/umby_boss_sprite_placeholder.png" id="1_lhq8s"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
+[ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="2_5bmmu"]
+[ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChipProjectile.tscn" id="2_hj7qa"]
 [ext_resource type="AudioStream" uid="uid://baowpjxeh2juw" path="res://src/bosses/base/assets/sfx/temp/You Win 2 or Game Start or etc.mp3" id="2_iapcc"]
 [ext_resource type="AudioStream" uid="uid://bpjefcq47oyr3" path="res://src/bosses/base/assets/sfx/temp/Hit 2.mp3" id="2_ooio7"]
 [ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="2_s3pnh"]
@@ -55,6 +57,8 @@ guard = SubResource("Resource_vq1e8")
 collision_layer = 4
 collision_mask = 27
 script = ExtResource("1_tem3i")
+chip_scene = ExtResource("2_hj7qa")
+barrel_pickup_scene = ExtResource("2_5bmmu")
 TEMP_sfx_awaken = ExtResource("2_iapcc")
 TEMP_sfx_hit = Array[AudioStream]([ExtResource("2_ooio7"), ExtResource("3_js8yl"), ExtResource("4_5kb5r"), ExtResource("5_1dh5s"), ExtResource("6_q351g"), ExtResource("7_f2ln5")])
 TEMP_sfx_area_1 = ExtResource("9_na3j5")
