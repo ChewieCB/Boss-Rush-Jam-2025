@@ -3,8 +3,9 @@
 [ext_resource type="Script" path="res://src/bosses/bartender/hazard_area.gd" id="1_d3qr7"]
 [ext_resource type="Texture2D" uid="uid://bus2aoy40njv1" path="res://src/bosses/bartender/assets/puddle.png" id="2_jiri2"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_x1b5n"]
-radius = 4.0
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_5p06s"]
+height = 1.0
+radius = 6.0
 
 [node name="SlowHazardArea" type="Node3D"]
 script = ExtResource("1_d3qr7")
@@ -13,7 +14,7 @@ duration = 20.0
 slow_perc = 50.0
 
 [node name="Puddle" type="Sprite3D" parent="."]
-transform = Transform3D(3, 0, 0, 0, -1.31134e-07, 3, 0, -3, -1.31134e-07, 0, 0.01, 0)
+transform = Transform3D(4.5, 0, 0, 0, -1.96701e-07, 4.5, 0, -4.5, -1.96701e-07, 0, 0.01, 0)
 modulate = Color(0.0828836, 0.092301, 0.0762992, 0.854902)
 texture = ExtResource("2_jiri2")
 
@@ -25,7 +26,8 @@ collision_layer = 0
 collision_mask = 70
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-shape = SubResource("SphereShape3D_x1b5n")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CylinderShape3D_5p06s")
 
 [node name="DoTTimer" type="Timer" parent="."]
 autostart = true
