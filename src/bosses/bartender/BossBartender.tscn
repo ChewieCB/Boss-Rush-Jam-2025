@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://dolyfi5qapq80" path="res://src/bosses/bartender/assets/strength_icon.png" id="11_fyl2a"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_p0ajt"]
-radius = 8.0
+radius = 10.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_dpsmo"]
 size = Vector3(1, 1, 2)

@@ -56,3 +56,4 @@ func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	if body is Player:
 		boss.activate()
 		boss_trigger.queue_free()
+		elevator_doors.close()

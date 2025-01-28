@@ -146,8 +146,6 @@ func shotgun_blast():
 	var proj_damage = 3
 	var proj_speed = 40
 	var n_shot_repeat = current_phase
-	if player_is_near:
-		n_shot_repeat += 1
 	var spread_angle = 6
 	var delay_between_burst = 0.5
 	state_chart.send_event("attack_telegraph")

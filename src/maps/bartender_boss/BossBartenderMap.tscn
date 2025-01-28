@@ -673,7 +673,7 @@ light_energy = 3.0
 omni_range = 20.0
 
 [node name="BossBartender" parent="." node_paths=PackedStringArray("behind_bar_move_points", "target") instance=ExtResource("13_ci071")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -44.9891)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -17.6124, 0, -44.9891)
 behind_bar_move_points = [NodePath("../BossMoveMarker"), NodePath("../BossMoveMarker2"), NodePath("../BossMoveMarker3"), NodePath("../BossMoveMarker4"), NodePath("../BossMoveMarker5")]
 target = NodePath("../NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/entity_2_PlayerRef")
 
