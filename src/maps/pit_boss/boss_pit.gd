@@ -50,8 +50,10 @@ func _on_player_death() -> void:
 
 
 func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
-	var combined_health_ratio := pit_boss.health_component.current_health_ratio + \
-		surveillance_boss.health_component.current_health_ratio
+	var combined_current_health := pit_boss.health_component.current_health + surveillance_boss.health_component.current_health
+	var combined_max_health := pit_boss.health_component.max_health + surveillance_boss.health_component.max_health 
+	var combined_health_ratio := combined_current_health / combined_max_health
+		
 	var pit_boss_health_ratio := pit_boss.health_component.current_health / \
 		pit_boss.health_component.max_health
 	
