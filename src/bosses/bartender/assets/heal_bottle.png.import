@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwyt08w82u6ne"
-path.s3tc="res://.godot/imported/health.png-f63e2f3b050e6575083a0f8bfe9a1048.s3tc.ctex"
+uid="uid://ddk5o5id7o0v5"
+path.s3tc="res://.godot/imported/heal_bottle.png-5bce8aa857b1d973299f7a31fb8f537c.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/sprite/placeholder/health.png"
-dest_files=["res://.godot/imported/health.png-f63e2f3b050e6575083a0f8bfe9a1048.s3tc.ctex"]
+source_file="res://src/bosses/bartender/assets/heal_bottle.png"
+dest_files=["res://.godot/imported/heal_bottle.png-5bce8aa857b1d973299f7a31fb8f537c.s3tc.ctex"]
 
 [params]
 

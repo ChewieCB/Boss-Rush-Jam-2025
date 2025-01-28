@@ -10,6 +10,7 @@ extends BossCore
 @export var molotov_prefab: PackedScene
 @export var poison_bottle_prefab: PackedScene
 @export var slow_bottle_prefab: PackedScene
+@export var heal_bottle_prefab: PackedScene
 
 @export_category("Drinks")
 @export var defense_icon: Texture2D
@@ -85,7 +86,8 @@ func select_attack_phase_1() -> void:
 		"start_throw_concoction",
 		"start_throw_concoction",
 		"start_brew_drink",
-		"start_shotgun_blast"
+		"start_shotgun_blast",
+		"start_throw_heal_bottle"
 	]
 
 	# Avoid use same attack twice in a row (except concoction)
@@ -160,20 +162,31 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0):
 		throw_force *= 0.8
 	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
 	aim_direction += Vector3(0, 0.2, 0) # Make it upward a bit
+	aim_direction = aim_direction.normalized()
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
 	for i in range(n_bottle_repeat):
 		var bottle_inst = prefab.instantiate()
-		get_parent().add_child(bottle_inst)
 		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
+		get_parent().add_child(bottle_inst)
 		bottle_inst.init(modified_spawn_pos, spreaded_direction, proj_damage, throw_force)
 
+## Throw upward to heal
+func throw_heal_bottle():
+	var throw_force = 5
+	var bottle_inst = heal_bottle_prefab.instantiate()
+	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
+	aim_direction += Vector3(0, 5, 0) # Make it upward a lot
+	aim_direction = aim_direction.normalized()
+	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction
+	get_parent().add_child(bottle_inst)
+	bottle_inst.init(modified_spawn_pos, aim_direction, 0, throw_force)
 
 ## Choose a random bottle then throw
 func throw_concoction_bottle():
 	var possible_bottle_prefab = [
 		molotov_prefab,
 		poison_bottle_prefab,
-		slow_bottle_prefab
+		slow_bottle_prefab,
 	]
 	var chosen_prefab = possible_bottle_prefab.pick_random()
 	var n_bottle = current_phase
@@ -226,6 +239,13 @@ func _on_brew_drink_state_entered() -> void:
 	await get_tree().create_timer(0.25).timeout
 	state_chart.send_event("return_idle")
 
+
+func _on_throw_heal_bottle_state_entered() -> void:
+	debug_state_label.text = "Throw heal bottle"
+	await get_tree().create_timer(0.25).timeout
+	throw_heal_bottle()
+	await get_tree().create_timer(1.5).timeout
+	state_chart.send_event("return_idle")
 
 ### Others
 

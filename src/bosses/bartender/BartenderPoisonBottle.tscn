@@ -20,7 +20,7 @@ texture = ExtResource("3_wi6a6")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." index="5"]
 light_color = Color(0.0580966, 0.38672, 0.190045, 1)
-light_energy = 2.0
+light_energy = 3.0
 
 [node name="Trail3D" parent="Trail" index="0"]
 material_override = SubResource("StandardMaterial3D_e3tqx")

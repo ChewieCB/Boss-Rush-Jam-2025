@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://dpahplwrr1ndt"]
+
+[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_ua7da"]
+[ext_resource type="PackedScene" uid="uid://dxkjp5oqlkncw" path="res://src/bosses/bartender/HealCloud.tscn" id="2_gkalb"]
+[ext_resource type="Texture2D" uid="uid://ddk5o5id7o0v5" path="res://src/bosses/bartender/assets/heal_bottle.png" id="3_s4mij"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_745eg"]
+transparency = 1
+albedo_color = Color(0.275141, 0.594475, 0, 0.576471)
+emission_enabled = true
+emission = Color(0.334227, 0.584103, 0, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_r13qw"]
+
+[node name="BartenderHealBottle" instance=ExtResource("1_ua7da")]
+break_effect_prefab = ExtResource("2_gkalb")
+
+[node name="Sprite3D" parent="." index="0"]
+texture = ExtResource("3_s4mij")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="5"]
+light_color = Color(0.310448, 0.784539, 1.15514e-06, 1)
+light_energy = 3.0
+
+[node name="Trail3D" parent="Trail" index="0"]
+material_override = SubResource("StandardMaterial3D_745eg")
+mesh = SubResource("ImmediateMesh_r13qw")

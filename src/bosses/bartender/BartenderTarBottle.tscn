@@ -4,11 +4,11 @@
 [ext_resource type="PackedScene" uid="uid://eclk54je77sy" path="res://src/bosses/bartender/SlowHazardArea.tscn" id="2_0xfjm"]
 [ext_resource type="Texture2D" uid="uid://brih8hrl87d0d" path="res://src/bosses/bartender/assets/tar_bottle.png" id="3_nvli3"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3tqx"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wdned"]
 transparency = 1
-albedo_color = Color(0.272776, 0.7926, 0.306752, 0.576471)
+albedo_color = Color(0.254326, 0.25652, 0.253249, 0.576471)
 emission_enabled = true
-emission = Color(0.368498, 0.830594, 0.199277, 1)
+emission = Color(0.185702, 0.16327, 0.163015, 1)
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_r13qw"]
 
@@ -23,5 +23,5 @@ light_color = Color(0.0580966, 0.38672, 0.190045, 1)
 light_energy = 2.0
 
 [node name="Trail3D" parent="Trail" index="0"]
-material_override = SubResource("StandardMaterial3D_e3tqx")
+material_override = SubResource("StandardMaterial3D_wdned")
 mesh = SubResource("ImmediateMesh_r13qw")
