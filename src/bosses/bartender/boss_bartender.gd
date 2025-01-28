@@ -85,14 +85,6 @@ func select_attack() -> void:
 			push_error("Invalid phase %s" % current_phase)
 
 func select_attack_phase_1() -> void:
-	# If player is near, more likely to use shotgun blast
-	if player_is_near:
-		var roll = randi_range(0, 100)
-		if roll <= 75:
-			state_chart.send_event("start_shotgun_blast")
-			previous_attack = "start_shotgun_blast"
-			return
-
 	var possible_attacks = [
 		"start_throw_broken_bottle",
 		"start_throw_concoction",
@@ -100,8 +92,15 @@ func select_attack_phase_1() -> void:
 		"start_throw_heal_bottle"
 	]
 
+	# If player is near, more likely to use shotgun blast
+	if player_is_near:
+		var shotgun_bonus_freq = 4
+		for i in range(shotgun_bonus_freq):
+			possible_attacks.append("start_shotgun_blast")
+
+	# If dont have buff, more likely to use buff	
 	if current_buff == "":
-		var brew_drink_bonus_freq = 5
+		var brew_drink_bonus_freq = 3
 		for i in range(brew_drink_bonus_freq):
 			possible_attacks.append("start_brew_drink")
 

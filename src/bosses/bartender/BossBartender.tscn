@@ -25,8 +25,8 @@ size = Vector3(1, 1, 2)
 
 [node name="BossBartender" node_paths=PackedStringArray("behind_bar_move_points") instance=ExtResource("1_bp57a")]
 script = ExtResource("2_ns3xp")
-phase_2_health_percentage_trigger = 0.5
-phase_3_health_percentage_trigger = 0.2
+phase_2_health_percentage_trigger = 0.6
+phase_3_health_percentage_trigger = 0.3
 shotgun_proj_prefab = ExtResource("3_ycarf")
 empty_bottle_prefab = ExtResource("4_vwmjv")
 molotov_prefab = ExtResource("5_e3e4s")
