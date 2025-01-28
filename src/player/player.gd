@@ -71,8 +71,6 @@ var is_sliding: bool:
 		is_sliding = value
 
 var internal_bonus_speed: float = 0
-var run_speed_modifier: float = 1
-var dash_slide_speed_modifier: float = 1
 
 var raw_input_dir := Vector2(0, 0)
 var input_dir := Vector2(0, 0)
@@ -91,6 +89,13 @@ var current_gun: Gun = null
 
 var is_in_inventory = false
 var object_to_be_interacted = null
+
+var buffs: Array[Buff] = []
+var base_stats = {
+	"run_speed_modifier": 1,
+	"dash_slide_speed_modifier": 1
+}
+var current_stats = base_stats.duplicate(true)
 
 
 func _ready():
@@ -141,6 +146,12 @@ func _input(event):
 
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
+
+	for buff in buffs:
+		if buff.duration > 0:
+			buff.duration -= delta
+			if buff.duration <= 0:
+				remove_buff(buff)
 
 	if aim_ray.is_colliding():
 		var interact_collider = aim_ray.get_collider()
@@ -212,7 +223,7 @@ func _physics_process(delta):
 	else:
 		vel_horizontal += input_dir * add_speed
 
-	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * run_speed_modifier
+	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats["run_speed_modifier"]
 
 	# Bonus speed
 	if is_dashing:
@@ -226,7 +237,7 @@ func _physics_process(delta):
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 3)
 
 	var velocity_dir = velocity.normalized()
-	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * dash_slide_speed_modifier
+	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats["dash_slide_speed_modifier"]
 
 	# Let the player ignore the wheelspin if they are moving
 	var floor_velocity = get_platform_velocity()
@@ -445,3 +456,40 @@ func _on_health_dead_state_entered() -> void:
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
 	neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
+
+func add_buff(new_buff: Buff):
+	# Check if already exist, then extend it instead of add new
+	for buff in buffs:
+		if buff.buff_name == new_buff.buff_name:
+			buff.duration = max(buff.duration, new_buff.duration)
+			return
+	buffs.append(new_buff)
+	apply_buffs()
+
+
+func remove_buff(buff: Buff):
+	buffs.erase(buff)
+	apply_buffs()
+
+
+func apply_buffs():
+	# Reset current stats to base stats.
+	current_stats = base_stats.duplicate(true)
+
+	# Temporary storage for stacking.
+	var flat_bonuses = {}
+	var percentage_bonuses = {}
+
+	for buff in buffs:
+		if buff.buff_type == Buff.BuffType.FLAT:
+			flat_bonuses[buff.stat_name] = flat_bonuses.get(buff.stat_name, 0) + buff.value
+		elif buff.buff_type == Buff.BuffType.PERCENTAGE:
+			percentage_bonuses[buff.stat_name] = percentage_bonuses.get(buff.stat_name, 0) + buff.value
+
+	# Apply flat bonuses (additive).
+	for stat in flat_bonuses.keys():
+		current_stats[stat] += flat_bonuses[stat]
+
+	# Apply percentage bonuses (multiplicative).
+	for stat in percentage_bonuses.keys():
+		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)

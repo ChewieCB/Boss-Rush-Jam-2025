@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=4 uid="uid://bm3l5if407n6l"]
+[gd_scene load_steps=89 format=4 uid="uid://bm3l5if407n6l"]
 
 [ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="1_fk3ye"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="2_ajswq"]
@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="11_1gkm3"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="12_878lo"]
 [ext_resource type="PackedScene" uid="uid://uwn1wb0neu46" path="res://src/bosses/bartender/BossBartender.tscn" id="13_ci071"]
+[ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="14_vebxl"]
+[ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="15_tohi4"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ydocc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -685,5 +687,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.397888, 0.330918, -45.1419
 
 [node name="BossMoveMarker3" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.9523, 0.330918, -45.1419)
+
+[node name="BarrelItemPickup" parent="." instance=ExtResource("14_vebxl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98407, 0.879601, -16.1403)
+data = ExtResource("15_tohi4")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]
