@@ -52,7 +52,6 @@ shape = SubResource("SphereShape3D_ib1tb")
 top_level = true
 material_override = SubResource("StandardMaterial3D_id061")
 mesh = SubResource("ImmediateMesh_c5h2l")
-skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("3_12jep")
 segments = 10
 base_width = 0.1

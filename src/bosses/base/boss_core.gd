@@ -104,7 +104,7 @@ func _ready() -> void:
 	health_component.died.connect(_on_died)
 	debug_trajectory_mesh = MeshInstance3D.new()
 	debug_trajectory_mesh.mesh = ImmediateMesh.new()
-	get_tree().get_root().add_child(debug_trajectory_mesh)
+	get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
 	#debug_mesh.visible = false
 	await owner.ready
 

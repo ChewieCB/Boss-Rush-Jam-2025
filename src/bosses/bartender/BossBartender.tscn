@@ -24,6 +24,7 @@ radius = 10.0
 size = Vector3(1, 1, 2)
 
 [node name="BossBartender" node_paths=PackedStringArray("behind_bar_move_points") instance=ExtResource("1_bp57a")]
+collision_mask = 11
 script = ExtResource("2_ns3xp")
 phase_2_health_percentage_trigger = 0.6
 phase_3_health_percentage_trigger = 0.3
@@ -34,6 +35,8 @@ poison_bottle_prefab = ExtResource("6_ei8fn")
 slow_bottle_prefab = ExtResource("7_hy3po")
 heal_bottle_prefab = ExtResource("8_y61gp")
 beer_barrel_prefab = ExtResource("9_u87s1")
+bottle_damage = 10
+barrel_damage = 45
 defense_icon = ExtResource("11_c0ayg")
 speed_icon = ExtResource("10_p58cf")
 strength_icon = ExtResource("11_fyl2a")

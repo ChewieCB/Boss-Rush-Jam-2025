@@ -4,7 +4,7 @@ extends BossCore
 @export var phase_2_health_percentage_trigger: float = 0.66
 @export var phase_3_health_percentage_trigger: float = 0.33
 
-@export_category("Attacks")
+@export_group("Attacks")
 @export var shotgun_proj_prefab: PackedScene
 @export var empty_bottle_prefab: PackedScene
 @export var molotov_prefab: PackedScene
@@ -15,7 +15,7 @@ extends BossCore
 @export var bottle_damage = 10
 @export var barrel_damage = 45
 
-@export_category("Drinks")
+@export_group("Drinks")
 @export var defense_icon: Texture2D
 @export var speed_icon: Texture2D
 @export var strength_icon: Texture2D
@@ -24,7 +24,7 @@ extends BossCore
 @export var defense_buff_resistance = 0.5
 @export var speed_buff_modifier = 0.5
 
-@export_category("Movement")
+@export_group("Movement")
 @export var base_movespeed = 10
 @export var behind_bar_move_points: Array[Marker3D] = []
 
