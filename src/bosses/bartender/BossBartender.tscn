@@ -18,7 +18,7 @@ radius = 8.0
 [sub_resource type="BoxMesh" id="BoxMesh_dpsmo"]
 size = Vector3(1, 1, 2)
 
-[node name="BossBartender" instance=ExtResource("1_bp57a")]
+[node name="BossBartender" node_paths=PackedStringArray("behind_bar_move_points") instance=ExtResource("1_bp57a")]
 script = ExtResource("2_ns3xp")
 phase_2_health_percentage_trigger = 0.5
 phase_3_health_percentage_trigger = 0.2
@@ -29,6 +29,7 @@ poison_bottle_prefab = ExtResource("6_ei8fn")
 slow_bottle_prefab = null
 defense_icon = ExtResource("11_c0ayg")
 defense_buff_resistance = 0.5
+behind_bar_move_points = []
 telegraph_time = 0.5
 
 [node name="Sprite3D" parent="." index="0"]
@@ -164,6 +165,9 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
+[node name="NavigationAgent3D" parent="." index="8"]
+target_desired_distance = 1.0
+
 [node name="DebugStateLabel" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.36476, 0)
 
@@ -185,7 +189,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.61227, -0.37315)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.90389, -1.1636)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ProjectileSpawnPos" index="0"]
-visible = false
 mesh = SubResource("BoxMesh_dpsmo")
 skeleton = NodePath("../..")
 
@@ -197,7 +200,7 @@ billboard = 1
 wait_time = 10.0
 one_shot = true
 
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Idle" to="." method="_on_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Idle" to="." method="_on_phase_1_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" to="." method="_on_throw_broken_bottle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowConcoction" to="." method="_on_throw_concoction_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BrewDrink" to="." method="_on_brew_drink_state_entered"]

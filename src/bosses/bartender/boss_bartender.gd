@@ -16,20 +16,21 @@ extends BossCore
 ## Received damage will multiply with this value
 @export var defense_buff_resistance = 0.5
 
+@export_category("Movement")
+@export var behind_bar_move_points: Array[Marker3D] = []
+
 @onready var buff_expire_timer: Timer = $BuffExpireTimer
 @onready var proj_spawn_marker = $ProjectileSpawnPos
 @onready var status_icon: Sprite3D = $StatusIcon
 
 var previous_attack: String
 var player_is_near = false
-var proj_spawn_pos
 var current_buff: String = ""
 
 const DIFFICULTY_LV = 1
 
 func _ready() -> void:
 	super()
-	proj_spawn_pos = proj_spawn_marker.global_position
 
 
 func _process(delta: float) -> void:
@@ -93,6 +94,15 @@ func select_attack_phase_1() -> void:
 	
 	var chosen_attack = possible_attacks.pick_random()
 	previous_attack = chosen_attack
+
+	var move_point = get_behind_bar_move_point()
+	if move_point:
+		navigation_component.target = move_point
+		state_chart.send_event("start_moving")
+		debug_state_label.text = "Walking"
+		await navigation_component.nav_agent.navigation_finished
+		state_chart.send_event("stop_moving")
+
 	state_chart.send_event(chosen_attack)
 
 
@@ -103,11 +113,6 @@ func _on_died() -> void:
 ### ATTACK PHASES --------------------------------
 
 #### Any Phase
-
-func _on_idle_state_entered() -> void:
-	debug_state_label.text = "Idle"
-	await get_tree().create_timer(1).timeout
-	select_attack()
 
 # Shotgun blast
 
@@ -122,15 +127,16 @@ func shotgun_blast():
 	var spread_angle = 6
 	var delay_between_burst = 0.5
 	state_chart.send_event("attack_telegraph")
+	# TODO: Change sprite "Ready gun"
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
 	for i in range(n_shot_repeat):
 		for j in range(proj_amount):
-			var aim_direction = proj_spawn_pos.direction_to(target.global_position)
+			var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
 			var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
 			var bullet_inst = shotgun_proj_prefab.instantiate()
 			get_parent().add_child(bullet_inst)
-			bullet_inst.init(proj_spawn_pos, spreaded_direction, proj_damage, proj_speed)
+			bullet_inst.init(proj_spawn_marker.global_position, spreaded_direction, proj_damage, proj_speed)
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
 			await get_tree().create_timer(delay_between_burst).timeout
 	state_chart.send_event("attack_end_now")
@@ -141,15 +147,20 @@ func _on_shotgun_blast_state_entered() -> void:
 
 #### Phase 1
 
+func _on_phase_1_idle_state_entered() -> void:
+	debug_state_label.text = "Idle"
+	await get_tree().create_timer(1).timeout
+	select_attack()
+
 func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0):
 	var proj_damage = 10
-	var throw_force = proj_spawn_pos.distance_to(target.global_position)
+	var throw_force = proj_spawn_marker.global_position.distance_to(target.global_position)
 	# Magic number that make bartender throw better
 	if throw_force >= 30:
 		throw_force *= 0.8
-	var aim_direction = proj_spawn_pos.direction_to(target.global_position)
+	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
 	aim_direction += Vector3(0, 0.2, 0) # Make it upward a bit
-	var modified_spawn_pos = proj_spawn_pos + aim_direction # Avoid stuck inside boss body
+	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
 	for i in range(n_bottle_repeat):
 		var bottle_inst = prefab.instantiate()
 		get_parent().add_child(bottle_inst)
@@ -165,7 +176,9 @@ func throw_concoction_bottle():
 		# slow_bottle_prefab
 	]
 	var chosen_prefab = possible_bottle_prefab.pick_random()
-	throw_bottle(chosen_prefab)
+	var n_bottle = current_phase
+	var spread_angle = (n_bottle - 1) * 20
+	throw_bottle(chosen_prefab, n_bottle, spread_angle)
 
 ## Choose a random drink to brew and buff
 func brew_drink():
@@ -187,27 +200,30 @@ func brew_drink():
 
 func _on_throw_broken_bottle_state_entered() -> void:
 	debug_state_label.text = "Throw broken bottle"
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(0.25).timeout
 	var n_bottle = randi_range(3, 6)
 	var spread = randf_range(4, 10)
+	# TODO: Change sprite "Throw"
 	throw_bottle(empty_bottle_prefab, n_bottle, spread)
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(0.25).timeout
 	state_chart.send_event("return_idle")
 
 
 func _on_throw_concoction_state_entered() -> void:
 	debug_state_label.text = "Throw concoction"
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(0.25).timeout
+	# TODO: Change sprite "Throw"
 	throw_concoction_bottle()
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(0.25).timeout
 	state_chart.send_event("return_idle")
 
 
 func _on_brew_drink_state_entered() -> void:
 	debug_state_label.text = "Brew drink"
 	await get_tree().create_timer(1).timeout
+	# TODO: Change sprite "Brew"
 	brew_drink()
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(0.25).timeout
 	state_chart.send_event("return_idle")
 
 
@@ -215,6 +231,8 @@ func _on_brew_drink_state_entered() -> void:
 
 func _on_shotgun_trigger_area_body_entered(body: Node3D) -> void:
 	if body is Player:
+		state_chart.send_event("stop_moving")
+		state_chart.send_event("start_shotgun_blast")
 		player_is_near = true
 
 func _on_shotgun_trigger_area_body_exited(body: Node3D) -> void:
@@ -228,3 +246,17 @@ func reset_buff():
 
 func _on_buff_expire_timer_timeout() -> void:
 	reset_buff()
+
+## Get a random point (exclude the closest point)
+func get_behind_bar_move_point():
+	var valid_move_points = behind_bar_move_points.duplicate()
+	valid_move_points.sort_custom(
+		func(a, b):
+			var a_dist: float = self.global_position.distance_to(a.global_position)
+			var b_dist: float = self.global_position.distance_to(b.global_position)
+			if a_dist < b_dist:
+				return true
+			return false
+	)
+	valid_move_points.pop_front()
+	return valid_move_points.pick_random()

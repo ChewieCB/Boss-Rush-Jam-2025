@@ -672,12 +672,13 @@ light_color = Color(0.813401, 0.433048, 0.281874, 1)
 light_energy = 3.0
 omni_range = 20.0
 
-[node name="BossBartender" parent="." node_paths=PackedStringArray("target") instance=ExtResource("13_ci071")]
+[node name="BossBartender" parent="." node_paths=PackedStringArray("behind_bar_move_points", "target") instance=ExtResource("13_ci071")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -44.9891)
+behind_bar_move_points = [NodePath("../BossMoveMarker"), NodePath("../BossMoveMarker2"), NodePath("../BossMoveMarker3")]
 target = NodePath("../NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/entity_2_PlayerRef")
 
 [node name="BossMoveMarker" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.4755, 0.330918, -45.1419)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.741, 0.68626, -45.1419)
 
 [node name="BossMoveMarker2" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.397888, 0.330918, -45.1419)
