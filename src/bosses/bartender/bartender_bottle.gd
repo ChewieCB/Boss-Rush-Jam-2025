@@ -1,6 +1,7 @@
 extends RigidBody3D
 
 @export var break_effect_prefab: PackedScene
+@export var break_on_contact = true
 
 @onready var life_timer: Timer = $LifeTimer
 
@@ -36,7 +37,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			body.health_component.damage(damage)
 
 	spawn_break_effect()
-	call_deferred("queue_free")
+	if break_on_contact:
+		call_deferred("queue_free")
 
 func spawn_break_effect():
 	if break_effect_prefab == null:

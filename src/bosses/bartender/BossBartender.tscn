@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=19 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -12,7 +12,10 @@
 [ext_resource type="Texture2D" uid="uid://b41us6y851cfv" path="res://src/bosses/bartender/assets/bartender.png" id="6_ky2ag"]
 [ext_resource type="PackedScene" uid="uid://dc551puah5jwj" path="res://src/bosses/bartender/BartenderTarBottle.tscn" id="7_hy3po"]
 [ext_resource type="PackedScene" uid="uid://dpahplwrr1ndt" path="res://src/bosses/bartender/BartenderHealBottle.tscn" id="8_y61gp"]
+[ext_resource type="PackedScene" uid="uid://lmvhnu7j64r7" path="res://src/bosses/bartender/BartenderBeerBarrel.tscn" id="9_u87s1"]
+[ext_resource type="Texture2D" uid="uid://cfkua1w43rgb4" path="res://src/bosses/bartender/assets/speed_icon.png" id="10_p58cf"]
 [ext_resource type="Texture2D" uid="uid://dciecve6bacil" path="res://src/bosses/bartender/assets/shield_icon.png" id="11_c0ayg"]
+[ext_resource type="Texture2D" uid="uid://dolyfi5qapq80" path="res://src/bosses/bartender/assets/strength_icon.png" id="11_fyl2a"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_p0ajt"]
 radius = 8.0
@@ -30,8 +33,13 @@ molotov_prefab = ExtResource("5_e3e4s")
 poison_bottle_prefab = ExtResource("6_ei8fn")
 slow_bottle_prefab = ExtResource("7_hy3po")
 heal_bottle_prefab = ExtResource("8_y61gp")
+beer_barrel_prefab = ExtResource("9_u87s1")
 defense_icon = ExtResource("11_c0ayg")
+speed_icon = ExtResource("10_p58cf")
+strength_icon = ExtResource("11_fyl2a")
 defense_buff_resistance = 0.5
+speed_buff_modifier = 0.5
+base_movespeed = 10
 behind_bar_move_points = []
 telegraph_time = 0.5
 
@@ -41,6 +49,9 @@ texture = ExtResource("6_ky2ag")
 
 [node name="Hurtbox" parent="." index="3"]
 visible = false
+
+[node name="NavigationComponent" parent="." index="5"]
+current_speed = 100.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Bart the Bartender"

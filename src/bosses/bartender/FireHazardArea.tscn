@@ -8,7 +8,7 @@
 offsets = PackedFloat32Array(0, 0.797015, 1)
 colors = PackedColorArray(0.678431, 0, 0, 1, 0.823529, 0.823529, 0.627451, 1, 0.823529, 0.823529, 0.627451, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_3c13r"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7rvnt"]
 gradient = SubResource("Gradient_samdw")
 
 [sub_resource type="Curve" id="Curve_7fxc7"]
@@ -16,7 +16,7 @@ max_value = 5.0
 _data = [Vector2(0, 5), 0.0, 0.0, 0, 0, Vector2(1, 2.53209), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_iskqs"]
+[sub_resource type="CurveTexture" id="CurveTexture_ac6oa"]
 curve = SubResource("Curve_7fxc7")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dq4mg"]
@@ -30,12 +30,12 @@ gravity = Vector3(0, 0.2, 0)
 scale_min = 0.75
 scale_max = 1.5
 color = Color(0.892114, 0.748462, 0, 1)
-color_ramp = SubResource("GradientTexture1D_3c13r")
-emission_curve = SubResource("CurveTexture_iskqs")
+color_ramp = SubResource("GradientTexture1D_7rvnt")
+emission_curve = SubResource("CurveTexture_ac6oa")
 anim_speed_min = 0.5
 anim_speed_max = 0.5
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dmqvj"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36dku"]
 transparency = 1
 vertex_color_use_as_albedo = true
 albedo_texture = ExtResource("2_73ktq")
@@ -46,22 +46,22 @@ particles_anim_v_frames = 3
 particles_anim_loop = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_5nj2i"]
-material = SubResource("StandardMaterial3D_dmqvj")
+material = SubResource("StandardMaterial3D_36dku")
 
 [sub_resource type="Gradient" id="Gradient_damr1"]
 offsets = PackedFloat32Array(0, 0.626866, 1)
 colors = PackedColorArray(0, 0, 0, 0.952941, 0.223529, 0.223529, 0.223529, 0.866667, 0, 0, 0, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_gkd1y"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ee7c4"]
 gradient = SubResource("Gradient_damr1")
 
-[sub_resource type="CurveTexture" id="CurveTexture_fxfwl"]
+[sub_resource type="CurveTexture" id="CurveTexture_jk8dj"]
 
 [sub_resource type="Curve" id="Curve_qe2jg"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.253012, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_b1xbx"]
+[sub_resource type="CurveTexture" id="CurveTexture_act1e"]
 curve = SubResource("Curve_qe2jg")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ycs0i"]
@@ -76,15 +76,15 @@ initial_velocity_min = 0.5
 initial_velocity_max = 1.0
 gravity = Vector3(0, 4, 0)
 scale_max = 2.0
-scale_curve = SubResource("CurveTexture_b1xbx")
+scale_curve = SubResource("CurveTexture_act1e")
 color = Color(0.415686, 0.27451, 0, 0.788235)
-color_ramp = SubResource("GradientTexture1D_gkd1y")
-emission_curve = SubResource("CurveTexture_fxfwl")
+color_ramp = SubResource("GradientTexture1D_ee7c4")
+emission_curve = SubResource("CurveTexture_jk8dj")
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_26vrp"]
 load_path = "res://.godot/imported/circle.png-2a7d29501a90d369c65cabf8eff5784a.s3tc.ctex"
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0pci"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_67xip"]
 transparency = 1
 vertex_color_use_as_albedo = true
 albedo_texture = SubResource("CompressedTexture2D_26vrp")
@@ -95,7 +95,7 @@ particles_anim_v_frames = 1
 particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_rnvrd"]
-material = SubResource("StandardMaterial3D_a0pci")
+material = SubResource("StandardMaterial3D_67xip")
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_lsom5"]
 height = 0.5
