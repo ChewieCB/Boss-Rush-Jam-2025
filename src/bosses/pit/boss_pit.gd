@@ -34,7 +34,6 @@ var slam_target_pos := Vector3.ZERO
 @export var lunge_cooldown: float = 15.0
 @onready var lunge_timer: Timer = $LungeCooldown
 
-@onready var face_sprite: Sprite3D = $Sprite3D/FaceSprite
 @onready var phase_debug_label: Label3D = $DebugPhaseLabel
 @onready var melee_attack_debug_mesh: MeshInstance3D = $Hurtbox/MeshInstance3D
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
@@ -253,10 +252,8 @@ func _on_melee_combo_swipe_state_entered() -> void:
 	velocity.x = 0
 	velocity.z = 0
 	
-	face_sprite.texture = swipe_debug
 	anim_player.play("swipe")
 	await anim_player.animation_finished
-	face_sprite.texture = null
 	
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_attack")
@@ -274,10 +271,8 @@ func _on_melee_combo_hook_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	
-	face_sprite.texture = swipe_debug
 	anim_player.play("hook")
 	await anim_player.animation_finished
-	face_sprite.texture = null
 	
 	if current_phase > 1:
 		if target in hurtbox.get_overlapping_bodies():
@@ -297,10 +292,8 @@ func _on_melee_combo_uppercut_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	
-	face_sprite.texture = uppercut_debug
 	anim_player.play("uppercut")
 	await anim_player.animation_finished
-	face_sprite.texture = null
 	
 	# Phase 2 - Uppercut chaser movement
 	var horizontal_distance = Vector2(
@@ -341,7 +334,6 @@ func _on_lunge_closer_attack_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	
-	face_sprite.texture = lunge_debug
 	if $StateChart/Root/Movement/Charging.active:
 		#print("Waiting for current charge to finish")
 		await charge_ended
@@ -354,9 +346,7 @@ func _on_lunge_closer_attack_state_entered() -> void:
 	await charge_ended
 	#print("Charge ended")
 
-	state_chart.send_event("stop_moving")
-	face_sprite.texture = null
-	
+	state_chart.send_event("stop_moving")	
 	state_chart.send_event("combo_end")
 
 
@@ -385,7 +375,6 @@ func _on_melee_combo_lunge_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	
-	face_sprite.texture = lunge_debug
 	if $StateChart/Root/Movement/Charging.active:
 		#print("Waiting for current charge to finish")
 		await charge_ended
@@ -399,7 +388,6 @@ func _on_melee_combo_lunge_state_entered() -> void:
 	#print("Charge ended")
 
 	state_chart.send_event("stop_moving")
-	face_sprite.texture = null
 	
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_attack")
@@ -481,13 +469,10 @@ func _on_intro_air_slam_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", false)
 	state_chart.send_event("start_targeting")
 	
-	face_sprite.texture = uppercut_debug
 	anim_player.play("air_slam_intro")
 	await anim_player.animation_finished
 	
 	hurtbox.body_entered.connect(_air_slam_damage)
-	
-	face_sprite.texture = null
 
 
 func _on_air_slam_state_entered() -> void:
@@ -495,13 +480,11 @@ func _on_air_slam_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	
-	face_sprite.texture = uppercut_debug
 	anim_player.play("air_slam")
 	hurtbox.body_entered.connect(_air_slam_damage)
 	hurtbox.set_deferred("monitoring", true)
 	await anim_player.animation_finished
-	
-	face_sprite.texture = null
+
 
 func _on_air_slam_state_physics_processing(_delta: float) -> void:
 	

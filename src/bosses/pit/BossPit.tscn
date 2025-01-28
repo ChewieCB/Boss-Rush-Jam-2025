@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
-[ext_resource type="Texture2D" uid="uid://b31wk2rcrvdbp" path="res://src/bosses/base/assets/juni_boss_sprite_placeholder.png" id="2_dnkm2"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_akhww"]
 [ext_resource type="Texture2D" uid="uid://bpkl437wqw2kh" path="res://src/bosses/base/assets/juni_boss_face_lunge.png" id="4_nd84x"]
 [ext_resource type="Texture2D" uid="uid://dqopqwf4syxsn" path="res://src/bosses/base/assets/juni_boss_face_swipe.png" id="4_qi0bj"]
@@ -11,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dasca74no7m2t" path="res://src/bosses/base/assets/juni_boss_face_uppercut.png" id="5_i6at3"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="6_l4p06"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="7_koy73"]
+[ext_resource type="Texture2D" uid="uid://bww23gc1wfoj6" path="res://src/bosses/pit/assets/pit_boss_idle.png" id="8_d716h"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="9_juug2"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_el2h4"]
 
@@ -36,11 +36,11 @@ shader_parameter/impact_falloff_sharpness = 1.0
 size = Vector3(0.6, 2, 0.6)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ijkfg"]
-radius = 1.0
+radius = 1.5
 height = 4.6
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_jlq7w"]
-radius = 1.0
+radius = 1.5
 height = 4.6
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pi7fj"]
@@ -821,13 +821,8 @@ mesh = SubResource("BoxMesh_g5e5v")
 skeleton = NodePath("../../../Sprite3D")
 
 [node name="Sprite3D" parent="." index="1"]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 2.8, 0)
-texture = ExtResource("2_dnkm2")
-
-[node name="FaceSprite" type="Sprite3D" parent="Sprite3D" index="0"]
-sorting_offset = 0.1
-billboard = 2
-texture = ExtResource("5_i6at3")
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0.177727, 2.32, 0)
+texture = ExtResource("8_d716h")
 
 [node name="CollisionShape3D" parent="." index="2"]
 shape = SubResource("CapsuleShape3D_ijkfg")
