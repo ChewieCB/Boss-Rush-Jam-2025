@@ -7,8 +7,7 @@ extends Node3D
 @onready var boss_trigger: Area3D = $BossTrigger
 
 @onready var stance_timer: Timer = $StanceTimer
-@export var phase_2_stance_time: float = 15.0
-@export var phase_3_stance_time: float = 9.0
+@export var phase_2_stance_time: float = 14.0
 
 @export var phase_2_health_percentage_trigger: float = 0.7
 @export var phase_3_health_percentage_trigger: float = 0.35
@@ -63,15 +62,15 @@ func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
 	
 	print("%s | %s" % [pit_boss_health_ratio, combined_health_ratio])
 	if combined_health_ratio <= phase_3_health_percentage_trigger:
-		if pit_boss.current_phase < 3 and surveillance_boss.current_phase < 3:
-			stance_timer.stop()
-			pit_boss.state_chart.send_event("start_phase_3")
-			surveillance_boss.state_chart.send_event("start_phase_3")
-			stance_timer.start(phase_3_stance_time + randf_range(-1.5, 1.5))
-	elif pit_boss.health_component.current_health_ratio <= phase_2_health_percentage_trigger:
 		stance_timer.stop()
-		pit_boss.state_chart.send_event("start_phase_2")
-		surveillance_boss.state_chart.send_event("start_phase_2")
+		pit_boss.state_chart.send_event("start_phase_3")
+		surveillance_boss.state_chart.send_event("start_phase_3")
+	elif pit_boss.health_component.current_health_ratio <= phase_2_health_percentage_trigger:
+		if pit_boss.current_phase < 2 and surveillance_boss.current_phase < 2:
+			stance_timer.stop()
+			pit_boss.state_chart.send_event("start_phase_2")
+			surveillance_boss.state_chart.send_event("start_phase_2")
+			stance_timer.start(phase_2_stance_time + randf_range(-1.5, 1.5))
 
 
 func _on_boss_died(boss: BossCore) -> void:
@@ -172,7 +171,4 @@ func _on_boss_trigger_body_entered(body: Node3D) -> void:
 func _on_stance_timer_timeout() -> void:
 	pit_boss.toggle_stance()
 	surveillance_boss.toggle_stance()
-	var stance_time: float
-	if pit_boss.current_phase == 2:
-		stance_time = phase_2_stance_time
-	stance_timer.start(stance_time + randf_range(-1.5, 1.5))
+	stance_timer.start(phase_2_stance_time + randf_range(-1.5, 1.5))

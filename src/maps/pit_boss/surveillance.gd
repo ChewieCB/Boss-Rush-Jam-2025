@@ -320,16 +320,20 @@ func _on_phase_2_laser_beam_sweep_beam_state_entered() -> void:
 	
 	# TODO - glow the laser to indicate sweep start
 	await get_tree().create_timer(telegraph_time).timeout
-	elevation_speed = deg_to_rad(elevation_speed_deg * 0.64)
-	rotation_speed = deg_to_rad(rotation_speed_deg * 0.64)
+	elevation_speed = deg_to_rad(elevation_speed_deg * 0.8)
+	rotation_speed = deg_to_rad(rotation_speed_deg * 0.8)
 	
 	# Sweep towards the player's position
 	beam_target = target.global_position
 
 func _on_phase_2_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
-	#beam_target = target.global_position
-	rotate_and_elevate(beam_target, delta)
+	# Update target every 6 frames to lag behind a bit
+	#if Engine.get_physics_frames() % 20 == 0:
+	beam_target = target.global_position
+		#draw_debug_sphere(beam_target, 0.5)
 	
+	rotate_and_elevate(beam_target, delta)
+
 	var cast_point: Vector3
 	aim_ray.force_raycast_update()
 	if aim_ray.is_colliding():
@@ -573,6 +577,7 @@ func hide_shield() -> void:
 	tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", 0, 0.6)
 	tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", 0, 0.6)
 	tween.tween_callback(shield_collider.set_disabled.bind(true))
+
 
 func _on_defensive_state_entered() -> void:
 	show_shield()

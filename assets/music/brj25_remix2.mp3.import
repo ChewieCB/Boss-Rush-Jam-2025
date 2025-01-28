@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/brj25_remix2.mp3-96116e013de3e125229d8d2df080
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

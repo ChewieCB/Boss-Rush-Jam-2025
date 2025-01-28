@@ -24,6 +24,9 @@ var phase_stance: Stance = Stance.AGGRESSIVE:
 		phase_debug_label.text = "Phase %s (%s)" % [current_phase, Stance.keys()[phase_stance]]
 
 @export_group("Attacks")
+@onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
+@export var hurtbox_range_close: float = 4.5
+@export var hurtbox_range_far: float = 6.0
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 7.0
 @export_subgroup("Hook")
@@ -118,7 +121,7 @@ func select_attack_phase_2() -> void:
 	
 	if dist_to_target > 22:
 		state_chart.send_event("start_close_distance_attack_far")
-	elif dist_to_target > 10 and lunge_timer.is_stopped():
+	elif dist_to_target > 7 and lunge_timer.is_stopped():
 		state_chart.send_event("start_close_distance_attack_close")
 	else:
 		state_chart.send_event("start_melee_combo_attack")
@@ -286,6 +289,8 @@ func _on_melee_combo_swipe_state_entered() -> void:
 	anim_player.play("swipe")
 	await anim_player.animation_finished
 	
+	hurtbox_collider.shape.size.z = hurtbox_range_far
+	
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_attack")
 	# Phase 2 - if player is in distance of lunge attack, lunge forwards
@@ -344,6 +349,7 @@ func _on_melee_combo_uppercut_state_entered() -> void:
 func _on_melee_combo_recover_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Recovery"
 	
+	hurtbox_collider.shape.size.z = hurtbox_range_close
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
@@ -397,6 +403,7 @@ func _on_lunge_closer_recover_state_entered() -> void:
 func _on_phase_2_state_entered() -> void:
 	current_phase = 2
 	phase_debug_label.text = "Phase 2"
+	lunge_timer.wait_time *= 0.7
 	toggle_stance()
 
 #### Phase 2 | Combo Lunge

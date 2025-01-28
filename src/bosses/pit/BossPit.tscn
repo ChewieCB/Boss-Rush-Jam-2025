@@ -68,7 +68,7 @@ radius = 1.5
 height = 4.6
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pi7fj"]
-size = Vector3(3, 3.6, 3.5)
+size = Vector3(3, 3.6, 4.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_n64vh"]
 size = Vector3(3, 3.6, 4)
@@ -810,6 +810,8 @@ swipe_debug = ExtResource("4_qi0bj")
 lunge_debug = ExtResource("4_nd84x")
 uppercut_debug = ExtResource("5_i6at3")
 wave_material = SubResource("ShaderMaterial_2s76u")
+hurtbox_range_close = 4.5
+hurtbox_range_far = 6.0
 swipe_damage = 5.0
 hook_damage = 5.0
 uppercut_damage = 5.0
@@ -826,6 +828,8 @@ attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.6
 FRICTION = 4.0
+TURN_SPEED_FAST = 18.0
+TURN_SPEED_SLOW = 8.0
 
 [node name="ArmsDEbug" type="Node3D" parent="." index="0"]
 transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, 0, 0, 0)
@@ -888,7 +892,7 @@ mesh = SubResource("BoxMesh_n64vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
 
 [node name="HealthComponent" parent="." index="6"]
-max_health = 2500.0
+max_health = 5500.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"
