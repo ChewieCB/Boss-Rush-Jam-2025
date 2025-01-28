@@ -6,6 +6,10 @@ extends Node3D
 @onready var win_ui: Control = $UI/BossDefeatedUI
 @onready var boss_trigger: Area3D = $BossTrigger
 
+@onready var stance_timer: Timer = $StanceTimer
+@export var phase_2_stance_time: float = 15.0
+@export var phase_3_stance_time: float = 9.0
+
 @export var phase_2_health_percentage_trigger: float = 0.7
 @export var phase_3_health_percentage_trigger: float = 0.35
 
@@ -59,9 +63,13 @@ func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
 	
 	print("%s | %s" % [pit_boss_health_ratio, combined_health_ratio])
 	if combined_health_ratio <= phase_3_health_percentage_trigger:
-		pit_boss.state_chart.send_event("start_phase_3")
-		surveillance_boss.state_chart.send_event("start_phase_3")
+		if pit_boss.current_phase < 3 and surveillance_boss.current_phase < 3:
+			stance_timer.stop()
+			pit_boss.state_chart.send_event("start_phase_3")
+			surveillance_boss.state_chart.send_event("start_phase_3")
+			stance_timer.start(phase_3_stance_time + randf_range(-1.5, 1.5))
 	elif pit_boss.health_component.current_health_ratio <= phase_2_health_percentage_trigger:
+		stance_timer.stop()
 		pit_boss.state_chart.send_event("start_phase_2")
 		surveillance_boss.state_chart.send_event("start_phase_2")
 
@@ -138,7 +146,7 @@ func _on_cover_destroyed(cover: Cover) -> void:
 	var spawn = cover_spawn_points.filter(func(x): return x.current_cover == cover).front()
 	cover_objects.erase(cover)
 	_rebake_nav()
-	await get_tree().create_timer(randf_range(8.0, 14.0)).timeout
+	await get_tree().create_timer(randf_range(4.0, 9.0)).timeout
 	
 	spawn.current_cover = null
 	
@@ -159,3 +167,12 @@ func _on_boss_trigger_body_entered(body: Node3D) -> void:
 		surveillance_boss.activate()
 		pit_boss.activate()
 		boss_trigger.queue_free()
+
+
+func _on_stance_timer_timeout() -> void:
+	pit_boss.toggle_stance()
+	surveillance_boss.toggle_stance()
+	var stance_time: float
+	if pit_boss.current_phase == 2:
+		stance_time = phase_2_stance_time
+	stance_timer.start(stance_time + randf_range(-1.5, 1.5))

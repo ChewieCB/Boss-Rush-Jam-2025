@@ -1,8 +1,22 @@
 extends BossCore
 class_name BossSurveillance
 
+enum Stance {DEFENSIVE, AGGRESSIVE}
+
 @export var elevation_speed_deg: float = 25.0
 @export var rotation_speed_deg: float = 25.0
+
+@export_category("Phases")
+@export var pit_boss: BossPit 
+var phase_stance: Stance = Stance.DEFENSIVE:
+	set(value):
+		phase_stance = value
+		if phase_stance == Stance.AGGRESSIVE:
+			state_chart.send_event("aggressive_stance")
+		elif phase_stance == Stance.DEFENSIVE:
+			state_chart.send_event("defensive_stance")
+		phase_debug_label.text = "Phase %s (%s)" % [current_phase, Stance.keys()[phase_stance]]
+		select_attack()
 
 @onready var elevation_speed: float = deg_to_rad(elevation_speed_deg)
 @onready var rotation_speed: float = deg_to_rad(rotation_speed_deg)
@@ -13,6 +27,12 @@ class_name BossSurveillance
 @onready var aim_ray: RayCast3D = $Body/Head/RayCast3D
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var phase_debug_label: Label3D = $DebugPhaseLabel
+
+@export var shield_radius: float = 7.5
+@onready var shield_body: StaticBody3D = $Shield
+@onready var shield_mesh_solid: MeshInstance3D = $Shield/ShieldMeshSolid
+@onready var shield_mesh_wispy: MeshInstance3D = $Shield/ShieldMeshWispy
+@onready var shield_collider: CollisionShape3D = $Shield/CollisionShape3D
 
 var previous_phase: String
 
@@ -59,8 +79,16 @@ func _physics_process(_delta: float) -> void:
 func activate() -> void:
 	super()
 	anim_player.play("intro_look_at_player")
+	show_shield()
 	await anim_player.animation_finished
 	state_chart.send_event("start_phase_1")
+
+
+func toggle_stance() -> void:
+	if phase_stance == Stance.AGGRESSIVE:
+		phase_stance = Stance.DEFENSIVE
+	elif phase_stance == Stance.DEFENSIVE:
+		phase_stance = Stance.AGGRESSIVE
 
 
 func select_attack() -> void:
@@ -81,13 +109,19 @@ func select_attack_phase_1() -> void:
 
 func select_attack_phase_2() -> void:
 	var _dist_to_target = self.global_position.distance_to(target.global_position)
-	var possible_phases = [
-		"start_laser_attack",
-		"start_barrier_cage_attack",
-	]
+	var possible_phases: Array[String]
 	
-	if previous_phase:
-		possible_phases.erase(previous_phase)
+	if phase_stance == Stance.DEFENSIVE:
+		possible_phases = [
+			"start_barrier_cage_attack",
+		]
+	elif phase_stance == Stance.AGGRESSIVE:
+		possible_phases = [
+			"start_laser_attack",
+		]
+	
+	#if previous_phase:
+		#possible_phases.erase(previous_phase)
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	previous_phase = new_phase
@@ -97,7 +131,7 @@ func select_attack_phase_2() -> void:
 func select_attack_phase_3() -> void:
 	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
-		"start_spawn_turrets_attack",
+		#"start_spawn_turrets_attack",
 		"start_laser_attack",
 		"start_barrier_cage_attack",
 	]
@@ -203,7 +237,7 @@ func _on_phase_1_state_physics_processing(delta: float) -> void:
 func _on_phase_2_state_entered() -> void:
 	current_phase = 2
 	phase_debug_label.text = "Phase 2"
-	select_attack()
+	toggle_stance()
 
 func _on_phase_2_state_physics_processing(_delta: float) -> void:
 	pass
@@ -374,7 +408,7 @@ func _on_laser_beam_recover_state_entered() -> void:
 
 func _on_laser_hurtbox_body_entered(_body: Node3D) -> void:
 	if _body == target:
-		target.health_component.damage(10)
+		target.health_component.damage(5)
 		laser_area.set_deferred("monitoring", false)
 		await get_tree().create_timer(0.4).timeout
 		laser_area.monitoring = true
@@ -521,3 +555,28 @@ func _on_spawn_turrets_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+func show_shield() -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(shield_mesh_solid.mesh, "radius", shield_radius, 0.6)
+	tween.parallel().tween_property(shield_mesh_solid.mesh, "height", shield_radius, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", shield_radius, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", shield_radius, 0.6)
+	tween.tween_callback(shield_collider.set_disabled.bind(false))
+
+
+func hide_shield() -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(shield_mesh_solid.mesh, "radius", 0, 0.6)
+	tween.parallel().tween_property(shield_mesh_solid.mesh, "height", 0, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", 0, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", 0, 0.6)
+	tween.tween_callback(shield_collider.set_disabled.bind(true))
+
+func _on_defensive_state_entered() -> void:
+	show_shield()
+
+
+func _on_aggressive_state_entered() -> void:
+	hide_shield()

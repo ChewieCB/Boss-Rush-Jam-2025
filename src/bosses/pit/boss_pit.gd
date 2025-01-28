@@ -3,6 +3,8 @@ class_name BossPit
 
 signal charge_ended
 
+enum Stance {DEFENSIVE, AGGRESSIVE}
+
 @export_category("Display")
 @export var swipe_debug: CompressedTexture2D
 @export var lunge_debug: CompressedTexture2D
@@ -11,7 +13,15 @@ signal charge_ended
 @export var wave_material: ShaderMaterial
 
 @export_category("Phases")
-@export var surveillance_boss: BossSurveillance
+@export var surveillance_boss: BossSurveillance 
+var phase_stance: Stance = Stance.AGGRESSIVE:
+	set(value):
+		phase_stance = value
+		if phase_stance == Stance.AGGRESSIVE:
+			state_chart.send_event("aggressive_stance")
+		elif phase_stance == Stance.DEFENSIVE:
+			state_chart.send_event("defensive_stance")
+		phase_debug_label.text = "Phase %s (%s)" % [current_phase, Stance.keys()[phase_stance]]
 
 @export_group("Attacks")
 @export_subgroup("Swipe")
@@ -38,6 +48,12 @@ var slam_target_pos := Vector3.ZERO
 @onready var melee_attack_debug_mesh: MeshInstance3D = $Hurtbox/MeshInstance3D
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
+@export var shield_radius: float = 4.0
+@onready var shield_body: StaticBody3D = $Shield
+@onready var shield_mesh_solid: MeshInstance3D = $Shield/ShieldMeshSolid
+@onready var shield_mesh_wispy: MeshInstance3D = $Shield/ShieldMeshWispy
+@onready var shield_collider: CollisionShape3D = $Shield/CollisionShape3D
+
 
 func _ready() -> void:
 	super()
@@ -46,6 +62,13 @@ func _ready() -> void:
 func activate() -> void:
 	super()
 	state_chart.send_event("intro_slam")
+
+
+func toggle_stance() -> void:
+	if phase_stance == Stance.AGGRESSIVE:
+		phase_stance = Stance.DEFENSIVE
+	elif phase_stance == Stance.DEFENSIVE:
+		phase_stance = Stance.AGGRESSIVE
 
 
 func _physics_process(delta: float) -> void:
@@ -89,6 +112,10 @@ func select_attack_phase_2() -> void:
 		"start_close_distance_attack_far",
 	]
 	
+	# TODO - rework this if we have more defensive abilities
+	if phase_stance == Stance.DEFENSIVE:
+		return
+	
 	if dist_to_target > 22:
 		state_chart.send_event("start_close_distance_attack_far")
 	elif dist_to_target > 10 and lunge_timer.is_stopped():
@@ -106,7 +133,11 @@ func select_attack_phase_3() -> void:
 		"start_close_distance_attack_far",
 	]
 	
-	if dist_to_target > 12:
+	# TODO - rework this if we have more defensive abilities
+	if phase_stance == Stance.DEFENSIVE:
+		return
+	
+	if dist_to_target > 14:
 		state_chart.send_event("start_close_distance_attack_far")
 	elif dist_to_target > 5 and lunge_timer.is_stopped():
 		state_chart.send_event("start_close_distance_attack_close")
@@ -346,7 +377,7 @@ func _on_lunge_closer_attack_state_entered() -> void:
 	await charge_ended
 	#print("Charge ended")
 
-	state_chart.send_event("stop_moving")	
+	state_chart.send_event("stop_moving")
 	state_chart.send_event("combo_end")
 
 
@@ -366,7 +397,7 @@ func _on_lunge_closer_recover_state_entered() -> void:
 func _on_phase_2_state_entered() -> void:
 	current_phase = 2
 	phase_debug_label.text = "Phase 2"
-	select_attack()
+	toggle_stance()
 
 #### Phase 2 | Combo Lunge
 func _on_melee_combo_lunge_state_entered() -> void:
@@ -658,3 +689,38 @@ func _on_hammer_ground_recover_state_entered() -> void:
 func _on_inactive_state_entered() -> void:
 	velocity.x = 0
 	velocity.z = 0
+
+
+func _on_shield_slam_state_entered() -> void:
+	state_chart.send_event("start_targeting")
+	var tween = get_tree().create_tween()
+	tween.tween_property(shield_mesh_solid.mesh, "radius", shield_radius, 0.6)
+	tween.parallel().tween_property(shield_mesh_solid.mesh, "height", shield_radius * 2, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", shield_radius, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", shield_radius * 2, 0.6)
+	tween.tween_callback(shield_collider.set_disabled.bind(false))
+
+
+func _on_shield_slam_targeting_state_entered() -> void:
+	debug_state_label.text = "Shield Slam | Targeting"
+	hurtbox.set_deferred("monitoring", false)
+	state_chart.send_event("start_jumping")
+	
+	anim_player.play("air_slam_intro")
+	await anim_player.animation_finished
+	state_chart.send_event("end_jumping")
+	
+	hurtbox.body_entered.connect(_air_slam_damage)
+	
+	await get_tree().create_timer(1.0).timeout
+	self.velocity = Vector3.ZERO
+	state_chart.send_event("start_attack")
+
+
+func _on_shield_slam_state_exited() -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(shield_mesh_solid.mesh, "radius", 0, 0.6)
+	tween.parallel().tween_property(shield_mesh_solid.mesh, "height", 0, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", 0, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", 0, 0.6)
+	tween.tween_callback(shield_collider.set_disabled.bind(true))

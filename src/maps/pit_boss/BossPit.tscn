@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_vfcr2"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/boss_pit.gd" id="1_ymudn"]
+[ext_resource type="AudioStream" uid="uid://cpclsa3ujr4lu" path="res://assets/music/brj25_remix2.mp3" id="2_bre08"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_hhc2p"]
-[ext_resource type="AudioStream" uid="uid://coyh1k757v4k8" path="res://assets/music/WANTED 0.1.mp3" id="2_sx666"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="3_nqcqn"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_w7aip"]
 [ext_resource type="Material" uid="uid://coo1y5tjcwlec" path="res://assets/textures/placeholder/texture_dark_03.tres" id="4_h2odb"]
@@ -970,7 +970,7 @@ _surfaces = [{
 
 [node name="BossPit" type="Node3D" node_paths=PackedStringArray("pit_boss", "surveillance_boss")]
 script = ExtResource("1_ymudn")
-bgm = ExtResource("2_sx666")
+bgm = ExtResource("2_bre08")
 pit_boss = NodePath("FuncGodotMap/entity_5_PitBoss")
 surveillance_boss = NodePath("FuncGodotMap/entity_58_BossSurveillance")
 
@@ -2128,4 +2128,7 @@ metadata/_tb_type = "_tb_group"
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 19.5, 0)
 target = NodePath("../entity_4_PlayerRef")
 
+[node name="StanceTimer" type="Timer" parent="."]
+
 [connection signal="body_entered" from="BossTrigger" to="." method="_on_boss_trigger_body_entered"]
+[connection signal="timeout" from="StanceTimer" to="." method="_on_stance_timer_timeout"]

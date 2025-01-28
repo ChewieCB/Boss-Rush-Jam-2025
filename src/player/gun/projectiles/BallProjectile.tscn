@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://r58hv7fv4nab"]
+[gd_scene load_steps=13 format=3 uid="uid://r58hv7fv4nab"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/ball_projectile.gd" id="1_f5td2"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_au05s"]
@@ -24,6 +24,8 @@ albedo_color = Color(0.964844, 1, 0.929688, 0.713726)
 emission_enabled = true
 emission = Color(1, 0.731834, 0.032858, 1)
 
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_ytwgm"]
+
 [sub_resource type="Curve" id="Curve_inxyf"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -33,7 +35,7 @@ radius = 4.0
 
 [node name="BallProjectile" type="RigidBody3D"]
 collision_layer = 0
-collision_mask = 5
+collision_mask = 197
 script = ExtResource("1_f5td2")
 spark_effect = ExtResource("2_au05s")
 generic_blood_splatter = ExtResource("3_4ks7h")
@@ -63,7 +65,9 @@ collision_mask = 29
 [node name="Trail" type="Node3D" parent="."]
 
 [node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
 material_override = SubResource("StandardMaterial3D_bye4v")
+mesh = SubResource("ImmediateMesh_ytwgm")
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("4_4r3ns")
 segments = 10
