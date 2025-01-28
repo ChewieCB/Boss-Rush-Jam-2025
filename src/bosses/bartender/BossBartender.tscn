@@ -227,7 +227,7 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 5.02249, 0)
 billboard = 1
 
 [node name="BuffExpireTimer" type="Timer" parent="." index="17"]
-wait_time = 10.0
+wait_time = 30.0
 one_shot = true
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Idle" to="." method="_on_phase_1_idle_state_entered"]

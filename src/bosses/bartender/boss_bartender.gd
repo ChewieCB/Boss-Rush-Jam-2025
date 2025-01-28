@@ -97,10 +97,13 @@ func select_attack_phase_1() -> void:
 		"start_throw_broken_bottle",
 		"start_throw_concoction",
 		"start_throw_concoction",
-		"start_brew_drink",
-		"start_shotgun_blast",
 		"start_throw_heal_bottle"
 	]
+
+	if current_buff == "":
+		var brew_drink_bonus_freq = 5
+		for i in range(brew_drink_bonus_freq):
+			possible_attacks.append("start_brew_drink")
 
 	# More likely to throw bottle / throw barrel when has str buff
 	var throw_barrel_bonus_freq = 5

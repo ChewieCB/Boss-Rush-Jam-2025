@@ -674,7 +674,7 @@ omni_range = 20.0
 
 [node name="BossBartender" parent="." node_paths=PackedStringArray("behind_bar_move_points", "target") instance=ExtResource("13_ci071")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -44.9891)
-behind_bar_move_points = [NodePath("../BossMoveMarker"), NodePath("../BossMoveMarker2"), NodePath("../BossMoveMarker3")]
+behind_bar_move_points = [NodePath("../BossMoveMarker"), NodePath("../BossMoveMarker2"), NodePath("../BossMoveMarker3"), NodePath("../BossMoveMarker4"), NodePath("../BossMoveMarker5")]
 target = NodePath("../NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/entity_2_PlayerRef")
 
 [node name="BossMoveMarker" type="Marker3D" parent="."]
@@ -685,5 +685,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.397888, 0.330918, -45.1419
 
 [node name="BossMoveMarker3" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.9523, 0.330918, -45.1419)
+
+[node name="BossMoveMarker4" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96243, 0.330918, -45.1419)
+
+[node name="BossMoveMarker5" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.26166, 0.330918, -45.1419)
+
+[node name="BossJumpPhase2Marker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.243006, 0.330918, -35.8964)
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]
