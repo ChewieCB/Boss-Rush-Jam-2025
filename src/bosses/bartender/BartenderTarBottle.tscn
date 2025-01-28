@@ -1,8 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cujkupeiuhqjh"]
+[gd_scene load_steps=6 format=3 uid="uid://dc551puah5jwj"]
 
-[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_e7xao"]
-[ext_resource type="PackedScene" uid="uid://dqw4c2ldowow3" path="res://src/bosses/bartender/PoisonHazardArea.tscn" id="2_62kvn"]
-[ext_resource type="Texture2D" uid="uid://dvw0txhoe4k3" path="res://src/bosses/bartender/assets/poison_bottle.png" id="3_wi6a6"]
+[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_qnpql"]
+[ext_resource type="PackedScene" uid="uid://dqw4c2ldowow3" path="res://src/bosses/bartender/PoisonHazardArea.tscn" id="2_ho0o5"]
+[ext_resource type="Texture2D" uid="uid://brih8hrl87d0d" path="res://src/bosses/bartender/assets/tar_bottle.png" id="3_nvli3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3tqx"]
 transparency = 1
@@ -12,11 +12,11 @@ emission = Color(0.368498, 0.830594, 0.199277, 1)
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_r13qw"]
 
-[node name="BartenderPoisonBottle" instance=ExtResource("1_e7xao")]
-break_effect_prefab = ExtResource("2_62kvn")
+[node name="BartenderTarBottle" instance=ExtResource("1_qnpql")]
+break_effect_prefab = ExtResource("2_ho0o5")
 
 [node name="Sprite3D" parent="." index="0"]
-texture = ExtResource("3_wi6a6")
+texture = ExtResource("3_nvli3")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." index="5"]
 light_color = Color(0.0580966, 0.38672, 0.190045, 1)

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://csksvkj83ajtj"
-path.s3tc="res://.godot/imported/fire_sprite.png-430b9dfefa6d9b9fae9823c8f916bb9a.s3tc.ctex"
+uid="uid://brih8hrl87d0d"
+path.s3tc="res://.godot/imported/tar_bottle.png-d9d94caa7d912684fc3ebbd6798c3ae3.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/bosses/bartender/fire_sprite.png"
-dest_files=["res://.godot/imported/fire_sprite.png-430b9dfefa6d9b9fae9823c8f916bb9a.s3tc.ctex"]
+source_file="res://src/bosses/bartender/assets/tar_bottle.png"
+dest_files=["res://.godot/imported/tar_bottle.png-d9d94caa7d912684fc3ebbd6798c3ae3.s3tc.ctex"]
 
 [params]
 

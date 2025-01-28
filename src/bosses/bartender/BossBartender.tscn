@@ -9,8 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://bkbyk7x5yc34u" path="res://src/bosses/bartender/BartenderMolotov.tscn" id="5_e3e4s"]
 [ext_resource type="PackedScene" uid="uid://cujkupeiuhqjh" path="res://src/bosses/bartender/BartenderPoisonBottle.tscn" id="6_ei8fn"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_kkb22"]
-[ext_resource type="Texture2D" uid="uid://b41us6y851cfv" path="res://src/bosses/bartender/bartender.png" id="6_ky2ag"]
-[ext_resource type="Texture2D" uid="uid://dciecve6bacil" path="res://src/bosses/bartender/shield_icon.png" id="11_c0ayg"]
+[ext_resource type="Texture2D" uid="uid://b41us6y851cfv" path="res://src/bosses/bartender/assets/bartender.png" id="6_ky2ag"]
+[ext_resource type="Texture2D" uid="uid://dciecve6bacil" path="res://src/bosses/bartender/assets/shield_icon.png" id="11_c0ayg"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_p0ajt"]
 radius = 8.0

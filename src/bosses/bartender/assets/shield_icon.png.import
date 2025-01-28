@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bus2aoy40njv1"
-path.s3tc="res://.godot/imported/puddle.png-7a669dd6d9e4c885bfae44539315ca06.s3tc.ctex"
+uid="uid://dciecve6bacil"
+path.s3tc="res://.godot/imported/shield_icon.png-5bd74c10850bc31e540d4ad649b446a7.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/bosses/bartender/puddle.png"
-dest_files=["res://.godot/imported/puddle.png-7a669dd6d9e4c885bfae44539315ca06.s3tc.ctex"]
+source_file="res://src/bosses/bartender/assets/shield_icon.png"
+dest_files=["res://.godot/imported/shield_icon.png-5bd74c10850bc31e540d4ad649b446a7.s3tc.ctex"]
 
 [params]
 
