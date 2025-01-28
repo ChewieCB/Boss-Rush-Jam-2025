@@ -12,9 +12,9 @@ class_name BossSurveillance
 @onready var eye_mesh: MeshInstance3D = $Body/MeshInstance3D
 @onready var aim_ray: RayCast3D = $Body/Head/RayCast3D
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var phase_debug_label: Label3D = $DebugPhaseLabel
 
 var previous_phase: String
-@export var phase_2_health_percentage_trigger: float = 0.5
 
 # Turrets
 var turret_spawns: Array:
@@ -69,13 +69,17 @@ func select_attack() -> void:
 			select_attack_phase_1()
 		2:
 			select_attack_phase_2()
-		#3:
-			#select_attack_phase_3()
+		3:
+			select_attack_phase_3()
 		_:
 			push_error("Invalid phase %s" % current_phase)
 
 
 func select_attack_phase_1() -> void:
+	return
+
+
+func select_attack_phase_2() -> void:
 	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_laser_attack",
@@ -90,7 +94,7 @@ func select_attack_phase_1() -> void:
 	state_chart.send_event(new_phase)
 
 
-func select_attack_phase_2() -> void:
+func select_attack_phase_3() -> void:
 	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
 		"start_spawn_turrets_attack",
@@ -169,11 +173,6 @@ func get_angle_to_target(seeker_pos: Vector3, target_pos: Vector3, facing_dir: V
 
 #####
 
-func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super(new_health, prev_health)
-	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
-		state_chart.send_event("start_phase_2")
-
 func _on_died() -> void:
 	eye_mesh.mesh.material.albedo_color = Color.PURPLE
 	state_chart.send_event("death")
@@ -193,12 +192,23 @@ func _on_health_hit_state_exited() -> void:
 #### PHASE 1 ==========================
 func _on_phase_1_state_entered() -> void:
 	current_phase = 1
+	phase_debug_label.text = "Phase 1"
 	select_attack()
 
-func _on_phase_1_state_physics_processing(_delta: float) -> void:
+func _on_phase_1_state_physics_processing(delta: float) -> void:
+	rotate_and_elevate(target.global_position, delta)
+
+
+#### PHASE 2 ==========================
+func _on_phase_2_state_entered() -> void:
+	current_phase = 2
+	phase_debug_label.text = "Phase 2"
+	select_attack()
+
+func _on_phase_2_state_physics_processing(_delta: float) -> void:
 	pass
 
-#### Phase 1 | Laser Beam
+#### Phase 2 | Laser Beam
 func _on_laser_beam_startup_state_entered() -> void:
 	# Look down to the center
 	var tween = get_tree().create_tween()
@@ -229,31 +239,6 @@ func _on_laser_beam_startup_state_entered() -> void:
 		laser_particles.global_position = cast_point
 		laser_particles.emitting = true
 		state_chart.send_event("start_beam")
-
-
-# Add a debug sphere at global location.
-func draw_debug_sphere(location, size, color):
-	# Will usually work, but you might need to adjust this.
-	var scene_root = get_tree().root.get_children()[0]
-	# Create sphere with low detail of size.
-	var sphere = SphereMesh.new()
-	sphere.radial_segments = 4
-	sphere.rings = 4
-	sphere.radius = size
-	sphere.height = size * 2
-	# Bright red material (unshaded).
-	var material = StandardMaterial3D.new()
-	material.albedo_color = color
-	material.flags_unshaded = true
-	sphere.surface_set_material(0, material)
-
-	# Add to meshinstance in the right place.
-	var node = MeshInstance3D.new()
-	node.mesh = sphere
-	node.global_transform.origin = location
-	scene_root.add_child(node)
-	
-	return node
 
 
 func _on_laser_beam_startup_state_physics_processing(_delta: float) -> void:
@@ -290,7 +275,7 @@ func _on_laser_beam_targeting_state_physics_processing(delta: float) -> void:
 		laser_particles.global_position = cast_point
 
 
-func _on_phase_1_laser_beam_sweep_beam_state_entered() -> void:
+func _on_phase_2_laser_beam_sweep_beam_state_entered() -> void:
 	debug_state_label.text = "Laser Beam | Sweep"
 	# TODO - add telegraphing to the sweep attack
 	var tween = get_tree().create_tween()
@@ -307,7 +292,7 @@ func _on_phase_1_laser_beam_sweep_beam_state_entered() -> void:
 	# Sweep towards the player's position
 	beam_target = target.global_position
 
-func _on_phase_1_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
+func _on_phase_2_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
 	#beam_target = target.global_position
 	rotate_and_elevate(beam_target, delta)
 	
@@ -326,7 +311,7 @@ func _on_phase_1_laser_beam_sweep_beam_state_physics_processing(delta: float) ->
 			state_chart.send_event("end_sweep")
 
 
-func _on_phase_2_laser_beam_sweep_beam_state_entered() -> void:
+func _on_phase_3_laser_beam_sweep_beam_state_entered() -> void:
 	debug_state_label.text = "Laser Beam | Sweep"
 	# TODO - add telegraphing to the sweep attack
 	var tween = get_tree().create_tween()
@@ -343,7 +328,7 @@ func _on_phase_2_laser_beam_sweep_beam_state_entered() -> void:
 	# Sweep towards the player's position
 	beam_target = target.global_position
 
-func _on_phase_2_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:	
+func _on_phase_3_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
 	# Update target every 6 frames to lag behind a bit
 	#if Engine.get_physics_frames() % 20 == 0:
 	beam_target = target.global_position
@@ -483,16 +468,17 @@ func _on_barrier_cage_state_exited() -> void:
 	barrier_cage_area.visible = false
 
 
-#### PHASE 2 ==========================
-func _on_phase_2_state_entered() -> void:
-	current_phase = 2
+#### PHASE 3 ==========================
+func _on_phase_3_state_entered() -> void:
+	current_phase = 3
+	phase_debug_label.text = "Phase 3"
 	select_attack()
 
-func _on_phase_2_state_physics_processing(_delta: float) -> void:
+func _on_phase_3_state_physics_processing(_delta: float) -> void:
 	pass
 
 
-#### Phase 2 | Spawn Turrets
+#### Phase 3 | Spawn Turrets
 
 func _on_turret_destroyed(turret: PitTurret) -> void:
 	var turret_spawn = turret.get_parent()

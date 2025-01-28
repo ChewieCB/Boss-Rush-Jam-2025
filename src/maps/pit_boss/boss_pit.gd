@@ -6,9 +6,13 @@ extends Node3D
 @onready var win_ui: Control = $UI/BossDefeatedUI
 @onready var boss_trigger: Area3D = $BossTrigger
 
+@export var phase_2_health_percentage_trigger: float = 0.7
+@export var phase_3_health_percentage_trigger: float = 0.35
+
 @export var pit_boss: BossPit
 @export var surveillance_boss: BossSurveillance
 var dead_boss_count: int = 0
+
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 @onready var turret_spawns: Array = find_children("*", "TurretSpawnPoint")
@@ -19,9 +23,13 @@ var cover_objects: Array = []
 
 
 func _ready() -> void:
+	pit_boss.health_component.health_changed.connect(_on_boss_health_changed)
 	pit_boss.health_component.died.connect(_on_boss_died.bind(pit_boss))
+	
+	surveillance_boss.health_component.health_changed.connect(_on_boss_health_changed)
 	surveillance_boss.health_component.died.connect(_on_boss_died.bind(surveillance_boss))
 	surveillance_boss.turret_spawns = turret_spawns
+	
 	player.health_component.died.connect(_on_player_death)
 	
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
@@ -39,6 +47,21 @@ func _ready() -> void:
 func _on_player_death() -> void:
 	win_ui.lose()
 	show_end_panel()
+
+
+func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
+	var combined_health_ratio := pit_boss.health_component.current_health_ratio + \
+		surveillance_boss.health_component.current_health_ratio
+	var pit_boss_health_ratio := pit_boss.health_component.current_health / \
+		pit_boss.health_component.max_health
+	
+	print("%s | %s" % [pit_boss_health_ratio, combined_health_ratio])
+	if combined_health_ratio <= phase_3_health_percentage_trigger:
+		pit_boss.state_chart.send_event("start_phase_3")
+		surveillance_boss.state_chart.send_event("start_phase_3")
+	elif pit_boss.health_component.current_health_ratio <= phase_2_health_percentage_trigger:
+		pit_boss.state_chart.send_event("start_phase_2")
+		surveillance_boss.state_chart.send_event("start_phase_2")
 
 
 func _on_boss_died(boss: BossCore) -> void:
