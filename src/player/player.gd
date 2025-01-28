@@ -471,6 +471,14 @@ func remove_buff(buff: Buff):
 	buffs.erase(buff)
 	apply_buffs()
 
+func remove_buff_by_name(find_name: String):
+	var found_buff = null
+	for buff in buffs:
+		if buff.buff_name == find_name:
+			found_buff = buff
+			break
+	if found_buff:
+		remove_buff(found_buff)
 
 func apply_buffs():
 	# Reset current stats to base stats.

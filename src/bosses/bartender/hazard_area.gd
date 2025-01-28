@@ -3,9 +3,10 @@ class_name HazardArea
 
 @export var damage_per_tick: int = 5
 @export var duration: float = 5
+@export var slow_perc: float = 0
+
 @export var particle_effects: Array[GPUParticles3D] = []
 @export var pe_expire_time = 2
-
 
 @onready var dot_timer: Timer = $DoTTimer
 @onready var life_timer: Timer = $LifeTimer
@@ -36,8 +37,17 @@ func _physics_process(delta: float) -> void:
 func _on_damage_timer_timeout() -> void:
 	if not is_active:
 		return
+
 	for body in bodies_inside:
-		body.get_node("HealthComponent").damage(damage_per_tick)
+		if damage_per_tick > 0:
+			body.get_node("HealthComponent").damage(damage_per_tick)
+
+		if body is Player and slow_perc > 0:
+			var run_debuff = create_slow_run_debuff(1)
+			body.add_buff(run_debuff)
+			var dash_debuff = create_slow_dash_debuff(1)
+			body.add_buff(dash_debuff)
+
 
 func _on_life_timer_timeout() -> void:
 	is_active = false
@@ -60,3 +70,23 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 func _on_area_3d_body_exited(body: Node3D) -> void:
 	if body.get_node("HealthComponent") and body in bodies_inside:
 		bodies_inside.erase(body)
+
+func create_slow_run_debuff(debuff_duration: float = 1) -> Buff:
+	var slow_debuff = Buff.new()
+	slow_debuff.buff_name = "slow_hazard_run_speed"
+	slow_debuff.stat_name = "run_speed_modifier"
+	slow_debuff.value = -slow_perc
+	slow_debuff.buff_type = Buff.BuffType.PERCENTAGE
+	slow_debuff.stack_type = Buff.StackType.ADDITIVE
+	slow_debuff.duration = debuff_duration
+	return slow_debuff
+
+func create_slow_dash_debuff(debuff_duration: float = 1) -> Buff:
+	var slow_debuff = Buff.new()
+	slow_debuff.buff_name = "slow_hazard_dash_slide_speed"
+	slow_debuff.stat_name = "dash_slide_speed_modifier"
+	slow_debuff.value = -slow_perc
+	slow_debuff.buff_type = Buff.BuffType.PERCENTAGE
+	slow_debuff.stack_type = Buff.StackType.ADDITIVE
+	slow_debuff.duration = debuff_duration
+	return slow_debuff

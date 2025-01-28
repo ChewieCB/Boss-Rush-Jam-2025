@@ -173,7 +173,7 @@ func throw_concoction_bottle():
 	var possible_bottle_prefab = [
 		molotov_prefab,
 		poison_bottle_prefab,
-		# slow_bottle_prefab
+		slow_bottle_prefab
 	]
 	var chosen_prefab = possible_bottle_prefab.pick_random()
 	var n_bottle = current_phase

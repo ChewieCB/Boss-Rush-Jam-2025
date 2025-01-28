@@ -7,7 +7,7 @@ extends BaseBarrelEffect
 
 func on_ammo_consumed():
     var dash_slide_speed_buff = Buff.new()
-    dash_slide_speed_buff.buff_name = "speed_burst_barrel_dash_slide"
+    dash_slide_speed_buff.buff_name = "speed_burst_barrel_dash_slide_speed"
     dash_slide_speed_buff.stat_name = "dash_slide_speed_modifier"
     dash_slide_speed_buff.value = bonus_dash_speed_perc
     dash_slide_speed_buff.buff_type = Buff.BuffType.PERCENTAGE
@@ -16,7 +16,7 @@ func on_ammo_consumed():
     GameManager.player.add_buff(dash_slide_speed_buff)
 
     var run_speed_buff = Buff.new()
-    run_speed_buff.buff_name = "speed_burst_barrel_run"
+    run_speed_buff.buff_name = "speed_burst_barrel_run_speed"
     run_speed_buff.stat_name = "run_speed_modifier"
     run_speed_buff.value = bonus_run_speed_perc
     run_speed_buff.buff_type = Buff.BuffType.PERCENTAGE

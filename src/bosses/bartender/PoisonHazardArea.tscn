@@ -72,7 +72,7 @@ modulate = Color(0.0926836, 0.291941, 0, 0.854902)
 texture = ExtResource("3_0iq2y")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-light_color = Color(0.841752, 0.337685, 0, 1)
+light_color = Color(0.312417, 0.600959, 0.14662, 1)
 light_energy = 5.0
 omni_range = 10.0
 
