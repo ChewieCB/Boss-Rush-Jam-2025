@@ -154,10 +154,6 @@ func select_attack_phase_3() -> void:
 		"start_close_distance_attack_far",
 	]
 	
-	# TODO - rework this if we have more defensive abilities
-	if phase_stance == Stance.DEFENSIVE:
-		return
-	
 	if dist_to_target > 14:
 		state_chart.send_event("start_close_distance_attack_far")
 	elif dist_to_target > 5 and lunge_timer.is_stopped():
@@ -655,6 +651,7 @@ func _on_wave_collision(body: Node3D) -> void:
 func _on_phase_3_state_entered() -> void:
 	current_phase = 3
 	phase_debug_label.text = "Phase 3"
+	phase_stance = Stance.AGGRESSIVE
 	select_attack()
 
 

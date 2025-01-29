@@ -225,9 +225,6 @@ offset_bottom = 281.0
 theme_override_constants/margin_top = 144
 boss_name = "Surveillance"
 
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
-
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("7_bpphr")
 to = NodePath("../../Phase1")
