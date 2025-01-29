@@ -213,6 +213,10 @@ func _on_died() -> void:
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
 
+func _exit_tree() -> void:
+	if shield_mesh_solid.mesh.radius > 0.1:
+		hide_shield()
+
 func _on_health_hit_state_entered() -> void:
 	eye_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
 	sprite.modulate = Color.RED

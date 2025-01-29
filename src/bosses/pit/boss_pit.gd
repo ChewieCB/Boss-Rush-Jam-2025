@@ -74,6 +74,24 @@ func toggle_stance() -> void:
 		phase_stance = Stance.AGGRESSIVE
 
 
+func show_shield() -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(shield_mesh_solid.mesh, "radius", shield_radius, 0.6)
+	tween.parallel().tween_property(shield_mesh_solid.mesh, "height", shield_radius * 2, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", shield_radius, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", shield_radius * 2, 0.6)
+	tween.tween_callback(shield_collider.set_disabled.bind(false))
+
+
+func hide_shield() -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(shield_mesh_solid.mesh, "radius", 0, 0.6)
+	tween.parallel().tween_property(shield_mesh_solid.mesh, "height", 0, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", 0, 0.6)
+	tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", 0, 0.6)
+	tween.tween_callback(shield_collider.set_disabled.bind(true))
+
+
 func _physics_process(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
@@ -157,6 +175,11 @@ func _on_died() -> void:
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
+
+
+func _exit_tree() -> void:
+	if shield_mesh_solid.mesh.radius > 0.1:
+		hide_shield()
 
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:
@@ -699,12 +722,7 @@ func _on_inactive_state_entered() -> void:
 
 func _on_shield_slam_state_entered() -> void:
 	state_chart.send_event("start_targeting")
-	var tween = get_tree().create_tween()
-	tween.tween_property(shield_mesh_solid.mesh, "radius", shield_radius, 0.6)
-	tween.parallel().tween_property(shield_mesh_solid.mesh, "height", shield_radius * 2, 0.6)
-	tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", shield_radius, 0.6)
-	tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", shield_radius * 2, 0.6)
-	tween.tween_callback(shield_collider.set_disabled.bind(false))
+	show_shield()
 
 
 func _on_shield_slam_targeting_state_entered() -> void:
@@ -724,9 +742,4 @@ func _on_shield_slam_targeting_state_entered() -> void:
 
 
 func _on_shield_slam_state_exited() -> void:
-	var tween = get_tree().create_tween()
-	tween.tween_property(shield_mesh_solid.mesh, "radius", 0, 0.6)
-	tween.parallel().tween_property(shield_mesh_solid.mesh, "height", 0, 0.6)
-	tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", 0, 0.6)
-	tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", 0, 0.6)
-	tween.tween_callback(shield_collider.set_disabled.bind(true))
+	hide_shield()
