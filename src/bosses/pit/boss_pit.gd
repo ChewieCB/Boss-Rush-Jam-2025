@@ -525,7 +525,6 @@ func _on_air_slam_state_entered() -> void:
 
 
 func _on_air_slam_state_physics_processing(_delta: float) -> void:
-	
 	if anim_player.is_playing():
 		await anim_player.animation_finished
 	

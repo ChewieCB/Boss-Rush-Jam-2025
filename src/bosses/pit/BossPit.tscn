@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=35 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -60,22 +60,15 @@ height = 0.001
 radius = 4.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ijkfg"]
-radius = 1.5
-height = 4.6
+radius = 1.9
+height = 5.8
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_jlq7w"]
-radius = 1.5
-height = 4.6
+radius = 1.9
+height = 5.8
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pi7fj"]
-size = Vector3(3, 3.6, 4.5)
-
-[sub_resource type="BoxMesh" id="BoxMesh_n64vh"]
-size = Vector3(3, 3.6, 4)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q0jwb"]
-transparency = 1
-albedo_color = Color(1, 0, 0, 0.337255)
+size = Vector3(5, 5.70808, 4.5)
 
 [sub_resource type="Animation" id="Animation_6jtcq"]
 length = 0.001
@@ -867,14 +860,15 @@ shape = SubResource("SphereShape3D_5bmqa")
 disabled = true
 
 [node name="Sprite3D" parent="." index="2"]
-transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0.177727, 2.32, 0)
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0.178, 2.785, 0)
 texture = ExtResource("8_d716h")
 
 [node name="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9, 0)
 shape = SubResource("CapsuleShape3D_ijkfg")
 
 [node name="DebugMesh" parent="." index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9, 0)
 mesh = SubResource("CapsuleMesh_jlq7w")
 
 [node name="Hurtbox" parent="." index="5"]
@@ -882,14 +876,8 @@ collision_mask = 67
 monitoring = true
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0999999, 2.85404, -2)
 shape = SubResource("BoxShape3D_pi7fj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Hurtbox" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -1.5)
-visible = false
-mesh = SubResource("BoxMesh_n64vh")
-surface_material_override/0 = SubResource("StandardMaterial3D_q0jwb")
 
 [node name="HealthComponent" parent="." index="6"]
 max_health = 5500.0
@@ -1786,6 +1774,12 @@ text = "STATE"
 [node name="DebugDistanceLabel" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, 0)
 text = "DISTANCE"
+
+[node name="DamageTextMarker" parent="." index="14"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.131287, 4.12246, 0)
+
+[node name="BodyCenter" parent="." index="15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.119352, 3.48643, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="16"]
 libraries = {
