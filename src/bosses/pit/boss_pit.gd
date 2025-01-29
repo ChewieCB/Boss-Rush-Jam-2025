@@ -725,13 +725,12 @@ func _on_inactive_state_entered() -> void:
 	velocity.z = 0
 
 
-func _on_shield_slam_state_entered() -> void:
-	state_chart.send_event("start_targeting")
+func _on_defensive_state_entered() -> void:
 	show_shield()
 
 
-func _on_shield_slam_targeting_state_entered() -> void:
-	debug_state_label.text = "Shield Slam | Targeting"
+func _on_move_to_center_state_entered() -> void:
+	debug_state_label.text = "Move To Center"
 	hurtbox.set_deferred("monitoring", false)
 	state_chart.send_event("start_jumping")
 	
@@ -743,8 +742,8 @@ func _on_shield_slam_targeting_state_entered() -> void:
 	
 	await get_tree().create_timer(1.0).timeout
 	self.velocity = Vector3.ZERO
-	state_chart.send_event("start_attack")
+	state_chart.send_event("start_shield_slam")
 
 
-func _on_shield_slam_state_exited() -> void:
+func _on_defensive_state_exited() -> void:
 	hide_shield()

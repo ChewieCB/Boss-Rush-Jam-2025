@@ -887,6 +887,9 @@ max_health = 500.0
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"
 
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
+
 [node name="toIntroAirSlam" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("4_akhww")
 to = NodePath("../../IntroAirSlam")
@@ -1096,9 +1099,18 @@ initial_state = NodePath("Defensive")
 
 [node name="Defensive" type="Node" parent="StateChart/Root/Phase/Phase2" index="0"]
 script = ExtResource("5_bqowf")
-initial_state = NodePath("ShieldSlam")
+initial_state = NodePath("MoveToCenter")
 
-[node name="ShieldSlam" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive" index="0"]
+[node name="MoveToCenter" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive" index="0"]
+script = ExtResource("5_bjod6")
+
+[node name="toShieldSlam" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive/MoveToCenter" index="0"]
+script = ExtResource("4_akhww")
+to = NodePath("../../ShieldSlam")
+event = &"start_shield_slam"
+delay_in_seconds = "0.0"
+
+[node name="ShieldSlam" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive" index="1"]
 script = ExtResource("5_bqowf")
 initial_state = NodePath("Targeting")
 
@@ -1129,7 +1141,12 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toAggressive" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive" index="1"]
+[node name="toMoveToCenter" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive/ShieldSlam" index="3"]
+script = ExtResource("4_akhww")
+event = &"move_to_center"
+delay_in_seconds = "0.0"
+
+[node name="toAggressive" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive" index="2"]
 script = ExtResource("4_akhww")
 to = NodePath("../../Aggressive")
 event = &"aggressive_stance"
@@ -1830,10 +1847,10 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LungeCloser/Attack" to="." method="_on_lunge_closer_attack_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LungeCloser/Recover" to="." method="_on_lunge_closer_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Defensive/ShieldSlam" to="." method="_on_shield_slam_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Phase/Phase2/Defensive/ShieldSlam" to="." method="_on_shield_slam_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Defensive/ShieldSlam/Targeting" to="." method="_on_shield_slam_targeting_state_entered"]
-[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/Defensive/ShieldSlam/Targeting" to="." method="_on_shield_slam_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Defensive" to="." method="_on_defensive_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase2/Defensive" to="." method="_on_defensive_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Defensive/MoveToCenter" to="." method="_on_move_to_center_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Defensive/ShieldSlam/Targeting" to="." method="_on_hammer_ground_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Defensive/ShieldSlam/Slam" to="." method="_on_hammer_ground_hammering_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Defensive/ShieldSlam/Recover" to="." method="_on_hammer_ground_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Aggressive/MeleeComboComplex/Targeting" to="." method="_on_melee_combo_targeting_state_entered"]
