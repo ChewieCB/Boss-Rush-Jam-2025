@@ -27,6 +27,13 @@ extends BossCore
 @export_group("Movement")
 @export var base_movespeed = 10
 @export var behind_bar_move_points: Array[Marker3D] = []
+@export var boss_jump_phase2_marker: Marker3D
+@export var boss_jump_phase3_marker: Marker3D
+@export_subgroup("Orbiting")
+@export var angle_speed: float = 1.0 # radians/second
+@export var orbit_angle: float = 0.0 # track this over time
+@export var orbit_radius: float = 10.0
+@export var desired_distance: float = 5
 
 @onready var buff_expire_timer: Timer = $BuffExpireTimer
 @onready var proj_spawn_marker = $ProjectileSpawnPos
@@ -45,42 +52,36 @@ func _ready() -> void:
 	super()
 	navigation_component.current_speed = base_movespeed * current_speed_modifier
 
-
 func _process(delta: float) -> void:
 	if target:
 		_turn_towards_target(TURN_SPEED_SLOW, delta)
 
 func activate() -> void:
 	super()
-	change_phase(current_phase)
+	change_phase(1)
 
 func change_phase(new_phase: int) -> void:
 	# Check if an attack is in progress
 	if not $StateChart/Root/Attacking/Idle.active:
 		await $StateChart/Root/Attacking/Idle.state_entered
-	# TODO - anims/effects/sound for phase change
-	#
-	# Change phase
-	var phase_event: String
-	match new_phase:
-		1:
-			phase_event = "start_phase_1"
-		2:
-			phase_event = "start_phase_2"
-		3:
-			phase_event = "start_phase_3"
-	
-	state_chart.send_event(phase_event)
+	current_phase = new_phase
+
+	if current_phase == 1:
+		state_chart.send_event("start_phase_1")
+	elif current_phase == 2:
+		state_chart.send_event("start_phase_2")
+	elif current_phase == 3:
+		state_chart.send_event("start_phase_3")
 
 
 func select_attack() -> void:
 	match current_phase:
 		1:
 			select_attack_phase_1()
-		# 2:
-		# 	select_attack_phase_2()
-		# 3:
-		# 	select_attack_phase_3()
+		2:
+			select_attack_phase_2()
+		3:
+			select_attack_phase_1() # Phase 3 is same as phase 1
 		_:
 			push_error("Invalid phase %s" % current_phase)
 
@@ -129,6 +130,42 @@ func select_attack_phase_1() -> void:
 	state_chart.send_event(chosen_attack)
 
 
+func select_attack_phase_2() -> void:
+	# If dont have buff, ALWAYS use buff	
+	if current_buff == "":
+		state_chart.send_event("start_brew_drink")
+		return
+
+	var possible_attacks = [
+		"start_throw_broken_bottle",
+		"start_shotgun_blast",
+		"start_shotgun_blast",
+		"start_throw_concoction",
+	]
+
+	# More likely to throw bottle / throw barrel when has str buff
+	var throw_barrel_bonus_freq = 5
+	if has_strength_buff:
+		for i in range(throw_barrel_bonus_freq):
+			possible_attacks.append("start_throw_broken_bottle")
+
+	# Avoid use same attack twice in a row (except concoction)
+	if previous_attack:
+		possible_attacks.erase(previous_attack)
+	
+	var chosen_attack = possible_attacks.pick_random()
+	previous_attack = chosen_attack
+
+	state_chart.send_event(chosen_attack)
+
+func _on_health_changed(new_health: float, prev_health: float) -> void:
+	super(new_health, prev_health)
+	if new_health < health_component.max_health * phase_3_health_percentage_trigger and current_phase == 2:
+		change_phase(3)
+	elif new_health < health_component.max_health * phase_2_health_percentage_trigger and current_phase == 1:
+		change_phase(2)
+
+
 func _on_died() -> void:
 	super()
 
@@ -172,6 +209,75 @@ func _on_phase_1_idle_state_entered() -> void:
 	debug_state_label.text = "Idle"
 	await get_tree().create_timer(1).timeout
 	select_attack()
+
+#### Phase 2
+
+func _on_phase_2_state_entered() -> void:
+	state_chart.send_event("start_moving")
+	navigation_component.follow_target = false
+	navigation_component.enable()
+	jump_to(boss_jump_phase2_marker.global_position)
+
+func _on_phase_2_state_physics_processing(delta: float) -> void:
+	orbit_player(delta)
+
+func orbit_player(delta: float) -> void:
+	orbit_angle += angle_speed * delta
+	# offset in XZ-plane
+	var offset_x = cos(orbit_angle) * desired_distance
+	var offset_z = sin(orbit_angle) * desired_distance
+	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	# Pathfind to orbit_pos
+	navigation_component.set_nav_target_position(orbit_pos)
+
+#### Phase 3
+func _on_phase_3_state_entered() -> void:
+	state_chart.send_event("stop_moving")
+	jump_to(boss_jump_phase3_marker.global_position)
+
+
+### Common
+
+## If has str buff, throw barrel instead
+func _on_throw_broken_bottle_state_entered() -> void:
+	debug_state_label.text = "Throw broken bottle"
+	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	# TODO: Change sprite "Throw"
+	if has_strength_buff:
+		throw_bottle(beer_barrel_prefab, 1, 1, barrel_damage)
+	else:
+		var n_bottle = randi_range(2, 4)
+		var spread = randf_range(5, 10)
+		throw_bottle(empty_bottle_prefab, n_bottle, spread, bottle_damage)
+	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	state_chart.send_event("return_idle")
+
+
+func _on_throw_concoction_state_entered() -> void:
+	debug_state_label.text = "Throw concoction"
+	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	# TODO: Change sprite "Throw"
+	throw_concoction_bottle()
+	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	state_chart.send_event("return_idle")
+
+
+func _on_brew_drink_state_entered() -> void:
+	debug_state_label.text = "Brew drink"
+	await get_tree().create_timer(1 * current_delay_modifier).timeout
+	# TODO: Change sprite "Brew"
+	brew_drink()
+	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	state_chart.send_event("return_idle")
+
+
+func _on_throw_heal_bottle_state_entered() -> void:
+	debug_state_label.text = "Throw heal bottle"
+	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	throw_heal_bottle()
+	await get_tree().create_timer(1.5).timeout
+	state_chart.send_event("return_idle")
+
 
 func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10):
 	var throw_force = proj_spawn_marker.global_position.distance_to(target.global_position)
@@ -246,45 +352,6 @@ func brew_drink():
 			status_icon.texture = strength_icon
 			buff_expire_timer.start()
 
-## If has str buff, throw barrel instead
-func _on_throw_broken_bottle_state_entered() -> void:
-	debug_state_label.text = "Throw broken bottle"
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	# TODO: Change sprite "Throw"
-	if has_strength_buff:
-		throw_bottle(beer_barrel_prefab, 1, 1, barrel_damage)
-	else:
-		var n_bottle = randi_range(2, 4)
-		var spread = randf_range(5, 10)
-		throw_bottle(empty_bottle_prefab, n_bottle, spread, bottle_damage)
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	state_chart.send_event("return_idle")
-
-
-func _on_throw_concoction_state_entered() -> void:
-	debug_state_label.text = "Throw concoction"
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	# TODO: Change sprite "Throw"
-	throw_concoction_bottle()
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	state_chart.send_event("return_idle")
-
-
-func _on_brew_drink_state_entered() -> void:
-	debug_state_label.text = "Brew drink"
-	await get_tree().create_timer(1 * current_delay_modifier).timeout
-	# TODO: Change sprite "Brew"
-	brew_drink()
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	state_chart.send_event("return_idle")
-
-
-func _on_throw_heal_bottle_state_entered() -> void:
-	debug_state_label.text = "Throw heal bottle"
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	throw_heal_bottle()
-	await get_tree().create_timer(1.5).timeout
-	state_chart.send_event("return_idle")
 
 ### Others
 
@@ -323,3 +390,21 @@ func get_behind_bar_move_point():
 	)
 	valid_move_points.pop_front()
 	return valid_move_points.pick_random()
+
+func jump_to(target_position: Vector3, jump_height: float = 5, jump_time: float = 1):
+	var tween = get_tree().create_tween()
+	var tween2 = get_tree().create_tween()
+
+	# Step 1: Tween XZ movement (horizontal movement)
+	var start_position = global_position
+	var end_position = target_position
+	start_position.y = 0
+	end_position.y = 0
+	tween.tween_property(self, "global_position", end_position, jump_time).set_trans(Tween.TRANS_LINEAR)
+
+	# Step 2: Animate Y movement with a parabola
+	var mid_time = jump_time / 2 # Midpoint of the jump
+	var peak_height = global_position.y + jump_height # Peak height
+
+	tween2.tween_property(self, "position:y", peak_height, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween2.tween_property(self, "position:y", target_position.y, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)

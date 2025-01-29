@@ -44,6 +44,10 @@ defense_buff_resistance = 0.5
 speed_buff_modifier = 0.5
 base_movespeed = 10
 behind_bar_move_points = []
+angle_speed = 1.0
+orbit_angle = 0.0
+orbit_radius = 10.0
+desired_distance = 5.0
 telegraph_time = 0.5
 
 [node name="Sprite3D" parent="." index="0"]
@@ -53,11 +57,15 @@ texture = ExtResource("6_ky2ag")
 [node name="Hurtbox" parent="." index="3"]
 visible = false
 
-[node name="NavigationComponent" parent="." index="5"]
-current_speed = 100.0
+[node name="HealthComponent" parent="." index="4"]
+max_health = 300.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Bart the Bartender"
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+visible = true
+enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("4_dheml")
@@ -178,10 +186,76 @@ initial_state = NodePath("Idle")
 [node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase2" index="0"]
 script = ExtResource("6_kkb22")
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
+[node name="toThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ThrowBrokenBottle")
+event = &"start_throw_broken_bottle"
+delay_in_seconds = "0.0"
+
+[node name="toThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ThrowConcoction")
+event = &"start_throw_concoction"
+delay_in_seconds = "0.0"
+
+[node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="2"]
+script = ExtResource("4_dheml")
+to = NodePath("../../BrewDrink")
+event = &"start_brew_drink"
+delay_in_seconds = "0.0"
+
+[node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="3"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ShotgunBlast")
+event = &"start_shotgun_blast"
+delay_in_seconds = "0.0"
+
+[node name="ThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase2/ThrowBrokenBottle" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="ThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase2/ThrowConcoction" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="BrewDrink" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase2/BrewDrink" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="ShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase2" index="4"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunBlast" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="5"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Inactive")
 event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Phase2" index="6"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Phase3")
+event = &"start_phase_3"
 delay_in_seconds = "0.0"
 
 [node name="Phase3" type="Node" parent="StateChart/Root/Phase" index="3"]
@@ -191,7 +265,82 @@ initial_state = NodePath("Idle")
 [node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase3" index="0"]
 script = ExtResource("6_kkb22")
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3" index="1"]
+[node name="toThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ThrowBrokenBottle")
+event = &"start_throw_broken_bottle"
+delay_in_seconds = "0.0"
+
+[node name="toThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ThrowConcoction")
+event = &"start_throw_concoction"
+delay_in_seconds = "0.0"
+
+[node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="2"]
+script = ExtResource("4_dheml")
+to = NodePath("../../BrewDrink")
+event = &"start_brew_drink"
+delay_in_seconds = "0.0"
+
+[node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="3"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ShotgunBlast")
+event = &"start_shotgun_blast"
+delay_in_seconds = "0.0"
+
+[node name="toThrowHealBottle" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="4"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ThrowHealBottle")
+event = &"start_throw_heal_bottle"
+delay_in_seconds = "0.0"
+
+[node name="ThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase3" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/ThrowBrokenBottle" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="ThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/ThrowConcoction" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="BrewDrink" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/BrewDrink" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="ShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase3" index="4"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/ShotgunBlast" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="ThrowHealBottle" type="Node" parent="StateChart/Root/Phase/Phase3" index="5"]
+script = ExtResource("6_kkb22")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/ThrowHealBottle" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"return_idle"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3" index="6"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Inactive")
 event = &"deactivate"
@@ -239,6 +388,20 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BrewDrink" to="." method="_on_brew_drink_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunBlast" to="." method="_on_shotgun_blast_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowHealBottle" to="." method="_on_throw_heal_bottle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Idle" to="." method="_on_phase_1_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ThrowBrokenBottle" to="." method="_on_throw_broken_bottle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ThrowConcoction" to="." method="_on_throw_concoction_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BrewDrink" to="." method="_on_brew_drink_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ShotgunBlast" to="." method="_on_shotgun_blast_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/Idle" to="." method="_on_phase_1_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ThrowBrokenBottle" to="." method="_on_throw_broken_bottle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ThrowConcoction" to="." method="_on_throw_concoction_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/BrewDrink" to="." method="_on_brew_drink_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ShotgunBlast" to="." method="_on_shotgun_blast_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ThrowHealBottle" to="." method="_on_throw_heal_bottle_state_entered"]
 [connection signal="body_entered" from="ShotgunTriggerArea" to="." method="_on_shotgun_trigger_area_body_entered"]
 [connection signal="body_exited" from="ShotgunTriggerArea" to="." method="_on_shotgun_trigger_area_body_exited"]
 [connection signal="timeout" from="BuffExpireTimer" to="." method="_on_buff_expire_timer_timeout"]
