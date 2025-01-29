@@ -1,16 +1,16 @@
 [gd_scene load_steps=29 format=3 uid="uid://burh3udob1t32"]
 
-[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7qur5"]
-[ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_l4r8d"]
-[ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="3_duvt5"]
-[ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="3_kymb3"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_tbpt7"]
-[ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="4_e13kv"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_vjmyh"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_75mh0"]
-[ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="6_fjks3"]
-[ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="6_s5rpg"]
-[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="10_03052"]
+[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_rd2xm"]
+[ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_p6rlf"]
+[ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="3_bke04"]
+[ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="4_nqlwe"]
+[ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="5_fqifh"]
+[ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="6_dvo4w"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_bpphr"]
+[ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="8_bah8y"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_h6vir"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="10_tlulp"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_3sg7f"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dnveo"]
 
@@ -49,7 +49,7 @@ height = 0.001
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e0hgo"]
 render_priority = 3
-shader = ExtResource("6_s5rpg")
+shader = ExtResource("6_dvo4w")
 shader_parameter/color = Color(0.189, 0.69855, 0.9, 0.321569)
 shader_parameter/fresnel_sharpness = 1.0
 shader_parameter/extend_distance = 0.0
@@ -64,7 +64,7 @@ height = 0.001
 is_hemisphere = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_15lvl"]
-material = ExtResource("3_kymb3")
+material = ExtResource("3_bke04")
 radius = 0.001
 height = 0.001
 is_hemisphere = true
@@ -73,7 +73,7 @@ is_hemisphere = true
 radius = 7.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_tvwto"]
-material = ExtResource("3_kymb3")
+material = ExtResource("3_bke04")
 top_radius = 42.0
 bottom_radius = 42.0
 height = 32.0
@@ -123,9 +123,9 @@ _data = {
 "intro_look_at_player": SubResource("Animation_lmydu")
 }
 
-[node name="BossSurveillance" instance=ExtResource("1_7qur5")]
+[node name="BossSurveillance" instance=ExtResource("1_rd2xm")]
 motion_mode = 1
-script = ExtResource("2_l4r8d")
+script = ExtResource("2_p6rlf")
 elevation_speed_deg = 25.0
 rotation_speed_deg = 25.0
 shield_radius = 7.5
@@ -135,8 +135,9 @@ beam_sweep_delay = 0.7
 barrier_cage_radius = 16.0
 barrier_cage_reflect_force = 12.0
 barrier_cage_time = 12.0
-barrier_cage_material = ExtResource("3_kymb3")
-barrel_to_drop = ExtResource("4_e13kv")
+barrier_cage_material = ExtResource("3_bke04")
+barrel_to_drop = ExtResource("4_nqlwe")
+current_phase = 3
 attack_recovery_time = 0.7
 projectile_scene = null
 delay_per_projectile = 0.6
@@ -173,7 +174,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 mesh = SubResource("CylinderMesh_m2l2m")
 skeleton = NodePath("../..")
 
-[node name="LaserEndParticles" parent="Body/Head/RayCast3D/Area3D/LaserMesh" index="0" instance=ExtResource("3_duvt5")]
+[node name="LaserEndParticles" parent="Body/Head/RayCast3D/Area3D/LaserMesh" index="0" instance=ExtResource("5_fqifh")]
 transform = Transform3D(2, 0, 0, 0, -8.74228e-08, -2, 0, 2, -8.74228e-08, 0, 0, 0)
 
 [node name="Shield" type="StaticBody3D" parent="." index="1"]
@@ -217,414 +218,417 @@ shape = SubResource("SphereShape3D_ook83")
 visible = false
 
 [node name="HealthComponent" parent="." index="7"]
-max_health = 3800.0
+max_health = 500.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 offset_bottom = 281.0
 theme_override_constants/margin_top = 144
 boss_name = "Surveillance"
 
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
+
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Phase1")
 event = &"start_phase_1"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Inactive" index="1"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Phase2")
 event = &"start_phase_2"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Inactive" index="2"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Phase3")
 event = &"start_phase_3"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="1"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Phase2")
 event = &"start_phase_2"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="Phase2" type="Node" parent="StateChart/Root/Phase" index="2"]
-script = ExtResource("3_tbpt7")
+script = ExtResource("10_tlulp")
 initial_state = NodePath("Aggressive")
 
 [node name="Defensive" type="Node" parent="StateChart/Root/Phase/Phase2" index="0"]
-script = ExtResource("3_tbpt7")
+script = ExtResource("10_tlulp")
 initial_state = NodePath("BarrierCage")
 
 [node name="BarrierCage" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive" index="0"]
-script = ExtResource("3_tbpt7")
+script = ExtResource("10_tlulp")
 initial_state = NodePath("Targeting")
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive/BarrierCage" index="0"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toSpawnCage" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive/BarrierCage/Targeting" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../SpawnCage")
 event = &"spawn_cage"
 delay_in_seconds = "0.0"
 
 [node name="SpawnCage" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive/BarrierCage" index="1"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive/BarrierCage/SpawnCage" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Recover")
 event = &"end_cage"
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive/BarrierCage" index="2"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive/BarrierCage/Recover" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive/BarrierCage" index="3"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive/BarrierCage" index="4"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../../Aggressive/LaserBeam")
 event = &"start_laser_attack"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="toAggressive" type="Node" parent="StateChart/Root/Phase/Phase2/Defensive" index="1"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Aggressive")
 event = &"aggressive_stance"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="Aggressive" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
-script = ExtResource("3_tbpt7")
+script = ExtResource("10_tlulp")
 initial_state = NodePath("LaserBeam")
 
 [node name="ShieldPitBoss" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive" index="0"]
-script = ExtResource("3_tbpt7")
+script = ExtResource("10_tlulp")
 initial_state = NodePath("Targeting")
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/ShieldPitBoss" index="0"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toApplyShield" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/ShieldPitBoss/Targeting" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../ApplyShield")
 event = &"start_attack"
 delay_in_seconds = "0.0"
 
 [node name="ApplyShield" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/ShieldPitBoss" index="1"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/ShieldPitBoss/ApplyShield" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Recover")
 event = &"end_attack"
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/ShieldPitBoss" index="2"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/ShieldPitBoss/Recover" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("..")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="LaserBeam" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive" index="1"]
-script = ExtResource("3_tbpt7")
+script = ExtResource("10_tlulp")
 initial_state = NodePath("Startup")
 
 [node name="Startup" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam" index="0"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam/Startup" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Targeting")
 event = &"start_beam"
 delay_in_seconds = "0.0"
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam" index="1"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toSweepBeam" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam/Targeting" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../SweepBeam")
 event = &"sweep_beam"
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam/Targeting" index="1"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Recover")
 event = &"end_beam"
 delay_in_seconds = "0.0"
 
 [node name="SweepBeam" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam" index="2"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam/SweepBeam" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Targeting")
 event = &"end_sweep"
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam/SweepBeam" index="1"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../../../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam" index="3"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam/Recover" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Startup")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam" index="4"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="toBarrierCage" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive/LaserBeam" index="5"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../../Defensive/BarrierCage")
 event = &"start_barrier_cage_attack"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="toDefensive" type="Node" parent="StateChart/Root/Phase/Phase2/Aggressive" index="2"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Defensive")
 event = &"defensive_stance"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Phase3")
 event = &"start_phase_3"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="Phase3" type="Node" parent="StateChart/Root/Phase" index="3"]
-script = ExtResource("3_tbpt7")
+script = ExtResource("10_tlulp")
 initial_state = NodePath("SpawnTurrets")
 
 [node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase3" index="0"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toSpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../SpawnTurrets")
 event = &"start_spawn_turrets_attack"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="1"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../LaserBeam")
 event = &"start_laser_attack"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="toBarrierCage" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="2"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../BarrierCage")
 event = &"start_barrier_cage_attack"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="LaserBeam" type="Node" parent="StateChart/Root/Phase/Phase3" index="1"]
-script = ExtResource("3_tbpt7")
+script = ExtResource("10_tlulp")
 initial_state = NodePath("Startup")
 
 [node name="Startup" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam" index="0"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam/Startup" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Targeting")
 event = &"start_beam"
 delay_in_seconds = "0.0"
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam" index="1"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toSweepBeam" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam/Targeting" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../SweepBeam")
 event = &"sweep_beam"
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam/Targeting" index="1"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Recover")
 event = &"end_beam"
 delay_in_seconds = "0.0"
 
 [node name="SweepBeam" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam" index="2"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam/SweepBeam" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Targeting")
 event = &"end_sweep"
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam/SweepBeam" index="1"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam" index="3"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam/Recover" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Startup")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam" index="4"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="toBarrierCage" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam" index="5"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../BarrierCage")
 event = &"start_barrier_cage_attack"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="toSpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam" index="6"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../SpawnTurrets")
 event = &"start_spawn_turrets_attack"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="SpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
-script = ExtResource("3_tbpt7")
+script = ExtResource("10_tlulp")
 initial_state = NodePath("Targeting")
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/SpawnTurrets" index="0"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toSpawning" type="Node" parent="StateChart/Root/Phase/Phase3/SpawnTurrets/Targeting" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Spawning")
 event = &"spawn_turrets"
 delay_in_seconds = "0.0"
 
 [node name="Spawning" type="Node" parent="StateChart/Root/Phase/Phase3/SpawnTurrets" index="1"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/SpawnTurrets/Spawning" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Recover")
 event = &"stop_spawning"
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/SpawnTurrets" index="2"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/SpawnTurrets/Recover" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase3/SpawnTurrets" index="3"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../LaserBeam")
 event = &"start_laser_attack"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="BarrierCage" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
-script = ExtResource("3_tbpt7")
+script = ExtResource("10_tlulp")
 initial_state = NodePath("Targeting")
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/BarrierCage" index="0"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toSpawnCage" type="Node" parent="StateChart/Root/Phase/Phase3/BarrierCage/Targeting" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../SpawnCage")
 event = &"spawn_cage"
 delay_in_seconds = "0.0"
 
 [node name="SpawnCage" type="Node" parent="StateChart/Root/Phase/Phase3/BarrierCage" index="1"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/BarrierCage/SpawnCage" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Recover")
 event = &"end_cage"
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/BarrierCage" index="2"]
-script = ExtResource("4_vjmyh")
+script = ExtResource("9_h6vir")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/BarrierCage/Recover" index="0"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3/BarrierCage" index="3"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="toLaserBeam" type="Node" parent="StateChart/Root/Phase/Phase3/BarrierCage" index="4"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../LaserBeam")
 event = &"start_laser_attack"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="toSpawnTurrets" type="Node" parent="StateChart/Root/Phase/Phase3/BarrierCage" index="5"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../SpawnTurrets")
 event = &"start_spawn_turrets_attack"
-guard = ExtResource("6_fjks3")
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3" index="4"]
-script = ExtResource("5_75mh0")
+script = ExtResource("7_bpphr")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
@@ -633,7 +637,7 @@ delay_in_seconds = "0.0"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.4, 0)
 billboard = 1
 text = "INACTIVE"
-font = ExtResource("10_03052")
+font = ExtResource("11_3sg7f")
 font_size = 128
 outline_size = 32
 uppercase = true

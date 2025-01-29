@@ -21,7 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="18_47gnp"]
 [ext_resource type="PackedScene" uid="uid://2ss8hk0shm7i" path="res://src/bosses/pit/cover/CoverSpawnPoint.tscn" id="19_cn7g4"]
 [ext_resource type="PackedScene" uid="uid://ch37egcj2scio" path="res://src/bosses/pit/turret/TurretSpawnPoint.tscn" id="20_e0ccw"]
-[ext_resource type="PackedScene" uid="uid://burh3udob1t32" path="res://src/bosses/pit/surveillance/BossSurveillance.tscn" id="21_27bb6"]
+[ext_resource type="PackedScene" uid="uid://burh3udob1t32" path="res://src/bosses/pit/turret/BossSurveillance.tscn" id="21_27bb6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eyfm3"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)

@@ -818,7 +818,7 @@ shield_radius = 4.0
 chip_spawn_chance = 0.2
 chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("7_koy73")
-current_phase = 2
+current_phase = 3
 attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.6
@@ -882,7 +882,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0999999, 2.85404, -2)
 shape = SubResource("BoxShape3D_pi7fj")
 
 [node name="HealthComponent" parent="." index="6"]
-max_health = 5500.0
+max_health = 500.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"

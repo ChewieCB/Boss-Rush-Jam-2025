@@ -33,9 +33,8 @@ signal destroyed(turret: PitTurret)
 @export var delay_per_projectile: float = 0.6
 
 
-#func _physics_process(delta: float) -> void:
-	##if target:
-	#
+func destroy() -> void:
+	health_component.damage(999999)
 
 
 func rotate_and_elevate(delta: float, target_pos: Vector3) -> void:

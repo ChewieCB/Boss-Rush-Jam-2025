@@ -44,7 +44,7 @@ var turret_spawns: Array:
 var valid_spawns: Array
 var turret_look_target: Node3D
 @export var turrets_to_spawn: int = 2
-var spawned_turrets_count: int = 0
+var spawned_turrets: Array = []
 
 # Beam
 @onready var laser_area: Area3D = $Body/Head/RayCast3D/Area3D
@@ -212,10 +212,28 @@ func _on_died() -> void:
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
+	
+	for turret in spawned_turrets:
+		turret.destroy()
 
 func _exit_tree() -> void:
+	for turret in spawned_turrets:
+		turret.destroy()
+	
 	if shield_mesh_solid.mesh.radius > 0.1:
 		hide_shield()
+	
+	if laser_mesh.mesh.height > 0.1:
+		var tween = get_tree().create_tween()
+		tween.tween_property(laser_mesh.mesh, "height", 0.1, 0.4)
+		tween.parallel().tween_property(laser_mesh, "position:z", 0.4, 0.4)
+		tween.parallel().tween_property(laser_collider.shape, "height", 0.1, 0.4)
+		tween.parallel().tween_property(laser_collider, "position:z", 0.4, 0.4)
+		tween.parallel().tween_property(laser_mesh.mesh, "top_radius", 0.3, 0.8)
+		tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 0.3, 0.8)
+		tween.parallel().tween_property(laser_particles, "scale", Vector3(1, 1, 1), 0.8)
+		tween.parallel().tween_property(laser_collider.shape, "radius", 0.3, 0.8)
+		laser_particles.emitting = false
 
 func _on_health_hit_state_entered() -> void:
 	eye_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
@@ -525,7 +543,7 @@ func _on_phase_3_state_physics_processing(_delta: float) -> void:
 func _on_turret_destroyed(turret: PitTurret) -> void:
 	var turret_spawn = turret.get_parent()
 	valid_spawns.push_back(turret_spawn)
-	spawned_turrets_count -= 1
+	spawned_turrets.erase(turret)
 
 func _on_spawn_turrets_targeting_state_entered() -> void:
 	debug_state_label.text = "Spawn Turrets | Targeting"
@@ -539,7 +557,7 @@ func _on_spawn_turrets_spawning_state_entered() -> void:
 	debug_state_label.text = "Spawn Turrets | Spawning"
 	
 	for i in turrets_to_spawn:
-		if spawned_turrets_count >= turrets_to_spawn:
+		if spawned_turrets.size() >= turrets_to_spawn:
 			break
 		var idx: int = randi_range(0, valid_spawns.size() - 1)
 		turret_look_target = valid_spawns.pop_at(idx)
@@ -553,7 +571,7 @@ func _on_spawn_turrets_spawning_state_entered() -> void:
 		await tween.finished
 		var turret = turret_look_target.spawn_turret(target)
 		turret.destroyed.connect(_on_turret_destroyed)
-		spawned_turrets_count += 1
+		spawned_turrets.push_back(turret)
 	turret_look_target = null
 	state_chart.send_event("stop_spawning")
 
