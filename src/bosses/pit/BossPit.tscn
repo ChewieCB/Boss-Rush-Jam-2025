@@ -1592,6 +1592,12 @@ event = &"start_hammer_ground_attack"
 guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="11"]
+script = ExtResource("4_akhww")
+to = NodePath("../../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
 [node name="HammerGround" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
 script = ExtResource("5_bqowf")
 initial_state = NodePath("Targeting")
@@ -1644,6 +1650,12 @@ event = &"start_close_distance_attack_far"
 guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround" index="6"]
+script = ExtResource("4_akhww")
+to = NodePath("../../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
 [node name="LungeCloser" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
 script = ExtResource("5_bqowf")
 initial_state = NodePath("Targeting")
@@ -1694,6 +1706,12 @@ script = ExtResource("4_akhww")
 to = NodePath("../../AirSlamCloser")
 event = &"start_close_distance_attack_far"
 guard = ExtResource("9_juug2")
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser" index="6"]
+script = ExtResource("4_akhww")
+to = NodePath("../../../Inactive")
+event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="AirSlamCloser" type="Node" parent="StateChart/Root/Phase/Phase3" index="4"]
@@ -1755,6 +1773,12 @@ script = ExtResource("4_akhww")
 to = NodePath("../../HammerGround")
 event = &"start_hammer_ground_attack"
 guard = ExtResource("9_juug2")
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser" index="7"]
+script = ExtResource("4_akhww")
+to = NodePath("../../../Inactive")
+event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase3" index="5"]
