@@ -466,8 +466,9 @@ func air_slam_trajectory(goal_pos: Vector3 = Vector3.ZERO, debug: bool = false) 
 	var highest_y = max(start_pos.y, goal_pos.y)
 	var jump_height = surveillance_boss.global_position.y - 12.0 - 2.0
 	var apex_y = highest_y + jump_height
+	apex_y = clamp(apex_y, 0, surveillance_boss.global_position.y - 1.0 - start_pos.y)
 	
-	var velocity_v: float = sqrt(
+	var velocity_v: float = sqrt( 
 		2 * GRAVITY * (apex_y - start_pos.y)
 	)
 	
