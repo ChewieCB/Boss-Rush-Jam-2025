@@ -887,9 +887,6 @@ max_health = 500.0
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"
 
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
-
 [node name="toIntroAirSlam" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("4_akhww")
 to = NodePath("../../IntroAirSlam")

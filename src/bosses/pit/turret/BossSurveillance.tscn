@@ -132,6 +132,7 @@ shield_radius = 7.5
 turrets_to_spawn = 2
 beam_sweeps_per_attack = 4
 beam_sweep_delay = 0.7
+beam_collision_reset_delay = 1.2
 barrier_cage_radius = 16.0
 barrier_cage_reflect_force = 12.0
 barrier_cage_time = 12.0
@@ -224,6 +225,9 @@ max_health = 500.0
 offset_bottom = 281.0
 theme_override_constants/margin_top = 144
 boss_name = "Surveillance"
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("7_bpphr")

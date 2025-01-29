@@ -56,6 +56,8 @@ var beam_target: Vector3
 @export var beam_sweeps_per_attack: int = 4
 var beam_sweep_count: int = 0
 @export var beam_sweep_delay: float = 0.7
+@export var beam_collision_reset_delay: float = 1.2
+var is_beam_tracking: bool = true  # HACK to prevent the beam from locking once it hits you
 
 # Barrier Cage
 @export var barrier_cage_radius: float = 24.0
@@ -350,13 +352,10 @@ func _on_phase_2_laser_beam_sweep_beam_state_entered() -> void:
 	beam_target = target.global_position
 
 func _on_phase_2_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
-	# Update target every 6 frames to lag behind a bit
-	#if Engine.get_physics_frames() % 20 == 0:
-	beam_target = target.global_position
-		#draw_debug_sphere(beam_target, 0.5)
+	if is_beam_tracking:
+		beam_target = target.global_position
+		rotate_and_elevate(beam_target, delta)
 	
-	rotate_and_elevate(beam_target, delta)
-
 	var cast_point: Vector3
 	aim_ray.force_raycast_update()
 	if aim_ray.is_colliding():
@@ -434,11 +433,31 @@ func _on_laser_beam_recover_state_entered() -> void:
 
 
 func _on_laser_hurtbox_body_entered(_body: Node3D) -> void:
-	if _body == target:
+	if _body == target and is_beam_tracking:
 		target.health_component.damage(5)
+		is_beam_tracking = false
 		laser_area.set_deferred("monitoring", false)
-		await get_tree().create_timer(0.4).timeout
-		laser_area.monitoring = true
+		
+		# FIXME - this is getting stuck narrow
+		var tween = get_tree().create_tween()
+		tween.parallel().tween_property(laser_mesh.mesh, "top_radius", 0.3, 0.2)
+		tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 0.3, 0.2)
+		tween.parallel().tween_property(laser_particles, "scale", Vector3(1, 1, 1), 0.2)
+		tween.parallel().tween_property(laser_collider.shape, "radius", 0.3, 0.2)
+		
+		await tween.finished
+		
+		await get_tree().create_timer(beam_collision_reset_delay).timeout
+		
+		tween = get_tree().create_tween()
+		tween.tween_property(laser_mesh.mesh, "top_radius", 1.5, 0.2)
+		tween.parallel().tween_property(laser_mesh.mesh, "bottom_radius", 1.5, 0.2)
+		tween.parallel().tween_property(laser_particles, "scale", Vector3(3, 3, 3), 0.2)
+		tween.parallel().tween_property(laser_collider.shape, "radius", 1.5, 0.2)
+		await tween.finished
+		
+		laser_area.set_deferred("monitoring", true)
+		is_beam_tracking = true
 
 ##### Barrier Cage
 
