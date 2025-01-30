@@ -382,19 +382,16 @@ func _on_phase_3_laser_beam_sweep_beam_state_entered() -> void:
 	
 	# TODO - glow the laser to indicate sweep start
 	await get_tree().create_timer(telegraph_time).timeout
-	elevation_speed = deg_to_rad(elevation_speed_deg * 0.8)
-	rotation_speed = deg_to_rad(rotation_speed_deg * 0.8)
+	elevation_speed = deg_to_rad(elevation_speed_deg)
+	rotation_speed = deg_to_rad(rotation_speed_deg)
 	
 	# Sweep towards the player's position
 	beam_target = target.global_position
 
 func _on_phase_3_laser_beam_sweep_beam_state_physics_processing(delta: float) -> void:
-	# Update target every 6 frames to lag behind a bit
-	#if Engine.get_physics_frames() % 20 == 0:
-	beam_target = target.global_position
-		#draw_debug_sphere(beam_target, 0.5)
-	
-	rotate_and_elevate(beam_target, delta)
+	if is_beam_tracking:
+		beam_target = target.global_position
+		rotate_and_elevate(beam_target, delta)
 
 	var cast_point: Vector3
 	aim_ray.force_raycast_update()
