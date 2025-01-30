@@ -667,8 +667,8 @@ func spawn_center_wave(
 func _on_wave_collision(body: Node3D) -> void:
 	if body == target:
 		body.health_component.damage(ground_wave_damage)
-	#elif body is Cover:
-		#destroy_cover(body)
+	elif body is Cover:
+		destroy_cover(body)
 
 #### PHASE 3 ==========================
 
