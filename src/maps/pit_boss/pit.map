@@ -2805,122 +2805,170 @@
 // entity 22
 {
 "classname" "CoverFull"
-"origin" "-320 -768 8"
+"origin" "-320 -768 -1"
 "angle" "240"
 }
 // entity 23
 {
 "classname" "CoverFull"
-"origin" "-320 768 8"
+"origin" "-320 768 -1"
 "angle" "120"
 }
 // entity 24
 {
 "classname" "CoverFull"
-"origin" "320 -768 8"
+"origin" "320 -768 -1"
 "angle" "300"
 }
 // entity 25
 {
 "classname" "CoverFull"
-"origin" "320 768 8"
+"origin" "320 768 -1"
 "angle" "60"
 }
 // entity 26
 {
 "classname" "CoverFull"
-"origin" "-384 368 8"
+"origin" "-384 368 -1"
 "angle" "135"
 }
 // entity 27
 {
 "classname" "CoverFull"
-"origin" "384 -368 8"
+"origin" "384 -368 -1"
 "angle" "315"
 }
 // entity 28
 {
 "classname" "CoverFull"
-"origin" "-384 -368 8"
+"origin" "-384 -368 -1"
 "angle" "225"
 }
 // entity 29
 {
 "classname" "CoverFull"
-"origin" "384 368 8"
+"origin" "384 368 -1"
 "angle" "45"
 }
 // entity 30
 {
 "classname" "CoverFull"
-"origin" "0 320 8"
+"origin" "0 320 -1"
 "angle" "90"
 }
 // entity 31
 {
 "classname" "CoverFull"
-"origin" "0 -320 8"
+"origin" "0 -320 -1"
 "angle" "90"
 }
 // entity 32
 {
 "classname" "CoverColumn"
-"origin" "0 576 8"
+"origin" "0 576 -1"
 }
 // entity 33
 {
 "classname" "CoverColumn"
-"origin" "0 -576 8"
+"origin" "0 -576 -1"
 }
 // entity 34
 {
 "classname" "CoverColumn"
-"origin" "-640 640 8"
+"origin" "-640 640 -1"
 }
 // entity 35
 {
 "classname" "CoverColumn"
-"origin" "-640 -640 8"
+"origin" "-640 -640 -1"
 }
 // entity 36
 {
 "classname" "CoverColumn"
-"origin" "640 -640 8"
+"origin" "640 -640 -1"
 }
 // entity 37
 {
 "classname" "CoverColumn"
-"origin" "640 640 8"
+"origin" "640 640 -1"
 }
 // entity 38
 {
 "classname" "CoverHalf"
-"origin" "8 904 8"
+"origin" "8 904 -1"
 "angle" "270"
 }
 // entity 39
 {
 "classname" "CoverHalf"
-"origin" "8 -888 8"
+"origin" "8 -888 -1"
 "angle" "270"
 }
 // entity 40
 {
 "classname" "CoverHalf"
-"origin" "-608 8 8"
+"origin" "-608 8 -1"
 }
 // entity 41
 {
 "classname" "CoverHalf"
-"origin" "604 8 8"
+"origin" "604 8 -1"
 }
 // entity 42
 {
 "classname" "CoverHalf"
-"origin" "252 8 8"
+"origin" "252 8 -1"
 }
 // entity 43
 {
 "classname" "CoverHalf"
-"origin" "-260 8 8"
+"origin" "-260 8 -1"
+}
+// entity 44
+{
+"classname" "TurretSpawnPoint"
+"origin" "768 -256 8"
+"angle" "180"
+}
+// entity 45
+{
+"classname" "TurretSpawnPoint"
+"origin" "768 256 8"
+"angle" "180"
+}
+// entity 46
+{
+"classname" "TurretSpawnPoint"
+"origin" "-768 256 8"
+"angle" "0"
+}
+// entity 47
+{
+"classname" "TurretSpawnPoint"
+"origin" "-768 -256 8"
+"angle" "0"
+}
+// entity 48
+{
+"classname" "TurretSpawnPoint"
+"origin" "192 576 8"
+"angle" "270"
+}
+// entity 49
+{
+"classname" "TurretSpawnPoint"
+"origin" "-192 576 8"
+"angle" "270"
+}
+// entity 50
+{
+"classname" "TurretSpawnPoint"
+"origin" "-192 -576 8"
+"angle" "90"
+}
+// entity 51
+{
+"classname" "TurretSpawnPoint"
+"origin" "192 -576 8"
+"angle" "90"
 }
