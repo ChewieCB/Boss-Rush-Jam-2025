@@ -30,8 +30,8 @@ var phase_stance: Stance = Stance.AGGRESSIVE:
 
 @export_group("Attacks")
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
-@export var hurtbox_range_close: float = 4.5
-@export var hurtbox_range_far: float = 6.0
+@export var hurtbox_range_close: float = 3.5
+@export var hurtbox_range_far: float = 4.5
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 7.0
 @export_subgroup("Hook")
@@ -47,6 +47,7 @@ var slam_target_pos := Vector3.ZERO
 @onready var air_slam_timer: Timer = $AirSlamCooldown
 @export_subgroup("Ground Pound")
 @export var ground_pound_wave_radius: float = 16.0
+@export var ground_wave_damage: float = 6.0
 @export_subgroup("Lunge")
 @export var lunge_friction: float = 0.05
 @export var lunge_damage: float = 5.0
@@ -68,7 +69,8 @@ var shield_tween: Tween
 
 func _ready() -> void:
 	super()
-	#surveillance_boss.health_component.died.connect(_on_surveillance_died)
+	hurtbox_collider.shape.size.z = hurtbox_range_close
+
 
 func activate() -> void:
 	super()
@@ -662,7 +664,7 @@ func spawn_center_wave(
 
 func _on_wave_collision(body: Node3D) -> void:
 	if body == target:
-		body.health_component.damage(10)
+		body.health_component.damage(ground_wave_damage)
 	elif body is Cover:
 		destroy_cover(body)
 
