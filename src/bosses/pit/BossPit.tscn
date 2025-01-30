@@ -812,6 +812,7 @@ swipe_damage = 5.0
 hook_damage = 5.0
 uppercut_damage = 5.0
 air_slam_damage = 10.0
+air_slam_cooldown = 15.0
 ground_pound_wave_radius = 16.0
 lunge_friction = 0.05
 lunge_damage = 5.0
@@ -1839,6 +1840,9 @@ libraries = {
 }
 
 [node name="LungeCooldown" type="Timer" parent="." index="17"]
+one_shot = true
+
+[node name="AirSlamCooldown" type="Timer" parent="." index="18"]
 one_shot = true
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_inactive_state_entered"]

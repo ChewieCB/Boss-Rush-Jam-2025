@@ -1915,6 +1915,7 @@ wave_amplitude = 7.0
 wave_frequency = 5.0
 time_elapsed = 0.0
 surveillance_boss = NodePath("../entity_30_BossSurveillance")
+air_slam_cooldown = 15.0
 target = NodePath("../entity_4_PlayerRef")
 
 [node name="entity_6_CoverSpawnPoint" parent="FuncGodotMap" instance=ExtResource("19_cn7g4")]

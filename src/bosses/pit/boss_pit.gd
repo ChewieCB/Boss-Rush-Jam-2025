@@ -43,6 +43,8 @@ var phase_stance: Stance = Stance.AGGRESSIVE:
 #@export var air_slam_jump_height: float = 20.0
 @export var air_slam_damage: float = 15.0
 var slam_target_pos := Vector3.ZERO
+@export var air_slam_cooldown: float = 15.0
+@onready var air_slam_timer: Timer = $AirSlamCooldown
 @export_subgroup("Ground Pound")
 @export var ground_pound_wave_radius: float = 16.0
 @export_subgroup("Lunge")
@@ -154,7 +156,7 @@ func select_attack_phase_2() -> void:
 	if phase_stance == Stance.DEFENSIVE:
 		return
 	
-	if dist_to_target > 22:
+	if dist_to_target > 22 and air_slam_timer.is_stopped():
 		state_chart.send_event("start_close_distance_attack_far")
 	elif dist_to_target > 7 and lunge_timer.is_stopped():
 		state_chart.send_event("start_close_distance_attack_close")
@@ -171,7 +173,7 @@ func select_attack_phase_3() -> void:
 		"start_close_distance_attack_far",
 	]
 	
-	if dist_to_target > 14:
+	if dist_to_target > 14 and air_slam_timer.is_stopped():
 		state_chart.send_event("start_close_distance_attack_far")
 	elif dist_to_target > 5 and lunge_timer.is_stopped():
 		state_chart.send_event("start_close_distance_attack_close")
@@ -671,6 +673,7 @@ func _on_phase_3_state_entered() -> void:
 	phase_debug_label.text = "Phase 3"
 	hide_shield()
 	phase_stance = Stance.AGGRESSIVE
+	air_slam_timer.wait_time *= 0.7
 	select_attack()
 
 
@@ -703,6 +706,7 @@ func _on_air_slam_closer_recover_state_entered() -> void:
 			state_chart.send_event("start_hammer_ground_attack")
 			return
 	
+	air_slam_timer.start(air_slam_cooldown)
 	select_attack()
 	state_chart.send_event("end_recovery")
 
