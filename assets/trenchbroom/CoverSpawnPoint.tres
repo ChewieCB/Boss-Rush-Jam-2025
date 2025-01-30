@@ -17,7 +17,8 @@ description = ""
 func_godot_internal = false
 base_classes = Array[Resource]([])
 class_properties = {
-"cover_type": ""
+"cover_type": "",
+"layout_idx": 0
 }
 class_property_descriptions = {}
 auto_apply_to_matching_node_properties = false

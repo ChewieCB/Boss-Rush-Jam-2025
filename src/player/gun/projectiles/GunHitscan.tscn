@@ -45,7 +45,7 @@ texture = ExtResource("3_d15wr")
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
 target_position = Vector3(0, 0, -100)
-collision_mask = 5
+collision_mask = 197
 
 [node name="NearbyEnemyCheckArea3D" type="Area3D" parent="."]
 collision_layer = 0

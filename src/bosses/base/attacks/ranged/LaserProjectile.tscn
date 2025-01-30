@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://bw11sgcr0wtk4"]
+
+[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/test_projectile.gd" id="1_1e8s7"]
+[ext_resource type="Material" uid="uid://ctsldd772hkaj" path="res://src/bosses/pit/surveillance/laser_material.tres" id="2_ne2f5"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_y70d2"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_m0sv5"]
+material = ExtResource("2_ne2f5")
+top_radius = 0.25
+bottom_radius = 0.25
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_jkwcn"]
+radius = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mrjv6"]
+transparency = 1
+albedo_color = Color(0.709804, 0.0352941, 0.0352941, 0.486275)
+emission_enabled = true
+emission = Color(0.709804, 0.0352941, 0.0352941, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_40o0e"]
+
+[sub_resource type="Curve" id="Curve_my72y"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="LaserProjectile" type="Area3D"]
+collision_layer = 8
+collision_mask = 7
+script = ExtResource("1_1e8s7")
+projectile_damage = 2.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_m0sv5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_jkwcn")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_mrjv6")
+mesh = SubResource("ImmediateMesh_40o0e")
+skeleton = NodePath("../../MeshInstance3D")
+script = ExtResource("3_y70d2")
+segments = 10
+base_width = 0.1
+width_profile = SubResource("Curve_my72y")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

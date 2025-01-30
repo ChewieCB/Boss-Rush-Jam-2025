@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bxk2wvkyky01p"]
 
-[ext_resource type="Texture2D" uid="uid://cq6ltygg20okd" path="res://src/bosses/base/attacks/ranged/coin_16.png" id="1_v5sg8"]
 [ext_resource type="Script" path="res://src/ui/player/inventory/currency_ui.gd" id="1_w6gyf"]
+[ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="2_3nf2q"]
 
 [node name="CurrencyUI" type="Control"]
 layout_mode = 3
@@ -24,7 +24,7 @@ theme_override_constants/separation = 16
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
-texture = ExtResource("1_v5sg8")
+texture = ExtResource("2_3nf2q")
 expand_mode = 3
 stretch_mode = 5
 

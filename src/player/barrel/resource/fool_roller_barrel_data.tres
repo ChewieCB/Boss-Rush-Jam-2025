@@ -18,4 +18,5 @@ Ammo Leech: Small chance to refund ammo on hit, but reduce your damage.
 Gambler's Precision: Chance to crit on hit and jam gun on miss.
 [/ul]"
 barrel_image = ExtResource("1_0ubde")
+barrel_cost = 350
 barrel_prefab = ExtResource("2_gxri0")

@@ -81,7 +81,7 @@ shader_parameter/distortionTexture = SubResource("NoiseTexture2D_nb2lf")
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
 collision_layer = 2
-collision_mask = 93
+collision_mask = 221
 script = ExtResource("1_rl0vi")
 sfx_hurt = Array[AudioStream]([ExtResource("2_cpvt1"), ExtResource("3_lb5n1"), ExtResource("4_broo0"), ExtResource("5_lkuup"), ExtResource("6_vqbwb")])
 sfx_dead = Array[AudioStream]([ExtResource("7_lluik"), ExtResource("8_h2aj6"), ExtResource("9_wamw4"), ExtResource("10_mowd1")])

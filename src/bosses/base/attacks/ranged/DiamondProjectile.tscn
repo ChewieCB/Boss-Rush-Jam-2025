@@ -10,11 +10,11 @@ radius = 0.4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_usbrc"]
 transparency = 1
-albedo_color = Color(1, 0.766048, 0, 0.713726)
+albedo_color = Color(0.207614, 0.804089, 0.957, 1)
 emission_enabled = true
-emission = Color(1, 0.731834, 0.032858, 1)
+emission = Color(0.57644, 0.921828, 1, 1)
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_dkih7"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_4htjv"]
 
 [sub_resource type="Curve" id="Curve_ierie"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -44,7 +44,7 @@ autostart = true
 [node name="Trail3D" type="MeshInstance3D" parent="Trail"]
 top_level = true
 material_override = SubResource("StandardMaterial3D_usbrc")
-mesh = SubResource("ImmediateMesh_dkih7")
+mesh = SubResource("ImmediateMesh_4htjv")
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("2_11y2m")
 segments = 10

@@ -78,8 +78,8 @@ var spawned_area_objects = []
 
 @export var MAX_SPEED: float = 5.0
 @export var FRICTION: float = 1.0
-const TURN_SPEED_FAST: float = 7.5
-const TURN_SPEED_SLOW: float = 5.0
+@export var TURN_SPEED_FAST: float = 7.5
+@export var TURN_SPEED_SLOW: float = 5.0
 const MAX_FALL_SPEED: float = 50.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 8

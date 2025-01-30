@@ -33,9 +33,18 @@ signal destroyed(turret: PitTurret)
 @export var delay_per_projectile: float = 0.6
 
 
-#func _physics_process(delta: float) -> void:
-	##if target:
-	#
+func _ready() -> void:
+	spawn()
+
+
+func spawn() -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "scale", Vector3.ONE, 0.4).set_trans(Tween.TRANS_SINE)
+	#tween.tween_property(self, "global_position:y", 0.0, 3.4).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+
+
+func destroy() -> void:
+	health_component.damage(999999)
 
 
 func rotate_and_elevate(delta: float, target_pos: Vector3) -> void:
@@ -101,14 +110,7 @@ func get_angle_to_target(seeker_pos: Vector3, target_pos: Vector3, facing_dir: V
 
 func _on_standard_attack_state_physics_processing(delta: float) -> void:
 	rotate_and_elevate(delta, target.global_position + Vector3(0, 1.0, 0))
-	
-	#var aim_collision = aim_ray.get_collider()
-	#if aim_collision == target:
-		#dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
-	#elif aim_collision != null:
-		#dome_mesh.mesh.surface_get_material(0).albedo_color = Color.YELLOW
-	#else:
-		#dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
+
 
 func _on_standard_attack_targeting_state_entered() -> void:
 	debug_state_label.text = "Standard Attack | Targeting"
@@ -116,7 +118,6 @@ func _on_standard_attack_targeting_state_entered() -> void:
 func _on_standard_attack_targeting_state_physics_processing(_delta: float) -> void:
 	var aim_collision = aim_ray.get_collider()
 	if aim_collision == target:
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
 		state_chart.send_event("start_firing")
 
 

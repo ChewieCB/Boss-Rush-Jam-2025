@@ -24,6 +24,7 @@ var current_health: float:
 		var prev_health = current_health
 		current_health = clamp(value, 0, max_health)
 		var diff = current_health - prev_health
+		current_health_ratio = current_health / max_health
 		health_diff.emit(diff)
 		health_changed.emit(current_health, prev_health)
 		if current_health == 0:
@@ -31,6 +32,7 @@ var current_health: float:
 			has_died = true
 		if diff < 0:
 			hurt.emit()
+var current_health_ratio: float = current_health / max_health
 var has_died: bool = false
 
 
