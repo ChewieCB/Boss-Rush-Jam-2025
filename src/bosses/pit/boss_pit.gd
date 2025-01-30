@@ -6,9 +6,11 @@ signal charge_ended
 enum Stance {DEFENSIVE, AGGRESSIVE}
 
 @export_category("Display")
-@export var swipe_debug: CompressedTexture2D
-@export var lunge_debug: CompressedTexture2D
-@export var uppercut_debug: CompressedTexture2D
+@export var swipe_sprite: CompressedTexture2D
+@export var hook_sprite: CompressedTexture2D
+@export var lunge_sprite: CompressedTexture2D
+@export var uppercut_sprite: CompressedTexture2D
+@export var slam_sprite: CompressedTexture2D
 
 @export var wave_material: ShaderMaterial
 

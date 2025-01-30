@@ -1,19 +1,18 @@
-[gd_scene load_steps=35 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=34 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_akhww"]
-[ext_resource type="Texture2D" uid="uid://bpkl437wqw2kh" path="res://src/bosses/base/assets/juni_boss_face_lunge.png" id="4_nd84x"]
-[ext_resource type="Texture2D" uid="uid://dqopqwf4syxsn" path="res://src/bosses/base/assets/juni_boss_face_swipe.png" id="4_qi0bj"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bjod6"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_bqowf"]
-[ext_resource type="Texture2D" uid="uid://dasca74no7m2t" path="res://src/bosses/base/assets/juni_boss_face_uppercut.png" id="5_i6at3"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="6_l4p06"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="7_koy73"]
 [ext_resource type="Texture2D" uid="uid://bww23gc1wfoj6" path="res://src/bosses/pit/assets/pit_boss_idle.png" id="8_d716h"]
 [ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="8_fo0ij"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="9_juug2"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_el2h4"]
+[ext_resource type="Texture2D" uid="uid://benckouaod2x3" path="res://src/bosses/pit/assets/pit_boss_hook_TEMP.png" id="12_sekny"]
+[ext_resource type="Texture2D" uid="uid://dm1odub4yea6w" path="res://src/bosses/pit/assets/pit_boss_swipe_TEMP.png" id="13_qgkan"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
 transparency = 1
@@ -191,6 +190,18 @@ tracks/9/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, -3.14159, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Sprite3D:texture")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_d716h")]
 }
 
 [sub_resource type="Animation" id="Animation_kjge0"]
@@ -581,6 +592,18 @@ tracks/4/keys = {
 "method": &"hook"
 }]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:texture")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_d716h"), ExtResource("12_sekny"), ExtResource("8_d716h"), ExtResource("8_d716h")]
+}
 
 [sub_resource type="Animation" id="Animation_3v14a"]
 resource_name = "lunge"
@@ -715,6 +738,18 @@ tracks/4/keys = {
 "method": &"swipe"
 }]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:texture")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_d716h"), ExtResource("13_qgkan"), ExtResource("8_d716h"), ExtResource("8_d716h")]
+}
 
 [sub_resource type="Animation" id="Animation_xr3uq"]
 resource_name = "uppercut"
@@ -799,9 +834,11 @@ _data = {
 [node name="BossPit" instance=ExtResource("1_opefu")]
 collision_mask = 75
 script = ExtResource("2_a8b8q")
-swipe_debug = ExtResource("4_qi0bj")
-lunge_debug = ExtResource("4_nd84x")
-uppercut_debug = ExtResource("5_i6at3")
+swipe_sprite = null
+hook_sprite = null
+lunge_sprite = null
+uppercut_sprite = null
+slam_sprite = null
 wave_material = SubResource("ShaderMaterial_2s76u")
 wave_amplitude = 7.0
 wave_frequency = 5.0
@@ -833,6 +870,7 @@ TURN_SPEED_SLOW = 8.0
 
 [node name="ArmsDEbug" type="Node3D" parent="." index="0"]
 transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, 0, 0, 0)
+visible = false
 
 [node name="ArmsDebugL" type="Node3D" parent="ArmsDEbug" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
@@ -867,7 +905,7 @@ shape = SubResource("SphereShape3D_5bmqa")
 disabled = true
 
 [node name="Sprite3D" parent="." index="2"]
-transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0.178, 2.785, 0)
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0.178, 2.67325, 0)
 texture = ExtResource("8_d716h")
 
 [node name="CollisionShape3D" parent="." index="3"]

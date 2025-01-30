@@ -2008,6 +2008,11 @@ metadata/_tb_type = "_tb_group"
 
 [node name="entity_21_PitBoss" parent="FuncGodotMap" node_paths=PackedStringArray("surveillance_boss", "target") instance=ExtResource("16_gmu4j")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 4, -34.25)
+swipe_sprite = null
+hook_sprite = null
+lunge_sprite = null
+uppercut_sprite = null
+slam_sprite = null
 surveillance_boss = NodePath("../entity_5_BossSurveillance")
 target = NodePath("../entity_4_PlayerRef")
 
