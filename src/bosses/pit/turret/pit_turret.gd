@@ -33,6 +33,16 @@ signal destroyed(turret: PitTurret)
 @export var delay_per_projectile: float = 0.6
 
 
+func _ready() -> void:
+	spawn()
+
+
+func spawn() -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "scale", Vector3.ONE, 0.4).set_trans(Tween.TRANS_SINE)
+	#tween.tween_property(self, "global_position:y", 0.0, 3.4).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+
+
 func destroy() -> void:
 	health_component.damage(999999)
 
