@@ -32,8 +32,8 @@ extends BossCore
 @export_subgroup("Orbiting")
 @export var angle_speed: float = 1.0 # radians/second
 @export var orbit_angle: float = 0.0 # track this over time
-@export var orbit_radius: float = 10.0
-@export var desired_distance: float = 5
+@export var orbit_radius: float = 5.0
+@export var desired_distance: float = 2
 
 @onready var buff_expire_timer: Timer = $BuffExpireTimer
 @onready var proj_spawn_marker = $ProjectileSpawnPos
@@ -64,6 +64,9 @@ func change_phase(new_phase: int) -> void:
 	# Check if an attack is in progress
 	if not $StateChart/Root/Attacking/Idle.active:
 		await $StateChart/Root/Attacking/Idle.state_entered
+
+	state_chart.send_event("stop_moving")
+
 	current_phase = new_phase
 
 	if current_phase == 1:
@@ -118,21 +121,13 @@ func select_attack_phase_1() -> void:
 	var chosen_attack = possible_attacks.pick_random()
 	previous_attack = chosen_attack
 
-	var move_point = get_behind_bar_move_point()
-	navigation_component.current_speed = base_movespeed * current_speed_modifier
-	if move_point:
-		navigation_component.target = move_point
-		state_chart.send_event("start_moving")
-		debug_state_label.text = "Walking"
-		await navigation_component.nav_agent.navigation_finished
-		state_chart.send_event("stop_moving")
-
 	state_chart.send_event(chosen_attack)
 
 
 func select_attack_phase_2() -> void:
 	# If dont have buff, ALWAYS use buff	
 	if current_buff == "":
+		previous_attack = "start_brew_drink"
 		state_chart.send_event("start_brew_drink")
 		return
 
@@ -184,10 +179,6 @@ func shotgun_blast():
 	var n_shot_repeat = current_phase
 	var spread_angle = 6
 	var delay_between_burst = 0.5
-	state_chart.send_event("attack_telegraph")
-	# TODO: Change sprite "Ready gun"
-	await get_tree().create_timer(telegraph_time).timeout
-	state_chart.send_event("attack_start")
 	for i in range(n_shot_repeat):
 		for j in range(proj_amount):
 			var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
@@ -197,42 +188,54 @@ func shotgun_blast():
 			bullet_inst.init(proj_spawn_marker.global_position, spreaded_direction, proj_damage, proj_speed)
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
 			await get_tree().create_timer(delay_between_burst).timeout
-	state_chart.send_event("attack_end_now")
-	state_chart.send_event("return_idle")
 
 func _on_shotgun_blast_state_entered() -> void:
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time).timeout
+	state_chart.send_event("attack_start")
+	# TODO: Change sprite "Ready gun"
 	shotgun_blast()
+	state_chart.send_event("attack_end_now")
+	state_chart.send_event("return_idle")
 
 #### Phase 1
 
 func _on_phase_1_idle_state_entered() -> void:
 	debug_state_label.text = "Idle"
 	await get_tree().create_timer(1).timeout
+
+	var move_point = get_behind_bar_move_point()
+	navigation_component.current_speed = base_movespeed * current_speed_modifier
+	if move_point:
+		navigation_component.target = move_point
+		state_chart.send_event("start_moving")
+		debug_state_label.text = "Walking"
+		await get_tree().create_timer(1).timeout
+		state_chart.send_event("stop_moving")
+
 	select_attack()
 
 #### Phase 2
 
 func _on_phase_2_state_entered() -> void:
-	state_chart.send_event("start_moving")
-	navigation_component.follow_target = false
-	navigation_component.enable()
 	jump_to(boss_jump_phase2_marker.global_position)
 
-func _on_phase_2_state_physics_processing(delta: float) -> void:
-	orbit_player(delta)
 
-func orbit_player(delta: float) -> void:
-	orbit_angle += angle_speed * delta
-	# offset in XZ-plane
-	var offset_x = cos(orbit_angle) * desired_distance
-	var offset_z = sin(orbit_angle) * desired_distance
-	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
-	# Pathfind to orbit_pos
-	navigation_component.set_nav_target_position(orbit_pos)
+func _on_phase_2_idle_state_entered() -> void:
+	debug_state_label.text = "Idle"
+	await get_tree().create_timer(1).timeout
+
+	navigation_component.current_speed = base_movespeed * current_speed_modifier
+	navigation_component.target = target
+	state_chart.send_event("start_moving")
+	debug_state_label.text = "Walking"
+	await get_tree().create_timer(2).timeout
+	state_chart.send_event("stop_moving")
+
+	select_attack()
 
 #### Phase 3
 func _on_phase_3_state_entered() -> void:
-	state_chart.send_event("stop_moving")
 	jump_to(boss_jump_phase3_marker.global_position)
 
 
@@ -241,6 +244,7 @@ func _on_phase_3_state_entered() -> void:
 ## If has str buff, throw barrel instead
 func _on_throw_broken_bottle_state_entered() -> void:
 	debug_state_label.text = "Throw broken bottle"
+	state_chart.send_event("attack_start")
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
 	# TODO: Change sprite "Throw"
 	if has_strength_buff:
@@ -250,32 +254,39 @@ func _on_throw_broken_bottle_state_entered() -> void:
 		var spread = randf_range(5, 10)
 		throw_bottle(empty_bottle_prefab, n_bottle, spread, bottle_damage)
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
 
 
 func _on_throw_concoction_state_entered() -> void:
 	debug_state_label.text = "Throw concoction"
+	state_chart.send_event("attack_start")
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
 	# TODO: Change sprite "Throw"
 	throw_concoction_bottle()
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
 
 
 func _on_brew_drink_state_entered() -> void:
 	debug_state_label.text = "Brew drink"
+	state_chart.send_event("attack_start")
 	await get_tree().create_timer(1 * current_delay_modifier).timeout
 	# TODO: Change sprite "Brew"
 	brew_drink()
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
 
 
 func _on_throw_heal_bottle_state_entered() -> void:
 	debug_state_label.text = "Throw heal bottle"
+	state_chart.send_event("attack_start")
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
 	throw_heal_bottle()
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(2).timeout
+	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
 
 
@@ -344,7 +355,7 @@ func brew_drink():
 		"speed":
 			status_icon.texture = speed_icon
 			current_speed_modifier = 1 + speed_buff_modifier
-			current_delay_modifier = 1 - speed_buff_modifier
+			# current_delay_modifier = 1 - speed_buff_modifier
 			navigation_component.current_speed = base_movespeed * current_speed_modifier
 			buff_expire_timer.start()
 		"strength":
@@ -352,13 +363,10 @@ func brew_drink():
 			status_icon.texture = strength_icon
 			buff_expire_timer.start()
 
-
 ### Others
 
 func _on_shotgun_trigger_area_body_entered(body: Node3D) -> void:
 	if body is Player:
-		state_chart.send_event("stop_moving")
-		state_chart.send_event("start_shotgun_blast")
 		player_is_near = true
 
 func _on_shotgun_trigger_area_body_exited(body: Node3D) -> void:

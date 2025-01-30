@@ -19,7 +19,7 @@ uniform float fire_aperture : hint_range( 0.0, 3.0 ) = 0.22;
 	noise_texを使わないパターン
 
 float random( vec2 pos )
-{ 
+{
 	return fract(sin(dot(pos, vec2(12.9898,78.233))) * 43758.5453);
 }
 
