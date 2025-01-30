@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=17 format=3 uid="uid://bb5aobsi08anx"]
+[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=19 format=3 uid="uid://bb5aobsi08anx"]
 
 [ext_resource type="Resource" uid="uid://dq458eynubrqg" path="res://assets/trenchbroom/PlayerRef.tres" id="1_aaqsq"]
 [ext_resource type="Resource" uid="uid://crgpdahjaj" path="res://addons/func_godot/fgd/func_godot_fgd.tres" id="1_v87b8"]
@@ -16,6 +16,8 @@
 [ext_resource type="Resource" uid="uid://cfqrc0bgny2xj" path="res://assets/trenchbroom/CoverHalf.tres" id="12_8ses4"]
 [ext_resource type="Resource" uid="uid://bc5dmbk2icg86" path="res://assets/trenchbroom/CoverSpawnPoint.tres" id="13_w55fb"]
 [ext_resource type="Resource" uid="uid://h25xigyqkxet" path="res://assets/trenchbroom/TurretSpawnPoint.tres" id="14_75rhd"]
+[ext_resource type="Resource" uid="uid://chjrrd2deml0e" path="res://assets/trenchbroom/Chandellier1.tres" id="16_6pasw"]
+[ext_resource type="Resource" uid="uid://cy5ny8wn2cab" path="res://assets/trenchbroom/Chandellier2.tres" id="17_adfc1"]
 
 [resource]
 script = ExtResource("2_daboe")
@@ -23,4 +25,4 @@ export_file = false
 target_map_editor = 1
 fgd_name = "FuncGodot"
 base_fgd_files = Array[Resource]([ExtResource("1_v87b8")])
-entity_definitions = Array[Resource]([ExtResource("1_aaqsq"), ExtResource("4_jt43q"), ExtResource("6_8ycue"), ExtResource("5_s6gss"), ExtResource("7_ls432"), ExtResource("7_8kdmy"), ExtResource("8_tfoyg"), ExtResource("9_geeyq"), ExtResource("10_1fjbd"), ExtResource("11_os4xu"), ExtResource("12_8ses4"), ExtResource("13_w55fb"), ExtResource("14_75rhd"), ExtResource("2_fkeva")])
+entity_definitions = Array[Resource]([ExtResource("1_aaqsq"), ExtResource("4_jt43q"), ExtResource("6_8ycue"), ExtResource("5_s6gss"), ExtResource("7_ls432"), ExtResource("7_8kdmy"), ExtResource("8_tfoyg"), ExtResource("9_geeyq"), ExtResource("10_1fjbd"), ExtResource("11_os4xu"), ExtResource("12_8ses4"), ExtResource("13_w55fb"), ExtResource("14_75rhd"), ExtResource("2_fkeva"), ExtResource("16_6pasw"), ExtResource("17_adfc1")])

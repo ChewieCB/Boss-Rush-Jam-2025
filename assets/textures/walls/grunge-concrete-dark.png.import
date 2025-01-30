@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bimqjyp7on3ig"
-path.s3tc="res://.godot/imported/chandellier_2.png-ffeedc08744f4e5183098202ed92bce6.s3tc.ctex"
+uid="uid://c3b0o5irhfvr"
+path.s3tc="res://.godot/imported/grunge-concrete-dark.png-54b63ba8a0ab3153a0ddc687d3690a85.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/env/lighting/assets/chandellier_2.png"
-dest_files=["res://.godot/imported/chandellier_2.png-ffeedc08744f4e5183098202ed92bce6.s3tc.ctex"]
+source_file="res://assets/textures/walls/grunge-concrete-dark.png"
+dest_files=["res://.godot/imported/grunge-concrete-dark.png-54b63ba8a0ab3153a0ddc687d3690a85.s3tc.ctex"]
 
 [params]
 

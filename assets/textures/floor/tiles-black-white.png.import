@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bimqjyp7on3ig"
-path.s3tc="res://.godot/imported/chandellier_2.png-ffeedc08744f4e5183098202ed92bce6.s3tc.ctex"
+uid="uid://diykauctv5tlt"
+path.s3tc="res://.godot/imported/tiles-black-white.png-82bb96d278375e89037ab29ba0fc30e6.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/env/lighting/assets/chandellier_2.png"
-dest_files=["res://.godot/imported/chandellier_2.png-ffeedc08744f4e5183098202ed92bce6.s3tc.ctex"]
+source_file="res://assets/textures/floor/tiles-black-white.png"
+dest_files=["res://.godot/imported/tiles-black-white.png-82bb96d278375e89037ab29ba0fc30e6.s3tc.ctex"]
 
 [params]
 
