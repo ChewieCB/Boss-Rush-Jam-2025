@@ -12,13 +12,13 @@ bottom_radius = 0.25
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_jkwcn"]
 radius = 0.25
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mcyja"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mrjv6"]
 transparency = 1
-albedo_color = Color(1, 0.766048, 0, 0.713726)
+albedo_color = Color(0.709804, 0.0352941, 0.0352941, 0.486275)
 emission_enabled = true
-emission = Color(1, 0.731834, 0.032858, 1)
+emission = Color(0.709804, 0.0352941, 0.0352941, 1)
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_cpk8h"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_40o0e"]
 
 [sub_resource type="Curve" id="Curve_my72y"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -46,8 +46,8 @@ autostart = true
 
 [node name="Trail3D" type="MeshInstance3D" parent="Trail"]
 top_level = true
-material_override = SubResource("StandardMaterial3D_mcyja")
-mesh = SubResource("ImmediateMesh_cpk8h")
+material_override = SubResource("StandardMaterial3D_mrjv6")
+mesh = SubResource("ImmediateMesh_40o0e")
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("3_y70d2")
 segments = 10
