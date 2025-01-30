@@ -2568,9 +2568,9 @@ entProperties = {
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.90625, 0.25, 11.875)
 entProperties = {
 "_tb_group": "575",
-"boss_name": "Coming Soon",
+"boss_name": "Bar Brawl",
 "classname": "ElevatorButton",
-"linked_level": "",
+"linked_level": "res://src/maps/bartender_boss/BossBartenderMap.tscn",
 "origin": "380 -29 8"
 }
 

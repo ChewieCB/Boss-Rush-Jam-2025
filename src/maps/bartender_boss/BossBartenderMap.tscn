@@ -1,7 +1,8 @@
-[gd_scene load_steps=175 format=4 uid="uid://bm3l5if407n6l"]
+[gd_scene load_steps=176 format=4 uid="uid://bm3l5if407n6l"]
 
 [ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="1_fk3ye"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="2_ajswq"]
+[ext_resource type="AudioStream" uid="uid://coyh1k757v4k8" path="res://assets/music/WANTED 0.1.mp3" id="2_ckji0"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="3_th36c"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="4_md8wb"]
 [ext_resource type="Texture2D" uid="uid://cyg2snr1w5xw5" path="res://addons/func_godot/textures/default_texture.png" id="5_jjkrh"]
@@ -573,6 +574,7 @@ points = PackedVector3Array(-22.25, 1, -44.75, -22.25, 0.5, -44.75, -21.25, 0.5,
 
 [node name="BartenderBoss" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors")]
 script = ExtResource("1_fk3ye")
+bgm = ExtResource("2_ckji0")
 boss = NodePath("BossBartender")
 player = NodePath("NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/entity_2_PlayerRef")
 elevator_doors = NodePath("NavigationRegion3D/FuncGodotMap/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/entity_5_ElevatorDoors")
