@@ -1,0 +1,99 @@
+[gd_scene load_steps=13 format=3 uid="uid://dqw4c2ldowow3"]
+
+[ext_resource type="Script" path="res://src/bosses/bartender/hazard_area.gd" id="1_rl1eo"]
+[ext_resource type="Texture2D" uid="uid://bus2aoy40njv1" path="res://src/bosses/bartender/assets/puddle.png" id="3_0iq2y"]
+
+[sub_resource type="Gradient" id="Gradient_jw0kd"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bj5yb"]
+gradient = SubResource("Gradient_jw0kd")
+
+[sub_resource type="CurveTexture" id="CurveTexture_yw64l"]
+
+[sub_resource type="Curve" id="Curve_nc5n4"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.253012, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_788ig"]
+curve = SubResource("Curve_nc5n4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_87i5c"]
+emission_shape_scale = Vector3(3, 3, 3)
+emission_shape = 2
+emission_sphere_radius = 1.0
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
+gravity = Vector3(0, 1, 0)
+scale_min = 0.5
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_788ig")
+color = Color(2.64719e-06, 0.539226, 0.10176, 0.929412)
+color_initial_ramp = SubResource("GradientTexture1D_bj5yb")
+emission_curve = SubResource("CurveTexture_yw64l")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_kbcn8"]
+load_path = "res://.godot/imported/circle.png-2a7d29501a90d369c65cabf8eff5784a.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_re01x"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("CompressedTexture2D_kbcn8")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_odgr1"]
+material = SubResource("StandardMaterial3D_re01x")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_x1b5n"]
+radius = 4.0
+
+[node name="PoisonHazardArea" type="Node3D" node_paths=PackedStringArray("particle_effects")]
+script = ExtResource("1_rl1eo")
+damage_per_tick = 7
+duration = 25.0
+particle_effects = [NodePath("PoisonCloud")]
+
+[node name="PoisonCloud" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3607, 0)
+amount = 30
+lifetime = 2.0
+explosiveness = 0.2
+visibility_aabb = AABB(-3.29834, -1.46055, -3.63985, 6.89615, 9.95287, 6.95106)
+process_material = SubResource("ParticleProcessMaterial_87i5c")
+draw_pass_1 = SubResource("QuadMesh_odgr1")
+
+[node name="Puddle" type="Sprite3D" parent="."]
+transform = Transform3D(3, 0, 0, 0, -1.31134e-07, 3, 0, -3, -1.31134e-07, 0, 0.01, 0)
+modulate = Color(0.0926836, 0.291941, 0, 0.854902)
+texture = ExtResource("3_0iq2y")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.312417, 0.600959, 0.14662, 1)
+light_energy = 5.0
+omni_range = 10.0
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 70
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_x1b5n")
+
+[node name="DoTTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -0.1, 0)
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
+[connection signal="timeout" from="DoTTimer" to="." method="_on_damage_timer_timeout"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]

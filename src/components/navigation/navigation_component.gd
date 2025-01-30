@@ -42,7 +42,7 @@ func _wait_for_navigation_setup() -> void:
 	query.collide_with_bodies = true
 	query.collide_with_areas = true
 	# TODO - make some global vars to track the collision layers
-	query.collision_mask = 2  # Player
+	query.collision_mask = 2 # Player
 	query.shape = SphereShape3D.new()
 	query.shape.radius = search_radius
 	query.transform = Transform3D.IDENTITY

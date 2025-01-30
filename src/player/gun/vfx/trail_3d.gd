@@ -1,4 +1,3 @@
-@tool
 class_name Trail3D extends MeshInstance3D
 
 """

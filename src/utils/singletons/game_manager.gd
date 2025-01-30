@@ -105,3 +105,15 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
 		inventory_barrels.append(found_data)
 		GameManager.player.inventory_ui.full_refresh_ui()
 		GameManager.player.current_gun.remove_barrel(search_barrel_id)
+
+
+func show_boss_special_dialog(content: String, duration: float):
+	var original_sm_process_mode = SoundManager.process_mode
+	SoundManager.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().paused = true
+	GameManager.player.boss_special_dialog_label.text = content
+	GameManager.player.boss_special_dialog.visible = true
+	await get_tree().create_timer(duration).timeout
+	GameManager.player.boss_special_dialog.visible = false
+	get_tree().paused = false
+	SoundManager.process_mode = original_sm_process_mode
