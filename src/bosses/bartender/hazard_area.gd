@@ -6,6 +6,7 @@ class_name HazardArea
 @export var slow_perc: float = 0
 
 @export var particle_effects: Array[GPUParticles3D] = []
+
 @export var pe_expire_time = 2
 
 @onready var dot_timer: Timer = $DoTTimer
@@ -49,7 +50,7 @@ func _on_damage_timer_timeout() -> void:
 			body.add_buff(dash_debuff)
 
 
-func _on_life_timer_timeout() -> void:
+func clear_hazard():
 	is_active = false
 	for pe in particle_effects:
 		pe.emitting = false
@@ -61,6 +62,9 @@ func _on_life_timer_timeout() -> void:
 	await get_tree().create_timer(pe_expire_time).timeout
 	call_deferred("queue_free")
 
+
+func _on_life_timer_timeout() -> void:
+	clear_hazard()
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body.get_node("HealthComponent"):

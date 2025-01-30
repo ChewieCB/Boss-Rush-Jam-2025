@@ -2,6 +2,7 @@ extends RigidBody3D
 
 @export var break_effect_prefab: PackedScene
 @export var break_on_contact = true
+@export var break_sfx: AudioStream
 
 @onready var life_timer: Timer = $LifeTimer
 
@@ -38,6 +39,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 
 	spawn_break_effect()
 	if break_on_contact:
+		SoundManager.play_sound(break_sfx, "SFX")
 		call_deferred("queue_free")
 
 func spawn_break_effect():

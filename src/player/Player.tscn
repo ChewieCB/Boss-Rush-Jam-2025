@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=62 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -50,6 +50,9 @@
 [ext_resource type="AudioStream" uid="uid://cjcluk6lldawc" path="res://src/player/assets/sfx/JUMP IN AIR.mp3" id="29_xv6x8"]
 [ext_resource type="AudioStream" uid="uid://ckr1r101hscjl" path="res://src/player/assets/sfx/Floor Dash.mp3" id="30_on7sg"]
 [ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="31_pnqxi"]
+[ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
+[ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -63,6 +66,18 @@ noise_type = 0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sjjg0"]
 size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nb2lf"]
+seamless = true
+noise = SubResource("FastNoiseLite_h1qoy")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wp8dr"]
+shader = ExtResource("46_fqoxl")
+shader_parameter/projector_power = 0.2
+shader_parameter/vignette_param = 10.0
+shader_parameter/distortionTexture = SubResource("NoiseTexture2D_nb2lf")
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
 collision_layer = 2
@@ -281,6 +296,53 @@ z_as_relative = false
 [node name="InventoryUI" parent="UI" instance=ExtResource("22_qf5o4")]
 
 [node name="CurrencyUI" parent="UI" instance=ExtResource("23_xgmby")]
+
+[node name="BossSpecialDialog" type="Control" parent="UI"]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="TextureRect" parent="UI/BossSpecialDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("46_fj1jc")
+
+[node name="Label" type="Label" parent="UI/BossSpecialDialog"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -431.5
+offset_top = -36.5
+offset_right = 431.5
+offset_bottom = 36.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 60
+text = "I WILL LIT THE WHOLE FLOOR ON FIRE!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Shader" type="TextureRect" parent="UI/BossSpecialDialog"]
+material = SubResource("ShaderMaterial_wp8dr")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("47_yr3ov")
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")

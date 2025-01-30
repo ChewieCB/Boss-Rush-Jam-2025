@@ -14,12 +14,14 @@ extends BossCore
 @export var beer_barrel_prefab: PackedScene
 @export var bottle_damage = 10
 @export var barrel_damage = 45
+@export var shotgun_sfx: AudioStream
+@export var floor_fize_hazard_marker: Marker3D
+@export var floor_fire_hazard_prefab: PackedScene
 
 @export_group("Drinks")
 @export var defense_icon: Texture2D
 @export var speed_icon: Texture2D
 @export var strength_icon: Texture2D
-
 ## Received damage will multiply with this value
 @export var defense_buff_resistance = 0.5
 @export var speed_buff_modifier = 0.5
@@ -29,11 +31,6 @@ extends BossCore
 @export var behind_bar_move_points: Array[Marker3D] = []
 @export var boss_jump_phase2_marker: Marker3D
 @export var boss_jump_phase3_marker: Marker3D
-@export_subgroup("Orbiting")
-@export var angle_speed: float = 1.0 # radians/second
-@export var orbit_angle: float = 0.0 # track this over time
-@export var orbit_radius: float = 5.0
-@export var desired_distance: float = 2
 
 @onready var buff_expire_timer: Timer = $BuffExpireTimer
 @onready var proj_spawn_marker = $ProjectileSpawnPos
@@ -45,6 +42,7 @@ var current_buff: String = ""
 var current_speed_modifier = 1
 var current_delay_modifier = 1
 var has_strength_buff = false
+var floor_fire_hazard: HazardArea = null
 
 const DIFFICULTY_LV = 1
 
@@ -163,6 +161,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 func _on_died() -> void:
 	super()
+	floor_fire_hazard.clear_hazard()
 
 
 ### ATTACK PHASES --------------------------------
@@ -180,6 +179,7 @@ func shotgun_blast():
 	var spread_angle = 6
 	var delay_between_burst = 0.5
 	for i in range(n_shot_repeat):
+		SoundManager.play_sound(shotgun_sfx, "SFX")
 		for j in range(proj_amount):
 			var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
 			var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
@@ -200,9 +200,12 @@ func _on_shotgun_blast_state_entered() -> void:
 
 #### Phase 1
 
+func _on_phase_1_state_entered() -> void:
+	GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
+
 func _on_phase_1_idle_state_entered() -> void:
 	debug_state_label.text = "Idle"
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(0.5).timeout
 
 	var move_point = get_behind_bar_move_point()
 	navigation_component.current_speed = base_movespeed * current_speed_modifier
@@ -218,12 +221,13 @@ func _on_phase_1_idle_state_entered() -> void:
 #### Phase 2
 
 func _on_phase_2_state_entered() -> void:
+	GameManager.show_boss_special_dialog("PLAYTIME IS OVER!", 1)
 	jump_to(boss_jump_phase2_marker.global_position)
 
 
 func _on_phase_2_idle_state_entered() -> void:
 	debug_state_label.text = "Idle"
-	await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(0.5).timeout
 
 	navigation_component.current_speed = base_movespeed * current_speed_modifier
 	navigation_component.target = target
@@ -236,7 +240,12 @@ func _on_phase_2_idle_state_entered() -> void:
 
 #### Phase 3
 func _on_phase_3_state_entered() -> void:
+	GameManager.show_boss_special_dialog("DARN IT! I WILL JUST LIT THE WHOLE FLOOR ON FIRE THEN!", 2)
 	jump_to(boss_jump_phase3_marker.global_position)
+	await get_tree().create_timer(4).timeout
+	floor_fire_hazard = floor_fire_hazard_prefab.instantiate()
+	floor_fize_hazard_marker.add_child(floor_fire_hazard)
+	floor_fire_hazard.position = Vector3.ZERO
 
 
 ### Common
@@ -355,7 +364,7 @@ func brew_drink():
 		"speed":
 			status_icon.texture = speed_icon
 			current_speed_modifier = 1 + speed_buff_modifier
-			# current_delay_modifier = 1 - speed_buff_modifier
+			current_delay_modifier = 1 - speed_buff_modifier
 			navigation_component.current_speed = base_movespeed * current_speed_modifier
 			buff_expire_timer.start()
 		"strength":
@@ -416,3 +425,5 @@ func jump_to(target_position: Vector3, jump_height: float = 5, jump_time: float 
 
 	tween2.tween_property(self, "position:y", peak_height, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween2.tween_property(self, "position:y", target_position.y, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	await tween.finished

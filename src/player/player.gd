@@ -45,6 +45,10 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var magazine_label: Label = $UI/GunUI/MagazineUI
 @onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
 
+@onready var boss_special_dialog = $UI/BossSpecialDialog
+@onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
+
+
 signal movement_dashed
 
 const MAX_SPEED: float = 8.0
@@ -128,6 +132,7 @@ func _ready():
 	health_component.died.connect(_on_died)
 	gun_container_original_pos = gun_container.position
 	interact_ui.visible = false
+	boss_special_dialog.visible = false
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_hud)
 	current_gun.gun_reloaded.connect(update_hud)

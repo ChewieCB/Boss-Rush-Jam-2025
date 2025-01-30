@@ -104,6 +104,7 @@ radius = 3.0
 [node name="FireHazardArea" type="Node3D" node_paths=PackedStringArray("particle_effects")]
 script = ExtResource("1_xogw5")
 duration = 20.0
+slow_perc = null
 particle_effects = [NodePath("Fire"), NodePath("Smoke")]
 
 [node name="Fire" type="GPUParticles3D" parent="."]
