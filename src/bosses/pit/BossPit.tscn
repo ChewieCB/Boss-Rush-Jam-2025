@@ -905,7 +905,7 @@ shape = SubResource("SphereShape3D_5bmqa")
 disabled = true
 
 [node name="Sprite3D" parent="." index="2"]
-transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0.178, 2.67325, 0)
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -0.152, 2.67325, 0)
 texture = ExtResource("8_d716h")
 
 [node name="CollisionShape3D" parent="." index="3"]

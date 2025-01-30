@@ -7,9 +7,11 @@ class_name CoverSpawnPoint
 
 @export var entProperties: Dictionary = {
 	"cover_type": "",
+	"layout_idx": "",
 }
 
 var cover_type: String
+var layout_idx: int
 var current_cover: Cover
 
 
@@ -21,7 +23,9 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	
-	cover_type = entProperties["cover_type"]
+	if entProperties:
+		cover_type = entProperties["cover_type"]
+		layout_idx = entProperties["layout_idx"]
 
 
 func spawn_cover() -> Cover:

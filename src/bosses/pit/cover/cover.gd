@@ -7,6 +7,10 @@ signal cover_destroyed(cover: Cover)
 @onready var mesh: MeshInstance3D = $Mesh
 
 
+func _get_class() -> String:
+		return "cover"
+
+
 func show_cover() -> void:
 	var tween = get_tree().create_tween()
 	var mesh_size = mesh.get_aabb().size

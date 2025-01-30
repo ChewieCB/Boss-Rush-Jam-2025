@@ -2804,25 +2804,123 @@
 }
 // entity 22
 {
-"classname" "TurretSpawnPoint"
-"origin" "512 512 8"
-"angle" "225"
+"classname" "CoverFull"
+"origin" "-320 -768 8"
+"angle" "240"
 }
 // entity 23
 {
-"classname" "TurretSpawnPoint"
-"origin" "-512 512 8"
-"angle" "315"
+"classname" "CoverFull"
+"origin" "-320 768 8"
+"angle" "120"
 }
 // entity 24
 {
-"classname" "TurretSpawnPoint"
-"origin" "-512 -768 8"
-"angle" "45"
+"classname" "CoverFull"
+"origin" "320 -768 8"
+"angle" "300"
 }
 // entity 25
 {
-"classname" "TurretSpawnPoint"
-"origin" "512 -768 8"
+"classname" "CoverFull"
+"origin" "320 768 8"
+"angle" "60"
+}
+// entity 26
+{
+"classname" "CoverFull"
+"origin" "-384 368 8"
 "angle" "135"
+}
+// entity 27
+{
+"classname" "CoverFull"
+"origin" "384 -368 8"
+"angle" "315"
+}
+// entity 28
+{
+"classname" "CoverFull"
+"origin" "-384 -368 8"
+"angle" "225"
+}
+// entity 29
+{
+"classname" "CoverFull"
+"origin" "384 368 8"
+"angle" "45"
+}
+// entity 30
+{
+"classname" "CoverFull"
+"origin" "0 320 8"
+"angle" "90"
+}
+// entity 31
+{
+"classname" "CoverFull"
+"origin" "0 -320 8"
+"angle" "90"
+}
+// entity 32
+{
+"classname" "CoverColumn"
+"origin" "0 576 8"
+}
+// entity 33
+{
+"classname" "CoverColumn"
+"origin" "0 -576 8"
+}
+// entity 34
+{
+"classname" "CoverColumn"
+"origin" "-640 640 8"
+}
+// entity 35
+{
+"classname" "CoverColumn"
+"origin" "-640 -640 8"
+}
+// entity 36
+{
+"classname" "CoverColumn"
+"origin" "640 -640 8"
+}
+// entity 37
+{
+"classname" "CoverColumn"
+"origin" "640 640 8"
+}
+// entity 38
+{
+"classname" "CoverHalf"
+"origin" "8 904 8"
+"angle" "270"
+}
+// entity 39
+{
+"classname" "CoverHalf"
+"origin" "8 -888 8"
+"angle" "270"
+}
+// entity 40
+{
+"classname" "CoverHalf"
+"origin" "-608 8 8"
+}
+// entity 41
+{
+"classname" "CoverHalf"
+"origin" "604 8 8"
+}
+// entity 42
+{
+"classname" "CoverHalf"
+"origin" "252 8 8"
+}
+// entity 43
+{
+"classname" "CoverHalf"
+"origin" "-260 8 8"
 }
