@@ -348,6 +348,7 @@ delay_in_seconds = "0.0"
 
 [node name="NavigationAgent3D" parent="." index="8"]
 target_desired_distance = 1.0
+radius = 1.0
 
 [node name="DebugStateLabel" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.36476, 0)
