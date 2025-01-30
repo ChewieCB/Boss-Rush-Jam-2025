@@ -100,8 +100,6 @@ func get_new_nav_agent_velocity() -> Vector3:
 
 func _on_velocity_computed(safe_velocity: Vector3) -> void:
 	if is_enabled():
-		#if ignore_y_movement:
-			#safe_velocity.y = 0
 		entity.velocity = safe_velocity
 		entity.velocity = entity.velocity.move_toward(safe_velocity, 0.25)
 		entity.move_and_slide()

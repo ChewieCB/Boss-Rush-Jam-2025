@@ -12,6 +12,11 @@ enum Stance {DEFENSIVE, AGGRESSIVE}
 
 @export var wave_material: ShaderMaterial
 
+@export_category("Movement")
+@export var wave_amplitude: float = 7.0
+@export var wave_frequency: float = 5.0
+@export var time_elapsed: float = 0.0
+
 @export_category("Phases")
 @export var surveillance_boss: BossSurveillance 
 var phase_stance: Stance = Stance.AGGRESSIVE:
@@ -101,10 +106,15 @@ func hide_shield() -> void:
 
 func _physics_process(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
+	time_elapsed += delta
+	var chase_direction: Vector3 = self.global_position.direction_to(target.global_position)
+	var perpendicular: Vector3 = chase_direction.rotated(Vector3.UP, PI/2)
+	var wave_offset = perpendicular * sin(time_elapsed * wave_frequency) * wave_amplitude
+	var desired_position = target.global_position + wave_offset
+	navigation_component.set_nav_target_position(desired_position)
 	move_and_slide()
 	
 	debug_dist_label.text = str(self.global_position.distance_to(target.global_position))
-	#_debug_air_slam_trajectory()
 
 
 func select_attack() -> void:

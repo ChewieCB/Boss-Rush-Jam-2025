@@ -803,6 +803,9 @@ swipe_debug = ExtResource("4_qi0bj")
 lunge_debug = ExtResource("4_nd84x")
 uppercut_debug = ExtResource("5_i6at3")
 wave_material = SubResource("ShaderMaterial_2s76u")
+wave_amplitude = 7.0
+wave_frequency = 5.0
+time_elapsed = 0.0
 hurtbox_range_close = 4.5
 hurtbox_range_far = 6.0
 swipe_damage = 5.0
@@ -883,6 +886,9 @@ shape = SubResource("BoxShape3D_pi7fj")
 
 [node name="HealthComponent" parent="." index="6"]
 max_health = 500.0
+
+[node name="NavigationComponent" parent="." index="7"]
+follow_target = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"
@@ -1800,6 +1806,9 @@ script = ExtResource("4_akhww")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
+
+[node name="NavigationAgent3D" parent="." index="10"]
+debug_enabled = true
 
 [node name="DebugPhaseLabel" type="Label3D" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.7, 0)
