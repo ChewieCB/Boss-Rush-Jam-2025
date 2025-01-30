@@ -1,10 +1,10 @@
 [gd_scene load_steps=15 format=3 uid="uid://dmhl0n57v7a5e"]
 
 [ext_resource type="Script" path="res://src/bosses/pit/turret/pit_turret.gd" id="1_56juh"]
-[ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="2_gbo06"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_nwx76"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_oqn11"]
 [ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_r6yck"]
+[ext_resource type="PackedScene" uid="uid://bw11sgcr0wtk4" path="res://src/bosses/base/attacks/ranged/LaserProjectile.tscn" id="3_xvg4j"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="4_b87ak"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_lku4f"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_m3qs5"]
@@ -18,11 +18,11 @@ radius = 1.75
 height = 1.75
 is_hemisphere = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tmp0t"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_71th5"]
+albedo_color = Color(0, 0, 0, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_7p546"]
-material = SubResource("StandardMaterial3D_tmp0t")
-size = Vector3(2, 0.35, 0.35)
+[sub_resource type="SphereMesh" id="SphereMesh_h6sa4"]
+material = SubResource("StandardMaterial3D_71th5")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8wfl4"]
 size = Vector3(3.5, 2, 3.5)
@@ -33,10 +33,11 @@ collision_layer = 64
 collision_mask = 11
 script = ExtResource("1_56juh")
 explosion_scene = ExtResource("2_r6yck")
-projectile_scene = ExtResource("2_gbo06")
-projectile_spawns = [NodePath("Body/Head/Barrel1/Marker3D"), NodePath("Body/Head/Barrel2/Marker3D")]
+projectile_scene = ExtResource("3_xvg4j")
+projectile_spawns = [NodePath("Body/Head/Barrel1/Marker3D")]
 
 [node name="Body" type="Node3D" parent="."]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Dome" type="MeshInstance3D" parent="Body"]
 mesh = SubResource("SphereMesh_3mpgo")
@@ -45,26 +46,19 @@ skeleton = NodePath("../..")
 [node name="Head" type="Node3D" parent="Body"]
 
 [node name="Barrel1" type="MeshInstance3D" parent="Body/Head"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, 0.5, 0.5, 2.4)
-mesh = SubResource("BoxMesh_7p546")
+transform = Transform3D(-4.37114e-08, 5.37311e-16, 1, 0, 0.999999, -2.74675e-15, -0.999999, 0, -4.37113e-08, 1.74846e-08, 8.97998e-08, 1.7)
+mesh = SubResource("SphereMesh_h6sa4")
 
 [node name="Marker3D" type="Marker3D" parent="Body/Head/Barrel1"]
-transform = Transform3D(4.37114e-08, -3.82137e-15, -1, -8.74228e-08, -1, 0, -1, 8.74227e-08, -4.37114e-08, -1.4, 1.19209e-07, 2.98023e-08)
-
-[node name="Barrel2" type="MeshInstance3D" parent="Body/Head"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, -0.5, 0.5, 2.4)
-mesh = SubResource("BoxMesh_7p546")
-
-[node name="Marker3D" type="Marker3D" parent="Body/Head/Barrel2"]
-transform = Transform3D(4.37114e-08, -3.82137e-15, -1, -8.74227e-08, -1, 0, -1, 8.74227e-08, -4.37114e-08, -1.4, 1.19209e-07, 0)
+transform = Transform3D(4.37114e-08, 2.13163e-14, -1, -8.74228e-08, -1, -1.42109e-14, -1, 8.74227e-08, -4.37114e-08, -0.5, 4.37115e-08, 6.55671e-08)
 
 [node name="RayCast3D" type="RayCast3D" parent="Body/Head"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, 0, 0.5, 2.4)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 0.999999, 0, -0.999999, 0, -4.37113e-08, 0, 0, 2.4)
 target_position = Vector3(-100, 0, 0)
 collision_mask = 3
 
 [node name="DomeCollider" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 shape = SubResource("BoxShape3D_8wfl4")
 
 [node name="HealthComponent" parent="." instance=ExtResource("2_nwx76")]

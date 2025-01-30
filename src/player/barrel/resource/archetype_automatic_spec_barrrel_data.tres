@@ -19,4 +19,5 @@ Vector SMG: High firerate and fast reload time.
 LMG: Good firerate with huge magazine, but increased reload time.
 [/ul]"
 barrel_image = ExtResource("1_pomnq")
+barrel_cost = 200
 barrel_prefab = ExtResource("2_lh78w")

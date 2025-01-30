@@ -2806,23 +2806,19 @@
 {
 "classname" "TurretSpawnPoint"
 "origin" "512 512 8"
-"angle" "225"
 }
 // entity 23
 {
 "classname" "TurretSpawnPoint"
 "origin" "-512 512 8"
-"angle" "315"
 }
 // entity 24
 {
 "classname" "TurretSpawnPoint"
 "origin" "-512 -768 8"
-"angle" "45"
 }
 // entity 25
 {
 "classname" "TurretSpawnPoint"
 "origin" "512 -768 8"
-"angle" "135"
 }

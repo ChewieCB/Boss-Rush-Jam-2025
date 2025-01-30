@@ -134,7 +134,7 @@ func select_attack_phase_2() -> void:
 func select_attack_phase_3() -> void:
 	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
-		#"start_spawn_turrets_attack",
+		"start_spawn_turrets_attack",
 		"start_laser_attack",
 		"start_barrier_cage_attack",
 	]

@@ -19,4 +19,5 @@ Explosive Bullet: Explosive bullets.
 Hyperfocus: Increased damage and reduce recoil while standing still. Opposite effect while moving.
 [/ul]"
 barrel_image = ExtResource("1_vp1f6")
+barrel_cost = 200
 barrel_prefab = ExtResource("1_nrto8")

@@ -100,14 +100,7 @@ func get_angle_to_target(seeker_pos: Vector3, target_pos: Vector3, facing_dir: V
 
 func _on_standard_attack_state_physics_processing(delta: float) -> void:
 	rotate_and_elevate(delta, target.global_position + Vector3(0, 1.0, 0))
-	
-	#var aim_collision = aim_ray.get_collider()
-	#if aim_collision == target:
-		#dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
-	#elif aim_collision != null:
-		#dome_mesh.mesh.surface_get_material(0).albedo_color = Color.YELLOW
-	#else:
-		#dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
+
 
 func _on_standard_attack_targeting_state_entered() -> void:
 	debug_state_label.text = "Standard Attack | Targeting"
@@ -115,7 +108,6 @@ func _on_standard_attack_targeting_state_entered() -> void:
 func _on_standard_attack_targeting_state_physics_processing(_delta: float) -> void:
 	var aim_collision = aim_ray.get_collider()
 	if aim_collision == target:
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
 		state_chart.send_event("start_firing")
 
 

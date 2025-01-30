@@ -5,6 +5,7 @@
 [ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="3_bke04"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="4_nqlwe"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="5_fqifh"]
+[ext_resource type="Material" uid="uid://ctsldd772hkaj" path="res://src/bosses/pit/surveillance/laser_material.tres" id="5_wjqbp"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="6_dvo4w"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_bpphr"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="8_bah8y"]
@@ -33,16 +34,8 @@ radius = 1.0
 height = 0.1
 radius = 0.3
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0r83n"]
-transparency = 1
-cull_mode = 2
-albedo_color = Color(0.71, 0.0355, 0.0355, 0.486275)
-emission_enabled = true
-emission = Color(0.85, 0.00849999, 0.00849999, 1)
-emission_energy_multiplier = 10.0
-
 [sub_resource type="CylinderMesh" id="CylinderMesh_m2l2m"]
-material = SubResource("StandardMaterial3D_0r83n")
+material = ExtResource("5_wjqbp")
 top_radius = 0.3
 bottom_radius = 0.3
 height = 0.001
@@ -129,7 +122,7 @@ script = ExtResource("2_p6rlf")
 elevation_speed_deg = 25.0
 rotation_speed_deg = 25.0
 shield_radius = 7.5
-turrets_to_spawn = 2
+turrets_to_spawn = 4
 beam_sweeps_per_attack = 4
 beam_sweep_delay = 0.7
 beam_collision_reset_delay = 1.2
@@ -137,6 +130,7 @@ barrier_cage_radius = 16.0
 barrier_cage_reflect_force = 12.0
 barrier_cage_time = 12.0
 barrier_cage_material = ExtResource("3_bke04")
+chip_spawn_chance = 0.24
 barrel_to_drop = ExtResource("4_nqlwe")
 current_phase = 3
 attack_recovery_time = 0.7
@@ -217,6 +211,9 @@ shape = SubResource("SphereShape3D_ook83")
 
 [node name="Hurtbox" parent="." index="6"]
 visible = false
+
+[node name="HealthComponent" parent="." index="7"]
+max_health = 3800.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 offset_bottom = 281.0

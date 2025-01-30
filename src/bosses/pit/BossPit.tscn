@@ -820,7 +820,7 @@ lunge_damage = 5.0
 lunge_force = 6.5
 lunge_cooldown = 5.0
 shield_radius = 4.0
-chip_spawn_chance = 0.2
+chip_spawn_chance = 0.15
 chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("7_koy73")
 current_phase = 3
@@ -891,9 +891,6 @@ follow_target = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"
-
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
 
 [node name="toIntroAirSlam" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("4_akhww")
@@ -1805,9 +1802,6 @@ script = ExtResource("4_akhww")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
-
-[node name="NavigationAgent3D" parent="." index="10"]
-debug_enabled = true
 
 [node name="DebugPhaseLabel" type="Label3D" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.7, 0)
