@@ -44,4 +44,4 @@ light_indirect_energy = 2.0
 light_volumetric_fog_energy = 2.0
 light_size = 2.0
 light_bake_mode = 1
-omni_range = 20.0
+omni_range = 10.0
