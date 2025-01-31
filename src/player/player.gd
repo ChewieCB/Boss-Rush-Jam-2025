@@ -219,6 +219,7 @@ func _process(delta):
 
 func _physics_process(delta):
 	if controls_disabled:
+		input_dir = Vector2.ZERO
 		velocity = Vector3(0, -GRAVITY, 0)
 		move_and_slide()
 		return
@@ -228,9 +229,8 @@ func _physics_process(delta):
 			raw_input_dir = Vector2(0, -1)
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
-	if not is_dashing and not is_sliding:
-		if not is_in_inventory:
-			raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	if not is_dashing and not is_sliding and not is_in_inventory:
+		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
 	# If the next line is for grounded only, we will have bunnyhop tech
