@@ -33,7 +33,8 @@ func on_prepare_to_fire():
 		child.on_prepare_to_fire()
 
 func on_ammo_consumed():
-	SoundManager.play_sound_with_pitch(archetype_shot_sfx.pick_random(), randf_range(0.85, 1.15), "Gun")
+	if is_archetype:
+		SoundManager.play_sound_with_pitch(archetype_shot_sfx.pick_random(), randf_range(0.85, 1.15), "Gun")
 	for child in child_effects:
 		child.on_ammo_consumed()
 
@@ -46,10 +47,11 @@ func on_reload_start():
 		child.on_reload_start()
 
 func on_reload_end():
-	for child in child_effects:
-		child.on_reload_end()
 	if is_archetype:
 		SoundManager.play_sound(archetype_reload_sfx.pick_random(), "Gun")
+	for child in child_effects:
+		child.on_reload_end()
+
 
 func on_reload_interrupted():
 	for child in child_effects:

@@ -44,9 +44,8 @@ is_perc = true
 [node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_rhvms")
 display_text_title = "Newton's Third Law"
-display_text_tag = "Knock yourself back when shoot"
+display_text_tag = "Safer Rocket Jump"
 display_text_desc = "+50% damage
-+25% recoil
 -25% firerate"
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
@@ -61,15 +60,10 @@ attribute = 4
 modify_value = -25.0
 is_perc = true
 
-[node name="ModifyRecoil" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
-script = ExtResource("6_2bruo")
-attribute = 11
-modify_value = -25.0
-is_perc = true
-
 [node name="ApplyKnockbackSelf" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
 script = ExtResource("7_wghk1")
-force = 10.0
+force = 15.0
+max_range = 3.0
 
 [node name="ProtectiveBarrier" type="Node3D" parent="EffectContainer"]
 script = ExtResource("8_xqxdp")
