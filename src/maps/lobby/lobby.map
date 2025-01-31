@@ -2483,13 +2483,72 @@
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
+"_tb_name" "Elevator"
+"_tb_id" "637"
+"_tb_linked_group_id" "{b69fcef2-c516-4b31-985c-df4242008667}"
+"_tb_transformation" "1 0 0 320 0 1 0 0 0 0 1 -34 0 0 0 1"
+"_tb_group" "628"
+}
+// entity 17
+{
+"classname" "func_group"
+"_tb_type" "_tb_group"
+"_tb_name" "Elevator"
+"_tb_id" "636"
+"_tb_linked_group_id" "{689da497-f56d-4e82-bda5-eb7bfe0938a1}"
+"_tb_transformation" "1 0 0 320 0 1 0 0 0 0 1 -34 0 0 0 1"
+"_tb_group" "637"
+}
+// entity 18
+{
+"classname" "func_group"
+"_tb_type" "_tb_group"
+"_tb_name" "Elevator"
+"_tb_id" "630"
+"_tb_linked_group_id" "{18e1a266-ff78-4c3e-b61d-21fbf5143466}"
+"_tb_transformation" "1 0 0 320 0 1 0 0 0 0 1 -34 0 0 0 1"
+"_tb_group" "636"
+}
+// entity 19
+{
+"classname" "func_group"
+"_tb_type" "_tb_group"
+"_tb_name" "ElevatorPrefab"
+"_tb_id" "635"
+"_tb_linked_group_id" "{ccc84457-fc14-474f-8ace-b99cdb7debd6}"
+"_tb_transformation" "1 0 0 320 0 1 0 0 0 0 1 -34 0 0 0 1"
+"_tb_group" "630"
+}
+// entity 20
+{
+"classname" "func_group"
+"_tb_type" "_tb_group"
+"_tb_name" "ElevatorPrefab"
+"_tb_id" "634"
+"_tb_linked_group_id" "{bb15995e-2d30-407a-bd96-b78549a6a5a8}"
+"_tb_transformation" "1 0 0 320 0 1 0 0 0 0 1 -34 0 0 0 1"
+"_tb_group" "635"
+// brush 0
+{
+( 240 -128 -28 ) ( 240 -127 -28 ) ( 240 -128 -27 ) placeholder/texture_dark_07 [ 0 -1 0 0 ] [ 0 0 -1 0 ] 0 0.5 0.5
+( 256 -64 -12 ) ( 256 -64 -11 ) ( 257 -64 -12 ) special/skip [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 0.5 0.5
+( 240 -128 64 ) ( 241 -128 64 ) ( 240 -127 64 ) placeholder/texture_light_07 [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
+( 256 -48 80 ) ( 256 -32 80 ) ( 384 -32 80 ) special/skip [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
+( 256 0 -12 ) ( 257 0 -12 ) ( 256 0 -11 ) special/skip [ -1 0 0 0 ] [ 0 0 -1 0 ] 0 0.5 0.5
+( 256 -64 -12 ) ( 256 -64 -11 ) ( 256 -63 -12 ) special/skip [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 0.5 0.5
+}
+}
+// entity 21
+{
+"classname" "func_group"
+"_tb_type" "_tb_group"
 "_tb_name" "ElevatorPrefab"
 "_tb_id" "619"
 "_tb_linked_group_id" "{19c255d5-2995-48ab-8156-e19e3e4a0ccf}"
 "_tb_transformation" "1 0 0 -256 0 1 0 0 0 0 1 0 0 0 0 1"
-"_tb_group" "628"
+"_tb_group" "634"
 }
-// entity 17
+// entity 22
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
@@ -2499,13 +2558,7 @@
 "_tb_transformation" "1 0 0 320 0 1 0 0 0 0 1 -34 0 0 0 1"
 "_tb_group" "619"
 }
-// entity 18
-{
-"classname" "ElevatorDoors"
-"origin" "248 0 -30"
-"_tb_group" "626"
-}
-// entity 19
+// entity 23
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
@@ -2542,7 +2595,7 @@
 ( 256 64 -12 ) ( 256 63 -12 ) ( 256 64 -11 ) special/skip [ 0 -1 0 0 ] [ 0 0 -1 0 ] 180 0.5 0.5
 }
 }
-// entity 20
+// entity 24
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
@@ -2562,7 +2615,7 @@
 }
 // brush 1
 {
-( 256 -64 64 ) ( 256 64 64 ) ( 256 -64 96 ) special/skip [ 0 -1 0 0 ] [ 0 0 -1 -48 ] 0 0.5 0.5
+( 256 -64 64 ) ( 256 64 64 ) ( 256 -64 96 ) special/skip [ 0 -1 0 0 ] [ 0 0 -1 16 ] 0 0.5 0.5
 ( 256 -64 96 ) ( 296 -64 96 ) ( 256 -64 64 ) special/skip [ 1 0 0 0 ] [ 0 0 -1 16 ] 0 1 1
 ( 256 -64 64 ) ( 296 -64 64 ) ( 256 64 64 ) placeholder/texture_dark_02 [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
 ( 296 -10 66 ) ( 296 -4 66 ) ( 424 -4 66 ) special/skip [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
@@ -2588,7 +2641,7 @@
 ( 344 -64 96 ) ( 344 -24 96 ) ( 344 -64 64 ) placeholder/texture_light_07 [ 0 1 0 16 ] [ 0 0 -1 20 ] 0 0.5 0.5
 }
 }
-// entity 21
+// entity 25
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
@@ -2598,55 +2651,39 @@
 "_tb_transformation" "1 0 0 0 0 1 0 -32 0 0 1 -20 0 0 0 1"
 "_tb_group" "576"
 }
-// entity 22
-{
-"classname" "ElevatorButton"
-"origin" "380 27 40"
-"boss_name" "Umby the Stinky"
-"linked_level" "res://src/bosses/base/test/Test_BossCore.tscn"
-"_tb_group" "575"
-}
-// entity 23
-{
-"classname" "ElevatorButton"
-"origin" "380 27 24"
-"boss_name" "Roulette Dares"
-"linked_level" "res://src/maps/roulette_boss/BossRoulette.tscn"
-"_tb_group" "575"
-}
-// entity 24
-{
-"classname" "ElevatorButton"
-"origin" "380 27 8"
-"boss_name" "Open This Pit Up!"
-"linked_level" "res://src/maps/pit_boss/BossPit.tscn"
-"_tb_group" "575"
-}
-// entity 25
-{
-"classname" "ElevatorButton"
-"origin" "380 -29 8"
-"boss_name" "Coming Soon"
-"linked_level" ""
-"_tb_group" "575"
-}
 // entity 26
 {
 "classname" "ElevatorButton"
-"origin" "380 -29 24"
-"boss_name" "Coming Soon"
-"linked_level" ""
+"origin" "380 19 40"
+"boss_name" "Umby the Stinky"
+"linked_level" "res://src/bosses/base/test/Test_BossCore.tscn"
 "_tb_group" "575"
 }
 // entity 27
 {
 "classname" "ElevatorButton"
-"origin" "380 -29 40"
-"boss_name" "Coming Soon"
-"linked_level" ""
+"origin" "380 19 16"
+"boss_name" "Roulette Dares"
+"linked_level" "res://src/maps/roulette_boss/BossRoulette.tscn"
 "_tb_group" "575"
 }
 // entity 28
+{
+"classname" "ElevatorButton"
+"origin" "380 -21 16"
+"boss_name" "Open This Pit Up!"
+"linked_level" "res://src/maps/pit_boss/BossPit.tscn"
+"_tb_group" "575"
+}
+// entity 29
+{
+"classname" "ElevatorButton"
+"origin" "380 -21 40"
+"boss_name" "Mixology 101"
+"linked_level" "res://src/maps/bartender_boss/BossBartenderMap.tscn"
+"_tb_group" "575"
+}
+// entity 30
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
@@ -2657,7 +2694,7 @@
 // brush 0
 {
 ( 256 32 -28 ) ( 256 33 -28 ) ( 256 32 -27 ) special/skip [ 0 -1 0 32 ] [ 0 0 -1 -28 ] 0 0.5 0.5
-( 256 64 -28 ) ( 256 64 -27 ) ( 257 64 -28 ) placeholder/texture_dark_07 [ 1 0 0 0 ] [ 0 0 -1 -54 ] 0 0.5 0.5
+( 256 64 -28 ) ( 256 64 -27 ) ( 257 64 -28 ) floor/black-tiles [ 1 0 0 -256 ] [ 0 0 -1 -136 ] 0 0.25 0.25
 ( 256 32 -28 ) ( 257 32 -28 ) ( 256 33 -28 ) special/skip [ -1 0 0 0 ] [ 0 -1 0 32 ] 0 1 1
 ( 256 64 64 ) ( 384 192 64 ) ( 384 64 64 ) special/skip [ 1 0 0 0 ] [ 0 -1 0 32 ] 0 1 1
 ( 512 96 36 ) ( 513 96 36 ) ( 512 96 37 ) special/skip [ -1 0 0 0 ] [ 0 0 -1 -28 ] 0 1 1
@@ -2665,7 +2702,7 @@
 }
 // brush 1
 {
-( 384 -128 -32 ) ( 384 -127 -32 ) ( 384 -128 -31 ) placeholder/texture_dark_07 [ 0 -1 0 256 ] [ 0 0 -1 -54 ] 0 0.5 0.5
+( 384 -128 -32 ) ( 384 -127 -32 ) ( 384 -128 -31 ) floor/black-tiles [ 0 -1 0 0 ] [ 0 0 -1 -136 ] 0 0.25 0.25
 ( 384 -64 -32 ) ( 384 -64 -31 ) ( 385 -64 -32 ) special/skip [ 1 0 0 -32 ] [ 0 0 -1 0 ] 0 1 1
 ( 384 -128 -32 ) ( 385 -128 -32 ) ( 384 -127 -32 ) special/skip [ -1 0 0 32 ] [ 0 -1 0 0 ] 0 1 1
 ( 416 128 64 ) ( 416 129 64 ) ( 417 128 64 ) special/skip [ 1 0 0 -32 ] [ 0 -1 0 0 ] 0 1 1
@@ -2683,36 +2720,36 @@
 }
 // brush 3
 {
-( 344 64 94 ) ( 344 -64 94 ) ( 344 64 62 ) special/skip [ 0 1 0 -48 ] [ 0 0 -1 -48 ] 0 0.5 0.5
+( 344 64 94 ) ( 344 -64 94 ) ( 344 64 62 ) special/skip [ 0 1 0 16 ] [ 0 0 -1 16 ] 0 0.5 0.5
 ( 384 -64 62 ) ( 344 -64 62 ) ( 384 -64 94 ) special/skip [ 1 0 0 0 ] [ 0 0 -1 14 ] 0 1 1
-( 344 16 64 ) ( 344 14 64 ) ( 472 14 64 ) placeholder/texture_dark_02 [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
+( 344 16 64 ) ( 344 14 64 ) ( 472 14 64 ) walls/grunge-concrete-dark [ -1 0 0 256 ] [ 0 -1 0 0 ] 0 0.25 0.25
 ( 384 -64 94 ) ( 344 -64 94 ) ( 384 64 94 ) special/skip [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
 ( 384 64 94 ) ( 344 64 94 ) ( 384 64 62 ) special/skip [ -1 0 0 0 ] [ 0 0 -1 14 ] 0 1 1
 ( 384 -64 94 ) ( 384 64 94 ) ( 384 -64 62 ) special/skip [ 0 1 0 0 ] [ 0 0 -1 14 ] 0 1 1
 }
 // brush 4
 {
-( 256 -64 62 ) ( 256 64 62 ) ( 256 -64 94 ) special/skip [ 0 -1 0 0 ] [ 0 0 -1 -52 ] 0 0.5 0.5
+( 256 -64 62 ) ( 256 64 62 ) ( 256 -64 94 ) special/skip [ 0 -1 0 0 ] [ 0 0 -1 12 ] 0 0.5 0.5
 ( 256 -64 94 ) ( 296 -64 94 ) ( 256 -64 62 ) special/skip [ 1 0 0 0 ] [ 0 0 -1 14 ] 0 1 1
-( 296 -10 64 ) ( 424 -4 64 ) ( 296 -4 64 ) placeholder/texture_dark_02 [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
+( 296 -10 64 ) ( 424 -4 64 ) ( 296 -4 64 ) walls/grunge-concrete-dark [ -1 0 0 256 ] [ 0 -1 0 0 ] 0 0.25 0.25
 ( 256 64 94 ) ( 296 64 94 ) ( 256 -64 94 ) special/skip [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
 ( 256 64 62 ) ( 296 64 62 ) ( 256 64 94 ) special/skip [ -1 0 0 0 ] [ 0 0 -1 14 ] 0 1 1
-( 296 -64 62 ) ( 296 -64 94 ) ( 296 64 62 ) special/skip [ 0 -1 0 16 ] [ 0 0 -1 -48 ] 0 0.5 0.5
+( 296 -64 62 ) ( 296 -64 94 ) ( 296 64 62 ) special/skip [ 0 -1 0 16 ] [ 0 0 -1 16 ] 0 0.5 0.5
 }
 // brush 5
 {
 ( 296 -64 62 ) ( 296 -24 62 ) ( 296 -64 94 ) placeholder/texture_light_07 [ 0 -1 0 16 ] [ 0 0 -1 16 ] 0 0.5 0.5
 ( 344 -64 62 ) ( 296 -64 62 ) ( 344 -64 94 ) special/skip [ 1 0 0 0 ] [ 0 0 -1 14 ] 0 1 1
-( 312 -24 64 ) ( 308 104 64 ) ( 308 -24 64 ) placeholder/texture_dark_02 [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
+( 312 -24 64 ) ( 308 104 64 ) ( 308 -24 64 ) walls/grunge-concrete-dark [ -1 0 0 256 ] [ 0 -1 0 0 ] 0 0.25 0.25
 ( 296 -64 94 ) ( 296 -24 94 ) ( 344 -64 94 ) special/skip [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
-( 296 -24 62 ) ( 344 -24 62 ) ( 296 -24 94 ) special/skip [ 1 0 0 -48 ] [ 0 0 -1 -48 ] 0 0.5 0.5
+( 296 -24 62 ) ( 344 -24 62 ) ( 296 -24 94 ) special/skip [ 1 0 0 16 ] [ 0 0 -1 16 ] 0 0.5 0.5
 ( 344 -64 94 ) ( 344 -24 94 ) ( 344 -64 62 ) placeholder/texture_light_07 [ 0 1 0 16 ] [ 0 0 -1 16 ] 0 0.5 0.5
 }
 // brush 6
 {
 ( 296 64 94 ) ( 296 24 94 ) ( 296 64 62 ) placeholder/texture_light_07 [ 0 -1 0 16 ] [ 0 0 -1 16 ] 0 0.5 0.5
-( 344 24 94 ) ( 344 24 62 ) ( 296 24 94 ) special/skip [ -1 0 0 16 ] [ 0 0 -1 -48 ] 0 0.5 0.5
-( 322 24 64 ) ( 332 24 64 ) ( 332 152 64 ) placeholder/texture_dark_02 [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
+( 344 24 94 ) ( 344 24 62 ) ( 296 24 94 ) special/skip [ -1 0 0 16 ] [ 0 0 -1 16 ] 0 0.5 0.5
+( 322 24 64 ) ( 332 24 64 ) ( 332 152 64 ) walls/grunge-concrete-dark [ -1 0 0 256 ] [ 0 -1 0 0 ] 0 0.25 0.25
 ( 344 64 94 ) ( 344 24 94 ) ( 296 64 94 ) special/skip [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
 ( 344 64 94 ) ( 296 64 94 ) ( 344 64 62 ) special/skip [ -1 0 0 0 ] [ 0 0 -1 14 ] 0 1 1
 ( 344 64 62 ) ( 344 24 62 ) ( 344 64 94 ) placeholder/texture_light_07 [ 0 1 0 16 ] [ 0 0 -1 16 ] 0 0.5 0.5
@@ -2722,7 +2759,7 @@
 ( 240 -64 -60 ) ( 240 -63 -60 ) ( 240 -64 -59 ) special/skip [ 0 -1 0 0 ] [ 0 0 -1 -44 ] 0 1 1
 ( 448 -64 -60 ) ( 448 -64 -59 ) ( 449 -64 -60 ) special/skip [ 1 0 0 0 ] [ 0 0 -1 -44 ] 0 1 1
 ( 448 -64 -60 ) ( 449 -64 -60 ) ( 448 -63 -60 ) special/skip [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
-( 576 64 -28 ) ( 576 65 -28 ) ( 577 64 -28 ) placeholder/texture_orange_09 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
+( 576 64 -28 ) ( 576 65 -28 ) ( 577 64 -28 ) floor/marble [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 0.5 0.5
 ( 576 64 -28 ) ( 577 64 -28 ) ( 576 64 -27 ) special/skip [ -1 0 0 0 ] [ 0 0 -1 -44 ] 0 1 1
 ( 384 64 -28 ) ( 384 64 -27 ) ( 384 65 -28 ) special/skip [ 0 1 0 0 ] [ 0 0 -1 -44 ] 0 1 1
 }
@@ -2732,11 +2769,17 @@
 ( 256 -96 -28 ) ( 256 -96 -27 ) ( 257 -96 -28 ) special/skip [ 1 0 0 0 ] [ 0 0 -1 -28 ] 0 1 1
 ( 256 -128 -28 ) ( 257 -128 -28 ) ( 256 -127 -28 ) special/skip [ -1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
 ( 512 -64 64 ) ( 512 -63 64 ) ( 513 -64 64 ) special/skip [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
-( 512 -64 36 ) ( 513 -64 36 ) ( 512 -64 37 ) placeholder/texture_dark_07 [ -1 0 0 0 ] [ 0 0 -1 -54 ] 0 0.5 0.5
+( 512 -64 36 ) ( 513 -64 36 ) ( 512 -64 37 ) floor/black-tiles [ -1 0 0 256 ] [ 0 0 -1 -136 ] 0 0.25 0.25
 ( 384 -64 36 ) ( 384 -64 37 ) ( 384 -63 36 ) special/skip [ 0 1 0 0 ] [ 0 0 -1 -28 ] 0 1 1
 }
 }
-// entity 29
+// entity 31
+{
+"classname" "ElevatorDoors"
+"origin" "250 0 -30"
+"_tb_group" "576"
+}
+// entity 32
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
@@ -2817,12 +2860,12 @@
 ( -656 -64 24 ) ( -656 -64 25 ) ( -656 -63 24 ) floor/carpet-red [ 0 -1 0 -303 ] [ 0 0 -1 244 ] 0 0.5 0.5
 }
 }
-// entity 30
+// entity 33
 {
 "classname" "Chandellier1"
 "origin" "-416 0 272"
 }
-// entity 31
+// entity 34
 {
 "classname" "Chandellier1"
 "origin" "-160 0 272"
