@@ -256,9 +256,9 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 	bullet_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 	bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
-func check_barrel_effect_on_damage_applied():
+func check_barrel_effect_on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
-		barrel.get_active_effect().on_damage_applied()
+		barrel.get_active_effect().on_damage_applied(_has_pos, _pos)
 
 func check_barrel_effect_on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:

@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://baauotfv75lsw"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_yvor8"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_bm7vu"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/create_on_action_effect.gd" id="3_vhyyg"]
+[ext_resource type="PackedScene" uid="uid://ovfcjowsr7df" path="res://src/bosses/bartender/FireHazardArea.tscn" id="4_08ruy"]
+[ext_resource type="PackedScene" uid="uid://dqw4c2ldowow3" path="res://src/bosses/bartender/PoisonHazardArea.tscn" id="5_mp0pc"]
+[ext_resource type="PackedScene" uid="uid://2a8xpe58m4sr" path="res://src/player/gun/damage_effect/CognacReloadHealCloud.tscn" id="5_o0msc"]
+
+[node name="BartenderBossBarrel" type="Node3D"]
+script = ExtResource("1_yvor8")
+barrel_id = 12
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_bm7vu")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="MolotovDash" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_vhyyg")
+trigger_action = 1
+prefab = ExtResource("4_08ruy")
+display_text_title = "Molotov Dash"
+display_text_tag = "A burning gift"
+display_text_desc = "Create a burning puddle after dash"
+
+[node name="ToxinMist" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_vhyyg")
+trigger_action = 3
+prefab = ExtResource("5_mp0pc")
+limit_once_per_shot = true
+chance_perc = 20.0
+display_text_title = "Toxin Mist"
+display_text_tag = "Poison 'em!"
+display_text_desc = "20% chance to create poison cloud on enemy hit"
+
+[node name="CognacReload" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_vhyyg")
+trigger_action = 2
+prefab = ExtResource("5_o0msc")
+display_text_title = "Cognac Reload"
+display_text_tag = "Take a break, take a sip"
+display_text_desc = "Recover HP on reload"

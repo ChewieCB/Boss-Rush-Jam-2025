@@ -136,6 +136,7 @@ func _ready():
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_hud)
 	current_gun.gun_reloaded.connect(update_hud)
+	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 
 func _input(event):
 	if controls_disabled:

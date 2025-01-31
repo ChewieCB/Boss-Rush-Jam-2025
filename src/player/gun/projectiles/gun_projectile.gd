@@ -59,7 +59,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			body.health_component.damage(damage)
-			damage_applied.emit()
+			damage_applied.emit(true, global_position)
 			ricochet_count_left = 0
 		if found_hitscal_col:
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)

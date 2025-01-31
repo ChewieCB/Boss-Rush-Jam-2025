@@ -77,9 +77,9 @@ func on_damage_calculation():
 	for child in child_effects:
 		child.on_damage_calculation()
 
-func on_damage_applied():
+func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for child in child_effects:
-		child.on_damage_applied()
+		child.on_damage_applied(_has_pos, _pos)
 
 func on_enemy_killed():
 	for child in child_effects:
