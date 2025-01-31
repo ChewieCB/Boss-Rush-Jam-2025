@@ -1575,12 +1575,13 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.8
 [node name="entity_55_Chandellier1LightOnly" parent="NavigationRegion3D/FuncGodotMap" instance=ExtResource("23_un6b8")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.3125, -3.25)
 
-[node name="BossBartender" parent="." node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker") instance=ExtResource("13_ci071")]
+[node name="BossBartender" parent="." node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "target") instance=ExtResource("13_ci071")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -17.0607, 0, -44.9891)
 floor_fize_hazard_marker = NodePath("../BossMarker/FloorFireHazard")
 behind_bar_move_points = [NodePath("../BossMarker/BossMoveMarker"), NodePath("../BossMarker/BossMoveMarker2"), NodePath("../BossMarker/BossMoveMarker3"), NodePath("../BossMarker/BossMoveMarker4"), NodePath("../BossMarker/BossMoveMarker5")]
 boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")
 boss_jump_phase3_marker = NodePath("../BossMarker/BossJumpPhase3Marker")
+target = NodePath("../NavigationRegion3D/FuncGodotMap/entity_53_PlayerRef")
 
 [node name="BarLight" type="Node3D" parent="."]
 
