@@ -23,7 +23,7 @@ script = ExtResource("3_rhvms")
 display_text_title = "Ball Bullet"
 display_text_tag = "Shoot huge ball"
 display_text_desc = "-90% projectile
-+100% damage"
++60% damage"
 
 [node name="SetProjectileToBall" type="Node3D" parent="EffectContainer/BallBullet"]
 script = ExtResource("3_nac64")
@@ -38,7 +38,7 @@ is_perc = true
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/BallBullet"]
 script = ExtResource("6_2bruo")
 attribute = 1
-modify_value = 100.0
+modify_value = 60.0
 is_perc = true
 
 [node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]

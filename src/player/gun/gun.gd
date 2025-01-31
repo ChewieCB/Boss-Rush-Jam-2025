@@ -201,6 +201,9 @@ func shoot(aim_ray: RayCast3D):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_prepare_to_fire()
 
+	if barrel_count == 0:
+		SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
+
 	# Screenshake
 	GameManager.player.player_camera.add_trauma(modified_screenshake)
 
@@ -252,16 +255,6 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 	bullet_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
 	bullet_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 	bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
-
-# func create_projectile_attack(start_pos: Vector3, direction: Vector3, damage: int, speed: float):
-#     var projectile_inst: GunProjectile = projectile_prefab.instantiate()
-#     projectile_inst.owner_gun = self
-#     projectile_inst.homing_strength = modified_homing_strength
-#     GameManager.player.get_parent().add_child(projectile_inst)
-#     projectile_inst.init(start_pos, direction, damage, modified_ricochet_count, speed)
-#     projectile_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
-#     projectile_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
-#     projectile_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 
 func check_barrel_effect_on_damage_applied():
 	for barrel in installed_barrels:
@@ -416,8 +409,6 @@ func install_barrel(barrel_prefab: PackedScene):
 			# installed_barrels.append(barrel_inst)
 			break
 	magazine_ammo_left = 0
-	# This is just to force magazein UI update
-	gun_reloaded.emit()
 	recheck_installed_barrels()
 
 
@@ -433,6 +424,9 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
 
 
 func recheck_installed_barrels():
+	# Wait to make sure barrel actually instantiated or queue_freed
+	await get_tree().process_frame
+	await get_tree().process_frame
 	installed_barrels = []
 	for child in barrel_container.get_children():
 		if child.get_child_count() > 0:
@@ -441,6 +435,8 @@ func recheck_installed_barrels():
 			installed_barrels.append(barrel)
 	
 	barrel_count = installed_barrels.size()
+	# This is just to force magazein UI update
+	gun_reloaded.emit()
 
 
 ## Use after change scene
