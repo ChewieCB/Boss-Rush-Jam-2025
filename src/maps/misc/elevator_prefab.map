@@ -307,3 +307,13 @@
 "origin" "0 0 36"
 "angle" "180"
 }
+// entity 18
+{
+"classname" "Chandellier2LightOnly"
+"origin" "0 0 96"
+}
+// entity 19
+{
+"classname" "Chandellier1LightOnly"
+"origin" "-104 0 48"
+}

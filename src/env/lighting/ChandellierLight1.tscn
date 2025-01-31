@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://ckjl0xci7amep"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7vk1h"]
+size = Vector3(3, 3, 3)
+
+[node name="ChandellierLight1" type="Node3D"]
+
+[node name="DebugMesh" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("BoxMesh_7vk1h")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.996078, 0.937469, 0.850996, 1)
+light_energy = 4.0
+light_indirect_energy = 2.0
+light_volumetric_fog_energy = 2.0
+light_size = 2.0
+light_bake_mode = 1
+omni_range = 20.0

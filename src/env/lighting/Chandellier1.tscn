@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ckjl0xci7amep"]
+[gd_scene load_steps=6 format=3 uid="uid://bu43hcl2orkct"]
 
 [ext_resource type="Texture2D" uid="uid://dbjcmdnek20wd" path="res://src/env/lighting/assets/chandellier_1.png" id="1_jbfgn"]
 [ext_resource type="Texture2D" uid="uid://u3vyw6eyv5u7" path="res://src/env/lighting/assets/chain.png" id="2_30pyj"]
