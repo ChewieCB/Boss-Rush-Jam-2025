@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_vfcr2"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/boss_pit.gd" id="1_ymudn"]
-[ext_resource type="AudioStream" uid="uid://cpclsa3ujr4lu" path="res://assets/music/brj25_remix2.mp3" id="2_bre08"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_hhc2p"]
+[ext_resource type="AudioStream" uid="uid://fq71s50v8yd7" path="res://assets/music/brj25_balrog03.mp3" id="2_usrqo"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="3_nqcqn"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_w7aip"]
 [ext_resource type="Material" uid="uid://coo1y5tjcwlec" path="res://assets/textures/placeholder/texture_dark_03.tres" id="4_h2odb"]
@@ -1220,7 +1220,7 @@ _surfaces = [{
 
 [node name="BossPit" type="Node3D"]
 script = ExtResource("1_ymudn")
-bgm = ExtResource("2_bre08")
+bgm = ExtResource("2_usrqo")
 cover_spawn_scene = ExtResource("21_w72c7")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

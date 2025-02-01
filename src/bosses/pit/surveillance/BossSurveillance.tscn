@@ -1,14 +1,19 @@
-[gd_scene load_steps=31 format=3 uid="uid://burh3udob1t32"]
+[gd_scene load_steps=36 format=3 uid="uid://burh3udob1t32"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_rd2xm"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_p6rlf"]
 [ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="3_bke04"]
+[ext_resource type="AudioStream" uid="uid://cqrc5y3uldep8" path="res://src/bosses/pit/assets/sfx/PIT BOSS SURVEILLANCE LAZER LOOP.mp3" id="3_wy31b"]
+[ext_resource type="AudioStream" uid="uid://dm80pauvthiji" path="res://src/bosses/pit/assets/sfx/PIT BOSS LAZER DAMAGE RECEIVED LOOP_.mp3" id="4_41emj"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="4_nqlwe"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="5_fqifh"]
 [ext_resource type="Material" uid="uid://ctsldd772hkaj" path="res://src/bosses/pit/surveillance/laser_material.tres" id="5_wjqbp"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="6_dvo4w"]
+[ext_resource type="AudioStream" uid="uid://dlutklospeu5y" path="res://src/bosses/pit/assets/sfx/PIT BOSS EM FIELD.mp3" id="6_xnsy2"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_bpphr"]
+[ext_resource type="AudioStream" uid="uid://sdruigjaclpn" path="res://src/bosses/pit/assets/sfx/Surveilance Hitmarker .mp3" id="8_8p6dj"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="8_bah8y"]
+[ext_resource type="AudioStream" uid="uid://64qypvlak01e" path="res://src/bosses/pit/assets/sfx/SURVEILLANCE DEATH.mp3" id="9_7awj5"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_h6vir"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="10_tlulp"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_3sg7f"]
@@ -134,12 +139,17 @@ turrets_to_spawn = 4
 beam_sweeps_per_attack = 4
 beam_sweep_delay = 0.7
 beam_collision_reset_delay = 1.2
+sfx_laser = ExtResource("3_wy31b")
+sfx_laser_impact = Array[AudioStream]([ExtResource("4_41emj")])
 barrier_cage_radius = 16.0
 barrier_cage_reflect_force = 12.0
 barrier_cage_time = 12.0
 barrier_cage_material = ExtResource("3_bke04")
+sfx_barrier = ExtResource("6_xnsy2")
 chip_spawn_chance = 0.24
 barrel_to_drop = ExtResource("4_nqlwe")
+sfx_hit = Array[AudioStream]([ExtResource("8_8p6dj")])
+sfx_death = ExtResource("9_7awj5")
 current_phase = 3
 attack_recovery_time = 0.7
 projectile_scene = null
@@ -180,6 +190,10 @@ skeleton = NodePath("../..")
 [node name="LaserEndParticles" parent="Body/Head/RayCast3D/Area3D/LaserMesh" index="0" instance=ExtResource("5_fqifh")]
 transform = Transform3D(2, 0, 0, 0, -8.74228e-08, -2, 0, 2, -8.74228e-08, 0, 0, 0)
 
+[node name="LaserSFXPlayer" type="AudioStreamPlayer3D" parent="Body/Head/RayCast3D/Area3D/LaserMesh/LaserEndParticles" index="0"]
+stream = ExtResource("3_wy31b")
+unit_size = 5.0
+
 [node name="Shield" type="StaticBody3D" parent="." index="1"]
 transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 1.9233e-07, -0.1, 0)
 collision_layer = 128
@@ -219,6 +233,10 @@ mesh = SubResource("TorusMesh_2jdcd")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BarrierCageArea" index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -16, 0)
 shape = SubResource("CylinderShape3D_o7mde")
+
+[node name="BarrierSFXPlayer" type="AudioStreamPlayer" parent="BarrierCageArea" index="4"]
+stream = ExtResource("6_xnsy2")
+bus = &"SFX"
 
 [node name="Sprite3D" parent="." index="3"]
 visible = false
@@ -665,6 +683,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.71903, 0)
 libraries = {
 "": SubResource("AnimationLibrary_7pmgg")
 }
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="18"]
+unit_size = 20.0
+bus = &"SFX"
 
 [connection signal="body_entered" from="Body/Head/RayCast3D/Area3D" to="." method="_on_laser_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]

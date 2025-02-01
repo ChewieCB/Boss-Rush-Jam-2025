@@ -28,6 +28,10 @@ var phase_stance: Stance = Stance.DEFENSIVE:
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var phase_debug_label: Label3D = $DebugPhaseLabel
 
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
+@onready var laser_sfx_player: AudioStreamPlayer3D = $Body/Head/RayCast3D/Area3D/LaserMesh/LaserEndParticles/LaserSFXPlayer
+@onready var barrier_sfx_player: AudioStreamPlayer = $BarrierCageArea/BarrierSFXPlayer
+
 @export var shield_radius: float = 7.5
 @onready var shield_body: StaticBody3D = $Shield
 @onready var shield_mesh_solid: MeshInstance3D = $Shield/ShieldMeshSolid
@@ -38,6 +42,7 @@ var shield_tween: Tween
 var previous_phase: String
 
 # Turrets
+@export_group("Turrets")
 var turret_spawns: Array:
 	set(value):
 		turret_spawns = value
@@ -48,6 +53,7 @@ var turret_look_target: Node3D
 var spawned_turrets: Array = []
 
 # Beam
+@export_group("Laser Beam")
 @onready var laser_area: Area3D = $Body/Head/RayCast3D/Area3D
 @onready var laser_collider: CollisionShape3D = $Body/Head/RayCast3D/Area3D/LaserCollider
 @onready var laser_mesh: MeshInstance3D = $Body/Head/RayCast3D/Area3D/LaserMesh
@@ -58,8 +64,12 @@ var beam_sweep_count: int = 0
 @export var beam_sweep_delay: float = 0.7
 @export var beam_collision_reset_delay: float = 1.2
 var is_beam_tracking: bool = true  # HACK to prevent the beam from locking once it hits you
+@export_subgroup("SFX")
+@export var sfx_laser: AudioStream
+@export var sfx_laser_impact: Array[AudioStream]
 
 # Barrier Cage
+@export_group("Barrier Cage")
 @export var barrier_cage_radius: float = 24.0
 @export var barrier_cage_reflect_force: float = 12.0
 @export var barrier_cage_time: float = 12.0
@@ -67,6 +77,8 @@ var is_beam_tracking: bool = true  # HACK to prevent the beam from locking once 
 @onready var barrier_cage_area: Area3D = $BarrierCageArea
 @onready var barrier_cage_collider: CollisionShape3D = $BarrierCageArea/CollisionShape3D
 @onready var barrier_cage_mesh: MeshInstance3D = $BarrierCageArea/MeshInstance3D
+@export_subgroup("SFX")
+@export var sfx_barrier: AudioStream
 
 
 func _ready() -> void:
@@ -76,7 +88,13 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	pass
+	if barrier_sfx_player.playing:
+		var target_pos_floor: Vector3 = target.global_position
+		target_pos_floor.y = 0
+		var target_dist: float = target_pos_floor.distance_to(Vector3.ZERO)
+		target_dist = clamp(target_dist, 0, barrier_cage_radius)
+		var dist_ratio: float = remap(target_dist, 0, barrier_cage_radius, 0.2, 1.0)
+		barrier_sfx_player.volume_db = linear_to_db(dist_ratio)
 
 
 func activate() -> void:
@@ -283,6 +301,7 @@ func _on_laser_beam_startup_state_entered() -> void:
 	
 	# Start up the laser
 	var cast_point: Vector3
+	laser_sfx_player.play()
 	aim_ray.force_raycast_update()
 	if aim_ray.is_colliding():
 		cast_point = aim_ray.get_collision_point()
@@ -368,6 +387,7 @@ func _on_phase_2_laser_beam_sweep_beam_state_physics_processing(delta: float) ->
 		var aim_dir = aim_ray.global_basis.z.normalized()
 		var target_dir = (beam_target - aim_ray.global_position).normalized()
 		if aim_dir.dot(target_dir) > 0.999:
+			laser_sfx_player.stop()
 			state_chart.send_event("end_sweep")
 
 
@@ -405,12 +425,14 @@ func _on_phase_3_laser_beam_sweep_beam_state_physics_processing(delta: float) ->
 		var aim_dir = aim_ray.global_basis.z.normalized()
 		var target_dir = (beam_target - aim_ray.global_position).normalized()
 		if aim_dir.dot(target_dir) > 0.999:
+			laser_sfx_player.stop()
 			state_chart.send_event("end_sweep")
 
 
 func _on_laser_beam_recover_state_entered() -> void:
 	debug_state_label.text = "Laser Beam | Recovering"
 	
+	laser_sfx_player.stop()
 	var tween = get_tree().create_tween()
 	tween.tween_property(laser_mesh.mesh, "height", 0.1, 0.4)
 	tween.parallel().tween_property(laser_mesh, "position:z", 0.4, 0.4)
@@ -432,6 +454,9 @@ func _on_laser_beam_recover_state_entered() -> void:
 func _on_laser_hurtbox_body_entered(_body: Node3D) -> void:
 	if _body == target and is_beam_tracking:
 		target.health_component.damage(5)
+		laser_sfx_player.stop()
+		laser_sfx_player.stream = sfx_laser_impact.pick_random()
+		laser_sfx_player.play()
 		is_beam_tracking = false
 		laser_area.set_deferred("monitoring", false)
 		
@@ -452,6 +477,10 @@ func _on_laser_hurtbox_body_entered(_body: Node3D) -> void:
 		tween.parallel().tween_property(laser_particles, "scale", Vector3(3, 3, 3), 0.2)
 		tween.parallel().tween_property(laser_collider.shape, "radius", 1.5, 0.2)
 		await tween.finished
+		
+		laser_sfx_player.stop()
+		laser_sfx_player.stream = sfx_laser
+		laser_sfx_player.play()
 		
 		laser_area.set_deferred("monitoring", true)
 		is_beam_tracking = true
@@ -485,6 +514,7 @@ func _on_barrier_cage_spawn_cage_state_entered() -> void:
 	barrier_cage_area.visible = true
 	barrier_cage_area.monitoring = true
 	
+	barrier_sfx_player.play()
 	var cage_tween = get_tree().create_tween()
 	cage_tween.tween_property(barrier_cage_mesh.mesh, "top_radius", barrier_cage_radius, 0.8)
 	cage_tween.parallel().tween_property(barrier_cage_mesh.mesh, "bottom_radius", barrier_cage_radius, 0.8)
@@ -502,7 +532,9 @@ func _on_barrier_cage_spawn_cage_state_exited() -> void:
 	cage_tween.tween_property(barrier_cage_mesh.mesh, "top_radius", 42.0, 0.8)
 	cage_tween.parallel().tween_property(barrier_cage_mesh.mesh, "bottom_radius", 42.0, 0.8)
 	cage_tween.parallel().tween_property(barrier_cage_collider.shape, "radius", 42.0, 0.8)
+	cage_tween.parallel().tween_property(barrier_sfx_player, "volume_db", linear_to_db(0.0), 0.8)
 	await cage_tween.finished
+	barrier_sfx_player.stop()
 	
 	barrier_cage_area.visible = false
 
@@ -626,6 +658,7 @@ func hide_shield() -> void:
 
 
 func _on_defensive_state_entered() -> void:
+	laser_sfx_player.stop()
 	show_shield()
 
 

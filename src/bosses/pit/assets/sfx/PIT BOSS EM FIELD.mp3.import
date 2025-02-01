@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/PIT BOSS EM FIELD.mp3-c6c6347ab5d1010e4035f07
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0
