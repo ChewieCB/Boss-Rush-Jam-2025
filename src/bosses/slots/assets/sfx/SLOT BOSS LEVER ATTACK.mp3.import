@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b15by5itg11gr"
+path="res://.godot/imported/SLOT BOSS LEVER ATTACK.mp3-16d669989e0291ef4c9896124a2c388b.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/SLOT BOSS LEVER ATTACK.mp3"
+dest_files=["res://.godot/imported/SLOT BOSS LEVER ATTACK.mp3-16d669989e0291ef4c9896124a2c388b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

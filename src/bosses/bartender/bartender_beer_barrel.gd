@@ -1,0 +1,2 @@
+extends BartenderBottle
+class_name BartenderBarrel

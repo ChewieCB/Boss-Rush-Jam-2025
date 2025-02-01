@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cyf0d62sx0q84"
+path="res://.godot/imported/PIT BOSS BIG JUMP.mp3-c8eae70402b6fc1c3b9f29044734bee0.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/PIT BOSS BIG JUMP.mp3"
+dest_files=["res://.godot/imported/PIT BOSS BIG JUMP.mp3-c8eae70402b6fc1c3b9f29044734bee0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

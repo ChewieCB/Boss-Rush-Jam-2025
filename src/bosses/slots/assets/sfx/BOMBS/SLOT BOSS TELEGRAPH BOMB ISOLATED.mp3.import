@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d0a08ylid028n"
+path="res://.godot/imported/SLOT BOSS TELEGRAPH BOMB ISOLATED.mp3-9b9f8dc943318a0a4982481ae534c7a8.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS TELEGRAPH BOMB ISOLATED.mp3"
+dest_files=["res://.godot/imported/SLOT BOSS TELEGRAPH BOMB ISOLATED.mp3-9b9f8dc943318a0a4982481ae534c7a8.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

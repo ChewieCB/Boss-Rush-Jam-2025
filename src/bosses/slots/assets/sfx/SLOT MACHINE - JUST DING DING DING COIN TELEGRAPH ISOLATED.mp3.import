@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://vjjoalu8btt5"
+path="res://.godot/imported/SLOT MACHINE - JUST DING DING DING COIN TELEGRAPH ISOLATED.mp3-93bc882d6e808521c12630b2e7348bc8.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/SLOT MACHINE - JUST DING DING DING COIN TELEGRAPH ISOLATED.mp3"
+dest_files=["res://.godot/imported/SLOT MACHINE - JUST DING DING DING COIN TELEGRAPH ISOLATED.mp3-93bc882d6e808521c12630b2e7348bc8.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

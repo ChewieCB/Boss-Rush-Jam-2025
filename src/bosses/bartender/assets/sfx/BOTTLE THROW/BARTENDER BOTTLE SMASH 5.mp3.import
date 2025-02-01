@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cq716jgj04q7r"
+path="res://.godot/imported/BARTENDER BOTTLE SMASH 5.mp3-3a73848b694c4bddec52b6310695d8c1.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER BOTTLE SMASH 5.mp3"
+dest_files=["res://.godot/imported/BARTENDER BOTTLE SMASH 5.mp3-3a73848b694c4bddec52b6310695d8c1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

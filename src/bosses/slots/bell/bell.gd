@@ -16,6 +16,11 @@ var floor_y: float
 @export var explosion_scene: PackedScene
 @export var spark_scene: PackedScene
 
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
+@export_group("SFX")
+@export var sfx_bell_windup: Array[AudioStream]
+@export var sfx_bell_impact: Array[AudioStream]
+
 
 func _ready() -> void:
 	var space_state = get_world_3d().direct_space_state
@@ -27,6 +32,15 @@ func _ready() -> void:
 	var result = space_state.intersect_ray(query)
 	if result:
 		floor_y = result.position.y
+	
+	sfx_player.stream = sfx_bell_windup.pick_random()
+	get_tree().get_root().get_child(2).add_child(sfx_player)
+	sfx_player.global_position = self.global_position
+	sfx_player.global_position.y = floor_y
+	sfx_player.volume_db = 5.0
+	sfx_player.max_db = 5.0
+	sfx_player.unit_size = 30.0
+	sfx_player.play()
 	
 	var tween = get_tree().create_tween()
 	mesh.mesh.surface_get_material(0).albedo_color = Color("#b08137")
@@ -42,6 +56,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if self.global_position.y <= floor_y:
+		destroyed.emit(self)
 		destroy()
 	else:
 		global_position.y -= fall_speed * delta
@@ -69,8 +84,11 @@ func destroy() -> void:
 	
 	var tween = get_tree().create_tween()
 	tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:a", 0, 0.14).set_trans(Tween.TRANS_EXPO)
-	tween.tween_callback(destroyed.emit.bind(self))
-	tween.tween_callback(self.queue_free)
+	tween.tween_callback(_on_destroyed)
+
+
+func _on_destroyed() -> void:
+	queue_free()
 
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:

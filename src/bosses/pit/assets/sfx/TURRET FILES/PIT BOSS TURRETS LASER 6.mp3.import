@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://baosy2qbshyq5"
+path="res://.godot/imported/PIT BOSS TURRETS LASER 6.mp3-ef13dd088a56663c6f98a6e8ae878f27.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/TURRET FILES/PIT BOSS TURRETS LASER 6.mp3"
+dest_files=["res://.godot/imported/PIT BOSS TURRETS LASER 6.mp3-ef13dd088a56663c6f98a6e8ae878f27.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

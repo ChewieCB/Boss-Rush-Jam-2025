@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b3ppg2boieouy"
+path="res://.godot/imported/BARTENDER BARREL ROLL 2.mp3-810b4166bc55dffbae535f04234db890.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL ROLL 2.mp3"
+dest_files=["res://.godot/imported/BARTENDER BARREL ROLL 2.mp3-810b4166bc55dffbae535f04234db890.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

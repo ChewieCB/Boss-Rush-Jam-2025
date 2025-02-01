@@ -11,9 +11,6 @@ signal desired_height_reached
 var prev_phase
 @export var phase_2_health_percentage_trigger: float = 0.5
 
-@export var SLOT_TICKS: int = 20
-var slot_ticks: int = SLOT_TICKS
-
 @export_group("Movement")
 @export var DESIRED_DISTANCE: float = 10.0
 @export var desired_distance: float = DESIRED_DISTANCE
@@ -25,10 +22,33 @@ var drop_factor: float = DROP_FACTOR
 @export var angle_speed: float = 1.0  # radians/second
 @export var orbit_angle: float = 0.0  # track this over time
 @export var orbit_radius: float = 20.0
-@export_group("Spin Slots")
+
+@export_group("Attacks")
+@export_subgroup("Spin Slots")
 var next_attack: String
 var next_attack_idx: int
 var next_attack_texture: Texture
+## Determines how long the slots roll for
+@export var SLOT_TICKS: int = 20  
+var slot_ticks: int = SLOT_TICKS
+# SFX
+@export var sfx_slot_roll_long: AudioStream  # For phase 1
+@export var sfx_slot_roll_short: AudioStream  # For phase 2
+@export var sfx_slot_roll_ding: AudioStream
+@export var sfx_slot_roll_coins: AudioStream
+@export var sfx_slot_pick_coin: AudioStream
+@export var sfx_slot_pick_bell: AudioStream
+@export var sfx_slot_pick_bar: AudioStream
+@export var sfx_slot_pick_diamond: AudioStream
+@export var sfx_slot_pick_cherry: AudioStream
+@onready var sfx_slot_picks: Array[AudioStream] = [
+	sfx_slot_pick_coin, 
+	sfx_slot_pick_bell, 
+	sfx_slot_pick_bar, 
+	sfx_slot_pick_diamond, 
+	sfx_slot_pick_cherry
+]
+
 @export_subgroup("Slot Icons")
 @export var icon_coin: Texture
 @export var icon_bell: Texture
@@ -38,40 +58,67 @@ var next_attack_texture: Texture
 @onready var slot_icons: Array[Texture] = [
 	icon_coin, icon_bell, icon_bar, icon_diamond, icon_cherry
 ]
-@export_group("Coin Burst")
+@onready var slot_decals: Array[Node] = get_tree().get_root().get_child(3).find_children("*", "SlotRollerDecal")
+
+@export_subgroup("Coin Burst")
 @export var coin_projectile: PackedScene
 @export var coin_shots_per_burst: int = 8
 @export var num_bursts: int = 1
 @export var delay_between_burst: float = 0.6
-@export_group("Bell Drop")
+# SFX
+@export var sfx_coin_shot: Array[AudioStream]
+
+@export_subgroup("Bell Drop")
 @export var bell_scene: PackedScene
 @export var drop_shadow_material: Material
 @export var bell_shadow_time: float = 1.4
 @export var bell_spawn_area_radius: float = 28.0
 @export var bells_to_spawn: int = 6
 var bell_spawn_points: Array = []
-@export_group("Lever Swipe")
+# SFX
+#@export var sfx_bell_Spawn: Array[AudioStream]  - TODO: Get spawn sounds
+# Moved to the bell objects
+@export var sfx_bell_windup: Array[AudioStream]
+@export var sfx_bell_impact: Array[AudioStream]
+
+@export_subgroup("Lever Swipe")
 @export var swipe_damage: float = 5.0
 @export var swipe_knockback: float = 50.0
 @export var swipe_dodge_speed: float = 10.0
-@export_group("Charge")
+# SFX
+@export var sfx_lever_swipe: Array[AudioStream]
+
+@export_subgroup("Charge")
 @export var charge_damage: float = 10.0
 @export var charge_knockback: float = 50.0
 @export var min_charge_distance: float = 10.0
 var charge_locked: bool = false
-@export_group("Homing Diamonds")
+# SFX
+@export var sfx_charge: Array[AudioStream]
+@export var sfx_charge_impact: Array[AudioStream]
+
+@export_subgroup("Homing Diamonds")
 @export var diamond_projectile: PackedScene
 @export var diamond_shots_per_attack: int = 12
 @export var diamond_shot_time: float = 1.3
-@export_group("Cherry Bombs")
+# SFX
+@export var sfx_diamond_shot: Array[AudioStream]
+
+@export_subgroup("Cherry Bombs")
 @export var bomb_projectile: PackedScene
 @export var bombs_per_attack: int = 5
 @export var bomb_drop_delay: float = 0.4
 @export var bomb_fuse_time: float = 2.5
 @export var bomb_impulse: float = 100000.0
 @export var max_drop_distance: float = 20.0
+# SFX
+# Moved to the bomb objects
+@export var sfx_bomb_launch: Array[AudioStream]
+#@export var sfx_bomb_bounce: Array[AudioStream]
+#@export var sfx_bomb_explode: Array[AudioStream]
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 
 func activate() -> void:
@@ -217,11 +264,16 @@ func _on_spin_slots_spinning_state_entered() -> void:
 	next_attack_texture = slot_icons[next_attack_idx]
 	
 	# Spinning
+	sfx_player.stream = sfx_slot_roll_long if current_phase == 1 else sfx_slot_roll_short
+	sfx_player.play()
+	
 	for i in range(slot_ticks):
 		for slot_sprite in slot_icons_parent.get_children():
 			var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
 			var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size() - 1) 
 			slot_sprite.texture = slot_icons[new_idx]
+			#for decal in slot_decals:
+				#decal.mesh.material.albedo_texture = slot_icons[new_idx]
 		await get_tree().create_timer(0.1).timeout
 	# Settle each roller one by one
 	for i in range(slot_icons_parent.get_child_count()):
@@ -231,6 +283,14 @@ func _on_spin_slots_spinning_state_entered() -> void:
 				var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
 				var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size()) 
 				slot_sprite.texture = slot_icons[new_idx]
+	
+	#for decal in slot_decals:
+		#decal.mesh.material.albedo_texture = slot_icons[next_attack_idx]
+	
+	sfx_player.stop()
+	var choice_sfx: AudioStream = sfx_slot_picks[next_attack_idx]
+	sfx_player.stream = choice_sfx
+	sfx_player.play()
 	
 	state_chart.send_event("attack_start")
 	state_chart.send_event("end_slots")
@@ -251,11 +311,16 @@ func _on_spin_slots_recover_state_entered() -> void:
 # Rapid fire coin projectiles 
 
 func fire_projectile(projectile_scene: PackedScene) -> BaseProjectile:
+	var _sfx_player = get_available_sfx_player()
+	if not _sfx_player:
+		# TODO - error handling
+		pass
+	_sfx_player.stream = sfx_coin_shot.pick_random()
+	_sfx_player.play()
 	var projectile := projectile_scene.instantiate()
-	get_tree().root.get_child(0).add_child(projectile)
+	get_tree().root.get_child(2).add_child(projectile)
 	projectile.global_position = projectile_spawn_marker.global_position
 	projectile.look_at(target.global_position, Vector3.UP)
-	#SoundManager.play_sound(TEMP_sfx_projectile)
 	return projectile
 
 
@@ -305,7 +370,7 @@ func _on_coin_projectiles_recover_state_entered() -> void:
 func drop_shadow(
 	target_pos: Vector3,
 	max_radius: float, 
-	drop_time: float = 1.0, 
+	drop_time: float = 3.5, 
 	callback: Callable = func(): pass
 ) -> void:
 	var debug_mesh_instance = MeshInstance3D.new()
@@ -336,7 +401,6 @@ func drop_shadow(
 	mesh.material = drop_shadow_material
 	
 	var shadow_tween = get_tree().create_tween()
-	
 	shadow_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", max_radius, drop_time)#.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
 	shadow_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", max_radius, drop_time)#.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
 	shadow_tween.tween_callback(debug_mesh_instance.queue_free)
@@ -354,8 +418,19 @@ func spawn_bell(pos: Vector3, size: float) -> void:
 	if result:
 		pos.y = result.position.y
 	
+	var bell_sfx := AudioStreamPlayer3D.new()
+	bell_sfx.stream = sfx_bell_windup.pick_random()
+	get_tree().get_root().get_child(3).add_child(bell_sfx)
+	bell_sfx.global_position = pos
+	bell_sfx.volume_db = 5.0
+	bell_sfx.max_db = 5.0
+	bell_sfx.unit_size = 30.0
+	bell_sfx.play()
+	
 	var bell = bell_scene.instantiate()
 	get_tree().root.get_child(2).add_child(bell)
+	sfx_player.stream = sfx_bell_windup.pick_random()
+	sfx_player.play()
 	bell.global_position = pos
 	bell.mesh.scale *= size
 	bell.collider.shape.radius = size
@@ -364,6 +439,14 @@ func spawn_bell(pos: Vector3, size: float) -> void:
 	bell.hurtbox_collider.shape.radius = size
 	bell.hurtbox_collider.shape.height = size * 2
 	bell.hurtbox_collider.position.y = size / 2
+	# Hacky workaround since playing these on the bells themselves causes an issue
+	bell.destroyed.connect(
+		func(_bell):
+			bell_sfx.stream = sfx_bell_impact.pick_random()
+			bell_sfx.play()
+			await bell_sfx.finished
+			bell_sfx.queue_free()
+	)
 
 
 func _on_bell_drop_state_entered() -> void:
@@ -394,7 +477,7 @@ func _on_bell_drop_dropping_state_entered() -> void:
 	
 	# Get a bunch of evenly distributed points clamped to the navmesh
 	bell_spawn_points = Poisson.generate_points_for_circle(
-		Vector2(1, 18),  # Annoyingly off center due to bad mapping lol
+		Vector2.ZERO,
 		bell_spawn_area_radius,
 		30,
 		15,
@@ -442,6 +525,9 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 	
 	state_chart.send_event("attack_start")
 	sprite.modulate = Color.ORANGE
+	
+	sfx_player.stream = sfx_lever_swipe.pick_random()
+	sfx_player.play()
 	
 	# Hit player in melee range and flee away
 	if target in hurtbox.get_overlapping_bodies():
@@ -496,6 +582,7 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 func _on_lever_swipe_recover_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Recovery"
 	hurtbox.set_deferred("monitoring", true)
+	sfx_player.stream = null
 	
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time).timeout
@@ -534,13 +621,16 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 	# Fire out projctiles in a spiral, each projectile homes in on the player
 	for i in range(diamond_shots_per_attack):
 		await get_tree().create_timer(diamond_shot_time/diamond_shots_per_attack).timeout
+		var _sfx_player = get_available_sfx_player()
+		_sfx_player.stream = sfx_diamond_shot.pick_random()
+		_sfx_player.play()
+		
 		var projectile := diamond_projectile.instantiate()
 		#get_tree().root.get_child(2).
 		get_parent().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.target = target
 		projectile.global_rotation.y = self.global_rotation.y
-		#SoundManager.play_sound(TEMP_sfx_projectile)
 	#
 	state_chart.send_event("stop_shooting")
 
@@ -604,7 +694,8 @@ func _on_charge_charging_state_entered() -> void:
 	var charge_dir = self.global_position.direction_to(target.global_position)
 	var charge_impulse = self.global_position.distance_to(target.global_position) * charge_force
 	velocity += charge_dir * charge_impulse
-	#SoundManager.play_sound(TEMP_sfx_charge)
+	sfx_player.stream = sfx_charge.pick_random()
+	sfx_player.play()
 
 func _on_charge_collision(body: Node3D) -> void:
 	if body == target:
@@ -672,20 +763,22 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 	state_chart.send_event("attack_start")
 	
 	var dir_counter: int = -1
+	sfx_player.volume_db = 3.0
 	for i in range(bombs_per_attack):
 		await get_tree().create_timer(bomb_drop_delay).timeout
+		sfx_player.stream = sfx_bomb_launch.pick_random()
+		sfx_player.play()
 		var projectile := bomb_projectile.instantiate() as RigidBody3D
-		#get_tree().root.get_child(2).
 		projectile.fuse_time = bomb_fuse_time
 		get_parent().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.global_rotation.y = self.global_rotation.y + (PI/8 * dir_counter)
 		projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
-		#SoundManager.play_sound(TEMP_sfx_projectile)
 		
 		dir_counter += 1
 		dir_counter = wrapi(dir_counter, -1, 2)
 	
+	sfx_player.volume_db = 0.0
 	state_chart.send_event("stop_dropping_bombs")
 
 

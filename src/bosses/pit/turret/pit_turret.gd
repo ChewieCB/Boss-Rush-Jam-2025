@@ -5,12 +5,19 @@ signal destroyed(turret: PitTurret)
 
 @export var TEMP_sfx_projectile: AudioStream
 
+@export_group("SFX")
+@export var sfx_turret_spawn: Array[AudioStream]
+@export var sfx_turret_shot: Array[AudioStream]
+@export var sfx_turret_death: Array[AudioStream]
+
 
 @onready var body: Node3D = $Body
 @onready var head: Node3D = $Body/Head
 @onready var dome_mesh: MeshInstance3D = $Body/Dome
 @onready var dome_collider: CollisionShape3D = $DomeCollider
 @onready var aim_ray: RayCast3D = $Body/Head/RayCast3D
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer1
+@export var sfx_players: Array[AudioStreamPlayer3D]
 
 @onready var debug_state_label: Label3D = $Label3D
 @onready var state_chart: StateChart = $StateChart
@@ -38,6 +45,8 @@ func _ready() -> void:
 
 
 func spawn() -> void:
+	sfx_player.stream = sfx_turret_spawn.pick_random()
+	sfx_player.play()
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "scale", Vector3.ONE, 0.4).set_trans(Tween.TRANS_SINE)
 	#tween.tween_property(self, "global_position:y", 0.0, 3.4).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
@@ -132,7 +141,9 @@ func _on_standard_attack_firing_state_entered() -> void:
 			projectile.global_position = spawn.global_position
 			projectile.look_at(target.global_position)
 			projectile.projectile_speed = 42.0
-			SoundManager.play_sound(TEMP_sfx_projectile)
+			var _sfx_player = get_available_sfx_player()
+			_sfx_player.stream = sfx_turret_shot.pick_random()
+			_sfx_player.play()
 	
 	await get_tree().create_timer(delay_per_projectile).timeout
 	state_chart.send_event("stop_firing")
@@ -157,6 +168,8 @@ func _on_health_component_health_changed(new_health: float, prev_health: float) 
 
 
 func _on_health_component_died() -> void:
+	sfx_player.stream = sfx_turret_death.pick_random()
+	sfx_player.play()
 	var explosion_vfx = explosion_scene.instantiate()
 	get_tree().get_root().add_child(explosion_vfx)
 	explosion_vfx.global_position = self.global_position
@@ -165,3 +178,24 @@ func _on_health_component_died() -> void:
 	tween.tween_property(self, "scale", Vector3.ZERO, 0.4).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(destroyed.emit.bind(self))
 	tween.tween_callback(self.queue_free)
+
+
+func get_available_sfx_player() -> AudioStreamPlayer3D:
+	for player: AudioStreamPlayer3D in sfx_players:
+		if player.playing:
+			continue
+		return player
+	
+	var players_ending_soon = sfx_players.duplicate()
+	players_ending_soon.sort_custom(
+		func(a, b):
+			var a_time_left: float = a.stream.get_length() - a.get_playback_position()
+			var b_time_left: float = b.stream.get_length() - b.get_playback_position()
+			if a_time_left < b_time_left:
+				return a
+			return b
+	)
+	var fallback_player: AudioStreamPlayer3D = players_ending_soon.front()
+	fallback_player.stop()
+	
+	return fallback_player

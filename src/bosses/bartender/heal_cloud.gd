@@ -4,17 +4,22 @@ extends Node3D
 
 @onready var heal_pe: GPUParticles3D = $HealEffect
 @onready var light: OmniLight3D = $OmniLight3D
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 var healed_bodies = []
 
 func _ready() -> void:
 	heal_pe.emitting = true
+	sfx_player.play()
 	var tween = self.create_tween()
 	tween.tween_property(light, "light_energy", 0, 2)
 
 
 func _on_heal_effect_finished() -> void:
-	await get_tree().create_timer(0.5).timeout
+	var tween = get_tree().create_tween()
+	tween.tween_property(sfx_player, "volume_db", linear_to_db(0.01), 0.5)
+	await tween.finished
+	sfx_player.stop()
 	call_deferred("queue_free")
 
 

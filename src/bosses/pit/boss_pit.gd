@@ -34,6 +34,7 @@ var phase_stance: Stance = Stance.AGGRESSIVE:
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 3.5
 @export var hurtbox_range_far: float = 4.5
+@export var sfx_melee: Array[AudioStream]
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 7.0
 @export_subgroup("Hook")
@@ -47,19 +48,26 @@ var phase_stance: Stance = Stance.AGGRESSIVE:
 var slam_target_pos := Vector3.ZERO
 @export var air_slam_cooldown: float = 15.0
 @onready var air_slam_timer: Timer = $AirSlamCooldown
+# SFX
+@export var sfx_jump: Array[AudioStream]
+@export var sfx_slam: Array[AudioStream]
 @export_subgroup("Ground Pound")
 @export var ground_pound_wave_radius: float = 16.0
 @export var ground_wave_damage: float = 6.0
+# SFX
+@export var sfx_ground_pound: Array[AudioStream]
 @export_subgroup("Lunge")
 @export var lunge_friction: float = 0.05
 @export var lunge_damage: float = 5.0
 @export var lunge_force: float = 6.5
 @export var lunge_cooldown: float = 15.0
 @onready var lunge_timer: Timer = $LungeCooldown
+# SFX
+@export var sfx_lunge: Array[AudioStream]
 
 @onready var phase_debug_label: Label3D = $DebugPhaseLabel
-@onready var melee_attack_debug_mesh: MeshInstance3D = $Hurtbox/MeshInstance3D
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 @export var shield_radius: float = 4.0
 @onready var shield_body: StaticBody3D = $Shield
@@ -214,11 +222,14 @@ func _on_hurtbox_body_entered(_body: Node3D) -> void:
 func _on_movement_charging_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", true)
 	hurtbox.body_entered.connect(destroy_cover)
+	# Ignore cover when charging to prevent it slowing the boss down
+	self.collision_mask -= pow(2, 7-1)
 
 func destroy_cover(body: Node3D) -> void:
 	if body is Cover:
+		sfx_player.stream = sfx_melee.pick_random()
+		sfx_player.play()
 		body.destroy()
-		hurtbox.set_deferred("monitoring", false)
 
 func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, lunge_friction)
@@ -248,11 +259,14 @@ func _on_movement_charging_state_exited() -> void:
 	charge_ended.emit()
 	hurtbox.body_entered.disconnect(destroy_cover)
 	hurtbox.set_deferred("monitoring", true)
+	self.collision_mask += pow(2, 7-1)
 
 ### ATTACK PHASES --------------------------------
 
 func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
 	if target in hurtbox.get_overlapping_bodies():
+		sfx_player.stream = sfx_melee.pick_random()
+		sfx_player.play()
 		target.health_component.damage(damage)
 		if stun:
 			target.stun(1.2)
@@ -291,6 +305,7 @@ func _on_intro_air_slam_recover_state_entered() -> void:
 	
 	state_chart.send_event("stop_moving")
 	slam_target_pos = target.global_position
+	anim_player.play("RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	state_chart.send_event("end_recovery")
@@ -328,6 +343,8 @@ func _on_melee_combo_swipe_state_entered() -> void:
 	velocity.x = 0
 	velocity.z = 0
 	
+	sfx_player.stream = sfx_melee.pick_random()
+	sfx_player.play()
 	anim_player.play("swipe")
 	await anim_player.animation_finished
 	
@@ -349,6 +366,8 @@ func _on_melee_combo_hook_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	
+	sfx_player.stream = sfx_melee.pick_random()
+	sfx_player.play()
 	anim_player.play("hook")
 	await anim_player.animation_finished
 	
@@ -370,6 +389,8 @@ func _on_melee_combo_uppercut_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	
+	sfx_player.stream = sfx_melee.pick_random()
+	sfx_player.play()
 	anim_player.play("uppercut")
 	await anim_player.animation_finished
 	
@@ -394,6 +415,7 @@ func _on_melee_combo_recover_state_entered() -> void:
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
+	anim_player.play("RESET")
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
@@ -412,6 +434,9 @@ func _on_lunge_closer_attack_state_entered() -> void:
 	debug_state_label.text = "Lunge | Attack"
 	
 	state_chart.send_event("start_targeting")
+	
+	sfx_player.stream = sfx_lunge.pick_random()
+	sfx_player.play()
 	
 	if $StateChart/Root/Movement/Charging.active:
 		#print("Waiting for current charge to finish")
@@ -454,6 +479,9 @@ func _on_melee_combo_lunge_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", true)
 	
 	state_chart.send_event("start_targeting")
+	
+	sfx_player.stream = sfx_lunge.pick_random()
+	sfx_player.play()
 	
 	if $StateChart/Root/Movement/Charging.active:
 		#print("Waiting for current charge to finish")
@@ -531,6 +559,8 @@ func air_slam_jump(debug: bool = false, goal_position: Vector3 = target.global_p
 
 func air_slam_attack(slam_force: float, _target_pos: Vector3 = slam_target_pos) -> void:
 	# TODO - replace this with a properly configurable trajectory
+	sfx_player.stream = sfx_slam.pick_random()
+	sfx_player.play()
 	target.health_component.damage(air_slam_damage)
 	target.vel_vertical -= slam_force
 	self.vel_vertical -= slam_force
@@ -561,6 +591,9 @@ func _on_air_slam_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	
+	
+	sfx_player.stream = sfx_jump.pick_random()
+	sfx_player.play()
 	anim_player.play("air_slam")
 	hurtbox.body_entered.connect(_air_slam_damage)
 	hurtbox.set_deferred("monitoring", true)
@@ -584,6 +617,7 @@ func _on_ground_pound_state_entered() -> void:
 	state_chart.send_event("stop_moving")
 	debug_trajectory_mesh.mesh.clear_surfaces()
 	velocity = Vector3.ZERO
+	sprite.texture = slam_sprite
 	var wave_callback: Callable = func(): 
 		state_chart.send_event("combo_end")
 	spawn_center_wave(ground_pound_wave_radius, 0.8, 2.0, false, wave_callback)
@@ -654,7 +688,8 @@ func spawn_center_wave(
 		state_chart.send_event("finish_wave")
 	
 	# Animate the visual
-	#SoundManager.play_sound(TEMP_sfx_area_1)
+	sfx_player.stream = sfx_ground_pound.pick_random()
+	sfx_player.play()
 	var tween = get_tree().create_tween()
 	tween.tween_property(mesh, "bottom_radius", max_radius, spawned_wave_time)
 	tween.parallel().tween_property(mesh, "top_radius", max_radius, spawned_wave_time)
@@ -695,6 +730,7 @@ func _on_air_slam_closer_recover_state_entered() -> void:
 	debug_state_label.text = "Air Slam | Recovery"
 	
 	state_chart.send_event("stop_moving")
+	anim_player.play("RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	# Hammer Ground follow up if the player doesn't escape
@@ -735,6 +771,7 @@ func _on_hammer_ground_recover_state_entered() -> void:
 	debug_state_label.text = "Hammer Ground | Recovery"
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
+	anim_player.play("RESET")
 	select_attack()
 	state_chart.send_event("end_recovery")
 

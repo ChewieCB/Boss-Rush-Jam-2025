@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://nrv16ny1wym"
+path="res://.godot/imported/SLOT BOSS TELEGRAPH MELEE_SHIELD ISOLATED.mp3-7f53d9858dd3ecc524a648f0316a1642.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/SLOT BOSS TELEGRAPH MELEE_SHIELD ISOLATED.mp3"
+dest_files=["res://.godot/imported/SLOT BOSS TELEGRAPH MELEE_SHIELD ISOLATED.mp3-7f53d9858dd3ecc524a648f0316a1642.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

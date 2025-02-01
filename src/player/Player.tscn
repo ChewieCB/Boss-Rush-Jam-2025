@@ -50,7 +50,7 @@
 [ext_resource type="AudioStream" uid="uid://cjcluk6lldawc" path="res://src/player/assets/sfx/JUMP IN AIR.mp3" id="29_xv6x8"]
 [ext_resource type="AudioStream" uid="uid://ckr1r101hscjl" path="res://src/player/assets/sfx/Floor Dash.mp3" id="30_on7sg"]
 [ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="31_pnqxi"]
-[ext_resource type="Shader" path="res://src/player/assets/thick_3d_outline.gdshader" id="36_f75i1"]
+[ext_resource type="Shader" path="res://src/player/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
@@ -70,13 +70,23 @@ size = Vector3(0.5, 0.5, 0.5)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cjv3t"]
 render_priority = -1
-shader = ExtResource("36_f75i1")
-shader_parameter/shadow_color = Color(0, 0, 0, 1)
-shader_parameter/shadow_thickness = 2.0
+shader = ExtResource("36_1ffwc")
+shader_parameter/outlineColor = Color(0, 0, 0, 0.78)
+shader_parameter/depth_threshold = 0.025
+shader_parameter/normal_threshold = 0.5
+shader_parameter/normal_smoothing = 0.25
+shader_parameter/max_thickness = 1.3
+shader_parameter/min_thickness = 0.5
+shader_parameter/max_distance = 75.0
+shader_parameter/min_distance = 2.0
+shader_parameter/grazing_fresnel_power = 5.0
+shader_parameter/grazing_angle_mask_power = 1.0
+shader_parameter/grazing_angle_modulation_factor = 50.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_bbump"]
 material = SubResource("ShaderMaterial_cjv3t")
-size = Vector2(5, 5)
+flip_faces = true
+size = Vector2(2, 2)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
@@ -149,6 +159,7 @@ near = 0.02
 
 [node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeableCamera/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.947067)
+extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_bbump")
 
 [node name="AimRecticle" type="TextureRect" parent="Neck/ShakeableCamera"]

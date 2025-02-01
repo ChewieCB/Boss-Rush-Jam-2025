@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dnirkeyfxwj7d"
+path="res://.godot/imported/SLOT BOSS STARTING SOUND (first pass).mp3-e74a85016410b9a4c1c97104d19d4cbd.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/SLOT BOSS STARTING SOUND (first pass).mp3"
+dest_files=["res://.godot/imported/SLOT BOSS STARTING SOUND (first pass).mp3-e74a85016410b9a4c1c97104d19d4cbd.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

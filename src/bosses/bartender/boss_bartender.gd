@@ -5,18 +5,27 @@ extends BossCore
 @export var phase_3_health_percentage_trigger: float = 0.33
 
 @export_group("Attacks")
+@export_subgroup("Shotgun")
 @export var shotgun_proj_prefab: PackedScene
+@export var sfx_shotgun: Array[AudioStream]
+@export_subgroup("Bottles")
+@export var bottle_damage = 10
 @export var empty_bottle_prefab: PackedScene
 @export var molotov_prefab: PackedScene
 @export var poison_bottle_prefab: PackedScene
 @export var slow_bottle_prefab: PackedScene
 @export var heal_bottle_prefab: PackedScene
+@export var sfx_bottle_throw: Array[AudioStream]
+@export_subgroup("Barrel")
 @export var beer_barrel_prefab: PackedScene
-@export var bottle_damage = 10
 @export var barrel_damage = 45
-@export var shotgun_sfx: AudioStream
+@export var sfx_barrel_throw: Array[AudioStream]
+
+@export_subgroup("Floor Fire")
 @export var floor_fize_hazard_marker: Marker3D
 @export var floor_fire_hazard_prefab: PackedScene
+@export var sfx_start_fire: AudioStream
+@export var sfx_fire_loop: AudioStream
 
 @export_group("Drinks")
 @export var defense_icon: Texture2D
@@ -31,10 +40,13 @@ extends BossCore
 @export var behind_bar_move_points: Array[Marker3D] = []
 @export var boss_jump_phase2_marker: Marker3D
 @export var boss_jump_phase3_marker: Marker3D
+@export_subgroup("SFX")
+@export var sfx_jump: Array[AudioStream]
 
 @onready var buff_expire_timer: Timer = $BuffExpireTimer
 @onready var proj_spawn_marker = $ProjectileSpawnPos
 @onready var status_icon: Sprite3D = $StatusIcon
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 var previous_attack: String
 var player_is_near = false
@@ -186,7 +198,8 @@ func shotgun_blast():
 	var spread_angle = 6
 	var delay_between_burst = 0.5
 	for i in range(n_shot_repeat):
-		SoundManager.play_sound(shotgun_sfx, "SFX")
+		sfx_player.stream = sfx_shotgun.pick_random()
+		sfx_player.play()
 		for j in range(proj_amount):
 			var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
 			var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
@@ -242,14 +255,18 @@ func _on_phase_2_idle_state_entered() -> void:
 	debug_state_label.text = "Walking"
 	await get_tree().create_timer(2).timeout
 	state_chart.send_event("stop_moving")
-
+	
 	select_attack()
 
 #### Phase 3
 func _on_phase_3_state_entered() -> void:
 	GameManager.show_boss_special_dialog("DARN IT! I WILL JUST LIT THE WHOLE FLOOR ON FIRE THEN!", 2)
 	jump_to(boss_jump_phase3_marker.global_position)
-	await get_tree().create_timer(4).timeout
+	await get_tree().create_timer(4.0).timeout
+	var fire_sfx = SoundManager.play_ambient_sound(sfx_start_fire, 0.2, "SFX")
+	fire_sfx.finished.connect(func():
+		SoundManager.play_ambient_sound(sfx_fire_loop, 0.1, "SFX")
+	)
 	floor_fire_hazard = floor_fire_hazard_prefab.instantiate()
 	floor_fize_hazard_marker.add_child(floor_fire_hazard)
 	floor_fire_hazard.position = Vector3.ZERO
@@ -323,6 +340,11 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, pr
 		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
 		get_parent().add_child(bottle_inst)
 		bottle_inst.init(modified_spawn_pos, spreaded_direction, proj_damage, throw_force)
+		if bottle_inst is BartenderBarrel:
+			sfx_player.stream = sfx_barrel_throw.pick_random()
+		else:
+			sfx_player.stream = sfx_bottle_throw.pick_random()
+		sfx_player.play()
 
 ## Throw upward to heal
 func throw_heal_bottle():
@@ -335,6 +357,7 @@ func throw_heal_bottle():
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction
 	get_parent().add_child(bottle_inst)
 	bottle_inst.init(modified_spawn_pos, aim_direction, 0, throw_force)
+
 
 ## Choose a random bottle then throw
 func throw_concoction_bottle():
@@ -425,6 +448,8 @@ func jump_to(target_position: Vector3, jump_height: float = 5, jump_time: float 
 	var end_position = target_position
 	start_position.y = 0
 	end_position.y = 0
+	sfx_player.stream = sfx_jump.pick_random()
+	sfx_player.play()
 	tween.tween_property(self, "global_position", end_position, jump_time).set_trans(Tween.TRANS_LINEAR)
 
 	# Step 2: Animate Y movement with a parabola

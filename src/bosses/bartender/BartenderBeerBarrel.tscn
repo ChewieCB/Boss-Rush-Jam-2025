@@ -1,8 +1,18 @@
-[gd_scene load_steps=23 format=3 uid="uid://lmvhnu7j64r7"]
+[gd_scene load_steps=31 format=3 uid="uid://lmvhnu7j64r7"]
 
 [ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_hdfjv"]
 [ext_resource type="Texture2D" uid="uid://dy6pwm2pvkfkh" path="res://src/bosses/bartender/assets/beer_barrel.png" id="2_3x5b2"]
+[ext_resource type="Script" path="res://src/bosses/bartender/bartender_beer_barrel.gd" id="2_5ymcq"]
 [ext_resource type="Texture2D" uid="uid://csksvkj83ajtj" path="res://src/bosses/bartender/assets/fire_sprite.png" id="3_lq2tg"]
+[ext_resource type="AudioStream" uid="uid://dyltsf21dn5pk" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL SMASH 1.mp3" id="3_yxaxd"]
+[ext_resource type="AudioStream" uid="uid://mra8pp65j1uf" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL SMASH 2.mp3" id="4_kjoea"]
+[ext_resource type="AudioStream" uid="uid://b1c754eqprstv" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL SMASH 3.mp3" id="5_6mw88"]
+[ext_resource type="AudioStream" uid="uid://c6odeum2hrrw0" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL ROLL 1.mp3" id="6_be3lq"]
+[ext_resource type="AudioStream" uid="uid://b3ppg2boieouy" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL ROLL 2.mp3" id="7_4gv0y"]
+[ext_resource type="AudioStream" uid="uid://bxdm0t7a63fgd" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL ROLL 3.mp3" id="8_tg4n2"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vltxk"]
+bounce = 0.65
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_pvpb8"]
 
@@ -101,7 +111,11 @@ particles_anim_loop = false
 material = SubResource("StandardMaterial3D_a0pci")
 
 [node name="BartenderBeerBarrel" instance=ExtResource("1_hdfjv")]
-break_on_contact = false
+physics_material_override = SubResource("PhysicsMaterial_vltxk")
+gravity_scale = 2.0
+script = ExtResource("2_5ymcq")
+sfx_break = Array[AudioStream]([ExtResource("3_yxaxd"), ExtResource("4_kjoea"), ExtResource("5_6mw88")])
+sfx_bounce = Array[AudioStream]([ExtResource("6_be3lq"), ExtResource("7_4gv0y"), ExtResource("8_tg4n2")])
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)

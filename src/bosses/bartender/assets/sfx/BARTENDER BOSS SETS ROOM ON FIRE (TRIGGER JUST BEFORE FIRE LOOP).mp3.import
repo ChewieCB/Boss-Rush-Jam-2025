@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bdcqmijgrl2cc"
+path="res://.godot/imported/BARTENDER BOSS SETS ROOM ON FIRE (TRIGGER JUST BEFORE FIRE LOOP).mp3-1e588fa354e74ca65fb3f227d2ac3900.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS SETS ROOM ON FIRE (TRIGGER JUST BEFORE FIRE LOOP).mp3"
+dest_files=["res://.godot/imported/BARTENDER BOSS SETS ROOM ON FIRE (TRIGGER JUST BEFORE FIRE LOOP).mp3-1e588fa354e74ca65fb3f227d2ac3900.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

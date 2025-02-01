@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dm80pauvthiji"
+path="res://.godot/imported/PIT BOSS LAZER DAMAGE RECEIVED LOOP_.mp3-046acbebb038737bf4ef6fa5622fd0ea.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/PIT BOSS LAZER DAMAGE RECEIVED LOOP_.mp3"
+dest_files=["res://.godot/imported/PIT BOSS LAZER DAMAGE RECEIVED LOOP_.mp3-046acbebb038737bf4ef6fa5622fd0ea.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

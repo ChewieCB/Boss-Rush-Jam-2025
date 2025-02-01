@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://djpgcg8yqujhs"
+path="res://.godot/imported/BASIC LONG SLOT MACHINE.mp3-0dfb14722d972e4254c26bb1bb2823e0.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/BASIC LONG SLOT MACHINE.mp3"
+dest_files=["res://.godot/imported/BASIC LONG SLOT MACHINE.mp3-0dfb14722d972e4254c26bb1bb2823e0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

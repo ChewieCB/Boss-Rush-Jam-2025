@@ -1,18 +1,32 @@
-[gd_scene load_steps=34 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=48 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_akhww"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bjod6"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_bqowf"]
+[ext_resource type="Texture2D" uid="uid://cm52o61isok1h" path="res://src/bosses/pit/assets/pit_boss_lunge.png" id="5_my4lc"]
+[ext_resource type="Texture2D" uid="uid://drj8vgnapbsgk" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="6_0uepf"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="6_l4p06"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="7_koy73"]
+[ext_resource type="AudioStream" uid="uid://b7nfp4x27l0np" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 1.mp3" id="8_16sah"]
 [ext_resource type="Texture2D" uid="uid://bww23gc1wfoj6" path="res://src/bosses/pit/assets/pit_boss_idle.png" id="8_d716h"]
 [ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="8_fo0ij"]
+[ext_resource type="AudioStream" uid="uid://caojs0svhgxl3" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 2.mp3" id="9_iolon"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="9_juug2"]
+[ext_resource type="AudioStream" uid="uid://b03ragdpxedsv" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 3.mp3" id="10_3o63l"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_el2h4"]
+[ext_resource type="AudioStream" uid="uid://cyf0d62sx0q84" path="res://src/bosses/pit/assets/sfx/PIT BOSS BIG JUMP.mp3" id="11_qdlm8"]
+[ext_resource type="AudioStream" uid="uid://bvrfeda04uu16" path="res://src/bosses/pit/assets/sfx/PIT BOSS OVERHEAD SLAM 1.mp3" id="12_gfyrj"]
 [ext_resource type="Texture2D" uid="uid://benckouaod2x3" path="res://src/bosses/pit/assets/pit_boss_hook_TEMP.png" id="12_sekny"]
+[ext_resource type="AudioStream" uid="uid://bmylmhbjypmdt" path="res://src/bosses/pit/assets/sfx/PIT BOSS OVERHEAD SLAM 2.mp3" id="13_ne8it"]
 [ext_resource type="Texture2D" uid="uid://dm1odub4yea6w" path="res://src/bosses/pit/assets/pit_boss_swipe_TEMP.png" id="13_qgkan"]
+[ext_resource type="AudioStream" uid="uid://ch70wgmho3fnf" path="res://src/bosses/pit/assets/sfx/PIT BOSS OVERHEAD SLAM 3.mp3" id="14_v35b0"]
+[ext_resource type="AudioStream" uid="uid://cmccepm0vu8qm" path="res://src/bosses/pit/assets/sfx/PIT BOSS AOE.mp3" id="15_krqds"]
+[ext_resource type="AudioStream" uid="uid://dbxt7ck7bxxxr" path="res://src/bosses/pit/assets/sfx/PIT BOSS DASH.mp3" id="16_q6xxl"]
+[ext_resource type="AudioStream" uid="uid://dt60mvvsp8gbw" path="res://src/bosses/pit/assets/sfx/PIT BOSS ANGRY VOICE.mp3" id="18_e8yae"]
+[ext_resource type="AudioStream" uid="uid://e15km4eb5n7w" path="res://src/bosses/pit/assets/sfx/PIT BOSS DEAD.mp3" id="19_2oyqj"]
+[ext_resource type="AudioStream" uid="uid://dmxh4enemydu2" path="res://src/bosses/pit/assets/sfx/PIT BOSS GRUNT.mp3" id="19_ku61b"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
 transparency = 1
@@ -294,6 +308,18 @@ tracks/6/keys = {
 "update": 0,
 "values": [Vector3(0, -3.14159, 0), Vector3(0.698132, -3.14159, 1.26701e-07), Vector3(0, -3.14159, 0)]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Sprite3D:texture")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_d716h")]
+}
 
 [sub_resource type="Animation" id="Animation_rk1lk"]
 resource_name = "air_slam_attack"
@@ -361,6 +387,18 @@ tracks/4/keys = {
 "update": 0,
 "values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 2.26694, 0.0392845)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:texture")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_d716h")]
+}
 
 [sub_resource type="Animation" id="Animation_qkirm"]
 resource_name = "air_slam_intro"
@@ -376,7 +414,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0.2),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [true, Vector3(0, 0, 0)],
+"args": [false, Vector3(0, 0, 0)],
 "method": &"air_slam_jump"
 }]
 }
@@ -452,6 +490,18 @@ tracks/6/keys = {
 "update": 0,
 "values": [Vector3(0, -3.14159, 0), Vector3(0.698132, -3.14159, 1.26701e-07), Vector3(0, -3.14159, 0)]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Sprite3D:texture")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.45, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("8_d716h")]
+}
 
 [sub_resource type="Animation" id="Animation_eetrs"]
 resource_name = "hammer_ground"
@@ -524,6 +574,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1.7411, 0.435275, 1.62451, 2.07053, 1.62451, 2.07053, 1.8025, 1.7411),
 "update": 0,
 "values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 1.19562, 0.630243), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 1.19562, 0.630243), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 1.19562, 0.630243), Vector3(2.05191, 2.26694, 0.0392845)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:texture")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.45, 0.75, 0.95, 1.25, 1.5, 2.05, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("6_0uepf"), ExtResource("8_d716h")]
 }
 
 [sub_resource type="Animation" id="Animation_qtmfa"]
@@ -670,6 +732,18 @@ tracks/4/keys = {
 "args": [],
 "method": &"lunge"
 }]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:texture")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.55, 0.95),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_d716h"), ExtResource("5_my4lc"), ExtResource("5_my4lc"), ExtResource("8_d716h")]
 }
 
 [sub_resource type="Animation" id="Animation_bc730"]
@@ -834,32 +908,40 @@ _data = {
 [node name="BossPit" instance=ExtResource("1_opefu")]
 collision_mask = 75
 script = ExtResource("2_a8b8q")
-swipe_sprite = null
-hook_sprite = null
-lunge_sprite = null
+swipe_sprite = ExtResource("13_qgkan")
+hook_sprite = ExtResource("12_sekny")
+lunge_sprite = ExtResource("5_my4lc")
 uppercut_sprite = null
-slam_sprite = null
+slam_sprite = ExtResource("6_0uepf")
 wave_material = SubResource("ShaderMaterial_2s76u")
 wave_amplitude = 7.0
 wave_frequency = 5.0
 time_elapsed = 0.0
 hurtbox_range_close = 3.5
 hurtbox_range_far = 4.5
+sfx_melee = Array[AudioStream]([ExtResource("8_16sah"), ExtResource("9_iolon"), ExtResource("10_3o63l")])
 swipe_damage = 5.0
 hook_damage = 5.0
 uppercut_damage = 5.0
 air_slam_damage = 10.0
 air_slam_cooldown = 15.0
+sfx_jump = Array[AudioStream]([ExtResource("11_qdlm8")])
+sfx_slam = Array[AudioStream]([ExtResource("12_gfyrj"), ExtResource("13_ne8it"), ExtResource("14_v35b0")])
 ground_pound_wave_radius = 16.0
 ground_wave_damage = 6.0
+sfx_ground_pound = Array[AudioStream]([ExtResource("15_krqds")])
 lunge_friction = 0.05
 lunge_damage = 5.0
 lunge_force = 6.5
 lunge_cooldown = 5.0
+sfx_lunge = Array[AudioStream]([ExtResource("16_q6xxl")])
 shield_radius = 4.0
 chip_spawn_chance = 0.15
 chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("7_koy73")
+sfx_awaken = ExtResource("18_e8yae")
+sfx_hit = Array[AudioStream]([ExtResource("19_ku61b")])
+sfx_death = ExtResource("19_2oyqj")
 current_phase = 3
 attack_recovery_time = 0.5
 projectile_scene = null
@@ -1846,6 +1928,7 @@ delay_in_seconds = "0.0"
 
 [node name="DebugPhaseLabel" type="Label3D" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.7, 0)
+visible = false
 billboard = 1
 text = "PHASE"
 font = ExtResource("11_el2h4")
@@ -1855,10 +1938,12 @@ uppercase = true
 
 [node name="DebugStateLabel" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+visible = false
 text = "STATE"
 
 [node name="DebugDistanceLabel" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, 0)
+visible = false
 text = "DISTANCE"
 
 [node name="DamageTextMarker" parent="." index="14"]
@@ -1877,6 +1962,9 @@ one_shot = true
 
 [node name="AirSlamCooldown" type="Timer" parent="." index="18"]
 one_shot = true
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="19"]
+unit_size = 25.0
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_inactive_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/AirSlam" to="." method="_on_intro_air_slam_state_entered"]
