@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_k0t2c"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_ky52g"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/explosive_bullet_effect.gd" id="6_ayuco"]
-[ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/projectiles/ExplosionDamageArea.tscn" id="7_tc2w0"]
+[ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="7_tc2w0"]
 [ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/ExplosionVFX3D.tscn" id="8_x4fhu"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="9_6f2yx"]
 

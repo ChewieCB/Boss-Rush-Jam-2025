@@ -16,6 +16,7 @@ enum BarrelIdEnum {
 	ARCHETYPE_AUTOMATIC_SPEC,
 	PIT_BOSS_BARREL,
 	BARTENDER_BOSS_BARREL,
+	DELAYED_GRATIFICATION
 }
 
 @export var barrel_id: BarrelIdEnum
