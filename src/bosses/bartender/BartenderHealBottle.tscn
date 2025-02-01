@@ -18,10 +18,10 @@ break_effect_prefab = ExtResource("2_gkalb")
 [node name="Sprite3D" parent="." index="0"]
 texture = ExtResource("3_s4mij")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="." index="5"]
-light_color = Color(0.310448, 0.784539, 1.15514e-06, 1)
-light_energy = 3.0
-
 [node name="Trail3D" parent="Trail" index="0"]
 material_override = SubResource("StandardMaterial3D_745eg")
 mesh = SubResource("ImmediateMesh_r13qw")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="5"]
+light_color = Color(0.310448, 0.784539, 1.15514e-06, 1)
+light_energy = 3.0

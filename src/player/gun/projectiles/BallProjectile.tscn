@@ -68,7 +68,6 @@ collision_mask = 29
 top_level = true
 material_override = SubResource("StandardMaterial3D_bye4v")
 mesh = SubResource("ImmediateMesh_6aqen")
-skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("4_4r3ns")
 segments = 10
 width_profile = SubResource("Curve_inxyf")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=24 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -20,6 +20,10 @@
 [ext_resource type="Texture2D" uid="uid://dolyfi5qapq80" path="res://src/bosses/bartender/assets/strength_icon.png" id="11_fyl2a"]
 [ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="13_a7i4i"]
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="15_817ob"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2tbsr"]
+radius = 1.2
+height = 5.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_p0ajt"]
 radius = 15.0
@@ -57,6 +61,9 @@ telegraph_time = 1.0
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1.2, 0, 0, 0, 1, 0, 2.1, 0)
 texture = ExtResource("6_ky2ag")
+
+[node name="CollisionShape3D" parent="." index="1"]
+shape = SubResource("CapsuleShape3D_2tbsr")
 
 [node name="Hurtbox" parent="." index="3"]
 visible = false
