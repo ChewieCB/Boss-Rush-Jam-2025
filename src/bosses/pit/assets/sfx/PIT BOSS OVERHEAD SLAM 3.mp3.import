@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ch70wgmho3fnf"
+path="res://.godot/imported/PIT BOSS OVERHEAD SLAM 3.mp3-201afe9c2ea6c510b6bb7db60503ae2c.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/PIT BOSS OVERHEAD SLAM 3.mp3"
+dest_files=["res://.godot/imported/PIT BOSS OVERHEAD SLAM 3.mp3-201afe9c2ea6c510b6bb7db60503ae2c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

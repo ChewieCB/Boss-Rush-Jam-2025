@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=48 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -9,12 +9,24 @@
 [ext_resource type="Texture2D" uid="uid://drj8vgnapbsgk" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="6_0uepf"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="6_l4p06"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="7_koy73"]
+[ext_resource type="AudioStream" uid="uid://b7nfp4x27l0np" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 1.mp3" id="8_16sah"]
 [ext_resource type="Texture2D" uid="uid://bww23gc1wfoj6" path="res://src/bosses/pit/assets/pit_boss_idle.png" id="8_d716h"]
 [ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="8_fo0ij"]
+[ext_resource type="AudioStream" uid="uid://caojs0svhgxl3" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 2.mp3" id="9_iolon"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="9_juug2"]
+[ext_resource type="AudioStream" uid="uid://b03ragdpxedsv" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 3.mp3" id="10_3o63l"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_el2h4"]
+[ext_resource type="AudioStream" uid="uid://cyf0d62sx0q84" path="res://src/bosses/pit/assets/sfx/PIT BOSS BIG JUMP.mp3" id="11_qdlm8"]
+[ext_resource type="AudioStream" uid="uid://bvrfeda04uu16" path="res://src/bosses/pit/assets/sfx/PIT BOSS OVERHEAD SLAM 1.mp3" id="12_gfyrj"]
 [ext_resource type="Texture2D" uid="uid://benckouaod2x3" path="res://src/bosses/pit/assets/pit_boss_hook_TEMP.png" id="12_sekny"]
+[ext_resource type="AudioStream" uid="uid://bmylmhbjypmdt" path="res://src/bosses/pit/assets/sfx/PIT BOSS OVERHEAD SLAM 2.mp3" id="13_ne8it"]
 [ext_resource type="Texture2D" uid="uid://dm1odub4yea6w" path="res://src/bosses/pit/assets/pit_boss_swipe_TEMP.png" id="13_qgkan"]
+[ext_resource type="AudioStream" uid="uid://ch70wgmho3fnf" path="res://src/bosses/pit/assets/sfx/PIT BOSS OVERHEAD SLAM 3.mp3" id="14_v35b0"]
+[ext_resource type="AudioStream" uid="uid://cmccepm0vu8qm" path="res://src/bosses/pit/assets/sfx/PIT BOSS AOE.mp3" id="15_krqds"]
+[ext_resource type="AudioStream" uid="uid://dbxt7ck7bxxxr" path="res://src/bosses/pit/assets/sfx/PIT BOSS DASH.mp3" id="16_q6xxl"]
+[ext_resource type="AudioStream" uid="uid://dt60mvvsp8gbw" path="res://src/bosses/pit/assets/sfx/PIT BOSS ANGRY VOICE.mp3" id="18_e8yae"]
+[ext_resource type="AudioStream" uid="uid://e15km4eb5n7w" path="res://src/bosses/pit/assets/sfx/PIT BOSS DEAD.mp3" id="19_2oyqj"]
+[ext_resource type="AudioStream" uid="uid://dmxh4enemydu2" path="res://src/bosses/pit/assets/sfx/PIT BOSS GRUNT.mp3" id="19_ku61b"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
 transparency = 1
@@ -907,21 +919,29 @@ wave_frequency = 5.0
 time_elapsed = 0.0
 hurtbox_range_close = 3.5
 hurtbox_range_far = 4.5
+sfx_melee = Array[AudioStream]([ExtResource("8_16sah"), ExtResource("9_iolon"), ExtResource("10_3o63l")])
 swipe_damage = 5.0
 hook_damage = 5.0
 uppercut_damage = 5.0
 air_slam_damage = 10.0
 air_slam_cooldown = 15.0
+sfx_jump = Array[AudioStream]([ExtResource("11_qdlm8")])
+sfx_slam = Array[AudioStream]([ExtResource("12_gfyrj"), ExtResource("13_ne8it"), ExtResource("14_v35b0")])
 ground_pound_wave_radius = 16.0
 ground_wave_damage = 6.0
+sfx_ground_pound = Array[AudioStream]([ExtResource("15_krqds")])
 lunge_friction = 0.05
 lunge_damage = 5.0
 lunge_force = 6.5
 lunge_cooldown = 5.0
+sfx_lunge = Array[AudioStream]([ExtResource("16_q6xxl")])
 shield_radius = 4.0
 chip_spawn_chance = 0.15
 chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("7_koy73")
+sfx_awaken = ExtResource("18_e8yae")
+sfx_hit = Array[AudioStream]([ExtResource("19_ku61b")])
+sfx_death = ExtResource("19_2oyqj")
 current_phase = 3
 attack_recovery_time = 0.5
 projectile_scene = null
@@ -1939,6 +1959,9 @@ one_shot = true
 
 [node name="AirSlamCooldown" type="Timer" parent="." index="18"]
 one_shot = true
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="19"]
+unit_size = 25.0
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_inactive_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/AirSlam" to="." method="_on_intro_air_slam_state_entered"]
