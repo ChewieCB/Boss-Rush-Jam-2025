@@ -1,2 +1,2 @@
-extends Bottle
-class_name Barrel
+extends BartenderBottle
+class_name BartenderBarrel

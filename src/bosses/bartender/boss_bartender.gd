@@ -255,7 +255,7 @@ func _on_phase_2_idle_state_entered() -> void:
 	debug_state_label.text = "Walking"
 	await get_tree().create_timer(2).timeout
 	state_chart.send_event("stop_moving")
-
+	
 	select_attack()
 
 #### Phase 3
@@ -340,7 +340,7 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, pr
 		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
 		get_parent().add_child(bottle_inst)
 		bottle_inst.init(modified_spawn_pos, spreaded_direction, proj_damage, throw_force)
-		if bottle_inst is Barrel:
+		if bottle_inst is BartenderBarrel:
 			sfx_player.stream = sfx_barrel_throw.pick_random()
 		else:
 			sfx_player.stream = sfx_bottle_throw.pick_random()

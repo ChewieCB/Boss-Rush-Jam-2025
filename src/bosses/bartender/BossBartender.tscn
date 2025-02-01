@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=30 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
