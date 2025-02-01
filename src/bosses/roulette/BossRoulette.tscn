@@ -9,7 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://7tuesojhkb67" path="res://src/bosses/roulette/shield/assets/sfx/Roulette Sheild Amb 2.wav" id="5_0wxys"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="5_m3ad2"]
 [ext_resource type="Material" uid="uid://voft28so03rt" path="res://src/bosses/roulette/assets/materials/BarrierMatBlue.tres" id="5_tmeqi"]
-[ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel.tres" id="6_7xocg"]
+[ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel_data.tres" id="6_7xocg"]
 [ext_resource type="AudioStream" uid="uid://dto7l1f5jclu4" path="res://src/bosses/roulette/shield/assets/sfx/Roulette Shield Amb 3.wav" id="6_62161"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="6_lkakv"]
 [ext_resource type="Material" uid="uid://bl2wsskw41kaa" path="res://src/bosses/roulette/assets/materials/BarrierMat.tres" id="7_nq11i"]

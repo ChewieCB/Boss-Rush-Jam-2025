@@ -17,6 +17,9 @@ func _ready() -> void:
 
 func interact() -> void:
 	player.inventory_ui.toggle()
+	player.input_dir = Vector2.ZERO
+	player.vel_horizontal = Vector2.ZERO
+	player.velocity = Vector3.ZERO
 
 
 func show_dialogue(dialogue: String) -> void:
@@ -49,6 +52,7 @@ func _on_too_expensive(_data: BarrelDataResource) -> void:
 		"Perhaps something a little more\nin budget, sir?",
 		"Another time perhaps.",
 		"Taste better than your luck, eh?",
+		"Come back when you're a little \nmmmm richer!"
 	]
 	show_dialogue(fail_dialogue.pick_random())
 

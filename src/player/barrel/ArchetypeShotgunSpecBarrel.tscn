@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://bjcvwkqb8mks4"]
+[gd_scene load_steps=9 format=3 uid="uid://bjcvwkqb8mks4"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_41m3f"]
 [ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_8sd3q"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_eatto"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_cnlm3"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="4_wabqs"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="5_spqg0"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="6_xoagj"]
+[ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="7_a20w1"]
 
 [node name="ArchetypeShotgunSpecBarrel" type="Node3D"]
 script = ExtResource("1_41m3f")
@@ -15,6 +19,9 @@ barrel_id = 7
 
 [node name="CompoundEffectCombat" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_eatto")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("4_wabqs"), ExtResource("5_spqg0")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("6_xoagj"), ExtResource("7_a20w1")])
 display_text_title = "Archetype: Combat Shotgun"
 display_text_tag = "Fire faster and more ammo"
 
@@ -49,6 +56,9 @@ new_value = 9.0
 
 [node name="CompoundEffectDoubleBarrel" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_eatto")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("4_wabqs"), ExtResource("5_spqg0")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("6_xoagj"), ExtResource("7_a20w1")])
 display_text_title = "Archetype: Double-Barrel Shotgun"
 display_text_tag = "Come close for a huge burst"
 
@@ -83,6 +93,9 @@ new_value = 2.0
 
 [node name="CompoundEffectSlug" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_eatto")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("4_wabqs"), ExtResource("5_spqg0")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("6_xoagj"), ExtResource("7_a20w1")])
 display_text_title = "Archetype: Slug Shotgun"
 display_text_tag = "We have Railgun at home"
 
