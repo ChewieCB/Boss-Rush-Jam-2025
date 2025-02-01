@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://c4d5lv4t5vv4w"]
+
+[ext_resource type="PackedScene" uid="uid://baauotfv75lsw" path="res://src/player/barrel/BartenderBossBarrel.tscn" id="1_8ixwb"]
+[ext_resource type="Texture2D" uid="uid://d3f6yx0qssa1x" path="res://src/player/barrel/resource/sprite/bartender.png" id="1_ma3kv"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_4jnqy"]
+
+[resource]
+script = ExtResource("3_4jnqy")
+barrel_id = 12
+barrel_name = "Bartender's Cellar"
+barrel_desc = "[b]Bartender's Cellar Barrel[/b]
+Barrel collected from the Bartender. Grant you ability similar to its owner.
+
+Possible rolls:
+[ul]
+Molotov Dash: After dash, create a puddle of burning flame at your previous position.
+Toxin Mist: Empowered your bullet, which has a chance to create a poison cloud upon hiting an enemy.
+Cognac Reload: Drop a bottle of cognac when you reload, which heal you a small amount.
+[/ul]"
+barrel_image = ExtResource("1_ma3kv")
+barrel_cost = 200
+barrel_prefab = ExtResource("1_8ixwb")

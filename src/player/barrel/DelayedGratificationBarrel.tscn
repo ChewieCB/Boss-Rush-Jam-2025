@@ -1,0 +1,71 @@
+[gd_scene load_steps=9 format=3 uid="uid://c7jc72exa8eg2"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_2a2qf"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_iurid"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_q7s8s"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_duuhv"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_307l2"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="6_j8ucp"]
+[ext_resource type="PackedScene" uid="uid://35lbaqwytewn" path="res://src/player/gun/projectiles/StickyBombProjectile.tscn" id="7_2jtxl"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/medical_payout_effect.gd" id="8_0by4g"]
+
+[node name="DelayedGratificationBarrel" type="Node3D"]
+script = ExtResource("1_2a2qf")
+barrel_id = 13
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_iurid")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="BulletTime" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_q7s8s")
+display_text_title = "Bullet Time"
+display_text_tag = "You are not Neo though"
+display_text_desc = "-50% projectile speed
++ 100% damage"
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/BulletTime"]
+script = ExtResource("4_duuhv")
+attribute = 6
+
+[node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/BulletTime"]
+script = ExtResource("5_307l2")
+attribute = 3
+modify_value = -80.0
+is_perc = true
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/BulletTime"]
+script = ExtResource("5_307l2")
+attribute = 1
+modify_value = 100.0
+is_perc = true
+
+[node name="StickyBomb" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_q7s8s")
+display_text_title = "Sticky Bomb"
+display_text_tag = "Keep distance"
+display_text_desc = "+25% damage
+-50% firerate"
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/StickyBomb"]
+script = ExtResource("6_j8ucp")
+new_prefab = ExtResource("7_2jtxl")
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/StickyBomb"]
+script = ExtResource("5_307l2")
+attribute = 1
+modify_value = 25.0
+is_perc = true
+
+[node name="ModifyFirerate" type="Node3D" parent="EffectContainer/StickyBomb"]
+script = ExtResource("5_307l2")
+attribute = 4
+modify_value = -50.0
+is_perc = true
+
+[node name="MedicalPayout" type="Node3D" parent="EffectContainer"]
+script = ExtResource("8_0by4g")
+display_text_title = "Medical Payout"
+display_text_tag = "Hurt others to heal yourself"
+display_text_desc = "Store 1 HP every 100 damage dealt
+Recover HP on reload"

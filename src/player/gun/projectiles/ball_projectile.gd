@@ -20,7 +20,7 @@ var owner_gun: Gun
 var homing_strength = 0 # radius to search for enemy
 var homing_locked_in = false
 var homing_target = null
-var ricochet_count_left= 0
+var ricochet_count_left = 0
 var max_range
 
 const HOMING_FORCE_COEFFICIENT = 1200
@@ -63,7 +63,7 @@ func ricochet():
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		body.health_component.damage(damage)
-		damage_applied.emit()
+		damage_applied.emit(true, global_position)
 		create_blood_splatter(global_position, Vector3.UP)
 	else:
 		if body is Shield:

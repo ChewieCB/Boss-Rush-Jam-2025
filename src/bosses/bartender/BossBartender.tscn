@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=23 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://3s57qo57n84d" path="res://src/bosses/bartender/FloorFireHazardArea.tscn" id="11_fes67"]
 [ext_resource type="Texture2D" uid="uid://dolyfi5qapq80" path="res://src/bosses/bartender/assets/strength_icon.png" id="11_fyl2a"]
 [ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="13_a7i4i"]
+[ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="15_817ob"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_p0ajt"]
 radius = 15.0
@@ -39,7 +40,7 @@ slow_bottle_prefab = ExtResource("7_hy3po")
 heal_bottle_prefab = ExtResource("8_y61gp")
 beer_barrel_prefab = ExtResource("9_u87s1")
 bottle_damage = 10
-barrel_damage = 45
+barrel_damage = 30
 shotgun_sfx = ExtResource("10_vkeiy")
 floor_fire_hazard_prefab = ExtResource("11_fes67")
 defense_icon = ExtResource("11_c0ayg")
@@ -49,6 +50,7 @@ defense_buff_resistance = 0.5
 speed_buff_modifier = 0.5
 base_movespeed = 10
 behind_bar_move_points = []
+barrel_to_drop = ExtResource("15_817ob")
 sfx_telegraph = ExtResource("13_a7i4i")
 telegraph_time = 1.0
 
