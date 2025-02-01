@@ -8,7 +8,7 @@ size = Vector3(0.15, 0.15, 100)
 [node name="AimRay" type="RayCast3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
 target_position = Vector3(0, 0, -500)
-collision_mask = 157
+collision_mask = 221
 script = ExtResource("1_2sjnk")
 
 [node name="AimRayEnd" type="Marker3D" parent="."]

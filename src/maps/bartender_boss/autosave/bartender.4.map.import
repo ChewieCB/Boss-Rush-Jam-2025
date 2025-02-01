@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://bkmpmjb7om48b"
+path="res://.godot/imported/bartender.4.map-affb8248359272c30c481ebcfc8a8cd7.tres"
+
+[deps]
+
+source_file="res://src/maps/bartender_boss/autosave/bartender.4.map"
+dest_files=["res://.godot/imported/bartender.4.map-affb8248359272c30c481ebcfc8a8cd7.tres"]
+
+[params]
+

@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://rxldux0ag0my"]
+
+[ext_resource type="Texture2D" uid="uid://bimqjyp7on3ig" path="res://src/env/lighting/assets/chandellier_2.png" id="1_mjbwx"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_cq3u5"]
+size = Vector3(4, 3, 3.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6se8u"]
+size = Vector3(4, 3, 3.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i5chr"]
+size = Vector3(1, 2, 1)
+
+[node name="Chandellier1" type="StaticBody3D"]
+collision_layer = 128
+collision_mask = 0
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+billboard = 2
+texture = ExtResource("1_mjbwx")
+
+[node name="DebugMesh" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("BoxMesh_cq3u5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78814e-07, -0.3, -0.05)
+shape = SubResource("BoxShape3D_6se8u")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+shape = SubResource("BoxShape3D_i5chr")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.960906, 0.678553, 0.450889, 1)
+light_energy = 2.0
+light_bake_mode = 1
+omni_range = 20.0
