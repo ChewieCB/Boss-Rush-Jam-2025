@@ -26,7 +26,7 @@ point_count = 2
 
 [node name="LaserProjectile" type="Area3D"]
 collision_layer = 8
-collision_mask = 7
+collision_mask = 199
 script = ExtResource("1_1e8s7")
 projectile_damage = 2.0
 
