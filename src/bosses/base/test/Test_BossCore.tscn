@@ -1,4 +1,4 @@
-[gd_scene load_steps=161 format=4 uid="uid://2q4ssotscvd5"]
+[gd_scene load_steps=185 format=4 uid="uid://2q4ssotscvd5"]
 
 [ext_resource type="Script" path="res://src/bosses/base/test/test_boss_core.gd" id="1_pgc5k"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="2_5mq86"]
@@ -604,6 +604,134 @@ indices = PackedInt32Array(0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 4, 7, 8, 4, 8, 9,
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_iu0yp"]
 data = PackedVector3Array(31.25, -0.25, -12.75, 31.25, -0.25, 11.25, -31.25, -0.25, 11.25, 31.25, -0.25, -12.75, -31.25, -0.25, 11.25, -31.25, -0.25, -12.75, 31.25, -0.25, 15.25, 31.25, -0.25, 17.75, 18.75, -0.25, 30.25, 31.25, -0.25, 15.25, 18.75, -0.25, 30.25, -18.75, -0.25, 30.25, 31.25, -0.25, 15.25, -18.75, -0.25, 30.25, -31.25, -0.25, 17.75, 31.25, -0.25, 15.25, -31.25, -0.25, 17.75, -31.25, -0.25, 15.25, 9.25, -0.25, 11.25, 9.25, -0.25, 15.25, -8.75, -0.25, 15.25, 9.25, -0.25, 11.25, -8.75, -0.25, 15.25, -8.75, -0.25, 11.25, -12.75, -0.25, 11.25, -12.75, -0.25, 15.25, -31.25, -0.25, 15.25, -12.75, -0.25, 11.25, -31.25, -0.25, 15.25, -31.25, -0.25, 11.25, 31.25, -0.25, 11.25, 31.25, -0.25, 15.25, 13.25, -0.25, 15.25, 31.25, -0.25, 11.25, 13.25, -0.25, 15.25, 13.25, -0.25, 11.25, -4.25, 0.75, -9.25, -4.25, -0.25, -12.75, 4.75, -0.25, -12.75, -4.25, 0.75, -9.25, 4.75, -0.25, -12.75, 4.75, 0.75, -9.25, -4.25, -0.25, -12.75, -4.25, 0.75, -9.25, -8.25, 0.75, -5.25, -4.25, -0.25, -12.75, -8.25, 0.75, -5.25, -11.75, -0.25, -5.25, 4.75, 0.75, -9.25, 4.75, -0.25, -12.75, 12.25, -0.25, -5.25, 4.75, 0.75, -9.25, 12.25, -0.25, -5.25, 8.75, 0.75, -5.25, -8.25, 0.75, -5.25, -8.25, 0.75, 2.75, -11.75, -0.25, 2.75, -8.25, 0.75, -5.25, -11.75, -0.25, 2.75, -11.75, -0.25, -5.25, 12.25, -0.25, -5.25, 4.75, -0.25, -12.75, -4.25, -0.25, -12.75, 12.25, -0.25, -5.25, -4.25, -0.25, -12.75, -11.75, -0.25, -5.25, 12.25, -0.25, -5.25, -11.75, -0.25, -5.25, -11.75, -0.25, 2.75, 12.25, -0.25, -5.25, -11.75, -0.25, 2.75, -4.25, -0.25, 10.25, 12.25, -0.25, -5.25, -4.25, -0.25, 10.25, 4.75, -0.25, 10.25, 12.25, -0.25, -5.25, 4.75, -0.25, 10.25, 12.25, -0.25, 2.75, 8.75, 0.75, -5.25, 8.75, 0.75, 2.75, 4.75, 0.75, 6.75, 8.75, 0.75, -5.25, 4.75, 0.75, 6.75, -4.25, 0.75, 6.75, 8.75, 0.75, -5.25, -4.25, 0.75, 6.75, -8.25, 0.75, 2.75, 8.75, 0.75, -5.25, -8.25, 0.75, 2.75, -8.25, 0.75, -5.25, 8.75, 0.75, -5.25, -8.25, 0.75, -5.25, -4.25, 0.75, -9.25, 8.75, 0.75, -5.25, -4.25, 0.75, -9.25, 4.75, 0.75, -9.25, 8.75, 0.75, -5.25, 12.25, -0.25, -5.25, 12.25, -0.25, 2.75, 8.75, 0.75, -5.25, 12.25, -0.25, 2.75, 8.75, 0.75, 2.75, -8.25, 0.75, 2.75, -4.25, 0.75, 6.75, -4.25, -0.25, 10.25, -8.25, 0.75, 2.75, -4.25, -0.25, 10.25, -11.75, -0.25, 2.75, 4.75, -0.25, 10.25, 4.75, 0.75, 6.75, 8.75, 0.75, 2.75, 4.75, -0.25, 10.25, 8.75, 0.75, 2.75, 12.25, -0.25, 2.75, -4.25, -0.25, 10.25, -4.25, 0.75, 6.75, 4.75, 0.75, 6.75, -4.25, -0.25, 10.25, 4.75, 0.75, 6.75, 4.75, -0.25, 10.25, 31.25, -0.25, -16.75, 31.25, -0.25, -12.75, 13.25, -0.25, -12.75, 31.25, -0.25, -16.75, 13.25, -0.25, -12.75, 13.25, -0.25, -16.75, 9.25, -0.25, -16.75, 9.25, -0.25, -12.75, -8.75, -0.25, -12.75, 9.25, -0.25, -16.75, -8.75, -0.25, -12.75, -8.75, -0.25, -16.75, 18.75, -0.25, -30.25, 31.25, -0.25, -17.75, 31.25, -0.25, -16.75, 18.75, -0.25, -30.25, 31.25, -0.25, -16.75, -31.25, -0.25, -16.75, 18.75, -0.25, -30.25, -31.25, -0.25, -16.75, -31.25, -0.25, -17.75, 18.75, -0.25, -30.25, -31.25, -0.25, -17.75, -18.75, -0.25, -30.25, -12.75, -0.25, -16.75, -12.75, -0.25, -12.75, -31.25, -0.25, -12.75, -12.75, -0.25, -16.75, -31.25, -0.25, -12.75, -31.25, -0.25, -16.75)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_nhigm"]
+load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emckx"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_nhigm")
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_utuic"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_emckx")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gedu5"]
+load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4uom5"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_gedu5")
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_i2sft"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_4uom5")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2w3uq"]
+load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_scavq"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_2w3uq")
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_x46ml"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_scavq")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_l4rwv"]
+load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o0hjk"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_l4rwv")
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_ji4sa"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_o0hjk")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xib3m"]
+load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ubi6o"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_xib3m")
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_utt08"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_ubi6o")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ca5ks"]
+load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v3y46"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_ca5ks")
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_006f1"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_v3y46")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3f6wn"]
+load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eato5"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_3f6wn")
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_8v5pv"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_eato5")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2vj7p"]
+load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_osp8c"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_2vj7p")
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_envmj"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_osp8c")
+uv2_padding = 0.0
+size = Vector2(5, 25)
 
 [node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors")]
 script = ExtResource("1_pgc5k")
@@ -1219,26 +1347,34 @@ shape = SubResource("ConcavePolygonShape3D_iu0yp")
 
 [node name="entity_39_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, -3.1875)
+mesh = SubResource("QuadMesh_utuic")
 
 [node name="entity_40_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, -11.5625)
+mesh = SubResource("QuadMesh_i2sft")
 
 [node name="entity_41_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, 5.0625)
+mesh = SubResource("QuadMesh_x46ml")
 
 [node name="entity_42_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, 13.1875)
+mesh = SubResource("QuadMesh_ji4sa")
 
 [node name="entity_43_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, 13.1875)
+mesh = SubResource("QuadMesh_utt08")
 
 [node name="entity_44_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, 5.0625)
+mesh = SubResource("QuadMesh_006f1")
 
 [node name="entity_45_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, -3.1875)
+mesh = SubResource("QuadMesh_8v5pv")
 
 [node name="entity_46_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, -11.5625)
+mesh = SubResource("QuadMesh_envmj")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

@@ -7,6 +7,8 @@ var is_scrolling: bool = true
 
 func _ready() -> void:
 	decal_idx = randi_range(0, 5)
+	var uv_offset: float = 0.25 * randi_range(0, 5)
+	mesh.material.uv1_offset.y -= uv_offset
 
 
 func _physics_process(delta: float) -> void:
@@ -16,7 +18,7 @@ func _physics_process(delta: float) -> void:
 		mesh.material.uv1_offset.y = lerp(
 			mesh.material.uv1_offset.y, 
 			closest_uv_snap + 0.25, 
-			delta / 2
+			delta * 4.0
 		)
 	else:
 		if is_equal_approx(mesh.material.uv1_offset.y, closest_uv_snap + decal_idx * 0.25):
@@ -25,5 +27,5 @@ func _physics_process(delta: float) -> void:
 			mesh.material.uv1_offset.y = lerp(
 				mesh.material.uv1_offset.y, 
 				closest_uv_snap + decal_idx * 0.25, 
-				delta
+				delta * 4.0
 			)
