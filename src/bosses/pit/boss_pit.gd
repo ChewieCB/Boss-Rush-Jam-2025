@@ -291,6 +291,7 @@ func _on_intro_air_slam_recover_state_entered() -> void:
 	
 	state_chart.send_event("stop_moving")
 	slam_target_pos = target.global_position
+	anim_player.play("RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	state_chart.send_event("end_recovery")
@@ -394,6 +395,7 @@ func _on_melee_combo_recover_state_entered() -> void:
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
+	anim_player.play("RESET")
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
@@ -584,6 +586,7 @@ func _on_ground_pound_state_entered() -> void:
 	state_chart.send_event("stop_moving")
 	debug_trajectory_mesh.mesh.clear_surfaces()
 	velocity = Vector3.ZERO
+	sprite.texture = slam_sprite
 	var wave_callback: Callable = func(): 
 		state_chart.send_event("combo_end")
 	spawn_center_wave(ground_pound_wave_radius, 0.8, 2.0, false, wave_callback)
@@ -695,6 +698,7 @@ func _on_air_slam_closer_recover_state_entered() -> void:
 	debug_state_label.text = "Air Slam | Recovery"
 	
 	state_chart.send_event("stop_moving")
+	anim_player.play("RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	# Hammer Ground follow up if the player doesn't escape
@@ -735,6 +739,7 @@ func _on_hammer_ground_recover_state_entered() -> void:
 	debug_state_label.text = "Hammer Ground | Recovery"
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
+	anim_player.play("RESET")
 	select_attack()
 	state_chart.send_event("end_recovery")
 

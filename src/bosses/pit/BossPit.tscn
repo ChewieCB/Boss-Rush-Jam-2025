@@ -1,10 +1,12 @@
-[gd_scene load_steps=34 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=36 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_akhww"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bjod6"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_bqowf"]
+[ext_resource type="Texture2D" uid="uid://cm52o61isok1h" path="res://src/bosses/pit/assets/pit_boss_lunge.png" id="5_my4lc"]
+[ext_resource type="Texture2D" uid="uid://drj8vgnapbsgk" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="6_0uepf"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="6_l4p06"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="7_koy73"]
 [ext_resource type="Texture2D" uid="uid://bww23gc1wfoj6" path="res://src/bosses/pit/assets/pit_boss_idle.png" id="8_d716h"]
@@ -294,6 +296,18 @@ tracks/6/keys = {
 "update": 0,
 "values": [Vector3(0, -3.14159, 0), Vector3(0.698132, -3.14159, 1.26701e-07), Vector3(0, -3.14159, 0)]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Sprite3D:texture")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_d716h")]
+}
 
 [sub_resource type="Animation" id="Animation_rk1lk"]
 resource_name = "air_slam_attack"
@@ -360,6 +374,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1.93187, 0.196146, 1),
 "update": 0,
 "values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 2.26694, 0.0392845)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:texture")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_d716h")]
 }
 
 [sub_resource type="Animation" id="Animation_qkirm"]
@@ -452,6 +478,18 @@ tracks/6/keys = {
 "update": 0,
 "values": [Vector3(0, -3.14159, 0), Vector3(0.698132, -3.14159, 1.26701e-07), Vector3(0, -3.14159, 0)]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Sprite3D:texture")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.45, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("8_d716h")]
+}
 
 [sub_resource type="Animation" id="Animation_eetrs"]
 resource_name = "hammer_ground"
@@ -524,6 +562,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1.7411, 0.435275, 1.62451, 2.07053, 1.62451, 2.07053, 1.8025, 1.7411),
 "update": 0,
 "values": [Vector3(2.05191, 2.26694, 0.0392845), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 1.19562, 0.630243), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 1.19562, 0.630243), Vector3(1.85191, 3.26694, 1.03928), Vector3(2.05191, 1.19562, 0.630243), Vector3(2.05191, 2.26694, 0.0392845)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:texture")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.45, 0.75, 0.95, 1.25, 1.5, 2.05, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("6_0uepf"), ExtResource("8_d716h")]
 }
 
 [sub_resource type="Animation" id="Animation_qtmfa"]
@@ -670,6 +720,18 @@ tracks/4/keys = {
 "args": [],
 "method": &"lunge"
 }]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:texture")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.55, 0.95),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_d716h"), ExtResource("5_my4lc"), ExtResource("5_my4lc"), ExtResource("8_d716h")]
 }
 
 [sub_resource type="Animation" id="Animation_bc730"]
@@ -834,11 +896,11 @@ _data = {
 [node name="BossPit" instance=ExtResource("1_opefu")]
 collision_mask = 75
 script = ExtResource("2_a8b8q")
-swipe_sprite = null
-hook_sprite = null
-lunge_sprite = null
+swipe_sprite = ExtResource("13_qgkan")
+hook_sprite = ExtResource("12_sekny")
+lunge_sprite = ExtResource("5_my4lc")
 uppercut_sprite = null
-slam_sprite = null
+slam_sprite = ExtResource("6_0uepf")
 wave_material = SubResource("ShaderMaterial_2s76u")
 wave_amplitude = 7.0
 wave_frequency = 5.0
