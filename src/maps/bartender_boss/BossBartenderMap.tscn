@@ -1,4 +1,4 @@
-[gd_scene load_steps=224 format=4 uid="uid://bm3l5if407n6l"]
+[gd_scene load_steps=226 format=4 uid="uid://bm3l5if407n6l"]
 
 [ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="1_fk3ye"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="2_ajswq"]
@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" uid="uid://rxldux0ag0my" path="res://src/env/lighting/Chandellier2.tscn" id="19_eq1jm"]
 [ext_resource type="PackedScene" uid="uid://dsipuwmnkxl5" path="res://src/env/lighting/ChandellierLight2.tscn" id="22_4l2u7"]
 [ext_resource type="PackedScene" uid="uid://ckjl0xci7amep" path="res://src/env/lighting/ChandellierLight1.tscn" id="23_un6b8"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="25_umium"]
+[ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="26_pd2aw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ydocc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -1575,16 +1577,13 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.8
 [node name="entity_55_Chandellier1LightOnly" parent="NavigationRegion3D/FuncGodotMap" instance=ExtResource("23_un6b8")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.3125, -3.25)
 
-[node name="BossBartender" parent="." node_paths=PackedStringArray("floor_fize_hazard_marker", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "target") instance=ExtResource("13_ci071")]
+[node name="BossBartender" parent="." node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "target") instance=ExtResource("13_ci071")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -0.0606995, 0, -44.9891)
-sfx_bottle_throw = Array[AudioStream]([])
-sfx_barrel_throw = Array[AudioStream]([])
+sfx_shotgun = Array[AudioStream]([ExtResource("25_umium"), ExtResource("26_pd2aw")])
 floor_fize_hazard_marker = NodePath("../BossMarker/FloorFireHazard")
-sfx_start_fire = null
-sfx_fire_loop = null
+behind_bar_move_points = [NodePath("../BossMarker/BossMoveMarker"), NodePath("../BossMarker/BossMoveMarker2"), NodePath("../BossMarker/BossMoveMarker3"), NodePath("../BossMarker/BossMoveMarker4"), NodePath("../BossMarker/BossMoveMarker5")]
 boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")
 boss_jump_phase3_marker = NodePath("../BossMarker/BossJumpPhase3Marker")
-sfx_jump = Array[AudioStream]([])
 target = NodePath("../NavigationRegion3D/FuncGodotMap/entity_53_PlayerRef")
 
 [node name="BarLight" type="Node3D" parent="."]

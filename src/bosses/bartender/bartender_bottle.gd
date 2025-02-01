@@ -45,6 +45,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if break_on_contact:
 		sfx_player.stream = sfx_break.pick_random()
 		sfx_player.play()
+		await sfx_player.finished
 		call_deferred("queue_free")
 	else:
 		sfx_player.stream = sfx_bounce.pick_random()
