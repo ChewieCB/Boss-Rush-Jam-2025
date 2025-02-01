@@ -1,5 +1,5 @@
 extends RigidBody3D
-class_name Bottle
+class_name BartenderBottle
 
 @export var break_effect_prefab: PackedScene
 @export var break_on_contact = true

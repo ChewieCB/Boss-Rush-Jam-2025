@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=65 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -50,6 +50,7 @@
 [ext_resource type="AudioStream" uid="uid://cjcluk6lldawc" path="res://src/player/assets/sfx/JUMP IN AIR.mp3" id="29_xv6x8"]
 [ext_resource type="AudioStream" uid="uid://ckr1r101hscjl" path="res://src/player/assets/sfx/Floor Dash.mp3" id="30_on7sg"]
 [ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="31_pnqxi"]
+[ext_resource type="Shader" path="res://src/player/assets/thick_3d_outline.gdshader" id="36_f75i1"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
@@ -66,6 +67,16 @@ noise_type = 0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sjjg0"]
 size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cjv3t"]
+render_priority = -1
+shader = ExtResource("36_f75i1")
+shader_parameter/shadow_color = Color(0, 0, 0, 1)
+shader_parameter/shadow_thickness = 2.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_bbump"]
+material = SubResource("ShaderMaterial_cjv3t")
+size = Vector2(5, 5)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
@@ -135,6 +146,10 @@ shape = SubResource("BoxShape3D_sjjg0")
 current = true
 fov = 90.0
 near = 0.02
+
+[node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeableCamera/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.947067)
+mesh = SubResource("QuadMesh_bbump")
 
 [node name="AimRecticle" type="TextureRect" parent="Neck/ShakeableCamera"]
 anchors_preset = 8

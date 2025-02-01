@@ -55,8 +55,10 @@ var current_speed_modifier = 1
 var current_delay_modifier = 1
 var has_strength_buff = false
 var floor_fire_hazard: HazardArea = null
+var action_used_before_heal = 0
 
 const DIFFICULTY_LV = 1
+const MIN_ACTION_BEFORE_HEAL = 8
 
 func _ready() -> void:
 	super()
@@ -88,6 +90,7 @@ func change_phase(new_phase: int) -> void:
 
 
 func select_attack() -> void:
+	action_used_before_heal += 1
 	match current_phase:
 		1:
 			select_attack_phase_1()
@@ -101,10 +104,14 @@ func select_attack() -> void:
 func select_attack_phase_1() -> void:
 	var possible_attacks = [
 		"start_throw_broken_bottle",
+		"start_throw_broken_bottle",
 		"start_throw_concoction",
 		"start_throw_concoction",
-		"start_throw_heal_bottle"
+		"start_throw_concoction",
 	]
+
+	if action_used_before_heal >= MIN_ACTION_BEFORE_HEAL:
+		possible_attacks.append("start_throw_heal_bottle")
 
 	# If player is near, more likely to use shotgun blast
 	if player_is_near:
@@ -114,12 +121,12 @@ func select_attack_phase_1() -> void:
 
 	# If dont have buff, more likely to use buff	
 	if current_buff == "":
-		var brew_drink_bonus_freq = 3
+		var brew_drink_bonus_freq = 2
 		for i in range(brew_drink_bonus_freq):
 			possible_attacks.append("start_brew_drink")
 
 	# More likely to throw bottle / throw barrel when has str buff
-	var throw_barrel_bonus_freq = 5
+	var throw_barrel_bonus_freq = 3
 	if has_strength_buff:
 		for i in range(throw_barrel_bonus_freq):
 			possible_attacks.append("start_throw_broken_bottle")
@@ -341,6 +348,7 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, pr
 
 ## Throw upward to heal
 func throw_heal_bottle():
+	action_used_before_heal = 0
 	var throw_force = 5
 	var bottle_inst = heal_bottle_prefab.instantiate()
 	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)

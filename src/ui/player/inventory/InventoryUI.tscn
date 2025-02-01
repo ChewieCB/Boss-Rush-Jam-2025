@@ -30,7 +30,7 @@ offset_right = -128.0
 offset_bottom = -120.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.584314)
+color = Color(0, 0, 0, 0.72549)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Background"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)

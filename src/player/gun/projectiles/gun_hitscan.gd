@@ -92,6 +92,13 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			damage_applied.emit(true, global_position)
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 		else:
+			if target is Shield:
+				target.impact(self.global_position)
+				target.health_component.damage(damage)
+			elif target is RouletteBall or target is PitTurret:
+				target.health_component.damage(damage)
+			elif target is BartenderBottle:
+				target.call_deferred("queue_free")
 			create_spark(hitscan_col_point, hitscan_col_normal)
 		if ricochet_count_left > 0:
 			ricochet()
