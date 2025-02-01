@@ -13,7 +13,7 @@ func on_damage_calculation():
 	owner_barrel.owner_gun.modified_damage = round(owner_barrel.owner_gun.modified_damage * (1 + (perc_damage_modify / 100.0)))
 	# print("damage: {0}".format([owner_barrel.owner_gun.modified_damage]))
 
-func on_damage_applied():
+func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	super()
 	var roll = randi_range(1, 100)
 	# print("on_damage_applied with {0}, rolled {1}".format([display_text, roll]))

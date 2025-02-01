@@ -111,13 +111,13 @@ texture = ExtResource("21_4uwvq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0330088, 0)
 
 [node name="Slot1" type="Node3D" parent="Barrel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.132691)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.174)
 
 [node name="Slot2" type="Node3D" parent="Barrel"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0360075)
 
 [node name="Slot3" type="Node3D" parent="Barrel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.174082)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.133)
 
 [node name="PlaceholderUI" type="Node3D" parent="."]
 

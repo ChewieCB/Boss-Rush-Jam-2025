@@ -86,7 +86,7 @@ func on_damage_calculation():
 	return
 
 ## After deal damage to enemy.
-func on_damage_applied():
+func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	return
 
 func on_enemy_killed():
@@ -96,4 +96,7 @@ func on_status_effect_tick():
 	return
 
 func on_weapon_switched_to():
+	return
+
+func on_dash_movement():
 	return

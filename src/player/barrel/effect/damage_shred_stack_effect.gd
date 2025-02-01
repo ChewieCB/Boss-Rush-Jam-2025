@@ -7,9 +7,9 @@ var stack_count = 0
 
 func on_reload_start():
 	super()
-	stack_count= 0
+	stack_count = 0
 
-func on_damage_applied():
+func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	super()
 	stack_count += 1
 
