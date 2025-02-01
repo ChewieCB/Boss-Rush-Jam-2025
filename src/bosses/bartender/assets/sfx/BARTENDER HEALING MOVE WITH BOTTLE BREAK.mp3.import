@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c5tipkjjjfp31"
+path="res://.godot/imported/BARTENDER HEALING MOVE WITH BOTTLE BREAK.mp3-befd412d6d245113328ecc0452bac3f6.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/BARTENDER HEALING MOVE WITH BOTTLE BREAK.mp3"
+dest_files=["res://.godot/imported/BARTENDER HEALING MOVE WITH BOTTLE BREAK.mp3-befd412d6d245113328ecc0452bac3f6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
