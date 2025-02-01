@@ -1928,6 +1928,7 @@ delay_in_seconds = "0.0"
 
 [node name="DebugPhaseLabel" type="Label3D" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.7, 0)
+visible = false
 billboard = 1
 text = "PHASE"
 font = ExtResource("11_el2h4")
@@ -1937,10 +1938,12 @@ uppercase = true
 
 [node name="DebugStateLabel" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
+visible = false
 text = "STATE"
 
 [node name="DebugDistanceLabel" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, 0)
+visible = false
 text = "DISTANCE"
 
 [node name="DamageTextMarker" parent="." index="14"]

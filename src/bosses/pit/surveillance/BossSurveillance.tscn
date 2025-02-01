@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://burh3udob1t32"]
+[gd_scene load_steps=39 format=3 uid="uid://burh3udob1t32"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_rd2xm"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_p6rlf"]
@@ -15,10 +15,23 @@
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="8_bah8y"]
 [ext_resource type="AudioStream" uid="uid://64qypvlak01e" path="res://src/bosses/pit/assets/sfx/SURVEILLANCE DEATH.mp3" id="9_7awj5"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_h6vir"]
+[ext_resource type="Texture2D" uid="uid://gjk5gdeux2e6" path="res://src/bosses/pit/surveillance/textures/Veins_001_roughness.jpg" id="10_0m5sf"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="10_tlulp"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_3sg7f"]
+[ext_resource type="Texture2D" uid="uid://dwcugmin6uohy" path="res://src/bosses/pit/surveillance/textures/Veins_001_basecolor.jpg" id="11_f1pe4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a8rdl"]
+transparency = 1
+albedo_color = Color(0.98, 0.7644, 0.7448, 0.537255)
+albedo_texture = ExtResource("11_f1pe4")
+normal_enabled = true
+ao_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dnveo"]
+next_pass = SubResource("StandardMaterial3D_a8rdl")
+emission_enabled = true
+emission = Color(0.843274, 0.753243, 0.619033, 1)
+emission_texture = ExtResource("10_0m5sf")
 
 [sub_resource type="SphereMesh" id="SphereMesh_lki4d"]
 material = SubResource("StandardMaterial3D_dnveo")
@@ -660,6 +673,7 @@ delay_in_seconds = "0.0"
 
 [node name="DebugPhaseLabel" type="Label3D" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.4, 0)
+visible = false
 billboard = 1
 text = "INACTIVE"
 font = ExtResource("11_3sg7f")
@@ -669,9 +683,11 @@ uppercase = true
 
 [node name="DebugStateLabel" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 0)
+visible = false
 
 [node name="DebugDistanceLabel" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.6, 0)
+visible = false
 
 [node name="DamageTextMarker" parent="." index="15"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4888, 0)

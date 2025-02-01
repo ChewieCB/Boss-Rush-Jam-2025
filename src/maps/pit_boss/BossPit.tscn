@@ -1223,10 +1223,6 @@ script = ExtResource("1_ymudn")
 bgm = ExtResource("2_usrqo")
 cover_spawn_scene = ExtResource("21_w72c7")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
-shadow_enabled = true
-
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="BossDefeatedUI" parent="UI" instance=ExtResource("3_nqcqn")]
@@ -2294,26 +2290,50 @@ transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -18, 0, 
 [node name="entity_36_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 8.34375, 13.5)
 
+[node name="OmniLight3D" parent="FuncGodotMap/entity_36_Chandellier1" index="5"]
+omni_range = 20.0
+
 [node name="entity_37_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 8.34375, -13)
+
+[node name="OmniLight3D" parent="FuncGodotMap/entity_37_Chandellier1" index="5"]
+omni_range = 20.0
 
 [node name="entity_38_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 18, 8.34375, -13)
 
+[node name="OmniLight3D" parent="FuncGodotMap/entity_38_Chandellier1" index="5"]
+omni_range = 20.0
+
 [node name="entity_39_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 18, 8.34375, 13.5)
+
+[node name="OmniLight3D" parent="FuncGodotMap/entity_39_Chandellier1" index="5"]
+omni_range = 20.0
 
 [node name="entity_40_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -18, 8.34375, -13)
 
+[node name="OmniLight3D" parent="FuncGodotMap/entity_40_Chandellier1" index="5"]
+omni_range = 20.0
+
 [node name="entity_41_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -18, 8.34375, 13.5)
+
+[node name="OmniLight3D" parent="FuncGodotMap/entity_41_Chandellier1" index="5"]
+omni_range = 20.0
 
 [node name="entity_42_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -28, 8.34375, 0)
 
+[node name="OmniLight3D" parent="FuncGodotMap/entity_42_Chandellier1" index="5"]
+omni_range = 20.0
+
 [node name="entity_43_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 28, 8.34375, 0)
+
+[node name="OmniLight3D" parent="FuncGodotMap/entity_43_Chandellier1" index="5"]
+omni_range = 20.0
 
 [node name="group_629_Elevator" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
@@ -2412,3 +2432,14 @@ light_data = ExtResource("36_182s1")
 
 [connection signal="body_entered" from="BossTrigger" to="." method="_on_boss_trigger_body_entered"]
 [connection signal="timeout" from="StanceTimer" to="." method="_on_stance_timer_timeout"]
+
+[editable path="FuncGodotMap/entity_36_Chandellier1"]
+[editable path="FuncGodotMap/entity_37_Chandellier1"]
+[editable path="FuncGodotMap/entity_38_Chandellier1"]
+[editable path="FuncGodotMap/entity_39_Chandellier1"]
+[editable path="FuncGodotMap/entity_40_Chandellier1"]
+[editable path="FuncGodotMap/entity_41_Chandellier1"]
+[editable path="FuncGodotMap/entity_42_Chandellier1"]
+[editable path="FuncGodotMap/entity_43_Chandellier1"]
+[editable path="FuncGodotMap/entity_63_Chandellier1LightOnly"]
+[editable path="FuncGodotMap/entity_64_Chandellier1LightOnly"]
