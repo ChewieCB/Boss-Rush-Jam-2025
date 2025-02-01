@@ -58,6 +58,7 @@ var slot_ticks: int = SLOT_TICKS
 @onready var slot_icons: Array[Texture] = [
 	icon_coin, icon_bell, icon_bar, icon_diamond, icon_cherry
 ]
+@onready var slot_decals: Array[Node] = get_tree().get_root().get_child(3).find_children("*", "SlotRollerDecal")
 
 @export_subgroup("Coin Burst")
 @export var coin_projectile: PackedScene
@@ -271,6 +272,8 @@ func _on_spin_slots_spinning_state_entered() -> void:
 			var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
 			var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size() - 1) 
 			slot_sprite.texture = slot_icons[new_idx]
+			#for decal in slot_decals:
+				#decal.mesh.material.albedo_texture = slot_icons[new_idx]
 		await get_tree().create_timer(0.1).timeout
 	# Settle each roller one by one
 	for i in range(slot_icons_parent.get_child_count()):
@@ -280,6 +283,9 @@ func _on_spin_slots_spinning_state_entered() -> void:
 				var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
 				var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size()) 
 				slot_sprite.texture = slot_icons[new_idx]
+	
+	#for decal in slot_decals:
+		#decal.mesh.material.albedo_texture = slot_icons[next_attack_idx]
 	
 	sfx_player.stop()
 	var choice_sfx: AudioStream = sfx_slot_picks[next_attack_idx]
@@ -414,7 +420,7 @@ func spawn_bell(pos: Vector3, size: float) -> void:
 	
 	var bell_sfx := AudioStreamPlayer3D.new()
 	bell_sfx.stream = sfx_bell_windup.pick_random()
-	get_tree().get_root().get_child(2).add_child(bell_sfx)
+	get_tree().get_root().get_child(3).add_child(bell_sfx)
 	bell_sfx.global_position = pos
 	bell_sfx.volume_db = 5.0
 	bell_sfx.max_db = 5.0
