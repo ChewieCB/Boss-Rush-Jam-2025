@@ -370,7 +370,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		if randf() < chip_spawn_chance:
 			var chip = chip_scene.instantiate() as RigidBody3D
-			get_tree().root.get_child(-1).add_child(chip)
+			GameManager.player.get_parent().add_child(chip)
 			chip.global_position = self.global_position
 			chip.rotate_y(randf_range(0, 2*PI))
 			chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
