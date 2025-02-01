@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://db6875qyqrt13"
+path="res://.godot/imported/lobby-crash.map-b181c783da5296d9645d4bcdf9044e70.tres"
+
+[deps]
+
+source_file="res://src/maps/lobby/lobby-crash.map"
+dest_files=["res://.godot/imported/lobby-crash.map-b181c783da5296d9645d4bcdf9044e70.tres"]
+
+[params]
+
