@@ -1,12 +1,17 @@
 extends RigidBody3D
 class_name BombProjectile
 
+@export_group("Bomb Behaviour")
 @export var fuse_time: float = 1.0
 @export var fuse_variance: float = 1.4
 @export var ticks: int = 3
 @export var explosion_radius: float = 8.0
 @export var explosion_damage: float = 10.0
-
+@export_group("SFX")
+@export var sfx_bomb_launch: Array[AudioStream]
+@export var sfx_bomb_bounce: Array[AudioStream]
+@export var sfx_bomb_explode: Array[AudioStream]
+@export_group("VFX Scenes")
 @export var explosion_scene: PackedScene
 @export var spark_scene: PackedScene
 
@@ -14,6 +19,7 @@ class_name BombProjectile
 @onready var timer: Timer = $Timer
 @onready var explosion_area: Area3D = $ExplosionArea
 @onready var explosion_collider: CollisionShape3D = $ExplosionArea/CollisionShape3D
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 var body_state: PhysicsDirectBodyState3D
 
@@ -52,8 +58,12 @@ func destroy() -> void:
 	explosion_vfx.global_position = self.global_position
 	# TODO - make explosion size of area
 	
+	sfx_player.stream = sfx_bomb_explode.pick_random()
+	sfx_player.play()
+	
 	var tween = get_tree().create_tween()
 	tween.tween_property(mesh, "scale", Vector3.ZERO, 0.4).set_trans(Tween.TRANS_SINE)
+	# TODO - await sfx player finished?
 	tween.tween_callback(self.queue_free)
 
 
@@ -76,3 +86,6 @@ func _on_explosion_area_body_entered(body: Node3D) -> void:
 		body.health_component.damage(explosion_damage)
 	elif body is BombProjectile:
 		body.destroy()
+	else:
+		sfx_player.stream = sfx_bomb_bounce.pick_random()
+		sfx_player.play()

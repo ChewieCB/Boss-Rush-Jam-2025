@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://p38ber7fs63l"
+path="res://.godot/imported/SLOT BOSS CHERRY BOMB EXPLOSION 2.mp3-d8edc0b293b106f1140156156cf360e3.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 2.mp3"
+dest_files=["res://.godot/imported/SLOT BOSS CHERRY BOMB EXPLOSION 2.mp3-d8edc0b293b106f1140156156cf360e3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

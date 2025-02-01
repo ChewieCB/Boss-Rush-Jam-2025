@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://brfh1b3jim3qo"
+path="res://.godot/imported/SLOT BOSS DIES.mp3-734183a3e601b052b32f1541377556d0.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3"
+dest_files=["res://.godot/imported/SLOT BOSS DIES.mp3-734183a3e601b052b32f1541377556d0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

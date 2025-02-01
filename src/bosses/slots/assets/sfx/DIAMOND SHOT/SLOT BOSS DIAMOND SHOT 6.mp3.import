@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://3sc5nb62s1j0"
+path="res://.godot/imported/SLOT BOSS DIAMOND SHOT 6.mp3-0fad953e5d87f03a5947290cb18250b3.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 6.mp3"
+dest_files=["res://.godot/imported/SLOT BOSS DIAMOND SHOT 6.mp3-0fad953e5d87f03a5947290cb18250b3.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

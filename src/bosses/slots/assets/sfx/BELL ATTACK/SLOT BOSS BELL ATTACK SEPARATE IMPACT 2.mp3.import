@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://boyjiwip3m72n"
+path="res://.godot/imported/SLOT BOSS BELL ATTACK SEPARATE IMPACT 2.mp3-b052528ce10381d6e6135153b36f7308.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 2.mp3"
+dest_files=["res://.godot/imported/SLOT BOSS BELL ATTACK SEPARATE IMPACT 2.mp3-b052528ce10381d6e6135153b36f7308.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

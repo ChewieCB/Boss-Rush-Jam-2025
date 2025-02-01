@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dt0ekxq6en04s"
+path="res://.godot/imported/SLOT BOSS CHERRY BOMB BOUCNE 11.mp3-18a4b95c24f14d5fd4e77d98c4d01c0d.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 11.mp3"
+dest_files=["res://.godot/imported/SLOT BOSS CHERRY BOMB BOUCNE 11.mp3-18a4b95c24f14d5fd4e77d98c4d01c0d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

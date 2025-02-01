@@ -1,34 +1,21 @@
-[gd_scene load_steps=37 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=24 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Texture2D" uid="uid://l708f35ye0ad" path="res://src/bosses/base/assets/umby_boss_sprite_placeholder.png" id="1_lhq8s"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="2_5bmmu"]
 [ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChipProjectile.tscn" id="2_hj7qa"]
-[ext_resource type="AudioStream" uid="uid://baowpjxeh2juw" path="res://src/bosses/base/assets/sfx/temp/You Win 2 or Game Start or etc.mp3" id="2_iapcc"]
-[ext_resource type="AudioStream" uid="uid://bpjefcq47oyr3" path="res://src/bosses/base/assets/sfx/temp/Hit 2.mp3" id="2_ooio7"]
 [ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="2_s3pnh"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_fy6mc"]
-[ext_resource type="AudioStream" uid="uid://ch0bkn7t2rb4i" path="res://src/bosses/base/assets/sfx/temp/Hit 3.mp3" id="3_js8yl"]
 [ext_resource type="PackedScene" uid="uid://bwei3cifjg1sq" path="res://src/ui/boss/BossHealthBar.tscn" id="3_ybtoo"]
-[ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="4_5kb5r"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_sfdil"]
-[ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="5_1dh5s"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="5_oy1aj"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="6_4cg3x"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_nojwf"]
-[ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="6_q351g"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="7_0t8qy"]
-[ext_resource type="AudioStream" uid="uid://b4k4hf58sg3a2" path="res://src/bosses/base/assets/sfx/temp/Hit 7.mp3" id="7_f2ln5"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="8_lsrry"]
 [ext_resource type="PackedScene" uid="uid://e7b51y76wxn3" path="res://src/components/navigation/NavigationComponent.tscn" id="9_cunyl"]
-[ext_resource type="AudioStream" uid="uid://bcippputkq3ih" path="res://src/bosses/base/assets/sfx/temp/Whoosh .mp3" id="9_h0e05"]
-[ext_resource type="AudioStream" uid="uid://wetpevehhwx1" path="res://src/bosses/base/assets/sfx/temp/weird_summon_clipped.wav" id="9_na3j5"]
-[ext_resource type="AudioStream" uid="uid://bxeo1ync2wkuj" path="res://src/bosses/base/assets/sfx/temp/dash6.wav" id="10_0w6pv"]
-[ext_resource type="AudioStream" uid="uid://db2criyne5nvh" path="res://src/bosses/base/assets/sfx/temp/whoosh2_clipped.wav" id="10_b4sbu"]
-[ext_resource type="AudioStream" uid="uid://3p8sq5hywihn" path="res://src/bosses/base/assets/sfx/temp/Copy of Heavy Hit - Paladin Tank attack_.mp3" id="11_2mj0o"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="11_j156m"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="12_1g6yn"]
-[ext_resource type="AudioStream" uid="uid://c7aydtbbovsbu" path="res://src/bosses/base/assets/sfx/temp/Blade Scrape.mp3" id="12_egg5k"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="13_ai5vk"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m057l"]
@@ -54,19 +41,12 @@ script = ExtResource("12_1g6yn")
 guard = SubResource("Resource_vq1e8")
 
 [node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
+process_mode = 1
 collision_layer = 4
 collision_mask = 27
 script = ExtResource("1_tem3i")
 chip_scene = ExtResource("2_hj7qa")
 barrel_pickup_scene = ExtResource("2_5bmmu")
-TEMP_sfx_awaken = ExtResource("2_iapcc")
-TEMP_sfx_hit = Array[AudioStream]([ExtResource("2_ooio7"), ExtResource("3_js8yl"), ExtResource("4_5kb5r"), ExtResource("5_1dh5s"), ExtResource("6_q351g"), ExtResource("7_f2ln5")])
-TEMP_sfx_area_1 = ExtResource("9_na3j5")
-TEMP_sfx_area_2 = ExtResource("10_b4sbu")
-TEMP_sfx_projectile = ExtResource("9_h0e05")
-TEMP_sfx_telegraph = ExtResource("12_egg5k")
-TEMP_sfx_charge = ExtResource("10_0w6pv")
-TEMP_sfx_charge_impact = ExtResource("11_2mj0o")
 navigation_component = NodePath("NavigationComponent")
 health_component = NodePath("HealthComponent")
 attack_recovery_time = 0.65

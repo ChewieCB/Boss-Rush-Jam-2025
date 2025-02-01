@@ -14,6 +14,7 @@ var debug_trajectory_mesh: MeshInstance3D
 
 
 @export_category("SFX")
+@export var sfx_players: Array[AudioStreamPlayer3D]
 @export var sfx_awaken: AudioStream
 @export var sfx_hit: Array[AudioStream]
 @export var sfx_death: AudioStream
@@ -166,6 +167,27 @@ func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInst
 	scene_root.add_child(node)
 	
 	return node
+
+
+func get_available_sfx_player() -> AudioStreamPlayer3D:
+	for player: AudioStreamPlayer3D in sfx_players:
+		if player.playing:
+			continue
+		return player
+	
+	var players_ending_soon = sfx_players.duplicate()
+	players_ending_soon.sort_custom(
+		func(a, b):
+			var a_time_left: float = a.stream.get_length() - a.get_playback_position()
+			var b_time_left: float = b.stream.get_length() - b.get_playback_position()
+			if a_time_left < b_time_left:
+				return a
+			return b
+	)
+	var fallback_player: AudioStreamPlayer3D = players_ending_soon.front()
+	fallback_player.stop()
+	
+	return fallback_player
 
 
 func drop_barrel() -> void:
