@@ -8,11 +8,10 @@ var bgm_player: AudioStreamPlayer
 
 @export var lobby_scene: PackedScene
 
-@onready var buttons: Array[Button] = [
-	$TitleColumn/VBoxContainer/OptionsButton,
-	$TitleColumn/VBoxContainer/CreditButton,
-	$TitleColumn/VBoxContainer/QuitButton,
-]
+@onready var buttons_container: Container = $TitleColumn/VBoxContainer
+@onready var buttons = buttons_container.get_children()
+@onready var settings_ui = $SettingUI
+@onready var credits_ui = $CreditsUI
 
 func _ready() -> void:
 	bgm_player = SoundManager.play_music(bgm, 0.2, "BGM")
@@ -36,3 +35,18 @@ func _on_start_button_pressed() -> void:
 
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_options_button_pressed() -> void:
+	buttons_container.visible = false
+	credits_ui.visible = false
+	settings_ui.visible = true
+
+
+func _on_back_button_pressed() -> void:
+	buttons_container.visible = true
+	settings_ui.visible = false
+
+
+func _on_credit_button_pressed() -> void:
+	credits_ui.visible = !credits_ui.visible
