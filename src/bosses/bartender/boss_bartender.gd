@@ -248,6 +248,7 @@ func _on_phase_1_idle_state_entered() -> void:
 #### Phase 2
 
 func _on_phase_2_state_entered() -> void:
+	await get_tree().create_timer(1.0).timeout
 	GameManager.show_boss_special_dialog("PLAYTIME IS OVER!", 1)
 	jump_to(boss_jump_phase2_marker.global_position)
 
@@ -267,9 +268,10 @@ func _on_phase_2_idle_state_entered() -> void:
 
 #### Phase 3
 func _on_phase_3_state_entered() -> void:
-	GameManager.show_boss_special_dialog("DARN IT! I WILL JUST LIT THE WHOLE FLOOR ON FIRE THEN!", 2)
+	await get_tree().create_timer(1.0).timeout
+	GameManager.show_boss_special_dialog("DARN IT! \nI WILL JUST LIT THE WHOLE FLOOR ON FIRE THEN!", 2)
 	jump_to(boss_jump_phase3_marker.global_position)
-	await get_tree().create_timer(4.0).timeout
+	await get_tree().create_timer(6.0).timeout
 	var fire_sfx = SoundManager.play_ambient_sound(sfx_start_fire, 0.2, "SFX")
 	fire_sfx.finished.connect(func():
 		SoundManager.play_ambient_sound(sfx_fire_loop, 0.1, "SFX")
@@ -409,7 +411,7 @@ func brew_drink():
 		"speed":
 			status_icon.texture = speed_icon
 			current_speed_modifier = 1 + speed_buff_modifier
-			current_delay_modifier = 1 - speed_buff_modifier
+			# current_delay_modifier = 1 - speed_buff_modifier
 			navigation_component.current_speed = base_movespeed * current_speed_modifier
 			buff_expire_timer.start()
 		"strength":

@@ -11,8 +11,7 @@ extends Node3D
 
 
 func _ready() -> void:
-	if boss:
-		boss.health_component.died.connect(_on_boss_defeated)
+	boss.defeated.connect(_on_boss_defeated)
 	player.health_component.died.connect(_on_player_death)
 	
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
@@ -24,7 +23,7 @@ func _ready() -> void:
 	elevator_doors.open()
 
 
-func _on_boss_defeated() -> void:
+func _on_boss_defeated(_boss: BossCore) -> void:
 	win_ui.win()
 	show_end_panel()
 
