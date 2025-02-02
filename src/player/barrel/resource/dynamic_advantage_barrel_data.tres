@@ -9,15 +9,15 @@ script = ExtResource("1_wmb4n")
 barrel_id = 3
 barrel_name = "Dynamic Advantage"
 barrel_desc = "[b]Dynamic Advantage[/b]
-Give dynamic advantage to your barrel (duh).
+Give dynamic advantage to your barrel.
 
 Possible rolls:
 [ul]
 Ramp Up: Shoot faster as you shoot continuously.
 Extended Drum: Increased magazine size and reload time.
 Explosive Bullet: Explosive bullets.
-Hyperfocus: Increased damage and reduce recoil while standing still. Opposite effect while moving.
 [/ul]"
 barrel_image = ExtResource("1_vp1f6")
 barrel_cost = 630
 barrel_prefab = ExtResource("1_nrto8")
+is_archetype_barrel = false

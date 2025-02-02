@@ -18,6 +18,6 @@ Double-barrel shotgun: Limited magazine size and high spread, but huge damage.
 Slug shotgun: Low spread and firerate. Very high damage but only one projectile.
 [/ul]"
 barrel_image = ExtResource("1_7kpif")
-barrel_cost = 860
+barrel_cost = 1850
 barrel_prefab = ExtResource("2_v2xxy")
 is_archetype_barrel = false
