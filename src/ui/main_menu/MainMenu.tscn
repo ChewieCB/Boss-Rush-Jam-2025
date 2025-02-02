@@ -1,0 +1,249 @@
+[gd_scene load_steps=14 format=3 uid="uid://ctddgvd003sjr"]
+
+[ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="1_jqa14"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="3_j6oww"]
+[ext_resource type="Texture2D" uid="uid://ccn08me1il1m4" path="res://src/ui/main_menu/bg2.png" id="4_5npb2"]
+[ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="4_q0jt0"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="5_8m82e"]
+[ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="6_q3sa1"]
+[ext_resource type="Texture2D" uid="uid://csw0xjbbqsivg" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-016.png" id="6_tem84"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2x62q"]
+shader = ExtResource("1_jqa14")
+shader_parameter/blur_amount = 2.0
+shader_parameter/mix_amount = null
+shader_parameter/color_over = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e022a"]
+shader = ExtResource("3_j6oww")
+shader_parameter/scroll_speed = 0.01
+shader_parameter/angle_degrees = 45.0
+shader_parameter/repeat_x = 1.0
+shader_parameter/repeat_y = 3.5
+shader_parameter/row_offset = 0.0
+shader_parameter/texture_to_scroll = ExtResource("4_5npb2")
+
+[sub_resource type="Animation" id="Animation_bjuou"]
+resource_name = "spin_chip"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TitleColumn/Chip:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.5708, 3.14159, 4.71239, 6.26573]
+}
+
+[sub_resource type="Animation" id="Animation_cq0qc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TitleColumn/Chip:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j68ti"]
+_data = {
+"RESET": SubResource("Animation_cq0qc"),
+"spin_chip": SubResource("Animation_bjuou")
+}
+
+[node name="MainMenu" type="Control"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="OverallBackground" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_gnvwu")
+expand_mode = 5
+
+[node name="BlurShader" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_2x62q")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_8m82e")
+
+[node name="TitleColumn" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_e022a")
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 212.0
+offset_right = 591.0
+grow_vertical = 2
+texture = ExtResource("5_8m82e")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="TitleColumn"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_tem84")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="Chip" type="TextureRect" parent="TitleColumn"]
+modulate = Color(0.366595, 0.366595, 0.366595, 1)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.337
+offset_top = 100.269
+offset_right = 155.663
+offset_bottom = 406.269
+grow_horizontal = 2
+pivot_offset = Vector2(155.142, 153.952)
+texture = ExtResource("4_q0jt0")
+expand_mode = 1
+
+[node name="Title" type="RichTextLabel" parent="TitleColumn"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -345.5
+offset_top = 58.0
+offset_right = 358.5
+offset_bottom = 420.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/normal_font_size = 150
+theme_override_font_sizes/bold_font_size = 150
+bbcode_enabled = true
+text = "[center][color=red]Spin Spin[/color]
+Bang Bang[/center]"
+fit_content = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TitleColumn"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -156.0
+offset_top = -322.0
+offset_right = 156.0
+offset_bottom = -74.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 20
+
+[node name="StartButton" type="Button" parent="TitleColumn/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 45
+text = "Start"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="TitleColumn/VBoxContainer/StartButton"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_q3sa1")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="CreditButton" type="Button" parent="TitleColumn/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 45
+text = "Credit
+"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="TitleColumn/VBoxContainer/CreditButton"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_q3sa1")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="QuitButton" type="Button" parent="TitleColumn/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 45
+text = "Quit
+"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="TitleColumn/VBoxContainer/QuitButton"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_q3sa1")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="VersionLabel" type="Label" parent="TitleColumn"]
+modulate = Color(0.529067, 0.529067, 0.529067, 1)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 20
+text = "v1.0"
+horizontal_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_j68ti")
+}
+autoplay = "spin_chip"
+speed_scale = 0.1
