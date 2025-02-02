@@ -1,21 +1,34 @@
 extends CharacterBody3D
 class_name Player
 
-## TEMP SFX PLS CHANGE
-@export var TEMP_sfx_hurt: Array[AudioStream]
-@export var TEMP_sfx_dead: Array[AudioStream]
-@export var TEMP_sfx_dash: AudioStream
+@export_category("SFX")
+@export var sfx_hurt: Array[AudioStream]
+@export var sfx_dead: Array[AudioStream]
+@export var sfx_dead_falling: Array[AudioStream]
+var movement_sfx_player: AudioStreamPlayer
+@export var sfx_movement_loop: AudioStream
+@export var sfx_movement_steps: Array[AudioStream]
+@export var sfx_crouch: Array[AudioStream]
+@export var sfx_stand: Array[AudioStream]
+@export var sfx_jump_ground: Array[AudioStream]
+@export var sfx_jump_air: Array[AudioStream]
+@export var sfx_dash_floor: Array[AudioStream]
+@export var sfx_dash_air: Array[AudioStream]
 
+@export_category("Movement")
 @export var can_wall_jump: bool
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
 @export var dash_cd: float = 0.5
 @export var angular_momentum_multiplier = 0.4
+
+@export_category("Prefabs")
 @export var aim_ray_prefab: PackedScene
 @export var health_component: HealthComponent
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
 @onready var inventory_ui: InventoryUI = $UI/InventoryUI
+@onready var interact_ui: Label = $UI/InteractUI
 
 @onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
 @onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
@@ -29,9 +42,17 @@ class_name Player
 @onready var gun_container = $Neck/ShakeableCamera/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeableCamera/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
-@onready var magazine_label: Label = $UI/MagazineUI
+@onready var magazine_label: Label = $UI/GunUI/MagazineUI
+@onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
+
+@onready var boss_special_dialog = $UI/BossSpecialDialog
+@onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
+
+
+signal movement_dashed
 
 const MAX_SPEED: float = 8.0
+var max_speed: float = MAX_SPEED
 const MAX_FALL_SPEED: float = 50.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 8
@@ -43,6 +64,7 @@ const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
 const RECOIL_COEFFICIENT: float = 10
 const BULLET_SPAWN_POS_VARIATION: float = 10
+const INTERACT_DISTANCE = 5
 
 const DASH_SPEED: float = 15
 const SLIDE_SPEED: float = 5
@@ -64,9 +86,16 @@ var is_sliding: bool:
 				player_camera.add_long_trauma(-SLIDE_SHAKE_TRAUMA)
 		is_sliding = value
 
-var bonus_speed: float = 0
+var internal_bonus_speed: float = 0
 
-var raw_input_dir := Vector2(0, 0)
+var raw_input_dir := Vector2(0, 0):
+	set(value):
+		if is_on_floor() and raw_input_dir == Vector2.ZERO and value != Vector2.ZERO:
+			movement_sfx_player = SoundManager.play_sound(sfx_movement_loop, "SFX")
+		raw_input_dir = value
+		if is_instance_valid(movement_sfx_player):
+			if raw_input_dir == Vector2.ZERO and movement_sfx_player.playing:
+				SoundManager.stop_sound(sfx_movement_loop)
 var input_dir := Vector2(0, 0)
 
 var last_dashed_timestamp
@@ -82,6 +111,14 @@ var is_swapping_gun = false
 var current_gun: Gun = null
 
 var is_in_inventory = false
+var object_to_be_interacted = null
+
+var buffs: Array[Buff] = []
+var base_stats = {
+	"run_speed_modifier": 1,
+	"dash_slide_speed_modifier": 1
+}
+var current_stats = base_stats.duplicate(true)
 
 
 func _ready():
@@ -94,17 +131,19 @@ func _ready():
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	gun_container_original_pos = gun_container.position
-
+	interact_ui.visible = false
+	boss_special_dialog.visible = false
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_hud)
 	current_gun.gun_reloaded.connect(update_hud)
+	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 
 func _input(event):
 	if controls_disabled:
 		return
 
-	if event.is_action_pressed("open_inventory"):
-		inventory_ui.toggle()
+	#if event.is_action_pressed("open_inventory"):
+		#inventory_ui.toggle()
 
 	if is_in_inventory:
 		return
@@ -121,19 +160,52 @@ func _input(event):
 		if last_dashed_timestamp + dash_cd * 1000 <= Time.get_ticks_msec():
 			last_dashed_timestamp = Time.get_ticks_msec()
 			is_dashing = true
-			SoundManager.play_sound_with_pitch(TEMP_sfx_dash, randf_range(0.8, 1.1))
+			if is_on_floor():
+				SoundManager.play_sound_with_pitch(
+					sfx_dash_floor.pick_random(), randf_range(0.8, 1.1), "SFX"
+				)
+			else:
+				SoundManager.play_sound_with_pitch(
+					sfx_dash_air.pick_random(), randf_range(0.8, 1.1), "SFX"
+				)
 			vel_vertical = 0
 			dash_duration_timer.start()
+			movement_dashed.emit()
 
 	if Input.is_action_just_pressed("interact"):
-		if aim_ray.is_colliding():
-			var interact_collider = aim_ray.get_collider()
-			if interact_collider:
-				if interact_collider.has_method("interact"):
-					interact_collider.interact()
+		if object_to_be_interacted:
+			object_to_be_interacted.interact()
+			get_viewport().set_input_as_handled()
+	
+	if Input.is_action_just_pressed("crouch"):
+		SoundManager.play_sound(sfx_crouch.pick_random(), "SFX")
+	elif Input.is_action_just_released("crouch"):
+		SoundManager.play_sound(sfx_stand.pick_random(), "SFX")
+
 
 func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
+
+	for buff in buffs:
+		if buff.duration > 0:
+			buff.duration -= delta
+			if buff.duration <= 0:
+				remove_buff(buff)
+
+	if aim_ray.is_colliding():
+		var interact_collider = aim_ray.get_collider()
+		if interact_collider and \
+			interact_collider.has_method("interact") and \
+			interact_collider.global_position.distance_to(global_position) <= INTERACT_DISTANCE:
+			object_to_be_interacted = interact_collider
+			interact_ui.visible = true
+		else:
+			object_to_be_interacted = null
+			interact_ui.visible = false
+	else:
+		object_to_be_interacted = null
+		interact_ui.visible = false
+
 
 	if controls_disabled or is_in_inventory:
 		return
@@ -148,6 +220,7 @@ func _process(delta):
 
 func _physics_process(delta):
 	if controls_disabled:
+		input_dir = Vector2.ZERO
 		velocity = Vector3(0, -GRAVITY, 0)
 		move_and_slide()
 		return
@@ -157,9 +230,8 @@ func _physics_process(delta):
 			raw_input_dir = Vector2(0, -1)
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
-	if not is_dashing and not is_sliding:
-		if not is_in_inventory:
-			raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	if not is_dashing and not is_sliding and not is_in_inventory:
+		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
 	# If the next line is for grounded only, we will have bunnyhop tech
@@ -183,28 +255,28 @@ func _physics_process(delta):
 	# Use the next line will make player move faster when strafing + rotate camera
 	# var current_speed = vel_horizontal.dot(input_dir)
 	var current_speed = vel_horizontal.length()
-	var add_speed = clamp(MAX_SPEED - current_speed, 0.0, ACCEL_RATE * delta)
+	var add_speed = clamp(max_speed - current_speed, 0.0, ACCEL_RATE * delta)
 
 	if is_dashing or is_sliding:
-		vel_horizontal = input_dir * MAX_SPEED
+		vel_horizontal = input_dir * max_speed
 	else:
 		vel_horizontal += input_dir * add_speed
 
-	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y)
+	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats["run_speed_modifier"]
 
 	# Bonus speed
 	if is_dashing:
-		bonus_speed = DASH_SPEED
+		internal_bonus_speed = DASH_SPEED
 	elif is_sliding:
-		bonus_speed = SLIDE_SPEED
+		internal_bonus_speed = SLIDE_SPEED
 	else:
 		if is_on_floor():
-			bonus_speed = lerpf(bonus_speed, 0, delta * 9)
+			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 9)
 		else:
-			bonus_speed = lerpf(bonus_speed, 0, delta * 3)
+			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 3)
 
 	var velocity_dir = velocity.normalized()
-	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * bonus_speed
+	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats["dash_slide_speed_modifier"]
 
 	# Let the player ignore the wheelspin if they are moving
 	var floor_velocity = get_platform_velocity()
@@ -214,9 +286,9 @@ func _physics_process(delta):
 			floor_velocity.normalized().z,
 		))
 		velocity += floor_velocity * dir_weight
-		
+
 	move_and_slide()
-	
+
 	#show_debug_label()
 	var gun_sway_velocity = velocity * transform.basis
 	if not is_swapping_gun:
@@ -225,7 +297,17 @@ func _physics_process(delta):
 
 func update_hud():
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
-
+	for i in range(current_gun.max_barrels):
+		var effect_ui = all_barrel_effect_ui.get_child(i)
+		if current_gun.get_node("Barrel").get_child(i).get_child_count() > 0:
+			var barrel: SpinBarrel = current_gun.get_node("Barrel").get_child(i).get_child(0)
+			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
+			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
+			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+		else:
+			effect_ui.get_node("Title").text = ""
+			effect_ui.get_node("Tag").text = ""
+			effect_ui.get_node("Desc").text = ""
 
 func show_debug_label():
 	var h_speed = snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.1)
@@ -246,22 +328,28 @@ func show_debug_label():
 func jump(multiplier = 1.0):
 	vel_vertical = JUMP_FORCE * multiplier
 	
-	# Conserve angular momentum when jumping off spinning objevts
-	#if cached_angular_velocity:
-		#var angular_velocity = cached_angular_velocity
-		#var pos_relative_to_center = self.global_position
-		#var linear_velocity = angular_velocity.cross(pos_relative_to_center)
-		#var velocity_to_center = self.global_position.direction_to(Vector3.ZERO) * 10.0
-		#
-		#vel_horizontal += Vector2(
-			#linear_velocity.x,
-			#linear_velocity.z
-		#) * angular_momentum_multiplier + Vector2(velocity_to_center.x, velocity_to_center.z)
-	
 	jumped = true
 	state_chart.send_event("jump")
 	is_dashing = false
 	is_sliding = false
+	
+	if is_on_floor():
+		SoundManager.play_sound_with_pitch(
+			sfx_jump_ground.pick_random(), randf_range(0.8, 1.1), "SFX"
+		)
+	else:
+		SoundManager.play_sound_with_pitch(
+			sfx_jump_air.pick_random(), randf_range(0.8, 1.1), "SFX"
+		)
+
+
+func stun(time: float) -> void:
+	max_speed = MAX_SPEED / 4
+	dash_disabled = true
+	hurt_overlay.stun(time)
+	await get_tree().create_timer(time).timeout
+	max_speed = MAX_SPEED
+	dash_disabled = false
 
 
 func spin_reload():
@@ -298,6 +386,10 @@ func ground_slam():
 	vel_horizontal = Vector2.ZERO
 	vel_vertical -= SLAM_SPEED
 
+
+func apply_impulse_to_player(impulse_force: Vector3):
+	vel_vertical = impulse_force.y
+	vel_horizontal = Vector2(impulse_force.x, impulse_force.z)
 
 func _on_dash_duration_timeout() -> void:
 	is_dashing = false
@@ -336,8 +428,8 @@ func _on_airborne_state_physics_processing(delta: float) -> void:
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	if Input.is_action_just_pressed("crouch"):
 		ground_slam()
-	if moving_toward_wall() and can_wall_cling:
-		state_chart.send_event("wallcling")
+	#if moving_toward_wall() and can_wall_cling:
+		#state_chart.send_event("wallcling")
 
 
 func moving_toward_wall() -> bool:
@@ -379,14 +471,20 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
-		SoundManager.play_sound(TEMP_sfx_hurt.pick_random())
+		SoundManager.play_sound(sfx_hurt.pick_random())
 		if new_health > 0:
 			state_chart.send_event("end_damage")
 
 
 func _on_died() -> void:
 	state_chart.send_event("death")
-	SoundManager.play_sound(TEMP_sfx_dead.pick_random())
+	SoundManager.play_sound(sfx_dead.pick_random())
+
+
+func fall_death() -> void:
+	health_component.current_health = 0
+	state_chart.send_event("death")
+	SoundManager.play_sound(sfx_dead_falling.pick_random(), "SFX")
 
 
 func _on_health_hurt_state_entered() -> void:
@@ -400,3 +498,48 @@ func _on_health_dead_state_entered() -> void:
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
 	neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
+
+func add_buff(new_buff: Buff):
+	# Check if already exist, then extend it instead of add new
+	for buff in buffs:
+		if buff.buff_name == new_buff.buff_name:
+			buff.duration = max(buff.duration, new_buff.duration)
+			return
+	buffs.append(new_buff)
+	apply_buffs()
+
+
+func remove_buff(buff: Buff):
+	buffs.erase(buff)
+	apply_buffs()
+
+func remove_buff_by_name(find_name: String):
+	var found_buff = null
+	for buff in buffs:
+		if buff.buff_name == find_name:
+			found_buff = buff
+			break
+	if found_buff:
+		remove_buff(found_buff)
+
+func apply_buffs():
+	# Reset current stats to base stats.
+	current_stats = base_stats.duplicate(true)
+
+	# Temporary storage for stacking.
+	var flat_bonuses = {}
+	var percentage_bonuses = {}
+
+	for buff in buffs:
+		if buff.buff_type == Buff.BuffType.FLAT:
+			flat_bonuses[buff.stat_name] = flat_bonuses.get(buff.stat_name, 0) + buff.value
+		elif buff.buff_type == Buff.BuffType.PERCENTAGE:
+			percentage_bonuses[buff.stat_name] = percentage_bonuses.get(buff.stat_name, 0) + buff.value
+
+	# Apply flat bonuses (additive).
+	for stat in flat_bonuses.keys():
+		current_stats[stat] += flat_bonuses[stat]
+
+	# Apply percentage bonuses (multiplicative).
+	for stat in percentage_bonuses.keys():
+		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)

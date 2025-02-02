@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpyj480amlor7"]
+[gd_scene load_steps=7 format=3 uid="uid://dpyj480amlor7"]
 
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="1_tbrlo"]
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_item_ui.gd" id="2_2nkrm"]
+[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="3_4ggj2"]
+[ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_7nebw"]
+[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_fr15b"]
+[ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="4_kd8jk"]
 
 [node name="BarrelItemUI" type="TextureRect"]
 custom_minimum_size = Vector2(100, 100)
@@ -10,7 +14,10 @@ offset_bottom = 100.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("1_tbrlo")
+expand_mode = 1
 script = ExtResource("2_2nkrm")
+sfx_click = ExtResource("3_4ggj2")
+sfx_barrel_equip = ExtResource("4_kd8jk")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 1
@@ -19,6 +26,35 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="BorderNormal" type="NinePatchRect" parent="."]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_fr15b")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="BorderSelected" type="NinePatchRect" parent="."]
+visible = false
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_7nebw")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

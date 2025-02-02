@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bb7rrjhgxeejg"
+path="res://.godot/imported/PIT BOSS BLOCKS MOVING_SPAWNING_.mp3-f1c28025d4f5f69d7c80035cc93a920d.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS MOVING_SPAWNING_.mp3"
+dest_files=["res://.godot/imported/PIT BOSS BLOCKS MOVING_SPAWNING_.mp3-f1c28025d4f5f69d7c80035cc93a920d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

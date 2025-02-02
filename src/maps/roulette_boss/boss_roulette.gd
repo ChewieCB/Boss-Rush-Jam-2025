@@ -16,11 +16,16 @@ var goal_rotation_speed: float = ROTATION_SPEED : set = set_goal_rotation_speed
 var floor_segments: Array
 
 @onready var win_ui: Control = $UI/BossDefeatedUI
+@export var win_subtext: Array[String]
+@export var lose_tips: Array[String]
 @onready var boss_trigger: Area3D = $BossTriggerVolume
+
+@export var sfx_ambience: Array[AudioStream]
+var current_sfx_ambient: AudioStream
 
 
 func _ready() -> void:
-	boss.health_component.died.connect(_on_boss_defeated)
+	boss.defeated.connect(_on_boss_defeated)
 	boss.change_wheel_speed.connect(set_goal_rotation_speed)
 	player.health_component.died.connect(_on_player_death)
 	
@@ -34,7 +39,7 @@ func _ready() -> void:
 		new_collider.global_position += static_body.global_position
 		collider.disabled = true
 		
-		floor_segments.append([mesh, new_collider])
+		floor_segments.append([mesh, new_collider, mesh.global_position.y])
 	boss.floor_segments = floor_segments
 	
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
@@ -51,16 +56,6 @@ func _physics_process(delta) -> void:
 		ROTATION_SPEED = lerp(ROTATION_SPEED, goal_rotation_speed, delta)
 	floor_pivot.rotation.y += ROTATION_SPEED * delta
 	boss.wheel_rotation_speed = ROTATION_SPEED
-	#if Input.is_action_just_pressed("interact"):
-		## Ball test code
-		#spawn_balls(1)
-
-		# Floor segment test code
-		#if floor_segments.size() > 0:
-			#var idx: int = randi_range(0, floor_segments.size() - 1)
-			#var segment_arr = floor_segments[idx]
-			#floor_segments.remove_at(idx)
-			#drop_floor_segment(segment_arr)
 
 
 func shove_player(shove_force: float = 25.0) -> void:
@@ -77,13 +72,14 @@ func set_goal_rotation_speed(value: float) -> void:
 	goal_rotation_speed = value
 
 
-func _on_boss_defeated() -> void:
-	win_ui.win()
+func _on_boss_defeated(_boss: BossCore) -> void:
+	SoundManager.stop_ambient_sound(current_sfx_ambient, 0.5)
+	win_ui.win("Floor Cleared", win_subtext.pick_random())
 	show_end_panel()
 
 
 func _on_player_death() -> void:
-	win_ui.lose()
+	win_ui.lose(lose_tips.pick_random())
 	show_end_panel()
 
 
@@ -92,11 +88,14 @@ func show_end_panel() -> void:
 	var tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
 	await tween.finished
-	await get_tree().create_timer(5.0).timeout
+	await get_tree().create_timer(2.5).timeout
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	tween.tween_callback(func(): get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn"))
+	tween.tween_callback(_return_to_lobby)
 
+
+func _return_to_lobby() -> void:
+	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
 
 func _return_to_main() -> void:
 	get_tree().change_scene_to_file("res://src/ui/temp/TempMain.tscn")
@@ -113,13 +112,20 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 
 func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	if body is Player:
+		current_sfx_ambient = sfx_ambience.pick_random()
+		SoundManager.play_ambient_sound(current_sfx_ambient, 0.5, "Ambience")
 		boss.activate()
 		boss_trigger.queue_free()
 		shove_player()
 
 
 func _on_killbox_area_body_entered(body: Node3D) -> void:
-	if body.health_component:
-		body.health_component.damage(9999999)
+	if body is RouletteBall:
+		body.destroy()
+	elif "health_component" in body:
+		if body is Player:
+			body.fall_death()
+		else:
+			body.health_component.damage(9999999)
 	else:
 		body.queue_free()

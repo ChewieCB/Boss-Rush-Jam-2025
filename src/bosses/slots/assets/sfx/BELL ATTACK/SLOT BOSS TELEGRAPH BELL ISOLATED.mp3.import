@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dkvp444gcr566"
+path="res://.godot/imported/SLOT BOSS TELEGRAPH BELL ISOLATED.mp3-164f04ba3d0d4825ade68fe4920dbcc5.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS TELEGRAPH BELL ISOLATED.mp3"
+dest_files=["res://.godot/imported/SLOT BOSS TELEGRAPH BELL ISOLATED.mp3-164f04ba3d0d4825ade68fe4920dbcc5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://da6ff3q4j0wqr"
+path="res://.godot/imported/Ball Metal Impact 3.mp3-a2dd25543a7725965ecfd5a0f8ea088c.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 3.mp3"
+dest_files=["res://.godot/imported/Ball Metal Impact 3.mp3-a2dd25543a7725965ecfd5a0f8ea088c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

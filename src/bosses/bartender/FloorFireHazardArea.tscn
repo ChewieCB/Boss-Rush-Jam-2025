@@ -1,0 +1,213 @@
+[gd_scene load_steps=21 format=3 uid="uid://3s57qo57n84d"]
+
+[ext_resource type="Script" path="res://src/bosses/bartender/hazard_area.gd" id="1_074su"]
+[ext_resource type="Texture2D" uid="uid://csksvkj83ajtj" path="res://src/bosses/bartender/assets/fire_sprite.png" id="2_oi6pj"]
+[ext_resource type="Texture2D" uid="uid://bus2aoy40njv1" path="res://src/bosses/bartender/assets/puddle.png" id="3_ul1lf"]
+
+[sub_resource type="Gradient" id="Gradient_h0xwe"]
+offsets = PackedFloat32Array(0, 0.797015, 1)
+colors = PackedColorArray(0.678431, 0, 0, 1, 0.823529, 0.823529, 0.627451, 1, 0.823529, 0.823529, 0.627451, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0msbv"]
+gradient = SubResource("Gradient_h0xwe")
+
+[sub_resource type="Curve" id="Curve_xpce6"]
+max_value = 5.0
+_data = [Vector2(0, 5), 0.0, 0.0, 0, 0, Vector2(1, 2.53209), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_i6jm5"]
+curve = SubResource("Curve_xpce6")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xvqw0"]
+emission_shape_scale = Vector3(15, 0.25, 30)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+gravity = Vector3(0, 0.2, 0)
+scale_min = 0.75
+scale_max = 1.5
+color = Color(0.892114, 0.748462, 0, 1)
+color_ramp = SubResource("GradientTexture1D_0msbv")
+emission_curve = SubResource("CurveTexture_i6jm5")
+anim_speed_min = 0.5
+anim_speed_max = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36dku"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_oi6pj")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 3
+particles_anim_loop = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_5nj2i"]
+material = SubResource("StandardMaterial3D_36dku")
+
+[sub_resource type="Gradient" id="Gradient_damr1"]
+offsets = PackedFloat32Array(0, 0.626866, 1)
+colors = PackedColorArray(0, 0, 0, 0.952941, 0.223529, 0.223529, 0.223529, 0.866667, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ee7c4"]
+gradient = SubResource("Gradient_damr1")
+
+[sub_resource type="CurveTexture" id="CurveTexture_jk8dj"]
+
+[sub_resource type="Curve" id="Curve_qe2jg"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.253012, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_act1e"]
+curve = SubResource("Curve_qe2jg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ycs0i"]
+emission_shape_scale = Vector3(2, 1, 2)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
+gravity = Vector3(0, 4, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_act1e")
+color = Color(0.415686, 0.27451, 0, 0.788235)
+color_ramp = SubResource("GradientTexture1D_ee7c4")
+emission_curve = SubResource("CurveTexture_jk8dj")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_26vrp"]
+load_path = "res://.godot/imported/circle.png-2a7d29501a90d369c65cabf8eff5784a.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_67xip"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("CompressedTexture2D_26vrp")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_rnvrd"]
+material = SubResource("StandardMaterial3D_67xip")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rhwmr"]
+size = Vector3(25, 0.5, 50)
+
+[node name="FloorFireHazardArea" type="Node3D" node_paths=PackedStringArray("particle_effects")]
+script = ExtResource("1_074su")
+damage_per_tick = 1
+duration = 999999.0
+particle_effects = [NodePath("Fire"), NodePath("Smoke"), NodePath("Smoke2"), NodePath("Smoke3"), NodePath("Smoke4"), NodePath("Smoke5"), NodePath("Smoke6"), NodePath("Smoke7")]
+
+[node name="Fire" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.220448, 0)
+amount = 800
+lifetime = 2.0
+visibility_aabb = AABB(-20.9994, -1.24942, -30.9973, 41.9945, 2.89847, 61.9432)
+process_material = SubResource("ParticleProcessMaterial_xvqw0")
+draw_pass_1 = SubResource("QuadMesh_5nj2i")
+
+[node name="Smoke" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.83137, 1.3607, -20.8157)
+amount = 20
+lifetime = 2.0
+explosiveness = 0.2
+visibility_aabb = AABB(-3.29834, -1.46055, -3.63985, 6.89615, 9.95287, 6.95106)
+process_material = SubResource("ParticleProcessMaterial_ycs0i")
+draw_pass_1 = SubResource("QuadMesh_rnvrd")
+
+[node name="Smoke2" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.83137, 1.3607, -12.7811)
+amount = 20
+lifetime = 2.0
+explosiveness = 0.2
+visibility_aabb = AABB(-3.29834, -1.46055, -3.63985, 6.89615, 9.95287, 6.95106)
+process_material = SubResource("ParticleProcessMaterial_ycs0i")
+draw_pass_1 = SubResource("QuadMesh_rnvrd")
+
+[node name="Smoke3" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.10938, 1.3607, -18.5499)
+amount = 20
+lifetime = 2.0
+explosiveness = 0.2
+visibility_aabb = AABB(-3.29834, -1.46055, -3.63985, 6.89615, 9.95287, 6.95106)
+process_material = SubResource("ParticleProcessMaterial_ycs0i")
+draw_pass_1 = SubResource("QuadMesh_rnvrd")
+
+[node name="Smoke4" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.10938, 1.3607, 3.97023)
+amount = 20
+lifetime = 2.0
+explosiveness = 0.2
+visibility_aabb = AABB(-3.29834, -1.46055, -3.63985, 6.89615, 9.95287, 6.95106)
+process_material = SubResource("ParticleProcessMaterial_ycs0i")
+draw_pass_1 = SubResource("QuadMesh_rnvrd")
+
+[node name="Smoke5" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3644, 1.3607, 3.97023)
+amount = 20
+lifetime = 2.0
+explosiveness = 0.2
+visibility_aabb = AABB(-3.29834, -1.46055, -3.63985, 6.89615, 9.95287, 6.95106)
+process_material = SubResource("ParticleProcessMaterial_ycs0i")
+draw_pass_1 = SubResource("QuadMesh_rnvrd")
+
+[node name="Smoke6" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.63603, 1.3607, 16.3339)
+amount = 20
+lifetime = 2.0
+explosiveness = 0.2
+visibility_aabb = AABB(-3.29834, -1.46055, -3.63985, 6.89615, 9.95287, 6.95106)
+process_material = SubResource("ParticleProcessMaterial_ycs0i")
+draw_pass_1 = SubResource("QuadMesh_rnvrd")
+
+[node name="Smoke7" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.78181, 1.3607, 16.3339)
+amount = 20
+lifetime = 2.0
+explosiveness = 0.2
+visibility_aabb = AABB(-3.29834, -1.46055, -3.63985, 6.89615, 9.95287, 6.95106)
+process_material = SubResource("ParticleProcessMaterial_ycs0i")
+draw_pass_1 = SubResource("QuadMesh_rnvrd")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.920901, 0.211809, 1.92523e-07, 1)
+light_energy = 4.0
+omni_range = 30.0
+omni_attenuation = 0.2
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 70
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("BoxShape3D_rhwmr")
+
+[node name="DoTTimer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -0.1, 0)
+
+[node name="Puddle" type="Sprite3D" parent="."]
+transform = Transform3D(2.2, 0, 0, 0, -9.61651e-08, 2.2, 0, -2.2, -9.61651e-08, 0, 0.01, 0)
+visible = false
+modulate = Color(0.211765, 0, 0.0901961, 0.854902)
+texture = ExtResource("3_ul1lf")
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
+[connection signal="timeout" from="DoTTimer" to="." method="_on_damage_timer_timeout"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]

@@ -1,0 +1,99 @@
+[gd_scene load_steps=14 format=3 uid="uid://2a8xpe58m4sr"]
+
+[ext_resource type="Script" path="res://src/bosses/bartender/heal_cloud.gd" id="1_t7lgf"]
+[ext_resource type="Texture2D" uid="uid://dwyt08w82u6ne" path="res://assets/sprite/placeholder/health.png" id="2_ybw7y"]
+[ext_resource type="AudioStream" uid="uid://dnf4nkl82xwht" path="res://src/bosses/bartender/assets/sfx/BARTENDER HEALING MOVE WITHOUT BOTTLE BREAK.mp3" id="3_3282y"]
+
+[sub_resource type="Gradient" id="Gradient_44xtl"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7xsvm"]
+gradient = SubResource("Gradient_44xtl")
+
+[sub_resource type="Curve" id="Curve_udsvt"]
+max_value = 5.0
+_data = [Vector2(0, 2.49733), 0.0, 0.0, 0, 0, Vector2(0.250689, 5), 0.0, 0.0, 0, 0, Vector2(1, 2.53209), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_x0rhf"]
+curve = SubResource("Curve_udsvt")
+
+[sub_resource type="Curve" id="Curve_37pkc"]
+_data = [Vector2(1e-05, 0.534225), 0.0, 0.0, 0, 0, Vector2(0.253444, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_vqmdg"]
+curve = SubResource("Curve_37pkc")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bl436"]
+emission_shape_scale = Vector3(3, 3, 3)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
+gravity = Vector3(0, 2, 0)
+linear_accel_min = -2.23517e-06
+linear_accel_max = -2.23517e-06
+radial_accel_min = 0.499998
+radial_accel_max = 0.999998
+scale_min = 0.75
+scale_max = 1.25
+scale_curve = SubResource("CurveTexture_vqmdg")
+color = Color(0, 0.827451, 0, 0.635294)
+color_initial_ramp = SubResource("GradientTexture1D_7xsvm")
+emission_curve = SubResource("CurveTexture_x0rhf")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sp7yf"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_ybw7y")
+emission = Color(0, 0.57695, 0.076412, 1)
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_jl4eu"]
+material = SubResource("StandardMaterial3D_sp7yf")
+size = Vector2(0.5, 0.5)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_rky7c"]
+radius = 3.0
+
+[node name="CognacReloadHealCloud" type="Node3D"]
+script = ExtResource("1_t7lgf")
+heal_amount_flat = 10
+
+[node name="HealEffect" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.220283, 0)
+emitting = false
+amount = 40
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.5
+visibility_aabb = AABB(-5.44267, -0.971762, -4.86569, 11.6571, 6.24977, 10.9057)
+process_material = SubResource("ParticleProcessMaterial_bl436")
+draw_pass_1 = SubResource("QuadMesh_jl4eu")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 70
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_rky7c")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.19171, 0.781102, 7.70092e-07, 1)
+light_energy = 2.0
+omni_range = 10.0
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_3282y")
+unit_size = 15.0
+bus = &"SFX"
+
+[connection signal="finished" from="HealEffect" to="." method="_on_heal_effect_finished"]
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

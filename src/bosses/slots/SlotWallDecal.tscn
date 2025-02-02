@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://crgts86aoqg47"]
+
+[ext_resource type="Script" path="res://src/bosses/slots/slot_wall_decal.gd" id="2_8ahqf"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_d2gkh"]
+load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hwiia"]
+transparency = 1
+albedo_color = Color(0, 0, 0, 1)
+albedo_texture = SubResource("CompressedTexture2D_d2gkh")
+uv1_offset = Vector3(0, 0.2, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_gtag1"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_hwiia")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[node name="DecalMesh1" type="MeshInstance3D"]
+mesh = SubResource("QuadMesh_gtag1")
+script = ExtResource("2_8ahqf")

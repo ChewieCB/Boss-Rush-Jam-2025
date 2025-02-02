@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dwgrnamxgx5x1"
+path="res://.godot/imported/Sheild Hit 2.mp3-8c6e011f3807dfe04a36bd3c8092663f.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Sheild Hit 2.mp3"
+dest_files=["res://.godot/imported/Sheild Hit 2.mp3-8c6e011f3807dfe04a36bd3c8092663f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

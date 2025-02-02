@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://e15km4eb5n7w"
+path="res://.godot/imported/PIT BOSS DEAD.mp3-b26bd777f946bea6f4f2adf08b9aa032.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/PIT BOSS DEAD.mp3"
+dest_files=["res://.godot/imported/PIT BOSS DEAD.mp3-b26bd777f946bea6f4f2adf08b9aa032.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

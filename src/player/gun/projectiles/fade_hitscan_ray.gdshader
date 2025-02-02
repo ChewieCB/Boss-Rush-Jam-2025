@@ -34,7 +34,7 @@ void vertex() {
 void fragment() {
 	// Calculate the distance between the fragment and the origin
 	float origin_distance = length(origin_position - world_vertex);
-    
+
 	// Calculate the alpha value based on the distance
 	float alpha = 1.0;
 	if (enable_fade) {

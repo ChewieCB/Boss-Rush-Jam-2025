@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b7yg0xjpb75i2"
+path="res://.godot/imported/Roulette Shield Amb 3.wav-fedcdd3b23602e81d28c3df3e86b5bba.sample"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/WAV dont use/Roulette Shield Amb 3.wav"
+dest_files=["res://.godot/imported/Roulette Shield Amb 3.wav-fedcdd3b23602e81d28c3df3e86b5bba.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

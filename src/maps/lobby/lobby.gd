@@ -1,26 +1,58 @@
 extends Node3D
 
 @export var bgm: AudioStream
-@export var elevator_doors: ElevatorDoors
-@export var elevator_buttons: Array[ElevatorButton]
+@onready var lobby_music_player: AudioStreamPlayer3D = $LobbyMusicPlayer
+
+signal ui_accept
+
+@onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
+@onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
+
+@onready var tutorial_ui: Control = $UI/TutorialUI
+@onready var game_win_ui: Control = $UI/GameWinUI
+
 
 var display_barrels: Array = []
 
 
 func _ready() -> void:
+	SoundManager.stop_music(0.1)
 	get_tree().paused = false
-	SoundManager.play_music(bgm, 0.25)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
-	for node in $DisplayBarrels.get_children():
-		var model = node.get_node("Model")
-		model.rotation_degrees.y = randf_range(0, 360)
-		display_barrels.append(model)
+	
+	lobby_music_player.play()
+	
+	# HACK
+	if GameManager.player_gained_first_barrel:
+		if not GameManager.barrel_tutorial_shown:
+			tutorial_ui.text_no_resize(
+				"You've gained a barrel!",
+				"Talk to the vendor to change your loadout and buy new barrels."
+			)
+			show_panel(tutorial_ui)
+			GameManager.barrel_tutorial_shown = true
+	
+	if GameManager.all_bosses_defeated:
+		if not GameManager.victory_ui_shown:
+			show_panel(game_win_ui)
+			GameManager.victory_ui_shown = true
 
 
-func _process(delta: float) -> void:
-	for node in display_barrels:
-		node.rotation.y += delta
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("interact"):
+		ui_accept.emit()
+
+
+func show_panel(panel: Control) -> void:
+	panel.visible = true
+	var tween = get_tree().create_tween()
+	tween.tween_property(panel, "modulate", Color(Color.WHITE, 1.0), 1.0)
+	await tween.finished
+	await ui_accept
+	tween = get_tree().create_tween()
+	tween.tween_property(panel, "modulate", Color(Color.WHITE, 0.0), 1.0)
+
 
 
 func _on_level_select(level_path: String) -> void:
@@ -30,17 +62,19 @@ func _on_level_select(level_path: String) -> void:
 	# Wait until the level has been loaded on another thread
 	while ResourceLoader.load_threaded_get_status(level_path) != ResourceLoader.THREAD_LOAD_LOADED:
 		pass
-	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
-	# HACK - do this properly with dynamic loading of scenes
 	# Get the player's position relative to the elevator doors
 	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
 	GameManager.cached_player_rotation = GameManager.player.rotation
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
+	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
+	# HACK - do this properly with dynamic loading of scenes
   
 	if is_inside_tree():
+		# TODO - fade this out via tween
+		lobby_music_player.stop()
 		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1) 
 		if new_bgm:
-			SoundManager.play_music(new_bgm, 0.25)
+			SoundManager.play_music(new_bgm, 0.25, "BGM")
 		get_tree().change_scene_to_packed(loaded_scene)
 
 

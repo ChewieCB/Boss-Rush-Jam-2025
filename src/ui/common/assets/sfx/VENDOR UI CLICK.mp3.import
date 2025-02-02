@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b367lg4wac2xl"
+path="res://.godot/imported/VENDOR UI CLICK.mp3-87c4696ca4993c7f2fafdf42e1129610.mp3str"
+
+[deps]
+
+source_file="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3"
+dest_files=["res://.godot/imported/VENDOR UI CLICK.mp3-87c4696ca4993c7f2fafdf42e1129610.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

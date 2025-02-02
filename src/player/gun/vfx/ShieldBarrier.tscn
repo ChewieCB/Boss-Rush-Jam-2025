@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3 uid="uid://chkipxd8ctjen"]
+
+[ext_resource type="Script" path="res://src/player/shield_rotate.gd" id="1_io408"]
+[ext_resource type="Material" uid="uid://dt63xhaj0rbay" path="res://src/bosses/roulette/assets/materials/shield_mat.tres" id="2_db15k"]
+[ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="3_rbxyo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w800b"]
+render_priority = 0
+shader = ExtResource("3_rbxyo")
+shader_parameter/color = Color(0.188235, 0.698039, 0.901961, 1)
+shader_parameter/fresnel_sharpness = 1.0
+shader_parameter/extend_distance = 0.0
+shader_parameter/impact_points = null
+shader_parameter/impact_size = 1.0
+shader_parameter/impact_falloff_sharpness = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_sy2b7"]
+material = SubResource("ShaderMaterial_w800b")
+size = Vector3(0.8, 1, 0.2)
+
+[node name="Shields" type="Node3D"]
+script = ExtResource("1_io408")
+
+[node name="Shield" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.85601, 0, 0)
+material_override = ExtResource("2_db15k")
+mesh = SubResource("BoxMesh_sy2b7")
+skeleton = NodePath("")
+
+[node name="Shield2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.85601, 0, 0)
+material_override = ExtResource("2_db15k")
+mesh = SubResource("BoxMesh_sy2b7")
+skeleton = NodePath("")
+
+[node name="Shield3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.85601, 0, 0)
+material_override = ExtResource("2_db15k")
+mesh = SubResource("BoxMesh_sy2b7")
+skeleton = NodePath("")
+
+[node name="Shield4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.85601, 0, 0)
+material_override = ExtResource("2_db15k")
+mesh = SubResource("BoxMesh_sy2b7")
+skeleton = NodePath("")
+
+[node name="Shield5" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.85601, 0, 0)
+material_override = ExtResource("2_db15k")
+mesh = SubResource("BoxMesh_sy2b7")
+skeleton = NodePath("")
+
+[node name="Shield6" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.85601, 0, 0)
+material_override = ExtResource("2_db15k")
+mesh = SubResource("BoxMesh_sy2b7")
+skeleton = NodePath("")

@@ -31,6 +31,6 @@ func on_damage_calculation():
 		owner_barrel.owner_gun.modified_damage = owner_barrel.owner_gun.modified_damage * 2
 		owner_barrel.owner_gun.crit_damage(owner_barrel.owner_gun.modified_damage)
 
-func on_damage_applied():
+func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	super()
 	hit_count += 1

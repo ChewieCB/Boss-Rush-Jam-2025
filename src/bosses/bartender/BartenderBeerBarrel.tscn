@@ -1,0 +1,156 @@
+[gd_scene load_steps=31 format=3 uid="uid://lmvhnu7j64r7"]
+
+[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_hdfjv"]
+[ext_resource type="Texture2D" uid="uid://dy6pwm2pvkfkh" path="res://src/bosses/bartender/assets/beer_barrel.png" id="2_3x5b2"]
+[ext_resource type="Script" path="res://src/bosses/bartender/bartender_beer_barrel.gd" id="2_5ymcq"]
+[ext_resource type="Texture2D" uid="uid://csksvkj83ajtj" path="res://src/bosses/bartender/assets/fire_sprite.png" id="3_lq2tg"]
+[ext_resource type="AudioStream" uid="uid://dyltsf21dn5pk" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL SMASH 1.mp3" id="3_yxaxd"]
+[ext_resource type="AudioStream" uid="uid://mra8pp65j1uf" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL SMASH 2.mp3" id="4_kjoea"]
+[ext_resource type="AudioStream" uid="uid://b1c754eqprstv" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL SMASH 3.mp3" id="5_6mw88"]
+[ext_resource type="AudioStream" uid="uid://c6odeum2hrrw0" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL ROLL 1.mp3" id="6_be3lq"]
+[ext_resource type="AudioStream" uid="uid://b3ppg2boieouy" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL ROLL 2.mp3" id="7_4gv0y"]
+[ext_resource type="AudioStream" uid="uid://bxdm0t7a63fgd" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL ROLL 3.mp3" id="8_tg4n2"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vltxk"]
+bounce = 0.65
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pvpb8"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vpj53"]
+radius = 1.2
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_r13qw"]
+
+[sub_resource type="Gradient" id="Gradient_w7o0i"]
+offsets = PackedFloat32Array(0, 0.797015, 1)
+colors = PackedColorArray(0.678431, 0, 0, 1, 0.823529, 0.823529, 0.627451, 1, 0.823529, 0.823529, 0.627451, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_j0uix"]
+gradient = SubResource("Gradient_w7o0i")
+
+[sub_resource type="Curve" id="Curve_hyg6d"]
+max_value = 5.0
+_data = [Vector2(0, 5), 0.0, 0.0, 0, 0, Vector2(1, 2.53209), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_s78tr"]
+curve = SubResource("Curve_hyg6d")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qly5j"]
+emission_shape_scale = Vector3(1.5, 1.5, 1.5)
+emission_shape = 2
+emission_sphere_radius = 1.0
+gravity = Vector3(0, 0.2, 0)
+scale_min = 0.75
+scale_max = 1.5
+color = Color(0.892114, 0.748462, 0, 1)
+color_ramp = SubResource("GradientTexture1D_j0uix")
+emission_curve = SubResource("CurveTexture_s78tr")
+anim_speed_min = 0.5
+anim_speed_max = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dmqvj"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("3_lq2tg")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 3
+particles_anim_loop = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_xikc1"]
+material = SubResource("StandardMaterial3D_dmqvj")
+
+[sub_resource type="Gradient" id="Gradient_jvfd5"]
+offsets = PackedFloat32Array(0, 0.626866, 1)
+colors = PackedColorArray(0, 0, 0, 0.952941, 0.223529, 0.223529, 0.223529, 0.866667, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mmmx6"]
+gradient = SubResource("Gradient_jvfd5")
+
+[sub_resource type="CurveTexture" id="CurveTexture_7hjb6"]
+
+[sub_resource type="Curve" id="Curve_n4ylu"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.253012, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_4ftqg"]
+curve = SubResource("Curve_n4ylu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fewex"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
+gravity = Vector3(0, 4, 0)
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_4ftqg")
+color = Color(0.415686, 0.27451, 0, 0.788235)
+color_ramp = SubResource("GradientTexture1D_mmmx6")
+emission_curve = SubResource("CurveTexture_7hjb6")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3roxf"]
+load_path = "res://.godot/imported/circle.png-2a7d29501a90d369c65cabf8eff5784a.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0pci"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("CompressedTexture2D_3roxf")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_0f2x1"]
+material = SubResource("StandardMaterial3D_a0pci")
+
+[node name="BartenderBeerBarrel" instance=ExtResource("1_hdfjv")]
+physics_material_override = SubResource("PhysicsMaterial_vltxk")
+gravity_scale = 2.0
+script = ExtResource("2_5ymcq")
+sfx_break = Array[AudioStream]([ExtResource("3_yxaxd"), ExtResource("4_kjoea"), ExtResource("5_6mw88")])
+sfx_bounce = Array[AudioStream]([ExtResource("6_be3lq"), ExtResource("7_4gv0y"), ExtResource("8_tg4n2")])
+
+[node name="Sprite3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+texture = ExtResource("2_3x5b2")
+
+[node name="CollisionShape3D" parent="." index="1"]
+shape = SubResource("SphereShape3D_pvpb8")
+
+[node name="CollisionShape3D" parent="Area3D" index="0"]
+shape = SubResource("SphereShape3D_vpj53")
+
+[node name="LifeTimer" parent="." index="3"]
+wait_time = 5.0
+
+[node name="Trail3D" parent="Trail" index="0"]
+mesh = SubResource("ImmediateMesh_r13qw")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="5"]
+light_color = Color(0.770042, 0.440231, 1.92523e-07, 1)
+light_energy = 4.0
+omni_range = 10.0
+
+[node name="Fire" type="GPUParticles3D" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.220448, 0)
+amount = 30
+lifetime = 2.0
+visibility_aabb = AABB(-3.82821, -1.12446, -3.73806, 7.76815, 2.65475, 7.61359)
+process_material = SubResource("ParticleProcessMaterial_qly5j")
+draw_pass_1 = SubResource("QuadMesh_xikc1")
+
+[node name="Smoke" type="GPUParticles3D" parent="." index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3607, 0)
+amount = 20
+lifetime = 2.0
+explosiveness = 0.2
+visibility_aabb = AABB(-3.29834, -1.46055, -3.63985, 6.89615, 9.95287, 6.95106)
+process_material = SubResource("ParticleProcessMaterial_fewex")
+draw_pass_1 = SubResource("QuadMesh_0f2x1")

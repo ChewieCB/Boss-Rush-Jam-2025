@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://ctvkw2g7tq4yf"
+path="res://.godot/imported/pit.5.map-55a7281d778e96f27c10433fbef3693e.tres"
+
+[deps]
+
+source_file="res://src/maps/pit_boss/autosave/pit.5.map"
+dest_files=["res://.godot/imported/pit.5.map-55a7281d778e96f27c10433fbef3693e.tres"]
+
+[params]
+

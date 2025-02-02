@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://ch37egcj2scio"]
+
+[ext_resource type="Script" path="res://src/bosses/pit/turret/turret_spawn_point.gd" id="1_cdm2a"]
+[ext_resource type="PackedScene" uid="uid://dmhl0n57v7a5e" path="res://src/bosses/pit/turret/PitTurret.tscn" id="2_2qck7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p1ida"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_y02iy"]
+material = SubResource("StandardMaterial3D_p1ida")
+radius = 1.75
+height = 1.75
+is_hemisphere = true
+
+[node name="TurretSpawnPoint" type="Node3D"]
+script = ExtResource("1_cdm2a")
+turret_scene = ExtResource("2_2qck7")
+
+[node name="Dome" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0)
+visible = false
+mesh = SubResource("SphereMesh_y02iy")
+skeleton = NodePath("../..")

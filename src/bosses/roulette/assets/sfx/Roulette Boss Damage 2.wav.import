@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ccfl4ftvl136h"
+path="res://.godot/imported/Roulette Boss Damage 2.wav-c2e10ea3698a06f7223016cbe5305bf1.sample"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Roulette Boss Damage 2.wav"
+dest_files=["res://.godot/imported/Roulette Boss Damage 2.wav-c2e10ea3698a06f7223016cbe5305bf1.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

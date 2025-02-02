@@ -1,53 +1,44 @@
-[gd_scene load_steps=6 format=3 uid="uid://d1r8em3of5o8n"]
+[gd_scene load_steps=26 format=3 uid="uid://d1r8em3of5o8n"]
 
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="1_8li6c"]
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_ctp8d"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_hpbf5"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="2_soqa0"]
-[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="4_3e4ye"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
-height = 0.5
+[ext_resource type="AudioStream" uid="uid://edneq2x4wm78" path="res://src/player/gun/assets/sfx/reloading/railgun/railgun_reload_1.mp3" id="4_75jst"]
+[ext_resource type="AudioStream" uid="uid://dqr1710c1o8py" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 1.mp3" id="5_volit"]
+[ext_resource type="AudioStream" uid="uid://i3coc5gtyk0w" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 2.mp3" id="6_pcx57"]
+[ext_resource type="AudioStream" uid="uid://cte0yqejjtu7j" path="res://src/player/gun/assets/sfx/reloading/smg/smg_reload_1.mp3" id="6_rdcja"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="7_27wu3"]
+[ext_resource type="AudioStream" uid="uid://bjp2ylixw7dhg" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 3.mp3" id="7_m2140"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="8_3tnph"]
+[ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="10_mirek"]
+[ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="11_wfx2f"]
+[ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="12_q3id7"]
+[ext_resource type="AudioStream" uid="uid://cf460otm0xrf3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 4.mp3" id="13_qsixs"]
+[ext_resource type="AudioStream" uid="uid://dpcvjx6i8qmt7" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 5.mp3" id="14_gji11"]
+[ext_resource type="AudioStream" uid="uid://dhilfnn0tk1u5" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 6.mp3" id="15_emgbq"]
+[ext_resource type="AudioStream" uid="uid://dtyk4el1l2a1n" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 7.mp3" id="16_4rinr"]
+[ext_resource type="AudioStream" uid="uid://t5oqkgi1pmg3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 8.mp3" id="17_asvda"]
+[ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="18_s8p45"]
+[ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="19_gskni"]
+[ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="20_3esr5"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="23_fbci2"]
+[ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="24_biu37"]
+[ext_resource type="AudioStream" uid="uid://bh8fwafto05bl" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ WITHCOIN1.mp3" id="25_l4gj7"]
 
 [node name="ArchetypeBarrel" type="Node3D"]
 script = ExtResource("1_ctp8d")
 barrel_id = 2
 
-[node name="Model" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
-mesh = SubResource("CylinderMesh_sfbyw")
-
-[node name="EffectName" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.109181, -0.0166867)
-modulate = Color(1, 0.883, 0.22, 1)
-text = "DOUBLE TAP"
-font = ExtResource("4_3e4ye")
-font_size = 64
-outline_size = 32
-horizontal_alignment = 2
-
-[node name="EffectTag" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0716908, -0.00866602)
-modulate = Color(0.87, 0.76328, 0.6699, 1)
-text = "Both barrels!"
-font = ExtResource("4_3e4ye")
-font_size = 40
-outline_size = 16
-horizontal_alignment = 2
-
-[node name="EffectDesc" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0575581, -0.00564242)
-modulate = Color(0.46, 0.46, 0.46, 1)
-text = "10% ammo refund on hit
--10% damage"
-font = ExtResource("4_3e4ye")
-font_size = 24
-horizontal_alignment = 2
-vertical_alignment = 0
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_hpbf5")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="CompoundEffectRailgun" type="Node3D" parent="EffectContainer"]
 script = ExtResource("1_8li6c")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("4_75jst")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_volit"), ExtResource("6_pcx57"), ExtResource("7_m2140")])
 display_text_title = "Archetype: Railgun"
 display_text_tag = "Precision is important!"
 
@@ -83,6 +74,9 @@ new_value = 5.0
 
 [node name="CompoundEffectSMG" type="Node3D" parent="EffectContainer"]
 script = ExtResource("1_8li6c")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("6_rdcja")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("10_mirek"), ExtResource("11_wfx2f"), ExtResource("12_q3id7"), ExtResource("13_qsixs"), ExtResource("14_gji11"), ExtResource("15_emgbq"), ExtResource("16_4rinr"), ExtResource("17_asvda"), ExtResource("18_s8p45"), ExtResource("19_gskni"), ExtResource("20_3esr5")])
 display_text_title = " Archetype: SMG"
 display_text_tag = "Spray and pray!"
 
@@ -117,6 +111,9 @@ new_value = 30.0
 
 [node name="CompoundEffectShotgun" type="Node3D" parent="EffectContainer"]
 script = ExtResource("1_8li6c")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("7_27wu3"), ExtResource("8_3tnph")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("23_fbci2"), ExtResource("24_biu37"), ExtResource("25_l4gj7")])
 display_text_title = "Archetype: Shotgun"
 display_text_tag = "Strong at close range!"
 
@@ -142,4 +139,9 @@ new_value = 8.0
 [node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
 script = ExtResource("2_soqa0")
 attribute = 5
+new_value = 10.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+script = ExtResource("2_soqa0")
+attribute = 1
 new_value = 10.0

@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="NotGuard" load_steps=10 format=3 uid="uid://dlnn1fr5bmklq"]
+
+[ext_resource type="Script" path="res://addons/godot_state_charts/guard.gd" id="1_11lxi"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="2_3eijs"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/any_of_guard.gd" id="3_cqg7u"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="4_j71cp"]
+
+[sub_resource type="Resource" id="Resource_sk6l0"]
+script = ExtResource("2_3eijs")
+state = NodePath("../../../Attacking/Buildup")
+
+[sub_resource type="Resource" id="Resource_v7eql"]
+script = ExtResource("2_3eijs")
+state = NodePath("../../../Attacking/Telegraph")
+
+[sub_resource type="Resource" id="Resource_rxxqo"]
+script = ExtResource("2_3eijs")
+state = NodePath("../../../Attacking/Attack")
+
+[sub_resource type="Resource" id="Resource_2tn5g"]
+script = ExtResource("2_3eijs")
+state = NodePath("../../../Attacking/Cooldown")
+
+[sub_resource type="Resource" id="Resource_l328e"]
+script = ExtResource("3_cqg7u")
+guards = Array[ExtResource("1_11lxi")]([SubResource("Resource_sk6l0"), SubResource("Resource_v7eql"), SubResource("Resource_rxxqo"), SubResource("Resource_2tn5g")])
+
+[resource]
+script = ExtResource("4_j71cp")
+guard = SubResource("Resource_l328e")

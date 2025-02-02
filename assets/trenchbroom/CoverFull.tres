@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="FuncGodotFGDModelPointClass" load_steps=3 format=3 uid="uid://631n2m70t34k"]
+
+[ext_resource type="Script" path="res://addons/func_godot/src/fgd/func_godot_fgd_model_point_class.gd" id="1_mtmjx"]
+[ext_resource type="PackedScene" uid="uid://07url6i34wfu" path="res://src/bosses/pit/cover/CoverFull.tscn" id="1_wofnp"]
+
+[resource]
+script = ExtResource("1_mtmjx")
+target_map_editor = 0
+models_sub_folder = ""
+scale_expression = ""
+generate_size_property = false
+generate_gd_ignore_file = false
+scene_file = ExtResource("1_wofnp")
+apply_rotation_on_map_build = true
+classname = "CoverFull"
+description = ""
+func_godot_internal = false
+base_classes = Array[Resource]([])
+class_properties = {}
+class_property_descriptions = {}
+auto_apply_to_matching_node_properties = false
+meta_properties = {
+"color": Color(0.8, 0.8, 0.8, 1),
+"size": AABB(-8, -8, -8, 8, 8, 8)
+}
+node_class = ""
+name_property = ""

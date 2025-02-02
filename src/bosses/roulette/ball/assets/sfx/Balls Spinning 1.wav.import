@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://0pd5ni2lqa65"
+path="res://.godot/imported/Balls Spinning 1.wav-e0331b155b8a290419c9f69d916ea740.sample"
+
+[deps]
+
+source_file="res://src/bosses/roulette/ball/assets/sfx/Balls Spinning 1.wav"
+dest_files=["res://.godot/imported/Balls Spinning 1.wav-e0331b155b8a290419c9f69d916ea740.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=2
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://55w4uow6ukdi"
+path="res://.godot/imported/PIT BOSS TURRET 5.mp3-47ced51f7c136617cfaf2a63588ab2cd.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/TURRET FILES/BIN/PIT BOSS TURRET 5.mp3"
+dest_files=["res://.godot/imported/PIT BOSS TURRET 5.mp3-47ced51f7c136617cfaf2a63588ab2cd.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

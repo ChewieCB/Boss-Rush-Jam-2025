@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://qrfqoob00pwl"
+path="res://.godot/imported/PIT BOSS BLOCKS BREAK 2.mp3-9b56c6f290ad32d336126b900701bf5d.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS BREAK 2.mp3"
+dest_files=["res://.godot/imported/PIT BOSS BLOCKS BREAK 2.mp3-9b56c6f290ad32d336126b900701bf5d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

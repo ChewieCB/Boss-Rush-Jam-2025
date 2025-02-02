@@ -1,0 +1,168 @@
+[gd_scene load_steps=27 format=3 uid="uid://ckiren6h4keb6"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_5qelq"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_yw7pw"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_w2hft"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_3n82e"]
+[ext_resource type="AudioStream" uid="uid://cte0yqejjtu7j" path="res://src/player/gun/assets/sfx/reloading/smg/smg_reload_1.mp3" id="4_cri1e"]
+[ext_resource type="AudioStream" uid="uid://edneq2x4wm78" path="res://src/player/gun/assets/sfx/reloading/railgun/railgun_reload_1.mp3" id="5_5hv6s"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="5_lxmwo"]
+[ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="5_m8udd"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="5_uqnjt"]
+[ext_resource type="PackedScene" uid="uid://w52vphhedtws" path="res://src/player/gun/projectiles/RailcannonHitscan.tscn" id="6_3vdu1"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="6_bxoxn"]
+[ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="6_c4q6k"]
+[ext_resource type="AudioStream" uid="uid://dqr1710c1o8py" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 1.mp3" id="6_hwm5a"]
+[ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="7_cy8ya"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="7_lr8ap"]
+[ext_resource type="AudioStream" uid="uid://i3coc5gtyk0w" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 2.mp3" id="7_phtfe"]
+[ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="8_5pbtv"]
+[ext_resource type="AudioStream" uid="uid://bjp2ylixw7dhg" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 3.mp3" id="8_c4uy7"]
+[ext_resource type="AudioStream" uid="uid://cf460otm0xrf3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 4.mp3" id="8_sx1ku"]
+[ext_resource type="AudioStream" uid="uid://dpcvjx6i8qmt7" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 5.mp3" id="9_7r7iv"]
+[ext_resource type="AudioStream" uid="uid://dhilfnn0tk1u5" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 6.mp3" id="10_ptb2v"]
+[ext_resource type="AudioStream" uid="uid://dtyk4el1l2a1n" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 7.mp3" id="11_2chv5"]
+[ext_resource type="AudioStream" uid="uid://t5oqkgi1pmg3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 8.mp3" id="12_bisv8"]
+[ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="13_qcjda"]
+[ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="14_8snm5"]
+[ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="15_8f242"]
+
+[node name="ArchetypeRailgunSpecBarrel" type="Node3D"]
+script = ExtResource("1_5qelq")
+barrel_id = 9
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_yw7pw")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CompoundEffectGaussRifle" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_w2hft")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("4_cri1e")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_m8udd"), ExtResource("6_c4q6k"), ExtResource("7_cy8ya"), ExtResource("8_sx1ku"), ExtResource("9_7r7iv"), ExtResource("10_ptb2v"), ExtResource("11_2chv5"), ExtResource("12_bisv8"), ExtResource("13_qcjda"), ExtResource("14_8snm5"), ExtResource("15_8f242")])
+display_text_title = "Archetype: Gauss Rifle"
+display_text_tag = "Fire faster and more ammo"
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 4
+new_value = 5.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 7
+new_value = 0.5
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 5
+new_value = 20.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 1
+new_value = 15.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 11
+new_value = 0.01
+
+[node name="CompoundEffectScatterBeam" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_w2hft")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("5_lxmwo"), ExtResource("6_bxoxn")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("7_lr8ap"), ExtResource("8_5pbtv")])
+display_text_title = "Archetype: Scatter Beam"
+display_text_tag = "Closer...closer..."
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 1
+new_value = 14.0
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 2
+new_value = 7.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 4
+new_value = 1.5
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 7
+new_value = 7.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 5
+new_value = 7.0
+
+[node name="CompoundEffectRailcannon" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_w2hft")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("5_5hv6s")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("6_hwm5a"), ExtResource("7_phtfe"), ExtResource("8_c4uy7")])
+display_text_title = "Archetype: Railcannon"
+display_text_tag = "Don't miss it!"
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 1
+new_value = 250.0
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 4
+new_value = 0.5
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 7
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 5
+new_value = 1.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 11
+new_value = 0.1
+
+[node name="SetScreenshake" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 12
+new_value = 2.0
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("4_3n82e")
+attribute = 8
+new_value = 2.0
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+script = ExtResource("5_uqnjt")
+new_prefab = ExtResource("6_3vdu1")

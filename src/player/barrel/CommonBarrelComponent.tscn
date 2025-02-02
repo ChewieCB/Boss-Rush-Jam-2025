@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://df5b301cil4ub"]
+
+[node name="CommonBarrelComponent" type="Node3D"]
+
+[node name="EffectName" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.109181, -0.0166867)
+no_depth_test = true
+render_priority = 10
+outline_render_priority = 9
+modulate = Color(1, 0.883, 0.22, 1)
+text = "DOUBLE TAP"
+font_size = 64
+outline_size = 32
+horizontal_alignment = 2
+
+[node name="EffectTag" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0716908, -0.00866602)
+no_depth_test = true
+render_priority = 10
+outline_render_priority = 9
+modulate = Color(0.87, 0.76328, 0.6699, 1)
+text = "Both barrels!"
+font_size = 40
+outline_size = 16
+horizontal_alignment = 2
+
+[node name="EffectDesc" type="Label3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0575581, -0.00564242)
+no_depth_test = true
+render_priority = 10
+outline_render_priority = 9
+modulate = Color(0.46, 0.46, 0.46, 1)
+text = "10% ammo refund on hit
+-10% damage"
+font_size = 24
+horizontal_alignment = 2
+vertical_alignment = 0

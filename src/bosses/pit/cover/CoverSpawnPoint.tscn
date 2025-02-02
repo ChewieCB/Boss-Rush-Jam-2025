@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://2ss8hk0shm7i"]
+
+[ext_resource type="Script" path="res://src/bosses/pit/cover/cover_spawn_point.gd" id="1_7sw7r"]
+[ext_resource type="PackedScene" uid="uid://07url6i34wfu" path="res://src/bosses/pit/cover/CoverFull.tscn" id="2_608rq"]
+[ext_resource type="PackedScene" uid="uid://83k3of5xh1gr" path="res://src/bosses/pit/cover/CoverHalf.tscn" id="3_73k3j"]
+[ext_resource type="PackedScene" uid="uid://dggs1mnis3x6x" path="res://src/bosses/pit/cover/CoverColumn.tscn" id="4_emwjt"]
+
+[node name="CoverSpawnPoint" type="Node3D"]
+script = ExtResource("1_7sw7r")
+cover_scenes = {
+"column": ExtResource("4_emwjt"),
+"full": ExtResource("2_608rq"),
+"half": ExtResource("3_73k3j")
+}
+cover_spawn_weights = {
+"column": 0.15,
+"full": 0.5,
+"half": 0.35
+}
+entProperties = {}

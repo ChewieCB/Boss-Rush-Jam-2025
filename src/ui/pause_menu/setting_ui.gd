@@ -29,27 +29,24 @@ class_name SettingUI
 
 var pause_ui: PauseUI
 var keybindable_action_list = {
-	"up": "Move forward",
-	"down": "Move backward",
-	"left": "Move left",
-	"right": "Move right",
+	"move_up": "Move forward",
+	"move_down": "Move backward",
+	"move_left": "Move left",
+	"move_right": "Move right",
 	"jump": "Jump",
 	"dash": "Dash",
-	"pause_menu": "Pause",
-	"primary_attack": "Primary attack",
-	"secondary_attack": "Secondary attack",
 	"crouch": "Crouch/Slam",
-	"weapon_slot_1": "Weapon slot 1",
-	"weapon_slot_2": "Weapon slot 2",
+	"pause_menu": "Pause",
+	"shoot": "Shoot",
+	"spin_reload": "Reload",
+	"interact": "Interact",
+	"open_inventory": "Open inventory",
 }
 var is_remapping = false
 var action_to_remap = null
 var remapping_button: KeybindButton = null
 
 func _ready() -> void:
-	visible = false
-	pause_ui = get_parent()
-
 	mouse_sen_slider.value = GameManager.mouse_sensitivity
 	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
 
@@ -155,22 +152,22 @@ func _on_resolution_option_button_item_selected(index: int) -> void:
 	centre_window()
 
 func _on_master_slider_value_changed(value: float) -> void:
-	SoundManager.set_master_volume(value / 100.0)
+	AudioServer.set_bus_volume_db(0, linear_to_db(value/100.0))
 	master_value.text = "{0}".format([value])
 	GameManager.master_audio = value
 
 func _on_ui_slider_value_changed(value: float) -> void:
-	SoundManager.set_sound_volume(value / 100.0)
+	AudioServer.set_bus_volume_db(3, linear_to_db(value/100.0))
 	ui_value.text = "{0}".format([value])
 	GameManager.ui_audio = value
 
 func _on_sfx_slider_value_changed(value: float) -> void:
-	SoundManager.set_sound_volume(value / 100.0)
+	AudioServer.set_bus_volume_db(2, linear_to_db(value/100.0))
 	sfx_value.text = "{0}".format([value])
 	GameManager.sfx_audio = value
 
 func _on_bgm_slider_value_changed(value: float) -> void:
-	SoundManager.set_music_volume(value / 100.0)
+	AudioServer.set_bus_volume_db(1, linear_to_db(value/100.0))
 	bgm_value.text = "{0}".format([value])
 	GameManager.bgm_audio = value
 

@@ -10,6 +10,7 @@ signal pathfinding_ready
 @export var current_speed: float = 10.0
 @export var acceleration: float = 7.0
 @export_category("Target Finding")
+@export var follow_target: bool = true
 @export var search_radius: float = 128
 @export var max_intersect_results := 8
 @export_category("Avoidance")
@@ -41,7 +42,7 @@ func _wait_for_navigation_setup() -> void:
 	query.collide_with_bodies = true
 	query.collide_with_areas = true
 	# TODO - make some global vars to track the collision layers
-	query.collision_mask = 2  # Player
+	query.collision_mask = 2 # Player
 	query.shape = SphereShape3D.new()
 	query.shape.radius = search_radius
 	query.transform = Transform3D.IDENTITY
@@ -69,9 +70,9 @@ func _physics_process(_delta) -> void:
 			return
 		if not target:
 			return
-			#target = _get_target()
 		
-		set_nav_target_position(target.global_position)
+		if follow_target:
+			set_nav_target_position(target.global_position)
 		var new_velocity = get_new_nav_agent_velocity()
 		if nav_agent.avoidance_enabled:
 			nav_agent.set_velocity(new_velocity)

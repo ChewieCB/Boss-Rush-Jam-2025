@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://guegep2ueo26"]
+[gd_scene load_steps=12 format=3 uid="uid://guegep2ueo26"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_projectile.gd" id="1_x0ax1"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_bxb8l"]
@@ -23,6 +23,8 @@ albedo_color = Color(1, 0.766048, 0, 0.713726)
 emission_enabled = true
 emission = Color(1, 0.731834, 0.032858, 1)
 
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_hlqus"]
+
 [sub_resource type="Curve" id="Curve_inxyf"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -40,13 +42,13 @@ mesh = SubResource("BoxMesh_ptj85")
 
 [node name="Area3D" type="Area3D" parent="."]
 collision_layer = 0
-collision_mask = 93
+collision_mask = 221
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("SphereShape3D_t27v6")
 
 [node name="LifeTimer" type="Timer" parent="."]
-wait_time = 1.5
+wait_time = 4.0
 one_shot = true
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
@@ -57,7 +59,9 @@ collision_mask = 29
 [node name="Trail" type="Node3D" parent="."]
 
 [node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
 material_override = SubResource("StandardMaterial3D_pphwl")
+mesh = SubResource("ImmediateMesh_hlqus")
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("4_xa5jf")
 segments = 10
@@ -66,7 +70,7 @@ width_profile = SubResource("Curve_inxyf")
 
 [node name="HomingArea3D" type="Area3D" parent="."]
 collision_layer = 0
-collision_mask = 4
+collision_mask = 196
 monitoring = false
 monitorable = false
 

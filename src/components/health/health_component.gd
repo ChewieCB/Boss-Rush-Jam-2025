@@ -12,6 +12,9 @@ signal hurt
 @export var text_effect: PackedScene
 @export var text_effect_location: Node3D
 
+# Changed by owner character, range from 0 (invincible) to 1 (normal)
+var modified_resistance = 1
+
 
 var current_health: float:
 	set(value):
@@ -21,6 +24,7 @@ var current_health: float:
 		var prev_health = current_health
 		current_health = clamp(value, 0, max_health)
 		var diff = current_health - prev_health
+		current_health_ratio = current_health / max_health
 		health_diff.emit(diff)
 		health_changed.emit(current_health, prev_health)
 		if current_health == 0:
@@ -28,6 +32,7 @@ var current_health: float:
 			has_died = true
 		if diff < 0:
 			hurt.emit()
+var current_health_ratio: float = current_health / max_health
 var has_died: bool = false
 
 
@@ -36,6 +41,7 @@ func _ready() -> void:
 
 
 func damage(_damage: float, _color: Color = Color.WHITE) -> void:
+	_damage = round(_damage * modified_resistance)
 	if enabled:
 		if not is_invincible:
 			current_health -= _damage
@@ -44,9 +50,13 @@ func damage(_damage: float, _color: Color = Color.WHITE) -> void:
 		else:
 			create_text(self.global_position, str(_damage), _color)
 
-func heal(health: float) -> void:
+func heal(health: float, _color: Color = Color.GREEN) -> void:
 	if enabled:
 		current_health += health
+		if text_effect_location:
+			create_text(text_effect_location.global_position, str(health), _color)
+		else:
+			create_text(self.global_position, str(health), _color)
 
 
 func initialize_health() -> void:

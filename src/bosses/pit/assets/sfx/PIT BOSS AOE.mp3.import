@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cmccepm0vu8qm"
+path="res://.godot/imported/PIT BOSS AOE.mp3-f78e7ffe16cfe19a314c92b5680d4263.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/PIT BOSS AOE.mp3"
+dest_files=["res://.godot/imported/PIT BOSS AOE.mp3-f78e7ffe16cfe19a314c92b5680d4263.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

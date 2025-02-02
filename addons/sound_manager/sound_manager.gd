@@ -13,6 +13,7 @@ var music: MusicPlayer = MusicPlayer.new(["Music"], 2)
 var button_hover_sfx = preload("res://src/ui/common/assets/sfx/gui_hover.ogg")
 var button_click_sfx = preload("res://src/ui/common/assets/sfx/gui_click.ogg")
 
+
 var sound_process_mode: ProcessMode:
 	set(value):
 		sound_effects.process_mode = value

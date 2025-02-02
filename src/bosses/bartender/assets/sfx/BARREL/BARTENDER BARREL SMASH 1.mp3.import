@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dyltsf21dn5pk"
+path="res://.godot/imported/BARTENDER BARREL SMASH 1.mp3-da071660d515e9db6eb93376d41036e6.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL SMASH 1.mp3"
+dest_files=["res://.godot/imported/BARTENDER BARREL SMASH 1.mp3-da071660d515e9db6eb93376d41036e6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

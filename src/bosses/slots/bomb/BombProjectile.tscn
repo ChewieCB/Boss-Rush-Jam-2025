@@ -1,0 +1,72 @@
+[gd_scene load_steps=29 format=3 uid="uid://yw8o87v7ydx1"]
+
+[ext_resource type="Script" path="res://src/bosses/slots/bomb/bomb_projectile.gd" id="1_4scaw"]
+[ext_resource type="ArrayMesh" uid="uid://d5m2g14coy2c" path="res://src/bosses/slots/bell/bomb_mesh.tres" id="1_pne0t"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_gd1st"]
+[ext_resource type="AudioStream" uid="uid://dsk2dfx34iy6m" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 1.mp3" id="2_tkyk2"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="3_e47h8"]
+[ext_resource type="AudioStream" uid="uid://b1h5uugbn6oed" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 2.mp3" id="3_l4xhx"]
+[ext_resource type="AudioStream" uid="uid://dtumhkhlkde2g" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 3.mp3" id="4_h1b8m"]
+[ext_resource type="AudioStream" uid="uid://bu1ukh2e2to0u" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 4.mp3" id="5_ykxuv"]
+[ext_resource type="AudioStream" uid="uid://ek641dpub6ow" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 5.mp3" id="6_iciou"]
+[ext_resource type="AudioStream" uid="uid://douuuxp6mbsat" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 1.mp3" id="7_h1v2i"]
+[ext_resource type="AudioStream" uid="uid://b3o7mv6pdnq48" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 2.mp3" id="8_6no0s"]
+[ext_resource type="AudioStream" uid="uid://1ogs0hv61ogk" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 3.mp3" id="9_abp3y"]
+[ext_resource type="AudioStream" uid="uid://b3d3tft5s7akj" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 4.mp3" id="10_aajbu"]
+[ext_resource type="AudioStream" uid="uid://dxjcoodpxoyov" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 5.mp3" id="11_d5xn8"]
+[ext_resource type="AudioStream" uid="uid://6nfqmalygj7p" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 6.mp3" id="12_hrolw"]
+[ext_resource type="AudioStream" uid="uid://bnj1511ulhxbd" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 7.mp3" id="13_abko1"]
+[ext_resource type="AudioStream" uid="uid://7st5ioymsxn2" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 8.mp3" id="14_r2i30"]
+[ext_resource type="AudioStream" uid="uid://bd13vwgsid3gs" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 9.mp3" id="15_enqup"]
+[ext_resource type="AudioStream" uid="uid://b0xljjk4vej5b" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 10.mp3" id="16_52daq"]
+[ext_resource type="AudioStream" uid="uid://dt0ekxq6en04s" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 11.mp3" id="17_p4xef"]
+[ext_resource type="AudioStream" uid="uid://o76j6h3aiu2k" path="res://src/bosses/slots/assets/sfx/BOMBS/BOUNCE FILES/SLOT BOSS CHERRY BOMB BOUCNE 12.mp3" id="18_pi0rb"]
+[ext_resource type="AudioStream" uid="uid://b8oj1kfldgvko" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 1.mp3" id="19_kam7q"]
+[ext_resource type="AudioStream" uid="uid://p38ber7fs63l" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 2.mp3" id="20_q6g5x"]
+[ext_resource type="AudioStream" uid="uid://b6hry7fd6c60y" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 3.mp3" id="21_0y8q4"]
+[ext_resource type="AudioStream" uid="uid://jqugutq06ydl" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 4.mp3" id="22_omxju"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pl4mw"]
+bounce = 0.7
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cjnpl"]
+radius = 1.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2sd2v"]
+
+[node name="BombProjectile" type="RigidBody3D"]
+collision_layer = 64
+collision_mask = 79
+mass = 50.0
+physics_material_override = SubResource("PhysicsMaterial_pl4mw")
+script = ExtResource("1_4scaw")
+sfx_bomb_launch = Array[AudioStream]([ExtResource("2_tkyk2"), ExtResource("3_l4xhx"), ExtResource("4_h1b8m"), ExtResource("5_ykxuv"), ExtResource("6_iciou")])
+sfx_bomb_bounce = Array[AudioStream]([ExtResource("7_h1v2i"), ExtResource("8_6no0s"), ExtResource("9_abp3y"), ExtResource("10_aajbu"), ExtResource("11_d5xn8"), ExtResource("12_hrolw"), ExtResource("13_abko1"), ExtResource("14_r2i30"), ExtResource("15_enqup"), ExtResource("16_52daq"), ExtResource("17_p4xef"), ExtResource("18_pi0rb")])
+sfx_bomb_explode = Array[AudioStream]([ExtResource("19_kam7q"), ExtResource("20_q6g5x"), ExtResource("21_0y8q4"), ExtResource("22_omxju")])
+explosion_scene = ExtResource("2_gd1st")
+spark_scene = ExtResource("3_e47h8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0.358207, 0)
+mesh = ExtResource("1_pne0t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_cjnpl")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ExplosionArea" type="Area3D" parent="."]
+collision_layer = 64
+collision_mask = 78
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ExplosionArea"]
+shape = SubResource("SphereShape3D_2sd2v")
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="body_entered" from="ExplosionArea" to="." method="_on_explosion_area_body_entered"]

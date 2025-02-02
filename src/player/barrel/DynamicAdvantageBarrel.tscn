@@ -1,53 +1,19 @@
-[gd_scene load_steps=11 format=3 uid="uid://dy7nqvo7uq1ti"]
+[gd_scene load_steps=9 format=3 uid="uid://dy7nqvo7uq1ti"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_54i25"]
-[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="2_v2cse"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_embam"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/ramp_up_effect.gd" id="3_w70eq"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_k0t2c"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_ky52g"]
-[ext_resource type="Script" path="res://src/player/barrel/explosive_bullet_effect.gd" id="6_ayuco"]
-[ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/projectiles/ExplosionDamageArea.tscn" id="7_tc2w0"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/explosive_bullet_effect.gd" id="6_ayuco"]
+[ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="7_tc2w0"]
 [ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/ExplosionVFX3D.tscn" id="8_x4fhu"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="9_6f2yx"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_sfbyw"]
-height = 0.5
 
 [node name="DynamicAdvantageBarrel" type="Node3D"]
 script = ExtResource("1_54i25")
 barrel_id = 3
 
-[node name="Model" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, 0.15, 0, -0.15, -6.55671e-09, -0.070747, 0.0311846, 0)
-mesh = SubResource("CylinderMesh_sfbyw")
-
-[node name="EffectName" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.109181, -0.0166867)
-modulate = Color(1, 0.883, 0.22, 1)
-text = "DOUBLE TAP"
-font = ExtResource("2_v2cse")
-font_size = 64
-outline_size = 32
-horizontal_alignment = 2
-
-[node name="EffectTag" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0716908, -0.00866602)
-modulate = Color(0.87, 0.76328, 0.6699, 1)
-text = "Both barrels!"
-font = ExtResource("2_v2cse")
-font_size = 40
-outline_size = 16
-horizontal_alignment = 2
-
-[node name="EffectDesc" type="Label3D" parent="."]
-transform = Transform3D(0.15, 0, 0, 0, 0.146681, 0.0313814, 0, -0.0313814, 0.146681, -0.159941, 0.0575581, -0.00564242)
-modulate = Color(0.46, 0.46, 0.46, 1)
-text = "10% ammo refund on hit
--10% damage"
-font = ExtResource("2_v2cse")
-font_size = 24
-horizontal_alignment = 2
-vertical_alignment = 0
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_embam")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
@@ -88,14 +54,3 @@ explosion_vfx = ExtResource("8_x4fhu")
 display_text_title = "Explosive bullet"
 display_text_tag = "Don't hurt yourself!"
 display_text_desc = "Make bullets go boom"
-
-[node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
-script = ExtResource("9_6f2yx")
-modify_perc_spread_stationary = -50.0
-modify_perc_damage_stationary = 25.0
-modify_perc_spread_moving = 100.0
-modify_perc_damage_moving = -25.0
-display_text_title = "Hyperfocus"
-display_text_tag = "Take position and start blasting!"
-display_text_desc = "-50% spread, +25% damage when stationary
-+100% spread, -25% damage when moving"

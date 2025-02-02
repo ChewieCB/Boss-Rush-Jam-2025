@@ -1,0 +1,61 @@
+[gd_scene load_steps=9 format=3 uid="uid://w52vphhedtws"]
+
+[ext_resource type="Script" path="res://src/player/gun/projectiles/gun_hitscan.gd" id="1_gwc3y"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_ircxh"]
+[ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_vqvrn"]
+[ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="4_mqx5a"]
+[ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="5_q8kxl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ka6s1"]
+render_priority = 0
+shader = ExtResource("4_mqx5a")
+shader_parameter/enable_fade = true
+shader_parameter/enable_taper = true
+shader_parameter/origin_position = null
+shader_parameter/fade_distance = 10.0
+shader_parameter/fade_multiplier = 1.0
+shader_parameter/color = Color(0.101563, 0.204432, 1, 1)
+shader_parameter/taper_amount = -2.0
+shader_parameter/emission_color = Color(0.119992, 0.757934, 1, 1)
+shader_parameter/emission_intensity = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_yehfg"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_kk8sx"]
+radius = 500.0
+
+[node name="GunHitscan" type="Node3D"]
+script = ExtResource("1_gwc3y")
+thickness = 30
+fade_speed = 1.0
+spark_effect = ExtResource("2_ircxh")
+generic_blood_splatter = ExtResource("3_vqvrn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_ka6s1")
+mesh = SubResource("BoxMesh_yehfg")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ShotFlashStart" type="Sprite3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 30, 0, 0, 7.5)
+visible = false
+texture = ExtResource("5_q8kxl")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
+target_position = Vector3(0, 0, -100)
+collision_mask = 197
+
+[node name="NearbyEnemyCheckArea3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 196
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NearbyEnemyCheckArea3D"]
+shape = SubResource("SphereShape3D_kk8sx")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="body_entered" from="NearbyEnemyCheckArea3D" to="." method="_on_nearby_enemy_check_area_3d_body_entered"]

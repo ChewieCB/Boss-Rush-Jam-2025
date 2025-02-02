@@ -1,0 +1,86 @@
+[gd_scene load_steps=12 format=3 uid="uid://35lbaqwytewn"]
+
+[ext_resource type="Script" path="res://src/player/gun/projectiles/sticky_bomb_projectile.gd" id="1_oktax"]
+[ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="2_c01wk"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="3_h00rf"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_qa43f"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hch7l"]
+albedo_color = Color(0.860888, 0.539123, 3.85046e-07, 1)
+emission_enabled = true
+emission = Color(0.862745, 0.537255, 0, 1)
+rim_enabled = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_ynnlg"]
+material = SubResource("StandardMaterial3D_hch7l")
+radius = 0.1
+height = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_t27v6"]
+radius = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pphwl"]
+transparency = 1
+albedo_color = Color(1, 0.766048, 0, 0.713726)
+emission_enabled = true
+emission = Color(1, 0.731834, 0.032858, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_hlqus"]
+
+[sub_resource type="Curve" id="Curve_inxyf"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_m0ts0"]
+radius = 1.0
+
+[node name="StickyBombProjectile" type="Node3D"]
+script = ExtResource("1_oktax")
+explosion_prefab = ExtResource("2_c01wk")
+explosion_vfx = ExtResource("3_h00rf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_ynnlg")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 221
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_t27v6")
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="ExplodeTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_pphwl")
+mesh = SubResource("ImmediateMesh_hlqus")
+script = ExtResource("4_qa43f")
+segments = 10
+base_width = 0.1
+width_profile = SubResource("Curve_inxyf")
+
+[node name="HomingArea3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 196
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HomingArea3D"]
+shape = SubResource("SphereShape3D_m0ts0")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.862745, 0.537255, 0, 1)
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
+[connection signal="timeout" from="ExplodeTimer" to="." method="_on_explode_timer_timeout"]
+[connection signal="body_entered" from="HomingArea3D" to="." method="_on_homing_area_3d_body_entered"]

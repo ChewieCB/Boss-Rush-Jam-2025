@@ -1,0 +1,67 @@
+[gd_scene load_steps=12 format=4 uid="uid://07url6i34wfu"]
+
+[ext_resource type="Script" path="res://src/bosses/pit/cover/cover_full.gd" id="1_emnca"]
+[ext_resource type="AudioStream" uid="uid://bb7rrjhgxeejg" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS MOVING_SPAWNING_.mp3" id="2_4w5mt"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_jbsxg"]
+[ext_resource type="AudioStream" uid="uid://56mdeui8rvsv" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS BREAK 1.mp3" id="3_b7kdn"]
+[ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="4_istg1"]
+[ext_resource type="AudioStream" uid="uid://qrfqoob00pwl" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS BREAK 2.mp3" id="4_mhgds"]
+[ext_resource type="AudioStream" uid="uid://c1nj7pxck0n5e" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS BREAK 3.mp3" id="5_74ja5"]
+[ext_resource type="Texture2D" uid="uid://dn841clu682ah" path="res://assets/textures/walls/slot-machines.png" id="5_kqpvs"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_opkae"]
+size = Vector3(1.99036, 5.45, 8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ni0pq"]
+transparency = 1
+albedo_texture = ExtResource("5_kqpvs")
+metallic_specular = 0.0
+texture_filter = 2
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_hu4pv"]
+_surfaces = [{
+"aabb": AABB(-0.96875, -2.75, -4, 1.9375, 5.5, 8),
+"attribute_data": PackedByteArray("AABRvgAAML4AAFG+AAAAAACAh74AAAAAAICHvgAAML4AAAC+AAAwvgAAAD4AADC+AAAAPgAAAAAAAAC+AAAAAAAAAD4AgIe+AAAAPgAAUb4AAAC+AABRvgAAAL4AgIe+AAAAvgCAh74AAAA+AICHvgAAAD4AAFG+AAAAvgAAUb4AAAA+AAAwvgAAAD4AAAAAAAAAvgAAAAAAAAC+AAAwvgAAUT4AADC+AICHPgAAML4AgIc+AAAAAAAAUT4AAAAA"),
+"format": 34359742487,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcA"),
+"material": ExtResource("4_istg1"),
+"name": "walls/grunge-concrete-dark",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAB4vwAAMEAAAIDAAAB4vwAAMMAAAIDAAAB4PwAAMMAAAIDAAAB4PwAAMEAAAIDAAAB4vwAAMEAAAIDAAAB4vwAAMEAAAIBAAAB4vwAAMMAAAIBAAAB4vwAAMMAAAIDAAAB4PwAAMMAAAIDAAAB4vwAAMMAAAIDAAAB4vwAAMMAAAIBAAAB4PwAAMMAAAIBAAAB4PwAAMEAAAIDAAAB4PwAAMEAAAIBAAAB4vwAAMEAAAIBAAAB4vwAAMEAAAIDAAAB4PwAAMEAAAIDAAAB4PwAAMMAAAIDAAAB4PwAAMMAAAIBAAAB4PwAAMEAAAIBAAAB4vwAAMEAAAIBAAAB4PwAAMEAAAIBAAAB4PwAAMMAAAIBAAAB4vwAAMMAAAIBA/////wAA/7//////AAD/v/////8AAP+//////wAA/78AAP9//3//vwAA/3//f/+/AAD/f/9//78AAP9//3//v/9/AAD//////38AAP//////fwAA//////9/AAD//////3////9//7//f////3//v/9/////f/+//3////9//7////9//////////3//////////f/////////9///////9//3////+//3//f////7//f/9/////v/9//3////+/")
+}, {
+"aabb": AABB(-1, -2.75, -4.03125, 2, 5.5, 8.0625),
+"attribute_data": PackedByteArray("LS2LPwAASL88PLo/AABIvzw8uj8AAAAALS2LPwAAAAA4ju2+AABIvziO7b4AAAAAHMdsPwAAAAAcx2w/AABIvziO7b4AAEi/HMdsPwAASL8cx2w/AAAAADiO7b4AAAAALS2LPwAASL8tLYs/AAAAADw8uj8AAAAAPDy6PwAASL8="),
+"format": 34359742487,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8A"),
+"material": SubResource("StandardMaterial3D_ni0pq"),
+"name": "walls/slot-machines",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("AACAvwAAMEAAAIFAAACAPwAAMEAAAIFAAACAPwAAMMAAAIFAAACAvwAAMMAAAIFAAACAPwAAMEAAAIDAAACAPwAAMMAAAIDAAACAPwAAMMAAAIBAAACAPwAAMEAAAIBAAACAvwAAMEAAAIDAAACAvwAAMEAAAIBAAACAvwAAMMAAAIBAAACAvwAAMMAAAIDAAACAvwAAMEAAAIHAAACAvwAAMMAAAIHAAACAPwAAMMAAAIHAAACAPwAAMEAAAIHA/3//f////7//f/9/////v/9//3////+//3//f////7////9//3//P////3//f/8/////f/9//z////9//3//PwAA/3//f/+/AAD/f/9//78AAP9//3//vwAA/3//f/+//////////z//////////P/////////8//////////z8=")
+}]
+
+[node name="CoverFull" type="StaticBody3D"]
+collision_layer = 64
+collision_mask = 78
+script = ExtResource("1_emnca")
+spawn_sfx = Array[AudioStream]([ExtResource("2_4w5mt")])
+destroy_sfx = Array[AudioStream]([ExtResource("3_b7kdn"), ExtResource("4_mhgds"), ExtResource("5_74ja5")])
+explosion_vfx = ExtResource("2_jbsxg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.00482184, 2.73284, 0)
+shape = SubResource("BoxShape3D_opkae")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 2.758, 0)
+cast_shadow = 2
+gi_mode = 0
+mesh = SubResource("ArrayMesh_hu4pv")
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+volume_db = -5.0

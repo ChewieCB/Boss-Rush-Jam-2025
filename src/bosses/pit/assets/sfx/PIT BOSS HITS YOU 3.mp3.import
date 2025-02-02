@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b03ragdpxedsv"
+path="res://.godot/imported/PIT BOSS HITS YOU 3.mp3-26d21e69171ce3db84f4d1a0d5a5b41a.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 3.mp3"
+dest_files=["res://.godot/imported/PIT BOSS HITS YOU 3.mp3-26d21e69171ce3db84f4d1a0d5a5b41a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

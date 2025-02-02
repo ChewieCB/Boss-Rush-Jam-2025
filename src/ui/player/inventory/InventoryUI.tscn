@@ -1,8 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://gwlfcdvj2q8w"]
+[gd_scene load_steps=9 format=3 uid="uid://gwlfcdvj2q8w"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_r38si"]
 [ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="1_vlm2x"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="3_775rd"]
+[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="4_ayxuj"]
+[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="4_hkf46"]
+[ext_resource type="AudioStream" uid="uid://bfikexik2t3y6" path="res://src/ui/common/assets/sfx/OPEN THE SHOP.mp3" id="4_x57d7"]
+[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="5_f3yr3"]
+[ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="7_k8j1w"]
 
 [node name="InventoryUI" type="Control"]
 layout_mode = 3
@@ -13,6 +18,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_r38si")
 barrel_item_ui_prefab = ExtResource("3_775rd")
+shop_item_ui_prefab = ExtResource("7_k8j1w")
+sfx_open = ExtResource("4_x57d7")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -25,9 +32,10 @@ offset_right = -128.0
 offset_bottom = -120.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.584314)
+color = Color(0, 0, 0, 0.72549)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Background"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -125,6 +133,8 @@ offset_right = -16.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("4_hkf46")
+theme_override_fonts/bold_font = ExtResource("5_f3yr3")
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 26
 bbcode_enabled = true
@@ -136,96 +146,128 @@ Possible roll:
 - Roll B: explainexplain explain explain explain explain explain explain explain 
 - Roll C: explain explain explain explain explain explain explain explain explain explain explain explain explain "
 
-[node name="InventoryBarrelSection" type="Control" parent="."]
+[node name="NinePatchRect" type="NinePatchRect" parent="EquipBarrelSection/BarrelDescription"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
+anchors_preset = 15
 anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ayxuj")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="WarningLabel" type="Label" parent="EquipBarrelSection"]
+self_modulate = Color(1, 0, 0.168627, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -896.0
-offset_top = -284.0
-offset_right = -192.0
-offset_bottom = 356.0
-grow_horizontal = 0
+offset_left = -214.0
+offset_top = -112.0
+offset_right = 214.0
+offset_bottom = -68.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "Can only equip 1 archetype barrel"
+
+[node name="BarrelOptionsSection" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 990.0
+offset_top = 234.0
+offset_right = -162.0
+offset_bottom = -206.0
+grow_horizontal = 2
 grow_vertical = 2
 
-[node name="InventoryTitle" type="Label" parent="InventoryBarrelSection"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -59.0
-offset_right = 59.0
-offset_bottom = 55.0
-grow_horizontal = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="BarrelOptionsSection"]
+layout_mode = 2
+
+[node name="InventoryBarrelSection" type="MarginContainer" parent="BarrelOptionsSection/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="InventoryTitle" type="Label" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
 theme_override_font_sizes/font_size = 40
 text = "In bag"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="InventoryBarrelSection"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -296.0
-offset_top = -576.0
-offset_right = 296.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="GridContainer" type="GridContainer" parent="InventoryBarrelSection/ScrollContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 5
 
-[node name="ColorRect" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="BarrelItemUI" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
-[node name="ColorRect2" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="BarrelItemUI2" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
-[node name="ColorRect3" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="ShopBarrelSelection" type="MarginContainer" parent="BarrelOptionsSection/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_vertical = 3
 
-[node name="ColorRect4" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="VBoxContainer" type="VBoxContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+theme_override_constants/separation = 16
 
-[node name="ColorRect5" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="InventoryTitle" type="Label" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "Available"
+horizontal_alignment = 1
 
-[node name="ColorRect6" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="ScrollContainer" type="ScrollContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_vertical = 3
 
-[node name="ColorRect7" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="GridContainer" type="GridContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 6
 size_flags_vertical = 4
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 5
 
-[node name="ColorRect8" type="ColorRect" parent="InventoryBarrelSection/ScrollContainer/GridContainer"]
-custom_minimum_size = Vector2(100, 100)
+[node name="ShopItemContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("7_k8j1w")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+
+[node name="ShopItemContainer2" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("7_k8j1w")]
+layout_mode = 2
+
+[node name="ShopItemContainer3" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("7_k8j1w")]
+layout_mode = 2
+
+[node name="ControlHelpText" type="Label" parent="."]
+layout_mode = 0
+offset_left = 134.0
+offset_top = 77.0
+offset_right = 735.0
+offset_bottom = 126.0
+theme_override_font_sizes/font_size = 40
+text = "Click once to select barrel / Click again to confirm"

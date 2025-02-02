@@ -11,7 +11,9 @@ enum AttributeNameEnum {
 	SPREAD_ANGLE,
 	RELOAD_TIME,
 	RICOCHET_COUNT,
-	HOMING_STRENGTH
+	HOMING_STRENGTH,
+	RECOIL,
+	SCREENSHAKE
 }
 
 @export var attribute: AttributeNameEnum
@@ -45,6 +47,10 @@ func on_prepare_to_fire():
 			owner_barrel.owner_gun.modified_ricochet_count = new_value
 		AttributeNameEnum.HOMING_STRENGTH:
 			owner_barrel.owner_gun.modified_homing_strength = new_value
+		AttributeNameEnum.RECOIL:
+			owner_barrel.owner_gun.modified_recoil = new_value
+		AttributeNameEnum.SCREENSHAKE:
+			owner_barrel.owner_gun.modified_screenshake = new_value
 
 func on_reload_start():
 	super()
