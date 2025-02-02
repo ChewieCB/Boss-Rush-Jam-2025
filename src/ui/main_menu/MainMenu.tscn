@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://ctddgvd003sjr"]
+[gd_scene load_steps=29 format=3 uid="uid://ctddgvd003sjr"]
 
 [ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
 [ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="19_ygg6c"]
 [ext_resource type="FontFile" uid="uid://djistlrjw48qk" path="res://assets/fonts/kleptocracy titling/kleptocracy titling lt.otf" id="20_6j3k5"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="20_j34pk"]
+[ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="24_prxld"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2x62q"]
 shader = ExtResource("1_jqa14")
@@ -990,6 +991,47 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 24
 
+[node name="HBoxContainer6" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer6"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/normal_font = ExtResource("19_nwl4i")
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Art[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+
+[node name="Name3" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer6/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Grace Althea"
+fit_content = true
+scroll_active = false
+
+[node name="Name2" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer6/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_fonts/normal_font = ExtResource("20_6j3k5")
+theme_override_font_sizes/normal_font_size = 42
+text = "Spencer Krigbaum"
+fit_content = true
+scroll_active = false
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
@@ -1002,7 +1044,7 @@ size_flags_horizontal = 0
 theme_override_fonts/normal_font = ExtResource("19_nwl4i")
 theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
-text = "[right]Art[/right]"
+text = "[right]Concept Art[/right]"
 fit_content = true
 scroll_active = false
 
@@ -1017,28 +1059,6 @@ size_flags_vertical = 0
 theme_override_fonts/normal_font = ExtResource("20_6j3k5")
 theme_override_font_sizes/normal_font_size = 42
 text = "Akashdeep Hehar"
-fit_content = true
-scroll_active = false
-
-[node name="Name3" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
-custom_minimum_size = Vector2(420, 32)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_fonts/normal_font = ExtResource("20_6j3k5")
-theme_override_font_sizes/normal_font_size = 42
-text = "Grace Althea"
-fit_content = true
-scroll_active = false
-
-[node name="Name2" type="RichTextLabel" parent="CreditsUI/TabContainer/Control/ScrollContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
-custom_minimum_size = Vector2(420, 32)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_fonts/normal_font = ExtResource("20_6j3k5")
-theme_override_font_sizes/normal_font_size = 42
-text = "Spencer Krigbaum"
 fit_content = true
 scroll_active = false
 
@@ -1207,6 +1227,101 @@ fit_content = true
 scroll_active = false
 
 [node name="NinePatchRect" type="NinePatchRect" parent="CreditsUI"]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -470.0
+offset_right = 790.0
+offset_bottom = 430.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("20_j34pk")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="StoryUI" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TabContainer" type="PanelContainer" parent="StoryUI"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -470.0
+offset_right = 790.0
+offset_bottom = 430.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="StoryUI/TabContainer"]
+layout_mode = 2
+
+[node name="Title" type="RichTextLabel" parent="StoryUI/TabContainer/Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -409.0
+offset_top = 36.0
+offset_right = 430.0
+offset_bottom = 131.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 64
+bbcode_enabled = true
+text = "[center][u]The Story So Far"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="StoryUI/TabContainer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = 127.0
+offset_right = -40.0
+offset_bottom = -55.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="StoryUI/TabContainer/Control/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_fonts/normal_font = ExtResource("24_prxld")
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 28
+theme_override_font_sizes/mono_font_size = 32
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 36
+bbcode_enabled = true
+text = "You are a professional card cheat, caught red-handed in the towering mega-casino owned by the enigmatic [b][color=gold]Mr. Big[/color][/b]. 
+
+Locked in a [b][color=red]plush lounge[/color][/b] high above the gaming floors, you are forced to enter a deadly game of chance — fighting against each of Mr. Big’s henchmen, all under the bleary-eyed gaze of an audience of gamblers placing bets on the bloodsport. 
+
+Armed with a unique weapon whose [b][color=dark_turquoise]interchangeable barrels[/color][/b] spin random effects on each reload, you must acquire new barrels from every boss you defeat to build a weapon that can [b][color=lawn_green]change your odds[/color][/b]. 
+
+
+[center][i]Gamble everything for your freedom.[/i][/center]"
+fit_content = true
+
+[node name="NinePatchRect" type="NinePatchRect" parent="StoryUI"]
 self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 1
 anchors_preset = 8

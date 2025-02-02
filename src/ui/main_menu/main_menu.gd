@@ -12,6 +12,7 @@ var bgm_player: AudioStreamPlayer
 @onready var buttons = buttons_container.get_children()
 @onready var settings_ui = $SettingUI
 @onready var credits_ui = $CreditsUI
+@onready var story_ui = $StoryUI
 
 func _ready() -> void:
 	bgm_player = SoundManager.play_music(bgm, 0.2, "BGM")
@@ -40,13 +41,16 @@ func _on_quit_button_pressed() -> void:
 func _on_options_button_pressed() -> void:
 	buttons_container.visible = false
 	credits_ui.visible = false
+	story_ui.visible = false
 	settings_ui.visible = true
 
 
 func _on_back_button_pressed() -> void:
 	buttons_container.visible = true
 	settings_ui.visible = false
+	story_ui.visible = true
 
 
 func _on_credit_button_pressed() -> void:
 	credits_ui.visible = !credits_ui.visible
+	story_ui.visible = !story_ui.visible
