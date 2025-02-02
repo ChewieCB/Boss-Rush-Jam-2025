@@ -2450,6 +2450,7 @@ transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, 5.875, -
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.5, 0.53, -14.5)
 billboard = 2
+shaded = true
 texture = ExtResource("41_tpab6")
 region_enabled = true
 region_rect = Rect2(0, 35.3603, 512, 476.64)
@@ -2457,6 +2458,7 @@ region_rect = Rect2(0, 35.3603, 512, 476.64)
 [node name="Sprite3D2" type="Sprite3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -6, 0.53, -14.5)
 billboard = 2
+shaded = true
 texture = ExtResource("41_tpab6")
 region_enabled = true
 region_rect = Rect2(0, 17.7883, 512, 494.212)
@@ -2464,6 +2466,7 @@ region_rect = Rect2(0, 17.7883, 512, 494.212)
 [node name="Sprite3D3" type="Sprite3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -6, 0.53, -3.5)
 billboard = 2
+shaded = true
 texture = ExtResource("41_tpab6")
 region_enabled = true
 region_rect = Rect2(0, 28.9183, 512, 483.082)
@@ -2471,6 +2474,7 @@ region_rect = Rect2(0, 28.9183, 512, 483.082)
 [node name="Sprite3D4" type="Sprite3D" parent="."]
 transform = Transform3D(0.5, -1.47178e-06, 0.000302907, 1.67723e-06, 0.5, -0.000360986, -0.000302906, 0.000360987, 0.5, 5.5003, 0.529639, -3.5)
 billboard = 2
+shaded = true
 texture = ExtResource("41_tpab6")
 region_enabled = true
 region_rect = Rect2(0, 33.7498, 512, 478.25)
