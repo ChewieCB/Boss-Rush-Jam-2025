@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c3umcmw3oiv1e"
+path="res://.godot/imported/Attack Warning 1.mp3-326457f09e9edc1d2896929b5728047e.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Attack Warning 1.mp3"
+dest_files=["res://.godot/imported/Attack Warning 1.mp3-326457f09e9edc1d2896929b5728047e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

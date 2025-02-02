@@ -482,7 +482,7 @@ func _on_died() -> void:
 
 
 func fall_death() -> void:
-	#health_component.current_health = 0
+	health_component.current_health = 0
 	state_chart.send_event("death")
 	SoundManager.play_sound(sfx_dead_falling.pick_random(), "SFX")
 

@@ -281,7 +281,8 @@ func _set_ball_active_params(ball: RouletteBall, _target: Node3D = target) -> Ro
 	ball.max_collisions = 30
 	ball.radial_force_magnitude = 2500.0
 	ball.central_force_magnitude = 10000.0
-	ball.homing_force_magnitude = 7500.0
+	ball.homing_force_magnitude = 6500.0
+	ball.mute_sfx = false
 	return ball
 
 func _set_ball_passive_params(ball: RouletteBall, _target: Node3D) -> RouletteBall:
@@ -291,6 +292,7 @@ func _set_ball_passive_params(ball: RouletteBall, _target: Node3D) -> RouletteBa
 	ball.radial_force_magnitude = 3500.0
 	ball.central_force_magnitude = 500.0
 	ball.homing_force_magnitude = 0.0
+	ball.mute_sfx = true
 	#ball.radial_force_magnitude = 3500.0
 	
 	return ball
@@ -447,6 +449,7 @@ func _on_ball_kill_timer_timeout() -> void:
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
+	
 	if new_health < health_component.max_health * phase_3_health_percentage_trigger and current_phase == 2:
 		change_phase(3)
 	elif new_health < health_component.max_health * phase_2_health_percentage_trigger and current_phase == 1:
@@ -512,6 +515,15 @@ func _on_movement_targeting_state_physics_processing(delta: float) -> void:
 func _on_wave_collision(body: Node3D) -> void:
 	if body is Player:
 		_pushback_effect(body)
+
+
+func _on_attack_telegraph_state_entered() -> void:
+	shockwave_sfx_player.stream = sfx_telegraph
+	shockwave_sfx_player.play()
+
+
+func _on_attack_telegraph_state_exited() -> void:
+	shockwave_sfx_player.stop()
 
 
 ### ATTACK PHASES --------------------------------

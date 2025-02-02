@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=55 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -27,6 +27,12 @@
 [ext_resource type="AudioStream" uid="uid://dt60mvvsp8gbw" path="res://src/bosses/pit/assets/sfx/PIT BOSS ANGRY VOICE.mp3" id="18_e8yae"]
 [ext_resource type="AudioStream" uid="uid://e15km4eb5n7w" path="res://src/bosses/pit/assets/sfx/PIT BOSS DEAD.mp3" id="19_2oyqj"]
 [ext_resource type="AudioStream" uid="uid://dmxh4enemydu2" path="res://src/bosses/pit/assets/sfx/PIT BOSS GRUNT.mp3" id="19_ku61b"]
+[ext_resource type="AudioStream" uid="uid://bpjefcq47oyr3" path="res://src/bosses/base/assets/sfx/temp/Hit 2.mp3" id="20_j42ea"]
+[ext_resource type="AudioStream" uid="uid://ch0bkn7t2rb4i" path="res://src/bosses/base/assets/sfx/temp/Hit 3.mp3" id="21_pnx0u"]
+[ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="22_rtc4r"]
+[ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="23_0bbok"]
+[ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="24_ia7ug"]
+[ext_resource type="AudioStream" uid="uid://b4k4hf58sg3a2" path="res://src/bosses/base/assets/sfx/temp/Hit 7.mp3" id="25_1vpok"]
 [ext_resource type="Texture2D" uid="uid://fh4rp8ctjfwe" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="28_1qowr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
@@ -941,7 +947,7 @@ chip_spawn_chance = 0.15
 chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("7_koy73")
 sfx_awaken = ExtResource("18_e8yae")
-sfx_hit = Array[AudioStream]([ExtResource("19_ku61b")])
+sfx_hit = Array[AudioStream]([ExtResource("19_ku61b"), ExtResource("20_j42ea"), ExtResource("21_pnx0u"), ExtResource("22_rtc4r"), ExtResource("23_0bbok"), ExtResource("24_ia7ug"), ExtResource("25_1vpok")])
 sfx_death = ExtResource("19_2oyqj")
 current_phase = 3
 attack_recovery_time = 0.5

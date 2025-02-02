@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ch138g6vklbkb"
+path="res://.godot/imported/Floor Rumble Loop 2.mp3-16a3b566607123049f407835f1f20e9f.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Floor Rumble Loop 2.mp3"
+dest_files=["res://.godot/imported/Floor Rumble Loop 2.mp3-16a3b566607123049f407835f1f20e9f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

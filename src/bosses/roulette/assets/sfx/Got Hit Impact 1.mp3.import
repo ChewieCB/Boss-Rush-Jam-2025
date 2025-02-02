@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://4apgqpqc4u1t"
+path="res://.godot/imported/Got Hit Impact 1.mp3-1e863dd01b7025c4feab4bef36fd8721.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Got Hit Impact 1.mp3"
+dest_files=["res://.godot/imported/Got Hit Impact 1.mp3-1e863dd01b7025c4feab4bef36fd8721.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

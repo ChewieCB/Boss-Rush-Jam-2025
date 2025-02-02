@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://h6vxbfcrehxl"
+path="res://.godot/imported/Roulette AOE 1.mp3-63efbf0d733711bb8fc6446b7127f94b.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Roulette AOE 1.mp3"
+dest_files=["res://.godot/imported/Roulette AOE 1.mp3-63efbf0d733711bb8fc6446b7127f94b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

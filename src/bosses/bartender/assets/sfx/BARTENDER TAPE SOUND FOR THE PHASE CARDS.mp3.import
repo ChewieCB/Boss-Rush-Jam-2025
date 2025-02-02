@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bl2fw7kkqwtd2"
+path="res://.godot/imported/BARTENDER TAPE SOUND FOR THE PHASE CARDS.mp3-8023cee93e83c4be0d74acf7c6e63d52.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/BARTENDER TAPE SOUND FOR THE PHASE CARDS.mp3"
+dest_files=["res://.godot/imported/BARTENDER TAPE SOUND FOR THE PHASE CARDS.mp3-8023cee93e83c4be0d74acf7c6e63d52.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

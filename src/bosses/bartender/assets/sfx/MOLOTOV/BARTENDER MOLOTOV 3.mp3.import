@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://t2epxveubxfn"
+path="res://.godot/imported/BARTENDER MOLOTOV 3.mp3-9aad1b001fd4f05d72f982e5eea910ea.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/MOLOTOV/BARTENDER MOLOTOV 3.mp3"
+dest_files=["res://.godot/imported/BARTENDER MOLOTOV 3.mp3-9aad1b001fd4f05d72f982e5eea910ea.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ckumscbrh1hni"
+path="res://.godot/imported/BARTENDER BOSS START UP SOUND.mp3-9013856f9f033d1f15e38aca8f5bce0b.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS START UP SOUND.mp3"
+dest_files=["res://.godot/imported/BARTENDER BOSS START UP SOUND.mp3-9013856f9f033d1f15e38aca8f5bce0b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

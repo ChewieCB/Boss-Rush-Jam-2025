@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bbjfd1yk1gfko"
+path="res://.godot/imported/KIER ROULETTE SPIN LOOP VERSION.mp3-5082f5d2ca4d6ba356f803dfd06a720d.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/WAV dont use/KIER ROULETTE SPIN LOOP VERSION.mp3"
+dest_files=["res://.godot/imported/KIER ROULETTE SPIN LOOP VERSION.mp3-5082f5d2ca4d6ba356f803dfd06a720d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

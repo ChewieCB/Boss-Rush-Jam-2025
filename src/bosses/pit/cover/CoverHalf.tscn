@@ -1,8 +1,12 @@
-[gd_scene load_steps=6 format=4 uid="uid://83k3of5xh1gr"]
+[gd_scene load_steps=10 format=4 uid="uid://83k3of5xh1gr"]
 
 [ext_resource type="Script" path="res://src/bosses/pit/cover/cover_half.gd" id="1_m2eba"]
+[ext_resource type="AudioStream" uid="uid://bb7rrjhgxeejg" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS MOVING_SPAWNING_.mp3" id="2_yfvsc"]
 [ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_yln0c"]
+[ext_resource type="AudioStream" uid="uid://56mdeui8rvsv" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS BREAK 1.mp3" id="3_72dp5"]
 [ext_resource type="Material" uid="uid://n34cnqh7s2w0" path="res://assets/textures/floor/carpet-red.tres" id="4_4mhm4"]
+[ext_resource type="AudioStream" uid="uid://qrfqoob00pwl" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS BREAK 2.mp3" id="4_chl81"]
+[ext_resource type="AudioStream" uid="uid://c1nj7pxck0n5e" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS BREAK 3.mp3" id="5_8kicc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nnm5n"]
 size = Vector3(7.5, 1.47815, 2.1)
@@ -26,6 +30,8 @@ _surfaces = [{
 collision_layer = 64
 collision_mask = 78
 script = ExtResource("1_m2eba")
+spawn_sfx = Array[AudioStream]([ExtResource("2_yfvsc")])
+destroy_sfx = Array[AudioStream]([ExtResource("3_72dp5"), ExtResource("4_chl81"), ExtResource("5_8kicc")])
 explosion_vfx = ExtResource("2_yln0c")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -37,3 +43,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
 cast_shadow = 2
 gi_mode = 0
 mesh = SubResource("ArrayMesh_ukayu")
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+volume_db = -5.0

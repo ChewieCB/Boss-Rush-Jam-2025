@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ba8dhka0f20tw"
+path="res://.godot/imported/Falling Death 1.mp3-d629ac30bf5ec9950fb21955b2a680c5.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Falling Death 1.mp3"
+dest_files=["res://.godot/imported/Falling Death 1.mp3-d629ac30bf5ec9950fb21955b2a680c5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
