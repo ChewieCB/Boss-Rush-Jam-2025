@@ -6,6 +6,9 @@ extends VBoxContainer
 @export var price_icon: TextureRect
 @export var price_label: Label
 
+@export var sfx_click: AudioStream
+@export var sfx_purchase: AudioStream
+
 var data: BarrelDataResource
 var clicked_once: bool = false
 var is_disabled: bool = false:
@@ -40,6 +43,7 @@ func init(_data: BarrelDataResource, _is_purchased):
 
 func _on_button_pressed() -> void:
 	if not clicked_once:
+		SoundManager.play_ui_sound(sfx_click, "UI")
 		if (GameManager.player.inventory_ui.current_selected_item_ui != null):
 			GameManager.player.inventory_ui.current_selected_item_ui.unselected()
 		GameManager.player.inventory_ui.current_selected_item_ui = self
@@ -53,6 +57,10 @@ func _on_button_pressed() -> void:
 		border_selected.visible = true
 	else:
 		is_purchased = GameManager.purchase_barrel(data)
+		if is_purchased:
+			SoundManager.play_ui_sound(sfx_purchase, "UI")
+		else:
+			SoundManager.play_ui_sound(sfx_click, "UI")
 
 
 func unselected() -> void:

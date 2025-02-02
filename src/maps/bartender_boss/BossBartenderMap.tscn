@@ -1590,6 +1590,7 @@ floor_fize_hazard_marker = NodePath("../BossMarker/FloorFireHazard")
 behind_bar_move_points = [NodePath("../BossMarker/BossMoveMarker"), NodePath("../BossMarker/BossMoveMarker2"), NodePath("../BossMarker/BossMoveMarker3"), NodePath("../BossMarker/BossMoveMarker4"), NodePath("../BossMarker/BossMoveMarker5")]
 boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")
 boss_jump_phase3_marker = NodePath("../BossMarker/BossJumpPhase3Marker")
+sfx_slowmo = null
 target = NodePath("../NavigationRegion3D/FuncGodotMap/group_702_Elevator/entity_56_PlayerRef")
 
 [node name="BarLight" type="Node3D" parent="."]

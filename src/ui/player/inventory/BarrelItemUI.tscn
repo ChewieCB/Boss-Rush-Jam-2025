@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dpyj480amlor7"]
+[gd_scene load_steps=6 format=3 uid="uid://dpyj480amlor7"]
 
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="1_tbrlo"]
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_item_ui.gd" id="2_2nkrm"]
+[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="3_4ggj2"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_7nebw"]
 [ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_fr15b"]
 
@@ -14,6 +15,7 @@ size_flags_vertical = 4
 texture = ExtResource("1_tbrlo")
 expand_mode = 1
 script = ExtResource("2_2nkrm")
+sfx_click = ExtResource("3_4ggj2")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 1

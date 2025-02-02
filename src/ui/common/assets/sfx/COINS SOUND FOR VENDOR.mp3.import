@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bleu7jgamqfoj"
+path="res://.godot/imported/COINS SOUND FOR VENDOR.mp3-d08fac846d1d3a160837b970554d5f53.mp3str"
+
+[deps]
+
+source_file="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3"
+dest_files=["res://.godot/imported/COINS SOUND FOR VENDOR.mp3-d08fac846d1d3a160837b970554d5f53.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

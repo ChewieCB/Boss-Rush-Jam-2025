@@ -1228,6 +1228,7 @@ metadata/_tb_type = "_tb_group"
 
 [node name="entity_16_BossSlots" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("18_6tv2n")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.25, 0.75, -23.625)
+sfx_slowmo = null
 target = NodePath("../group_632_Elevator/entity_48_PlayerRef")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="FuncGodotMap"]

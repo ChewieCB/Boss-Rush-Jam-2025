@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://gwlfcdvj2q8w"]
+[gd_scene load_steps=9 format=3 uid="uid://gwlfcdvj2q8w"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_r38si"]
 [ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="1_vlm2x"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="3_775rd"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="4_ayxuj"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="4_hkf46"]
+[ext_resource type="AudioStream" uid="uid://bfikexik2t3y6" path="res://src/ui/common/assets/sfx/OPEN THE SHOP.mp3" id="4_x57d7"]
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="5_f3yr3"]
 [ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="7_k8j1w"]
 
@@ -18,6 +19,7 @@ grow_vertical = 2
 script = ExtResource("1_r38si")
 barrel_item_ui_prefab = ExtResource("3_775rd")
 shop_item_ui_prefab = ExtResource("7_k8j1w")
+sfx_open = ExtResource("4_x57d7")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
