@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dy7nqvo7uq1ti"]
+[gd_scene load_steps=9 format=3 uid="uid://dy7nqvo7uq1ti"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_54i25"]
 [ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_embam"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/explosive_bullet_effect.gd" id="6_ayuco"]
 [ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="7_tc2w0"]
 [ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/ExplosionVFX3D.tscn" id="8_x4fhu"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="9_6f2yx"]
 
 [node name="DynamicAdvantageBarrel" type="Node3D"]
 script = ExtResource("1_54i25")
@@ -55,14 +54,3 @@ explosion_vfx = ExtResource("8_x4fhu")
 display_text_title = "Explosive bullet"
 display_text_tag = "Don't hurt yourself!"
 display_text_desc = "Make bullets go boom"
-
-[node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
-script = ExtResource("9_6f2yx")
-modify_perc_spread_stationary = -50.0
-modify_perc_damage_stationary = 25.0
-modify_perc_spread_moving = 100.0
-modify_perc_damage_moving = -25.0
-display_text_title = "Hyperfocus"
-display_text_tag = "Take position and start blasting!"
-display_text_desc = "-50% spread, +25% damage when stationary
-+100% spread, -25% damage when moving"

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fh4rp8ctjfwe"
-path.s3tc="res://.godot/imported/pit_boss_slam.png-051ead0ddd4ab6b3ff59d140c3b8cb4b.s3tc.ctex"
+uid="uid://drj8vgnapbsgk"
+path.s3tc="res://.godot/imported/pit_boss_telegraph.png-fe5901f444ed7deb07948284a59cd4a2.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/bosses/pit/assets/pit_boss_slam.png"
-dest_files=["res://.godot/imported/pit_boss_slam.png-051ead0ddd4ab6b3ff59d140c3b8cb4b.s3tc.ctex"]
+source_file="res://src/bosses/pit/assets/pit_boss_telegraph.png"
+dest_files=["res://.godot/imported/pit_boss_telegraph.png-fe5901f444ed7deb07948284a59cd4a2.s3tc.ctex"]
 
 [params]
 

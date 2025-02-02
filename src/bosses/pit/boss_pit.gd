@@ -202,6 +202,9 @@ func _on_died() -> void:
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
+	
+	if surveillance_boss.health_component.current_health == 0:
+		await boss_death_slow_mo()
 
 
 func _exit_tree() -> void:

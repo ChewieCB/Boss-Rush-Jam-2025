@@ -101,6 +101,10 @@ var cached_target: Node3D
 
 func _ready() -> void:
 	randomize()
+	# If the player has beaten all bosses, buff them for the replay value
+	if GameManager.all_bosses_defeated:
+		health_component.max_health *= 2
+		health_component.initialize_health()
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	debug_trajectory_mesh = MeshInstance3D.new()
@@ -270,6 +274,8 @@ func _on_barrel_collected(data: BarrelDataResource) -> void:
 	#
 	# Wait for player to click continue
 	#
+	
+	
 	defeated.emit(self)
 
 
@@ -298,11 +304,12 @@ func _exit_tree() -> void:
 			if is_instance_valid(node):
 				node.queue_free()
 
-func boss_death_slow_mo():
+func boss_death_slow_mo() -> bool:
 	var original_time_scale = Engine.time_scale
 	Engine.time_scale = 0.1
 	await get_tree().create_timer(2 * Engine.time_scale).timeout
 	Engine.time_scale = original_time_scale
+	return true
 
 
 ## ======== State Chart Methods ========
@@ -411,7 +418,10 @@ func _on_died() -> void:
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
 	drop_barrel()
-	boss_death_slow_mo()
+	await boss_death_slow_mo()
+	if not self in GameManager.bosses_defeated:
+		GameManager.bosses_defeated.append(self)
+		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:

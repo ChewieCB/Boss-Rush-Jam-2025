@@ -15,6 +15,10 @@ Possible rolls:
 [ul]
 Ricochet: Bullets bounce of walls and enemies.
 Homing: Bullets homing toward enemies, but significantly reduced damage.
-[/ul]"
+Hyperfocus: Increased damage and reduce recoil while standing still. Opposite effect while moving.
+[/ul]
+"
 barrel_image = ExtResource("1_qqx0r")
+barrel_cost = 200
 barrel_prefab = ExtResource("2_pg4nx")
+is_archetype_barrel = false

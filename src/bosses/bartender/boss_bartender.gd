@@ -189,14 +189,15 @@ func _on_died() -> void:
 	super()
 	if fire_sfx:
 		fire_sfx.stop()
-	floor_fire_hazard.clear_hazard()
+	if floor_fire_hazard:
+		floor_fire_hazard.clear_hazard()
 
 
 ### ATTACK PHASES --------------------------------
 
 #### Any Phase
 
-# Shotgun blast
+# Shotgun blastaa
 
 func shotgun_blast():
 	debug_state_label.text = "Shotgun blast"
