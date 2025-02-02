@@ -19,6 +19,7 @@ var debug_trajectory_mesh: MeshInstance3D
 @export var sfx_hit: Array[AudioStream]
 @export var sfx_death: AudioStream
 @export var sfx_telegraph: AudioStream
+@export var sfx_slowmo: AudioStream
 
 @export var navigation_component: NavigationComponent
 @export var health_component: HealthComponent
@@ -305,10 +306,12 @@ func _exit_tree() -> void:
 				node.queue_free()
 
 func boss_death_slow_mo() -> bool:
+	SoundManager.play_sound(sfx_slowmo, "SFX")
 	var original_time_scale = Engine.time_scale
 	Engine.time_scale = 0.1
 	await get_tree().create_timer(2 * Engine.time_scale).timeout
 	Engine.time_scale = original_time_scale
+	SoundManager.stop_sound(sfx_slowmo)
 	return true
 
 

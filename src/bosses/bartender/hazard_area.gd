@@ -5,6 +5,9 @@ class_name HazardArea
 @export var duration: float = 5
 @export var slow_perc: float = 0
 
+@export var sfx_break: Array[AudioStream]
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
+
 @export var particle_effects: Array[GPUParticles3D] = []
 
 @export var pe_expire_time = 2
@@ -21,6 +24,9 @@ var stopped_moving = false
 
 func _ready() -> void:
 	is_active = true
+	if sfx_player:
+		sfx_player.stream = sfx_break.pick_random()
+		sfx_player.play()
 	life_timer.start(duration)
 
 func _physics_process(delta: float) -> void:

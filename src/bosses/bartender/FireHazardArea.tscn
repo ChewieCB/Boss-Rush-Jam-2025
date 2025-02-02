@@ -1,8 +1,11 @@
-[gd_scene load_steps=21 format=3 uid="uid://ovfcjowsr7df"]
+[gd_scene load_steps=24 format=3 uid="uid://ovfcjowsr7df"]
 
 [ext_resource type="Script" path="res://src/bosses/bartender/hazard_area.gd" id="1_xogw5"]
+[ext_resource type="AudioStream" uid="uid://uijk4rcbpwd4" path="res://src/bosses/bartender/assets/sfx/MOLOTOV/BARTENDER MOLOTOV 1.mp3" id="2_0sr16"]
 [ext_resource type="Texture2D" uid="uid://csksvkj83ajtj" path="res://src/bosses/bartender/assets/fire_sprite.png" id="2_73ktq"]
 [ext_resource type="Texture2D" uid="uid://bus2aoy40njv1" path="res://src/bosses/bartender/assets/puddle.png" id="3_h2ljg"]
+[ext_resource type="AudioStream" uid="uid://drve15beqxd4b" path="res://src/bosses/bartender/assets/sfx/MOLOTOV/BARTENDER MOLOTOV 2.mp3" id="3_kfut2"]
+[ext_resource type="AudioStream" uid="uid://t2epxveubxfn" path="res://src/bosses/bartender/assets/sfx/MOLOTOV/BARTENDER MOLOTOV 3.mp3" id="4_747aq"]
 
 [sub_resource type="Gradient" id="Gradient_samdw"]
 offsets = PackedFloat32Array(0, 0.797015, 1)
@@ -104,7 +107,7 @@ radius = 3.0
 [node name="FireHazardArea" type="Node3D" node_paths=PackedStringArray("particle_effects")]
 script = ExtResource("1_xogw5")
 duration = 20.0
-slow_perc = null
+sfx_break = Array[AudioStream]([ExtResource("2_0sr16"), ExtResource("3_kfut2"), ExtResource("4_747aq")])
 particle_effects = [NodePath("Fire"), NodePath("Smoke")]
 
 [node name="Fire" type="GPUParticles3D" parent="."]
@@ -152,6 +155,9 @@ one_shot = true
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 target_position = Vector3(0, -0.1, 0)
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

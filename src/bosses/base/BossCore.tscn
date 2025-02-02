@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=25 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Texture2D" uid="uid://l708f35ye0ad" path="res://src/bosses/base/assets/umby_boss_sprite_placeholder.png" id="1_lhq8s"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="2_s3pnh"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_fy6mc"]
 [ext_resource type="PackedScene" uid="uid://bwei3cifjg1sq" path="res://src/ui/boss/BossHealthBar.tscn" id="3_ybtoo"]
+[ext_resource type="AudioStream" uid="uid://cxj7l1ec2hsnv" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS SLOW TIME SOUND .mp3" id="4_rbx6b"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_sfdil"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="5_oy1aj"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="6_4cg3x"]
@@ -47,6 +48,7 @@ collision_mask = 27
 script = ExtResource("1_tem3i")
 chip_scene = ExtResource("2_hj7qa")
 barrel_pickup_scene = ExtResource("2_5bmmu")
+sfx_slowmo = ExtResource("4_rbx6b")
 navigation_component = NodePath("NavigationComponent")
 health_component = NodePath("HealthComponent")
 attack_recovery_time = 0.65

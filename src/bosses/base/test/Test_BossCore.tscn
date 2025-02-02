@@ -1,4 +1,4 @@
-[gd_scene load_steps=173 format=4 uid="uid://2q4ssotscvd5"]
+[gd_scene load_steps=180 format=4 uid="uid://2q4ssotscvd5"]
 
 [ext_resource type="Script" path="res://src/bosses/base/test/test_boss_core.gd" id="1_pgc5k"]
 [ext_resource type="AudioStream" uid="uid://c5fve5riow6qd" path="res://assets/music/Danceparty R1.mp3" id="2_2nw5f"]
@@ -657,6 +657,55 @@ material = SubResource("StandardMaterial3D_2euc2")
 uv2_padding = 0.0
 size = Vector2(5, 25)
 
+[sub_resource type="QuadMesh" id="QuadMesh_a6gqs"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_2euc2")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="QuadMesh" id="QuadMesh_bvi32"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_2euc2")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="QuadMesh" id="QuadMesh_r3rib"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_2euc2")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="QuadMesh" id="QuadMesh_korvc"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_2euc2")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="QuadMesh" id="QuadMesh_gaj1v"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_2euc2")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="QuadMesh" id="QuadMesh_llyn3"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_2euc2")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
+[sub_resource type="QuadMesh" id="QuadMesh_383lh"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(27, 27)
+material = SubResource("StandardMaterial3D_2euc2")
+uv2_padding = 0.0
+size = Vector2(5, 25)
+
 [node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors")]
 script = ExtResource("1_pgc5k")
 bgm = ExtResource("2_2nw5f")
@@ -1203,31 +1252,31 @@ mesh = SubResource("QuadMesh_x0677")
 
 [node name="entity_19_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, -11.5625)
-mesh = SubResource("QuadMesh_x0677")
+mesh = SubResource("QuadMesh_a6gqs")
 
 [node name="entity_20_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, 5.0625)
-mesh = SubResource("QuadMesh_x0677")
+mesh = SubResource("QuadMesh_bvi32")
 
 [node name="entity_21_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, 13.1875)
-mesh = SubResource("QuadMesh_x0677")
+mesh = SubResource("QuadMesh_r3rib")
 
 [node name="entity_22_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, 13.1875)
-mesh = SubResource("QuadMesh_x0677")
+mesh = SubResource("QuadMesh_korvc")
 
 [node name="entity_23_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, 5.0625)
-mesh = SubResource("QuadMesh_x0677")
+mesh = SubResource("QuadMesh_gaj1v")
 
 [node name="entity_24_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, -3.1875)
-mesh = SubResource("QuadMesh_x0677")
+mesh = SubResource("QuadMesh_llyn3")
 
 [node name="entity_25_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, -11.5625)
-mesh = SubResource("QuadMesh_x0677")
+mesh = SubResource("QuadMesh_383lh")
 
 [node name="group_654_Column" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"

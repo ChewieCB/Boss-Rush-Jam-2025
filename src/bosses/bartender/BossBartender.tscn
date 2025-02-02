@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=36 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -29,6 +29,8 @@
 [ext_resource type="AudioStream" uid="uid://cm6h6wj6m5ybu" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS ROOM ON FIRE LOOP.mp3" id="15_o40bi"]
 [ext_resource type="AudioStream" uid="uid://vkfmj1xifrci" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS JUMP.mp3" id="18_nhb38"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="23_33lgi"]
+[ext_resource type="AudioStream" uid="uid://cbntnevaw0w7r" path="res://src/bosses/bartender/assets/sfx/BARTENDER COCKTAIL SHAKE FOR BUFFS AND STUFF.mp3" id="24_3kufh"]
+[ext_resource type="AudioStream" uid="uid://ckumscbrh1hni" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS START UP SOUND.mp3" id="26_lq1hd"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="28_8rmxp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2tbsr"]
@@ -50,9 +52,10 @@ base_sprite = ExtResource("23_33lgi")
 shotgun_sprite = ExtResource("4_8vk3k")
 throw_sprite = ExtResource("5_rirhf")
 brew_sprite = ExtResource("6_0y3ym")
+sfx_tape = null
 shotgun_proj_prefab = ExtResource("3_ycarf")
 sfx_shotgun = Array[AudioStream]([])
-bottle_damage = 10
+bottle_damage = 6
 empty_bottle_prefab = ExtResource("4_vwmjv")
 molotov_prefab = ExtResource("5_e3e4s")
 poison_bottle_prefab = ExtResource("6_ei8fn")
@@ -60,7 +63,7 @@ slow_bottle_prefab = ExtResource("7_hy3po")
 heal_bottle_prefab = ExtResource("8_y61gp")
 sfx_bottle_throw = Array[AudioStream]([ExtResource("9_g736w"), ExtResource("10_wyqju"), ExtResource("11_rk2ei")])
 beer_barrel_prefab = ExtResource("9_u87s1")
-barrel_damage = 30
+barrel_damage = 25
 sfx_barrel_throw = Array[AudioStream]([ExtResource("13_cxv74")])
 floor_fire_hazard_prefab = ExtResource("11_fes67")
 sfx_start_fire = ExtResource("15_c467v")
@@ -70,10 +73,14 @@ speed_icon = ExtResource("10_p58cf")
 strength_icon = ExtResource("11_fyl2a")
 defense_buff_resistance = 0.5
 speed_buff_modifier = 0.5
+sfx_brew = Array[AudioStream]([ExtResource("24_3kufh")])
 base_movespeed = 10
 behind_bar_move_points = Array[AudioStream]([])
 sfx_jump = Array[AudioStream]([ExtResource("18_nhb38")])
+chip_spawn_chance = 0.3
+chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("15_817ob")
+sfx_awaken = ExtResource("26_lq1hd")
 sfx_telegraph = ExtResource("13_a7i4i")
 telegraph_time = 1.0
 
@@ -144,13 +151,6 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ShotgunBlast")
 event = &"start_shotgun_blast"
-guard = ExtResource("28_8rmxp")
-delay_in_seconds = "0.0"
-
-[node name="toThrowHealBottle" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="4"]
-script = ExtResource("4_dheml")
-to = NodePath("../../ThrowHealBottle")
-event = &"start_throw_heal_bottle"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
