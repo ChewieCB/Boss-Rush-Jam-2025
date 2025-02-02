@@ -91,7 +91,6 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 		for barrel in equipped_barrels:
 			if barrel.is_archetype_barrel and found_data.is_archetype_barrel:
 				return "Can only equip max 1 archetype barrel"
-
 		inventory_barrels.erase(found_data)
 		equipped_barrels.append(found_data)
 		GameManager.player.inventory_ui.full_refresh_ui()

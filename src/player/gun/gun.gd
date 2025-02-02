@@ -399,28 +399,28 @@ func play_failed_shoot_sfx():
 		failed_shoot_sfx_timer.start()
 
 
-func install_barrel(barrel_prefab: PackedScene):
+func install_barrel(_barrel_prefab: PackedScene):
 	if len(installed_barrels) >= max_barrels:
 		return
-	var barrel_inst = barrel_prefab.instantiate()
-	for child in barrel_container.get_children():
-		if child.get_child_count() == 0:
-			child.add_child(barrel_inst)
-			# installed_barrels.append(barrel_inst)
-			break
-	magazine_ammo_left = 0
-	recheck_installed_barrels()
+	reinstall_barrels()
+	# var barrel_inst = barrel_prefab.instantiate()
+	# for child in barrel_container.get_children():
+	# 	if child.get_child_count() == 0:
+	# 		child.add_child(barrel_inst)
+	# 		break
+	# magazine_ammo_left = 0
+	# recheck_installed_barrels()
 
 
-func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
-	for child in barrel_container.get_children():
-		if child.get_child_count() > 0:
-			var barrel: SpinBarrel = child.get_child(0)
-			if barrel.barrel_id == search_barrel_id:
-				# installed_barrels.erase(barrel)
-				barrel.queue_free()
-				break
-	recheck_installed_barrels()
+func remove_barrel(_search_barrel_id: BarrelDataResource.BarrelIdEnum):
+	reinstall_barrels()
+	# for child in barrel_container.get_children():
+	# 	if child.get_child_count() > 0:
+	# 		var barrel: SpinBarrel = child.get_child(0)
+	# 		if barrel.barrel_id == search_barrel_id:
+	# 			barrel.queue_free()
+	# 			break
+	# recheck_installed_barrels()
 
 
 func recheck_installed_barrels():
@@ -433,17 +433,19 @@ func recheck_installed_barrels():
 			var barrel = child.get_child(0)
 			barrel.owner_gun = self
 			installed_barrels.append(barrel)
-	
 	barrel_count = installed_barrels.size()
-	# This is just to force magazein UI update
+	# This is just to force UI update
 	gun_reloaded.emit()
 
 
-## Use after change scene
 func reinstall_barrels():
+	# Clear old barrel
+	for i in range(max_barrels):
+		if barrel_container.get_child(i).get_child_count() > 0:
+			barrel_container.get_child(i).get_child(0).queue_free()
+
+	# Instantiate barrels onto gun
 	for i in range(len(GameManager.equipped_barrels)):
 		var barrel_inst: SpinBarrel = GameManager.equipped_barrels[i].barrel_prefab.instantiate()
 		barrel_container.get_child(i).add_child(barrel_inst)
-	#await get_tree().process_frame
-	#await get_tree().process_frame
 	recheck_installed_barrels()
