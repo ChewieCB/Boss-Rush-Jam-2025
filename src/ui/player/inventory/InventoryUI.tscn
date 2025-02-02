@@ -158,6 +158,24 @@ patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
+[node name="ErrorLabel" type="Label" parent="EquipBarrelSection"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -214.0
+offset_top = -112.0
+offset_right = 214.0
+offset_bottom = -68.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.954395, 0.000591286, 0.000325171, 1)
+theme_override_font_sizes/font_size = 36
+text = "Can only equip 1 archetype barrel"
+
 [node name="BarrelOptionsSection" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
