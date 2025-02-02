@@ -15,4 +15,4 @@ process_mode = 3
 script = ExtResource("1_rn441")
 starting_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("3_23s84")])
 starting_shop_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2")])
-player_currency = 1000
+player_currency = 0

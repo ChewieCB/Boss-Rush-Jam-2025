@@ -8,6 +8,7 @@ extends VBoxContainer
 
 @export var sfx_click: AudioStream
 @export var sfx_purchase: AudioStream
+@export var sfx_too_expensive: AudioStream
 
 var data: BarrelDataResource
 var clicked_once: bool = false
@@ -60,7 +61,7 @@ func _on_button_pressed() -> void:
 		if is_purchased:
 			SoundManager.play_ui_sound(sfx_purchase, "UI")
 		else:
-			SoundManager.play_ui_sound(sfx_click, "UI")
+			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
 
 
 func unselected() -> void:

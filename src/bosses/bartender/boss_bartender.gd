@@ -42,6 +42,9 @@ extends BossCore
 @export var defense_buff_resistance = 0.5
 @export var speed_buff_modifier = 0.5
 @export var sfx_brew: Array[AudioStream]
+@export var sfx_strength: AudioStream
+@export var sfx_speed: AudioStream
+@export var sfx_defense: AudioStream
 
 @export_group("Movement")
 @export var base_movespeed = 10
@@ -427,16 +430,18 @@ func brew_drink():
 			status_icon.texture = defense_icon
 			health_component.modified_resistance = defense_buff_resistance
 			buff_expire_timer.start()
+			sfx_player.stream = sfx_defense
 		"speed":
 			status_icon.texture = speed_icon
 			current_speed_modifier = 1 + speed_buff_modifier
 			# current_delay_modifier = 1 - speed_buff_modifier
 			navigation_component.current_speed = base_movespeed * current_speed_modifier
 			buff_expire_timer.start()
+			sfx_player.stream = sfx_speed
 		"strength":
 			has_strength_buff = true
 			status_icon.texture = strength_icon
-			buff_expire_timer.start()
+			buff_expire_timer.start() 
 
 ### Others
 
