@@ -210,7 +210,6 @@ func shotgun_blast():
 	var spread_angle = 6
 	var delay_between_burst = 0.5
 	for i in range(n_shot_repeat):
-		sprite.texture = shotgun_sprite
 		sfx_player.stream = sfx_shotgun.pick_random()
 		sfx_player.play()
 		for j in range(proj_amount):
@@ -220,7 +219,6 @@ func shotgun_blast():
 			get_parent().add_child(bullet_inst)
 			bullet_inst.init(proj_spawn_marker.global_position, spreaded_direction, proj_damage, proj_speed)
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
-			sprite.texture = base_sprite
 			await get_tree().create_timer(delay_between_burst).timeout
 
 func _on_shotgun_blast_state_entered() -> void:
