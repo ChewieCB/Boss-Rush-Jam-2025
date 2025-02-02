@@ -10,12 +10,13 @@ config_version=5
 
 [application]
 
-config/name="Boss Rush Jam 2025"
+config/name="Crapshoot"
+config/version="1.0"
 config/tags=PackedStringArray("jam")
 run/main_scene="res://src/ui/main_menu/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 boot_splash/image="res://src/godot-splash-reimagined-large-color.png"
-config/icon="res://icon.svg"
+config/icon="res://src/collectibles/poker_chip/assets/chip_base.png"
 
 [autoload]
 
@@ -31,6 +32,7 @@ gdscript/warnings/unused_signal=0
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/size/mode=3
 window/stretch/mode="canvas_items"
 
 [editor_plugins]
