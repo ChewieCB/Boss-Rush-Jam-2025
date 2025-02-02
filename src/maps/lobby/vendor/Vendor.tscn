@@ -1,11 +1,11 @@
 [gd_scene load_steps=6 format=3 uid="uid://dcjxhb84sgq6f"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/vendor/vendor.gd" id="1_xd7ad"]
-[ext_resource type="Texture2D" uid="uid://dy1fc1q12ow2p" path="res://src/bosses/base/assets/yuya-removebg-preview.png" id="2_lnkwi"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_q1oya"]
+[ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="2_ut4j6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dp6qw"]
-size = Vector3(4.9, 2.9, 1)
+size = Vector3(2.5, 3.1, 2.3)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_rsf6f"]
 radius = 5.0
@@ -16,13 +16,13 @@ collision_mask = 79
 script = ExtResource("1_xd7ad")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 1.45, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 1.55, -0.15)
 shape = SubResource("BoxShape3D_dp6qw")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.16, 1.44, 0)
 billboard = 2
-texture = ExtResource("2_lnkwi")
+texture = ExtResource("2_ut4j6")
 
 [node name="Label3D" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)

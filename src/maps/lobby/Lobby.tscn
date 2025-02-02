@@ -1461,7 +1461,7 @@ fit_content = true
 scroll_active = false
 
 [node name="Vendor" parent="." node_paths=PackedStringArray("player") instance=ExtResource("19_fr53g")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12.4, 1.6, -8.4)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.4, 1.6, -9.2)
 player = NodePath("../FuncGodotMap/entity_1_PlayerRef")
 
 [node name="GoldSymbolDecal" type="Decal" parent="."]
