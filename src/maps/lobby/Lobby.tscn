@@ -1,4 +1,4 @@
-[gd_scene load_steps=326 format=4 uid="uid://v6jgq46mkg4n"]
+[gd_scene load_steps=333 format=4 uid="uid://v6jgq46mkg4n"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
@@ -7,10 +7,15 @@
 [ext_resource type="LightmapGIData" uid="uid://ds8fdm645i322" path="res://src/maps/lobby/Lobby.lmbake" id="2_wjq6h"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="3_cmr84"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_nbyib"]
+[ext_resource type="Script" path="res://src/bosses/base/test/end_panel_ui.gd" id="4_vqx20"]
+[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="5_bxned"]
 [ext_resource type="Material" uid="uid://dj7ojpb1ijsks" path="res://assets/textures/placeholder/texture_orange_12.tres" id="5_kwpqm"]
 [ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="5_s8dkq"]
+[ext_resource type="FontFile" uid="uid://bs58em2h8opfu" path="res://assets/fonts/BLACKJAC.TTF" id="6_274gx"]
 [ext_resource type="Material" uid="uid://f1owxp1fp5iw" path="res://assets/textures/placeholder/texture_red_09.tres" id="6_mtll7"]
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="6_n7t1b"]
+[ext_resource type="FontFile" uid="uid://cf4ghtgpa7pbl" path="res://assets/engebrechtre.rg-bold.otf" id="7_o47kk"]
+[ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="8_a25qv"]
 [ext_resource type="Material" uid="uid://jnnisx0gc2xt" path="res://assets/textures/doors/elevator_door_processed.tres" id="8_djaoh"]
 [ext_resource type="Material" uid="uid://caoyj1kh0pty6" path="res://assets/textures/walls/column_0.tres" id="10_6rl80"]
 [ext_resource type="Material" uid="uid://n34cnqh7s2w0" path="res://assets/textures/floor/carpet-red.tres" id="12_oa3or"]
@@ -146,6 +151,17 @@ _data = {
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l477v"]
 size = Vector3(5.8, 5.3, 9.8)
+
+[sub_resource type="Theme" id="Theme_5idyq"]
+default_font = ExtResource("6_274gx")
+default_font_size = 128
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vbj68"]
+texture = ExtResource("8_a25qv")
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+region_rect = Rect2(0, 0, 93.7968, 22)
+modulate_color = Color(0.901961, 0.776471, 0, 1)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_3dtt2"]
 lightmap_size_hint = Vector2i(1186, 1186)
@@ -1236,6 +1252,120 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DoorTransitionArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 7.6)
 shape = SubResource("BoxShape3D_l477v")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="TutorialUI" type="Control" parent="UI"]
+process_mode = 3
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_vqx20")
+
+[node name="PanelContainer" type="MarginContainer" parent="UI/TutorialUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -390.5
+offset_top = -236.5
+offset_right = 390.5
+offset_bottom = 236.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="UI/TutorialUI/PanelContainer"]
+layout_mode = 2
+color = Color(0, 0, 0, 0.72549)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="UI/TutorialUI/PanelContainer/Background"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_bxned")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 9.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WinLabelHeader" type="RichTextLabel" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme = SubResource("Theme_5idyq")
+theme_override_fonts/normal_font = ExtResource("7_o47kk")
+theme_override_font_sizes/normal_font_size = 80
+bbcode_enabled = true
+text = "[center]You've gained a barrel![/center]"
+fit_content = true
+scroll_active = false
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
+
+[node name="HSeparator" type="HSeparator" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxTexture_vbj68")
+
+[node name="MarginContainer2" type="MarginContainer" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="WinLabelSubHeader" type="RichTextLabel" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+mouse_filter = 2
+theme = SubResource("Theme_5idyq")
+theme_override_colors/default_color = Color(0.41598, 0.41598, 0.41598, 1)
+theme_override_fonts/normal_font = ExtResource("7_o47kk")
+theme_override_font_sizes/normal_font_size = 64
+bbcode_enabled = true
+text = "Talk to the vendor to change your loadout and buy new barrels."
+fit_content = true
+scroll_active = false
+
+[node name="MarginContainer3" type="MarginContainer" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="ContinueLabel" type="RichTextLabel" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3"]
+layout_mode = 2
+mouse_filter = 2
+theme = SubResource("Theme_5idyq")
+theme_override_colors/default_color = Color(0.41598, 0.41598, 0.41598, 1)
+theme_override_fonts/normal_font = ExtResource("7_o47kk")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "[right](Interact) to close[/right]"
+fit_content = true
+scroll_active = false
 
 [node name="Vendor" parent="." node_paths=PackedStringArray("player") instance=ExtResource("19_fr53g")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -12.4, 1.6, -8.4)

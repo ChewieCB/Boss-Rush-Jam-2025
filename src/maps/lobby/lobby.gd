@@ -2,8 +2,12 @@ extends Node3D
 
 @export var bgm: AudioStream
 
+signal ui_accept
+
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 @onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
+
+@onready var tutorial_ui: Control = $UI/TutorialUI
 
 var display_barrels: Array = []
 
@@ -13,6 +17,32 @@ func _ready() -> void:
 	SoundManager.play_music(bgm, 0.25, "BGM")
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
+	
+	# HACK
+	if GameManager.player_gained_first_barrel:
+		if not GameManager.barrel_tutorial_shown:
+			tutorial_ui.text_no_resize(
+				"You've gained a barrel!",
+				"Talk to the vendor to change your loadout and buy new barrels."
+			)
+			show_tutorial_panel()
+			GameManager.barrel_tutorial_shown = true
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("interact"):
+		ui_accept.emit()
+
+
+func show_tutorial_panel() -> void:
+	tutorial_ui.visible = true
+	var tween = get_tree().create_tween()
+	tween.tween_property(tutorial_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
+	await tween.finished
+	await ui_accept
+	tween = get_tree().create_tween()
+	tween.tween_property(tutorial_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
+
 
 
 func _on_level_select(level_path: String) -> void:

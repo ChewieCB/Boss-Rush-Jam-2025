@@ -270,6 +270,8 @@ func _on_barrel_collected(data: BarrelDataResource) -> void:
 	#
 	# Wait for player to click continue
 	#
+	
+	
 	defeated.emit(self)
 
 
