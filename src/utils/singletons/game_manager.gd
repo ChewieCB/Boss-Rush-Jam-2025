@@ -76,26 +76,31 @@ func purchase_barrel(data: BarrelDataResource) -> bool:
 	barrel_too_expensive.emit(data)
 	return false
 
-
-func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
+## Return error string if cant equipped
+func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading:
-		return
+		return "Can not change barrel while reloading"
 	if len(equipped_barrels) >= player.current_gun.max_barrels:
-		return
+		return "Can not equip more barrel"
 	var found_data: BarrelDataResource = null
 	for data in inventory_barrels:
 		if data.barrel_id == search_barrel_id:
 			found_data = data
 	if found_data:
+		# Check if already equipped archetype
+		for barrel in equipped_barrels:
+			if barrel.is_archetype_barrel and found_data.is_archetype_barrel:
+				return "Can only equip max 1 archetype barrel"
 		inventory_barrels.erase(found_data)
 		equipped_barrels.append(found_data)
 		GameManager.player.inventory_ui.full_refresh_ui()
 		GameManager.player.current_gun.install_barrel(found_data.barrel_prefab)
+	return ""
 
 
-func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
+func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading:
-		return
+		return "Can not change barrel while reloading"
 	var found_data: BarrelDataResource = null
 	for data in equipped_barrels:
 		if data.barrel_id == search_barrel_id:
@@ -105,7 +110,7 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum):
 		inventory_barrels.append(found_data)
 		GameManager.player.inventory_ui.full_refresh_ui()
 		GameManager.player.current_gun.remove_barrel(search_barrel_id)
-
+	return ""
 
 func show_boss_special_dialog(content: String, duration: float):
 	var original_sm_process_mode = SoundManager.process_mode

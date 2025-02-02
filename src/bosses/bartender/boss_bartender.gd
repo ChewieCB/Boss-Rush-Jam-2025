@@ -4,6 +4,12 @@ extends BossCore
 @export var phase_2_health_percentage_trigger: float = 0.66
 @export var phase_3_health_percentage_trigger: float = 0.33
 
+@export_group("Display")
+@export var base_sprite: CompressedTexture2D
+@export var shotgun_sprite: CompressedTexture2D
+@export var throw_sprite: CompressedTexture2D
+@export var brew_sprite: CompressedTexture2D
+
 @export_group("Attacks")
 @export_subgroup("Shotgun")
 @export var shotgun_proj_prefab: PackedScene
@@ -56,6 +62,7 @@ var current_delay_modifier = 1
 var has_strength_buff = false
 var floor_fire_hazard: HazardArea = null
 var action_used_before_heal = 0
+var fire_sfx: AudioStreamPlayer = null
 
 const DIFFICULTY_LV = 1
 const MIN_ACTION_BEFORE_HEAL = 8
@@ -180,6 +187,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 func _on_died() -> void:
 	super()
+	if fire_sfx:
+		fire_sfx.stop()
 	floor_fire_hazard.clear_hazard()
 
 
@@ -210,13 +219,14 @@ func shotgun_blast():
 			await get_tree().create_timer(delay_between_burst).timeout
 
 func _on_shotgun_blast_state_entered() -> void:
+	sprite.texture = shotgun_sprite
 	state_chart.send_event("attack_telegraph")
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
-	# TODO: Change sprite "Ready gun"
 	shotgun_blast()
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
+	sprite.texture = base_sprite
 
 #### Phase 1
 
@@ -241,6 +251,7 @@ func _on_phase_1_idle_state_entered() -> void:
 #### Phase 2
 
 func _on_phase_2_state_entered() -> void:
+	await get_tree().create_timer(1.0).timeout
 	GameManager.show_boss_special_dialog("PLAYTIME IS OVER!", 1)
 	jump_to(boss_jump_phase2_marker.global_position)
 
@@ -260,10 +271,11 @@ func _on_phase_2_idle_state_entered() -> void:
 
 #### Phase 3
 func _on_phase_3_state_entered() -> void:
-	GameManager.show_boss_special_dialog("DARN IT! I WILL JUST LIT THE WHOLE FLOOR ON FIRE THEN!", 2)
+	await get_tree().create_timer(1.0).timeout
+	GameManager.show_boss_special_dialog("DARN IT! \nI WILL JUST LIT THE WHOLE FLOOR ON FIRE THEN!", 2)
 	jump_to(boss_jump_phase3_marker.global_position)
-	await get_tree().create_timer(4.0).timeout
-	var fire_sfx = SoundManager.play_ambient_sound(sfx_start_fire, 0.2, "SFX")
+	await get_tree().create_timer(6.0).timeout
+	fire_sfx = SoundManager.play_ambient_sound(sfx_start_fire, 0.2, "SFX")
 	fire_sfx.finished.connect(func():
 		SoundManager.play_ambient_sound(sfx_fire_loop, 0.1, "SFX")
 	)
@@ -276,10 +288,10 @@ func _on_phase_3_state_entered() -> void:
 
 ## If has str buff, throw barrel instead
 func _on_throw_broken_bottle_state_entered() -> void:
+	sprite.texture = throw_sprite
 	debug_state_label.text = "Throw broken bottle"
 	state_chart.send_event("attack_start")
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	# TODO: Change sprite "Throw"
 	if has_strength_buff:
 		throw_bottle(beer_barrel_prefab, 1, 1, barrel_damage)
 	else:
@@ -289,9 +301,11 @@ func _on_throw_broken_bottle_state_entered() -> void:
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
+	sprite.texture = base_sprite
 
 
 func _on_throw_concoction_state_entered() -> void:
+	sprite.texture = throw_sprite
 	debug_state_label.text = "Throw concoction"
 	state_chart.send_event("attack_start")
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
@@ -300,20 +314,24 @@ func _on_throw_concoction_state_entered() -> void:
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
+	sprite.texture = base_sprite
 
 
 func _on_brew_drink_state_entered() -> void:
+	sprite.texture = brew_sprite
 	debug_state_label.text = "Brew drink"
 	state_chart.send_event("attack_start")
-	await get_tree().create_timer(1 * current_delay_modifier).timeout
+	await get_tree().create_timer(2 * current_delay_modifier).timeout
 	# TODO: Change sprite "Brew"
 	brew_drink()
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
+	sprite.texture = base_sprite
 
 
 func _on_throw_heal_bottle_state_entered() -> void:
+	sprite.texture = throw_sprite
 	debug_state_label.text = "Throw heal bottle"
 	state_chart.send_event("attack_start")
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
@@ -321,6 +339,7 @@ func _on_throw_heal_bottle_state_entered() -> void:
 	await get_tree().create_timer(2).timeout
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
+	sprite.texture = base_sprite
 
 
 func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10):
@@ -337,6 +356,7 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, pr
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
 	for i in range(n_bottle_repeat):
 		var bottle_inst = prefab.instantiate()
+		bottle_inst.bartender_owner = self
 		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
 		get_parent().add_child(bottle_inst)
 		bottle_inst.init(modified_spawn_pos, spreaded_direction, proj_damage, throw_force)
@@ -357,6 +377,7 @@ func throw_heal_bottle():
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction
 	get_parent().add_child(bottle_inst)
 	bottle_inst.init(modified_spawn_pos, aim_direction, 0, throw_force)
+	bottle_inst.bartender_owner = self
 
 
 ## Choose a random bottle then throw
@@ -395,7 +416,7 @@ func brew_drink():
 		"speed":
 			status_icon.texture = speed_icon
 			current_speed_modifier = 1 + speed_buff_modifier
-			current_delay_modifier = 1 - speed_buff_modifier
+			# current_delay_modifier = 1 - speed_buff_modifier
 			navigation_component.current_speed = base_movespeed * current_speed_modifier
 			buff_expire_timer.start()
 		"strength":

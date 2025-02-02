@@ -12,6 +12,7 @@ class_name BartenderBottle
 var damage
 var projectile_speed = 100
 var current_dir
+var bartender_owner: BossCore
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, _speed: float):
 	life_timer.start()
@@ -58,3 +59,4 @@ func spawn_break_effect():
 	# Spawn in world environment
 	GameManager.player.get_parent().add_child(inst)
 	inst.position = global_position - current_dir
+	bartender_owner.health_component.died.connect(inst.queue_free)

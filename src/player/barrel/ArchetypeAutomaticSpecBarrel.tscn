@@ -110,7 +110,7 @@ display_text_tag = "Very fast firerate"
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
 script = ExtResource("4_p3s2o")
 attribute = 4
-new_value = 20.0
+new_value = 15.0
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
 script = ExtResource("4_p3s2o")
@@ -124,12 +124,12 @@ new_value = 1.0
 [node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
 script = ExtResource("4_p3s2o")
 attribute = 5
-new_value = 25.0
+new_value = 20.0
 
 [node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
 script = ExtResource("4_p3s2o")
 attribute = 1
-new_value = 8.0
+new_value = 5.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
 script = ExtResource("4_p3s2o")
