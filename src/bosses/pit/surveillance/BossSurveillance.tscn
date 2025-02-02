@@ -297,6 +297,13 @@ event = &"start_phase_2"
 guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
+[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
+script = ExtResource("7_bpphr")
+to = NodePath("../../Phase3")
+event = &"start_phase_3"
+guard = ExtResource("8_bah8y")
+delay_in_seconds = "0.0"
+
 [node name="Phase2" type="Node" parent="StateChart/Root/Phase" index="2"]
 script = ExtResource("10_tlulp")
 initial_state = NodePath("Aggressive")

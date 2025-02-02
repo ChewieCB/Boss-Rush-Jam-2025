@@ -28,6 +28,10 @@ var shop_barrels: Array[BarrelDataResource] = []
 var player_gained_first_barrel: bool = false
 var barrel_tutorial_shown: bool = false
 
+var bosses_defeated: Array[BossCore] = []
+var all_bosses_defeated: bool = false
+var victory_ui_shown: bool = false
+
 # HACK - do this dynamically with level loading/unloading in the elevator
 var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3

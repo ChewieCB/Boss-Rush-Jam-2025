@@ -8,6 +8,7 @@ signal ui_accept
 @onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
 
 @onready var tutorial_ui: Control = $UI/TutorialUI
+@onready var game_win_ui: Control = $UI/GameWinUI
 
 var display_barrels: Array = []
 
@@ -25,8 +26,13 @@ func _ready() -> void:
 				"You've gained a barrel!",
 				"Talk to the vendor to change your loadout and buy new barrels."
 			)
-			show_tutorial_panel()
+			show_panel(tutorial_ui)
 			GameManager.barrel_tutorial_shown = true
+	
+	if GameManager.all_bosses_defeated:
+		if not GameManager.victory_ui_shown:
+			show_panel(game_win_ui)
+			GameManager.victory_ui_shown = true
 
 
 func _input(event: InputEvent) -> void:
@@ -34,14 +40,14 @@ func _input(event: InputEvent) -> void:
 		ui_accept.emit()
 
 
-func show_tutorial_panel() -> void:
-	tutorial_ui.visible = true
+func show_panel(panel: Control) -> void:
+	panel.visible = true
 	var tween = get_tree().create_tween()
-	tween.tween_property(tutorial_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
+	tween.tween_property(panel, "modulate", Color(Color.WHITE, 1.0), 1.0)
 	await tween.finished
 	await ui_accept
 	tween = get_tree().create_tween()
-	tween.tween_property(tutorial_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
+	tween.tween_property(panel, "modulate", Color(Color.WHITE, 0.0), 1.0)
 
 
 

@@ -1257,7 +1257,7 @@ shape = SubResource("BoxShape3D_l477v")
 
 [node name="TutorialUI" type="Control" parent="UI"]
 process_mode = 3
-modulate = Color(1, 1, 1, 0)
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1356,6 +1356,121 @@ theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 32
 
 [node name="ContinueLabel" type="RichTextLabel" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3"]
+layout_mode = 2
+mouse_filter = 2
+theme = SubResource("Theme_5idyq")
+theme_override_colors/default_color = Color(0.41598, 0.41598, 0.41598, 1)
+theme_override_fonts/normal_font = ExtResource("7_o47kk")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "[right](Interact) to close[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="GameWinUI" type="Control" parent="UI"]
+process_mode = 3
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_vqx20")
+
+[node name="PanelContainer" type="MarginContainer" parent="UI/GameWinUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -458.0
+offset_top = -438.0
+offset_right = 474.0
+offset_bottom = 439.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="UI/GameWinUI/PanelContainer"]
+layout_mode = 2
+color = Color(0, 0, 0, 0.72549)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="UI/GameWinUI/PanelContainer/Background"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_bxned")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 23.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WinLabelHeader" type="RichTextLabel" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme = SubResource("Theme_5idyq")
+theme_override_fonts/normal_font = ExtResource("7_o47kk")
+theme_override_font_sizes/normal_font_size = 80
+bbcode_enabled = true
+text = "[center]Nicely Done![/center]"
+fit_content = true
+scroll_active = false
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
+
+[node name="HSeparator" type="HSeparator" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxTexture_vbj68")
+
+[node name="MarginContainer2" type="MarginContainer" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="WinLabelSubHeader" type="RichTextLabel" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+mouse_filter = 2
+theme = SubResource("Theme_5idyq")
+theme_override_colors/default_color = Color(0.41598, 0.41598, 0.41598, 1)
+theme_override_fonts/normal_font = ExtResource("7_o47kk")
+theme_override_font_sizes/normal_font_size = 64
+bbcode_enabled = true
+text = "You beat all the bosses we had time to make! 
+
+Go spend your hard-earned chips on some new barrels and give them another shot - we've buffed their health so they can take more of a beating."
+fit_content = true
+scroll_active = false
+
+[node name="MarginContainer3" type="MarginContainer" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="ContinueLabel" type="RichTextLabel" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3"]
 layout_mode = 2
 mouse_filter = 2
 theme = SubResource("Theme_5idyq")
@@ -2370,3 +2485,5 @@ texture_albedo = ExtResource("34_0fts8")
 
 [connection signal="body_entered" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_entered"]
 [connection signal="body_exited" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_exited"]
+
+[editable path="FuncGodotMap/entity_1_PlayerRef"]
