@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://cf4ghtgpa7pbl"
-path="res://.godot/imported/engebrechtre.rg-bold.otf-592cea3459fd2fa14631a22543374c22.fontdata"
+path="res://.godot/imported/engebrechtre.rg-bold.otf-8fe6523b5e739260e39df8ede09f53f4.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/engebrechtre/engebrechtre.rg-bold.otf"
-dest_files=["res://.godot/imported/engebrechtre.rg-bold.otf-592cea3459fd2fa14631a22543374c22.fontdata"]
+source_file="res://assets/engebrechtre.rg-bold.otf"
+dest_files=["res://.godot/imported/engebrechtre.rg-bold.otf-8fe6523b5e739260e39df8ede09f53f4.fontdata"]
 
 [params]
 
