@@ -1,8 +1,8 @@
 [gd_scene load_steps=181 format=4 uid="uid://2q4ssotscvd5"]
 
 [ext_resource type="Script" path="res://src/bosses/base/test/test_boss_core.gd" id="1_pgc5k"]
+[ext_resource type="AudioStream" uid="uid://c5fve5riow6qd" path="res://assets/music/Danceparty R1.mp3" id="2_2nw5f"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="2_5mq86"]
-[ext_resource type="AudioStream" path="res://assets/music/brj25_remix0.mp3" id="2_jm767"]
 [ext_resource type="LightmapGIData" uid="uid://bei114xif3db4" path="res://src/bosses/base/test/Test_BossCore.lmbake" id="2_tb1hd"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="3_8kb16"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="4_gonij"]
@@ -709,7 +709,7 @@ size = Vector2(5, 25)
 
 [node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors")]
 script = ExtResource("1_pgc5k")
-bgm = ExtResource("2_jm767")
+bgm = ExtResource("2_2nw5f")
 boss = NodePath("FuncGodotMap/entity_16_BossSlots")
 player = NodePath("FuncGodotMap/group_632_Elevator/entity_48_PlayerRef")
 elevator_doors = NodePath("FuncGodotMap/group_632_Elevator/group_629_Elevator/group_659_Elevator/group_630_Elevator/group_624_ElevatorPrefab/group_628_ElevatorPrefab/group_631_Elevator/group_619_ElevatorPrefab/group_658_Elevator/group_625_Elevator/entity_45_ElevatorDoors")

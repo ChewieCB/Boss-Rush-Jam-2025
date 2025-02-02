@@ -1,9 +1,10 @@
-[gd_scene load_steps=359 format=4 uid="uid://ct3oq6juhe7y4"]
+[gd_scene load_steps=360 format=4 uid="uid://ct3oq6juhe7y4"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_vfcr2"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/boss_pit.gd" id="1_ymudn"]
+[ext_resource type="AudioStream" uid="uid://ds7xvkwqd62rm" path="res://assets/music/PissbotAmbience.mp3" id="2_bh1i0"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_hhc2p"]
-[ext_resource type="AudioStream" path="res://assets/music/brj25_balrog03.mp3" id="2_usrqo"]
+[ext_resource type="AudioStream" uid="uid://yq2sk127dfov" path="res://assets/music/Remix R1.mp3" id="3_eog7o"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="3_nqcqn"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_w7aip"]
 [ext_resource type="Material" uid="uid://coo1y5tjcwlec" path="res://assets/textures/placeholder/texture_dark_03.tres" id="4_h2odb"]
@@ -1307,7 +1308,8 @@ _surfaces = [{
 
 [node name="BossPit" type="Node3D"]
 script = ExtResource("1_ymudn")
-bgm = ExtResource("2_usrqo")
+bgm = ExtResource("2_bh1i0")
+active_bgm = ExtResource("3_eog7o")
 win_subtext = Array[String](["Double Down", "Security Breached"])
 lose_tips = Array[String](["Keep out of range of the big guy's combos", "Use cover to your advantage"])
 cover_spawn_scene = ExtResource("21_w72c7")

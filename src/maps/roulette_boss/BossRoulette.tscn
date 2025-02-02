@@ -3,7 +3,7 @@
 [ext_resource type="LightmapGIData" uid="uid://cm40gu7sl57sg" path="res://src/maps/roulette_boss/BossRoulette.lmbake" id="1_ddfrs"]
 [ext_resource type="Script" path="res://src/maps/roulette_boss/boss_roulette.gd" id="1_of6pu"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="2_bnhua"]
-[ext_resource type="AudioStream" path="res://assets/music/brj25_balrog03.mp3" id="2_cdhrj"]
+[ext_resource type="AudioStream" uid="uid://g6tymd3nnpod" path="res://assets/music/Balrog R1.mp3" id="2_jo6es"]
 [ext_resource type="AudioStream" uid="uid://cqfwd30p77wmu" path="res://src/bosses/roulette/assets/sfx/Roulette Room 1.wav" id="3_pylwf"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="3_wl5og"]
 [ext_resource type="AudioStream" uid="uid://btjy14hcffuo3" path="res://src/bosses/roulette/assets/sfx/Roulette Room 2.wav" id="4_st2l6"]
@@ -56,8 +56,8 @@ volumetric_fog_emission_energy = 0.3
 size = Vector3(5, 5, 13.7744)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_towa0"]
-height = 9.0
-radius = 34.0
+height = 44.6
+radius = 57.0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ra4xq"]
 lightmap_size_hint = Vector2i(3986, 3918)
@@ -2523,7 +2523,7 @@ _surfaces = [{
 
 [node name="BossRoulette" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors", "floor_pivot")]
 script = ExtResource("1_of6pu")
-bgm = ExtResource("2_cdhrj")
+bgm = ExtResource("2_jo6es")
 boss = NodePath("FuncGodotMap/entity_65_BossRoulette")
 player = NodePath("FuncGodotMap/group_701_Elevator/entity_85_PlayerRef")
 elevator_doors = NodePath("FuncGodotMap/group_701_Elevator/group_629_Elevator/group_627_Elevator/group_700_Elevator/group_624_ElevatorPrefab/group_628_ElevatorPrefab/group_699_Elevator/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/entity_82_ElevatorDoors")
@@ -2608,7 +2608,7 @@ collision_layer = 0
 collision_mask = 30
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="KillboxArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -31.6, 0)
 shape = SubResource("CylinderShape3D_towa0")
 
 [node name="FuncGodotMap" type="Node3D" parent="."]

@@ -2,12 +2,14 @@ extends RigidBody3D
 class_name PokerChip
 
 @export var value: int = 10
+@export var sfx_pickup: Array[AudioStream]
 
 @onready var sprite: Sprite3D = $Sprite3D
 
 
 func _on_collect() -> void:
 	GameManager.player_currency += value
+	SoundManager.play_sound_with_pitch(sfx_pickup.pick_random(), randf_range(0.8, 1.1), "SFX")
 	# TODO - sfx
 	# TODO - particles
 	queue_free()

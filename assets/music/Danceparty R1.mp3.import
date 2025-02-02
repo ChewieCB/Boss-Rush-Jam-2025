@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c5fve5riow6qd"
+path="res://.godot/imported/Danceparty R1.mp3-ac2f56f9999d494c981a1372d58eb91f.mp3str"
+
+[deps]
+
+source_file="res://assets/music/Danceparty R1.mp3"
+dest_files=["res://.godot/imported/Danceparty R1.mp3-ac2f56f9999d494c981a1372d58eb91f.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

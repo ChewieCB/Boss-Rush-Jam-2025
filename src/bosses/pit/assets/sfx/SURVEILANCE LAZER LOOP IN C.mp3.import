@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://deajvocw2xdo8"
+path="res://.godot/imported/SURVEILANCE LAZER LOOP IN C.mp3-c80d59b3cd85a7b0279a150033afb522.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/SURVEILANCE LAZER LOOP IN C.mp3"
+dest_files=["res://.godot/imported/SURVEILANCE LAZER LOOP IN C.mp3-c80d59b3cd85a7b0279a150033afb522.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
