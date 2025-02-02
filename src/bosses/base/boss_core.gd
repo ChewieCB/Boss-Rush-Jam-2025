@@ -298,6 +298,12 @@ func _exit_tree() -> void:
 			if is_instance_valid(node):
 				node.queue_free()
 
+func boss_death_slow_mo():
+	var original_time_scale = Engine.time_scale
+	Engine.time_scale = 0.1
+	await get_tree().create_timer(2 * Engine.time_scale).timeout
+	Engine.time_scale = original_time_scale
+
 
 ## ======== State Chart Methods ========
 
@@ -405,6 +411,7 @@ func _on_died() -> void:
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
 	drop_barrel()
+	boss_death_slow_mo()
 
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
