@@ -39,6 +39,9 @@ one_shot = true
 [node name="RayCast3D" type="RayCast3D" parent="."]
 target_position = Vector3(0, -0.1, 0)
 
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
+
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
 [connection signal="timeout" from="DoTTimer" to="." method="_on_damage_timer_timeout"]

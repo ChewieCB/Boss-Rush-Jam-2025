@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b1iehq43fyh67"
+path="res://.godot/imported/BARTENDER ATTACK UP BUFF.mp3-27127cd9e470acadd53fdd8e8f6387fc.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/BARTENDER ATTACK UP BUFF.mp3"
+dest_files=["res://.godot/imported/BARTENDER ATTACK UP BUFF.mp3-27127cd9e470acadd53fdd8e8f6387fc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,8 +1,9 @@
-[gd_scene load_steps=39 format=3 uid="uid://burh3udob1t32"]
+[gd_scene load_steps=40 format=3 uid="uid://burh3udob1t32"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_rd2xm"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_p6rlf"]
 [ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="3_bke04"]
+[ext_resource type="AudioStream" uid="uid://deajvocw2xdo8" path="res://src/bosses/pit/assets/sfx/SURVEILANCE LAZER LOOP IN C.mp3" id="3_o1bl8"]
 [ext_resource type="AudioStream" uid="uid://cqrc5y3uldep8" path="res://src/bosses/pit/assets/sfx/PIT BOSS SURVEILLANCE LAZER LOOP.mp3" id="3_wy31b"]
 [ext_resource type="AudioStream" uid="uid://dm80pauvthiji" path="res://src/bosses/pit/assets/sfx/PIT BOSS LAZER DAMAGE RECEIVED LOOP_.mp3" id="4_41emj"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="4_nqlwe"]
@@ -152,7 +153,7 @@ turrets_to_spawn = 4
 beam_sweeps_per_attack = 4
 beam_sweep_delay = 0.7
 beam_collision_reset_delay = 1.2
-sfx_laser = ExtResource("3_wy31b")
+sfx_laser = ExtResource("3_o1bl8")
 sfx_laser_impact = Array[AudioStream]([ExtResource("4_41emj")])
 barrier_cage_radius = 16.0
 barrier_cage_reflect_force = 12.0

@@ -1,17 +1,36 @@
-[gd_scene load_steps=22 format=3 uid="uid://cpicsh5bemc0b"]
+[gd_scene load_steps=41 format=3 uid="uid://cpicsh5bemc0b"]
 
 [ext_resource type="Script" path="res://src/bosses/roulette/ball/roulette_ball.gd" id="1_onkcb"]
 [ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_3sdjd"]
+[ext_resource type="AudioStream" uid="uid://d1qjywjnfqec0" path="res://src/bosses/roulette/assets/sfx/Ball Launch Sound 1.mp3" id="2_108so"]
 [ext_resource type="AudioStream" uid="uid://0pd5ni2lqa65" path="res://src/bosses/roulette/ball/assets/sfx/Balls Spinning 1.wav" id="2_irwo6"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="3_g45k2"]
+[ext_resource type="AudioStream" uid="uid://5otvtcdfnuum" path="res://src/bosses/roulette/assets/sfx/Ball Launch Sound 2.mp3" id="3_luxd2"]
 [ext_resource type="AudioStream" uid="uid://c5x7s5wdmqut1" path="res://src/bosses/roulette/ball/assets/sfx/Balls Spinning 2.wav" id="3_pri6y"]
 [ext_resource type="AudioStream" uid="uid://gdbu0oasjl4s" path="res://src/bosses/roulette/ball/assets/sfx/Balls Spinning 3.wav" id="4_03n4o"]
+[ext_resource type="AudioStream" uid="uid://cjwe5a1wy2kkq" path="res://src/bosses/roulette/assets/sfx/Ball Launch Sound 3.mp3" id="4_b43gf"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="4_elsvf"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/fire3d.gdshader" id="4_ldqmi"]
 [ext_resource type="AudioStream" uid="uid://coxvtf55vfrjl" path="res://src/bosses/roulette/ball/assets/sfx/Balls Spinning 4.wav" id="5_iugjm"]
 [ext_resource type="AudioStream" uid="uid://bjtpwo1ujwwhe" path="res://src/bosses/roulette/ball/assets/sfx/Ball Rolling 1.wav" id="6_480bl"]
 [ext_resource type="AudioStream" uid="uid://dibb1odlnd7lv" path="res://src/bosses/roulette/ball/assets/sfx/Ball Rolling 2.wav" id="7_r0t2l"]
 [ext_resource type="AudioStream" uid="uid://b6a3cyjo6lo8e" path="res://src/bosses/roulette/ball/assets/sfx/Ball Rolling 3.wav" id="8_dwug4"]
+[ext_resource type="AudioStream" uid="uid://cpop0paiyyoqf" path="res://src/bosses/roulette/assets/sfx/Balls Spinning 1.mp3" id="9_va0fw"]
+[ext_resource type="AudioStream" uid="uid://cw3tpf6ho76nx" path="res://src/bosses/roulette/assets/sfx/Balls Spinning 2.mp3" id="10_c3gth"]
+[ext_resource type="AudioStream" uid="uid://bl7gvvns02mi8" path="res://src/bosses/roulette/assets/sfx/Balls Spinning 3.mp3" id="11_lulh7"]
+[ext_resource type="AudioStream" uid="uid://caegtgsxl1xfi" path="res://src/bosses/roulette/assets/sfx/Balls Spinning 4.mp3" id="12_fe340"]
+[ext_resource type="AudioStream" uid="uid://c52nht3e222ov" path="res://src/bosses/roulette/assets/sfx/Ball Rolling 1.mp3" id="16_2gn0d"]
+[ext_resource type="AudioStream" uid="uid://jubwrybf3t8g" path="res://src/bosses/roulette/assets/sfx/Ball Rolling 2.mp3" id="17_ba3bi"]
+[ext_resource type="AudioStream" uid="uid://bs2usxb6ufu8p" path="res://src/bosses/roulette/assets/sfx/Ball Rolling 3.mp3" id="18_qtr5d"]
+[ext_resource type="AudioStream" uid="uid://fq4hcec72gfe" path="res://src/bosses/roulette/assets/sfx/Flame Ball 1.mp3" id="19_3f2bp"]
+[ext_resource type="AudioStream" uid="uid://iyhckokmohp3" path="res://src/bosses/roulette/assets/sfx/Flame Ball 2.mp3" id="20_dt76y"]
+[ext_resource type="AudioStream" uid="uid://cvymqo6ghxgl2" path="res://src/bosses/roulette/assets/sfx/Flame Ball 3.mp3" id="21_yeaf7"]
+[ext_resource type="AudioStream" uid="uid://c8up1bjmm46lf" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 1.mp3" id="22_77vdp"]
+[ext_resource type="AudioStream" uid="uid://ih5kcfb4vcxk" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 2.mp3" id="23_vfope"]
+[ext_resource type="AudioStream" uid="uid://da6ff3q4j0wqr" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 3.mp3" id="24_snoeh"]
+[ext_resource type="AudioStream" uid="uid://cbg7scs2oibp1" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 4.mp3" id="25_fm5h3"]
+[ext_resource type="AudioStream" uid="uid://cwgvvmsa5bix0" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 5.mp3" id="26_ti6xf"]
+[ext_resource type="AudioStream" uid="uid://c4vxn0ovp2x2q" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 6.mp3" id="27_pigpk"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_sw7i0"]
 
@@ -70,11 +89,14 @@ gravity_scale = 4.0
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_onkcb")
-sfx_spinning = Array[AudioStream]([ExtResource("2_irwo6"), ExtResource("3_pri6y"), ExtResource("4_03n4o"), ExtResource("5_iugjm")])
-sfx_rolling = Array[AudioStream]([ExtResource("6_480bl"), ExtResource("7_r0t2l"), ExtResource("8_dwug4")])
+sfx_spawn = Array[AudioStream]([ExtResource("2_108so"), ExtResource("3_luxd2"), ExtResource("4_b43gf")])
+sfx_spinning = Array[AudioStream]([ExtResource("2_irwo6"), ExtResource("3_pri6y"), ExtResource("4_03n4o"), ExtResource("5_iugjm"), ExtResource("9_va0fw"), ExtResource("10_c3gth"), ExtResource("11_lulh7"), ExtResource("12_fe340")])
+sfx_rolling = Array[AudioStream]([ExtResource("6_480bl"), ExtResource("7_r0t2l"), ExtResource("8_dwug4"), ExtResource("16_2gn0d"), ExtResource("17_ba3bi"), ExtResource("18_qtr5d")])
+sfx_fire = Array[AudioStream]([ExtResource("19_3f2bp"), ExtResource("20_dt76y"), ExtResource("21_yeaf7")])
+sfx_impact = Array[AudioStream]([ExtResource("22_77vdp"), ExtResource("23_vfope"), ExtResource("24_snoeh"), ExtResource("25_fm5h3"), ExtResource("26_ti6xf"), ExtResource("27_pigpk")])
 radial_force_magnitude = 2500.0
 central_force_magnitude = 10000.0
-homing_force_magnitude = 7500.0
+homing_force_magnitude = 6000.0
 homing_delay = 2.0
 health_component = NodePath("HealthComponent")
 explosion_scene = ExtResource("2_3sdjd")
@@ -96,7 +118,17 @@ max_health = 50.0
 visible = false
 mesh = SubResource("SphereMesh_merss")
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+[node name="SFXPlayer1OneShot" type="AudioStreamPlayer3D" parent="."]
+volume_db = -2.0
+bus = &"SFX"
+
+[node name="SFXPlayer2Loop" type="AudioStreamPlayer3D" parent="."]
+volume_db = 1.0
+unit_size = 20.0
+bus = &"SFX"
+
+[node name="SFXPlayer3Loop" type="AudioStreamPlayer3D" parent="."]
+unit_size = 12.0
 bus = &"SFX"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

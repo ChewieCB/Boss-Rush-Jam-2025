@@ -4,6 +4,8 @@ class_name InventoryUI
 @export var barrel_item_ui_prefab: PackedScene
 @export var shop_item_ui_prefab: PackedScene
 
+@export var sfx_open: AudioStream
+
 @onready var equip_title: Label = $EquipBarrelSection/EquipTitle
 @onready var equip_barrel_container: HBoxContainer = $EquipBarrelSection/EquippedBarrelContainer
 @onready var barrel_desc: RichTextLabel = $EquipBarrelSection/BarrelDescription/RichTextLabel
@@ -24,6 +26,7 @@ func toggle():
 	warning_label.self_modulate = Color.WHITE
 	warning_label.text = "Barrel effects applied from left to right"
 	warning_label.visible = true
+	SoundManager.play_sound(sfx_open, "SFX")
 	if visible:
 		close()
 	else:

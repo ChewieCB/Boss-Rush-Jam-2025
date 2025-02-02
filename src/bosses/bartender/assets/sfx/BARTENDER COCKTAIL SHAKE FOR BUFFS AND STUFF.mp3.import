@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cbntnevaw0w7r"
+path="res://.godot/imported/BARTENDER COCKTAIL SHAKE FOR BUFFS AND STUFF.mp3-d1b0cb96a1930381ec0a8b0e65b21a99.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/BARTENDER COCKTAIL SHAKE FOR BUFFS AND STUFF.mp3"
+dest_files=["res://.godot/imported/BARTENDER COCKTAIL SHAKE FOR BUFFS AND STUFF.mp3-d1b0cb96a1930381ec0a8b0e65b21a99.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

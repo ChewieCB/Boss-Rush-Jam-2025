@@ -9,6 +9,7 @@ extends BossCore
 @export var shotgun_sprite: CompressedTexture2D
 @export var throw_sprite: CompressedTexture2D
 @export var brew_sprite: CompressedTexture2D
+@export var sfx_tape: AudioStream
 
 @export_group("Attacks")
 @export_subgroup("Shotgun")
@@ -40,6 +41,10 @@ extends BossCore
 ## Received damage will multiply with this value
 @export var defense_buff_resistance = 0.5
 @export var speed_buff_modifier = 0.5
+@export var sfx_brew: Array[AudioStream]
+@export var sfx_strength: AudioStream
+@export var sfx_speed: AudioStream
+@export var sfx_defense: AudioStream
 
 @export_group("Movement")
 @export var base_movespeed = 10
@@ -117,8 +122,8 @@ func select_attack_phase_1() -> void:
 		"start_throw_concoction",
 	]
 
-	if action_used_before_heal >= MIN_ACTION_BEFORE_HEAL:
-		possible_attacks.append("start_throw_heal_bottle")
+	#if action_used_before_heal >= MIN_ACTION_BEFORE_HEAL:
+		#possible_attacks.append("start_throw_heal_bottle")
 
 	# If player is near, more likely to use shotgun blast
 	if player_is_near:
@@ -232,7 +237,10 @@ func _on_shotgun_blast_state_entered() -> void:
 #### Phase 1
 
 func _on_phase_1_state_entered() -> void:
+	SoundManager.play_sound(sfx_tape, "SFX")
 	GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
+	await get_tree().create_timer(1.5).timeout
+	SoundManager.stop_sound(sfx_tape)
 
 func _on_phase_1_idle_state_entered() -> void:
 	debug_state_label.text = "Idle"
@@ -252,8 +260,10 @@ func _on_phase_1_idle_state_entered() -> void:
 #### Phase 2
 
 func _on_phase_2_state_entered() -> void:
-	await get_tree().create_timer(1.0).timeout
-	GameManager.show_boss_special_dialog("PLAYTIME IS OVER!", 1)
+	SoundManager.play_sound(sfx_tape, "SFX")
+	GameManager.show_boss_special_dialog("Playtime is OVER!", 1)
+	await get_tree().create_timer(1).timeout
+	SoundManager.stop_sound(sfx_tape)
 	jump_to(boss_jump_phase2_marker.global_position)
 
 
@@ -272,10 +282,13 @@ func _on_phase_2_idle_state_entered() -> void:
 
 #### Phase 3
 func _on_phase_3_state_entered() -> void:
-	await get_tree().create_timer(1.0).timeout
-	GameManager.show_boss_special_dialog("DARN IT! \nI WILL JUST LIT THE WHOLE FLOOR ON FIRE THEN!", 2)
+	SoundManager.play_sound(sfx_tape, "SFX")
+	GameManager.show_boss_special_dialog("You better hot foot it out of here while you still can!", 1.5)
+	await get_tree().create_timer(1.5).timeout
+	SoundManager.stop_sound(sfx_tape)
+	
 	jump_to(boss_jump_phase3_marker.global_position)
-	await get_tree().create_timer(6.0).timeout
+	await get_tree().create_timer(2.0).timeout
 	fire_sfx = SoundManager.play_ambient_sound(sfx_start_fire, 0.2, "SFX")
 	fire_sfx.finished.connect(func():
 		SoundManager.play_ambient_sound(sfx_fire_loop, 0.1, "SFX")
@@ -321,6 +334,8 @@ func _on_throw_concoction_state_entered() -> void:
 func _on_brew_drink_state_entered() -> void:
 	sprite.texture = brew_sprite
 	debug_state_label.text = "Brew drink"
+	sfx_player.stream = sfx_brew.pick_random()
+	sfx_player.play()
 	state_chart.send_event("attack_start")
 	await get_tree().create_timer(2 * current_delay_modifier).timeout
 	# TODO: Change sprite "Brew"
@@ -408,22 +423,25 @@ func brew_drink():
 	# I want boss to stack buffs, but due to time constraint (and possible bugs)
 	# boss can only just have 1 buff ongoing for now
 	reset_buff()
+	sfx_player.stop()
 	current_buff = chosen_drink
 	match chosen_drink:
 		"defense":
 			status_icon.texture = defense_icon
 			health_component.modified_resistance = defense_buff_resistance
 			buff_expire_timer.start()
+			sfx_player.stream = sfx_defense
 		"speed":
 			status_icon.texture = speed_icon
 			current_speed_modifier = 1 + speed_buff_modifier
 			# current_delay_modifier = 1 - speed_buff_modifier
 			navigation_component.current_speed = base_movespeed * current_speed_modifier
 			buff_expire_timer.start()
+			sfx_player.stream = sfx_speed
 		"strength":
 			has_strength_buff = true
 			status_icon.texture = strength_icon
-			buff_expire_timer.start()
+			buff_expire_timer.start() 
 
 ### Others
 

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cjwe5a1wy2kkq"
+path="res://.godot/imported/Ball Launch Sound 3.mp3-881c2c468c0fad1b6f59544cf79ba191.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Ball Launch Sound 3.mp3"
+dest_files=["res://.godot/imported/Ball Launch Sound 3.mp3-881c2c468c0fad1b6f59544cf79ba191.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

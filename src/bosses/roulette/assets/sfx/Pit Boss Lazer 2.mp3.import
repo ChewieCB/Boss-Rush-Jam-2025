@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://pscylftybldk"
+path="res://.godot/imported/Pit Boss Lazer 2.mp3-800d98ae221f8f166f1329ad6ee05674.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Pit Boss Lazer 2.mp3"
+dest_files=["res://.godot/imported/Pit Boss Lazer 2.mp3-800d98ae221f8f166f1329ad6ee05674.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

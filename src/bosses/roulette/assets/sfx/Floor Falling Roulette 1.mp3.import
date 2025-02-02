@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dkfupjis4chyo"
+path="res://.godot/imported/Floor Falling Roulette 1.mp3-46d2b8cd88feabba8a86b6de41af0cef.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Floor Falling Roulette 1.mp3"
+dest_files=["res://.godot/imported/Floor Falling Roulette 1.mp3-46d2b8cd88feabba8a86b6de41af0cef.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

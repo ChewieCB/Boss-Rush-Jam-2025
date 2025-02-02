@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://iyhckokmohp3"
+path="res://.godot/imported/Flame Ball 2.mp3-877b2a91ebe5d20f6dcf76305a386491.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Flame Ball 2.mp3"
+dest_files=["res://.godot/imported/Flame Ball 2.mp3-877b2a91ebe5d20f6dcf76305a386491.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

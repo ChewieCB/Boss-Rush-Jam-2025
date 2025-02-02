@@ -101,7 +101,6 @@ size = Vector3(25, 0.5, 50)
 script = ExtResource("1_074su")
 damage_per_tick = 1
 duration = 999999.0
-slow_perc = null
 particle_effects = [NodePath("Fire"), NodePath("Smoke"), NodePath("Smoke2"), NodePath("Smoke3"), NodePath("Smoke4"), NodePath("Smoke5"), NodePath("Smoke6"), NodePath("Smoke7")]
 
 [node name="Fire" type="GPUParticles3D" parent="."]
@@ -205,6 +204,8 @@ transform = Transform3D(2.2, 0, 0, 0, -9.61651e-08, 2.2, 0, -2.2, -9.61651e-08, 
 visible = false
 modulate = Color(0.211765, 0, 0.0901961, 0.854902)
 texture = ExtResource("3_ul1lf")
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

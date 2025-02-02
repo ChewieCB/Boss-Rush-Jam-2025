@@ -428,8 +428,8 @@ func _on_airborne_state_physics_processing(delta: float) -> void:
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	if Input.is_action_just_pressed("crouch"):
 		ground_slam()
-	if moving_toward_wall() and can_wall_cling:
-		state_chart.send_event("wallcling")
+	#if moving_toward_wall() and can_wall_cling:
+		#state_chart.send_event("wallcling")
 
 
 func moving_toward_wall() -> bool:
@@ -482,7 +482,7 @@ func _on_died() -> void:
 
 
 func fall_death() -> void:
-	#health_component.current_health = 0
+	health_component.current_health = 0
 	state_chart.send_event("death")
 	SoundManager.play_sound(sfx_dead_falling.pick_random(), "SFX")
 

@@ -47,9 +47,6 @@ var action_to_remap = null
 var remapping_button: KeybindButton = null
 
 func _ready() -> void:
-	visible = false
-	pause_ui = get_parent()
-
 	mouse_sen_slider.value = GameManager.mouse_sensitivity
 	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
 

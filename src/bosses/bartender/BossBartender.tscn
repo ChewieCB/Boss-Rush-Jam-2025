@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=47 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://vbu3c5jf2eya" path="res://src/bosses/bartender/assets/Bartender_Brew.png" id="6_0y3ym"]
 [ext_resource type="PackedScene" uid="uid://cujkupeiuhqjh" path="res://src/bosses/bartender/BartenderPoisonBottle.tscn" id="6_ei8fn"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_kkb22"]
+[ext_resource type="AudioStream" uid="uid://bl2fw7kkqwtd2" path="res://src/bosses/bartender/assets/sfx/BARTENDER TAPE SOUND FOR THE PHASE CARDS.mp3" id="7_c226c"]
 [ext_resource type="PackedScene" uid="uid://dc551puah5jwj" path="res://src/bosses/bartender/BartenderTarBottle.tscn" id="7_hy3po"]
 [ext_resource type="PackedScene" uid="uid://dpahplwrr1ndt" path="res://src/bosses/bartender/BartenderHealBottle.tscn" id="8_y61gp"]
 [ext_resource type="AudioStream" uid="uid://c1hbnru2upykl" path="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER THROW BOTTLE 1.mp3" id="9_g736w"]
@@ -29,7 +30,19 @@
 [ext_resource type="AudioStream" uid="uid://cm6h6wj6m5ybu" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS ROOM ON FIRE LOOP.mp3" id="15_o40bi"]
 [ext_resource type="AudioStream" uid="uid://vkfmj1xifrci" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS JUMP.mp3" id="18_nhb38"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="23_33lgi"]
+[ext_resource type="AudioStream" uid="uid://cbntnevaw0w7r" path="res://src/bosses/bartender/assets/sfx/BARTENDER COCKTAIL SHAKE FOR BUFFS AND STUFF.mp3" id="24_3kufh"]
+[ext_resource type="AudioStream" uid="uid://b1iehq43fyh67" path="res://src/bosses/bartender/assets/sfx/BARTENDER ATTACK UP BUFF.mp3" id="25_dr4qd"]
+[ext_resource type="AudioStream" uid="uid://b1liqu2ivwr6u" path="res://src/bosses/bartender/assets/sfx/BARTENDER SPEED UP BUFF.mp3" id="26_kt5aj"]
+[ext_resource type="AudioStream" uid="uid://ckumscbrh1hni" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS START UP SOUND.mp3" id="26_lq1hd"]
+[ext_resource type="AudioStream" uid="uid://b3fsqphdrd4n4" path="res://src/bosses/bartender/assets/sfx/BARTENDER DEFENSE UP BUFF.mp3" id="27_uykih"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="28_8rmxp"]
+[ext_resource type="AudioStream" uid="uid://co8a2nnst88eh" path="res://src/bosses/bartender/assets/sfx/BARTENDER DEATH STING.mp3" id="31_7cmfq"]
+[ext_resource type="AudioStream" uid="uid://bpjefcq47oyr3" path="res://src/bosses/base/assets/sfx/temp/Hit 2.mp3" id="31_a4u5n"]
+[ext_resource type="AudioStream" uid="uid://ch0bkn7t2rb4i" path="res://src/bosses/base/assets/sfx/temp/Hit 3.mp3" id="32_vtq3o"]
+[ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="33_rnf52"]
+[ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="34_nkrfy"]
+[ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="35_efay1"]
+[ext_resource type="AudioStream" uid="uid://b4k4hf58sg3a2" path="res://src/bosses/base/assets/sfx/temp/Hit 7.mp3" id="36_logat"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2tbsr"]
 radius = 1.2
@@ -50,9 +63,10 @@ base_sprite = ExtResource("23_33lgi")
 shotgun_sprite = ExtResource("4_8vk3k")
 throw_sprite = ExtResource("5_rirhf")
 brew_sprite = ExtResource("6_0y3ym")
+sfx_tape = ExtResource("7_c226c")
 shotgun_proj_prefab = ExtResource("3_ycarf")
 sfx_shotgun = Array[AudioStream]([])
-bottle_damage = 10
+bottle_damage = 6
 empty_bottle_prefab = ExtResource("4_vwmjv")
 molotov_prefab = ExtResource("5_e3e4s")
 poison_bottle_prefab = ExtResource("6_ei8fn")
@@ -60,7 +74,7 @@ slow_bottle_prefab = ExtResource("7_hy3po")
 heal_bottle_prefab = ExtResource("8_y61gp")
 sfx_bottle_throw = Array[AudioStream]([ExtResource("9_g736w"), ExtResource("10_wyqju"), ExtResource("11_rk2ei")])
 beer_barrel_prefab = ExtResource("9_u87s1")
-barrel_damage = 30
+barrel_damage = 25
 sfx_barrel_throw = Array[AudioStream]([ExtResource("13_cxv74")])
 floor_fire_hazard_prefab = ExtResource("11_fes67")
 sfx_start_fire = ExtResource("15_c467v")
@@ -70,10 +84,19 @@ speed_icon = ExtResource("10_p58cf")
 strength_icon = ExtResource("11_fyl2a")
 defense_buff_resistance = 0.5
 speed_buff_modifier = 0.5
+sfx_brew = Array[AudioStream]([ExtResource("24_3kufh")])
+sfx_strength = ExtResource("25_dr4qd")
+sfx_speed = ExtResource("26_kt5aj")
+sfx_defense = ExtResource("27_uykih")
 base_movespeed = 10
 behind_bar_move_points = Array[AudioStream]([])
 sfx_jump = Array[AudioStream]([ExtResource("18_nhb38")])
+chip_spawn_chance = 0.3
+chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("15_817ob")
+sfx_awaken = ExtResource("26_lq1hd")
+sfx_hit = Array[AudioStream]([ExtResource("31_a4u5n"), ExtResource("32_vtq3o"), ExtResource("33_rnf52"), ExtResource("34_nkrfy"), ExtResource("35_efay1"), ExtResource("36_logat")])
+sfx_death = ExtResource("31_7cmfq")
 sfx_telegraph = ExtResource("13_a7i4i")
 telegraph_time = 1.0
 
@@ -144,13 +167,6 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ShotgunBlast")
 event = &"start_shotgun_blast"
-guard = ExtResource("28_8rmxp")
-delay_in_seconds = "0.0"
-
-[node name="toThrowHealBottle" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="4"]
-script = ExtResource("4_dheml")
-to = NodePath("../../ThrowHealBottle")
-event = &"start_throw_heal_bottle"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
@@ -395,9 +411,11 @@ radius = 1.0
 
 [node name="DebugStateLabel" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.66476, 0)
+visible = false
 
 [node name="DebugDistanceLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.06476, 0)
+visible = false
 
 [node name="ShotgunTriggerArea" type="Area3D" parent="." index="13"]
 collision_layer = 0

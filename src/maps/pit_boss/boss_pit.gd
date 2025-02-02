@@ -1,6 +1,7 @@
 extends Node3D
 
 @export var bgm: AudioStream
+@export var active_bgm: AudioStream
 
 @onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
 @onready var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
@@ -192,6 +193,7 @@ func _on_boss_trigger_body_entered(body: Node3D) -> void:
 		spawn_cover()
 		surveillance_boss.activate()
 		pit_boss.activate()
+		SoundManager.play_music(active_bgm, 0.1, "BGM")
 		boss_trigger.queue_free()
 
 

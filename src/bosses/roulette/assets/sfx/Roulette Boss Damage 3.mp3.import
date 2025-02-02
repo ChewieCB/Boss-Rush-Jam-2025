@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://nc35khseamd5"
+path="res://.godot/imported/Roulette Boss Damage 3.mp3-7b470395742286353a1560b647e451c7.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Roulette Boss Damage 3.mp3"
+dest_files=["res://.godot/imported/Roulette Boss Damage 3.mp3-7b470395742286353a1560b647e451c7.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

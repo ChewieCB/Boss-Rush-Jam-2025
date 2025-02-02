@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ciu2t5wx7dt84"
+path="res://.godot/imported/BARTENDER BOSS ROOM ON FIRE LOOP.mp3-3c17e28222fab1b6c56083e7e2921417.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/bartender/assets/sfx/ROOM ON FIRE/BARTENDER BOSS ROOM ON FIRE LOOP.mp3"
+dest_files=["res://.godot/imported/BARTENDER BOSS ROOM ON FIRE LOOP.mp3-3c17e28222fab1b6c56083e7e2921417.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

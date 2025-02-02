@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://6n3s0ojha33v"
+path="res://.godot/imported/PICKING UP CHIPS.mp3-87105ca02376c36f763d3eeea9987e6b.mp3str"
+
+[deps]
+
+source_file="res://src/collectibles/poker_chip/assets/sfx/PICKING UP CHIPS.mp3"
+dest_files=["res://.godot/imported/PICKING UP CHIPS.mp3-87105ca02376c36f763d3eeea9987e6b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

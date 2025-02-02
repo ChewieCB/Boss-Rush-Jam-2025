@@ -1022,9 +1022,11 @@ delay_in_seconds = "0.0"
 
 [node name="DebugStateLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.3, 0)
+visible = false
 
 [node name="DebugDistanceLabel" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0)
+visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="14"]
 libraries = {

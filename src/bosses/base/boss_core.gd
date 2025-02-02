@@ -19,6 +19,7 @@ var debug_trajectory_mesh: MeshInstance3D
 @export var sfx_hit: Array[AudioStream]
 @export var sfx_death: AudioStream
 @export var sfx_telegraph: AudioStream
+@export var sfx_slowmo: AudioStream
 
 @export var navigation_component: NavigationComponent
 @export var health_component: HealthComponent
@@ -305,10 +306,12 @@ func _exit_tree() -> void:
 				node.queue_free()
 
 func boss_death_slow_mo() -> bool:
+	SoundManager.play_sound(sfx_slowmo, "SFX")
 	var original_time_scale = Engine.time_scale
 	Engine.time_scale = 0.1
 	await get_tree().create_timer(2 * Engine.time_scale).timeout
 	Engine.time_scale = original_time_scale
+	SoundManager.stop_sound(sfx_slowmo)
 	return true
 
 
@@ -388,7 +391,6 @@ func _on_health_dead_state_entered() -> void:
 ### ATTACKING --------------------------------
 #### TELEGRAPH
 func _on_attack_telegraph_state_entered() -> void:
-	SoundManager.play_sound(sfx_telegraph, "SFX")
 	sprite.modulate = Color.CYAN
 
 
@@ -401,7 +403,7 @@ func _on_attack_telegraph_state_exited() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
-		#SoundManager.play_sound_with_pitch(sfx_hit.pick_random(), randf_range(0.7, 1.2), "SFX")
+		SoundManager.play_sound_with_pitch(sfx_hit.pick_random(), randf_range(0.7, 1.2), "SFX")
 	if new_health < prev_health:
 		if randf() < chip_spawn_chance:
 			var chip = chip_scene.instantiate() as RigidBody3D

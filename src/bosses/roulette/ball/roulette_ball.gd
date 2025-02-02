@@ -5,9 +5,15 @@ signal destroyed(ball: RouletteBall)
 
 var body_state: PhysicsDirectBodyState3D
 @export_group("SFX")
-@onready var sfx_player: AudioStreamPlayer3D = $AudioStreamPlayer3D
+@export var mute_sfx: bool = false
+@onready var sfx_player_oneshot: AudioStreamPlayer3D = $SFXPlayer1OneShot
+@onready var sfx_player_loop_1: AudioStreamPlayer3D = $SFXPlayer2Loop
+@onready var sfx_player_loop_2: AudioStreamPlayer3D = $SFXPlayer3Loop
+@export var sfx_spawn: Array[AudioStream]
 @export var sfx_spinning: Array[AudioStream]
 @export var sfx_rolling: Array[AudioStream]
+@export var sfx_fire: Array[AudioStream]
+@export var sfx_impact: Array[AudioStream]
 @export_group("Behaviour")
 @export var target: Node3D
 @export var wheel_center: Vector3 = Vector3.ZERO
@@ -39,11 +45,20 @@ func _ready() -> void:
 	health_component.died.connect(destroy)
 	homing_timer.wait_time = homing_delay
 	homing_timer.start()
-	sfx_player.stream = sfx_rolling.pick_random()
-	sfx_player.volume_db = linear_to_db(0.1)
-	sfx_player.playing = true
-	var tween = get_tree().create_tween()
-	tween.tween_property(sfx_player, "volume_db", linear_to_db(1.0), 0.4).set_trans(Tween.TRANS_SINE)
+	
+	if not mute_sfx:
+		sfx_player_oneshot.stream = sfx_spawn.pick_random()
+		sfx_player_oneshot.play()
+		sfx_player_loop_1.volume_db = linear_to_db(0.1)
+		sfx_player_loop_1.stream = sfx_rolling.pick_random()
+		sfx_player_loop_1.play()
+		if is_flaming:
+			sfx_player_loop_2.volume_db = linear_to_db(0.1)
+			sfx_player_loop_2.stream = sfx_fire.pick_random()
+			sfx_player_loop_2.play() 
+		var tween = get_tree().create_tween()
+		tween.tween_property(sfx_player_loop_2, "volume_db", linear_to_db(1.0), 0.4).set_trans(Tween.TRANS_SINE)
+		tween.parallel().tween_property(sfx_player_loop_2, "volume_db", linear_to_db(1.0), 0.4).set_trans(Tween.TRANS_SINE)
 
 
 func _physics_process(_delta: float) -> void:
@@ -81,7 +96,8 @@ func destroy() -> void:
 	
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "scale", Vector3.ZERO, 0.4).set_trans(Tween.TRANS_SINE)
-	tween.parallel().tween_property(sfx_player, "volume_db", linear_to_db(0.0), 0.4).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(sfx_player_loop_1, "volume_db", linear_to_db(0.0), 0.4).set_trans(Tween.TRANS_SINE)
+	tween.parallel().tween_property(sfx_player_loop_2, "volume_db", linear_to_db(0.0), 0.4).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(destroyed.emit.bind(self))
 	tween.tween_callback(self.queue_free)
 
@@ -104,6 +120,9 @@ func _on_body_entered(body: Node) -> void:
 		else:
 			var spark_pos: Vector3 = body_state.get_contact_collider_position(0)
 			spark(spark_pos)
+			if not mute_sfx:
+				sfx_player_oneshot.stream = sfx_impact.pick_random()
+				sfx_player_oneshot.play()
 			
 			collision_count += 1
 			if collision_count == max_collisions and max_collisions > 0:

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://caegtgsxl1xfi"
+path="res://.godot/imported/Balls Spinning 4.mp3-ce3a2bd92af441daabd692cb92d1fc37.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Balls Spinning 4.mp3"
+dest_files=["res://.godot/imported/Balls Spinning 4.mp3-ce3a2bd92af441daabd692cb92d1fc37.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

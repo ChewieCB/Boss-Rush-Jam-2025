@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dpvsk8t6jf1je"
+path="res://.godot/imported/Roulette Lazer 2.mp3-f796cc6ec24dc3846a5c6bad34ac0ea1.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Roulette Lazer 2.mp3"
+dest_files=["res://.godot/imported/Roulette Lazer 2.mp3-f796cc6ec24dc3846a5c6bad34ac0ea1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

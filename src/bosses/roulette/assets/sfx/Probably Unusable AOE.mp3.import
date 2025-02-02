@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://2k6vb5gxbqgq"
+path="res://.godot/imported/Probably Unusable AOE.mp3-90c40eb20db7d512e0cf0f276a407d88.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/roulette/assets/sfx/Probably Unusable AOE.mp3"
+dest_files=["res://.godot/imported/Probably Unusable AOE.mp3-90c40eb20db7d512e0cf0f276a407d88.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
