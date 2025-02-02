@@ -395,9 +395,11 @@ radius = 1.0
 
 [node name="DebugStateLabel" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.66476, 0)
+visible = false
 
 [node name="DebugDistanceLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.06476, 0)
+visible = false
 
 [node name="ShotgunTriggerArea" type="Area3D" parent="." index="13"]
 collision_layer = 0

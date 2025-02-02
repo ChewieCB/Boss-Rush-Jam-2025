@@ -1,6 +1,7 @@
 extends Node3D
 
 @export var bgm: AudioStream
+@onready var lobby_music_player: AudioStreamPlayer3D = $LobbyMusicPlayer
 
 signal ui_accept
 
@@ -10,14 +11,17 @@ signal ui_accept
 @onready var tutorial_ui: Control = $UI/TutorialUI
 @onready var game_win_ui: Control = $UI/GameWinUI
 
+
 var display_barrels: Array = []
 
 
 func _ready() -> void:
+	SoundManager.stop_music(0.1)
 	get_tree().paused = false
-	SoundManager.play_music(bgm, 0.25, "BGM")
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
+	
+	lobby_music_player.play()
 	
 	# HACK
 	if GameManager.player_gained_first_barrel:
@@ -66,6 +70,8 @@ func _on_level_select(level_path: String) -> void:
 	# HACK - do this properly with dynamic loading of scenes
   
 	if is_inside_tree():
+		# TODO - fade this out via tween
+		lobby_music_player.stop()
 		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1) 
 		if new_bgm:
 			SoundManager.play_music(new_bgm, 0.25, "BGM")
