@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://2a8xpe58m4sr"]
+[gd_scene load_steps=14 format=3 uid="uid://2a8xpe58m4sr"]
 
 [ext_resource type="Script" path="res://src/bosses/bartender/heal_cloud.gd" id="1_t7lgf"]
 [ext_resource type="Texture2D" uid="uid://dwyt08w82u6ne" path="res://assets/sprite/placeholder/health.png" id="2_ybw7y"]
+[ext_resource type="AudioStream" uid="uid://dnf4nkl82xwht" path="res://src/bosses/bartender/assets/sfx/BARTENDER HEALING MOVE WITHOUT BOTTLE BREAK.mp3" id="3_3282y"]
 
 [sub_resource type="Gradient" id="Gradient_44xtl"]
 
@@ -88,6 +89,11 @@ shape = SubResource("SphereShape3D_rky7c")
 light_color = Color(0.19171, 0.781102, 7.70092e-07, 1)
 light_energy = 2.0
 omni_range = 10.0
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_3282y")
+unit_size = 15.0
+bus = &"SFX"
 
 [connection signal="finished" from="HealEffect" to="." method="_on_heal_effect_finished"]
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

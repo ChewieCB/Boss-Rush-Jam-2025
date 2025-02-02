@@ -1,12 +1,15 @@
-[gd_scene load_steps=30 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=33 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
 [ext_resource type="PackedScene" uid="uid://cx7dytvoa0h3h" path="res://src/bosses/bartender/BartenderShotgunProjectile.tscn" id="3_ycarf"]
+[ext_resource type="Texture2D" uid="uid://txwcmnye41n5" path="res://src/bosses/bartender/assets/Bartender_Shotgun.png" id="4_8vk3k"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_dheml"]
 [ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="4_vwmjv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_2jcim"]
 [ext_resource type="PackedScene" uid="uid://bkbyk7x5yc34u" path="res://src/bosses/bartender/BartenderMolotov.tscn" id="5_e3e4s"]
+[ext_resource type="Texture2D" uid="uid://dcbpw0qc37nf6" path="res://src/bosses/bartender/assets/Bartender_Throw.png" id="5_rirhf"]
+[ext_resource type="Texture2D" uid="uid://vbu3c5jf2eya" path="res://src/bosses/bartender/assets/Bartender_Brew.png" id="6_0y3ym"]
 [ext_resource type="PackedScene" uid="uid://cujkupeiuhqjh" path="res://src/bosses/bartender/BartenderPoisonBottle.tscn" id="6_ei8fn"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_kkb22"]
 [ext_resource type="PackedScene" uid="uid://dc551puah5jwj" path="res://src/bosses/bartender/BartenderTarBottle.tscn" id="7_hy3po"]
@@ -24,12 +27,12 @@
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="15_817ob"]
 [ext_resource type="AudioStream" uid="uid://bdcqmijgrl2cc" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS SETS ROOM ON FIRE (TRIGGER JUST BEFORE FIRE LOOP).mp3" id="15_c467v"]
 [ext_resource type="AudioStream" uid="uid://cm6h6wj6m5ybu" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS ROOM ON FIRE LOOP.mp3" id="15_o40bi"]
-[ext_resource type="Texture2D" uid="uid://dk37hjq6erd7v" path="res://src/bosses/bartender/assets/bartender_temp.png" id="17_rvy2h"]
 [ext_resource type="AudioStream" uid="uid://vkfmj1xifrci" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS JUMP.mp3" id="18_nhb38"]
+[ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="23_33lgi"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2tbsr"]
 radius = 1.2
-height = 5.0
+height = 5.5
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_p0ajt"]
 radius = 15.0
@@ -42,6 +45,10 @@ collision_mask = 11
 script = ExtResource("2_ns3xp")
 phase_2_health_percentage_trigger = 0.6
 phase_3_health_percentage_trigger = 0.3
+base_sprite = ExtResource("23_33lgi")
+shotgun_sprite = ExtResource("4_8vk3k")
+throw_sprite = ExtResource("5_rirhf")
+brew_sprite = ExtResource("6_0y3ym")
 shotgun_proj_prefab = ExtResource("3_ycarf")
 sfx_shotgun = Array[AudioStream]([])
 bottle_damage = 10
@@ -70,10 +77,11 @@ sfx_telegraph = ExtResource("13_a7i4i")
 telegraph_time = 1.0
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0.18, 2.505, 0)
-texture = ExtResource("17_rvy2h")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00917214, 2.505, 0)
+texture = ExtResource("23_33lgi")
 
 [node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 shape = SubResource("CapsuleShape3D_2tbsr")
 
 [node name="Hurtbox" parent="." index="3"]

@@ -4,6 +4,12 @@ extends BossCore
 @export var phase_2_health_percentage_trigger: float = 0.66
 @export var phase_3_health_percentage_trigger: float = 0.33
 
+@export_group("Display")
+@export var base_sprite: CompressedTexture2D
+@export var shotgun_sprite: CompressedTexture2D
+@export var throw_sprite: CompressedTexture2D
+@export var brew_sprite: CompressedTexture2D
+
 @export_group("Attacks")
 @export_subgroup("Shotgun")
 @export var shotgun_proj_prefab: PackedScene
@@ -210,13 +216,14 @@ func shotgun_blast():
 			await get_tree().create_timer(delay_between_burst).timeout
 
 func _on_shotgun_blast_state_entered() -> void:
+	sprite.texture = shotgun_sprite
 	state_chart.send_event("attack_telegraph")
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
-	# TODO: Change sprite "Ready gun"
 	shotgun_blast()
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
+	sprite.texture = base_sprite
 
 #### Phase 1
 
@@ -276,10 +283,10 @@ func _on_phase_3_state_entered() -> void:
 
 ## If has str buff, throw barrel instead
 func _on_throw_broken_bottle_state_entered() -> void:
+	sprite.texture = throw_sprite
 	debug_state_label.text = "Throw broken bottle"
 	state_chart.send_event("attack_start")
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	# TODO: Change sprite "Throw"
 	if has_strength_buff:
 		throw_bottle(beer_barrel_prefab, 1, 1, barrel_damage)
 	else:
@@ -289,9 +296,11 @@ func _on_throw_broken_bottle_state_entered() -> void:
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
+	sprite.texture = base_sprite
 
 
 func _on_throw_concoction_state_entered() -> void:
+	sprite.texture = throw_sprite
 	debug_state_label.text = "Throw concoction"
 	state_chart.send_event("attack_start")
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
@@ -300,20 +309,24 @@ func _on_throw_concoction_state_entered() -> void:
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
+	sprite.texture = base_sprite
 
 
 func _on_brew_drink_state_entered() -> void:
+	sprite.texture = brew_sprite
 	debug_state_label.text = "Brew drink"
 	state_chart.send_event("attack_start")
-	await get_tree().create_timer(1 * current_delay_modifier).timeout
+	await get_tree().create_timer(2 * current_delay_modifier).timeout
 	# TODO: Change sprite "Brew"
 	brew_drink()
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
+	sprite.texture = base_sprite
 
 
 func _on_throw_heal_bottle_state_entered() -> void:
+	sprite.texture = throw_sprite
 	debug_state_label.text = "Throw heal bottle"
 	state_chart.send_event("attack_start")
 	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
@@ -321,6 +334,7 @@ func _on_throw_heal_bottle_state_entered() -> void:
 	await get_tree().create_timer(2).timeout
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
+	sprite.texture = base_sprite
 
 
 func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10):
