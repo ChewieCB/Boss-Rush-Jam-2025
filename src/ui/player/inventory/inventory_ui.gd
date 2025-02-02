@@ -9,7 +9,7 @@ class_name InventoryUI
 @onready var barrel_desc: RichTextLabel = $EquipBarrelSection/BarrelDescription/RichTextLabel
 @onready var inventory_barrel_container: GridContainer = $BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer
 @onready var shop_barrel_container: GridContainer = $BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/GridContainer
-@onready var warning_label: Label = $EquipBarrelSection/ErrorLabel
+@onready var warning_label: Label = $EquipBarrelSection/WarningLabel
 
 var current_selected_item_ui = null
 
@@ -21,7 +21,9 @@ func _ready() -> void:
 
 
 func toggle():
-	warning_label.visible = false
+	warning_label.self_modulate = Color.WHITE
+	warning_label.text = "Barrel effects applied from left to right"
+	warning_label.visible = true
 	if visible:
 		close()
 	else:
@@ -79,5 +81,6 @@ func close():
 
 
 func show_warning(content: String):
+	warning_label.self_modulate = Color.RED
 	warning_label.text = content
 	warning_label.visible = true

@@ -158,8 +158,8 @@ patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
-[node name="ErrorLabel" type="Label" parent="EquipBarrelSection"]
-visible = false
+[node name="WarningLabel" type="Label" parent="EquipBarrelSection"]
+self_modulate = Color(1, 0, 0.168627, 1)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -172,7 +172,6 @@ offset_right = 214.0
 offset_bottom = -68.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.954395, 0.000591286, 0.000325171, 1)
 theme_override_font_sizes/font_size = 36
 text = "Can only equip 1 archetype barrel"
 
@@ -261,3 +260,12 @@ layout_mode = 2
 
 [node name="ShopItemContainer3" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("7_k8j1w")]
 layout_mode = 2
+
+[node name="ControlHelpText" type="Label" parent="."]
+layout_mode = 0
+offset_left = 134.0
+offset_top = 77.0
+offset_right = 735.0
+offset_bottom = 126.0
+theme_override_font_sizes/font_size = 40
+text = "Click once to select barrel / Click again to confirm"
