@@ -157,6 +157,7 @@ drop_delay = 0.5
 drop_time = 1.0
 drop_return_delay = 4.0
 sfx_drop_amb = Array[AudioStream]([ExtResource("15_s2314"), ExtResource("16_i0y7r"), ExtResource("17_gn7lr")])
+chip_spawn_chance = 0.2
 chip_spawn_force = 2000.0
 barrel_to_drop = ExtResource("6_7xocg")
 sfx_hit = Array[AudioStream]([ExtResource("19_x2tmg"), ExtResource("20_6atv2"), ExtResource("21_0r1py"), ExtResource("22_xstdk"), ExtResource("23_1lenr")])

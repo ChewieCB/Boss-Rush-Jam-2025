@@ -5,6 +5,8 @@ extends Node3D
 @onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
 @onready var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
 @onready var win_ui: Control = $UI/BossDefeatedUI
+@export var win_subtext: Array[String]
+@export var lose_tips: Array[String]
 @onready var boss_trigger: Area3D = $BossTrigger
 
 @onready var stance_timer: Timer = $StanceTimer
@@ -64,7 +66,7 @@ func _ready() -> void:
 
 
 func _on_player_death() -> void:
-	win_ui.lose()
+	win_ui.lose(lose_tips.pick_random())
 	show_end_panel()
 
 
@@ -105,7 +107,7 @@ func _on_boss_died(boss: BossCore) -> void:
 
 
 func _on_bosses_defeated(boss: BossCore) -> void:
-	win_ui.win()
+	win_ui.win("Floor Cleared", win_subtext.pick_random())
 	show_end_panel()
 
 

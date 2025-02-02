@@ -20,4 +20,4 @@ Slug shotgun: Low spread and firerate. Very high damage but only one projectile.
 barrel_image = ExtResource("1_7kpif")
 barrel_cost = 860
 barrel_prefab = ExtResource("2_v2xxy")
-is_archetype_barrel = true
+is_archetype_barrel = false

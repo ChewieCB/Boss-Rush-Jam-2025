@@ -739,6 +739,8 @@ bgm = ExtResource("2_jm767")
 boss = NodePath("FuncGodotMap/entity_37_BossSlots")
 player = NodePath("FuncGodotMap/entity_35_PlayerRef")
 elevator_doors = NodePath("FuncGodotMap/group_629_Elevator/group_653_Elevator/group_630_Elevator/group_624_ElevatorPrefab/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_652_Elevator/group_625_Elevator/group_576_Elevator/entity_34_ElevatorDoors")
+win_subtext = Array[String](["Jackpot!", "Beat the odds"])
+lose_tips = Array[String](["Use his bombs against him", "Watch the floor for falling bells", "Diamonds penetrate walls"])
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)

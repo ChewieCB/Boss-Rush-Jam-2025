@@ -1307,6 +1307,8 @@ _surfaces = [{
 [node name="BossPit" type="Node3D"]
 script = ExtResource("1_ymudn")
 bgm = ExtResource("2_usrqo")
+win_subtext = Array[String](["Double Down", "Security Breached"])
+lose_tips = Array[String](["Keep out of range of the big guy's combos", "Use cover to your advantage"])
 cover_spawn_scene = ExtResource("21_w72c7")
 
 [node name="UI" type="CanvasLayer" parent="."]
