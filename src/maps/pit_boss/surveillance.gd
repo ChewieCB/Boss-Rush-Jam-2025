@@ -229,6 +229,8 @@ func get_angle_to_target(seeker_pos: Vector3, target_pos: Vector3, facing_dir: V
 #####
 
 func _on_died() -> void:
+	if pit_boss.health_component.current_health == 0:
+		await boss_death_slow_mo()
 	eye_mesh.mesh.material.albedo_color = Color.PURPLE
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")

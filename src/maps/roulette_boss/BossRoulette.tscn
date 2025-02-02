@@ -2543,6 +2543,8 @@ boss = NodePath("FuncGodotMap/entity_67_BossRoulette")
 player = NodePath("FuncGodotMap/entity_84_PlayerRef")
 elevator_doors = NodePath("FuncGodotMap/group_629_Elevator/group_627_Elevator/group_698_Elevator/group_624_ElevatorPrefab/group_628_ElevatorPrefab/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/group_576_Elevator/entity_83_ElevatorDoors")
 floor_pivot = NodePath("FuncGodotMap/group_645_WheelFloor")
+win_subtext = Array[String](["Fortunes Faded", "Lady's luck ran out"])
+lose_tips = Array[String](["Keep your distance from the center", "Go with the direction of spin", "Shields heal the boss, destroy them"])
 sfx_ambience = Array[AudioStream]([ExtResource("3_pylwf"), ExtResource("4_st2l6"), ExtResource("5_duoie")])
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

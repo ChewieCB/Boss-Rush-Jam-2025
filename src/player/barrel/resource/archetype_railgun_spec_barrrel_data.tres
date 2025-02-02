@@ -18,6 +18,6 @@ Scatter Beam: Limited magazine size and high spread, but high projectile count.
 Railcannon: Powerful oneshot wonder.
 [/ul]"
 barrel_image = ExtResource("1_ktk71")
-barrel_cost = 1270
+barrel_cost = 2200
 barrel_prefab = ExtResource("2_ijulb")
-is_archetype_barrel = true
+is_archetype_barrel = false

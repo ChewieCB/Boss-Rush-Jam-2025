@@ -7,6 +7,8 @@ extends Node3D
 @export var elevator_doors: ElevatorDoors
 
 @onready var win_ui: Control = $UI/BossDefeatedUI
+@export var win_subtext: Array[String]
+@export var lose_tips: Array[String]
 @onready var boss_trigger: Area3D = $BossTriggerVolume
 
 
@@ -22,12 +24,12 @@ func _ready() -> void:
 
 
 func _on_boss_defeated(_boss: BossCore) -> void:
-	win_ui.win()
+	win_ui.win("Floor Cleared", win_subtext.pick_random())
 	show_end_panel()
 
 
 func _on_player_death() -> void:
-	win_ui.lose()
+	win_ui.lose(lose_tips.pick_random())
 	show_end_panel()
 
 
@@ -36,7 +38,7 @@ func show_end_panel() -> void:
 	var tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
 	await tween.finished
-	await get_tree().create_timer(5.0).timeout
+	await get_tree().create_timer(2.5).timeout
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
 	tween.tween_callback(func(): get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn"))

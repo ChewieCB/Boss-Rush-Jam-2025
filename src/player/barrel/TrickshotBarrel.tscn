@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://cp0e7vka232ws"]
+[gd_scene load_steps=7 format=3 uid="uid://cp0e7vka232ws"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_eccsf"]
 [ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_bc00m"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_8iiph"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_khhtx"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="3_xhp4t"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="6_a7t4g"]
 
 [node name="TrickshotBarrel" type="Node3D"]
 script = ExtResource("1_eccsf")
@@ -39,3 +40,14 @@ script = ExtResource("3_8iiph")
 attribute = 1
 modify_value = -30.0
 is_perc = true
+
+[node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("6_a7t4g")
+modify_perc_spread_stationary = -50.0
+modify_perc_damage_stationary = 25.0
+modify_perc_spread_moving = 100.0
+modify_perc_damage_moving = -25.0
+display_text_title = "Hyperfocus"
+display_text_tag = "Take position and start blasting!"
+display_text_desc = "-50% spread, +25% damage when stationary
++100% spread, -25% damage when moving"

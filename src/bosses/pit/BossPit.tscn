@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=49 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bjod6"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_bqowf"]
 [ext_resource type="Texture2D" uid="uid://cm52o61isok1h" path="res://src/bosses/pit/assets/pit_boss_lunge.png" id="5_my4lc"]
-[ext_resource type="Texture2D" uid="uid://drj8vgnapbsgk" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="6_0uepf"]
+[ext_resource type="Texture2D" uid="uid://drj8vgnapbsgk" path="res://src/bosses/pit/assets/pit_boss_telegraph.png" id="6_0uepf"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="6_l4p06"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="7_koy73"]
 [ext_resource type="AudioStream" uid="uid://b7nfp4x27l0np" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 1.mp3" id="8_16sah"]
@@ -27,6 +27,7 @@
 [ext_resource type="AudioStream" uid="uid://dt60mvvsp8gbw" path="res://src/bosses/pit/assets/sfx/PIT BOSS ANGRY VOICE.mp3" id="18_e8yae"]
 [ext_resource type="AudioStream" uid="uid://e15km4eb5n7w" path="res://src/bosses/pit/assets/sfx/PIT BOSS DEAD.mp3" id="19_2oyqj"]
 [ext_resource type="AudioStream" uid="uid://dmxh4enemydu2" path="res://src/bosses/pit/assets/sfx/PIT BOSS GRUNT.mp3" id="19_ku61b"]
+[ext_resource type="Texture2D" uid="uid://fh4rp8ctjfwe" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="28_1qowr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
 transparency = 1
@@ -315,10 +316,10 @@ tracks/7/path = NodePath("Sprite3D:texture")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("8_d716h")]
+"values": [ExtResource("6_0uepf"), ExtResource("8_d716h")]
 }
 
 [sub_resource type="Animation" id="Animation_rk1lk"]
@@ -497,10 +498,10 @@ tracks/7/path = NodePath("Sprite3D:texture")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.45, 0.6),
+"times": PackedFloat32Array(0, 0.2, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("8_d716h")]
+"values": [ExtResource("6_0uepf"), ExtResource("8_d716h"), ExtResource("8_d716h")]
 }
 
 [sub_resource type="Animation" id="Animation_eetrs"]
@@ -585,7 +586,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.45, 0.75, 0.95, 1.25, 1.5, 2.05, 2.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("8_d716h"), ExtResource("6_0uepf"), ExtResource("6_0uepf"), ExtResource("8_d716h")]
+"values": [ExtResource("8_d716h"), ExtResource("28_1qowr"), ExtResource("8_d716h"), ExtResource("28_1qowr"), ExtResource("8_d716h"), ExtResource("28_1qowr"), ExtResource("6_0uepf"), ExtResource("8_d716h")]
 }
 
 [sub_resource type="Animation" id="Animation_qtmfa"]
@@ -743,7 +744,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.25, 0.55, 0.95),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("8_d716h"), ExtResource("5_my4lc"), ExtResource("5_my4lc"), ExtResource("8_d716h")]
+"values": [ExtResource("6_0uepf"), ExtResource("5_my4lc"), ExtResource("5_my4lc"), ExtResource("8_d716h")]
 }
 
 [sub_resource type="Animation" id="Animation_bc730"]
@@ -912,7 +913,7 @@ swipe_sprite = ExtResource("13_qgkan")
 hook_sprite = ExtResource("12_sekny")
 lunge_sprite = ExtResource("5_my4lc")
 uppercut_sprite = null
-slam_sprite = ExtResource("6_0uepf")
+slam_sprite = ExtResource("28_1qowr")
 wave_material = SubResource("ShaderMaterial_2s76u")
 wave_amplitude = 7.0
 wave_frequency = 5.0
@@ -1005,9 +1006,6 @@ monitoring = true
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0999999, 2.85404, -1.3)
 shape = SubResource("BoxShape3D_pi7fj")
-
-[node name="HealthComponent" parent="." index="6"]
-max_health = 3400.0
 
 [node name="NavigationComponent" parent="." index="7"]
 follow_target = false

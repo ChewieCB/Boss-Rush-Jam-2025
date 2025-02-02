@@ -23,6 +23,8 @@ func init(_data: BarrelDataResource):
 	model.material_override.albedo_texture = data.barrel_image
 
 func interact():
+	if GameManager.inventory_barrels.size() <= 1:
+		GameManager.player_gained_first_barrel = true
 	GameManager.add_barrel_to_inventory(data)
 	collected.emit(data)
 	call_deferred("queue_free")
