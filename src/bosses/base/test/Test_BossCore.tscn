@@ -1,4 +1,4 @@
-[gd_scene load_steps=181 format=4 uid="uid://2q4ssotscvd5"]
+[gd_scene load_steps=173 format=4 uid="uid://2q4ssotscvd5"]
 
 [ext_resource type="Script" path="res://src/bosses/base/test/test_boss_core.gd" id="1_pgc5k"]
 [ext_resource type="AudioStream" uid="uid://c5fve5riow6qd" path="res://assets/music/Danceparty R1.mp3" id="2_2nw5f"]
@@ -29,7 +29,6 @@
 [ext_resource type="Material" uid="uid://2ctjkms0hgma" path="res://assets/textures/floor/tiles-black-white.tres" id="22_qjuv8"]
 [ext_resource type="PackedScene" uid="uid://dsipuwmnkxl5" path="res://src/env/lighting/ChandellierLight2.tscn" id="25_opmp2"]
 [ext_resource type="Material" uid="uid://n34cnqh7s2w0" path="res://assets/textures/floor/carpet-red.tres" id="26_oigh4"]
-[ext_resource type="PackedScene" uid="uid://ckjl0xci7amep" path="res://src/env/lighting/ChandellierLight1.tscn" id="29_g6gcm"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ydocc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -642,68 +641,19 @@ indices = PackedInt32Array(0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 4, 7, 8, 4, 8, 9,
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_3f2kp"]
 data = PackedVector3Array(31.25, -0.25, -12.75, 31.25, -0.25, 11.25, -31.25, -0.25, 11.25, 31.25, -0.25, -12.75, -31.25, -0.25, 11.25, -31.25, -0.25, -12.75, 31.25, -0.25, 15.25, 31.25, -0.25, 17.75, 18.75, -0.25, 30.25, 31.25, -0.25, 15.25, 18.75, -0.25, 30.25, -18.75, -0.25, 30.25, 31.25, -0.25, 15.25, -18.75, -0.25, 30.25, -31.25, -0.25, 17.75, 31.25, -0.25, 15.25, -31.25, -0.25, 17.75, -31.25, -0.25, 15.25, 9.25, -0.25, 11.25, 9.25, -0.25, 15.25, -8.75, -0.25, 15.25, 9.25, -0.25, 11.25, -8.75, -0.25, 15.25, -8.75, -0.25, 11.25, -12.75, -0.25, 11.25, -12.75, -0.25, 15.25, -31.25, -0.25, 15.25, -12.75, -0.25, 11.25, -31.25, -0.25, 15.25, -31.25, -0.25, 11.25, 31.25, -0.25, 11.25, 31.25, -0.25, 15.25, 13.25, -0.25, 15.25, 31.25, -0.25, 11.25, 13.25, -0.25, 15.25, 13.25, -0.25, 11.25, -4.25, 0.75, -9.25, -4.25, -0.25, -12.75, 4.75, -0.25, -12.75, -4.25, 0.75, -9.25, 4.75, -0.25, -12.75, 4.75, 0.75, -9.25, -4.25, -0.25, -12.75, -4.25, 0.75, -9.25, -8.25, 0.75, -5.25, -4.25, -0.25, -12.75, -8.25, 0.75, -5.25, -11.75, -0.25, -5.25, 4.75, 0.75, -9.25, 4.75, -0.25, -12.75, 12.25, -0.25, -5.25, 4.75, 0.75, -9.25, 12.25, -0.25, -5.25, 8.75, 0.75, -5.25, -8.25, 0.75, -5.25, -8.25, 0.75, 2.75, -11.75, -0.25, 2.75, -8.25, 0.75, -5.25, -11.75, -0.25, 2.75, -11.75, -0.25, -5.25, 12.25, -0.25, -5.25, 4.75, -0.25, -12.75, -4.25, -0.25, -12.75, 12.25, -0.25, -5.25, -4.25, -0.25, -12.75, -11.75, -0.25, -5.25, 12.25, -0.25, -5.25, -11.75, -0.25, -5.25, -11.75, -0.25, 2.75, 12.25, -0.25, -5.25, -11.75, -0.25, 2.75, -4.25, -0.25, 10.25, 12.25, -0.25, -5.25, -4.25, -0.25, 10.25, 4.75, -0.25, 10.25, 12.25, -0.25, -5.25, 4.75, -0.25, 10.25, 12.25, -0.25, 2.75, 8.75, 0.75, -5.25, 8.75, 0.75, 2.75, 4.75, 0.75, 6.75, 8.75, 0.75, -5.25, 4.75, 0.75, 6.75, -4.25, 0.75, 6.75, 8.75, 0.75, -5.25, -4.25, 0.75, 6.75, -8.25, 0.75, 2.75, 8.75, 0.75, -5.25, -8.25, 0.75, 2.75, -8.25, 0.75, -5.25, 8.75, 0.75, -5.25, -8.25, 0.75, -5.25, -4.25, 0.75, -9.25, 8.75, 0.75, -5.25, -4.25, 0.75, -9.25, 4.75, 0.75, -9.25, 8.75, 0.75, -5.25, 12.25, -0.25, -5.25, 12.25, -0.25, 2.75, 8.75, 0.75, -5.25, 12.25, -0.25, 2.75, 8.75, 0.75, 2.75, -8.25, 0.75, 2.75, -4.25, 0.75, 6.75, -4.25, -0.25, 10.25, -8.25, 0.75, 2.75, -4.25, -0.25, 10.25, -11.75, -0.25, 2.75, 4.75, -0.25, 10.25, 4.75, 0.75, 6.75, 8.75, 0.75, 2.75, 4.75, -0.25, 10.25, 8.75, 0.75, 2.75, 12.25, -0.25, 2.75, -4.25, -0.25, 10.25, -4.25, 0.75, 6.75, 4.75, 0.75, 6.75, -4.25, -0.25, 10.25, 4.75, 0.75, 6.75, 4.75, -0.25, 10.25, 31.25, -0.25, -16.75, 31.25, -0.25, -12.75, 13.25, -0.25, -12.75, 31.25, -0.25, -16.75, 13.25, -0.25, -12.75, 13.25, -0.25, -16.75, 9.25, -0.25, -16.75, 9.25, -0.25, -12.75, -8.75, -0.25, -12.75, 9.25, -0.25, -16.75, -8.75, -0.25, -12.75, -8.75, -0.25, -16.75, 18.75, -0.25, -30.25, 31.25, -0.25, -17.75, 31.25, -0.25, -16.75, 18.75, -0.25, -30.25, 31.25, -0.25, -16.75, -31.25, -0.25, -16.75, 18.75, -0.25, -30.25, -31.25, -0.25, -16.75, -31.25, -0.25, -17.75, 18.75, -0.25, -30.25, -31.25, -0.25, -17.75, -18.75, -0.25, -30.25, -12.75, -0.25, -16.75, -12.75, -0.25, -12.75, -31.25, -0.25, -12.75, -12.75, -0.25, -16.75, -31.25, -0.25, -12.75, -31.25, -0.25, -16.75)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_d2gkh"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4pdo1"]
 load_path = "res://.godot/imported/slot_roller_texture.png-e0bc6024acbd9ec44dc375dc4fda0b1b.s3tc.ctex"
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hwiia"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2euc2"]
 transparency = 1
 albedo_color = Color(0, 0, 0, 1)
-albedo_texture = SubResource("CompressedTexture2D_d2gkh")
+albedo_texture = SubResource("CompressedTexture2D_4pdo1")
 uv1_offset = Vector3(0, 0.2, 0)
 
-[sub_resource type="QuadMesh" id="QuadMesh_lygqb"]
+[sub_resource type="QuadMesh" id="QuadMesh_x0677"]
 resource_local_to_scene = true
 lightmap_size_hint = Vector2i(27, 27)
-material = SubResource("StandardMaterial3D_hwiia")
-uv2_padding = 0.0
-size = Vector2(5, 25)
-
-[sub_resource type="QuadMesh" id="QuadMesh_knl74"]
-resource_local_to_scene = true
-lightmap_size_hint = Vector2i(27, 27)
-material = SubResource("StandardMaterial3D_hwiia")
-uv2_padding = 0.0
-size = Vector2(5, 25)
-
-[sub_resource type="QuadMesh" id="QuadMesh_hw1ee"]
-resource_local_to_scene = true
-lightmap_size_hint = Vector2i(27, 27)
-material = SubResource("StandardMaterial3D_hwiia")
-uv2_padding = 0.0
-size = Vector2(5, 25)
-
-[sub_resource type="QuadMesh" id="QuadMesh_80i7y"]
-resource_local_to_scene = true
-lightmap_size_hint = Vector2i(27, 27)
-material = SubResource("StandardMaterial3D_hwiia")
-uv2_padding = 0.0
-size = Vector2(5, 25)
-
-[sub_resource type="QuadMesh" id="QuadMesh_ifjyd"]
-resource_local_to_scene = true
-lightmap_size_hint = Vector2i(27, 27)
-material = SubResource("StandardMaterial3D_hwiia")
-uv2_padding = 0.0
-size = Vector2(5, 25)
-
-[sub_resource type="QuadMesh" id="QuadMesh_lu5n2"]
-resource_local_to_scene = true
-lightmap_size_hint = Vector2i(27, 27)
-material = SubResource("StandardMaterial3D_hwiia")
-uv2_padding = 0.0
-size = Vector2(5, 25)
-
-[sub_resource type="QuadMesh" id="QuadMesh_gaeqk"]
-resource_local_to_scene = true
-lightmap_size_hint = Vector2i(27, 27)
-material = SubResource("StandardMaterial3D_hwiia")
-uv2_padding = 0.0
-size = Vector2(5, 25)
-
-[sub_resource type="QuadMesh" id="QuadMesh_o1ipt"]
-resource_local_to_scene = true
-lightmap_size_hint = Vector2i(27, 27)
-material = SubResource("StandardMaterial3D_hwiia")
+material = SubResource("StandardMaterial3D_2euc2")
 uv2_padding = 0.0
 size = Vector2(5, 25)
 
@@ -715,10 +665,6 @@ player = NodePath("FuncGodotMap/group_632_Elevator/entity_48_PlayerRef")
 elevator_doors = NodePath("FuncGodotMap/group_632_Elevator/group_629_Elevator/group_659_Elevator/group_630_Elevator/group_624_ElevatorPrefab/group_628_ElevatorPrefab/group_631_Elevator/group_619_ElevatorPrefab/group_658_Elevator/group_625_Elevator/entity_45_ElevatorDoors")
 win_subtext = Array[String](["Jackpot!", "Beat the odds"])
 lose_tips = Array[String](["Use his bombs against him", "Watch the floor for falling bells", "Diamonds penetrate walls"])
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
-shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_jn580")
@@ -1253,35 +1199,35 @@ shape = SubResource("ConcavePolygonShape3D_3f2kp")
 
 [node name="entity_18_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, -3.1875)
-mesh = SubResource("QuadMesh_lygqb")
+mesh = SubResource("QuadMesh_x0677")
 
 [node name="entity_19_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, -11.5625)
-mesh = SubResource("QuadMesh_knl74")
+mesh = SubResource("QuadMesh_x0677")
 
 [node name="entity_20_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, 5.0625)
-mesh = SubResource("QuadMesh_hw1ee")
+mesh = SubResource("QuadMesh_x0677")
 
 [node name="entity_21_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -32.25, 9.25, 13.1875)
-mesh = SubResource("QuadMesh_80i7y")
+mesh = SubResource("QuadMesh_x0677")
 
 [node name="entity_22_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, 13.1875)
-mesh = SubResource("QuadMesh_ifjyd")
+mesh = SubResource("QuadMesh_x0677")
 
 [node name="entity_23_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, 5.0625)
-mesh = SubResource("QuadMesh_lu5n2")
+mesh = SubResource("QuadMesh_x0677")
 
 [node name="entity_24_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, -3.1875)
-mesh = SubResource("QuadMesh_gaeqk")
+mesh = SubResource("QuadMesh_x0677")
 
 [node name="entity_25_SlotRollerDecal" parent="FuncGodotMap" instance=ExtResource("6_fqym8")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 31.5, 9.25, -11.5625)
-mesh = SubResource("QuadMesh_o1ipt")
+mesh = SubResource("QuadMesh_x0677")
 
 [node name="group_654_Column" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
@@ -1373,9 +1319,6 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.062
 
 [node name="entity_46_Chandellier2LightOnly" parent="FuncGodotMap/group_632_Elevator" instance=ExtResource("25_opmp2")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 45.5312, 4.40625)
-
-[node name="entity_47_Chandellier1LightOnly" parent="FuncGodotMap/group_632_Elevator" instance=ExtResource("29_g6gcm")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 44.0312, 1.15625)
 
 [node name="entity_48_PlayerRef" parent="FuncGodotMap/group_632_Elevator" instance=ExtResource("8_pclyy")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -0.0625, 43.6562, 4.40625)

@@ -12,8 +12,9 @@ config_version=5
 
 config/name="Boss Rush Jam 2025"
 config/tags=PackedStringArray("jam")
-run/main_scene="res://src/maps/lobby/Lobby.tscn"
+run/main_scene="res://src/ui/main_menu/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
+boot_splash/image="res://src/godot-splash-reimagined-large-color.png"
 config/icon="res://icon.svg"
 
 [autoload]

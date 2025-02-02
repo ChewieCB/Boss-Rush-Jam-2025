@@ -1,13 +1,22 @@
-[gd_scene load_steps=14 format=3 uid="uid://ctddgvd003sjr"]
+[gd_scene load_steps=23 format=3 uid="uid://ctddgvd003sjr"]
 
+[ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
 [ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="1_jqa14"]
+[ext_resource type="AudioStream" uid="uid://dxqp4ee1u27bd" path="res://src/ui/main_menu/assets/sfx/MenuLoop.mp3" id="2_ef670"]
+[ext_resource type="AudioStream" uid="uid://bjjecuxqteiru" path="res://src/ui/main_menu/assets/sfx/drumMenu1.mp3" id="3_7ak47"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="3_j6oww"]
 [ext_resource type="Texture2D" uid="uid://ccn08me1il1m4" path="res://src/ui/main_menu/bg2.png" id="4_5npb2"]
+[ext_resource type="AudioStream" uid="uid://y1sgmihdvpcl" path="res://src/ui/main_menu/assets/sfx/drumMenu2.mp3" id="4_oermb"]
 [ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="4_q0jt0"]
+[ext_resource type="AudioStream" uid="uid://ns5foi711w8r" path="res://src/ui/main_menu/assets/sfx/drumMenu3.mp3" id="5_7tag1"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="5_8m82e"]
+[ext_resource type="AudioStream" uid="uid://cgxt6yjnd3mif" path="res://src/ui/main_menu/assets/sfx/drumMenu4.mp3" id="6_hri1i"]
 [ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="6_q3sa1"]
 [ext_resource type="Texture2D" uid="uid://csw0xjbbqsivg" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-016.png" id="6_tem84"]
+[ext_resource type="AudioStream" uid="uid://c6w10um3o4jvk" path="res://src/ui/main_menu/assets/sfx/drumMenu5.mp3" id="7_bs3mo"]
+[ext_resource type="AudioStream" uid="uid://2j7e6yrpg06p" path="res://src/ui/main_menu/assets/sfx/drumMenuStartGame.mp3" id="8_e8blx"]
+[ext_resource type="PackedScene" uid="uid://v6jgq46mkg4n" path="res://src/maps/lobby/Lobby.tscn" id="9_hsakg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2x62q"]
 shader = ExtResource("1_jqa14")
@@ -23,6 +32,21 @@ shader_parameter/repeat_x = 1.0
 shader_parameter/repeat_y = 3.5
 shader_parameter/row_offset = 0.0
 shader_parameter/texture_to_scroll = ExtResource("4_5npb2")
+
+[sub_resource type="Animation" id="Animation_cq0qc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TitleColumn/Chip:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_bjuou"]
 resource_name = "spin_chip"
@@ -41,21 +65,6 @@ tracks/0/keys = {
 "values": [0.0, 1.5708, 3.14159, 4.71239, 6.26573]
 }
 
-[sub_resource type="Animation" id="Animation_cq0qc"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("TitleColumn/Chip:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_j68ti"]
 _data = {
 "RESET": SubResource("Animation_cq0qc"),
@@ -72,6 +81,11 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_bnujd")
+bgm = ExtResource("2_ef670")
+button_sfx = Array[AudioStream]([ExtResource("3_7ak47"), ExtResource("4_oermb"), ExtResource("5_7tag1"), ExtResource("6_hri1i"), ExtResource("7_bs3mo")])
+start_game_sfx = ExtResource("8_e8blx")
+lobby_scene = ExtResource("9_hsakg")
 
 [node name="OverallBackground" type="TextureRect" parent="."]
 layout_mode = 1
@@ -138,16 +152,15 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -345.5
-offset_top = 58.0
+offset_top = 146.0
 offset_right = 358.5
-offset_bottom = 420.0
+offset_bottom = 508.0
 grow_horizontal = 2
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/normal_font_size = 150
 theme_override_font_sizes/bold_font_size = 150
 bbcode_enabled = true
-text = "[center][color=red]Spin Spin[/color]
-Bang Bang[/center]"
+text = "[center]Crapshoot[/center]"
 fit_content = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TitleColumn"]
@@ -184,11 +197,29 @@ patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
+[node name="OptionsButton" type="Button" parent="TitleColumn/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 45
+text = "Options"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="TitleColumn/VBoxContainer/OptionsButton"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_q3sa1")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
 [node name="CreditButton" type="Button" parent="TitleColumn/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 45
-text = "Credit
-"
+text = "Credits"
 
 [node name="NinePatchRect" type="NinePatchRect" parent="TitleColumn/VBoxContainer/CreditButton"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
@@ -247,3 +278,6 @@ libraries = {
 }
 autoplay = "spin_chip"
 speed_scale = 0.1
+
+[connection signal="pressed" from="TitleColumn/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="TitleColumn/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
