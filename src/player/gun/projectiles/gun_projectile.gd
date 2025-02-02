@@ -31,7 +31,8 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	damage = _damage
+	var rand_damage_mod := int(randf_range(-_damage/3, _damage/3))
+	damage = _damage + rand_damage_mod
 	current_dir = dir
 	ricochet_count_left = ricochet_count
 	look_at_from_position(start_pos, start_pos + dir)
