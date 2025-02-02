@@ -62,6 +62,7 @@ var current_delay_modifier = 1
 var has_strength_buff = false
 var floor_fire_hazard: HazardArea = null
 var action_used_before_heal = 0
+var fire_sfx: AudioStreamPlayer = null
 
 const DIFFICULTY_LV = 1
 const MIN_ACTION_BEFORE_HEAL = 8
@@ -186,6 +187,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 func _on_died() -> void:
 	super()
+	if fire_sfx:
+		fire_sfx.stop()
 	floor_fire_hazard.clear_hazard()
 
 
@@ -272,7 +275,7 @@ func _on_phase_3_state_entered() -> void:
 	GameManager.show_boss_special_dialog("DARN IT! \nI WILL JUST LIT THE WHOLE FLOOR ON FIRE THEN!", 2)
 	jump_to(boss_jump_phase3_marker.global_position)
 	await get_tree().create_timer(6.0).timeout
-	var fire_sfx = SoundManager.play_ambient_sound(sfx_start_fire, 0.2, "SFX")
+	fire_sfx = SoundManager.play_ambient_sound(sfx_start_fire, 0.2, "SFX")
 	fire_sfx.finished.connect(func():
 		SoundManager.play_ambient_sound(sfx_fire_loop, 0.1, "SFX")
 	)
@@ -353,6 +356,7 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, pr
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
 	for i in range(n_bottle_repeat):
 		var bottle_inst = prefab.instantiate()
+		bottle_inst.bartender_owner = self
 		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
 		get_parent().add_child(bottle_inst)
 		bottle_inst.init(modified_spawn_pos, spreaded_direction, proj_damage, throw_force)
@@ -373,6 +377,7 @@ func throw_heal_bottle():
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction
 	get_parent().add_child(bottle_inst)
 	bottle_inst.init(modified_spawn_pos, aim_direction, 0, throw_force)
+	bottle_inst.bartender_owner = self
 
 
 ## Choose a random bottle then throw
