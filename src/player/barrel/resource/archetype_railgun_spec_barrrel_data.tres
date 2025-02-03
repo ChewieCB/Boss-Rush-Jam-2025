@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://di2x3xsnfojlh"]
 
-[ext_resource type="Texture2D" uid="uid://dtqva43dg4qfk" path="res://src/player/barrel/resource/sprite/archetype_railgun.png" id="1_ktk71"]
 [ext_resource type="PackedScene" uid="uid://ckiren6h4keb6" path="res://src/player/barrel/ArchetypeRailgunSpecBarrel.tscn" id="2_ijulb"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_o0mqq"]
+
+[sub_resource type="Resource" id="Resource_pbcps"]
+metadata/__load_path__ = "res://src/player/barrel/resource/sprite/archetype_railgun.png"
 
 [resource]
 script = ExtResource("3_o0mqq")
@@ -17,7 +19,7 @@ Gauss Rifle: High firerate and magazine, but lower damage.
 Scatter Beam: Limited magazine size and high spread, but high projectile count.
 Railcannon: Powerful oneshot wonder.
 [/ul]"
-barrel_image = ExtResource("1_ktk71")
+barrel_image = SubResource("Resource_pbcps")
 barrel_cost = 2200
 barrel_prefab = ExtResource("2_ijulb")
-is_archetype_barrel = false
+is_archetype_barrel = true
