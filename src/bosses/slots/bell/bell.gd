@@ -25,15 +25,22 @@ var floor_y: float
 func _ready() -> void:
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
-		self.global_position, 
+		self.global_position,
 		self.global_position - Vector3(0, 100, 0),
-		pow(2, 1-1) + pow(2, 7-1)
+		pow(2, 1 - 1) + pow(2, 7 - 1)
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
 		floor_y = result.position.y
 	
 	sfx_player.stream = sfx_bell_windup.pick_random()
+	# FIXME: This line has error
+	#
+	# E 0:01:04:0836   bell.gd:37 @ _ready(): Can't add child 'SFXPlayer' to 'GameManager', already has a parent '@CharacterBody3D@1603'.
+	#   <C++ Error>    Condition "p_child->data.parent" is true.
+	#   <C++ Source>   scene/main/node.cpp:1568 @ add_child()
+	#   <Stack Trace>  bell.gd:37 @ _ready()
+	#                  boss_slots.gd:431 @ spawn_bell()
 	get_tree().get_root().get_child(2).add_child(sfx_player)
 	sfx_player.global_position = self.global_position
 	sfx_player.global_position.y = floor_y
@@ -48,8 +55,8 @@ func _ready() -> void:
 	
 	for i in range(3):
 		var pos = self.global_position - self.global_basis.z.rotated(
-			Vector3.UP, 
-			2 * PI / i+1
+			Vector3.UP,
+			2 * PI / i + 1
 		) * 4.0
 		spark(pos)
 
@@ -62,7 +69,6 @@ func _physics_process(delta: float) -> void:
 		global_position.y -= fall_speed * delta
 	
 
-
 func spark(spark_pos: Vector3) -> void:
 	var spark_vfx = spark_scene.instantiate()
 	get_tree().get_root().add_child(spark_vfx)
@@ -72,8 +78,8 @@ func spark(spark_pos: Vector3) -> void:
 func destroy() -> void:
 	for i in range(4):
 		var pos = self.global_position + Vector3(0, 2.0, 0) - self.global_basis.z.rotated(
-			Vector3.UP, 
-			2 * PI / i+1
+			Vector3.UP,
+			2 * PI / i + 1
 		) * collider.shape.radius
 		var explosion_vfx = explosion_scene.instantiate()
 		get_tree().get_root().add_child(explosion_vfx)

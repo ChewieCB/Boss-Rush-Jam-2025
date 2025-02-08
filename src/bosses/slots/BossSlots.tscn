@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=73 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -17,7 +17,6 @@
 [ext_resource type="Texture2D" uid="uid://bc7ur1o66fgkl" path="res://src/bosses/slots/assets/icons/temp/fire.png" id="7_ri7nv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="8_0tk6i"]
 [ext_resource type="AudioStream" uid="uid://nrv16ny1wym" path="res://src/bosses/slots/assets/sfx/SLOT BOSS TELEGRAPH MELEE_SHIELD ISOLATED.mp3" id="8_1arpf"]
-[ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="8_dcrya"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="9_1g4bc"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_5a0pq"]
 [ext_resource type="PackedScene" uid="uid://bacaewb7dl2l6" path="res://src/bosses/slots/bell/BellAttack.tscn" id="9_6qwni"]
@@ -26,6 +25,7 @@
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="11_5va1t"]
 [ext_resource type="PackedScene" uid="uid://40024fnpmf14" path="res://src/bosses/base/attacks/ranged/DiamondProjectile.tscn" id="11_dqr52"]
 [ext_resource type="PackedScene" uid="uid://yw8o87v7ydx1" path="res://src/bosses/slots/bomb/BombProjectile.tscn" id="12_xbq02"]
+[ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="16_52y3v"]
 [ext_resource type="AudioStream" uid="uid://cslq2jntaulce" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 1.mp3" id="17_1qoae"]
 [ext_resource type="AudioStream" uid="uid://ce1fw8wy6012x" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 2.mp3" id="18_5fj8q"]
 [ext_resource type="AudioStream" uid="uid://dfm3de6k0lylb" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 3.mp3" id="19_ecwx3"]
@@ -57,6 +57,12 @@
 [ext_resource type="AudioStream" uid="uid://bu1ukh2e2to0u" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 4.mp3" id="48_qbsnc"]
 [ext_resource type="AudioStream" uid="uid://ek641dpub6ow" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 5.mp3" id="49_sigie"]
 [ext_resource type="AudioStream" uid="uid://dnirkeyfxwj7d" path="res://src/bosses/slots/assets/sfx/SLOT BOSS STARTING SOUND (first pass).mp3" id="51_nikje"]
+[ext_resource type="AudioStream" uid="uid://bpjefcq47oyr3" path="res://src/bosses/base/assets/sfx/temp/Hit 2.mp3" id="53_c2xtu"]
+[ext_resource type="AudioStream" uid="uid://ch0bkn7t2rb4i" path="res://src/bosses/base/assets/sfx/temp/Hit 3.mp3" id="54_56pdr"]
+[ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="55_5buyr"]
+[ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="56_ft1nf"]
+[ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="57_f27rp"]
+[ext_resource type="AudioStream" uid="uid://b4k4hf58sg3a2" path="res://src/bosses/base/assets/sfx/temp/Hit 7.mp3" id="58_5y24g"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
@@ -197,7 +203,7 @@ icon_bell = ExtResource("4_oaydl")
 icon_bar = ExtResource("6_opr8o")
 icon_diamond = ExtResource("4_6oj0s")
 icon_cherry = ExtResource("7_ri7nv")
-coin_projectile = ExtResource("8_dcrya")
+coin_projectile = ExtResource("16_52y3v")
 coin_shots_per_burst = 8
 num_bursts = 2
 delay_between_burst = 0.6
@@ -234,6 +240,7 @@ chip_spawn_force = 1200.0
 barrel_to_drop = ExtResource("11_5va1t")
 sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8"), NodePath("SFXPlayer9"), NodePath("SFXPlayer10"), NodePath("SFXPlayer11"), NodePath("SFXPlayer12")]
 sfx_awaken = ExtResource("51_nikje")
+sfx_hit = Array[AudioStream]([ExtResource("53_c2xtu"), ExtResource("54_56pdr"), ExtResource("55_5buyr"), ExtResource("56_ft1nf"), ExtResource("57_f27rp"), ExtResource("58_5y24g")])
 sfx_death = ExtResource("67_pi67a")
 attack_recovery_time = 0.5
 telegraph_time = 0.4

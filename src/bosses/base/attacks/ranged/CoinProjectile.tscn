@@ -1,8 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cjklncq8p42y1"]
+[gd_scene load_steps=8 format=3 uid="uid://bxshoefc1p3uy"]
 
-[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/test_projectile.gd" id="1_ye752"]
-[ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="2_v73pc"]
-[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_dflu1"]
+[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/test_projectile.gd" id="1_dekmn"]
+[ext_resource type="Texture2D" uid="uid://cq6ltygg20okd" path="res://src/bosses/base/attacks/ranged/coin_16.png" id="2_5qvk8"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_jh5os"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_so2kb"]
 radius = 0.4
@@ -19,16 +19,17 @@ emission = Color(1, 0.731834, 0.032858, 1)
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[node name="TestProjectile" type="Area3D"]
+[node name="CoinProjectile" type="Area3D"]
 collision_layer = 8
 collision_mask = 7
-script = ExtResource("1_ye752")
+script = ExtResource("1_dekmn")
 projectile_damage = 2.0
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+modulate = Color(1, 0.933333, 0, 1)
 billboard = 1
-texture = ExtResource("2_v73pc")
+texture = ExtResource("2_5qvk8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_so2kb")
@@ -43,7 +44,7 @@ autostart = true
 top_level = true
 material_override = SubResource("StandardMaterial3D_mcyja")
 mesh = SubResource("ImmediateMesh_bli60")
-script = ExtResource("3_dflu1")
+script = ExtResource("3_jh5os")
 segments = 10
 base_width = 0.1
 width_profile = SubResource("Curve_my72y")
