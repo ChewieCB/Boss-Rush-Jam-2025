@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_1bpti"]
+[ext_resource type="AudioStream" uid="uid://doscr7i44h7fy" path="res://assets/music/Lobby R1.mp3" id="2_ho2it"]
 [ext_resource type="LightmapGIData" uid="uid://ds8fdm645i322" path="res://src/maps/lobby/Lobby.lmbake" id="2_wjq6h"]
 [ext_resource type="Material" path="res://assets/textures/placeholder/texture_light_07.tres" id="3_cmr84"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_nbyib"]
@@ -39,7 +40,6 @@
 [ext_resource type="Texture2D" uid="uid://c7v7y1r217hq3" path="res://src/collectibles/poker_chip/gold_decal.png" id="33_dvcfn"]
 [ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="34_0fts8"]
 [ext_resource type="PackedScene" uid="uid://83k3of5xh1gr" path="res://src/bosses/pit/cover/CoverHalf.tscn" id="39_d2vdx"]
-[ext_resource type="AudioStream" uid="uid://dxs2jsxotwrqv" path="res://assets/music/Lobby 1.0.mp3" id="41_t8fhn"]
 [ext_resource type="Texture2D" uid="uid://dl65xxjqpf0o7" path="res://src/env/decor/assets/trash_can_art_deco_1.png" id="41_tpab6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ckxgb"]
@@ -1207,6 +1207,7 @@ points = PackedVector3Array(-3, 2, 8, -3, -0.875, 8, -2, -0.875, 8, -2, 2, 8, -3
 
 [node name="Lobby" type="Node3D"]
 script = ExtResource("1_ywg7j")
+bgm = ExtResource("2_ho2it")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_odh8l")
@@ -2481,7 +2482,7 @@ region_rect = Rect2(0, 33.7498, 512, 478.25)
 
 [node name="LobbyMusicPlayer" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -21.9)
-stream = ExtResource("41_t8fhn")
+stream = ExtResource("2_ho2it")
 attenuation_model = 1
 volume_db = 10.0
 max_db = 6.0
