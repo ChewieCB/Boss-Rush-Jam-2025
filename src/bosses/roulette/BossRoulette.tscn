@@ -24,12 +24,12 @@
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/fire3d.gdshader" id="10_pv807"]
 [ext_resource type="AudioStream" uid="uid://h6vxbfcrehxl" path="res://src/bosses/roulette/assets/sfx/Roulette AOE 1.mp3" id="13_lspi4"]
 [ext_resource type="AudioStream" uid="uid://c0ihktis5hg8x" path="res://src/bosses/roulette/assets/sfx/Roulette AOE 2 .mp3" id="14_mk8a1"]
+[ext_resource type="AudioStream" uid="uid://dkfupjis4chyo" path="res://src/bosses/roulette/assets/sfx/Floor Falling Roulette 1.mp3" id="15_ktveg"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/guard.gd" id="15_rx3ud"]
-[ext_resource type="AudioStream" uid="uid://bf5hk5lkkmpo8" path="res://src/bosses/roulette/assets/sfx/Floor Falling Roulette 1.wav" id="15_s2314"]
 [ext_resource type="Resource" uid="uid://dlnn1fr5bmklq" path="res://src/bosses/MidAttackPhaseChangeGuard.tres" id="16_4livr"]
-[ext_resource type="AudioStream" uid="uid://bb665hvagsw1k" path="res://src/bosses/roulette/assets/sfx/Floor Falling Roulette 2.wav" id="16_i0y7r"]
+[ext_resource type="AudioStream" uid="uid://dnidcb1mdww73" path="res://src/bosses/roulette/assets/sfx/Floor Falling Roulette 2.mp3" id="16_6j6ku"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/any_of_guard.gd" id="17_dqgtw"]
-[ext_resource type="AudioStream" uid="uid://b2bdsmvjtu2e2" path="res://src/bosses/roulette/assets/sfx/Floor Falling Roulette 3.wav" id="17_gn7lr"]
+[ext_resource type="AudioStream" uid="uid://da7nrovfoqsy5" path="res://src/bosses/roulette/assets/sfx/Floor Falling Roulette 3.mp3" id="17_yy8hc"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="18_m5pf4"]
 [ext_resource type="AudioStream" uid="uid://bc1h30fh0yudm" path="res://src/bosses/roulette/assets/sfx/Impact Punch 1.mp3" id="23_2x3ho"]
 [ext_resource type="AudioStream" uid="uid://b23xy34nea6gd" path="res://src/bosses/roulette/assets/sfx/Impact Punch 2.mp3" id="24_5q0lp"]
@@ -165,7 +165,7 @@ sfx_shockwave_amb = Array[AudioStream]([ExtResource("13_lspi4"), ExtResource("14
 drop_delay = 0.5
 drop_time = 1.0
 drop_return_delay = 4.0
-sfx_drop_amb = Array[AudioStream]([ExtResource("15_s2314"), ExtResource("16_i0y7r"), ExtResource("17_gn7lr")])
+sfx_drop_amb = Array[AudioStream]([ExtResource("15_ktveg"), ExtResource("16_6j6ku"), ExtResource("17_yy8hc")])
 chip_spawn_chance = 0.2
 chip_spawn_force = 2000.0
 barrel_to_drop = ExtResource("6_7xocg")

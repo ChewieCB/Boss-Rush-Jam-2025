@@ -31,7 +31,7 @@
 [ext_resource type="AudioStream" uid="uid://b5qhakfhohemg" path="res://src/player/assets/sfx/VOICE LINES/DEATH 4.mp3" id="10_mowd1"]
 [ext_resource type="AudioStream" uid="uid://ca0lxnf1w8ufu" path="res://src/player/assets/sfx/RUNNING/Running Individual 8.mp3" id="10_njsu2"]
 [ext_resource type="AudioStream" uid="uid://ds6ft76jc0nrp" path="res://src/player/assets/sfx/RUNNING/Running Individual 9.mp3" id="11_1jfcb"]
-[ext_resource type="AudioStream" uid="uid://bvncm3v3v2dq7" path="res://src/bosses/roulette/assets/sfx/Falling Death 1.wav" id="11_qp0vt"]
+[ext_resource type="AudioStream" uid="uid://ba8dhka0f20tw" path="res://src/bosses/roulette/assets/sfx/Falling Death 1.mp3" id="11_kmu77"]
 [ext_resource type="AudioStream" uid="uid://bf4cejah4dxaw" path="res://src/player/assets/sfx/RUNNING/Running Individual 10.mp3" id="12_8gaey"]
 [ext_resource type="AudioStream" uid="uid://wm873qkywncp" path="res://src/player/assets/sfx/RUNNING/Running Individual 11.mp3" id="13_hisam"]
 [ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
@@ -106,7 +106,7 @@ collision_mask = 221
 script = ExtResource("1_rl0vi")
 sfx_hurt = Array[AudioStream]([ExtResource("2_cpvt1"), ExtResource("3_lb5n1"), ExtResource("4_broo0"), ExtResource("5_lkuup"), ExtResource("6_vqbwb")])
 sfx_dead = Array[AudioStream]([ExtResource("7_lluik"), ExtResource("8_h2aj6"), ExtResource("9_wamw4"), ExtResource("10_mowd1")])
-sfx_dead_falling = Array[AudioStream]([ExtResource("11_qp0vt")])
+sfx_dead_falling = Array[AudioStream]([ExtResource("11_kmu77")])
 sfx_movement_loop = ExtResource("2_5ndff")
 sfx_movement_steps = Array[AudioStream]([ExtResource("3_hiqt7"), ExtResource("4_a4xoc"), ExtResource("5_pg460"), ExtResource("6_320sy"), ExtResource("7_2he1w"), ExtResource("8_kw11m"), ExtResource("9_qmrha"), ExtResource("10_njsu2"), ExtResource("11_1jfcb"), ExtResource("12_8gaey"), ExtResource("13_hisam"), ExtResource("14_rd2i6"), ExtResource("15_w5gjb"), ExtResource("16_tto8i")])
 sfx_crouch = Array[AudioStream]([ExtResource("26_skrud")])

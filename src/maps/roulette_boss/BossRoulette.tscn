@@ -4,14 +4,14 @@
 [ext_resource type="Script" path="res://src/maps/roulette_boss/boss_roulette.gd" id="1_of6pu"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="2_bnhua"]
 [ext_resource type="AudioStream" uid="uid://g6tymd3nnpod" path="res://assets/music/Balrog R1.mp3" id="2_jo6es"]
-[ext_resource type="AudioStream" uid="uid://cqfwd30p77wmu" path="res://src/bosses/roulette/assets/sfx/Roulette Room 1.wav" id="3_pylwf"]
+[ext_resource type="AudioStream" uid="uid://cp4fm8145lhg" path="res://src/bosses/roulette/assets/sfx/Roulette Room 1.mp3" id="3_b0lqy"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="3_wl5og"]
-[ext_resource type="AudioStream" uid="uid://btjy14hcffuo3" path="res://src/bosses/roulette/assets/sfx/Roulette Room 2.wav" id="4_st2l6"]
+[ext_resource type="AudioStream" uid="uid://cvi2330x75x78" path="res://src/bosses/roulette/assets/sfx/Roulette Room 2.mp3" id="4_q4318"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="4_xrxe8"]
-[ext_resource type="AudioStream" uid="uid://sw1l5k5qejo0" path="res://src/bosses/roulette/assets/sfx/Roulette Room 3.wav" id="5_duoie"]
+[ext_resource type="AudioStream" uid="uid://bfxo5nlinjsh3" path="res://src/bosses/roulette/assets/sfx/Roulette Room 3.mp3" id="5_vkn4e"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="7_q62vj"]
 [ext_resource type="Material" uid="uid://b3fn320leb44p" path="res://assets/textures/placeholder/texture_dark_05.tres" id="8_qv5or"]
-[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="9_htjk6"]
+[ext_resource type="Material" path="res://assets/textures/placeholder/texture_light_07.tres" id="9_htjk6"]
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="10_dt2pf"]
 [ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="10_jy1qo"]
 [ext_resource type="Material" uid="uid://c42rborvicsq2" path="res://assets/textures/floor/wood_0.tres" id="11_svm8o"]
@@ -2530,7 +2530,7 @@ elevator_doors = NodePath("FuncGodotMap/group_701_Elevator/group_629_Elevator/gr
 floor_pivot = NodePath("FuncGodotMap/group_645_WheelFloor")
 win_subtext = Array[String](["Fortunes Faded", "Lady's luck ran out"])
 lose_tips = Array[String](["Keep your distance from the center", "Go with the direction of spin", "Shields heal the boss, destroy them"])
-sfx_ambience = Array[AudioStream]([ExtResource("3_pylwf"), ExtResource("4_st2l6"), ExtResource("5_duoie")])
+sfx_ambience = Array[AudioStream]([ExtResource("3_b0lqy"), ExtResource("4_q4318"), ExtResource("5_vkn4e")])
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.5, -2.18557e-08, 0, -4.37114e-08, 1, -0.5, 0.866025, 3.78552e-08, 0, 0, 0)
