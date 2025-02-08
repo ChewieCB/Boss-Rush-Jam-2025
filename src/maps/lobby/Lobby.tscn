@@ -4,14 +4,14 @@
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_1bpti"]
 [ext_resource type="LightmapGIData" uid="uid://ds8fdm645i322" path="res://src/maps/lobby/Lobby.lmbake" id="2_wjq6h"]
-[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="3_cmr84"]
+[ext_resource type="Material" path="res://assets/textures/placeholder/texture_light_07.tres" id="3_cmr84"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_nbyib"]
 [ext_resource type="Script" path="res://src/bosses/base/test/end_panel_ui.gd" id="4_vqx20"]
 [ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="5_bxned"]
-[ext_resource type="Material" uid="uid://dj7ojpb1ijsks" path="res://assets/textures/placeholder/texture_orange_12.tres" id="5_kwpqm"]
+[ext_resource type="Material" path="res://assets/textures/placeholder/texture_orange_12.tres" id="5_kwpqm"]
 [ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="5_s8dkq"]
 [ext_resource type="FontFile" uid="uid://bs58em2h8opfu" path="res://assets/fonts/BLACKJAC.TTF" id="6_274gx"]
-[ext_resource type="Material" uid="uid://f1owxp1fp5iw" path="res://assets/textures/placeholder/texture_red_09.tres" id="6_mtll7"]
+[ext_resource type="Material" path="res://assets/textures/placeholder/texture_red_09.tres" id="6_mtll7"]
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="6_n7t1b"]
 [ext_resource type="FontFile" uid="uid://cf4ghtgpa7pbl" path="res://assets/engebrechtre.rg-bold.otf" id="7_o47kk"]
 [ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="8_a25qv"]
@@ -2393,7 +2393,7 @@ metadata/_tb_type = "_tb_group"
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.59375, 1.25, 12.0261)
 entProperties = {
 "_tb_group": "575",
-"boss_name": "Umby the Stinky",
+"boss_name": "Slot Machine",
 "classname": "ElevatorButton",
 "linked_level": "res://src/bosses/base/test/Test_BossCore.tscn",
 "origin": "380 19 40"
