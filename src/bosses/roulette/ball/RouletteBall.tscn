@@ -1,20 +1,13 @@
-[gd_scene load_steps=41 format=3 uid="uid://cpicsh5bemc0b"]
+[gd_scene load_steps=34 format=3 uid="uid://cpicsh5bemc0b"]
 
 [ext_resource type="Script" path="res://src/bosses/roulette/ball/roulette_ball.gd" id="1_onkcb"]
 [ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_3sdjd"]
 [ext_resource type="AudioStream" uid="uid://d1qjywjnfqec0" path="res://src/bosses/roulette/assets/sfx/Ball Launch Sound 1.mp3" id="2_108so"]
-[ext_resource type="AudioStream" uid="uid://0pd5ni2lqa65" path="res://src/bosses/roulette/ball/assets/sfx/Balls Spinning 1.wav" id="2_irwo6"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="3_g45k2"]
 [ext_resource type="AudioStream" uid="uid://5otvtcdfnuum" path="res://src/bosses/roulette/assets/sfx/Ball Launch Sound 2.mp3" id="3_luxd2"]
-[ext_resource type="AudioStream" uid="uid://c5x7s5wdmqut1" path="res://src/bosses/roulette/ball/assets/sfx/Balls Spinning 2.wav" id="3_pri6y"]
-[ext_resource type="AudioStream" uid="uid://gdbu0oasjl4s" path="res://src/bosses/roulette/ball/assets/sfx/Balls Spinning 3.wav" id="4_03n4o"]
 [ext_resource type="AudioStream" uid="uid://cjwe5a1wy2kkq" path="res://src/bosses/roulette/assets/sfx/Ball Launch Sound 3.mp3" id="4_b43gf"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="4_elsvf"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/fire3d.gdshader" id="4_ldqmi"]
-[ext_resource type="AudioStream" uid="uid://coxvtf55vfrjl" path="res://src/bosses/roulette/ball/assets/sfx/Balls Spinning 4.wav" id="5_iugjm"]
-[ext_resource type="AudioStream" uid="uid://bjtpwo1ujwwhe" path="res://src/bosses/roulette/ball/assets/sfx/Ball Rolling 1.wav" id="6_480bl"]
-[ext_resource type="AudioStream" uid="uid://dibb1odlnd7lv" path="res://src/bosses/roulette/ball/assets/sfx/Ball Rolling 2.wav" id="7_r0t2l"]
-[ext_resource type="AudioStream" uid="uid://b6a3cyjo6lo8e" path="res://src/bosses/roulette/ball/assets/sfx/Ball Rolling 3.wav" id="8_dwug4"]
 [ext_resource type="AudioStream" uid="uid://cpop0paiyyoqf" path="res://src/bosses/roulette/assets/sfx/Balls Spinning 1.mp3" id="9_va0fw"]
 [ext_resource type="AudioStream" uid="uid://cw3tpf6ho76nx" path="res://src/bosses/roulette/assets/sfx/Balls Spinning 2.mp3" id="10_c3gth"]
 [ext_resource type="AudioStream" uid="uid://bl7gvvns02mi8" path="res://src/bosses/roulette/assets/sfx/Balls Spinning 3.mp3" id="11_lulh7"]
@@ -80,7 +73,7 @@ material = SubResource("ShaderMaterial_mj65k")
 radius = 3.0
 height = 6.0
 
-[node name="BallTest" type="RigidBody3D" node_paths=PackedStringArray("health_component")]
+[node name="RouletteBall" type="RigidBody3D" node_paths=PackedStringArray("health_component")]
 collision_layer = 64
 collision_mask = 11
 mass = 50.0
@@ -90,8 +83,8 @@ contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_onkcb")
 sfx_spawn = Array[AudioStream]([ExtResource("2_108so"), ExtResource("3_luxd2"), ExtResource("4_b43gf")])
-sfx_spinning = Array[AudioStream]([ExtResource("2_irwo6"), ExtResource("3_pri6y"), ExtResource("4_03n4o"), ExtResource("5_iugjm"), ExtResource("9_va0fw"), ExtResource("10_c3gth"), ExtResource("11_lulh7"), ExtResource("12_fe340")])
-sfx_rolling = Array[AudioStream]([ExtResource("6_480bl"), ExtResource("7_r0t2l"), ExtResource("8_dwug4"), ExtResource("16_2gn0d"), ExtResource("17_ba3bi"), ExtResource("18_qtr5d")])
+sfx_spinning = Array[AudioStream]([ExtResource("9_va0fw"), ExtResource("10_c3gth"), ExtResource("11_lulh7"), ExtResource("12_fe340")])
+sfx_rolling = Array[AudioStream]([ExtResource("16_2gn0d"), ExtResource("17_ba3bi"), ExtResource("18_qtr5d")])
 sfx_fire = Array[AudioStream]([ExtResource("19_3f2bp"), ExtResource("20_dt76y"), ExtResource("21_yeaf7")])
 sfx_impact = Array[AudioStream]([ExtResource("22_77vdp"), ExtResource("23_vfope"), ExtResource("24_snoeh"), ExtResource("25_fm5h3"), ExtResource("26_ti6xf"), ExtResource("27_pigpk")])
 radial_force_magnitude = 2500.0
