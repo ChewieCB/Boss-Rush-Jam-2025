@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://b3x1bn1jpkwjo"]
+[gd_scene load_steps=11 format=3 uid="uid://b3x1bn1jpkwjo"]
 
 [ext_resource type="Script" path="res://src/collectibles/poker_chip/poker_chip_projectile.gd" id="1_1s0ep"]
+[ext_resource type="AudioStream" uid="uid://6n3s0ojha33v" path="res://src/collectibles/poker_chip/assets/sfx/PICKING UP CHIPS.mp3" id="2_td1fs"]
 [ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="2_u6yr2"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_12jep"]
 
@@ -30,6 +31,7 @@ point_count = 2
 collision_layer = 16
 physics_material_override = SubResource("PhysicsMaterial_ipprj")
 script = ExtResource("1_1s0ep")
+sfx_pickup = Array[AudioStream]([ExtResource("2_td1fs")])
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)

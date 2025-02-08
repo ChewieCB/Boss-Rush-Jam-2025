@@ -46,7 +46,7 @@ func destroy() -> void:
 
 func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
 	var spark_inst = spark_effect.instantiate()
-	get_parent().add_child(spark_inst)
+	get_parent().add_child.call_deferred(spark_inst)
 	spark_inst.global_position = pos
 	
 	if normal:
@@ -62,7 +62,7 @@ func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
 		body.health_component.damage(damage)
 	create_spark(
-		self.global_position, 
+		self.global_position,
 		body.global_position.direction_to(self.global_position)
 	)
 	collision_count += 1
@@ -72,10 +72,9 @@ func _on_body_entered(body: Node3D) -> void:
 
 func _on_body_exited(body: Node3D) -> void:
 	create_spark(
-		self.global_position, 
+		self.global_position,
 		body.global_position.direction_to(self.global_position)
 	)
-
 
 
 func _on_life_timer_timeout() -> void:

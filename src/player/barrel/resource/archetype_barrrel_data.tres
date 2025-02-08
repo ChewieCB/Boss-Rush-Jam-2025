@@ -20,4 +20,4 @@ Railgun: Low magazine size and firerate, but high damage and high bullet velocit
 barrel_image = ExtResource("1_1q24l")
 barrel_cost = 200
 barrel_prefab = ExtResource("2_6yxa3")
-is_archetype_barrel = false
+is_archetype_barrel = true

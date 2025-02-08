@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dpcew656ofo1q"]
 
-[ext_resource type="Texture2D" uid="uid://dbc8fjl1x6n2s" path="res://src/player/barrel/resource/sprite/archetype_shotgun.png" id="1_7kpif"]
+[ext_resource type="Texture2D" uid="uid://dbc8fjl1x6n2s" path="res://src/player/barrel/resource/sprite/archetype_shotgun.png" id="1_qifxw"]
 [ext_resource type="PackedScene" uid="uid://bjcvwkqb8mks4" path="res://src/player/barrel/ArchetypeShotgunSpecBarrel.tscn" id="2_v2xxy"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_1ouvy"]
 
@@ -17,7 +17,7 @@ Combat shotgun: High firerate and magazine. Lower spread and projectile count.
 Double-barrel shotgun: Limited magazine size and high spread, but huge damage.
 Slug shotgun: Low spread and firerate. Very high damage but only one projectile.
 [/ul]"
-barrel_image = ExtResource("1_7kpif")
+barrel_image = ExtResource("1_qifxw")
 barrel_cost = 1850
 barrel_prefab = ExtResource("2_v2xxy")
-is_archetype_barrel = false
+is_archetype_barrel = true

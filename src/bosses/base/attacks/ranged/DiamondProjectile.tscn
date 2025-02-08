@@ -45,7 +45,6 @@ autostart = true
 top_level = true
 material_override = SubResource("StandardMaterial3D_usbrc")
 mesh = SubResource("ImmediateMesh_4htjv")
-skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("2_11y2m")
 segments = 10
 base_width = 0.1
