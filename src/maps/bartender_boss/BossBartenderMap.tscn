@@ -773,11 +773,11 @@ environment = SubResource("Environment_jn580")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 5.85933, -11.3552)
+light_color = Color(0.75, 0.451172, 0.0996094, 1)
+light_energy = 0.5
 shadow_enabled = true
 
 [node name="LightmapGI" type="LightmapGI" parent="."]
-quality = 2
-bounces = 4
 interior = true
 light_data = ExtResource("3_8rubq")
 
@@ -1592,14 +1592,6 @@ boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")
 boss_jump_phase3_marker = NodePath("../BossMarker/BossJumpPhase3Marker")
 sfx_slowmo = null
 target = NodePath("../NavigationRegion3D/FuncGodotMap/group_702_Elevator/entity_56_PlayerRef")
-
-[node name="BarLight" type="Node3D" parent="."]
-
-[node name="OmniLight3D" type="OmniLight3D" parent="BarLight"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.79299, -23.9556)
-light_color = Color(0.909402, 0.797065, 0.611877, 1)
-light_energy = 5.0
-omni_range = 20.0
 
 [node name="BossMarker" type="Node3D" parent="."]
 

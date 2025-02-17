@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://rxldux0ag0my"]
+[gd_scene load_steps=7 format=3 uid="uid://rxldux0ag0my"]
 
 [ext_resource type="Texture2D" uid="uid://bimqjyp7on3ig" path="res://src/env/lighting/assets/chandellier_2.png" id="1_mjbwx"]
+[ext_resource type="Script" path="res://src/env/lighting/chandellier.gd" id="1_mtke7"]
+[ext_resource type="Script" path="res://src/components/health/health_component.gd" id="3_lf2gt"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_cq3u5"]
 size = Vector3(4, 3, 3.9)
@@ -11,9 +13,10 @@ size = Vector3(4, 3, 3.9)
 [sub_resource type="BoxShape3D" id="BoxShape3D_i5chr"]
 size = Vector3(1, 2, 1)
 
-[node name="Chandellier1" type="StaticBody3D"]
-collision_layer = 128
+[node name="ChandellierB" type="StaticBody3D"]
+collision_layer = 129
 collision_mask = 0
+script = ExtResource("1_mtke7")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
@@ -35,5 +38,10 @@ shape = SubResource("BoxShape3D_i5chr")
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 light_color = Color(0.960906, 0.678553, 0.450889, 1)
 light_energy = 2.0
-light_bake_mode = 1
 omni_range = 20.0
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_lf2gt")
+max_health = 1.0
+
+[connection signal="died" from="HealthComponent" to="." method="_on_health_component_died"]
