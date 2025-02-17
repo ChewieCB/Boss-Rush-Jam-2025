@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://bu43hcl2orkct"]
+[gd_scene load_steps=7 format=3 uid="uid://bu43hcl2orkct"]
 
+[ext_resource type="Script" path="res://src/env/lighting/chandellier.gd" id="1_bf6g5"]
 [ext_resource type="Texture2D" uid="uid://dbjcmdnek20wd" path="res://src/env/lighting/assets/chandellier_1.png" id="1_jbfgn"]
 [ext_resource type="Texture2D" uid="uid://u3vyw6eyv5u7" path="res://src/env/lighting/assets/chain.png" id="2_30pyj"]
 
@@ -15,6 +16,7 @@ size = Vector3(1, 3.28357, 1)
 [node name="Chandellier1" type="StaticBody3D"]
 collision_layer = 128
 collision_mask = 0
+script = ExtResource("1_bf6g5")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)

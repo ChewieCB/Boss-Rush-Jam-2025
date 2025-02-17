@@ -102,6 +102,18 @@ autoplay = "spin"
 speed_scale = 0.5
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1, 0.2)
-light_color = Color(1, 0.975097, 0.325903, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.435172, 0)
+light_color = Color(1, 0.780655, 0.14372, 1)
+light_volumetric_fog_energy = 5.0
+shadow_enabled = true
 omni_range = 3.0
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 9.1803, 0)
+light_color = Color(1, 0.710778, 0, 1)
+light_energy = 15.0
+light_volumetric_fog_energy = 16.0
+light_bake_mode = 0
+spot_range = 20.0
+spot_angle = 15.0
+spot_angle_attenuation = 0.0490367
