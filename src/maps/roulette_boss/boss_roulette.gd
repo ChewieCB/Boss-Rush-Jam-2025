@@ -10,21 +10,25 @@ extends Node3D
 	set(value):
 		ROTATION_SPEED = value
 		boss.wheel_rotation_speed = ROTATION_SPEED
-var goal_rotation_speed: float = ROTATION_SPEED : set = set_goal_rotation_speed
+var goal_rotation_speed: float = ROTATION_SPEED: set = set_goal_rotation_speed
 # Floor segments array stores tuples of [mesh, collider] since we separate them
 # for the purposes of the AnimatableBody3D rotation
 var floor_segments: Array
 
-@onready var win_ui: Control = $UI/BossDefeatedUI
 @export var win_subtext: Array[String]
 @export var lose_tips: Array[String]
-@onready var boss_trigger: Area3D = $BossTriggerVolume
 
 @export var sfx_ambience: Array[AudioStream]
 var current_sfx_ambient: AudioStream
 
+@export var directional_light: DirectionalLight3D
+
+@onready var win_ui: Control = $UI/BossDefeatedUI
+@onready var boss_trigger: Area3D = $BossTriggerVolume
+
 
 func _ready() -> void:
+	boss.died.connect(_on_boss_died)
 	boss.defeated.connect(_on_boss_defeated)
 	boss.change_wheel_speed.connect(set_goal_rotation_speed)
 	player.health_component.died.connect(_on_player_death)
@@ -62,8 +66,8 @@ func shove_player(shove_force: float = 25.0) -> void:
 	var shove_vector = player.global_position.direction_to(boss.global_position)
 	player.dash_disabled = true
 	#player.velocity = Vector3.ZERO
-	player.vel_horizontal += Vector2(shove_vector.x, shove_vector.z) * shove_force 
-	player.vel_vertical += shove_vector.y * shove_force 
+	player.vel_horizontal += Vector2(shove_vector.x, shove_vector.z) * shove_force
+	player.vel_vertical += shove_vector.y * shove_force
 	await get_tree().create_timer(0.5).timeout
 	player.dash_disabled = false
 
@@ -71,6 +75,9 @@ func shove_player(shove_force: float = 25.0) -> void:
 func set_goal_rotation_speed(value: float) -> void:
 	goal_rotation_speed = value
 
+func _on_boss_died() -> void:
+	var tween = self.create_tween()
+	tween.tween_property(directional_light, "light_energy", 0, 1)
 
 func _on_boss_defeated(_boss: BossCore) -> void:
 	SoundManager.stop_ambient_sound(current_sfx_ambient, 0.5)
