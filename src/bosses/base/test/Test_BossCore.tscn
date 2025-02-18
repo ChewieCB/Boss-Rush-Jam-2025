@@ -9,11 +9,11 @@
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="5_3rcpl"]
 [ext_resource type="PackedScene" uid="uid://crgts86aoqg47" path="res://src/bosses/slots/SlotWallDecal.tscn" id="6_fqym8"]
 [ext_resource type="Material" uid="uid://bsm5c6b4ncugr" path="res://assets/textures/placeholder/texture_light_13.tres" id="6_ogads"]
-[ext_resource type="Material" uid="uid://b2r7uow4jc8v0" path="res://assets/textures/placeholder/texture_orange_10.tres" id="7_ikps2"]
+[ext_resource type="Material" path="res://assets/textures/placeholder/texture_orange_10.tres" id="7_ikps2"]
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="8_pclyy"]
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="8_xyyig"]
 [ext_resource type="Material" uid="uid://c21k5cw2fd0br" path="res://assets/textures/walls/paint-red.tres" id="9_5cs8k"]
-[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="10_2xl2x"]
+[ext_resource type="Material" path="res://assets/textures/placeholder/texture_light_07.tres" id="10_2xl2x"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_position_marker.gd" id="10_6uhem"]
 [ext_resource type="Material" uid="uid://cpmnrcuro67h8" path="res://assets/textures/walls/paint-green.tres" id="10_bxt4v"]
 [ext_resource type="Material" uid="uid://b678qslmidbq0" path="res://assets/textures/floor/yellow-tiles.tres" id="11_5qis2"]
@@ -706,7 +706,7 @@ material = SubResource("StandardMaterial3D_2euc2")
 uv2_padding = 0.0
 size = Vector2(5, 25)
 
-[node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors")]
+[node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors", "directional_light")]
 script = ExtResource("1_pgc5k")
 bgm = ExtResource("2_2nw5f")
 boss = NodePath("FuncGodotMap/entity_16_BossSlots")
@@ -714,9 +714,15 @@ player = NodePath("FuncGodotMap/group_632_Elevator/entity_48_PlayerRef")
 elevator_doors = NodePath("FuncGodotMap/group_632_Elevator/group_629_Elevator/group_659_Elevator/group_630_Elevator/group_624_ElevatorPrefab/group_628_ElevatorPrefab/group_631_Elevator/group_619_ElevatorPrefab/group_658_Elevator/group_625_Elevator/entity_45_ElevatorDoors")
 win_subtext = Array[String](["Jackpot!", "Beat the odds"])
 lose_tips = Array[String](["Use his bombs against him", "Watch the floor for falling bells", "Diamonds penetrate walls"])
+directional_light = NodePath("DirectionalLight3D")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_jn580")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.75, -0.43301, 0, 5.85933, -11.3552)
+light_color = Color(0.9375, 0.913561, 0.642888, 1)
+shadow_enabled = true
 
 [node name="LightmapGI" type="LightmapGI" parent="."]
 quality = 2

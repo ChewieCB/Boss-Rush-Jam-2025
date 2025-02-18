@@ -1,6 +1,10 @@
 extends CharacterBody3D
 class_name BossCore
 
+## Emit when boss HP drop to 0.
+signal died
+## Emit after collected the barrel, 
+## or same time as `died` signal if already collected.
 signal defeated(boss: BossCore)
 
 @export var chip_scene: PackedScene
@@ -416,6 +420,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 
 func _on_died() -> void:
+	died.emit()
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")

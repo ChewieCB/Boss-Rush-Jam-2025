@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="3_nqcqn"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_w7aip"]
 [ext_resource type="Material" uid="uid://coo1y5tjcwlec" path="res://assets/textures/placeholder/texture_dark_03.tres" id="4_h2odb"]
-[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="4_tvaml"]
+[ext_resource type="Material" path="res://assets/textures/placeholder/texture_light_07.tres" id="4_tvaml"]
 [ext_resource type="Material" uid="uid://pssqe4n1jgb4" path="res://assets/textures/placeholder/texture_dark_01.tres" id="5_udcre"]
 [ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="5_xc8xd"]
 [ext_resource type="Material" uid="uid://c162u3li2i84m" path="res://assets/textures/walls/wallpaper_0.tres" id="7_3pp8n"]
@@ -1306,13 +1306,14 @@ _surfaces = [{
 "vertex_data": PackedByteArray("AACAPwAAMEAAAIDAAACAPwAAMMAAAIDAAACAPwAAMMAAAIBAAACAPwAAMEAAAIBAAACAvwAAMEAAAIHAAACAvwAAMMAAAIHAAACAPwAAMMAAAIHAAACAPwAAMEAAAIHAAACAvwAAMEAAAIFAAACAPwAAMEAAAIFAAACAPwAAMMAAAIFAAACAvwAAMMAAAIFAAACAvwAAMEAAAIDAAACAvwAAMEAAAIBAAACAvwAAMMAAAIBAAACAvwAAMMAAAIDA////f/9//z////9//3//P////3//f/8/////f/9//z//////////P/////////8//////////z//////////P/9//3////+//3//f////7//f/9/////v/9//3////+/AAD/f/9//78AAP9//3//vwAA/3//f/+/AAD/f/9//78=")
 }]
 
-[node name="BossPit" type="Node3D"]
+[node name="BossPit" type="Node3D" node_paths=PackedStringArray("directional_light")]
 script = ExtResource("1_ymudn")
 bgm = ExtResource("2_bh1i0")
 active_bgm = ExtResource("3_eog7o")
 win_subtext = Array[String](["Double Down", "Security Breached"])
 lose_tips = Array[String](["Keep out of range of the big guy's combos", "Use cover to your advantage"])
 cover_spawn_scene = ExtResource("21_w72c7")
+directional_light = NodePath("DirectionalLight3D")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -1320,6 +1321,11 @@ cover_spawn_scene = ExtResource("21_w72c7")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_pqt42")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.75, -0.43301, 0, 5.85933, -11.3552)
+light_color = Color(0.631632, 0.9375, 0.852371, 1)
+shadow_enabled = true
 
 [node name="BossTrigger" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 30.9)
@@ -2352,12 +2358,6 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 18, 8.
 [node name="OmniLight3D" parent="FuncGodotMap/entity_15_Chandellier1" index="5"]
 omni_range = 25.0
 
-[node name="entity_16_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 8.34375, -13)
-
-[node name="OmniLight3D" parent="FuncGodotMap/entity_16_Chandellier1" index="5"]
-omni_range = 25.0
-
 [node name="entity_17_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 8.34375, 13.5)
 
@@ -2577,7 +2577,6 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0.937
 [editable path="FuncGodotMap/entity_13_Chandellier1"]
 [editable path="FuncGodotMap/entity_14_Chandellier1"]
 [editable path="FuncGodotMap/entity_15_Chandellier1"]
-[editable path="FuncGodotMap/entity_16_Chandellier1"]
 [editable path="FuncGodotMap/entity_17_Chandellier1"]
 [editable path="FuncGodotMap/entity_28_Chandellier1"]
 [editable path="FuncGodotMap/entity_35_Chandellier1"]

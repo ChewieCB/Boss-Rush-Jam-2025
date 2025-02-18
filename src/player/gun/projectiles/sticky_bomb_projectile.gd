@@ -61,7 +61,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		if body is Shield:
 			body.impact(self.global_position)
 			body.health_component.damage(damage)
-		elif body is RouletteBall or body is PitTurret:
+		elif "health_component" in body:
 			body.health_component.damage(damage)
 	self.reparent.call_deferred(body)
 	sticked = true

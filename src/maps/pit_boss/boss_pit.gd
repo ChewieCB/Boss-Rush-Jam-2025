@@ -16,7 +16,7 @@ extends Node3D
 @export var phase_2_health_percentage_trigger: float = 0.7
 @export var phase_3_health_percentage_trigger: float = 0.35
 
-@onready var pit_boss: BossPit = find_children("*", "BossPit").front() 
+@onready var pit_boss: BossPit = find_children("*", "BossPit").front()
 @onready var surveillance_boss: BossSurveillance = find_children("*", "BossSurveillance").front()
 var dead_boss_count: int = 0
 
@@ -29,6 +29,7 @@ var nav_region: NavigationRegion3D
 @onready var initial_cover = find_children("*", "Cover")
 var cover_objects: Array = []
 var cover_spawn_points: Array = []
+@export var directional_light: DirectionalLight3D
 
 
 func _ready() -> void:
@@ -73,7 +74,7 @@ func _on_player_death() -> void:
 
 func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
 	var combined_current_health := pit_boss.health_component.current_health + surveillance_boss.health_component.current_health
-	var combined_max_health := pit_boss.health_component.max_health + surveillance_boss.health_component.max_health 
+	var combined_max_health := pit_boss.health_component.max_health + surveillance_boss.health_component.max_health
 	var combined_health_ratio := combined_current_health / combined_max_health
 		
 	var pit_boss_health_ratio := pit_boss.health_component.current_health / \
@@ -97,6 +98,8 @@ func _on_boss_died(boss: BossCore) -> void:
 	if dead_boss_count == 2:
 		boss.defeated.connect(_on_bosses_defeated)
 		boss.drop_barrel()
+		var tween = self.create_tween()
+		tween.tween_property(directional_light, "light_energy", 0, 1)
 	
 	var remaining_boss: BossCore
 	match boss:

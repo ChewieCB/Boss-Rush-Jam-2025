@@ -70,7 +70,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 	# Normal hitscan start here
 	life_timer.start()
-	var rand_damage_mod := int(randf_range(-_damage/3, _damage/3))
+	var rand_damage_mod := int(randf_range(-_damage / 3, _damage / 3))
 	damage = _damage + rand_damage_mod
 	speed = _speed
 	ricochet_count_left = ricochet_count
@@ -96,7 +96,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			if target is Shield:
 				target.impact(self.global_position)
 				target.health_component.damage(damage)
-			elif target is RouletteBall or target is PitTurret:
+			elif "health_component" in target:
 				target.health_component.damage(damage)
 			elif target is BartenderBottle:
 				target.call_deferred("queue_free")
