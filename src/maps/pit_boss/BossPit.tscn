@@ -2358,12 +2358,6 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 18, 8.
 [node name="OmniLight3D" parent="FuncGodotMap/entity_15_Chandellier1" index="5"]
 omni_range = 25.0
 
-[node name="entity_16_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 8.34375, -13)
-
-[node name="OmniLight3D" parent="FuncGodotMap/entity_16_Chandellier1" index="5"]
-omni_range = 25.0
-
 [node name="entity_17_Chandellier1" parent="FuncGodotMap" instance=ExtResource("35_p7cif")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 8.34375, 13.5)
 
@@ -2583,7 +2577,6 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0.937
 [editable path="FuncGodotMap/entity_13_Chandellier1"]
 [editable path="FuncGodotMap/entity_14_Chandellier1"]
 [editable path="FuncGodotMap/entity_15_Chandellier1"]
-[editable path="FuncGodotMap/entity_16_Chandellier1"]
 [editable path="FuncGodotMap/entity_17_Chandellier1"]
 [editable path="FuncGodotMap/entity_28_Chandellier1"]
 [editable path="FuncGodotMap/entity_35_Chandellier1"]
