@@ -54,6 +54,7 @@ fit_content = true
 
 [node name="DeleteButton" type="Button" parent="."]
 modulate = Color(1, 0.150666, 0.0309665, 1)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = " Delete "
@@ -73,3 +74,4 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [connection signal="pressed" from="MarginContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="DeleteButton" to="." method="_on_delete_button_pressed"]

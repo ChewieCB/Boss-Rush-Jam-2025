@@ -50,6 +50,7 @@ func _on_lobby_button_pressed() -> void:
 
 func _on_exit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
+	await SaveManager.save_game(GameManager.chosen_slot_id)
 	get_tree().quit()
 
 

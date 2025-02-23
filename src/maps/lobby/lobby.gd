@@ -25,10 +25,12 @@ func _ready() -> void:
 	lobby_music_player.play()
 
 	# Save and load check
-	if SaveManager.is_loaded:
+	if SaveManager.save_data_is_loaded:
 		SaveManager.save_game(GameManager.chosen_slot_id)
 	else:
 		SaveManager.load_game(GameManager.chosen_slot_id)
+		await get_tree().create_timer(1.0).timeout
+		SaveManager.save_game(GameManager.chosen_slot_id)
 
 	# HACK
 	if GameManager.player_gained_first_barrel:

@@ -1,7 +1,7 @@
 extends Node
 
-var is_loaded = false
-
+var save_data_is_loaded = false
+var is_saving = false
 
 func convert_resource_to_id(array_resource: Array) -> Array[int]:
 	var result: Array[int] = []
@@ -15,6 +15,13 @@ func convert_id_to_resource(array_id: Array) -> Array[BarrelDataResource]:
 		for item in GameManager.barrel_database:
 			if item.barrel_id == elem:
 				result.append(item)
+	return result
+
+
+func convert_id_to_boss_enum(array_id: Array) -> Array[BossCore.BossIdEnum]:
+	var result: Array[BossCore.BossIdEnum] = []
+	for elem in array_id:
+		result.append(elem as BossCore.BossIdEnum)
 	return result
 
 
@@ -33,6 +40,7 @@ func delete_save_file(slot_id: int):
 
 
 func save_game(slot_id: int = 0):
+	is_saving = true
 	var save_dict = {
 		"player_currency": GameManager.player_currency,
 		"equipped_barrels": convert_resource_to_id(GameManager.equipped_barrels),
@@ -46,7 +54,7 @@ func save_game(slot_id: int = 0):
 	var save_file = FileAccess.open(get_savefile_name(slot_id), FileAccess.WRITE)
 	var json_string = JSON.stringify(save_dict)
 	save_file.store_line(json_string)
-
+	is_saving = false
 
 func load_data_only(slot_id: int) -> Dictionary:
 	var save_data: Dictionary = {}
@@ -69,7 +77,7 @@ func load_data_only(slot_id: int) -> Dictionary:
 
 
 func load_game(slot_id: int = 0):
-	is_loaded = true
+	save_data_is_loaded = true
 
 	var save_data = load_data_only(slot_id)
 	if save_data.is_empty():
@@ -81,7 +89,7 @@ func load_game(slot_id: int = 0):
 	GameManager.shop_barrels = convert_id_to_resource(save_data["shop_barrels"])
 	GameManager.player_gained_first_barrel = save_data["player_gained_first_barrel"]
 	GameManager.barrel_tutorial_shown = save_data["barrel_tutorial_shown"]
-	GameManager.bosses_defeated = save_data["bosses_defeated"]
+	GameManager.bosses_defeated = convert_id_to_boss_enum(save_data["bosses_defeated"])
 	GameManager.victory_ui_shown = save_data["victory_ui_shown"]
 
 
