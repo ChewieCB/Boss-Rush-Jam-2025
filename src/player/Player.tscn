@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=66 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -51,6 +51,7 @@
 [ext_resource type="AudioStream" uid="uid://ckr1r101hscjl" path="res://src/player/assets/sfx/Floor Dash.mp3" id="30_on7sg"]
 [ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="31_pnqxi"]
 [ext_resource type="Shader" path="res://src/player/outline.gdshader" id="36_1ffwc"]
+[ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
@@ -220,6 +221,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.27613, 0)
 texture_albedo = ExtResource("3_tgexf")
 
 [node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("41_63osp")
 
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
 visible = false
@@ -369,6 +371,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("47_yr3ov")
+
+[node name="SavingIndicator" type="Label" parent="UI"]
+visible = false
+offset_left = 8.0
+offset_top = 1024.0
+offset_right = 117.0
+offset_bottom = 1073.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "Saving..."
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")

@@ -28,9 +28,9 @@ func _ready() -> void:
 	if SaveManager.save_data_is_loaded:
 		SaveManager.save_game(GameManager.chosen_slot_id)
 	else:
+		# First time get to lobby, load data from save file
 		SaveManager.load_game(GameManager.chosen_slot_id)
-		await get_tree().create_timer(1.0).timeout
-		SaveManager.save_game(GameManager.chosen_slot_id)
+
 
 	# HACK
 	if GameManager.player_gained_first_barrel:

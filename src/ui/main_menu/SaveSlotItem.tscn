@@ -44,10 +44,10 @@ theme_override_constants/margin_bottom = 10
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 mouse_filter = 2
-theme_override_font_sizes/normal_font_size = 40
+theme_override_font_sizes/normal_font_size = 32
 theme_override_font_sizes/bold_font_size = 45
 bbcode_enabled = true
-text = "[b]Slot 1[/b]
+text = "[b][color=gold]Slot 1[/color][/b]
 Chips: 450 | Barrels collected: 12
 Playtime: 00:12:20"
 fit_content = true

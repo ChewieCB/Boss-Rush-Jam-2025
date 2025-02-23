@@ -79,6 +79,25 @@ patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
+[node name="MainMenuButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Main Menu"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/MainMenuButton"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_cl7if")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
 [node name="QuitButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
@@ -102,9 +121,11 @@ patch_margin_bottom = 20
 visible = false
 layout_mode = 1
 
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="_on_setting_button_mouse_entered"]
+[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="_on_setting_button_pressed"]
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/LobbyButton" to="." method="_on_setting_button_mouse_entered"]
+[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/LobbyButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="PauseOptionBG/VBoxContainer/LobbyButton" to="." method="_on_lobby_button_pressed"]
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="_on_exit_button_mouse_entered"]
+[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/MainMenuButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="PauseOptionBG/VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
+[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="_on_exit_button_pressed"]

@@ -3,6 +3,9 @@ extends Node
 var save_data_is_loaded = false
 var is_saving = false
 
+signal started_saving
+signal finished_saving
+
 func convert_resource_to_id(array_resource: Array) -> Array[int]:
 	var result: Array[int] = []
 	for elem in array_resource:
@@ -39,8 +42,9 @@ func delete_save_file(slot_id: int):
 		print("Save file does not exist.")
 
 
-func save_game(slot_id: int = 0):
+func save_game(slot_id):
 	is_saving = true
+	started_saving.emit()
 	var save_dict = {
 		"player_currency": GameManager.player_currency,
 		"equipped_barrels": convert_resource_to_id(GameManager.equipped_barrels),
@@ -55,6 +59,7 @@ func save_game(slot_id: int = 0):
 	var json_string = JSON.stringify(save_dict)
 	save_file.store_line(json_string)
 	is_saving = false
+	finished_saving.emit()
 
 func load_data_only(slot_id: int) -> Dictionary:
 	var save_data: Dictionary = {}
@@ -76,11 +81,14 @@ func load_data_only(slot_id: int) -> Dictionary:
 	return save_data
 
 
-func load_game(slot_id: int = 0):
+func load_game(slot_id):
 	save_data_is_loaded = true
 
 	var save_data = load_data_only(slot_id)
+	print("FAFAFAF ", save_data)
 	if save_data.is_empty():
+		print("NO DATA ON SLOT ", slot_id)
+		GameManager.load_new_save_data()
 		return
 
 	GameManager.player_currency = save_data["player_currency"]

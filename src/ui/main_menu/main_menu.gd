@@ -16,6 +16,10 @@ var bgm_player: AudioStreamPlayer
 @onready var save_ui = $SaveUI
 
 func _ready() -> void:
+	Engine.time_scale = 1
+	SoundManager.stop_music(0.1)
+	get_tree().paused = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	bgm_player = SoundManager.play_music(bgm, 0.2, "BGM")
 	save_ui.visible = false
 	for button in buttons:

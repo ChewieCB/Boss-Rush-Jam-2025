@@ -21,7 +21,7 @@ var shop_barrels: Array[BarrelDataResource] = []
 @export var starting_shop_barrels: Array[BarrelDataResource]
 @export var barrel_database: Array[BarrelDataResource]
 
-@export var player_currency: int = 200:
+@export var player_currency: int = 0:
 	set(value):
 		player_currency = value
 		currency_changed.emit(player_currency)
@@ -63,11 +63,7 @@ var scaling_3d: float = 100.0
 
 func _ready() -> void:
 	if len(barrel_database) == 0:
-		load_barrel_tres_file()
-	for data in starting_barrels:
-		equipped_barrels.append(data)
-	for data in starting_shop_barrels:
-		shop_barrels.append(data)
+		load_barrel_database()
 
 
 func add_barrel_to_inventory(data: BarrelDataResource):
@@ -136,7 +132,7 @@ func show_boss_special_dialog(content: String, duration: float):
 	SoundManager.process_mode = original_sm_process_mode
 
 
-func load_barrel_tres_file():
+func load_barrel_database():
 	var directory_path = "res://src/player/barrel/resource/"
 	var tres_files: Array[BarrelDataResource] = []
 	var dir = DirAccess.open(directory_path)
@@ -151,3 +147,22 @@ func load_barrel_tres_file():
 	else:
 		print("Failed to open directory: ", directory_path)
 	barrel_database = tres_files
+
+
+func load_new_save_data():
+	for data in starting_barrels:
+		equipped_barrels.append(data)
+	for data in starting_shop_barrels:
+		shop_barrels.append(data)
+
+func reset_current_save_data():
+	equipped_barrels = []
+	inventory_barrels = []
+	shop_barrels = []
+	player_currency = 0
+	player_gained_first_barrel = false
+	barrel_tutorial_shown = false
+	bosses_defeated = []
+	all_bosses_defeated = false
+	victory_ui_shown = false
+	chosen_slot_id = -1
