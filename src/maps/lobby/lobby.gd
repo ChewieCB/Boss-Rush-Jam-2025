@@ -23,7 +23,13 @@ func _ready() -> void:
 		button.pushed.connect(_on_level_select)
 	
 	lobby_music_player.play()
-	
+
+	# Save and load check
+	if SaveManager.is_loaded:
+		SaveManager.save_game()
+	else:
+		SaveManager.load_game()
+
 	# HACK
 	if GameManager.player_gained_first_barrel:
 		if not GameManager.barrel_tutorial_shown:

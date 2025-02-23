@@ -942,6 +942,7 @@ lunge_force = 6.5
 lunge_cooldown = 5.0
 sfx_lunge = Array[AudioStream]([ExtResource("16_q6xxl")])
 shield_radius = 4.0
+boss_id = 5
 chip_spawn_chance = 0.15
 chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("7_koy73")

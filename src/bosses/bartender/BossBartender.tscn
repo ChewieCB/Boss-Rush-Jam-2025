@@ -90,6 +90,7 @@ sfx_defense = ExtResource("27_uykih")
 base_movespeed = 10
 behind_bar_move_points = Array[AudioStream]([])
 sfx_jump = Array[AudioStream]([ExtResource("18_nhb38")])
+boss_id = 4
 chip_spawn_chance = 0.3
 chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("15_817ob")

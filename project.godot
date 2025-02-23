@@ -15,14 +15,15 @@ config/version="1.0"
 config/tags=PackedStringArray("jam")
 run/main_scene="res://src/ui/main_menu/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
-boot_splash/image="res://src/godot-splash-reimagined-large-color.png"
+boot_splash/image="res://src/godot-splash-fancy.png"
 config/icon="res://src/collectibles/poker_chip/assets/chip_base.png"
 
 [autoload]
 
+GameManager="*res://src/utils/singletons/GameManager.tscn"
+SaveManager="*res://src/utils/singletons/save_manager.gd"
 SoundManager="*res://addons/sound_manager/sound_manager.gd"
 GunUtils="*res://src/utils/gun_utils.gd"
-GameManager="*res://src/utils/singletons/GameManager.tscn"
 
 [debug]
 

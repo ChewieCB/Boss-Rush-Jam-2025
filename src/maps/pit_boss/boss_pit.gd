@@ -110,9 +110,9 @@ func _on_boss_died(boss: BossCore) -> void:
 	remaining_boss.state_chart.send_event("start_phase_3")
 
 
-func _on_bosses_defeated(boss: BossCore) -> void:
-	if not pit_boss in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(pit_boss)
+func _on_bosses_defeated() -> void:
+	if not self.boss_id in GameManager.bosses_defeated:
+		GameManager.bosses_defeated.append(self.boss_id)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 	win_ui.win("Floor Cleared", win_subtext.pick_random())
 	show_end_panel()

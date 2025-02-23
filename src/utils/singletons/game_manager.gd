@@ -19,6 +19,7 @@ var shop_barrels: Array[BarrelDataResource] = []
 
 @export var starting_barrels: Array[BarrelDataResource]
 @export var starting_shop_barrels: Array[BarrelDataResource]
+@export var barrel_database: Array[BarrelDataResource]
 
 @export var player_currency: int = 200:
 	set(value):
@@ -28,7 +29,7 @@ var shop_barrels: Array[BarrelDataResource] = []
 var player_gained_first_barrel: bool = false
 var barrel_tutorial_shown: bool = false
 
-var bosses_defeated: Array[BossCore] = []
+var bosses_defeated: Array[BossCore.BossIdEnum] = []
 var all_bosses_defeated: bool = false
 var victory_ui_shown: bool = false
 
@@ -59,6 +60,8 @@ var scaling_3d: float = 100.0
 
 
 func _ready() -> void:
+	if len(barrel_database) == 0:
+		load_barrel_tres_file()
 	for data in starting_barrels:
 		equipped_barrels.append(data)
 	for data in starting_shop_barrels:
@@ -129,3 +132,20 @@ func show_boss_special_dialog(content: String, duration: float):
 	GameManager.player.boss_special_dialog.visible = false
 	get_tree().paused = false
 	SoundManager.process_mode = original_sm_process_mode
+
+
+func load_barrel_tres_file():
+	var directory_path = "res://src/player/barrel/resource/"
+	var tres_files: Array[BarrelDataResource] = []
+	var dir = DirAccess.open(directory_path)
+
+	if dir:
+		var files = dir.get_files() # Get all files in the directory
+		for file in files:
+			if file.ends_with(".tres"):
+				var resource = ResourceLoader.load(directory_path + "/" + file)
+				if resource:
+					tres_files.append(resource as BarrelDataResource)
+	else:
+		print("Failed to open directory: ", directory_path)
+	barrel_database = tres_files

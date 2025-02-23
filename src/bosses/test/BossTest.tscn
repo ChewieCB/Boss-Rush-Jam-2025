@@ -27,6 +27,7 @@ guard = SubResource("Resource_2ueik")
 
 [node name="BossTest" instance=ExtResource("1_35rb8")]
 script = ExtResource("2_t8yjh")
+boss_id = 1
 barrel_to_drop = ExtResource("3_jyk2h")
 
 [node name="DebugMesh" parent="." index="2"]
