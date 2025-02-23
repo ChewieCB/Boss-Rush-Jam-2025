@@ -33,6 +33,8 @@ var bosses_defeated: Array[BossCore.BossIdEnum] = []
 var all_bosses_defeated: bool = false
 var victory_ui_shown: bool = false
 
+var chosen_slot_id = -1
+
 # HACK - do this dynamically with level loading/unloading in the elevator
 var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3

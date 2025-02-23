@@ -1,0 +1,75 @@
+[gd_scene load_steps=4 format=3 uid="uid://dif5ua57y8udh"]
+
+[ext_resource type="Texture2D" uid="uid://bgnypcgioivlr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-012.png" id="1_3angc"]
+[ext_resource type="Script" path="res://src/ui/main_menu/save_slot_item.gd" id="1_wo6cm"]
+[ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="2_7tlhs"]
+
+[node name="SaveSlotItem" type="HBoxContainer"]
+offset_right = 1491.0
+offset_bottom = 173.0
+theme_override_constants/separation = 20
+script = ExtResource("1_wo6cm")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LoadButton" type="Button" parent="MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 45
+
+[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer/LoadButton"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_3angc")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="LoadButtonLabel" type="RichTextLabel" parent="MarginContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 40
+theme_override_font_sizes/bold_font_size = 45
+bbcode_enabled = true
+text = "[b]Slot 1[/b]
+Chips: 450 | Barrels collected: 12
+Playtime: 00:12:20"
+fit_content = true
+
+[node name="DeleteButton" type="Button" parent="."]
+modulate = Color(1, 0.150666, 0.0309665, 1)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = " Delete "
+
+[node name="NinePatchRect" type="NinePatchRect" parent="DeleteButton"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_7tlhs")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[connection signal="pressed" from="MarginContainer/LoadButton" to="." method="_on_load_button_pressed"]

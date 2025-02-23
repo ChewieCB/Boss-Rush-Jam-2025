@@ -26,9 +26,9 @@ func _ready() -> void:
 
 	# Save and load check
 	if SaveManager.is_loaded:
-		SaveManager.save_game()
+		SaveManager.save_game(GameManager.chosen_slot_id)
 	else:
-		SaveManager.load_game()
+		SaveManager.load_game(GameManager.chosen_slot_id)
 
 	# HACK
 	if GameManager.player_gained_first_barrel:

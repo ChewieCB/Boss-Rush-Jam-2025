@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://ctddgvd003sjr"]
+[gd_scene load_steps=30 format=3 uid="uid://ctddgvd003sjr"]
 
 [ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
 [ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
@@ -23,6 +23,7 @@
 [ext_resource type="FontFile" uid="uid://djistlrjw48qk" path="res://assets/fonts/kleptocracy titling/kleptocracy titling lt.otf" id="20_6j3k5"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="20_j34pk"]
 [ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="24_prxld"]
+[ext_resource type="PackedScene" uid="uid://dif5ua57y8udh" path="res://src/ui/main_menu/SaveSlotItem.tscn" id="24_re1j0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2x62q"]
 shader = ExtResource("1_jqa14")
@@ -1339,6 +1340,36 @@ patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
+
+[node name="SaveUI" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_left = 692.0
+offset_top = 299.0
+offset_right = 1806.0
+offset_bottom = 949.0
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SaveUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="SaveSlotItem" parent="SaveUI/VBoxContainer" instance=ExtResource("24_re1j0")]
+layout_mode = 2
+slot_id = 1
+
+[node name="SaveSlotItem2" parent="SaveUI/VBoxContainer" instance=ExtResource("24_re1j0")]
+layout_mode = 2
+slot_id = 2
+
+[node name="SaveSlotItem3" parent="SaveUI/VBoxContainer" instance=ExtResource("24_re1j0")]
+layout_mode = 2
+slot_id = 3
 
 [connection signal="pressed" from="TitleColumn/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
