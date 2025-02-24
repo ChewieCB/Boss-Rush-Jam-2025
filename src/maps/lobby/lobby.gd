@@ -11,9 +11,7 @@ signal ui_accept
 @onready var tutorial_ui: Control = $UI/TutorialUI
 @onready var game_win_ui: Control = $UI/GameWinUI
 
-
 var display_barrels: Array = []
-
 
 func _ready() -> void:
 	Engine.time_scale = 1
@@ -26,9 +24,11 @@ func _ready() -> void:
 
 	# Save and load check
 	if SaveManager.save_data_is_loaded:
+		GameManager.update_total_playtime()
 		SaveManager.save_game(GameManager.chosen_slot_id)
 	else:
 		# First time get to lobby, load data from save file
+		GameManager.start_record_playtime()
 		SaveManager.load_game(GameManager.chosen_slot_id)
 
 

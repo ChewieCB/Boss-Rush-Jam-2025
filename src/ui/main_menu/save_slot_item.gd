@@ -21,17 +21,18 @@ func _ready() -> void:
 
 	save_data = SaveManager.load_data_only(slot_id)
 	if not save_data.is_empty():
-		var chips = save_data["player_currency"]
-		var barrel_collected = len(save_data["equipped_barrels"]) + len(save_data["inventory_barrels"])
+		var chips = save_data.get("player_currency", 0)
+		var barrel_collected = len(save_data.get("equipped_barrels", [])) + len(save_data.get("inventory_barrels", []))
+		var playtime = save_data.get("total_playtime", 0)
 		load_button_label.text = "[b][color=gold]Slot {0}[/color][/b] \
 			\nChips: {1} | Barrels collected: {2} \
-			\nPlaytime: 00:00:00 (Not implemented)".format([slot_id, chips, barrel_collected])
+			\nPlaytime: {3}".format([slot_id, chips, barrel_collected, format_time(playtime)])
 		delete_button.disabled = false
 	else:
 		load_button_label.text = "[b][color=gold]Slot {0}[/color][/b] \
 			\nNew save file".format([slot_id])
 		delete_button.disabled = true
-		
+
 
 func _on_load_button_pressed() -> void:
 	GameManager.chosen_slot_id = slot_id
@@ -51,3 +52,11 @@ func _on_delete_button_pressed() -> void:
 		confirm_delete = false
 		load_button_label.text = "[b][color=gold]Slot {0}[/color][/b] \
 			\nNew save file".format([slot_id])
+
+
+func format_time(msec: int) -> String:
+	var seconds: int = round(msec / 1000.0)
+	var hours: int = round(seconds / 3600.0)
+	var minutes: int = round((seconds % 3600) / 60.0)
+	var secs = seconds % 60
+	return "%02d:%02d:%02d" % [hours, minutes, secs]

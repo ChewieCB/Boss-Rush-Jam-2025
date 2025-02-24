@@ -34,6 +34,8 @@ var all_bosses_defeated: bool = false
 var victory_ui_shown: bool = false
 
 var chosen_slot_id = -1
+var start_record_timestamp = 0
+var total_playtime = 0
 
 # HACK - do this dynamically with level loading/unloading in the elevator
 var cached_player_pos_relative_to_elevator_doors: Vector3
@@ -166,3 +168,14 @@ func reset_current_save_data():
 	all_bosses_defeated = false
 	victory_ui_shown = false
 	chosen_slot_id = -1
+	start_record_timestamp = 0
+	total_playtime = 0
+
+
+func start_record_playtime():
+	start_record_timestamp = Time.get_ticks_msec()
+
+func update_total_playtime():
+	var current_time = Time.get_ticks_msec()
+	var played_time = current_time - start_record_timestamp
+	total_playtime += played_time

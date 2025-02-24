@@ -54,6 +54,7 @@ func save_game(slot_id):
 		"barrel_tutorial_shown": GameManager.barrel_tutorial_shown,
 		"bosses_defeated": GameManager.bosses_defeated,
 		"victory_ui_shown": GameManager.victory_ui_shown,
+		"total_playtime": GameManager.total_playtime
 	}
 	var save_file = FileAccess.open(get_savefile_name(slot_id), FileAccess.WRITE)
 	var json_string = JSON.stringify(save_dict)
@@ -85,9 +86,7 @@ func load_game(slot_id):
 	save_data_is_loaded = true
 
 	var save_data = load_data_only(slot_id)
-	print("FAFAFAF ", save_data)
 	if save_data.is_empty():
-		print("NO DATA ON SLOT ", slot_id)
 		GameManager.load_new_save_data()
 		return
 
@@ -99,6 +98,7 @@ func load_game(slot_id):
 	GameManager.barrel_tutorial_shown = save_data["barrel_tutorial_shown"]
 	GameManager.bosses_defeated = convert_id_to_boss_enum(save_data["bosses_defeated"])
 	GameManager.victory_ui_shown = save_data["victory_ui_shown"]
+	GameManager.total_playtime = save_data["total_playtime"]
 
 
 func get_savefile_name(slot_id: int) -> String:

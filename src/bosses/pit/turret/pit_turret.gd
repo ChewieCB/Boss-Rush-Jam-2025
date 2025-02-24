@@ -95,7 +95,7 @@ func rotate_and_elevate(delta: float, target_pos: Vector3) -> void:
 		head.global_basis.z
 	)
 
-	var elevation_sign = -sign(head.to_local(target_pos).y)
+	var elevation_sign = - sign(head.to_local(target_pos).y)
 	var final_x: float = elevation_sign * min(elevation_speed * delta, x_angle)
 	head.rotate_x(final_x)
 
@@ -162,9 +162,10 @@ func _on_standard_attack_recovering_state_exited() -> void:
 
 func _on_health_component_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
-		await get_tree().create_timer(0.05).timeout
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
+		if get_tree():
+			dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
+			await get_tree().create_timer(0.05).timeout
+			dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
 
 
 func _on_health_component_died() -> void:
