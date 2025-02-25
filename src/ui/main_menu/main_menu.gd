@@ -53,6 +53,7 @@ func _on_back_button_pressed() -> void:
 	buttons_container.visible = true
 	settings_ui.visible = false
 	story_ui.visible = true
+	SaveManager.save_setting_config()
 
 
 func _on_credit_button_pressed() -> void:

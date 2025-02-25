@@ -44,10 +44,9 @@ var cached_camera_rotation: Vector3
 
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
-
 @export_range(60, 120, 1.0) var camera_fov: float = 90:
 	set(value):
-		if value != camera_fov:
+		if value != camera_fov && player:
 			player.player_camera.set_fov(value)
 		camera_fov = value
 var camera_tilt: bool = true
@@ -66,6 +65,9 @@ var scaling_3d: float = 100.0
 func _ready() -> void:
 	if len(barrel_database) == 0:
 		load_barrel_database()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	SaveManager.load_setting_config()
 
 
 func add_barrel_to_inventory(data: BarrelDataResource):

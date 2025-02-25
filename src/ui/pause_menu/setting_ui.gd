@@ -27,7 +27,6 @@ class_name SettingUI
 @export var keybind_button_prefab: PackedScene
 @onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection
 
-var pause_ui: PauseUI
 var keybindable_action_list = {
 	"move_up": "Move forward",
 	"move_down": "Move backward",
@@ -47,45 +46,9 @@ var action_to_remap = null
 var remapping_button: KeybindButton = null
 
 func _ready() -> void:
-	mouse_sen_slider.value = GameManager.mouse_sensitivity
-	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
-
-	fov_slider.value = GameManager.camera_fov
-	fov_value.text = "{0}".format([GameManager.camera_fov])
-
-	camera_tilt_toggle.set_pressed_no_signal(GameManager.camera_tilt)
-
-	Engine.max_fps = GameManager.FPS_LIMIT_ARRAY[GameManager.fps_limit_index]
-	fps_limit_option_button.selected = GameManager.fps_limit_index
-
-	DisplayServer.window_set_vsync_mode(GameManager.vsync_option_index)
-	vsync_option_button.selected = GameManager.vsync_option_index
-
-	DisplayServer.window_set_size(GameManager.RESOLUTION_ARRAY[GameManager.resolution_index])
-	resolution_option_button.selected = GameManager.resolution_index
-
-	set_window_mode(GameManager.window_mode_index)
-	window_mode_option_button.selected = GameManager.window_mode_index
-
-	get_viewport().set_scaling_3d_scale(GameManager.scaling_3d / 100.0)
-	scaling_3d_slider.value = GameManager.scaling_3d
-	scaling_3d_value.text = "{0}%".format([GameManager.scaling_3d])
-
-	# TODO - update these to use the more recent SoundManager version (or downgrade SoundManager)
-	#SoundManager.set_master_volume(GameManager.master_audio / 100.0)
-	#SoundManager.set_music_volume(GameManager.bgm_audio / 100.0)
-	#SoundManager.set_sound_volume(GameManager.sfx_audio / 100.0)
-	#SoundManager.set_ui_sound_volume(GameManager.ui_audio / 100.0)
-	master_slider.value = GameManager.master_audio
-	master_value.text = "{0}".format([GameManager.master_audio])
-	bgm_slider.value = GameManager.bgm_audio
-	bgm_value.text = "{0}".format([GameManager.bgm_audio])
-	sfx_slider.value = GameManager.sfx_audio
-	sfx_value.text = "{0}".format([GameManager.sfx_audio])
-	ui_slider.value = GameManager.ui_audio
-	ui_value.text = "{0}".format([GameManager.ui_audio])
-
+	refresh_setting_value()
 	create_keybind_buttons()
+	SaveManager.setting_config_loaded.connect(refresh_setting_value)
 
 func _input(event):
 	if is_remapping:
@@ -105,6 +68,7 @@ func open_menu():
 
 func close_menu():
 	visible = false
+	SaveManager.save_setting_config()
 
 func _on_control_option_pressed() -> void:
 	tab_container.current_tab = 0
@@ -121,7 +85,7 @@ func _on_audio_option_pressed() -> void:
 func _on_back_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 	close_menu()
-	pause_ui.return_to_pause_menu()
+	GameManager.pause_ui.return_to_pause_menu()
 
 func _on_mouse_sen_slider_value_changed(value: float) -> void:
 	GameManager.mouse_sensitivity = value
@@ -152,22 +116,22 @@ func _on_resolution_option_button_item_selected(index: int) -> void:
 	centre_window()
 
 func _on_master_slider_value_changed(value: float) -> void:
-	AudioServer.set_bus_volume_db(0, linear_to_db(value/100.0))
+	AudioServer.set_bus_volume_db(0, linear_to_db(value / 100.0))
 	master_value.text = "{0}".format([value])
 	GameManager.master_audio = value
 
 func _on_ui_slider_value_changed(value: float) -> void:
-	AudioServer.set_bus_volume_db(3, linear_to_db(value/100.0))
+	AudioServer.set_bus_volume_db(3, linear_to_db(value / 100.0))
 	ui_value.text = "{0}".format([value])
 	GameManager.ui_audio = value
 
 func _on_sfx_slider_value_changed(value: float) -> void:
-	AudioServer.set_bus_volume_db(2, linear_to_db(value/100.0))
+	AudioServer.set_bus_volume_db(2, linear_to_db(value / 100.0))
 	sfx_value.text = "{0}".format([value])
 	GameManager.sfx_audio = value
 
 func _on_bgm_slider_value_changed(value: float) -> void:
-	AudioServer.set_bus_volume_db(1, linear_to_db(value/100.0))
+	AudioServer.set_bus_volume_db(1, linear_to_db(value / 100.0))
 	bgm_value.text = "{0}".format([value])
 	GameManager.bgm_audio = value
 
@@ -241,3 +205,43 @@ func _on_reset_keybind_button_pressed():
 
 func _on_reset_keybind_button_mouse_entered():
 	play_button_hover_sfx()
+
+
+func refresh_setting_value():
+	mouse_sen_slider.value = GameManager.mouse_sensitivity
+	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
+
+	fov_slider.value = GameManager.camera_fov
+	fov_value.text = "{0}".format([GameManager.camera_fov])
+
+	camera_tilt_toggle.set_pressed_no_signal(GameManager.camera_tilt)
+
+	Engine.max_fps = GameManager.FPS_LIMIT_ARRAY[GameManager.fps_limit_index]
+	fps_limit_option_button.selected = GameManager.fps_limit_index
+
+	DisplayServer.window_set_vsync_mode(GameManager.vsync_option_index)
+	vsync_option_button.selected = GameManager.vsync_option_index
+
+	DisplayServer.window_set_size(GameManager.RESOLUTION_ARRAY[GameManager.resolution_index])
+	resolution_option_button.selected = GameManager.resolution_index
+
+	set_window_mode(GameManager.window_mode_index)
+	window_mode_option_button.selected = GameManager.window_mode_index
+
+	get_viewport().set_scaling_3d_scale(GameManager.scaling_3d / 100.0)
+	scaling_3d_slider.value = GameManager.scaling_3d
+	scaling_3d_value.text = "{0}%".format([GameManager.scaling_3d])
+
+	# TODO - update these to use the more recent SoundManager version (or downgrade SoundManager)
+	#SoundManager.set_master_volume(GameManager.master_audio / 100.0)
+	#SoundManager.set_music_volume(GameManager.bgm_audio / 100.0)
+	#SoundManager.set_sound_volume(GameManager.sfx_audio / 100.0)
+	#SoundManager.set_ui_sound_volume(GameManager.ui_audio / 100.0)
+	master_slider.value = GameManager.master_audio
+	master_value.text = "{0}".format([GameManager.master_audio])
+	bgm_slider.value = GameManager.bgm_audio
+	bgm_value.text = "{0}".format([GameManager.bgm_audio])
+	sfx_slider.value = GameManager.sfx_audio
+	sfx_value.text = "{0}".format([GameManager.sfx_audio])
+	ui_slider.value = GameManager.ui_audio
+	ui_value.text = "{0}".format([GameManager.ui_audio])
