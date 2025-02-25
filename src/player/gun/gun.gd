@@ -104,11 +104,10 @@ func _ready() -> void:
 	gun_status_label.visible = false
 	magazine_ammo_left = base_magazine_size
 	generate_gun_animations()
+	await get_tree().physics_frame
+	await get_tree().physics_frame
 	reinstall_barrels()
 	reset_modifier(true)
-	await get_tree().physics_frame
-	await get_tree().physics_frame
-	recheck_installed_barrels()
 	reload()
 
 
@@ -228,7 +227,7 @@ func shoot(aim_ray: RayCast3D):
 		time_since_last_shot = 0
 		# Recoil
 		GameManager.player.player_camera.rotate_x(modified_recoil)
-		GameManager.player.player_camera.rotate_y(randf_range(-modified_recoil, modified_recoil))
+		GameManager.player.player_camera.rotate_y(randf_range(- modified_recoil, modified_recoil))
 
 		magazine_ammo_left -= n_ammo_consume
 		for barrel in installed_barrels:
@@ -384,8 +383,8 @@ func get_spread_direction(center_direction: Vector3) -> Vector3:
 	var max_radians = deg_to_rad(modified_spread_angle)
 
 	# Generate random rotation within the spread cone
-	var random_yaw = randf_range(-max_radians, max_radians)
-	var random_pitch = randf_range(-max_radians, max_radians)
+	var random_yaw = randf_range(- max_radians, max_radians)
+	var random_pitch = randf_range(- max_radians, max_radians)
 
 	# Create a rotation basis
 	var spread_rotation = Basis(Vector3.UP, random_yaw) * Basis(Vector3.RIGHT, random_pitch)

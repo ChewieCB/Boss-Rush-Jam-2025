@@ -47,15 +47,22 @@ func _on_lobby_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
 
+func _on_main_menu_button_pressed() -> void:
+	SoundManager.play_button_click_sfx()
+	if GameManager.chosen_slot_id != -1:
+		GameManager.update_total_playtime()
+		await SaveManager.save_game(GameManager.chosen_slot_id)
+	GameManager.reset_current_save_data()
+	SaveManager.save_data_is_loaded = false
+	get_tree().change_scene_to_file("res://src/ui/main_menu/MainMenu.tscn")
 
 func _on_exit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
+	if GameManager.chosen_slot_id != -1:
+		GameManager.update_total_playtime()
+		await SaveManager.save_game(GameManager.chosen_slot_id)
 	get_tree().quit()
 
 
-func _on_exit_button_mouse_entered() -> void:
-	SoundManager.play_button_hover_sfx()
-
-
-func _on_setting_button_mouse_entered() -> void:
+func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()

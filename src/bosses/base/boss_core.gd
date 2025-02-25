@@ -7,6 +7,16 @@ signal died
 ## or same time as `died` signal if already collected.
 signal defeated(boss: BossCore)
 
+enum BossIdEnum {
+	NONE,
+	BASE,
+	SLOTS,
+	ROULETTE,
+	BARTENDER,
+	PIT
+}
+
+@export var boss_id: BossIdEnum
 @export var chip_scene: PackedScene
 @export var chip_spawn_chance: float = 0.4
 @export var chip_spawn_force: float = 700.0
@@ -121,7 +131,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	vel_vertical -= GRAVITY * delta
-	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
+	vel_vertical = clamp(vel_vertical, - MAX_FALL_SPEED, 10000)
 	velocity.y = vel_vertical
 
 	move_and_slide()
@@ -142,8 +152,8 @@ func hide_health() -> void:
 func _turn_towards_target(speed: float, delta: float) -> void:
 	var direction: Vector3 = self.global_position.direction_to(target.global_position)
 	self.rotation.y = lerp_angle(
-		self.rotation.y,atan2(
-			-direction.x, -direction.z
+		self.rotation.y, atan2(
+			- direction.x, - direction.z
 		),
 		delta * speed
 	)
@@ -225,7 +235,7 @@ func drop_barrel() -> void:
 	var query = PhysicsRayQueryParameters3D.create(
 		goal_pos,
 		goal_pos - Vector3(0, 100, 0),
-		pow(2, 1-1) + pow(2, 7-1)
+		pow(2, 1 - 1) + pow(2, 7 - 1)
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
@@ -279,8 +289,6 @@ func _on_barrel_collected(data: BarrelDataResource) -> void:
 	#
 	# Wait for player to click continue
 	#
-
-
 	defeated.emit(self)
 
 
@@ -300,7 +308,6 @@ func select_attack_phase_1() -> void:
 
 func select_attack_phase_2() -> void:
 	pass
-
 
 
 func _exit_tree() -> void:
@@ -356,7 +363,7 @@ func _on_movement_walking_state_physics_processing(delta: float) -> void:
 func _on_movement_charging_state_entered() -> void:
 	navigation_component.disable()
 	hurtbox.monitoring = true
-	var charge_dir = -self.global_basis.z
+	var charge_dir = - self.global_basis.z
 	var charge_impulse = self.global_position.distance_to(target.global_position) * charge_force
 	velocity += charge_dir * charge_impulse
 
@@ -413,10 +420,9 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			var chip = chip_scene.instantiate() as RigidBody3D
 			GameManager.player.get_parent().add_child(chip)
 			chip.global_position = self.global_position
-			chip.rotate_y(randf_range(0, 2*PI))
-			chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+			chip.rotate_y(randf_range(0, 2 * PI))
+			chip.apply_central_force(- chip.global_basis.z * chip_spawn_force)
 			chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
-
 
 
 func _on_died() -> void:
@@ -427,7 +433,7 @@ func _on_died() -> void:
 	drop_barrel()
 	await boss_death_slow_mo()
 	if not self in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(self)
+		GameManager.bosses_defeated.append(boss_id)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 
 

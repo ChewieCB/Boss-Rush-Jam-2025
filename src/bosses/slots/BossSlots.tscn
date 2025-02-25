@@ -234,6 +234,7 @@ bomb_fuse_time = 2.5
 bomb_impulse = 170000.0
 max_drop_distance = 20.0
 sfx_bomb_launch = Array[AudioStream]([ExtResource("45_ishi6"), ExtResource("46_vgcme"), ExtResource("47_hafh8"), ExtResource("48_qbsnc"), ExtResource("49_sigie")])
+boss_id = 2
 chip_spawn_chance = 0.3
 chip_spawn_force = 1200.0
 barrel_to_drop = ExtResource("11_5va1t")
