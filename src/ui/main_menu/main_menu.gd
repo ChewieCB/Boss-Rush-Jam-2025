@@ -69,3 +69,6 @@ func start_game():
 	bgm_player.stop()
 	SoundManager.play_ui_sound(start_game_sfx, "UI")
 	get_tree().change_scene_to_packed(lobby_scene)
+
+func play_button_hover_sfx():
+	SoundManager.play_button_hover_sfx()

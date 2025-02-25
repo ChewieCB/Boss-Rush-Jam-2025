@@ -73,5 +73,7 @@ patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
+[connection signal="mouse_entered" from="MarginContainer/LoadButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="MarginContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="mouse_entered" from="DeleteButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="DeleteButton" to="." method="_on_delete_button_pressed"]

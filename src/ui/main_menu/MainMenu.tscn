@@ -1371,9 +1371,13 @@ slot_id = 2
 layout_mode = 2
 slot_id = 3
 
+[connection signal="mouse_entered" from="TitleColumn/VBoxContainer/StartButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="mouse_entered" from="TitleColumn/VBoxContainer/OptionsButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="mouse_entered" from="TitleColumn/VBoxContainer/CreditButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/CreditButton" to="." method="_on_credit_button_pressed"]
+[connection signal="mouse_entered" from="TitleColumn/VBoxContainer/QuitButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="mouse_entered" from="SettingUI/BackButton" to="SettingUI" method="play_button_hover_sfx"]
 [connection signal="pressed" from="SettingUI/BackButton" to="." method="_on_back_button_pressed"]
