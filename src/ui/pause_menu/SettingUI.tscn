@@ -131,10 +131,11 @@ offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
-current_tab = 0
+current_tab = 1
 tabs_visible = false
 
 [node name="Control" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -228,7 +229,6 @@ theme_override_font_sizes/font_size = 26
 text = "Reset to default"
 
 [node name="Graphic" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 

@@ -2,3 +2,5 @@
 .godot/
 /android/
 dist/*
+/build_win/
+/build_linux/

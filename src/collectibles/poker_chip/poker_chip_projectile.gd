@@ -6,6 +6,11 @@ class_name PokerChip
 
 @onready var sprite: Sprite3D = $Sprite3D
 
+const SPIN_RATE = 5
+
+func _process(delta: float) -> void:
+	sprite.rotate(Vector3(0, 1, 0), SPIN_RATE * delta)
+
 
 func _on_collect() -> void:
 	GameManager.player_currency += value
