@@ -1,14 +1,16 @@
 extends Area3D
-class_name ShakeableCamera
+class_name ShakeCameraWrapper
 
 @export var trauma_reduction_rate = 1.0
-
 @export var max_x = 10.0
 @export var max_y = 10.0
 @export var max_z = 5.0
-
 @export var noise: FastNoiseLite
 @export var noise_speed = 50.0
+
+@onready var recoil_camera: RecoilCameraWrapper = $RecoilCameraWrapper
+@onready var camera: Camera3D = $RecoilCameraWrapper/Camera3D
+@onready var initial_rotation: Vector3 = camera.rotation_degrees
 
 const MAX_TRAUMA = 2.0
 const SHAKE_COEFFICIENT = 1.0
@@ -17,8 +19,6 @@ var trauma = 0.0
 var long_trauma = 0.0 # Trauma over a long duration
 var time = 0.0
 
-@onready var camera: Camera3D = $Camera3D
-@onready var initial_rotation: Vector3 = camera.rotation_degrees
 
 func _process(delta):
 	time += delta

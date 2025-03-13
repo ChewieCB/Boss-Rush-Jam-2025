@@ -51,7 +51,6 @@ class_name Gun
 @export var screenshake_amount: float = 0.2
 
 @export_group("Prefab Scenes")
-@export var aim_ray_prefab: PackedScene
 @export var hitscan_prefab: PackedScene
 @export var projectile_prefab: PackedScene
 
@@ -203,8 +202,8 @@ func shoot(aim_ray: RayCast3D):
 	if barrel_count == 0:
 		SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
 
-	# Screenshake
-	GameManager.player.player_camera.add_trauma(modified_screenshake)
+	GameManager.player.player_camera.recoil_camera.set_recoil_power(modified_recoil)
+	GameManager.player.player_camera.add_trauma(modified_screenshake) # Screenshake for powerful gun (like railcannon)
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_calculation()
@@ -225,9 +224,10 @@ func shoot(aim_ray: RayCast3D):
 				create_gun_attack(projectile_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 
 		time_since_last_shot = 0
-		# Recoil
-		GameManager.player.player_camera.rotate_x(modified_recoil)
-		GameManager.player.player_camera.rotate_y(randf_range(- modified_recoil, modified_recoil))
+		# Recoil (old)
+		# GameManager.player.player_camera.rotate_x(modified_recoil)
+		# GameManager.player.player_camera.rotate_y(randf_range(- modified_recoil, modified_recoil))
+		GameManager.player.player_camera.recoil_camera.recoil_fire()
 
 		magazine_ammo_left -= n_ammo_consume
 		for barrel in installed_barrels:
@@ -383,8 +383,8 @@ func get_spread_direction(center_direction: Vector3) -> Vector3:
 	var max_radians = deg_to_rad(modified_spread_angle)
 
 	# Generate random rotation within the spread cone
-	var random_yaw = randf_range(- max_radians, max_radians)
-	var random_pitch = randf_range(- max_radians, max_radians)
+	var random_yaw = randf_range(-max_radians, max_radians)
+	var random_pitch = randf_range(-max_radians, max_radians)
 
 	# Create a rotation basis
 	var spread_rotation = Basis(Vector3.UP, random_yaw) * Basis(Vector3.RIGHT, random_pitch)

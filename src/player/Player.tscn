@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=67 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -51,6 +51,7 @@
 [ext_resource type="AudioStream" uid="uid://ckr1r101hscjl" path="res://src/player/assets/sfx/Floor Dash.mp3" id="30_on7sg"]
 [ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="31_pnqxi"]
 [ext_resource type="Shader" path="res://src/player/outline.gdshader" id="36_1ffwc"]
+[ext_resource type="Script" path="res://src/player/recoil_camera.gd" id="39_lhhw6"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
@@ -119,7 +120,6 @@ sfx_dash_air = Array[AudioStream]([ExtResource("31_pnqxi")])
 can_wall_jump = true
 can_wall_cling = true
 max_air_jump = 1
-aim_ray_prefab = ExtResource("5_dqbuo")
 health_component = NodePath("HealthComponent")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
@@ -145,25 +145,29 @@ debug_shape_thickness = 5
 
 [node name="Neck" type="Node3D" parent="."]
 
-[node name="ShakeableCamera" type="Area3D" parent="Neck"]
+[node name="ShakeCameraWrapper" type="Area3D" parent="Neck"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
 script = ExtResource("3_cy2wl")
 noise = SubResource("FastNoiseLite_cda8p")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Neck/ShakeableCamera"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Neck/ShakeCameraWrapper"]
 shape = SubResource("BoxShape3D_sjjg0")
 
-[node name="Camera3D" type="Camera3D" parent="Neck/ShakeableCamera"]
+[node name="RecoilCameraWrapper" type="Node3D" parent="Neck/ShakeCameraWrapper"]
+script = ExtResource("39_lhhw6")
+recoil = Vector3(0.5, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Neck/ShakeCameraWrapper/RecoilCameraWrapper"]
 current = true
 fov = 90.0
 near = 0.02
 
-[node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeableCamera/Camera3D"]
+[node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeCameraWrapper/RecoilCameraWrapper/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.947067)
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_bbump")
 
-[node name="AimRecticle" type="TextureRect" parent="Neck/ShakeableCamera"]
+[node name="AimRecticle" type="TextureRect" parent="Neck/ShakeCameraWrapper/RecoilCameraWrapper"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -177,7 +181,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_ymis7")
 
-[node name="HitMarker" type="TextureRect" parent="Neck/ShakeableCamera"]
+[node name="HitMarker" type="TextureRect" parent="Neck/ShakeCameraWrapper/RecoilCameraWrapper"]
 modulate = Color(1, 0.979667, 0.39, 0)
 texture_filter = 1
 anchors_preset = 8
@@ -193,16 +197,17 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_nkt42")
 
-[node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
+[node name="GunContainer" type="Node3D" parent="Neck/ShakeCameraWrapper/RecoilCameraWrapper"]
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
+script = ExtResource("39_lhhw6")
 
-[node name="BlankGun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("16_1gnyn")]
+[node name="BlankGun" parent="Neck/ShakeCameraWrapper/RecoilCameraWrapper/GunContainer" instance=ExtResource("16_1gnyn")]
 
-[node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
+[node name="AimRay" parent="Neck/ShakeCameraWrapper/RecoilCameraWrapper" instance=ExtResource("5_dqbuo")]
 collision_mask = 125
 collide_with_areas = true
 
-[node name="DebugLabel" type="Label" parent="Neck/ShakeableCamera"]
+[node name="DebugLabel" type="Label" parent="Neck/ShakeCameraWrapper/RecoilCameraWrapper"]
 visible = false
 offset_right = 40.0
 offset_bottom = 20.0

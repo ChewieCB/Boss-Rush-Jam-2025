@@ -23,15 +23,14 @@ var movement_sfx_player: AudioStreamPlayer
 @export var angular_momentum_multiplier = 0.4
 
 @export_category("Prefabs")
-@export var aim_ray_prefab: PackedScene
 @export var health_component: HealthComponent
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
 @onready var inventory_ui: InventoryUI = $UI/InventoryUI
 @onready var interact_ui: Label = $UI/InteractUI
 
-@onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
-@onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
+@onready var player_camera: ShakeCameraWrapper = $Neck/ShakeCameraWrapper
+@onready var debug_label: Label = $Neck/ShakeCameraWrapper/RecoilCameraWrapper/DebugLabel
 @onready var debug_meshes: Node3D = $DebugMeshes
 @onready var dash_duration_timer: Timer = $DashDuration
 @onready var coyote_timer: Timer = $CoyoteTimer
@@ -39,9 +38,9 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var state_chart: StateChart = $StateChart
 @onready var wall_raycast: RayCast3D = $WallRaycast
 
-@onready var gun_container = $Neck/ShakeableCamera/GunContainer
-@onready var aim_ray: AimRay = $Neck/ShakeableCamera/AimRay
-@onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
+@onready var gun_container = $Neck/ShakeCameraWrapper/RecoilCameraWrapper/GunContainer
+@onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/RecoilCameraWrapper/AimRay
+@onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/RecoilCameraWrapper/HitMarker
 @onready var magazine_label: Label = $UI/GunUI/MagazineUI
 @onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
 
@@ -62,7 +61,6 @@ const HEAVY_FALL_SHAKE_TRAUMA: float = 0.8
 const SLIDE_SHAKE_TRAUMA: float = 0.1
 const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
-const RECOIL_COEFFICIENT: float = 10
 const BULLET_SPAWN_POS_VARIATION: float = 10
 const INTERACT_DISTANCE = 5
 
@@ -176,7 +174,7 @@ func _input(event):
 		if object_to_be_interacted:
 			object_to_be_interacted.interact()
 			get_viewport().set_input_as_handled()
-	
+
 	if Input.is_action_just_pressed("crouch"):
 		SoundManager.play_sound(sfx_crouch.pick_random(), "SFX")
 	elif Input.is_action_just_released("crouch"):
@@ -327,12 +325,12 @@ func show_debug_label():
 
 func jump(multiplier = 1.0):
 	vel_vertical = JUMP_FORCE * multiplier
-	
+
 	jumped = true
 	state_chart.send_event("jump")
 	is_dashing = false
 	is_sliding = false
-	
+
 	if is_on_floor():
 		SoundManager.play_sound_with_pitch(
 			sfx_jump_ground.pick_random(), randf_range(0.8, 1.1), "SFX"
