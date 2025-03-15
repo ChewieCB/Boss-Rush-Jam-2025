@@ -9,8 +9,7 @@ class_name ShakeCameraWrapper
 @export var noise: FastNoiseLite
 @export var noise_speed = 50.0
 @export_category("Recoil")
-@export var recoil: Vector3 = Vector3(1, 0.2, 0)
-@export var recoil_power: float = 0.3
+@export var recoil: Vector3 = Vector3(1, 0, 0)
 
 @onready var camera: Camera3D = $Camera3D
 @onready var initial_rotation: Vector3 = camera.rotation_degrees
@@ -26,6 +25,7 @@ var time = 0.0
 var current_rotation: Vector3
 var target_rotation: Vector3
 var rotation_velocity: Vector3
+var recoil_power: float = 0
 
 func _process(delta):
 	# Trauma

@@ -196,6 +196,7 @@ texture = ExtResource("5_nkt42")
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
 
 [node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("16_1gnyn")]
+recoil_amount = 0.05
 
 [node name="AimRay" parent="Neck/ShakeCameraWrapper" instance=ExtResource("5_dqbuo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
