@@ -202,7 +202,7 @@ func shoot(aim_ray: RayCast3D):
 	if barrel_count == 0:
 		SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
 
-	GameManager.player.player_camera.recoil_camera.set_recoil_power(modified_recoil)
+	GameManager.player.player_camera.set_recoil_power(modified_recoil)
 	GameManager.player.player_camera.add_trauma(modified_screenshake) # Screenshake for powerful gun (like railcannon)
 
 	for barrel in installed_barrels:
@@ -227,7 +227,7 @@ func shoot(aim_ray: RayCast3D):
 		# Recoil (old)
 		# GameManager.player.player_camera.rotate_x(modified_recoil)
 		# GameManager.player.player_camera.rotate_y(randf_range(- modified_recoil, modified_recoil))
-		GameManager.player.player_camera.recoil_camera.recoil_fire()
+		GameManager.player.player_camera.recoil_fire()
 
 		magazine_ammo_left -= n_ammo_consume
 		for barrel in installed_barrels:

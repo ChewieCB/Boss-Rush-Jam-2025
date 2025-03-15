@@ -3,26 +3,33 @@ class_name RecoilCameraWrapper
 
 @export var recoil: Vector3
 @export var recoil_power: float = 0.3
-@export var snappiness: float = 2.0
-@export var return_speed: float = 10.0
 
 var current_rotation: Vector3
 var target_rotation: Vector3
+var rotation_velocity: Vector3
+
+const DAMPING_FACTOR = 5
 
 func _process(delta):
-	# Lerp target rotation to (0,0,0) and lerp current rotation to target rotation
-	target_rotation = lerp(target_rotation, Vector3.ZERO, return_speed * delta)
-	current_rotation = lerp(current_rotation, target_rotation, snappiness * delta)
-
-	# Set rotation
-	rotation = current_rotation
+    # Apply damping to stabilize motion
+    rotation_velocity -= rotation_velocity * DAMPING_FACTOR * delta
+    
+    # Apply velocity to rotation
+    target_rotation += rotation_velocity * delta
+    
+    # Set rotation
+    rotation = target_rotation
 
 func recoil_fire():
-	var final_recoil = recoil
-	target_rotation += Vector3(final_recoil.x, randf_range(-final_recoil.y, final_recoil.y), randf_range(-final_recoil.z, final_recoil.z))
+    var final_recoil = recoil * recoil_power
+    var recoil_vector = Vector3(final_recoil.x, randf_range(-final_recoil.y, final_recoil.y), randf_range(-final_recoil.z, final_recoil.z))
+
+    # Apply recoil impulse
+    target_rotation += recoil_vector
+    rotation_velocity += recoil_vector
 
 func set_recoil_vector(new_recoil: Vector3):
-	recoil = new_recoil
+    recoil = new_recoil
 
 func set_recoil_power(new_power: float):
-	recoil_power = new_power
+    recoil_power = new_power
