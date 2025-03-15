@@ -12,7 +12,7 @@ class_name ShakeCameraWrapper
 @export var recoil: Vector3 = Vector3(1, 0.2, 0)
 @export var recoil_power: float = 0.3
 
-@onready var camera: Camera3D = $RecoilCameraWrapper/Camera3D
+@onready var camera: Camera3D = $Camera3D
 @onready var initial_rotation: Vector3 = camera.rotation_degrees
 
 const MAX_TRAUMA = 2.0

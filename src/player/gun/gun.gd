@@ -203,7 +203,7 @@ func shoot(aim_ray: RayCast3D):
 		SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
 
 	GameManager.player.player_camera.set_recoil_power(modified_recoil)
-	GameManager.player.player_camera.add_trauma(modified_screenshake) # Screenshake for powerful gun (like railcannon)
+	GameManager.player.player_camera.add_trauma(modified_screenshake)
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_calculation()

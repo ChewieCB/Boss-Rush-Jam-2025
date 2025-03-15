@@ -30,7 +30,7 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var interact_ui: Label = $UI/InteractUI
 
 @onready var player_camera: ShakeCameraWrapper = $Neck/ShakeCameraWrapper
-@onready var debug_label: Label = $Neck/ShakeCameraWrapper/RecoilCameraWrapper/DebugLabel
+@onready var debug_label: Label = $Neck/ShakeCameraWrapper/DebugLabel
 @onready var debug_meshes: Node3D = $DebugMeshes
 @onready var dash_duration_timer: Timer = $DashDuration
 @onready var coyote_timer: Timer = $CoyoteTimer
@@ -38,9 +38,9 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var state_chart: StateChart = $StateChart
 @onready var wall_raycast: RayCast3D = $WallRaycast
 
-@onready var gun_container = $Neck/ShakeCameraWrapper/RecoilCameraWrapper/GunContainer
-@onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/RecoilCameraWrapper/AimRay
-@onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/RecoilCameraWrapper/HitMarker
+@onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
+@onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
+@onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 @onready var magazine_label: Label = $UI/GunUI/MagazineUI
 @onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
 
