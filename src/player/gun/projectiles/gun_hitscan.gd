@@ -75,7 +75,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	speed = _speed
 	ricochet_count_left = ricochet_count
 	max_range = _max_range
-	raycast.target_position.z = -abs(_max_range)
+	raycast.target_position.z = - abs(_max_range)
 	self.look_at_from_position(start_pos, start_pos + current_dir * _max_range, Vector3.UP)
 
 	await get_tree().physics_frame
@@ -121,7 +121,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 
 func ricochet():
-	super()
+	super ()
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	found_hitscal_col = false
 	var new_hitscan_inst: GunHitscan = self.duplicate()

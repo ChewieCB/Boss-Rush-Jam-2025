@@ -75,7 +75,7 @@ new_value = 5.0
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/Railgun"]
 script = ExtResource("2_soqa0")
 attribute = 11
-new_value = 0.4
+new_value = 0.3
 
 [node name="SMG" type="Node3D" parent="EffectContainer"]
 script = ExtResource("1_8li6c")

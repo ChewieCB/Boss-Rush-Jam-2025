@@ -128,6 +128,9 @@ shape = SubResource("CylinderShape3D_63wrj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 0)
 data = ExtResource("4_bjy76")
 
+[node name="BarrelItemPickup12" parent="." instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9177, 0.599205, -1.038)
+
 [node name="BarrelItemPickup7" parent="." instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.9866, 0.599205, 0)
 data = ExtResource("4_1w7yd")
@@ -141,11 +144,11 @@ transform = Transform3D(0.999994, -0.000245996, 0.00340721, 0.000229993, 0.99998
 data = ExtResource("5_eqila")
 
 [node name="BarrelItemPickup8" parent="." instance=ExtResource("3_g5u1p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 1.65531)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 3.3006)
 data = ExtResource("7_lahx4")
 
 [node name="BarrelItemPickup9" parent="." instance=ExtResource("3_g5u1p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 3.09174)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 1.75342)
 data = ExtResource("8_4asxy")
 
 [node name="BarrelItemPickup10" parent="." instance=ExtResource("3_g5u1p")]
