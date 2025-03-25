@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn3goklu8k5p0"
-path.s3tc="res://.godot/imported/texture_light_12.png-51d58a7075872dfe21f8d573ad6790bc.s3tc.ctex"
+uid="uid://blpko4ve0t26v"
+path.s3tc="res://.godot/imported/CoverFull_1.png-704cb09cda839ceefe4a97579b300694.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "4117fd210880c6bc9b9ae192369ebb02"
+}
 
 [deps]
 
-source_file="res://assets/textures/placeholder/texture_light_12.png"
-dest_files=["res://.godot/imported/texture_light_12.png-51d58a7075872dfe21f8d573ad6790bc.s3tc.ctex"]
+source_file="res://assets/trenchbroom/home/jackm/Documents/Godot4/boss-rush-jam-2025/assets/trenchbroom/models/CoverFull_1.png"
+dest_files=["res://.godot/imported/CoverFull_1.png-704cb09cda839ceefe4a97579b300694.s3tc.ctex"]
 
 [params]
 

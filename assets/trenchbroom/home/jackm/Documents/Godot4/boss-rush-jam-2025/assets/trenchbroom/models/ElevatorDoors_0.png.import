@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn3goklu8k5p0"
-path.s3tc="res://.godot/imported/texture_light_12.png-51d58a7075872dfe21f8d573ad6790bc.s3tc.ctex"
+uid="uid://cfcx7ghmoy70f"
+path.s3tc="res://.godot/imported/ElevatorDoors_0.png-4957346831413196777dc2a9a2770651.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "addc5af4bc0275f6424077d4e4d8e559"
+}
 
 [deps]
 
-source_file="res://assets/textures/placeholder/texture_light_12.png"
-dest_files=["res://.godot/imported/texture_light_12.png-51d58a7075872dfe21f8d573ad6790bc.s3tc.ctex"]
+source_file="res://assets/trenchbroom/home/jackm/Documents/Godot4/boss-rush-jam-2025/assets/trenchbroom/models/ElevatorDoors_0.png"
+dest_files=["res://.godot/imported/ElevatorDoors_0.png-4957346831413196777dc2a9a2770651.s3tc.ctex"]
 
 [params]
 

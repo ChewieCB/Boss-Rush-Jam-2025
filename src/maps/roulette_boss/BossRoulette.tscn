@@ -11,7 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://bfxo5nlinjsh3" path="res://src/bosses/roulette/assets/sfx/Roulette Room 3.mp3" id="5_vkn4e"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="7_q62vj"]
 [ext_resource type="Material" uid="uid://b3fn320leb44p" path="res://assets/textures/placeholder/texture_dark_05.tres" id="8_qv5or"]
-[ext_resource type="Material" path="res://assets/textures/placeholder/texture_light_07.tres" id="9_htjk6"]
+[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="9_htjk6"]
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="10_dt2pf"]
 [ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="10_jy1qo"]
 [ext_resource type="Material" uid="uid://c42rborvicsq2" path="res://assets/textures/floor/wood_0.tres" id="11_svm8o"]
