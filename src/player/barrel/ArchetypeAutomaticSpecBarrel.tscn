@@ -25,7 +25,7 @@ barrel_id = 10
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
-[node name="CompoundEffectAmericanRifle" type="Node3D" parent="EffectContainer"]
+[node name="AmericanRifle" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_tarn7")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("4_kgobi")])
@@ -33,36 +33,36 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("5_4i0i4"), ExtResource("6_
 display_text_title = "Archetype: American Rifle"
 display_text_tag = "Easy to control"
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 4
 new_value = 11.0
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 6
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+[node name="SetSpread" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 7
 new_value = 1.5
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 5
 new_value = 30.0
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+[node name="SetDamage" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 1
 new_value = 9.0
 
-[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectAmericanRifle"]
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 11
-new_value = 0.03
+new_value = 0.06
 
-[node name="CompoundEffectRussianRifle" type="Node3D" parent="EffectContainer"]
+[node name="RussianRifle" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_tarn7")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("4_kgobi")])
@@ -70,36 +70,36 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("5_4i0i4"), ExtResource("6_
 display_text_title = "Archetype: Russian Rifle"
 display_text_tag = "Hard to master"
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/RussianRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 4
 new_value = 10.0
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/RussianRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 6
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+[node name="SetSpread" type="Node3D" parent="EffectContainer/RussianRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 7
 new_value = 2.5
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/RussianRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 5
 new_value = 30.0
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+[node name="SetDamage" type="Node3D" parent="EffectContainer/RussianRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 1
 new_value = 16.0
 
-[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectRussianRifle"]
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/RussianRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 11
-new_value = 0.06
+new_value = 0.08
 
-[node name="CompoundEffectVectorSMG" type="Node3D" parent="EffectContainer"]
+[node name="Vector" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_tarn7")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("4_kgobi")])
@@ -107,41 +107,41 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("5_4i0i4"), ExtResource("6_
 display_text_title = "Archetype: Vector SMG"
 display_text_tag = "Very fast firerate"
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
 attribute = 4
 new_value = 15.0
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
 attribute = 6
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+[node name="SetSpread" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
 attribute = 7
 new_value = 1.0
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
 attribute = 5
 new_value = 20.0
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+[node name="SetDamage" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
 attribute = 1
 new_value = 5.0
 
-[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
 attribute = 11
-new_value = 0.01
+new_value = 0.02
 
-[node name="SetReloadTime" type="Node3D" parent="EffectContainer/CompoundEffectVectorSMG"]
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
 attribute = 8
 new_value = 0.5
 
-[node name="CompoundEffectLMG" type="Node3D" parent="EffectContainer"]
+[node name="LMG" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_tarn7")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("4_kgobi")])
@@ -149,36 +149,36 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("5_4i0i4"), ExtResource("6_
 display_text_title = "Archetype: LMG"
 display_text_tag = "Dakka forever"
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 4
 new_value = 7.0
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 6
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+[node name="SetSpread" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 7
 new_value = 3.0
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 5
 new_value = 100.0
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+[node name="SetDamage" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 1
 new_value = 15.0
 
-[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 11
-new_value = 0.04
+new_value = 0.07
 
-[node name="SetReloadTime" type="Node3D" parent="EffectContainer/CompoundEffectLMG"]
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 8
 new_value = 2.0
