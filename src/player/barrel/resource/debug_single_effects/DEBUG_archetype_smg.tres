@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cql0l7x1w3urb"]
+
+[ext_resource type="Texture2D" uid="uid://bi80a1pxmr6x" path="res://src/player/barrel/resource/sprite/archetype_automatic.png" id="1_xam4i"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_evy70"]
+[ext_resource type="PackedScene" uid="uid://brr824xxqpjda" path="res://src/player/barrel/resource/debug_single_effects/prefabs/Debug_ArchetypeSMG.tscn" id="2_njfwj"]
+
+[resource]
+script = ExtResource("2_evy70")
+barrel_id = 15
+barrel_name = "[DEBUG] SMG"
+barrel_desc = "[b][DEBUG] SMG[/b]
+Basic SMG archetype. High rate of fire, medium damage."
+barrel_image = ExtResource("1_xam4i")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_njfwj")
+is_archetype_barrel = true

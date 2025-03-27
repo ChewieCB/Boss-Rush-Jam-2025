@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://bmy7qgg3imyvv"]
+[gd_scene load_steps=20 format=4 uid="uid://bmy7qgg3imyvv"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/vendor/vendor.gd" id="1_q25t3"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="1_r5vfn"]
@@ -8,6 +8,14 @@
 [ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="5_b7an8"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="6_qqfkm"]
 [ext_resource type="Resource" uid="uid://dtjfyb374gapa" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ammo_leech.tres" id="7_w8qpy"]
+[ext_resource type="Resource" uid="uid://xodkopxrm4f2" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_shotgun.tres" id="8_m0arp"]
+[ext_resource type="Resource" uid="uid://cql0l7x1w3urb" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_smg.tres" id="9_oc20r"]
+[ext_resource type="Resource" uid="uid://bf7j6nykfjy5w" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_double_tap.tres" id="9_t37n2"]
+[ext_resource type="Resource" uid="uid://dfhl5t0jpftd5" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_gamblers_precision.tres" id="10_hcac1"]
+[ext_resource type="Resource" uid="uid://cbped3pwpq8gx" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_railgun.tres" id="10_yhgbb"]
+[ext_resource type="Resource" uid="uid://bs7u4ckswam2f" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ramp_up.tres" id="11_rqjiq"]
+[ext_resource type="Resource" uid="uid://flq0lkjfimuf" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_extended_drum.tres" id="12_qo2ly"]
+[ext_resource type="Resource" uid="uid://okv7b5p22t5g" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_explosive_bullet.tres" id="13_2fs0b"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_am2uw"]
 _surfaces = [{
@@ -94,4 +102,4 @@ shape = SubResource("BoxShape3D_2202f")
 
 [node name="ShopUI" parent="UI" instance=ExtResource("5_b7an8")]
 shop_title = "Debug Vending Machine"
-current_inventory = Array[ExtResource("6_qqfkm")]([ExtResource("7_w8qpy")])
+current_inventory = Array[ExtResource("6_qqfkm")]([ExtResource("8_m0arp"), ExtResource("9_oc20r"), ExtResource("10_yhgbb"), ExtResource("7_w8qpy"), ExtResource("9_t37n2"), ExtResource("13_2fs0b"), ExtResource("12_qo2ly"), ExtResource("10_hcac1"), ExtResource("11_rqjiq")])

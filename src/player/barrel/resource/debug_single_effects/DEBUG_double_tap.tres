@@ -1,13 +1,17 @@
-[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=3 format=3 uid="uid://bf7j6nykfjy5w"]
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bf7j6nykfjy5w"]
 
-[ext_resource type="Texture2D" uid="uid://bi80a1pxmr6x" path="res://src/player/barrel/resource/sprite/archetype_automatic.png" id="1_u55mx"]
+[ext_resource type="Texture2D" uid="uid://8xbqicp62xfx" path="res://src/player/barrel/resource/sprite/archetype.png" id="1_kotbj"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_1nv33"]
+[ext_resource type="PackedScene" uid="uid://d2m6p2sqrwtng" path="res://src/player/barrel/resource/debug_single_effects/prefabs/Debug_DoubleTap.tscn" id="2_g5uuu"]
 
 [resource]
 script = ExtResource("2_1nv33")
-barrel_id = 1
+barrel_id = 18
 barrel_name = "[DEBUG] Double Tap"
-barrel_desc = ""
-barrel_image = ExtResource("1_u55mx")
+barrel_desc = "[b][DEBUG] Double Tap[/b]
+
+Fire 2 shots in quick succession."
+barrel_image = ExtResource("1_kotbj")
 barrel_cost = 0
+barrel_prefab = ExtResource("2_g5uuu")
 is_archetype_barrel = false

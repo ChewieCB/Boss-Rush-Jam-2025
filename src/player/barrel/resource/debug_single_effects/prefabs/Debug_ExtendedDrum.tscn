@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://cstfrxbdbwppe"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_2t3ff"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_1hxna"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_rbbja"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_me3og"]
+
+[node name="DebugExtendedDrumBarrel" type="Node3D"]
+script = ExtResource("1_2t3ff")
+barrel_id = 3
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_1hxna")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="ExtendedDrumEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("4_rbbja")
+display_text_title = "Extended Drum"
+display_text_tag = "More dakka!"
+display_text_desc = "+100% magazine size
++200% reload time"
+
+[node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ExtendedDrumEffect"]
+script = ExtResource("5_me3og")
+attribute = 5
+modify_value = 100.0
+is_perc = true
+
+[node name="ModifyReloadTime" type="Node3D" parent="EffectContainer/ExtendedDrumEffect"]
+script = ExtResource("5_me3og")
+attribute = 8
+modify_value = 200.0
+is_perc = true

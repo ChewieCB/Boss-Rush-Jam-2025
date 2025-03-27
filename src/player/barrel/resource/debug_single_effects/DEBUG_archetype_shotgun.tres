@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://xodkopxrm4f2"]
+
+[ext_resource type="Texture2D" uid="uid://dbc8fjl1x6n2s" path="res://src/player/barrel/resource/sprite/archetype_shotgun.png" id="1_olwi5"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_iikdc"]
+[ext_resource type="PackedScene" uid="uid://bo7e5uudnvkla" path="res://src/player/barrel/resource/debug_single_effects/prefabs/Debug_ArchetypeShotgun.tscn" id="2_s0g4k"]
+
+[resource]
+script = ExtResource("2_iikdc")
+barrel_id = 16
+barrel_name = "[DEBUG] Shotgun"
+barrel_desc = "[b][DEBUG] Shotgun[/b]
+Basic Shotgun archetype. Medium rate of fire, medium damage, projectile spread."
+barrel_image = ExtResource("1_olwi5")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_s0g4k")
+is_archetype_barrel = true

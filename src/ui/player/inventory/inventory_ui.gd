@@ -49,6 +49,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		item_ui.is_purchased = GameManager.purchase_barrel(data)
 		if item_ui.is_purchased:
 			SoundManager.play_ui_sound(sfx_purchase, "UI")
+			item_ui.unselected()
 		else:
 			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
 	elif item_ui.is_equipped:
