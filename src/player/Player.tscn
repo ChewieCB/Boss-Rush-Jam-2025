@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=65 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -42,7 +42,6 @@
 [ext_resource type="AudioStream" uid="uid://l2hmqeiq76ff" path="res://src/player/assets/sfx/RUNNING/Running Individual 14.mp3" id="16_tto8i"]
 [ext_resource type="PackedScene" uid="uid://dxau0o2083o1d" path="res://src/ui/player/PlayerHealthBarUI.tscn" id="19_n1ar7"]
 [ext_resource type="PackedScene" uid="uid://xtemm86x5ftx" path="res://src/ui/player/EffectDetailUI.tscn" id="20_ic8us"]
-[ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="22_qf5o4"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="23_xgmby"]
 [ext_resource type="AudioStream" uid="uid://bmdb3aap303b0" path="res://src/player/assets/sfx/CROUCH.mp3" id="26_skrud"]
 [ext_resource type="AudioStream" uid="uid://dckgsngjsbl02" path="res://src/player/assets/sfx/STAND.mp3" id="27_6gtc3"]
@@ -199,7 +198,6 @@ transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249
 recoil_amount = 0.05
 
 [node name="AimRay" parent="Neck/ShakeCameraWrapper" instance=ExtResource("5_dqbuo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
 collision_mask = 125
 collide_with_areas = true
 
@@ -321,8 +319,6 @@ layout_mode = 2
 
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
-
-[node name="InventoryUI" parent="UI" instance=ExtResource("22_qf5o4")]
 
 [node name="CurrencyUI" parent="UI" instance=ExtResource("23_xgmby")]
 

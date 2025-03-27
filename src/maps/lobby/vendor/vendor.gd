@@ -2,6 +2,7 @@ extends CharacterBody3D
 class_name Vendor
 
 @onready var dialogue_label: Label3D = $Label3D
+@onready var shop_ui: InventoryUI = $UI/ShopUI
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var interact_area: Area3D = $InteractArea
 
@@ -16,7 +17,7 @@ func _ready() -> void:
 
 
 func interact() -> void:
-	player.inventory_ui.toggle()
+	shop_ui.toggle()
 	player.input_dir = Vector2.ZERO
 	player.vel_horizontal = Vector2.ZERO
 	player.velocity = Vector3.ZERO
@@ -65,4 +66,4 @@ func _on_body_entered(body: Node3D) -> void:
 func _on_body_exited(body: Node3D) -> void:
 	if body is Player:
 		show_dialogue("Good luck!")
-		player.inventory_ui.close()
+		shop_ui.close()
