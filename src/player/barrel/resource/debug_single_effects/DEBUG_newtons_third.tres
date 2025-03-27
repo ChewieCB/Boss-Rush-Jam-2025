@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://catoesfsr51ok"]
+
+[ext_resource type="Texture2D" uid="uid://8xbqicp62xfx" path="res://src/player/barrel/resource/sprite/archetype.png" id="1_0d4o3"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_8bj7y"]
+[ext_resource type="PackedScene" uid="uid://b5pl7qt5q33eg" path="res://src/player/barrel/resource/debug_single_effects/prefabs/Debug_NewtonsThird.tscn" id="2_xihjd"]
+
+[resource]
+script = ExtResource("2_8bj7y")
+barrel_id = 27
+barrel_name = "[DEBUG] Newton's Third"
+barrel_desc = "[b][DEBUG] Newton's Third[/b]
+Projectiles allow rocket jumping against close surfaces. +[50%] damage, -[25%] firerate.
+
+"
+barrel_image = ExtResource("1_0d4o3")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_xihjd")
+is_archetype_barrel = false

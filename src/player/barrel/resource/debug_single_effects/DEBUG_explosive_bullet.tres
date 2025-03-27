@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://okv7b5p22t5g"]
+
+[ext_resource type="Texture2D" uid="uid://8xbqicp62xfx" path="res://src/player/barrel/resource/sprite/archetype.png" id="1_4fndl"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_fuqyq"]
+[ext_resource type="PackedScene" uid="uid://vfu7s80y38ye" path="res://src/player/barrel/resource/debug_single_effects/prefabs/Debug_ExplosiveBullet.tscn" id="2_n28dr"]
+
+[resource]
+script = ExtResource("2_fuqyq")
+barrel_id = 19
+barrel_name = "[DEBUG] Explosive Bullet"
+barrel_desc = "[b][DEBUG] Explosive Bullet[/b]
+
+Bullets explode on impact."
+barrel_image = ExtResource("1_4fndl")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_n28dr")
+is_archetype_barrel = false

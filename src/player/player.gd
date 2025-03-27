@@ -26,7 +26,6 @@ var movement_sfx_player: AudioStreamPlayer
 @export var health_component: HealthComponent
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
-@onready var inventory_ui: InventoryUI = $UI/InventoryUI
 @onready var interact_ui: Label = $UI/InteractUI
 
 @onready var player_camera: ShakeCameraWrapper = $Neck/ShakeCameraWrapper

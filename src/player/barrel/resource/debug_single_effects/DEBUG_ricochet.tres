@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bmy7206nh0maq"]
+
+[ext_resource type="Texture2D" uid="uid://8xbqicp62xfx" path="res://src/player/barrel/resource/sprite/archetype.png" id="1_cg1to"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_5o8jm"]
+[ext_resource type="PackedScene" uid="uid://do2sd6qlny0c1" path="res://src/player/barrel/resource/debug_single_effects/prefabs/Debug_Richochet.tscn" id="2_cr5c8"]
+
+[resource]
+script = ExtResource("2_5o8jm")
+barrel_id = 30
+barrel_name = "[DEBUG] Ricochet"
+barrel_desc = "[b][DEBUG] Ricochet[/b]
+
+Bullets bounce off of surfaces up to [3] times."
+barrel_image = ExtResource("1_cg1to")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_cr5c8")
+is_archetype_barrel = false

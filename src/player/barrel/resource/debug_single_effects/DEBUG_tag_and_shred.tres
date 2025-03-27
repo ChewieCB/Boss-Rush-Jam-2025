@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=3 format=3 uid="uid://uvem1037bxmd"]
+
+[ext_resource type="Texture2D" uid="uid://bi80a1pxmr6x" path="res://src/player/barrel/resource/sprite/archetype_automatic.png" id="1_3g0nr"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_3r3ji"]
+
+[resource]
+script = ExtResource("2_3r3ji")
+barrel_id = 35
+barrel_name = "[DEBUG] Tag And Shred"
+barrel_desc = "[b][DEBUG] Tag And Shred[/b]
+
+-[50%] damage, +[1 damage per projectile hit"
+barrel_image = ExtResource("1_3g0nr")
+barrel_cost = 0
+is_archetype_barrel = false

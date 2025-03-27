@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="4_md8wb"]
 [ext_resource type="Material" uid="uid://cpmnrcuro67h8" path="res://assets/textures/walls/paint-green.tres" id="6_2fmdr"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="6_ryixa"]
-[ext_resource type="Material" path="res://assets/textures/placeholder/texture_light_07.tres" id="7_2alyt"]
+[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="7_2alyt"]
 [ext_resource type="Material" uid="uid://c162u3li2i84m" path="res://assets/textures/walls/wallpaper_0.tres" id="7_ojnvf"]
 [ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="8_jg1u0"]
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="8_jqml3"]

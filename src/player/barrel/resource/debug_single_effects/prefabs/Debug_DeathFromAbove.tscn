@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dnn7c82dwi6vc"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_1l2v6"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_la85p"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/death_from_above_effect.gd" id="6_m405c"]
+
+[node name="DebugDeathFromAboveBarrel" type="Node3D"]
+script = ExtResource("1_1l2v6")
+barrel_id = 11
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_la85p")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="DeathFromAbove" type="Node3D" parent="EffectContainer"]
+script = ExtResource("6_m405c")
+damage_modify_perc = 25.0
+crit_chance = 25.0
+display_text_title = "Death From Above"
+display_text_tag = "Fly up, look down"
+display_text_desc = "+25% damage when midair
+25% crit chance when shoot downward"

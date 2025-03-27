@@ -3,6 +3,7 @@ extends Node
 signal currency_changed(new_currency: int)
 signal barrel_purchased(barrel_data: BarrelDataResource)
 signal barrel_too_expensive(barrel_data: BarrelDataResource)
+signal refresh_shop_ui
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -82,7 +83,7 @@ func purchase_barrel(data: BarrelDataResource) -> bool:
 		player_currency -= data.barrel_cost
 		inventory_barrels.append(data)
 		shop_barrels.erase(data)
-		GameManager.player.inventory_ui.full_refresh_ui()
+		refresh_shop_ui.emit()
 		barrel_purchased.emit(data)
 		return true
 	barrel_too_expensive.emit(data)
@@ -105,7 +106,7 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 				return "Can only equip max 1 archetype barrel"
 		inventory_barrels.erase(found_data)
 		equipped_barrels.append(found_data)
-		GameManager.player.inventory_ui.full_refresh_ui()
+		refresh_shop_ui.emit()
 		GameManager.player.current_gun.install_barrel(found_data.barrel_prefab)
 	return ""
 
@@ -120,7 +121,7 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if found_data:
 		equipped_barrels.erase(found_data)
 		inventory_barrels.append(found_data)
-		GameManager.player.inventory_ui.full_refresh_ui()
+		refresh_shop_ui.emit()
 		GameManager.player.current_gun.remove_barrel(search_barrel_id)
 	return ""
 

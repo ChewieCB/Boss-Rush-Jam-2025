@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dsh30snmwhk8l"]
+
+[ext_resource type="Texture2D" uid="uid://8xbqicp62xfx" path="res://src/player/barrel/resource/sprite/archetype.png" id="1_25p1k"]
+[ext_resource type="PackedScene" uid="uid://bkt5icnpnhh7q" path="res://src/player/barrel/resource/debug_single_effects/prefabs/Debug_CognacReload.tscn" id="2_03hfy"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_m1aqq"]
+
+[resource]
+script = ExtResource("2_m1aqq")
+barrel_id = 38
+barrel_name = "[DEBUG] Cognac Reload"
+barrel_desc = "Recover HP on reload."
+barrel_image = ExtResource("1_25p1k")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_03hfy")
+is_archetype_barrel = false

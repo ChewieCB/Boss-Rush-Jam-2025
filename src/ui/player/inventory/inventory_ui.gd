@@ -1,11 +1,22 @@
 extends Control
 class_name InventoryUI
 
+@export var shop_title: String
+
 @export var barrel_item_ui_prefab: PackedScene
+@export var cost_label_ui_prefab: PackedScene
 @export var shop_item_ui_prefab: PackedScene
 
-@export var sfx_open: AudioStream
+@export var current_inventory: Array[BarrelDataResource]
+@onready var has_custom_inventory: bool = current_inventory.size() > 0
 
+@export var sfx_open: AudioStream
+@export var sfx_click: AudioStream
+@export var sfx_purchase: AudioStream
+@export var sfx_too_expensive: AudioStream
+@export var sfx_barrel_equip: AudioStream
+
+@onready var shop_title_label: Label = $Title
 @onready var equip_title: Label = $EquipBarrelSection/EquipTitle
 @onready var equip_barrel_container: HBoxContainer = $EquipBarrelSection/EquippedBarrelContainer
 @onready var barrel_desc: RichTextLabel = $EquipBarrelSection/BarrelDescription/RichTextLabel
@@ -15,11 +26,41 @@ class_name InventoryUI
 
 var current_selected_item_ui = null
 
+
 func _ready() -> void:
 	warning_label.visible = false
 	visible = false
 	barrel_desc.text = ""
 	GameManager.currency_changed.connect(full_refresh_ui.unbind(1))
+	GameManager.refresh_shop_ui.connect(full_refresh_ui)
+	shop_title_label.text = shop_title
+
+
+func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
+	if (current_selected_item_ui != null):
+		current_selected_item_ui.unselected()
+	current_selected_item_ui = item_ui
+	update_description(data.barrel_desc)
+	SoundManager.play_ui_sound(sfx_click, "UI")
+
+
+func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
+	if not item_ui.is_purchased:
+		item_ui.is_purchased = GameManager.purchase_barrel(data)
+		if item_ui.is_purchased:
+			SoundManager.play_ui_sound(sfx_purchase, "UI")
+			item_ui.unselected()
+		else:
+			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
+	elif item_ui.is_equipped:
+		var warning_text = GameManager.remove_barrel(data.barrel_id)
+		show_warning(warning_text)
+		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
+	else:
+		var warning_text = GameManager.equip_barrel(data.barrel_id)
+		show_warning(warning_text)
+		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
+	full_refresh_ui()
 
 
 func toggle():
@@ -42,32 +83,62 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func full_refresh_ui():
 	barrel_desc.text = ""
+	
+	# EQUIPPED BARRELS
 	for child in equip_barrel_container.get_children():
 		child.queue_free()
 	for barrel_data in GameManager.equipped_barrels:
 		var item_inst = barrel_item_ui_prefab.instantiate()
-		item_inst.init(barrel_data, true)
+		item_inst.init(barrel_data, true, true)
 		equip_barrel_container.add_child(item_inst)
+		item_inst.select_item.connect(_on_item_ui_select)
+		item_inst.interact_item.connect(_on_item_ui_interact)
+		item_inst.show_warning.connect(show_warning)
 	equip_title.text = "Equipped ({0}/{1})".format([len(GameManager.equipped_barrels), GameManager.player.current_gun.max_barrels])
-
+	
+	# INVENTORY BARRELS
 	for child in inventory_barrel_container.get_children():
 		child.queue_free()
 	for barrel_data in GameManager.inventory_barrels:
 		var item_inst = barrel_item_ui_prefab.instantiate()
-		item_inst.init(barrel_data, false)
+		item_inst.init(barrel_data, false, true)
 		inventory_barrel_container.add_child(item_inst)
-		
+		item_inst.select_item.connect(_on_item_ui_select)
+		item_inst.interact_item.connect(_on_item_ui_interact)
+		item_inst.show_warning.connect(show_warning)
+	
+	# SHOP BARRELS
 	for child in shop_barrel_container.get_children():
 		child.queue_free()
-	for barrel_data in GameManager.shop_barrels:
-		var item_inst = shop_item_ui_prefab.instantiate()
-		item_inst.init(barrel_data, false)
-		shop_barrel_container.add_child(item_inst)
+	if not has_custom_inventory:
+		current_inventory = GameManager.shop_barrels
+	for barrel_data in current_inventory:
+		if barrel_data in GameManager.inventory_barrels:
+			current_inventory.erase(barrel_data)
+		
+		var item_container := VBoxContainer.new()
+		shop_barrel_container.add_child(item_container)
+		var item_inst = barrel_item_ui_prefab.instantiate()
+		item_inst.init(barrel_data)
+		item_container.add_child(item_inst)
+		
+		item_inst.select_item.connect(_on_item_ui_select)
+		item_inst.interact_item.connect(_on_item_ui_interact)
+		item_inst.show_warning.connect(show_warning)
+		
+		var cost_label_inst = cost_label_ui_prefab.instantiate()
+		item_container.add_child(cost_label_inst)
+		cost_label_inst.label.text = str(barrel_data.barrel_cost)
+		
 		if barrel_data.barrel_cost > GameManager.player_currency:
 			item_inst.is_disabled = true
+		for elem in [cost_label_inst.icon, cost_label_inst.label]:
+			elem.modulate = Color.DIM_GRAY if item_inst.is_disabled else Color.WHITE
+
 
 func update_description(_text: String):
 	barrel_desc.text = _text
+
 
 func open():
 	full_refresh_ui()
@@ -75,6 +146,7 @@ func open():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	#Engine.time_scale = 0.2
 	GameManager.player.is_in_inventory = true
+
 
 func close():
 	visible = false

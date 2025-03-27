@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dfhl5t0jpftd5"]
+
+[ext_resource type="Texture2D" uid="uid://8xbqicp62xfx" path="res://src/player/barrel/resource/sprite/archetype.png" id="1_j5og7"]
+[ext_resource type="PackedScene" uid="uid://cxdr7l6x0ckmp" path="res://src/player/barrel/resource/debug_single_effects/prefabs/Debug_GamblersPrecision.tscn" id="2_uh1e4"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_vhm5g"]
+
+[resource]
+script = ExtResource("2_vhm5g")
+barrel_id = 21
+barrel_name = "[DEBUG] Gambler's Precision"
+barrel_desc = "[b][DEBUG] Gambler's Precision[/b]
+
+[50%] chance to crit on hit, [20%] chance to jam on miss
+"
+barrel_image = ExtResource("1_j5og7")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_uh1e4")
+is_archetype_barrel = false
