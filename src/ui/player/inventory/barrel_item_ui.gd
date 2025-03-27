@@ -32,6 +32,11 @@ func init(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: 
 	texture = data.barrel_image
 
 
+func _ready() -> void:
+	if data:
+		button.text = data.barrel_name
+
+
 func _on_button_pressed() -> void:
 	if not clicked_once:
 		select_item.emit(self, data)
@@ -48,17 +53,9 @@ func _on_button_pressed() -> void:
 		border_selected.visible = true
 	else:
 		interact_item.emit(self, data)
-		if is_equipped:
-			warning_text = GameManager.remove_barrel(data.barrel_id)
-			show_warning.emit(warning_text)
-			SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
-		else:
-			warning_text = GameManager.equip_barrel(data.barrel_id)
-			show_warning.emit(warning_text)
-			SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 
 
 func unselected():
 	clicked_once = false
 	border_selected.visible = false
-	button.text = ""
+	button.text = data.barrel_name

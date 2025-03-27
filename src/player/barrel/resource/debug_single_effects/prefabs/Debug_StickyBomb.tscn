@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://cerrieppeb3rt"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_kw84u"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_7ddmd"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_m3yju"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_crbad"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="6_v6nlt"]
+[ext_resource type="PackedScene" uid="uid://35lbaqwytewn" path="res://src/player/gun/projectiles/StickyBombProjectile.tscn" id="7_a8l5p"]
+
+[node name="DelayedGratificationBarrel" type="Node3D"]
+script = ExtResource("1_kw84u")
+barrel_id = 13
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_7ddmd")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="StickyBomb" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_m3yju")
+display_text_title = "Sticky Bomb"
+display_text_tag = "Keep distance"
+display_text_desc = "+25% damage
+-50% firerate"
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/StickyBomb"]
+script = ExtResource("6_v6nlt")
+new_prefab = ExtResource("7_a8l5p")
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/StickyBomb"]
+script = ExtResource("5_crbad")
+attribute = 1
+modify_value = 25.0
+is_perc = true
+
+[node name="ModifyFirerate" type="Node3D" parent="EffectContainer/StickyBomb"]
+script = ExtResource("5_crbad")
+attribute = 4
+modify_value = -50.0
+is_perc = true

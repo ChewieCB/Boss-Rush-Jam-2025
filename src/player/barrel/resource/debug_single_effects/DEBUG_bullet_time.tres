@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=3 format=3 uid="uid://do2l2svihllsk"]
+
+[ext_resource type="Texture2D" uid="uid://8xbqicp62xfx" path="res://src/player/barrel/resource/sprite/archetype.png" id="1_6xw0j"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_3js65"]
+
+[resource]
+script = ExtResource("2_3js65")
+barrel_id = 23
+barrel_name = "[DEBUG] Bullet Time"
+barrel_desc = "[b][DEBUG] Bullet Time[/b]
+
+-[50%] projectile speed, + [100%] damage"
+barrel_image = ExtResource("1_6xw0j")
+barrel_cost = 0
+is_archetype_barrel = false

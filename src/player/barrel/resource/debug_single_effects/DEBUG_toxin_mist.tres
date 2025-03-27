@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bndnrynsldd1b"]
+
+[ext_resource type="Texture2D" uid="uid://8xbqicp62xfx" path="res://src/player/barrel/resource/sprite/archetype.png" id="1_5wfd2"]
+[ext_resource type="PackedScene" uid="uid://4itw8cpew264" path="res://src/player/barrel/resource/debug_single_effects/prefabs/Debug_ToxinMist.tscn" id="2_e1wo1"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_mmkkh"]
+
+[resource]
+script = ExtResource("2_mmkkh")
+barrel_id = 37
+barrel_name = "[DEBUG] Toxin Mist"
+barrel_desc = "[20%] chance to create poison cloud on enemy hit."
+barrel_image = ExtResource("1_5wfd2")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_e1wo1")
+is_archetype_barrel = false

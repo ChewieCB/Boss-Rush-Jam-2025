@@ -4,6 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="1_si5qx"]
 
 [node name="CostLabel" type="HBoxContainer"]
+offset_top = 24.0
+offset_right = 120.0
+offset_bottom = 73.0
 script = ExtResource("1_if1p8")
 
 [node name="TextureRect" type="TextureRect" parent="."]

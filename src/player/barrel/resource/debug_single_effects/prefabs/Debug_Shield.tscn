@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://n3q3bem1i1ww"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_hfx0t"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_6qkv3"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/protective_barrier.gd" id="8_n3nue"]
+[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/ShieldBarrier.tscn" id="9_knf72"]
+
+[node name="DebugShieldBarrel" type="Node3D"]
+script = ExtResource("1_hfx0t")
+barrel_id = 8
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_6qkv3")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="ProtectiveBarrier" type="Node3D" parent="EffectContainer"]
+script = ExtResource("8_n3nue")
+shield_barrier_prefab = ExtResource("9_knf72")
+damage_reduction_perc = 50.0
+display_text_title = "Protective Barrier"
+display_text_tag = "Tough up!"
+display_text_desc = "50% damage resistance"

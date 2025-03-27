@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_wc5nl")
 barrel_id = 22
-barrel_name = "[DEBUG] Newton's Third"
+barrel_name = "[DEBUG] Ramp Up"
 barrel_desc = "[b][DEBUG] Ramp Up[/b]
 
 +[5%] fire-rate increase every [0.2] seconds."

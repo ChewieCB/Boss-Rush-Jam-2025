@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://dkryabkq1hv10"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_bro3l"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_ta0mr"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_4l2ua"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="4_qn3bg"]
+[ext_resource type="PackedScene" uid="uid://r58hv7fv4nab" path="res://src/player/gun/projectiles/BallProjectile.tscn" id="5_ofcfp"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_yy27y"]
+
+[node name="RouletteBossBarrel" type="Node3D"]
+script = ExtResource("1_bro3l")
+barrel_id = 8
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_ta0mr")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="BallBullet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_4l2ua")
+display_text_title = "Ball Bullet"
+display_text_tag = "Shoot huge ball"
+display_text_desc = "-90% projectile
++60% damage"
+
+[node name="SetProjectileToBall" type="Node3D" parent="EffectContainer/BallBullet"]
+script = ExtResource("4_qn3bg")
+new_prefab = ExtResource("5_ofcfp")
+
+[node name="ModifyProjectileCount" type="Node3D" parent="EffectContainer/BallBullet"]
+script = ExtResource("6_yy27y")
+attribute = 2
+modify_value = -50.0
+is_perc = true
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/BallBullet"]
+script = ExtResource("6_yy27y")
+attribute = 1
+modify_value = 60.0
+is_perc = true
