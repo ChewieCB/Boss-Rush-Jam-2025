@@ -49,7 +49,7 @@ _surfaces = [{
 }]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_l2vrl"]
-size = Vector3(4.2, 4.7, 4)
+size = Vector3(1.2, 2.5, 2.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2202f"]
 size = Vector3(2.5, 3.1, 2.3)
@@ -83,7 +83,7 @@ collision_layer = 32
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85068, 1.15, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15068, 0.0500001, -0.1)
 shape = SubResource("BoxShape3D_l2vrl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
