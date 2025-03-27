@@ -31,7 +31,7 @@ func _ready() -> void:
 	visible = false
 	barrel_desc.text = ""
 	GameManager.currency_changed.connect(full_refresh_ui.unbind(1))
-	GameManager.refresh_shop_ui.connect(full_refresh_ui.unbind(1))
+	GameManager.refresh_shop_ui.connect(full_refresh_ui)
 	shop_title_label.text = shop_title
 
 
@@ -44,14 +44,12 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
-	# Check if we're attempting to purchase the item
 	if not item_ui.is_purchased:
 		item_ui.is_purchased = GameManager.purchase_barrel(data)
 		if item_ui.is_purchased:
 			SoundManager.play_ui_sound(sfx_purchase, "UI")
 		else:
 			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
-	# Check if we're attempting to equip/unequip an item
 	elif item_ui.is_equipped:
 		var warning_text = GameManager.remove_barrel(data.barrel_id)
 		show_warning(warning_text)
@@ -84,6 +82,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func full_refresh_ui():
 	barrel_desc.text = ""
 	
+	# EQUIPPED BARRELS
 	for child in equip_barrel_container.get_children():
 		child.queue_free()
 	for barrel_data in GameManager.equipped_barrels:
@@ -94,7 +93,8 @@ func full_refresh_ui():
 		item_inst.interact_item.connect(_on_item_ui_interact)
 		item_inst.show_warning.connect(show_warning)
 	equip_title.text = "Equipped ({0}/{1})".format([len(GameManager.equipped_barrels), GameManager.player.current_gun.max_barrels])
-
+	
+	# INVENTORY BARRELS
 	for child in inventory_barrel_container.get_children():
 		child.queue_free()
 	for barrel_data in GameManager.inventory_barrels:
@@ -104,7 +104,8 @@ func full_refresh_ui():
 		item_inst.select_item.connect(_on_item_ui_select)
 		item_inst.interact_item.connect(_on_item_ui_interact)
 		item_inst.show_warning.connect(show_warning)
-		
+	
+	# SHOP BARRELS
 	for child in shop_barrel_container.get_children():
 		child.queue_free()
 	if not current_inventory:
