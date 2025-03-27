@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=3 format=3 uid="uid://dfhl5t0jpftd5"]
+
+[ext_resource type="Texture2D" uid="uid://bi80a1pxmr6x" path="res://src/player/barrel/resource/sprite/archetype_automatic.png" id="1_pvkvn"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_vhm5g"]
+
+[resource]
+script = ExtResource("2_vhm5g")
+barrel_id = 1
+barrel_name = "[DEBUG] Gambler's Precision"
+barrel_desc = ""
+barrel_image = ExtResource("1_pvkvn")
+barrel_cost = 0
+is_archetype_barrel = false

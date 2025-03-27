@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=3 format=3 uid="uid://bf7j6nykfjy5w"]
+
+[ext_resource type="Texture2D" uid="uid://bi80a1pxmr6x" path="res://src/player/barrel/resource/sprite/archetype_automatic.png" id="1_u55mx"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_1nv33"]
+
+[resource]
+script = ExtResource("2_1nv33")
+barrel_id = 1
+barrel_name = "[DEBUG] Double Tap"
+barrel_desc = ""
+barrel_image = ExtResource("1_u55mx")
+barrel_cost = 0
+is_archetype_barrel = false

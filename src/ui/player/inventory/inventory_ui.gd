@@ -8,6 +8,7 @@ class_name InventoryUI
 @export var shop_item_ui_prefab: PackedScene
 
 @export var current_inventory: Array[BarrelDataResource]
+@onready var has_custom_inventory: bool = current_inventory.size() > 0
 
 @export var sfx_open: AudioStream
 @export var sfx_click: AudioStream
@@ -108,7 +109,7 @@ func full_refresh_ui():
 	# SHOP BARRELS
 	for child in shop_barrel_container.get_children():
 		child.queue_free()
-	if not current_inventory:
+	if not has_custom_inventory:
 		current_inventory = GameManager.shop_barrels
 	for barrel_data in current_inventory:
 		if barrel_data in GameManager.inventory_barrels:

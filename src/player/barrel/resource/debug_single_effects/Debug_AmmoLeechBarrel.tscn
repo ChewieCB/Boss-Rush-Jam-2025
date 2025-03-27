@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://c7wkgakgeu0fw"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_s7tjg"]
+[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_gfpek"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/ammo_leech_effect.gd" id="3_w2def"]
+
+[node name="FoolRollerBarrel" type="Node3D"]
+script = ExtResource("1_s7tjg")
+barrel_id = 4
+
+[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_gfpek")]
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="AmmoLeechEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_w2def")
+refund_chance = 20.0
+perc_damage_modify = -25.0
+display_text_title = "Ammo Leech"
+display_text_tag = "Take back those puny bullets!"
+display_text_desc = "20% chance to refund ammo on hit
+-25% damage per shot"

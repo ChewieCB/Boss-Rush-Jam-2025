@@ -1,4 +1,4 @@
-extends CharacterBody3D
+extends PhysicsBody3D
 class_name Vendor
 
 @onready var dialogue_label: Label3D = $Label3D
