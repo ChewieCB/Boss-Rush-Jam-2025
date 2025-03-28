@@ -14,11 +14,19 @@ var bgm_player: AudioStreamPlayer
 @onready var credits_ui = $CreditsUI
 @onready var story_ui = $StoryUI
 @onready var save_ui = $SaveUI
+@onready var loading_ui = $LoadingUI
+@onready var transition_ui = $TransitionUI
+
 
 func _ready() -> void:
+	transition_ui.fill_screen()
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
+	loading_ui.loading_finished.connect(_on_loading_finished)
 	get_tree().paused = false
+	
+	transition_ui.transition_in(0.7)
+	await transition_ui.transition_finished
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	bgm_player = SoundManager.play_music(bgm, 0.2, "BGM")
 	save_ui.visible = false
@@ -68,7 +76,16 @@ func start_game():
 	await get_tree().create_timer(next_beat_time - current_beat_time).timeout
 	bgm_player.stop()
 	SoundManager.play_ui_sound(start_game_sfx, "UI")
-	get_tree().change_scene_to_packed(lobby_scene)
+	transition_ui.transition_out(0.7)
+	await transition_ui.transition_finished
+	loading_ui.start_loading()
+
+
+func _on_loading_finished(packed_scene: PackedScene) -> void:
+	transition_ui.transition_in(0.7)
+	await transition_ui.transition_finished
+	get_tree().change_scene_to_packed(packed_scene)
+
 
 func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()
