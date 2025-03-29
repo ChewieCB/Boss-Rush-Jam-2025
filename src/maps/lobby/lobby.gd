@@ -14,11 +14,16 @@ signal ui_accept
 var display_barrels: Array = []
 
 func _ready() -> void:
+	ScreenTransition.fill_screen()
+	
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
-	get_tree().paused = false
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
+	get_tree().paused = false
+	
+	ScreenTransition.transition_in()
+	await ScreenTransition.transition_finished
 	
 	lobby_music_player.play()
 

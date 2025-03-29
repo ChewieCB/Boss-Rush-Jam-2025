@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://ctddgvd003sjr"]
+[gd_scene load_steps=32 format=3 uid="uid://ctddgvd003sjr"]
 
 [ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
 [ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
@@ -25,7 +25,6 @@
 [ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="24_prxld"]
 [ext_resource type="PackedScene" uid="uid://dif5ua57y8udh" path="res://src/ui/main_menu/SaveSlotItem.tscn" id="24_re1j0"]
 [ext_resource type="Script" path="res://src/ui/main_menu/loading_ui.gd" id="25_nwtqu"]
-[ext_resource type="PackedScene" uid="uid://b7ohf7acd1iqu" path="res://src/ui/common/screen_transition/ScreenTransitionUI.tscn" id="26_46f83"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2x62q"]
 shader = ExtResource("1_jqa14")
@@ -1406,9 +1405,6 @@ layout_mode = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_bta4f")
 step = 0.1
 rounded = true
-
-[node name="TransitionUI" parent="." instance=ExtResource("26_46f83")]
-layout_mode = 1
 
 [connection signal="mouse_entered" from="TitleColumn/VBoxContainer/StartButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]

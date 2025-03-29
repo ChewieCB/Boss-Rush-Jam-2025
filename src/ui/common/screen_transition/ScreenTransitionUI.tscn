@@ -11,8 +11,8 @@ shader_parameter/AspectRatio = 1.0
 shader_parameter/Dots = 10.0
 shader_parameter/_min = 0.0
 shader_parameter/_max = 1.0
-shader_parameter/transition_angle = 180.0
-shader_parameter/height = 0.99
+shader_parameter/transition_angle = 0.0
+shader_parameter/height = -0.45
 shader_parameter/scroll_speed = 0.3
 shader_parameter/angle_degrees = 90.0
 shader_parameter/repeat_x = 2.0
@@ -20,7 +20,13 @@ shader_parameter/repeat_y = 2.0
 shader_parameter/row_offset = 1.0
 shader_parameter/texture_to_scroll = ExtResource("3_c4553")
 
-[node name="TransitionUI" type="Control"]
+[node name="TransitionUI" type="CanvasLayer"]
+process_mode = 3
+process_priority = -1
+layer = 2
+script = ExtResource("1_8ukgo")
+
+[node name="UI" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -30,9 +36,8 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_8ukgo")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="UI"]
 material = SubResource("ShaderMaterial_xokkb")
 layout_mode = 1
 anchors_preset = 13

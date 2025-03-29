@@ -46,6 +46,9 @@ func _on_setting_button_pressed() -> void:
 
 func _on_lobby_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
+	#ScreenTransition.transition_out()
+	#await ScreenTransition.transition_finished
+	# TODO - background loading here
 	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
 
 func _on_main_menu_button_pressed() -> void:
@@ -55,6 +58,9 @@ func _on_main_menu_button_pressed() -> void:
 		await SaveManager.save_game(GameManager.chosen_slot_id)
 	GameManager.reset_current_save_data()
 	SaveManager.save_data_is_loaded = false
+	#ScreenTransition.transition_out()
+	#await ScreenTransition.transition_finished
+	# TODO - background loading here
 	get_tree().change_scene_to_file("res://src/ui/main_menu/MainMenu.tscn")
 
 func _on_exit_button_pressed() -> void:
@@ -62,6 +68,9 @@ func _on_exit_button_pressed() -> void:
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
+	#ScreenTransition.transition_out()
+	#await ScreenTransition.transition_finished
+	# TODO - background loading here
 	get_tree().quit()
 
 
