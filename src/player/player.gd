@@ -21,6 +21,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var max_air_jump = 2
 @export var dash_cd: float = 0.5
 @export var angular_momentum_multiplier = 0.4
+@export var speedline_vfx_prefab: PackedScene
 
 @export_category("Prefabs")
 @export var health_component: HealthComponent
@@ -168,6 +169,18 @@ func _input(event):
 			vel_vertical = 0
 			dash_duration_timer.start()
 			movement_dashed.emit()
+
+
+			var dash_dir = raw_input_dir
+			# Swap speedline direction for horizontal dash
+			dash_dir.x = - dash_dir.x
+			if raw_input_dir.length() == 0:
+				dash_dir = Vector2(0, -1)
+			var angle_radians = dash_dir.angle()
+			var pe: Node3D = speedline_vfx_prefab.instantiate()
+			add_child(pe)
+			pe.global_position = global_position
+			pe.rotate_y(angle_radians)
 
 	if Input.is_action_just_pressed("interact"):
 		if object_to_be_interacted:
