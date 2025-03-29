@@ -51,10 +51,10 @@ signal movement_dashed
 
 const MAX_SPEED: float = 8.0
 var max_speed: float = MAX_SPEED
-const MAX_FALL_SPEED: float = 50.0
+const MAX_FALL_SPEED: float = 70.0
 const ACCEL_RATE: float = 40.0
-const JUMP_FORCE: float = 8
-const GRAVITY: float = 14
+const JUMP_FORCE: float = 10
+const GRAVITY: float = 30
 const FALL_SPEED_TO_SHAKE_CAMERA: float = 15
 const HEAVY_FALL_SHAKE_TRAUMA: float = 0.8
 const SLIDE_SHAKE_TRAUMA: float = 0.1
@@ -425,8 +425,8 @@ func _on_airborne_state_physics_processing(delta: float) -> void:
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	if Input.is_action_just_pressed("crouch"):
 		ground_slam()
-	#if moving_toward_wall() and can_wall_cling:
-		#state_chart.send_event("wallcling")
+	if moving_toward_wall() and can_wall_cling:
+		state_chart.send_event("wallcling")
 
 
 func moving_toward_wall() -> bool:

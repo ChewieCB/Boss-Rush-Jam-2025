@@ -115,8 +115,6 @@ sfx_jump_ground = Array[AudioStream]([ExtResource("28_k5crr")])
 sfx_jump_air = Array[AudioStream]([ExtResource("29_xv6x8")])
 sfx_dash_floor = Array[AudioStream]([ExtResource("30_on7sg")])
 sfx_dash_air = Array[AudioStream]([ExtResource("31_pnqxi")])
-can_wall_jump = true
-can_wall_cling = true
 max_air_jump = 1
 health_component = NodePath("HealthComponent")
 
