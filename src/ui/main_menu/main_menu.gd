@@ -78,11 +78,13 @@ func start_game():
 	
 	ScreenTransition.transition_out()
 	await ScreenTransition.transition_finished
+	ScreenTransition.loading_label.visible = true
 	
 	loading_ui.start_loading()
 
 
 func _on_loading_finished(packed_scene: PackedScene) -> void:
+	ScreenTransition.loading_label.visible = false
 	get_tree().change_scene_to_packed(packed_scene)
 
 

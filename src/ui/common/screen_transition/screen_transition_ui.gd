@@ -3,6 +3,7 @@ extends CanvasLayer
 signal transition_finished
 
 @onready var ui: ColorRect = $UI/ColorRect
+@onready var loading_label: Label = $UI/ColorRect/Label
 
 
 func fill_screen() -> void:
@@ -16,13 +17,15 @@ func clear_screen() -> void:
 
 
 func transition_in(duration: float = 0.7) -> void:
+	loading_label.visible = false
 	clear_screen()
 	tween_transition(1.0, -1.0, duration)
 
 
 func transition_out(duration: float = 0.7) -> void:
 	fill_screen()
-	tween_transition(0.0, 2.0, duration)
+	await tween_transition(0.0, 2.0, duration)
+	loading_label.visible = true
 
 
 func tween_transition(start: float, finish: float, duration: float = 0.7) -> void:

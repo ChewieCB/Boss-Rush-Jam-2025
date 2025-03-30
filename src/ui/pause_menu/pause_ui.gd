@@ -68,9 +68,6 @@ func _on_exit_button_pressed() -> void:
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
-	ScreenTransition.transition_out()
-	await ScreenTransition.transition_finished
-	# TODO - background loading here
 	get_tree().quit()
 
 
