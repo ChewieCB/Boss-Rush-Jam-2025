@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=66 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -49,11 +49,12 @@
 [ext_resource type="AudioStream" uid="uid://cjcluk6lldawc" path="res://src/player/assets/sfx/JUMP IN AIR.mp3" id="29_xv6x8"]
 [ext_resource type="AudioStream" uid="uid://ckr1r101hscjl" path="res://src/player/assets/sfx/Floor Dash.mp3" id="30_on7sg"]
 [ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="31_pnqxi"]
-[ext_resource type="Shader" path="res://src/player/outline.gdshader" id="36_1ffwc"]
+[ext_resource type="Shader" path="res://src/player/assets/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
+[ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -115,9 +116,8 @@ sfx_jump_ground = Array[AudioStream]([ExtResource("28_k5crr")])
 sfx_jump_air = Array[AudioStream]([ExtResource("29_xv6x8")])
 sfx_dash_floor = Array[AudioStream]([ExtResource("30_on7sg")])
 sfx_dash_air = Array[AudioStream]([ExtResource("31_pnqxi")])
-can_wall_jump = true
-can_wall_cling = true
 max_air_jump = 1
+speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
@@ -359,7 +359,7 @@ text = "I WILL LIT THE WHOLE FLOOR ON FIRE!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Shader" type="TextureRect" parent="UI/BossSpecialDialog"]
+[node name="OldMovieShader" type="TextureRect" parent="UI/BossSpecialDialog"]
 material = SubResource("ShaderMaterial_wp8dr")
 layout_mode = 1
 anchors_preset = 15

@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://dj22bp2g01voq"]
+
+[ext_resource type="Script" path="res://src/player/gun/vfx/self_destruct_3dparticle.gd" id="1_sn6j6"]
+
+[sub_resource type="Curve" id="Curve_da08b"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.74, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_stfbt"]
+curve = SubResource("Curve_da08b")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6a8ae"]
+emission_shape_offset = Vector3(-5, 0, 0)
+emission_shape_scale = Vector3(5, 5, 4)
+emission_shape = 2
+emission_sphere_radius = 1.0
+spread = 0.0
+initial_velocity_min = 25.0
+initial_velocity_max = 35.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_stfbt")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s1qoi"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(1, 1, 1, 0.14902)
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_aq07r"]
+material = SubResource("StandardMaterial3D_s1qoi")
+size = Vector2(5, 0.1)
+
+[node name="SpeedlineParticle" type="GPUParticles3D"]
+emitting = false
+amount = 50
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.8
+visibility_aabb = AABB(-12.881, -12.9978, -12.8083, 41.2467, 25.9639, 25.7844)
+process_material = SubResource("ParticleProcessMaterial_6a8ae")
+draw_pass_1 = SubResource("QuadMesh_aq07r")
+script = ExtResource("1_sn6j6")
