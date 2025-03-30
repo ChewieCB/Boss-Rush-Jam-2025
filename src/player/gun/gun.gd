@@ -70,7 +70,7 @@ var barrel_count: int = 0:
 	set(value):
 		barrel_count = value
 		anim_player.play("%s_barrel_idle" % barrel_count)
-		
+
 var is_trigger_pulled = false
 
 # Modify-able by barrels
@@ -100,6 +100,7 @@ const BULLET_SPAWN_POS_VARIATION = 10
 
 
 func _ready() -> void:
+	SaveManager.savefile_loaded.connect(reinstall_barrels)
 	gun_status_label.visible = false
 	magazine_ammo_left = base_magazine_size
 	generate_gun_animations()
@@ -127,7 +128,7 @@ func generate_gun_animations() -> void:
 			3:
 				idle_sprite = idle_3_barrel
 				reload_sprites = [reload_frame_0_3_barrel, reload_frame_1_3_barrel]
-		
+
 		create_gun_anims(i, idle_sprite, reload_sprites)
 
 
@@ -135,20 +136,20 @@ func create_gun_anims(barrel_count: int, idle_texture: Texture, reload_textures:
 	var anim_root_node: Node = anim_player.get_node(anim_player.root_node)
 	var gun_sprite_path: NodePath = anim_root_node.get_path_to(gun_sprite)
 	var sprite_texture_path: NodePath = "%s:texture" % gun_sprite_path
-	
+
 	var base_library = anim_player.get_animation_library("")
-	
+
 	# Idle animation
 	var idle_anim := Animation.new()
 	idle_anim.step = 0.05
 	idle_anim.length = 0.1
-	
+
 	var idle_texture_track_idx = idle_anim.add_track(Animation.TYPE_VALUE)
 	idle_anim.track_set_path(idle_texture_track_idx, sprite_texture_path)
 	idle_anim.track_insert_key(idle_texture_track_idx, 0.0, idle_texture)
-	
+
 	base_library.add_animation("%s_barrel_idle" % [barrel_count], idle_anim)
-	
+
 	# Reload animation
 	if reload_textures == []:
 		return
@@ -156,13 +157,13 @@ func create_gun_anims(barrel_count: int, idle_texture: Texture, reload_textures:
 	reload_anim.step = 0.05
 	reload_anim.length = 0.1
 	reload_anim.loop = true
-	
+
 	var reload_texture_track_idx = reload_anim.add_track(Animation.TYPE_VALUE)
 	reload_anim.track_set_path(reload_texture_track_idx, sprite_texture_path)
 	reload_anim.track_insert_key(reload_texture_track_idx, 0.0, reload_textures[0])
 	reload_anim.track_insert_key(reload_texture_track_idx, 0.05, reload_textures[1])
 	reload_anim.track_insert_key(reload_texture_track_idx, 0.1, reload_textures[0])
-	
+
 	base_library.add_animation("%s_barrel_reload" % [barrel_count], reload_anim)
 
 
@@ -295,10 +296,10 @@ func reload():
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
-	
+
 	if barrel_count > 0:
 		anim_player.play("%s_barrel_reload" % barrel_count)
-	
+
 	is_reloading = true
 	SoundManager.play_sound(TEMP_sfx_reload, "Gun")
 	show_gun_status("Reloading...")
@@ -444,6 +445,7 @@ func reinstall_barrels():
 			barrel_container.get_child(i).get_child(0).queue_free()
 
 	# Instantiate barrels onto gun
+	print("Reinstall barrelllll ", len(GameManager.equipped_barrels))
 	for i in range(len(GameManager.equipped_barrels)):
 		var barrel_inst: SpinBarrel = GameManager.equipped_barrels[i].barrel_prefab.instantiate()
 		barrel_container.get_child(i).add_child(barrel_inst)
