@@ -65,8 +65,8 @@ const BULLET_SPAWN_POS_VARIATION: float = 10
 const INTERACT_DISTANCE = 5
 
 const DASH_SPEED: float = 15
-const SLIDE_SPEED: float = 5
 const SLAM_SPEED: float = 25
+const CROUCH_SPEED_MODIFIER: float = 0.5
 
 var floor_col_pos = Vector3.ZERO
 var jumped: bool = false
@@ -75,14 +75,7 @@ var vel_horizontal := Vector2(0, 0)
 var vel_vertical: float = 0
 
 var is_dashing: bool = false
-var is_sliding: bool:
-	set(value):
-		if value != is_sliding:
-			if value:
-				player_camera.add_long_trauma(SLIDE_SHAKE_TRAUMA)
-			else:
-				player_camera.add_long_trauma(-SLIDE_SHAKE_TRAUMA)
-		is_sliding = value
+var is_crouching: bool = false
 
 var internal_bonus_speed: float = 0
 
@@ -240,7 +233,7 @@ func _physics_process(delta):
 			raw_input_dir = Vector2(0, -1)
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
-	if not is_dashing and not is_sliding and not is_in_inventory:
+	if not is_dashing and not is_in_inventory:
 		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
@@ -265,10 +258,16 @@ func _physics_process(delta):
 	# Use the next line will make player move faster when strafing + rotate camera
 	# var current_speed = vel_horizontal.dot(input_dir)
 	var current_speed = vel_horizontal.length()
+	if is_crouching:
+		max_speed = MAX_SPEED * CROUCH_SPEED_MODIFIER
+	else:
+		max_speed = MAX_SPEED
 	var add_speed = clamp(max_speed - current_speed, 0.0, ACCEL_RATE * delta)
 
-	if is_dashing or is_sliding:
+	if is_dashing:
 		vel_horizontal = input_dir * max_speed
+	elif is_crouching:
+		vel_horizontal += input_dir * add_speed
 	else:
 		vel_horizontal += input_dir * add_speed
 
@@ -277,8 +276,6 @@ func _physics_process(delta):
 	# Bonus speed
 	if is_dashing:
 		internal_bonus_speed = DASH_SPEED
-	elif is_sliding:
-		internal_bonus_speed = SLIDE_SPEED
 	else:
 		if is_on_floor():
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 9)
@@ -329,7 +326,7 @@ func show_debug_label():
 	debug_label.text += "\nHSpeed: {0} u/s\nVSpeed: {1} u/s".format([h_speed, v_speed])
 	debug_label.text += "\nHeight from ground: {0}".format([snapped_height - 1.5])
 	debug_label.text += "\nOn ground: {0} | wall-cling: {1}".format([is_on_floor(), moving_toward_wall()])
-	debug_label.text += "\nIs dashing: {0} | Is sliding: {1}".format([is_dashing, is_sliding])
+	debug_label.text += "\nIs dashing: {0} | Is sliding: {1}".format([is_dashing, is_crouching])
 	debug_label.text += "\nAir jumps move_left: {0}".format([max_air_jump - current_air_jump_count])
 	debug_label.text += "\nCoyote jump: {0}".format([can_coyote_jump])
 	#debug_label.text += "\nUsing gun: {0}".format([gun_container.get_child(current_gun_slot).data.name])
@@ -341,7 +338,7 @@ func jump(multiplier = 1.0):
 	jumped = true
 	state_chart.send_event("jump")
 	is_dashing = false
-	is_sliding = false
+	is_crouching = false
 
 	if is_on_floor():
 		SoundManager.play_sound_with_pitch(
@@ -383,7 +380,7 @@ func camera_control(delta):
 			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
 
 	# Lower camera
-	if is_sliding:
+	if is_crouching:
 		neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
 	else:
 		neck.position.y = lerp(neck.position.y, 0.0, delta * 5)
@@ -410,10 +407,10 @@ func _on_grounded_state_input(event: InputEvent):
 		jump()
 
 func _on_grounded_state_physics_processing(_delta: float):
-	if Input.is_action_pressed("crouch") and raw_input_dir != Vector2.ZERO:
-		is_sliding = true
-	else:
-		is_sliding = false
+		if Input.is_action_pressed("crouch"):
+			is_crouching = true
+		else:
+			is_crouching = false
 
 
 func _on_airborne_state_input(event: InputEvent):
@@ -426,7 +423,7 @@ func _on_airborne_state_input(event: InputEvent):
 
 
 func _on_airborne_state_entered() -> void:
-	is_sliding = false
+	is_crouching = false
 	if not jumped:
 		coyote_timer.start()
 		can_coyote_jump = true
