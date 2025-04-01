@@ -54,20 +54,41 @@ pivot_offset = Vector2(1000, 1000)
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="UI/ColorRect"]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ColorRect"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -10.0
-offset_right = 20.0
-offset_bottom = 10.0
+offset_left = -202.0
+offset_top = 54.0
+offset_right = 202.0
+offset_bottom = 78.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = -8
+
+[node name="LoadingLabel" type="Label" parent="UI/ColorRect/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.20871, 0.20871, 0.20871, 1)
 theme_override_font_sizes/font_size = 128
-text = "Loading..."
+text = "Loading"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="UI/ColorRect/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+value = 60.0
+show_percentage = false
+
+[node name="LoadingDetailLabel" type="Label" parent="UI/ColorRect/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "re-re-re-re-re-re-re-reticulating splines"
+horizontal_alignment = 1

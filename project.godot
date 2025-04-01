@@ -25,6 +25,7 @@ SaveManager="*res://src/utils/singletons/save_manager.gd"
 SoundManager="*res://addons/sound_manager/sound_manager.gd"
 GunUtils="*res://src/utils/gun_utils.gd"
 ScreenTransition="*res://src/ui/common/screen_transition/ScreenTransitionUI.tscn"
+LoadingHandler="*res://src/utils/loading/LoadingHandler.tscn"
 
 [debug]
 

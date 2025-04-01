@@ -14,6 +14,8 @@ extends Node3D
 @onready var boss_trigger: Area3D = $BossTriggerVolume
 
 func _ready() -> void:
+	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	
 	boss.died.connect(_on_boss_died)
 	boss.defeated.connect(_on_boss_defeated)
 	player.health_component.died.connect(_on_player_death)
@@ -24,9 +26,11 @@ func _ready() -> void:
 	player.player_camera.rotation = GameManager.cached_camera_rotation
 	elevator_doors.open()
 
+
 func _on_boss_died() -> void:
 	var tween = self.create_tween()
 	tween.tween_property(directional_light, "light_energy", 0, 1)
+
 
 func _on_boss_defeated(_boss: BossCore) -> void:
 	win_ui.win("Floor Cleared", win_subtext.pick_random())
@@ -46,7 +50,9 @@ func show_end_panel() -> void:
 	await get_tree().create_timer(2.5).timeout
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	tween.tween_callback(func(): get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn"))
+	await tween.finished
+	
+	LoadingHandler.start_loading("Lobby")
 
 
 func _return_to_main() -> void:
