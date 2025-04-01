@@ -11,7 +11,7 @@ var current_scene_path: String:
 var can_transition: bool = false
 
 # Shader pre-compilation
-const PRECOMPILE_CONFIG_PATH: String = "res://config/precompile_list.txt"
+const PRECOMPILE_CONFIG_PATH: String = "res://config/precompile_list.config"
 const IGNORED_PATH_EXTENSIONS: Array[String] = [
 	".mp3", ".wav", 
 	".png", ".jpg", ".svg",
