@@ -137,5 +137,5 @@ jobs:
           username: BuildBot
           description: "${{ steps.get-tagged-release.outputs.body }}"
           footer: ${{ needs.export_game.outputs.tag }}
-          text: @Playtester A new build is available at https://chewiecb.itch.io/boss-rush-jam-2025
+          text: <@&1356614688313708814> A new build is available at https://chewiecb.itch.io/boss-rush-jam-2025
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
