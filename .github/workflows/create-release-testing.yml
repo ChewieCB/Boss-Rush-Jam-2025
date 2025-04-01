@@ -140,5 +140,5 @@ jobs:
           description: "${{ steps.get-tagged-release.outputs.body }}"
           details: "__This is a pre-release build and may be unstable__"
           footer: ${{ needs.export_game.outputs.tag }}
-          text: \@Playtester A new __testing__ build is available at https://chewiecb.itch.io/boss-rush-jam-2025-testing
+          text: @Playtester A new __testing__ build is available at https://chewiecb.itch.io/boss-rush-jam-2025-testing
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
