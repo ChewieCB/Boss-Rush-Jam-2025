@@ -3,29 +3,45 @@ extends CanvasLayer
 signal transition_finished
 
 @onready var ui: ColorRect = $UI/ColorRect
-@onready var loading_label: Label = $UI/ColorRect/Label
+@onready var loading_label: Label = $UI/ColorRect/VBoxContainer/LoadingLabel
+@onready var loading_detail_label: Label = $UI/ColorRect/VBoxContainer/LoadingDetailLabel
+@onready var progress_bar: ProgressBar = $UI/ColorRect/VBoxContainer/ProgressBar
 
 
-func fill_screen() -> void:
+func update_progress_bar(value: float) -> void:
+	progress_bar.value = value
+
+func set_loading_detail_text(detail_text: String) -> void:
+	loading_detail_label.text = detail_text
+
+
+func set_loading_visible(value: bool = true) -> void:
+	# TODO - add some small animations here for polish
+	loading_label.visible = value
+	progress_bar.visible = value
+	loading_detail_label.visible = value
+
+
+func _fill_screen() -> void:
 	ui.material.set("shader_parameter/transition_angle", 180.0)
 	ui.material.set("shader_param/height", 0.0)
 
 
-func clear_screen() -> void:
+func _clear_screen() -> void:
 	ui.material.set("shader_parameter/transition_angle", 0.0)
 	ui.material.set("shader_param/height", 1.0)
 
 
 func transition_in(duration: float = 0.7) -> void:
-	loading_label.visible = false
-	clear_screen()
+	set_loading_visible(false)
+	_clear_screen()
 	tween_transition(1.0, -1.0, duration)
 
 
 func transition_out(duration: float = 0.7) -> void:
-	fill_screen()
+	_fill_screen()
 	await tween_transition(0.0, 2.0, duration)
-	loading_label.visible = true
+	set_loading_visible()
 
 
 func tween_transition(start: float, finish: float, duration: float = 0.7) -> void:

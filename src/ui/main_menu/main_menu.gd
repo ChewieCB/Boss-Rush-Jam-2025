@@ -18,7 +18,7 @@ var bgm_player: AudioStreamPlayer
 
 
 func _ready() -> void:
-	ScreenTransition.fill_screen()
+	#ScreenTransition.fill_screen()
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	loading_ui.loading_finished.connect(_on_loading_finished)
@@ -78,7 +78,7 @@ func start_game():
 	
 	ScreenTransition.transition_out()
 	await ScreenTransition.transition_finished
-	ScreenTransition.loading_label.visible = true
+	ScreenTransition.set_loading_visible()
 	
 	loading_ui.start_loading()
 
