@@ -116,10 +116,9 @@ jobs:
           VERSION: ${{ steps.download-linux.outputs.version }}
   notify-discord:
     runs-on: ubuntu-latest
-    needs:
-      [
+    needs: [
         export_game,
-        release_testing_html,
+        # release_testing_html,
         release_testing_windows,
         release_testing_linux,
       ]
