@@ -22,9 +22,6 @@ func _ready() -> void:
 		button.pushed.connect(_on_level_select)
 	get_tree().paused = false
 	
-	ScreenTransition.transition_in()
-	await ScreenTransition.transition_finished
-	
 	lobby_music_player.play()
 
 	# Save and load check

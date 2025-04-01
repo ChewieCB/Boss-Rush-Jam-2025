@@ -15,6 +15,8 @@ extends Node3D
 
 
 func _ready() -> void:
+	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	
 	boss.died.connect(_on_boss_died)
 	boss.defeated.connect(_on_boss_defeated)
 	player.health_component.died.connect(_on_player_death)
@@ -50,9 +52,7 @@ func show_end_panel() -> void:
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
 	await tween.finished
-	ScreenTransition.transition_out()
-	await ScreenTransition.transition_finished
-	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
+	LoadingHandler.start_loading("Lobby")
 
 
 func _return_to_main() -> void:

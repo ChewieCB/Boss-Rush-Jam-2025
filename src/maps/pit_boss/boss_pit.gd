@@ -33,6 +33,8 @@ var cover_spawn_points: Array = []
 
 
 func _ready() -> void:
+	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	
 	pit_boss.health_component.health_changed.connect(_on_boss_health_changed)
 	pit_boss.health_component.died.connect(_on_boss_died.bind(pit_boss))
 	pit_boss.surveillance_boss = surveillance_boss
@@ -127,9 +129,8 @@ func show_end_panel() -> void:
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
 	await tween.finished
-	ScreenTransition.transition_out()
-	await ScreenTransition.transition_finished
-	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
+	
+	LoadingHandler.start_loading("Lobby")
 
 
 func _return_to_main() -> void:
