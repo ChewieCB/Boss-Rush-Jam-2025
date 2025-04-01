@@ -39,4 +39,4 @@ func tween_transition(start: float, finish: float, duration: float = 0.7) -> voi
 
 
 func _set_transition_height(height: float) -> void:
-	ui.material.set("shader_param/height", height)
+	ui.material.set("shader_parameter/height", height)

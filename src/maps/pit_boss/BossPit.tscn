@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="3_nqcqn"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_w7aip"]
 [ext_resource type="Material" uid="uid://coo1y5tjcwlec" path="res://assets/textures/placeholder/texture_dark_03.tres" id="4_h2odb"]
-[ext_resource type="Material" path="res://assets/textures/placeholder/texture_light_07.tres" id="4_tvaml"]
+[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="4_tvaml"]
 [ext_resource type="Material" uid="uid://pssqe4n1jgb4" path="res://assets/textures/placeholder/texture_dark_01.tres" id="5_udcre"]
 [ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="5_xc8xd"]
 [ext_resource type="Material" uid="uid://c162u3li2i84m" path="res://assets/textures/walls/wallpaper_0.tres" id="7_3pp8n"]

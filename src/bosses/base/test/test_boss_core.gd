@@ -46,7 +46,10 @@ func show_end_panel() -> void:
 	await get_tree().create_timer(2.5).timeout
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	tween.tween_callback(func(): get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn"))
+	await tween.finished
+	ScreenTransition.transition_out()
+	await ScreenTransition.transition_finished
+	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
 
 
 func _return_to_main() -> void:
