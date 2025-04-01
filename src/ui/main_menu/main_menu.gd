@@ -20,13 +20,13 @@ func _ready() -> void:
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
-
+	bgm_player = SoundManager.play_music(bgm, 0.2, "BGM")
 	get_tree().paused = false
 	
 	ScreenTransition.transition_in()
 	await ScreenTransition.transition_finished
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	bgm_player = SoundManager.play_music(bgm, 0.2, "BGM")
 	save_ui.visible = false
 	for button in buttons:
 		button.pressed.connect(_play_button_sfx)

@@ -12,6 +12,10 @@ var can_transition: bool = false
 
 # Shader pre-compilation
 const PRECOMPILE_CONFIG_PATH: String = "res://config/precompile_list.txt"
+const IGNORED_PATH_EXTENSIONS: Array[String] = [
+	".mp3", ".wav", 
+	".png", ".jpg", ".svg",
+]
 @export var max_materials_compiled_per_frame: int = 2
 var scenes_to_compile: Array = []
 var compiling_materials_count: int = 0
@@ -44,13 +48,12 @@ func initial_load() -> void:
 func start_loading(scene_name: String = "") -> void:
 	ScreenTransition.transition_out()
 	await ScreenTransition.transition_finished
-	ScreenTransition.set_loading_visible()
 	
 	if not is_materials_compiled:
 		initial_load()
 		await materials_compiled
 	
-	ScreenTransition.set_loading_detail_text("Loading %s" % [scene_name])
+	ScreenTransition.set_loading_detail_text(scene_name)
 	
 	can_transition = true
 
@@ -152,10 +155,11 @@ func compile_materials() -> void:
 
 
 func _compile_material(scene_path: String) -> void:
+	if scene_path.get_extension() in IGNORED_PATH_EXTENSIONS:
+		return
+	
 	print("Precompile shader materials in %s" % scene_path)
 	var scene = ResourceLoader.load(scene_path).instantiate()
-	
-	ScreenTransition.set_loading_detail_text("Compiling %s" % scene.name)
 	
 	if scene is GPUParticles3D:
 		_compile_particles_node(scene)

@@ -18,7 +18,7 @@ func set_loading_detail_text(detail_text: String) -> void:
 func set_loading_visible(value: bool = true) -> void:
 	# TODO - add some small animations here for polish
 	loading_label.visible = value
-	progress_bar.visible = value
+	#progress_bar.visible = value
 	loading_detail_label.visible = value
 
 
@@ -36,12 +36,14 @@ func transition_in(duration: float = 0.7) -> void:
 	set_loading_visible(false)
 	_clear_screen()
 	tween_transition(1.0, -1.0, duration)
+	transition_finished.emit()
 
 
 func transition_out(duration: float = 0.7) -> void:
 	_fill_screen()
 	await tween_transition(0.0, 2.0, duration)
 	set_loading_visible()
+	transition_finished.emit()
 
 
 func tween_transition(start: float, finish: float, duration: float = 0.7) -> void:
@@ -51,7 +53,6 @@ func tween_transition(start: float, finish: float, duration: float = 0.7) -> voi
 		_set_transition_height, start, finish, duration
 	)
 	await transition_tween.finished
-	transition_finished.emit()
 
 
 func _set_transition_height(height: float) -> void:
