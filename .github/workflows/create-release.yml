@@ -83,7 +83,7 @@ jobs:
         uses: dsaltares/fetch-gh-release-asset@master
         with:
           version: latest
-          file: brj25-win.zip
+          file: crapshoot-win.zip
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: deploy to itch.io (Windows)
         uses: josephbmanley/butler-publish-itchio-action@master
@@ -103,7 +103,7 @@ jobs:
         uses: dsaltares/fetch-gh-release-asset@master
         with:
           version: latest
-          file: brj25-linux.zip
+          file: crapshoot-linux.zip
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: deploy to itch.io (Windows)
         uses: josephbmanley/butler-publish-itchio-action@master
