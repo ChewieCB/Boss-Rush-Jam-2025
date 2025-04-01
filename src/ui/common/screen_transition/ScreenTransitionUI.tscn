@@ -70,15 +70,14 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="LoadingLabel" type="Label" parent="UI/ColorRect/VBoxContainer"]
-visible = false
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.20871, 0.20871, 0.20871, 1)
 theme_override_font_sizes/font_size = 128
-text = "Loading..."
+text = "Loading"
+horizontal_alignment = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="UI/ColorRect/VBoxContainer"]
-visible = false
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_vertical = 3
@@ -87,8 +86,7 @@ value = 60.0
 show_percentage = false
 
 [node name="LoadingDetailLabel" type="Label" parent="UI/ColorRect/VBoxContainer"]
-visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "caching shaders"
+text = "re-re-re-re-re-re-re-reticulating splines"
 horizontal_alignment = 2

@@ -17,7 +17,6 @@ var bgm_player: AudioStreamPlayer
 
 
 func _ready() -> void:
-	#ScreenTransition.fill_screen()
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
