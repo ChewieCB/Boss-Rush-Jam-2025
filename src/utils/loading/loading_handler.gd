@@ -13,8 +13,8 @@ var can_transition: bool = false
 # Shader pre-compilation
 const PRECOMPILE_CONFIG_PATH: String = "res://config/precompile_list.config"
 const IGNORED_PATH_EXTENSIONS: Array[String] = [
-	".mp3", ".wav", 
-	".png", ".jpg", ".svg",
+	"mp3", "wav", 
+	"png", "jpg", "svg",
 ]
 @export var max_materials_compiled_per_frame: int = 2
 var scenes_to_compile: Array = []
@@ -93,10 +93,12 @@ func parse_scene_paths_to_compile() -> void:
 	var instantiation_list := []
 	var filepaths = get_filepaths_from_nested_directory("res://src", true)
 	for filepath in filepaths:
+		if filepath.get_extension() in IGNORED_PATH_EXTENSIONS:
+			return
+		
 		var file = FileAccess.open(filepath, FileAccess.READ)
 		if file == null:
 			continue
-		
 		var text = file.get_as_text()
 		var regex_match = regex.search(text)
 		if regex_match:
@@ -155,9 +157,6 @@ func compile_materials() -> void:
 
 
 func _compile_material(scene_path: String) -> void:
-	if scene_path.get_extension() in IGNORED_PATH_EXTENSIONS:
-		return
-	
 	print("Precompile shader materials in %s" % scene_path)
 	var scene = ResourceLoader.load(scene_path).instantiate()
 	
