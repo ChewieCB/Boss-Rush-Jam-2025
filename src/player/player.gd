@@ -47,7 +47,6 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
 
-
 signal movement_dashed
 
 const MAX_SPEED: float = 8.0
@@ -129,6 +128,7 @@ func _ready():
 	current_gun.gun_reloaded.connect(update_hud)
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 
+
 func _input(event):
 	if controls_disabled:
 		return
@@ -144,6 +144,8 @@ func _input(event):
 
 	if event.is_action_pressed("spin_reload"):
 		spin_reload()
+	elif event.is_action_pressed("spin_barrels"):
+		current_gun.spin_all_barrels()
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -361,6 +363,7 @@ func stun(time: float) -> void:
 
 func spin_reload():
 	current_gun.reload()
+
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))

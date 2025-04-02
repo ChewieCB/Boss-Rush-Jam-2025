@@ -94,6 +94,9 @@ var modified_screenshake
 signal gun_shot
 signal gun_reloaded
 
+signal barrel_spin_started(barrel: SpinBarrel)
+signal barrel_spin_stopped(barrel: SpinBarrel)
+
 
 const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.1
 const BULLET_SPAWN_POS_VARIATION = 10
@@ -284,34 +287,69 @@ func release_trigger():
 			barrel.get_active_effect().on_trigger_released()
 
 
+func spin_all_barrels() -> void:
+	release_trigger()
+	# TODO - replace with individual animation layers
+	if barrel_count > 0:
+		anim_player.play("%s_barrel_reload" % barrel_count)
+	# TODO - add catch for HELD barrels
+	for i in installed_barrels.size():
+		_spin_barrel(i)
+	
+	# TODO - replace with a dedicated spin time value now reloading isn't directly
+	# tied to spinning
+	await get_tree().create_timer(modified_reload_time).timeout
+	
+	reset_modifier(true)
+	gun_status_label.visible = false
+	stop_all_barrels()
+	reload()
+
+
+func _spin_barrel(barrel_idx: int) -> void:
+	var barrel = installed_barrels[barrel_idx]
+	barrel.start_spin()
+	barrel_spin_started.emit(barrel)
+
+
+func stop_all_barrels() -> void:
+	anim_player.play("%s_barrel_idle" % barrel_count)
+	for i in installed_barrels.size():
+		_stop_barrel(i)
+
+
+func _stop_barrel(barrel_idx: int) -> void:
+	# TODO - replace with individual barrel animation layers
+	#anim_player.play("%s_barrel_idle" % barrel_idx)
+	var barrel = installed_barrels[barrel_idx]
+	barrel.stop_spin()
+	barrel_spin_stopped.emit(barrel)
+
+
 func reload():
+	# TODO - make this more generic and less tied to spinning barrels so we can call it elsewhere
 	if is_reloading:
 		return
 	if is_jammed:
 		play_failed_shoot_sfx()
 		return
-
+	
 	release_trigger()
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
 	
-	if barrel_count > 0:
-		anim_player.play("%s_barrel_reload" % barrel_count)
-	
 	is_reloading = true
 	SoundManager.play_sound(TEMP_sfx_reload, "Gun")
 	show_gun_status("Reloading...")
-	for barrel in installed_barrels:
-		barrel.start_spin()
+
 	await get_tree().create_timer(modified_reload_time).timeout
-	reset_modifier(true)
+	
 	gun_status_label.visible = false
-	for barrel in installed_barrels:
-		barrel.stop_spin()
 	SoundManager.stop_sound(TEMP_sfx_reload)
-	anim_player.play("%s_barrel_idle" % barrel_count)
-	await anim_player.animation_finished
+	# TODO - add new reload anim?
+	#anim_player.play("%s_barrel_idle" % barrel_count)
+	#await anim_player.animation_finished
 	anim_player.play("reload_foregrip")
 	is_reloading = false
 

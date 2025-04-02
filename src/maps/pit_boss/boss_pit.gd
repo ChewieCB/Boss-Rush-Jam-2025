@@ -208,3 +208,9 @@ func _on_stance_timer_timeout() -> void:
 	pit_boss.toggle_stance()
 	surveillance_boss.toggle_stance()
 	stance_timer.start(phase_2_stance_time + randf_range(-1.5, 1.5))
+
+
+func _on_barrel_reload_trigger_body_entered(body: Node3D) -> void:
+	$BarrelReloadTrigger.monitoring = false
+	$BarrelReloadTrigger.queue_free()
+	body.current_gun.spin_all_barrels()
