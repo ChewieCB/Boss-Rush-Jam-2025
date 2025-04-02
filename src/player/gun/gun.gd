@@ -7,6 +7,7 @@ class_name Gun
 ## SPRITES
 @export_group("Sprites")
 @onready var gun_sprite: Sprite3D = $SpriteParent/GunSprite
+@onready var barrel_flare_sprite: Sprite3D = $SpriteParent/GunSprite/MuzzleflareLightSprite
 @onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @export_subgroup("1 Barrel")
@@ -240,11 +241,18 @@ func shoot(aim_ray: RayCast3D):
 			barrel.get_active_effect().on_ammo_consumed()
 		if magazine_ammo_left <= 0 and i < n_shot_repeat - 1:
 			break
-
+		
 		gun_shot.emit()
+		
+		barrel_flare_sprite.visible = true
+		await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
+		barrel_flare_sprite.visible = false
+		
 
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
+			barrel_flare_sprite.visible = true
 			await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
+			barrel_flare_sprite.visible = false
 
 	if magazine_ammo_left <= 0:
 		for barrel in installed_barrels:
@@ -354,9 +362,10 @@ func reload():
 	#anim_player.play("%s_barrel_idle" % barrel_count)
 	#await anim_player.animation_finished
 	anim_player.play("reload", -1, 0.55 * modified_reload_time)
-	is_reloading = false
 	
 	await anim_player.animation_finished
+	is_reloading = false
+	
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://duunxkkrmgp1s"]
+[gd_scene load_steps=21 format=3 uid="uid://duunxkkrmgp1s"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -10,7 +10,9 @@
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="8_trw5g"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="9_hhraw"]
 [ext_resource type="Texture2D" uid="uid://dknmlvpcf02rm" path="res://src/player/gun/assets/sprite/rescale/idle/gun_body_idle.png" id="10_g3hse"]
+[ext_resource type="Texture2D" uid="uid://dh6t8spyrx65x" path="res://src/player/gun/assets/sprite/rescale/idle/gun_barrel_firing.png" id="11_cwod4"]
 [ext_resource type="Texture2D" uid="uid://tfuumqiincn8" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1.png" id="11_hubp1"]
+[ext_resource type="Texture2D" uid="uid://iha0nlvvg0on" path="res://src/player/gun/assets/sprite/muzzleflash_temp.png" id="12_e2h1w"]
 [ext_resource type="Texture2D" uid="uid://b7act70bpswy0" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2.png" id="12_vi2pp"]
 [ext_resource type="Texture2D" uid="uid://bbg2tgpr0qgk" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3.png" id="13_u0vae"]
 [ext_resource type="Texture2D" uid="uid://ciovo216nkk7n" path="res://src/player/gun/assets/sprite/rescale/idle/gun_foregrip_idle.png" id="14_8rp44"]
@@ -159,6 +161,16 @@ transform = Transform3D(0.165, 0, 0, 0, 0.165, 0, 0, 0, 0.165, 0.364854, -0.3940
 
 [node name="GunSprite" type="Sprite3D" parent="SpriteParent"]
 texture = ExtResource("10_g3hse")
+
+[node name="MuzzleflareLightSprite" type="Sprite3D" parent="SpriteParent/GunSprite"]
+visible = false
+sorting_offset = 1.0
+texture = ExtResource("11_cwod4")
+
+[node name="MuzzleFlashSprite" type="Sprite3D" parent="SpriteParent/GunSprite/MuzzleflareLightSprite"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.236985, -0.583699, 0)
+sorting_offset = -1.0
+texture = ExtResource("12_e2h1w")
 
 [node name="Barrel1Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 1.0
