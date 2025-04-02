@@ -96,6 +96,7 @@ var controls_disabled: bool = false
 var dash_disabled: bool = false
 
 var gun_container_original_pos: Vector3
+var gun_container_original_rot: Vector3
 var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
@@ -121,6 +122,7 @@ func _ready():
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	gun_container_original_pos = gun_container.position
+	gun_container_original_rot = gun_container.rotation
 	interact_ui.visible = false
 	boss_special_dialog.visible = false
 	current_gun = gun_container.get_child(0)
@@ -302,21 +304,25 @@ func _physics_process(delta):
 	var gun_sway_velocity = velocity * transform.basis
 	if not is_swapping_gun:
 		gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
+		if is_dashing:
+			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z - (gun_sway_velocity.x / 250), delta * 10)
+		else:
+			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
 	camera_control(delta)
 
 func update_hud():
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
-	for i in range(current_gun.max_barrels):
-		var effect_ui = all_barrel_effect_ui.get_child(i)
-		if current_gun.get_node("Barrel").get_child(i).get_child_count() > 0:
-			var barrel: SpinBarrel = current_gun.get_node("Barrel").get_child(i).get_child(0)
-			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
-			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
-			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
-		else:
-			effect_ui.get_node("Title").text = ""
-			effect_ui.get_node("Tag").text = ""
-			effect_ui.get_node("Desc").text = ""
+	#for i in range(current_gun.max_barrels):
+		#var effect_ui = all_barrel_effect_ui.get_child(i)
+#w		if current_gun.get_node("Barrel").get_child(i).get_child_count() > 0:
+			#var barrel: SpinBarrel = current_gun.get_node("Barrel").get_child(i).get_child(0)
+			#effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
+			#effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
+			#effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+		#else:
+			#effect_ui.get_node("Title").text = ""
+			#effect_ui.get_node("Tag").text = ""
+			#effect_ui.get_node("Desc").text = ""
 
 func show_debug_label():
 	var h_speed = snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.1)

@@ -16,6 +16,7 @@ const IGNORED_PATH_EXTENSIONS: Array[String] = [
 	"mp3", "wav", 
 	"png", "jpg", "svg",
 ]
+@export var debug_skip_pre_compile: bool = false
 @export var max_materials_compiled_per_frame: int = 2
 var scenes_to_compile: Array = []
 var compiling_materials_count: int = 0
@@ -36,7 +37,7 @@ func collect_scenes_to_compile() -> void:
 
 func initial_load() -> void:
 	# Pre-cache files we know contain materials to load
-	if OS.is_debug_build():
+	if OS.is_debug_build() and not debug_skip_pre_compile:
 		ScreenTransition.set_loading_detail_text("Parsing scene paths to compile")
 		parse_scene_paths_to_compile()
 	ScreenTransition.set_loading_detail_text("Collecting scenes to compile")

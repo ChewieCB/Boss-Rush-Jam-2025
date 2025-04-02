@@ -1,20 +1,20 @@
-[gd_scene load_steps=19 format=3 uid="uid://d2tb8ogqlaxhy"]
+[gd_scene load_steps=19 format=3 uid="uid://duunxkkrmgp1s"]
 
-[ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_wwe7d"]
-[ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_5dqrq"]
-[ext_resource type="AudioStream" uid="uid://bxq16mdpw6cvr" path="res://src/player/gun/assets/sfx/temp/Shotgun_Dry_Fire.mp3" id="3_nou6i"]
-[ext_resource type="AudioStream" uid="uid://d3psu8yx8uldk" path="res://src/player/gun/assets/sfx/temp/Shotgun_Cock_only.mp3" id="5_8nbf7"]
-[ext_resource type="AudioStream" uid="uid://csslo4nsdbmmp" path="res://src/player/gun/assets/sfx/temp/Recover_ammp.mp3" id="6_gecfl"]
-[ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="7_p32ub"]
-[ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="9_tyti4"]
-[ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="10_vvihl"]
-[ext_resource type="AudioStream" uid="uid://cqdjicto0uwp2" path="res://src/player/gun/assets/sfx/reloading/slot_roller.mp3" id="14_2r0ft"]
-[ext_resource type="Texture2D" uid="uid://dknmlvpcf02rm" path="res://src/player/gun/assets/sprite/rescale/idle/gun_body_idle.png" id="20_1b0s3"]
-[ext_resource type="Texture2D" uid="uid://ciovo216nkk7n" path="res://src/player/gun/assets/sprite/rescale/idle/gun_foregrip_idle.png" id="20_gojii"]
-[ext_resource type="Texture2D" uid="uid://drrr4aotn87ol" path="res://src/player/gun/assets/sprite/rescale/idle/arm_idle.png" id="21_qo6l7"]
-[ext_resource type="Texture2D" uid="uid://tfuumqiincn8" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1.png" id="21_yxjfx"]
-[ext_resource type="Texture2D" uid="uid://b7act70bpswy0" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2.png" id="22_x04wc"]
-[ext_resource type="Texture2D" uid="uid://bbg2tgpr0qgk" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3.png" id="23_ee10x"]
+[ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
+[ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
+[ext_resource type="AudioStream" uid="uid://bxq16mdpw6cvr" path="res://src/player/gun/assets/sfx/temp/Shotgun_Dry_Fire.mp3" id="3_doij6"]
+[ext_resource type="AudioStream" uid="uid://cqdjicto0uwp2" path="res://src/player/gun/assets/sfx/reloading/slot_roller.mp3" id="4_jq6y4"]
+[ext_resource type="AudioStream" uid="uid://d3psu8yx8uldk" path="res://src/player/gun/assets/sfx/temp/Shotgun_Cock_only.mp3" id="5_cutjd"]
+[ext_resource type="AudioStream" uid="uid://csslo4nsdbmmp" path="res://src/player/gun/assets/sfx/temp/Recover_ammp.mp3" id="6_j7hjd"]
+[ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="7_dh421"]
+[ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="8_trw5g"]
+[ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="9_hhraw"]
+[ext_resource type="Texture2D" uid="uid://dknmlvpcf02rm" path="res://src/player/gun/assets/sprite/rescale/idle/gun_body_idle.png" id="10_g3hse"]
+[ext_resource type="Texture2D" uid="uid://tfuumqiincn8" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1.png" id="11_hubp1"]
+[ext_resource type="Texture2D" uid="uid://b7act70bpswy0" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2.png" id="12_vi2pp"]
+[ext_resource type="Texture2D" uid="uid://bbg2tgpr0qgk" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3.png" id="13_u0vae"]
+[ext_resource type="Texture2D" uid="uid://ciovo216nkk7n" path="res://src/player/gun/assets/sprite/rescale/idle/gun_foregrip_idle.png" id="14_8rp44"]
+[ext_resource type="Texture2D" uid="uid://drrr4aotn87ol" path="res://src/player/gun/assets/sprite/rescale/idle/arm_idle.png" id="15_x3kbv"]
 
 [sub_resource type="Animation" id="Animation_64i2r"]
 length = 0.001
@@ -119,6 +119,20 @@ tracks/3/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, -0.331613), Vector3(0, 0, -0.331613), Vector3(0, 0, 0)]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_play_reload_end_sfx"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mu0sm"]
 _data = {
@@ -127,28 +141,28 @@ _data = {
 }
 
 [node name="BlankGun" type="Node3D"]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, -0.664934, 0.729413, -6.51926e-09)
-script = ExtResource("1_wwe7d")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, -6.51926e-09)
+script = ExtResource("1_ferpt")
 gun_name = "Blank gun"
 description = "A ordinary gun, waiting to be modified with various special barrels."
-TEMP_sfx_shoot = ExtResource("2_5dqrq")
-TEMP_sfx_dry = ExtResource("3_nou6i")
-TEMP_sfx_reload = ExtResource("14_2r0ft")
-TEMP_sfx_click = ExtResource("5_8nbf7")
-TEMP_regain_ammo = ExtResource("6_gecfl")
-TEMP_crit = ExtResource("7_p32ub")
-hitscan_prefab = ExtResource("9_tyti4")
-projectile_prefab = ExtResource("10_vvihl")
+TEMP_sfx_shoot = ExtResource("2_3jkil")
+TEMP_sfx_dry = ExtResource("3_doij6")
+TEMP_sfx_reload = ExtResource("4_jq6y4")
+TEMP_sfx_click = ExtResource("5_cutjd")
+TEMP_regain_ammo = ExtResource("6_j7hjd")
+TEMP_crit = ExtResource("7_dh421")
+hitscan_prefab = ExtResource("8_trw5g")
+projectile_prefab = ExtResource("9_hhraw")
 
 [node name="SpriteParent" type="Node3D" parent="."]
 transform = Transform3D(0.165, 0, 0, 0, 0.165, 0, 0, 0, 0.165, 0.364854, -0.394036, 0)
 
 [node name="GunSprite" type="Sprite3D" parent="SpriteParent"]
-texture = ExtResource("20_1b0s3")
+texture = ExtResource("10_g3hse")
 
 [node name="Barrel1Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 1.0
-texture = ExtResource("21_yxjfx")
+texture = ExtResource("11_hubp1")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel1Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, -0.7, 0)
@@ -160,7 +174,7 @@ outline_size = 24
 
 [node name="Barrel2Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 2.0
-texture = ExtResource("22_x04wc")
+texture = ExtResource("12_vi2pp")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel2Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3, -1.2, 0)
@@ -172,7 +186,7 @@ outline_size = 24
 
 [node name="Barrel3Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 3.0
-texture = ExtResource("23_ee10x")
+texture = ExtResource("13_u0vae")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel3Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1.7, 0)
@@ -186,18 +200,18 @@ outline_size = 24
 [node name="ForegripSprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 4.0
 render_priority = 1
-texture = ExtResource("20_gojii")
+texture = ExtResource("14_8rp44")
 
 [node name="ArmSprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 5.0
 render_priority = 1
-texture = ExtResource("21_qo6l7")
+texture = ExtResource("15_x3kbv")
 
 [node name="JamTimer" type="Timer" parent="."]
 one_shot = true
 
 [node name="BulletStartPos" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.773927)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.520216, -0.523901, -0.950173)
 
 [node name="FailToShootSFXTimer" type="Timer" parent="."]
 wait_time = 0.5

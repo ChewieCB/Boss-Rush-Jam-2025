@@ -37,7 +37,6 @@
 [ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
 [ext_resource type="AudioStream" uid="uid://4qf6uf8inc1v" path="res://src/player/assets/sfx/RUNNING/Running Individual 12.mp3" id="14_rd2i6"]
 [ext_resource type="AudioStream" uid="uid://clrb5tuaish36" path="res://src/player/assets/sfx/RUNNING/Running Individual 13.mp3" id="15_w5gjb"]
-[ext_resource type="PackedScene" uid="uid://d2tb8ogqlaxhy" path="res://src/player/gun/BlankGun.tscn" id="16_1gnyn"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
 [ext_resource type="AudioStream" uid="uid://l2hmqeiq76ff" path="res://src/player/assets/sfx/RUNNING/Running Individual 14.mp3" id="16_tto8i"]
 [ext_resource type="PackedScene" uid="uid://dxau0o2083o1d" path="res://src/ui/player/PlayerHealthBarUI.tscn" id="19_n1ar7"]
@@ -50,6 +49,7 @@
 [ext_resource type="AudioStream" uid="uid://ckr1r101hscjl" path="res://src/player/assets/sfx/Floor Dash.mp3" id="30_on7sg"]
 [ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="31_pnqxi"]
 [ext_resource type="Shader" path="res://src/player/assets/outline.gdshader" id="36_1ffwc"]
+[ext_resource type="PackedScene" uid="uid://duunxkkrmgp1s" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
@@ -126,6 +126,7 @@ health_component = NodePath("HealthComponent")
 shape = SubResource("CapsuleShape3D_le58x")
 
 [node name="DebugMeshes" type="Node3D" parent="."]
+visible = false
 
 [node name="Body" type="MeshInstance3D" parent="DebugMeshes"]
 mesh = SubResource("CapsuleMesh_w3btf")
@@ -194,8 +195,7 @@ texture = ExtResource("5_nkt42")
 [node name="GunContainer" type="Node3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
 
-[node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("16_1gnyn")]
-recoil_amount = 0.05
+[node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("39_lhbas")]
 
 [node name="AimRay" parent="Neck/ShakeCameraWrapper" instance=ExtResource("5_dqbuo")]
 collision_mask = 125

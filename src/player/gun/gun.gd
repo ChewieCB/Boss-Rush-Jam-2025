@@ -5,22 +5,25 @@ class_name Gun
 @export_multiline var description: String
 
 ## SPRITES
-@onready var gun_sprite: Sprite3D = $GunSprite
 @export_group("Sprites")
-@export_subgroup("0 Barrels")
-@export var idle_0_barrel: Texture
+@onready var gun_sprite: Sprite3D = $SpriteParent/GunSprite
+@onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
+@onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @export_subgroup("1 Barrel")
-@export var idle_1_barrel: Texture
-@export var reload_frame_0_1_barrel: Texture
-@export var reload_frame_1_1_barrel: Texture
+@onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
+@export var barrel_1_idle_frame: Texture
+@export var barrel_1_spin_frame_1: Texture
+@export var barrel_1_spin_frame_2: Texture
 @export_subgroup("2 Barrels")
-@export var idle_2_barrel: Texture
-@export var reload_frame_0_2_barrel: Texture
-@export var reload_frame_1_2_barrel: Texture
+@onready var barrel_2_sprite: Sprite3D = $SpriteParent/Barrel2Sprite
+@export var barrel_2_idle_frame: Texture
+@export var barrel_2_spin_frame_1: Texture
+@export var barrel_2_spin_frame_2: Texture
 @export_subgroup("3 Barrels")
-@export var idle_3_barrel: Texture
-@export var reload_frame_0_3_barrel: Texture
-@export var reload_frame_1_3_barrel: Texture
+@onready var barrel_3_sprite: Sprite3D = $SpriteParent/Barrel3Sprite
+@export var barrel_3_idle_frame: Texture
+@export var barrel_3_spin_frame_1: Texture
+@export var barrel_3_spin_frame_2: Texture
 
 @export_group("SFX")
 ## TEMP SFX PLS CHANGE
@@ -55,7 +58,7 @@ class_name Gun
 @export var projectile_prefab: PackedScene
 
 @onready var barrel_container = $Barrel
-@onready var gun_status_label: Label3D = $PlaceholderUI/StatusLabel
+#@onready var gun_status_label: Label3D = $PlaceholderUI/StatusLabel
 @onready var bullet_spawn_marker = $BulletStartPos
 @onready var jam_timer: Timer = $JamTimer
 @onready var failed_shoot_sfx_timer: Timer = $FailToShootSFXTimer
@@ -103,70 +106,70 @@ const BULLET_SPAWN_POS_VARIATION = 10
 
 
 func _ready() -> void:
-	gun_status_label.visible = false
+	#gun_status_label.visible = false
 	magazine_ammo_left = base_magazine_size
-	generate_gun_animations()
+	#generate_gun_animations()
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	reinstall_barrels()
+	#reinstall_barrels()
 	reset_modifier(true)
 	reload()
 
 
-func generate_gun_animations() -> void:
-	for i in range(4):
-		var idle_sprite: Texture
-		var reload_sprites: Array
-		match i:
-			0:
-				idle_sprite = idle_0_barrel
-				reload_sprites = []
-			1:
-				idle_sprite = idle_1_barrel
-				reload_sprites = [reload_frame_0_1_barrel, reload_frame_1_1_barrel]
-			2:
-				idle_sprite = idle_2_barrel
-				reload_sprites = [reload_frame_0_2_barrel, reload_frame_1_2_barrel]
-			3:
-				idle_sprite = idle_3_barrel
-				reload_sprites = [reload_frame_0_3_barrel, reload_frame_1_3_barrel]
-		
-		create_gun_anims(i, idle_sprite, reload_sprites)
-
-
-func create_gun_anims(barrel_count: int, idle_texture: Texture, reload_textures: Array) -> void:
-	var anim_root_node: Node = anim_player.get_node(anim_player.root_node)
-	var gun_sprite_path: NodePath = anim_root_node.get_path_to(gun_sprite)
-	var sprite_texture_path: NodePath = "%s:texture" % gun_sprite_path
-	
-	var base_library = anim_player.get_animation_library("")
-	
-	# Idle animation
-	var idle_anim := Animation.new()
-	idle_anim.step = 0.05
-	idle_anim.length = 0.1
-	
-	var idle_texture_track_idx = idle_anim.add_track(Animation.TYPE_VALUE)
-	idle_anim.track_set_path(idle_texture_track_idx, sprite_texture_path)
-	idle_anim.track_insert_key(idle_texture_track_idx, 0.0, idle_texture)
-	
-	base_library.add_animation("%s_barrel_idle" % [barrel_count], idle_anim)
-	
-	# Reload animation
-	if reload_textures == []:
-		return
-	var reload_anim := Animation.new()
-	reload_anim.step = 0.05
-	reload_anim.length = 0.1
-	reload_anim.loop = true
-	
-	var reload_texture_track_idx = reload_anim.add_track(Animation.TYPE_VALUE)
-	reload_anim.track_set_path(reload_texture_track_idx, sprite_texture_path)
-	reload_anim.track_insert_key(reload_texture_track_idx, 0.0, reload_textures[0])
-	reload_anim.track_insert_key(reload_texture_track_idx, 0.05, reload_textures[1])
-	reload_anim.track_insert_key(reload_texture_track_idx, 0.1, reload_textures[0])
-	
-	base_library.add_animation("%s_barrel_reload" % [barrel_count], reload_anim)
+#func generate_gun_animations() -> void:
+	#for i in range(4):
+		#var idle_sprite: Texture
+		#var reload_sprites: Array
+		#match i:
+			#0:
+				#idle_sprite = idle_0_barrel
+				#reload_sprites = []
+			#1:
+				#idle_sprite = idle_1_barrel
+				#reload_sprites = [reload_frame_0_1_barrel, reload_frame_1_1_barrel]
+			#2:
+				#idle_sprite = idle_2_barrel
+				#reload_sprites = [reload_frame_0_2_barrel, reload_frame_1_2_barrel]
+			#3:
+				#idle_sprite = idle_3_barrel
+				#reload_sprites = [reload_frame_0_3_barrel, reload_frame_1_3_barrel]
+		#
+		#create_gun_anims(i, idle_sprite, reload_sprites)
+#
+#
+#func create_gun_anims(barrel_count: int, idle_texture: Texture, reload_textures: Array) -> void:
+	#var anim_root_node: Node = anim_player.get_node(anim_player.root_node)
+	#var gun_sprite_path: NodePath = anim_root_node.get_path_to(gun_sprite)
+	#var sprite_texture_path: NodePath = "%s:texture" % gun_sprite_path
+	#
+	#var base_library = anim_player.get_animation_library("")
+	#
+	## Idle animation
+	#var idle_anim := Animation.new()
+	#idle_anim.step = 0.05
+	#idle_anim.length = 0.1
+	#
+	#var idle_texture_track_idx = idle_anim.add_track(Animation.TYPE_VALUE)
+	#idle_anim.track_set_path(idle_texture_track_idx, sprite_texture_path)
+	#idle_anim.track_insert_key(idle_texture_track_idx, 0.0, idle_texture)
+	#
+	#base_library.add_animation("%s_barrel_idle" % [barrel_count], idle_anim)
+	#
+	## Reload animation
+	#if reload_textures == []:
+		#return
+	#var reload_anim := Animation.new()
+	#reload_anim.step = 0.05
+	#reload_anim.length = 0.1
+	#reload_anim.loop = true
+	#
+	#var reload_texture_track_idx = reload_anim.add_track(Animation.TYPE_VALUE)
+	#reload_anim.track_set_path(reload_texture_track_idx, sprite_texture_path)
+	#reload_anim.track_insert_key(reload_texture_track_idx, 0.0, reload_textures[0])
+	#reload_anim.track_insert_key(reload_texture_track_idx, 0.05, reload_textures[1])
+	#reload_anim.track_insert_key(reload_texture_track_idx, 0.1, reload_textures[0])
+	#
+	#base_library.add_animation("%s_barrel_reload" % [barrel_count], reload_anim)
 
 
 func _process(delta: float) -> void:
@@ -301,7 +304,7 @@ func spin_all_barrels() -> void:
 	await get_tree().create_timer(modified_reload_time).timeout
 	
 	reset_modifier(true)
-	gun_status_label.visible = false
+	#gun_status_label.visible = false
 	stop_all_barrels()
 	reload()
 
@@ -340,19 +343,20 @@ func reload():
 		barrel.get_active_effect().on_reload_start()
 	
 	is_reloading = true
-	SoundManager.play_sound(TEMP_sfx_reload, "Gun")
-	show_gun_status("Reloading...")
+	#SoundManager.play_sound(TEMP_sfx_reload, "Gun")
+	#show_gun_status("Reloading...")
 
-	await get_tree().create_timer(modified_reload_time).timeout
+	#await get_tree().create_timer(modified_reload_time).timeout
 	
-	gun_status_label.visible = false
-	SoundManager.stop_sound(TEMP_sfx_reload)
+	#gun_status_label.visible = false
+	#SoundManager.stop_sound(TEMP_sfx_reload)
 	# TODO - add new reload anim?
 	#anim_player.play("%s_barrel_idle" % barrel_count)
 	#await anim_player.animation_finished
-	anim_player.play("reload_foregrip")
+	anim_player.play("reload", -1, 0.55 * modified_reload_time)
 	is_reloading = false
-
+	
+	await anim_player.animation_finished
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
 
@@ -380,7 +384,7 @@ func reset_modifier(reload_reset = false):
 
 
 func jam_the_gun(duration: float = 1.0):
-	show_gun_status("Jammed...", Color.DIM_GRAY, duration)
+	#show_gun_status("Jammed...", Color.DIM_GRAY, duration)
 
 	jam_timer.start(duration)
 	is_jammed = true
@@ -388,32 +392,32 @@ func jam_the_gun(duration: float = 1.0):
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
 func regain_ammo(ammo: int) -> void:
-	show_gun_status("Regained +%s ammo" % [ammo], Color.CYAN)
+	#show_gun_status("Regained +%s ammo" % [ammo], Color.CYAN)
 	SoundManager.play_sound(TEMP_regain_ammo, "Gun")
 
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
 func crit_damage(damage: int) -> void:
-	show_gun_status("CRIT! %s damage" % [damage], Color.RED)
+	#show_gun_status("CRIT! %s damage" % [damage], Color.RED)
 	SoundManager.play_sound(TEMP_crit, "Gun")
 
 
-func show_gun_status(text: String, color: Color = Color.WHITE, duration: float = 0.4) -> void:
-	gun_status_label.modulate = color
-	gun_status_label.text = text
-
-	gun_status_label.visible = true
-	gun_status_label.modulate = Color(color, 0)
-
-	var tween = get_tree().create_tween()
-	tween.tween_property(gun_status_label, "modulate", Color(color, 1.0), 0.4)
-	await get_tree().create_timer(duration).timeout
-	#tween.tween_property(gun_status_label, "modulate:a", 0, 1.0)
+#func show_gun_status(text: String, color: Color = Color.WHITE, duration: float = 0.4) -> void:
+	#gun_status_label.modulate = color
+	#gun_status_label.text = text
+#
+	#gun_status_label.visible = true
+	#gun_status_label.modulate = Color(color, 0)
+#
+	#var tween = get_tree().create_tween()
+	#tween.tween_property(gun_status_label, "modulate", Color(color, 1.0), 0.4)
+	#await get_tree().create_timer(duration).timeout
+	##tween.tween_property(gun_status_label, "modulate:a", 0, 1.0)
 
 
 func _on_jam_timer_timeout() -> void:
 	is_jammed = false
-	gun_status_label.visible = false
+	#gun_status_label.visible = false
 
 
 func get_spread_direction(center_direction: Vector3) -> Vector3:
@@ -486,3 +490,10 @@ func reinstall_barrels():
 		var barrel_inst: SpinBarrel = GameManager.equipped_barrels[i].barrel_prefab.instantiate()
 		barrel_container.get_child(i).add_child(barrel_inst)
 	recheck_installed_barrels()
+
+
+func _play_reload_start_sfx() -> void:
+	SoundManager.play_sound(TEMP_sfx_reload, "Gun")
+
+func _play_reload_end_sfx() -> void:
+	SoundManager.play_sound(TEMP_sfx_click, "Gun")
