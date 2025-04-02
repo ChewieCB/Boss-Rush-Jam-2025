@@ -314,8 +314,8 @@ func update_hud():
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
 	#for i in range(current_gun.max_barrels):
 		#var effect_ui = all_barrel_effect_ui.get_child(i)
-#w		if current_gun.get_node("Barrel").get_child(i).get_child_count() > 0:
-			#var barrel: SpinBarrel = current_gun.get_node("Barrel").get_child(i).get_child(0)
+		#if current_gun.barrel_container.get_child_count() > 0:
+			#var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			#effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
 			#effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
 			#effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc

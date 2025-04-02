@@ -8,20 +8,24 @@ class_name Gun
 @export_group("Sprites")
 @onready var gun_sprite: Sprite3D = $SpriteParent/GunSprite
 @onready var barrel_flare_sprite: Sprite3D = $SpriteParent/GunSprite/MuzzleflareLightSprite
+@onready var muzzle_flash_sprite: Sprite3D = $SpriteParent/GunSprite/MuzzleflareLightSprite/MuzzleFlashSprite
 @onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @export_subgroup("1 Barrel")
 @onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
+@onready var barrel_1_label: Label3D = $SpriteParent/Barrel1Sprite/Label3D
 @export var barrel_1_idle_frame: Texture
 @export var barrel_1_spin_frame_1: Texture
 @export var barrel_1_spin_frame_2: Texture
 @export_subgroup("2 Barrels")
 @onready var barrel_2_sprite: Sprite3D = $SpriteParent/Barrel2Sprite
+@onready var barrel_2_label: Label3D = $SpriteParent/Barrel2Sprite/Label3D
 @export var barrel_2_idle_frame: Texture
 @export var barrel_2_spin_frame_1: Texture
 @export var barrel_2_spin_frame_2: Texture
 @export_subgroup("3 Barrels")
 @onready var barrel_3_sprite: Sprite3D = $SpriteParent/Barrel3Sprite
+@onready var barrel_3_label: Label3D = $SpriteParent/Barrel3Sprite/Label3D
 @export var barrel_3_idle_frame: Texture
 @export var barrel_3_spin_frame_1: Texture
 @export var barrel_3_spin_frame_2: Texture
@@ -58,7 +62,7 @@ class_name Gun
 @export var hitscan_prefab: PackedScene
 @export var projectile_prefab: PackedScene
 
-@onready var barrel_container = $Barrel
+@onready var barrel_container = $BarrelContainer
 #@onready var gun_status_label: Label3D = $PlaceholderUI/StatusLabel
 @onready var bullet_spawn_marker = $BulletStartPos
 @onready var jam_timer: Timer = $JamTimer
@@ -112,7 +116,7 @@ func _ready() -> void:
 	#generate_gun_animations()
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	#reinstall_barrels()
+	reinstall_barrels()
 	reset_modifier(true)
 	reload()
 
@@ -243,15 +247,14 @@ func shoot(aim_ray: RayCast3D):
 			break
 		
 		gun_shot.emit()
-		
-		barrel_flare_sprite.visible = true
-		await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
-		barrel_flare_sprite.visible = false
-		
 
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
 			barrel_flare_sprite.visible = true
 			await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
+			barrel_flare_sprite.visible = false
+		else:
+			barrel_flare_sprite.visible = true
+			await get_tree().physics_frame
 			barrel_flare_sprite.visible = false
 
 	if magazine_ammo_left <= 0:
@@ -300,9 +303,6 @@ func release_trigger():
 
 func spin_all_barrels() -> void:
 	release_trigger()
-	# TODO - replace with individual animation layers
-	if barrel_count > 0:
-		anim_player.play("%s_barrel_reload" % barrel_count)
 	# TODO - add catch for HELD barrels
 	for i in installed_barrels.size():
 		_spin_barrel(i)
@@ -324,7 +324,6 @@ func _spin_barrel(barrel_idx: int) -> void:
 
 
 func stop_all_barrels() -> void:
-	anim_player.play("%s_barrel_idle" % barrel_count)
 	for i in installed_barrels.size():
 		_stop_barrel(i)
 
@@ -449,17 +448,18 @@ func play_failed_shoot_sfx():
 		failed_shoot_sfx_timer.start()
 
 
-func install_barrel(_barrel_prefab: PackedScene):
+func install_barrel(barrel_prefab: PackedScene):
 	if len(installed_barrels) >= max_barrels:
 		return
-	reinstall_barrels()
-	# var barrel_inst = barrel_prefab.instantiate()
-	# for child in barrel_container.get_children():
-	# 	if child.get_child_count() == 0:
-	# 		child.add_child(barrel_inst)
-	# 		break
-	# magazine_ammo_left = 0
-	# recheck_installed_barrels()
+	
+	var barrel_inst = barrel_prefab.instantiate()
+	barrel_inst.barrel_effect_changed.connect(
+		_set_barrel_effect_label.bind(barrel_container.get_child_count())
+	)
+	barrel_container.add_child(barrel_inst)
+	
+	magazine_ammo_left = 0
+	recheck_installed_barrels()
 
 
 func remove_barrel(_search_barrel_id: BarrelDataResource.BarrelIdEnum):
@@ -478,27 +478,38 @@ func recheck_installed_barrels():
 	await get_tree().process_frame
 	await get_tree().process_frame
 	installed_barrels = []
-	for child in barrel_container.get_children():
-		if child.get_child_count() > 0:
-			var barrel = child.get_child(0)
-			barrel.owner_gun = self
-			installed_barrels.append(barrel)
+	for barrel in barrel_container.get_children():
+		barrel.owner_gun = self
+		installed_barrels.append(barrel)
 	barrel_count = installed_barrels.size()
 	# This is just to force UI update
 	gun_reloaded.emit()
 
 
 func reinstall_barrels():
-	# Clear old barrel
-	for i in range(max_barrels):
-		if barrel_container.get_child(i).get_child_count() > 0:
-			barrel_container.get_child(i).get_child(0).queue_free()
+	# Clear old barrels
+	for barrel in barrel_container.get_children():
+		barrel.queue_free()
 
 	# Instantiate barrels onto gun
-	for i in range(len(GameManager.equipped_barrels)):
-		var barrel_inst: SpinBarrel = GameManager.equipped_barrels[i].barrel_prefab.instantiate()
-		barrel_container.get_child(i).add_child(barrel_inst)
+	for i in GameManager.equipped_barrels.size():
+		var barrel = GameManager.equipped_barrels[i].barrel_prefab
+		install_barrel(barrel)
 	recheck_installed_barrels()
+
+
+func _set_barrel_effect_label(barrel: BaseBarrelEffect, idx: int) -> void:
+	var label: Label3D
+	match idx:
+		0:
+			label = barrel_3_label
+		1:
+			label = barrel_2_label
+		2:
+			label = barrel_1_label
+		_:
+			return
+	label.text = barrel.display_text_title
 
 
 func _play_reload_start_sfx() -> void:

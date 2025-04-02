@@ -1,9 +1,12 @@
 extends Node3D
 class_name SpinBarrel
 
+signal barrel_effect_changed(BaseBarrelEffect)
+
 @export var barrel_id: BarrelDataResource.BarrelIdEnum
 
 @onready var effect_container: Node3D = $EffectContainer
+@onready var display_container: Node3D = $CommonBarrelComponent
 @onready var display_label_title: Label3D = $CommonBarrelComponent/EffectName
 @onready var display_label_tag: Label3D = $CommonBarrelComponent/EffectTag
 @onready var display_label_desc: Label3D = $CommonBarrelComponent/EffectDesc
@@ -12,7 +15,10 @@ var owner_gun: Gun
 var effect_list: Array[BaseBarrelEffect] = []
 var spin_interval_timer = 0
 var is_spinning = false
-var chosen_id = 0
+var chosen_id = 0:
+	set(value):
+		chosen_id = value
+		barrel_effect_changed.emit(effect_list[chosen_id])
 var is_equipped = false
 
 const SPIN_INTERVAL = 0.1
