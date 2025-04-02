@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://cp0e7vka232ws"]
+[gd_scene load_steps=6 format=3 uid="uid://cp0e7vka232ws"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_eccsf"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_bc00m"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_8iiph"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_khhtx"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="3_xhp4t"]
@@ -10,8 +9,6 @@
 [node name="TrickshotBarrel" type="Node3D"]
 script = ExtResource("1_eccsf")
 barrel_id = 6
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_bc00m")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://bjcvwkqb8mks4"]
+[gd_scene load_steps=8 format=3 uid="uid://bjcvwkqb8mks4"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_41m3f"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_8sd3q"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_eatto"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_cnlm3"]
 [ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="4_wabqs"]
@@ -12,8 +11,6 @@
 [node name="ArchetypeShotgunSpecBarrel" type="Node3D"]
 script = ExtResource("1_41m3f")
 barrel_id = 7
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_8sd3q")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

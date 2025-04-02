@@ -29,6 +29,7 @@ class_name Gun
 @export var barrel_3_idle_frame: Texture
 @export var barrel_3_spin_frame_1: Texture
 @export var barrel_3_spin_frame_2: Texture
+@onready var barrel_sprites: Array[Sprite3D] = [barrel_1_sprite, barrel_2_sprite, barrel_3_sprite]
 
 @export_group("SFX")
 ## TEMP SFX PLS CHANGE
@@ -74,10 +75,7 @@ var is_reloading = false
 var is_jammed = false
 var time_since_last_shot = 0
 var installed_barrels: Array[SpinBarrel] = []
-var barrel_count: int = 0:
-	set(value):
-		barrel_count = value
-		anim_player.play("%s_barrel_idle" % barrel_count)
+var barrel_count: int = 0
 		
 var is_trigger_pulled = false
 
@@ -453,10 +451,9 @@ func install_barrel(barrel_prefab: PackedScene):
 		return
 	
 	var barrel_inst = barrel_prefab.instantiate()
-	barrel_inst.barrel_effect_changed.connect(
-		_set_barrel_effect_label.bind(barrel_container.get_child_count())
-	)
+	barrel_inst.barrel_effect_changed.connect(_set_barrel_effect_label)
 	barrel_container.add_child(barrel_inst)
+	_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
 	
 	magazine_ammo_left = 0
 	recheck_installed_barrels()
@@ -482,8 +479,9 @@ func recheck_installed_barrels():
 		barrel.owner_gun = self
 		installed_barrels.append(barrel)
 	barrel_count = installed_barrels.size()
-	# This is just to force UI update
-	gun_reloaded.emit()
+	
+	for i in barrel_sprites.size():
+		barrel_sprites[i].visible = i < barrel_count
 
 
 func reinstall_barrels():
@@ -498,18 +496,19 @@ func reinstall_barrels():
 	recheck_installed_barrels()
 
 
-func _set_barrel_effect_label(barrel: BaseBarrelEffect, idx: int) -> void:
+func _set_barrel_effect_label(barrel: SpinBarrel, effect: BaseBarrelEffect) -> void:
 	var label: Label3D
+	var idx = barrel_container.get_children().find(barrel)
 	match idx:
 		0:
-			label = barrel_3_label
+			label = barrel_1_label
 		1:
 			label = barrel_2_label
 		2:
-			label = barrel_1_label
+			label = barrel_3_label
 		_:
 			return
-	label.text = barrel.display_text_title
+	label.text = effect.display_text_title
 
 
 func _play_reload_start_sfx() -> void:

@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://c7jc72exa8eg2"]
+[gd_scene load_steps=8 format=3 uid="uid://c7jc72exa8eg2"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_2a2qf"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_iurid"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_q7s8s"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_duuhv"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_307l2"]
@@ -12,8 +11,6 @@
 [node name="DelayedGratificationBarrel" type="Node3D"]
 script = ExtResource("1_2a2qf")
 barrel_id = 13
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_iurid")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

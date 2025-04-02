@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://cywwydmxkbh4x"]
+[gd_scene load_steps=6 format=3 uid="uid://cywwydmxkbh4x"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_w6qw3"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_2un3s"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="3_nac64"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_rhvms"]
 [ext_resource type="PackedScene" uid="uid://r58hv7fv4nab" path="res://src/player/gun/projectiles/BallProjectile.tscn" id="4_fpaqy"]
@@ -10,8 +9,6 @@
 [node name="DebugBallBulletBarrel" type="Node3D"]
 script = ExtResource("1_w6qw3")
 barrel_id = 8
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_2un3s")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

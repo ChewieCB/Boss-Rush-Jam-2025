@@ -172,11 +172,11 @@ transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0.236985, -0.583699, 0)
 sorting_offset = -1.0
 texture = ExtResource("12_e2h1w")
 
-[node name="Barrel1Sprite" type="Sprite3D" parent="SpriteParent"]
+[node name="Barrel3Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 1.0
-texture = ExtResource("11_hubp1")
+texture = ExtResource("13_u0vae")
 
-[node name="Label3D" type="Label3D" parent="SpriteParent/Barrel1Sprite"]
+[node name="Label3D" type="Label3D" parent="SpriteParent/Barrel3Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, -0.7, 0)
 render_priority = 1
 outline_render_priority = 0
@@ -198,11 +198,11 @@ text = "Barrel 2 Text Label"
 font_size = 64
 outline_size = 32
 
-[node name="Barrel3Sprite" type="Sprite3D" parent="SpriteParent"]
+[node name="Barrel1Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 3.0
-texture = ExtResource("13_u0vae")
+texture = ExtResource("11_hubp1")
 
-[node name="Label3D" type="Label3D" parent="SpriteParent/Barrel3Sprite"]
+[node name="Label3D" type="Label3D" parent="SpriteParent/Barrel1Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -1.7, 0)
 sorting_offset = 1.0
 render_priority = 1
