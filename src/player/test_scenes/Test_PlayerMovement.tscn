@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=24 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -16,6 +16,7 @@
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="9_vb777"]
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="10_28dwd"]
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="12_2rf45"]
+[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/BulletDecal.tscn" id="17_n3wco"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -31,7 +32,7 @@ tonemap_mode = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36m72"]
 transparency = 1
-albedo_color = Color(0.858824, 0.521569, 0.137255, 0.768627)
+albedo_color = Color(0.858824, 0.521569, 0.137255, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_oe1jg"]
 top_radius = 4.0
@@ -176,3 +177,6 @@ data = ExtResource("7_2srjf")
 [node name="Vendor" parent="." node_paths=PackedStringArray("player") instance=ExtResource("12_2rf45")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.7766, 0.00510705, -8.4)
 player = NodePath("../Player")
+
+[node name="BulletDecal" parent="." instance=ExtResource("17_n3wco")]
+transform = Transform3D(1, 0, 0, 0, 0.0971139, 0.995273, 0, -0.995273, 0.0971139, 0, 0.811173, 6.34857)

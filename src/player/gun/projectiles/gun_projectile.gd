@@ -31,7 +31,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	var rand_damage_mod := int(randf_range(-_damage / 3, _damage / 3))
+	var rand_damage_mod = int(randf_range(-_damage / 3.0, _damage / 3.0))
 	damage = _damage + rand_damage_mod
 	current_dir = dir
 	ricochet_count_left = ricochet_count
@@ -50,7 +50,7 @@ func _on_life_timer_timeout() -> void:
 	call_deferred("queue_free")
 
 func ricochet():
-	super()
+	super ()
 	found_hitscal_col = false
 	is_ricochet_shot = true
 	init(global_position, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, projectile_speed, max_range)
@@ -72,6 +72,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			body.health_component.damage(damage)
 		if found_hitscal_col:
 			create_spark(hitscan_col_point, hitscan_col_normal)
+			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
 	impacted.emit(true, global_position)
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()

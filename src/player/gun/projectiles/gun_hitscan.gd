@@ -70,7 +70,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 	# Normal hitscan start here
 	life_timer.start()
-	var rand_damage_mod := int(randf_range(-_damage / 3, _damage / 3))
+	var rand_damage_mod = int(randf_range(-_damage / 3.0, _damage / 3.0))
 	damage = _damage + rand_damage_mod
 	speed = _speed
 	ricochet_count_left = ricochet_count
@@ -101,6 +101,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			elif target is BartenderBottle:
 				target.call_deferred("queue_free")
 			create_spark(hitscan_col_point, hitscan_col_normal)
+			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
 		if ricochet_count_left > 0:
 			ricochet()
 	else:

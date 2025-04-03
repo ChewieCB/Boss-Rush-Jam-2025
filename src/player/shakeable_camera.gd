@@ -19,8 +19,6 @@ const SHAKE_COEFFICIENT = 1.0
 const DAMPING_FACTOR = 10
 const GLOBAL_RECOIL_COEFFICIENT = 20
 
-var recoil_recovery_speed: float = 5.0
-
 var trauma = 0.0
 var long_trauma = 0.0 # Trauma over a long duration
 var time = 0.0
@@ -39,10 +37,6 @@ func _process(delta):
 	camera.rotation_degrees.x = initial_rotation.x + max_x * get_shake_intensity(final_trauma) * get_noise_from_seed(0)
 	camera.rotation_degrees.y = initial_rotation.y + max_y * get_shake_intensity(final_trauma) * get_noise_from_seed(1)
 	camera.rotation_degrees.z = initial_rotation.z + max_z * get_shake_intensity(final_trauma) * get_noise_from_seed(2)
-
-	# Recoil Recovery (Spring-like effect)
-	var recoil_offset = target_rotation - camera.rotation_degrees
-	var recoil_recover = recoil_offset * recoil_recovery_speed * delta
 
 	# Recoil
 	rotation_velocity -= rotation_velocity * DAMPING_FACTOR * delta
