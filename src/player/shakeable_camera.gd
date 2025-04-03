@@ -13,11 +13,13 @@ class_name ShakeCameraWrapper
 
 @onready var camera: Camera3D = $Camera3D
 @onready var initial_rotation: Vector3 = camera.rotation_degrees
+@onready var gun_container = $GunContainer
 
 const MAX_TRAUMA = 2.0
 const SHAKE_COEFFICIENT = 1.0
-const DAMPING_FACTOR = 10
-const GLOBAL_RECOIL_COEFFICIENT = 20
+const RECOIL_DAMPING_FACTOR = 10.0
+const GLOBAL_RECOIL_COEFFICIENT = 20.0
+const JERK_GUN_DAMPING_FACTOR = 4.0
 
 var trauma = 0.0
 var long_trauma = 0.0 # Trauma over a long duration
@@ -27,6 +29,12 @@ var target_rotation: Vector3
 var rotation_velocity: Vector3
 var recoil_power: float = 0
 var recover_rotation_velocity: Vector3
+
+var original_gun_container_pos: Vector3
+var jerk_gun_tween: Tween
+
+func _ready() -> void:
+	original_gun_container_pos = gun_container.position
 
 func _process(delta):
 	# Trauma
@@ -39,8 +47,8 @@ func _process(delta):
 	camera.rotation_degrees.z = initial_rotation.z + max_z * get_shake_intensity(final_trauma) * get_noise_from_seed(2)
 
 	# Recoil
-	rotation_velocity -= rotation_velocity * DAMPING_FACTOR * delta
-	recover_rotation_velocity -= recover_rotation_velocity * (DAMPING_FACTOR / 2.0) * delta
+	rotation_velocity -= rotation_velocity * RECOIL_DAMPING_FACTOR * delta
+	recover_rotation_velocity -= recover_rotation_velocity * (RECOIL_DAMPING_FACTOR / 2.0) * delta
 	rotation += (rotation_velocity + recover_rotation_velocity) * delta
 
 func add_long_trauma(trauma_amount: float):
@@ -62,6 +70,7 @@ func set_fov(value: float):
 	camera.fov = value
 
 func recoil_fire():
+	jerk_gun_backward()
 	var final_recoil = recoil * recoil_power * GLOBAL_RECOIL_COEFFICIENT
 	var recoil_vector = Vector3(final_recoil.x, randf_range(-final_recoil.y, final_recoil.y), randf_range(-final_recoil.z, final_recoil.z))
 	target_rotation += recoil_vector
@@ -73,3 +82,11 @@ func set_recoil_vector(new_recoil: Vector3):
 
 func set_recoil_power(new_power: float):
 	recoil_power = new_power
+
+func jerk_gun_backward():
+	var jerk_distance = recoil_power / JERK_GUN_DAMPING_FACTOR
+	if jerk_gun_tween and jerk_gun_tween.is_running():
+		jerk_gun_tween.stop()
+	gun_container.position.z += jerk_distance # Move backward
+	jerk_gun_tween = self.create_tween()
+	jerk_gun_tween.tween_property(gun_container, "position", original_gun_container_pos, 0.2 + recoil_power).set_trans(Tween.TRANS_SINE)
