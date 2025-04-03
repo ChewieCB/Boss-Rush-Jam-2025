@@ -17,7 +17,9 @@ class_name ShakeCameraWrapper
 const MAX_TRAUMA = 2.0
 const SHAKE_COEFFICIENT = 1.0
 const DAMPING_FACTOR = 10
-const GLOBAL_RECOIL_COEFFICIENT = 10
+const GLOBAL_RECOIL_COEFFICIENT = 20
+
+var recoil_recovery_speed: float = 5.0
 
 var trauma = 0.0
 var long_trauma = 0.0 # Trauma over a long duration
@@ -26,6 +28,7 @@ var current_rotation: Vector3
 var target_rotation: Vector3
 var rotation_velocity: Vector3
 var recoil_power: float = 0
+var recover_rotation_velocity: Vector3
 
 func _process(delta):
 	# Trauma
@@ -37,9 +40,14 @@ func _process(delta):
 	camera.rotation_degrees.y = initial_rotation.y + max_y * get_shake_intensity(final_trauma) * get_noise_from_seed(1)
 	camera.rotation_degrees.z = initial_rotation.z + max_z * get_shake_intensity(final_trauma) * get_noise_from_seed(2)
 
+	# Recoil Recovery (Spring-like effect)
+	var recoil_offset = target_rotation - camera.rotation_degrees
+	var recoil_recover = recoil_offset * recoil_recovery_speed * delta
+
 	# Recoil
 	rotation_velocity -= rotation_velocity * DAMPING_FACTOR * delta
-	rotation += rotation_velocity * delta
+	recover_rotation_velocity -= recover_rotation_velocity * (DAMPING_FACTOR / 2.0) * delta
+	rotation += (rotation_velocity + recover_rotation_velocity) * delta
 
 func add_long_trauma(trauma_amount: float):
 	# Trauma over long duration, such as during sliding, earthquake, house collapsing, ...
@@ -64,6 +72,7 @@ func recoil_fire():
 	var recoil_vector = Vector3(final_recoil.x, randf_range(-final_recoil.y, final_recoil.y), randf_range(-final_recoil.z, final_recoil.z))
 	target_rotation += recoil_vector
 	rotation_velocity += recoil_vector
+	recover_rotation_velocity = - rotation_velocity / 2
 
 func set_recoil_vector(new_recoil: Vector3):
 	recoil = new_recoil

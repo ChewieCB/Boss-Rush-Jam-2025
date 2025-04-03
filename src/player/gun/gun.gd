@@ -445,7 +445,6 @@ func reinstall_barrels():
 			barrel_container.get_child(i).get_child(0).queue_free()
 
 	# Instantiate barrels onto gun
-	print("Reinstall barrelllll ", len(GameManager.equipped_barrels))
 	for i in range(len(GameManager.equipped_barrels)):
 		var barrel_inst: SpinBarrel = GameManager.equipped_barrels[i].barrel_prefab.instantiate()
 		barrel_container.get_child(i).add_child(barrel_inst)

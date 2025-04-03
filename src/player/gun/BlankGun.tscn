@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://d2tb8ogqlaxhy"]
+[gd_scene load_steps=24 format=3 uid="uid://d2tb8ogqlaxhy"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_wwe7d"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_5dqrq"]
@@ -11,7 +11,6 @@
 [ext_resource type="AudioStream" uid="uid://csslo4nsdbmmp" path="res://src/player/gun/assets/sfx/temp/Recover_ammp.mp3" id="6_gecfl"]
 [ext_resource type="Texture2D" uid="uid://k3t2iakg7u48" path="res://src/player/gun/assets/sprite/2_barrel/2_barrel_reload_0.png" id="7_nce8m"]
 [ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="7_p32ub"]
-[ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="8_aly8k"]
 [ext_resource type="Texture2D" uid="uid://dwl20aqb1u05t" path="res://src/player/gun/assets/sprite/2_barrel/2_barrel_reload_1.png" id="8_n1cti"]
 [ext_resource type="Texture2D" uid="uid://ct7twohaegdp3" path="res://src/player/gun/assets/sprite/3_barrel/3_barrel_idle.png" id="9_o5xa8"]
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="9_tyti4"]
@@ -92,7 +91,7 @@ TEMP_sfx_reload = ExtResource("14_2r0ft")
 TEMP_sfx_click = ExtResource("5_8nbf7")
 TEMP_regain_ammo = ExtResource("6_gecfl")
 TEMP_crit = ExtResource("7_p32ub")
-aim_ray_prefab = ExtResource("8_aly8k")
+screenshake_amount = 0.1
 hitscan_prefab = ExtResource("9_tyti4")
 projectile_prefab = ExtResource("10_vvihl")
 
@@ -102,7 +101,6 @@ texture = ExtResource("11_fxa2h")
 
 [node name="ForegripSprite" type="Sprite3D" parent="GunSprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.301, -0.349, -0.522)
-billboard = 1
 render_priority = 1
 texture = ExtResource("21_4uwvq")
 

@@ -46,7 +46,7 @@ display_text_tag = "Fire faster and more ammo"
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 4
-new_value = 5.0
+new_value = 6.0
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
@@ -157,11 +157,6 @@ new_value = 1.0
 script = ExtResource("4_3n82e")
 attribute = 11
 new_value = 0.4
-
-[node name="SetScreenshake" type="Node3D" parent="EffectContainer/Railcannon"]
-script = ExtResource("4_3n82e")
-attribute = 12
-new_value = 1.6
 
 [node name="SetReloadTime" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
