@@ -27,7 +27,7 @@ func _ready() -> void:
 	var query = PhysicsRayQueryParameters3D.create(
 		self.global_position,
 		self.global_position - Vector3(0, 100, 0),
-		pow(2, 1 - 1) + pow(2, 7 - 1)
+		int(pow(2, 1 - 1) + pow(2, 7 - 1))
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
@@ -49,7 +49,6 @@ func _ready() -> void:
 	sfx_player.unit_size = 30.0
 	sfx_player.play()
 	
-	var tween = get_tree().create_tween()
 	mesh.mesh.surface_get_material(0).albedo_color = Color("#b08137")
 	#tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:a", 255, 0.3).set_trans(Tween.TRANS_EXPO)
 	

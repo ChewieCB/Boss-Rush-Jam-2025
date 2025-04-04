@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://w52vphhedtws"]
+[gd_scene load_steps=10 format=3 uid="uid://w52vphhedtws"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_hitscan.gd" id="1_gwc3y"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_ircxh"]
 [ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_vqvrn"]
+[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/BulletDecal.tscn" id="4_8emp0"]
 [ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="4_mqx5a"]
 [ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="5_q8kxl"]
 
@@ -30,6 +31,7 @@ thickness = 30
 fade_speed = 1.0
 spark_effect = ExtResource("2_ircxh")
 generic_blood_splatter = ExtResource("3_vqvrn")
+bullet_decal_prefab = ExtResource("4_8emp0")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)

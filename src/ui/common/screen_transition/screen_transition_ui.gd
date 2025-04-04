@@ -23,13 +23,13 @@ func set_loading_visible(value: bool = true) -> void:
 
 
 func _fill_screen() -> void:
-	ui.material.set("shader_parameter/transition_angle", 180.0)
-	ui.material.set("shader_param/height", 0.0)
+	ui.material.set_shader_parameter("transition_angle", 180.0)
+	ui.material.set_shader_parameter("height", 0.0)
 
 
 func _clear_screen() -> void:
-	ui.material.set("shader_parameter/transition_angle", 0.0)
-	ui.material.set("shader_param/height", 1.0)
+	ui.material.set_shader_parameter("transition_angle", 0.0)
+	ui.material.set_shader_parameter("height", 1.0)
 
 
 func transition_in(duration: float = 0.7) -> void:
@@ -56,4 +56,4 @@ func tween_transition(start: float, finish: float, duration: float = 0.7) -> voi
 
 
 func _set_transition_height(height: float) -> void:
-	ui.material.set("shader_parameter/height", height)
+	ui.material.set_shader_parameter("height", height)

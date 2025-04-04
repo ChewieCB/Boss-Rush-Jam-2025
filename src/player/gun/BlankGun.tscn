@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="9_tyti4"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="10_vvihl"]
 [ext_resource type="AudioStream" uid="uid://cqdjicto0uwp2" path="res://src/player/gun/assets/sfx/reloading/slot_roller.mp3" id="14_2r0ft"]
+[ext_resource type="PackedScene" uid="uid://ddq840elsc3uc" path="res://src/player/gun/vfx/MuzzleSmoke.tscn" id="21_m26vw"]
 [ext_resource type="Texture2D" uid="uid://dknmlvpcf02rm" path="res://src/player/gun/assets/sprite/rescale/idle/gun_body_idle.png" id="20_1b0s3"]
 [ext_resource type="Texture2D" uid="uid://ciovo216nkk7n" path="res://src/player/gun/assets/sprite/rescale/idle/gun_foregrip_idle.png" id="20_gojii"]
 [ext_resource type="Texture2D" uid="uid://drrr4aotn87ol" path="res://src/player/gun/assets/sprite/rescale/idle/arm_idle.png" id="21_qo6l7"]
@@ -137,8 +138,10 @@ TEMP_sfx_reload = ExtResource("14_2r0ft")
 TEMP_sfx_click = ExtResource("5_8nbf7")
 TEMP_regain_ammo = ExtResource("6_gecfl")
 TEMP_crit = ExtResource("7_p32ub")
+screenshake_amount = 0.1
 hitscan_prefab = ExtResource("9_tyti4")
 projectile_prefab = ExtResource("10_vvihl")
+muzzle_smoke_prefab = ExtResource("21_m26vw")
 
 [node name="SpriteParent" type="Node3D" parent="."]
 transform = Transform3D(0.165, 0, 0, 0, 0.165, 0, 0, 0, 0.165, 0.364854, -0.394036, 0)
@@ -198,6 +201,11 @@ one_shot = true
 
 [node name="BulletStartPos" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.773927)
+
+[node name="MuzzleFlashLight" type="OmniLight3D" parent="BulletStartPos"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.773927)
+light_color = Color(1, 0.787902, 0, 1)
+light_energy = 0.0
 
 [node name="FailToShootSFXTimer" type="Timer" parent="."]
 wait_time = 0.5

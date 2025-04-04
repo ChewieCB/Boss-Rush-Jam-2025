@@ -5,6 +5,7 @@ var is_saving = false
 
 signal started_saving
 signal finished_saving
+signal savefile_loaded
 signal setting_config_loaded
 
 func convert_resource_to_id(array_resource: Array) -> Array[int]:
@@ -101,6 +102,7 @@ func load_game(slot_id):
 	GameManager.victory_ui_shown = save_data["victory_ui_shown"]
 	GameManager.total_playtime = save_data["total_playtime"]
 
+	savefile_loaded.emit()
 
 func get_savefile_name(slot_id: int) -> String:
 	return "user://savegame_slot{0}.save".format([slot_id])

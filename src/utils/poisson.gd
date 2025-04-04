@@ -31,11 +31,11 @@ static func _generate_points(shape: int, sample_region_rect: Rect2, poisson_radi
 	
 	# scale the cell size in each axis
 	var cell_size_scaled: Vector2
-	cell_size_scaled.x = sample_region_rect.size.x / cols 
+	cell_size_scaled.x = sample_region_rect.size.x / cols
 	cell_size_scaled.y = sample_region_rect.size.y / rows
 	
 	# use tranpose to map points starting from origin to calculate grid position
-	var transpose = -sample_region_rect.position
+	var transpose = - sample_region_rect.position
 	
 	var grid: Array = []
 	for i in cols:
@@ -67,7 +67,7 @@ static func _generate_points(shape: int, sample_region_rect: Rect2, poisson_radi
 	return points
 
 
-static func _is_valid_sample(shape: int, sample: Vector2, transpose: Vector2, cell_size_scaled: Vector2, cols: int, rows: int, grid: Array, points: Array, poisson_radius: float) -> bool:
+static func _is_valid_sample(_shape: int, sample: Vector2, transpose: Vector2, cell_size_scaled: Vector2, cols: int, rows: int, grid: Array, points: Array, poisson_radius: float) -> bool:
 	var cell := Vector2(int((transpose.x + sample.x) / cell_size_scaled.x), int((transpose.y + sample.y) / cell_size_scaled.y))
 	var cell_start := Vector2(max(0, cell.x - 2), max(0, cell.y - 2))
 	var cell_end := Vector2(min(cell.x + 2, cols - 1), min(cell.y + 2, rows - 1))
@@ -86,8 +86,8 @@ static func _is_point_in_sample_region(sample: Vector2, shape: int) -> bool:
 	if shape == ShapeType.POLYGON and Geometry2D.is_point_in_polygon(sample, shape_info[shape]["points"]):
 			return true
 	elif shape == ShapeType.CIRCLE and Geometry2D.is_point_in_circle(
-		sample, 
-		shape_info[shape]["circle_position"], 
+		sample,
+		shape_info[shape]["circle_position"],
 		shape_info[shape]["max_gen_radius"]
 	):
 		return true

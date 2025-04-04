@@ -64,6 +64,7 @@ class_name Gun
 @export_group("Prefab Scenes")
 @export var hitscan_prefab: PackedScene
 @export var projectile_prefab: PackedScene
+@export var muzzle_smoke_prefab: PackedScene
 
 @onready var barrel_container = $BarrelContainer
 #@onready var gun_status_label: Label3D = $PlaceholderUI/StatusLabel
@@ -71,6 +72,7 @@ class_name Gun
 @onready var jam_timer: Timer = $JamTimer
 @onready var failed_shoot_sfx_timer: Timer = $FailToShootSFXTimer
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var muzzle_flash_light: OmniLight3D = $BulletStartPos/MuzzleFlashLight
 
 var magazine_ammo_left = 0
 var is_reloading = false
@@ -80,6 +82,7 @@ var installed_barrels: Array[SpinBarrel] = []
 var barrel_count: int = 0
 		
 var is_trigger_pulled = false
+var muzzle_light_tween: Tween
 
 # Modify-able by barrels
 # We won't modify them in this script
@@ -112,9 +115,11 @@ const BULLET_SPAWN_POS_VARIATION = 10
 
 
 func _ready() -> void:
+	SaveManager.savefile_loaded.connect(reinstall_barrels)
 	#gun_status_label.visible = false
 	magazine_ammo_left = base_magazine_size
 	#generate_gun_animations()
+	muzzle_flash_light.light_energy = 0
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	reinstall_barrels()
@@ -183,18 +188,18 @@ func _process(delta: float) -> void:
 
 
 ## Return true if shot successful
-func shoot(aim_ray: RayCast3D):
+func shoot(aim_ray: RayCast3D) -> bool:
 	if is_reloading or is_jammed:
 		play_failed_shoot_sfx()
-		return
+		return false
 	if magazine_ammo_left <= 0:
 		play_failed_shoot_sfx()
 		reload()
-		return
+		return false
 
 	var time_until_next_shot = 1.0 / modified_firerate
 	if time_until_next_shot > time_since_last_shot:
-		return
+		return false
 
 	reset_modifier()
 
@@ -203,7 +208,7 @@ func shoot(aim_ray: RayCast3D):
 		can_fire = can_fire and barrel.get_active_effect().on_fire_attempt()
 	if not can_fire:
 		play_failed_shoot_sfx()
-		return
+		return false
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_fire_rate_check()
@@ -261,6 +266,12 @@ func shoot(aim_ray: RayCast3D):
 	if magazine_ammo_left <= 0:
 		for barrel in installed_barrels:
 			barrel.get_active_effect().on_clip_empty()
+
+	# Create muzzle smoke effect
+	create_muzzle_smoke(aim_ray)
+	create_muzzle_flash_light()
+
+	return true
 
 
 func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
@@ -534,3 +545,18 @@ func _play_reload_start_sfx() -> void:
 
 func _play_reload_end_sfx() -> void:
 	SoundManager.play_sound(TEMP_sfx_click, "Gun")
+
+
+func create_muzzle_smoke(aim_ray: RayCast3D):
+	var smoke_inst = muzzle_smoke_prefab.instantiate()
+	get_tree().get_root().add_child(smoke_inst)
+	var smoke_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
+	smoke_inst.global_position = bullet_spawn_marker.global_position
+	smoke_inst.look_at(smoke_inst.global_position + smoke_direction)
+
+func create_muzzle_flash_light():
+	muzzle_flash_light.light_energy = 3
+	if muzzle_light_tween and muzzle_light_tween.is_running():
+		muzzle_light_tween.stop()
+	muzzle_light_tween = create_tween()
+	muzzle_light_tween.tween_property(muzzle_flash_light, "light_energy", 0, 0.2).set_trans(Tween.TRANS_SINE)

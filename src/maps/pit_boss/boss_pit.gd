@@ -79,9 +79,6 @@ func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
 	var combined_max_health := pit_boss.health_component.max_health + surveillance_boss.health_component.max_health
 	var combined_health_ratio := combined_current_health / combined_max_health
 		
-	var pit_boss_health_ratio := pit_boss.health_component.current_health / \
-		pit_boss.health_component.max_health
-	
 	if combined_health_ratio <= phase_3_health_percentage_trigger:
 		stance_timer.stop()
 		pit_boss.state_chart.send_event("start_phase_3")
@@ -112,9 +109,9 @@ func _on_boss_died(boss: BossCore) -> void:
 	remaining_boss.state_chart.send_event("start_phase_3")
 
 
-func _on_bosses_defeated() -> void:
-	if not self.boss_id in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(self.boss_id)
+func _on_bosses_defeated(_boss: BossCore) -> void:
+	if _boss.boss_id != BossCore.BossIdEnum.NONE && not _boss.boss_id in GameManager.bosses_defeated:
+		GameManager.bosses_defeated.append(_boss.boss_id)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 	win_ui.win("Floor Cleared", win_subtext.pick_random())
 	show_end_panel()
