@@ -115,14 +115,18 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading:
 		return "Can not change barrel while reloading"
 	var found_data: BarrelDataResource = null
-	for data in equipped_barrels:
+	var barrel_idx: int = -1
+	for i in range(equipped_barrels.size()):
+		var data = equipped_barrels[i]
 		if data.barrel_id == search_barrel_id:
 			found_data = data
+			barrel_idx = i
+			break
 	if found_data:
 		equipped_barrels.erase(found_data)
 		inventory_barrels.append(found_data)
 		refresh_shop_ui.emit()
-		GameManager.player.current_gun.remove_barrel(search_barrel_id)
+		GameManager.player.current_gun.remove_barrel(barrel_idx)
 	return ""
 
 func show_boss_special_dialog(content: String, duration: float):

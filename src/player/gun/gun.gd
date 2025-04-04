@@ -1,6 +1,15 @@
 extends Node3D
 class_name Gun
 
+signal gun_shot
+signal reload_anim_end
+signal gun_reloaded
+
+signal barrel_spin_started(barrel: SpinBarrel, barrel_idx: int)
+signal barrel_spin_stopped(barrel: SpinBarrel, barrel_idx: int)
+signal barrel_equipped(barrel: SpinBarrel, barrel_idx: int)
+signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
+
 @export var gun_name: String
 @export_multiline var description: String
 
@@ -92,23 +101,13 @@ var modified_projectile_prefab: PackedScene = null
 var modified_recoil
 var modified_screenshake
 
-signal gun_shot
-signal reload_anim_end
-signal gun_reloaded
-
-signal barrel_spin_started(barrel: SpinBarrel)
-signal barrel_spin_stopped(barrel: SpinBarrel)
-
-
 const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.1
 const BULLET_SPAWN_POS_VARIATION = 10
 
 
 func _ready() -> void:
 	SaveManager.savefile_loaded.connect(reinstall_barrels)
-	#gun_status_label.visible = false
 	magazine_ammo_left = base_magazine_size
-	#generate_gun_animations()
 	muzzle_flash_light.light_energy = 0
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -292,7 +291,7 @@ func _spin_barrel(barrel_idx: int) -> void:
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("spin")
 	SoundManager.play_sound(TEMP_sfx_spin, "Gun")
-	barrel_spin_started.emit(barrel)
+	barrel_spin_started.emit(barrel, barrel_idx)
 
 
 func stop_all_barrels() -> void:
@@ -306,7 +305,7 @@ func _stop_barrel(barrel_idx: int) -> void:
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
 	SoundManager.stop_sound(TEMP_sfx_spin)
-	barrel_spin_stopped.emit(barrel)
+	barrel_spin_stopped.emit(barrel, barrel_idx)
 
 
 func reload():
@@ -416,7 +415,7 @@ func play_failed_shoot_sfx():
 		failed_shoot_sfx_timer.start()
 
 
-func install_barrel(barrel_prefab: PackedScene):
+func install_barrel(barrel_prefab: PackedScene) -> void:
 	if len(installed_barrels) >= max_barrels:
 		return
 	
@@ -426,18 +425,33 @@ func install_barrel(barrel_prefab: PackedScene):
 	_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
 	
 	magazine_ammo_left = 0
+	
+	var barrel_count: int = barrel_container.get_child_count()
+	var barrel_idx: int = barrel_count - 1 if barrel_count > 0 else 0 
+	
+	#barrel.owner_gun = self
+	installed_barrels.append(barrel_inst)
+	barrel_count = installed_barrels.size()
+	
+	barrel_equipped.emit(barrel_inst, barrel_idx)
+	
 	recheck_installed_barrels()
+	
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	spin_single_barrel(barrel_count - 1)
 
 
-func remove_barrel(_search_barrel_id: BarrelDataResource.BarrelIdEnum):
-	reinstall_barrels()
-	# for child in barrel_container.get_children():
-	# 	if child.get_child_count() > 0:
-	# 		var barrel: SpinBarrel = child.get_child(0)
-	# 		if barrel.barrel_id == search_barrel_id:
-	# 			barrel.queue_free()
-	# 			break
-	# recheck_installed_barrels()
+func remove_barrel(barrel_idx: int) -> void:
+	if len(installed_barrels) == 0:
+		return
+	
+	var barrel: SpinBarrel = barrel_container.get_child(barrel_idx)
+	barrel.queue_free()
+	barrel_container.remove_child(barrel)
+	barrel_unequipped.emit(barrel_idx)
+	
+	recheck_installed_barrels()
 
 
 func recheck_installed_barrels():
@@ -445,9 +459,11 @@ func recheck_installed_barrels():
 	await get_tree().process_frame
 	await get_tree().process_frame
 	installed_barrels = []
-	for barrel in barrel_container.get_children():
+	for i in range(barrel_container.get_child_count()):
+		var barrel = barrel_container.get_child(i)
 		barrel.owner_gun = self
 		installed_barrels.append(barrel)
+	
 	barrel_count = installed_barrels.size()
 	
 	for i in barrel_sprites.size():
@@ -456,14 +472,17 @@ func recheck_installed_barrels():
 
 func reinstall_barrels():
 	# Clear old barrels
-	for barrel in barrel_container.get_children():
-		barrel.queue_free()
-
+	var equipped_barrel_count: int = barrel_container.get_child_count()
+	for i in range(max_barrels):
+		if i < equipped_barrel_count:
+			var barrel = barrel_container.get_child(i)
+			barrel.queue_free()
+		barrel_unequipped.emit(null, i)
+	
 	# Instantiate barrels onto gun
 	for i in GameManager.equipped_barrels.size():
 		var barrel = GameManager.equipped_barrels[i].barrel_prefab
 		install_barrel(barrel)
-	recheck_installed_barrels()
 
 
 func _set_barrel_effect_label(barrel: SpinBarrel, effect: BaseBarrelEffect) -> void:
