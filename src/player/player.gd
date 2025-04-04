@@ -379,7 +379,8 @@ func stun(time: float) -> void:
 
 
 func spin_reload() -> void:
-	current_gun.spin_all_barrels()
+	if not current_gun.is_reloading:
+		current_gun.spin_all_barrels()
 
 
 func no_spin_reload() -> void:
