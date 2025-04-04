@@ -132,6 +132,11 @@ one_shot = true
 [node name="BulletStartPos" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.773927)
 
+[node name="MuzzleFlashLight" type="OmniLight3D" parent="BulletStartPos"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.773927)
+light_color = Color(1, 0.787902, 0, 1)
+light_energy = 0.0
+
 [node name="FailToShootSFXTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true

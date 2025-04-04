@@ -61,6 +61,7 @@ class_name Gun
 @onready var jam_timer: Timer = $JamTimer
 @onready var failed_shoot_sfx_timer: Timer = $FailToShootSFXTimer
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var muzzle_flash_light: OmniLight3D = $BulletStartPos/MuzzleFlashLight
 
 var magazine_ammo_left = 0
 var is_reloading = false
@@ -73,6 +74,7 @@ var barrel_count: int = 0:
 		anim_player.play("%s_barrel_idle" % barrel_count)
 
 var is_trigger_pulled = false
+var muzzle_light_tween: Tween
 
 # Modify-able by barrels
 # We won't modify them in this script
@@ -104,6 +106,7 @@ func _ready() -> void:
 	SaveManager.savefile_loaded.connect(reinstall_barrels)
 	gun_status_label.visible = false
 	magazine_ammo_left = base_magazine_size
+	muzzle_flash_light.light_energy = 0
 	generate_gun_animations()
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -248,6 +251,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 
 	# Create muzzle smoke effect
 	create_muzzle_smoke(aim_ray)
+	create_muzzle_flash_light()
 
 	return true
 
@@ -463,3 +467,10 @@ func create_muzzle_smoke(aim_ray: RayCast3D):
 	var smoke_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
 	smoke_inst.global_position = bullet_spawn_marker.global_position
 	smoke_inst.look_at(smoke_inst.global_position + smoke_direction)
+
+func create_muzzle_flash_light():
+	muzzle_flash_light.light_energy = 3
+	if muzzle_light_tween and muzzle_light_tween.is_running():
+		muzzle_light_tween.stop()
+	muzzle_light_tween = create_tween()
+	muzzle_light_tween.tween_property(muzzle_flash_light, "light_energy", 0, 0.2).set_trans(Tween.TRANS_SINE)
