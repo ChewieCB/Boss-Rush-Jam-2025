@@ -36,7 +36,7 @@ display_text_tag = "Easy to control"
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 4
-new_value = 11.0
+new_value = 12.0
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
@@ -55,7 +55,7 @@ new_value = 30.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 1
-new_value = 9.0
+new_value = 12.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
@@ -92,12 +92,12 @@ new_value = 30.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/RussianRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 1
-new_value = 16.0
+new_value = 18.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/RussianRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 11
-new_value = 0.08
+new_value = 0.1
 
 [node name="Vector" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_tarn7")
@@ -129,7 +129,7 @@ new_value = 20.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
 attribute = 1
-new_value = 5.0
+new_value = 6.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
@@ -152,7 +152,7 @@ display_text_tag = "Dakka forever"
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 4
-new_value = 7.0
+new_value = 8.0
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
@@ -166,7 +166,7 @@ new_value = 3.0
 [node name="SetMagazine" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 5
-new_value = 100.0
+new_value = 80.0
 
 [node name="SetDamage" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
