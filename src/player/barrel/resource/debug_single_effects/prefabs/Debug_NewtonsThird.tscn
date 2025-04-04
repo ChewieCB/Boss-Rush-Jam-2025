@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://b5pl7qt5q33eg"]
+[gd_scene load_steps=5 format=3 uid="uid://b5pl7qt5q33eg"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_c42rc"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_au5ra"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_ut8kn"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_82du7"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/apply_knockback_self.gd" id="7_at7gb"]
@@ -9,8 +8,6 @@
 [node name="DebugNewtonsThirdBarrel" type="Node3D"]
 script = ExtResource("1_c42rc")
 barrel_id = 8
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_au5ra")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

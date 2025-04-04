@@ -1,15 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://bkt5icnpnhh7q"]
+[gd_scene load_steps=4 format=3 uid="uid://bkt5icnpnhh7q"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_vxkm0"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_gc4xi"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/create_on_action_effect.gd" id="3_fwt3d"]
 [ext_resource type="PackedScene" uid="uid://2a8xpe58m4sr" path="res://src/player/gun/damage_effect/CognacReloadHealCloud.tscn" id="6_atxyg"]
 
 [node name="DebugCognacReloadBarrel" type="Node3D"]
 script = ExtResource("1_vxkm0")
 barrel_id = 12
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_gc4xi")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

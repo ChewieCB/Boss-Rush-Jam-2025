@@ -31,6 +31,8 @@ class_name Gun
 @export var barrel_3_spin_frame_2: Texture
 @onready var barrel_sprites: Array[Sprite3D] = [barrel_1_sprite, barrel_2_sprite, barrel_3_sprite]
 
+@onready var anim_tree: AnimationTree = $AnimationTree
+
 @export_group("SFX")
 ## TEMP SFX PLS CHANGE
 @export var TEMP_sfx_shoot: AudioStream
@@ -98,6 +100,7 @@ var modified_recoil
 var modified_screenshake
 
 signal gun_shot
+signal reload_anim_end
 signal gun_reloaded
 
 signal barrel_spin_started(barrel: SpinBarrel)
@@ -303,6 +306,8 @@ func spin_all_barrels() -> void:
 	release_trigger()
 	# TODO - add catch for HELD barrels
 	for i in installed_barrels.size():
+		if i > installed_barrels.size():
+			break
 		_spin_barrel(i)
 	
 	# TODO - replace with a dedicated spin time value now reloading isn't directly
@@ -315,9 +320,27 @@ func spin_all_barrels() -> void:
 	reload()
 
 
+func spin_single_barrel(barrel_idx: int) -> void:
+	if barrel_idx >= installed_barrels.size():
+		return
+	
+	release_trigger()
+	_spin_barrel(barrel_idx)
+	
+	# TODO - replace with a dedicated spin time value now reloading isn't directly
+	# tied to spinning
+	await get_tree().create_timer(modified_reload_time).timeout
+	
+	reset_modifier(true)
+	_stop_barrel(barrel_idx)
+	reload()
+
+
 func _spin_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	barrel.start_spin()
+	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
+	state_machine.travel("spin")
 	barrel_spin_started.emit(barrel)
 
 
@@ -327,10 +350,10 @@ func stop_all_barrels() -> void:
 
 
 func _stop_barrel(barrel_idx: int) -> void:
-	# TODO - replace with individual barrel animation layers
-	#anim_player.play("%s_barrel_idle" % barrel_idx)
 	var barrel = installed_barrels[barrel_idx]
 	barrel.stop_spin()
+	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
+	state_machine.travel("idle")
 	barrel_spin_stopped.emit(barrel)
 
 
@@ -348,19 +371,10 @@ func reload():
 		barrel.get_active_effect().on_reload_start()
 	
 	is_reloading = true
-	#SoundManager.play_sound(TEMP_sfx_reload, "Gun")
-	#show_gun_status("Reloading...")
-
-	#await get_tree().create_timer(modified_reload_time).timeout
+	anim_tree.set("parameters/reload_timescale/scale", modified_reload_time)
+	anim_tree.set("parameters/reload_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	
-	#gun_status_label.visible = false
-	#SoundManager.stop_sound(TEMP_sfx_reload)
-	# TODO - add new reload anim?
-	#anim_player.play("%s_barrel_idle" % barrel_count)
-	#await anim_player.animation_finished
-	anim_player.play("reload", -1, 0.55 * modified_reload_time)
-	
-	await anim_player.animation_finished
+	await reload_anim_end
 	is_reloading = false
 	
 	for barrel in installed_barrels:
@@ -368,6 +382,10 @@ func reload():
 
 	magazine_ammo_left = modified_magazine_size
 	gun_reloaded.emit()
+
+
+func _end_reload_anim() -> void:
+	reload_anim_end.emit()
 
 
 func reset_modifier(reload_reset = false):

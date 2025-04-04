@@ -1,14 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://cxdr7l6x0ckmp"]
+[gd_scene load_steps=3 format=3 uid="uid://cxdr7l6x0ckmp"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_r0pnh"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_a270i"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/gambler_precision_effect.gd" id="5_08r5o"]
 
 [node name="DebugGamblersPrecisionBarrel" type="Node3D"]
 script = ExtResource("1_r0pnh")
 barrel_id = 4
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_a270i")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

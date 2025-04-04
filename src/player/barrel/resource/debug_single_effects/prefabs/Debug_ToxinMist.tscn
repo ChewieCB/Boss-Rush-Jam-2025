@@ -1,15 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://4itw8cpew264"]
+[gd_scene load_steps=4 format=3 uid="uid://4itw8cpew264"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_osift"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_ir34g"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/create_on_action_effect.gd" id="3_rhvf0"]
 [ext_resource type="PackedScene" uid="uid://ce1fdy8od0511" path="res://src/player/gun/damage_effect/ToxinMistHazard.tscn" id="5_1kec2"]
 
 [node name="DebugToxinMistBarrel" type="Node3D"]
 script = ExtResource("1_osift")
 barrel_id = 12
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_ir34g")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

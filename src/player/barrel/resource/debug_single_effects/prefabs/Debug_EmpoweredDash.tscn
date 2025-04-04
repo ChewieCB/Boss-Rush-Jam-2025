@@ -1,14 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://ufux7krj0yjo"]
+[gd_scene load_steps=3 format=3 uid="uid://ufux7krj0yjo"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_on2xb"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_hmhit"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/speed_burst_effect.gd" id="3_1nalf"]
 
 [node name="DebugEmpoweredDashBarrel" type="Node3D"]
 script = ExtResource("1_on2xb")
 barrel_id = 11
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_hmhit")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
