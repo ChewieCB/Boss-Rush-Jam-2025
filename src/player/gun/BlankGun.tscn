@@ -11,7 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://cqdjicto0uwp2" path="res://src/player/gun/assets/sfx/reloading/slot_roller.mp3" id="14_2r0ft"]
 [ext_resource type="Texture2D" uid="uid://dknmlvpcf02rm" path="res://src/player/gun/assets/sprite/rescale/idle/gun_body_idle.png" id="20_1b0s3"]
 [ext_resource type="Texture2D" uid="uid://ciovo216nkk7n" path="res://src/player/gun/assets/sprite/rescale/idle/gun_foregrip_idle.png" id="20_gojii"]
-[ext_resource type="PackedScene" uid="uid://tviraxqs4fj2" path="res://src/player/gun/vfx/MuzzleSmoke.tscn" id="21_m26vw"]
+[ext_resource type="PackedScene" path="res://src/player/gun/vfx/MuzzleSmoke.tscn" id="21_m26vw"]
 [ext_resource type="Texture2D" uid="uid://drrr4aotn87ol" path="res://src/player/gun/assets/sprite/rescale/idle/arm_idle.png" id="21_qo6l7"]
 [ext_resource type="Texture2D" uid="uid://tfuumqiincn8" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1.png" id="21_yxjfx"]
 [ext_resource type="Texture2D" uid="uid://b7act70bpswy0" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2.png" id="22_x04wc"]

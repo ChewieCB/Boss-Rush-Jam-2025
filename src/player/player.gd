@@ -146,14 +146,15 @@ func _input(event):
 
 	if event.is_action_pressed("spin_reload"):
 		spin_reload()
-	elif event.is_action_pressed("spin_barrels"):
-		current_gun.spin_all_barrels()
-	elif event.is_action_pressed("input_1"):
-		current_gun.spin_single_barrel(0)
-	elif event.is_action_pressed("input_2"):
-		current_gun.spin_single_barrel(1)
-	elif event.is_action_pressed("input_3"):
-		current_gun.spin_single_barrel(2)
+	# TODO - experimental branch separating spin from reload
+	#elif event.is_action_pressed("spin_barrels"):
+		#current_gun.spin_all_barrels()
+	#elif event.is_action_pressed("input_1"):
+		#current_gun.spin_single_barrel(0)
+	#elif event.is_action_pressed("input_2"):
+		#current_gun.spin_single_barrel(1)
+	#elif event.is_action_pressed("input_3"):
+		#current_gun.spin_single_barrel(2)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -373,7 +374,11 @@ func stun(time: float) -> void:
 	dash_disabled = false
 
 
-func spin_reload():
+func spin_reload() -> void:
+	current_gun.spin_all_barrels()
+
+
+func no_spin_reload() -> void:
 	current_gun.reload()
 
 
