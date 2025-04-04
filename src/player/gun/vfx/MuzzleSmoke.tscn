@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://ddq840elsc3uc"]
+[gd_scene load_steps=12 format=3 uid="uid://tviraxqs4fj2"]
 
 [ext_resource type="Texture2D" uid="uid://mxi66dpdoty1" path="res://src/player/gun/assets/sprite/smoke1.png" id="1_btdet"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/self_destruct_3dparticle.gd" id="2_l3vjw"]

@@ -9,6 +9,7 @@ class_name Gun
 @onready var gun_sprite: Sprite3D = $SpriteParent/GunSprite
 @onready var barrel_flare_sprite: Sprite3D = $SpriteParent/GunSprite/MuzzleflareLightSprite
 @onready var muzzle_flash_sprite: Sprite3D = $SpriteParent/GunSprite/MuzzleflareLightSprite/MuzzleFlashSprite
+@export var muzzle_flash_hold_frames: int = 2
 @onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @export_subgroup("1 Barrel")
@@ -260,7 +261,8 @@ func shoot(aim_ray: RayCast3D) -> bool:
 			barrel_flare_sprite.visible = false
 		else:
 			barrel_flare_sprite.visible = true
-			await get_tree().physics_frame
+			for j in range(muzzle_flash_hold_frames):
+				await get_tree().physics_frame
 			barrel_flare_sprite.visible = false
 
 	if magazine_ammo_left <= 0:
