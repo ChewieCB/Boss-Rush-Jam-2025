@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://d2tb8ogqlaxhy"]
+[gd_scene load_steps=25 format=3 uid="uid://d2tb8ogqlaxhy"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_wwe7d"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_5dqrq"]
@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://cxph8tgp4srjf" path="res://src/player/gun/assets/sprite/3_barrel/3_barrel_reload_1.png" id="11_j27yv"]
 [ext_resource type="AudioStream" uid="uid://cqdjicto0uwp2" path="res://src/player/gun/assets/sfx/reloading/slot_roller.mp3" id="14_2r0ft"]
 [ext_resource type="Texture2D" uid="uid://dtoaa4uxyaeqm" path="res://src/player/gun/assets/sprite/gun_foregrip.png" id="21_4uwvq"]
+[ext_resource type="PackedScene" uid="uid://ddq840elsc3uc" path="res://src/player/gun/vfx/MuzzleSmoke.tscn" id="21_m26vw"]
 
 [sub_resource type="Animation" id="Animation_e0o34"]
 length = 0.001
@@ -94,6 +95,7 @@ TEMP_crit = ExtResource("7_p32ub")
 screenshake_amount = 0.1
 hitscan_prefab = ExtResource("9_tyti4")
 projectile_prefab = ExtResource("10_vvihl")
+muzzle_smoke_prefab = ExtResource("21_m26vw")
 
 [node name="GunSprite" type="Sprite3D" parent="."]
 transform = Transform3D(0.22, 0, 0, 0, 0.22, 0, 0, 0, 0.22, 0.325627, -0.314052, -0.342251)
