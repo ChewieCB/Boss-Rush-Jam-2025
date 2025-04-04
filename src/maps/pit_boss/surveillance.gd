@@ -7,7 +7,7 @@ enum Stance {DEFENSIVE, AGGRESSIVE}
 @export var rotation_speed_deg: float = 25.0
 
 @export_category("Phases")
-@export var pit_boss: BossPit 
+@export var pit_boss: BossPit
 var phase_stance: Stance = Stance.DEFENSIVE:
 	set(value):
 		phase_stance = value
@@ -63,7 +63,7 @@ var beam_target: Vector3
 var beam_sweep_count: int = 0
 @export var beam_sweep_delay: float = 0.7
 @export var beam_collision_reset_delay: float = 1.2
-var is_beam_tracking: bool = true  # HACK to prevent the beam from locking once it hits you
+var is_beam_tracking: bool = true # HACK to prevent the beam from locking once it hits you
 @export_subgroup("SFX")
 @export var sfx_laser: AudioStream
 @export var sfx_laser_impact: Array[AudioStream]
@@ -82,7 +82,7 @@ var is_beam_tracking: bool = true  # HACK to prevent the beam from locking once 
 
 
 func _ready() -> void:
-	super()
+	super ()
 	GRAVITY = 0
 	head.rotate_x(PI)
 
@@ -98,7 +98,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func activate() -> void:
-	super()
+	super ()
 	anim_player.play("intro_look_at_player")
 	show_shield()
 	await anim_player.animation_finished
@@ -170,7 +170,7 @@ func rotate_and_elevate(target_pos: Vector3, delta: float) -> void:
 	# but first adjust by the global position because 
 	# the global basis is purely orientation, not position.
 	var rotation_targ: Vector3 = get_projected(
-		target_pos - body.global_position, 
+		target_pos - body.global_position,
 		body.global_basis.y
 	)
 	# We also need to account for changes in position,
@@ -181,7 +181,7 @@ func rotate_and_elevate(target_pos: Vector3, delta: float) -> void:
 	# Since the point is projected onto the plane, this should be the angle
 	# the body should rotate to face along only one axis.
 	var y_angle: float = get_angle_to_target(
-		body.global_position, 
+		body.global_position,
 		rotation_targ,
 		body.global_basis.z
 	)
@@ -193,18 +193,18 @@ func rotate_and_elevate(target_pos: Vector3, delta: float) -> void:
 	
 	# Elevation
 	var elevation_targ: Vector3 = get_projected(
-		target_pos - head.global_position, 
+		target_pos - head.global_position,
 		head.global_basis.x
 	)
 	elevation_targ = elevation_targ + head.global_position
 	
 	var x_angle: float = get_angle_to_target(
-		head.global_position, 
+		head.global_position,
 		elevation_targ,
 		head.global_basis.z
 	)
 	
-	var elevation_sign = -sign(head.to_local(target_pos).y)
+	var elevation_sign = - sign(head.to_local(target_pos).y)
 	var final_x: float = elevation_sign * min(elevation_speed * delta, x_angle)
 	head.rotate_x(final_x)
 
@@ -295,9 +295,9 @@ func _on_laser_beam_startup_state_entered() -> void:
 	look_position.y = 0
 	tween.tween_method(
 			rotate_and_elevate.bind(get_physics_process_delta_time()),
-			target.global_position, 
+			target.global_position,
 			look_position,
-			0.4, 
+			0.4,
 		)
 	await tween.finished
 	
@@ -348,7 +348,7 @@ func _on_laser_beam_targeting_state_physics_processing(delta: float) -> void:
 	if aim_ray.is_colliding():
 		cast_point = aim_ray.get_collision_point()
 		var dist_to_cast: float = aim_ray.global_position.distance_to(cast_point)
-		laser_mesh.mesh.height = dist_to_cast 
+		laser_mesh.mesh.height = dist_to_cast
 		laser_mesh.position.z = dist_to_cast / 2
 		laser_collider.shape.height = dist_to_cast
 		laser_collider.position.z = dist_to_cast / 2
@@ -382,7 +382,7 @@ func _on_phase_2_laser_beam_sweep_beam_state_physics_processing(delta: float) ->
 	if aim_ray.is_colliding():
 		cast_point = aim_ray.get_collision_point()
 		var dist_to_cast: float = aim_ray.global_position.distance_to(cast_point)
-		laser_mesh.mesh.height = dist_to_cast 
+		laser_mesh.mesh.height = dist_to_cast
 		laser_mesh.position.z = dist_to_cast / 2
 		laser_particles.global_position = cast_point
 		
@@ -420,7 +420,7 @@ func _on_phase_3_laser_beam_sweep_beam_state_physics_processing(delta: float) ->
 	if aim_ray.is_colliding():
 		cast_point = aim_ray.get_collision_point()
 		var dist_to_cast: float = aim_ray.global_position.distance_to(cast_point)
-		laser_mesh.mesh.height = dist_to_cast 
+		laser_mesh.mesh.height = dist_to_cast
 		laser_mesh.position.z = dist_to_cast / 2
 		laser_particles.global_position = cast_point
 		
@@ -496,7 +496,7 @@ func _on_barrier_cage_state_physics_processing(delta: float) -> void:
 	var current_cage_radius: float = barrier_cage_collider.shape.radius
 	if target_floor_pos.distance_to(Vector3.ZERO) > current_cage_radius:
 		var reflect_dir = target.global_position.direction_to(Vector3.ZERO)
-		var barrer_point: Vector3 = -reflect_dir * current_cage_radius
+		var barrer_point: Vector3 = - reflect_dir * current_cage_radius
 		target.global_position.x = barrer_point.x
 		target.global_position.z = barrer_point.z
 
@@ -616,9 +616,9 @@ func _on_spawn_turrets_spawning_state_entered() -> void:
 		var tween = get_tree().create_tween()
 		tween.tween_method(
 			rotate_and_elevate.bind(get_physics_process_delta_time()),
-			target.global_position, 
+			target.global_position,
 			turret_look_target.global_position,
-			0.6, 
+			0.6,
 		)
 		await tween.finished
 		var turret = turret_look_target.spawn_turret(target)

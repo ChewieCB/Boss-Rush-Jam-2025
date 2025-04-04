@@ -135,10 +135,10 @@ func _on_standard_attack_firing_state_entered() -> void:
 
 	for i in projectiles_per_attack:
 		await get_tree().create_timer(delay_per_projectile).timeout
-		for spawn in projectile_spawns:
+		for proj_spawn in projectile_spawns:
 			var projectile: TestProjectile = projectile_scene.instantiate()
 			get_parent().get_parent().add_child(projectile)
-			projectile.global_position = spawn.global_position
+			projectile.global_position = proj_spawn.global_position
 			projectile.look_at(target.global_position)
 			projectile.projectile_speed = 42.0
 			var _sfx_player = get_available_sfx_player()

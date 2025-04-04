@@ -26,8 +26,7 @@ func lose(hint_text: String = "") -> void:
 
 
 func resize_font(label: RichTextLabel) -> void:
-	while label.get_line_count() > 1:
-		var current_font_size = label.get_theme_font_size("normal_font_size")
-		label.add_theme_font_size_override("normal_font_size", current_font_size - 16)
 	var current_font_size = label.get_theme_font_size("normal_font_size")
+	while label.get_line_count() > 1:
+		label.add_theme_font_size_override("normal_font_size", current_font_size - 16)
 	label.add_theme_font_size_override("normal_font_size", current_font_size - 8)

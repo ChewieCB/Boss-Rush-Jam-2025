@@ -122,14 +122,14 @@ var charge_locked: bool = false
 
 
 func activate() -> void:
-	super()
+	super ()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	state_chart.send_event("start_phase_1")
 
 
 func _physics_process(delta: float) -> void:
-	super(delta)
+	super (delta)
 	projectile_marker_pivot.look_at(target.global_position)
 	slot_icons_parent.look_at(target.global_position)
 	
@@ -183,19 +183,19 @@ func select_attack_phase_2() -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super(new_health, prev_health)
+	super (new_health, prev_health)
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
 
 func _on_died() -> void:
-	super()
+	super ()
 	anim_player.stop()
 	set_physics_process(false)
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
 
-func _on_hurtbox_body_entered(body: Node3D) -> void:
+func _on_hurtbox_body_entered(_body: Node3D) -> void:
 	pass
 
 
@@ -371,7 +371,7 @@ func drop_shadow(
 	target_pos: Vector3,
 	max_radius: float,
 	drop_time: float = 3.5,
-	callback: Callable = func(): pass
+	_callback: Callable = func(): pass
 ) -> void:
 	var debug_mesh_instance = MeshInstance3D.new()
 	var mesh = CylinderMesh.new()
@@ -387,7 +387,7 @@ func drop_shadow(
 	var query = PhysicsRayQueryParameters3D.create(
 		target_pos,
 		target_pos - Vector3(0, 100, 0),
-		pow(2, 1 - 1) + pow(2, 7 - 1)
+		int(pow(2, 1 - 1) + pow(2, 7 - 1))
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
@@ -412,7 +412,7 @@ func spawn_bell(pos: Vector3, size: float) -> void:
 	var query = PhysicsRayQueryParameters3D.create(
 		pos,
 		pos + Vector3(0, 400, 0),
-		pow(2, 1 - 1),
+		int(pow(2, 1 - 1)),
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
@@ -534,7 +534,7 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 		target.health_component.damage(swipe_damage)
 		hurtbox.set_deferred("monitoring", false)
 		# TODO - fix this knockback
-		var knockback_vector = -self.global_basis.z * swipe_knockback
+		var knockback_vector = - self.global_basis.z * swipe_knockback
 		target.velocity.x = 0
 		target.velocity.z = 0
 		target.velocity += knockback_vector
@@ -549,7 +549,7 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 			var query = PhysicsRayQueryParameters3D.create(
 				self.global_position,
 				self.global_position + dodge_vector,
-				pow(2, 1 - 1) + pow(2, 7 - 1)
+				int(pow(2, 1 - 1) + pow(2, 7 - 1))
 			)
 			var result = space_state.intersect_ray(query)
 			if result:
@@ -667,7 +667,7 @@ func _on_charge_targeting_state_physics_processing(delta: float) -> void:
 		var query = PhysicsRayQueryParameters3D.create(
 			self.global_position,
 			target.global_position,
-			pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 7 - 1)
+			int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 7 - 1))
 		)
 		var result = space_state.intersect_ray(query)
 		
@@ -704,7 +704,7 @@ func _on_charge_collision(body: Node3D) -> void:
 		hurtbox.body_entered.disconnect(_on_charge_collision)
 		hurtbox.set_deferred("monitoring", false)
 
-func _on_charge_charging_state_physics_processing(delta: float) -> void:
+func _on_charge_charging_state_physics_processing(_delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, 0.05)
 	velocity.z = lerp(velocity.z, 0.0, 0.05)
 
@@ -745,7 +745,7 @@ func _on_cherry_bombs_targeting_state_entered() -> void:
 	state_chart.send_event("attack_buildup")
 
 
-func _on_cherry_bombs_targeting_state_physics_processing(delta: float) -> void:
+func _on_cherry_bombs_targeting_state_physics_processing(_delta: float) -> void:
 	if self.global_position.distance_to(target.global_position) <= max_drop_distance:
 		state_chart.send_event("start_dropping_bombs")
 

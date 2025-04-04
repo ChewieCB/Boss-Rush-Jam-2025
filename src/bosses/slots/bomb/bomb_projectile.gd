@@ -75,7 +75,7 @@ func _on_timer_timeout() -> void:
 	destroy()
 
 
-func _on_body_entered(body: Node) -> void:
+func _on_body_entered(_body: Node) -> void:
 	var collision_pos = body_state.get_contact_local_position(0)
 	var collision_normal = body_state.get_contact_local_normal(0)
 	create_spark(collision_pos, collision_normal)

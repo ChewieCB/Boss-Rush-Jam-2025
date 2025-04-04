@@ -235,7 +235,7 @@ func drop_barrel() -> void:
 	var query = PhysicsRayQueryParameters3D.create(
 		goal_pos,
 		goal_pos - Vector3(0, 100, 0),
-		pow(2, 1 - 1) + pow(2, 7 - 1)
+		int(pow(2, 1 - 1) + pow(2, 7 - 1))
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
@@ -284,7 +284,7 @@ func drop_barrel() -> void:
 	)
 
 
-func _on_barrel_collected(data: BarrelDataResource) -> void:
+func _on_barrel_collected(_data: BarrelDataResource) -> void:
 	# TODO - show UI with new barrel effects
 	#
 	# Wait for player to click continue
@@ -437,5 +437,5 @@ func _on_died() -> void:
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 
 
-func _on_hurtbox_body_entered(body: Node3D) -> void:
+func _on_hurtbox_body_entered(_body: Node3D) -> void:
 	pass

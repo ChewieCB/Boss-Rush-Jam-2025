@@ -136,7 +136,7 @@ func generate_gun_animations() -> void:
 		create_gun_anims(i, idle_sprite, reload_sprites)
 
 
-func create_gun_anims(barrel_count: int, idle_texture: Texture, reload_textures: Array) -> void:
+func create_gun_anims(barrel_id: int, idle_texture: Texture, reload_textures: Array) -> void:
 	var anim_root_node: Node = anim_player.get_node(anim_player.root_node)
 	var gun_sprite_path: NodePath = anim_root_node.get_path_to(gun_sprite)
 	var sprite_texture_path: NodePath = "%s:texture" % gun_sprite_path
@@ -152,7 +152,7 @@ func create_gun_anims(barrel_count: int, idle_texture: Texture, reload_textures:
 	idle_anim.track_set_path(idle_texture_track_idx, sprite_texture_path)
 	idle_anim.track_insert_key(idle_texture_track_idx, 0.0, idle_texture)
 
-	base_library.add_animation("%s_barrel_idle" % [barrel_count], idle_anim)
+	base_library.add_animation("%s_barrel_idle" % [barrel_id], idle_anim)
 
 	# Reload animation
 	if reload_textures == []:
@@ -168,7 +168,7 @@ func create_gun_anims(barrel_count: int, idle_texture: Texture, reload_textures:
 	reload_anim.track_insert_key(reload_texture_track_idx, 0.05, reload_textures[1])
 	reload_anim.track_insert_key(reload_texture_track_idx, 0.1, reload_textures[0])
 
-	base_library.add_animation("%s_barrel_reload" % [barrel_count], reload_anim)
+	base_library.add_animation("%s_barrel_reload" % [barrel_id], reload_anim)
 
 
 func _process(delta: float) -> void:
