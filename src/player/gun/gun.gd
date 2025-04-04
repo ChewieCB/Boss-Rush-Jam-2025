@@ -128,8 +128,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		return false
 	if magazine_ammo_left <= 0:
 		play_failed_shoot_sfx()
-		spin_all_barrels()
-		#reload()
+		reload()
 		return false
 
 	var time_until_next_shot = 1.0 / modified_firerate

@@ -145,16 +145,15 @@ func _input(event):
 		rotate_player(event)
 
 	if event.is_action_pressed("spin_reload"):
-		spin_reload()
-	# TODO - experimental branch separating spin from reload
-	#elif event.is_action_pressed("spin_barrels"):
-		#current_gun.spin_all_barrels()
-	#elif event.is_action_pressed("input_1"):
-		#current_gun.spin_single_barrel(0)
-	#elif event.is_action_pressed("input_2"):
-		#current_gun.spin_single_barrel(1)
-	#elif event.is_action_pressed("input_3"):
-		#current_gun.spin_single_barrel(2)
+		no_spin_reload()
+	elif event.is_action_pressed("spin_barrels"):
+		current_gun.spin_all_barrels()
+	elif event.is_action_pressed("input_1"):
+		current_gun.spin_single_barrel(0)
+	elif event.is_action_pressed("input_2"):
+		current_gun.spin_single_barrel(1)
+	elif event.is_action_pressed("input_3"):
+		current_gun.spin_single_barrel(2)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
