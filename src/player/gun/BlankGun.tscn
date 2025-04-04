@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://d2tb8ogqlaxhy"]
+[gd_scene load_steps=20 format=3 uid="uid://clvxlb7vkkay7"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_wwe7d"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_5dqrq"]
@@ -134,7 +134,7 @@ gun_name = "Blank gun"
 description = "A ordinary gun, waiting to be modified with various special barrels."
 TEMP_sfx_shoot = ExtResource("2_5dqrq")
 TEMP_sfx_dry = ExtResource("3_nou6i")
-TEMP_sfx_reload = ExtResource("14_2r0ft")
+TEMP_sfx_spin = ExtResource("14_2r0ft")
 TEMP_sfx_click = ExtResource("5_8nbf7")
 TEMP_regain_ammo = ExtResource("6_gecfl")
 TEMP_crit = ExtResource("7_p32ub")

@@ -12,24 +12,12 @@ class_name Gun
 @export var muzzle_flash_hold_frames: int = 2
 @onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
-@export_subgroup("1 Barrel")
 @onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
 @onready var barrel_1_label: Label3D = $SpriteParent/Barrel1Sprite/Label3D
-@export var barrel_1_idle_frame: Texture
-@export var barrel_1_spin_frame_1: Texture
-@export var barrel_1_spin_frame_2: Texture
-@export_subgroup("2 Barrels")
 @onready var barrel_2_sprite: Sprite3D = $SpriteParent/Barrel2Sprite
 @onready var barrel_2_label: Label3D = $SpriteParent/Barrel2Sprite/Label3D
-@export var barrel_2_idle_frame: Texture
-@export var barrel_2_spin_frame_1: Texture
-@export var barrel_2_spin_frame_2: Texture
-@export_subgroup("3 Barrels")
 @onready var barrel_3_sprite: Sprite3D = $SpriteParent/Barrel3Sprite
 @onready var barrel_3_label: Label3D = $SpriteParent/Barrel3Sprite/Label3D
-@export var barrel_3_idle_frame: Texture
-@export var barrel_3_spin_frame_1: Texture
-@export var barrel_3_spin_frame_2: Texture
 @onready var barrel_sprites: Array[Sprite3D] = [barrel_1_sprite, barrel_2_sprite, barrel_3_sprite]
 
 @onready var anim_tree: AnimationTree = $AnimationTree
@@ -38,6 +26,7 @@ class_name Gun
 ## TEMP SFX PLS CHANGE
 @export var TEMP_sfx_shoot: AudioStream
 @export var TEMP_sfx_dry: AudioStream
+@export var TEMP_sfx_spin: AudioStream
 @export var TEMP_sfx_reload: AudioStream
 @export var TEMP_sfx_click: AudioStream
 @export var TEMP_regain_ammo: AudioStream
@@ -128,62 +117,6 @@ func _ready() -> void:
 	reload()
 
 
-#func generate_gun_animations() -> void:
-	#for i in range(4):
-		#var idle_sprite: Texture
-		#var reload_sprites: Array
-		#match i:
-			#0:
-				#idle_sprite = idle_0_barrel
-				#reload_sprites = []
-			#1:
-				#idle_sprite = idle_1_barrel
-				#reload_sprites = [reload_frame_0_1_barrel, reload_frame_1_1_barrel]
-			#2:
-				#idle_sprite = idle_2_barrel
-				#reload_sprites = [reload_frame_0_2_barrel, reload_frame_1_2_barrel]
-			#3:
-				#idle_sprite = idle_3_barrel
-				#reload_sprites = [reload_frame_0_3_barrel, reload_frame_1_3_barrel]
-		#
-		#create_gun_anims(i, idle_sprite, reload_sprites)
-#
-#
-#func create_gun_anims(barrel_count: int, idle_texture: Texture, reload_textures: Array) -> void:
-	#var anim_root_node: Node = anim_player.get_node(anim_player.root_node)
-	#var gun_sprite_path: NodePath = anim_root_node.get_path_to(gun_sprite)
-	#var sprite_texture_path: NodePath = "%s:texture" % gun_sprite_path
-	#
-	#var base_library = anim_player.get_animation_library("")
-	#
-	## Idle animation
-	#var idle_anim := Animation.new()
-	#idle_anim.step = 0.05
-	#idle_anim.length = 0.1
-	#
-	#var idle_texture_track_idx = idle_anim.add_track(Animation.TYPE_VALUE)
-	#idle_anim.track_set_path(idle_texture_track_idx, sprite_texture_path)
-	#idle_anim.track_insert_key(idle_texture_track_idx, 0.0, idle_texture)
-	#
-	#base_library.add_animation("%s_barrel_idle" % [barrel_count], idle_anim)
-	#
-	## Reload animation
-	#if reload_textures == []:
-		#return
-	#var reload_anim := Animation.new()
-	#reload_anim.step = 0.05
-	#reload_anim.length = 0.1
-	#reload_anim.loop = true
-	#
-	#var reload_texture_track_idx = reload_anim.add_track(Animation.TYPE_VALUE)
-	#reload_anim.track_set_path(reload_texture_track_idx, sprite_texture_path)
-	#reload_anim.track_insert_key(reload_texture_track_idx, 0.0, reload_textures[0])
-	#reload_anim.track_insert_key(reload_texture_track_idx, 0.05, reload_textures[1])
-	#reload_anim.track_insert_key(reload_texture_track_idx, 0.1, reload_textures[0])
-	#
-	#base_library.add_animation("%s_barrel_reload" % [barrel_count], reload_anim)
-
-
 func _process(delta: float) -> void:
 	time_since_last_shot += delta
 
@@ -195,7 +128,8 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		return false
 	if magazine_ammo_left <= 0:
 		play_failed_shoot_sfx()
-		reload()
+		spin_all_barrels()
+		#reload()
 		return false
 
 	var time_until_next_shot = 1.0 / modified_firerate
@@ -317,6 +251,7 @@ func release_trigger():
 
 func spin_all_barrels() -> void:
 	release_trigger()
+	is_reloading = true
 	# TODO - add catch for HELD barrels
 	for i in installed_barrels.size():
 		if i > installed_barrels.size():
@@ -330,6 +265,7 @@ func spin_all_barrels() -> void:
 	reset_modifier(true)
 	#gun_status_label.visible = false
 	stop_all_barrels()
+	is_reloading = false
 	reload()
 
 
@@ -337,6 +273,7 @@ func spin_single_barrel(barrel_idx: int) -> void:
 	if barrel_idx >= installed_barrels.size():
 		return
 	
+	is_reloading = true
 	release_trigger()
 	_spin_barrel(barrel_idx)
 	
@@ -346,6 +283,7 @@ func spin_single_barrel(barrel_idx: int) -> void:
 	
 	reset_modifier(true)
 	_stop_barrel(barrel_idx)
+	is_reloading = false
 	reload()
 
 
@@ -354,6 +292,7 @@ func _spin_barrel(barrel_idx: int) -> void:
 	barrel.start_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("spin")
+	SoundManager.play_sound(TEMP_sfx_spin, "Gun")
 	barrel_spin_started.emit(barrel)
 
 
@@ -367,6 +306,7 @@ func _stop_barrel(barrel_idx: int) -> void:
 	barrel.stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
+	SoundManager.stop_sound(TEMP_sfx_spin)
 	barrel_spin_stopped.emit(barrel)
 
 
