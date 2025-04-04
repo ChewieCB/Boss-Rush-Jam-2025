@@ -169,6 +169,8 @@ func _on_health_component_health_changed(new_health: float, prev_health: float) 
 
 
 func _on_health_component_died() -> void:
+	if get_tree() == null:
+		return
 	sfx_player.stream = sfx_turret_death.pick_random()
 	sfx_player.play()
 	var explosion_vfx = explosion_scene.instantiate()

@@ -13,7 +13,7 @@ var can_transition: bool = false
 # Shader pre-compilation
 const PRECOMPILE_CONFIG_PATH: String = "res://config/precompile_list.config"
 const IGNORED_PATH_EXTENSIONS: Array[String] = [
-	"mp3", "wav", 
+	"mp3", "wav",
 	"png", "jpg", "svg",
 ]
 @export var max_materials_compiled_per_frame: int = 2
@@ -67,7 +67,7 @@ func load_scene(packed_scene: PackedScene) -> void:
 	await ScreenTransition.transition_finished
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if current_scene_path:
 		var progress = []
 		ResourceLoader.load_threaded_get_status(current_scene_path, progress)
@@ -78,7 +78,7 @@ func _process(delta: float) -> void:
 			load_scene(packed_scene)
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if is_compiling:
 		compile_materials()
 
@@ -88,7 +88,6 @@ func parse_scene_paths_to_compile() -> void:
 	var regex_pattern := "(sub_resource|ext_resource) type=\"(ParticleProcessMaterial|ShaderMaterial|Material|CanvasItemMaterial)\""
 	var regex = RegEx.new()
 	regex.compile(regex_pattern)
-	var file_list := []
 	
 	var instantiation_list := []
 	var filepaths = get_filepaths_from_nested_directory("res://src", true)
@@ -116,12 +115,11 @@ func parse_scene_paths_to_compile() -> void:
 # TODO - move this to a utility script
 func get_filepaths_from_nested_directory(dir_path: String, incl_files_from_given_dir: bool = true) -> Array:
 	var files = []
-	var file
 	var item
 	var item_path
 	
 	var dir := DirAccess.open(dir_path)
-	if dir == null: 
+	if dir == null:
 		printerr("Could not open folder", dir_path)
 		return files
 	
@@ -197,7 +195,7 @@ func _compile_material_node(child: Node3D) -> void:
 	
 	if child.material.resource_path:
 		compiled_material_paths.append(child.material.resource_path)
-		print("Caching %s" % child.material.resource_path) 
+		print("Caching %s" % child.material.resource_path)
 	
 	await get_tree().create_timer(0.5).timeout
 	
