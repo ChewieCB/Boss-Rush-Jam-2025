@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://dy7nqvo7uq1ti"]
+[gd_scene load_steps=8 format=3 uid="uid://dy7nqvo7uq1ti"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_54i25"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_embam"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/ramp_up_effect.gd" id="3_w70eq"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_k0t2c"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_ky52g"]
@@ -12,8 +11,6 @@
 [node name="DynamicAdvantageBarrel" type="Node3D"]
 script = ExtResource("1_54i25")
 barrel_id = 3
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_embam")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

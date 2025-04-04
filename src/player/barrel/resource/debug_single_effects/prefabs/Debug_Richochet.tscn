@@ -1,14 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://do2sd6qlny0c1"]
+[gd_scene load_steps=3 format=3 uid="uid://do2sd6qlny0c1"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_hodut"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_88nwr"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_kbnga"]
 
 [node name="DebugRicochetBarrel" type="Node3D"]
 script = ExtResource("1_hodut")
 barrel_id = 6
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_88nwr")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

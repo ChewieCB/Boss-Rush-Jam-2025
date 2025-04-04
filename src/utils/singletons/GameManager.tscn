@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/utils/singletons/game_manager.gd" id="1_rn441"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_m6fe3"]
 [ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrrel_data.tres" id="3_23s84"]
-[ext_resource type="Resource" uid="uid://d2i2i2rrbo2v0" path="res://src/dynamic_advantage_barrel_data.tres" id="4_ds0rn"]
+[ext_resource type="Resource" uid="uid://d2i2i2rrbo2v0" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="4_ds0rn"]
 [ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="5_bj40w"]
 [ext_resource type="Resource" uid="uid://7xfi8anly2u3" path="res://src/player/barrel/resource/archetype_automatic_spec_barrrel_data.tres" id="6_pgp6q"]
 [ext_resource type="Resource" uid="uid://dpcew656ofo1q" path="res://src/player/barrel/resource/archetype_shotgun_spec_barrrel_data.tres" id="7_upwdb"]
@@ -15,4 +15,3 @@ process_mode = 3
 script = ExtResource("1_rn441")
 starting_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("3_23s84")])
 starting_shop_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2")])
-player_currency = 0

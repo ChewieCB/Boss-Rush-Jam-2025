@@ -1,14 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://d4cog6eokeoxw"]
+[gd_scene load_steps=3 format=3 uid="uid://d4cog6eokeoxw"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_vhtko"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_gfruu"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="6_w64jl"]
 
 [node name="DebugHyperfocusBarrel" type="Node3D"]
 script = ExtResource("1_vhtko")
 barrel_id = 6
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_gfruu")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

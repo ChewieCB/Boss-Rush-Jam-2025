@@ -47,7 +47,6 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
 
-
 signal movement_dashed
 
 const MAX_SPEED: float = 8.0
@@ -97,6 +96,7 @@ var controls_disabled: bool = false
 var dash_disabled: bool = false
 
 var gun_container_original_pos: Vector3
+var gun_container_original_rot: Vector3
 var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
@@ -122,12 +122,14 @@ func _ready():
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	gun_container_original_pos = gun_container.position
+	gun_container_original_rot = gun_container.rotation
 	interact_ui.visible = false
 	boss_special_dialog.visible = false
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_hud)
 	current_gun.gun_reloaded.connect(update_hud)
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
+
 
 func _input(event):
 	if controls_disabled:
@@ -144,6 +146,15 @@ func _input(event):
 
 	if event.is_action_pressed("spin_reload"):
 		spin_reload()
+	# TODO - experimental branch separating spin from reload
+	#elif event.is_action_pressed("spin_barrels"):
+		#current_gun.spin_all_barrels()
+	#elif event.is_action_pressed("input_1"):
+		#current_gun.spin_single_barrel(0)
+	#elif event.is_action_pressed("input_2"):
+		#current_gun.spin_single_barrel(1)
+	#elif event.is_action_pressed("input_3"):
+		#current_gun.spin_single_barrel(2)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -300,17 +311,26 @@ func _physics_process(delta):
 	var gun_sway_velocity = velocity * transform.basis
 	if not is_swapping_gun:
 		gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
+		if is_dashing:
+			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z - (gun_sway_velocity.x / 250), delta * 10)
+		else:
+			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
 	camera_control(delta)
 
 func update_hud():
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
 	for i in range(current_gun.max_barrels):
 		var effect_ui = all_barrel_effect_ui.get_child(i)
-		if current_gun.get_node("Barrel").get_child(i).get_child_count() > 0:
-			var barrel: SpinBarrel = current_gun.get_node("Barrel").get_child(i).get_child(0)
-			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
-			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
-			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+		if current_gun.barrel_container.get_child_count() > 0:
+			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
+			if barrel:
+				effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
+				effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
+				effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+			else:
+				effect_ui.get_node("Title").text = ""
+				effect_ui.get_node("Tag").text = ""
+				effect_ui.get_node("Desc").text = ""
 		else:
 			effect_ui.get_node("Title").text = ""
 			effect_ui.get_node("Tag").text = ""
@@ -359,8 +379,13 @@ func stun(time: float) -> void:
 	dash_disabled = false
 
 
-func spin_reload():
+func spin_reload() -> void:
+	current_gun.spin_all_barrels()
+
+
+func no_spin_reload() -> void:
 	current_gun.reload()
+
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))

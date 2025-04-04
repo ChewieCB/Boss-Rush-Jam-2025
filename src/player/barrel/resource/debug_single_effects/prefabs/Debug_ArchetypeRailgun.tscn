@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://dc3filbl8tqtn"]
+[gd_scene load_steps=8 format=3 uid="uid://dc3filbl8tqtn"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_hmje3"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_sw7c4"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_p7krh"]
 [ext_resource type="AudioStream" uid="uid://edneq2x4wm78" path="res://src/player/gun/assets/sfx/reloading/railgun/railgun_reload_1.mp3" id="4_skrfp"]
 [ext_resource type="AudioStream" uid="uid://dqr1710c1o8py" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 1.mp3" id="5_by4r8"]
@@ -12,8 +11,6 @@
 [node name="ArchetypeBarrel" type="Node3D"]
 script = ExtResource("1_hmje3")
 barrel_id = 2
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_sw7c4")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

@@ -1,14 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://d2m6p2sqrwtng"]
+[gd_scene load_steps=3 format=3 uid="uid://d2m6p2sqrwtng"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_p4ej0"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_hr1dc"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/multishot_effect.gd" id="4_a3nqq"]
 
 [node name="DebugDoubleTapBarrel" type="Node3D"]
 script = ExtResource("1_p4ej0")
 barrel_id = 4
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_hr1dc")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

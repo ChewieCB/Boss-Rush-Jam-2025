@@ -1,7 +1,6 @@
-[gd_scene load_steps=27 format=3 uid="uid://ckiren6h4keb6"]
+[gd_scene load_steps=26 format=3 uid="uid://ckiren6h4keb6"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_5qelq"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_yw7pw"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_w2hft"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_3n82e"]
 [ext_resource type="AudioStream" uid="uid://cte0yqejjtu7j" path="res://src/player/gun/assets/sfx/reloading/smg/smg_reload_1.mp3" id="4_cri1e"]
@@ -31,8 +30,6 @@
 script = ExtResource("1_5qelq")
 barrel_id = 9
 
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_yw7pw")]
-
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="GaussRifle" type="Node3D" parent="EffectContainer"]
@@ -46,7 +43,7 @@ display_text_tag = "Fire faster and more ammo"
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 4
-new_value = 5.0
+new_value = 6.0
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
@@ -157,11 +154,6 @@ new_value = 1.0
 script = ExtResource("4_3n82e")
 attribute = 11
 new_value = 0.4
-
-[node name="SetScreenshake" type="Node3D" parent="EffectContainer/Railcannon"]
-script = ExtResource("4_3n82e")
-attribute = 12
-new_value = 1.6
 
 [node name="SetReloadTime" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")

@@ -1,14 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://ptb63xpipbk1"]
+[gd_scene load_steps=3 format=3 uid="uid://ptb63xpipbk1"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_vvrge"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/projectile_count_effect.gd" id="2_6irkf"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_ra1k1"]
 
 [node name="ProjectileCountBarrel" type="Node3D"]
 script = ExtResource("1_vvrge")
 barrel_id = 5
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_ra1k1")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

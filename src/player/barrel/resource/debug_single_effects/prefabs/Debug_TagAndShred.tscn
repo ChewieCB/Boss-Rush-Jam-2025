@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://svhksvvubbk2"]
+[gd_scene load_steps=5 format=3 uid="uid://svhksvvubbk2"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_hdy56"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_pe5ec"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="7_cyvoe"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="8_0g13t"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/damage_shred_stack_effect.gd" id="9_xm7rq"]
@@ -9,8 +8,6 @@
 [node name="DebugTagAndShredBarrel" type="Node3D"]
 script = ExtResource("1_hdy56")
 barrel_id = 11
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_pe5ec")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

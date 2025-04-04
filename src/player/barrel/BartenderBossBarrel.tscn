@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://baauotfv75lsw"]
+[gd_scene load_steps=6 format=3 uid="uid://baauotfv75lsw"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_yvor8"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_bm7vu"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/create_on_action_effect.gd" id="3_vhyyg"]
 [ext_resource type="PackedScene" uid="uid://dn7kkvfjqnktd" path="res://src/player/gun/damage_effect/MolotovDashHazard.tscn" id="4_2fxr8"]
 [ext_resource type="PackedScene" uid="uid://2a8xpe58m4sr" path="res://src/player/gun/damage_effect/CognacReloadHealCloud.tscn" id="5_o0msc"]
@@ -10,8 +9,6 @@
 [node name="BartenderBossBarrel" type="Node3D"]
 script = ExtResource("1_yvor8")
 barrel_id = 12
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_bm7vu")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

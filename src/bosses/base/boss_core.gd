@@ -131,7 +131,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	vel_vertical -= GRAVITY * delta
-	vel_vertical = clamp(vel_vertical, - MAX_FALL_SPEED, 10000)
+	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	velocity.y = vel_vertical
 
 	move_and_slide()
@@ -153,7 +153,7 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 	var direction: Vector3 = self.global_position.direction_to(target.global_position)
 	self.rotation.y = lerp_angle(
 		self.rotation.y, atan2(
-			- direction.x, - direction.z
+			- direction.x, -direction.z
 		),
 		delta * speed
 	)
@@ -235,7 +235,7 @@ func drop_barrel() -> void:
 	var query = PhysicsRayQueryParameters3D.create(
 		goal_pos,
 		goal_pos - Vector3(0, 100, 0),
-		pow(2, 1 - 1) + pow(2, 7 - 1)
+		int(pow(2, 1 - 1) + pow(2, 7 - 1))
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
@@ -284,7 +284,7 @@ func drop_barrel() -> void:
 	)
 
 
-func _on_barrel_collected(data: BarrelDataResource) -> void:
+func _on_barrel_collected(_data: BarrelDataResource) -> void:
 	# TODO - show UI with new barrel effects
 	#
 	# Wait for player to click continue
@@ -421,7 +421,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			GameManager.player.get_parent().add_child(chip)
 			chip.global_position = self.global_position
 			chip.rotate_y(randf_range(0, 2 * PI))
-			chip.apply_central_force(- chip.global_basis.z * chip_spawn_force)
+			chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
 			chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
 
 
@@ -437,5 +437,5 @@ func _on_died() -> void:
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 
 
-func _on_hurtbox_body_entered(body: Node3D) -> void:
+func _on_hurtbox_body_entered(_body: Node3D) -> void:
 	pass
