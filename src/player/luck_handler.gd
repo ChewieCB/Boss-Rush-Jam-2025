@@ -5,7 +5,7 @@ signal luck_decreased(value: float)
 signal modifier_message(text: String, is_gain: bool)
 
 # TODO - default to false and enable on the boss trigger
-@export var enabled: bool = true
+@export var enabled: bool = false
 
 # Luck decay per second
 @export var luck_decay: float = 1.4

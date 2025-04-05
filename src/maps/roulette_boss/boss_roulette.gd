@@ -93,6 +93,7 @@ func _on_player_death() -> void:
 
 
 func show_end_panel() -> void:
+	LuckHandler.enabled = false
 	win_ui.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
@@ -121,6 +122,8 @@ func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 		current_sfx_ambient = sfx_ambience.pick_random()
 		SoundManager.play_ambient_sound(current_sfx_ambient, 0.5, "Ambience")
 		boss.activate()
+		LuckHandler.enabled = true
+		elevator_doors.close()
 		boss_trigger.queue_free()
 		shove_player()
 

@@ -118,6 +118,7 @@ func _on_bosses_defeated(_boss: BossCore) -> void:
 
 
 func show_end_panel() -> void:
+	LuckHandler.enabled = false
 	win_ui.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
@@ -198,6 +199,8 @@ func _on_boss_trigger_body_entered(body: Node3D) -> void:
 		surveillance_boss.activate()
 		pit_boss.activate()
 		SoundManager.play_music(active_bgm, 0.1, "BGM")
+		elevator_doors.close()
+		LuckHandler.enabled = true
 		boss_trigger.queue_free()
 
 
