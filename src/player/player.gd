@@ -25,6 +25,10 @@ var movement_sfx_player: AudioStreamPlayer
 
 @export_category("Prefabs")
 @export var health_component: HealthComponent
+@export var luck_component: LuckComponent
+
+@export_category("Luck")
+@export var luck_redeem_time: float = 2.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
 @onready var interact_ui: Label = $UI/InteractUI
@@ -41,8 +45,9 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
-@onready var magazine_label: Label = $UI/GunUI/MagazineUI
-@onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
+@onready var magazine_label: Label = $UI/GunUI/GunStatusUI/MagazineUI
+@onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
+@onready var luck_ui = $UI/LuckUI
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
@@ -111,6 +116,8 @@ var base_stats = {
 }
 var current_stats = base_stats.duplicate(true)
 
+var can_spin: bool = false
+
 
 func _ready():
 	GameManager.player = self
@@ -119,10 +126,16 @@ func _ready():
 	player_camera.set_fov(GameManager.camera_fov)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	last_dashed_timestamp = 0
+	
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
+	
+	luck_component.luck_changed.connect(_on_luck_changed)
+	luck_component.luck_maxed.connect(_on_luck_maxed)
+	
 	gun_container_original_pos = gun_container.position
 	gun_container_original_rot = gun_container.rotation
+	
 	interact_ui.visible = false
 	boss_special_dialog.visible = false
 	
@@ -151,13 +164,17 @@ func _input(event):
 	if event.is_action_pressed("spin_reload"):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
-		current_gun.spin_all_barrels()
+		if can_spin:
+			cash_in_luck()
+	# DEBUG
 	elif event.is_action_pressed("input_1"):
-		current_gun.spin_single_barrel(0)
+		luck_component.increase_luck(10.0)
+		#current_gun.spin_single_barrel(0)
 	elif event.is_action_pressed("input_2"):
-		current_gun.spin_single_barrel(1)
-	elif event.is_action_pressed("input_3"):
-		current_gun.spin_single_barrel(2)
+		luck_component.reduce_luck(10.0)
+		#current_gun.spin_single_barrel(1)
+	#elif event.is_action_pressed("input_3"):
+		#current_gun.spin_single_barrel(2)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -556,6 +573,7 @@ func remove_buff(buff: Buff):
 	buffs.erase(buff)
 	apply_buffs()
 
+
 func remove_buff_by_name(find_name: String):
 	var found_buff = null
 	for buff in buffs:
@@ -564,6 +582,7 @@ func remove_buff_by_name(find_name: String):
 			break
 	if found_buff:
 		remove_buff(found_buff)
+
 
 func apply_buffs():
 	# Reset current stats to base stats.
@@ -586,3 +605,33 @@ func apply_buffs():
 	# Apply percentage bonuses (multiplicative).
 	for stat in percentage_bonuses.keys():
 		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)
+
+
+func cash_in_luck() -> void:
+	can_spin = false
+	current_gun.spin_all_barrels()
+	# Animate the luck bar draining
+	luck_component.disable()
+	var tween = get_tree().create_tween()
+	tween.tween_property(
+		luck_ui.luck_bar, "value", 0, luck_redeem_time
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	tween.parallel().tween_property(
+		luck_ui.luck_gain_bar, "value", 0, luck_redeem_time
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	
+	await tween.finished
+	
+	luck_component.enable()
+	luck_component.current_luck = 0.0
+
+
+func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
+	# TODO - update luck handler to apply bonuses
+	if new_luck < prev_luck and prev_luck == luck_component.max_luck:
+		can_spin = false
+	pass
+
+
+func _on_luck_maxed() -> void:
+	can_spin = true

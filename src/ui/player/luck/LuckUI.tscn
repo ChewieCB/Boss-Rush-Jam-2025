@@ -1,0 +1,65 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0o8j4pl45qv0"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_ui.gd" id="1_lqfvk"]
+[ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="1_rdq53"]
+[ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="2_ib382"]
+[ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="3_pcxh8"]
+
+[node name="LuckUI" type="MarginContainer"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -337.5
+offset_right = 119.0
+offset_bottom = 337.5
+grow_vertical = 2
+script = ExtResource("1_lqfvk")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(80, 512)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="LuckBar" type="TextureProgressBar" parent="MarginContainer"]
+layout_mode = 2
+value = 40.0
+fill_mode = 3
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_over = ExtResource("1_rdq53")
+texture_progress = ExtResource("2_ib382")
+tint_over = Color(0.901961, 0.776471, 0, 1)
+tint_progress = Color(1, 0.74902, 0, 1)
+
+[node name="LuckGainBar" type="TextureProgressBar" parent="MarginContainer/LuckBar"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 60.0
+fill_mode = 3
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_under = ExtResource("3_pcxh8")
+texture_progress = ExtResource("3_pcxh8")
+tint_under = Color(0.113725, 0.113725, 0.113725, 1)
+tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
+
+[node name="Timer" type="Timer" parent="MarginContainer/LuckBar"]
+wait_time = 0.4
+one_shot = true
+
+[connection signal="timeout" from="MarginContainer/LuckBar/Timer" to="." method="_on_timer_timeout"]

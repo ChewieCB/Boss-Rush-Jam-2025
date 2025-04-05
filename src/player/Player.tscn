@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=68 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -51,10 +51,12 @@
 [ext_resource type="Shader" path="res://src/player/assets/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
+[ext_resource type="PackedScene" uid="uid://b0o8j4pl45qv0" path="res://src/ui/player/luck/LuckUI.tscn" id="45_fwrry"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
 [ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
+[ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -101,7 +103,7 @@ shader_parameter/projector_power = 0.2
 shader_parameter/vignette_param = 10.0
 shader_parameter/distortionTexture = SubResource("NoiseTexture2D_nb2lf")
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component", "luck_component")]
 collision_layer = 2
 collision_mask = 221
 script = ExtResource("1_rl0vi")
@@ -119,8 +121,11 @@ sfx_dash_air = Array[AudioStream]([ExtResource("31_pnqxi")])
 max_air_jump = 1
 speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
+luck_component = NodePath("LuckComponent")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
+
+[node name="LuckComponent" parent="." instance=ExtResource("57_0cid7")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_le58x")
@@ -241,6 +246,10 @@ mouse_filter = 2
 
 [node name="PlayerHealthBarUI" parent="UI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("19_n1ar7")]
 layout_mode = 1
+offset_left = 406.0
+offset_top = 0.0
+offset_right = 944.0
+offset_bottom = 171.0
 health_component = NodePath("../../../HealthComponent")
 
 [node name="InteractUI" type="Label" parent="UI"]
@@ -263,62 +272,65 @@ text = "Interact (E)"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="LuckUI" parent="UI" node_paths=PackedStringArray("luck_component") instance=ExtResource("45_fwrry")]
+offset_top = -415.0
+offset_right = 237.0
+offset_bottom = 415.0
+luck_component = NodePath("../../LuckComponent")
+
 [node name="GunUI" type="Control" parent="UI"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = 710.0
+offset_right = 958.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="MagazineUI" type="Label" parent="UI/GunUI"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -178.0
-offset_top = -89.0
-offset_right = -28.0
-offset_bottom = -20.0
-grow_horizontal = 0
-grow_vertical = 0
+[node name="GunStatusUI" type="MarginContainer" parent="UI/GunUI"]
+layout_mode = 2
+offset_left = -17.0
+offset_right = 208.0
+offset_bottom = 945.0
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="MagazineUI" type="Label" parent="UI/GunUI/GunStatusUI"]
+layout_mode = 2
+size_flags_vertical = 8
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 6
 theme_override_font_sizes/font_size = 50
 text = "10/10"
 horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="AllBarrelEffectUI" type="VBoxContainer" parent="UI/GunUI"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -712.0
-offset_top = -164.0
-offset_right = -20.0
-offset_bottom = 171.0
-grow_horizontal = 0
-grow_vertical = 2
+[node name="AllBarrelEffectUI" type="VBoxContainer" parent="UI/GunUI/GunStatusUI"]
+layout_mode = 2
+size_flags_horizontal = 8
 mouse_filter = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 24
 alignment = 1
 
-[node name="EffectDetailUI" parent="UI/GunUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
+[node name="EffectDetailUI" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
 layout_mode = 2
 
-[node name="EffectDetailUI2" parent="UI/GunUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
+[node name="EffectDetailUI2" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
 layout_mode = 2
 
-[node name="EffectDetailUI3" parent="UI/GunUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
+[node name="EffectDetailUI3" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
 layout_mode = 2
 
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
+offset_left = 5.0
+offset_top = 35.0
+offset_right = 5.0
+offset_bottom = 35.0
 
 [node name="CurrencyUI" parent="UI" instance=ExtResource("23_xgmby")]
 
