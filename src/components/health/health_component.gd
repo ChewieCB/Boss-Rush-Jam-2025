@@ -15,7 +15,6 @@ signal hurt
 # Changed by owner character, range from 0 (invincible) to 1 (normal)
 var modified_resistance = 1
 
-
 var current_health: float:
 	set(value):
 		if has_died or not enabled:

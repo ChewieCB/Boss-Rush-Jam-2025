@@ -145,6 +145,7 @@ func _ready():
 	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_equipped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
+	
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 
 
@@ -171,7 +172,7 @@ func _input(event):
 		luck_component.increase_luck(10.0)
 		#current_gun.spin_single_barrel(0)
 	elif event.is_action_pressed("input_2"):
-		luck_component.reduce_luck(10.0)
+		luck_component.decrease_luck(10.0)
 		#current_gun.spin_single_barrel(1)
 	#elif event.is_action_pressed("input_3"):
 		#current_gun.spin_single_barrel(2)
@@ -548,6 +549,8 @@ func fall_death() -> void:
 
 
 func _on_health_hurt_state_entered() -> void:
+	LuckHandler.time_since_last_hurt = 0.0
+	LuckHandler.last_hurt_mult = 0
 	hurt_overlay.hurt()
 
 
@@ -609,6 +612,7 @@ func apply_buffs():
 
 func cash_in_luck() -> void:
 	can_spin = false
+	LuckHandler.enabled = false
 	current_gun.spin_all_barrels()
 	# Animate the luck bar draining
 	luck_component.disable()
@@ -623,6 +627,7 @@ func cash_in_luck() -> void:
 	await tween.finished
 	
 	luck_component.enable()
+	LuckHandler.enabled = true
 	luck_component.current_luck = 0.0
 
 

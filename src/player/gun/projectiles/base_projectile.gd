@@ -5,7 +5,7 @@ class_name BaseProjectile
 @export var generic_blood_splatter: PackedScene
 @export var bullet_decal_prefab: PackedScene
 
-signal damage_applied
+signal damage_applied(damage: float)
 signal impacted
 signal destroyed
 

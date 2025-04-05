@@ -28,20 +28,23 @@ var current_luck: float:
 			pass
 		elif current_luck == max_luck:
 			luck_maxed.emit()
+			LuckHandler.max_luck_decay_buffer()
 var current_luck_ratio: float = current_luck / max_luck
 
 
 func _ready() -> void:
 	initialize_luck()
+	LuckHandler.luck_increased.connect(increase_luck)
+	LuckHandler.luck_decreased.connect(decrease_luck)
 
 
-func reduce_luck(_reduction: float, _color: Color = Color.WHITE) -> void:
+func decrease_luck(_reduction: float) -> void:
 	_reduction = round(_reduction * luck_loss_modifier)
 	if enabled:
 		current_luck -= _reduction
 
 
-func increase_luck(_luck: float, _color: Color = Color.GREEN) -> void:
+func increase_luck(_luck: float) -> void:
 	if enabled:
 		_luck = round(_luck * luck_gain_modifier)
 		current_luck += _luck

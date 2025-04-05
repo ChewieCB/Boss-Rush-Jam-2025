@@ -15,7 +15,10 @@ offset_bottom = 337.5
 grow_vertical = 2
 script = ExtResource("1_lqfvk")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
 custom_minimum_size = Vector2(80, 512)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -24,7 +27,7 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="LuckBar" type="TextureProgressBar" parent="MarginContainer"]
+[node name="LuckBar" type="TextureProgressBar" parent="HBoxContainer/MarginContainer"]
 layout_mode = 2
 value = 40.0
 fill_mode = 3
@@ -38,7 +41,7 @@ texture_progress = ExtResource("2_ib382")
 tint_over = Color(0.901961, 0.776471, 0, 1)
 tint_progress = Color(1, 0.74902, 0, 1)
 
-[node name="LuckGainBar" type="TextureProgressBar" parent="MarginContainer/LuckBar"]
+[node name="LuckGainBar" type="TextureProgressBar" parent="HBoxContainer/MarginContainer/LuckBar"]
 z_index = -1
 layout_mode = 1
 anchors_preset = 15
@@ -58,8 +61,23 @@ texture_progress = ExtResource("3_pcxh8")
 tint_under = Color(0.113725, 0.113725, 0.113725, 1)
 tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 
-[node name="Timer" type="Timer" parent="MarginContainer/LuckBar"]
+[node name="Timer" type="Timer" parent="HBoxContainer/MarginContainer/LuckBar"]
 wait_time = 0.4
 one_shot = true
 
-[connection signal="timeout" from="MarginContainer/LuckBar/Timer" to="." method="_on_timer_timeout"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="SignLabel" type="Label" parent="HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 96
+vertical_alignment = 1
+
+[node name="LuckModifierText" type="Label" parent="HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+vertical_alignment = 1
+
+[connection signal="timeout" from="HBoxContainer/MarginContainer/LuckBar/Timer" to="." method="_on_timer_timeout"]
