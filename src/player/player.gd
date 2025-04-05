@@ -613,6 +613,7 @@ func apply_buffs():
 func cash_in_luck() -> void:
 	can_spin = false
 	LuckHandler.enabled = false
+	luck_ui.cash_in_luck()
 	current_gun.spin_all_barrels()
 	# Animate the luck bar draining
 	luck_component.disable()

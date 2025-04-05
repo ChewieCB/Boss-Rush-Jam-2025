@@ -16,9 +16,11 @@ signal hide
 @onready var luck_bar: TextureProgressBar = $HBoxContainer/MarginContainer/LuckBar
 @onready var luck_gain_bar: TextureProgressBar = $HBoxContainer/MarginContainer/LuckBar/LuckGainBar
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
-@onready var luck_modifier_sign_label: Label = $HBoxContainer/HBoxContainer/SignLabel
-@onready var luck_modifier_label: Label = $HBoxContainer/HBoxContainer/LuckModifierText
+@onready var luck_modifier_sign_label: Label = $HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/SignLabel
+@onready var luck_modifier_label: Label = $HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/LuckModifierText
 @export var luck_modifier_text_lifetime: float = 2.0
+
+@onready var reroll_label: Label = $HBoxContainer/MarginContainer2/VBoxContainer/RerollLabel
 
 
 func _ready() -> void:
@@ -73,7 +75,11 @@ func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
 
 
 func _on_luck_maxed() -> void:
-	pass
+	reroll_label.visible = true
+
+
+func cash_in_luck() -> void:
+	reroll_label.visible = false
 
 
 func _on_timer_timeout():

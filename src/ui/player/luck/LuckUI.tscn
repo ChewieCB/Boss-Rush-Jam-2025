@@ -65,18 +65,44 @@ tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 wait_time = 0.4
 one_shot = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
-layout_mode = 2
-
-[node name="SignLabel" type="Label" parent="HBoxContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(80, 512)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RerollLabel" type="Label" parent="HBoxContainer/MarginContainer2/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.748898, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 32
+text = "[Q] I'm Feeling Lucky!"
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="SignLabel" type="Label" parent="HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.74902, 0, 1)
 theme_override_font_sizes/font_size = 96
 vertical_alignment = 1
 
-[node name="LuckModifierText" type="Label" parent="HBoxContainer/HBoxContainer"]
+[node name="LuckModifierText" type="Label" parent="HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.74902, 0, 1)
 theme_override_font_sizes/font_size = 32
 vertical_alignment = 1
 
