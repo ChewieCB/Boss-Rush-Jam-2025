@@ -129,9 +129,9 @@ func _ready():
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
 	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
-	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui)
-	current_gun.barrel_equipped.connect(update_barrel_effect_ui)
-	current_gun.barrel_unequipped.connect(update_barrel_effect_ui)
+	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_equipped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 
 
@@ -325,17 +325,25 @@ func update_ammo_counter_ui() -> void:
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
 
 
-func update_barrel_effect_ui(barrel: SpinBarrel, barrel_idx: int) -> void:
-	var effect_ui_idx: int = all_barrel_effect_ui.get_child_count() - barrel_idx - 1
-	var effect_ui = all_barrel_effect_ui.get_child(effect_ui_idx)
-	if barrel:
-		effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
-		effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
-		effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
-	else:
-		effect_ui.get_node("Title").text = ""
-		effect_ui.get_node("Tag").text = ""
-		effect_ui.get_node("Desc").text = ""
+func update_barrel_effect_ui() -> void:
+	for i in range(current_gun.max_barrels):
+		var effect_ui_idx: int = all_barrel_effect_ui.get_child_count() - i - 1
+		var effect_ui = all_barrel_effect_ui.get_child(effect_ui_idx)
+		if i < current_gun.barrel_container.get_child_count(): 
+		#if current_gun.barrel_container.get_child_count() > 0:
+			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
+			#if barrel:
+			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
+			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
+			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+			#else:
+				#effect_ui.get_node("Title").text = ""
+				#effect_ui.get_node("Tag").text = ""
+				#effect_ui.get_node("Desc").text = ""
+		else:
+			effect_ui.get_node("Title").text = ""
+			effect_ui.get_node("Tag").text = ""
+			effect_ui.get_node("Desc").text = ""
 
 
 func show_debug_label():

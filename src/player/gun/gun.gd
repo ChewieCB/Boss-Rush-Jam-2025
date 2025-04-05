@@ -106,7 +106,7 @@ const BULLET_SPAWN_POS_VARIATION = 10
 
 
 func _ready() -> void:
-	SaveManager.savefile_loaded.connect(reinstall_barrels)
+	#SaveManager.savefile_loaded.connect(reinstall_barrels)
 	magazine_ammo_left = base_magazine_size
 	muzzle_flash_light.light_energy = 0
 	await get_tree().physics_frame
@@ -449,7 +449,7 @@ func remove_barrel(barrel_idx: int) -> void:
 	var barrel: SpinBarrel = barrel_container.get_child(barrel_idx)
 	barrel.queue_free()
 	barrel_container.remove_child(barrel)
-	barrel_unequipped.emit(barrel_idx)
+	barrel_unequipped.emit(null, barrel_idx)
 	
 	recheck_installed_barrels()
 
@@ -463,6 +463,7 @@ func recheck_installed_barrels():
 		var barrel = barrel_container.get_child(i)
 		barrel.owner_gun = self
 		installed_barrels.append(barrel)
+		_set_barrel_effect_label(barrel, barrel.get_active_effect())
 	
 	barrel_count = installed_barrels.size()
 	
