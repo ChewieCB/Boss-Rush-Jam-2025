@@ -8,8 +8,9 @@ extends Node3D
 @onready var win_ui: Control = $UI/BossDefeatedUI
 @export var win_subtext: Array[String]
 @export var lose_tips: Array[String]
-#@onready var boss_trigger: Area3D = $BossTrigger
+@onready var boss_trigger: Area3D = $BossTrigger
 
+@export var boss: BossCore
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 
@@ -33,3 +34,10 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("input_1"):
 		if breakable_floor:
 			breakable_floor.queue_free()
+
+
+func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
+	if body is Player:
+		boss.activate()
+		elevator_doors.close()
+		boss_trigger.queue_free()

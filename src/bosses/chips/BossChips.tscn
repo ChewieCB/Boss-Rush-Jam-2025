@@ -1,0 +1,135 @@
+[gd_scene load_steps=10 format=3 uid="uid://ckss0n4oolai5"]
+
+[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
+[ext_resource type="Texture2D" uid="uid://c7hb6wpuv2rw6" path="res://src/bosses/base/assets/placeholder_sweets_big_stack.png" id="2_1q2di"]
+[ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="3_hbmr3"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_kiknp"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_81kie"]
+[ext_resource type="PackedScene" uid="uid://cxg3ytjd4ybu0" path="res://src/bosses/chips/RollingChipProjectile.tscn" id="6_dth1w"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dgy85"]
+size = Vector3(5.8, 5, 5.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oomx2"]
+size = Vector3(5.8, 5, 5.9)
+
+[node name="BossChips" instance=ExtResource("1_xyff2")]
+collision_mask = 11
+script = ExtResource("2_2er6y")
+phase_2_health_percentage_trigger = 0.5
+DESIRED_DISTANCE = 10.0
+desired_distance = null
+angle_speed = 1.0
+orbit_angle = 0.0
+orbit_radius = 20.0
+rolling_chip_projectile = ExtResource("6_dth1w")
+barrel_pickup_scene = null
+sfx_slowmo = null
+attack_recovery_time = 0.5
+projectile_scene = null
+delay_per_projectile = 0.6
+TURN_SPEED_FAST = 9.0
+TURN_SPEED_SLOW = 6.0
+
+[node name="Sprite3D" parent="." index="0"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2.72019, 0)
+texture = ExtResource("2_1q2di")
+
+[node name="DebugMesh" parent="." index="2"]
+visible = true
+mesh = SubResource("BoxMesh_dgy85")
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 2.5, -0.15)
+shape = SubResource("BoxShape3D_oomx2")
+
+[node name="HealthComponent" parent="." index="4"]
+max_health = 6000.0
+
+[node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
+boss_name = "Shortstack"
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+visible = true
+enabled = true
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Phase1")
+event = &"start_phase_1"
+delay_in_seconds = "0.0"
+
+[node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("4_kiknp")
+initial_state = NodePath("Idle")
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toBackspinChip" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../BackspinChip")
+event = &"start_backspin_chip"
+delay_in_seconds = "0.0"
+
+[node name="BackspinChip" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
+script = ExtResource("4_kiknp")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toForwardSpin" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ForwardSpin")
+event = &"start_spin"
+delay_in_seconds = "0.0"
+
+[node name="ForwardSpin" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toBackSpin" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip/ForwardSpin" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../BackSpin")
+event = &"reverse_spin"
+delay_in_seconds = "0.0"
+
+[node name="BackSpin" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip/BackSpin" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recover")
+event = &"end_spin"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="3"]
+script = ExtResource("5_81kie")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip/Recover" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip/Recover" index="1"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../../Idle")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/ForwardSpin" to="." method="_on_backspin_chip_forward_spin_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/BackspinChip/ForwardSpin" to="." method="_on_backspin_chip_forward_spin_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/BackSpin" to="." method="_on_backspin_chip_back_spin_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/BackspinChip/BackSpin" to="." method="_on_backspin_chip_back_spin_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/Recover" to="." method="_on_backspin_chip_recover_state_entered"]
