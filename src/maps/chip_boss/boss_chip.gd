@@ -19,6 +19,8 @@ extends Node3D
 
 @export var breakable_floor: Node3D
 
+var nav_region: NavigationRegion3D
+
 
 func _ready() -> void:
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
@@ -28,6 +30,9 @@ func _ready() -> void:
 		player.player_camera.rotation = GameManager.cached_camera_rotation
 	
 	elevator_doors.open()
+	
+	#await get_tree().physics_frame
+	#generate_navigation()
 
 
 func _input(event: InputEvent) -> void:
@@ -41,3 +46,26 @@ func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 		boss.activate()
 		elevator_doors.close()
 		boss_trigger.queue_free()
+
+
+func generate_navigation() -> void:
+	nav_region = NavigationRegion3D.new()
+	var nav_mesh := NavigationMesh.new()
+	nav_mesh.agent_radius = 1.2
+	#nav_mesh.agent_height = 1.0
+	nav_region.navigation_mesh = nav_mesh
+	
+	func_godot_parent.add_child(nav_region)
+	func_godot_parent.move_child(nav_region, 0)
+	
+	func_godot_parent.remove_child(worldspawn_mesh)
+	nav_region.add_child(worldspawn_mesh)
+	nav_region.move_child(worldspawn_mesh, 0)
+	
+	_rebake_nav()
+
+
+func _rebake_nav() -> void:
+	if nav_region.is_baking():
+		await nav_region.bake_finished
+	nav_region.bake_navigation_mesh()

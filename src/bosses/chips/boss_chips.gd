@@ -18,6 +18,11 @@ var prev_phase
 var active_rolling_chip: RollingChip
 # SFX
 
+@export_subgroup("Split Stacks")
+@export var small_stack_prefab: PackedScene
+@export var stack_spawn_time: float = 0.1
+var spawned_sub_stacks: Array = []
+
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
 #@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
@@ -30,7 +35,8 @@ func activate() -> void:
 
 
 func select_attack_phase_1() -> void:
-	state_chart.send_event("start_backspin_chip")
+	#state_chart.send_event("start_backspin_chip")
+	state_chart.send_event("split_stack")
 
 
 func _on_phase_1_state_entered() -> void:
@@ -102,3 +108,84 @@ func _on_backspin_chip_recover_state_entered() -> void:
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+func _on_form_split_stacks_state_entered() -> void:
+	# Hide the main boss body and disable collision
+	sprite.visible = false
+	debug_mesh.visible = false
+	navigation_component.disable()
+	# Disable player and projectile collisions
+	self.collision_mask -= (pow(2, 2-1) + pow(2, 4-1))
+	#collider.set_deferred("disabled",  true)
+	hurtbox.set_deferred("monitoring",  false)
+	# TODO - prevent damage numbers showing up
+	
+	spawned_sub_stacks = await spawn_stacks(3)
+	
+	await get_tree().create_timer(3.0).timeout
+	state_chart.send_event("combine_stack")
+
+
+func _stack_get_new_move_point(stack) -> void:
+	var random_pos: Vector3 = NavigationServer3D.map_get_random_point(stack.nav_map_rid, 1, false)
+	#draw_debug_sphere(random_pos, 1.0, Color.GREEN)
+	stack.navigation_component.set_nav_target_position(random_pos)
+
+
+func _on_form_split_stacks_state_exited() -> void:
+	await despawn_stacks()
+	sprite.visible = true
+	#navigation_component.enable()
+	debug_mesh.visible = true
+	self.collision_mask += (pow(2, 2-1) + pow(2, 4-1))
+	await get_tree().create_timer(3.0).timeout
+	select_attack()
+
+
+func spawn_stacks(stack_count: int) -> Array:
+	var spawned_stacks = []
+	# Spawn small stacks from the center point of the big stack and space them out
+	for i in range(stack_count):
+		var small_stack_inst: CharacterBody3D = small_stack_prefab.instantiate()
+		get_parent().add_child(small_stack_inst)
+		small_stack_inst.global_transform = self.global_transform
+		small_stack_inst.scale = Vector3(0, 1, 0)
+		small_stack_inst.health_component.health_diff.connect(_small_stack_hurt)
+		small_stack_inst.health_component.died.connect(_small_stack_dead.bind(small_stack_inst))
+		small_stack_inst.navigation_component.destination_reached.connect(_stack_get_new_move_point.bind(small_stack_inst))
+		spawned_stacks.append(small_stack_inst)
+		
+		var stack_spawn_tween: Tween = get_tree().create_tween()
+		var spawn_pos: Vector3 = self.global_position + (self.global_transform.basis.z * 5).rotated(
+			Vector3.UP, 2 * PI / stack_count * (i+1)
+		)
+		stack_spawn_tween.tween_property(small_stack_inst, "global_position", spawn_pos, stack_spawn_time)
+		stack_spawn_tween.parallel().tween_property(small_stack_inst, "scale", Vector3.ONE, stack_spawn_time)
+		
+		await stack_spawn_tween.finished
+		
+		_stack_get_new_move_point(small_stack_inst)
+		
+	
+	return spawned_stacks
+
+
+func despawn_stacks() -> void:
+	for stack in spawned_sub_stacks:
+		var stack_spawn_tween: Tween = get_tree().create_tween()
+		stack_spawn_tween.tween_property(stack, "global_position", self.global_position, stack_spawn_time)
+		stack_spawn_tween.parallel().tween_property(stack, "scale", Vector3.ZERO, stack_spawn_time)
+		
+		await stack_spawn_tween.finished
+		
+		stack.queue_free()
+	spawned_sub_stacks = []
+
+
+func _small_stack_hurt(damage: float) -> void:
+	health_component.damage(damage)
+
+
+func _small_stack_dead(stack: CharacterBody3D) -> void:
+	spawned_sub_stacks.erase(stack)

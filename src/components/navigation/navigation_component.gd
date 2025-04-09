@@ -2,6 +2,7 @@ extends BaseComponent
 class_name NavigationComponent
 
 signal pathfinding_ready
+signal destination_reached
 
 @export_category("Components")
 #@export var attack_component: AttackComponent
@@ -68,10 +69,10 @@ func _physics_process(_delta) -> void:
 			return
 		if nav_agent.is_navigation_finished():
 			return
-		if not target:
-			return
 		
 		if follow_target:
+			if not target:
+				return
 			set_nav_target_position(target.global_position)
 		var new_velocity = get_new_nav_agent_velocity()
 		if nav_agent.avoidance_enabled:
@@ -81,6 +82,8 @@ func _physics_process(_delta) -> void:
 
 
 func set_nav_target_position(pos: Vector3) -> void:
+	if not enabled:
+		return
 	if pos != nav_agent.target_position:
 		nav_agent.target_position = pos
 		await nav_agent.path_changed
@@ -88,6 +91,7 @@ func set_nav_target_position(pos: Vector3) -> void:
 
 func get_new_nav_agent_velocity() -> Vector3:
 	if nav_agent.is_navigation_finished():
+		destination_reached.emit()
 		return entity.global_position
 
 	var current_agent_position: Vector3 = entity.global_position

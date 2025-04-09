@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=11 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Texture2D" uid="uid://c7hb6wpuv2rw6" path="res://src/bosses/base/assets/placeholder_sweets_big_stack.png" id="2_1q2di"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="3_hbmr3"]
+[ext_resource type="PackedScene" uid="uid://bpbb23dkfwo0l" path="res://src/bosses/chips/ChipStackSmall.tscn" id="4_dao07"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_kiknp"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_81kie"]
 [ext_resource type="PackedScene" uid="uid://cxg3ytjd4ybu0" path="res://src/bosses/chips/RollingChipProjectile.tscn" id="6_dth1w"]
@@ -24,6 +25,8 @@ angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
 rolling_chip_projectile = ExtResource("6_dth1w")
+small_stack_prefab = ExtResource("4_dao07")
+stack_spawn_time = 0.1
 barrel_pickup_scene = null
 sfx_slowmo = null
 attack_recovery_time = 0.5
@@ -53,6 +56,27 @@ boss_name = "Shortstack"
 [node name="StateChartDebugger" parent="UI" index="1"]
 visible = true
 enabled = true
+
+[node name="Status" parent="StateChart/Root" index="3"]
+initial_state = NodePath("BigStack")
+
+[node name="BigStack" type="Node" parent="StateChart/Root/Status" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toSplitStacks" type="Node" parent="StateChart/Root/Status/BigStack" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStacks")
+event = &"split_stack"
+delay_in_seconds = "0.0"
+
+[node name="SplitStacks" type="Node" parent="StateChart/Root/Status" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toBigStack" type="Node" parent="StateChart/Root/Status/SplitStacks" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../BigStack")
+event = &"combine_stack"
+delay_in_seconds = "0.0"
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")
@@ -125,6 +149,8 @@ to = NodePath("../../../Idle")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
+[connection signal="state_entered" from="StateChart/Root/Status/SplitStacks" to="." method="_on_form_split_stacks_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Status/SplitStacks" to="." method="_on_form_split_stacks_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_physics_processing"]
