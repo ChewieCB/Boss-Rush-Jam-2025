@@ -3,10 +3,10 @@ extends CanvasLayer
 @onready var saving_indicator: Label = $SavingIndicator
 @onready var pause_ui: PauseUI = $PauseUI
 
-@onready var health_ui = $UI/HealthUI
-@onready var interact_ui = $UI/InteractUI
-@onready var gun_ui = $UI/GunUI
-@onready var currency_ui = $UI/CurrencyUI
+@onready var health_ui = $HealthUI
+@onready var interact_ui = $InteractUI
+@onready var gun_ui = $GunUI
+@onready var currency_ui = $CurrencyUI
 
 func _ready() -> void:
 	SaveManager.started_saving.connect(func(): saving_indicator.visible = true)
