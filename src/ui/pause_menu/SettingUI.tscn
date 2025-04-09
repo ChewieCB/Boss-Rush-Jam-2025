@@ -462,6 +462,25 @@ grow_vertical = 2
 text = "100%"
 horizontal_alignment = 1
 
+[node name="HideUI" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/HideUI"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Hide UI"
+
+[node name="HideUIToggle" type="CheckButton" parent="TabContainer/Graphic/VBoxContainer/HideUI"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
 [node name="Audio" type="Control" parent="TabContainer"]
 visible = false
 layout_mode = 2
@@ -668,6 +687,8 @@ patch_margin_bottom = 20
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/Resolution/ResolutionOptionButton" to="." method="play_button_hover_sfx"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider" to="." method="_on_scaling_3d_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/HideUI/HideUIToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/Graphic/VBoxContainer/HideUI/HideUIToggle" to="." method="_on_hide_ui_toggled"]
 [connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/Master/MasterSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/Master/MasterSlider" to="." method="_on_master_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/BGM/BGMSlider" to="." method="play_button_hover_sfx"]

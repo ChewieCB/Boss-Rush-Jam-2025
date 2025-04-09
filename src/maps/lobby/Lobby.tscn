@@ -1730,6 +1730,9 @@ collision_layer = 96
 collision_mask = 79
 script = ExtResource("48_lw5gn")
 
+[node name="BodyCenter" type="Marker3D" parent="TargetDummy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0524426, 0.879485, -0.564032)
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TargetDummy"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0524426, 0.879485, -0.564032)
 shape = SubResource("BoxShape3D_dp6qw")
@@ -1748,6 +1751,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.7, 2, 5)
 collision_layer = 96
 collision_mask = 79
 script = ExtResource("48_lw5gn")
+
+[node name="BodyCenter" type="Marker3D" parent="TargetDummy2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0524426, 0.879485, -0.564032)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TargetDummy2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0524426, 0.879485, -0.564032)
