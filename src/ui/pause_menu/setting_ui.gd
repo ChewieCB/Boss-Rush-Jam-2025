@@ -1,6 +1,12 @@
 extends Control
 class_name SettingUI
 
+signal setting_changed
+signal setting_back_button_pressed
+
+@export var is_at_main_menu = false
+@export var keybind_button_prefab: PackedScene
+
 @onready var tab_container: TabContainer = $TabContainer
 
 @onready var mouse_sen_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider
@@ -14,6 +20,7 @@ class_name SettingUI
 @onready var resolution_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/Resolution/ResolutionOptionButton
 @onready var scaling_3d_slider: HSlider = $TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider
 @onready var scaling_3d_value: Label = $TabContainer/Graphic/VBoxContainer/Scaling3D/Value
+@onready var hide_ui_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideUI/HideUIToggle
 
 @onready var master_slider: HSlider = $TabContainer/Audio/VBoxContainer/Master/MasterSlider
 @onready var master_value: Label = $TabContainer/Audio/VBoxContainer/Master/Value
@@ -24,7 +31,6 @@ class_name SettingUI
 @onready var ui_slider: HSlider = $TabContainer/Audio/VBoxContainer/UI/UISlider
 @onready var ui_value: Label = $TabContainer/Audio/VBoxContainer/UI/Value
 
-@export var keybind_button_prefab: PackedScene
 @onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection
 
 var keybindable_action_list = {
@@ -46,6 +52,7 @@ var action_to_remap = null
 var remapping_button: KeybindButton = null
 
 func _ready() -> void:
+	GameManager.setting_ui = self
 	refresh_setting_value()
 	create_keybind_buttons()
 	SaveManager.setting_config_loaded.connect(refresh_setting_value)
@@ -83,9 +90,11 @@ func _on_audio_option_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 
 func _on_back_button_pressed() -> void:
+	setting_back_button_pressed.emit()
 	SoundManager.play_button_click_sfx()
 	close_menu()
-	GameManager.pause_ui.return_to_pause_menu()
+	if not is_at_main_menu:
+		GameManager.pause_ui.return_to_pause_menu()
 
 func _on_mouse_sen_slider_value_changed(value: float) -> void:
 	GameManager.mouse_sensitivity = value
@@ -207,6 +216,12 @@ func _on_reset_keybind_button_mouse_entered():
 	play_button_hover_sfx()
 
 
+func _on_hide_ui_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.hide_ui = toggled_on
+	setting_changed.emit()
+
+
 func refresh_setting_value():
 	mouse_sen_slider.value = GameManager.mouse_sensitivity
 	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
@@ -215,6 +230,7 @@ func refresh_setting_value():
 	fov_value.text = "{0}".format([GameManager.camera_fov])
 
 	camera_tilt_toggle.set_pressed_no_signal(GameManager.camera_tilt)
+	hide_ui_toggle.set_pressed_no_signal(GameManager.hide_ui)
 
 	Engine.max_fps = GameManager.FPS_LIMIT_ARRAY[GameManager.fps_limit_index]
 	fps_limit_option_button.selected = GameManager.fps_limit_index
