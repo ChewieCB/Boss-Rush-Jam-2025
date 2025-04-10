@@ -21,17 +21,16 @@ var movement_sfx_player: AudioStreamPlayer
 @export var max_air_jump = 2
 @export var dash_cd: float = 0.5
 @export var angular_momentum_multiplier = 0.4
+@export var speedline_vfx_prefab: PackedScene
 
 @export_category("Prefabs")
-@export var aim_ray_prefab: PackedScene
 @export var health_component: HealthComponent
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
-@onready var inventory_ui: InventoryUI = $UI/InventoryUI
 @onready var interact_ui: Label = $UI/InteractUI
 
-@onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
-@onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
+@onready var player_camera: ShakeCameraWrapper = $Neck/ShakeCameraWrapper
+@onready var debug_label: Label = $Neck/ShakeCameraWrapper/DebugLabel
 @onready var debug_meshes: Node3D = $DebugMeshes
 @onready var dash_duration_timer: Timer = $DashDuration
 @onready var coyote_timer: Timer = $CoyoteTimer
@@ -39,36 +38,34 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var state_chart: StateChart = $StateChart
 @onready var wall_raycast: RayCast3D = $WallRaycast
 
-@onready var gun_container = $Neck/ShakeableCamera/GunContainer
-@onready var aim_ray: AimRay = $Neck/ShakeableCamera/AimRay
-@onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
+@onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
+@onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
+@onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 @onready var magazine_label: Label = $UI/GunUI/MagazineUI
 @onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
 
-
 signal movement_dashed
 
 const MAX_SPEED: float = 8.0
 var max_speed: float = MAX_SPEED
-const MAX_FALL_SPEED: float = 50.0
+const MAX_FALL_SPEED: float = 70.0
 const ACCEL_RATE: float = 40.0
-const JUMP_FORCE: float = 8
-const GRAVITY: float = 14
+const JUMP_FORCE: float = 10
+const GRAVITY: float = 30
 const FALL_SPEED_TO_SHAKE_CAMERA: float = 15
 const HEAVY_FALL_SHAKE_TRAUMA: float = 0.8
 const SLIDE_SHAKE_TRAUMA: float = 0.1
 const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
-const RECOIL_COEFFICIENT: float = 10
 const BULLET_SPAWN_POS_VARIATION: float = 10
 const INTERACT_DISTANCE = 5
 
 const DASH_SPEED: float = 15
-const SLIDE_SPEED: float = 5
 const SLAM_SPEED: float = 25
+const CROUCH_SPEED_MODIFIER: float = 0.5
 
 var floor_col_pos = Vector3.ZERO
 var jumped: bool = false
@@ -77,14 +74,7 @@ var vel_horizontal := Vector2(0, 0)
 var vel_vertical: float = 0
 
 var is_dashing: bool = false
-var is_sliding: bool:
-	set(value):
-		if value != is_sliding:
-			if value:
-				player_camera.add_long_trauma(SLIDE_SHAKE_TRAUMA)
-			else:
-				player_camera.add_long_trauma(-SLIDE_SHAKE_TRAUMA)
-		is_sliding = value
+var is_crouching: bool = false
 
 var internal_bonus_speed: float = 0
 
@@ -106,6 +96,7 @@ var controls_disabled: bool = false
 var dash_disabled: bool = false
 
 var gun_container_original_pos: Vector3
+var gun_container_original_rot: Vector3
 var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
@@ -131,12 +122,14 @@ func _ready():
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 	gun_container_original_pos = gun_container.position
+	gun_container_original_rot = gun_container.rotation
 	interact_ui.visible = false
 	boss_special_dialog.visible = false
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_hud)
 	current_gun.gun_reloaded.connect(update_hud)
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
+
 
 func _input(event):
 	if controls_disabled:
@@ -153,6 +146,15 @@ func _input(event):
 
 	if event.is_action_pressed("spin_reload"):
 		spin_reload()
+	# TODO - experimental branch separating spin from reload
+	#elif event.is_action_pressed("spin_barrels"):
+		#current_gun.spin_all_barrels()
+	#elif event.is_action_pressed("input_1"):
+		#current_gun.spin_single_barrel(0)
+	#elif event.is_action_pressed("input_2"):
+		#current_gun.spin_single_barrel(1)
+	#elif event.is_action_pressed("input_3"):
+		#current_gun.spin_single_barrel(2)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -172,11 +174,23 @@ func _input(event):
 			dash_duration_timer.start()
 			movement_dashed.emit()
 
+
+			var dash_dir = raw_input_dir
+			# Swap speedline direction for horizontal dash
+			dash_dir.x = - dash_dir.x
+			if raw_input_dir.length() == 0:
+				dash_dir = Vector2(0, -1)
+			var angle_radians = dash_dir.angle()
+			var pe: Node3D = speedline_vfx_prefab.instantiate()
+			add_child(pe)
+			pe.global_position = global_position
+			pe.rotate_y(angle_radians)
+
 	if Input.is_action_just_pressed("interact"):
 		if object_to_be_interacted:
 			object_to_be_interacted.interact()
 			get_viewport().set_input_as_handled()
-	
+
 	if Input.is_action_just_pressed("crouch"):
 		SoundManager.play_sound(sfx_crouch.pick_random(), "SFX")
 	elif Input.is_action_just_released("crouch"):
@@ -230,7 +244,7 @@ func _physics_process(delta):
 			raw_input_dir = Vector2(0, -1)
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
-	if not is_dashing and not is_sliding and not is_in_inventory:
+	if not is_dashing and not is_in_inventory:
 		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
@@ -255,10 +269,16 @@ func _physics_process(delta):
 	# Use the next line will make player move faster when strafing + rotate camera
 	# var current_speed = vel_horizontal.dot(input_dir)
 	var current_speed = vel_horizontal.length()
+	if is_crouching:
+		max_speed = MAX_SPEED * CROUCH_SPEED_MODIFIER
+	else:
+		max_speed = MAX_SPEED
 	var add_speed = clamp(max_speed - current_speed, 0.0, ACCEL_RATE * delta)
 
-	if is_dashing or is_sliding:
+	if is_dashing:
 		vel_horizontal = input_dir * max_speed
+	elif is_crouching:
+		vel_horizontal += input_dir * add_speed
 	else:
 		vel_horizontal += input_dir * add_speed
 
@@ -267,8 +287,6 @@ func _physics_process(delta):
 	# Bonus speed
 	if is_dashing:
 		internal_bonus_speed = DASH_SPEED
-	elif is_sliding:
-		internal_bonus_speed = SLIDE_SPEED
 	else:
 		if is_on_floor():
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 9)
@@ -293,17 +311,26 @@ func _physics_process(delta):
 	var gun_sway_velocity = velocity * transform.basis
 	if not is_swapping_gun:
 		gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
+		if is_dashing:
+			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z - (gun_sway_velocity.x / 250), delta * 10)
+		else:
+			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
 	camera_control(delta)
 
 func update_hud():
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
 	for i in range(current_gun.max_barrels):
 		var effect_ui = all_barrel_effect_ui.get_child(i)
-		if current_gun.get_node("Barrel").get_child(i).get_child_count() > 0:
-			var barrel: SpinBarrel = current_gun.get_node("Barrel").get_child(i).get_child(0)
-			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
-			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
-			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+		if current_gun.barrel_container.get_child_count() > i:
+			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
+			if barrel:
+				effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
+				effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
+				effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+			else:
+				effect_ui.get_node("Title").text = ""
+				effect_ui.get_node("Tag").text = ""
+				effect_ui.get_node("Desc").text = ""
 		else:
 			effect_ui.get_node("Title").text = ""
 			effect_ui.get_node("Tag").text = ""
@@ -319,7 +346,7 @@ func show_debug_label():
 	debug_label.text += "\nHSpeed: {0} u/s\nVSpeed: {1} u/s".format([h_speed, v_speed])
 	debug_label.text += "\nHeight from ground: {0}".format([snapped_height - 1.5])
 	debug_label.text += "\nOn ground: {0} | wall-cling: {1}".format([is_on_floor(), moving_toward_wall()])
-	debug_label.text += "\nIs dashing: {0} | Is sliding: {1}".format([is_dashing, is_sliding])
+	debug_label.text += "\nIs dashing: {0} | Is sliding: {1}".format([is_dashing, is_crouching])
 	debug_label.text += "\nAir jumps move_left: {0}".format([max_air_jump - current_air_jump_count])
 	debug_label.text += "\nCoyote jump: {0}".format([can_coyote_jump])
 	#debug_label.text += "\nUsing gun: {0}".format([gun_container.get_child(current_gun_slot).data.name])
@@ -327,12 +354,12 @@ func show_debug_label():
 
 func jump(multiplier = 1.0):
 	vel_vertical = JUMP_FORCE * multiplier
-	
+
 	jumped = true
 	state_chart.send_event("jump")
 	is_dashing = false
-	is_sliding = false
-	
+	is_crouching = false
+
 	if is_on_floor():
 		SoundManager.play_sound_with_pitch(
 			sfx_jump_ground.pick_random(), randf_range(0.8, 1.1), "SFX"
@@ -352,8 +379,13 @@ func stun(time: float) -> void:
 	dash_disabled = false
 
 
-func spin_reload():
+func spin_reload() -> void:
+	current_gun.spin_all_barrels()
+
+
+func no_spin_reload() -> void:
 	current_gun.reload()
+
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
@@ -373,7 +405,7 @@ func camera_control(delta):
 			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
 
 	# Lower camera
-	if is_sliding:
+	if is_crouching:
 		neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
 	else:
 		neck.position.y = lerp(neck.position.y, 0.0, delta * 5)
@@ -400,10 +432,10 @@ func _on_grounded_state_input(event: InputEvent):
 		jump()
 
 func _on_grounded_state_physics_processing(_delta: float):
-	if Input.is_action_pressed("crouch") and raw_input_dir != Vector2.ZERO:
-		is_sliding = true
-	else:
-		is_sliding = false
+		if Input.is_action_pressed("crouch"):
+			is_crouching = true
+		else:
+			is_crouching = false
 
 
 func _on_airborne_state_input(event: InputEvent):
@@ -416,7 +448,7 @@ func _on_airborne_state_input(event: InputEvent):
 
 
 func _on_airborne_state_entered() -> void:
-	is_sliding = false
+	is_crouching = false
 	if not jumped:
 		coyote_timer.start()
 		can_coyote_jump = true
@@ -428,8 +460,8 @@ func _on_airborne_state_physics_processing(delta: float) -> void:
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	if Input.is_action_just_pressed("crouch"):
 		ground_slam()
-	#if moving_toward_wall() and can_wall_cling:
-		#state_chart.send_event("wallcling")
+	if moving_toward_wall() and can_wall_cling:
+		state_chart.send_event("wallcling")
 
 
 func moving_toward_wall() -> bool:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=46 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -42,7 +42,6 @@
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="33_rnf52"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="34_nkrfy"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="35_efay1"]
-[ext_resource type="AudioStream" uid="uid://b4k4hf58sg3a2" path="res://src/bosses/base/assets/sfx/temp/Hit 7.mp3" id="36_logat"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2tbsr"]
 radius = 1.2
@@ -91,11 +90,12 @@ sfx_defense = ExtResource("27_uykih")
 base_movespeed = 10
 behind_bar_move_points = Array[AudioStream]([])
 sfx_jump = Array[AudioStream]([ExtResource("18_nhb38")])
+boss_id = 4
 chip_spawn_chance = 0.3
 chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("15_817ob")
 sfx_awaken = ExtResource("26_lq1hd")
-sfx_hit = Array[AudioStream]([ExtResource("31_a4u5n"), ExtResource("32_vtq3o"), ExtResource("33_rnf52"), ExtResource("34_nkrfy"), ExtResource("35_efay1"), ExtResource("36_logat")])
+sfx_hit = Array[AudioStream]([ExtResource("31_a4u5n"), ExtResource("32_vtq3o"), ExtResource("33_rnf52"), ExtResource("34_nkrfy"), ExtResource("35_efay1")])
 sfx_death = ExtResource("31_7cmfq")
 sfx_telegraph = ExtResource("13_a7i4i")
 telegraph_time = 1.0

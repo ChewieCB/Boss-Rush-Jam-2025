@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://svhksvvubbk2"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_hdy56"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="7_cyvoe"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="8_0g13t"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/damage_shred_stack_effect.gd" id="9_xm7rq"]
+
+[node name="DebugTagAndShredBarrel" type="Node3D"]
+script = ExtResource("1_hdy56")
+barrel_id = 11
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="TagAndShred" type="Node3D" parent="EffectContainer"]
+script = ExtResource("7_cyvoe")
+display_text_title = "Tag n Shred"
+display_text_tag = "Wear them down"
+display_text_desc = "-50% damage
++1 damage per projectile hit"
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/TagAndShred"]
+script = ExtResource("8_0g13t")
+attribute = 1
+modify_value = -50.0
+is_perc = true
+
+[node name="DamageShred" type="Node3D" parent="EffectContainer/TagAndShred"]
+script = ExtResource("9_xm7rq")
+flat_damage_bonus = 1

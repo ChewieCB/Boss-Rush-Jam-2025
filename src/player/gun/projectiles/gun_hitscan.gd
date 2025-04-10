@@ -70,12 +70,12 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 	# Normal hitscan start here
 	life_timer.start()
-	var rand_damage_mod := int(randf_range(-_damage/3, _damage/3))
+	var rand_damage_mod = int(randf_range(-_damage / 3.0, _damage / 3.0))
 	damage = _damage + rand_damage_mod
 	speed = _speed
 	ricochet_count_left = ricochet_count
 	max_range = _max_range
-	raycast.target_position.z = -abs(_max_range)
+	raycast.target_position.z = - abs(_max_range)
 	self.look_at_from_position(start_pos, start_pos + current_dir * _max_range, Vector3.UP)
 
 	await get_tree().physics_frame
@@ -96,11 +96,12 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			if target is Shield:
 				target.impact(self.global_position)
 				target.health_component.damage(damage)
-			elif target is RouletteBall or target is PitTurret:
+			elif "health_component" in target:
 				target.health_component.damage(damage)
 			elif target is BartenderBottle:
 				target.call_deferred("queue_free")
 			create_spark(hitscan_col_point, hitscan_col_normal)
+			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
 		if ricochet_count_left > 0:
 			ricochet()
 	else:
@@ -121,7 +122,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 
 func ricochet():
-	super()
+	super ()
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	found_hitscal_col = false
 	var new_hitscan_inst: GunHitscan = self.duplicate()

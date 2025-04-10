@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://ufux7krj0yjo"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_on2xb"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/speed_burst_effect.gd" id="3_1nalf"]
+
+[node name="DebugEmpoweredDashBarrel" type="Node3D"]
+script = ExtResource("1_on2xb")
+barrel_id = 11
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="EmpoweredDash" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_1nalf")
+bonus_dash_speed_perc = 100.0
+display_text_title = "Empowered Dash"
+display_text_tag = "Shoot n Dash!"
+display_text_desc = "+100% dash speed after shot"

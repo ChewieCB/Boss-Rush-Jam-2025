@@ -19,8 +19,8 @@ var desired_height: float = DESIRED_HEIGHT
 @export var DROP_FACTOR: float = 1.0
 var drop_factor: float = DROP_FACTOR
 @export_subgroup("Orbiting")
-@export var angle_speed: float = 1.0  # radians/second
-@export var orbit_angle: float = 0.0  # track this over time
+@export var angle_speed: float = 1.0 # radians/second
+@export var orbit_angle: float = 0.0 # track this over time
 @export var orbit_radius: float = 20.0
 
 @export_group("Attacks")
@@ -29,11 +29,11 @@ var next_attack: String
 var next_attack_idx: int
 var next_attack_texture: Texture
 ## Determines how long the slots roll for
-@export var SLOT_TICKS: int = 20  
+@export var SLOT_TICKS: int = 20
 var slot_ticks: int = SLOT_TICKS
 # SFX
-@export var sfx_slot_roll_long: AudioStream  # For phase 1
-@export var sfx_slot_roll_short: AudioStream  # For phase 2
+@export var sfx_slot_roll_long: AudioStream # For phase 1
+@export var sfx_slot_roll_short: AudioStream # For phase 2
 @export var sfx_slot_roll_ding: AudioStream
 @export var sfx_slot_roll_coins: AudioStream
 @export var sfx_slot_pick_coin: AudioStream
@@ -42,10 +42,10 @@ var slot_ticks: int = SLOT_TICKS
 @export var sfx_slot_pick_diamond: AudioStream
 @export var sfx_slot_pick_cherry: AudioStream
 @onready var sfx_slot_picks: Array[AudioStream] = [
-	sfx_slot_pick_coin, 
-	sfx_slot_pick_bell, 
-	sfx_slot_pick_bar, 
-	sfx_slot_pick_diamond, 
+	sfx_slot_pick_coin,
+	sfx_slot_pick_bell,
+	sfx_slot_pick_bar,
+	sfx_slot_pick_diamond,
 	sfx_slot_pick_cherry
 ]
 
@@ -122,14 +122,14 @@ var charge_locked: bool = false
 
 
 func activate() -> void:
-	super()
+	super ()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	state_chart.send_event("start_phase_1")
 
 
 func _physics_process(delta: float) -> void:
-	super(delta)
+	super (delta)
 	projectile_marker_pivot.look_at(target.global_position)
 	slot_icons_parent.look_at(target.global_position)
 	
@@ -183,19 +183,19 @@ func select_attack_phase_2() -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super(new_health, prev_health)
+	super (new_health, prev_health)
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
 
 func _on_died() -> void:
-	super()
+	super ()
 	anim_player.stop()
 	set_physics_process(false)
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
 
-func _on_hurtbox_body_entered(body: Node3D) -> void:
+func _on_hurtbox_body_entered(_body: Node3D) -> void:
 	pass
 
 
@@ -270,7 +270,7 @@ func _on_spin_slots_spinning_state_entered() -> void:
 	for i in range(slot_ticks):
 		for slot_sprite in slot_icons_parent.get_children():
 			var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
-			var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size() - 1) 
+			var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size() - 1)
 			slot_sprite.texture = slot_icons[new_idx]
 			#for decal in slot_decals:
 				#decal.mesh.material.albedo_texture = slot_icons[new_idx]
@@ -281,7 +281,7 @@ func _on_spin_slots_spinning_state_entered() -> void:
 			for j in range(i, slot_icons_parent.get_child_count()):
 				var slot_sprite = slot_icons_parent.get_child(j)
 				var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
-				var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size()) 
+				var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size())
 				slot_sprite.texture = slot_icons[new_idx]
 	
 	#for decal in slot_decals:
@@ -310,14 +310,14 @@ func _on_spin_slots_recover_state_entered() -> void:
 # 3 Coins on rollers
 # Rapid fire coin projectiles 
 
-func fire_projectile(projectile_scene: PackedScene) -> BaseProjectile:
+func fire_projectile(_projectile_prefab: PackedScene) -> BaseProjectile:
 	var _sfx_player = get_available_sfx_player()
 	if not _sfx_player:
 		# TODO - error handling
 		pass
 	_sfx_player.stream = sfx_coin_shot.pick_random()
 	_sfx_player.play()
-	var projectile := projectile_scene.instantiate()
+	var projectile := _projectile_prefab.instantiate()
 	get_tree().root.get_child(2).add_child(projectile)
 	projectile.global_position = projectile_spawn_marker.global_position
 	projectile.look_at(target.global_position, Vector3.UP)
@@ -369,9 +369,9 @@ func _on_coin_projectiles_recover_state_entered() -> void:
 # Single large AoE bell drops from ceiling
 func drop_shadow(
 	target_pos: Vector3,
-	max_radius: float, 
-	drop_time: float = 3.5, 
-	callback: Callable = func(): pass
+	max_radius: float,
+	drop_time: float = 3.5,
+	_callback: Callable = func(): pass
 ) -> void:
 	var debug_mesh_instance = MeshInstance3D.new()
 	var mesh = CylinderMesh.new()
@@ -385,9 +385,9 @@ func drop_shadow(
 	# Snap to floor
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
-		target_pos, 
+		target_pos,
 		target_pos - Vector3(0, 100, 0),
-		pow(2, 1-1) + pow(2, 7-1)
+		int(pow(2, 1 - 1) + pow(2, 7 - 1))
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
@@ -401,8 +401,8 @@ func drop_shadow(
 	mesh.material = drop_shadow_material
 	
 	var shadow_tween = get_tree().create_tween()
-	shadow_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", max_radius, drop_time)#.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
-	shadow_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", max_radius, drop_time)#.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	shadow_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", max_radius, drop_time) # .set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	shadow_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", max_radius, drop_time) # .set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
 	shadow_tween.tween_callback(debug_mesh_instance.queue_free)
 	shadow_tween.tween_callback(spawn_bell.bind(target_pos, max_radius))
 
@@ -410,9 +410,9 @@ func drop_shadow(
 func spawn_bell(pos: Vector3, size: float) -> void:
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
-		pos, 
+		pos,
 		pos + Vector3(0, 400, 0),
-		pow(2, 1-1),
+		int(pow(2, 1 - 1)),
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
@@ -534,7 +534,7 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 		target.health_component.damage(swipe_damage)
 		hurtbox.set_deferred("monitoring", false)
 		# TODO - fix this knockback
-		var knockback_vector = -self.global_basis.z * swipe_knockback
+		var knockback_vector = - self.global_basis.z * swipe_knockback
 		target.velocity.x = 0
 		target.velocity.z = 0
 		target.velocity += knockback_vector
@@ -544,12 +544,12 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 		# Make sure we don't dodge into a wall
 		var space_state = get_world_3d().direct_space_state
 		var dodge_collisions = []
-		for angle in [0, PI/2, PI, 3 * PI/2]:
+		for angle in [0, PI / 2, PI, 3 * PI / 2]:
 			dodge_vector = dodge_vector.rotated(Vector3.UP, angle)
 			var query = PhysicsRayQueryParameters3D.create(
-				self.global_position, 
+				self.global_position,
 				self.global_position + dodge_vector,
-				pow(2, 1-1) + pow(2, 7-1)
+				int(pow(2, 1 - 1) + pow(2, 7 - 1))
 			)
 			var result = space_state.intersect_ray(query)
 			if result:
@@ -620,7 +620,7 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Shooting"
 	# Fire out projctiles in a spiral, each projectile homes in on the player
 	for i in range(diamond_shots_per_attack):
-		await get_tree().create_timer(diamond_shot_time/diamond_shots_per_attack).timeout
+		await get_tree().create_timer(diamond_shot_time / diamond_shots_per_attack).timeout
 		var _sfx_player = get_available_sfx_player()
 		_sfx_player.stream = sfx_diamond_shot.pick_random()
 		_sfx_player.play()
@@ -665,11 +665,11 @@ func _on_charge_targeting_state_physics_processing(delta: float) -> void:
 	if not charge_locked:
 		var space_state = get_world_3d().direct_space_state
 		var query = PhysicsRayQueryParameters3D.create(
-			self.global_position, 
+			self.global_position,
 			target.global_position,
-			pow(2, 1-1) + pow(2, 2-1) + pow(2, 7-1)
+			int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 7 - 1))
 		)
-		var result =  space_state.intersect_ray(query)
+		var result = space_state.intersect_ray(query)
 		
 		if self.global_position.distance_to(target.global_position) >= min_charge_distance:
 			if result == null or result.collider == target:
@@ -704,7 +704,7 @@ func _on_charge_collision(body: Node3D) -> void:
 		hurtbox.body_entered.disconnect(_on_charge_collision)
 		hurtbox.set_deferred("monitoring", false)
 
-func _on_charge_charging_state_physics_processing(delta: float) -> void:
+func _on_charge_charging_state_physics_processing(_delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, 0.05)
 	velocity.z = lerp(velocity.z, 0.0, 0.05)
 
@@ -745,7 +745,7 @@ func _on_cherry_bombs_targeting_state_entered() -> void:
 	state_chart.send_event("attack_buildup")
 
 
-func _on_cherry_bombs_targeting_state_physics_processing(delta: float) -> void:
+func _on_cherry_bombs_targeting_state_physics_processing(_delta: float) -> void:
 	if self.global_position.distance_to(target.global_position) <= max_drop_distance:
 		state_chart.send_event("start_dropping_bombs")
 
@@ -772,7 +772,7 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 		projectile.fuse_time = bomb_fuse_time
 		get_parent().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
-		projectile.global_rotation.y = self.global_rotation.y + (PI/8 * dir_counter)
+		projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * dir_counter)
 		projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
 		
 		dir_counter += 1

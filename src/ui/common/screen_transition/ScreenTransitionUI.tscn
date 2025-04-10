@@ -1,0 +1,94 @@
+[gd_scene load_steps=5 format=3 uid="uid://b7ohf7acd1iqu"]
+
+[ext_resource type="Script" path="res://src/ui/common/screen_transition/screen_transition_ui.gd" id="1_8ukgo"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/halftone_directional_transition.gdshader" id="1_a1e2b"]
+[ext_resource type="Texture2D" uid="uid://ccn08me1il1m4" path="res://src/ui/main_menu/bg2.png" id="3_c4553"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xokkb"]
+shader = ExtResource("1_a1e2b")
+shader_parameter/transparent_dots = false
+shader_parameter/AspectRatio = 1.0
+shader_parameter/Dots = 10.0
+shader_parameter/_min = 0.0
+shader_parameter/_max = 1.0
+shader_parameter/transition_angle = 0.0
+shader_parameter/height = 1.0
+shader_parameter/scroll_speed = 0.3
+shader_parameter/angle_degrees = 90.0
+shader_parameter/repeat_x = 2.0
+shader_parameter/repeat_y = 2.0
+shader_parameter/row_offset = 1.0
+shader_parameter/texture_to_scroll = ExtResource("3_c4553")
+
+[node name="TransitionUI" type="CanvasLayer"]
+process_mode = 3
+process_priority = -1
+layer = 2
+script = ExtResource("1_8ukgo")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI"]
+material = SubResource("ShaderMaterial_xokkb")
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -1000.0
+offset_top = -1000.0
+offset_right = 1000.0
+offset_bottom = 1000.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(1000, 1000)
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -202.0
+offset_top = 54.0
+offset_right = 202.0
+offset_bottom = 78.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = -8
+
+[node name="LoadingLabel" type="Label" parent="UI/ColorRect/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.20871, 0.20871, 0.20871, 1)
+theme_override_font_sizes/font_size = 128
+text = "Loading"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="UI/ColorRect/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+value = 60.0
+show_percentage = false
+
+[node name="LoadingDetailLabel" type="Label" parent="UI/ColorRect/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "re-re-re-re-re-re-re-reticulating splines"
+horizontal_alignment = 1

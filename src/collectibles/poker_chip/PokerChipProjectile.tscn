@@ -1,8 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://b3x1bn1jpkwjo"]
+[gd_scene load_steps=16 format=3 uid="uid://b3x1bn1jpkwjo"]
 
 [ext_resource type="Script" path="res://src/collectibles/poker_chip/poker_chip_projectile.gd" id="1_1s0ep"]
-[ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="2_u6yr2"]
+[ext_resource type="Texture2D" uid="uid://bvw52w4qxdtyx" path="res://src/collectibles/poker_chip/assets/chip_white.png" id="2_1g755"]
+[ext_resource type="AudioStream" uid="uid://6n3s0ojha33v" path="res://src/collectibles/poker_chip/assets/sfx/PICKING UP CHIPS.mp3" id="2_td1fs"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_12jep"]
+[ext_resource type="Texture2D" uid="uid://dlmpay1afw5o8" path="res://src/collectibles/poker_chip/assets/chip_red.png" id="3_soabj"]
+[ext_resource type="Texture2D" uid="uid://bssyw0bap2iux" path="res://src/collectibles/poker_chip/assets/chip_blue.png" id="4_c5koj"]
+[ext_resource type="Texture2D" uid="uid://b4atouetg5pla" path="res://src/collectibles/poker_chip/assets/chip_green.png" id="5_nd3i0"]
+[ext_resource type="Texture2D" uid="uid://pgkke4lg1qx7" path="res://src/collectibles/poker_chip/assets/chip_black.png" id="6_pkt8q"]
+[ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="9_gmasi"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ipprj"]
 friction = 0.4
@@ -11,14 +17,14 @@ bounce = 0.6
 [sub_resource type="SphereShape3D" id="SphereShape3D_npndf"]
 radius = 0.475438
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_ib1tb"]
-radius = 10.0
+[sub_resource type="SphereShape3D" id="SphereShape3D_mxqef"]
+radius = 5.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_id061"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l3f1v"]
 transparency = 1
-albedo_color = Color(1, 0.766048, 0, 0.713726)
+albedo_color = Color(0.992257, 1, 0.923056, 0.713726)
 emission_enabled = true
-emission = Color(1, 0.731834, 0.032858, 1)
+emission = Color(1, 1, 1, 1)
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_ubspx"]
 
@@ -28,13 +34,30 @@ point_count = 2
 
 [node name="PokerChipProjectile" type="RigidBody3D"]
 collision_layer = 16
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
 physics_material_override = SubResource("PhysicsMaterial_ipprj")
 script = ExtResource("1_1s0ep")
+sprite_array = Array[Texture2D]([ExtResource("2_1g755"), ExtResource("3_soabj"), ExtResource("4_c5koj"), ExtResource("5_nd3i0"), ExtResource("6_pkt8q")])
+sfx_pickup = Array[AudioStream]([ExtResource("2_td1fs")])
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
-billboard = 1
-texture = ExtResource("2_u6yr2")
+texture = ExtResource("3_soabj")
+
+[node name="Label3D" type="Label3D" parent="Sprite3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.061468)
+pixel_size = 0.015
+text = "5"
+font_size = 100
+
+[node name="Label3D2" type="Label3D" parent="Sprite3D"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, -0.0563511)
+pixel_size = 0.015
+text = "5"
+font_size = 100
+outline_size = 30
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_npndf")
@@ -44,17 +67,22 @@ collision_layer = 0
 collision_mask = 34
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PickupArea"]
-shape = SubResource("SphereShape3D_ib1tb")
+shape = SubResource("SphereShape3D_mxqef")
 
 [node name="Trail" type="Node3D" parent="."]
 
 [node name="Trail3D" type="MeshInstance3D" parent="Trail"]
 top_level = true
-material_override = SubResource("StandardMaterial3D_id061")
+material_override = SubResource("StandardMaterial3D_l3f1v")
 mesh = SubResource("ImmediateMesh_ubspx")
 script = ExtResource("3_12jep")
 segments = 10
 base_width = 0.1
 width_profile = SubResource("Curve_3o5j5")
+
+[node name="Shadow" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -0.437256, 0)
+modulate = Color(0, 0, 0, 0.431373)
+texture = ExtResource("9_gmasi")
 
 [connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]

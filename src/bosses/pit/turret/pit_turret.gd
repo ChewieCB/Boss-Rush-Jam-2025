@@ -58,21 +58,21 @@ func destroy() -> void:
 
 func rotate_and_elevate(delta: float, target_pos: Vector3) -> void:
 	# Project the target onto the XZ plane of the turret
-	# but first adjust by the global position because 
+	# but first adjust by the global position because
 	# the global basis is purely orientation, not position.
 	var rotation_targ: Vector3 = get_projected(
-		target_pos - body.global_position, 
+		target_pos - body.global_position,
 		body.global_basis.y
 	)
 	# We also need to account for changes in position,
 	# so add the global position adjustment back in.
 	rotation_targ = rotation_targ + body.global_position
-	
+
 	# Get the angle from the body's facing direction (z) to the projected point.
 	# Since the point is projected onto the plane, this should be the angle
 	# the body should rotate to face along only one axis.
 	var y_angle: float = get_angle_to_target(
-		body.global_position, 
+		body.global_position,
 		rotation_targ,
 		body.global_basis.z
 	)
@@ -81,21 +81,21 @@ func rotate_and_elevate(delta: float, target_pos: Vector3) -> void:
 	# Calculate step size and direction. Use min to avoid over-rotating.
 	var final_y: float = rotation_sign * min(rotation_speed * delta, y_angle)
 	body.rotate_y(final_y)
-	
+
 	# Elevation
 	var elevation_targ: Vector3 = get_projected(
-		target_pos - head.global_position, 
+		target_pos - head.global_position,
 		head.global_basis.x
 	)
 	elevation_targ = elevation_targ + head.global_position
-	
+
 	var x_angle: float = get_angle_to_target(
-		head.global_position, 
+		head.global_position,
 		elevation_targ,
 		head.global_basis.z
 	)
-	
-	var elevation_sign = -sign(head.to_local(target_pos).y)
+
+	var elevation_sign = - sign(head.to_local(target_pos).y)
 	var final_x: float = elevation_sign * min(elevation_speed * delta, x_angle)
 	head.rotate_x(final_x)
 
@@ -132,19 +132,19 @@ func _on_standard_attack_targeting_state_physics_processing(_delta: float) -> vo
 
 func _on_standard_attack_firing_state_entered() -> void:
 	debug_state_label.text = "Standard Attack | Firing"
-	
+
 	for i in projectiles_per_attack:
 		await get_tree().create_timer(delay_per_projectile).timeout
-		for spawn in projectile_spawns:
+		for proj_spawn in projectile_spawns:
 			var projectile: TestProjectile = projectile_scene.instantiate()
 			get_parent().get_parent().add_child(projectile)
-			projectile.global_position = spawn.global_position
+			projectile.global_position = proj_spawn.global_position
 			projectile.look_at(target.global_position)
 			projectile.projectile_speed = 42.0
 			var _sfx_player = get_available_sfx_player()
 			_sfx_player.stream = sfx_turret_shot.pick_random()
 			_sfx_player.play()
-	
+
 	await get_tree().create_timer(delay_per_projectile).timeout
 	state_chart.send_event("stop_firing")
 
@@ -154,7 +154,7 @@ func _on_standard_attack_recovering_state_entered() -> void:
 	elevation_speed = deg_to_rad(elevation_speed_deg / 2)
 	await get_tree().create_timer(0.6).timeout
 	state_chart.send_event("end_recovery")
-	
+
 
 func _on_standard_attack_recovering_state_exited() -> void:
 	elevation_speed = deg_to_rad(elevation_speed_deg)
@@ -162,18 +162,21 @@ func _on_standard_attack_recovering_state_exited() -> void:
 
 func _on_health_component_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
-		await get_tree().create_timer(0.05).timeout
-		dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
+		if get_tree():
+			dome_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
+			await get_tree().create_timer(0.05).timeout
+			dome_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
 
 
 func _on_health_component_died() -> void:
+	if get_tree() == null:
+		return
 	sfx_player.stream = sfx_turret_death.pick_random()
 	sfx_player.play()
 	var explosion_vfx = explosion_scene.instantiate()
 	get_tree().get_root().add_child(explosion_vfx)
 	explosion_vfx.global_position = self.global_position
-	
+
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "scale", Vector3.ZERO, 0.4).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(destroyed.emit.bind(self))
@@ -185,7 +188,7 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 		if player.playing:
 			continue
 		return player
-	
+
 	var players_ending_soon = sfx_players.duplicate()
 	players_ending_soon.sort_custom(
 		func(a, b):
@@ -197,5 +200,5 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 	)
 	var fallback_player: AudioStreamPlayer3D = players_ending_soon.front()
 	fallback_player.stop()
-	
+
 	return fallback_player

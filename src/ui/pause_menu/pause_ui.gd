@@ -21,7 +21,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			return_to_pause_menu()
 		else:
 			SoundManager.play_button_click_sfx()
-			GameManager.player.inventory_ui.close()
+			# TODO - fix this to be generic across all inventory UIs
+			#GameManager.player.inventory_ui.close()
 			is_paused = not is_paused
 			get_tree().paused = is_paused
 			visible = is_paused
@@ -45,17 +46,35 @@ func _on_setting_button_pressed() -> void:
 
 func _on_lobby_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
-	get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn")
+	#ScreenTransition.transition_out()
+	#await ScreenTransition.transition_finished
+	# TODO - background loading here
+	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	LoadingHandler.start_loading("Lobby")
+
+
+func _on_main_menu_button_pressed() -> void:
+	SoundManager.play_button_click_sfx()
+	if GameManager.chosen_slot_id != -1:
+		GameManager.update_total_playtime()
+		await SaveManager.save_game(GameManager.chosen_slot_id)
+	GameManager.reset_current_save_data()
+	SaveManager.save_data_is_loaded = false
+	
+	#ScreenTransition.transition_out()
+	#await ScreenTransition.transition_finished
+	## TODO - background loading here
+	LoadingHandler.current_scene_path = "res://src/ui/main_menu/MainMenu.tscn"
+	LoadingHandler.start_loading("Main Menu")
 
 
 func _on_exit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
+	if GameManager.chosen_slot_id != -1:
+		GameManager.update_total_playtime()
+		await SaveManager.save_game(GameManager.chosen_slot_id)
 	get_tree().quit()
 
 
-func _on_exit_button_mouse_entered() -> void:
-	SoundManager.play_button_hover_sfx()
-
-
-func _on_setting_button_mouse_entered() -> void:
+func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()

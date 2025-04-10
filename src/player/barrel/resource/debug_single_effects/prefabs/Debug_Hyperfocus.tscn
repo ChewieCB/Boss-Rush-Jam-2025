@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://d4cog6eokeoxw"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_vhtko"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="6_w64jl"]
+
+[node name="DebugHyperfocusBarrel" type="Node3D"]
+script = ExtResource("1_vhtko")
+barrel_id = 6
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("6_w64jl")
+modify_perc_spread_stationary = -50.0
+modify_perc_damage_stationary = 25.0
+modify_perc_spread_moving = 100.0
+modify_perc_damage_moving = -25.0
+display_text_title = "Hyperfocus"
+display_text_tag = "Take position and start blasting!"
+display_text_desc = "-50% spread, +25% damage when stationary
++100% spread, -25% damage when moving"

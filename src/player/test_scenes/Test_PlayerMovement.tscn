@@ -1,13 +1,14 @@
-[gd_scene load_steps=22 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=24 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
+[ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
 [ext_resource type="PackedScene" uid="uid://d0uqv7xitfwnt" path="res://src/player/test_scenes/Dummy.tscn" id="2_lrk4j"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="3_g5u1p"]
 [ext_resource type="Resource" uid="uid://di2x3xsnfojlh" path="res://src/player/barrel/resource/archetype_railgun_spec_barrrel_data.tres" id="4_1w7yd"]
 [ext_resource type="Resource" uid="uid://dpcew656ofo1q" path="res://src/player/barrel/resource/archetype_shotgun_spec_barrrel_data.tres" id="4_bjy76"]
 [ext_resource type="Resource" uid="uid://yx1psxr1obhn" path="res://src/player/barrel/resource/projectile_count_barrel_data.tres" id="4_h0d4u"]
 [ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="5_bi1qm"]
-[ext_resource type="Resource" uid="uid://d2i2i2rrbo2v0" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="5_eqila"]
+[ext_resource type="Resource" uid="uid://ceo6ncflyswt2" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="5_eqila"]
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="6_1a2ul"]
 [ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel_data.tres" id="7_2srjf"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="7_lahx4"]
@@ -15,6 +16,7 @@
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="9_vb777"]
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="10_28dwd"]
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="12_2rf45"]
+[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/BulletDecal.tscn" id="17_n3wco"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -30,7 +32,7 @@ tonemap_mode = 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36m72"]
 transparency = 1
-albedo_color = Color(0.858824, 0.521569, 0.137255, 0.768627)
+albedo_color = Color(0.858824, 0.521569, 0.137255, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_oe1jg"]
 top_radius = 4.0
@@ -42,6 +44,7 @@ height = 4.0
 radius = 4.0
 
 [node name="TestPlayerMovement" type="Node3D"]
+script = ExtResource("1_ky5mp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
@@ -116,7 +119,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.38672, 0.952686, -11.856)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.74816, 10.3644)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175792, 10.3644)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 mesh = SubResource("CylinderMesh_oe1jg")
@@ -127,6 +130,9 @@ shape = SubResource("CylinderShape3D_63wrj")
 [node name="BarrelItemPickup" parent="." instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 0)
 data = ExtResource("4_bjy76")
+
+[node name="BarrelItemPickup12" parent="." instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9177, 0.599205, -1.038)
 
 [node name="BarrelItemPickup7" parent="." instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.9866, 0.599205, 0)
@@ -141,11 +147,11 @@ transform = Transform3D(0.999994, -0.000245996, 0.00340721, 0.000229993, 0.99998
 data = ExtResource("5_eqila")
 
 [node name="BarrelItemPickup8" parent="." instance=ExtResource("3_g5u1p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 1.65531)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 3.3006)
 data = ExtResource("7_lahx4")
 
 [node name="BarrelItemPickup9" parent="." instance=ExtResource("3_g5u1p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 3.09174)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 1.75342)
 data = ExtResource("8_4asxy")
 
 [node name="BarrelItemPickup10" parent="." instance=ExtResource("3_g5u1p")]
@@ -171,3 +177,6 @@ data = ExtResource("7_2srjf")
 [node name="Vendor" parent="." node_paths=PackedStringArray("player") instance=ExtResource("12_2rf45")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.7766, 0.00510705, -8.4)
 player = NodePath("../Player")
+
+[node name="BulletDecal" parent="." instance=ExtResource("17_n3wco")]
+transform = Transform3D(1, 0, 0, 0, 0.0971139, 0.995273, 0, -0.995273, 0.0971139, 0, 0.811173, 6.34857)

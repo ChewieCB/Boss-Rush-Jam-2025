@@ -1,70 +1,31 @@
 extends VBoxContainer
 
-@export var barrel_ui: TextureRect
-@export var button: Button
-@export var border_selected: NinePatchRect
+#signal select_item(item_ui: ItemUI, data: BarrelDataResource)
+
+@export var item_ui: ItemUI
 @export var price_icon: TextureRect
 @export var price_label: Label
 
-@export var sfx_click: AudioStream
-@export var sfx_purchase: AudioStream
-@export var sfx_too_expensive: AudioStream
-
-var data: BarrelDataResource
 var clicked_once: bool = false
 var is_disabled: bool = false:
 	set(value):
 		is_disabled = value
 		if is_disabled:
 			# Grey out the text and texture, disable the button
-			barrel_ui.modulate = Color.DIM_GRAY
+			item_ui.modulate = Color.DIM_GRAY
 			price_icon.modulate = Color.DIM_GRAY
 			price_label.modulate = Color.DIM_GRAY
-			#button.disabled = true
+			#item_ui.button.disabled = true
 		else:
 			# Grey out the text and texture, disable the button
-			barrel_ui.modulate = Color.WHITE
+			item_ui.modulate = Color.WHITE
 			price_icon.modulate = Color.WHITE
 			price_label.modulate = Color.WHITE
-			#button.disabled = false
-var is_purchased: bool = false:
-	set(value):
-		is_purchased = value
-		if is_purchased:
-			button.disabled = true
-			button.text = "Bought"
+			#item_ui.button.disabled = false
 
 
 func init(_data: BarrelDataResource, _is_purchased):
-	data = _data
-	is_purchased = _is_purchased
-	barrel_ui.texture = data.barrel_image
-	price_label.text = str(data.barrel_cost)
-
-
-func _on_button_pressed() -> void:
-	if not clicked_once:
-		SoundManager.play_ui_sound(sfx_click, "UI")
-		if (GameManager.player.inventory_ui.current_selected_item_ui != null):
-			GameManager.player.inventory_ui.current_selected_item_ui.unselected()
-		GameManager.player.inventory_ui.current_selected_item_ui = self
-		GameManager.player.inventory_ui.update_description(data.barrel_desc)
-		if not is_purchased:
-			if is_disabled:
-				button.text = "Not enough\nchips!"
-			else:
-				button.text = "Purchase?"
-		clicked_once = true
-		border_selected.visible = true
-	else:
-		is_purchased = GameManager.purchase_barrel(data)
-		if is_purchased:
-			SoundManager.play_ui_sound(sfx_purchase, "UI")
-		else:
-			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
-
-
-func unselected() -> void:
-	clicked_once = false
-	border_selected.visible = false
-	button.text = ""
+	item_ui.data = _data
+	item_ui.is_purchased = _is_purchased
+	item_ui.texture = item_ui.data.barrel_image
+	price_label.text = str(item_ui.data.barrel_cost)

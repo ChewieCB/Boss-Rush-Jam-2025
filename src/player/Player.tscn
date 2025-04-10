@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=66 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -31,18 +31,16 @@
 [ext_resource type="AudioStream" uid="uid://b5qhakfhohemg" path="res://src/player/assets/sfx/VOICE LINES/DEATH 4.mp3" id="10_mowd1"]
 [ext_resource type="AudioStream" uid="uid://ca0lxnf1w8ufu" path="res://src/player/assets/sfx/RUNNING/Running Individual 8.mp3" id="10_njsu2"]
 [ext_resource type="AudioStream" uid="uid://ds6ft76jc0nrp" path="res://src/player/assets/sfx/RUNNING/Running Individual 9.mp3" id="11_1jfcb"]
-[ext_resource type="AudioStream" uid="uid://bvncm3v3v2dq7" path="res://src/bosses/roulette/assets/sfx/Falling Death 1.wav" id="11_qp0vt"]
+[ext_resource type="AudioStream" uid="uid://ba8dhka0f20tw" path="res://src/bosses/roulette/assets/sfx/Falling Death 1.mp3" id="11_kmu77"]
 [ext_resource type="AudioStream" uid="uid://bf4cejah4dxaw" path="res://src/player/assets/sfx/RUNNING/Running Individual 10.mp3" id="12_8gaey"]
 [ext_resource type="AudioStream" uid="uid://wm873qkywncp" path="res://src/player/assets/sfx/RUNNING/Running Individual 11.mp3" id="13_hisam"]
 [ext_resource type="PackedScene" uid="uid://bjaq7wtuojgjb" path="res://src/ui/player/hurt_screen/HurtOverlay.tscn" id="14_meelg"]
 [ext_resource type="AudioStream" uid="uid://4qf6uf8inc1v" path="res://src/player/assets/sfx/RUNNING/Running Individual 12.mp3" id="14_rd2i6"]
 [ext_resource type="AudioStream" uid="uid://clrb5tuaish36" path="res://src/player/assets/sfx/RUNNING/Running Individual 13.mp3" id="15_w5gjb"]
-[ext_resource type="PackedScene" uid="uid://d2tb8ogqlaxhy" path="res://src/player/gun/BlankGun.tscn" id="16_1gnyn"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
 [ext_resource type="AudioStream" uid="uid://l2hmqeiq76ff" path="res://src/player/assets/sfx/RUNNING/Running Individual 14.mp3" id="16_tto8i"]
 [ext_resource type="PackedScene" uid="uid://dxau0o2083o1d" path="res://src/ui/player/PlayerHealthBarUI.tscn" id="19_n1ar7"]
 [ext_resource type="PackedScene" uid="uid://xtemm86x5ftx" path="res://src/ui/player/EffectDetailUI.tscn" id="20_ic8us"]
-[ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="22_qf5o4"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="23_xgmby"]
 [ext_resource type="AudioStream" uid="uid://bmdb3aap303b0" path="res://src/player/assets/sfx/CROUCH.mp3" id="26_skrud"]
 [ext_resource type="AudioStream" uid="uid://dckgsngjsbl02" path="res://src/player/assets/sfx/STAND.mp3" id="27_6gtc3"]
@@ -50,10 +48,13 @@
 [ext_resource type="AudioStream" uid="uid://cjcluk6lldawc" path="res://src/player/assets/sfx/JUMP IN AIR.mp3" id="29_xv6x8"]
 [ext_resource type="AudioStream" uid="uid://ckr1r101hscjl" path="res://src/player/assets/sfx/Floor Dash.mp3" id="30_on7sg"]
 [ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="31_pnqxi"]
-[ext_resource type="Shader" path="res://src/player/outline.gdshader" id="36_1ffwc"]
+[ext_resource type="Shader" path="res://src/player/assets/outline.gdshader" id="36_1ffwc"]
+[ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
+[ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
+[ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -106,7 +107,7 @@ collision_mask = 221
 script = ExtResource("1_rl0vi")
 sfx_hurt = Array[AudioStream]([ExtResource("2_cpvt1"), ExtResource("3_lb5n1"), ExtResource("4_broo0"), ExtResource("5_lkuup"), ExtResource("6_vqbwb")])
 sfx_dead = Array[AudioStream]([ExtResource("7_lluik"), ExtResource("8_h2aj6"), ExtResource("9_wamw4"), ExtResource("10_mowd1")])
-sfx_dead_falling = Array[AudioStream]([ExtResource("11_qp0vt")])
+sfx_dead_falling = Array[AudioStream]([ExtResource("11_kmu77")])
 sfx_movement_loop = ExtResource("2_5ndff")
 sfx_movement_steps = Array[AudioStream]([ExtResource("3_hiqt7"), ExtResource("4_a4xoc"), ExtResource("5_pg460"), ExtResource("6_320sy"), ExtResource("7_2he1w"), ExtResource("8_kw11m"), ExtResource("9_qmrha"), ExtResource("10_njsu2"), ExtResource("11_1jfcb"), ExtResource("12_8gaey"), ExtResource("13_hisam"), ExtResource("14_rd2i6"), ExtResource("15_w5gjb"), ExtResource("16_tto8i")])
 sfx_crouch = Array[AudioStream]([ExtResource("26_skrud")])
@@ -115,10 +116,8 @@ sfx_jump_ground = Array[AudioStream]([ExtResource("28_k5crr")])
 sfx_jump_air = Array[AudioStream]([ExtResource("29_xv6x8")])
 sfx_dash_floor = Array[AudioStream]([ExtResource("30_on7sg")])
 sfx_dash_air = Array[AudioStream]([ExtResource("31_pnqxi")])
-can_wall_jump = true
-can_wall_cling = true
 max_air_jump = 1
-aim_ray_prefab = ExtResource("5_dqbuo")
+speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
@@ -127,6 +126,7 @@ health_component = NodePath("HealthComponent")
 shape = SubResource("CapsuleShape3D_le58x")
 
 [node name="DebugMeshes" type="Node3D" parent="."]
+visible = false
 
 [node name="Body" type="MeshInstance3D" parent="DebugMeshes"]
 mesh = SubResource("CapsuleMesh_w3btf")
@@ -144,25 +144,25 @@ debug_shape_thickness = 5
 
 [node name="Neck" type="Node3D" parent="."]
 
-[node name="ShakeableCamera" type="Area3D" parent="Neck"]
+[node name="ShakeCameraWrapper" type="Area3D" parent="Neck"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.66, 0)
 script = ExtResource("3_cy2wl")
 noise = SubResource("FastNoiseLite_cda8p")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Neck/ShakeableCamera"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Neck/ShakeCameraWrapper"]
 shape = SubResource("BoxShape3D_sjjg0")
 
-[node name="Camera3D" type="Camera3D" parent="Neck/ShakeableCamera"]
+[node name="Camera3D" type="Camera3D" parent="Neck/ShakeCameraWrapper"]
 current = true
 fov = 90.0
 near = 0.02
 
-[node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeableCamera/Camera3D"]
+[node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.947067)
 extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_bbump")
 
-[node name="AimRecticle" type="TextureRect" parent="Neck/ShakeableCamera"]
+[node name="AimRecticle" type="TextureRect" parent="Neck/ShakeCameraWrapper"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -176,7 +176,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_ymis7")
 
-[node name="HitMarker" type="TextureRect" parent="Neck/ShakeableCamera"]
+[node name="HitMarker" type="TextureRect" parent="Neck/ShakeCameraWrapper"]
 modulate = Color(1, 0.979667, 0.39, 0)
 texture_filter = 1
 anchors_preset = 8
@@ -192,16 +192,16 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_nkt42")
 
-[node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
+[node name="GunContainer" type="Node3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
 
-[node name="BlankGun" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("16_1gnyn")]
+[node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("39_lhbas")]
 
-[node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
+[node name="AimRay" parent="Neck/ShakeCameraWrapper" instance=ExtResource("5_dqbuo")]
 collision_mask = 125
 collide_with_areas = true
 
-[node name="DebugLabel" type="Label" parent="Neck/ShakeableCamera"]
+[node name="DebugLabel" type="Label" parent="Neck/ShakeCameraWrapper"]
 visible = false
 offset_right = 40.0
 offset_bottom = 20.0
@@ -220,6 +220,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.27613, 0)
 texture_albedo = ExtResource("3_tgexf")
 
 [node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("41_63osp")
 
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
 visible = false
@@ -319,8 +320,6 @@ layout_mode = 2
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
 
-[node name="InventoryUI" parent="UI" instance=ExtResource("22_qf5o4")]
-
 [node name="CurrencyUI" parent="UI" instance=ExtResource("23_xgmby")]
 
 [node name="BossSpecialDialog" type="Control" parent="UI"]
@@ -360,7 +359,7 @@ text = "I WILL LIT THE WHOLE FLOOR ON FIRE!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Shader" type="TextureRect" parent="UI/BossSpecialDialog"]
+[node name="OldMovieShader" type="TextureRect" parent="UI/BossSpecialDialog"]
 material = SubResource("ShaderMaterial_wp8dr")
 layout_mode = 1
 anchors_preset = 15
@@ -369,6 +368,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("47_yr3ov")
+
+[node name="SavingIndicator" type="Label" parent="UI"]
+visible = false
+offset_left = 8.0
+offset_top = 1024.0
+offset_right = 117.0
+offset_bottom = 1073.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "Saving..."
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")

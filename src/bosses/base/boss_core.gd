@@ -1,8 +1,22 @@
 extends CharacterBody3D
 class_name BossCore
 
+## Emit when boss HP drop to 0.
+signal died
+## Emit after collected the barrel, 
+## or same time as `died` signal if already collected.
 signal defeated(boss: BossCore)
 
+enum BossIdEnum {
+	NONE,
+	BASE,
+	SLOTS,
+	ROULETTE,
+	BARTENDER,
+	PIT
+}
+
+@export var boss_id: BossIdEnum
 @export var chip_scene: PackedScene
 @export var chip_spawn_chance: float = 0.4
 @export var chip_spawn_force: float = 700.0
@@ -138,8 +152,8 @@ func hide_health() -> void:
 func _turn_towards_target(speed: float, delta: float) -> void:
 	var direction: Vector3 = self.global_position.direction_to(target.global_position)
 	self.rotation.y = lerp_angle(
-		self.rotation.y,atan2(
-			-direction.x, -direction.z
+		self.rotation.y, atan2(
+			- direction.x, -direction.z
 		),
 		delta * speed
 	)
@@ -164,13 +178,13 @@ func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInst
 	material.albedo_color = color
 	material.flags_unshaded = true
 	sphere.surface_set_material(0, material)
-	
+
 	# Add to meshinstance in the right place.
 	var node = MeshInstance3D.new()
 	node.mesh = sphere
 	node.global_transform.origin = location
 	scene_root.add_child(node)
-	
+
 	return node
 
 
@@ -179,7 +193,7 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 		if player.playing:
 			continue
 		return player
-	
+
 	var players_ending_soon = sfx_players.duplicate()
 	players_ending_soon.sort_custom(
 		func(a, b):
@@ -191,7 +205,7 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 	)
 	var fallback_player: AudioStreamPlayer3D = players_ending_soon.front()
 	fallback_player.stop()
-	
+
 	return fallback_player
 
 
@@ -202,11 +216,11 @@ func drop_barrel() -> void:
 		# If we don't have a barrel to spawn, emit the signal to end the level
 		defeated.emit(self)
 		return
-	
+
 	# Instance a pickup object with the barrel data
 	var barrel = barrel_pickup_scene.instantiate()
 	barrel.data = barrel_to_drop
-	
+
 	# Calculate a path for the barrel to move
 	var collider_height: float
 	if collider.shape is SphereShape3D:
@@ -215,48 +229,48 @@ func drop_barrel() -> void:
 		collider_height = collider.shape.height
 	var start_pos: Vector3 = self.global_position + Vector3(0, collider_height / 2, 0)
 	var goal_pos: Vector3 = start_pos.lerp(target.global_position, 0.7)
-	
+
 	# Snap to floor
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
-		goal_pos, 
+		goal_pos,
 		goal_pos - Vector3(0, 100, 0),
-		pow(2, 1-1) + pow(2, 7-1)
+		int(pow(2, 1 - 1) + pow(2, 7 - 1))
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
 		goal_pos.y = result.position.y + 1.5
-	
+
 	# Generate path to follow
 	var path = Path3D.new()
 	var curve = Curve3D.new()
 	var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5) + Vector3(0, 5.0, 0)
-	
+
 	#draw_debug_sphere(start_pos, 0.5, Color.GREEN)
 	#draw_debug_sphere(goal_pos, 0.5, Color.YELLOW)
 	#draw_debug_sphere(mid_point, 0.5, Color.ORANGE)
 	#draw_debug_sphere(target.global_position, 0.5, Color.RED)
-	
+
 	# Calculate bezier control points
 	var out_0 = (mid_point - start_pos) * 0.6667
 	var in_1 = (mid_point - goal_pos) * 0.6667
 	curve.add_point(start_pos, Vector3.ZERO, out_0)
 	curve.add_point(goal_pos, in_1, Vector3.ZERO)
 	path.curve = curve
-	
+
 	# Add the path to the scene
 	var scene_root = get_tree().root.get_children()[0]
 	scene_root.add_child(path)
 	var path_follow = PathFollow3D.new()
 	path.add_child(path_follow)
-	
+
 	# Add the barrel to the path
 	path_follow.add_child(barrel)
 	barrel.global_position = path_follow.global_position
-	
+
 	# Connect the barrel pickup to the end of the level
 	barrel.collected.connect(_on_barrel_collected)
-	
+
 	# Throw the barrel towards the player in an arc using kinematics
 	var tween = get_tree().create_tween()
 	tween.tween_property(path_follow, "progress_ratio", 1.0, 1.4).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
@@ -270,13 +284,11 @@ func drop_barrel() -> void:
 	)
 
 
-func _on_barrel_collected(data: BarrelDataResource) -> void:
+func _on_barrel_collected(_data: BarrelDataResource) -> void:
 	# TODO - show UI with new barrel effects
 	#
 	# Wait for player to click continue
 	#
-	
-	
 	defeated.emit(self)
 
 
@@ -296,7 +308,6 @@ func select_attack_phase_1() -> void:
 
 func select_attack_phase_2() -> void:
 	pass
-
 
 
 func _exit_tree() -> void:
@@ -352,7 +363,7 @@ func _on_movement_walking_state_physics_processing(delta: float) -> void:
 func _on_movement_charging_state_entered() -> void:
 	navigation_component.disable()
 	hurtbox.monitoring = true
-	var charge_dir = -self.global_basis.z
+	var charge_dir = - self.global_basis.z
 	var charge_impulse = self.global_position.distance_to(target.global_position) * charge_force
 	velocity += charge_dir * charge_impulse
 
@@ -409,22 +420,22 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			var chip = chip_scene.instantiate() as RigidBody3D
 			GameManager.player.get_parent().add_child(chip)
 			chip.global_position = self.global_position
-			chip.rotate_y(randf_range(0, 2*PI))
+			chip.rotate_y(randf_range(0, 2 * PI))
 			chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
 			chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
-			
 
 
 func _on_died() -> void:
+	died.emit()
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
 	drop_barrel()
 	await boss_death_slow_mo()
 	if not self in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(self)
+		GameManager.bosses_defeated.append(boss_id)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 
 
-func _on_hurtbox_body_entered(body: Node3D) -> void:
+func _on_hurtbox_body_entered(_body: Node3D) -> void:
 	pass

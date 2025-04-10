@@ -1,7 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://erwchuovt4x0"]
+[gd_scene load_steps=9 format=3 uid="uid://erwchuovt4x0"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_dicom"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_q81t8"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/speed_burst_effect.gd" id="3_u0w13"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/recovery_effect.gd" id="4_croek"]
 [ext_resource type="PackedScene" uid="uid://d4fgeytwm1c2r" path="res://src/player/gun/vfx/HealBarrier.tscn" id="5_bj72g"]
@@ -13,8 +12,6 @@
 [node name="PitBossBarrel" type="Node3D"]
 script = ExtResource("1_dicom")
 barrel_id = 11
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_q81t8")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

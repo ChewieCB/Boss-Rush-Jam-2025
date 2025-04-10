@@ -3,6 +3,7 @@ extends Node
 signal currency_changed(new_currency: int)
 signal barrel_purchased(barrel_data: BarrelDataResource)
 signal barrel_too_expensive(barrel_data: BarrelDataResource)
+signal refresh_shop_ui
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -11,6 +12,7 @@ const RESOLUTION_ARRAY = [
 ]
 
 var pause_ui: PauseUI
+var setting_ui: SettingUI
 var player: Player
 
 var equipped_barrels: Array[BarrelDataResource] = []
@@ -19,8 +21,9 @@ var shop_barrels: Array[BarrelDataResource] = []
 
 @export var starting_barrels: Array[BarrelDataResource]
 @export var starting_shop_barrels: Array[BarrelDataResource]
+@export var barrel_database: Array[BarrelDataResource]
 
-@export var player_currency: int = 200:
+@export var player_currency: int = 0:
 	set(value):
 		player_currency = value
 		currency_changed.emit(player_currency)
@@ -28,9 +31,13 @@ var shop_barrels: Array[BarrelDataResource] = []
 var player_gained_first_barrel: bool = false
 var barrel_tutorial_shown: bool = false
 
-var bosses_defeated: Array[BossCore] = []
+var bosses_defeated: Array[BossCore.BossIdEnum] = []
 var all_bosses_defeated: bool = false
 var victory_ui_shown: bool = false
+
+var chosen_slot_id = -1
+var start_record_timestamp = 0
+var total_playtime = 0
 
 # HACK - do this dynamically with level loading/unloading in the elevator
 var cached_player_pos_relative_to_elevator_doors: Vector3
@@ -39,10 +46,9 @@ var cached_camera_rotation: Vector3
 
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
-
 @export_range(60, 120, 1.0) var camera_fov: float = 90:
 	set(value):
-		if value != camera_fov:
+		if value != camera_fov && player:
 			player.player_camera.set_fov(value)
 		camera_fov = value
 var camera_tilt: bool = true
@@ -52,6 +58,7 @@ var camera_tilt: bool = true
 var vsync_option_index: int = 1
 @export_range(0, 2, 1) var window_mode_index: int = 1 # From 0 to 2
 var scaling_3d: float = 100.0
+var hide_ui = false
 @export_range(0, 100, 0.1) var master_audio: float = 80
 @export_range(0, 100, 0.1) var bgm_audio: float = 100
 @export_range(0, 100, 0.1) var sfx_audio: float = 100
@@ -59,10 +66,11 @@ var scaling_3d: float = 100.0
 
 
 func _ready() -> void:
-	for data in starting_barrels:
-		equipped_barrels.append(data)
-	for data in starting_shop_barrels:
-		shop_barrels.append(data)
+	if len(barrel_database) == 0:
+		load_barrel_database()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	SaveManager.load_setting_config()
 
 
 func add_barrel_to_inventory(data: BarrelDataResource):
@@ -77,7 +85,7 @@ func purchase_barrel(data: BarrelDataResource) -> bool:
 		player_currency -= data.barrel_cost
 		inventory_barrels.append(data)
 		shop_barrels.erase(data)
-		GameManager.player.inventory_ui.full_refresh_ui()
+		refresh_shop_ui.emit()
 		barrel_purchased.emit(data)
 		return true
 	barrel_too_expensive.emit(data)
@@ -100,7 +108,7 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 				return "Can only equip max 1 archetype barrel"
 		inventory_barrels.erase(found_data)
 		equipped_barrels.append(found_data)
-		GameManager.player.inventory_ui.full_refresh_ui()
+		refresh_shop_ui.emit()
 		GameManager.player.current_gun.install_barrel(found_data.barrel_prefab)
 	return ""
 
@@ -115,7 +123,7 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if found_data:
 		equipped_barrels.erase(found_data)
 		inventory_barrels.append(found_data)
-		GameManager.player.inventory_ui.full_refresh_ui()
+		refresh_shop_ui.emit()
 		GameManager.player.current_gun.remove_barrel(search_barrel_id)
 	return ""
 
@@ -129,3 +137,50 @@ func show_boss_special_dialog(content: String, duration: float):
 	GameManager.player.boss_special_dialog.visible = false
 	get_tree().paused = false
 	SoundManager.process_mode = original_sm_process_mode
+
+
+func load_barrel_database():
+	var directory_path = "res://src/player/barrel/resource/"
+	var tres_files: Array[BarrelDataResource] = []
+	var dir = DirAccess.open(directory_path)
+
+	if dir:
+		var files = dir.get_files() # Get all files in the directory
+		for file in files:
+			if file.ends_with(".tres"):
+				var resource = ResourceLoader.load(directory_path + "/" + file)
+				if resource:
+					tres_files.append(resource as BarrelDataResource)
+	else:
+		print("Failed to open directory: ", directory_path)
+	barrel_database = tres_files
+
+
+func load_new_save_data():
+	for data in starting_barrels:
+		equipped_barrels.append(data)
+	for data in starting_shop_barrels:
+		shop_barrels.append(data)
+
+func reset_current_save_data():
+	equipped_barrels = []
+	inventory_barrels = []
+	shop_barrels = []
+	player_currency = 0
+	player_gained_first_barrel = false
+	barrel_tutorial_shown = false
+	bosses_defeated = []
+	all_bosses_defeated = false
+	victory_ui_shown = false
+	chosen_slot_id = -1
+	start_record_timestamp = 0
+	total_playtime = 0
+
+
+func start_record_playtime():
+	start_record_timestamp = Time.get_ticks_msec()
+
+func update_total_playtime():
+	var current_time = Time.get_ticks_msec()
+	var played_time = current_time - start_record_timestamp
+	total_playtime += played_time

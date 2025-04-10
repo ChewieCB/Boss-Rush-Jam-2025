@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://d2i2i2rrbo2v0"]
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://ceo6ncflyswt2"]
 
 [ext_resource type="PackedScene" uid="uid://dy7nqvo7uq1ti" path="res://src/player/barrel/DynamicAdvantageBarrel.tscn" id="1_nrto8"]
 [ext_resource type="Texture2D" uid="uid://3l75nx17rjhp" path="res://src/player/barrel/resource/sprite/dynamic_advantage.png" id="1_vp1f6"]

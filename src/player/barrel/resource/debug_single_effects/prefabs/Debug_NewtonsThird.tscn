@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://b5pl7qt5q33eg"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_c42rc"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_ut8kn"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_82du7"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/apply_knockback_self.gd" id="7_at7gb"]
+
+[node name="DebugNewtonsThirdBarrel" type="Node3D"]
+script = ExtResource("1_c42rc")
+barrel_id = 8
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_ut8kn")
+display_text_title = "Newton's Third Law"
+display_text_tag = "Safer Rocket Jump"
+display_text_desc = "+50% damage
+-25% firerate"
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
+script = ExtResource("6_82du7")
+attribute = 1
+modify_value = 50.0
+is_perc = true
+
+[node name="ModifyFirerate" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
+script = ExtResource("6_82du7")
+attribute = 4
+modify_value = -25.0
+is_perc = true
+
+[node name="ApplyKnockbackSelf" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
+script = ExtResource("7_at7gb")
+force = 15.0
+max_range = 3.0

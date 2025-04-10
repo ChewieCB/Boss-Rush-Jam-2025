@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=54 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -32,7 +32,6 @@
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="22_rtc4r"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="23_0bbok"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="24_ia7ug"]
-[ext_resource type="AudioStream" uid="uid://b4k4hf58sg3a2" path="res://src/bosses/base/assets/sfx/temp/Hit 7.mp3" id="25_1vpok"]
 [ext_resource type="Texture2D" uid="uid://fh4rp8ctjfwe" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="28_1qowr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
@@ -943,11 +942,12 @@ lunge_force = 6.5
 lunge_cooldown = 5.0
 sfx_lunge = Array[AudioStream]([ExtResource("16_q6xxl")])
 shield_radius = 4.0
+boss_id = 5
 chip_spawn_chance = 0.15
 chip_spawn_force = 1500.0
 barrel_to_drop = ExtResource("7_koy73")
 sfx_awaken = ExtResource("18_e8yae")
-sfx_hit = Array[AudioStream]([ExtResource("19_ku61b"), ExtResource("20_j42ea"), ExtResource("21_pnx0u"), ExtResource("22_rtc4r"), ExtResource("23_0bbok"), ExtResource("24_ia7ug"), ExtResource("25_1vpok")])
+sfx_hit = Array[AudioStream]([ExtResource("19_ku61b"), ExtResource("20_j42ea"), ExtResource("21_pnx0u"), ExtResource("22_rtc4r"), ExtResource("23_0bbok"), ExtResource("24_ia7ug")])
 sfx_death = ExtResource("19_2oyqj")
 current_phase = 3
 attack_recovery_time = 0.5

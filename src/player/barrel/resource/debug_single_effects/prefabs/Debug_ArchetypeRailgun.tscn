@@ -1,0 +1,58 @@
+[gd_scene load_steps=8 format=3 uid="uid://dc3filbl8tqtn"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_hmje3"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_p7krh"]
+[ext_resource type="AudioStream" uid="uid://edneq2x4wm78" path="res://src/player/gun/assets/sfx/reloading/railgun/railgun_reload_1.mp3" id="4_skrfp"]
+[ext_resource type="AudioStream" uid="uid://dqr1710c1o8py" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 1.mp3" id="5_by4r8"]
+[ext_resource type="AudioStream" uid="uid://i3coc5gtyk0w" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 2.mp3" id="6_3j5pl"]
+[ext_resource type="AudioStream" uid="uid://bjp2ylixw7dhg" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 3.mp3" id="7_6gix4"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="8_3b7l8"]
+
+[node name="ArchetypeBarrel" type="Node3D"]
+script = ExtResource("1_hmje3")
+barrel_id = 2
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="Railgun" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_p7krh")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("4_skrfp")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_by4r8"), ExtResource("6_3j5pl"), ExtResource("7_6gix4")])
+display_text_title = "Archetype: Railgun"
+display_text_tag = "Precision is important!"
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Railgun"]
+script = ExtResource("8_3b7l8")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/Railgun"]
+script = ExtResource("8_3b7l8")
+attribute = 4
+new_value = 1.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/Railgun"]
+script = ExtResource("8_3b7l8")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/Railgun"]
+script = ExtResource("8_3b7l8")
+attribute = 7
+new_value = 0.5
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/Railgun"]
+script = ExtResource("8_3b7l8")
+attribute = 1
+new_value = 100.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/Railgun"]
+script = ExtResource("8_3b7l8")
+attribute = 5
+new_value = 5.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/Railgun"]
+script = ExtResource("8_3b7l8")
+attribute = 11
+new_value = 0.3

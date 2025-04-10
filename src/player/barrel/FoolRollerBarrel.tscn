@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dmgm77t2sxoc5"]
+[gd_scene load_steps=5 format=3 uid="uid://dmgm77t2sxoc5"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_iw80l"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_4xhml"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/ammo_leech_effect.gd" id="2_psr82"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/multishot_effect.gd" id="3_bgcdx"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/gambler_precision_effect.gd" id="4_s01a7"]
@@ -9,8 +8,6 @@
 [node name="FoolRollerBarrel" type="Node3D"]
 script = ExtResource("1_iw80l")
 barrel_id = 4
-
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_4xhml")]
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

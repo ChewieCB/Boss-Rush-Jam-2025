@@ -1,7 +1,6 @@
-[gd_scene load_steps=17 format=3 uid="uid://de36wdf6rkio"]
+[gd_scene load_steps=16 format=3 uid="uid://de36wdf6rkio"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_kygto"]
-[ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://src/player/AimRay.tscn" id="2_l7ggu"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_wip6c"]
 [ext_resource type="AudioStream" uid="uid://bxq16mdpw6cvr" path="res://src/player/gun/assets/sfx/temp/Shotgun_Dry_Fire.mp3" id="3_6qpgo"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="3_wypyb"]
@@ -43,7 +42,6 @@ TEMP_crit = ExtResource("7_8iawc")
 base_projectile_amount = 8
 base_magazine_size = 5
 base_spread_angle = 8
-aim_ray_prefab = ExtResource("2_l7ggu")
 projectile_prefab = ExtResource("3_wypyb")
 
 [node name="BaseGunModel" type="Node3D" parent="."]

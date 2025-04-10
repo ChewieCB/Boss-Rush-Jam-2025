@@ -11,18 +11,29 @@ signal ui_accept
 @onready var tutorial_ui: Control = $UI/TutorialUI
 @onready var game_win_ui: Control = $UI/GameWinUI
 
-
 var display_barrels: Array = []
 
-
 func _ready() -> void:
+	#ScreenTransition.fill_screen()
+	
+	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
-	get_tree().paused = false
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
+	get_tree().paused = false
 	
 	lobby_music_player.play()
-	
+
+	# Save and load check
+	if SaveManager.save_data_is_loaded:
+		GameManager.update_total_playtime()
+		SaveManager.save_game(GameManager.chosen_slot_id)
+	else:
+		# First time get to lobby, load data from save file
+		GameManager.start_record_playtime()
+		SaveManager.load_game(GameManager.chosen_slot_id)
+
+
 	# HACK
 	if GameManager.player_gained_first_barrel:
 		if not GameManager.barrel_tutorial_shown:
@@ -54,7 +65,6 @@ func show_panel(panel: Control) -> void:
 	tween.tween_property(panel, "modulate", Color(Color.WHITE, 0.0), 1.0)
 
 
-
 func _on_level_select(level_path: String) -> void:
 	ResourceLoader.load_threaded_request(level_path)
 	elevator_doors.close()
@@ -72,7 +82,7 @@ func _on_level_select(level_path: String) -> void:
 	if is_inside_tree():
 		# TODO - fade this out via tween
 		lobby_music_player.stop()
-		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1) 
+		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
 		if new_bgm:
 			SoundManager.play_music(new_bgm, 0.25, "BGM")
 		get_tree().change_scene_to_packed(loaded_scene)

@@ -20,7 +20,7 @@ enum Stance {DEFENSIVE, AGGRESSIVE}
 @export var time_elapsed: float = 0.0
 
 @export_category("Phases")
-@export var surveillance_boss: BossSurveillance 
+@export var surveillance_boss: BossSurveillance
 var phase_stance: Stance = Stance.AGGRESSIVE:
 	set(value):
 		phase_stance = value
@@ -78,12 +78,12 @@ var shield_tween: Tween
 
 
 func _ready() -> void:
-	super()
+	super ()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 
 func activate() -> void:
-	super()
+	super ()
 	state_chart.send_event("intro_slam")
 
 
@@ -122,7 +122,7 @@ func _physics_process(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	time_elapsed += delta
 	var chase_direction: Vector3 = self.global_position.direction_to(target.global_position)
-	var perpendicular: Vector3 = chase_direction.rotated(Vector3.UP, PI/2)
+	var perpendicular: Vector3 = chase_direction.rotated(Vector3.UP, PI / 2)
 	var wave_offset = perpendicular * sin(time_elapsed * wave_frequency) * wave_amplitude
 	var desired_position = target.global_position + wave_offset
 	navigation_component.set_nav_target_position(desired_position)
@@ -226,7 +226,7 @@ func _on_movement_charging_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", true)
 	hurtbox.body_entered.connect(destroy_cover)
 	# Ignore cover when charging to prevent it slowing the boss down
-	self.collision_mask -= pow(2, 7-1)
+	self.collision_mask -= int(pow(2, 7 - 1))
 
 func destroy_cover(body: Node3D) -> void:
 	if body is Cover:
@@ -262,7 +262,7 @@ func _on_movement_charging_state_exited() -> void:
 	charge_ended.emit()
 	hurtbox.body_entered.disconnect(destroy_cover)
 	hurtbox.set_deferred("monitoring", true)
-	self.collision_mask += pow(2, 7-1)
+	self.collision_mask += int(pow(2, 7 - 1))
 
 ### ATTACK PHASES --------------------------------
 
@@ -294,7 +294,7 @@ func uppercut(uppercut_force: float) -> void:
 
 func lunge() -> void:
 	#print("Lunge function entered")
-	var charge_dir = -self.global_basis.z
+	var charge_dir = - self.global_basis.z
 	var charge_impulse = max(self.global_position.distance_to(target.global_position), 1) * lunge_force
 	velocity += charge_dir * charge_impulse
 	#print("Lunged with vector: %s, velocity = %s" % [charge_impulse, velocity])
@@ -399,7 +399,7 @@ func _on_melee_combo_uppercut_state_entered() -> void:
 	
 	# Phase 2 - Uppercut chaser movement
 	var horizontal_distance = Vector2(
-		self.global_position.x, 
+		self.global_position.x,
 		self.global_position.z
 	).distance_to(Vector2(
 		target.global_position.x,
@@ -515,7 +515,7 @@ func air_slam_trajectory(goal_pos: Vector3 = Vector3.ZERO, debug: bool = false) 
 	var apex_y = highest_y + jump_height
 	apex_y = clamp(apex_y, 0, surveillance_boss.global_position.y - 1.0 - start_pos.y)
 	
-	var velocity_v: float = sqrt( 
+	var velocity_v: float = sqrt(
 		2 * GRAVITY * (apex_y - start_pos.y)
 	)
 	
@@ -621,16 +621,16 @@ func _on_ground_pound_state_entered() -> void:
 	debug_trajectory_mesh.mesh.clear_surfaces()
 	velocity = Vector3.ZERO
 	sprite.texture = slam_sprite
-	var wave_callback: Callable = func(): 
+	var wave_callback: Callable = func():
 		state_chart.send_event("combo_end")
 	spawn_center_wave(ground_pound_wave_radius, 0.8, 2.0, false, wave_callback)
 
 
 # TODO - rework and clean this up for the slam 
 func spawn_center_wave(
-	max_radius: float, 
-	spawned_wave_time: float = 1.0, 
-	spawned_wave_height: float = 4.0, 
+	max_radius: float,
+	spawned_wave_time: float = 1.0,
+	spawned_wave_height: float = 4.0,
 	_telegraph: bool = false,
 	callback: Callable = func(): pass
 ) -> void:
@@ -645,8 +645,8 @@ func spawn_center_wave(
 	collider_shape.height = spawned_wave_height
 	area_collider_shape.shape = collider_shape
 	area_collider.add_child(area_collider_shape)
-	area_collider.collision_layer = pow(2, 7)
-	area_collider.collision_mask = pow(2, 2-1) + pow(2, 7-1) # Player & Cover
+	area_collider.collision_layer = int(pow(2, 7))
+	area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
 	area_collider.monitoring = true
 	
 	get_tree().get_root().add_child(area_collider)
@@ -687,8 +687,6 @@ func spawn_center_wave(
 		#await telegraph_tween.finished
 	
 	state_chart.send_event("attack_start")
-	var wave_attack_callback: Callable = func():
-		state_chart.send_event("finish_wave")
 	
 	# Animate the visual
 	sfx_player.stream = sfx_ground_pound.pick_random()
@@ -739,7 +737,7 @@ func _on_air_slam_closer_recover_state_entered() -> void:
 	# Hammer Ground follow up if the player doesn't escape
 	if current_phase > 2:
 		var horizontal_distance = Vector2(
-			self.global_position.x, 
+			self.global_position.x,
 			self.global_position.z
 		).distance_to(Vector2(
 			target.global_position.x,

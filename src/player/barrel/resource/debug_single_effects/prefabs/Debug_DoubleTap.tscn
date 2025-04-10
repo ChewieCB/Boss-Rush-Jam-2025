@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2m6p2sqrwtng"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_p4ej0"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/multishot_effect.gd" id="4_a3nqq"]
+
+[node name="DebugDoubleTapBarrel" type="Node3D"]
+script = ExtResource("1_p4ej0")
+barrel_id = 4
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="DoubleTapEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("4_a3nqq")
+shot_count_per_trigger_modify = 1
+display_text_title = "Double Tap"
+display_text_tag = "Both barrels!"
+display_text_desc = "Fire 2 shots in quick succession"

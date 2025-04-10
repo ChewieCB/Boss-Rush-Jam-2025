@@ -80,7 +80,7 @@ var dropped_segments: Array
 
 
 func _ready() -> void:
-	super()
+	super ()
 	GRAVITY = 0.0
 	hurtbox.visible = false
 	
@@ -94,16 +94,16 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	super(delta)
+	super (delta)
 	held_ball_marker_pivot.look_at(target.global_position)
 
 
 func activate() -> void:
-	super()
+	super ()
 	change_phase(current_phase)
 
 
-func select_attack() -> void: 
+func select_attack() -> void:
 	match current_phase:
 		1:
 			select_attack_phase_1()
@@ -211,7 +211,7 @@ func material_glow(value: float, material: Material, target_color: Color):
 
 func sweep_barrier(
 	sweeps: int = 1,
-	sweep_rotation: float = TAU, 
+	sweep_rotation: float = TAU,
 	speed_multiplier: float = 1.0,
 	telegraph_delay: float = telegraph_time,
 	time_between_sweeps: float = 1.0,
@@ -220,17 +220,17 @@ func sweep_barrier(
 		state_chart.send_event("attack_telegraph")
 		var telegraph_tween = get_tree().create_tween()
 		var barrier_color = hurtbox_mesh.mesh.material.get("shader_parameter/color")
-		telegraph_tween.tween_method(material_glow.bind(hurtbox_mesh.mesh.material, Color.RED), 0, 1, telegraph_delay/2)
-		telegraph_tween.chain().tween_method(material_glow.bind(hurtbox_mesh.mesh.material, barrier_color), 0, 1, telegraph_delay/2)
+		telegraph_tween.tween_method(material_glow.bind(hurtbox_mesh.mesh.material, Color.RED), 0, 1, telegraph_delay / 2)
+		telegraph_tween.chain().tween_method(material_glow.bind(hurtbox_mesh.mesh.material, barrier_color), 0, 1, telegraph_delay / 2)
 		await telegraph_tween.finished
 		state_chart.send_event("attack_start")
 		
 		hurtbox.monitoring = true
 		var tween = get_tree().create_tween()
 		tween.tween_property(
-			self, 
-			"rotation:y", 
-			self.rotation.y + sweep_rotation, 
+			self,
+			"rotation:y",
+			self.rotation.y + sweep_rotation,
 			barrier_sweep_time * (sweep_rotation / TAU) / speed_multiplier
 		).set_ease(Tween.EASE_IN)
 		
@@ -243,8 +243,8 @@ func sweep_barrier(
 
 
 func spawn_ball(
-	_target: Node3D = target, 
-	spawn_force: float = 500, 
+	_target: Node3D = target,
+	spawn_force: float = 500,
 	ball_arr: Array = active_balls,
 	ball_prop_func: Callable = _set_ball_active_params
 ) -> RouletteBall:
@@ -306,9 +306,9 @@ func destroy_balls(ball_arr: Array) -> void:
 
 
 func spawn_center_wave(
-	max_radius: float, 
-	spawned_wave_time: float = wave_time, 
-	spawned_wave_height: float = wave_height, 
+	max_radius: float,
+	spawned_wave_time: float = wave_time,
+	spawned_wave_height: float = wave_height,
 	telegraph: bool = false,
 	callback: Callable = func(): pass
 ) -> void:
@@ -324,7 +324,7 @@ func spawn_center_wave(
 	area_collider_shape.shape = collider_shape
 	area_collider.add_child(area_collider_shape)
 	area_collider.collision_layer = 0
-	area_collider.collision_mask = 2  # Player
+	area_collider.collision_mask = 2 # Player
 	area_collider.monitoring = true
 	
 	get_tree().get_root().add_child(area_collider)
@@ -385,33 +385,33 @@ func _pushback_effect(body: Node3D) -> void:
 	var pushback_vector = self.global_position.direction_to(body.global_position)
 	
 	body.velocity = Vector3.ZERO
-	body.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * wave_pushback_force 
-	body.vel_vertical += pushback_vector.y * wave_pushback_force 
+	body.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * wave_pushback_force
+	body.vel_vertical += pushback_vector.y * wave_pushback_force
 
 
 func drop_floor_segment(segment_arr: Array) -> void:
 	var mesh: MeshInstance3D = segment_arr[0]
-	var collider: CollisionShape3D = segment_arr[1]
-	collider.disabled = true
+	var floor_collider: CollisionShape3D = segment_arr[1]
+	floor_collider.disabled = true
 	
 	drop_floor_tween = get_tree().create_tween()
 	drop_floor_tween.tween_property(mesh, "position:y", mesh.position.y - 20.0, drop_time)
 	drop_floor_tween.parallel().tween_property(mesh, "scale", Vector3.ZERO, drop_time)
-	drop_floor_tween.parallel().tween_property(collider, "position:y", collider.position.y - 20.0, drop_time)
+	drop_floor_tween.parallel().tween_property(floor_collider, "position:y", floor_collider.position.y - 20.0, drop_time)
 	drop_floor_tween.tween_callback(barrier_sfx_player.stop)
 	dropped_segments.append(segment_arr)
 
 
 func return_floor_segment(segment_arr: Array, time: float = drop_time) -> void:
 	var mesh: MeshInstance3D = segment_arr[0]
-	var collider: CollisionShape3D = segment_arr[1]
+	var floor_collider: CollisionShape3D = segment_arr[1]
 	mesh.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(mesh, "position:y", mesh.position.y + 20.0, time)
 	tween.parallel().tween_property(mesh, "scale", Vector3(1, 1, 1), time)
-	tween.parallel().tween_property(collider, "position:y", collider.position.y + 20.0, time)
+	tween.parallel().tween_property(floor_collider, "position:y", floor_collider.position.y + 20.0, time)
 	await tween.finished
-	collider.disabled = false
+	floor_collider.disabled = false
 
 
 func shake_segment(segment: MeshInstance3D, shake_count: int = 30, shake_amount: float = 0.3) -> bool:
@@ -419,9 +419,9 @@ func shake_segment(segment: MeshInstance3D, shake_count: int = 30, shake_amount:
 	drop_floor_tween = get_tree().create_tween()
 	for j in shake_count:
 		drop_floor_tween.tween_property(
-			segment, 
+			segment,
 			"position",
-			Vector3(0, randf_range(-shake_amount, shake_amount), 0), 
+			Vector3(0, randf_range(-shake_amount, shake_amount), 0),
 			0.05
 		).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_ELASTIC)
 	await drop_floor_tween.finished
@@ -448,7 +448,7 @@ func _on_ball_kill_timer_timeout() -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super(new_health, prev_health)
+	super (new_health, prev_health)
 	
 	if new_health < health_component.max_health * phase_3_health_percentage_trigger and current_phase == 2:
 		change_phase(3)
@@ -476,7 +476,7 @@ func change_phase(new_phase: int) -> void:
 
 
 func _on_died() -> void:
-	super()
+	super ()
 	destroy_balls(active_balls)
 	destroy_balls(passive_balls)
 	pushback_area.set_deferred("monitoring", false)
@@ -546,7 +546,7 @@ func _on_shields_spawn_shields_state_entered() -> void:
 		new_shield.position.y = shield_height
 		# Rotate the shield around the parent node as a pivot point
 		new_shield.global_translate(-shields_parent.global_position)
-		new_shield.transform = new_shield.transform.rotated(Vector3.UP, -rotation_increment * (i+1))
+		new_shield.transform = new_shield.transform.rotated(Vector3.UP, -rotation_increment * (i + 1))
 		new_shield.global_translate(shields_parent.global_position)
 		
 		new_shield.destroyed.connect(_check_shields)
@@ -675,7 +675,6 @@ func _on_damage_barrier_state_exited() -> void:
 		barrier_sfx_player.stop()
 		
 
-
 #### Phase 1 | Multiball
 func _on_ball_projectile_targeting_state_entered() -> void:
 	debug_state_label.text = "Multiball | Targeting"
@@ -687,7 +686,7 @@ func _on_ball_projectile_launch_balls_state_entered() -> void:
 	debug_state_label.text = "Multiball | Launching"
 	state_chart.send_event("attack_start")
 	for i in balls_to_spawn_phase_1:
-		var ball = spawn_ball()
+		var _ball = spawn_ball()
 	ball_kill_timer.start(max_ball_lifetime)
 
 func _on_ball_destroyed(ball: RouletteBall) -> void:
@@ -785,7 +784,7 @@ func _on_phase_2_damage_barrier_spawn_barrier_state_entered() -> void:
 # Multiball
 # Segment Drop
 
-func _on_phase_3_state_entered() -> void:	
+func _on_phase_3_state_entered() -> void:
 	debug_phase_label.text = "Phase 3"
 	
 	change_wheel_speed.emit(0.8)
@@ -900,7 +899,7 @@ func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
 				return true
 			return false
 	)
-	for i in range(balls_to_attack_phase_3 - active_balls.size()): 
+	for i in range(balls_to_attack_phase_3 - active_balls.size()):
 		var ball = spawn_ball()
 		ball.is_flaming = true
 		ball = _set_ball_active_params(ball)

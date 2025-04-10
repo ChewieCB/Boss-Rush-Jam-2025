@@ -16,7 +16,7 @@ extends Node3D
 @export var phase_2_health_percentage_trigger: float = 0.7
 @export var phase_3_health_percentage_trigger: float = 0.35
 
-@onready var pit_boss: BossPit = find_children("*", "BossPit").front() 
+@onready var pit_boss: BossPit = find_children("*", "BossPit").front()
 @onready var surveillance_boss: BossSurveillance = find_children("*", "BossSurveillance").front()
 var dead_boss_count: int = 0
 
@@ -29,9 +29,12 @@ var nav_region: NavigationRegion3D
 @onready var initial_cover = find_children("*", "Cover")
 var cover_objects: Array = []
 var cover_spawn_points: Array = []
+@export var directional_light: DirectionalLight3D
 
 
 func _ready() -> void:
+	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	
 	pit_boss.health_component.health_changed.connect(_on_boss_health_changed)
 	pit_boss.health_component.died.connect(_on_boss_died.bind(pit_boss))
 	pit_boss.surveillance_boss = surveillance_boss
@@ -73,12 +76,9 @@ func _on_player_death() -> void:
 
 func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
 	var combined_current_health := pit_boss.health_component.current_health + surveillance_boss.health_component.current_health
-	var combined_max_health := pit_boss.health_component.max_health + surveillance_boss.health_component.max_health 
+	var combined_max_health := pit_boss.health_component.max_health + surveillance_boss.health_component.max_health
 	var combined_health_ratio := combined_current_health / combined_max_health
 		
-	var pit_boss_health_ratio := pit_boss.health_component.current_health / \
-		pit_boss.health_component.max_health
-	
 	if combined_health_ratio <= phase_3_health_percentage_trigger:
 		stance_timer.stop()
 		pit_boss.state_chart.send_event("start_phase_3")
@@ -97,6 +97,8 @@ func _on_boss_died(boss: BossCore) -> void:
 	if dead_boss_count == 2:
 		boss.defeated.connect(_on_bosses_defeated)
 		boss.drop_barrel()
+		var tween = self.create_tween()
+		tween.tween_property(directional_light, "light_energy", 0, 1)
 	
 	var remaining_boss: BossCore
 	match boss:
@@ -107,9 +109,9 @@ func _on_boss_died(boss: BossCore) -> void:
 	remaining_boss.state_chart.send_event("start_phase_3")
 
 
-func _on_bosses_defeated(boss: BossCore) -> void:
-	if not pit_boss in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(pit_boss)
+func _on_bosses_defeated(_boss: BossCore) -> void:
+	if _boss.boss_id != BossCore.BossIdEnum.NONE && not _boss.boss_id in GameManager.bosses_defeated:
+		GameManager.bosses_defeated.append(_boss.boss_id)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 	win_ui.win("Floor Cleared", win_subtext.pick_random())
 	show_end_panel()
@@ -123,7 +125,9 @@ func show_end_panel() -> void:
 	await get_tree().create_timer(2.5).timeout
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	tween.tween_callback(func(): get_tree().change_scene_to_file("res://src/maps/lobby/Lobby.tscn"))
+	await tween.finished
+	
+	LoadingHandler.start_loading("Lobby")
 
 
 func _return_to_main() -> void:
@@ -201,3 +205,9 @@ func _on_stance_timer_timeout() -> void:
 	pit_boss.toggle_stance()
 	surveillance_boss.toggle_stance()
 	stance_timer.start(phase_2_stance_time + randf_range(-1.5, 1.5))
+
+
+func _on_barrel_reload_trigger_body_entered(body: Node3D) -> void:
+	$BarrelReloadTrigger.monitoring = false
+	$BarrelReloadTrigger.queue_free()
+	body.current_gun.spin_all_barrels()

@@ -45,6 +45,8 @@ func damage(_damage: float, _color: Color = Color.WHITE) -> void:
 	if enabled:
 		if not is_invincible:
 			current_health -= _damage
+		if not text_effect:
+			return
 		if text_effect_location:
 			create_text(text_effect_location.global_position, str(_damage), _color)
 		else:
@@ -53,6 +55,8 @@ func damage(_damage: float, _color: Color = Color.WHITE) -> void:
 func heal(health: float, _color: Color = Color.GREEN) -> void:
 	if enabled:
 		current_health += health
+		if not text_effect:
+			return
 		if text_effect_location:
 			create_text(text_effect_location.global_position, str(health), _color)
 		else:
@@ -63,6 +67,7 @@ func initialize_health() -> void:
 	current_health = max_health
 
 func create_text(pos: Vector3, text: String, color: Color = Color.WHITE, size: float = 92.0) -> void:
+
 	var text_inst = text_effect.instantiate()
 	get_parent().add_child(text_inst)
 	var variance = 1

@@ -1,7 +1,6 @@
-[gd_scene load_steps=27 format=3 uid="uid://ckiren6h4keb6"]
+[gd_scene load_steps=26 format=3 uid="uid://ckiren6h4keb6"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_5qelq"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_yw7pw"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_w2hft"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_3n82e"]
 [ext_resource type="AudioStream" uid="uid://cte0yqejjtu7j" path="res://src/player/gun/assets/sfx/reloading/smg/smg_reload_1.mp3" id="4_cri1e"]
@@ -31,11 +30,9 @@
 script = ExtResource("1_5qelq")
 barrel_id = 9
 
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_yw7pw")]
-
 [node name="EffectContainer" type="Node3D" parent="."]
 
-[node name="CompoundEffectGaussRifle" type="Node3D" parent="EffectContainer"]
+[node name="GaussRifle" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_w2hft")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("4_cri1e")])
@@ -43,37 +40,37 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("5_m8udd"), ExtResource("6_
 display_text_title = "Archetype: Gauss Rifle"
 display_text_tag = "Fire faster and more ammo"
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 4
-new_value = 5.0
+new_value = 6.0
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 6
 new_value = 1.0
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+[node name="SetSpread" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 7
 new_value = 0.5
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 5
 new_value = 20.0
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+[node name="SetDamage" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 1
 new_value = 15.0
 
-[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectGaussRifle"]
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 11
-new_value = 0.01
+new_value = 0.02
 
-[node name="CompoundEffectScatterBeam" type="Node3D" parent="EffectContainer"]
+[node name="ScatterBeam" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_w2hft")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("5_lxmwo"), ExtResource("6_bxoxn")])
@@ -81,37 +78,42 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("7_lr8ap"), ExtResource("8_
 display_text_title = "Archetype: Scatter Beam"
 display_text_tag = "Closer...closer..."
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+[node name="SetDamage" type="Node3D" parent="EffectContainer/ScatterBeam"]
 script = ExtResource("4_3n82e")
 attribute = 1
 new_value = 14.0
 
-[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/ScatterBeam"]
 script = ExtResource("4_3n82e")
 attribute = 2
 new_value = 7.0
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/ScatterBeam"]
 script = ExtResource("4_3n82e")
 attribute = 4
 new_value = 1.5
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/ScatterBeam"]
 script = ExtResource("4_3n82e")
 attribute = 6
 new_value = 1.0
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+[node name="SetSpread" type="Node3D" parent="EffectContainer/ScatterBeam"]
 script = ExtResource("4_3n82e")
 attribute = 7
 new_value = 7.0
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectScatterBeam"]
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/ScatterBeam"]
 script = ExtResource("4_3n82e")
 attribute = 5
 new_value = 7.0
 
-[node name="CompoundEffectRailcannon" type="Node3D" parent="EffectContainer"]
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/ScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 11
+new_value = 0.04
+
+[node name="Railcannon" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_w2hft")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("5_5hv6s")])
@@ -119,50 +121,45 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("6_hwm5a"), ExtResource("7_
 display_text_title = "Archetype: Railcannon"
 display_text_tag = "Don't miss it!"
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+[node name="SetDamage" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
 attribute = 1
 new_value = 250.0
 
-[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
 attribute = 2
 new_value = 1.0
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
 attribute = 4
 new_value = 0.5
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
 attribute = 6
 new_value = 1.0
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+[node name="SetSpread" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
 attribute = 7
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
 attribute = 5
 new_value = 1.0
 
-[node name="SetRecoil" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
 attribute = 11
-new_value = 0.1
+new_value = 0.4
 
-[node name="SetScreenshake" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
-script = ExtResource("4_3n82e")
-attribute = 12
-new_value = 2.0
-
-[node name="SetReloadTime" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
 attribute = 8
 new_value = 2.0
 
-[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/CompoundEffectRailcannon"]
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("5_uqnjt")
 new_prefab = ExtResource("6_3vdu1")

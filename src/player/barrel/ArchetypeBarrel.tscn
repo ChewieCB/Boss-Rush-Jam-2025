@@ -1,8 +1,7 @@
-[gd_scene load_steps=26 format=3 uid="uid://d1r8em3of5o8n"]
+[gd_scene load_steps=25 format=3 uid="uid://d1r8em3of5o8n"]
 
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="1_8li6c"]
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_ctp8d"]
-[ext_resource type="PackedScene" uid="uid://df5b301cil4ub" path="res://src/player/barrel/CommonBarrelComponent.tscn" id="2_hpbf5"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="2_soqa0"]
 [ext_resource type="AudioStream" uid="uid://edneq2x4wm78" path="res://src/player/gun/assets/sfx/reloading/railgun/railgun_reload_1.mp3" id="4_75jst"]
 [ext_resource type="AudioStream" uid="uid://dqr1710c1o8py" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 1.mp3" id="5_volit"]
@@ -30,11 +29,9 @@
 script = ExtResource("1_ctp8d")
 barrel_id = 2
 
-[node name="CommonBarrelComponent" parent="." instance=ExtResource("2_hpbf5")]
-
 [node name="EffectContainer" type="Node3D" parent="."]
 
-[node name="CompoundEffectRailgun" type="Node3D" parent="EffectContainer"]
+[node name="Railgun" type="Node3D" parent="EffectContainer"]
 script = ExtResource("1_8li6c")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("4_75jst")])
@@ -42,37 +39,42 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("5_volit"), ExtResource("6_
 display_text_title = "Archetype: Railgun"
 display_text_tag = "Precision is important!"
 
-[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Railgun"]
 script = ExtResource("2_soqa0")
 attribute = 2
 new_value = 1.0
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/Railgun"]
 script = ExtResource("2_soqa0")
 attribute = 4
 new_value = 1.0
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/Railgun"]
 script = ExtResource("2_soqa0")
 attribute = 6
 new_value = 1.0
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+[node name="SetSpread" type="Node3D" parent="EffectContainer/Railgun"]
 script = ExtResource("2_soqa0")
 attribute = 7
 new_value = 0.5
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+[node name="SetDamage" type="Node3D" parent="EffectContainer/Railgun"]
 script = ExtResource("2_soqa0")
 attribute = 1
 new_value = 100.0
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectRailgun"]
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/Railgun"]
 script = ExtResource("2_soqa0")
 attribute = 5
 new_value = 5.0
 
-[node name="CompoundEffectSMG" type="Node3D" parent="EffectContainer"]
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/Railgun"]
+script = ExtResource("2_soqa0")
+attribute = 11
+new_value = 0.3
+
+[node name="SMG" type="Node3D" parent="EffectContainer"]
 script = ExtResource("1_8li6c")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("6_rdcja")])
@@ -80,36 +82,41 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("10_mirek"), ExtResource("1
 display_text_title = " Archetype: SMG"
 display_text_tag = "Spray and pray!"
 
-[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/SMG"]
 script = ExtResource("2_soqa0")
 attribute = 2
 new_value = 1.0
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/SMG"]
 script = ExtResource("2_soqa0")
 attribute = 4
 new_value = 10.0
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/SMG"]
 script = ExtResource("2_soqa0")
 attribute = 6
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetSpread" type="Node3D" parent="EffectContainer/SMG"]
 script = ExtResource("2_soqa0")
 attribute = 7
 new_value = 2.0
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetDamage" type="Node3D" parent="EffectContainer/SMG"]
 script = ExtResource("2_soqa0")
 attribute = 1
 new_value = 8.0
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectSMG"]
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/SMG"]
 script = ExtResource("2_soqa0")
 attribute = 5
 new_value = 30.0
 
-[node name="CompoundEffectShotgun" type="Node3D" parent="EffectContainer"]
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/SMG"]
+script = ExtResource("2_soqa0")
+attribute = 11
+new_value = 0.04
+
+[node name="Shotgun" type="Node3D" parent="EffectContainer"]
 script = ExtResource("1_8li6c")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("7_27wu3"), ExtResource("8_3tnph")])
@@ -117,31 +124,36 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("23_fbci2"), ExtResource("2
 display_text_title = "Archetype: Shotgun"
 display_text_tag = "Strong at close range!"
 
-[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Shotgun"]
 script = ExtResource("2_soqa0")
 attribute = 2
 new_value = 8.0
 
-[node name="SetFirerate" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/Shotgun"]
 script = ExtResource("2_soqa0")
 attribute = 4
 new_value = 2.0
 
-[node name="SetHitscan" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/Shotgun"]
 script = ExtResource("2_soqa0")
 attribute = 6
 
-[node name="SetSpread" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetSpread" type="Node3D" parent="EffectContainer/Shotgun"]
 script = ExtResource("2_soqa0")
 attribute = 7
 new_value = 8.0
 
-[node name="SetMagazine" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/Shotgun"]
 script = ExtResource("2_soqa0")
 attribute = 5
 new_value = 10.0
 
-[node name="SetDamage" type="Node3D" parent="EffectContainer/CompoundEffectShotgun"]
+[node name="SetDamage" type="Node3D" parent="EffectContainer/Shotgun"]
 script = ExtResource("2_soqa0")
 attribute = 1
 new_value = 10.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/Shotgun"]
+script = ExtResource("2_soqa0")
+attribute = 11
+new_value = 0.1
