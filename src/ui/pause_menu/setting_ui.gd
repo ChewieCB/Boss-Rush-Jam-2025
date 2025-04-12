@@ -31,6 +31,7 @@ signal setting_back_button_pressed
 @onready var ui_slider: HSlider = $TabContainer/Audio/VBoxContainer/UI/UISlider
 @onready var ui_value: Label = $TabContainer/Audio/VBoxContainer/UI/Value
 
+@onready var tab_header_container: Container = $HBoxContainer
 @onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection
 
 var keybindable_action_list = {
@@ -72,6 +73,7 @@ func _input(event):
 
 func open_menu():
 	visible = true
+	tab_header_container.get_child(0).grab_focus()
 
 func close_menu():
 	visible = false

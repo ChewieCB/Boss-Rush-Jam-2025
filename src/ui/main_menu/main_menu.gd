@@ -5,12 +5,11 @@ class_name MainMenu
 var bgm_player: AudioStreamPlayer
 @export var button_sfx: Array[AudioStream]
 @export var start_game_sfx: AudioStream
-
 @export var lobby_scene: PackedScene
 
 @onready var buttons_container: Container = $TitleColumn/VBoxContainer
 @onready var buttons = buttons_container.get_children()
-@onready var settings_ui = $SettingUI
+@onready var settings_ui: SettingUI = $SettingUI
 @onready var credits_ui = $CreditsUI
 @onready var story_ui = $StoryUI
 @onready var save_ui = $SaveUI
@@ -33,15 +32,50 @@ func _ready() -> void:
 		button.pressed.connect(_play_button_sfx)
 
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		if save_ui.visible:
+			save_ui.visible = false
+			buttons_container.get_child(0).grab_focus()
+			story_ui.visible = true
+		elif settings_ui.visible:
+			settings_ui.visible = false
+			buttons_container.get_child(0).grab_focus()
+			story_ui.visible = true
+		elif credits_ui.visible:
+			credits_ui.visible = false
+			buttons_container.get_child(0).grab_focus()
+			story_ui.visible = true
+
+	if event.is_action_pressed("ui_left"):
+		if credits_ui.visible:
+			var button_container_has_focus = false
+			for child in buttons_container.get_children():
+				if child.has_focus():
+					button_container_has_focus = true
+					break
+			if not button_container_has_focus:
+				buttons_container.get_child(0).grab_focus()
+	
+	if event.is_action_pressed("ui_right"):
+		if credits_ui.visible:
+			for child in buttons_container.get_children():
+				child.release_focus()
+
+
 func _play_button_sfx() -> void:
 	SoundManager.play_ui_sound(button_sfx.pick_random(), "UI")
 
 
 func _on_start_button_pressed() -> void:
+	save_ui.visible = true
 	story_ui.visible = false
 	credits_ui.visible = false
-	settings_ui.visible = false
-	save_ui.visible = true
+	settings_ui.close_menu()
+
+	# Grab focus the first save button
+	var first_save_button: SaveSlotItem = save_ui.get_child(0).get_child(0)
+	first_save_button.main_button.grab_focus()
 	
 
 func _on_quit_button_pressed() -> void:
@@ -49,18 +83,19 @@ func _on_quit_button_pressed() -> void:
 
 
 func _on_options_button_pressed() -> void:
-	buttons_container.visible = false
 	credits_ui.visible = false
 	story_ui.visible = false
 	save_ui.visible = false
-	settings_ui.visible = true
-	title_column.visible = false
+	settings_ui.open_menu()
 
 
 func _on_credit_button_pressed() -> void:
-	credits_ui.visible = !credits_ui.visible
-	story_ui.visible = !story_ui.visible
+	credits_ui.visible = true
+	story_ui.visible = false
 	save_ui.visible = false
+	settings_ui.close_menu()
+	for child in buttons_container.get_children():
+		child.release_focus()
 
 
 func start_game():
@@ -78,7 +113,12 @@ func play_button_hover_sfx():
 
 func _on_setting_ui_setting_back_button_pressed() -> void:
 	buttons_container.visible = true
-	settings_ui.visible = false
+	settings_ui.close_menu()
 	story_ui.visible = true
 	title_column.visible = true
 	SaveManager.save_setting_config()
+	buttons_container.get_child(0).grab_focus()
+
+
+func _on_grab_focus_timer_timeout() -> void:
+	buttons_container.get_child(0).grab_focus()

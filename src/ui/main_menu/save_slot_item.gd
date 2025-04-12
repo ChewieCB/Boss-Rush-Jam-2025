@@ -1,9 +1,11 @@
 extends HBoxContainer
+class_name SaveSlotItem
 
 @export var slot_id: int = 0
 
 @onready var load_button_label: RichTextLabel = $MarginContainer/MarginContainer/LoadButtonLabel
 @onready var delete_button: Button = $DeleteButton
+@onready var main_button: Button = $MarginContainer/LoadButton
 
 var save_data = null
 var main_menu: MainMenu

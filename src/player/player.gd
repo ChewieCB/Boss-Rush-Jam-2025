@@ -50,7 +50,6 @@ var movement_sfx_player: AudioStreamPlayer
 signal movement_dashed
 
 const MAX_SPEED: float = 8.0
-var max_speed: float = MAX_SPEED
 const MAX_FALL_SPEED: float = 70.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 10
@@ -63,10 +62,14 @@ const SWAP_GUN_TIME: float = 0.3
 const BULLET_SPAWN_POS_VARIATION: float = 10
 const INTERACT_DISTANCE = 5
 
+const MOUSE_SENSITIVITY_COEEFICIENT = 10000
+const CONTROLLER_SENSITIVITY_COEEFICIENT = 10
+
 const DASH_SPEED: float = 15
 const SLAM_SPEED: float = 25
 const CROUCH_SPEED_MODIFIER: float = 0.5
 
+var max_speed: float = MAX_SPEED
 var floor_col_pos = Vector3.ZERO
 var jumped: bool = false
 var can_coyote_jump: bool = false
@@ -142,7 +145,7 @@ func _input(event):
 		return
 
 	if event is InputEventMouseMotion:
-		rotate_player(event)
+		rotate_player(event.relative.x, event.relative.y)
 
 	if event.is_action_pressed("spin_reload"):
 		spin_reload()
@@ -198,6 +201,8 @@ func _input(event):
 
 
 func _process(delta):
+	handle_controller_look(delta)
+
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 
 	for buff in buffs:
@@ -387,9 +392,17 @@ func no_spin_reload() -> void:
 	current_gun.reload()
 
 
-func rotate_player(event):
-	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
-	player_camera.rotate_x(-event.relative.y * (GameManager.mouse_sensitivity / 10000))
+func handle_controller_look(_delta):
+	var look_x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
+	var look_y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
+
+	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
+		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
+		rotate_player(look_x * sensitivity, look_y * sensitivity)
+
+func rotate_player(x: float, y: float):
+	rotate(Vector3(0, -1, 0), x * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
+	player_camera.rotate_x(-y * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotation.y = 0
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
