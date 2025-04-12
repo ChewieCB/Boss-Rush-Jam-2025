@@ -123,7 +123,7 @@ func _on_form_split_stacks_state_entered() -> void:
 	
 	spawned_sub_stacks = await spawn_stacks(3)
 	
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(15.0).timeout
 	state_chart.send_event("combine_stack")
 
 
@@ -154,6 +154,9 @@ func spawn_stacks(stack_count: int) -> Array:
 		small_stack_inst.health_component.health_diff.connect(_small_stack_hurt)
 		small_stack_inst.health_component.died.connect(_small_stack_dead.bind(small_stack_inst))
 		small_stack_inst.navigation_component.destination_reached.connect(_stack_get_new_move_point.bind(small_stack_inst))
+		small_stack_inst.target = target
+		small_stack_inst.group_size = stack_count
+		small_stack_inst.group_idx = i
 		spawned_stacks.append(small_stack_inst)
 		
 		var stack_spawn_tween: Tween = get_tree().create_tween()
@@ -165,7 +168,7 @@ func spawn_stacks(stack_count: int) -> Array:
 		
 		await stack_spawn_tween.finished
 		
-		_stack_get_new_move_point(small_stack_inst)
+		#_stack_get_new_move_point(small_stack_inst)
 		
 	
 	return spawned_stacks
