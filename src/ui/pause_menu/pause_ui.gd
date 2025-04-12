@@ -22,6 +22,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			SoundManager.play_button_click_sfx()
 			return_to_pause_menu()
 		else:
+			if GameManager.player.is_in_inventory:
+				return
 			SoundManager.play_button_click_sfx()
 			# TODO - fix this to be generic across all inventory UIs
 			#GameManager.player.inventory_ui.close()

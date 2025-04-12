@@ -31,6 +31,8 @@ func _ready() -> void:
 	for button in buttons:
 		button.pressed.connect(_play_button_sfx)
 
+	get_window().grab_focus()
+
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

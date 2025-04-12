@@ -6,6 +6,8 @@ extends VBoxContainer
 @export var price_icon: TextureRect
 @export var price_label: Label
 
+@onready var button: Button = $BarrelItemUI/Button
+
 var clicked_once: bool = false
 var is_disabled: bool = false:
 	set(value):

@@ -211,7 +211,7 @@ func _process(delta):
 			if buff.duration <= 0:
 				remove_buff(buff)
 
-	if aim_ray.is_colliding():
+	if aim_ray.is_colliding() and not is_in_inventory:
 		var interact_collider = aim_ray.get_collider()
 		if interact_collider and \
 			interact_collider.has_method("interact") and \
@@ -358,6 +358,9 @@ func show_debug_label():
 
 
 func jump(multiplier = 1.0):
+	if is_in_inventory or controls_disabled:
+		return
+		
 	vel_vertical = JUMP_FORCE * multiplier
 
 	jumped = true

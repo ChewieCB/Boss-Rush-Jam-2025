@@ -23,7 +23,6 @@ class_name InventoryUI
 @onready var inventory_barrel_container: GridContainer = $BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer
 @onready var shop_barrel_container: GridContainer = $BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/GridContainer
 @onready var warning_label: Label = $EquipBarrelSection/WarningLabel
-
 var current_selected_item_ui = null
 
 
@@ -61,6 +60,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		show_warning(warning_text)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 	full_refresh_ui()
+	get_first_item_for_focus()
 
 
 func toggle():
@@ -146,6 +146,7 @@ func open():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	#Engine.time_scale = 0.2
 	GameManager.player.is_in_inventory = true
+	get_first_item_for_focus()
 
 
 func close():
@@ -159,3 +160,17 @@ func show_warning(content: String):
 	warning_label.self_modulate = Color.RED
 	warning_label.text = content
 	warning_label.visible = true
+
+
+func get_first_item_for_focus():
+	await get_tree().create_timer(0.01).timeout
+	var item_to_focus = null
+	if equip_barrel_container.get_child_count() > 0:
+		item_to_focus = equip_barrel_container.get_child(0)
+	elif inventory_barrel_container.get_child_count() > 0:
+		item_to_focus = inventory_barrel_container.get_child(0)
+	elif shop_barrel_container.get_child_count() > 0:
+		item_to_focus = shop_barrel_container.get_child(0)
+
+	if item_to_focus != null and item_to_focus.button != null:
+		item_to_focus.button.grab_focus()
