@@ -91,7 +91,7 @@ size = Vector2(2, 2)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nb2lf"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7pe4k"]
 seamless = true
 noise = SubResource("FastNoiseLite_h1qoy")
 
@@ -99,7 +99,7 @@ noise = SubResource("FastNoiseLite_h1qoy")
 shader = ExtResource("46_fqoxl")
 shader_parameter/projector_power = 0.2
 shader_parameter/vignette_param = 10.0
-shader_parameter/distortionTexture = SubResource("NoiseTexture2D_nb2lf")
+shader_parameter/distortionTexture = SubResource("NoiseTexture2D_7pe4k")
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
 collision_layer = 2

@@ -1,6 +1,8 @@
 extends Control
 class_name PauseUI
 
+signal pause_ui_toggled
+
 @onready var pause_option_list: Control = $PauseOptionBG
 @onready var setting_ui: SettingUI = $SettingUI
 
@@ -26,6 +28,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			is_paused = not is_paused
 			get_tree().paused = is_paused
 			visible = is_paused
+			pause_ui_toggled.emit()
+			# Toggle low pass filter for BGM
+			AudioServer.set_bus_effect_enabled(1, 0, is_paused)
 			if is_paused:
 				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			else:

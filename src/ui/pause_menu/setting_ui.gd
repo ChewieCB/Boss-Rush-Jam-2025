@@ -70,6 +70,19 @@ func _input(event):
 			action_to_remap = null
 			remapping_button = null
 			accept_event()
+		return
+
+	if event.is_action_pressed("ui_page_up"):
+		var next_tab_id = tab_container.current_tab + 1
+		if next_tab_id > tab_container.get_child_count() - 1:
+			next_tab_id = 0
+		tab_container.current_tab = next_tab_id
+
+	if event.is_action_pressed("ui_page_down"):
+		var next_tab_id = tab_container.current_tab - 1
+		if next_tab_id < 0:
+			next_tab_id = tab_container.get_child_count() - 1
+		tab_container.current_tab = next_tab_id
 
 func open_menu():
 	visible = true

@@ -28,7 +28,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2x62q"]
 shader = ExtResource("1_jqa14")
 shader_parameter/blur_amount = 2.0
-shader_parameter/mix_amount = null
+shader_parameter/mix_amount = 0.0
 shader_parameter/color_over = null
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e022a"]
