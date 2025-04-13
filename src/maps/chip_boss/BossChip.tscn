@@ -674,7 +674,7 @@ light_color = Color(0.631632, 0.9375, 0.852371, 1)
 shadow_enabled = true
 
 [node name="WaterSurfaceMesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.6, 0)
 mesh = SubResource("PlaneMesh_ev02a")
 skeleton = NodePath("../Waterfalls")
 
@@ -692,6 +692,7 @@ visible = false
 mesh = SubResource("BoxMesh_ysjr3")
 
 [node name="Waterfalls" type="Node3D" parent="."]
+visible = false
 
 [node name="Waterfall1" type="Node3D" parent="Waterfalls"]
 
@@ -1133,7 +1134,7 @@ mesh = SubResource("ArrayMesh_5ykrk")
 shape = SubResource("ConcavePolygonShape3D_mhwog")
 
 [node name="entity_27_rising_platform_1" type="Node3D" parent="FuncGodotMap"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.24176e-09, -4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.24176e-09, -6, 0)
 
 [node name="entity_27_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_27_rising_platform_1"]
 cast_shadow = 2
@@ -1146,7 +1147,7 @@ mesh = SubResource("ArrayMesh_d0cme")
 shape = SubResource("ConcavePolygonShape3D_oq6kl")
 
 [node name="entity_30_rising_platform_2" type="Node3D" parent="FuncGodotMap"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, -4, -2.38419e-07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, -6, -2.38419e-07)
 
 [node name="entity_30_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_30_rising_platform_2"]
 cast_shadow = 2
@@ -1159,7 +1160,7 @@ mesh = SubResource("ArrayMesh_gxfkj")
 shape = SubResource("ConcavePolygonShape3D_t1fx3")
 
 [node name="entity_31_rising_platform_3" type="Node3D" parent="FuncGodotMap"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -4, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -6, -9)
 
 [node name="entity_31_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_31_rising_platform_3"]
 cast_shadow = 2
@@ -1172,7 +1173,7 @@ mesh = SubResource("ArrayMesh_gpyh0")
 shape = SubResource("ConcavePolygonShape3D_71gy4")
 
 [node name="entity_32_rising_platform_4" type="Node3D" parent="FuncGodotMap"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -4, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -6, -9)
 
 [node name="entity_32_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_32_rising_platform_4"]
 cast_shadow = 2
@@ -1185,7 +1186,7 @@ mesh = SubResource("ArrayMesh_k1cjv")
 shape = SubResource("ConcavePolygonShape3D_frxvs")
 
 [node name="entity_33_rising_platform_5" type="Node3D" parent="FuncGodotMap"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -4, -2.38419e-07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -6, -2.38419e-07)
 
 [node name="entity_33_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_33_rising_platform_5"]
 cast_shadow = 2
@@ -1198,7 +1199,7 @@ mesh = SubResource("ArrayMesh_x5a7f")
 shape = SubResource("ConcavePolygonShape3D_lh4ma")
 
 [node name="entity_34_rising_platform_6" type="Node3D" parent="FuncGodotMap"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -4, 9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -6, 9)
 
 [node name="entity_34_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_34_rising_platform_6"]
 cast_shadow = 2
@@ -1211,7 +1212,7 @@ mesh = SubResource("ArrayMesh_hs1ac")
 shape = SubResource("ConcavePolygonShape3D_bkt76")
 
 [node name="entity_35_rising_platform_7" type="Node3D" parent="FuncGodotMap"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -4, 9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -6, 9)
 
 [node name="entity_35_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_35_rising_platform_7"]
 cast_shadow = 2

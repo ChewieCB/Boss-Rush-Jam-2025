@@ -39,6 +39,10 @@ chip_shots_per_burst = 4
 num_bursts = 1
 delay_between_burst = 0.6
 sfx_chip_shot = Array[AudioStream]([])
+explosion_scene = null
+arena_radius = 19.5
+split_rush_targeting_time = 5.0
+charge_speed = 40.0
 barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer1")]
 sfx_slowmo = null
@@ -136,14 +140,42 @@ delay_in_seconds = "0.0"
 
 [node name="SplitRush" type="Node" parent="StateChart/Root/Phase" index="2"]
 script = ExtResource("4_wmyjd")
+initial_state = NodePath("Targeting")
 
-[node name="toSmallBlindProjectile" type="Node" parent="StateChart/Root/Phase/SplitRush" index="0"]
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/SplitRush" index="0"]
+script = ExtResource("6_yvmou")
+
+[node name="toCharging" type="Node" parent="StateChart/Root/Phase/SplitRush/Targeting" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Charging")
+event = &"start_charge"
+delay_in_seconds = "0.0"
+
+[node name="Charging" type="Node" parent="StateChart/Root/Phase/SplitRush" index="1"]
+script = ExtResource("6_yvmou")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/SplitRush/Charging" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Recover")
+event = &"end_charge"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/SplitRush" index="2"]
+script = ExtResource("6_yvmou")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/SplitRush/Recover" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toSmallBlindProjectile" type="Node" parent="StateChart/Root/Phase/SplitRush" index="3"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../SmallBlindProjectile")
 event = &"start_small_projectile_attack"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/SplitRush" index="1"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/SplitRush" index="4"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../Inactive")
 event = &"deactivate"
@@ -157,3 +189,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 [connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectile/Shooting" to="." method="_on_small_blind_shooting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/SmallBlindProjectile/Shooting" to="." method="_on_small_blind_shooting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectile/Recover" to="." method="_on_small_blind_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/SplitRush/Targeting" to="." method="_on_split_rush_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/SplitRush/Targeting" to="." method="_on_split_rush_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/SplitRush/Charging" to="." method="_on_split_rush_charging_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/SplitRush/Recover" to="." method="_on_split_rush_recover_state_entered"]

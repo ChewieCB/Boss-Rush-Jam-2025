@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=12 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Texture2D" uid="uid://c7hb6wpuv2rw6" path="res://src/bosses/base/assets/placeholder_sweets_big_stack.png" id="2_1q2di"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="3_7sirk"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="3_hbmr3"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_kiknp"]
 [ext_resource type="PackedScene" uid="uid://bhaia8j3ynxwp" path="res://src/bosses/chips/minions/SubStack.tscn" id="4_otar4"]
@@ -19,6 +20,7 @@ size = Vector3(5.8, 5, 5.9)
 collision_mask = 11
 script = ExtResource("2_2er6y")
 phase_2_health_percentage_trigger = 0.5
+explosion_scene = ExtResource("3_7sirk")
 DESIRED_DISTANCE = 10.0
 desired_distance = null
 angle_speed = 1.0
@@ -52,6 +54,9 @@ max_health = 6000.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
 
 [node name="Status" parent="StateChart/Root" index="3"]
 initial_state = NodePath("BigStack")
@@ -97,6 +102,18 @@ script = ExtResource("5_81kie")
 script = ExtResource("3_hbmr3")
 to = NodePath("../../BackspinChip")
 event = &"start_backspin_chip"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackProjectiles")
+event = &"start_split_stack_projectiles"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="2"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackCharge")
+event = &"start_split_stack_charge"
 delay_in_seconds = "0.0"
 
 [node name="BackspinChip" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
@@ -145,6 +162,116 @@ to = NodePath("../../../Idle")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
+[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="4"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackProjectiles")
+event = &"start_split_stack_projectiles"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="5"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackCharge")
+event = &"start_split_stack_charge"
+delay_in_seconds = "0.0"
+
+[node name="AoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+script = ExtResource("4_kiknp")
+
+[node name="SplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+script = ExtResource("4_kiknp")
+initial_state = NodePath("Splitting")
+
+[node name="Splitting" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toAttacking" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Splitting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Attacking")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toMerging" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Attacking" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Merging")
+event = &"finish_attack"
+delay_in_seconds = "0.0"
+
+[node name="Merging" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Merging" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recover")
+event = &"end_merge"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles" index="3"]
+script = ExtResource("5_81kie")
+
+[node name="toBackspinChip" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles" index="4"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../BackspinChip")
+event = &"start_backspin_chip"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles" index="5"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackCharge")
+event = &"start_split_stack_charge"
+delay_in_seconds = "0.0"
+
+[node name="SplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+script = ExtResource("4_kiknp")
+initial_state = NodePath("Splitting")
+
+[node name="Splitting" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toAttacking" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge/Splitting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Attacking")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toMerging" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge/Attacking" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Merging")
+event = &"finish_attack"
+delay_in_seconds = "0.0"
+
+[node name="Merging" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge/Merging" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recover")
+event = &"end_merge"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge" index="3"]
+script = ExtResource("5_81kie")
+
+[node name="toBackspinChip" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge" index="4"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../BackspinChip")
+event = &"start_backspin_chip"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge" index="5"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackProjectiles")
+event = &"start_split_stack_projectiles"
+delay_in_seconds = "0.0"
+
+[node name="SplitStackAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
+script = ExtResource("4_kiknp")
+
 [connection signal="state_entered" from="StateChart/Root/Status/SplitStacks" to="." method="_on_form_split_stacks_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Status/SplitStacks" to="." method="_on_form_split_stacks_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
@@ -155,3 +282,11 @@ delay_in_seconds = "0.0"
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/BackSpin" to="." method="_on_backspin_chip_back_spin_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/BackspinChip/BackSpin" to="." method="_on_backspin_chip_back_spin_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/Recover" to="." method="_on_backspin_chip_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Splitting" to="." method="_on_splitting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Attacking" to="." method="_on_split_stack_projectiles_attacking_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Merging" to="." method="_on_merging_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Recover" to="." method="_on_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackCharge/Splitting" to="." method="_on_splitting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackCharge/Attacking" to="." method="_on_split_stack_charge_attacking_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackCharge/Merging" to="." method="_on_merging_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackCharge/Recover" to="." method="_on_recover_state_entered"]

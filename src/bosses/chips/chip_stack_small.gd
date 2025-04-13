@@ -1,6 +1,8 @@
 extends BossCore
 class_name ChipBossSubStack
 
+signal substack_charge_set(pos: Vector3)
+
 @export_group("Movement")
 @export var DESIRED_DISTANCE: float = 20.0
 @export var desired_distance: float = DESIRED_DISTANCE
@@ -17,6 +19,12 @@ class_name ChipBossSubStack
 @export var delay_between_burst: float = 0.6
 # SFX
 @export var sfx_chip_shot: Array[AudioStream]
+@export_subgroup("Split Rush")
+@export var explosion_scene: PackedScene
+@export var arena_radius: float = 19.5
+@export var split_rush_targeting_time: float = 5.0
+@export var charge_speed: float = 40.0
+var charge_target_pos: Vector3
 
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
@@ -48,6 +56,20 @@ func orbit_target_in_group(delta: float) -> void:
 	var offset_x = cos(current_angle) * desired_distance
 	var offset_z = sin(current_angle) * desired_distance
 	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	# Pathfind to orbit_pos
+	navigation_component.set_nav_target_position(orbit_pos)
+
+
+func orbit_center_in_group(delta: float) -> void:
+	orbit_angle += angle_speed * delta
+	# Modify the orbit angle based on how many enemies are orbiting in the group
+	# so we have evenly spaced enemy orbits
+	var angle_offset = (2 * PI) / group_size * (group_idx + 1)
+	var current_angle = orbit_angle + angle_offset
+	# offset in XZ-plane
+	var offset_x = cos(current_angle) * arena_radius
+	var offset_z = sin(current_angle) * arena_radius
+	var orbit_pos = Vector3(offset_x, 0, offset_z)
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
 
@@ -109,4 +131,51 @@ func _on_small_blind_recover_state_entered() -> void:
 	state_chart.send_event("cooldown_end")
 	
 	select_attack()
+	state_chart.send_event("end_recovery")
+
+
+## SPLIT RUSH
+
+
+func _on_split_rush_targeting_state_entered() -> void:
+	debug_state_label.text = "Split Rush | Targeting"
+	
+	state_chart.send_event("start_moving")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(split_rush_targeting_time).timeout
+	
+	charge_target_pos = target.global_position
+	# TODO - raycast this or find a less hacky method of getting the floor y
+	charge_target_pos.y = -4
+	substack_charge_set.emit(charge_target_pos)
+	#draw_debug_sphere(charge_target_pos, 2.0, Color.PURPLE)
+	
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time * 2).timeout
+	state_chart.send_event("start_charge")
+
+
+func _on_split_rush_targeting_state_physics_processing(delta: float) -> void:
+	orbit_center_in_group(delta)
+
+
+func _on_split_rush_charging_state_entered() -> void:
+	debug_state_label.text = "Split Rush | Charging"
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_start")
+	navigation_component.disable()
+	
+	var charge_tween: Tween = get_tree().create_tween()
+	var charge_time: float = self.global_position.distance_to(charge_target_pos) / charge_speed
+	charge_tween.tween_property(self, "global_position", charge_target_pos, charge_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	#sfx_player.stream = sfx_charge.pick_random()
+	#sfx_player.play()
+	await charge_tween.finished
+	state_chart.send_event("end_charge")
+
+
+func _on_split_rush_recover_state_entered() -> void:
+	debug_state_label.text = "Split Rush | Recovering"
+	desired_distance = DESIRED_DISTANCE
+	health_component.damage(10000000)
 	state_chart.send_event("end_recovery")
