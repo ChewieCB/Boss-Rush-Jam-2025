@@ -19,12 +19,12 @@ height = 4.0
 height = 4.0
 radius = 1.5
 
-[node name="ChipStackSmall" type="CharacterBody3D" node_paths=PackedStringArray("health_component", "navigation_component")]
+[node name="ChipStackSmall" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
 collision_layer = 64
 collision_mask = 77
 script = ExtResource("1_2elh3")
-health_component = NodePath("HealthComponent")
 navigation_component = NodePath("NavigationComponent")
+health_component = NodePath("HealthComponent")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)

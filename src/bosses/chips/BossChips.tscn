@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://c7hb6wpuv2rw6" path="res://src/bosses/base/assets/placeholder_sweets_big_stack.png" id="2_1q2di"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="3_hbmr3"]
-[ext_resource type="PackedScene" uid="uid://bpbb23dkfwo0l" path="res://src/bosses/chips/ChipStackSmall.tscn" id="4_dao07"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_kiknp"]
+[ext_resource type="PackedScene" uid="uid://bhaia8j3ynxwp" path="res://src/bosses/chips/minions/SubStack.tscn" id="4_otar4"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_81kie"]
 [ext_resource type="PackedScene" uid="uid://cxg3ytjd4ybu0" path="res://src/bosses/chips/RollingChipProjectile.tscn" id="6_dth1w"]
 
@@ -25,7 +25,7 @@ angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
 rolling_chip_projectile = ExtResource("6_dth1w")
-small_stack_prefab = ExtResource("4_dao07")
+small_stack_prefab = ExtResource("4_otar4")
 stack_spawn_time = 0.1
 barrel_pickup_scene = null
 sfx_slowmo = null
@@ -54,7 +54,6 @@ max_health = 6000.0
 boss_name = "Shortstack"
 
 [node name="StateChartDebugger" parent="UI" index="1"]
-visible = true
 enabled = true
 
 [node name="Status" parent="StateChart/Root" index="3"]

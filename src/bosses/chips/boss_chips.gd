@@ -1,6 +1,8 @@
 extends BossCore
 class_name BossChips
 
+signal substack_attacks_finished
+
 var prev_phase
 @export var phase_2_health_percentage_trigger: float = 0.5
 
@@ -22,6 +24,7 @@ var active_rolling_chip: RollingChip
 @export var small_stack_prefab: PackedScene
 @export var stack_spawn_time: float = 0.1
 var spawned_sub_stacks: Array = []
+var finished_sub_stacks: Array = []
 
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
 #@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
@@ -110,6 +113,9 @@ func _on_backspin_chip_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
+# TODO - change this to specific split attack phases, not a split status. 
+# We can have distinct attacks per form, then choose the form, and then attack
+# in the select attack method.
 func _on_form_split_stacks_state_entered() -> void:
 	# Hide the main boss body and disable collision
 	sprite.visible = false
@@ -117,13 +123,15 @@ func _on_form_split_stacks_state_entered() -> void:
 	navigation_component.disable()
 	# Disable player and projectile collisions
 	self.collision_mask -= (pow(2, 2-1) + pow(2, 4-1))
-	#collider.set_deferred("disabled",  true)
 	hurtbox.set_deferred("monitoring",  false)
 	# TODO - prevent damage numbers showing up
 	
 	spawned_sub_stacks = await spawn_stacks(3)
 	
-	await get_tree().create_timer(15.0).timeout
+	for stack in spawned_sub_stacks:
+		stack.state_chart.send_event("start_small_projectile_attack")
+	
+	await substack_attacks_finished
 	state_chart.send_event("combine_stack")
 
 
@@ -131,6 +139,18 @@ func _stack_get_new_move_point(stack) -> void:
 	var random_pos: Vector3 = NavigationServer3D.map_get_random_point(stack.nav_map_rid, 1, false)
 	#draw_debug_sphere(random_pos, 1.0, Color.GREEN)
 	stack.navigation_component.set_nav_target_position(random_pos)
+
+
+func _substack_on_event_received(event: String, stack: ChipBossSubStack) -> void:
+	if event == "end_recovery":
+		_substack_finished(stack)
+
+
+func _substack_finished(stack: ChipBossSubStack) -> void:
+	finished_sub_stacks.append(stack)
+	if finished_sub_stacks.size() == spawned_sub_stacks.size():
+		substack_attacks_finished.emit()
+		finished_sub_stacks = []
 
 
 func _on_form_split_stacks_state_exited() -> void:
@@ -154,6 +174,7 @@ func spawn_stacks(stack_count: int) -> Array:
 		small_stack_inst.health_component.health_diff.connect(_small_stack_hurt)
 		small_stack_inst.health_component.died.connect(_small_stack_dead.bind(small_stack_inst))
 		small_stack_inst.navigation_component.destination_reached.connect(_stack_get_new_move_point.bind(small_stack_inst))
+		small_stack_inst.state_chart.event_received.connect(_substack_on_event_received.bind(small_stack_inst))
 		small_stack_inst.target = target
 		small_stack_inst.group_size = stack_count
 		small_stack_inst.group_idx = i
@@ -167,9 +188,6 @@ func spawn_stacks(stack_count: int) -> Array:
 		stack_spawn_tween.parallel().tween_property(small_stack_inst, "scale", Vector3.ONE, stack_spawn_time)
 		
 		await stack_spawn_tween.finished
-		
-		#_stack_get_new_move_point(small_stack_inst)
-		
 	
 	return spawned_stacks
 
@@ -191,4 +209,4 @@ func _small_stack_hurt(damage: float) -> void:
 
 
 func _small_stack_dead(stack: CharacterBody3D) -> void:
-	spawned_sub_stacks.erase(stack)
+	_substack_finished(stack)
