@@ -27,6 +27,11 @@ angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
 rolling_chip_projectile = ExtResource("6_dth1w")
+jump_height = 9.0
+jump_time = 0.8
+jump_hang_time = 1.2
+drop_time = 0.3
+drop_damage = 20.0
 small_stack_prefab = ExtResource("4_otar4")
 stack_spawn_time = 0.1
 barrel_pickup_scene = null
@@ -52,32 +57,14 @@ shape = SubResource("BoxShape3D_oomx2")
 [node name="HealthComponent" parent="." index="4"]
 max_health = 6000.0
 
+[node name="NavigationComponent" parent="." index="5"]
+follow_target = false
+
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
 
 [node name="StateChartDebugger" parent="UI" index="1"]
 enabled = true
-
-[node name="Status" parent="StateChart/Root" index="3"]
-initial_state = NodePath("BigStack")
-
-[node name="BigStack" type="Node" parent="StateChart/Root/Status" index="1"]
-script = ExtResource("5_81kie")
-
-[node name="toSplitStacks" type="Node" parent="StateChart/Root/Status/BigStack" index="0"]
-script = ExtResource("3_hbmr3")
-to = NodePath("../../SplitStacks")
-event = &"split_stack"
-delay_in_seconds = "0.0"
-
-[node name="SplitStacks" type="Node" parent="StateChart/Root/Status" index="2"]
-script = ExtResource("5_81kie")
-
-[node name="toBigStack" type="Node" parent="StateChart/Root/Status/SplitStacks" index="0"]
-script = ExtResource("3_hbmr3")
-to = NodePath("../../BigStack")
-event = &"combine_stack"
-delay_in_seconds = "0.0"
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")
@@ -104,13 +91,19 @@ to = NodePath("../../BackspinChip")
 event = &"start_backspin_chip"
 delay_in_seconds = "0.0"
 
-[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
+[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../PlaceYourBets")
+event = &"start_place_your_bets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="2"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../SplitStackProjectiles")
 event = &"start_split_stack_projectiles"
 delay_in_seconds = "0.0"
 
-[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="2"]
+[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="3"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../SplitStackCharge")
 event = &"start_split_stack_charge"
@@ -162,20 +155,84 @@ to = NodePath("../../../Idle")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="4"]
+[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="4"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../PlaceYourBets")
+event = &"start_place_your_bets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="5"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../SplitStackProjectiles")
 event = &"start_split_stack_projectiles"
 delay_in_seconds = "0.0"
 
-[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="5"]
+[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="6"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../SplitStackCharge")
 event = &"start_split_stack_charge"
 delay_in_seconds = "0.0"
 
-[node name="AoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+[node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
 script = ExtResource("4_kiknp")
+initial_state = NodePath("Flooding")
+
+[node name="Flooding" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toJumping" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets/Flooding" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Jumping")
+event = &"start_aoe_attack"
+delay_in_seconds = "0.0"
+
+[node name="Jumping" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toCrashing" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets/Jumping" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Crashing")
+event = &"aoe_dive"
+delay_in_seconds = "0.0"
+
+[node name="Crashing" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toDraining" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets/Crashing" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Draining")
+event = &"drain_chamber"
+delay_in_seconds = "0.0"
+
+[node name="Draining" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets" index="3"]
+script = ExtResource("5_81kie")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets/Draining" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recover")
+event = &"end_aoe_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets" index="4"]
+script = ExtResource("5_81kie")
+
+[node name="toBackspinChip" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets" index="5"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../BackspinChip")
+event = &"start_backspin_chip"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets" index="6"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackProjectiles")
+event = &"start_split_stack_projectiles"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets" index="7"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackCharge")
+event = &"start_split_stack_charge"
+delay_in_seconds = "0.0"
 
 [node name="SplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
 script = ExtResource("4_kiknp")
@@ -217,7 +274,13 @@ to = NodePath("../../BackspinChip")
 event = &"start_backspin_chip"
 delay_in_seconds = "0.0"
 
-[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles" index="5"]
+[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles" index="5"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../PlaceYourBets")
+event = &"start_place_your_bets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles" index="6"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../SplitStackCharge")
 event = &"start_split_stack_charge"
@@ -263,7 +326,13 @@ to = NodePath("../../BackspinChip")
 event = &"start_backspin_chip"
 delay_in_seconds = "0.0"
 
-[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge" index="5"]
+[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge" index="5"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../PlaceYourBets")
+event = &"start_place_your_bets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge" index="6"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../SplitStackProjectiles")
 event = &"start_split_stack_projectiles"
@@ -272,8 +341,6 @@ delay_in_seconds = "0.0"
 [node name="SplitStackAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
 script = ExtResource("4_kiknp")
 
-[connection signal="state_entered" from="StateChart/Root/Status/SplitStacks" to="." method="_on_form_split_stacks_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Status/SplitStacks" to="." method="_on_form_split_stacks_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_physics_processing"]
@@ -282,6 +349,11 @@ script = ExtResource("4_kiknp")
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/BackSpin" to="." method="_on_backspin_chip_back_spin_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/BackspinChip/BackSpin" to="." method="_on_backspin_chip_back_spin_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/Recover" to="." method="_on_backspin_chip_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/PlaceYourBets/Flooding" to="." method="_on_flooding_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/PlaceYourBets/Jumping" to="." method="_on_place_your_bets_jumping_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/PlaceYourBets/Crashing" to="." method="_on_place_your_bets_crashing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/PlaceYourBets/Draining" to="." method="_on_draining_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/PlaceYourBets/Recover" to="." method="_on_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Splitting" to="." method="_on_splitting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Attacking" to="." method="_on_split_stack_projectiles_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Merging" to="." method="_on_merging_state_entered"]

@@ -2,6 +2,8 @@ extends BossCore
 class_name BossChips
 
 signal substack_attacks_finished
+signal flood_chamber
+signal drain_chamber
 
 var prev_phase
 @export var phase_2_health_percentage_trigger: float = 0.5
@@ -23,7 +25,12 @@ var last_attack: String
 @export var rolling_chip_projectile: PackedScene
 var active_rolling_chip: RollingChip
 # SFX
-
+@export_subgroup("Place Your Bets")
+@export var jump_height: float = 9.0
+@export var jump_time: float = 0.8
+@export var jump_hang_time: float = 1.2
+@export var drop_time: float = 0.3
+@export var drop_damage: float = 20.0
 @export_subgroup("Split Stacks")
 @export var small_stack_prefab: PackedScene
 @export var stack_spawn_time: float = 0.1
@@ -31,8 +38,13 @@ var spawned_sub_stacks: Array = []
 var finished_sub_stacks: Array = []
 var last_stack: ChipBossSubStack
 
+
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
 #@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
+
+
+func _physics_process(delta: float) -> void:
+	pass
 
 
 func activate() -> void:
@@ -47,6 +59,7 @@ func select_attack_phase_1() -> void:
 		"start_backspin_chip",
 		"start_split_stack_projectiles",
 		"start_split_stack_charge",
+		"start_place_your_bets_attack"
 	]
 	if prev_phase:
 		possible_phases.erase(prev_phase)
@@ -57,11 +70,82 @@ func select_attack_phase_1() -> void:
 	state_chart.send_event(new_phase)
 
 
+#### SUBSTACK METHODS
+#
+func spawn_stacks(stack_count: int) -> Array:
+	var spawned_stacks = []
+	# Spawn small stacks from the center point of the big stack and space them out
+	for i in range(stack_count):
+		var small_stack_inst: CharacterBody3D = small_stack_prefab.instantiate()
+		get_parent().add_child(small_stack_inst)
+		small_stack_inst.global_transform = self.global_transform
+		small_stack_inst.scale = Vector3(0, 1, 0)
+		
+		small_stack_inst.health_component.health_diff.connect(_small_stack_hurt)
+		small_stack_inst.health_component.died.connect(_small_stack_dead.bind(small_stack_inst))
+		small_stack_inst.state_chart.event_received.connect(_substack_on_event_received.bind(small_stack_inst))
+		small_stack_inst.substack_charge_set.connect(_on_substack_charge_set)
+		
+		small_stack_inst.target = target
+		small_stack_inst.group_size = stack_count
+		small_stack_inst.group_idx = i
+		
+		spawned_stacks.append(small_stack_inst)
+		
+		var stack_spawn_tween: Tween = get_tree().create_tween()
+		var spawn_pos: Vector3 = self.global_position + (self.global_transform.basis.z * 5).rotated(
+			Vector3.UP, 2 * PI / stack_count * (i+1)
+		)
+		stack_spawn_tween.tween_property(small_stack_inst, "global_position", spawn_pos, stack_spawn_time)
+		stack_spawn_tween.parallel().tween_property(small_stack_inst, "scale", Vector3.ONE, stack_spawn_time)
+		
+		await stack_spawn_tween.finished
+	
+	return spawned_stacks
+
+
+func despawn_stacks() -> void:
+	for stack in spawned_sub_stacks:
+		var stack_spawn_tween: Tween = get_tree().create_tween()
+		stack_spawn_tween.tween_property(stack, "global_position", self.global_position, stack_spawn_time)
+		stack_spawn_tween.parallel().tween_property(stack, "scale", Vector3.ZERO, stack_spawn_time)
+		
+		await stack_spawn_tween.finished
+		
+		stack.queue_free()
+	spawned_sub_stacks = []
+
+
+func _substack_on_event_received(event: String, stack: ChipBossSubStack) -> void:
+	if event == "end_recovery":
+		_substack_finished(stack)
+
+
+func _substack_finished(stack: ChipBossSubStack) -> void:
+	finished_sub_stacks.append(stack)
+	if finished_sub_stacks.size() == spawned_sub_stacks.size():
+		last_stack = stack
+		substack_attacks_finished.emit()
+		finished_sub_stacks = []
+
+
+func _small_stack_hurt(damage: float) -> void:
+	health_component.damage(damage)
+
+
+func _small_stack_dead(stack: CharacterBody3D) -> void:
+	_substack_finished(stack)
+
+
+#### PHASE 1
+#
 func _on_phase_1_state_entered() -> void:
 	current_phase = 1
 	select_attack()
 
 
+#### BACKSPIN CHIP
+# Big stack fires a spinning chip that rolls back the way it came
 func _on_backspin_chip_targeting_state_entered() -> void:
 	debug_state_label.text = "Backspin Chip | Targeting"
 	
@@ -128,117 +212,33 @@ func _on_backspin_chip_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-# TODO - change this to specific split attack phases, not a split status. 
-# We can have distinct attacks per form, then choose the form, and then attack
-# in the select attack method.
-func _on_form_split_stacks_state_entered() -> void:
-	# Hide the main boss body and disable collision
-	sprite.visible = false
-	debug_mesh.visible = false
-	navigation_component.disable()
-	# Disable player and projectile collisions
-	self.collision_mask -= (pow(2, 2-1) + pow(2, 4-1))
-	hurtbox.set_deferred("monitoring",  false)
-	# TODO - prevent damage numbers showing up
+#### BIG STACK PLACE YOUR BETS AoE
+# Flood the arena and raise some platforms, leap into the air, 
+# and crash down on the platform the player is currently on
+func _on_place_your_bets_jumping_state_entered() -> void:
+	debug_state_label.text = "Place Your Bets | Jumping"
+	var jump_tween: Tween = get_tree().create_tween()
+	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height, 0), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	
-	spawned_sub_stacks = await spawn_stacks(3)
+	await jump_tween.finished
+	await get_tree().create_timer(jump_hang_time).timeout
 	
-	for stack in spawned_sub_stacks:
-		#stack.state_chart.send_event("start_small_projectile_attack")
-		stack.state_chart.send_event("start_split_rush_attack")
+	state_chart.send_event("aoe_dive")
+
+
+func _on_place_your_bets_crashing_state_entered() -> void:
+	debug_state_label.text = "Place Your Bets | Crashing"
+	var jump_tween: Tween = get_tree().create_tween()
+	jump_tween.tween_property(self, "global_position", Vector3(0, -2, 0), drop_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
-	await substack_attacks_finished
+	await jump_tween.finished
 	
-	state_chart.send_event("combine_stack")
+	state_chart.send_event("drain_chamber")
 
 
-func _stack_get_new_move_point(stack) -> void:
-	var random_pos: Vector3 = NavigationServer3D.map_get_random_point(stack.nav_map_rid, 1, false)
-	#draw_debug_sphere(random_pos, 1.0, Color.GREEN)
-	stack.navigation_component.set_nav_target_position(random_pos)
-
-
-func _substack_on_event_received(event: String, stack: ChipBossSubStack) -> void:
-	if event == "end_recovery":
-		_substack_finished(stack)
-
-
-func _substack_finished(stack: ChipBossSubStack) -> void:
-	finished_sub_stacks.append(stack)
-	if finished_sub_stacks.size() == spawned_sub_stacks.size():
-		last_stack = stack
-		substack_attacks_finished.emit()
-		finished_sub_stacks = []
-
-
-func _on_form_split_stacks_state_exited() -> void:
-	await despawn_stacks()
-	
-	# TODO - generate explosion for split rush
-	var explosion_vfx = explosion_scene.instantiate()
-	get_tree().get_root().add_child(explosion_vfx)
-	explosion_vfx.change_mesh_scale(4)
-	explosion_vfx.global_position = self.global_position + Vector3(0, 3, 0)
-	explosion_vfx.scale = Vector3(4, 4, 4)
-	
-	sprite.visible = true
-	#navigation_component.enable()
-	debug_mesh.visible = true
-	self.collision_mask += (pow(2, 2-1) + pow(2, 4-1))
-	await get_tree().create_timer(3.0).timeout
-	select_attack()
-
-
-func spawn_stacks(stack_count: int) -> Array:
-	var spawned_stacks = []
-	# Spawn small stacks from the center point of the big stack and space them out
-	for i in range(stack_count):
-		var small_stack_inst: CharacterBody3D = small_stack_prefab.instantiate()
-		get_parent().add_child(small_stack_inst)
-		small_stack_inst.global_transform = self.global_transform
-		small_stack_inst.scale = Vector3(0, 1, 0)
-		small_stack_inst.health_component.health_diff.connect(_small_stack_hurt)
-		small_stack_inst.health_component.died.connect(_small_stack_dead.bind(small_stack_inst))
-		small_stack_inst.navigation_component.destination_reached.connect(_stack_get_new_move_point.bind(small_stack_inst))
-		small_stack_inst.state_chart.event_received.connect(_substack_on_event_received.bind(small_stack_inst))
-		small_stack_inst.substack_charge_set.connect(_on_substack_charge_set)
-		small_stack_inst.target = target
-		small_stack_inst.group_size = stack_count
-		small_stack_inst.group_idx = i
-		spawned_stacks.append(small_stack_inst)
-		
-		var stack_spawn_tween: Tween = get_tree().create_tween()
-		var spawn_pos: Vector3 = self.global_position + (self.global_transform.basis.z * 5).rotated(
-			Vector3.UP, 2 * PI / stack_count * (i+1)
-		)
-		stack_spawn_tween.tween_property(small_stack_inst, "global_position", spawn_pos, stack_spawn_time)
-		stack_spawn_tween.parallel().tween_property(small_stack_inst, "scale", Vector3.ONE, stack_spawn_time)
-		
-		await stack_spawn_tween.finished
-	
-	return spawned_stacks
-
-
-func despawn_stacks() -> void:
-	for stack in spawned_sub_stacks:
-		var stack_spawn_tween: Tween = get_tree().create_tween()
-		stack_spawn_tween.tween_property(stack, "global_position", self.global_position, stack_spawn_time)
-		stack_spawn_tween.parallel().tween_property(stack, "scale", Vector3.ZERO, stack_spawn_time)
-		
-		await stack_spawn_tween.finished
-		
-		stack.queue_free()
-	spawned_sub_stacks = []
-
-
-func _small_stack_hurt(damage: float) -> void:
-	health_component.damage(damage)
-
-
-func _small_stack_dead(stack: CharacterBody3D) -> void:
-	_substack_finished(stack)
-
-
+#### GENERIC SPLITTING BEHAVIOUR
+# Shared behaviour for splitting the big stack into multiple substacks,
+# and reforming back into one big stack.
 func _on_splitting_state_entered() -> void:
 	# Hide the main boss body and disable collision
 	sprite.visible = false
@@ -286,13 +286,36 @@ func trigger_substack_attack(attack_event: String) -> void:
 	state_chart.send_event("finish_attack")
 
 
+#### SPLIT STACK PROJECTILES
+# Split into multiple smaller stacks, orbit the player, and fire projectiles
 func _on_split_stack_projectiles_attacking_state_entered() -> void:
 	trigger_substack_attack("start_small_projectile_attack")
 
 
+#### SPLIT STACK CHARGE
+# Split into multiple smaller stacks, orbit the player, and charge at them;
+# reforming into the big stack in a big explosion
 func _on_split_stack_charge_attacking_state_entered() -> void:
 	trigger_substack_attack("start_split_rush_attack")
 
 
 func _on_substack_charge_set(pos: Vector3) -> void:
 	self.global_position = pos
+
+
+#### SPLIT STACK AoE
+# Flood the arena and raise some platforms, leap into the air, 
+# split into several smaller stacks, and crash down on the platforms in sequence
+
+
+
+#### ARENA CONTROL METHODS
+func _on_flooding_state_entered() -> void:
+	debug_state_label.text = "Place Your Bets | Flooding"
+	navigation_component.disable()
+	flood_chamber.emit()
+
+
+func _on_draining_state_entered() -> void:
+	debug_state_label.text = "Place Your Bets | Draining"
+	drain_chamber.emit()

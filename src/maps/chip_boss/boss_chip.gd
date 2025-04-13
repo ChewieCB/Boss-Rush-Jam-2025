@@ -42,6 +42,9 @@ func _ready() -> void:
 		player.rotation = GameManager.cached_player_rotation
 		player.player_camera.rotation = GameManager.cached_camera_rotation
 	
+	boss.flood_chamber.connect(raise_water)
+	boss.drain_chamber.connect(lower_water)
+	
 	waterfalls.visible = false
 	water_surface.global_position.y = lower_water_level
 	for platform in rising_platforms:
@@ -53,13 +56,13 @@ func _ready() -> void:
 	#generate_navigation()
 
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("input_1"):
-		#if breakable_floor:
-			#breakable_floor.queue_free()
-		raise_water()
-	elif event.is_action_pressed("input_2"):
-		lower_water()
+#func _input(event: InputEvent) -> void:
+	#if event.is_action_pressed("input_1"):
+		##if breakable_floor:
+			##breakable_floor.queue_free()
+		#raise_water()
+	#elif event.is_action_pressed("input_2"):
+		#lower_water()
 
 
 func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
@@ -100,6 +103,8 @@ func raise_water() -> void:
 		water_tween.parallel().tween_property(platform, "global_position:y", upper_platform_level, 1.4)
 	
 	await water_tween.finished
+	
+	boss.state_chart.send_event("start_aoe_attack")
 
 
 func lower_water() -> void:
@@ -110,6 +115,8 @@ func lower_water() -> void:
 		water_tween.parallel().tween_property(platform, "global_position:y", lower_platform_level, 1.4)
 	
 	await water_tween.finished
+	
+	boss.state_chart.send_event("end_aoe_attack")
 
 
 func _on_water_damage_area_body_entered(body: Node3D) -> void:
