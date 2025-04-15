@@ -31,6 +31,8 @@ var active_rolling_chip: RollingChip
 @export var jump_hang_time: float = 1.2
 @export var drop_time: float = 0.3
 @export var drop_damage: float = 20.0
+@export var aoe_radius: float = 3.0
+@export var wave_material: ShaderMaterial
 var aoe_markers: Array[Node]
 @export_subgroup("Split Stacks")
 @export var small_stack_prefab: PackedScene
@@ -57,10 +59,10 @@ func activate() -> void:
 
 func select_attack_phase_1() -> void:
 	var possible_phases = [
-		"start_backspin_chip",
+		#"start_backspin_chip",
 		"start_place_your_bets_attack",
-		"start_split_stack_projectiles",
-		"start_split_stack_charge",
+		#"start_split_stack_projectiles",
+		#"start_split_stack_charge",
 		"start_split_stack_place_your_bets_attack",
 	]
 	if prev_phase:
@@ -234,6 +236,7 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 	jump_tween.tween_property(self, "global_position", Vector3(0, -2, 0), drop_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
 	await jump_tween.finished
+	spawn_aoe_wave(aoe_radius, drop_damage)
 	
 	state_chart.send_event("drain_chamber")
 
@@ -329,6 +332,7 @@ func _on_split_stack_place_your_bets_crashing_state_entered() -> void:
 		stack.marker_target_idx = new_target_idx
 		stack.state_chart.send_event("start_dive")
 		await stack.substack_dive_finished
+		spawn_aoe_wave(aoe_radius, drop_damage / i, stack.global_position)
 	
 	await substack_attacks_finished
 	
@@ -351,3 +355,82 @@ func _on_flooding_state_entered() -> void:
 func _on_draining_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Draining"
 	drain_chamber.emit()
+
+
+# TODO - make generic
+func spawn_aoe_wave(
+	max_radius: float,
+	damage: float = 10.0,
+	area_pos: Vector3 = self.global_position,
+	spawned_wave_time: float = 1.0,
+	spawned_wave_height: float = 1.0,
+	_telegraph: bool = false,
+	callback: Callable = func(): pass
+) -> void:
+	# Generate a collider
+	var area_collider := Area3D.new()
+	var area_collider_shape := CollisionShape3D.new()
+	var collider_shape := CylinderShape3D.new()
+	collider_shape.radius = 0.01
+	collider_shape.height = spawned_wave_height
+	area_collider_shape.shape = collider_shape
+	area_collider.add_child(area_collider_shape)
+	area_collider.collision_layer = int(pow(2, 7))
+	area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
+	area_collider.monitoring = true
+	
+	get_tree().get_root().add_child(area_collider)
+	
+	area_collider.global_position = area_pos
+	area_collider.body_entered.connect(_on_wave_collision.bind(damage))
+	#area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
+	
+	var debug_mesh_instance = MeshInstance3D.new()
+	var mesh = CylinderMesh.new()
+	
+	spawned_area_objects.append([area_collider, debug_mesh_instance])
+	
+	# Generate a visual
+	get_tree().get_root().add_child(debug_mesh_instance)
+	
+	debug_mesh_instance.mesh = mesh
+	debug_mesh_instance.cast_shadow = false
+	debug_mesh_instance.global_position = area_pos
+	
+	mesh.bottom_radius = 0.0
+	mesh.top_radius = 0.0
+	mesh.height = spawned_wave_height
+	mesh.material = wave_material
+	
+	#if telegraph:
+		#var telegraph_tween = get_tree().create_tween()
+		#var mesh_color: Color = debug_mesh_instance.mesh.material.get("shader_parameter/color")
+		#
+		#telegraph_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", 6.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+		#telegraph_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", 6.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+		##telegraph_tween.parallel().tween_method(material_glow.bind(debug_mesh_instance.mesh.material, Color.RED), 0, 1, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+		#telegraph_tween.parallel().tween_callback(func(): state_chart.send_event("attack_telegraph")).set_delay(0)
+		#telegraph_tween.chain().tween_property(debug_mesh_instance, "mesh:bottom_radius", 1.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+		#telegraph_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", 1.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+		##telegraph_tween.parallel().tween_method(material_glow.bind(debug_mesh_instance.mesh.material, mesh_color), 0, 1, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
+		#
+		#await telegraph_tween.finished
+	
+	#state_chart.send_event("attack_start")
+	
+	# Animate the visual
+	# TODO - SFX
+	#sfx_player.stream = sfx_ground_pound.pick_random()
+	#sfx_player.play()
+	var tween = get_tree().create_tween()
+	tween.tween_property(mesh, "bottom_radius", max_radius, spawned_wave_time)
+	tween.parallel().tween_property(mesh, "top_radius", max_radius, spawned_wave_time)
+	tween.parallel().tween_property(area_collider_shape.shape, "radius", max_radius, spawned_wave_time)
+	tween.tween_callback(debug_mesh_instance.queue_free)
+	tween.tween_callback(area_collider.queue_free)
+	tween.tween_callback(callback)
+
+
+func _on_wave_collision(body: Node3D, aoe_damage: float) -> void:
+	if body == target:
+		body.health_component.damage(aoe_damage)
