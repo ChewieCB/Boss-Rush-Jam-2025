@@ -31,6 +31,7 @@ var active_rolling_chip: RollingChip
 @export var jump_hang_time: float = 1.2
 @export var drop_time: float = 0.3
 @export var drop_damage: float = 20.0
+var aoe_markers: Array[Node]
 @export_subgroup("Split Stacks")
 @export var small_stack_prefab: PackedScene
 @export var stack_spawn_time: float = 0.1
@@ -57,9 +58,10 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	var possible_phases = [
 		"start_backspin_chip",
+		"start_place_your_bets_attack",
 		"start_split_stack_projectiles",
 		"start_split_stack_charge",
-		"start_place_your_bets_attack"
+		"start_split_stack_place_your_bets_attack",
 	]
 	if prev_phase:
 		possible_phases.erase(prev_phase)
@@ -72,7 +74,7 @@ func select_attack_phase_1() -> void:
 
 #### SUBSTACK METHODS
 #
-func spawn_stacks(stack_count: int) -> Array:
+func spawn_stacks(stack_count: int, spawn_distance: float) -> Array:
 	var spawned_stacks = []
 	# Spawn small stacks from the center point of the big stack and space them out
 	for i in range(stack_count):
@@ -93,7 +95,7 @@ func spawn_stacks(stack_count: int) -> Array:
 		spawned_stacks.append(small_stack_inst)
 		
 		var stack_spawn_tween: Tween = get_tree().create_tween()
-		var spawn_pos: Vector3 = self.global_position + (self.global_transform.basis.z * 5).rotated(
+		var spawn_pos: Vector3 = self.global_position + (self.global_transform.basis.z * spawn_distance).rotated(
 			Vector3.UP, 2 * PI / stack_count * (i+1)
 		)
 		stack_spawn_tween.tween_property(small_stack_inst, "global_position", spawn_pos, stack_spawn_time)
@@ -250,7 +252,7 @@ func _on_splitting_state_entered() -> void:
 	# TODO - prevent damage numbers showing up
 	health_component.show_damage_text = false
 	
-	spawned_sub_stacks = await spawn_stacks(3)
+	spawned_sub_stacks = await spawn_stacks(3, 1.0)
 	
 	state_chart.send_event("start_attack")
 
@@ -307,6 +309,36 @@ func _on_substack_charge_set(pos: Vector3) -> void:
 # Flood the arena and raise some platforms, leap into the air, 
 # split into several smaller stacks, and crash down on the platforms in sequence
 
+func _on_split_stack_place_your_bets_crashing_state_entered() -> void:
+	# Gets all substacks ready to drop
+	trigger_substack_attack("start_place_your_bets_attack")
+	
+	# Triggers AoE drops in random order
+	var shuffled_stacks = spawned_sub_stacks.duplicate()
+	aoe_markers = get_tree().get_nodes_in_group("boss_aoe_marker")
+	var available_markers = range(aoe_markers.size())
+	shuffled_stacks.shuffle()
+	for i in range(shuffled_stacks.size()):
+		var stack = shuffled_stacks[i]
+		var wrapped_idx = wrapi(
+			i + randi_range(0, available_markers.size()), 
+			0, 
+			available_markers.size()
+		)
+		var new_target_idx = available_markers.pop_at(wrapped_idx)
+		stack.marker_target_idx = new_target_idx
+		stack.state_chart.send_event("start_dive")
+		await stack.substack_dive_finished
+	
+	await substack_attacks_finished
+	
+	state_chart.send_event("drain_chamber")
+
+
+func _on_split_stack_place_your_bets_merging_state_entered() -> void:
+	# FIXME - sort this y position stuff out
+	self.global_position.y = -4
+	_on_merging_state_entered()
 
 
 #### ARENA CONTROL METHODS

@@ -1550,3 +1550,49 @@
 ( 352 -192 -218 ) ( 352 -128 -218 ) ( 352 -128 -250 ) placeholder/texture_green_green_green_06 [ 0 -1 0 -224 ] [ 0 0 -1 -122 ] 0 1 1
 }
 }
+// entity 36
+{
+"classname" "BossPositionMarker"
+"origin" "0 -384 -64"
+"marker_group" "aoe"
+}
+// entity 37
+{
+"classname" "BossPositionMarker"
+"origin" "-288 -160 -64"
+"marker_group" "aoe"
+}
+// entity 38
+{
+"classname" "BossPositionMarker"
+"origin" "288 -160 -64"
+"marker_group" "aoe"
+}
+// entity 39
+{
+"classname" "BossPositionMarker"
+"origin" "288 160 -64"
+"angle" "0"
+"marker_group" "aoe"
+}
+// entity 40
+{
+"classname" "BossPositionMarker"
+"origin" "0 384 -64"
+"angle" "0"
+"marker_group" "aoe"
+}
+// entity 41
+{
+"classname" "BossPositionMarker"
+"origin" "-288 160 -64"
+"angle" "0"
+"marker_group" "aoe"
+}
+// entity 42
+{
+"classname" "BossPositionMarker"
+"origin" "0 0 -64"
+"angle" "0"
+"marker_group" "aoe"
+}

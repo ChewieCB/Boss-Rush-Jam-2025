@@ -2,6 +2,7 @@ extends BossCore
 class_name ChipBossSubStack
 
 signal substack_charge_set(pos: Vector3)
+signal substack_dive_finished(stack: ChipBossSubStack)
 
 @export_group("Movement")
 @export var DESIRED_DISTANCE: float = 20.0
@@ -25,6 +26,10 @@ signal substack_charge_set(pos: Vector3)
 @export var split_rush_targeting_time: float = 5.0
 @export var charge_speed: float = 40.0
 var charge_target_pos: Vector3
+# SFX
+@export_subgroup("Place Your Bets")
+@onready var aoe_markers: Array[Node] = get_tree().get_nodes_in_group("boss_aoe_marker")
+@export var marker_target_idx: int
 
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
@@ -178,4 +183,36 @@ func _on_split_rush_recover_state_entered() -> void:
 	debug_state_label.text = "Split Rush | Recovering"
 	desired_distance = DESIRED_DISTANCE
 	health_component.damage(10000000)
+	state_chart.send_event("end_recovery")
+
+
+func _on_place_your_bets_targeting_state_entered() -> void:
+	debug_state_label.text = "Place Your Bets | Targeting"
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	
+	# Await an external signal so we can send the stacks down in any order
+
+
+func _on_place_your_bets_crashing_state_entered() -> void:
+	debug_state_label.text = "Place Your Bets | Crashing"
+	
+	# TODO - fix the telegraph timing
+	#state_chart.send_event("attack_telegraph")
+	#await get_tree().create_timer(telegraph_time * 2).timeout
+	state_chart.send_event("start_dive")
+	
+	var target_marker: Marker3D = aoe_markers[marker_target_idx]
+	var jump_tween: Tween = get_tree().create_tween()
+	jump_tween.tween_property(self, "global_position",target_marker.global_position, 0.4).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	
+	await jump_tween.finished
+	
+	state_chart.send_event("end_dive")
+
+
+func _on_place_your_bets_recover_state_entered() -> void:
+	debug_state_label.text = "Place Your Bets | Recovering"
+	substack_dive_finished.emit(self)
 	state_chart.send_event("end_recovery")
