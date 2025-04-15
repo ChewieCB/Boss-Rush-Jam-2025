@@ -40,6 +40,9 @@ var aoe_markers: Array[Node]
 var spawned_sub_stacks: Array = []
 var finished_sub_stacks: Array = []
 var last_stack: ChipBossSubStack
+@export_subgroup("Split Stack Rush")
+@export var split_rush_range: float = 6.0
+@export var split_rush_damage: float = 20.0
 
 
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
@@ -60,9 +63,9 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	var possible_phases = [
 		#"start_backspin_chip",
-		"start_place_your_bets_attack",
+		#"start_place_your_bets_attack",
 		#"start_split_stack_projectiles",
-		#"start_split_stack_charge",
+		"start_split_stack_charge",
 		"start_split_stack_place_your_bets_attack",
 	]
 	if prev_phase:
@@ -434,3 +437,28 @@ func spawn_aoe_wave(
 func _on_wave_collision(body: Node3D, aoe_damage: float) -> void:
 	if body == target:
 		body.health_component.damage(aoe_damage)
+
+
+func _on_split_stack_charge_merging_state_entered() -> void:
+	_on_merging_state_entered()
+	
+	# Create an explosion
+	var explosion_inst = explosion_scene.instantiate()
+	add_child(explosion_inst)
+	explosion_inst.change_mesh_scale(4.0)
+	
+	# Create an AoE damage
+	var area_collider := Area3D.new()
+	var area_collider_shape := CollisionShape3D.new()
+	var collider_shape := SphereShape3D.new()
+	collider_shape.radius = split_rush_range
+	area_collider_shape.shape = collider_shape
+	area_collider.add_child(area_collider_shape)
+	area_collider.collision_layer = int(pow(2, 7))
+	area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
+	area_collider.monitoring = true
+	
+	get_tree().get_root().add_child(area_collider)
+	
+	area_collider.global_position = self.global_position
+	area_collider.body_entered.connect(_on_wave_collision.bind(split_rush_damage))

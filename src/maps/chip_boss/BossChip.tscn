@@ -1101,6 +1101,8 @@ navigation_mesh = SubResource("NavigationMesh_4chnu")
 
 [node name="entity_24_BossChips" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("19_7l6tw")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, -3.5625, 0)
+split_rush_range = 6.0
+split_rush_damage = 20.0
 target = NodePath("../group_632_Elevator/entity_20_PlayerRef")
 
 [node name="group_638_PipeOutlet" type="Node3D" parent="FuncGodotMap"]

@@ -37,6 +37,8 @@ aoe_radius = 3.0
 wave_material = ExtResource("5_vcykk")
 small_stack_prefab = ExtResource("4_otar4")
 stack_spawn_time = 0.1
+split_rush_range = 6.0
+split_rush_damage = 20.0
 barrel_pickup_scene = null
 sfx_slowmo = null
 attack_recovery_time = 0.5
@@ -475,7 +477,7 @@ delay_in_seconds = "0.0"
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackProjectiles/Recover" to="." method="_on_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackCharge/Splitting" to="." method="_on_splitting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackCharge/Attacking" to="." method="_on_split_stack_charge_attacking_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackCharge/Merging" to="." method="_on_merging_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackCharge/Merging" to="." method="_on_split_stack_charge_merging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackCharge/Recover" to="." method="_on_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackAoE/Flooding" to="." method="_on_flooding_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackAoE/Jumping" to="." method="_on_place_your_bets_jumping_state_entered"]
