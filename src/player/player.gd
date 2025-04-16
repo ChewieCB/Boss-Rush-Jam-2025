@@ -134,7 +134,7 @@ func _ready():
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 
 
-func _input(event):
+func _unhandled_input(event):
 	if controls_disabled:
 		return
 

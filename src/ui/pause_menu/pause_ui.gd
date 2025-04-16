@@ -16,12 +16,14 @@ func _ready() -> void:
 	visible = false
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	# If the pause menu button is pressed, reset the pause menu and hide/show it
 	if event.is_action_pressed("pause_menu"):
 		SoundManager.play_button_click_sfx()
 		toggle_pause_menu()
 	elif event.is_action_pressed("ui_cancel"):
+		# Handle the input so we don't trigger non UI inputs when closing a menu
+		get_viewport().set_input_as_handled()
 		# If the UI cancel button is pressed and the settings menu is open, close the settings menu only
 		if is_in_submenu:
 			setting_ui.close_menu()
