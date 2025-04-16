@@ -4,6 +4,7 @@ class_name PauseUI
 signal pause_ui_toggled
 
 @onready var pause_option_list: Control = $PauseOptionBG
+@onready var setting_button: Button = $PauseOptionBG/VBoxContainer/SettingButton
 @onready var setting_ui: SettingUI = $SettingUI
 
 var is_paused = false
@@ -16,32 +17,46 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# If the pause menu button is pressed, reset the pause menu and hide/show it
 	if event.is_action_pressed("pause_menu"):
+		SoundManager.play_button_click_sfx()
+		toggle_pause_menu()
+	elif event.is_action_pressed("ui_cancel"):
+		# If the UI cancel button is pressed and the settings menu is open, close the settings menu only
 		if is_in_submenu:
 			setting_ui.close_menu()
 			SoundManager.play_button_click_sfx()
 			return_to_pause_menu()
+		# If the UI cancel button is pressed and the pause menu is open, close it
 		else:
-			if GameManager.player.is_in_inventory:
-				return
-			SoundManager.play_button_click_sfx()
-			# TODO - fix this to be generic across all inventory UIs
-			#GameManager.player.inventory_ui.close()
-			is_paused = not is_paused
-			get_tree().paused = is_paused
-			visible = is_paused
-			pause_ui_toggled.emit()
-			# Toggle low pass filter for BGM
-			AudioServer.set_bus_effect_enabled(1, 0, is_paused)
 			if is_paused:
-				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			else:
-				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+				toggle_pause_menu()
+
+
+func toggle_pause_menu() -> void:
+	is_paused = not is_paused
+	
+	get_tree().paused = is_paused
+	self.visible = is_paused
+	# Reset the pause menu UI
+	setting_ui.close_menu()
+	return_to_pause_menu()
+	
+	pause_ui_toggled.emit()
+	# Toggle low pass filter for BGM
+	AudioServer.set_bus_effect_enabled(1, 0, is_paused)
+	# Update mouse capture/control focus
+	if is_paused:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		setting_button.grab_focus()
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
 func return_to_pause_menu():
 	is_in_submenu = false
 	pause_option_list.visible = true
+	setting_button.grab_focus()
 
 
 func _on_setting_button_pressed() -> void:
