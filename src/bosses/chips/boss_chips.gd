@@ -32,6 +32,7 @@ var active_rolling_chip: RollingChip
 @export var drop_time: float = 0.3
 @export var drop_damage: float = 20.0
 @export var aoe_radius: float = 3.0
+@export var aoe_wave_time: float = 0.4
 @export var wave_material: ShaderMaterial
 var aoe_markers: Array[Node]
 @export_subgroup("Split Stacks")
@@ -62,10 +63,10 @@ func activate() -> void:
 
 func select_attack_phase_1() -> void:
 	var possible_phases = [
-		"start_backspin_chip",
+		#"start_backspin_chip",
 		"start_place_your_bets_attack",
-		"start_split_stack_projectiles",
-		"start_split_stack_charge",
+		#"start_split_stack_projectiles",
+		#"start_split_stack_charge",
 		"start_split_stack_place_your_bets_attack",
 	]
 	if prev_phase:
@@ -235,11 +236,22 @@ func _on_place_your_bets_jumping_state_entered() -> void:
 
 func _on_place_your_bets_crashing_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Crashing"
+	
+	var closest_targets = aoe_markers.duplicate()
+	closest_targets.sort_custom(
+		func(a, b):
+			var a_dist: float = a.global_position.distance_to(target.global_position)
+			var b_dist: float = b.global_position.distance_to(target.global_position)
+			if a_dist < b_dist:
+				return true
+			return false
+	)
+	var target_pos: Vector3 = closest_targets.front().global_position
 	var jump_tween: Tween = get_tree().create_tween()
-	jump_tween.tween_property(self, "global_position", Vector3.ZERO, drop_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	jump_tween.tween_property(self, "global_position", target_pos, drop_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
 	await jump_tween.finished
-	spawn_aoe_wave(aoe_radius, drop_damage)
+	await spawn_aoe_wave(aoe_radius, drop_damage, aoe_wave_time)
 	
 	state_chart.send_event("drain_chamber")
 
@@ -316,12 +328,13 @@ func _on_substack_charge_set(pos: Vector3) -> void:
 # split into several smaller stacks, and crash down on the platforms in sequence
 
 func _on_split_stack_place_your_bets_crashing_state_entered() -> void:
+	aoe_markers = get_tree().get_nodes_in_group("boss_aoe_marker")
+	
 	# Gets all substacks ready to drop
 	trigger_substack_attack("start_place_your_bets_attack")
 	
 	# Triggers AoE drops in random order
 	var shuffled_stacks = spawned_sub_stacks.duplicate()
-	aoe_markers = get_tree().get_nodes_in_group("boss_aoe_marker")
 	var available_markers = range(aoe_markers.size())
 	shuffled_stacks.shuffle()
 	for i in range(shuffled_stacks.size()):
@@ -335,7 +348,7 @@ func _on_split_stack_place_your_bets_crashing_state_entered() -> void:
 		stack.marker_target_idx = new_target_idx
 		stack.state_chart.send_event("start_dive")
 		await stack.substack_dive_finished
-		spawn_aoe_wave(aoe_radius, drop_damage / i, stack.global_position)
+		spawn_aoe_wave(aoe_radius, drop_damage / i, aoe_wave_time, stack.global_position)
 	
 	await substack_attacks_finished
 	
@@ -363,9 +376,9 @@ func _on_draining_state_entered() -> void:
 func spawn_aoe_wave(
 	max_radius: float,
 	damage: float = 10.0,
-	area_pos: Vector3 = self.global_position,
 	spawned_wave_time: float = 1.0,
-	spawned_wave_height: float = 1.0,
+	area_pos: Vector3 = self.global_position,
+	spawned_wave_height: float = 0.3,
 	_telegraph: bool = false,
 	callback: Callable = func(): pass
 ) -> void:
@@ -431,6 +444,10 @@ func spawn_aoe_wave(
 	tween.tween_callback(debug_mesh_instance.queue_free)
 	tween.tween_callback(area_collider.queue_free)
 	tween.tween_callback(callback)
+	
+	await tween.finished
+	
+	return
 
 
 func _on_wave_collision(body: Node3D, aoe_damage: float) -> void:

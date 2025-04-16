@@ -975,41 +975,6 @@ shape = SubResource("ConcavePolygonShape3D_vbks5")
 
 [node name="entity_24_BossChips" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("19_7l6tw")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -2)
-phase_2_health_percentage_trigger = null
-DESIRED_DISTANCE = null
-angle_speed = null
-orbit_angle = null
-orbit_radius = null
-jump_height = null
-jump_time = null
-jump_hang_time = null
-drop_time = null
-drop_damage = null
-aoe_radius = null
-stack_spawn_time = null
-split_rush_range = null
-split_rush_damage = null
-boss_id = null
-chip_spawn_chance = null
-chip_spawn_force = null
-sfx_hit = null
-current_phase = null
-attack_recovery_time = null
-telegraph_time = null
-charge_force = null
-projectiles_per_phase = null
-delay_per_projectile = null
-max_projectile_rounds = null
-area_damage = null
-areas_per_phase = null
-area_spawn_time = null
-delay_per_area = null
-max_area_rounds = null
-area_size = null
-area_rings = null
-MAX_SPEED = null
-FRICTION = null
-GRAVITY = null
 target = NodePath("../group_632_Elevator/entity_20_PlayerRef")
 
 [node name="group_638_PipeOutlet" type="Node3D" parent="FuncGodotMap"]
