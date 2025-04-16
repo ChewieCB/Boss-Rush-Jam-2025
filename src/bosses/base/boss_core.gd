@@ -103,7 +103,6 @@ const JUMP_FORCE: float = 8
 
 var vel_vertical: float = 0
 
-
 @export var target: Node3D:
 	set(value):
 		target = value
