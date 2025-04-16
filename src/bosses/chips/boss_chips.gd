@@ -62,9 +62,9 @@ func activate() -> void:
 
 func select_attack_phase_1() -> void:
 	var possible_phases = [
-		#"start_backspin_chip",
-		#"start_place_your_bets_attack",
-		#"start_split_stack_projectiles",
+		"start_backspin_chip",
+		"start_place_your_bets_attack",
+		"start_split_stack_projectiles",
 		"start_split_stack_charge",
 		"start_split_stack_place_your_bets_attack",
 	]
@@ -136,8 +136,8 @@ func _substack_finished(stack: ChipBossSubStack) -> void:
 		finished_sub_stacks = []
 
 
-func _small_stack_hurt(damage: float) -> void:
-	health_component.damage(damage)
+func _small_stack_hurt(health_diff: float) -> void:
+	health_component.damage(abs(health_diff))
 
 
 func _small_stack_dead(stack: CharacterBody3D) -> void:
@@ -454,7 +454,7 @@ func _on_split_stack_charge_merging_state_entered() -> void:
 	area_collider_shape.shape = collider_shape
 	area_collider.add_child(area_collider_shape)
 	area_collider.collision_layer = int(pow(2, 7))
-	area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
+	area_collider.collision_mask = int(pow(2, 2 - 1)) # Player
 	area_collider.monitoring = true
 	
 	get_tree().get_root().add_child(area_collider)

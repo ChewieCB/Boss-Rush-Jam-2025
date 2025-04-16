@@ -181,7 +181,8 @@ func _on_split_rush_charging_state_entered() -> void:
 func _on_split_rush_recover_state_entered() -> void:
 	debug_state_label.text = "Split Rush | Recovering"
 	desired_distance = DESIRED_DISTANCE
-	health_component.damage(10000000)
+	health_component.died.emit()
+	health_component.has_died = true
 	state_chart.send_event("end_recovery")
 
 
@@ -215,3 +216,10 @@ func _on_place_your_bets_recover_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Recovering"
 	substack_dive_finished.emit(self)
 	state_chart.send_event("end_recovery")
+
+
+func _on_died() -> void:
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
+	return
