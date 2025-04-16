@@ -275,7 +275,7 @@ func _on_splitting_state_entered() -> void:
 	# TODO - prevent damage numbers showing up
 	health_component.show_damage_text = false
 	
-	spawned_sub_stacks = await spawn_stacks(3, 1.0)
+	spawned_sub_stacks = await spawn_stacks(3, 2.5)
 	
 	state_chart.send_event("start_attack")
 
@@ -288,6 +288,9 @@ func _on_merging_state_entered() -> void:
 	debug_mesh.visible = true
 	self.collision_mask += (pow(2, 2-1) + pow(2, 4-1))
 	health_component.show_damage_text = true
+	
+	# TODO - add pushback if player is in big stack collider
+	#
 	
 	state_chart.send_event("end_merge")
 

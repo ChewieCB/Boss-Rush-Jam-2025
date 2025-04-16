@@ -149,13 +149,14 @@ func _on_split_rush_targeting_state_entered() -> void:
 	state_chart.send_event("attack_buildup")
 	await get_tree().create_timer(split_rush_targeting_time).timeout
 	
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time * 2).timeout
+	
 	charge_target_pos = target.global_position
 	charge_target_pos.y = 0
 	substack_charge_set.emit(charge_target_pos)
-	#draw_debug_sphere(charge_target_pos, 2.0, Color.PURPLE)
+	draw_debug_sphere(charge_target_pos, 2.0, Color.PURPLE)
 	
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time * 2).timeout
 	state_chart.send_event("start_charge")
 
 
@@ -171,6 +172,7 @@ func _on_split_rush_charging_state_entered() -> void:
 	
 	var charge_tween: Tween = get_tree().create_tween()
 	var charge_time: float = self.global_position.distance_to(charge_target_pos) / charge_speed
+	self.collision_mask -= pow(2, 7-1)  # Ignore collisions with other stacks
 	charge_tween.tween_property(self, "global_position", charge_target_pos, charge_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	#sfx_player.stream = sfx_charge.pick_random()
 	#sfx_player.play()
