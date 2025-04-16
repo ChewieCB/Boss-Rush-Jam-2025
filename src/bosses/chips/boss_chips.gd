@@ -237,6 +237,7 @@ func _on_place_your_bets_jumping_state_entered() -> void:
 func _on_place_your_bets_crashing_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Crashing"
 	
+	aoe_markers = get_tree().get_nodes_in_group("boss_aoe_marker")
 	var closest_targets = aoe_markers.duplicate()
 	closest_targets.sort_custom(
 		func(a, b):
@@ -334,17 +335,38 @@ func _on_split_stack_place_your_bets_crashing_state_entered() -> void:
 	trigger_substack_attack("start_place_your_bets_attack")
 	
 	# Triggers AoE drops in random order
-	var shuffled_stacks = spawned_sub_stacks.duplicate()
-	var available_markers = range(aoe_markers.size())
-	shuffled_stacks.shuffle()
-	for i in range(shuffled_stacks.size()):
-		var stack = shuffled_stacks[i]
-		var wrapped_idx = wrapi(
-			i + randi_range(0, available_markers.size()), 
-			0, 
-			available_markers.size()
-		)
-		var new_target_idx = available_markers.pop_at(wrapped_idx)
+	
+	var closest_targets = aoe_markers.duplicate()
+	
+	# RANDOM ORDER
+	#var shuffled_stacks = spawned_sub_stacks.duplicate()
+	#var available_markers = range(aoe_markers.size())
+	#shuffled_stacks.shuffle()
+	#for i in range(shuffled_stacks.size()):
+		#var stack = shuffled_stacks[i]
+		#var wrapped_idx = wrapi(
+			#i + randi_range(0, available_markers.size()), 
+			#0, 
+			#available_markers.size()
+		#)
+		#var new_target_idx = available_markers.pop_at(wrapped_idx)
+	
+	# CHASE PLAYER
+	for i in range(spawned_sub_stacks.size()):
+		var stack = spawned_sub_stacks[i]
+		
+		closest_targets.sort_custom(
+		func(a, b):
+			var a_dist: float = a.global_position.distance_to(target.global_position)
+			var b_dist: float = b.global_position.distance_to(target.global_position)
+			if a_dist < b_dist:
+				return true
+			return false
+	)
+		var target_marker: Marker3D = closest_targets.pop_front()
+		var new_target_idx: int = aoe_markers.find(target_marker)
+		
+	# Dive implementation
 		stack.marker_target_idx = new_target_idx
 		stack.state_chart.send_event("start_dive")
 		await stack.substack_dive_finished
