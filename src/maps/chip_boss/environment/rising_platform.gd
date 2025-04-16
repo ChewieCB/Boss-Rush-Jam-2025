@@ -15,7 +15,7 @@ func raise(height: float, time: float) -> void:
 
 
 func lower(time: float) -> void:
-	await change_height(-marker.global_position.y, time)
+	await change_height(0, time)
 
 
 func change_height(new_height: float, time: float) -> void:

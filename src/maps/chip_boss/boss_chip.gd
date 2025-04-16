@@ -101,7 +101,6 @@ func raise_water() -> void:
 	water_tween.tween_property(water_surface, "global_position:y", upper_water_level, 1.4)
 	for platform in rising_platforms:
 		platform.raise(platform_level, 1.4)
-		#water_tween.parallel().tween_property(platform, "global_position:y", upper_platform_level, 1.4)
 	
 	await water_tween.finished
 	
@@ -114,7 +113,6 @@ func lower_water() -> void:
 	water_tween.tween_property(water_surface, "global_position:y", lower_water_level, 1.4)
 	for platform in rising_platforms:
 		platform.lower(1.4)
-		#water_tween.parallel().tween_property(platform, "global_position:y", lower_platform_level, 1.4)
 	
 	await water_tween.finished
 	

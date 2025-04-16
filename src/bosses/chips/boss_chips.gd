@@ -62,9 +62,9 @@ func activate() -> void:
 
 func select_attack_phase_1() -> void:
 	var possible_phases = [
-		"start_backspin_chip",
-		"start_place_your_bets_attack",
-		"start_split_stack_projectiles",
+		#"start_backspin_chip",
+		#"start_place_your_bets_attack",
+		#"start_split_stack_projectiles",
 		"start_split_stack_charge",
 		"start_split_stack_place_your_bets_attack",
 	]

@@ -150,8 +150,7 @@ func _on_split_rush_targeting_state_entered() -> void:
 	await get_tree().create_timer(split_rush_targeting_time).timeout
 	
 	charge_target_pos = target.global_position
-	# TODO - raycast this or find a less hacky method of getting the floor y
-	charge_target_pos.y = -4
+	charge_target_pos.y = 0
 	substack_charge_set.emit(charge_target_pos)
 	#draw_debug_sphere(charge_target_pos, 2.0, Color.PURPLE)
 	
