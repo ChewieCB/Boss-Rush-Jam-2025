@@ -62,9 +62,9 @@ func activate() -> void:
 
 func select_attack_phase_1() -> void:
 	var possible_phases = [
-		#"start_backspin_chip",
-		#"start_place_your_bets_attack",
-		#"start_split_stack_projectiles",
+		"start_backspin_chip",
+		"start_place_your_bets_attack",
+		"start_split_stack_projectiles",
 		"start_split_stack_charge",
 		"start_split_stack_place_your_bets_attack",
 	]
@@ -236,7 +236,7 @@ func _on_place_your_bets_jumping_state_entered() -> void:
 func _on_place_your_bets_crashing_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Crashing"
 	var jump_tween: Tween = get_tree().create_tween()
-	jump_tween.tween_property(self, "global_position", Vector3(0, -2, 0), drop_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	jump_tween.tween_property(self, "global_position", Vector3.ZERO, drop_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
 	await jump_tween.finished
 	spawn_aoe_wave(aoe_radius, drop_damage)
@@ -343,8 +343,7 @@ func _on_split_stack_place_your_bets_crashing_state_entered() -> void:
 
 
 func _on_split_stack_place_your_bets_merging_state_entered() -> void:
-	# FIXME - sort this y position stuff out
-	self.global_position.y = -4
+	self.global_position.y = 0
 	_on_merging_state_entered()
 
 

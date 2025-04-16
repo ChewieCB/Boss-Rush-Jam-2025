@@ -6,13 +6,12 @@ extends Node3D
 @onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
 @onready var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
 
-@export var lower_water_level: float = -4.6
-@export var upper_water_level: float = -2.6
-@export var lower_platform_level: float = -6.0
-@export var upper_platform_level: float = -4.0
+@export var lower_water_level: float = -0.1
+@export var upper_water_level: float = 1.3
+@export var platform_level: float = 2.0
 @onready var waterfalls: Node3D = $Waterfalls
 @onready var water_surface: MeshInstance3D = $WaterSurfaceMesh
-@export var rising_platforms: Array[Node3D]
+@onready var rising_platforms: Array[Node] = get_tree().get_nodes_in_group("rising_platforms")
 
 @onready var win_ui: Control = $UI/BossDefeatedUI
 @export var win_subtext: Array[String]
@@ -47,8 +46,9 @@ func _ready() -> void:
 	
 	waterfalls.visible = false
 	water_surface.global_position.y = lower_water_level
-	for platform in rising_platforms:
-		platform.global_position.y = lower_platform_level
+	#for platform in rising_platforms:
+		#platform.lower(0.0)
+		#platform.global_position.y = lower_platform_level
 	
 	elevator_doors.open()
 	
@@ -100,7 +100,8 @@ func raise_water() -> void:
 	var water_tween: Tween = get_tree().create_tween()
 	water_tween.tween_property(water_surface, "global_position:y", upper_water_level, 1.4)
 	for platform in rising_platforms:
-		water_tween.parallel().tween_property(platform, "global_position:y", upper_platform_level, 1.4)
+		platform.raise(platform_level, 1.4)
+		#water_tween.parallel().tween_property(platform, "global_position:y", upper_platform_level, 1.4)
 	
 	await water_tween.finished
 	
@@ -112,7 +113,8 @@ func lower_water() -> void:
 	var water_tween: Tween = get_tree().create_tween()
 	water_tween.tween_property(water_surface, "global_position:y", lower_water_level, 1.4)
 	for platform in rising_platforms:
-		water_tween.parallel().tween_property(platform, "global_position:y", lower_platform_level, 1.4)
+		platform.lower(1.4)
+		#water_tween.parallel().tween_property(platform, "global_position:y", lower_platform_level, 1.4)
 	
 	await water_tween.finished
 	
