@@ -198,6 +198,9 @@ func _on_place_your_bets_targeting_state_entered() -> void:
 func _on_place_your_bets_crashing_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Crashing"
 	
+	vel_vertical = 0
+	GRAVITY = 0
+	
 	# TODO - fix the telegraph timing
 	#state_chart.send_event("attack_telegraph")
 	#await get_tree().create_timer(telegraph_time * 2).timeout
@@ -214,6 +217,7 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 
 func _on_place_your_bets_recover_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Recovering"
+	GRAVITY = 14
 	substack_dive_finished.emit(self)
 	state_chart.send_event("end_recovery")
 
