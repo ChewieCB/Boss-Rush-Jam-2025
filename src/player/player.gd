@@ -145,10 +145,18 @@ func _unhandled_input(event):
 		return
 
 	if event is InputEventMouseMotion:
+		# If we have a controller connected, ignore mouse events
+		# (this prevents the PS4 trackpad from triggering aim)
+		if Input.get_connected_joypads():
+			return
 		rotate_player(event.relative.x, event.relative.y)
-
+	elif event is InputEventJoypadMotion:
+		# Disable joystick support to prevent PS4 touchpad triggering aim events
+		return
+	
 	if event.is_action_pressed("spin_reload"):
 		spin_reload()
+	
 	# TODO - experimental branch separating spin from reload
 	#elif event.is_action_pressed("spin_barrels"):
 		#current_gun.spin_all_barrels()
@@ -402,6 +410,7 @@ func handle_controller_look(_delta):
 	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
 		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
 		rotate_player(look_x * sensitivity, look_y * sensitivity)
+
 
 func rotate_player(x: float, y: float):
 	rotate(Vector3(0, -1, 0), x * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))

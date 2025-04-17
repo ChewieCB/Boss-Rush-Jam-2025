@@ -17,6 +17,8 @@ var bgm_player: AudioStreamPlayer
 
 
 func _ready() -> void:
+	Input.joy_connection_changed.connect(_on_controller_connection)
+	
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
@@ -26,12 +28,9 @@ func _ready() -> void:
 	ScreenTransition.transition_in()
 	await ScreenTransition.transition_finished
 	
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	save_ui.visible = false
 	for button in buttons:
 		button.pressed.connect(_play_button_sfx)
-
-	get_window().grab_focus()
 
 
 func _input(event: InputEvent) -> void:
@@ -124,3 +123,11 @@ func _on_setting_ui_setting_back_button_pressed() -> void:
 
 func _on_grab_focus_timer_timeout() -> void:
 	buttons_container.get_child(0).grab_focus()
+
+
+func _on_controller_connection(device: int, connected: bool) -> void:
+	if connected:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		get_window().grab_focus()
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

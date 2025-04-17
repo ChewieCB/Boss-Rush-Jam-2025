@@ -7,13 +7,17 @@ signal pause_ui_toggled
 @onready var setting_button: Button = $PauseOptionBG/VBoxContainer/SettingButton
 @onready var setting_ui: SettingUI = $SettingUI
 
-var is_paused = false
-var is_in_submenu = false
+var is_paused: bool = false
+var is_in_submenu: bool = false
+var is_controller_connected: bool = false
 
 
 func _ready() -> void:
 	GameManager.pause_ui = self
 	visible = false
+	Input.joy_connection_changed.connect(_on_controller_connection)
+	is_controller_connected = Input.get_connected_joypads() != []
+	
 
 
 func _input(event: InputEvent) -> void:
@@ -49,8 +53,10 @@ func toggle_pause_menu() -> void:
 	AudioServer.set_bus_effect_enabled(1, 0, is_paused)
 	# Update mouse capture/control focus
 	if is_paused:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		setting_button.grab_focus()
+		if not is_controller_connected:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		else:
+			setting_button.grab_focus()
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -102,3 +108,12 @@ func _on_exit_button_pressed() -> void:
 
 func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()
+
+
+func _on_controller_connection(device: int, connected: bool) -> void:
+	is_controller_connected = connected
+	if is_paused and not is_controller_connected:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		setting_button.grab_focus()
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
