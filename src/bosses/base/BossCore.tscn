@@ -23,10 +23,6 @@
 radius = 1.0
 height = 4.6
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kcrnw"]
-radius = 2.0
-height = 4.0
-
 [sub_resource type="BoxMesh" id="BoxMesh_rkhu1"]
 size = Vector3(2.5, 4.8, 2.5)
 
@@ -44,6 +40,10 @@ state = NodePath("../../../Health/Dead")
 [sub_resource type="Resource" id="Resource_o1b2s"]
 script = ExtResource("12_1g6yn")
 guard = SubResource("Resource_vq1e8")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kcrnw"]
+radius = 2.0
+height = 4.0
 
 [node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
 process_mode = 1
@@ -67,18 +67,6 @@ texture = ExtResource("1_lhq8s")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
 shape = SubResource("CapsuleShape3D_m057l")
-
-[node name="AimAssistBubble" type="Area3D" parent="CollisionShape3D" groups=["AimAssistBubble"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.3, 0)
-collision_layer = 128
-collision_mask = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/AimAssistBubble"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.94604, 0)
-shape = SubResource("CapsuleShape3D_kcrnw")
-
-[node name="Marker3D" type="Marker3D" parent="CollisionShape3D/AimAssistBubble"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.86467, 0)
 
 [node name="DebugMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
@@ -400,6 +388,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5112, 0)
 
 [node name="BodyCenter" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.28097, 0)
+
+[node name="AimAssistBubble" type="Area3D" parent="." groups=["AimAssistBubble"]]
+collision_layer = 128
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AimAssistBubble"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.94604, 0)
+shape = SubResource("CapsuleShape3D_kcrnw")
+
+[node name="Marker3D" type="Marker3D" parent="AimAssistBubble"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.86467, 0)
 
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_entered"]
