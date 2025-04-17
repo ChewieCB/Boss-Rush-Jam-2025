@@ -78,9 +78,9 @@ height = 0.001
 [sub_resource type="SphereShape3D" id="SphereShape3D_5bmqa"]
 radius = 4.0
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ijkfg"]
-radius = 1.9
-height = 5.8
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0lu1s"]
+radius = 3.0
+height = 8.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_jlq7w"]
 radius = 1.9
@@ -998,8 +998,11 @@ transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -0.152, 2.67325, 0)
 texture = ExtResource("8_d716h")
 
 [node name="CollisionShape3D" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9, 0)
-shape = SubResource("CapsuleShape3D_ijkfg")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.47446, 0)
+shape = SubResource("CapsuleShape3D_0lu1s")
+
+[node name="Marker3D" parent="CollisionShape3D/AimAssistBubble" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.23509, 0)
 
 [node name="DebugMesh" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9, 0)

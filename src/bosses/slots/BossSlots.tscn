@@ -74,8 +74,9 @@ shader_parameter/impact_points = null
 shader_parameter/impact_size = 1.0
 shader_parameter/impact_falloff_sharpness = 1.0
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_rw4en"]
-radius = 1.7
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vg3vh"]
+radius = 3.0
+height = 8.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_unuxb"]
 radius = 1.7
@@ -270,7 +271,7 @@ texture = ExtResource("4_6oj0s")
 
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
-shape = SubResource("SphereShape3D_rw4en")
+shape = SubResource("CapsuleShape3D_vg3vh")
 
 [node name="DebugMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)

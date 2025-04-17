@@ -624,9 +624,12 @@ func aim_assist(delta: float):
 
 func get_assist_rotation_velocity(delta: float):
 	var cam = player_camera
+	var aim_target_pos: Vector3 = aim_assist_target.global_position
+	if aim_assist_target.get_node("Marker3D") != null:
+		aim_target_pos = aim_assist_target.get_node("Marker3D").global_position
 
 	# Direction to target (world space)
-	var to_target = (aim_assist_target.global_position - cam.global_position).normalized()
+	var to_target = (aim_target_pos - cam.global_position).normalized()
 	var cam_forward = - cam.global_transform.basis.z
 
 	# Get yaw (left/right) angle difference

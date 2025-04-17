@@ -46,9 +46,9 @@
 [ext_resource type="AudioStream" uid="uid://18w03u5q6px7" path="res://src/bosses/roulette/assets/sfx/Hit 3.mp3" id="31_7wohx"]
 [ext_resource type="AudioStream" uid="uid://dskgvb4n5jcob" path="res://src/bosses/roulette/assets/sfx/Attack Warning 2.mp3" id="31_jsqjw"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_obnfo"]
-height = 13.4
-radius = 3.1
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4550l"]
+radius = 4.0
+height = 16.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ljrhi"]
 top_radius = 3.1
@@ -184,8 +184,14 @@ render_priority = 1
 texture = ExtResource("9_2oxhb")
 
 [node name="CollisionShape3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_obnfo")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.42105, 0)
+shape = SubResource("CapsuleShape3D_4550l")
+
+[node name="CollisionShape3D" parent="CollisionShape3D/AimAssistBubble" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.06119, 0)
+
+[node name="Marker3D" parent="CollisionShape3D/AimAssistBubble" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.71755, 0)
 
 [node name="DebugMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
