@@ -19,7 +19,6 @@ func _ready() -> void:
 	is_controller_connected = Input.get_connected_joypads() != []
 	
 
-
 func _input(event: InputEvent) -> void:
 	# If the pause menu button is pressed, reset the pause menu and hide/show it
 	if event.is_action_pressed("pause_menu"):
@@ -116,7 +115,7 @@ func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()
 
 
-func _on_controller_connection(device: int, connected: bool) -> void:
+func _on_controller_connection(_device: int, connected: bool) -> void:
 	is_controller_connected = connected
 	if is_paused and not is_controller_connected:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

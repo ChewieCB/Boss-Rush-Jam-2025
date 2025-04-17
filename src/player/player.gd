@@ -40,6 +40,7 @@ var movement_sfx_player: AudioStreamPlayer
 
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
+@onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 @onready var magazine_label: Label = $UI/GunUI/MagazineUI
 @onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
@@ -114,6 +115,8 @@ var base_stats = {
 }
 var current_stats = base_stats.duplicate(true)
 
+var aim_assist_target: Node3D = null
+
 
 func _ready():
 	GameManager.player = self
@@ -147,8 +150,8 @@ func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		# If we have a controller connected, ignore mouse events
 		# (this prevents the PS4 trackpad from triggering aim)
-		if Input.get_connected_joypads():
-			return
+		# if Input.get_connected_joypads():
+		# 	return
 		rotate_player(event.relative.x, event.relative.y)
 	elif event is InputEventJoypadMotion:
 		# Disable joystick support to prevent PS4 touchpad triggering aim events
@@ -329,6 +332,8 @@ func _physics_process(delta):
 		else:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
 	camera_control(delta)
+
+	aim_assist(delta)
 
 func update_hud():
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
@@ -600,3 +605,43 @@ func apply_buffs():
 	# Apply percentage bonuses (multiplicative).
 	for stat in percentage_bonuses.keys():
 		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)
+
+
+func aim_assist(delta: float):
+	if aim_assist_ray.is_colliding():
+		aim_assist_target = aim_assist_ray.get_collider()
+	else:
+		aim_assist_target = null
+
+	if aim_assist_target != null:
+		get_assist_rotation_velocity(delta)
+
+
+func get_assist_rotation_velocity(delta: float):
+	var cam = self
+
+	# Direction to target (world space)
+	var to_target = (aim_assist_target.global_position - cam.global_position).normalized()
+	var cam_forward = - cam.global_transform.basis.z
+
+	# Get yaw (left/right) angle difference
+	var cam_yaw = atan2(cam_forward.x, cam_forward.z)
+	var target_yaw = atan2(to_target.x, to_target.z)
+	var yaw_diff = wrapf(target_yaw - cam_yaw, -PI, PI)
+
+	# Get pitch (up/down) angle difference
+	var cam_pitch = asin(cam_forward.y)
+	var target_pitch = asin(to_target.y)
+	var pitch_diff = target_pitch - cam_pitch
+
+	# Optional: Apply strength factor to convert to velocity
+	var yaw_velocity = yaw_diff * GameManager.aim_assist_strength
+	var pitch_velocity = pitch_diff * GameManager.aim_assist_strength
+
+	# yaw = horizontal / pitch = vertical
+
+	rotate(Vector3(0, -1, 0), -yaw_velocity * delta)
+	player_camera.rotate_x(pitch_velocity * delta)
+	player_camera.rotation.y = 0
+	player_camera.rotation.z = 0
+	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))

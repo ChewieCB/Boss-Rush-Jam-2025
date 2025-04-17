@@ -42,6 +42,10 @@ window/stretch/mode="canvas_items"
 
 enabled=PackedStringArray("res://addons/func_godot/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
 
+[global_group]
+
+AimAssistBubble=""
+
 [gui]
 
 theme/custom_font="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf"
@@ -198,6 +202,7 @@ look_right={
 3d_physics/layer_5="Pickups"
 3d_physics/layer_6="Interactible"
 3d_physics/layer_7="Minion"
+3d_physics/layer_8="AimAssistBubble"
 
 [physics]
 

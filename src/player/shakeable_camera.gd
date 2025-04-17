@@ -49,7 +49,8 @@ func _process(delta):
 	# Recoil
 	rotation_velocity -= rotation_velocity * RECOIL_DAMPING_FACTOR * delta
 	recover_rotation_velocity -= recover_rotation_velocity * (RECOIL_DAMPING_FACTOR / 2.0) * delta
-	rotation += (rotation_velocity + recover_rotation_velocity) * delta
+	var final_rotation_velocity = rotation_velocity + recover_rotation_velocity
+	rotation += final_rotation_velocity * delta
 
 func add_long_trauma(trauma_amount: float):
 	# Trauma over long duration, such as during sliding, earthquake, house collapsing, ...
