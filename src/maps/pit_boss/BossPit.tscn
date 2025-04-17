@@ -2572,10 +2572,6 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.3
 
 [node name="entity_71_PlayerRef" parent="FuncGodotMap/group_635_Elevator" instance=ExtResource("15_q6jib")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0.9375, 58.5)
-can_wall_jump = false
-can_wall_cling = false
-dash_cd = 0.5
-angular_momentum_multiplier = 0.4
 
 [node name="BarrelReloadTrigger" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 46)

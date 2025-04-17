@@ -3066,7 +3066,7 @@
 // entity 37
 {
 "classname" "ElevatorButton"
-"origin" "384 19 32"
+"origin" "384 31 32"
 "boss_name" "Umby the Stinky"
 "linked_level" "res://src/bosses/base/test/Test_BossCore.tscn"
 "_tb_group" "575"
@@ -3074,7 +3074,7 @@
 // entity 38
 {
 "classname" "ElevatorButton"
-"origin" "384 19 8"
+"origin" "384 31 8"
 "boss_name" "Roulette Dares"
 "linked_level" "res://src/maps/roulette_boss/BossRoulette.tscn"
 "_tb_group" "575"
@@ -3082,7 +3082,7 @@
 // entity 39
 {
 "classname" "ElevatorButton"
-"origin" "384 -21 8"
+"origin" "384 -1 8"
 "boss_name" "Open This Pit Up!"
 "linked_level" "res://src/maps/pit_boss/BossPit.tscn"
 "_tb_group" "575"
@@ -3090,12 +3090,28 @@
 // entity 40
 {
 "classname" "ElevatorButton"
-"origin" "384 -21 32"
+"origin" "384 -1 32"
 "boss_name" "Mixology 101"
 "linked_level" "res://src/maps/bartender_boss/BossBartenderMap.tscn"
 "_tb_group" "575"
 }
 // entity 41
+{
+"classname" "ElevatorButton"
+"origin" "384 -33 32"
+"boss_name" "Slow Roll'em"
+"linked_level" "res://src/maps/chip_boss/BossChip.tscn"
+"_tb_group" "575"
+}
+// entity 42
+{
+"classname" "ElevatorButton"
+"origin" "384 -33 8"
+"boss_name" "Coming Soon!"
+"linked_level" ""
+"_tb_group" "575"
+}
+// entity 43
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
@@ -3185,25 +3201,25 @@
 ( 384 -64 36 ) ( 384 -64 37 ) ( 384 -63 36 ) special/skip [ 0 1 0 0 ] [ 0 0 -1 36 ] 0 1 1
 }
 }
-// entity 42
+// entity 44
 {
 "classname" "ElevatorDoors"
 "origin" "250 0 -30"
 "_tb_group" "643"
 }
-// entity 43
+// entity 45
 {
 "classname" "Chandellier2LightOnly"
 "origin" "320 0 62"
 "_tb_group" "632"
 }
-// entity 44
+// entity 46
 {
 "classname" "Chandellier1LightOnly"
 "origin" "216 0 14"
 "_tb_group" "632"
 }
-// entity 45
+// entity 47
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"
@@ -3238,37 +3254,37 @@
 ( -754 28 -4 ) ( -754 27 -4 ) ( -754 28 -3 ) walls/grunge-concrete [ 0 1 0 200 ] [ 0 0 -1 48 ] 180 0.5 0.5
 }
 }
-// entity 46
+// entity 48
 {
 "classname" "Chandellier1LightOnly"
 "origin" "-160 392 164"
 "angle" "270"
 }
-// entity 47
+// entity 49
 {
 "classname" "Chandellier1LightOnly"
 "origin" "-416 392 164"
 "angle" "270"
 }
-// entity 48
+// entity 50
 {
 "classname" "Chandellier1LightOnly"
 "origin" "-416 -392 164"
 "angle" "90"
 }
-// entity 49
+// entity 51
 {
 "classname" "Chandellier1LightOnly"
 "origin" "-160 -392 164"
 "angle" "90"
 }
-// entity 50
+// entity 52
 {
 "classname" "SlidingDoor"
 "origin" "-288 473 56"
 "angle" "270"
 }
-// entity 51
+// entity 53
 {
 "classname" "func_group"
 "_tb_type" "_tb_group"

@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://fu4i1fnuehxv"
+path="res://.godot/imported/ChipBoss.11.map-9ce3894c2f354883db40ad60330003eb.tres"
+
+[deps]
+
+source_file="res://src/maps/chip_boss/autosave/ChipBoss.11.map"
+dest_files=["res://.godot/imported/ChipBoss.11.map-9ce3894c2f354883db40ad60330003eb.tres"]
+
+[params]
+
