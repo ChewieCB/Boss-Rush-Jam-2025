@@ -81,6 +81,9 @@ func _on_lobby_button_pressed() -> void:
 	# TODO - background loading here
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
 	LoadingHandler.start_loading("Lobby")
+	# Toggle low pass filter for BGM
+	await LoadingHandler.loading_finished
+	AudioServer.set_bus_effect_enabled(1, 0, false)
 
 
 func _on_main_menu_button_pressed() -> void:
@@ -96,6 +99,9 @@ func _on_main_menu_button_pressed() -> void:
 	## TODO - background loading here
 	LoadingHandler.current_scene_path = "res://src/ui/main_menu/MainMenu.tscn"
 	LoadingHandler.start_loading("Main Menu")
+	# Toggle low pass filter for BGM
+	await LoadingHandler.loading_finished
+	AudioServer.set_bus_effect_enabled(1, 0, false)
 
 
 func _on_exit_button_pressed() -> void:
