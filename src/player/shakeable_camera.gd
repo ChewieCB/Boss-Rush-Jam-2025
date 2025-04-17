@@ -91,3 +91,9 @@ func jerk_gun_backward():
 	gun_container.position.z += jerk_distance # Move backward
 	jerk_gun_tween = self.create_tween()
 	jerk_gun_tween.tween_property(gun_container, "position", original_gun_container_pos, 0.2 + recoil_power).set_trans(Tween.TRANS_SINE)
+
+
+func check_if_has_recoil():
+	if rotation_velocity.length() < 0.1:
+		return false
+	return true

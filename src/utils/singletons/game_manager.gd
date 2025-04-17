@@ -63,7 +63,7 @@ var hide_ui = false
 @export_range(0, 100, 0.1) var bgm_audio: float = 100
 @export_range(0, 100, 0.1) var sfx_audio: float = 100
 @export_range(0, 100, 0.1) var ui_audio: float = 100
-var aim_assist_strength: float = 1.0
+var aim_assist_strength: float = 0.5
 
 
 func _ready() -> void:

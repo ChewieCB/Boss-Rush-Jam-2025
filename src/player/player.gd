@@ -70,6 +70,9 @@ const DASH_SPEED: float = 15
 const SLAM_SPEED: float = 25
 const CROUCH_SPEED_MODIFIER: float = 0.5
 
+const AIM_ASSIST_STRENGTH_COEFFICIENT = 10
+const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.5
+
 var max_speed: float = MAX_SPEED
 var floor_col_pos = Vector3.ZERO
 var jumped: bool = false
@@ -414,6 +417,8 @@ func handle_controller_look(_delta):
 
 	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
 		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
+		if aim_assist_target:
+			sensitivity = sensitivity * AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT
 		rotate_player(look_x * sensitivity, look_y * sensitivity)
 
 
@@ -618,7 +623,7 @@ func aim_assist(delta: float):
 
 
 func get_assist_rotation_velocity(delta: float):
-	var cam = self
+	var cam = player_camera
 
 	# Direction to target (world space)
 	var to_target = (aim_assist_target.global_position - cam.global_position).normalized()
@@ -634,11 +639,13 @@ func get_assist_rotation_velocity(delta: float):
 	var target_pitch = asin(to_target.y)
 	var pitch_diff = target_pitch - cam_pitch
 
-	# Optional: Apply strength factor to convert to velocity
-	var yaw_velocity = yaw_diff * GameManager.aim_assist_strength
-	var pitch_velocity = pitch_diff * GameManager.aim_assist_strength
-
 	# yaw = horizontal / pitch = vertical
+	var yaw_velocity = yaw_diff * GameManager.aim_assist_strength * AIM_ASSIST_STRENGTH_COEFFICIENT
+	var pitch_velocity = pitch_diff * GameManager.aim_assist_strength * AIM_ASSIST_STRENGTH_COEFFICIENT
+
+	# Reduce pitch strength during weapon recoil
+	if player_camera.check_if_has_recoil():
+		pitch_velocity = pitch_velocity * 0.1
 
 	rotate(Vector3(0, -1, 0), -yaw_velocity * delta)
 	player_camera.rotate_x(pitch_velocity * delta)
