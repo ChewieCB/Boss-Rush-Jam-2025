@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://biqm56x6ewbmo"]
+[gd_scene load_steps=6 format=3 uid="uid://biqm56x6ewbmo"]
 
 [ext_resource type="Script" path="res://src/ui/pause_menu/setting_ui.gd" id="1_05qbb"]
 [ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="2_b71wb"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_1sxb2"]
 [ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="3_ogivf"]
+[ext_resource type="Theme" uid="uid://c4j7kmv6avlsi" path="res://src/ui/theme/setting_theme.tres" id="4_fifb6"]
 
 [node name="SettingUI" type="Control"]
 layout_mode = 3
@@ -138,10 +139,11 @@ offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
-current_tab = 0
+current_tab = 2
 tabs_visible = false
 
 [node name="Control" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -198,8 +200,9 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 min_value = 1.0
-value = 1.0
+value = 15.0
 
 [node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
 layout_mode = 1
@@ -212,6 +215,43 @@ offset_left = -66.0
 offset_top = -12.0
 offset_right = 14.0
 offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="ControllerAimAssistSens" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens"]
+layout_mode = 0
+offset_right = 220.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Controller 
+Aim Assist strength"
+
+[node name="AimAssistSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
+value = 25.0
+
+[node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -66.0
+offset_top = -26.0
+offset_right = 14.0
+offset_bottom = -3.0
 grow_horizontal = 0
 grow_vertical = 2
 text = "100"
@@ -265,6 +305,7 @@ theme_override_constants/separation = 10
 [node name="FOV" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme = ExtResource("4_fifb6")
 
 [node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/FOV"]
 layout_mode = 0
@@ -451,6 +492,7 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 min_value = 25.0
 step = 5.0
 value = 100.0
@@ -490,7 +532,6 @@ offset_bottom = 30.0
 text = "Toggle"
 
 [node name="Audio" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -534,6 +575,7 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 
 [node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/Master"]
 layout_mode = 1
@@ -567,6 +609,7 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 
 [node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/BGM"]
 layout_mode = 1
@@ -600,6 +643,7 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 
 [node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/SFX"]
 layout_mode = 1
@@ -633,6 +677,7 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 
 [node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/UI"]
 layout_mode = 1
@@ -679,6 +724,8 @@ patch_margin_bottom = 20
 [connection signal="pressed" from="HBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
 [connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/AimAssistSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/AimAssistSlider" to="." method="_on_aim_assist_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/ResetKeybindButton" to="." method="_on_reset_keybind_button_mouse_entered"]
 [connection signal="pressed" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/ResetKeybindButton" to="." method="_on_reset_keybind_button_pressed"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="play_button_hover_sfx"]
