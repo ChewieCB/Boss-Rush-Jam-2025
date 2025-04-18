@@ -15,6 +15,7 @@ var pause_ui: PauseUI
 var setting_ui: SettingUI
 var player: Player
 
+# Barrels
 var equipped_barrels: Array[BarrelDataResource] = []
 var inventory_barrels: Array[BarrelDataResource] = []
 var shop_barrels: Array[BarrelDataResource] = []
@@ -22,6 +23,10 @@ var shop_barrels: Array[BarrelDataResource] = []
 @export var starting_barrels: Array[BarrelDataResource]
 @export var starting_shop_barrels: Array[BarrelDataResource]
 @export var barrel_database: Array[BarrelDataResource]
+
+# Re-rolls
+@export var initial_reroll_cost: int = 200
+var reroll_cost: int = initial_reroll_cost
 
 @export var player_currency: int = 0:
 	set(value):
@@ -43,6 +48,11 @@ var total_playtime = 0
 var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3
 var cached_camera_rotation: Vector3
+
+# SFX
+# TODO - find a good generic solution for calling these outside of the shop
+@export var sfx_purchase: AudioStream
+@export var sfx_too_expensive: AudioStream
 
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
@@ -130,6 +140,17 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 		refresh_shop_ui.emit()
 		GameManager.player.current_gun.remove_barrel(barrel_idx)
 	return ""
+
+
+func purchase_reroll() -> bool:
+	if player_currency >= reroll_cost:
+		player_currency -= reroll_cost
+		# TODO - increase reroll cost, resetting to initial when exiting the fight
+		SoundManager.play_sound(sfx_purchase)
+		return true
+	SoundManager.play_sound(sfx_too_expensive)
+	return false
+
 
 func show_boss_special_dialog(content: String, duration: float):
 	var original_sm_process_mode = SoundManager.process_mode

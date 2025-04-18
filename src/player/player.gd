@@ -116,8 +116,6 @@ var base_stats = {
 }
 var current_stats = base_stats.duplicate(true)
 
-var can_spin: bool = false
-
 
 func _ready():
 	GameManager.player = self
@@ -165,8 +163,7 @@ func _input(event):
 	if event.is_action_pressed("spin_reload"):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
-		if can_spin:
-			cash_in_luck()
+		spin_barrels()
 	# DEBUG
 	elif event.is_action_pressed("input_1"):
 		luck_component.increase_luck(10.0)
@@ -610,11 +607,20 @@ func apply_buffs():
 		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)
 
 
+func spin_barrels() -> void:
+	# Check if we have enough chips
+	if GameManager.purchase_reroll():
+		cash_in_luck()
+		current_gun.spin_all_barrels()
+		# Provide small health buff (?)
+		# TODO
+		# Increase the cost of re-rolling for this fight
+		# TODO
+
+
 func cash_in_luck() -> void:
-	can_spin = false
 	LuckHandler.enabled = false
 	luck_ui.cash_in_luck()
-	current_gun.spin_all_barrels()
 	# Animate the luck bar draining
 	luck_component.disable()
 	var tween = get_tree().create_tween()
@@ -634,10 +640,11 @@ func cash_in_luck() -> void:
 
 func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
 	# TODO - update luck handler to apply bonuses
-	if new_luck < prev_luck and prev_luck == luck_component.max_luck:
-		can_spin = false
+	#if new_luck < prev_luck and prev_luck == luck_component.max_luck:
+	# TODO
 	pass
 
 
 func _on_luck_maxed() -> void:
-	can_spin = true
+	# TODO
+	pass
