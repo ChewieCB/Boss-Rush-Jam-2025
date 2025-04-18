@@ -1,4 +1,4 @@
-[gd_scene load_steps=748 format=4 uid="uid://hnh6snsnvx1p"]
+[gd_scene load_steps=750 format=4 uid="uid://hnh6snsnvx1p"]
 
 [ext_resource type="LightmapGIData" uid="uid://cm40gu7sl57sg" path="res://src/maps/roulette_boss/BossRoulette.lmbake" id="1_ddfrs"]
 [ext_resource type="Script" path="res://src/maps/roulette_boss/boss_roulette.gd" id="1_of6pu"]
@@ -10,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="4_xrxe8"]
 [ext_resource type="AudioStream" uid="uid://bfxo5nlinjsh3" path="res://src/bosses/roulette/assets/sfx/Roulette Room 3.mp3" id="5_vkn4e"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="7_q62vj"]
+[ext_resource type="Script" path="res://src/maps/pit_boss/barrel_reload_trigger.gd" id="8_p8pli"]
 [ext_resource type="Material" uid="uid://b3fn320leb44p" path="res://assets/textures/placeholder/texture_dark_05.tres" id="8_qv5or"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="9_htjk6"]
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="10_dt2pf"]
@@ -54,6 +55,9 @@ volumetric_fog_emission_energy = 0.3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e3mt6"]
 size = Vector3(5, 5, 13.7744)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3ferh"]
+size = Vector3(5.8, 5.4, 4.9)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_towa0"]
 height = 44.6
@@ -2603,6 +2607,16 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BossTriggerVolume"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1.38721)
 shape = SubResource("BoxShape3D_e3mt6")
+
+[node name="BarrelReloadTrigger" type="Area3D" parent="BossTriggerVolume"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 4)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("8_p8pli")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossTriggerVolume/BarrelReloadTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.76837e-07, 2.2, 7.55)
+shape = SubResource("BoxShape3D_3ferh")
 
 [node name="KillboxArea" type="Area3D" parent="."]
 collision_layer = 0

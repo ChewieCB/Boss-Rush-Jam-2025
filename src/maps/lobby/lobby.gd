@@ -20,6 +20,7 @@ func _ready() -> void:
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
+	
 	get_tree().paused = false
 	
 	lobby_music_player.play()
@@ -32,8 +33,10 @@ func _ready() -> void:
 		# First time get to lobby, load data from save file
 		GameManager.start_record_playtime()
 		SaveManager.load_game(GameManager.chosen_slot_id)
-
-
+	
+	GameManager.reset_reroll_cost()
+	GameManager.is_free_reroll = true
+	
 	# HACK
 	if GameManager.player_gained_first_barrel:
 		if not GameManager.barrel_tutorial_shown:
@@ -86,6 +89,7 @@ func _on_level_select(level_path: String) -> void:
 		# TODO - fixme
 		#if new_bgm:
 			#SoundManager.play_music(new_bgm, 0.25, "BGM")
+		GameManager.is_free_reroll = false
 		get_tree().change_scene_to_packed(loaded_scene)
 
 

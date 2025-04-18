@@ -1,4 +1,4 @@
-[gd_scene load_steps=227 format=4 uid="uid://bm3l5if407n6l"]
+[gd_scene load_steps=229 format=4 uid="uid://bm3l5if407n6l"]
 
 [ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="1_fk3ye"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="2_ajswq"]
@@ -27,6 +27,7 @@
 [ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="25_umium"]
 [ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="26_pd2aw"]
 [ext_resource type="Texture2D" uid="uid://b0jvmdu1nkww5" path="res://src/env/decor/assets/dart_board.png" id="27_l5bmw"]
+[ext_resource type="Script" path="res://src/maps/pit_boss/barrel_reload_trigger.gd" id="28_vr416"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ydocc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -758,6 +759,9 @@ points = PackedVector3Array(-2, 0, -2.5, -2, -1, -2.5, 2, -1, -2.5, 2, 0, -2.5, 
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_iw20o"]
 points = PackedVector3Array(-3, 2.875, -2, -3, 0, -2, -2, 0, -2, -2, 2.875, -2, -3, 2.875, 2, -3, 0, 2, -2, 0, 2, -2, 2.875, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q50n6"]
+size = Vector3(4.4, 4.2, 4.9)
 
 [node name="BartenderBoss" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors", "directional_light")]
 script = ExtResource("1_fk3ye")
@@ -1623,5 +1627,15 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.514
 [node name="Decal" type="Decal" parent="."]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -28, 4.2, -35.3)
 texture_albedo = ExtResource("27_l5bmw")
+
+[node name="BarrelReloadTrigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.4)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("28_vr416")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BarrelReloadTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38419e-07, 2, 7.55)
+shape = SubResource("BoxShape3D_q50n6")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

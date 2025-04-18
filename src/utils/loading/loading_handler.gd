@@ -62,6 +62,7 @@ func start_loading(scene_name: String = "") -> void:
 func load_scene(packed_scene: PackedScene) -> void:
 	can_transition = false
 	loading_finished.emit(packed_scene)
+	LuckHandler.enabled = false
 	get_tree().change_scene_to_packed(packed_scene)
 	ScreenTransition.set_loading_visible(false)
 	ScreenTransition.transition_in()
