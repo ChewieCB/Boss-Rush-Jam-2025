@@ -3,6 +3,7 @@ class_name Gun
 
 signal gun_shot
 signal reload_anim_end
+signal spin_anim_trigger
 signal gun_reloaded
 
 signal barrel_spin_started(barrel: SpinBarrel, barrel_idx: int)
@@ -28,6 +29,7 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 @onready var barrel_3_sprite: Sprite3D = $SpriteParent/Barrel3Sprite
 @onready var barrel_3_label: Label3D = $SpriteParent/Barrel3Sprite/Label3D
 @onready var barrel_sprites: Array[Sprite3D] = [barrel_1_sprite, barrel_2_sprite, barrel_3_sprite]
+@onready var barrel_labels: Array[Label3D] = [barrel_1_label, barrel_2_label, barrel_3_label]
 
 @onready var anim_tree: AnimationTree = $AnimationTree
 
@@ -251,6 +253,9 @@ func release_trigger():
 func spin_all_barrels() -> void:
 	release_trigger()
 	is_reloading = true
+	
+	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	await spin_anim_trigger
 	# TODO - add catch for HELD barrels
 	for i in installed_barrels.size():
 		if i > installed_barrels.size():
@@ -274,6 +279,11 @@ func spin_single_barrel(barrel_idx: int) -> void:
 	
 	is_reloading = true
 	release_trigger()
+	
+	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	#await spin_anim_trigger
+	# TODO - move spin arm up/down gun depending on barrel count
+	
 	_spin_barrel(barrel_idx)
 	
 	# TODO - replace with a dedicated spin time value now reloading isn't directly
@@ -338,6 +348,10 @@ func reload():
 
 func _end_reload_anim() -> void:
 	reload_anim_end.emit()
+
+
+func _trigger_spin_anim() -> void:
+	spin_anim_trigger.emit()
 
 
 func reset_modifier(reload_reset = false):
@@ -469,7 +483,14 @@ func recheck_installed_barrels():
 	barrel_count = installed_barrels.size()
 	
 	for i in barrel_sprites.size():
-		barrel_sprites[i].visible = i < barrel_count
+		var barrel_label: Label3D = barrel_labels[i]
+		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
+		if i < barrel_count:
+			state_machine.travel("idle")
+			barrel_label.visible = true
+		else:
+			state_machine.travel("unequip")
+			barrel_label.visible = false
 
 
 func reinstall_barrels():
