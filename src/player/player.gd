@@ -46,7 +46,7 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
-@onready var magazine_label: Label = $UI/GunUI/GunStatusUI/MagazineUI
+@onready var magazine_label: Label = $UI/ConsumableUI/MarginContainer/MagazineUI
 @onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
 @onready var luck_ui = $UI/LuckUI
 

@@ -252,13 +252,10 @@ mouse_filter = 2
 
 [node name="PlayerHealthBarUI" parent="UI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("19_n1ar7")]
 layout_mode = 1
-offset_left = 406.0
-offset_top = 0.0
-offset_right = 944.0
-offset_bottom = 171.0
 health_component = NodePath("../../../HealthComponent")
 
 [node name="InteractUI" type="Label" parent="UI"]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -283,6 +280,43 @@ offset_right = 237.0
 offset_bottom = 415.0
 luck_component = NodePath("../../LuckComponent")
 
+[node name="ConsumableUI" type="HBoxContainer" parent="UI"]
+offset_left = 1573.0
+offset_top = 824.0
+offset_right = 1876.0
+offset_bottom = 935.0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/separation = 16
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/ConsumableUI"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 8
+theme_override_constants/margin_bottom = 16
+
+[node name="MagazineUI" type="Label" parent="UI/ConsumableUI/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 50
+text = "10/10"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="UI/ConsumableUI"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 8
+
+[node name="CurrencyUI" parent="UI/ConsumableUI/MarginContainer2" instance=ExtResource("23_xgmby")]
+custom_minimum_size = Vector2(192, 96)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
 [node name="GunUI" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 13
@@ -297,22 +331,12 @@ mouse_filter = 2
 
 [node name="GunStatusUI" type="MarginContainer" parent="UI/GunUI"]
 layout_mode = 2
-offset_left = -17.0
+offset_left = -150.0
 offset_right = 208.0
 offset_bottom = 945.0
 size_flags_horizontal = 3
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_bottom = 16
-
-[node name="MagazineUI" type="Label" parent="UI/GunUI/GunStatusUI"]
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_outline_size = 6
-theme_override_font_sizes/font_size = 50
-text = "10/10"
-horizontal_alignment = 2
-vertical_alignment = 1
 
 [node name="AllBarrelEffectUI" type="VBoxContainer" parent="UI/GunUI/GunStatusUI"]
 layout_mode = 2
@@ -329,8 +353,6 @@ layout_mode = 2
 
 [node name="EffectDetailUI3" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
 layout_mode = 2
-
-[node name="CurrencyUI" parent="UI" instance=ExtResource("23_xgmby")]
 
 [node name="BossSpecialDialog" type="Control" parent="UI"]
 process_mode = 3
@@ -380,6 +402,7 @@ grow_vertical = 2
 texture = ExtResource("47_yr3ov")
 
 [node name="SavingIndicator" type="Label" parent="UI"]
+visible = false
 offset_left = 8.0
 offset_top = 1024.0
 offset_right = 117.0

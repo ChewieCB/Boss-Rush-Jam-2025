@@ -161,9 +161,9 @@ _data = {
 
 [node name="PlayerHealthBarUI" type="MarginContainer"]
 modulate = Color(1, 1, 1, 0)
-offset_top = 40.0
-offset_right = 538.0
-offset_bottom = 211.0
+offset_left = 406.0
+offset_right = 944.0
+offset_bottom = 171.0
 mouse_filter = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 32

@@ -28,7 +28,7 @@ var shop_barrels: Array[BarrelDataResource] = []
 
 # Re-rolls
 @export var initial_reroll_cost: int = 200
-@export var reroll_cost_mult: float = 1.2
+@export var reroll_cost_mult: float = 1.5
 var reroll_cost: int = initial_reroll_cost
 var is_free_reroll: bool = false:
 	set(value):
@@ -156,7 +156,7 @@ func purchase_reroll() -> bool:
 			player_currency -= reroll_cost
 			# Increase the cost of re-rolling for this fight
 			reroll_cost *= reroll_cost_mult
-			reroll_cost_changed.emit(reroll_cost)
+		reroll_cost_changed.emit(reroll_cost)
 		SoundManager.play_sound(sfx_purchase)
 		return true
 	SoundManager.play_sound(sfx_too_expensive)

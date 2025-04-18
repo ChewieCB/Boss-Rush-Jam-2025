@@ -1,6 +1,6 @@
 extends Control
 
-@onready var currency_label: Label = $MarginContainer/HBoxContainer/CurrencyLabel
+@onready var currency_label: Label = $MarginContainer/HBoxContainer/MarginContainer2/CurrencyLabel
 
 
 func _ready() -> void:
