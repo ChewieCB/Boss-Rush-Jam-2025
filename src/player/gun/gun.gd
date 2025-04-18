@@ -251,14 +251,18 @@ func release_trigger():
 
 
 func spin_all_barrels() -> void:
+	var barrels_to_spin: int = installed_barrels.size()
+	if barrels_to_spin == 0:
+		return
+	
 	release_trigger()
 	is_reloading = true
 	
 	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	await spin_anim_trigger
 	# TODO - add catch for HELD barrels
-	for i in installed_barrels.size():
-		if i > installed_barrels.size():
+	for i in barrels_to_spin:
+		if i > barrels_to_spin:
 			break
 		_spin_barrel(i)
 	
