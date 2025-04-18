@@ -120,6 +120,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	time_since_last_shot += delta
+	# EXPERIMENTAL for hold/release spinning
+	#if Input.is_action_just_released("spin_barrels"):
+		#var state_machine = anim_tree.get("parameters/spin_state/playback")
+		#state_machine.travel("released")
 
 
 ## Return true if shot successful
@@ -258,8 +262,13 @@ func spin_all_barrels() -> void:
 	release_trigger()
 	is_reloading = true
 	
+	# EXPERIMENTAL for hold/release spinning
+	#var state_machine = anim_tree.get("parameters/spin_state/playback")
+	#state_machine.travel("pressed")
+	
 	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	await spin_anim_trigger
+	
 	# TODO - add catch for HELD barrels
 	for i in barrels_to_spin:
 		if i > barrels_to_spin:
@@ -284,14 +293,14 @@ func spin_single_barrel(barrel_idx: int) -> void:
 	is_reloading = true
 	release_trigger()
 	
-	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-	#await spin_anim_trigger
 	# TODO - move spin arm up/down gun depending on barrel count
+	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	await spin_anim_trigger
 	
 	_spin_barrel(barrel_idx)
 	
-	# TODO - replace with a dedicated spin time value now reloading isn't directly
-	# tied to spinning
+	# TODO - replace with a dedicated spin time value now reloading 
+	# isn't directly tied to spinning
 	await get_tree().create_timer(modified_reload_time).timeout
 	
 	reset_modifier(true)

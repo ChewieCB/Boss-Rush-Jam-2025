@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=39 format=3 uid="uid://cyxkgv6ghxahc"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=47 format=3 uid="uid://cyxkgv6ghxahc"]
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_3t03u"]
 
@@ -116,8 +116,39 @@ animation = &"start_spin"
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_7h8f4"]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hsuvi"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_v0brl"]
+animation = &"start_spin_up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_u63rb"]
+animation = &"start_spin_down"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ikyxr"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1g3np"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_723ak"]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_l2qtg"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_gscp2"]
+states/idle/node = SubResource("AnimationNodeAnimation_hsuvi")
+states/idle/position = Vector2(340, 100)
+states/pressed/node = SubResource("AnimationNodeAnimation_v0brl")
+states/pressed/position = Vector2(540, 106)
+states/released/node = SubResource("AnimationNodeAnimation_u63rb")
+states/released/position = Vector2(500, 3)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_ikyxr"), "idle", "pressed", SubResource("AnimationNodeStateMachineTransition_1g3np"), "pressed", "released", SubResource("AnimationNodeStateMachineTransition_723ak"), "released", "idle", SubResource("AnimationNodeStateMachineTransition_l2qtg")]
+graph_offset = Vector2(-39, -63)
+
 [resource]
-graph_offset = Vector2(-297.611, 59.3551)
+graph_offset = Vector2(-128.987, 222.875)
 nodes/barrel_1+2/node = SubResource("AnimationNodeAdd2_3t03u")
 nodes/barrel_1+2/position = Vector2(-240, 0)
 nodes/barrel_12+3/node = SubResource("AnimationNodeAdd2_vi7yb")
@@ -133,7 +164,7 @@ nodes/barrels+reload/position = Vector2(260, 220)
 nodes/idle/node = SubResource("AnimationNodeAnimation_cu731")
 nodes/idle/position = Vector2(-160, 520)
 "nodes/idle 2/node" = SubResource("AnimationNodeAnimation_8netf")
-"nodes/idle 2/position" = Vector2(280, 460)
+"nodes/idle 2/position" = Vector2(240, 700)
 nodes/output/position = Vector2(940, 300)
 nodes/reload/node = SubResource("AnimationNodeAnimation_fsm60")
 nodes/reload/position = Vector2(-380, 680)
@@ -144,7 +175,9 @@ nodes/reload_shot/position = Vector2(20, 500)
 nodes/reload_timescale/node = SubResource("AnimationNodeTimeScale_utj7t")
 nodes/reload_timescale/position = Vector2(-200, 680)
 nodes/spin_barrel/node = SubResource("AnimationNodeAnimation_72aiu")
-nodes/spin_barrel/position = Vector2(300, 600)
+nodes/spin_barrel/position = Vector2(260, 840)
 nodes/spin_shot/node = SubResource("AnimationNodeOneShot_7h8f4")
-nodes/spin_shot/position = Vector2(480, 400)
+nodes/spin_shot/position = Vector2(440, 640)
+nodes/spin_state/node = SubResource("AnimationNodeStateMachine_gscp2")
+nodes/spin_state/position = Vector2(380, 460)
 node_connections = [&"barrel_1+2", 0, &"barrel_1_state", &"barrel_1+2", 1, &"barrel_2_state", &"barrel_12+3", 0, &"barrel_1+2", &"barrel_12+3", 1, &"barrel_3_state", &"barrels+reload", 0, &"barrel_12+3", &"barrels+reload", 1, &"reload_shot", &"output", 0, &"reload+spin", &"reload+spin", 0, &"barrels+reload", &"reload+spin", 1, &"spin_shot", &"reload_shot", 0, &"idle", &"reload_shot", 1, &"reload_timescale", &"reload_timescale", 0, &"reload", &"spin_shot", 0, &"idle 2", &"spin_shot", 1, &"spin_barrel"]

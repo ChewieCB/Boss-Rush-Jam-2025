@@ -609,7 +609,7 @@ func apply_buffs():
 
 
 func spin_barrels() -> void:
-	if current_gun.installed_barrels.size() == 0:
+	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading:
 		return
 	# Check if we have enough chips
 	if GameManager.purchase_reroll():
