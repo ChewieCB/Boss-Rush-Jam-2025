@@ -13,11 +13,15 @@ var bgm_player: AudioStreamPlayer
 @onready var credits_ui = $CreditsUI
 @onready var story_ui = $StoryUI
 @onready var save_ui = $SaveUI
+@onready var save_slot_items: Array[Node] = $SaveUI/VBoxContainer.get_children()
 @onready var title_column = $TitleColumn
 
 
 func _ready() -> void:
 	Input.joy_connection_changed.connect(_on_controller_connection)
+	
+	for slot: SaveSlotItem in save_slot_items:
+		slot.save_deleted.connect(_on_save_deleted)
 	
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
@@ -75,7 +79,7 @@ func _on_start_button_pressed() -> void:
 	settings_ui.close_menu()
 
 	# Grab focus the first save button
-	var first_save_button: SaveSlotItem = save_ui.get_child(0).get_child(0)
+	var first_save_button: SaveSlotItem = save_slot_items[0]
 	first_save_button.main_button.grab_focus()
 	
 
@@ -131,3 +135,9 @@ func _on_controller_connection(device: int, connected: bool) -> void:
 		get_window().grab_focus()
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+
+func _on_save_deleted(save_slot: SaveSlotItem) -> void:
+	var slot_idx = save_slot_items.find(save_slot)
+	save_slot_items[slot_idx].main_button.grab_focus()
+	

@@ -1,6 +1,8 @@
 extends HBoxContainer
 class_name SaveSlotItem
 
+signal save_deleted(save_slot: SaveSlotItem)
+
 @export var slot_id: int = 0
 
 @onready var load_button_label: RichTextLabel = $MarginContainer/MarginContainer/LoadButtonLabel
@@ -59,6 +61,7 @@ func _on_delete_button_pressed() -> void:
 		confirm_delete = false
 		load_button_label.text = "[b][color=gold]Slot {0}[/color][/b] \
 			\nNew save file".format([slot_id])
+		save_deleted.emit(self)
 
 
 func format_time(msec: int) -> String:
