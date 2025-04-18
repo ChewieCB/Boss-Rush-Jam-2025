@@ -226,6 +226,13 @@ texture_albedo = ExtResource("3_tgexf")
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("41_63osp")
 
+[node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
+z_as_relative = false
+offset_left = 5.0
+offset_top = 35.0
+offset_right = 5.0
+offset_bottom = 35.0
+
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
 visible = false
 z_index = 10
@@ -322,13 +329,6 @@ layout_mode = 2
 
 [node name="EffectDetailUI3" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
 layout_mode = 2
-
-[node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
-z_as_relative = false
-offset_left = 5.0
-offset_top = 35.0
-offset_right = 5.0
-offset_bottom = 35.0
 
 [node name="CurrencyUI" parent="UI" instance=ExtResource("23_xgmby")]
 

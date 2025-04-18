@@ -1,0 +1,66 @@
+[gd_scene load_steps=3 format=3 uid="uid://bicxns6d0ciub"]
+
+[ext_resource type="Script" path="res://src/ui/player/reroll/reroll_ui.gd" id="1_25dwc"]
+[ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="1_u27fg"]
+
+[node name="RerollUI" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_25dwc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = -20.0
+offset_right = 104.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Re-roll"
+horizontal_alignment = 1
+
+[node name="CostLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "(null)"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("1_u27fg")
+expand_mode = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+max_value = 2000.0
+step = 1.0
+value = 40.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="VBoxContainer/ProgressBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "null/null"
+horizontal_alignment = 1

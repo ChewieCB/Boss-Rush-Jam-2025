@@ -29,6 +29,7 @@ var movement_sfx_player: AudioStreamPlayer
 
 @export_category("Luck")
 @export var luck_redeem_time: float = 2.0
+@export var reroll_heal_value: float = 15.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
 @onready var interact_ui: Label = $UI/InteractUI
@@ -613,9 +614,7 @@ func spin_barrels() -> void:
 		cash_in_luck()
 		current_gun.spin_all_barrels()
 		# Provide small health buff (?)
-		# TODO
-		# Increase the cost of re-rolling for this fight
-		# TODO
+		health_component.heal(reroll_heal_value)
 
 
 func cash_in_luck() -> void:

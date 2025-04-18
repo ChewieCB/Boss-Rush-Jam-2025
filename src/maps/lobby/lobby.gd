@@ -21,8 +21,6 @@ func _ready() -> void:
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
 	
-	GameManager.is_free_reroll = true
-	
 	get_tree().paused = false
 	
 	lobby_music_player.play()
@@ -35,8 +33,10 @@ func _ready() -> void:
 		# First time get to lobby, load data from save file
 		GameManager.start_record_playtime()
 		SaveManager.load_game(GameManager.chosen_slot_id)
-
-
+	
+	GameManager.reset_reroll_cost()
+	GameManager.is_free_reroll = true
+	
 	# HACK
 	if GameManager.player_gained_first_barrel:
 		if not GameManager.barrel_tutorial_shown:

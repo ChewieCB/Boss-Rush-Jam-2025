@@ -3,6 +3,8 @@ extends Node
 signal currency_changed(new_currency: int)
 signal barrel_purchased(barrel_data: BarrelDataResource)
 signal barrel_too_expensive(barrel_data: BarrelDataResource)
+signal reroll_cost_changed(new_cost: int)
+signal free_rerolls
 signal refresh_shop_ui
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
@@ -26,8 +28,13 @@ var shop_barrels: Array[BarrelDataResource] = []
 
 # Re-rolls
 @export var initial_reroll_cost: int = 200
+@export var reroll_cost_mult: float = 1.2
 var reroll_cost: int = initial_reroll_cost
-var is_free_reroll: bool = false
+var is_free_reroll: bool = false:
+	set(value):
+		is_free_reroll = value
+		if is_free_reroll:
+			free_rerolls.emit()
 
 @export var player_currency: int = 0:
 	set(value):
@@ -145,8 +152,11 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 
 func purchase_reroll() -> bool:
 	if player_currency >= reroll_cost or is_free_reroll:
-		player_currency -= reroll_cost
-		# TODO - increase reroll cost, resetting to initial when exiting the fight
+		if not is_free_reroll:
+			player_currency -= reroll_cost
+			# Increase the cost of re-rolling for this fight
+			reroll_cost *= reroll_cost_mult
+			reroll_cost_changed.emit(reroll_cost)
 		SoundManager.play_sound(sfx_purchase)
 		return true
 	SoundManager.play_sound(sfx_too_expensive)
@@ -155,6 +165,7 @@ func purchase_reroll() -> bool:
 
 func reset_reroll_cost() -> void:
 	reroll_cost = initial_reroll_cost
+	reroll_cost_changed.emit(reroll_cost)
 
 
 func show_boss_special_dialog(content: String, duration: float):
