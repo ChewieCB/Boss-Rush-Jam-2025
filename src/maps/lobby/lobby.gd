@@ -20,6 +20,9 @@ func _ready() -> void:
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
+	
+	GameManager.is_free_reroll = true
+	
 	get_tree().paused = false
 	
 	lobby_music_player.play()
@@ -86,6 +89,7 @@ func _on_level_select(level_path: String) -> void:
 		# TODO - fixme
 		#if new_bgm:
 			#SoundManager.play_music(new_bgm, 0.25, "BGM")
+		GameManager.is_free_reroll = false
 		get_tree().change_scene_to_packed(loaded_scene)
 
 
