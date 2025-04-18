@@ -83,7 +83,7 @@ func _ready() -> void:
 
 
 func activate() -> void:
-	super ()
+	super()
 	state_chart.send_event("intro_slam")
 
 

@@ -12,6 +12,7 @@ const RESOLUTION_ARRAY = [
 ]
 
 var pause_ui: PauseUI
+var setting_ui: SettingUI
 var player: Player
 
 var equipped_barrels: Array[BarrelDataResource] = []
@@ -57,6 +58,7 @@ var camera_tilt: bool = true
 var vsync_option_index: int = 1
 @export_range(0, 2, 1) var window_mode_index: int = 1 # From 0 to 2
 var scaling_3d: float = 100.0
+var hide_ui = false
 @export_range(0, 100, 0.1) var master_audio: float = 80
 @export_range(0, 100, 0.1) var bgm_audio: float = 100
 @export_range(0, 100, 0.1) var sfx_audio: float = 100

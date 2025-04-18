@@ -122,14 +122,14 @@ var charge_locked: bool = false
 
 
 func activate() -> void:
-	super ()
+	super()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	state_chart.send_event("start_phase_1")
 
 
 func _physics_process(delta: float) -> void:
-	super (delta)
+	super(delta)
 	projectile_marker_pivot.look_at(target.global_position)
 	slot_icons_parent.look_at(target.global_position)
 	

@@ -14,6 +14,7 @@ var bgm_player: AudioStreamPlayer
 @onready var credits_ui = $CreditsUI
 @onready var story_ui = $StoryUI
 @onready var save_ui = $SaveUI
+@onready var title_column = $TitleColumn
 
 
 func _ready() -> void:
@@ -53,13 +54,7 @@ func _on_options_button_pressed() -> void:
 	story_ui.visible = false
 	save_ui.visible = false
 	settings_ui.visible = true
-
-
-func _on_back_button_pressed() -> void:
-	buttons_container.visible = true
-	settings_ui.visible = false
-	story_ui.visible = true
-	SaveManager.save_setting_config()
+	title_column.visible = false
 
 
 func _on_credit_button_pressed() -> void:
@@ -79,3 +74,11 @@ func start_game():
 
 func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()
+
+
+func _on_setting_ui_setting_back_button_pressed() -> void:
+	buttons_container.visible = true
+	settings_ui.visible = false
+	story_ui.visible = true
+	title_column.visible = true
+	SaveManager.save_setting_config()

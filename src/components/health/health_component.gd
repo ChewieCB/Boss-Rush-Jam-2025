@@ -9,6 +9,7 @@ signal hurt
 @export_category("Health")
 @export var is_invincible: bool = false
 @export var max_health: float = 100
+@export var show_damage_text: bool = true
 @export var text_effect: PackedScene
 @export var text_effect_location: Node3D
 
@@ -44,22 +45,24 @@ func damage(_damage: float, _color: Color = Color.WHITE) -> void:
 	if enabled:
 		if not is_invincible:
 			current_health -= _damage
-		if not text_effect:
-			return
-		if text_effect_location:
-			create_text(text_effect_location.global_position, str(_damage), _color)
-		else:
-			create_text(self.global_position, str(_damage), _color)
+		if show_damage_text:
+			if not text_effect:
+				return
+			if text_effect_location:
+				create_text(text_effect_location.global_position, str(_damage), _color)
+			else:
+				create_text(self.global_position, str(_damage), _color)
 
 func heal(health: float, _color: Color = Color.GREEN) -> void:
 	if enabled:
 		current_health += health
-		if not text_effect:
-			return
-		if text_effect_location:
-			create_text(text_effect_location.global_position, str(health), _color)
-		else:
-			create_text(self.global_position, str(health), _color)
+		if show_damage_text:
+			if not text_effect:
+				return
+			if text_effect_location:
+				create_text(text_effect_location.global_position, str(health), _color)
+			else:
+				create_text(self.global_position, str(health), _color)
 
 
 func initialize_health() -> void:

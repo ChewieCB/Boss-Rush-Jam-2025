@@ -131,7 +131,6 @@ luck_component = NodePath("LuckComponent")
 shape = SubResource("CapsuleShape3D_le58x")
 
 [node name="DebugMeshes" type="Node3D" parent="."]
-visible = false
 
 [node name="Body" type="MeshInstance3D" parent="DebugMeshes"]
 mesh = SubResource("CapsuleMesh_w3btf")
