@@ -34,7 +34,11 @@ signal setting_back_button_pressed
 @onready var ui_value: Label = $TabContainer/Audio/VBoxContainer/UI/Value
 
 @onready var tab_header_container: Container = $HBoxContainer
-@onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection
+@onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/KeybindingSection/KeybindContainer
+
+
+@onready var normal_control_options_section: Control = $TabContainer/Control/ScrollContainer/VBoxContainer
+@onready var keybinding_control_options_section: Control = $TabContainer/Control/ScrollContainer/KeybindingSection
 
 var keybindable_action_list = {
 	"move_up": "Move forward",
@@ -206,9 +210,8 @@ func _on_scaling_3d_slider_value_changed(value: float) -> void:
 	scaling_3d_value.text = "{0}%".format([value])
 
 func create_keybind_buttons():
-	for i in range(keybind_container.get_child_count()):
-		if i > 1:
-			keybind_container.get_child(i).queue_free()
+	for child in keybind_container.get_children():
+		child.queue_free()
 	InputMap.load_from_project_settings()
 	for action in keybindable_action_list:
 		var button_inst: KeybindButton = keybind_button_prefab.instantiate()
@@ -229,13 +232,6 @@ func _on_input_button_pressed(button: KeybindButton, action):
 		action_to_remap = action
 		remapping_button = button
 		button.input_button.text = "Press key to bind..."
-
-func _on_reset_keybind_button_pressed():
-	create_keybind_buttons()
-
-func _on_reset_keybind_button_mouse_entered():
-	play_button_hover_sfx()
-
 
 func _on_hide_ui_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
@@ -285,3 +281,21 @@ func refresh_setting_value():
 	sfx_value.text = "{0}".format([GameManager.sfx_audio])
 	ui_slider.value = GameManager.ui_audio
 	ui_value.text = "{0}".format([GameManager.ui_audio])
+
+
+func _on_keybind_default_button_pressed() -> void:
+	create_keybind_buttons()
+
+
+func _on_controller_binding_start_btn_pressed() -> void:
+	normal_control_options_section.visible = false
+	keybinding_control_options_section.visible = true
+
+func _on_keyboard_binding_start_btn_pressed() -> void:
+	normal_control_options_section.visible = false
+	keybinding_control_options_section.visible = true
+
+
+func _on_keybinding_return_button_pressed() -> void:
+	normal_control_options_section.visible = true
+	keybinding_control_options_section.visible = false
