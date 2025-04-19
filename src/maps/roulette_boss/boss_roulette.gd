@@ -52,6 +52,11 @@ func set_goal_rotation_speed(value: float) -> void:
 	goal_rotation_speed = value
 
 
+func _on_player_death() -> void:
+	SoundManager.stop_ambient_sound(current_sfx_ambient, 0.5)
+	super()
+
+
 func _on_boss_defeated(_boss: BossCore) -> void:
 	SoundManager.stop_ambient_sound(current_sfx_ambient, 0.5)
 	super(_boss)
