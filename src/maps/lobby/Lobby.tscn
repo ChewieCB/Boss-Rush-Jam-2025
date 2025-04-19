@@ -1769,8 +1769,9 @@ max_health = 1e+07
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="TargetDummy2"]
 
-[node name="VendingMachine" parent="." instance=ExtResource("48_u7c7o")]
+[node name="VendingMachine" parent="." node_paths=PackedStringArray("player") instance=ExtResource("48_u7c7o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 2.9, -10)
+player = NodePath("../FuncGodotMap/entity_1_PlayerRef")
 
 [node name="FuncGodotMap" type="Node3D" parent="."]
 script = ExtResource("1_akhik")
