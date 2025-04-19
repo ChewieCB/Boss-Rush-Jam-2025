@@ -26,6 +26,7 @@ SoundManager="*res://addons/sound_manager/sound_manager.gd"
 GunUtils="*res://src/utils/gun_utils.gd"
 ScreenTransition="*res://src/ui/common/screen_transition/ScreenTransitionUI.tscn"
 LoadingHandler="*res://src/utils/loading/LoadingHandler.tscn"
+InputHelper="*res://addons/input_helper/input_helper.gd"
 
 [debug]
 
@@ -40,7 +41,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/func_godot/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
+enabled=PackedStringArray("res://addons/func_godot/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/input_helper/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
 
 [global_group]
 

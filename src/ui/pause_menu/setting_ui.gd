@@ -1,6 +1,8 @@
 extends Control
 class_name SettingUI
 
+# https://github.com/nathanhoad/godot_input_helper/blob/main/docs/Mapping.md
+
 signal setting_changed
 signal setting_back_button_pressed
 
@@ -61,8 +63,10 @@ var remapping_button: KeybindButton = null
 func _ready() -> void:
 	GameManager.setting_ui = self
 	refresh_setting_value()
-	create_keybind_buttons()
+	InputMap.load_from_project_settings()
 	SaveManager.setting_config_loaded.connect(refresh_setting_value)
+	normal_control_options_section.visible = true
+	keybinding_control_options_section.visible = false
 
 func _input(event):
 	if is_remapping:
@@ -96,18 +100,23 @@ func open_menu():
 
 func close_menu():
 	visible = false
+	normal_control_options_section.visible = true
+	keybinding_control_options_section.visible = false
 	SaveManager.save_setting_config()
 
 func _on_control_option_pressed() -> void:
 	tab_container.current_tab = 0
+	reset_on_tab_changed()
 	SoundManager.play_button_click_sfx()
 
 func _on_graphic_option_pressed() -> void:
 	tab_container.current_tab = 1
+	reset_on_tab_changed()
 	SoundManager.play_button_click_sfx()
 
 func _on_audio_option_pressed() -> void:
 	tab_container.current_tab = 2
+	reset_on_tab_changed()
 	SoundManager.play_button_click_sfx()
 
 func _on_back_button_pressed() -> void:
@@ -209,19 +218,22 @@ func _on_scaling_3d_slider_value_changed(value: float) -> void:
 	get_viewport().set_scaling_3d_scale(value / 100.0)
 	scaling_3d_value.text = "{0}%".format([value])
 
-func create_keybind_buttons():
+func create_keybind_buttons(is_controller = false):
 	for child in keybind_container.get_children():
 		child.queue_free()
-	InputMap.load_from_project_settings()
 	for action in keybindable_action_list:
 		var button_inst: KeybindButton = keybind_button_prefab.instantiate()
 		keybind_container.add_child(button_inst)
 		button_inst.action_label.text = keybindable_action_list[action]
-		var events = InputMap.action_get_events(action)
-		if events.size() > 0:
-			button_inst.input_button.text = events[0].as_text().trim_suffix(" (Physical)")
+		button_inst.input_button.text = ""
+		if is_controller:
+			var event = InputHelper.get_joypad_input_for_action(action)
+			if event:
+				button_inst.input_button.text = InputHelper.get_label_for_input(event)
 		else:
-			button_inst.input_button.text = ""
+			var event = InputHelper.get_keyboard_input_for_action(action)
+			if event:
+				button_inst.input_button.text = InputHelper.get_label_for_input(event)
 		button_inst.input_button.pressed.connect(_on_input_button_pressed.bind(button_inst, action))
 		button_inst.input_button.mouse_entered.connect(play_button_hover_sfx)
 
@@ -283,15 +295,24 @@ func refresh_setting_value():
 	ui_value.text = "{0}".format([GameManager.ui_audio])
 
 
+func reset_on_tab_changed():
+	normal_control_options_section.visible = true
+	keybinding_control_options_section.visible = false
+
+
 func _on_keybind_default_button_pressed() -> void:
+	InputMap.load_from_project_settings()
 	create_keybind_buttons()
 
 
 func _on_controller_binding_start_btn_pressed() -> void:
+	create_keybind_buttons(true)
 	normal_control_options_section.visible = false
 	keybinding_control_options_section.visible = true
 
+
 func _on_keyboard_binding_start_btn_pressed() -> void:
+	create_keybind_buttons()
 	normal_control_options_section.visible = false
 	keybinding_control_options_section.visible = true
 
@@ -299,3 +320,45 @@ func _on_keyboard_binding_start_btn_pressed() -> void:
 func _on_keybinding_return_button_pressed() -> void:
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
+
+
+# ## Convert a Godot device identifier to a simplified string. Return
+# ## Xbox, Sony, Switch or Generic.
+# func get_simplified_device_name(raw_name: String) -> String:
+# 	match raw_name:
+# 		"XInput Gamepad", "Xbox Series Controller", "Xbox 360 Controller", \
+# 		"Xbox One Controller":
+# 			return "Xbox"
+# 		"Sony DualSense", "PS5 Controller", "PS4 Controller", \
+# 		"Nacon Revolution Unlimited Pro Controller":
+# 			return "Sony"
+# 		"Switch":
+# 			return "Switch"
+# 		_:
+# 			return "Generic"
+
+# func extract_controller_input_event_name(line: String) -> String:
+# 	var start_idx = line.find("(")
+# 	var end_idx = line.find(")", start_idx)
+	
+# 	if start_idx == -1 or end_idx == -1:
+# 		return "" # No label group found
+
+# 	var labels_text = line.substr(start_idx + 1, end_idx - start_idx - 1)
+# 	var labels = labels_text.split(",", false)
+	
+# 	# Trim whitespace
+# 	for i in labels.size():
+# 		labels[i] = labels[i].strip_edges()
+
+# 	# Custom logic to prefer more "human-friendly" labels
+# 	for label in labels:
+# 		if label.contains("Stick"):
+# 			return label
+# 		elif label in ["Sony Cross", "Xbox A", "Nintendo B"]:
+# 			return "A"
+# 		elif label == "Xbox RT" or label == "Sony R2":
+# 			return "RT"
+
+# 	# Fallback to first label if nothing matches
+# 	return labels[0] if labels.size() > 0 else ""
