@@ -18,6 +18,11 @@ transform = Transform3D(4.5, 0, 0, 0, -1.96701e-07, 4.5, 0, -4.5, -1.96701e-07, 
 modulate = Color(0.0828836, 0.092301, 0.0762992, 0.854902)
 texture = ExtResource("2_jiri2")
 
+[node name="Decal" type="Decal" parent="."]
+size = Vector3(12, 4, 12)
+texture_albedo = ExtResource("2_jiri2")
+modulate = Color(0.0823529, 0.0941176, 0.0745098, 0.854902)
+
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 omni_range = 10.0
 
