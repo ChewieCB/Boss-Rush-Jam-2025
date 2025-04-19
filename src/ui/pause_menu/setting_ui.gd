@@ -226,14 +226,13 @@ func create_keybind_buttons(is_controller = false):
 		keybind_container.add_child(button_inst)
 		button_inst.action_label.text = keybindable_action_list[action]
 		button_inst.input_button.text = ""
+		var event = null
 		if is_controller:
-			var event = InputHelper.get_joypad_input_for_action(action)
-			if event:
-				button_inst.input_button.text = InputHelper.get_label_for_input(event)
+			event = InputHelper.get_joypad_input_for_action(action)
 		else:
-			var event = InputHelper.get_keyboard_input_for_action(action)
-			if event:
-				button_inst.input_button.text = InputHelper.get_label_for_input(event)
+			event = InputHelper.get_keyboard_input_for_action(action)
+		if event:
+			button_inst.input_button.text = InputHelper.get_label_for_input(event)
 		button_inst.input_button.pressed.connect(_on_input_button_pressed.bind(button_inst, action))
 		button_inst.input_button.mouse_entered.connect(play_button_hover_sfx)
 
