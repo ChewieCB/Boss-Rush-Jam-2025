@@ -51,9 +51,11 @@ func show_end_panel() -> void:
 
 
 func collect_all_chips() -> void:
+	var target_pos = player.global_position
 	for chip in get_tree().get_nodes_in_group("currency_chips"):
+		var chip_move_time: float = chip.global_position.distance_to(target_pos) / 70.0
 		var chip_tween: Tween = get_tree().create_tween()
-		chip_tween.tween_property(chip, "global_position", player.global_position, 0.1).set_ease(Tween.EASE_IN)
+		chip_tween.tween_property(chip, "global_position", player.global_position, chip_move_time).set_ease(Tween.EASE_IN)
 
 
 func _on_boss_died(boss: BossCore = boss) -> void:
