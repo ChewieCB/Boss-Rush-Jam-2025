@@ -15,6 +15,7 @@ slow_perc = 50.0
 
 [node name="Puddle" type="Sprite3D" parent="."]
 transform = Transform3D(4.5, 0, 0, 0, -1.96701e-07, 4.5, 0, -4.5, -1.96701e-07, 0, 0.01, 0)
+visible = false
 modulate = Color(0.0828836, 0.092301, 0.0762992, 0.854902)
 texture = ExtResource("2_jiri2")
 
