@@ -40,7 +40,11 @@ signal setting_back_button_pressed
 
 @onready var normal_control_options_section: Control = $TabContainer/Control/ScrollContainer/VBoxContainer
 @onready var keybinding_control_options_section: Control = $TabContainer/Control/ScrollContainer/KeybindingSection
+@onready var edit_keybind_button: Button = $TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding/EditKeybindButton
 @onready var keybind_return_button: Button = $TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton
+@onready var keybind_timer: Timer = $KeybindTimer
+
+const KEYBIND_TIME_LIMIT = 5
 
 var keybindable_action_list = {
 	"move_up": "Move forward",
@@ -60,6 +64,7 @@ var is_remapping = false
 var remapping_controller = false
 var action_to_remap = null
 var remapping_button: KeybindButton = null
+var keybind_timer_timeleft = 0
 
 func _ready() -> void:
 	GameManager.setting_ui = self
@@ -70,16 +75,17 @@ func _ready() -> void:
 	keybinding_control_options_section.visible = false
 
 func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		if keybinding_control_options_section.visible:
+			if not is_remapping:
+				normal_control_options_section.visible = true
+				keybinding_control_options_section.visible = false
+				edit_keybind_button.grab_focus()
+				accept_event()
+				return
+
 	if is_remapping:
 		var did_update = false
-
-		if event.is_action_pressed("ui_cancel"):
-			remapping_button.update_button_detail()
-			is_remapping = false
-			action_to_remap = null
-			remapping_button = null
-			accept_event()
-			return
 
 		if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
 			if not remapping_controller:
@@ -103,18 +109,27 @@ func _input(event):
 		if next_tab_id > tab_container.get_child_count() - 1:
 			next_tab_id = 0
 		tab_container.current_tab = next_tab_id
+		tab_header_container.get_child(next_tab_id).grab_focus()
 
 	if event.is_action_pressed("ui_page_down"):
 		var next_tab_id = tab_container.current_tab - 1
 		if next_tab_id < 0:
 			next_tab_id = tab_container.get_child_count() - 1
 		tab_container.current_tab = next_tab_id
+		tab_header_container.get_child(next_tab_id).grab_focus()
+
 
 func open_menu():
 	visible = true
-	tab_header_container.get_child(0).grab_focus()
+	tab_header_container.get_child(tab_container.current_tab).grab_focus()
 
 func close_menu():
+	if remapping_button:
+		remapping_button.update_button_detail()
+		is_remapping = false
+		action_to_remap = null
+		remapping_button = null
+		accept_event()
 	visible = false
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
@@ -255,10 +270,12 @@ func _on_input_button_pressed(button: KeybindButton, action: String, is_controll
 		remapping_controller = is_controller
 		action_to_remap = action
 		remapping_button = button
+		keybind_timer_timeleft = KEYBIND_TIME_LIMIT
 		if is_controller:
-			button.controller_button.text = "Press key to bind..."
+			button.controller_button.text = "Press key to bind ({0})...".format([keybind_timer_timeleft])
 		else:
-			button.kbm_button.text = "Press key to bind..."
+			button.kbm_button.text = "Press key to bind ({0})...".format([keybind_timer_timeleft])
+		keybind_timer.start()
 
 func _on_hide_ui_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
@@ -323,6 +340,7 @@ func _on_keybind_default_button_pressed() -> void:
 func _on_keybinding_return_button_pressed() -> void:
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
+	edit_keybind_button.grab_focus()
 
 
 func _on_edit_keybind_button_pressed() -> void:
@@ -330,3 +348,22 @@ func _on_edit_keybind_button_pressed() -> void:
 	normal_control_options_section.visible = false
 	keybinding_control_options_section.visible = true
 	keybind_return_button.grab_focus()
+
+func _on_keybind_timer_timeout() -> void:
+	keybind_timer_timeleft -= 1
+	if keybind_timer_timeleft <= 0:
+		# Stop keybinding process
+		keybind_timer.stop()
+		if remapping_button:
+			remapping_button.update_button_detail()
+			is_remapping = false
+			action_to_remap = null
+			remapping_button = null
+			accept_event()
+	else:
+		# Countdown
+		if remapping_button:
+			if remapping_controller:
+				remapping_button.controller_button.text = "Press key to bind ({0})...".format([keybind_timer_timeleft])
+			else:
+				remapping_button.kbm_button.text = "Press key to bind ({0})...".format([keybind_timer_timeleft])

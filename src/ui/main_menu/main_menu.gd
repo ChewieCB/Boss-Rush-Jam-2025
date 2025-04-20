@@ -43,7 +43,7 @@ func _input(event: InputEvent) -> void:
 			save_ui.visible = false
 			buttons_container.get_child(0).grab_focus()
 			story_ui.visible = true
-		elif settings_ui.visible:
+		elif settings_ui.visible and not settings_ui.is_remapping:
 			settings_ui.visible = false
 			buttons_container.get_child(0).grab_focus()
 			story_ui.visible = true

@@ -1,10 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://biqm56x6ewbmo"]
+[gd_scene load_steps=9 format=3 uid="uid://biqm56x6ewbmo"]
 
 [ext_resource type="Script" path="res://src/ui/pause_menu/setting_ui.gd" id="1_05qbb"]
 [ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="2_b71wb"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_1sxb2"]
+[ext_resource type="Texture2D" uid="uid://cr52bg7vx5ccm" path="res://assets/sprite/game_icon/gamepad.png" id="4_4x1kt"]
 [ext_resource type="Theme" uid="uid://c4j7kmv6avlsi" path="res://src/ui/theme/setting_theme.tres" id="4_fifb6"]
+[ext_resource type="Texture2D" uid="uid://bbt0eaqh5wvv1" path="res://assets/sprite/game_icon/film.png" id="5_knue1"]
 [ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="5_oipns"]
+[ext_resource type="Texture2D" uid="uid://db7w5onrhapvt" path="res://assets/sprite/game_icon/audioOn.png" id="6_fqt2w"]
 
 [node name="SettingUI" type="Control"]
 layout_mode = 3
@@ -28,29 +31,35 @@ offset_top = 120.0
 offset_right = 320.0
 offset_bottom = 190.0
 grow_horizontal = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 15
 alignment = 1
 
 [node name="ControlOption" parent="HBoxContainer" instance=ExtResource("5_oipns")]
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = "Control"
+icon = ExtResource("4_4x1kt")
+icon_alignment = 2
 
 [node name="GraphicOption" parent="HBoxContainer" instance=ExtResource("5_oipns")]
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = "Graphic"
+icon = ExtResource("5_knue1")
+icon_alignment = 2
 
 [node name="AudioOption" parent="HBoxContainer" instance=ExtResource("5_oipns")]
-custom_minimum_size = Vector2(160, 0)
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = "Audio"
+icon = ExtResource("6_fqt2w")
+icon_alignment = 2
 
 [node name="TabContainer" type="TabContainer" parent="."]
 custom_minimum_size = Vector2(100, 100)
@@ -729,6 +738,8 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 40
 
+[node name="KeybindTimer" type="Timer" parent="."]
+
 [connection signal="mouse_entered" from="HBoxContainer/ControlOption" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="HBoxContainer/ControlOption" to="." method="_on_control_option_pressed"]
 [connection signal="mouse_entered" from="HBoxContainer/GraphicOption" to="." method="play_button_hover_sfx"]
@@ -771,3 +782,4 @@ theme_override_font_sizes/font_size = 40
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="timeout" from="KeybindTimer" to="." method="_on_keybind_timer_timeout"]

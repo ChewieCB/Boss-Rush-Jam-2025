@@ -29,6 +29,9 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		# If the UI cancel button is pressed and the settings menu is open, close the settings menu only
 		if is_in_submenu:
+			# If setting menu is remapping, ignore this
+			if setting_ui.is_remapping:
+				return
 			setting_ui.close_menu()
 			SoundManager.play_button_click_sfx()
 			return_to_pause_menu()
