@@ -129,15 +129,13 @@ func _on_grab_focus_timer_timeout() -> void:
 	buttons_container.get_child(0).grab_focus()
 
 
-func _on_controller_connection(device: int, connected: bool) -> void:
+func _on_controller_connection(_device: int, connected: bool) -> void:
 	if connected:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		get_window().grab_focus()
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-
 func _on_save_deleted(save_slot: SaveSlotItem) -> void:
 	var slot_idx = save_slot_items.find(save_slot)
 	save_slot_items[slot_idx].main_button.grab_focus()
-	

@@ -38,9 +38,9 @@ signal setting_back_button_pressed
 @onready var tab_header_container: Container = $HBoxContainer
 @onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/KeybindingSection/KeybindContainer
 
-
 @onready var normal_control_options_section: Control = $TabContainer/Control/ScrollContainer/VBoxContainer
 @onready var keybinding_control_options_section: Control = $TabContainer/Control/ScrollContainer/KeybindingSection
+@onready var keybind_return_button: Button = $TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton
 
 var keybindable_action_list = {
 	"move_up": "Move forward",
@@ -57,24 +57,40 @@ var keybindable_action_list = {
 	"open_inventory": "Open inventory",
 }
 var is_remapping = false
+var remapping_controller = false
 var action_to_remap = null
 var remapping_button: KeybindButton = null
 
 func _ready() -> void:
 	GameManager.setting_ui = self
 	refresh_setting_value()
-	InputMap.load_from_project_settings()
+	InputHelper.reset_all_actions()
 	SaveManager.setting_config_loaded.connect(refresh_setting_value)
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
 
-func _unhandled_input(event):
+func _input(event):
 	if is_remapping:
-		if (event is InputEventKey || (event is InputEventMouseButton && event.pressed)):
-			if event is InputEventMouseButton && event.double_click:
-				event.double_click = false
-			InputMap.action_erase_events(action_to_remap)
-			InputMap.action_add_event(action_to_remap, event)
+		var did_update = false
+
+		if event.is_action_pressed("ui_cancel"):
+			remapping_button.update_button_detail()
+			is_remapping = false
+			action_to_remap = null
+			remapping_button = null
+			accept_event()
+			return
+
+		if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
+			if not remapping_controller:
+				InputHelper.set_keyboard_input_for_action(action_to_remap, event)
+				did_update = true
+		elif (event is InputEventJoypadButton or event is InputEventJoypadMotion) and event.is_pressed():
+			if remapping_controller:
+				InputHelper.set_joypad_input_for_action(action_to_remap, event)
+				did_update = true
+
+		if did_update:
 			remapping_button.update_button_detail()
 			is_remapping = false
 			action_to_remap = null
@@ -236,6 +252,7 @@ func create_keybind_buttons():
 func _on_input_button_pressed(button: KeybindButton, action: String, is_controller: bool):
 	if not is_remapping:
 		is_remapping = true
+		remapping_controller = is_controller
 		action_to_remap = action
 		remapping_button = button
 		if is_controller:
@@ -299,22 +316,17 @@ func reset_on_tab_changed():
 
 
 func _on_keybind_default_button_pressed() -> void:
-	InputMap.load_from_project_settings()
+	InputHelper.reset_all_actions()
 	create_keybind_buttons()
-
-
-func _on_controller_binding_start_btn_pressed() -> void:
-	create_keybind_buttons()
-	normal_control_options_section.visible = false
-	keybinding_control_options_section.visible = true
-
-
-func _on_keyboard_binding_start_btn_pressed() -> void:
-	create_keybind_buttons()
-	normal_control_options_section.visible = false
-	keybinding_control_options_section.visible = true
 
 
 func _on_keybinding_return_button_pressed() -> void:
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
+
+
+func _on_edit_keybind_button_pressed() -> void:
+	create_keybind_buttons()
+	normal_control_options_section.visible = false
+	keybinding_control_options_section.visible = true
+	keybind_return_button.grab_focus()
