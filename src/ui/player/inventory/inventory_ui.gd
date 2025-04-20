@@ -18,7 +18,7 @@ class_name InventoryUI
 
 @onready var shop_title_label: Label = $Title
 @onready var equip_title: Label = $EquipBarrelSection/EquipTitle
-@onready var equip_barrel_container: HBoxContainer = $EquipBarrelSection/EquippedBarrelContainer
+@onready var equip_barrel_container: HBoxContainer = $EquipBarrelSection/EquippedBarrelBorder/EquippedBarrelContainer
 @onready var barrel_desc: RichTextLabel = $EquipBarrelSection/BarrelDescription/RichTextLabel
 @onready var inventory_barrel_container: GridContainer = $BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer
 @onready var shop_barrel_container: GridContainer = $BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer
