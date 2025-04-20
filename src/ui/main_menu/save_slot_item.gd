@@ -41,6 +41,10 @@ func _ready() -> void:
 
 
 func _on_load_button_pressed() -> void:
+	# This prevent issue where player spam pressing the load save button
+	if main_menu.started_loading:
+		return
+	main_menu.started_loading = true
 	SoundManager.play_button_click_sfx()
 	GameManager.chosen_slot_id = slot_id
 	load_button_label.text = "[b][color=gold]Slot {0}[/color][/b] \

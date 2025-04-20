@@ -16,6 +16,7 @@ var bgm_player: AudioStreamPlayer
 @onready var save_slot_items: Array[Node] = $SaveUI/VBoxContainer.get_children()
 @onready var title_column = $TitleColumn
 
+var started_loading = false
 
 func _ready() -> void:
 	Input.joy_connection_changed.connect(_on_controller_connection)
