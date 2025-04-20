@@ -22,6 +22,7 @@ func _process(_delta: float) -> void:
 	pivot_offset = size / 2
 
 func expand_button_size():
+	pivot_offset = size / 2
 	if disabled:
 		return
 	var tween = self.create_tween()
