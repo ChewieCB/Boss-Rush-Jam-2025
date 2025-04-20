@@ -19,6 +19,13 @@ var banned_controller_keybind_action = [
 func _ready() -> void:
 	InputHelper.keyboard_input_changed.connect(_on_input_changed)
 	InputHelper.joypad_input_changed.connect(_on_input_changed)
+	kbm_button.mouse_entered.connect(play_button_hover_sfx)
+	kbm_button.focus_entered.connect(play_button_hover_sfx)
+	controller_button.mouse_entered.connect(play_button_hover_sfx)
+	controller_button.focus_entered.connect(play_button_hover_sfx)
+
+func play_button_hover_sfx():
+	SoundManager.play_button_hover_sfx()
 
 
 func _on_input_changed(action: String, _input: InputEvent):

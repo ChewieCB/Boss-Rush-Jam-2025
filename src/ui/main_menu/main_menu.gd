@@ -73,6 +73,7 @@ func _play_button_sfx() -> void:
 
 
 func _on_start_button_pressed() -> void:
+	SoundManager.play_button_click_sfx()
 	save_ui.visible = true
 	story_ui.visible = false
 	credits_ui.visible = false
@@ -84,10 +85,12 @@ func _on_start_button_pressed() -> void:
 	
 
 func _on_quit_button_pressed() -> void:
+	SoundManager.play_button_click_sfx()
 	get_tree().quit()
 
 
-func _on_options_button_pressed() -> void:
+func _on_option_button_pressed() -> void:
+	SoundManager.play_button_click_sfx()
 	credits_ui.visible = false
 	story_ui.visible = false
 	save_ui.visible = false
@@ -95,6 +98,7 @@ func _on_options_button_pressed() -> void:
 
 
 func _on_credit_button_pressed() -> void:
+	SoundManager.play_button_click_sfx()
 	credits_ui.visible = true
 	story_ui.visible = false
 	save_ui.visible = false

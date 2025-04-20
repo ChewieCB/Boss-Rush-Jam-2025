@@ -106,7 +106,7 @@ func _on_main_menu_button_pressed() -> void:
 	AudioServer.set_bus_effect_enabled(1, 0, false)
 
 
-func _on_exit_button_pressed() -> void:
+func _on_quit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()

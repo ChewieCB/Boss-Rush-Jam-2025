@@ -2,7 +2,7 @@
 
 [sub_resource type="AudioEffectHighPassFilter" id="AudioEffectHighPassFilter_y8chw"]
 resource_name = "HighPassFilter"
-cutoff_hz = 1000.0
+cutoff_hz = 750.0
 db = 1
 
 [sub_resource type="AudioEffectReverb" id="AudioEffectReverb_yhh7p"]

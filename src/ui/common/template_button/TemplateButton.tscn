@@ -6,9 +6,8 @@
 [node name="TemplateButton" type="Button"]
 offset_right = 60.0
 offset_bottom = 40.0
-size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 26
-text = "Back"
+text = "Button"
 script = ExtResource("1_anfr8")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
