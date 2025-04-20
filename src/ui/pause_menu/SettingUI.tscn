@@ -177,7 +177,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 26
 text = "Keyboard bindings"
 
-[node name="KeyboardBindingStartBtn" type="Button" parent="TabContainer/Control/ScrollContainer/VBoxContainer/SetKeyboardBinding"]
+[node name="KeyboardBindingStartBtn" parent="TabContainer/Control/ScrollContainer/VBoxContainer/SetKeyboardBinding" instance=ExtResource("5_oipns")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -190,22 +190,7 @@ offset_right = 120.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 26
-text = "edit bindings"
-
-[node name="NinePatchRect" type="NinePatchRect" parent="TabContainer/Control/ScrollContainer/VBoxContainer/SetKeyboardBinding/KeyboardBindingStartBtn"]
-self_modulate = Color(0.902344, 0.776165, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_ogivf")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
+text = "Edit bindings"
 
 [node name="ControllerAimAssistSens" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 80)
@@ -305,6 +290,7 @@ patch_margin_bottom = 20
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/separation = 10
 
 [node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/KeybindingSection"]
 layout_mode = 2

@@ -68,14 +68,14 @@ func _ready() -> void:
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
 
-func _input(event):
+func _unhandled_input(event):
 	if is_remapping:
 		if (event is InputEventKey || (event is InputEventMouseButton && event.pressed)):
 			if event is InputEventMouseButton && event.double_click:
 				event.double_click = false
 			InputMap.action_erase_events(action_to_remap)
 			InputMap.action_add_event(action_to_remap, event)
-			remapping_button.input_button.text = event.as_text().trim_suffix(" (Physical)")
+			remapping_button.update_button_detail()
 			is_remapping = false
 			action_to_remap = null
 			remapping_button = null
@@ -218,31 +218,30 @@ func _on_scaling_3d_slider_value_changed(value: float) -> void:
 	get_viewport().set_scaling_3d_scale(value / 100.0)
 	scaling_3d_value.text = "{0}%".format([value])
 
-func create_keybind_buttons(is_controller = false):
+func create_keybind_buttons():
 	for child in keybind_container.get_children():
 		child.queue_free()
 	for action in keybindable_action_list:
 		var button_inst: KeybindButton = keybind_button_prefab.instantiate()
 		keybind_container.add_child(button_inst)
 		button_inst.action_label.text = keybindable_action_list[action]
-		button_inst.input_button.text = ""
-		var event = null
-		if is_controller:
-			event = InputHelper.get_joypad_input_for_action(action)
-		else:
-			event = InputHelper.get_keyboard_input_for_action(action)
-		if event:
-			button_inst.input_button.text = InputHelper.get_label_for_input(event)
-		button_inst.input_button.pressed.connect(_on_input_button_pressed.bind(button_inst, action))
-		button_inst.input_button.mouse_entered.connect(play_button_hover_sfx)
+		button_inst.assigned_action_name = action
+		button_inst.update_button_detail()
+		button_inst.kbm_button.pressed.connect(_on_input_button_pressed.bind(button_inst, action, false))
+		button_inst.kbm_button.mouse_entered.connect(play_button_hover_sfx)
+		button_inst.controller_button.pressed.connect(_on_input_button_pressed.bind(button_inst, action, true))
+		button_inst.controller_button.mouse_entered.connect(play_button_hover_sfx)
 
 
-func _on_input_button_pressed(button: KeybindButton, action):
+func _on_input_button_pressed(button: KeybindButton, action: String, is_controller: bool):
 	if not is_remapping:
 		is_remapping = true
 		action_to_remap = action
 		remapping_button = button
-		button.input_button.text = "Press key to bind..."
+		if is_controller:
+			button.controller_button.text = "Press key to bind..."
+		else:
+			button.kbm_button.text = "Press key to bind..."
 
 func _on_hide_ui_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
@@ -305,7 +304,7 @@ func _on_keybind_default_button_pressed() -> void:
 
 
 func _on_controller_binding_start_btn_pressed() -> void:
-	create_keybind_buttons(true)
+	create_keybind_buttons()
 	normal_control_options_section.visible = false
 	keybinding_control_options_section.visible = true
 
@@ -319,45 +318,3 @@ func _on_keyboard_binding_start_btn_pressed() -> void:
 func _on_keybinding_return_button_pressed() -> void:
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
-
-
-# ## Convert a Godot device identifier to a simplified string. Return
-# ## Xbox, Sony, Switch or Generic.
-# func get_simplified_device_name(raw_name: String) -> String:
-# 	match raw_name:
-# 		"XInput Gamepad", "Xbox Series Controller", "Xbox 360 Controller", \
-# 		"Xbox One Controller":
-# 			return "Xbox"
-# 		"Sony DualSense", "PS5 Controller", "PS4 Controller", \
-# 		"Nacon Revolution Unlimited Pro Controller":
-# 			return "Sony"
-# 		"Switch":
-# 			return "Switch"
-# 		_:
-# 			return "Generic"
-
-# func extract_controller_input_event_name(line: String) -> String:
-# 	var start_idx = line.find("(")
-# 	var end_idx = line.find(")", start_idx)
-	
-# 	if start_idx == -1 or end_idx == -1:
-# 		return "" # No label group found
-
-# 	var labels_text = line.substr(start_idx + 1, end_idx - start_idx - 1)
-# 	var labels = labels_text.split(",", false)
-	
-# 	# Trim whitespace
-# 	for i in labels.size():
-# 		labels[i] = labels[i].strip_edges()
-
-# 	# Custom logic to prefer more "human-friendly" labels
-# 	for label in labels:
-# 		if label.contains("Stick"):
-# 			return label
-# 		elif label in ["Sony Cross", "Xbox A", "Nintendo B"]:
-# 			return "A"
-# 		elif label == "Xbox RT" or label == "Sony R2":
-# 			return "RT"
-
-# 	# Fallback to first label if nothing matches
-# 	return labels[0] if labels.size() > 0 else ""
