@@ -234,11 +234,13 @@ func _show_shared_bus_warning() -> void:
 
 
 func play_button_click_sfx():
-	play_ui_sound(button_click_sfx_array.pick_random(), "UI")
+	var rand_pitch = randf_range(0.8, 1.2)
+	play_ui_sound_with_pitch(button_click_sfx_array.pick_random(), rand_pitch, "UI")
 
 
 func play_button_hover_sfx():
-	play_ui_sound(button_hover_sfx, "UI")
+	var rand_pitch = randf_range(0.8, 1.2)
+	play_ui_sound_with_pitch(button_hover_sfx, rand_pitch, "UI")
 
 
 #endregion
