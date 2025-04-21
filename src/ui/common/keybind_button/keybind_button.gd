@@ -108,17 +108,17 @@ func update_controller_icon():
 	# Decide what type of controller player is using
 	var controller_icon_mapping = {}
 	var icon_pathname = ""
-	var device = InputHelper.last_known_joypad_device
-	if device == "Sony":
+	var device = InputHelper.last_known_joypad_device.to_lower()
+	if device == "sony" or device == "playstation":
 		controller_icon_mapping = sony_input_icon_mapping
 		icon_pathname = "res://assets/sprite/input/sony/{0}.png"
-	elif device == "Xbox":
+	elif device == "xbox":
 		controller_icon_mapping = xbox_input_icon_mapping
 		icon_pathname = "res://assets/sprite/input/xbox/{0}.png"
 	else:
 		# Forcing using text instead of icon
 		controller_icon_mapping = {}
-		icon_pathname = {}
+		icon_pathname = ""
 
 	# Update icon
 	if controller_icon_mapping.has(controller_input_label):
