@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://gwlfcdvj2q8w"]
+[gd_scene load_steps=15 format=3 uid="uid://gwlfcdvj2q8w"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_61kc2"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_1x16c"]
@@ -13,6 +13,7 @@
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="11_afb2u"]
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="12_b66hh"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="13_b47xi"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="14_7bito"]
 
 [node name="InventoryUI" type="Control"]
 layout_mode = 3
@@ -254,13 +255,26 @@ size_flags_vertical = 3
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="InventoryTitle" type="Label" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
+layout_mode = 2
+
+[node name="InventoryTitle" type="Label" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 40
 text = "Available"
 horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_right = 128
+
+[node name="CurrencyUI" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/HBoxContainer/MarginContainer" instance=ExtResource("14_7bito")]
+layout_mode = 2
+size_flags_horizontal = 6
+is_static = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
 layout_mode = 2
