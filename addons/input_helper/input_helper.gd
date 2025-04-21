@@ -116,8 +116,8 @@ func get_simplified_device_name(raw_name: String) -> String:
 		SUB_DEVICE_XBOX_SERIES_CONTROLLER: ["Xbox Series Controller", "Xbox Wireless Controller"],
 		DEVICE_XBOX_CONTROLLER: ["XInput", "XBox"],
 		SUB_DEVICE_PLAYSTATION3_CONTROLLER: ["PS3"],
-		SUB_DEVICE_PLAYSTATION4_CONTROLLER:["Nacon Revolution Unlimited Pro Controller", "PS4", "DUALSHOCK 4"],
-		SUB_DEVICE_PLAYSTATION5_CONTROLLER:["Sony DualSense", "PS5", "DualSense Wireless Controller"],
+		SUB_DEVICE_PLAYSTATION4_CONTROLLER: ["Nacon Revolution Unlimited Pro Controller", "PS4", "DUALSHOCK 4"],
+		SUB_DEVICE_PLAYSTATION5_CONTROLLER: ["Sony DualSense", "PS5", "DualSense Wireless Controller"],
 		DEVICE_STEAMDECK_CONTROLLER: ["Steam"],
 		DEVICE_SWITCH_CONTROLLER: ["Switch", "Joy-Con (L/R)", "PowerA Core Controller"],
 		SUB_DEVICE_SWITCH_JOYCON_LEFT_CONTROLLER: ["Joy-Con (L)"],
@@ -194,7 +194,7 @@ func get_label_for_input(input: InputEvent) -> String:
 	if input == null: return ""
 
 	if input is InputEventKey:
-		if input.physical_keycode > 0 :
+		if input.physical_keycode > 0:
 			var keycode: Key = DisplayServer.keyboard_get_keycode_from_physical(input.physical_keycode) if DisplayServer.keyboard_get_current_layout() > -1 else input.physical_keycode
 			return OS.get_keycode_string(keycode)
 		elif input.keycode > 0:
@@ -224,7 +224,7 @@ func get_label_for_input(input: InputEvent) -> String:
 				return "%s Button" % SWITCH_BUTTON_LABELS[input.button_index]
 			DEVICE_SWITCH_CONTROLLER:
 				return "%s Button" % SWITCH_EXTENDED_GAMEPAD_BUTTON_LABELS[input.button_index]
-			SUB_DEVICE_PLAYSTATION3_CONTROLLER, SUB_DEVICE_PLAYSTATION4_CONTROLLER:
+			DEVICE_PLAYSTATION_CONTROLLER, SUB_DEVICE_PLAYSTATION3_CONTROLLER, SUB_DEVICE_PLAYSTATION4_CONTROLLER:
 				return "%s Button" % PLAYSTATION_3_4_BUTTON_LABELS[input.button_index]
 			SUB_DEVICE_PLAYSTATION5_CONTROLLER:
 				return "%s Button" % PLAYSTATION_5_BUTTON_LABELS[input.button_index]
