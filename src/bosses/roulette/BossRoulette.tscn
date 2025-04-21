@@ -142,7 +142,7 @@ shields_spawn_cooldown = 15.0
 shields_max_time = 12.0
 shield_count = 5
 shield_distance = 6.0
-shield_height = 3.0
+shield_height = 3.3
 sfx_shield_amb = Array[AudioStream]([ExtResource("4_f2bj1"), ExtResource("5_6k1wj"), ExtResource("6_j2w8r")])
 barrier_targeting_delay = 2.0
 barrier_sweep_time = 2.2
@@ -236,6 +236,9 @@ collision_mask = 64
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox/StaticBody3D" index="0"]
 shape = SubResource("BoxShape3D_6q8u4")
+
+[node name="HealthComponent" parent="." index="8"]
+max_health = 4500.0
 
 [node name="NavigationComponent" parent="." index="9"]
 enabled = false
@@ -730,6 +733,7 @@ script = ExtResource("8_edit5")
 script = ExtResource("4_3xtcm")
 to = NodePath("../../LaunchBalls")
 event = &"launch_balls"
+guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 
 [node name="LaunchBalls" type="Node" parent="StateChart/Root/Phase/Phase3/BallProjectile" index="1"]
@@ -877,6 +881,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.28097, 0)
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/Absorb" to="." method="_on_shields_absorb_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/Recover" to="." method="_on_shields_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_exited"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1/DamageBarrier" to="." method="_on_damage_barrier_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/Targeting" to="." method="_on_damage_barrier_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DamageBarrier/SpawnBarrier" to="." method="_on_phase_1_damage_barrier_spawn_barrier_state_entered"]
@@ -886,6 +891,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.28097, 0)
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BallProjectile/LaunchBalls" to="." method="_on_ball_projectile_launch_balls_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BallProjectile/Recover" to="." method="_on_ball_projectile_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_exited"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase2/DamageBarrier" to="." method="_on_damage_barrier_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/Targeting" to="." method="_on_damage_barrier_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_phase_2_damage_barrier_spawn_barrier_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase2/DamageBarrier/SpawnBarrier" to="." method="_on_damage_barrier_spawn_barrier_state_exited"]

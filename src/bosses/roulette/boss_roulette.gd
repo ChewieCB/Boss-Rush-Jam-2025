@@ -605,6 +605,33 @@ func _on_phase_1_state_entered() -> void:
 	state_chart.send_event("start_ball_attack")
 
 #### Phase 1 | Barrier Sweep
+func show_barrier() -> void:
+	var tween = get_tree().create_tween()
+	hurtbox_mesh.position.x = 0
+	hurtbox_mesh.mesh.size.x = 0
+	hurtbox.visible = true
+	tween.tween_property(hurtbox_mesh, "position:x", 17, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 35, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	tween.parallel().tween_property(barrier_sfx_player, "volume_db", linear_to_db(1.0), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	
+	await tween.finished
+	
+	return
+
+func hide_barrier() -> void:
+	if hurtbox.visible:
+		var tween = get_tree().create_tween()
+		tween.tween_property(hurtbox_mesh, "position:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
+		tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
+		tween.parallel().tween_property(barrier_sfx_player, "volume_db", linear_to_db(0.1), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
+		
+		await tween.finished
+		
+		hurtbox.visible = false
+		barrier_sfx_player.stop()
+		
+		return
+
 func _on_damage_barrier_targeting_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Targeting"
 	
@@ -617,14 +644,7 @@ func _on_damage_barrier_targeting_state_entered() -> void:
 	barrier_sfx_player.volume_db = linear_to_db(0.1)
 	barrier_sfx_player.play()
 	
-	var tween = get_tree().create_tween()
-	hurtbox_mesh.position.x = 0
-	hurtbox_mesh.mesh.size.x = 0
-	hurtbox.visible = true
-	tween.tween_property(hurtbox_mesh, "position:x", 17, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
-	tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 35, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
-	tween.parallel().tween_property(barrier_sfx_player, "volume_db", linear_to_db(1.0), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
-	await tween.finished
+	await show_barrier()
 	
 	barrier_targeting_timer.start(barrier_targeting_delay)
 
@@ -640,22 +660,12 @@ func _on_phase_1_damage_barrier_spawn_barrier_state_entered() -> void:
 	state_chart.send_event("barrier_attack_end")
 
 func _on_damage_barrier_spawn_barrier_state_exited() -> void:
-	var tween = get_tree().create_tween()
-	tween.tween_property(hurtbox_mesh, "position:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
-	tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
-	await tween.finished
-	hurtbox.visible = false
+	await hide_barrier()
 
 func _on_damage_barrier_recover_state_entered() -> void:
 	debug_state_label.text = "Damage Barrier | Recover"
 	
-	if hurtbox.visible:
-		var tween = get_tree().create_tween()
-		tween.tween_property(hurtbox_mesh, "position:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
-		tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
-		tween.parallel().tween_property(barrier_sfx_player, "volume_db", linear_to_db(0.1), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
-		await tween.finished
-		hurtbox.visible = false
+	await hide_barrier()
 	
 	await get_tree().create_timer(attack_recovery_time * 2).timeout
 	state_chart.send_event("cooldown_end")
@@ -665,15 +675,8 @@ func _on_damage_barrier_recover_state_entered() -> void:
 func _on_damage_barrier_state_exited() -> void:
 	barrier_targeting_timer.stop()
 	state_chart.send_event("attack_end_now")
-	if hurtbox.visible:
-		var tween = get_tree().create_tween()
-		tween.tween_property(hurtbox_mesh, "position:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
-		tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 0, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
-		tween.parallel().tween_property(barrier_sfx_player, "volume_db", linear_to_db(0.1), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUINT)
-		await tween.finished
-		hurtbox.visible = false
-		barrier_sfx_player.stop()
-		
+	await hide_barrier()
+
 
 #### Phase 1 | Multiball
 func _on_ball_projectile_targeting_state_entered() -> void:
@@ -703,13 +706,17 @@ func _on_ball_projectile_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
+func _on_phase_1_state_exited() -> void:
+	await hide_barrier()
+
+
 #### PHASE 2 ==========================
 # Shields 
 # Shockwave
 # Sweep
 
 func _on_phase_2_state_entered() -> void:
-	destroy_balls(active_balls)
+	active_balls = destroy_balls(active_balls)
 	ball_kill_timer.stop()
 	
 	debug_phase_label.text = "Phase 2"
@@ -776,6 +783,10 @@ func _on_phase_2_damage_barrier_spawn_barrier_state_entered() -> void:
 	await sweep_barrier(sweep_count, sweep_rotation, speed_multiplier)
 	
 	state_chart.send_event("barrier_attack_end")
+
+
+func _on_phase_2_state_exited() -> void:
+	await hide_barrier()
 
 
 #### PHASE 3 ==========================
