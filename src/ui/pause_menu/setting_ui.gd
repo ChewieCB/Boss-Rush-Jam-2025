@@ -69,7 +69,6 @@ var keybind_timer_timeleft = 0
 func _ready() -> void:
 	GameManager.setting_ui = self
 	refresh_setting_value()
-	InputHelper.reset_all_actions()
 	SaveManager.setting_config_loaded.connect(refresh_setting_value)
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
