@@ -702,7 +702,7 @@ grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
+[node name="SettingUIBorder" type="NinePatchRect" parent="."]
 self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 1
 anchors_preset = 8

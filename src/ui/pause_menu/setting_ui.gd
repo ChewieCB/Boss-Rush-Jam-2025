@@ -61,7 +61,7 @@ var keybindable_action_list = {
 	"open_inventory": "Open inventory",
 }
 var is_remapping = false
-var remapping_controller = false
+var is_remapping_controller = false
 var action_to_remap = null
 var remapping_button: KeybindButton = null
 var keybind_timer_timeleft = 0
@@ -87,11 +87,11 @@ func _input(event):
 		var did_update = false
 
 		if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
-			if not remapping_controller:
+			if not is_remapping_controller:
 				InputHelper.set_keyboard_input_for_action(action_to_remap, event)
 				did_update = true
 		elif (event is InputEventJoypadButton or event is InputEventJoypadMotion) and event.is_pressed():
-			if remapping_controller:
+			if is_remapping_controller:
 				InputHelper.set_joypad_input_for_action(action_to_remap, event)
 				did_update = true
 
@@ -266,14 +266,11 @@ func create_keybind_buttons():
 func _on_input_button_pressed(button: KeybindButton, action: String, is_controller: bool):
 	if not is_remapping:
 		is_remapping = true
-		remapping_controller = is_controller
+		is_remapping_controller = is_controller
 		action_to_remap = action
 		remapping_button = button
 		keybind_timer_timeleft = KEYBIND_TIME_LIMIT
-		if is_controller:
-			button.controller_button.text = "Press key to bind ({0})...".format([keybind_timer_timeleft])
-		else:
-			button.kbm_button.text = "Press key to bind ({0})...".format([keybind_timer_timeleft])
+		remapping_button.set_changing_keybind_text("Press key to bind ({0})...".format([keybind_timer_timeleft]), is_remapping_controller)
 		keybind_timer.start()
 
 func _on_hide_ui_toggled(toggled_on: bool) -> void:
@@ -362,7 +359,4 @@ func _on_keybind_timer_timeout() -> void:
 	else:
 		# Countdown
 		if remapping_button:
-			if remapping_controller:
-				remapping_button.controller_button.text = "Press key to bind ({0})...".format([keybind_timer_timeleft])
-			else:
-				remapping_button.kbm_button.text = "Press key to bind ({0})...".format([keybind_timer_timeleft])
+			remapping_button.set_changing_keybind_text("Press key to bind ({0})...".format([keybind_timer_timeleft]), is_remapping_controller)
