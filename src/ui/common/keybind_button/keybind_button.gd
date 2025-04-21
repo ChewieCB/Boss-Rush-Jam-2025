@@ -17,12 +17,31 @@ var banned_controller_keybind_action = [
 	"move_right",
 ]
 
-var inputname_to_icon_filename_mapping = {
+var kbm_input_icon_mapping = {
 	"mouse left button": "mouse_left",
 	"mouse right button": "mouse_right",
 	"mouse middle button": "mouse_scroll",
 	"mouse button 4": "mouse_scroll_up",
 	"mouse button 5": "mouse_scroll_down",
+}
+
+var xbox_input_icon_mapping = {
+	"left stick up": "xbox_stick_l_up",
+	"left stick down": "xbox_stick_l_down",
+	"left stick left": "xbox_stick_l_left",
+	"left stick right": "xbox_stick_l_right",
+	"a button": "xbox_button_color_aaaa",
+	"b button": "xbox_button_color_b",
+	"x button": "xbox_button_color_x",
+	"y button": "xbox_button_color_y",
+}
+
+var sony_input_icon_mapping = {
+	"left stick up": "playstation_stick_l_up",
+	"left stick down": "playstation_stick_l_down",
+	"left stick left": "playstation_stick_l_left",
+	"left stick right": "playstation_stick_l_right",
+	"a button": "playstation_button_color_cross",
 }
 
 func _ready() -> void:
@@ -56,10 +75,18 @@ func update_button_detail() -> void:
 	if assigned_action_name == "":
 		return
 
+	update_kbm_icon()
+	update_controller_icon()
+
+	if assigned_action_name in banned_controller_keybind_action:
+		controller_button.disabled = true
+
+
+func update_kbm_icon():
 	var kbm_event = InputHelper.get_keyboard_input_for_action(assigned_action_name)
 	var kbm_input_label = InputHelper.get_label_for_input(kbm_event).to_lower()
-	if inputname_to_icon_filename_mapping.has(kbm_input_label):
-		kbm_input_label = inputname_to_icon_filename_mapping[kbm_input_label]
+	if kbm_input_icon_mapping.has(kbm_input_label):
+		kbm_input_label = kbm_input_icon_mapping[kbm_input_label]
 	else:
 		kbm_input_label = "keyboard_" + kbm_input_label
 	var kbm_icon_path = "res://assets/sprite/input/keyboard_and_mouse/{0}.png".format([kbm_input_label])
@@ -72,8 +99,38 @@ func update_button_detail() -> void:
 		kbm_key_icon.texture = null
 		kbm_button.text = InputHelper.get_label_for_input(kbm_event)
 
-	var controller_event = InputHelper.get_joypad_input_for_action(assigned_action_name)
-	controller_button.text = InputHelper.get_label_for_input(controller_event)
 
-	if assigned_action_name in banned_controller_keybind_action:
-		controller_button.disabled = true
+func update_controller_icon():
+	var controller_event = InputHelper.get_joypad_input_for_action(assigned_action_name)
+	var controller_input_label = InputHelper.get_label_for_input(controller_event).to_lower()
+	print("OKOKOKO ", controller_input_label)
+
+	# Decide what type of controller player is using
+	var controller_icon_mapping = {}
+	var icon_pathname = ""
+	var device = InputHelper.last_known_joypad_device
+	if device == "Sony":
+		controller_icon_mapping = sony_input_icon_mapping
+		icon_pathname = "res://assets/sprite/input/sony/{0}.png"
+	elif device == "Xbox":
+		controller_icon_mapping = xbox_input_icon_mapping
+		icon_pathname = "res://assets/sprite/input/xbox/{0}.png"
+	else:
+		# Forcing using text instead of icon
+		controller_icon_mapping = {}
+		icon_pathname = {}
+
+	# Update icon
+	if controller_icon_mapping.has(controller_input_label):
+		controller_input_label = controller_icon_mapping[controller_input_label]
+	else:
+		controller_input_label = controller_input_label
+	var controller_icon_path = icon_pathname.format([controller_input_label])
+	if FileAccess.file_exists(controller_icon_path):
+		var texture = load(controller_icon_path)
+		controller_key_icon.texture = texture
+		controller_button.text = ""
+	else:
+		push_warning("Failed to load texture at: %s" % controller_icon_path)
+		controller_key_icon.texture = null
+		controller_button.text = InputHelper.get_label_for_input(controller_event)
