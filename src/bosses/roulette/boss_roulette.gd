@@ -298,11 +298,11 @@ func _set_ball_passive_params(ball: RouletteBall, _target: Node3D) -> RouletteBa
 	return ball
 
 
-func destroy_balls(ball_arr: Array) -> void:
+func destroy_balls(ball_arr: Array) -> Array:
 	for ball in ball_arr:
 		if is_instance_valid(ball):
 			ball.destroy()
-	ball_arr = []
+	return []
 
 
 func spawn_center_wave(
@@ -444,7 +444,7 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 
 
 func _on_ball_kill_timer_timeout() -> void:
-	destroy_balls(active_balls)
+	active_balls = destroy_balls(active_balls)
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
@@ -477,8 +477,8 @@ func change_phase(new_phase: int) -> void:
 
 func _on_died() -> void:
 	super ()
-	destroy_balls(active_balls)
-	destroy_balls(passive_balls)
+	active_balls = destroy_balls(active_balls)
+	passive_balls = destroy_balls(passive_balls)
 	pushback_area.set_deferred("monitoring", false)
 	change_wheel_speed.emit(0.0)
 	wheel_rotation_speed = 0.0
@@ -890,6 +890,12 @@ func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
 	debug_state_label.text = "Multiball | Launching"
 	state_chart.send_event("attack_start")
 	
+	# Fallback in case we've freed the balls on boss death
+	passive_balls = passive_balls.filter(
+		func(ball):
+			return is_instance_valid(ball)
+	)
+	
 	# Get the balls furthest from the player so they can see them when they shift
 	passive_balls.sort_custom(
 		func(a, b):
@@ -913,7 +919,7 @@ func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
 
 func _on_phase_3_ball_projectile_launch_balls_state_exited() -> void:
 	await get_tree().create_timer(8.0).timeout
-	destroy_balls(active_balls)
+	active_balls = destroy_balls(active_balls)
 
 func _on_phase_3_projectile_balls_recover_state_entered() -> void:
 	debug_state_label.text = "Multiball | Recovering"
