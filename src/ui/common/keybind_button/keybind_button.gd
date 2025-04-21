@@ -109,6 +109,7 @@ func update_controller_icon():
 	var controller_icon_mapping = {}
 	var icon_pathname = ""
 	var device = InputHelper.last_known_joypad_device.to_lower()
+	device = "g"
 	if device == "sony" or device == "playstation":
 		controller_icon_mapping = sony_input_icon_mapping
 		icon_pathname = "res://assets/sprite/input/sony/{0}.png"
@@ -118,7 +119,7 @@ func update_controller_icon():
 	else:
 		# Forcing using text instead of icon
 		controller_icon_mapping = {}
-		icon_pathname = ""
+		icon_pathname = "{0}"
 
 	# Update icon
 	if controller_icon_mapping.has(controller_input_label):
