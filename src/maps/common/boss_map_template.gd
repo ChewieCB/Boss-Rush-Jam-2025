@@ -18,14 +18,20 @@ class_name BossMap
 @onready var boss_trigger: Area3D = $BossTriggerVolume
 @onready var spin_trigger: Area3D = $SpinTriggerVolume
 
+var chips_dropped: int = 0
+var chip_value_collected: int = 0
+
 
 func _ready() -> void:
 	# Pre-load the lobby scene for faster level transitions
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	
 	# Connect UI signals
 	if boss:
 		boss.died.connect(_on_boss_died)
 		boss.defeated.connect(_on_boss_defeated)
+		# DEBUG
+		boss.chip_dropped.connect(_on_chip_dropped)
 	player.health_component.died.connect(_on_player_death)
 	# Sync the player's location in the elevator from the lobby
 	var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
@@ -68,6 +74,7 @@ func _on_boss_died(boss: BossCore = boss) -> void:
 func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	win_ui.win("Floor Cleared", win_subtext.pick_random())
+	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 	show_end_panel()
 
 
@@ -87,3 +94,9 @@ func _on_spin_trigger_body_entered(body: Node3D) -> void:
 	spin_trigger.monitoring = false
 	spin_trigger.queue_free()
 	body.current_gun.spin_all_barrels()
+
+
+# DEBUG to track chip drop rates
+func _on_chip_dropped(value: int) -> void:
+	chips_dropped += 1
+	chip_value_collected += value

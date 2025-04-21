@@ -6,6 +6,8 @@ signal died
 ## Emit after collected the barrel, 
 ## or same time as `died` signal if already collected.
 signal defeated(boss: BossCore)
+#
+signal chip_dropped(value: int)
 
 enum BossIdEnum {
 	NONE,
@@ -20,6 +22,16 @@ enum BossIdEnum {
 @export var chip_scene: PackedScene
 @export var chip_spawn_chance: float = 0.4
 @export var chip_spawn_force: float = 700.0
+@export var chip_spawn_dps_threshold: float = 25.0
+@export var chip_spawn_mult_cap: int = 3
+@export_subgroup("DPS Dealt In Last X Seconds")
+@export var dps_dealt_window: float = 1.8
+@onready var dps_dealt_window_timer: Timer = $DPSWindowTimer
+var dps_accumulated_in_window: float = 0.0:
+	set(value):
+		dps_accumulated_in_window = value
+		if dps_dealt_window_timer.is_stopped():
+			dps_dealt_window_timer.start(dps_dealt_window)
 
 @export_category("Barrels")
 @export var barrel_to_drop: BarrelDataResource
@@ -415,13 +427,24 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		state_chart.send_event("start_damage")
 		SoundManager.play_sound_with_pitch(sfx_hit.pick_random(), randf_range(0.7, 1.2), "SFX")
 	if new_health < prev_health:
-		if randf() < chip_spawn_chance:
-			var chip = chip_scene.instantiate() as RigidBody3D
-			GameManager.player.get_parent().add_child(chip)
-			chip.global_position = self.global_position
-			chip.rotate_y(randf_range(0, 2 * PI))
-			chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
-			chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+		dps_accumulated_in_window += abs(prev_health - new_health)
+		if dps_accumulated_in_window > chip_spawn_dps_threshold:
+			# Increase chip spawn rate based on DPS
+			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
+			chip_mult = min(chip_mult, chip_spawn_mult_cap)
+			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult] )
+			for i in chip_mult:
+				# TODO - modify spawned chip value chance based on dps
+				var chip = chip_scene.instantiate() as RigidBody3D
+				GameManager.player.get_parent().add_child(chip)
+				chip.global_position = self.global_position
+				chip.rotate_y(randf_range(0, 2 * PI))
+				chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+				chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+				chip_dropped.emit(chip.value)
+			# Stop the dps timer and set the accumulated dps to 0
+			dps_dealt_window_timer.stop()
+			dps_accumulated_in_window = 0.0
 
 
 func _on_died() -> void:
@@ -438,3 +461,8 @@ func _on_died() -> void:
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:
 	pass
+
+
+func _on_dps_window_timer_timeout() -> void:
+	# TODO - check for chip spawn threshold
+	dps_accumulated_in_window = 0.0
