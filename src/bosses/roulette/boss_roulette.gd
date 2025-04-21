@@ -602,6 +602,7 @@ func _on_phase_1_state_entered() -> void:
 	change_wheel_speed.emit(0.6)
 	wheel_rotation_speed = 0.6
 	current_phase = 1
+	state_chart.send_event("start_shields")
 	state_chart.send_event("start_ball_attack")
 
 #### Phase 1 | Barrier Sweep
