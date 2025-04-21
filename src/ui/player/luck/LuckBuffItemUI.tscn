@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://da4v0bmb3wgh6"]
+
+[ext_resource type="Texture2D" uid="uid://blv3xeh0t61aq" path="res://assets/sprite/placeholder/lighting.png" id="1_vi0mp"]
+
+[node name="LuckBuffItemUI" type="MarginContainer"]
+modulate = Color(0.901961, 0.776471, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("1_vi0mp")
+expand_mode = 5
+stretch_mode = 5

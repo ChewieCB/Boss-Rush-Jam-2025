@@ -276,6 +276,7 @@ columns = 5
 
 [node name="ControlHelpText" type="Label" parent="."]
 z_index = 2
+z_as_relative = false
 layout_mode = 0
 offset_left = 134.0
 offset_top = 77.0

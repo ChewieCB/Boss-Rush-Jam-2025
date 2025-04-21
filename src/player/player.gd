@@ -46,9 +46,12 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
-@onready var magazine_label: Label = $UI/ConsumableUI/MarginContainer/MagazineUI
+@onready var magazine_label: Label = $UI/PlayerUI/PlayerConsumables/ConsumableUI/MarginContainer/MagazineUI
 @onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
-@onready var luck_ui = $UI/LuckUI
+
+@onready var player_ui = $UI/PlayerUI
+@onready var health_ui = player_ui.health_ui
+@onready var luck_bar_ui = player_ui.luck_bar_ui
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
@@ -107,7 +110,13 @@ var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
 
-var is_in_inventory = false
+var is_in_inventory = false:
+	set(value):
+		is_in_inventory = value
+		if is_in_inventory:
+			player_ui.hide_non_luck_ui()
+		else:
+			player_ui.show_non_luck_ui()
 var object_to_be_interacted = null
 
 var buffs: Array[Buff] = []
@@ -125,6 +134,9 @@ func _ready():
 	player_camera.set_fov(GameManager.camera_fov)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	last_dashed_timestamp = 0
+	
+	player_ui.health_component = health_component
+	player_ui.luck_component = luck_component
 	
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
@@ -555,6 +567,7 @@ func _on_health_hurt_state_entered() -> void:
 func _on_health_dead_state_entered() -> void:
 	controls_disabled = true
 	hurt_overlay.dead()
+	player_ui.hide_all_ui()
 
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
@@ -621,15 +634,15 @@ func spin_barrels() -> void:
 
 func cash_in_luck() -> void:
 	LuckHandler.enabled = false
-	luck_ui.cash_in_luck()
+	luck_bar_ui.cash_in_luck()
 	# Animate the luck bar draining
 	luck_component.disable()
 	var tween = get_tree().create_tween()
 	tween.tween_property(
-		luck_ui.luck_bar, "value", 0, luck_redeem_time
+		luck_bar_ui.luck_bar, "value", 0, luck_redeem_time
 	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
 	tween.parallel().tween_property(
-		luck_ui.luck_gain_bar, "value", 0, luck_redeem_time
+		luck_bar_ui.luck_gain_bar, "value", 0, luck_redeem_time
 	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
 	
 	await tween.finished
