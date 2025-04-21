@@ -237,6 +237,15 @@ layout_mode = 2
 [node name="BarrelItemUI2" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_1x16c")]
 layout_mode = 2
 
+[node name="BarrelItemUI3" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_1x16c")]
+layout_mode = 2
+
+[node name="BarrelItemUI4" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_1x16c")]
+layout_mode = 2
+
+[node name="BarrelItemUI5" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_1x16c")]
+layout_mode = 2
+
 [node name="ShopBarrelSelection" type="MarginContainer" parent="BarrelOptionsSection/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -266,6 +275,7 @@ theme_override_constants/v_separation = 20
 columns = 5
 
 [node name="ControlHelpText" type="Label" parent="."]
+z_index = 2
 layout_mode = 0
 offset_left = 134.0
 offset_top = 77.0

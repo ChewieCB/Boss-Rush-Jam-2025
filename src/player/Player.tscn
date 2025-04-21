@@ -227,11 +227,8 @@ texture_albedo = ExtResource("3_tgexf")
 script = ExtResource("41_63osp")
 
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
+visible = false
 z_as_relative = false
-offset_left = 5.0
-offset_top = 35.0
-offset_right = 5.0
-offset_bottom = 35.0
 
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
 visible = false
@@ -335,6 +332,7 @@ offset_left = -150.0
 offset_right = 208.0
 offset_bottom = 945.0
 size_flags_horizontal = 3
+mouse_filter = 2
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_bottom = 16
 
@@ -498,3 +496,5 @@ light_color = Color(0.78, 0.897333, 1, 1)
 [connection signal="state_entered" from="StateChart/Root/Health/Hurt" to="." method="_on_health_hurt_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_physics_processing"]
+
+[editable path="UI/HurtOverlay"]
