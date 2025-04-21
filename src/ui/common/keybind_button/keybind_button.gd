@@ -36,13 +36,14 @@ var kbm_input_icon_mapping = {
 	"slash": "keyboard_slash_forward",
 }
 
+# use InputHelper's XBOX_BUTTON_LABELS
 var xbox_input_icon_mapping = {
 	"left stick up": "xbox_stick_l_up",
 	"left stick down": "xbox_stick_l_down",
 	"left stick left": "xbox_stick_l_left",
 	"left stick right": "xbox_stick_l_right",
 	"left stick button": "xbox_stick_side_l",
-	"right stick up": "xbox_stick_l_up",
+	"right stick up": "xbox_stick_r_up",
 	"right stick down": "xbox_stick_r_down",
 	"right stick left": "xbox_stick_r_left",
 	"right stick right": "xbox_stick_r_right",
@@ -61,16 +62,39 @@ var xbox_input_icon_mapping = {
 	"right trigger": "xbox_rt",
 	"back button": "xbox_button_back_icon",
 	"start button": "xbox_button_menu",
-	"guide button": "xbox_guide"
+	"guide button": "xbox_guide",
 }
 
+# use InputHelper's PLAYSTATION_3_4_BUTTON_LABELS
 var sony_input_icon_mapping = {
 	"left stick up": "playstation_stick_l_up",
 	"left stick down": "playstation_stick_l_down",
 	"left stick left": "playstation_stick_l_left",
 	"left stick right": "playstation_stick_l_right",
-	"a button": "playstation_button_color_cross",
+	"l3 button": "playstation_stick_side_l",
+	"right stick up": "playstation_stick_r_up",
+	"right stick down": "playstation_stick_r_down",
+	"right stick left": "playstation_stick_r_left",
+	"right stick right": "playstation_stick_r_right",
+	"r3 button": "playstation_stick_side_r",
+	"cross button": "playstation_button_color_cross",
+	"circle button": "playstation_button_color_circle",
+	"square button": "playstation_button_color_square",
+	"triangle button": "playstation_button_color_triangle",
+	"up button": "playstation_dpad_up",
+	"down button": "playstation_dpad_down",
+	"left button": "playstation_dpad_left",
+	"right button": "playstation_dpad_right",
+	"l1 button": "playstation_trigger_l1",
+	"r1 button": "playstation_trigger_r1",
+	"left trigger": "playstation_trigger_l2",
+	"right trigger": "playstation_trigger_r2",
+	"share button": "playstation4_button_share",
+	"options button": "playstation4_button_options",
+	"ps button": "",
 }
+
+# TODO: Mapping for Switch and PS5
 
 func _ready() -> void:
 	InputHelper.keyboard_input_changed.connect(_on_input_changed)
