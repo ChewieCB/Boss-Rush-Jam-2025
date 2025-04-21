@@ -6,6 +6,7 @@ class_name KeybindButton
 @onready var kbm_key_icon: TextureRect = $HBoxContainer/KBMButton/TextureRect
 @onready var controller_button: Button = $HBoxContainer/ControllerButton
 @onready var controller_key_icon: TextureRect = $HBoxContainer/ControllerButton/TextureRect
+@onready var controller_button_border: Control = $HBoxContainer/ControllerButton/NinePatchRect
 
 var assigned_action_name: String # something like "shoot" or "move_up"
 var setting_ui: SettingUI
@@ -50,13 +51,17 @@ var xbox_input_icon_mapping = {
 	"b button": "xbox_button_color_b",
 	"x button": "xbox_button_color_x",
 	"y button": "xbox_button_color_y",
-	"lb button": "",
-	"rb button": "",
-	"left trigger": "",
-	"right trigger": "",
-	"back button": "",
-	"start button": "",
-	"guide button": ""
+	"up button": "xbox_dpad_up",
+	"down button": "xbox_dpad_down",
+	"left button": "xbox_dpad_left",
+	"right button": "xbox_dpad_right",
+	"lb button": "xbox_lb",
+	"rb button": "xbox_rb",
+	"left trigger": "xbox_lt",
+	"right trigger": "xbox_rt",
+	"back button": "xbox_button_back_icon",
+	"start button": "xbox_button_menu",
+	"guide button": "xbox_guide"
 }
 
 var sony_input_icon_mapping = {
@@ -101,8 +106,11 @@ func update_button_detail() -> void:
 	update_kbm_icon()
 	update_controller_icon()
 
+	controller_button_border.visible = true
 	if assigned_action_name in banned_controller_keybind_action:
 		controller_button.disabled = true
+		controller_key_icon.modulate = Color.DARK_GRAY
+		controller_button_border.visible = false
 
 
 func update_kbm_icon():
@@ -132,7 +140,6 @@ func update_controller_icon():
 	var controller_icon_mapping = {}
 	var icon_pathname = ""
 	var device = InputHelper.last_known_joypad_device.to_lower()
-	device = "g"
 	if device == "sony" or device == "playstation":
 		controller_icon_mapping = sony_input_icon_mapping
 		icon_pathname = "res://assets/sprite/input/sony/{0}.png"
