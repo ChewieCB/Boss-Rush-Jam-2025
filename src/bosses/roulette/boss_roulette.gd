@@ -558,7 +558,7 @@ func _on_shields_spawn_shields_state_entered() -> void:
 	tween.tween_callback(shields_absorb_timer.start)
 
 func _on_shields_spawn_shields_state_physics_processing(delta: float) -> void:
-	shields_parent.rotation.y += delta * wheel_rotation_speed * 4
+	shields_parent.rotation.y += delta * wheel_rotation_speed * 2
 
 func _on_shields_spawn_timer_timeout() -> void:
 	if health_component.current_health < health_component.max_health:
