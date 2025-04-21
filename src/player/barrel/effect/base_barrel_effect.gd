@@ -23,6 +23,11 @@ func calculate_new_value(old_value: float, modify_value: float, is_perc: bool, r
 		new_value = round(new_value)
 	return new_value
 
+
+## Call when an effect is first applied
+func on_effect_set():
+	return
+
 ## Call when player start to hold or click LMB (or shoot button)
 func on_trigger_pulled():
 	return
