@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://crvu72pwcnneq"]
+[gd_scene load_steps=22 format=3 uid="uid://crvu72pwcnneq"]
 
 [ext_resource type="Script" path="res://src/ui/player/player_stats_ui.gd" id="1_ct6da"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="1_v8jbf"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="6_g72qs"]
 [ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="7_x1uxm"]
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_ui.gd" id="8_12af2"]
-[ext_resource type="PackedScene" uid="uid://da4v0bmb3wgh6" path="res://src/ui/player/luck/LuckBuffItemUI.tscn" id="9_orhbl"]
 
 [sub_resource type="Theme" id="Theme_y0f30"]
 default_font = ExtResource("4_tew2m")
@@ -542,10 +541,6 @@ size_flags_horizontal = 8
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
-
-[node name="LuckBuffItemUI" parent="PlayerStatsUI/VBoxContainer/PlayerLuckUI/LuckBuffsUI/HBoxContainer" instance=ExtResource("9_orhbl")]
-layout_mode = 2
-size_flags_horizontal = 4
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../PlayerStatsUI")
