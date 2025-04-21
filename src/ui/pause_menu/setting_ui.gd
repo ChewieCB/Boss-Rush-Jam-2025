@@ -88,11 +88,11 @@ func _input(event):
 
 		if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
 			if not is_remapping_controller:
-				InputHelper.set_keyboard_input_for_action(action_to_remap, event)
+				InputHelper.set_keyboard_input_for_action(action_to_remap, event, false)
 				did_update = true
 		elif (event is InputEventJoypadButton or event is InputEventJoypadMotion) and event.is_pressed():
 			if is_remapping_controller:
-				InputHelper.set_joypad_input_for_action(action_to_remap, event)
+				InputHelper.set_joypad_input_for_action(action_to_remap, event, false)
 				did_update = true
 
 		if did_update:

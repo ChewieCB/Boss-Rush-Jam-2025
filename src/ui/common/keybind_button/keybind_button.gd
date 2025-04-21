@@ -23,6 +23,16 @@ var kbm_input_icon_mapping = {
 	"mouse middle button": "mouse_scroll",
 	"mouse button 4": "mouse_scroll_up",
 	"mouse button 5": "mouse_scroll_down",
+	"up": "keyboard_arrows_up",
+	"down": "keyboard_arrows_down",
+	"left": "keyboard_arrows_left",
+	"right": "keyboard_arrows_right",
+	"equal": "keyboard_equals",
+	"quoteleft": "keyboard_tilde",
+	"braceleft": "keyboard_bracket_open",
+	"braceright": "keyboard_bracket_close",
+	"backslash": "keyboard_slash_back",
+	"slash": "keyboard_slash_forward",
 }
 
 var xbox_input_icon_mapping = {
@@ -30,10 +40,23 @@ var xbox_input_icon_mapping = {
 	"left stick down": "xbox_stick_l_down",
 	"left stick left": "xbox_stick_l_left",
 	"left stick right": "xbox_stick_l_right",
-	"a button": "xbox_button_color_aaaa",
+	"left stick button": "xbox_stick_side_l",
+	"right stick up": "xbox_stick_l_up",
+	"right stick down": "xbox_stick_r_down",
+	"right stick left": "xbox_stick_r_left",
+	"right stick right": "xbox_stick_r_right",
+	"right stick button": "xbox_stick_side_r",
+	"a button": "xbox_button_color_a",
 	"b button": "xbox_button_color_b",
 	"x button": "xbox_button_color_x",
 	"y button": "xbox_button_color_y",
+	"lb button": "",
+	"rb button": "",
+	"left trigger": "",
+	"right trigger": "",
+	"back button": "",
+	"start button": "",
+	"guide button": ""
 }
 
 var sony_input_icon_mapping = {
@@ -103,7 +126,7 @@ func update_kbm_icon():
 func update_controller_icon():
 	var controller_event = InputHelper.get_joypad_input_for_action(assigned_action_name)
 	var controller_input_label = InputHelper.get_label_for_input(controller_event).to_lower()
-	print("OKOKOKO ", controller_input_label)
+	print("[keybind_button.gd] controller_input_label: ", controller_input_label)
 
 	# Decide what type of controller player is using
 	var controller_icon_mapping = {}
