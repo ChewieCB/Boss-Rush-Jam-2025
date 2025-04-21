@@ -1,39 +1,32 @@
-extends Node3D
+extends BossMap
 
-@export var bgm: AudioStream
 @export var active_bgm: AudioStream
 
+## World Geometry & Navigation
 @onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
 @onready var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
-@onready var win_ui: Control = $UI/BossDefeatedUI
-@export var win_subtext: Array[String]
-@export var lose_tips: Array[String]
-@onready var boss_trigger: Area3D = $BossTrigger
-
-@onready var stance_timer: Timer = $StanceTimer
-@export var phase_2_stance_time: float = 14.0
-
-@export var phase_2_health_percentage_trigger: float = 0.7
-@export var phase_3_health_percentage_trigger: float = 0.35
-
+var nav_region: NavigationRegion3D
+## Boss Tracking
 @onready var pit_boss: BossPit = find_children("*", "BossPit").front()
 @onready var surveillance_boss: BossSurveillance = find_children("*", "BossSurveillance").front()
 var dead_boss_count: int = 0
-
-@onready var player: Player = find_children("*", "Player").front()
-@onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
+## Boss Stance & Phase Triggers
+@onready var stance_timer: Timer = $StanceTimer
+@export var phase_2_stance_time: float = 14.0
+@export var phase_2_health_percentage_trigger: float = 0.7
+@export var phase_3_health_percentage_trigger: float = 0.35
+## Spawns
+# Turrets
 @onready var turret_spawns: Array = find_children("*", "TurretSpawnPoint")
-
-var nav_region: NavigationRegion3D
+# Cover
 @export var cover_spawn_scene: PackedScene
 @onready var initial_cover = find_children("*", "Cover")
 var cover_objects: Array = []
 var cover_spawn_points: Array = []
-@export var directional_light: DirectionalLight3D
 
 
 func _ready() -> void:
-	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	super()
 	
 	pit_boss.health_component.health_changed.connect(_on_boss_health_changed)
 	pit_boss.health_component.died.connect(_on_boss_died.bind(pit_boss))
@@ -43,16 +36,6 @@ func _ready() -> void:
 	surveillance_boss.health_component.died.connect(_on_boss_died.bind(surveillance_boss))
 	surveillance_boss.turret_spawns = turret_spawns
 	surveillance_boss.pit_boss = pit_boss
-	
-	player.health_component.died.connect(_on_player_death)
-	
-	if GameManager.cached_player_pos_relative_to_elevator_doors:
-		var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
-		player.global_position = player_start_pos
-		player.rotation = GameManager.cached_player_rotation
-		player.player_camera.rotation = GameManager.cached_camera_rotation
-	
-	elevator_doors.open()
 	
 	await get_tree().physics_frame
 	generate_navigation()
@@ -67,11 +50,6 @@ func _ready() -> void:
 		cover_spawn_points.push_back(new_spawn)
 	for cover in initial_cover:
 		cover.queue_free()
-
-
-func _on_player_death() -> void:
-	win_ui.lose(lose_tips.pick_random())
-	show_end_panel()
 
 
 func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
@@ -91,7 +69,7 @@ func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
 			stance_timer.start(phase_2_stance_time + randf_range(-1.5, 1.5))
 
 
-func _on_boss_died(boss: BossCore) -> void:
+func _on_boss_died(boss: BossCore = boss) -> void:
 	dead_boss_count += 1
 	
 	if dead_boss_count == 2:
@@ -113,30 +91,11 @@ func _on_bosses_defeated(_boss: BossCore) -> void:
 	if _boss.boss_id != BossCore.BossIdEnum.NONE && not _boss.boss_id in GameManager.bosses_defeated:
 		GameManager.bosses_defeated.append(_boss.boss_id)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
-	win_ui.win("Floor Cleared", win_subtext.pick_random())
-	show_end_panel()
-
-
-func show_end_panel() -> void:
-	LuckHandler.enabled = false
-	win_ui.visible = true
-	var tween = get_tree().create_tween()
-	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
-	await tween.finished
-	await get_tree().create_timer(2.5).timeout
-	tween = get_tree().create_tween()
-	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	await tween.finished
 	
-	LoadingHandler.start_loading("Lobby")
-
-
-func _return_to_main() -> void:
-	get_tree().change_scene_to_file("res://src/ui/temp/TempMain.tscn")
-
-
-func _reload_scene() -> void:
-	get_tree().reload_current_scene()
+	collect_all_chips()
+	
+	var tween = self.create_tween()
+	tween.tween_property(directional_light, "light_energy", 0, 1)
 
 
 func generate_navigation() -> void:
@@ -194,23 +153,16 @@ func _on_cover_destroyed(cover: Cover) -> void:
 
 
 func _on_boss_trigger_body_entered(body: Node3D) -> void:
-	if body is Player:
-		spawn_cover()
-		surveillance_boss.activate()
-		pit_boss.activate()
-		SoundManager.play_music(active_bgm, 0.1, "BGM")
-		elevator_doors.close()
-		LuckHandler.enabled = true
-		boss_trigger.queue_free()
+	spawn_cover()
+	surveillance_boss.activate()
+	pit_boss.activate()
+	SoundManager.play_music(active_bgm, 0.1, "BGM")
+	elevator_doors.close()
+	LuckHandler.enabled = true
+	boss_trigger.queue_free()
 
 
 func _on_stance_timer_timeout() -> void:
 	pit_boss.toggle_stance()
 	surveillance_boss.toggle_stance()
 	stance_timer.start(phase_2_stance_time + randf_range(-1.5, 1.5))
-
-
-func _on_barrel_reload_trigger_body_entered(body: Node3D) -> void:
-	$BarrelReloadTrigger.monitoring = false
-	$BarrelReloadTrigger.queue_free()
-	body.current_gun.spin_all_barrels()

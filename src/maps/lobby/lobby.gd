@@ -5,6 +5,7 @@ extends Node3D
 
 signal ui_accept
 
+@onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 @onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
 
@@ -51,6 +52,8 @@ func _ready() -> void:
 		if not GameManager.victory_ui_shown:
 			show_panel(game_win_ui)
 			GameManager.victory_ui_shown = true
+	
+	player.player_ui.show_health_ui()
 
 
 func _input(event: InputEvent) -> void:

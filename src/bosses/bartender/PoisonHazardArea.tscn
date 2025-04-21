@@ -70,8 +70,14 @@ draw_pass_1 = SubResource("QuadMesh_odgr1")
 
 [node name="Puddle" type="Sprite3D" parent="."]
 transform = Transform3D(3, 0, 0, 0, -1.31134e-07, 3, 0, -3, -1.31134e-07, 0, 0.01, 0)
+visible = false
 modulate = Color(0.0926836, 0.291941, 0, 0.854902)
 texture = ExtResource("3_0iq2y")
+
+[node name="Decal" type="Decal" parent="."]
+size = Vector3(8, 4, 8)
+texture_albedo = ExtResource("3_0iq2y")
+modulate = Color(0.0941176, 0.290196, 0, 0.854902)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 light_color = Color(0.312417, 0.600959, 0.14662, 1)

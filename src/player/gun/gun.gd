@@ -51,6 +51,7 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 @export var base_firerate = 2
 @export var base_magazine_size = 10
 @export var base_reload_time = 1
+@export var base_spin_time = 1
 ## How spread out projectile can be from the aim center
 @export var base_spread_angle = 0.5
 ## Projectile dont have travel time. Shot enemy is instanly damaged. If this ticked, ignore projectile_speed
@@ -97,6 +98,7 @@ var modified_projectile_speed
 var modified_is_hitscan
 var modified_spread_angle
 var modified_reload_time
+var modified_spin_time
 var modified_ricochet_count = 0
 var modified_homing_strength: float = 0 # radius to search for enemy
 var modified_projectile_prefab: PackedScene = null
@@ -140,7 +142,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	if time_until_next_shot > time_since_last_shot:
 		return false
 
-	reset_modifier()
+	#reset_modifier()
 
 	var can_fire = true
 	for barrel in installed_barrels:
@@ -277,7 +279,7 @@ func spin_all_barrels() -> void:
 	
 	# TODO - replace with a dedicated spin time value now reloading isn't directly
 	# tied to spinning
-	await get_tree().create_timer(modified_reload_time).timeout
+	await get_tree().create_timer(base_spin_time).timeout
 	
 	reset_modifier(true)
 	#gun_status_label.visible = false
@@ -301,9 +303,8 @@ func spin_single_barrel(barrel_idx: int) -> void:
 	
 	# TODO - replace with a dedicated spin time value now reloading 
 	# isn't directly tied to spinning
-	await get_tree().create_timer(modified_reload_time).timeout
+	await get_tree().create_timer(base_spin_time).timeout
 	
-	reset_modifier(true)
 	_stop_barrel(barrel_idx)
 	is_reloading = false
 	reload()
@@ -330,6 +331,7 @@ func _stop_barrel(barrel_idx: int) -> void:
 	state_machine.travel("idle")
 	SoundManager.stop_sound(TEMP_sfx_spin)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
+	barrel.get_active_effect().on_effect_set()
 
 
 func reload():
@@ -346,11 +348,12 @@ func reload():
 		barrel.get_active_effect().on_reload_start()
 	
 	is_reloading = true
-	anim_tree.set("parameters/reload_timescale/scale", modified_reload_time)
+	anim_tree.set("parameters/reload_timescale/scale", 1/modified_reload_time)
 	anim_tree.set("parameters/reload_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	
 	await reload_anim_end
 	is_reloading = false
+	anim_tree.set("parameters/reload_timescale/scale", 1)
 	
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()

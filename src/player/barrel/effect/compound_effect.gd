@@ -18,6 +18,10 @@ func _ready() -> void:
 		barrel.owner_barrel = owner_barrel
 		child_effects.append(barrel)
 
+func on_effect_set():
+	for child in child_effects:
+		child.on_effect_set()
+
 func on_fire_attempt() -> bool:
 	var res = true
 	for child in child_effects:

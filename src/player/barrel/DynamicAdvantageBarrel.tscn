@@ -40,7 +40,7 @@ is_perc = true
 [node name="ModifyReloadTime" type="Node3D" parent="EffectContainer/ExtendedDrumEffect"]
 script = ExtResource("5_ky52g")
 attribute = 8
-modify_value = 200.0
+modify_value = 150.0
 is_perc = true
 
 [node name="ExplosiveBulletEffect" type="Node3D" parent="EffectContainer"]
