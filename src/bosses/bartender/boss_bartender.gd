@@ -121,33 +121,35 @@ func select_attack() -> void:
 
 func select_attack_phase_1() -> void:
 	var possible_attacks = [
-		"start_throw_broken_bottle",
-		"start_throw_broken_bottle",
-		"start_throw_concoction",
-		"start_throw_concoction",
-		"start_throw_concoction",
+		"start_shotgun_blast",
+		"start_shotgun_blast",
+		#"start_throw_broken_bottle",
+		#"start_throw_broken_bottle",
+		#"start_throw_concoction",
+		#"start_throw_concoction",
+		#"start_throw_concoction",
 	]
 
 	#if action_used_before_heal >= MIN_ACTION_BEFORE_HEAL:
 		#possible_attacks.append("start_throw_heal_bottle")
 
 	# If player is near, more likely to use shotgun blast
-	if player_is_near:
-		var shotgun_bonus_freq = 4
-		for i in range(shotgun_bonus_freq):
-			possible_attacks.append("start_shotgun_blast")
-
-	# If dont have buff, more likely to use buff	
-	if current_buff == "":
-		var brew_drink_bonus_freq = 2
-		for i in range(brew_drink_bonus_freq):
-			possible_attacks.append("start_brew_drink")
-
-	# More likely to throw bottle / throw barrel when has str buff
-	var throw_barrel_bonus_freq = 3
-	if has_strength_buff:
-		for i in range(throw_barrel_bonus_freq):
-			possible_attacks.append("start_throw_broken_bottle")
+	#if player_is_near:
+		#var shotgun_bonus_freq = 4
+		#for i in range(shotgun_bonus_freq):
+			#possible_attacks.append("start_shotgun_blast")
+#
+	## If dont have buff, more likely to use buff	
+	#if current_buff == "":
+		#var brew_drink_bonus_freq = 2
+		#for i in range(brew_drink_bonus_freq):
+			#possible_attacks.append("start_brew_drink")
+#
+	## More likely to throw bottle / throw barrel when has str buff
+	#var throw_barrel_bonus_freq = 3
+	#if has_strength_buff:
+		#for i in range(throw_barrel_bonus_freq):
+			#possible_attacks.append("start_throw_broken_bottle")
 
 	# Avoid use same attack twice in a row (except concoction)
 	if previous_attack:
@@ -161,23 +163,23 @@ func select_attack_phase_1() -> void:
 
 func select_attack_phase_2() -> void:
 	# If dont have buff, ALWAYS use buff	
-	if current_buff == "":
-		previous_attack = "start_brew_drink"
-		state_chart.send_event("start_brew_drink")
-		return
+	#if current_buff == "":
+		#previous_attack = "start_brew_drink"
+		#state_chart.send_event("start_brew_drink")
+		#return
 
 	var possible_attacks = [
-		"start_throw_broken_bottle",
+		#"start_throw_broken_bottle",
 		"start_shotgun_blast",
 		"start_shotgun_blast",
-		"start_throw_concoction",
+		#"start_throw_concoction",
 	]
 
 	# More likely to throw bottle / throw barrel when has str buff
-	var throw_barrel_bonus_freq = 5
-	if has_strength_buff:
-		for i in range(throw_barrel_bonus_freq):
-			possible_attacks.append("start_throw_broken_bottle")
+	#var throw_barrel_bonus_freq = 5
+	#if has_strength_buff:
+		#for i in range(throw_barrel_bonus_freq):
+			#possible_attacks.append("start_throw_broken_bottle")
 
 	# Avoid use same attack twice in a row (except concoction)
 	if previous_attack:
@@ -207,6 +209,9 @@ func _on_died() -> void:
 
 ### ATTACK PHASES --------------------------------
 
+func _on_attack_telegraph_state_entered() -> void:
+	pass
+
 #### Any Phase
 
 # Shotgun blastaa
@@ -219,9 +224,13 @@ func shotgun_blast():
 	var n_shot_repeat = current_phase
 	var spread_angle = 6
 	var delay_between_burst = 0.5
+	# TODO - this needs to be cancellable for when the boss dies mid attack
+	# Make this function shoot once and then we can call it 3 times and allow 
+	# an interrupt for death after each shot.
 	for i in range(n_shot_repeat):
 		sfx_player.stream = sfx_shotgun.pick_random()
 		sfx_player.play()
+		sprite.texture = base_sprite
 		for j in range(proj_amount):
 			var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
 			var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
@@ -229,16 +238,30 @@ func shotgun_blast():
 			get_parent().add_child(bullet_inst)
 			bullet_inst.init(proj_spawn_marker.global_position, spreaded_direction, proj_damage, proj_speed)
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
-			await get_tree().create_timer(delay_between_burst).timeout
+			await get_tree().create_timer(delay_between_burst/2).timeout
+			sprite.texture = shotgun_sprite
+			await get_tree().create_timer(delay_between_burst/2).timeout
 
 func _on_shotgun_blast_state_entered() -> void:
-	sprite.texture = shotgun_sprite
 	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time).timeout
+	var reload_time: float = telegraph_time * 2 / (current_phase + 1)
+	for i in range(current_phase):
+		sprite.texture = reload_sprite
+		await get_tree().create_timer(reload_time/2).timeout
+		sprite.texture = shotgun_sprite
+		await get_tree().create_timer(reload_time/2).timeout
+	
+	sprite.texture = shotgun_sprite
+	var remaining_time: float = (telegraph_time / 2) - (reload_time * current_phase)
+	await get_tree().create_timer(remaining_time).timeout
 	state_chart.send_event("attack_start")
 	shotgun_blast()
 	state_chart.send_event("attack_end_now")
+	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("return_idle")
+
+
+func _on_shotgun_blast_state_exited() -> void:
 	sprite.texture = base_sprite
 
 #### Phase 1

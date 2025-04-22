@@ -411,10 +411,6 @@ func _on_movement_jumping_state_physics_processing(_delta: float) -> void:
 ### HEALTH --------------------------------
 #### HIT
 func _on_health_hit_state_entered() -> void:
-	# TODO - limit the hurt frame to a minimum dps amount?
-	#if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
-		#sprite.texture = hurt_sprite
-		#hurt_frame_timer.start(hurt_frame_window)
 	sprite.modulate = Color.RED
 	await get_tree().create_timer(0.05).timeout
 	state_chart.send_event("end_damage")
@@ -449,7 +445,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		dps_accumulated_in_window += abs(prev_health - new_health)
 		if dps_accumulated_in_window > chip_spawn_dps_threshold:
-			# TODO - play hurt frame here instead?
+			# Play a hurt frame when we do enough DPS
+			# TODO - let this interrupt/restart the attack telegraph for some attacks
 			if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
 				sprite.texture = hurt_sprite
 				hurt_frame_timer.start(hurt_frame_window)

@@ -123,6 +123,7 @@ luck_component = NodePath("LuckComponent")
 reroll_heal_value = 20.0
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
+is_invincible = true
 
 [node name="LuckComponent" parent="." instance=ExtResource("57_0cid7")]
 
