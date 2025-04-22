@@ -27,6 +27,7 @@ func _ready() -> void:
 		
 		floor_segments.append([mesh, new_collider, mesh.global_position.y])
 	boss.floor_segments = floor_segments
+	boss.change_wheel_speed.connect(set_goal_rotation_speed)
 	
 	super()
 

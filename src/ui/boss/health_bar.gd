@@ -23,6 +23,10 @@ func _ready() -> void:
 		#show_ui()
 
 
+func _process(_delta: float) -> void:
+	health_label.text = "%s/%s" % [heath_bar.value, heath_bar.max_value]
+
+
 func init_health_ui(_health) -> void:
 	heath_bar.max_value = _health
 	heath_bar.value = _health
@@ -32,13 +36,16 @@ func init_health_ui(_health) -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	heath_bar.value = new_health
-	health_label.text = "%s/%s" % [heath_bar.value, heath_bar.max_value]
-	
 	if new_health < prev_health:
+		heath_bar.value = new_health
 		timer.start()
 	else:
 		damage_bar.value = new_health
+		await get_tree().create_timer(0.3).timeout
+		var tween: Tween = get_tree().create_tween()
+		tween.tween_property(heath_bar, "value", new_health, 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		await tween.finished
+		heath_bar.value = new_health
 
 
 func _on_timer_timeout():

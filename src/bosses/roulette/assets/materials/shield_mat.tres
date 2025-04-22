@@ -3,7 +3,7 @@
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="1_kw4fx"]
 
 [resource]
-render_priority = 3
+render_priority = 0
 shader = ExtResource("1_kw4fx")
 shader_parameter/color = Color(0.188235, 0.698039, 0.901961, 1)
 shader_parameter/fresnel_sharpness = 1.0

@@ -434,6 +434,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			chip_mult = min(chip_mult, chip_spawn_mult_cap)
 			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult] )
 			for i in chip_mult:
+				if randf() < chip_spawn_chance:
+					continue
 				# TODO - modify spawned chip value chance based on dps
 				var chip = chip_scene.instantiate() as RigidBody3D
 				GameManager.player.get_parent().add_child(chip)
