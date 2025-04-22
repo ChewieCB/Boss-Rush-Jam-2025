@@ -3,6 +3,7 @@
 [node name="EffectDetailUI" type="VBoxContainer"]
 offset_right = 448.0
 offset_bottom = 75.0
+size_flags_horizontal = 10
 mouse_filter = 2
 theme_override_constants/separation = -5
 alignment = 2

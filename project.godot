@@ -27,6 +27,7 @@ GunUtils="*res://src/utils/gun_utils.gd"
 ScreenTransition="*res://src/ui/common/screen_transition/ScreenTransitionUI.tscn"
 LoadingHandler="*res://src/utils/loading/LoadingHandler.tscn"
 InputHelper="*res://addons/input_helper/input_helper.gd"
+LuckHandler="*res://src/player/LuckHandler.tscn"
 
 [debug]
 
@@ -42,6 +43,10 @@ window/stretch/mode="canvas_items"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/func_godot/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/input_helper/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
+
+[global_group]
+
+AimAssistBubble=""
 
 [global_group]
 

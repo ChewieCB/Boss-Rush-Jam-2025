@@ -294,6 +294,9 @@ mesh = SubResource("SphereMesh_lr0sl")
 [node name="Hurtbox" parent="." index="4"]
 monitoring = true
 
+[node name="HealthComponent" parent="." index="5"]
+max_health = 3500.0
+
 [node name="NavigationComponent" parent="." index="6"]
 follow_target = false
 

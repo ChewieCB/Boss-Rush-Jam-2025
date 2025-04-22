@@ -1,5 +1,7 @@
 extends BossCore
 
+signal fire_started
+
 @export_category("Phases")
 @export var phase_2_health_percentage_trigger: float = 0.66
 @export var phase_3_health_percentage_trigger: float = 0.33
@@ -31,7 +33,7 @@ extends BossCore
 @export_subgroup("Floor Fire")
 @export var floor_fize_hazard_marker: Marker3D
 @export var floor_fire_hazard_prefab: PackedScene
-@export var sfx_start_fire: AudioStream
+@export var sfx_fire_started: AudioStream
 @export var sfx_fire_loop: AudioStream
 
 @export_group("Drinks")
@@ -289,10 +291,8 @@ func _on_phase_3_state_entered() -> void:
 	
 	jump_to(boss_jump_phase3_marker.global_position)
 	await get_tree().create_timer(2.0).timeout
-	fire_sfx = SoundManager.play_ambient_sound(sfx_start_fire, 0.2, "SFX")
-	fire_sfx.finished.connect(func():
-		SoundManager.play_ambient_sound(sfx_fire_loop, 0.1, "SFX")
-	)
+	fire_started.emit()
+	# TODO - move this to the map script
 	floor_fire_hazard = floor_fire_hazard_prefab.instantiate()
 	floor_fize_hazard_marker.add_child(floor_fire_hazard)
 	floor_fire_hazard.position = Vector3.ZERO

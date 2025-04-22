@@ -5,11 +5,11 @@
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_k6qd8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rvupe"]
-size = Vector3(4, 6, 1)
+size = Vector3(4, 10, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_sjoi1"]
 material = ExtResource("2_wkhni")
-size = Vector3(4, 6, 1)
+size = Vector3(4, 10, 1)
 
 [node name="Shield1" type="StaticBody3D" node_paths=PackedStringArray("shield_mesh", "health_component")]
 collision_layer = 64
@@ -26,4 +26,4 @@ material_override = ExtResource("2_wkhni")
 mesh = SubResource("BoxMesh_sjoi1")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_k6qd8")]
-max_health = 50.0
+max_health = 185.0

@@ -25,6 +25,11 @@ var movement_sfx_player: AudioStreamPlayer
 
 @export_category("Prefabs")
 @export var health_component: HealthComponent
+@export var luck_component: LuckComponent
+
+@export_category("Luck")
+@export var luck_redeem_time: float = 2.0
+@export var reroll_heal_value: float = 15.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
 @onready var interact_ui: Label = $UI/InteractUI
@@ -42,8 +47,12 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
-@onready var magazine_label: Label = $UI/GunUI/MagazineUI
-@onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
+@onready var magazine_label: Label = $UI/PlayerUI/PlayerConsumables/ConsumableUI/MarginContainer/MagazineUI
+@onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
+
+@onready var player_ui = $UI/PlayerUI
+@onready var health_ui = player_ui.health_ui
+@onready var luck_bar_ui = player_ui.luck_bar_ui
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
@@ -108,7 +117,15 @@ var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
 
-var is_in_inventory = false
+var is_in_inventory = false:
+	set(value):
+		is_in_inventory = value
+		
+		all_barrel_effect_ui.visible = !is_in_inventory
+		if is_in_inventory:
+			player_ui.hide_non_luck_ui()
+		else:
+			player_ui.show_non_luck_ui()
 var object_to_be_interacted = null
 
 var buffs: Array[Buff] = []
@@ -128,15 +145,29 @@ func _ready():
 	player_camera.set_fov(GameManager.camera_fov)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	last_dashed_timestamp = 0
+	
+	player_ui.health_component = health_component
+	player_ui.luck_component = luck_component
+	
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
+	
+	luck_component.luck_changed.connect(_on_luck_changed)
+	luck_component.luck_maxed.connect(_on_luck_maxed)
+	
 	gun_container_original_pos = gun_container.position
 	gun_container_original_rot = gun_container.rotation
+	
 	interact_ui.visible = false
 	boss_special_dialog.visible = false
+	
 	current_gun = gun_container.get_child(0)
-	current_gun.gun_shot.connect(update_hud)
-	current_gun.gun_reloaded.connect(update_hud)
+	current_gun.gun_shot.connect(update_ammo_counter_ui)
+	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
+	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_equipped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
+	
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 
 
@@ -161,14 +192,15 @@ func _unhandled_input(event):
 		return
 	
 	if event.is_action_pressed("spin_reload"):
-		spin_reload()
-	
-	# TODO - experimental branch separating spin from reload
-	#elif event.is_action_pressed("spin_barrels"):
-		#current_gun.spin_all_barrels()
-	#elif event.is_action_pressed("input_1"):
+		no_spin_reload()
+	elif event.is_action_pressed("spin_barrels"):
+		spin_barrels()
+	# DEBUG
+	elif event.is_action_pressed("input_1"):
+		luck_component.increase_luck(10.0)
 		#current_gun.spin_single_barrel(0)
-	#elif event.is_action_pressed("input_2"):
+	elif event.is_action_pressed("input_2"):
+		luck_component.decrease_luck(10.0)
 		#current_gun.spin_single_barrel(1)
 	#elif event.is_action_pressed("input_3"):
 		#current_gun.spin_single_barrel(2)
@@ -336,26 +368,37 @@ func _physics_process(delta):
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
 	camera_control(delta)
 
+<< << << < HEAD
 	aim_assist(delta)
 
 func update_hud():
+== == == =
+
+func update_ammo_counter_ui() -> void:
+>> >> >> > testing
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
+
+
+func update_barrel_effect_ui() -> void:
 	for i in range(current_gun.max_barrels):
-		var effect_ui = all_barrel_effect_ui.get_child(i)
-		if current_gun.barrel_container.get_child_count() > i:
+		var effect_ui_idx: int = all_barrel_effect_ui.get_child_count() - i - 1
+		var effect_ui = all_barrel_effect_ui.get_child(effect_ui_idx)
+		if i < current_gun.barrel_container.get_child_count():
+		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
-			if barrel:
-				effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
-				effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
-				effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
-			else:
-				effect_ui.get_node("Title").text = ""
-				effect_ui.get_node("Tag").text = ""
-				effect_ui.get_node("Desc").text = ""
+			#if barrel:
+			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
+			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
+			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+			#else:
+				#effect_ui.get_node("Title").text = ""
+				#effect_ui.get_node("Tag").text = ""
+				#effect_ui.get_node("Desc").text = ""
 		else:
 			effect_ui.get_node("Title").text = ""
 			effect_ui.get_node("Tag").text = ""
 			effect_ui.get_node("Desc").text = ""
+
 
 func show_debug_label():
 	var h_speed = snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.1)
@@ -404,7 +447,8 @@ func stun(time: float) -> void:
 
 
 func spin_reload() -> void:
-	current_gun.spin_all_barrels()
+	if not current_gun.is_reloading:
+		current_gun.spin_all_barrels()
 
 
 func no_spin_reload() -> void:
@@ -556,12 +600,15 @@ func fall_death() -> void:
 
 
 func _on_health_hurt_state_entered() -> void:
+	LuckHandler.time_since_last_hurt = 0.0
+	LuckHandler.last_hurt_mult = 0
 	hurt_overlay.hurt()
 
 
 func _on_health_dead_state_entered() -> void:
 	controls_disabled = true
 	hurt_overlay.dead()
+	player_ui.hide_all_ui()
 
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
@@ -581,6 +628,7 @@ func remove_buff(buff: Buff):
 	buffs.erase(buff)
 	apply_buffs()
 
+
 func remove_buff_by_name(find_name: String):
 	var found_buff = null
 	for buff in buffs:
@@ -589,6 +637,7 @@ func remove_buff_by_name(find_name: String):
 			break
 	if found_buff:
 		remove_buff(found_buff)
+
 
 func apply_buffs():
 	# Reset current stats to base stats.
@@ -613,6 +662,7 @@ func apply_buffs():
 		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)
 
 
+<< << << < HEAD
 func aim_assist(delta: float):
 	if aim_assist_ray.is_colliding():
 		aim_assist_target = aim_assist_ray.get_collider()
@@ -656,3 +706,46 @@ func get_assist_rotation_velocity(delta: float):
 	player_camera.rotation.y = 0
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
+== == == =
+func spin_barrels() -> void:
+	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading:
+		return
+	# Check if we have enough chips
+	if GameManager.purchase_reroll():
+		cash_in_luck()
+		current_gun.spin_all_barrels()
+		# Provide small health buff (?)
+		health_component.heal(reroll_heal_value)
+
+
+func cash_in_luck() -> void:
+	LuckHandler.enabled = false
+	luck_bar_ui.cash_in_luck()
+	# Animate the luck bar draining
+	luck_component.disable()
+	var tween = get_tree().create_tween()
+	tween.tween_property(
+		luck_bar_ui.luck_bar, "value", 0, luck_redeem_time
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	tween.parallel().tween_property(
+		luck_bar_ui.luck_gain_bar, "value", 0, luck_redeem_time
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	
+	await tween.finished
+	
+	luck_component.enable()
+	LuckHandler.enabled = true
+	luck_component.current_luck = 0.0
+
+
+func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
+	# TODO - update luck handler to apply bonuses
+	#if new_luck < prev_luck and prev_luck == luck_component.max_luck:
+	# TODO
+	pass
+
+
+func _on_luck_maxed() -> void:
+	# TODO
+	pass
+>> >> >> > testing

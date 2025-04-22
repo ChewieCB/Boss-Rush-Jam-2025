@@ -15,17 +15,16 @@ signal hide
 @onready var heath_bar: TextureProgressBar = $VBoxContainer/MarginContainer2/MarginContainer/HealthBar
 @onready var damage_bar: TextureProgressBar = $VBoxContainer/MarginContainer2/MarginContainer/HealthBar/DamageBar
 @onready var health_label: Label = $VBoxContainer/MarginContainer2/MarginContainer/Label
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 
 func _ready() -> void:
 	await get_owner().ready
-	if health_component:
-		init_health_ui(health_component.current_health)
-		health_component.health_changed.connect(_on_health_changed)
-		health_component.died.connect(_on_died)
-	if show_on_ready:
-		show_ui()
+	#if show_on_ready:
+		#show_ui()
+
+
+func _process(_delta: float) -> void:
+	health_label.text = "%s/%s" % [heath_bar.value, heath_bar.max_value]
 
 
 func init_health_ui(_health) -> void:
@@ -36,37 +35,18 @@ func init_health_ui(_health) -> void:
 	health_label.text = "%s/%s" % [heath_bar.value, heath_bar.max_value]
 
 
-func show_ui() -> void:
-	if animate_show_hide:
-		anim_player.play("show")
-	else:
-		anim_player.play("visible")
-	show.emit()
-
-
-func hide_ui() -> void:
-	if animate_show_hide:
-		anim_player.play("hide")
-	else:
-		anim_player.play("invisible")
-	hide.emit()
-
-
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	heath_bar.value = new_health
-	health_label.text = "%s/%s" % [heath_bar.value, heath_bar.max_value]
-	
 	if new_health < prev_health:
+		heath_bar.value = new_health
 		timer.start()
 	else:
 		damage_bar.value = new_health
-
-
-func _on_died() -> void:
-	if hide_ui_on_death:
-		hide_ui()
+		await get_tree().create_timer(0.3).timeout
+		var tween: Tween = get_tree().create_tween()
+		tween.tween_property(heath_bar, "value", new_health, 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		await tween.finished
+		heath_bar.value = new_health
 
 
 func _on_timer_timeout():
 	damage_bar.value = health_component.current_health
-	

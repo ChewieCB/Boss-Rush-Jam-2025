@@ -1,4 +1,4 @@
-[gd_scene load_steps=180 format=4 uid="uid://2q4ssotscvd5"]
+[gd_scene load_steps=182 format=4 uid="uid://2q4ssotscvd5"]
 
 [ext_resource type="Script" path="res://src/bosses/base/test/test_boss_core.gd" id="1_pgc5k"]
 [ext_resource type="AudioStream" uid="uid://c5fve5riow6qd" path="res://assets/music/Danceparty R1.mp3" id="2_2nw5f"]
@@ -29,6 +29,7 @@
 [ext_resource type="Material" uid="uid://2ctjkms0hgma" path="res://assets/textures/floor/tiles-black-white.tres" id="22_qjuv8"]
 [ext_resource type="PackedScene" uid="uid://dsipuwmnkxl5" path="res://src/env/lighting/ChandellierLight2.tscn" id="25_opmp2"]
 [ext_resource type="Material" uid="uid://n34cnqh7s2w0" path="res://assets/textures/floor/carpet-red.tres" id="26_oigh4"]
+[ext_resource type="Script" path="res://src/maps/pit_boss/barrel_reload_trigger.gd" id="30_y58b0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ydocc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -706,6 +707,9 @@ material = SubResource("StandardMaterial3D_2euc2")
 uv2_padding = 0.0
 size = Vector2(5, 25)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ecld6"]
+size = Vector3(5.3, 4.7, 4.9)
+
 [node name="TestBossCore" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors", "directional_light")]
 script = ExtResource("1_pgc5k")
 bgm = ExtResource("2_2nw5f")
@@ -1378,5 +1382,15 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.062
 
 [node name="entity_48_PlayerRef" parent="FuncGodotMap/group_632_Elevator" instance=ExtResource("8_pclyy")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -0.0625, 43.6562, 4.40625)
+
+[node name="BarrelReloadTrigger" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 41.8, -7.6)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("30_y58b0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BarrelReloadTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0499997, 2.25, 7.15)
+shape = SubResource("BoxShape3D_ecld6")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]

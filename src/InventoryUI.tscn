@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="11_1voaa"]
 [ext_resource type="PackedScene" uid="uid://0vh3rulnbnev" path="res://src/ui/shop/CostLabel.tscn" id="11_o0vgt"]
 [ext_resource type="Texture2D" uid="uid://nvouyvq10qte" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-026.png" id="13_jfjuu"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="14_7bito"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kjq12"]
 shader = ExtResource("10_q5ec2")
@@ -30,16 +31,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_r38si")
+script = ExtResource("1_61kc2")
 shop_title = "Yuya's Barrels"
-barrel_item_ui_prefab = ExtResource("3_775rd")
-cost_label_ui_prefab = ExtResource("11_o0vgt")
-shop_item_ui_prefab = ExtResource("7_k8j1w")
-sfx_open = ExtResource("4_x57d7")
-sfx_click = ExtResource("6_aax7i")
-sfx_purchase = ExtResource("7_dpqtd")
-sfx_too_expensive = ExtResource("8_c62sf")
-sfx_barrel_equip = ExtResource("9_xe36t")
+barrel_item_ui_prefab = ExtResource("2_1x16c")
+cost_label_ui_prefab = ExtResource("3_qdtxh")
+shop_item_ui_prefab = ExtResource("4_xurk0")
+sfx_open = ExtResource("5_2dfvj")
+sfx_click = ExtResource("6_orjwx")
+sfx_purchase = ExtResource("7_0us1u")
+sfx_too_expensive = ExtResource("8_i1x5l")
+sfx_barrel_equip = ExtResource("9_o0ehq")
 
 [node name="BlurShader" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_kjq12")
@@ -72,7 +73,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_vlm2x")
+texture = ExtResource("10_efotv")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -177,8 +178,8 @@ offset_right = -16.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/normal_font = ExtResource("4_hkf46")
-theme_override_fonts/bold_font = ExtResource("5_f3yr3")
+theme_override_fonts/normal_font = ExtResource("11_afb2u")
+theme_override_fonts/bold_font = ExtResource("12_b66hh")
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 26
 bbcode_enabled = true
@@ -198,7 +199,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_ayxuj")
+texture = ExtResource("13_b47xi")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -297,13 +298,26 @@ size_flags_vertical = 3
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="InventoryTitle" type="Label" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
+layout_mode = 2
+
+[node name="InventoryTitle" type="Label" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 40
 text = "Available"
 horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_right = 128
+
+[node name="CurrencyUI" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/HBoxContainer/MarginContainer" instance=ExtResource("14_7bito")]
+layout_mode = 2
+size_flags_horizontal = 6
+is_static = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
 layout_mode = 2
@@ -345,6 +359,8 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [node name="ControlHelpText" type="Label" parent="."]
+z_index = 2
+z_as_relative = false
 layout_mode = 0
 offset_left = 134.0
 offset_top = 77.0

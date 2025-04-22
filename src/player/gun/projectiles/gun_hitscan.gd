@@ -90,7 +90,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		impacted.emit(true, hitscan_col_point)
 		if target is CharacterBody3D:
 			target.health_component.damage(damage)
-			damage_applied.emit(true, global_position)
+			damage_applied.emit(damage, true, global_position)
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 		else:
 			if target is Shield:

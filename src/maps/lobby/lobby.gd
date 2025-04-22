@@ -5,6 +5,7 @@ extends Node3D
 
 signal ui_accept
 
+@onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 @onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
 
@@ -20,6 +21,7 @@ func _ready() -> void:
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
+	
 	get_tree().paused = false
 	
 	lobby_music_player.play()
@@ -32,8 +34,10 @@ func _ready() -> void:
 		# First time get to lobby, load data from save file
 		GameManager.start_record_playtime()
 		SaveManager.load_game(GameManager.chosen_slot_id)
-
-
+	
+	GameManager.reset_reroll_cost()
+	GameManager.is_free_reroll = true
+	
 	# HACK
 	if GameManager.player_gained_first_barrel:
 		if not GameManager.barrel_tutorial_shown:
@@ -48,6 +52,8 @@ func _ready() -> void:
 		if not GameManager.victory_ui_shown:
 			show_panel(game_win_ui)
 			GameManager.victory_ui_shown = true
+	
+	player.player_ui.show_health_ui()
 
 
 func _input(event: InputEvent) -> void:
@@ -86,6 +92,7 @@ func _on_level_select(level_path: String) -> void:
 		# TODO - fixme
 		#if new_bgm:
 			#SoundManager.play_music(new_bgm, 0.25, "BGM")
+		GameManager.is_free_reroll = false
 		get_tree().change_scene_to_packed(loaded_scene)
 
 

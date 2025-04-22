@@ -21,15 +21,11 @@ enum AttributeNameEnum {
 @export var new_value: float
 
 
-func on_fire_rate_check():
+func on_effect_set():
 	super()
 	match attribute:
 		AttributeNameEnum.FIRERATE:
 			owner_barrel.owner_gun.modified_firerate = new_value
-
-func on_prepare_to_fire():
-	super()
-	match attribute:
 		AttributeNameEnum.DAMAGE:
 			owner_barrel.owner_gun.modified_damage = new_value
 		AttributeNameEnum.PROJECTILE_AMOUNT:
@@ -47,19 +43,11 @@ func on_prepare_to_fire():
 			owner_barrel.owner_gun.modified_ricochet_count = new_value
 		AttributeNameEnum.HOMING_STRENGTH:
 			owner_barrel.owner_gun.modified_homing_strength = new_value
+		AttributeNameEnum.MAGAZINE_SIZE:
+			owner_barrel.owner_gun.modified_magazine_size = new_value
 		AttributeNameEnum.RECOIL:
 			owner_barrel.owner_gun.modified_recoil = new_value
 		AttributeNameEnum.SCREENSHAKE:
 			owner_barrel.owner_gun.modified_screenshake = new_value
-
-func on_reload_start():
-	super()
-	match attribute:
 		AttributeNameEnum.RELOAD_TIME:
 			owner_barrel.owner_gun.modified_reload_time = new_value
-
-func on_reload_end():
-	super()
-	match attribute:
-		AttributeNameEnum.MAGAZINE_SIZE:
-			owner_barrel.owner_gun.modified_magazine_size = new_value

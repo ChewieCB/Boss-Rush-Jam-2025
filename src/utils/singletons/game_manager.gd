@@ -3,6 +3,8 @@ extends Node
 signal currency_changed(new_currency: int)
 signal barrel_purchased(barrel_data: BarrelDataResource)
 signal barrel_too_expensive(barrel_data: BarrelDataResource)
+signal reroll_cost_changed(new_cost: int)
+signal free_rerolls
 signal refresh_shop_ui
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
@@ -15,6 +17,7 @@ var pause_ui: PauseUI
 var setting_ui: SettingUI
 var player: Player
 
+# Barrels
 var equipped_barrels: Array[BarrelDataResource] = []
 var inventory_barrels: Array[BarrelDataResource] = []
 var shop_barrels: Array[BarrelDataResource] = []
@@ -22,6 +25,16 @@ var shop_barrels: Array[BarrelDataResource] = []
 @export var starting_barrels: Array[BarrelDataResource]
 @export var starting_shop_barrels: Array[BarrelDataResource]
 @export var barrel_database: Array[BarrelDataResource]
+
+# Re-rolls
+@export var initial_reroll_cost: int = 200
+@export var reroll_cost_mult: float = 1.5
+var reroll_cost: int = initial_reroll_cost
+var is_free_reroll: bool = false:
+	set(value):
+		is_free_reroll = value
+		if is_free_reroll:
+			free_rerolls.emit()
 
 @export var player_currency: int = 0:
 	set(value):
@@ -43,6 +56,11 @@ var total_playtime = 0
 var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3
 var cached_camera_rotation: Vector3
+
+# SFX
+# TODO - find a good generic solution for calling these outside of the shop
+@export var sfx_purchase: AudioStream
+@export var sfx_too_expensive: AudioStream
 
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
@@ -118,15 +136,38 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading:
 		return "Can not change barrel while reloading"
 	var found_data: BarrelDataResource = null
-	for data in equipped_barrels:
+	var barrel_idx: int = -1
+	for i in range(equipped_barrels.size()):
+		var data = equipped_barrels[i]
 		if data.barrel_id == search_barrel_id:
 			found_data = data
+			barrel_idx = i
+			break
 	if found_data:
 		equipped_barrels.erase(found_data)
 		inventory_barrels.append(found_data)
 		refresh_shop_ui.emit()
-		GameManager.player.current_gun.remove_barrel(search_barrel_id)
+		GameManager.player.current_gun.remove_barrel(barrel_idx)
 	return ""
+
+
+func purchase_reroll() -> bool:
+	if player_currency >= reroll_cost or is_free_reroll:
+		if not is_free_reroll:
+			player_currency -= reroll_cost
+			# Increase the cost of re-rolling for this fight
+			reroll_cost *= reroll_cost_mult
+		reroll_cost_changed.emit(reroll_cost)
+		SoundManager.play_sound(sfx_purchase)
+		return true
+	SoundManager.play_sound(sfx_too_expensive)
+	return false
+
+
+func reset_reroll_cost() -> void:
+	reroll_cost = initial_reroll_cost
+	reroll_cost_changed.emit(reroll_cost)
+
 
 func show_boss_special_dialog(content: String, duration: float):
 	var original_sm_process_mode = SoundManager.process_mode

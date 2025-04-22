@@ -1,4 +1,4 @@
-[gd_scene load_steps=127 format=4 uid="uid://dolfr0q7esqwr"]
+[gd_scene load_steps=128 format=4 uid="uid://dolfr0q7esqwr"]
 
 [ext_resource type="LightmapGIData" uid="uid://7f6slxb5lrkr" path="res://src/maps/pit_boss/BossPit.lmbake" id="1_5x6au"]
 [ext_resource type="Script" path="res://src/maps/chip_boss/boss_chip.gd" id="1_cxln3"]
@@ -42,6 +42,9 @@ volumetric_fog_emission = Color(0.23, 0.23, 0.23, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0uo0t"]
 size = Vector3(9, 6, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2e64q"]
+size = Vector3(5.3, 4.7, 4.9)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c3lt2"]
 albedo_texture = ExtResource("15_3s6qv")
@@ -514,27 +517,16 @@ _surfaces = [{
 "vertex_data": PackedByteArray("QH8vv9RrH0BAVVW/EH8vv9hrH0BgVVU/gFgXPjAXhj8AACBAkCt7P4Clyr4AACBAeEDoP/Bp679IVVU/aEDoP/Bp679YVVW/kCt7P8Clyr4AACDAAFkXPiAXhj8AACDA2S4lUQAAAADZLiVRAAAAANkuJVEAAAAA2S4lUQAAAADZLiVRAAAAANkuJVEAAAAA2S4lUQAAAADZLiVRAAAAAA==")
 }]
 
-[node name="BossChip" type="Node3D" node_paths=PackedStringArray("boss", "directional_light", "breakable_floor")]
+[node name="BossChip" type="Node3D" node_paths=PackedStringArray("breakable_floor", "boss", "directional_light")]
 script = ExtResource("1_cxln3")
-boss = NodePath("FuncGodotMap/entity_24_BossChips")
-directional_light = NodePath("DirectionalLight3D")
 breakable_floor = NodePath("FuncGodotMap/group_635_FloorTop")
-
-[node name="UI" type="CanvasLayer" parent="."]
-
-[node name="BossDefeatedUI" parent="UI" instance=ExtResource("2_au7wo")]
+boss = NodePath("FuncGodotMap/entity_24_BossChips")
+win_subtext = Array[String](["Win Text Here"])
+lose_tips = Array[String](["Lose Text Here"])
+directional_light = NodePath("DirectionalLight3D")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_qjbdr")
-
-[node name="BossTrigger" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.63654, 16.3507)
-collision_layer = 32
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BossTrigger"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-shape = SubResource("BoxShape3D_0uo0t")
 
 [node name="LightmapGI" type="LightmapGI" parent="."]
 interior = true
@@ -544,6 +536,27 @@ light_data = ExtResource("1_5x6au")
 transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.75, -0.43301, 0, 5.85933, -11.3552)
 light_color = Color(0.631632, 0.9375, 0.852371, 1)
 shadow_enabled = true
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="BossDefeatedUI" parent="UI" instance=ExtResource("2_au7wo")]
+
+[node name="BossTriggerVolume" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.63654, 16.3507)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BossTriggerVolume"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_0uo0t")
+
+[node name="SpinTriggerVolume" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 16.5)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SpinTriggerVolume"]
+shape = SubResource("BoxShape3D_2e64q")
 
 [node name="WaterSurfaceMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
@@ -1020,7 +1033,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 [node name="entity_35_RisingPlatform" parent="FuncGodotMap" instance=ExtResource("25_myv0m")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -12, 0, -2)
 
-[connection signal="body_entered" from="BossTrigger" to="." method="_on_boss_trigger_volume_body_entered"]
+[connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]
 [connection signal="body_entered" from="WaterSurfaceMesh/WaterDamageArea" to="." method="_on_water_damage_area_body_entered"]
 [connection signal="body_exited" from="WaterSurfaceMesh/WaterDamageArea" to="." method="_on_water_damage_area_body_exited"]
 [connection signal="timeout" from="WaterDamageTimer" to="." method="_on_water_damage_timer_timeout"]
