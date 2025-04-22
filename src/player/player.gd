@@ -367,15 +367,10 @@ func _physics_process(delta):
 		else:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
 	camera_control(delta)
-
-<< << << < HEAD
 	aim_assist(delta)
 
-func update_hud():
-== == == =
 
 func update_ammo_counter_ui() -> void:
->> >> >> > testing
 	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
 
 
@@ -662,7 +657,6 @@ func apply_buffs():
 		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)
 
 
-<< << << < HEAD
 func aim_assist(delta: float):
 	if aim_assist_ray.is_colliding():
 		aim_assist_target = aim_assist_ray.get_collider()
@@ -706,7 +700,7 @@ func get_assist_rotation_velocity(delta: float):
 	player_camera.rotation.y = 0
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
-== == == =
+
 func spin_barrels() -> void:
 	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading:
 		return
@@ -748,4 +742,3 @@ func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
 func _on_luck_maxed() -> void:
 	# TODO
 	pass
->> >> >> > testing

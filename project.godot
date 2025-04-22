@@ -48,10 +48,6 @@ enabled=PackedStringArray("res://addons/func_godot/plugin.cfg", "res://addons/go
 
 AimAssistBubble=""
 
-[global_group]
-
-AimAssistBubble=""
-
 [gui]
 
 theme/custom_font="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf"
