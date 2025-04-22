@@ -174,9 +174,8 @@ data = ExtResource("6_1a2ul")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 5.96152)
 data = ExtResource("7_2srjf")
 
-[node name="Vendor" parent="." node_paths=PackedStringArray("player") instance=ExtResource("12_2rf45")]
+[node name="Vendor" parent="." instance=ExtResource("12_2rf45")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.7766, 0.00510705, -8.4)
-player = NodePath("../Player")
 
 [node name="BulletDecal" parent="." instance=ExtResource("17_n3wco")]
 transform = Transform3D(1, 0, 0, 0, 0.0971139, 0.995273, 0, -0.995273, 0.0971139, 0, 0.811173, 6.34857)

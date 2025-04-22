@@ -1,19 +1,28 @@
-[gd_scene load_steps=15 format=3 uid="uid://gwlfcdvj2q8w"]
+[gd_scene load_steps=19 format=3 uid="uid://gwlfcdvj2q8w"]
 
-[ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_61kc2"]
-[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_1x16c"]
-[ext_resource type="PackedScene" uid="uid://0vh3rulnbnev" path="res://src/ui/shop/CostLabel.tscn" id="3_qdtxh"]
-[ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="4_xurk0"]
-[ext_resource type="AudioStream" uid="uid://bfikexik2t3y6" path="res://src/ui/common/assets/sfx/OPEN THE SHOP.mp3" id="5_2dfvj"]
-[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_orjwx"]
-[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="7_0us1u"]
-[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="8_i1x5l"]
-[ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="9_o0ehq"]
-[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="10_efotv"]
-[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="11_afb2u"]
-[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="12_b66hh"]
-[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="13_b47xi"]
+[ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_r38si"]
+[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="1_vlm2x"]
+[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="3_775rd"]
+[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="4_ayxuj"]
+[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="4_hkf46"]
+[ext_resource type="AudioStream" uid="uid://bfikexik2t3y6" path="res://src/ui/common/assets/sfx/OPEN THE SHOP.mp3" id="4_x57d7"]
+[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="5_f3yr3"]
+[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_aax7i"]
+[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="7_dpqtd"]
+[ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="7_k8j1w"]
+[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="8_c62sf"]
+[ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="9_xe36t"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="10_q5ec2"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="11_1voaa"]
+[ext_resource type="PackedScene" uid="uid://0vh3rulnbnev" path="res://src/ui/shop/CostLabel.tscn" id="11_o0vgt"]
+[ext_resource type="Texture2D" uid="uid://nvouyvq10qte" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-026.png" id="13_jfjuu"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="14_7bito"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kjq12"]
+shader = ExtResource("10_q5ec2")
+shader_parameter/blur_amount = 2.0
+shader_parameter/mix_amount = 0.0
+shader_parameter/color_over = null
 
 [node name="InventoryUI" type="Control"]
 layout_mode = 3
@@ -22,16 +31,26 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_61kc2")
+script = ExtResource("1_r38si")
 shop_title = "Yuya's Barrels"
-barrel_item_ui_prefab = ExtResource("2_1x16c")
-cost_label_ui_prefab = ExtResource("3_qdtxh")
-shop_item_ui_prefab = ExtResource("4_xurk0")
-sfx_open = ExtResource("5_2dfvj")
-sfx_click = ExtResource("6_orjwx")
-sfx_purchase = ExtResource("7_0us1u")
-sfx_too_expensive = ExtResource("8_i1x5l")
-sfx_barrel_equip = ExtResource("9_o0ehq")
+barrel_item_ui_prefab = ExtResource("3_775rd")
+cost_label_ui_prefab = ExtResource("11_o0vgt")
+shop_item_ui_prefab = ExtResource("7_k8j1w")
+sfx_open = ExtResource("4_x57d7")
+sfx_click = ExtResource("6_aax7i")
+sfx_purchase = ExtResource("7_dpqtd")
+sfx_too_expensive = ExtResource("8_c62sf")
+sfx_barrel_equip = ExtResource("9_xe36t")
+
+[node name="BlurShader" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_kjq12")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_1voaa")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -54,11 +73,29 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("10_efotv")
+texture = ExtResource("1_vlm2x")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="Background"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -152.0
+offset_top = 32.0
+offset_right = -24.0
+offset_bottom = 81.0
+grow_horizontal = 0
+size_flags_horizontal = 10
+theme_override_constants/margin_right = 128
+
+[node name="CurrencyUI" parent="Background/MarginContainer" instance=ExtResource("14_7bito")]
+layout_mode = 2
+size_flags_horizontal = 6
+is_static = true
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 1
@@ -70,6 +107,7 @@ offset_top = 144.0
 offset_right = 255.0
 offset_bottom = 227.0
 grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 60
 text = "Inventory"
 horizontal_alignment = 1
@@ -79,10 +117,10 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 192.0
+offset_left = 160.0
 offset_top = -284.0
-offset_right = 960.0
-offset_bottom = 356.0
+offset_right = 928.0
+offset_bottom = 380.0
 grow_vertical = 2
 
 [node name="EquipTitle" type="Label" parent="EquipBarrelSection"]
@@ -98,26 +136,39 @@ theme_override_font_sizes/font_size = 40
 text = "Equipped (0/3)"
 horizontal_alignment = 1
 
-[node name="EquippedBarrelContainer" type="HBoxContainer" parent="EquipBarrelSection"]
+[node name="EquippedBarrelBorder" type="NinePatchRect" parent="EquipBarrelSection"]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -384.0
-offset_top = 64.0
-offset_right = 384.0
-offset_bottom = 164.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 56.0
+offset_bottom = -456.0
 grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_jfjuu")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="EquippedBarrelContainer" type="HBoxContainer" parent="EquipBarrelSection/EquippedBarrelBorder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="BarrelItemUI" parent="EquipBarrelSection/EquippedBarrelContainer" instance=ExtResource("2_1x16c")]
+[node name="BarrelItemUI" parent="EquipBarrelSection/EquippedBarrelBorder/EquippedBarrelContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
 
-[node name="BarrelItemUI2" parent="EquipBarrelSection/EquippedBarrelContainer" instance=ExtResource("2_1x16c")]
+[node name="BarrelItemUI2" parent="EquipBarrelSection/EquippedBarrelBorder/EquippedBarrelContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
 
-[node name="BarrelItemUI3" parent="EquipBarrelSection/EquippedBarrelContainer" instance=ExtResource("2_1x16c")]
+[node name="BarrelItemUI3" parent="EquipBarrelSection/EquippedBarrelBorder/EquippedBarrelContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
 
 [node name="BarrelDescription" type="ColorRect" parent="EquipBarrelSection"]
@@ -145,8 +196,8 @@ offset_right = -16.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/normal_font = ExtResource("11_afb2u")
-theme_override_fonts/bold_font = ExtResource("12_b66hh")
+theme_override_fonts/normal_font = ExtResource("4_hkf46")
+theme_override_fonts/bold_font = ExtResource("5_f3yr3")
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 26
 bbcode_enabled = true
@@ -166,7 +217,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("13_b47xi")
+texture = ExtResource("4_ayxuj")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -194,15 +245,16 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 990.0
-offset_top = 234.0
-offset_right = -162.0
-offset_bottom = -206.0
+offset_left = 984.0
+offset_top = 256.0
+offset_right = -168.0
+offset_bottom = -162.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BarrelOptionsSection"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="InventoryBarrelSection" type="MarginContainer" parent="BarrelOptionsSection/VBoxContainer"]
 layout_mode = 2
@@ -223,8 +275,17 @@ horizontal_alignment = 1
 [node name="ScrollContainer" type="ScrollContainer" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+follow_focus = true
 
-[node name="GridContainer" type="GridContainer" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
@@ -232,20 +293,20 @@ theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 5
 
-[node name="BarrelItemUI" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_1x16c")]
+[node name="BarrelItemUI" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
 
-[node name="BarrelItemUI2" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_1x16c")]
+[node name="BarrelItemUI2" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_775rd")]
 layout_mode = 2
 
-[node name="BarrelItemUI3" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_1x16c")]
+[node name="EquippedBarrelBorder" type="NinePatchRect" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection"]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 2
-
-[node name="BarrelItemUI4" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_1x16c")]
-layout_mode = 2
-
-[node name="BarrelItemUI5" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/GridContainer" instance=ExtResource("2_1x16c")]
-layout_mode = 2
+texture = ExtResource("13_jfjuu")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
 [node name="ShopBarrelSelection" type="MarginContainer" parent="BarrelOptionsSection/VBoxContainer"]
 layout_mode = 2
@@ -255,10 +316,7 @@ size_flags_vertical = 3
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
-layout_mode = 2
-
-[node name="InventoryTitle" type="Label" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/HBoxContainer"]
+[node name="InventoryTitle" type="Label" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -266,27 +324,44 @@ theme_override_font_sizes/font_size = 40
 text = "Available"
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 10
-theme_override_constants/margin_right = 128
-
-[node name="CurrencyUI" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/HBoxContainer/MarginContainer" instance=ExtResource("14_7bito")]
-layout_mode = 2
-size_flags_horizontal = 6
-is_static = true
-
 [node name="ScrollContainer" type="ScrollContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+follow_focus = true
 
-[node name="GridContainer" type="GridContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 5
+
+[node name="ShopItemContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("7_k8j1w")]
+layout_mode = 2
+
+[node name="ShopItemContainer2" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("7_k8j1w")]
+layout_mode = 2
+
+[node name="ShopItemContainer3" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("7_k8j1w")]
+layout_mode = 2
+
+[node name="EquippedBarrelBorder" type="NinePatchRect" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection"]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
+layout_mode = 2
+texture = ExtResource("13_jfjuu")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
 [node name="ControlHelpText" type="Label" parent="."]
 z_index = 2
@@ -296,5 +371,6 @@ offset_left = 134.0
 offset_top = 77.0
 offset_right = 735.0
 offset_bottom = 126.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 40
 text = "Click once to select barrel / Click again to confirm"

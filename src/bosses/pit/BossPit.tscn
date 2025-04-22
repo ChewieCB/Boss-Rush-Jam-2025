@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=55 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -78,7 +78,7 @@ height = 0.001
 [sub_resource type="SphereShape3D" id="SphereShape3D_5bmqa"]
 radius = 4.0
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ijkfg"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_flnhw"]
 radius = 1.9
 height = 5.8
 
@@ -911,6 +911,10 @@ _data = {
 "uppercut": SubResource("Animation_xr3uq")
 }
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mew0r"]
+radius = 3.0
+height = 8.0
+
 [node name="BossPit" instance=ExtResource("1_opefu")]
 collision_mask = 75
 script = ExtResource("2_a8b8q")
@@ -998,8 +1002,8 @@ transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -0.152, 2.67325, 0)
 texture = ExtResource("8_d716h")
 
 [node name="CollisionShape3D" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9, 0)
-shape = SubResource("CapsuleShape3D_ijkfg")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.47446, 0)
+shape = SubResource("CapsuleShape3D_flnhw")
 
 [node name="DebugMesh" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9, 0)
@@ -1969,6 +1973,13 @@ one_shot = true
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="19"]
 unit_size = 25.0
+
+[node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.41782, 0)
+shape = SubResource("CapsuleShape3D_mew0r")
+
+[node name="Marker3D" parent="AimAssistBubble" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.16769, 0)
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_inactive_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/IntroAirSlam/AirSlam" to="." method="_on_intro_air_slam_state_entered"]

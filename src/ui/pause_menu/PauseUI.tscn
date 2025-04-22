@@ -1,8 +1,31 @@
-[gd_scene load_steps=4 format=3 uid="uid://byj1y3wrwtdtq"]
+[gd_scene load_steps=12 format=3 uid="uid://byj1y3wrwtdtq"]
 
 [ext_resource type="PackedScene" uid="uid://biqm56x6ewbmo" path="res://src/ui/pause_menu/SettingUI.tscn" id="1_oj67h"]
 [ext_resource type="Script" path="res://src/ui/pause_menu/pause_ui.gd" id="1_y22bm"]
-[ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="2_cl7if"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="2_mnul8"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="3_fbfq4"]
+[ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="4_5h1bl"]
+[ext_resource type="Texture2D" uid="uid://csw0xjbbqsivg" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-016.png" id="6_3n3jr"]
+[ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="6_vrelk"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1s2yq"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nb2lf"]
+seamless = true
+noise = SubResource("FastNoiseLite_1s2yq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2sij"]
+resource_local_to_scene = true
+shader = ExtResource("4_5h1bl")
+shader_parameter/projector_power = 0.2
+shader_parameter/vignette_param = 1.0
+shader_parameter/distortionTexture = SubResource("NoiseTexture2D_nb2lf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hhcs4"]
+shader = ExtResource("2_mnul8")
+shader_parameter/blur_amount = 2.0
+shader_parameter/mix_amount = null
+shader_parameter/color_over = null
 
 [node name="PauseUI" type="Control"]
 process_mode = 3
@@ -14,6 +37,27 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_y22bm")
+
+[node name="OldMovieShader" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_c2sij")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_fbfq4")
+
+[node name="BlurShader" type="TextureRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_hhcs4")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_fbfq4")
 
 [node name="PauseOptionBG" type="ColorRect" parent="."]
 layout_mode = 1
@@ -40,78 +84,38 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 20
 
-[node name="SettingButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+[node name="SettingButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Settings"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/SettingButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_cl7if")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="LobbyButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+[node name="LobbyButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
-text = "Return to
+text = "Return to 
 Lobby"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/LobbyButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_cl7if")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="MainMenuButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+[node name="MainMenuButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
-text = "Main Menu"
+text = "Main menu"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/MainMenuButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_cl7if")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="QuitButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+[node name="QuitButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Quit"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/QuitButton"]
+[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -16.0
+offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_cl7if")
+texture = ExtResource("6_3n3jr")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -121,11 +125,7 @@ patch_margin_bottom = 20
 visible = false
 layout_mode = 1
 
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="_on_setting_button_pressed"]
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/LobbyButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="PauseOptionBG/VBoxContainer/LobbyButton" to="." method="_on_lobby_button_pressed"]
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/MainMenuButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="PauseOptionBG/VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

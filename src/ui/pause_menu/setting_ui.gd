@@ -1,6 +1,8 @@
 extends Control
 class_name SettingUI
 
+# https://github.com/nathanhoad/godot_input_helper/blob/main/docs/Mapping.md
+
 signal setting_changed
 signal setting_back_button_pressed
 
@@ -11,6 +13,8 @@ signal setting_back_button_pressed
 
 @onready var mouse_sen_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider
 @onready var mouse_sen_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/Value
+@onready var aim_assist_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/AimAssistSlider
+@onready var aim_assist_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/Value
 @onready var fov_slider: HSlider = $TabContainer/Graphic/VBoxContainer/FOV/FOVSlider
 @onready var fov_value: Label = $TabContainer/Graphic/VBoxContainer/FOV/Value
 @onready var camera_tilt_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle
@@ -31,7 +35,16 @@ signal setting_back_button_pressed
 @onready var ui_slider: HSlider = $TabContainer/Audio/VBoxContainer/UI/UISlider
 @onready var ui_value: Label = $TabContainer/Audio/VBoxContainer/UI/Value
 
-@onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection
+@onready var tab_header_container: Container = $HBoxContainer
+@onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/KeybindingSection/KeybindContainer
+
+@onready var normal_control_options_section: Control = $TabContainer/Control/ScrollContainer/VBoxContainer
+@onready var keybinding_control_options_section: Control = $TabContainer/Control/ScrollContainer/KeybindingSection
+@onready var edit_keybind_button: Button = $TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding/EditKeybindButton
+@onready var keybind_return_button: Button = $TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton
+@onready var keybind_timer: Timer = $KeybindTimer
+
+const KEYBIND_TIME_LIMIT = 5
 
 var keybindable_action_list = {
 	"move_up": "Move forward",
@@ -45,48 +58,103 @@ var keybindable_action_list = {
 	"shoot": "Shoot",
 	"spin_reload": "Reload",
 	"interact": "Interact",
-	"open_inventory": "Open inventory",
 }
 var is_remapping = false
+var is_remapping_controller = false
 var action_to_remap = null
 var remapping_button: KeybindButton = null
+var keybind_timer_timeleft = 0
+var is_controller_connected = false
 
 func _ready() -> void:
 	GameManager.setting_ui = self
 	refresh_setting_value()
-	create_keybind_buttons()
 	SaveManager.setting_config_loaded.connect(refresh_setting_value)
+	normal_control_options_section.visible = true
+	keybinding_control_options_section.visible = false
+	is_controller_connected = Input.get_connected_joypads() != []
+	Input.joy_connection_changed.connect(_on_controller_connection)
 
 func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		if keybinding_control_options_section.visible:
+			if not is_remapping:
+				normal_control_options_section.visible = true
+				keybinding_control_options_section.visible = false
+				edit_keybind_button.grab_focus()
+				accept_event()
+				return
+
 	if is_remapping:
-		if (event is InputEventKey || (event is InputEventMouseButton && event.pressed)):
-			if event is InputEventMouseButton && event.double_click:
-				event.double_click = false
-			InputMap.action_erase_events(action_to_remap)
-			InputMap.action_add_event(action_to_remap, event)
-			remapping_button.input_button.text = event.as_text().trim_suffix(" (Physical)")
+		var did_update = false
+
+		if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
+			if not is_remapping_controller:
+				InputHelper.set_keyboard_input_for_action(action_to_remap, event, false)
+				did_update = true
+		elif (event is InputEventJoypadButton or event is InputEventJoypadMotion) and event.is_pressed():
+			if is_remapping_controller:
+				InputHelper.set_joypad_input_for_action(action_to_remap, event, false)
+				did_update = true
+
+		if did_update:
+			remapping_button.update_button_detail()
 			is_remapping = false
 			action_to_remap = null
 			remapping_button = null
 			accept_event()
+		return
+
+	if event.is_action_pressed("ui_page_up"):
+		var next_tab_id = tab_container.current_tab + 1
+		if next_tab_id > tab_container.get_child_count() - 1:
+			next_tab_id = 0
+		tab_container.current_tab = next_tab_id
+		tab_header_container.get_child(next_tab_id).grab_focus()
+
+	if event.is_action_pressed("ui_page_down"):
+		var next_tab_id = tab_container.current_tab - 1
+		if next_tab_id < 0:
+			next_tab_id = tab_container.get_child_count() - 1
+		tab_container.current_tab = next_tab_id
+		tab_header_container.get_child(next_tab_id).grab_focus()
+
 
 func open_menu():
 	visible = true
+	tab_header_container.get_child(tab_container.current_tab).grab_focus()
+	# Grab focus first element INSIDE the tab container instead of the tab themselve
+	var event = InputEventAction.new()
+	event.action = "ui_down"
+	event.pressed = true
+	Input.parse_input_event(event)
+
 
 func close_menu():
+	if remapping_button:
+		remapping_button.update_button_detail()
+		is_remapping = false
+		action_to_remap = null
+		remapping_button = null
+		accept_event()
 	visible = false
+	normal_control_options_section.visible = true
+	keybinding_control_options_section.visible = false
 	SaveManager.save_setting_config()
 
 func _on_control_option_pressed() -> void:
 	tab_container.current_tab = 0
+	reset_on_tab_changed()
 	SoundManager.play_button_click_sfx()
 
 func _on_graphic_option_pressed() -> void:
 	tab_container.current_tab = 1
+	reset_on_tab_changed()
 	SoundManager.play_button_click_sfx()
 
 func _on_audio_option_pressed() -> void:
 	tab_container.current_tab = 2
+	reset_on_tab_changed()
 	SoundManager.play_button_click_sfx()
 
 func _on_back_button_pressed() -> void:
@@ -99,6 +167,10 @@ func _on_back_button_pressed() -> void:
 func _on_mouse_sen_slider_value_changed(value: float) -> void:
 	GameManager.mouse_sensitivity = value
 	mouse_sen_value.text = "{0}".format([value])
+
+func _on_aim_assist_slider_value_changed(value: float) -> void:
+	GameManager.aim_assist_strength = value / 100.0
+	aim_assist_value.text = "{0}".format([value])
 
 func _on_fov_slider_value_changed(value: float) -> void:
 	GameManager.camera_fov = value
@@ -185,36 +257,30 @@ func _on_scaling_3d_slider_value_changed(value: float) -> void:
 	scaling_3d_value.text = "{0}%".format([value])
 
 func create_keybind_buttons():
-	for i in range(keybind_container.get_child_count()):
-		if i > 1:
-			keybind_container.get_child(i).queue_free()
-	InputMap.load_from_project_settings()
+	for child in keybind_container.get_children():
+		child.queue_free()
 	for action in keybindable_action_list:
 		var button_inst: KeybindButton = keybind_button_prefab.instantiate()
 		keybind_container.add_child(button_inst)
+		button_inst.setting_ui = self
 		button_inst.action_label.text = keybindable_action_list[action]
-		var events = InputMap.action_get_events(action)
-		if events.size() > 0:
-			button_inst.input_button.text = events[0].as_text().trim_suffix(" (Physical)")
-		else:
-			button_inst.input_button.text = ""
-		button_inst.input_button.pressed.connect(_on_input_button_pressed.bind(button_inst, action))
-		button_inst.input_button.mouse_entered.connect(play_button_hover_sfx)
+		button_inst.assigned_action_name = action
+		button_inst.update_button_detail()
+		button_inst.kbm_button.pressed.connect(_on_input_button_pressed.bind(button_inst, action, false))
+		button_inst.kbm_button.mouse_entered.connect(play_button_hover_sfx)
+		button_inst.controller_button.pressed.connect(_on_input_button_pressed.bind(button_inst, action, true))
+		button_inst.controller_button.mouse_entered.connect(play_button_hover_sfx)
 
 
-func _on_input_button_pressed(button: KeybindButton, action):
+func _on_input_button_pressed(button: KeybindButton, action: String, is_controller: bool):
 	if not is_remapping:
 		is_remapping = true
+		is_remapping_controller = is_controller
 		action_to_remap = action
 		remapping_button = button
-		button.input_button.text = "Press key to bind..."
-
-func _on_reset_keybind_button_pressed():
-	create_keybind_buttons()
-
-func _on_reset_keybind_button_mouse_entered():
-	play_button_hover_sfx()
-
+		keybind_timer_timeleft = KEYBIND_TIME_LIMIT
+		remapping_button.set_changing_keybind_text("Press key to bind ({0})...".format([keybind_timer_timeleft]), is_remapping_controller)
+		keybind_timer.start()
 
 func _on_hide_ui_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
@@ -225,6 +291,9 @@ func _on_hide_ui_toggled(toggled_on: bool) -> void:
 func refresh_setting_value():
 	mouse_sen_slider.value = GameManager.mouse_sensitivity
 	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
+
+	aim_assist_slider.value = GameManager.aim_assist_strength * 100
+	aim_assist_value.text = "{0}".format([GameManager.aim_assist_strength * 100])
 
 	fov_slider.value = GameManager.camera_fov
 	fov_value.text = "{0}".format([GameManager.camera_fov])
@@ -261,3 +330,48 @@ func refresh_setting_value():
 	sfx_value.text = "{0}".format([GameManager.sfx_audio])
 	ui_slider.value = GameManager.ui_audio
 	ui_value.text = "{0}".format([GameManager.ui_audio])
+
+
+func reset_on_tab_changed():
+	normal_control_options_section.visible = true
+	keybinding_control_options_section.visible = false
+
+
+func _on_keybind_default_button_pressed() -> void:
+	InputHelper.reset_all_actions()
+	create_keybind_buttons()
+
+
+func _on_keybinding_return_button_pressed() -> void:
+	normal_control_options_section.visible = true
+	keybinding_control_options_section.visible = false
+	edit_keybind_button.grab_focus()
+
+
+func _on_edit_keybind_button_pressed() -> void:
+	create_keybind_buttons()
+	normal_control_options_section.visible = false
+	keybinding_control_options_section.visible = true
+	keybind_return_button.grab_focus()
+
+func _on_keybind_timer_timeout() -> void:
+	keybind_timer_timeleft -= 1
+	if keybind_timer_timeleft <= 0:
+		# Stop keybinding process
+		keybind_timer.stop()
+		if remapping_button:
+			remapping_button.update_button_detail()
+			is_remapping = false
+			action_to_remap = null
+			remapping_button = null
+			accept_event()
+	else:
+		# Countdown
+		if remapping_button:
+			remapping_button.set_changing_keybind_text("Press key to bind ({0})...".format([keybind_timer_timeleft]), is_remapping_controller)
+
+
+func _on_controller_connection(_device: int, connected: bool):
+	is_controller_connected = connected
+	if keybinding_control_options_section.visible:
+		create_keybind_buttons()

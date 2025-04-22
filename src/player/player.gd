@@ -45,6 +45,7 @@ var movement_sfx_player: AudioStreamPlayer
 
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
+@onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 @onready var magazine_label: Label = $UI/PlayerUI/PlayerConsumables/ConsumableUI/MarginContainer/MagazineUI
 @onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
@@ -59,23 +60,29 @@ var movement_sfx_player: AudioStreamPlayer
 signal movement_dashed
 
 const MAX_SPEED: float = 8.0
-var max_speed: float = MAX_SPEED
 const MAX_FALL_SPEED: float = 70.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 10
 const GRAVITY: float = 30
 const FALL_SPEED_TO_SHAKE_CAMERA: float = 15
-const HEAVY_FALL_SHAKE_TRAUMA: float = 0.8
+const HEAVY_FALL_SHAKE_TRAUMA: float = 0.4
 const SLIDE_SHAKE_TRAUMA: float = 0.1
 const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
 const BULLET_SPAWN_POS_VARIATION: float = 10
 const INTERACT_DISTANCE = 5
 
+const MOUSE_SENSITIVITY_COEEFICIENT = 10000
+const CONTROLLER_SENSITIVITY_COEEFICIENT = 10
+
 const DASH_SPEED: float = 15
 const SLAM_SPEED: float = 25
 const CROUCH_SPEED_MODIFIER: float = 0.5
 
+const AIM_ASSIST_STRENGTH_COEFFICIENT = 10
+const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.5
+
+var max_speed: float = MAX_SPEED
 var floor_col_pos = Vector3.ZERO
 var jumped: bool = false
 var can_coyote_jump: bool = false
@@ -128,6 +135,8 @@ var base_stats = {
 }
 var current_stats = base_stats.duplicate(true)
 
+var aim_assist_target: Node3D = null
+
 
 func _ready():
 	GameManager.player = self
@@ -162,7 +171,7 @@ func _ready():
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 
 
-func _input(event):
+func _unhandled_input(event):
 	if controls_disabled:
 		return
 
@@ -173,8 +182,15 @@ func _input(event):
 		return
 
 	if event is InputEventMouseMotion:
-		rotate_player(event)
-
+		# If we have a controller connected, ignore mouse events
+		# (this prevents the PS4 trackpad from triggering aim)
+		# if Input.get_connected_joypads():
+		# 	return
+		rotate_player(event.relative.x, event.relative.y)
+	elif event is InputEventJoypadMotion:
+		# Disable joystick support to prevent PS4 touchpad triggering aim events
+		return
+	
 	if event.is_action_pressed("spin_reload"):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
@@ -231,6 +247,8 @@ func _input(event):
 
 
 func _process(delta):
+	handle_controller_look(delta)
+
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 
 	for buff in buffs:
@@ -239,7 +257,7 @@ func _process(delta):
 			if buff.duration <= 0:
 				remove_buff(buff)
 
-	if aim_ray.is_colliding():
+	if aim_ray.is_colliding() and not is_in_inventory:
 		var interact_collider = aim_ray.get_collider()
 		if interact_collider and \
 			interact_collider.has_method("interact") and \
@@ -349,6 +367,7 @@ func _physics_process(delta):
 		else:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
 	camera_control(delta)
+	aim_assist(delta)
 
 
 func update_ammo_counter_ui() -> void:
@@ -359,7 +378,7 @@ func update_barrel_effect_ui() -> void:
 	for i in range(current_gun.max_barrels):
 		var effect_ui_idx: int = all_barrel_effect_ui.get_child_count() - i - 1
 		var effect_ui = all_barrel_effect_ui.get_child(effect_ui_idx)
-		if i < current_gun.barrel_container.get_child_count(): 
+		if i < current_gun.barrel_container.get_child_count():
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			#if barrel:
@@ -393,6 +412,9 @@ func show_debug_label():
 
 
 func jump(multiplier = 1.0):
+	if is_in_inventory or controls_disabled:
+		return
+		
 	vel_vertical = JUMP_FORCE * multiplier
 
 	jumped = true
@@ -428,9 +450,20 @@ func no_spin_reload() -> void:
 	current_gun.reload()
 
 
-func rotate_player(event):
-	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
-	player_camera.rotate_x(-event.relative.y * (GameManager.mouse_sensitivity / 10000))
+func handle_controller_look(_delta):
+	var look_x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
+	var look_y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
+
+	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
+		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
+		if aim_assist_target:
+			sensitivity = sensitivity * AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT
+		rotate_player(look_x * sensitivity, look_y * sensitivity)
+
+
+func rotate_player(x: float, y: float):
+	rotate(Vector3(0, -1, 0), x * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
+	player_camera.rotate_x(-y * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotation.y = 0
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
@@ -544,6 +577,7 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
+		InputHelper.rumble_large()
 		SoundManager.play_sound(sfx_hurt.pick_random())
 		if new_health > 0:
 			state_chart.send_event("end_damage")
@@ -622,6 +656,50 @@ func apply_buffs():
 	for stat in percentage_bonuses.keys():
 		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)
 
+
+func aim_assist(delta: float):
+	if aim_assist_ray.is_colliding():
+		aim_assist_target = aim_assist_ray.get_collider()
+	else:
+		aim_assist_target = null
+
+	if aim_assist_target != null:
+		get_assist_rotation_velocity(delta)
+
+
+func get_assist_rotation_velocity(delta: float):
+	var cam = player_camera
+	var aim_target_pos: Vector3 = aim_assist_target.global_position
+	if aim_assist_target.get_node("Marker3D") != null:
+		aim_target_pos = aim_assist_target.get_node("Marker3D").global_position
+
+	# Direction to target (world space)
+	var to_target = (aim_target_pos - cam.global_position).normalized()
+	var cam_forward = - cam.global_transform.basis.z
+
+	# Get yaw (left/right) angle difference
+	var cam_yaw = atan2(cam_forward.x, cam_forward.z)
+	var target_yaw = atan2(to_target.x, to_target.z)
+	var yaw_diff = wrapf(target_yaw - cam_yaw, -PI, PI)
+
+	# Get pitch (up/down) angle difference
+	var cam_pitch = asin(cam_forward.y)
+	var target_pitch = asin(to_target.y)
+	var pitch_diff = target_pitch - cam_pitch
+
+	# yaw = horizontal / pitch = vertical
+	var yaw_velocity = yaw_diff * GameManager.aim_assist_strength * AIM_ASSIST_STRENGTH_COEFFICIENT
+	var pitch_velocity = pitch_diff * GameManager.aim_assist_strength * AIM_ASSIST_STRENGTH_COEFFICIENT
+
+	# Reduce pitch strength during weapon recoil
+	if player_camera.check_if_has_recoil():
+		pitch_velocity = pitch_velocity * 0.1
+
+	rotate(Vector3(0, -1, 0), -yaw_velocity * delta)
+	player_camera.rotate_x(pitch_velocity * delta)
+	player_camera.rotation.y = 0
+	player_camera.rotation.z = 0
+	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
 func spin_barrels() -> void:
 	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading:

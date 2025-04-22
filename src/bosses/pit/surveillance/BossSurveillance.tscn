@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://burh3udob1t32"]
+[gd_scene load_steps=41 format=3 uid="uid://burh3udob1t32"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_rd2xm"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_p6rlf"]
@@ -142,6 +142,10 @@ _data = {
 "RESET": SubResource("Animation_sq5t5"),
 "intro_look_at_player": SubResource("Animation_lmydu")
 }
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_n1tb0"]
+radius = 4.0
+height = 8.0
 
 [node name="BossSurveillance" instance=ExtResource("1_rd2xm")]
 motion_mode = 1
@@ -711,6 +715,13 @@ libraries = {
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="18"]
 unit_size = 20.0
 bus = &"SFX"
+
+[node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.04475, 0)
+shape = SubResource("CapsuleShape3D_n1tb0")
+
+[node name="Marker3D" parent="AimAssistBubble" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.17757, 0)
 
 [connection signal="body_entered" from="Body/Head/RayCast3D/Area3D" to="." method="_on_laser_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]

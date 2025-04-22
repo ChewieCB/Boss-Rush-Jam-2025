@@ -6,6 +6,8 @@ extends VBoxContainer
 @export var price_icon: TextureRect
 @export var price_label: Label
 
+@onready var button: Button = $BarrelItemUI/Button
+
 var clicked_once: bool = false
 var is_disabled: bool = false:
 	set(value):
@@ -29,3 +31,11 @@ func init(_data: BarrelDataResource, _is_purchased):
 	item_ui.is_purchased = _is_purchased
 	item_ui.texture = item_ui.data.barrel_image
 	price_label.text = str(item_ui.data.barrel_cost)
+
+
+func _ready() -> void:
+	button.mouse_entered.connect(play_button_hover_sfx)
+	button.focus_entered.connect(play_button_hover_sfx)
+
+func play_button_hover_sfx():
+	SoundManager.play_button_hover_sfx()

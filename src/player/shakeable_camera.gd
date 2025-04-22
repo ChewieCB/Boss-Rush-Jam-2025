@@ -49,7 +49,8 @@ func _process(delta):
 	# Recoil
 	rotation_velocity -= rotation_velocity * RECOIL_DAMPING_FACTOR * delta
 	recover_rotation_velocity -= recover_rotation_velocity * (RECOIL_DAMPING_FACTOR / 2.0) * delta
-	rotation += (rotation_velocity + recover_rotation_velocity) * delta
+	var final_rotation_velocity = rotation_velocity + recover_rotation_velocity
+	rotation += final_rotation_velocity * delta
 
 func add_long_trauma(trauma_amount: float):
 	# Trauma over long duration, such as during sliding, earthquake, house collapsing, ...
@@ -90,3 +91,9 @@ func jerk_gun_backward():
 	gun_container.position.z += jerk_distance # Move backward
 	jerk_gun_tween = self.create_tween()
 	jerk_gun_tween.tween_property(gun_container, "position", original_gun_container_pos, 0.2 + recoil_power).set_trans(Tween.TRANS_SINE)
+
+
+func check_if_has_recoil():
+	if rotation_velocity.length() < 0.1:
+		return false
+	return true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=73 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -74,8 +74,9 @@ shader_parameter/impact_points = null
 shader_parameter/impact_size = 1.0
 shader_parameter/impact_falloff_sharpness = 1.0
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_rw4en"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vg3vh"]
 radius = 1.7
+height = 3.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_unuxb"]
 radius = 1.7
@@ -176,6 +177,10 @@ _data = {
 "float": SubResource("Animation_1e422")
 }
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o53xj"]
+radius = 4.0
+height = 8.0
+
 [node name="BossSlots" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_qxyx0")]
 motion_mode = 1
 script = ExtResource("2_b0b3s")
@@ -270,7 +275,7 @@ texture = ExtResource("4_6oj0s")
 
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
-shape = SubResource("SphereShape3D_rw4en")
+shape = SubResource("CapsuleShape3D_vg3vh")
 
 [node name="DebugMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
@@ -1115,6 +1120,9 @@ volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
+
+[node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
+shape = SubResource("CapsuleShape3D_o53xj")
 
 [connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]

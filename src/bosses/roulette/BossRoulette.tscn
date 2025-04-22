@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://dd7xt2ptfqbkw"]
+[gd_scene load_steps=65 format=3 uid="uid://dd7xt2ptfqbkw"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_jhwuw"]
 [ext_resource type="Script" path="res://src/bosses/roulette/boss_roulette.gd" id="2_m116k"]
@@ -46,9 +46,9 @@
 [ext_resource type="AudioStream" uid="uid://18w03u5q6px7" path="res://src/bosses/roulette/assets/sfx/Hit 3.mp3" id="31_7wohx"]
 [ext_resource type="AudioStream" uid="uid://dskgvb4n5jcob" path="res://src/bosses/roulette/assets/sfx/Attack Warning 2.mp3" id="31_jsqjw"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_obnfo"]
-height = 13.4
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4550l"]
 radius = 3.1
+height = 13.4
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ljrhi"]
 top_radius = 3.1
@@ -131,6 +131,10 @@ radius = 7.0
 height = 58.0
 radius = 6.0
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bhnnk"]
+radius = 4.0
+height = 16.0
+
 [node name="BossRoulette" instance=ExtResource("1_jhwuw")]
 collision_mask = 10
 motion_mode = 1
@@ -186,7 +190,7 @@ texture = ExtResource("9_2oxhb")
 
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-shape = SubResource("CylinderShape3D_obnfo")
+shape = SubResource("CapsuleShape3D_4550l")
 
 [node name="DebugMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
@@ -875,6 +879,13 @@ one_shot = true
 
 [node name="BodyCenter" parent="." index="23"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.28097, 0)
+
+[node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.237343, 0)
+shape = SubResource("CapsuleShape3D_bhnnk")
+
+[node name="Marker3D" parent="AimAssistBubble" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51173, 1.86467, 0)
 
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/Targeting" to="." method="_on_shields_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Status/Shields/SpawnShields" to="." method="_on_shields_spawn_shields_state_entered"]

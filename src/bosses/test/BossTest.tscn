@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_35rb8"]
 [ext_resource type="Script" path="res://src/bosses/test/boss_test.gd" id="2_t8yjh"]
-[ext_resource type="Resource" uid="uid://d2i2i2rrbo2v0" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="3_jyk2h"]
+[ext_resource type="Resource" uid="uid://ceo6ncflyswt2" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="3_jyk2h"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="3_p1uc1"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="4_oiifk"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="5_y1s41"]

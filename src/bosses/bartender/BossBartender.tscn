@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=47 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -43,7 +43,7 @@
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="34_nkrfy"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="35_efay1"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2tbsr"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5yo4q"]
 radius = 1.2
 height = 5.5
 
@@ -52,6 +52,10 @@ radius = 15.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_dpsmo"]
 size = Vector3(1, 1, 2)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yedjn"]
+radius = 2.0
+height = 6.0
 
 [node name="BossBartender" node_paths=PackedStringArray("behind_bar_move_points") instance=ExtResource("1_bp57a")]
 collision_mask = 11
@@ -106,7 +110,7 @@ texture = ExtResource("23_33lgi")
 
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
-shape = SubResource("CapsuleShape3D_2tbsr")
+shape = SubResource("CapsuleShape3D_5yo4q")
 
 [node name="Hurtbox" parent="." index="3"]
 visible = false
@@ -447,6 +451,13 @@ one_shot = true
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="18"]
 unit_size = 25.0
 bus = &"SFX"
+
+[node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.42472, 0)
+shape = SubResource("CapsuleShape3D_yedjn")
+
+[node name="Marker3D" parent="AimAssistBubble" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.48801, 0)
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Idle" to="." method="_on_phase_1_idle_state_entered"]

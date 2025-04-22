@@ -1,40 +1,72 @@
 extends Control
 class_name PauseUI
 
+signal pause_ui_toggled
+
 @onready var pause_option_list: Control = $PauseOptionBG
+@onready var setting_button: Button = $PauseOptionBG/VBoxContainer/SettingButton
 @onready var setting_ui: SettingUI = $SettingUI
 
-var is_paused = false
-var is_in_submenu = false
+var is_paused: bool = false
+var is_in_submenu: bool = false
+var is_controller_connected: bool = false
 
 
 func _ready() -> void:
 	GameManager.pause_ui = self
 	visible = false
+	Input.joy_connection_changed.connect(_on_controller_connection)
+	is_controller_connected = Input.get_connected_joypads() != []
+	
 
-
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
+	# If the pause menu button is pressed, reset the pause menu and hide/show it
 	if event.is_action_pressed("pause_menu"):
+		SoundManager.play_button_click_sfx()
+		toggle_pause_menu()
+	elif event.is_action_pressed("ui_cancel"):
+		# Handle the input so we don't trigger non UI inputs when closing a menu
+		get_viewport().set_input_as_handled()
+		# If the UI cancel button is pressed and the settings menu is open, close the settings menu only
 		if is_in_submenu:
+			# If setting menu is remapping, ignore this
+			if setting_ui.is_remapping:
+				return
 			setting_ui.close_menu()
 			SoundManager.play_button_click_sfx()
 			return_to_pause_menu()
+		# If the UI cancel button is pressed and the pause menu is open, close it
 		else:
-			SoundManager.play_button_click_sfx()
-			# TODO - fix this to be generic across all inventory UIs
-			#GameManager.player.inventory_ui.close()
-			is_paused = not is_paused
-			get_tree().paused = is_paused
-			visible = is_paused
 			if is_paused:
-				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-			else:
-				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+				toggle_pause_menu()
+
+
+func toggle_pause_menu() -> void:
+	is_paused = not is_paused
+	
+	get_tree().paused = is_paused
+	self.visible = is_paused
+	# Reset the pause menu UI
+	setting_ui.close_menu()
+	return_to_pause_menu()
+	
+	pause_ui_toggled.emit()
+	# Toggle low pass filter for BGM
+	AudioServer.set_bus_effect_enabled(1, 0, is_paused)
+	# Update mouse capture/control focus
+	if is_paused:
+		if not is_controller_connected:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		else:
+			setting_button.grab_focus()
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
 func return_to_pause_menu():
 	is_in_submenu = false
 	pause_option_list.visible = true
+	setting_button.grab_focus()
 
 
 func _on_setting_button_pressed() -> void:
@@ -51,6 +83,9 @@ func _on_lobby_button_pressed() -> void:
 	# TODO - background loading here
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
 	LoadingHandler.start_loading("Lobby")
+	# Toggle low pass filter for BGM
+	await LoadingHandler.loading_finished
+	AudioServer.set_bus_effect_enabled(1, 0, false)
 
 
 func _on_main_menu_button_pressed() -> void:
@@ -66,9 +101,12 @@ func _on_main_menu_button_pressed() -> void:
 	## TODO - background loading here
 	LoadingHandler.current_scene_path = "res://src/ui/main_menu/MainMenu.tscn"
 	LoadingHandler.start_loading("Main Menu")
+	# Toggle low pass filter for BGM
+	await LoadingHandler.loading_finished
+	AudioServer.set_bus_effect_enabled(1, 0, false)
 
 
-func _on_exit_button_pressed() -> void:
+func _on_quit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
@@ -78,3 +116,12 @@ func _on_exit_button_pressed() -> void:
 
 func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()
+
+
+func _on_controller_connection(_device: int, connected: bool) -> void:
+	is_controller_connected = connected
+	if is_paused and not is_controller_connected:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		setting_button.grab_focus()
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

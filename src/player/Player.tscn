@@ -91,7 +91,7 @@ size = Vector2(2, 2)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nb2lf"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7pe4k"]
 seamless = true
 noise = SubResource("FastNoiseLite_h1qoy")
 
@@ -99,7 +99,7 @@ noise = SubResource("FastNoiseLite_h1qoy")
 shader = ExtResource("46_fqoxl")
 shader_parameter/projector_power = 0.2
 shader_parameter/vignette_param = 10.0
-shader_parameter/distortionTexture = SubResource("NoiseTexture2D_nb2lf")
+shader_parameter/distortionTexture = SubResource("NoiseTexture2D_7pe4k")
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component", "luck_component")]
 collision_layer = 2
@@ -203,6 +203,13 @@ transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249
 [node name="AimRay" parent="Neck/ShakeCameraWrapper" instance=ExtResource("5_dqbuo")]
 collision_mask = 125
 collide_with_areas = true
+
+[node name="AimAssistRaycast" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
+target_position = Vector3(0, 0, -500)
+collision_mask = 128
+collide_with_areas = true
+collide_with_bodies = false
 
 [node name="DebugLabel" type="Label" parent="Neck/ShakeCameraWrapper"]
 visible = false

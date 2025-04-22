@@ -1,9 +1,13 @@
 extends HBoxContainer
+class_name SaveSlotItem
+
+signal save_deleted(save_slot: SaveSlotItem)
 
 @export var slot_id: int = 0
 
 @onready var load_button_label: RichTextLabel = $MarginContainer/MarginContainer/LoadButtonLabel
 @onready var delete_button: Button = $DeleteButton
+@onready var main_button: Button = $MarginContainer/LoadButton
 
 var save_data = null
 var main_menu: MainMenu
@@ -37,6 +41,10 @@ func _ready() -> void:
 
 
 func _on_load_button_pressed() -> void:
+	# This prevent issue where player spam pressing the load save button
+	if main_menu.started_loading:
+		return
+	main_menu.started_loading = true
 	SoundManager.play_button_click_sfx()
 	GameManager.chosen_slot_id = slot_id
 	load_button_label.text = "[b][color=gold]Slot {0}[/color][/b] \
@@ -57,6 +65,7 @@ func _on_delete_button_pressed() -> void:
 		confirm_delete = false
 		load_button_label.text = "[b][color=gold]Slot {0}[/color][/b] \
 			\nNew save file".format([slot_id])
+		save_deleted.emit(self)
 
 
 func format_time(msec: int) -> String:

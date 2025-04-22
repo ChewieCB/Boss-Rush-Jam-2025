@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://biqm56x6ewbmo"]
+[gd_scene load_steps=9 format=3 uid="uid://biqm56x6ewbmo"]
 
 [ext_resource type="Script" path="res://src/ui/pause_menu/setting_ui.gd" id="1_05qbb"]
 [ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="2_b71wb"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_1sxb2"]
-[ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="3_ogivf"]
+[ext_resource type="Texture2D" uid="uid://cr52bg7vx5ccm" path="res://assets/sprite/game_icon/gamepad.png" id="4_4x1kt"]
+[ext_resource type="Theme" uid="uid://c4j7kmv6avlsi" path="res://src/ui/theme/setting_theme.tres" id="4_fifb6"]
+[ext_resource type="Texture2D" uid="uid://bbt0eaqh5wvv1" path="res://assets/sprite/game_icon/film.png" id="5_knue1"]
+[ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="5_oipns"]
+[ext_resource type="Texture2D" uid="uid://db7w5onrhapvt" path="res://assets/sprite/game_icon/audioOn.png" id="6_fqt2w"]
 
 [node name="SettingUI" type="Control"]
 layout_mode = 3
@@ -12,109 +16,50 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_05qbb")
 keybind_button_prefab = ExtResource("2_b71wb")
 
-[node name="Background" type="ColorRect" parent="."]
-layout_mode = 0
-offset_left = 256.0
-offset_top = -16.0
-offset_right = 552.0
-offset_bottom = 1088.0
-color = Color(0, 0, 0, 0.733333)
-
-[node name="BackButton" type="Button" parent="."]
-layout_mode = 2
-offset_left = 296.0
-offset_top = 288.0
-offset_right = 504.0
-offset_bottom = 351.0
-theme_override_font_sizes/font_size = 40
-text = "<< Back "
-
-[node name="NinePatchRect" type="NinePatchRect" parent="BackButton"]
-self_modulate = Color(0.902344, 0.776165, 0, 1)
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_top = 120.0
+offset_right = 320.0
+offset_bottom = 190.0
 grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_ogivf")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
+theme_override_constants/separation = 15
+alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 296.0
-offset_top = -92.0
-offset_right = 504.0
-offset_bottom = 117.0
-grow_vertical = 2
-theme_override_constants/separation = 10
-
-[node name="ControlOption" type="Button" parent="VBoxContainer"]
+[node name="ControlOption" parent="HBoxContainer" instance=ExtResource("5_oipns")]
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
-text = "Control 
-"
+text = "Control"
+icon = ExtResource("4_4x1kt")
+icon_alignment = 2
 
-[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/ControlOption"]
-self_modulate = Color(0.902344, 0.776165, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_ogivf")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="GraphicOption" type="Button" parent="VBoxContainer"]
+[node name="GraphicOption" parent="HBoxContainer" instance=ExtResource("5_oipns")]
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = "Graphic"
+icon = ExtResource("5_knue1")
+icon_alignment = 2
 
-[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/GraphicOption"]
-self_modulate = Color(0.902344, 0.776165, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_ogivf")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="AudioOption" type="Button" parent="VBoxContainer"]
+[node name="AudioOption" parent="HBoxContainer" instance=ExtResource("5_oipns")]
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = "Audio"
-
-[node name="NinePatchRect" type="NinePatchRect" parent="VBoxContainer/AudioOption"]
-self_modulate = Color(0.902344, 0.776165, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_ogivf")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
+icon = ExtResource("6_fqt2w")
+icon_alignment = 2
 
 [node name="TabContainer" type="TabContainer" parent="."]
 custom_minimum_size = Vector2(100, 100)
@@ -124,18 +69,17 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -320.0
-offset_top = -260.0
-offset_right = 512.0
-offset_bottom = 260.0
+offset_left = -416.0
+offset_top = -348.0
+offset_right = 416.0
+offset_bottom = 356.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
-current_tab = 1
+current_tab = 0
 tabs_visible = false
 
 [node name="Control" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -166,6 +110,8 @@ offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer"]
 layout_mode = 2
@@ -178,21 +124,34 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -21.0
 offset_right = 220.0
-offset_bottom = 42.0
+offset_bottom = 21.0
+grow_vertical = 2
 theme_override_font_sizes/font_size = 26
 text = "Mouse Sensitivity
 "
 
 [node name="MouseSenSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
-layout_mode = 0
-offset_left = 296.0
-offset_top = 16.0
-offset_right = 672.0
-offset_bottom = 32.0
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -472.0
+offset_top = -12.0
+offset_right = -96.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("4_fifb6")
 min_value = 1.0
-value = 1.0
+value = 15.0
 
 [node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
 layout_mode = 1
@@ -201,34 +160,130 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -66.0
-offset_top = -12.0
-offset_right = 14.0
-offset_bottom = 11.0
+offset_left = -80.0
+offset_top = -11.5
+offset_bottom = 11.5
 grow_horizontal = 0
 grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
-[node name="KeybindingSection" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+[node name="ControllerAimAssistSens" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -33.5
+offset_right = 220.0
+offset_bottom = 33.5
+grow_vertical = 2
+theme_override_font_sizes/font_size = 26
+text = "Controller 
+Aim Assist strength"
+
+[node name="AimAssistSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -472.0
+offset_top = -12.0
+offset_right = -96.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("4_fifb6")
+value = 25.0
+
+[node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="SetControllerBinding" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -16.0
+offset_right = 220.0
+offset_bottom = 16.0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 26
+text = "Keybindings"
+
+[node name="EditKeybindButton" parent="TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding" instance=ExtResource("5_oipns")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -20.0
+offset_right = 112.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Edit keybindings"
+
+[node name="KeybindingSection" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection"]
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/KeybindingSection"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.498039, 0.498039, 0.498039, 1)
 theme_override_font_sizes/font_size = 26
-text = "Keybindings"
+text = "Keyboard keybinding"
 horizontal_alignment = 1
 
-[node name="ResetKeybindButton" type="Button" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Control/ScrollContainer/KeybindingSection"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 26
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="KeybindingReturnButton" parent="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer" instance=ExtResource("5_oipns")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = "Return"
+
+[node name="KeybindDefaultButton" parent="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer" instance=ExtResource("5_oipns")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
 text = "Reset to default"
 
+[node name="KeybindContainer" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer/KeybindingSection"]
+layout_mode = 2
+
 [node name="Graphic" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -257,6 +312,7 @@ theme_override_constants/separation = 10
 [node name="FOV" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme = ExtResource("4_fifb6")
 
 [node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/FOV"]
 layout_mode = 0
@@ -443,6 +499,7 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 min_value = 25.0
 step = 5.0
 value = 100.0
@@ -526,6 +583,7 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 
 [node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/Master"]
 layout_mode = 1
@@ -559,6 +617,7 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 
 [node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/BGM"]
 layout_mode = 1
@@ -592,6 +651,7 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 
 [node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/SFX"]
 layout_mode = 1
@@ -625,6 +685,7 @@ offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
 offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
 
 [node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/UI"]
 layout_mode = 1
@@ -641,7 +702,7 @@ grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
+[node name="SettingUIBorder" type="NinePatchRect" parent="."]
 self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -649,10 +710,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -320.0
-offset_top = -260.0
-offset_right = 512.0
-offset_bottom = 260.0
+offset_left = -416.0
+offset_top = -348.0
+offset_right = 416.0
+offset_bottom = 356.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_1sxb2")
@@ -661,18 +722,41 @@ patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
-[connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="mouse_entered" from="VBoxContainer/ControlOption" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="VBoxContainer/ControlOption" to="." method="_on_control_option_pressed"]
-[connection signal="mouse_entered" from="VBoxContainer/GraphicOption" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="VBoxContainer/GraphicOption" to="." method="_on_graphic_option_pressed"]
-[connection signal="mouse_entered" from="VBoxContainer/AudioOption" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="VBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
+[node name="BackButton" parent="." instance=ExtResource("5_oipns")]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -176.0
+offset_right = 100.0
+offset_bottom = -119.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "Back"
+
+[node name="KeybindTimer" type="Timer" parent="."]
+
+[connection signal="mouse_entered" from="HBoxContainer/ControlOption" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="HBoxContainer/ControlOption" to="." method="_on_control_option_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/GraphicOption" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="HBoxContainer/GraphicOption" to="." method="_on_graphic_option_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/AudioOption" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="HBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
 [connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
-[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/ResetKeybindButton" to="." method="_on_reset_keybind_button_mouse_entered"]
-[connection signal="pressed" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/ResetKeybindButton" to="." method="_on_reset_keybind_button_pressed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/AimAssistSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/AimAssistSlider" to="." method="_on_aim_assist_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding/EditKeybindButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding/EditKeybindButton" to="." method="_on_edit_keybind_button_pressed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton" to="." method="_on_keybinding_return_button_pressed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindDefaultButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindDefaultButton" to="." method="_on_keybind_default_button_pressed"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="_on_fov_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle" to="." method="play_button_hover_sfx"]
@@ -697,3 +781,6 @@ patch_margin_bottom = 20
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/SFX/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
+[connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="timeout" from="KeybindTimer" to="." method="_on_keybind_timer_timeout"]

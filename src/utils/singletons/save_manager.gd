@@ -111,7 +111,11 @@ func get_savefile_name(slot_id: int) -> String:
 func save_setting_config():
 	var config = ConfigFile.new()
 
+	var serialized_keybinding_data: String = InputHelper.serialize_inputs_for_actions()
+
 	config.set_value("Control", "mouse_sensitivity", GameManager.mouse_sensitivity)
+	config.set_value("Control", "aim_assist_strength", GameManager.aim_assist_strength)
+	config.set_value("Control", "keybinding", serialized_keybinding_data)
 	config.set_value("Graphic", "camera_fov", GameManager.camera_fov)
 	config.set_value("Graphic", "camera_tilt", GameManager.camera_tilt)
 	config.set_value("Graphic", "fps_limit_index", GameManager.fps_limit_index)
@@ -135,7 +139,12 @@ func load_setting_config():
 	if err != OK:
 		return
 
+	var serialized_keybinding_data = config.get_value("Control", "keybinding", "")
+	if serialized_keybinding_data != "":
+		InputHelper.deserialize_inputs_for_actions(serialized_keybinding_data)
+
 	GameManager.mouse_sensitivity = config.get_value("Control", "mouse_sensitivity", 50.0)
+	GameManager.aim_assist_strength = config.get_value("Control", "aim_assist_strength", 0.5)
 	GameManager.camera_fov = config.get_value("Graphic", "camera_fov", 90)
 	GameManager.camera_tilt = config.get_value("Graphic", "camera_tilt", true)
 	GameManager.fps_limit_index = config.get_value("Graphic", "fps_limit_index", 2)
