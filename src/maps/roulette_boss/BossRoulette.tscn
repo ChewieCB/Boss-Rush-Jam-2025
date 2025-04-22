@@ -5067,6 +5067,7 @@ metadata/_tb_type = "_tb_group"
 
 [node name="entity_65_BossRoulette" parent="FuncGodotMap" node_paths=PackedStringArray("target") instance=ExtResource("22_02a3j")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 5.84375, 0)
+shields_destroyed_threshold = 2
 sfx_slowmo = null
 target = NodePath("../group_701_Elevator/entity_85_PlayerRef")
 

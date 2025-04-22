@@ -120,6 +120,7 @@ max_air_jump = 1
 speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
+reroll_heal_value = 20.0
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
 

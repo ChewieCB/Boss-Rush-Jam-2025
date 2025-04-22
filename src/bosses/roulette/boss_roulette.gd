@@ -25,6 +25,9 @@ var previous_phase: String
 @export var shield_count: int = 4
 @export var shield_distance: float = 6.0
 @export var shield_height: float = 3.3
+@export var shields_destroyed_threshold: int = 2
+var shields_destroyed: int = 0
+@export var shield_abosrb_time: float = 1.4
 @export_subgroup("SFX")
 @export var sfx_shield_amb: Array[AudioStream]
 @onready var shield_sfx_player: AudioStreamPlayer3D = $CentralStreamPlayer
@@ -86,7 +89,7 @@ func _ready() -> void:
 	
 	shields_parent.position.y -= 30.0
 	shields_spawn_timer.wait_time = shields_spawn_cooldown
-	shields_absorb_timer.wait_time = shields_max_time
+	#shields_absorb_timer.wait_time = shields_max_time
 	
 	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
 	available_spawns = ball_spawn_positions.duplicate()
@@ -280,8 +283,8 @@ func _set_ball_active_params(ball: RouletteBall, _target: Node3D = target) -> Ro
 	ball.health_component.is_invincible = false
 	ball.max_collisions = 30
 	ball.radial_force_magnitude = 2500.0
-	ball.central_force_magnitude = 10000.0
-	ball.homing_force_magnitude = 6500.0
+	ball.central_force_magnitude = 8500.0
+	ball.homing_force_magnitude = 4200.0
 	ball.mute_sfx = false
 	return ball
 
@@ -476,7 +479,6 @@ func change_phase(new_phase: int) -> void:
 
 
 func _on_died() -> void:
-	super ()
 	active_balls = destroy_balls(active_balls)
 	passive_balls = destroy_balls(passive_balls)
 	pushback_area.set_deferred("monitoring", false)
@@ -493,6 +495,8 @@ func _on_died() -> void:
 		else:
 			segment[0].global_position.y = segment[2]
 	dropped_segments = []
+	
+	super()
 
 
 func _on_pushback_area_body_entered(body: Node3D) -> void:
@@ -541,6 +545,7 @@ func _on_shields_spawn_shields_state_entered() -> void:
 	
 	for i in shield_count:
 		var new_shield: Shield = shield_scene.instantiate()
+		new_shield.health_component.died.connect(_on_shield_destroyed)
 		shields_parent.add_child(new_shield)
 		new_shield.position.z = shield_distance
 		new_shield.position.y = shield_height
@@ -555,32 +560,40 @@ func _on_shields_spawn_shields_state_entered() -> void:
 	var tween = get_tree().create_tween()
 	tween.tween_property(shields_parent, "position:y", 0, 0.8).set_trans(Tween.TRANS_SINE)
 	tween.parallel().tween_property(shield_sfx_player, "volume_db", linear_to_db(1.0), 0.8).set_trans(Tween.TRANS_SINE)
-	tween.tween_callback(shields_absorb_timer.start)
+	#tween.tween_callback(shields_absorb_timer.start)
+
+
+func _on_shield_destroyed() -> void:
+	shields_destroyed += 1
+	if shields_destroyed >= shields_destroyed_threshold:
+		state_chart.send_event("shields_timeout")
 
 func _on_shields_spawn_shields_state_physics_processing(delta: float) -> void:
-	shields_parent.rotation.y += delta * wheel_rotation_speed * 2
+	shields_parent.rotation.y += delta * wheel_rotation_speed * 4
 
 func _on_shields_spawn_timer_timeout() -> void:
-	if health_component.current_health < health_component.max_health:
-		state_chart.send_event("start_shields")
+	#if health_component.current_health < health_component.max_health:
+	state_chart.send_event("start_shields")
 
-func _on_shields_absorb_timer_timeout() -> void:
-	state_chart.send_event("shields_timeout")
+#func _on_shields_absorb_timer_timeout() -> void:
+	#state_chart.send_event("shields_timeout")
 
 func _on_shields_absorb_state_entered() -> void:
-	var health_regained: float = 0.0
+	#var health_regained: float = 0.0
+	var absorb_time: float = shield_abosrb_time / shield_count
 	for shield in shields_parent.get_children():
 		if not is_instance_valid(shield):
 			continue
-		health_regained += shield.health_component.current_health
+		#health_regained += shield.health_component.current_health
 		var tween = get_tree().create_tween()
-		tween.tween_property(shield, "position", Vector3(0, shield_height, 0), 0.3).set_trans(Tween.TRANS_SINE)
-		tween.parallel().tween_property(shield, "scale", Vector3(0, 0, 0), 0.3).set_trans(Tween.TRANS_SINE)
-		tween.parallel().tween_property(shield_sfx_player, "volume_db", linear_to_db(0.1), 0.8).set_trans(Tween.TRANS_SINE)
+		tween.tween_property(shield, "position", Vector3(0, shield_height, 0), absorb_time).set_trans(Tween.TRANS_SINE)
+		tween.parallel().tween_property(shield, "scale", Vector3(0, 0, 0), absorb_time).set_trans(Tween.TRANS_SINE)
+		tween.parallel().tween_property(shield_sfx_player, "volume_db", linear_to_db(0.1), absorb_time).set_trans(Tween.TRANS_SINE)
 		tween.tween_callback(shield.queue_free)
 		tween.tween_callback(shield_sfx_player.stop)
-		tween.tween_callback(health_component.heal.bind(health_regained))
+		#tween.tween_callback(health_component.heal.bind(health_regained))
 		await tween.finished
+	shields_destroyed = 0
 	state_chart.send_event("shields_absorbed")
 
 func _on_shields_recover_state_entered() -> void:

@@ -87,6 +87,7 @@ sfx_spinning = Array[AudioStream]([ExtResource("9_va0fw"), ExtResource("10_c3gth
 sfx_rolling = Array[AudioStream]([ExtResource("16_2gn0d"), ExtResource("17_ba3bi"), ExtResource("18_qtr5d")])
 sfx_fire = Array[AudioStream]([ExtResource("19_3f2bp"), ExtResource("20_dt76y"), ExtResource("21_yeaf7")])
 sfx_impact = Array[AudioStream]([ExtResource("22_77vdp"), ExtResource("23_vfope"), ExtResource("24_snoeh"), ExtResource("25_fm5h3"), ExtResource("26_ti6xf"), ExtResource("27_pigpk")])
+damage = 12.0
 radial_force_magnitude = 2500.0
 central_force_magnitude = 10000.0
 homing_force_magnitude = 6000.0
