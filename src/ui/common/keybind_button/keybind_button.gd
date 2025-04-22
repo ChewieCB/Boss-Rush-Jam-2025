@@ -162,7 +162,7 @@ func update_controller_icon():
 	var icon_pathname = ""
 	var device = ""
 	# If no controller connected, force use xbox buttons icon
-	if not setting_ui.is_controller_connected:
+	if not GameManager.is_controller_connected:
 		device = "xbox"
 	else:
 		device = InputHelper.guess_device_name().to_lower()

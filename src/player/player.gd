@@ -367,7 +367,8 @@ func _physics_process(delta):
 		else:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
 	camera_control(delta)
-	aim_assist(delta)
+	if GameManager.is_controller_connected:
+		aim_assist(delta)
 
 
 func update_ammo_counter_ui() -> void:

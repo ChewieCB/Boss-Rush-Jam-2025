@@ -57,6 +57,7 @@ var keybindable_action_list = {
 	"pause_menu": "Pause",
 	"shoot": "Shoot",
 	"spin_reload": "Reload",
+	"spin_barrels": "Re-roll Barrels",
 	"interact": "Interact",
 }
 var is_remapping = false
@@ -64,7 +65,6 @@ var is_remapping_controller = false
 var action_to_remap = null
 var remapping_button: KeybindButton = null
 var keybind_timer_timeleft = 0
-var is_controller_connected = false
 
 func _ready() -> void:
 	GameManager.setting_ui = self
@@ -72,7 +72,7 @@ func _ready() -> void:
 	SaveManager.setting_config_loaded.connect(refresh_setting_value)
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
-	is_controller_connected = Input.get_connected_joypads() != []
+	_on_controller_connection(0, GameManager.is_controller_connected)
 	Input.joy_connection_changed.connect(_on_controller_connection)
 
 func _input(event):
@@ -372,6 +372,17 @@ func _on_keybind_timer_timeout() -> void:
 
 
 func _on_controller_connection(_device: int, connected: bool):
-	is_controller_connected = connected
+	# Disable aim assist and it's options if no controller is detected
+	if not connected:
+		aim_assist_slider.value_changed.disconnect(_on_aim_assist_slider_value_changed)
+		aim_assist_slider.value = 0
+		aim_assist_value.text = "Disabled"
+		aim_assist_slider.editable = false
+	else:
+		aim_assist_slider.value = GameManager.aim_assist_strength * 100
+		aim_assist_value.text = "{0}".format([GameManager.aim_assist_strength * 100])
+		aim_assist_slider.editable = true
+		aim_assist_slider.value_changed.connect(_on_aim_assist_slider_value_changed)
+	
 	if keybinding_control_options_section.visible:
 		create_keybind_buttons()
