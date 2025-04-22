@@ -7,10 +7,14 @@ signal fire_started
 @export var phase_3_health_percentage_trigger: float = 0.33
 
 @export_group("Display")
-@export var base_sprite: CompressedTexture2D
+#@export var base_sprite: CompressedTexture2D
 @export var shotgun_sprite: CompressedTexture2D
+@export var reload_sprite: CompressedTexture2D
 @export var throw_sprite: CompressedTexture2D
 @export var brew_sprite: CompressedTexture2D
+#@export var hurt_sprite: CompressedTexture2D
+#@export var death_sprites: Array[CompressedTexture2D]
+
 @export var sfx_tape: AudioStream
 
 @export_group("Attacks")
@@ -186,6 +190,7 @@ func select_attack_phase_2() -> void:
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
+	
 	if new_health < health_component.max_health * phase_3_health_percentage_trigger and current_phase == 2:
 		change_phase(3)
 	elif new_health < health_component.max_health * phase_2_health_percentage_trigger and current_phase == 1:
@@ -240,7 +245,7 @@ func _on_shotgun_blast_state_entered() -> void:
 
 func _on_phase_1_state_entered() -> void:
 	SoundManager.play_sound(sfx_tape, "SFX")
-	GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
+	#GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
 	await get_tree().create_timer(1.5).timeout
 	SoundManager.stop_sound(sfx_tape)
 
@@ -263,7 +268,7 @@ func _on_phase_1_idle_state_entered() -> void:
 
 func _on_phase_2_state_entered() -> void:
 	SoundManager.play_sound(sfx_tape, "SFX")
-	GameManager.show_boss_special_dialog("Playtime is OVER!", 1)
+	#GameManager.show_boss_special_dialog("Playtime is OVER!", 1)
 	await get_tree().create_timer(1).timeout
 	SoundManager.stop_sound(sfx_tape)
 	jump_to(boss_jump_phase2_marker.global_position)
@@ -285,7 +290,7 @@ func _on_phase_2_idle_state_entered() -> void:
 #### Phase 3
 func _on_phase_3_state_entered() -> void:
 	SoundManager.play_sound(sfx_tape, "SFX")
-	GameManager.show_boss_special_dialog("You better hot foot it out of here while you still can!", 1.5)
+	#GameManager.show_boss_special_dialog("You better hot foot it out of here while you still can!", 1.5)
 	await get_tree().create_timer(1.5).timeout
 	SoundManager.stop_sound(sfx_tape)
 	

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dpahplwrr1ndt"]
 
-[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_ua7da"]
-[ext_resource type="PackedScene" uid="uid://dxkjp5oqlkncw" path="res://src/bosses/bartender/HealCloud.tscn" id="2_gkalb"]
+[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/projectiles/BartenderBottle.tscn" id="1_ua7da"]
+[ext_resource type="PackedScene" uid="uid://dxkjp5oqlkncw" path="res://src/bosses/bartender/area_effects/HealCloud.tscn" id="2_gkalb"]
 [ext_resource type="Texture2D" uid="uid://ddk5o5id7o0v5" path="res://src/bosses/bartender/assets/heal_bottle.png" id="3_s4mij"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_745eg"]

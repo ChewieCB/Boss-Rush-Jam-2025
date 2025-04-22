@@ -1,32 +1,35 @@
-[gd_scene load_steps=47 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=50 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
-[ext_resource type="PackedScene" uid="uid://cx7dytvoa0h3h" path="res://src/bosses/bartender/BartenderShotgunProjectile.tscn" id="3_ycarf"]
+[ext_resource type="PackedScene" uid="uid://cx7dytvoa0h3h" path="res://src/bosses/bartender/projectiles/BartenderShotgunProjectile.tscn" id="3_ycarf"]
 [ext_resource type="Texture2D" uid="uid://txwcmnye41n5" path="res://src/bosses/bartender/assets/Bartender_Shotgun.png" id="4_8vk3k"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_dheml"]
-[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="4_vwmjv"]
+[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/projectiles/BartenderBottle.tscn" id="4_vwmjv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_2jcim"]
-[ext_resource type="PackedScene" uid="uid://bkbyk7x5yc34u" path="res://src/bosses/bartender/BartenderMolotov.tscn" id="5_e3e4s"]
+[ext_resource type="Texture2D" uid="uid://53r071jbg2a4" path="res://src/bosses/bartender/assets/Bartender_Reload.png" id="5_av4in"]
+[ext_resource type="PackedScene" uid="uid://bkbyk7x5yc34u" path="res://src/bosses/bartender/projectiles/BartenderMolotov.tscn" id="5_e3e4s"]
 [ext_resource type="Texture2D" uid="uid://dcbpw0qc37nf6" path="res://src/bosses/bartender/assets/Bartender_Throw.png" id="5_rirhf"]
 [ext_resource type="Texture2D" uid="uid://vbu3c5jf2eya" path="res://src/bosses/bartender/assets/Bartender_Brew.png" id="6_0y3ym"]
-[ext_resource type="PackedScene" uid="uid://cujkupeiuhqjh" path="res://src/bosses/bartender/BartenderPoisonBottle.tscn" id="6_ei8fn"]
+[ext_resource type="PackedScene" uid="uid://cujkupeiuhqjh" path="res://src/bosses/bartender/projectiles/BartenderPoisonBottle.tscn" id="6_ei8fn"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_kkb22"]
 [ext_resource type="AudioStream" uid="uid://bl2fw7kkqwtd2" path="res://src/bosses/bartender/assets/sfx/BARTENDER TAPE SOUND FOR THE PHASE CARDS.mp3" id="7_c226c"]
-[ext_resource type="PackedScene" uid="uid://dc551puah5jwj" path="res://src/bosses/bartender/BartenderTarBottle.tscn" id="7_hy3po"]
-[ext_resource type="PackedScene" uid="uid://dpahplwrr1ndt" path="res://src/bosses/bartender/BartenderHealBottle.tscn" id="8_y61gp"]
+[ext_resource type="PackedScene" uid="uid://dc551puah5jwj" path="res://src/bosses/bartender/projectiles/BartenderTarBottle.tscn" id="7_hy3po"]
+[ext_resource type="Texture2D" uid="uid://b0dwoqbf2pxac" path="res://src/bosses/bartender/assets/Bartender_Hit.png" id="8_jooce"]
+[ext_resource type="PackedScene" uid="uid://dpahplwrr1ndt" path="res://src/bosses/bartender/projectiles/BartenderHealBottle.tscn" id="8_y61gp"]
+[ext_resource type="Texture2D" uid="uid://c84m7xsqkv4lg" path="res://src/bosses/bartender/assets/Bartender_Death_1.png" id="9_fm23x"]
 [ext_resource type="AudioStream" uid="uid://c1hbnru2upykl" path="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER THROW BOTTLE 1.mp3" id="9_g736w"]
-[ext_resource type="PackedScene" uid="uid://lmvhnu7j64r7" path="res://src/bosses/bartender/BartenderBeerBarrel.tscn" id="9_u87s1"]
+[ext_resource type="PackedScene" uid="uid://lmvhnu7j64r7" path="res://src/bosses/bartender/projectiles/BartenderBeerBarrel.tscn" id="9_u87s1"]
+[ext_resource type="Texture2D" uid="uid://cucyy5fv7mxp0" path="res://src/bosses/bartender/assets/Bartender_Death_2.png" id="10_d78ef"]
 [ext_resource type="Texture2D" uid="uid://cfkua1w43rgb4" path="res://src/bosses/bartender/assets/speed_icon.png" id="10_p58cf"]
 [ext_resource type="AudioStream" uid="uid://dlqcniyte5gv3" path="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER THROW BOTTLE 2.mp3" id="10_wyqju"]
 [ext_resource type="Texture2D" uid="uid://dciecve6bacil" path="res://src/bosses/bartender/assets/shield_icon.png" id="11_c0ayg"]
-[ext_resource type="PackedScene" uid="uid://3s57qo57n84d" path="res://src/bosses/bartender/FloorFireHazardArea.tscn" id="11_fes67"]
+[ext_resource type="PackedScene" uid="uid://3s57qo57n84d" path="res://src/bosses/bartender/area_effects/FloorFireHazardArea.tscn" id="11_fes67"]
 [ext_resource type="Texture2D" uid="uid://dolyfi5qapq80" path="res://src/bosses/bartender/assets/strength_icon.png" id="11_fyl2a"]
 [ext_resource type="AudioStream" uid="uid://i4v6845j156o" path="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER THROW BOTTLE 3.mp3" id="11_rk2ei"]
 [ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="13_a7i4i"]
 [ext_resource type="AudioStream" uid="uid://dgmit68scnpxg" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER LAUNCH BARREL .mp3" id="13_cxv74"]
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="15_817ob"]
-[ext_resource type="AudioStream" uid="uid://bdcqmijgrl2cc" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS SETS ROOM ON FIRE (TRIGGER JUST BEFORE FIRE LOOP).mp3" id="15_c467v"]
 [ext_resource type="AudioStream" uid="uid://cm6h6wj6m5ybu" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS ROOM ON FIRE LOOP.mp3" id="15_o40bi"]
 [ext_resource type="AudioStream" uid="uid://vkfmj1xifrci" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS JUMP.mp3" id="18_nhb38"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="23_33lgi"]
@@ -62,8 +65,8 @@ collision_mask = 11
 script = ExtResource("2_ns3xp")
 phase_2_health_percentage_trigger = 0.6
 phase_3_health_percentage_trigger = 0.3
-base_sprite = ExtResource("23_33lgi")
 shotgun_sprite = ExtResource("4_8vk3k")
+reload_sprite = ExtResource("5_av4in")
 throw_sprite = ExtResource("5_rirhf")
 brew_sprite = ExtResource("6_0y3ym")
 sfx_tape = ExtResource("7_c226c")
@@ -80,7 +83,7 @@ beer_barrel_prefab = ExtResource("9_u87s1")
 barrel_damage = 25
 sfx_barrel_throw = Array[AudioStream]([ExtResource("13_cxv74")])
 floor_fire_hazard_prefab = ExtResource("11_fes67")
-sfx_start_fire = ExtResource("15_c467v")
+sfx_fire_started = null
 sfx_fire_loop = ExtResource("15_o40bi")
 defense_icon = ExtResource("11_c0ayg")
 speed_icon = ExtResource("10_p58cf")
@@ -102,6 +105,9 @@ sfx_awaken = ExtResource("26_lq1hd")
 sfx_hit = Array[AudioStream]([ExtResource("31_a4u5n"), ExtResource("32_vtq3o"), ExtResource("33_rnf52"), ExtResource("34_nkrfy"), ExtResource("35_efay1")])
 sfx_death = ExtResource("31_7cmfq")
 sfx_telegraph = ExtResource("13_a7i4i")
+base_sprite = ExtResource("23_33lgi")
+hurt_sprite = ExtResource("8_jooce")
+death_sprites = Array[CompressedTexture2D]([ExtResource("9_fm23x"), ExtResource("10_d78ef")])
 telegraph_time = 1.0
 
 [node name="Sprite3D" parent="." index="0"]
@@ -114,6 +120,9 @@ shape = SubResource("CapsuleShape3D_5yo4q")
 
 [node name="Hurtbox" parent="." index="3"]
 visible = false
+
+[node name="HealthComponent" parent="." index="4"]
+max_health = 1000.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Bart the Bartender"

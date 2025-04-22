@@ -3,6 +3,7 @@ class_name BossCore
 
 ## Emit when boss HP drop to 0.
 signal died
+signal death_anim_finished
 ## Emit after collected the barrel, 
 ## or same time as `died` signal if already collected.
 signal defeated(boss: BossCore)
@@ -55,6 +56,17 @@ var debug_trajectory_mesh: MeshInstance3D
 @onready var debug_state_label: Label3D = $DebugStateLabel
 @onready var debug_dist_label: Label3D = $DebugDistanceLabel
 @onready var state_chart: StateChart = $StateChart
+
+@export_group("Sprites")
+@export var base_sprite: CompressedTexture2D
+@export var hurt_sprite: CompressedTexture2D
+@export var death_sprites: Array[CompressedTexture2D]
+@export_subgroup("Hurt Frame")
+# TODO - make this an actual stagger that delays/interrupts attacks?
+@export var hurt_frame_window: float = 0.6
+@export var hurt_frame_cooldown: float = 1.5
+@onready var hurt_frame_timer: Timer = $HurtFrameTimer
+@onready var hurt_frame_cooldown_timer: Timer = $HurtFrameCooldownTimer
 
 @export var current_phase: int = 1
 
@@ -399,6 +411,10 @@ func _on_movement_jumping_state_physics_processing(_delta: float) -> void:
 ### HEALTH --------------------------------
 #### HIT
 func _on_health_hit_state_entered() -> void:
+	# TODO - limit the hurt frame to a minimum dps amount?
+	#if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
+		#sprite.texture = hurt_sprite
+		#hurt_frame_timer.start(hurt_frame_window)
 	sprite.modulate = Color.RED
 	await get_tree().create_timer(0.05).timeout
 	state_chart.send_event("end_damage")
@@ -408,7 +424,11 @@ func _on_health_hit_state_exited() -> void:
 
 #### DEAD
 func _on_health_dead_state_entered() -> void:
+	for _sprite in death_sprites:
+		sprite.texture = _sprite
+		await get_tree().create_timer(1.0).timeout
 	sprite.modulate = Color.DARK_SLATE_BLUE
+	death_anim_finished.emit()
 
 ### ATTACKING --------------------------------
 #### TELEGRAPH
@@ -429,6 +449,10 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		dps_accumulated_in_window += abs(prev_health - new_health)
 		if dps_accumulated_in_window > chip_spawn_dps_threshold:
+			# TODO - play hurt frame here instead?
+			if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
+				sprite.texture = hurt_sprite
+				hurt_frame_timer.start(hurt_frame_window)
 			# Increase chip spawn rate based on DPS
 			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
 			chip_mult = min(chip_mult, chip_spawn_mult_cap)
@@ -454,6 +478,7 @@ func _on_died() -> void:
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
+	await death_anim_finished
 	drop_barrel()
 	await boss_death_slow_mo()
 	if not self in GameManager.bosses_defeated:
@@ -468,3 +493,8 @@ func _on_hurtbox_body_entered(_body: Node3D) -> void:
 func _on_dps_window_timer_timeout() -> void:
 	# TODO - check for chip spawn threshold
 	dps_accumulated_in_window = 0.0
+
+
+func _on_hurt_frame_timer_timeout() -> void:
+	sprite.texture = base_sprite
+	hurt_frame_cooldown_timer.start(hurt_frame_cooldown)

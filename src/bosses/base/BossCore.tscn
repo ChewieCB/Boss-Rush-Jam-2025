@@ -399,7 +399,14 @@ shape = SubResource("CapsuleShape3D_kcrnw")
 
 [node name="Marker3D" type="Marker3D" parent="AimAssistBubble"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.86467, 0)
+
 [node name="DPSWindowTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="HurtFrameTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="HurtFrameCooldownTimer" type="Timer" parent="."]
 one_shot = true
 
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
@@ -421,3 +428,4 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Health/Dead" to="." method="_on_health_dead_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_entered"]
 [connection signal="timeout" from="DPSWindowTimer" to="." method="_on_dps_window_timer_timeout"]
+[connection signal="timeout" from="HurtFrameTimer" to="." method="_on_hurt_frame_timer_timeout"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=25 format=3 uid="uid://ovfcjowsr7df"]
 
-[ext_resource type="Script" path="res://src/bosses/bartender/hazard_area.gd" id="1_xogw5"]
+[ext_resource type="Script" path="res://src/bosses/bartender/area_effects/hazard_area.gd" id="1_xogw5"]
 [ext_resource type="AudioStream" uid="uid://uijk4rcbpwd4" path="res://src/bosses/bartender/assets/sfx/MOLOTOV/BARTENDER MOLOTOV 1.mp3" id="2_0sr16"]
 [ext_resource type="Texture2D" uid="uid://csksvkj83ajtj" path="res://src/bosses/bartender/assets/fire_sprite.png" id="2_73ktq"]
 [ext_resource type="Texture2D" uid="uid://bus2aoy40njv1" path="res://src/bosses/bartender/assets/puddle.png" id="3_h2ljg"]
