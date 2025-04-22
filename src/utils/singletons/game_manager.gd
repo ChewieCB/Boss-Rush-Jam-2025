@@ -81,6 +81,7 @@ var hide_ui = false
 @export_range(0, 100, 0.1) var bgm_audio: float = 100
 @export_range(0, 100, 0.1) var sfx_audio: float = 100
 @export_range(0, 100, 0.1) var ui_audio: float = 100
+var is_controller_connected: bool = false
 var aim_assist_strength: float = 0.5
 
 
@@ -90,6 +91,8 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	SaveManager.load_setting_config()
+	is_controller_connected = Input.get_connected_joypads() != []
+	Input.joy_connection_changed.connect(_on_controller_connection)
 
 
 func add_barrel_to_inventory(data: BarrelDataResource):
@@ -226,3 +229,7 @@ func update_total_playtime():
 	var current_time = Time.get_ticks_msec()
 	var played_time = current_time - start_record_timestamp
 	total_playtime += played_time
+
+
+func _on_controller_connection(_device: int, connected: bool):
+	is_controller_connected = connected

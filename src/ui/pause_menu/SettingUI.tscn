@@ -133,7 +133,7 @@ offset_right = 220.0
 offset_bottom = 21.0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 26
-text = "Mouse Sensitivity
+text = "Aiming Sensitivity
 "
 
 [node name="MouseSenSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
@@ -199,7 +199,7 @@ offset_bottom = 12.0
 grow_horizontal = 0
 grow_vertical = 2
 theme = ExtResource("4_fifb6")
-value = 25.0
+editable = false
 
 [node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens"]
 layout_mode = 1
@@ -747,6 +747,7 @@ text = "Back"
 [connection signal="pressed" from="HBoxContainer/GraphicOption" to="." method="_on_graphic_option_pressed"]
 [connection signal="mouse_entered" from="HBoxContainer/AudioOption" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="HBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
+[connection signal="tab_changed" from="TabContainer" to="." method="_on_tab_container_tab_changed"]
 [connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/AimAssistSlider" to="." method="play_button_hover_sfx"]
