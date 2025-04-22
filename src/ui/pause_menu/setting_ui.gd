@@ -262,6 +262,7 @@ func create_keybind_buttons():
 	for action in keybindable_action_list:
 		var button_inst: KeybindButton = keybind_button_prefab.instantiate()
 		keybind_container.add_child(button_inst)
+		button_inst.setting_ui = self
 		button_inst.action_label.text = keybindable_action_list[action]
 		button_inst.assigned_action_name = action
 		button_inst.update_button_detail()

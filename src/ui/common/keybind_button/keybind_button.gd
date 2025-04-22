@@ -160,7 +160,12 @@ func update_controller_icon():
 	# Decide what type of controller player is using
 	var controller_icon_mapping = {}
 	var icon_pathname = ""
-	var device = InputHelper.guess_device_name().to_lower()
+	var device = ""
+	# If no controller connected, force use xbox buttons icon
+	if not setting_ui.is_controller_connected:
+		device = "xbox"
+	else:
+		device = InputHelper.guess_device_name().to_lower()
 	if device == "sony" or device == "playstation":
 		controller_icon_mapping = sony_input_icon_mapping
 		icon_pathname = "res://assets/sprite/input/sony/{0}.png"
@@ -171,6 +176,7 @@ func update_controller_icon():
 		# Forcing using text instead of icon
 		controller_icon_mapping = {}
 		icon_pathname = "{0}"
+
 
 	# Update icon
 	if controller_icon_mapping.has(controller_input_label):
