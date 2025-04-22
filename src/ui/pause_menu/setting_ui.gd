@@ -122,7 +122,8 @@ func _input(event):
 
 func open_menu():
 	visible = true
-	#tab_container.current_tab = 0
+	tab_container.current_tab = 0
+	mouse_sen_slider.focus_neighbor_top = $HBoxContainer.get_child(0).get_path()
 	tab_header_container.get_child(tab_container.current_tab).grab_focus()
 	# Grab focus first element INSIDE the tab container instead of the tab themselve
 	var event = InputEventAction.new()
@@ -387,3 +388,9 @@ func _on_controller_connection(_device: int, connected: bool):
 	
 	if keybinding_control_options_section.visible:
 		create_keybind_buttons()
+
+
+func _on_tab_container_tab_changed(tab: int) -> void:
+	mouse_sen_slider.focus_neighbor_top = tab_header_container.get_child(tab).get_path()
+	fov_slider.focus_neighbor_top = tab_header_container.get_child(tab).get_path()
+	master_slider.focus_neighbor_top = tab_header_container.get_child(tab).get_path()
