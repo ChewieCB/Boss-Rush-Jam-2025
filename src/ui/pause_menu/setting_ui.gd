@@ -58,13 +58,13 @@ var keybindable_action_list = {
 	"shoot": "Shoot",
 	"spin_reload": "Reload",
 	"interact": "Interact",
-	"open_inventory": "Open inventory",
 }
 var is_remapping = false
 var is_remapping_controller = false
 var action_to_remap = null
 var remapping_button: KeybindButton = null
 var keybind_timer_timeleft = 0
+var is_controller_connected = false
 
 func _ready() -> void:
 	GameManager.setting_ui = self
@@ -72,6 +72,8 @@ func _ready() -> void:
 	SaveManager.setting_config_loaded.connect(refresh_setting_value)
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
+	is_controller_connected = Input.get_connected_joypads() != []
+	Input.joy_connection_changed.connect(_on_controller_connection)
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -121,6 +123,7 @@ func _input(event):
 func open_menu():
 	visible = true
 	tab_header_container.get_child(tab_container.current_tab).grab_focus()
+	# TODO: Grab focus first element INSIDE the tab container instead of the tab themselve
 
 func close_menu():
 	if remapping_button:
@@ -360,3 +363,9 @@ func _on_keybind_timer_timeout() -> void:
 		# Countdown
 		if remapping_button:
 			remapping_button.set_changing_keybind_text("Press key to bind ({0})...".format([keybind_timer_timeleft]), is_remapping_controller)
+
+
+func _on_controller_connection(_device: int, connected: bool):
+	is_controller_connected = connected
+	if keybinding_control_options_section.visible:
+		create_keybind_buttons()
