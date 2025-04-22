@@ -123,7 +123,12 @@ func _input(event):
 func open_menu():
 	visible = true
 	tab_header_container.get_child(tab_container.current_tab).grab_focus()
-	# TODO: Grab focus first element INSIDE the tab container instead of the tab themselve
+	# Grab focus first element INSIDE the tab container instead of the tab themselve
+	var event = InputEventAction.new()
+	event.action = "ui_down"
+	event.pressed = true
+	Input.parse_input_event(event)
+
 
 func close_menu():
 	if remapping_button:
