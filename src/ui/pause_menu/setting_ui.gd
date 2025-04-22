@@ -122,6 +122,7 @@ func _input(event):
 
 func open_menu():
 	visible = true
+	#tab_container.current_tab = 0
 	tab_header_container.get_child(tab_container.current_tab).grab_focus()
 	# Grab focus first element INSIDE the tab container instead of the tab themselve
 	var event = InputEventAction.new()
