@@ -479,6 +479,8 @@ func change_phase(new_phase: int) -> void:
 
 
 func _on_died() -> void:
+	super()
+	
 	active_balls = destroy_balls(active_balls)
 	passive_balls = destroy_balls(passive_balls)
 	pushback_area.set_deferred("monitoring", false)
@@ -496,7 +498,7 @@ func _on_died() -> void:
 			segment[0].global_position.y = segment[2]
 	dropped_segments = []
 	
-	super()
+	state_chart.send_event("shields_timeout")
 
 
 func _on_pushback_area_body_entered(body: Node3D) -> void:

@@ -106,7 +106,7 @@ shape = SubResource("SphereShape3D_hwqll")
 one_shot = true
 
 [node name="HealthComponent" parent="." instance=ExtResource("4_elsvf")]
-max_health = 50.0
+max_health = 25.0
 
 [node name="FireMesh" type="MeshInstance3D" parent="."]
 visible = false
