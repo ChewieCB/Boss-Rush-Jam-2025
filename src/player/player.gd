@@ -188,8 +188,10 @@ func _unhandled_input(event):
 		# 	return
 		rotate_player(event.relative.x, event.relative.y)
 	elif event is InputEventJoypadMotion:
-		# Disable joystick support to prevent PS4 touchpad triggering aim events
-		return
+		if not InputHelper.get_label_for_input(event).to_lower().contains("trigger"):
+			# Disable joystick support to prevent PS4 touchpad triggering aim events
+			# Has to check Trigger buttons first, since they are also InputEventJoypadMotion
+			return
 	
 	if event.is_action_pressed("spin_reload"):
 		no_spin_reload()
