@@ -119,7 +119,6 @@ var current_gun: Gun = null
 var is_in_inventory = false:
 	set(value):
 		is_in_inventory = value
-
 		all_barrel_effect_ui.visible = !is_in_inventory
 		if is_in_inventory:
 			stat_ui.hide_non_luck_ui()

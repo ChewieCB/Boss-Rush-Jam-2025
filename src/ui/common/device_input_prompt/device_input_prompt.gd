@@ -12,6 +12,9 @@ enum DeviceType {
 @export var assigned_action: String
 ## Set this to force display input icon from certain device. Otherwise leave at AUTO.
 @export var device_type: DeviceType
+@export var hide_background = false
+# Force only show input type that is not KB/M. Aka it will show Xbox if no other controller detected.
+@export var force_non_kbm = false
 
 var kbm_input_icon_mapping = {
 	"mouse left button": "mouse_left",
@@ -96,6 +99,9 @@ func _ready() -> void:
 		InputHelper.device_changed.connect(func(_device, _index): update_texture())
 	update_texture()
 
+	if hide_background:
+		get_node("ColorRect").visible = false
+
 
 func update_texture():
 	var loaded_texture = null
@@ -114,7 +120,10 @@ func update_texture():
 			if ["xbox", "playstation"].has(guessed_device):
 				loaded_texture = get_image_for_controller_input(guessed_device, assigned_action)
 			else:
-				loaded_texture = get_image_for_keyboard_input(assigned_action)
+				if force_non_kbm:
+					loaded_texture = get_image_for_controller_input("xbox", assigned_action)
+				else:
+					loaded_texture = get_image_for_keyboard_input(assigned_action)
 
 	texture = loaded_texture
 
@@ -131,6 +140,8 @@ func get_image_for_keyboard_input(action: String):
 	var icon_texture = null
 	if FileAccess.file_exists(kbm_icon_path):
 		icon_texture = load(kbm_icon_path)
+	else:
+		push_warning("Failed to load texture at: %s" % kbm_icon_path)
 	return icon_texture
 
 func get_image_for_controller_input(device: String, action: String):
@@ -161,4 +172,6 @@ func get_image_for_controller_input(device: String, action: String):
 	var icon_texture = null
 	if FileAccess.file_exists(controller_icon_path):
 		icon_texture = load(controller_icon_path)
+	else:
+		push_warning("Failed to load texture at: %s" % controller_icon_path)
 	return icon_texture

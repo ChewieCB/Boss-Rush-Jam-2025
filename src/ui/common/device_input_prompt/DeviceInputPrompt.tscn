@@ -5,8 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="3_ra3l4"]
 
 [node name="DeviceInputPrompt" type="TextureRect"]
+custom_minimum_size = Vector2(48, 48)
 size_flags_vertical = 4
 texture = ExtResource("1_1rafh")
+expand_mode = 1
 stretch_mode = 4
 script = ExtResource("2_a4ywj")
 
