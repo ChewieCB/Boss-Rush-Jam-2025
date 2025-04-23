@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="1_ef7fu"]
 [ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="2_wavg1"]
 [ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="3_cwsn4"]
-[ext_resource type="Texture2D" uid="uid://ut34yvp7hhr5" path="res://src/ui/common/assets/kenney_borders/default/Divider Fade/divider-fade-000.png" id="4_8xujt"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="5_wos4h"]
+[ext_resource type="Texture2D" uid="uid://jgscawd6skc" path="res://src/ui/common/assets/kenney_borders/default/Divider Fade/divider-fade-001.png" id="6_62y4p"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="7_bj4c4"]
 
 [sub_resource type="Theme" id="Theme_y0f30"]
@@ -13,7 +13,7 @@ default_font = ExtResource("5_wos4h")
 
 [sub_resource type="Theme" id="Theme_gqrbp"]
 default_font = ExtResource("7_bj4c4")
-default_font_size = 60
+default_font_size = 40
 Label/colors/font_color = Color(1, 1, 1, 1)
 Label/colors/font_outline_color = Color(0, 0, 0, 1)
 Label/constants/outline_size = 2
@@ -151,7 +151,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -795.0
 offset_right = 795.0
-offset_bottom = 169.0
+offset_bottom = 144.0
 grow_horizontal = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 16
@@ -240,7 +240,7 @@ theme_override_constants/margin_bottom = 8
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-texture = ExtResource("4_8xujt")
+texture = ExtResource("6_62y4p")
 expand_mode = 3
 stretch_mode = 5
 
@@ -252,6 +252,9 @@ theme_override_constants/margin_right = 32
 [node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2"]
 layout_mode = 2
 theme = SubResource("Theme_gqrbp")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
 text = "TEST BOSS NAME GOES HERE LALALA"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -264,7 +267,7 @@ theme_override_constants/margin_bottom = 8
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
-texture = ExtResource("4_8xujt")
+texture = ExtResource("6_62y4p")
 expand_mode = 3
 stretch_mode = 5
 flip_h = true
