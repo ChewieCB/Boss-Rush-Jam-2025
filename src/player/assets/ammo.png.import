@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ble2oc8nbdlrf"
-path="res://.godot/imported/button2.png-86e0536215a3bee84bb3ee3a1e7e040b.ctex"
+uid="uid://dktkrabxua7mo"
+path="res://.godot/imported/ammo.png-3e1052204a2c3d4de647f4691e7beb98.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/game_icon/button2.png"
-dest_files=["res://.godot/imported/button2.png-86e0536215a3bee84bb3ee3a1e7e040b.ctex"]
+source_file="res://src/player/assets/ammo.png"
+dest_files=["res://.godot/imported/ammo.png-3e1052204a2c3d4de647f4691e7beb98.ctex"]
 
 [params]
 

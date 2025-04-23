@@ -1,5 +1,5 @@
 extends Control
-class_name PlayerUI
+class_name StatUI
 
 signal show
 signal hide
@@ -8,15 +8,16 @@ signal hide
 @export var health_component: HealthComponent
 @export var luck_component: LuckComponent
 
-@onready var health_ui: Control = $PlayerStatsUI/VBoxContainer/PlayerHealthBarUI
-@onready var luck_bar_ui: Control = $PlayerStatsUI/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI
-@onready var luck_buffs_ui: Control = $PlayerStatsUI/VBoxContainer/PlayerLuckUI/LuckBuffsUI
+@onready var health_ui: Control = $PlayerHealthBarUI
+@onready var luck_bar_ui: LuckBar = $PlayerLuckUI/PlayerLuckBarUI
+@onready var luck_buffs_ui: Control = $PlayerLuckUI/LuckBuffsUI
 
 @export var animate_show_hide: bool = true
 @export var hide_ui_on_death: bool = true
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
-
+@onready var current_ammo_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/CurrentAmmo
+@onready var magazine_size_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/MagazineSize
 
 func _ready() -> void:
 	await get_owner().ready
@@ -65,7 +66,7 @@ func hide_all_ui() -> void:
 	_animate_ui_element("all", false)
 
 
-func _animate_ui_element(element: String, show: bool = true) -> void:
-	anim_player.play("%s_%s" % ["show" if show else "hide", element])
+func _animate_ui_element(element: String, _show: bool = true) -> void:
+	anim_player.play("%s_%s" % ["show" if _show else "hide", element])
 	await anim_player.animation_finished
 	return
