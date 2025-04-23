@@ -72,8 +72,10 @@ func _ready() -> void:
 	SaveManager.setting_config_loaded.connect(refresh_setting_value)
 	normal_control_options_section.visible = true
 	keybinding_control_options_section.visible = false
-	_on_controller_connection(0, GameManager.is_controller_connected)
 	Input.joy_connection_changed.connect(_on_controller_connection)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_on_controller_connection(0, GameManager.is_controller_connected)
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):

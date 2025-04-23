@@ -32,7 +32,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var reroll_heal_value: float = 15.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
-@onready var interact_ui: Label = $UI/InteractUI
+@onready var interact_ui: Control = $UI/InteractUI
 
 @onready var player_camera: ShakeCameraWrapper = $Neck/ShakeCameraWrapper
 @onready var debug_label: Label = $Neck/ShakeCameraWrapper/DebugLabel
@@ -47,12 +47,11 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
-@onready var magazine_label: Label = $UI/PlayerUI/PlayerConsumables/ConsumableUI/MarginContainer/MagazineUI
 @onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
 
-@onready var player_ui = $UI/PlayerUI
-@onready var health_ui = player_ui.health_ui
-@onready var luck_bar_ui = player_ui.luck_bar_ui
+@onready var stat_ui: StatUI = $UI/StatUI
+@onready var health_ui = stat_ui.health_ui
+@onready var luck_bar_ui = stat_ui.luck_bar_ui
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
@@ -120,12 +119,12 @@ var current_gun: Gun = null
 var is_in_inventory = false:
 	set(value):
 		is_in_inventory = value
-		
+
 		all_barrel_effect_ui.visible = !is_in_inventory
 		if is_in_inventory:
-			player_ui.hide_non_luck_ui()
+			stat_ui.hide_non_luck_ui()
 		else:
-			player_ui.show_non_luck_ui()
+			stat_ui.show_non_luck_ui()
 var object_to_be_interacted = null
 
 var buffs: Array[Buff] = []
@@ -145,31 +144,31 @@ func _ready():
 	player_camera.set_fov(GameManager.camera_fov)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	last_dashed_timestamp = 0
-	
-	player_ui.health_component = health_component
-	player_ui.luck_component = luck_component
-	
+
+	stat_ui.health_component = health_component
+	stat_ui.luck_component = luck_component
+
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
-	
+
 	luck_component.luck_changed.connect(_on_luck_changed)
 	luck_component.luck_maxed.connect(_on_luck_maxed)
-	
+
 	gun_container_original_pos = gun_container.position
 	gun_container_original_rot = gun_container.rotation
-	
+
 	interact_ui.visible = false
 	boss_special_dialog.visible = false
-	
+
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
 	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
 	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_equipped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
-	
-	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 
+	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
+	update_ammo_counter_ui()
 
 func _unhandled_input(event):
 	if controls_disabled:
@@ -192,7 +191,7 @@ func _unhandled_input(event):
 			# Disable joystick support to prevent PS4 touchpad triggering aim events
 			# Has to check Trigger buttons first, since they are also InputEventJoypadMotion
 			return
-	
+
 	if event.is_action_pressed("spin_reload"):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
@@ -374,7 +373,8 @@ func _physics_process(delta):
 
 
 func update_ammo_counter_ui() -> void:
-	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
+	stat_ui.current_ammo_label.text = "{0}".format([current_gun.magazine_ammo_left])
+	stat_ui.magazine_size_label.text = "/{0}".format([current_gun.modified_magazine_size])
 
 
 func update_barrel_effect_ui() -> void:
@@ -417,7 +417,7 @@ func show_debug_label():
 func jump(multiplier = 1.0):
 	if is_in_inventory or controls_disabled:
 		return
-		
+
 	vel_vertical = JUMP_FORCE * multiplier
 
 	jumped = true
@@ -606,7 +606,7 @@ func _on_health_hurt_state_entered() -> void:
 func _on_health_dead_state_entered() -> void:
 	controls_disabled = true
 	hurt_overlay.dead()
-	player_ui.hide_all_ui()
+	stat_ui.hide_all_ui()
 
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
@@ -727,9 +727,9 @@ func cash_in_luck() -> void:
 	tween.parallel().tween_property(
 		luck_bar_ui.luck_gain_bar, "value", 0, luck_redeem_time
 	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
-	
+
 	await tween.finished
-	
+
 	luck_component.enable()
 	LuckHandler.enabled = true
 	luck_component.current_luck = 0.0

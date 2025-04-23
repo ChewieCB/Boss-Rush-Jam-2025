@@ -1,12 +1,12 @@
 extends CanvasLayer
+class_name PlayerUI
 
 @onready var saving_indicator: Label = $SavingIndicator
 @onready var pause_ui: PauseUI = $PauseUI
 
-@onready var stats_ui = $PlayerUI
+@onready var stat_ui: StatUI = $StatUI
 @onready var interact_ui = $InteractUI
 @onready var gun_ui = $GunUI
-
 
 func _ready() -> void:
 	SaveManager.started_saving.connect(func(): saving_indicator.visible = true)
@@ -21,6 +21,6 @@ func hide_saving_indicator():
 
 
 func refresh_after_setting_changed():
-	stats_ui.visible = not GameManager.hide_ui
+	stat_ui.visible = not GameManager.hide_ui
 	interact_ui.visible = not GameManager.hide_ui
 	gun_ui.visible = not GameManager.hide_ui

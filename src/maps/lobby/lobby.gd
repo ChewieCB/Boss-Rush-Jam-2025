@@ -16,7 +16,6 @@ var display_barrels: Array = []
 
 func _ready() -> void:
 	#ScreenTransition.fill_screen()
-	
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
@@ -53,7 +52,7 @@ func _ready() -> void:
 			show_panel(game_win_ui)
 			GameManager.victory_ui_shown = true
 	
-	player.player_ui.show_health_ui()
+	player.stat_ui.show_health_ui()
 
 
 func _input(event: InputEvent) -> void:
