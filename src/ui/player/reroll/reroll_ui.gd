@@ -31,6 +31,11 @@ func _on_currency_changed(new_value: int) -> void:
 	var progress_tween: Tween = get_tree().create_tween()
 	progress_tween.tween_property(progress_bar, "value", new_value, fill_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 
+	progress_bar.scale = Vector2(1.4, 1.4)
+	progress_bar.pivot_offset = progress_bar.size / 2
+	var scale_tween: Tween = get_tree().create_tween()
+	scale_tween.tween_property(progress_bar, "scale", Vector2(1, 1), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+
 
 func _update_reroll_max(new_max: int) -> void:
 	progress_bar.max_value = float(new_max)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://crvu72pwcnneq"]
+[gd_scene load_steps=25 format=3 uid="uid://crvu72pwcnneq"]
 
 [ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_ct6da"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="1_v8jbf"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="7_x1uxm"]
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_ui.gd" id="8_12af2"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="8_esel0"]
+[ext_resource type="Texture2D" uid="uid://dktkrabxua7mo" path="res://src/player/assets/ammo.png" id="9_8qhrl"]
 [ext_resource type="PackedScene" uid="uid://bicxns6d0ciub" path="res://src/ui/player/reroll/RerollUI.tscn" id="10_tkawr"]
 
 [sub_resource type="Theme" id="Theme_y0f30"]
@@ -531,6 +532,14 @@ layout_mode = 2
 [node name="ReloadKeyIcon" parent="PlayerConsumables/ConsumableUI" instance=ExtResource("8_esel0")]
 layout_mode = 2
 assigned_action = "spin_reload"
+
+[node name="AmmoIcon" type="TextureRect" parent="PlayerConsumables/ConsumableUI"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("9_8qhrl")
+expand_mode = 1
+stretch_mode = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PlayerConsumables/ConsumableUI"]
 custom_minimum_size = Vector2(150, 0)
