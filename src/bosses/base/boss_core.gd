@@ -18,6 +18,14 @@ enum BossIdEnum {
 	PIT
 }
 
+enum StatusEffects {
+	NONE,
+	BURNING,
+	POISONED
+}
+@onready var burning_timer: Timer = $StateChart/Root/Status/Burning/BurningTimer
+@onready var poisoned_timer: Timer = $StateChart/Root/Status/Poisoned/PoisonedTimer
+
 @export var boss_id: BossIdEnum
 @export var chip_scene: PackedScene
 @export var chip_spawn_chance: float = 0.4
@@ -54,6 +62,7 @@ var debug_trajectory_mesh: MeshInstance3D
 @onready var debug_mesh: MeshInstance3D = $DebugMesh
 @onready var debug_state_label: Label3D = $DebugStateLabel
 @onready var debug_dist_label: Label3D = $DebugDistanceLabel
+@onready var debug_status_label_parent: Node3D = $StatusLabelParent
 @onready var state_chart: StateChart = $StateChart
 
 @export var current_phase: int = 1
@@ -146,6 +155,14 @@ func _physics_process(delta: float) -> void:
 	velocity.y = vel_vertical
 
 	move_and_slide()
+	
+	# DEBUG
+	# TODO - add export var for burning status length so we can configure it
+	# per boss/effect
+	if Input.is_action_just_pressed("input_1"):
+		apply_status(StatusEffects.BURNING, 5.0)
+	if Input.is_action_just_pressed("input_2"):
+		apply_status(StatusEffects.POISONED, 12.0)
 
 
 func jump(multiplier = 1.0) -> void:
@@ -468,3 +485,90 @@ func _on_hurtbox_body_entered(_body: Node3D) -> void:
 func _on_dps_window_timer_timeout() -> void:
 	# TODO - check for chip spawn threshold
 	dps_accumulated_in_window = 0.0
+
+
+## STATUS EFFECTS
+
+func apply_status(status: StatusEffects, duration: float) -> void:
+	var event_string: String = "status_%s" % StatusEffects.keys()[status].to_lower()
+	state_chart.send_event("add_" + event_string)
+	await get_tree().create_timer(duration).timeout
+	state_chart.send_event("remove_" + event_string)
+
+
+func remove_status(status: StatusEffects) -> void:
+	var event_string: String = "status_%s" % StatusEffects.keys()[status].to_lower()
+	state_chart.send_event("remove_" + event_string)
+
+
+func create_status_label(status: String, color: Color) -> void:
+	var status_label := Label3D.new()
+	status_label.text = status
+	status_label.modulate = color
+	status_label.font_size = 128
+	status_label.outline_size = 32
+	status_label.uppercase = true
+	status_label.double_sided = true
+	status_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	debug_status_label_parent.add_child(status_label)
+	status_label.position.y = 0.6 * debug_status_label_parent.get_child_count()
+
+
+func remove_status_label(status: String) -> void:
+	var status_labels = debug_status_label_parent.get_children()
+	status_labels.filter(func(x): return x.text == status)
+	var label = status_labels.front()
+	debug_status_label_parent.remove_child(label)
+	label.queue_free()
+
+
+# Burning
+func _on_status_burning_active_state_entered() -> void:
+	create_status_label("Burning", Color.ORANGE)
+	# TODO - add burning effect particles/shader/icon
+	#
+	burning_timer.start(0.6)
+
+
+func _on_status_burning_active_state_physics_processing(delta: float) -> void:
+	pass
+
+
+func _on_status_burning_active_state_exited() -> void:
+	remove_status_label("Burning")
+	# TODO - remove burning effect particles/shader/icon
+	#
+	burning_timer.stop()
+
+
+func _on_status_poisoned_active_state_entered() -> void:
+	create_status_label("Poisoned", Color.WEB_GREEN)
+	# TODO - add burning effect particles/shader/icon
+	poisoned_timer.start(1.8)
+
+
+func _on_status_poisoned_active_state_physics_processing(delta: float) -> void:
+	pass
+
+
+func _on_status_poisoned_active_state_exited() -> void:
+	remove_status_label("Poisoned")
+	# TODO - remove burning effect particles/shader/icon
+	#
+	poisoned_timer.stop()
+
+
+func _on_burning_timer_timeout() -> void:
+	# TODO - let specific attacks/modifiers change how much damage the effect does
+	health_component.damage(5, Color.ORANGE)
+	sprite.modulate = Color.ORANGE
+	await get_tree().create_timer(0.2).timeout
+	sprite.modulate = Color.WHITE
+
+
+func _on_poisoned_timer_timeout() -> void:
+	# TODO - let specific attacks/modifiers change how much damage the effect does
+	health_component.damage(12, Color.WEB_GREEN)
+	sprite.modulate = Color.WEB_GREEN
+	await get_tree().create_timer(0.4).timeout
+	sprite.modulate = Color.WHITE

@@ -1036,12 +1036,10 @@ event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="DebugStateLabel" parent="." index="10"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.3, 0)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
 
 [node name="DebugDistanceLabel" parent="." index="11"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="14"]
 libraries = {
