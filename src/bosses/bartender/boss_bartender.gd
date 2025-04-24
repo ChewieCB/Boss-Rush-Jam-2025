@@ -22,6 +22,7 @@ signal fire_started
 @export var shotgun_proj_prefab: PackedScene
 @export var sfx_shotgun: Array[AudioStream]
 @onready var shotgun_timer: Timer = $StateChart/Root/Phase/Phase1/ShotgunBlast/Targeting/ShotTimer
+@onready var shotgun_spawn_pos: Marker3D = $Sprite3D/ShotgunSpawnPos
 var shots_to_fire: int = 1
 var shots_fired: int = 0
 @export_subgroup("Bottles")
@@ -64,7 +65,7 @@ var shots_fired: int = 0
 @export var sfx_jump: Array[AudioStream]
 
 @onready var buff_expire_timer: Timer = $BuffExpireTimer
-@onready var proj_spawn_marker = $ProjectileSpawnPos
+@onready var proj_spawn_marker = $Sprite3D/ThrowableSprite/ProjectileSpawnPos
 @onready var status_icon: Sprite3D = $StatusIcon
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
@@ -131,8 +132,8 @@ func select_attack_phase_1() -> void:
 	var possible_attacks = [
 		"start_shotgun_blast",
 		"start_shotgun_blast",
-		#"start_throw_broken_bottle",
-		#"start_throw_broken_bottle",
+		"start_throw_broken_bottle",
+		"start_throw_broken_bottle",
 		#"start_throw_concoction",
 		#"start_throw_concoction",
 		#"start_throw_concoction",
@@ -238,11 +239,11 @@ func fire_shotgun():
 	sfx_player.stream = sfx_shotgun.pick_random()
 	sfx_player.play()
 	for j in range(proj_amount):
-		var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
+		var aim_direction = shotgun_spawn_pos.global_position.direction_to(target.global_position)
 		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
 		var bullet_inst = shotgun_proj_prefab.instantiate()
 		get_parent().add_child(bullet_inst)
-		bullet_inst.init(proj_spawn_marker.global_position, spreaded_direction, proj_damage, proj_speed)
+		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, proj_speed)
 
 
 func _on_shotgun_blast_state_entered() -> void:
@@ -338,21 +339,21 @@ func _on_phase_3_state_entered() -> void:
 ### Common
 
 ## If has str buff, throw barrel instead
-func _on_throw_broken_bottle_state_entered() -> void:
-	sprite.texture = throw_sprite
-	debug_state_label.text = "Throw broken bottle"
-	state_chart.send_event("attack_start")
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	if has_strength_buff:
-		throw_bottle(beer_barrel_prefab, 1, 1, barrel_damage)
-	else:
-		var n_bottle = randi_range(2, 4)
-		var spread = randf_range(5, 10)
-		throw_bottle(empty_bottle_prefab, n_bottle, spread, bottle_damage)
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	state_chart.send_event("attack_end_now")
-	state_chart.send_event("return_idle")
-	sprite.texture = base_sprite
+#func _on_throw_broken_bottle_state_entered() -> void:
+	#sprite.texture = throw_sprite
+	#debug_state_label.text = "Throw broken bottle"
+	#state_chart.send_event("attack_start")
+	#await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	#if has_strength_buff:
+		#throw_bottle(beer_barrel_prefab, 1, 1, barrel_damage)
+	#else:
+		#var n_bottle = randi_range(2, 4)
+		#var spread = randf_range(5, 10)
+		#throw_bottle(empty_bottle_prefab, n_bottle, spread, bottle_damage)
+	#await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	#state_chart.send_event("attack_end_now")
+	#state_chart.send_event("return_idle")
+	#sprite.texture = base_sprite
 
 
 func _on_throw_concoction_state_entered() -> void:
@@ -571,8 +572,53 @@ func _on_shotgun_recover_state_entered() -> void:
 	
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
+	select_attack()
 	state_chart.send_event("end_recovery")
 
 
 func _on_shotgun_timer_timeout() -> void:
 	state_chart.send_event("start_shooting")
+
+##
+
+func _on_throw_broken_bottle_targeting_state_entered() -> void:
+	debug_state_label.text = "Throw Broken Bottle | Targeting"
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_telegraph")
+	anim_player.play("bottle_telegraph")
+	
+	await anim_player.animation_finished
+	
+	state_chart.send_event("start_throw")
+
+
+func _on_throw_broken_bottle_throwing_state_entered() -> void:
+	debug_state_label.text = "Throw Broken Bottle | Throwing"
+	
+	state_chart.send_event("attack_start")
+	anim_player.play("bottle_throw")
+	
+	await anim_player.animation_finished
+	
+	state_chart.send_event("end_throw")
+
+
+func throw_projectile() -> void:
+	if has_strength_buff:
+		throw_bottle(beer_barrel_prefab, 1, 1, barrel_damage)
+	else:
+		var n_bottle = randi_range(2, 4)
+		var spread = randf_range(5, 10)
+		throw_bottle(empty_bottle_prefab, n_bottle, spread, bottle_damage)
+
+
+func _on_throw_broken_bottle_recover_state_entered() -> void:
+	debug_state_label.text = "Throw Broken Bottle | Recovering"
+	state_chart.send_event("attack_end")
+	sprite.texture = base_sprite
+	
+	await get_tree().create_timer(attack_recovery_time ).timeout
+	
+	select_attack()
+	state_chart.send_event("end_recovery")
