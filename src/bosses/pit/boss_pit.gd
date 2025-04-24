@@ -66,7 +66,6 @@ var slam_target_pos := Vector3.ZERO
 @export var sfx_lunge: Array[AudioStream]
 
 @onready var phase_debug_label: Label3D = $DebugPhaseLabel
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 @export var shield_radius: float = 4.0

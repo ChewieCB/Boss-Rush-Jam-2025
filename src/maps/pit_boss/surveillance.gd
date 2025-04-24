@@ -25,7 +25,6 @@ var phase_stance: Stance = Stance.DEFENSIVE:
 @onready var head: Node3D = $Body/Head
 @onready var eye_mesh: MeshInstance3D = $Body/MeshInstance3D
 @onready var aim_ray: RayCast3D = $Body/Head/RayCast3D
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var phase_debug_label: Label3D = $DebugPhaseLabel
 
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer

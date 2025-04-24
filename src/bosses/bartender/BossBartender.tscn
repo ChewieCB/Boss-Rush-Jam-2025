@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=54 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -60,6 +60,76 @@ size = Vector3(1, 1, 2)
 radius = 2.0
 height = 6.0
 
+[sub_resource type="Animation" id="Animation_6h31p"]
+resource_name = "shotgun_telegraph"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("23_33lgi"), ExtResource("5_av4in"), ExtResource("4_8vk3k")]
+}
+
+[sub_resource type="Animation" id="Animation_go0l5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("23_33lgi")]
+}
+
+[sub_resource type="Animation" id="Animation_oo8q7"]
+resource_name = "shotgun_fire"
+length = 0.15
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("4_8vk3k"), ExtResource("23_33lgi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"fire_shotgun"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k4utu"]
+_data = {
+"RESET": SubResource("Animation_go0l5"),
+"shotgun_fire": SubResource("Animation_oo8q7"),
+"shotgun_telegraph": SubResource("Animation_6h31p")
+}
+
 [node name="BossBartender" node_paths=PackedStringArray("behind_bar_move_points") instance=ExtResource("1_bp57a")]
 collision_mask = 11
 script = ExtResource("2_ns3xp")
@@ -109,7 +179,6 @@ base_sprite = ExtResource("23_33lgi")
 hurt_sprite = ExtResource("8_jooce")
 death_sprites = Array[CompressedTexture2D]([ExtResource("9_fm23x"), ExtResource("10_d78ef")])
 hurt_frame_window = 0.4
-telegraph_time = 1.0
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00917214, 2.505, 0)
@@ -185,48 +254,176 @@ guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="ThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="0"]
 script = ExtResource("6_kkb22")
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="0"]
+[node name="toThrowing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle/Targeting" index="0"]
 script = ExtResource("4_dheml")
-to = NodePath("../../Idle")
-event = &"return_idle"
+to = NodePath("..")
+event = &"start_throw"
+delay_in_seconds = "0.0"
+
+[node name="Throwing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle/Throwing" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Recover")
+event = &"end_throw"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle/Recover" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="ThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Recover")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction" index="0"]
 script = ExtResource("6_kkb22")
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction" index="0"]
+[node name="toThrowing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction/Targeting" index="0"]
 script = ExtResource("4_dheml")
-to = NodePath("../../Idle")
-event = &"return_idle"
+to = NodePath("..")
+event = &"start_throw"
 delay_in_seconds = "0.0"
 
-[node name="BrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+[node name="Throwing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction" index="1"]
 script = ExtResource("6_kkb22")
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="0"]
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction/Throwing" index="0"]
 script = ExtResource("4_dheml")
-to = NodePath("../../Idle")
-event = &"return_idle"
+to = NodePath("../../Recover")
+event = &"end_throw"
 delay_in_seconds = "0.0"
 
-[node name="ShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction" index="2"]
 script = ExtResource("6_kkb22")
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="0"]
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction/Recover" index="0"]
 script = ExtResource("4_dheml")
-to = NodePath("../../Idle")
-event = &"return_idle"
+to = NodePath("../../Targeting")
+event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="ThrowHealBottle" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+[node name="ThrowHealBottle" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Recover")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle" index="0"]
 script = ExtResource("6_kkb22")
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle" index="0"]
+[node name="toThrowing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle/Targeting" index="0"]
 script = ExtResource("4_dheml")
-to = NodePath("../../Idle")
-event = &"return_idle"
+to = NodePath("..")
+event = &"start_throw"
+delay_in_seconds = "0.0"
+
+[node name="Throwing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle/Throwing" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Recover")
+event = &"end_throw"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle/Recover" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="BrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toBrewing" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink/Targeting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Brewing")
+event = &"start_brew"
+delay_in_seconds = "0.0"
+
+[node name="Brewing" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toDrinking" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink/Brewing" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Drinking")
+event = &"finish_brew"
+delay_in_seconds = "0.0"
+
+[node name="Drinking" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink/Drinking" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Recover")
+event = &"finish_drink"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="3"]
+script = ExtResource("6_kkb22")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink/Recover" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="ShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toShooting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast/Targeting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Shooting")
+event = &"start_shooting"
+delay_in_seconds = "0.0"
+
+[node name="ShotTimer" type="Timer" parent="StateChart/Root/Phase/Phase1/ShotgunBlast/Targeting" index="1"]
+one_shot = true
+
+[node name="Shooting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast/Shooting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Recover")
+event = &"end_shooting"
+delay_in_seconds = "0.0"
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast/Shooting" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"next_shot"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast/Recover" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
@@ -469,14 +666,18 @@ shape = SubResource("CapsuleShape3D_yedjn")
 [node name="Marker3D" parent="AimAssistBubble" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.48801, 0)
 
+[node name="AnimationPlayer" parent="." index="23"]
+libraries = {
+"": SubResource("AnimationLibrary_k4utu")
+}
+
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Idle" to="." method="_on_phase_1_idle_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" to="." method="_on_throw_broken_bottle_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowConcoction" to="." method="_on_throw_concoction_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BrewDrink" to="." method="_on_brew_drink_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunBlast" to="." method="_on_shotgun_blast_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1/ShotgunBlast" to="." method="_on_shotgun_blast_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowHealBottle" to="." method="_on_throw_heal_bottle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunBlast/Targeting" to="." method="_on_shotgun_targeting_state_entered"]
+[connection signal="timeout" from="StateChart/Root/Phase/Phase1/ShotgunBlast/Targeting/ShotTimer" to="." method="_on_shotgun_timer_timeout"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunBlast/Shooting" to="." method="_on_shotgun_shooting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunBlast/Recover" to="." method="_on_shotgun_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/Idle" to="." method="_on_phase_2_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ThrowBrokenBottle" to="." method="_on_throw_broken_bottle_state_entered"]

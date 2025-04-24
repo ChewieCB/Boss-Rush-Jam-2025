@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=71 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -62,6 +62,7 @@
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="55_5buyr"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="56_ft1nf"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="57_f27rp"]
+[ext_resource type="AnimationLibrary" uid="uid://bt7sjducups6v" path="res://src/bosses/slots/assets/slot_boss_anims.res" id="64_5u1vo"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
@@ -89,93 +90,6 @@ albedo_color = Color(1, 0, 0, 1)
 material = SubResource("StandardMaterial3D_7kkon")
 radius = 0.35
 height = 0.7
-
-[sub_resource type="Animation" id="Animation_uf2b5"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 2.5, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 2.2, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("MarkerPivot:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 3.6, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_1e422"]
-resource_name = "float"
-length = 1.2
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
-"transitions": PackedFloat32Array(0.63728, 1.27456, 0.707107, 1.31951, 1),
-"update": 0,
-"values": [Vector3(0, 3.5, 0), Vector3(0, 3.7, 0), Vector3(0, 3.5, 0), Vector3(0, 3.3, 0), Vector3(0, 3.5, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
-"transitions": PackedFloat32Array(0.63728, 1.27456, 0.707107, 1.31951, 1),
-"update": 0,
-"values": [Vector3(0, 3.5, 0), Vector3(0, 3.7, 0), Vector3(0, 3.5, 0), Vector3(0, 3.3, 0), Vector3(0, 3.5, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("MarkerPivot:position")
-tracks/2/interp = 2
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
-"transitions": PackedFloat32Array(0.63728, 1.27456, 0.707107, 1.31951, 1),
-"update": 0,
-"values": [Vector3(0, 3.6, 0), Vector3(0, 3.8, 0), Vector3(0, 3.6, 0), Vector3(0, 3.4, 0), Vector3(0, 3.6, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_33bk0"]
-_data = {
-"RESET": SubResource("Animation_uf2b5"),
-"float": SubResource("Animation_1e422")
-}
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o53xj"]
 radius = 4.0
@@ -1043,79 +957,73 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0)
 visible = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="14"]
-libraries = {
-"": SubResource("AnimationLibrary_33bk0")
-}
-autoplay = "float"
-
-[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="15"]
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="14"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="16"]
+[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="15"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="17"]
+[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="16"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="18"]
+[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="17"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="19"]
+[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="18"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="20"]
+[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="19"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="21"]
+[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="20"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="22"]
+[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="21"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="." index="23"]
+[node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="." index="22"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="." index="24"]
+[node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="." index="23"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="." index="25"]
+[node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="." index="24"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer12" type="AudioStreamPlayer3D" parent="." index="26"]
+[node name="SFXPlayer12" type="AudioStreamPlayer3D" parent="." index="25"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
@@ -1123,6 +1031,11 @@ bus = &"SFX"
 
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
 shape = SubResource("CapsuleShape3D_o53xj")
+
+[node name="AnimationPlayer" parent="." index="30"]
+libraries = {
+"slot_boss_anims": ExtResource("64_5u1vo")
+}
 
 [connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]

@@ -21,6 +21,9 @@ signal fire_started
 @export_subgroup("Shotgun")
 @export var shotgun_proj_prefab: PackedScene
 @export var sfx_shotgun: Array[AudioStream]
+@onready var shotgun_timer: Timer = $StateChart/Root/Phase/Phase1/ShotgunBlast/Targeting/ShotTimer
+var shots_to_fire: int = 1
+var shots_fired: int = 0
 @export_subgroup("Bottles")
 @export var bottle_damage = 10
 @export var empty_bottle_prefab: PackedScene
@@ -78,17 +81,21 @@ var fire_sfx: AudioStreamPlayer = null
 const DIFFICULTY_LV = 1
 const MIN_ACTION_BEFORE_HEAL = 8
 
+
 func _ready() -> void:
 	super()
 	navigation_component.current_speed = base_movespeed * current_speed_modifier
+
 
 func _process(delta: float) -> void:
 	if target:
 		_turn_towards_target(TURN_SPEED_SLOW, delta)
 
+
 func activate() -> void:
 	super()
 	change_phase(1)
+
 
 func change_phase(new_phase: int) -> void:
 	# Check if an attack is in progress
@@ -118,6 +125,7 @@ func select_attack() -> void:
 			select_attack_phase_1() # Phase 3 is same as phase 1
 		_:
 			push_error("Invalid phase %s" % current_phase)
+
 
 func select_attack_phase_1() -> void:
 	var possible_attacks = [
@@ -190,6 +198,7 @@ func select_attack_phase_2() -> void:
 
 	state_chart.send_event(chosen_attack)
 
+
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
 	
@@ -216,31 +225,25 @@ func _on_attack_telegraph_state_entered() -> void:
 
 # Shotgun blastaa
 
-func shotgun_blast():
-	debug_state_label.text = "Shotgun blast"
+
+func fire_shotgun():
 	var proj_amount = 8
 	var proj_damage = 3
 	var proj_speed = 40
-	var n_shot_repeat = current_phase
 	var spread_angle = 6
 	var delay_between_burst = 0.5
 	# TODO - this needs to be cancellable for when the boss dies mid attack
 	# Make this function shoot once and then we can call it 3 times and allow 
 	# an interrupt for death after each shot.
-	for i in range(n_shot_repeat):
-		sfx_player.stream = sfx_shotgun.pick_random()
-		sfx_player.play()
-		sprite.texture = base_sprite
-		for j in range(proj_amount):
-			var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
-			var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
-			var bullet_inst = shotgun_proj_prefab.instantiate()
-			get_parent().add_child(bullet_inst)
-			bullet_inst.init(proj_spawn_marker.global_position, spreaded_direction, proj_damage, proj_speed)
-		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
-			await get_tree().create_timer(delay_between_burst/2).timeout
-			sprite.texture = shotgun_sprite
-			await get_tree().create_timer(delay_between_burst/2).timeout
+	sfx_player.stream = sfx_shotgun.pick_random()
+	sfx_player.play()
+	for j in range(proj_amount):
+		var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
+		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
+		var bullet_inst = shotgun_proj_prefab.instantiate()
+		get_parent().add_child(bullet_inst)
+		bullet_inst.init(proj_spawn_marker.global_position, spreaded_direction, proj_damage, proj_speed)
+
 
 func _on_shotgun_blast_state_entered() -> void:
 	state_chart.send_event("attack_telegraph")
@@ -255,7 +258,7 @@ func _on_shotgun_blast_state_entered() -> void:
 	var remaining_time: float = (telegraph_time / 2) - (reload_time * current_phase)
 	await get_tree().create_timer(remaining_time).timeout
 	state_chart.send_event("attack_start")
-	shotgun_blast()
+	#shotgun_blast()
 	state_chart.send_event("attack_end_now")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("return_idle")
@@ -263,14 +266,18 @@ func _on_shotgun_blast_state_entered() -> void:
 
 func _on_shotgun_blast_state_exited() -> void:
 	sprite.texture = base_sprite
+	shotgun_timer.stop()
+
 
 #### Phase 1
 
 func _on_phase_1_state_entered() -> void:
 	SoundManager.play_sound(sfx_tape, "SFX")
+	shots_to_fire = 1
 	#GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
 	await get_tree().create_timer(1.5).timeout
 	SoundManager.stop_sound(sfx_tape)
+
 
 func _on_phase_1_idle_state_entered() -> void:
 	debug_state_label.text = "Idle"
@@ -291,6 +298,7 @@ func _on_phase_1_idle_state_entered() -> void:
 
 func _on_phase_2_state_entered() -> void:
 	SoundManager.play_sound(sfx_tape, "SFX")
+	shots_to_fire = 2
 	#GameManager.show_boss_special_dialog("Playtime is OVER!", 1)
 	await get_tree().create_timer(1).timeout
 	SoundManager.stop_sound(sfx_tape)
@@ -313,6 +321,7 @@ func _on_phase_2_idle_state_entered() -> void:
 #### Phase 3
 func _on_phase_3_state_entered() -> void:
 	SoundManager.play_sound(sfx_tape, "SFX")
+	shots_to_fire = 3
 	#GameManager.show_boss_special_dialog("You better hot foot it out of here while you still can!", 1.5)
 	await get_tree().create_timer(1.5).timeout
 	SoundManager.stop_sound(sfx_tape)
@@ -528,3 +537,42 @@ func jump_to(target_position: Vector3, jump_height: float = 5, jump_time: float 
 	tween2.tween_property(self, "position:y", target_position.y, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 	await tween.finished
+
+
+func _on_shotgun_targeting_state_entered() -> void:
+	debug_state_label.text = "Shotgun Blast | Targeting"
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_telegraph")
+	anim_player.play("shotgun_telegraph")
+	
+	await anim_player.animation_finished
+	
+	shotgun_timer.start(telegraph_time)
+
+
+func _on_shotgun_shooting_state_entered() -> void:
+	state_chart.send_event("attack_start")
+	anim_player.play("shotgun_fire")
+	
+	await anim_player.animation_finished
+	
+	if shots_to_fire > 1:
+		if shots_fired < shots_to_fire - 1:
+			shots_fired += 1
+			state_chart.send_event("next_shot")
+			return
+	
+	state_chart.send_event("end_shooting")
+
+
+func _on_shotgun_recover_state_entered() -> void:
+	shots_fired = 0
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("end_recovery")
+
+
+func _on_shotgun_timer_timeout() -> void:
+	state_chart.send_event("start_shooting")

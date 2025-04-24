@@ -115,6 +115,7 @@ var spawned_area_objects = []
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var hurtbox: Area3D = $Hurtbox
 @onready var health_ui = $UI/HealthUI/BossHealthContainer
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 @export var MAX_SPEED: float = 5.0
 @export var FRICTION: float = 1.0
