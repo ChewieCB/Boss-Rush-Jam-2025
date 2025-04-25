@@ -27,6 +27,15 @@ var shots_to_fire: int = 1
 var shots_fired: int = 0
 @export_subgroup("Bottles")
 @export var bottle_damage = 10
+enum BottleAttack {
+	EMPTY,
+	FIRE,
+	POISON,
+	SLOW,
+	HEAL
+}
+var current_bottle_type: BottleAttack
+var last_bottle_attack: BottleAttack
 @export var empty_bottle_prefab: PackedScene
 @export var molotov_prefab: PackedScene
 @export var poison_bottle_prefab: PackedScene
@@ -131,14 +140,9 @@ func select_attack() -> void:
 func select_attack_phase_1() -> void:
 	var possible_attacks = [
 		"start_shotgun_blast",
-		#"start_shotgun_blast",
 		"start_throw_broken_bottle",
-		#"start_throw_broken_bottle",
-		#"start_brew_drink",
 		"start_brew_drink",
-		#"start_throw_concoction",
-		#"start_throw_concoction",
-		#"start_throw_concoction",
+		"start_throw_drink",
 	]
 
 	#if action_used_before_heal >= MIN_ACTION_BEFORE_HEAL:
@@ -398,7 +402,20 @@ func _on_throw_heal_bottle_state_entered() -> void:
 	sprite.texture = base_sprite
 
 
-func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10):
+func throw_bottle(n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> void:
+	var prefab: PackedScene
+	match current_bottle_type:
+		BottleAttack.EMPTY:
+			prefab = empty_bottle_prefab
+		BottleAttack.FIRE:
+			prefab = molotov_prefab
+		BottleAttack.POISON:
+			prefab = poison_bottle_prefab
+		BottleAttack.SLOW:
+			prefab = slow_bottle_prefab
+		_:
+			return
+	
 	var throw_force = proj_spawn_marker.global_position.distance_to(target.global_position)
 	# Magic number that make bartender throw better
 	if throw_force >= 30:
@@ -409,6 +426,7 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, pr
 	else:
 		aim_direction += Vector3(0, 0.2, 0) # Make it upward a bit
 	aim_direction = aim_direction.normalized()
+	
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
 	for i in range(n_bottle_repeat):
 		var bottle_inst = prefab.instantiate()
@@ -421,6 +439,7 @@ func throw_bottle(prefab: PackedScene, n_bottle_repeat = 1, spread_angle = 0, pr
 		else:
 			sfx_player.stream = sfx_bottle_throw.pick_random()
 		sfx_player.play()
+
 
 ## Throw upward to heal
 func throw_heal_bottle():
@@ -571,6 +590,7 @@ func _on_shotgun_shooting_state_entered() -> void:
 
 func _on_shotgun_recover_state_entered() -> void:
 	shots_fired = 0
+	anim_player.play("RESET")
 	
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
@@ -588,6 +608,7 @@ func _on_throw_broken_bottle_targeting_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_telegraph")
+	current_bottle_type = BottleAttack.EMPTY
 	anim_player.play("bottle_telegraph")
 	
 	await anim_player.animation_finished
@@ -606,19 +627,19 @@ func _on_throw_broken_bottle_throwing_state_entered() -> void:
 	state_chart.send_event("end_throw")
 
 
-func throw_projectile() -> void:
-	if has_strength_buff:
-		throw_bottle(beer_barrel_prefab, 1, 1, barrel_damage)
-	else:
-		var n_bottle = randi_range(2, 4)
-		var spread = randf_range(5, 10)
-		throw_bottle(empty_bottle_prefab, n_bottle, spread, bottle_damage)
+#func throw_projectile() -> void:
+	#if has_strength_buff:
+		#throw_bottle(beer_barrel_prefab, 1, 1, barrel_damage)
+	#else:
+		#var n_bottle = randi_range(2, 4)
+		#var spread = randf_range(5, 10)
+		#throw_bottle(empty_bottle_prefab, n_bottle, spread, bottle_damage)
 
 
 func _on_throw_broken_bottle_recover_state_entered() -> void:
 	debug_state_label.text = "Throw Broken Bottle | Recovering"
 	state_chart.send_event("attack_end")
-	sprite.texture = base_sprite
+	anim_player.play("RESET")
 	
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
@@ -627,6 +648,7 @@ func _on_throw_broken_bottle_recover_state_entered() -> void:
 
 
 ##
+
 
 func _on_brew_drink_targeting_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Targeting"
@@ -655,7 +677,6 @@ func _on_brew_drink_flourish_state_entered() -> void:
 	state_chart.send_event("attack_telegraph")
 	anim_player.play("drink_flourish")
 	
-	# TODO - loop anim for a period, then break the loop 
 	await anim_player.animation_finished
 	
 	state_chart.send_event("start_drink")
@@ -670,12 +691,91 @@ func _on_brew_drink_drinking_state_entered() -> void:
 	# TODO - loop anim for a period, then break the loop 
 	await anim_player.animation_finished
 	
-	state_chart.send_event("finish_drink")
+	state_chart.send_event("end_drink")
 
 
 func _on_brew_drink_recover_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Recovering"
 	state_chart.send_event("attack_end")
+	anim_player.play("RESET")
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	select_attack()
+	state_chart.send_event("end_recovery")
+
+
+##
+
+
+func _on_throw_drink_targeting_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Targeting"
+	
+	state_chart.send_event("start_targeting")
+	
+	# Decide what drink to throw
+	var keys = BottleAttack.keys()
+	var possible_types := keys.duplicate()
+	if last_bottle_attack:
+		possible_types.erase(last_bottle_attack)
+	var rand_key: String = possible_types.pick_random()
+	var type_idx: int = keys.find(rand_key)
+	current_bottle_type = type_idx
+	
+	await get_tree().create_timer(0.2).timeout
+	
+	state_chart.send_event("telegraph_throw")
+
+
+func _on_throw_drink_flourish_state_entered() -> void:
+	debug_state_label.text = "Throw Drink | Flourish"
+	
+	state_chart.send_event("attack_telegraph")
+	
+	# Get specific anim for type of attack
+	var flourish_anim: String
+	match current_bottle_type:
+		BottleAttack.FIRE:
+			flourish_anim = "drink_flourish_fire"
+		BottleAttack.POISON:
+			flourish_anim = "drink_flourish_poison"
+		BottleAttack.SLOW:
+			flourish_anim = "drink_flourish_tar"
+		_:
+			select_attack()
+	anim_player.play(flourish_anim)
+	
+	await anim_player.animation_finished
+	
+	state_chart.send_event("start_throw")
+
+
+func _on_throw_drink_throwing_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Drinking"
+	
+	state_chart.send_event("start_attack")
+	
+	# Get specific anim for type of attack
+	var throw_anim: String
+	match current_bottle_type:
+		BottleAttack.FIRE:
+			throw_anim = "bottle_throw_fire"
+		BottleAttack.POISON:
+			throw_anim = "bottle_throw_poison"
+		BottleAttack.SLOW:
+			throw_anim = "bottle_throw_tar"
+	anim_player.play(throw_anim)
+	
+	await anim_player.animation_finished
+	
+	state_chart.send_event("end_throw")
+
+
+func _on_throw_drink_recover_state_entered() -> void:
+	debug_state_label.text = "Throw Drink | Recovering"
+	
+	state_chart.send_event("attack_end")
+	last_bottle_attack = current_bottle_type
 	anim_player.play("RESET")
 	
 	await get_tree().create_timer(attack_recovery_time).timeout

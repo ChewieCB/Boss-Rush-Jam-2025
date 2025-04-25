@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=81 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -55,6 +55,10 @@
 [ext_resource type="Texture2D" uid="uid://beo60ur1nlsti" path="res://src/bosses/bartender/assets/Bartender_Brew_arm_only.png" id="52_kdm2q"]
 [ext_resource type="Texture2D" uid="uid://drp3v3k5agf3m" path="res://src/bosses/bartender/assets/Bartender_Brew_hand_shaker.png" id="52_wkjj5"]
 [ext_resource type="Texture2D" uid="uid://34jrw0u3k8p3" path="res://src/bosses/bartender/assets/Bartender_Brew_noarm.png" id="53_cwg46"]
+[ext_resource type="Texture2D" uid="uid://bnss5kdp8bdsp" path="res://src/bosses/bartender/assets/molotov_bottle.png" id="56_6oeg8"]
+[ext_resource type="Texture2D" uid="uid://dvw0txhoe4k3" path="res://src/bosses/bartender/assets/poison_bottle.png" id="57_51wr0"]
+[ext_resource type="Texture2D" uid="uid://brih8hrl87d0d" path="res://src/bosses/bartender/assets/tar_bottle.png" id="58_603cq"]
+[ext_resource type="Texture2D" uid="uid://ddk5o5id7o0v5" path="res://src/bosses/bartender/assets/heal_bottle.png" id="59_4v7r0"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_dpsmo"]
 size = Vector3(1, 1, 2)
@@ -260,7 +264,7 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"throw_projectile"
+"method": &"throw_bottle"
 }]
 }
 tracks/2/type = "value"
@@ -274,6 +278,30 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [ExtResource("48_mdqxm"), null]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/ThrowableSprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.33, 0.33, 0.33)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/ThrowableSprite:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.6, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_oo8q7"]
@@ -556,15 +584,595 @@ tracks/7/keys = {
 "update": 0,
 "values": [Vector3(0, -3.14159, 0), Vector3(0, -3.14159, -0.76969), Vector3(0, -3.14159, -0.849975), Vector3(0, -3.14159, -0.76969), Vector3(0, -3.14159, 0)]
 }
+tracks/8/type = "method"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath(".")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.45),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"brew_drink"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_2ilgn"]
+resource_name = "drink_flourish_fire"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.95),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("46_ulosq"), ExtResource("47_tp2kw")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/ThrowableSprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("56_6oeg8")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/ThrowableSprite:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1.68179, 1),
+"update": 0,
+"values": [Vector3(0.496295, 0.953981, 0), Vector3(0.966796, 4.02941, 0), Vector3(0.966796, 4.02941, 0), Vector3(0.496295, 0.953981, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/ThrowableSprite:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.35, 1),
+"transitions": PackedFloat32Array(0.659754, 1, 0.153893),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(0, -3.14159, 3.38638), Vector3(0, -3.14159, 6.28319)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/ThrowableSprite:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.5, 1),
+"transitions": PackedFloat32Array(0.42, 1, 1.68, 1),
+"update": 0,
+"values": [Vector3(0.5, 0.5, 0.5), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.5, 0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_nvstt"]
+resource_name = "bottle_throw_fire"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("5_rirhf"), ExtResource("23_33lgi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"throw_bottle"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/ThrowableSprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("56_6oeg8"), null]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/ThrowableSprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.5, 0.5, 0.5)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/ThrowableSprite:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.489071, 0.950479, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_4sfhc"]
+resource_name = "bottle_throw_poison"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("5_rirhf"), ExtResource("23_33lgi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"throw_bottle"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/ThrowableSprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("57_51wr0"), null]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/ThrowableSprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.5, 0.5, 0.5)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/ThrowableSprite:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.661986, 0.963842, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_e87bt"]
+resource_name = "drink_flourish_poison"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.95),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("46_ulosq"), ExtResource("47_tp2kw")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/ThrowableSprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("57_51wr0")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/ThrowableSprite:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1.68179, 1),
+"update": 0,
+"values": [Vector3(0.671922, 0.969478, 0), Vector3(0.966796, 4.02941, 0), Vector3(0.966796, 4.02941, 0), Vector3(0.671922, 0.969478, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/ThrowableSprite:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.35, 1),
+"transitions": PackedFloat32Array(0.659754, 1, 0.153893),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(0, -3.14159, 3.38638), Vector3(0, -3.14159, 6.28319)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/ThrowableSprite:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.5, 1),
+"transitions": PackedFloat32Array(0.42, 1, 1.68, 1),
+"update": 0,
+"values": [Vector3(0.5, 0.5, 0.5), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.5, 0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_wg6kt"]
+resource_name = "drink_flourish_tar"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.95),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("46_ulosq"), ExtResource("47_tp2kw")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/ThrowableSprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("58_603cq")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/ThrowableSprite:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1.68179, 1),
+"update": 0,
+"values": [Vector3(0.65084, 0.618097, 0), Vector3(0.966796, 4.02941, 0), Vector3(0.966796, 4.02941, 0), Vector3(0.65084, 0.618097, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/ThrowableSprite:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.35, 1),
+"transitions": PackedFloat32Array(0.659754, 1, 0.153893),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(0, -3.14159, 3.38638), Vector3(0, -3.14159, 6.28319)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/ThrowableSprite:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.5, 1),
+"transitions": PackedFloat32Array(0.42, 1, 1.68, 1),
+"update": 0,
+"values": [Vector3(0.5, 0.5, 0.5), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.5, 0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_5elv6"]
+resource_name = "drink_flourish_heal"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.95),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("46_ulosq"), ExtResource("47_tp2kw")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/ThrowableSprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("59_4v7r0")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/ThrowableSprite:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1.68179, 1),
+"update": 0,
+"values": [Vector3(0.668915, 1.00973, 0), Vector3(0.966796, 4.02941, 0), Vector3(0.966796, 4.02941, 0), Vector3(0.668915, 1.00973, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/ThrowableSprite:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.35, 1),
+"transitions": PackedFloat32Array(0.659754, 1, 0.153893),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(0, -3.14159, 3.38638), Vector3(0, -3.14159, 6.28319)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/ThrowableSprite:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.5, 1),
+"transitions": PackedFloat32Array(0.42, 1, 1.68, 1),
+"update": 0,
+"values": [Vector3(0.5, 0.5, 0.5), Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.5, 0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_xmupu"]
+resource_name = "bottle_throw_tar"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("5_rirhf"), ExtResource("23_33lgi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"throw_bottle"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/ThrowableSprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("58_603cq"), null]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/ThrowableSprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.5, 0.5, 0.5)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/ThrowableSprite:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.661986, 0.651659, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3xb07"]
+resource_name = "bottle_consume_heal"
+length = 1.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("52_dtrpn"), ExtResource("53_cwg46"), ExtResource("23_33lgi")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D/ThrowableSprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("59_4v7r0"), null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/ThrowableSprite:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.225, 0.45, 0.8, 1.1),
+"transitions": PackedFloat32Array(1.56917, 1, 0.267943, 1.41421, 1.23114, 1),
+"update": 0,
+"values": [Vector3(0.880985, 1.39882, 0), Vector3(0.724127, 1.55173, 0), Vector3(0.416955, 1.68799, 0), Vector3(0.403505, 1.72162, 0), Vector3(0.416955, 1.68799, 0), Vector3(0.880985, 1.39882, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/ThrowableSprite:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.225, 0.45, 0.8, 1.1),
+"transitions": PackedFloat32Array(1.56917, 1, 0.267943, 1.41421, 1.23114, 0.482968),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(0, -3.14159, -0.47822), Vector3(0, -3.14159, -0.954695), Vector3(0, -3.14159, -1.35263), Vector3(0, -3.14159, -0.954695), Vector3(0, -3.14159, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/ThrowableSprite:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.5, 0.5, 0.5)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D/ArmSprite:texture")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("52_kdm2q"), null]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite3D/ArmSprite:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.225, 0.45, 0.8, 1.1),
+"transitions": PackedFloat32Array(1.56917, 0.267943, 1.41421, 1.23114, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.793275, 0.0999999, 0), Vector3(0.900876, 0.268127, 0), Vector3(0.793275, 0.0999999, 0), Vector3(0, 0, 0)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Sprite3D/ArmSprite:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.225, 0.45, 0.8, 1.1),
+"transitions": PackedFloat32Array(1.56917, 0.267943, 1.41421, 1.23114, 1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(0, -3.14159, -0.76969), Vector3(0, -3.14159, -0.849975), Vector3(0, -3.14159, -0.76969), Vector3(0, -3.14159, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k4utu"]
 _data = {
 "RESET": SubResource("Animation_go0l5"),
+"bottle_consume_heal": SubResource("Animation_3xb07"),
 "bottle_telegraph": SubResource("Animation_porbi"),
 "bottle_throw": SubResource("Animation_vjbjb"),
+"bottle_throw_fire": SubResource("Animation_nvstt"),
+"bottle_throw_poison": SubResource("Animation_4sfhc"),
+"bottle_throw_tar": SubResource("Animation_xmupu"),
 "drink_brew": SubResource("Animation_drylh"),
 "drink_consume": SubResource("Animation_8nivd"),
 "drink_flourish": SubResource("Animation_ompyx"),
+"drink_flourish_fire": SubResource("Animation_2ilgn"),
+"drink_flourish_heal": SubResource("Animation_5elv6"),
+"drink_flourish_poison": SubResource("Animation_e87bt"),
+"drink_flourish_tar": SubResource("Animation_wg6kt"),
 "shotgun_fire": SubResource("Animation_oo8q7"),
 "shotgun_telegraph": SubResource("Animation_6h31p")
 }
@@ -688,11 +1296,10 @@ event = &"start_throw_broken_bottle"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
+[node name="toThrowDrink" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="1"]
 script = ExtResource("4_dheml")
-to = NodePath("../../ThrowConcoction")
-event = &"start_throw_concoction"
-guard = ExtResource("28_8rmxp")
+to = NodePath("../../ThrowDrink")
+event = &"start_throw_drink"
 delay_in_seconds = "0.0"
 
 [node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="2"]
@@ -740,11 +1347,10 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="3"]
+[node name="toThrowDrink" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="3"]
 script = ExtResource("4_dheml")
-to = NodePath("../../ThrowConcoction")
-event = &"start_throw_concoction"
-guard = ExtResource("28_8rmxp")
+to = NodePath("../../ThrowDrink")
+event = &"start_throw_drink"
 delay_in_seconds = "0.0"
 
 [node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="4"]
@@ -761,69 +1367,7 @@ event = &"start_shotgun_blast"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="ThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
-script = ExtResource("5_2jcim")
-initial_state = NodePath("Recover")
-
-[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction" index="0"]
-script = ExtResource("6_kkb22")
-
-[node name="toThrowing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction/Targeting" index="0"]
-script = ExtResource("4_dheml")
-to = NodePath("..")
-event = &"start_throw"
-delay_in_seconds = "0.0"
-
-[node name="Throwing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction" index="1"]
-script = ExtResource("6_kkb22")
-
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction/Throwing" index="0"]
-script = ExtResource("4_dheml")
-to = NodePath("../../Recover")
-event = &"end_throw"
-delay_in_seconds = "0.0"
-
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction" index="2"]
-script = ExtResource("6_kkb22")
-
-[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowConcoction/Recover" index="0"]
-script = ExtResource("4_dheml")
-to = NodePath("../../Targeting")
-event = &"end_recovery"
-delay_in_seconds = "0.0"
-
-[node name="ThrowHealBottle" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
-script = ExtResource("5_2jcim")
-initial_state = NodePath("Recover")
-
-[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle" index="0"]
-script = ExtResource("6_kkb22")
-
-[node name="toThrowing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle/Targeting" index="0"]
-script = ExtResource("4_dheml")
-to = NodePath("..")
-event = &"start_throw"
-delay_in_seconds = "0.0"
-
-[node name="Throwing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle" index="1"]
-script = ExtResource("6_kkb22")
-
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle/Throwing" index="0"]
-script = ExtResource("4_dheml")
-to = NodePath("../../Recover")
-event = &"end_throw"
-delay_in_seconds = "0.0"
-
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle" index="2"]
-script = ExtResource("6_kkb22")
-
-[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowHealBottle/Recover" index="0"]
-script = ExtResource("4_dheml")
-to = NodePath("../../Targeting")
-event = &"end_recovery"
-delay_in_seconds = "0.0"
-
-[node name="BrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+[node name="BrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
 script = ExtResource("5_2jcim")
 initial_state = NodePath("Targeting")
 
@@ -852,6 +1396,7 @@ script = ExtResource("6_kkb22")
 script = ExtResource("4_dheml")
 to = NodePath("../../Drinking")
 event = &"start_drink"
+guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="Drinking" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="3"]
@@ -860,13 +1405,13 @@ script = ExtResource("6_kkb22")
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink/Drinking" index="0"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Recover")
-event = &"finish_drink"
+event = &"end_drink"
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="4"]
 script = ExtResource("6_kkb22")
 
-[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink/Recover" index="0"]
+[node name="toDrinking" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink/Recover" index="0"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
@@ -879,11 +1424,10 @@ event = &"start_throw_broken_bottle"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="6"]
+[node name="toThrowDrink" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="6"]
 script = ExtResource("4_dheml")
-to = NodePath("../../ThrowConcoction")
-event = &"start_throw_concoction"
-guard = ExtResource("28_8rmxp")
+to = NodePath("../../ThrowDrink")
+event = &"start_throw_drink"
 delay_in_seconds = "0.0"
 
 [node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1/BrewDrink" index="7"]
@@ -893,7 +1437,68 @@ event = &"start_shotgun_blast"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="ShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+[node name="ThrowDrink" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toFlourish" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink/Targeting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Flourish")
+event = &"telegraph_throw"
+delay_in_seconds = "0.0"
+
+[node name="Flourish" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toThrowing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink/Flourish" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Throwing")
+event = &"start_throw"
+delay_in_seconds = "0.0"
+
+[node name="Throwing" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink/Throwing" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Recover")
+event = &"end_throw"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="3"]
+script = ExtResource("6_kkb22")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink/Recover" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="4"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ThrowBrokenBottle")
+event = &"start_throw_broken_bottle"
+guard = ExtResource("28_8rmxp")
+delay_in_seconds = "0.0"
+
+[node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="5"]
+script = ExtResource("4_dheml")
+to = NodePath("../../BrewDrink")
+event = &"start_brew_drink"
+guard = ExtResource("28_8rmxp")
+delay_in_seconds = "0.0"
+
+[node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="6"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ShotgunBlast")
+event = &"start_shotgun_blast"
+guard = ExtResource("28_8rmxp")
+delay_in_seconds = "0.0"
+
+[node name="ShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
 script = ExtResource("5_2jcim")
 initial_state = NodePath("Targeting")
 
@@ -940,11 +1545,10 @@ event = &"start_throw_broken_bottle"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toThrowConcoction" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="4"]
+[node name="toThrowDrink" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="4"]
 script = ExtResource("4_dheml")
-to = NodePath("../../ThrowConcoction")
-event = &"start_throw_concoction"
-guard = ExtResource("28_8rmxp")
+to = NodePath("../../ThrowDrink")
+event = &"start_throw_drink"
 delay_in_seconds = "0.0"
 
 [node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="5"]
@@ -954,13 +1558,13 @@ event = &"start_brew_drink"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="7"]
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Phase2")
 event = &"start_phase_2"
@@ -997,8 +1601,7 @@ target_desired_distance = 1.0
 radius = 1.0
 
 [node name="DebugStateLabel" parent="." index="9"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.66476, 0)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.25628, 0)
 
 [node name="DebugDistanceLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.06476, 0)
@@ -1049,6 +1652,10 @@ libraries = {
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BrewDrink/Flourish" to="." method="_on_brew_drink_flourish_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BrewDrink/Drinking" to="." method="_on_brew_drink_drinking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BrewDrink/Recover" to="." method="_on_brew_drink_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowDrink/Targeting" to="." method="_on_throw_drink_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowDrink/Flourish" to="." method="_on_throw_drink_flourish_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowDrink/Throwing" to="." method="_on_throw_drink_throwing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ThrowDrink/Recover" to="." method="_on_throw_drink_recover_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1/ShotgunBlast" to="." method="_on_shotgun_blast_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunBlast/Targeting" to="." method="_on_shotgun_targeting_state_entered"]
 [connection signal="timeout" from="StateChart/Root/Phase/Phase1/ShotgunBlast/Targeting/ShotTimer" to="." method="_on_shotgun_timer_timeout"]
