@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhrdqiil17twh"
-path.s3tc="res://.godot/imported/Bartender_Brew_shaker.png-4f7349cfa0fd380fd7601ba3827f0bd0.s3tc.ctex"
+uid="uid://drp3v3k5agf3m"
+path.s3tc="res://.godot/imported/Bartender_Brew_hand_shaker.png-cca479083e9fe8bf6c676008a615201c.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/bosses/bartender/assets/Bartender_Brew_shaker.png"
-dest_files=["res://.godot/imported/Bartender_Brew_shaker.png-4f7349cfa0fd380fd7601ba3827f0bd0.s3tc.ctex"]
+source_file="res://src/bosses/bartender/assets/Bartender_Brew_hand_shaker.png"
+dest_files=["res://.godot/imported/Bartender_Brew_hand_shaker.png-cca479083e9fe8bf6c676008a615201c.s3tc.ctex"]
 
 [params]
 

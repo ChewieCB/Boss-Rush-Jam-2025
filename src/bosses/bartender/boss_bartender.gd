@@ -131,9 +131,11 @@ func select_attack() -> void:
 func select_attack_phase_1() -> void:
 	var possible_attacks = [
 		"start_shotgun_blast",
-		"start_shotgun_blast",
+		#"start_shotgun_blast",
 		"start_throw_broken_bottle",
-		"start_throw_broken_bottle",
+		#"start_throw_broken_bottle",
+		#"start_brew_drink",
+		"start_brew_drink",
 		#"start_throw_concoction",
 		#"start_throw_concoction",
 		#"start_throw_concoction",
@@ -369,19 +371,19 @@ func _on_throw_concoction_state_entered() -> void:
 	sprite.texture = base_sprite
 
 
-func _on_brew_drink_state_entered() -> void:
-	sprite.texture = brew_sprite
-	debug_state_label.text = "Brew drink"
-	sfx_player.stream = sfx_brew.pick_random()
-	sfx_player.play()
-	state_chart.send_event("attack_start")
-	await get_tree().create_timer(2 * current_delay_modifier).timeout
-	# TODO: Change sprite "Brew"
-	brew_drink()
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	state_chart.send_event("attack_end_now")
-	state_chart.send_event("return_idle")
-	sprite.texture = base_sprite
+#func _on_brew_drink_state_entered() -> void:
+	#sprite.texture = brew_sprite
+	#debug_state_label.text = "Brew drink"
+	##sfx_player.stream = sfx_brew.pick_random()
+	#sfx_player.play()
+	#state_chart.send_event("attack_start")
+	#await get_tree().create_timer(2 * current_delay_modifier).timeout
+	## TODO: Change sprite "Brew"
+	#brew_drink()
+	#await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	#state_chart.send_event("attack_end_now")
+	#state_chart.send_event("return_idle")
+	#sprite.texture = base_sprite
 
 
 func _on_throw_heal_bottle_state_entered() -> void:
@@ -618,7 +620,65 @@ func _on_throw_broken_bottle_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	sprite.texture = base_sprite
 	
-	await get_tree().create_timer(attack_recovery_time ).timeout
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	select_attack()
+	state_chart.send_event("end_recovery")
+
+
+##
+
+func _on_brew_drink_targeting_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Targeting"
+	
+	state_chart.send_event("start_targeting")
+	await get_tree().create_timer(0.2).timeout
+	
+	state_chart.send_event("start_brew")
+
+
+func _on_brew_drink_brewing_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Brewing"
+	
+	state_chart.send_event("attack_buildup")
+	anim_player.play("drink_brew")
+	
+	# TODO - loop anim for a period, then break the loop 
+	await anim_player.animation_finished
+	
+	state_chart.send_event("finish_brew")
+
+
+func _on_brew_drink_flourish_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Flourish"
+	
+	state_chart.send_event("attack_telegraph")
+	anim_player.play("drink_flourish")
+	
+	# TODO - loop anim for a period, then break the loop 
+	await anim_player.animation_finished
+	
+	state_chart.send_event("start_drink")
+
+
+func _on_brew_drink_drinking_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Drinking"
+	
+	state_chart.send_event("start_attack")
+	anim_player.play("drink_consume")
+	
+	# TODO - loop anim for a period, then break the loop 
+	await anim_player.animation_finished
+	
+	state_chart.send_event("finish_drink")
+
+
+func _on_brew_drink_recover_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Recovering"
+	state_chart.send_event("attack_end")
+	anim_player.play("RESET")
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
