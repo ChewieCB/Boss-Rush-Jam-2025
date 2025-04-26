@@ -138,7 +138,7 @@ func get_image_for_keyboard_input(action: String):
 	var kbm_icon_path = "res://assets/sprite/input/keyboard_and_mouse/{0}.png".format([kbm_input_label])
 
 	var icon_texture = null
-	if FileAccess.file_exists(kbm_icon_path):
+	if ResourceLoader.exists(kbm_icon_path):
 		icon_texture = load(kbm_icon_path)
 	else:
 		push_warning("Failed to load texture at: %s" % kbm_icon_path)
@@ -170,7 +170,7 @@ func get_image_for_controller_input(device: String, action: String):
 	var controller_icon_path = icon_pathname.format([controller_input_label])
 	
 	var icon_texture = null
-	if FileAccess.file_exists(controller_icon_path):
+	if ResourceLoader.exists(controller_icon_path):
 		icon_texture = load(controller_icon_path)
 	else:
 		push_warning("Failed to load texture at: %s" % controller_icon_path)
