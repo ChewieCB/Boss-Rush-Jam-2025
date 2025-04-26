@@ -468,6 +468,13 @@ func install_barrel(barrel_prefab: PackedScene) -> void:
 	
 	recheck_installed_barrels()
 	
+	# Re-apply the effects of the currently equipped barrels
+	reset_modifier(true)
+	for barrel in barrel_container.get_children():
+		if barrel == barrel_inst:
+			continue
+		barrel.get_active_effect().on_effect_set()
+	
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	spin_single_barrel(barrel_count - 1)
@@ -481,8 +488,12 @@ func remove_barrel(barrel_idx: int) -> void:
 	barrel.queue_free()
 	barrel_container.remove_child(barrel)
 	barrel_unequipped.emit(null, barrel_idx)
-	
+	reset_modifier(true)
 	recheck_installed_barrels()
+	
+	# Re-apply the effects of the currently equipped barrels
+	for _barrel in barrel_container.get_children():
+		_barrel.get_active_effect().on_effect_set()
 
 
 func recheck_installed_barrels():
