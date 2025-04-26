@@ -2,10 +2,6 @@ extends BossMap
 
 @export var active_bgm: AudioStream
 
-## World Geometry & Navigation
-@onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
-@onready var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
-var nav_region: NavigationRegion3D
 ## Boss Tracking
 @onready var pit_boss: BossPit = find_children("*", "BossPit").front()
 @onready var surveillance_boss: BossSurveillance = find_children("*", "BossSurveillance").front()
@@ -26,7 +22,7 @@ var cover_spawn_points: Array = []
 
 
 func _ready() -> void:
-	super()
+	await super()
 	
 	pit_boss.health_component.health_changed.connect(_on_boss_health_changed)
 	pit_boss.health_component.died.connect(_on_boss_died.bind(pit_boss))
@@ -36,9 +32,6 @@ func _ready() -> void:
 	surveillance_boss.health_component.died.connect(_on_boss_died.bind(surveillance_boss))
 	surveillance_boss.turret_spawns = turret_spawns
 	surveillance_boss.pit_boss = pit_boss
-	
-	await get_tree().physics_frame
-	generate_navigation()
 	
 	for cover in initial_cover:
 		var new_spawn = cover_spawn_scene.instantiate()
@@ -98,23 +91,6 @@ func _on_bosses_defeated(_boss: BossCore) -> void:
 	tween.tween_property(directional_light, "light_energy", 0, 1)
 
 
-func generate_navigation() -> void:
-	nav_region = NavigationRegion3D.new()
-	var nav_mesh := NavigationMesh.new()
-	nav_mesh.agent_radius = 1.2
-	#nav_mesh.agent_height = 1.0
-	nav_region.navigation_mesh = nav_mesh
-	
-	func_godot_parent.add_child(nav_region)
-	func_godot_parent.move_child(nav_region, 0)
-	
-	func_godot_parent.remove_child(worldspawn_mesh)
-	nav_region.add_child(worldspawn_mesh)
-	nav_region.move_child(worldspawn_mesh, 0)
-	
-	_rebake_nav()
-
-
 func spawn_cover() -> void:
 	for object in cover_spawn_points:
 		var cover = object.spawn_cover()
@@ -125,12 +101,6 @@ func spawn_cover() -> void:
 		cover.cover_destroyed.connect(_on_cover_destroyed)
 		cover_objects.append(cover)
 	_rebake_nav()
-
-
-func _rebake_nav() -> void:
-	if nav_region.is_baking():
-		await nav_region.bake_finished
-	nav_region.bake_navigation_mesh()
 
 
 func _on_cover_destroyed(cover: Cover) -> void:
