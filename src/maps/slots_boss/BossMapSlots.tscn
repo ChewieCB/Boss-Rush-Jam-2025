@@ -720,9 +720,12 @@ size = Vector2(5, 25)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ecld6"]
 size = Vector3(5.3, 4.7, 4.9)
 
-[node name="BossMapSlots" type="Node3D" node_paths=PackedStringArray("boss", "directional_light")]
+[node name="BossMapSlots" type="Node3D" node_paths=PackedStringArray("nav_parent", "floor_parent", "floor_mesh", "boss", "directional_light")]
 script = ExtResource("1_wilwm")
 bgm = ExtResource("2_oq541")
+nav_parent = NodePath("FuncGodotMap/entity_17_func_geo")
+floor_parent = NodePath("FuncGodotMap/entity_17_func_geo")
+floor_mesh = NodePath("FuncGodotMap/entity_17_func_geo/entity_17_mesh_instance")
 boss = NodePath("FuncGodotMap/entity_16_BossSlots")
 win_subtext = Array[String](["Jackpot!"])
 lose_tips = Array[String](["Avoid AoE markers"])

@@ -2,9 +2,6 @@ extends BossMap
 
 @export var active_bgm: AudioStream
 
-@onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
-@onready var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
-var nav_region: NavigationRegion3D
 # Flooding/Draining levels
 @export var lower_water_level: float = -0.1
 @export var upper_water_level: float = 1.3
