@@ -3,7 +3,7 @@ class_name BossCore
 
 ## Emit when boss HP drop to 0.
 signal died
-## Emit after collected the barrel, 
+## Emit after collected the barrel,
 ## or same time as `died` signal if already collected.
 signal defeated(boss: BossCore)
 #
@@ -155,7 +155,7 @@ func _physics_process(delta: float) -> void:
 	velocity.y = vel_vertical
 
 	move_and_slide()
-	
+
 	# DEBUG
 	# TODO - add export var for burning status length so we can configure it
 	# per boss/effect
@@ -242,6 +242,11 @@ func drop_barrel() -> void:
 	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
 		push_warning("Barrel [%s] already collected, exiting level." % barrel_to_drop.barrel_name)
 		# If we don't have a barrel to spawn, emit the signal to end the level
+		defeated.emit(self)
+		return
+
+	if barrel_pickup_scene == null:
+		push_warning("No barrel to spawn.")
 		defeated.emit(self)
 		return
 
@@ -449,7 +454,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			# Increase chip spawn rate based on DPS
 			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
 			chip_mult = min(chip_mult, chip_spawn_mult_cap)
-			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult] )
+			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult])
 			for i in chip_mult:
 				if randf() < chip_spawn_chance:
 					continue
