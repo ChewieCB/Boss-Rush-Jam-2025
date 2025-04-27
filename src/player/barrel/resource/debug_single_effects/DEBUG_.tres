@@ -11,3 +11,4 @@ barrel_desc = ""
 barrel_image = ExtResource("1_6rfda")
 barrel_cost = 0
 is_archetype_barrel = false
+is_debug_only = true
