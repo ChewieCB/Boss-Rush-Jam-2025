@@ -45,10 +45,11 @@ func _ready() -> void:
 		boss.chip_dropped.connect(_on_chip_dropped)
 	player.health_component.died.connect(_on_player_death)
 	# Sync the player's location in the elevator from the lobby
-	var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
-	player.global_position = player_start_pos
-	player.rotation = GameManager.cached_player_rotation
-	player.player_camera.rotation = GameManager.cached_camera_rotation
+	if GameManager.cached_player_pos_relative_to_elevator_doors:
+		var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
+		player.global_position = player_start_pos
+		player.rotation = GameManager.cached_player_rotation
+		player.player_camera.rotation = GameManager.cached_camera_rotation
 	
 	player.stat_ui.show_luck_ui()
 	
