@@ -66,7 +66,6 @@ var slam_target_pos := Vector3.ZERO
 @export var sfx_lunge: Array[AudioStream]
 
 @onready var phase_debug_label: Label3D = $DebugPhaseLabel
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 @export var shield_radius: float = 4.0
@@ -315,7 +314,7 @@ func _on_intro_air_slam_recover_state_entered() -> void:
 	
 	state_chart.send_event("stop_moving")
 	slam_target_pos = target.global_position
-	anim_player.play("RESET")
+	anim_player.play("pit_boss_anims/RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	state_chart.send_event("end_recovery")
@@ -355,7 +354,7 @@ func _on_melee_combo_swipe_state_entered() -> void:
 	
 	sfx_player.stream = sfx_melee.pick_random()
 	sfx_player.play()
-	anim_player.play("swipe")
+	anim_player.play("pit_boss_anims/swipe")
 	await anim_player.animation_finished
 	
 	hurtbox_collider.shape.size.z = hurtbox_range_far
@@ -378,7 +377,7 @@ func _on_melee_combo_hook_state_entered() -> void:
 	
 	sfx_player.stream = sfx_melee.pick_random()
 	sfx_player.play()
-	anim_player.play("hook")
+	anim_player.play("pit_boss_anims/hook")
 	await anim_player.animation_finished
 	
 	if current_phase > 1:
@@ -401,7 +400,7 @@ func _on_melee_combo_uppercut_state_entered() -> void:
 	
 	sfx_player.stream = sfx_melee.pick_random()
 	sfx_player.play()
-	anim_player.play("uppercut")
+	anim_player.play("pit_boss_anims/uppercut")
 	await anim_player.animation_finished
 	
 	# Phase 2 - Uppercut chaser movement
@@ -425,7 +424,7 @@ func _on_melee_combo_recover_state_entered() -> void:
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
-	anim_player.play("RESET")
+	anim_player.play("pit_boss_anims/RESET")
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
@@ -455,7 +454,7 @@ func _on_lunge_closer_attack_state_entered() -> void:
 		#print("Waiting for anim player to finish")
 		await anim_player.animation_finished
 	#print("Lunge animation playing")
-	anim_player.play("lunge")
+	anim_player.play("pit_boss_anims/lunge")
 	
 	await charge_ended
 	#print("Charge ended")
@@ -500,7 +499,7 @@ func _on_melee_combo_lunge_state_entered() -> void:
 		#print("Waiting for anim player to finish")
 		await anim_player.animation_finished
 	#print("Lunge animation playing")
-	anim_player.play("lunge")
+	anim_player.play("pit_boss_anims/lunge")
 	
 	await charge_ended
 	#print("Charge ended")
@@ -580,7 +579,7 @@ func _air_slam_damage(body: Node3D) -> void:
 		hurtbox.set_deferred("monitoring", false)
 		target.velocity = Vector3.ZERO
 		self.velocity = Vector3.ZERO
-		anim_player.play("air_slam_attack")
+		anim_player.play("pit_boss_anims/air_slam_attack")
 		hurtbox.body_entered.disconnect(_air_slam_damage)
 
 
@@ -590,7 +589,7 @@ func _on_intro_air_slam_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", false)
 	state_chart.send_event("start_targeting")
 	
-	anim_player.play("air_slam_intro")
+	anim_player.play("pit_boss_anims/air_slam_intro")
 	await anim_player.animation_finished
 	
 	hurtbox.body_entered.connect(_air_slam_damage)
@@ -604,7 +603,7 @@ func _on_air_slam_state_entered() -> void:
 	
 	sfx_player.stream = sfx_jump.pick_random()
 	sfx_player.play()
-	anim_player.play("air_slam")
+	anim_player.play("pit_boss_anims/air_slam")
 	hurtbox.body_entered.connect(_air_slam_damage)
 	hurtbox.set_deferred("monitoring", true)
 	await anim_player.animation_finished
@@ -738,7 +737,7 @@ func _on_air_slam_closer_recover_state_entered() -> void:
 	debug_state_label.text = "Air Slam | Recovery"
 	
 	state_chart.send_event("stop_moving")
-	anim_player.play("RESET")
+	anim_player.play("pit_boss_anims/RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	# Hammer Ground follow up if the player doesn't escape
@@ -770,7 +769,7 @@ func _on_hammer_ground_targeting_state_entered() -> void:
 
 func _on_hammer_ground_hammering_state_entered() -> void:
 	debug_state_label.text = "Hammer Ground | Hammering"
-	anim_player.play("hammer_ground")
+	anim_player.play("pit_boss_anims/hammer_ground")
 	await anim_player.animation_finished
 	state_chart.send_event("end_attack")
 
@@ -779,7 +778,7 @@ func _on_hammer_ground_recover_state_entered() -> void:
 	debug_state_label.text = "Hammer Ground | Recovery"
 	state_chart.send_event("stop_moving")
 	await get_tree().create_timer(attack_recovery_time).timeout
-	anim_player.play("RESET")
+	anim_player.play("pit_boss_anims/RESET")
 	select_attack()
 	state_chart.send_event("end_recovery")
 
@@ -798,7 +797,7 @@ func _on_move_to_center_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", false)
 	state_chart.send_event("start_jumping")
 	
-	anim_player.play("air_slam_intro")
+	anim_player.play("pit_boss_anims/air_slam_intro")
 	await anim_player.animation_finished
 	state_chart.send_event("end_jumping")
 	

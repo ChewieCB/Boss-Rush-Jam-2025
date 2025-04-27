@@ -455,6 +455,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.86467, 0)
 [node name="DPSWindowTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="HurtFrameTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="HurtFrameCooldownTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
 [node name="HurtSFXPlayer" type="AudioStreamPlayer3D" parent="."]
 bus = &"SFX"
 
@@ -485,3 +493,4 @@ bus = &"SFX"
 [connection signal="timeout" from="StateChart/Root/Status/Poisoned/PoisonedTimer" to="." method="_on_poisoned_timer_timeout"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_entered"]
 [connection signal="timeout" from="DPSWindowTimer" to="." method="_on_dps_window_timer_timeout"]
+[connection signal="timeout" from="HurtFrameTimer" to="." method="_on_hurt_frame_timer_timeout"]

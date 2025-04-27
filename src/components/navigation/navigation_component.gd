@@ -20,7 +20,8 @@ signal destination_reached
 var target: Node3D:
 	set(value):
 		target = value
-		set_nav_target_position(target.global_position)
+		if target:
+			set_nav_target_position(target.global_position)
 		#nav_agent.set_target_position(target.global_position)
 var path: PackedVector3Array
 var nav_map_rid: RID

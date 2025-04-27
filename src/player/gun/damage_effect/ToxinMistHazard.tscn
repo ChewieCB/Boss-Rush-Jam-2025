@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://ce1fdy8od0511"]
 
-[ext_resource type="Script" path="res://src/bosses/bartender/hazard_area.gd" id="1_u4h40"]
+[ext_resource type="Script" path="res://src/bosses/bartender/area_effects/hazard_area.gd" id="1_u4h40"]
 [ext_resource type="Texture2D" uid="uid://bus2aoy40njv1" path="res://src/bosses/bartender/assets/puddle.png" id="2_l5jmn"]
 
 [sub_resource type="Gradient" id="Gradient_jw0kd"]

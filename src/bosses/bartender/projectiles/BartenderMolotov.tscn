@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bkbyk7x5yc34u"]
 
-[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_13d0f"]
-[ext_resource type="PackedScene" uid="uid://ovfcjowsr7df" path="res://src/bosses/bartender/FireHazardArea.tscn" id="2_vptrv"]
+[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/projectiles/BartenderBottle.tscn" id="1_13d0f"]
+[ext_resource type="PackedScene" uid="uid://ovfcjowsr7df" path="res://src/bosses/bartender/area_effects/FireHazardArea.tscn" id="2_vptrv"]
 [ext_resource type="Texture2D" uid="uid://bnss5kdp8bdsp" path="res://src/bosses/bartender/assets/molotov_bottle.png" id="3_2hvxt"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k16ha"]

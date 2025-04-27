@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cujkupeiuhqjh"]
 
-[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_e7xao"]
-[ext_resource type="PackedScene" uid="uid://dqw4c2ldowow3" path="res://src/bosses/bartender/PoisonHazardArea.tscn" id="2_62kvn"]
+[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/projectiles/BartenderBottle.tscn" id="1_e7xao"]
+[ext_resource type="PackedScene" uid="uid://dqw4c2ldowow3" path="res://src/bosses/bartender/area_effects/PoisonHazardArea.tscn" id="2_62kvn"]
 [ext_resource type="Texture2D" uid="uid://dvw0txhoe4k3" path="res://src/bosses/bartender/assets/poison_bottle.png" id="3_wi6a6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3tqx"]

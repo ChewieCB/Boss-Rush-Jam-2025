@@ -117,7 +117,6 @@ var charge_locked: bool = false
 #@export var sfx_bomb_bounce: Array[AudioStream]
 #@export var sfx_bomb_explode: Array[AudioStream]
 
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 
