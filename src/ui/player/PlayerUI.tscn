@@ -303,13 +303,16 @@ animate_show_hide = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PlayerHealthBarUI"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 0
 
 [node name="MarginContainer2" type="MarginContainer" parent="PlayerHealthBarUI/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
 visible = false
@@ -328,6 +331,7 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(240, 20)
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
 value = 40.0
 nine_patch_stretch = true
 stretch_margin_left = 20
@@ -347,6 +351,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 value = 60.0
 nine_patch_stretch = true
 stretch_margin_left = 20
