@@ -2365,7 +2365,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.25628, 0)
 
 [node name="DebugDistanceLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.06476, 0)
-visible = false
 
 [node name="ShotgunTriggerArea" type="Area3D" parent="." index="13"]
 collision_layer = 0
@@ -2393,11 +2392,6 @@ shape = SubResource("CapsuleShape3D_yedjn")
 [node name="Marker3D" parent="AimAssistBubble" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.48801, 0)
 
-[node name="AnimationPlayer" parent="." index="21"]
-libraries = {
-"": SubResource("AnimationLibrary_k4utu")
-}
-
 [node name="BrewCooldownTimer" type="Timer" parent="." index="22"]
 one_shot = true
 
@@ -2406,6 +2400,11 @@ one_shot = true
 
 [node name="ShotgunTimer" type="Timer" parent="." index="24"]
 one_shot = true
+
+[node name="AnimationPlayer" parent="." index="25"]
+libraries = {
+"": SubResource("AnimationLibrary_k4utu")
+}
 
 [connection signal="state_entered" from="StateChart/Root/Status/BrewBuffs/NoBuff" to="." method="_on_no_buff_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Status/BrewBuffs/StrengthBuff" to="." method="_on_strength_buff_state_entered"]

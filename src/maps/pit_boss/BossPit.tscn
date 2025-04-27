@@ -1315,11 +1315,11 @@ script = ExtResource("1_ymudn")
 active_bgm = ExtResource("3_eog7o")
 cover_spawn_scene = ExtResource("21_w72c7")
 bgm = ExtResource("2_bh1i0")
-win_subtext = Array[String](["Double Down", "Security Breached"])
-lose_tips = Array[String](["Keep out of range of the big guy's combos", "Use cover to your advantage"])
 nav_parent = NodePath("FuncGodotMap")
 floor_parent = NodePath("FuncGodotMap/entity_0_worldspawn")
 floor_mesh = NodePath("FuncGodotMap/entity_0_worldspawn/entity_0_mesh_instance")
+win_subtext = Array[String](["Double Down", "Security Breached"])
+lose_tips = Array[String](["Keep out of range of the big guy's combos", "Use cover to your advantage"])
 directional_light = NodePath("DirectionalLight3D")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

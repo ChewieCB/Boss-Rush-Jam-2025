@@ -474,9 +474,10 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		if dps_accumulated_in_window > chip_spawn_dps_threshold:
 			# Play a hurt frame when we do enough DPS
 			# TODO - let this interrupt/restart the attack telegraph for some attacks
-			if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
-				sprite.texture = hurt_sprite
-				hurt_frame_timer.start(hurt_frame_window)
+			if hurt_sprite:
+				if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
+					sprite.texture = hurt_sprite
+					hurt_frame_timer.start(hurt_frame_window)
 			# Increase chip spawn rate based on DPS
 			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
 			chip_mult = min(chip_mult, chip_spawn_mult_cap)

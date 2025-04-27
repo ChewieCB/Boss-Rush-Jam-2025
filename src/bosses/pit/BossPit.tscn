@@ -32,7 +32,7 @@
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="23_0bbok"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="24_ia7ug"]
 [ext_resource type="Texture2D" uid="uid://fh4rp8ctjfwe" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="28_1qowr"]
-[ext_resource type="AnimationLibrary" uid="uid://daeapif58hnnw" path="res://src/bosses/pit/assets/pit_boss_anims.res" id="33_vitgm"]
+[ext_resource type="AnimationLibrary" uid="uid://d2wsbe5ulvdyw" path="res://src/bosses/pit/assets/pit_boss_anims.res" id="33_vitgm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
 transparency = 1
@@ -1134,9 +1134,6 @@ text = "DISTANCE"
 [node name="DamageTextMarker" parent="." index="15"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.131287, 4.12246, 0)
 
-[node name="BodyCenter" parent="." index="15"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.119352, 3.48643, 0)
-
 [node name="LungeCooldown" type="Timer" parent="." index="16"]
 one_shot = true
 
@@ -1146,7 +1143,7 @@ one_shot = true
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="18"]
 unit_size = 25.0
 
-[node name="BodyCenter" parent="." index="20"]
+[node name="BodyCenter" parent="." index="19"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.119352, 3.48643, 0)
 
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
@@ -1156,7 +1153,7 @@ shape = SubResource("CapsuleShape3D_mew0r")
 [node name="Marker3D" parent="AimAssistBubble" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.16769, 0)
 
-[node name="AnimationPlayer" parent="." index="23"]
+[node name="AnimationPlayer" parent="." index="24"]
 libraries = {
 "pit_boss_anims": ExtResource("33_vitgm")
 }
