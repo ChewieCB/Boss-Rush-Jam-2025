@@ -8,6 +8,10 @@ signal transition_finished
 @onready var progress_bar: ProgressBar = $UI/ColorRect/VBoxContainer/ProgressBar
 
 
+func _ready() -> void:
+	transition_in(0.0)
+
+
 func update_progress_bar(value: float) -> void:
 	progress_bar.value = value
 
