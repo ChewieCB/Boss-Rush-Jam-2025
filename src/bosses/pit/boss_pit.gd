@@ -74,6 +74,7 @@ var slam_target_pos := Vector3.ZERO
 @onready var shield_mesh_solid: MeshInstance3D = $Shield/ShieldMeshSolid
 @onready var shield_mesh_wispy: MeshInstance3D = $Shield/ShieldMeshWispy
 @onready var shield_collider: CollisionShape3D = $Shield/CollisionShape3D
+@onready var shield_sfx_player: AudioStreamPlayer3D = $Shield/ShieldSFXPlayer
 var shield_tween: Tween
 
 
@@ -98,11 +99,14 @@ func show_shield() -> void:
 	if shield_tween:
 		shield_tween.kill()
 	
+	shield_sfx_player.play()
 	shield_tween = get_tree().create_tween()
 	shield_tween.tween_property(shield_mesh_solid.mesh, "radius", shield_radius, 0.6)
 	shield_tween.parallel().tween_property(shield_mesh_solid.mesh, "height", shield_radius * 2, 0.6)
 	shield_tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", shield_radius, 0.6)
 	shield_tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", shield_radius * 2, 0.6)
+	shield_tween.parallel().tween_property(shield_sfx_player, "volume_db", 0.0, 0.6)
+	shield_tween.parallel().tween_property(shield_sfx_player, "unit_size", 20.0, 0.6)
 	shield_tween.tween_callback(shield_collider.set_disabled.bind(false))
 
 
@@ -115,7 +119,10 @@ func hide_shield() -> void:
 	shield_tween.parallel().tween_property(shield_mesh_solid.mesh, "height", 0, 0.6)
 	shield_tween.parallel().tween_property(shield_mesh_wispy.mesh, "radius", 0, 0.6)
 	shield_tween.parallel().tween_property(shield_mesh_wispy.mesh, "height", 0, 0.6)
+	shield_tween.parallel().tween_property(shield_sfx_player, "volume_db", -80.0, 0.6)
+	shield_tween.parallel().tween_property(shield_sfx_player, "unit_size", 0.1, 0.6)
 	shield_tween.tween_callback(shield_collider.set_disabled.bind(true))
+	shield_tween.tween_callback(shield_sfx_player.stop)
 
 
 func _physics_process(delta: float) -> void:

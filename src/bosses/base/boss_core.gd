@@ -48,6 +48,7 @@ var debug_trajectory_mesh: MeshInstance3D
 
 
 @export_category("SFX")
+@onready var hurt_sfx_player: AudioStreamPlayer3D = $HurtSFXPlayer
 @export var sfx_players: Array[AudioStreamPlayer3D]
 @export var sfx_awaken: AudioStream
 @export var sfx_hit: Array[AudioStream]
@@ -447,7 +448,9 @@ func _on_attack_telegraph_state_exited() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
-		SoundManager.play_sound_with_pitch(sfx_hit.pick_random(), randf_range(0.7, 1.2), "SFX")
+		hurt_sfx_player.stream = sfx_hit.pick_random()
+		hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
+		hurt_sfx_player.play()
 	if new_health < prev_health:
 		dps_accumulated_in_window += abs(prev_health - new_health)
 		if dps_accumulated_in_window > chip_spawn_dps_threshold:
