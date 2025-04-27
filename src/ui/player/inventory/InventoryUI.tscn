@@ -1,26 +1,26 @@
 [gd_scene load_steps=20 format=3 uid="uid://gwlfcdvj2q8w"]
 
-[ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_r38si"]
-[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="1_vlm2x"]
-[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="3_775rd"]
-[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="4_ayxuj"]
-[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="4_hkf46"]
-[ext_resource type="AudioStream" uid="uid://bfikexik2t3y6" path="res://src/ui/common/assets/sfx/OPEN THE SHOP.mp3" id="4_x57d7"]
-[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="5_f3yr3"]
-[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_aax7i"]
-[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="7_dpqtd"]
-[ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="7_k8j1w"]
-[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="8_c62sf"]
-[ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="9_xe36t"]
-[ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="10_q5ec2"]
-[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="11_1voaa"]
-[ext_resource type="PackedScene" uid="uid://0vh3rulnbnev" path="res://src/ui/shop/CostLabel.tscn" id="11_o0vgt"]
-[ext_resource type="Texture2D" uid="uid://nvouyvq10qte" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-026.png" id="13_jfjuu"]
-[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="14_7bito"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="18_u51s1"]
+[ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_ipm0i"]
+[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_ll5g3"]
+[ext_resource type="PackedScene" uid="uid://0vh3rulnbnev" path="res://src/ui/shop/CostLabel.tscn" id="3_xgxd3"]
+[ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="4_2cim8"]
+[ext_resource type="AudioStream" uid="uid://bfikexik2t3y6" path="res://src/ui/common/assets/sfx/OPEN THE SHOP.mp3" id="5_uo88s"]
+[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_r2p6i"]
+[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="7_7ms08"]
+[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="8_26bi3"]
+[ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="9_1namh"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="10_qwxoi"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="11_02p56"]
+[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="12_sx8my"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="13_subkd"]
+[ext_resource type="Texture2D" uid="uid://nvouyvq10qte" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-026.png" id="14_b5p2g"]
+[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="15_3ijuy"]
+[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="16_52kyw"]
+[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="17_us1pk"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="18_wlq32"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kjq12"]
-shader = ExtResource("10_q5ec2")
+shader = ExtResource("10_qwxoi")
 shader_parameter/blur_amount = 2.0
 shader_parameter/mix_amount = 0.0
 shader_parameter/color_over = null
@@ -32,16 +32,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_r38si")
+script = ExtResource("1_ipm0i")
 shop_title = "Yuya's Barrels"
-barrel_item_ui_prefab = ExtResource("3_775rd")
-cost_label_ui_prefab = ExtResource("11_o0vgt")
-shop_item_ui_prefab = ExtResource("7_k8j1w")
-sfx_open = ExtResource("4_x57d7")
-sfx_click = ExtResource("6_aax7i")
-sfx_purchase = ExtResource("7_dpqtd")
-sfx_too_expensive = ExtResource("8_c62sf")
-sfx_barrel_equip = ExtResource("9_xe36t")
+barrel_item_ui_prefab = ExtResource("2_ll5g3")
+cost_label_ui_prefab = ExtResource("3_xgxd3")
+shop_item_ui_prefab = ExtResource("4_2cim8")
+sfx_open = ExtResource("5_uo88s")
+sfx_click = ExtResource("6_r2p6i")
+sfx_purchase = ExtResource("7_7ms08")
+sfx_too_expensive = ExtResource("8_26bi3")
+sfx_barrel_equip = ExtResource("9_1namh")
 
 [node name="BlurShader" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_kjq12")
@@ -51,7 +51,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("11_1voaa")
+texture = ExtResource("11_02p56")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -74,7 +74,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_vlm2x")
+texture = ExtResource("12_sx8my")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -92,7 +92,7 @@ offset_bottom = 96.0
 grow_horizontal = 0
 size_flags_horizontal = 10
 
-[node name="CurrencyUI" parent="Background/MarginContainer" instance=ExtResource("14_7bito")]
+[node name="CurrencyUI" parent="Background/MarginContainer" instance=ExtResource("13_subkd")]
 layout_mode = 2
 size_flags_horizontal = 6
 is_static = true
@@ -146,7 +146,7 @@ offset_top = 56.0
 offset_bottom = -456.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("13_jfjuu")
+texture = ExtResource("14_b5p2g")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -162,13 +162,13 @@ grow_vertical = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="BarrelItemUI" parent="EquipBarrelSection/EquippedBarrelBorder/EquippedBarrelContainer" instance=ExtResource("3_775rd")]
+[node name="BarrelItemUI" parent="EquipBarrelSection/EquippedBarrelBorder/EquippedBarrelContainer" instance=ExtResource("2_ll5g3")]
 layout_mode = 2
 
-[node name="BarrelItemUI2" parent="EquipBarrelSection/EquippedBarrelBorder/EquippedBarrelContainer" instance=ExtResource("3_775rd")]
+[node name="BarrelItemUI2" parent="EquipBarrelSection/EquippedBarrelBorder/EquippedBarrelContainer" instance=ExtResource("2_ll5g3")]
 layout_mode = 2
 
-[node name="BarrelItemUI3" parent="EquipBarrelSection/EquippedBarrelBorder/EquippedBarrelContainer" instance=ExtResource("3_775rd")]
+[node name="BarrelItemUI3" parent="EquipBarrelSection/EquippedBarrelBorder/EquippedBarrelContainer" instance=ExtResource("2_ll5g3")]
 layout_mode = 2
 
 [node name="BarrelDescription" type="ColorRect" parent="EquipBarrelSection"]
@@ -196,8 +196,8 @@ offset_right = -16.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/normal_font = ExtResource("4_hkf46")
-theme_override_fonts/bold_font = ExtResource("5_f3yr3")
+theme_override_fonts/normal_font = ExtResource("15_3ijuy")
+theme_override_fonts/bold_font = ExtResource("16_52kyw")
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 26
 bbcode_enabled = true
@@ -217,7 +217,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_ayxuj")
+texture = ExtResource("17_us1pk")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -293,16 +293,16 @@ theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 5
 
-[node name="BarrelItemUI" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_775rd")]
+[node name="BarrelItemUI" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("2_ll5g3")]
 layout_mode = 2
 
-[node name="BarrelItemUI2" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("3_775rd")]
+[node name="BarrelItemUI2" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("2_ll5g3")]
 layout_mode = 2
 
 [node name="EquippedBarrelBorder" type="NinePatchRect" parent="BarrelOptionsSection/VBoxContainer/InventoryBarrelSection"]
 self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 2
-texture = ExtResource("13_jfjuu")
+texture = ExtResource("14_b5p2g")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -345,19 +345,19 @@ theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 5
 
-[node name="ShopItemContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("7_k8j1w")]
+[node name="ShopItemContainer" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("4_2cim8")]
 layout_mode = 2
 
-[node name="ShopItemContainer2" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("7_k8j1w")]
+[node name="ShopItemContainer2" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("4_2cim8")]
 layout_mode = 2
 
-[node name="ShopItemContainer3" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("7_k8j1w")]
+[node name="ShopItemContainer3" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection/VBoxContainer/ScrollContainer/MarginContainer/GridContainer" instance=ExtResource("4_2cim8")]
 layout_mode = 2
 
 [node name="EquippedBarrelBorder" type="NinePatchRect" parent="BarrelOptionsSection/VBoxContainer/ShopBarrelSelection"]
 self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 2
-texture = ExtResource("13_jfjuu")
+texture = ExtResource("14_b5p2g")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -404,7 +404,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Select"
 
-[node name="DeviceInputPrompt" parent="ControlHelp/HBoxContainer" instance=ExtResource("18_u51s1")]
+[node name="DeviceInputPrompt" parent="ControlHelp/HBoxContainer" instance=ExtResource("18_wlq32")]
 layout_mode = 2
 assigned_action = "ui_select"
 
@@ -417,6 +417,6 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "return"
 
-[node name="DeviceInputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("18_u51s1")]
+[node name="DeviceInputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("18_wlq32")]
 layout_mode = 2
 assigned_action = "interact"
