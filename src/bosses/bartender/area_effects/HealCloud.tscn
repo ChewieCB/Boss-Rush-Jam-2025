@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://dxkjp5oqlkncw"]
 
 [ext_resource type="Texture2D" uid="uid://dwyt08w82u6ne" path="res://assets/sprite/placeholder/health.png" id="1_uroxj"]
-[ext_resource type="Script" path="res://src/bosses/bartender/heal_cloud.gd" id="1_vry84"]
+[ext_resource type="Script" path="res://src/bosses/bartender/area_effects/heal_cloud.gd" id="1_vry84"]
 [ext_resource type="AudioStream" uid="uid://dnf4nkl82xwht" path="res://src/bosses/bartender/assets/sfx/BARTENDER HEALING MOVE WITHOUT BOTTLE BREAK.mp3" id="3_7t8yt"]
 
 [sub_resource type="Gradient" id="Gradient_44xtl"]

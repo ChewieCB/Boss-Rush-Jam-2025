@@ -1,8 +1,8 @@
 [gd_scene load_steps=31 format=3 uid="uid://lmvhnu7j64r7"]
 
-[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/BartenderBottle.tscn" id="1_hdfjv"]
+[ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/projectiles/BartenderBottle.tscn" id="1_hdfjv"]
 [ext_resource type="Texture2D" uid="uid://dy6pwm2pvkfkh" path="res://src/bosses/bartender/assets/beer_barrel.png" id="2_3x5b2"]
-[ext_resource type="Script" path="res://src/bosses/bartender/bartender_beer_barrel.gd" id="2_5ymcq"]
+[ext_resource type="Script" path="res://src/bosses/bartender/projectiles/bartender_beer_barrel.gd" id="2_5ymcq"]
 [ext_resource type="Texture2D" uid="uid://csksvkj83ajtj" path="res://src/bosses/bartender/assets/fire_sprite.png" id="3_lq2tg"]
 [ext_resource type="AudioStream" uid="uid://dyltsf21dn5pk" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL SMASH 1.mp3" id="3_yxaxd"]
 [ext_resource type="AudioStream" uid="uid://mra8pp65j1uf" path="res://src/bosses/bartender/assets/sfx/BARREL/BARTENDER BARREL SMASH 2.mp3" id="4_kjoea"]

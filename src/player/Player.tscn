@@ -52,7 +52,7 @@
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="46_br567"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
-[ext_resource type="PackedScene" uid="uid://crvu72pwcnneq" path="res://src/ui/player/StatUI.tscn" id="46_ob8n4"]
+[ext_resource type="PackedScene" path="res://src/ui/player/StatUI.tscn" id="46_ob8n4"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
 [ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]

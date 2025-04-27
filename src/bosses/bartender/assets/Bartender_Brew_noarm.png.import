@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vbu3c5jf2eya"
-path.s3tc="res://.godot/imported/Bartender_Brew.png-eca84656af62c00ccd7d42601c83e6e8.s3tc.ctex"
+uid="uid://34jrw0u3k8p3"
+path.s3tc="res://.godot/imported/Bartender_Brew_noarm.png-01dced0647c8ffc68ef4e69f4bc518cf.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/bosses/bartender/assets/Bartender_Brew.png"
-dest_files=["res://.godot/imported/Bartender_Brew.png-eca84656af62c00ccd7d42601c83e6e8.s3tc.ctex"]
+source_file="res://src/bosses/bartender/assets/Bartender_Brew_noarm.png"
+dest_files=["res://.godot/imported/Bartender_Brew_noarm.png-01dced0647c8ffc68ef4e69f4bc518cf.s3tc.ctex"]
 
 [params]
 
