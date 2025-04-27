@@ -1404,7 +1404,7 @@ shape = SubResource("CapsuleShape3D_5yo4q")
 visible = false
 
 [node name="HealthComponent" parent="." index="4"]
-max_health = 1000.0
+max_health = 5000.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Bart the Bartender"
