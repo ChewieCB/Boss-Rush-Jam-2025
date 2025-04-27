@@ -94,6 +94,7 @@ func load_game(slot_id):
 	var save_data = load_data_only(slot_id)
 	if save_data.is_empty():
 		GameManager.load_new_save_data()
+		savefile_loaded.emit()
 		return
 
 	GameManager.player_currency = save_data["player_currency"]
