@@ -18,6 +18,19 @@ signal fire_started
 @export var sfx_tape: AudioStream
 
 @export_group("Attacks")
+const BASE_DAMAGE_MODIFIER: float = 1.0
+const BASE_RESISTANCE_MODIFIER: float = 1.0
+const BASE_SPEED_MODIFIER: float = 1.0
+const BASE_DELAY_MODIFIER: float = 1.0
+var damage_modifier: float = BASE_DAMAGE_MODIFIER
+var speed_modifier: float = BASE_SPEED_MODIFIER
+var delay_modifier:float = BASE_DELAY_MODIFIER:
+	set(value):
+		delay_modifier = value
+		# Don't change the speed of the drinking animation
+		if anim_player.is_playing():
+			await anim_player.animation_finished
+		anim_player.speed_scale = 1.0 / (delay_modifier * 1.5)
 @export_subgroup("Shotgun")
 @export var shotgun_proj_prefab: PackedScene
 @export var sfx_shotgun: Array[AudioStream]
@@ -25,14 +38,15 @@ signal fire_started
 @onready var shotgun_spawn_pos: Marker3D = $Sprite3D/ShotgunSpawnPos
 var shots_to_fire: int = 1
 var shots_fired: int = 0
-@export_subgroup("Bottles")
+@export_subgroup("Throw Drink")
 @export var bottle_damage = 10
 enum BottleAttack {
 	EMPTY,
 	FIRE,
 	POISON,
 	SLOW,
-	HEAL
+	HEAL,
+	BARREL
 }
 var current_bottle_type: BottleAttack
 var last_bottle_attack: BottleAttack
@@ -41,29 +55,44 @@ var last_bottle_attack: BottleAttack
 @export var poison_bottle_prefab: PackedScene
 @export var slow_bottle_prefab: PackedScene
 @export var heal_bottle_prefab: PackedScene
+# SFX
 @export var sfx_bottle_throw: Array[AudioStream]
 @export_subgroup("Barrel")
 @export var beer_barrel_prefab: PackedScene
 @export var barrel_damage = 45
+# SFX
 @export var sfx_barrel_throw: Array[AudioStream]
+@export_subgroup("Brewing")
+enum BrewType {
+	DEFENSE,
+	SPEED,
+	STRENGTH
+}
+var current_brew_type: BrewType
+var last_brew_type: BrewType
+@onready var buff_expire_timer: Timer = $BuffExpireTimer
+@onready var brew_cooldown_timer: Timer = $BrewCooldownTimer
+@export var buff_duration: float = 10.0
+@export var buff_cooldown: float = 21.0
+@export var defense_icon: Texture2D
+@export var speed_icon: Texture2D
+@export var strength_icon: Texture2D
+## Received damage will multiply with this value
+# TODO - create a rock/paper/scissors tradeoff for each buff around damage, speed, and resistance
+@export var defense_buff_modifier = 0.5
+@export var speed_buff_modifier = 0.5
+@export var strength_buff_modifier = 1.5
+# SFX
+@export var sfx_brew: Array[AudioStream]
+@export var sfx_strength: AudioStream
+@export var sfx_speed: AudioStream
+@export var sfx_defense: AudioStream
 
 @export_subgroup("Floor Fire")
 @export var floor_fize_hazard_marker: Marker3D
 @export var floor_fire_hazard_prefab: PackedScene
 @export var sfx_fire_started: AudioStream
 @export var sfx_fire_loop: AudioStream
-
-@export_group("Drinks")
-@export var defense_icon: Texture2D
-@export var speed_icon: Texture2D
-@export var strength_icon: Texture2D
-## Received damage will multiply with this value
-@export var defense_buff_resistance = 0.5
-@export var speed_buff_modifier = 0.5
-@export var sfx_brew: Array[AudioStream]
-@export var sfx_strength: AudioStream
-@export var sfx_speed: AudioStream
-@export var sfx_defense: AudioStream
 
 @export_group("Movement")
 @export var base_movespeed = 10
@@ -73,7 +102,6 @@ var last_bottle_attack: BottleAttack
 @export_subgroup("SFX")
 @export var sfx_jump: Array[AudioStream]
 
-@onready var buff_expire_timer: Timer = $BuffExpireTimer
 @onready var proj_spawn_marker = $Sprite3D/ThrowableSprite/ProjectileSpawnPos
 @onready var status_icon: Sprite3D = $StatusIcon
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
@@ -81,8 +109,6 @@ var last_bottle_attack: BottleAttack
 var previous_attack: String
 var player_is_near = false
 var current_buff: String = ""
-var current_speed_modifier = 1
-var current_delay_modifier = 1
 var has_strength_buff = false
 var floor_fire_hazard: HazardArea = null
 var action_used_before_heal = 0
@@ -94,7 +120,7 @@ const MIN_ACTION_BEFORE_HEAL = 8
 
 func _ready() -> void:
 	super()
-	navigation_component.current_speed = base_movespeed * current_speed_modifier
+	navigation_component.current_speed = base_movespeed * speed_modifier
 
 
 func _process(delta: float) -> void:
@@ -184,10 +210,10 @@ func select_attack_phase_2() -> void:
 		#return
 
 	var possible_attacks = [
-		#"start_throw_broken_bottle",
 		"start_shotgun_blast",
-		"start_shotgun_blast",
-		#"start_throw_concoction",
+		"start_throw_broken_bottle",
+		"start_brew_drink",
+		"start_throw_drink",
 	]
 
 	# More likely to throw bottle / throw barrel when has str buff
@@ -232,13 +258,12 @@ func _on_attack_telegraph_state_entered() -> void:
 
 # Shotgun blastaa
 
-
 func fire_shotgun():
 	var proj_amount = 8
-	var proj_damage = 3
+	var proj_damage = 3 * damage_modifier
 	var proj_speed = 40
 	var spread_angle = 6
-	var delay_between_burst = 0.5
+	var delay_between_burst = 0.5 * delay_modifier
 	# TODO - this needs to be cancellable for when the boss dies mid attack
 	# Make this function shoot once and then we can call it 3 times and allow 
 	# an interrupt for death after each shot.
@@ -250,30 +275,6 @@ func fire_shotgun():
 		var bullet_inst = shotgun_proj_prefab.instantiate()
 		get_parent().add_child(bullet_inst)
 		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, proj_speed)
-
-
-func _on_shotgun_blast_state_entered() -> void:
-	state_chart.send_event("attack_telegraph")
-	var reload_time: float = telegraph_time * 2 / (current_phase + 1)
-	for i in range(current_phase):
-		sprite.texture = reload_sprite
-		await get_tree().create_timer(reload_time/2).timeout
-		sprite.texture = shotgun_sprite
-		await get_tree().create_timer(reload_time/2).timeout
-	
-	sprite.texture = shotgun_sprite
-	var remaining_time: float = (telegraph_time / 2) - (reload_time * current_phase)
-	await get_tree().create_timer(remaining_time).timeout
-	state_chart.send_event("attack_start")
-	#shotgun_blast()
-	state_chart.send_event("attack_end_now")
-	await get_tree().create_timer(attack_recovery_time).timeout
-	state_chart.send_event("return_idle")
-
-
-func _on_shotgun_blast_state_exited() -> void:
-	sprite.texture = base_sprite
-	shotgun_timer.stop()
 
 
 #### Phase 1
@@ -291,7 +292,7 @@ func _on_phase_1_idle_state_entered() -> void:
 	await get_tree().create_timer(0.5).timeout
 
 	var move_point = get_behind_bar_move_point()
-	navigation_component.current_speed = base_movespeed * current_speed_modifier
+	navigation_component.current_speed = base_movespeed * speed_modifier
 	if move_point:
 		navigation_component.target = move_point
 		state_chart.send_event("start_moving")
@@ -316,7 +317,7 @@ func _on_phase_2_idle_state_entered() -> void:
 	debug_state_label.text = "Idle"
 	await get_tree().create_timer(0.5).timeout
 
-	navigation_component.current_speed = base_movespeed * current_speed_modifier
+	navigation_component.current_speed = base_movespeed * speed_modifier
 	navigation_component.target = target
 	state_chart.send_event("start_moving")
 	debug_state_label.text = "Walking"
@@ -362,39 +363,11 @@ func _on_phase_3_state_entered() -> void:
 	#sprite.texture = base_sprite
 
 
-func _on_throw_concoction_state_entered() -> void:
-	sprite.texture = throw_sprite
-	debug_state_label.text = "Throw concoction"
-	state_chart.send_event("attack_start")
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	# TODO: Change sprite "Throw"
-	throw_concoction_bottle()
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	state_chart.send_event("attack_end_now")
-	state_chart.send_event("return_idle")
-	sprite.texture = base_sprite
-
-
-#func _on_brew_drink_state_entered() -> void:
-	#sprite.texture = brew_sprite
-	#debug_state_label.text = "Brew drink"
-	##sfx_player.stream = sfx_brew.pick_random()
-	#sfx_player.play()
-	#state_chart.send_event("attack_start")
-	#await get_tree().create_timer(2 * current_delay_modifier).timeout
-	## TODO: Change sprite "Brew"
-	#brew_drink()
-	#await get_tree().create_timer(0.25 * current_delay_modifier).timeout
-	#state_chart.send_event("attack_end_now")
-	#state_chart.send_event("return_idle")
-	#sprite.texture = base_sprite
-
-
 func _on_throw_heal_bottle_state_entered() -> void:
 	sprite.texture = throw_sprite
 	debug_state_label.text = "Throw heal bottle"
 	state_chart.send_event("attack_start")
-	await get_tree().create_timer(0.25 * current_delay_modifier).timeout
+	await get_tree().create_timer(0.25 * delay_modifier).timeout
 	throw_heal_bottle()
 	await get_tree().create_timer(2).timeout
 	state_chart.send_event("attack_end_now")
@@ -402,7 +375,17 @@ func _on_throw_heal_bottle_state_entered() -> void:
 	sprite.texture = base_sprite
 
 
-func throw_bottle(n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> void:
+func throw_projectile(throw_barrel: bool = false) -> void:
+	if throw_barrel:
+		current_bottle_type = BottleAttack.BARREL
+		_throw_bottle(1, 1, barrel_damage)
+	else:
+		var n_bottle = randi_range(2, 4)
+		var spread = randf_range(5, 10)
+		_throw_bottle(n_bottle, spread, bottle_damage)
+
+
+func _throw_bottle(n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> void:
 	var prefab: PackedScene
 	match current_bottle_type:
 		BottleAttack.EMPTY:
@@ -413,27 +396,46 @@ func throw_bottle(n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> vo
 			prefab = poison_bottle_prefab
 		BottleAttack.SLOW:
 			prefab = slow_bottle_prefab
+		BottleAttack.HEAL:
+			pass
+		BottleAttack.BARREL:
+			prefab = beer_barrel_prefab
 		_:
 			return
 	
+	
+	#if has_strength_buff:
+		#throw_bottle(beer_barrel_prefab, 1, 1, barrel_damage)
+	#else:
+		#var n_bottle = randi_range(2, 4)
+		#var spread = randf_range(5, 10)
+		#throw_bottle(empty_bottle_prefab, n_bottle, spread, bottle_damage)
+	
+	
+	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
 	var throw_force = proj_spawn_marker.global_position.distance_to(target.global_position)
 	# Magic number that make bartender throw better
 	if throw_force >= 30:
 		throw_force *= 0.8
-	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
-	if has_strength_buff:
+	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
 		throw_force *= 2
 	else:
-		aim_direction += Vector3(0, 0.2, 0) # Make it upward a bit
+		aim_direction += Vector3(0, 0.2, 0) # Make it arc upwards a bit
 	aim_direction = aim_direction.normalized()
 	
+	proj_damage *= damage_modifier
+	
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
+	
 	for i in range(n_bottle_repeat):
+		var spread_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
 		var bottle_inst = prefab.instantiate()
 		bottle_inst.bartender_owner = self
-		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
+		
 		get_parent().add_child(bottle_inst)
-		bottle_inst.init(modified_spawn_pos, spreaded_direction, proj_damage, throw_force)
+		
+		bottle_inst.init(modified_spawn_pos, spread_direction, proj_damage, throw_force)
+		
 		if bottle_inst is BartenderBarrel:
 			sfx_player.stream = sfx_barrel_throw.pick_random()
 		else:
@@ -466,41 +468,19 @@ func throw_concoction_bottle():
 	var n_bottle = 1
 	if current_phase > 1:
 		n_bottle += 1
-	if has_strength_buff:
+	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
 		n_bottle += 1
 	var spread_angle = (n_bottle - 1) * 20
-	throw_bottle(chosen_prefab, n_bottle, spread_angle)
+	_throw_bottle(chosen_prefab, n_bottle, spread_angle)
+
 
 ## Choose a random drink to brew and buff
 func brew_drink():
-	var possible_drink = [
-		"defense",
-		"speed",
-		"strength",
-	]
-	var chosen_drink = possible_drink.pick_random()
-	# I want boss to stack buffs, but due to time constraint (and possible bugs)
-	# boss can only just have 1 buff ongoing for now
-	reset_buff()
-	sfx_player.stop()
-	current_buff = chosen_drink
-	match chosen_drink:
-		"defense":
-			status_icon.texture = defense_icon
-			health_component.modified_resistance = defense_buff_resistance
-			buff_expire_timer.start()
-			sfx_player.stream = sfx_defense
-		"speed":
-			status_icon.texture = speed_icon
-			current_speed_modifier = 1 + speed_buff_modifier
-			# current_delay_modifier = 1 - speed_buff_modifier
-			navigation_component.current_speed = base_movespeed * current_speed_modifier
-			buff_expire_timer.start()
-			sfx_player.stream = sfx_speed
-		"strength":
-			has_strength_buff = true
-			status_icon.texture = strength_icon
-			buff_expire_timer.start() 
+	var buff_event_str: String = BrewType.keys()[current_brew_type].to_lower()
+	state_chart.send_event("apply_%s_buff" % buff_event_str)
+	
+	buff_expire_timer.start(buff_duration)
+	brew_cooldown_timer.start(buff_cooldown)
 
 ### Others
 
@@ -512,17 +492,6 @@ func _on_shotgun_trigger_area_body_exited(body: Node3D) -> void:
 	if body is Player:
 		player_is_near = false
 
-func reset_buff():
-	current_buff = ""
-	status_icon.texture = null
-	health_component.modified_resistance = 1
-	current_speed_modifier = 1
-	current_delay_modifier = 1
-	has_strength_buff = false
-
-
-func _on_buff_expire_timer_timeout() -> void:
-	reset_buff()
 
 ## Get a random point (exclude the closest point)
 func get_behind_bar_move_point():
@@ -641,7 +610,7 @@ func _on_throw_broken_bottle_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	anim_player.play("RESET")
 	
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time * delay_modifier).timeout
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
@@ -653,8 +622,14 @@ func _on_throw_broken_bottle_recover_state_entered() -> void:
 func _on_brew_drink_targeting_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Targeting"
 	
+	if not brew_cooldown_timer.is_stopped():
+		select_attack()
+		return
+	
 	state_chart.send_event("start_targeting")
-	await get_tree().create_timer(0.2).timeout
+	current_brew_type = get_random_enum_key(BrewType.keys(), last_brew_type)
+	
+	await get_tree().create_timer(0.2 * delay_modifier).timeout
 	
 	state_chart.send_event("start_brew")
 
@@ -699,7 +674,7 @@ func _on_brew_drink_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	anim_player.play("RESET")
 	
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time * delay_modifier).timeout
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
@@ -712,17 +687,15 @@ func _on_throw_drink_targeting_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Targeting"
 	
 	state_chart.send_event("start_targeting")
+	# Only throw the barrel if we have the strength buff
+	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
+		current_bottle_type = BottleAttack.BARREL
+	else:
+		var bottle_types_no_barrel = BottleAttack.keys().duplicate()
+		bottle_types_no_barrel.remove_at(BottleAttack.BARREL)
+		current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack)
 	
-	# Decide what drink to throw
-	var keys = BottleAttack.keys()
-	var possible_types := keys.duplicate()
-	if last_bottle_attack:
-		possible_types.erase(last_bottle_attack)
-	var rand_key: String = possible_types.pick_random()
-	var type_idx: int = keys.find(rand_key)
-	current_bottle_type = type_idx
-	
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.2 * delay_modifier).timeout
 	
 	state_chart.send_event("telegraph_throw")
 
@@ -741,6 +714,8 @@ func _on_throw_drink_flourish_state_entered() -> void:
 			flourish_anim = "drink_flourish_poison"
 		BottleAttack.SLOW:
 			flourish_anim = "drink_flourish_tar"
+		BottleAttack.BARREL:
+			flourish_anim = "drink_flourish_barrel"
 		_:
 			select_attack()
 	anim_player.play(flourish_anim)
@@ -764,6 +739,8 @@ func _on_throw_drink_throwing_state_entered() -> void:
 			throw_anim = "bottle_throw_poison"
 		BottleAttack.SLOW:
 			throw_anim = "bottle_throw_tar"
+		BottleAttack.BARREL:
+			throw_anim = "bottle_throw_barrel"
 	anim_player.play(throw_anim)
 	
 	await anim_player.animation_finished
@@ -778,7 +755,75 @@ func _on_throw_drink_recover_state_entered() -> void:
 	last_bottle_attack = current_bottle_type
 	anim_player.play("RESET")
 	
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time * delay_modifier).timeout
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+# TODO - should probably be a global utility function
+func get_random_enum_key(enum_keys: Array, previous_key: int = -1) -> int:
+	var possible_types := enum_keys.duplicate()
+	if previous_key != -1:
+		possible_types.remove_at(previous_key)
+	var rand_key: String = possible_types.pick_random()
+	var type_idx: int = enum_keys.find(rand_key)
+	
+	return type_idx
+
+
+func _on_no_buff_state_entered() -> void:
+	last_brew_type = current_brew_type
+	status_icon.texture = null
+	health_component.modified_resistance = BASE_RESISTANCE_MODIFIER
+	damage_modifier = BASE_DAMAGE_MODIFIER
+	speed_modifier = BASE_SPEED_MODIFIER
+	#
+	delay_modifier = 1
+
+
+func _on_strength_buff_state_entered() -> void:
+	# STRENGTH: 
+	#  - damage resistance DECREASED
+	#  - damage output INCREASED
+	#  - movement speed UNAFFECTED
+	health_component.modified_resistance = strength_buff_modifier
+	damage_modifier = strength_buff_modifier
+	speed_modifier = BASE_SPEED_MODIFIER
+	delay_modifier = BASE_DELAY_MODIFIER
+	
+	status_icon.texture = strength_icon
+
+
+func _on_defence_buff_state_entered() -> void:
+	# DEFENCE: 
+	#  - damage resistance INCREASED
+	#  - damage output UNAFFECTED
+	#  - movement speed DECREASED
+	health_component.modified_resistance = defense_buff_modifier
+	damage_modifier = BASE_DAMAGE_MODIFIER
+	speed_modifier = 1 - defense_buff_modifier
+	delay_modifier = 1 + speed_buff_modifier
+	
+	status_icon.texture = defense_icon
+	sfx_player.stream = sfx_defense
+
+
+func _on_speed_buff_state_entered() -> void:
+	# SPEED: 
+	#  - damage resistance UNAFFECTED
+	#  - damage output DECREASED
+	#  - movement speed INCREASED
+	health_component.modified_resistance = BASE_RESISTANCE_MODIFIER
+	damage_modifier = speed_buff_modifier
+	speed_modifier = 1 + speed_buff_modifier
+	delay_modifier = 1 - speed_buff_modifier
+	
+	navigation_component.current_speed = base_movespeed * speed_modifier
+	
+	status_icon.texture = speed_icon
+	sfx_player.stream = sfx_speed
+
+
+func _on_buff_expire_timer_timeout() -> void:
+	state_chart.send_event("remove_buff")

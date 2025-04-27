@@ -763,12 +763,10 @@ points = PackedVector3Array(-2, 0, -2.5, -2, -1, -2.5, 2, -1, -2.5, 2, 0, -2.5, 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_iw20o"]
 points = PackedVector3Array(-3, 2.875, -2, -3, 0, -2, -2, 0, -2, -2, 2.875, -2, -3, 2.875, 2, -3, 0, 2, -2, 0, 2, -2, 2.875, 2)
 
-[node name="BartenderBoss" type="Node3D" node_paths=PackedStringArray("boss", "player", "elevator_doors", "directional_light")]
+[node name="BartenderBoss" type="Node3D" node_paths=PackedStringArray("boss", "directional_light")]
 script = ExtResource("1_fk3ye")
 bgm = ExtResource("2_wypwt")
 boss = NodePath("BossBartender")
-player = NodePath("NavigationRegion3D/FuncGodotMap/group_702_Elevator/entity_56_PlayerRef")
-elevator_doors = NodePath("NavigationRegion3D/FuncGodotMap/group_702_Elevator/group_701_Elevator/group_627_Elevator/group_700_Elevator/group_624_ElevatorPrefab/group_628_ElevatorPrefab/group_699_Elevator/group_619_ElevatorPrefab/group_626_Elevator/group_625_Elevator/entity_53_ElevatorDoors")
 win_subtext = Array[String](["Closing Time", "Last Call", "One Too Many"])
 lose_tips = Array[String](["Steal the healing brews", "Keep out of shotgun range", "The floor is lava! Use the tables"])
 directional_light = NodePath("DirectionalLight3D")
@@ -1601,6 +1599,10 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0.937
 [node name="BossBartender" parent="." node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "target") instance=ExtResource("13_ci071")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -0.0606995, 0, -44.9891)
 sfx_shotgun = Array[AudioStream]([ExtResource("25_umium"), ExtResource("26_pd2aw")])
+buff_duration = 10.0
+buff_cooldown = 21.0
+defense_buff_modifier = 0.5
+strength_buff_modifier = 1.5
 floor_fize_hazard_marker = NodePath("../BossMarker/FloorFireHazard")
 behind_bar_move_points = [NodePath("../BossMarker/BossMoveMarker"), NodePath("../BossMarker/BossMoveMarker2"), NodePath("../BossMarker/BossMoveMarker3"), NodePath("../BossMarker/BossMoveMarker4"), NodePath("../BossMarker/BossMoveMarker5")]
 boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")

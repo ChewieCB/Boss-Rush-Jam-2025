@@ -344,11 +344,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("7_0t8qy")
 
 [node name="Status" type="Node" parent="StateChart/Root"]
-script = ExtResource("6_nojwf")
-initial_state = NodePath("Idle")
-
-[node name="Idle" type="Node" parent="StateChart/Root/Status"]
-script = ExtResource("7_0t8qy")
+script = ExtResource("5_oy1aj")
 
 [node name="Phase" type="Node" parent="StateChart/Root"]
 script = ExtResource("6_nojwf")
