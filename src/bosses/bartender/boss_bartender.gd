@@ -12,8 +12,6 @@ signal fire_started
 @export var reload_sprite: CompressedTexture2D
 @export var throw_sprite: CompressedTexture2D
 @export var brew_sprite: CompressedTexture2D
-#@export var hurt_sprite: CompressedTexture2D
-#@export var death_sprites: Array[CompressedTexture2D]
 
 @export var sfx_tape: AudioStream
 
@@ -78,7 +76,6 @@ var last_brew_type: BrewType
 @export var speed_icon: Texture2D
 @export var strength_icon: Texture2D
 ## Received damage will multiply with this value
-# TODO - create a rock/paper/scissors tradeoff for each buff around damage, speed, and resistance
 @export var defense_buff_modifier = 0.5
 @export var speed_buff_modifier = 0.5
 @export var strength_buff_modifier = 1.5
@@ -121,6 +118,7 @@ const MIN_ACTION_BEFORE_HEAL = 8
 func _ready() -> void:
 	super()
 	navigation_component.current_speed = base_movespeed * speed_modifier
+	brew_cooldown_timer.stop()
 
 
 func _process(delta: float) -> void:
@@ -135,8 +133,8 @@ func activate() -> void:
 
 func change_phase(new_phase: int) -> void:
 	# Check if an attack is in progress
-	if not $StateChart/Root/Attacking/Idle.active:
-		await $StateChart/Root/Attacking/Idle.state_entered
+	#if not $StateChart/Root/Attacking/Idle.active:
+		#await $StateChart/Root/Attacking/Idle.state_entered
 
 	state_chart.send_event("stop_moving")
 
@@ -167,7 +165,7 @@ func select_attack_phase_1() -> void:
 	var possible_attacks = [
 		"start_shotgun_blast",
 		"start_throw_broken_bottle",
-		"start_brew_drink",
+		#"start_brew_drink",
 		"start_throw_drink",
 	]
 
@@ -175,10 +173,10 @@ func select_attack_phase_1() -> void:
 		#possible_attacks.append("start_throw_heal_bottle")
 
 	# If player is near, more likely to use shotgun blast
-	#if player_is_near:
-		#var shotgun_bonus_freq = 4
-		#for i in range(shotgun_bonus_freq):
-			#possible_attacks.append("start_shotgun_blast")
+	if player_is_near:
+		var shotgun_bonus_freq = 4
+		for i in range(shotgun_bonus_freq):
+			possible_attacks.append("start_shotgun_blast")
 #
 	## If dont have buff, more likely to use buff	
 	#if current_buff == "":
@@ -203,11 +201,11 @@ func select_attack_phase_1() -> void:
 
 
 func select_attack_phase_2() -> void:
-	# If dont have buff, ALWAYS use buff	
-	#if current_buff == "":
-		#previous_attack = "start_brew_drink"
-		#state_chart.send_event("start_brew_drink")
-		#return
+	# If we dont have buff, ALWAYS use a buff to start the phase
+	if current_buff == "":
+		previous_attack = "start_brew_drink"
+		state_chart.send_event("start_brew_drink")
+		return
 
 	var possible_attacks = [
 		"start_shotgun_blast",
@@ -217,10 +215,10 @@ func select_attack_phase_2() -> void:
 	]
 
 	# More likely to throw bottle / throw barrel when has str buff
-	#var throw_barrel_bonus_freq = 5
-	#if has_strength_buff:
-		#for i in range(throw_barrel_bonus_freq):
-			#possible_attacks.append("start_throw_broken_bottle")
+	var throw_barrel_bonus_freq = 3
+	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
+		for i in range(throw_barrel_bonus_freq):
+			possible_attacks.append("start_throw_broken_bottle")
 
 	# Avoid use same attack twice in a row (except concoction)
 	if previous_attack:
@@ -308,14 +306,14 @@ func _on_phase_2_state_entered() -> void:
 	SoundManager.play_sound(sfx_tape, "SFX")
 	shots_to_fire = 2
 	#GameManager.show_boss_special_dialog("Playtime is OVER!", 1)
-	await get_tree().create_timer(1).timeout
-	SoundManager.stop_sound(sfx_tape)
+	#await get_tree().create_timer(1).timeout
+	#SoundManager.stop_sound(sfx_tape)
 	jump_to(boss_jump_phase2_marker.global_position)
 
 
 func _on_phase_2_idle_state_entered() -> void:
 	debug_state_label.text = "Idle"
-	await get_tree().create_timer(0.5).timeout
+	#await get_tree().create_timer(0.5).timeout
 
 	navigation_component.current_speed = base_movespeed * speed_modifier
 	navigation_component.target = target
@@ -330,12 +328,16 @@ func _on_phase_2_idle_state_entered() -> void:
 func _on_phase_3_state_entered() -> void:
 	SoundManager.play_sound(sfx_tape, "SFX")
 	shots_to_fire = 3
+	buff_duration *= 1.5
+	buff_cooldown /= 2
 	#GameManager.show_boss_special_dialog("You better hot foot it out of here while you still can!", 1.5)
-	await get_tree().create_timer(1.5).timeout
-	SoundManager.stop_sound(sfx_tape)
+	#await get_tree().create_timer(1.5).timeout
+	#SoundManager.stop_sound(sfx_tape)
 	
 	jump_to(boss_jump_phase3_marker.global_position)
+	
 	await get_tree().create_timer(2.0).timeout
+	
 	fire_started.emit()
 	# TODO - move this to the map script
 	floor_fire_hazard = floor_fire_hazard_prefab.instantiate()

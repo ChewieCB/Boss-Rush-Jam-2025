@@ -1599,10 +1599,6 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0.937
 [node name="BossBartender" parent="." node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "target") instance=ExtResource("13_ci071")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -0.0606995, 0, -44.9891)
 sfx_shotgun = Array[AudioStream]([ExtResource("25_umium"), ExtResource("26_pd2aw")])
-buff_duration = 10.0
-buff_cooldown = 21.0
-defense_buff_modifier = 0.5
-strength_buff_modifier = 1.5
 floor_fize_hazard_marker = NodePath("../BossMarker/FloorFireHazard")
 behind_bar_move_points = [NodePath("../BossMarker/BossMoveMarker"), NodePath("../BossMarker/BossMoveMarker2"), NodePath("../BossMarker/BossMoveMarker3"), NodePath("../BossMarker/BossMoveMarker4"), NodePath("../BossMarker/BossMoveMarker5")]
 boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")
