@@ -18,13 +18,15 @@ var setting_ui: SettingUI
 var player: Player
 
 # Barrels
+@export var starting_barrels: Array[BarrelDataResource]
+@export var starting_shop_barrels: Array[BarrelDataResource]
+@export var barrel_database: Array[Resource]
+@export var debug_barrel_database: Array[Resource]
+
 var equipped_barrels: Array[BarrelDataResource] = []
 var inventory_barrels: Array[BarrelDataResource] = []
 var shop_barrels: Array[BarrelDataResource] = []
 
-@export var starting_barrels: Array[BarrelDataResource]
-@export var starting_shop_barrels: Array[BarrelDataResource]
-@export var barrel_database: Array[BarrelDataResource]
 
 # Re-rolls
 @export var initial_reroll_cost: int = 200
@@ -86,8 +88,7 @@ var aim_assist_strength: float = 0.5
 
 
 func _ready() -> void:
-	if len(barrel_database) == 0:
-		load_barrel_database()
+	barrel_database.append_array(debug_barrel_database)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	SaveManager.load_setting_config()
@@ -159,7 +160,7 @@ func purchase_reroll() -> bool:
 		if not is_free_reroll:
 			player_currency -= reroll_cost
 			# Increase the cost of re-rolling for this fight
-			reroll_cost *= reroll_cost_mult
+			reroll_cost = int(reroll_cost * reroll_cost_mult)
 		reroll_cost_changed.emit(reroll_cost)
 		SoundManager.play_sound(sfx_purchase)
 		return true
@@ -182,23 +183,6 @@ func show_boss_special_dialog(content: String, duration: float):
 	GameManager.player.boss_special_dialog.visible = false
 	get_tree().paused = false
 	SoundManager.process_mode = original_sm_process_mode
-
-
-func load_barrel_database():
-	var directory_path = "res://src/player/barrel/resource/"
-	var tres_files: Array[BarrelDataResource] = []
-	var dir = DirAccess.open(directory_path)
-
-	if dir:
-		var files = dir.get_files() # Get all files in the directory
-		for file in files:
-			if file.ends_with(".tres"):
-				var resource = ResourceLoader.load(directory_path + "/" + file)
-				if resource:
-					tres_files.append(resource as BarrelDataResource)
-	else:
-		print("Failed to open directory: ", directory_path)
-	barrel_database = tres_files
 
 
 func load_new_save_data():

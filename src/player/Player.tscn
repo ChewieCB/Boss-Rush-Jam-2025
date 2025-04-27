@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=67 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -49,9 +49,10 @@
 [ext_resource type="Shader" path="res://src/player/assets/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="46_br567"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
-[ext_resource type="PackedScene" path="res://src/ui/player/PlayerUI.tscn" id="46_ob8n4"]
+[ext_resource type="PackedScene" path="res://src/ui/player/StatUI.tscn" id="46_ob8n4"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
 [ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
@@ -239,27 +240,33 @@ z_as_relative = false
 visible = false
 z_index = 10
 
-[node name="InteractUI" type="Label" parent="UI"]
-visible = false
+[node name="InteractUI" type="HBoxContainer" parent="UI"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -75.0
-offset_top = -76.0
-offset_right = 75.0
-offset_bottom = -7.0
+offset_left = -75.5
+offset_top = 23.0
+offset_right = 75.5
+offset_bottom = 87.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Label" type="Label" parent="UI/InteractUI"]
+layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_outline_size = 6
 theme_override_font_sizes/font_size = 30
-text = "Interact (E)"
+text = "Interact"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PlayerUI" parent="UI" node_paths=PackedStringArray("health_component", "luck_component") instance=ExtResource("46_ob8n4")]
+[node name="DeviceInputPrompt" parent="UI/InteractUI" instance=ExtResource("46_br567")]
+layout_mode = 2
+assigned_action = "interact"
+
+[node name="StatUI" parent="UI" node_paths=PackedStringArray("health_component", "luck_component") instance=ExtResource("46_ob8n4")]
 health_component = NodePath("../../HealthComponent")
 luck_component = NodePath("../../LuckComponent")
 

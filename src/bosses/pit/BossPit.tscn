@@ -1125,15 +1125,13 @@ uppercase = true
 
 [node name="DebugStateLabel" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
-visible = false
 text = "STATE"
 
 [node name="DebugDistanceLabel" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, 0)
-visible = false
 text = "DISTANCE"
 
-[node name="DamageTextMarker" parent="." index="14"]
+[node name="DamageTextMarker" parent="." index="15"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.131287, 4.12246, 0)
 
 [node name="BodyCenter" parent="." index="15"]
@@ -1147,6 +1145,9 @@ one_shot = true
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="18"]
 unit_size = 25.0
+
+[node name="BodyCenter" parent="." index="20"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.119352, 3.48643, 0)
 
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.41782, 0)

@@ -517,12 +517,15 @@ _surfaces = [{
 "vertex_data": PackedByteArray("QH8vv9RrH0BAVVW/EH8vv9hrH0BgVVU/gFgXPjAXhj8AACBAkCt7P4Clyr4AACBAeEDoP/Bp679IVVU/aEDoP/Bp679YVVW/kCt7P8Clyr4AACDAAFkXPiAXhj8AACDA2S4lUQAAAADZLiVRAAAAANkuJVEAAAAA2S4lUQAAAADZLiVRAAAAANkuJVEAAAAA2S4lUQAAAADZLiVRAAAAAA==")
 }]
 
-[node name="BossChip" type="Node3D" node_paths=PackedStringArray("breakable_floor", "boss", "directional_light")]
+[node name="BossChip" type="Node3D" node_paths=PackedStringArray("breakable_floor", "nav_parent", "floor_parent", "floor_mesh", "boss", "directional_light")]
 script = ExtResource("1_cxln3")
-breakable_floor = NodePath("FuncGodotMap/group_635_FloorTop")
-boss = NodePath("FuncGodotMap/entity_24_BossChips")
 win_subtext = Array[String](["Win Text Here"])
 lose_tips = Array[String](["Lose Text Here"])
+breakable_floor = NodePath("FuncGodotMap/group_635_FloorTop")
+nav_parent = NodePath("FuncGodotMap/group_635_FloorTop/entity_23_FloorBreakable-col/entity_23_mesh_instance")
+floor_parent = NodePath("FuncGodotMap/group_635_FloorTop/entity_23_FloorBreakable-col")
+floor_mesh = NodePath("FuncGodotMap/group_635_FloorTop/entity_23_FloorBreakable-col/entity_23_mesh_instance")
+boss = NodePath("FuncGodotMap/entity_24_BossChips")
 directional_light = NodePath("DirectionalLight3D")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

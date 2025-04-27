@@ -5,6 +5,7 @@ class_name BossCore
 signal died
 signal death_anim_finished
 ## Emit after collected the barrel, 
+## Emit after collected the barrel,
 ## or same time as `died` signal if already collected.
 signal defeated(boss: BossCore)
 #
@@ -18,6 +19,14 @@ enum BossIdEnum {
 	BARTENDER,
 	PIT
 }
+
+enum StatusEffects {
+	NONE,
+	BURNING,
+	POISONED
+}
+@onready var burning_timer: Timer = $StateChart/Root/Status/Burning/BurningTimer
+@onready var poisoned_timer: Timer = $StateChart/Root/Status/Poisoned/PoisonedTimer
 
 @export var boss_id: BossIdEnum
 @export var chip_scene: PackedScene
@@ -55,6 +64,7 @@ var debug_trajectory_mesh: MeshInstance3D
 @onready var debug_mesh: MeshInstance3D = $DebugMesh
 @onready var debug_state_label: Label3D = $DebugStateLabel
 @onready var debug_dist_label: Label3D = $DebugDistanceLabel
+@onready var debug_status_label_parent: Node3D = $StatusLabelParent
 @onready var state_chart: StateChart = $StateChart
 
 @export_group("Sprites")
@@ -160,6 +170,14 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+	# DEBUG
+	# TODO - add export var for burning status length so we can configure it
+	# per boss/effect
+	if Input.is_action_just_pressed("input_1"):
+		apply_status(StatusEffects.BURNING, 5.0)
+	if Input.is_action_just_pressed("input_2"):
+		apply_status(StatusEffects.POISONED, 12.0)
+
 
 func jump(multiplier = 1.0) -> void:
 	vel_vertical = JUMP_FORCE * multiplier
@@ -238,6 +256,11 @@ func drop_barrel() -> void:
 	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
 		push_warning("Barrel [%s] already collected, exiting level." % barrel_to_drop.barrel_name)
 		# If we don't have a barrel to spawn, emit the signal to end the level
+		defeated.emit(self)
+		return
+
+	if barrel_pickup_scene == null:
+		push_warning("No barrel to spawn.")
 		defeated.emit(self)
 		return
 
@@ -457,7 +480,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			# Increase chip spawn rate based on DPS
 			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
 			chip_mult = min(chip_mult, chip_spawn_mult_cap)
-			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult] )
+			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult])
 			for i in chip_mult:
 				if randf() < chip_spawn_chance:
 					continue
@@ -499,3 +522,90 @@ func _on_dps_window_timer_timeout() -> void:
 func _on_hurt_frame_timer_timeout() -> void:
 	sprite.texture = base_sprite
 	hurt_frame_cooldown_timer.start(hurt_frame_cooldown)
+
+
+## STATUS EFFECTS
+
+func apply_status(status: StatusEffects, duration: float) -> void:
+	var event_string: String = "status_%s" % StatusEffects.keys()[status].to_lower()
+	state_chart.send_event("add_" + event_string)
+	await get_tree().create_timer(duration).timeout
+	state_chart.send_event("remove_" + event_string)
+
+
+func remove_status(status: StatusEffects) -> void:
+	var event_string: String = "status_%s" % StatusEffects.keys()[status].to_lower()
+	state_chart.send_event("remove_" + event_string)
+
+
+func create_status_label(status: String, color: Color) -> void:
+	var status_label := Label3D.new()
+	status_label.text = status
+	status_label.modulate = color
+	status_label.font_size = 128
+	status_label.outline_size = 32
+	status_label.uppercase = true
+	status_label.double_sided = true
+	status_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	debug_status_label_parent.add_child(status_label)
+	status_label.position.y = 0.6 * debug_status_label_parent.get_child_count()
+
+
+func remove_status_label(status: String) -> void:
+	var status_labels = debug_status_label_parent.get_children()
+	status_labels.filter(func(x): return x.text == status)
+	var label = status_labels.front()
+	debug_status_label_parent.remove_child(label)
+	label.queue_free()
+
+
+# Burning
+func _on_status_burning_active_state_entered() -> void:
+	create_status_label("Burning", Color.ORANGE)
+	# TODO - add burning effect particles/shader/icon
+	#
+	burning_timer.start(0.6)
+
+
+func _on_status_burning_active_state_physics_processing(delta: float) -> void:
+	pass
+
+
+func _on_status_burning_active_state_exited() -> void:
+	remove_status_label("Burning")
+	# TODO - remove burning effect particles/shader/icon
+	#
+	burning_timer.stop()
+
+
+func _on_status_poisoned_active_state_entered() -> void:
+	create_status_label("Poisoned", Color.WEB_GREEN)
+	# TODO - add burning effect particles/shader/icon
+	poisoned_timer.start(1.8)
+
+
+func _on_status_poisoned_active_state_physics_processing(delta: float) -> void:
+	pass
+
+
+func _on_status_poisoned_active_state_exited() -> void:
+	remove_status_label("Poisoned")
+	# TODO - remove burning effect particles/shader/icon
+	#
+	poisoned_timer.stop()
+
+
+func _on_burning_timer_timeout() -> void:
+	# TODO - let specific attacks/modifiers change how much damage the effect does
+	health_component.damage(5, Color.ORANGE)
+	sprite.modulate = Color.ORANGE
+	await get_tree().create_timer(0.2).timeout
+	sprite.modulate = Color.WHITE
+
+
+func _on_poisoned_timer_timeout() -> void:
+	# TODO - let specific attacks/modifiers change how much damage the effect does
+	health_component.damage(12, Color.WEB_GREEN)
+	sprite.modulate = Color.WEB_GREEN
+	await get_tree().create_timer(0.4).timeout
+	sprite.modulate = Color.WHITE

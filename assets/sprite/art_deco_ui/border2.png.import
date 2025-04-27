@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://y1ur84vb754a"
-path="res://.godot/imported/buttonY.png-af0e17ef11846a691a14a804afab8011.ctex"
+uid="uid://bvolaycqesq62"
+path="res://.godot/imported/border2.png-1f0d9f6c227a11cf055273a207498aef.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/game_icon/buttonY.png"
-dest_files=["res://.godot/imported/buttonY.png-af0e17ef11846a691a14a804afab8011.ctex"]
+source_file="res://assets/sprite/art_deco_ui/border2.png"
+dest_files=["res://.godot/imported/border2.png-1f0d9f6c227a11cf055273a207498aef.ctex"]
 
 [params]
 

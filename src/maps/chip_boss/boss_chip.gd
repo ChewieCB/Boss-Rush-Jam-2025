@@ -2,9 +2,6 @@ extends BossMap
 
 @export var active_bgm: AudioStream
 
-@onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
-@onready var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
-var nav_region: NavigationRegion3D
 # Flooding/Draining levels
 @export var lower_water_level: float = -0.1
 @export var upper_water_level: float = 1.3
@@ -23,10 +20,10 @@ var nav_region: NavigationRegion3D
 func _ready() -> void:
 	boss.flood_chamber.connect(raise_water)
 	boss.drain_chamber.connect(lower_water)
-	
+
 	waterfalls.visible = false
 	water_surface.global_position.y = lower_water_level
-	
+
 	super()
 
 
@@ -45,14 +42,14 @@ func generate_navigation() -> void:
 	nav_mesh.agent_radius = 1.2
 	#nav_mesh.agent_height = 1.0
 	nav_region.navigation_mesh = nav_mesh
-	
+
 	func_godot_parent.add_child(nav_region)
 	func_godot_parent.move_child(nav_region, 0)
-	
+
 	func_godot_parent.remove_child(worldspawn_mesh)
 	nav_region.add_child(worldspawn_mesh)
 	nav_region.move_child(worldspawn_mesh, 0)
-	
+
 	_rebake_nav()
 
 
@@ -68,9 +65,9 @@ func raise_water() -> void:
 	water_tween.tween_property(water_surface, "global_position:y", upper_water_level, 1.4)
 	for platform in rising_platforms:
 		platform.raise(platform_level, 1.4)
-	
+
 	await water_tween.finished
-	
+
 	boss.state_chart.send_event("start_aoe_attack")
 
 
@@ -80,9 +77,9 @@ func lower_water() -> void:
 	water_tween.tween_property(water_surface, "global_position:y", lower_water_level, 1.4)
 	for platform in rising_platforms:
 		platform.lower(1.4)
-	
+
 	await water_tween.finished
-	
+
 	boss.state_chart.send_event("end_aoe_attack")
 
 

@@ -11,14 +11,18 @@ signal setting_config_loaded
 func convert_resource_to_id(array_resource: Array) -> Array[int]:
 	var result: Array[int] = []
 	for elem in array_resource:
-		result.append(elem.barrel_id)
+		if not elem.barrel_name.to_lower().contains("debug"):
+			result.append(elem.barrel_id)
 	return result
 
 func convert_id_to_resource(array_id: Array) -> Array[BarrelDataResource]:
+	if len(GameManager.barrel_database) == 0:
+		push_warning("GameManger.barrel_database is empty / not loaded yet!")
 	var result: Array[BarrelDataResource] = []
 	for elem in array_id:
 		for item in GameManager.barrel_database:
-			if item.barrel_id == elem:
+			var barrel_data_item = item as BarrelDataResource
+			if barrel_data_item.barrel_id == elem:
 				result.append(item)
 	return result
 
@@ -90,6 +94,7 @@ func load_game(slot_id):
 	var save_data = load_data_only(slot_id)
 	if save_data.is_empty():
 		GameManager.load_new_save_data()
+		savefile_loaded.emit()
 		return
 
 	GameManager.player_currency = save_data["player_currency"]

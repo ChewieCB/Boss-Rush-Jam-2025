@@ -3,6 +3,14 @@ class_name BossMap
 
 @export var bgm: AudioStream
 
+## World Geometry & Navigation
+@onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
+@onready var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
+var nav_region: NavigationRegion3D
+@export var nav_parent: Node3D
+@export var floor_parent: Node3D
+@export var floor_mesh: MeshInstance3D
+
 @export_group("Actors")
 @export var boss: BossCore
 @onready var player: Player = find_children("*", "Player").front()
@@ -23,7 +31,8 @@ var chip_value_collected: int = 0
 
 
 func _ready() -> void:
-	SoundManager.play_music(bgm, 0.5, "BGM")
+	if bgm:
+		SoundManager.play_music(bgm, 0.5, "BGM")
 	
 	# Pre-load the lobby scene for faster level transitions
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
@@ -41,9 +50,46 @@ func _ready() -> void:
 	player.rotation = GameManager.cached_player_rotation
 	player.player_camera.rotation = GameManager.cached_camera_rotation
 	
-	player.player_ui.show_luck_ui()
+	player.stat_ui.show_luck_ui()
+	
+	await get_tree().physics_frame
+	generate_navigation()
 	
 	elevator_doors.open()
+
+
+func generate_navigation() -> void:
+	if not nav_parent or not floor_mesh:
+		push_warning("Navmesh nodes not configured, navigation generation aborted")
+		return
+	
+	nav_region = NavigationRegion3D.new()
+	var nav_mesh := NavigationMesh.new()
+	nav_mesh.agent_radius = 1.2
+	#nav_mesh.agent_height = 1.0
+	nav_region.navigation_mesh = nav_mesh
+	
+	nav_parent.add_child(nav_region)
+	nav_parent.move_child(nav_region, 0)
+	
+	floor_parent.remove_child(floor_mesh)
+	nav_region.add_child(floor_mesh)
+	nav_region.move_child(floor_mesh, 0)
+	
+	_rebake_nav()
+	# Switch the parse type to colliders after the initial bake 
+	# to reduce performance impact of runtime rebaking
+	#
+	# FIXME - this wipes out the nav mesh on rebaking,
+	# have a proper refactor of the cover navigation 
+	# to accomodate this gemoetry type parsing.
+	#nav_mesh.geometry_parsed_geometry_type = NavigationMesh.ParsedGeometryType.PARSED_GEOMETRY_STATIC_COLLIDERS
+
+
+func _rebake_nav() -> void:
+	if nav_region.is_baking():
+		await nav_region.bake_finished
+	nav_region.bake_navigation_mesh()
 
 
 func show_end_panel() -> void:
