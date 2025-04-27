@@ -463,6 +463,9 @@ one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 
+[node name="HurtSFXPlayer" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
+
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_physics_processing"]

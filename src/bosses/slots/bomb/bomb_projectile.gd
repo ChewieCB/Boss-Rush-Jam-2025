@@ -79,6 +79,8 @@ func _on_body_entered(_body: Node) -> void:
 	var collision_pos = body_state.get_contact_local_position(0)
 	var collision_normal = body_state.get_contact_local_normal(0)
 	create_spark(collision_pos, collision_normal)
+	sfx_player.stream = sfx_bomb_bounce.pick_random()
+	sfx_player.play()
 
 
 func _on_explosion_area_body_entered(body: Node3D) -> void:
@@ -86,6 +88,3 @@ func _on_explosion_area_body_entered(body: Node3D) -> void:
 		body.health_component.damage(explosion_damage)
 	elif body is BombProjectile:
 		body.destroy()
-	else:
-		sfx_player.stream = sfx_bomb_bounce.pick_random()
-		sfx_player.play()

@@ -417,20 +417,9 @@ func spawn_bell(pos: Vector3, size: float) -> void:
 	if result:
 		pos.y = result.position.y
 	
-	var bell_sfx := AudioStreamPlayer3D.new()
-	bell_sfx.stream = sfx_bell_windup.pick_random()
-	get_tree().get_root().get_child(3).add_child(bell_sfx)
-	bell_sfx.global_position = pos
-	bell_sfx.volume_db = 5.0
-	bell_sfx.max_db = 5.0
-	bell_sfx.unit_size = 30.0
-	bell_sfx.play()
-	
 	var bell = bell_scene.instantiate()
-	get_tree().root.get_child(2).add_child(bell)
-	sfx_player.stream = sfx_bell_windup.pick_random()
-	sfx_player.play()
 	bell.global_position = pos
+	get_tree().root.get_child(7).add_child(bell)
 	bell.mesh.scale *= size
 	bell.collider.shape.radius = size
 	bell.collider.shape.height = size * 2
@@ -438,14 +427,7 @@ func spawn_bell(pos: Vector3, size: float) -> void:
 	bell.hurtbox_collider.shape.radius = size
 	bell.hurtbox_collider.shape.height = size * 2
 	bell.hurtbox_collider.position.y = size / 2
-	# Hacky workaround since playing these on the bells themselves causes an issue
-	bell.destroyed.connect(
-		func(_bell):
-			bell_sfx.stream = sfx_bell_impact.pick_random()
-			bell_sfx.play()
-			await bell_sfx.finished
-			bell_sfx.queue_free()
-	)
+	bell.drop()
 
 
 func _on_bell_drop_state_entered() -> void:
@@ -492,7 +474,6 @@ func _on_bell_drop_dropping_state_exited() -> void:
 		var spawn := Vector3(point.x, 1.0, point.y)
 		# Spawn shadow/mesh to show AoE, grow in size as it drops
 		drop_shadow(spawn, 6.0, bell_shadow_time)
-		# TODO - spawn mesh that drops down and crashes, dealing damage
 		await get_tree().create_timer(0.2).timeout
 
 

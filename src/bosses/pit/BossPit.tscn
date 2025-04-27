@@ -31,6 +31,7 @@
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="22_rtc4r"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="23_0bbok"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="24_ia7ug"]
+[ext_resource type="AudioStream" uid="uid://dlutklospeu5y" path="res://src/bosses/pit/assets/sfx/PIT BOSS EM FIELD.mp3" id="27_ipwe6"]
 [ext_resource type="Texture2D" uid="uid://fh4rp8ctjfwe" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="28_1qowr"]
 [ext_resource type="AnimationLibrary" uid="uid://d2wsbe5ulvdyw" path="res://src/bosses/pit/assets/pit_boss_anims.res" id="33_vitgm"]
 
@@ -174,6 +175,12 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Shield" index="2"]
 shape = SubResource("SphereShape3D_5bmqa")
 disabled = true
+
+[node name="ShieldSFXPlayer" type="AudioStreamPlayer3D" parent="Shield" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.1, 0)
+stream = ExtResource("27_ipwe6")
+volume_db = -80.0
+unit_size = 0.1
 
 [node name="Sprite3D" parent="." index="2"]
 transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -0.152, 2.67325, 0)
