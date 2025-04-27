@@ -421,6 +421,9 @@ func _on_health_hit_state_exited() -> void:
 
 #### DEAD
 func _on_health_dead_state_entered() -> void:
+	if anim_player.is_playing():
+		anim_player.stop()
+		anim_player.play("RESET")
 	for _sprite in death_sprites:
 		sprite.texture = _sprite
 		await get_tree().create_timer(1.0).timeout
