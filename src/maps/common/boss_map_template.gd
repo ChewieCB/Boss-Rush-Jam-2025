@@ -32,7 +32,7 @@ var chip_value_collected: int = 0
 
 func _ready() -> void:
 	if bgm:
-		SoundManager.play_music(bgm)
+		SoundManager.play_music(bgm, 0.4, "BGM")
 	
 	# Pre-load the lobby scene for faster level transitions
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
