@@ -110,11 +110,9 @@ const BULLET_SPAWN_POS_VARIATION = 10
 
 
 func _ready() -> void:
-	#SaveManager.savefile_loaded.connect(reinstall_barrels)
+	SaveManager.savefile_loaded.connect(reinstall_barrels)
 	magazine_ammo_left = base_magazine_size
 	muzzle_flash_light.light_energy = 0
-	await get_tree().physics_frame
-	await get_tree().physics_frame
 	reinstall_barrels()
 	reset_modifier(true)
 	reload()
@@ -348,7 +346,7 @@ func reload():
 		barrel.get_active_effect().on_reload_start()
 	
 	is_reloading = true
-	anim_tree.set("parameters/reload_timescale/scale", 1/modified_reload_time)
+	anim_tree.set("parameters/reload_timescale/scale", 1 / modified_reload_time)
 	anim_tree.set("parameters/reload_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	
 	await reload_anim_end
@@ -391,7 +389,6 @@ func reset_modifier(reload_reset = false):
 
 func jam_the_gun(duration: float = 1.0):
 	#show_gun_status("Jammed...", Color.DIM_GRAY, duration)
-
 	jam_timer.start(duration)
 	is_jammed = true
 
@@ -458,7 +455,7 @@ func install_barrel(barrel_prefab: PackedScene) -> void:
 	magazine_ammo_left = 0
 	
 	var barrel_count: int = barrel_container.get_child_count()
-	var barrel_idx: int = barrel_count - 1 if barrel_count > 0 else 0 
+	var barrel_idx: int = barrel_count - 1 if barrel_count > 0 else 0
 	
 	#barrel.owner_gun = self
 	installed_barrels.append(barrel_inst)
