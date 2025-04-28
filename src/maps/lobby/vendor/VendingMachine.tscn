@@ -5,7 +5,7 @@
 [ext_resource type="Material" uid="uid://b2r7uow4jc8v0" path="res://assets/textures/placeholder/texture_orange_10.tres" id="2_il1cf"]
 [ext_resource type="Material" uid="uid://bsm5c6b4ncugr" path="res://assets/textures/placeholder/texture_light_13.tres" id="3_yxy2g"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="4_ql423"]
-[ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/InventoryUI.tscn" id="5_b7an8"]
+[ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="5_b7an8"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="6_qqfkm"]
 [ext_resource type="Resource" uid="uid://dtjfyb374gapa" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ammo_leech.tres" id="7_w8qpy"]
 [ext_resource type="Resource" uid="uid://xodkopxrm4f2" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_shotgun.tres" id="8_m0arp"]
