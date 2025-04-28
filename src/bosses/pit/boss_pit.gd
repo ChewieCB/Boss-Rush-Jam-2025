@@ -15,6 +15,11 @@ enum Stance {DEFENSIVE, AGGRESSIVE}
 @export var wave_material: ShaderMaterial
 
 @export_category("Movement")
+@export var MOVE_SPEED: float = 10.0
+@onready var move_speed: float = MOVE_SPEED:
+	set(value):
+		move_speed = value
+		navigation_component.current_speed = move_speed
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
 @export var time_elapsed: float = 0.0
@@ -810,3 +815,14 @@ func _on_move_to_center_state_entered() -> void:
 
 func _on_defensive_state_exited() -> void:
 	hide_shield()
+
+
+func _on_stagger() -> void:
+	if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
+		move_speed = MOVE_SPEED / 5
+	super()
+
+
+func _on_hurt_frame_timer_timeout() -> void:
+	move_speed = MOVE_SPEED
+	super()

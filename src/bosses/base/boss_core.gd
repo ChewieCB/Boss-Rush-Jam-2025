@@ -79,9 +79,8 @@ var debug_trajectory_mesh: MeshInstance3D
 @onready var hurt_frame_timer: Timer = $HurtFrameTimer
 @onready var hurt_frame_cooldown_timer: Timer = $HurtFrameCooldownTimer
 
+@export_group("Phase")
 @export var current_phase: int = 1
-
-@export var attack_recovery_time: float = 0.5
 
 # Make sure the boss doesn't spam attacks
 # TODO - make this more modular
@@ -90,10 +89,13 @@ var charge_phase_count: int = 0
 var ranged_phase_count: int = 0
 var area_phase_count: int = 0
 
+@export_group("Attacks")
+@export var attack_recovery_time: float = 0.5
+@export_subgroup("Charge")
 # Charge Attack
 @export var telegraph_time: float = 0.25
 @export var charge_force: float = 8.0
-
+@export_subgroup("Projectile")
 # Projectile Attack
 @export var projectile_scene: PackedScene
 @export var projectiles_per_phase: int = 5
@@ -105,6 +107,7 @@ var ranged_move_points: Array[Node]
 var area_move_points: Array[Node]
 
 # Area Attack
+@export_subgroup("AoE")
 @export var area_damage: float = 25.0
 @export var areas_per_phase: int = 6
 @export var area_spawn_time: float = 1.5
@@ -128,6 +131,7 @@ var spawned_area_objects = []
 @onready var health_ui = $UI/HealthUI/BossHealthContainer
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
+@export_group("Movement")
 @export var MAX_SPEED: float = 5.0
 @export var FRICTION: float = 1.0
 @export var TURN_SPEED_FAST: float = 7.5
@@ -466,6 +470,15 @@ func _on_attack_telegraph_state_exited() -> void:
 
 ## ======== Signal Callback Methods ========
 
+func _on_stagger() -> void:
+	# Play a hurt frame when we do enough DPS
+	# TODO - let this interrupt/restart the attack telegraph for some attacks
+	if hurt_sprite:
+		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
+			sprite.texture = hurt_sprite
+			hurt_frame_timer.start(hurt_frame_window)
+
+
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
@@ -475,12 +488,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		dps_accumulated_in_window += abs(prev_health - new_health)
 		if dps_accumulated_in_window > chip_spawn_dps_threshold:
-			# Play a hurt frame when we do enough DPS
-			# TODO - let this interrupt/restart the attack telegraph for some attacks
-			if hurt_sprite:
-				if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
-					sprite.texture = hurt_sprite
-					hurt_frame_timer.start(hurt_frame_window)
+			_on_stagger()
 			# Increase chip spawn rate based on DPS
 			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
 			chip_mult = min(chip_mult, chip_spawn_mult_cap)
