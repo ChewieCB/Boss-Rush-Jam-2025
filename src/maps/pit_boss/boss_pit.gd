@@ -49,7 +49,7 @@ func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
 	var combined_current_health := pit_boss.health_component.current_health + surveillance_boss.health_component.current_health
 	var combined_max_health := pit_boss.health_component.max_health + surveillance_boss.health_component.max_health
 	var combined_health_ratio := combined_current_health / combined_max_health
-		
+	
 	if combined_health_ratio <= phase_3_health_percentage_trigger:
 		stance_timer.stop()
 		pit_boss.state_chart.send_event("start_phase_3")

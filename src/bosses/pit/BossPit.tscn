@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=50 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -31,8 +31,10 @@
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="22_rtc4r"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="23_0bbok"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="24_ia7ug"]
+[ext_resource type="Texture2D" uid="uid://b3qmllvgg2lgt" path="res://src/bosses/pit/assets/pit_boss_hurt.png" id="27_4wn57"]
 [ext_resource type="AudioStream" uid="uid://dlutklospeu5y" path="res://src/bosses/pit/assets/sfx/PIT BOSS EM FIELD.mp3" id="27_ipwe6"]
 [ext_resource type="Texture2D" uid="uid://fh4rp8ctjfwe" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="28_1qowr"]
+[ext_resource type="Texture2D" uid="uid://448jp7cfw467" path="res://src/bosses/pit/assets/pit_boss_death.png" id="28_ljohv"]
 [ext_resource type="AnimationLibrary" uid="uid://d2wsbe5ulvdyw" path="res://src/bosses/pit/assets/pit_boss_anims.res" id="33_vitgm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
@@ -57,7 +59,7 @@ shader_parameter/impact_falloff_sharpness = 1.0
 size = Vector3(0.6, 2, 0.6)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u2ghv"]
-render_priority = 3
+render_priority = 0
 shader = ExtResource("6_l4p06")
 shader_parameter/color = Color(0.189, 0.69855, 0.9, 0.321569)
 shader_parameter/fresnel_sharpness = 1.0
@@ -81,7 +83,7 @@ radius = 4.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_flnhw"]
 radius = 1.9
-height = 5.8
+height = 5.01101
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_jlq7w"]
 radius = 1.9
@@ -94,6 +96,26 @@ size = Vector3(5, 5.708, 3.5)
 radius = 3.0
 height = 8.0
 
+[sub_resource type="Animation" id="Animation_uu0dl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_d716h")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4yxgi"]
+_data = {
+"RESET": SubResource("Animation_uu0dl")
+}
+
 [node name="BossPit" instance=ExtResource("1_opefu")]
 collision_mask = 75
 script = ExtResource("2_a8b8q")
@@ -103,6 +125,7 @@ lunge_sprite = ExtResource("5_my4lc")
 uppercut_sprite = null
 slam_sprite = ExtResource("28_1qowr")
 wave_material = SubResource("ShaderMaterial_2s76u")
+MOVE_SPEED = 10.0
 wave_amplitude = 7.0
 wave_frequency = 5.0
 time_elapsed = 0.0
@@ -132,6 +155,9 @@ barrel_to_drop = ExtResource("7_koy73")
 sfx_awaken = ExtResource("18_e8yae")
 sfx_hit = Array[AudioStream]([ExtResource("19_ku61b"), ExtResource("20_j42ea"), ExtResource("21_pnx0u"), ExtResource("22_rtc4r"), ExtResource("23_0bbok"), ExtResource("24_ia7ug")])
 sfx_death = ExtResource("19_2oyqj")
+base_sprite = ExtResource("8_d716h")
+hurt_sprite = ExtResource("27_4wn57")
+death_sprites = Array[CompressedTexture2D]([ExtResource("27_4wn57"), ExtResource("28_ljohv")])
 current_phase = 3
 attack_recovery_time = 0.5
 projectile_scene = null
@@ -1151,7 +1177,7 @@ one_shot = true
 unit_size = 25.0
 
 [node name="BodyCenter" parent="." index="19"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.119352, 3.48643, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.25923, 0)
 
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.41782, 0)
@@ -1162,6 +1188,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.16769, 0)
 
 [node name="AnimationPlayer" parent="." index="24"]
 libraries = {
+"": SubResource("AnimationLibrary_4yxgi"),
 "pit_boss_anims": ExtResource("33_vitgm")
 }
 

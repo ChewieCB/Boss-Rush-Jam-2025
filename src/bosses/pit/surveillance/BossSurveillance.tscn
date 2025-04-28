@@ -60,7 +60,7 @@ bottom_radius = 0.3
 height = 0.001
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e0hgo"]
-render_priority = 3
+render_priority = 0
 shader = ExtResource("6_dvo4w")
 shader_parameter/color = Color(0.189, 0.69855, 0.9, 0.321569)
 shader_parameter/fresnel_sharpness = 1.0
@@ -168,7 +168,6 @@ chip_spawn_chance = 0.24
 barrel_to_drop = ExtResource("4_nqlwe")
 sfx_hit = Array[AudioStream]([ExtResource("8_8p6dj")])
 sfx_death = ExtResource("9_7awj5")
-current_phase = 3
 attack_recovery_time = 0.7
 projectile_scene = null
 delay_per_projectile = 0.6
@@ -695,19 +694,14 @@ uppercase = true
 
 [node name="DebugStateLabel" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 0)
-visible = false
 
 [node name="DebugDistanceLabel" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.6, 0)
-visible = false
 
-[node name="DamageTextMarker" parent="." index="15"]
+[node name="DamageTextMarker" parent="." index="16"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4888, 0)
 
-[node name="BodyCenter" parent="." index="16"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.71903, 0)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="17"]
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="." index="17"]
 libraries = {
 "": SubResource("AnimationLibrary_7pmgg")
 }
@@ -715,6 +709,9 @@ libraries = {
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="18"]
 unit_size = 20.0
 bus = &"SFX"
+
+[node name="BodyCenter" parent="." index="19"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.71903, 0)
 
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.04475, 0)
