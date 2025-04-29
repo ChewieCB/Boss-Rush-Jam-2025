@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=75 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -96,6 +96,14 @@ height = 0.7
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o53xj"]
 radius = 4.0
 height = 8.0
+
+[sub_resource type="Animation" id="Animation_mppog"]
+length = 0.1
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wocs5"]
+_data = {
+"death": SubResource("Animation_mppog")
+}
 
 [node name="BossSlots" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_qxyx0")]
 motion_mode = 1
@@ -1036,6 +1044,7 @@ shape = SubResource("CapsuleShape3D_o53xj")
 
 [node name="AnimationPlayer" parent="." index="31"]
 libraries = {
+"": SubResource("AnimationLibrary_wocs5"),
 "slot_boss_anims": ExtResource("64_5u1vo")
 }
 
