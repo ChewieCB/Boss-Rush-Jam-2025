@@ -79,6 +79,7 @@ func destroy() -> void:
 
 
 func _on_destroyed() -> void:
+	destroyed.emit(self)
 	mesh.visible = false
 	hurtbox_collider.disabled = true
 	collider.disabled = true
