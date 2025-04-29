@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=75 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -33,6 +33,8 @@
 [ext_resource type="AudioStream" uid="uid://d1gvu53dhcadx" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 5.mp3" id="21_f8dbu"]
 [ext_resource type="AudioStream" uid="uid://8rqo0mj5n8cw" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 6.mp3" id="22_dg8a1"]
 [ext_resource type="AudioStream" uid="uid://bmjh7bs72w8bm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 7.mp3" id="23_cagkm"]
+[ext_resource type="Texture2D" uid="uid://dndtyj8hh404v" path="res://assets/sprite/aoe_markers/aoe_ring.png" id="25_4viup"]
+[ext_resource type="Texture2D" uid="uid://cjm0gilmb52sa" path="res://assets/sprite/aoe_markers/aoe_arrows.png" id="26_27dae"]
 [ext_resource type="AudioStream" uid="uid://dj3qqiciyxwmv" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 1.mp3" id="26_ttq7b"]
 [ext_resource type="AudioStream" uid="uid://ddhs0duid8pk8" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 2.mp3" id="27_q6v3x"]
 [ext_resource type="AudioStream" uid="uid://xuyc45uopqlk" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 3.mp3" id="28_d1bvs"]
@@ -62,7 +64,7 @@
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="55_5buyr"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="56_ft1nf"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="57_f27rp"]
-[ext_resource type="AnimationLibrary" uid="uid://bt7sjducups6v" path="res://src/bosses/slots/assets/slot_boss_anims.res" id="64_5u1vo"]
+[ext_resource type="AnimationLibrary" uid="uid://cbukxypul85wr" path="res://src/bosses/slots/assets/slot_boss_anims.res" id="64_5u1vo"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
@@ -94,6 +96,14 @@ height = 0.7
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o53xj"]
 radius = 4.0
 height = 8.0
+
+[sub_resource type="Animation" id="Animation_mppog"]
+length = 0.1
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wocs5"]
+_data = {
+"death": SubResource("Animation_mppog")
+}
 
 [node name="BossSlots" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_qxyx0")]
 motion_mode = 1
@@ -127,6 +137,8 @@ num_bursts = 2
 delay_between_burst = 0.6
 sfx_coin_shot = Array[AudioStream]([ExtResource("17_1qoae"), ExtResource("18_5fj8q"), ExtResource("19_ecwx3"), ExtResource("20_dhjas"), ExtResource("21_f8dbu"), ExtResource("22_dg8a1"), ExtResource("23_cagkm")])
 bell_scene = ExtResource("9_6qwni")
+bell_aoe_marker_ring = ExtResource("25_4viup")
+bell_aoe_marker_arrows = ExtResource("26_27dae")
 drop_shadow_material = SubResource("ShaderMaterial_o7nhx")
 bell_shadow_time = 1.4
 bell_spawn_area_radius = 28.0
@@ -1030,8 +1042,9 @@ bus = &"SFX"
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
 shape = SubResource("CapsuleShape3D_o53xj")
 
-[node name="AnimationPlayer" parent="." index="30"]
+[node name="AnimationPlayer" parent="." index="31"]
 libraries = {
+"": SubResource("AnimationLibrary_wocs5"),
 "slot_boss_anims": ExtResource("64_5u1vo")
 }
 

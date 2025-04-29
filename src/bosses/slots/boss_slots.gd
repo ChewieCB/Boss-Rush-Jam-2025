@@ -70,6 +70,8 @@ var slot_ticks: int = SLOT_TICKS
 
 @export_subgroup("Bell Drop")
 @export var bell_scene: PackedScene
+@export var bell_aoe_marker_ring: CompressedTexture2D
+@export var bell_aoe_marker_arrows: CompressedTexture2D
 @export var drop_shadow_material: Material
 @export var bell_shadow_time: float = 1.4
 @export var bell_spawn_area_radius: float = 28.0
@@ -372,41 +374,52 @@ func drop_shadow(
 	drop_time: float = 3.5,
 	_callback: Callable = func(): pass
 ) -> void:
-	var debug_mesh_instance = MeshInstance3D.new()
-	var mesh = CylinderMesh.new()
-	
-	# Generate a visual
-	get_tree().get_root().add_child(debug_mesh_instance)
-	
-	debug_mesh_instance.mesh = mesh
-	debug_mesh_instance.cast_shadow = false
-	
 	# Snap to floor
+	#draw_debug_sphere(target_pos, 1.0, Color.YELLOW)
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
 		target_pos,
-		target_pos - Vector3(0, 100, 0),
-		int(pow(2, 1 - 1) + pow(2, 7 - 1))
+		target_pos - Vector3(0, 20, 0),
+		int(pow(2, 1 - 1))
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
 		target_pos.y = result.position.y
+		#draw_debug_sphere(target_pos, 1.0, Color.PURPLE)
 	
-	debug_mesh_instance.global_position = target_pos
+	# AoE decal
+	var aoe_tween: Tween = get_tree().create_tween()
+	var decal_ring := Decal.new()
+	decal_ring.texture_albedo = bell_aoe_marker_ring
+	decal_ring.size = Vector3(0, 1, 0)
+	get_parent().get_parent().add_child(decal_ring)
+	decal_ring.global_position = target_pos
 	
-	mesh.bottom_radius = 0.0
-	mesh.top_radius = 0.0
-	mesh.height = 0.5
-	mesh.material = drop_shadow_material
+	var decal_arrows := Decal.new()
+	decal_arrows.texture_albedo = bell_aoe_marker_arrows
+	decal_arrows.size = Vector3(0, 1, 0)
+	get_parent().get_parent().add_child(decal_arrows)
+	decal_arrows.global_position = target_pos
 	
-	var shadow_tween = get_tree().create_tween()
-	shadow_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", max_radius, drop_time) # .set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
-	shadow_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", max_radius, drop_time) # .set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
-	shadow_tween.tween_callback(debug_mesh_instance.queue_free)
-	shadow_tween.tween_callback(spawn_bell.bind(target_pos, max_radius))
+	aoe_tween.tween_property(decal_ring, "size", Vector3(max_radius * 2, 1, max_radius * 2), drop_time * 0.75)
+	aoe_tween.parallel().tween_property(decal_arrows, "size", Vector3(max_radius * 2, 1, max_radius * 2), drop_time)
+	aoe_tween.parallel().tween_property(decal_arrows, "rotation_degrees:y", 360, drop_time)
+	aoe_tween.chain().tween_callback(_spawn_bell.bind(target_pos, max_radius, [decal_arrows, decal_ring]))
+	aoe_tween.chain().tween_property(decal_arrows, "size", Vector3.ZERO, 1.04)  # Based on bell sfx sample timing
 
 
-func spawn_bell(pos: Vector3, size: float) -> void:
+func _cleanup_aoe_decals(decals_to_remove: Array) -> void:
+	for decal in decals_to_remove:
+		decal.queue_free()
+
+
+func _spawn_bell(pos: Vector3, size: float, decals: Array) -> void:
+	var bell = spawn_bell(pos, size)
+	await bell.destroyed
+	_cleanup_aoe_decals(decals)
+
+
+func spawn_bell(pos: Vector3, size: float) -> Bell:
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
 		pos,
@@ -417,7 +430,7 @@ func spawn_bell(pos: Vector3, size: float) -> void:
 	if result:
 		pos.y = result.position.y
 	
-	var bell = bell_scene.instantiate()
+	var bell: Bell = bell_scene.instantiate()
 	bell.global_position = pos
 	get_tree().root.get_child(7).add_child(bell)
 	bell.mesh.scale *= size
@@ -428,6 +441,8 @@ func spawn_bell(pos: Vector3, size: float) -> void:
 	bell.hurtbox_collider.shape.height = size * 2
 	bell.hurtbox_collider.position.y = size / 2
 	bell.drop()
+	
+	return bell
 
 
 func _on_bell_drop_state_entered() -> void:
@@ -471,7 +486,7 @@ func _on_bell_drop_dropping_state_entered() -> void:
 
 func _on_bell_drop_dropping_state_exited() -> void:
 	for point in bell_spawn_points:
-		var spawn := Vector3(point.x, 1.0, point.y)
+		var spawn := Vector3(point.x, 2.5, point.y)
 		# Spawn shadow/mesh to show AoE, grow in size as it drops
 		drop_shadow(spawn, 6.0, bell_shadow_time)
 		await get_tree().create_timer(0.2).timeout
