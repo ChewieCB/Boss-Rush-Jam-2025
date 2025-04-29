@@ -1,0 +1,67 @@
+[gd_scene load_steps=10 format=3 uid="uid://c2hnjvjn0xqoi"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_7qvwq"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_lnx2f"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="3_ahv8e"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="4_nlnie"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="5_ekkbf"]
+[ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="6_aheuu"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="7_jkbd8"]
+[ext_resource type="PackedScene" uid="uid://bpfgkk1ymtl18" path="res://src/player/gun/projectiles/GelProjectile.tscn" id="8_wtxnw"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="9_cg85h"]
+
+[node name="ArchetypeGelThrowerSpecBarrel" type="Node3D"]
+script = ExtResource("1_7qvwq")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="BasicFlamethrower" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_lnx2f")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_ekkbf"), ExtResource("6_aheuu")])
+display_text_title = "Flamethrower: Basic"
+display_text_tag = "High fireate and projectiles"
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/BasicFlamethrower"]
+script = ExtResource("7_jkbd8")
+new_prefab = ExtResource("8_wtxnw")
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/BasicFlamethrower"]
+script = ExtResource("9_cg85h")
+attribute = 2
+new_value = 2.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/BasicFlamethrower"]
+script = ExtResource("9_cg85h")
+attribute = 4
+new_value = 15.0
+
+[node name="SetSpreadAngle" type="Node3D" parent="EffectContainer/BasicFlamethrower"]
+script = ExtResource("9_cg85h")
+attribute = 7
+new_value = 5.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/BasicFlamethrower"]
+script = ExtResource("9_cg85h")
+attribute = 6
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/BasicFlamethrower"]
+script = ExtResource("9_cg85h")
+attribute = 5
+new_value = 50.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/BasicFlamethrower"]
+script = ExtResource("9_cg85h")
+attribute = 1
+new_value = 2.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/BasicFlamethrower"]
+script = ExtResource("9_cg85h")
+attribute = 11
+new_value = 0.01
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/BasicFlamethrower"]
+script = ExtResource("9_cg85h")
+attribute = 3
+new_value = 20.0

@@ -3,8 +3,6 @@ class_name SpinBarrel
 
 signal barrel_effect_changed(SpinBarrel, BaseBarrelEffect)
 
-@export var barrel_id: BarrelDataResource.BarrelIdEnum
-
 @onready var effect_container: Node3D = $EffectContainer
 
 var owner_gun: Gun
