@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("3_u4sns")
 barrel_id = 39
-barrel_name = "Archetype Flamethrower"
+barrel_name = "Archetype Gelthrower"
 barrel_desc = "[b]Archetype Barrel - Flamethrower[/b]
 Change the innate nature of the gun. Ideally put this barrel at the first position.
 

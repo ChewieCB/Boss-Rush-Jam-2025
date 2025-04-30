@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=26 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -18,6 +18,7 @@
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="10_28dwd"]
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="12_2rf45"]
 [ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/BulletDecal.tscn" id="17_n3wco"]
+[ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChipProjectile.tscn" id="19_sk1dt"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -184,3 +185,7 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.776
 
 [node name="BulletDecal" parent="." instance=ExtResource("17_n3wco")]
 transform = Transform3D(1, 0, 0, 0, 0.0971139, 0.995273, 0, -0.995273, 0.0971139, 0, 0.811173, 6.34857)
+
+[node name="CheatMoney" parent="." instance=ExtResource("19_sk1dt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.31406, 0.958608, -7.30638)
+value_array = Array[int]([100000, 100000, 100000, 100000, 100000])

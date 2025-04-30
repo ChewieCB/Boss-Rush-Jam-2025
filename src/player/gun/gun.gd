@@ -75,6 +75,7 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 @onready var failed_shoot_sfx_timer: Timer = $FailToShootSFXTimer
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var muzzle_flash_light: OmniLight3D = $BulletStartPos/MuzzleFlashLight
+@onready var smoke_timer: Timer = $SmokeTimer
 
 var magazine_ammo_left = 0
 var is_reloading = false
@@ -107,6 +108,7 @@ var modified_screenshake
 
 const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.1
 const BULLET_SPAWN_POS_VARIATION = 10
+const TIME_BETWEEN_MUZZLE_SMOKE = 0.25
 
 
 func _ready() -> void:
@@ -555,6 +557,11 @@ func _play_reload_end_sfx() -> void:
 
 
 func create_muzzle_smoke(aim_ray: RayCast3D):
+	if muzzle_smoke_prefab == null:
+		return
+	if not smoke_timer.is_stopped():
+		return
+	smoke_timer.start(TIME_BETWEEN_MUZZLE_SMOKE)
 	var smoke_inst = muzzle_smoke_prefab.instantiate()
 	get_tree().get_root().add_child(smoke_inst)
 	var smoke_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
