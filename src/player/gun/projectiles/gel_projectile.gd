@@ -25,9 +25,12 @@ var start_deflate = false
 
 func _physics_process(delta: float) -> void:
 	if sticked:
-		if start_deflate and mesh_instance.scale.x > 0:
-			deflate_speed += deflate_accel * delta
-			mesh_instance.scale -= Vector3.ONE * deflate_speed * delta
+		if start_deflate:
+			if mesh_instance.scale.x > 0:
+				deflate_speed += deflate_accel * delta
+				mesh_instance.scale -= Vector3.ONE * deflate_speed * delta
+			else:
+				mesh_instance.visible = false
 		return
 
 	if mesh_instance.scale.x < max_scale:
@@ -105,6 +108,7 @@ func _on_life_timer_timeout() -> void:
 
 
 func _on_stick_timer_timeout() -> void:
+	life_timer.start()
 	if ricochet_count_left > 0 and found_hitscal_col:
 		sticked = false
 		self.reparent.call_deferred(get_tree().get_root())

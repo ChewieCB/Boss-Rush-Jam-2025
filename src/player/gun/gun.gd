@@ -142,7 +142,9 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	if time_until_next_shot > time_since_last_shot:
 		return false
 
-	#reset_modifier()
+	reset_modifier()
+	for _barrel in barrel_container.get_children():
+		_barrel.get_active_effect().on_effect_set()
 
 	var can_fire = true
 	for barrel in installed_barrels:
@@ -182,9 +184,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 				create_gun_attack(projectile_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 
 		time_since_last_shot = 0
-		# Recoil (old)
-		# GameManager.player.player_camera.rotate_x(modified_recoil)
-		# GameManager.player.player_camera.rotate_y(randf_range(- modified_recoil, modified_recoil))
 		GameManager.player.player_camera.recoil_fire()
 
 		magazine_ammo_left -= n_ammo_consume
@@ -285,7 +284,7 @@ func spin_all_barrels() -> void:
 	#gun_status_label.visible = false
 	stop_all_barrels()
 	is_reloading = false
-	reload()
+	reload(true)
 
 
 func spin_single_barrel(barrel_idx: int) -> void:
@@ -307,7 +306,7 @@ func spin_single_barrel(barrel_idx: int) -> void:
 
 	_stop_barrel(barrel_idx)
 	is_reloading = false
-	reload()
+	reload(true)
 
 
 func _spin_barrel(barrel_idx: int) -> void:
@@ -334,7 +333,7 @@ func _stop_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_effect_set()
 
 
-func reload():
+func reload(already_spin_barrel = false):
 	# TODO - make this more generic and less tied to spinning barrels so we can call it elsewhere
 	if is_reloading:
 		return
@@ -346,6 +345,7 @@ func reload():
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
+		
 
 	is_reloading = true
 	anim_tree.set("parameters/reload_timescale/scale", 1 / modified_reload_time)
@@ -354,6 +354,11 @@ func reload():
 	await reload_anim_end
 	is_reloading = false
 	anim_tree.set("parameters/reload_timescale/scale", 1)
+
+	if not already_spin_barrel:
+		reset_modifier(true)
+		for _barrel in barrel_container.get_children():
+			_barrel.get_active_effect().on_effect_set()
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
