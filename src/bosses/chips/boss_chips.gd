@@ -5,6 +5,7 @@ signal substack_attacks_finished
 signal flood_chamber
 signal drain_chamber
 signal break_floor
+signal leap_finished(head_segment: Node)
 
 var prev_phase
 @export var phase_2_health_percentage_trigger: float = 0.5
@@ -46,13 +47,20 @@ var last_stack: ChipBossSubStack
 @export var split_rush_range: float = 6.0
 @export var split_rush_damage: float = 20.0
 @export_group("Chiptopede")
+@export var chiptopede_segment_prefab: PackedScene
 var chiptopede_spawns: Array[Node] = []
 var last_spawn: Node
 var last_leap_end_pos: Vector3
+@export_subgroup("Attributes")
+@export var chiptopede_max_health: float = 8000
 @export_subgroup("Chiptopede Leap")
-@export var chiptopede_segments: int = 8
-@export var segment_separation: float = 2.0
-@export var leap_time: float = 2.0
+@export var chiptopede_segments: int = 24
+@export var segment_separation: float = 0.9
+@export var leap_time: float = 3.4
+var leap_distance: float
+var leap_speed: float
+@export var leap_damage: float = 15.0
+var has_leap_impacted: bool = false
 var leap_curve: Curve3D
 var follow_nodes := []
 var completed_nodes := []
@@ -61,9 +69,13 @@ var chiptopede_head_offset: float = 0.0
 @export var leap_out_ratio: float = 0.6667
 @export var leap_in_ratio: float = 0.6667
 
-
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
 #@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
+
+
+func _ready() -> void:
+	super()
+	leap_finished.connect(_on_chiptopede_leap_impact)
 
 
 #func _physics_process(delta: float) -> void:
@@ -543,9 +555,19 @@ func _on_phase_3_state_entered() -> void:
 	# TODO - prevent damage numbers showing up
 	health_component.show_damage_text = false
 	
+	# TODO - fakeout death
+	#
+	
+	# Re-fill health bar, change name, and show
+	health_component.max_health = chiptopede_max_health
+	health_ui.init_health_ui(chiptopede_max_health)
+	health_ui.boss_name = "Chiptopede"
+	health_ui.show_ui()
+	
 	break_floor.emit()
 	await get_tree().create_timer(0.5)
 	state_chart.send_event("start_leap_attack")
+
 
 # LEAP
 func get_chiptopede_spawn() -> Vector3:
@@ -554,15 +576,22 @@ func get_chiptopede_spawn() -> Vector3:
 		available_spawns.erase(last_spawn)
 	# Pick a spawn location close to the last end position
 	var sort_target: Vector3 = target.global_position
+	var get_furthest: bool = true
 	if last_leap_end_pos:
 		sort_target = last_leap_end_pos
+		get_furthest = false
 	available_spawns.sort_custom(
 		func(a, b):
 			var a_dist: float = a.global_position.distance_to(sort_target)
 			var b_dist: float = b.global_position.distance_to(sort_target)
-			if a_dist > b_dist:
-				return true
-			return false
+			if get_furthest:
+				if a_dist > b_dist:
+					return true
+				return false
+			else:
+				if a_dist < b_dist:
+					return true
+				return false
 	)
 	last_spawn = available_spawns.front()
 	
@@ -580,11 +609,6 @@ func _on_chiptopede_leap_targeting_state_entered() -> void:
 	var path = Path3D.new()
 	leap_curve = Curve3D.new()
 	var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5) + Vector3(0, leap_height, 0)
-
-	draw_debug_sphere(start_pos, 0.5, Color.GREEN)
-	draw_debug_sphere(goal_pos, 0.5, Color.YELLOW)
-	draw_debug_sphere(mid_point, 0.5, Color.ORANGE)
-	draw_debug_sphere(target.global_position, 0.5, Color.PURPLE)
 
 	# Calculate bezier control points
 	var out_0 = (mid_point - start_pos) * leap_out_ratio  # 0.6667
@@ -604,14 +628,16 @@ func _on_chiptopede_leap_targeting_state_entered() -> void:
 		var path_follow = PathFollow3D.new()
 		path.add_child(path_follow)
 		
-		var test_mesh: MeshInstance3D = MeshInstance3D.new()
-		test_mesh.mesh = SphereMesh.new()
-		test_mesh.mesh.height = 4.0
-		test_mesh.mesh.radius = 2.0
-		test_mesh.global_position = path_follow.global_position
+		var new_segment: ChiptopedeSegment = chiptopede_segment_prefab.instantiate()
+		path_follow.add_child(new_segment)
+		new_segment.global_position = path_follow.global_position
+		new_segment.health_component.health_diff.connect(_on_chiptopede_hurt)
 		
-		path_follow.add_child(test_mesh)  # TODO - link to segment mesh
 		follow_nodes.append(path_follow)
+	
+	leap_distance = leap_curve.get_baked_length()
+	leap_speed = leap_distance / leap_time
+	has_leap_impacted = false
 	
 	state_chart.send_event("start_leap")
 
@@ -626,24 +652,38 @@ func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
 		state_chart.send_event("end_leap")
 		return
 	
-	chiptopede_head_offset += 30.0 * delta  # TODO - add speed control
-	var path_length: float = leap_curve.get_baked_length()
+	chiptopede_head_offset += leap_speed * delta
 	for i in range(chiptopede_segments):
 		var segment = follow_nodes[i]
 		if not segment:
 			continue
 		
 		var offset = chiptopede_head_offset - (i * segment_separation)
-		segment.progress = clamp(offset, 0, path_length)
+		segment.progress = clamp(offset, 0, leap_distance)
 		
 		if segment.progress_ratio == 1.0:
-			# TODO - only trigger AoE when first segment hits ground?
-			#segment.leap_finished.emit()
-			spawn_aoe_wave(8.0, 10.0, 0.1, segment.global_position, 0.5)
+			# Only trigger AoE when first segment hits ground
+			leap_finished.emit(segment)
 			segment.queue_free()
 			completed_nodes.append(i)
 
 
 func _on_chiptopede_leap_leaping_state_exited() -> void:
 	completed_nodes = []
+	follow_nodes = []
+
+
+func _on_chiptopede_leap_impact(segment: Node) -> void:
+	if not has_leap_impacted:
+		spawn_aoe_wave(8.0, leap_damage, 0.1, segment.global_position, 0.5)
+		has_leap_impacted = true
+
+
+func _on_chiptopede_hurt(health_diff: float) -> void:
+	health_component.damage(abs(health_diff))
+
+
+func _exit_tree() -> void:
+	for node in follow_nodes:
+		node.queue_free()
 	follow_nodes = []

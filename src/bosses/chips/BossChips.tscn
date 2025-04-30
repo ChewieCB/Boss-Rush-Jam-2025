@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=14 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Texture2D" uid="uid://c7hb6wpuv2rw6" path="res://src/bosses/base/assets/placeholder_sweets_big_stack.png" id="2_1q2di"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_81kie"]
 [ext_resource type="Material" uid="uid://ikjycfpkgv3n" path="res://src/bosses/chips/AoeMat.tres" id="5_vcykk"]
 [ext_resource type="PackedScene" uid="uid://cxg3ytjd4ybu0" path="res://src/bosses/chips/RollingChipProjectile.tscn" id="6_dth1w"]
+[ext_resource type="PackedScene" uid="uid://d4e0u7jv00gxw" path="res://src/bosses/chips/minions/ChiptopedeSegment.tscn" id="7_3u62n"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_dgy85"]
 size = Vector3(5.8, 5, 5.9)
@@ -40,9 +41,12 @@ small_stack_prefab = ExtResource("4_otar4")
 stack_spawn_time = 0.1
 split_rush_range = 6.0
 split_rush_damage = 20.0
-chiptopede_segments = 8
-segment_separation = 2.0
-leap_time = 2.0
+chiptopede_segment_prefab = ExtResource("7_3u62n")
+chiptopede_max_health = 8000.0
+chiptopede_segments = 24
+segment_separation = 0.9
+leap_time = 3.4
+leap_damage = 15.0
 leap_height = 16.0
 leap_out_ratio = 0.6667
 leap_in_ratio = 0.6667

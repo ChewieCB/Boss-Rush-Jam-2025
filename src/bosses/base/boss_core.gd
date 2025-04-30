@@ -500,17 +500,18 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
 			chip_mult = min(chip_mult, chip_spawn_mult_cap)
 			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult])
-			for i in chip_mult:
-				if randf() < chip_spawn_chance:
-					continue
-				# TODO - modify spawned chip value chance based on dps
-				var chip = chip_scene.instantiate() as RigidBody3D
-				GameManager.player.get_parent().add_child(chip)
-				chip.global_position = self.global_position
-				chip.rotate_y(randf_range(0, 2 * PI))
-				chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
-				chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
-				chip_dropped.emit(chip.value)
+			if chip_scene:
+				for i in chip_mult:
+					if randf() < chip_spawn_chance:
+						continue
+					# TODO - modify spawned chip value chance based on dps
+					var chip = chip_scene.instantiate() as RigidBody3D
+					GameManager.player.get_parent().add_child(chip)
+					chip.global_position = self.global_position
+					chip.rotate_y(randf_range(0, 2 * PI))
+					chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+					chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+					chip_dropped.emit(chip.value)
 			# Stop the dps timer and set the accumulated dps to 0
 			dps_dealt_window_timer.stop()
 			dps_accumulated_in_window = 0.0

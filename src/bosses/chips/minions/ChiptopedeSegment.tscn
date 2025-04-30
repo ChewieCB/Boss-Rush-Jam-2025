@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://d4e0u7jv00gxw"]
+
+[ext_resource type="Script" path="res://src/bosses/chips/minions/chiptopede_segment.gd" id="1_lem27"]
+[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_vud1u"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_dutx2"]
+height = 1.0
+radius = 2.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dmtq5"]
+top_radius = 2.0
+bottom_radius = 2.0
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yc1qx"]
+transparency = 1
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="ChiptopedeSegment" instance=ExtResource("1_vud1u")]
+collision_layer = 64
+script = ExtResource("1_lem27")
+chip_scene = null
+barrel_pickup_scene = null
+sfx_slowmo = null
+attack_recovery_time = 0.5
+projectile_scene = null
+delay_per_projectile = 0.6
+
+[node name="Sprite3D" parent="." index="0"]
+visible = false
+
+[node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_dutx2")
+
+[node name="DebugMesh" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+visible = true
+mesh = SubResource("CylinderMesh_dmtq5")
+surface_material_override/0 = SubResource("StandardMaterial3D_yc1qx")
+
+[node name="HealthComponent" parent="." index="4"]
+max_health = 10000.0
