@@ -9,6 +9,8 @@ extends BossMap
 @onready var waterfalls: Node3D = $Waterfalls
 @onready var water_surface: MeshInstance3D = $WaterSurfaceMesh
 @onready var rising_platforms: Array[Node] = get_tree().get_nodes_in_group("rising_platforms")
+@onready var chiptopede_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_worm_spawn_marker")
+
 # Water damage
 @onready var water_damage_timer: Timer = $WaterDamageTimer
 @export var water_damage_tick: float = 0.6
@@ -18,8 +20,10 @@ extends BossMap
 
 
 func _ready() -> void:
+	boss.chiptopede_spawns = chiptopede_spawns
 	boss.flood_chamber.connect(raise_water)
 	boss.drain_chamber.connect(lower_water)
+	boss.break_floor.connect(break_floor)
 
 	waterfalls.visible = false
 	water_surface.global_position.y = lower_water_level
@@ -27,13 +31,20 @@ func _ready() -> void:
 	super()
 
 
-#func _input(event: InputEvent) -> void:
-	#if event.is_action_pressed("input_1"):
-		##if breakable_floor:
-			##breakable_floor.queue_free()
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("input_1"):
+		break_floor()
 		#raise_water()
 	#elif event.is_action_pressed("input_2"):
 		#lower_water()
+
+
+func break_floor() -> void:
+	water_surface.visible = false
+	if breakable_floor:
+		breakable_floor.queue_free()
+	for platform in rising_platforms:
+		platform.queue_free()
 
 
 func generate_navigation() -> void:
