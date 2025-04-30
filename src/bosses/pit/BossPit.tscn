@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=53 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://dm1odub4yea6w" path="res://src/bosses/pit/assets/pit_boss_swipe_TEMP.png" id="13_qgkan"]
 [ext_resource type="AudioStream" uid="uid://ch70wgmho3fnf" path="res://src/bosses/pit/assets/sfx/PIT BOSS OVERHEAD SLAM 3.mp3" id="14_v35b0"]
 [ext_resource type="AudioStream" uid="uid://cmccepm0vu8qm" path="res://src/bosses/pit/assets/sfx/PIT BOSS AOE.mp3" id="15_krqds"]
+[ext_resource type="Texture2D" uid="uid://wtny7hmnvya0" path="res://assets/sprite/aoe_markers/aoe_cracks.png" id="15_ocuyd"]
 [ext_resource type="AudioStream" uid="uid://dbxt7ck7bxxxr" path="res://src/bosses/pit/assets/sfx/PIT BOSS DASH.mp3" id="16_q6xxl"]
 [ext_resource type="AudioStream" uid="uid://dt60mvvsp8gbw" path="res://src/bosses/pit/assets/sfx/PIT BOSS ANGRY VOICE.mp3" id="18_e8yae"]
 [ext_resource type="AudioStream" uid="uid://e15km4eb5n7w" path="res://src/bosses/pit/assets/sfx/PIT BOSS DEAD.mp3" id="19_2oyqj"]
@@ -36,6 +37,7 @@
 [ext_resource type="Texture2D" uid="uid://fh4rp8ctjfwe" path="res://src/bosses/pit/assets/pit_boss_slam.png" id="28_1qowr"]
 [ext_resource type="Texture2D" uid="uid://448jp7cfw467" path="res://src/bosses/pit/assets/pit_boss_death.png" id="28_ljohv"]
 [ext_resource type="AnimationLibrary" uid="uid://d2wsbe5ulvdyw" path="res://src/bosses/pit/assets/pit_boss_anims.res" id="33_vitgm"]
+[ext_resource type="Texture2D" uid="uid://gsl8gv11j648" path="res://src/bosses/pit/assets/pit_boss_stagger.png" id="37_v71bl"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e3170"]
 transparency = 1
@@ -111,9 +113,26 @@ tracks/0/keys = {
 "values": [ExtResource("8_d716h")]
 }
 
+[sub_resource type="Animation" id="Animation_ny4xv"]
+length = 0.6
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_d716h"), ExtResource("37_v71bl"), ExtResource("27_4wn57"), ExtResource("28_ljohv")]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4yxgi"]
 _data = {
-"RESET": SubResource("Animation_uu0dl")
+"RESET": SubResource("Animation_uu0dl"),
+"death": SubResource("Animation_ny4xv")
 }
 
 [node name="BossPit" instance=ExtResource("1_opefu")]
@@ -141,6 +160,7 @@ sfx_jump = Array[AudioStream]([ExtResource("11_qdlm8")])
 sfx_slam = Array[AudioStream]([ExtResource("12_gfyrj"), ExtResource("13_ne8it"), ExtResource("14_v35b0")])
 ground_pound_wave_radius = 16.0
 ground_wave_damage = 6.0
+slam_aoe_decal = ExtResource("15_ocuyd")
 sfx_ground_pound = Array[AudioStream]([ExtResource("15_krqds")])
 lunge_friction = 0.05
 lunge_damage = 5.0
@@ -174,14 +194,14 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugL" index="0"]
-transform = Transform3D(-0.905967, 1.1274, 0.39775, 0.933456, 0.978886, -0.648424, -0.746919, -0.144112, -1.29281, -1.94809, 2.26694, -0.0607154)
+transform = Transform3D(-0.905967, 1.1274, 0.397751, 0.933456, 0.978886, -0.648424, -0.746919, -0.144112, -1.29281, -1.94809, 2.26694, -0.0607154)
 mesh = SubResource("BoxMesh_g5e5v")
 skeleton = NodePath("../../../Sprite3D")
 
 [node name="ArmsDebugR" type="Node3D" parent="ArmsDEbug" index="1"]
 
 [node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugR" index="0"]
-transform = Transform3D(0.789815, -1.17876, -0.486546, 1.14907, 0.906037, -0.329768, 0.553034, -0.19908, 1.38004, 2.05191, 2.26694, 0.0392845)
+transform = Transform3D(0.789815, -1.17876, -0.486546, 1.14907, 0.906037, -0.329769, 0.553034, -0.19908, 1.38004, 2.05191, 2.26694, 0.0392845)
 mesh = SubResource("BoxMesh_g5e5v")
 skeleton = NodePath("../../../Sprite3D")
 

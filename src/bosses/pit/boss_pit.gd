@@ -59,6 +59,7 @@ var slam_target_pos := Vector3.ZERO
 @export_subgroup("Ground Pound")
 @export var ground_pound_wave_radius: float = 16.0
 @export var ground_wave_damage: float = 6.0
+@export var slam_aoe_decal: CompressedTexture2D
 # SFX
 @export var sfx_ground_pound: Array[AudioStream]
 @export_subgroup("Lunge")
@@ -702,6 +703,16 @@ func spawn_center_wave(
 	# Animate the visual
 	sfx_player.stream = sfx_ground_pound.pick_random()
 	sfx_player.play()
+	
+	var decal_slam := Decal.new()
+	decal_slam.texture_albedo = slam_aoe_decal
+	decal_slam.size = Vector3(max_radius, 1, max_radius)
+	get_parent().get_parent().add_child(decal_slam)
+	decal_slam.global_position = self.global_position
+	
+	var aoe_tween: Tween = get_tree().create_tween()
+	aoe_tween.tween_property(decal_slam, "modulate:a", 0, 1.0).set_ease(Tween.EASE_IN)
+	
 	var tween = get_tree().create_tween()
 	tween.tween_property(mesh, "bottom_radius", max_radius, spawned_wave_time)
 	tween.parallel().tween_property(mesh, "top_radius", max_radius, spawned_wave_time)
