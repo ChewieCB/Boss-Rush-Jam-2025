@@ -93,6 +93,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	impacted.emit(true, global_position)
 	life_timer.stop()
 	stick_timer.start(stick_time)
+	if found_hitscal_col:
+		global_position = hitscan_col_point
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:
