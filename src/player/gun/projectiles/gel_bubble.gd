@@ -21,7 +21,8 @@ var current_dir
 var max_range
 ## Each bubble has a random delayed time before it start moving
 var delayed = true
-
+var start_deflate = false
+var deflate_speed = 30
 
 func _ready() -> void:
 	delayed = true
@@ -29,6 +30,8 @@ func _ready() -> void:
 	mesh_instance.scale = Vector3.ONE * 0.01
 	var delay_time = randf_range(min_delay_time, max_delay_time)
 	await get_tree().create_timer(delay_time).timeout
+	# Reset lifetime so delayed time doesnt affect it
+	life_timer.start()
 	delayed = false
 	mesh_instance.visible = true
 
@@ -37,10 +40,12 @@ func _physics_process(delta: float) -> void:
 	if delayed:
 		return
 
-	if projectile_speed > 0:
-		projectile_speed -= projectile_speed_decay * delta
 	if mesh_instance.scale.x < max_scale:
 		mesh_instance.scale += Vector3.ONE * grow_speed * delta
+
+	if projectile_speed > 0:
+		projectile_speed -= projectile_speed_decay * delta
+
 
 	if homing_locked_in and homing_target:
 		var target_pos = homing_target.global_position

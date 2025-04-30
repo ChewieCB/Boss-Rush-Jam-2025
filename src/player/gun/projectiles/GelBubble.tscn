@@ -37,7 +37,7 @@ radius = 1.0
 [node name="GelProjectile" type="Node3D"]
 script = ExtResource("1_72qkr")
 max_scale = 5
-grow_speed = 50
+grow_speed = 25
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
