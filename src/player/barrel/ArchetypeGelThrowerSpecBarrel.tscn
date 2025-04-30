@@ -44,17 +44,17 @@ new_prefab = ExtResource("8_wtxnw")
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")
 attribute = 2
-new_value = 1.0
+new_value = 2.0
 
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")
 attribute = 4
-new_value = 18.0
+new_value = 20.0
 
 [node name="SetSpreadAngle" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")
 attribute = 7
-new_value = 3.0
+new_value = 10.0
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")
