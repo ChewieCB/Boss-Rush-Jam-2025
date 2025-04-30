@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c2hnjvjn0xqoi"]
+[gd_scene load_steps=21 format=3 uid="uid://c2hnjvjn0xqoi"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_7qvwq"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_lnx2f"]
@@ -19,6 +19,7 @@
 [ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="14_nmsjh"]
 [ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="15_sylvt"]
 [ext_resource type="PackedScene" uid="uid://dij705shy7t2i" path="res://src/player/gun/projectiles/GelProjectileBlob.tscn" id="19_0vbdx"]
+[ext_resource type="PackedScene" uid="uid://fsh2tr0s517i" path="res://src/player/gun/projectiles/GelBubble.tscn" id="20_qbway"]
 
 [node name="ArchetypeGelThrowerSpecBarrel" type="Node3D"]
 script = ExtResource("1_7qvwq")
@@ -31,7 +32,7 @@ is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_td2sj"), ExtResource("6_8lxby"), ExtResource("7_0s8ux"), ExtResource("8_edm41"), ExtResource("9_2krpk"), ExtResource("10_botf5"), ExtResource("11_6abxt"), ExtResource("12_8f28h"), ExtResource("13_l3foa"), ExtResource("14_nmsjh"), ExtResource("15_sylvt")])
 display_text_title = "Archetype: Gel stream"
-display_text_tag = "High firerate and projectile count"
+display_text_tag = "Very high firerate but low damage"
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("7_jkbd8")
@@ -40,12 +41,12 @@ new_prefab = ExtResource("8_wtxnw")
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")
 attribute = 2
-new_value = 2.0
+new_value = 1.0
 
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")
 attribute = 4
-new_value = 15.0
+new_value = 16.0
 
 [node name="SetSpreadAngle" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")
@@ -64,7 +65,7 @@ new_value = 50.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")
 attribute = 1
-new_value = 2.0
+new_value = 3.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")
@@ -136,3 +137,57 @@ new_value = 2.0
 script = ExtResource("9_cg85h")
 attribute = 3
 new_value = 60.0
+
+[node name="GelBubble" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_lnx2f")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_td2sj"), ExtResource("6_8lxby"), ExtResource("7_0s8ux"), ExtResource("8_edm41"), ExtResource("9_2krpk"), ExtResource("10_botf5"), ExtResource("11_6abxt"), ExtResource("12_8f28h"), ExtResource("13_l3foa"), ExtResource("14_nmsjh"), ExtResource("15_sylvt")])
+display_text_title = "Archetype: Gel bubbles"
+display_text_tag = "Dense projectile count yet zero damage"
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("7_jkbd8")
+new_prefab = ExtResource("20_qbway")
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 2
+new_value = 22.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 4
+new_value = 2.0
+
+[node name="SetSpreadAngle" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 7
+new_value = 10.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 6
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 5
+new_value = 10.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 1
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 11
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 3
+new_value = 30.0
+
+[node name="SetReload" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 8
+new_value = 1.8
