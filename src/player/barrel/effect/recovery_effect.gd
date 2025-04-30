@@ -27,5 +27,9 @@ func on_reload_end():
 		heal_barrier_inst = heal_barrier_prefab.instantiate()
 		GameManager.player.add_child(heal_barrier_inst)
 
+
+func on_barrel_remove():
+	on_reload_start()
+
 func heal():
 	GameManager.player.health_component.heal(heal_amount)

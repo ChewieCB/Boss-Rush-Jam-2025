@@ -24,6 +24,12 @@ func calculate_new_value(old_value: float, modify_value: float, is_perc: bool, r
 	return new_value
 
 
+func on_barrel_install():
+	return
+
+func on_barrel_remove():
+	return
+
 ## Call when an effect is first applied
 func on_effect_set():
 	return
