@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ba3k7kprithnp"
+path="res://.godot/imported/Coin Shot Bigger 4.mp3-e3dd55643a76dbd068cd8b9a28113b67.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 4.mp3"
+dest_files=["res://.godot/imported/Coin Shot Bigger 4.mp3-e3dd55643a76dbd068cd8b9a28113b67.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
