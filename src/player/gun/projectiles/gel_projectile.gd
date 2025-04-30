@@ -6,6 +6,7 @@ extends BaseProjectile
 @export var deflate_accel = 10
 @export var deflate_speed = 1
 
+@onready var raycast: RayCast3D = $RayCast3D
 @onready var mesh_instance: MeshInstance3D = $MeshInstance3D
 @onready var life_timer: Timer = $LifeTimer
 @onready var stick_timer: Timer = $StickTimer
@@ -13,6 +14,9 @@ extends BaseProjectile
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
 var projectile_speed = 100
+var found_hitscal_col = false
+var hitscan_col_point
+var hitscan_col_normal
 var current_dir
 var max_range
 var sticked = false
@@ -47,13 +51,25 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	damage = 1
+	var rand_damage_mod = int(randf_range(-_damage / 3.0, _damage / 3.0))
+	damage = _damage + rand_damage_mod
 	current_dir = dir
 	ricochet_count_left = ricochet_count
 	look_at_from_position(start_pos, start_pos + dir)
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
+
+	if raycast.is_colliding():
+		hitscan_col_point = raycast.get_collision_point()
+		hitscan_col_normal = raycast.get_collision_normal()
+		found_hitscal_col = true
+
+func ricochet():
+	super ()
+	found_hitscal_col = false
+	is_ricochet_shot = true
+	init(global_position, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
@@ -71,9 +87,9 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			body.health_component.damage(damage)
 	self.reparent.call_deferred(body)
 	sticked = true
+	impacted.emit(true, global_position)
 	life_timer.stop()
 	stick_timer.start(stick_time)
-	impacted.emit(true, global_position)
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:
@@ -89,5 +105,9 @@ func _on_life_timer_timeout() -> void:
 
 
 func _on_stick_timer_timeout() -> void:
-	start_deflate = true
-	life_timer.start()
+	if ricochet_count_left > 0 and found_hitscal_col:
+		sticked = false
+		self.reparent.call_deferred(get_tree().get_root())
+		ricochet()
+	else:
+		start_deflate = true

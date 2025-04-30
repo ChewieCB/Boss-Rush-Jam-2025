@@ -62,3 +62,5 @@ visibility_aabb = AABB(-0.452503, -0.204213, -1.28575, 0.830573, 0.973868, 1.385
 process_material = SubResource("ParticleProcessMaterial_27yf8")
 draw_pass_1 = SubResource("QuadMesh_idobp")
 script = ExtResource("2_l3vjw")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

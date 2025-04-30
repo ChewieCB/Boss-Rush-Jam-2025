@@ -4,12 +4,16 @@ extends BaseProjectile
 @export var explosion_prefab: PackedScene
 @export var explosion_vfx: PackedScene
 
+@onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
 @onready var explode_timer: Timer = $ExplodeTimer
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
 var projectile_speed = 100
+var found_hitscal_col = false
+var hitscan_col_point
+var hitscan_col_normal
 var current_dir
 var max_range
 var sticked = false
@@ -44,6 +48,18 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
+
+	if raycast.is_colliding():
+		hitscan_col_point = raycast.get_collision_point()
+		hitscan_col_normal = raycast.get_collision_normal()
+		found_hitscal_col = true
+
+func ricochet():
+	super ()
+	found_hitscal_col = false
+	is_ricochet_shot = true
+	init(global_position, current_dir.bounce(hitscan_col_normal), explosion_damage, ricochet_count_left - 1, projectile_speed, max_range)
+
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit()
@@ -86,6 +102,11 @@ func _on_explode_timer_timeout() -> void:
 	get_parent().add_child(vfx)
 	vfx.global_position = global_position
 
-	await get_tree().create_timer(0.25).timeout
-	destroyed.emit()
-	call_deferred("queue_free")
+	if ricochet_count_left > 0 and found_hitscal_col:
+		sticked = false
+		self.reparent.call_deferred(get_tree().get_root())
+		ricochet()
+	else:
+		await get_tree().create_timer(0.25).timeout
+		destroyed.emit()
+		call_deferred("queue_free")

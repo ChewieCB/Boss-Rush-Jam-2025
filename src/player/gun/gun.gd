@@ -220,7 +220,7 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 	var bullet_inst = bullet_prefab.instantiate()
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
-	GameManager.player.get_parent().add_child(bullet_inst)
+	get_tree().get_root().add_child(bullet_inst)
 	bullet_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
 	bullet_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
 	bullet_inst.impacted.connect(check_barrel_effect_on_projectile_impact)

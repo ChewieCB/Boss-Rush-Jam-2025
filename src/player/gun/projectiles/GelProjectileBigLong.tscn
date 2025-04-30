@@ -32,7 +32,6 @@ radius = 1.0
 [node name="GelProjectileBigLong" type="Node3D"]
 script = ExtResource("1_5n0au")
 stick_time = 5
-max_scale = 3
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
