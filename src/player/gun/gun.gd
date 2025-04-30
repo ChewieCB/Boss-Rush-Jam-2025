@@ -258,6 +258,7 @@ func release_trigger():
 func spin_all_barrels() -> void:
 	var barrels_to_spin: int = installed_barrels.size()
 	if barrels_to_spin == 0:
+		reload()
 		return
 
 	release_trigger()
@@ -461,13 +462,14 @@ func install_barrel(barrel_prefab: PackedScene) -> void:
 
 	magazine_ammo_left = 0
 
-	var barrel_count: int = barrel_container.get_child_count()
+	barrel_count = barrel_container.get_child_count()
 	var barrel_idx: int = barrel_count - 1 if barrel_count > 0 else 0
 
-	#barrel.owner_gun = self
+	barrel_inst.owner_gun = self
 	installed_barrels.append(barrel_inst)
 	barrel_count = installed_barrels.size()
 
+	barrel_inst.get_active_effect().on_barrel_install()
 	barrel_equipped.emit(barrel_inst, barrel_idx)
 
 	recheck_installed_barrels()
@@ -475,13 +477,10 @@ func install_barrel(barrel_prefab: PackedScene) -> void:
 	# Re-apply the effects of the currently equipped barrels
 	reset_modifier(true)
 	for barrel in barrel_container.get_children():
-		if barrel == barrel_inst:
-			continue
 		barrel.get_active_effect().on_effect_set()
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	spin_single_barrel(barrel_count - 1)
 
 
 func remove_barrel(barrel_idx: int) -> void:
@@ -489,13 +488,15 @@ func remove_barrel(barrel_idx: int) -> void:
 		return
 
 	var barrel: SpinBarrel = barrel_container.get_child(barrel_idx)
-	barrel.queue_free()
 	barrel_container.remove_child(barrel)
+	barrel.get_active_effect().on_barrel_remove()
 	barrel_unequipped.emit(null, barrel_idx)
-	reset_modifier(true)
+	barrel.queue_free()
+	
 	recheck_installed_barrels()
 
 	# Re-apply the effects of the currently equipped barrels
+	reset_modifier(true)
 	for _barrel in barrel_container.get_children():
 		_barrel.get_active_effect().on_effect_set()
 
