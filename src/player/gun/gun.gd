@@ -86,6 +86,7 @@ var barrel_count: int = 0
 
 var is_trigger_pulled = false
 var muzzle_light_tween: Tween
+var reinstalled_barrel_from_savefile = false
 
 # Modify-able by barrels
 # We won't modify them in this script
@@ -112,11 +113,16 @@ const TIME_BETWEEN_MUZZLE_SMOKE = 0.25
 
 
 func _ready() -> void:
-	SaveManager.savefile_loaded.connect(reinstall_barrels)
+	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
+	if SaveManager.save_data_is_loaded:
+		_on_savefile_loaded()
+	else:
+		reinstall_barrels()
 	magazine_ammo_left = base_magazine_size
 	muzzle_flash_light.light_energy = 0
-	reinstall_barrels()
 	reset_modifier(true)
+	await get_tree().process_frame
+	await get_tree().process_frame
 	reload()
 
 
@@ -346,7 +352,7 @@ func reload(already_spin_barrel = false):
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
-		
+
 
 	is_reloading = true
 	anim_tree.set("parameters/reload_timescale/scale", 1 / modified_reload_time)
@@ -492,7 +498,7 @@ func remove_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_remove()
 	barrel_unequipped.emit(null, barrel_idx)
 	barrel.queue_free()
-	
+
 	recheck_installed_barrels()
 
 	# Re-apply the effects of the currently equipped barrels
@@ -505,7 +511,7 @@ func recheck_installed_barrels():
 	# Wait to make sure barrel actually instantiated or queue_freed
 	await get_tree().process_frame
 	await get_tree().process_frame
-	installed_barrels = []
+	installed_barrels.clear()
 	for i in range(barrel_container.get_child_count()):
 		var barrel = barrel_container.get_child(i)
 		barrel.owner_gun = self
@@ -580,3 +586,8 @@ func create_muzzle_flash_light():
 		muzzle_light_tween.stop()
 	muzzle_light_tween = create_tween()
 	muzzle_light_tween.tween_property(muzzle_flash_light, "light_energy", 0, 0.2).set_trans(Tween.TRANS_SINE)
+
+func _on_savefile_loaded():
+	if not reinstalled_barrel_from_savefile:
+		reinstalled_barrel_from_savefile = true
+		reinstall_barrels()
