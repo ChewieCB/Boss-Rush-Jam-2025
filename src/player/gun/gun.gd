@@ -142,9 +142,9 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	if time_until_next_shot > time_since_last_shot:
 		return false
 
-	reset_modifier()
-	for _barrel in barrel_container.get_children():
-		_barrel.get_active_effect().on_effect_set()
+	# reset_modifier()
+	# for _barrel in barrel_container.get_children():
+	# 	_barrel.get_active_effect().on_effect_set()
 
 	var can_fire = true
 	for barrel in installed_barrels:

@@ -17,12 +17,12 @@ enum AttributeNameEnum {
 }
 
 @export var attribute: AttributeNameEnum
-## By default is flat value. For boolean value, 0 for false and 1 for true
+## By default is flat value. If is_perc is true, 50 = 50%. For boolean value, 0 for false and 1 for true
 @export var modify_value: float
 @export var is_perc: bool
 
 func on_effect_set():
-	super()
+	super ()
 	match attribute:
 		AttributeNameEnum.FIRERATE:
 			owner_barrel.owner_gun.modified_firerate = calculate_new_value(
