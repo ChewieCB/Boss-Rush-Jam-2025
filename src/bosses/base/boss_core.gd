@@ -230,7 +230,7 @@ func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInst
 	var node = MeshInstance3D.new()
 	node.mesh = sphere
 	node.global_transform.origin = location
-	scene_root.add_child(node)
+	#scene_root.add_child(node)
 
 	return node
 
@@ -350,6 +350,8 @@ func select_attack() -> void:
 			select_attack_phase_1()
 		2:
 			select_attack_phase_2()
+		3:
+			select_attack_phase_3()
 		_:
 			push_error("Invalid phase %s" % current_phase)
 
@@ -359,6 +361,10 @@ func select_attack_phase_1() -> void:
 
 
 func select_attack_phase_2() -> void:
+	pass
+
+
+func select_attack_phase_3() -> void:
 	pass
 
 

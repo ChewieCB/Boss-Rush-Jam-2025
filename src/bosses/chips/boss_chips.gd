@@ -4,6 +4,7 @@ class_name BossChips
 signal substack_attacks_finished
 signal flood_chamber
 signal drain_chamber
+signal break_floor
 
 var prev_phase
 @export var phase_2_health_percentage_trigger: float = 0.5
@@ -44,6 +45,21 @@ var last_stack: ChipBossSubStack
 @export_subgroup("Split Stack Rush")
 @export var split_rush_range: float = 6.0
 @export var split_rush_damage: float = 20.0
+@export_group("Chiptopede")
+var chiptopede_spawns: Array[Node] = []
+var last_spawn: Node
+var last_leap_end_pos: Vector3
+@export_subgroup("Chiptopede Leap")
+@export var chiptopede_segments: int = 8
+@export var segment_separation: float = 2.0
+@export var leap_time: float = 2.0
+var leap_curve: Curve3D
+var follow_nodes := []
+var completed_nodes := []
+var chiptopede_head_offset: float = 0.0
+@export var leap_height: float = 16.0
+@export var leap_out_ratio: float = 0.6667
+@export var leap_in_ratio: float = 0.6667
 
 
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
@@ -58,7 +74,7 @@ func activate() -> void:
 	super()
 	navigation_component.follow_target = false
 	navigation_component.enable()
-	state_chart.send_event("start_phase_1")
+	state_chart.send_event("start_phase_3")
 
 
 func select_attack_phase_1() -> void:
@@ -76,6 +92,10 @@ func select_attack_phase_1() -> void:
 	print(prev_phase, new_phase)
 	prev_phase = new_phase
 	state_chart.send_event(new_phase)
+
+
+func select_attack_phase_3() -> void:
+	state_chart.send_event("start_chiptopede_leap")
 
 
 #### SUBSTACK METHODS
@@ -508,3 +528,122 @@ func _on_split_stack_charge_merging_state_entered() -> void:
 	
 	area_collider.global_position = self.global_position
 	area_collider.body_entered.connect(_on_wave_collision.bind(split_rush_damage))
+
+
+## Phase 3 - Chiptopede
+
+func _on_phase_3_state_entered() -> void:
+	# Hide the main boss body and disable collision
+	sprite.visible = false
+	debug_mesh.visible = false
+	navigation_component.disable()
+	# Disable player and projectile collisions
+	self.collision_mask -= (pow(2, 2-1) + pow(2, 4-1))
+	hurtbox.set_deferred("monitoring",  false)
+	# TODO - prevent damage numbers showing up
+	health_component.show_damage_text = false
+	
+	break_floor.emit()
+	await get_tree().create_timer(0.5)
+	state_chart.send_event("start_leap_attack")
+
+# LEAP
+func get_chiptopede_spawn() -> Vector3:
+	var available_spawns = chiptopede_spawns.duplicate()
+	if last_spawn:
+		available_spawns.erase(last_spawn)
+	# Pick a spawn location close to the last end position
+	var sort_target: Vector3 = target.global_position
+	if last_leap_end_pos:
+		sort_target = last_leap_end_pos
+	available_spawns.sort_custom(
+		func(a, b):
+			var a_dist: float = a.global_position.distance_to(sort_target)
+			var b_dist: float = b.global_position.distance_to(sort_target)
+			if a_dist > b_dist:
+				return true
+			return false
+	)
+	last_spawn = available_spawns.front()
+	
+	return last_spawn.global_position
+
+
+func _on_chiptopede_leap_targeting_state_entered() -> void:
+	# Move chiptopede to new spawn location
+	self.global_position = get_chiptopede_spawn()
+	# Get the player's current position as the target point
+	var start_pos: Vector3 = self.global_position
+	var goal_pos: Vector3 = target.global_position
+	goal_pos.y = -19
+	# Create a leaping path between these two points
+	var path = Path3D.new()
+	leap_curve = Curve3D.new()
+	var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5) + Vector3(0, leap_height, 0)
+
+	draw_debug_sphere(start_pos, 0.5, Color.GREEN)
+	draw_debug_sphere(goal_pos, 0.5, Color.YELLOW)
+	draw_debug_sphere(mid_point, 0.5, Color.ORANGE)
+	draw_debug_sphere(target.global_position, 0.5, Color.PURPLE)
+
+	# Calculate bezier control points
+	var out_0 = (mid_point - start_pos) * leap_out_ratio  # 0.6667
+	var in_1 = (mid_point - goal_pos) * leap_in_ratio  # 0.6667
+	leap_curve.add_point(start_pos, Vector3.ZERO, out_0)
+	leap_curve.add_point(goal_pos, in_1, Vector3.ZERO)
+	path.curve = leap_curve
+
+	# Add the path to the scene
+	var scene_root = get_tree().root.get_children()[8]
+	scene_root.add_child(path)
+	
+	# For each segment of the chiptopede, create a path follow 
+	# and offset it by the distance between each segment
+	follow_nodes = []
+	for segment in chiptopede_segments:
+		var path_follow = PathFollow3D.new()
+		path.add_child(path_follow)
+		
+		var test_mesh: MeshInstance3D = MeshInstance3D.new()
+		test_mesh.mesh = SphereMesh.new()
+		test_mesh.mesh.height = 4.0
+		test_mesh.mesh.radius = 2.0
+		test_mesh.global_position = path_follow.global_position
+		
+		path_follow.add_child(test_mesh)  # TODO - link to segment mesh
+		follow_nodes.append(path_follow)
+	
+	state_chart.send_event("start_leap")
+
+
+func _on_chiptopede_leap_leaping_state_entered() -> void:
+	chiptopede_head_offset = 0.0
+	completed_nodes = []
+
+
+func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
+	if completed_nodes.size() == follow_nodes.size():
+		state_chart.send_event("end_leap")
+		return
+	
+	chiptopede_head_offset += 30.0 * delta  # TODO - add speed control
+	var path_length: float = leap_curve.get_baked_length()
+	for i in range(chiptopede_segments):
+		var segment = follow_nodes[i]
+		if not segment:
+			continue
+		
+		var offset = chiptopede_head_offset - (i * segment_separation)
+		segment.progress = clamp(offset, 0, path_length)
+		
+		if segment.progress_ratio == 1.0:
+			# TODO - only trigger AoE when first segment hits ground?
+			#segment.leap_finished.emit()
+			spawn_aoe_wave(8.0, 10.0, 0.1, segment.global_position, 0.5)
+			segment.queue_free()
+			completed_nodes.append(i)
+
+
+func _on_chiptopede_leap_leaping_state_exited() -> void:
+	completed_nodes = []
+	follow_nodes = []
