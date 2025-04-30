@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://gwlfcdvj2q8w"]
+[gd_scene load_steps=22 format=3 uid="uid://gwlfcdvj2q8w"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/inventory_ui.gd" id="1_ipm0i"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_ll5g3"]
 [ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="4_2cim8"]
-[ext_resource type="AudioStream" uid="uid://bfikexik2t3y6" path="res://src/ui/common/assets/sfx/OPEN THE SHOP.mp3" id="5_uo88s"]
+[ext_resource type="AudioStream" uid="uid://bnt0hxmrnje7n" path="res://src/ui/common/assets/sfx/Open the shop new.mp3" id="5_kjcmp"]
+[ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="6_6bh6k"]
 [ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_r2p6i"]
 [ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="7_7ms08"]
 [ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="8_26bi3"]
@@ -17,6 +18,12 @@
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="16_52kyw"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="17_us1pk"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="18_wlq32"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_k1v6f"]
+random_pitch = 1.36
+streams_count = 2
+stream_0/stream = ExtResource("5_kjcmp")
+stream_1/stream = ExtResource("6_6bh6k")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kjq12"]
 shader = ExtResource("10_qwxoi")
@@ -35,7 +42,7 @@ script = ExtResource("1_ipm0i")
 shop_title = "Yuya's Barrels"
 barrel_item_ui_prefab = ExtResource("2_ll5g3")
 shop_item_ui_prefab = ExtResource("4_2cim8")
-sfx_open = ExtResource("5_uo88s")
+sfx_open = SubResource("AudioStreamRandomizer_k1v6f")
 sfx_click = ExtResource("6_r2p6i")
 sfx_purchase = ExtResource("7_7ms08")
 sfx_too_expensive = ExtResource("8_26bi3")
