@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dejxfgvmmixqg"
-path.s3tc="res://.godot/imported/texture_light_08.png-1d1be7236ecb7b0c8183e79778445994.s3tc.ctex"
+uid="uid://3yl8x1go5ul0"
+path.s3tc="res://.godot/imported/archetype_gelthrower.png-ee2f35fff043ebf9fef3dc58ae9275e5.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/placeholder/texture_light_08.png"
-dest_files=["res://.godot/imported/texture_light_08.png-1d1be7236ecb7b0c8183e79778445994.s3tc.ctex"]
+source_file="res://src/player/barrel/resource/sprite/archetype_gelthrower.png"
+dest_files=["res://.godot/imported/archetype_gelthrower.png-ee2f35fff043ebf9fef3dc58ae9275e5.s3tc.ctex"]
 
 [params]
 

@@ -1,9 +1,15 @@
 extends BaseProjectile
-class_name GunProjectile
+
+@export var stick_time = 1
+@export var max_scale = 3
+@export var grow_speed = 100
+@export var deflate_accel = 10
+@export var deflate_speed = 1
 
 @onready var raycast: RayCast3D = $RayCast3D
+@onready var mesh_instance: MeshInstance3D = $MeshInstance3D
 @onready var life_timer: Timer = $LifeTimer
-
+@onready var stick_timer: Timer = $StickTimer
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
@@ -13,14 +19,31 @@ var hitscan_col_point
 var hitscan_col_normal
 var current_dir
 var max_range
+var sticked = false
+var start_deflate = false
+
 
 func _physics_process(delta: float) -> void:
+	if sticked:
+		if start_deflate:
+			if mesh_instance.scale.x > 0:
+				deflate_speed += deflate_accel * delta
+				mesh_instance.scale -= Vector3.ONE * deflate_speed * delta
+			else:
+				mesh_instance.visible = false
+		return
+
+	if mesh_instance.scale.x < max_scale:
+		mesh_instance.scale += Vector3.ONE * grow_speed * delta
+
 	if homing_locked_in and homing_target:
 		var target_pos = homing_target.global_position
 		if homing_target.get_node("BodyCenter"):
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
+
+	# Make it fly forward
 	global_position -= transform.basis.z * projectile_speed * delta
 
 
@@ -45,10 +68,6 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		hitscan_col_normal = raycast.get_collision_normal()
 		found_hitscal_col = true
 
-func _on_life_timer_timeout() -> void:
-	destroyed.emit()
-	call_deferred("queue_free")
-
 func ricochet():
 	super ()
 	found_hitscal_col = false
@@ -57,28 +76,25 @@ func ricochet():
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
+	if sticked:
+		return
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			body.health_component.damage(damage)
 			damage_applied.emit(damage, true, global_position)
-			ricochet_count_left = 0
-		if found_hitscal_col:
-			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
 			body.health_component.damage(damage)
 		elif "health_component" in body:
 			body.health_component.damage(damage)
-		if found_hitscal_col:
-			create_spark(hitscan_col_point, hitscan_col_normal)
-			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
+	self.reparent.call_deferred(body)
+	sticked = true
 	impacted.emit(true, global_position)
-	if ricochet_count_left > 0 and found_hitscal_col:
-		ricochet()
-	else:
-		destroyed.emit()
-		call_deferred("queue_free")
+	life_timer.stop()
+	stick_timer.start(stick_time)
+	if found_hitscal_col:
+		global_position = hitscan_col_point
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:
@@ -86,3 +102,18 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 		homing_locked_in = true
 		homing_target = body
 		homing_area.set_deferred("monitoring", false)
+
+
+func _on_life_timer_timeout() -> void:
+	destroyed.emit()
+	call_deferred("queue_free")
+
+
+func _on_stick_timer_timeout() -> void:
+	life_timer.start()
+	if ricochet_count_left > 0 and found_hitscal_col:
+		sticked = false
+		self.reparent.call_deferred(get_tree().get_root())
+		ricochet()
+	else:
+		start_deflate = true

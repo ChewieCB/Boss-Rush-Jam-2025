@@ -36,7 +36,7 @@ func _ready() -> void:
 	value = value_array[chosen_idx]
 	value_label_1.text = str(value)
 	value_label_2.text = str(value)
-	
+
 	add_to_group("currency_chips")
 
 

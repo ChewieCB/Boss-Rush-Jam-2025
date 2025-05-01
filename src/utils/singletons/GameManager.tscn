@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://bf0e8h28gl1ae"]
+[gd_scene load_steps=44 format=3 uid="uid://bf0e8h28gl1ae"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/game_manager.gd" id="1_rn441"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_m6fe3"]
@@ -10,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://di2x3xsnfojlh" path="res://src/player/barrel/resource/archetype_railgun_spec_barrrel_data.tres" id="8_fntlm"]
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="9_juqu2"]
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="10_83sf6"]
+[ext_resource type="Resource" uid="uid://b8ex3g3n6w7du" path="res://src/player/barrel/resource/archetype_gelthrower_spec_barrrel_data.tres" id="10_ol55s"]
 [ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="10_sxhit"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="11_pbpm2"]
 [ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="11_rdxq7"]
@@ -47,8 +48,8 @@
 process_mode = 3
 script = ExtResource("1_rn441")
 starting_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("3_23s84")])
-starting_shop_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2")])
-barrel_database = Array[Resource]([ExtResource("6_pgp6q"), ExtResource("3_23s84"), ExtResource("8_fntlm"), ExtResource("7_upwdb"), ExtResource("10_83sf6"), ExtResource("9_juqu2"), ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("11_pbpm2"), ExtResource("12_b3bxi"), ExtResource("13_iyynv"), ExtResource("14_lbyk3")])
+starting_shop_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2"), ExtResource("10_ol55s")])
+barrel_database = Array[Resource]([ExtResource("6_pgp6q"), ExtResource("3_23s84"), ExtResource("8_fntlm"), ExtResource("7_upwdb"), ExtResource("10_83sf6"), ExtResource("9_juqu2"), ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("11_pbpm2"), ExtResource("12_b3bxi"), ExtResource("13_iyynv"), ExtResource("14_lbyk3"), ExtResource("10_ol55s")])
 debug_barrel_database = Array[Resource]([ExtResource("15_tw800"), ExtResource("16_8l4bp"), ExtResource("17_rr7ua"), ExtResource("18_i21jw"), ExtResource("19_c2uqn"), ExtResource("20_r8862"), ExtResource("21_8s4w2"), ExtResource("22_hxj0e"), ExtResource("23_oeafg"), ExtResource("24_43pof"), ExtResource("25_ub3jn"), ExtResource("26_5pvpg"), ExtResource("27_r43al"), ExtResource("28_31w6r"), ExtResource("29_e1hqf"), ExtResource("30_6palp"), ExtResource("31_tfgny"), ExtResource("32_if6fu"), ExtResource("33_t2wjc"), ExtResource("34_k0sis"), ExtResource("35_iofua"), ExtResource("36_8equh"), ExtResource("37_2c257"), ExtResource("38_f3sy1"), ExtResource("39_i56c5"), ExtResource("40_3cilc")])
 sfx_purchase = ExtResource("10_sxhit")
 sfx_too_expensive = ExtResource("11_rdxq7")

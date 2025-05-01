@@ -1,0 +1,196 @@
+[gd_scene load_steps=24 format=3 uid="uid://c2hnjvjn0xqoi"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_7qvwq"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_lnx2f"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="3_ahv8e"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="4_nlnie"]
+[ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="5_td2sj"]
+[ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="6_8lxby"]
+[ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="7_0s8ux"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="7_jkbd8"]
+[ext_resource type="AudioStream" uid="uid://cf460otm0xrf3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 4.mp3" id="8_edm41"]
+[ext_resource type="PackedScene" uid="uid://bpfgkk1ymtl18" path="res://src/player/gun/projectiles/GelProjectile.tscn" id="8_wtxnw"]
+[ext_resource type="AudioStream" uid="uid://dpcvjx6i8qmt7" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 5.mp3" id="9_2krpk"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="9_cg85h"]
+[ext_resource type="AudioStream" uid="uid://dhilfnn0tk1u5" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 6.mp3" id="10_botf5"]
+[ext_resource type="AudioStream" uid="uid://dtyk4el1l2a1n" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 7.mp3" id="11_6abxt"]
+[ext_resource type="AudioStream" uid="uid://t5oqkgi1pmg3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 8.mp3" id="12_8f28h"]
+[ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="13_l3foa"]
+[ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="14_nmsjh"]
+[ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="15_sylvt"]
+[ext_resource type="PackedScene" uid="uid://dij705shy7t2i" path="res://src/player/gun/projectiles/GelProjectileBlob.tscn" id="19_0vbdx"]
+[ext_resource type="AudioStream" uid="uid://dgkubhibl6i66" path="res://src/player/gun/assets/sfx/shot/bubble/bubbles1.mp3" id="20_73alt"]
+[ext_resource type="PackedScene" uid="uid://fsh2tr0s517i" path="res://src/player/gun/projectiles/GelBubble.tscn" id="20_qbway"]
+[ext_resource type="AudioStream" uid="uid://c30vsy4ydh8yq" path="res://src/player/gun/assets/sfx/shot/bubble/bubbles2.mp3" id="21_gik88"]
+[ext_resource type="AudioStream" uid="uid://jywk1r8a4sgw" path="res://src/player/gun/assets/sfx/shot/bubble/bubbles3.mp3" id="22_fit1i"]
+
+[node name="ArchetypeGelThrowerSpecBarrel" type="Node3D"]
+script = ExtResource("1_7qvwq")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="GelStream" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_lnx2f")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_td2sj"), ExtResource("6_8lxby"), ExtResource("7_0s8ux"), ExtResource("8_edm41"), ExtResource("9_2krpk"), ExtResource("10_botf5"), ExtResource("11_6abxt"), ExtResource("12_8f28h"), ExtResource("13_l3foa"), ExtResource("14_nmsjh"), ExtResource("15_sylvt")])
+display_text_title = "Archetype: Gel stream"
+display_text_tag = "Very high firerate but low damage"
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("7_jkbd8")
+new_prefab = ExtResource("8_wtxnw")
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("9_cg85h")
+attribute = 2
+new_value = 2.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("9_cg85h")
+attribute = 4
+new_value = 20.0
+
+[node name="SetSpreadAngle" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("9_cg85h")
+attribute = 7
+new_value = 10.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("9_cg85h")
+attribute = 6
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("9_cg85h")
+attribute = 5
+new_value = 50.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("9_cg85h")
+attribute = 1
+new_value = 3.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("9_cg85h")
+attribute = 11
+new_value = 0.01
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("9_cg85h")
+attribute = 3
+new_value = 60.0
+
+[node name="SetReload" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("9_cg85h")
+attribute = 8
+new_value = 2.5
+
+[node name="GelBlob" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_lnx2f")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_td2sj"), ExtResource("6_8lxby"), ExtResource("7_0s8ux"), ExtResource("8_edm41"), ExtResource("9_2krpk"), ExtResource("10_botf5"), ExtResource("11_6abxt"), ExtResource("12_8f28h"), ExtResource("13_l3foa"), ExtResource("14_nmsjh"), ExtResource("15_sylvt")])
+display_text_title = "Archetype: Gel blob"
+display_text_tag = "Single, big, sticky projectile"
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("7_jkbd8")
+new_prefab = ExtResource("19_0vbdx")
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("9_cg85h")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("9_cg85h")
+attribute = 4
+new_value = 1.0
+
+[node name="SetSpreadAngle" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("9_cg85h")
+attribute = 7
+new_value = 1.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("9_cg85h")
+attribute = 6
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("9_cg85h")
+attribute = 5
+new_value = 2.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("9_cg85h")
+attribute = 1
+new_value = 20.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("9_cg85h")
+attribute = 11
+new_value = 0.05
+
+[node name="SetReload" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("9_cg85h")
+attribute = 8
+new_value = 2.0
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("9_cg85h")
+attribute = 3
+new_value = 60.0
+
+[node name="GelBubble" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_lnx2f")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("20_73alt"), ExtResource("21_gik88"), ExtResource("22_fit1i")])
+display_text_title = "Archetype: Gel bubbles"
+display_text_tag = "Dense projectile count yet zero damage"
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("7_jkbd8")
+new_prefab = ExtResource("20_qbway")
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 2
+new_value = 28.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 4
+new_value = 2.0
+
+[node name="SetSpreadAngle" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 7
+new_value = 10.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 6
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 5
+new_value = 10.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 1
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 11
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 3
+new_value = 30.0
+
+[node name="SetReload" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("9_cg85h")
+attribute = 8
+new_value = 1.8

@@ -1,14 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://cywwydmxkbh4x"]
+[gd_scene load_steps=9 format=3 uid="uid://cywwydmxkbh4x"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_w6qw3"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="3_nac64"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_rhvms"]
 [ext_resource type="PackedScene" uid="uid://r58hv7fv4nab" path="res://src/player/gun/projectiles/BallProjectile.tscn" id="4_fpaqy"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_2bruo"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/protective_barrier.gd" id="6_61sk6"]
+[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/ShieldBarrier.tscn" id="7_n73is"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/apply_knockback_self.gd" id="8_1u0d3"]
 
-[node name="DebugBallBulletBarrel" type="Node3D"]
+[node name="RouletteBossBarrel" type="Node3D"]
 script = ExtResource("1_w6qw3")
-barrel_id = 8
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
@@ -34,3 +36,35 @@ script = ExtResource("6_2bruo")
 attribute = 1
 modify_value = 60.0
 is_perc = true
+
+[node name="ProtectiveBarrier" type="Node3D" parent="EffectContainer"]
+script = ExtResource("6_61sk6")
+shield_barrier_prefab = ExtResource("7_n73is")
+damage_reduction_perc = 50.0
+display_text_title = "Protective Barrier"
+display_text_tag = "Tough up!"
+display_text_desc = "50% damage resistance"
+
+[node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_rhvms")
+display_text_title = "Newton's Third Law"
+display_text_tag = "Safer Rocket Jump"
+display_text_desc = "+50% damage
+-25% firerate"
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
+script = ExtResource("6_2bruo")
+attribute = 1
+modify_value = 50.0
+is_perc = true
+
+[node name="ModifyFirerate" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
+script = ExtResource("6_2bruo")
+attribute = 4
+modify_value = -25.0
+is_perc = true
+
+[node name="ApplyKnockbackSelf" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
+script = ExtResource("8_1u0d3")
+force = 15.0
+max_range = 3.0

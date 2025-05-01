@@ -16,3 +16,6 @@ func on_reload_end():
 	if shield_barrier_inst == null:
 		shield_barrier_inst = shield_barrier_prefab.instantiate()
 		GameManager.player.add_child(shield_barrier_inst)
+
+func on_barrel_remove():
+	on_reload_start()
