@@ -10,6 +10,7 @@ extends BossMap
 @onready var water_surface: MeshInstance3D = $WaterSurfaceMesh
 @onready var rising_platforms: Array[Node] = get_tree().get_nodes_in_group("rising_platforms")
 @onready var chiptopede_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_worm_spawn_marker")
+@onready var chiptopede_snake_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_snake_spawn_marker")
 
 # Water damage
 @onready var water_damage_timer: Timer = $WaterDamageTimer
@@ -40,7 +41,9 @@ func _input(event: InputEvent) -> void:
 
 
 func break_floor() -> void:
-	water_surface.visible = false
+	water_surface.visible = true
+	#lower_water()
+	water_surface.global_position.y = -19
 	if breakable_floor:
 		breakable_floor.queue_free()
 	for platform in rising_platforms:
@@ -95,6 +98,8 @@ func lower_water() -> void:
 
 
 func _on_water_damage_area_body_entered(body: Node3D) -> void:
+	return
+	# TODO - add drunk effect instead of damage
 	if body is Player:
 		player.health_component.damage(water_damage_amount)
 		water_damage_timer.start(water_damage_tick)

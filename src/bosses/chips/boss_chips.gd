@@ -59,6 +59,7 @@ var last_leap_end_pos: Vector3
 @export var leap_time: float = 3.4
 var leap_distance: float
 var leap_speed: float
+@export var leap_aoe_radius: float = 12.0
 @export var leap_damage: float = 15.0
 var has_leap_impacted: bool = false
 var leap_curve: Curve3D
@@ -512,6 +513,27 @@ func spawn_aoe_wave(
 	return
 
 
+func spawn_aoe_bubble(radius: float, damage: float, spawn_pos: Vector3, duration: float) -> void:
+	# Generate a collider
+	var area_collider := Area3D.new()
+	var area_collider_shape := CollisionShape3D.new()
+	var collider_shape := SphereShape3D.new()
+	collider_shape.radius = radius
+	area_collider_shape.shape = collider_shape
+	area_collider.add_child(area_collider_shape)
+	area_collider.collision_layer = int(pow(2, 7))
+	area_collider.collision_mask = int(pow(2, 2 - 1))
+	area_collider.monitoring = true
+	
+	get_tree().get_root().add_child(area_collider)
+	
+	area_collider.global_position = spawn_pos
+	area_collider.body_entered.connect(_on_wave_collision.bind(damage))
+	
+	await get_tree().create_timer(duration).timeout
+	area_collider.queue_free()
+
+
 func _on_wave_collision(body: Node3D, aoe_damage: float) -> void:
 	if body == target:
 		body.health_component.damage(aoe_damage)
@@ -675,7 +697,14 @@ func _on_chiptopede_leap_leaping_state_exited() -> void:
 
 func _on_chiptopede_leap_impact(segment: Node) -> void:
 	if not has_leap_impacted:
-		spawn_aoe_wave(8.0, leap_damage, 0.1, segment.global_position, 0.5)
+		spawn_aoe_bubble(leap_aoe_radius, leap_damage, segment.global_position, 0.4)
+		#spawn_aoe_wave(8.0, leap_damage, 0.1, segment.global_position, 0.5)
+		# Create an explosion
+		var explosion_inst = explosion_scene.instantiate()
+		add_child(explosion_inst)
+		explosion_inst.global_position = segment.global_position
+		explosion_inst.change_mesh_scale(8.0)
+		
 		has_leap_impacted = true
 
 
