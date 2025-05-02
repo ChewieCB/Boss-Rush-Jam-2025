@@ -48,7 +48,7 @@ func _input(event: InputEvent) -> void:
 
 
 func break_floor() -> void:
-	water_surface.visible = false
+	water_surface.visible = true
 	#lower_water()
 	water_surface.global_position.y = -19.3
 	if breakable_floor:
