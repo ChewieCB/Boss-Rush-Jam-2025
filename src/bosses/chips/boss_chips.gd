@@ -48,14 +48,17 @@ var last_stack: ChipBossSubStack
 @export var split_rush_damage: float = 20.0
 @export_group("Chiptopede")
 @export var chiptopede_segment_prefab: PackedScene
-var chiptopede_spawns: Array[Node] = []
+var chiptopede_spawns: Array[Node]
+var chiptopede_snake_spawns: Array[Node]
+var chiptopede_snake_path_points: Array[Node]
+@onready var chiptopede_snake_points: Array[Node] = chiptopede_snake_spawns + chiptopede_snake_path_points
 var last_spawn: Node
 var last_leap_end_pos: Vector3
 @export_subgroup("Attributes")
 @export var chiptopede_max_health: float = 8000
-@export_subgroup("Chiptopede Leap")
+@export_subgroup("Leap")
 @export var chiptopede_segments: int = 24
-@export var segment_separation: float = 0.9
+@export var segment_separation: float = 2.0
 @export var leap_time: float = 3.4
 var leap_distance: float
 var leap_speed: float
@@ -69,6 +72,11 @@ var chiptopede_head_offset: float = 0.0
 @export var leap_height: float = 16.0
 @export var leap_out_ratio: float = 0.6667
 @export var leap_in_ratio: float = 0.6667
+@export_subgroup("Snake")
+@onready var astar := AStar3D.new()
+var snake_path: PackedVector3Array
+@export var snake_speed: float = 25.0
+var snake_distance: float
 
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
 #@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
@@ -87,6 +95,8 @@ func activate() -> void:
 	super()
 	navigation_component.follow_target = false
 	navigation_component.enable()
+	if not self.is_node_ready():
+		await self.ready
 	state_chart.send_event("start_phase_3")
 
 
@@ -108,7 +118,17 @@ func select_attack_phase_1() -> void:
 
 
 func select_attack_phase_3() -> void:
-	state_chart.send_event("start_chiptopede_leap")
+	var possible_phases = [
+		"start_leap_attack",
+		"start_snake_attack",
+	]
+	if prev_phase:
+		possible_phases.erase(prev_phase)
+	# TODO - add random weighting
+	var new_phase = possible_phases.pick_random()
+	print(prev_phase, new_phase)
+	prev_phase = new_phase
+	state_chart.send_event(new_phase)
 
 
 #### SUBSTACK METHODS
@@ -579,6 +599,7 @@ func _on_phase_3_state_entered() -> void:
 	
 	# TODO - fakeout death
 	#
+	generate_snake_graph()
 	
 	# Re-fill health bar, change name, and show
 	health_component.max_health = chiptopede_max_health
@@ -588,7 +609,7 @@ func _on_phase_3_state_entered() -> void:
 	
 	break_floor.emit()
 	await get_tree().create_timer(0.5)
-	state_chart.send_event("start_leap_attack")
+	select_attack_phase_3()
 
 
 # LEAP
@@ -712,7 +733,119 @@ func _on_chiptopede_hurt(health_diff: float) -> void:
 	health_component.damage(abs(health_diff))
 
 
+## Snake
+
+func generate_snake_graph() -> void:
+	var all_points = chiptopede_snake_spawns + chiptopede_snake_path_points
+	for i in range(all_points.size()):
+		var point = all_points[i]
+		astar.add_point(i, point.global_position)
+		all_points.append(point)
+	for point in all_points:
+		var point_idx: int = all_points.find(point)
+		for connection in point.connected_points:
+			var connection_idx: int = all_points.find(connection)
+			astar.connect_points(point_idx, connection_idx)
+
+
+func calculate_snake_path(target_pos: Vector3) -> void:
+	snake_path += astar.get_point_path(
+		astar.get_closest_point(self.global_position),
+		astar.get_closest_point(target_pos)
+	)
+	for point in snake_path:
+		draw_debug_sphere(point, 15.0, Color.PURPLE)
+
+
+
 func _exit_tree() -> void:
 	for node in follow_nodes:
-		node.queue_free()
+		if is_instance_valid(node):
+			node.queue_free()
 	follow_nodes = []
+
+
+func _on_chiptopede_snake_targeting_state_entered() -> void:
+	# Pick a spawn point
+	var spawn_pos = chiptopede_snake_spawns.pick_random()
+	self.global_position = spawn_pos.global_position
+	
+	# Calculate a path for the snake to move along
+	snake_path.clear()
+	calculate_snake_path(target.global_position)
+	var available_spawns = chiptopede_snake_spawns.duplicate()
+	available_spawns.erase(spawn_pos)
+	available_spawns.sort_custom(
+		func(a, b):
+			var a_dist: float = a.global_position.distance_to(target.global_position)
+			var b_dist: float = b.global_position.distance_to(target.global_position)
+			if a_dist < b_dist:
+				return true
+			return false
+	)
+	var end_pos = available_spawns.front()
+	calculate_snake_path(end_pos.global_position)
+	
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(0.8).timeout
+	
+	state_chart.send_event("start_snake")
+
+
+func _on_chiptopede_snake_moving_state_entered() -> void:
+	# Create curves from path and create chiptopede segments
+	var path = Path3D.new()
+	var curve = Curve3D.new()
+	for i in range(snake_path.size() - 1):
+		var start_pos: Vector3 = snake_path[i]
+		var goal_pos: Vector3 = snake_path[i + 1]
+		# Create a leaping path between these two points
+		var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5)
+
+		# Calculate bezier control points
+		var out_0 = (mid_point - start_pos) * 0.6667
+		var in_1 = (mid_point - goal_pos) * 0.6667
+		curve.add_point(start_pos, Vector3.ZERO, out_0)
+		curve.add_point(goal_pos, in_1, Vector3.ZERO)
+	path.curve = curve
+	snake_distance = curve.get_baked_length()
+	
+	# Add the path to the scene
+	var scene_root = get_tree().root.get_children()[8]
+	scene_root.add_child(path)
+
+	follow_nodes = []
+	for segment in chiptopede_segments:
+		var path_follow = PathFollow3D.new()
+		path.add_child(path_follow)
+		
+		var new_segment: ChiptopedeSegment = chiptopede_segment_prefab.instantiate()
+		path_follow.add_child(new_segment)
+		new_segment.global_position = path_follow.global_position
+		new_segment.health_component.health_diff.connect(_on_chiptopede_hurt)
+		
+		follow_nodes.append(path_follow)
+
+
+func _on_chiptopede_snake_moving_state_physics_processing(delta: float) -> void:
+	if completed_nodes.size() == follow_nodes.size():
+		state_chart.send_event("end_snake")
+		return
+	
+	chiptopede_head_offset += snake_speed * delta
+	for i in range(chiptopede_segments):
+		var segment = follow_nodes[i]
+		if not segment:
+			continue
+		
+		var offset = chiptopede_head_offset - (i * segment_separation)
+		# TODO - get snake distance and clamp progress max here
+		segment.progress = clamp(offset, 0, snake_distance)
+		
+		if segment.progress_ratio == 1.0:
+			segment.queue_free()
+			completed_nodes.append(i)
+
+
+func _on_chiptopede_snake_moving_state_exited() -> void:
+	snake_path.clear()

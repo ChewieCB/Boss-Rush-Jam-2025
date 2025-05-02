@@ -7,8 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d0cyswc5xao7m" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_head.png" id="5_3rtpt"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_dutx2"]
-height = 1.0
-radius = 2.0
+radius = 4.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s8do6"]
 resource_name = "rear_texture"
@@ -140,7 +139,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 shape = SubResource("CylinderShape3D_dutx2")
 
 [node name="Cylinder" type="MeshInstance3D" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(2, 0, 0, 0, -8.74228e-08, 2, 0, -2, -8.74228e-08, 0, 0, 0)
 mesh = SubResource("ArrayMesh_e60hf")
 skeleton = NodePath("")
 

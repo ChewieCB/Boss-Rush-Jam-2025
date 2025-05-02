@@ -44,13 +44,14 @@ split_rush_damage = 20.0
 chiptopede_segment_prefab = ExtResource("7_3u62n")
 chiptopede_max_health = 8000.0
 chiptopede_segments = 32
-segment_separation = 0.9
+segment_separation = 2.0
 leap_time = 3.0
 leap_aoe_radius = 12.0
 leap_damage = 15.0
 leap_height = 18.0
 leap_out_ratio = 0.6667
 leap_in_ratio = 0.6667
+snake_speed = 25.0
 barrel_pickup_scene = null
 sfx_slowmo = null
 current_phase = 3
@@ -493,6 +494,12 @@ to = NodePath("../../ChiptopedeLeap")
 event = &"start_leap_attack"
 delay_in_seconds = "0.0"
 
+[node name="toChiptopedeSnake" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="1"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeSnake")
+event = &"start_snake_attack"
+delay_in_seconds = "0.0"
+
 [node name="ChiptopedeLeap" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Targeting")
@@ -524,8 +531,48 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
+[node name="toChiptopedeSnake" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeLeap" index="3"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeSnake")
+event = &"start_snake_attack"
+delay_in_seconds = "0.0"
+
 [node name="ChiptopedeSnake" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
 script = ExtResource("4_kiknp")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeSnake" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toMoving" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Targeting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Moving")
+event = &"start_snake"
+delay_in_seconds = "0.0"
+
+[node name="Moving" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeSnake" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toRecovering" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Moving" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recovering")
+event = &"end_snake"
+delay_in_seconds = "0.0"
+
+[node name="Recovering" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeSnake" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Recovering" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toChiptopedeLeap" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeSnake" index="3"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeLeap")
+event = &"start_leap_attack"
+delay_in_seconds = "0.0"
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_entered"]
@@ -563,3 +610,8 @@ script = ExtResource("4_kiknp")
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Leaping" to="." method="_on_chiptopede_leapleaping_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Recovering" to="." method="_on_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Recovering" to="." method="_on_recovering_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Targeting" to="." method="_on_chiptopede_snake_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Moving" to="." method="_on_chiptopede_snake_moving_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Moving" to="." method="_on_chiptopede_snake_moving_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Moving" to="." method="_on_chiptopede_snake_moving_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Recovering" to="." method="_on_recover_state_entered"]

@@ -2,6 +2,11 @@ extends BossMap
 
 @export var active_bgm: AudioStream
 
+#
+@onready var chiptopede_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_worm_spawn_marker")
+@onready var chiptopede_snake_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_snake_spawn_marker")
+@onready var chiptopede_snake_path_points: Array[Node] = get_tree().get_nodes_in_group("boss_snake_path_marker")
+
 # Flooding/Draining levels
 @export var lower_water_level: float = -0.1
 @export var upper_water_level: float = 1.3
@@ -9,8 +14,6 @@ extends BossMap
 @onready var waterfalls: Node3D = $Waterfalls
 @onready var water_surface: MeshInstance3D = $WaterSurfaceMesh
 @onready var rising_platforms: Array[Node] = get_tree().get_nodes_in_group("rising_platforms")
-@onready var chiptopede_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_worm_spawn_marker")
-@onready var chiptopede_snake_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_snake_spawn_marker")
 
 # Water damage
 @onready var water_damage_timer: Timer = $WaterDamageTimer
@@ -21,10 +24,14 @@ extends BossMap
 
 
 func _ready() -> void:
-	boss.chiptopede_spawns = chiptopede_spawns
 	boss.flood_chamber.connect(raise_water)
 	boss.drain_chamber.connect(lower_water)
 	boss.break_floor.connect(break_floor)
+	
+	
+	boss.chiptopede_spawns = chiptopede_spawns
+	boss.chiptopede_snake_spawns = chiptopede_snake_spawns
+	boss.chiptopede_snake_path_points = chiptopede_snake_path_points
 
 	waterfalls.visible = false
 	water_surface.global_position.y = lower_water_level
@@ -43,7 +50,7 @@ func _input(event: InputEvent) -> void:
 func break_floor() -> void:
 	water_surface.visible = true
 	#lower_water()
-	water_surface.global_position.y = -19
+	water_surface.global_position.y = -19.3
 	if breakable_floor:
 		breakable_floor.queue_free()
 	for platform in rising_platforms:
