@@ -298,11 +298,6 @@ func drop_barrel() -> void:
 	var curve = Curve3D.new()
 	var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5) + Vector3(0, 5.0, 0)
 
-	#draw_debug_sphere(start_pos, 0.5, Color.GREEN)
-	#draw_debug_sphere(goal_pos, 0.5, Color.YELLOW)
-	#draw_debug_sphere(mid_point, 0.5, Color.ORANGE)
-	#draw_debug_sphere(target.global_position, 0.5, Color.RED)
-
 	# Calculate bezier control points
 	var out_0 = (mid_point - start_pos) * 0.6667
 	var in_1 = (mid_point - goal_pos) * 0.6667

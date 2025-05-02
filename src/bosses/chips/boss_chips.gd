@@ -71,12 +71,14 @@ var completed_nodes := []
 var chiptopede_head_offset: float = 0.0
 @export var leap_height: float = 16.0
 @export var leap_out_ratio: float = 0.6667
-@export var leap_in_ratio: float = 0.6667
+@export var leap_in_ratio: float = 0.
+var leap_path_3d: Path3D
 @export_subgroup("Snake")
 @onready var astar := AStar3D.new()
 var snake_path: PackedVector3Array
 @export var snake_speed: float = 25.0
 var snake_distance: float
+var snake_path_3d: Path3D
 
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
 #@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
@@ -649,7 +651,7 @@ func _on_chiptopede_leap_targeting_state_entered() -> void:
 	var goal_pos: Vector3 = target.global_position
 	goal_pos.y = -19
 	# Create a leaping path between these two points
-	var path = Path3D.new()
+	leap_path_3d = Path3D.new()
 	leap_curve = Curve3D.new()
 	var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5) + Vector3(0, leap_height, 0)
 
@@ -658,18 +660,18 @@ func _on_chiptopede_leap_targeting_state_entered() -> void:
 	var in_1 = (mid_point - goal_pos) * leap_in_ratio  # 0.6667
 	leap_curve.add_point(start_pos, Vector3.ZERO, out_0)
 	leap_curve.add_point(goal_pos, in_1, Vector3.ZERO)
-	path.curve = leap_curve
+	leap_path_3d.curve = leap_curve
 
 	# Add the path to the scene
 	var scene_root = get_tree().root.get_children()[8]
-	scene_root.add_child(path)
+	scene_root.add_child(leap_path_3d)
 	
 	# For each segment of the chiptopede, create a path follow 
 	# and offset it by the distance between each segment
 	follow_nodes = []
 	for segment in chiptopede_segments:
 		var path_follow = PathFollow3D.new()
-		path.add_child(path_follow)
+		leap_path_3d.add_child(path_follow)
 		
 		var new_segment: ChiptopedeSegment = chiptopede_segment_prefab.instantiate()
 		path_follow.add_child(new_segment)
@@ -714,6 +716,7 @@ func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
 func _on_chiptopede_leap_leaping_state_exited() -> void:
 	completed_nodes = []
 	follow_nodes = []
+	leap_path_3d.queue_free()
 
 
 func _on_chiptopede_leap_impact(segment: Node) -> void:
@@ -748,13 +751,11 @@ func generate_snake_graph() -> void:
 			astar.connect_points(point_idx, connection_idx)
 
 
-func calculate_snake_path(target_pos: Vector3) -> void:
+func calculate_snake_path(start_pos: Vector3, target_pos: Vector3) -> void:
 	snake_path += astar.get_point_path(
-		astar.get_closest_point(self.global_position),
+		astar.get_closest_point(start_pos),
 		astar.get_closest_point(target_pos)
 	)
-	for point in snake_path:
-		draw_debug_sphere(point, 15.0, Color.PURPLE)
 
 
 
@@ -771,8 +772,8 @@ func _on_chiptopede_snake_targeting_state_entered() -> void:
 	self.global_position = spawn_pos.global_position
 	
 	# Calculate a path for the snake to move along
-	snake_path.clear()
-	calculate_snake_path(target.global_position)
+	snake_path = []
+	calculate_snake_path(self.global_position, target.global_position)
 	var available_spawns = chiptopede_snake_spawns.duplicate()
 	available_spawns.erase(spawn_pos)
 	available_spawns.sort_custom(
@@ -784,7 +785,7 @@ func _on_chiptopede_snake_targeting_state_entered() -> void:
 			return false
 	)
 	var end_pos = available_spawns.front()
-	calculate_snake_path(end_pos.global_position)
+	calculate_snake_path(target.global_position, end_pos.global_position)
 	
 	state_chart.send_event("attack_buildup")
 	await get_tree().create_timer(0.8).timeout
@@ -793,8 +794,10 @@ func _on_chiptopede_snake_targeting_state_entered() -> void:
 
 
 func _on_chiptopede_snake_moving_state_entered() -> void:
+	# FIXME - stutter on this, needs optimizing
+	#
 	# Create curves from path and create chiptopede segments
-	var path = Path3D.new()
+	snake_path_3d = Path3D.new()
 	var curve = Curve3D.new()
 	for i in range(snake_path.size() - 1):
 		var start_pos: Vector3 = snake_path[i]
@@ -807,17 +810,17 @@ func _on_chiptopede_snake_moving_state_entered() -> void:
 		var in_1 = (mid_point - goal_pos) * 0.6667
 		curve.add_point(start_pos, Vector3.ZERO, out_0)
 		curve.add_point(goal_pos, in_1, Vector3.ZERO)
-	path.curve = curve
+	snake_path_3d.curve = curve
 	snake_distance = curve.get_baked_length()
 	
 	# Add the path to the scene
 	var scene_root = get_tree().root.get_children()[8]
-	scene_root.add_child(path)
+	scene_root.add_child(snake_path_3d)
 
 	follow_nodes = []
 	for segment in chiptopede_segments:
 		var path_follow = PathFollow3D.new()
-		path.add_child(path_follow)
+		snake_path_3d.add_child(path_follow)
 		
 		var new_segment: ChiptopedeSegment = chiptopede_segment_prefab.instantiate()
 		path_follow.add_child(new_segment)
@@ -848,4 +851,5 @@ func _on_chiptopede_snake_moving_state_physics_processing(delta: float) -> void:
 
 
 func _on_chiptopede_snake_moving_state_exited() -> void:
-	snake_path.clear()
+	snake_path = []
+	snake_path_3d.queue_free()
