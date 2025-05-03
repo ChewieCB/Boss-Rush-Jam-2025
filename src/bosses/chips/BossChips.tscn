@@ -92,6 +92,10 @@ follow_target = false
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
 
+[node name="StateChartDebugger" parent="UI" index="1"]
+visible = true
+enabled = true
+
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../Phase1")

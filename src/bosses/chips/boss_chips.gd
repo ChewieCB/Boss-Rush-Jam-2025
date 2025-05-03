@@ -135,9 +135,10 @@ func select_attack_phase_1() -> void:
 
 func select_attack_phase_3() -> void:
 	var possible_phases = [
-		"start_leap_attack",
-		"start_leap_attack",
-		#"start_snake_attack",
+		#"start_leap_attack",
+		#"start_leap_attack",
+		"start_snake_attack",
+		"start_snake_attack",
 		#"start_shoot_attack",
 	]
 	if prev_phase:
@@ -638,11 +639,11 @@ func get_chiptopede_spawn_pos(
 	spawn_marker_group: Array[Node], 
 	previous_pos: Vector3 = Vector3.ZERO, 
 	min_spawn_distance: float = 0.0
-) -> Vector3:
+) -> Node:
 	# Don't spawn in the same place twice in a row
 	var available_spawns = spawn_marker_group.duplicate()
 	if last_spawn:
-		spawn_marker_group.erase(last_spawn)
+		available_spawns.erase(last_spawn)
 	
 	# By default, pick a spawn target furthest away from the player
 	var sort_target: Vector3 = target.global_position
@@ -672,9 +673,8 @@ func get_chiptopede_spawn_pos(
 	)
 	
 	last_spawn = filtered_spawns.front()
-	print(last_spawn.global_position.distance_to(sort_target))
 	
-	return last_spawn.global_position
+	return last_spawn
 
 
 func create_premade_path(start_pos: Vector3, prefab: PackedScene) -> Path3D:
@@ -737,6 +737,7 @@ func _cleanup_segment_arrays() -> void:
 				node.queue_free()
 	follow_nodes = []
 	completed_nodes = []
+	chiptopede_head_offset = 0.0
 
 
 func spawn_segments(path: Path3D) -> Array:
@@ -765,10 +766,11 @@ func spawn_segments(path: Path3D) -> Array:
 
 func move_segments_along_path(
 	end_event_str: String,speed: float, max_distance: float, delta: float,
-	segment_callback: Callable = func(): pass,
+	segment_callback: Callable = Callable(),
 	is_reversed: bool = false, free_segment_when_finished: bool = true,
 ) -> void:
 	if completed_nodes.size() == follow_nodes.size():
+		_cleanup_segment_arrays()
 		state_chart.send_event(end_event_str)
 		return
 	
@@ -788,11 +790,31 @@ func move_segments_along_path(
 		var progress_endpoint: float = 0.0 if is_reversed else max_distance
 		if segment.progress == progress_endpoint:
 			# Only trigger AoE when first segment hits ground
-			segment_callback.call(segment)
+			if segment_callback:
+				segment_callback.call(segment)
 			if free_segment_when_finished:
 				segment.queue_free()
 			completed_nodes.append(i)
 
+
+func generate_snake_graph() -> void:
+	var all_points = chiptopede_snake_spawns + chiptopede_snake_path_points
+	for i in range(all_points.size()):
+		var point = all_points[i]
+		astar.add_point(i, point.global_position)
+		all_points.append(point)
+	for point in all_points:
+		var point_idx: int = all_points.find(point)
+		for connection in point.connected_points:
+			var connection_idx: int = all_points.find(connection)
+			astar.connect_points(point_idx, connection_idx)
+
+# FIXME - double-backing in places
+func calculate_snake_path(start_pos: Vector3, target_pos: Vector3) -> void:
+	snake_path += astar.get_point_path(
+		astar.get_closest_point(start_pos),
+		astar.get_closest_point(target_pos)
+	)
 
 
 ## LEAP
@@ -803,7 +825,7 @@ func _on_chiptopede_leap_targeting_state_entered() -> void:
 		chiptopede_spawns, 
 		last_leap_end_pos,
 		min_spawn_distance
-	)
+	).global_position
 	
 	# Get the player's current position as the target point
 	var start_pos: Vector3 = self.global_position
@@ -850,44 +872,21 @@ func _on_chiptopede_leap_impact(segment: Node) -> void:
 
 ## Snake
 
-func generate_snake_graph() -> void:
-	var all_points = chiptopede_snake_spawns + chiptopede_snake_path_points
-	for i in range(all_points.size()):
-		var point = all_points[i]
-		astar.add_point(i, point.global_position)
-		all_points.append(point)
-	for point in all_points:
-		var point_idx: int = all_points.find(point)
-		for connection in point.connected_points:
-			var connection_idx: int = all_points.find(connection)
-			astar.connect_points(point_idx, connection_idx)
-
-
-func calculate_snake_path(start_pos: Vector3, target_pos: Vector3) -> void:
-	snake_path += astar.get_point_path(
-		astar.get_closest_point(start_pos),
-		astar.get_closest_point(target_pos)
-	)
-
-
-
-func _exit_tree() -> void:
-	for node in follow_nodes:
-		if is_instance_valid(node):
-			node.queue_free()
-	follow_nodes = []
-
-
 func _on_chiptopede_snake_targeting_state_entered() -> void:
 	# Pick a spawn point
-	var spawn_pos = chiptopede_snake_spawns.pick_random()
-	self.global_position = spawn_pos.global_position
+	var spawn: Node = get_chiptopede_spawn_pos(chiptopede_snake_spawns)
+	var spawn_pos: Vector3 = spawn.global_position
+	self.global_position = spawn_pos
 	
 	# Calculate a path for the snake to move along
 	snake_path = []
-	calculate_snake_path(self.global_position, target.global_position)
+	
+	# FIXME - spawn -> target path
+	#calculate_snake_path(self.global_position, target.global_position)
+	
+	# Get an end-point from another spawn
 	var available_spawns = chiptopede_snake_spawns.duplicate()
-	available_spawns.erase(spawn_pos)
+	available_spawns.erase(spawn)
 	available_spawns.sort_custom(
 		func(a, b):
 			var a_dist: float = a.global_position.distance_to(target.global_position)
@@ -896,8 +895,21 @@ func _on_chiptopede_snake_targeting_state_entered() -> void:
 				return true
 			return false
 	)
-	var end_pos = available_spawns.front()
-	calculate_snake_path(target.global_position, end_pos.global_position)
+	var end_pos: Vector3 = available_spawns.front().global_position
+	
+	calculate_snake_path(spawn_pos, end_pos)
+	
+	# FIXME - target -> end path
+	#calculate_snake_path(target.global_position, end_pos.global_position)
+	
+	# Create curve paths
+	snake_path_3d = create_curve_path(
+		spawn_pos,
+		end_pos,
+		snake_path,
+		_create_snake_path
+	)
+	snake_distance = snake_path_3d.curve.get_baked_length()
 	
 	state_chart.send_event("attack_buildup")
 	await get_tree().create_timer(0.8).timeout
@@ -906,65 +918,17 @@ func _on_chiptopede_snake_targeting_state_entered() -> void:
 
 
 func _on_chiptopede_snake_moving_state_entered() -> void:
-	# FIXME - stutter on this, needs optimizing
-	#
-	# Create curves from path and create chiptopede segments
-	snake_path_3d = Path3D.new()
-	var curve = Curve3D.new()
-	for i in range(snake_path.size() - 2):
-		var start_pos: Vector3 = snake_path[i]
-		var goal_pos: Vector3 = snake_path[i + 1]
-		# Create a leaping path between these two points
-		var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5)
-
-		# Calculate bezier control points
-		var out_0 = (mid_point - start_pos) * 0.6667
-		var in_1 = (mid_point - goal_pos) * 0.6667
-		curve.add_point(start_pos, Vector3.ZERO, out_0)
-		curve.add_point(goal_pos, in_1, Vector3.ZERO)
-	snake_path_3d.curve = curve
-	snake_distance = curve.get_baked_length()
-	
-	# Add the path to the scene
-	var scene_root = get_tree().root.get_children()[8]
-	scene_root.add_child(snake_path_3d)
-
-	for segment in chiptopede_segments:
-		var path_follow = PathFollow3D.new()
-		snake_path_3d.add_child(path_follow)
-		
-		var new_segment: ChiptopedeSegment = chiptopede_segment_prefab.instantiate()
-		path_follow.add_child(new_segment)
-		new_segment.global_position = path_follow.global_position
-		new_segment.health_component.health_diff.connect(_on_chiptopede_hurt)
-		
-		follow_nodes.append(path_follow)
+	follow_nodes = spawn_segments(snake_path_3d)
 
 
 func _on_chiptopede_snake_moving_state_physics_processing(delta: float) -> void:
-	if completed_nodes.size() == follow_nodes.size():
-		state_chart.send_event("end_snake")
-		return
-	
-	chiptopede_head_offset += snake_speed * delta
-	for i in range(chiptopede_segments):
-		var segment = follow_nodes[i]
-		if not segment:
-			continue
-		
-		var offset = chiptopede_head_offset - (i * segment_separation)
-		# TODO - get snake distance and clamp progress max here
-		segment.progress = clamp(offset, 0, snake_distance)
-		
-		if segment.progress_ratio == 1.0:
-			segment.queue_free()
-			completed_nodes.append(i)
+	move_segments_along_path(
+		"end_snake", snake_speed, snake_distance, delta
+	)
 
 
 func _on_chiptopede_snake_moving_state_exited() -> void:
 	snake_path = []
-	follow_nodes = []
-	completed_nodes = []
 	snake_path_3d.queue_free()
 
 
@@ -1087,3 +1051,7 @@ func _on_chiptopede_shoot_recovering_state_entered() -> void:
 
 func _on_chiptopede_hurt(health_diff: float) -> void:
 	health_component.damage(abs(health_diff))
+
+
+func _exit_tree() -> void:
+	_cleanup_segment_arrays()
