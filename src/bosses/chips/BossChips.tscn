@@ -47,9 +47,11 @@ chiptopede_segment_prefab = ExtResource("7_3u62n")
 chiptopede_max_health = 8000.0
 chiptopede_segments = 32
 segment_separation = 2.0
+min_spawn_distance = 36.0
 leap_time = 3.0
 leap_aoe_radius = 12.0
 leap_damage = 15.0
+leap_damage_cooldown = 0.4
 leap_height = 18.0
 leap_out_ratio = 0.6667
 leap_in_ratio = 0.0
@@ -556,6 +558,9 @@ script = ExtResource("3_hbmr3")
 to = NodePath("../../ChiptopedeShoot")
 event = &"start_shoot_attack"
 delay_in_seconds = "0.0"
+
+[node name="LeapDamageTimer" type="Timer" parent="StateChart/Root/Phase/Phase3/ChiptopedeLeap" index="5"]
+one_shot = true
 
 [node name="ChiptopedeSnake" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
 script = ExtResource("4_kiknp")
