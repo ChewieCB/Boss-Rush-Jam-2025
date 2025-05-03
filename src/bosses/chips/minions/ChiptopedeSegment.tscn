@@ -121,6 +121,7 @@ bottom_radius = 2.0
 height = 1.0
 
 [node name="ChiptopedeSegment" instance=ExtResource("1_vud1u")]
+visible = false
 collision_layer = 64
 script = ExtResource("1_lem27")
 rotation_speed = 5.0

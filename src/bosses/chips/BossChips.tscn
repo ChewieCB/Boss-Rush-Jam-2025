@@ -57,6 +57,7 @@ leap_out_ratio = 0.6667
 leap_in_ratio = 0.0
 snake_speed = 25.0
 shooting_stance_prefab = ExtResource("8_280mm")
+chiptopede_targeting_speed = 3.0
 chiptopede_projectile = ExtResource("9_n5byv")
 chiptopede_projectile_bursts = 2
 chiptopede_shots_per_burst = 20
@@ -91,10 +92,6 @@ follow_target = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
-
-[node name="StateChartDebugger" parent="UI" index="1"]
-visible = true
-enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")

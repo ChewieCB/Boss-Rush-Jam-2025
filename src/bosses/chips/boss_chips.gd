@@ -86,6 +86,7 @@ var snake_path_3d: Path3D
 var stance_path: Path3D
 @export var shooting_stance_prefab: PackedScene
 var emerge_speed: float = 10.0
+@export var chiptopede_targeting_speed: float = 3.0
 var emerge_distance: float
 @export var chiptopede_projectile: PackedScene
 @export var chiptopede_projectile_bursts: int = 2
@@ -135,11 +136,14 @@ func select_attack_phase_1() -> void:
 
 func select_attack_phase_3() -> void:
 	var possible_phases = [
-		#"start_leap_attack",
-		#"start_leap_attack",
+		"start_leap_attack",
+		"start_leap_attack",
+		"start_leap_attack",
+		"start_leap_attack",
 		"start_snake_attack",
-		"start_snake_attack",
-		#"start_shoot_attack",
+		"start_shoot_attack",
+		"start_shoot_attack",
+		"start_shoot_attack",
 	]
 	if prev_phase:
 		possible_phases.erase(prev_phase)
@@ -637,8 +641,8 @@ func _on_phase_3_state_entered() -> void:
 
 func get_chiptopede_spawn_pos(
 	spawn_marker_group: Array[Node], 
+	min_spawn_distance: float = 0.0,
 	previous_pos: Vector3 = Vector3.ZERO, 
-	min_spawn_distance: float = 0.0
 ) -> Node:
 	# Don't spawn in the same place twice in a row
 	var available_spawns = spawn_marker_group.duplicate()
@@ -753,7 +757,6 @@ func spawn_segments(path: Path3D) -> Array:
 		path.add_child(path_follow)
 		
 		var new_segment: ChiptopedeSegment = chiptopede_segment_prefab.instantiate()
-		new_segment.visible = false
 		path_follow.add_child(new_segment)
 		new_segment.global_position = path_follow.global_position
 		new_segment.health_component.health_diff.connect(_on_chiptopede_hurt)
@@ -770,7 +773,8 @@ func move_segments_along_path(
 	is_reversed: bool = false, free_segment_when_finished: bool = true,
 ) -> void:
 	if completed_nodes.size() == follow_nodes.size():
-		_cleanup_segment_arrays()
+		if free_segment_when_finished:
+			_cleanup_segment_arrays()
 		state_chart.send_event(end_event_str)
 		return
 	
@@ -823,8 +827,8 @@ func _on_chiptopede_leap_targeting_state_entered() -> void:
 	# Move chiptopede to new spawn location
 	self.global_position = get_chiptopede_spawn_pos(
 		chiptopede_spawns, 
-		last_leap_end_pos,
-		min_spawn_distance
+		min_spawn_distance,
+		last_leap_end_pos
 	).global_position
 	
 	# Get the player's current position as the target point
@@ -945,50 +949,30 @@ func turn_towards_target(node: Node, speed: float, delta: float) -> void:
 
 
 func _on_chiptopede_shoot_emerging_state_entered() -> void:
-	# Pick a spawn location
-	var spawn_pos = chiptopede_shoot_spawns.pick_random()
-	self.global_position = spawn_pos.global_position
-	# Instance the shooting stance path
-	stance_path = shooting_stance_prefab.instantiate()
-	get_parent().get_parent().add_child(stance_path)
-	stance_path.global_position = spawn_pos.global_position
-	stance_path.global_position.y = -20
-	var angle_to_player: float = spawn_pos.global_position.angle_to(target.global_position)
+	# Move chiptopede to new spawn location
+	self.global_position = get_chiptopede_spawn_pos(
+		chiptopede_shoot_spawns, 
+		min_spawn_distance
+	).global_position
+	
+	# Get the player's current position as the target point
+	var spawn_pos: Vector3 = self.global_position
+	spawn_pos.y = -21
+	stance_path = create_premade_path(spawn_pos, shooting_stance_prefab)
+	
+	follow_nodes = spawn_segments(stance_path)
+	
 	emerge_distance = stance_path.curve.get_baked_length()
-	# TODO - optimize segment spawning/despawning
-	# Spawn the chiptopede segments
-	# TODO - use a smaller number of segments here
-	for segment in chiptopede_segments:
-		var path_follow = PathFollow3D.new()
-		stance_path.add_child(path_follow)
-		
-		var new_segment: ChiptopedeSegment = chiptopede_segment_prefab.instantiate()
-		path_follow.add_child(new_segment)
-		new_segment.global_position = path_follow.global_position
-		new_segment.health_component.health_diff.connect(_on_chiptopede_hurt)
-		
-		follow_nodes.append(path_follow)
 
 
 func _on_chiptopede_shoot_emerging_state_physics_processing(delta: float) -> void:
-	turn_towards_target(stance_path, 3.0, delta)
-	# Animate the chiptopede up it as it rears up
-	if completed_nodes.size() == follow_nodes.size():
-		state_chart.send_event("end_emerge")
-		return
+	turn_towards_target(stance_path, chiptopede_targeting_speed, delta)
 	
-	chiptopede_head_offset += emerge_speed * delta
-	for i in range(chiptopede_segments):
-		var segment = follow_nodes[i]
-		if not segment:
-			continue
-		
-		var offset = chiptopede_head_offset - (i * segment_separation)
-		# TODO - get snake distance and clamp progress max here
-		segment.progress = clamp(offset, 0, emerge_distance)
-		
-		if segment.progress == emerge_distance:
-			completed_nodes.append(i)
+	# Animate the chiptopede up it as it rears up
+	move_segments_along_path(
+		"end_emerge", emerge_speed, emerge_distance, delta,
+		Callable(), false, false
+	)
 
 
 func _on_chiptopede_shoot_targeting_state_entered() -> void:
@@ -998,7 +982,7 @@ func _on_chiptopede_shoot_targeting_state_entered() -> void:
 
 
 func _on_chiptopede_shoot_targeting_state_physics_processing(delta: float) -> void:
-	turn_towards_target(stance_path, 3.0, delta)
+	turn_towards_target(stance_path, chiptopede_targeting_speed, delta)
 
 
 func _on_chiptopede_shoot_shooting_state_entered() -> void:
@@ -1014,7 +998,7 @@ func _on_chiptopede_shoot_shooting_state_entered() -> void:
 
 
 func _on_chiptopede_shoot_shooting_state_physics_processing(delta: float) -> void:
-	turn_towards_target(stance_path, 3.0, delta)
+	turn_towards_target(stance_path, chiptopede_targeting_speed, delta)
 
 
 func _on_chiptopede_shoot_retreat_state_entered() -> void:
@@ -1022,30 +1006,14 @@ func _on_chiptopede_shoot_retreat_state_entered() -> void:
 
 
 func _on_chiptopede_shoot_retreat_state_physics_processing(delta: float) -> void:
-	# Animate the chiptopede up it as it rears up
-	if completed_nodes.size() == follow_nodes.size():
-		state_chart.send_event("end_retreat")
-		return
-	
-	chiptopede_head_offset -= emerge_speed * delta
-	for i in range(chiptopede_segments):
-		var segment = follow_nodes[i]
-		if not segment:
-			continue
-		
-		var offset = chiptopede_head_offset - (i * segment_separation)
-		# TODO - get snake distance and clamp progress max here
-		segment.progress = clamp(offset, 0, emerge_distance)
-		
-		if segment.progress_ratio == 0.0:
-			segment.queue_free()
-			completed_nodes.append(i)
+	move_segments_along_path(
+		"end_retreat", emerge_speed, emerge_distance, delta,
+		Callable(), true, true
+	)
 
 
 func _on_chiptopede_shoot_recovering_state_entered() -> void:
 	stance_path.queue_free()
-	follow_nodes = []
-	completed_nodes = []
 	_on_recover_state_entered()
 
 
