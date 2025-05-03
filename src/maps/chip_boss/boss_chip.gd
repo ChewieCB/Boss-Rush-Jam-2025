@@ -6,6 +6,7 @@ extends BossMap
 @onready var chiptopede_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_worm_spawn_marker")
 @onready var chiptopede_snake_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_snake_spawn_marker")
 @onready var chiptopede_snake_path_points: Array[Node] = get_tree().get_nodes_in_group("boss_snake_path_marker")
+@onready var chiptopede_shoot_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_shoot_spawn_marker")
 
 # Flooding/Draining levels
 @export var lower_water_level: float = -0.1
@@ -32,6 +33,7 @@ func _ready() -> void:
 	boss.chiptopede_spawns = chiptopede_spawns
 	boss.chiptopede_snake_spawns = chiptopede_snake_spawns
 	boss.chiptopede_snake_path_points = chiptopede_snake_path_points
+	boss.chiptopede_shoot_spawns = chiptopede_shoot_spawns
 
 	waterfalls.visible = false
 	water_surface.global_position.y = lower_water_level

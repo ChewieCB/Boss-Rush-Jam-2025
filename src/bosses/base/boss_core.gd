@@ -206,6 +206,21 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 	)
 
 
+func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> BaseProjectile:
+	var _sfx_player = get_available_sfx_player()
+	if not _sfx_player:
+		# TODO - error handling
+		pass
+	if sfx_arr:
+		_sfx_player.stream = sfx_arr.pick_random()
+		_sfx_player.play()
+	var projectile := _projectile_prefab.instantiate()
+	get_tree().root.get_child(8).add_child(projectile)
+	projectile.global_position = spawn_pos
+	projectile.look_at(target.global_position, Vector3.UP)
+	return projectile
+
+
 func activate() -> void:
 	show_health()
 	SoundManager.play_sound(sfx_awaken, "SFX")
@@ -251,9 +266,11 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 			return b
 	)
 	var fallback_player: AudioStreamPlayer3D = players_ending_soon.front()
-	fallback_player.stop()
+	if fallback_player:
+		fallback_player.stop()
 
-	return fallback_player
+		return fallback_player
+	return null
 
 
 func drop_barrel() -> void:

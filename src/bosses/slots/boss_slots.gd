@@ -311,19 +311,6 @@ func _on_spin_slots_recover_state_entered() -> void:
 # 3 Coins on rollers
 # Rapid fire coin projectiles 
 
-func fire_projectile(_projectile_prefab: PackedScene) -> BaseProjectile:
-	var _sfx_player = get_available_sfx_player()
-	if not _sfx_player:
-		# TODO - error handling
-		pass
-	_sfx_player.stream = sfx_coin_shot.pick_random()
-	_sfx_player.play()
-	var projectile := _projectile_prefab.instantiate()
-	get_tree().root.get_child(2).add_child(projectile)
-	projectile.global_position = projectile_spawn_marker.global_position
-	projectile.look_at(target.global_position, Vector3.UP)
-	return projectile
-
 
 func _on_coin_projectiles_state_physics_processing(delta: float) -> void:
 	orbit_player(delta)
@@ -348,7 +335,7 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 	for i in num_bursts:
 		for j in coin_shots_per_burst:
 			await get_tree().create_timer(delay_per_projectile).timeout
-			fire_projectile(coin_projectile)
+			fire_projectile(coin_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
 		await get_tree().create_timer(delay_between_burst).timeout
 	
 	state_chart.send_event("stop_shooting")

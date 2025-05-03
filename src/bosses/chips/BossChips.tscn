@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=16 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Texture2D" uid="uid://c7hb6wpuv2rw6" path="res://src/bosses/base/assets/placeholder_sweets_big_stack.png" id="2_1q2di"]
@@ -11,6 +11,8 @@
 [ext_resource type="Material" uid="uid://ikjycfpkgv3n" path="res://src/bosses/chips/AoeMat.tres" id="5_vcykk"]
 [ext_resource type="PackedScene" uid="uid://cxg3ytjd4ybu0" path="res://src/bosses/chips/RollingChipProjectile.tscn" id="6_dth1w"]
 [ext_resource type="PackedScene" uid="uid://d4e0u7jv00gxw" path="res://src/bosses/chips/minions/ChiptopedeSegment.tscn" id="7_3u62n"]
+[ext_resource type="PackedScene" uid="uid://diiahann2tcbe" path="res://src/bosses/chips/minions/ChiptopedeProjectileStancePath.tscn" id="8_280mm"]
+[ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="9_n5byv"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_dgy85"]
 size = Vector3(5.8, 5, 5.9)
@@ -52,6 +54,12 @@ leap_height = 18.0
 leap_out_ratio = 0.6667
 leap_in_ratio = 0.0
 snake_speed = 25.0
+shooting_stance_prefab = ExtResource("8_280mm")
+chiptopede_projectile = ExtResource("9_n5byv")
+chiptopede_projectile_bursts = 2
+chiptopede_shots_per_burst = 20
+chiptopede_delay_per_projectile = 0.05
+delay_between_burst = 0.3
 barrel_pickup_scene = null
 sfx_slowmo = null
 current_phase = 3
@@ -500,6 +508,12 @@ to = NodePath("../../ChiptopedeSnake")
 event = &"start_snake_attack"
 delay_in_seconds = "0.0"
 
+[node name="toChiptopedeShoot" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="2"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeShoot")
+event = &"start_shoot_attack"
+delay_in_seconds = "0.0"
+
 [node name="ChiptopedeLeap" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Targeting")
@@ -535,6 +549,12 @@ delay_in_seconds = "0.0"
 script = ExtResource("3_hbmr3")
 to = NodePath("../../ChiptopedeSnake")
 event = &"start_snake_attack"
+delay_in_seconds = "0.0"
+
+[node name="toChiptopedeShoot" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeLeap" index="4"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeShoot")
+event = &"start_shoot_attack"
 delay_in_seconds = "0.0"
 
 [node name="ChiptopedeSnake" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
@@ -574,6 +594,73 @@ to = NodePath("../../ChiptopedeLeap")
 event = &"start_leap_attack"
 delay_in_seconds = "0.0"
 
+[node name="toChiptopedeShoot" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeSnake" index="4"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeShoot")
+event = &"start_shoot_attack"
+delay_in_seconds = "0.0"
+
+[node name="ChiptopedeShoot" type="Node" parent="StateChart/Root/Phase/Phase3" index="4"]
+script = ExtResource("4_kiknp")
+initial_state = NodePath("Emerging")
+
+[node name="Emerging" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Emerging" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Targeting")
+event = &"end_emerge"
+delay_in_seconds = "0.0"
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toShooting" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Targeting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Shooting")
+event = &"start_shooting"
+delay_in_seconds = "0.0"
+
+[node name="Shooting" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toRetreat" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Shooting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Retreat")
+event = &"stop_shooting"
+delay_in_seconds = "0.0"
+
+[node name="Retreat" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot" index="3"]
+script = ExtResource("5_81kie")
+
+[node name="toRecovering" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Retreat" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recovering")
+event = &"end_retreat"
+delay_in_seconds = "0.0"
+
+[node name="Recovering" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot" index="4"]
+script = ExtResource("5_81kie")
+
+[node name="toEmerging" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Recovering" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Emerging")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toChiptopedeLeap" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot" index="5"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeLeap")
+event = &"start_leap_attack"
+delay_in_seconds = "0.0"
+
+[node name="toChiptopedeSnake" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot" index="6"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeSnake")
+event = &"start_snake_attack"
+delay_in_seconds = "0.0"
+
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_physics_processing"]
@@ -608,10 +695,19 @@ delay_in_seconds = "0.0"
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Leaping" to="." method="_on_chiptopede_leap_leaping_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Leaping" to="." method="_on_chiptopede_leap_leaping_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Leaping" to="." method="_on_chiptopede_leapleaping_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Recovering" to="." method="_on_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Recovering" to="." method="_on_recovering_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Recovering" to="." method="_on_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Targeting" to="." method="_on_chiptopede_snake_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Moving" to="." method="_on_chiptopede_snake_moving_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Moving" to="." method="_on_chiptopede_snake_moving_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Moving" to="." method="_on_chiptopede_snake_moving_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Recovering" to="." method="_on_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Emerging" to="." method="_on_chiptopede_shoot_emerging_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Emerging" to="." method="_on_chiptopede_shoot_emerging_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Targeting" to="." method="_on_chiptopede_shoot_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Targeting" to="." method="_on_chiptopede_shoot_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Shooting" to="." method="_on_chiptopede_shoot_shooting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Shooting" to="." method="_on_chiptopede_shoot_shooting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Retreat" to="." method="_on_chiptopede_shoot_retreat_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Retreat" to="." method="_on_chiptopede_shoot_retreat_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Recovering" to="." method="_on_chiptopede_shoot_recovering_state_entered"]
