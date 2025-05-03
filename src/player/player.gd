@@ -52,9 +52,13 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var stat_ui: StatUI = $UI/StatUI
 @onready var health_ui = stat_ui.health_ui
 @onready var luck_bar_ui = stat_ui.luck_bar_ui
+@onready var drunk_ui: Control = $UI/DrunkUI
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
+
+# Statuses
+@onready var drunk_timer: Timer = $StateChart/Root/Status/Drunk/DrunkTimer
 
 signal movement_dashed
 
@@ -197,10 +201,10 @@ func _unhandled_input(event):
 		spin_barrels()
 	# DEBUG
 	elif event.is_action_pressed("input_1"):
-		luck_component.increase_luck(10.0)
+		state_chart.send_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
 	elif event.is_action_pressed("input_2"):
-		luck_component.decrease_luck(10.0)
+		state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
 	#elif event.is_action_pressed("input_3"):
 		#current_gun.spin_single_barrel(2)
@@ -744,3 +748,17 @@ func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
 func _on_luck_maxed() -> void:
 	# TODO
 	pass
+
+
+func _on_status_drunk_active_state_entered() -> void:
+	# TODO - add drunk effect particles/shader/icon/screenshake/fov
+	drunk_ui.start_drunk()
+	# TODO - set/reset drunk timer externally by the source of the debuff
+	#drunk_timer.start(0.6)
+
+func _on_status_drunk_active_state_exited() -> void:
+	drunk_ui.end_drunk()
+	drunk_timer.stop()
+
+func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
+	pass # Replace with function body.

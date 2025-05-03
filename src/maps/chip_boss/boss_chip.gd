@@ -41,9 +41,9 @@ func _ready() -> void:
 	super()
 
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("input_1"):
-		break_floor()
+#func _input(event: InputEvent) -> void:
+	#if event.is_action_pressed("input_1"):
+		#break_floor()
 		#raise_water()
 	#elif event.is_action_pressed("input_2"):
 		#lower_water()
