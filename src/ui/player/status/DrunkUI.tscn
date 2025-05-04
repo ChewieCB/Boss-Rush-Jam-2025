@@ -21,7 +21,6 @@ mouse_filter = 2
 script = ExtResource("1_jm7bv")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-visible = false
 material = SubResource("ShaderMaterial_h7axq")
 layout_mode = 1
 anchors_preset = 15
@@ -30,3 +29,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+color = Color(1, 1, 1, 0)
