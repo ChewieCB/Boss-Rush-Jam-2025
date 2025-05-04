@@ -39,6 +39,8 @@ mouse_filter = 1
 script = ExtResource("1_y22bm")
 
 [node name="OldMovieShader" type="TextureRect" parent="."]
+visible = false
+z_index = -1
 material = SubResource("ShaderMaterial_c2sij")
 layout_mode = 1
 anchors_preset = 15
@@ -50,6 +52,7 @@ texture = ExtResource("3_fbfq4")
 
 [node name="BlurShader" type="TextureRect" parent="."]
 visible = false
+z_index = -1
 material = SubResource("ShaderMaterial_hhcs4")
 layout_mode = 1
 anchors_preset = 15

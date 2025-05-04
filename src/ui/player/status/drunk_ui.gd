@@ -10,7 +10,20 @@ var drunk_tween: Tween
 @onready var sfx_bus_lowpass := AudioServer.get_bus_effect(2, 0) as AudioEffectLowPassFilter
 
 
+func _ready() -> void:
+	GameManager.setting_changed.connect(_on_setting_changed)
+
+
+func _on_setting_changed() -> void:
+	if GameManager.drunk_blur_disabled:
+		rect.color.a = 0.0
+	else:
+		rect.color.a = 1.0
+
+
 func start_drunk() -> void:
+	if GameManager.drunk_blur_disabled:
+		return
 	# Toggle low pass filter for BGM
 	AudioServer.set_bus_effect_enabled(1, 1, true)
 	AudioServer.set_bus_effect_enabled(2, 0, true)

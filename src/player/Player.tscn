@@ -244,8 +244,6 @@ z_as_relative = false
 visible = false
 z_index = 10
 
-[node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
-
 [node name="InteractUI" type="HBoxContainer" parent="UI"]
 anchors_preset = 8
 anchor_left = 0.5
@@ -370,6 +368,9 @@ offset_bottom = 1073.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 40
 text = "Saving..."
+
+[node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
+process_mode = 1
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")

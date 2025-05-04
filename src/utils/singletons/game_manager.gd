@@ -6,6 +6,7 @@ signal barrel_too_expensive(barrel_data: BarrelDataResource)
 signal reroll_cost_changed(new_cost: int)
 signal free_rerolls
 signal refresh_shop_ui
+signal setting_changed
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -79,6 +80,10 @@ var vsync_option_index: int = 1
 @export_range(0, 2, 1) var window_mode_index: int = 1 # From 0 to 2
 var scaling_3d: float = 100.0
 var hide_ui = false
+# Accessibility setting flags
+var screen_shake_disabled: bool = false
+var drunk_blur_disabled: bool = false
+
 @export_range(0, 100, 0.1) var master_audio: float = 80
 @export_range(0, 100, 0.1) var bgm_audio: float = 100
 @export_range(0, 100, 0.1) var sfx_audio: float = 100
