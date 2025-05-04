@@ -43,7 +43,7 @@ func add_refresh_status_ui(new_status: StatusEffect):
 	# Check if it already exist, then refresh it
 	for child in status_ui_container.get_children():
 		if child.status_effect.status_code == new_status.status_code:
-			child.refresh()
+			child.refresh(new_status)
 			return
 	# Else, add new status UI item
 	var ui_inst = status_duration_ui_prefab.instantiate()
