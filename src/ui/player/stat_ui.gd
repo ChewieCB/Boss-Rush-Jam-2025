@@ -8,18 +8,20 @@ signal hide
 @export var health_component: HealthComponent
 @export var luck_component: LuckComponent
 
+@export var animate_show_hide: bool = true
+@export var hide_ui_on_death: bool = true
+@export var status_duration_ui_prefab: PackedScene
+
 @onready var health_ui: Control = $PlayerHealthBarUI
 @onready var luck_bar_ui: LuckBar = $PlayerLuckUI/PlayerLuckBarUI
 @onready var luck_buffs_ui: Control = $PlayerLuckUI/LuckBuffsUI
-
-@export var animate_show_hide: bool = true
-@export var hide_ui_on_death: bool = true
-
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var current_ammo_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/CurrentAmmo
 @onready var magazine_size_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/MagazineSize
+@onready var status_ui_container: GridContainer = $PlayerHealthBarUI/VBoxContainer/StatusUIContainer
 
 func _ready() -> void:
+	# Await player ready
 	await get_owner().ready
 	health_ui.health_component = health_component
 	luck_bar_ui.luck_component = luck_component
@@ -32,7 +34,21 @@ func _ready() -> void:
 		luck_component.luck_maxed.connect(luck_bar_ui._on_luck_maxed)
 	#if show_on_ready:
 		#show_ui()
+	GameManager.player.add_new_status_effect.connect(add_refresh_status_ui)
+	
 
+## Only for adding or refreshing status UI. UI will be removed by the
+## instance's timer (which hopefully synced correctly with the actual status duration)
+func add_refresh_status_ui(new_status: StatusEffect):
+	# Check if it already exist, then refresh it
+	for child in status_ui_container.get_children():
+		if child.status_effect.status_code == new_status.status_code:
+			child.refresh()
+			return
+	# Else, add new status UI item
+	var ui_inst = status_duration_ui_prefab.instantiate()
+	status_ui_container.add_child(ui_inst)
+	ui_inst.init(new_status)
 
 func show_health_ui() -> void:
 	_animate_ui_element("health")

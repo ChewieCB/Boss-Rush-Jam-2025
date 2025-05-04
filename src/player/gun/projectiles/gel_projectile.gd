@@ -13,6 +13,10 @@ extends BaseProjectile
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
+# When gel projectile collide, if the hitscan_col_point is valid and not too
+# far from current global_position, snap to hitscan_col_point so it look better.
+const SNAP_STICK_DISTANCE = 5
+
 var projectile_speed = 100
 var found_hitscal_col = false
 var hitscan_col_point
@@ -94,7 +98,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	life_timer.stop()
 	stick_timer.start(stick_time)
 	if found_hitscal_col:
-		global_position = hitscan_col_point
+		if global_position.distance_to(hitscan_col_point) < SNAP_STICK_DISTANCE:
+			global_position = hitscan_col_point
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:

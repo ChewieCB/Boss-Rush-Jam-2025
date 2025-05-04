@@ -57,9 +57,9 @@ func _on_damage_timer_timeout() -> void:
 
 		if body is Player and slow_perc > 0:
 			var run_debuff = create_slow_run_debuff(1)
-			body.add_buff(run_debuff)
+			body.add_status_effect(run_debuff)
 			var dash_debuff = create_slow_dash_debuff(1)
-			body.add_buff(dash_debuff)
+			body.add_status_effect(dash_debuff)
 
 
 func clear_hazard():
@@ -87,22 +87,23 @@ func _on_area_3d_body_exited(body: Node3D) -> void:
 	if body.get_node("HealthComponent") and body in bodies_inside:
 		bodies_inside.erase(body)
 
-func create_slow_run_debuff(debuff_duration: float = 1) -> Buff:
-	var slow_debuff = Buff.new()
-	slow_debuff.buff_name = "slow_hazard_run_speed"
-	slow_debuff.stat_name = "run_speed_modifier"
-	slow_debuff.value = -slow_perc
-	slow_debuff.buff_type = Buff.BuffType.PERCENTAGE
-	slow_debuff.stack_type = Buff.StackType.ADDITIVE
+func create_slow_run_debuff(debuff_duration: float = 1) -> StatusEffect:
+	var slow_debuff = StatusEffect.new()
+	slow_debuff.status_name = "Run speed down"
+	slow_debuff.status_code = "run_speed_modifier"
+	slow_debuff.value = - slow_perc
+	slow_debuff.modify_type = StatusEffect.StatusEffectModifyType.PERCENTAGE
 	slow_debuff.duration = debuff_duration
+	slow_debuff.is_bad_effect = true
 	return slow_debuff
 
-func create_slow_dash_debuff(debuff_duration: float = 1) -> Buff:
-	var slow_debuff = Buff.new()
-	slow_debuff.buff_name = "slow_hazard_dash_slide_speed"
-	slow_debuff.stat_name = "dash_slide_speed_modifier"
-	slow_debuff.value = -slow_perc
-	slow_debuff.buff_type = Buff.BuffType.PERCENTAGE
-	slow_debuff.stack_type = Buff.StackType.ADDITIVE
+func create_slow_dash_debuff(debuff_duration: float = 1) -> StatusEffect:
+	var slow_debuff = StatusEffect.new()
+	slow_debuff.display_name = "Dash speed down"
+	slow_debuff.status_code = "slow_hazard_dash_slide_speed"
+	slow_debuff.modified_stat_name = "dash_slide_speed_modifier"
+	slow_debuff.value = - slow_perc
+	slow_debuff.modify_type = StatusEffect.StatusEffectModifyType.PERCENTAGE
 	slow_debuff.duration = debuff_duration
+	slow_debuff.is_bad_effect = true
 	return slow_debuff

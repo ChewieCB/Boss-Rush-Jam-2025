@@ -19,7 +19,8 @@ var movement_sfx_player: AudioStreamPlayer
 @export var can_wall_jump: bool
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
-@export var dash_cd: float = 0.5
+@export var dash_cd: float = 1
+@export var dash_iframe_duration: float = 0.2
 @export var angular_momentum_multiplier = 0.4
 @export var speedline_vfx_prefab: PackedScene
 
@@ -57,6 +58,7 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
 
 signal movement_dashed
+signal add_new_status_effect(status)
 
 const MAX_SPEED: float = 8.0
 const MAX_FALL_SPEED: float = 70.0
@@ -126,13 +128,15 @@ var is_in_inventory = false:
 			stat_ui.show_non_luck_ui()
 var object_to_be_interacted = null
 
-var buffs: Array[Buff] = []
+var status_effect_list: Array[StatusEffect] = []
 var base_stats = {
 	"run_speed_modifier": 1,
-	"dash_slide_speed_modifier": 1
+	"dash_slide_speed_modifier": 1,
+	"is_invincible": false,
 }
-var current_stats = base_stats.duplicate(true)
+var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
 
+var current_stats = base_stats.duplicate(true)
 var aim_assist_target: Node3D = null
 
 
@@ -222,7 +226,7 @@ func _unhandled_input(event):
 			vel_vertical = 0
 			dash_duration_timer.start()
 			movement_dashed.emit()
-
+			add_iframe_on_dash()
 
 			var dash_dir = raw_input_dir
 			# Swap speedline direction for horizontal dash
@@ -251,11 +255,11 @@ func _process(delta):
 
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 
-	for buff in buffs:
-		if buff.duration > 0:
-			buff.duration -= delta
-			if buff.duration <= 0:
-				remove_buff(buff)
+	for status in status_effect_list:
+		if status.duration > 0:
+			status.duration -= delta
+			if status.duration <= 0:
+				remove_status_effect(status)
 
 	if aim_ray.is_colliding() and not is_in_inventory:
 		var interact_collider = aim_ray.get_collider()
@@ -611,52 +615,62 @@ func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
 	neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
 
-func add_buff(new_buff: Buff):
-	# Check if already exist, then extend it instead of add new
-	for buff in buffs:
-		if buff.buff_name == new_buff.buff_name:
-			buff.duration = max(buff.duration, new_buff.duration)
+func add_status_effect(new_status: StatusEffect):
+	# Check if already exist, then refresh it instead of add new
+	for status in status_effect_list:
+		if status.status_code == new_status.status_code:
+			status.duration = max(status.duration, new_status.duration)
+			add_new_status_effect.emit(status)
 			return
-	buffs.append(new_buff)
-	apply_buffs()
+	status_effect_list.append(new_status)
+	add_new_status_effect.emit(new_status)
+	apply_status_effects()
 
 
-func remove_buff(buff: Buff):
-	buffs.erase(buff)
-	apply_buffs()
+func remove_status_effect(status: StatusEffect):
+	status_effect_list.erase(status)
+	apply_status_effects()
 
 
-func remove_buff_by_name(find_name: String):
-	var found_buff = null
-	for buff in buffs:
-		if buff.buff_name == find_name:
-			found_buff = buff
+func remove_status_effect_by_name(find_name: String):
+	var found = null
+	for status in status_effect_list:
+		if status.status_code == find_name:
+			found = status
 			break
-	if found_buff:
-		remove_buff(found_buff)
+	if found:
+		remove_status_effect(found)
 
 
-func apply_buffs():
+func apply_status_effects():
 	# Reset current stats to base stats.
 	current_stats = base_stats.duplicate(true)
 
 	# Temporary storage for stacking.
-	var flat_bonuses = {}
-	var percentage_bonuses = {}
+	var flat_modifiers = {}
+	var percentage_modifiers = {}
 
-	for buff in buffs:
-		if buff.buff_type == Buff.BuffType.FLAT:
-			flat_bonuses[buff.stat_name] = flat_bonuses.get(buff.stat_name, 0) + buff.value
-		elif buff.buff_type == Buff.BuffType.PERCENTAGE:
-			percentage_bonuses[buff.stat_name] = percentage_bonuses.get(buff.stat_name, 0) + buff.value
+	for status in status_effect_list:
+		if status.modify_type == StatusEffect.StatusEffectModifyType.FLAT:
+			flat_modifiers[status.modified_stat_name] = flat_modifiers.get(status.status_code, 0) + status.value
+		elif status.modify_type == StatusEffect.StatusEffectModifyType.PERCENTAGE:
+			percentage_modifiers[status.modified_stat_name] = percentage_modifiers.get(status.status_code, 0) + status.value
+		elif status.modify_type == StatusEffect.StatusEffectModifyType.BOOL:
+			if status.value == 1:
+				current_stats[status.modified_stat_name] = true
+			else:
+				current_stats[status.modified_stat_name] = false
 
 	# Apply flat bonuses (additive).
-	for stat in flat_bonuses.keys():
-		current_stats[stat] += flat_bonuses[stat]
+	for stat in flat_modifiers.keys():
+		current_stats[stat] += flat_modifiers[stat]
 
 	# Apply percentage bonuses (multiplicative).
-	for stat in percentage_bonuses.keys():
-		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)
+	for stat in percentage_modifiers.keys():
+		current_stats[stat] *= (1 + percentage_modifiers[stat] / 100.0)
+
+	# Other
+	health_component.is_invincible = current_stats["is_invincible"]
 
 
 func aim_assist(delta: float):
@@ -733,6 +747,17 @@ func cash_in_luck() -> void:
 	LuckHandler.enabled = true
 	luck_component.current_luck = 0.0
 
+
+func add_iframe_on_dash():
+	var iframe_dash_buff = StatusEffect.new()
+	iframe_dash_buff.display_name = "Dodging"
+	iframe_dash_buff.status_code = "iframe_on_dash"
+	iframe_dash_buff.modified_stat_name = "is_invincible"
+	iframe_dash_buff.value = 1
+	iframe_dash_buff.modify_type = StatusEffect.StatusEffectModifyType.BOOL
+	iframe_dash_buff.duration = dash_iframe_duration
+	iframe_dash_buff.status_icon = dash_iframe_icon
+	add_status_effect(iframe_dash_buff)
 
 func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
 	# TODO - update luck handler to apply bonuses
