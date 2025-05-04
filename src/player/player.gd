@@ -44,7 +44,7 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var wall_raycast: RayCast3D = $WallRaycast
 
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
-@onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
+@onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/Camera3D/AimRay
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 @onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
@@ -57,7 +57,8 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
 
-# Statuses
+@export_group("Status Effects")
+@export_subgroup("Drunk")
 @onready var drunk_timer: Timer = $StateChart/Root/Status/Drunk/DrunkTimer
 
 signal movement_dashed
@@ -172,6 +173,7 @@ func _ready():
 
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 	update_ammo_counter_ui()
+
 
 func _unhandled_input(event):
 	if controls_disabled:
@@ -474,6 +476,7 @@ func rotate_player(x: float, y: float):
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
+
 func camera_control(delta):
 	# Tilt camera
 	if GameManager.camera_tilt:
@@ -707,6 +710,7 @@ func get_assist_rotation_velocity(delta: float):
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
+
 func spin_barrels() -> void:
 	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading:
 		return
@@ -753,12 +757,14 @@ func _on_luck_maxed() -> void:
 func _on_status_drunk_active_state_entered() -> void:
 	# TODO - add drunk effect particles/shader/icon/screenshake/fov
 	drunk_ui.start_drunk()
+	player_camera.target_drunk_intensity = 4.0
 	# TODO - set/reset drunk timer externally by the source of the debuff
 	#drunk_timer.start(0.6)
 
 func _on_status_drunk_active_state_exited() -> void:
 	drunk_ui.end_drunk()
+	player_camera.target_drunk_intensity = 0.0
 	drunk_timer.stop()
 
 func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
-	pass # Replace with function body.
+	pass

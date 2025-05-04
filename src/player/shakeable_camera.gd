@@ -15,6 +15,17 @@ class_name ShakeCameraWrapper
 @onready var initial_rotation: Vector3 = camera.rotation_degrees
 @onready var gun_container = $GunContainer
 
+# Statuses
+@export_group("Status Effects")
+@export_subgroup("Drunk")
+var drunk_sway_time: float = 0.0
+@export var drunk_sway_speed: float = 1.5
+@export var drunk_sway_amount_deg: float = 5.0
+@export var drunk_noise_intensity: float = 3.0
+var drunk_intensity: float = 0.0
+@export var target_drunk_intensity: float = 0.0
+var sway_noise := FastNoiseLite.new()
+
 const MAX_TRAUMA = 2.0
 const SHAKE_COEFFICIENT = 1.0
 const RECOIL_DAMPING_FACTOR = 10.0
@@ -51,6 +62,28 @@ func _process(delta):
 	recover_rotation_velocity -= recover_rotation_velocity * (RECOIL_DAMPING_FACTOR / 2.0) * delta
 	var final_rotation_velocity = rotation_velocity + recover_rotation_velocity
 	rotation += final_rotation_velocity * delta
+	
+	# Drunk
+	drunk_intensity = lerp(drunk_intensity, target_drunk_intensity, delta * 2.0)
+	if drunk_intensity > 0.01:
+		drunk_sway_time += delta * drunk_sway_speed
+	
+		var sway_pitch: float = sin(drunk_sway_time) * drunk_sway_amount_deg * 0.25 * drunk_intensity
+		var sway_yaw: float = cos(drunk_sway_time * 1.5) * drunk_sway_amount_deg * 0.25 * drunk_intensity
+		var sway_roll: float = sin(drunk_sway_time * 0.6) * drunk_sway_amount_deg * drunk_intensity
+		
+		# Add some procedural jitter
+		# TODO 
+		var noise_offset = get_noise_from_seed(Time.get_ticks_msec() * 0.001) * drunk_noise_intensity
+		
+		var wobble_vector := Vector3(
+			sway_pitch, #+ noise_offset,
+			sway_yaw,
+			sway_roll * 0.25
+		)
+		
+		camera.rotation_degrees += wobble_vector
+	
 
 func add_long_trauma(trauma_amount: float):
 	# Trauma over long duration, such as during sliding, earthquake, house collapsing, ...
