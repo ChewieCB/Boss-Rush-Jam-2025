@@ -207,11 +207,11 @@ func _unhandled_input(event):
 	elif event.is_action_pressed("spin_barrels"):
 		spin_barrels()
 	# DEBUG
-	elif event.is_action_pressed("input_1"):
-		state_chart.send_event("add_status_drunk")
+	#elif event.is_action_pressed("input_1"):
+		#state_chart.send_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
-	elif event.is_action_pressed("input_2"):
-		state_chart.send_event("remove_status_drunk")
+	#elif event.is_action_pressed("input_2"):
+		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
 	#elif event.is_action_pressed("input_3"):
 		#current_gun.spin_single_barrel(2)
@@ -760,12 +760,14 @@ func _on_luck_maxed() -> void:
 	pass
 
 
+func apply_drunk_status(duration: float) -> void:
+	state_chart.send_event("add_status_drunk")
+	drunk_timer.start(duration)
+
+
 func _on_status_drunk_active_state_entered() -> void:
-	# TODO - add drunk effect particles/shader/icon/screenshake/fov
 	drunk_ui.start_drunk()
 	player_camera.target_drunk_intensity = 4.0
-	# TODO - set/reset drunk timer externally by the source of the debuff
-	#drunk_timer.start(0.6)
 
 func _on_status_drunk_active_state_exited() -> void:
 	drunk_ui.end_drunk()
@@ -788,3 +790,6 @@ func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
 	# Add to input direction
 	velocity = Vector3(drunk_drift_vector.x, 0, drunk_drift_vector.y)
 	move_and_slide()
+
+func _on_drunk_timer_timeout() -> void:
+	state_chart.send_event("remove_status_drunk")

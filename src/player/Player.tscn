@@ -540,5 +540,6 @@ light_color = Color(0.78, 0.897333, 1, 1)
 [connection signal="state_entered" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_physics_processing"]
+[connection signal="timeout" from="StateChart/Root/Status/Drunk/DrunkTimer" to="." method="_on_drunk_timer_timeout"]
 
 [editable path="UI/HurtOverlay"]

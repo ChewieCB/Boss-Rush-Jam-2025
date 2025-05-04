@@ -29,7 +29,6 @@ func _ready() -> void:
 	boss.drain_chamber.connect(lower_water)
 	boss.break_floor.connect(break_floor)
 	
-	
 	boss.chiptopede_spawns = chiptopede_spawns
 	boss.chiptopede_snake_spawns = chiptopede_snake_spawns
 	boss.chiptopede_snake_path_points = chiptopede_snake_path_points
@@ -51,8 +50,7 @@ func _ready() -> void:
 
 func break_floor() -> void:
 	water_surface.visible = true
-	#lower_water()
-	water_surface.global_position.y = -19.3
+	water_surface.global_position.y = -19.5
 	if breakable_floor:
 		breakable_floor.queue_free()
 	for platform in rising_platforms:
@@ -107,10 +105,10 @@ func lower_water() -> void:
 
 
 func _on_water_damage_area_body_entered(body: Node3D) -> void:
-	return
 	# TODO - add drunk effect instead of damage
 	if body is Player:
-		player.health_component.damage(water_damage_amount)
+		player.apply_drunk_status(6.0)
+		#player.health_component.damage(water_damage_amount)
 		water_damage_timer.start(water_damage_tick)
 
 
@@ -120,4 +118,4 @@ func _on_water_damage_area_body_exited(body: Node3D) -> void:
 
 
 func _on_water_damage_timer_timeout() -> void:
-	player.health_component.damage(water_damage_amount)
+	player.apply_drunk_status(6.0)
