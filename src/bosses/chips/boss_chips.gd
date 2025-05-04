@@ -55,6 +55,10 @@ var chiptopede_snake_path_points: Array[Node]
 var chiptopede_shoot_spawns: Array[Node]
 var last_spawn: Node
 var last_leap_end_pos := Vector3.ZERO
+# Segment caching
+var despawned_pos := Vector3(0, -50, 0)
+var cached_segments: Array = []
+var segment_cache_parent: Node3D
 @export_subgroup("Attributes")
 @export var chiptopede_max_health: float = 8000
 @export var chiptopede_segments: int = 24
@@ -94,6 +98,7 @@ var emerge_distance: float
 @export var chiptopede_delay_per_projectile: float = 0.05
 @export var delay_between_burst: float = 0.3
 
+@onready var scene_root = get_parent().get_parent()
 
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
 #@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
@@ -129,7 +134,6 @@ func select_attack_phase_1() -> void:
 		possible_phases.erase(prev_phase)
 	# TODO - add random weighting
 	var new_phase = possible_phases.pick_random()
-	print(prev_phase, new_phase)
 	prev_phase = new_phase
 	state_chart.send_event(new_phase)
 
@@ -149,7 +153,7 @@ func select_attack_phase_3() -> void:
 		possible_phases.erase(prev_phase)
 	# TODO - add random weighting
 	var new_phase = possible_phases.pick_random()
-	print(prev_phase, new_phase)
+	print(prev_phase, " -> ", new_phase)
 	prev_phase = new_phase
 	state_chart.send_event(new_phase)
 
@@ -622,6 +626,8 @@ func _on_phase_3_state_entered() -> void:
 	
 	# TODO - fakeout death
 	#
+	self.global_position = despawned_pos
+	_create_segment_cache()
 	generate_snake_graph()
 	
 	# Re-fill health bar, change name, and show
@@ -654,7 +660,7 @@ func get_chiptopede_spawn_pos(
 	var get_furthest: bool = true
 	# If we provide a previous location, spawn near this location for continutity
 	if previous_pos != Vector3.ZERO:
-		sort_target = last_leap_end_pos
+		sort_target = previous_pos
 		get_furthest = false
 	# 
 	available_spawns.sort_custom(
@@ -684,7 +690,6 @@ func get_chiptopede_spawn_pos(
 func create_premade_path(start_pos: Vector3, prefab: PackedScene) -> Path3D:
 	# Instance the shooting stance path
 	var path: Path3D = prefab.instantiate()
-	var scene_root = get_tree().root.get_children()[8]
 	scene_root.add_child(path)
 	path.global_position = start_pos
 	
@@ -697,7 +702,6 @@ func create_curve_path(start_pos: Vector3, goal_pos: Vector3, follow_path: Array
 	path.curve = curve
 
 	# Add the path to the scene
-	var scene_root = get_tree().root.get_children()[8]
 	scene_root.add_child(path)
 	
 	return path
@@ -735,28 +739,68 @@ func _create_snake_path(_start_pos: Vector3, _goal_pos: Vector3, follow_path: Ar
 
 
 func _cleanup_segment_arrays() -> void:
-	for arr in [follow_nodes, completed_nodes]:
-		for node in arr:
-			if is_instance_valid(node):
-				node.queue_free()
+	print("Caching segments")
+	for node in follow_nodes:
+		var segment = node.get_child(0)
+		if segment:
+			cache_segment(segment, node)
 	follow_nodes = []
 	completed_nodes = []
 	chiptopede_head_offset = 0.0
 
 
+func _create_segment_cache() -> Node3D:
+	segment_cache_parent = Node3D.new()
+	get_tree().root.get_children()[8].add_child(segment_cache_parent)
+	segment_cache_parent.global_position = despawned_pos
+	
+	for idx in range(chiptopede_segments):
+		var segment = chiptopede_segment_prefab.instantiate()
+		cache_segment(segment)
+	
+	return segment_cache_parent
+
+
+func cache_segment(segment: ChiptopedeSegment, segment_parent: Node3D = null) -> void:
+	if segment_parent:
+		segment_parent.remove_child(segment)
+	segment_cache_parent.add_child(segment)
+	segment.global_position = despawned_pos
+	cached_segments.append(segment)
+	print(cached_segments.size())
+
+
+func get_segment_from_cache() -> ChiptopedeSegment:
+	var segment: ChiptopedeSegment = cached_segments.pop_front()
+	segment_cache_parent.remove_child(segment)
+	print(cached_segments.size())
+	
+	return segment
+
+
 func spawn_segments(path: Path3D) -> Array:
-	# Before we spawn anything new, make sure we've 
-	# cleaned up previously spawned segments
-	_cleanup_segment_arrays()
 	# For each segment of the chiptopede, create a path follow 
 	# and offset it by the distance between each segment
 	var path_follow_nodes := []
 	
-	for segment in chiptopede_segments:
+	# DEBUG fallback, find the actual source of this
+	if cached_segments.size() == 0:
+		_cleanup_segment_arrays()
+	
+	print("Spawning segments")
+	for segment_idx in chiptopede_segments:
 		var path_follow = PathFollow3D.new()
 		path.add_child(path_follow)
 		
-		var new_segment: ChiptopedeSegment = chiptopede_segment_prefab.instantiate()
+		var new_segment: ChiptopedeSegment = get_segment_from_cache()
+		# If there are segments in the cache, grab one
+		#if segment_idx < cached_segments.size():
+			#new_segment = get_segment_from_cache()
+		## Otherwise, instantiate a new segment
+		#else:
+			#new_segment = chiptopede_segment_prefab.instantiate()
+		
+		# Moving segments
 		path_follow.add_child(new_segment)
 		new_segment.global_position = path_follow.global_position
 		new_segment.health_component.health_diff.connect(_on_chiptopede_hurt)
@@ -773,8 +817,8 @@ func move_segments_along_path(
 	is_reversed: bool = false, free_segment_when_finished: bool = true,
 ) -> void:
 	if completed_nodes.size() == follow_nodes.size():
-		if free_segment_when_finished:
-			_cleanup_segment_arrays()
+		#if free_segment_when_finished:
+			#_cleanup_segment_arrays()
 		state_chart.send_event(end_event_str)
 		return
 	
@@ -784,20 +828,21 @@ func move_segments_along_path(
 	chiptopede_head_offset += offset_diff
 	
 	for i in range(chiptopede_segments):
-		var segment = follow_nodes[i]
-		if not segment:
+		var path_follow = follow_nodes[i]
+		if not path_follow or path_follow.get_child_count() == 0:
 			continue
 		
 		var offset = chiptopede_head_offset - (i * segment_separation)
-		segment.progress = clamp(offset, 0, max_distance)
+		path_follow.progress = clamp(offset, 0, max_distance)
 		
 		var progress_endpoint: float = 0.0 if is_reversed else max_distance
-		if segment.progress == progress_endpoint:
+		if path_follow.progress == progress_endpoint:
 			# Only trigger AoE when first segment hits ground
 			if segment_callback:
-				segment_callback.call(segment)
+				segment_callback.call(path_follow)
 			if free_segment_when_finished:
-				segment.queue_free()
+				var segment = path_follow.get_child(0)
+				cache_segment(segment, path_follow)
 			completed_nodes.append(i)
 
 
@@ -812,6 +857,7 @@ func generate_snake_graph() -> void:
 		for connection in point.connected_points:
 			var connection_idx: int = all_points.find(connection)
 			astar.connect_points(point_idx, connection_idx)
+
 
 # FIXME - double-backing in places
 func calculate_snake_path(start_pos: Vector3, target_pos: Vector3) -> void:
@@ -856,6 +902,7 @@ func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
 
 
 func _on_chiptopede_leap_leaping_state_exited() -> void:
+	_cleanup_segment_arrays()
 	leap_path.queue_free()
 	leap_damage_timer.stop()
 
@@ -932,6 +979,7 @@ func _on_chiptopede_snake_moving_state_physics_processing(delta: float) -> void:
 
 
 func _on_chiptopede_snake_moving_state_exited() -> void:
+	_cleanup_segment_arrays()
 	snake_path = []
 	snake_path_3d.queue_free()
 
@@ -1013,6 +1061,7 @@ func _on_chiptopede_shoot_retreat_state_physics_processing(delta: float) -> void
 
 
 func _on_chiptopede_shoot_recovering_state_entered() -> void:
+	_cleanup_segment_arrays()
 	stance_path.queue_free()
 	_on_recover_state_entered()
 
