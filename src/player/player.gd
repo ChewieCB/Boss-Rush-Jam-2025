@@ -60,6 +60,11 @@ var movement_sfx_player: AudioStreamPlayer
 @export_group("Status Effects")
 @export_subgroup("Drunk")
 @onready var drunk_timer: Timer = $StateChart/Root/Status/Drunk/DrunkTimer
+@export var drunk_movement_drift: float = 1.0
+@export var drunk_movement_drift_change_interval: float = 0.8
+var drunk_drift_timer: float = 0.0
+var drunk_drift_vector := Vector2.ZERO
+var drunk_target_drift_vector := Vector2.ZERO
 
 signal movement_dashed
 
@@ -288,6 +293,7 @@ func _process(delta):
 
 	if Input.is_action_just_released("shoot"):
 		current_gun.release_trigger()
+
 
 func _physics_process(delta):
 	if controls_disabled:
@@ -767,4 +773,18 @@ func _on_status_drunk_active_state_exited() -> void:
 	drunk_timer.stop()
 
 func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
-	pass
+	# Don't move the player when they're standing still
+	if raw_input_dir == Vector2.ZERO:
+		return
+	
+	# Drunk movement drift
+	drunk_drift_timer += delta
+	if drunk_drift_timer >= drunk_movement_drift_change_interval:
+		drunk_drift_timer = 0.0
+		# Random unit vector with small magnitude
+		drunk_target_drift_vector = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)).normalized() * drunk_movement_drift
+	# Smoothly lerp toward the target
+	drunk_drift_vector = drunk_drift_vector.lerp(drunk_target_drift_vector, delta * 5.0)
+	# Add to input direction
+	velocity = Vector3(drunk_drift_vector.x, 0, drunk_drift_vector.y)
+	move_and_slide()

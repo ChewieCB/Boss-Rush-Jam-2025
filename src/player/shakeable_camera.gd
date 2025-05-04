@@ -73,7 +73,6 @@ func _process(delta):
 		var sway_roll: float = sin(drunk_sway_time * 0.6) * drunk_sway_amount_deg * drunk_intensity
 		
 		# Add some procedural jitter
-		# TODO 
 		var noise_offset = get_noise_from_seed(Time.get_ticks_msec() * 0.001) * drunk_noise_intensity
 		
 		var wobble_vector := Vector3(
@@ -83,7 +82,7 @@ func _process(delta):
 		)
 		
 		camera.rotation_degrees += wobble_vector
-	
+
 
 func add_long_trauma(trauma_amount: float):
 	# Trauma over long duration, such as during sliding, earthquake, house collapsing, ...
