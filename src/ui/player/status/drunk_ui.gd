@@ -6,17 +6,42 @@ var drunk_tween: Tween
 @export var lower_blur: float = 0.015
 @export var upper_blur: float = 0.03
 
+@onready var bgm_bus_lowpass := AudioServer.get_bus_effect(1, 1) as AudioEffectLowPassFilter
+@onready var sfx_bus_lowpass := AudioServer.get_bus_effect(2, 0) as AudioEffectLowPassFilter
+
 
 func start_drunk() -> void:
+	# Toggle low pass filter for BGM
+	AudioServer.set_bus_effect_enabled(1, 1, true)
+	AudioServer.set_bus_effect_enabled(2, 0, true)
+	
+	# Setup tween
 	drunk_tween = create_tween()
 	drunk_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	
+	# Tween into drunk effect
 	drunk_tween.tween_method(
 		_set_blur_amount, 0.0, lower_blur, 0.6
 	).set_ease(Tween.EASE_IN)
 	drunk_tween.parallel().tween_property(
 		rect, "color:a", 1.0, 0.6
 	).set_ease(Tween.EASE_IN)
+	drunk_tween.parallel().tween_property(
+		bgm_bus_lowpass, "cutoff_hz", 800, 0.6
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	drunk_tween.parallel().tween_property(
+		sfx_bus_lowpass, "cutoff_hz", 800, 0.6
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	drunk_tween.parallel().tween_property(
+		bgm_bus_lowpass, "resonance", 0.5, 0.6
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	drunk_tween.parallel().tween_property(
+		sfx_bus_lowpass, "resonance", 0.5, 0.6
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	
 	await drunk_tween.finished
+	
+	# Cycle between blurs
 	drunk_tween = create_tween()
 	drunk_tween.chain().tween_method(
 		_set_blur_amount, lower_blur, upper_blur, 0.8
@@ -39,6 +64,22 @@ func end_drunk() -> void:
 	drunk_tween.parallel().tween_property(
 		rect, "color:a", 0.0, 0.6
 	).set_ease(Tween.EASE_OUT)
+	drunk_tween.parallel().tween_property(
+		bgm_bus_lowpass, "cutoff_hz", 2000, 0.6
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	drunk_tween.parallel().tween_property(
+		sfx_bus_lowpass, "cutoff_hz", 2000, 0.6
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	drunk_tween.parallel().tween_property(
+		bgm_bus_lowpass, "resonance", 0.0, 0.6
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	drunk_tween.parallel().tween_property(
+		sfx_bus_lowpass, "resonance", 0.0, 0.6
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	
+	# Toggle low pass filter for BGM
+	AudioServer.set_bus_effect_enabled(1, 1, false)
+	AudioServer.set_bus_effect_enabled(2, 0, false)
 
 
 func _set_blur_amount(amount: float) -> void:

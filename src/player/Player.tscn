@@ -169,7 +169,6 @@ extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_bbump")
 
 [node name="AimRay" parent="Neck/ShakeCameraWrapper/Camera3D" instance=ExtResource("5_dqbuo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
 collision_mask = 125
 collide_with_areas = true
 
