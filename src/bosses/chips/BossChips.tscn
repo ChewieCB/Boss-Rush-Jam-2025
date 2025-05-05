@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=19 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Texture2D" uid="uid://c7hb6wpuv2rw6" path="res://src/bosses/base/assets/placeholder_sweets_big_stack.png" id="2_1q2di"]
@@ -13,6 +13,7 @@
 [ext_resource type="Material" uid="uid://ikjycfpkgv3n" path="res://src/bosses/chips/AoeMat.tres" id="5_vcykk"]
 [ext_resource type="PackedScene" uid="uid://cxg3ytjd4ybu0" path="res://src/bosses/chips/RollingChipProjectile.tscn" id="6_dth1w"]
 [ext_resource type="PackedScene" uid="uid://d4e0u7jv00gxw" path="res://src/bosses/chips/minions/ChiptopedeSegment.tscn" id="7_3u62n"]
+[ext_resource type="PackedScene" uid="uid://cbb2iyep64uu" path="res://src/bosses/chips/minions/SlamShockwave.tscn" id="7_s7i42"]
 [ext_resource type="PackedScene" uid="uid://diiahann2tcbe" path="res://src/bosses/chips/minions/ChiptopedeProjectileStancePath.tscn" id="8_280mm"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="9_n5byv"]
 
@@ -42,6 +43,13 @@ chip_mine_spawn_area_radius = 18.0
 chip_mine_trigger_radius = 6.0
 chip_mine_trigger_time = 0.8
 chip_mine_prefab = ExtResource("5_bdbd0")
+slam_shockwave_prefab = ExtResource("7_s7i42")
+slam_count = 4
+slam_damage = 10.0
+slam_wave_speed = 2.1
+slam_wave_width = 6.0
+slam_wave_radius = 20.0
+slam_delay = 0.4
 jump_height = 9.0
 jump_time = 0.8
 jump_hang_time = 1.2
@@ -168,6 +176,12 @@ delay_in_seconds = "0.0"
 script = ExtResource("3_hbmr3")
 to = NodePath("../../ChipSweep")
 event = &"start_chip_sweep"
+delay_in_seconds = "0.0"
+
+[node name="toStackSlam" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="7"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../StackSlam")
+event = &"start_slam_attack"
 delay_in_seconds = "0.0"
 
 [node name="BackspinChip" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
@@ -635,6 +649,49 @@ delay_in_seconds = "0.0"
 
 [node name="StackSlam" type="Node" parent="StateChart/Root/Phase/Phase1" index="9"]
 script = ExtResource("4_kiknp")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/StackSlam" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toJump" type="Node" parent="StateChart/Root/Phase/Phase1/StackSlam/Targeting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Jump")
+event = &"start_jump"
+delay_in_seconds = "0.0"
+
+[node name="Jump" type="Node" parent="StateChart/Root/Phase/Phase1/StackSlam" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toSlam" type="Node" parent="StateChart/Root/Phase/Phase1/StackSlam/Jump" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Slam")
+event = &"spawn_wave"
+delay_in_seconds = "0.0"
+
+[node name="Slam" type="Node" parent="StateChart/Root/Phase/Phase1/StackSlam" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/StackSlam/Slam" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recover")
+event = &"end_slam"
+delay_in_seconds = "0.0"
+
+[node name="toJump" type="Node" parent="StateChart/Root/Phase/Phase1/StackSlam/Slam" index="1"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Jump")
+event = &"start_jump"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/StackSlam" index="3"]
+script = ExtResource("5_81kie")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/StackSlam/Recover" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
 
 [node name="ChipSpray" type="Node" parent="StateChart/Root/Phase/Phase1" index="10"]
 script = ExtResource("4_kiknp")
@@ -859,6 +916,10 @@ delay_in_seconds = "0.0"
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ChipSweep/Targeting" to="." method="_on_chip_sweep_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ChipSweep/Sweep" to="." method="_on_chip_sweep_sweep_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ChipSweep/Recover" to="." method="_on_chip_sweep_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/StackSlam/Targeting" to="." method="_on_stack_slam_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/StackSlam/Jump" to="." method="_on_stack_slam_jump_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/StackSlam/Slam" to="." method="_on_stack_slam_slam_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/StackSlam/Recover" to="." method="_on_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Targeting" to="." method="_on_chiptopede_leap_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Leaping" to="." method="_on_chiptopede_leap_leaping_state_entered"]

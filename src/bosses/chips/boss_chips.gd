@@ -34,6 +34,8 @@ var active_rolling_chip: RollingChip
 @export var sweep_delay: float = 0.4
 @export var chip_sweep_prefab: PackedScene
 var chip_sweep_instances: Array = []
+# SFX
+#
 @export_subgroup("Chip Mines")
 @export var chip_mine_count: int = 6
 @export var chip_mine_spawn_area_radius: float = 18.0
@@ -42,6 +44,17 @@ var chip_sweep_instances: Array = []
 @export var chip_mine_prefab: PackedScene
 var chip_mine_spawn_points: Array
 var active_mines: Array = []
+# SFX
+#
+@export_subgroup("Stack Slam")
+@export var slam_shockwave_prefab: PackedScene
+@export var slam_count: int = 4
+@export var slam_damage: float = 10.0
+@export var slam_wave_speed: float = 2.1
+@export var slam_wave_width: float = 6.0
+@export var slam_wave_radius: float = 20.0
+@export var slam_delay: float = 0.4
+var completed_slams: int = 0
 # SFX
 #
 @export_subgroup("Place Your Bets")
@@ -159,8 +172,10 @@ func activate() -> void:
 
 func select_attack_phase_1() -> void:
 	var possible_phases = [
-		"start_chip_sweep",
-		"start_chip_sweep",
+		#"start_chip_sweep",
+		#"start_chip_sweep",
+		"start_slam_attack",
+		"start_slam_attack",
 		#"start_backspin_chip",
 		#"start_backspin_chip",
 		#"start_chip_mines",
@@ -1253,3 +1268,55 @@ func _on_chip_sweep_recover_state_entered() -> void:
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+func _on_stack_slam_targeting_state_entered() -> void:
+	debug_state_label.text = "Stack Slam | Targeting"
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(0.8).timeout
+	state_chart.send_event("start_jump")
+
+
+func _on_stack_slam_jump_state_entered() -> void:
+	debug_state_label.text = "Stack Slam | Jumping"
+	
+	vel_vertical = 0
+	GRAVITY = 0
+	
+	var jump_tween: Tween = get_tree().create_tween()
+	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height/2, 0), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	
+	await jump_tween.finished
+	
+	var target_pos: Vector3 = self.global_position
+	target_pos.y = 0
+	jump_tween = get_tree().create_tween()
+	jump_tween.tween_property(self, "global_position", target_pos, drop_time/2).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	
+	await jump_tween.finished
+	
+	state_chart.send_event("spawn_wave")
+
+
+func _on_stack_slam_slam_state_entered() -> void:
+	if completed_slams < slam_count:
+		var shockwave = slam_shockwave_prefab.instantiate()
+		scene_root.add_child(shockwave)
+		
+		shockwave.global_transform = self.global_transform
+		#shockwave.global_position.y += 0.4
+		shockwave.max_radius = slam_wave_radius
+		shockwave.damage = slam_damage
+		shockwave.wave_time = slam_wave_speed
+		shockwave.start_shockwave()
+		
+		completed_slams += 1
+		
+		await get_tree().create_timer(slam_delay).timeout
+		
+		state_chart.send_event("start_jump")
+		
+	completed_slams = 0
+	state_chart.send_event("end_slam")
