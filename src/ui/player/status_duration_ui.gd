@@ -38,6 +38,10 @@ func refresh(updated_status: StatusEffect):
 	max_time = status_effect.duration
 	timer.start(status_effect.duration)
 
+func remove():
+	call_deferred("queue_free")
+
+
 func _process(_delta: float) -> void:
 	if status_effect == null:
 		return

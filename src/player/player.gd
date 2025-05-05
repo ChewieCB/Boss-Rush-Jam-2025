@@ -58,7 +58,8 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
 
 signal movement_dashed
-signal add_new_status_effect(status)
+signal new_status_effect_added(status)
+signal status_effect_removed(status_effect_code)
 
 const MAX_SPEED: float = 8.0
 const MAX_FALL_SPEED: float = 70.0
@@ -256,7 +257,7 @@ func _process(delta):
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 
 	for status in status_effect_list:
-		if status.duration > 0:
+		if status.duration > 0 and status.duration < StatusEffect.INFINITE_DURATION:
 			status.duration -= delta
 			if status.duration <= 0:
 				remove_status_effect(status)
@@ -620,15 +621,16 @@ func add_status_effect(new_status: StatusEffect):
 	for status in status_effect_list:
 		if status.status_code == new_status.status_code:
 			status.duration = max(status.duration, new_status.duration)
-			add_new_status_effect.emit(status)
+			new_status_effect_added.emit(status)
 			return
 	status_effect_list.append(new_status)
-	add_new_status_effect.emit(new_status)
+	new_status_effect_added.emit(new_status)
 	apply_status_effects()
 
 
 func remove_status_effect(status: StatusEffect):
 	status_effect_list.erase(status)
+	status_effect_removed.emit(status.status_code)
 	apply_status_effects()
 
 
@@ -651,6 +653,8 @@ func apply_status_effects():
 	var percentage_modifiers = {}
 
 	for status in status_effect_list:
+		if not current_stats.has(status.modified_stat_name):
+			continue
 		if status.modify_type == StatusEffect.StatusEffectModifyType.FLAT:
 			flat_modifiers[status.modified_stat_name] = flat_modifiers.get(status.status_code, 0) + status.value
 		elif status.modify_type == StatusEffect.StatusEffectModifyType.PERCENTAGE:

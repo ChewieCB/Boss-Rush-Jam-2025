@@ -34,10 +34,11 @@ func _ready() -> void:
 		luck_component.luck_maxed.connect(luck_bar_ui._on_luck_maxed)
 	#if show_on_ready:
 		#show_ui()
-	GameManager.player.add_new_status_effect.connect(add_refresh_status_ui)
+	GameManager.player.new_status_effect_added.connect(add_refresh_status_ui)
+	GameManager.player.status_effect_removed.connect(remove_status_ui)
 	
 
-## Only for adding or refreshing status UI. UI will be removed by the
+## Only for adding or refreshing status UI. UI usually be removed by the
 ## instance's timer (which hopefully synced correctly with the actual status duration)
 func add_refresh_status_ui(new_status: StatusEffect):
 	# Check if it already exist, then refresh it
@@ -49,6 +50,12 @@ func add_refresh_status_ui(new_status: StatusEffect):
 	var ui_inst = status_duration_ui_prefab.instantiate()
 	status_ui_container.add_child(ui_inst)
 	ui_inst.init(new_status)
+
+## Usually used for infinite duration status
+func remove_status_ui(status_code: String):
+	for child in status_ui_container.get_children():
+		if child.status_effect.status_code == status_code:
+			child.remove()
 
 func show_health_ui() -> void:
 	_animate_ui_element("health")

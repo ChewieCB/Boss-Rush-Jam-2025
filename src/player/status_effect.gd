@@ -2,6 +2,8 @@ class_name StatusEffect
 
 enum StatusEffectModifyType {FLAT, PERCENTAGE, BOOL}
 
+const INFINITE_DURATION = 100000
+
 var display_name: String
 var status_code: String
 var modified_stat_name: String # Which stat this status affects (e.g., "strength", "run_speed_modifier").

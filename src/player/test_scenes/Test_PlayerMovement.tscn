@@ -75,6 +75,12 @@ shape = SubResource("BoxShape3D_xq4fj")
 
 [node name="Player" parent="." instance=ExtResource("1_h4pew")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+can_wall_jump = null
+can_wall_cling = null
+dash_cd = null
+dash_iframe_duration = null
+angular_momentum_multiplier = null
+luck_redeem_time = null
 
 [node name="Dummy" parent="." instance=ExtResource("2_lrk4j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.38672, 0.952686, -11.856)
