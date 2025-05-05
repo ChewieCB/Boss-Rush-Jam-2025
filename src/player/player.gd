@@ -207,8 +207,7 @@ func _unhandled_input(event):
 	elif event.is_action_pressed("spin_barrels"):
 		spin_barrels()
 	# DEBUG
-	#elif event.is_action_pressed("input_1"):
-		#state_chart.send_event("add_status_drunk")
+	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
 	#elif event.is_action_pressed("input_2"):
 		#state_chart.send_event("remove_status_drunk")

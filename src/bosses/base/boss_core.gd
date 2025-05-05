@@ -228,7 +228,7 @@ func activate() -> void:
 
 func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInstance3D:
 	# Will usually work, but you might need to adjust this.
-	var scene_root = get_tree().root.get_children()[0]
+	var scene_root = get_tree().root.get_children()[8]
 	# Create sphere with low detail of size.
 	var sphere = SphereMesh.new()
 	sphere.radial_segments = 4
@@ -244,8 +244,8 @@ func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInst
 	# Add to meshinstance in the right place.
 	var node = MeshInstance3D.new()
 	node.mesh = sphere
+	scene_root.add_child.call_deferred(node)
 	node.global_transform.origin = location
-	#scene_root.add_child(node)
 
 	return node
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=18 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Texture2D" uid="uid://c7hb6wpuv2rw6" path="res://src/bosses/base/assets/placeholder_sweets_big_stack.png" id="2_1q2di"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_kiknp"]
 [ext_resource type="PackedScene" uid="uid://bhaia8j3ynxwp" path="res://src/bosses/chips/minions/SubStack.tscn" id="4_otar4"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_81kie"]
+[ext_resource type="PackedScene" uid="uid://ge1558qgjpow" path="res://src/bosses/chips/minions/ChipMineProjectile.tscn" id="5_bdbd0"]
+[ext_resource type="PackedScene" uid="uid://qx2chp743o1f" path="res://src/bosses/chips/minions/ChipSweepProjectile.tscn" id="5_dugfr"]
 [ext_resource type="Material" uid="uid://ikjycfpkgv3n" path="res://src/bosses/chips/AoeMat.tres" id="5_vcykk"]
 [ext_resource type="PackedScene" uid="uid://cxg3ytjd4ybu0" path="res://src/bosses/chips/RollingChipProjectile.tscn" id="6_dth1w"]
 [ext_resource type="PackedScene" uid="uid://d4e0u7jv00gxw" path="res://src/bosses/chips/minions/ChiptopedeSegment.tscn" id="7_3u62n"]
@@ -31,6 +33,15 @@ angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
 rolling_chip_projectile = ExtResource("6_dth1w")
+chip_sweep_count = 3
+sweep_time = 0.05
+sweep_spread_angle = 20.0
+chip_sweep_prefab = ExtResource("5_dugfr")
+chip_mine_count = 6
+chip_mine_spawn_area_radius = 18.0
+chip_mine_trigger_radius = 6.0
+chip_mine_trigger_time = 0.8
+chip_mine_prefab = ExtResource("5_bdbd0")
 jump_height = 9.0
 jump_time = 0.8
 jump_hang_time = 1.2
@@ -65,7 +76,6 @@ chiptopede_delay_per_projectile = 0.05
 delay_between_burst = 0.3
 barrel_pickup_scene = null
 sfx_slowmo = null
-current_phase = 3
 attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.6
@@ -148,6 +158,18 @@ to = NodePath("../../SplitStackAoE")
 event = &"start_split_stack_place_your_bets_attack"
 delay_in_seconds = "0.0"
 
+[node name="toChipMines" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="5"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChipMines")
+event = &"start_chip_mines"
+delay_in_seconds = "0.0"
+
+[node name="toChipSweep" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="6"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChipSweep")
+event = &"start_chip_sweep"
+delay_in_seconds = "0.0"
+
 [node name="BackspinChip" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Targeting")
@@ -188,12 +210,6 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip/Recover" index="1"]
-script = ExtResource("3_hbmr3")
-to = NodePath("../../../Idle")
-event = &"end_recovery"
-delay_in_seconds = "0.0"
-
 [node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="4"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../PlaceYourBets")
@@ -216,6 +232,12 @@ delay_in_seconds = "0.0"
 script = ExtResource("3_hbmr3")
 to = NodePath("../../SplitStackAoE")
 event = &"start_split_stack_place_your_bets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toChipMines" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="8"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChipMines")
+event = &"start_chip_mines"
 delay_in_seconds = "0.0"
 
 [node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
@@ -285,6 +307,12 @@ to = NodePath("../../SplitStackAoE")
 event = &"start_split_stack_place_your_bets_attack"
 delay_in_seconds = "0.0"
 
+[node name="toChipMines" type="Node" parent="StateChart/Root/Phase/Phase1/PlaceYourBets" index="9"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChipMines")
+event = &"start_chip_mines"
+delay_in_seconds = "0.0"
+
 [node name="SplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Splitting")
@@ -343,6 +371,12 @@ to = NodePath("../../SplitStackAoE")
 event = &"start_split_stack_place_your_bets_attack"
 delay_in_seconds = "0.0"
 
+[node name="toChipMines" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackProjectiles" index="8"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChipMines")
+event = &"start_chip_mines"
+delay_in_seconds = "0.0"
+
 [node name="SplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Splitting")
@@ -399,6 +433,12 @@ delay_in_seconds = "0.0"
 script = ExtResource("3_hbmr3")
 to = NodePath("../../SplitStackAoE")
 event = &"start_split_stack_place_your_bets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toChipMines" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackCharge" index="8"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChipMines")
+event = &"start_chip_mines"
 delay_in_seconds = "0.0"
 
 [node name="SplitStackAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
@@ -485,6 +525,122 @@ script = ExtResource("3_hbmr3")
 to = NodePath("../../SplitStackCharge")
 event = &"start_split_stack_charge"
 delay_in_seconds = "0.0"
+
+[node name="toChipMines" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStackAoE" index="11"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChipMines")
+event = &"start_chip_mines"
+delay_in_seconds = "0.0"
+
+[node name="ChipMines" type="Node" parent="StateChart/Root/Phase/Phase1" index="7"]
+script = ExtResource("4_kiknp")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toJump" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines/Targeting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Jump")
+event = &"start_jump"
+delay_in_seconds = "0.0"
+
+[node name="Jump" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toSpawnMines" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines/Jump" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SpawnMines")
+event = &"start_spawn"
+delay_in_seconds = "0.0"
+
+[node name="SpawnMines" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines/SpawnMines" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recover")
+event = &"end_spawn"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines" index="3"]
+script = ExtResource("5_81kie")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines/Recover" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toBackspinChip" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines" index="4"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../BackspinChip")
+event = &"start_backspin_chip"
+delay_in_seconds = "0.0"
+
+[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines" index="5"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../PlaceYourBets")
+event = &"start_place_your_bets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines" index="6"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackProjectiles")
+event = &"start_split_stack_projectiles"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines" index="7"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackCharge")
+event = &"start_split_stack_charge"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStackPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase1/ChipMines" index="8"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStackAoE")
+event = &"start_split_stack_place_your_bets_attack"
+delay_in_seconds = "0.0"
+
+[node name="ChipSweep" type="Node" parent="StateChart/Root/Phase/Phase1" index="8"]
+script = ExtResource("4_kiknp")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ChipSweep" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toSweep" type="Node" parent="StateChart/Root/Phase/Phase1/ChipSweep/Targeting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Sweep")
+event = &"start_sweep"
+delay_in_seconds = "0.0"
+
+[node name="Sweep" type="Node" parent="StateChart/Root/Phase/Phase1/ChipSweep" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ChipSweep/Sweep" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recover")
+event = &"end_sweep"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ChipSweep" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ChipSweep/Recover" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="StackSlam" type="Node" parent="StateChart/Root/Phase/Phase1" index="9"]
+script = ExtResource("4_kiknp")
+
+[node name="ChipSpray" type="Node" parent="StateChart/Root/Phase/Phase1" index="10"]
+script = ExtResource("4_kiknp")
+
+[node name="ChipBounce" type="Node" parent="StateChart/Root/Phase/Phase1" index="11"]
+script = ExtResource("4_kiknp")
 
 [node name="Phase3" type="Node" parent="StateChart/Root/Phase" index="2"]
 script = ExtResource("4_kiknp")
@@ -696,13 +852,20 @@ delay_in_seconds = "0.0"
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackAoE/Draining" to="." method="_on_draining_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackAoE/Merging" to="." method="_on_split_stack_place_your_bets_merging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStackAoE/Recover" to="." method="_on_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ChipMines/Targeting" to="." method="_on_chip_mines_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ChipMines/Jump" to="." method="_on_chip_mines_jump_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ChipMines/SpawnMines" to="." method="_on_chip_mines_spawn_mines_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ChipMines/Recover" to="." method="_on_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ChipSweep/Targeting" to="." method="_on_chip_sweep_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ChipSweep/Sweep" to="." method="_on_chip_sweep_sweep_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ChipSweep/Recover" to="." method="_on_chip_sweep_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Targeting" to="." method="_on_chiptopede_leap_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Leaping" to="." method="_on_chiptopede_leap_leaping_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Leaping" to="." method="_on_chiptopede_leap_leaping_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Leaping" to="." method="_on_chiptopede_leapleaping_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Recovering" to="." method="_on_recovering_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Recovering" to="." method="_on_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Recovering" to="." method="_on_recovering_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Targeting" to="." method="_on_chiptopede_snake_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Moving" to="." method="_on_chiptopede_snake_moving_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase3/ChiptopedeSnake/Moving" to="." method="_on_chiptopede_snake_moving_state_exited"]

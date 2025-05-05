@@ -27,6 +27,23 @@ var last_attack: String
 @export var rolling_chip_projectile: PackedScene
 var active_rolling_chip: RollingChip
 # SFX
+#
+@export_subgroup("Chip Sweep")
+@export var chip_sweep_count: int = 3
+@export var sweep_time: float = 0.05
+@export var sweep_spread_angle: float = 20.0
+@export var chip_sweep_prefab: PackedScene
+var chip_sweep_instances: Array = []
+@export_subgroup("Chip Mines")
+@export var chip_mine_count: int = 6
+@export var chip_mine_spawn_area_radius: float = 18.0
+@export var chip_mine_trigger_radius: float = 6.0
+@export var chip_mine_trigger_time: float = 0.8
+@export var chip_mine_prefab: PackedScene
+var chip_mine_spawn_points: Array
+var active_mines: Array = []
+# SFX
+#
 @export_subgroup("Place Your Bets")
 @export var jump_height: float = 9.0
 @export var jump_time: float = 0.8
@@ -107,6 +124,24 @@ var emerge_distance: float
 func _ready() -> void:
 	super()
 	leap_finished.connect(_on_chiptopede_leap_impact)
+	chip_mine_spawn_points = generate_circular_point_distribution(4, chip_mine_spawn_area_radius, 12)
+
+
+func generate_circular_point_distribution(circles: int, radius: float, points_per_circle: int = 8) -> Array:
+	var points := []  # graph data list
+	var circle_separation: float = radius/circles
+	for i in circles:
+		for j in points_per_circle:
+			# Start at the center
+			var _pos := Vector3(0, 2, 0)
+			# Move the position left depending on which circle we're populating
+			var sep_vector := Vector3.LEFT * circle_separation * (i + 1)
+			# Rotate the position based on which point in the current circle we're drawing
+			_pos += sep_vector.rotated(Vector3.UP, 2 * PI / points_per_circle * (j + 1))
+			points.append(_pos)
+			#draw_debug_sphere(_pos, 0.5, Color.AQUA)
+	
+	return points
 
 
 #func _physics_process(delta: float) -> void:
@@ -119,16 +154,39 @@ func activate() -> void:
 	navigation_component.enable()
 	if not self.is_node_ready():
 		await self.ready
-	state_chart.send_event("start_phase_3")
+	state_chart.send_event("start_phase_1")
 
 
 func select_attack_phase_1() -> void:
 	var possible_phases = [
+		"start_chip_sweep",
+		"start_chip_sweep",
+		#"start_backspin_chip",
+		#"start_backspin_chip",
+		#"start_chip_mines",
+		#"start_chip_mines",
+		#"start_split_stack_projectiles",
+		#"start_split_stack_projectiles",
+		#"start_split_stack_charge",
+	]
+	if prev_phase:
+		possible_phases.erase(prev_phase)
+	# TODO - add random weighting
+	var new_phase = possible_phases.pick_random()
+	prev_phase = new_phase
+	state_chart.send_event(new_phase)
+	state_chart.send_event("end_recovery")
+
+
+func select_attack_phase_2() -> void:
+	# TODO
+	var possible_phases = [
 		"start_backspin_chip",
+		#"start_",
 		"start_place_your_bets_attack",
+		"start_split_stack_place_your_bets_attack",
 		"start_split_stack_projectiles",
 		"start_split_stack_charge",
-		"start_split_stack_place_your_bets_attack",
 	]
 	if prev_phase:
 		possible_phases.erase(prev_phase)
@@ -300,6 +358,90 @@ func _on_backspin_chip_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
+#### BIG STACK CHIP MINES
+# Jump up, crash into the ground creating an AoE and 
+# make chip mines pop up out of the floor.
+func _on_chip_mines_targeting_state_entered() -> void:
+	debug_state_label.text = "Chip Mines | Targeting"
+	
+	# TODO - detonate any existing chip mines before we spawn new ones
+	for mine in active_mines:
+		if is_instance_valid(mine):
+			mine.detonate()
+	active_mines = []
+	#
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(0.8).timeout
+	state_chart.send_event("start_jump")
+
+
+func _on_chip_mines_jump_state_entered() -> void:
+	debug_state_label.text = "Chip Mines | Jumping"
+	
+	vel_vertical = 0
+	GRAVITY = 0
+	
+	var jump_tween: Tween = get_tree().create_tween()
+	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height/2, 0), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	
+	await jump_tween.finished
+	await get_tree().create_timer(jump_hang_time/3).timeout
+	
+	var target_pos: Vector3 = self.global_position
+	target_pos.y = 0
+	jump_tween = get_tree().create_tween()
+	jump_tween.tween_property(self, "global_position", target_pos, drop_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	
+	await jump_tween.finished
+	await spawn_aoe_wave(aoe_radius, drop_damage, aoe_wave_time)
+	
+	state_chart.send_event("start_spawn")
+
+
+func _on_chip_mines_spawn_mines_state_entered() -> void:
+	debug_state_label.text = "Chip Mines | Spawning Mines"
+	# Animate each chip mine spawning out of floor
+	for i in range(chip_mine_count):
+		var spawn_pos := get_mine_spawn_position()
+		var mine = chip_mine_prefab.instantiate()
+		active_mines.append(mine)
+		scene_root.add_child(mine)
+		mine.global_position = spawn_pos
+		mine.global_position.y -= 4.0
+		var tween = get_tree().create_tween()
+		tween.tween_property(mine, "global_position:y", spawn_pos.y, 0.4)
+		#mine.spawn()
+	
+	state_chart.send_event("end_spawn")
+
+
+func get_mine_spawn_position() -> Vector3:
+	# Make sure we don't spawn too close to player/boss
+	var valid_spawns = chip_mine_spawn_points.filter(
+		func(point):
+			for mine in active_mines:
+				if point.distance_to(mine.global_position) < chip_mine_trigger_radius:
+					return false
+			
+			var self_dist: float = point.distance_to(self.global_position)
+			var target_dist: float = point.distance_to(target.global_position)
+			
+			return self_dist > chip_mine_trigger_radius \
+			and target_dist > chip_mine_trigger_radius \
+	)
+	#if last_spawn:
+		#valid_spawns.sort_custom(
+			#func(a, b):
+				#return a.distance_to(last_spawn) > b.distance_to(last_spawn)
+		#)
+		#last_spawn = valid_spawns.front()
+	#else:
+	
+	return valid_spawns.pick_random()
+
+
 #### BIG STACK PLACE YOUR BETS AoE
 # Flood the arena and raise some platforms, leap into the air, 
 # and crash down on the platform the player is currently on
@@ -381,7 +523,6 @@ func _on_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 	
 	state_chart.send_event("cooldown_end")
-	state_chart.send_event("end_recovery")
 	
 	select_attack()
 
@@ -739,7 +880,6 @@ func _create_snake_path(_start_pos: Vector3, _goal_pos: Vector3, follow_path: Ar
 
 
 func _cleanup_segment_arrays() -> void:
-	print("Caching segments")
 	for node in follow_nodes:
 		var segment = node.get_child(0)
 		if segment:
@@ -767,13 +907,11 @@ func cache_segment(segment: ChiptopedeSegment, segment_parent: Node3D = null) ->
 	segment_cache_parent.add_child(segment)
 	segment.global_position = despawned_pos
 	cached_segments.append(segment)
-	print(cached_segments.size())
 
 
 func get_segment_from_cache() -> ChiptopedeSegment:
 	var segment: ChiptopedeSegment = cached_segments.pop_front()
 	segment_cache_parent.remove_child(segment)
-	print(cached_segments.size())
 	
 	return segment
 
@@ -787,7 +925,6 @@ func spawn_segments(path: Path3D) -> Array:
 	if cached_segments.size() == 0:
 		_cleanup_segment_arrays()
 	
-	print("Spawning segments")
 	for segment_idx in chiptopede_segments:
 		var path_follow = PathFollow3D.new()
 		path.add_child(path_follow)
@@ -1072,3 +1209,60 @@ func _on_chiptopede_hurt(health_diff: float) -> void:
 
 func _exit_tree() -> void:
 	_cleanup_segment_arrays()
+
+
+## Chip Sweep
+
+func _on_chip_sweep_targeting_state_entered() -> void:
+	debug_state_label.text = "Chip Sweep | Targeting"
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(0.8).timeout
+	state_chart.send_event("start_sweep")
+
+
+func _on_chip_sweep_sweep_state_entered() -> void:
+	debug_state_label.text = "Chip Sweep | Sweep"
+	
+	state_chart.send_event("stop_moving")
+	
+	var rand_dir_flip: int = -1 if randf() < 0.5 else 1
+	var middle_idx: int = floor(chip_sweep_count - 1 / 2)
+	for i in chip_sweep_count:
+		var sweep_proj: ChipSweepProjectile = chip_sweep_prefab.instantiate()
+		scene_root.add_child(sweep_proj)
+		sweep_proj.global_transform = self.global_transform
+		
+		# Don't sweep the middle idx
+		if i != 0:
+			var rotation_angle = deg_to_rad(sweep_spread_angle) * i * rand_dir_flip
+			sweep_proj.rotate_y(rotation_angle if i % 2 == 0 else -rotation_angle)
+		
+		chip_sweep_instances.append(sweep_proj)
+		
+		var chips_to_player: int = int(sweep_proj.global_position.distance_to(target.global_position))
+		sweep_proj.anim_time = sweep_time / chips_to_player
+		
+		sweep_proj.add_chips(chips_to_player + 2)
+		
+		await sweep_proj.chips_placed
+	
+	state_chart.send_event("end_sweep")
+
+
+func _on_chip_sweep_recover_state_entered() -> void:
+	debug_state_label.text = "Chip Sweep | Recovery"
+	
+	state_chart.send_event("attack_end")
+	await get_tree().create_timer(attack_recovery_time).timeout
+	state_chart.send_event("cooldown_end")
+	
+	for inst in chip_sweep_instances:
+		if is_instance_valid(inst):
+			inst.remove_chips()
+			await inst.chips_removed
+			inst.queue_free()
+	
+	select_attack()
+	state_chart.send_event("end_recovery")
