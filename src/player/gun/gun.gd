@@ -318,6 +318,7 @@ func spin_single_barrel(barrel_idx: int) -> void:
 
 func _spin_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
+	barrel.get_active_effect().on_barrel_spin()
 	barrel.start_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("spin")

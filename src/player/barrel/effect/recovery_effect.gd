@@ -16,6 +16,7 @@ func _ready():
 		timer.timeout.connect(heal)
 
 func on_reload_start():
+	# Remove the effect
 	timer.stop()
 	if heal_barrier_inst != null:
 		heal_barrier_inst.queue_free()
@@ -30,6 +31,10 @@ func on_reload_end():
 
 func on_barrel_remove():
 	on_reload_start()
+
+func on_barrel_spin():
+	on_reload_start()
+
 
 func heal():
 	GameManager.player.health_component.heal(heal_amount)

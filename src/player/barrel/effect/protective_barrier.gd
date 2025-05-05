@@ -19,3 +19,6 @@ func on_reload_end():
 
 func on_barrel_remove():
 	on_reload_start()
+
+func on_barrel_spin():
+	on_reload_start()
