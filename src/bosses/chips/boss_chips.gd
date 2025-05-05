@@ -31,7 +31,7 @@ var active_rolling_chip: RollingChip
 @export_subgroup("Chip Sweep")
 @export var chip_sweep_count: int = 3
 @export var sweep_time: float = 0.05
-@export var sweep_spread_angle: float = 20.0
+@export var sweep_delay: float = 0.4
 @export var chip_sweep_prefab: PackedScene
 var chip_sweep_instances: Array = []
 @export_subgroup("Chip Mines")
@@ -1225,28 +1225,21 @@ func _on_chip_sweep_targeting_state_entered() -> void:
 func _on_chip_sweep_sweep_state_entered() -> void:
 	debug_state_label.text = "Chip Sweep | Sweep"
 	
-	state_chart.send_event("stop_moving")
-	
-	var rand_dir_flip: int = -1 if randf() < 0.5 else 1
-	var middle_idx: int = floor(chip_sweep_count - 1 / 2)
 	for i in chip_sweep_count:
 		var sweep_proj: ChipSweepProjectile = chip_sweep_prefab.instantiate()
 		scene_root.add_child(sweep_proj)
 		sweep_proj.global_transform = self.global_transform
-		
-		# Don't sweep the middle idx
-		if i != 0:
-			var rotation_angle = deg_to_rad(sweep_spread_angle) * i * rand_dir_flip
-			sweep_proj.rotate_y(rotation_angle if i % 2 == 0 else -rotation_angle)
-		
-		chip_sweep_instances.append(sweep_proj)
+		#chip_sweep_instances.append(sweep_proj)
 		
 		var chips_to_player: int = int(sweep_proj.global_position.distance_to(target.global_position))
 		sweep_proj.anim_time = sweep_time / chips_to_player
 		
 		sweep_proj.add_chips(chips_to_player + 2)
-		
 		await sweep_proj.chips_placed
+		sweep_proj.remove_chips()
+		await sweep_proj.chips_removed
+		sweep_proj.queue_free()
+		await get_tree().create_timer(sweep_delay).timeout
 	
 	state_chart.send_event("end_sweep")
 
@@ -1257,12 +1250,6 @@ func _on_chip_sweep_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
-	
-	for inst in chip_sweep_instances:
-		if is_instance_valid(inst):
-			inst.remove_chips()
-			await inst.chips_removed
-			inst.queue_free()
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
