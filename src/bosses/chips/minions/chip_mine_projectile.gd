@@ -1,12 +1,16 @@
-extends Node3D
+extends CharacterBody3D
 class_name ChipMineProjectile
 
 @export_group("Bomb Behaviour")
-@export var fuse_time: float = 1.0
+@export var fuse_time: float = 1.6
 @export var fuse_variance: float = 1.4
 @export var ticks: int = 3
 @export var explosion_radius: float = 8.0
 @export var explosion_damage: float = 10.0
+@export_subgroup("Movement")
+@export var acceleration: float = 8.0
+@export var max_speed: float = 12.0
+@export var steering_damping: float = 0.8
 @export_group("SFX")
 @export var sfx_bomb_launch: Array[AudioStream]
 @export var sfx_bomb_bounce: Array[AudioStream]
@@ -28,10 +32,26 @@ var body_state: PhysicsDirectBodyState3D
 
 var has_detonated: bool = false
 
+var target: CharacterBody3D
+var drift_velocity := Vector3.ZERO
+
 
 func _ready() -> void:
 	explosion_collider.shape.radius = explosion_radius
 	fuse_time += randf_range(0, fuse_variance)
+
+
+func _physics_process(delta: float) -> void:
+	if target:
+		var to_target: Vector3 = target.global_position - self.global_position
+		var desired_velocity: Vector3 = to_target.normalized() * max_speed
+		
+		# Smooth steering towards target
+		drift_velocity = drift_velocity.lerp(desired_velocity, acceleration * delta)
+		drift_velocity *= steering_damping
+		
+		self.velocity = drift_velocity
+		move_and_slide()
 
 
 func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
@@ -67,9 +87,9 @@ func detonate() -> void:
 			continue
 		_on_explosion_area_body_entered(body)
 	
-	var tween = get_tree().create_tween()
-	tween.tween_property(mesh_mat, "albedo_color", Color.BLACK, 0.1).set_trans(Tween.TRANS_CIRC)
-	tween.parallel().tween_property(mesh, "scale", Vector3(0.1, 0.1, 0.1), 0.1).set_trans(Tween.TRANS_CIRC)
+	#var tween = get_tree().create_tween()
+	#tween.tween_property(mesh_mat, "albedo_color", Color.BLACK, 0.1).set_trans(Tween.TRANS_CIRC)
+	#tween.parallel().tween_property(mesh, "scale", Vector3(0.1, 0.1, 0.1), 0.1).set_trans(Tween.TRANS_CIRC)
 	
 	sfx_player.stream = sfx_bomb_explode.pick_random()
 	sfx_player.play()
@@ -90,7 +110,11 @@ func _on_explosion_area_body_entered(body: Node3D) -> void:
 
 
 func _on_activation_area_body_entered(body: Node3D) -> void:
-	if body is Player:
+	if body is CharacterBody3D:
+		if body is ChipMineProjectile:
+			return
+		target = body
+		
 		acivation_area.set_deferred("monitoring", false)
 		timer.start(fuse_time)
 		
@@ -98,7 +122,12 @@ func _on_activation_area_body_entered(body: Node3D) -> void:
 		
 		var tween = get_tree().create_tween()
 		tween.tween_property(mesh_mat, "albedo_color", Color.RED, anim_tick).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
-		tween.parallel().tween_property(mesh, "scale", Vector3(0.5, 0.5, 0.5), anim_tick).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
 		tween.chain().tween_property(mesh_mat, "albedo_color", Color.DARK_ORANGE, anim_tick).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-		tween.parallel().tween_property(mesh, "scale", Vector3.ONE, anim_tick).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
 		tween.set_loops(ticks)
+
+
+func _on_contact_area_body_entered(body: Node3D) -> void:
+	if body == self or has_detonated:
+		return
+	if body is CharacterBody3D:
+		detonate()
