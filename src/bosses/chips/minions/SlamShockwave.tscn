@@ -56,8 +56,9 @@ outer_radius = 2.0
 rings = 24
 ring_segments = 6
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_1bed7"]
-radius = 0.2
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bsp6k"]
+height = 0.2
+radius = 1.975
 
 [node name="SlamShockwave" type="Area3D"]
 collision_layer = 8
@@ -69,6 +70,6 @@ transform = Transform3D(0.34202, 0, -0.939693, 0, 0.5, 0, 0.939693, 0, 0.34202, 
 mesh = SubResource("TorusMesh_8pyy8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_1bed7")
+shape = SubResource("CylinderShape3D_bsp6k")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

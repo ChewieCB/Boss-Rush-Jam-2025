@@ -22,7 +22,6 @@ func start_shockwave() -> void:
 	mesh_material.set_shader_parameter("arc_start_deg", 0)
 	mesh_material.set_shader_parameter("arc_end_deg", arc_angle)
 	mesh.rotation_degrees.y = 90 + arc_angle/2
-	collider.rotation_degrees.y = 90 + arc_angle/2
 	var tween: Tween = create_tween()
 	tween.tween_property(mesh.mesh, "inner_radius", max_radius * arc_thickness_ratio, wave_time)
 	tween.parallel().tween_property(mesh.mesh, "outer_radius", max_radius, wave_time)
@@ -36,29 +35,10 @@ func start_shockwave() -> void:
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
-		# Flattened direction from center to player in XZ
-		var to_body = (body.global_position - self.global_position)
-		to_body.y = 0.0
-		to_body = to_body.normalized()
-
-		# Get forward directison of this node in XZ
-		var forward = -mesh.transform.basis.z
-		forward.y = 0.0
-		forward = forward.normalized()
-
-		# Get signed angle between forward and target direction in degrees
-		var angle_to_body = rad_to_deg(forward.angle_to(to_body))
-
-		# Signed direction (left or right)
-		var cross = forward.cross(to_body).y
-		if cross < 0:
-			angle_to_body = -angle_to_body  # Make it signed (-180 to 180)
-		
-		angle_to_body -= 90
-
-		var arc_half = arc_angle / 2.0  # arc_angle = total sweep, like 90°
-
-		if angle_to_body < -arc_half or angle_to_body > arc_half:
-			return  # Outside visible arc
-	
-		body.health_component.damage(damage)
+		# Check player hasn't jumped over the arc
+		if self.global_position.distance_to(body.global_position) > collider.shape.radius * arc_thickness_ratio:
+			# Check player is in view of arc
+			var arc_facing_dir: Vector3 = mesh.global_transform.basis.z.normalized()
+			var to_body_dir: Vector3 = self.global_position.direction_to(body.global_position).normalized()
+			if arc_facing_dir.dot(to_body_dir) > 0:
+				body.health_component.damage(damage)

@@ -211,12 +211,12 @@ func select_attack_phase_1() -> void:
 				# 45% chance of chip sweep
 				# 60% chance of backspin chip
 				# 40% chance of slam
-				if attack_roll < 45:
-					attack_str = "start_chip_sweep"
-				elif attack_roll < 60:
-					attack_str = "start_backspin_chip"
-				else:
-					attack_str = "start_slam_attack"
+				#if attack_roll < 45:
+					#attack_str = "start_chip_sweep"
+				#elif attack_roll < 60:
+					#attack_str = "start_backspin_chip"
+				#else:
+				attack_str = "start_slam_attack"
 			
 			big_attacks_performed += 1
 		
