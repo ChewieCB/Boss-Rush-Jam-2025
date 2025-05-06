@@ -7,10 +7,10 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_42ewo"]
 radius = 1.5
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vbxq7"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kx7mk"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_mhmry"]
-material = SubResource("StandardMaterial3D_vbxq7")
+[sub_resource type="SphereMesh" id="SphereMesh_o0bxp"]
+material = SubResource("StandardMaterial3D_kx7mk")
 radius = 0.125
 height = 0.25
 
@@ -46,7 +46,7 @@ top_radius = 0.2
 bottom_radius = 0.1
 height = 1.0
 
-[node name="ChipMineProjectile" type="StaticBody3D"]
+[node name="ChipMineProjectile" type="CharacterBody3D"]
 collision_layer = 64
 collision_mask = 8
 script = ExtResource("1_362ni")
@@ -57,7 +57,7 @@ shape = SubResource("SphereShape3D_42ewo")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
-mesh = SubResource("SphereMesh_mhmry")
+mesh = SubResource("SphereMesh_o0bxp")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
@@ -65,7 +65,6 @@ one_shot = true
 [node name="ExplosionArea" type="Area3D" parent="."]
 collision_layer = 64
 collision_mask = 78
-monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ExplosionArea"]
 shape = SubResource("SphereShape3D_2sd2v")
@@ -97,9 +96,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, 0)
 mesh = SubResource("CylinderMesh_ptm2u")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_uugp1")]
-max_health = 10.0
+max_health = 5.0
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
-[connection signal="body_entered" from="ExplosionArea" to="." method="_on_explosion_area_body_entered"]
 [connection signal="body_entered" from="ActivationArea" to="." method="_on_activation_area_body_entered"]
 [connection signal="died" from="HealthComponent" to="." method="detonate"]

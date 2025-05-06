@@ -173,14 +173,10 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	var possible_phases = [
 		#"start_chip_sweep",
-		#"start_chip_sweep",
-		"start_slam_attack",
-		"start_slam_attack",
+		#"start_slam_attack",
 		#"start_backspin_chip",
-		#"start_backspin_chip",
-		#"start_chip_mines",
-		#"start_chip_mines",
-		#"start_split_stack_projectiles",
+		"start_chip_mines",
+		"start_chip_mines",
 		#"start_split_stack_projectiles",
 		#"start_split_stack_charge",
 	]
@@ -377,6 +373,11 @@ func _on_backspin_chip_recover_state_entered() -> void:
 # Jump up, crash into the ground creating an AoE and 
 # make chip mines pop up out of the floor.
 func _on_chip_mines_targeting_state_entered() -> void:
+	# DEBUG - keep mines alive for testing
+	if active_mines:
+		select_attack()
+		return
+	
 	debug_state_label.text = "Chip Mines | Targeting"
 	
 	# TODO - detonate any existing chip mines before we spawn new ones
@@ -1317,6 +1318,6 @@ func _on_stack_slam_slam_state_entered() -> void:
 		await get_tree().create_timer(slam_delay).timeout
 		
 		state_chart.send_event("start_jump")
-		
-	completed_slams = 0
-	state_chart.send_event("end_slam")
+	else:
+		completed_slams = 0
+		state_chart.send_event("end_slam")

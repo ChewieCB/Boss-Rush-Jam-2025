@@ -16,26 +16,22 @@ class_name ChipMineProjectile
 @export var spark_scene: PackedScene
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
+@onready var mesh_mat: Material = mesh.mesh.surface_get_material(0)
 @onready var timer: Timer = $Timer
 @onready var acivation_area: Area3D = $ActivationArea
 @onready var explosion_area: Area3D = $ExplosionArea
 @onready var explosion_collider: CollisionShape3D = $ExplosionArea/CollisionShape3D
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
+@onready var health_component: HealthComponent = $HealthComponent
 
 var body_state: PhysicsDirectBodyState3D
+
+var has_detonated: bool = false
 
 
 func _ready() -> void:
 	explosion_collider.shape.radius = explosion_radius
 	fuse_time += randf_range(0, fuse_variance)
-	#timer.start(fuse_time)
-	#
-	#var tick_time: float = fuse_time / ticks
-	#for i in range(ticks):
-		#var tween = get_tree().create_tween()
-		#tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 1.0, tick_time / 2).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
-		#tween.chain().tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 0.152, tick_time / 2).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-		#await tween.finished
 
 
 func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
@@ -53,6 +49,11 @@ func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
 
 
 func detonate() -> void:
+	has_detonated = true
+	
+	mesh_mat.albedo_color = Color.RED
+	mesh.scale *= 0.25
+	
 	explosion_area.set_deferred("monitoring", true)
 	var explosion_vfx = explosion_scene.instantiate()
 	get_tree().get_root().add_child(explosion_vfx)
@@ -60,14 +61,20 @@ func detonate() -> void:
 	explosion_vfx.change_mesh_scale(2)
 	# TODO - make explosion size of area
 	
+	var test0 = explosion_area.get_overlapping_bodies()
+	for body in explosion_area.get_overlapping_bodies():
+		if body == self:
+			continue
+		_on_explosion_area_body_entered(body)
+	
+	var tween = get_tree().create_tween()
+	tween.tween_property(mesh_mat, "albedo_color", Color.BLACK, 0.1).set_trans(Tween.TRANS_CIRC)
+	tween.parallel().tween_property(mesh, "scale", Vector3(0.1, 0.1, 0.1), 0.1).set_trans(Tween.TRANS_CIRC)
+	
 	sfx_player.stream = sfx_bomb_explode.pick_random()
 	sfx_player.play()
 	
 	self.queue_free()
-	#var tween = get_tree().create_tween()
-	#tween.tween_property(mesh, "scale", Vector3.ZERO, 0.4).set_trans(Tween.TRANS_SINE)
-	## TODO - await sfx player finished?
-	#tween.tween_callback(self.queue_free)
 
 
 func _on_timer_timeout() -> void:
@@ -78,14 +85,20 @@ func _on_explosion_area_body_entered(body: Node3D) -> void:
 	if body is Player or body is BossCore:
 		body.health_component.damage(explosion_damage)
 	elif body is ChipMineProjectile:
-		body.detonate()
+		if not body.has_detonated:
+			body.detonate()
 
 
 func _on_activation_area_body_entered(body: Node3D) -> void:
 	if body is Player:
 		acivation_area.set_deferred("monitoring", false)
 		timer.start(fuse_time)
+		
+		var anim_tick: float = fuse_time / ticks / 2
+		
 		var tween = get_tree().create_tween()
-		tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 1.0, 0.2).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
-		tween.chain().tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 0.152, 0.2).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-		tween.set_loops()
+		tween.tween_property(mesh_mat, "albedo_color", Color.RED, anim_tick).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
+		tween.parallel().tween_property(mesh, "scale", Vector3(0.5, 0.5, 0.5), anim_tick).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
+		tween.chain().tween_property(mesh_mat, "albedo_color", Color.DARK_ORANGE, anim_tick).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(mesh, "scale", Vector3.ONE, anim_tick).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
+		tween.set_loops(ticks)
