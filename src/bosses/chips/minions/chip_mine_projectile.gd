@@ -2,14 +2,14 @@ extends CharacterBody3D
 class_name ChipMineProjectile
 
 @export_group("Bomb Behaviour")
-@export var fuse_time: float = 1.6
+@export var fuse_time: float = 3.2
 @export var fuse_variance: float = 1.4
-@export var ticks: int = 3
-@export var explosion_radius: float = 8.0
+@export var ticks: int = 6
+@export var explosion_radius: float = 6.5
 @export var explosion_damage: float = 10.0
 @export_subgroup("Movement")
 @export var acceleration: float = 8.0
-@export var max_speed: float = 12.0
+@export var max_speed: float = 16.0
 @export var steering_damping: float = 0.8
 @export_group("SFX")
 @export var sfx_bomb_launch: Array[AudioStream]
@@ -102,7 +102,11 @@ func _on_timer_timeout() -> void:
 
 
 func _on_explosion_area_body_entered(body: Node3D) -> void:
-	if body is Player or body is BossCore:
+	if body is Player or body is BossCore or body is ChipBossSubStack:
+		var damage: float = explosion_damage
+		# Do more damage to bosses
+		if body is BossCore or body is ChipBossSubStack:
+			damage *= 3
 		body.health_component.damage(explosion_damage)
 	elif body is ChipMineProjectile:
 		if not body.has_detonated:

@@ -37,7 +37,10 @@ desired_distance = null
 angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
+max_big_attacks = 5
+max_small_attacks = 3
 rolling_chip_projectile = ExtResource("6_dth1w")
+chips_per_attack = 2
 chip_sweep_count = 3
 sweep_time = 0.05
 sweep_delay = 0.4
@@ -47,6 +50,7 @@ chip_mine_spawn_area_radius = 18.0
 chip_mine_trigger_radius = 6.0
 chip_mine_trigger_time = 0.8
 chip_mine_prefab = ExtResource("5_bdbd0")
+chip_mine_cooldown = 20.0
 slam_shockwave_prefab = ExtResource("7_s7i42")
 slam_count = 4
 slam_damage = 10.0
@@ -86,6 +90,8 @@ chiptopede_projectile_bursts = 2
 chiptopede_shots_per_burst = 20
 chiptopede_delay_per_projectile = 0.05
 delay_between_burst = 0.3
+chip_spawn_chance = 0.2
+chip_spawn_dps_threshold = 70.0
 barrel_pickup_scene = null
 sfx_slowmo = null
 attack_recovery_time = 0.5
@@ -230,6 +236,12 @@ script = ExtResource("5_81kie")
 script = ExtResource("3_hbmr3")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toForwardSpin" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip/Recover" index="1"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ForwardSpin")
+event = &"next_shot"
 delay_in_seconds = "0.0"
 
 [node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase1/BackspinChip" index="4"]
@@ -1049,6 +1061,9 @@ script = ExtResource("3_hbmr3")
 to = NodePath("../../ChiptopedeSnake")
 event = &"start_snake_attack"
 delay_in_seconds = "0.0"
+
+[node name="ChipMineSpawnTimer" type="Timer" parent="." index="20"]
+one_shot = true
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_entered"]

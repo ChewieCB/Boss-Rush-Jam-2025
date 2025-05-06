@@ -22,9 +22,24 @@ var last_attack: String
 @export var orbit_angle: float = 0.0 # track this over time
 @export var orbit_radius: float = 20.0
 
+enum ChipBossForms {
+	BIG_STACK,
+	SPLIT_STACKS,
+	CHIPTOPEDE
+}
+
+var current_form: ChipBossForms
+
 @export_group("Attacks")
+@export_subgroup("Form Transitions")
+@export var max_big_attacks: int = 5
+var big_attacks_performed: int = 0
+@export var max_small_attacks: int = 3
+var small_attacks_performed: int = 0
 @export_subgroup("Backspin Chip")
 @export var rolling_chip_projectile: PackedScene
+@export var chips_per_attack: int = 2
+var chips_fired: int = 0
 var active_rolling_chip: RollingChip
 # SFX
 #
@@ -42,6 +57,8 @@ var chip_sweep_instances: Array = []
 @export var chip_mine_trigger_radius: float = 6.0
 @export var chip_mine_trigger_time: float = 0.8
 @export var chip_mine_prefab: PackedScene
+@export var chip_mine_cooldown: float = 20.0
+@onready var chip_mine_spawn_timer: Timer = $ChipMineSpawnTimer
 var chip_mine_spawn_points: Array
 var active_mines: Array = []
 # SFX
@@ -171,22 +188,52 @@ func activate() -> void:
 
 
 func select_attack_phase_1() -> void:
-	var possible_phases = [
-		#"start_chip_sweep",
-		#"start_slam_attack",
-		#"start_backspin_chip",
-		"start_chip_mines",
-		"start_chip_mines",
-		#"start_split_stack_projectiles",
-		#"start_split_stack_charge",
-	]
-	if prev_phase:
-		possible_phases.erase(prev_phase)
-	# TODO - add random weighting
-	var new_phase = possible_phases.pick_random()
-	prev_phase = new_phase
-	state_chart.send_event(new_phase)
-	state_chart.send_event("end_recovery")
+	# Weighted random chance attacks
+	# 
+	var attack_str: String = ""
+	var attack_roll: int = randi_range(0, 99)
+	
+	match current_form:
+		ChipBossForms.BIG_STACK:
+			# Transition between big and small forms:
+			#if big_attacks_performed >= max_big_attacks:
+				# TODO - transition phase
+				#current_form = ChipBossForms.SPLIT_STACKS
+				#big_attacks_performed = 0
+				#small_attacks_performed = 0
+				#select_attack_phase_1()
+			
+			# If we haven't spawned mines in a while, spawn some
+			if chip_mine_spawn_timer.is_stopped():
+				attack_str = "start_chip_mines"
+			else:
+				# Focus on backspin chip, occasional slams and sweeps
+				# 45% chance of chip sweep
+				# 60% chance of backspin chip
+				# 40% chance of slam
+				if attack_roll < 45:
+					attack_str = "start_chip_sweep"
+				elif attack_roll < 60:
+					attack_str = "start_backspin_chip"
+				else:
+					attack_str = "start_slam_attack"
+			
+			big_attacks_performed += 1
+		
+		#ChipBossForms.SPLIT_STACKS:
+			## Transition between big and small forms:
+			#if small_attacks_performed >= max_small_attacks:
+				#attack_str = "start_split_stack_charge"
+				#current_form = ChipBossForms.BIG_STACK
+				#big_attacks_performed = 0
+				#small_attacks_performed = 0
+			#else:
+				#attack_str = "start_split_stack_projectiles"
+			#
+			#small_attacks_performed += 1
+	# TODO
+	
+	state_chart.send_event(attack_str)
 
 
 func select_attack_phase_2() -> void:
@@ -361,23 +408,24 @@ func _on_backspin_chip_recover_state_entered() -> void:
 	active_rolling_chip.queue_free()
 	active_rolling_chip = null
 	
-	state_chart.send_event("attack_end")
-	await get_tree().create_timer(attack_recovery_time).timeout
-	state_chart.send_event("cooldown_end")
+	chips_fired += 1
 	
-	select_attack()
-	state_chart.send_event("end_recovery")
+	if chips_fired >= chips_per_attack:
+		chips_fired = 0
+		state_chart.send_event("attack_end")
+		await get_tree().create_timer(attack_recovery_time).timeout
+		state_chart.send_event("cooldown_end")
+		select_attack()
+		state_chart.send_event("end_recovery")
+	else:
+		state_chart.send_event("start_targeting")
+		state_chart.send_event("next_shot")
 
 
 #### BIG STACK CHIP MINES
 # Jump up, crash into the ground creating an AoE and 
 # make chip mines pop up out of the floor.
 func _on_chip_mines_targeting_state_entered() -> void:
-	# DEBUG - keep mines alive for testing
-	if active_mines:
-		select_attack()
-		return
-	
 	debug_state_label.text = "Chip Mines | Targeting"
 	
 	# TODO - detonate any existing chip mines before we spawn new ones
@@ -430,6 +478,7 @@ func _on_chip_mines_spawn_mines_state_entered() -> void:
 		tween.tween_property(mine, "global_position:y", spawn_pos.y, 0.4)
 		#mine.spawn()
 	
+	chip_mine_spawn_timer.start(chip_mine_cooldown)
 	state_chart.send_event("end_spawn")
 
 
