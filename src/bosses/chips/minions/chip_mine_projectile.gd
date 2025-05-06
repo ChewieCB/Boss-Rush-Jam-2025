@@ -23,6 +23,7 @@ class_name ChipMineProjectile
 @onready var mesh_mat: Material = mesh.mesh.surface_get_material(0)
 @onready var timer: Timer = $Timer
 @onready var acivation_area: Area3D = $ActivationArea
+@onready var contact_area: Area3D = $ContactArea
 @onready var explosion_area: Area3D = $ExplosionArea
 @onready var explosion_collider: CollisionShape3D = $ExplosionArea/CollisionShape3D
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
@@ -39,6 +40,11 @@ var drift_velocity := Vector3.ZERO
 func _ready() -> void:
 	explosion_collider.shape.radius = explosion_radius
 	fuse_time += randf_range(0, fuse_variance)
+
+
+func arm() -> void:
+	acivation_area.set_deferred("monitoring", true)
+	contact_area.set_deferred("monitoring", true)
 
 
 func _physics_process(delta: float) -> void:

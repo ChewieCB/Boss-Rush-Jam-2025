@@ -53,7 +53,7 @@ var chip_sweep_instances: Array = []
 #
 @export_subgroup("Chip Mines")
 @export var chip_mine_count: int = 6
-@export var chip_mine_spawn_area_radius: float = 18.0
+@export var chip_mine_spawn_area_radius: float = 8.5
 @export var chip_mine_trigger_radius: float = 6.0
 @export var chip_mine_trigger_time: float = 0.8
 @export var chip_mine_prefab: PackedScene
@@ -154,7 +154,7 @@ var emerge_distance: float
 func _ready() -> void:
 	super()
 	leap_finished.connect(_on_chiptopede_leap_impact)
-	chip_mine_spawn_points = generate_circular_point_distribution(4, chip_mine_spawn_area_radius, 12)
+	#chip_mine_spawn_points = generate_circular_point_distribution(4, chip_mine_spawn_area_radius, 12)
 
 
 func generate_circular_point_distribution(circles: int, radius: float, points_per_circle: int = 8) -> Array:
@@ -468,15 +468,21 @@ func _on_chip_mines_spawn_mines_state_entered() -> void:
 	debug_state_label.text = "Chip Mines | Spawning Mines"
 	# Animate each chip mine spawning out of floor
 	for i in range(chip_mine_count):
-		var spawn_pos := get_mine_spawn_position()
 		var mine = chip_mine_prefab.instantiate()
 		active_mines.append(mine)
 		scene_root.add_child(mine)
-		mine.global_position = spawn_pos
-		mine.global_position.y -= 4.0
+		
+		mine.global_position = self.global_position
+		var mine_rot: float = (2 * PI / chip_mine_count) * i
+		var goal_pos: Vector3 = self.global_position + Vector3.FORWARD.rotated(Vector3.UP, mine_rot) * chip_mine_spawn_area_radius
+		goal_pos.y += 1.4
+		
 		var tween = get_tree().create_tween()
-		tween.tween_property(mine, "global_position:y", spawn_pos.y, 0.4)
-		#mine.spawn()
+		tween.tween_property(mine, "global_position", goal_pos, 0.25).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		
+		await tween.finished
+		
+		mine.arm()
 	
 	chip_mine_spawn_timer.start(chip_mine_cooldown)
 	state_chart.send_event("end_spawn")
