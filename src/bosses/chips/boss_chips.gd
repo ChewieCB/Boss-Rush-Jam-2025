@@ -52,8 +52,9 @@ var chip_sweep_instances: Array = []
 # SFX
 #
 @export_subgroup("Chip Mines")
-@export var chip_mine_count: int = 6
-@export var chip_mine_spawn_area_radius: float = 8.5
+@export var chip_mine_count: int = 8
+@export var chip_mine_layers: int = 2
+@export var chip_mine_spawn_area_radius: float = 9.0
 @export var chip_mine_trigger_radius: float = 6.0
 @export var chip_mine_trigger_time: float = 0.8
 @export var chip_mine_prefab: PackedScene
@@ -68,8 +69,7 @@ var active_mines: Array = []
 @export var slam_count: int = 4
 @export var slam_damage: float = 10.0
 @export var slam_wave_speed: float = 2.1
-@export var slam_wave_width: float = 6.0
-@export var slam_wave_radius: float = 20.0
+@export var slam_wave_radius: float = 35.0
 @export var slam_delay: float = 0.4
 var completed_slams: int = 0
 # SFX
@@ -178,6 +178,12 @@ func generate_circular_point_distribution(circles: int, radius: float, points_pe
 	#pass
 
 
+func _on_health_changed(new_health: float, prev_health: float) -> void:
+	super(new_health, prev_health)
+	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
+		state_chart.send_event("start_phase_2")
+
+
 func activate() -> void:
 	super()
 	navigation_component.follow_target = false
@@ -188,6 +194,7 @@ func activate() -> void:
 
 
 func select_attack_phase_1() -> void:
+	state_chart.send_event("end_attack")
 	# Weighted random chance attacks
 	# 
 	var attack_str: String = ""
@@ -196,41 +203,37 @@ func select_attack_phase_1() -> void:
 	match current_form:
 		ChipBossForms.BIG_STACK:
 			# Transition between big and small forms:
-			#if big_attacks_performed >= max_big_attacks:
-				# TODO - transition phase
-				#current_form = ChipBossForms.SPLIT_STACKS
-				#big_attacks_performed = 0
-				#small_attacks_performed = 0
-				#select_attack_phase_1()
+			if big_attacks_performed >= max_big_attacks:
+				state_chart.send_event("change_form_split")
+				return
 			
+			# TODO - move mines to phase 2?
 			# If we haven't spawned mines in a while, spawn some
-			if chip_mine_spawn_timer.is_stopped():
-				attack_str = "start_chip_mines"
+			#if chip_mine_spawn_timer.is_stopped():
+				#attack_str = "start_chip_mines"
+			#else:
+			# Focus on backspin chip, occasional slams and sweeps
+			# 45% chance of chip sweep
+			# 60% chance of backspin chip
+			# 40% chance of slam
+			if attack_roll < 45:
+				attack_str = "start_chip_sweep"
+			elif attack_roll < 60:
+				attack_str = "start_backspin_chip"
 			else:
-				# Focus on backspin chip, occasional slams and sweeps
-				# 45% chance of chip sweep
-				# 60% chance of backspin chip
-				# 40% chance of slam
-				#if attack_roll < 45:
-					#attack_str = "start_chip_sweep"
-				#elif attack_roll < 60:
-					#attack_str = "start_backspin_chip"
-				#else:
 				attack_str = "start_slam_attack"
 			
 			big_attacks_performed += 1
 		
-		#ChipBossForms.SPLIT_STACKS:
-			## Transition between big and small forms:
-			#if small_attacks_performed >= max_small_attacks:
-				#attack_str = "start_split_stack_charge"
-				#current_form = ChipBossForms.BIG_STACK
-				#big_attacks_performed = 0
-				#small_attacks_performed = 0
-			#else:
-				#attack_str = "start_split_stack_projectiles"
-			#
-			#small_attacks_performed += 1
+		ChipBossForms.SPLIT_STACKS:
+			# Transition between big and small forms:
+			if small_attacks_performed >= max_small_attacks:
+				state_chart.send_event("change_form_big")
+				return
+			else:
+				attack_str = "start_split_stack_projectiles"
+			
+			small_attacks_performed += 1
 	# TODO
 	
 	state_chart.send_event(attack_str)
@@ -256,7 +259,6 @@ func select_attack_phase_2() -> void:
 
 func select_attack_phase_3() -> void:
 	var possible_phases = [
-		"start_leap_attack",
 		"start_leap_attack",
 		"start_leap_attack",
 		"start_leap_attack",
@@ -467,23 +469,22 @@ func _on_chip_mines_jump_state_entered() -> void:
 func _on_chip_mines_spawn_mines_state_entered() -> void:
 	debug_state_label.text = "Chip Mines | Spawning Mines"
 	# Animate each chip mine spawning out of floor
-	for i in range(chip_mine_count):
-		var mine = chip_mine_prefab.instantiate()
-		active_mines.append(mine)
-		scene_root.add_child(mine)
+	for i in range(chip_mine_layers):
+		for j in range(chip_mine_count / (chip_mine_layers - i)):
+			var mine = chip_mine_prefab.instantiate()
+			active_mines.append(mine)
+			scene_root.add_child(mine)
+			
+			mine.global_position = self.global_position
+			var mine_rot: float = (2 * PI / chip_mine_count) * j
+			var mine_dist: float = chip_mine_spawn_area_radius * (i + 1)
+			var goal_pos := self.global_position + Vector3.FORWARD.rotated(Vector3.UP, mine_rot) * mine_dist
+			goal_pos.y += 1.4
+			
+			var tween = get_tree().create_tween()
+			tween.tween_property(mine, "global_position", goal_pos, 0.25).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+			tween.tween_callback(mine.arm)
 		
-		mine.global_position = self.global_position
-		var mine_rot: float = (2 * PI / chip_mine_count) * i
-		var goal_pos: Vector3 = self.global_position + Vector3.FORWARD.rotated(Vector3.UP, mine_rot) * chip_mine_spawn_area_radius
-		goal_pos.y += 1.4
-		
-		var tween = get_tree().create_tween()
-		tween.tween_property(mine, "global_position", goal_pos, 0.25).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-		
-		await tween.finished
-		
-		mine.arm()
-	
 	chip_mine_spawn_timer.start(chip_mine_cooldown)
 	state_chart.send_event("end_spawn")
 
@@ -562,6 +563,7 @@ func _on_splitting_state_entered() -> void:
 	sprite.visible = false
 	debug_mesh.visible = false
 	navigation_component.disable()
+	
 	# Disable player and projectile collisions
 	self.collision_mask -= (pow(2, 2-1) + pow(2, 4-1))
 	hurtbox.set_deferred("monitoring",  false)
@@ -570,7 +572,7 @@ func _on_splitting_state_entered() -> void:
 	
 	spawned_sub_stacks = await spawn_stacks(3, 2.5)
 	
-	state_chart.send_event("start_attack")
+	state_chart.send_event("end_attack")
 
 
 func _on_merging_state_entered() -> void:
@@ -596,6 +598,7 @@ func _on_recover_state_entered() -> void:
 	state_chart.send_event("cooldown_end")
 	
 	select_attack()
+	state_chart.send_event("end_recovery")
 
 
 func trigger_substack_attack(attack_event: String) -> void:
@@ -608,6 +611,9 @@ func trigger_substack_attack(attack_event: String) -> void:
 
 #### SPLIT STACK PROJECTILES
 # Split into multiple smaller stacks, orbit the player, and fire projectiles
+func _on_split_stacks_orbiting_projectiles_targeting_state_entered() -> void:
+	state_chart.send_event("start_attack")
+
 func _on_split_stack_projectiles_attacking_state_entered() -> void:
 	trigger_substack_attack("start_small_projectile_attack")
 
@@ -823,6 +829,12 @@ func _on_split_stack_charge_merging_state_entered() -> void:
 	area_collider.body_entered.connect(_on_wave_collision.bind(split_rush_damage))
 
 
+## Phase 2 - Flooded
+
+func _on_phase_2_state_entered() -> void:
+	flood_chamber.emit()
+
+
 ## Phase 3 - Chiptopede
 
 func _on_phase_3_state_entered() -> void:
@@ -842,13 +854,16 @@ func _on_phase_3_state_entered() -> void:
 	_create_segment_cache()
 	generate_snake_graph()
 	
+	break_floor.emit()
+	
+	await get_tree().create_timer(2.0).timeout
+	
 	# Re-fill health bar, change name, and show
 	health_component.max_health = chiptopede_max_health
 	health_ui.init_health_ui(chiptopede_max_health)
 	health_ui.boss_name = "Chiptopede"
 	health_ui.show_ui()
 	
-	break_floor.emit()
 	# Have longer between chiptopede attacks
 	attack_recovery_time *= 2
 	await get_tree().create_timer(0.5)
@@ -967,6 +982,7 @@ func _create_segment_cache() -> Node3D:
 	
 	for idx in range(chiptopede_segments):
 		var segment = chiptopede_segment_prefab.instantiate()
+		segment.health_component.health_diff.connect(_on_chiptopede_hurt)
 		cache_segment(segment)
 	
 	return segment_cache_parent
@@ -1011,7 +1027,6 @@ func spawn_segments(path: Path3D) -> Array:
 		# Moving segments
 		path_follow.add_child(new_segment)
 		new_segment.global_position = path_follow.global_position
-		new_segment.health_component.health_diff.connect(_on_chiptopede_hurt)
 		new_segment.visible = true
 		
 		path_follow_nodes.append(path_follow)
@@ -1357,7 +1372,7 @@ func _on_stack_slam_jump_state_entered() -> void:
 
 
 func _on_stack_slam_slam_state_entered() -> void:
-	if completed_slams < slam_count:
+	if completed_slams <= slam_count:
 		var shockwave = slam_shockwave_prefab.instantiate()
 		scene_root.add_child(shockwave)
 		
@@ -1376,3 +1391,29 @@ func _on_stack_slam_slam_state_entered() -> void:
 	else:
 		completed_slams = 0
 		state_chart.send_event("end_slam")
+
+
+func _on_small_stack_idle_state_entered() -> void:
+	select_attack()
+
+
+func _on_split_stacks_state_entered() -> void:
+	current_form = ChipBossForms.SPLIT_STACKS
+	big_attacks_performed = 0
+	small_attacks_performed = 0
+
+
+func _on_split_stacks_state_exited() -> void:
+	current_form = ChipBossForms.BIG_STACK
+	big_attacks_performed = 0
+	small_attacks_performed = 0
+
+
+## Small slams
+
+func _on_split_stacks_slam_targeting_state_entered() -> void:
+	state_chart.send_event("start_attack")
+
+
+func _on_split_stacks_slam_attacking_state_entered() -> void:
+	trigger_substack_attack("start_split_slam_attack")

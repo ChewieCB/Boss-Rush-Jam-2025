@@ -116,13 +116,17 @@ func _on_small_blind_shooting_state_physics_processing(delta: float) -> void:
 
 func _on_small_blind_recover_state_entered() -> void:
 	debug_state_label.text = "Small Blind Burst | Recovering"
-	
+	_recover_state_entered()
+
+
+func _recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
+	
 
 
 ## SPLIT RUSH

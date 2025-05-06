@@ -40,6 +40,21 @@ func _ready() -> void:
 	super()
 
 
+func _on_boss_defeated(_boss: BossCore) -> void:
+	collect_all_chips()
+	
+	if boss.current_phase != 3:
+		await get_tree().create_timer(1.0).timeout
+		# TODO - screenshake and particles before floor collapses
+		#
+		# TODO - wait and trigger chiptopede
+		boss.state_chart.send_event("start_phase_3")
+	else:
+		win_ui.win("Floor Cleared", win_subtext.pick_random())
+		print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
+		show_end_panel()
+
+
 #func _input(event: InputEvent) -> void:
 	#if event.is_action_pressed("input_1"):
 		#break_floor()
