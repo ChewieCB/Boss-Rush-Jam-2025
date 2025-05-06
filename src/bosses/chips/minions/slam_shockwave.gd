@@ -21,7 +21,7 @@ func start_shockwave() -> void:
 	var mesh_material := mesh.mesh.surface_get_material(0)
 	mesh_material.set_shader_parameter("arc_start_deg", 0)
 	mesh_material.set_shader_parameter("arc_end_deg", arc_angle)
-	mesh.rotation_degrees.y = 90 + arc_angle/2
+	#mesh.rotation_degrees.y = 90 + arc_angle/2
 	var tween: Tween = create_tween()
 	tween.tween_property(mesh.mesh, "inner_radius", max_radius * arc_thickness_ratio, wave_time)
 	tween.parallel().tween_property(mesh.mesh, "outer_radius", max_radius, wave_time)
@@ -38,7 +38,11 @@ func _on_body_entered(body: Node3D) -> void:
 		# Check player hasn't jumped over the arc
 		if self.global_position.distance_to(body.global_position) > collider.shape.radius * arc_thickness_ratio:
 			# Check player is in view of arc
-			var arc_facing_dir: Vector3 = mesh.global_transform.basis.z.normalized()
+			var arc_facing_dir: Vector3 = -self.global_transform.basis.z.normalized()
 			var to_body_dir: Vector3 = self.global_position.direction_to(body.global_position).normalized()
-			if arc_facing_dir.dot(to_body_dir) > 0:
+			
+			var angle_threshold: float = cos(deg_to_rad(arc_angle / 2))
+			var dot_product: float = arc_facing_dir.dot(to_body_dir)
+			
+			if dot_product > angle_threshold:
 				body.health_component.damage(damage)
