@@ -145,7 +145,6 @@ func _on_split_rush_targeting_state_entered() -> void:
 	charge_target_pos = target.global_position
 	charge_target_pos.y = 0
 	substack_charge_set.emit(charge_target_pos)
-	draw_debug_sphere(charge_target_pos, 2.0, Color.PURPLE)
 	
 	state_chart.send_event("start_charge")
 
@@ -162,7 +161,9 @@ func _on_split_rush_charging_state_entered() -> void:
 	
 	var charge_tween: Tween = get_tree().create_tween()
 	var charge_time: float = self.global_position.distance_to(charge_target_pos) / charge_speed
-	self.collision_mask -= pow(2, 7-1)  # Ignore collisions with other stacks
+	# Ignore collisions with player and other stacks
+	self.collision_layer = 0
+	self.collision_mask -= pow(2, 2-1)
 	charge_tween.tween_property(self, "global_position", charge_target_pos, charge_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	#sfx_player.stream = sfx_charge.pick_random()
 	#sfx_player.play()

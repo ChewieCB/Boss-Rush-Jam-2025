@@ -32,9 +32,9 @@ var current_form: ChipBossForms
 
 @export_group("Attacks")
 @export_subgroup("Form Transitions")
-@export var max_big_attacks: int = 5
+@export var max_big_attacks: int = 4
 var big_attacks_performed: int = 0
-@export var max_small_attacks: int = 3
+@export var max_small_attacks: int = 2
 var small_attacks_performed: int = 0
 @export_subgroup("Backspin Chip")
 @export var rolling_chip_projectile: PackedScene
@@ -169,7 +169,6 @@ func generate_circular_point_distribution(circles: int, radius: float, points_pe
 			# Rotate the position based on which point in the current circle we're drawing
 			_pos += sep_vector.rotated(Vector3.UP, 2 * PI / points_per_circle * (j + 1))
 			points.append(_pos)
-			#draw_debug_sphere(_pos, 0.5, Color.AQUA)
 	
 	return points
 
@@ -228,7 +227,7 @@ func select_attack_phase_1() -> void:
 		ChipBossForms.SPLIT_STACKS:
 			# Transition between big and small forms:
 			if small_attacks_performed >= max_small_attacks:
-				state_chart.send_event("change_form_big")
+				state_chart.send_event("start_charge_reform")
 				return
 			else:
 				attack_str = "start_split_stack_projectiles"
@@ -565,7 +564,8 @@ func _on_splitting_state_entered() -> void:
 	navigation_component.disable()
 	
 	# Disable player and projectile collisions
-	self.collision_mask -= (pow(2, 2-1) + pow(2, 4-1))
+	self.collision_layer = 0  # None
+	self.collision_mask = 1  # World only
 	hurtbox.set_deferred("monitoring",  false)
 	# TODO - prevent damage numbers showing up
 	health_component.show_damage_text = false
@@ -578,14 +578,22 @@ func _on_splitting_state_entered() -> void:
 func _on_merging_state_entered() -> void:
 	await despawn_stacks()
 	
+	# Add pushback if player is in big stack collider
+	if target.global_position.distance_to(self.global_position) <= collider.shape.radius:
+		var pushback_vector = self.global_position.direction_to(target.global_position)
+		target.velocity = Vector3.ZERO
+		target.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * 50.0
+		target.vel_vertical += 15.0
+	
 	sprite.visible = true
 	#navigation_component.enable()
 	debug_mesh.visible = true
-	self.collision_mask += (pow(2, 2-1) + pow(2, 4-1))
 	health_component.show_damage_text = true
 	
-	# TODO - add pushback if player is in big stack collider
-	#
+	# Re-enable collision
+	await get_tree().create_timer(0.3).timeout
+	self.collision_layer = 4
+	self.collision_mask = (pow(2, 1-1) + pow(2, 2-1) + pow(2, 4-1))
 	
 	state_chart.send_event("end_merge")
 
@@ -621,6 +629,9 @@ func _on_split_stack_projectiles_attacking_state_entered() -> void:
 #### SPLIT STACK CHARGE
 # Split into multiple smaller stacks, orbit the player, and charge at them;
 # reforming into the big stack in a big explosion
+func _on_split_stack_charge_targeting_state_entered() -> void:
+	state_chart.send_event("start_attack")
+	
 func _on_split_stack_charge_attacking_state_entered() -> void:
 	trigger_substack_attack("start_split_rush_attack")
 
@@ -827,6 +838,10 @@ func _on_split_stack_charge_merging_state_entered() -> void:
 	
 	area_collider.global_position = self.global_position
 	area_collider.body_entered.connect(_on_wave_collision.bind(split_rush_damage))
+	
+	await get_tree().create_timer(0.3).timeout
+	
+	area_collider.queue_free()
 
 
 ## Phase 2 - Flooded
@@ -843,7 +858,8 @@ func _on_phase_3_state_entered() -> void:
 	debug_mesh.visible = false
 	navigation_component.disable()
 	# Disable player and projectile collisions
-	self.collision_mask -= (pow(2, 2-1) + pow(2, 4-1))
+	self.collision_layer = 1
+	self.collision_mask = 0
 	hurtbox.set_deferred("monitoring",  false)
 	# TODO - prevent damage numbers showing up
 	health_component.show_damage_text = false
@@ -1417,3 +1433,8 @@ func _on_split_stacks_slam_targeting_state_entered() -> void:
 
 func _on_split_stacks_slam_attacking_state_entered() -> void:
 	trigger_substack_attack("start_split_slam_attack")
+
+
+func _on_split_stack_charge_reform_recover_state_entered() -> void:
+	state_chart.send_event("change_form_big")
+	_on_recover_state_entered()
