@@ -1,7 +1,8 @@
 extends BossCore
 class_name BossChips
 
-signal substack_attacks_finished
+signal substack_attack_finished
+signal substack_all_attacks_finished
 signal flood_chamber
 signal drain_chamber
 signal break_floor
@@ -216,7 +217,7 @@ func select_attack_phase_1() -> void:
 			# 45% chance of chip sweep
 			# 60% chance of backspin chip
 			# 40% chance of slam
-			if attack_roll < 45:
+			if attack_roll < 35:
 				attack_str = "start_chip_sweep"
 			elif attack_roll < 60:
 				attack_str = "start_backspin_chip"
@@ -335,9 +336,10 @@ func _substack_on_event_received(event: String, stack: ChipBossSubStack) -> void
 
 func _substack_finished(stack: ChipBossSubStack) -> void:
 	finished_sub_stacks.append(stack)
+	substack_attack_finished.emit()
 	if finished_sub_stacks.size() == spawned_sub_stacks.size():
 		last_stack = stack
-		substack_attacks_finished.emit()
+		substack_all_attacks_finished.emit()
 		finished_sub_stacks = []
 
 
@@ -616,11 +618,13 @@ func _on_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-func trigger_substack_attack(attack_event: String) -> void:
+func trigger_substack_attack(attack_event: String, is_sequential: bool = false) -> void:
 	for stack in spawned_sub_stacks:
 		stack.state_chart.send_event(attack_event)
+		if is_sequential:
+			await substack_attack_finished
 	
-	await substack_attacks_finished
+	await substack_all_attacks_finished
 	state_chart.send_event("finish_attack")
 
 
@@ -695,7 +699,7 @@ func _on_split_stack_place_your_bets_crashing_state_entered() -> void:
 		await stack.substack_dive_finished
 		spawn_aoe_wave(aoe_radius, drop_damage / i, aoe_wave_time, stack.global_position)
 	
-	await substack_attacks_finished
+	await substack_all_attacks_finished
 	
 	state_chart.send_event("drain_chamber")
 
@@ -890,7 +894,7 @@ func _on_phase_3_state_entered() -> void:
 	# Have longer between chiptopede attacks
 	attack_recovery_time *= 2
 	await get_tree().create_timer(0.5)
-	select_attack_phase_3()
+	state_chart.send_event("start_leap_attack")
 
 
 ## Generic Chiptopede helper functions
@@ -1395,7 +1399,7 @@ func _on_stack_slam_jump_state_entered() -> void:
 
 
 func _on_stack_slam_slam_state_entered() -> void:
-	if completed_slams <= slam_count:
+	if completed_slams < slam_count:
 		var shockwave = slam_shockwave_prefab.instantiate()
 		scene_root.add_child(shockwave)
 		
@@ -1456,4 +1460,4 @@ func _on_split_stack_arc_wave_targeting_state_entered() -> void:
 
 
 func _on_split_stack_arc_wave_attacking_state_entered() -> void:
-	trigger_substack_attack("start_arc_wave_attack")
+	trigger_substack_attack("start_arc_wave_attack", true)

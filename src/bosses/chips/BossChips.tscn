@@ -126,10 +126,6 @@ follow_target = false
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
 
-[node name="StateChartDebugger" parent="UI" index="1"]
-visible = true
-enabled = true
-
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../Phase1")
@@ -529,6 +525,12 @@ delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform" index="3"]
 script = ExtResource("5_81kie")
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Phase2")
+event = &"start_phase_2"
+delay_in_seconds = "0.0"
 
 [node name="Phase2" type="Node" parent="StateChart/Root/Phase" index="2"]
 script = ExtResource("4_kiknp")

@@ -55,6 +55,12 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		show_end_panel()
 
 
+func _on_boss_died(_boss: BossCore = boss) -> void:
+	if boss.current_phase != 3:
+		return
+	super(_boss)
+
+
 #func _input(event: InputEvent) -> void:
 	#if event.is_action_pressed("input_1"):
 		#break_floor()
