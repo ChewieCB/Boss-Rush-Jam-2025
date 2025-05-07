@@ -504,7 +504,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		hurt_sfx_player.stream = sfx_hit.pick_random()
 		hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
 		hurt_sfx_player.play()
-	if new_health < prev_health:
+		
 		dps_accumulated_in_window += abs(prev_health - new_health)
 		if dps_accumulated_in_window > chip_spawn_dps_threshold:
 			_on_stagger()

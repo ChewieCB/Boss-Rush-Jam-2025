@@ -185,6 +185,11 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		state_chart.send_event("start_phase_2")
 
 
+func _on_health_dead_state_entered() -> void:
+	_on_merging_state_entered()
+	super()
+
+
 func activate() -> void:
 	super()
 	navigation_component.follow_target = false
