@@ -34,7 +34,7 @@ var current_form: ChipBossForms
 
 @export_group("Attacks")
 @export_subgroup("Form Transitions")
-@export var max_big_attacks: int = 4
+@export var max_big_attacks: int = 2
 var big_attacks_performed: int = 0
 @export var max_small_attacks: int = 3
 var small_attacks_performed: int = 0
@@ -237,10 +237,12 @@ func select_attack_phase_1() -> void:
 				state_chart.send_event("start_charge_reform")
 				return
 			else:
-				# 45% chance of chip sweep
-				# 60% chance of backspin chip
-				# 40% chance of slam
-				if attack_roll < 50:
+				# 25% chance of sequential charges
+				# 40% chance of melee arcs
+				# 50% chance of projectiles
+				if attack_roll < 25:
+					attack_str = "start_split_stack_charge_back_attack"
+				elif attack_roll < 50:
 					attack_str = "start_split_stack_arc_attack"
 				else:
 					attack_str = "start_split_stack_projectiles"
@@ -336,7 +338,9 @@ func despawn_stacks() -> void:
 
 func _substack_on_event_received(event: String, stack: ChipBossSubStack) -> void:
 	if event == "end_recovery":
+		stack.state_chart.send_event("end_attack")
 		_substack_finished(stack)
+		
 
 
 func _substack_finished(stack: ChipBossSubStack) -> void:
@@ -623,13 +627,21 @@ func _on_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-func trigger_substack_attack(attack_event: String, is_sequential: bool = false) -> void:
+func trigger_substack_attack(attack_event: String) -> void:
 	for stack in spawned_sub_stacks:
 		stack.state_chart.send_event(attack_event)
-		if is_sequential:
-			await substack_attack_finished
 	
 	await substack_all_attacks_finished
+	state_chart.send_event("finish_attack")
+
+
+func trigger_sequential_substack_attacks(activate_event: String, attack_event: String) -> void:
+	for stack in spawned_sub_stacks:
+		stack.state_chart.send_event(activate_event)
+	for stack in spawned_sub_stacks:
+		stack.state_chart.send_event(attack_event)
+		await substack_attack_finished
+
 	state_chart.send_event("finish_attack")
 
 
@@ -1465,4 +1477,12 @@ func _on_split_stack_arc_wave_targeting_state_entered() -> void:
 
 
 func _on_split_stack_arc_wave_attacking_state_entered() -> void:
-	trigger_substack_attack("start_arc_wave_attack", true)
+	trigger_sequential_substack_attacks("start_arc_wave_attack", "start_closing")
+
+
+func _on_split_stack_charge_back_targeting_state_entered() -> void:
+	state_chart.send_event("start_attack")
+
+
+func _on_split_stack_charge_back_attacking_state_entered() -> void:
+	trigger_sequential_substack_attacks("start_charge_back_attack", "start_charge")

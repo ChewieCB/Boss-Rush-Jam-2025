@@ -7,11 +7,11 @@ signal substack_dive_finished(stack: ChipBossSubStack)
 @export_group("Movement")
 @export var DESIRED_DISTANCE: float = 20.0
 @export var desired_distance: float = DESIRED_DISTANCE
-@export var MOVE_SPEED: float = 10.0
-@onready var move_speed: float = MOVE_SPEED:
-	set(value):
-		move_speed = value
-		navigation_component.current_speed = move_speed
+#@export var MOVE_SPEED: float = 10.0
+#@onready var move_speed: float = MOVE_SPEED:
+	#set(value):
+		#move_speed = value
+		#navigation_component.current_speed = move_speed
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
 @export var time_elapsed: float = 0.0
@@ -32,7 +32,8 @@ signal substack_dive_finished(stack: ChipBossSubStack)
 @export var swipe_prefab: PackedScene
 @export var num_swipes: int = 2
 @export var delay_between_swipe: float = 0.4
-@export var swipe_damage: float = 8.0
+@export var swipe_damage: float = 4.0
+@export var swipe_range: float = 10.0
 @export var swipe_radius: float = 8.0
 @export var swipe_height_scale: float = 0.12
 @export var swipe_lifetime: float = 0.35
@@ -40,6 +41,12 @@ signal substack_dive_finished(stack: ChipBossSubStack)
 @onready var swipe_targeting_timer: Timer = $StateChart/Root/Phase/ArcWaveSwipe/MeleeTargetingTimer
 # SFX
 #
+@export_subgroup("Chargeback")
+@export var chargeback_targeting_time: float = 1.8
+@export var chargeback_damage: float = 6.0
+var chargeback_leap_height: float = 8.0
+var chargeback_return_pos: Vector3
+
 @export var sfx_chip_shot: Array[AudioStream]
 @export_subgroup("Split Rush")
 @export var explosion_scene: PackedScene
@@ -68,6 +75,10 @@ func _ready() -> void:
 	nav_map_rid = get_world_3d().get_navigation_map()
 	nav_agent_rid = NavigationServer3D.agent_create()
 	NavigationServer3D.agent_set_map(nav_agent_rid, nav_map_rid)
+	
+	debug_trajectory_mesh = MeshInstance3D.new()
+	debug_trajectory_mesh.mesh = ImmediateMesh.new()
+	get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
 
 
 #func _physics_process(delta: float) -> void:
@@ -88,24 +99,18 @@ func orbit_target_in_group(delta: float) -> void:
 	navigation_component.set_nav_target_position(orbit_pos)
 
 
-func orbit_melee_closer_in_group(delta: float) -> void:
-	orbit_angle += angle_speed * delta
-	# Modify the orbit angle based on how many enemies are orbiting in the group
-	# so we have evenly spaced enemy orbits
-	var angle_offset = (2 * PI) / group_size * (group_idx + 1)
-	var current_angle = orbit_angle + angle_offset
-	
-	var stack_distance_variance = randf_range(-0.5, 0.5)
-	var final_distance = desired_distance + stack_distance_variance
-	
-	var offset_x = cos(current_angle) * final_distance
-	var offset_z = sin(current_angle) * final_distance
-	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
-	# Pathfind to orbit_pos
-	navigation_component.set_nav_target_position(orbit_pos)
+func melee_approach(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	time_elapsed += delta
+	var chase_direction: Vector3 = self.global_position.direction_to(target.global_position)
+	var perpendicular: Vector3 = chase_direction.rotated(Vector3.UP, PI / 2)
+	var wave_offset = perpendicular * sin(time_elapsed * wave_frequency) * wave_amplitude
+	var desired_position = target.global_position + wave_offset
+	navigation_component.set_nav_target_position(desired_position)
+	move_and_slide()
 
 
-func orbit_center_in_group(delta: float) -> void:
+func orbit_center_in_group(delta: float, is_evasive: bool = false) -> void:
 	orbit_angle += angle_speed * delta
 	# Modify the orbit angle based on how many enemies are orbiting in the group
 	# so we have evenly spaced enemy orbits
@@ -115,6 +120,13 @@ func orbit_center_in_group(delta: float) -> void:
 	var offset_x = cos(current_angle) * arena_radius
 	var offset_z = sin(current_angle) * arena_radius
 	var orbit_pos = Vector3(offset_x, 0, offset_z)
+	
+	if is_evasive:
+		var chase_direction: Vector3 = self.global_position.direction_to(target.global_position)
+		var perpendicular: Vector3 = chase_direction.rotated(Vector3.UP, PI / 2)
+		var wave_offset = perpendicular * sin(time_elapsed * wave_frequency) * wave_amplitude
+		orbit_pos += wave_offset
+	
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
 
@@ -160,11 +172,9 @@ func _on_small_blind_recover_state_entered() -> void:
 
 
 func _recover_state_entered() -> void:
-	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
 	
-	select_attack()
 	state_chart.send_event("end_recovery")
 
 
@@ -173,26 +183,30 @@ func _recover_state_entered() -> void:
 
 func _on_arc_swipe_targeting_state_entered() -> void:
 	debug_state_label.text = "Arc Wave Swipe | Targeting"
-	
-	swipe_targeting_timer.start(swipe_targeting_timeout)
-	desired_distance = 5.0
-	
 	state_chart.send_event("start_moving")
 
 
-func _on_arc_swipe_targeting_state_exited() -> void:
-	desired_distance = DESIRED_DISTANCE
-
-
 func _on_arc_swipe_targeting_state_physics_processing(delta: float) -> void:
-	if target in hurtbox.get_overlapping_bodies():
+	orbit_center_in_group(delta, true)
+
+
+func _on_arc_swipe_closing_state_entered() -> void:
+	debug_state_label.text = "Arc Wave Swipe | Closing"
+	swipe_targeting_timer.start(swipe_targeting_timeout)
+	state_chart.send_event("start_moving")
+
+
+func _on_arc_swipe_closing_state_physics_processing(delta: float) -> void:
+	if self.global_position.distance_to(target.global_position) <= swipe_range:
 		swipe_targeting_timer.stop()
-		state_chart.send_event("attack_buildup")
-		await get_tree().create_timer(0.4 + group_idx * swipe_lifetime * num_swipes).timeout
+		state_chart.send_event("start_targeting")
+		state_chart.send_event("attack_telegraph")
+		await get_tree().create_timer(telegraph_time).timeout
+		state_chart.send_event("attack_start")
 		state_chart.send_event("start_swipe")
 		return
 	
-	orbit_melee_closer_in_group(delta)
+	melee_approach(delta)
 
 
 func _on_arc_swipe_swiping_state_entered() -> void:
@@ -320,3 +334,111 @@ func _on_died() -> void:
 
 func _on_melee_targeting_timer_timeout() -> void:
 	state_chart.send_event("start_attack")
+
+
+func _on_charge_back_targeting_state_entered() -> void:
+	debug_state_label.text = "Charge Back | Targeting"
+	
+	GRAVITY = 14
+	
+	state_chart.send_event("start_moving")
+
+
+func _on_charge_back_targeting_state_physics_processing(delta: float) -> void:
+	orbit_center_in_group(delta, true)
+
+
+func _on_charge_back_charging_state_entered() -> void:
+	debug_state_label.text = "Chargeback | Charging"
+	
+	chargeback_return_pos = self.global_position
+	hurtbox.set_deferred("monitoring", true)
+	
+	state_chart.send_event("start_targeting")
+	
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(chargeback_targeting_time).timeout
+	
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time * 2).timeout
+	
+	charge_target_pos = target.global_position
+	charge_target_pos.y = 0
+	substack_charge_set.emit(charge_target_pos)
+	
+	state_chart.send_event("attack_start")
+	navigation_component.disable()
+	
+	var charge_tween: Tween = get_tree().create_tween()
+	var charge_time: float = self.global_position.distance_to(charge_target_pos) / charge_speed
+	charge_tween.tween_property(self, "global_position", charge_target_pos, charge_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	#sfx_player.stream = sfx_charge.pick_random()
+	#sfx_player.play()
+	await charge_tween.finished
+	state_chart.send_event("end_charge")
+
+
+func _on_charge_back_leaping_state_entered() -> void:
+	hurtbox.set_deferred("monitoring", false)
+	var jump_results = charge_back_jump(chargeback_return_pos, chargeback_leap_height, true)
+	self.velocity = jump_results[0]
+	
+	await get_tree().create_timer(jump_results[1]).timeout
+	
+	state_chart.send_event("end_leap")
+
+
+func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, jump_height: float = chargeback_leap_height, debug: bool = false) -> Array:
+	var start_pos = self.global_position
+	var highest_y = max(start_pos.y, goal_pos.y)
+	var apex_y = highest_y + jump_height
+	
+	var velocity_v: float = sqrt(
+		2 * GRAVITY * (apex_y - start_pos.y)
+	)
+	
+	# TODO - make time_up and time_down configurable so we can set a jump time
+	var time_up: float = velocity_v / GRAVITY
+	var time_down: float = sqrt(2.0 * (apex_y - goal_pos.y) / GRAVITY)
+	var time: float = time_up + time_down
+	
+	var displacement_xz: Vector2 = Vector2(goal_pos.x, goal_pos.z) - Vector2(start_pos.x, start_pos.z)
+	var horizontal_distance: float = displacement_xz.length()
+	var velocity_h = horizontal_distance / time
+	var horizontal_dir: Vector2 = displacement_xz.normalized()
+	
+	var initial_velocity := Vector3(
+		horizontal_dir.x * velocity_h,
+		velocity_v,
+		horizontal_dir.y * velocity_h,
+	)
+	
+	# Drawing
+	if debug:
+		var trajectory_points: Array = []
+		
+		for i in range(1, 151):
+			var t = time * float(i) / float(151)
+			var x = start_pos.x + initial_velocity.x * t
+			var y = start_pos.y + initial_velocity.y * t - 0.5 * GRAVITY * t * t
+			var z = start_pos.z + initial_velocity.z * t
+			trajectory_points.append(Vector3(x, y, z))
+		
+		debug_trajectory_mesh.mesh.clear_surfaces()
+		debug_trajectory_mesh.mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
+		for p in trajectory_points:
+			debug_trajectory_mesh.mesh.surface_set_color(Color.RED)
+			debug_trajectory_mesh.mesh.surface_add_vertex(p)
+		debug_trajectory_mesh.mesh.surface_end()
+		
+	return [initial_velocity, time]
+
+
+func _on_charge_back_leaping_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
+func _on_hurtbox_body_entered(body: Node3D) -> void:
+	if body == target:
+		body.health_component.damage(chargeback_damage)

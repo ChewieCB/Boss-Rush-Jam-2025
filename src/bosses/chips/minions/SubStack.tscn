@@ -34,7 +34,6 @@ motion_mode = 1
 script = ExtResource("2_u1ibk")
 DESIRED_DISTANCE = 20.0
 desired_distance = null
-MOVE_SPEED = 10.0
 wave_amplitude = 7.0
 wave_frequency = 5.0
 time_elapsed = 0.0
@@ -48,11 +47,14 @@ delay_between_burst = 0.6
 swipe_prefab = ExtResource("4_1uy5e")
 num_swipes = 2
 delay_between_swipe = 0.4
-swipe_damage = 8.0
+swipe_damage = 4.0
+swipe_range = 10.0
 swipe_radius = 8.0
 swipe_height_scale = 0.12
 swipe_lifetime = 0.35
 swipe_targeting_timeout = 2.0
+chargeback_targeting_time = 1.8
+chargeback_damage = 6.0
 sfx_chip_shot = Array[AudioStream]([])
 explosion_scene = null
 arena_radius = 19.5
@@ -103,44 +105,77 @@ visible = false
 visible = false
 boss_name = "MINION DO NOT USE"
 
-[node name="toSmallBlindProjectile" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
+[node name="Phase" parent="StateChart/Root" index="4"]
+initial_state = NodePath("Idle")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Idle")
+event = &"activate"
+delay_in_seconds = "0.0"
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("6_yvmou")
+
+[node name="toSmallBlindProjectile" type="Node" parent="StateChart/Root/Phase/Idle" index="0"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../SmallBlindProjectile")
 event = &"start_small_projectile_attack"
 delay_in_seconds = "0.0"
 
-[node name="toSplitRush" type="Node" parent="StateChart/Root/Phase/Inactive" index="1"]
+[node name="toSplitRush" type="Node" parent="StateChart/Root/Phase/Idle" index="1"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../SplitRush")
 event = &"start_split_rush_attack"
 delay_in_seconds = "0.0"
 
-[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Inactive" index="2"]
+[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Idle" index="2"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../PlaceYourBets")
 event = &"start_place_your_bets_attack"
 delay_in_seconds = "0.0"
 
-[node name="toArcWaveSwipe" type="Node" parent="StateChart/Root/Phase/Inactive" index="3"]
+[node name="toArcWaveSwipe" type="Node" parent="StateChart/Root/Phase/Idle" index="3"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../ArcWaveSwipe")
 event = &"start_arc_wave_attack"
 delay_in_seconds = "0.0"
 
-[node name="ArcWaveSwipe" type="Node" parent="StateChart/Root/Phase" index="1"]
+[node name="toChargeBack" type="Node" parent="StateChart/Root/Phase/Idle" index="4"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../ChargeBack")
+event = &"start_charge_back_attack"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Idle" index="5"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="ArcWaveSwipe" type="Node" parent="StateChart/Root/Phase" index="2"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="0"]
 script = ExtResource("6_yvmou")
 
-[node name="toSwiping" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe/Targeting" index="0"]
+[node name="toClosing" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe/Targeting" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Closing")
+event = &"start_closing"
+delay_in_seconds = "0.0"
+
+[node name="Closing" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="1"]
+script = ExtResource("6_yvmou")
+
+[node name="toSwiping" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe/Closing" index="0"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../Swiping")
 event = &"start_swipe"
 delay_in_seconds = "0.0"
 
-[node name="Swiping" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="1"]
+[node name="Swiping" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="2"]
 script = ExtResource("6_yvmou")
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe/Swiping" index="0"]
@@ -149,7 +184,7 @@ to = NodePath("../../Recover")
 event = &"end_swipe"
 delay_in_seconds = "0.0"
 
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="2"]
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="3"]
 script = ExtResource("6_yvmou")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe/Recover" index="0"]
@@ -158,28 +193,22 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toSmallBlindProjectile" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="3"]
+[node name="MeleeTargetingTimer" type="Timer" parent="StateChart/Root/Phase/ArcWaveSwipe" index="4"]
+one_shot = true
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="5"]
 script = ExtResource("4_51dvw")
-to = NodePath("../../SmallBlindProjectile")
-event = &"start_small_projectile_attack"
+to = NodePath("../../Idle")
+event = &"end_attack"
 delay_in_seconds = "0.0"
 
-[node name="toSplitRush" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="4"]
-script = ExtResource("4_51dvw")
-to = NodePath("../../SplitRush")
-event = &"start_split_rush_attack"
-delay_in_seconds = "0.0"
-
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="5"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="6"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="MeleeTargetingTimer" type="Timer" parent="StateChart/Root/Phase/ArcWaveSwipe" index="6"]
-one_shot = true
-
-[node name="SmallBlindProjectile" type="Node" parent="StateChart/Root/Phase" index="2"]
+[node name="SmallBlindProjectile" type="Node" parent="StateChart/Root/Phase" index="3"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -210,10 +239,10 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toSplitRush" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectile" index="3"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectile" index="3"]
 script = ExtResource("4_51dvw")
-to = NodePath("../../SplitRush")
-event = &"start_split_rush_attack"
+to = NodePath("../../Idle")
+event = &"end_attack"
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectile" index="4"]
@@ -222,19 +251,7 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectile" index="5"]
-script = ExtResource("4_51dvw")
-to = NodePath("../../PlaceYourBets")
-event = &"start_place_your_bets_attack"
-delay_in_seconds = "0.0"
-
-[node name="toArcWaveSwipe" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectile" index="6"]
-script = ExtResource("4_51dvw")
-to = NodePath("../../ArcWaveSwipe")
-event = &"start_arc_wave_attack"
-delay_in_seconds = "0.0"
-
-[node name="SplitRush" type="Node" parent="StateChart/Root/Phase" index="3"]
+[node name="SplitRush" type="Node" parent="StateChart/Root/Phase" index="4"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -265,10 +282,10 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toSmallBlindProjectile" type="Node" parent="StateChart/Root/Phase/SplitRush" index="3"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/SplitRush" index="3"]
 script = ExtResource("4_51dvw")
-to = NodePath("../../SmallBlindProjectile")
-event = &"start_small_projectile_attack"
+to = NodePath("../../Idle")
+event = &"end_attack"
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/SplitRush" index="4"]
@@ -277,13 +294,7 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/SplitRush" index="5"]
-script = ExtResource("4_51dvw")
-to = NodePath("../../PlaceYourBets")
-event = &"start_place_your_bets_attack"
-delay_in_seconds = "0.0"
-
-[node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase" index="4"]
+[node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase" index="5"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -308,19 +319,65 @@ delay_in_seconds = "0.0"
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/PlaceYourBets" index="2"]
 script = ExtResource("6_yvmou")
 
-[node name="toSmallBlindProjectile" type="Node" parent="StateChart/Root/Phase/PlaceYourBets" index="3"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/PlaceYourBets" index="3"]
 script = ExtResource("4_51dvw")
-to = NodePath("../../SmallBlindProjectile")
-event = &"start_small_projectile_attack"
+to = NodePath("../../Idle")
+event = &"end_attack"
 delay_in_seconds = "0.0"
 
-[node name="toSplitRush" type="Node" parent="StateChart/Root/Phase/PlaceYourBets" index="4"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/PlaceYourBets" index="4"]
 script = ExtResource("4_51dvw")
-to = NodePath("../../SplitRush")
-event = &"start_split_rush_attack"
+to = NodePath("../../Inactive")
+event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/PlaceYourBets" index="5"]
+[node name="ChargeBack" type="Node" parent="StateChart/Root/Phase" index="6"]
+script = ExtResource("4_wmyjd")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/ChargeBack" index="0"]
+script = ExtResource("6_yvmou")
+
+[node name="toCharging" type="Node" parent="StateChart/Root/Phase/ChargeBack/Targeting" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Charging")
+event = &"start_charge"
+delay_in_seconds = "0.0"
+
+[node name="Charging" type="Node" parent="StateChart/Root/Phase/ChargeBack" index="1"]
+script = ExtResource("6_yvmou")
+
+[node name="toLeaping" type="Node" parent="StateChart/Root/Phase/ChargeBack/Charging" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Leaping")
+event = &"end_charge"
+delay_in_seconds = "0.0"
+
+[node name="Leaping" type="Node" parent="StateChart/Root/Phase/ChargeBack" index="2"]
+script = ExtResource("6_yvmou")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/ChargeBack/Leaping" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Recover")
+event = &"end_leap"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/ChargeBack" index="3"]
+script = ExtResource("6_yvmou")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/ChargeBack/Recover" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/ChargeBack" index="4"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Idle")
+event = &"end_attack"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/ChargeBack" index="5"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../Inactive")
 event = &"deactivate"
@@ -332,6 +389,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Closing" to="." method="_on_arc_swipe_closing_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipe/Closing" to="." method="_on_arc_swipe_closing_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Swiping" to="." method="_on_arc_swipe_swiping_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Recover" to="." method="_recover_state_entered"]
 [connection signal="timeout" from="StateChart/Root/Phase/ArcWaveSwipe/MeleeTargetingTimer" to="." method="_on_melee_targeting_timer_timeout"]
@@ -347,3 +406,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 [connection signal="state_entered" from="StateChart/Root/Phase/PlaceYourBets/Targeting" to="." method="_on_place_your_bets_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/PlaceYourBets/Crashing" to="." method="_on_place_your_bets_crashing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/PlaceYourBets/Recover" to="." method="_on_place_your_bets_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Targeting" to="." method="_on_charge_back_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/ChargeBack/Targeting" to="." method="_on_charge_back_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Charging" to="." method="_on_charge_back_charging_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Leaping" to="." method="_on_charge_back_leaping_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/ChargeBack/Leaping" to="." method="_on_charge_back_leaping_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Recover" to="." method="_recover_state_entered"]

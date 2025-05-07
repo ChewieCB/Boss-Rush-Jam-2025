@@ -37,7 +37,7 @@ desired_distance = null
 angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
-max_big_attacks = 4
+max_big_attacks = 2
 max_small_attacks = 3
 rolling_chip_projectile = ExtResource("6_dth1w")
 chips_per_attack = 2
@@ -125,6 +125,9 @@ follow_target = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")
@@ -418,6 +421,12 @@ to = NodePath("../../CloseArcWave")
 event = &"start_split_stack_arc_attack"
 delay_in_seconds = "0.0"
 
+[node name="toChargeBack" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/Idle" index="3"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChargeBack")
+event = &"start_split_stack_charge_back_attack"
+delay_in_seconds = "0.0"
+
 [node name="OrbitProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks" index="3"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Targeting")
@@ -525,6 +534,37 @@ delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform" index="3"]
 script = ExtResource("5_81kie")
+
+[node name="ChargeBack" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks" index="6"]
+script = ExtResource("4_kiknp")
+initial_state = NodePath("Recover")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toAttacking" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack/Targeting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Attacking")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack/Attacking" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recover")
+event = &"finish_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack/Recover" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
 
 [node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
 script = ExtResource("3_hbmr3")
@@ -996,6 +1036,9 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Attacking" to="." method="_on_split_stack_charge_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Merging" to="." method="_on_split_stack_charge_merging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Recover" to="." method="_on_split_stack_charge_reform_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack/Targeting" to="." method="_on_split_stack_charge_back_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack/Attacking" to="." method="_on_split_stack_charge_back_attacking_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack/Recover" to="." method="_on_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Flooding" to="." method="_on_flooding_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Jumping" to="." method="_on_place_your_bets_jumping_state_entered"]
