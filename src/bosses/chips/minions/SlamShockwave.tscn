@@ -45,7 +45,7 @@ void fragment() {
 render_priority = 0
 shader = SubResource("Shader_4ownv")
 shader_parameter/arc_start_deg = 0.0
-shader_parameter/arc_end_deg = 40.0
+shader_parameter/arc_end_deg = 90.0
 shader_parameter/base_color = Color(0.37, 0.1, 1, 0.686275)
 
 [sub_resource type="TorusMesh" id="TorusMesh_u4ve2"]

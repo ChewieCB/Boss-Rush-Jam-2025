@@ -38,7 +38,7 @@ angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
 max_big_attacks = 4
-max_small_attacks = 2
+max_small_attacks = 3
 rolling_chip_projectile = ExtResource("6_dth1w")
 chips_per_attack = 2
 chip_sweep_count = 3
@@ -68,7 +68,7 @@ aoe_wave_time = 0.4
 wave_material = ExtResource("5_vcykk")
 small_stack_prefab = ExtResource("4_otar4")
 stack_spawn_time = 0.1
-split_rush_range = 6.0
+split_rush_range = 3.5
 split_rush_damage = 20.0
 chiptopede_segment_prefab = ExtResource("7_3u62n")
 chiptopede_max_health = 8000.0
@@ -416,6 +416,12 @@ to = NodePath("../../ChargeReform")
 event = &"start_charge_reform"
 delay_in_seconds = "0.0"
 
+[node name="CloseArcWave" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/Idle" index="2"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../CloseArcWave")
+event = &"start_split_stack_arc_attack"
+delay_in_seconds = "0.0"
+
 [node name="OrbitProjectiles" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks" index="3"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Targeting")
@@ -453,7 +459,44 @@ to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
 
-[node name="ChargeReform" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks" index="4"]
+[node name="CloseArcWave" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks" index="4"]
+script = ExtResource("4_kiknp")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/CloseArcWave" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toAttacking" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/CloseArcWave/Targeting" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Attacking")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/CloseArcWave" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/CloseArcWave/Attacking" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Recover")
+event = &"finish_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/CloseArcWave" index="2"]
+script = ExtResource("5_81kie")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/CloseArcWave/Recover" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/CloseArcWave" index="3"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Idle")
+event = &"end_attack"
+delay_in_seconds = "0.0"
+
+[node name="ChargeReform" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks" index="5"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Targeting")
 
@@ -944,6 +987,9 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/OrbitProjectiles/Targeting" to="." method="_on_split_stacks_orbiting_projectiles_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/OrbitProjectiles/Attacking" to="." method="_on_split_stack_projectiles_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/OrbitProjectiles/Recover" to="." method="_on_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/CloseArcWave/Targeting" to="." method="_on_split_stack_arc_wave_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/CloseArcWave/Attacking" to="." method="_on_split_stack_arc_wave_attacking_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/CloseArcWave/Recover" to="." method="_on_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Targeting" to="." method="_on_split_stack_charge_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Attacking" to="." method="_on_split_stack_charge_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Merging" to="." method="_on_split_stack_charge_merging_state_entered"]

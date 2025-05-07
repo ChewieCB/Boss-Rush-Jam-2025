@@ -10,15 +10,15 @@ extends Area3D
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var collider: CollisionShape3D = $CollisionShape3D
+@onready var mesh_material := mesh.mesh.surface_get_material(0)
 
 var current_radius: float = 0.0
 
 
-func start_shockwave() -> void:
+func start_shockwave(wipe_arc: bool = false) -> void:
 	mesh.mesh.inner_radius = 0.0
-	mesh.mesh.outer_radius = 0.0
+	mesh.mesh.outer_radius = 0.1
 	collider.shape.radius = 0.0
-	var mesh_material := mesh.mesh.surface_get_material(0)
 	mesh_material.set_shader_parameter("arc_start_deg", 0)
 	mesh_material.set_shader_parameter("arc_end_deg", arc_angle)
 	#mesh.rotation_degrees.y = 90 + arc_angle/2
@@ -26,11 +26,18 @@ func start_shockwave() -> void:
 	tween.tween_property(mesh.mesh, "inner_radius", max_radius * arc_thickness_ratio, wave_time)
 	tween.parallel().tween_property(mesh.mesh, "outer_radius", max_radius, wave_time)
 	tween.parallel().tween_property(collider.shape, "radius", max_radius, wave_time)
+	if wipe_arc:
+		tween.parallel().tween_method(_set_arc_angle, 0.1, arc_angle, wave_time)
+		
 	#tween.parallel().tween_property(collider.shape)
 	
 	await tween.finished
 	
 	self.queue_free()
+
+
+func _set_arc_angle(angle: float) -> void:
+	mesh_material.set_shader_parameter("arc_end_deg", angle)
 
 
 func _on_body_entered(body: Node3D) -> void:

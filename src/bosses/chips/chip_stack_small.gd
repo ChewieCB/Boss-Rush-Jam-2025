@@ -7,6 +7,14 @@ signal substack_dive_finished(stack: ChipBossSubStack)
 @export_group("Movement")
 @export var DESIRED_DISTANCE: float = 20.0
 @export var desired_distance: float = DESIRED_DISTANCE
+@export var MOVE_SPEED: float = 10.0
+@onready var move_speed: float = MOVE_SPEED:
+	set(value):
+		move_speed = value
+		navigation_component.current_speed = move_speed
+@export var wave_amplitude: float = 7.0
+@export var wave_frequency: float = 5.0
+@export var time_elapsed: float = 0.0
 @export_subgroup("Orbiting Movement")
 @export var angle_speed: float = 1.0 # radians/second
 @export var orbit_angle: float = 0.0 # track this over time
@@ -19,6 +27,19 @@ signal substack_dive_finished(stack: ChipBossSubStack)
 @export var num_bursts: int = 1
 @export var delay_between_burst: float = 0.6
 # SFX
+#
+@export_subgroup("Arc Wave Swipe")
+@export var swipe_prefab: PackedScene
+@export var num_swipes: int = 2
+@export var delay_between_swipe: float = 0.4
+@export var swipe_damage: float = 8.0
+@export var swipe_radius: float = 8.0
+@export var swipe_height_scale: float = 0.12
+@export var swipe_lifetime: float = 0.35
+@export var swipe_targeting_timeout: float = 2.0
+@onready var swipe_targeting_timer: Timer = $StateChart/Root/Phase/ArcWaveSwipe/MeleeTargetingTimer
+# SFX
+#
 @export var sfx_chip_shot: Array[AudioStream]
 @export_subgroup("Split Rush")
 @export var explosion_scene: PackedScene
@@ -30,6 +51,8 @@ var charge_target_pos: Vector3
 @export_subgroup("Place Your Bets")
 @onready var aoe_markers: Array[Node] = get_tree().get_nodes_in_group("boss_aoe_marker")
 @export var marker_target_idx: int
+
+@onready var scene_root = get_parent().get_parent()
 
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
@@ -60,6 +83,23 @@ func orbit_target_in_group(delta: float) -> void:
 	# offset in XZ-plane
 	var offset_x = cos(current_angle) * desired_distance
 	var offset_z = sin(current_angle) * desired_distance
+	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	# Pathfind to orbit_pos
+	navigation_component.set_nav_target_position(orbit_pos)
+
+
+func orbit_melee_closer_in_group(delta: float) -> void:
+	orbit_angle += angle_speed * delta
+	# Modify the orbit angle based on how many enemies are orbiting in the group
+	# so we have evenly spaced enemy orbits
+	var angle_offset = (2 * PI) / group_size * (group_idx + 1)
+	var current_angle = orbit_angle + angle_offset
+	
+	var stack_distance_variance = randf_range(-0.5, 0.5)
+	var final_distance = desired_distance + stack_distance_variance
+	
+	var offset_x = cos(current_angle) * final_distance
+	var offset_z = sin(current_angle) * final_distance
 	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
@@ -126,7 +166,63 @@ func _recover_state_entered() -> void:
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+## ARC SWIPE
+
+
+func _on_arc_swipe_targeting_state_entered() -> void:
+	debug_state_label.text = "Arc Wave Swipe | Targeting"
 	
+	swipe_targeting_timer.start(swipe_targeting_timeout)
+	desired_distance = 5.0
+	
+	state_chart.send_event("start_moving")
+
+
+func _on_arc_swipe_targeting_state_exited() -> void:
+	desired_distance = DESIRED_DISTANCE
+
+
+func _on_arc_swipe_targeting_state_physics_processing(delta: float) -> void:
+	if target in hurtbox.get_overlapping_bodies():
+		swipe_targeting_timer.stop()
+		state_chart.send_event("attack_buildup")
+		await get_tree().create_timer(0.4 + group_idx * swipe_lifetime * num_swipes).timeout
+		state_chart.send_event("start_swipe")
+		return
+	
+	orbit_melee_closer_in_group(delta)
+
+
+func _on_arc_swipe_swiping_state_entered() -> void:
+	debug_state_label.text = "Arc Wave Swipe | Swiping"
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_telegraph")
+	
+	await get_tree().create_timer(telegraph_time).timeout
+	state_chart.send_event("attack_start")
+	
+	for i in num_swipes:
+		var swipe = swipe_prefab.instantiate()
+		scene_root.add_child(swipe)
+		
+		swipe.global_transform = projectile_spawn_marker.global_transform
+		swipe.look_at(target.global_position)
+		# Rotate swipe to be ~45 degrees instead of horizontal
+		swipe.global_rotation_degrees.z = -45 if randf() < 0.5 else -135
+		swipe.global_rotation_degrees.z += randf_range(-15, 15)
+		swipe.max_radius = swipe_radius
+		swipe.mesh.scale.y = swipe_height_scale
+		swipe.damage = swipe_damage
+		swipe.wave_time = swipe_lifetime
+		# animate swipe
+		swipe.start_shockwave(true)
+		
+		await get_tree().create_timer(delay_between_swipe).timeout
+	
+	state_chart.send_event("end_swipe")
 
 
 ## SPLIT RUSH
@@ -220,3 +316,7 @@ func _on_died() -> void:
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
 	return
+
+
+func _on_melee_targeting_timer_timeout() -> void:
+	state_chart.send_event("start_attack")

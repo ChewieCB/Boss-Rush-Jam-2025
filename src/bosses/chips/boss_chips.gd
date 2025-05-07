@@ -17,6 +17,7 @@ var last_attack: String
 @export_group("Movement")
 @export var DESIRED_DISTANCE: float = 10.0
 @export var desired_distance: float = DESIRED_DISTANCE
+
 @export_subgroup("Orbiting")
 @export var angle_speed: float = 1.0 # radians/second
 @export var orbit_angle: float = 0.0 # track this over time
@@ -34,7 +35,7 @@ var current_form: ChipBossForms
 @export_subgroup("Form Transitions")
 @export var max_big_attacks: int = 4
 var big_attacks_performed: int = 0
-@export var max_small_attacks: int = 2
+@export var max_small_attacks: int = 3
 var small_attacks_performed: int = 0
 @export_subgroup("Backspin Chip")
 @export var rolling_chip_projectile: PackedScene
@@ -91,7 +92,7 @@ var spawned_sub_stacks: Array = []
 var finished_sub_stacks: Array = []
 var last_stack: ChipBossSubStack
 @export_subgroup("Split Stack Rush")
-@export var split_rush_range: float = 6.0
+@export var split_rush_range: float = 3.5
 @export var split_rush_damage: float = 20.0
 @export_group("Chiptopede")
 @export var chiptopede_segment_prefab: PackedScene
@@ -230,7 +231,13 @@ func select_attack_phase_1() -> void:
 				state_chart.send_event("start_charge_reform")
 				return
 			else:
-				attack_str = "start_split_stack_projectiles"
+				# 45% chance of chip sweep
+				# 60% chance of backspin chip
+				# 40% chance of slam
+				if attack_roll < 50:
+					attack_str = "start_split_stack_arc_attack"
+				else:
+					attack_str = "start_split_stack_projectiles"
 			
 			small_attacks_performed += 1
 	# TODO
@@ -1435,6 +1442,18 @@ func _on_split_stacks_slam_attacking_state_entered() -> void:
 	trigger_substack_attack("start_split_slam_attack")
 
 
+##
+
 func _on_split_stack_charge_reform_recover_state_entered() -> void:
 	state_chart.send_event("change_form_big")
 	_on_recover_state_entered()
+
+
+## Split melee arc wave
+
+func _on_split_stack_arc_wave_targeting_state_entered() -> void:
+	state_chart.send_event("start_attack")
+
+
+func _on_split_stack_arc_wave_attacking_state_entered() -> void:
+	trigger_substack_attack("start_arc_wave_attack")
