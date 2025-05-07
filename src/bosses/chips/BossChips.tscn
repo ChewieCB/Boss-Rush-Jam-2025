@@ -37,8 +37,8 @@ desired_distance = null
 angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
-max_big_attacks = 2
-max_small_attacks = 3
+max_big_attacks = 4
+max_small_attacks = 2
 rolling_chip_projectile = ExtResource("6_dth1w")
 chips_per_attack = 2
 chip_sweep_count = 3
@@ -51,7 +51,7 @@ chip_mine_spawn_area_radius = 9.0
 chip_mine_trigger_radius = 6.0
 chip_mine_trigger_time = 0.8
 chip_mine_prefab = ExtResource("5_bdbd0")
-chip_mine_cooldown = 20.0
+chip_mine_cooldown = 30.0
 slam_shockwave_prefab = ExtResource("7_s7i42")
 slam_count = 4
 slam_damage = 10.0
@@ -109,7 +109,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
 shape = SubResource("CapsuleShape3D_62t77")
 
 [node name="DebugMesh" parent="." index="2"]
-visible = true
 mesh = SubResource("BoxMesh_dgy85")
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
@@ -118,16 +117,13 @@ shape = SubResource("BoxShape3D_oomx2")
 disabled = true
 
 [node name="HealthComponent" parent="." index="4"]
-max_health = 6000.0
+max_health = 8500.0
 
 [node name="NavigationComponent" parent="." index="5"]
 follow_target = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
-
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")

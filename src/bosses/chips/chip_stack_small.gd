@@ -380,7 +380,7 @@ func _on_charge_back_charging_state_entered() -> void:
 
 func _on_charge_back_leaping_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", false)
-	var jump_results = charge_back_jump(chargeback_return_pos, chargeback_leap_height, true)
+	var jump_results = charge_back_jump(chargeback_return_pos)
 	self.velocity = jump_results[0]
 	
 	await get_tree().create_timer(jump_results[1]).timeout

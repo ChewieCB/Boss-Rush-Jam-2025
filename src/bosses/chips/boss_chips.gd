@@ -34,9 +34,9 @@ var current_form: ChipBossForms
 
 @export_group("Attacks")
 @export_subgroup("Form Transitions")
-@export var max_big_attacks: int = 2
+@export var max_big_attacks: int = 4
 var big_attacks_performed: int = 0
-@export var max_small_attacks: int = 3
+@export var max_small_attacks: int = 2
 var small_attacks_performed: int = 0
 @export_subgroup("Backspin Chip")
 @export var rolling_chip_projectile: PackedScene
@@ -60,7 +60,7 @@ var chip_sweep_instances: Array = []
 @export var chip_mine_trigger_radius: float = 6.0
 @export var chip_mine_trigger_time: float = 0.8
 @export var chip_mine_prefab: PackedScene
-@export var chip_mine_cooldown: float = 20.0
+@export var chip_mine_cooldown: float = 30.0
 @onready var chip_mine_spawn_timer: Timer = $ChipMineSpawnTimer
 var chip_mine_spawn_points: Array
 var active_mines: Array = []
@@ -213,7 +213,7 @@ func select_attack_phase_1() -> void:
 				state_chart.send_event("change_form_split")
 				return
 			
-			# TODO - move mines to phase 2?
+			# TODO - move mines to phase 2? Or maybe launch mines and have small stacks move but not attack
 			# If we haven't spawned mines in a while, spawn some
 			#if chip_mine_spawn_timer.is_stopped():
 				#attack_str = "start_chip_mines"
@@ -237,13 +237,12 @@ func select_attack_phase_1() -> void:
 				state_chart.send_event("start_charge_reform")
 				return
 			else:
-				# 25% chance of sequential charges
-				# 40% chance of melee arcs
-				# 50% chance of projectiles
-				if attack_roll < 25:
+				# 30% chance of sequential charges
+				# 70% chance of projectiles
+				if attack_roll < 30:
 					attack_str = "start_split_stack_charge_back_attack"
-				elif attack_roll < 50:
-					attack_str = "start_split_stack_arc_attack"
+				#elif attack_roll < 50:
+					#attack_str = "start_split_stack_arc_attack"  # Move arc attack to phase 2, short range projectile attack
 				else:
 					attack_str = "start_split_stack_projectiles"
 			

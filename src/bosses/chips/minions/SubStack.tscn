@@ -76,7 +76,6 @@ texture = ExtResource("3_0jj1h")
 shape = SubResource("CylinderShape3D_ase24")
 
 [node name="DebugMesh" parent="." index="2"]
-visible = true
 mesh = SubResource("CylinderMesh_447b3")
 surface_material_override/0 = SubResource("StandardMaterial3D_5irfp")
 
