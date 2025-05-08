@@ -30,6 +30,12 @@ func on_barrel_install():
 func on_barrel_remove():
 	return
 
+func on_barrel_start_spin():
+	return
+
+func on_barrel_stop_spin():
+	return
+
 ## Call when an effect is first applied
 func on_effect_set():
 	return
@@ -68,11 +74,11 @@ func on_ammo_consumed():
 func on_clip_empty():
 	return
 
-## Call after started reload (and start the barrel spin).
+## Call after started reload
 func on_reload_start():
 	return
 
-## Call after finished reload (and stopped spinning).
+## Call after finished reload
 func on_reload_end():
 	return
 
@@ -92,8 +98,13 @@ func on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 func on_projectile_destroyed():
 	return
 
-## Before deal damage to enemy.
+## When bullet go out of barrel
 func on_damage_calculation():
+	return
+
+# When bullet hit enemy but JUST before applied damage
+# TODO: Make BallProjectile also work with this
+func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
 	return
 
 ## After deal damage to enemy.

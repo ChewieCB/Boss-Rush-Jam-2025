@@ -1,5 +1,6 @@
 extends RigidBody3D
 class_name BallProjectile
+# This cannot extend BaseProjectile because it's a RigidBody3D
 
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene

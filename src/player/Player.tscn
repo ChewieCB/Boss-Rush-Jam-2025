@@ -117,10 +117,16 @@ sfx_jump_ground = Array[AudioStream]([ExtResource("28_k5crr")])
 sfx_jump_air = Array[AudioStream]([ExtResource("29_xv6x8")])
 sfx_dash_floor = Array[AudioStream]([ExtResource("30_on7sg")])
 sfx_dash_air = Array[AudioStream]([ExtResource("31_pnqxi")])
+can_wall_jump = null
+can_wall_cling = null
 max_air_jump = 1
+dash_cd = null
+dash_iframe_duration = null
+angular_momentum_multiplier = null
 speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
+luck_redeem_time = null
 reroll_heal_value = 20.0
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
@@ -235,10 +241,6 @@ script = ExtResource("41_63osp")
 
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
-
-[node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
-visible = false
-z_index = 10
 
 [node name="InteractUI" type="HBoxContainer" parent="UI"]
 anchors_preset = 8
@@ -367,6 +369,10 @@ offset_bottom = 1073.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 40
 text = "Saving..."
+
+[node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
+visible = false
+z_index = 10
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")

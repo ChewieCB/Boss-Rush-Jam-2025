@@ -50,7 +50,10 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 ## Shot per second
 @export var base_firerate = 2
 @export var base_magazine_size = 10
-@export var base_reload_time = 1
+# DONT CHANGE THIS base_reload_time, THIS BREAK THE GUN
+# I think the animation tied to 1s or so
+# But modify the reload time on barrel effect seem to be fine
+var base_reload_time = 1
 @export var base_spin_time = 1
 ## How spread out projectile can be from the aim center
 @export var base_spread_angle = 0.5
@@ -148,9 +151,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	if time_until_next_shot > time_since_last_shot:
 		return false
 
-	# reset_modifier()
-	# for _barrel in barrel_container.get_children():
-	# 	_barrel.get_active_effect().on_effect_set()
+	reset_modifier()
 
 	var can_fire = true
 	for barrel in installed_barrels:
@@ -165,7 +166,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_prepare_to_fire()
 
-	if barrel_count == 0:
+	if barrel_count == 0 or not check_if_archetype_barrel_installed():
 		SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
 
 	GameManager.player.player_camera.set_recoil_power(modified_recoil)
@@ -226,11 +227,16 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
 	get_tree().get_root().add_child(bullet_inst)
+	bullet_inst.before_damage_applied.connect(check_barrel_effect_on_before_damage_applied)
 	bullet_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
 	bullet_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
 	bullet_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
 	bullet_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 	bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
+
+func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_before_damage_applied(_enemy, _projectile)
 
 func check_barrel_effect_on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
@@ -312,12 +318,13 @@ func spin_single_barrel(barrel_idx: int) -> void:
 	await get_tree().create_timer(base_spin_time).timeout
 
 	_stop_barrel(barrel_idx)
-	is_reloading = false
 	reload(true)
+	is_reloading = false
 
 
 func _spin_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
+	barrel.get_active_effect().on_barrel_start_spin()
 	barrel.start_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("spin")
@@ -332,12 +339,12 @@ func stop_all_barrels() -> void:
 
 func _stop_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
+	barrel.get_active_effect().on_barrel_stop_spin()
 	barrel.stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
 	SoundManager.stop_sound(TEMP_sfx_spin)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
-	barrel.get_active_effect().on_effect_set()
 
 
 func reload(already_spin_barrel = false):
@@ -350,22 +357,19 @@ func reload(already_spin_barrel = false):
 
 	release_trigger()
 
+	if not already_spin_barrel:
+		reset_modifier(true)
+
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
 
-
 	is_reloading = true
-	anim_tree.set("parameters/reload_timescale/scale", 1 / modified_reload_time)
+	anim_tree.set("parameters/reload_timescale/scale", 1 / modified_reload_time) # FIXME: Need to do sth with base_reload_time here
 	anim_tree.set("parameters/reload_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 	await reload_anim_end
 	is_reloading = false
 	anim_tree.set("parameters/reload_timescale/scale", 1)
-
-	if not already_spin_barrel:
-		reset_modifier(true)
-		for _barrel in barrel_container.get_children():
-			_barrel.get_active_effect().on_effect_set()
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
@@ -591,3 +595,9 @@ func _on_savefile_loaded():
 	if not reinstalled_barrel_from_savefile:
 		reinstalled_barrel_from_savefile = true
 		reinstall_barrels()
+
+func check_if_archetype_barrel_installed() -> bool:
+	for barrel in GameManager.equipped_barrels:
+		if barrel.is_archetype_barrel:
+			return true
+	return false

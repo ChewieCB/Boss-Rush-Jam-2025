@@ -38,6 +38,20 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_y22bm")
 
+[node name="PausedLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -296.0
+offset_top = 64.0
+offset_right = -66.0
+offset_bottom = 161.0
+grow_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 80
+text = "PAUSED"
+
 [node name="OldMovieShader" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_c2sij")
 layout_mode = 1

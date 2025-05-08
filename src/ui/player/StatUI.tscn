@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://crvu72pwcnneq"]
+[gd_scene load_steps=24 format=3 uid="uid://crvu72pwcnneq"]
 
 [ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_ct6da"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="1_v8jbf"]
+[ext_resource type="PackedScene" uid="uid://ckmikt60e76dq" path="res://src/ui/player/StatusDurationUI.tscn" id="3_ovi2h"]
 [ext_resource type="Script" path="res://src/ui/boss/health_bar.gd" id="3_yk5mo"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="4_tew2m"]
 [ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="5_71223"]
@@ -284,6 +285,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_ct6da")
+status_duration_ui_prefab = ExtResource("3_ovi2h")
 
 [node name="PlayerHealthBarUI" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -306,9 +308,14 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
+[node name="StatusUIContainer" type="GridContainer" parent="PlayerHealthBarUI/VBoxContainer"]
+layout_mode = 2
+columns = 5
+
 [node name="MarginContainer2" type="MarginContainer" parent="PlayerHealthBarUI/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/margin_top = 10
 
 [node name="MarginContainer" type="MarginContainer" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2"]
 layout_mode = 2
