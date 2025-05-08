@@ -102,3 +102,18 @@ func on_prepare_to_fire():
 		AttributeNameEnum.SCREENSHAKE:
 			owner_barrel.owner_gun.modified_screenshake = calculate_new_value(
 				owner_barrel.owner_gun.modified_screenshake, modify_value, is_perc)
+
+
+func on_reload_start():
+	super ()
+	match attribute:
+		AttributeNameEnum.RELOAD_TIME:
+			owner_barrel.owner_gun.modified_reload_time = calculate_new_value(
+				owner_barrel.owner_gun.modified_reload_time, modify_value, is_perc, false)
+
+func on_reload_end():
+	super ()
+	match attribute:
+		AttributeNameEnum.MAGAZINE_SIZE:
+			owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(
+				owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc)

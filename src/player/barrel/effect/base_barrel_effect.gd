@@ -74,11 +74,11 @@ func on_ammo_consumed():
 func on_clip_empty():
 	return
 
-## Call after started reload (and start the barrel spin).
+## Call after started reload
 func on_reload_start():
 	return
 
-## Call after finished reload (and stopped spinning).
+## Call after finished reload
 func on_reload_end():
 	return
 
