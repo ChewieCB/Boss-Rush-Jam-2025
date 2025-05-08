@@ -280,8 +280,8 @@ func select_attack_phase_2() -> void:
 				attack_str = "start_chip_sweep"
 			elif attack_roll < 50:
 				attack_str = "start_backspin_chip"
-			#elif attack_roll < 75:
-				#attack_str = "start_place_your_bets_attack"
+			elif attack_roll < 75:
+				attack_str = "start_place_your_bets_attack"
 			else:
 				attack_str = "start_slam_attack"
 			
@@ -295,10 +295,12 @@ func select_attack_phase_2() -> void:
 				state_chart.send_event("change_form_big")
 				return
 			else:
-				if attack_roll < 30:
-					attack_str = "start_split_stack_projectiles"
-				elif attack_roll < 50:
-					attack_str = "start_split_stack_arc_attack"
+				# TODO - chip mines defensive attack
+				#
+				#if attack_roll < 30:
+				attack_str = "start_split_stack_projectiles"
+				#elif attack_roll < 50:
+					#attack_str = "start_split_stack_arc_attack"
 				#else:
 					#attack_str = "start_split_stack_aoe_attack"
 			
@@ -416,6 +418,16 @@ func _on_phase_1_state_exited() -> void:
 	# Merge the stack to avoid state headaches
 	await despawn_stacks(0.8)
 	await tween.finished
+	
+	sprite.visible = true
+	#navigation_component.enable()
+	debug_mesh.visible = true
+	health_component.show_damage_text = true
+	
+	# Re-enable collision
+	await get_tree().create_timer(0.3).timeout
+	self.collision_layer = 4
+	self.collision_mask = (pow(2, 1-1) + pow(2, 2-1) + pow(2, 4-1))
 
 
 #### BACKSPIN CHIP
@@ -518,7 +530,7 @@ func _on_chip_mines_jump_state_entered() -> void:
 	GRAVITY = 0
 	
 	var jump_tween: Tween = get_tree().create_tween()
-	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height/2, 0), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height/2, -2), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	
 	await jump_tween.finished
 	await get_tree().create_timer(jump_hang_time/3).timeout
@@ -583,8 +595,20 @@ func get_mine_spawn_position() -> Vector3:
 
 
 #### BIG STACK PLACE YOUR BETS AoE
-# Flood the arena and raise some platforms, leap into the air, 
-# and crash down on the platform the player is currently on
+# Leap into the air and crash down on the 
+# platform the player is currently on, temporarily destroying it
+
+func _on_place_your_bets_targeting_state_entered() -> void:
+	debug_state_label.text = "Place Your Bets | Targeting"
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	
+	await get_tree().create_timer(0.8).timeout
+	
+	state_chart.send_event("start_jump")
+
+
 func _on_place_your_bets_jumping_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Jumping"
 	
@@ -592,7 +616,7 @@ func _on_place_your_bets_jumping_state_entered() -> void:
 	GRAVITY = 0
 	
 	var jump_tween: Tween = get_tree().create_tween()
-	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height, 0), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height, -2), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	
 	await jump_tween.finished
 	await get_tree().create_timer(jump_hang_time).timeout
@@ -620,7 +644,9 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 	await jump_tween.finished
 	await spawn_aoe_wave(aoe_radius, drop_damage, aoe_wave_time)
 	
-	state_chart.send_event("drain_chamber")
+	# TODO - destroy platform
+	
+	state_chart.send_event("end_aoe_attack")
 
 
 #### GENERIC SPLITTING BEHAVIOUR
@@ -733,10 +759,47 @@ func trigger_sequential_substack_attacks(activate_event: String, attack_event: S
 #### SPLIT STACK PROJECTILES
 # Split into multiple smaller stacks, orbit the player, and fire projectiles
 func _on_split_stacks_orbiting_projectiles_targeting_state_entered() -> void:
+	if current_phase == 2:
+		var furthest_targets = aoe_markers.duplicate()
+	
+		# RANDOM ORDER
+		#var shuffled_stacks = spawned_sub_stacks.duplicate()
+		#var available_markers = range(aoe_markers.size())
+		#shuffled_stacks.shuffle()
+		#for i in range(shuffled_stacks.size()):
+			#var stack = shuffled_stacks[i]
+			#var wrapped_idx = wrapi(
+				#i + randi_range(0, available_markers.size()), 
+				#0, 
+				#available_markers.size()
+			#)
+			#var new_target_idx = available_markers.pop_at(wrapped_idx)
+		
+		# CHASE PLAYER
+		for i in range(spawned_sub_stacks.size()):
+			var stack = spawned_sub_stacks[i]
+			
+			furthest_targets.sort_custom(
+			func(a, b):
+				var a_dist: float = a.global_position.distance_to(target.global_position)
+				var b_dist: float = b.global_position.distance_to(target.global_position)
+				if a_dist > b_dist:
+					return true
+				return false
+		)
+			var target_marker: Marker3D = furthest_targets.pop_front()
+			var new_target_idx: int = aoe_markers.find(target_marker)
+			
+			# Dive implementation
+			stack.marker_target_idx = new_target_idx
+	
 	state_chart.send_event("start_attack")
 
 func _on_split_stack_projectiles_attacking_state_entered() -> void:
-	trigger_substack_attack("start_small_projectile_attack")
+	if current_phase == 2:
+		trigger_substack_attack("start_small_projectile_attack_phase_2")
+	else:
+		trigger_substack_attack("start_small_projectile_attack")
 
 
 #### SPLIT STACK CHARGE
@@ -1500,7 +1563,7 @@ func _on_stack_slam_jump_state_entered() -> void:
 	GRAVITY = 0
 	
 	var jump_tween: Tween = get_tree().create_tween()
-	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height/2, 0), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height/2, -2), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	
 	await jump_tween.finished
 	
@@ -1609,11 +1672,9 @@ func _on_split_stacks_phase_2_state_exited() -> void:
 	current_form = ChipBossForms.BIG_STACK
 	big_attacks_performed = 0
 	small_attacks_performed = 0
-	# TODO - trigger big stack AoE attack
-	state_chart.send_event("start_merge_aoe_finisher")
-
-
-func _on_merge_aoe_targeting_state_entered() -> void:
+	
+	await despawn_stacks()
+	
 	sprite.visible = true
 	#navigation_component.enable()
 	debug_mesh.visible = true
@@ -1624,6 +1685,12 @@ func _on_merge_aoe_targeting_state_entered() -> void:
 	self.collision_layer = 4
 	self.collision_mask = (pow(2, 1-1) + pow(2, 2-1) + pow(2, 4-1))
 	
+	# Trigger big stack AoE attack
+	# TODO - make this random chance between attack merge and regular merge
+	state_chart.send_event("start_merge_aoe_finisher")
+
+
+func _on_merge_aoe_targeting_state_entered() -> void:
 	# Hover for a sec before telegraphing the slam
 	await get_tree().create_timer(jump_hang_time).timeout
 	var target_pos: Vector3 = self.global_position
@@ -1678,3 +1745,13 @@ func _on_phase_2_split_normal_state_entered() -> void:
 	#
 	# Split into multiple small stacks, sending each small stack to a platform
 	pass # Replace with function body.
+
+
+func _on_phase_2_stack_slam_targeting_state_entered() -> void:
+	# Move to central platform
+	var move_tween: Tween = get_tree().create_tween()
+	move_tween.tween_property(self, "global_position", Vector3(0, 2, -2), 0.6).set_ease(Tween.EASE_IN)
+	
+	await move_tween.finished
+	
+	_on_stack_slam_targeting_state_entered()

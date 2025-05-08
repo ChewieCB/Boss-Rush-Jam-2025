@@ -139,12 +139,35 @@ func _on_small_blind_targeting_state_entered() -> void:
 	
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.6).timeout
 	state_chart.send_event("start_shooting")
 
 
 func _on_small_blind_targeting_state_physics_processing(delta: float) -> void:
 	orbit_target_in_group(delta)
+
+
+func _on_small_blind_phase_2_targeting_state_entered() -> void:
+	# Pick a free platform far away from the player and move to it
+	var target_marker: Marker3D = aoe_markers[marker_target_idx]
+	
+	self.collision_layer = 0
+	
+	velocity.y += 8.0
+	var tween: Tween = get_tree().create_tween()
+	tween.tween_property(self, "global_position", Vector3(0, 2, -2), 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	tween.chain().tween_property(self, "global_position",target_marker.global_position, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	
+	await tween.finished
+	
+	self.collision_layer = 4
+	
+	_on_small_blind_targeting_state_entered()
+
+
+func _on_small_blind_phase_2_targeting_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
 
 
 func _on_small_blind_shooting_state_entered() -> void:

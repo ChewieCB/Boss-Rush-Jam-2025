@@ -122,37 +122,43 @@ to = NodePath("../../SmallBlindProjectile")
 event = &"start_small_projectile_attack"
 delay_in_seconds = "0.0"
 
-[node name="toSplitRush" type="Node" parent="StateChart/Root/Phase/Idle" index="1"]
+[node name="toSmallBlindProjectilePhase2" type="Node" parent="StateChart/Root/Phase/Idle" index="1"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../SmallBlindProjectilePhase2")
+event = &"start_small_projectile_attack_phase_2"
+delay_in_seconds = "0.0"
+
+[node name="toSplitRush" type="Node" parent="StateChart/Root/Phase/Idle" index="2"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../SplitRush")
 event = &"start_split_rush_attack"
 delay_in_seconds = "0.0"
 
-[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Idle" index="2"]
+[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Idle" index="3"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../PlaceYourBets")
 event = &"start_place_your_bets_attack"
 delay_in_seconds = "0.0"
 
-[node name="toArcWaveSwipe" type="Node" parent="StateChart/Root/Phase/Idle" index="3"]
+[node name="toArcWaveSwipe" type="Node" parent="StateChart/Root/Phase/Idle" index="4"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../ArcWaveSwipe")
 event = &"start_arc_wave_attack"
 delay_in_seconds = "0.0"
 
-[node name="toChargeBack" type="Node" parent="StateChart/Root/Phase/Idle" index="4"]
+[node name="toChargeBack" type="Node" parent="StateChart/Root/Phase/Idle" index="5"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../ChargeBack")
 event = &"start_charge_back_attack"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Idle" index="5"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Idle" index="6"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="toAoEMerge" type="Node" parent="StateChart/Root/Phase/Idle" index="6"]
+[node name="toAoEMerge" type="Node" parent="StateChart/Root/Phase/Idle" index="7"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../AoeMerge")
 event = &"change_form_big_aoe"
@@ -256,7 +262,50 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="SplitRush" type="Node" parent="StateChart/Root/Phase" index="4"]
+[node name="SmallBlindProjectilePhase2" type="Node" parent="StateChart/Root/Phase" index="4"]
+script = ExtResource("4_wmyjd")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectilePhase2" index="0"]
+script = ExtResource("6_yvmou")
+
+[node name="toShooting" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectilePhase2/Targeting" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Shooting")
+event = &"start_shooting"
+delay_in_seconds = "0.0"
+
+[node name="Shooting" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectilePhase2" index="1"]
+script = ExtResource("6_yvmou")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectilePhase2/Shooting" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Recover")
+event = &"stop_shooting"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectilePhase2" index="2"]
+script = ExtResource("6_yvmou")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectilePhase2/Recover" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectilePhase2" index="3"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Idle")
+event = &"end_attack"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/SmallBlindProjectilePhase2" index="4"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="SplitRush" type="Node" parent="StateChart/Root/Phase" index="5"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -302,7 +351,7 @@ delay_in_seconds = "0.0"
 [node name="ReformChargeTimer" type="Timer" parent="StateChart/Root/Phase/SplitRush" index="5"]
 one_shot = true
 
-[node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase" index="5"]
+[node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase" index="6"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -339,7 +388,7 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="ChargeBack" type="Node" parent="StateChart/Root/Phase" index="6"]
+[node name="ChargeBack" type="Node" parent="StateChart/Root/Phase" index="7"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -391,7 +440,7 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="AoeMerge" type="Node" parent="StateChart/Root/Phase" index="7"]
+[node name="AoeMerge" type="Node" parent="StateChart/Root/Phase" index="8"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -450,6 +499,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 [connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectile/Shooting" to="." method="_on_small_blind_shooting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/SmallBlindProjectile/Shooting" to="." method="_on_small_blind_shooting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectile/Recover" to="." method="_on_small_blind_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectilePhase2/Targeting" to="." method="_on_small_blind_phase_2_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/SmallBlindProjectilePhase2/Targeting" to="." method="_on_small_blind_phase_2_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectilePhase2/Shooting" to="." method="_on_small_blind_shooting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectilePhase2/Recover" to="." method="_on_small_blind_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SplitRush/Targeting" to="." method="_on_split_rush_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/SplitRush/Targeting" to="." method="_on_split_rush_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SplitRush/Charging" to="." method="_on_split_rush_charging_state_entered"]

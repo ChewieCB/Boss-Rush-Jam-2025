@@ -117,16 +117,13 @@ shape = SubResource("BoxShape3D_oomx2")
 disabled = true
 
 [node name="HealthComponent" parent="." index="4"]
-max_health = 200.0
+max_health = 1000.0
 
 [node name="NavigationComponent" parent="." index="5"]
 follow_target = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
-
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")
@@ -630,7 +627,13 @@ to = NodePath("../../StackSlam")
 event = &"start_slam_attack"
 delay_in_seconds = "0.0"
 
-[node name="toMergeAoE" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/Idle" index="4"]
+[node name="toPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/Idle" index="4"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../PlaceYourBets")
+event = &"start_place_your_bets_attack"
+delay_in_seconds = "0.0"
+
+[node name="toMergeAoE" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/Idle" index="5"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../MergeAoE")
 event = &"start_merge_aoe_finisher"
@@ -825,15 +828,15 @@ delay_in_seconds = "0.0"
 
 [node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack" index="6"]
 script = ExtResource("4_kiknp")
-initial_state = NodePath("Flooding")
+initial_state = NodePath("Targeting")
 
-[node name="Flooding" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="0"]
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="0"]
 script = ExtResource("5_81kie")
 
-[node name="toJumping" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Flooding" index="0"]
+[node name="toJumping" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Targeting" index="0"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../Jumping")
-event = &"start_aoe_attack"
+event = &"start_jump"
 delay_in_seconds = "0.0"
 
 [node name="Jumping" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="1"]
@@ -848,62 +851,25 @@ delay_in_seconds = "0.0"
 [node name="Crashing" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="2"]
 script = ExtResource("5_81kie")
 
-[node name="toDraining" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Crashing" index="0"]
-script = ExtResource("3_hbmr3")
-to = NodePath("../../Draining")
-event = &"drain_chamber"
-delay_in_seconds = "0.0"
-
-[node name="Draining" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="3"]
-script = ExtResource("5_81kie")
-
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Draining" index="0"]
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Crashing" index="0"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../Recover")
 event = &"end_aoe_attack"
 delay_in_seconds = "0.0"
 
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="4"]
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="3"]
 script = ExtResource("5_81kie")
 
-[node name="toBackspinChip" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="5"]
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Recover" index="0"]
 script = ExtResource("3_hbmr3")
-to = NodePath("../../../../Phase1/BigStack/BackspinChip")
-event = &"start_backspin_chip"
+to = NodePath("../../Targeting")
+event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toSplitStackProjectiles" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="6"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="4"]
 script = ExtResource("3_hbmr3")
-event = &"start_split_stack_projectiles"
-delay_in_seconds = "0.0"
-
-[node name="toSplitStackCharge" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="7"]
-script = ExtResource("3_hbmr3")
-event = &"start_split_stack_charge"
-delay_in_seconds = "0.0"
-
-[node name="toSplitStackPlaceYourBets" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="8"]
-script = ExtResource("3_hbmr3")
-to = NodePath("../../../SplitStacks/SplitStackAoE")
-event = &"start_split_stack_place_your_bets_attack"
-delay_in_seconds = "0.0"
-
-[node name="toChipMines" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="9"]
-script = ExtResource("3_hbmr3")
-to = NodePath("../../../../Phase1/BigStack/ChipMines")
-event = &"start_chip_mines"
-delay_in_seconds = "0.0"
-
-[node name="toChipSweep" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="10"]
-script = ExtResource("3_hbmr3")
-to = NodePath("../../../../Phase1/BigStack/ChipSweep")
-event = &"start_chip_sweep"
-delay_in_seconds = "0.0"
-
-[node name="toStackSlam" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets" index="11"]
-script = ExtResource("3_hbmr3")
-to = NodePath("../../../../Phase1/BigStack/StackSlam")
-event = &"start_slam_attack"
+to = NodePath("../../Idle")
+event = &"end_attack"
 delay_in_seconds = "0.0"
 
 [node name="MergeAoE" type="Node" parent="StateChart/Root/Phase/Phase2/BigStack" index="7"]
@@ -1443,14 +1409,13 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/ChipSweep/Targeting" to="." method="_on_chip_sweep_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/ChipSweep/Sweep" to="." method="_on_chip_sweep_sweep_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/ChipSweep/Recover" to="." method="_on_chip_sweep_recover_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/StackSlam/Targeting" to="." method="_on_stack_slam_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/StackSlam/Targeting" to="." method="_on_phase_2_stack_slam_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/StackSlam/Jump" to="." method="_on_stack_slam_jump_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/StackSlam/Slam" to="." method="_on_stack_slam_slam_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/StackSlam/Recover" to="." method="_on_recover_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Flooding" to="." method="_on_flooding_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Targeting" to="." method="_on_place_your_bets_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Jumping" to="." method="_on_place_your_bets_jumping_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Crashing" to="." method="_on_place_your_bets_crashing_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Draining" to="." method="_on_draining_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/PlaceYourBets/Recover" to="." method="_on_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/MergeAoE/Targeting" to="." method="_on_merge_aoe_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/MergeAoE/Slam" to="." method="_on_merge_aoe_slam_state_entered"]
