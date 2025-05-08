@@ -12,9 +12,9 @@ func on_ammo_consumed():
     var dash_slide_speed_buff = StatusEffect.new()
     dash_slide_speed_buff.display_name = "Dash speed up"
     dash_slide_speed_buff.status_code = "speed_burst_barrel_dash_slide_speed"
-    dash_slide_speed_buff.modified_stat_name = "dash_slide_speed_modifier"
+    dash_slide_speed_buff.modified_stat = StatusEffect.PlayerStatEnum.DASH_SPEED
     dash_slide_speed_buff.value = bonus_dash_speed_perc
-    dash_slide_speed_buff.modify_type = StatusEffect.StatusEffectModifyType.PERCENTAGE
+    dash_slide_speed_buff.modify_type = StatusEffect.ModifyType.PERCENTAGE
     dash_slide_speed_buff.duration = duration
     dash_slide_speed_buff.status_icon = dash_speed_buff_icon
     GameManager.player.add_status_effect(dash_slide_speed_buff)
@@ -22,9 +22,9 @@ func on_ammo_consumed():
     var run_speed_buff = StatusEffect.new()
     run_speed_buff.display_name = "Run speed up"
     run_speed_buff.status_code = "speed_burst_barrel_run_speed"
-    run_speed_buff.modified_stat_name = "run_speed_modifier"
+    run_speed_buff.modified_stat = StatusEffect.PlayerStatEnum.RUN_SPEED
     run_speed_buff.value = bonus_run_speed_perc
-    run_speed_buff.modify_type = StatusEffect.StatusEffectModifyType.PERCENTAGE
+    run_speed_buff.modify_type = StatusEffect.ModifyType.PERCENTAGE
     run_speed_buff.duration = duration
     run_speed_buff.status_icon = run_speed_buff_icon
     GameManager.player.add_status_effect(run_speed_buff)

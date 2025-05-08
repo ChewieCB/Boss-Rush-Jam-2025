@@ -18,6 +18,22 @@ func _ready() -> void:
 		barrel.owner_barrel = owner_barrel
 		child_effects.append(barrel)
 
+func on_barrel_install():
+	for child in child_effects:
+		child.on_barrel_install()
+
+func on_barrel_remove():
+	for child in child_effects:
+		child.on_barrel_remove()
+
+func on_barrel_start_spin():
+	for child in child_effects:
+		child.on_barrel_start_spin()
+
+func on_barrel_stop_spin():
+	for child in child_effects:
+		child.on_barrel_stop_spin()
+
 func on_effect_set():
 	for child in child_effects:
 		child.on_effect_set()

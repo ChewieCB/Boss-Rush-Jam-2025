@@ -312,13 +312,13 @@ func spin_single_barrel(barrel_idx: int) -> void:
 	await get_tree().create_timer(base_spin_time).timeout
 
 	_stop_barrel(barrel_idx)
-	is_reloading = false
 	reload(true)
+	is_reloading = false
 
 
 func _spin_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
-	barrel.get_active_effect().on_barrel_spin()
+	barrel.get_active_effect().on_barrel_start_spin()
 	barrel.start_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("spin")
@@ -333,6 +333,7 @@ func stop_all_barrels() -> void:
 
 func _stop_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
+	barrel.get_active_effect().on_barrel_stop_spin()
 	barrel.stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")

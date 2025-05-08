@@ -30,7 +30,10 @@ func on_barrel_install():
 func on_barrel_remove():
 	return
 
-func on_barrel_spin():
+func on_barrel_start_spin():
+	return
+
+func on_barrel_stop_spin():
 	return
 
 ## Call when an effect is first applied

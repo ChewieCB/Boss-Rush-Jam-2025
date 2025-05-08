@@ -131,13 +131,14 @@ var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
 var base_stats = {
-	"run_speed_modifier": 1,
-	"dash_slide_speed_modifier": 1,
-	"is_invincible": false,
+	StatusEffect.PlayerStatEnum.RUN_SPEED: 1,
+	StatusEffect.PlayerStatEnum.DASH_SPEED: 1,
+	StatusEffect.PlayerStatEnum.IS_INVINVIBLE: false,
+	StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION: 0,
 }
+var current_stats = base_stats.duplicate(true)
 var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
 
-var current_stats = base_stats.duplicate(true)
 var aim_assist_target: Node3D = null
 
 
@@ -152,6 +153,7 @@ func _ready():
 	stat_ui.health_component = health_component
 	stat_ui.luck_component = luck_component
 
+	health_component.show_damage_text = false
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 
@@ -200,15 +202,15 @@ func _unhandled_input(event):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
 		spin_barrels()
-	# DEBUG
+	# DEBUG ONLY
 	elif event.is_action_pressed("input_1"):
 		luck_component.increase_luck(10.0)
 		#current_gun.spin_single_barrel(0)
 	elif event.is_action_pressed("input_2"):
 		luck_component.decrease_luck(10.0)
 		#current_gun.spin_single_barrel(1)
-	#elif event.is_action_pressed("input_3"):
-		#current_gun.spin_single_barrel(2)
+	elif event.is_action_pressed("input_3"):
+		health_component.damage(20)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -338,7 +340,7 @@ func _physics_process(delta):
 	else:
 		vel_horizontal += input_dir * add_speed
 
-	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats["run_speed_modifier"]
+	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats[StatusEffect.PlayerStatEnum.RUN_SPEED]
 
 	# Bonus speed
 	if is_dashing:
@@ -350,7 +352,7 @@ func _physics_process(delta):
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 3)
 
 	var velocity_dir = velocity.normalized()
-	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats["dash_slide_speed_modifier"]
+	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats[StatusEffect.PlayerStatEnum.DASH_SPEED]
 
 	# Let the player ignore the wheelspin if they are moving
 	var floor_velocity = get_platform_velocity()
@@ -653,28 +655,31 @@ func apply_status_effects():
 	var percentage_modifiers = {}
 
 	for status in status_effect_list:
-		if not current_stats.has(status.modified_stat_name):
+		if not current_stats.has(status.modified_stat):
 			continue
-		if status.modify_type == StatusEffect.StatusEffectModifyType.FLAT:
-			flat_modifiers[status.modified_stat_name] = flat_modifiers.get(status.status_code, 0) + status.value
-		elif status.modify_type == StatusEffect.StatusEffectModifyType.PERCENTAGE:
-			percentage_modifiers[status.modified_stat_name] = percentage_modifiers.get(status.status_code, 0) + status.value
-		elif status.modify_type == StatusEffect.StatusEffectModifyType.BOOL:
+		if status.modify_type == StatusEffect.ModifyType.FLAT:
+			flat_modifiers[status.modified_stat] = flat_modifiers.get(status.modified_stat, 0) + status.value
+		elif status.modify_type == StatusEffect.ModifyType.PERCENTAGE:
+			percentage_modifiers[status.modified_stat] = percentage_modifiers.get(status.modified_stat, 0) + status.value
+		elif status.modify_type == StatusEffect.ModifyType.BOOL:
 			if status.value == 1:
-				current_stats[status.modified_stat_name] = true
+				current_stats[status.modified_stat] = true
 			else:
-				current_stats[status.modified_stat_name] = false
+				current_stats[status.modified_stat] = false
 
-	# Apply flat bonuses (additive).
+	# Apply flat bonuses.
 	for stat in flat_modifiers.keys():
 		current_stats[stat] += flat_modifiers[stat]
 
-	# Apply percentage bonuses (multiplicative).
+	# Apply percentage bonuses.
 	for stat in percentage_modifiers.keys():
-		current_stats[stat] *= (1 + percentage_modifiers[stat] / 100.0)
+		current_stats[stat] = current_stats[stat] * (1 + (percentage_modifiers[stat] / 100.0))
 
 	# Other
-	health_component.is_invincible = current_stats["is_invincible"]
+	health_component.received_dmg_multiplier = 1 - (current_stats[StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION] / 100.0)
+	if health_component.received_dmg_multiplier < 0:
+		health_component.received_dmg_multiplier = 0
+	health_component.is_invincible = current_stats[StatusEffect.PlayerStatEnum.IS_INVINVIBLE]
 
 
 func aim_assist(delta: float):
@@ -756,9 +761,9 @@ func add_iframe_on_dash():
 	var iframe_dash_buff = StatusEffect.new()
 	iframe_dash_buff.display_name = "Dodging"
 	iframe_dash_buff.status_code = "iframe_on_dash"
-	iframe_dash_buff.modified_stat_name = "is_invincible"
+	iframe_dash_buff.modified_stat = StatusEffect.PlayerStatEnum.IS_INVINVIBLE
 	iframe_dash_buff.value = 1
-	iframe_dash_buff.modify_type = StatusEffect.StatusEffectModifyType.BOOL
+	iframe_dash_buff.modify_type = StatusEffect.ModifyType.BOOL
 	iframe_dash_buff.duration = dash_iframe_duration
 	iframe_dash_buff.status_icon = dash_iframe_icon
 	add_status_effect(iframe_dash_buff)

@@ -40,10 +40,9 @@ is_perc = true
 [node name="ProtectiveBarrier" type="Node3D" parent="EffectContainer"]
 script = ExtResource("6_61sk6")
 shield_barrier_prefab = ExtResource("7_n73is")
-damage_reduction_perc = 50.0
 display_text_title = "Protective Barrier"
 display_text_tag = "Tough up!"
-display_text_desc = "50% damage resistance"
+display_text_desc = "25% damage resistance"
 
 [node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_rhvms")

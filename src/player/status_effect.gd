@@ -1,27 +1,41 @@
 class_name StatusEffect
 
-enum StatusEffectModifyType {FLAT, PERCENTAGE, BOOL}
+enum PlayerStatEnum {
+	NONE,
+	RUN_SPEED,
+	DASH_SPEED,
+	IS_INVINVIBLE,
+	DAMAGE_REDUCTION, # 100 = 100% resist damage / take no damage
+}
+enum ModifyType {FLAT, PERCENTAGE, BOOL} # How it interact with base value
+
 
 const INFINITE_DURATION = 100000
 
+# NOTE: For simplicity, all stacking effect will be additively
+# Ex: Buff A increased 25% speed, Buff B increased 100% speed, Debuff C reduced 20% speed
+# Total to 25 + 100 - 20 = 105% increased speed.
+
 var display_name: String
 var status_code: String
-var modified_stat_name: String # Which stat this status affects (e.g., "strength", "run_speed_modifier").
-var modify_type: StatusEffectModifyType
+var modified_stat: PlayerStatEnum
+var modify_type: ModifyType
 var value: float
 var duration: float = 0
 var is_bad_effect: bool
 var status_icon: Texture2D
+var show_duration_ui: bool = true
 
 func _to_string() -> String:
     var data = {
         "display_name": display_name,
         "status_code": status_code,
-        "modified_stat_name": modified_stat_name,
-        "modify_type": modify_type,
+        "modified_stat": PlayerStatEnum.keys()[modified_stat],
+        "modify_type": ModifyType.keys()[modify_type],
         "value": value,
         "duration": duration,
         "is_bad_effect": is_bad_effect,
+        "show_duration_ui": show_duration_ui
     }
     return JSON.stringify(data)
 
