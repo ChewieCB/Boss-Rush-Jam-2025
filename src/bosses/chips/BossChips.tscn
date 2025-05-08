@@ -531,9 +531,15 @@ delay_in_seconds = "0.0"
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform" index="3"]
 script = ExtResource("5_81kie")
 
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Recover" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
 [node name="ChargeBack" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks" index="6"]
 script = ExtResource("4_kiknp")
-initial_state = NodePath("Recover")
+initial_state = NodePath("Targeting")
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack" index="0"]
 script = ExtResource("5_81kie")
@@ -560,6 +566,12 @@ script = ExtResource("5_81kie")
 script = ExtResource("3_hbmr3")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack" index="3"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Idle")
+event = &"end_attack"
 delay_in_seconds = "0.0"
 
 [node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
