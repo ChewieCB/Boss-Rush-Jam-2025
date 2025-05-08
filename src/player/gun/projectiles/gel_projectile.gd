@@ -84,6 +84,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		return
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
+			before_damage_applied.emit(body, self)
 			body.health_component.damage(damage)
 			damage_applied.emit(damage, true, global_position)
 	else:

@@ -5,6 +5,7 @@ class_name BaseProjectile
 @export var generic_blood_splatter: PackedScene
 @export var bullet_decal_prefab: PackedScene
 
+signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
 signal damage_applied(damage: float)
 signal impacted
 signal destroyed

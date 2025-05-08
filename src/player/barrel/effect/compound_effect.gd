@@ -97,6 +97,10 @@ func on_damage_calculation():
 	for child in child_effects:
 		child.on_damage_calculation()
 
+func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
+	for child in child_effects:
+		child.on_before_damage_applied(_enemy, _projectile)
+
 func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for child in child_effects:
 		child.on_damage_applied(_has_pos, _pos)

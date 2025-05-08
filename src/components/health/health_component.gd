@@ -41,7 +41,6 @@ func _ready() -> void:
 
 func damage(_damage: float, _color: Color = Color.WHITE) -> void:
 	_damage = round(_damage * received_dmg_multiplier)
-	print("Take dmg: ", _damage)
 	if enabled:
 		if not is_invincible:
 			current_health -= _damage

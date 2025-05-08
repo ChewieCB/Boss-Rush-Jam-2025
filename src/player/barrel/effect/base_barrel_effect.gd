@@ -98,8 +98,13 @@ func on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 func on_projectile_destroyed():
 	return
 
-## Before deal damage to enemy.
+## When bullet go out of barrel
 func on_damage_calculation():
+	return
+
+# When bullet hit enemy but JUST before applied damage
+# TODO: Make BallProjectile also work with this
+func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
 	return
 
 ## After deal damage to enemy.

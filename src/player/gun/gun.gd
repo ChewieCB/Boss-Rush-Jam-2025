@@ -226,11 +226,16 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
 	get_tree().get_root().add_child(bullet_inst)
+	bullet_inst.before_damage_applied.connect(check_barrel_effect_on_before_damage_applied)
 	bullet_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
 	bullet_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
 	bullet_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
 	bullet_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 	bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
+
+func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_before_damage_applied(_enemy, _projectile)
 
 func check_barrel_effect_on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:

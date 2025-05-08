@@ -1,14 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=6 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_5c3j8"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round.gd" id="2_nse0w"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_76tq5"]
-[ext_resource type="Script" path="res://src/player/barrel/add_player_status_effect.gd" id="4_gramu"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="4_gramu"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
 
 [node name="EffectContainer" type="Node3D" parent="."]
+script = ExtResource("2_nse0w")
 
 [node name="Glass cannon" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_5c3j8")
@@ -33,3 +35,10 @@ modified_stat = 4
 value = -25.0
 is_infinite_duration = true
 show_duration_ui = false
+
+[node name="ExecutionerRound" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_nse0w")
+display_text_title = "Executioner Round"
+display_text_tag = "Finish them"
+display_text_desc = "+25% damage when enemy is low life
+-25% damage otherwise"
