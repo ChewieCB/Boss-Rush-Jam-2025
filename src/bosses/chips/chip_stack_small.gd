@@ -54,6 +54,7 @@ var chargeback_return_pos: Vector3
 @export var split_rush_targeting_time: float = 5.0
 @export var charge_speed: float = 40.0
 var charge_target_pos: Vector3
+@onready var reform_charge_timer: Timer = $StateChart/Root/Phase/SplitRush/ReformChargeTimer
 # SFX
 @export_subgroup("Place Your Bets")
 @onready var aoe_markers: Array[Node] = get_tree().get_nodes_in_group("boss_aoe_marker")
@@ -247,7 +248,8 @@ func _on_split_rush_targeting_state_entered() -> void:
 	
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(split_rush_targeting_time).timeout
+	reform_charge_timer.start(split_rush_targeting_time)
+	await reform_charge_timer.timeout
 	
 	state_chart.send_event("attack_telegraph")
 	await get_tree().create_timer(telegraph_time * 2).timeout
@@ -279,6 +281,19 @@ func _on_split_rush_charging_state_entered() -> void:
 	#sfx_player.play()
 	await charge_tween.finished
 	state_chart.send_event("end_charge")
+
+
+func merge_to_pos(pos: Vector3, time: float) -> void:
+	state_chart.send_event("end_attack")
+	var tween: Tween = get_tree().create_tween()
+	# Ignore collisions with player and other stacks
+	self.collision_layer = 0
+	self.collision_mask = 0
+	tween.tween_property(self, "global_position", pos, time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	#sfx_player.stream = sfx_charge.pick_random()
+	#sfx_player.play()
+	await tween.finished
+	self.queue_free()
 
 
 func _on_split_rush_recover_state_entered() -> void:
@@ -442,3 +457,32 @@ func _on_charge_back_leaping_state_physics_processing(delta: float) -> void:
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	if body == target:
 		body.health_component.damage(chargeback_damage)
+
+
+
+func _on_aoe_merge_targeting_state_entered() -> void:
+	debug_state_label.text = "Merge AoE | Targeting"
+	
+	vel_vertical = 0
+	GRAVITY = 0
+	
+	state_chart.send_event("start_merge")
+
+
+func _on_aoe_merge_merging_state_entered() -> void:
+	debug_state_label.text = "Merge AoE | Jumping"
+	
+	var jump_tween: Tween = get_tree().create_tween()
+	jump_tween.tween_property(self, "global_position", Vector3(0, 9.0, 0), 0.9).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	
+	await jump_tween.finished
+	
+	state_chart.send_event("end_merge")
+
+
+func _on_aoe_merge_recover_state_entered() -> void:
+	debug_state_label.text = "Merge AoE | Recovering"
+	desired_distance = DESIRED_DISTANCE
+	health_component.died.emit()
+	health_component.has_died = true
+	state_chart.send_event("end_recovery")

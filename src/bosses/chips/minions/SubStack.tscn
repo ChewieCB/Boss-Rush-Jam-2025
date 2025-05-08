@@ -152,6 +152,12 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
+[node name="toAoEMerge" type="Node" parent="StateChart/Root/Phase/Idle" index="6"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../AoeMerge")
+event = &"change_form_big_aoe"
+delay_in_seconds = "0.0"
+
 [node name="ArcWaveSwipe" type="Node" parent="StateChart/Root/Phase" index="2"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
@@ -293,6 +299,9 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
+[node name="ReformChargeTimer" type="Timer" parent="StateChart/Root/Phase/SplitRush" index="5"]
+one_shot = true
+
 [node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase" index="5"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
@@ -382,6 +391,49 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
+[node name="AoeMerge" type="Node" parent="StateChart/Root/Phase" index="7"]
+script = ExtResource("4_wmyjd")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/AoeMerge" index="0"]
+script = ExtResource("6_yvmou")
+
+[node name="toMerging" type="Node" parent="StateChart/Root/Phase/AoeMerge/Targeting" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Merging")
+event = &"start_merge"
+delay_in_seconds = "0.0"
+
+[node name="Merging" type="Node" parent="StateChart/Root/Phase/AoeMerge" index="1"]
+script = ExtResource("6_yvmou")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AoeMerge/Merging" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Recover")
+event = &"end_merge"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/AoeMerge" index="2"]
+script = ExtResource("6_yvmou")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/AoeMerge/Recover" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/AoeMerge" index="3"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Idle")
+event = &"end_attack"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/AoeMerge" index="4"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
 [node name="SFXPlayer1" type="AudioStreamPlayer3D" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 
@@ -411,3 +463,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 [connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Leaping" to="." method="_on_charge_back_leaping_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ChargeBack/Leaping" to="." method="_on_charge_back_leaping_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Recover" to="." method="_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Targeting" to="." method="_on_aoe_merge_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Merging" to="." method="_on_aoe_merge_merging_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Recover" to="." method="_on_aoe_merge_recover_state_entered"]

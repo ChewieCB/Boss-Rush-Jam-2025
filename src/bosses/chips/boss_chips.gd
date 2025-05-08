@@ -31,13 +31,15 @@ enum ChipBossForms {
 }
 
 var current_form: ChipBossForms
+var prev_form: ChipBossForms
 
 @export_group("Attacks")
 @export_subgroup("Form Transitions")
 @export var max_big_attacks: int = 4
 var big_attacks_performed: int = 0
-@export var max_small_attacks: int = 2
+@export var max_small_attacks: int = 3
 var small_attacks_performed: int = 0
+#
 @export_subgroup("Backspin Chip")
 @export var rolling_chip_projectile: PackedScene
 @export var chips_per_attack: int = 2
@@ -74,6 +76,7 @@ var active_mines: Array = []
 @export var slam_wave_radius: float = 35.0
 @export var slam_delay: float = 0.4
 var completed_slams: int = 0
+var aoe_floor = 0.0
 # SFX
 #
 @export_subgroup("Place Your Bets")
@@ -253,21 +256,56 @@ func select_attack_phase_1() -> void:
 
 
 func select_attack_phase_2() -> void:
+	state_chart.send_event("end_attack")
+	# Weighted random chance attacks
+	# 
+	var attack_str: String = ""
+	var attack_roll: int = randi_range(0, 99)
+	
+	match current_form:
+		ChipBossForms.BIG_STACK:
+			# Transition between big and small forms:
+			if big_attacks_performed >= max_big_attacks:
+				# TODO - split with attack
+				#state_chart.send_event("change_form_split_aoe")
+				state_chart.send_event("change_form_split")
+				return
+			
+			# TODO - move mines to phase 2? Or maybe launch mines and have small stacks move but not attack
+			# If we haven't spawned mines in a while, spawn some
+			#if chip_mine_spawn_timer.is_stopped():
+				#attack_str = "start_chip_mines"
+			#else:
+			if attack_roll < 25:
+				attack_str = "start_chip_sweep"
+			elif attack_roll < 50:
+				attack_str = "start_backspin_chip"
+			#elif attack_roll < 75:
+				#attack_str = "start_place_your_bets_attack"
+			else:
+				attack_str = "start_slam_attack"
+			
+			big_attacks_performed += 1
+		
+		ChipBossForms.SPLIT_STACKS:
+			# Transition between big and small forms:
+			if small_attacks_performed >= max_small_attacks:
+				# TODO - radial attack with reform
+				#state_chart.send_event("change_form_big_aoe")
+				state_chart.send_event("change_form_big")
+				return
+			else:
+				if attack_roll < 30:
+					attack_str = "start_split_stack_projectiles"
+				elif attack_roll < 50:
+					attack_str = "start_split_stack_arc_attack"
+				#else:
+					#attack_str = "start_split_stack_aoe_attack"
+			
+			small_attacks_performed += 1
 	# TODO
-	var possible_phases = [
-		"start_backspin_chip",
-		#"start_",
-		"start_place_your_bets_attack",
-		"start_split_stack_place_your_bets_attack",
-		"start_split_stack_projectiles",
-		"start_split_stack_charge",
-	]
-	if prev_phase:
-		possible_phases.erase(prev_phase)
-	# TODO - add random weighting
-	var new_phase = possible_phases.pick_random()
-	prev_phase = new_phase
-	state_chart.send_event(new_phase)
+	
+	state_chart.send_event(attack_str)
 
 
 func select_attack_phase_3() -> void:
@@ -291,7 +329,7 @@ func select_attack_phase_3() -> void:
 
 #### SUBSTACK METHODS
 #
-func spawn_stacks(stack_count: int, spawn_distance: float) -> Array:
+func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Array = []) -> Array:
 	var spawned_stacks = []
 	# Spawn small stacks from the center point of the big stack and space them out
 	for i in range(stack_count):
@@ -315,6 +353,11 @@ func spawn_stacks(stack_count: int, spawn_distance: float) -> Array:
 		var spawn_pos: Vector3 = self.global_position + (self.global_transform.basis.z * spawn_distance).rotated(
 			Vector3.UP, 2 * PI / stack_count * (i+1)
 		)
+		
+		# If we specify spawn positions, use them instead of distance
+		if spawn_positions:
+			spawn_pos = spawn_positions[i]
+		
 		stack_spawn_tween.tween_property(small_stack_inst, "global_position", spawn_pos, stack_spawn_time)
 		stack_spawn_tween.parallel().tween_property(small_stack_inst, "scale", Vector3.ONE, stack_spawn_time)
 		
@@ -323,7 +366,7 @@ func spawn_stacks(stack_count: int, spawn_distance: float) -> Array:
 	return spawned_stacks
 
 
-func despawn_stacks() -> void:
+func despawn_stacks(despawn_time: float = stack_spawn_time) -> void:
 	for stack in spawned_sub_stacks:
 		var stack_spawn_tween: Tween = get_tree().create_tween()
 		stack_spawn_tween.tween_property(stack, "global_position", self.global_position, stack_spawn_time)
@@ -364,6 +407,15 @@ func _small_stack_dead(stack: CharacterBody3D) -> void:
 func _on_phase_1_state_entered() -> void:
 	current_phase = 1
 	select_attack()
+
+
+func _on_phase_1_state_exited() -> void:
+	var goal_pos = Vector3(0, jump_height, -2)
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "global_position", goal_pos, 0.8).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT)
+	# Merge the stack to avoid state headaches
+	await despawn_stacks(0.8)
+	await tween.finished
 
 
 #### BACKSPIN CHIP
@@ -588,6 +640,40 @@ func _on_splitting_state_entered() -> void:
 	health_component.show_damage_text = false
 	
 	spawned_sub_stacks = await spawn_stacks(3, 2.5)
+	
+	state_chart.send_event("end_attack")
+
+
+func _on_phase_2_splitting_state_entered() -> void:
+	# Move boss to center
+	var move_tween: Tween = get_tree().create_tween()
+	move_tween.tween_property(self, "global_position", Vector3(0, 2, -2), 0.6).set_ease(Tween.EASE_IN)
+	await move_tween.finished
+	# Hide the main boss body and disable collision
+	sprite.visible = false
+	debug_mesh.visible = false
+	navigation_component.disable()
+	
+	# Disable player and projectile collisions
+	self.collision_layer = 0  # None
+	self.collision_mask = 1  # World only
+	hurtbox.set_deferred("monitoring",  false)
+	# TODO - prevent damage numbers showing up
+	health_component.show_damage_text = false
+	
+	# TODO - move spawned stacks onto specific platforms
+	aoe_markers = get_tree().get_nodes_in_group("boss_aoe_marker")
+	var far_platforms = aoe_markers.duplicate()
+	far_platforms.sort_custom(
+		func(a, b):
+			var a_dist: float = a.global_position.distance_to(target.global_position)
+			var b_dist: float = b.global_position.distance_to(target.global_position)
+			if a_dist > b_dist:
+				return true
+			return false
+	)
+	far_platforms = far_platforms.map(func(marker): return marker.global_position)
+	spawned_sub_stacks = await spawn_stacks(3, 0.0, far_platforms)
 	
 	state_chart.send_event("end_attack")
 
@@ -875,6 +961,20 @@ func _on_split_stack_charge_merging_state_entered() -> void:
 
 func _on_phase_2_state_entered() -> void:
 	flood_chamber.emit()
+	current_phase = 2
+	aoe_floor = 2.0
+	
+	state_chart.send_event("start_merge_aoe_finisher")
+	#if current_form == ChipBossForms.BIG_STACK:
+		#state_chart.send_event("start_big_stack")
+		## TODO - move to center platform
+		## TODO - test, trigger the split
+		#
+	#elif current_form == ChipBossForms.SPLIT_STACKS:
+		#state_chart.send_event("start_split_stack")
+		## Change to big stack and jump to middle
+		#state_chart.send_event("change_form_big_aoe_merge")
+	#select_attack()
 
 
 ## Phase 3 - Chiptopede
@@ -1420,7 +1520,7 @@ func _on_stack_slam_slam_state_entered() -> void:
 		scene_root.add_child(shockwave)
 		
 		shockwave.global_transform = self.global_transform
-		#shockwave.global_position.y += 0.4
+		shockwave.global_position.y = aoe_floor
 		shockwave.max_radius = slam_wave_radius
 		shockwave.damage = slam_damage
 		shockwave.wave_time = slam_wave_speed
@@ -1444,6 +1544,9 @@ func _on_split_stacks_state_entered() -> void:
 	current_form = ChipBossForms.SPLIT_STACKS
 	big_attacks_performed = 0
 	small_attacks_performed = 0
+	# We need to trigger the split for phase 2
+	if current_phase == 2:
+		state_chart.send_event("change_form_split")
 
 
 func _on_split_stacks_state_exited() -> void:
@@ -1485,3 +1588,93 @@ func _on_split_stack_charge_back_targeting_state_entered() -> void:
 
 func _on_split_stack_charge_back_attacking_state_entered() -> void:
 	trigger_sequential_substack_attacks("start_charge_back_attack", "start_charge")
+
+
+func _on_phase_2_aoe_merge_targeting_state_entered() -> void:
+	state_chart.send_event("start_merge")
+
+
+func _on_phase_2_aoe_merge_merging_state_entered() -> void:
+	trigger_substack_attack("start_aoe_merge")
+
+
+func _on_split_stacks_phase_2_state_entered() -> void:
+	current_form = ChipBossForms.SPLIT_STACKS
+	big_attacks_performed = 0
+	small_attacks_performed = 0
+	#state_chart.send_event("trigger_split")
+
+
+func _on_split_stacks_phase_2_state_exited() -> void:
+	current_form = ChipBossForms.BIG_STACK
+	big_attacks_performed = 0
+	small_attacks_performed = 0
+	# TODO - trigger big stack AoE attack
+	state_chart.send_event("start_merge_aoe_finisher")
+
+
+func _on_merge_aoe_targeting_state_entered() -> void:
+	sprite.visible = true
+	#navigation_component.enable()
+	debug_mesh.visible = true
+	health_component.show_damage_text = true
+	
+	# Re-enable collision
+	await get_tree().create_timer(0.3).timeout
+	self.collision_layer = 4
+	self.collision_mask = (pow(2, 1-1) + pow(2, 2-1) + pow(2, 4-1))
+	
+	# Hover for a sec before telegraphing the slam
+	await get_tree().create_timer(jump_hang_time).timeout
+	var target_pos: Vector3 = self.global_position
+	target_pos.y = aoe_floor
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "global_position", target_pos, drop_time/2).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	
+	await tween.finished
+	
+	state_chart.send_event("start_slam")
+
+
+func _on_merge_aoe_slam_state_entered() -> void:
+	# Slam down and generate a radial wave AoE on impact
+	var shockwave = slam_shockwave_prefab.instantiate()
+	scene_root.add_child(shockwave)
+	
+	shockwave.global_transform = self.global_transform
+	#shockwave.global_position.y += 0.4
+	shockwave.max_radius = slam_wave_radius
+	shockwave.arc_angle = 360
+	shockwave.arc_thickness_ratio = 0.7
+	shockwave.damage = slam_damage
+	shockwave.wave_time = 1.4
+	shockwave.start_shockwave()
+	
+	# Add pushback if player is in big stack collider
+	if target.global_position.distance_to(self.global_position) <= collider.shape.radius:
+		var pushback_vector = self.global_position.direction_to(target.global_position)
+		target.velocity = Vector3.ZERO
+		target.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * 50.0
+		target.vel_vertical += 15.0
+	
+	await get_tree().create_timer(slam_delay).timeout
+	
+	state_chart.send_event("end_slam")
+
+
+func _on_aoe_merge_recovering_state_entered() -> void:
+	state_chart.send_event("attack_end")
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("cooldown_end")
+	
+	state_chart.send_event("start_merge_aoe_finisher")
+	state_chart.send_event("end_recovery")
+
+
+func _on_phase_2_split_normal_state_entered() -> void:
+	# Tween big stack to center platform
+	#
+	# Split into multiple small stacks, sending each small stack to a platform
+	pass # Replace with function body.
