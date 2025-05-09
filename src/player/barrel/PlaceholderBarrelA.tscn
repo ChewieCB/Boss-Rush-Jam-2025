@@ -54,8 +54,6 @@ display_text_desc = "+25% damage when enemy is low life
 [node name="Longshot" type="Node3D" parent="EffectContainer"]
 visible = false
 script = ExtResource("6_qxk2r")
-distance_threshold = null
-dmg_modify_perc_per_unit = null
 display_text_title = "Longshot"
 display_text_tag = "Keep your distance"
 display_text_desc = "More damage with distance"
