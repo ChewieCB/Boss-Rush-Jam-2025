@@ -135,6 +135,8 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.DASH_SPEED: 1,
 	StatusEffect.PlayerStatEnum.IS_INVINVIBLE: false,
 	StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION: 0,
+	StatusEffect.PlayerStatEnum.LUCK: 0,
+	StatusEffect.PlayerStatEnum.JUMP_HEIGHT: 1,
 }
 var current_stats = base_stats.duplicate(true)
 var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
@@ -421,11 +423,11 @@ func show_debug_label():
 	#debug_label.text += "\nUsing gun: {0}".format([gun_container.get_child(current_gun_slot).data.name])
 
 
-func jump(multiplier = 1.0):
+func jump(local_multiplier = 1.0):
 	if is_in_inventory or controls_disabled:
 		return
 
-	vel_vertical = JUMP_FORCE * multiplier
+	vel_vertical = JUMP_FORCE * current_stats[StatusEffect.PlayerStatEnum.JUMP_HEIGHT] * local_multiplier
 
 	jumped = true
 	state_chart.send_event("jump")
@@ -624,7 +626,7 @@ func add_status_effect(new_status: StatusEffect):
 	for status in status_effect_list:
 		if status.status_code == new_status.status_code:
 			status.duration = max(status.duration, new_status.duration)
-			new_status_effect_added.emit(status)
+			new_status_effect_added.emit(new_status)
 			return
 	status_effect_list.append(new_status)
 	new_status_effect_added.emit(new_status)
@@ -763,7 +765,7 @@ func add_iframe_on_dash():
 	iframe_dash_buff.display_name = "Dodging"
 	iframe_dash_buff.status_code = "iframe_on_dash"
 	iframe_dash_buff.modified_stat = StatusEffect.PlayerStatEnum.IS_INVINVIBLE
-	iframe_dash_buff.value = 1
+	iframe_dash_buff.value = 1 # Doesnt matter
 	iframe_dash_buff.modify_type = StatusEffect.ModifyType.BOOL
 	iframe_dash_buff.duration = dash_iframe_duration
 	iframe_dash_buff.status_icon = dash_iframe_icon

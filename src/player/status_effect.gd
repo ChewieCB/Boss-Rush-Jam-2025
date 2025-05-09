@@ -4,8 +4,10 @@ enum PlayerStatEnum {
 	NONE,
 	RUN_SPEED,
 	DASH_SPEED,
-	IS_INVINVIBLE,
+	IS_INVINVIBLE, # bool
 	DAMAGE_REDUCTION, # 100 = 100% resist damage / take no damage
+    LUCK, # Used in a lot of things. Ex: improve crit chance, increased money drop, chance to dodge bullet
+    JUMP_HEIGHT
 }
 enum ModifyType {FLAT, PERCENTAGE, BOOL} # How it interact with base value
 
@@ -25,6 +27,7 @@ var duration: float = 0
 var is_bad_effect: bool
 var status_icon: Texture2D
 var show_duration_ui: bool = true
+var show_value_on_ui: bool = false
 
 func _to_string() -> String:
     var data = {

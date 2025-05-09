@@ -6,7 +6,7 @@ class_name BaseProjectile
 @export var bullet_decal_prefab: PackedScene
 
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
-signal damage_applied(damage: float)
+signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
 signal impacted
 signal destroyed
 

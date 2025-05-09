@@ -141,7 +141,9 @@ func ricochet():
 	# Offset a bit to prevent stuck inside collision body
 	var new_start_pos = hitscan_col_point - current_dir * RICO_START_POS_OFFSET_MODIFIER
 	new_hitscan_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, speed, max_range)
+	new_hitscan_inst.before_damage_applied.connect(owner_gun.check_barrel_effect_on_before_damage_applied)
 	new_hitscan_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
+	new_hitscan_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
 	new_hitscan_inst.impacted.connect(owner_gun.check_barrel_effect_on_projectile_impact)
 	new_hitscan_inst.destroyed.connect(owner_gun.check_barrel_effect_on_projectile_destroyed)
 

@@ -117,16 +117,10 @@ sfx_jump_ground = Array[AudioStream]([ExtResource("28_k5crr")])
 sfx_jump_air = Array[AudioStream]([ExtResource("29_xv6x8")])
 sfx_dash_floor = Array[AudioStream]([ExtResource("30_on7sg")])
 sfx_dash_air = Array[AudioStream]([ExtResource("31_pnqxi")])
-can_wall_jump = null
-can_wall_cling = null
 max_air_jump = 1
-dash_cd = null
-dash_iframe_duration = null
-angular_momentum_multiplier = null
 speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
-luck_redeem_time = null
 reroll_heal_value = 20.0
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]

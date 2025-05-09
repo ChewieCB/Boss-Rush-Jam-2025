@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_ct6da"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="1_v8jbf"]
-[ext_resource type="PackedScene" uid="uid://ckmikt60e76dq" path="res://src/ui/player/StatusDurationUI.tscn" id="3_ovi2h"]
+[ext_resource type="PackedScene" uid="uid://q6qasacer4wj" path="res://src/ui/player/StatusDurationUI.tscn" id="3_ovi2h"]
 [ext_resource type="Script" path="res://src/ui/boss/health_bar.gd" id="3_yk5mo"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="4_tew2m"]
 [ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="5_71223"]

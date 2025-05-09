@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=12 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_5c3j8"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/trigger_leg_effect.gd" id="8_vqioa"]
 [ext_resource type="Script" path="res://src/player/barrel/crit_chance_effect.gd" id="9_csjtn"]
 [ext_resource type="Script" path="res://src/player/barrel/reactive_shot_effect.gd" id="10_4ovwp"]
+[ext_resource type="Script" path="res://src/player/barrel/card_counting_system_effect.gd" id="11_4doj4"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
@@ -99,7 +100,15 @@ modify_value = 50.0
 is_perc = true
 
 [node name="ReactiveShot" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("10_4ovwp")
 display_text_title = "Reactive Shot"
 display_text_tag = "Payback time!"
 display_text_desc = "+100% damage for 1s after get hit"
+
+[node name="CardCountingSystem" type="Node3D" parent="EffectContainer"]
+script = ExtResource("11_4doj4")
+display_text_title = "The System"
+display_text_tag = "Trust me brother"
+display_text_desc = "+10% damage for each missed shot
+Reset on reload"

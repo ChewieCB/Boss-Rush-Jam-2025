@@ -10,7 +10,8 @@ class_name BallProjectile
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
-signal damage_applied
+signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
+signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
 signal impacted
 signal destroyed
 
@@ -64,7 +65,7 @@ func ricochet():
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		body.health_component.damage(damage)
-		damage_applied.emit(true, global_position)
+		damage_applied.emit(damage, true, global_position)
 		create_blood_splatter(global_position, Vector3.UP)
 	else:
 		if body is Shield:

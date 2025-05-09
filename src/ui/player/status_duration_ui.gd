@@ -6,9 +6,21 @@ extends TextureProgressBar
 @export var default_status_up: Texture2D
 
 @onready var timer: Timer = $Timer
+@onready var label: Label = $Label
 
 var status_effect: StatusEffect
 var max_time: float
+
+
+func _process(_delta: float) -> void:
+	if status_effect == null:
+		return
+	# Status_effect timetracking is handled in Player.gd, and since it's a
+	# referenced object, it duration value (aka duration left) will change here too
+	value = int((status_effect.duration / max_time) * 100)
+	if status_effect.duration <= 0:
+		call_deferred("queue_free")
+
 
 func init(_status_effect: StatusEffect) -> void:
 	status_effect = _status_effect
@@ -32,21 +44,19 @@ func init(_status_effect: StatusEffect) -> void:
 	max_time = status_effect.duration
 	timer.start(status_effect.duration)
 
+	if status_effect.show_value_on_ui:
+		label.text = str(int(status_effect.value))
+	else:
+		label.text = ""
 
 func refresh(updated_status: StatusEffect):
 	status_effect = updated_status
 	max_time = status_effect.duration
 	timer.start(status_effect.duration)
+	if status_effect.show_value_on_ui:
+		label.text = str(int(status_effect.value))
+	else:
+		label.text = ""
 
 func remove():
 	call_deferred("queue_free")
-
-
-func _process(_delta: float) -> void:
-	if status_effect == null:
-		return
-	# Staus_effect timetracking is handled in Player.gd, and since it's a
-	# referenced object, it duration value (aka duration left) will change here too
-	value = int((status_effect.duration / max_time) * 100)
-	if status_effect.duration <= 0:
-		call_deferred("queue_free")

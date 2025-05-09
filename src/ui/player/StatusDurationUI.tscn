@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckmikt60e76dq"]
+[gd_scene load_steps=6 format=3 uid="uid://q6qasacer4wj"]
 
 [ext_resource type="Texture2D" uid="uid://beqyxuvocv7t1" path="res://assets/sprite/buff_icon/invincible.png" id="1_ppsxb"]
 [ext_resource type="Script" path="res://src/ui/player/status_duration_ui.gd" id="2_2xq5q"]
 [ext_resource type="Texture2D" uid="uid://b6h85ewtcxeuk" path="res://assets/sprite/buff_icon/default_status_down.png" id="3_17ouo"]
 [ext_resource type="Texture2D" uid="uid://cuxy2kx47ip57" path="res://assets/sprite/buff_icon/default_status_up.png" id="4_a22mu"]
+[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="5_fdk32"]
 
 [node name="StatusDurationUI" type="TextureProgressBar"]
 custom_minimum_size = Vector2(64, 64)
@@ -21,5 +22,25 @@ default_status_down = ExtResource("3_17ouo")
 default_status_up = ExtResource("4_a22mu")
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -32.0
+offset_right = 20.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("5_fdk32")
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
