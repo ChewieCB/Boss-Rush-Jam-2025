@@ -35,9 +35,9 @@ var prev_form: ChipBossForms
 
 @export_group("Attacks")
 @export_subgroup("Form Transitions")
-@export var max_big_attacks: int = 4
+@export var max_big_attacks: int = 3
 var big_attacks_performed: int = 0
-@export var max_small_attacks: int = 3
+@export var max_small_attacks: int = 2
 var small_attacks_performed: int = 0
 #
 @export_subgroup("Backspin Chip")
@@ -297,10 +297,10 @@ func select_attack_phase_2() -> void:
 			else:
 				# TODO - chip mines defensive attack
 				#
-				#if attack_roll < 30:
+				#if attack_roll <w 30:
 				attack_str = "start_split_stack_projectiles"
 				#elif attack_roll < 50:
-					#attack_str = "start_split_stack_arc_attack"
+				#attack_str = "start_split_stack_arc_attack"
 				#else:
 					#attack_str = "start_split_stack_aoe_attack"
 			
@@ -669,22 +669,6 @@ func _on_splitting_state_entered() -> void:
 
 
 func _on_phase_2_splitting_state_entered() -> void:
-	# Move boss to center
-	var move_tween: Tween = get_tree().create_tween()
-	move_tween.tween_property(self, "global_position", Vector3(0, 2, -2), 0.6).set_ease(Tween.EASE_IN)
-	await move_tween.finished
-	# Hide the main boss body and disable collision
-	sprite.visible = false
-	debug_mesh.visible = false
-	navigation_component.disable()
-	
-	# Disable player and projectile collisions
-	self.collision_layer = 0  # None
-	self.collision_mask = 1  # World only
-	hurtbox.set_deferred("monitoring",  false)
-	# TODO - prevent damage numbers showing up
-	health_component.show_damage_text = false
-	
 	# TODO - move spawned stacks onto specific platforms
 	aoe_markers = get_tree().get_nodes_in_group("boss_aoe_marker")
 	var far_platforms = aoe_markers.duplicate()
@@ -759,6 +743,12 @@ func trigger_sequential_substack_attacks(activate_event: String, attack_event: S
 func _on_split_stacks_orbiting_projectiles_targeting_state_entered() -> void:
 	if current_phase == 2:
 		var furthest_targets = aoe_markers.duplicate()
+		
+		furthest_targets.filter(
+			func(marker):
+				# Hacky way to filter out the central platform
+				return marker.global_position != Vector3(0, 2, -2)
+		)
 	
 		# RANDOM ORDER
 		#var shuffled_stacks = spawned_sub_stacks.duplicate()
@@ -784,7 +774,7 @@ func _on_split_stacks_orbiting_projectiles_targeting_state_entered() -> void:
 				if a_dist > b_dist:
 					return true
 				return false
-		)
+			)
 			var target_marker: Marker3D = furthest_targets.pop_front()
 			var new_target_idx: int = aoe_markers.find(target_marker)
 			
@@ -1024,6 +1014,8 @@ func _on_phase_2_state_entered() -> void:
 	flood_chamber.emit()
 	current_phase = 2
 	aoe_floor = 2.0
+	big_attacks_performed = 0
+	small_attacks_performed = 0
 	
 	state_chart.send_event("start_merge_aoe_finisher")
 	#if current_form == ChipBossForms.BIG_STACK:
@@ -1667,7 +1659,22 @@ func _on_split_stacks_phase_2_state_entered() -> void:
 	current_form = ChipBossForms.SPLIT_STACKS
 	big_attacks_performed = 0
 	small_attacks_performed = 0
-	#state_chart.send_event("trigger_split")
+	
+	# Move boss to center
+	var move_tween: Tween = get_tree().create_tween()
+	move_tween.tween_property(self, "global_position", Vector3(0, 2, -2), 0.6).set_ease(Tween.EASE_IN)
+	await move_tween.finished
+	# Hide the main boss body and disable collision
+	sprite.visible = false
+	debug_mesh.visible = false
+	navigation_component.disable()
+	
+	# Disable player and projectile collisions
+	self.collision_layer = 0  # None
+	self.collision_mask = 1  # World only
+	hurtbox.set_deferred("monitoring",  false)
+	# TODO - prevent damage numbers showing up
+	health_component.show_damage_text = false
 
 
 func _on_split_stacks_phase_2_state_exited() -> void:

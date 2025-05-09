@@ -178,10 +178,10 @@ func _physics_process(delta: float) -> void:
 	# DEBUG
 	# TODO - add export var for burning status length so we can configure it
 	# per boss/effect
-	if Input.is_action_just_pressed("input_1"):
-		apply_status(StatusEffects.BURNING, 5.0)
-	if Input.is_action_just_pressed("input_2"):
-		apply_status(StatusEffects.POISONED, 12.0)
+	#if Input.is_action_just_pressed("input_1"):
+		#apply_status(StatusEffects.BURNING, 5.0)
+	#if Input.is_action_just_pressed("input_2"):
+		#apply_status(StatusEffects.POISONED, 12.0)
 
 
 func jump(multiplier = 1.0) -> void:

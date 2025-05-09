@@ -37,8 +37,8 @@ desired_distance = null
 angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
-max_big_attacks = 4
-max_small_attacks = 3
+max_big_attacks = 3
+max_small_attacks = 2
 rolling_chip_projectile = ExtResource("6_dth1w")
 chips_per_attack = 2
 chip_sweep_count = 3
@@ -124,6 +124,9 @@ follow_target = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")
