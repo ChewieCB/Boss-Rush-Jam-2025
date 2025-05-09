@@ -314,9 +314,7 @@ func select_attack_phase_3() -> void:
 	var possible_phases = [
 		"start_leap_attack",
 		"start_leap_attack",
-		"start_leap_attack",
 		"start_snake_attack",
-		"start_shoot_attack",
 		"start_shoot_attack",
 		"start_shoot_attack",
 	]
@@ -1043,6 +1041,10 @@ func _on_phase_2_state_entered() -> void:
 ## Phase 3 - Chiptopede
 
 func _on_phase_3_state_entered() -> void:
+	current_phase = 3
+	
+	await despawn_stacks()
+	
 	# Hide the main boss body and disable collision
 	sprite.visible = false
 	debug_mesh.visible = false
