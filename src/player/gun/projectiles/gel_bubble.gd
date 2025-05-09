@@ -25,6 +25,7 @@ var start_deflate = false
 var deflate_speed = 30
 
 func _ready() -> void:
+	super ()
 	delayed = true
 	mesh_instance.visible = false
 	mesh_instance.scale = Vector3.ONE * 0.01
@@ -34,6 +35,10 @@ func _ready() -> void:
 	life_timer.start()
 	delayed = false
 	mesh_instance.visible = true
+
+
+func _process(delta: float) -> void:
+	super (delta)
 
 
 func _physics_process(delta: float) -> void:
@@ -55,6 +60,7 @@ func _physics_process(delta: float) -> void:
 		look_at(global_position + dir_to_target)
 
 	global_position -= transform.basis.z * projectile_speed * delta
+	travelled_distance += projectile_speed * delta
 	# When bubble stop moving forward, make it flight up
 	global_position += Vector3.UP * 1 * delta
 
@@ -66,7 +72,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	var rand_damage_mod = int(randf_range(-_damage / 3.0, _damage / 3.0))
+	var rand_damage_mod = get_damamge_variance_modifier(_damage)
 	damage = _damage + rand_damage_mod
 	current_dir = dir
 	ricochet_count_left = ricochet_count

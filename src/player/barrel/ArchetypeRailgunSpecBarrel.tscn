@@ -167,7 +167,7 @@ new_value = 0.4
 [node name="SetReloadTime" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
 attribute = 8
-new_value = 2.5
+new_value = 3.5
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("5_uqnjt")

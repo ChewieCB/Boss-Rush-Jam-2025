@@ -27,6 +27,14 @@ var sticked = false
 var start_deflate = false
 
 
+func _ready() -> void:
+	super ()
+
+
+func _process(delta: float) -> void:
+	super (delta)
+
+
 func _physics_process(delta: float) -> void:
 	if sticked:
 		if start_deflate:
@@ -49,6 +57,7 @@ func _physics_process(delta: float) -> void:
 
 	# Make it fly forward
 	global_position -= transform.basis.z * projectile_speed * delta
+	travelled_distance += projectile_speed * delta
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
@@ -58,7 +67,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	var rand_damage_mod = int(randf_range(-_damage / 3.0, _damage / 3.0))
+	var rand_damage_mod = get_damamge_variance_modifier(_damage)
 	damage = _damage + rand_damage_mod
 	current_dir = dir
 	ricochet_count_left = ricochet_count

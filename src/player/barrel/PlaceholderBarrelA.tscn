@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=8 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_5c3j8"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round.gd" id="2_nse0w"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_76tq5"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="4_gramu"]
+[ext_resource type="Script" path="res://src/player/barrel/longshot_effect.gd" id="6_qxk2r"]
+[ext_resource type="Script" path="res://src/player/barrel/slow_roller_effect.gd" id="7_stjrl"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
@@ -12,7 +14,8 @@ script = ExtResource("1_xtoip")
 [node name="EffectContainer" type="Node3D" parent="."]
 script = ExtResource("2_nse0w")
 
-[node name="Glass cannon" type="Node3D" parent="EffectContainer"]
+[node name="GlassCannon" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_5c3j8")
 display_text_title = "Glass Cannon
 "
@@ -21,13 +24,13 @@ display_text_desc = "+25% damage
 +25% damage taken
 "
 
-[node name="ModifyDamage" type="Node3D" parent="EffectContainer/Glass cannon"]
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/GlassCannon"]
 script = ExtResource("3_76tq5")
 attribute = 1
 modify_value = 25.0
 is_perc = true
 
-[node name="ModifyDamageTaken" type="Node3D" parent="EffectContainer/Glass cannon"]
+[node name="ModifyDamageTaken" type="Node3D" parent="EffectContainer/GlassCannon"]
 script = ExtResource("4_gramu")
 display_name = "Increased damage taken"
 status_code = "glass_cannon_damage_reduction_debuff"
@@ -37,8 +40,34 @@ is_infinite_duration = true
 show_duration_ui = false
 
 [node name="ExecutionerRound" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_nse0w")
 display_text_title = "Executioner Round"
 display_text_tag = "Finish them"
 display_text_desc = "+25% damage when enemy is low life
 -25% damage otherwise"
+
+[node name="Longshot" type="Node3D" parent="EffectContainer"]
+visible = false
+script = ExtResource("6_qxk2r")
+distance_threshold = null
+dmg_modify_perc_per_unit = null
+display_text_title = "Longshot"
+display_text_tag = "Keep your distance"
+display_text_desc = "More damage with distance"
+
+[node name="SlowRoller" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_5c3j8")
+display_text_title = "Slow Roller"
+display_text_tag = "Oh, the anticipation!"
+display_text_desc = "Longer bullet flight time, higher damage
+-50% projectile speed"
+
+[node name="SlowRollerEffect" type="Node3D" parent="EffectContainer/SlowRoller"]
+script = ExtResource("7_stjrl")
+
+[node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/SlowRoller"]
+script = ExtResource("3_76tq5")
+attribute = 3
+modify_value = -50.0
+is_perc = true

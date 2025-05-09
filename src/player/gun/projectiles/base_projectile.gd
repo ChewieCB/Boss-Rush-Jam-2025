@@ -10,6 +10,8 @@ signal damage_applied(damage: float)
 signal impacted
 signal destroyed
 
+const DAMAGE_VARIANCE = 0.2
+
 var damage = 1
 var ricochet_count_left = 0
 var owner_gun: Gun
@@ -18,6 +20,19 @@ var homing_strength = 0 # radius to search for enemy
 var homing_locked_in = false
 var homing_target = null
 var delayed_time = 1
+
+# Statistics traking or barrel effect
+var life_time = 0
+var spawn_pos = Vector3.ZERO
+var travelled_distance = 0
+
+
+func _ready() -> void:
+	spawn_pos = global_position
+	life_time = 0
+
+func _process(delta: float) -> void:
+	life_time += delta
 
 func create_spark(pos: Vector3, normal: Vector3):
 	if spark_effect == null:
@@ -64,3 +79,7 @@ func create_bullet_decal(pos: Vector3, normal: Vector3):
 
 func ricochet():
 	return
+
+
+func get_damamge_variance_modifier(_damage: int) -> int:
+	return int(randf_range(-_damage * DAMAGE_VARIANCE, _damage * DAMAGE_VARIANCE))

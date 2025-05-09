@@ -25,6 +25,7 @@ const RICO_START_POS_OFFSET_MODIFIER = 0.01
 const HITSCAN_HOMING_STRENTH_MODIFIER = 2
 
 func _ready():
+	super ()
 	var dup_mat = mesh.material_override.duplicate()
 	mesh.material_override = dup_mat
 	if shot_flash_start:
@@ -33,6 +34,7 @@ func _ready():
 		shot_flash_start.modulate = mesh.material_override.get_shader_parameter("color")
 
 func _process(delta):
+	super (delta)
 	alpha -= delta * fade_speed
 	alpha = clamp(alpha, 0, 1)
 	mesh.material_override.set_shader_parameter("fade_multiplier", alpha)
@@ -70,7 +72,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 	# Normal hitscan start here
 	life_timer.start()
-	var rand_damage_mod = int(randf_range(-_damage / 3.0, _damage / 3.0))
+	var rand_damage_mod = get_damamge_variance_modifier(_damage)
 	damage = _damage + rand_damage_mod
 	speed = _speed
 	ricochet_count_left = ricochet_count
@@ -87,6 +89,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
 		end_pos = hitscan_col_point
+		travelled_distance += start_pos.distance_to(end_pos)
 		impacted.emit(true, hitscan_col_point)
 		if target is CharacterBody3D:
 			before_damage_applied.emit(target, self)
@@ -131,6 +134,9 @@ func ricochet():
 	new_hitscan_inst.owner_gun = owner_gun
 	new_hitscan_inst.is_ricochet_shot = true
 	new_hitscan_inst.homing_strength = homing_strength
+	new_hitscan_inst.spawn_pos = spawn_pos
+	new_hitscan_inst.life_time = new_hitscan_inst.life_time
+	new_hitscan_inst.travelled_distance = new_hitscan_inst.travelled_distance
 	var new_dir = current_dir.bounce(hitscan_col_normal)
 	# Offset a bit to prevent stuck inside collision body
 	var new_start_pos = hitscan_col_point - current_dir * RICO_START_POS_OFFSET_MODIFIER
@@ -152,15 +158,11 @@ func angle_between_vectors(vec1: Vector3, vec2: Vector3) -> float:
 	# Normalize the vectors
 	var vec1_normalized = vec1.normalized()
 	var vec2_normalized = vec2.normalized()
-	
 	# Calculate the dot product
 	var dot_product = vec1_normalized.dot(vec2_normalized)
-	
 	# Clamp the dot product to avoid floating-point errors (to keep it between -1 and 1)
 	dot_product = clamp(dot_product, -1.0, 1.0)
-	
 	# Calculate the angle in radians
 	var angle_radians = acos(dot_product)
-	
 	# Convert the angle to degrees
 	return rad_to_deg(angle_radians)
