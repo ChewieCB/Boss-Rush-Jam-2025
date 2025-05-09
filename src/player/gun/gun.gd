@@ -254,6 +254,10 @@ func check_barrel_effect_on_dash_movement():
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_dash_movement()
 
+func check_barrel_effect_on_player_damaged():
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_player_damaged()
+
 func pull_trigger():
 	if not is_trigger_pulled:
 		is_trigger_pulled = true

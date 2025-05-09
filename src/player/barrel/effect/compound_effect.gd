@@ -120,3 +120,8 @@ func on_weapon_switched_to():
 func on_dash_movement():
 	for child in child_effects:
 		child.on_dash_movement()
+
+
+func on_player_damaged():
+	for child in child_effects:
+		child.on_player_damaged()

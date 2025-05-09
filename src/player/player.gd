@@ -174,6 +174,7 @@ func _ready():
 	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
 	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
+	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
 	update_ammo_counter_ui()
 
 func _unhandled_input(event):

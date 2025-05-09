@@ -122,3 +122,6 @@ func on_weapon_switched_to():
 
 func on_dash_movement():
 	return
+
+func on_player_damaged():
+	return
