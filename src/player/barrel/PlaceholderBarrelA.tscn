@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=10 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_5c3j8"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="4_gramu"]
 [ext_resource type="Script" path="res://src/player/barrel/longshot_effect.gd" id="6_qxk2r"]
 [ext_resource type="Script" path="res://src/player/barrel/slow_roller_effect.gd" id="7_stjrl"]
+[ext_resource type="Script" path="res://src/player/barrel/trigger_leg_effect.gd" id="8_vqioa"]
+[ext_resource type="Script" path="res://src/player/barrel/crit_chance_effect.gd" id="9_csjtn"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
@@ -57,6 +59,7 @@ display_text_tag = "Keep your distance"
 display_text_desc = "More damage with distance"
 
 [node name="SlowRoller" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_5c3j8")
 display_text_title = "Slow Roller"
 display_text_tag = "Oh, the anticipation!"
@@ -70,4 +73,25 @@ script = ExtResource("7_stjrl")
 script = ExtResource("3_76tq5")
 attribute = 3
 modify_value = -50.0
+is_perc = true
+
+[node name="TriggerLeg" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_5c3j8")
+display_text_title = "Trigger Leg"
+display_text_tag = "Be one with your feet"
+display_text_desc = "Can only shoot when you dash
++50% crit chance
++50% damage"
+
+[node name="TriggerLegEffect" type="Node3D" parent="EffectContainer/TriggerLeg"]
+script = ExtResource("8_vqioa")
+
+[node name="CritChanceEffect" type="Node3D" parent="EffectContainer/TriggerLeg"]
+script = ExtResource("9_csjtn")
+crit_chance = 50.0
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/TriggerLeg"]
+script = ExtResource("3_76tq5")
+attribute = 1
+modify_value = 50.0
 is_perc = true

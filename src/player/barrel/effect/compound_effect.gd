@@ -116,3 +116,7 @@ func on_status_effect_tick():
 func on_weapon_switched_to():
 	for child in child_effects:
 		child.on_weapon_switched_to()
+
+func on_dash_movement():
+	for child in child_effects:
+		child.on_dash_movement()
