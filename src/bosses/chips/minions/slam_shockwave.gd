@@ -27,7 +27,8 @@ func start_shockwave(wipe_arc: bool = false) -> void:
 	tween.parallel().tween_property(mesh.mesh, "outer_radius", max_radius, wave_time)
 	tween.parallel().tween_property(collider.shape, "radius", max_radius, wave_time)
 	if wipe_arc:
-		tween.parallel().tween_method(_set_arc_angle, 0.1, arc_angle, wave_time)
+		pass
+		#tween.parallel().tween_method(_set_arc_angle, 0.1, arc_angle, wave_time)
 		
 	#tween.parallel().tween_property(collider.shape)
 	

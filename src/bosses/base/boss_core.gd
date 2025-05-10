@@ -90,6 +90,7 @@ var ranged_phase_count: int = 0
 var area_phase_count: int = 0
 
 @export_group("Attacks")
+@export var attack_targeting_time: float = 0.5
 @export var attack_recovery_time: float = 0.5
 @export_subgroup("Charge")
 # Charge Attack

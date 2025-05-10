@@ -15,6 +15,8 @@ signal substack_dive_finished(stack: ChipBossSubStack)
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
 @export var time_elapsed: float = 0.0
+@export var idle_radius := 1.5
+var idle_time := 0.0
 @export_subgroup("Orbiting Movement")
 @export var angle_speed: float = 1.0 # radians/second
 @export var orbit_angle: float = 0.0 # track this over time
@@ -33,12 +35,12 @@ signal substack_dive_finished(stack: ChipBossSubStack)
 @export var num_swipes: int = 2
 @export var delay_between_swipe: float = 0.4
 @export var swipe_damage: float = 4.0
-@export var swipe_range: float = 10.0
+@export var swipe_range: float = 25.0
 @export var swipe_radius: float = 8.0
 @export var swipe_height_scale: float = 0.12
-@export var swipe_lifetime: float = 0.35
+@export var swipe_speed: float = 15.0
 @export var swipe_targeting_timeout: float = 2.0
-@onready var swipe_targeting_timer: Timer = $StateChart/Root/Phase/ArcWaveSwipe/MeleeTargetingTimer
+@onready var swipe_targeting_timer: Timer = $MeleeTargetingTimer
 # SFX
 #
 @export_subgroup("Chargeback")
@@ -106,9 +108,19 @@ func melee_approach(delta: float) -> void:
 	var chase_direction: Vector3 = self.global_position.direction_to(target.global_position)
 	var perpendicular: Vector3 = chase_direction.rotated(Vector3.UP, PI / 2)
 	var wave_offset = perpendicular * sin(time_elapsed * wave_frequency) * wave_amplitude
-	var desired_position = target.global_position + wave_offset
-	navigation_component.set_nav_target_position(desired_position)
+	#var desired_position = target.global_position + wave_offset
+	#navigation_component.set_nav_target_position(desired_position)
+	velocity += wave_offset
 	move_and_slide()
+
+
+func platform_idle(delta) -> void:
+	idle_time += delta
+	var offset_x: float = sin(idle_time * 1.7) * idle_radius
+	var offset_y: float = cos(idle_time * 2.3) * idle_radius
+	var target_pos: Vector3 = aoe_markers[marker_target_idx].global_position + \
+		Vector3(offset_x, 0, offset_y)
+	self.global_position = target_pos
 
 
 func orbit_center_in_group(delta: float, is_evasive: bool = false) -> void:
@@ -167,8 +179,7 @@ func _on_small_blind_phase_2_targeting_state_entered() -> void:
 
 func _on_small_blind_phase_2_targeting_state_physics_processing(delta: float) -> void:
 	return
-	#velocity.y -= GRAVITY * delta
-	#move_and_slide()
+	platform_idle(delta)
 
 
 func _on_small_blind_shooting_state_entered() -> void:
@@ -215,6 +226,17 @@ func _on_arc_swipe_targeting_state_physics_processing(delta: float) -> void:
 	orbit_center_in_group(delta, true)
 
 
+func _on_arc_swipe_phase_2_targeting_state_entered() -> void:
+	debug_state_label.text = "Arc Wave Swipe | Targeting"
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("start_closing")
+
+
+func _on_arc_swipe_phase_2_targeting_state_physics_processing(delta: float) -> void:
+	return
+	platform_idle(delta)
+
+
 func _on_arc_swipe_closing_state_entered() -> void:
 	debug_state_label.text = "Arc Wave Swipe | Closing"
 	swipe_targeting_timer.start(swipe_targeting_timeout)
@@ -234,6 +256,38 @@ func _on_arc_swipe_closing_state_physics_processing(delta: float) -> void:
 	melee_approach(delta)
 
 
+func _on_arc_swipe_phase_2_closing_state_entered() -> void:
+	# Pick a free platform close to the player and move to it
+	var target_marker: Marker3D = aoe_markers[marker_target_idx]
+	
+	if self.global_position != target_marker.global_position:
+		self.collision_layer = 0
+		
+		velocity.y += 8.0
+		var tween: Tween = get_tree().create_tween()
+		tween.chain().tween_property(self, "global_position", target_marker.global_position, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+		
+		await tween.finished
+		
+		self.collision_layer = 4
+	
+	_on_arc_swipe_closing_state_entered()
+
+
+func _on_arc_swipe_phase_2_closing_state_physics_processing(delta: float) -> void:
+	# Trigger swipe
+	if self.global_position.distance_to(target.global_position) <= swipe_range:
+		swipe_targeting_timer.stop()
+		state_chart.send_event("start_targeting")
+		state_chart.send_event("attack_telegraph")
+		await get_tree().create_timer(telegraph_time).timeout
+		state_chart.send_event("attack_start")
+		state_chart.send_event("start_swipe")
+	
+	return
+	platform_idle(delta)
+
+
 func _on_arc_swipe_swiping_state_entered() -> void:
 	debug_state_label.text = "Arc Wave Swipe | Swiping"
 	
@@ -244,24 +298,20 @@ func _on_arc_swipe_swiping_state_entered() -> void:
 	state_chart.send_event("attack_start")
 	
 	for i in num_swipes:
-		var swipe = swipe_prefab.instantiate()
-		scene_root.add_child(swipe)
-		
-		swipe.global_transform = projectile_spawn_marker.global_transform
-		swipe.look_at(target.global_position)
-		# Rotate swipe to be ~45 degrees instead of horizontal
-		swipe.global_rotation_degrees.z = -45 if randf() < 0.5 else -135
-		swipe.global_rotation_degrees.z += randf_range(-15, 15)
-		swipe.max_radius = swipe_radius
-		swipe.mesh.scale.y = swipe_height_scale
-		swipe.damage = swipe_damage
-		swipe.wave_time = swipe_lifetime
-		# animate swipe
-		swipe.start_shockwave(true)
+		var arc_proj := fire_projectile(swipe_prefab, projectile_spawn_marker.global_position)
+		arc_proj.rotation_degrees.z += randf_range(-10, 10)
+		arc_proj.velocity = (
+			arc_proj.get_arc_vector(target.global_position)
+		)
 		
 		await get_tree().create_timer(delay_between_swipe).timeout
 	
 	state_chart.send_event("end_swipe")
+
+
+func _on_arc_swipe_phase_2_swiping_state_entered(delta: float) -> void:
+	return
+	platform_idle(delta)
 
 
 ## SPLIT RUSH
@@ -372,7 +422,7 @@ func _on_died() -> void:
 
 
 func _on_melee_targeting_timer_timeout() -> void:
-	state_chart.send_event("start_attack")
+	state_chart.send_event("start_swipe")
 
 
 func _on_charge_back_targeting_state_entered() -> void:

@@ -4,9 +4,9 @@
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="2_u1ibk"]
 [ext_resource type="Texture2D" uid="uid://igye6giedkv" path="res://src/bosses/base/assets/placeholder_stack_salem.png" id="3_0jj1h"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="3_54m0v"]
-[ext_resource type="PackedScene" uid="uid://cbb2iyep64uu" path="res://src/bosses/chips/minions/SlamShockwave.tscn" id="4_1uy5e"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_51dvw"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_wmyjd"]
+[ext_resource type="PackedScene" uid="uid://cs666dcyj3w4p" path="res://src/bosses/chips/minions/projectiles/ArcProjectile.tscn" id="4_xln3v"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_yvmou"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ase24"]
@@ -37,6 +37,7 @@ desired_distance = null
 wave_amplitude = 7.0
 wave_frequency = 5.0
 time_elapsed = 0.0
+idle_radius = 1.5
 angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 40.0
@@ -44,14 +45,14 @@ chip_projectile = ExtResource("3_54m0v")
 chip_shots_per_burst = 4
 num_bursts = 1
 delay_between_burst = 0.6
-swipe_prefab = ExtResource("4_1uy5e")
+swipe_prefab = ExtResource("4_xln3v")
 num_swipes = 2
 delay_between_swipe = 0.4
 swipe_damage = 4.0
-swipe_range = 10.0
+swipe_range = 25.0
 swipe_radius = 8.0
 swipe_height_scale = 0.12
-swipe_lifetime = 0.35
+swipe_speed = 15.0
 swipe_targeting_timeout = 2.0
 chargeback_targeting_time = 1.8
 chargeback_damage = 6.0
@@ -87,9 +88,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MarkerPivot/Marker3D" index="0"]
 visible = false
 mesh = SubResource("SphereMesh_78wax")
-
-[node name="Hurtbox" parent="." index="4"]
-monitoring = true
 
 [node name="HealthComponent" parent="." index="5"]
 max_health = 1e+07
@@ -146,19 +144,25 @@ to = NodePath("../../ArcWaveSwipe")
 event = &"start_arc_wave_attack"
 delay_in_seconds = "0.0"
 
-[node name="toChargeBack" type="Node" parent="StateChart/Root/Phase/Idle" index="5"]
+[node name="toArcWaveSwipePhase2" type="Node" parent="StateChart/Root/Phase/Idle" index="5"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../ArcWaveSwipePhase2")
+event = &"start_arc_wave_attack_phase_2"
+delay_in_seconds = "0.0"
+
+[node name="toChargeBack" type="Node" parent="StateChart/Root/Phase/Idle" index="6"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../ChargeBack")
 event = &"start_charge_back_attack"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Idle" index="6"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Idle" index="7"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="toAoEMerge" type="Node" parent="StateChart/Root/Phase/Idle" index="7"]
+[node name="toAoEMerge" type="Node" parent="StateChart/Root/Phase/Idle" index="8"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../AoeMerge")
 event = &"change_form_big_aoe"
@@ -204,22 +208,71 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="MeleeTargetingTimer" type="Timer" parent="StateChart/Root/Phase/ArcWaveSwipe" index="4"]
-one_shot = true
-
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="5"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="4"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="6"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipe" index="5"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="SmallBlindProjectile" type="Node" parent="StateChart/Root/Phase" index="3"]
+[node name="ArcWaveSwipePhase2" type="Node" parent="StateChart/Root/Phase" index="3"]
+script = ExtResource("4_wmyjd")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipePhase2" index="0"]
+script = ExtResource("6_yvmou")
+
+[node name="toClosing" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipePhase2/Targeting" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Closing")
+event = &"start_closing"
+delay_in_seconds = "0.0"
+
+[node name="Closing" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipePhase2" index="1"]
+script = ExtResource("6_yvmou")
+
+[node name="toSwiping" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipePhase2/Closing" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Swiping")
+event = &"start_swipe"
+delay_in_seconds = "0.0"
+
+[node name="Swiping" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipePhase2" index="2"]
+script = ExtResource("6_yvmou")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipePhase2/Swiping" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Recover")
+event = &"end_swipe"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipePhase2" index="3"]
+script = ExtResource("6_yvmou")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipePhase2/Recover" index="0"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipePhase2" index="4"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Idle")
+event = &"end_attack"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/ArcWaveSwipePhase2" index="5"]
+script = ExtResource("4_51dvw")
+to = NodePath("../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="SmallBlindProjectile" type="Node" parent="StateChart/Root/Phase" index="4"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -262,7 +315,7 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="SmallBlindProjectilePhase2" type="Node" parent="StateChart/Root/Phase" index="4"]
+[node name="SmallBlindProjectilePhase2" type="Node" parent="StateChart/Root/Phase" index="5"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -305,7 +358,7 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="SplitRush" type="Node" parent="StateChart/Root/Phase" index="5"]
+[node name="SplitRush" type="Node" parent="StateChart/Root/Phase" index="6"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -351,7 +404,7 @@ delay_in_seconds = "0.0"
 [node name="ReformChargeTimer" type="Timer" parent="StateChart/Root/Phase/SplitRush" index="5"]
 one_shot = true
 
-[node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase" index="6"]
+[node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase" index="7"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -388,7 +441,7 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="ChargeBack" type="Node" parent="StateChart/Root/Phase" index="7"]
+[node name="ChargeBack" type="Node" parent="StateChart/Root/Phase" index="8"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -440,7 +493,7 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="AoeMerge" type="Node" parent="StateChart/Root/Phase" index="8"]
+[node name="AoeMerge" type="Node" parent="StateChart/Root/Phase" index="9"]
 script = ExtResource("4_wmyjd")
 initial_state = NodePath("Targeting")
 
@@ -486,6 +539,9 @@ delay_in_seconds = "0.0"
 [node name="SFXPlayer1" type="AudioStreamPlayer3D" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 
+[node name="MeleeTargetingTimer" type="Timer" parent="." index="22"]
+one_shot = true
+
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_physics_processing"]
@@ -493,7 +549,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipe/Closing" to="." method="_on_arc_swipe_closing_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Swiping" to="." method="_on_arc_swipe_swiping_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Recover" to="." method="_recover_state_entered"]
-[connection signal="timeout" from="StateChart/Root/Phase/ArcWaveSwipe/MeleeTargetingTimer" to="." method="_on_melee_targeting_timer_timeout"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipePhase2/Targeting" to="." method="_on_arc_swipe_phase_2_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipePhase2/Targeting" to="." method="_on_arc_swipe_phase_2_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipePhase2/Closing" to="." method="_on_arc_swipe_phase_2_closing_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipePhase2/Closing" to="." method="_on_arc_swipe_phase_2_closing_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipePhase2/Swiping" to="." method="_on_arc_swipe_swiping_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipePhase2/Swiping" to="." method="_on_arc_swipe_phase_2_swiping_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipePhase2/Recover" to="." method="_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectile/Targeting" to="." method="_on_small_blind_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/SmallBlindProjectile/Targeting" to="." method="_on_small_blind_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SmallBlindProjectile/Shooting" to="." method="_on_small_blind_shooting_state_entered"]
@@ -519,3 +581,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Targeting" to="." method="_on_aoe_merge_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Merging" to="." method="_on_aoe_merge_merging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Recover" to="." method="_on_aoe_merge_recover_state_entered"]
+[connection signal="timeout" from="MeleeTargetingTimer" to="." method="_on_melee_targeting_timer_timeout"]
