@@ -1292,6 +1292,7 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack/Attacking" to="." method="_on_ss_charge_solo_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeBack/Recover" to="." method="_recover_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2" to="." method="_on_phase_2_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack" to="." method="_on_big_stack_state_entered_phase_2"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/BackspinChip/Targeting" to="." method="_on_backspin_chip_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/BackspinChip/ForwardSpin" to="." method="_on_backspin_chip_forward_spin_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BigStack/BackspinChip/BackSpin" to="." method="_on_backspin_chip_back_spin_state_entered"]

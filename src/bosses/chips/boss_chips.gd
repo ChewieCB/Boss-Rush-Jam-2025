@@ -185,7 +185,7 @@ func activate() -> void:
 	navigation_component.enable()
 	if not self.is_node_ready():
 		await self.ready
-	state_chart.send_event("start_phase_1")
+	state_chart.send_event("start_phase_2")
 
 
 func _physics_process(delta: float) -> void:
@@ -312,7 +312,8 @@ func select_attack_phase_2() -> void:
 					attack_str = "start_split_stack_projectiles"
 				elif attack_roll < 60:
 					attack_str = "start_split_stack_arc_attack"
-				#else:
+				else:
+					attack_str = "start_split_stack_arc_attack"
 					#attack_str = "start_split_stack_aoe_attack"
 			
 			small_attacks_performed += 1
@@ -507,6 +508,12 @@ func _on_split_stacks_state_entered_phase_2() -> void:
 func _on_big_stack_state_entered_phase_1() -> void:
 	_reset_to_big_stack()
 	await return_big_stack_to_center()
+	select_attack()
+
+func _on_big_stack_state_entered_phase_2() -> void:
+	_reset_to_big_stack()
+	await return_big_stack_to_center()
+	await merge_stacks()
 	select_attack()
 
 
