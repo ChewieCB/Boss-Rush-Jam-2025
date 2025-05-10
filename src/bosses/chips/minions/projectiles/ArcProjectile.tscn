@@ -4,13 +4,10 @@
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_jc46b"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qm2e7"]
-load_path = "res://.godot/imported/chinese_hand_fan_0.png-a0b627837863008c47de3ef19d584696.s3tc.ctex"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_57qwi"]
-load_path = "res://.godot/imported/chinese_hand_fan_1.png-cbf79da2d2a74dcbcb919a29a73afce5.s3tc.ctex"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_f1etw"]
-load_path = "res://.godot/imported/chinese_hand_fan_2.png-1688b384d0c0ab5cecdbcc6784d68051.s3tc.ctex"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a2lh3"]
 resource_name = "Scene_-_Root"

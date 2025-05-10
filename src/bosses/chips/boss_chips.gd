@@ -26,7 +26,7 @@ var prev_form: ChipBossForms
 @export var DESIRED_DISTANCE: float = 10.0
 @export var desired_distance: float = DESIRED_DISTANCE
 @export_subgroup("Jumping")
-@onready var aoe_markers: Array[Node] = get_tree().get_nodes_in_group("boss_aoe_marker")
+var aoe_markers: Array[Node]
 var center_pos := Vector3(0, 0, -2)
 @export_subgroup("Orbiting")
 @export var angle_speed: float = 1.0 # radians/second
@@ -504,11 +504,10 @@ func _on_split_stacks_state_entered_phase_2() -> void:
 	select_attack()
 
 
-func _on_split_stacks_state_exited_phase_1() -> void:
+func _on_big_stack_state_entered_phase_1() -> void:
 	_reset_to_big_stack()
 	await return_big_stack_to_center()
 	select_attack()
-	#merge_stacks()
 
 
 #### PHASE 1
@@ -605,6 +604,7 @@ func _on_chip_sweep_sweep_state_entered() -> void:
 		var sweep_proj: ChipSweepProjectile = chip_sweep_prefab.instantiate()
 		scene_root.add_child(sweep_proj)
 		sweep_proj.global_transform = self.global_transform
+		chip_sweep_instances.append(sweep_proj)
 		
 		var chips_to_player: int = int(sweep_proj.global_position.distance_to(target.global_position))
 		sweep_proj.anim_time = sweep_time / chips_to_player
@@ -613,11 +613,20 @@ func _on_chip_sweep_sweep_state_entered() -> void:
 		await sweep_proj.chips_placed
 		sweep_proj.remove_chips()
 		await sweep_proj.chips_removed
+		chip_sweep_instances.erase(sweep_proj)
 		sweep_proj.queue_free()
 		
 		await get_tree().create_timer(sweep_delay).timeout
 	
 	state_chart.send_event("end_sweep")
+
+
+func _on_chip_sweep_state_exited() -> void:
+	for inst in chip_sweep_instances:
+		if is_instance_valid(inst):
+			inst.queue_free()
+	chip_sweep_instances = []
+
 
 ## Stack Slam
 #
@@ -781,18 +790,12 @@ func _on_phase_2_state_entered() -> void:
 	
 	# Update the center position to account for the platform
 	center_pos.y = 2.0
+	aoe_markers = get_tree().get_nodes_in_group("boss_aoe_marker")
 	
-	if current_form == ChipBossForms.BIG_STACK:
-		# Move to center platform
-		_disable_gravity()
-		await big_stack_jump_to_center()
-		state_chart.send_event("start_merge_aoe_finisher")
-	elif current_form == ChipBossForms.SPLIT_STACKS:
-		#state_chart.send_event("start_split_stack")
-		## Change to big stack and jump to middle
-		await return_big_stack_to_center()
-		state_chart.send_event("change_form_big_aoe_merge")
-	#select_attack()
+	_disable_gravity()
+	await big_stack_jump_to_center()
+	_reset_to_big_stack()
+	state_chart.send_event("start_merge_aoe_finisher")
 
 
 ### AoE Merge Attack
@@ -820,8 +823,6 @@ func _on_ss_merge_aoe_recovering_state_entered() -> void:
 #
 # Big Stack Slam down with radial wave
 func _on_merge_aoe_targeting_state_entered() -> void:
-	_disable_gravity()
-	
 	await big_stack_slam(center_pos, drop_time / 2)
 	state_chart.send_event("start_slam")
 

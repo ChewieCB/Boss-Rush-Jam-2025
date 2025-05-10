@@ -46,7 +46,7 @@ void fragment() {
     //float arc_center_deg = mod((arc_start_deg + arc_end_deg) * 0.5, 360.0);
     //float rotation_rad = radians(arc_center_deg);
     //vec2 rotated_uv = rotate_uv(UV, -rotation_rad); // negate to counter arc rotation
-	
+
 	float fade_alpha = smoothstep(uv_fade_position - uv_fade_width, uv_fade_position + uv_fade_width, UV.x);
 
     vec4 tex_color = texture(base_texture, UV * uv_scale);
