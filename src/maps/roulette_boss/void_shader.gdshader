@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, depth_draw_always; // NO LIGHTING!, "depth_draw_always" to 'fix' Z-ordering
+render_mode unshaded;
 
 uniform bool warp_ScreenSpace = false;
 uniform sampler2D texture_albedo : source_color, filter_nearest;

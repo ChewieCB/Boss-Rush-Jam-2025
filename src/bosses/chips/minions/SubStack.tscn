@@ -71,6 +71,7 @@ delay_per_projectile = 0.6
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
+render_priority = 1
 texture = ExtResource("3_0jj1h")
 
 [node name="CollisionShape3D" parent="." index="1"]

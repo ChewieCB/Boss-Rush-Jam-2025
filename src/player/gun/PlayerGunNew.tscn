@@ -663,20 +663,24 @@ muzzle_smoke_prefab = ExtResource("10_ipycd")
 transform = Transform3D(0.165, 0, 0, 0, 0.165, 0, 0, 0, 0.165, 0.364854, -0.394036, 0)
 
 [node name="GunSprite" type="Sprite3D" parent="SpriteParent"]
+render_priority = 2
 texture = ExtResource("11_n85hu")
 
 [node name="MuzzleflareLightSprite" type="Sprite3D" parent="SpriteParent/GunSprite"]
 visible = false
 sorting_offset = 1.0
+render_priority = 2
 texture = ExtResource("11_cwod4")
 
 [node name="MuzzleFlashSprite" type="Sprite3D" parent="SpriteParent/GunSprite/MuzzleflareLightSprite"]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 sorting_offset = -1.0
+render_priority = 2
 texture = ExtResource("12_fgtrf")
 
 [node name="Barrel3Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 1.0
+render_priority = 2
 texture = ExtResource("29_egcby")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel3Sprite"]
@@ -691,6 +695,7 @@ outline_size = 32
 
 [node name="Barrel2Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 2.0
+render_priority = 2
 texture = ExtResource("28_vfi2f")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel2Sprite"]
@@ -705,6 +710,7 @@ outline_size = 32
 
 [node name="Barrel1Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 3.0
+render_priority = 2
 texture = ExtResource("27_6hxas")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel1Sprite"]
@@ -720,16 +726,17 @@ outline_size = 32
 
 [node name="ForegripSprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 4.0
-render_priority = 1
+render_priority = 2
 texture = ExtResource("14_8rp44")
 
 [node name="ArmSprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 5.0
-render_priority = 1
+render_priority = 2
 texture = ExtResource("15_x3kbv")
 
 [node name="ArmSpriteR" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 3.0
+render_priority = 2
 
 [node name="BarrelContainer" type="Node3D" parent="."]
 
