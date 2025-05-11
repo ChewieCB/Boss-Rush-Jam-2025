@@ -217,6 +217,40 @@ func _on_health_dead_state_entered() -> void:
 	super()
 
 
+func _on_died() -> void:
+	if current_phase != 3:
+		state_chart.send_event("stop_moving")
+		state_chart.send_event("deactivate")
+		#await death_anim_finished
+		await boss_death_slow_mo()
+		defeated.emit(self)
+	else:
+		died.emit()
+		state_chart.send_event("death")
+		state_chart.send_event("stop_moving")
+		state_chart.send_event("deactivate")
+		# Stop the chiptopede in place
+		#
+		# Explode chiptopede segments one by one
+		for node in follow_nodes:
+			if is_instance_valid(node):
+				var segment = node.get_child(0)
+				if segment:
+					segment.queue_free()
+					var explosion_inst = explosion_scene.instantiate()
+					scene_root.add_child(explosion_inst)
+					explosion_inst.global_position = segment.global_position
+					explosion_inst.change_mesh_scale(2.0)
+					await get_tree().create_timer(0.7).timeout
+		#
+		#await death_anim_finished
+		drop_barrel()
+		await boss_death_slow_mo()
+		if not self in GameManager.bosses_defeated:
+			GameManager.bosses_defeated.append(boss_id)
+			GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
+
+
 ## ATTACK CHOICES
 
 func select_attack_phase_1() -> void:
