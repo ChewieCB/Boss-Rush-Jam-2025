@@ -39,6 +39,8 @@ func _ready() -> void:
 	
 	# Connect UI signals
 	if boss:
+		if not boss.is_node_ready():
+			await boss.ready
 		boss.died.connect(_on_boss_died)
 		boss.defeated.connect(_on_boss_defeated)
 		# DEBUG
