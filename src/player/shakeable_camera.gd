@@ -34,6 +34,7 @@ const JERK_GUN_DAMPING_FACTOR = 4.0
 
 var trauma = 0.0
 var long_trauma = 0.0 # Trauma over a long duration
+var final_trauma = 0.0
 var time = 0.0
 var current_rotation: Vector3
 var target_rotation: Vector3
@@ -51,7 +52,7 @@ func _process(delta):
 	# Trauma
 	time += delta
 	trauma = max(trauma - delta * trauma_reduction_rate, 0.0)
-	var final_trauma = clamp(trauma + long_trauma, 0.0, MAX_TRAUMA)
+	final_trauma = clamp(trauma + long_trauma, 0.0, MAX_TRAUMA)
 
 	camera.rotation_degrees.x = initial_rotation.x + max_x * get_shake_intensity(final_trauma) * get_noise_from_seed(0)
 	camera.rotation_degrees.y = initial_rotation.y + max_y * get_shake_intensity(final_trauma) * get_noise_from_seed(1)

@@ -44,10 +44,6 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	
 	if boss.current_phase != 3:
-		await get_tree().create_timer(1.0).timeout
-		# TODO - screenshake and particles before floor collapses
-		#
-		# TODO - wait and trigger chiptopede
 		boss.state_chart.send_event("start_phase_3")
 	else:
 		win_ui.win("Floor Cleared", win_subtext.pick_random())
@@ -70,6 +66,16 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 
 
 func break_floor() -> void:
+	# TODO - animate water level?
+	# Screen shake for a beat
+	player.player_camera.add_long_trauma(0.7)
+	await get_tree().create_timer(2.0).timeout
+	player.player_camera.trauma = 0.0
+	player.player_camera.long_trauma = 0.0
+	player.player_camera.final_trauma = 0.0
+	#
+	# Remove the floor mesh
+	# TODO - add particles/broken meshes to sell this more
 	water_surface.visible = true
 	water_surface.global_position.y = -19.5
 	if breakable_floor:

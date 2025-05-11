@@ -128,7 +128,7 @@ var despawned_pos := Vector3(0, -50, 0)
 var cached_segments: Array = []
 var segment_cache_parent: Node3D
 @export_subgroup("Attributes")
-@export var chiptopede_max_health: float = 8000
+@export var chiptopede_max_health: float = 6000
 @export var chiptopede_segments: int = 24
 @export var segment_separation: float = 2.0
 @export var min_spawn_distance: float = 36.0
@@ -205,7 +205,8 @@ func _exit_tree() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
-		state_chart.send_event("start_phase_2")
+		if current_phase == 1:
+			state_chart.send_event("start_phase_2")
 
 
 func _on_health_dead_state_entered() -> void:
@@ -296,7 +297,7 @@ func select_attack_phase_2() -> void:
 				attack_str = "start_chip_sweep"
 			elif attack_roll < 50:
 				attack_str = "start_backspin_chip"
-			elif attack_roll < 75:
+			elif attack_roll < 65:
 				attack_str = "start_place_your_bets_attack"
 			else:
 				attack_str = "start_slam_attack"
@@ -311,12 +312,12 @@ func select_attack_phase_2() -> void:
 				state_chart.send_event("change_form_big")
 				return
 			else:
-				if attack_roll < 20:
-					# TODO - chip mines defensive attack
-					attack_str = "start_split_stack_projectiles"
-				elif attack_roll < 40:
+				#if attack_roll < 20:
+					## TODO - chip mines defensive attack
+					#attack_str = "start_split_stack_ projectiles"
+				if attack_roll < 45:
 					attack_str = "start_split_stack_arc_attack"
-				elif attack_roll < 60:
+				elif attack_roll < 65:
 					attack_str = "start_split_stack_projectiles"
 				else:
 					attack_str = "start_split_stack_aoe_attack"
@@ -392,7 +393,7 @@ func big_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
 ##
 func show_big_stack() -> void:
 	sprite.visible = true
-	debug_mesh.visible = true
+	#debug_mesh.visible = true
 	health_component.show_damage_text = true
 	
 	# Re-enable collision
@@ -405,7 +406,7 @@ func show_big_stack() -> void:
 
 func hide_big_stack() -> void:
 	sprite.visible = false
-	debug_mesh.visible = false
+	#debug_mesh.visible = false
 	health_component.show_damage_text = false
 	
 	# Disable player and projectile collisions
@@ -964,8 +965,6 @@ func _on_ss_place_your_bets_attacking_state_entered() -> void:
 	
 	state_chart.send_event("finish_attack")
 
-# TODO - re-implement this AoE in line with the other patterns
-
 
 #### Phase 3 - Chiptopede
 
@@ -981,12 +980,15 @@ func _on_phase_3_state_entered() -> void:
 	_create_segment_cache()
 	generate_snake_graph()
 	
+	# TODO - screen shake, particles, polish, etc.
 	break_floor.emit()
 	
 	await get_tree().create_timer(2.0).timeout
 	
 	# Re-fill health bar, change name, and show
+	health_component.has_died = false
 	health_component.max_health = chiptopede_max_health
+	health_component.current_health = chiptopede_max_health
 	health_ui.init_health_ui(chiptopede_max_health)
 	health_ui.boss_name = "Chiptopede"
 	health_ui.show_ui()
@@ -1386,9 +1388,10 @@ func _create_snake_path(_start_pos: Vector3, _goal_pos: Vector3, follow_path: Ar
 
 func _cleanup_segment_arrays() -> void:
 	for node in follow_nodes:
-		var segment = node.get_child(0)
-		if segment:
-			cache_segment(segment, node)
+		if is_instance_valid(node):
+			var segment = node.get_child(0)
+			if segment:
+				cache_segment(segment, node)
 	follow_nodes = []
 	completed_nodes = []
 	chiptopede_head_offset = 0.0

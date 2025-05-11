@@ -42,6 +42,7 @@ var center_pos: Vector3
 @export var swipe_speed: float = 15.0
 @export var swipe_targeting_timeout: float = 2.0
 @onready var swipe_targeting_timer: Timer = $MeleeTargetingTimer
+var active_arc_projectiles: Array = []
 # SFX
 #
 @export_subgroup("Chargeback")
@@ -376,6 +377,7 @@ func _on_arc_swipe_swiping_state_entered() -> void:
 		arc_proj.velocity = (
 			arc_proj.get_arc_vector(target.global_position)
 		)
+		active_arc_projectiles.append(arc_proj)
 		
 		await get_tree().create_timer(delay_between_swipe).timeout
 	
@@ -621,3 +623,10 @@ func _on_aoe_merge_recover_state_entered() -> void:
 	health_component.died.emit()
 	health_component.has_died = true
 	state_chart.send_event("end_recovery")
+
+
+func _exit_tree() -> void:
+	for proj in active_arc_projectiles:
+		if is_instance_valid(proj):
+			proj.queue_free()
+	active_arc_projectiles = []
