@@ -132,7 +132,7 @@ func _on_player_death() -> void:
 	show_end_panel()
 
 
-func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
+func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	boss.activate()
 	LuckHandler.enabled = true
 	elevator_doors.close()

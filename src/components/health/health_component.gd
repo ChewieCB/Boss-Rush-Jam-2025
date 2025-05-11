@@ -18,7 +18,10 @@ var received_dmg_multiplier = 1
 var current_health: float:
 	set(value):
 		if has_died or not enabled:
-			return
+			if has_died and value > 0:
+				has_died = false
+			else:
+				return
 		# Cache previous value so we can do dynamic health bars
 		var prev_health = current_health
 		current_health = clamp(value, 0, max_health)

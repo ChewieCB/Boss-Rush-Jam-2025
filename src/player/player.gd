@@ -45,7 +45,7 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var wall_raycast: RayCast3D = $WallRaycast
 
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
-@onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
+@onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/Camera3D/AimRay
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 @onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
@@ -53,9 +53,19 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var stat_ui: StatUI = $UI/StatUI
 @onready var health_ui = stat_ui.health_ui
 @onready var luck_bar_ui = stat_ui.luck_bar_ui
+@onready var drunk_ui: Control = $UI/DrunkUI
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
+
+@export_group("Status Effects")
+@export_subgroup("Drunk")
+@onready var drunk_timer: Timer = $StateChart/Root/Status/Drunk/DrunkTimer
+@export var drunk_movement_drift: float = 1.0
+@export var drunk_movement_drift_change_interval: float = 0.8
+var drunk_drift_timer: float = 0.0
+var drunk_drift_vector := Vector2.ZERO
+var drunk_target_drift_vector := Vector2.ZERO
 
 signal movement_dashed
 signal new_status_effect_added(status)
@@ -176,6 +186,7 @@ func _ready():
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 	update_ammo_counter_ui()
 
+
 func _unhandled_input(event):
 	if controls_disabled:
 		return
@@ -202,12 +213,11 @@ func _unhandled_input(event):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
 		spin_barrels()
-	# DEBUG ONLY
-	elif event.is_action_pressed("input_1"):
-		luck_component.increase_luck(10.0)
+	# DEBUG
+	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
-	elif event.is_action_pressed("input_2"):
-		luck_component.decrease_luck(10.0)
+	#elif event.is_action_pressed("input_2"):
+		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
 	elif event.is_action_pressed("input_3"):
 		health_component.damage(20)
@@ -289,6 +299,7 @@ func _process(delta):
 
 	if Input.is_action_just_released("shoot"):
 		current_gun.release_trigger()
+
 
 func _physics_process(delta):
 	if controls_disabled:
@@ -476,6 +487,7 @@ func rotate_player(x: float, y: float):
 	player_camera.rotation.y = 0
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
+
 
 func camera_control(delta):
 	# Tilt camera
@@ -726,6 +738,7 @@ func get_assist_rotation_velocity(delta: float):
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
+
 func spin_barrels() -> void:
 	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading:
 		return
@@ -778,3 +791,38 @@ func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
 func _on_luck_maxed() -> void:
 	# TODO
 	pass
+
+
+func apply_drunk_status(duration: float) -> void:
+	state_chart.send_event("add_status_drunk")
+	drunk_timer.start(duration)
+
+
+func _on_status_drunk_active_state_entered() -> void:
+	drunk_ui.start_drunk()
+	player_camera.target_drunk_intensity = 4.0
+
+func _on_status_drunk_active_state_exited() -> void:
+	drunk_ui.end_drunk()
+	player_camera.target_drunk_intensity = 0.0
+	drunk_timer.stop()
+
+func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
+	# Don't move the player when they're standing still
+	if raw_input_dir == Vector2.ZERO:
+		return
+	
+	# Drunk movement drift
+	drunk_drift_timer += delta
+	if drunk_drift_timer >= drunk_movement_drift_change_interval:
+		drunk_drift_timer = 0.0
+		# Random unit vector with small magnitude
+		drunk_target_drift_vector = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)).normalized() * drunk_movement_drift
+	# Smoothly lerp toward the target
+	drunk_drift_vector = drunk_drift_vector.lerp(drunk_target_drift_vector, delta * 5.0)
+	# Add to input direction
+	velocity = Vector3(drunk_drift_vector.x, 0, drunk_drift_vector.y)
+	move_and_slide()
+
+func _on_drunk_timer_timeout() -> void:
+	state_chart.send_event("remove_status_drunk")

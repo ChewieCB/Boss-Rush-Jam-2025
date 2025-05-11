@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://diiahann2tcbe"]
+
+[sub_resource type="Curve3D" id="Curve3D_dmf1c"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, -0.14, 0, 0, 0, 0, -0.655, -2.895, 0, 0, 1.75, 0, 9, 0, 0, 0.295, -0.615, 0, 0, 0, 0, 10, 4),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="ChiptopedeProjectileStancePath" type="Path3D"]
+curve = SubResource("Curve3D_dmf1c")
