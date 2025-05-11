@@ -155,6 +155,7 @@ var cached_target: Node3D
 
 
 func _ready() -> void:
+	print_debug("BossCore ready")
 	randomize()
 	# If the player has beaten all bosses, buff them for the replay value
 	if GameManager.all_bosses_defeated:
