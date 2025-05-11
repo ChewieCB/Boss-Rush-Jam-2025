@@ -38,9 +38,10 @@ func _ready() -> void:
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
 	
 	# Connect UI signals
-	if boss:
-		if not boss.is_node_ready():
-			await boss.ready
+	if not boss:
+		push_error("No boss defined for map.")
+	if not boss.is_node_ready():
+		await boss.ready
 		boss.died.connect(_on_boss_died)
 		boss.defeated.connect(_on_boss_defeated)
 		# DEBUG
