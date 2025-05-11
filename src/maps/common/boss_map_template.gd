@@ -12,7 +12,8 @@ var nav_region: NavigationRegion3D
 @export var floor_mesh: MeshInstance3D
 
 @export_group("Actors")
-@export var boss: BossCore
+#@export var boss: BossCore
+@onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 
