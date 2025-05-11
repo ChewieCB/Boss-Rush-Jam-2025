@@ -17,6 +17,7 @@ signal substack_dive_finished(stack: ChipBossSubStack)
 @export var time_elapsed: float = 0.0
 @export var idle_radius := 1.5
 var idle_time := 0.0
+var center_pos: Vector3
 @export_subgroup("Orbiting Movement")
 @export var angle_speed: float = 1.0 # radians/second
 @export var orbit_angle: float = 0.0 # track this over time
@@ -48,7 +49,8 @@ var idle_time := 0.0
 @export var chargeback_damage: float = 6.0
 var chargeback_leap_height: float = 8.0
 var chargeback_return_pos: Vector3
-
+# SFX
+#
 @export var sfx_chip_shot: Array[AudioStream]
 @export_subgroup("Split Rush")
 @export var explosion_scene: PackedScene
@@ -58,9 +60,16 @@ var chargeback_return_pos: Vector3
 var charge_target_pos: Vector3
 @onready var reform_charge_timer: Timer = $StateChart/Root/Phase/SplitRush/ReformChargeTimer
 # SFX
+#
 @export_subgroup("Place Your Bets")
-@onready var aoe_markers: Array[Node] = get_tree().get_nodes_in_group("boss_aoe_marker")
+@onready var aoe_markers: Array[Node]
 @export var marker_target_idx: int
+@export var jump_height: float = 9.0
+@export var jump_time: float = 0.8
+@export var jump_hang_time: float = 1.2
+@export var drop_time: float = 0.3
+# SFX
+#
 
 @onready var scene_root = get_parent().get_parent()
 
@@ -88,6 +97,8 @@ func _physics_process(delta: float) -> void:
 	return
 
 
+## MOVEMENT BEHAVIOURS
+#
 func orbit_target_in_group(delta: float) -> void:
 	orbit_angle += angle_speed * delta
 	# Modify the orbit angle based on how many enemies are orbiting in the group
@@ -142,6 +153,67 @@ func orbit_center_in_group(delta: float, is_evasive: bool = false) -> void:
 	
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
+
+## MOVEMENT UTILS
+#
+func return_split_stack_to_center() -> void:
+	var goal_pos: Vector3 = center_pos
+	if group_size > 1:
+		goal_pos += Vector3(0, 0, 1.0).rotated(
+			Vector3.UP, 
+			(2 * PI / group_size) * (group_idx - 1)
+		)
+	var tween = get_tree().create_tween()
+	tween.tween_property(
+		self, "global_position", goal_pos, 0.8
+	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.finished
+	
+	return
+
+# JUMPING
+func split_stack_jump(goal_pos: Vector3, height: float = jump_height, hover: bool = true) -> void:
+	if group_size > 1:
+		goal_pos += Vector3(0, 0, 1.0).rotated(
+			Vector3.UP, 
+			(2 * PI / group_size) * (group_idx - 1)
+		)
+	
+	var jump_tween: Tween = get_tree().create_tween()
+	jump_tween.tween_property(
+		self, "global_position", goal_pos, jump_time
+	).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	
+	await jump_tween.finished
+	
+	if hover:
+		await get_tree().create_timer(jump_hang_time).timeout
+	
+	return
+
+func split_stack_jump_to_center(height: float = jump_height, hover: bool = true) -> void:
+	var goal_pos: Vector3 = center_pos
+	goal_pos.y = jump_height
+	if group_size > 1:
+		goal_pos += Vector3(0, 0, 1.0).rotated(
+			Vector3.UP, 
+			(2 * PI / group_size) * (group_idx - 1)
+		)
+	
+	await split_stack_jump(goal_pos, height, hover)
+	
+	return
+
+func split_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
+	var jump_tween: Tween = get_tree().create_tween()
+	jump_tween.tween_property(
+		self, "global_position", target_pos, time
+	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	
+	await jump_tween.finished
+	
+	return
 
 
 ## SMALL BLIND PROJECTILES
@@ -228,6 +300,7 @@ func _on_arc_swipe_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_arc_swipe_phase_2_targeting_state_entered() -> void:
 	debug_state_label.text = "Arc Wave Swipe | Targeting"
+	navigation_component.disable()
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("start_closing")
 
@@ -378,32 +451,18 @@ func _on_split_rush_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-func _on_place_your_bets_targeting_state_entered() -> void:
-	debug_state_label.text = "Place Your Bets | Targeting"
-	
-	state_chart.send_event("start_targeting")
-	state_chart.send_event("attack_buildup")
-	
-	# Await an external signal so we can send the stacks down in any order
-
-
-func _on_place_your_bets_crashing_state_entered() -> void:
-	debug_state_label.text = "Place Your Bets | Crashing"
-	
+func _on_place_your_bets_jumping_state_entered() -> void:
 	vel_vertical = 0
 	GRAVITY = 0
 	
-	# TODO - fix the telegraph timing
-	#state_chart.send_event("attack_telegraph")
-	#await get_tree().create_timer(telegraph_time * 2).timeout
-	state_chart.send_event("start_dive")
-	
+	await split_stack_jump_to_center()
+
+
+func _on_place_your_bets_crashing_state_entered() -> void:
+	await _telegraph_attack("Place Your Bets")
+	self.collision_layer = 0
 	var target_marker: Marker3D = aoe_markers[marker_target_idx]
-	var jump_tween: Tween = get_tree().create_tween()
-	jump_tween.tween_property(self, "global_position",target_marker.global_position, 0.4).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
-	
-	await jump_tween.finished
-	
+	await split_stack_slam(target_marker.global_position)
 	state_chart.send_event("end_dive")
 
 
@@ -411,6 +470,8 @@ func _on_place_your_bets_recover_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Recovering"
 	GRAVITY = 14
 	substack_dive_finished.emit(self)
+	await return_split_stack_to_center()
+	self.collision_layer = 4
 	state_chart.send_event("end_recovery")
 
 

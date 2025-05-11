@@ -40,7 +40,7 @@ var center_pos := Vector3(0, 0, -2)
 # SFX
 #
 @export_subgroup("Form Transitions")
-@export var max_big_attacks: int = 2
+@export var max_big_attacks: int = 3
 var big_attacks_performed: int = 0
 @export var max_small_attacks: int = 2
 var small_attacks_performed: int = 0
@@ -94,6 +94,10 @@ var last_stack: ChipBossSubStack
 @export_subgroup("Split Stack Rush")
 @export var split_rush_range: float = 3.5
 @export var split_rush_damage: float = 20.0
+# SFX
+#
+@export_subgroup("Split Stack AoE")
+@export var split_aoe_dive_delay: float = 0.3
 # SFX
 #
 @export_subgroup("Chip Mines")
@@ -309,12 +313,11 @@ func select_attack_phase_2() -> void:
 					# TODO - chip mines defensive attack
 					attack_str = "start_split_stack_projectiles"
 				elif attack_roll < 40:
-					attack_str = "start_split_stack_projectiles"
+					attack_str = "start_split_stack_arc_attack"
 				elif attack_roll < 60:
-					attack_str = "start_split_stack_arc_attack"
+					attack_str = "start_split_stack_projectiles"
 				else:
-					attack_str = "start_split_stack_arc_attack"
-					#attack_str = "start_split_stack_aoe_attack"
+					attack_str = "start_split_stack_aoe_attack"
 			
 			small_attacks_performed += 1
 	# TODO
@@ -415,37 +418,16 @@ func _enable_gravity() -> void:
 	GRAVITY = 14
 
 ##
-func trigger_pushback() -> void:
-	if target.global_position.distance_to(self.global_position) <= collider.shape.radius:
-		var pushback_vector = self.global_position.direction_to(target.global_position)
+func trigger_pushback(
+	force: float = pushback_force, 
+	pushback_source: Node3D = self, 
+	pushback_radius: float = pushback_source.collider.shape.radius
+) -> void:
+	if target.global_position.distance_to(pushback_source.global_position) <= pushback_radius:
+		var pushback_vector = pushback_source.global_position.direction_to(target.global_position)
 		target.velocity = Vector3.ZERO
-		target.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * pushback_force
+		target.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * force
 		target.vel_vertical += 15.0
-
-
-## GENERIC STATE HELPERS
-func _targeting_entered(next_state: String, attack_name: String = "", delay: float = attack_targeting_time) -> void:
-	debug_state_label.text = "%s | Targeting" % attack_name
-	
-	state_chart.send_event("start_targeting")
-	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(delay).timeout
-	state_chart.send_event(next_state)
-
-func _telegraph_attack(attack_name: String = ""):
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time).timeout
-	state_chart.send_event("attack_start")
-
-func _recover_entered() -> void:
-	state_chart.send_event("attack_end")
-	
-	await get_tree().create_timer(attack_recovery_time).timeout
-	
-	state_chart.send_event("cooldown_end")
-	select_attack()
-	# Reset the current state to Targeting
-	state_chart.send_event("end_recovery")
 
 
 #### GENERIC SPLITTING/MERGING BEHAVIOUR
@@ -744,9 +726,6 @@ func _on_ss_charge_solo_attacking_state_entered() -> void:
 #### SPLIT STACK CHARGE
 # Split into multiple smaller stacks, orbit the player, and charge at them;
 # reforming into the big stack in a big explosion
-func _on_ss_charge_targeting_state_entered() -> void:
-	_start_split_attack()
-	
 func _on_ss_charge_attacking_state_entered() -> void:
 	trigger_substack_attack("start_split_rush_attack")
 
@@ -870,7 +849,8 @@ func _on_place_your_bets_jumping_state_entered() -> void:
 	_disable_gravity()
 	
 	await big_stack_jump_to_center()
-	
+	# Disable collision to avoid clipping player into platform on slam
+	self.collision_layer = 0  # None
 	state_chart.send_event("aoe_dive")
 
 
@@ -888,6 +868,8 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 	await spawn_aoe_wave(aoe_radius, drop_damage, aoe_wave_time)
 	# TODO - destroy platform
 	#
+	# Re-enable collision after pushback to avoid clipping
+	self.collision_layer = 4  
 	
 	state_chart.send_event("end_aoe_attack")
 
@@ -949,16 +931,26 @@ func _on_ss_place_your_bets_attacking_state_entered() -> void:
 		closest_targets.sort_custom(
 			_sort_by_distance_to_target
 		)
+		closest_targets = closest_targets.filter(_filter_out_element_by_pos.bind(center_pos))
 		var target_marker: Marker3D = closest_targets.pop_front()
 		var new_target_idx: int = aoe_markers.find(target_marker)
 		
 		# Dive implementation
 		stack.marker_target_idx = new_target_idx
+		
 		stack.state_chart.send_event("start_dive")
 		
 		await stack.substack_dive_finished
-		spawn_aoe_wave(aoe_radius, drop_damage / i, aoe_wave_time, stack.global_position)
 		
+		spawn_aoe_wave(
+			aoe_radius, 
+			drop_damage / spawned_sub_stacks.size(), 
+			aoe_wave_time, 
+			stack.global_position,
+			stack
+		)
+		
+		await get_tree().create_timer(split_aoe_dive_delay).timeout
 	
 	await substack_all_attacks_finished
 	
@@ -1218,6 +1210,10 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 		small_stack_inst.target = target
 		small_stack_inst.group_size = stack_count
 		small_stack_inst.group_idx = i
+		small_stack_inst.center_pos = center_pos
+		small_stack_inst.aoe_markers = aoe_markers
+		if current_phase == 2:
+			small_stack_inst.navigation_component.disable()
 		
 		spawned_stacks.append(small_stack_inst)
 		
@@ -1621,9 +1617,10 @@ func spawn_aoe_wave(
 	damage: float = 10.0,
 	spawned_wave_time: float = 1.0,
 	area_pos: Vector3 = self.global_position,
+	pushback_source: Node3D = self,
 	spawned_wave_height: float = 0.3,
 	_telegraph: bool = false,
-	callback: Callable = func(): pass
+	callback: Callable = func(): pass,
 ) -> void:
 	# Generate a collider
 	var area_collider := Area3D.new()
@@ -1640,7 +1637,7 @@ func spawn_aoe_wave(
 	scene_root.add_child(area_collider)
 	
 	area_collider.global_position = area_pos
-	area_collider.body_entered.connect(_on_wave_collision.bind(damage))
+	area_collider.body_entered.connect(_on_wave_collision.bind(damage, area_collider, max_radius))
 	#area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
 	
 	var debug_mesh_instance = MeshInstance3D.new()
@@ -1715,6 +1712,12 @@ func spawn_aoe_bubble(radius: float, damage: float, spawn_pos: Vector3, duration
 	area_collider.queue_free()
 
 
-func _on_wave_collision(body: Node3D, aoe_damage: float) -> void:
+func _on_wave_collision(
+	body: Node3D, 
+	aoe_damage: float, 
+	pushback_source: Node3D = self, 
+	pushback_radius: float = pushback_source.collider.shape.radius
+) -> void:
 	if body == target:
 		body.health_component.damage(aoe_damage)
+		trigger_pushback(pushback_force, pushback_source, pushback_radius)

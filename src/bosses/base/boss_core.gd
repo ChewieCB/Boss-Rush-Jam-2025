@@ -227,6 +227,31 @@ func activate() -> void:
 	SoundManager.play_sound(sfx_awaken, "SFX")
 
 
+## GENERIC STATE HELPERS
+func _targeting_entered(next_state: String, attack_name: String = "", delay: float = attack_targeting_time) -> void:
+	debug_state_label.text = "%s | Targeting" % attack_name
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(delay).timeout
+	state_chart.send_event(next_state)
+
+func _telegraph_attack(attack_name: String = ""):
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time).timeout
+	state_chart.send_event("attack_start")
+
+func _recover_entered() -> void:
+	state_chart.send_event("attack_end")
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("cooldown_end")
+	select_attack()
+	# Reset the current state to Targeting
+	state_chart.send_event("end_recovery")
+
+
 func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInstance3D:
 	# Will usually work, but you might need to adjust this.
 	var scene_root = get_tree().root.get_children()[8]

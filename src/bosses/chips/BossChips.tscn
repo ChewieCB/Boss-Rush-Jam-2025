@@ -38,7 +38,7 @@ orbit_angle = 0.0
 orbit_radius = 20.0
 explosion_scene = ExtResource("3_7sirk")
 pushback_force = 20.0
-max_big_attacks = 2
+max_big_attacks = 3
 max_small_attacks = 2
 rolling_chip_projectile = ExtResource("6_dth1w")
 chips_per_attack = 2
@@ -64,6 +64,7 @@ small_stack_prefab = ExtResource("4_otar4")
 stack_spawn_time = 0.1
 split_rush_range = 3.5
 split_rush_damage = 20.0
+split_aoe_dive_delay = 0.3
 chip_mine_count = 8
 chip_mine_layers = 2
 chip_mine_spawn_area_radius = 9.0
@@ -1012,7 +1013,7 @@ script = ExtResource("5_81kie")
 
 [node name="toAttacking" type="Node" parent="StateChart/Root/Phase/Phase2/SplitStacks/SplitStackAoE/Targeting" index="0"]
 script = ExtResource("3_hbmr3")
-to = NodePath("../../../AoEMerge/Merging")
+to = NodePath("../../Attacking")
 event = &"start_attack"
 delay_in_seconds = "0.0"
 
@@ -1021,7 +1022,7 @@ script = ExtResource("5_81kie")
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/SplitStacks/SplitStackAoE/Attacking" index="0"]
 script = ExtResource("3_hbmr3")
-to = NodePath("../../../AoEMerge/Recovering")
+to = NodePath("../../Recover")
 event = &"finish_attack"
 delay_in_seconds = "0.0"
 
@@ -1285,7 +1286,7 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/OrbitProjectiles/Targeting" to="." method="_start_split_attack"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/OrbitProjectiles/Attacking" to="." method="_on_ss_orbiting_projectiles_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/OrbitProjectiles/Recover" to="." method="_recover_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Targeting" to="." method="_on_ss_charge_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Targeting" to="." method="_start_split_attack"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Attacking" to="." method="_on_ss_charge_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Merging" to="." method="_on_ss_charge_merging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/SplitStacks/ChargeReform/Recover" to="." method="_on_ss_charge_reform_recover_state_entered"]
@@ -1325,6 +1326,9 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/CloseArcWave/Targeting" to="." method="_on_ss_arc_wave_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/CloseArcWave/Attacking" to="." method="_on_ss_arc_wave_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/CloseArcWave/Recover" to="." method="_recover_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/SplitStackAoE/Targeting" to="." method="_start_split_attack"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/SplitStackAoE/Attacking" to="." method="_on_ss_place_your_bets_attacking_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/SplitStackAoE/Recover" to="." method="_recover_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge/Targeting" to="." method="_on_phase_2_aoe_merge_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge/Merging" to="." method="_on_phase_2_aoe_merge_merging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge/Recovering" to="." method="_on_aoe_merge_recovering_state_entered"]

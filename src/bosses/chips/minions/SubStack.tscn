@@ -62,6 +62,10 @@ arena_radius = 19.5
 split_rush_targeting_time = 5.0
 charge_speed = 40.0
 marker_target_idx = 0
+jump_height = 9.0
+jump_time = 0.8
+jump_hang_time = 1.2
+drop_time = 0.3
 barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer1")]
 sfx_slowmo = null
@@ -407,12 +411,12 @@ one_shot = true
 
 [node name="PlaceYourBets" type="Node" parent="StateChart/Root/Phase" index="7"]
 script = ExtResource("4_wmyjd")
-initial_state = NodePath("Targeting")
+initial_state = NodePath("Jumping")
 
-[node name="Targeting" type="Node" parent="StateChart/Root/Phase/PlaceYourBets" index="0"]
+[node name="Jumping" type="Node" parent="StateChart/Root/Phase/PlaceYourBets" index="0"]
 script = ExtResource("6_yvmou")
 
-[node name="toCrashing" type="Node" parent="StateChart/Root/Phase/PlaceYourBets/Targeting" index="0"]
+[node name="toCrashing" type="Node" parent="StateChart/Root/Phase/PlaceYourBets/Jumping" index="0"]
 script = ExtResource("4_51dvw")
 to = NodePath("../../Crashing")
 event = &"start_dive"
@@ -570,7 +574,7 @@ one_shot = true
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/SplitRush/Targeting" to="." method="_on_split_rush_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SplitRush/Charging" to="." method="_on_split_rush_charging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/SplitRush/Recover" to="." method="_on_split_rush_recover_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/PlaceYourBets/Targeting" to="." method="_on_place_your_bets_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/PlaceYourBets/Jumping" to="." method="_on_place_your_bets_jumping_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/PlaceYourBets/Crashing" to="." method="_on_place_your_bets_crashing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/PlaceYourBets/Recover" to="." method="_on_place_your_bets_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Targeting" to="." method="_on_charge_back_targeting_state_entered"]
