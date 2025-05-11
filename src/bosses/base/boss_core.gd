@@ -223,7 +223,7 @@ func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_ar
 
 
 func activate() -> void:
-	print_debug()
+	print_debug("BossCore activate called")
 	show_health()
 	SoundManager.play_sound(sfx_awaken, "SFX")
 
