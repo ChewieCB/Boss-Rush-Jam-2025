@@ -184,11 +184,15 @@ func _ready() -> void:
 
 
 func activate() -> void:
+	print_debug("BossChips activate called")
 	super()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	if not self.is_node_ready():
+		print_debug("Boss scene is not ready, waiting for ready signal")
 		await self.ready
+		print_debug("Ready signal received")
+	print_debug("Sending event `start_phase_1`")
 	state_chart.send_event("start_phase_1")
 
 
