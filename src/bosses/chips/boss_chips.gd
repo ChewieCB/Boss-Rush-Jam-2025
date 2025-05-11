@@ -189,7 +189,7 @@ func activate() -> void:
 	navigation_component.enable()
 	if not self.is_node_ready():
 		await self.ready
-	state_chart.send_event("start_phase_2")
+	state_chart.send_event("start_phase_1")
 
 
 func _physics_process(delta: float) -> void:
@@ -211,6 +211,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 func _on_health_dead_state_entered() -> void:
 	# Before we trigger the death state, make sure we've merged back into the big stack
 	merge_stacks()
+	_cleanup_backspin_chip()
+	_on_chip_sweep_state_exited()
 	super()
 
 
@@ -304,8 +306,8 @@ func select_attack_phase_2() -> void:
 		ChipBossForms.SPLIT_STACKS:
 			# Transition between big and small forms:
 			if small_attacks_performed >= max_small_attacks:
-				# TODO - radial attack with reform
-				#state_chart.send_event("change_form_big_aoe")
+				# FIXME - radial attack with reform
+				#state_chart.send_event("change_form_big_aoe_merge")
 				state_chart.send_event("change_form_big")
 				return
 			else:
@@ -326,6 +328,8 @@ func select_attack_phase_2() -> void:
 
 
 func select_attack_phase_3() -> void:
+	state_chart.send_event("end_attack")
+	
 	var possible_phases = [
 		"start_leap_attack",
 		"start_leap_attack",
@@ -778,9 +782,13 @@ func _on_phase_2_state_entered() -> void:
 	center_pos.y = 2.0
 	aoe_markers = get_tree().get_nodes_in_group("boss_aoe_marker")
 	
+	_cleanup_backspin_chip()
+	_on_chip_sweep_state_exited()
+	
 	_disable_gravity()
 	await big_stack_jump_to_center()
 	_reset_to_big_stack()
+	# FIXME - radial attack with reform
 	state_chart.send_event("start_merge_aoe_finisher")
 
 
@@ -865,7 +873,7 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 	
 	await _telegraph_attack()
 	await big_stack_slam(target_pos)
-	await spawn_aoe_wave(aoe_radius, drop_damage, aoe_wave_time)
+	await spawn_aoe_wave(aoe_radius, drop_damage, 0.1)
 	# TODO - destroy platform
 	#
 	# Re-enable collision after pushback to avoid clipping
@@ -1031,7 +1039,7 @@ func _on_chiptopede_leap_leaping_state_exited() -> void:
 
 func _on_chiptopede_leap_impact(segment: Node) -> void:
 	if leap_damage_timer.is_stopped():
-		spawn_aoe_bubble(leap_aoe_radius, leap_damage, segment.global_position, 0.4)
+		spawn_aoe_bubble(leap_aoe_radius, leap_damage, segment.global_position, 0.4, segment)
 		#spawn_aoe_wave(8.0, leap_damage, 0.1, segment.global_position, 0.5)
 		# Create an explosion
 		var explosion_inst = explosion_scene.instantiate()
@@ -1306,6 +1314,19 @@ func get_chiptopede_spawn_pos(
 		func(spawn):
 			return spawn.global_position.distance_to(sort_target) >= min_spawn_distance
 	)
+	## TODO - Make sure the spawn is somewhere the player is looking
+	#var facing_spawns = filtered_spawns.filter(
+		#func(spawn):
+			## Check player is in view of arc
+			#var in_view_angle: float = PI
+			#var target_facing_dir: Vector3 = -target.global_transform.basis.z.normalized()
+			#var to_spawn_dir: Vector3 = target.global_position.direction_to(spawn.global_position).normalized()
+			#
+			#var angle_threshold: float = cos(deg_to_rad(in_view_angle / 2))
+			#var dot_product: float = target_facing_dir.dot(to_spawn_dir)
+			#
+			#return dot_product >= 0
+	#)
 	
 	last_spawn = filtered_spawns.front()
 	
@@ -1690,7 +1711,7 @@ func spawn_aoe_wave(
 	return
 
 
-func spawn_aoe_bubble(radius: float, damage: float, spawn_pos: Vector3, duration: float) -> void:
+func spawn_aoe_bubble(radius: float, damage: float, spawn_pos: Vector3, duration: float, pushback_source: Node3D = self) -> void:
 	# Generate a collider
 	var area_collider := Area3D.new()
 	var area_collider_shape := CollisionShape3D.new()
@@ -1705,7 +1726,7 @@ func spawn_aoe_bubble(radius: float, damage: float, spawn_pos: Vector3, duration
 	scene_root.add_child(area_collider)
 	
 	area_collider.global_position = spawn_pos
-	area_collider.body_entered.connect(_on_wave_collision.bind(damage))
+	area_collider.body_entered.connect(_on_wave_collision.bind(damage, pushback_source, radius))
 	
 	await get_tree().create_timer(duration).timeout
 	
