@@ -25,6 +25,7 @@ extends BossMap
 
 
 func _ready() -> void:
+	super()
 	boss.flood_chamber.connect(raise_water)
 	boss.drain_chamber.connect(lower_water)
 	boss.break_floor.connect(break_floor)
@@ -36,8 +37,6 @@ func _ready() -> void:
 
 	waterfalls.visible = false
 	water_surface.global_position.y = lower_water_level
-
-	super()
 
 
 func _on_boss_defeated(_boss: BossCore) -> void:
