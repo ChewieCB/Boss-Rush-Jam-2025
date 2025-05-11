@@ -53,7 +53,7 @@
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="46_br567"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
-[ext_resource type="PackedScene" path="res://src/ui/player/StatUI.tscn" id="46_ob8n4"]
+[ext_resource type="PackedScene" uid="uid://crvu72pwcnneq" path="res://src/ui/player/StatUI.tscn" id="46_ob8n4"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
 [ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
@@ -119,10 +119,16 @@ sfx_jump_ground = Array[AudioStream]([ExtResource("28_k5crr")])
 sfx_jump_air = Array[AudioStream]([ExtResource("29_xv6x8")])
 sfx_dash_floor = Array[AudioStream]([ExtResource("30_on7sg")])
 sfx_dash_air = Array[AudioStream]([ExtResource("31_pnqxi")])
+can_wall_jump = null
+can_wall_cling = null
 max_air_jump = 1
+dash_cd = null
+dash_iframe_duration = null
+angular_momentum_multiplier = null
 speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
+luck_redeem_time = null
 reroll_heal_value = 20.0
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
@@ -240,10 +246,6 @@ script = ExtResource("41_63osp")
 [node name="HurtOverlay" parent="UI" instance=ExtResource("14_meelg")]
 z_as_relative = false
 
-[node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
-visible = false
-z_index = 10
-
 [node name="InteractUI" type="HBoxContainer" parent="UI"]
 anchors_preset = 8
 anchor_left = 0.5
@@ -280,21 +282,24 @@ anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 710.0
+offset_left = 576.0
 offset_right = 958.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
 [node name="GunStatusUI" type="MarginContainer" parent="UI/GunUI"]
-layout_mode = 2
-offset_left = -150.0
-offset_right = 208.0
-offset_bottom = 945.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 mouse_filter = 2
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="AllBarrelEffectUI" type="VBoxContainer" parent="UI/GunUI/GunStatusUI"]
 layout_mode = 2
@@ -368,6 +373,10 @@ offset_bottom = 1073.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 40
 text = "Saving..."
+
+[node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
+visible = false
+z_index = 10
 
 [node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
 process_mode = 1

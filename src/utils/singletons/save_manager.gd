@@ -97,6 +97,7 @@ func load_game(slot_id):
 		savefile_loaded.emit()
 		return
 
+	
 	GameManager.player_currency = save_data["player_currency"]
 	GameManager.equipped_barrels = convert_id_to_resource(save_data["equipped_barrels"])
 	GameManager.inventory_barrels = convert_id_to_resource(save_data["inventory_barrels"])
@@ -107,6 +108,8 @@ func load_game(slot_id):
 	GameManager.victory_ui_shown = save_data["victory_ui_shown"]
 	GameManager.total_playtime = save_data["total_playtime"]
 
+	check_for_new_update_barrels()
+	
 	savefile_loaded.emit()
 
 func get_savefile_name(slot_id: int) -> String:
@@ -166,3 +169,12 @@ func load_setting_config():
 	GameManager.ui_audio = config.get_value("Audio", "ui_audio", 100)
 
 	setting_config_loaded.emit()
+
+# If we update the game and add new barrel into GameManager's shop,
+# this will look for it
+func check_for_new_update_barrels():
+	for barrel_data in GameManager.starting_shop_barrels:
+		if not GameManager.equipped_barrels.has(barrel_data) and \
+		not GameManager.inventory_barrels.has(barrel_data) and \
+		not GameManager.shop_barrels.has(barrel_data):
+			GameManager.shop_barrels.append(barrel_data)

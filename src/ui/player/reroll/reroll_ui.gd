@@ -10,6 +10,8 @@ extends Control
 
 func _ready() -> void:
 	progress_bar.value_changed.connect(_on_progress_changed)
+	await get_tree().process_frame
+	await get_tree().process_frame
 	_update_reroll_max(GameManager.reroll_cost)
 	GameManager.currency_changed.connect(_on_currency_changed)
 	GameManager.reroll_cost_changed.connect(_update_reroll_max)

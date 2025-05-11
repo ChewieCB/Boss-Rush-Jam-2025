@@ -23,14 +23,14 @@ void fragment( )
 	for( int i=0; i < sampling_count; i++ ) {
 		c += texture( SCREEN_TEXTURE, SCREEN_UV - blur_power * direction * float(i) ).rgb * f;
 	}
-	
+
 	// TWEAK THE COEFFS AND/OR EQUATION FOR A DIFFERENT WARP PATTERN
 	c.x += sin(c.y * 1.54 * PI + TIME) * cos(c.y * 1.31 * PI + TIME) * 0.1 * warp_speed;
 	c.y += cos(c.x * 1.74 * PI + TIME) * -sin(c.y * 1.64 * PI + TIME) * 0.1 * warp_speed;
-	
+
 	COLOR.rgb = c;
 
 	//ALBEDO = color.xyz;
 	//ALPHA = color.a;
-	
+
 }

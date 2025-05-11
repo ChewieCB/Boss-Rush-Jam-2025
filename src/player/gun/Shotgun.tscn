@@ -41,7 +41,6 @@ TEMP_regain_ammo = ExtResource("6_ursny")
 TEMP_crit = ExtResource("7_8iawc")
 base_projectile_amount = 8
 base_magazine_size = 5
-base_spread_angle = 8
 projectile_prefab = ExtResource("3_wypyb")
 
 [node name="BaseGunModel" type="Node3D" parent="."]

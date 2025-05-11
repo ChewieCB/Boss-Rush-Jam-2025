@@ -1,14 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://baauotfv75lsw"]
+[gd_scene load_steps=8 format=3 uid="uid://baauotfv75lsw"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_yvor8"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/create_on_action_effect.gd" id="3_vhyyg"]
 [ext_resource type="PackedScene" uid="uid://dn7kkvfjqnktd" path="res://src/player/gun/damage_effect/MolotovDashHazard.tscn" id="4_2fxr8"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="5_ntkq2"]
 [ext_resource type="PackedScene" uid="uid://2a8xpe58m4sr" path="res://src/player/gun/damage_effect/CognacReloadHealCloud.tscn" id="5_o0msc"]
 [ext_resource type="PackedScene" uid="uid://ce1fdy8od0511" path="res://src/player/gun/damage_effect/ToxinMistHazard.tscn" id="5_w57qn"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="7_v1vu1"]
 
 [node name="BartenderBossBarrel" type="Node3D"]
 script = ExtResource("1_yvor8")
-barrel_id = 12
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
@@ -31,9 +32,19 @@ display_text_tag = "Poison 'em!"
 display_text_desc = "20% chance to create poison cloud on enemy hit"
 
 [node name="CognacReload" type="Node3D" parent="EffectContainer"]
+script = ExtResource("5_ntkq2")
+display_text_title = "Cognac Reload"
+display_text_tag = "Take a break, take a sip"
+display_text_desc = "Recover HP on reload
++200% reload time"
+
+[node name="CreateHealCloud" type="Node3D" parent="EffectContainer/CognacReload"]
 script = ExtResource("3_vhyyg")
 trigger_action = 2
 prefab = ExtResource("5_o0msc")
-display_text_title = "Cognac Reload"
-display_text_tag = "Take a break, take a sip"
-display_text_desc = "Recover HP on reload"
+
+[node name="ModifyReload" type="Node3D" parent="EffectContainer/CognacReload"]
+script = ExtResource("7_v1vu1")
+attribute = 8
+modify_value = 200.0
+is_perc = true

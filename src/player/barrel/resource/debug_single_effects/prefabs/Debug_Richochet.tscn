@@ -5,7 +5,7 @@
 
 [node name="DebugRicochetBarrel" type="Node3D"]
 script = ExtResource("1_hodut")
-barrel_id = 6
+barrel_id = 30
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

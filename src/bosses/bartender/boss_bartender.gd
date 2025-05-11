@@ -22,7 +22,7 @@ const BASE_SPEED_MODIFIER: float = 1.0
 const BASE_DELAY_MODIFIER: float = 1.0
 var damage_modifier: float = BASE_DAMAGE_MODIFIER
 var speed_modifier: float = BASE_SPEED_MODIFIER
-var delay_modifier:float = BASE_DELAY_MODIFIER:
+var delay_modifier: float = BASE_DELAY_MODIFIER:
 	set(value):
 		delay_modifier = value
 		# Don't change the speed of the drinking animation
@@ -116,7 +116,7 @@ const MIN_ACTION_BEFORE_HEAL = 8
 
 
 func _ready() -> void:
-	super()
+	super ()
 	navigation_component.current_speed = base_movespeed * speed_modifier
 	brew_cooldown_timer.stop()
 
@@ -127,7 +127,7 @@ func _process(delta: float) -> void:
 
 
 func activate() -> void:
-	super()
+	super ()
 	change_phase(1)
 
 
@@ -135,7 +135,6 @@ func change_phase(new_phase: int) -> void:
 	# Check if an attack is in progress
 	#if not $StateChart/Root/Attacking/Idle.active:
 		#await $StateChart/Root/Attacking/Idle.state_entered
-
 	state_chart.send_event("stop_moving")
 
 	current_phase = new_phase
@@ -156,7 +155,7 @@ func select_attack() -> void:
 		2:
 			select_attack_phase_2()
 		3:
-			select_attack_phase_2()  # Phase 3 is same as phase 2
+			select_attack_phase_2() # Phase 3 is same as phase 2
 		_:
 			push_error("Invalid phase %s" % current_phase)
 
@@ -274,7 +273,7 @@ func select_attack_phase_2() -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super(new_health, prev_health)
+	super (new_health, prev_health)
 	
 	if new_health < health_component.max_health * phase_3_health_percentage_trigger and current_phase == 2:
 		change_phase(3)
@@ -283,7 +282,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 
 func _on_died() -> void:
-	super()
+	super ()
 	if fire_sfx:
 		fire_sfx.stop()
 	if floor_fire_hazard:
@@ -790,7 +789,7 @@ func get_random_enum_key(enum_keys: Array, previous_key: int = -1) -> int:
 func _on_no_buff_state_entered() -> void:
 	last_brew_type = current_brew_type
 	status_icon.texture = null
-	health_component.modified_resistance = BASE_RESISTANCE_MODIFIER
+	health_component.received_dmg_multiplier = BASE_RESISTANCE_MODIFIER
 	damage_modifier = BASE_DAMAGE_MODIFIER
 	speed_modifier = BASE_SPEED_MODIFIER
 	#
@@ -802,7 +801,7 @@ func _on_strength_buff_state_entered() -> void:
 	#  - damage resistance DECREASED
 	#  - damage output INCREASED
 	#  - movement speed UNAFFECTED
-	health_component.modified_resistance = strength_buff_modifier
+	health_component.received_dmg_multiplier = strength_buff_modifier
 	damage_modifier = strength_buff_modifier
 	speed_modifier = BASE_SPEED_MODIFIER
 	delay_modifier = BASE_DELAY_MODIFIER
@@ -815,7 +814,7 @@ func _on_defence_buff_state_entered() -> void:
 	#  - damage resistance INCREASED
 	#  - damage output UNAFFECTED
 	#  - movement speed DECREASED
-	health_component.modified_resistance = defense_buff_modifier
+	health_component.received_dmg_multiplier = defense_buff_modifier
 	damage_modifier = BASE_DAMAGE_MODIFIER
 	speed_modifier = 1 - defense_buff_modifier
 	delay_modifier = 1 + speed_buff_modifier
@@ -829,7 +828,7 @@ func _on_speed_buff_state_entered() -> void:
 	#  - damage resistance UNAFFECTED
 	#  - damage output DECREASED
 	#  - movement speed INCREASED
-	health_component.modified_resistance = BASE_RESISTANCE_MODIFIER
+	health_component.received_dmg_multiplier = BASE_RESISTANCE_MODIFIER
 	damage_modifier = speed_buff_modifier
 	speed_modifier = 1 + speed_buff_modifier
 	delay_modifier = 1 - speed_buff_modifier

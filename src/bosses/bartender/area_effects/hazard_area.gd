@@ -23,6 +23,9 @@ var bodies_inside = []
 var is_active = false
 var stopped_moving = false
 
+var dash_speed_buff_icon = preload("res://assets/sprite/buff_icon/dash_speed_down.png")
+var run_speed_buff_icon = preload("res://assets/sprite/buff_icon/run_speed_down.png")
+
 func _ready() -> void:
 	is_active = true
 	if sfx_break:
@@ -57,9 +60,9 @@ func _on_damage_timer_timeout() -> void:
 
 		if body is Player and slow_perc > 0:
 			var run_debuff = create_slow_run_debuff(1)
-			body.add_buff(run_debuff)
+			body.add_status_effect(run_debuff)
 			var dash_debuff = create_slow_dash_debuff(1)
-			body.add_buff(dash_debuff)
+			body.add_status_effect(dash_debuff)
 
 
 func clear_hazard():
@@ -87,22 +90,26 @@ func _on_area_3d_body_exited(body: Node3D) -> void:
 	if body.get_node("HealthComponent") and body in bodies_inside:
 		bodies_inside.erase(body)
 
-func create_slow_run_debuff(debuff_duration: float = 1) -> Buff:
-	var slow_debuff = Buff.new()
-	slow_debuff.buff_name = "slow_hazard_run_speed"
-	slow_debuff.stat_name = "run_speed_modifier"
-	slow_debuff.value = -slow_perc
-	slow_debuff.buff_type = Buff.BuffType.PERCENTAGE
-	slow_debuff.stack_type = Buff.StackType.ADDITIVE
-	slow_debuff.duration = debuff_duration
-	return slow_debuff
+func create_slow_run_debuff(debuff_duration: float = 1) -> StatusEffect:
+	var slow_run_debuff = StatusEffect.new()
+	slow_run_debuff.display_name = "Run speed down"
+	slow_run_debuff.status_code = "slow_hazard_run_speed"
+	slow_run_debuff.modified_stat = StatusEffect.PlayerStatEnum.RUN_SPEED
+	slow_run_debuff.value = - slow_perc
+	slow_run_debuff.modify_type = StatusEffect.ModifyType.PERCENTAGE
+	slow_run_debuff.duration = debuff_duration
+	slow_run_debuff.is_bad_effect = true
+	slow_run_debuff.status_icon = run_speed_buff_icon
+	return slow_run_debuff
 
-func create_slow_dash_debuff(debuff_duration: float = 1) -> Buff:
-	var slow_debuff = Buff.new()
-	slow_debuff.buff_name = "slow_hazard_dash_slide_speed"
-	slow_debuff.stat_name = "dash_slide_speed_modifier"
-	slow_debuff.value = -slow_perc
-	slow_debuff.buff_type = Buff.BuffType.PERCENTAGE
-	slow_debuff.stack_type = Buff.StackType.ADDITIVE
-	slow_debuff.duration = debuff_duration
-	return slow_debuff
+func create_slow_dash_debuff(debuff_duration: float = 1) -> StatusEffect:
+	var slow_dash_debuff = StatusEffect.new()
+	slow_dash_debuff.display_name = "Dash speed down"
+	slow_dash_debuff.status_code = "slow_hazard_dash_slide_speed"
+	slow_dash_debuff.modified_stat = StatusEffect.PlayerStatEnum.DASH_SPEED
+	slow_dash_debuff.value = - slow_perc
+	slow_dash_debuff.modify_type = StatusEffect.ModifyType.PERCENTAGE
+	slow_dash_debuff.duration = debuff_duration
+	slow_dash_debuff.is_bad_effect = true
+	slow_dash_debuff.status_icon = dash_speed_buff_icon
+	return slow_dash_debuff

@@ -13,7 +13,7 @@ modulate = Color(1, 0.815903, 0.0313445, 1)
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
-text = "Double tap"
+text = "Gelthrower: Blob"
 horizontal_alignment = 2
 
 [node name="Tag" type="Label" parent="."]
@@ -21,7 +21,7 @@ self_modulate = Color(1, 0.618338, 0, 1)
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
-text = "Shoot twice"
+text = "Single, big, sticky projectile"
 horizontal_alignment = 2
 
 [node name="Desc" type="Label" parent="."]

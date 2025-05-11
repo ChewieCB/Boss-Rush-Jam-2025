@@ -13,8 +13,7 @@ signal hurt
 @export var text_effect: PackedScene
 @export var text_effect_location: Node3D
 
-# Changed by owner character, range from 0 (invincible) to 1 (normal)
-var modified_resistance = 1
+var received_dmg_multiplier = 1
 
 var current_health: float:
 	set(value):
@@ -44,11 +43,11 @@ func _ready() -> void:
 
 
 func damage(_damage: float, _color: Color = Color.WHITE) -> void:
-	_damage = round(_damage * modified_resistance)
+	_damage = round(_damage * received_dmg_multiplier)
 	if enabled:
 		if not is_invincible:
 			current_health -= _damage
-		if show_damage_text:
+		if show_damage_text and not is_invincible:
 			if not text_effect:
 				return
 			if text_effect_location:

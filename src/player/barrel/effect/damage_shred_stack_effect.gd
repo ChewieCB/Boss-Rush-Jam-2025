@@ -6,14 +6,14 @@ extends BaseBarrelEffect
 var stack_count = 0
 
 func on_reload_start():
-	super()
+	super ()
 	stack_count = 0
 
 func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
-	super()
+	super ()
 	stack_count += 1
 
 func on_damage_calculation():
-	super()
+	super ()
 	owner_barrel.owner_gun.modified_damage += flat_damage_bonus * stack_count
 	owner_barrel.owner_gun.modified_damage = round(owner_barrel.owner_gun.modified_damage * (1 + (perc_damage_bonus * stack_count / 100.0)))

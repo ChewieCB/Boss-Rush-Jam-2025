@@ -19,7 +19,8 @@ var movement_sfx_player: AudioStreamPlayer
 @export var can_wall_jump: bool
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
-@export var dash_cd: float = 0.5
+@export var dash_cd: float = 1
+@export var dash_iframe_duration: float = 0.2
 @export var angular_momentum_multiplier = 0.4
 @export var speedline_vfx_prefab: PackedScene
 
@@ -67,6 +68,8 @@ var drunk_drift_vector := Vector2.ZERO
 var drunk_target_drift_vector := Vector2.ZERO
 
 signal movement_dashed
+signal new_status_effect_added(status)
+signal status_effect_removed(status_effect_code)
 
 const MAX_SPEED: float = 8.0
 const MAX_FALL_SPEED: float = 70.0
@@ -136,12 +139,15 @@ var is_in_inventory = false:
 			stat_ui.show_non_luck_ui()
 var object_to_be_interacted = null
 
-var buffs: Array[Buff] = []
+var status_effect_list: Array[StatusEffect] = []
 var base_stats = {
-	"run_speed_modifier": 1,
-	"dash_slide_speed_modifier": 1
+	StatusEffect.PlayerStatEnum.RUN_SPEED: 1,
+	StatusEffect.PlayerStatEnum.DASH_SPEED: 1,
+	StatusEffect.PlayerStatEnum.IS_INVINVIBLE: false,
+	StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION: 0,
 }
 var current_stats = base_stats.duplicate(true)
+var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
 
 var aim_assist_target: Node3D = null
 
@@ -157,6 +163,7 @@ func _ready():
 	stat_ui.health_component = health_component
 	stat_ui.luck_component = luck_component
 
+	health_component.show_damage_text = false
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 
@@ -175,7 +182,7 @@ func _ready():
 	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_equipped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
-
+	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 	update_ammo_counter_ui()
 
@@ -212,8 +219,8 @@ func _unhandled_input(event):
 	#elif event.is_action_pressed("input_2"):
 		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
-	#elif event.is_action_pressed("input_3"):
-		#current_gun.spin_single_barrel(2)
+	elif event.is_action_pressed("input_3"):
+		health_component.damage(20)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -232,7 +239,7 @@ func _unhandled_input(event):
 			vel_vertical = 0
 			dash_duration_timer.start()
 			movement_dashed.emit()
-
+			add_iframe_on_dash()
 
 			var dash_dir = raw_input_dir
 			# Swap speedline direction for horizontal dash
@@ -261,11 +268,11 @@ func _process(delta):
 
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 
-	for buff in buffs:
-		if buff.duration > 0:
-			buff.duration -= delta
-			if buff.duration <= 0:
-				remove_buff(buff)
+	for status in status_effect_list:
+		if status.duration > 0 and status.duration < StatusEffect.INFINITE_DURATION:
+			status.duration -= delta
+			if status.duration <= 0:
+				remove_status_effect(status)
 
 	if aim_ray.is_colliding() and not is_in_inventory:
 		var interact_collider = aim_ray.get_collider()
@@ -344,7 +351,7 @@ func _physics_process(delta):
 	else:
 		vel_horizontal += input_dir * add_speed
 
-	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats["run_speed_modifier"]
+	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats[StatusEffect.PlayerStatEnum.RUN_SPEED]
 
 	# Bonus speed
 	if is_dashing:
@@ -356,7 +363,7 @@ func _physics_process(delta):
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 3)
 
 	var velocity_dir = velocity.normalized()
-	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats["dash_slide_speed_modifier"]
+	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats[StatusEffect.PlayerStatEnum.DASH_SPEED]
 
 	# Let the player ignore the wheelspin if they are moving
 	var floor_velocity = get_platform_velocity()
@@ -623,52 +630,68 @@ func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
 	neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
 
-func add_buff(new_buff: Buff):
-	# Check if already exist, then extend it instead of add new
-	for buff in buffs:
-		if buff.buff_name == new_buff.buff_name:
-			buff.duration = max(buff.duration, new_buff.duration)
+func add_status_effect(new_status: StatusEffect):
+	# Check if already exist, then refresh it instead of add new
+	for status in status_effect_list:
+		if status.status_code == new_status.status_code:
+			status.duration = max(status.duration, new_status.duration)
+			new_status_effect_added.emit(status)
 			return
-	buffs.append(new_buff)
-	apply_buffs()
+	status_effect_list.append(new_status)
+	new_status_effect_added.emit(new_status)
+	apply_status_effects()
 
 
-func remove_buff(buff: Buff):
-	buffs.erase(buff)
-	apply_buffs()
+func remove_status_effect(status: StatusEffect):
+	status_effect_list.erase(status)
+	status_effect_removed.emit(status.status_code)
+	apply_status_effects()
 
 
-func remove_buff_by_name(find_name: String):
-	var found_buff = null
-	for buff in buffs:
-		if buff.buff_name == find_name:
-			found_buff = buff
+func remove_status_effect_by_name(find_name: String):
+	var found = null
+	for status in status_effect_list:
+		if status.status_code == find_name:
+			found = status
 			break
-	if found_buff:
-		remove_buff(found_buff)
+	if found:
+		remove_status_effect(found)
 
 
-func apply_buffs():
+func apply_status_effects():
 	# Reset current stats to base stats.
 	current_stats = base_stats.duplicate(true)
 
 	# Temporary storage for stacking.
-	var flat_bonuses = {}
-	var percentage_bonuses = {}
+	var flat_modifiers = {}
+	var percentage_modifiers = {}
 
-	for buff in buffs:
-		if buff.buff_type == Buff.BuffType.FLAT:
-			flat_bonuses[buff.stat_name] = flat_bonuses.get(buff.stat_name, 0) + buff.value
-		elif buff.buff_type == Buff.BuffType.PERCENTAGE:
-			percentage_bonuses[buff.stat_name] = percentage_bonuses.get(buff.stat_name, 0) + buff.value
+	for status in status_effect_list:
+		if not current_stats.has(status.modified_stat):
+			continue
+		if status.modify_type == StatusEffect.ModifyType.FLAT:
+			flat_modifiers[status.modified_stat] = flat_modifiers.get(status.modified_stat, 0) + status.value
+		elif status.modify_type == StatusEffect.ModifyType.PERCENTAGE:
+			percentage_modifiers[status.modified_stat] = percentage_modifiers.get(status.modified_stat, 0) + status.value
+		elif status.modify_type == StatusEffect.ModifyType.BOOL:
+			if status.value == 1:
+				current_stats[status.modified_stat] = true
+			else:
+				current_stats[status.modified_stat] = false
 
-	# Apply flat bonuses (additive).
-	for stat in flat_bonuses.keys():
-		current_stats[stat] += flat_bonuses[stat]
+	# Apply flat bonuses.
+	for stat in flat_modifiers.keys():
+		current_stats[stat] += flat_modifiers[stat]
 
-	# Apply percentage bonuses (multiplicative).
-	for stat in percentage_bonuses.keys():
-		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)
+	# Apply percentage bonuses.
+	for stat in percentage_modifiers.keys():
+		current_stats[stat] = current_stats[stat] * (1 + (percentage_modifiers[stat] / 100.0))
+
+	# Other
+	health_component.received_dmg_multiplier = 1 - (current_stats[StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION] / 100.0)
+	if health_component.received_dmg_multiplier < 0:
+		health_component.received_dmg_multiplier = 0
+	health_component.is_invincible = current_stats[StatusEffect.PlayerStatEnum.IS_INVINVIBLE]
 
 
 func aim_assist(delta: float):
@@ -746,6 +769,17 @@ func cash_in_luck() -> void:
 	LuckHandler.enabled = true
 	luck_component.current_luck = 0.0
 
+
+func add_iframe_on_dash():
+	var iframe_dash_buff = StatusEffect.new()
+	iframe_dash_buff.display_name = "Dodging"
+	iframe_dash_buff.status_code = "iframe_on_dash"
+	iframe_dash_buff.modified_stat = StatusEffect.PlayerStatEnum.IS_INVINVIBLE
+	iframe_dash_buff.value = 1
+	iframe_dash_buff.modify_type = StatusEffect.ModifyType.BOOL
+	iframe_dash_buff.duration = dash_iframe_duration
+	iframe_dash_buff.status_icon = dash_iframe_icon
+	add_status_effect(iframe_dash_buff)
 
 func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
 	# TODO - update luck handler to apply bonuses

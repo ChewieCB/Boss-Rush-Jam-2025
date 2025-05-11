@@ -19,6 +19,7 @@ var bgm_player: AudioStreamPlayer
 var started_loading = false
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	
 	for slot: SaveSlotItem in save_slot_items:

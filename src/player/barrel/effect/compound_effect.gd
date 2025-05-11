@@ -18,6 +18,22 @@ func _ready() -> void:
 		barrel.owner_barrel = owner_barrel
 		child_effects.append(barrel)
 
+func on_barrel_install():
+	for child in child_effects:
+		child.on_barrel_install()
+
+func on_barrel_remove():
+	for child in child_effects:
+		child.on_barrel_remove()
+
+func on_barrel_start_spin():
+	for child in child_effects:
+		child.on_barrel_start_spin()
+
+func on_barrel_stop_spin():
+	for child in child_effects:
+		child.on_barrel_stop_spin()
+
 func on_effect_set():
 	for child in child_effects:
 		child.on_effect_set()
@@ -80,6 +96,10 @@ func on_projectile_destroyed():
 func on_damage_calculation():
 	for child in child_effects:
 		child.on_damage_calculation()
+
+func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
+	for child in child_effects:
+		child.on_before_damage_applied(_enemy, _projectile)
 
 func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for child in child_effects:

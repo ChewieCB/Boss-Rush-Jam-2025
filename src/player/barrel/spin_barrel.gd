@@ -3,8 +3,6 @@ class_name SpinBarrel
 
 signal barrel_effect_changed(SpinBarrel, BaseBarrelEffect)
 
-@export var barrel_id: BarrelDataResource.BarrelIdEnum
-
 @onready var effect_container: Node3D = $EffectContainer
 
 var owner_gun: Gun
@@ -21,8 +19,11 @@ const SPIN_INTERVAL = 0.1
 
 func _ready() -> void:
 	for child in effect_container.get_children():
-		child.owner_barrel = self
-		effect_list.append(child)
+		# This help with debugging, you can show/hide barrel effect to avoid
+		# spamming spin barrel when testing it
+		if child.visible:
+			child.owner_barrel = self
+			effect_list.append(child)
 	chosen_id = 0
 	instant_spin()
 
