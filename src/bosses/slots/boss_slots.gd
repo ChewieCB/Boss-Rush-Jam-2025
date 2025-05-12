@@ -131,8 +131,10 @@ func activate() -> void:
 
 func _physics_process(delta: float) -> void:
 	super(delta)
-	projectile_marker_pivot.look_at(target.global_position)
-	slot_icons_parent.look_at(target.global_position)
+	
+	if target:
+		projectile_marker_pivot.look_at(target.global_position)
+		slot_icons_parent.look_at(target.global_position)
 	
 	if hurtbox.monitoring:
 		if target in hurtbox.get_overlapping_bodies():
