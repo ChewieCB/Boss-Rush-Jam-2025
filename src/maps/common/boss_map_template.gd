@@ -32,6 +32,17 @@ var chip_value_collected: int = 0
 
 
 func _ready() -> void:
+	if OS.is_debug_build():
+		print("\n[Export Variable Debug] Checking for unset exports in ", self.name)
+		var export_info = self.get_property_list()
+		for prop in export_info:
+			if "usage" in prop and (prop.usage & PROPERTY_USAGE_EDITOR) and prop.name != "script":
+				var value = self.get(prop.name)
+				if value == null or value == "" or (value is Resource and not is_instance_valid(value)):
+					print("🚫 Unset or invalid export: ", prop.name)
+				else:
+					print("✅ ", prop.name, " → ", value)
+	
 	if bgm:
 		SoundManager.play_music(bgm, 0.5, "BGM")
 	
