@@ -22,7 +22,7 @@ var nav_region: NavigationRegion3D
 @export var lose_tips: Array[String]
 @onready var win_ui: Control = $UI/BossDefeatedUI
 
-@export var directional_light: DirectionalLight3D
+@onready var directional_light: DirectionalLight3D = $DirectionalLight3D
 
 @onready var boss_trigger: Area3D = $BossTriggerVolume
 @onready var spin_trigger: Area3D = $SpinTriggerVolume

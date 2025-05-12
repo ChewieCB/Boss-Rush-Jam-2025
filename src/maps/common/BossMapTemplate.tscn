@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://b1aj8e7ult44k"]
+[gd_scene load_steps=11 format=3 uid="uid://b1aj8e7ult44k"]
 
 [ext_resource type="Script" path="res://src/maps/common/boss_map_template.gd" id="1_0in43"]
 [ext_resource type="LightmapGIData" uid="uid://bei114xif3db4" path="res://src/bosses/base/test/Test_BossCore.lmbake" id="2_yfo4x"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="3_ysao1"]
+[ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="4_y81i5"]
+[ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="5_yquh1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ydocc"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -28,7 +30,7 @@ size = Vector3(68, 26, 78)
 [sub_resource type="BoxShape3D" id="BoxShape3D_ecld6"]
 size = Vector3(5.3, 4.7, 4.9)
 
-[node name="BossMapTemplate" type="Node3D"]
+[node name="BossMapCore" type="Node3D"]
 script = ExtResource("1_0in43")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -64,6 +66,10 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SpinTriggerVolume"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0499997, 2.25, 7.15)
 shape = SubResource("BoxShape3D_ecld6")
+
+[node name="FuncGodotMap" type="Node3D" parent="."]
+script = ExtResource("4_y81i5")
+map_settings = ExtResource("5_yquh1")
 
 [connection signal="body_entered" from="BossTriggerVolume" to="." method="_on_boss_trigger_volume_body_entered"]
 [connection signal="body_entered" from="SpinTriggerVolume" to="." method="_on_barrel_reload_trigger_body_entered"]

@@ -2843,7 +2843,7 @@ entProperties = {
 "_tb_group": "575",
 "boss_name": "Umby the Stinky",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
+"linked_level": "res://src/maps/slots_boss/BossMapSlotsNew.tscn",
 "origin": "384 31 32"
 }
 
