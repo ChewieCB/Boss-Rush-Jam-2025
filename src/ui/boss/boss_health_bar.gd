@@ -1,6 +1,10 @@
 extends HealthBar
 
-@export var boss_name: String = ""
+@export var boss_name: String = "":
+	set(value):
+		boss_name = value
+		if name_label:
+			name_label.text = boss_name
 
 @onready var name_label: Label = $VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2/Label
 @onready var anim_player: AnimationPlayer = $AnimationPlayer

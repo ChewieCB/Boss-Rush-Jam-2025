@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://diyo7ftvwcl0r"]
+
+[ext_resource type="Shader" path="res://src/player/assets/shaders/drunk_blur.gdshader" id="1_8wwos"]
+[ext_resource type="Script" path="res://src/ui/player/status/drunk_ui.gd" id="1_jm7bv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h7axq"]
+shader = ExtResource("1_8wwos")
+shader_parameter/blur_center = Vector2(0.5, 0.5)
+shader_parameter/blur_power = 0.0
+shader_parameter/warp_speed = 1.0
+shader_parameter/sampling_count = 6
+
+[node name="DrunkUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_jm7bv")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_h7axq")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)

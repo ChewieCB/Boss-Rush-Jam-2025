@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="FuncGodotFGDPointClass" load_steps=3 format=3 uid="uid://bj3p2umxysjak"]
+
+[ext_resource type="Script" path="res://addons/func_godot/src/fgd/func_godot_fgd_point_class.gd" id="1_om3nf"]
+[ext_resource type="Script" path="res://src/bosses/chips/snake_path_marker.gd" id="2_0rgmh"]
+
+[resource]
+script = ExtResource("1_om3nf")
+script_class = ExtResource("2_0rgmh")
+apply_rotation_on_map_build = false
+classname = "BossSnakePathMarker"
+description = ""
+func_godot_internal = false
+base_classes = Array[Resource]([])
+class_properties = {
+"connected_points": [],
+"marker_group": "boss_snake_path_marker"
+}
+class_property_descriptions = {}
+auto_apply_to_matching_node_properties = false
+meta_properties = {
+"color": Color(0.8, 0.8, 0.8, 1),
+"size": AABB(-8, -8, -8, 8, 8, 8)
+}
+node_class = "Marker3D"
+name_property = ""

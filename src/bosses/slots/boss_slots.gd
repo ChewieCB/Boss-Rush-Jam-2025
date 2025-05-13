@@ -131,8 +131,10 @@ func activate() -> void:
 
 func _physics_process(delta: float) -> void:
 	super(delta)
-	projectile_marker_pivot.look_at(target.global_position)
-	slot_icons_parent.look_at(target.global_position)
+	
+	if target:
+		projectile_marker_pivot.look_at(target.global_position)
+		slot_icons_parent.look_at(target.global_position)
 	
 	if hurtbox.monitoring:
 		if target in hurtbox.get_overlapping_bodies():
@@ -184,7 +186,7 @@ func select_attack_phase_2() -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super (new_health, prev_health)
+	super(new_health, prev_health)
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
@@ -311,19 +313,6 @@ func _on_spin_slots_recover_state_entered() -> void:
 # 3 Coins on rollers
 # Rapid fire coin projectiles 
 
-func fire_projectile(_projectile_prefab: PackedScene) -> BaseProjectile:
-	var _sfx_player = get_available_sfx_player()
-	if not _sfx_player:
-		# TODO - error handling
-		pass
-	_sfx_player.stream = sfx_coin_shot.pick_random()
-	_sfx_player.play()
-	var projectile := _projectile_prefab.instantiate()
-	get_tree().root.get_child(2).add_child(projectile)
-	projectile.global_position = projectile_spawn_marker.global_position
-	projectile.look_at(target.global_position, Vector3.UP)
-	return projectile
-
 
 func _on_coin_projectiles_state_physics_processing(delta: float) -> void:
 	orbit_player(delta)
@@ -348,7 +337,7 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 	for i in num_bursts:
 		for j in coin_shots_per_burst:
 			await get_tree().create_timer(delay_per_projectile).timeout
-			fire_projectile(coin_projectile)
+			fire_projectile(coin_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
 		await get_tree().create_timer(delay_between_burst).timeout
 	
 	state_chart.send_event("stop_shooting")

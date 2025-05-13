@@ -12,7 +12,8 @@ var nav_region: NavigationRegion3D
 @export var floor_mesh: MeshInstance3D
 
 @export_group("Actors")
-@export var boss: BossCore
+#@export var boss: BossCore
+@onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 
@@ -21,7 +22,7 @@ var nav_region: NavigationRegion3D
 @export var lose_tips: Array[String]
 @onready var win_ui: Control = $UI/BossDefeatedUI
 
-@export var directional_light: DirectionalLight3D
+@onready var directional_light: DirectionalLight3D = $DirectionalLight3D
 
 @onready var boss_trigger: Area3D = $BossTriggerVolume
 @onready var spin_trigger: Area3D = $SpinTriggerVolume
@@ -31,6 +32,17 @@ var chip_value_collected: int = 0
 
 
 func _ready() -> void:
+	if OS.is_debug_build():
+		print("\n[Export Variable Debug] Checking for unset exports in ", self.name)
+		var export_info = self.get_property_list()
+		for prop in export_info:
+			if "usage" in prop and (prop.usage & PROPERTY_USAGE_EDITOR) and prop.name != "script":
+				var value = self.get(prop.name)
+				if value == null or (value is Resource and not is_instance_valid(value)):
+					print("!! Unset or invalid export: ", prop.name)
+				else:
+					print(prop.name, " → ", value)
+	
 	if bgm:
 		SoundManager.play_music(bgm, 0.5, "BGM")
 	
@@ -38,7 +50,10 @@ func _ready() -> void:
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
 	
 	# Connect UI signals
-	if boss:
+	if not boss:
+		push_error("No boss defined for map.")
+	if not boss.is_node_ready():
+		await boss.ready
 		boss.died.connect(_on_boss_died)
 		boss.defeated.connect(_on_boss_defeated)
 		# DEBUG
@@ -132,10 +147,13 @@ func _on_player_death() -> void:
 	show_end_panel()
 
 
-func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
+func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
+	print_debug("Boss trigger volume activated")
 	boss.activate()
+	print_debug("Boss activate method called")
 	LuckHandler.enabled = true
 	elevator_doors.close()
+	print_debug("Elevator doors closed, freeing trigger volume")
 	boss_trigger.queue_free()
 
 

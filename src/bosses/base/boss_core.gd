@@ -90,6 +90,7 @@ var ranged_phase_count: int = 0
 var area_phase_count: int = 0
 
 @export_group("Attacks")
+@export var attack_targeting_time: float = 0.5
 @export var attack_recovery_time: float = 0.5
 @export_subgroup("Charge")
 # Charge Attack
@@ -154,6 +155,7 @@ var cached_target: Node3D
 
 
 func _ready() -> void:
+	print_debug("BossCore ready")
 	randomize()
 	# If the player has beaten all bosses, buff them for the replay value
 	if GameManager.all_bosses_defeated:
@@ -178,10 +180,10 @@ func _physics_process(delta: float) -> void:
 	# DEBUG
 	# TODO - add export var for burning status length so we can configure it
 	# per boss/effect
-	if Input.is_action_just_pressed("input_1"):
-		apply_status(StatusEffects.BURNING, 5.0)
-	if Input.is_action_just_pressed("input_2"):
-		apply_status(StatusEffects.POISONED, 12.0)
+	#if Input.is_action_just_pressed("input_1"):
+		#apply_status(StatusEffects.BURNING, 5.0)
+	#if Input.is_action_just_pressed("input_2"):
+		#apply_status(StatusEffects.POISONED, 12.0)
 
 
 func jump(multiplier = 1.0) -> void:
@@ -206,14 +208,55 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 	)
 
 
+func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> BaseProjectile:
+	var _sfx_player = get_available_sfx_player()
+	if not _sfx_player:
+		# TODO - error handling
+		pass
+	if sfx_arr:
+		_sfx_player.stream = sfx_arr.pick_random()
+		_sfx_player.play()
+	var projectile := _projectile_prefab.instantiate()
+	get_tree().root.get_child(8).add_child(projectile)
+	projectile.global_position = spawn_pos
+	projectile.look_at(target.global_position, Vector3.UP)
+	return projectile
+
+
 func activate() -> void:
+	print_debug("BossCore activate called")
 	show_health()
 	SoundManager.play_sound(sfx_awaken, "SFX")
 
 
+## GENERIC STATE HELPERS
+func _targeting_entered(next_state: String, attack_name: String = "", delay: float = attack_targeting_time) -> void:
+	debug_state_label.text = "%s | Targeting" % attack_name
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(delay).timeout
+	state_chart.send_event(next_state)
+
+func _telegraph_attack(attack_name: String = ""):
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time).timeout
+	state_chart.send_event("attack_start")
+
+func _recover_entered() -> void:
+	state_chart.send_event("attack_end")
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("cooldown_end")
+	select_attack()
+	# Reset the current state to Targeting
+	state_chart.send_event("end_recovery")
+
+
 func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInstance3D:
 	# Will usually work, but you might need to adjust this.
-	var scene_root = get_tree().root.get_children()[0]
+	var scene_root = get_tree().root.get_children()[8]
 	# Create sphere with low detail of size.
 	var sphere = SphereMesh.new()
 	sphere.radial_segments = 4
@@ -229,8 +272,8 @@ func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInst
 	# Add to meshinstance in the right place.
 	var node = MeshInstance3D.new()
 	node.mesh = sphere
+	scene_root.add_child.call_deferred(node)
 	node.global_transform.origin = location
-	scene_root.add_child(node)
 
 	return node
 
@@ -251,9 +294,11 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 			return b
 	)
 	var fallback_player: AudioStreamPlayer3D = players_ending_soon.front()
-	fallback_player.stop()
+	if fallback_player:
+		fallback_player.stop()
 
-	return fallback_player
+		return fallback_player
+	return null
 
 
 func drop_barrel() -> void:
@@ -297,11 +342,6 @@ func drop_barrel() -> void:
 	var path = Path3D.new()
 	var curve = Curve3D.new()
 	var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5) + Vector3(0, 5.0, 0)
-
-	#draw_debug_sphere(start_pos, 0.5, Color.GREEN)
-	#draw_debug_sphere(goal_pos, 0.5, Color.YELLOW)
-	#draw_debug_sphere(mid_point, 0.5, Color.ORANGE)
-	#draw_debug_sphere(target.global_position, 0.5, Color.RED)
 
 	# Calculate bezier control points
 	var out_0 = (mid_point - start_pos) * 0.6667
@@ -350,6 +390,8 @@ func select_attack() -> void:
 			select_attack_phase_1()
 		2:
 			select_attack_phase_2()
+		3:
+			select_attack_phase_3()
 		_:
 			push_error("Invalid phase %s" % current_phase)
 
@@ -359,6 +401,10 @@ func select_attack_phase_1() -> void:
 
 
 func select_attack_phase_2() -> void:
+	pass
+
+
+func select_attack_phase_3() -> void:
 	pass
 
 
@@ -486,7 +532,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		hurt_sfx_player.stream = sfx_hit.pick_random()
 		hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
 		hurt_sfx_player.play()
-	if new_health < prev_health:
+		
 		dps_accumulated_in_window += abs(prev_health - new_health)
 		if dps_accumulated_in_window > chip_spawn_dps_threshold:
 			_on_stagger()
@@ -494,17 +540,18 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
 			chip_mult = min(chip_mult, chip_spawn_mult_cap)
 			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult])
-			for i in chip_mult:
-				if randf() < chip_spawn_chance:
-					continue
-				# TODO - modify spawned chip value chance based on dps
-				var chip = chip_scene.instantiate() as RigidBody3D
-				GameManager.player.get_parent().add_child(chip)
-				chip.global_position = self.global_position
-				chip.rotate_y(randf_range(0, 2 * PI))
-				chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
-				chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
-				chip_dropped.emit(chip.value)
+			if chip_scene:
+				for i in chip_mult:
+					if randf() < chip_spawn_chance:
+						continue
+					# TODO - modify spawned chip value chance based on dps
+					var chip = chip_scene.instantiate() as RigidBody3D
+					GameManager.player.get_parent().add_child(chip)
+					chip.global_position = self.global_position
+					chip.rotate_y(randf_range(0, 2 * PI))
+					chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+					chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+					chip_dropped.emit(chip.value)
 			# Stop the dps timer and set the accumulated dps to 0
 			dps_dealt_window_timer.stop()
 			dps_accumulated_in_window = 0.0

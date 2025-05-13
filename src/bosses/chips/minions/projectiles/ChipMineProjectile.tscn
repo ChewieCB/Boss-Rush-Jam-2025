@@ -1,0 +1,102 @@
+[gd_scene load_steps=14 format=3 uid="uid://ge1558qgjpow"]
+
+[ext_resource type="Script" path="res://src/bosses/chips/minions/chip_mine_projectile.gd" id="1_362ni"]
+[ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/ExplosionVFX3D.tscn" id="2_tp0w1"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_uugp1"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_42ewo"]
+radius = 0.75
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kx7mk"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_o0bxp"]
+material = SubResource("StandardMaterial3D_kx7mk")
+radius = 0.063
+height = 0.125
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2sd2v"]
+radius = 3.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ga03k"]
+transparency = 1
+albedo_color = Color(1, 0.1, 0.1, 0.0862745)
+
+[sub_resource type="SphereMesh" id="SphereMesh_qhvrn"]
+material = SubResource("StandardMaterial3D_ga03k")
+radius = 0.4
+height = 0.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_knbem"]
+radius = 6.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xkou"]
+transparency = 1
+albedo_color = Color(1, 0.82, 0.1, 0.0862745)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7u0eh"]
+material = SubResource("StandardMaterial3D_0xkou")
+radius = 0.75
+height = 1.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_kpd6y"]
+radius = 0.6
+
+[node name="ChipMineProjectile" type="CharacterBody3D"]
+collision_layer = 32
+collision_mask = 136
+script = ExtResource("1_362ni")
+explosion_scene = ExtResource("2_tp0w1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_42ewo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
+mesh = SubResource("SphereMesh_o0bxp")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ExplosionArea" type="Area3D" parent="."]
+collision_layer = 64
+collision_mask = 78
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ExplosionArea"]
+shape = SubResource("SphereShape3D_2sd2v")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ExplosionArea"]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
+visible = false
+mesh = SubResource("SphereMesh_qhvrn")
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
+
+[node name="ActivationArea" type="Area3D" parent="."]
+collision_layer = 64
+collision_mask = 70
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ActivationArea"]
+shape = SubResource("SphereShape3D_knbem")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ActivationArea"]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
+visible = false
+mesh = SubResource("SphereMesh_7u0eh")
+
+[node name="ContactArea" type="Area3D" parent="."]
+collision_layer = 64
+collision_mask = 70
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ContactArea"]
+shape = SubResource("SphereShape3D_kpd6y")
+
+[node name="HealthComponent" parent="." instance=ExtResource("3_uugp1")]
+max_health = 5.0
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="body_entered" from="ActivationArea" to="." method="_on_activation_area_body_entered"]
+[connection signal="body_entered" from="ContactArea" to="." method="_on_contact_area_body_entered"]
+[connection signal="died" from="HealthComponent" to="." method="detonate"]

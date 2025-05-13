@@ -25,6 +25,10 @@ signal setting_back_button_pressed
 @onready var scaling_3d_slider: HSlider = $TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider
 @onready var scaling_3d_value: Label = $TabContainer/Graphic/VBoxContainer/Scaling3D/Value
 @onready var hide_ui_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideUI/HideUIToggle
+# Accessibility
+@onready var screen_shake_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/ScreenShakeToggle/ScreenShakeToggle
+@onready var drunk_blur_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/DrunkBlurToggle/DrunkBlurToggle
+
 
 @onready var master_slider: HSlider = $TabContainer/Audio/VBoxContainer/Master/MasterSlider
 @onready var master_value: Label = $TabContainer/Audio/VBoxContainer/Master/Value
@@ -290,10 +294,26 @@ func _on_input_button_pressed(button: KeybindButton, action: String, is_controll
 		remapping_button.set_changing_keybind_text("Press key to bind ({0})...".format([keybind_timer_timeleft]), is_remapping_controller)
 		keybind_timer.start()
 
+
 func _on_hide_ui_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.hide_ui = toggled_on
 	setting_changed.emit()
+
+
+func _on_screen_shake_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.screen_shake_disabled = !toggled_on
+	setting_changed.emit()
+	GameManager.setting_changed.emit()
+
+
+func _on_drunk_blur_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.drunk_blur_disabled = !toggled_on
+	setting_changed.emit()
+	GameManager.setting_changed.emit()
+
 
 
 func refresh_setting_value():
@@ -308,6 +328,8 @@ func refresh_setting_value():
 
 	camera_tilt_toggle.set_pressed_no_signal(GameManager.camera_tilt)
 	hide_ui_toggle.set_pressed_no_signal(GameManager.hide_ui)
+	screen_shake_toggle.set_pressed_no_signal(!GameManager.screen_shake_disabled)
+	drunk_blur_toggle.set_pressed_no_signal(!GameManager.drunk_blur_disabled)
 
 	Engine.max_fps = GameManager.FPS_LIMIT_ARRAY[GameManager.fps_limit_index]
 	fps_limit_option_button.selected = GameManager.fps_limit_index
