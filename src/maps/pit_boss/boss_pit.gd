@@ -122,7 +122,7 @@ func _on_cover_destroyed(cover: Cover) -> void:
 	nav_region.bake_navigation_mesh()
 
 
-func _on_boss_trigger_body_entered(body: Node3D) -> void:
+func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	spawn_cover()
 	surveillance_boss.activate()
 	pit_boss.activate()
