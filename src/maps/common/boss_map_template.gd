@@ -12,8 +12,7 @@ var nav_region: NavigationRegion3D
 @export var floor_mesh: MeshInstance3D
 
 @export_group("Actors")
-#@export var boss: BossCore
-@export var boss: BossCore
+@onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 
@@ -49,11 +48,14 @@ func _ready() -> void:
 	# Pre-load the lobby scene for faster level transitions
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
 	
-	# Connect UI signals
-	boss.died.connect(_on_boss_died)
-	boss.defeated.connect(_on_boss_defeated)
-	# DEBUG
-	boss.chip_dropped.connect(_on_chip_dropped)
+	if not boss:
+		push_error("No boss defined for map.")
+	if not boss.is_node_ready():
+		await boss.ready
+		boss.died.connect(_on_boss_died)
+		boss.defeated.connect(_on_boss_defeated)
+		boss.chip_dropped.connect(_on_chip_dropped)
+	
 	player.health_component.died.connect(_on_player_death)
 	# Sync the player's location in the elevator from the lobby
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
