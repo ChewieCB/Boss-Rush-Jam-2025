@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://dd7xt2ptfqbkw"]
+[gd_scene load_steps=63 format=3 uid="uid://dd7xt2ptfqbkw"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_jhwuw"]
 [ext_resource type="Script" path="res://src/bosses/roulette/boss_roulette.gd" id="2_m116k"]
@@ -45,14 +45,6 @@
 [ext_resource type="AudioStream" uid="uid://cj8ebj5amcry2" path="res://src/bosses/roulette/assets/sfx/Hit 2.mp3" id="30_xp8l2"]
 [ext_resource type="AudioStream" uid="uid://18w03u5q6px7" path="res://src/bosses/roulette/assets/sfx/Hit 3.mp3" id="31_7wohx"]
 [ext_resource type="AudioStream" uid="uid://dskgvb4n5jcob" path="res://src/bosses/roulette/assets/sfx/Attack Warning 2.mp3" id="31_jsqjw"]
-
-[sub_resource type="Resource" id="Resource_31yl5"]
-script = ExtResource("5_m3ad2")
-state = NodePath("../../../Health/Dead")
-
-[sub_resource type="Resource" id="Resource_c0bw8"]
-script = ExtResource("6_lkakv")
-guard = SubResource("Resource_31yl5")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4550l"]
 radius = 3.1
@@ -184,34 +176,27 @@ projectile_scene = null
 delay_per_projectile = 0.6
 GRAVITY = 0.0
 
-[node name="StateChart_Root_Status_Idle#toShields" type="Node" parent="." index="0"]
-script = ExtResource("4_3xtcm")
-to = NodePath("../../Shields")
-event = &"start_shields"
-guard = SubResource("Resource_c0bw8")
-delay_in_seconds = "0.0"
-
-[node name="Sprite3D" parent="." index="1"]
+[node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -0.385, -0.326035, 0)
 texture = ExtResource("9_2oxhb")
 
-[node name="CollisionShape3D" parent="." index="2"]
+[node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_4550l")
 
-[node name="DebugMesh" parent="." index="3"]
+[node name="DebugMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 mesh = SubResource("CylinderMesh_ljrhi")
 
-[node name="CentralStreamPlayer" type="AudioStreamPlayer3D" parent="." index="4"]
+[node name="CentralStreamPlayer" type="AudioStreamPlayer3D" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8, 0)
 
-[node name="SegmentStreamPlayer" type="AudioStreamPlayer3D" parent="." index="5"]
+[node name="SegmentStreamPlayer" type="AudioStreamPlayer3D" parent="." index="4"]
 
-[node name="Shields" type="Node3D" parent="." index="6"]
+[node name="Shields" type="Node3D" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.8, 0)
 
-[node name="HeldBallPivot" type="Node3D" parent="." index="7"]
+[node name="HeldBallPivot" type="Node3D" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.385, 3.4, 0)
 
 [node name="Marker3D" type="Marker3D" parent="HeldBallPivot" index="0"]
@@ -226,7 +211,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.083, 0, 0.9)
 mesh = SubResource("SphereMesh_nuufe")
 skeleton = NodePath("")
 
-[node name="Hurtbox" parent="." index="8"]
+[node name="Hurtbox" parent="." index="7"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.1, 0)
 collision_mask = 66
 
@@ -249,16 +234,16 @@ collision_mask = 64
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox/StaticBody3D" index="0"]
 shape = SubResource("BoxShape3D_6q8u4")
 
-[node name="HealthComponent" parent="." index="9"]
-max_health = 4000.0
+[node name="HealthComponent" parent="." index="8"]
+max_health = 500.0
 
-[node name="NavigationComponent" parent="." index="10"]
+[node name="NavigationComponent" parent="." index="9"]
 enabled = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Malina, Center of Attention"
 
-[node name="DebugPhaseLabel" type="Label3D" parent="." index="12"]
+[node name="DebugPhaseLabel" type="Label3D" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, 0)
 visible = false
 billboard = 1
@@ -835,16 +820,16 @@ to = NodePath("..")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="DebugStateLabel" parent="." index="15"]
+[node name="DebugStateLabel" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, 0)
 no_depth_test = true
 
-[node name="ShieldsAbsorbTimer" type="Timer" parent="." index="16"]
+[node name="ShieldsAbsorbTimer" type="Timer" parent="." index="15"]
 one_shot = true
 
-[node name="ShieldsSpawnTimer" type="Timer" parent="." index="17"]
+[node name="ShieldsSpawnTimer" type="Timer" parent="." index="16"]
 
-[node name="PushbackArea" type="Area3D" parent="." index="18"]
+[node name="PushbackArea" type="Area3D" parent="." index="17"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.1, 0)
 collision_layer = 0
 collision_mask = 2
@@ -853,7 +838,7 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 29, 0)
 shape = SubResource("CylinderShape3D_7wlfa")
 
-[node name="CenterBlocker" type="StaticBody3D" parent="." index="19"]
+[node name="CenterBlocker" type="StaticBody3D" parent="." index="18"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.1, 0)
 collision_layer = 0
 collision_mask = 2
@@ -862,20 +847,20 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 29, 0)
 shape = SubResource("CylinderShape3D_cbruj")
 
-[node name="DebugDistanceLabel" parent="." index="20"]
+[node name="DebugDistanceLabel" parent="." index="19"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, 0)
 no_depth_test = true
 
-[node name="BarrierTargetingTimer" type="Timer" parent="." index="21"]
+[node name="BarrierTargetingTimer" type="Timer" parent="." index="20"]
 one_shot = true
 
-[node name="BallKillTimer" type="Timer" parent="." index="22"]
+[node name="BallKillTimer" type="Timer" parent="." index="21"]
 one_shot = true
 
-[node name="DamageTextMarker" parent="." index="24"]
+[node name="DamageTextMarker" parent="." index="23"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.3112, 0)
 
-[node name="BodyCenter" parent="." index="25"]
+[node name="BodyCenter" parent="." index="24"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.28097, 0)
 
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]

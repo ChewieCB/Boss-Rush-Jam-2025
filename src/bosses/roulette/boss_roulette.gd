@@ -605,7 +605,7 @@ func _on_shields_recover_state_entered() -> void:
 	
 	await get_tree().create_timer(attack_recovery_time).timeout
 	shields_spawn_timer.start()
-	state_chart.send_event("end_shields")
+	state_chart.send_event("restart_targeting")
 
 
 #### PHASE 1 ==========================

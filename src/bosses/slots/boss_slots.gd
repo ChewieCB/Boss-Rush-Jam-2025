@@ -194,7 +194,6 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 
 func _on_died() -> void:
-	#super()
 	_cleanup_bombs()
 	
 	anim_player.stop()
