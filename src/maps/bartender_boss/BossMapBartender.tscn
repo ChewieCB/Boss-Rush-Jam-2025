@@ -1,4 +1,4 @@
-[gd_scene load_steps=223 format=4 uid="uid://cgk2mraaxwvxd"]
+[gd_scene load_steps=224 format=4 uid="uid://cgk2mraaxwvxd"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_vcodf"]
 [ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="2_ikfam"]
@@ -8,6 +8,7 @@
 [ext_resource type="Material" uid="uid://c162u3li2i84m" path="res://assets/textures/walls/wallpaper_0.tres" id="4_rdf0i"]
 [ext_resource type="AudioStream" uid="uid://cm6h6wj6m5ybu" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS ROOM ON FIRE LOOP.mp3" id="4_w5yjf"]
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="5_psrfu"]
+[ext_resource type="LightmapGIData" uid="uid://crmsxh2cqhmb2" path="res://src/maps/bartender_boss/BossMapBartender.lmbake" id="6_4rrpe"]
 [ext_resource type="Material" uid="uid://b0ctqc57ph8u7" path="res://assets/textures/walls/grunge-concrete.tres" id="6_dsjuu"]
 [ext_resource type="Material" uid="uid://c42rborvicsq2" path="res://assets/textures/floor/wood_0.tres" id="7_erqd4"]
 [ext_resource type="Material" uid="uid://n34cnqh7s2w0" path="res://assets/textures/floor/carpet-red.tres" id="8_oo7i2"]
@@ -749,6 +750,9 @@ nav_parent = NodePath("FuncGodotMap")
 floor_parent = NodePath("FuncGodotMap/entity_0_worldspawn")
 floor_mesh = NodePath("FuncGodotMap/entity_0_worldspawn/entity_0_mesh_instance")
 boss = NodePath("FuncGodotMap/BossBartender")
+
+[node name="LightmapGI" parent="." index="2"]
+light_data = ExtResource("6_4rrpe")
 
 [node name="BossTriggerVolume" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -20)

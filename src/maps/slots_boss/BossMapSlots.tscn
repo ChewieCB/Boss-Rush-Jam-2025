@@ -1,8 +1,9 @@
-[gd_scene load_steps=174 format=4 uid="uid://fccl23tqjubn"]
+[gd_scene load_steps=175 format=4 uid="uid://fccl23tqjubn"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_e32ik"]
 [ext_resource type="Script" path="res://src/maps/slots_boss/boss_map_slots.gd" id="1_wilwm"]
 [ext_resource type="AudioStream" uid="uid://iuxwxuvd05wd" path="res://assets/music/Tank R1.mp3" id="3_2l212"]
+[ext_resource type="LightmapGIData" uid="uid://cmiruh4eutw2x" path="res://src/maps/slots_boss/BossMapSlots.lmbake" id="4_cib3u"]
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="7_fn066"]
 [ext_resource type="Material" uid="uid://c21k5cw2fd0br" path="res://assets/textures/walls/paint-red.tres" id="8_2qnm2"]
 [ext_resource type="Material" uid="uid://cpmnrcuro67h8" path="res://assets/textures/walls/paint-green.tres" id="9_1paok"]
@@ -691,6 +692,9 @@ nav_parent = NodePath("FuncGodotMap")
 floor_parent = NodePath("FuncGodotMap/group_660_Floor/entity_48_nav_floor")
 floor_mesh = NodePath("FuncGodotMap/group_660_Floor/entity_48_nav_floor/entity_48_mesh_instance")
 boss = NodePath("FuncGodotMap/entity_15_BossSlots")
+
+[node name="LightmapGI" parent="." index="2"]
+light_data = ExtResource("4_cib3u")
 
 [node name="BossTriggerVolume" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13, 0)
