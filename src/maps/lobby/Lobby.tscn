@@ -2843,7 +2843,7 @@ entProperties = {
 "_tb_group": "575",
 "boss_name": "Umby the Stinky",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/slots_boss/BossMapSlotsNew.tscn",
+"linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
 "origin": "384 31 32"
 }
 
@@ -2853,7 +2853,7 @@ entProperties = {
 "_tb_group": "575",
 "boss_name": "Roulette Dares",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/roulette_boss/BossRoulette.tscn",
+"linked_level": "res://src/maps/roulette_boss/BossMapRoulette.tscn",
 "origin": "384 31 8"
 }
 
@@ -2863,7 +2863,7 @@ entProperties = {
 "_tb_group": "575",
 "boss_name": "Open This Pit Up!",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/pit_boss/BossPit.tscn",
+"linked_level": "res://src/maps/pit_boss/BossMapPit.tscn",
 "origin": "384 -1 8"
 }
 
@@ -2873,7 +2873,7 @@ entProperties = {
 "_tb_group": "575",
 "boss_name": "Mixology 101",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/bartender_boss/BossBartenderMap.tscn",
+"linked_level": "res://src/maps/bartender_boss/BossMapBartender.tscn",
 "origin": "384 -1 32"
 }
 
@@ -2883,7 +2883,7 @@ entProperties = {
 "_tb_group": "575",
 "boss_name": "Slow Roll'em",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/chip_boss/BossChip.tscn",
+"linked_level": "res://src/maps/chip_boss/BossMapChip.tscn",
 "origin": "384 -33 32"
 }
 

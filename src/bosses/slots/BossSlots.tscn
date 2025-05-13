@@ -160,10 +160,10 @@ diamond_shot_time = 1.3
 sfx_diamond_shot = Array[AudioStream]([ExtResource("36_pqkkl"), ExtResource("37_0sig5"), ExtResource("38_hfhsu"), ExtResource("39_gde5g"), ExtResource("40_8wl1k"), ExtResource("41_182io"), ExtResource("42_vntjg"), ExtResource("43_2donj")])
 bomb_projectile = ExtResource("12_xbq02")
 bombs_per_attack = 8
-bomb_drop_delay = 0.4
 bomb_fuse_time = 2.5
 bomb_impulse = 170000.0
 max_drop_distance = 20.0
+bomb_drop_delay = 0.4
 sfx_bomb_launch = Array[AudioStream]([ExtResource("45_ishi6"), ExtResource("46_vgcme"), ExtResource("47_hafh8"), ExtResource("48_qbsnc"), ExtResource("49_sigie")])
 boss_id = 2
 chip_spawn_chance = 0.3
@@ -762,6 +762,9 @@ script = ExtResource("5_lu46i")
 to = NodePath("../../Recover")
 event = &"stop_dropping_bombs"
 delay_in_seconds = "0.0"
+
+[node name="DropTimer" type="Timer" parent="StateChart/Root/Phase/Phase2/CherryBombs/DroppingBombs" index="1"]
+one_shot = true
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/CherryBombs" index="2"]
 script = ExtResource("9_5a0pq")

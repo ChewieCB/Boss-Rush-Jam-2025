@@ -109,10 +109,12 @@ var charge_locked: bool = false
 @export_subgroup("Cherry Bombs")
 @export var bomb_projectile: PackedScene
 @export var bombs_per_attack: int = 5
-@export var bomb_drop_delay: float = 0.4
 @export var bomb_fuse_time: float = 2.5
 @export var bomb_impulse: float = 100000.0
 @export var max_drop_distance: float = 20.0
+@export var bomb_drop_delay: float = 0.4
+@onready var bomb_drop_timer: Timer = $StateChart/Root/Phase/Phase2/CherryBombs/DroppingBombs/DropTimer
+var active_bombs: Array = []
 # SFX
 # Moved to the bomb objects
 @export var sfx_bomb_launch: Array[AudioStream]
@@ -192,11 +194,27 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 
 func _on_died() -> void:
-	super ()
+	_cleanup_bombs()
+	
 	anim_player.stop()
 	set_physics_process(false)
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.finished
+	
+	died.emit()
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
+	drop_barrel()
+	
+	await boss_death_slow_mo()
+	
+	if not self in GameManager.bosses_defeated:
+		GameManager.bosses_defeated.append(boss_id)
+		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
+
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:
 	pass
@@ -749,7 +767,9 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 	var dir_counter: int = -1
 	sfx_player.volume_db = 3.0
 	for i in range(bombs_per_attack):
-		await get_tree().create_timer(bomb_drop_delay).timeout
+		bomb_drop_timer.start(bomb_drop_delay)
+		await bomb_drop_timer.timeout
+		#await get_tree().create_timer(bomb_drop_delay).timeout
 		sfx_player.stream = sfx_bomb_launch.pick_random()
 		sfx_player.play()
 		var projectile := bomb_projectile.instantiate() as RigidBody3D
@@ -758,6 +778,7 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * dir_counter)
 		projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
+		active_bombs.append(projectile)
 		
 		dir_counter += 1
 		dir_counter = wrapi(dir_counter, -1, 2)
@@ -782,3 +803,11 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 	state_chart.send_event("cooldown_end")
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+func _cleanup_bombs() -> void:
+	bomb_drop_timer.stop()
+	for bomb in active_bombs:
+		if is_instance_valid(bomb):
+			bomb.destroy(false)
+	active_bombs = []
