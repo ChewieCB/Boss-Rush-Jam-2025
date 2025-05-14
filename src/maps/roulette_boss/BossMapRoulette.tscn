@@ -2509,13 +2509,12 @@ data = PackedVector3Array(0, 0.375, -4, 0, -0.375, -4, 1.0353, -0.375, -3.8637, 
 height = 44.6
 radius = 57.0
 
-[node name="BossMapRoulette" node_paths=PackedStringArray("floor_pivot", "boss") instance=ExtResource("1_knghr")]
+[node name="BossMapRoulette" node_paths=PackedStringArray("floor_pivot") instance=ExtResource("1_knghr")]
 script = ExtResource("2_frro7")
 floor_pivot = NodePath("FuncGodotMap/group_645_WheelFloor")
 ROTATION_SPEED = 0.0
 sfx_ambience = Array[AudioStream]([ExtResource("3_6b2ja"), ExtResource("4_ixxb2"), ExtResource("5_kfknr")])
 bgm = ExtResource("2_fh2i0")
-boss = NodePath("FuncGodotMap/entity_65_BossRoulette")
 
 [node name="LightmapGI" parent="." index="2"]
 quality = 1

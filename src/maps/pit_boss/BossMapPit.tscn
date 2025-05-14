@@ -1291,7 +1291,7 @@ _surfaces = [{
 "vertex_data": PackedByteArray("AACAPwAAMEAAAIDAAACAPwAAMMAAAIDAAACAPwAAMMAAAIBAAACAPwAAMEAAAIBAAACAvwAAMEAAAIHAAACAvwAAMMAAAIHAAACAPwAAMMAAAIHAAACAPwAAMEAAAIHAAACAvwAAMEAAAIFAAACAPwAAMEAAAIFAAACAPwAAMMAAAIFAAACAvwAAMMAAAIFAAACAvwAAMEAAAIDAAACAvwAAMEAAAIBAAACAvwAAMMAAAIBAAACAvwAAMMAAAIDA////f/9//z////9//3//P////3//f/8/////f/9//z//////////P/////////8//////////z//////////P/9//3////+//3//f////7//f/9/////v/9//3////+/AAD/f/9//78AAP9//3//vwAA/3//f/+/AAD/f/9//78=")
 }]
 
-[node name="BossMapPit" node_paths=PackedStringArray("nav_parent", "floor_parent", "floor_mesh", "boss") instance=ExtResource("1_mky1f")]
+[node name="BossMapPit" node_paths=PackedStringArray("nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_mky1f")]
 script = ExtResource("2_6oq1m")
 active_bgm = ExtResource("3_51kcm")
 phase_2_stance_time = 14.0
@@ -1302,7 +1302,6 @@ bgm = ExtResource("4_ce2q6")
 nav_parent = NodePath("FuncGodotMap")
 floor_parent = NodePath("FuncGodotMap/entity_0_worldspawn")
 floor_mesh = NodePath("FuncGodotMap/entity_0_worldspawn/entity_0_mesh_instance")
-boss = NodePath("FuncGodotMap/entity_31_PitBoss")
 
 [node name="BossTriggerVolume" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 26)
