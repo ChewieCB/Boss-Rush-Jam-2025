@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://bpbb23dkfwo0l"]
 
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="1_2elh3"]
-[ext_resource type="Texture2D" uid="uid://igye6giedkv" path="res://src/bosses/base/assets/placeholder_stack_salem.png" id="1_8y3b6"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_c2ut8"]
+[ext_resource type="Texture2D" uid="uid://bfj4vbh53jpe" path="res://src/bosses/chips/assets/sprites/split_stack/TEMP_idle.png" id="2_eddf8"]
 [ext_resource type="PackedScene" uid="uid://e7b51y76wxn3" path="res://src/components/navigation/NavigationComponent.tscn" id="4_kqvls"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6do11"]
@@ -17,7 +17,7 @@ height = 4.0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_1rd1s"]
 height = 4.0
-radius = 1.5
+radius = 1.1
 
 [node name="ChipStackSmall" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
 collision_layer = 64
@@ -27,16 +27,17 @@ navigation_component = NodePath("NavigationComponent")
 health_component = NodePath("HealthComponent")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
 billboard = 2
-texture = ExtResource("1_8y3b6")
+texture = ExtResource("2_eddf8")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+visible = false
 mesh = SubResource("CylinderMesh_td5xh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 2, 0)
 shape = SubResource("CylinderShape3D_1rd1s")
 
 [node name="HealthComponent" parent="." instance=ExtResource("2_c2ut8")]

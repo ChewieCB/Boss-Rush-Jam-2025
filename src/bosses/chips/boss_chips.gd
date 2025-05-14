@@ -408,12 +408,15 @@ func return_big_stack_to_center() -> void:
 	return
 
 func big_stack_jump(goal_pos: Vector3, height: float = jump_height, hover: bool = true) -> void:
+	anim_player.play("big_stack/jump_start")
+	
 	var jump_tween: Tween = get_tree().create_tween()
 	jump_tween.tween_property(
 		self, "global_position", goal_pos, jump_time
 	).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	
 	await jump_tween.finished
+	anim_player.play("big_stack/jump_apex")
 	
 	if hover:
 		await get_tree().create_timer(jump_hang_time).timeout
@@ -429,12 +432,16 @@ func big_stack_jump_to_center(height: float = jump_height, hover: bool = true) -
 	return
 
 func big_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
+	anim_player.play("big_stack/slam_start")
+	
 	var jump_tween: Tween = get_tree().create_tween()
 	jump_tween.tween_property(
 		self, "global_position", target_pos, time
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
 	await jump_tween.finished
+	
+	anim_player.play("big_stack/slam_end")
 	
 	return
 
@@ -574,7 +581,9 @@ func _on_backspin_chip_targeting_state_entered() -> void:
 
 
 func _on_backspin_chip_forward_spin_state_entered() -> void:
+	anim_player.play("big_stack/projectile_telegraph")
 	await _telegraph_attack()
+	anim_player.play("big_stack/projectile_fire")
 	
 	# Instance a chip projectile
 	var chip_inst: RollingChip = rolling_chip_projectile.instantiate()
@@ -607,6 +616,7 @@ func _on_backspin_chip_recover_state_entered() -> void:
 	
 	_cleanup_backspin_chip()
 	chips_fired += 1
+	anim_player.play("big_stack/projectile_telegraph")
 	
 	if chips_fired >= chips_per_attack:
 		chips_fired = 0
@@ -615,6 +625,7 @@ func _on_backspin_chip_recover_state_entered() -> void:
 		await get_tree().create_timer(attack_recovery_time).timeout
 		
 		state_chart.send_event("cooldown_end")
+		anim_player.play("big_stack/idle")
 		select_attack()
 		state_chart.send_event("end_recovery")
 	else:
@@ -642,6 +653,9 @@ func _on_chip_sweep_targeting_state_entered() -> void:
 func _on_chip_sweep_sweep_state_entered() -> void:
 	debug_state_label.text = "Chip Sweep | Sweep"
 	
+	anim_player.play("big_stack/projectile_telegraph")
+	await _telegraph_attack()
+	
 	for i in chip_sweep_count:
 		var sweep_proj: ChipSweepProjectile = chip_sweep_prefab.instantiate()
 		scene_root.add_child(sweep_proj)
@@ -651,15 +665,18 @@ func _on_chip_sweep_sweep_state_entered() -> void:
 		var chips_to_player: int = int(sweep_proj.global_position.distance_to(target.global_position))
 		sweep_proj.anim_time = sweep_time / chips_to_player
 		
+		anim_player.play("big_stack/projectile_fire")
 		sweep_proj.add_chips(chips_to_player + 2)
 		await sweep_proj.chips_placed
 		sweep_proj.remove_chips()
 		await sweep_proj.chips_removed
+		anim_player.play("big_stack/projectile_telegraph")
 		chip_sweep_instances.erase(sweep_proj)
 		sweep_proj.queue_free()
 		
 		await get_tree().create_timer(sweep_delay).timeout
-	
+		
+	anim_player.play("big_stack/idle")
 	state_chart.send_event("end_sweep")
 
 
@@ -680,6 +697,8 @@ func _on_stack_slam_targeting_state_entered() -> void:
 func _on_stack_slam_jump_state_entered() -> void:
 	debug_state_label.text = "Stack Slam | Jumping"
 	_disable_gravity()
+	
+	anim_player.play("big_stack/jump_telegraph")
 	
 	await big_stack_jump_to_center(jump_height / 2, false)
 	
