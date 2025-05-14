@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bibe88ibu2n4d"]
 
 [ext_resource type="Texture2D" uid="uid://bri5bfpidk1w3" path="res://src/player/barrel/resource/sprite/leg_eye_coordinate.png" id="1_khihb"]
-[ext_resource type="PackedScene" uid="uid://1vmbg406xmyk" path="res://src/player/barrel/RecklessAbandonBarrel.tscn" id="2_vt5ef"]
+[ext_resource type="PackedScene" uid="uid://d0br37tx0fckb" path="res://src/player/barrel/LegEyeCoordinateBarrel.tscn" id="2_wlqqv"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_567sj"]
 
 [resource]
@@ -20,5 +20,5 @@ Flexible Knee: You can only shoot while you are crouching. Your crouch can let y
 "
 barrel_image = ExtResource("1_khihb")
 barrel_cost = 1650
-barrel_prefab = ExtResource("2_vt5ef")
+barrel_prefab = ExtResource("2_wlqqv")
 is_archetype_barrel = false

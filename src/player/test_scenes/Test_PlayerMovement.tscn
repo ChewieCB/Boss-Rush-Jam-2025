@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=33 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -21,6 +21,9 @@
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="12_2rf45"]
 [ext_resource type="PackedScene" uid="uid://dow4ee3qublb7" path="res://src/maps/common/ShootWallTest.tscn" id="19_cev3k"]
 [ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChipProjectile.tscn" id="19_sk1dt"]
+[ext_resource type="Resource" uid="uid://bibe88ibu2n4d" path="res://src/player/barrel/resource/leg_eye_coordinate_barrel_data.tres" id="21_7d46j"]
+[ext_resource type="Resource" uid="uid://cioys44ppioym" path="res://src/player/barrel/resource/reckless_abandon_barrel_data.tres" id="21_8043w"]
+[ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="22_qlyyk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -152,6 +155,18 @@ data = ExtResource("6_1a2ul")
 [node name="BarrelItemPickup5" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 5.96152)
 data = ExtResource("7_2srjf")
+
+[node name="BarrelItemPickup15" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 7.30406)
+data = ExtResource("21_7d46j")
+
+[node name="BarrelItemPickup16" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.73626, 0.599205, 8.82271)
+data = ExtResource("22_qlyyk")
+
+[node name="BarrelItemPickup17" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.89, 0.599205, 7.53859)
+data = ExtResource("21_8043w")
 
 [node name="ShootWallTest" parent="." instance=ExtResource("19_cev3k")]
 

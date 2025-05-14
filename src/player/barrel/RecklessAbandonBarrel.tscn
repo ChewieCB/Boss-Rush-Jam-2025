@@ -34,7 +34,6 @@ status_code = "glass_cannon_damage_reduction_debuff"
 modified_stat = 4
 value = -30.0
 is_infinite_duration = true
-show_duration_ui = false
 
 [node name="ExecutionerRound" type="Node3D" parent="EffectContainer"]
 script = ExtResource("5_83dk4")

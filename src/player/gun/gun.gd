@@ -166,9 +166,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_prepare_to_fire()
 
-	if barrel_count == 0 or not check_if_archetype_barrel_installed():
-		SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
-
 	GameManager.player.player_camera.set_recoil_power(modified_recoil)
 	GameManager.player.player_camera.add_trauma(modified_screenshake)
 
@@ -176,6 +173,9 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		barrel.get_active_effect().on_damage_calculation()
 
 	for i in range(n_shot_repeat):
+		if barrel_count == 0 or not check_if_archetype_barrel_installed():
+			SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
+
 		var bullet_start_pos = bullet_spawn_marker.global_position
 
 		for j in range(modified_projectile_amount):
@@ -343,8 +343,8 @@ func stop_all_barrels() -> void:
 
 func _stop_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
-	barrel.get_active_effect().on_barrel_stop_spin()
 	barrel.stop_spin()
+	barrel.get_active_effect().on_barrel_stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
 	SoundManager.stop_sound(TEMP_sfx_spin)
