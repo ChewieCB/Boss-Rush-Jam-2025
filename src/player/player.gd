@@ -20,7 +20,6 @@ var movement_sfx_player: AudioStreamPlayer
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
 @export var dash_cd: float = 1
-@export var dash_iframe_duration: float = 0.2
 @export var angular_momentum_multiplier = 0.4
 @export var speedline_vfx_prefab: PackedScene
 
@@ -68,6 +67,7 @@ var drunk_drift_vector := Vector2.ZERO
 var drunk_target_drift_vector := Vector2.ZERO
 
 signal movement_dashed
+signal movement_crouched
 signal new_status_effect_added(status)
 signal status_effect_removed(status_effect_code)
 
@@ -102,7 +102,11 @@ var vel_horizontal := Vector2(0, 0)
 var vel_vertical: float = 0
 
 var is_dashing: bool = false
-var is_crouching: bool = false
+var is_crouching: bool = false:
+	set(value):
+		if value != is_crouching:
+			movement_crouched.emit()
+		is_crouching = value
 
 var internal_bonus_speed: float = 0
 
@@ -141,12 +145,14 @@ var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
 var base_stats = {
-	StatusEffect.PlayerStatEnum.RUN_SPEED: 1,
-	StatusEffect.PlayerStatEnum.DASH_SPEED: 1,
+	StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER: 1,
+	StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER: 1,
 	StatusEffect.PlayerStatEnum.IS_INVINVIBLE: false,
 	StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION: 0,
 	StatusEffect.PlayerStatEnum.LUCK: 0,
 	StatusEffect.PlayerStatEnum.JUMP_HEIGHT: 1,
+	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
+	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
 }
 var current_stats = base_stats.duplicate(true)
 var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
@@ -240,7 +246,7 @@ func _unhandled_input(event):
 					sfx_dash_air.pick_random(), randf_range(0.8, 1.1), "SFX"
 				)
 			vel_vertical = 0
-			dash_duration_timer.start()
+			dash_duration_timer.start(current_stats[StatusEffect.PlayerStatEnum.DASH_DURATION])
 			movement_dashed.emit()
 			add_iframe_on_dash()
 
@@ -354,7 +360,7 @@ func _physics_process(delta):
 	else:
 		vel_horizontal += input_dir * add_speed
 
-	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats[StatusEffect.PlayerStatEnum.RUN_SPEED]
+	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats[StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER]
 
 	# Bonus speed
 	if is_dashing:
@@ -366,7 +372,7 @@ func _physics_process(delta):
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 3)
 
 	var velocity_dir = velocity.normalized()
-	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats[StatusEffect.PlayerStatEnum.DASH_SPEED]
+	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats[StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER]
 
 	# Let the player ignore the wheelspin if they are moving
 	var floor_velocity = get_platform_velocity()
@@ -780,7 +786,7 @@ func add_iframe_on_dash():
 	iframe_dash_buff.modified_stat = StatusEffect.PlayerStatEnum.IS_INVINVIBLE
 	iframe_dash_buff.value = 1 # Doesnt matter
 	iframe_dash_buff.modify_type = StatusEffect.ModifyType.BOOL
-	iframe_dash_buff.duration = dash_iframe_duration
+	iframe_dash_buff.duration = current_stats[StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION]
 	iframe_dash_buff.status_icon = dash_iframe_icon
 	add_status_effect(iframe_dash_buff)
 

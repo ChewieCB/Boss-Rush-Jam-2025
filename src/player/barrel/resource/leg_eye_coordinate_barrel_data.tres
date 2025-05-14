@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bibe88ibu2n4d"]
+
+[ext_resource type="Texture2D" uid="uid://bri5bfpidk1w3" path="res://src/player/barrel/resource/sprite/leg_eye_coordinate.png" id="1_khihb"]
+[ext_resource type="PackedScene" uid="uid://1vmbg406xmyk" path="res://src/player/barrel/RecklessAbandonBarrel.tscn" id="2_vt5ef"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_567sj"]
+
+[resource]
+script = ExtResource("3_567sj")
+barrel_id = 44
+barrel_name = "Leg Eye Coordinate"
+barrel_desc = "[b]Leg Eye Coordinate Barrel[/b]
+Focus on your movement to shoot your gun.
+
+Possible rolls:
+[ul]
+Trigger Leg: You can only shoot when you dash. Your dash is longer. Increased damage and critical hit chance
+Springy Feet: You can only shoot while you are midair. You jump higher. Reduce spread and recoil.
+Flexible Knee: You can only shoot while you are crouching. Your crouch can let you dodge if you time it right. Increased fire rate and magazine size.
+[/ul]
+"
+barrel_image = ExtResource("1_khihb")
+barrel_cost = 1650
+barrel_prefab = ExtResource("2_vt5ef")
+is_archetype_barrel = false

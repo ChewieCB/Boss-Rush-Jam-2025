@@ -2,12 +2,14 @@ class_name StatusEffect
 
 enum PlayerStatEnum {
 	NONE,
-	RUN_SPEED,
-	DASH_SPEED,
+	RUN_SPEED_MODIFIER,
+	DASH_SPEED_MODIFIER,
 	IS_INVINVIBLE, # bool
 	DAMAGE_REDUCTION, # 100 = 100% resist damage / take no damage
     LUCK, # Used in a lot of things. Ex: improve crit chance, increased money drop, chance to dodge bullet
-    JUMP_HEIGHT
+    JUMP_HEIGHT,
+    DASH_IFRAME_DURATION,
+	DASH_DURATION,
 }
 enum ModifyType {FLAT, PERCENTAGE, BOOL} # How it interact with base value
 
