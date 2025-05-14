@@ -21,6 +21,7 @@ const BEAM_RANGE_IF_NOT_COLLIDE = 50
 
 func _ready():
 	super ()
+	is_hitscan = true
 	var dup_mat = mesh.material_override.duplicate()
 	mesh.material_override = dup_mat
 	if shot_flash_start:
@@ -67,7 +68,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 	# Normal hitscan start here
 	life_timer.start()
-	var rand_damage_mod = get_damamge_variance_modifier(_damage)
+	var rand_damage_mod = get_damage_variance_modifier(_damage)
 	damage = _damage + rand_damage_mod
 	projectile_speed = _speed
 	ricochet_count_left = ricochet_count

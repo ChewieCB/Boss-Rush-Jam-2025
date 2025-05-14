@@ -63,7 +63,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	var rand_damage_mod = get_damamge_variance_modifier(_damage)
+	var rand_damage_mod = get_damage_variance_modifier(_damage)
 	damage = _damage + rand_damage_mod
 	current_dir = dir
 	ricochet_count_left = ricochet_count

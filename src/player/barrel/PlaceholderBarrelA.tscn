@@ -1,11 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=5 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_5c3j8"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_76tq5"]
-[ext_resource type="Script" path="res://src/player/barrel/longshot_effect.gd" id="6_qxk2r"]
-[ext_resource type="Script" path="res://src/player/barrel/slow_roller_effect.gd" id="7_stjrl"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="8_8ud1i"]
 [ext_resource type="Script" path="res://src/player/barrel/card_counting_system_effect.gd" id="11_4doj4"]
 
@@ -14,23 +10,6 @@ script = ExtResource("1_xtoip")
 
 [node name="EffectContainer" type="Node3D" parent="."]
 script = ExtResource("2_nse0w")
-
-[node name="SlowRoller" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("2_5c3j8")
-display_text_title = "Slow Roller"
-display_text_tag = "Oh, the anticipation!"
-display_text_desc = "Longer bullet flight time, higher damage
--50% projectile speed"
-
-[node name="SlowRollerEffect" type="Node3D" parent="EffectContainer/SlowRoller"]
-script = ExtResource("7_stjrl")
-
-[node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/SlowRoller"]
-script = ExtResource("3_76tq5")
-attribute = 3
-modify_value = -50.0
-is_perc = true
 
 [node name="CardCountingSystem" type="Node3D" parent="EffectContainer"]
 visible = false
@@ -51,10 +30,3 @@ display_text_title = "Hyperfocus"
 display_text_tag = "Take position and start blasting!"
 display_text_desc = "-50% spread, +25% damage when stationary
 +100% spread, -25% damage when moving"
-
-[node name="Longshot" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("6_qxk2r")
-display_text_title = "Longshot"
-display_text_tag = "Keep your distance"
-display_text_desc = "More damage with distance"

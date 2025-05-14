@@ -28,6 +28,7 @@ var current_dir: Vector3
 var projectile_speed = 100
 var max_range
 var splitted = false
+var is_hitscan = false
 
 # Statistics traking or barrel effect
 var life_time = 0
@@ -89,7 +90,7 @@ func ricochet():
 	return
 
 ## This will be added to normal projectile attack
-func get_damamge_variance_modifier(_damage: int) -> int:
+func get_damage_variance_modifier(_damage: int) -> int:
 	if GameManager.player.luck_component.current_luck_ratio >= GameManager.player.HIGH_LUCK_THRESHOLD:
 		# High luck will roll from 0 to 0.2 instead of usual -0.2 to 0.2
 		return int(randf_range(0, _damage * DAMAGE_VARIANCE))
