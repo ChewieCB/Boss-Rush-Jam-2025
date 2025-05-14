@@ -2,10 +2,13 @@ class_name StatusEffect
 
 enum PlayerStatEnum {
 	NONE,
-	RUN_SPEED,
-	DASH_SPEED,
-	IS_INVINVIBLE,
+	RUN_SPEED_MODIFIER,
+	DASH_SPEED_MODIFIER,
+	IS_INVINVIBLE, # bool
 	DAMAGE_REDUCTION, # 100 = 100% resist damage / take no damage
+    JUMP_HEIGHT,
+    DASH_IFRAME_DURATION,
+	DASH_DURATION,
 }
 enum ModifyType {FLAT, PERCENTAGE, BOOL} # How it interact with base value
 
@@ -25,6 +28,7 @@ var duration: float = 0
 var is_bad_effect: bool
 var status_icon: Texture2D
 var show_duration_ui: bool = true
+var show_value_on_ui: bool = false
 
 func _to_string() -> String:
     var data = {

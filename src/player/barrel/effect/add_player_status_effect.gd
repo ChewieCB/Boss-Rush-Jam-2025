@@ -10,7 +10,8 @@ extends BaseBarrelEffect
 @export var duration: float = 0
 @export var is_bad_effect: bool
 @export var status_icon: Texture2D
-@export var show_duration_ui: bool = true
+@export var show_duration_ui: bool = false
+@export var show_value_on_ui: bool = false
 
 func create_status_effect() -> StatusEffect:
 	var status = StatusEffect.new()
@@ -25,6 +26,8 @@ func create_status_effect() -> StatusEffect:
 		status.duration = duration
 	status.is_bad_effect = true
 	status.status_icon = status_icon
+	status.show_duration_ui = show_duration_ui
+	status.show_value_on_ui = show_value_on_ui
 	return status
 
 

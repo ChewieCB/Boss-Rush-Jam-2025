@@ -13,4 +13,4 @@ If you are a player, you shouldn't see this barrel"
 barrel_image = ExtResource("1_h1087")
 barrel_cost = 10
 barrel_prefab = ExtResource("2_4yh3c")
-is_archetype_barrel = true
+is_archetype_barrel = false

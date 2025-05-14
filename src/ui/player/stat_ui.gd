@@ -36,11 +36,13 @@ func _ready() -> void:
 		#show_ui()
 	GameManager.player.new_status_effect_added.connect(add_refresh_status_ui)
 	GameManager.player.status_effect_removed.connect(remove_status_ui)
-	
+
 
 ## Only for adding or refreshing status UI. UI usually be removed by the
 ## instance's timer (which hopefully synced correctly with the actual status duration)
 func add_refresh_status_ui(new_status: StatusEffect):
+	if not new_status.show_duration_ui:
+		return
 	# Check if it already exist, then refresh it
 	for child in status_ui_container.get_children():
 		if child.status_effect.status_code == new_status.status_code:

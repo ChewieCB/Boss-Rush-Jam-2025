@@ -17,14 +17,16 @@ extends BaseProjectile
 # far from current global_position, snap to hitscan_col_point so it look better.
 const SNAP_STICK_DISTANCE = 5
 
-var projectile_speed = 100
-var found_hitscal_col = false
-var hitscan_col_point
-var hitscan_col_normal
-var current_dir
-var max_range
 var sticked = false
 var start_deflate = false
+
+
+func _ready() -> void:
+	super ()
+
+
+func _process(delta: float) -> void:
+	super (delta)
 
 
 func _physics_process(delta: float) -> void:
@@ -49,6 +51,7 @@ func _physics_process(delta: float) -> void:
 
 	# Make it fly forward
 	global_position -= transform.basis.z * projectile_speed * delta
+	travelled_distance += projectile_speed * delta
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
@@ -58,7 +61,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	var rand_damage_mod = int(randf_range(-_damage / 3.0, _damage / 3.0))
+	var rand_damage_mod = get_damage_variance_modifier(_damage)
 	damage = _damage + rand_damage_mod
 	current_dir = dir
 	ricochet_count_left = ricochet_count
@@ -95,7 +98,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			body.health_component.damage(damage)
 	self.reparent.call_deferred(body)
 	sticked = true
-	impacted.emit(true, global_position)
+	impacted.emit(self, true, global_position)
 	life_timer.stop()
 	stick_timer.start(stick_time)
 	if found_hitscal_col:

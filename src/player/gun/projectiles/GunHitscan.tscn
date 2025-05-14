@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/BulletDecal.tscn" id="4_coueb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ch4f"]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_1gwnq")
 shader_parameter/enable_fade = true
@@ -34,6 +35,7 @@ bullet_decal_prefab = ExtResource("4_coueb")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_3ch4f")
+cast_shadow = 0
 mesh = SubResource("BoxMesh_yehfg")
 
 [node name="Timer" type="Timer" parent="."]

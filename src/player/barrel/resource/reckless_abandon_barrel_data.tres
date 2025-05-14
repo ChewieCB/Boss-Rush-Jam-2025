@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cioys44ppioym"]
+
+[ext_resource type="Texture2D" uid="uid://bjqft3q7d8hvd" path="res://src/player/barrel/resource/sprite/reckless_abandon.png" id="1_tng3t"]
+[ext_resource type="PackedScene" uid="uid://1vmbg406xmyk" path="res://src/player/barrel/RecklessAbandonBarrel.tscn" id="2_dpmig"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_3se0o"]
+
+[resource]
+script = ExtResource("3_3se0o")
+barrel_id = 43
+barrel_name = "Reckless Abandon"
+barrel_desc = "[b]Reckless Abandon Barrel[/b]
+Encourage you to go full-on attack mode.
+
+Possible rolls:
+[ul]
+Glass Cannon: Deal and take increased damage.
+Executioner Round: Deal more damage to enemy under 50% HP, but lower damage otherwise.
+Reactive Shot: Significantly increased damage for a short time after got hurt.
+[/ul]
+"
+barrel_image = ExtResource("1_tng3t")
+barrel_cost = 1400
+barrel_prefab = ExtResource("2_dpmig")
+is_archetype_barrel = false

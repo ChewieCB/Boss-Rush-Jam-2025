@@ -9,14 +9,15 @@ var hit_count = 0
 var projectile_count = 0
 
 func on_prepare_to_fire():
-	super()
+	super ()
 	hit_count = 0
 	projectile_count = 0
 
 func on_projectile_destroyed():
-	super()
+	super ()
 	projectile_count += 1
-	# print("projectile_count {0}, modified_projectile_amount{1}".format([projectile_count, owner_barrel.owner_gun.modified_projectile_amount]))
+	# print("projectile_count {0}, modified_projectile_amount{1}".format([projectile_count, owner_barrel.owner_gun.modified_projectile_amount]))'
+	
 	# We only check for missed after all projectiles destroyed
 	if projectile_count == owner_barrel.owner_gun.modified_projectile_amount:
 		if hit_count <= 0:
@@ -25,12 +26,12 @@ func on_projectile_destroyed():
 				owner_barrel.owner_gun.jam_the_gun(2)
 
 func on_damage_calculation():
-	super()
+	super ()
 	var roll = randi_range(1, 100)
 	if roll <= crit_chance:
 		owner_barrel.owner_gun.modified_damage = owner_barrel.owner_gun.modified_damage * 2
 		owner_barrel.owner_gun.crit_damage(owner_barrel.owner_gun.modified_damage)
 
 func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
-	super()
+	super ()
 	hit_count += 1

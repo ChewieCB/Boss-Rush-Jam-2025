@@ -85,9 +85,9 @@ func on_projectile_travel_tick():
 	for child in child_effects:
 		child.on_projectile_travel_tick()
 
-func on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for child in child_effects:
-		child.on_projectile_impact(_has_pos, _pos)
+		child.on_projectile_impact(_projectile, _has_pos, _pos)
 
 func on_projectile_destroyed():
 	for child in child_effects:
@@ -116,3 +116,12 @@ func on_status_effect_tick():
 func on_weapon_switched_to():
 	for child in child_effects:
 		child.on_weapon_switched_to()
+
+func on_dash_movement():
+	for child in child_effects:
+		child.on_dash_movement()
+
+
+func on_player_damaged():
+	for child in child_effects:
+		child.on_player_damaged()

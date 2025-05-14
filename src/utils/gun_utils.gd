@@ -2,15 +2,25 @@ extends Node
 
 ## Spread angle is in degree.
 func get_spread_direction(center_direction: Vector3, spread_angle: float) -> Vector3:
-	# Convert spread angle to radians
-	var max_radians = deg_to_rad(spread_angle)
+	# max_angle_deg is the max deviation from the center vector (like cone spread), in degrees
+	var axis = center_direction.normalized()
 
-	# Generate random rotation within the spread cone
-	var random_yaw = randf_range(-max_radians, max_radians)
-	var random_pitch = randf_range(-max_radians, max_radians)
+	# Create a random rotation axis perpendicular to center_direction
+	var random_dir = Vector3(
+		randf_range(-1.0, 1.0),
+		randf_range(-1.0, 1.0),
+		randf_range(-1.0, 1.0)
+	)
 
-	# Create a rotation basis
-	var spread_rotation = Basis(Vector3.UP, random_yaw) * Basis(Vector3.RIGHT, random_pitch)
+	# Ensure it's not parallel
+	random_dir = random_dir.cross(axis).normalized()
+	if random_dir.length() == 0:
+		random_dir = Vector3.UP.cross(axis).normalized()
 
-	# Apply the rotation to the center direction
-	return (spread_rotation * center_direction).normalized()
+	# Choose a random angle within the cone
+	var angle_rad = deg_to_rad(randf_range(0.0, spread_angle))
+
+	# Rotate the original direction around the random perpendicular axis
+	var rotated_dir = center_direction.rotated(random_dir, angle_rad)
+
+	return rotated_dir.normalized()

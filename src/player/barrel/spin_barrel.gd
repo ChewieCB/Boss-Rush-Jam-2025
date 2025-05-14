@@ -5,6 +5,8 @@ signal barrel_effect_changed(SpinBarrel, BaseBarrelEffect)
 
 @onready var effect_container: Node3D = $EffectContainer
 
+const SPIN_INTERVAL = 0.1
+
 var owner_gun: Gun
 var effect_list: Array[BaseBarrelEffect] = []
 var spin_interval_timer = 0
@@ -14,8 +16,7 @@ var chosen_id: int:
 		chosen_id = value
 		barrel_effect_changed.emit(self, effect_list[chosen_id])
 var is_equipped = false
-
-const SPIN_INTERVAL = 0.1
+var last_chosen_id = 0
 
 func _ready() -> void:
 	for child in effect_container.get_children():
@@ -33,6 +34,8 @@ func start_spin():
 
 func stop_spin():
 	is_spinning = false
+	prevent_roll_same_effect()
+	last_chosen_id = chosen_id
 
 func _process(delta: float) -> void:
 	if not is_spinning:
@@ -50,3 +53,12 @@ func instant_spin():
 
 func get_active_effect():
 	return effect_list[chosen_id]
+
+func prevent_roll_same_effect():
+	if chosen_id == last_chosen_id:
+		var filtered_id_array = []
+		for i in range(len(effect_list)):
+			if i != chosen_id:
+				filtered_id_array.append(i)
+		if filtered_id_array.size() > 0:
+			chosen_id = filtered_id_array.pick_random()

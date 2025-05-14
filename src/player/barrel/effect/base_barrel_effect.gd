@@ -92,7 +92,7 @@ func on_projectile_spawn():
 func on_projectile_travel_tick():
 	return
 
-func on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	return
 
 func on_projectile_destroyed():
@@ -121,4 +121,7 @@ func on_weapon_switched_to():
 	return
 
 func on_dash_movement():
+	return
+
+func on_player_damaged():
 	return

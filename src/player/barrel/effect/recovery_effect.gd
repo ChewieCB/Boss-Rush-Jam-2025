@@ -44,6 +44,8 @@ func on_barrel_stop_spin():
 
 func heal():
 	GameManager.player.health_component.heal(heal_amount)
+	var status_effect = create_recovery_status_effect()
+	GameManager.player.add_status_effect(status_effect)
 
 func create_recovery_status_effect() -> StatusEffect:
 	# Just to display the status UI, not actually do anything
@@ -53,7 +55,7 @@ func create_recovery_status_effect() -> StatusEffect:
 	recovery_status_effect.modified_stat = StatusEffect.PlayerStatEnum.NONE
 	recovery_status_effect.value = heal_amount
 	recovery_status_effect.modify_type = StatusEffect.ModifyType.FLAT
-	recovery_status_effect.duration = StatusEffect.INFINITE_DURATION
+	recovery_status_effect.duration = heal_interval + 0.1 # Add a bit of time to show UI better
 	recovery_status_effect.is_bad_effect = false
 	recovery_status_effect.status_icon = recovery_status_icon
 	return recovery_status_effect

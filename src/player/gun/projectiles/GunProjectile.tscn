@@ -40,6 +40,7 @@ generic_blood_splatter = ExtResource("3_7tm1i")
 bullet_decal_prefab = ExtResource("4_5dvet")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("BoxMesh_ptj85")
 
 [node name="Area3D" type="Area3D" parent="."]
@@ -50,11 +51,10 @@ collision_mask = 253
 shape = SubResource("SphereShape3D_t27v6")
 
 [node name="LifeTimer" type="Timer" parent="."]
-wait_time = 4.0
+wait_time = 6.0
 one_shot = true
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.610737)
 target_position = Vector3(0, 0, -100)
 collision_mask = 29
 
@@ -63,6 +63,7 @@ collision_mask = 29
 [node name="Trail3D" type="MeshInstance3D" parent="Trail"]
 top_level = true
 material_override = SubResource("StandardMaterial3D_pphwl")
+cast_shadow = 0
 mesh = SubResource("ImmediateMesh_hlqus")
 skeleton = NodePath("../../MeshInstance3D")
 script = ExtResource("4_xa5jf")

@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://1vmbg406xmyk"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_7qs68"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_1gkh4"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_762nm"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="4_b5x1l"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="5_83dk4"]
+[ext_resource type="Script" path="res://src/player/barrel/reactive_shot_effect.gd" id="6_tghp2"]
+
+[node name="RecklessAbandon" type="Node3D"]
+script = ExtResource("1_7qs68")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="GlassCannon" type="Node3D" parent="EffectContainer"]
+script = ExtResource("3_1gkh4")
+display_text_title = "Glass Cannon
+"
+display_text_tag = "Deal and take more damage"
+display_text_desc = "+30% damage
++30% damage taken
+"
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/GlassCannon"]
+script = ExtResource("4_762nm")
+attribute = 1
+modify_value = 30.0
+is_perc = true
+
+[node name="ModifyDamageTaken" type="Node3D" parent="EffectContainer/GlassCannon"]
+script = ExtResource("4_b5x1l")
+display_name = "Increased damage taken"
+status_code = "glass_cannon_damage_reduction_debuff"
+modified_stat = 4
+value = -30.0
+is_infinite_duration = true
+
+[node name="ExecutionerRound" type="Node3D" parent="EffectContainer"]
+script = ExtResource("5_83dk4")
+enemy_hp_threshold_perc = 50
+display_text_title = "Executioner Round"
+display_text_tag = "Finish them"
+display_text_desc = "+25% damage when enemy is less than 50% hp
+-25% damage otherwise"
+
+[node name="ReactiveShot" type="Node3D" parent="EffectContainer"]
+script = ExtResource("6_tghp2")
+display_text_title = "Reactive Shot"
+display_text_tag = "Payback time!"
+display_text_desc = "+100% damage for 1s after get hit"

@@ -12,19 +12,16 @@ class_name GunHitscan
 @onready var nearby_enemy_check_area: Area3D = $NearbyEnemyCheckArea3D
 
 var alpha = 1.0
-var found_hitscal_col = false
-var hitscan_col_point = Vector3.ZERO
-var hitscan_col_normal = Vector3.ZERO
 var end_pos
-var current_dir
-var max_range
-var speed
 
 const DELAY_BETWEEN_RICO = 0.05
 const RICO_START_POS_OFFSET_MODIFIER = 0.01
 const HITSCAN_HOMING_STRENTH_MODIFIER = 2
+const BEAM_RANGE_IF_NOT_COLLIDE = 50
 
 func _ready():
+	super ()
+	is_hitscan = true
 	var dup_mat = mesh.material_override.duplicate()
 	mesh.material_override = dup_mat
 	if shot_flash_start:
@@ -33,6 +30,7 @@ func _ready():
 		shot_flash_start.modulate = mesh.material_override.get_shader_parameter("color")
 
 func _process(delta):
+	super (delta)
 	alpha -= delta * fade_speed
 	alpha = clamp(alpha, 0, 1)
 	mesh.material_override.set_shader_parameter("fade_multiplier", alpha)
@@ -70,9 +68,9 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 	# Normal hitscan start here
 	life_timer.start()
-	var rand_damage_mod = int(randf_range(-_damage / 3.0, _damage / 3.0))
+	var rand_damage_mod = get_damage_variance_modifier(_damage)
 	damage = _damage + rand_damage_mod
-	speed = _speed
+	projectile_speed = _speed
 	ricochet_count_left = ricochet_count
 	max_range = _max_range
 	raycast.target_position.z = - abs(_max_range)
@@ -87,7 +85,8 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
 		end_pos = hitscan_col_point
-		impacted.emit(true, hitscan_col_point)
+		travelled_distance += start_pos.distance_to(end_pos)
+		impacted.emit(self, true, hitscan_col_point)
 		if target is CharacterBody3D:
 			before_damage_applied.emit(target, self)
 			target.health_component.damage(damage)
@@ -106,7 +105,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		if ricochet_count_left > 0:
 			ricochet()
 	else:
-		end_pos = start_pos + current_dir * 50
+		end_pos = start_pos + current_dir * BEAM_RANGE_IF_NOT_COLLIDE
 
 	var distance = start_pos.distance_to(end_pos)
 	position += current_dir * (distance / 2.0)
@@ -126,19 +125,12 @@ func ricochet():
 	super ()
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	found_hitscal_col = false
-	var new_hitscan_inst: GunHitscan = self.duplicate()
-	GameManager.player.get_parent().add_child(new_hitscan_inst)
-	new_hitscan_inst.owner_gun = owner_gun
-	new_hitscan_inst.is_ricochet_shot = true
-	new_hitscan_inst.homing_strength = homing_strength
+	var new_hitscan_inst: GunHitscan = create_duplication()
+	get_tree().get_root().add_child(new_hitscan_inst)
 	var new_dir = current_dir.bounce(hitscan_col_normal)
 	# Offset a bit to prevent stuck inside collision body
 	var new_start_pos = hitscan_col_point - current_dir * RICO_START_POS_OFFSET_MODIFIER
-	new_hitscan_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, speed, max_range)
-	new_hitscan_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
-	new_hitscan_inst.impacted.connect(owner_gun.check_barrel_effect_on_projectile_impact)
-	new_hitscan_inst.destroyed.connect(owner_gun.check_barrel_effect_on_projectile_destroyed)
-
+	new_hitscan_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 func get_projectile_color() -> Color:
 	return mesh.material_override.get_shader_parameter("color")
@@ -152,15 +144,34 @@ func angle_between_vectors(vec1: Vector3, vec2: Vector3) -> float:
 	# Normalize the vectors
 	var vec1_normalized = vec1.normalized()
 	var vec2_normalized = vec2.normalized()
-	
 	# Calculate the dot product
 	var dot_product = vec1_normalized.dot(vec2_normalized)
-	
 	# Clamp the dot product to avoid floating-point errors (to keep it between -1 and 1)
 	dot_product = clamp(dot_product, -1.0, 1.0)
-	
 	# Calculate the angle in radians
 	var angle_radians = acos(dot_product)
-	
 	# Convert the angle to degrees
 	return rad_to_deg(angle_radians)
+
+
+func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
+	if splitted:
+		return
+
+	var center_dir = - current_dir
+	var new_pos = global_position
+	if found_hitscal_col:
+		center_dir = hitscan_col_normal
+	if _has_pos:
+		new_pos = _pos
+
+	for i in range(split_count):
+		if not is_instance_valid(self):
+			return
+		var new_inst = create_duplication()
+		get_tree().get_root().add_child(new_inst)
+		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
+		# Offset a bit to prevent stuck inside collision body
+		new_pos = hitscan_col_point - current_dir * 0.01
+		new_inst.init(new_pos, new_dir, int(damage / split_count), ricochet_count_left, projectile_speed, max_range)
+		new_inst.splitted = true

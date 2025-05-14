@@ -21,3 +21,6 @@ mesh = SubResource("SphereMesh_j6dyv")
 
 [node name="CollisionShape3D" parent="Area3D" index="0"]
 shape = SubResource("SphereShape3D_0jwuq")
+
+[node name="LifeTimer" parent="." index="5"]
+wait_time = 5.0

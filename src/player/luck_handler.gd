@@ -41,7 +41,7 @@ func _physics_process(delta: float) -> void:
 func track_no_damage_taken(delta: float) -> void:
 	time_since_last_hurt += delta
 	
-	var threshold = no_damage_taken_threshold
+	# var threshold = no_damage_taken_threshold
 	var current_mult = int(time_since_last_hurt / no_damage_taken_threshold)
 	
 	if current_mult > last_hurt_mult and current_mult <= no_damage_taken_mult_cap:
@@ -56,7 +56,7 @@ func gain_no_damage_taken(threshold_mult: int) -> void:
 		"No damage taken for %s seconds!" % [
 			no_damage_taken_threshold * threshold_mult
 		],
-		true 
+		true
 	)
 
 
@@ -76,10 +76,10 @@ func gain_dps_dealt(dps_dealt: float) -> void:
 			dps_dealt,
 			dps_dealt_threshold
 		],
-		true 
+		true
 	)
 	print("Gained %s luck, did %s damage in %s seconds!" % [
-		dps_dealt_luck_gain * mult, 
+		dps_dealt_luck_gain * mult,
 		dps_dealt,
 		dps_dealt_threshold
 	])

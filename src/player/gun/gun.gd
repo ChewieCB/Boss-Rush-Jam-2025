@@ -166,9 +166,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_prepare_to_fire()
 
-	if barrel_count == 0 or not check_if_archetype_barrel_installed():
-		SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
-
 	GameManager.player.player_camera.set_recoil_power(modified_recoil)
 	GameManager.player.player_camera.add_trauma(modified_screenshake)
 
@@ -176,13 +173,16 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		barrel.get_active_effect().on_damage_calculation()
 
 	for i in range(n_shot_repeat):
+		if barrel_count == 0 or not check_if_archetype_barrel_installed():
+			SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
+
 		var bullet_start_pos = bullet_spawn_marker.global_position
 
 		for j in range(modified_projectile_amount):
 			for barrel in installed_barrels:
 				barrel.get_active_effect().on_projectile_spawn()
 			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
-			var spread_direction = get_spread_direction(aim_direction)
+			var spread_direction = GunUtils.get_spread_direction(aim_direction, modified_spread_angle)
 			if modified_projectile_prefab:
 				create_gun_attack(modified_projectile_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 			elif modified_is_hitscan:
@@ -242,9 +242,9 @@ func check_barrel_effect_on_damage_applied(_damage: float, _has_pos: bool = fals
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_applied(_has_pos, _pos)
 
-func check_barrel_effect_on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func check_barrel_effect_on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
-		barrel.get_active_effect().on_projectile_impact(_has_pos, _pos)
+		barrel.get_active_effect().on_projectile_impact(_projectile, _has_pos, _pos)
 
 func check_barrel_effect_on_projectile_destroyed():
 	for barrel in installed_barrels:
@@ -253,6 +253,10 @@ func check_barrel_effect_on_projectile_destroyed():
 func check_barrel_effect_on_dash_movement():
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_dash_movement()
+
+func check_barrel_effect_on_player_damaged():
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_player_damaged()
 
 func pull_trigger():
 	if not is_trigger_pulled:
@@ -339,8 +343,8 @@ func stop_all_barrels() -> void:
 
 func _stop_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
-	barrel.get_active_effect().on_barrel_stop_spin()
 	barrel.stop_spin()
+	barrel.get_active_effect().on_barrel_stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
 	SoundManager.stop_sound(TEMP_sfx_spin)
@@ -440,20 +444,6 @@ func _on_jam_timer_timeout() -> void:
 	is_jammed = false
 	#gun_status_label.visible = false
 
-
-func get_spread_direction(center_direction: Vector3) -> Vector3:
-	# Convert spread angle to radians
-	var max_radians = deg_to_rad(modified_spread_angle)
-
-	# Generate random rotation within the spread cone
-	var random_yaw = randf_range(-max_radians, max_radians)
-	var random_pitch = randf_range(-max_radians, max_radians)
-
-	# Create a rotation basis
-	var spread_rotation = Basis(Vector3.UP, random_yaw) * Basis(Vector3.RIGHT, random_pitch)
-
-	# Apply the rotation to the center direction
-	return (spread_rotation * center_direction).normalized()
 
 func play_failed_shoot_sfx():
 	if failed_shoot_sfx_timer.is_stopped():

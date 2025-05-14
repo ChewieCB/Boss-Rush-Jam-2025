@@ -36,4 +36,6 @@ func create_damage_reduction_effect() -> StatusEffect:
 	damage_reduction_effect.modify_type = StatusEffect.ModifyType.FLAT
 	damage_reduction_effect.duration = StatusEffect.INFINITE_DURATION
 	damage_reduction_effect.is_bad_effect = false
+	damage_reduction_effect.show_value_on_ui = false
+	damage_reduction_effect.show_duration_ui = false
 	return damage_reduction_effect
