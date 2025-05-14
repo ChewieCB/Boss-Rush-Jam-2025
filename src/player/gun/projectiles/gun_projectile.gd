@@ -7,14 +7,6 @@ class_name GunProjectile
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
-var projectile_speed = 100
-var found_hitscal_col = false
-var hitscan_col_point
-var hitscan_col_normal
-var current_dir
-var max_range
-
-
 func _ready() -> void:
 	super ()
 
@@ -63,7 +55,6 @@ func ricochet():
 	is_ricochet_shot = true
 	init(global_position, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, projectile_speed, max_range)
 
-
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
@@ -82,7 +73,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		if found_hitscal_col:
 			create_spark(hitscan_col_point, hitscan_col_normal)
 			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
-	impacted.emit(true, global_position)
+	impacted.emit(self, true, global_position)
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:

@@ -13,12 +13,6 @@ extends BaseProjectile
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
-var projectile_speed = 100
-var found_hitscal_col = false
-var hitscan_col_point
-var hitscan_col_normal
-var current_dir
-var max_range
 ## Each bubble has a random delayed time before it start moving
 var delayed = true
 var start_deflate = false
@@ -106,7 +100,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		elif "health_component" in body:
 			body.health_component.damage(damage)
 	self.reparent.call_deferred(body)
-	impacted.emit(true, global_position)
+	impacted.emit(self, true, global_position)
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:

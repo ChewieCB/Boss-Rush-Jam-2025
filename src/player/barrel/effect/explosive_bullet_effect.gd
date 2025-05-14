@@ -6,7 +6,7 @@ extends BaseBarrelEffect
 @export var explosion_vfx: PackedScene
 
 
-func on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	if (_has_pos):
 		create_explosion(_pos)
 

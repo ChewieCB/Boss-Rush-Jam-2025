@@ -182,7 +182,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 			for barrel in installed_barrels:
 				barrel.get_active_effect().on_projectile_spawn()
 			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
-			var spread_direction = get_spread_direction(aim_direction)
+			var spread_direction = GunUtils.get_spread_direction(aim_direction, modified_spread_angle)
 			if modified_projectile_prefab:
 				create_gun_attack(modified_projectile_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 			elif modified_is_hitscan:
@@ -242,9 +242,9 @@ func check_barrel_effect_on_damage_applied(_damage: float, _has_pos: bool = fals
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_applied(_has_pos, _pos)
 
-func check_barrel_effect_on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func check_barrel_effect_on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
-		barrel.get_active_effect().on_projectile_impact(_has_pos, _pos)
+		barrel.get_active_effect().on_projectile_impact(_projectile, _has_pos, _pos)
 
 func check_barrel_effect_on_projectile_destroyed():
 	for barrel in installed_barrels:
@@ -444,30 +444,6 @@ func _on_jam_timer_timeout() -> void:
 	is_jammed = false
 	#gun_status_label.visible = false
 
-
-func get_spread_direction(center_direction: Vector3) -> Vector3:
-	var forward = center_direction.normalized()
-
-	# Choose an arbitrary up vector that's not aligned with the forward direction
-	var arbitrary_up = Vector3.UP
-	if abs(forward.dot(Vector3.UP)) > 0.999:
-		arbitrary_up = Vector3.FORWARD
-
-	# Build a local basis around the forward direction
-	var right = forward.cross(arbitrary_up).normalized()
-	var up = right.cross(forward).normalized()
-	var spread_basis = Basis(right, up, forward)
-
-	# Random yaw and pitch angles within the cone
-	var max_radians = deg_to_rad(modified_spread_angle)
-	var yaw = randf_range(-max_radians, max_radians)
-	var pitch = randf_range(-max_radians, max_radians)
-
-	# Apply rotation around local axes
-	var spread = Basis(up, yaw) * Basis(right, pitch)
-
-	# Transform the forward vector using the spread and local basis
-	return (spread * spread_basis.z).normalized()
 
 func play_failed_shoot_sfx():
 	if failed_shoot_sfx_timer.is_stopped():

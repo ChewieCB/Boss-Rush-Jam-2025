@@ -12,7 +12,7 @@ class_name BallProjectile
 
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
-signal impacted
+signal impacted(projectile: BallProjectile, has_pos: bool, pos: Vector3)
 signal destroyed
 
 var damage
@@ -74,7 +74,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		elif "health_component" in body:
 			body.health_component.damage(damage)
 		create_spark(global_position, Vector3.UP)
-	impacted.emit(true, global_position)
+	impacted.emit(self, true, global_position)
 	if ricochet_count_left > 0:
 		ricochet()
 

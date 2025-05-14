@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/BulletDecal.tscn" id="4_coueb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ch4f"]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_1gwnq")
 shader_parameter/enable_fade = true

@@ -17,12 +17,6 @@ extends BaseProjectile
 # far from current global_position, snap to hitscan_col_point so it look better.
 const SNAP_STICK_DISTANCE = 5
 
-var projectile_speed = 100
-var found_hitscal_col = false
-var hitscan_col_point
-var hitscan_col_normal
-var current_dir
-var max_range
 var sticked = false
 var start_deflate = false
 
@@ -104,7 +98,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			body.health_component.damage(damage)
 	self.reparent.call_deferred(body)
 	sticked = true
-	impacted.emit(true, global_position)
+	impacted.emit(self, true, global_position)
 	life_timer.stop()
 	stick_timer.start(stick_time)
 	if found_hitscal_col:

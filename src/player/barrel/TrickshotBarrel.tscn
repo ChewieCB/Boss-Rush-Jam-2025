@@ -4,15 +4,15 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_8iiph"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_khhtx"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="3_xhp4t"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="6_a7t4g"]
+[ext_resource type="Script" path="res://src/player/barrel/split_bullet_effect.gd" id="5_ai2fh"]
 
 [node name="TrickshotBarrel" type="Node3D"]
 script = ExtResource("1_eccsf")
-barrel_id = 6
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="RicochetBullet" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("3_8iiph")
 attribute = 9
 modify_value = 3.0
@@ -20,31 +20,29 @@ display_text_title = "Ricochet Bullet"
 display_text_tag = "Make stylish shot"
 display_text_desc = "+3 richochet count"
 
-[node name="HomingBulletEffect" type="Node3D" parent="EffectContainer"]
+[node name="HomingBullet" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("3_khhtx")
 display_text_title = "Homing bullet"
 display_text_tag = "Skill issues solved!"
 display_text_desc = "+5 homing strength
 -30% damage"
 
-[node name="SetHomingStrength" type="Node3D" parent="EffectContainer/HomingBulletEffect"]
+[node name="SetHomingStrength" type="Node3D" parent="EffectContainer/HomingBullet"]
 script = ExtResource("3_xhp4t")
 attribute = 10
 new_value = 5.0
 
-[node name="ModifyDamage" type="Node3D" parent="EffectContainer/HomingBulletEffect"]
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/HomingBullet"]
 script = ExtResource("3_8iiph")
 attribute = 1
 modify_value = -30.0
 is_perc = true
 
-[node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
-script = ExtResource("6_a7t4g")
-modify_perc_spread_stationary = -50.0
-modify_perc_damage_stationary = 25.0
-modify_perc_spread_moving = 100.0
-modify_perc_damage_moving = -25.0
-display_text_title = "Hyperfocus"
-display_text_tag = "Take position and start blasting!"
-display_text_desc = "-50% spread, +25% damage when stationary
-+100% spread, -25% damage when moving"
+[node name="SplitBullet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("5_ai2fh")
+split_count = 3
+split_spread_radius = 90.0
+display_text_title = "Split Bullet"
+display_text_tag = "Extra bullets on impact!"
+display_text_desc = "Bullets splitted into 3 on impact"

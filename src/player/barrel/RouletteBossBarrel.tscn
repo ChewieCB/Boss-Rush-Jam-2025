@@ -1,9 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://cywwydmxkbh4x"]
+[gd_scene load_steps=7 format=3 uid="uid://cywwydmxkbh4x"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_w6qw3"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="3_nac64"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_rhvms"]
-[ext_resource type="PackedScene" uid="uid://r58hv7fv4nab" path="res://src/player/gun/projectiles/BallProjectile.tscn" id="4_fpaqy"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_2bruo"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/protective_barrier.gd" id="6_61sk6"]
 [ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/ShieldBarrier.tscn" id="7_n73is"]
@@ -13,30 +11,6 @@
 script = ExtResource("1_w6qw3")
 
 [node name="EffectContainer" type="Node3D" parent="."]
-
-[node name="BallBullet" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("3_rhvms")
-display_text_title = "Ball Bullet"
-display_text_tag = "Shoot huge ball"
-display_text_desc = "-90% projectile
-+60% damage"
-
-[node name="SetProjectileToBall" type="Node3D" parent="EffectContainer/BallBullet"]
-script = ExtResource("3_nac64")
-new_prefab = ExtResource("4_fpaqy")
-
-[node name="ModifyProjectileCount" type="Node3D" parent="EffectContainer/BallBullet"]
-script = ExtResource("6_2bruo")
-attribute = 2
-modify_value = -50.0
-is_perc = true
-
-[node name="ModifyDamage" type="Node3D" parent="EffectContainer/BallBullet"]
-script = ExtResource("6_2bruo")
-attribute = 1
-modify_value = 60.0
-is_perc = true
 
 [node name="ProtectiveBarrier" type="Node3D" parent="EffectContainer"]
 script = ExtResource("6_61sk6")
