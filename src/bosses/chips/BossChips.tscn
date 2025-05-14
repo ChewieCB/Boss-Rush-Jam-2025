@@ -1,9 +1,10 @@
-[gd_scene load_steps=40 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=45 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
 [ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="3_7sirk"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="3_hbmr3"]
+[ext_resource type="Texture2D" uid="uid://wtny7hmnvya0" path="res://assets/sprite/aoe_markers/aoe_cracks.png" id="3_vww1n"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_kiknp"]
 [ext_resource type="PackedScene" uid="uid://bhaia8j3ynxwp" path="res://src/bosses/chips/minions/SubStack.tscn" id="4_otar4"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_81kie"]
@@ -15,8 +16,12 @@
 [ext_resource type="PackedScene" uid="uid://cbb2iyep64uu" path="res://src/bosses/chips/minions/SlamShockwave.tscn" id="7_s7i42"]
 [ext_resource type="PackedScene" uid="uid://diiahann2tcbe" path="res://src/bosses/chips/minions/ChiptopedeProjectileStancePath.tscn" id="8_280mm"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="9_n5byv"]
+[ext_resource type="AudioStream" uid="uid://bak8v6wppvc03" path="res://src/bosses/chips/assets/sfx/Hitmarker 1.mp3" id="13_hq7h1"]
 [ext_resource type="Texture2D" uid="uid://c6p7obfb2ndl7" path="res://src/bosses/chips/assets/sprites/MCK_Idle.png" id="13_lqof8"]
 [ext_resource type="Texture2D" uid="uid://dsg6qarplaec4" path="res://src/bosses/chips/assets/sprites/MCK_Hit.png" id="14_i35lc"]
+[ext_resource type="AudioStream" uid="uid://bj6hrilpnek6j" path="res://src/bosses/chips/assets/sfx/Hitmarker 2.mp3" id="14_k6k1b"]
+[ext_resource type="AudioStream" uid="uid://bvv5jnw64iub" path="res://src/bosses/chips/assets/sfx/Hitmarker 3.mp3" id="15_dog2d"]
+[ext_resource type="AudioStream" uid="uid://d2jgdmrbiimh3" path="res://src/bosses/chips/assets/sfx/Hitmarker 4.mp3" id="16_ompdj"]
 [ext_resource type="Texture2D" uid="uid://cgm7nkuqbx06r" path="res://src/bosses/chips/assets/sprites/MCK_Jump_start.png" id="18_rpcfr"]
 [ext_resource type="Texture2D" uid="uid://becn8g0tfp4bk" path="res://src/bosses/chips/assets/sprites/MCK_Apex_Smear.png" id="19_ickrb"]
 [ext_resource type="Texture2D" uid="uid://bsrb3cxm3uxph" path="res://src/bosses/chips/assets/sprites/MCK_Apex.png" id="20_avd3g"]
@@ -35,10 +40,6 @@ size = Vector3(5.8, 5, 5.9)
 [sub_resource type="BoxShape3D" id="BoxShape3D_oomx2"]
 size = Vector3(5.8, 5, 5.9)
 
-[sub_resource type="Animation" id="Animation_dshkv"]
-resource_name = "death"
-length = 0.1
-
 [sub_resource type="Animation" id="Animation_8e3f2"]
 length = 0.001
 tracks/0/type = "value"
@@ -53,6 +54,10 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("13_lqof8")]
 }
+
+[sub_resource type="Animation" id="Animation_dshkv"]
+resource_name = "death"
+length = 0.1
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3pryd"]
 _data = {
@@ -75,23 +80,6 @@ tracks/0/keys = {
 "values": [ExtResource("13_lqof8")]
 }
 
-[sub_resource type="Animation" id="Animation_c2t4k"]
-resource_name = "jump_start"
-length = 0.05
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("19_ickrb")]
-}
-
 [sub_resource type="Animation" id="Animation_6ba30"]
 resource_name = "jump_apex"
 length = 0.05
@@ -109,9 +97,9 @@ tracks/0/keys = {
 "values": [ExtResource("20_avd3g")]
 }
 
-[sub_resource type="Animation" id="Animation_crbi3"]
-resource_name = "slam_start"
-length = 0.1
+[sub_resource type="Animation" id="Animation_c2t4k"]
+resource_name = "jump_start"
+length = 0.15
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -120,31 +108,14 @@ tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
+"times": PackedFloat32Array(0, 0.15),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("21_3xex4"), ExtResource("22_gjw4s")]
+"values": [ExtResource("19_ickrb"), ExtResource("20_avd3g")]
 }
 
-[sub_resource type="Animation" id="Animation_33fxr"]
-resource_name = "slam_end"
-length = 0.35
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.35),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [ExtResource("18_rpcfr"), ExtResource("13_lqof8")]
-}
-
-[sub_resource type="Animation" id="Animation_e25yp"]
-resource_name = "projectile_telegraph"
+[sub_resource type="Animation" id="Animation_6ovpb"]
+resource_name = "jump_telegraph"
 length = 0.05
 step = 0.05
 tracks/0/type = "value"
@@ -157,7 +128,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("23_10urj")]
+"values": [ExtResource("18_rpcfr")]
 }
 
 [sub_resource type="Animation" id="Animation_3riow"]
@@ -177,8 +148,8 @@ tracks/0/keys = {
 "values": [ExtResource("24_k86x4")]
 }
 
-[sub_resource type="Animation" id="Animation_6ovpb"]
-resource_name = "jump_telegraph"
+[sub_resource type="Animation" id="Animation_e25yp"]
+resource_name = "projectile_telegraph"
 length = 0.05
 step = 0.05
 tracks/0/type = "value"
@@ -191,7 +162,41 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("18_rpcfr")]
+"values": [ExtResource("23_10urj")]
+}
+
+[sub_resource type="Animation" id="Animation_33fxr"]
+resource_name = "slam_end"
+length = 0.35
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.35),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("18_rpcfr"), ExtResource("13_lqof8")]
+}
+
+[sub_resource type="Animation" id="Animation_crbi3"]
+resource_name = "slam_start"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("21_3xex4"), ExtResource("22_gjw4s")]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ri8wq"]
@@ -212,6 +217,7 @@ script = ExtResource("2_2er6y")
 phase_2_health_percentage_trigger = 0.5
 DESIRED_DISTANCE = 10.0
 desired_distance = null
+slam_aoe_decal = ExtResource("3_vww1n")
 angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
@@ -274,6 +280,7 @@ delay_between_burst = 0.3
 chip_spawn_chance = 0.2
 chip_spawn_dps_threshold = 70.0
 barrel_pickup_scene = null
+sfx_hit = Array[AudioStream]([ExtResource("13_hq7h1"), ExtResource("14_k6k1b"), ExtResource("15_dog2d"), ExtResource("16_ompdj")])
 sfx_slowmo = null
 base_sprite = ExtResource("13_lqof8")
 hurt_sprite = ExtResource("14_i35lc")
@@ -286,7 +293,6 @@ TURN_SPEED_SLOW = 6.0
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2.72019, 0)
 render_priority = 1
-texture = ExtResource("13_lqof8")
 
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0)
@@ -1424,6 +1430,7 @@ libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "big_stack": SubResource("AnimationLibrary_ri8wq")
 }
+autoplay = "big_stack/idle"
 
 [node name="ChipMineSpawnTimer" type="Timer" parent="." index="20"]
 one_shot = true

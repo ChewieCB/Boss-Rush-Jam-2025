@@ -28,6 +28,7 @@ var prev_form: ChipBossForms
 @export_subgroup("Jumping")
 var aoe_markers: Array[Node]
 var center_pos := Vector3(0, 0, -2)
+@export var slam_aoe_decal: CompressedTexture2D
 @export_subgroup("Orbiting")
 @export var angle_speed: float = 1.0 # radians/second
 @export var orbit_angle: float = 0.0 # track this over time
@@ -442,6 +443,17 @@ func big_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
 	await jump_tween.finished
 	
 	anim_player.play("big_stack/slam_end")
+	
+	var decal_slam := Decal.new()
+	decal_slam.texture_albedo = slam_aoe_decal
+	decal_slam.size = Vector3(6, 6, 6)
+	scene_root.add_child(decal_slam)
+	decal_slam.global_position = self.global_position
+	decal_slam.global_position.y += 1
+	
+	var aoe_tween: Tween = get_tree().create_tween()
+	aoe_tween.tween_property(decal_slam, "modulate:a", 0, 1.0).set_ease(Tween.EASE_IN)
+	aoe_tween.tween_callback(decal_slam.queue_free)
 	
 	return
 

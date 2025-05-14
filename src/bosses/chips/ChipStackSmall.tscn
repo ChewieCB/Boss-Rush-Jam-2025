@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpbb23dkfwo0l"]
+[gd_scene load_steps=8 format=3 uid="uid://d4e4xmrpy84ly"]
 
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="1_2elh3"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_c2ut8"]
@@ -25,6 +25,7 @@ collision_mask = 77
 script = ExtResource("1_2elh3")
 navigation_component = NodePath("NavigationComponent")
 health_component = NodePath("HealthComponent")
+base_sprite = ExtResource("2_eddf8")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)

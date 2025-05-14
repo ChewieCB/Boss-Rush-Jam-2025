@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dp8c5b52f8kfr"
+path="res://.godot/imported/Tunneling around 2.mp3-d7d55ba0407db90edcb9a35867a02d54.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/Tunneling around 2.mp3"
+dest_files=["res://.godot/imported/Tunneling around 2.mp3-d7d55ba0407db90edcb9a35867a02d54.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
