@@ -10,7 +10,6 @@
 
 [node name="DelayedGratificationBarrel" type="Node3D"]
 script = ExtResource("1_2a2qf")
-barrel_id = 13
 
 [node name="EffectContainer" type="Node3D" parent="."]
 

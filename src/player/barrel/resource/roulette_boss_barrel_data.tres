@@ -13,10 +13,11 @@ Barrel collected from the Roulette dealer. Grant you ability similar to its owne
 
 Possible rolls:
 [ul]
-Ball Bullet: shoot huge ball that affected by gravity. Increased damage but decreased projectile count.
 Newton's Third Law: Knock you back when shoot the nearby environment. Increased damage but decreased firerate.
 Protective Barrier: A group of blue shields circle you, grant you damage resistance.
+Ball Bullet: Shoot a single huge bouncy ball. Significantly increased damage but reduce firerate and projectile speed.
 [/ul]"
 barrel_image = ExtResource("1_lmo6o")
 barrel_cost = 200
 barrel_prefab = ExtResource("2_y352h")
+is_archetype_barrel = false

@@ -11,6 +11,7 @@ signal impacted(projectile: BaseProjectile, has_pos: bool, pos: Vector3)
 signal destroyed
 
 const DAMAGE_VARIANCE = 0.2
+const GRAVITY_FORCE = -9.8
 
 var damage = 1
 var ricochet_count_left = 0

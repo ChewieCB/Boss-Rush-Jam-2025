@@ -1,20 +1,34 @@
 extends BaseProjectile
 class_name GunProjectile
 
+@export var gravity_modifier = 0.0
+
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
 
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
+
+# Gravity stuff
+const MAX_GRAVITY_PITCH = deg_to_rad(90.0)
+const ROTATE_RATE_MODIFIER = 0.25
+const GRAVITY_IGNORE_AFTER_RICO_TIME = 0.2
+
+var gravity_accel = 0
+var gravity_free_timer = 0.2
+
 func _ready() -> void:
 	super ()
 
 func _process(delta: float) -> void:
 	super (delta)
+	gravity_free_timer += delta
 
 func _physics_process(delta: float) -> void:
 	if homing_locked_in and homing_target:
+		gravity_modifier = 0
+		gravity_accel = 0
 		var target_pos = homing_target.global_position
 		if homing_target.get_node("BodyCenter"):
 			target_pos = homing_target.get_node("BodyCenter").global_position
@@ -23,6 +37,24 @@ func _physics_process(delta: float) -> void:
 	global_position -= transform.basis.z * projectile_speed * delta
 	travelled_distance += projectile_speed * delta
 
+
+	if gravity_modifier > 0 and gravity_free_timer > GRAVITY_IGNORE_AFTER_RICO_TIME:
+		gravity_accel += GRAVITY_FORCE * gravity_modifier * delta
+		global_position += Vector3(0, 1, 0) * gravity_accel * delta
+		# Pitch downward based on accumulated gravity
+		var pitch_angle = gravity_accel * ROTATE_RATE_MODIFIER * delta # radians per frame
+		var dot = - raycast.global_transform.basis.z.dot(Vector3.DOWN)
+		# If dot > 0.99, it point almost downward. Downward == 1
+		# Only rotate if not point downward
+		if dot < 0.99:
+			raycast.rotate_object_local(Vector3(1, 0, 0), pitch_angle)
+
+		if raycast.is_colliding():
+			hitscan_col_point = raycast.get_collision_point()
+			hitscan_col_normal = raycast.get_collision_normal()
+			found_hitscal_col = true
+		else:
+			found_hitscal_col = false
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
 	if homing_strength > 0:
@@ -51,9 +83,12 @@ func _on_life_timer_timeout() -> void:
 
 func ricochet():
 	super ()
+	gravity_free_timer = 0
 	found_hitscal_col = false
 	is_ricochet_shot = true
 	init(global_position, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, projectile_speed, max_range)
+	raycast.rotation = Vector3.ZERO
+	gravity_accel = 0
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
@@ -70,9 +105,12 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			body.health_component.damage(damage)
 		elif "health_component" in body:
 			body.health_component.damage(damage)
-		if found_hitscal_col:
+		if found_hitscal_col and gravity_accel == 0:
 			create_spark(hitscan_col_point, hitscan_col_normal)
 			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
+		else:
+			create_spark(global_position, Vector3.UP)
+			create_bullet_decal(global_position, Vector3.UP)
 	impacted.emit(self, true, global_position)
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
