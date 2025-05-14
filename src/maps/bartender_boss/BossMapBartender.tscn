@@ -741,7 +741,7 @@ points = PackedVector3Array(-2, 0, -2.5, -2, -1, -2.5, 2, -1, -2.5, 2, 0, -2.5, 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_bxc37"]
 points = PackedVector3Array(-3, 2.875, -2, -3, 0, -2, -2, 0, -2, -2, 2.875, -2, -3, 2.875, 2, -3, 0, 2, -2, 0, 2, -2, 2.875, 2)
 
-[node name="BossMapBartender" node_paths=PackedStringArray("nav_parent", "floor_parent", "floor_mesh", "boss") instance=ExtResource("1_vcodf")]
+[node name="BossMapBartender" node_paths=PackedStringArray("nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_vcodf")]
 script = ExtResource("2_ikfam")
 sfx_fire_start = ExtResource("3_qvoi0")
 sfx_fire_loop = ExtResource("4_w5yjf")
@@ -749,7 +749,6 @@ bgm = ExtResource("2_pyfw2")
 nav_parent = NodePath("FuncGodotMap")
 floor_parent = NodePath("FuncGodotMap/entity_0_worldspawn")
 floor_mesh = NodePath("FuncGodotMap/entity_0_worldspawn/entity_0_mesh_instance")
-boss = NodePath("FuncGodotMap/BossBartender")
 
 [node name="LightmapGI" parent="." index="2"]
 light_data = ExtResource("6_4rrpe")
