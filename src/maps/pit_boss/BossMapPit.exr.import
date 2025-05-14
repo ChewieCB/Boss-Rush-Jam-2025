@@ -1,0 +1,26 @@
+[remap]
+
+importer="2d_array_texture"
+type="CompressedTexture2DArray"
+uid="uid://cg6bjmdi5245l"
+path="res://.godot/imported/BossMapPit.exr-4c4de3860807e3197b4165801d3e152b.ctexarray"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://src/maps/pit_boss/BossMapPit.exr"
+dest_files=["res://.godot/imported/BossMapPit.exr-4c4de3860807e3197b4165801d3e152b.ctexarray"]
+
+[params]
+
+compress/mode=3
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/channel_pack=1
+mipmaps/generate=false
+mipmaps/limit=-1
+slices/horizontal=1
+slices/vertical=1

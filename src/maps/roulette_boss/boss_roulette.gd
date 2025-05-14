@@ -4,7 +4,8 @@ extends BossMap
 @export var ROTATION_SPEED: float = 0.0:
 	set(value):
 		ROTATION_SPEED = value
-		boss.wheel_rotation_speed = ROTATION_SPEED
+		if boss:
+			boss.wheel_rotation_speed = ROTATION_SPEED
 var goal_rotation_speed: float = ROTATION_SPEED: set = set_goal_rotation_speed
 # Floor segments array stores tuples of [mesh, collider] since we separate them
 # for the purposes of the AnimatableBody3D rotation

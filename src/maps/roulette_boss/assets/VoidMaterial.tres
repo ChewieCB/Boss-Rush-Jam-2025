@@ -7,4 +7,6 @@
 render_priority = 0
 shader = ExtResource("1_2v0p3")
 shader_parameter/warp_ScreenSpace = true
+shader_parameter/uv_scale = 1.0
+shader_parameter/warp_speed = 1.0
 shader_parameter/texture_albedo = ExtResource("2_2ilwi")

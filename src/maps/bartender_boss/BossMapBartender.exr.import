@@ -1,0 +1,26 @@
+[remap]
+
+importer="2d_array_texture"
+type="CompressedTexture2DArray"
+uid="uid://bg8p6um6gd2w2"
+path="res://.godot/imported/BossMapBartender.exr-625e23946d8a920ae33bfa5747148728.ctexarray"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://src/maps/bartender_boss/BossMapBartender.exr"
+dest_files=["res://.godot/imported/BossMapBartender.exr-625e23946d8a920ae33bfa5747148728.ctexarray"]
+
+[params]
+
+compress/mode=3
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/channel_pack=1
+mipmaps/generate=false
+mipmaps/limit=-1
+slices/horizontal=1
+slices/vertical=1
