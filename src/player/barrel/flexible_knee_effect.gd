@@ -8,12 +8,17 @@ var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
 var timer: Timer
 
 func _ready():
+	await owner.ready
 	if timer == null:
 		timer = Timer.new()
 		timer.wait_time = crouch_iframe_cd
 		timer.one_shot = true
 		add_child(timer)
+
+	await get_tree().process_frame
+	await get_tree().process_frame
 	GameManager.player.movement_crouched.connect(add_iframe_on_crouch)
+
 
 # func _process(_delta: float) -> void:
 # 	if not active:
