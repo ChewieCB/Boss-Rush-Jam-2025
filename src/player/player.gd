@@ -94,6 +94,9 @@ const CROUCH_SPEED_MODIFIER: float = 0.5
 const AIM_ASSIST_STRENGTH_COEFFICIENT = 10
 const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.5
 
+const HIGH_LUCK_THRESHOLD = 0.6
+const HIGH_LUCK_DASH_IFRAME_MODIFIER = 2.0
+
 var max_speed: float = MAX_SPEED
 var floor_col_pos = Vector3.ZERO
 var jumped: bool = false
@@ -149,7 +152,6 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER: 1,
 	StatusEffect.PlayerStatEnum.IS_INVINVIBLE: false,
 	StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION: 0,
-	StatusEffect.PlayerStatEnum.LUCK: 0,
 	StatusEffect.PlayerStatEnum.JUMP_HEIGHT: 1,
 	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
 	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
@@ -780,13 +782,16 @@ func cash_in_luck() -> void:
 
 
 func add_iframe_on_dash():
+	var iframe_duration = current_stats[StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION]
+	if luck_component.current_luck_ratio >= HIGH_LUCK_THRESHOLD:
+		iframe_duration = iframe_duration * HIGH_LUCK_DASH_IFRAME_MODIFIER
 	var iframe_dash_buff = StatusEffect.new()
 	iframe_dash_buff.display_name = "Dodging"
 	iframe_dash_buff.status_code = "iframe_on_dash"
 	iframe_dash_buff.modified_stat = StatusEffect.PlayerStatEnum.IS_INVINVIBLE
 	iframe_dash_buff.value = 1 # Doesnt matter
 	iframe_dash_buff.modify_type = StatusEffect.ModifyType.BOOL
-	iframe_dash_buff.duration = current_stats[StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION]
+	iframe_dash_buff.duration = iframe_duration
 	iframe_dash_buff.status_icon = dash_iframe_icon
 	add_status_effect(iframe_dash_buff)
 

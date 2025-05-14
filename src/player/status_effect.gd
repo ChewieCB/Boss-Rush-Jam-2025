@@ -6,7 +6,6 @@ enum PlayerStatEnum {
 	DASH_SPEED_MODIFIER,
 	IS_INVINVIBLE, # bool
 	DAMAGE_REDUCTION, # 100 = 100% resist damage / take no damage
-    LUCK, # Used in a lot of things. Ex: improve crit chance, increased money drop, chance to dodge bullet
     JUMP_HEIGHT,
     DASH_IFRAME_DURATION,
 	DASH_DURATION,

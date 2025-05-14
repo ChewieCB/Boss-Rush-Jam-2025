@@ -4,13 +4,6 @@ extends BaseProjectile
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
 
-var projectile_speed = 100
-var current_dir
-var max_range
-
-var found_hitscal_col = false
-var hitscan_col_normal
-
 func _physics_process(delta: float) -> void:
 	global_position -= transform.basis.z * projectile_speed * delta
 
