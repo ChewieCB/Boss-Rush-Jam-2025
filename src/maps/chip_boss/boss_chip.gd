@@ -83,23 +83,6 @@ func break_floor() -> void:
 		platform.queue_free()
 
 
-func generate_navigation() -> void:
-	nav_region = NavigationRegion3D.new()
-	var nav_mesh := NavigationMesh.new()
-	nav_mesh.agent_radius = 1.2
-	#nav_mesh.agent_height = 1.0
-	nav_region.navigation_mesh = nav_mesh
-
-	func_godot_parent.add_child(nav_region)
-	func_godot_parent.move_child(nav_region, 0)
-
-	func_godot_parent.remove_child(worldspawn_mesh)
-	nav_region.add_child(worldspawn_mesh)
-	nav_region.move_child(worldspawn_mesh, 0)
-
-	_rebake_nav()
-
-
 func _rebake_nav() -> void:
 	if nav_region.is_baking():
 		await nav_region.bake_finished

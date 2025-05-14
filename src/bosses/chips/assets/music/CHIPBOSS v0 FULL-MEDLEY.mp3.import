@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://vt2fmi4mns63"
+path="res://.godot/imported/CHIPBOSS v0 FULL-MEDLEY.mp3-2901c181627202e3ffcb87d1f5ceeb9a.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/music/CHIPBOSS v0 FULL-MEDLEY.mp3"
+dest_files=["res://.godot/imported/CHIPBOSS v0 FULL-MEDLEY.mp3-2901c181627202e3ffcb87d1f5ceeb9a.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=85.0
+beat_count=0
+bar_beats=4
