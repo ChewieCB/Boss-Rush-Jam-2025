@@ -446,18 +446,28 @@ func _on_jam_timer_timeout() -> void:
 
 
 func get_spread_direction(center_direction: Vector3) -> Vector3:
-	# Convert spread angle to radians
+	var forward = center_direction.normalized()
+
+	# Choose an arbitrary up vector that's not aligned with the forward direction
+	var arbitrary_up = Vector3.UP
+	if abs(forward.dot(Vector3.UP)) > 0.999:
+		arbitrary_up = Vector3.FORWARD
+
+	# Build a local basis around the forward direction
+	var right = forward.cross(arbitrary_up).normalized()
+	var up = right.cross(forward).normalized()
+	var spread_basis = Basis(right, up, forward)
+
+	# Random yaw and pitch angles within the cone
 	var max_radians = deg_to_rad(modified_spread_angle)
+	var yaw = randf_range(-max_radians, max_radians)
+	var pitch = randf_range(-max_radians, max_radians)
 
-	# Generate random rotation within the spread cone
-	var random_yaw = randf_range(-max_radians, max_radians)
-	var random_pitch = randf_range(-max_radians, max_radians)
+	# Apply rotation around local axes
+	var spread = Basis(up, yaw) * Basis(right, pitch)
 
-	# Create a rotation basis
-	var spread_rotation = Basis(Vector3.UP, random_yaw) * Basis(Vector3.RIGHT, random_pitch)
-
-	# Apply the rotation to the center direction
-	return (spread_rotation * center_direction).normalized()
+	# Transform the forward vector using the spread and local basis
+	return (spread * spread_basis.z).normalized()
 
 func play_failed_shoot_sfx():
 	if failed_shoot_sfx_timer.is_stopped():
