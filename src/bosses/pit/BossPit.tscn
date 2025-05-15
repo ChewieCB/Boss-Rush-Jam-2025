@@ -248,11 +248,17 @@ monitoring = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0999999, 2.85404, -1.3)
 shape = SubResource("BoxShape3D_pi7fj")
 
+[node name="HealthComponent" parent="." index="6"]
+max_health = 300.0
+
 [node name="NavigationComponent" parent="." index="7"]
 follow_target = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Pit Boss"
+
+[node name="StateChartDebugger" parent="UI" index="1"]
+enabled = true
 
 [node name="toIntroAirSlam" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("4_akhww")
@@ -873,12 +879,14 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../Uppercut")
 event = &"melee_attack"
+guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
 [node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" index="1"]
 script = ExtResource("4_akhww")
 to = NodePath("../../Lunge")
 event = &"close_distance"
+guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" index="2"]
@@ -894,6 +902,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../Uppercut")
 event = &"melee_attack"
+guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Lunge" index="1"]
@@ -909,6 +918,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../AirSlam")
 event = &"melee_attack"
+guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Uppercut" index="1"]
@@ -924,6 +934,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../GroundPound")
 event = &"aoe_burst"
+guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/AirSlam" index="1"]
@@ -988,6 +999,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../Hammering")
 event = &"start_attack"
+guard = ExtResource("9_juug2")
 delay_in_seconds = "0.0"
 
 [node name="Hammering" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround" index="1"]
