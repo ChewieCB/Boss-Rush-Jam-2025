@@ -24,6 +24,7 @@ var phase_stance: Stance = Stance.DEFENSIVE:
 @onready var body: Node3D = $Body
 @onready var head: Node3D = $Body/Head
 @onready var eye_mesh: MeshInstance3D = $Body/MeshInstance3D
+@onready var pupil_mesh: MeshInstance3D = $Body/Head/MeshInstance3D
 @onready var aim_ray: RayCast3D = $Body/Head/RayCast3D
 @onready var phase_debug_label: Label3D = $DebugPhaseLabel
 
@@ -228,20 +229,21 @@ func get_angle_to_target(seeker_pos: Vector3, target_pos: Vector3, facing_dir: V
 #####
 
 func _on_died() -> void:
-	eye_mesh.mesh.material.albedo_color = Color.PURPLE
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
 	
 	for turret in spawned_turrets:
-		turret.destroy()
+		if is_instance_valid(turret):
+			turret.destroy()
 	
 	if pit_boss.health_component.current_health == 0:
 		await boss_death_slow_mo()
 
 func _exit_tree() -> void:
 	for turret in spawned_turrets:
-		turret.destroy()
+		if is_instance_valid(turret):
+			turret.destroy()
 	
 	if shield_mesh_solid.mesh.radius > 0.1:
 		hide_shield()
@@ -260,12 +262,32 @@ func _exit_tree() -> void:
 
 func _on_health_hit_state_entered() -> void:
 	eye_mesh.mesh.surface_get_material(0).albedo_color = Color.RED
+	eye_mesh.mesh.material.emission = Color.RED
 	sprite.modulate = Color.RED
 	await get_tree().create_timer(0.05).timeout
 	state_chart.send_event("end_damage")
 
 func _on_health_hit_state_exited() -> void:
 	eye_mesh.mesh.surface_get_material(0).albedo_color = Color.WHITE
+	eye_mesh.mesh.material.emission = Color("#d7c09e")
+
+func _on_health_dead_state_entered() -> void:
+	# TODO - add proper death anim for eye
+	#if anim_player.is_playing():
+		#anim_player.stop()
+		#anim_player.play("RESET")
+	#anim_player.play("death")
+	#
+	#await anim_player.animation_finished
+	var eye_tween: Tween = get_tree().create_tween()
+	eye_tween.tween_property(pupil_mesh, "scale", Vector3.ZERO, 0.2).set_ease(Tween.EASE_OUT)
+	await eye_tween.finished
+	pupil_mesh.visible = false
+	laser_mesh.visible = false
+	
+	eye_mesh.mesh.surface_get_material(0).albedo_color = Color.DARK_SLATE_BLUE
+	eye_mesh.mesh.surface_get_material(0).emission = Color.DARK_SLATE_BLUE
+	death_anim_finished.emit()
 
 
 #### PHASE 1 ==========================

@@ -211,6 +211,7 @@ func select_attack_phase_3() -> void:
 ## ======== Signal Callback Methods ========
 
 func _on_died() -> void:
+	hurtbox.set_deferred("monitoring", false)
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
