@@ -253,9 +253,6 @@ enabled = false
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Malina, Center of Attention"
 
-[node name="StateChartDebugger" parent="UI" index="1"]
-enabled = true
-
 [node name="DebugPhaseLabel" type="Label3D" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.4, 0)
 visible = false

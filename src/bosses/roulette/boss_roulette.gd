@@ -18,7 +18,7 @@ var previous_phase: String
 @export_group("Shields")
 @onready var shields_parent: Node3D = $Shields
 @export var shield_scene: PackedScene
-@export var shields_spawn_cooldown: float = 15.0
+@export var shields_spawn_cooldown: float = 10.0
 @export var shields_max_time: float = 12.0
 @onready var shields_spawn_timer: Timer = $ShieldsSpawnTimer
 @onready var shields_absorb_timer: Timer = $ShieldsAbsorbTimer
