@@ -5,6 +5,7 @@
 [node name="LoadingHandler" type="Node"]
 process_mode = 3
 script = ExtResource("1_pa3f2")
+debug_skip_pre_compile = true
 
 [node name="CompileParent" type="Node3D" parent="."]
 visible = false
