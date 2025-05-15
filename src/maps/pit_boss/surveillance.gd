@@ -316,11 +316,11 @@ func _on_laser_beam_startup_state_entered() -> void:
 	var look_position: Vector3 = self.global_position
 	look_position.y = 0
 	tween.tween_method(
-			rotate_and_elevate.bind(get_physics_process_delta_time()),
-			target.global_position,
-			look_position,
-			0.4,
-		)
+		rotate_and_elevate.bind(get_physics_process_delta_time()),
+		target.global_position,
+		look_position,
+		0.4,
+	)
 	await tween.finished
 	
 	# Start up the laser
