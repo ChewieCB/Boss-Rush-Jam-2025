@@ -226,9 +226,10 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 func _on_health_dead_state_entered() -> void:
 	# Before we trigger the death state, make sure we've merged back into the big stack
-	merge_stacks()
 	_cleanup_backspin_chip()
 	_on_chip_sweep_state_exited()
+	#return_big_stack_to_center()
+	merge_stacks()
 	super()
 
 
@@ -236,7 +237,8 @@ func _on_died() -> void:
 	if current_phase != 3:
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
-		#await death_anim_finished
+		_on_health_dead_state_entered()
+		await death_anim_finished
 		await boss_death_slow_mo()
 		defeated.emit(self)
 	else:
