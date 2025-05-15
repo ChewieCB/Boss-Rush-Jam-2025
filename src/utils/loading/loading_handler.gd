@@ -95,7 +95,7 @@ func parse_scene_paths_to_compile() -> void:
 	var filepaths = get_filepaths_from_nested_directory("res://src", true)
 	for filepath in filepaths:
 		if filepath.get_extension() in IGNORED_PATH_EXTENSIONS:
-			return
+			continue
 		
 		var file = FileAccess.open(filepath, FileAccess.READ)
 		if file == null:
