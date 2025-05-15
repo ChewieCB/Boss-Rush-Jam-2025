@@ -601,6 +601,7 @@ script = ExtResource("9_h6vir")
 script = ExtResource("7_bpphr")
 to = NodePath("../../Spawning")
 event = &"spawn_turrets"
+guard = ExtResource("8_bah8y")
 delay_in_seconds = "0.0"
 
 [node name="Spawning" type="Node" parent="StateChart/Root/Phase/Phase3/SpawnTurrets" index="1"]
