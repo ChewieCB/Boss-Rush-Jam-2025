@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bhaia8j3ynxwp"]
+[gd_scene load_steps=18 format=3 uid="uid://bhaia8j3ynxwp"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_t3h5b"]
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="2_u1ibk"]
@@ -12,9 +12,6 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_yvmou"]
 [ext_resource type="AudioStream" uid="uid://bvv5jnw64iub" path="res://src/bosses/chips/assets/sfx/Hitmarker 3.mp3" id="7_u10vx"]
 [ext_resource type="AudioStream" uid="uid://d2jgdmrbiimh3" path="res://src/bosses/chips/assets/sfx/Hitmarker 4.mp3" id="8_bpeyj"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3x11a"]
-load_path = "res://.godot/imported/TEMP_idle.png-4a98381b966bbad4fe86f407d5bd1859.s3tc.ctex"
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ase24"]
 height = 4.0
@@ -84,23 +81,17 @@ delay_per_projectile = 0.6
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
-visible = false
 render_priority = 1
+texture = ExtResource("5_nsqwa")
 
-[node name="Sprite3D2" type="Sprite3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
-billboard = 2
-render_priority = 1
-texture = SubResource("CompressedTexture2D_3x11a")
-
-[node name="CollisionShape3D" parent="." index="2"]
+[node name="CollisionShape3D" parent="." index="1"]
 shape = SubResource("CylinderShape3D_ase24")
 
-[node name="DebugMesh" parent="." index="3"]
+[node name="DebugMesh" parent="." index="2"]
 mesh = SubResource("CylinderMesh_447b3")
 surface_material_override/0 = SubResource("StandardMaterial3D_5irfp")
 
-[node name="MarkerPivot" type="Node3D" parent="." index="4"]
+[node name="MarkerPivot" type="Node3D" parent="." index="3"]
 
 [node name="Marker3D" type="Marker3D" parent="MarkerPivot" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
@@ -109,10 +100,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
 visible = false
 mesh = SubResource("SphereMesh_78wax")
 
-[node name="HealthComponent" parent="." index="6"]
+[node name="HealthComponent" parent="." index="5"]
 max_health = 1e+07
 
-[node name="NavigationComponent" parent="." index="7"]
+[node name="NavigationComponent" parent="." index="6"]
 follow_target = false
 
 [node name="HealthUI" parent="UI" index="0"]
@@ -556,10 +547,10 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="SFXPlayer1" type="AudioStreamPlayer3D" parent="." index="15"]
+[node name="SFXPlayer1" type="AudioStreamPlayer3D" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 
-[node name="MeleeTargetingTimer" type="Timer" parent="." index="23"]
+[node name="MeleeTargetingTimer" type="Timer" parent="." index="22"]
 one_shot = true
 
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_entered"]
