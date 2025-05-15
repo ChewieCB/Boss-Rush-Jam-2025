@@ -48,6 +48,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	
 	if boss.current_phase != 3:
 		SoundManager.play_music(bgm_transition, 0.5, "BGM")
+		await get_tree().create_timer(5.0).timeout
 		boss.state_chart.send_event("start_phase_3")
 		await boss.chiptopede_emerges
 		SoundManager.play_music(bgm_chiptopede, 0.5, "BGM")
