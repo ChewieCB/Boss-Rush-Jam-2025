@@ -194,7 +194,7 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugL" index="0"]
-transform = Transform3D(-0.905967, 1.1274, 0.39775, 0.933456, 0.978886, -0.648424, -0.746919, -0.144112, -1.29281, -1.94809, 2.26694, -0.0607154)
+transform = Transform3D(-0.905967, 1.1274, 0.397751, 0.933456, 0.978886, -0.648424, -0.746919, -0.144112, -1.29281, -1.94809, 2.26694, -0.0607154)
 mesh = SubResource("BoxMesh_g5e5v")
 skeleton = NodePath("../../../Sprite3D")
 

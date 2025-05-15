@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://dd7xt2ptfqbkw"]
+[gd_scene load_steps=65 format=3 uid="uid://dd7xt2ptfqbkw"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_jhwuw"]
 [ext_resource type="Script" path="res://src/bosses/roulette/boss_roulette.gd" id="2_m116k"]
@@ -102,6 +102,14 @@ size = Vector3(35, 2, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_n2kfn"]
 material = ExtResource("7_nq11i")
 size = Vector3(35, 3, 1)
+
+[sub_resource type="Resource" id="Resource_8j60f"]
+script = ExtResource("5_m3ad2")
+state = NodePath("../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_4idc1"]
+script = ExtResource("6_lkakv")
+guard = SubResource("Resource_8j60f")
 
 [sub_resource type="Resource" id="Resource_pfh5s"]
 script = ExtResource("5_m3ad2")
@@ -276,7 +284,7 @@ script = ExtResource("8_edit5")
 script = ExtResource("4_3xtcm")
 to = NodePath("../../SpawnShields")
 event = &"spawn_shields"
-guard = ExtResource("18_m5pf4")
+guard = SubResource("Resource_4idc1")
 delay_in_seconds = "0.0"
 
 [node name="SpawnShields" type="Node" parent="StateChart/Root/Status/Shields" index="1"]

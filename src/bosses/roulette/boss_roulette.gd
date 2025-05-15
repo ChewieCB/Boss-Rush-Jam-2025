@@ -489,13 +489,13 @@ func _on_died() -> void:
 	shields_spawn_timer.stop()
 	state_chart.send_event("shields_timeout")
 	
-	for tween in [barrier_tween, shockwave_tween]:
+	for tween in [barrier_tween, shockwave_tween, drop_floor_tween]:
 		if tween:
 			tween.kill()
 	
-	if drop_floor_tween:
-		await drop_floor_tween.step_finished
-		drop_floor_tween.kill()
+	#if drop_floor_tween:
+		#await drop_floor_tween.step_finished
+		#drop_floor_tween.kill()
 	
 	active_balls = destroy_balls(active_balls)
 	passive_balls = destroy_balls(passive_balls)

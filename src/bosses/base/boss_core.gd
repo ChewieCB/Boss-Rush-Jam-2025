@@ -153,6 +153,8 @@ var vel_vertical: float = 0
 			navigation_component.target = target
 var cached_target: Node3D
 
+@onready var scene_root = get_parent().get_parent()
+
 
 func _ready() -> void:
 	print_debug("BossCore ready")
@@ -165,7 +167,7 @@ func _ready() -> void:
 	health_component.died.connect(_on_died)
 	debug_trajectory_mesh = MeshInstance3D.new()
 	debug_trajectory_mesh.mesh = ImmediateMesh.new()
-	get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
+	scene_root.add_child.call_deferred(debug_trajectory_mesh)
 	#debug_mesh.visible = false
 	await owner.ready
 
@@ -217,7 +219,7 @@ func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_ar
 		_sfx_player.stream = sfx_arr.pick_random()
 		_sfx_player.play()
 	var projectile := _projectile_prefab.instantiate()
-	get_tree().root.get_child(8).add_child(projectile)
+	scene_root.add_child(projectile)
 	projectile.global_position = spawn_pos
 	projectile.look_at(target.global_position, Vector3.UP)
 	return projectile
@@ -546,7 +548,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 						continue
 					# TODO - modify spawned chip value chance based on dps
 					var chip = chip_scene.instantiate() as RigidBody3D
-					GameManager.player.get_parent().add_child(chip)
+					scene_root.add_child(chip)
 					chip.global_position = self.global_position
 					chip.rotate_y(randf_range(0, 2 * PI))
 					chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)

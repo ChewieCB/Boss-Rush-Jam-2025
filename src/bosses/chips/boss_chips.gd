@@ -174,7 +174,6 @@ var emerge_distance: float
 @export var delay_between_burst: float = 0.3
 
 ## USEFUL GLOBALS
-@onready var scene_root = get_parent().get_parent()
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
 #@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
