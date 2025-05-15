@@ -245,7 +245,7 @@ collision_mask = 64
 shape = SubResource("BoxShape3D_6q8u4")
 
 [node name="HealthComponent" parent="." index="8"]
-max_health = 500.0
+max_health = 4500.0
 
 [node name="NavigationComponent" parent="." index="9"]
 enabled = false
