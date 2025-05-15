@@ -3,6 +3,7 @@ class_name Shield
 
 signal destroyed
 
+@export var possible_card_faces: Array[CompressedTexture2D]
 @export var shield_back_mesh: MeshInstance3D
 @export var shield_card_mesh: MeshInstance3D
 @export var health_component: HealthComponent
@@ -15,6 +16,8 @@ var _points: PointBuffer = PointBuffer.new(16)
 func _ready() -> void:
 	shield_back_mesh.material_override = shield_back_mesh.material_override.duplicate()
 	shield_card_mesh.material_override = shield_card_mesh.material_override.duplicate()
+	var card_face: CompressedTexture2D = possible_card_faces.pick_random()
+	shield_card_mesh.material_override.set("shader_parameter/base_texture", card_face)
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
 

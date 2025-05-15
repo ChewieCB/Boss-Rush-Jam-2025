@@ -90,7 +90,7 @@ func _ready() -> void:
 	hurtbox.visible = false
 	
 	shields_parent.position.y -= 30.0
-	shields_spawn_timer.wait_time = shields_spawn_cooldown
+	shields_spawn_timer.wait_time = shields_spawn_cooldown * 2
 	#shields_absorb_timer.wait_time = shields_max_time
 	
 	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
@@ -99,12 +99,12 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	super (delta)
+	super(delta)
 	held_ball_marker_pivot.look_at(target.global_position)
 
 
 func activate() -> void:
-	super ()
+	super()
 	change_phase(current_phase)
 
 
@@ -636,7 +636,6 @@ func _on_phase_1_state_entered() -> void:
 	change_wheel_speed.emit(0.6)
 	wheel_rotation_speed = 0.6
 	current_phase = 1
-	state_chart.send_event("start_shields")
 	state_chart.send_event("start_ball_attack")
 
 #### Phase 1 | Barrier Sweep
