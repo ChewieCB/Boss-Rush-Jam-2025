@@ -86,9 +86,9 @@ func _on_bosses_defeated(_boss: BossCore) -> void:
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 	
 	collect_all_chips()
-	
-	var tween = self.create_tween()
-	tween.tween_property(directional_light, "light_energy", 0, 1)
+	win_ui.win("Floor Cleared", win_subtext.pick_random())
+	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
+	show_end_panel()
 
 
 func spawn_cover() -> void:

@@ -72,8 +72,6 @@ var charge_target_pos: Vector3
 # SFX
 #
 
-@onready var scene_root = get_parent().get_parent()
-
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
 

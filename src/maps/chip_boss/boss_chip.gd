@@ -1,6 +1,9 @@
 extends BossMap
 
-@export var active_bgm: AudioStream
+@export_group("Music")
+@export var bgm_normal: AudioStream
+@export var bgm_transition: AudioStream
+@export var bgm_chiptopede: AudioStream
 
 #
 @onready var chiptopede_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_worm_spawn_marker")
@@ -25,6 +28,7 @@ extends BossMap
 
 
 func _ready() -> void:
+	bgm = bgm_normal
 	super()
 	boss.flood_chamber.connect(raise_water)
 	boss.drain_chamber.connect(lower_water)
@@ -43,7 +47,11 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	
 	if boss.current_phase != 3:
+		SoundManager.play_music(bgm_transition, 0.5, "BGM")
+		await get_tree().create_timer(5.0).timeout
 		boss.state_chart.send_event("start_phase_3")
+		await boss.chiptopede_emerges
+		SoundManager.play_music(bgm_chiptopede, 0.5, "BGM")
 	else:
 		win_ui.win("Floor Cleared", win_subtext.pick_random())
 		print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])

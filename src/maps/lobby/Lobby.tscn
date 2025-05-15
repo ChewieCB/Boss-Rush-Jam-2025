@@ -1447,6 +1447,7 @@ mouse_filter = 2
 
 [node name="Background" type="ColorRect" parent="UI/TutorialUI/PanelContainer"]
 layout_mode = 2
+mouse_filter = 2
 color = Color(0, 0, 0, 0.72549)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="UI/TutorialUI/PanelContainer/Background"]
@@ -1472,6 +1473,7 @@ offset_top = 9.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="WinLabelHeader" type="RichTextLabel" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
 layout_mode = 2
@@ -1560,6 +1562,7 @@ mouse_filter = 2
 
 [node name="Background" type="ColorRect" parent="UI/GameWinUI/PanelContainer"]
 layout_mode = 2
+mouse_filter = 2
 color = Color(0, 0, 0, 0.72549)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="UI/GameWinUI/PanelContainer/Background"]
