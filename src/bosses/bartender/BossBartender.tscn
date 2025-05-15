@@ -1477,6 +1477,7 @@ base_sprite = ExtResource("23_33lgi")
 hurt_sprite = ExtResource("8_jooce")
 death_sprites = Array[CompressedTexture2D]([ExtResource("9_fm23x"), ExtResource("10_d78ef")])
 hurt_frame_window = 0.4
+attack_targeting_time = 0.3
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00917214, 2.505, 0)

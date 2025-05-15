@@ -6,6 +6,7 @@ signal substack_all_attacks_finished
 signal flood_chamber
 signal drain_chamber
 signal break_floor
+signal chiptopede_emerges
 signal leap_finished(head_segment: Node)
 
 ## Phase transitions
@@ -46,6 +47,7 @@ var big_attacks_performed: int = 0
 @export var max_small_attacks: int = 2
 var small_attacks_performed: int = 0
 # SFX
+@export var sfx_chiptopede_awaken: AudioStream
 #
 ## BIG STACK
 @export_group("Attacks | Big Stack")
@@ -152,6 +154,7 @@ var follow_nodes := []
 var completed_nodes := []
 var chiptopede_head_offset: float = 0.0
 # SFX
+@export var sfx_chiptopede_leap: Array[AudioStream]
 #
 @export_subgroup("Snake")
 @export var snake_speed: float = 25.0
@@ -160,6 +163,7 @@ var snake_path: PackedVector3Array
 var snake_path_3d: Path3D
 var snake_distance: float
 # SFX
+@export var sfx_chiptopede_snake: Array[AudioStream]
 #
 @export_subgroup("Spit Projectiles")
 @export var shooting_stance_prefab: PackedScene
@@ -172,6 +176,8 @@ var emerge_distance: float
 @export var chiptopede_shots_per_burst: int = 20
 @export var chiptopede_delay_per_projectile: float = 0.05
 @export var delay_between_burst: float = 0.3
+
+@onready var chiptopede_sfx_player: AudioStreamPlayer3D = $ChiptopedeHeadSFXPlayer
 
 ## USEFUL GLOBALS
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
@@ -225,6 +231,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 func _on_health_dead_state_entered() -> void:
 	# Before we trigger the death state, make sure we've merged back into the big stack
+	_enable_gravity()
 	_cleanup_backspin_chip()
 	_on_chip_sweep_state_exited()
 	#return_big_stack_to_center()
@@ -292,9 +299,9 @@ func select_attack_phase_1() -> void:
 			# 45% chance of chip sweep
 			# 60% chance of backspin chip
 			# 40% chance of slam
-			if attack_roll < 35:
+			if attack_roll < 45:
 				attack_str = "start_chip_sweep"
-			elif attack_roll < 60:
+			elif attack_roll < 75:
 				attack_str = "start_backspin_chip"
 			else:
 				attack_str = "start_slam_attack"
@@ -345,7 +352,7 @@ func select_attack_phase_2() -> void:
 			#else:
 			if attack_roll < 25:
 				attack_str = "start_chip_sweep"
-			elif attack_roll < 50:
+			elif attack_roll < 35:
 				attack_str = "start_backspin_chip"
 			elif attack_roll < 65:
 				attack_str = "start_place_your_bets_attack"
@@ -1063,7 +1070,8 @@ func _on_phase_3_state_entered() -> void:
 	# TODO - screen shake, particles, polish, etc.
 	break_floor.emit()
 	
-	await get_tree().create_timer(2.0).timeout
+	#await get_tree().create_timer(2.0).timeout
+	await chiptopede_sfx_player.finished
 	
 	# Re-fill health bar, change name, and show
 	health_component.has_died = false
@@ -1076,6 +1084,7 @@ func _on_phase_3_state_entered() -> void:
 	# Have longer between chiptopede attacks
 	attack_recovery_time *= 2
 	await get_tree().create_timer(0.5)
+	chiptopede_emerges.emit()
 	state_chart.send_event("start_leap_attack")
 
 
@@ -1105,6 +1114,9 @@ func _on_chiptopede_leap_targeting_state_entered() -> void:
 
 func _on_chiptopede_leap_leaping_state_entered() -> void:
 	chiptopede_head_offset = 0.0
+	
+	chiptopede_sfx_player.stream = sfx_chiptopede_leap.pick_random()
+	chiptopede_sfx_player.play()
 
 
 func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
@@ -1117,6 +1129,8 @@ func _on_chiptopede_leap_leaping_state_exited() -> void:
 	_cleanup_segment_arrays()
 	leap_path.queue_free()
 	leap_damage_timer.stop()
+	chiptopede_sfx_player.stop()
+	chiptopede_sfx_player.stream = null
 
 
 func _on_chiptopede_leap_impact(segment: Node) -> void:
@@ -1182,6 +1196,9 @@ func _on_chiptopede_snake_targeting_state_entered() -> void:
 
 func _on_chiptopede_snake_moving_state_entered() -> void:
 	follow_nodes = spawn_segments(snake_path_3d)
+	
+	chiptopede_sfx_player.stream = sfx_chiptopede_leap.pick_random()
+	chiptopede_sfx_player.play()
 
 
 func _on_chiptopede_snake_moving_state_physics_processing(delta: float) -> void:
@@ -1194,6 +1211,8 @@ func _on_chiptopede_snake_moving_state_exited() -> void:
 	_cleanup_segment_arrays()
 	snake_path = []
 	snake_path_3d.queue_free()
+	chiptopede_sfx_player.stop()
+	chiptopede_sfx_player.stream = null
 
 
 ## Projectile attack
@@ -1486,6 +1505,13 @@ func _create_segment_cache() -> Node3D:
 		var segment = chiptopede_segment_prefab.instantiate()
 		segment.health_component.health_diff.connect(_on_chiptopede_hurt)
 		cache_segment(segment)
+	
+	# Setup sfx player at head segment
+	var chiptopede_head = segment_cache_parent.get_child(0)
+	chiptopede_head.add_child(chiptopede_sfx_player)
+	# Play awakening sound from below
+	chiptopede_sfx_player.stream = sfx_chiptopede_awaken
+	chiptopede_sfx_player.play()
 	
 	return segment_cache_parent
 
