@@ -100,11 +100,11 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		if found_hitscal_col:
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 	else:
-		if body is Shield:
-			body.impact(self.global_position)
+		if "health_component" in body:
+			if body is Shield:
+				body.impact(self.global_position)
 			body.health_component.damage(damage)
-		elif "health_component" in body:
-			body.health_component.damage(damage)
+			damage_applied.emit(damage, true, global_position)
 		if found_hitscal_col and gravity_accel == 0:
 			create_spark(hitscan_col_point, hitscan_col_normal)
 			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
