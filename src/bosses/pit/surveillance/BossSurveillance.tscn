@@ -164,6 +164,7 @@ barrier_cage_reflect_force = 12.0
 barrier_cage_time = 12.0
 barrier_cage_material = ExtResource("3_bke04")
 sfx_barrier = ExtResource("6_xnsy2")
+boss_id = 4
 chip_spawn_chance = 0.24
 barrel_to_drop = ExtResource("4_nqlwe")
 sfx_hit = Array[AudioStream]([ExtResource("8_8p6dj")])

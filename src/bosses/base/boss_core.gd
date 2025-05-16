@@ -12,12 +12,12 @@ signal defeated(boss: BossCore)
 signal chip_dropped(value: int)
 
 enum BossIdEnum {
-	NONE,
 	BASE,
 	SLOTS,
 	ROULETTE,
 	BARTENDER,
-	PIT
+	PIT,
+	CHIPS
 }
 
 enum StatusEffects {
@@ -567,9 +567,6 @@ func _on_died() -> void:
 	await death_anim_finished
 	drop_barrel()
 	await boss_death_slow_mo()
-	if not self in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(boss_id)
-		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:

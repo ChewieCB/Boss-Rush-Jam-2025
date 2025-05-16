@@ -55,6 +55,12 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	else:
 		win_ui.win("Floor Cleared", win_subtext.pick_random())
 		print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
+		
+		if not boss.boss_id in GameManager.bosses_defeated:
+			GameManager.bosses_defeated.append(boss.boss_id)
+			print(GameManager.bosses_defeated)
+			GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
+
 		show_end_panel()
 
 

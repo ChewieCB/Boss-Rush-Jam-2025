@@ -133,11 +133,19 @@ func _on_boss_died(boss: BossCore = boss) -> void:
 	tween.tween_property(directional_light, "light_energy", 0, 1)
 
 
-func _on_boss_defeated(_boss: BossCore) -> void:
+func _on_boss_defeated(boss: BossCore) -> void:
 	collect_all_chips()
 	win_ui.win("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
+	
+	if not boss.boss_id in GameManager.bosses_defeated:
+		GameManager.bosses_defeated.append(boss.boss_id)
+		print(GameManager.bosses_defeated)
+		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
+
 	show_end_panel()
+	
+	
 
 
 func _on_player_death() -> void:
