@@ -355,7 +355,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 
 func _on_died() -> void:
-	super ()
+	super()
 	if fire_sfx:
 		fire_sfx.stop()
 	if floor_fire_hazard:
