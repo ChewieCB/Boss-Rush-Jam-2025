@@ -155,7 +155,7 @@ func select_attack() -> void:
 		2:
 			select_attack_phase_2()
 		3:
-			select_attack_phase_2() # Phase 3 is same as phase 2
+			select_attack_phase_3()
 		_:
 			push_error("Invalid phase %s" % current_phase)
 
@@ -172,7 +172,7 @@ func select_attack_phase_1() -> void:
 		# Focus on shotgun attacks, sometimes bottle attacks, rarely elemental bottles
 		# 10% chance of molotov/tar/poison
 		# 15% chance of broken bottle
-		# 85% chance of shotgun blast
+		# 75% chance of shotgun blast
 		if attack_roll < 10:
 			attack_str = "start_throw_drink"
 		elif attack_roll < 15:
@@ -183,12 +183,12 @@ func select_attack_phase_1() -> void:
 		# Mid/Far range:
 		#
 		# Focus on bottle attacks, rarely elemental bottles, shotgun sometimes
-		# 45% chance of broken bottle
-		# 70% chance of molotov/tar/poison
-		# 30% chance of shotgun blast
-		if attack_roll < 45:
+		# 35% chance of broken bottle
+		# 55% chance of molotov/tar/poison
+		# 10% chance of shotgun blast
+		if attack_roll < 35:
 			attack_str = "start_throw_broken_bottle"
-		elif attack_roll < 70:
+		elif attack_roll < 90:
 			attack_str = "start_throw_drink"
 		else:
 			attack_str = "start_shotgun_blast"
@@ -211,9 +211,82 @@ func select_attack_phase_2() -> void:
 			#
 			# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
 			# 5% chance of broken bottle
-			# 45% chance of molotov/tar/poison
-			# 50% chance of shotgun blast
+			# 10% chance of molotov/tar/poison
+			# 85% chance of shotgun blast
 			if attack_roll < 5:
+				attack_str = "start_throw_broken_bottle"
+			elif attack_roll < 15:
+				attack_str = "start_throw_drink"
+			else:
+				attack_str = "start_shotgun_blast"
+		elif $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
+			# Strength buff, Buff on cooldown:
+			#
+			# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
+			# 30% chance of shotgun blast
+			# 70% chance of broken bottle/keg
+			if attack_roll < 30:
+				attack_str = "start_shotgun_blast"
+			else:
+				attack_str = "start_throw_drink"
+		elif $StateChart/Root/Status/BrewBuffs/DefenceBuff.active:
+			# Defense buff, Buff on cooldown:
+			#
+			# Focus on elemental bottle attacks, occasionally shotgun blasts and broken bottle attacks
+			# 10% chance of broken bottle
+			# 25% chance of shotgun blast
+			# 65% chance of molotov/tar/poison
+			if attack_roll < 10:
+				attack_str = "start_throw_broken_bottle"
+			elif attack_roll < 35:
+				attack_str = "start_shotgun_blast"
+			else:
+				attack_str = "start_throw_drink"
+		elif $StateChart/Root/Status/BrewBuffs/SpeedBuff.active:
+			# Speed buff, Buff on cooldown:
+			#
+			# Focus on shotgun blasts, broken bottle attacks, and occasional elemental bottle attacks
+			# 10% chance of molotov/tar/poison
+			# 15% chance of broken bottle
+			# 75% chance of shotgun blast
+			if attack_roll < 10:
+				attack_str = "start_throw_drink"
+			elif attack_roll < 25:
+				attack_str = "start_throw_broken_bottle"
+			else:
+				attack_str = "start_shotgun_blast"
+	else:
+		# Buff ready to brew:
+		#
+		# Focus on brewing, minor chances for shotgun and elemental bottle attacks
+		# 5% chance of shotgun blast
+		# 5% chance of molotov/tar/poison
+		# 90% chance of brew drink
+		if attack_roll < 5:
+			attack_str = "start_shotgun_blast"
+		elif attack_roll < 10:
+			attack_str = "start_throw_drink"
+		else:
+			attack_str = "start_brew_drink"
+
+	state_chart.send_event(attack_str)
+
+
+func select_attack_phase_3() -> void:
+	# Weighted random chance attacks
+	#
+	var attack_str: String = ""
+	var attack_roll: int = randi_range(0, 99)
+
+	if not brew_cooldown_timer.is_stopped():
+		if $StateChart/Root/Status/BrewBuffs/NoBuff.active:
+			# No buffs, Buff on cooldown:
+			#
+			# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
+			# 15% chance of broken bottle
+			# 30% chance of molotov/tar/poison
+			# 55% chance of shotgun blast
+			if attack_roll < 15:
 				attack_str = "start_throw_broken_bottle"
 			elif attack_roll < 45:
 				attack_str = "start_throw_drink"
@@ -234,11 +307,11 @@ func select_attack_phase_2() -> void:
 			#
 			# Focus on elemental bottle attacks, occasionally shotgun blasts and broken bottle attacks
 			# 10% chance of broken bottle
-			# 15% chance of shotgun blast
-			# 75% chance of molotov/tar/poison
+			# 40% chance of shotgun blast
+			# 50% chance of molotov/tar/poison
 			if attack_roll < 10:
 				attack_str = "start_throw_broken_bottle"
-			elif attack_roll < 15:
+			elif attack_roll < 50:
 				attack_str = "start_shotgun_blast"
 			else:
 				attack_str = "start_throw_drink"
@@ -251,7 +324,7 @@ func select_attack_phase_2() -> void:
 			# 75% chance of shotgun blast
 			if attack_roll < 10:
 				attack_str = "start_throw_drink"
-			elif attack_roll < 15:
+			elif attack_roll < 25:
 				attack_str = "start_throw_broken_bottle"
 			else:
 				attack_str = "start_shotgun_blast"
@@ -259,12 +332,12 @@ func select_attack_phase_2() -> void:
 		# Buff ready to brew:
 		#
 		# Focus on brewing, minor chances for shotgun and elemental bottle attacks
-		# 10% chance of shotgun blast
-		# 15% chance of molotov/tar/poison
-		# 70% chance of brew drink
-		if attack_roll < 10:
+		# 5% chance of shotgun blast
+		# 5% chance of molotov/tar/poison
+		# 90% chance of brew drink
+		if attack_roll < 5:
 			attack_str = "start_shotgun_blast"
-		elif attack_roll < 15:
+		elif attack_roll < 10:
 			attack_str = "start_throw_drink"
 		else:
 			attack_str = "start_brew_drink"
@@ -339,14 +412,12 @@ func _on_phase_1_idle_state_entered() -> void:
 		print("New nav target: %s" % navigation_component.target.name)
 		state_chart.send_event("start_moving")
 		navigation_component.target = move_point
-		debug_state_label.text = "Idle | Walking"
 		#await $NavigationAgent3D.navigation_finished
 		#navigation_component.target = null
 		#print("Nav target reached & cleared")
-		await get_tree().create_timer(1.0 * delay_modifier).timeout
+		await get_tree().create_timer(0.4 * delay_modifier).timeout
 		state_chart.send_event("stop_moving")
-
-	select_attack()
+		select_attack()
 
 #### Phase 2
 
@@ -369,9 +440,8 @@ func _on_phase_2_idle_state_entered() -> void:
 	navigation_component.target = target
 	state_chart.send_event("start_moving")
 	debug_state_label.text = "Idle | Walking"
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(0.8).timeout
 	state_chart.send_event("stop_moving")
-
 	select_attack()
 
 #### Phase 3
@@ -699,7 +769,9 @@ func _on_brew_drink_recover_state_entered() -> void:
 
 func _on_throw_drink_targeting_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Targeting"
-
+	
+	#anim_player.speed_scale *= 1.5
+	
 	state_chart.send_event("start_targeting")
 	# Only throw the barrel if we have the strength buff
 	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
@@ -768,6 +840,8 @@ func _on_throw_drink_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	last_bottle_attack = current_bottle_type
 	anim_player.play("RESET")
+	
+	#anim_player.speed_scale /= 1.5
 
 	await get_tree().create_timer(attack_recovery_time * delay_modifier).timeout
 
