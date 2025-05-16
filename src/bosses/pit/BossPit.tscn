@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=81 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -96,6 +96,78 @@ height = 5.8
 [sub_resource type="BoxShape3D" id="BoxShape3D_pi7fj"]
 size = Vector3(5, 5.708, 3.5)
 
+[sub_resource type="Resource" id="Resource_hhr8m"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_f52y0"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_hhr8m")
+
+[sub_resource type="Resource" id="Resource_iqtpc"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_e74p2"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_iqtpc")
+
+[sub_resource type="Resource" id="Resource_tiy5s"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_vfo7s"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_tiy5s")
+
+[sub_resource type="Resource" id="Resource_khbla"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_2eh6m"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_khbla")
+
+[sub_resource type="Resource" id="Resource_xaj1i"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_x46as"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_xaj1i")
+
+[sub_resource type="Resource" id="Resource_1ievr"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_o1end"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_1ievr")
+
+[sub_resource type="Resource" id="Resource_4vyqo"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_erp3g"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_4vyqo")
+
+[sub_resource type="Resource" id="Resource_pxbjt"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_71o4y"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_pxbjt")
+
+[sub_resource type="Resource" id="Resource_40jrd"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_78dgc"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_40jrd")
+
 [sub_resource type="Resource" id="Resource_e6wek"]
 script = ExtResource("36_hby2a")
 state = NodePath("../../../../../Health/Dead")
@@ -103,6 +175,30 @@ state = NodePath("../../../../../Health/Dead")
 [sub_resource type="Resource" id="Resource_dunpi"]
 script = ExtResource("37_6l0hp")
 guard = SubResource("Resource_e6wek")
+
+[sub_resource type="Resource" id="Resource_yu84j"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_i16bp"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_yu84j")
+
+[sub_resource type="Resource" id="Resource_bd0nl"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_o6h4n"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_bd0nl")
+
+[sub_resource type="Resource" id="Resource_1nywm"]
+script = ExtResource("36_hby2a")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_7egb1"]
+script = ExtResource("37_6l0hp")
+guard = SubResource("Resource_1nywm")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mew0r"]
 radius = 3.0
@@ -856,6 +952,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../Swipe")
 event = &"start_attack"
+guard = SubResource("Resource_f52y0")
 delay_in_seconds = "0.0"
 
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex" index="1"]
@@ -865,12 +962,14 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../Hook")
 event = &"melee_attack"
+guard = SubResource("Resource_e74p2")
 delay_in_seconds = "0.0"
 
 [node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Swipe" index="1"]
 script = ExtResource("4_akhww")
 to = NodePath("../../Lunge")
 event = &"close_distance"
+guard = SubResource("Resource_vfo7s")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Swipe" index="2"]
@@ -886,14 +985,14 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../Uppercut")
 event = &"melee_attack"
-guard = ExtResource("9_juug2")
+guard = SubResource("Resource_2eh6m")
 delay_in_seconds = "0.0"
 
 [node name="toLunge" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" index="1"]
 script = ExtResource("4_akhww")
 to = NodePath("../../Lunge")
 event = &"close_distance"
-guard = ExtResource("9_juug2")
+guard = SubResource("Resource_x46as")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Hook" index="2"]
@@ -909,7 +1008,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../Uppercut")
 event = &"melee_attack"
-guard = ExtResource("9_juug2")
+guard = SubResource("Resource_o1end")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Lunge" index="1"]
@@ -925,7 +1024,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../AirSlam")
 event = &"melee_attack"
-guard = ExtResource("9_juug2")
+guard = SubResource("Resource_erp3g")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/Uppercut" index="1"]
@@ -941,7 +1040,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../GroundPound")
 event = &"aoe_burst"
-guard = ExtResource("9_juug2")
+guard = SubResource("Resource_71o4y")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/MeleeComboComplex/AirSlam" index="1"]
@@ -1006,7 +1105,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../Hammering")
 event = &"start_attack"
-guard = ExtResource("9_juug2")
+guard = SubResource("Resource_78dgc")
 delay_in_seconds = "0.0"
 
 [node name="Hammering" type="Node" parent="StateChart/Root/Phase/Phase3/HammerGround" index="1"]
@@ -1066,6 +1165,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../Attack")
 event = &"close_distance"
+guard = SubResource("Resource_i16bp")
 delay_in_seconds = "0.0"
 
 [node name="Attack" type="Node" parent="StateChart/Root/Phase/Phase3/LungeCloser" index="1"]
@@ -1124,6 +1224,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../AirSlam")
 event = &"start_attack"
+guard = SubResource("Resource_o6h4n")
 delay_in_seconds = "0.0"
 
 [node name="AirSlam" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser" index="1"]
@@ -1133,6 +1234,7 @@ script = ExtResource("5_bjod6")
 script = ExtResource("4_akhww")
 to = NodePath("../../GroundPound")
 event = &"aoe_burst"
+guard = SubResource("Resource_7egb1")
 delay_in_seconds = "0.0"
 
 [node name="GroundPound" type="Node" parent="StateChart/Root/Phase/Phase3/AirSlamCloser" index="2"]
