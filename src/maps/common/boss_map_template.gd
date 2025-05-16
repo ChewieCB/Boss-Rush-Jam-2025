@@ -144,8 +144,6 @@ func _on_boss_defeated(boss: BossCore) -> void:
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 
 	show_end_panel()
-	
-	
 
 
 func _on_player_death() -> void:
