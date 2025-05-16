@@ -26,6 +26,7 @@ var previous_phase: String
 @export var shield_distance: float = 6.0
 @export var shield_height: float = 3.3
 @export var shields_destroyed_threshold: int = 2
+@export var shields_respawn_delay: float = 1.8
 var shields_destroyed: int = 0
 @export var shield_abosrb_time: float = 1.4
 @export_subgroup("SFX")
@@ -622,7 +623,7 @@ func _on_shields_recover_state_entered() -> void:
 	tween.tween_property(shield_sfx_player, "volume_db", linear_to_db(0.1), 0.8).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(shield_sfx_player.stop)
 	
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(shields_respawn_delay).timeout
 	
 	state_chart.send_event("restart_targeting")
 

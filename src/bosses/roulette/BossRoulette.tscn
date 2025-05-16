@@ -148,6 +148,7 @@ shield_count = 8
 shield_distance = 6.0
 shield_height = -1.0
 shields_destroyed_threshold = 3
+shields_respawn_delay = 1.8
 shield_abosrb_time = 1.4
 sfx_shield_amb = Array[AudioStream]([ExtResource("4_f2bj1"), ExtResource("5_6k1wj"), ExtResource("6_j2w8r")])
 barrier_targeting_delay = 2.0
