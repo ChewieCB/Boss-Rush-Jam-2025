@@ -2,6 +2,7 @@ extends BossMap
 
 @export var active_bgm: AudioStream
 
+@onready var arena_doors: ElevatorDoors = find_children("*", "ElevatorDoors")[1]
 ## Boss Tracking
 @onready var pit_boss: BossPit = find_children("*", "BossPit").front()
 @onready var surveillance_boss: BossSurveillance = find_children("*", "BossSurveillance").front()
@@ -129,6 +130,7 @@ func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	pit_boss.activate()
 	SoundManager.play_music(active_bgm, 0.1, "BGM")
 	elevator_doors.close()
+	arena_doors.close()
 	LuckHandler.enabled = true
 	boss_trigger.queue_free()
 
