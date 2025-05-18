@@ -3,6 +3,7 @@ class_name ChipBossSubStack
 
 signal substack_charge_set(pos: Vector3)
 signal substack_dive_finished(stack: ChipBossSubStack)
+signal substack_idle(stack: ChipBossSubStack)
 
 @export var spark_scene: PackedScene
 
@@ -281,7 +282,10 @@ func _on_small_blind_shooting_state_entered() -> void:
 	_telegraph_attack()
 	
 	for i in num_bursts:
-		for j in chip_shots_per_burst:
+		for j in chip_shots_per_burst: 
+			# HACK - break out of this loop if we've exited the state
+			if not $StateChart/Root/Phase/SmallBlindProjectile.active and not $StateChart/Root/Phase/SmallBlindProjectilePhase2.active:
+				return
 			await get_tree().create_timer(delay_per_projectile).timeout
 			# Animate shot
 			face_sprite.visible = true
@@ -436,6 +440,10 @@ func _on_split_rush_targeting_state_entered() -> void:
 
 	await get_tree().create_timer(telegraph_time * 2).timeout
 	
+	# HACK - break out of this loop if we've exited the state
+	if not $StateChart/Root/Phase/SplitRush.active:
+		return
+	
 	charge_target_pos = target.global_position
 	charge_target_pos.y = 0
 	substack_charge_set.emit(charge_target_pos)
@@ -466,8 +474,8 @@ func _on_split_rush_charging_state_entered() -> void:
 	state_chart.send_event("end_charge")
 
 
-func merge_to_pos(pos: Vector3, time: float) -> void:
-	state_chart.send_event("end_attack")
+func merge_to_pos(pos: Vector3, time: float, destroy_on_merge: bool = true) -> void:
+	#state_chart.send_event("end_attack")
 	var tween: Tween = get_tree().create_tween()
 	# Ignore collisions with player and other stacks
 	self.collision_layer = 0
@@ -476,7 +484,9 @@ func merge_to_pos(pos: Vector3, time: float) -> void:
 	#sfx_player.stream = sfx_charge.pick_random()
 	#sfx_player.play()
 	await tween.finished
-	self.queue_free()
+	
+	if destroy_on_merge:
+		self.queue_free()
 
 
 func _on_split_rush_recover_state_entered() -> void:
@@ -551,6 +561,10 @@ func _on_charge_back_charging_state_entered() -> void:
 	anim_player.play("substack/slash_spark")
 	
 	await _telegraph_attack()
+	
+	# HACK - break out of this loop if we've exited the state
+	if not $StateChart/Root/Phase/ChargeBack.active:
+		return
 	
 	charge_target_pos = target.global_position
 	charge_target_pos.y = 0
@@ -645,7 +659,6 @@ func _on_charge_back_recover_state_physics_processing(delta: float) -> void:
 	orbit_center_in_group(delta, true)
 
 
-
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	if body == target:
 		body.health_component.damage(chargeback_damage)
@@ -656,6 +669,7 @@ func _on_aoe_merge_targeting_state_entered() -> void:
 	
 	vel_vertical = 0
 	GRAVITY = 0
+	navigation_component.disable()
 	
 	state_chart.send_event("start_merge")
 
@@ -663,19 +677,13 @@ func _on_aoe_merge_targeting_state_entered() -> void:
 func _on_aoe_merge_merging_state_entered() -> void:
 	debug_state_label.text = "Merge AoE | Jumping"
 	
-	var jump_tween: Tween = get_tree().create_tween()
-	jump_tween.tween_property(self, "global_position", Vector3(0, 9.0, 0), 0.9).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	
-	await jump_tween.finished
+	merge_to_pos(Vector3(0, 9.0, 0), 0.9, false)
 	
 	state_chart.send_event("end_merge")
 
 
 func _on_aoe_merge_recover_state_entered() -> void:
 	debug_state_label.text = "Merge AoE | Recovering"
-	desired_distance = DESIRED_DISTANCE
-	health_component.died.emit()
-	health_component.has_died = true
 	state_chart.send_event("end_recovery")
 
 

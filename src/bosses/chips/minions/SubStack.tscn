@@ -631,6 +631,7 @@ one_shot = true
 [node name="FusePath" type="Path3D" parent="." index="23"]
 curve = SubResource("Curve3D_2g52k")
 
+[connection signal="state_entered" from="StateChart/Root/Phase/Idle" to="." method="_on_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_physics_processing"]
@@ -668,6 +669,8 @@ curve = SubResource("Curve3D_2g52k")
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ChargeBack/Leaping" to="." method="_on_charge_back_leaping_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Recover" to="." method="_recover_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ChargeBack/Recover" to="." method="_on_charge_back_recover_state_physics_processing"]
+[connection signal="event_received" from="StateChart/Root/Phase/AoeMerge" to="." method="_on_aoe_merge_event_received"]
+[connection signal="state_exited" from="StateChart/Root/Phase/AoeMerge" to="." method="_on_aoe_merge_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Targeting" to="." method="_on_aoe_merge_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Merging" to="." method="_on_aoe_merge_merging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Recover" to="." method="_on_aoe_merge_recover_state_entered"]

@@ -109,10 +109,8 @@ func raise_water() -> void:
 	water_tween.tween_property(water_surface, "global_position:y", upper_water_level, 1.4)
 	for platform in rising_platforms:
 		platform.raise(platform_level, 1.4)
-
+	
 	await water_tween.finished
-
-	boss.state_chart.send_event("start_aoe_attack")
 
 
 func lower_water() -> void:
@@ -121,10 +119,8 @@ func lower_water() -> void:
 	water_tween.tween_property(water_surface, "global_position:y", lower_water_level, 1.4)
 	for platform in rising_platforms:
 		platform.lower(1.4)
-
+	
 	await water_tween.finished
-
-	boss.state_chart.send_event("end_aoe_attack")
 
 
 func _on_water_damage_area_body_entered(body: Node3D) -> void:

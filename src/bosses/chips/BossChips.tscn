@@ -338,6 +338,9 @@ enabled = false
 boss_name = "Shortstack"
 
 [node name="StateChartDebugger" parent="UI" index="1"]
+process_mode = 3
+z_index = 100
+z_as_relative = false
 enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
@@ -759,7 +762,7 @@ delay_in_seconds = "0.0"
 
 [node name="Phase2" type="Node" parent="StateChart/Root/Phase" index="2"]
 script = ExtResource("4_kiknp")
-initial_state = NodePath("BigStack")
+initial_state = NodePath("FormTransition")
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="0"]
 script = ExtResource("3_hbmr3")
@@ -767,7 +770,22 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="BigStack" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
+[node name="FormTransition" type="Node" parent="StateChart/Root/Phase/Phase2" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toBigStack" type="Node" parent="StateChart/Root/Phase/Phase2/FormTransition" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../BigStack")
+event = &"phase_2_start_big_stack"
+delay_in_seconds = "0.0"
+
+[node name="toSplitStacks" type="Node" parent="StateChart/Root/Phase/Phase2/FormTransition" index="1"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../SplitStacks")
+event = &"phase_2_start_split_stacks"
+delay_in_seconds = "0.0"
+
+[node name="BigStack" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Idle")
 
@@ -1086,7 +1104,7 @@ to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
 
-[node name="SplitStacks" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
+[node name="SplitStacks" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Idle")
 
@@ -1268,7 +1286,7 @@ script = ExtResource("5_81kie")
 [node name="toRecovering" type="Node" parent="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge/Merging" index="0"]
 script = ExtResource("3_hbmr3")
 to = NodePath("../../Recovering")
-event = &"end_merge"
+event = &"finish_attack"
 delay_in_seconds = "0.0"
 
 [node name="Recovering" type="Node" parent="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge" index="2"]
@@ -1530,9 +1548,9 @@ unit_size = 40.0
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/SplitStackAoE/Targeting" to="." method="_start_split_attack"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/SplitStackAoE/Attacking" to="." method="_on_ss_place_your_bets_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/SplitStackAoE/Recover" to="." method="_recover_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge/Targeting" to="." method="_on_phase_2_aoe_merge_targeting_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge/Merging" to="." method="_on_phase_2_aoe_merge_merging_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge/Recovering" to="." method="_on_aoe_merge_recovering_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge/Targeting" to="." method="_on_ss_merge_aoe_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge/Merging" to="." method="_on_ss_merge_aoe_merging_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/SplitStacks/AoEMerge/Recovering" to="." method="_on_ss_merge_aoe_recovering_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Targeting" to="." method="_on_chiptopede_leap_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeLeap/Leaping" to="." method="_on_chiptopede_leap_leaping_state_entered"]

@@ -362,8 +362,8 @@ func select_attack_phase_2() -> void:
 			# Transition between big and small forms:
 			if small_attacks_performed >= max_small_attacks:
 				# FIXME - radial attack with reform
-				#state_chart.send_event("change_form_big_aoe_merge")
-				state_chart.send_event("change_form_big")
+				state_chart.send_event("change_form_big_aoe_merge")
+				#state_chart.send_event("change_form_big")
 				return
 			else:
 				#if attack_roll < 20:
@@ -559,6 +559,13 @@ func _on_split_stacks_state_entered_phase_1() -> void:
 	select_attack()
 
 func _on_split_stacks_state_entered_phase_2() -> void:
+	# If we already have the Big Stack form before we call _reset_to_big_stack(),
+	# this is the first transition from Phase1 -> Phase2 so do the AoE Merge
+	if current_form == ChipBossForms.SPLIT_STACKS:
+		await cancel_substack_attacks()
+		state_chart.send_event("change_form_big_aoe_merge")
+		return
+	
 	_reset_to_split_stacks()
 	await split_stacks(_spawn_stacks_on_platforms)
 	select_attack()
@@ -570,10 +577,26 @@ func _on_big_stack_state_entered_phase_1() -> void:
 	select_attack()
 
 func _on_big_stack_state_entered_phase_2() -> void:
+	# If we already have the Big Stack form before we call _reset_to_big_stack(),
+	# this is the first transition from Phase1 -> Phase2 so do the AoE Merge
+	if current_form == ChipBossForms.BIG_STACK:
+		await big_stack_jump_to_center(jump_height, false)
+		state_chart.send_event("start_merge_aoe_finisher")
+		return
+	
 	_reset_to_big_stack()
-	await return_big_stack_to_center()
-	await merge_stacks()
-	select_attack()
+	await big_stack_jump_to_center(jump_height, false)
+	
+	# TODO - make this area damage explosion a generic method we can re-use
+	# Create an explosion
+	var explosion_inst = explosion_scene.instantiate()
+	add_child(explosion_inst)
+	explosion_inst.change_mesh_scale(4.0)
+	explosion_inst.global_position = self.global_position
+	
+	merge_stacks()
+	
+	state_chart.send_event("start_merge_aoe_finisher")
 
 
 #### PHASE 1
@@ -583,9 +606,10 @@ func _on_phase_1_state_entered() -> void:
 
 
 func _on_phase_1_state_exited() -> void:
-	return_big_stack_to_center()
-	await despawn_stacks(0.8)
-	show_big_stack()
+	pass
+	#return_big_stack_to_center()
+	#await despawn_stacks(0.8)
+	#show_big_stack()
 
 
 ### BIG STACK ATTACKS
@@ -673,6 +697,9 @@ func _on_chip_sweep_sweep_state_entered() -> void:
 	await _telegraph_attack()
 	
 	for i in chip_sweep_count:
+		# HACK - break out of this loop if we send an end_attack event
+		if "end_attack" in state_chart._queued_events:
+			return
 		var sweep_proj: ChipSweepProjectile = chip_sweep_prefab.instantiate()
 		scene_root.add_child(sweep_proj)
 		sweep_proj.global_transform = self.global_transform
@@ -759,7 +786,14 @@ func trigger_substack_attack(attack_event: String) -> void:
 		stack.state_chart.send_event(attack_event)
 	
 	await substack_all_attacks_finished
+	
 	state_chart.send_event("finish_attack")
+
+
+func cancel_substack_attacks() -> void:
+	for stack in spawned_sub_stacks:
+		stack.state_chart.send_event("end_attack")
+
 
 func trigger_sequential_substack_attacks(activate_event: String, attack_event: String) -> void:
 	for stack in spawned_sub_stacks:
@@ -870,10 +904,16 @@ func _on_phase_2_state_entered() -> void:
 	_on_chip_sweep_state_exited()
 	
 	_disable_gravity()
-	await big_stack_jump_to_center()
-	_reset_to_big_stack()
+	if current_form == ChipBossForms.SPLIT_STACKS:
+		state_chart.send_event("phase_2_start_split_stacks")
+		#state_chart.send_event("change_form_big_aoe_merge")
+	else:
+		state_chart.send_event("phase_2_start_big_stack")
+		#await big_stack_jump_to_center()
+		#state_chart.send_event("start_merge_aoe_finisher")
+	#_reset_to_big_stack()
 	# FIXME - radial attack with reform
-	state_chart.send_event("start_merge_aoe_finisher")
+	#state_chart.send_event("start_merge_aoe_finisher")
 
 
 ### AoE Merge Attack
@@ -885,15 +925,12 @@ func _on_ss_merge_aoe_targeting_state_entered() -> void:
 	state_chart.send_event("start_merge")
 
 func _on_ss_merge_aoe_merging_state_entered() -> void:
-	trigger_substack_attack("start_aoe_merge")
+	trigger_substack_attack("change_form_big_aoe")
+	
 
 func _on_ss_merge_aoe_recovering_state_entered() -> void:
 	state_chart.send_event("attack_end")
-	
-	await big_stack_jump_to_center()
-	
 	state_chart.send_event("change_form_big")
-	state_chart.send_event("start_merge_aoe_finisher")
 	state_chart.send_event("end_recovery")
 
 #

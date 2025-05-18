@@ -371,6 +371,7 @@ text = "Saving..."
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
 visible = false
 z_index = 10
+mouse_filter = 2
 
 [node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
 process_mode = 1
