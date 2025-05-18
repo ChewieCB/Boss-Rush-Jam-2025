@@ -313,7 +313,7 @@ func select_attack_phase_1() -> void:
 			else:
 				# 30% chance of sequential charges
 				# 70% chance of projectiles
-				if attack_roll < 30:
+				if attack_roll < 50:
 					attack_str = "start_split_stack_charge_back_attack"
 				#elif attack_roll < 50:
 					#attack_str = "start_split_stack_arc_attack"  # Move arc attack to phase 2, short range projectile attack
@@ -580,7 +580,6 @@ func _on_big_stack_state_entered_phase_2() -> void:
 # 
 func _on_phase_1_state_entered() -> void:
 	current_phase = 1
-	select_attack()
 
 
 func _on_phase_1_state_exited() -> void:

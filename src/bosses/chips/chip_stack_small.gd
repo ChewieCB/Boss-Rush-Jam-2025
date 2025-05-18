@@ -4,6 +4,8 @@ class_name ChipBossSubStack
 signal substack_charge_set(pos: Vector3)
 signal substack_dive_finished(stack: ChipBossSubStack)
 
+@export var spark_scene: PackedScene
+
 @export_group("Movement")
 @export var DESIRED_DISTANCE: float = 20.0
 @export var desired_distance: float = DESIRED_DISTANCE
@@ -72,8 +74,11 @@ var charge_target_pos: Vector3
 # SFX
 #
 
+@onready var face_sprite: Sprite3D = $Sprite3D/FaceSprite
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
-@onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
+@onready var spark_spawn_marker_l: Marker3D = $MarkerPivot/SparkMarkerL
+@onready var spark_spawn_marker_r: Marker3D = $MarkerPivot/SparkMarkerR
+@onready var projectile_spawn_marker: Marker3D = $MarkerPivot/ProjectileSpawnMarker
 
 var group_size: int = 1
 var group_idx: int = 0
@@ -179,6 +184,7 @@ func split_stack_jump(goal_pos: Vector3, height: float = jump_height, hover: boo
 			(2 * PI / group_size) * (group_idx - 1)
 		)
 	
+	anim_player.play("substack/jump_start")
 	var jump_tween: Tween = get_tree().create_tween()
 	jump_tween.tween_property(
 		self, "global_position", goal_pos, jump_time
@@ -187,6 +193,7 @@ func split_stack_jump(goal_pos: Vector3, height: float = jump_height, hover: boo
 	await jump_tween.finished
 	
 	if hover:
+		anim_player.play("substack/jump_apex")
 		await get_tree().create_timer(jump_hang_time).timeout
 	
 	return
@@ -205,6 +212,7 @@ func split_stack_jump_to_center(height: float = jump_height, hover: bool = true)
 	return
 
 func split_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
+	anim_player.play("substack/slam_start")
 	var jump_tween: Tween = get_tree().create_tween()
 	jump_tween.tween_property(
 		self, "global_position", target_pos, time
@@ -215,11 +223,22 @@ func split_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
 	return
 
 
+##
+
+func _on_attack_telegraph_state_entered() -> void:
+	return
+
+
+func _on_attack_telegraph_state_exited() -> void:
+	return
+
+
 ## SMALL BLIND PROJECTILES
 
 func _on_small_blind_targeting_state_entered() -> void:
 	debug_state_label.text = "Small Blind Burst | Targeting"
 	
+	anim_player.play("substack/idle")
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	await get_tree().create_timer(0.6).timeout
@@ -250,27 +269,36 @@ func _on_small_blind_phase_2_targeting_state_entered() -> void:
 
 func _on_small_blind_phase_2_targeting_state_physics_processing(delta: float) -> void:
 	return
-	platform_idle(delta)
+	#platform_idle(delta)
 
 
 func _on_small_blind_shooting_state_entered() -> void:
 	debug_state_label.text = "Small Blind Burst | Shooting"
 	
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time).timeout
-	state_chart.send_event("attack_start")
+	state_chart.send_event("start_targeting")
+	navigation_component.disable()
+	anim_player.play("substack/projectile_telegraph")
+	_telegraph_attack()
 	
 	for i in num_bursts:
 		for j in chip_shots_per_burst:
 			await get_tree().create_timer(delay_per_projectile).timeout
+			# Animate shot
+			face_sprite.visible = true
+			var face_tween: Tween = get_tree().create_tween()
+			face_tween.tween_property(face_sprite, "scale", Vector3(1.2, 1.2, 1.0), 0.2).set_ease(Tween.EASE_OUT)
 			fire_projectile(chip_projectile, projectile_spawn_marker.global_position, sfx_chip_shot)
+			face_tween.chain().tween_property(face_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.1).set_ease(Tween.EASE_IN)
+			face_tween.tween_callback(func(): face_sprite.visible = false)
+			
 		await get_tree().create_timer(delay_between_burst).timeout
 	
 	state_chart.send_event("stop_shooting")
 
 
 func _on_small_blind_shooting_state_physics_processing(delta: float) -> void:
-	orbit_target_in_group(delta)
+	return
+	#orbit_target_in_group(delta)
 
 
 func _on_small_blind_recover_state_entered() -> void:
@@ -279,8 +307,11 @@ func _on_small_blind_recover_state_entered() -> void:
 
 
 func _recover_state_entered() -> void:
+	anim_player.play("substack/RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
-	state_chart.send_event("cooldown_end")
+	state_chart.send_event("cooldown_endw")
+	
+	navigation_component.enable()
 	
 	state_chart.send_event("end_recovery")
 
@@ -399,6 +430,10 @@ func _on_split_rush_targeting_state_entered() -> void:
 	await reform_charge_timer.timeout
 	
 	state_chart.send_event("attack_telegraph")
+	var spark_marker: Marker3D = spark_spawn_marker_r if sprite.flip_h else spark_spawn_marker_l
+	spark(spark_marker.global_position)
+	anim_player.play("substack/slash_spark")
+
 	await get_tree().create_timer(telegraph_time * 2).timeout
 	
 	charge_target_pos = target.global_position
@@ -416,6 +451,7 @@ func _on_split_rush_charging_state_entered() -> void:
 	debug_state_label.text = "Split Rush | Charging"
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_start")
+	anim_player.play("substack/slash_attack")
 	navigation_component.disable()
 	
 	var charge_tween: Tween = get_tree().create_tween()
@@ -455,6 +491,7 @@ func _on_place_your_bets_jumping_state_entered() -> void:
 	vel_vertical = 0
 	GRAVITY = 0
 	
+	anim_player.play("substack/jump_telegraph")
 	await split_stack_jump_to_center()
 
 
@@ -462,13 +499,17 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 	await _telegraph_attack("Place Your Bets")
 	self.collision_layer = 0
 	var target_marker: Marker3D = aoe_markers[marker_target_idx]
+	
 	await split_stack_slam(target_marker.global_position)
+	
+	anim_player.play("substack/slam_end")
 	state_chart.send_event("end_dive")
 
 
 func _on_place_your_bets_recover_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Recovering"
 	GRAVITY = 14
+	anim_player.play("substack/idle")
 	substack_dive_finished.emit(self)
 	await return_split_stack_to_center()
 	self.collision_layer = 4
@@ -491,6 +532,7 @@ func _on_charge_back_targeting_state_entered() -> void:
 	
 	GRAVITY = 14
 	
+	anim_player.play("substack/idle")
 	state_chart.send_event("start_moving")
 
 
@@ -504,21 +546,21 @@ func _on_charge_back_charging_state_entered() -> void:
 	chargeback_return_pos = self.global_position
 	hurtbox.set_deferred("monitoring", true)
 	
-	state_chart.send_event("start_targeting")
+	var spark_marker: Marker3D = spark_spawn_marker_r if sprite.flip_h else spark_spawn_marker_l
+	spark(spark_marker.global_position)
+	anim_player.play("substack/slash_spark")
 	
-	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(chargeback_targeting_time).timeout
-	
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time * 2).timeout
+	await _telegraph_attack()
 	
 	charge_target_pos = target.global_position
 	charge_target_pos.y = 0
 	substack_charge_set.emit(charge_target_pos)
 	
 	state_chart.send_event("attack_start")
+	state_chart.send_event("start_targeting")
 	navigation_component.disable()
 	
+	anim_player.play("substack/slash_attack")
 	var charge_tween: Tween = get_tree().create_tween()
 	var charge_time: float = self.global_position.distance_to(charge_target_pos) / charge_speed
 	charge_tween.tween_property(self, "global_position", charge_target_pos, charge_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
@@ -530,10 +572,20 @@ func _on_charge_back_charging_state_entered() -> void:
 
 func _on_charge_back_leaping_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", false)
+	anim_player.play("substack/jump_telegraph")
 	var jump_results = charge_back_jump(chargeback_return_pos)
-	self.velocity = jump_results[0]
 	
-	await get_tree().create_timer(jump_results[1]).timeout
+	anim_player.play("substack/jump_start")
+	self.velocity = jump_results[0]
+	var time_up = jump_results[1]
+	var time_down = jump_results[2]
+	
+	await get_tree().create_timer(time_up).timeout
+	
+	await get_tree().create_timer(time_down).timeout
+
+	anim_player.play("substack/slam_end")
+	await anim_player.animation_finished
 	
 	state_chart.send_event("end_leap")
 
@@ -581,7 +633,7 @@ func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, jump_height: float = cha
 			debug_trajectory_mesh.mesh.surface_add_vertex(p)
 		debug_trajectory_mesh.mesh.surface_end()
 		
-	return [initial_velocity, time]
+	return [initial_velocity, time_up, time_down]
 
 
 func _on_charge_back_leaping_state_physics_processing(delta: float) -> void:
@@ -589,10 +641,14 @@ func _on_charge_back_leaping_state_physics_processing(delta: float) -> void:
 	move_and_slide()
 
 
+func _on_charge_back_recover_state_physics_processing(delta: float) -> void:
+	orbit_center_in_group(delta, true)
+
+
+
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	if body == target:
 		body.health_component.damage(chargeback_damage)
-
 
 
 func _on_aoe_merge_targeting_state_entered() -> void:
@@ -621,6 +677,13 @@ func _on_aoe_merge_recover_state_entered() -> void:
 	health_component.died.emit()
 	health_component.has_died = true
 	state_chart.send_event("end_recovery")
+
+
+# TODO - make a global util method
+func spark(spark_pos: Vector3) -> void:
+	var spark_vfx = spark_scene.instantiate()
+	scene_root.add_child(spark_vfx)
+	spark_vfx.global_position = spark_pos
 
 
 func _exit_tree() -> void:

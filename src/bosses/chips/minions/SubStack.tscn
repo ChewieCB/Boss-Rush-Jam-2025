@@ -1,7 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://bhaia8j3ynxwp"]
+[gd_scene load_steps=27 format=3 uid="uid://bhaia8j3ynxwp"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_t3h5b"]
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="2_u1ibk"]
+[ext_resource type="PackedScene" uid="uid://c6m6uaacee7aj" path="res://src/player/gun/vfx/StackSpark.tscn" id="3_0yylu"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="3_54m0v"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_51dvw"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_wmyjd"]
@@ -12,6 +13,10 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_yvmou"]
 [ext_resource type="AudioStream" uid="uid://bvv5jnw64iub" path="res://src/bosses/chips/assets/sfx/Hitmarker 3.mp3" id="7_u10vx"]
 [ext_resource type="AudioStream" uid="uid://d2jgdmrbiimh3" path="res://src/bosses/chips/assets/sfx/Hitmarker 4.mp3" id="8_bpeyj"]
+[ext_resource type="Texture2D" uid="uid://q12l7oh16xcn" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Hurt.png" id="11_rowys"]
+[ext_resource type="Texture2D" uid="uid://dlkcsqogvilcq" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Slash_1_spark.png" id="11_ytlyr"]
+[ext_resource type="Texture2D" uid="uid://buhfc7y6yqvpd" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Cannon_Face.png" id="12_pln03"]
+[ext_resource type="AnimationLibrary" uid="uid://dp6nqwqohdj5q" path="res://src/bosses/chips/minions/sub_stack_anims.res" id="14_4pmxc"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ase24"]
 height = 4.0
@@ -32,10 +37,55 @@ albedo_color = Color(1, 0, 0, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_78wax"]
 material = SubResource("StandardMaterial3D_taqtl")
 
+[sub_resource type="Animation" id="Animation_8e3f2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_ytlyr")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.8, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dshkv"]
+resource_name = "death"
+length = 0.1
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3pryd"]
+_data = {
+"RESET": SubResource("Animation_8e3f2"),
+"death": SubResource("Animation_dshkv")
+}
+
+[sub_resource type="Curve3D" id="Curve3D_2g52k"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -1.19466, 2.30577, 0, 0, 0, 0, 0, 0, 0, -1.14441, 2.3251, 0, 0, 0, 0, 0, 0, 0, -1.09801, 2.33283, 0, 0, 0, 0, 0, 0, 0, -1.04389, 2.33283, 0, 0, 0, 0, 0, 0, 0, -0.978161, 2.29804, 0, 0, 0, 0, 0, 0, 0, -0.947232, 2.23618, 0, 0, 0, 0, 0, 0, 0, -0.931767, 2.17045, 0, 0, 0, 0, 0, 0, 0, -0.927901, 2.10473, 0, 0, 0, 0, 0, 0, 0, -0.916303, 2.02741, 0, 0, 0, 0, 0, 0, 0, -0.900838, 1.97328, 0, 0, 0, 0, 0, 0, 0, -0.877641, 1.90369, 0, 0, 0, 0, 0, 0, 0, -0.854444, 1.8457, 0, 0, 0, 0, 0, 0, 0, -0.835114, 1.8109, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 13
+
 [node name="SubStack" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_t3h5b")]
 collision_mask = 9
 motion_mode = 1
 script = ExtResource("2_u1ibk")
+spark_scene = ExtResource("3_0yylu")
 DESIRED_DISTANCE = 20.0
 desired_distance = null
 wave_amplitude = 7.0
@@ -75,14 +125,24 @@ sfx_players = [NodePath("SFXPlayer1")]
 sfx_hit = Array[AudioStream]([ExtResource("5_4sojs"), ExtResource("6_16fho"), ExtResource("7_u10vx"), ExtResource("8_bpeyj")])
 sfx_slowmo = null
 base_sprite = ExtResource("5_nsqwa")
+hurt_sprite = ExtResource("11_rowys")
 attack_recovery_time = 0.5
+telegraph_time = 0.45
 projectile_scene = null
 delay_per_projectile = 0.6
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
 render_priority = 1
-texture = ExtResource("5_nsqwa")
+texture = ExtResource("11_ytlyr")
+
+[node name="FaceSprite" type="Sprite3D" parent="Sprite3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
+visible = false
+billboard = 2
+render_priority = 1
+texture = ExtResource("12_pln03")
 
 [node name="CollisionShape3D" parent="." index="1"]
 shape = SubResource("CylinderShape3D_ase24")
@@ -99,6 +159,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MarkerPivot/Marker3D" index="0"]
 visible = false
 mesh = SubResource("SphereMesh_78wax")
+
+[node name="SparkMarkerL" type="Marker3D" parent="MarkerPivot" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="SparkMarkerR" type="Marker3D" parent="MarkerPivot" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="ProjectileSpawnMarker" type="Marker3D" parent="MarkerPivot" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.6, 0)
 
 [node name="HealthComponent" parent="." index="5"]
 max_health = 1e+07
@@ -550,8 +619,17 @@ delay_in_seconds = "0.0"
 [node name="SFXPlayer1" type="AudioStreamPlayer3D" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.79936, 0)
 
+[node name="AnimationPlayer" parent="." index="20"]
+libraries = {
+"": SubResource("AnimationLibrary_3pryd"),
+"substack": ExtResource("14_4pmxc")
+}
+
 [node name="MeleeTargetingTimer" type="Timer" parent="." index="22"]
 one_shot = true
+
+[node name="FusePath" type="Path3D" parent="." index="23"]
+curve = SubResource("Curve3D_2g52k")
 
 [connection signal="state_entered" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/ArcWaveSwipe/Targeting" to="." method="_on_arc_swipe_targeting_state_exited"]
@@ -588,7 +666,8 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Charging" to="." method="_on_charge_back_charging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Leaping" to="." method="_on_charge_back_leaping_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/ChargeBack/Leaping" to="." method="_on_charge_back_leaping_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Recover" to="." method="_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/ChargeBack/Recover" to="." method="_recover_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/ChargeBack/Recover" to="." method="_on_charge_back_recover_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Targeting" to="." method="_on_aoe_merge_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Merging" to="." method="_on_aoe_merge_merging_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AoeMerge/Recover" to="." method="_on_aoe_merge_recover_state_entered"]

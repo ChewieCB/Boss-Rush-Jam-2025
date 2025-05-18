@@ -240,10 +240,11 @@ func _targeting_entered(next_state: String, attack_name: String = "", delay: flo
 	await get_tree().create_timer(delay).timeout
 	state_chart.send_event(next_state)
 
-func _telegraph_attack(attack_name: String = ""):
+func _telegraph_attack(attack_name: String = "") -> void:
 	state_chart.send_event("attack_telegraph")
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
+	return
 
 func _recover_entered() -> void:
 	state_chart.send_event("attack_end")
