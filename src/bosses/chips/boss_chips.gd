@@ -230,10 +230,6 @@ func activate() -> void:
 	state_chart.send_event("start_phase_1")
 
 
-func _physics_process(delta: float) -> void:
-	return
-
-
 func _exit_tree() -> void:
 	_cleanup_segment_arrays()
 

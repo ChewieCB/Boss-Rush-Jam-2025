@@ -71,7 +71,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_dshkv"]
 resource_name = "death"
-length = 0.6
+length = 0.01
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true

@@ -504,6 +504,7 @@ func _on_health_dead_state_entered() -> void:
 	anim_player.play("death")
 	
 	await anim_player.animation_finished
+	anim_player.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	sprite.modulate = Color.DARK_SLATE_BLUE
 	death_anim_finished.emit()
