@@ -15,7 +15,11 @@ extends BossMap
 @export var lower_water_level: float = -0.1
 @export var upper_water_level: float = 1.3
 @export var platform_level: float = 2.0
+@export var water_raise_time: float = 4.0
+@export var waterfall_speed: float = 1.0
 @onready var waterfalls: Node3D = $Waterfalls
+@export var waterfall_meshes: Array[Node3D]
+@export var waterfall_meshses_vertical: Array[Node3D]
 @onready var water_surface: MeshInstance3D = $WaterSurfaceMesh
 @onready var rising_platforms: Array[Node] = get_tree().get_nodes_in_group("rising_platforms")
 
@@ -28,7 +32,6 @@ extends BossMap
 
 
 func _ready() -> void:
-	bgm = bgm_normal
 	super()
 	boss.flood_chamber.connect(raise_water)
 	boss.drain_chamber.connect(lower_water)
@@ -40,7 +43,20 @@ func _ready() -> void:
 	boss.chiptopede_shoot_spawns = chiptopede_shoot_spawns
 
 	waterfalls.visible = false
+	for mesh in waterfall_meshses_vertical:
+		mesh.scale.x = 0
 	water_surface.global_position.y = lower_water_level
+
+
+func _process(delta) -> void:
+	if waterfalls.visible:
+		for mesh in waterfall_meshes:
+			mesh.mesh.surface_get_material(0).uv1_offset.x -= delta * waterfall_speed
+
+
+func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
+	SoundManager.play_music(bgm_normal, 0.5, "BGM")
+	super(_body)
 
 
 func _on_boss_defeated(_boss: BossCore) -> void:
@@ -55,6 +71,12 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	else:
 		win_ui.win("Floor Cleared", win_subtext.pick_random())
 		print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
+		
+		if not boss.boss_id in GameManager.bosses_defeated:
+			GameManager.bosses_defeated.append(boss.boss_id)
+			print(GameManager.bosses_defeated)
+			GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
+
 		show_end_panel()
 
 
@@ -100,13 +122,20 @@ func _rebake_nav() -> void:
 func raise_water() -> void:
 	waterfalls.visible = true
 	var water_tween: Tween = get_tree().create_tween()
-	water_tween.tween_property(water_surface, "global_position:y", upper_water_level, 1.4)
+	for mesh in waterfall_meshses_vertical:
+		water_tween.parallel().tween_property(
+			mesh, 
+			"scale:x", 
+			1.0, 
+			water_raise_time/3
+		)
+	water_tween.chain().tween_property(water_surface, "global_position:y", upper_water_level, water_raise_time)
+	
 	for platform in rising_platforms:
 		platform.raise(platform_level, 1.4)
-
+	
+	
 	await water_tween.finished
-
-	boss.state_chart.send_event("start_aoe_attack")
 
 
 func lower_water() -> void:
@@ -115,10 +144,8 @@ func lower_water() -> void:
 	water_tween.tween_property(water_surface, "global_position:y", lower_water_level, 1.4)
 	for platform in rising_platforms:
 		platform.lower(1.4)
-
+	
 	await water_tween.finished
-
-	boss.state_chart.send_event("end_aoe_attack")
 
 
 func _on_water_damage_area_body_entered(body: Node3D) -> void:

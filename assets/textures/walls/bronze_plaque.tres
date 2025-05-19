@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://mxeoucc8vmen"]
+
+[ext_resource type="Texture2D" uid="uid://b67n7jt5lgwe3" path="res://assets/textures/walls/bronze_plaque.png" id="1_f78ev"]
+
+[resource]
+albedo_texture = ExtResource("1_f78ev")
+metallic_specular = 0.0
+texture_filter = 2

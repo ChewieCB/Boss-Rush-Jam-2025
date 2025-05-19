@@ -1,8 +1,6 @@
-[gd_scene load_steps=13 format=4 uid="uid://b4jtd8erp77w7"]
+[gd_scene load_steps=11 format=4 uid="uid://b4jtd8erp77w7"]
 
-[ext_resource type="Script" path="res://src/maps/lobby/elevator_doors.gd" id="1_060x5"]
-[ext_resource type="AudioStream" uid="uid://c2puwhx3tyoi7" path="res://src/maps/lobby/assets/Door_open.mp3" id="2_bh6bv"]
-[ext_resource type="AudioStream" uid="uid://dbmwfc5gmshj4" path="res://src/maps/lobby/assets/Door_close.mp3" id="3_wq5i3"]
+[ext_resource type="Script" path="res://src/maps/lobby/sliding_door.gd" id="1_kr1au"]
 [ext_resource type="Material" uid="uid://jnnisx0gc2xt" path="res://assets/textures/doors/elevator_door_processed.tres" id="4_y2ir2"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_na37a"]
@@ -87,9 +85,7 @@ _data = {
 size = Vector3(5, 4, 5)
 
 [node name="SlidingDoor" type="Node3D"]
-script = ExtResource("1_060x5")
-TEMP_sfx_open = ExtResource("2_bh6bv")
-TEMP_sfx_close = ExtResource("3_wq5i3")
+script = ExtResource("1_kr1au")
 metadata/_tb_type = "_tb_group"
 
 [node name="Door" type="StaticBody3D" parent="."]
@@ -122,5 +118,5 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_jc3p2")
 
-[connection signal="body_entered" from="DoorTriggerArea" to="." method="open" unbinds=1]
-[connection signal="body_exited" from="DoorTriggerArea" to="." method="close" unbinds=1]
+[connection signal="body_entered" from="DoorTriggerArea" to="." method="_on_door_trigger_area_body_entered"]
+[connection signal="body_exited" from="DoorTriggerArea" to="." method="_on_door_trigger_area_body_exited"]

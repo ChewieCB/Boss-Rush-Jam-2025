@@ -633,6 +633,8 @@ func _on_spawn_turrets_spawning_state_entered() -> void:
 	for i in turrets_to_spawn:
 		if spawned_turrets.size() >= turrets_to_spawn:
 			break
+		elif $StateChart/Root/Health/Dead.active:
+			break
 		var idx: int = randi_range(0, valid_spawns.size() - 1)
 		turret_look_target = valid_spawns.pop_at(idx)
 		var tween = get_tree().create_tween()

@@ -93,11 +93,11 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			damage_applied.emit(damage, true, target.global_position)
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 		else:
-			if target is Shield:
-				target.impact(self.global_position)
+			if "health_component" in target:
+				if target is Shield:
+					target.impact(self.global_position)
 				target.health_component.damage(damage)
-			elif "health_component" in target:
-				target.health_component.damage(damage)
+				damage_applied.emit(damage, true, global_position)
 			elif target is BartenderBottle:
 				target.call_deferred("queue_free")
 			create_spark(hitscan_col_point, hitscan_col_normal)

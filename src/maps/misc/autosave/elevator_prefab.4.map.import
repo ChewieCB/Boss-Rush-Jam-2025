@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://bjbm8fjbeblj7"
+path="res://.godot/imported/elevator_prefab.4.map-ae0ce7e0c11f34fddfac5f44c1de4225.tres"
+
+[deps]
+
+source_file="res://src/maps/misc/autosave/elevator_prefab.4.map"
+dest_files=["res://.godot/imported/elevator_prefab.4.map-ae0ce7e0c11f34fddfac5f44c1de4225.tres"]
+
+[params]
+

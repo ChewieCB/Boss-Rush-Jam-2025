@@ -26,6 +26,7 @@ var previous_phase: String
 @export var shield_distance: float = 6.0
 @export var shield_height: float = 3.3
 @export var shields_destroyed_threshold: int = 2
+@export var shields_respawn_delay: float = 2.6
 var shields_destroyed: int = 0
 @export var shield_abosrb_time: float = 1.4
 @export_subgroup("SFX")
@@ -90,7 +91,7 @@ func _ready() -> void:
 	hurtbox.visible = false
 	
 	shields_parent.position.y -= 30.0
-	shields_spawn_timer.wait_time = shields_spawn_cooldown * 2
+	shields_spawn_timer.wait_time = shields_respawn_delay
 	#shields_absorb_timer.wait_time = shields_max_time
 	
 	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
@@ -513,10 +514,6 @@ func _on_died() -> void:
 	await death_anim_finished
 	drop_barrel()
 	await boss_death_slow_mo()
-	
-	if not self in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(boss_id)
-		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 
 
 func _on_pushback_area_body_entered(body: Node3D) -> void:
@@ -555,9 +552,10 @@ func _on_attack_telegraph_state_exited() -> void:
 #### Any Phase | Shields
 func _on_shields_targeting_state_entered() -> void:
 	shields_spawn_timer.start()
-	state_chart.send_event("spawn_shields")
+	#state_chart.send_event("spawn_shields")
 
 func _on_shields_spawn_shields_state_entered() -> void:
+	shields_spawn_timer.stop()
 	var rotation_increment: float = 2 * PI / shield_count
 	
 	shield_sfx_player.stream = sfx_shield_amb.pick_random()
@@ -593,8 +591,7 @@ func _on_shields_spawn_shields_state_physics_processing(delta: float) -> void:
 	shields_parent.rotation.y += delta * wheel_rotation_speed * 4
 
 func _on_shields_spawn_timer_timeout() -> void:
-	#if health_component.current_health < health_component.max_health:
-	state_chart.send_event("start_shields")
+	state_chart.send_event("spawn_shields")
 
 #func _on_shields_absorb_timer_timeout() -> void:
 	#state_chart.send_event("shields_timeout")
@@ -622,9 +619,9 @@ func _on_shields_recover_state_entered() -> void:
 	tween.tween_property(shield_sfx_player, "volume_db", linear_to_db(0.1), 0.8).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(shield_sfx_player.stop)
 	
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await tween.finished
 	
-	state_chart.send_event("restart_targeting")
+	state_chart.send_event("restart_shields")
 
 
 #### PHASE 1 ==========================
@@ -637,6 +634,10 @@ func _on_phase_1_state_entered() -> void:
 	wheel_rotation_speed = 0.6
 	current_phase = 1
 	state_chart.send_event("start_ball_attack")
+	
+	await get_tree().create_timer(0.6).timeout
+	
+	state_chart.send_event("spawn_shields")
 
 #### Phase 1 | Barrier Sweep
 func show_barrier() -> void:
