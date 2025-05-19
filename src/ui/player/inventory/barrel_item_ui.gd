@@ -31,6 +31,7 @@ func init(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: 
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
 	texture = data.barrel_image
+	button.text = data.barrel_name
 
 
 func _ready() -> void:
