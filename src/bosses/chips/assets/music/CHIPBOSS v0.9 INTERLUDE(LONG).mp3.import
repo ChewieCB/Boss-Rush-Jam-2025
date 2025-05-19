@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bgfnn57pxpd4p"
+path="res://.godot/imported/CHIPBOSS v0.9 INTERLUDE(LONG).mp3-d25148feb1eaa15619f5c91af72041bf.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/music/CHIPBOSS v0.9 INTERLUDE(LONG).mp3"
+dest_files=["res://.godot/imported/CHIPBOSS v0.9 INTERLUDE(LONG).mp3-d25148feb1eaa15619f5c91af72041bf.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

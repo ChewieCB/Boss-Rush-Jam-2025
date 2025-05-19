@@ -28,7 +28,6 @@ extends BossMap
 
 
 func _ready() -> void:
-	bgm = bgm_normal
 	super()
 	boss.flood_chamber.connect(raise_water)
 	boss.drain_chamber.connect(lower_water)
@@ -41,6 +40,11 @@ func _ready() -> void:
 
 	waterfalls.visible = false
 	water_surface.global_position.y = lower_water_level
+
+
+func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
+	SoundManager.play_music(bgm_normal, 0.5, "BGM")
+	super(_body)
 
 
 func _on_boss_defeated(_boss: BossCore) -> void:

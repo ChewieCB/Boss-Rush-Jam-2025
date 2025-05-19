@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b6kha01qoq52c"]
+
+[ext_resource type="Texture2D" uid="uid://bla0jtyugdjil" path="res://assets/textures/walls/rusty_metal_moasicd.png" id="1_q0frb"]
+
+[resource]
+albedo_texture = ExtResource("1_q0frb")
+metallic_specular = 0.0
+texture_filter = 2

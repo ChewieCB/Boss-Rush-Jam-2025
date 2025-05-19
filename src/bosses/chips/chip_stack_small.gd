@@ -313,7 +313,7 @@ func _on_small_blind_recover_state_entered() -> void:
 func _recover_state_entered() -> void:
 	anim_player.play("substack/RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
-	state_chart.send_event("cooldown_endw")
+	state_chart.send_event("cooldown_end")
 	
 	navigation_component.enable()
 	

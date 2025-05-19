@@ -362,8 +362,8 @@ func select_attack_phase_2() -> void:
 			# Transition between big and small forms:
 			if small_attacks_performed >= max_small_attacks:
 				# FIXME - radial attack with reform
-				state_chart.send_event("change_form_big_aoe_merge")
-				#state_chart.send_event("change_form_big")
+				#state_chart.send_event("change_form_big_aoe_merge")
+				state_chart.send_event("change_form_big")
 				return
 			else:
 				#if attack_roll < 20:
