@@ -1,90 +1,29 @@
-[gd_scene load_steps=7 format=3 uid="uid://c4s43jnwiod5e"]
+[gd_scene load_steps=4 format=3 uid="uid://c4s43jnwiod5e"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/shop_item_ui.gd" id="1_m7gx6"]
-[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="2_agwco"]
-[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_d4b32"]
-[ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="4_7h7mh"]
+[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_yis5u"]
 [ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="5_fggm4"]
-[ext_resource type="Script" path="res://src/ui/player/inventory/barrel_item_ui.gd" id="6_fgxee"]
 
-[node name="ShopItemContainer" type="VBoxContainer" node_paths=PackedStringArray("item_ui", "price_icon", "price_label")]
+[node name="ShopItemContainer" type="VBoxContainer"]
 theme_override_constants/separation = 16
 script = ExtResource("1_m7gx6")
-item_ui = NodePath("BarrelItemUI")
-price_icon = NodePath("HBoxContainer/TextureRect")
-price_label = NodePath("HBoxContainer/InventoryTitle")
 
-[node name="BarrelItemUI" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(100, 100)
+[node name="BarrelItemUI" parent="." instance=ExtResource("2_yis5u")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("2_agwco")
-expand_mode = 1
-script = ExtResource("6_fgxee")
-
-[node name="Button" type="Button" parent="BarrelItemUI"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="BorderNormal" type="NinePatchRect" parent="BarrelItemUI"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_d4b32")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="BorderSelected" type="NinePatchRect" parent="BarrelItemUI"]
-visible = false
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_7h7mh")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="DisablePanel" type="Panel" parent="BarrelItemUI"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+[node name="PriceIcon" type="TextureRect" parent="HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("5_fggm4")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="InventoryTitle" type="Label" parent="HBoxContainer"]
+[node name="PriceLabel" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 40
 text = "300"
 horizontal_alignment = 1
-
-[connection signal="mouse_exited" from="BarrelItemUI" to="." method="unselected"]
-[connection signal="pressed" from="BarrelItemUI/Button" to="." method="_on_button_pressed"]

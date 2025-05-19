@@ -16,6 +16,7 @@
 [ext_resource type="FontFile" uid="uid://cf4ghtgpa7pbl" path="res://assets/engebrechtre.rg-bold.otf" id="7_o47kk"]
 [ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="8_a25qv"]
 [ext_resource type="Material" uid="uid://jnnisx0gc2xt" path="res://assets/textures/doors/elevator_door_processed.tres" id="8_djaoh"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="9_qykf5"]
 [ext_resource type="Material" uid="uid://caoyj1kh0pty6" path="res://assets/textures/walls/column_0.tres" id="10_6rl80"]
 [ext_resource type="Texture2D" uid="uid://dvv8dgq51ktn1" path="res://assets/textures/walls/painting_decal.png" id="12_codcn"]
 [ext_resource type="Material" uid="uid://n34cnqh7s2w0" path="res://assets/textures/floor/carpet-red.tres" id="12_oa3or"]
@@ -1819,10 +1820,11 @@ mouse_filter = 2
 layout_mode = 2
 mouse_filter = 2
 theme = SubResource("Theme_5idyq")
+theme_override_colors/default_color = Color(1, 0.843137, 0, 1)
 theme_override_fonts/normal_font = ExtResource("7_o47kk")
-theme_override_font_sizes/normal_font_size = 80
+theme_override_font_sizes/normal_font_size = 72
 bbcode_enabled = true
-text = "[center]You've gained a barrel![/center]"
+text = "[wave][center]You've gained a barrel![/center][/wave]"
 fit_content = true
 scroll_active = false
 
@@ -1846,9 +1848,8 @@ theme_override_constants/margin_bottom = 32
 layout_mode = 2
 mouse_filter = 2
 theme = SubResource("Theme_5idyq")
-theme_override_colors/default_color = Color(0.41598, 0.41598, 0.41598, 1)
 theme_override_fonts/normal_font = ExtResource("7_o47kk")
-theme_override_font_sizes/normal_font_size = 64
+theme_override_font_sizes/normal_font_size = 52
 bbcode_enabled = true
 text = "Talk to the vendor to change your loadout and buy new barrels."
 fit_content = true
@@ -1856,26 +1857,26 @@ scroll_active = false
 
 [node name="MarginContainer3" type="MarginContainer" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 32
+theme_override_constants/margin_top = 100
 
-[node name="ContinueLabel" type="RichTextLabel" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3"]
 layout_mode = 2
-mouse_filter = 2
-theme = SubResource("Theme_5idyq")
-theme_override_colors/default_color = Color(0.41598, 0.41598, 0.41598, 1)
-theme_override_fonts/normal_font = ExtResource("7_o47kk")
-theme_override_font_sizes/normal_font_size = 32
-bbcode_enabled = true
-text = "[right](Interact) to close[/right]"
-fit_content = true
-scroll_active = false
+alignment = 2
+
+[node name="DeviceInputPrompt" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3/HBoxContainer" instance=ExtResource("9_qykf5")]
+layout_mode = 2
+assigned_action = "interact"
+hide_background = true
+
+[node name="ContinueLabel" type="Label" parent="UI/TutorialUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = " to close"
 
 [node name="GameWinUI" type="Control" parent="UI"]
 process_mode = 3
 visible = false
-modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1933,10 +1934,11 @@ grow_vertical = 2
 layout_mode = 2
 mouse_filter = 2
 theme = SubResource("Theme_5idyq")
+theme_override_colors/default_color = Color(1, 0.843137, 0, 1)
 theme_override_fonts/normal_font = ExtResource("7_o47kk")
-theme_override_font_sizes/normal_font_size = 80
+theme_override_font_sizes/normal_font_size = 72
 bbcode_enabled = true
-text = "[center]Nicely Done![/center]"
+text = "[wave][center]Nicely Done![/center][/wave]"
 fit_content = true
 scroll_active = false
 
@@ -1960,33 +1962,33 @@ theme_override_constants/margin_bottom = 32
 layout_mode = 2
 mouse_filter = 2
 theme = SubResource("Theme_5idyq")
-theme_override_colors/default_color = Color(0.41598, 0.41598, 0.41598, 1)
 theme_override_fonts/normal_font = ExtResource("7_o47kk")
-theme_override_font_sizes/normal_font_size = 64
+theme_override_font_sizes/normal_font_size = 52
 bbcode_enabled = true
-text = "You beat all the bosses we had time to make! 
+text = "You beat all the bosses! 
 
-Go spend your hard-earned chips on some new barrels and give them another shot - we've buffed their health so they can take more of a beating."
+Go spend your hard-earned chips on some new barrels and give them another shot - The enemies became stronger and can take more of a beating."
 fit_content = true
 scroll_active = false
 
 [node name="MarginContainer3" type="MarginContainer" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 32
+theme_override_constants/margin_top = 210
 
-[node name="ContinueLabel" type="RichTextLabel" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3"]
 layout_mode = 2
-mouse_filter = 2
-theme = SubResource("Theme_5idyq")
-theme_override_colors/default_color = Color(0.41598, 0.41598, 0.41598, 1)
-theme_override_fonts/normal_font = ExtResource("7_o47kk")
-theme_override_font_sizes/normal_font_size = 32
-bbcode_enabled = true
-text = "[right](Interact) to close[/right]"
-fit_content = true
-scroll_active = false
+alignment = 2
+
+[node name="DeviceInputPrompt" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3/HBoxContainer" instance=ExtResource("9_qykf5")]
+layout_mode = 2
+assigned_action = "interact"
+hide_background = true
+
+[node name="ContinueLabel" type="Label" parent="UI/GameWinUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = " to close"
 
 [node name="Vendor" parent="." instance=ExtResource("19_fr53g")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.4, 1.6, -9.2)

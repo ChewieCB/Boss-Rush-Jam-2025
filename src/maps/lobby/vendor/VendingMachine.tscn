@@ -116,5 +116,6 @@ shape = SubResource("BoxShape3D_2202f")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="InventoryUI" parent="UI" instance=ExtResource("5_b7an8")]
+visible = false
 shop_title = "Debug Vending Machine"
 current_inventory = Array[ExtResource("6_qqfkm")]([ExtResource("8_m0arp"), ExtResource("9_oc20r"), ExtResource("10_yhgbb"), ExtResource("7_w8qpy"), ExtResource("13_5f2k0"), ExtResource("14_4sgpc"), ExtResource("9_t37n2"), ExtResource("16_o0ero"), ExtResource("13_2fs0b"), ExtResource("12_qo2ly"), ExtResource("19_oo5sd"), ExtResource("10_hcac1"), ExtResource("21_jpwd4"), ExtResource("22_scu43"), ExtResource("23_vfyqf"), ExtResource("24_2kilb"), ExtResource("11_rqjiq"), ExtResource("26_px180"), ExtResource("27_j5rnn"), ExtResource("28_mhb3c"), ExtResource("29_btcgv"), ExtResource("30_yhhcr"), ExtResource("31_382ao"), ExtResource("32_ed8yr")])
