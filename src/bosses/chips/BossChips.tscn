@@ -310,6 +310,7 @@ sfx_chiptopede_impact = Array[AudioStream]([])
 snake_speed = 25.0
 sfx_chiptopede_snake = Array[AudioStream]([ExtResource("15_idgtr"), ExtResource("16_1jelc")])
 shooting_stance_prefab = ExtResource("8_280mm")
+max_projectile_spawn_distance = 36.0
 chiptopede_targeting_speed = 3.0
 chiptopede_projectile = ExtResource("9_n5byv")
 chiptopede_projectile_bursts = 2

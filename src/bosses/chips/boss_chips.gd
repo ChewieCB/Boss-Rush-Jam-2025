@@ -182,6 +182,7 @@ var snake_distance: float
 var stance_path: Path3D
 var emerge_speed: float = 10.0
 var emerge_distance: float
+@export var max_projectile_spawn_distance: float = 36.0
 @export var chiptopede_targeting_speed: float = 3.0
 @export var chiptopede_projectile: PackedScene
 @export var chiptopede_projectile_bursts: int = 2
@@ -1176,11 +1177,13 @@ func _on_chiptopede_leap_targeting_state_entered() -> void:
 	self.global_position = get_chiptopede_spawn_pos(
 		chiptopede_spawns, 
 		min_spawn_distance,
+		0.0,
 		last_leap_end_pos
 	).global_position
 	
 	# Get the player's current position as the target point
 	var start_pos: Vector3 = self.global_position
+	#print("Start pos dist to target: %s | Min spawn dist: %s" % [start_pos.distance_to(target.global_position), min_spawn_distance])
 	var goal_pos: Vector3 = target.global_position
 	goal_pos.y = -19
 	leap_path = create_curve_path(start_pos, goal_pos, [], _create_leap_path)
@@ -1316,7 +1319,8 @@ func _on_chiptopede_shoot_emerging_state_entered() -> void:
 	# Move chiptopede to new spawn location
 	self.global_position = get_chiptopede_spawn_pos(
 		chiptopede_shoot_spawns, 
-		min_spawn_distance
+		24.0,
+		max_projectile_spawn_distance,
 	).global_position
 	
 	# Get the player's current position as the target point
@@ -1486,7 +1490,9 @@ func _small_stack_dead(stack: CharacterBody3D) -> void:
 func get_chiptopede_spawn_pos(
 	spawn_marker_group: Array[Node], 
 	min_spawn_distance: float = 0.0,
-	previous_pos: Vector3 = Vector3.ZERO, 
+	max_spawn_distance: float = 0.0,
+	previous_pos: Vector3 = Vector3.ZERO,
+	filter_func: Callable = Callable() 
 ) -> Node:
 	# Don't spawn in the same place twice in a row
 	var available_spawns = spawn_marker_group.duplicate()
@@ -1515,10 +1521,21 @@ func get_chiptopede_spawn_pos(
 				return false
 	)
 	# If we have a minimum spawn distance, filter out any spawns within this distance 
-	var filtered_spawns = available_spawns.filter(
-		func(spawn):
-			return spawn.global_position.distance_to(sort_target) >= min_spawn_distance
-	)
+	var filtered_spawns = available_spawns
+	if min_spawn_distance:
+		filtered_spawns = filtered_spawns.filter(
+			func(spawn):
+				return spawn.global_position.distance_to(sort_target) >= min_spawn_distance
+		)
+	if max_spawn_distance:
+		filtered_spawns = filtered_spawns.filter(
+			func(spawn):
+				return spawn.global_position.distance_to(sort_target) <= max_spawn_distance
+		)
+	#
+	if filter_func:
+		filtered_spawns = filtered_spawns.filter(filter_func)
+	
 	## TODO - Make sure the spawn is somewhere the player is looking
 	#var facing_spawns = filtered_spawns.filter(
 		#func(spawn):
