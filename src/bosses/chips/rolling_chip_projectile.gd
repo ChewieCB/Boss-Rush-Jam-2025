@@ -3,23 +3,28 @@ class_name RollingChip
 
 signal spin_finished
 
+@export var health_component: HealthComponent
+@export_group("Damage")
 @export var damage: float = 15.0
 @export var damage_cooldown: float = 0.1
-
+@export_group("Spin Movement")
 @export var spin_forward_buffer: float = 2.0
 @export var spin_forward_check_distance: float = 128.0
 @export var spin_forward_time: float = 0.8
 @export var spin_hold_time: float = 0.3
 @export var spin_reverse_time: float = 0.7
 @export var spin_rotation_speed: float = 8.0
-
-@export var health_component: HealthComponent
+@export_group("SFX")
+@export var sfx_rolling: Array[AudioStream]
+@export var sfx_impact: Array[AudioStream]
 
 @onready var mesh_pivot: Node3D = $MeshPivot
 @onready var mesh: MeshInstance3D = $MeshPivot/MeshInstance3D
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var hurtbox: Area3D = $MeshPivot/Hurtbox
 @onready var hit_timer: Timer = $HitTImer
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
+@onready var sfx_player_loop: AudioStreamPlayer3D = $SFXPlayerLoop
 
 var wall_pos_sphere: MeshInstance3D
 var target_pos_sphere: MeshInstance3D
@@ -29,7 +34,8 @@ var roll_end_pos_sphere: MeshInstance3D
 
 
 func _ready() -> void:
-	pass
+	sfx_player_loop.stream = sfx_rolling.pick_random()
+	sfx_player_loop.play()
 
 
 func get_point_before_wall() -> Vector3:
@@ -118,5 +124,7 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 	if not hit_timer.is_stopped():
 		return
 	if body.health_component:
+		sfx_player.stream = sfx_impact.pick_random()
+		sfx_player.play()
 		body.health_component.damage(damage)
 		hit_timer.start(damage_cooldown)

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c751tkspvkb33"
+path="res://.godot/imported/CHIP JUMP 3.mp3-010d8485163ae9ee47ff7534c751b676.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/CHIP JUMP 3.mp3"
+dest_files=["res://.godot/imported/CHIP JUMP 3.mp3-010d8485163ae9ee47ff7534c751b676.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

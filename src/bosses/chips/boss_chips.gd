@@ -40,6 +40,7 @@ var center_pos := Vector3(0, 0, -2)
 @export var explosion_scene: PackedScene
 @export var pushback_force: float = 20.0
 # SFX
+@export var sfx_jump: Array[AudioStream]
 #
 @export_subgroup("Form Transitions")
 @export var max_big_attacks: int = 3
@@ -57,6 +58,7 @@ var small_attacks_performed: int = 0
 var chips_fired: int = 0
 var active_rolling_chip: RollingChip
 # SFX
+@export var sfx_chip_fire: Array[AudioStream]
 #
 @export_subgroup("Chip Sweep")
 @export var chip_sweep_count: int = 3
@@ -65,6 +67,7 @@ var active_rolling_chip: RollingChip
 @export var chip_sweep_prefab: PackedScene
 var chip_sweep_instances: Array = []
 # SFX
+@export var sfx_chip_sweep_out: Array[AudioStream]
 #
 @export_subgroup("Stack Slam")
 @export var slam_shockwave_prefab: PackedScene
@@ -76,6 +79,7 @@ var chip_sweep_instances: Array = []
 var completed_slams: int = 0
 var aoe_floor = 0.0
 # SFX
+@export var sfx_slam: Array[AudioStream]
 #
 @export_subgroup("Place Your Bets")
 @export var jump_height: float = 9.0
@@ -177,6 +181,7 @@ var emerge_distance: float
 @export var chiptopede_delay_per_projectile: float = 0.05
 @export var delay_between_burst: float = 0.3
 
+@onready var big_stack_sfx_player: AudioStreamPlayer3D = $BigStackSFXPlayer
 @onready var chiptopede_sfx_player: AudioStreamPlayer3D = $ChiptopedeHeadSFXPlayer
 
 ## USEFUL GLOBALS
@@ -402,6 +407,16 @@ func select_attack_phase_3() -> void:
 
 
 ## UTIL FUNCTIONS
+
+# For animation player triggering - do we actually need this?
+func _play_sfx_from_array(sfx_array_name: String) -> void:
+	var sfx_array: Array = self.get(sfx_array_name)
+	if sfx_array:
+		big_stack_sfx_player.stream = sfx_array.pick_random()
+		big_stack_sfx_player.play()
+	else:
+		push_error("No such sfx array: %s" % sfx_array_name)
+
 # BIG STACK MOVEMENT TWEENS
 func return_big_stack_to_center() -> void:
 	var tween = get_tree().create_tween()
@@ -415,6 +430,8 @@ func return_big_stack_to_center() -> void:
 
 func big_stack_jump(goal_pos: Vector3, height: float = jump_height, hover: bool = true) -> void:
 	anim_player.play("big_stack/jump_start")
+	big_stack_sfx_player.stream = sfx_jump.pick_random()
+	big_stack_sfx_player.play()
 	
 	var jump_tween: Tween = get_tree().create_tween()
 	jump_tween.tween_property(
@@ -448,6 +465,8 @@ func big_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
 	await jump_tween.finished
 	
 	anim_player.play("big_stack/slam_end")
+	big_stack_sfx_player.stream = sfx_slam.pick_random()
+	big_stack_sfx_player.play()
 	
 	var decal_slam := Decal.new()
 	decal_slam.texture_albedo = slam_aoe_decal
@@ -709,8 +728,17 @@ func _on_chip_sweep_sweep_state_entered() -> void:
 		sweep_proj.anim_time = sweep_time / chips_to_player
 		
 		anim_player.play("big_stack/projectile_fire")
+		# SFX
+		big_stack_sfx_player.stream = sfx_chip_sweep_out.pick_random()
+		big_stack_sfx_player.play()
+		
 		sweep_proj.add_chips(chips_to_player + 2)
 		await sweep_proj.chips_placed
+		# TODO - return sfx
+		# SFX
+		#big_stack_sfx_player.stream = sfx_chip_sweep_out.pick_random()
+		#big_stack_sfx_player.play()
+		
 		sweep_proj.remove_chips()
 		await sweep_proj.chips_removed
 		anim_player.play("big_stack/projectile_telegraph")
