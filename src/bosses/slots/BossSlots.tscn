@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=97 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -65,6 +65,8 @@
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="56_ft1nf"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="57_f27rp"]
 [ext_resource type="AnimationLibrary" uid="uid://cbukxypul85wr" path="res://src/bosses/slots/assets/slot_boss_anims.res" id="64_5u1vo"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="66_4ktje"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="67_h7fvy"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
@@ -92,6 +94,86 @@ albedo_color = Color(1, 0, 0, 1)
 material = SubResource("StandardMaterial3D_7kkon")
 radius = 0.35
 height = 0.7
+
+[sub_resource type="Resource" id="Resource_7mlln"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_v0uhn"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_7mlln")
+
+[sub_resource type="Resource" id="Resource_nvdn1"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_8dxoa"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_nvdn1")
+
+[sub_resource type="Resource" id="Resource_vudos"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_swquk"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_vudos")
+
+[sub_resource type="Resource" id="Resource_k564c"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_ifeni"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_k564c")
+
+[sub_resource type="Resource" id="Resource_3onr3"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_mrysj"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_3onr3")
+
+[sub_resource type="Resource" id="Resource_jn0hb"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_fifxe"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_jn0hb")
+
+[sub_resource type="Resource" id="Resource_lo164"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_jsu51"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_lo164")
+
+[sub_resource type="Resource" id="Resource_raxrd"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_n6uxk"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_raxrd")
+
+[sub_resource type="Resource" id="Resource_15l04"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_joexq"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_15l04")
+
+[sub_resource type="Resource" id="Resource_uhsr0"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_kklh8"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_uhsr0")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o53xj"]
 radius = 4.0
@@ -165,7 +247,7 @@ bomb_impulse = 170000.0
 max_drop_distance = 20.0
 bomb_drop_delay = 0.4
 sfx_bomb_launch = Array[AudioStream]([ExtResource("45_ishi6"), ExtResource("46_vgcme"), ExtResource("47_hafh8"), ExtResource("48_qbsnc"), ExtResource("49_sigie")])
-boss_id = 2
+boss_id = 1
 chip_spawn_chance = 0.3
 chip_spawn_force = 1200.0
 barrel_to_drop = ExtResource("11_5va1t")
@@ -600,6 +682,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_lu46i")
 to = NodePath("../../HomingProjectiles")
 event = &"start_diamond_attack"
+guard = SubResource("Resource_v0uhn")
 delay_in_seconds = "0.0"
 
 [node name="toCherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="2"]
@@ -641,6 +724,7 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Spinning")
 event = &"start_slots"
+guard = SubResource("Resource_8dxoa")
 delay_in_seconds = "0.0"
 
 [node name="Spinning" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="1"]
@@ -707,6 +791,7 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Shooting")
 event = &"start_shooting"
+guard = SubResource("Resource_swquk")
 delay_in_seconds = "0.0"
 
 [node name="Shooting" type="Node" parent="StateChart/Root/Phase/Phase2/HomingProjectiles" index="1"]
@@ -752,6 +837,7 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../DroppingBombs")
 event = &"start_dropping_bombs"
+guard = SubResource("Resource_ifeni")
 delay_in_seconds = "0.0"
 
 [node name="DroppingBombs" type="Node" parent="StateChart/Root/Phase/Phase2/CherryBombs" index="1"]
@@ -800,13 +886,14 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Dropping")
 event = &"start_drop"
+guard = SubResource("Resource_mrysj")
 delay_in_seconds = "0.0"
 
 [node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase2/BellDrop/Targeting" index="1"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../../LeverSwipe")
 event = &"start_lever_attack"
-guard = ExtResource("5_3q2k6")
+guard = SubResource("Resource_fifxe")
 delay_in_seconds = "0.0"
 
 [node name="Dropping" type="Node" parent="StateChart/Root/Phase/Phase2/BellDrop" index="1"]
@@ -822,7 +909,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_lu46i")
 to = NodePath("../../../LeverSwipe")
 event = &"start_lever_attack"
-guard = ExtResource("5_3q2k6")
+guard = SubResource("Resource_jsu51")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/BellDrop" index="2"]
@@ -866,6 +953,7 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Charging")
 event = &"start_charge_attack"
+guard = SubResource("Resource_n6uxk")
 delay_in_seconds = "0.0"
 
 [node name="Charging" type="Node" parent="StateChart/Root/Phase/Phase2/Charge" index="1"]
@@ -904,6 +992,7 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Swipe")
 event = &"start_swipe"
+guard = SubResource("Resource_joexq")
 delay_in_seconds = "0.0"
 
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe" index="1"]
@@ -942,6 +1031,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_lu46i")
 to = NodePath("../../HomingProjectiles")
 event = &"start_diamond_attack"
+guard = SubResource("Resource_kklh8")
 delay_in_seconds = "0.0"
 
 [node name="toCherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe" index="6"]

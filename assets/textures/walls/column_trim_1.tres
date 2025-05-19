@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dr3hgrw1wdh3v"]
+
+[ext_resource type="Texture2D" uid="uid://ckuk4w00vl6ul" path="res://assets/textures/walls/column_trim_1.jpg" id="1_nrlk2"]
+
+[resource]
+albedo_texture = ExtResource("1_nrlk2")
+metallic_specular = 0.0
+texture_filter = 2

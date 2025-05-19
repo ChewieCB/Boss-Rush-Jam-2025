@@ -210,10 +210,6 @@ func _on_died() -> void:
 	drop_barrel()
 	
 	await boss_death_slow_mo()
-	
-	if not self in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(boss_id)
-		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:
@@ -493,6 +489,8 @@ func _on_bell_drop_dropping_state_entered() -> void:
 
 func _on_bell_drop_dropping_state_exited() -> void:
 	for point in bell_spawn_points:
+		if $StateChart/Root/Health/Dead.active:
+			break
 		var spawn := Vector3(point.x, 2.5, point.y)
 		# Spawn shadow/mesh to show AoE, grow in size as it drops
 		drop_shadow(spawn, 6.0, bell_shadow_time)
@@ -767,6 +765,8 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 	var dir_counter: int = -1
 	sfx_player.volume_db = 3.0
 	for i in range(bombs_per_attack):
+		if $StateChart/Root/Health/Dead.active:
+			break
 		bomb_drop_timer.start(bomb_drop_delay)
 		await bomb_drop_timer.timeout
 		#await get_tree().create_timer(bomb_drop_delay).timeout

@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://burh3udob1t32"]
+[gd_scene load_steps=51 format=3 uid="uid://burh3udob1t32"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_rd2xm"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/surveillance.gd" id="2_p6rlf"]
@@ -20,6 +20,8 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="10_tlulp"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="11_3sg7f"]
 [ext_resource type="Texture2D" uid="uid://dwcugmin6uohy" path="res://src/bosses/pit/surveillance/textures/Veins_001_basecolor.jpg" id="11_f1pe4"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="20_js66j"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="21_vq86d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a8rdl"]
 transparency = 1
@@ -105,6 +107,38 @@ radius = 42.0
 [sub_resource type="SphereShape3D" id="SphereShape3D_ook83"]
 radius = 6.5
 
+[sub_resource type="Resource" id="Resource_v523b"]
+script = ExtResource("20_js66j")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_4gv4g"]
+script = ExtResource("21_vq86d")
+guard = SubResource("Resource_v523b")
+
+[sub_resource type="Resource" id="Resource_ndbs3"]
+script = ExtResource("20_js66j")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_xd5nj"]
+script = ExtResource("21_vq86d")
+guard = SubResource("Resource_ndbs3")
+
+[sub_resource type="Resource" id="Resource_j2n13"]
+script = ExtResource("20_js66j")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_f405o"]
+script = ExtResource("21_vq86d")
+guard = SubResource("Resource_j2n13")
+
+[sub_resource type="Resource" id="Resource_yxjau"]
+script = ExtResource("20_js66j")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_qcdpy"]
+script = ExtResource("21_vq86d")
+guard = SubResource("Resource_yxjau")
+
 [sub_resource type="Animation" id="Animation_sq5t5"]
 length = 0.001
 tracks/0/type = "value"
@@ -164,6 +198,7 @@ barrier_cage_reflect_force = 12.0
 barrier_cage_time = 12.0
 barrier_cage_material = ExtResource("3_bke04")
 sfx_barrier = ExtResource("6_xnsy2")
+boss_id = 4
 chip_spawn_chance = 0.24
 barrel_to_drop = ExtResource("4_nqlwe")
 sfx_hit = Array[AudioStream]([ExtResource("8_8p6dj")])
@@ -529,6 +564,7 @@ script = ExtResource("9_h6vir")
 script = ExtResource("7_bpphr")
 to = NodePath("../../Targeting")
 event = &"start_beam"
+guard = SubResource("Resource_4gv4g")
 delay_in_seconds = "0.0"
 
 [node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam" index="1"]
@@ -538,6 +574,7 @@ script = ExtResource("9_h6vir")
 script = ExtResource("7_bpphr")
 to = NodePath("../../SweepBeam")
 event = &"sweep_beam"
+guard = SubResource("Resource_xd5nj")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/LaserBeam/Targeting" index="1"]
@@ -601,7 +638,7 @@ script = ExtResource("9_h6vir")
 script = ExtResource("7_bpphr")
 to = NodePath("../../Spawning")
 event = &"spawn_turrets"
-guard = ExtResource("8_bah8y")
+guard = SubResource("Resource_f405o")
 delay_in_seconds = "0.0"
 
 [node name="Spawning" type="Node" parent="StateChart/Root/Phase/Phase3/SpawnTurrets" index="1"]
@@ -640,6 +677,7 @@ script = ExtResource("9_h6vir")
 script = ExtResource("7_bpphr")
 to = NodePath("../../SpawnCage")
 event = &"spawn_cage"
+guard = SubResource("Resource_qcdpy")
 delay_in_seconds = "0.0"
 
 [node name="SpawnCage" type="Node" parent="StateChart/Root/Phase/Phase3/BarrierCage" index="1"]

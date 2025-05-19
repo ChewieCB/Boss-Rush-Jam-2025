@@ -148,6 +148,7 @@ shield_count = 8
 shield_distance = 6.0
 shield_height = -1.0
 shields_destroyed_threshold = 3
+shields_respawn_delay = 2.6
 shield_abosrb_time = 1.4
 sfx_shield_amb = Array[AudioStream]([ExtResource("4_f2bj1"), ExtResource("5_6k1wj"), ExtResource("6_j2w8r")])
 barrier_targeting_delay = 2.0
@@ -172,7 +173,7 @@ drop_delay = 0.5
 drop_time = 1.0
 drop_return_delay = 4.0
 sfx_drop_amb = Array[AudioStream]([ExtResource("15_ktveg"), ExtResource("16_6j6ku"), ExtResource("17_yy8hc")])
-boss_id = 3
+boss_id = 2
 chip_spawn_chance = 0.2
 chip_spawn_force = 950.0
 barrel_to_drop = ExtResource("6_7xocg")
@@ -314,7 +315,7 @@ script = ExtResource("8_edit5")
 [node name="toTargeting" type="Node" parent="StateChart/Root/Status/Shields/Recover" index="0"]
 script = ExtResource("4_3xtcm")
 to = NodePath("../../Targeting")
-event = &"restart_targeting"
+event = &"restart_shields"
 guard = ExtResource("18_m5pf4")
 delay_in_seconds = "0.0"
 

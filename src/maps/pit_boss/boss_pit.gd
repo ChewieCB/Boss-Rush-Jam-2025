@@ -2,6 +2,7 @@ extends BossMap
 
 @export var active_bgm: AudioStream
 
+@onready var arena_doors: ElevatorDoors = find_children("*", "ElevatorDoors")[1]
 ## Boss Tracking
 @onready var pit_boss: BossPit = find_children("*", "BossPit").front()
 @onready var surveillance_boss: BossSurveillance = find_children("*", "BossSurveillance").front()
@@ -80,10 +81,11 @@ func _on_boss_died(boss: BossCore = boss) -> void:
 	remaining_boss.state_chart.send_event("start_phase_3")
 
 
-func _on_bosses_defeated(_boss: BossCore) -> void:
-	if _boss.boss_id != BossCore.BossIdEnum.NONE && not _boss.boss_id in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(_boss.boss_id)
-		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
+func _on_bosses_defeated(boss: BossCore) -> void:
+	if not boss.boss_id in GameManager.bosses_defeated:
+		GameManager.bosses_defeated.append(boss.boss_id)
+		print(GameManager.bosses_defeated)
+		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 	
 	collect_all_chips()
 	win_ui.win("Floor Cleared", win_subtext.pick_random())
@@ -128,6 +130,7 @@ func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	pit_boss.activate()
 	SoundManager.play_music(active_bgm, 0.1, "BGM")
 	elevator_doors.close()
+	arena_doors.close()
 	LuckHandler.enabled = true
 	boss_trigger.queue_free()
 

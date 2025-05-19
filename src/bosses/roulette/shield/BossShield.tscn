@@ -55,4 +55,4 @@ material_override = ExtResource("4_wjik8")
 mesh = SubResource("BoxMesh_r8fi6")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_k6qd8")]
-max_health = 60.0
+max_health = 50.0
