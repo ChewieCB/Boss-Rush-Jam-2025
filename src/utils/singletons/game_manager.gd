@@ -138,6 +138,8 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 		equipped_barrels.append(found_data)
 		refresh_shop_ui.emit()
 		GameManager.player.current_gun.install_barrel(found_data.barrel_prefab)
+		if found_data.is_archetype_barrel and equipped_barrels.size() != 1:
+			return "Warning: archetype barrel isn't installed in first slot"
 	return ""
 
 

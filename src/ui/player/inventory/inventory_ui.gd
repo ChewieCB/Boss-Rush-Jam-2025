@@ -63,7 +63,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 
 func toggle():
 	warning_label.self_modulate = Color.WHITE
-	warning_label.text = "Barrel effects applied from left to right"
+	warning_label.text = "Barrel effects applied in stock-to-muzzle direction"
 	warning_label.visible = true
 	SoundManager.play_sound(sfx_open, "SFX")
 	if visible:
@@ -149,8 +149,10 @@ func close():
 		GameManager.player.current_gun.spin_all_barrels()
 
 
-func show_warning(content: String):
-	warning_label.self_modulate = Color.RED
+func show_warning(content: String, color: Color = Color.RED):
+	if content.contains("Warning"):
+		color = Color.YELLOW
+	warning_label.self_modulate = color
 	warning_label.text = content
 	warning_label.visible = true
 
