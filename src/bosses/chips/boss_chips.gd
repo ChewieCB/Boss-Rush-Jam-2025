@@ -1161,6 +1161,7 @@ func _on_phase_3_state_entered() -> void:
 	health_component.has_died = false
 	health_component.max_health = chiptopede_max_health
 	health_component.current_health = chiptopede_max_health
+	health_component.received_dmg_multiplier = 0.5
 	health_ui.init_health_ui(chiptopede_max_health)
 	health_ui.boss_name = "Chiptopede"
 	health_ui.show_ui()
@@ -1398,7 +1399,8 @@ func _on_chiptopede_shoot_recovering_state_entered() -> void:
 
 
 func _on_chiptopede_hurt(health_diff: float) -> void:
-	health_component.damage(abs(health_diff))
+	if health_diff < 0:
+		health_component.damage(abs(health_diff))
 
 
 #### SPLIT STACK HELPER METHODS
