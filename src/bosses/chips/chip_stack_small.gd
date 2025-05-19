@@ -33,6 +33,8 @@ var center_pos: Vector3
 @export var num_bursts: int = 1
 @export var delay_between_burst: float = 0.6
 # SFX
+@export var sfx_shoot_telegraph: Array[AudioStream]
+@export var sfx_shoot: Array[AudioStream]
 #
 @export_subgroup("Arc Wave Swipe")
 @export var swipe_prefab: PackedScene
@@ -47,6 +49,7 @@ var center_pos: Vector3
 @onready var swipe_targeting_timer: Timer = $MeleeTargetingTimer
 var active_arc_projectiles: Array = []
 # SFX
+@export var sfx_swipe: Array[AudioStream]
 #
 @export_subgroup("Chargeback")
 @export var chargeback_targeting_time: float = 1.8
@@ -54,6 +57,8 @@ var active_arc_projectiles: Array = []
 var chargeback_leap_height: float = 8.0
 var chargeback_return_pos: Vector3
 # SFX
+@export var sfx_charge_telegraph: Array[AudioStream]
+@export var sfx_charge: Array[AudioStream]
 #
 @export var sfx_chip_shot: Array[AudioStream]
 @export_subgroup("Split Rush")
@@ -64,6 +69,7 @@ var chargeback_return_pos: Vector3
 var charge_target_pos: Vector3
 @onready var reform_charge_timer: Timer = $StateChart/Root/Phase/SplitRush/ReformChargeTimer
 # SFX
+@export var sfx_merge_telegraph: Array[AudioStream]
 #
 @export_subgroup("Place Your Bets")
 @onready var aoe_markers: Array[Node]
@@ -73,6 +79,9 @@ var charge_target_pos: Vector3
 @export var jump_hang_time: float = 1.2
 @export var drop_time: float = 0.3
 # SFX
+@export var sfx_jump: Array[AudioStream]
+@export var sfx_slam: Array[AudioStream]
+@export var sfx_dive_telegraph: Array[AudioStream]
 #
 
 @onready var face_sprite: Sprite3D = $Sprite3D/FaceSprite
@@ -80,6 +89,7 @@ var charge_target_pos: Vector3
 @onready var spark_spawn_marker_l: Marker3D = $MarkerPivot/SparkMarkerL
 @onready var spark_spawn_marker_r: Marker3D = $MarkerPivot/SparkMarkerR
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/ProjectileSpawnMarker
+@onready var sfx_player: AudioStreamPlayer3D = $StackSFXPlayer
 
 var group_size: int = 1
 var group_idx: int = 0
@@ -186,6 +196,10 @@ func split_stack_jump(goal_pos: Vector3, height: float = jump_height, hover: boo
 		)
 	
 	anim_player.play("substack/jump_start")
+	#
+	sfx_player.stream = sfx_jump.pick_random()
+	sfx_player.play()
+	#
 	var jump_tween: Tween = get_tree().create_tween()
 	jump_tween.tween_property(
 		self, "global_position", goal_pos, jump_time
@@ -195,6 +209,10 @@ func split_stack_jump(goal_pos: Vector3, height: float = jump_height, hover: boo
 	
 	if hover:
 		anim_player.play("substack/jump_apex")
+		#
+		sfx_player.stream = sfx_dive_telegraph.pick_random()
+		sfx_player.play()
+		#
 		await get_tree().create_timer(jump_hang_time).timeout
 	
 	return
@@ -279,6 +297,10 @@ func _on_small_blind_shooting_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	navigation_component.disable()
 	anim_player.play("substack/projectile_telegraph")
+	#
+	sfx_player.stream = sfx_shoot_telegraph.pick_random()
+	sfx_player.play()
+	#
 	_telegraph_attack()
 	
 	for i in num_bursts:
@@ -291,6 +313,10 @@ func _on_small_blind_shooting_state_entered() -> void:
 			face_sprite.visible = true
 			var face_tween: Tween = get_tree().create_tween()
 			face_tween.tween_property(face_sprite, "scale", Vector3(1.2, 1.2, 1.0), 0.2).set_ease(Tween.EASE_OUT)
+			#
+			sfx_player.stream = sfx_shoot.pick_random()
+			sfx_player.play()
+			#
 			fire_projectile(chip_projectile, projectile_spawn_marker.global_position, sfx_chip_shot)
 			face_tween.chain().tween_property(face_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.1).set_ease(Tween.EASE_IN)
 			face_tween.tween_callback(func(): face_sprite.visible = false)
@@ -405,6 +431,10 @@ func _on_arc_swipe_swiping_state_entered() -> void:
 	state_chart.send_event("attack_start")
 	
 	for i in num_swipes:
+		#
+		sfx_player.stream = sfx_swipe.pick_random()
+		sfx_player.play()
+		#
 		var arc_proj := fire_projectile(swipe_prefab, projectile_spawn_marker.global_position)
 		arc_proj.rotation_degrees.z += randf_range(-10, 10)
 		arc_proj.velocity = (
@@ -434,6 +464,10 @@ func _on_split_rush_targeting_state_entered() -> void:
 	await reform_charge_timer.timeout
 	
 	state_chart.send_event("attack_telegraph")
+	#
+	sfx_player.stream = sfx_charge_telegraph.pick_random()
+	sfx_player.play()
+	#
 	var spark_marker: Marker3D = spark_spawn_marker_r if sprite.flip_h else spark_spawn_marker_l
 	spark(spark_marker.global_position)
 	anim_player.play("substack/slash_spark")
@@ -460,6 +494,10 @@ func _on_split_rush_charging_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_start")
 	anim_player.play("substack/slash_attack")
+	#
+	sfx_player.stream = sfx_charge.pick_random()
+	sfx_player.play()
+	#
 	navigation_component.disable()
 	
 	var charge_tween: Tween = get_tree().create_tween()
@@ -480,6 +518,10 @@ func merge_to_pos(pos: Vector3, time: float, destroy_on_merge: bool = true) -> v
 	# Ignore collisions with player and other stacks
 	self.collision_layer = 0
 	self.collision_mask = 0
+	#
+	sfx_player.stream = sfx_merge_telegraph.pick_random()
+	sfx_player.play()
+	#
 	tween.tween_property(self, "global_position", pos, time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	#sfx_player.stream = sfx_charge.pick_random()
 	#sfx_player.play()
@@ -560,6 +602,10 @@ func _on_charge_back_charging_state_entered() -> void:
 	spark(spark_marker.global_position)
 	anim_player.play("substack/slash_spark")
 	
+	#
+	sfx_player.stream = sfx_charge_telegraph.pick_random()
+	sfx_player.play()
+	#
 	await _telegraph_attack()
 	
 	# HACK - break out of this loop if we've exited the state
@@ -574,6 +620,10 @@ func _on_charge_back_charging_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	navigation_component.disable()
 	
+	#
+	sfx_player.stream = sfx_charge.pick_random()
+	sfx_player.play()
+	#
 	anim_player.play("substack/slash_attack")
 	var charge_tween: Tween = get_tree().create_tween()
 	var charge_time: float = self.global_position.distance_to(charge_target_pos) / charge_speed
@@ -590,6 +640,10 @@ func _on_charge_back_leaping_state_entered() -> void:
 	var jump_results = charge_back_jump(chargeback_return_pos)
 	
 	anim_player.play("substack/jump_start")
+	#
+	sfx_player.stream = sfx_jump.pick_random()
+	sfx_player.play()
+	#
 	self.velocity = jump_results[0]
 	var time_up = jump_results[1]
 	var time_down = jump_results[2]
@@ -599,6 +653,10 @@ func _on_charge_back_leaping_state_entered() -> void:
 	await get_tree().create_timer(time_down).timeout
 
 	anim_player.play("substack/slam_end")
+	#
+	sfx_player.stream = sfx_slam.pick_random()
+	sfx_player.play()
+	#
 	await anim_player.animation_finished
 	
 	state_chart.send_event("end_leap")
