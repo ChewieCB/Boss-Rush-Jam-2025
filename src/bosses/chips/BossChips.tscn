@@ -276,7 +276,7 @@ chip_mine_trigger_time = 0.8
 chip_mine_prefab = ExtResource("5_bdbd0")
 chip_mine_cooldown = 30.0
 chiptopede_segment_prefab = ExtResource("7_3u62n")
-chiptopede_max_health = 3000.0
+chiptopede_max_health = 5000.0
 chiptopede_segments = 32
 segment_separation = 2.0
 min_spawn_distance = 36.0
@@ -328,7 +328,7 @@ shape = SubResource("BoxShape3D_oomx2")
 disabled = true
 
 [node name="HealthComponent" parent="." index="4"]
-max_health = 500.0
+max_health = 5500.0
 
 [node name="NavigationComponent" parent="." index="5"]
 follow_target = false
@@ -341,7 +341,6 @@ boss_name = "Shortstack"
 process_mode = 3
 z_index = 100
 z_as_relative = false
-enabled = true
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")

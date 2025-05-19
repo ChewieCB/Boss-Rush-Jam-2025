@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dr3feawwdhcq1"]
+
+[ext_resource type="Texture2D" uid="uid://48xtb0k11tir" path="res://assets/textures/floor/chip_pile_full_cover.png" id="1_4ck7p"]
+
+[resource]
+albedo_texture = ExtResource("1_4ck7p")
+metallic_specular = 0.0
+uv1_scale = Vector3(8, 8, 8)
+texture_filter = 2
