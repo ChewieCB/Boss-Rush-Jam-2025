@@ -46,6 +46,7 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/Camera3D/AimRay
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
+@onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 @onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
 
@@ -722,6 +723,11 @@ func aim_assist(delta: float):
 
 
 func get_assist_rotation_velocity(delta: float):
+	# Player aim already on boss, no need to rotate camera anymore
+	# Essentially this make the player only auto-aim to the edge of enemy hitbox
+	if aim_assist_ray_boss_check.is_colliding():
+		return
+	
 	var cam = player_camera
 	var aim_target_pos: Vector3 = aim_assist_target.global_position
 	if aim_assist_target.get_node("Marker3D") != null:
