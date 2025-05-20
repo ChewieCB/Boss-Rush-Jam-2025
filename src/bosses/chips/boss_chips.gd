@@ -1974,6 +1974,9 @@ func _on_chiptopede_death_exploding_state_entered() -> void:
 			var segment = node.get_child(0)
 			if segment:
 				segment.queue_free()
+				# If the segment is below the waterline just free it and move on
+				if segment.global_position.y < -20.0:
+					continue
 				var explosion_inst = explosion_scene.instantiate()
 				scene_root.add_child(explosion_inst)
 				explosion_inst.global_position = segment.global_position
