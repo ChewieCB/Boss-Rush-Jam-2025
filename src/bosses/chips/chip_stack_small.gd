@@ -171,6 +171,16 @@ func orbit_center_in_group(delta: float, is_evasive: bool = false) -> void:
 
 ## MOVEMENT UTILS
 #
+func move_stack_to_pos(goal_pos: Vector3) -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(
+		self, "global_position", goal_pos, 0.8
+	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.finished
+	
+	return
+
 func return_split_stack_to_center() -> void:
 	var goal_pos: Vector3 = center_pos
 	if group_size > 1:
@@ -178,12 +188,8 @@ func return_split_stack_to_center() -> void:
 			Vector3.UP, 
 			(2 * PI / group_size) * (group_idx - 1)
 		)
-	var tween = get_tree().create_tween()
-	tween.tween_property(
-		self, "global_position", goal_pos, 0.8
-	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT)
 	
-	await tween.finished
+	await move_stack_to_pos(goal_pos)
 	
 	return
 
@@ -256,6 +262,7 @@ func _on_attack_telegraph_state_exited() -> void:
 
 func _on_small_blind_targeting_state_entered() -> void:
 	debug_state_label.text = "Small Blind Burst | Targeting"
+	navigation_component.enable()
 	
 	anim_player.play("substack/idle")
 	state_chart.send_event("start_moving")
@@ -269,21 +276,22 @@ func _on_small_blind_targeting_state_physics_processing(delta: float) -> void:
 
 
 func _on_small_blind_phase_2_targeting_state_entered() -> void:
+	vel_vertical = 0
+	GRAVITY = 0
+	navigation_component.disable()
+	
 	# Pick a free platform far away from the player and move to it
 	var target_marker: Marker3D = aoe_markers[marker_target_idx]
 	
-	if self.global_position != target_marker.global_position:
-		self.collision_layer = 0
-		
-		velocity.y += 8.0
-		var tween: Tween = get_tree().create_tween()
-		tween.chain().tween_property(self, "global_position", target_marker.global_position, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
-		
-		await tween.finished
-		
-		self.collision_layer = 4
+	self.collision_layer = 0
+	await move_stack_to_pos(target_marker.global_position)
+	self.collision_layer = 4
 	
-	_on_small_blind_targeting_state_entered()
+	anim_player.play("substack/idle")
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(0.6).timeout
+	state_chart.send_event("start_shooting")
 
 
 func _on_small_blind_phase_2_targeting_state_physics_processing(delta: float) -> void:
@@ -341,7 +349,7 @@ func _recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
 	
-	navigation_component.enable()
+	#navigation_component.enable()
 	
 	state_chart.send_event("end_recovery")
 
@@ -360,6 +368,8 @@ func _on_arc_swipe_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_arc_swipe_phase_2_targeting_state_entered() -> void:
 	debug_state_label.text = "Arc Wave Swipe | Targeting"
+	vel_vertical = 0
+	GRAVITY = 0
 	navigation_component.disable()
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("start_closing")
@@ -367,7 +377,7 @@ func _on_arc_swipe_phase_2_targeting_state_entered() -> void:
 
 func _on_arc_swipe_phase_2_targeting_state_physics_processing(delta: float) -> void:
 	return
-	platform_idle(delta)
+	#platform_idle(delta)
 
 
 func _on_arc_swipe_closing_state_entered() -> void:
@@ -390,21 +400,15 @@ func _on_arc_swipe_closing_state_physics_processing(delta: float) -> void:
 
 
 func _on_arc_swipe_phase_2_closing_state_entered() -> void:
+	debug_state_label.text = "Arc Wave Swipe | Closing"
 	# Pick a free platform close to the player and move to it
 	var target_marker: Marker3D = aoe_markers[marker_target_idx]
 	
-	if self.global_position != target_marker.global_position:
-		self.collision_layer = 0
-		
-		velocity.y += 8.0
-		var tween: Tween = get_tree().create_tween()
-		tween.chain().tween_property(self, "global_position", target_marker.global_position, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
-		
-		await tween.finished
-		
-		self.collision_layer = 4
+	self.collision_layer = 0
+	await move_stack_to_pos(target_marker.global_position)
+	self.collision_layer = 4
 	
-	_on_arc_swipe_closing_state_entered()
+	swipe_targeting_timer.start(swipe_targeting_timeout)
 
 
 func _on_arc_swipe_phase_2_closing_state_physics_processing(delta: float) -> void:
@@ -418,7 +422,7 @@ func _on_arc_swipe_phase_2_closing_state_physics_processing(delta: float) -> voi
 		state_chart.send_event("start_swipe")
 	
 	return
-	platform_idle(delta)
+	#platform_idle(delta)
 
 
 func _on_arc_swipe_swiping_state_entered() -> void:
@@ -457,6 +461,8 @@ func _on_arc_swipe_phase_2_swiping_state_entered(delta: float) -> void:
 
 func _on_split_rush_targeting_state_entered() -> void:
 	debug_state_label.text = "Split Rush | Targeting"
+	
+	navigation_component.enable()
 	
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
@@ -583,6 +589,7 @@ func _on_charge_back_targeting_state_entered() -> void:
 	debug_state_label.text = "Charge Back | Targeting"
 	
 	GRAVITY = 14
+	navigation_component.enable()
 	
 	anim_player.play("substack/idle")
 	state_chart.send_event("start_moving")
