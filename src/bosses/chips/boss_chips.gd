@@ -814,9 +814,11 @@ func _on_stack_slam_slam_state_entered() -> void:
 # Since the small stacks are CharacterBody3D instances with their own state charts,
 # we direct them here from the hidden big stack.
 #
-func trigger_substack_attack(attack_event: String) -> void:
+func trigger_substack_attack(attack_event: String, stack_delay: float = 0.0) -> void:
 	for stack in spawned_sub_stacks:
 		stack.state_chart.send_event(attack_event)
+		if stack_delay:
+			await get_tree().create_timer(stack_delay).timeout
 	
 	await substack_all_attacks_finished
 	
@@ -1063,7 +1065,7 @@ func _on_ss_arc_wave_targeting_state_entered() -> void:
 	state_chart.send_event("start_attack")
 
 func _on_ss_arc_wave_attacking_state_entered() -> void:
-	trigger_substack_attack("start_arc_wave_attack_phase_2")
+	trigger_substack_attack("start_arc_wave_attack_phase_2", 0.2)
 	#trigger_sequential_substack_attacks("start_arc_wave_attack", "start_closing")
 
 
