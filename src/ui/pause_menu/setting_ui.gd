@@ -315,7 +315,6 @@ func _on_drunk_blur_toggle_toggled(toggled_on: bool) -> void:
 	GameManager.setting_changed.emit()
 
 
-
 func refresh_setting_value():
 	mouse_sen_slider.value = GameManager.mouse_sensitivity
 	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
@@ -404,15 +403,17 @@ func _on_keybind_timer_timeout() -> void:
 func _on_controller_connection(_device: int, connected: bool):
 	# Disable aim assist and it's options if no controller is detected
 	if not connected:
-		aim_assist_slider.value_changed.disconnect(_on_aim_assist_slider_value_changed)
 		aim_assist_slider.value = 0
 		aim_assist_value.text = "Disabled"
 		aim_assist_slider.editable = false
+		if aim_assist_slider.is_connected("value_changed", _on_aim_assist_slider_value_changed):
+			aim_assist_slider.value_changed.disconnect(_on_aim_assist_slider_value_changed)
 	else:
 		aim_assist_slider.value = GameManager.aim_assist_strength * 100
 		aim_assist_value.text = "{0}".format([GameManager.aim_assist_strength * 100])
 		aim_assist_slider.editable = true
-		aim_assist_slider.value_changed.connect(_on_aim_assist_slider_value_changed)
+		if not aim_assist_slider.is_connected("value_changed", _on_aim_assist_slider_value_changed):
+			aim_assist_slider.value_changed.connect(_on_aim_assist_slider_value_changed)
 	
 	if keybinding_control_options_section.visible:
 		create_keybind_buttons()
