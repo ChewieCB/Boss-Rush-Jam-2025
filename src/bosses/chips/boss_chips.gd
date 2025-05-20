@@ -1991,5 +1991,10 @@ func _on_chiptopede_death_dead_state_entered() -> void:
 	state_chart.send_event("death")
 	died.emit()
 	#await death_anim_finished
-	drop_barrel()
+	var land_markers = chiptopede_spawns.duplicate()
+	land_markers.sort_custom(
+		_sort_by_distance_to_target
+	)
+	var nearest_land_pos: Vector3 = land_markers.front().global_position + Vector3(0, 1.0, 0)
+	drop_barrel(nearest_land_pos)
 	await boss_death_slow_mo()
