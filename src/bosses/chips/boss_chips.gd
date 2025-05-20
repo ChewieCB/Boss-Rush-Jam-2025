@@ -138,6 +138,7 @@ var last_leap_end_pos := Vector3.ZERO
 var despawned_pos := Vector3(0, -50, 0)
 var cached_segments: Array = []
 var segment_cache_parent: Node3D
+var persist_segements: bool = false
 # SFX
 @export var sfx_chiptopede_death: Array[AudioStream]
 #
@@ -146,6 +147,7 @@ var segment_cache_parent: Node3D
 @export var chiptopede_segments: int = 24
 @export var segment_separation: float = 2.0
 @export var min_spawn_distance: float = 36.0
+@export var chiptopede_explosion_delay: float = 0.2
 @export_subgroup("Leap")
 @export var leap_aoe_radius: float = 12.0
 @export var leap_damage: float = 15.0
@@ -224,11 +226,14 @@ func activate() -> void:
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	if not self.is_node_ready():
-		print_debug("Boss scene is not ready, waiting for ready signal")
 		await self.ready
-		print_debug("Ready signal received")
-	print_debug("Sending event `start_phase_1`")
-	state_chart.send_event("start_phase_1")
+	match current_phase:
+		1:
+			state_chart.send_event("start_phase_1")
+		2:
+			state_chart.send_event("start_phase_2")
+		3:
+			state_chart.send_event("start_phase_3")
 
 
 func _exit_tree() -> void:
@@ -263,27 +268,9 @@ func _on_died() -> void:
 		await boss_death_slow_mo()
 		defeated.emit(self)
 	else:
-		died.emit()
-		state_chart.send_event("death")
+		persist_segements = true
 		state_chart.send_event("stop_moving")
-		state_chart.send_event("deactivate")
-		# Stop the chiptopede in place
-		#
-		# Explode chiptopede segments one by one
-		for node in follow_nodes:
-			if is_instance_valid(node):
-				var segment = node.get_child(0)
-				if segment:
-					segment.queue_free()
-					var explosion_inst = explosion_scene.instantiate()
-					scene_root.add_child(explosion_inst)
-					explosion_inst.global_position = segment.global_position
-					explosion_inst.change_mesh_scale(2.0)
-					await get_tree().create_timer(0.7).timeout
-		#
-		#await death_anim_finished
-		drop_barrel()
-		await boss_death_slow_mo()
+		state_chart.send_event("chiptopede_death")
 
 
 ## ATTACK CHOICES
@@ -1210,8 +1197,9 @@ func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
 
 
 func _on_chiptopede_leap_leaping_state_exited() -> void:
-	_cleanup_segment_arrays()
-	leap_path.queue_free()
+	if not persist_segements:
+		_cleanup_segment_arrays()
+		leap_path.queue_free()
 	leap_damage_timer.stop()
 	chiptopede_sfx_player.stop()
 	chiptopede_sfx_player.stream = null
@@ -1296,9 +1284,10 @@ func _on_chiptopede_snake_moving_state_physics_processing(delta: float) -> void:
 
 
 func _on_chiptopede_snake_moving_state_exited() -> void:
-	_cleanup_segment_arrays()
-	snake_path = []
-	snake_path_3d.queue_free()
+	if not persist_segements:
+		_cleanup_segment_arrays()
+		snake_path = []
+		snake_path_3d.queue_free()
 	chiptopede_sfx_player.stop()
 	chiptopede_sfx_player.stream = null
 
@@ -1393,8 +1382,9 @@ func _on_chiptopede_shoot_retreat_state_physics_processing(delta: float) -> void
 
 
 func _on_chiptopede_shoot_recovering_state_entered() -> void:
-	_cleanup_segment_arrays()
-	stance_path.queue_free()
+	if not persist_segements:
+		_cleanup_segment_arrays()
+		stance_path.queue_free()
 	_recover_entered()
 
 
@@ -1751,10 +1741,6 @@ func calculate_snake_path(start_pos: Vector3, target_pos: Vector3) -> void:
 
 
 
-
-
-
-
 #### CHIP MINES
 # Jump up, crash into the ground creating an AoE and 
 # make chip mines pop up out of the floor.
@@ -1972,3 +1958,34 @@ func _on_wave_collision(
 	if body == target:
 		body.health_component.damage(aoe_damage)
 		trigger_pushback(pushback_force, pushback_source, pushback_radius)
+
+
+func _on_chiptopede_death_freeze_state_entered() -> void:
+	self.global_position = follow_nodes[0].get_child(0).global_position
+	state_chart.send_event("start_exploding")
+
+
+func _on_chiptopede_death_exploding_state_entered() -> void:
+	# Explode chiptopede segments one by one
+	follow_nodes.reverse()
+	for node in follow_nodes:
+		if is_instance_valid(node):
+			var segment = node.get_child(0)
+			if segment:
+				segment.queue_free()
+				var explosion_inst = explosion_scene.instantiate()
+				scene_root.add_child(explosion_inst)
+				explosion_inst.global_position = segment.global_position
+				explosion_inst.change_mesh_scale(2.0)
+				await get_tree().create_timer(chiptopede_explosion_delay).timeout
+	
+	state_chart.send_event("end_exploding")
+
+
+func _on_chiptopede_death_dead_state_entered() -> void:
+	state_chart.send_event("deactivate")
+	state_chart.send_event("death")
+	died.emit()
+	#await death_anim_finished
+	drop_barrel()
+	await boss_death_slow_mo()

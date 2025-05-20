@@ -354,7 +354,6 @@ func drop_barrel() -> void:
 	path.curve = curve
 
 	# Add the path to the scene
-	var scene_root = get_tree().root.get_children()[7]
 	scene_root.add_child(path)
 	var path_follow = PathFollow3D.new()
 	path.add_child(path_follow)

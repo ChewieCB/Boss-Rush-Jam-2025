@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=60 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -43,6 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://26bd5usoo1e5" path="res://src/bosses/chips/assets/sprites/MCK_Slam_Smear.png" id="22_gjw4s"]
 [ext_resource type="Texture2D" uid="uid://cknrcl1stlqqm" path="res://src/bosses/chips/assets/sprites/MCK_Projectile_Prep.png" id="23_10urj"]
 [ext_resource type="Texture2D" uid="uid://dn2brf2m4fegk" path="res://src/bosses/chips/assets/sprites/MCK_Projectile_Attack.png" id="24_k86x4"]
+[ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="28_a82g3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_62t77"]
 radius = 2.9
@@ -298,6 +299,7 @@ chiptopede_max_health = 5000.0
 chiptopede_segments = 32
 segment_separation = 2.0
 min_spawn_distance = 36.0
+chiptopede_explosion_delay = 0.2
 leap_aoe_radius = 12.0
 leap_damage = 15.0
 leap_damage_cooldown = 0.4
@@ -322,7 +324,7 @@ sfx_chiptopede_shoot = Array[AudioStream]([])
 sfx_chiptopede_retreat = Array[AudioStream]([])
 boss_id = 5
 chip_spawn_dps_threshold = 70.0
-barrel_pickup_scene = null
+barrel_to_drop = ExtResource("28_a82g3")
 sfx_hit = Array[AudioStream]([ExtResource("13_hq7h1"), ExtResource("14_k6k1b"), ExtResource("15_dog2d"), ExtResource("16_ompdj")])
 sfx_slowmo = null
 base_sprite = ExtResource("13_lqof8")
@@ -1357,6 +1359,12 @@ to = NodePath("../../ChiptopedeShoot")
 event = &"start_shoot_attack"
 delay_in_seconds = "0.0"
 
+[node name="toChiptopedeDeath" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="3"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeDeath")
+event = &"chiptopede_death"
+delay_in_seconds = "0.0"
+
 [node name="ChiptopedeLeap" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Targeting")
@@ -1397,6 +1405,12 @@ to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
 
+[node name="toChiptopedeDeath" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeLeap" index="5"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeDeath")
+event = &"chiptopede_death"
+delay_in_seconds = "0.0"
+
 [node name="ChiptopedeSnake" type="Node" parent="StateChart/Root/Phase/Phase3" index="3"]
 script = ExtResource("4_kiknp")
 initial_state = NodePath("Targeting")
@@ -1432,6 +1446,12 @@ delay_in_seconds = "0.0"
 script = ExtResource("3_hbmr3")
 to = NodePath("../../Idle")
 event = &"end_attack"
+delay_in_seconds = "0.0"
+
+[node name="toChiptopedeDeath" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeSnake" index="4"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeDeath")
+event = &"chiptopede_death"
 delay_in_seconds = "0.0"
 
 [node name="ChiptopedeShoot" type="Node" parent="StateChart/Root/Phase/Phase3" index="4"]
@@ -1488,6 +1508,37 @@ script = ExtResource("3_hbmr3")
 to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
+
+[node name="toChiptopedeDeath" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeShoot" index="6"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../ChiptopedeDeath")
+event = &"chiptopede_death"
+delay_in_seconds = "0.0"
+
+[node name="ChiptopedeDeath" type="Node" parent="StateChart/Root/Phase/Phase3" index="5"]
+script = ExtResource("4_kiknp")
+initial_state = NodePath("Freeze")
+
+[node name="Freeze" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeDeath" index="0"]
+script = ExtResource("5_81kie")
+
+[node name="toExploding" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeDeath/Freeze" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Exploding")
+event = &"start_exploding"
+delay_in_seconds = "0.0"
+
+[node name="Exploding" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeDeath" index="1"]
+script = ExtResource("5_81kie")
+
+[node name="toDead" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeDeath/Exploding" index="0"]
+script = ExtResource("3_hbmr3")
+to = NodePath("../../Dead")
+event = &"end_exploding"
+delay_in_seconds = "0.0"
+
+[node name="Dead" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeDeath" index="2"]
+script = ExtResource("5_81kie")
 
 [node name="AnimationPlayer" parent="." index="18"]
 libraries = {
@@ -1597,3 +1648,6 @@ bus = &"SFX"
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Retreat" to="." method="_on_chiptopede_shoot_retreat_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Retreat" to="." method="_on_chiptopede_shoot_retreat_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeShoot/Recovering" to="." method="_on_chiptopede_shoot_recovering_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeDeath/Freeze" to="." method="_on_chiptopede_death_freeze_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeDeath/Exploding" to="." method="_on_chiptopede_death_exploding_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeDeath/Dead" to="." method="_on_chiptopede_death_dead_state_entered"]
