@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://beunw631r018y"]
+[gd_scene load_steps=48 format=3 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://b7act70bpswy0" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2.png" id="12_vi2pp"]
 [ext_resource type="Texture2D" uid="uid://bbg2tgpr0qgk" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3.png" id="13_u0vae"]
 [ext_resource type="Texture2D" uid="uid://ciovo216nkk7n" path="res://src/player/gun/assets/sprite/rescale/idle/gun_foregrip_idle.png" id="14_8rp44"]
+[ext_resource type="Texture2D" uid="uid://cnwnxmug0heye" path="res://src/player/gun/assets/sprite/gun_silhouette.png" id="14_qn47w"]
 [ext_resource type="Texture2D" uid="uid://ngmk0hmjnikh" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1_spin_1.png" id="14_rhmcq"]
 [ext_resource type="Texture2D" uid="uid://tpbqrtskhc32" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_1.png" id="15_a1yho"]
 [ext_resource type="Texture2D" uid="uid://drrr4aotn87ol" path="res://src/player/gun/assets/sprite/rescale/idle/arm_idle.png" id="15_x3kbv"]
@@ -661,6 +662,11 @@ muzzle_smoke_prefab = ExtResource("10_ipycd")
 
 [node name="SpriteParent" type="Node3D" parent="."]
 transform = Transform3D(0.165, 0, 0, 0, 0.165, 0, 0, 0, 0.165, 0.364854, -0.394036, 0)
+
+[node name="GunSilhouetteSprite" type="Sprite3D" parent="SpriteParent"]
+sorting_offset = -1.0
+render_priority = 2
+texture = ExtResource("14_qn47w")
 
 [node name="GunSprite" type="Sprite3D" parent="SpriteParent"]
 render_priority = 2
