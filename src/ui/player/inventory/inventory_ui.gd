@@ -160,13 +160,13 @@ func show_warning(content: String, color: Color = Color.RED):
 func get_first_item_for_focus():
 	await get_tree().create_timer(0.02).timeout
 	var item_to_focus = null
-	# if archetype_barrel_container.get_child_count() > 0:
-	# 	item_to_focus = archetype_barrel_container.get_child(0)
-	# elif equip_barrel_container.get_child_count() > 0:
-	# 	item_to_focus = equip_barrel_container.get_child(0)
-	# elif inventory_barrel_container.get_child_count() > 0:
-	# 	item_to_focus = inventory_barrel_container.get_child(0)
-	if shop_barrel_container.get_child_count() > 0:
+	if archetype_barrel_container.get_child_count() > 0:
+		item_to_focus = archetype_barrel_container.get_child(0)
+	elif equip_barrel_container.get_child_count() > 0:
+		item_to_focus = equip_barrel_container.get_child(0)
+	elif inventory_barrel_container.get_child_count() > 0:
+		item_to_focus = inventory_barrel_container.get_child(0)
+	elif shop_barrel_container.get_child_count() > 0:
 		item_to_focus = shop_barrel_container.get_child(0)
 
 	if item_to_focus != null and item_to_focus.button != null:
