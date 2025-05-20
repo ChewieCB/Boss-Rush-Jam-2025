@@ -447,14 +447,25 @@ func _on_arc_swipe_swiping_state_entered() -> void:
 	state_chart.send_event("attack_start")
 	
 	for i in num_swipes:
-		anim_player.play("substack/slash_attack_proj")
-		
-		await anim_player.animation_finished
-		await get_tree().create_timer(delay_between_swipe).timeout
-		
-		spark(spark_marker.global_position)
-		anim_player.play("substack/slash_spark")
+		if i % 2 == 0:
+			anim_player.play("substack/slash_attack_proj")
+			
+			await anim_player.animation_finished
+			await get_tree().create_timer(delay_between_swipe).timeout
+			
+			spark(spark_marker.global_position)
+			anim_player.play("substack/slash_spark_offhand")
+		else:
+			anim_player.play("substack/slash_attack_proj_offhand")
+			
+			await anim_player.animation_finished
+			await get_tree().create_timer(delay_between_swipe).timeout
+			
+			spark(spark_marker.global_position)
+			anim_player.play("substack/slash_spark")
+		sprite.flip_h = !sprite.flip_h
 	
+	sprite.flip_h = false
 	state_chart.send_event("end_swipe")
 
 
