@@ -649,7 +649,8 @@ func add_status_effect(new_status: StatusEffect):
 	for status in status_effect_list:
 		if status.status_code == new_status.status_code:
 			status.duration = max(status.duration, new_status.duration)
-			new_status_effect_added.emit(new_status)
+			status.value = new_status.value
+			new_status_effect_added.emit(status)
 			return
 	status_effect_list.append(new_status)
 	new_status_effect_added.emit(new_status)
