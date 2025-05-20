@@ -99,6 +99,8 @@ var nav_agent_rid: RID
 
 
 func _ready() -> void:
+	health_component.health_changed.connect(_on_health_changed)
+	
 	nav_map_rid = get_world_3d().get_navigation_map()
 	nav_agent_rid = NavigationServer3D.agent_create()
 	NavigationServer3D.agent_set_map(nav_agent_rid, nav_map_rid)
@@ -757,6 +759,17 @@ func spark(spark_pos: Vector3) -> void:
 	var spark_vfx = spark_scene.instantiate()
 	scene_root.add_child(spark_vfx)
 	spark_vfx.global_position = spark_pos
+
+
+func _on_health_changed(new_health: float, prev_health: float) -> void:
+	if not $StateChart/Root/Phase/SmallBlindProjectile.active or $StateChart/Root/Phase/SmallBlindProjectilePhase2.active:
+		super(new_health, prev_health)
+	else:
+		if new_health < prev_health:
+			state_chart.send_event("start_damage")
+			hurt_sfx_player.stream = sfx_hit.pick_random()
+			hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
+			hurt_sfx_player.play()
 
 
 func _exit_tree() -> void:

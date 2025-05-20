@@ -147,7 +147,7 @@ var persist_segements: bool = false
 @export var chiptopede_segments: int = 24
 @export var segment_separation: float = 2.0
 @export var min_spawn_distance: float = 36.0
-@export var chiptopede_explosion_delay: float = 0.2
+@export var chiptopede_explosion_delay: float = 0.07
 @export_subgroup("Leap")
 @export var leap_aoe_radius: float = 12.0
 @export var leap_damage: float = 15.0
