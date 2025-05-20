@@ -21,10 +21,10 @@
 [ext_resource type="AudioStream" uid="uid://d1gvu53dhcadx" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 5.mp3" id="10_f4xo7"]
 [ext_resource type="AudioStream" uid="uid://8rqo0mj5n8cw" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 6.mp3" id="11_3h6gx"]
 [ext_resource type="Texture2D" uid="uid://q12l7oh16xcn" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Hurt.png" id="11_rowys"]
-[ext_resource type="Texture2D" uid="uid://dlkcsqogvilcq" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Slash_1_spark.png" id="11_ytlyr"]
 [ext_resource type="AudioStream" uid="uid://bmjh7bs72w8bm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 7.mp3" id="12_5xbmc"]
 [ext_resource type="Texture2D" uid="uid://buhfc7y6yqvpd" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Cannon_Face.png" id="12_pln03"]
 [ext_resource type="AnimationLibrary" uid="uid://dp6nqwqohdj5q" path="res://src/bosses/chips/minions/sub_stack_anims.res" id="14_4pmxc"]
+[ext_resource type="Texture2D" uid="uid://cinxupsks16c" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Idle.png" id="20_ro4sy"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ase24"]
 height = 4.0
@@ -57,7 +57,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("11_ytlyr")]
+"values": [ExtResource("20_ro4sy")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -69,7 +69,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 1.8, 0)]
+"values": [Vector3(0, 2.09105, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_dshkv"]
@@ -150,9 +150,9 @@ delay_per_projectile = 0.6
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.09105, 0)
 render_priority = 1
-texture = ExtResource("11_ytlyr")
+texture = ExtResource("20_ro4sy")
 
 [node name="FaceSprite" type="Sprite3D" parent="Sprite3D" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
@@ -162,6 +162,7 @@ render_priority = 1
 texture = ExtResource("12_pln03")
 
 [node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("CylinderShape3D_ase24")
 
 [node name="DebugMesh" parent="." index="2"]
