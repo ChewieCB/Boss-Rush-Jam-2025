@@ -91,8 +91,9 @@ const DASH_SPEED: float = 15
 const SLAM_SPEED: float = 25
 const CROUCH_SPEED_MODIFIER: float = 0.5
 
-const AIM_ASSIST_STRENGTH_COEFFICIENT = 10
-const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.5
+const AIM_ASSIST_STRENGTH_COEFFICIENT = 4 # Higher = stronger auto rotate to target. 1-10
+const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.8 # Higher = stronger stickiness when near target. 0-1
+const AIM_ASSIST_MAX_RANGE = 50
 
 const HIGH_LUCK_THRESHOLD = 0.6
 const HIGH_LUCK_DASH_IFRAME_MODIFIER = 2.0
@@ -488,7 +489,8 @@ func handle_controller_look(_delta):
 	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
 		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
 		if aim_assist_target:
-			sensitivity = sensitivity * AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT
+			var modifier = AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT * GameManager.aim_assist_strength
+			sensitivity = sensitivity * (1 - modifier)
 		rotate_player(look_x * sensitivity, look_y * sensitivity)
 
 
@@ -707,7 +709,11 @@ func apply_status_effects():
 
 func aim_assist(delta: float):
 	if aim_assist_ray.is_colliding():
-		aim_assist_target = aim_assist_ray.get_collider()
+		var dist = global_position.distance_to(aim_assist_ray.get_collision_point())
+		if dist <= AIM_ASSIST_MAX_RANGE:
+			aim_assist_target = aim_assist_ray.get_collider()
+		else:
+			aim_assist_target = null
 	else:
 		aim_assist_target = null
 
