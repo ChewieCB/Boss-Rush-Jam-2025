@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cd456ku24gamy"
+path="res://.godot/imported/CHIP Separate Stacks.mp3-2fdc39f8e0f4963bea6f25065c64a20c.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/CHIP Separate Stacks.mp3"
+dest_files=["res://.godot/imported/CHIP Separate Stacks.mp3-2fdc39f8e0f4963bea6f25065c64a20c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

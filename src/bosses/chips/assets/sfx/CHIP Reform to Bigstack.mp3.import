@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bhv86vlcndff1"
+path="res://.godot/imported/CHIP Reform to Bigstack.mp3-21135de591f2c302cd64dca348811a96.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/CHIP Reform to Bigstack.mp3"
+dest_files=["res://.godot/imported/CHIP Reform to Bigstack.mp3-21135de591f2c302cd64dca348811a96.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
