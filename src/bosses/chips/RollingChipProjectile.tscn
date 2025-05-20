@@ -1,17 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://cxg3ytjd4ybu0"]
+[gd_scene load_steps=12 format=3 uid="uid://cxg3ytjd4ybu0"]
 
 [ext_resource type="Script" path="res://src/bosses/chips/rolling_chip_projectile.gd" id="1_7jhjc"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_6corf"]
-[ext_resource type="AudioStream" uid="uid://c52nht3e222ov" path="res://src/bosses/roulette/assets/sfx/Ball Rolling 1.mp3" id="2_ij7ar"]
+[ext_resource type="AudioStream" uid="uid://jkyya4te2uwq" path="res://src/bosses/chips/assets/sfx/CHIP Chip Roll attack.mp3" id="2_dsg1u"]
 [ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="2_vsv6d"]
-[ext_resource type="AudioStream" uid="uid://jubwrybf3t8g" path="res://src/bosses/roulette/assets/sfx/Ball Rolling 2.mp3" id="3_uo1tc"]
-[ext_resource type="AudioStream" uid="uid://bs2usxb6ufu8p" path="res://src/bosses/roulette/assets/sfx/Ball Rolling 3.mp3" id="4_gai4r"]
-[ext_resource type="AudioStream" uid="uid://c8up1bjmm46lf" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 1.mp3" id="5_6lt0c"]
-[ext_resource type="AudioStream" uid="uid://ih5kcfb4vcxk" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 2.mp3" id="6_c7kak"]
-[ext_resource type="AudioStream" uid="uid://da6ff3q4j0wqr" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 3.mp3" id="7_r84ay"]
-[ext_resource type="AudioStream" uid="uid://cbg7scs2oibp1" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 4.mp3" id="8_dp74t"]
-[ext_resource type="AudioStream" uid="uid://cwgvvmsa5bix0" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 5.mp3" id="9_x82wb"]
-[ext_resource type="AudioStream" uid="uid://c4vxn0ovp2x2q" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 6.mp3" id="10_8fju1"]
+[ext_resource type="AudioStream" uid="uid://4sbfi7dje4wy" path="res://src/bosses/chips/assets/sfx/CHIP Chip Roll attack 2.mp3" id="3_0vlx7"]
+[ext_resource type="AudioStream" uid="uid://dek8tv432gwnn" path="res://src/bosses/chips/assets/sfx/CHIP Rolling chip hits you 1.mp3" id="4_6uie8"]
+[ext_resource type="AudioStream" uid="uid://dsaxb0r4go2hk" path="res://src/bosses/chips/assets/sfx/CHIP Rolling chip hits you 2.mp3" id="5_koeqd"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qc288"]
 albedo_texture = ExtResource("2_vsv6d")
@@ -40,8 +35,8 @@ collision_layer = 0
 collision_mask = 9
 script = ExtResource("1_7jhjc")
 health_component = NodePath("HealthComponent")
-sfx_rolling = Array[AudioStream]([ExtResource("2_ij7ar"), ExtResource("3_uo1tc"), ExtResource("4_gai4r")])
-sfx_impact = Array[AudioStream]([ExtResource("5_6lt0c"), ExtResource("6_c7kak"), ExtResource("7_r84ay"), ExtResource("8_dp74t"), ExtResource("9_x82wb"), ExtResource("10_8fju1")])
+sfx_rolling = Array[AudioStream]([ExtResource("2_dsg1u"), ExtResource("3_0vlx7")])
+sfx_impact = Array[AudioStream]([ExtResource("4_6uie8"), ExtResource("5_koeqd")])
 
 [node name="MeshPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -78,7 +73,7 @@ one_shot = true
 bus = &"SFX"
 
 [node name="SFXPlayerLoop" type="AudioStreamPlayer3D" parent="."]
-volume_db = -6.0
+volume_db = 5.0
 bus = &"SFX"
 
 [connection signal="body_entered" from="MeshPivot/Hurtbox" to="." method="_on_hurtbox_body_entered"]

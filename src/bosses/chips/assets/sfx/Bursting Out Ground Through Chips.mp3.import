@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dghbmgcqlpg8a"
+path="res://.godot/imported/Bursting Out Ground Through Chips.mp3-372f2f44b61f2bd8a496911d149411dc.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/Bursting Out Ground Through Chips.mp3"
+dest_files=["res://.godot/imported/Bursting Out Ground Through Chips.mp3-372f2f44b61f2bd8a496911d149411dc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

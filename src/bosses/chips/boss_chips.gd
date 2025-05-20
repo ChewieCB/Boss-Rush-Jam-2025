@@ -312,8 +312,6 @@ func select_attack_phase_1() -> void:
 		ChipBossForms.SPLIT_STACKS:
 			# Transition between big and small forms:
 			if small_attacks_performed >= max_small_attacks:
-				big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
-				big_stack_sfx_player.play()
 				state_chart.send_event("start_charge_reform")
 				return
 			else:
@@ -888,6 +886,9 @@ func _on_ss_charge_attacking_state_entered() -> void:
 
 func _on_ss_charge_merging_state_entered() -> void:
 	merge_stacks()
+	
+	big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
+	big_stack_sfx_player.play()
 	
 	# TODO - make this area damage explosion a generic method we can re-use
 	#
