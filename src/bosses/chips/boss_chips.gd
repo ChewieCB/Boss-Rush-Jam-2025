@@ -154,6 +154,8 @@ var persist_segements: bool = false
 @export var leap_damage_cooldown: float = 0.4
 @export var leap_time: float = 3.4
 @onready var leap_damage_timer: Timer = $StateChart/Root/Phase/Phase3/ChiptopedeLeap/LeapDamageTimer
+@export var chip_stack_particles_prefab: PackedScene
+@export var splash_particle_prefab: PackedScene
 # Leap curve attributes
 @export var leap_height: float = 16.0
 @export var leap_out_ratio: float = 0.6667
@@ -166,6 +168,7 @@ var leap_curve: Curve3D
 var follow_nodes := []
 var completed_nodes := []
 var chiptopede_head_offset: float = 0.0
+var is_leap_first_impact: bool = true
 # SFX
 @export var sfx_chiptopede_leap: Array[AudioStream]
 @export var sfx_chiptopede_impact: Array[AudioStream]
@@ -1217,6 +1220,14 @@ func _on_chiptopede_leap_leaping_state_entered() -> void:
 	
 	chiptopede_sfx_player.stream = sfx_chiptopede_leap.pick_random()
 	chiptopede_sfx_player.play()
+	
+	var chip_particles = chip_stack_particles_prefab.instantiate()
+	scene_root.add_child(chip_particles)
+	chip_particles.global_position = self.global_position
+	chip_particles.process_material.emission_shape_scale = Vector3(3, 3, 3)
+	chip_particles.emitting = true
+	await chip_particles.finished
+	chip_particles.queue_free()
 
 
 func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
@@ -1232,10 +1243,41 @@ func _on_chiptopede_leap_leaping_state_exited() -> void:
 	leap_damage_timer.stop()
 	chiptopede_sfx_player.stop()
 	chiptopede_sfx_player.stream = null
+	is_leap_first_impact = true
 
 
 func _on_chiptopede_leap_impact(segment: Node) -> void:
 	if leap_damage_timer.is_stopped():
+		# Check if we're impacting the water or a solid mesh
+		var space_state = get_world_3d().direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(
+			segment.global_position + Vector3(0, 30, 0), 
+			segment.global_position,
+			pow(2, 1-1) + pow(2, 9-1), 
+		)
+		query.collide_with_areas = true
+		var result = space_state.intersect_ray(query)
+		if result:
+			if result.collider is Area3D:
+				var splash = splash_particle_prefab.instantiate()
+				scene_root.add_child(splash)
+				splash.global_position = result.collider.global_position
+				# Scale up the splash particles
+				splash.draw_pass_1.size = Vector2(7, 7)
+				splash.amount = 32
+				splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
+				splash.emitting = true
+			else:
+				if is_leap_first_impact:
+					var chip_particles = chip_stack_particles_prefab.instantiate()
+					scene_root.add_child(chip_particles)
+					chip_particles.global_position = segment.global_position
+					chip_particles.process_material.emission_shape_scale = Vector3(1.5, 1.5, 1.5)
+					chip_particles.emitting = true
+					#await chip_particles.finished
+					#chip_particles.queue_free()
+					is_leap_first_impact = false
+		
 		#
 		chiptopede_sfx_player.stream = sfx_chiptopede_impact.pick_random()
 		chiptopede_sfx_player.play()
@@ -1301,9 +1343,14 @@ func _on_chiptopede_snake_targeting_state_entered() -> void:
 
 func _on_chiptopede_snake_moving_state_entered() -> void:
 	follow_nodes = spawn_segments(snake_path_3d)
+	for node in follow_nodes:
+		var segment = node.get_child(0)
+		#segment.splash_particles.emitting = true
+		segment.splash_ring_particles.emitting = true
 	
 	chiptopede_sfx_player.stream = sfx_chiptopede_leap.pick_random()
 	chiptopede_sfx_player.play()
+	
 
 
 func _on_chiptopede_snake_moving_state_physics_processing(delta: float) -> void:
@@ -1353,6 +1400,17 @@ func _on_chiptopede_shoot_emerging_state_entered() -> void:
 	follow_nodes = spawn_segments(stance_path)
 	
 	emerge_distance = stance_path.curve.get_baked_length()
+	
+	var splash = splash_particle_prefab.instantiate()
+	scene_root.add_child(splash)
+	splash.global_position = follow_nodes[0].get_child(0).global_position
+	# Scale up the splash particles
+	splash.draw_pass_1.size = Vector2(7, 7)
+	splash.amount = 32
+	splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
+	splash.emitting = true
+	await splash.finished
+	splash.queue_free()
 
 
 func _on_chiptopede_shoot_emerging_state_physics_processing(delta: float) -> void:
@@ -1411,9 +1469,22 @@ func _on_chiptopede_shoot_retreat_state_physics_processing(delta: float) -> void
 
 
 func _on_chiptopede_shoot_recovering_state_entered() -> void:
+	var splash = splash_particle_prefab.instantiate()
+	scene_root.add_child(splash)
+	splash.global_position = follow_nodes[0].global_position
+	# Scale up the splash particles
+	splash.draw_pass_1.size = Vector2(7, 7)
+	splash.amount = 32
+	splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
+	splash.emitting = true
+	
 	if not persist_segements:
 		_cleanup_segment_arrays()
 		stance_path.queue_free()
+		
+	await splash.finished
+	splash.queue_free()
+	
 	_recover_entered()
 
 
@@ -1635,6 +1706,8 @@ func _cleanup_segment_arrays() -> void:
 		if is_instance_valid(node):
 			var segment = node.get_child(0)
 			if segment:
+				segment.splash_particles.emitting = false
+				segment.splash_ring_particles.emitting = false
 				cache_segment(segment, node)
 	follow_nodes = []
 	completed_nodes = []
@@ -1701,6 +1774,8 @@ func spawn_segments(path: Path3D) -> Array:
 		path_follow.add_child(new_segment)
 		new_segment.global_position = path_follow.global_position
 		new_segment.visible = true
+		new_segment.splash_particles.emitting = false
+		new_segment.splash_ring_particles.emitting = false
 		
 		path_follow_nodes.append(path_follow)
 		

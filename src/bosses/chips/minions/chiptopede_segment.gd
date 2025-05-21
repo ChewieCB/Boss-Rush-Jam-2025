@@ -5,6 +5,8 @@ signal damaged(damage: float)
 
 @onready var mesh: MeshInstance3D = $Cylinder
 @export var rotation_speed: float = 5.0
+@onready var splash_particles: GPUParticles3D = $SplashParticles
+@onready var splash_ring_particles: GPUParticles3D = $SplashParticles/SplashRingParticle
 
 
 func _ready() -> void:

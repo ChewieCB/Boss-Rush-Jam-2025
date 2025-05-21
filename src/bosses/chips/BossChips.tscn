@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=83 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -46,6 +46,7 @@
 [ext_resource type="Texture2D" uid="uid://dn2brf2m4fegk" path="res://src/bosses/chips/assets/sprites/MCK_Projectile_Attack.png" id="24_k86x4"]
 [ext_resource type="AudioStream" uid="uid://q4fm5sew0xq5" path="res://src/bosses/chips/assets/sfx/Chiptapede Death.mp3" id="25_21ggy"]
 [ext_resource type="AudioStream" uid="uid://l15tyg18m35p" path="res://src/bosses/chips/assets/sfx/Burst ground and scream 1.mp3" id="26_66jo0"]
+[ext_resource type="PackedScene" uid="uid://cd30ihwhltreb" path="res://src/bosses/chips/assets/particles/ChipPileEruptParticles.tscn" id="26_n12sa"]
 [ext_resource type="AudioStream" uid="uid://dghbmgcqlpg8a" path="res://src/bosses/chips/assets/sfx/Bursting Out Ground Through Chips.mp3" id="26_xua7j"]
 [ext_resource type="AudioStream" uid="uid://6qe1hg4wkjwf" path="res://src/bosses/chips/assets/sfx/Burst ground and scream 2.mp3" id="27_16l83"]
 [ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="28_a82g3"]
@@ -327,6 +328,8 @@ leap_aoe_radius = 12.0
 leap_damage = 15.0
 leap_damage_cooldown = 0.4
 leap_time = 3.0
+chip_stack_particles_prefab = ExtResource("26_n12sa")
+splash_particle_prefab = ExtResource("66_ih6eo")
 leap_height = 18.0
 leap_out_ratio = 0.6667
 leap_in_ratio = 0.6667

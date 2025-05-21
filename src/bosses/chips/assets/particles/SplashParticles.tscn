@@ -11,8 +11,13 @@ gradient = SubResource("Gradient_i6tbf")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iqkac"]
 particle_flag_rotate_y = true
+emission_shape_scale = Vector3(2.5, 0.1, 0.05)
+emission_shape = 1
+emission_sphere_radius = 2.0
+angle_min = 1.07288e-05
+angle_max = 360.0
 direction = Vector3(0, 1, 0)
-spread = 30.0
+spread = 60.0
 initial_velocity_min = 3.0
 initial_velocity_max = 5.0
 color = Color(0.72, 0.60984, 0.3528, 1)
@@ -37,6 +42,7 @@ point_count = 3
 curve = SubResource("Curve_1gcow")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tgibn"]
+emission_shape_scale = Vector3(2, 0.5, 1)
 angle_min = 90.0
 angle_max = 90.0
 gravity = Vector3(0, 0, 0)
