@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=4 uid="uid://d2el785lqsvuu"]
+[gd_scene load_steps=14 format=4 uid="uid://d2el785lqsvuu"]
 
 [ext_resource type="Material" uid="uid://f1owxp1fp5iw" path="res://assets/textures/placeholder/texture_red_09.tres" id="1_2txce"]
 [ext_resource type="Material" uid="uid://ca0hm4ut83yn0" path="res://assets/textures/placeholder/texture_light_02.tres" id="2_5snix"]
 [ext_resource type="Script" path="res://src/maps/lobby/elevator_button.gd" id="3_3558c"]
 [ext_resource type="Material" uid="uid://crektbfoxddq3" path="res://assets/textures/placeholder/texture_orange_07.tres" id="3_rxt36"]
+[ext_resource type="AudioStream" uid="uid://cjujtslawa5cj" path="res://src/maps/lobby/assets/Lift Button Press 1.mp3" id="5_bbbgf"]
+[ext_resource type="AudioStream" uid="uid://dnkyiungq7xbo" path="res://src/maps/lobby/assets/Lift Button Press 2.mp3" id="6_etw1e"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vmvmc"]
 size = Vector3(0.911914, 0.257544, 0.4)
@@ -88,6 +90,12 @@ _data = {
 "push": SubResource("Animation_fnpr2")
 }
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_aoi1h"]
+random_pitch = 1.2
+streams_count = 2
+stream_0/stream = ExtResource("5_bbbgf")
+stream_1/stream = ExtResource("6_etw1e")
+
 [node name="ElevatorButton" type="Area3D"]
 collision_layer = 32
 collision_mask = 2
@@ -122,3 +130,7 @@ texture_filter = 4
 font_size = 12
 outline_size = 6
 horizontal_alignment = 0
+
+[node name="SFXButtonPress" type="AudioStreamPlayer3D" parent="."]
+stream = SubResource("AudioStreamRandomizer_aoi1h")
+unit_size = 3.0
