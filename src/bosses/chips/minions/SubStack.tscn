@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bhaia8j3ynxwp"]
+[gd_scene load_steps=50 format=3 uid="uid://bhaia8j3ynxwp"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_t3h5b"]
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="2_u1ibk"]
@@ -8,23 +8,40 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_wmyjd"]
 [ext_resource type="PackedScene" uid="uid://cs666dcyj3w4p" path="res://src/bosses/chips/minions/projectiles/ArcProjectile.tscn" id="4_xln3v"]
 [ext_resource type="AudioStream" uid="uid://bak8v6wppvc03" path="res://src/bosses/chips/assets/sfx/Hitmarker 1.mp3" id="5_4sojs"]
-[ext_resource type="AudioStream" uid="uid://cork0akyuaju6" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Gun mode .mp3" id="5_67jsx"]
+[ext_resource type="AudioStream" uid="uid://b263grbfqdi4i" path="res://src/bosses/chips/assets/sfx/CHIP SubStack gun mode quieter.mp3" id="5_mv1gd"]
 [ext_resource type="Texture2D" uid="uid://bfj4vbh53jpe" path="res://src/bosses/chips/assets/sprites/split_stack/TEMP_idle.png" id="5_nsqwa"]
 [ext_resource type="AudioStream" uid="uid://bj6hrilpnek6j" path="res://src/bosses/chips/assets/sfx/Hitmarker 2.mp3" id="6_16fho"]
-[ext_resource type="AudioStream" uid="uid://cslq2jntaulce" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 1.mp3" id="6_t864h"]
+[ext_resource type="AudioStream" uid="uid://b62n6dvoxjtgs" path="res://src/bosses/chips/assets/sfx/CHIP SubStack gun mode alt.mp3" id="6_rtgou"]
+[ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="6_winuh"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_yvmou"]
-[ext_resource type="AudioStream" uid="uid://ce1fw8wy6012x" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 2.mp3" id="7_6vpqs"]
+[ext_resource type="AudioStream" uid="uid://cbf7hkjdjvljq" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 2.mp3" id="7_qyxbp"]
 [ext_resource type="AudioStream" uid="uid://bvv5jnw64iub" path="res://src/bosses/chips/assets/sfx/Hitmarker 3.mp3" id="7_u10vx"]
+[ext_resource type="AudioStream" uid="uid://dv5u41740s0hh" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 3.mp3" id="8_bfvnu"]
 [ext_resource type="AudioStream" uid="uid://d2jgdmrbiimh3" path="res://src/bosses/chips/assets/sfx/Hitmarker 4.mp3" id="8_bpeyj"]
-[ext_resource type="AudioStream" uid="uid://dfm3de6k0lylb" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 3.mp3" id="8_t88y2"]
-[ext_resource type="AudioStream" uid="uid://bold3t26mprn4" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 4.mp3" id="9_v5joa"]
-[ext_resource type="AudioStream" uid="uid://d1gvu53dhcadx" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 5.mp3" id="10_f4xo7"]
-[ext_resource type="AudioStream" uid="uid://8rqo0mj5n8cw" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 6.mp3" id="11_3h6gx"]
+[ext_resource type="AudioStream" uid="uid://ba3k7kprithnp" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 4.mp3" id="9_5l2f1"]
+[ext_resource type="AudioStream" uid="uid://cmhmrmkyi3u0o" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 5.mp3" id="10_fpkdt"]
+[ext_resource type="AudioStream" uid="uid://b5w4tt4xnxqfm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 6.mp3" id="11_d7fey"]
 [ext_resource type="Texture2D" uid="uid://q12l7oh16xcn" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Hurt.png" id="11_rowys"]
-[ext_resource type="AudioStream" uid="uid://bmjh7bs72w8bm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 7.mp3" id="12_5xbmc"]
+[ext_resource type="Texture2D" uid="uid://dlkcsqogvilcq" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Slash_1_spark.png" id="11_ytlyr"]
+[ext_resource type="AudioStream" uid="uid://cr76fcs47jgtf" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 7.mp3" id="12_cuapj"]
 [ext_resource type="Texture2D" uid="uid://buhfc7y6yqvpd" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Cannon_Face.png" id="12_pln03"]
 [ext_resource type="AnimationLibrary" uid="uid://dp6nqwqohdj5q" path="res://src/bosses/chips/minions/sub_stack_anims.res" id="14_4pmxc"]
+[ext_resource type="AudioStream" uid="uid://s62c34hxjac4" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Swipe 1.mp3" id="14_kp42l"]
+[ext_resource type="AudioStream" uid="uid://c4xxb4wv8v66m" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Swipe 2.mp3" id="15_542ie"]
+[ext_resource type="AudioStream" uid="uid://dmd3us2eammau" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Swipe 3.mp3" id="16_mpf1f"]
+[ext_resource type="AudioStream" uid="uid://dtdvk5csa3lxw" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge Telegraph better.mp3" id="17_qgi5r"]
+[ext_resource type="AudioStream" uid="uid://21fjtkxrdnte" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 1.mp3" id="18_h65fw"]
+[ext_resource type="AudioStream" uid="uid://cj1inqwkr70fl" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 2.mp3" id="19_l7v0h"]
+[ext_resource type="AudioStream" uid="uid://cg736ya54cipl" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 3.mp3" id="20_xe6d1"]
 [ext_resource type="Texture2D" uid="uid://cinxupsks16c" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Idle.png" id="20_ro4sy"]
+[ext_resource type="AudioStream" uid="uid://bhv86vlcndff1" path="res://src/bosses/chips/assets/sfx/CHIP Reform to Bigstack.mp3" id="21_k0b0y"]
+[ext_resource type="AudioStream" uid="uid://0278lhey64pp" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets jump 1.mp3" id="23_yipf0"]
+[ext_resource type="AudioStream" uid="uid://xyjvd0xxrdt3" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets jump 2.mp3" id="24_7biya"]
+[ext_resource type="AudioStream" uid="uid://bufrfi6bp6erc" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets slam 1.mp3" id="25_84v2k"]
+[ext_resource type="AudioStream" uid="uid://d08j3j0oby6l8" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets slam 2.mp3" id="26_apgft"]
+[ext_resource type="AudioStream" uid="uid://cjl3shf0wt8ho" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets slam 3.mp3" id="27_l1fai"]
+[ext_resource type="AudioStream" uid="uid://5f5asfydiwxp" path="res://src/bosses/chips/assets/sfx/CHIP SubStack PLACE BETS TELEGRAPH TEST 1.mp3" id="28_ult5e"]
+
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ase24"]
 height = 4.0
@@ -107,8 +124,8 @@ chip_projectile = ExtResource("3_54m0v")
 chip_shots_per_burst = 4
 num_bursts = 1
 delay_between_burst = 0.6
-sfx_shoot_telegraph = Array[AudioStream]([ExtResource("5_67jsx")])
-sfx_shoot = Array[AudioStream]([ExtResource("6_t864h"), ExtResource("7_6vpqs"), ExtResource("8_t88y2"), ExtResource("9_v5joa"), ExtResource("10_f4xo7"), ExtResource("11_3h6gx"), ExtResource("12_5xbmc")])
+sfx_shoot_telegraph = Array[AudioStream]([ExtResource("5_mv1gd"), ExtResource("6_rtgou")])
+sfx_shoot = Array[AudioStream]([ExtResource("6_winuh"), ExtResource("7_qyxbp"), ExtResource("8_bfvnu"), ExtResource("9_5l2f1"), ExtResource("10_fpkdt"), ExtResource("11_d7fey"), ExtResource("12_cuapj")])
 swipe_prefab = ExtResource("4_xln3v")
 num_swipes = 2
 delay_between_swipe = 0.4
@@ -118,25 +135,25 @@ swipe_radius = 8.0
 swipe_height_scale = 0.12
 swipe_speed = 15.0
 swipe_targeting_timeout = 2.0
-sfx_swipe = Array[AudioStream]([])
+sfx_swipe = Array[AudioStream]([ExtResource("14_kp42l"), ExtResource("15_542ie"), ExtResource("16_mpf1f")])
 chargeback_targeting_time = 1.8
 chargeback_damage = 6.0
-sfx_charge_telegraph = Array[AudioStream]([])
-sfx_charge = Array[AudioStream]([])
+sfx_charge_telegraph = Array[AudioStream]([ExtResource("17_qgi5r")])
+sfx_charge = Array[AudioStream]([ExtResource("18_h65fw"), ExtResource("19_l7v0h"), ExtResource("20_xe6d1")])
 sfx_chip_shot = Array[AudioStream]([])
 explosion_scene = null
 arena_radius = 19.5
 split_rush_targeting_time = 5.0
 charge_speed = 40.0
-sfx_merge_telegraph = Array[AudioStream]([])
+sfx_merge_telegraph = Array[AudioStream]([ExtResource("21_k0b0y")])
 marker_target_idx = 0
 jump_height = 9.0
 jump_time = 0.8
 jump_hang_time = 1.2
 drop_time = 0.3
-sfx_jump = Array[AudioStream]([])
-sfx_slam = Array[AudioStream]([])
-sfx_dive_telegraph = Array[AudioStream]([])
+sfx_jump = Array[AudioStream]([ExtResource("23_yipf0"), ExtResource("24_7biya")])
+sfx_slam = Array[AudioStream]([ExtResource("25_84v2k"), ExtResource("26_apgft"), ExtResource("27_l1fai")])
+sfx_dive_telegraph = Array[AudioStream]([ExtResource("28_ult5e")])
 barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer1")]
 sfx_hit = Array[AudioStream]([ExtResource("5_4sojs"), ExtResource("6_16fho"), ExtResource("7_u10vx"), ExtResource("8_bpeyj")])
@@ -650,6 +667,7 @@ one_shot = true
 curve = SubResource("Curve3D_2g52k")
 
 [node name="StackSFXPlayer" type="AudioStreamPlayer3D" parent="." index="24"]
+unit_size = 12.07
 bus = &"SFX"
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Idle" to="." method="_on_idle_state_entered"]

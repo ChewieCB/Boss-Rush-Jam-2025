@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://5f5asfydiwxp"
+path="res://.godot/imported/CHIP SubStack PLACE BETS TELEGRAPH TEST 1.mp3-eb98abd90479112bb86ed1cf35072da6.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/CHIP SubStack PLACE BETS TELEGRAPH TEST 1.mp3"
+dest_files=["res://.godot/imported/CHIP SubStack PLACE BETS TELEGRAPH TEST 1.mp3-eb98abd90479112bb86ed1cf35072da6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

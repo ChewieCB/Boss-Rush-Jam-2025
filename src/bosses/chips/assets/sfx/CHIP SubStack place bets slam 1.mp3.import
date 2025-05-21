@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bufrfi6bp6erc"
+path="res://.godot/imported/CHIP SubStack place bets slam 1.mp3-5f742c68e3e418930e3e4dad145321a5.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets slam 1.mp3"
+dest_files=["res://.godot/imported/CHIP SubStack place bets slam 1.mp3-5f742c68e3e418930e3e4dad145321a5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

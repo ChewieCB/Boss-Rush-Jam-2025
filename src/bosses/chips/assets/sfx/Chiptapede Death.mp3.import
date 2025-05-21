@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://q4fm5sew0xq5"
+path="res://.godot/imported/Chiptapede Death.mp3-155221ffc52647f106e791f3b4c5e5b7.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/Chiptapede Death.mp3"
+dest_files=["res://.godot/imported/Chiptapede Death.mp3-155221ffc52647f106e791f3b4c5e5b7.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://s62c34hxjac4"
+path="res://.godot/imported/CHIP SubStack Swipe 1.mp3-603460eda3d05be7978a972164a0010a.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/CHIP SubStack Swipe 1.mp3"
+dest_files=["res://.godot/imported/CHIP SubStack Swipe 1.mp3-603460eda3d05be7978a972164a0010a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
