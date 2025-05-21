@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=82 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -31,9 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://dsg6qarplaec4" path="res://src/bosses/chips/assets/sprites/MCK_Hit.png" id="14_i35lc"]
 [ext_resource type="AudioStream" uid="uid://bj6hrilpnek6j" path="res://src/bosses/chips/assets/sfx/Hitmarker 2.mp3" id="14_k6k1b"]
 [ext_resource type="AudioStream" uid="uid://bvv5jnw64iub" path="res://src/bosses/chips/assets/sfx/Hitmarker 3.mp3" id="15_dog2d"]
-[ext_resource type="AudioStream" uid="uid://dp8c5b52f8kfr" path="res://src/bosses/chips/assets/sfx/Tunneling around 2.mp3" id="15_idgtr"]
 [ext_resource type="AudioStream" uid="uid://cpmv8ipqtcgvc" path="res://src/bosses/chips/assets/sfx/CHIP Ground Pound 1.mp3" id="15_uq4e1"]
-[ext_resource type="AudioStream" uid="uid://8ys1jeogl20e" path="res://src/bosses/chips/assets/sfx/Tunneling around.mp3" id="16_1jelc"]
 [ext_resource type="AudioStream" uid="uid://crb04k7g6ns11" path="res://src/bosses/chips/assets/sfx/CHIP Ground Pound 2.mp3" id="16_kposs"]
 [ext_resource type="AudioStream" uid="uid://d2jgdmrbiimh3" path="res://src/bosses/chips/assets/sfx/Hitmarker 4.mp3" id="16_ompdj"]
 [ext_resource type="AudioStream" uid="uid://bevr5o5qnr8ko" path="res://src/bosses/chips/assets/sfx/CHIP Ground Pound 3.mp3" id="17_8nh4d"]
@@ -46,11 +44,19 @@
 [ext_resource type="Texture2D" uid="uid://dn2brf2m4fegk" path="res://src/bosses/chips/assets/sprites/MCK_Projectile_Attack.png" id="24_k86x4"]
 [ext_resource type="AudioStream" uid="uid://q4fm5sew0xq5" path="res://src/bosses/chips/assets/sfx/Chiptapede Death.mp3" id="25_21ggy"]
 [ext_resource type="AudioStream" uid="uid://l15tyg18m35p" path="res://src/bosses/chips/assets/sfx/Burst ground and scream 1.mp3" id="26_66jo0"]
-[ext_resource type="AudioStream" uid="uid://dghbmgcqlpg8a" path="res://src/bosses/chips/assets/sfx/Bursting Out Ground Through Chips.mp3" id="26_xua7j"]
 [ext_resource type="AudioStream" uid="uid://6qe1hg4wkjwf" path="res://src/bosses/chips/assets/sfx/Burst ground and scream 2.mp3" id="27_16l83"]
 [ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="28_a82g3"]
+[ext_resource type="AudioStream" uid="uid://d1wulb8onnxen" path="res://src/bosses/chips/assets/sfx/Leap Impact 1.mp3" id="28_crvab"]
+[ext_resource type="AudioStream" uid="uid://ctv7ibuj4uds3" path="res://src/bosses/chips/assets/sfx/Tunneling around better 1.mp3" id="29_76lxc"]
+[ext_resource type="AudioStream" uid="uid://cpigcei8xsmg3" path="res://src/bosses/chips/assets/sfx/Leap Impact 2.mp3" id="29_82w8e"]
+[ext_resource type="AudioStream" uid="uid://b70bmsl6fha37" path="res://src/bosses/chips/assets/sfx/Tunneling around better 2.mp3" id="30_6ma7t"]
+[ext_resource type="AudioStream" uid="uid://dnwxaeuasen6t" path="res://src/bosses/chips/assets/sfx/Leap Impact 3.mp3" id="30_hc3ix"]
+[ext_resource type="AudioStream" uid="uid://b8b0clta7vubv" path="res://src/bosses/chips/assets/sfx/Leap Impact 4.mp3" id="31_7ekfc"]
+[ext_resource type="AudioStream" uid="uid://cddso1jeh15er" path="res://src/bosses/chips/assets/sfx/Leap Impact 5.mp3" id="32_be33u"]
+[ext_resource type="AudioStream" uid="uid://cxhv1wxgh3xn0" path="res://src/bosses/chips/assets/sfx/Leap Impact 6.mp3" id="33_h8irb"]
 [ext_resource type="AudioStream" uid="uid://36h7m1npqoo4" path="res://src/bosses/chips/assets/sfx/Chiptapede Emerge to Shoot.mp3" id="33_ug8ld"]
 [ext_resource type="AudioStream" uid="uid://d27k5xljtve4v" path="res://src/bosses/chips/assets/sfx/Chiptapede Emerge to Shoot 2.mp3" id="34_0flmo"]
+[ext_resource type="AudioStream" uid="uid://cydb05agme7h8" path="res://src/bosses/chips/assets/sfx/Leap Impact 7.mp3" id="34_j5lkn"]
 [ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="35_xcjvj"]
 [ext_resource type="AudioStream" uid="uid://cbf7hkjdjvljq" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 2.mp3" id="36_2oo6r"]
 [ext_resource type="AudioStream" uid="uid://dv5u41740s0hh" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 3.mp3" id="37_va4hg"]
@@ -324,9 +330,9 @@ leap_height = 18.0
 leap_out_ratio = 0.6667
 leap_in_ratio = 0.6667
 sfx_chiptopede_leap = Array[AudioStream]([ExtResource("26_66jo0"), ExtResource("27_16l83")])
-sfx_chiptopede_impact = Array[AudioStream]([ExtResource("26_xua7j")])
+sfx_chiptopede_impact = Array[AudioStream]([ExtResource("28_crvab"), ExtResource("29_82w8e"), ExtResource("30_hc3ix"), ExtResource("31_7ekfc"), ExtResource("32_be33u"), ExtResource("33_h8irb"), ExtResource("34_j5lkn")])
 snake_speed = 25.0
-sfx_chiptopede_snake = Array[AudioStream]([ExtResource("15_idgtr"), ExtResource("16_1jelc")])
+sfx_chiptopede_snake = Array[AudioStream]([ExtResource("29_76lxc"), ExtResource("30_6ma7t")])
 shooting_stance_prefab = ExtResource("8_280mm")
 max_projectile_spawn_distance = 36.0
 chiptopede_targeting_speed = 3.0
@@ -1571,8 +1577,8 @@ unit_size = 12.3
 one_shot = true
 
 [node name="ChiptopedeHeadSFXPlayer" type="AudioStreamPlayer3D" parent="." index="21"]
-volume_db = 2.0
-unit_size = 20.2
+volume_db = 15.272
+unit_size = 40.92
 bus = &"SFX"
 
 [node name="BigStackSFXPlayer" type="AudioStreamPlayer3D" parent="." index="22"]
