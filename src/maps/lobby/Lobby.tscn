@@ -34,7 +34,7 @@
 [ext_resource type="Material" uid="uid://i1urvbtkthfg" path="res://assets/textures/floor/marble.tres" id="22_fd3i4"]
 [ext_resource type="Material" uid="uid://h0auashbc0jx" path="res://assets/textures/floor/carpet_0.tres" id="23_l1jqh"]
 [ext_resource type="Material" uid="uid://c7spfpeimpdf3" path="res://assets/textures/floor/black-tiles.tres" id="26_iq1i4"]
-[ext_resource type="Material" path="res://assets/textures/walls/wood_trim_1.tres" id="27_cwomf"]
+[ext_resource type="Material" uid="uid://ro5lsxexjte4" path="res://assets/textures/walls/wood_trim_1.tres" id="27_cwomf"]
 [ext_resource type="PackedScene" uid="uid://bu43hcl2orkct" path="res://src/env/lighting/Chandellier1.tscn" id="30_anr3q"]
 [ext_resource type="PackedScene" uid="uid://dsipuwmnkxl5" path="res://src/env/lighting/ChandellierLight2.tscn" id="31_fmlub"]
 [ext_resource type="Material" uid="uid://ckn8uwkgb3cq1" path="res://assets/textures/walls/concrete-paint.tres" id="32_8ggst"]
@@ -49,8 +49,8 @@
 [ext_resource type="Texture2D" uid="uid://dl65xxjqpf0o7" path="res://src/env/decor/assets/trash_can_art_deco_1.png" id="41_tpab6"]
 [ext_resource type="Material" uid="uid://boe1pn246iwrh" path="res://assets/textures/posters/grand_opening_scuffed.tres" id="42_7m8kd"]
 [ext_resource type="Material" uid="uid://btuhn4hpus54d" path="res://assets/textures/walls/brass.tres" id="43_77yis"]
-[ext_resource type="Material" path="res://assets/textures/walls/bronze_plaque.tres" id="44_ciu6t"]
-[ext_resource type="Material" path="res://assets/textures/walls/marbling.tres" id="45_l0yjl"]
+[ext_resource type="Material" uid="uid://mxeoucc8vmen" path="res://assets/textures/walls/bronze_plaque.tres" id="44_ciu6t"]
+[ext_resource type="Material" uid="uid://dmkk1mgbrg368" path="res://assets/textures/walls/marbling.tres" id="45_l0yjl"]
 [ext_resource type="PackedScene" uid="uid://b4jtd8erp77w7" path="res://src/maps/lobby/SlidingDoor.tscn" id="46_6owm2"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="48_5x1qu"]
 [ext_resource type="Script" path="res://src/maps/lobby/target_dummy.gd" id="48_lw5gn"]
@@ -2044,7 +2044,9 @@ process_mode = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -21.9)
 stream = ExtResource("2_ho2it")
 volume_db = 10.0
+unit_size = 5.0
 max_db = 6.0
+panning_strength = 0.0
 bus = &"BGM"
 
 [node name="TargetDummy" type="CharacterBody3D" parent="."]
