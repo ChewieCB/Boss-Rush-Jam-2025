@@ -22,7 +22,6 @@
 [ext_resource type="AudioStream" uid="uid://cmhmrmkyi3u0o" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 5.mp3" id="10_fpkdt"]
 [ext_resource type="AudioStream" uid="uid://b5w4tt4xnxqfm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 6.mp3" id="11_d7fey"]
 [ext_resource type="Texture2D" uid="uid://q12l7oh16xcn" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Hurt.png" id="11_rowys"]
-[ext_resource type="Texture2D" uid="uid://dlkcsqogvilcq" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Slash_1_spark.png" id="11_ytlyr"]
 [ext_resource type="AudioStream" uid="uid://cr76fcs47jgtf" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 7.mp3" id="12_cuapj"]
 [ext_resource type="Texture2D" uid="uid://buhfc7y6yqvpd" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Cannon_Face.png" id="12_pln03"]
 [ext_resource type="AnimationLibrary" uid="uid://dp6nqwqohdj5q" path="res://src/bosses/chips/minions/sub_stack_anims.res" id="14_4pmxc"]
@@ -32,8 +31,8 @@
 [ext_resource type="AudioStream" uid="uid://dtdvk5csa3lxw" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge Telegraph better.mp3" id="17_qgi5r"]
 [ext_resource type="AudioStream" uid="uid://21fjtkxrdnte" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 1.mp3" id="18_h65fw"]
 [ext_resource type="AudioStream" uid="uid://cj1inqwkr70fl" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 2.mp3" id="19_l7v0h"]
-[ext_resource type="AudioStream" uid="uid://cg736ya54cipl" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 3.mp3" id="20_xe6d1"]
 [ext_resource type="Texture2D" uid="uid://cinxupsks16c" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Idle.png" id="20_ro4sy"]
+[ext_resource type="AudioStream" uid="uid://cg736ya54cipl" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 3.mp3" id="20_xe6d1"]
 [ext_resource type="AudioStream" uid="uid://bhv86vlcndff1" path="res://src/bosses/chips/assets/sfx/CHIP Reform to Bigstack.mp3" id="21_k0b0y"]
 [ext_resource type="AudioStream" uid="uid://0278lhey64pp" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets jump 1.mp3" id="23_yipf0"]
 [ext_resource type="AudioStream" uid="uid://xyjvd0xxrdt3" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets jump 2.mp3" id="24_7biya"]
@@ -41,7 +40,6 @@
 [ext_resource type="AudioStream" uid="uid://d08j3j0oby6l8" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets slam 2.mp3" id="26_apgft"]
 [ext_resource type="AudioStream" uid="uid://cjl3shf0wt8ho" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets slam 3.mp3" id="27_l1fai"]
 [ext_resource type="AudioStream" uid="uid://5f5asfydiwxp" path="res://src/bosses/chips/assets/sfx/CHIP SubStack PLACE BETS TELEGRAPH TEST 1.mp3" id="28_ult5e"]
-
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ase24"]
 height = 4.0

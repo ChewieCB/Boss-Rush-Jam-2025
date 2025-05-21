@@ -26,7 +26,7 @@
 [ext_resource type="Resource" uid="uid://c65mk2jb6ladn" path="res://assets/trenchbroom/BossChips.tres" id="23_wjyyf"]
 [ext_resource type="Resource" uid="uid://6nswkt6y3x4u" path="res://assets/trenchbroom/RisingPlatform.tres" id="24_j78om"]
 [ext_resource type="Resource" uid="uid://bj3p2umxysjak" path="res://assets/trenchbroom/SnakePathMarker.tres" id="25_ppybx"]
-[ext_resource type="Resource" path="res://assets/trenchbroom/WallLight.tres" id="26_asgd7"]
+[ext_resource type="Resource" uid="uid://c2j60bs07fwy8" path="res://assets/trenchbroom/WallLight.tres" id="26_asgd7"]
 
 [resource]
 script = ExtResource("2_daboe")

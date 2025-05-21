@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=4 uid="uid://d4e0u7jv00gxw"]
+[gd_scene load_steps=15 format=4 uid="uid://d4e0u7jv00gxw"]
 
 [ext_resource type="Script" path="res://src/bosses/chips/minions/chiptopede_segment.gd" id="1_lem27"]
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_vud1u"]
 [ext_resource type="Texture2D" uid="uid://ctoh8vq047sw7" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_back.png" id="3_3y4qi"]
+[ext_resource type="Texture2D" uid="uid://1kwq4wr6twd7" path="res://src/bosses/roulette/assets/roulette_boss_FINAL.png" id="3_qocgl"]
 [ext_resource type="Texture2D" uid="uid://costfghi77lyk" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_side.png" id="4_2plm5"]
 [ext_resource type="Texture2D" uid="uid://d0cyswc5xao7m" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_head.png" id="5_3rtpt"]
 
@@ -134,6 +135,7 @@ delay_per_projectile = 0.6
 
 [node name="Sprite3D" parent="." index="0"]
 visible = false
+texture = ExtResource("3_qocgl")
 
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)

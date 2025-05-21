@@ -231,6 +231,7 @@ func sweep_barrier(
 		await barrier_tween.finished
 		state_chart.send_event("attack_start")
 		
+		anim_player.play("roulette/attack")
 		hurtbox.monitoring = true
 		barrier_tween = get_tree().create_tween()
 		barrier_tween.tween_property(
@@ -243,6 +244,7 @@ func sweep_barrier(
 		await barrier_tween.finished
 		hurtbox.monitoring = false
 		state_chart.send_event("attack_end")
+		anim_player.play("RESET")
 	await get_tree().create_timer(time_between_sweeps).timeout
 	
 	return true
@@ -645,11 +647,13 @@ func show_barrier() -> void:
 	hurtbox_mesh.position.x = 0
 	hurtbox_mesh.mesh.size.x = 0
 	hurtbox.visible = true
+	anim_player.play("roulette/attack")
 	barrier_tween.tween_property(hurtbox_mesh, "position:x", 17, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	barrier_tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 35, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	barrier_tween.parallel().tween_property(barrier_sfx_player, "volume_db", linear_to_db(1.0), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	
 	await barrier_tween.finished
+	anim_player.play("RESET")
 	
 	return
 
@@ -723,6 +727,7 @@ func _on_ball_projectile_targeting_state_entered() -> void:
 func _on_ball_projectile_launch_balls_state_entered() -> void:
 	debug_state_label.text = "Multiball | Launching"
 	state_chart.send_event("attack_start")
+	anim_player.play("roulette/attack")
 	for i in balls_to_spawn_phase_1:
 		var _ball = spawn_ball()
 	ball_kill_timer.start(max_ball_lifetime)
@@ -736,6 +741,7 @@ func _on_ball_destroyed(ball: RouletteBall) -> void:
 func _on_ball_projectile_recover_state_entered() -> void:
 	debug_state_label.text = "Multiball | Recovering"
 	await get_tree().create_timer(attack_recovery_time).timeout
+	anim_player.play("RESET")
 	state_chart.send_event("cooldown_end")
 	select_attack()
 	state_chart.send_event("end_recovery")
@@ -780,6 +786,7 @@ func _on_phase_2_pushback_wave_targeting_state_entered() -> void:
 func _on_phase_2_pushback_wave_spawn_wave_state_entered() -> void:
 	debug_state_label.text = "Shockwave | Burst"
 	
+	anim_player.play("roulette/attack")
 	shockwave_sfx_player.stream = sfx_shockwave_amb.pick_random()
 	#shockwave_sfx_player.volume_db = linear_to_db(0.1)
 	
@@ -790,6 +797,7 @@ func _on_phase_2_pushback_wave_spawn_wave_state_entered() -> void:
 func _on_phase_2_pushback_wave_recover_state_entered() -> void:
 	debug_state_label.text = "Shockwave | Recovering"
 	state_chart.send_event("attack_end")
+	anim_player.play("RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
 	select_attack()
@@ -887,6 +895,8 @@ func _on_phase_3_dropping_segments_dropping_state_entered() -> void:
 			state_chart.send_event("attack_end")
 			state_chart.send_event("deactivate")
 			return
+			
+		anim_player.play("roulette/attack")
 		
 		segments_to_drop.sort_custom(
 			# TODO - make this a function for sort closest/furthest to target
@@ -907,6 +917,8 @@ func _on_phase_3_dropping_segments_dropping_state_entered() -> void:
 		
 		await shake_segment(segment_mesh)
 		drop_floor_segment(segments_to_drop.pop_front())
+		
+		anim_player.play("RESET")
 		await get_tree().create_timer(drop_delay).timeout
 		
 	await get_tree().create_timer(drop_return_delay).timeout
@@ -915,6 +927,7 @@ func _on_phase_3_dropping_segments_dropping_state_entered() -> void:
 
 func _on_phase_3_dropping_segments_recover_state_entered() -> void:
 	debug_state_label.text = "Segment Drop | Recover"
+	anim_player.play("RESET")
 	
 	for i in range(dropped_segments.size()):
 		return_floor_segment(dropped_segments.pop_front())
@@ -951,6 +964,7 @@ func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
 				return true
 			return false
 	)
+	anim_player.play("roulette/attack")
 	for i in range(balls_to_attack_phase_3 - active_balls.size()):
 		var ball = spawn_ball()
 		ball.is_flaming = true
@@ -970,6 +984,7 @@ func _on_phase_3_ball_projectile_launch_balls_state_exited() -> void:
 func _on_phase_3_projectile_balls_recover_state_entered() -> void:
 	debug_state_label.text = "Multiball | Recovering"
 	state_chart.send_event("attack_end")
+	anim_player.play("RESET")
 	
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
