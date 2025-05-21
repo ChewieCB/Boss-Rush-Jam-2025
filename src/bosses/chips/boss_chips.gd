@@ -1276,7 +1276,7 @@ func _on_chiptopede_snake_targeting_state_entered() -> void:
 func _on_chiptopede_snake_moving_state_entered() -> void:
 	follow_nodes = spawn_segments(snake_path_3d)
 	
-	chiptopede_sfx_player.stream = sfx_chiptopede_leap.pick_random()
+	chiptopede_sfx_player.stream = sfx_chiptopede_snake.pick_random()
 	chiptopede_sfx_player.play()
 
 

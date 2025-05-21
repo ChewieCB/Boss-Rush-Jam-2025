@@ -22,6 +22,10 @@ extends BossMap
 @export var waterfall_meshses_vertical: Array[Node3D]
 @onready var water_surface: MeshInstance3D = $WaterSurfaceMesh
 @onready var rising_platforms: Array[Node] = get_tree().get_nodes_in_group("rising_platforms")
+@onready var SFXBeerPlayer: AudioStreamPlayer3D = $SFXBeerPlayer
+@onready var SFXBeerPlayer2: AudioStreamPlayer3D = $SFXBeerPlayer2
+@onready var SFXBeerFlood: AudioStreamPlayer3D = $SFXBeerFlood
+@onready var SFXBeerFlood2: AudioStreamPlayer3D = $SFXBeerFlood2
 
 # Water damage
 @onready var water_damage_timer: Timer = $WaterDamageTimer
@@ -120,6 +124,10 @@ func _rebake_nav() -> void:
 
 
 func raise_water() -> void:
+	SFXBeerPlayer.play()
+	SFXBeerPlayer2.play()
+	SFXBeerFlood.play()
+	SFXBeerFlood2.play()
 	waterfalls.visible = true
 	var water_tween: Tween = get_tree().create_tween()
 	for mesh in waterfall_meshses_vertical:
