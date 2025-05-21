@@ -199,6 +199,7 @@ var emerge_distance: float
 
 @onready var big_stack_sfx_player: AudioStreamPlayer3D = $BigStackSFXPlayer
 @onready var chiptopede_sfx_player: AudioStreamPlayer3D = $ChiptopedeHeadSFXPlayer
+@onready var chip_death_particles: GPUParticles3D = $ChipDeathParticles
 
 ## USEFUL GLOBALS
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
@@ -261,12 +262,14 @@ func _on_health_dead_state_entered() -> void:
 		anim_player.stop()
 		anim_player.play("RESET")
 	
+	chip_death_particles.emitting = true
 	for i in range(20):
 		# Death anim loops, so wait for X loops then finish
 		anim_player.play("death")
 		# TODO - chip particle effect
 		#
 		await anim_player.animation_finished
+	chip_death_particles.emitting = false
 	anim_player.process_mode = Node.PROCESS_MODE_DISABLED
 	# Hide the sprite and explode into chips
 	# TODO - make this area damage explosion a generic method we can re-use

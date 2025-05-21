@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=81 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -63,6 +63,8 @@
 [ext_resource type="Texture2D" uid="uid://dcer0mc7kglbb" path="res://src/bosses/chips/assets/sprites/MCK_Death_1.png" id="54_hri1b"]
 [ext_resource type="Texture2D" uid="uid://bi1md2pmoenl" path="res://src/bosses/chips/assets/sprites/MCK_Death_2.png" id="55_dxb8s"]
 [ext_resource type="Texture2D" uid="uid://dk3ythhh8s1fd" path="res://src/bosses/chips/assets/sprites/MCK_Death_3.png" id="56_e2pvt"]
+[ext_resource type="PackedScene" uid="uid://c6m6uaacee7aj" path="res://src/player/gun/vfx/StackSpark.tscn" id="65_1jthq"]
+[ext_resource type="PackedScene" uid="uid://dj6ifyci05l4y" path="res://src/bosses/chips/assets/particles/ChipDeathParticles.tscn" id="65_skpgp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_62t77"]
 radius = 2.9
@@ -1583,6 +1585,13 @@ bus = &"SFX"
 unit_size = 15.06
 max_polyphony = 5
 bus = &"SFX"
+
+[node name="ChipDeathParticles" parent="." index="23" instance=ExtResource("65_skpgp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+sub_emitter = NodePath("../StackSpark")
+
+[node name="StackSpark" parent="." index="24" instance=ExtResource("65_1jthq")]
+script = null
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_exited"]

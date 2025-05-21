@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://dj6ifyci05l4y"]
+
+[ext_resource type="ArrayMesh" uid="uid://cvpi3dfo08nxd" path="res://src/bosses/chips/assets/meshes/ChipProjMesh.tres" id="1_w80vl"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_25cix"]
+particle_flag_align_y = true
+emission_shape_scale = Vector3(3, 3, 3)
+emission_shape = 1
+emission_sphere_radius = 1.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(1, 1, 1)
+spread = 180.0
+initial_velocity_min = 15.0
+initial_velocity_max = 25.0
+angular_velocity_min = -1.60933e-05
+angular_velocity_max = 360.0
+radial_velocity_min = 5.99998
+radial_velocity_max = 9.99998
+scale_min = 0.4
+scale_max = 0.5
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 1.0
+sub_emitter_mode = 3
+sub_emitter_amount_at_collision = 1
+
+[node name="ChipDeathParticles" type="GPUParticles3D"]
+emitting = false
+amount = 45
+speed_scale = 2.0
+explosiveness = 0.11
+randomness = 0.41
+collision_base_size = 2.0
+visibility_aabb = AABB(-10, -10, -10, 20, 20, 20)
+process_material = SubResource("ParticleProcessMaterial_25cix")
+draw_pass_1 = ExtResource("1_w80vl")
