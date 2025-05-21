@@ -27,6 +27,7 @@ extends BossMap
 @onready var water_damage_timer: Timer = $WaterDamageTimer
 @export var water_damage_tick: float = 0.6
 @export var water_damage_amount: float = 5.0
+@export var splash_particle_prefab: PackedScene
 
 @export var breakable_floor: Node3D
 
@@ -149,11 +150,40 @@ func lower_water() -> void:
 
 
 func _on_water_damage_area_body_entered(body: Node3D) -> void:
-	# TODO - add drunk effect instead of damage
+	# Add splash at location
+	var splash = splash_particle_prefab.instantiate()
+	add_child(splash)
+	splash.global_position = body.global_position
+	splash.global_position.y = water_surface.global_position.y
+	# Scale up the splash particles for the player
+	if body is Player:
+		splash.draw_pass_1.size = Vector2(3, 3)
+		splash.amount = 16
+		splash.get_child(0).draw_pass_1.size = Vector2(3, 3)
+	elif body is ChiptopedeSegment:
+		splash.draw_pass_1.size = Vector2(7, 7)
+		splash.amount = 32
+		splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
+	splash.emitting = true
+	
+	# Add drunk effect instead of damage
+	# TODO - apply by building up a threshold instead of on/off
 	if body is Player:
 		player.apply_drunk_status(6.0)
 		#player.health_component.damage(water_damage_amount)
 		water_damage_timer.start(water_damage_tick)
+		
+	await splash.finished
+	splash.queue_free()
+
+
+func _on_water_damage_area_area_entered(area: Area3D) -> void:
+		# Add splash at location
+	var splash = splash_particle_prefab.instantiate()
+	add_child(splash)
+	splash.global_position = area.global_position
+	splash.global_position.y = water_surface.global_position.y
+	splash.emitting = true
 
 
 func _on_water_damage_area_body_exited(body: Node3D) -> void:

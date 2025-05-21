@@ -31,6 +31,9 @@ scale_min = 2.0
 scale_max = 2.5
 scale_curve = SubResource("CurveTexture_tby2w")
 color_ramp = SubResource("GradientTexture1D_s6vbk")
+collision_mode = 2
+sub_emitter_mode = 3
+sub_emitter_amount_at_collision = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p54np"]
 vertex_color_use_as_albedo = true
@@ -47,11 +50,13 @@ material = SubResource("StandardMaterial3D_p54np")
 size = Vector2(0.2, 0.2)
 
 [node name="StackSpark" type="GPUParticles3D"]
+layers = 2
 emitting = false
 amount = 30
 one_shot = true
 explosiveness = 1.0
 randomness = 0.5
+collision_base_size = 0.1
 visibility_aabb = AABB(-2.09474, -3.78992, -3.45481, 4.16517, 4.57921, 3.65482)
 process_material = SubResource("ParticleProcessMaterial_t8jpd")
 draw_pass_1 = SubResource("QuadMesh_iy2t6")

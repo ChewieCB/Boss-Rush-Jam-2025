@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=82 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -65,6 +65,7 @@
 [ext_resource type="Texture2D" uid="uid://dk3ythhh8s1fd" path="res://src/bosses/chips/assets/sprites/MCK_Death_3.png" id="56_e2pvt"]
 [ext_resource type="PackedScene" uid="uid://c6m6uaacee7aj" path="res://src/player/gun/vfx/StackSpark.tscn" id="65_1jthq"]
 [ext_resource type="PackedScene" uid="uid://dj6ifyci05l4y" path="res://src/bosses/chips/assets/particles/ChipDeathParticles.tscn" id="65_skpgp"]
+[ext_resource type="PackedScene" uid="uid://vkr6i7lrqkbi" path="res://src/bosses/chips/assets/particles/SplashParticles.tscn" id="66_ih6eo"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_62t77"]
 radius = 2.9
@@ -1591,7 +1592,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 sub_emitter = NodePath("../StackSpark")
 
 [node name="StackSpark" parent="." index="24" instance=ExtResource("65_1jthq")]
+sub_emitter = NodePath("../ChipSplashParticles")
 script = null
+
+[node name="ChipSplashParticles" parent="." index="25" instance=ExtResource("66_ih6eo")]
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_exited"]

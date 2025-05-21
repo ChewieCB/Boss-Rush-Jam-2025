@@ -6,6 +6,7 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vmwhn"]
 resource_name = "rear_texture"
 cull_mode = 2
+albedo_color = Color(0, 0.183333, 1, 1)
 albedo_texture = ExtResource("1_l1kj0")
 roughness = 0.5
 uv1_scale = Vector3(2.03, 2.03, 1)
@@ -14,6 +15,7 @@ uv1_offset = Vector3(3, 0.965, 0)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8er7g"]
 resource_name = "side_texture"
 cull_mode = 2
+albedo_color = Color(0, 0.184314, 1, 1)
 albedo_texture = ExtResource("2_q4wfb")
 roughness = 0.5
 uv1_scale = Vector3(0.59, 1, 1)
@@ -22,6 +24,7 @@ uv1_offset = Vector3(0.905, 0, 0)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ggvds"]
 resource_name = "front_texture"
 cull_mode = 2
+albedo_color = Color(0, 0.184314, 1, 1)
 albedo_texture = ExtResource("1_l1kj0")
 roughness = 0.5
 uv1_scale = Vector3(2.03, 2.03, 1)
