@@ -919,6 +919,7 @@ func _on_phase_3_dropping_segments_dropping_state_entered() -> void:
 		drop_floor_segment(segments_to_drop.pop_front())
 		
 		anim_player.play("RESET")
+		
 		await get_tree().create_timer(drop_delay).timeout
 		
 	await get_tree().create_timer(drop_return_delay).timeout

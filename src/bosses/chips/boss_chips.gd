@@ -256,7 +256,30 @@ func _on_health_dead_state_entered() -> void:
 	_on_chip_sweep_state_exited()
 	#return_big_stack_to_center()
 	merge_stacks()
-	super ()
+	
+	if anim_player.is_playing():
+		anim_player.stop()
+		anim_player.play("RESET")
+	
+	for i in range(20):
+		# Death anim loops, so wait for X loops then finish
+		anim_player.play("death")
+		# TODO - chip particle effect
+		#
+		await anim_player.animation_finished
+	anim_player.process_mode = Node.PROCESS_MODE_DISABLED
+	# Hide the sprite and explode into chips
+	# TODO - make this area damage explosion a generic method we can re-use
+	# Create an explosion
+	sprite.render_priority = -1
+	var explosion_inst = explosion_scene.instantiate()
+	add_child(explosion_inst)
+	explosion_inst.change_mesh_scale(4.0)
+	explosion_inst.global_position = self.global_position
+	var tween: Tween = get_tree().create_tween()
+	tween.tween_property(sprite, "modulate:a", 0.0, explosion_inst.fire.lifetime / 2)
+	
+	death_anim_finished.emit()
 
 
 func _on_died() -> void:
