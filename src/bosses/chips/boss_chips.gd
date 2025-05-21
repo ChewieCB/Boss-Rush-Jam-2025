@@ -216,13 +216,13 @@ func _ready() -> void:
 					print("!! Unset or invalid export: ", prop.name)
 				else:
 					print(prop.name, " → ", value)
-	super()
+	super ()
 	leap_finished.connect(_on_chiptopede_leap_impact)
 
 
 func activate() -> void:
 	print_debug("BossChips activate called")
-	super()
+	super ()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	if not self.is_node_ready():
@@ -243,7 +243,7 @@ func _exit_tree() -> void:
 ## HEALTH TRIGGERS
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super(new_health, prev_health)
+	super (new_health, prev_health)
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		if current_phase == 1:
 			state_chart.send_event("start_phase_2")
@@ -256,7 +256,7 @@ func _on_health_dead_state_entered() -> void:
 	_on_chip_sweep_state_exited()
 	#return_big_stack_to_center()
 	merge_stacks()
-	super()
+	super ()
 
 
 func _on_died() -> void:
@@ -494,7 +494,7 @@ func show_big_stack() -> void:
 	await get_tree().create_timer(0.1).timeout
 	
 	self.collision_layer = 4
-	self.collision_mask = (pow(2, 1-1) + pow(2, 2-1) + pow(2, 4-1))
+	self.collision_mask = (pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1))
 	
 	return
 
@@ -504,9 +504,9 @@ func hide_big_stack() -> void:
 	health_component.show_damage_text = false
 	
 	# Disable player and projectile collisions
-	self.collision_layer = 0  # None
-	self.collision_mask = 1  # World only
-	hurtbox.set_deferred("monitoring",  false)
+	self.collision_layer = 0 # None
+	self.collision_mask = 1 # World only
+	hurtbox.set_deferred("monitoring", false)
 
 ##
 func _disable_gravity() -> void:
@@ -518,8 +518,8 @@ func _enable_gravity() -> void:
 
 ##
 func trigger_pushback(
-	force: float = pushback_force, 
-	pushback_source: Node3D = self, 
+	force: float = pushback_force,
+	pushback_source: Node3D = self,
 	pushback_radius: float = pushback_source.collider.shape.radius
 ) -> void:
 	if target.global_position.distance_to(pushback_source.global_position) <= pushback_radius:
@@ -1017,7 +1017,7 @@ func _on_place_your_bets_jumping_state_entered() -> void:
 	
 	await big_stack_jump_to_center()
 	# Disable collision to avoid clipping player into platform on slam
-	self.collision_layer = 0  # None
+	self.collision_layer = 0 # None
 	state_chart.send_event("aoe_dive")
 
 
@@ -1036,7 +1036,7 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 	# TODO - destroy platform
 	#
 	# Re-enable collision after pushback to avoid clipping
-	self.collision_layer = 4  
+	self.collision_layer = 4
 	
 	state_chart.send_event("end_aoe_attack")
 
@@ -1060,7 +1060,7 @@ func _on_ss_arc_wave_targeting_state_entered() -> void:
 	for i in range(spawned_sub_stacks.size()):
 		var stack = spawned_sub_stacks[i]
 		var target_marker: Marker3D = closest_targets.pop_front()
-		stack.marker_target_idx =  aoe_markers.find(target_marker)
+		stack.marker_target_idx = aoe_markers.find(target_marker)
 	
 	state_chart.send_event("start_attack")
 
@@ -1110,9 +1110,9 @@ func _on_ss_place_your_bets_attacking_state_entered() -> void:
 		await stack.substack_dive_finished
 		
 		spawn_aoe_wave(
-			aoe_radius, 
-			drop_damage / spawned_sub_stacks.size(), 
-			aoe_wave_time, 
+			aoe_radius,
+			drop_damage / spawned_sub_stacks.size(),
+			aoe_wave_time,
 			stack.global_position,
 			stack
 		)
@@ -1165,7 +1165,7 @@ func _on_phase_3_state_entered() -> void:
 func _on_chiptopede_leap_targeting_state_entered() -> void:
 	# Move chiptopede to new spawn location
 	self.global_position = get_chiptopede_spawn_pos(
-		chiptopede_spawns, 
+		chiptopede_spawns,
 		min_spawn_distance,
 		0.0,
 		last_leap_end_pos
@@ -1310,7 +1310,7 @@ func turn_towards_target(node: Node, speed: float, delta: float) -> void:
 func _on_chiptopede_shoot_emerging_state_entered() -> void:
 	# Move chiptopede to new spawn location
 	self.global_position = get_chiptopede_spawn_pos(
-		chiptopede_shoot_spawns, 
+		chiptopede_shoot_spawns,
 		24.0,
 		max_projectile_spawn_distance,
 	).global_position
@@ -1426,7 +1426,7 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 		
 		var stack_spawn_tween: Tween = get_tree().create_tween()
 		var spawn_pos: Vector3 = self.global_position + (self.global_transform.basis.z * spawn_distance).rotated(
-			Vector3.UP, 2 * PI / stack_count * (i+1)
+			Vector3.UP, 2 * PI / stack_count * (i + 1)
 		)
 		
 		# If we specify spawn positions, use them instead of distance
@@ -1481,11 +1481,11 @@ func _small_stack_dead(stack: CharacterBody3D) -> void:
 
 #### CHIPTOPEDE HELPER METHODS
 func get_chiptopede_spawn_pos(
-	spawn_marker_group: Array[Node], 
+	spawn_marker_group: Array[Node],
 	min_spawn_distance: float = 0.0,
 	max_spawn_distance: float = 0.0,
 	previous_pos: Vector3 = Vector3.ZERO,
-	filter_func: Callable = Callable() 
+	filter_func: Callable = Callable()
 ) -> Node:
 	# Don't spawn in the same place twice in a row
 	var available_spawns = spawn_marker_group.duplicate()
@@ -1544,6 +1544,11 @@ func get_chiptopede_spawn_pos(
 	#)
 	
 	last_spawn = filtered_spawns.front()
+
+	# Failsafe
+	if last_spawn == null:
+		push_warning("Can't find a spawn in get_chiptopede_spawn_pos()")
+		last_spawn = available_spawns[0]
 	
 	return last_spawn
 
@@ -1573,8 +1578,8 @@ func _create_leap_path(start_pos: Vector3, goal_pos: Vector3, _follow_path: Arra
 	var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5) + Vector3(0, leap_height, 0)
 
 	# Calculate bezier control points
-	var out_0 = (mid_point - start_pos) * leap_out_ratio  # 0.6667
-	var in_1 = (mid_point - goal_pos) * leap_in_ratio  # 0.6667
+	var out_0 = (mid_point - start_pos) * leap_out_ratio # 0.6667
+	var in_1 = (mid_point - goal_pos) * leap_in_ratio # 0.6667
 	curve.add_point(start_pos, Vector3.ZERO, out_0)
 	curve.add_point(goal_pos, in_1, Vector3.ZERO)
 	
@@ -1677,7 +1682,7 @@ func spawn_segments(path: Path3D) -> Array:
 
 
 func move_segments_along_path(
-	end_event_str: String,speed: float, max_distance: float, delta: float,
+	end_event_str: String, speed: float, max_distance: float, delta: float,
 	segment_callback: Callable = Callable(),
 	is_reversed: bool = false, free_segment_when_finished: bool = true,
 ) -> void:
@@ -1732,18 +1737,6 @@ func calculate_snake_path(start_pos: Vector3, target_pos: Vector3) -> void:
 	)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 #### CHIP MINES
 # Jump up, crash into the ground creating an AoE and 
 # make chip mines pop up out of the floor.
@@ -1770,10 +1763,10 @@ func _on_chip_mines_jump_state_entered() -> void:
 	GRAVITY = 0
 	
 	var jump_tween: Tween = get_tree().create_tween()
-	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height/2, -2), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	jump_tween.tween_property(self, "global_position", Vector3(0, jump_height / 2, -2), jump_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	
 	await jump_tween.finished
-	await get_tree().create_timer(jump_hang_time/3).timeout
+	await get_tree().create_timer(jump_hang_time / 3).timeout
 	
 	var target_pos: Vector3 = self.global_position
 	target_pos.y = 0
@@ -1860,7 +1853,7 @@ func spawn_aoe_wave(
 	pushback_source: Node3D = self,
 	spawned_wave_height: float = 0.3,
 	_telegraph: bool = false,
-	callback: Callable = func(): pass,
+	callback: Callable = func(): pass ,
 ) -> void:
 	# Generate a collider
 	var area_collider := Area3D.new()
@@ -1953,9 +1946,9 @@ func spawn_aoe_bubble(radius: float, damage: float, spawn_pos: Vector3, duration
 
 
 func _on_wave_collision(
-	body: Node3D, 
-	aoe_damage: float, 
-	pushback_source: Node3D = self, 
+	body: Node3D,
+	aoe_damage: float,
+	pushback_source: Node3D = self,
 	pushback_radius: float = pushback_source.collider.shape.radius
 ) -> void:
 	if body == target:
