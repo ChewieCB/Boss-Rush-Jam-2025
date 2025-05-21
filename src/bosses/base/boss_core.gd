@@ -304,7 +304,7 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 	return null
 
 
-func drop_barrel() -> void:
+func drop_barrel(target_pos: Vector3 = target.global_position) -> void:
 	# Check if we've already given the player this barrel
 	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
 		push_warning("Barrel [%s] already collected, exiting level." % barrel_to_drop.barrel_name)
@@ -328,7 +328,7 @@ func drop_barrel() -> void:
 	else:
 		collider_height = collider.shape.height
 	var start_pos: Vector3 = self.global_position + Vector3(0, collider_height / 2, 0)
-	var goal_pos: Vector3 = start_pos.lerp(target.global_position, 0.7)
+	var goal_pos: Vector3 = start_pos.lerp(target_pos, 0.7)
 
 	# Snap to floor
 	var space_state = get_world_3d().direct_space_state
@@ -354,7 +354,6 @@ func drop_barrel() -> void:
 	path.curve = curve
 
 	# Add the path to the scene
-	var scene_root = get_tree().root.get_children()[7]
 	scene_root.add_child(path)
 	var path_follow = PathFollow3D.new()
 	path.add_child(path_follow)
@@ -504,6 +503,7 @@ func _on_health_dead_state_entered() -> void:
 	anim_player.play("death")
 	
 	await anim_player.animation_finished
+	anim_player.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	sprite.modulate = Color.DARK_SLATE_BLUE
 	death_anim_finished.emit()

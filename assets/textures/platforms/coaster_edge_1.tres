@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://626wkiaaixqm"]
+
+[ext_resource type="Texture2D" uid="uid://b5pnyfta6oesd" path="res://assets/textures/platforms/coaster_edge_1.png" id="1_45ie8"]
+
+[resource]
+transparency = 1
+albedo_texture = ExtResource("1_45ie8")
+metallic_specular = 0.0
+texture_filter = 2

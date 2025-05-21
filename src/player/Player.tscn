@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=67 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -42,10 +42,8 @@
 [ext_resource type="PackedScene" uid="uid://xtemm86x5ftx" path="res://src/ui/player/EffectDetailUI.tscn" id="20_ic8us"]
 [ext_resource type="AudioStream" uid="uid://bmdb3aap303b0" path="res://src/player/assets/sfx/CROUCH.mp3" id="26_skrud"]
 [ext_resource type="AudioStream" uid="uid://dckgsngjsbl02" path="res://src/player/assets/sfx/STAND.mp3" id="27_6gtc3"]
-[ext_resource type="AudioStream" uid="uid://bwepo6qinnaup" path="res://src/player/assets/sfx/JUMP FROM GROUND.mp3" id="28_k5crr"]
-[ext_resource type="AudioStream" uid="uid://cjcluk6lldawc" path="res://src/player/assets/sfx/JUMP IN AIR.mp3" id="29_xv6x8"]
-[ext_resource type="AudioStream" uid="uid://ckr1r101hscjl" path="res://src/player/assets/sfx/Floor Dash.mp3" id="30_on7sg"]
-[ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="31_pnqxi"]
+[ext_resource type="AudioStream" uid="uid://b1j1n3jwte3cg" path="res://src/player/assets/sfx/New Jump from ground.mp3" id="29_5swy3"]
+[ext_resource type="AudioStream" uid="uid://dxp1qdaew521c" path="res://src/player/assets/sfx/New Dash Sound (maybe highpass later) w: verb.mp3" id="30_bfwyi"]
 [ext_resource type="Shader" path="res://src/player/assets/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
@@ -115,10 +113,10 @@ sfx_movement_loop = ExtResource("2_5ndff")
 sfx_movement_steps = Array[AudioStream]([ExtResource("3_hiqt7"), ExtResource("4_a4xoc"), ExtResource("5_pg460"), ExtResource("6_320sy"), ExtResource("7_2he1w"), ExtResource("8_kw11m"), ExtResource("9_qmrha"), ExtResource("10_njsu2"), ExtResource("11_1jfcb"), ExtResource("12_8gaey"), ExtResource("13_hisam"), ExtResource("14_rd2i6"), ExtResource("15_w5gjb"), ExtResource("16_tto8i")])
 sfx_crouch = Array[AudioStream]([ExtResource("26_skrud")])
 sfx_stand = Array[AudioStream]([ExtResource("27_6gtc3")])
-sfx_jump_ground = Array[AudioStream]([ExtResource("28_k5crr")])
-sfx_jump_air = Array[AudioStream]([ExtResource("29_xv6x8")])
-sfx_dash_floor = Array[AudioStream]([ExtResource("30_on7sg")])
-sfx_dash_air = Array[AudioStream]([ExtResource("31_pnqxi")])
+sfx_jump_ground = Array[AudioStream]([ExtResource("29_5swy3")])
+sfx_jump_air = Array[AudioStream]([ExtResource("29_5swy3")])
+sfx_dash_floor = Array[AudioStream]([ExtResource("30_bfwyi")])
+sfx_dash_air = Array[AudioStream]([ExtResource("30_bfwyi")])
 max_air_jump = 1
 speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")

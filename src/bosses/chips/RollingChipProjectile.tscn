@@ -1,8 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://cxg3ytjd4ybu0"]
+[gd_scene load_steps=12 format=3 uid="uid://cxg3ytjd4ybu0"]
 
 [ext_resource type="Script" path="res://src/bosses/chips/rolling_chip_projectile.gd" id="1_7jhjc"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_6corf"]
+[ext_resource type="AudioStream" uid="uid://jkyya4te2uwq" path="res://src/bosses/chips/assets/sfx/CHIP Chip Roll attack.mp3" id="2_dsg1u"]
 [ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="2_vsv6d"]
+[ext_resource type="AudioStream" uid="uid://4sbfi7dje4wy" path="res://src/bosses/chips/assets/sfx/CHIP Chip Roll attack 2.mp3" id="3_0vlx7"]
+[ext_resource type="AudioStream" uid="uid://dek8tv432gwnn" path="res://src/bosses/chips/assets/sfx/CHIP Rolling chip hits you 1.mp3" id="4_6uie8"]
+[ext_resource type="AudioStream" uid="uid://dsaxb0r4go2hk" path="res://src/bosses/chips/assets/sfx/CHIP Rolling chip hits you 2.mp3" id="5_koeqd"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qc288"]
 albedo_texture = ExtResource("2_vsv6d")
@@ -31,6 +35,8 @@ collision_layer = 0
 collision_mask = 9
 script = ExtResource("1_7jhjc")
 health_component = NodePath("HealthComponent")
+sfx_rolling = Array[AudioStream]([ExtResource("2_dsg1u"), ExtResource("3_0vlx7")])
+sfx_impact = Array[AudioStream]([ExtResource("4_6uie8"), ExtResource("5_koeqd")])
 
 [node name="MeshPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -62,5 +68,12 @@ is_invincible = true
 
 [node name="HitTImer" type="Timer" parent="."]
 one_shot = true
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
+
+[node name="SFXPlayerLoop" type="AudioStreamPlayer3D" parent="."]
+volume_db = 5.0
+bus = &"SFX"
 
 [connection signal="body_entered" from="MeshPivot/Hurtbox" to="." method="_on_hurtbox_body_entered"]

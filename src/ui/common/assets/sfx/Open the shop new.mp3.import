@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bnt0hxmrnje7n"
+path="res://.godot/imported/Open the shop new.mp3-0aa5b4fa0d0c4f85e8fbd3603f919aff.mp3str"
+
+[deps]
+
+source_file="res://src/ui/common/assets/sfx/Open the shop new.mp3"
+dest_files=["res://.godot/imported/Open the shop new.mp3-0aa5b4fa0d0c4f85e8fbd3603f919aff.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

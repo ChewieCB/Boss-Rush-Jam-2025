@@ -40,6 +40,7 @@ var center_pos := Vector3(0, 0, -2)
 @export var explosion_scene: PackedScene
 @export var pushback_force: float = 20.0
 # SFX
+@export var sfx_jump: Array[AudioStream]
 #
 @export_subgroup("Form Transitions")
 @export var max_big_attacks: int = 3
@@ -47,6 +48,8 @@ var big_attacks_performed: int = 0
 @export var max_small_attacks: int = 2
 var small_attacks_performed: int = 0
 # SFX
+@export var sfx_stack_split: Array[AudioStream]
+@export var sfx_stack_merge: Array[AudioStream]
 @export var sfx_chiptopede_awaken: AudioStream
 #
 ## BIG STACK
@@ -57,6 +60,7 @@ var small_attacks_performed: int = 0
 var chips_fired: int = 0
 var active_rolling_chip: RollingChip
 # SFX
+@export var sfx_chip_fire: Array[AudioStream]
 #
 @export_subgroup("Chip Sweep")
 @export var chip_sweep_count: int = 3
@@ -65,6 +69,7 @@ var active_rolling_chip: RollingChip
 @export var chip_sweep_prefab: PackedScene
 var chip_sweep_instances: Array = []
 # SFX
+@export var sfx_chip_sweep_out: Array[AudioStream]
 #
 @export_subgroup("Stack Slam")
 @export var slam_shockwave_prefab: PackedScene
@@ -76,6 +81,7 @@ var chip_sweep_instances: Array = []
 var completed_slams: int = 0
 var aoe_floor = 0.0
 # SFX
+@export var sfx_slam: Array[AudioStream]
 #
 @export_subgroup("Place Your Bets")
 @export var jump_height: float = 9.0
@@ -98,6 +104,8 @@ var last_stack: ChipBossSubStack
 @export var split_rush_range: float = 3.5
 @export var split_rush_damage: float = 20.0
 # SFX
+@export var sfx_stack_spawn: Array[AudioStream]
+@export var sfx_stack_despawn: Array[AudioStream]
 #
 @export_subgroup("Split Stack AoE")
 @export var split_aoe_dive_delay: float = 0.3
@@ -130,11 +138,16 @@ var last_leap_end_pos := Vector3.ZERO
 var despawned_pos := Vector3(0, -50, 0)
 var cached_segments: Array = []
 var segment_cache_parent: Node3D
+var persist_segements: bool = false
+# SFX
+@export var sfx_chiptopede_death: Array[AudioStream]
+#
 @export_subgroup("Attributes")
 @export var chiptopede_max_health: float = 6000
 @export var chiptopede_segments: int = 24
 @export var segment_separation: float = 2.0
 @export var min_spawn_distance: float = 36.0
+@export var chiptopede_explosion_delay: float = 0.07
 @export_subgroup("Leap")
 @export var leap_aoe_radius: float = 12.0
 @export var leap_damage: float = 15.0
@@ -155,6 +168,7 @@ var completed_nodes := []
 var chiptopede_head_offset: float = 0.0
 # SFX
 @export var sfx_chiptopede_leap: Array[AudioStream]
+@export var sfx_chiptopede_impact: Array[AudioStream]
 #
 @export_subgroup("Snake")
 @export var snake_speed: float = 25.0
@@ -170,13 +184,20 @@ var snake_distance: float
 var stance_path: Path3D
 var emerge_speed: float = 10.0
 var emerge_distance: float
+@export var max_projectile_spawn_distance: float = 36.0
 @export var chiptopede_targeting_speed: float = 3.0
 @export var chiptopede_projectile: PackedScene
 @export var chiptopede_projectile_bursts: int = 2
 @export var chiptopede_shots_per_burst: int = 20
 @export var chiptopede_delay_per_projectile: float = 0.05
 @export var delay_between_burst: float = 0.3
+# SFX
+@export var sfx_chiptopede_emerge: Array[AudioStream]
+@export var sfx_chiptopede_shoot: Array[AudioStream]
+@export var sfx_chiptopede_retreat: Array[AudioStream]
+#
 
+@onready var big_stack_sfx_player: AudioStreamPlayer3D = $BigStackSFXPlayer
 @onready var chiptopede_sfx_player: AudioStreamPlayer3D = $ChiptopedeHeadSFXPlayer
 
 ## USEFUL GLOBALS
@@ -205,15 +226,14 @@ func activate() -> void:
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	if not self.is_node_ready():
-		print_debug("Boss scene is not ready, waiting for ready signal")
 		await self.ready
-		print_debug("Ready signal received")
-	print_debug("Sending event `start_phase_1`")
-	state_chart.send_event("start_phase_1")
-
-
-func _physics_process(delta: float) -> void:
-	return
+	match current_phase:
+		1:
+			state_chart.send_event("start_phase_1")
+		2:
+			state_chart.send_event("start_phase_2")
+		3:
+			state_chart.send_event("start_phase_3")
 
 
 func _exit_tree() -> void:
@@ -248,27 +268,9 @@ func _on_died() -> void:
 		await boss_death_slow_mo()
 		defeated.emit(self)
 	else:
-		died.emit()
-		state_chart.send_event("death")
+		persist_segements = true
 		state_chart.send_event("stop_moving")
-		state_chart.send_event("deactivate")
-		# Stop the chiptopede in place
-		#
-		# Explode chiptopede segments one by one
-		for node in follow_nodes:
-			if is_instance_valid(node):
-				var segment = node.get_child(0)
-				if segment:
-					segment.queue_free()
-					var explosion_inst = explosion_scene.instantiate()
-					scene_root.add_child(explosion_inst)
-					explosion_inst.global_position = segment.global_position
-					explosion_inst.change_mesh_scale(2.0)
-					await get_tree().create_timer(0.7).timeout
-		#
-		#await death_anim_finished
-		drop_barrel()
-		await boss_death_slow_mo()
+		state_chart.send_event("chiptopede_death")
 
 
 ## ATTACK CHOICES
@@ -284,6 +286,8 @@ func select_attack_phase_1() -> void:
 		ChipBossForms.BIG_STACK:
 			# Transition between big and small forms:
 			if big_attacks_performed >= max_big_attacks:
+				big_stack_sfx_player.stream = sfx_stack_split.pick_random()
+				big_stack_sfx_player.play()
 				state_chart.send_event("change_form_split")
 				return
 			
@@ -339,6 +343,8 @@ func select_attack_phase_2() -> void:
 			if big_attacks_performed >= max_big_attacks:
 				# TODO - split with attack
 				#state_chart.send_event("change_form_split_aoe")
+				big_stack_sfx_player.stream = sfx_stack_split.pick_random()
+				big_stack_sfx_player.play()
 				state_chart.send_event("change_form_split")
 				return
 			
@@ -363,6 +369,8 @@ func select_attack_phase_2() -> void:
 			if small_attacks_performed >= max_small_attacks:
 				# FIXME - radial attack with reform
 				#state_chart.send_event("change_form_big_aoe_merge")
+				big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
+				big_stack_sfx_player.play()
 				state_chart.send_event("change_form_big")
 				return
 			else:
@@ -402,6 +410,16 @@ func select_attack_phase_3() -> void:
 
 
 ## UTIL FUNCTIONS
+
+# For animation player triggering - do we actually need this?
+func _play_sfx_from_array(sfx_array_name: String) -> void:
+	var sfx_array: Array = self.get(sfx_array_name)
+	if sfx_array:
+		big_stack_sfx_player.stream = sfx_array.pick_random()
+		big_stack_sfx_player.play()
+	else:
+		push_error("No such sfx array: %s" % sfx_array_name)
+
 # BIG STACK MOVEMENT TWEENS
 func return_big_stack_to_center() -> void:
 	var tween = get_tree().create_tween()
@@ -415,6 +433,8 @@ func return_big_stack_to_center() -> void:
 
 func big_stack_jump(goal_pos: Vector3, height: float = jump_height, hover: bool = true) -> void:
 	anim_player.play("big_stack/jump_start")
+	big_stack_sfx_player.stream = sfx_jump.pick_random()
+	big_stack_sfx_player.play()
 	
 	var jump_tween: Tween = get_tree().create_tween()
 	jump_tween.tween_property(
@@ -448,6 +468,8 @@ func big_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
 	await jump_tween.finished
 	
 	anim_player.play("big_stack/slam_end")
+	big_stack_sfx_player.stream = sfx_slam.pick_random()
+	big_stack_sfx_player.play()
 	
 	var decal_slam := Decal.new()
 	decal_slam.texture_albedo = slam_aoe_decal
@@ -632,6 +654,8 @@ func _on_backspin_chip_forward_spin_state_entered() -> void:
 	chip_inst.global_transform = self.global_transform
 	
 	# Send it towards the player
+	big_stack_sfx_player.stream = sfx_chip_fire.pick_random()
+	big_stack_sfx_player.play()
 	var forward_target: Vector3 = chip_inst.get_point_before_wall()
 	chip_inst.roll_to_point(forward_target, 0.8)
 	
@@ -709,8 +733,17 @@ func _on_chip_sweep_sweep_state_entered() -> void:
 		sweep_proj.anim_time = sweep_time / chips_to_player
 		
 		anim_player.play("big_stack/projectile_fire")
+		# SFX
+		big_stack_sfx_player.stream = sfx_chip_sweep_out.pick_random()
+		big_stack_sfx_player.play()
+		
 		sweep_proj.add_chips(chips_to_player + 2)
 		await sweep_proj.chips_placed
+		# TODO - return sfx
+		# SFX
+		#big_stack_sfx_player.stream = sfx_chip_sweep_out.pick_random()
+		#big_stack_sfx_player.play()
+		
 		sweep_proj.remove_chips()
 		await sweep_proj.chips_removed
 		anim_player.play("big_stack/projectile_telegraph")
@@ -781,9 +814,11 @@ func _on_stack_slam_slam_state_entered() -> void:
 # Since the small stacks are CharacterBody3D instances with their own state charts,
 # we direct them here from the hidden big stack.
 #
-func trigger_substack_attack(attack_event: String) -> void:
+func trigger_substack_attack(attack_event: String, stack_delay: float = 0.0) -> void:
 	for stack in spawned_sub_stacks:
 		stack.state_chart.send_event(attack_event)
+		if stack_delay:
+			await get_tree().create_timer(stack_delay).timeout
 	
 	await substack_all_attacks_finished
 	
@@ -853,6 +888,9 @@ func _on_ss_charge_attacking_state_entered() -> void:
 
 func _on_ss_charge_merging_state_entered() -> void:
 	merge_stacks()
+	
+	big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
+	big_stack_sfx_player.play()
 	
 	# TODO - make this area damage explosion a generic method we can re-use
 	#
@@ -1027,7 +1065,7 @@ func _on_ss_arc_wave_targeting_state_entered() -> void:
 	state_chart.send_event("start_attack")
 
 func _on_ss_arc_wave_attacking_state_entered() -> void:
-	trigger_substack_attack("start_arc_wave_attack_phase_2")
+	trigger_substack_attack("start_arc_wave_attack_phase_2", 0.2)
 	#trigger_sequential_substack_attacks("start_arc_wave_attack", "start_closing")
 
 
@@ -1110,6 +1148,7 @@ func _on_phase_3_state_entered() -> void:
 	health_component.has_died = false
 	health_component.max_health = chiptopede_max_health
 	health_component.current_health = chiptopede_max_health
+	health_component.received_dmg_multiplier = 0.5
 	health_ui.init_health_ui(chiptopede_max_health)
 	health_ui.boss_name = "Chiptopede"
 	health_ui.show_ui()
@@ -1128,11 +1167,13 @@ func _on_chiptopede_leap_targeting_state_entered() -> void:
 	self.global_position = get_chiptopede_spawn_pos(
 		chiptopede_spawns, 
 		min_spawn_distance,
+		0.0,
 		last_leap_end_pos
 	).global_position
 	
 	# Get the player's current position as the target point
 	var start_pos: Vector3 = self.global_position
+	#print("Start pos dist to target: %s | Min spawn dist: %s" % [start_pos.distance_to(target.global_position), min_spawn_distance])
 	var goal_pos: Vector3 = target.global_position
 	goal_pos.y = -19
 	leap_path = create_curve_path(start_pos, goal_pos, [], _create_leap_path)
@@ -1159,8 +1200,9 @@ func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
 
 
 func _on_chiptopede_leap_leaping_state_exited() -> void:
-	_cleanup_segment_arrays()
-	leap_path.queue_free()
+	if not persist_segements:
+		_cleanup_segment_arrays()
+		leap_path.queue_free()
 	leap_damage_timer.stop()
 	chiptopede_sfx_player.stop()
 	chiptopede_sfx_player.stream = null
@@ -1168,6 +1210,10 @@ func _on_chiptopede_leap_leaping_state_exited() -> void:
 
 func _on_chiptopede_leap_impact(segment: Node) -> void:
 	if leap_damage_timer.is_stopped():
+		#
+		chiptopede_sfx_player.stream = sfx_chiptopede_impact.pick_random()
+		chiptopede_sfx_player.play()
+		#
 		spawn_aoe_bubble(leap_aoe_radius, leap_damage, segment.global_position, 0.4, segment)
 		#spawn_aoe_wave(8.0, leap_damage, 0.1, segment.global_position, 0.5)
 		# Create an explosion
@@ -1241,9 +1287,10 @@ func _on_chiptopede_snake_moving_state_physics_processing(delta: float) -> void:
 
 
 func _on_chiptopede_snake_moving_state_exited() -> void:
-	_cleanup_segment_arrays()
-	snake_path = []
-	snake_path_3d.queue_free()
+	if not persist_segements:
+		_cleanup_segment_arrays()
+		snake_path = []
+		snake_path_3d.queue_free()
 	chiptopede_sfx_player.stop()
 	chiptopede_sfx_player.stream = null
 
@@ -1264,7 +1311,8 @@ func _on_chiptopede_shoot_emerging_state_entered() -> void:
 	# Move chiptopede to new spawn location
 	self.global_position = get_chiptopede_spawn_pos(
 		chiptopede_shoot_spawns, 
-		min_spawn_distance
+		24.0,
+		max_projectile_spawn_distance,
 	).global_position
 	
 	# Get the player's current position as the target point
@@ -1272,6 +1320,10 @@ func _on_chiptopede_shoot_emerging_state_entered() -> void:
 	spawn_pos.y = -21
 	stance_path = create_premade_path(spawn_pos, shooting_stance_prefab)
 	
+	#
+	chiptopede_sfx_player.stream = sfx_chiptopede_emerge.pick_random()
+	chiptopede_sfx_player.play()
+	#
 	follow_nodes = spawn_segments(stance_path)
 	
 	emerge_distance = stance_path.curve.get_baked_length()
@@ -1303,6 +1355,10 @@ func _on_chiptopede_shoot_shooting_state_entered() -> void:
 	for i in chiptopede_projectile_bursts:
 		for j in chiptopede_shots_per_burst:
 			await get_tree().create_timer(chiptopede_delay_per_projectile).timeout
+			#
+			chiptopede_sfx_player.stream = sfx_chiptopede_shoot.pick_random()
+			chiptopede_sfx_player.play()
+			#
 			fire_projectile(chiptopede_projectile, follow_nodes[0].global_position)
 		await get_tree().create_timer(delay_between_burst).timeout
 	
@@ -1315,6 +1371,10 @@ func _on_chiptopede_shoot_shooting_state_physics_processing(delta: float) -> voi
 
 func _on_chiptopede_shoot_retreat_state_entered() -> void:
 	completed_nodes = []
+	#
+	chiptopede_sfx_player.stream = sfx_chiptopede_retreat.pick_random()
+	chiptopede_sfx_player.play()
+	#
 
 
 func _on_chiptopede_shoot_retreat_state_physics_processing(delta: float) -> void:
@@ -1325,13 +1385,15 @@ func _on_chiptopede_shoot_retreat_state_physics_processing(delta: float) -> void
 
 
 func _on_chiptopede_shoot_recovering_state_entered() -> void:
-	_cleanup_segment_arrays()
-	stance_path.queue_free()
+	if not persist_segements:
+		_cleanup_segment_arrays()
+		stance_path.queue_free()
 	_recover_entered()
 
 
 func _on_chiptopede_hurt(health_diff: float) -> void:
-	health_component.damage(abs(health_diff))
+	if health_diff < 0:
+		health_component.damage(abs(health_diff))
 
 
 #### SPLIT STACK HELPER METHODS
@@ -1339,6 +1401,9 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 	var spawned_stacks = []
 	# Spawn small stacks from the center point of the big stack and space them out
 	for i in range(stack_count):
+		big_stack_sfx_player.stream = sfx_stack_spawn.pick_random()
+		big_stack_sfx_player.play()
+		
 		var small_stack_inst: CharacterBody3D = small_stack_prefab.instantiate()
 		get_parent().add_child(small_stack_inst)
 		small_stack_inst.global_transform = self.global_transform
@@ -1378,6 +1443,9 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 
 func despawn_stacks(despawn_time: float = stack_spawn_time) -> void:
 	for stack in spawned_sub_stacks:
+		big_stack_sfx_player.stream = sfx_stack_despawn.pick_random()
+		big_stack_sfx_player.play()
+		
 		var stack_spawn_tween: Tween = get_tree().create_tween()
 		stack_spawn_tween.tween_property(stack, "global_position", self.global_position, stack_spawn_time)
 		stack_spawn_tween.parallel().tween_property(stack, "scale", Vector3.ZERO, stack_spawn_time)
@@ -1415,7 +1483,9 @@ func _small_stack_dead(stack: CharacterBody3D) -> void:
 func get_chiptopede_spawn_pos(
 	spawn_marker_group: Array[Node], 
 	min_spawn_distance: float = 0.0,
-	previous_pos: Vector3 = Vector3.ZERO, 
+	max_spawn_distance: float = 0.0,
+	previous_pos: Vector3 = Vector3.ZERO,
+	filter_func: Callable = Callable() 
 ) -> Node:
 	# Don't spawn in the same place twice in a row
 	var available_spawns = spawn_marker_group.duplicate()
@@ -1444,10 +1514,21 @@ func get_chiptopede_spawn_pos(
 				return false
 	)
 	# If we have a minimum spawn distance, filter out any spawns within this distance 
-	var filtered_spawns = available_spawns.filter(
-		func(spawn):
-			return spawn.global_position.distance_to(sort_target) >= min_spawn_distance
-	)
+	var filtered_spawns = available_spawns
+	if min_spawn_distance:
+		filtered_spawns = filtered_spawns.filter(
+			func(spawn):
+				return spawn.global_position.distance_to(sort_target) >= min_spawn_distance
+		)
+	if max_spawn_distance:
+		filtered_spawns = filtered_spawns.filter(
+			func(spawn):
+				return spawn.global_position.distance_to(sort_target) <= max_spawn_distance
+		)
+	#
+	if filter_func:
+		filtered_spawns = filtered_spawns.filter(filter_func)
+	
 	## TODO - Make sure the spawn is somewhere the player is looking
 	#var facing_spawns = filtered_spawns.filter(
 		#func(spawn):
@@ -1649,10 +1730,6 @@ func calculate_snake_path(start_pos: Vector3, target_pos: Vector3) -> void:
 		astar.get_closest_point(start_pos),
 		astar.get_closest_point(target_pos)
 	)
-
-
-
-
 
 
 
@@ -1884,3 +1961,42 @@ func _on_wave_collision(
 	if body == target:
 		body.health_component.damage(aoe_damage)
 		trigger_pushback(pushback_force, pushback_source, pushback_radius)
+
+
+func _on_chiptopede_death_freeze_state_entered() -> void:
+	self.global_position = follow_nodes[0].get_child(0).global_position
+	state_chart.send_event("start_exploding")
+
+
+func _on_chiptopede_death_exploding_state_entered() -> void:
+	# Explode chiptopede segments one by one
+	follow_nodes.reverse()
+	for node in follow_nodes:
+		if is_instance_valid(node):
+			var segment = node.get_child(0)
+			if segment:
+				segment.queue_free()
+				# If the segment is below the waterline just free it and move on
+				if segment.global_position.y < -20.0:
+					continue
+				var explosion_inst = explosion_scene.instantiate()
+				scene_root.add_child(explosion_inst)
+				explosion_inst.global_position = segment.global_position
+				explosion_inst.change_mesh_scale(2.0)
+				await get_tree().create_timer(chiptopede_explosion_delay).timeout
+	
+	state_chart.send_event("end_exploding")
+
+
+func _on_chiptopede_death_dead_state_entered() -> void:
+	state_chart.send_event("deactivate")
+	state_chart.send_event("death")
+	died.emit()
+	#await death_anim_finished
+	var land_markers = chiptopede_spawns.duplicate()
+	land_markers.sort_custom(
+		_sort_by_distance_to_target
+	)
+	var nearest_land_pos: Vector3 = land_markers.front().global_position + Vector3(0, 1.0, 0)
+	drop_barrel(nearest_land_pos)
+	await boss_death_slow_mo()

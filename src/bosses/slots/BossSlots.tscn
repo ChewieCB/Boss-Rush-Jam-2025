@@ -26,13 +26,13 @@
 [ext_resource type="PackedScene" uid="uid://40024fnpmf14" path="res://src/bosses/base/attacks/ranged/DiamondProjectile.tscn" id="11_dqr52"]
 [ext_resource type="PackedScene" uid="uid://yw8o87v7ydx1" path="res://src/bosses/slots/bomb/BombProjectile.tscn" id="12_xbq02"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="16_52y3v"]
-[ext_resource type="AudioStream" uid="uid://cslq2jntaulce" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 1.mp3" id="17_1qoae"]
-[ext_resource type="AudioStream" uid="uid://ce1fw8wy6012x" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 2.mp3" id="18_5fj8q"]
-[ext_resource type="AudioStream" uid="uid://dfm3de6k0lylb" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 3.mp3" id="19_ecwx3"]
-[ext_resource type="AudioStream" uid="uid://bold3t26mprn4" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 4.mp3" id="20_dhjas"]
-[ext_resource type="AudioStream" uid="uid://d1gvu53dhcadx" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 5.mp3" id="21_f8dbu"]
-[ext_resource type="AudioStream" uid="uid://8rqo0mj5n8cw" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 6.mp3" id="22_dg8a1"]
-[ext_resource type="AudioStream" uid="uid://bmjh7bs72w8bm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 7.mp3" id="23_cagkm"]
+[ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="17_6xi00"]
+[ext_resource type="AudioStream" uid="uid://cbf7hkjdjvljq" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 2.mp3" id="18_0lbrd"]
+[ext_resource type="AudioStream" uid="uid://dv5u41740s0hh" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 3.mp3" id="19_aidds"]
+[ext_resource type="AudioStream" uid="uid://ba3k7kprithnp" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 4.mp3" id="20_tmjxh"]
+[ext_resource type="AudioStream" uid="uid://cmhmrmkyi3u0o" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 5.mp3" id="21_wokd2"]
+[ext_resource type="AudioStream" uid="uid://b5w4tt4xnxqfm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 6.mp3" id="22_0em2w"]
+[ext_resource type="AudioStream" uid="uid://cr76fcs47jgtf" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 7.mp3" id="23_sjuev"]
 [ext_resource type="Texture2D" uid="uid://dndtyj8hh404v" path="res://assets/sprite/aoe_markers/aoe_ring.png" id="25_4viup"]
 [ext_resource type="Texture2D" uid="uid://cjm0gilmb52sa" path="res://assets/sprite/aoe_markers/aoe_arrows.png" id="26_27dae"]
 [ext_resource type="AudioStream" uid="uid://dj3qqiciyxwmv" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 1.mp3" id="26_ttq7b"]
@@ -217,7 +217,7 @@ coin_projectile = ExtResource("16_52y3v")
 coin_shots_per_burst = 8
 num_bursts = 2
 delay_between_burst = 0.6
-sfx_coin_shot = Array[AudioStream]([ExtResource("17_1qoae"), ExtResource("18_5fj8q"), ExtResource("19_ecwx3"), ExtResource("20_dhjas"), ExtResource("21_f8dbu"), ExtResource("22_dg8a1"), ExtResource("23_cagkm")])
+sfx_coin_shot = Array[AudioStream]([ExtResource("17_6xi00"), ExtResource("18_0lbrd"), ExtResource("19_aidds"), ExtResource("20_tmjxh"), ExtResource("21_wokd2"), ExtResource("22_0em2w"), ExtResource("23_sjuev")])
 bell_scene = ExtResource("9_6qwni")
 bell_aoe_marker_ring = ExtResource("25_4viup")
 bell_aoe_marker_arrows = ExtResource("26_27dae")
