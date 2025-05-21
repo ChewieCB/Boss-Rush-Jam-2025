@@ -29,7 +29,7 @@
 [ext_resource type="AudioStream" uid="uid://s62c34hxjac4" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Swipe 1.mp3" id="14_kp42l"]
 [ext_resource type="AudioStream" uid="uid://c4xxb4wv8v66m" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Swipe 2.mp3" id="15_542ie"]
 [ext_resource type="AudioStream" uid="uid://dmd3us2eammau" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Swipe 3.mp3" id="16_mpf1f"]
-[ext_resource type="AudioStream" uid="uid://dtdvk5csa3lxw" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge Telegraph better?.mp3" id="17_qgi5r"]
+[ext_resource type="AudioStream" uid="uid://dtdvk5csa3lxw" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge Telegraph better.mp3" id="17_qgi5r"]
 [ext_resource type="AudioStream" uid="uid://21fjtkxrdnte" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 1.mp3" id="18_h65fw"]
 [ext_resource type="AudioStream" uid="uid://cj1inqwkr70fl" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 2.mp3" id="19_l7v0h"]
 [ext_resource type="AudioStream" uid="uid://cg736ya54cipl" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 3.mp3" id="20_xe6d1"]

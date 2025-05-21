@@ -43,7 +43,7 @@
 [ext_resource type="AudioStream" uid="uid://bmdb3aap303b0" path="res://src/player/assets/sfx/CROUCH.mp3" id="26_skrud"]
 [ext_resource type="AudioStream" uid="uid://dckgsngjsbl02" path="res://src/player/assets/sfx/STAND.mp3" id="27_6gtc3"]
 [ext_resource type="AudioStream" uid="uid://b1j1n3jwte3cg" path="res://src/player/assets/sfx/New Jump from ground.mp3" id="29_5swy3"]
-[ext_resource type="AudioStream" uid="uid://dxp1qdaew521c" path="res://src/player/assets/sfx/New Dash Sound (maybe highpass later) w: verb.mp3" id="30_bfwyi"]
+[ext_resource type="AudioStream" uid="uid://dxp1qdaew521c" path="res://src/player/assets/sfx/New Dash Sound (maybe highpass later) w verb.mp3" id="30_bfwyi"]
 [ext_resource type="Shader" path="res://src/player/assets/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]

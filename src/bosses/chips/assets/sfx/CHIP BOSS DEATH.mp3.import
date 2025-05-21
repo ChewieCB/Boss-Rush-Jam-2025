@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://twa63e7btyjs"
+path="res://.godot/imported/CHIP BOSS DEATH.mp3-cdb3a6f1e3eacfaacf3436a6f59a82d0.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/CHIP BOSS DEATH.mp3"
+dest_files=["res://.godot/imported/CHIP BOSS DEATH.mp3-cdb3a6f1e3eacfaacf3436a6f59a82d0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
