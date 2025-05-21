@@ -2,10 +2,12 @@ extends Control
 class_name PauseUI
 
 signal pause_ui_toggled
+signal ui_accept_pressed
 
 @onready var pause_option_list: Control = $PauseOptionBG
 @onready var setting_button: Button = $PauseOptionBG/VBoxContainer/SettingButton
 @onready var setting_ui: SettingUI = $SettingUI
+@onready var promo_ui: Control = $QRLinkUI
 
 var is_paused: bool = false
 var is_in_submenu: bool = false
@@ -39,6 +41,8 @@ func _input(event: InputEvent) -> void:
 		else:
 			if is_paused:
 				toggle_pause_menu()
+	elif event.is_action_pressed("ui_accept"):
+		ui_accept_pressed.emit()
 
 
 func toggle_pause_menu() -> void:
@@ -111,6 +115,13 @@ func _on_quit_button_pressed() -> void:
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
+	
+	# TODO - move promo UI to a higher node in the scene tree to avoid this shuffling
+	promo_ui.visible = true
+	remove_child(promo_ui)
+	get_parent().add_child(promo_ui)
+	self.visible = false
+	await get_tree().create_timer(3.0).timeout
 	get_tree().quit()
 
 
