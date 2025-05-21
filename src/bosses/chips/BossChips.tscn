@@ -57,15 +57,15 @@
 [ext_resource type="AudioStream" uid="uid://36h7m1npqoo4" path="res://src/bosses/chips/assets/sfx/Chiptapede Emerge to Shoot.mp3" id="33_ug8ld"]
 [ext_resource type="AudioStream" uid="uid://d27k5xljtve4v" path="res://src/bosses/chips/assets/sfx/Chiptapede Emerge to Shoot 2.mp3" id="34_0flmo"]
 [ext_resource type="AudioStream" uid="uid://cydb05agme7h8" path="res://src/bosses/chips/assets/sfx/Leap Impact 7.mp3" id="34_j5lkn"]
-[ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="35_xcjvj"]
-[ext_resource type="AudioStream" uid="uid://cbf7hkjdjvljq" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 2.mp3" id="36_2oo6r"]
-[ext_resource type="AudioStream" uid="uid://dv5u41740s0hh" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 3.mp3" id="37_va4hg"]
-[ext_resource type="AudioStream" uid="uid://ba3k7kprithnp" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 4.mp3" id="38_5s06y"]
 [ext_resource type="AudioStream" uid="uid://bc24id1hvfvec" path="res://src/bosses/chips/assets/sfx/Hurt Scream 2.mp3" id="38_xoi1t"]
-[ext_resource type="AudioStream" uid="uid://cmhmrmkyi3u0o" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 5.mp3" id="39_dn07s"]
 [ext_resource type="AudioStream" uid="uid://twa63e7btyjs" path="res://src/bosses/chips/assets/sfx/CHIP BOSS DEATH.mp3" id="39_gl65c"]
-[ext_resource type="AudioStream" uid="uid://b5w4tt4xnxqfm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 6.mp3" id="40_2vtug"]
-[ext_resource type="AudioStream" uid="uid://cr76fcs47jgtf" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 7.mp3" id="41_b5637"]
+[ext_resource type="AudioStream" uid="uid://ci6i3lrnlyue" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 1.mp3" id="41_x4ksd"]
+[ext_resource type="AudioStream" uid="uid://dv1aha38bsjic" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 2.mp3" id="42_nca3f"]
+[ext_resource type="AudioStream" uid="uid://cqh7nvow88qap" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 3.mp3" id="43_laq2w"]
+[ext_resource type="AudioStream" uid="uid://7qr6c78mj3kf" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 4.mp3" id="44_6iecn"]
+[ext_resource type="AudioStream" uid="uid://bg6k4fl7724xe" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 5.mp3" id="45_dshqp"]
+[ext_resource type="AudioStream" uid="uid://drhgtxwwk88l1" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 6.mp3" id="46_5w0b2"]
+[ext_resource type="AudioStream" uid="uid://cqmjaw7ch7kcg" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 7.mp3" id="47_4waef"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_62t77"]
 radius = 2.9
@@ -342,7 +342,7 @@ chiptopede_shots_per_burst = 20
 chiptopede_delay_per_projectile = 0.05
 delay_between_burst = 0.3
 sfx_chiptopede_emerge = Array[AudioStream]([ExtResource("33_ug8ld"), ExtResource("34_0flmo")])
-sfx_chiptopede_shoot = Array[AudioStream]([ExtResource("35_xcjvj"), ExtResource("36_2oo6r"), ExtResource("37_va4hg"), ExtResource("38_5s06y"), ExtResource("39_dn07s"), ExtResource("40_2vtug"), ExtResource("41_b5637")])
+sfx_chiptopede_shoot = Array[AudioStream]([ExtResource("41_x4ksd"), ExtResource("42_nca3f"), ExtResource("43_laq2w"), ExtResource("44_6iecn"), ExtResource("45_dshqp"), ExtResource("46_5w0b2"), ExtResource("47_4waef")])
 sfx_chiptopede_retreat = Array[AudioStream]([ExtResource("38_xoi1t")])
 boss_id = 5
 chip_spawn_dps_threshold = 70.0
