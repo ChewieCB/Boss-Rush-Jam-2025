@@ -33,6 +33,7 @@
 [ext_resource type="AudioStream" uid="uid://21fjtkxrdnte" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 1.mp3" id="18_h65fw"]
 [ext_resource type="AudioStream" uid="uid://cj1inqwkr70fl" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 2.mp3" id="19_l7v0h"]
 [ext_resource type="AudioStream" uid="uid://cg736ya54cipl" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Charge punch 3.mp3" id="20_xe6d1"]
+[ext_resource type="Texture2D" uid="uid://cinxupsks16c" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Idle.png" id="20_ro4sy"]
 [ext_resource type="AudioStream" uid="uid://bhv86vlcndff1" path="res://src/bosses/chips/assets/sfx/CHIP Reform to Bigstack.mp3" id="21_k0b0y"]
 [ext_resource type="AudioStream" uid="uid://0278lhey64pp" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets jump 1.mp3" id="23_yipf0"]
 [ext_resource type="AudioStream" uid="uid://xyjvd0xxrdt3" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets jump 2.mp3" id="24_7biya"]
@@ -40,6 +41,7 @@
 [ext_resource type="AudioStream" uid="uid://d08j3j0oby6l8" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets slam 2.mp3" id="26_apgft"]
 [ext_resource type="AudioStream" uid="uid://cjl3shf0wt8ho" path="res://src/bosses/chips/assets/sfx/CHIP SubStack place bets slam 3.mp3" id="27_l1fai"]
 [ext_resource type="AudioStream" uid="uid://5f5asfydiwxp" path="res://src/bosses/chips/assets/sfx/CHIP SubStack PLACE BETS TELEGRAPH TEST 1.mp3" id="28_ult5e"]
+
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ase24"]
 height = 4.0
@@ -72,7 +74,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("11_ytlyr")]
+"values": [ExtResource("20_ro4sy")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -84,7 +86,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 1.8, 0)]
+"values": [Vector3(0, 2.09105, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_dshkv"]
@@ -165,9 +167,9 @@ delay_per_projectile = 0.6
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.09105, 0)
 render_priority = 1
-texture = ExtResource("11_ytlyr")
+texture = ExtResource("20_ro4sy")
 
 [node name="FaceSprite" type="Sprite3D" parent="Sprite3D" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
@@ -177,6 +179,7 @@ render_priority = 1
 texture = ExtResource("12_pln03")
 
 [node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("CylinderShape3D_ase24")
 
 [node name="DebugMesh" parent="." index="2"]

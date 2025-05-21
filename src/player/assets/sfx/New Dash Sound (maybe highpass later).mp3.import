@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cs2yus7h4m0dr"
+path="res://.godot/imported/New Dash Sound (maybe highpass later).mp3-44723a800772aec3e12a0a7189908f4d.mp3str"
+
+[deps]
+
+source_file="res://src/player/assets/sfx/New Dash Sound (maybe highpass later).mp3"
+dest_files=["res://.godot/imported/New Dash Sound (maybe highpass later).mp3-44723a800772aec3e12a0a7189908f4d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

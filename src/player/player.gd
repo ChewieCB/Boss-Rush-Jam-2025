@@ -46,6 +46,7 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/Camera3D/AimRay
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
+@onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 @onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
 
@@ -91,8 +92,9 @@ const DASH_SPEED: float = 15
 const SLAM_SPEED: float = 25
 const CROUCH_SPEED_MODIFIER: float = 0.5
 
-const AIM_ASSIST_STRENGTH_COEFFICIENT = 10
-const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.5
+const AIM_ASSIST_STRENGTH_COEFFICIENT = 4 # Higher = stronger auto rotate to target. 1-10
+const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.8 # Higher = stronger stickiness when near target. 0-1
+const AIM_ASSIST_MAX_RANGE = 50
 
 const HIGH_LUCK_THRESHOLD = 0.6
 const HIGH_LUCK_DASH_IFRAME_MODIFIER = 2.0
@@ -488,7 +490,8 @@ func handle_controller_look(_delta):
 	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
 		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
 		if aim_assist_target:
-			sensitivity = sensitivity * AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT
+			var modifier = AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT * GameManager.aim_assist_strength
+			sensitivity = sensitivity * (1 - modifier)
 		rotate_player(look_x * sensitivity, look_y * sensitivity)
 
 
@@ -646,7 +649,8 @@ func add_status_effect(new_status: StatusEffect):
 	for status in status_effect_list:
 		if status.status_code == new_status.status_code:
 			status.duration = max(status.duration, new_status.duration)
-			new_status_effect_added.emit(new_status)
+			status.value = new_status.value
+			new_status_effect_added.emit(status)
 			return
 	status_effect_list.append(new_status)
 	new_status_effect_added.emit(new_status)
@@ -707,7 +711,11 @@ func apply_status_effects():
 
 func aim_assist(delta: float):
 	if aim_assist_ray.is_colliding():
-		aim_assist_target = aim_assist_ray.get_collider()
+		var dist = global_position.distance_to(aim_assist_ray.get_collision_point())
+		if dist <= AIM_ASSIST_MAX_RANGE:
+			aim_assist_target = aim_assist_ray.get_collider()
+		else:
+			aim_assist_target = null
 	else:
 		aim_assist_target = null
 
@@ -716,6 +724,11 @@ func aim_assist(delta: float):
 
 
 func get_assist_rotation_velocity(delta: float):
+	# Player aim already on boss, no need to rotate camera anymore
+	# Essentially this make the player only auto-aim to the edge of enemy hitbox
+	if aim_assist_ray_boss_check.is_colliding():
+		return
+	
 	var cam = player_camera
 	var aim_target_pos: Vector3 = aim_assist_target.global_position
 	if aim_assist_target.get_node("Marker3D") != null:

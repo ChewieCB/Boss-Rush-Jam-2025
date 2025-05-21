@@ -2,13 +2,14 @@ extends Area3D
 class_name ArcProjectile
 
 @onready var timer: Timer = $Timer
-@onready var mesh: MeshInstance3D = $PlaceholderFanMesh
+@onready var mesh: Node3D = $Mesh
 
 @export var projectile_damage: float = 10.0
 @export var projectile_speed: float = 50.0
 @export var rotation_speed: float = 1.0
 @export var arc_height: float = 5.0
 @export var GRAVITY: float = 14
+@export var spark_scene: PackedScene
 var debug_trajectory_mesh: MeshInstance3D
 
 var velocity := Vector3.ZERO
@@ -24,7 +25,8 @@ func _physics_process(delta: float) -> void:
 	#self.global_position -= transform.basis.z * projectile_speed * delta
 	velocity.y -= GRAVITY * delta
 	self.global_position += velocity * delta
-	mesh.rotation.z += delta * rotation_speed
+	#mesh.rotation.z += delta * rotation_speed
+	mesh.rotation.x += delta * rotation_speed
 
 
 func get_arc_vector(goal_pos: Vector3, debug: bool = false) -> Vector3:
@@ -74,6 +76,7 @@ func get_arc_vector(goal_pos: Vector3, debug: bool = false) -> Vector3:
 
 
 func _on_body_entered(body: Node3D) -> void:
+	spark()
 	if body is Player:
 		body.health_component.damage(projectile_damage)
 	# TODO - make this have collision exception based on who fired it
@@ -81,6 +84,13 @@ func _on_body_entered(body: Node3D) -> void:
 		pass
 	else:
 		queue_free()
+
+
+# TODO - make a global util method
+func spark() -> void:
+	var spark_vfx = spark_scene.instantiate()
+	get_parent().get_parent().add_child(spark_vfx)
+	spark_vfx.global_position = self.global_position
 
 
 func _on_timer_timeout() -> void:

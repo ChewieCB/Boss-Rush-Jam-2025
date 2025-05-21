@@ -1,6 +1,8 @@
-[gd_scene load_steps=13 format=4 uid="uid://cs666dcyj3w4p"]
+[gd_scene load_steps=16 format=4 uid="uid://cs666dcyj3w4p"]
 
 [ext_resource type="Script" path="res://src/bosses/chips/minions/projectiles/arc_projectile.gd" id="1_5kt6y"]
+[ext_resource type="PackedScene" uid="uid://c6m6uaacee7aj" path="res://src/player/gun/vfx/StackSpark.tscn" id="2_poqbl"]
+[ext_resource type="Texture2D" uid="uid://dme52tjmsp3rb" path="res://src/bosses/chips/assets/sprites/chiptopede/chiptopede_back.png" id="3_gdhcn"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_jc46b"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qm2e7"]
@@ -72,18 +74,26 @@ emission = Color(1, 0.731834, 0.032858, 1)
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ca7n"]
+albedo_texture = ExtResource("3_gdhcn")
+uv1_scale = Vector3(0.505, 0.505, 0.505)
+uv1_offset = Vector3(0, 0.505, 0.3)
+uv1_triplanar = true
+
 [node name="ArcProjectile" type="Area3D"]
 collision_layer = 8
-collision_mask = 2
+collision_mask = 3
 script = ExtResource("1_5kt6y")
 projectile_damage = 7.0
 projectile_speed = 1.0
 rotation_speed = 10.0
 arc_height = 1.0
 GRAVITY = 5.0
+spark_scene = ExtResource("2_poqbl")
 
 [node name="PlaceholderFanMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(-1.09278e-08, 0, 1, 0, 0.25, 0, -0.25, 0, -4.37114e-08, -0.0513576, 0, 0.45)
+visible = false
 mesh = SubResource("ArrayMesh_xcfka")
 skeleton = NodePath("")
 
@@ -106,6 +116,26 @@ script = ExtResource("3_jc46b")
 segments = 10
 base_width = 0.1
 width_profile = SubResource("Curve_my72y")
+
+[node name="Mesh" type="CSGCombiner3D" parent="."]
+operation = 2
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Mesh"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0.4)
+radius = 0.9
+height = 0.2
+sides = 12
+material = SubResource("StandardMaterial3D_1ca7n")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Mesh"]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 0.341945, 0.904318)
+operation = 2
+size = Vector3(1, 1.9, 1.1)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Mesh"]
+transform = Transform3D(1, 0, 0, 0, 0.906308, -0.422618, 0, 0.422618, 0.906308, 0, -0.517948, 0.84105)
+operation = 2
+size = Vector3(1, 2.2, 1.1)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

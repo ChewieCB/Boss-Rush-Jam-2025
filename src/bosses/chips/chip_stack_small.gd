@@ -393,6 +393,11 @@ func _on_arc_swipe_closing_state_physics_processing(delta: float) -> void:
 		swipe_targeting_timer.stop()
 		state_chart.send_event("start_targeting")
 		state_chart.send_event("attack_telegraph")
+		
+		var spark_marker: Marker3D = spark_spawn_marker_r if sprite.flip_h else spark_spawn_marker_l
+		spark(spark_marker.global_position)
+		anim_player.play("substack/slash_spark")
+		
 		await get_tree().create_timer(telegraph_time).timeout
 		state_chart.send_event("attack_start")
 		state_chart.send_event("start_swipe")
@@ -418,7 +423,8 @@ func _on_arc_swipe_phase_2_closing_state_physics_processing(delta: float) -> voi
 	if self.global_position.distance_to(target.global_position) <= swipe_range:
 		swipe_targeting_timer.stop()
 		state_chart.send_event("start_targeting")
-		state_chart.send_event("attack_telegraph")
+		state_chart.send_event("attack_telegraph") 
+		
 		await get_tree().create_timer(telegraph_time).timeout
 		state_chart.send_event("attack_start")
 		state_chart.send_event("start_swipe")
@@ -433,24 +439,46 @@ func _on_arc_swipe_swiping_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_telegraph")
 	
+	var spark_marker: Marker3D = spark_spawn_marker_r if sprite.flip_h else spark_spawn_marker_l
+	spark(spark_marker.global_position)
+	anim_player.play("substack/slash_spark")
+	
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
 	
 	for i in num_swipes:
-		#
-		sfx_player.stream = sfx_swipe.pick_random()
-		sfx_player.play()
-		#
-		var arc_proj := fire_projectile(swipe_prefab, projectile_spawn_marker.global_position)
-		arc_proj.rotation_degrees.z += randf_range(-10, 10)
-		arc_proj.velocity = (
-			arc_proj.get_arc_vector(target.global_position)
-		)
-		active_arc_projectiles.append(arc_proj)
-		
-		await get_tree().create_timer(delay_between_swipe).timeout
+		if i % 2 == 0:
+			anim_player.play("substack/slash_attack_proj")
+			
+			await anim_player.animation_finished
+			await get_tree().create_timer(delay_between_swipe).timeout
+			
+			spark(spark_marker.global_position)
+			anim_player.play("substack/slash_spark_offhand")
+		else:
+			anim_player.play("substack/slash_attack_proj_offhand")
+			
+			await anim_player.animation_finished
+			await get_tree().create_timer(delay_between_swipe).timeout
+			
+			spark(spark_marker.global_position)
+			anim_player.play("substack/slash_spark")
+		sprite.flip_h = !sprite.flip_h
 	
+	sprite.flip_h = false
 	state_chart.send_event("end_swipe")
+
+
+func _spawn_arc_proj() -> void:
+	sfx_player.stream = sfx_swipe.pick_random()
+	sfx_player.play()
+	#
+	var arc_proj := fire_projectile(swipe_prefab, projectile_spawn_marker.global_position)
+	arc_proj.rotation_degrees.z += randf_range(-10, 10)
+	arc_proj.velocity = (
+		arc_proj.get_arc_vector(target.global_position)
+	)
+	active_arc_projectiles.append(arc_proj)
 
 
 func _on_arc_swipe_phase_2_swiping_state_entered(delta: float) -> void:
