@@ -25,8 +25,9 @@ func start_drunk() -> void:
 	if GameManager.drunk_blur_disabled:
 		return
 	# Toggle low pass filter for BGM
-	AudioServer.set_bus_effect_enabled(1, 1, true)
-	AudioServer.set_bus_effect_enabled(2, 0, true)
+	# FIXME
+	#AudioServer.set_bus_effect_enabled(1, 1, true)
+	#AudioServer.set_bus_effect_enabled(2, 0, true)
 	
 	# Setup tween
 	drunk_tween = create_tween()
@@ -39,18 +40,19 @@ func start_drunk() -> void:
 	drunk_tween.parallel().tween_property(
 		rect, "color:a", 1.0, 0.6
 	).set_ease(Tween.EASE_IN)
-	drunk_tween.parallel().tween_property(
-		bgm_bus_lowpass, "cutoff_hz", 800, 0.6
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	drunk_tween.parallel().tween_property(
-		sfx_bus_lowpass, "cutoff_hz", 800, 0.6
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	drunk_tween.parallel().tween_property(
-		bgm_bus_lowpass, "resonance", 0.5, 0.6
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	drunk_tween.parallel().tween_property(
-		sfx_bus_lowpass, "resonance", 0.5, 0.6
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	# FIXME - rework this low pass to be less aggressive
+	#drunk_tween.parallel().tween_property(
+		#bgm_bus_lowpass, "cutoff_hz", 1400, 0.6
+	#).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	#drunk_tween.parallel().tween_property(
+		#sfx_bus_lowpass, "cutoff_hz", 1400, 0.6
+	#).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	#drunk_tween.parallel().tween_property(
+		#bgm_bus_lowpass, "resonance", 0.8, 0.6
+	#).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	#drunk_tween.parallel().tween_property(
+		#sfx_bus_lowpass, "resonance", 0.8, 0.6
+	#).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	
 	await drunk_tween.finished
 	
@@ -77,22 +79,23 @@ func end_drunk() -> void:
 	drunk_tween.parallel().tween_property(
 		rect, "color:a", 0.0, 0.6
 	).set_ease(Tween.EASE_OUT)
-	drunk_tween.parallel().tween_property(
-		bgm_bus_lowpass, "cutoff_hz", 2000, 0.6
-	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	drunk_tween.parallel().tween_property(
-		sfx_bus_lowpass, "cutoff_hz", 2000, 0.6
-	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	drunk_tween.parallel().tween_property(
-		bgm_bus_lowpass, "resonance", 0.0, 0.6
-	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	drunk_tween.parallel().tween_property(
-		sfx_bus_lowpass, "resonance", 0.0, 0.6
-	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	
-	# Toggle low pass filter for BGM
-	AudioServer.set_bus_effect_enabled(1, 1, false)
-	AudioServer.set_bus_effect_enabled(2, 0, false)
+	# FIXME - rework this low pass to be less aggressive
+	#drunk_tween.parallel().tween_property(
+		#bgm_bus_lowpass, "cutoff_hz", 2000, 0.6
+	#).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	#drunk_tween.parallel().tween_property(
+		#sfx_bus_lowpass, "cutoff_hz", 2000, 0.6
+	#).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	#drunk_tween.parallel().tween_property(
+		#bgm_bus_lowpass, "resonance", 0.0, 0.6
+	#).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	#drunk_tween.parallel().tween_property(
+		#sfx_bus_lowpass, "resonance", 0.0, 0.6
+	#).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	#
+	## Toggle low pass filter for BGM
+	#AudioServer.set_bus_effect_enabled(1, 1, false)
+	#AudioServer.set_bus_effect_enabled(2, 0, false)
 
 
 func _set_blur_amount(amount: float) -> void:
