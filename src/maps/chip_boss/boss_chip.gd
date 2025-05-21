@@ -1,10 +1,7 @@
 extends BossMap
 
-@export_group("Music")
-@export var bgm_normal: AudioStream
-@export var bgm_transition: AudioStream
-@export var bgm_chiptopede: AudioStream
-
+@onready var music_player: AudioStreamPlayer = $InteractiveMusicPlayer
+var music_playback: AudioStreamPlaybackInteractive
 #
 @onready var chiptopede_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_worm_spawn_marker")
 @onready var chiptopede_snake_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_snake_spawn_marker")
@@ -47,6 +44,8 @@ func _ready() -> void:
 	for mesh in waterfall_meshses_vertical:
 		mesh.scale.x = 0
 	water_surface.global_position.y = lower_water_level
+	
+	music_playback = music_player.get_stream_playback()
 
 
 func _process(delta) -> void:
@@ -56,7 +55,7 @@ func _process(delta) -> void:
 
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
-	SoundManager.play_music(bgm_normal, 0.5, "BGM")
+	music_playback.switch_to_clip(1)
 	super(_body)
 
 
@@ -64,11 +63,11 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	
 	if boss.current_phase != 3:
-		SoundManager.play_music(bgm_transition, 0.5, "BGM")
-		await get_tree().create_timer(5.0).timeout
+		# Wait for the bar to end then transition
+		# TODO
 		boss.state_chart.send_event("start_phase_3")
 		await boss.chiptopede_emerges
-		SoundManager.play_music(bgm_chiptopede, 0.5, "BGM")
+		music_playback.switch_to_clip(3)
 	else:
 		win_ui.win("Floor Cleared", win_subtext.pick_random())
 		print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
@@ -83,6 +82,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 
 func _on_boss_died(_boss: BossCore = boss) -> void:
 	if boss.current_phase != 3:
+		music_playback.switch_to_clip(2)
 		return
 	super(_boss)
 

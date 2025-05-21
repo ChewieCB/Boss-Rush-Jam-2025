@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dmjrbqg4nt4iu"
+path="res://.godot/imported/chipboss 1.0 intro.mp3-417e35e38c857cca6140ebac0e5bff54.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/music/chipboss 1.0 intro.mp3"
+dest_files=["res://.godot/imported/chipboss 1.0 intro.mp3-417e35e38c857cca6140ebac0e5bff54.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=85.0
+beat_count=16
+bar_beats=4

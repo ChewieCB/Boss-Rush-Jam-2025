@@ -261,12 +261,16 @@ func _on_health_dead_state_entered() -> void:
 	#return_big_stack_to_center()
 	merge_stacks()
 	
+	died.emit()
+	# interlude is 11.3 seconds from here
+	
 	if anim_player.is_playing():
 		anim_player.stop()
 		anim_player.play("RESET")
 	
 	chip_death_particles.emitting = true
-	for i in range(20):
+	var death_time: float = 4.0
+	for i in range(death_time / 0.2):
 		# Death anim loops, so wait for X loops then finish
 		anim_player.play("death")
 		# TODO - chip particle effect
@@ -293,9 +297,12 @@ func _on_died() -> void:
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
 		_on_health_dead_state_entered()
+		# 4s delay
 		await death_anim_finished
+		# 0.2s delay
 		await boss_death_slow_mo()
 		defeated.emit(self)
+		health_ui.hide_ui()
 	else:
 		persist_segements = true
 		state_chart.send_event("stop_moving")
@@ -1157,7 +1164,8 @@ func _on_ss_place_your_bets_attacking_state_entered() -> void:
 
 func _on_phase_3_state_entered() -> void:
 	current_phase = 3
-	
+	# 4.2s delay going in
+	# +0.3s despawning
 	await despawn_stacks()
 	
 	hide_big_stack()
@@ -1169,10 +1177,12 @@ func _on_phase_3_state_entered() -> void:
 	
 	# TODO - screen shake, particles, polish, etc.
 	break_floor.emit()
-	
-	#await get_tree().create_timer(2.0).timeout
-	await chiptopede_sfx_player.finished
-	
+	# 6.5s  delay
+	await get_tree().create_timer(3.2).timeout
+	activate_chiptopede()
+
+
+func activate_chiptopede() -> void:
 	# Re-fill health bar, change name, and show
 	health_component.has_died = false
 	health_component.max_health = chiptopede_max_health
@@ -1184,7 +1194,6 @@ func _on_phase_3_state_entered() -> void:
 	
 	# Have longer between chiptopede attacks
 	attack_recovery_time *= 2
-	await get_tree().create_timer(0.5)
 	chiptopede_emerges.emit()
 	state_chart.send_event("start_leap_attack")
 
