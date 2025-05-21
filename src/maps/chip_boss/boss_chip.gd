@@ -107,7 +107,7 @@ func break_floor() -> void:
 	# Remove the floor mesh
 	# TODO - add particles/broken meshes to sell this more
 	water_surface.visible = true
-	water_surface.global_position.y = -19.5
+	water_surface.global_position.y = -20
 	if breakable_floor:
 		breakable_floor.queue_free()
 	for platform in rising_platforms:
