@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=91 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -20,8 +20,10 @@
 [ext_resource type="AudioStream" uid="uid://c751tkspvkb33" path="res://src/bosses/chips/assets/sfx/CHIP JUMP 3.mp3" id="7_updhw"]
 [ext_resource type="PackedScene" uid="uid://diiahann2tcbe" path="res://src/bosses/chips/minions/ChiptopedeProjectileStancePath.tscn" id="8_280mm"]
 [ext_resource type="AudioStream" uid="uid://cd456ku24gamy" path="res://src/bosses/chips/assets/sfx/CHIP Separate Stacks.mp3" id="8_afdun"]
+[ext_resource type="AudioStream" uid="uid://hr7rbfnignp4" path="res://src/bosses/chips/assets/sfx/Hurt Scream 3.mp3" id="9_02uy3"]
 [ext_resource type="AudioStream" uid="uid://bhv86vlcndff1" path="res://src/bosses/chips/assets/sfx/CHIP Reform to Bigstack.mp3" id="9_3f4p8"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="9_n5byv"]
+[ext_resource type="AudioStream" uid="uid://hkbs0i23m6id" path="res://src/bosses/chips/assets/sfx/Hurt Scream.mp3" id="10_bmort"]
 [ext_resource type="AudioStream" uid="uid://dkv3rvipncg1f" path="res://src/bosses/chips/assets/sfx/CHIP Chips line attack 1.mp3" id="11_exu11"]
 [ext_resource type="AudioStream" uid="uid://drq5rqd3ohcpx" path="res://src/bosses/chips/assets/sfx/CHIP Chips line attack 2.mp3" id="12_qk8ng"]
 [ext_resource type="AudioStream" uid="uid://d0vg7i3jeapf0" path="res://src/bosses/chips/assets/sfx/CHIP Chip Roll attack Spit Out Best.mp3" id="12_u68io"]
@@ -281,6 +283,7 @@ orbit_radius = 20.0
 explosion_scene = ExtResource("3_7sirk")
 pushback_force = 20.0
 sfx_jump = Array[AudioStream]([ExtResource("5_ausvj"), ExtResource("6_x0ywq"), ExtResource("7_updhw")])
+sfx_hurt_scream = Array[AudioStream]([ExtResource("38_xoi1t"), ExtResource("9_02uy3"), ExtResource("10_bmort")])
 max_big_attacks = 3
 max_small_attacks = 2
 sfx_stack_split = Array[AudioStream]([ExtResource("8_afdun")])

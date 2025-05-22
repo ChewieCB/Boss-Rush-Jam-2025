@@ -174,7 +174,7 @@ func orbit_center_in_group(delta: float, is_evasive: bool = false) -> void:
 ## MOVEMENT UTILS
 #
 func move_stack_to_pos(goal_pos: Vector3) -> void:
-	sfx_player.stream = sfx_charge_telegraph.pick_random()
+	sfx_player.stream = sfx_charge.pick_random()
 	sfx_player.play()
 	var tween = get_tree().create_tween()
 	tween.tween_property(

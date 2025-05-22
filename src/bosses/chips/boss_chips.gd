@@ -41,6 +41,7 @@ var center_pos := Vector3(0, 0, -2)
 @export var pushback_force: float = 20.0
 # SFX
 @export var sfx_jump: Array[AudioStream]
+@export var sfx_hurt_scream: Array[AudioStream]
 #
 @export_subgroup("Form Transitions")
 @export var max_big_attacks: int = 3
@@ -295,6 +296,8 @@ func _on_health_dead_state_entered() -> void:
 func _on_died() -> void:
 	if current_phase != 3:
 		SoundManager.play_sound(sfx_death, "SFX")
+		hurt_sfx_player.stream = sfx_hurt_scream.pick_random()
+		hurt_sfx_player.play()
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
 		_on_health_dead_state_entered()
@@ -305,6 +308,7 @@ func _on_died() -> void:
 		defeated.emit(self)
 		health_ui.hide_ui()
 	else:
+		SoundManager.play_sound(sfx_chiptopede_death.pick_random(), "SFX")
 		persist_segements = true
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("chiptopede_death")
