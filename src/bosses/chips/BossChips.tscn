@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=92 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -69,6 +69,7 @@
 [ext_resource type="AudioStream" uid="uid://bg6k4fl7724xe" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 5.mp3" id="45_dshqp"]
 [ext_resource type="AudioStream" uid="uid://drhgtxwwk88l1" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 6.mp3" id="46_5w0b2"]
 [ext_resource type="AudioStream" uid="uid://cqmjaw7ch7kcg" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 7.mp3" id="47_4waef"]
+[ext_resource type="AudioStream" uid="uid://cgtunc0drpsxh" path="res://src/bosses/chips/assets/sfx/CHIPBOSS AWAKENING.mp3" id="54_7lt4w"]
 [ext_resource type="Texture2D" uid="uid://dcer0mc7kglbb" path="res://src/bosses/chips/assets/sprites/MCK_Death_1.png" id="54_hri1b"]
 [ext_resource type="Texture2D" uid="uid://bi1md2pmoenl" path="res://src/bosses/chips/assets/sprites/MCK_Death_2.png" id="55_dxb8s"]
 [ext_resource type="Texture2D" uid="uid://dk3ythhh8s1fd" path="res://src/bosses/chips/assets/sprites/MCK_Death_3.png" id="56_e2pvt"]
@@ -360,6 +361,7 @@ sfx_chiptopede_retreat = Array[AudioStream]([ExtResource("38_xoi1t")])
 boss_id = 5
 chip_spawn_dps_threshold = 70.0
 barrel_to_drop = ExtResource("28_a82g3")
+sfx_awaken = ExtResource("54_7lt4w")
 sfx_hit = Array[AudioStream]([ExtResource("13_hq7h1"), ExtResource("14_k6k1b"), ExtResource("15_dog2d"), ExtResource("16_ompdj")])
 sfx_death = ExtResource("39_gl65c")
 sfx_slowmo = null
@@ -1592,6 +1594,7 @@ one_shot = true
 [node name="ChiptopedeHeadSFXPlayer" type="AudioStreamPlayer3D" parent="." index="21"]
 volume_db = 15.272
 unit_size = 40.92
+max_polyphony = 10
 bus = &"SFX"
 
 [node name="BigStackSFXPlayer" type="AudioStreamPlayer3D" parent="." index="22"]

@@ -31,8 +31,11 @@ var music_playback: AudioStreamPlaybackInteractive
 @export var water_damage_tick: float = 0.6
 @export var water_damage_amount: float = 5.0
 @export var splash_particle_prefab: PackedScene
+@export var sfx_splash: Array[AudioStream]
 
 @export var breakable_floor: Node3D
+@onready var collapse_fire_particles: GPUParticles3D = $FloorCollapseFire
+@onready var collapse_smoke_particles: GPUParticles3D = $FloorCollapseSmoke
 
 
 func _ready() -> void:
@@ -102,18 +105,20 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 
 
 func break_floor() -> void:
-	# TODO - animate water level?
 	# Screen shake for a beat
+	InputHelper.start_rumble_large()
+	collapse_fire_particles.emitting = true
+	collapse_smoke_particles.emitting = true
 	player.player_camera.add_long_trauma(0.7)
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(4.0).timeout
 	SFXFloorBreak.play()
+	collapse_fire_particles.emitting = false
+	collapse_smoke_particles.emitting = false
+	InputHelper.stop_rumble()
 	player.player_camera.trauma = 0.0
 	player.player_camera.long_trauma = 0.0
 	player.player_camera.final_trauma = 0.0
 	
-	#
-	# Remove the floor mesh
-	# TODO - add particles/broken meshes to sell this more
 	water_surface.visible = true
 	water_surface.global_position.y = -20
 	if breakable_floor:
@@ -173,6 +178,7 @@ func _on_water_damage_area_body_entered(body: Node3D) -> void:
 		splash.draw_pass_1.size = Vector2(3, 3)
 		splash.amount = 16
 		splash.get_child(0).draw_pass_1.size = Vector2(3, 3)
+		SoundManager.play_sound(sfx_splash.pick_random(), "SFX")
 	elif body is ChiptopedeSegment:
 		splash.draw_pass_1.size = Vector2(7, 7)
 		splash.amount = 32
@@ -209,6 +215,7 @@ func _on_waterfall_body_entered(body: Node3D) -> void:
 		splash.draw_pass_1.size = Vector2(3, 3)
 		splash.amount = 16
 		splash.get_child(0).draw_pass_1.size = Vector2(3, 3)
+		SoundManager.play_sound(sfx_splash.pick_random(), "SFX")
 	elif body is ChiptopedeSegment:
 		splash.draw_pass_1.size = Vector2(7, 7)
 		splash.amount = 32

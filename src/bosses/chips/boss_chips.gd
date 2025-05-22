@@ -296,8 +296,7 @@ func _on_health_dead_state_entered() -> void:
 func _on_died() -> void:
 	if current_phase != 3:
 		SoundManager.play_sound(sfx_death, "SFX")
-		hurt_sfx_player.stream = sfx_hurt_scream.pick_random()
-		hurt_sfx_player.play()
+		SoundManager.play_sound(sfx_hurt_scream.pick_random(), "SFX")
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
 		_on_health_dead_state_entered()
@@ -1186,7 +1185,7 @@ func _on_phase_3_state_entered() -> void:
 	# TODO - screen shake, particles, polish, etc.
 	break_floor.emit()
 	# 6.5s  delay
-	await get_tree().create_timer(3.2).timeout
+	await get_tree().create_timer(3.8).timeout
 	activate_chiptopede()
 
 
@@ -2072,15 +2071,21 @@ func _on_wave_collision(
 	if body == target:
 		body.health_component.damage(aoe_damage)
 		trigger_pushback(pushback_force, pushback_source, pushback_radius)
+		InputHelper.rumble_medium()
 
 
 func _on_chiptopede_death_freeze_state_entered() -> void:
-	self.global_position = follow_nodes[0].get_child(0).global_position
+	for node in follow_nodes:
+		var segment = node.get_child(0)
+		if segment:
+			self.global_position = segment.global_position
+			break
 	state_chart.send_event("start_exploding")
 
 
 func _on_chiptopede_death_exploding_state_entered() -> void:
 	# Explode chiptopede segments one by one
+	InputHelper.start_rumble_large()
 	follow_nodes.reverse()
 	for node in follow_nodes:
 		if is_instance_valid(node):
@@ -2103,6 +2108,7 @@ func _on_chiptopede_death_dead_state_entered() -> void:
 	state_chart.send_event("deactivate")
 	state_chart.send_event("death")
 	died.emit()
+	InputHelper.stop_rumble()
 	#await death_anim_finished
 	var land_markers = chiptopede_spawns.duplicate()
 	land_markers.sort_custom(
