@@ -23,6 +23,12 @@ extends BossMap
 @onready var water_surface: MeshInstance3D = $WaterSurfaceMesh
 @onready var rising_platforms: Array[Node] = get_tree().get_nodes_in_group("rising_platforms")
 
+@onready var SFXBeerPlayer: AudioStreamPlayer3D = $SFXBeerPlayer
+@onready var SFXBeerPlayer2: AudioStreamPlayer3D = $SFXBeerPlayer2
+@onready var SFXBeerFlood: AudioStreamPlayer3D = $SFXBeerFlood
+@onready var SFXBeerFlood2: AudioStreamPlayer3D = $SFXBeerFlood2
+@onready var SFXFloorBreak: AudioStreamPlayer3D = $SFXFloorBreak
+
 # Water damage
 @onready var water_damage_timer: Timer = $WaterDamageTimer
 @export var water_damage_tick: float = 0.6
@@ -99,9 +105,11 @@ func break_floor() -> void:
 	# Screen shake for a beat
 	player.player_camera.add_long_trauma(0.7)
 	await get_tree().create_timer(2.0).timeout
+	SFXFloorBreak.play()
 	player.player_camera.trauma = 0.0
 	player.player_camera.long_trauma = 0.0
 	player.player_camera.final_trauma = 0.0
+	
 	#
 	# Remove the floor mesh
 	# TODO - add particles/broken meshes to sell this more
@@ -120,6 +128,10 @@ func _rebake_nav() -> void:
 
 
 func raise_water() -> void:
+	SFXBeerPlayer.play()
+	SFXBeerPlayer2.play()
+	SFXBeerFlood.play()
+	SFXBeerFlood2.play()
 	waterfalls.visible = true
 	var water_tween: Tween = get_tree().create_tween()
 	for mesh in waterfall_meshses_vertical:

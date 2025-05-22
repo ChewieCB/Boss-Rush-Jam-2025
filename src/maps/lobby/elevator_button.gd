@@ -14,6 +14,7 @@ var boss_name: String
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var label: Label3D = $Label3D
+@onready var SFXButtonPress: AudioStreamPlayer3D = $SFXButtonPress
 
 
 func _ready() -> void:
@@ -26,6 +27,7 @@ func interact() -> void:
 	anim_player.play("push")
 	if linked_level:
 		pushed.emit(linked_level)
+		SFXButtonPress.play()
 
 
 func _func_godot_apply_properties(properties: Dictionary) -> void:
