@@ -22,7 +22,6 @@
 [ext_resource type="AudioStream" uid="uid://cd456ku24gamy" path="res://src/bosses/chips/assets/sfx/CHIP Separate Stacks.mp3" id="8_afdun"]
 [ext_resource type="AudioStream" uid="uid://hr7rbfnignp4" path="res://src/bosses/chips/assets/sfx/Hurt Scream 3.mp3" id="9_02uy3"]
 [ext_resource type="AudioStream" uid="uid://bhv86vlcndff1" path="res://src/bosses/chips/assets/sfx/CHIP Reform to Bigstack.mp3" id="9_3f4p8"]
-[ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="9_n5byv"]
 [ext_resource type="AudioStream" uid="uid://hkbs0i23m6id" path="res://src/bosses/chips/assets/sfx/Hurt Scream.mp3" id="10_bmort"]
 [ext_resource type="AudioStream" uid="uid://dkv3rvipncg1f" path="res://src/bosses/chips/assets/sfx/CHIP Chips line attack 1.mp3" id="11_exu11"]
 [ext_resource type="AudioStream" uid="uid://drq5rqd3ohcpx" path="res://src/bosses/chips/assets/sfx/CHIP Chips line attack 2.mp3" id="12_qk8ng"]
@@ -65,6 +64,7 @@
 [ext_resource type="AudioStream" uid="uid://ci6i3lrnlyue" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 1.mp3" id="41_x4ksd"]
 [ext_resource type="AudioStream" uid="uid://dv1aha38bsjic" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 2.mp3" id="42_nca3f"]
 [ext_resource type="AudioStream" uid="uid://cqh7nvow88qap" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 3.mp3" id="43_laq2w"]
+[ext_resource type="PackedScene" uid="uid://c0ddu7x6kgycs" path="res://src/bosses/base/attacks/ranged/ChiptopedeProjectile.tscn" id="43_paol5"]
 [ext_resource type="AudioStream" uid="uid://7qr6c78mj3kf" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 4.mp3" id="44_6iecn"]
 [ext_resource type="AudioStream" uid="uid://bg6k4fl7724xe" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 5.mp3" id="45_dshqp"]
 [ext_resource type="AudioStream" uid="uid://drhgtxwwk88l1" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 6.mp3" id="46_5w0b2"]
@@ -350,7 +350,7 @@ sfx_chiptopede_snake = Array[AudioStream]([ExtResource("29_76lxc"), ExtResource(
 shooting_stance_prefab = ExtResource("8_280mm")
 max_projectile_spawn_distance = 36.0
 chiptopede_targeting_speed = 3.0
-chiptopede_projectile = ExtResource("9_n5byv")
+chiptopede_projectile = ExtResource("43_paol5")
 chiptopede_projectile_bursts = 2
 chiptopede_shots_per_burst = 20
 chiptopede_delay_per_projectile = 0.05
