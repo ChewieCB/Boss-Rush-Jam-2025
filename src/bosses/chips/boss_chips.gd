@@ -283,6 +283,7 @@ func _on_health_dead_state_entered() -> void:
 	# TODO - make this area damage explosion a generic method we can re-use
 	# Create an explosion
 	sprite.render_priority = -1
+	SoundManager.play_sound(sfx_chiptopede_impact.pick_random(), "SFX")
 	var explosion_inst = explosion_scene.instantiate()
 	add_child(explosion_inst)
 	explosion_inst.change_mesh_scale(4.0)
@@ -421,7 +422,7 @@ func select_attack_phase_2() -> void:
 					attack_str = "start_split_stack_projectiles"
 				else:
 					attack_str = "start_split_stack_aoe_attack"
-			
+				
 			small_attacks_performed += 1
 	# TODO
 	

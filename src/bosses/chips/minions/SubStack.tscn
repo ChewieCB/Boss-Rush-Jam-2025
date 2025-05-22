@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_t3h5b"]
 [ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="2_u1ibk"]
 [ext_resource type="PackedScene" uid="uid://c6m6uaacee7aj" path="res://src/player/gun/vfx/StackSpark.tscn" id="3_0yylu"]
-[ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="3_54m0v"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_51dvw"]
+[ext_resource type="PackedScene" uid="uid://do3bxfmdvwqyt" path="res://src/bosses/base/attacks/ranged/BallProjectile.tscn" id="4_llp1i"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="4_wmyjd"]
 [ext_resource type="PackedScene" uid="uid://cs666dcyj3w4p" path="res://src/bosses/chips/minions/projectiles/ArcProjectile.tscn" id="4_xln3v"]
 [ext_resource type="AudioStream" uid="uid://bak8v6wppvc03" path="res://src/bosses/chips/assets/sfx/Hitmarker 1.mp3" id="5_4sojs"]
@@ -118,7 +118,7 @@ idle_radius = 1.5
 angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 40.0
-chip_projectile = ExtResource("3_54m0v")
+chip_projectile = ExtResource("4_llp1i")
 chip_shots_per_burst = 4
 num_bursts = 1
 delay_between_burst = 0.6
