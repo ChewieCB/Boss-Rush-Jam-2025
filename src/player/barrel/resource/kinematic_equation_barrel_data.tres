@@ -9,13 +9,13 @@ script = ExtResource("3_15ils")
 barrel_id = 45
 barrel_name = "Kinematic Equation"
 barrel_desc = "[b]Kinematic Equation Barrel[/b]
-Speed equal distance divided by time. Or so I remembered. Nothing to do with card game at all.
+Keep your distance and pick your placements.
 
 Possible rolls:
 [ul]
-Slow Roller: Your bullets are slower, but they have increased damage the longer they travelled.
-Long Shot: Your bullets are more accurate, and deal more damage the further its target.
-Snap Call: Your bullets are faster, and deal more damage the higher their speed. Minimal benefit for hitscan weapon though.
+Slow Roller: Bullets move slower, but damage increases the further they travel.
+Long Shot: Bullets are more accurate, and deal more damage the further away they are fired from their target.
+Snap Call: Bullets move faster, and deal more damage the higher their speed is. Minimal benefit for hitscan weapons.
 [/ul]
 "
 barrel_image = ExtResource("1_k28iw")

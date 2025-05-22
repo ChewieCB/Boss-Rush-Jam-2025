@@ -9,12 +9,12 @@ script = ExtResource("3_pahdn")
 barrel_id = 4
 barrel_name = "Fool Roller"
 barrel_desc = "[b]Fool Roller Barrel[/b]
-Add some strange effects to your gun.
+High risk, high reward.
 
 Possible rolls:
 [ul]
-Double Tap: Shot in burst of two.
-Ammo Leech: Small chance to refund ammo on hit, but reduce your damage.
+Double Tap: Shoot in two-round bursts.
+Ammo Leech: Small chance to refund ammo on hit, but reduces base bullet damage.
 Gambler's Precision: Chance to crit on hit and jam gun on miss.
 [/ul]"
 barrel_image = ExtResource("1_0ubde")

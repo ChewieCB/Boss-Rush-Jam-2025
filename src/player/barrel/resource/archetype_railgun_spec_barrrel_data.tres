@@ -9,7 +9,7 @@ script = ExtResource("3_o0mqq")
 barrel_id = 9
 barrel_name = "Archetype Railgun Spec"
 barrel_desc = "[b]Archetype Barrel - Railgun Specialization[/b]
-Change the innate nature of the gun. Ideally put this barrel at the first position.
+Change the innate nature of the gun.
 
 Possible rolls:
 [ul]
