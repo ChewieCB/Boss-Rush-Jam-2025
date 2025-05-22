@@ -1,0 +1,75 @@
+[gd_scene load_steps=13 format=3 uid="uid://vkr6i7lrqkbi"]
+
+[ext_resource type="Texture2D" uid="uid://b175bo6d2i0lv" path="res://src/bosses/chips/assets/particles/textures/splash.png" id="1_ngynx"]
+[ext_resource type="Texture2D" uid="uid://da3gk6xigonkd" path="res://src/bosses/chips/assets/particles/textures/splash_0.png" id="2_g1hhs"]
+
+[sub_resource type="Gradient" id="Gradient_i6tbf"]
+colors = PackedColorArray(1, 1, 1, 1, 0.024, 0.024, 0.024, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_71s45"]
+gradient = SubResource("Gradient_i6tbf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iqkac"]
+particle_flag_rotate_y = true
+emission_shape_scale = Vector3(2.5, 0.1, 0.05)
+emission_shape = 1
+emission_sphere_radius = 2.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 3.0
+initial_velocity_max = 5.0
+color = Color(0.72, 0.60984, 0.3528, 1)
+color_ramp = SubResource("GradientTexture1D_71s45")
+sub_emitter_mode = 1
+sub_emitter_frequency = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0430b"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_ngynx")
+billboard_mode = 2
+
+[sub_resource type="QuadMesh" id="QuadMesh_xe3pl"]
+material = SubResource("StandardMaterial3D_0430b")
+
+[sub_resource type="Curve" id="Curve_1gcow"]
+_data = [Vector2(0, 0.986316), 0.0, 0.0, 0, 0, Vector2(0.119565, 0.514211), -2.34622, -2.34622, 0, 0, Vector2(0.347826, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_rqux6"]
+curve = SubResource("Curve_1gcow")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tgibn"]
+emission_shape_scale = Vector3(2, 0.5, 1)
+angle_min = 90.0
+angle_max = 90.0
+gravity = Vector3(0, 0, 0)
+color = Color(0.7, 0.56875, 0.385, 1)
+alpha_curve = SubResource("CurveTexture_rqux6")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0nvmx"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_g1hhs")
+
+[sub_resource type="QuadMesh" id="QuadMesh_pvbdo"]
+material = SubResource("StandardMaterial3D_0nvmx")
+
+[node name="SplashParticles" type="GPUParticles3D"]
+emitting = false
+sub_emitter = NodePath("SplashRingParticle")
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_iqkac")
+draw_pass_1 = SubResource("QuadMesh_xe3pl")
+
+[node name="SplashRingParticle" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+emitting = false
+amount = 1
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_tgibn")
+draw_pass_1 = SubResource("QuadMesh_pvbdo")

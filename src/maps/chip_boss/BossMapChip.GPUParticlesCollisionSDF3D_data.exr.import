@@ -1,0 +1,26 @@
+[remap]
+
+importer="3d_texture"
+type="CompressedTexture3D"
+uid="uid://bcdecon0y00wo"
+path="res://.godot/imported/BossMapChip.GPUParticlesCollisionSDF3D_data.exr-47d4a87f0621cd4ddd5d9d4737a804d7.ctex3d"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://src/maps/chip_boss/BossMapChip.GPUParticlesCollisionSDF3D_data.exr"
+dest_files=["res://.godot/imported/BossMapChip.GPUParticlesCollisionSDF3D_data.exr-47d4a87f0621cd4ddd5d9d4737a804d7.ctex3d"]
+
+[params]
+
+compress/mode=3
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/channel_pack=1
+mipmaps/generate=false
+mipmaps/limit=-1
+slices/horizontal=1
+slices/vertical=128

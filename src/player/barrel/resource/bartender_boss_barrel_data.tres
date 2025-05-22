@@ -9,14 +9,15 @@ script = ExtResource("3_4jnqy")
 barrel_id = 12
 barrel_name = "Bartender's Cellar"
 barrel_desc = "[b]Bartender's Cellar Barrel[/b]
-Barrel collected from the Bartender. Grant you ability similar to its owner.
+Barrel collected from the Bartender. Grants you abilities similar to its owner.
 
 Possible rolls:
 [ul]
 Molotov Dash: After dash, create a puddle of burning flame at your previous position.
-Toxin Mist: Empowered your bullet, which has a chance to create a poison cloud upon hiting an enemy.
-Cognac Reload: Drop a bottle of cognac when you reload, which heal you a small amount.
+Toxin Mist: Chance to create a poison cloud upon hiting an enemy.
+Cognac Reload: Drop a bottle of cognac when you reload, which heals you a small amount.
 [/ul]"
 barrel_image = ExtResource("1_ma3kv")
 barrel_cost = 200
 barrel_prefab = ExtResource("1_8ixwb")
+is_archetype_barrel = false

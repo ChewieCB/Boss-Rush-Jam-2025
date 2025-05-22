@@ -9,14 +9,16 @@ script = ExtResource("3_w6n65")
 barrel_id = 11
 barrel_name = "Pit Boss"
 barrel_desc = "[b]Pit Boss Barrel[/b]
-Barrel collected from the Pit Boss. Grant you ability similar to its owner.
+Barrel collected from the Pit Boss. Grant you abilities similar to its owner.
 
 Possible rolls:
 [ul]
-Empowered Dash: Gain bonus dash speed for a short amount of time after you shoot a bullet.
+Empowered Dash: Gain bonus dash speed for a short amount of time after you shoot.
 Fortitude: Recover a small amount of health over time.
-Death From Above: Increased damage when midair and increased crit chance when shoot downward.
-Tag n Shred: Reduced initial damage, but increased damage for every projectile hit target.
+Death From Above: Increased damage when mid-air and increased crit chance when shoot downward.
+Tag'n'Shred: Reduced initial damage, but increased damage for every projectile hit target.
 [/ul]"
 barrel_image = ExtResource("1_t3h56")
+barrel_cost = 200
 barrel_prefab = ExtResource("1_24mrw")
+is_archetype_barrel = false

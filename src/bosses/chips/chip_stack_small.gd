@@ -174,6 +174,8 @@ func orbit_center_in_group(delta: float, is_evasive: bool = false) -> void:
 ## MOVEMENT UTILS
 #
 func move_stack_to_pos(goal_pos: Vector3) -> void:
+	sfx_player.stream = sfx_charge.pick_random()
+	sfx_player.play()
 	var tween = get_tree().create_tween()
 	tween.tween_property(
 		self, "global_position", goal_pos, 0.8
@@ -589,8 +591,10 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 	var target_marker: Marker3D = aoe_markers[marker_target_idx]
 	
 	await split_stack_slam(target_marker.global_position)
-	
+	sfx_player.stream = sfx_slam.pick_random()
+	sfx_player.play()
 	anim_player.play("substack/slam_end")
+	
 	state_chart.send_event("end_dive")
 
 

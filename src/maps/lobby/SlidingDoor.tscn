@@ -1,6 +1,8 @@
-[gd_scene load_steps=11 format=4 uid="uid://b4jtd8erp77w7"]
+[gd_scene load_steps=13 format=4 uid="uid://b4jtd8erp77w7"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/sliding_door.gd" id="1_kr1au"]
+[ext_resource type="AudioStream" uid="uid://c2puwhx3tyoi7" path="res://src/maps/lobby/assets/Door_open.mp3" id="2_ik3jr"]
+[ext_resource type="AudioStream" uid="uid://dbmwfc5gmshj4" path="res://src/maps/lobby/assets/Door_close.mp3" id="3_oo0be"]
 [ext_resource type="Material" uid="uid://jnnisx0gc2xt" path="res://assets/textures/doors/elevator_door_processed.tres" id="4_y2ir2"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_na37a"]
@@ -86,6 +88,8 @@ size = Vector3(5, 4, 5)
 
 [node name="SlidingDoor" type="Node3D"]
 script = ExtResource("1_kr1au")
+TEMP_sfx_open = ExtResource("2_ik3jr")
+TEMP_sfx_close = ExtResource("3_oo0be")
 metadata/_tb_type = "_tb_group"
 
 [node name="Door" type="StaticBody3D" parent="."]

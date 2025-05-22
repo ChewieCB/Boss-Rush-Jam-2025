@@ -3,11 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="1_dfyk2"]
 [ext_resource type="Texture2D" uid="uid://bir3bjle34i7" path="res://assets/textures/placeholder/texture_dark_09.png" id="2_qv0ob"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ujw6d"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cm2h5"]
 albedo_texture = ExtResource("2_qv0ob")
 
 [sub_resource type="SphereMesh" id="SphereMesh_5h75q"]
-material = SubResource("StandardMaterial3D_ujw6d")
+material = SubResource("StandardMaterial3D_cm2h5")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_6o3jq"]
 radius = 0.6

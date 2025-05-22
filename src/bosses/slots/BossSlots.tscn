@@ -1,4 +1,4 @@
-[gd_scene load_steps=97 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=98 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -64,6 +64,7 @@
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="55_5buyr"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="56_ft1nf"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="57_f27rp"]
+[ext_resource type="Texture2D" uid="uid://cy008ijk50dtk" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_hit.png" id="62_ci6xi"]
 [ext_resource type="AnimationLibrary" uid="uid://cbukxypul85wr" path="res://src/bosses/slots/assets/slot_boss_anims.res" id="64_5u1vo"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="66_4ktje"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="67_h7fvy"]
@@ -255,6 +256,8 @@ sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlaye
 sfx_awaken = ExtResource("51_nikje")
 sfx_hit = Array[AudioStream]([ExtResource("53_c2xtu"), ExtResource("54_56pdr"), ExtResource("55_5buyr"), ExtResource("56_ft1nf"), ExtResource("57_f27rp")])
 sfx_death = ExtResource("67_pi67a")
+base_sprite = ExtResource("5_wqq5t")
+hurt_sprite = ExtResource("62_ci6xi")
 attack_recovery_time = 0.5
 telegraph_time = 0.4
 projectiles_per_phase = 8

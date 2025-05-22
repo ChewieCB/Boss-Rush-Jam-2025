@@ -41,6 +41,7 @@ var center_pos := Vector3(0, 0, -2)
 @export var pushback_force: float = 20.0
 # SFX
 @export var sfx_jump: Array[AudioStream]
+@export var sfx_hurt_scream: Array[AudioStream]
 #
 @export_subgroup("Form Transitions")
 @export var max_big_attacks: int = 3
@@ -154,6 +155,8 @@ var persist_segements: bool = false
 @export var leap_damage_cooldown: float = 0.4
 @export var leap_time: float = 3.4
 @onready var leap_damage_timer: Timer = $StateChart/Root/Phase/Phase3/ChiptopedeLeap/LeapDamageTimer
+@export var chip_stack_particles_prefab: PackedScene
+@export var splash_particle_prefab: PackedScene
 # Leap curve attributes
 @export var leap_height: float = 16.0
 @export var leap_out_ratio: float = 0.6667
@@ -166,6 +169,7 @@ var leap_curve: Curve3D
 var follow_nodes := []
 var completed_nodes := []
 var chiptopede_head_offset: float = 0.0
+var is_leap_first_impact: bool = true
 # SFX
 @export var sfx_chiptopede_leap: Array[AudioStream]
 @export var sfx_chiptopede_impact: Array[AudioStream]
@@ -199,6 +203,7 @@ var emerge_distance: float
 
 @onready var big_stack_sfx_player: AudioStreamPlayer3D = $BigStackSFXPlayer
 @onready var chiptopede_sfx_player: AudioStreamPlayer3D = $ChiptopedeHeadSFXPlayer
+@onready var chip_death_particles: GPUParticles3D = $ChipDeathParticles
 
 ## USEFUL GLOBALS
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
@@ -256,18 +261,54 @@ func _on_health_dead_state_entered() -> void:
 	_on_chip_sweep_state_exited()
 	#return_big_stack_to_center()
 	merge_stacks()
-	super ()
+	
+	died.emit()
+	# interlude is 11.3 seconds from here
+	
+	if anim_player.is_playing():
+		anim_player.stop()
+		anim_player.play("RESET")
+	
+	chip_death_particles.emitting = true
+	var death_time: float = 4.0
+	for i in range(death_time / 0.2):
+		# Death anim loops, so wait for X loops then finish
+		anim_player.play("death")
+		# TODO - chip particle effect
+		#
+		await anim_player.animation_finished
+	chip_death_particles.emitting = false
+	anim_player.process_mode = Node.PROCESS_MODE_DISABLED
+	# Hide the sprite and explode into chips
+	# TODO - make this area damage explosion a generic method we can re-use
+	# Create an explosion
+	sprite.render_priority = -1
+	SoundManager.play_sound(sfx_chiptopede_impact.pick_random(), "SFX")
+	var explosion_inst = explosion_scene.instantiate()
+	add_child(explosion_inst)
+	explosion_inst.change_mesh_scale(4.0)
+	explosion_inst.global_position = self.global_position
+	var tween: Tween = get_tree().create_tween()
+	tween.tween_property(sprite, "modulate:a", 0.0, explosion_inst.fire.lifetime / 2)
+	
+	death_anim_finished.emit()
 
 
 func _on_died() -> void:
 	if current_phase != 3:
+		SoundManager.play_sound(sfx_death, "SFX")
+		SoundManager.play_sound(sfx_hurt_scream.pick_random(), "SFX")
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
 		_on_health_dead_state_entered()
+		# 4s delay
 		await death_anim_finished
+		# 0.2s delay
 		await boss_death_slow_mo()
 		defeated.emit(self)
+		health_ui.hide_ui()
 	else:
+		SoundManager.play_sound(sfx_chiptopede_death.pick_random(), "SFX")
 		persist_segements = true
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("chiptopede_death")
@@ -369,8 +410,6 @@ func select_attack_phase_2() -> void:
 			if small_attacks_performed >= max_small_attacks:
 				# FIXME - radial attack with reform
 				#state_chart.send_event("change_form_big_aoe_merge")
-				big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
-				big_stack_sfx_player.play()
 				state_chart.send_event("change_form_big")
 				return
 			else:
@@ -383,7 +422,7 @@ func select_attack_phase_2() -> void:
 					attack_str = "start_split_stack_projectiles"
 				else:
 					attack_str = "start_split_stack_aoe_attack"
-			
+				
 			small_attacks_performed += 1
 	# TODO
 	
@@ -558,6 +597,8 @@ func merge_stacks() -> void:
 	await despawn_stacks()
 	trigger_pushback()
 	await show_big_stack()
+	big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
+	big_stack_sfx_player.play()
 	
 	# TODO - move this to the actual state trigger func
 	state_chart.send_event("end_merge")
@@ -993,6 +1034,9 @@ func _on_merge_aoe_slam_state_entered() -> void:
 	shockwave.wave_time = 1.4
 	shockwave.start_shockwave()
 	
+	big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
+	big_stack_sfx_player.play()
+	
 	# Add pushback if player is in big stack collider
 	trigger_pushback()
 	
@@ -1128,7 +1172,8 @@ func _on_ss_place_your_bets_attacking_state_entered() -> void:
 
 func _on_phase_3_state_entered() -> void:
 	current_phase = 3
-	
+	# 4.2s delay going in
+	# +0.3s despawning
 	await despawn_stacks()
 	
 	hide_big_stack()
@@ -1140,10 +1185,12 @@ func _on_phase_3_state_entered() -> void:
 	
 	# TODO - screen shake, particles, polish, etc.
 	break_floor.emit()
-	
-	#await get_tree().create_timer(2.0).timeout
-	await chiptopede_sfx_player.finished
-	
+	# 6.5s  delay
+	await get_tree().create_timer(3.8).timeout
+	activate_chiptopede()
+
+
+func activate_chiptopede() -> void:
 	# Re-fill health bar, change name, and show
 	health_component.has_died = false
 	health_component.max_health = chiptopede_max_health
@@ -1155,7 +1202,6 @@ func _on_phase_3_state_entered() -> void:
 	
 	# Have longer between chiptopede attacks
 	attack_recovery_time *= 2
-	await get_tree().create_timer(0.5)
 	chiptopede_emerges.emit()
 	state_chart.send_event("start_leap_attack")
 
@@ -1191,6 +1237,14 @@ func _on_chiptopede_leap_leaping_state_entered() -> void:
 	
 	chiptopede_sfx_player.stream = sfx_chiptopede_leap.pick_random()
 	chiptopede_sfx_player.play()
+	
+	var chip_particles = chip_stack_particles_prefab.instantiate()
+	scene_root.add_child(chip_particles)
+	chip_particles.global_position = self.global_position
+	chip_particles.process_material.emission_shape_scale = Vector3(3, 3, 3)
+	chip_particles.emitting = true
+	await chip_particles.finished
+	chip_particles.queue_free()
 
 
 func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
@@ -1206,10 +1260,41 @@ func _on_chiptopede_leap_leaping_state_exited() -> void:
 	leap_damage_timer.stop()
 	chiptopede_sfx_player.stop()
 	chiptopede_sfx_player.stream = null
+	is_leap_first_impact = true
 
 
 func _on_chiptopede_leap_impact(segment: Node) -> void:
 	if leap_damage_timer.is_stopped():
+		# Check if we're impacting the water or a solid mesh
+		var space_state = get_world_3d().direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(
+			segment.global_position + Vector3(0, 30, 0), 
+			segment.global_position,
+			pow(2, 1-1) + pow(2, 9-1), 
+		)
+		query.collide_with_areas = true
+		var result = space_state.intersect_ray(query)
+		if result:
+			if result.collider is Area3D:
+				var splash = splash_particle_prefab.instantiate()
+				scene_root.add_child(splash)
+				splash.global_position = result.collider.global_position
+				# Scale up the splash particles
+				splash.draw_pass_1.size = Vector2(7, 7)
+				splash.amount = 32
+				splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
+				splash.emitting = true
+			else:
+				if is_leap_first_impact:
+					var chip_particles = chip_stack_particles_prefab.instantiate()
+					scene_root.add_child(chip_particles)
+					chip_particles.global_position = segment.global_position
+					chip_particles.process_material.emission_shape_scale = Vector3(1.5, 1.5, 1.5)
+					chip_particles.emitting = true
+					#await chip_particles.finished
+					#chip_particles.queue_free()
+					is_leap_first_impact = false
+		
 		#
 		chiptopede_sfx_player.stream = sfx_chiptopede_impact.pick_random()
 		chiptopede_sfx_player.play()
@@ -1275,9 +1360,14 @@ func _on_chiptopede_snake_targeting_state_entered() -> void:
 
 func _on_chiptopede_snake_moving_state_entered() -> void:
 	follow_nodes = spawn_segments(snake_path_3d)
+	for node in follow_nodes:
+		var segment = node.get_child(0)
+		#segment.splash_particles.emitting = true
+		segment.splash_ring_particles.emitting = true
 	
 	chiptopede_sfx_player.stream = sfx_chiptopede_snake.pick_random()
 	chiptopede_sfx_player.play()
+	
 
 
 func _on_chiptopede_snake_moving_state_physics_processing(delta: float) -> void:
@@ -1327,6 +1417,17 @@ func _on_chiptopede_shoot_emerging_state_entered() -> void:
 	follow_nodes = spawn_segments(stance_path)
 	
 	emerge_distance = stance_path.curve.get_baked_length()
+	
+	var splash = splash_particle_prefab.instantiate()
+	scene_root.add_child(splash)
+	splash.global_position = follow_nodes[0].get_child(0).global_position
+	# Scale up the splash particles
+	splash.draw_pass_1.size = Vector2(7, 7)
+	splash.amount = 32
+	splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
+	splash.emitting = true
+	await splash.finished
+	splash.queue_free()
 
 
 func _on_chiptopede_shoot_emerging_state_physics_processing(delta: float) -> void:
@@ -1385,9 +1486,22 @@ func _on_chiptopede_shoot_retreat_state_physics_processing(delta: float) -> void
 
 
 func _on_chiptopede_shoot_recovering_state_entered() -> void:
+	var splash = splash_particle_prefab.instantiate()
+	scene_root.add_child(splash)
+	splash.global_position = follow_nodes[0].global_position
+	# Scale up the splash particles
+	splash.draw_pass_1.size = Vector2(7, 7)
+	splash.amount = 32
+	splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
+	splash.emitting = true
+	
 	if not persist_segements:
 		_cleanup_segment_arrays()
 		stance_path.queue_free()
+		
+	await splash.finished
+	splash.queue_free()
+	
 	_recover_entered()
 
 
@@ -1609,6 +1723,8 @@ func _cleanup_segment_arrays() -> void:
 		if is_instance_valid(node):
 			var segment = node.get_child(0)
 			if segment:
+				segment.splash_particles.emitting = false
+				segment.splash_ring_particles.emitting = false
 				cache_segment(segment, node)
 	follow_nodes = []
 	completed_nodes = []
@@ -1675,6 +1791,8 @@ func spawn_segments(path: Path3D) -> Array:
 		path_follow.add_child(new_segment)
 		new_segment.global_position = path_follow.global_position
 		new_segment.visible = true
+		new_segment.splash_particles.emitting = false
+		new_segment.splash_ring_particles.emitting = false
 		
 		path_follow_nodes.append(path_follow)
 		
@@ -1954,15 +2072,21 @@ func _on_wave_collision(
 	if body == target:
 		body.health_component.damage(aoe_damage)
 		trigger_pushback(pushback_force, pushback_source, pushback_radius)
+		InputHelper.rumble_medium()
 
 
 func _on_chiptopede_death_freeze_state_entered() -> void:
-	self.global_position = follow_nodes[0].get_child(0).global_position
+	for node in follow_nodes:
+		var segment = node.get_child(0)
+		if segment:
+			self.global_position = segment.global_position
+			break
 	state_chart.send_event("start_exploding")
 
 
 func _on_chiptopede_death_exploding_state_entered() -> void:
 	# Explode chiptopede segments one by one
+	InputHelper.start_rumble_large()
 	follow_nodes.reverse()
 	for node in follow_nodes:
 		if is_instance_valid(node):
@@ -1985,6 +2109,7 @@ func _on_chiptopede_death_dead_state_entered() -> void:
 	state_chart.send_event("deactivate")
 	state_chart.send_event("death")
 	died.emit()
+	InputHelper.stop_rumble()
 	#await death_anim_finished
 	var land_markers = chiptopede_spawns.duplicate()
 	land_markers.sort_custom(
@@ -1993,3 +2118,10 @@ func _on_chiptopede_death_dead_state_entered() -> void:
 	var nearest_land_pos: Vector3 = land_markers.front().global_position + Vector3(0, 1.0, 0)
 	drop_barrel(nearest_land_pos)
 	await boss_death_slow_mo()
+
+
+func _on_attack_telegraph_state_entered() -> void:
+	return
+
+func _on_attack_telegraph_state_exited() -> void:
+	return

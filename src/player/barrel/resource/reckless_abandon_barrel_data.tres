@@ -9,13 +9,13 @@ script = ExtResource("3_3se0o")
 barrel_id = 43
 barrel_name = "Reckless Abandon"
 barrel_desc = "[b]Reckless Abandon Barrel[/b]
-Encourage you to go full-on attack mode.
+I'm all in!
 
 Possible rolls:
 [ul]
 Glass Cannon: Deal and take increased damage.
-Executioner Round: Deal more damage to enemy under 50% HP, but lower damage otherwise.
-Reactive Shot: Significantly increased damage for a short time after got hurt.
+Executioner Round: Deal more damage to enemies under 50% HP, but reduced damage otherwise.
+Reactive Shot: Significantly increases bullet damage for a short time after taking damage.
 [/ul]
 "
 barrel_image = ExtResource("1_tng3t")

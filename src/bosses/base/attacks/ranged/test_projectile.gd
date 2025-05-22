@@ -10,6 +10,7 @@ class_name TestProjectile
 
 func _physics_process(delta: float) -> void:
 	self.global_position -= transform.basis.z * projectile_speed * delta
+	
 
 
 func _on_body_entered(body: Node3D) -> void:
