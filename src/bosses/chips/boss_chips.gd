@@ -294,6 +294,7 @@ func _on_health_dead_state_entered() -> void:
 
 func _on_died() -> void:
 	if current_phase != 3:
+		SoundManager.play_sound(sfx_death, "SFX")
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
 		_on_health_dead_state_entered()
@@ -405,8 +406,6 @@ func select_attack_phase_2() -> void:
 			if small_attacks_performed >= max_small_attacks:
 				# FIXME - radial attack with reform
 				#state_chart.send_event("change_form_big_aoe_merge")
-				big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
-				big_stack_sfx_player.play()
 				state_chart.send_event("change_form_big")
 				return
 			else:
@@ -594,6 +593,8 @@ func merge_stacks() -> void:
 	await despawn_stacks()
 	trigger_pushback()
 	await show_big_stack()
+	big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
+	big_stack_sfx_player.play()
 	
 	# TODO - move this to the actual state trigger func
 	state_chart.send_event("end_merge")
@@ -1029,6 +1030,9 @@ func _on_merge_aoe_slam_state_entered() -> void:
 	shockwave.wave_time = 1.4
 	shockwave.start_shockwave()
 	
+	big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
+	big_stack_sfx_player.play()
+	
 	# Add pushback if player is in big stack collider
 	trigger_pushback()
 	
@@ -1357,7 +1361,7 @@ func _on_chiptopede_snake_moving_state_entered() -> void:
 		#segment.splash_particles.emitting = true
 		segment.splash_ring_particles.emitting = true
 	
-	chiptopede_sfx_player.stream = sfx_chiptopede_leap.pick_random()
+	chiptopede_sfx_player.stream = sfx_chiptopede_snake.pick_random()
 	chiptopede_sfx_player.play()
 	
 
@@ -2103,3 +2107,10 @@ func _on_chiptopede_death_dead_state_entered() -> void:
 	var nearest_land_pos: Vector3 = land_markers.front().global_position + Vector3(0, 1.0, 0)
 	drop_barrel(nearest_land_pos)
 	await boss_death_slow_mo()
+
+
+func _on_attack_telegraph_state_entered() -> void:
+	return
+
+func _on_attack_telegraph_state_exited() -> void:
+	return

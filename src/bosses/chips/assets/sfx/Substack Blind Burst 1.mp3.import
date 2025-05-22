@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b0hha6ne7n1ks"
+path="res://.godot/imported/Substack Blind Burst 1.mp3-bb6a12ea54fe08e8d2450f7d3158f66d.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/Substack Blind Burst 1.mp3"
+dest_files=["res://.godot/imported/Substack Blind Burst 1.mp3-bb6a12ea54fe08e8d2450f7d3158f66d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

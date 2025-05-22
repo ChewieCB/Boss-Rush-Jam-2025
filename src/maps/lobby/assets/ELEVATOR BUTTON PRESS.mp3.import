@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://30gb7es0qiff"
+path="res://.godot/imported/ELEVATOR BUTTON PRESS.mp3-6260a3a4741514d610f5600a4b51e03e.mp3str"
+
+[deps]
+
+source_file="res://src/maps/lobby/assets/ELEVATOR BUTTON PRESS.mp3"
+dest_files=["res://.godot/imported/ELEVATOR BUTTON PRESS.mp3-6260a3a4741514d610f5600a4b51e03e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

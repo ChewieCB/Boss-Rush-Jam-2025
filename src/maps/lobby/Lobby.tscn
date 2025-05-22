@@ -1,4 +1,4 @@
-[gd_scene load_steps=508 format=4 uid="uid://v6jgq46mkg4n"]
+[gd_scene load_steps=510 format=4 uid="uid://v6jgq46mkg4n"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
@@ -55,6 +55,8 @@
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="48_5x1qu"]
 [ext_resource type="Script" path="res://src/maps/lobby/target_dummy.gd" id="48_lw5gn"]
 [ext_resource type="PackedScene" uid="uid://bmy7qgg3imyvv" path="res://src/maps/lobby/vendor/VendingMachine.tscn" id="48_u7c7o"]
+[ext_resource type="AudioStream" uid="uid://cuge1lwxr3m82" path="res://src/maps/lobby/assets/Lift Door Open.mp3" id="56_4ys2i"]
+[ext_resource type="AudioStream" uid="uid://brxmaksjy6431" path="res://src/maps/lobby/assets/Lift Door Close.mp3" id="57_wqqjr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ckxgb"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -2044,7 +2046,9 @@ process_mode = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -21.9)
 stream = ExtResource("2_ho2it")
 volume_db = 10.0
+unit_size = 5.0
 max_db = 6.0
+panning_strength = 0.0
 bus = &"BGM"
 
 [node name="TargetDummy" type="CharacterBody3D" parent="."]
@@ -3534,6 +3538,20 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.4
 
 [node name="layer_2_Elevator" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_layer"
+
+[node name="SFXDoorOpen" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.808648, 0.588293, 0, -0.588293, 0.808648, -0.0256858, 0.632339, 8.23853)
+stream = ExtResource("56_4ys2i")
+volume_db = -5.0
+unit_size = 2.0
+bus = &"SFX"
+
+[node name="SFXDoorClose" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.808648, 0.588293, 0, -0.588293, 0.808648, -0.0256858, 0.632339, 8.23853)
+stream = ExtResource("57_wqqjr")
+volume_db = -5.0
+unit_size = 2.0
+bus = &"SFX"
 
 [connection signal="body_entered" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_entered"]
 [connection signal="body_exited" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_exited"]

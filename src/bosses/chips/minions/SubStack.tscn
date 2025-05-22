@@ -12,18 +12,18 @@
 [ext_resource type="Texture2D" uid="uid://bfj4vbh53jpe" path="res://src/bosses/chips/assets/sprites/split_stack/TEMP_idle.png" id="5_nsqwa"]
 [ext_resource type="AudioStream" uid="uid://bj6hrilpnek6j" path="res://src/bosses/chips/assets/sfx/Hitmarker 2.mp3" id="6_16fho"]
 [ext_resource type="AudioStream" uid="uid://b62n6dvoxjtgs" path="res://src/bosses/chips/assets/sfx/CHIP SubStack gun mode alt.mp3" id="6_rtgou"]
-[ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="6_winuh"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_yvmou"]
-[ext_resource type="AudioStream" uid="uid://cbf7hkjdjvljq" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 2.mp3" id="7_qyxbp"]
+[ext_resource type="AudioStream" uid="uid://b0hha6ne7n1ks" path="res://src/bosses/chips/assets/sfx/Substack Blind Burst 1.mp3" id="7_pwkg4"]
 [ext_resource type="AudioStream" uid="uid://bvv5jnw64iub" path="res://src/bosses/chips/assets/sfx/Hitmarker 3.mp3" id="7_u10vx"]
-[ext_resource type="AudioStream" uid="uid://dv5u41740s0hh" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 3.mp3" id="8_bfvnu"]
+[ext_resource type="AudioStream" uid="uid://b078sf63gmtat" path="res://src/bosses/chips/assets/sfx/Substack Blind Burst 2.mp3" id="8_8pjm8"]
 [ext_resource type="AudioStream" uid="uid://d2jgdmrbiimh3" path="res://src/bosses/chips/assets/sfx/Hitmarker 4.mp3" id="8_bpeyj"]
-[ext_resource type="AudioStream" uid="uid://ba3k7kprithnp" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 4.mp3" id="9_5l2f1"]
-[ext_resource type="AudioStream" uid="uid://cmhmrmkyi3u0o" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 5.mp3" id="10_fpkdt"]
-[ext_resource type="AudioStream" uid="uid://b5w4tt4xnxqfm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 6.mp3" id="11_d7fey"]
+[ext_resource type="AudioStream" uid="uid://bxpxji48x1t07" path="res://src/bosses/chips/assets/sfx/Substack Blind Burst 3.mp3" id="9_gyu8b"]
+[ext_resource type="AudioStream" uid="uid://cqoxhly3lcdqa" path="res://src/bosses/chips/assets/sfx/Substack Blind Burst 4.mp3" id="10_kpsri"]
+[ext_resource type="AudioStream" uid="uid://dilirwrigo5pb" path="res://src/bosses/chips/assets/sfx/Substack Blind Burst 5.mp3" id="11_6axnb"]
 [ext_resource type="Texture2D" uid="uid://q12l7oh16xcn" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Hurt.png" id="11_rowys"]
-[ext_resource type="AudioStream" uid="uid://cr76fcs47jgtf" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 7.mp3" id="12_cuapj"]
 [ext_resource type="Texture2D" uid="uid://buhfc7y6yqvpd" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Cannon_Face.png" id="12_pln03"]
+[ext_resource type="AudioStream" uid="uid://dw0uhnampko5n" path="res://src/bosses/chips/assets/sfx/Substack Blind Burst 6.mp3" id="12_x3h7f"]
+[ext_resource type="AudioStream" uid="uid://7ygcjepn6gig" path="res://src/bosses/chips/assets/sfx/Substack Blind Burst 7.mp3" id="13_h65ga"]
 [ext_resource type="AnimationLibrary" uid="uid://dp6nqwqohdj5q" path="res://src/bosses/chips/minions/sub_stack_anims.res" id="14_4pmxc"]
 [ext_resource type="AudioStream" uid="uid://s62c34hxjac4" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Swipe 1.mp3" id="14_kp42l"]
 [ext_resource type="AudioStream" uid="uid://c4xxb4wv8v66m" path="res://src/bosses/chips/assets/sfx/CHIP SubStack Swipe 2.mp3" id="15_542ie"]
@@ -123,7 +123,7 @@ chip_shots_per_burst = 4
 num_bursts = 1
 delay_between_burst = 0.6
 sfx_shoot_telegraph = Array[AudioStream]([ExtResource("5_mv1gd"), ExtResource("6_rtgou")])
-sfx_shoot = Array[AudioStream]([ExtResource("6_winuh"), ExtResource("7_qyxbp"), ExtResource("8_bfvnu"), ExtResource("9_5l2f1"), ExtResource("10_fpkdt"), ExtResource("11_d7fey"), ExtResource("12_cuapj")])
+sfx_shoot = Array[AudioStream]([ExtResource("7_pwkg4"), ExtResource("8_8pjm8"), ExtResource("9_gyu8b"), ExtResource("10_kpsri"), ExtResource("11_6axnb"), ExtResource("12_x3h7f"), ExtResource("13_h65ga")])
 swipe_prefab = ExtResource("4_xln3v")
 num_swipes = 2
 delay_between_swipe = 0.4

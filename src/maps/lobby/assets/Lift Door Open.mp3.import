@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cuge1lwxr3m82"
+path="res://.godot/imported/Lift Door Open.mp3-9701417dfa11986c66c77816005e4344.mp3str"
+
+[deps]
+
+source_file="res://src/maps/lobby/assets/Lift Door Open.mp3"
+dest_files=["res://.godot/imported/Lift Door Open.mp3-9701417dfa11986c66c77816005e4344.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

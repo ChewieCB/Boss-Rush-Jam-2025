@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://djvdypgx1y3j6"
+path="res://.godot/imported/Basic Short Slot Machine Improved.mp3-c4283377310e4c4feba657f77f0dc3b2.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/Basic Short Slot Machine Improved.mp3"
+dest_files=["res://.godot/imported/Basic Short Slot Machine Improved.mp3-c4283377310e4c4feba657f77f0dc3b2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

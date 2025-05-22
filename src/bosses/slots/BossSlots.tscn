@@ -2,11 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
-[ext_resource type="AudioStream" uid="uid://djpgcg8yqujhs" path="res://src/bosses/slots/assets/sfx/BASIC LONG SLOT MACHINE.mp3" id="3_pb03v"]
+[ext_resource type="AudioStream" uid="uid://biv0t34kylfov" path="res://src/bosses/slots/assets/sfx/Basic Long Slot Machine Improved.mp3" id="3_o5exi"]
 [ext_resource type="Texture2D" uid="uid://bbblp8vkvd3no" path="res://src/bosses/slots/assets/icons/temp/flip_full.png" id="3_say4o"]
 [ext_resource type="Texture2D" uid="uid://v67yeqhnxlbd" path="res://src/bosses/slots/assets/icons/temp/suit_diamonds.png" id="4_6oj0s"]
 [ext_resource type="Texture2D" uid="uid://8rlesfd54n8r" path="res://src/bosses/slots/assets/icons/temp/suit_hearts.png" id="4_oaydl"]
-[ext_resource type="AudioStream" uid="uid://bf837nq3217n7" path="res://src/bosses/slots/assets/sfx/BASIC SHORT SLOT MACHINE.mp3" id="4_uxdny"]
+[ext_resource type="AudioStream" uid="uid://djvdypgx1y3j6" path="res://src/bosses/slots/assets/sfx/Basic Short Slot Machine Improved.mp3" id="4_vhne6"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="5_3q2k6"]
 [ext_resource type="AudioStream" uid="uid://vjjoalu8btt5" path="res://src/bosses/slots/assets/sfx/SLOT MACHINE - JUST DING DING DING COIN TELEGRAPH ISOLATED.mp3" id="5_lghps"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_lu46i"]
@@ -16,7 +16,7 @@
 [ext_resource type="AudioStream" uid="uid://dkvp444gcr566" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS TELEGRAPH BELL ISOLATED.mp3" id="7_1c6a3"]
 [ext_resource type="Texture2D" uid="uid://bc7ur1o66fgkl" path="res://src/bosses/slots/assets/icons/temp/fire.png" id="7_ri7nv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="8_0tk6i"]
-[ext_resource type="AudioStream" uid="uid://nrv16ny1wym" path="res://src/bosses/slots/assets/sfx/SLOT BOSS TELEGRAPH MELEE_SHIELD ISOLATED.mp3" id="8_1arpf"]
+[ext_resource type="AudioStream" uid="uid://c1qu2s17kgr8h" path="res://src/bosses/slots/assets/sfx/Slot Melee Improved Temp.mp3" id="8_po7hj"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="9_1g4bc"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_5a0pq"]
 [ext_resource type="PackedScene" uid="uid://bacaewb7dl2l6" path="res://src/bosses/slots/bell/BellAttack.tscn" id="9_6qwni"]
@@ -44,9 +44,9 @@
 [ext_resource type="AudioStream" uid="uid://dy7dp3qgxrb1n" path="res://src/bosses/slots/assets/sfx/SLOT BOSS LEVER ATTACK 2.mp3" id="32_1rwgx"]
 [ext_resource type="AudioStream" uid="uid://d3ibk35sllumq" path="res://src/bosses/slots/assets/sfx/SLOT BOSS LEVER ATTACK 3.mp3" id="33_31vh7"]
 [ext_resource type="AudioStream" uid="uid://b15by5itg11gr" path="res://src/bosses/slots/assets/sfx/SLOT BOSS LEVER ATTACK.mp3" id="34_otbm5"]
-[ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="35_ysshl"]
 [ext_resource type="AudioStream" uid="uid://c1t5q0u05luro" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 1.mp3" id="36_pqkkl"]
 [ext_resource type="AudioStream" uid="uid://b7ldij2udgm6r" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 2.mp3" id="37_0sig5"]
+[ext_resource type="AudioStream" uid="uid://dy7omvpcxu4mv" path="res://src/bosses/slots/assets/sfx/Slot Melee Dash.mp3" id="37_cawc0"]
 [ext_resource type="AudioStream" uid="uid://dsf1r32gkkqo2" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 3.mp3" id="38_hfhsu"]
 [ext_resource type="AudioStream" uid="uid://dmxlvexm1yqfb" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 4.mp3" id="39_gde5g"]
 [ext_resource type="AudioStream" uid="uid://c48v18qfcbx6t" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 5.mp3" id="40_8wl1k"]
@@ -200,13 +200,13 @@ angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
 SLOT_TICKS = 20
-sfx_slot_roll_long = ExtResource("3_pb03v")
-sfx_slot_roll_short = ExtResource("4_uxdny")
+sfx_slot_roll_long = ExtResource("3_o5exi")
+sfx_slot_roll_short = ExtResource("4_vhne6")
 sfx_slot_roll_ding = ExtResource("5_lghps")
 sfx_slot_roll_coins = ExtResource("6_q1utd")
 sfx_slot_pick_coin = ExtResource("6_q1utd")
 sfx_slot_pick_bell = ExtResource("7_1c6a3")
-sfx_slot_pick_bar = ExtResource("8_1arpf")
+sfx_slot_pick_bar = ExtResource("8_po7hj")
 sfx_slot_pick_diamond = ExtResource("9_qwmyu")
 sfx_slot_pick_cherry = ExtResource("10_88yvd")
 icon_coin = ExtResource("3_say4o")
@@ -235,7 +235,7 @@ sfx_lever_swipe = Array[AudioStream]([ExtResource("32_1rwgx"), ExtResource("33_3
 charge_damage = 10.0
 charge_knockback = 50.0
 min_charge_distance = 10.0
-sfx_charge = Array[AudioStream]([ExtResource("35_ysshl")])
+sfx_charge = Array[AudioStream]([ExtResource("37_cawc0")])
 sfx_charge_impact = Array[AudioStream]([])
 diamond_projectile = ExtResource("11_dqr52")
 diamond_shots_per_attack = 12
@@ -1065,67 +1065,67 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, 0)
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="14"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="15"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="16"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="17"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="18"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="19"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="20"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="21"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="." index="22"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="." index="23"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="." index="24"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 

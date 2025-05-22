@@ -227,6 +227,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0190299, 0)
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05396, 0)
 
+[node name="HurtSFXPlayer" parent="." index="20"]
+unit_size = 20.0
+
 [node name="SplashParticles" type="GPUParticles3D" parent="." index="21"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
 emitting = false
