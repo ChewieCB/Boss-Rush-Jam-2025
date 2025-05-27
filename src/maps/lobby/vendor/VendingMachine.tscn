@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=4 uid="uid://bmy7qgg3imyvv"]
+[gd_scene load_steps=35 format=4 uid="uid://bmy7qgg3imyvv"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/vendor/vendor.gd" id="1_q25t3"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="1_r5vfn"]
@@ -14,7 +14,6 @@
 [ext_resource type="Resource" uid="uid://dfhl5t0jpftd5" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_gamblers_precision.tres" id="10_hcac1"]
 [ext_resource type="Resource" uid="uid://cbped3pwpq8gx" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_railgun.tres" id="10_yhgbb"]
 [ext_resource type="Resource" uid="uid://bs7u4ckswam2f" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ramp_up.tres" id="11_rqjiq"]
-[ext_resource type="Resource" uid="uid://dm2rh4kkx2aq4" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ball_bullet.tres" id="12_5lw2l"]
 [ext_resource type="Resource" uid="uid://flq0lkjfimuf" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_extended_drum.tres" id="12_qo2ly"]
 [ext_resource type="Resource" uid="uid://okv7b5p22t5g" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_explosive_bullet.tres" id="13_2fs0b"]
 [ext_resource type="Resource" uid="uid://do2l2svihllsk" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_bullet_time.tres" id="13_5f2k0"]
@@ -116,6 +115,7 @@ shape = SubResource("BoxShape3D_2202f")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="ShopUI" parent="UI" instance=ExtResource("5_b7an8")]
+[node name="InventoryUI" parent="UI" instance=ExtResource("5_b7an8")]
+visible = false
 shop_title = "Debug Vending Machine"
-current_inventory = Array[ExtResource("6_qqfkm")]([ExtResource("8_m0arp"), ExtResource("9_oc20r"), ExtResource("10_yhgbb"), ExtResource("7_w8qpy"), ExtResource("12_5lw2l"), ExtResource("13_5f2k0"), ExtResource("14_4sgpc"), ExtResource("9_t37n2"), ExtResource("16_o0ero"), ExtResource("13_2fs0b"), ExtResource("12_qo2ly"), ExtResource("19_oo5sd"), ExtResource("10_hcac1"), ExtResource("21_jpwd4"), ExtResource("22_scu43"), ExtResource("23_vfyqf"), ExtResource("24_2kilb"), ExtResource("11_rqjiq"), ExtResource("26_px180"), ExtResource("27_j5rnn"), ExtResource("28_mhb3c"), ExtResource("29_btcgv"), ExtResource("30_yhhcr"), ExtResource("31_382ao"), ExtResource("32_ed8yr")])
+current_inventory = Array[ExtResource("6_qqfkm")]([ExtResource("8_m0arp"), ExtResource("9_oc20r"), ExtResource("10_yhgbb"), ExtResource("7_w8qpy"), ExtResource("13_5f2k0"), ExtResource("14_4sgpc"), ExtResource("9_t37n2"), ExtResource("16_o0ero"), ExtResource("13_2fs0b"), ExtResource("12_qo2ly"), ExtResource("19_oo5sd"), ExtResource("10_hcac1"), ExtResource("21_jpwd4"), ExtResource("22_scu43"), ExtResource("23_vfyqf"), ExtResource("24_2kilb"), ExtResource("11_rqjiq"), ExtResource("26_px180"), ExtResource("27_j5rnn"), ExtResource("28_mhb3c"), ExtResource("29_btcgv"), ExtResource("30_yhhcr"), ExtResource("31_382ao"), ExtResource("32_ed8yr")])

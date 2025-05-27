@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyak3rklcc1gg"]
+
+[ext_resource type="Script" path="res://src/player/luck_handler.gd" id="1_718cx"]
+
+[node name="LuckHandler" type="Node"]
+script = ExtResource("1_718cx")
+
+[node name="LuckDecayTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="DPSWindowTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="LuckDecayTimer" to="." method="_on_luck_decay_timer_timeout"]
+[connection signal="timeout" from="DPSWindowTimer" to="." method="_on_dps_dealt_window_timer_timeout"]

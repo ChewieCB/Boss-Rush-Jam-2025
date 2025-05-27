@@ -1,28 +1,27 @@
-extends CharacterBody3D
+extends StaticBody3D
 class_name Bell
 
 signal destroyed(bell: Bell)
 
-@export var fall_speed: float = 50.0
 @export var damage: float = 20.0
-var floor_y: float
+var floor_y: float = 0.0
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var hurtbox: Area3D = $Hurtbox
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 
-@export var health_component: HealthComponent
 @export var explosion_scene: PackedScene
 @export var spark_scene: PackedScene
 
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 @export_group("SFX")
+@export var sfx_bell_full: Array[AudioStream]
 @export var sfx_bell_windup: Array[AudioStream]
 @export var sfx_bell_impact: Array[AudioStream]
 
 
-func _ready() -> void:
+func drop() -> void:
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
 		self.global_position,
@@ -33,22 +32,7 @@ func _ready() -> void:
 	if result:
 		floor_y = result.position.y
 	
-	sfx_player.stream = sfx_bell_windup.pick_random()
-	# FIXME: This line has error
-	#
-	# E 0:01:04:0836   bell.gd:37 @ _ready(): Can't add child 'SFXPlayer' to 'GameManager', already has a parent '@CharacterBody3D@1603'.
-	#   <C++ Error>    Condition "p_child->data.parent" is true.
-	#   <C++ Source>   scene/main/node.cpp:1568 @ add_child()
-	#   <Stack Trace>  bell.gd:37 @ _ready()
-	#                  boss_slots.gd:431 @ spawn_bell()
-	get_tree().get_root().get_child(2).add_child(sfx_player)
-	sfx_player.global_position = self.global_position
-	sfx_player.global_position.y = floor_y
-	sfx_player.volume_db = 5.0
-	sfx_player.max_db = 5.0
-	sfx_player.unit_size = 30.0
-	sfx_player.play()
-	
+	mesh.visible = true
 	mesh.mesh.surface_get_material(0).albedo_color = Color("#b08137")
 	#tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:a", 255, 0.3).set_trans(Tween.TRANS_EXPO)
 	
@@ -58,15 +42,14 @@ func _ready() -> void:
 			2 * PI / i + 1
 		) * 4.0
 		spark(pos)
-
-
-func _physics_process(delta: float) -> void:
-	if self.global_position.y <= floor_y:
-		destroyed.emit(self)
-		destroy()
-	else:
-		global_position.y -= fall_speed * delta
 	
+	sfx_player.stream = sfx_bell_full.pick_random()
+	sfx_player.play()
+	var tween: Tween = get_tree().create_tween()
+	# 1.04s is the timestamp of the impact in the full bell sfx samples
+	tween.tween_property(self, "global_position:y", floor_y, 1.04)
+	tween.tween_callback(destroy)
+
 
 func spark(spark_pos: Vector3) -> void:
 	var spark_vfx = spark_scene.instantiate()
@@ -75,13 +58,16 @@ func spark(spark_pos: Vector3) -> void:
 
 
 func destroy() -> void:
+	sfx_player.stream = sfx_bell_impact.pick_random()
+	sfx_player.play()
+
 	for i in range(4):
 		var pos = self.global_position + Vector3(0, 2.0, 0) - self.global_basis.z.rotated(
 			Vector3.UP,
 			2 * PI / i + 1
 		) * collider.shape.radius
 		var explosion_vfx = explosion_scene.instantiate()
-		get_tree().get_root().add_child(explosion_vfx)
+		get_tree().get_root().get_child(7).add_child(explosion_vfx)
 		explosion_vfx.original_fire_size = Vector2(10, 10)
 		explosion_vfx.original_smoke_size = Vector2(6, 6)
 		explosion_vfx.global_position = pos
@@ -93,6 +79,12 @@ func destroy() -> void:
 
 
 func _on_destroyed() -> void:
+	destroyed.emit(self)
+	mesh.visible = false
+	hurtbox_collider.disabled = true
+	collider.disabled = true
+	if sfx_player.playing:
+		await sfx_player.finished 
 	queue_free()
 
 

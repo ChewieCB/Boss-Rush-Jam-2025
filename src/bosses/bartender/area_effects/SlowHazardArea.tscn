@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://eclk54je77sy"]
+
+[ext_resource type="Script" path="res://src/bosses/bartender/area_effects/hazard_area.gd" id="1_d3qr7"]
+[ext_resource type="Texture2D" uid="uid://bus2aoy40njv1" path="res://src/bosses/bartender/assets/puddle.png" id="2_jiri2"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_5p06s"]
+height = 1.0
+radius = 6.0
+
+[node name="SlowHazardArea" type="Node3D"]
+script = ExtResource("1_d3qr7")
+damage_per_tick = 0
+duration = 20.0
+slow_perc = 50.0
+
+[node name="Puddle" type="Sprite3D" parent="."]
+transform = Transform3D(4.5, 0, 0, 0, -1.96701e-07, 4.5, 0, -4.5, -1.96701e-07, 0, 0.01, 0)
+visible = false
+modulate = Color(0.0828836, 0.092301, 0.0762992, 0.854902)
+texture = ExtResource("2_jiri2")
+
+[node name="Decal" type="Decal" parent="."]
+size = Vector3(12, 4, 12)
+texture_albedo = ExtResource("2_jiri2")
+modulate = Color(0.0823529, 0.0941176, 0.0745098, 0.854902)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+omni_range = 10.0
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 70
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CylinderShape3D_5p06s")
+
+[node name="DoTTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -0.1, 0)
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
+[connection signal="timeout" from="DoTTimer" to="." method="_on_damage_timer_timeout"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]

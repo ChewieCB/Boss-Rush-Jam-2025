@@ -26,7 +26,7 @@ curve = SubResource("Curve_wrxbr")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_27yf8"]
 direction = Vector3(0, 0, -1)
-spread = 20.0
+spread = 30.0
 initial_velocity_min = 0.5
 initial_velocity_max = 1.0
 angular_velocity_min = -20.0
@@ -55,10 +55,12 @@ size = Vector2(0.1, 0.1)
 
 [node name="MuzzleSmoke" type="GPUParticles3D"]
 emitting = false
-amount = 20
+amount = 10
 one_shot = true
 explosiveness = 1.0
 visibility_aabb = AABB(-0.452503, -0.204213, -1.28575, 0.830573, 0.973868, 1.38575)
 process_material = SubResource("ParticleProcessMaterial_27yf8")
 draw_pass_1 = SubResource("QuadMesh_idobp")
 script = ExtResource("2_l3vjw")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

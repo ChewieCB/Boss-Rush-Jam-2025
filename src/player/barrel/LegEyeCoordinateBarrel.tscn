@@ -1,0 +1,113 @@
+[gd_scene load_steps=9 format=3 uid="uid://d0br37tx0fckb"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_rslxk"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_dndl2"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_dstpa"]
+[ext_resource type="Script" path="res://src/player/barrel/trigger_leg_effect.gd" id="3_wqy0s"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="4_j66hp"]
+[ext_resource type="Script" path="res://src/player/barrel/crit_chance_effect.gd" id="4_skjky"]
+[ext_resource type="Script" path="res://src/player/barrel/springy_feet_effect.gd" id="7_ouncf"]
+[ext_resource type="Script" path="res://src/player/barrel/flexible_knee_effect.gd" id="8_ghm3r"]
+
+[node name="LegEyeCoordinateBarrel" type="Node3D"]
+script = ExtResource("1_rslxk")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="TriggerLeg" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_dndl2")
+display_text_title = "Trigger Leg"
+display_text_tag = "Dash and blast!"
+display_text_desc = "Can only shoot when you dash
+Dash improved
++50% crit chance
++50% damage"
+
+[node name="TriggerLegEffect" type="Node3D" parent="EffectContainer/TriggerLeg"]
+script = ExtResource("3_wqy0s")
+
+[node name="CritChanceEffect" type="Node3D" parent="EffectContainer/TriggerLeg"]
+script = ExtResource("4_skjky")
+crit_chance = 50.0
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/TriggerLeg"]
+script = ExtResource("3_dstpa")
+attribute = 1
+modify_value = 50.0
+is_perc = true
+
+[node name="IncreaseDashDuration" type="Node3D" parent="EffectContainer/TriggerLeg"]
+script = ExtResource("4_j66hp")
+display_name = "Increased dash duration"
+status_code = "trigger_leg_increased_dash_duration"
+modified_stat = 7
+modify_type = 1
+value = 100.0
+is_infinite_duration = true
+
+[node name="IncreaseDashIframeDuration" type="Node3D" parent="EffectContainer/TriggerLeg"]
+script = ExtResource("4_j66hp")
+display_name = "Increased dash invinvible duration"
+status_code = "trigger_leg_increased_dash_iframe_duration"
+modified_stat = 6
+modify_type = 1
+value = 100.0
+is_infinite_duration = true
+
+[node name="SpringyFeet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_dndl2")
+display_text_title = "Spingy Feet"
+display_text_tag = "Jump and pump!"
+display_text_desc = "Can only shoot while you are midair
+Jump improved
+-50% recoil
+-50% spread"
+
+[node name="SpringyFeetEffect" type="Node3D" parent="EffectContainer/SpringyFeet"]
+script = ExtResource("7_ouncf")
+
+[node name="ModifyRecoil" type="Node3D" parent="EffectContainer/SpringyFeet"]
+script = ExtResource("3_dstpa")
+attribute = 11
+modify_value = -50.0
+is_perc = true
+
+[node name="ModifySpread" type="Node3D" parent="EffectContainer/SpringyFeet"]
+script = ExtResource("3_dstpa")
+attribute = 7
+modify_value = -50.0
+is_perc = true
+
+[node name="IncreaseJumpHeight" type="Node3D" parent="EffectContainer/SpringyFeet"]
+script = ExtResource("4_j66hp")
+display_name = "Increased jump height"
+status_code = "springy_feet_increased_jump_height"
+modified_stat = 5
+modify_type = 1
+value = 50.0
+is_infinite_duration = true
+
+[node name="FlexibleKnee" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_dndl2")
+display_text_title = "Flexible Knee"
+display_text_tag = "Sit down and blitz out!"
+display_text_desc = "Can only shoot while you are crouching
+Improved crouch
++50% magazine size
++50% firerate"
+
+[node name="FlexibleKnee" type="Node3D" parent="EffectContainer/FlexibleKnee"]
+script = ExtResource("8_ghm3r")
+crouch_iframe_duration = 0.4
+
+[node name="ModifyFirerate" type="Node3D" parent="EffectContainer/FlexibleKnee"]
+script = ExtResource("3_dstpa")
+attribute = 4
+modify_value = 50.0
+is_perc = true
+
+[node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/FlexibleKnee"]
+script = ExtResource("3_dstpa")
+attribute = 5
+modify_value = 50.0
+is_perc = true

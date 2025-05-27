@@ -3,23 +3,45 @@ class_name BossCore
 
 ## Emit when boss HP drop to 0.
 signal died
+signal death_anim_finished
 ## Emit after collected the barrel, 
+## Emit after collected the barrel,
 ## or same time as `died` signal if already collected.
 signal defeated(boss: BossCore)
+#
+signal chip_dropped(value: int)
 
 enum BossIdEnum {
-	NONE,
 	BASE,
 	SLOTS,
 	ROULETTE,
 	BARTENDER,
-	PIT
+	PIT,
+	CHIPS
 }
+
+enum StatusEffects {
+	NONE,
+	BURNING,
+	POISONED
+}
+@onready var burning_timer: Timer = $StateChart/Root/Status/Burning/BurningTimer
+@onready var poisoned_timer: Timer = $StateChart/Root/Status/Poisoned/PoisonedTimer
 
 @export var boss_id: BossIdEnum
 @export var chip_scene: PackedScene
 @export var chip_spawn_chance: float = 0.4
 @export var chip_spawn_force: float = 700.0
+@export var chip_spawn_dps_threshold: float = 25.0
+@export var chip_spawn_mult_cap: int = 3
+@export_subgroup("DPS Dealt In Last X Seconds")
+@export var dps_dealt_window: float = 1.8
+@onready var dps_dealt_window_timer: Timer = $DPSWindowTimer
+var dps_accumulated_in_window: float = 0.0:
+	set(value):
+		dps_accumulated_in_window = value
+		if dps_dealt_window_timer.is_stopped():
+			dps_dealt_window_timer.start(dps_dealt_window)
 
 @export_category("Barrels")
 @export var barrel_to_drop: BarrelDataResource
@@ -28,6 +50,7 @@ var debug_trajectory_mesh: MeshInstance3D
 
 
 @export_category("SFX")
+@onready var hurt_sfx_player: AudioStreamPlayer3D = $HurtSFXPlayer
 @export var sfx_players: Array[AudioStreamPlayer3D]
 @export var sfx_awaken: AudioStream
 @export var sfx_hit: Array[AudioStream]
@@ -42,11 +65,22 @@ var debug_trajectory_mesh: MeshInstance3D
 @onready var debug_mesh: MeshInstance3D = $DebugMesh
 @onready var debug_state_label: Label3D = $DebugStateLabel
 @onready var debug_dist_label: Label3D = $DebugDistanceLabel
+@onready var debug_status_label_parent: Node3D = $StatusLabelParent
 @onready var state_chart: StateChart = $StateChart
 
-@export var current_phase: int = 1
+@export_group("Sprites")
+@export var base_sprite: CompressedTexture2D
+@export var hurt_sprite: CompressedTexture2D
+@export var death_sprites: Array[CompressedTexture2D]
+@export_subgroup("Hurt Frame")
+# TODO - make this an actual stagger that delays/interrupts attacks?
+@export var hurt_frame_window: float = 0.6
+@export var hurt_frame_cooldown: float = 1.5
+@onready var hurt_frame_timer: Timer = $HurtFrameTimer
+@onready var hurt_frame_cooldown_timer: Timer = $HurtFrameCooldownTimer
 
-@export var attack_recovery_time: float = 0.5
+@export_group("Phase")
+@export var current_phase: int = 1
 
 # Make sure the boss doesn't spam attacks
 # TODO - make this more modular
@@ -55,10 +89,14 @@ var charge_phase_count: int = 0
 var ranged_phase_count: int = 0
 var area_phase_count: int = 0
 
+@export_group("Attacks")
+@export var attack_targeting_time: float = 0.5
+@export var attack_recovery_time: float = 0.5
+@export_subgroup("Charge")
 # Charge Attack
 @export var telegraph_time: float = 0.25
 @export var charge_force: float = 8.0
-
+@export_subgroup("Projectile")
 # Projectile Attack
 @export var projectile_scene: PackedScene
 @export var projectiles_per_phase: int = 5
@@ -70,6 +108,7 @@ var ranged_move_points: Array[Node]
 var area_move_points: Array[Node]
 
 # Area Attack
+@export_subgroup("AoE")
 @export var area_damage: float = 25.0
 @export var areas_per_phase: int = 6
 @export var area_spawn_time: float = 1.5
@@ -91,7 +130,9 @@ var spawned_area_objects = []
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var hurtbox: Area3D = $Hurtbox
 @onready var health_ui = $UI/HealthUI/BossHealthContainer
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
 
+@export_group("Movement")
 @export var MAX_SPEED: float = 5.0
 @export var FRICTION: float = 1.0
 @export var TURN_SPEED_FAST: float = 7.5
@@ -103,7 +144,6 @@ const JUMP_FORCE: float = 8
 
 var vel_vertical: float = 0
 
-
 @export var target: Node3D:
 	set(value):
 		target = value
@@ -113,8 +153,11 @@ var vel_vertical: float = 0
 			navigation_component.target = target
 var cached_target: Node3D
 
+@onready var scene_root = get_parent().get_parent()
+
 
 func _ready() -> void:
+	print_debug("BossCore ready")
 	randomize()
 	# If the player has beaten all bosses, buff them for the replay value
 	if GameManager.all_bosses_defeated:
@@ -124,7 +167,7 @@ func _ready() -> void:
 	health_component.died.connect(_on_died)
 	debug_trajectory_mesh = MeshInstance3D.new()
 	debug_trajectory_mesh.mesh = ImmediateMesh.new()
-	get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
+	scene_root.add_child.call_deferred(debug_trajectory_mesh)
 	#debug_mesh.visible = false
 	await owner.ready
 
@@ -135,6 +178,14 @@ func _physics_process(delta: float) -> void:
 	velocity.y = vel_vertical
 
 	move_and_slide()
+
+	# DEBUG
+	# TODO - add export var for burning status length so we can configure it
+	# per boss/effect
+	#if Input.is_action_just_pressed("input_1"):
+		#apply_status(StatusEffects.BURNING, 5.0)
+	#if Input.is_action_just_pressed("input_2"):
+		#apply_status(StatusEffects.POISONED, 12.0)
 
 
 func jump(multiplier = 1.0) -> void:
@@ -159,14 +210,56 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 	)
 
 
+func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> BaseProjectile:
+	var _sfx_player = get_available_sfx_player()
+	if not _sfx_player:
+		# TODO - error handling
+		pass
+	if sfx_arr:
+		_sfx_player.stream = sfx_arr.pick_random()
+		_sfx_player.play()
+	var projectile := _projectile_prefab.instantiate()
+	scene_root.add_child(projectile)
+	projectile.global_position = spawn_pos
+	projectile.look_at(target.global_position, Vector3.UP)
+	return projectile
+
+
 func activate() -> void:
+	print_debug("BossCore activate called")
 	show_health()
 	SoundManager.play_sound(sfx_awaken, "SFX")
 
 
+## GENERIC STATE HELPERS
+func _targeting_entered(next_state: String, attack_name: String = "", delay: float = attack_targeting_time) -> void:
+	debug_state_label.text = "%s | Targeting" % attack_name
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(delay).timeout
+	state_chart.send_event(next_state)
+
+func _telegraph_attack(attack_name: String = "") -> void:
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time).timeout
+	state_chart.send_event("attack_start")
+	return
+
+func _recover_entered() -> void:
+	state_chart.send_event("attack_end")
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("cooldown_end")
+	select_attack()
+	# Reset the current state to Targeting
+	state_chart.send_event("end_recovery")
+
+
 func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInstance3D:
 	# Will usually work, but you might need to adjust this.
-	var scene_root = get_tree().root.get_children()[0]
+	var scene_root = get_tree().root.get_children()[8]
 	# Create sphere with low detail of size.
 	var sphere = SphereMesh.new()
 	sphere.radial_segments = 4
@@ -182,8 +275,8 @@ func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInst
 	# Add to meshinstance in the right place.
 	var node = MeshInstance3D.new()
 	node.mesh = sphere
+	scene_root.add_child.call_deferred(node)
 	node.global_transform.origin = location
-	scene_root.add_child(node)
 
 	return node
 
@@ -204,16 +297,23 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 			return b
 	)
 	var fallback_player: AudioStreamPlayer3D = players_ending_soon.front()
-	fallback_player.stop()
+	if fallback_player:
+		fallback_player.stop()
 
-	return fallback_player
+		return fallback_player
+	return null
 
 
-func drop_barrel() -> void:
+func drop_barrel(target_pos: Vector3 = target.global_position) -> void:
 	# Check if we've already given the player this barrel
 	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
 		push_warning("Barrel [%s] already collected, exiting level." % barrel_to_drop.barrel_name)
 		# If we don't have a barrel to spawn, emit the signal to end the level
+		defeated.emit(self)
+		return
+
+	if barrel_pickup_scene == null:
+		push_warning("No barrel to spawn.")
 		defeated.emit(self)
 		return
 
@@ -228,7 +328,7 @@ func drop_barrel() -> void:
 	else:
 		collider_height = collider.shape.height
 	var start_pos: Vector3 = self.global_position + Vector3(0, collider_height / 2, 0)
-	var goal_pos: Vector3 = start_pos.lerp(target.global_position, 0.7)
+	var goal_pos: Vector3 = start_pos.lerp(target_pos, 0.7)
 
 	# Snap to floor
 	var space_state = get_world_3d().direct_space_state
@@ -246,11 +346,6 @@ func drop_barrel() -> void:
 	var curve = Curve3D.new()
 	var mid_point: Vector3 = start_pos.lerp(goal_pos, 0.5) + Vector3(0, 5.0, 0)
 
-	#draw_debug_sphere(start_pos, 0.5, Color.GREEN)
-	#draw_debug_sphere(goal_pos, 0.5, Color.YELLOW)
-	#draw_debug_sphere(mid_point, 0.5, Color.ORANGE)
-	#draw_debug_sphere(target.global_position, 0.5, Color.RED)
-
 	# Calculate bezier control points
 	var out_0 = (mid_point - start_pos) * 0.6667
 	var in_1 = (mid_point - goal_pos) * 0.6667
@@ -259,7 +354,6 @@ func drop_barrel() -> void:
 	path.curve = curve
 
 	# Add the path to the scene
-	var scene_root = get_tree().root.get_children()[0]
 	scene_root.add_child(path)
 	var path_follow = PathFollow3D.new()
 	path.add_child(path_follow)
@@ -298,6 +392,8 @@ func select_attack() -> void:
 			select_attack_phase_1()
 		2:
 			select_attack_phase_2()
+		3:
+			select_attack_phase_3()
 		_:
 			push_error("Invalid phase %s" % current_phase)
 
@@ -307,6 +403,10 @@ func select_attack_phase_1() -> void:
 
 
 func select_attack_phase_2() -> void:
+	pass
+
+
+func select_attack_phase_3() -> void:
 	pass
 
 
@@ -397,7 +497,16 @@ func _on_health_hit_state_exited() -> void:
 
 #### DEAD
 func _on_health_dead_state_entered() -> void:
+	if anim_player.is_playing():
+		anim_player.stop()
+		anim_player.play("RESET")
+	anim_player.play("death")
+	
+	await anim_player.animation_finished
+	anim_player.process_mode = Node.PROCESS_MODE_DISABLED
+	
 	sprite.modulate = Color.DARK_SLATE_BLUE
+	death_anim_finished.emit()
 
 ### ATTACKING --------------------------------
 #### TELEGRAPH
@@ -411,18 +520,44 @@ func _on_attack_telegraph_state_exited() -> void:
 
 ## ======== Signal Callback Methods ========
 
+func _on_stagger() -> void:
+	# Play a hurt frame when we do enough DPS
+	# TODO - let this interrupt/restart the attack telegraph for some attacks
+	if hurt_sprite:
+		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
+			sprite.texture = hurt_sprite
+			hurt_frame_timer.start(hurt_frame_window)
+
+
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
-		SoundManager.play_sound_with_pitch(sfx_hit.pick_random(), randf_range(0.7, 1.2), "SFX")
-	if new_health < prev_health:
-		if randf() < chip_spawn_chance:
-			var chip = chip_scene.instantiate() as RigidBody3D
-			GameManager.player.get_parent().add_child(chip)
-			chip.global_position = self.global_position
-			chip.rotate_y(randf_range(0, 2 * PI))
-			chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
-			chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+		hurt_sfx_player.stream = sfx_hit.pick_random()
+		hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
+		hurt_sfx_player.play()
+		
+		dps_accumulated_in_window += abs(prev_health - new_health)
+		if dps_accumulated_in_window > chip_spawn_dps_threshold:
+			_on_stagger()
+			# Increase chip spawn rate based on DPS
+			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
+			chip_mult = min(chip_mult, chip_spawn_mult_cap)
+			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult])
+			if chip_scene:
+				for i in chip_mult:
+					if randf() < chip_spawn_chance:
+						continue
+					# TODO - modify spawned chip value chance based on dps
+					var chip = chip_scene.instantiate() as RigidBody3D
+					scene_root.add_child(chip)
+					chip.global_position = self.global_position
+					chip.rotate_y(randf_range(0, 2 * PI))
+					chip.apply_central_force(-chip.global_basis.z * chip_spawn_force)
+					chip.apply_central_force(Vector3.UP * chip_spawn_force / 10)
+					chip_dropped.emit(chip.value)
+			# Stop the dps timer and set the accumulated dps to 0
+			dps_dealt_window_timer.stop()
+			dps_accumulated_in_window = 0.0
 
 
 func _on_died() -> void:
@@ -430,12 +565,107 @@ func _on_died() -> void:
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
+	await death_anim_finished
 	drop_barrel()
 	await boss_death_slow_mo()
-	if not self in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(boss_id)
-		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == 4
 
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:
 	pass
+
+
+func _on_dps_window_timer_timeout() -> void:
+	# TODO - check for chip spawn threshold
+	dps_accumulated_in_window = 0.0
+
+
+func _on_hurt_frame_timer_timeout() -> void:
+	sprite.texture = base_sprite
+	hurt_frame_cooldown_timer.start(hurt_frame_cooldown)
+
+
+## STATUS EFFECTS
+
+func apply_status(status: StatusEffects, duration: float) -> void:
+	var event_string: String = "status_%s" % StatusEffects.keys()[status].to_lower()
+	state_chart.send_event("add_" + event_string)
+	await get_tree().create_timer(duration).timeout
+	state_chart.send_event("remove_" + event_string)
+
+
+func remove_status(status: StatusEffects) -> void:
+	var event_string: String = "status_%s" % StatusEffects.keys()[status].to_lower()
+	state_chart.send_event("remove_" + event_string)
+
+
+func create_status_label(status: String, color: Color) -> void:
+	var status_label := Label3D.new()
+	status_label.text = status
+	status_label.modulate = color
+	status_label.font_size = 128
+	status_label.outline_size = 32
+	status_label.uppercase = true
+	status_label.double_sided = true
+	status_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	debug_status_label_parent.add_child(status_label)
+	status_label.position.y = 0.6 * debug_status_label_parent.get_child_count()
+
+
+func remove_status_label(status: String) -> void:
+	var status_labels = debug_status_label_parent.get_children()
+	status_labels.filter(func(x): return x.text == status)
+	var label = status_labels.front()
+	debug_status_label_parent.remove_child(label)
+	label.queue_free()
+
+
+# Burning
+func _on_status_burning_active_state_entered() -> void:
+	create_status_label("Burning", Color.ORANGE)
+	# TODO - add burning effect particles/shader/icon
+	#
+	burning_timer.start(0.6)
+
+
+func _on_status_burning_active_state_physics_processing(delta: float) -> void:
+	pass
+
+
+func _on_status_burning_active_state_exited() -> void:
+	remove_status_label("Burning")
+	# TODO - remove burning effect particles/shader/icon
+	#
+	burning_timer.stop()
+
+
+func _on_status_poisoned_active_state_entered() -> void:
+	create_status_label("Poisoned", Color.WEB_GREEN)
+	# TODO - add burning effect particles/shader/icon
+	poisoned_timer.start(1.8)
+
+
+func _on_status_poisoned_active_state_physics_processing(delta: float) -> void:
+	pass
+
+
+func _on_status_poisoned_active_state_exited() -> void:
+	remove_status_label("Poisoned")
+	# TODO - remove burning effect particles/shader/icon
+	#
+	poisoned_timer.stop()
+
+
+func _on_burning_timer_timeout() -> void:
+	# TODO - let specific attacks/modifiers change how much damage the effect does
+	health_component.damage(5, Color.ORANGE)
+	sprite.modulate = Color.ORANGE
+	await get_tree().create_timer(0.2).timeout
+	sprite.modulate = Color.WHITE
+
+
+func _on_poisoned_timer_timeout() -> void:
+	# TODO - let specific attacks/modifiers change how much damage the effect does
+	health_component.damage(12, Color.WEB_GREEN)
+	sprite.modulate = Color.WEB_GREEN
+	await get_tree().create_timer(0.4).timeout
+	sprite.modulate = Color.WHITE

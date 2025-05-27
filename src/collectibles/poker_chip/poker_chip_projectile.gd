@@ -37,6 +37,8 @@ func _ready() -> void:
 	value_label_1.text = str(value)
 	value_label_2.text = str(value)
 
+	add_to_group("currency_chips")
+
 
 func _process(delta: float) -> void:
 	sprite.rotate(Vector3(0, 1, 0), SPIN_RATE * delta)

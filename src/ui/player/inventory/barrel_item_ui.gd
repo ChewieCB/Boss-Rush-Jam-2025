@@ -13,6 +13,7 @@ signal show_warning(warning_text: String)
 
 var data: BarrelDataResource
 var clicked_once = false
+var scale_factor = 1.1
 
 var is_equipped = false
 var is_purchased: bool = false:
@@ -30,11 +31,20 @@ func init(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: 
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
 	texture = data.barrel_image
+	button.text = data.barrel_name
 
 
 func _ready() -> void:
 	if data:
 		button.text = data.barrel_name
+
+	button.mouse_entered.connect(play_button_hover_sfx)
+	button.focus_entered.connect(play_button_hover_sfx)
+	
+	button.mouse_entered.connect(expand_button_size)
+	button.mouse_exited.connect(return_button_size)
+	button.focus_entered.connect(expand_button_size)
+	button.focus_exited.connect(return_button_size)
 
 
 func _on_button_pressed() -> void:
@@ -59,3 +69,18 @@ func unselected():
 	clicked_once = false
 	border_selected.visible = false
 	button.text = data.barrel_name
+
+func play_button_hover_sfx():
+	SoundManager.play_button_hover_sfx()
+
+func expand_button_size():
+	pivot_offset = size / 2
+	if button.disabled:
+		return
+	var tween = self.create_tween()
+	tween.tween_property(self, "scale", Vector2(scale_factor, scale_factor), 0.1)
+
+func return_button_size():
+	pivot_offset = size / 2
+	var tween = self.create_tween()
+	tween.tween_property(self, "scale", Vector2(1, 1), 0.1)

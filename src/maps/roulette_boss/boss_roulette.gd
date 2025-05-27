@@ -1,40 +1,21 @@
-extends Node3D
+extends BossMap
 
-@export var bgm: AudioStream
-
-@export var boss: BossCore
-@export var player: Player
-@export var elevator_doors: ElevatorDoors
 @export var floor_pivot: AnimatableBody3D
 @export var ROTATION_SPEED: float = 0.0:
 	set(value):
 		ROTATION_SPEED = value
-		boss.wheel_rotation_speed = ROTATION_SPEED
+		if boss:
+			boss.wheel_rotation_speed = ROTATION_SPEED
 var goal_rotation_speed: float = ROTATION_SPEED: set = set_goal_rotation_speed
 # Floor segments array stores tuples of [mesh, collider] since we separate them
 # for the purposes of the AnimatableBody3D rotation
 var floor_segments: Array
 
-@export var win_subtext: Array[String]
-@export var lose_tips: Array[String]
-
 @export var sfx_ambience: Array[AudioStream]
 var current_sfx_ambient: AudioStream
 
-@export var directional_light: DirectionalLight3D
-
-@onready var win_ui: Control = $UI/BossDefeatedUI
-@onready var boss_trigger: Area3D = $BossTriggerVolume
-
 
 func _ready() -> void:
-	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
-	
-	boss.died.connect(_on_boss_died)
-	boss.defeated.connect(_on_boss_defeated)
-	boss.change_wheel_speed.connect(set_goal_rotation_speed)
-	player.health_component.died.connect(_on_player_death)
-	
 	# Build the animatable body's collision from each wheel segment collider
 	for segment in floor_pivot.get_children():
 		var static_body: StaticBody3D = segment.get_child(0)
@@ -47,14 +28,9 @@ func _ready() -> void:
 		
 		floor_segments.append([mesh, new_collider, mesh.global_position.y])
 	boss.floor_segments = floor_segments
+	boss.change_wheel_speed.connect(set_goal_rotation_speed)
 	
-	if GameManager.cached_player_pos_relative_to_elevator_doors:
-		var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
-		player.global_position = player_start_pos
-		player.rotation = GameManager.cached_player_rotation
-		player.player_camera.rotation = GameManager.cached_camera_rotation
-	
-	elevator_doors.open()
+	super()
 
 
 func _physics_process(delta) -> void:
@@ -77,52 +53,22 @@ func shove_player(shove_force: float = 25.0) -> void:
 func set_goal_rotation_speed(value: float) -> void:
 	goal_rotation_speed = value
 
-func _on_boss_died() -> void:
-	var tween = self.create_tween()
-	tween.tween_property(directional_light, "light_energy", 0, 1)
+
+func _on_player_death() -> void:
+	SoundManager.stop_ambient_sound(current_sfx_ambient, 0.5)
+	super()
+
 
 func _on_boss_defeated(_boss: BossCore) -> void:
 	SoundManager.stop_ambient_sound(current_sfx_ambient, 0.5)
-	win_ui.win("Floor Cleared", win_subtext.pick_random())
-	show_end_panel()
-
-
-func _on_player_death() -> void:
-	win_ui.lose(lose_tips.pick_random())
-	show_end_panel()
-
-
-func show_end_panel() -> void:
-	win_ui.visible = true
-	var tween = get_tree().create_tween()
-	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
-	await tween.finished
-	await get_tree().create_timer(2.5).timeout
-	tween = get_tree().create_tween()
-	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
-	await tween.finished
-	
-	LoadingHandler.start_loading("Lobby")
-
-
-func _reload_scene() -> void:
-	ScreenTransition.transition_out()
-	await ScreenTransition.transition_finished
-	get_tree().reload_current_scene()
-
-
-func _on_area_3d_body_entered(body: Node3D) -> void:
-	if body is BossCore:
-		body.jump()
+	super(_boss)
 
 
 func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
-	if body is Player:
-		current_sfx_ambient = sfx_ambience.pick_random()
-		SoundManager.play_ambient_sound(current_sfx_ambient, 0.5, "Ambience")
-		boss.activate()
-		boss_trigger.queue_free()
-		shove_player()
+	current_sfx_ambient = sfx_ambience.pick_random()
+	SoundManager.play_ambient_sound(current_sfx_ambient, 0.5, "Ambience")
+	super(body)
+	shove_player()
 
 
 func _on_killbox_area_body_entered(body: Node3D) -> void:

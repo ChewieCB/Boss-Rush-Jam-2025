@@ -1,0 +1,114 @@
+extends Node
+
+signal luck_increased(value: float)
+signal luck_decreased(value: float)
+signal modifier_message(text: String, is_gain: bool)
+
+# TODO - default to false and enable on the boss trigger
+@export var enabled: bool = false
+
+# Luck decay per second
+@export var luck_decay: float = 1.4
+@export var max_luck_decay_buffer_time: float = 2.0
+@onready var luck_decay_timer: Timer = $LuckDecayTimer
+
+@export_subgroup("No Damage Taken For X Seconds")
+@export var no_damage_taken_threshold: float = 5.0
+@export var no_damage_taken_luck_gain: float = 10.0
+@export var no_damage_taken_mult_cap: int = 3
+var time_since_last_hurt: float = 0.0
+var last_hurt_mult: int = 0
+@export_subgroup("DPS Dealt In Last X Seconds")
+@export var dps_dealt_window: float = 1.8
+@export var dps_dealt_threshold: float = 80.0
+@export var dps_dealt_luck_gain: float = 10.0
+@export var dps_dealt_mult_cap: int = 5
+@onready var dps_dealt_window_timer: Timer = $DPSWindowTimer
+var dps_accumulated_in_window: float = 0.0:
+	set(value):
+		dps_accumulated_in_window = value
+		if dps_dealt_window_timer.is_stopped():
+			dps_dealt_window_timer.start(dps_dealt_window)
+
+
+func _physics_process(delta: float) -> void:
+	if not enabled:
+		return
+	
+	track_no_damage_taken(delta)
+
+
+func track_no_damage_taken(delta: float) -> void:
+	time_since_last_hurt += delta
+	
+	# var threshold = no_damage_taken_threshold
+	var current_mult = int(time_since_last_hurt / no_damage_taken_threshold)
+	
+	if current_mult > last_hurt_mult and current_mult <= no_damage_taken_mult_cap:
+		LuckHandler.gain_no_damage_taken(current_mult)
+		last_hurt_mult = current_mult
+
+
+func gain_no_damage_taken(threshold_mult: int) -> void:
+	# Gain luck from not taking damage in the last X seconds
+	increase_luck(no_damage_taken_luck_gain * threshold_mult)
+	modifier_message.emit(
+		"No damage taken for %s seconds!" % [
+			no_damage_taken_threshold * threshold_mult
+		],
+		true
+	)
+
+
+func accumulate_dps_dealt(damage: float) -> void:
+	if not enabled:
+		return
+	dps_accumulated_in_window += damage
+
+
+func gain_dps_dealt(dps_dealt: float) -> void:
+	var mult = int(dps_dealt / dps_dealt_threshold)
+	if mult > dps_dealt_mult_cap:
+		mult = dps_dealt_mult_cap
+	increase_luck(dps_dealt_luck_gain * mult)
+	modifier_message.emit(
+		"%s damage in %s seconds!" % [
+			dps_dealt,
+			dps_dealt_threshold
+		],
+		true
+	)
+	print("Gained %s luck, did %s damage in %s seconds!" % [
+		dps_dealt_luck_gain * mult,
+		dps_dealt,
+		dps_dealt_threshold
+	])
+
+
+func increase_luck(amount: float) -> void:
+	luck_increased.emit(amount)
+
+
+func decrease_luck(amount: float) -> void:
+	luck_decreased.emit(amount)
+
+
+func max_luck_decay_buffer() -> void:
+	# When we max out luck, stop the decay for a short time 
+	# to make sure we can cash it in.
+	luck_decay_timer.stop()
+	await get_tree().create_timer(max_luck_decay_buffer_time).timeout
+	luck_decay_timer.start()
+
+
+func _on_luck_decay_timer_timeout() -> void:
+	luck_decreased.emit(luck_decay)
+
+
+func _on_dps_dealt_window_timer_timeout() -> void:
+	if not enabled:
+		dps_accumulated_in_window = 0.0
+		return
+	if dps_accumulated_in_window > dps_dealt_threshold:
+		gain_dps_dealt(dps_accumulated_in_window)
+	dps_accumulated_in_window = 0.0

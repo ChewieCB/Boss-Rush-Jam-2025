@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cork0akyuaju6"
+path="res://.godot/imported/CHIP SubStack Gun mode .mp3-fc429b9271e76770c1a94cff55b89e6c.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/CHIP SubStack Gun mode .mp3"
+dest_files=["res://.godot/imported/CHIP SubStack Gun mode .mp3-fc429b9271e76770c1a94cff55b89e6c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

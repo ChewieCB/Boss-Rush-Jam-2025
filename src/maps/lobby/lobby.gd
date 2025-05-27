@@ -5,21 +5,25 @@ extends Node3D
 
 signal ui_accept
 
+@onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 @onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
 
 @onready var tutorial_ui: Control = $UI/TutorialUI
 @onready var game_win_ui: Control = $UI/GameWinUI
 
+@onready var SFXDoorOpen: AudioStreamPlayer3D = $SFXDoorOpen
+@onready var SFXDoorClose: AudioStreamPlayer3D = $SFXDoorClose
+
 var display_barrels: Array = []
 
 func _ready() -> void:
 	#ScreenTransition.fill_screen()
-	
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
+	
 	get_tree().paused = false
 	
 	lobby_music_player.play()
@@ -32,8 +36,10 @@ func _ready() -> void:
 		# First time get to lobby, load data from save file
 		GameManager.start_record_playtime()
 		SaveManager.load_game(GameManager.chosen_slot_id)
-
-
+	
+	GameManager.reset_reroll_cost()
+	GameManager.is_free_reroll = true
+	
 	# HACK
 	if GameManager.player_gained_first_barrel:
 		if not GameManager.barrel_tutorial_shown:
@@ -48,6 +54,8 @@ func _ready() -> void:
 		if not GameManager.victory_ui_shown:
 			show_panel(game_win_ui)
 			GameManager.victory_ui_shown = true
+	
+	player.stat_ui.show_health_ui()
 
 
 func _input(event: InputEvent) -> void:
@@ -66,6 +74,7 @@ func show_panel(panel: Control) -> void:
 
 
 func _on_level_select(level_path: String) -> void:
+	SFXDoorClose.play()
 	ResourceLoader.load_threaded_request(level_path)
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
@@ -83,16 +92,20 @@ func _on_level_select(level_path: String) -> void:
 		# TODO - fade this out via tween
 		lobby_music_player.stop()
 		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
-		if new_bgm:
-			SoundManager.play_music(new_bgm, 0.25, "BGM")
+		# TODO - fixme
+		#if new_bgm:
+			#SoundManager.play_music(new_bgm, 0.25, "BGM")
+		GameManager.is_free_reroll = false
 		get_tree().change_scene_to_packed(loaded_scene)
 
 
 func _on_door_transition_area_body_entered(body: Node3D) -> void:
 	if body is Player:
 		elevator_doors.open()
+		SFXDoorOpen.play()
 
 
 func _on_door_transition_area_body_exited(body: Node3D) -> void:
 	if body is Player:
 		elevator_doors.close()
+		SFXDoorClose.play()

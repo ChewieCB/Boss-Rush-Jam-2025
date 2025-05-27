@@ -5,7 +5,7 @@ uniform float AspectRatio = 1.5;
 uniform float Dots = 10.0;
 uniform float _min;
 uniform float _max = 1.0;
-uniform float transition_angle = 0.0; 
+uniform float transition_angle = 0.0;
 
 uniform float height = 0.0;
 
@@ -28,7 +28,7 @@ void fragment() {
 	vec3 uv_grid = fract(vec3(rotated_uv, 0.0));
 
 	float grid = distance(uv_grid, vec3(0.5, 0.5, 0.5));
-	
+
 	// Apply rotated wipe direction for animated transition
 	vec2 wipe_dir = vec2(cos(dots_angle_rad), sin(dots_angle_rad));
 	float wipe_value = dot(UV, wipe_dir);  // This replaces UV.y
@@ -46,7 +46,7 @@ void fragment() {
 
 	bool black_dot_grid = grid > dot(vec3(1.0, 1.0, 1.0) - clamped, vec3(0.333333, 0.333333, 0.333333));
 	bool white_dot_grid = grid < dot(clamped, vec3(0.333333, 0.333333, 0.333333));
-	
+
 	// Scrolling texture shader code
 	float angle_rad = radians(angle_degrees);
 	vec2 direction = vec2(cos(angle_rad), sin(angle_rad));
@@ -63,6 +63,6 @@ void fragment() {
 	vec4 grid_result = transparent_dots? (black_dot_grid? texture_uv : vec4(0.0)): (white_dot_grid? texture_uv : vec4(0.0));
 
 	COLOR.rgb = grid_result.rgb;
-	
+
 	COLOR.a = grid_result.a;
 }

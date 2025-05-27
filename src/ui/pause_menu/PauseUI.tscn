@@ -1,8 +1,49 @@
-[gd_scene load_steps=4 format=3 uid="uid://byj1y3wrwtdtq"]
+[gd_scene load_steps=21 format=3 uid="uid://byj1y3wrwtdtq"]
 
 [ext_resource type="PackedScene" uid="uid://biqm56x6ewbmo" path="res://src/ui/pause_menu/SettingUI.tscn" id="1_oj67h"]
 [ext_resource type="Script" path="res://src/ui/pause_menu/pause_ui.gd" id="1_y22bm"]
-[ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="2_cl7if"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="2_mnul8"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="3_fbfq4"]
+[ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="4_5h1bl"]
+[ext_resource type="Texture2D" uid="uid://csw0xjbbqsivg" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-016.png" id="6_3n3jr"]
+[ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="6_vrelk"]
+[ext_resource type="Script" path="res://src/bosses/base/test/end_panel_ui.gd" id="8_vyjnr"]
+[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="9_728ko"]
+[ext_resource type="FontFile" uid="uid://bs58em2h8opfu" path="res://assets/fonts/BLACKJAC.TTF" id="10_72h53"]
+[ext_resource type="FontFile" uid="uid://cf4ghtgpa7pbl" path="res://assets/engebrechtre.rg-bold.otf" id="11_ecy6m"]
+[ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="12_ixudt"]
+[ext_resource type="Texture2D" uid="uid://cwmhx1u0uxo4b" path="res://assets/misc/https_gnarled-hand_itch_io_.png" id="13_5ll6d"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="14_emu32"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1s2yq"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nb2lf"]
+seamless = true
+noise = SubResource("FastNoiseLite_1s2yq")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2sij"]
+resource_local_to_scene = true
+shader = ExtResource("4_5h1bl")
+shader_parameter/projector_power = 0.2
+shader_parameter/vignette_param = 1.0
+shader_parameter/distortionTexture = SubResource("NoiseTexture2D_nb2lf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hhcs4"]
+shader = ExtResource("2_mnul8")
+shader_parameter/blur_amount = 2.0
+shader_parameter/mix_amount = null
+shader_parameter/color_over = null
+
+[sub_resource type="Theme" id="Theme_f2ch4"]
+default_font = ExtResource("10_72h53")
+default_font_size = 128
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lfg50"]
+texture = ExtResource("12_ixudt")
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+region_rect = Rect2(0, 0, 93.7968, 22)
+modulate_color = Color(0.901961, 0.776471, 0, 1)
 
 [node name="PauseUI" type="Control"]
 process_mode = 3
@@ -14,6 +55,44 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_y22bm")
+
+[node name="PausedLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -296.0
+offset_top = 64.0
+offset_right = -66.0
+offset_bottom = 161.0
+grow_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 80
+text = "PAUSED"
+
+[node name="OldMovieShader" type="TextureRect" parent="."]
+visible = false
+z_index = -1
+material = SubResource("ShaderMaterial_c2sij")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_fbfq4")
+
+[node name="BlurShader" type="TextureRect" parent="."]
+visible = false
+z_index = -1
+material = SubResource("ShaderMaterial_hhcs4")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_fbfq4")
 
 [node name="PauseOptionBG" type="ColorRect" parent="."]
 layout_mode = 1
@@ -40,78 +119,38 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 20
 
-[node name="SettingButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+[node name="SettingButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Settings"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/SettingButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_cl7if")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="LobbyButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+[node name="LobbyButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
-text = "Return to
+text = "Return to 
 Lobby"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/LobbyButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_cl7if")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="MainMenuButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+[node name="MainMenuButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
-text = "Main Menu"
+text = "Main menu"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/MainMenuButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_cl7if")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="QuitButton" type="Button" parent="PauseOptionBG/VBoxContainer"]
+[node name="QuitButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Quit"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG/VBoxContainer/QuitButton"]
+[node name="NinePatchRect" type="NinePatchRect" parent="PauseOptionBG"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -16.0
+offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_cl7if")
+texture = ExtResource("6_3n3jr")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -121,11 +160,144 @@ patch_margin_bottom = 20
 visible = false
 layout_mode = 1
 
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="play_button_hover_sfx"]
+[node name="QRLinkUI" type="Control" parent="."]
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_vyjnr")
+
+[node name="PanelContainer" type="MarginContainer" parent="QRLinkUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -321.0
+offset_top = -254.0
+offset_right = 321.0
+offset_bottom = 254.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="QRLinkUI/PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.72549)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="QRLinkUI/PanelContainer/Background"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_728ko")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QRLinkUI/PanelContainer/Background/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 9.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WinLabelHeader" type="RichTextLabel" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme = SubResource("Theme_f2ch4")
+theme_override_colors/default_color = Color(1, 0.843137, 0, 1)
+theme_override_fonts/normal_font = ExtResource("11_ecy6m")
+theme_override_font_sizes/normal_font_size = 72
+bbcode_enabled = true
+text = "[wave][center]Thanks for playing![/center][/wave]"
+fit_content = true
+scroll_active = false
+
+[node name="MarginContainer" type="MarginContainer" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
+
+[node name="HSeparator" type="HSeparator" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxTexture_lfg50")
+
+[node name="MarginContainer2" type="MarginContainer" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="WinLabelSubHeader" type="RichTextLabel" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+mouse_filter = 2
+theme = SubResource("Theme_f2ch4")
+theme_override_fonts/normal_font = ExtResource("11_ecy6m")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "Crapshoot is currently in active development, feel free to follow us on itch.io for regular updates!"
+fit_content = true
+scroll_active = false
+
+[node name="MarginContainer4" type="MarginContainer" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="TextureRect" type="TextureRect" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer4"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("13_5ll6d")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer3" type="MarginContainer" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 32
+
+[node name="HBoxContainer" type="HBoxContainer" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3"]
+layout_mode = 2
+alignment = 2
+
+[node name="DeviceInputPrompt" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3/HBoxContainer" instance=ExtResource("14_emu32")]
+visible = false
+layout_mode = 2
+assigned_action = "ui_accept"
+hide_background = true
+
+[node name="ContinueLabel" type="Label" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer3/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = " to close"
+
+[connection signal="focus_entered" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="PauseOptionBG/VBoxContainer/SettingButton" to="." method="_on_setting_button_pressed"]
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/LobbyButton" to="." method="play_button_hover_sfx"]
+[connection signal="focus_entered" from="PauseOptionBG/VBoxContainer/LobbyButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="PauseOptionBG/VBoxContainer/LobbyButton" to="." method="_on_lobby_button_pressed"]
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/MainMenuButton" to="." method="play_button_hover_sfx"]
+[connection signal="focus_entered" from="PauseOptionBG/VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_focus_entered"]
 [connection signal="pressed" from="PauseOptionBG/VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
-[connection signal="mouse_entered" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="focus_entered" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="PauseOptionBG/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

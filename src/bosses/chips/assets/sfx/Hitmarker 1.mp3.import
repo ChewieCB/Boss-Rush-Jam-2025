@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bak8v6wppvc03"
+path="res://.godot/imported/Hitmarker 1.mp3-420920d709bcc107d0526fc68dae325c.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/Hitmarker 1.mp3"
+dest_files=["res://.godot/imported/Hitmarker 1.mp3-420920d709bcc107d0526fc68dae325c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

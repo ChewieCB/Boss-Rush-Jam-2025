@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=3 uid="uid://cu52aolci8t0a"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_v4d5e"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_yv5q3"]
+[ext_resource type="Script" path="res://src/player/barrel/slow_roller_effect.gd" id="3_b2svt"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_2xsnk"]
+[ext_resource type="Script" path="res://src/player/barrel/longshot_effect.gd" id="5_12stn"]
+[ext_resource type="Script" path="res://src/player/barrel/snap_call_effect.gd" id="6_t0qlc"]
+
+[node name="KinematicEquationBarrel" type="Node3D"]
+script = ExtResource("1_v4d5e")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="SlowRoller" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_yv5q3")
+display_text_title = "Slow Roller"
+display_text_tag = "Oh, the anticipation!"
+display_text_desc = "More damage with bullet flight time
+-50% projectile speed"
+
+[node name="SlowRollerEffect" type="Node3D" parent="EffectContainer/SlowRoller"]
+script = ExtResource("3_b2svt")
+
+[node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/SlowRoller"]
+script = ExtResource("5_2xsnk")
+attribute = 3
+modify_value = -50.0
+is_perc = true
+
+[node name="LongShot" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_yv5q3")
+display_text_title = "Long Shot"
+display_text_tag = "Oh, the separation!"
+display_text_desc = "More damage with distance
+-50% spread"
+
+[node name="LongshotEffect" type="Node3D" parent="EffectContainer/LongShot"]
+script = ExtResource("5_12stn")
+
+[node name="ModifySpread" type="Node3D" parent="EffectContainer/LongShot"]
+script = ExtResource("5_2xsnk")
+attribute = 7
+modify_value = -50.0
+is_perc = true
+
+[node name="SnapCall" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_yv5q3")
+display_text_title = "Snap Call"
+display_text_tag = "Oh, the attraction!"
+display_text_desc = "More damage with bullet speed
++25% projectile speed"
+
+[node name="SnapCallEffect" type="Node3D" parent="EffectContainer/SnapCall"]
+script = ExtResource("6_t0qlc")
+dmg_modify_for_hitscan = 1.25
+
+[node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/SnapCall"]
+script = ExtResource("5_2xsnk")
+attribute = 3
+modify_value = 25.0
+is_perc = true

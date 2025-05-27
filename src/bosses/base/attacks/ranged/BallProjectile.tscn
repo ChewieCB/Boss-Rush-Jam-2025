@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://do3bxfmdvwqyt"]
+
+[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/ball_projectile.gd" id="1_jebwo"]
+[ext_resource type="Texture2D" uid="uid://bir3bjle34i7" path="res://assets/textures/placeholder/texture_dark_09.png" id="2_gma1t"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_5ggf0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_txdvl"]
+albedo_texture = ExtResource("2_gma1t")
+
+[sub_resource type="SphereMesh" id="SphereMesh_h1cwk"]
+material = SubResource("StandardMaterial3D_txdvl")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jxnus"]
+radius = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tr7ah"]
+transparency = 1
+albedo_color = Color(1, 0.995527, 0.960938, 0.713726)
+emission = Color(1, 0.731834, 0.032858, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_80j66"]
+
+[sub_resource type="Curve" id="Curve_bpr7s"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="BalllProjectile" type="Area3D"]
+collision_layer = 8
+collision_mask = 7
+script = ExtResource("1_jebwo")
+projectile_damage = 5.0
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_h1cwk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_jxnus")
+
+[node name="Trail2" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail2"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_tr7ah")
+cast_shadow = 0
+mesh = SubResource("ImmediateMesh_80j66")
+skeleton = NodePath("../../MeshInstance3D")
+script = ExtResource("3_5ggf0")
+segments = 10
+base_width = 0.1
+width_profile = SubResource("Curve_bpr7s")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

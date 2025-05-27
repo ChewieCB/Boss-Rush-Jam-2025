@@ -1,0 +1,554 @@
+[gd_scene load_steps=24 format=3 uid="uid://crvu72pwcnneq"]
+
+[ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_ct6da"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="1_v8jbf"]
+[ext_resource type="PackedScene" uid="uid://q6qasacer4wj" path="res://src/ui/player/StatusDurationUI.tscn" id="3_ovi2h"]
+[ext_resource type="Script" path="res://src/ui/boss/health_bar.gd" id="3_yk5mo"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="4_tew2m"]
+[ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="5_71223"]
+[ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="6_g72qs"]
+[ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="7_x1uxm"]
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_ui.gd" id="8_12af2"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="8_esel0"]
+[ext_resource type="Texture2D" uid="uid://dktkrabxua7mo" path="res://src/player/assets/ammo.png" id="9_8qhrl"]
+[ext_resource type="PackedScene" uid="uid://bicxns6d0ciub" path="res://src/ui/player/reroll/RerollUI.tscn" id="10_tkawr"]
+
+[sub_resource type="Theme" id="Theme_y0f30"]
+default_font = ExtResource("4_tew2m")
+
+[sub_resource type="Animation" id="Animation_kjov7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerHealthBarUI:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerLuckUI:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerConsumables:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RerollUI:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4ce41"]
+resource_name = "hide_all"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_8ow1x"]
+resource_name = "hide_health"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerHealthBarUI:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(0.392292, 0.392292),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_jk0qx"]
+resource_name = "hide_luck"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerLuckUI:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(0.392292, 0.392292),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kr8h7"]
+resource_name = "hide_non_luck"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerHealthBarUI:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(0.392292, 0.392292),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerConsumables:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(0.392292, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RerollUI:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_oj1x5"]
+resource_name = "show_all"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xq8g0"]
+resource_name = "show_health"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerHealthBarUI:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.392292, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_2wuw4"]
+resource_name = "show_luck"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerLuckUI:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.392292, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_pwctn"]
+resource_name = "show_non_luck"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerHealthBarUI:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.392292, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerConsumables:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(0.392, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RerollUI:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2600x"]
+_data = {
+"RESET": SubResource("Animation_kjov7"),
+"hide_all": SubResource("Animation_4ce41"),
+"hide_health": SubResource("Animation_8ow1x"),
+"hide_luck": SubResource("Animation_jk0qx"),
+"hide_non_luck": SubResource("Animation_kr8h7"),
+"show_all": SubResource("Animation_oj1x5"),
+"show_health": SubResource("Animation_xq8g0"),
+"show_luck": SubResource("Animation_2wuw4"),
+"show_non_luck": SubResource("Animation_pwctn")
+}
+
+[node name="StatUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_ct6da")
+status_duration_ui_prefab = ExtResource("3_ovi2h")
+
+[node name="PlayerHealthBarUI" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -96.0
+offset_right = 440.0
+offset_bottom = -56.0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("3_yk5mo")
+animate_show_hide = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerHealthBarUI"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="StatusUIContainer" type="GridContainer" parent="PlayerHealthBarUI/VBoxContainer"]
+layout_mode = 2
+columns = 5
+
+[node name="MarginContainer2" type="MarginContainer" parent="PlayerHealthBarUI/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 10
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
+visible = false
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_y0f30")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "10,000/10,000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthBar" type="TextureProgressBar" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
+custom_minimum_size = Vector2(240, 20)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+value = 40.0
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_over = ExtResource("5_71223")
+texture_progress = ExtResource("6_g72qs")
+tint_over = Color(0.901961, 0.776471, 0, 1)
+tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
+
+[node name="DamageBar" type="TextureProgressBar" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+value = 60.0
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_under = ExtResource("7_x1uxm")
+texture_progress = ExtResource("7_x1uxm")
+tint_under = Color(0.113725, 0.113725, 0.113725, 1)
+tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
+
+[node name="Timer" type="Timer" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
+wait_time = 0.4
+one_shot = true
+
+[node name="PlayerLuckUI" type="VBoxContainer" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -440.0
+offset_top = -96.0
+offset_right = -64.0
+offset_bottom = -56.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="PlayerLuckBarUI" type="MarginContainer" parent="PlayerLuckUI"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("8_12af2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerLuckUI/PlayerLuckBarUI"]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(376, 16)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
+visible = false
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_y0f30")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "10,000/10,000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LuckBar" type="TextureProgressBar" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
+layout_mode = 2
+value = 41.0
+nine_patch_stretch = true
+stretch_margin_left = 12
+stretch_margin_top = 12
+stretch_margin_right = 12
+stretch_margin_bottom = 12
+texture_over = ExtResource("5_71223")
+texture_progress = ExtResource("6_g72qs")
+tint_over = Color(0.901961, 0.776471, 0, 1)
+tint_progress = Color(1, 0.74902, 0, 1)
+
+[node name="LuckGain" type="TextureProgressBar" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar"]
+z_index = -1
+custom_minimum_size = Vector2(376, 16)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 60.0
+nine_patch_stretch = true
+stretch_margin_left = 12
+stretch_margin_top = 12
+stretch_margin_right = 12
+stretch_margin_bottom = 12
+texture_under = ExtResource("7_x1uxm")
+texture_progress = ExtResource("7_x1uxm")
+tint_under = Color(0.113725, 0.113725, 0.113725, 1)
+tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
+
+[node name="Timer" type="Timer" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar"]
+wait_time = 0.4
+one_shot = true
+
+[node name="LuckBuffsUI" type="MarginContainer" parent="PlayerLuckUI"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PlayerLuckUI/LuckBuffsUI"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+
+[node name="PlayerConsumables" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -543.0
+offset_top = -160.0
+offset_right = 52.0
+offset_bottom = -64.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.8, 0.8)
+
+[node name="ConsumableUI" type="HBoxContainer" parent="PlayerConsumables"]
+layout_mode = 2
+
+[node name="ReloadKeyIcon" parent="PlayerConsumables/ConsumableUI" instance=ExtResource("8_esel0")]
+layout_mode = 2
+assigned_action = "spin_reload"
+
+[node name="AmmoIcon" type="TextureRect" parent="PlayerConsumables/ConsumableUI"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("9_8qhrl")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PlayerConsumables/ConsumableUI"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="CurrentAmmo" type="Label" parent="PlayerConsumables/ConsumableUI/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 40
+text = "100"
+
+[node name="MagazineSize" type="Label" parent="PlayerConsumables/ConsumableUI/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.535156, 0.535156, 0.535156, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 40
+text = "/100"
+
+[node name="Spacer" type="Control" parent="PlayerConsumables/ConsumableUI"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SpinBarrelKeyIcon" parent="PlayerConsumables/ConsumableUI" instance=ExtResource("8_esel0")]
+layout_mode = 2
+assigned_action = "spin_barrels"
+
+[node name="MarginContainer2" type="MarginContainer" parent="PlayerConsumables/ConsumableUI"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CurrencyUI" parent="PlayerConsumables/ConsumableUI/MarginContainer2" instance=ExtResource("1_v8jbf")]
+custom_minimum_size = Vector2(200, 96)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+is_static = true
+
+[node name="RerollUI" parent="." instance=ExtResource("10_tkawr")]
+layout_mode = 1
+anchors_preset = 7
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 792.0
+offset_top = -240.0
+offset_right = 888.0
+offset_bottom = -144.0
+grow_vertical = 0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_2600x")
+}
+
+[connection signal="timeout" from="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer" to="PlayerHealthBarUI" method="_on_timer_timeout"]
+[connection signal="timeout" from="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar/Timer" to="PlayerLuckUI/PlayerLuckBarUI" method="_on_timer_timeout"]

@@ -51,7 +51,7 @@ func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
 			spark_inst.look_at(pos + normal, Vector3.UP)
 
 
-func destroy() -> void:
+func destroy(explode: bool = true) -> void:
 	explosion_area.set_deferred("monitoring", true)
 	var explosion_vfx = explosion_scene.instantiate()
 	get_tree().get_root().add_child(explosion_vfx)
@@ -79,6 +79,8 @@ func _on_body_entered(_body: Node) -> void:
 	var collision_pos = body_state.get_contact_local_position(0)
 	var collision_normal = body_state.get_contact_local_normal(0)
 	create_spark(collision_pos, collision_normal)
+	sfx_player.stream = sfx_bomb_bounce.pick_random()
+	sfx_player.play()
 
 
 func _on_explosion_area_body_entered(body: Node3D) -> void:
@@ -86,6 +88,3 @@ func _on_explosion_area_body_entered(body: Node3D) -> void:
 		body.health_component.damage(explosion_damage)
 	elif body is BombProjectile:
 		body.destroy()
-	else:
-		sfx_player.stream = sfx_bomb_bounce.pick_random()
-		sfx_player.play()

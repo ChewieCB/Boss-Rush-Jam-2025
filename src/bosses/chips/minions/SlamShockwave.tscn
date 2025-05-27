@@ -1,0 +1,74 @@
+[gd_scene load_steps=6 format=3 uid="uid://cbb2iyep64uu"]
+
+[ext_resource type="Script" path="res://src/bosses/chips/minions/slam_shockwave.gd" id="1_itr88"]
+
+[sub_resource type="Shader" id="Shader_4ownv"]
+code = "shader_type spatial;
+
+render_mode depth_draw_opaque, cull_back;
+
+uniform float arc_start_deg = 0.0;
+uniform float arc_end_deg = 90.0;
+
+varying vec3 local_pos;
+
+uniform vec4 base_color : source_color;
+
+
+void vertex() {
+    local_pos = VERTEX;
+}
+
+void fragment() {
+    float angle = degrees(atan(local_pos.z, local_pos.x)); // XZ plane
+    if (angle < 0.0) {
+        angle += 360.0;
+    }
+
+    bool in_arc = false;
+    if (arc_start_deg < arc_end_deg) {
+        in_arc = angle >= arc_start_deg && angle <= arc_end_deg;
+    } else {
+        // Wraps around 360 → 0
+        in_arc = angle >= arc_start_deg || angle <= arc_end_deg;
+    }
+
+    if (!in_arc) {
+        discard;
+    }
+
+    ALBEDO = base_color.rgb;
+    ALPHA = base_color.a;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_muwhh"]
+render_priority = 1
+shader = SubResource("Shader_4ownv")
+shader_parameter/arc_start_deg = 0.0
+shader_parameter/arc_end_deg = 90.0
+shader_parameter/base_color = Color(0.37, 0.1, 1, 0.686275)
+
+[sub_resource type="TorusMesh" id="TorusMesh_u4ve2"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_muwhh")
+inner_radius = 1.6
+outer_radius = 2.0
+rings = 24
+ring_segments = 6
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bo36u"]
+resource_local_to_scene = true
+
+[node name="SlamShockwave" type="Area3D"]
+collision_layer = 8
+collision_mask = 66
+script = ExtResource("1_itr88")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 0.5, 0, -0.939693, 0, -0.34202, 0, 0, 0)
+mesh = SubResource("TorusMesh_u4ve2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_bo36u")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

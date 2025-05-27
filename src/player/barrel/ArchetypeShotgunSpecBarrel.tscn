@@ -10,7 +10,6 @@
 
 [node name="ArchetypeShotgunSpecBarrel" type="Node3D"]
 script = ExtResource("1_41m3f")
-barrel_id = 7
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
@@ -56,6 +55,11 @@ script = ExtResource("4_cnlm3")
 attribute = 11
 new_value = 0.08
 
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/CombatShotgun"]
+script = ExtResource("4_cnlm3")
+attribute = 8
+new_value = 2.0
+
 [node name="DoubleBarrel" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_eatto")
 is_archetype = true
@@ -97,6 +101,11 @@ new_value = 2.0
 script = ExtResource("4_cnlm3")
 attribute = 11
 new_value = 0.12
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/DoubleBarrel"]
+script = ExtResource("4_cnlm3")
+attribute = 8
+new_value = 2.1
 
 [node name="Slug" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_eatto")
@@ -144,3 +153,8 @@ new_value = 6.0
 script = ExtResource("4_cnlm3")
 attribute = 11
 new_value = 0.15
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/Slug"]
+script = ExtResource("4_cnlm3")
+attribute = 8
+new_value = 2.3

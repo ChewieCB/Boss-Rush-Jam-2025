@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://k85gvtgbejwf"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="8_8ud1i"]
+[ext_resource type="Script" path="res://src/player/barrel/card_counting_system_effect.gd" id="11_4doj4"]
+
+[node name="PlaceholderBarrelA" type="Node3D"]
+script = ExtResource("1_xtoip")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+script = ExtResource("2_nse0w")
+
+[node name="CardCountingSystem" type="Node3D" parent="EffectContainer"]
+visible = false
+script = ExtResource("11_4doj4")
+display_text_title = "The System"
+display_text_tag = "Trust me brother"
+display_text_desc = "+10% damage for each missed shot
+Reset on reload"
+
+[node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
+visible = false
+script = ExtResource("8_8ud1i")
+modify_perc_spread_stationary = -50.0
+modify_perc_damage_stationary = 25.0
+modify_perc_spread_moving = 100.0
+modify_perc_damage_moving = -25.0
+display_text_title = "Hyperfocus"
+display_text_tag = "Take position and start blasting!"
+display_text_desc = "-50% spread, +25% damage when stationary
++100% spread, -25% damage when moving"

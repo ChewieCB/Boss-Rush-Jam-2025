@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://6qe1hg4wkjwf"
+path="res://.godot/imported/Burst ground and scream 2.mp3-a70f6b5bda2896a40557fa1375a4c342.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/Burst ground and scream 2.mp3"
+dest_files=["res://.godot/imported/Burst ground and scream 2.mp3-a70f6b5bda2896a40557fa1375a4c342.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

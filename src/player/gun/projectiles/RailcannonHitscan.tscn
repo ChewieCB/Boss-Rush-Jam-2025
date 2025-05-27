@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="5_q8kxl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ka6s1"]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("4_mqx5a")
 shader_parameter/enable_fade = true

@@ -3,7 +3,10 @@ extends Node
 signal currency_changed(new_currency: int)
 signal barrel_purchased(barrel_data: BarrelDataResource)
 signal barrel_too_expensive(barrel_data: BarrelDataResource)
+signal reroll_cost_changed(new_cost: int)
+signal free_rerolls
 signal refresh_shop_ui
+signal setting_changed
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -15,13 +18,26 @@ var pause_ui: PauseUI
 var setting_ui: SettingUI
 var player: Player
 
+# Barrels
+@export var starting_barrels: Array[BarrelDataResource]
+@export var starting_shop_barrels: Array[BarrelDataResource]
+@export var barrel_database: Array[Resource]
+@export var debug_barrel_database: Array[Resource]
+
 var equipped_barrels: Array[BarrelDataResource] = []
 var inventory_barrels: Array[BarrelDataResource] = []
 var shop_barrels: Array[BarrelDataResource] = []
 
-@export var starting_barrels: Array[BarrelDataResource]
-@export var starting_shop_barrels: Array[BarrelDataResource]
-@export var barrel_database: Array[BarrelDataResource]
+
+# Re-rolls
+@export var initial_reroll_cost: int = 200
+@export var reroll_cost_mult: float = 1.5
+var reroll_cost: int = initial_reroll_cost
+var is_free_reroll: bool = false:
+	set(value):
+		is_free_reroll = value
+		if is_free_reroll:
+			free_rerolls.emit()
 
 @export var player_currency: int = 0:
 	set(value):
@@ -44,6 +60,11 @@ var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3
 var cached_camera_rotation: Vector3
 
+# SFX
+# TODO - find a good generic solution for calling these outside of the shop
+@export var sfx_purchase: AudioStream
+@export var sfx_too_expensive: AudioStream
+
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
 @export_range(60, 120, 1.0) var camera_fov: float = 90:
@@ -59,18 +80,25 @@ var vsync_option_index: int = 1
 @export_range(0, 2, 1) var window_mode_index: int = 1 # From 0 to 2
 var scaling_3d: float = 100.0
 var hide_ui = false
+# Accessibility setting flags
+var screen_shake_disabled: bool = false
+var drunk_blur_disabled: bool = false
+
 @export_range(0, 100, 0.1) var master_audio: float = 80
 @export_range(0, 100, 0.1) var bgm_audio: float = 100
 @export_range(0, 100, 0.1) var sfx_audio: float = 100
 @export_range(0, 100, 0.1) var ui_audio: float = 100
+var is_controller_connected: bool = false
+var aim_assist_strength: float = 0.5
 
 
 func _ready() -> void:
-	if len(barrel_database) == 0:
-		load_barrel_database()
+	barrel_database.append_array(debug_barrel_database)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	SaveManager.load_setting_config()
+	is_controller_connected = Input.get_connected_joypads() != []
+	Input.joy_connection_changed.connect(_on_controller_connection)
 
 
 func add_barrel_to_inventory(data: BarrelDataResource):
@@ -110,6 +138,8 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 		equipped_barrels.append(found_data)
 		refresh_shop_ui.emit()
 		GameManager.player.current_gun.install_barrel(found_data.barrel_prefab)
+		if found_data.is_archetype_barrel and equipped_barrels.size() != 1:
+			return "Warning: archetype barrel isn't installed in first slot"
 	return ""
 
 
@@ -117,15 +147,38 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading:
 		return "Can not change barrel while reloading"
 	var found_data: BarrelDataResource = null
-	for data in equipped_barrels:
+	var barrel_idx: int = -1
+	for i in range(equipped_barrels.size()):
+		var data = equipped_barrels[i]
 		if data.barrel_id == search_barrel_id:
 			found_data = data
+			barrel_idx = i
+			break
 	if found_data:
 		equipped_barrels.erase(found_data)
 		inventory_barrels.append(found_data)
 		refresh_shop_ui.emit()
-		GameManager.player.current_gun.remove_barrel(search_barrel_id)
+		GameManager.player.current_gun.remove_barrel(barrel_idx)
 	return ""
+
+
+func purchase_reroll() -> bool:
+	if player_currency >= reroll_cost or is_free_reroll:
+		if not is_free_reroll:
+			player_currency -= reroll_cost
+			# Increase the cost of re-rolling for this fight
+			reroll_cost = int(reroll_cost * reroll_cost_mult)
+		reroll_cost_changed.emit(reroll_cost)
+		SoundManager.play_sound(sfx_purchase)
+		return true
+	SoundManager.play_sound(sfx_too_expensive)
+	return false
+
+
+func reset_reroll_cost() -> void:
+	reroll_cost = initial_reroll_cost
+	reroll_cost_changed.emit(reroll_cost)
+
 
 func show_boss_special_dialog(content: String, duration: float):
 	var original_sm_process_mode = SoundManager.process_mode
@@ -137,23 +190,6 @@ func show_boss_special_dialog(content: String, duration: float):
 	GameManager.player.boss_special_dialog.visible = false
 	get_tree().paused = false
 	SoundManager.process_mode = original_sm_process_mode
-
-
-func load_barrel_database():
-	var directory_path = "res://src/player/barrel/resource/"
-	var tres_files: Array[BarrelDataResource] = []
-	var dir = DirAccess.open(directory_path)
-
-	if dir:
-		var files = dir.get_files() # Get all files in the directory
-		for file in files:
-			if file.ends_with(".tres"):
-				var resource = ResourceLoader.load(directory_path + "/" + file)
-				if resource:
-					tres_files.append(resource as BarrelDataResource)
-	else:
-		print("Failed to open directory: ", directory_path)
-	barrel_database = tres_files
 
 
 func load_new_save_data():
@@ -184,3 +220,7 @@ func update_total_playtime():
 	var current_time = Time.get_ticks_msec()
 	var played_time = current_time - start_record_timestamp
 	total_playtime += played_time
+
+
+func _on_controller_connection(_device: int, connected: bool):
+	is_controller_connected = connected

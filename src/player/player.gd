@@ -19,15 +19,20 @@ var movement_sfx_player: AudioStreamPlayer
 @export var can_wall_jump: bool
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
-@export var dash_cd: float = 0.5
+@export var dash_cd: float = 1
 @export var angular_momentum_multiplier = 0.4
 @export var speedline_vfx_prefab: PackedScene
 
 @export_category("Prefabs")
 @export var health_component: HealthComponent
+@export var luck_component: LuckComponent
+
+@export_category("Luck")
+@export var luck_redeem_time: float = 2.0
+@export var reroll_heal_value: float = 15.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
-@onready var interact_ui: Label = $UI/InteractUI
+@onready var interact_ui: Control = $UI/InteractUI
 
 @onready var player_camera: ShakeCameraWrapper = $Neck/ShakeCameraWrapper
 @onready var debug_label: Label = $Neck/ShakeCameraWrapper/DebugLabel
@@ -39,34 +44,62 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var wall_raycast: RayCast3D = $WallRaycast
 
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
-@onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/AimRay
+@onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/Camera3D/AimRay
+@onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
+@onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
-@onready var magazine_label: Label = $UI/GunUI/MagazineUI
-@onready var all_barrel_effect_ui = $UI/GunUI/AllBarrelEffectUI
+@onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
+
+@onready var stat_ui: StatUI = $UI/StatUI
+@onready var health_ui = stat_ui.health_ui
+@onready var luck_bar_ui = stat_ui.luck_bar_ui
+@onready var drunk_ui: Control = $UI/DrunkUI
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
 
+@export_group("Status Effects")
+@export_subgroup("Drunk")
+@onready var drunk_timer: Timer = $StateChart/Root/Status/Drunk/DrunkTimer
+@export var drunk_movement_drift: float = 1.0
+@export var drunk_movement_drift_change_interval: float = 0.8
+var drunk_drift_timer: float = 0.0
+var drunk_drift_vector := Vector2.ZERO
+var drunk_target_drift_vector := Vector2.ZERO
+
 signal movement_dashed
+signal movement_crouched
+signal new_status_effect_added(status)
+signal status_effect_removed(status_effect_code)
 
 const MAX_SPEED: float = 8.0
-var max_speed: float = MAX_SPEED
 const MAX_FALL_SPEED: float = 70.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 10
 const GRAVITY: float = 30
 const FALL_SPEED_TO_SHAKE_CAMERA: float = 15
-const HEAVY_FALL_SHAKE_TRAUMA: float = 0.8
+const HEAVY_FALL_SHAKE_TRAUMA: float = 0.4
 const SLIDE_SHAKE_TRAUMA: float = 0.1
 const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
 const BULLET_SPAWN_POS_VARIATION: float = 10
 const INTERACT_DISTANCE = 5
 
+const MOUSE_SENSITIVITY_COEEFICIENT = 10000
+const CONTROLLER_SENSITIVITY_COEEFICIENT = 10
+
 const DASH_SPEED: float = 15
 const SLAM_SPEED: float = 25
 const CROUCH_SPEED_MODIFIER: float = 0.5
 
+const AIM_ASSIST_STRENGTH_COEFFICIENT = 4 # Higher = stronger auto rotate to target. 1-10
+const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.8 # Higher = stronger stickiness when near target. 0-1
+const AIM_ASSIST_MAX_RANGE = 50
+
+const HIGH_LUCK_THRESHOLD = 0.6
+const HIGH_LUCK_DASH_IFRAME_MODIFIER = 2.0
+
+var max_speed: float = MAX_SPEED
 var floor_col_pos = Vector3.ZERO
 var jumped: bool = false
 var can_coyote_jump: bool = false
@@ -74,7 +107,11 @@ var vel_horizontal := Vector2(0, 0)
 var vel_vertical: float = 0
 
 var is_dashing: bool = false
-var is_crouching: bool = false
+var is_crouching: bool = false:
+	set(value):
+		if value != is_crouching:
+			movement_crouched.emit()
+		is_crouching = value
 
 var internal_bonus_speed: float = 0
 
@@ -101,15 +138,30 @@ var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
 
-var is_in_inventory = false
+var is_in_inventory = false:
+	set(value):
+		is_in_inventory = value
+		all_barrel_effect_ui.visible = !is_in_inventory
+		if is_in_inventory:
+			stat_ui.hide_non_luck_ui()
+		else:
+			stat_ui.show_non_luck_ui()
 var object_to_be_interacted = null
 
-var buffs: Array[Buff] = []
+var status_effect_list: Array[StatusEffect] = []
 var base_stats = {
-	"run_speed_modifier": 1,
-	"dash_slide_speed_modifier": 1
+	StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER: 1,
+	StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER: 1,
+	StatusEffect.PlayerStatEnum.IS_INVINVIBLE: false,
+	StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION: 0,
+	StatusEffect.PlayerStatEnum.JUMP_HEIGHT: 1,
+	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
+	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
 }
 var current_stats = base_stats.duplicate(true)
+var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
+
+var aim_assist_target: Node3D = null
 
 
 func _ready():
@@ -119,19 +171,36 @@ func _ready():
 	player_camera.set_fov(GameManager.camera_fov)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	last_dashed_timestamp = 0
+
+	stat_ui.health_component = health_component
+	stat_ui.luck_component = luck_component
+
+	health_component.show_damage_text = false
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
+
+	luck_component.luck_changed.connect(_on_luck_changed)
+	luck_component.luck_maxed.connect(_on_luck_maxed)
+
 	gun_container_original_pos = gun_container.position
 	gun_container_original_rot = gun_container.rotation
+
 	interact_ui.visible = false
 	boss_special_dialog.visible = false
+
 	current_gun = gun_container.get_child(0)
-	current_gun.gun_shot.connect(update_hud)
-	current_gun.gun_reloaded.connect(update_hud)
+	current_gun.gun_shot.connect(update_ammo_counter_ui)
+	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
+	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_equipped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
+	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
+	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
+	update_ammo_counter_ui()
 
 
-func _input(event):
+func _unhandled_input(event):
 	if controls_disabled:
 		return
 
@@ -142,19 +211,29 @@ func _input(event):
 		return
 
 	if event is InputEventMouseMotion:
-		rotate_player(event)
+		# If we have a controller connected, ignore mouse events
+		# (this prevents the PS4 trackpad from triggering aim)
+		# if Input.get_connected_joypads():
+		# 	return
+		rotate_player(event.relative.x, event.relative.y)
+	elif event is InputEventJoypadMotion:
+		if not InputHelper.get_label_for_input(event).to_lower().contains("trigger"):
+			# Disable joystick support to prevent PS4 touchpad triggering aim events
+			# Has to check Trigger buttons first, since they are also InputEventJoypadMotion
+			return
 
 	if event.is_action_pressed("spin_reload"):
-		spin_reload()
-	# TODO - experimental branch separating spin from reload
-	#elif event.is_action_pressed("spin_barrels"):
-		#current_gun.spin_all_barrels()
-	#elif event.is_action_pressed("input_1"):
+		no_spin_reload()
+	elif event.is_action_pressed("spin_barrels"):
+		spin_barrels()
+	# DEBUG
+	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
 	#elif event.is_action_pressed("input_2"):
+		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
-	#elif event.is_action_pressed("input_3"):
-		#current_gun.spin_single_barrel(2)
+	elif event.is_action_pressed("input_3"):
+		health_component.damage(20)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -171,9 +250,9 @@ func _input(event):
 					sfx_dash_air.pick_random(), randf_range(0.8, 1.1), "SFX"
 				)
 			vel_vertical = 0
-			dash_duration_timer.start()
+			dash_duration_timer.start(current_stats[StatusEffect.PlayerStatEnum.DASH_DURATION])
 			movement_dashed.emit()
-
+			add_iframe_on_dash()
 
 			var dash_dir = raw_input_dir
 			# Swap speedline direction for horizontal dash
@@ -198,15 +277,17 @@ func _input(event):
 
 
 func _process(delta):
+	handle_controller_look(delta)
+
 	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 
-	for buff in buffs:
-		if buff.duration > 0:
-			buff.duration -= delta
-			if buff.duration <= 0:
-				remove_buff(buff)
+	for status in status_effect_list:
+		if status.duration > 0 and status.duration < StatusEffect.INFINITE_DURATION:
+			status.duration -= delta
+			if status.duration <= 0:
+				remove_status_effect(status)
 
-	if aim_ray.is_colliding():
+	if aim_ray.is_colliding() and not is_in_inventory:
 		var interact_collider = aim_ray.get_collider()
 		if interact_collider and \
 			interact_collider.has_method("interact") and \
@@ -231,6 +312,7 @@ func _process(delta):
 
 	if Input.is_action_just_released("shoot"):
 		current_gun.release_trigger()
+
 
 func _physics_process(delta):
 	if controls_disabled:
@@ -282,7 +364,7 @@ func _physics_process(delta):
 	else:
 		vel_horizontal += input_dir * add_speed
 
-	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats["run_speed_modifier"]
+	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats[StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER]
 
 	# Bonus speed
 	if is_dashing:
@@ -294,7 +376,7 @@ func _physics_process(delta):
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 3)
 
 	var velocity_dir = velocity.normalized()
-	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats["dash_slide_speed_modifier"]
+	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats[StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER]
 
 	# Let the player ignore the wheelspin if they are moving
 	var floor_velocity = get_platform_velocity()
@@ -316,25 +398,35 @@ func _physics_process(delta):
 		else:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
 	camera_control(delta)
+	if GameManager.is_controller_connected:
+		aim_assist(delta)
 
-func update_hud():
-	magazine_label.text = "{0}/{1}".format([current_gun.magazine_ammo_left, current_gun.modified_magazine_size])
+
+func update_ammo_counter_ui() -> void:
+	stat_ui.current_ammo_label.text = "{0}".format([current_gun.magazine_ammo_left])
+	stat_ui.magazine_size_label.text = "/{0}".format([current_gun.modified_magazine_size])
+
+
+func update_barrel_effect_ui() -> void:
 	for i in range(current_gun.max_barrels):
-		var effect_ui = all_barrel_effect_ui.get_child(i)
-		if current_gun.barrel_container.get_child_count() > i:
+		var effect_ui_idx: int = all_barrel_effect_ui.get_child_count() - i - 1
+		var effect_ui = all_barrel_effect_ui.get_child(effect_ui_idx)
+		if i < current_gun.barrel_container.get_child_count():
+		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
-			if barrel:
-				effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
-				effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
-				effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
-			else:
-				effect_ui.get_node("Title").text = ""
-				effect_ui.get_node("Tag").text = ""
-				effect_ui.get_node("Desc").text = ""
+			#if barrel:
+			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
+			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
+			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+			#else:
+				#effect_ui.get_node("Title").text = ""
+				#effect_ui.get_node("Tag").text = ""
+				#effect_ui.get_node("Desc").text = ""
 		else:
 			effect_ui.get_node("Title").text = ""
 			effect_ui.get_node("Tag").text = ""
 			effect_ui.get_node("Desc").text = ""
+
 
 func show_debug_label():
 	var h_speed = snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.1)
@@ -352,8 +444,11 @@ func show_debug_label():
 	#debug_label.text += "\nUsing gun: {0}".format([gun_container.get_child(current_gun_slot).data.name])
 
 
-func jump(multiplier = 1.0):
-	vel_vertical = JUMP_FORCE * multiplier
+func jump(local_multiplier = 1.0):
+	if is_in_inventory or controls_disabled:
+		return
+
+	vel_vertical = JUMP_FORCE * current_stats[StatusEffect.PlayerStatEnum.JUMP_HEIGHT] * local_multiplier
 
 	jumped = true
 	state_chart.send_event("jump")
@@ -380,19 +475,33 @@ func stun(time: float) -> void:
 
 
 func spin_reload() -> void:
-	current_gun.spin_all_barrels()
+	if not current_gun.is_reloading:
+		current_gun.spin_all_barrels()
 
 
 func no_spin_reload() -> void:
 	current_gun.reload()
 
 
-func rotate_player(event):
-	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
-	player_camera.rotate_x(-event.relative.y * (GameManager.mouse_sensitivity / 10000))
+func handle_controller_look(_delta):
+	var look_x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
+	var look_y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
+
+	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
+		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
+		if aim_assist_target:
+			var modifier = AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT * GameManager.aim_assist_strength
+			sensitivity = sensitivity * (1 - modifier)
+		rotate_player(look_x * sensitivity, look_y * sensitivity)
+
+
+func rotate_player(x: float, y: float):
+	rotate(Vector3(0, -1, 0), x * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
+	player_camera.rotate_x(-y * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotation.y = 0
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
+
 
 func camera_control(delta):
 	# Tilt camera
@@ -503,6 +612,7 @@ func _on_wallcling_state_input(event: InputEvent) -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		state_chart.send_event("start_damage")
+		InputHelper.rumble_large()
 		SoundManager.play_sound(sfx_hurt.pick_random())
 		if new_health > 0:
 			state_chart.send_event("end_damage")
@@ -520,58 +630,226 @@ func fall_death() -> void:
 
 
 func _on_health_hurt_state_entered() -> void:
+	LuckHandler.time_since_last_hurt = 0.0
+	LuckHandler.last_hurt_mult = 0
 	hurt_overlay.hurt()
 
 
 func _on_health_dead_state_entered() -> void:
 	controls_disabled = true
 	hurt_overlay.dead()
+	stat_ui.hide_all_ui()
 
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
 	neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
 
-func add_buff(new_buff: Buff):
-	# Check if already exist, then extend it instead of add new
-	for buff in buffs:
-		if buff.buff_name == new_buff.buff_name:
-			buff.duration = max(buff.duration, new_buff.duration)
+func add_status_effect(new_status: StatusEffect):
+	# Check if already exist, then refresh it instead of add new
+	for status in status_effect_list:
+		if status.status_code == new_status.status_code:
+			status.duration = max(status.duration, new_status.duration)
+			status.value = new_status.value
+			new_status_effect_added.emit(status)
 			return
-	buffs.append(new_buff)
-	apply_buffs()
+	status_effect_list.append(new_status)
+	new_status_effect_added.emit(new_status)
+	apply_status_effects()
 
 
-func remove_buff(buff: Buff):
-	buffs.erase(buff)
-	apply_buffs()
+func remove_status_effect(status: StatusEffect):
+	status_effect_list.erase(status)
+	status_effect_removed.emit(status.status_code)
+	apply_status_effects()
 
-func remove_buff_by_name(find_name: String):
-	var found_buff = null
-	for buff in buffs:
-		if buff.buff_name == find_name:
-			found_buff = buff
+
+func remove_status_effect_by_name(find_name: String):
+	var found = null
+	for status in status_effect_list:
+		if status.status_code == find_name:
+			found = status
 			break
-	if found_buff:
-		remove_buff(found_buff)
+	if found:
+		remove_status_effect(found)
 
-func apply_buffs():
+
+func apply_status_effects():
 	# Reset current stats to base stats.
 	current_stats = base_stats.duplicate(true)
 
 	# Temporary storage for stacking.
-	var flat_bonuses = {}
-	var percentage_bonuses = {}
+	var flat_modifiers = {}
+	var percentage_modifiers = {}
 
-	for buff in buffs:
-		if buff.buff_type == Buff.BuffType.FLAT:
-			flat_bonuses[buff.stat_name] = flat_bonuses.get(buff.stat_name, 0) + buff.value
-		elif buff.buff_type == Buff.BuffType.PERCENTAGE:
-			percentage_bonuses[buff.stat_name] = percentage_bonuses.get(buff.stat_name, 0) + buff.value
+	for status in status_effect_list:
+		if not current_stats.has(status.modified_stat):
+			continue
+		if status.modify_type == StatusEffect.ModifyType.FLAT:
+			flat_modifiers[status.modified_stat] = flat_modifiers.get(status.modified_stat, 0) + status.value
+		elif status.modify_type == StatusEffect.ModifyType.PERCENTAGE:
+			percentage_modifiers[status.modified_stat] = percentage_modifiers.get(status.modified_stat, 0) + status.value
+		elif status.modify_type == StatusEffect.ModifyType.BOOL:
+			if status.value == 1:
+				current_stats[status.modified_stat] = true
+			else:
+				current_stats[status.modified_stat] = false
 
-	# Apply flat bonuses (additive).
-	for stat in flat_bonuses.keys():
-		current_stats[stat] += flat_bonuses[stat]
+	# Apply flat bonuses.
+	for stat in flat_modifiers.keys():
+		current_stats[stat] += flat_modifiers[stat]
 
-	# Apply percentage bonuses (multiplicative).
-	for stat in percentage_bonuses.keys():
-		current_stats[stat] *= (1 + percentage_bonuses[stat] / 100.0)
+	# Apply percentage bonuses.
+	for stat in percentage_modifiers.keys():
+		current_stats[stat] = current_stats[stat] * (1 + (percentage_modifiers[stat] / 100.0))
+
+	# Other
+	health_component.received_dmg_multiplier = 1 - (current_stats[StatusEffect.PlayerStatEnum.DAMAGE_REDUCTION] / 100.0)
+	if health_component.received_dmg_multiplier < 0:
+		health_component.received_dmg_multiplier = 0
+	health_component.is_invincible = current_stats[StatusEffect.PlayerStatEnum.IS_INVINVIBLE]
+
+
+func aim_assist(delta: float):
+	if aim_assist_ray.is_colliding():
+		var dist = global_position.distance_to(aim_assist_ray.get_collision_point())
+		if dist <= AIM_ASSIST_MAX_RANGE:
+			aim_assist_target = aim_assist_ray.get_collider()
+		else:
+			aim_assist_target = null
+	else:
+		aim_assist_target = null
+
+	if aim_assist_target != null:
+		get_assist_rotation_velocity(delta)
+
+
+func get_assist_rotation_velocity(delta: float):
+	# Player aim already on boss, no need to rotate camera anymore
+	# Essentially this make the player only auto-aim to the edge of enemy hitbox
+	if aim_assist_ray_boss_check.is_colliding():
+		return
+	
+	var cam = player_camera
+	var aim_target_pos: Vector3 = aim_assist_target.global_position
+	if aim_assist_target.get_node("Marker3D") != null:
+		aim_target_pos = aim_assist_target.get_node("Marker3D").global_position
+
+	# Direction to target (world space)
+	var to_target = (aim_target_pos - cam.global_position).normalized()
+	var cam_forward = - cam.global_transform.basis.z
+
+	# Get yaw (left/right) angle difference
+	var cam_yaw = atan2(cam_forward.x, cam_forward.z)
+	var target_yaw = atan2(to_target.x, to_target.z)
+	var yaw_diff = wrapf(target_yaw - cam_yaw, -PI, PI)
+
+	# Get pitch (up/down) angle difference
+	var cam_pitch = asin(cam_forward.y)
+	var target_pitch = asin(to_target.y)
+	var pitch_diff = target_pitch - cam_pitch
+
+	# yaw = horizontal / pitch = vertical
+	var yaw_velocity = yaw_diff * GameManager.aim_assist_strength * AIM_ASSIST_STRENGTH_COEFFICIENT
+	var pitch_velocity = pitch_diff * GameManager.aim_assist_strength * AIM_ASSIST_STRENGTH_COEFFICIENT
+
+	# Reduce pitch strength during weapon recoil
+	if player_camera.check_if_has_recoil():
+		pitch_velocity = pitch_velocity * 0.1
+
+	rotate(Vector3(0, -1, 0), -yaw_velocity * delta)
+	player_camera.rotate_x(pitch_velocity * delta)
+	player_camera.rotation.y = 0
+	player_camera.rotation.z = 0
+	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
+
+
+func spin_barrels() -> void:
+	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading:
+		return
+	# Check if we have enough chips
+	if GameManager.purchase_reroll():
+		cash_in_luck()
+		current_gun.spin_all_barrels()
+		# Provide small health buff (?)
+		health_component.heal(reroll_heal_value)
+
+
+func cash_in_luck() -> void:
+	LuckHandler.enabled = false
+	luck_bar_ui.cash_in_luck()
+	# Animate the luck bar draining
+	luck_component.disable()
+	var tween = get_tree().create_tween()
+	tween.tween_property(
+		luck_bar_ui.luck_bar, "value", 0, luck_redeem_time
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	tween.parallel().tween_property(
+		luck_bar_ui.luck_gain_bar, "value", 0, luck_redeem_time
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+
+	await tween.finished
+
+	luck_component.enable()
+	LuckHandler.enabled = true
+	luck_component.current_luck = 0.0
+
+
+func add_iframe_on_dash():
+	var iframe_duration = current_stats[StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION]
+	if luck_component.current_luck_ratio >= HIGH_LUCK_THRESHOLD:
+		iframe_duration = iframe_duration * HIGH_LUCK_DASH_IFRAME_MODIFIER
+	var iframe_dash_buff = StatusEffect.new()
+	iframe_dash_buff.display_name = "Dodging"
+	iframe_dash_buff.status_code = "iframe_on_dash"
+	iframe_dash_buff.modified_stat = StatusEffect.PlayerStatEnum.IS_INVINVIBLE
+	iframe_dash_buff.value = 1 # Doesnt matter
+	iframe_dash_buff.modify_type = StatusEffect.ModifyType.BOOL
+	iframe_dash_buff.duration = iframe_duration
+	iframe_dash_buff.status_icon = dash_iframe_icon
+	add_status_effect(iframe_dash_buff)
+
+func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
+	# TODO - update luck handler to apply bonuses
+	#if new_luck < prev_luck and prev_luck == luck_component.max_luck:
+	# TODO
+	pass
+
+
+func _on_luck_maxed() -> void:
+	# TODO
+	pass
+
+
+func apply_drunk_status(duration: float) -> void:
+	state_chart.send_event("add_status_drunk")
+	drunk_timer.start(duration)
+
+
+func _on_status_drunk_active_state_entered() -> void:
+	drunk_ui.start_drunk()
+	player_camera.target_drunk_intensity = 4.0
+
+func _on_status_drunk_active_state_exited() -> void:
+	drunk_ui.end_drunk()
+	player_camera.target_drunk_intensity = 0.0
+	drunk_timer.stop()
+
+func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
+	# Don't move the player when they're standing still
+	if raw_input_dir == Vector2.ZERO:
+		return
+	
+	# Drunk movement drift
+	drunk_drift_timer += delta
+	if drunk_drift_timer >= drunk_movement_drift_change_interval:
+		drunk_drift_timer = 0.0
+		# Random unit vector with small magnitude
+		drunk_target_drift_vector = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)).normalized() * drunk_movement_drift
+	# Smoothly lerp toward the target
+	drunk_drift_vector = drunk_drift_vector.lerp(drunk_target_drift_vector, delta * 5.0)
+	# Add to input direction
+	velocity = Vector3(drunk_drift_vector.x, 0, drunk_drift_vector.y)
+	move_and_slide()
+
+func _on_drunk_timer_timeout() -> void:
+	state_chart.send_event("remove_status_drunk")

@@ -30,10 +30,12 @@ mesh = SubResource("BoxMesh_cq3u5")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78814e-07, -0.3, -0.05)
 shape = SubResource("BoxShape3D_6se8u")
+disabled = true
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
 shape = SubResource("BoxShape3D_i5chr")
+disabled = true
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 light_color = Color(0.960906, 0.678553, 0.450889, 1)

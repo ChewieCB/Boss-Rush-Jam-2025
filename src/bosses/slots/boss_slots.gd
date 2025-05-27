@@ -70,6 +70,8 @@ var slot_ticks: int = SLOT_TICKS
 
 @export_subgroup("Bell Drop")
 @export var bell_scene: PackedScene
+@export var bell_aoe_marker_ring: CompressedTexture2D
+@export var bell_aoe_marker_arrows: CompressedTexture2D
 @export var drop_shadow_material: Material
 @export var bell_shadow_time: float = 1.4
 @export var bell_spawn_area_radius: float = 28.0
@@ -107,31 +109,34 @@ var charge_locked: bool = false
 @export_subgroup("Cherry Bombs")
 @export var bomb_projectile: PackedScene
 @export var bombs_per_attack: int = 5
-@export var bomb_drop_delay: float = 0.4
 @export var bomb_fuse_time: float = 2.5
 @export var bomb_impulse: float = 100000.0
 @export var max_drop_distance: float = 20.0
+@export var bomb_drop_delay: float = 0.4
+@onready var bomb_drop_timer: Timer = $StateChart/Root/Phase/Phase2/CherryBombs/DroppingBombs/DropTimer
+var active_bombs: Array = []
 # SFX
 # Moved to the bomb objects
 @export var sfx_bomb_launch: Array[AudioStream]
 #@export var sfx_bomb_bounce: Array[AudioStream]
 #@export var sfx_bomb_explode: Array[AudioStream]
 
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 
 func activate() -> void:
-	super ()
+	super()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	state_chart.send_event("start_phase_1")
 
 
 func _physics_process(delta: float) -> void:
-	super (delta)
-	projectile_marker_pivot.look_at(target.global_position)
-	slot_icons_parent.look_at(target.global_position)
+	super(delta)
+	
+	if target:
+		projectile_marker_pivot.look_at(target.global_position)
+		slot_icons_parent.look_at(target.global_position)
 	
 	if hurtbox.monitoring:
 		if target in hurtbox.get_overlapping_bodies():
@@ -183,17 +188,29 @@ func select_attack_phase_2() -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super (new_health, prev_health)
+	super(new_health, prev_health)
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
 
 func _on_died() -> void:
-	super ()
+	_cleanup_bombs()
+	
 	anim_player.stop()
 	set_physics_process(false)
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+	
+	await tween.finished
+	
+	died.emit()
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
+	drop_barrel()
+	
+	await boss_death_slow_mo()
+
 
 func _on_hurtbox_body_entered(_body: Node3D) -> void:
 	pass
@@ -310,19 +327,6 @@ func _on_spin_slots_recover_state_entered() -> void:
 # 3 Coins on rollers
 # Rapid fire coin projectiles 
 
-func fire_projectile(_projectile_prefab: PackedScene) -> BaseProjectile:
-	var _sfx_player = get_available_sfx_player()
-	if not _sfx_player:
-		# TODO - error handling
-		pass
-	_sfx_player.stream = sfx_coin_shot.pick_random()
-	_sfx_player.play()
-	var projectile := _projectile_prefab.instantiate()
-	get_tree().root.get_child(2).add_child(projectile)
-	projectile.global_position = projectile_spawn_marker.global_position
-	projectile.look_at(target.global_position, Vector3.UP)
-	return projectile
-
 
 func _on_coin_projectiles_state_physics_processing(delta: float) -> void:
 	orbit_player(delta)
@@ -347,7 +351,7 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 	for i in num_bursts:
 		for j in coin_shots_per_burst:
 			await get_tree().create_timer(delay_per_projectile).timeout
-			fire_projectile(coin_projectile)
+			fire_projectile(coin_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
 		await get_tree().create_timer(delay_between_burst).timeout
 	
 	state_chart.send_event("stop_shooting")
@@ -373,41 +377,52 @@ func drop_shadow(
 	drop_time: float = 3.5,
 	_callback: Callable = func(): pass
 ) -> void:
-	var debug_mesh_instance = MeshInstance3D.new()
-	var mesh = CylinderMesh.new()
-	
-	# Generate a visual
-	get_tree().get_root().add_child(debug_mesh_instance)
-	
-	debug_mesh_instance.mesh = mesh
-	debug_mesh_instance.cast_shadow = false
-	
 	# Snap to floor
+	#draw_debug_sphere(target_pos, 1.0, Color.YELLOW)
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
 		target_pos,
-		target_pos - Vector3(0, 100, 0),
-		int(pow(2, 1 - 1) + pow(2, 7 - 1))
+		target_pos - Vector3(0, 20, 0),
+		int(pow(2, 1 - 1))
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
 		target_pos.y = result.position.y
+		#draw_debug_sphere(target_pos, 1.0, Color.PURPLE)
 	
-	debug_mesh_instance.global_position = target_pos
+	# AoE decal
+	var aoe_tween: Tween = get_tree().create_tween()
+	var decal_ring := Decal.new()
+	decal_ring.texture_albedo = bell_aoe_marker_ring
+	decal_ring.size = Vector3(0, 1, 0)
+	get_parent().get_parent().add_child(decal_ring)
+	decal_ring.global_position = target_pos
 	
-	mesh.bottom_radius = 0.0
-	mesh.top_radius = 0.0
-	mesh.height = 0.5
-	mesh.material = drop_shadow_material
+	var decal_arrows := Decal.new()
+	decal_arrows.texture_albedo = bell_aoe_marker_arrows
+	decal_arrows.size = Vector3(0, 1, 0)
+	get_parent().get_parent().add_child(decal_arrows)
+	decal_arrows.global_position = target_pos
 	
-	var shadow_tween = get_tree().create_tween()
-	shadow_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", max_radius, drop_time) # .set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
-	shadow_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", max_radius, drop_time) # .set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
-	shadow_tween.tween_callback(debug_mesh_instance.queue_free)
-	shadow_tween.tween_callback(spawn_bell.bind(target_pos, max_radius))
+	aoe_tween.tween_property(decal_ring, "size", Vector3(max_radius * 2, 1, max_radius * 2), drop_time * 0.75)
+	aoe_tween.parallel().tween_property(decal_arrows, "size", Vector3(max_radius * 2, 1, max_radius * 2), drop_time)
+	aoe_tween.parallel().tween_property(decal_arrows, "rotation_degrees:y", 360, drop_time)
+	aoe_tween.chain().tween_callback(_spawn_bell.bind(target_pos, max_radius, [decal_arrows, decal_ring]))
+	aoe_tween.chain().tween_property(decal_arrows, "size", Vector3.ZERO, 1.04)  # Based on bell sfx sample timing
 
 
-func spawn_bell(pos: Vector3, size: float) -> void:
+func _cleanup_aoe_decals(decals_to_remove: Array) -> void:
+	for decal in decals_to_remove:
+		decal.queue_free()
+
+
+func _spawn_bell(pos: Vector3, size: float, decals: Array) -> void:
+	var bell = spawn_bell(pos, size)
+	await bell.destroyed
+	_cleanup_aoe_decals(decals)
+
+
+func spawn_bell(pos: Vector3, size: float) -> Bell:
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
 		pos,
@@ -418,20 +433,9 @@ func spawn_bell(pos: Vector3, size: float) -> void:
 	if result:
 		pos.y = result.position.y
 	
-	var bell_sfx := AudioStreamPlayer3D.new()
-	bell_sfx.stream = sfx_bell_windup.pick_random()
-	get_tree().get_root().get_child(3).add_child(bell_sfx)
-	bell_sfx.global_position = pos
-	bell_sfx.volume_db = 5.0
-	bell_sfx.max_db = 5.0
-	bell_sfx.unit_size = 30.0
-	bell_sfx.play()
-	
-	var bell = bell_scene.instantiate()
-	get_tree().root.get_child(2).add_child(bell)
-	sfx_player.stream = sfx_bell_windup.pick_random()
-	sfx_player.play()
+	var bell: Bell = bell_scene.instantiate()
 	bell.global_position = pos
+	get_tree().root.get_child(7).add_child(bell)
 	bell.mesh.scale *= size
 	bell.collider.shape.radius = size
 	bell.collider.shape.height = size * 2
@@ -439,14 +443,9 @@ func spawn_bell(pos: Vector3, size: float) -> void:
 	bell.hurtbox_collider.shape.radius = size
 	bell.hurtbox_collider.shape.height = size * 2
 	bell.hurtbox_collider.position.y = size / 2
-	# Hacky workaround since playing these on the bells themselves causes an issue
-	bell.destroyed.connect(
-		func(_bell):
-			bell_sfx.stream = sfx_bell_impact.pick_random()
-			bell_sfx.play()
-			await bell_sfx.finished
-			bell_sfx.queue_free()
-	)
+	bell.drop()
+	
+	return bell
 
 
 func _on_bell_drop_state_entered() -> void:
@@ -490,10 +489,11 @@ func _on_bell_drop_dropping_state_entered() -> void:
 
 func _on_bell_drop_dropping_state_exited() -> void:
 	for point in bell_spawn_points:
-		var spawn := Vector3(point.x, 1.0, point.y)
+		if $StateChart/Root/Health/Dead.active:
+			break
+		var spawn := Vector3(point.x, 2.5, point.y)
 		# Spawn shadow/mesh to show AoE, grow in size as it drops
 		drop_shadow(spawn, 6.0, bell_shadow_time)
-		# TODO - spawn mesh that drops down and crashes, dealing damage
 		await get_tree().create_timer(0.2).timeout
 
 
@@ -765,7 +765,11 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 	var dir_counter: int = -1
 	sfx_player.volume_db = 3.0
 	for i in range(bombs_per_attack):
-		await get_tree().create_timer(bomb_drop_delay).timeout
+		if $StateChart/Root/Health/Dead.active:
+			break
+		bomb_drop_timer.start(bomb_drop_delay)
+		await bomb_drop_timer.timeout
+		#await get_tree().create_timer(bomb_drop_delay).timeout
 		sfx_player.stream = sfx_bomb_launch.pick_random()
 		sfx_player.play()
 		var projectile := bomb_projectile.instantiate() as RigidBody3D
@@ -774,6 +778,7 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * dir_counter)
 		projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
+		active_bombs.append(projectile)
 		
 		dir_counter += 1
 		dir_counter = wrapi(dir_counter, -1, 2)
@@ -798,3 +803,11 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 	state_chart.send_event("cooldown_end")
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+func _cleanup_bombs() -> void:
+	bomb_drop_timer.stop()
+	for bomb in active_bombs:
+		if is_instance_valid(bomb):
+			bomb.destroy(false)
+	active_bombs = []

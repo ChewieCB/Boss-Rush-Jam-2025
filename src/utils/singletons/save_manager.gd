@@ -11,14 +11,18 @@ signal setting_config_loaded
 func convert_resource_to_id(array_resource: Array) -> Array[int]:
 	var result: Array[int] = []
 	for elem in array_resource:
-		result.append(elem.barrel_id)
+		if not elem.barrel_name.to_lower().contains("debug"):
+			result.append(elem.barrel_id)
 	return result
 
 func convert_id_to_resource(array_id: Array) -> Array[BarrelDataResource]:
+	if len(GameManager.barrel_database) == 0:
+		push_warning("GameManger.barrel_database is empty / not loaded yet!")
 	var result: Array[BarrelDataResource] = []
 	for elem in array_id:
 		for item in GameManager.barrel_database:
-			if item.barrel_id == elem:
+			var barrel_data_item = item as BarrelDataResource
+			if barrel_data_item.barrel_id == elem:
 				result.append(item)
 	return result
 
@@ -90,8 +94,10 @@ func load_game(slot_id):
 	var save_data = load_data_only(slot_id)
 	if save_data.is_empty():
 		GameManager.load_new_save_data()
+		savefile_loaded.emit()
 		return
 
+	
 	GameManager.player_currency = save_data["player_currency"]
 	GameManager.equipped_barrels = convert_id_to_resource(save_data["equipped_barrels"])
 	GameManager.inventory_barrels = convert_id_to_resource(save_data["inventory_barrels"])
@@ -102,6 +108,8 @@ func load_game(slot_id):
 	GameManager.victory_ui_shown = save_data["victory_ui_shown"]
 	GameManager.total_playtime = save_data["total_playtime"]
 
+	check_for_new_update_barrels()
+	
 	savefile_loaded.emit()
 
 func get_savefile_name(slot_id: int) -> String:
@@ -111,13 +119,19 @@ func get_savefile_name(slot_id: int) -> String:
 func save_setting_config():
 	var config = ConfigFile.new()
 
+	var serialized_keybinding_data: String = InputHelper.serialize_inputs_for_actions()
+
 	config.set_value("Control", "mouse_sensitivity", GameManager.mouse_sensitivity)
+	config.set_value("Control", "aim_assist_strength", GameManager.aim_assist_strength)
+	config.set_value("Control", "keybinding", serialized_keybinding_data)
 	config.set_value("Graphic", "camera_fov", GameManager.camera_fov)
 	config.set_value("Graphic", "camera_tilt", GameManager.camera_tilt)
 	config.set_value("Graphic", "fps_limit_index", GameManager.fps_limit_index)
 	config.set_value("Graphic", "resolution_index", GameManager.resolution_index)
 	config.set_value("Graphic", "window_mode_index", GameManager.window_mode_index)
 	config.set_value("Graphic", "scaling_3d", GameManager.scaling_3d)
+	config.set_value("Graphic", "screen_shake_disabled", GameManager.screen_shake_disabled)
+	config.set_value("Graphic", "drunk_blur_disabled", GameManager.drunk_blur_disabled)
 	config.set_value("Audio", "master_audio", GameManager.master_audio)
 	config.set_value("Audio", "bgm_audio", GameManager.bgm_audio)
 	config.set_value("Audio", "sfx_audio", GameManager.sfx_audio)
@@ -135,16 +149,32 @@ func load_setting_config():
 	if err != OK:
 		return
 
+	var serialized_keybinding_data = config.get_value("Control", "keybinding", "")
+	if serialized_keybinding_data != "":
+		InputHelper.deserialize_inputs_for_actions(serialized_keybinding_data)
+
 	GameManager.mouse_sensitivity = config.get_value("Control", "mouse_sensitivity", 50.0)
+	GameManager.aim_assist_strength = config.get_value("Control", "aim_assist_strength", 0.5)
 	GameManager.camera_fov = config.get_value("Graphic", "camera_fov", 90)
 	GameManager.camera_tilt = config.get_value("Graphic", "camera_tilt", true)
 	GameManager.fps_limit_index = config.get_value("Graphic", "fps_limit_index", 2)
 	GameManager.resolution_index = config.get_value("Graphic", "resolution_index", 1)
 	GameManager.window_mode_index = config.get_value("Graphic", "window_mode_index", 1)
 	GameManager.scaling_3d = config.get_value("Graphic", "scaling_3d", 100.0)
+	GameManager.screen_shake_disabled = !config.get_value("Graphic", "screen_shake_disabled", false)
+	GameManager.drunk_blur_disabled = !config.get_value("Graphic", "drunk_blur_disabled", false)
 	GameManager.master_audio = config.get_value("Audio", "master_audio", 80)
 	GameManager.bgm_audio = config.get_value("Audio", "bgm_audio", 100)
 	GameManager.sfx_audio = config.get_value("Audio", "sfx_audio", 100)
 	GameManager.ui_audio = config.get_value("Audio", "ui_audio", 100)
 
 	setting_config_loaded.emit()
+
+# If we update the game and add new barrel into GameManager's shop,
+# this will look for it
+func check_for_new_update_barrels():
+	for barrel_data in GameManager.starting_shop_barrels:
+		if not GameManager.equipped_barrels.has(barrel_data) and \
+		not GameManager.inventory_barrels.has(barrel_data) and \
+		not GameManager.shop_barrels.has(barrel_data):
+			GameManager.shop_barrels.append(barrel_data)

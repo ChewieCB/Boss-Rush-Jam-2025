@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://hr7rbfnignp4"
+path="res://.godot/imported/Hurt Scream 3.mp3-b0faaa297417339d9675addad5bec4ee.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/Hurt Scream 3.mp3"
+dest_files=["res://.godot/imported/Hurt Scream 3.mp3-b0faaa297417339d9675addad5bec4ee.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

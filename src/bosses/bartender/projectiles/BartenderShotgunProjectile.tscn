@@ -1,0 +1,63 @@
+[gd_scene load_steps=10 format=3 uid="uid://cx7dytvoa0h3h"]
+
+[ext_resource type="Script" path="res://src/bosses/bartender/projectiles/bartender_shotgun_projectile.gd" id="1_44j7o"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_11gin"]
+[ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_wgkqq"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_t5jn8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c8gkq"]
+albedo_color = Color(0.884935, 0.465512, 0.128773, 1)
+emission_enabled = true
+emission = Color(1, 0.286275, 0.129412, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_r4rf5"]
+material = SubResource("StandardMaterial3D_c8gkq")
+size = Vector3(0.05, 0.05, 0.1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_t27v6"]
+radius = 0.2
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_810gr"]
+
+[sub_resource type="Curve" id="Curve_inxyf"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="BartenderShotgunProjectile" type="Node3D"]
+script = ExtResource("1_44j7o")
+spark_effect = ExtResource("2_11gin")
+generic_blood_splatter = ExtResource("3_wgkqq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_r4rf5")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 27
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_t27v6")
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.610737)
+target_position = Vector3(0, 0, -100)
+collision_mask = 29
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_c8gkq")
+mesh = SubResource("ImmediateMesh_810gr")
+skeleton = NodePath("../../MeshInstance3D")
+script = ExtResource("4_t5jn8")
+segments = 10
+base_width = 0.1
+width_profile = SubResource("Curve_inxyf")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]

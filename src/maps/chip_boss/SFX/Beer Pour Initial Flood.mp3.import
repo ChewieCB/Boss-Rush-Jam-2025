@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bgycvk4g0jh5r"
+path="res://.godot/imported/Beer Pour Initial Flood.mp3-3b911940d315abba6c848ea6e604a5ae.mp3str"
+
+[deps]
+
+source_file="res://src/maps/chip_boss/SFX/Beer Pour Initial Flood.mp3"
+dest_files=["res://.godot/imported/Beer Pour Initial Flood.mp3-3b911940d315abba6c848ea6e604a5ae.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

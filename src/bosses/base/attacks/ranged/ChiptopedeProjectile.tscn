@@ -1,0 +1,69 @@
+[gd_scene load_steps=11 format=3 uid="uid://c0ddu7x6kgycs"]
+
+[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/ball_projectile.gd" id="1_1vugk"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_en370"]
+[ext_resource type="Shader" path="res://src/bosses/base/attacks/ranged/blob_shader.gdshader" id="3_f38pi"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_so2kb"]
+radius = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mcyja"]
+transparency = 1
+albedo_color = Color(1, 0.766048, 0, 0.713726)
+emission_enabled = true
+emission = Color(1, 0.731834, 0.032858, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_bli60"]
+
+[sub_resource type="Curve" id="Curve_my72y"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i6dov"]
+render_priority = 0
+shader = ExtResource("3_f38pi")
+shader_parameter/colour = Color(0.24969, 0.41, 0.1271, 0.858824)
+
+[sub_resource type="SphereMesh" id="SphereMesh_5sgai"]
+material = SubResource("ShaderMaterial_i6dov")
+radius = 1.0
+height = 2.0
+radial_segments = 32
+rings = 16
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_rq8jn"]
+radius = 1.0
+
+[node name="ChiptopedeProjectile" type="Area3D"]
+collision_layer = 8
+collision_mask = 7
+script = ExtResource("1_1vugk")
+projectile_damage = 15.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_so2kb")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_mcyja")
+mesh = SubResource("ImmediateMesh_bli60")
+script = ExtResource("3_en370")
+segments = 10
+base_width = 0.1
+width_profile = SubResource("Curve_my72y")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_5sgai")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_rq8jn")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

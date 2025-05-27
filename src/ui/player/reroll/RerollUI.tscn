@@ -1,0 +1,106 @@
+[gd_scene load_steps=8 format=3 uid="uid://bicxns6d0ciub"]
+
+[ext_resource type="Script" path="res://src/ui/player/reroll/reroll_ui.gd" id="1_25dwc"]
+[ext_resource type="Texture2D" uid="uid://cbcx6hp31e6k4" path="res://src/collectibles/poker_chip/assets/chip_icon_grey_128.png" id="2_qpnhu"]
+[ext_resource type="Texture2D" uid="uid://cyridr3xco78k" path="res://src/collectibles/poker_chip/assets/chip_icon_gold_128.png" id="3_qfoi1"]
+[ext_resource type="Texture2D" uid="uid://dcs5o482rkb4e" path="res://src/collectibles/poker_chip/assets/chip_icon_128.png" id="4_h5l3i"]
+
+[sub_resource type="Animation" id="Animation_1o81m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ProgressBar:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_oy3iu"]
+resource_name = "spin"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ProgressBar:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.5708, 3.14159, 4.71239, 6.28319]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rlhs7"]
+_data = {
+"RESET": SubResource("Animation_1o81m"),
+"spin": SubResource("Animation_oy3iu")
+}
+
+[node name="RerollUI" type="Control"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = -864.0
+offset_bottom = -444.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_25dwc")
+
+[node name="ProgressBar" type="TextureProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(47.7041, 48.1079)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+max_value = 200.0
+value = 98.0
+fill_mode = 4
+nine_patch_stretch = true
+texture_under = ExtResource("2_qpnhu")
+texture_over = ExtResource("3_qfoi1")
+texture_progress = ExtResource("4_h5l3i")
+tint_over = Color(1, 1, 1, 0)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -27.5
+offset_right = 26.0
+offset_bottom = 27.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "9999"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_rlhs7")
+}
+autoplay = "spin"
+speed_scale = 0.2

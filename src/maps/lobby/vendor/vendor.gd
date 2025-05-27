@@ -2,12 +2,9 @@ extends PhysicsBody3D
 class_name Vendor
 
 @onready var dialogue_label: Label3D = $Label3D
-@onready var shop_ui: InventoryUI = $UI/ShopUI
+@onready var shop_ui: InventoryUI = $UI/InventoryUI
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var interact_area: Area3D = $InteractArea
-
-@export var player: Player
-
 
 func _ready() -> void:
 	health_component.hurt.connect(_on_hurt)
@@ -18,9 +15,9 @@ func _ready() -> void:
 
 func interact() -> void:
 	shop_ui.toggle()
-	player.input_dir = Vector2.ZERO
-	player.vel_horizontal = Vector2.ZERO
-	player.velocity = Vector3.ZERO
+	GameManager.player.input_dir = Vector2.ZERO
+	GameManager.player.vel_horizontal = Vector2.ZERO
+	GameManager.player.velocity = Vector3.ZERO
 
 
 func show_dialogue(dialogue: String) -> void:

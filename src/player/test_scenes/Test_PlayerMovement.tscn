@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=33 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
+[ext_resource type="Texture2D" uid="uid://xqhack4uhgdb" path="res://assets/textures/placeholder/texture_dark_06.png" id="2_gh1kv"]
 [ext_resource type="PackedScene" uid="uid://d0uqv7xitfwnt" path="res://src/player/test_scenes/Dummy.tscn" id="2_lrk4j"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="3_g5u1p"]
 [ext_resource type="Resource" uid="uid://di2x3xsnfojlh" path="res://src/player/barrel/resource/archetype_railgun_spec_barrrel_data.tres" id="4_1w7yd"]
@@ -10,13 +11,19 @@
 [ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="5_bi1qm"]
 [ext_resource type="Resource" uid="uid://ceo6ncflyswt2" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="5_eqila"]
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="6_1a2ul"]
+[ext_resource type="Resource" uid="uid://b8ex3g3n6w7du" path="res://src/player/barrel/resource/archetype_gelthrower_spec_barrrel_data.tres" id="6_gecbk"]
 [ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel_data.tres" id="7_2srjf"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="7_lahx4"]
 [ext_resource type="Resource" uid="uid://7xfi8anly2u3" path="res://src/player/barrel/resource/archetype_automatic_spec_barrrel_data.tres" id="8_4asxy"]
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="9_vb777"]
+[ext_resource type="Resource" uid="uid://l1nys7kixqcl" path="res://src/player/barrel/resource/placeholderA_barrrel_data.tres" id="10_0mcpf"]
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="10_28dwd"]
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="12_2rf45"]
-[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/BulletDecal.tscn" id="17_n3wco"]
+[ext_resource type="PackedScene" uid="uid://dow4ee3qublb7" path="res://src/maps/common/ShootWallTest.tscn" id="19_cev3k"]
+[ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChipProjectile.tscn" id="19_sk1dt"]
+[ext_resource type="Resource" uid="uid://bibe88ibu2n4d" path="res://src/player/barrel/resource/leg_eye_coordinate_barrel_data.tres" id="21_7d46j"]
+[ext_resource type="Resource" uid="uid://cioys44ppioym" path="res://src/player/barrel/resource/reckless_abandon_barrel_data.tres" id="21_8043w"]
+[ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="22_qlyyk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -30,9 +37,16 @@ background_mode = 2
 sky = SubResource("Sky_3etq8")
 tonemap_mode = 2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36m72"]
-transparency = 1
-albedo_color = Color(0.858824, 0.521569, 0.137255, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_votsj"]
+albedo_texture = ExtResource("2_gh1kv")
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_ny80a"]
+material = SubResource("StandardMaterial3D_votsj")
+size = Vector3(100, 1, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xq4fj"]
+size = Vector3(100, 1, 100)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_oe1jg"]
 top_radius = 4.0
@@ -53,64 +67,15 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ss6yq")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.179134, 0)
-use_collision = true
-size = Vector3(100, 0.2, 100)
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="."]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -29, 4.92087, -36)
-use_collision = true
-size = Vector3(10, 10, 10)
-material = SubResource("StandardMaterial3D_36m72")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0514736, 0, 0.0906063)
+mesh = SubResource("BoxMesh_ny80a")
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="."]
-transform = Transform3D(0.816702, 0, 0.57706, 0, 1, 0, -0.57706, 0, 0.816702, 29.1085, 4.92087, 4.95324)
-use_collision = true
-size = Vector3(10, 10, 10)
-material = SubResource("StandardMaterial3D_36m72")
-
-[node name="CSGBox3D4" type="CSGBox3D" parent="."]
-transform = Transform3D(0.816702, 0, 0.57706, 0, 1, 0, -0.57706, 0, 0.816702, -25.0659, 4.92087, -2.56013)
-use_collision = true
-size = Vector3(10, 10, 10)
-material = SubResource("StandardMaterial3D_36m72")
-
-[node name="CSGBox3D6" type="CSGBox3D" parent="."]
-transform = Transform3D(0.74943, 0, -0.662084, 0, 1, 0, 0.662084, 0, 0.74943, -10.6409, 4.92087, 29.5684)
-use_collision = true
-size = Vector3(10, 10, 10)
-material = SubResource("StandardMaterial3D_36m72")
-
-[node name="CSGBox3D7" type="CSGBox3D" parent="."]
-transform = Transform3D(0.74943, 0, -0.662084, 0, 1, 0, 0.662084, 0, 0.74943, 12.2054, 9.02551, -35.9304)
-use_collision = true
-size = Vector3(4.43213, 20.2905, 23.3564)
-material = SubResource("StandardMaterial3D_36m72")
-
-[node name="CSGBox3D8" type="CSGBox3D" parent="."]
-transform = Transform3D(0.74943, 0, -0.662084, 0, 1, 0, 0.662084, 0, 0.74943, 30.9365, 9.1051, -19.4058)
-use_collision = true
-size = Vector3(4.43213, 20.1313, 23.3564)
-material = SubResource("StandardMaterial3D_36m72")
-
-[node name="CSGBox3D10" type="CSGBox3D" parent="."]
-transform = Transform3D(0.74943, 0, -0.662084, 0, 1, 0, 0.662084, 0, 0.74943, 30.2666, 9.14759, -36.8465)
-use_collision = true
-size = Vector3(28.3526, 20.0463, 2.27496)
-material = SubResource("StandardMaterial3D_36m72")
-
-[node name="CSGBox3D9" type="CSGBox3D" parent="."]
-transform = Transform3D(0.74943, 0, -0.662084, 0, 1, 0, 0.662084, 0, 0.74943, 21.1274, 18.4061, -27.8635)
-use_collision = true
-size = Vector3(25.6065, 1.52936, 23.7671)
-material = SubResource("StandardMaterial3D_36m72")
-
-[node name="CSGBox3D11" type="CSGBox3D" parent="."]
-transform = Transform3D(0.651927, -0.536187, 0.536187, 0, 0.707107, 0.707107, -0.758282, -0.460982, 0.460982, -0.984107, 13.36, -13.8563)
-use_collision = true
-size = Vector3(15.9293, 1.52936, 11.8049)
-material = SubResource("StandardMaterial3D_36m72")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_xq4fj")
 
 [node name="Player" parent="." instance=ExtResource("1_h4pew")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
@@ -127,56 +92,101 @@ mesh = SubResource("CylinderMesh_oe1jg")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("CylinderShape3D_63wrj")
 
-[node name="BarrelItemPickup" parent="." instance=ExtResource("3_g5u1p")]
+[node name="Vendor" parent="." instance=ExtResource("12_2rf45")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.7766, 0.00510705, -8.4)
+
+[node name="CheatMoney" parent="." instance=ExtResource("19_sk1dt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6221, 1.02637, -11.1613)
+value_array = Array[int]([100000, 100000, 100000, 100000, 100000])
+
+[node name="barrel stuff" type="Node3D" parent="."]
+
+[node name="BarrelItemPickup" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 0)
 data = ExtResource("4_bjy76")
 
-[node name="BarrelItemPickup12" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup12" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9177, 0.599205, -1.038)
 
-[node name="BarrelItemPickup7" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup13" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.94303, 0.599205, -1.038)
+data = ExtResource("6_gecbk")
+
+[node name="BarrelItemPickup14" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.94303, 0.599205, 0.808412)
+data = ExtResource("10_0mcpf")
+
+[node name="BarrelItemPickup7" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.9866, 0.599205, 0)
 data = ExtResource("4_1w7yd")
 
-[node name="BarrelItemPickup2" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup2" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 2.57001)
 data = ExtResource("4_h0d4u")
 
-[node name="BarrelItemPickup6" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup6" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(0.999994, -0.000245996, 0.00340721, 0.000229993, 0.999989, 0.00470241, -0.00340833, -0.0047016, 0.999983, 9.79518, 0.599205, 1.65531)
 data = ExtResource("5_eqila")
 
-[node name="BarrelItemPickup8" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup8" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 3.3006)
 data = ExtResource("7_lahx4")
 
-[node name="BarrelItemPickup9" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup9" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 1.75342)
 data = ExtResource("8_4asxy")
 
-[node name="BarrelItemPickup10" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup10" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 4.59947)
 data = ExtResource("9_vb777")
 
-[node name="BarrelItemPickup11" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup11" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8545, 0.599205, 6.14203)
 data = ExtResource("10_28dwd")
 
-[node name="BarrelItemPickup3" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup3" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 3.93916)
 data = ExtResource("5_bi1qm")
 
-[node name="BarrelItemPickup4" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup4" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 5.02901)
 data = ExtResource("6_1a2ul")
 
-[node name="BarrelItemPickup5" parent="." instance=ExtResource("3_g5u1p")]
+[node name="BarrelItemPickup5" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 5.96152)
 data = ExtResource("7_2srjf")
 
-[node name="Vendor" parent="." node_paths=PackedStringArray("player") instance=ExtResource("12_2rf45")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.7766, 0.00510705, -8.4)
-player = NodePath("../Player")
+[node name="BarrelItemPickup15" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.79518, 0.599205, 7.30406)
+data = ExtResource("21_7d46j")
 
-[node name="BulletDecal" parent="." instance=ExtResource("17_n3wco")]
-transform = Transform3D(1, 0, 0, 0, 0.0971139, 0.995273, 0, -0.995273, 0.0971139, 0, 0.811173, 6.34857)
+[node name="BarrelItemPickup16" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.73626, 0.599205, 8.82271)
+data = ExtResource("22_qlyyk")
+
+[node name="BarrelItemPickup17" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.89, 0.599205, 7.53859)
+data = ExtResource("21_8043w")
+
+[node name="ShootWallTest" parent="." instance=ExtResource("19_cev3k")]
+
+[node name="ShootWallTest7" parent="." instance=ExtResource("19_cev3k")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 8.72625, 3.61703, -19.5232)
+
+[node name="ShootWallTest8" parent="." instance=ExtResource("19_cev3k")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 18.9701, 3.61703, 7.94599)
+
+[node name="ShootWallTest6" parent="." instance=ExtResource("19_cev3k")]
+transform = Transform3D(-2.18557e-08, 0.866025, -0.5, 3.78552e-08, 0.5, 0.866025, 1, 0, -4.37114e-08, -1.88214, 10.3533, -15.182)
+
+[node name="ShootWallTest2" parent="." instance=ExtResource("19_cev3k")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.2796, 3.61703, -27.6038)
+
+[node name="ShootWallTest3" parent="." instance=ExtResource("19_cev3k")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.538738, 3.61703, -27.6038)
+
+[node name="ShootWallTest4" parent="." instance=ExtResource("19_cev3k")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4.7296, 3.61703, -33.2212)
+
+[node name="ShootWallTest5" parent="." instance=ExtResource("19_cev3k")]
+transform = Transform3D(-1, 0, 8.74228e-08, 8.74228e-08, -4.37114e-08, 1, 3.82137e-15, 1, 4.37114e-08, -4.77851, 7.19081, -29.7185)

@@ -9,17 +9,19 @@ signal hurt
 @export_category("Health")
 @export var is_invincible: bool = false
 @export var max_health: float = 100
+@export var show_damage_text: bool = true
 @export var text_effect: PackedScene
 @export var text_effect_location: Node3D
 
-# Changed by owner character, range from 0 (invincible) to 1 (normal)
-var modified_resistance = 1
-
+var received_dmg_multiplier = 1
 
 var current_health: float:
 	set(value):
 		if has_died or not enabled:
-			return
+			if has_died and value > 0:
+				has_died = false
+			else:
+				return
 		# Cache previous value so we can do dynamic health bars
 		var prev_health = current_health
 		current_health = clamp(value, 0, max_health)
@@ -41,33 +43,34 @@ func _ready() -> void:
 
 
 func damage(_damage: float, _color: Color = Color.WHITE) -> void:
-	_damage = round(_damage * modified_resistance)
+	_damage = round(_damage * received_dmg_multiplier)
 	if enabled:
 		if not is_invincible:
 			current_health -= _damage
-		if not text_effect:
-			return
-		if text_effect_location:
-			create_text(text_effect_location.global_position, str(_damage), _color)
-		else:
-			create_text(self.global_position, str(_damage), _color)
+		if show_damage_text and not is_invincible:
+			if not text_effect:
+				return
+			if text_effect_location:
+				create_text(text_effect_location.global_position, str(_damage), _color)
+			else:
+				create_text(self.global_position, str(_damage), _color)
 
 func heal(health: float, _color: Color = Color.GREEN) -> void:
 	if enabled:
 		current_health += health
-		if not text_effect:
-			return
-		if text_effect_location:
-			create_text(text_effect_location.global_position, str(health), _color)
-		else:
-			create_text(self.global_position, str(health), _color)
+		if show_damage_text:
+			if not text_effect:
+				return
+			if text_effect_location:
+				create_text(text_effect_location.global_position, str(health), _color)
+			else:
+				create_text(self.global_position, str(health), _color)
 
 
 func initialize_health() -> void:
 	current_health = max_health
 
 func create_text(pos: Vector3, text: String, color: Color = Color.WHITE, size: float = 92.0) -> void:
-
 	var text_inst = text_effect.instantiate()
 	get_parent().add_child(text_inst)
 	var variance = 1

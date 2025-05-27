@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bkfyc15xx5ogy"
+path="res://.godot/imported/chipboss 1.0 fullmedley.mp3-078feb60f5c312631cb1ab667dc524ab.mp3str"
+
+[deps]
+
+source_file="res://assets/music/chipboss 1.0 fullmedley.mp3"
+dest_files=["res://.godot/imported/chipboss 1.0 fullmedley.mp3-078feb60f5c312631cb1ab667dc524ab.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

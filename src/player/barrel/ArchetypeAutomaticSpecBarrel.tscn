@@ -18,7 +18,6 @@
 
 [node name="ArchetypeAutomaticSpecBarrel" type="Node3D"]
 script = ExtResource("1_jqac0")
-barrel_id = 10
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
@@ -59,6 +58,11 @@ script = ExtResource("4_p3s2o")
 attribute = 11
 new_value = 0.06
 
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/AmericanRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 8
+new_value = 2.1
+
 [node name="RussianRifle" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_tarn7")
 is_archetype = true
@@ -95,6 +99,11 @@ new_value = 18.0
 script = ExtResource("4_p3s2o")
 attribute = 11
 new_value = 0.1
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/RussianRifle"]
+script = ExtResource("4_p3s2o")
+attribute = 8
+new_value = 2.0
 
 [node name="Vector" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_tarn7")
@@ -136,7 +145,7 @@ new_value = 0.02
 [node name="SetReloadTime" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
 attribute = 8
-new_value = 0.5
+new_value = 1.6
 
 [node name="LMG" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_tarn7")
@@ -178,4 +187,4 @@ new_value = 0.07
 [node name="SetReloadTime" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 8
-new_value = 2.0
+new_value = 3.0

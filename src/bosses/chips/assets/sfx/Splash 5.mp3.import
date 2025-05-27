@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c2ag4v4flr1p8"
+path="res://.godot/imported/Splash 5.mp3-ad084f3637a7d4a8d48f03a725667bf8.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/Splash 5.mp3"
+dest_files=["res://.godot/imported/Splash 5.mp3-ad084f3637a7d4a8d48f03a725667bf8.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,12 +1,12 @@
-[gd_scene load_steps=72 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=98 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
-[ext_resource type="AudioStream" uid="uid://djpgcg8yqujhs" path="res://src/bosses/slots/assets/sfx/BASIC LONG SLOT MACHINE.mp3" id="3_pb03v"]
+[ext_resource type="AudioStream" uid="uid://biv0t34kylfov" path="res://src/bosses/slots/assets/sfx/Basic Long Slot Machine Improved.mp3" id="3_o5exi"]
 [ext_resource type="Texture2D" uid="uid://bbblp8vkvd3no" path="res://src/bosses/slots/assets/icons/temp/flip_full.png" id="3_say4o"]
 [ext_resource type="Texture2D" uid="uid://v67yeqhnxlbd" path="res://src/bosses/slots/assets/icons/temp/suit_diamonds.png" id="4_6oj0s"]
 [ext_resource type="Texture2D" uid="uid://8rlesfd54n8r" path="res://src/bosses/slots/assets/icons/temp/suit_hearts.png" id="4_oaydl"]
-[ext_resource type="AudioStream" uid="uid://bf837nq3217n7" path="res://src/bosses/slots/assets/sfx/BASIC SHORT SLOT MACHINE.mp3" id="4_uxdny"]
+[ext_resource type="AudioStream" uid="uid://djvdypgx1y3j6" path="res://src/bosses/slots/assets/sfx/Basic Short Slot Machine Improved.mp3" id="4_vhne6"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="5_3q2k6"]
 [ext_resource type="AudioStream" uid="uid://vjjoalu8btt5" path="res://src/bosses/slots/assets/sfx/SLOT MACHINE - JUST DING DING DING COIN TELEGRAPH ISOLATED.mp3" id="5_lghps"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_lu46i"]
@@ -16,7 +16,7 @@
 [ext_resource type="AudioStream" uid="uid://dkvp444gcr566" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS TELEGRAPH BELL ISOLATED.mp3" id="7_1c6a3"]
 [ext_resource type="Texture2D" uid="uid://bc7ur1o66fgkl" path="res://src/bosses/slots/assets/icons/temp/fire.png" id="7_ri7nv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="8_0tk6i"]
-[ext_resource type="AudioStream" uid="uid://nrv16ny1wym" path="res://src/bosses/slots/assets/sfx/SLOT BOSS TELEGRAPH MELEE_SHIELD ISOLATED.mp3" id="8_1arpf"]
+[ext_resource type="AudioStream" uid="uid://c1qu2s17kgr8h" path="res://src/bosses/slots/assets/sfx/Slot Melee Improved Temp.mp3" id="8_po7hj"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="9_1g4bc"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="9_5a0pq"]
 [ext_resource type="PackedScene" uid="uid://bacaewb7dl2l6" path="res://src/bosses/slots/bell/BellAttack.tscn" id="9_6qwni"]
@@ -26,13 +26,15 @@
 [ext_resource type="PackedScene" uid="uid://40024fnpmf14" path="res://src/bosses/base/attacks/ranged/DiamondProjectile.tscn" id="11_dqr52"]
 [ext_resource type="PackedScene" uid="uid://yw8o87v7ydx1" path="res://src/bosses/slots/bomb/BombProjectile.tscn" id="12_xbq02"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="16_52y3v"]
-[ext_resource type="AudioStream" uid="uid://cslq2jntaulce" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 1.mp3" id="17_1qoae"]
-[ext_resource type="AudioStream" uid="uid://ce1fw8wy6012x" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 2.mp3" id="18_5fj8q"]
-[ext_resource type="AudioStream" uid="uid://dfm3de6k0lylb" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 3.mp3" id="19_ecwx3"]
-[ext_resource type="AudioStream" uid="uid://bold3t26mprn4" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 4.mp3" id="20_dhjas"]
-[ext_resource type="AudioStream" uid="uid://d1gvu53dhcadx" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 5.mp3" id="21_f8dbu"]
-[ext_resource type="AudioStream" uid="uid://8rqo0mj5n8cw" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 6.mp3" id="22_dg8a1"]
-[ext_resource type="AudioStream" uid="uid://bmjh7bs72w8bm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS COIN SHOT 7.mp3" id="23_cagkm"]
+[ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="17_6xi00"]
+[ext_resource type="AudioStream" uid="uid://cbf7hkjdjvljq" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 2.mp3" id="18_0lbrd"]
+[ext_resource type="AudioStream" uid="uid://dv5u41740s0hh" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 3.mp3" id="19_aidds"]
+[ext_resource type="AudioStream" uid="uid://ba3k7kprithnp" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 4.mp3" id="20_tmjxh"]
+[ext_resource type="AudioStream" uid="uid://cmhmrmkyi3u0o" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 5.mp3" id="21_wokd2"]
+[ext_resource type="AudioStream" uid="uid://b5w4tt4xnxqfm" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 6.mp3" id="22_0em2w"]
+[ext_resource type="AudioStream" uid="uid://cr76fcs47jgtf" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 7.mp3" id="23_sjuev"]
+[ext_resource type="Texture2D" uid="uid://dndtyj8hh404v" path="res://assets/sprite/aoe_markers/aoe_ring.png" id="25_4viup"]
+[ext_resource type="Texture2D" uid="uid://cjm0gilmb52sa" path="res://assets/sprite/aoe_markers/aoe_arrows.png" id="26_27dae"]
 [ext_resource type="AudioStream" uid="uid://dj3qqiciyxwmv" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 1.mp3" id="26_ttq7b"]
 [ext_resource type="AudioStream" uid="uid://ddhs0duid8pk8" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 2.mp3" id="27_q6v3x"]
 [ext_resource type="AudioStream" uid="uid://xuyc45uopqlk" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 3.mp3" id="28_d1bvs"]
@@ -42,9 +44,9 @@
 [ext_resource type="AudioStream" uid="uid://dy7dp3qgxrb1n" path="res://src/bosses/slots/assets/sfx/SLOT BOSS LEVER ATTACK 2.mp3" id="32_1rwgx"]
 [ext_resource type="AudioStream" uid="uid://d3ibk35sllumq" path="res://src/bosses/slots/assets/sfx/SLOT BOSS LEVER ATTACK 3.mp3" id="33_31vh7"]
 [ext_resource type="AudioStream" uid="uid://b15by5itg11gr" path="res://src/bosses/slots/assets/sfx/SLOT BOSS LEVER ATTACK.mp3" id="34_otbm5"]
-[ext_resource type="AudioStream" uid="uid://b5u11ya8wqrke" path="res://src/player/assets/sfx/AIR DASH.mp3" id="35_ysshl"]
 [ext_resource type="AudioStream" uid="uid://c1t5q0u05luro" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 1.mp3" id="36_pqkkl"]
 [ext_resource type="AudioStream" uid="uid://b7ldij2udgm6r" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 2.mp3" id="37_0sig5"]
+[ext_resource type="AudioStream" uid="uid://dy7omvpcxu4mv" path="res://src/bosses/slots/assets/sfx/Slot Melee Dash.mp3" id="37_cawc0"]
 [ext_resource type="AudioStream" uid="uid://dsf1r32gkkqo2" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 3.mp3" id="38_hfhsu"]
 [ext_resource type="AudioStream" uid="uid://dmxlvexm1yqfb" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 4.mp3" id="39_gde5g"]
 [ext_resource type="AudioStream" uid="uid://c48v18qfcbx6t" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 5.mp3" id="40_8wl1k"]
@@ -62,6 +64,10 @@
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="55_5buyr"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="56_ft1nf"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="57_f27rp"]
+[ext_resource type="Texture2D" uid="uid://cy008ijk50dtk" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_hit.png" id="62_ci6xi"]
+[ext_resource type="AnimationLibrary" uid="uid://cbukxypul85wr" path="res://src/bosses/slots/assets/slot_boss_anims.res" id="64_5u1vo"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="66_4ktje"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="67_h7fvy"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
@@ -74,8 +80,9 @@ shader_parameter/impact_points = null
 shader_parameter/impact_size = 1.0
 shader_parameter/impact_falloff_sharpness = 1.0
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_rw4en"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vg3vh"]
 radius = 1.7
+height = 3.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_unuxb"]
 radius = 1.7
@@ -89,91 +96,96 @@ material = SubResource("StandardMaterial3D_7kkon")
 radius = 0.35
 height = 0.7
 
-[sub_resource type="Animation" id="Animation_uf2b5"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 2.5, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 2.2, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("MarkerPivot:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 3.6, 0)]
-}
+[sub_resource type="Resource" id="Resource_7mlln"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../Health/Dead")
 
-[sub_resource type="Animation" id="Animation_1e422"]
-resource_name = "float"
-length = 1.2
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
-"transitions": PackedFloat32Array(0.63728, 1.27456, 0.707107, 1.31951, 1),
-"update": 0,
-"values": [Vector3(0, 3.5, 0), Vector3(0, 3.7, 0), Vector3(0, 3.5, 0), Vector3(0, 3.3, 0), Vector3(0, 3.5, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape3D:position")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
-"transitions": PackedFloat32Array(0.63728, 1.27456, 0.707107, 1.31951, 1),
-"update": 0,
-"values": [Vector3(0, 3.5, 0), Vector3(0, 3.7, 0), Vector3(0, 3.5, 0), Vector3(0, 3.3, 0), Vector3(0, 3.5, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("MarkerPivot:position")
-tracks/2/interp = 2
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
-"transitions": PackedFloat32Array(0.63728, 1.27456, 0.707107, 1.31951, 1),
-"update": 0,
-"values": [Vector3(0, 3.6, 0), Vector3(0, 3.8, 0), Vector3(0, 3.6, 0), Vector3(0, 3.4, 0), Vector3(0, 3.6, 0)]
-}
+[sub_resource type="Resource" id="Resource_v0uhn"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_7mlln")
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_33bk0"]
+[sub_resource type="Resource" id="Resource_nvdn1"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_8dxoa"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_nvdn1")
+
+[sub_resource type="Resource" id="Resource_vudos"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_swquk"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_vudos")
+
+[sub_resource type="Resource" id="Resource_k564c"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_ifeni"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_k564c")
+
+[sub_resource type="Resource" id="Resource_3onr3"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_mrysj"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_3onr3")
+
+[sub_resource type="Resource" id="Resource_jn0hb"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_fifxe"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_jn0hb")
+
+[sub_resource type="Resource" id="Resource_lo164"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_jsu51"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_lo164")
+
+[sub_resource type="Resource" id="Resource_raxrd"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_n6uxk"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_raxrd")
+
+[sub_resource type="Resource" id="Resource_15l04"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_joexq"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_15l04")
+
+[sub_resource type="Resource" id="Resource_uhsr0"]
+script = ExtResource("66_4ktje")
+state = NodePath("../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_kklh8"]
+script = ExtResource("67_h7fvy")
+guard = SubResource("Resource_uhsr0")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o53xj"]
+radius = 4.0
+height = 8.0
+
+[sub_resource type="Animation" id="Animation_mppog"]
+length = 0.1
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wocs5"]
 _data = {
-"RESET": SubResource("Animation_uf2b5"),
-"float": SubResource("Animation_1e422")
+"death": SubResource("Animation_mppog")
 }
 
 [node name="BossSlots" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_qxyx0")]
@@ -188,13 +200,13 @@ angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 20.0
 SLOT_TICKS = 20
-sfx_slot_roll_long = ExtResource("3_pb03v")
-sfx_slot_roll_short = ExtResource("4_uxdny")
+sfx_slot_roll_long = ExtResource("3_o5exi")
+sfx_slot_roll_short = ExtResource("4_vhne6")
 sfx_slot_roll_ding = ExtResource("5_lghps")
 sfx_slot_roll_coins = ExtResource("6_q1utd")
 sfx_slot_pick_coin = ExtResource("6_q1utd")
 sfx_slot_pick_bell = ExtResource("7_1c6a3")
-sfx_slot_pick_bar = ExtResource("8_1arpf")
+sfx_slot_pick_bar = ExtResource("8_po7hj")
 sfx_slot_pick_diamond = ExtResource("9_qwmyu")
 sfx_slot_pick_cherry = ExtResource("10_88yvd")
 icon_coin = ExtResource("3_say4o")
@@ -206,8 +218,10 @@ coin_projectile = ExtResource("16_52y3v")
 coin_shots_per_burst = 8
 num_bursts = 2
 delay_between_burst = 0.6
-sfx_coin_shot = Array[AudioStream]([ExtResource("17_1qoae"), ExtResource("18_5fj8q"), ExtResource("19_ecwx3"), ExtResource("20_dhjas"), ExtResource("21_f8dbu"), ExtResource("22_dg8a1"), ExtResource("23_cagkm")])
+sfx_coin_shot = Array[AudioStream]([ExtResource("17_6xi00"), ExtResource("18_0lbrd"), ExtResource("19_aidds"), ExtResource("20_tmjxh"), ExtResource("21_wokd2"), ExtResource("22_0em2w"), ExtResource("23_sjuev")])
 bell_scene = ExtResource("9_6qwni")
+bell_aoe_marker_ring = ExtResource("25_4viup")
+bell_aoe_marker_arrows = ExtResource("26_27dae")
 drop_shadow_material = SubResource("ShaderMaterial_o7nhx")
 bell_shadow_time = 1.4
 bell_spawn_area_radius = 28.0
@@ -221,7 +235,7 @@ sfx_lever_swipe = Array[AudioStream]([ExtResource("32_1rwgx"), ExtResource("33_3
 charge_damage = 10.0
 charge_knockback = 50.0
 min_charge_distance = 10.0
-sfx_charge = Array[AudioStream]([ExtResource("35_ysshl")])
+sfx_charge = Array[AudioStream]([ExtResource("37_cawc0")])
 sfx_charge_impact = Array[AudioStream]([])
 diamond_projectile = ExtResource("11_dqr52")
 diamond_shots_per_attack = 12
@@ -229,12 +243,12 @@ diamond_shot_time = 1.3
 sfx_diamond_shot = Array[AudioStream]([ExtResource("36_pqkkl"), ExtResource("37_0sig5"), ExtResource("38_hfhsu"), ExtResource("39_gde5g"), ExtResource("40_8wl1k"), ExtResource("41_182io"), ExtResource("42_vntjg"), ExtResource("43_2donj")])
 bomb_projectile = ExtResource("12_xbq02")
 bombs_per_attack = 8
-bomb_drop_delay = 0.4
 bomb_fuse_time = 2.5
 bomb_impulse = 170000.0
 max_drop_distance = 20.0
+bomb_drop_delay = 0.4
 sfx_bomb_launch = Array[AudioStream]([ExtResource("45_ishi6"), ExtResource("46_vgcme"), ExtResource("47_hafh8"), ExtResource("48_qbsnc"), ExtResource("49_sigie")])
-boss_id = 2
+boss_id = 1
 chip_spawn_chance = 0.3
 chip_spawn_force = 1200.0
 barrel_to_drop = ExtResource("11_5va1t")
@@ -242,6 +256,8 @@ sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlaye
 sfx_awaken = ExtResource("51_nikje")
 sfx_hit = Array[AudioStream]([ExtResource("53_c2xtu"), ExtResource("54_56pdr"), ExtResource("55_5buyr"), ExtResource("56_ft1nf"), ExtResource("57_f27rp")])
 sfx_death = ExtResource("67_pi67a")
+base_sprite = ExtResource("5_wqq5t")
+hurt_sprite = ExtResource("62_ci6xi")
 attack_recovery_time = 0.5
 telegraph_time = 0.4
 projectiles_per_phase = 8
@@ -270,7 +286,7 @@ texture = ExtResource("4_6oj0s")
 
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
-shape = SubResource("SphereShape3D_rw4en")
+shape = SubResource("CapsuleShape3D_vg3vh")
 
 [node name="DebugMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
@@ -288,6 +304,9 @@ mesh = SubResource("SphereMesh_lr0sl")
 
 [node name="Hurtbox" parent="." index="4"]
 monitoring = true
+
+[node name="HealthComponent" parent="." index="5"]
+max_health = 4400.0
 
 [node name="NavigationComponent" parent="." index="6"]
 follow_target = false
@@ -666,6 +685,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_lu46i")
 to = NodePath("../../HomingProjectiles")
 event = &"start_diamond_attack"
+guard = SubResource("Resource_v0uhn")
 delay_in_seconds = "0.0"
 
 [node name="toCherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="2"]
@@ -707,6 +727,7 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Spinning")
 event = &"start_slots"
+guard = SubResource("Resource_8dxoa")
 delay_in_seconds = "0.0"
 
 [node name="Spinning" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="1"]
@@ -773,6 +794,7 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Shooting")
 event = &"start_shooting"
+guard = SubResource("Resource_swquk")
 delay_in_seconds = "0.0"
 
 [node name="Shooting" type="Node" parent="StateChart/Root/Phase/Phase2/HomingProjectiles" index="1"]
@@ -818,6 +840,7 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../DroppingBombs")
 event = &"start_dropping_bombs"
+guard = SubResource("Resource_ifeni")
 delay_in_seconds = "0.0"
 
 [node name="DroppingBombs" type="Node" parent="StateChart/Root/Phase/Phase2/CherryBombs" index="1"]
@@ -828,6 +851,9 @@ script = ExtResource("5_lu46i")
 to = NodePath("../../Recover")
 event = &"stop_dropping_bombs"
 delay_in_seconds = "0.0"
+
+[node name="DropTimer" type="Timer" parent="StateChart/Root/Phase/Phase2/CherryBombs/DroppingBombs" index="1"]
+one_shot = true
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/CherryBombs" index="2"]
 script = ExtResource("9_5a0pq")
@@ -863,13 +889,14 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Dropping")
 event = &"start_drop"
+guard = SubResource("Resource_mrysj")
 delay_in_seconds = "0.0"
 
 [node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase2/BellDrop/Targeting" index="1"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../../LeverSwipe")
 event = &"start_lever_attack"
-guard = ExtResource("5_3q2k6")
+guard = SubResource("Resource_fifxe")
 delay_in_seconds = "0.0"
 
 [node name="Dropping" type="Node" parent="StateChart/Root/Phase/Phase2/BellDrop" index="1"]
@@ -885,7 +912,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_lu46i")
 to = NodePath("../../../LeverSwipe")
 event = &"start_lever_attack"
-guard = ExtResource("5_3q2k6")
+guard = SubResource("Resource_jsu51")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/BellDrop" index="2"]
@@ -929,6 +956,7 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Charging")
 event = &"start_charge_attack"
+guard = SubResource("Resource_n6uxk")
 delay_in_seconds = "0.0"
 
 [node name="Charging" type="Node" parent="StateChart/Root/Phase/Phase2/Charge" index="1"]
@@ -967,6 +995,7 @@ script = ExtResource("9_5a0pq")
 script = ExtResource("5_lu46i")
 to = NodePath("../../Swipe")
 event = &"start_swipe"
+guard = SubResource("Resource_joexq")
 delay_in_seconds = "0.0"
 
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe" index="1"]
@@ -1005,6 +1034,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_lu46i")
 to = NodePath("../../HomingProjectiles")
 event = &"start_diamond_attack"
+guard = SubResource("Resource_kklh8")
 delay_in_seconds = "0.0"
 
 [node name="toCherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe" index="6"]
@@ -1028,90 +1058,91 @@ event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="DebugStateLabel" parent="." index="10"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.3, 0)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
 
 [node name="DebugDistanceLabel" parent="." index="11"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.7, 0)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, 0)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="14"]
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="14"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="15"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="16"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="17"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="18"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="19"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="20"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="21"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="." index="22"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="." index="23"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="." index="24"]
+volume_db = 2.0
+unit_size = 25.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="SFXPlayer12" type="AudioStreamPlayer3D" parent="." index="25"]
+volume_db = 2.0
+unit_size = 20.0
+max_polyphony = 10
+bus = &"SFX"
+
+[node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
+shape = SubResource("CapsuleShape3D_o53xj")
+
+[node name="AnimationPlayer" parent="." index="31"]
 libraries = {
-"": SubResource("AnimationLibrary_33bk0")
+"": SubResource("AnimationLibrary_wocs5"),
+"slot_boss_anims": ExtResource("64_5u1vo")
 }
-autoplay = "float"
-
-[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="15"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="16"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="17"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="18"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="19"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="20"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="21"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="22"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="." index="23"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="." index="24"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="." index="25"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
-
-[node name="SFXPlayer12" type="AudioStreamPlayer3D" parent="." index="26"]
-volume_db = 2.0
-unit_size = 20.0
-max_polyphony = 10
-bus = &"SFX"
 
 [connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]

@@ -1,29 +1,58 @@
-[gd_scene load_steps=6 format=3 uid="uid://yjhwpjyorotf"]
+[gd_scene load_steps=24 format=3 uid="uid://yjhwpjyorotf"]
 
 [ext_resource type="Script" path="res://src/bosses/roulette/shield/boss_shield.gd" id="1_ju4me"]
+[ext_resource type="Texture2D" uid="uid://cmbk0ee2ycfr7" path="res://assets/sprite/playing_cards/ace_of_clubs.png" id="2_ftole"]
 [ext_resource type="Material" uid="uid://dt63xhaj0rbay" path="res://src/bosses/roulette/assets/materials/shield_mat.tres" id="2_wkhni"]
+[ext_resource type="Texture2D" uid="uid://chubb6oo6m3bb" path="res://assets/sprite/playing_cards/ace_of_diamonds.png" id="3_6mok0"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_k6qd8"]
+[ext_resource type="Texture2D" uid="uid://bpysy3ognjwre" path="res://assets/sprite/playing_cards/ace_of_hearts.png" id="4_lskab"]
+[ext_resource type="Material" uid="uid://bfbxeugxf2di5" path="res://src/bosses/roulette/shield/ShieldCardFace.tres" id="4_wjik8"]
+[ext_resource type="Texture2D" uid="uid://com68ufp46sqw" path="res://assets/sprite/playing_cards/ace_of_spades.png" id="5_6ihay"]
+[ext_resource type="Texture2D" uid="uid://cwfnf0ofs1xxc" path="res://assets/sprite/playing_cards/jack_of_clubs.png" id="6_6q2xe"]
+[ext_resource type="Texture2D" uid="uid://c43bmiwdc0sgo" path="res://assets/sprite/playing_cards/jack_of_diamonds.png" id="7_av1au"]
+[ext_resource type="Texture2D" uid="uid://dxfootljpyw8q" path="res://assets/sprite/playing_cards/jack_of_hearts.png" id="8_jdsjs"]
+[ext_resource type="Texture2D" uid="uid://bu2ipanlrchon" path="res://assets/sprite/playing_cards/jack_of_spades.png" id="9_pn0su"]
+[ext_resource type="Texture2D" uid="uid://u7a0oot6ltm6" path="res://assets/sprite/playing_cards/king_of_clubs.png" id="11_usd5b"]
+[ext_resource type="Texture2D" uid="uid://wuh5m67ie22w" path="res://assets/sprite/playing_cards/king_of_diamonds.png" id="12_r6qmy"]
+[ext_resource type="Texture2D" uid="uid://gkc05qvm7vdw" path="res://assets/sprite/playing_cards/king_of_hearts.png" id="13_iolm7"]
+[ext_resource type="Texture2D" uid="uid://bljfvimfo48qf" path="res://assets/sprite/playing_cards/king_of_spades.png" id="14_mrc7x"]
+[ext_resource type="Texture2D" uid="uid://be2h3p8bvgy3o" path="res://assets/sprite/playing_cards/queen_of_clubs.png" id="15_p8o05"]
+[ext_resource type="Texture2D" uid="uid://d04k0mnhxdj4e" path="res://assets/sprite/playing_cards/queen_of_diamonds.png" id="16_wx1y3"]
+[ext_resource type="Texture2D" uid="uid://bbhpvvwe7eq4i" path="res://assets/sprite/playing_cards/queen_of_hearts.png" id="17_n16ct"]
+[ext_resource type="Texture2D" uid="uid://cyqet0vfyhvg7" path="res://assets/sprite/playing_cards/queen_of_spades.png" id="18_3h6tn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rvupe"]
-size = Vector3(4, 6, 1)
+size = Vector3(4.45, 9, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_sjoi1"]
 material = ExtResource("2_wkhni")
-size = Vector3(4, 6, 1)
+size = Vector3(4.5, 9, 0.25)
 
-[node name="Shield1" type="StaticBody3D" node_paths=PackedStringArray("shield_mesh", "health_component")]
+[sub_resource type="BoxMesh" id="BoxMesh_r8fi6"]
+material = ExtResource("4_wjik8")
+size = Vector3(4.5, 9, 0.25)
+
+[node name="Shield1" type="StaticBody3D" node_paths=PackedStringArray("shield_back_mesh", "shield_card_mesh", "health_component")]
 collision_layer = 64
 collision_mask = 10
 script = ExtResource("1_ju4me")
-shield_mesh = NodePath("MeshInstance3D")
+possible_card_faces = Array[CompressedTexture2D]([ExtResource("2_ftole"), ExtResource("3_6mok0"), ExtResource("4_lskab"), ExtResource("5_6ihay"), ExtResource("6_6q2xe"), ExtResource("7_av1au"), ExtResource("8_jdsjs"), ExtResource("9_pn0su"), ExtResource("11_usd5b"), ExtResource("12_r6qmy"), ExtResource("13_iolm7"), ExtResource("14_mrc7x"), ExtResource("15_p8o05"), ExtResource("16_wx1y3"), ExtResource("17_n16ct"), ExtResource("18_3h6tn")])
+shield_back_mesh = NodePath("ShieldBackMesh")
+shield_card_mesh = NodePath("CardFaceMesh")
 health_component = NodePath("HealthComponent")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.125)
 shape = SubResource("BoxShape3D_rvupe")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="ShieldBackMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25)
 material_override = ExtResource("2_wkhni")
 mesh = SubResource("BoxMesh_sjoi1")
+
+[node name="CardFaceMesh" type="MeshInstance3D" parent="."]
+material_override = ExtResource("4_wjik8")
+mesh = SubResource("BoxMesh_r8fi6")
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_k6qd8")]
 max_health = 50.0

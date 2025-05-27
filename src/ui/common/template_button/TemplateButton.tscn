@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://da707blxxuo3c"]
+
+[ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="1_31pm1"]
+[ext_resource type="Script" path="res://src/ui/common/template_button/template_button.gd" id="1_anfr8"]
+
+[node name="TemplateButton" type="Button"]
+offset_right = 60.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 26
+text = "Button"
+script = ExtResource("1_anfr8")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_31pm1")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20

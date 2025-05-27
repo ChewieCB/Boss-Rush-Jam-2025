@@ -1,6 +1,16 @@
 extends Node3D
 class_name Gun
 
+signal gun_shot
+signal reload_anim_end
+signal spin_anim_trigger
+signal gun_reloaded
+
+signal barrel_spin_started(barrel: SpinBarrel, barrel_idx: int)
+signal barrel_spin_stopped(barrel: SpinBarrel, barrel_idx: int)
+signal barrel_equipped(barrel: SpinBarrel, barrel_idx: int)
+signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
+
 @export var gun_name: String
 @export_multiline var description: String
 
@@ -19,6 +29,7 @@ class_name Gun
 @onready var barrel_3_sprite: Sprite3D = $SpriteParent/Barrel3Sprite
 @onready var barrel_3_label: Label3D = $SpriteParent/Barrel3Sprite/Label3D
 @onready var barrel_sprites: Array[Sprite3D] = [barrel_1_sprite, barrel_2_sprite, barrel_3_sprite]
+@onready var barrel_labels: Array[Label3D] = [barrel_1_label, barrel_2_label, barrel_3_label]
 
 @onready var anim_tree: AnimationTree = $AnimationTree
 
@@ -39,7 +50,11 @@ class_name Gun
 ## Shot per second
 @export var base_firerate = 2
 @export var base_magazine_size = 10
-@export var base_reload_time = 1
+# DONT CHANGE THIS base_reload_time, THIS BREAK THE GUN
+# I think the animation tied to 1s or so
+# But modify the reload time on barrel effect seem to be fine
+var base_reload_time = 1
+@export var base_spin_time = 1
 ## How spread out projectile can be from the aim center
 @export var base_spread_angle = 0.5
 ## Projectile dont have travel time. Shot enemy is instanly damaged. If this ticked, ignore projectile_speed
@@ -63,6 +78,7 @@ class_name Gun
 @onready var failed_shoot_sfx_timer: Timer = $FailToShootSFXTimer
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var muzzle_flash_light: OmniLight3D = $BulletStartPos/MuzzleFlashLight
+@onready var smoke_timer: Timer = $SmokeTimer
 
 var magazine_ammo_left = 0
 var is_reloading = false
@@ -70,9 +86,10 @@ var is_jammed = false
 var time_since_last_shot = 0
 var installed_barrels: Array[SpinBarrel] = []
 var barrel_count: int = 0
-		
+
 var is_trigger_pulled = false
 var muzzle_light_tween: Tween
+var reinstalled_barrel_from_savefile = false
 
 # Modify-able by barrels
 # We won't modify them in this script
@@ -86,39 +103,38 @@ var modified_projectile_speed
 var modified_is_hitscan
 var modified_spread_angle
 var modified_reload_time
+var modified_spin_time
 var modified_ricochet_count = 0
 var modified_homing_strength: float = 0 # radius to search for enemy
 var modified_projectile_prefab: PackedScene = null
 var modified_recoil
 var modified_screenshake
 
-signal gun_shot
-signal reload_anim_end
-signal gun_reloaded
-
-signal barrel_spin_started(barrel: SpinBarrel)
-signal barrel_spin_stopped(barrel: SpinBarrel)
-
-
 const MIN_DELAY_BETWEEN_SHOT_IN_BURST = 0.1
 const BULLET_SPAWN_POS_VARIATION = 10
+const TIME_BETWEEN_MUZZLE_SMOKE = 0.25
 
 
 func _ready() -> void:
-	SaveManager.savefile_loaded.connect(reinstall_barrels)
-	#gun_status_label.visible = false
+	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
+	if SaveManager.save_data_is_loaded:
+		_on_savefile_loaded()
+	else:
+		reinstall_barrels()
 	magazine_ammo_left = base_magazine_size
-	#generate_gun_animations()
 	muzzle_flash_light.light_energy = 0
-	await get_tree().physics_frame
-	await get_tree().physics_frame
-	reinstall_barrels()
 	reset_modifier(true)
+	await get_tree().process_frame
+	await get_tree().process_frame
 	reload()
 
 
 func _process(delta: float) -> void:
 	time_since_last_shot += delta
+	# EXPERIMENTAL for hold/release spinning
+	#if Input.is_action_just_released("spin_barrels"):
+		#var state_machine = anim_tree.get("parameters/spin_state/playback")
+		#state_machine.travel("released")
 
 
 ## Return true if shot successful
@@ -128,8 +144,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		return false
 	if magazine_ammo_left <= 0:
 		play_failed_shoot_sfx()
-		spin_all_barrels()
-		#reload()
+		reload()
 		return false
 
 	var time_until_next_shot = 1.0 / modified_firerate
@@ -151,9 +166,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_prepare_to_fire()
 
-	if barrel_count == 0:
-		SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
-
 	GameManager.player.player_camera.set_recoil_power(modified_recoil)
 	GameManager.player.player_camera.add_trauma(modified_screenshake)
 
@@ -161,13 +173,16 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		barrel.get_active_effect().on_damage_calculation()
 
 	for i in range(n_shot_repeat):
+		if barrel_count == 0 or not check_if_archetype_barrel_installed():
+			SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
+
 		var bullet_start_pos = bullet_spawn_marker.global_position
 
 		for j in range(modified_projectile_amount):
 			for barrel in installed_barrels:
 				barrel.get_active_effect().on_projectile_spawn()
 			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
-			var spread_direction = get_spread_direction(aim_direction)
+			var spread_direction = GunUtils.get_spread_direction(aim_direction, modified_spread_angle)
 			if modified_projectile_prefab:
 				create_gun_attack(modified_projectile_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 			elif modified_is_hitscan:
@@ -176,9 +191,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 				create_gun_attack(projectile_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 
 		time_since_last_shot = 0
-		# Recoil (old)
-		# GameManager.player.player_camera.rotate_x(modified_recoil)
-		# GameManager.player.player_camera.rotate_y(randf_range(- modified_recoil, modified_recoil))
 		GameManager.player.player_camera.recoil_fire()
 
 		magazine_ammo_left -= n_ammo_consume
@@ -186,7 +198,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 			barrel.get_active_effect().on_ammo_consumed()
 		if magazine_ammo_left <= 0 and i < n_shot_repeat - 1:
 			break
-		
+
 		gun_shot.emit()
 
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
@@ -214,19 +226,25 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 	var bullet_inst = bullet_prefab.instantiate()
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
-	GameManager.player.get_parent().add_child(bullet_inst)
+	get_tree().get_root().add_child(bullet_inst)
+	bullet_inst.before_damage_applied.connect(check_barrel_effect_on_before_damage_applied)
 	bullet_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
+	bullet_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
 	bullet_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
 	bullet_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
 	bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
-func check_barrel_effect_on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_before_damage_applied(_enemy, _projectile)
+
+func check_barrel_effect_on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_applied(_has_pos, _pos)
 
-func check_barrel_effect_on_projectile_impact(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func check_barrel_effect_on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
-		barrel.get_active_effect().on_projectile_impact(_has_pos, _pos)
+		barrel.get_active_effect().on_projectile_impact(_projectile, _has_pos, _pos)
 
 func check_barrel_effect_on_projectile_destroyed():
 	for barrel in installed_barrels:
@@ -235,6 +253,10 @@ func check_barrel_effect_on_projectile_destroyed():
 func check_barrel_effect_on_dash_movement():
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_dash_movement()
+
+func check_barrel_effect_on_player_damaged():
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_player_damaged()
 
 func pull_trigger():
 	if not is_trigger_pulled:
@@ -250,50 +272,68 @@ func release_trigger():
 
 
 func spin_all_barrels() -> void:
+	var barrels_to_spin: int = installed_barrels.size()
+	if barrels_to_spin == 0:
+		reload()
+		return
+
 	release_trigger()
 	is_reloading = true
+
+	# EXPERIMENTAL for hold/release spinning
+	#var state_machine = anim_tree.get("parameters/spin_state/playback")
+	#state_machine.travel("pressed")
+
+	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	await spin_anim_trigger
+
 	# TODO - add catch for HELD barrels
-	for i in installed_barrels.size():
-		if i > installed_barrels.size():
+	for i in barrels_to_spin:
+		if i > barrels_to_spin:
 			break
 		_spin_barrel(i)
-	
+
 	# TODO - replace with a dedicated spin time value now reloading isn't directly
 	# tied to spinning
-	await get_tree().create_timer(modified_reload_time).timeout
-	
+	await get_tree().create_timer(base_spin_time).timeout
+
 	reset_modifier(true)
 	#gun_status_label.visible = false
 	stop_all_barrels()
 	is_reloading = false
-	reload()
+	reload(true)
 
 
 func spin_single_barrel(barrel_idx: int) -> void:
 	if barrel_idx >= installed_barrels.size():
 		return
-	
+
 	is_reloading = true
 	release_trigger()
+
+	# TODO - move spin arm up/down gun depending on barrel count
+	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	await spin_anim_trigger
+
 	_spin_barrel(barrel_idx)
-	
-	# TODO - replace with a dedicated spin time value now reloading isn't directly
-	# tied to spinning
-	await get_tree().create_timer(modified_reload_time).timeout
-	
-	reset_modifier(true)
+
+	# TODO - replace with a dedicated spin time value now reloading
+	# isn't directly tied to spinning
+	await get_tree().create_timer(base_spin_time).timeout
+
 	_stop_barrel(barrel_idx)
+	reload(true)
 	is_reloading = false
-	reload()
 
 
 func _spin_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
+	barrel.get_active_effect().on_barrel_start_spin()
 	barrel.start_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("spin")
 	SoundManager.play_sound(TEMP_sfx_spin, "Gun")
-	barrel_spin_started.emit(barrel)
+	barrel_spin_started.emit(barrel, barrel_idx)
 
 
 func stop_all_barrels() -> void:
@@ -304,32 +344,37 @@ func stop_all_barrels() -> void:
 func _stop_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	barrel.stop_spin()
+	barrel.get_active_effect().on_barrel_stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
 	SoundManager.stop_sound(TEMP_sfx_spin)
-	barrel_spin_stopped.emit(barrel)
+	barrel_spin_stopped.emit(barrel, barrel_idx)
 
 
-func reload():
+func reload(already_spin_barrel = false):
 	# TODO - make this more generic and less tied to spinning barrels so we can call it elsewhere
 	if is_reloading:
 		return
 	if is_jammed:
 		play_failed_shoot_sfx()
 		return
-	
+
 	release_trigger()
+
+	if not already_spin_barrel:
+		reset_modifier(true)
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
-	
+
 	is_reloading = true
-	anim_tree.set("parameters/reload_timescale/scale", modified_reload_time)
+	anim_tree.set("parameters/reload_timescale/scale", 1 / modified_reload_time) # FIXME: Need to do sth with base_reload_time here
 	anim_tree.set("parameters/reload_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-	
+
 	await reload_anim_end
 	is_reloading = false
-	
+	anim_tree.set("parameters/reload_timescale/scale", 1)
+
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
 
@@ -339,6 +384,10 @@ func reload():
 
 func _end_reload_anim() -> void:
 	reload_anim_end.emit()
+
+
+func _trigger_spin_anim() -> void:
+	spin_anim_trigger.emit()
 
 
 func reset_modifier(reload_reset = false):
@@ -362,7 +411,6 @@ func reset_modifier(reload_reset = false):
 
 func jam_the_gun(duration: float = 1.0):
 	#show_gun_status("Jammed...", Color.DIM_GRAY, duration)
-
 	jam_timer.start(duration)
 	is_jammed = true
 
@@ -397,74 +445,99 @@ func _on_jam_timer_timeout() -> void:
 	#gun_status_label.visible = false
 
 
-func get_spread_direction(center_direction: Vector3) -> Vector3:
-	# Convert spread angle to radians
-	var max_radians = deg_to_rad(modified_spread_angle)
-
-	# Generate random rotation within the spread cone
-	var random_yaw = randf_range(-max_radians, max_radians)
-	var random_pitch = randf_range(-max_radians, max_radians)
-
-	# Create a rotation basis
-	var spread_rotation = Basis(Vector3.UP, random_yaw) * Basis(Vector3.RIGHT, random_pitch)
-
-	# Apply the rotation to the center direction
-	return (spread_rotation * center_direction).normalized()
-
 func play_failed_shoot_sfx():
 	if failed_shoot_sfx_timer.is_stopped():
 		SoundManager.play_sound(TEMP_sfx_dry, "Gun")
 		failed_shoot_sfx_timer.start()
 
 
-func install_barrel(barrel_prefab: PackedScene):
+func install_barrel(barrel_prefab: PackedScene) -> void:
 	if len(installed_barrels) >= max_barrels:
 		return
-	
+
 	var barrel_inst = barrel_prefab.instantiate()
 	barrel_inst.barrel_effect_changed.connect(_set_barrel_effect_label)
 	barrel_container.add_child(barrel_inst)
 	_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
-	
+
 	magazine_ammo_left = 0
+
+	barrel_count = barrel_container.get_child_count()
+	var barrel_idx: int = barrel_count - 1 if barrel_count > 0 else 0
+
+	barrel_inst.owner_gun = self
+	installed_barrels.append(barrel_inst)
+	barrel_count = installed_barrels.size()
+
+	barrel_inst.get_active_effect().on_barrel_install()
+	barrel_equipped.emit(barrel_inst, barrel_idx)
+
 	recheck_installed_barrels()
 
+	# Re-apply the effects of the currently equipped barrels
+	reset_modifier(true)
+	for barrel in barrel_container.get_children():
+		barrel.get_active_effect().on_effect_set()
 
-func remove_barrel(_search_barrel_id: BarrelDataResource.BarrelIdEnum):
-	reinstall_barrels()
-	# for child in barrel_container.get_children():
-	# 	if child.get_child_count() > 0:
-	# 		var barrel: SpinBarrel = child.get_child(0)
-	# 		if barrel.barrel_id == search_barrel_id:
-	# 			barrel.queue_free()
-	# 			break
-	# recheck_installed_barrels()
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+
+
+func remove_barrel(barrel_idx: int) -> void:
+	if len(installed_barrels) == 0:
+		return
+
+	var barrel: SpinBarrel = barrel_container.get_child(barrel_idx)
+	barrel_container.remove_child(barrel)
+	barrel.get_active_effect().on_barrel_remove()
+	barrel_unequipped.emit(null, barrel_idx)
+	barrel.queue_free()
+
+	recheck_installed_barrels()
+
+	# Re-apply the effects of the currently equipped barrels
+	reset_modifier(true)
+	for _barrel in barrel_container.get_children():
+		_barrel.get_active_effect().on_effect_set()
 
 
 func recheck_installed_barrels():
 	# Wait to make sure barrel actually instantiated or queue_freed
 	await get_tree().process_frame
 	await get_tree().process_frame
-	installed_barrels = []
-	for barrel in barrel_container.get_children():
+	installed_barrels.clear()
+	for i in range(barrel_container.get_child_count()):
+		var barrel = barrel_container.get_child(i)
 		barrel.owner_gun = self
 		installed_barrels.append(barrel)
+		_set_barrel_effect_label(barrel, barrel.get_active_effect())
+
 	barrel_count = installed_barrels.size()
-	
+
 	for i in barrel_sprites.size():
-		barrel_sprites[i].visible = i < barrel_count
+		var barrel_label: Label3D = barrel_labels[i]
+		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
+		if i < barrel_count:
+			state_machine.travel("idle")
+			barrel_label.visible = true
+		else:
+			state_machine.travel("unequip")
+			barrel_label.visible = false
 
 
 func reinstall_barrels():
 	# Clear old barrels
-	for barrel in barrel_container.get_children():
-		barrel.queue_free()
+	var equipped_barrel_count: int = barrel_container.get_child_count()
+	for i in range(max_barrels):
+		if i < equipped_barrel_count:
+			var barrel = barrel_container.get_child(i)
+			barrel.queue_free()
+		barrel_unequipped.emit(null, i)
 
 	# Instantiate barrels onto gun
 	for i in GameManager.equipped_barrels.size():
 		var barrel = GameManager.equipped_barrels[i].barrel_prefab
 		install_barrel(barrel)
-	recheck_installed_barrels()
 
 
 func _set_barrel_effect_label(barrel: SpinBarrel, effect: BaseBarrelEffect) -> void:
@@ -490,6 +563,11 @@ func _play_reload_end_sfx() -> void:
 
 
 func create_muzzle_smoke(aim_ray: RayCast3D):
+	if muzzle_smoke_prefab == null:
+		return
+	if not smoke_timer.is_stopped():
+		return
+	smoke_timer.start(TIME_BETWEEN_MUZZLE_SMOKE)
 	var smoke_inst = muzzle_smoke_prefab.instantiate()
 	get_tree().get_root().add_child(smoke_inst)
 	var smoke_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
@@ -502,3 +580,14 @@ func create_muzzle_flash_light():
 		muzzle_light_tween.stop()
 	muzzle_light_tween = create_tween()
 	muzzle_light_tween.tween_property(muzzle_flash_light, "light_energy", 0, 0.2).set_trans(Tween.TRANS_SINE)
+
+func _on_savefile_loaded():
+	if not reinstalled_barrel_from_savefile:
+		reinstalled_barrel_from_savefile = true
+		reinstall_barrels()
+
+func check_if_archetype_barrel_installed() -> bool:
+	for barrel in GameManager.equipped_barrels:
+		if barrel.is_archetype_barrel:
+			return true
+	return false

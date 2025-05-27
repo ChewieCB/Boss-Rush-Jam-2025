@@ -1,17 +1,57 @@
-[gd_scene load_steps=10 format=3 uid="uid://bf0e8h28gl1ae"]
+[gd_scene load_steps=46 format=3 uid="uid://bf0e8h28gl1ae"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/game_manager.gd" id="1_rn441"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_m6fe3"]
 [ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrrel_data.tres" id="3_23s84"]
-[ext_resource type="Resource" uid="uid://d2i2i2rrbo2v0" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="4_ds0rn"]
+[ext_resource type="Resource" uid="uid://ceo6ncflyswt2" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="4_ds0rn"]
 [ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="5_bj40w"]
 [ext_resource type="Resource" uid="uid://7xfi8anly2u3" path="res://src/player/barrel/resource/archetype_automatic_spec_barrrel_data.tres" id="6_pgp6q"]
 [ext_resource type="Resource" uid="uid://dpcew656ofo1q" path="res://src/player/barrel/resource/archetype_shotgun_spec_barrrel_data.tres" id="7_upwdb"]
 [ext_resource type="Resource" uid="uid://di2x3xsnfojlh" path="res://src/player/barrel/resource/archetype_railgun_spec_barrrel_data.tres" id="8_fntlm"]
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="9_juqu2"]
+[ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="10_83sf6"]
+[ext_resource type="Resource" uid="uid://b8ex3g3n6w7du" path="res://src/player/barrel/resource/archetype_gelthrower_spec_barrrel_data.tres" id="10_ol55s"]
+[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="10_sxhit"]
+[ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="11_pbpm2"]
+[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="11_rdxq7"]
+[ext_resource type="Resource" uid="uid://bibe88ibu2n4d" path="res://src/player/barrel/resource/leg_eye_coordinate_barrel_data.tres" id="12_046jp"]
+[ext_resource type="Resource" uid="uid://yx1psxr1obhn" path="res://src/player/barrel/resource/projectile_count_barrel_data.tres" id="12_b3bxi"]
+[ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="13_aamrg"]
+[ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel_data.tres" id="13_iyynv"]
+[ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="14_lbyk3"]
+[ext_resource type="Resource" uid="uid://dtjfyb374gapa" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ammo_leech.tres" id="16_8l4bp"]
+[ext_resource type="Resource" uid="uid://l1nys7kixqcl" path="res://src/player/barrel/resource/placeholderA_barrrel_data.tres" id="16_lo202"]
+[ext_resource type="Resource" uid="uid://cioys44ppioym" path="res://src/player/barrel/resource/reckless_abandon_barrel_data.tres" id="17_7q02m"]
+[ext_resource type="Resource" uid="uid://cbped3pwpq8gx" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_railgun.tres" id="17_rr7ua"]
+[ext_resource type="Resource" uid="uid://xodkopxrm4f2" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_shotgun.tres" id="18_i21jw"]
+[ext_resource type="Resource" uid="uid://cql0l7x1w3urb" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_smg.tres" id="19_c2uqn"]
+[ext_resource type="Resource" uid="uid://do2l2svihllsk" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_bullet_time.tres" id="21_8s4w2"]
+[ext_resource type="Resource" uid="uid://dsh30snmwhk8l" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_cognac_reload.tres" id="22_hxj0e"]
+[ext_resource type="Resource" uid="uid://dk6xc7t1fhhlc" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_death_from_above.tres" id="23_oeafg"]
+[ext_resource type="Resource" uid="uid://bf7j6nykfjy5w" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_double_tap.tres" id="24_43pof"]
+[ext_resource type="Resource" uid="uid://b1epv0co28m3f" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_empowered_dash.tres" id="25_ub3jn"]
+[ext_resource type="Resource" uid="uid://okv7b5p22t5g" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_explosive_bullet.tres" id="26_5pvpg"]
+[ext_resource type="Resource" uid="uid://flq0lkjfimuf" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_extended_drum.tres" id="27_r43al"]
+[ext_resource type="Resource" uid="uid://in3s5eph31kk" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_fortitude.tres" id="28_31w6r"]
+[ext_resource type="Resource" uid="uid://dfhl5t0jpftd5" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_gamblers_precision.tres" id="29_e1hqf"]
+[ext_resource type="Resource" uid="uid://bxaqsgyj2gcgs" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_homing_bullets.tres" id="30_6palp"]
+[ext_resource type="Resource" uid="uid://dsgygur0314m2" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_hyperfocus.tres" id="31_tfgny"]
+[ext_resource type="Resource" uid="uid://dm04bq0pv7c1j" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_medical_payout.tres" id="32_if6fu"]
+[ext_resource type="Resource" uid="uid://o6ewuiqdmmmt" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_molotov_dash.tres" id="33_t2wjc"]
+[ext_resource type="Resource" uid="uid://catoesfsr51ok" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_newtons_third.tres" id="34_k0sis"]
+[ext_resource type="Resource" uid="uid://bs7u4ckswam2f" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ramp_up.tres" id="35_iofua"]
+[ext_resource type="Resource" uid="uid://bmy7206nh0maq" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ricochet.tres" id="36_8equh"]
+[ext_resource type="Resource" uid="uid://d2cgitpcvf4g0" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_shield.tres" id="37_2c257"]
+[ext_resource type="Resource" uid="uid://mrxt3egtibbf" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_sticky_bomb.tres" id="38_f3sy1"]
+[ext_resource type="Resource" uid="uid://uvem1037bxmd" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_tag_and_shred.tres" id="39_i56c5"]
+[ext_resource type="Resource" uid="uid://bndnrynsldd1b" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_toxin_mist.tres" id="40_3cilc"]
 
 [node name="GameManager" type="Node"]
 process_mode = 3
 script = ExtResource("1_rn441")
 starting_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("3_23s84")])
-starting_shop_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2")])
+starting_shop_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2"), ExtResource("10_ol55s"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg")])
+barrel_database = Array[Resource]([ExtResource("6_pgp6q"), ExtResource("3_23s84"), ExtResource("8_fntlm"), ExtResource("7_upwdb"), ExtResource("10_83sf6"), ExtResource("9_juqu2"), ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("11_pbpm2"), ExtResource("12_b3bxi"), ExtResource("13_iyynv"), ExtResource("14_lbyk3"), ExtResource("10_ol55s"), ExtResource("16_lo202"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg")])
+debug_barrel_database = Array[Resource]([ExtResource("16_lo202"), ExtResource("16_8l4bp"), ExtResource("17_rr7ua"), ExtResource("18_i21jw"), ExtResource("19_c2uqn"), ExtResource("21_8s4w2"), ExtResource("22_hxj0e"), ExtResource("23_oeafg"), ExtResource("24_43pof"), ExtResource("25_ub3jn"), ExtResource("26_5pvpg"), ExtResource("27_r43al"), ExtResource("28_31w6r"), ExtResource("29_e1hqf"), ExtResource("30_6palp"), ExtResource("31_tfgny"), ExtResource("32_if6fu"), ExtResource("33_t2wjc"), ExtResource("34_k0sis"), ExtResource("35_iofua"), ExtResource("36_8equh"), ExtResource("37_2c257"), ExtResource("38_f3sy1"), ExtResource("39_i56c5"), ExtResource("40_3cilc")])
+sfx_purchase = ExtResource("10_sxhit")
+sfx_too_expensive = ExtResource("11_rdxq7")

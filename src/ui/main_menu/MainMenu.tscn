@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://ctddgvd003sjr"]
+[gd_scene load_steps=30 format=3 uid="uid://ctddgvd003sjr"]
 
 [ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
 [ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
@@ -12,11 +12,12 @@
 [ext_resource type="AudioStream" uid="uid://ns5foi711w8r" path="res://src/ui/main_menu/assets/sfx/drumMenu3.mp3" id="5_7tag1"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="5_8m82e"]
 [ext_resource type="AudioStream" uid="uid://cgxt6yjnd3mif" path="res://src/ui/main_menu/assets/sfx/drumMenu4.mp3" id="6_hri1i"]
-[ext_resource type="Texture2D" uid="uid://mql53aoddg1y" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-001.png" id="6_q3sa1"]
 [ext_resource type="Texture2D" uid="uid://csw0xjbbqsivg" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-016.png" id="6_tem84"]
 [ext_resource type="AudioStream" uid="uid://c6w10um3o4jvk" path="res://src/ui/main_menu/assets/sfx/drumMenu5.mp3" id="7_bs3mo"]
 [ext_resource type="AudioStream" uid="uid://2j7e6yrpg06p" path="res://src/ui/main_menu/assets/sfx/drumMenuStartGame.mp3" id="8_e8blx"]
 [ext_resource type="PackedScene" uid="uid://v6jgq46mkg4n" path="res://src/maps/lobby/Lobby.tscn" id="9_hsakg"]
+[ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="18_wr3ef"]
+[ext_resource type="Script" path="res://src/ui/main_menu/credits_ui.gd" id="19_2s5jh"]
 [ext_resource type="FontFile" uid="uid://bi7vx7s04krj" path="res://assets/fonts/kleptocracy titling/kleptocracy titling bd.otf" id="19_nwl4i"]
 [ext_resource type="FontFile" uid="uid://djistlrjw48qk" path="res://assets/fonts/kleptocracy titling/kleptocracy titling lt.otf" id="20_6j3k5"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="20_j34pk"]
@@ -27,7 +28,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2x62q"]
 shader = ExtResource("1_jqa14")
 shader_parameter/blur_amount = 2.0
-shader_parameter/mix_amount = null
+shader_parameter/mix_amount = 0.0
 shader_parameter/color_over = null
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e022a"]
@@ -129,6 +130,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -16.0
+offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("6_tem84")
@@ -184,82 +187,25 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 20
 
-[node name="StartButton" type="Button" parent="TitleColumn/VBoxContainer"]
+[node name="StartButton" parent="TitleColumn/VBoxContainer" instance=ExtResource("18_wr3ef")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 45
 text = "Start"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="TitleColumn/VBoxContainer/StartButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_q3sa1")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="OptionsButton" type="Button" parent="TitleColumn/VBoxContainer"]
+[node name="OptionButton" parent="TitleColumn/VBoxContainer" instance=ExtResource("18_wr3ef")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 45
 text = "Options"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="TitleColumn/VBoxContainer/OptionsButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_q3sa1")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="CreditButton" type="Button" parent="TitleColumn/VBoxContainer"]
+[node name="CreditButton" parent="TitleColumn/VBoxContainer" instance=ExtResource("18_wr3ef")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 45
 text = "Credits"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="TitleColumn/VBoxContainer/CreditButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_q3sa1")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="QuitButton" type="Button" parent="TitleColumn/VBoxContainer"]
+[node name="QuitButton" parent="TitleColumn/VBoxContainer" instance=ExtResource("18_wr3ef")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 45
-text = "Quit
-"
-
-[node name="NinePatchRect" type="NinePatchRect" parent="TitleColumn/VBoxContainer/QuitButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_q3sa1")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
+text = "Quit"
 
 [node name="VersionLabel" type="Label" parent="TitleColumn"]
 modulate = Color(0.529067, 0.529067, 0.529067, 1)
@@ -288,6 +234,8 @@ speed_scale = 0.1
 [node name="SettingUI" parent="." instance=ExtResource("23_8rbfy")]
 visible = false
 layout_mode = 1
+offset_left = 248.0
+offset_right = 248.0
 is_at_main_menu = true
 
 [node name="CreditsUI" type="Control" parent="."]
@@ -298,7 +246,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 2
 mouse_filter = 2
+script = ExtResource("19_2s5jh")
 
 [node name="TabContainer" type="TabContainer" parent="CreditsUI"]
 custom_minimum_size = Vector2(100, 100)
@@ -349,6 +299,7 @@ offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CreditsUI/TabContainer/Control/ScrollContainer"]
 layout_mode = 2
@@ -612,7 +563,6 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [node name="StoryUI" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -736,12 +686,18 @@ slot_id = 2
 layout_mode = 2
 slot_id = 3
 
-[connection signal="mouse_entered" from="TitleColumn/VBoxContainer/StartButton" to="." method="play_button_hover_sfx"]
+[node name="GrabFocusTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+autostart = true
+
+[connection signal="focus_entered" from="TitleColumn/VBoxContainer/StartButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="mouse_entered" from="TitleColumn/VBoxContainer/OptionsButton" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="TitleColumn/VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
-[connection signal="mouse_entered" from="TitleColumn/VBoxContainer/CreditButton" to="." method="play_button_hover_sfx"]
+[connection signal="focus_entered" from="TitleColumn/VBoxContainer/OptionButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="TitleColumn/VBoxContainer/OptionButton" to="." method="_on_option_button_pressed"]
+[connection signal="focus_entered" from="TitleColumn/VBoxContainer/CreditButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/CreditButton" to="." method="_on_credit_button_pressed"]
-[connection signal="mouse_entered" from="TitleColumn/VBoxContainer/QuitButton" to="." method="play_button_hover_sfx"]
+[connection signal="focus_entered" from="TitleColumn/VBoxContainer/QuitButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="TitleColumn/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="setting_back_button_pressed" from="SettingUI" to="." method="_on_setting_ui_setting_back_button_pressed"]
+[connection signal="timeout" from="GrabFocusTimer" to="." method="_on_grab_focus_timer_timeout"]

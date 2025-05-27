@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8fqj7i2fkcnf"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_component.gd" id="1_li3ya"]
+
+[node name="LuckComponent" type="Node"]
+script = ExtResource("1_li3ya")

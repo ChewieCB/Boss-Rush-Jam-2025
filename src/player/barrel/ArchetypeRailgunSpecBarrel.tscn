@@ -28,7 +28,6 @@
 
 [node name="ArchetypeRailgunSpecBarrel" type="Node3D"]
 script = ExtResource("1_5qelq")
-barrel_id = 9
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
@@ -69,6 +68,11 @@ new_value = 15.0
 script = ExtResource("4_3n82e")
 attribute = 11
 new_value = 0.02
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/GaussRifle"]
+script = ExtResource("4_3n82e")
+attribute = 8
+new_value = 2.2
 
 [node name="ScatterBeam" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_w2hft")
@@ -112,6 +116,11 @@ new_value = 7.0
 script = ExtResource("4_3n82e")
 attribute = 11
 new_value = 0.04
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/ScatterBeam"]
+script = ExtResource("4_3n82e")
+attribute = 8
+new_value = 2.0
 
 [node name="Railcannon" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_w2hft")
@@ -158,7 +167,7 @@ new_value = 0.4
 [node name="SetReloadTime" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
 attribute = 8
-new_value = 2.0
+new_value = 3.5
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("5_uqnjt")

@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://dij705shy7t2i"]
+
+[ext_resource type="PackedScene" uid="uid://bpfgkk1ymtl18" path="res://src/player/gun/projectiles/GelProjectile.tscn" id="1_pvpt3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uyanh"]
+roughness = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_j6dyv"]
+material = SubResource("StandardMaterial3D_uyanh")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0jwuq"]
+radius = 0.242954
+
+[node name="GelProjectileBlob" instance=ExtResource("1_pvpt3")]
+stick_time = 5
+
+[node name="MeshInstance3D" parent="." index="0"]
+mesh = SubResource("SphereMesh_j6dyv")
+
+[node name="Area3D" parent="." index="1"]
+collision_layer = 8
+
+[node name="CollisionShape3D" parent="Area3D" index="0"]
+shape = SubResource("SphereShape3D_0jwuq")

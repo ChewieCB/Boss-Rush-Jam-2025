@@ -1,0 +1,350 @@
+[gd_scene load_steps=31 format=3 uid="uid://d4e4xmrpy84ly"]
+
+[ext_resource type="Script" path="res://src/bosses/chips/chip_stack_small.gd" id="1_2elh3"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_c2ut8"]
+[ext_resource type="Texture2D" uid="uid://cinxupsks16c" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Idle.png" id="3_dt1a4"]
+[ext_resource type="Texture2D" uid="uid://q12l7oh16xcn" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Hurt.png" id="3_gfll1"]
+[ext_resource type="PackedScene" uid="uid://e7b51y76wxn3" path="res://src/components/navigation/NavigationComponent.tscn" id="4_kqvls"]
+[ext_resource type="Texture2D" uid="uid://d2mmtop6o6fcq" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Jump_2_smear.png" id="6_at2ir"]
+[ext_resource type="Texture2D" uid="uid://0bxtnb3qg155" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Jump_1_prep.png" id="6_pjt7e"]
+[ext_resource type="Texture2D" uid="uid://b1utyveqcgox8" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Jump_3_Apex.png" id="7_hnxb2"]
+[ext_resource type="Texture2D" uid="uid://b4e54a6r1qdbw" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Jump_4_slam_smear.png" id="9_k0fjt"]
+[ext_resource type="Texture2D" uid="uid://bm8m4wmlur0ro" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Jump_5_slam.png" id="10_jmdl2"]
+[ext_resource type="Texture2D" uid="uid://m75rcoi55wcs" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Cannon.png" id="11_y2sjb"]
+[ext_resource type="Texture2D" uid="uid://c5cuj7hh8hdn8" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Slash_1.png" id="12_3je8d"]
+[ext_resource type="Texture2D" uid="uid://dk00mb76wmtgj" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Slash_2.png" id="13_0xybe"]
+[ext_resource type="Texture2D" uid="uid://255ikrmsrq1q" path="res://src/bosses/chips/assets/sprites/split_stack/Short_Stack_Slash_3.png" id="14_3qhq8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hexvc"]
+transparency = 1
+albedo_color = Color(1, 0.530667, 0.12, 0.478431)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_n777r"]
+material = SubResource("StandardMaterial3D_hexvc")
+top_radius = 1.5
+bottom_radius = 1.5
+height = 3.5
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1rd1s"]
+height = 3.5
+radius = 1.2
+
+[sub_resource type="Animation" id="Animation_nlnil"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_dt1a4")]
+}
+
+[sub_resource type="Animation" id="Animation_hp4si"]
+resource_name = "idle"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_dt1a4")]
+}
+
+[sub_resource type="Animation" id="Animation_hs2hh"]
+resource_name = "jump_apex"
+length = 0.05
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("7_hnxb2")]
+}
+
+[sub_resource type="Animation" id="Animation_l8d5o"]
+resource_name = "jump_start"
+length = 0.15
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("6_at2ir"), ExtResource("7_hnxb2")]
+}
+
+[sub_resource type="Animation" id="Animation_valyq"]
+resource_name = "jump_telegraph"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_pjt7e")]
+}
+
+[sub_resource type="Animation" id="Animation_kkku4"]
+resource_name = "projectile_telegraph"
+length = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_y2sjb")]
+}
+
+[sub_resource type="Animation" id="Animation_8dt74"]
+resource_name = "slam_end"
+length = 0.35
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("10_jmdl2"), ExtResource("6_pjt7e"), ExtResource("3_dt1a4")]
+}
+
+[sub_resource type="Animation" id="Animation_3xjjs"]
+resource_name = "slam_start"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("9_k0fjt"), ExtResource("10_jmdl2")]
+}
+
+[sub_resource type="Animation" id="Animation_5tdio"]
+resource_name = "slash"
+length = 0.35
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("12_3je8d")]
+}
+
+[sub_resource type="Animation" id="Animation_lm147"]
+resource_name = "slash_attack"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("13_0xybe"), ExtResource("14_3qhq8"), ExtResource("3_dt1a4")]
+}
+
+[sub_resource type="Animation" id="Animation_kgvcy"]
+resource_name = "slash_telegraph"
+length = 0.01
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("12_3je8d")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5wyw8"]
+_data = {
+"RESET": SubResource("Animation_nlnil"),
+"idle": SubResource("Animation_hp4si"),
+"jump_apex": SubResource("Animation_hs2hh"),
+"jump_start": SubResource("Animation_l8d5o"),
+"jump_telegraph": SubResource("Animation_valyq"),
+"projectile_telegraph": SubResource("Animation_kkku4"),
+"slam_end": SubResource("Animation_8dt74"),
+"slam_start": SubResource("Animation_3xjjs"),
+"slash": SubResource("Animation_5tdio"),
+"slash_attack": SubResource("Animation_lm147"),
+"slash_telegraph": SubResource("Animation_kgvcy")
+}
+
+[sub_resource type="Curve3D" id="Curve3D_wwshn"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -1.19466, 2.30577, 0, 0, 0, 0, 0, 0, 0, -1.14441, 2.3251, 0, 0, 0, 0, 0, 0, 0, -1.09801, 2.33283, 0, 0, 0, 0, 0, 0, 0, -1.04389, 2.33283, 0, 0, 0, 0, 0, 0, 0, -0.978161, 2.29804, 0, 0, 0, 0, 0, 0, 0, -0.947232, 2.23618, 0, 0, 0, 0, 0, 0, 0, -0.931767, 2.17045, 0, 0, 0, 0, 0, 0, 0, -0.927901, 2.10473, 0, 0, 0, 0, 0, 0, 0, -0.916303, 2.02741, 0, 0, 0, 0, 0, 0, 0, -0.900838, 1.97328, 0, 0, 0, 0, 0, 0, 0, -0.877641, 1.90369, 0, 0, 0, 0, 0, 0, 0, -0.854444, 1.8457, 0, 0, 0, 0, 0, 0, 0, -0.835114, 1.8109, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 13
+
+[node name="ChipStackSmall" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
+collision_layer = 64
+collision_mask = 77
+script = ExtResource("1_2elh3")
+DESIRED_DISTANCE = null
+wave_amplitude = null
+wave_frequency = null
+time_elapsed = null
+idle_radius = null
+angle_speed = null
+orbit_angle = null
+orbit_radius = null
+chip_shots_per_burst = null
+num_bursts = null
+delay_between_burst = null
+num_swipes = null
+delay_between_swipe = null
+swipe_damage = null
+swipe_range = null
+swipe_radius = null
+swipe_height_scale = null
+swipe_speed = null
+swipe_targeting_timeout = null
+chargeback_targeting_time = null
+chargeback_damage = null
+sfx_chip_shot = null
+arena_radius = null
+split_rush_targeting_time = null
+charge_speed = null
+marker_target_idx = null
+jump_height = null
+jump_time = null
+jump_hang_time = null
+drop_time = null
+boss_id = null
+chip_spawn_chance = null
+chip_spawn_force = null
+chip_spawn_dps_threshold = null
+chip_spawn_mult_cap = null
+dps_dealt_window = null
+navigation_component = NodePath("NavigationComponent")
+health_component = NodePath("HealthComponent")
+base_sprite = ExtResource("3_dt1a4")
+hurt_sprite = ExtResource("3_gfll1")
+death_sprites = null
+hurt_frame_window = null
+hurt_frame_cooldown = null
+current_phase = null
+attack_targeting_time = null
+attack_recovery_time = null
+telegraph_time = null
+charge_force = null
+projectiles_per_phase = null
+delay_per_projectile = null
+max_projectile_rounds = null
+area_damage = null
+areas_per_phase = null
+area_spawn_time = null
+delay_per_area = null
+max_area_rounds = null
+area_size = null
+area_rings = null
+MAX_SPEED = null
+FRICTION = null
+TURN_SPEED_FAST = null
+TURN_SPEED_SLOW = null
+GRAVITY = null
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+billboard = 2
+texture = ExtResource("3_dt1a4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+visible = false
+mesh = SubResource("CylinderMesh_n777r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.75, 0)
+shape = SubResource("CylinderShape3D_1rd1s")
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_c2ut8")]
+max_health = 500.0
+
+[node name="NavigationComponent" parent="." node_paths=PackedStringArray("nav_agent") instance=ExtResource("4_kqvls")]
+nav_agent = NodePath("../NavigationAgent3D")
+follow_target = false
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.5
+target_desired_distance = 0.25
+simplify_path = true
+keep_y_velocity = false
+debug_path_custom_color = Color(1, 0, 0, 1)
+debug_path_custom_point_size = 8.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_5wyw8")
+}
+
+[node name="FusePath" type="Path3D" parent="."]
+curve = SubResource("Curve3D_wwshn")
+
+[node name="MarkerPivot" type="Node3D" parent="."]
+
+[node name="SparkMarkerL" type="Marker3D" parent="MarkerPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+
+[node name="SparkMarkerR" type="Marker3D" parent="MarkerPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+
+[node name="ProjectileSpawnMarker" type="Marker3D" parent="MarkerPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.6, 0)

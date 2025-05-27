@@ -17,3 +17,6 @@ func _on_body_entered(body: Node3D) -> void:
 		body.health_component.damage(damage, Color.ORANGE)
 		if body is Player:
 			body.apply_impulse_to_player(global_position.direction_to(body.global_position) * damage)
+			# TODO - negative luck from getting hit by your own AoE
+		else:
+			LuckHandler.accumulate_dps_dealt(damage)

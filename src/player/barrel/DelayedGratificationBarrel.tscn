@@ -10,7 +10,6 @@
 
 [node name="DelayedGratificationBarrel" type="Node3D"]
 script = ExtResource("1_2a2qf")
-barrel_id = 13
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
@@ -19,7 +18,7 @@ script = ExtResource("3_q7s8s")
 display_text_title = "Bullet Time"
 display_text_tag = "You are not Neo though"
 display_text_desc = "-50% projectile speed
-+ 100% damage"
++25% damage"
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("4_duuhv")
@@ -34,14 +33,14 @@ is_perc = true
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("5_307l2")
 attribute = 1
-modify_value = 100.0
+modify_value = 25.0
 is_perc = true
 
 [node name="StickyBomb" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_q7s8s")
 display_text_title = "Sticky Bomb"
 display_text_tag = "Keep distance"
-display_text_desc = "+25% damage
+display_text_desc = "+30% damage
 -50% firerate"
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/StickyBomb"]
@@ -51,7 +50,7 @@ new_prefab = ExtResource("7_2jtxl")
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/StickyBomb"]
 script = ExtResource("5_307l2")
 attribute = 1
-modify_value = 25.0
+modify_value = 30.0
 is_perc = true
 
 [node name="ModifyFirerate" type="Node3D" parent="EffectContainer/StickyBomb"]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://qx2chp743o1f"]
+
+[ext_resource type="Script" path="res://src/bosses/chips/minions/chip_sweep_projectile.gd" id="1_tkhw3"]
+[ext_resource type="ArrayMesh" uid="uid://cvpi3dfo08nxd" path="res://src/bosses/chips/assets/meshes/ChipProjMesh.tres" id="2_342r3"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_clasv"]
+height = 0.2
+radius = 1.0
+
+[node name="ChipSweepProjectile" type="Area3D"]
+collision_layer = 8
+collision_mask = 10
+script = ExtResource("1_tkhw3")
+anim_time = 0.03
+
+[node name="ColliderBase" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.994522, -0.104528, 0, 0.104528, 0.994522, 0, 0.2, 0)
+shape = SubResource("CylinderShape3D_clasv")
+disabled = true
+
+[node name="MeshBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.214182, -0.0435779, 0, 0.0187385, 0.498097, 0, 0.199239, 0.0174311)
+mesh = ExtResource("2_342r3")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

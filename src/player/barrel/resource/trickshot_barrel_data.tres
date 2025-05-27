@@ -9,13 +9,13 @@ script = ExtResource("3_curd4")
 barrel_id = 6
 barrel_name = "Trickshot"
 barrel_desc = "[b]Trickshot Barrel[/b]
-Make your bullet move in amazing ways.
+Cover all the angles.
 
 Possible rolls:
 [ul]
-Ricochet: Bullets bounce of walls and enemies.
-Homing: Bullets homing toward enemies, but significantly reduced damage.
-Hyperfocus: Increased damage and reduce recoil while standing still. Opposite effect while moving.
+Ricochet Bullet: Bullets bounce of walls and enemies.
+Homing Bullet: Bullets homing toward enemies, but significantly reduced damage.
+Split Bullet: Bullets split into 3 on impact, which deal reduced damage.
 [/ul]
 "
 barrel_image = ExtResource("1_qqx0r")
