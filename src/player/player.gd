@@ -96,9 +96,6 @@ const AIM_ASSIST_STRENGTH_COEFFICIENT = 4 # Higher = stronger auto rotate to tar
 const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.8 # Higher = stronger stickiness when near target. 0-1
 const AIM_ASSIST_MAX_RANGE = 50
 
-const HIGH_LUCK_THRESHOLD = 0.6
-const HIGH_LUCK_DASH_IFRAME_MODIFIER = 2.0
-
 var max_speed: float = MAX_SPEED
 var floor_col_pos = Vector3.ZERO
 var jumped: bool = false
@@ -157,6 +154,7 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.JUMP_HEIGHT: 1,
 	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
 	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
+	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
 }
 var current_stats = base_stats.duplicate(true)
 var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
@@ -655,6 +653,8 @@ func add_status_effect(new_status: StatusEffect):
 	status_effect_list.append(new_status)
 	new_status_effect_added.emit(new_status)
 	apply_status_effects()
+	print("========== Player stats =============")
+	print(current_stats)
 
 
 func remove_status_effect(status: StatusEffect):
@@ -796,8 +796,6 @@ func cash_in_luck() -> void:
 
 func add_iframe_on_dash():
 	var iframe_duration = current_stats[StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION]
-	if luck_component.current_luck_ratio >= HIGH_LUCK_THRESHOLD:
-		iframe_duration = iframe_duration * HIGH_LUCK_DASH_IFRAME_MODIFIER
 	var iframe_dash_buff = StatusEffect.new()
 	iframe_dash_buff.display_name = "Dodging"
 	iframe_dash_buff.status_code = "iframe_on_dash"

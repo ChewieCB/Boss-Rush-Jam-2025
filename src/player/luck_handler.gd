@@ -18,6 +18,7 @@ signal modifier_message(text: String, is_gain: bool)
 @export var no_damage_taken_mult_cap: int = 3
 var time_since_last_hurt: float = 0.0
 var last_hurt_mult: int = 0
+
 @export_subgroup("DPS Dealt In Last X Seconds")
 @export var dps_dealt_window: float = 1.8
 @export var dps_dealt_threshold: float = 80.0

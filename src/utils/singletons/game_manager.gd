@@ -44,6 +44,8 @@ var is_free_reroll: bool = false:
 		player_currency = value
 		currency_changed.emit(player_currency)
 
+var player_luck_level = 3
+
 var player_gained_first_barrel: bool = false
 var barrel_tutorial_shown: bool = false
 

@@ -9,6 +9,7 @@ enum PlayerStatEnum {
     JUMP_HEIGHT,
     DASH_IFRAME_DURATION,
 	DASH_DURATION,
+    CHIP_DROPRATE_MULTIPLIER
 }
 enum ModifyType {FLAT, PERCENTAGE, BOOL} # How it interact with base value
 

@@ -11,7 +11,7 @@
 [ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="5_bi1qm"]
 [ext_resource type="Resource" uid="uid://ceo6ncflyswt2" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="5_eqila"]
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="6_1a2ul"]
-[ext_resource type="Resource" uid="uid://b8ex3g3n6w7du" path="res://src/player/barrel/resource/archetype_gelthrower_spec_barrrel_data.tres" id="6_gecbk"]
+[ext_resource type="Resource" uid="uid://cipovlqeojqla" path="res://src/player/barrel/resource/archetype_gelthrower_spec_barrrel_data.tres" id="6_gecbk"]
 [ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel_data.tres" id="7_2srjf"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="7_lahx4"]
 [ext_resource type="Resource" uid="uid://7xfi8anly2u3" path="res://src/player/barrel/resource/archetype_automatic_spec_barrrel_data.tres" id="8_4asxy"]
