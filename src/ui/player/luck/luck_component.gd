@@ -92,4 +92,6 @@ func create_and_add_buff(display_name: String, status_code: String,
 	status_effect.modify_type = modify_type
 	status_effect.duration = StatusEffect.INFINITE_DURATION
 	status_effect.is_bad_effect = false
+	status_effect.show_duration_ui = false
+	status_effect.show_value_on_ui = false
 	GameManager.player.add_status_effect(status_effect)

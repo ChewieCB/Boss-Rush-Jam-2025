@@ -653,8 +653,6 @@ func add_status_effect(new_status: StatusEffect):
 	status_effect_list.append(new_status)
 	new_status_effect_added.emit(new_status)
 	apply_status_effects()
-	print("========== Player stats =============")
-	print(current_stats)
 
 
 func remove_status_effect(status: StatusEffect):

@@ -10,7 +10,7 @@
 [ext_resource type="Resource" uid="uid://di2x3xsnfojlh" path="res://src/player/barrel/resource/archetype_railgun_spec_barrrel_data.tres" id="8_fntlm"]
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="9_juqu2"]
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="10_83sf6"]
-[ext_resource type="Resource" uid="uid://b8ex3g3n6w7du" path="res://src/player/barrel/resource/archetype_gelthrower_spec_barrrel_data.tres" id="10_ol55s"]
+[ext_resource type="Resource" uid="uid://cipovlqeojqla" path="res://src/player/barrel/resource/archetype_gelthrower_spec_barrrel_data.tres" id="10_ol55s"]
 [ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="10_sxhit"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="11_pbpm2"]
 [ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="11_rdxq7"]

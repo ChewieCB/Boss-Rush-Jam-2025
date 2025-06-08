@@ -1,0 +1,151 @@
+[gd_scene load_steps=10 format=3 uid="uid://d0xksun1nqr31"]
+
+[ext_resource type="Script" path="res://src/maps/lobby/shrine/skill_tree_ui.gd" id="1_3mn7w"]
+[ext_resource type="AudioStream" uid="uid://bnt0hxmrnje7n" path="res://src/ui/common/assets/sfx/Open the shop new.mp3" id="2_mex55"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="2_q58gh"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="3_4e5xo"]
+[ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="3_8ctpn"]
+[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="4_ciuek"]
+[ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="5_8xe5f"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_blprx"]
+random_pitch = 1.36
+streams_count = 2
+stream_0/stream = ExtResource("2_mex55")
+stream_1/stream = ExtResource("3_8ctpn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4hu16"]
+shader = ExtResource("2_q58gh")
+shader_parameter/blur_amount = 2.0
+shader_parameter/mix_amount = 0.0
+shader_parameter/color_over = null
+
+[node name="SkillTreeUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3mn7w")
+sfx_open = SubResource("AudioStreamRandomizer_blprx")
+
+[node name="BlurShader" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_4hu16")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_4e5xo")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.317647)
+
+[node name="SkillTreeView" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 1344.0
+offset_bottom = 836.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="SkillTreeView"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ciuek")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="SkillInfo" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 1408.0
+offset_top = 64.0
+offset_right = 1864.0
+offset_bottom = 640.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="SkillInfo"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ciuek")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="Title" type="Label" parent="SkillInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -456.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Skill Name"
+
+[node name="Description" type="Label" parent="SkillInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 72.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 22
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+autowrap_mode = 2
+
+[node name="AcquireButton" parent="SkillInfo" instance=ExtResource("5_8xe5f")]
+layout_mode = 0
+offset_top = 640.0
+offset_right = 448.0
+offset_bottom = 696.0
+text = "Acquire skill"
+
+[node name="ResetButton" parent="SkillInfo" instance=ExtResource("5_8xe5f")]
+layout_mode = 0
+offset_top = 712.0
+offset_right = 448.0
+offset_bottom = 768.0
+text = "Reset All skilss"
+
+[node name="ControlHelpText" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -40.0
+offset_right = -32.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 24
+text = "WASD to move, E to Select"

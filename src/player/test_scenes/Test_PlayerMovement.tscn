@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=34 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -24,6 +24,7 @@
 [ext_resource type="Resource" uid="uid://bibe88ibu2n4d" path="res://src/player/barrel/resource/leg_eye_coordinate_barrel_data.tres" id="21_7d46j"]
 [ext_resource type="Resource" uid="uid://cioys44ppioym" path="res://src/player/barrel/resource/reckless_abandon_barrel_data.tres" id="21_8043w"]
 [ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="22_qlyyk"]
+[ext_resource type="PackedScene" uid="uid://cm1sitbvy6aye" path="res://src/maps/lobby/shrine/SkillShrine.tscn" id="25_janht"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -190,3 +191,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4.729
 
 [node name="ShootWallTest5" parent="." instance=ExtResource("19_cev3k")]
 transform = Transform3D(-1, 0, 8.74228e-08, 8.74228e-08, -4.37114e-08, 1, 3.82137e-15, 1, 4.37114e-08, -4.77851, 7.19081, -29.7185)
+
+[node name="LevelupShrine" parent="." instance=ExtResource("25_janht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9781, 1, -4)
