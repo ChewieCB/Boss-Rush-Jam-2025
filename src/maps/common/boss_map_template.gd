@@ -50,11 +50,12 @@ func _ready() -> void:
 	
 	if not boss:
 		push_error("No boss defined for map.")
-	if not boss.is_node_ready():
-		await boss.ready
-	boss.died.connect(_on_boss_died)
-	boss.defeated.connect(_on_boss_defeated)
-	boss.chip_dropped.connect(_on_chip_dropped)
+	else:
+		if not boss.is_node_ready():
+			await boss.ready
+		boss.died.connect(_on_boss_died)
+		boss.defeated.connect(_on_boss_defeated)
+		boss.chip_dropped.connect(_on_chip_dropped)
 	
 	player.health_component.died.connect(_on_player_death)
 	# Sync the player's location in the elevator from the lobby
@@ -69,7 +70,8 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	generate_navigation()
 	
-	elevator_doors.open()
+	if elevator_doors:
+		elevator_doors.open()
 
 
 func generate_navigation() -> void:
