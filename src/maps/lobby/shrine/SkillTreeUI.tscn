@@ -1,21 +1,18 @@
-[gd_scene load_steps=13 format=3 uid="uid://d0xksun1nqr31"]
+[gd_scene load_steps=15 format=3 uid="uid://d0xksun1nqr31"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/shrine/skill_tree_ui.gd" id="1_3mn7w"]
-[ext_resource type="AudioStream" uid="uid://bnt0hxmrnje7n" path="res://src/ui/common/assets/sfx/Open the shop new.mp3" id="2_mex55"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="2_q58gh"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="3_4e5xo"]
 [ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="3_8ctpn"]
 [ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="4_ciuek"]
 [ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="5_8xe5f"]
 [ext_resource type="PackedScene" uid="uid://bna8nm6mu0l1n" path="res://src/maps/lobby/shrine/SkillItemUI.tscn" id="7_h1uvb"]
-[ext_resource type="Texture2D" uid="uid://cs3pihvswdkxr" path="res://assets/sprite/buff_icon/drunk.png" id="8_2sxx1"]
-[ext_resource type="Texture2D" uid="uid://deeklpptwqj6c" path="res://assets/sprite/buff_icon/health_normal.png" id="9_glx12"]
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_blprx"]
-random_pitch = 1.36
-streams_count = 2
-stream_0/stream = ExtResource("2_mex55")
-stream_1/stream = ExtResource("3_8ctpn")
+[ext_resource type="PackedScene" uid="uid://wpg3bn7jlyjp" path="res://src/maps/lobby/shrine/SkillTreePath.tscn" id="7_tcow0"]
+[ext_resource type="Texture2D" uid="uid://co107hhrp2wur" path="res://assets/sprite/skilltree_icon/hot_hand.png" id="8_mm72c"]
+[ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="9_s0fyt"]
+[ext_resource type="Texture2D" uid="uid://bvvadnny5vuht" path="res://assets/sprite/skilltree_icon/lucky_crit.png" id="10_r8suc"]
+[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="11_scd5t"]
+[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="12_8x4rq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4hu16"]
 shader = ExtResource("2_q58gh")
@@ -23,7 +20,7 @@ shader_parameter/blur_amount = 2.0
 shader_parameter/mix_amount = 0.0
 shader_parameter/color_over = null
 
-[node name="SkillTreeUI" type="Control"]
+[node name="SkillTreeUI" type="Control" node_paths=PackedStringArray("first_item_focus")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,7 +28,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3mn7w")
-sfx_open = SubResource("AudioStreamRandomizer_blprx")
+sfx_open = ExtResource("3_8ctpn")
+first_item_focus = NodePath("SkillTreeView/Tree/HotHand")
 
 [node name="BlurShader" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_4hu16")
@@ -91,38 +89,25 @@ offset_top = 128.0
 offset_right = 256.0
 offset_bottom = 640.0
 
-[node name="Path" type="TextureRect" parent="SkillTreeView/Tree"]
-self_modulate = Color(0.511719, 0.511719, 0.511719, 1)
+[node name="SkillTreePath" parent="SkillTreeView/Tree" instance=ExtResource("7_tcow0")]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
 offset_left = -8.0
-offset_top = 96.0
+offset_top = 104.0
 offset_right = 8.0
-offset_bottom = 224.0
-grow_horizontal = 2
-texture = ExtResource("3_4e5xo")
-expand_mode = 1
+offset_bottom = 232.0
 
-[node name="Path2" type="TextureRect" parent="SkillTreeView/Tree"]
-self_modulate = Color(0.511719, 0.511719, 0.511719, 1)
+[node name="SkillTreePath2" parent="SkillTreeView/Tree" instance=ExtResource("7_tcow0")]
 layout_mode = 1
 anchors_preset = 7
-anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -8.0
-offset_top = -224.0
+offset_top = -216.0
 offset_right = 8.0
-offset_bottom = -96.0
-grow_horizontal = 2
+offset_bottom = -88.0
 grow_vertical = 0
-texture = ExtResource("3_4e5xo")
-expand_mode = 1
 
-[node name="SkillItemUI" parent="SkillTreeView/Tree" instance=ExtResource("7_h1uvb")]
+[node name="HotHand" parent="SkillTreeView/Tree" node_paths=PackedStringArray("highlight_paths") instance=ExtResource("7_h1uvb")]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -130,10 +115,19 @@ anchor_right = 0.5
 offset_left = -64.0
 offset_right = 64.0
 grow_horizontal = 2
+texture = ExtResource("8_mm72c")
 skill_name = "Hot Hand"
-skill_id_enum = 1
+description = "Increased minimum damage you dealt. By default, your weapon will dealt from 80% to 120% of its base damage.
 
-[node name="SkillItemUI2" parent="SkillTreeView/Tree" instance=ExtResource("7_h1uvb")]
+Level 1: 85%
+Level 2: 90%
+Level 3: 95%
+Level 4: 100%"
+skill_id_enum = 1
+max_level = 4
+highlight_paths = [NodePath("../SkillTreePath")]
+
+[node name="LuckyShot" parent="SkillTreeView/Tree" node_paths=PackedStringArray("highlight_paths") instance=ExtResource("7_h1uvb")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -146,12 +140,20 @@ offset_right = 64.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_2sxx1")
+texture = ExtResource("9_s0fyt")
 skill_name = "Lucky Shot"
-skill_id_enum = 2
-prerequisite_skills = Array[int]([1])
+description = "Increased your critical chance.
 
-[node name="SkillItemUI3" parent="SkillTreeView/Tree" instance=ExtResource("7_h1uvb")]
+Level 1: +4% critical chance.
+Level 2: +7% critical chance.
+Level 3: +10% critical chance.
+Level 4: +15% critical chance."
+skill_id_enum = 2
+max_level = 4
+prerequisite_skills = Array[int]([1])
+highlight_paths = [NodePath("../SkillTreePath2")]
+
+[node name="LuckyCrit" parent="SkillTreeView/Tree" instance=ExtResource("7_h1uvb")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -164,17 +166,28 @@ offset_right = 64.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("9_glx12")
+texture = ExtResource("10_r8suc")
 skill_name = "Lucky Crit"
+description = "Increased the critical damage multiplier from 2.0x to 2.5x."
 skill_id_enum = 3
 prerequisite_skills = Array[int]([1, 2])
+
+[node name="SkillPointLabel" type="Label" parent="SkillTreeView"]
+layout_mode = 1
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 205.0
+offset_bottom = 54.0
+theme_override_fonts/font = ExtResource("11_scd5t")
+theme_override_font_sizes/font_size = 30
+text = "Points left: 0"
 
 [node name="SkillInfo" type="Control" parent="."]
 anchors_preset = 0
 offset_left = 1344.0
 offset_top = 128.0
-offset_right = 1800.0
-offset_bottom = 704.0
+offset_right = 1792.0
+offset_bottom = 768.0
 
 [node name="ColorRect" type="ColorRect" parent="SkillInfo"]
 layout_mode = 1
@@ -204,12 +217,13 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = -16.0
-offset_bottom = -456.0
+offset_left = 24.0
+offset_top = 32.0
+offset_right = -24.0
+offset_bottom = -520.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("11_scd5t")
 theme_override_font_sizes/font_size = 32
 text = "Skill Name"
 
@@ -218,12 +232,13 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 72.0
-offset_right = -16.0
+offset_left = 24.0
+offset_top = 128.0
+offset_right = -24.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("12_8x4rq")
 theme_override_font_sizes/font_size = 22
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 autowrap_mode = 2
@@ -242,22 +257,32 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 24
 text = "WASD to move, E to Select"
+horizontal_alignment = 2
 
-[node name="ButtonContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
+[node name="ResetButton" parent="." instance=ExtResource("5_8xe5f")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
 offset_left = 1344.0
-offset_top = 768.0
+offset_top = 832.0
 offset_right = 1792.0
 offset_bottom = 898.0
-theme_override_constants/separation = 30
-alignment = 1
-
-[node name="AcquireButton" parent="ButtonContainer" instance=ExtResource("5_8xe5f")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-text = "Acquire skill"
-
-[node name="ResetButton" parent="ButtonContainer" instance=ExtResource("5_8xe5f")]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
 text = "Reset All skilss"
+
+[node name="ReturnButton" parent="." instance=ExtResource("5_8xe5f")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -224.0
+offset_top = -120.0
+offset_right = 224.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Return"
+
+[connection signal="pressed" from="ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="ReturnButton" to="." method="_on_return_button_pressed"]
