@@ -48,7 +48,7 @@ var is_free_reroll: bool = false:
 
 var player_level = 1
 var player_skill_dict = {}
-var player_skill_points = 5
+var player_skill_points = 0
 
 var player_gained_first_barrel: bool = false
 var barrel_tutorial_shown: bool = false

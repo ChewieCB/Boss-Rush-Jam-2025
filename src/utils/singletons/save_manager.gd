@@ -1,5 +1,7 @@
 extends Node
 
+# On Windows, save files are located in C:\Users\[Name]\AppData\Roaming\Godot\app_userdata\Crapshoot
+
 var save_data_is_loaded = false
 var is_saving = false
 
@@ -106,18 +108,18 @@ func load_game(slot_id):
 		savefile_loaded.emit()
 		return
 	
-	GameManager.player_currency = save_data["player_currency"]
+	GameManager.player_currency = save_data.get("player_currency", 0)
 	GameManager.equipped_barrels = convert_id_to_resource(save_data["equipped_barrels"])
 	GameManager.inventory_barrels = convert_id_to_resource(save_data["inventory_barrels"])
 	GameManager.shop_barrels = convert_id_to_resource(save_data["shop_barrels"])
-	GameManager.player_gained_first_barrel = save_data["player_gained_first_barrel"]
-	GameManager.barrel_tutorial_shown = save_data["barrel_tutorial_shown"]
+	GameManager.player_gained_first_barrel = save_data.get("player_gained_first_barrel", false)
+	GameManager.barrel_tutorial_shown = save_data.get("barrel_tutorial_shown", false)
 	GameManager.bosses_defeated = convert_id_to_boss_enum(save_data["bosses_defeated"])
-	GameManager.victory_ui_shown = save_data["victory_ui_shown"]
-	GameManager.total_playtime = save_data["total_playtime"]
-	GameManager.player_level = save_data["player_level"]
-	GameManager.player_skill_points = save_data["player_skill_points"]
-	GameManager.player_skill_dict = convert_id_to_skill_enum(save_data["player_skill_dict"])
+	GameManager.victory_ui_shown = save_data.get("victory_ui_shown", false)
+	GameManager.total_playtime = save_data.get("total_playtime", 0)
+	GameManager.player_level = save_data.get("player_level", 1)
+	GameManager.player_skill_points = save_data.get("player_skill_points", 0)
+	GameManager.player_skill_dict = convert_id_to_skill_enum(save_data.get("player_skill_dict", {}))
 
 	check_for_new_update_barrels()
 	

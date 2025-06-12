@@ -193,4 +193,4 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4.729
 transform = Transform3D(-1, 0, 8.74228e-08, 8.74228e-08, -4.37114e-08, 1, 3.82137e-15, 1, 4.37114e-08, -4.77851, 7.19081, -29.7185)
 
 [node name="LevelupShrine" parent="." instance=ExtResource("25_janht")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9781, 1, -4)
+transform = Transform3D(-0.00677179, 0, 0.999977, 0, 1, 0, -0.999977, 0, -0.00677179, 14.9781, 1, -4)
