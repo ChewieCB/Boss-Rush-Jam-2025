@@ -8,7 +8,7 @@ enum SkillIdEnum {
 	LUCKY_CRIT, # Replaced, Inreased crit mult from 2.0x to 2.5x
 	DOUBLE_DOWN,
 	IOU,
-	INSURANCE,
+	CHEAT_DEATH,
 	POKER_FACE,
 	BLINDSPOT,
 	PLOT_ARMOR,
