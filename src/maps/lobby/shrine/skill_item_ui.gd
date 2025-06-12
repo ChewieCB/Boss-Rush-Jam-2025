@@ -1,7 +1,7 @@
 extends TextureRect
 class_name SkillItemUI
 
-enum SkillId {
+enum SkillIdEnum {
 	NONE,
 	HOT_HAND,
 	LUCKY_SHOT,
@@ -15,14 +15,13 @@ enum SkillId {
 	JACKPOT,
 	BLESSED_CHIP,
 	HIGH_ROLLER # Replaced, spin barrel with higher cost will restore more hp
-
 }
 
 @export var skill_name: String
 @export_multiline var description: String
-@export var skill_id_enum: SkillId
+@export var skill_id_enum: SkillIdEnum
 @export var max_level: int = 1
-@export var prerequisite_skills: Array[SkillId]
+@export var prerequisite_skills: Array[SkillIdEnum]
 ## These paths will be highlighted after skill acquired
 @export var highlight_paths: Array[TextureRect]
 @export var learned_color: Color

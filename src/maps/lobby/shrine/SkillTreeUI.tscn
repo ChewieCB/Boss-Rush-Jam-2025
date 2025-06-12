@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://d0xksun1nqr31"]
+[gd_scene load_steps=16 format=3 uid="uid://d0xksun1nqr31"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/shrine/skill_tree_ui.gd" id="1_3mn7w"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="2_q58gh"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bvvadnny5vuht" path="res://assets/sprite/skilltree_icon/lucky_crit.png" id="10_r8suc"]
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="11_scd5t"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="12_8x4rq"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="14_eenjl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4hu16"]
 shader = ExtResource("2_q58gh")
@@ -187,7 +188,7 @@ anchors_preset = 0
 offset_left = 1344.0
 offset_top = 128.0
 offset_right = 1792.0
-offset_bottom = 768.0
+offset_bottom = 704.0
 
 [node name="ColorRect" type="ColorRect" parent="SkillInfo"]
 layout_mode = 1
@@ -259,14 +260,23 @@ theme_override_font_sizes/font_size = 24
 text = "WASD to move, E to Select"
 horizontal_alignment = 2
 
+[node name="LevelUpButton" parent="." instance=ExtResource("5_8xe5f")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+offset_left = 1344.0
+offset_top = 752.0
+offset_right = 1792.0
+offset_bottom = 810.0
+text = "Level up to 2 (1000 chips)"
+
 [node name="ResetButton" parent="." instance=ExtResource("5_8xe5f")]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 offset_left = 1344.0
-offset_top = 832.0
+offset_top = 840.0
 offset_right = 1792.0
 offset_bottom = 898.0
-text = "Reset All skilss"
+text = "Reset all skills"
 
 [node name="ReturnButton" parent="." instance=ExtResource("5_8xe5f")]
 custom_minimum_size = Vector2(0, 50)
@@ -284,5 +294,24 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Return"
 
+[node name="CurrencyUI" parent="." instance=ExtResource("14_eenjl")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -328.0
+offset_top = 24.0
+offset_right = -23.0
+offset_bottom = 88.0
+grow_horizontal = 0
+size_flags_horizontal = 6
+is_static = true
+
+[node name="ResetTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="pressed" from="LevelUpButton" to="." method="_on_level_up_button_pressed"]
 [connection signal="pressed" from="ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="ReturnButton" to="." method="_on_return_button_pressed"]
+[connection signal="timeout" from="ResetTimer" to="." method="_on_reset_timer_timeout"]
