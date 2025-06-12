@@ -58,27 +58,27 @@ func initialize_luck() -> void:
 # replace the if-level with if-has-skill
 
 func check_for_luck_buffs():
-	if GameManager.player_luck_level >= 2:
+	if GameManager.player_level >= 2:
 		# Dash +0.2s iframe
 		if current_luck_ratio >= high_luck_threshold:
 			create_and_add_buff("High luck: Improved dash", "high_luck_increased_dash_iframe",
 			StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION, 0.2, StatusEffect.ModifyType.FLAT)
 		else:
 			GameManager.player.remove_status_effect_by_name("high_luck_increased_dash_iframe")
-	if GameManager.player_luck_level >= 3:
+	if GameManager.player_level >= 3:
 		# Chip drop 30% more
 		if current_luck_ratio >= high_luck_threshold:
 			create_and_add_buff("High luck: Improved chip droprate", "high_luck_increased_chip_droprate",
 			StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER, 0.3, StatusEffect.ModifyType.FLAT)
 		else:
 			GameManager.player.remove_status_effect_by_name("high_luck_increased_chip_droprate")
-	if GameManager.player_luck_level >= 4:
+	if GameManager.player_level >= 4:
 		# 5% Crit chance
 		pass
-	if GameManager.player_luck_level >= 5:
+	if GameManager.player_level >= 5:
 		# Better 
 		pass
-	if GameManager.player_luck_level >= 6:
+	if GameManager.player_level >= 6:
 		pass
 
 

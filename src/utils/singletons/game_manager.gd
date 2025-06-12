@@ -14,6 +14,8 @@ const RESOLUTION_ARRAY = [
 	Vector2i(1366, 768), Vector2i(1280, 720), Vector2i(1024, 768)
 ]
 
+const CHIP_COST_PER_LEVEL_UP = 2000
+
 var pause_ui: PauseUI
 var setting_ui: SettingUI
 var player: Player
@@ -44,7 +46,7 @@ var is_free_reroll: bool = false:
 		player_currency = value
 		currency_changed.emit(player_currency)
 
-var player_luck_level = 1
+var player_level = 1
 var player_skill_dict = {}
 var player_skill_points = 5
 
