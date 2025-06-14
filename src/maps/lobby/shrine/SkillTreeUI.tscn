@@ -255,10 +255,10 @@ texture = ExtResource("12_8rcra")
 skill_name = "IOU"
 description = "You can spin gun's barrels even when you don't have enough chips. However, it will consume your health instead of restore it.
 
-Level 1: -25% HP.
-Level 2: -20% HP.
-Level 3: -15% HP.
-Level 4: -5% HP."
+Level 1: -25 HP.
+Level 2: -20 HP.
+Level 3: -15 HP.
+Level 4: -5 HP."
 skill_id_enum = 5
 max_level = 4
 prerequisite_skills = Array[int]([4])

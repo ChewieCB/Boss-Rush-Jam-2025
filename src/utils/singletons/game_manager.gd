@@ -67,11 +67,6 @@ var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3
 var cached_camera_rotation: Vector3
 
-# SFX
-# TODO - find a good generic solution for calling these outside of the shop
-@export var sfx_purchase: AudioStream
-@export var sfx_too_expensive: AudioStream
-
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
 @export_range(60, 120, 1.0) var camera_fov: float = 90:
@@ -176,11 +171,8 @@ func purchase_reroll() -> bool:
 			# Increase the cost of re-rolling for this fight
 			reroll_cost = int(reroll_cost * reroll_cost_mult)
 		reroll_cost_changed.emit(reroll_cost)
-		SoundManager.play_sound(sfx_purchase)
 		return true
-	SoundManager.play_sound(sfx_too_expensive)
 	return false
-
 
 func reset_reroll_cost() -> void:
 	reroll_cost = initial_reroll_cost
@@ -232,16 +224,17 @@ func update_total_playtime():
 func _on_controller_connection(_device: int, connected: bool):
 	is_controller_connected = connected
 
-func create_and_add_buff(display_name: String, status_code: String,
-	modified_stat: StatusEffect.PlayerStatEnum, value: float, modify_type: StatusEffect.ModifyType):
+func create_and_add_buff(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
+	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, show_duration_ui = false, status_icon: Texture2D = null, ):
 	var status_effect = StatusEffect.new()
 	status_effect.display_name = display_name
 	status_effect.status_code = status_code
 	status_effect.modified_stat = modified_stat
 	status_effect.value = value
 	status_effect.modify_type = modify_type
-	status_effect.duration = StatusEffect.INFINITE_DURATION
+	status_effect.duration = duration
 	status_effect.is_bad_effect = false
-	status_effect.show_duration_ui = false
+	status_effect.show_duration_ui = show_duration_ui
 	status_effect.show_value_on_ui = false
+	status_effect.status_icon = status_icon
 	player.add_status_effect(status_effect)

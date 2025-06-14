@@ -14,6 +14,8 @@ var movement_sfx_player: AudioStreamPlayer
 @export var sfx_jump_air: Array[AudioStream]
 @export var sfx_dash_floor: Array[AudioStream]
 @export var sfx_dash_air: Array[AudioStream]
+@export var sfx_purchase: AudioStream
+@export var sfx_too_expensive: AudioStream
 
 @export_category("Movement")
 @export var can_wall_jump: bool
@@ -161,7 +163,11 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0,
 }
 var current_stats = base_stats.duplicate(true)
+
 var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
+var cheat_death_icon = preload("res://assets/sprite/skilltree_icon/cheat_death.png")
+var double_down_icon = preload("res://assets/sprite/skilltree_icon/double_down.png")
+
 var aim_assist_target: Node3D = null
 var cheat_death_triggered = false
 
@@ -196,6 +202,9 @@ func _ready():
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
 	update_ammo_counter_ui()
+
+	await get_tree().process_frame
+	await get_tree().process_frame
 
 	check_permanent_buffs()
 	luck_component.check_for_high_luck_buffs()
@@ -616,9 +625,36 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		SoundManager.play_sound(sfx_hurt.pick_random())
 		if new_health > 0:
 			state_chart.send_event("end_damage")
+			if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.DOUBLE_DOWN):
+				var buff_value = 0
+				var buff_time = 0
+				match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.DOUBLE_DOWN]:
+					1:
+						buff_value = 0.15
+						buff_time = 2
+					2:
+						buff_value = 0.15
+						buff_time = 3
+					3:
+						buff_value = 0.3
+						buff_time = 3
+					4:
+						buff_value = 0.3
+						buff_time = 5
+				# Only need 1 to display duration
+				GameManager.create_and_add_buff("Double Down (Min damage)", "double_down_min_buff",
+					StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time, true, double_down_icon)
+				GameManager.create_and_add_buff("Double Down (Max damage)", "double_down_max_buff",
+					StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time)
 
 
 func _on_died() -> void:
+	if check_if_has_status_effect_by_name("cheat_death_buff") and not cheat_death_triggered:
+		cheat_death_triggered = true
+		health_component.current_health = 1
+		health_component.has_died = false
+		remove_status_effect_by_name("cheat_death_buff")
+		return
 	state_chart.send_event("death")
 	SoundManager.play_sound(sfx_dead.pick_random())
 
@@ -672,6 +708,14 @@ func remove_status_effect_by_name(find_name: String):
 	if found:
 		remove_status_effect(found)
 
+
+func check_if_has_status_effect_by_name(find_name: String):
+	var found = false
+	for status in status_effect_list:
+		if status.status_code == find_name:
+			found = true
+			break
+	return found
 
 func apply_status_effects():
 	# Reset current stats to base stats.
@@ -772,6 +816,29 @@ func spin_barrels() -> void:
 		current_gun.spin_all_barrels()
 		# Provide small health buff (?)
 		health_component.heal(reroll_heal_value)
+		SoundManager.play_sound(sfx_purchase)
+
+	# Spin with IOU skill
+	elif GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.IOU):
+		var hp_cost = 0
+		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.IOU]:
+			1:
+				hp_cost = 25
+			2:
+				hp_cost = 20
+			3:
+				hp_cost = 15
+			4:
+				hp_cost = 5
+		if health_component.current_health > hp_cost:
+			cash_in_luck()
+			current_gun.spin_all_barrels()
+			health_component.damage(hp_cost)
+			SoundManager.play_sound(sfx_purchase)
+		else:
+			SoundManager.play_sound(sfx_too_expensive)
+	else:
+		SoundManager.play_sound(sfx_too_expensive)
 
 
 func cash_in_luck() -> void:
@@ -812,7 +879,10 @@ func check_permanent_buffs():
 	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.LUCKY_CRIT):
 		GameManager.create_and_add_buff("Lucky Crit", "lucky_crit_buff",
 		StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER, 0.5, StatusEffect.ModifyType.FLAT)
-	
+	# Only show this to let player know if they still have Cheat Death 
+	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.CHEAT_DEATH):
+		GameManager.create_and_add_buff("Cheat Death", "cheat_death_buff",
+		StatusEffect.PlayerStatEnum.NONE, 0, StatusEffect.ModifyType.FLAT, StatusEffect.INFINITE_DURATION, true, cheat_death_icon)
 
 func apply_drunk_status(duration: float) -> void:
 	state_chart.send_event("add_status_drunk")

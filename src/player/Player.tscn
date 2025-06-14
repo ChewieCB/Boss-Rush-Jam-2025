@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=69 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -44,6 +44,8 @@
 [ext_resource type="AudioStream" uid="uid://dckgsngjsbl02" path="res://src/player/assets/sfx/STAND.mp3" id="27_6gtc3"]
 [ext_resource type="AudioStream" uid="uid://b1j1n3jwte3cg" path="res://src/player/assets/sfx/New Jump from ground.mp3" id="29_5swy3"]
 [ext_resource type="AudioStream" uid="uid://dxp1qdaew521c" path="res://src/player/assets/sfx/New Dash Sound (maybe highpass later) w verb.mp3" id="30_bfwyi"]
+[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="31_uqkio"]
+[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="32_vsild"]
 [ext_resource type="Shader" path="res://src/player/assets/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
@@ -117,6 +119,8 @@ sfx_jump_ground = Array[AudioStream]([ExtResource("29_5swy3")])
 sfx_jump_air = Array[AudioStream]([ExtResource("29_5swy3")])
 sfx_dash_floor = Array[AudioStream]([ExtResource("30_bfwyi")])
 sfx_dash_air = Array[AudioStream]([ExtResource("30_bfwyi")])
+sfx_purchase = ExtResource("31_uqkio")
+sfx_too_expensive = ExtResource("32_vsild")
 max_air_jump = 1
 speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
