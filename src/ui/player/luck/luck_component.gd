@@ -8,7 +8,6 @@ signal luck_maxed()
 @export_category("Luck")
 @export var max_luck: float = 100
 
-var high_luck_threshold: float = 0.75
 var luck_loss_modifier: float = 1.0
 var luck_gain_modifier: float = 1.0
 
@@ -42,56 +41,55 @@ func decrease_luck(_reduction: float) -> void:
 	_reduction = round(_reduction * luck_loss_modifier)
 	if enabled:
 		current_luck -= _reduction
-	check_for_luck_buffs()
+	check_for_high_luck_buffs()
 
 func increase_luck(_luck: float) -> void:
 	if enabled:
 		_luck = round(_luck * luck_gain_modifier)
 		current_luck += _luck
-	check_for_luck_buffs()
+	check_for_high_luck_buffs()
 
 
 func initialize_luck() -> void:
 	current_luck = 0.0
 
-# If we switched to using skill tree system instead of just linear level, just
-# replace the if-level with if-has-skill
+func check_for_high_luck_buffs():
+	var player_base_stat = GameManager.player.base_stats
 
-func check_for_luck_buffs():
-	if GameManager.player_level >= 2:
-		# Dash +0.2s iframe
-		if current_luck_ratio >= high_luck_threshold:
-			create_and_add_buff("High luck: Improved dash", "high_luck_increased_dash_iframe",
-			StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION, 0.2, StatusEffect.ModifyType.FLAT)
-		else:
-			GameManager.player.remove_status_effect_by_name("high_luck_increased_dash_iframe")
-	if GameManager.player_level >= 3:
-		# Chip drop 30% more
-		if current_luck_ratio >= high_luck_threshold:
-			create_and_add_buff("High luck: Improved chip droprate", "high_luck_increased_chip_droprate",
-			StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER, 0.3, StatusEffect.ModifyType.FLAT)
-		else:
-			GameManager.player.remove_status_effect_by_name("high_luck_increased_chip_droprate")
-	if GameManager.player_level >= 4:
-		# 5% Crit chance
-		pass
-	if GameManager.player_level >= 5:
-		# Better 
-		pass
-	if GameManager.player_level >= 6:
-		pass
+	if current_luck_ratio >= get_high_luck_threshold():
+		# Hot Hand: 5% increased minimum damage per level
+		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HOT_HAND):
+			var increased_min_dmg = 0.05 * GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.HOT_HAND]
+			GameManager.create_and_add_buff("Hot Hand", "hot_hand_buff",
+			StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, increased_min_dmg, StatusEffect.ModifyType.FLAT)
+
+		# Lucky Shot: increased crit chance
+		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HOT_HAND):
+			var increased_crit = 0
+			match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.HOT_HAND]:
+				1:
+					increased_crit = 0.04
+				2:
+					increased_crit = 0.07
+				3:
+					increased_crit = 0.1
+				4:
+					increased_crit = 0.15
+			GameManager.create_and_add_buff("Lucky Shot", "lucky_shot_buff",
+			StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE, increased_crit, StatusEffect.ModifyType.FLAT)
+
+		# Blindspot: 10% increased dash iframe duration per level
+		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.BLINDSPOT):
+			var increased_dash_duration = player_base_stat[StatusEffect.PlayerStatEnum.DASH_DURATION] * 0.1 * \
+				GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLINDSPOT]
+			GameManager.create_and_add_buff("Blindspot", "blindspot_buff",
+			StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION, increased_dash_duration, StatusEffect.ModifyType.FLAT)
+	else:
+		GameManager.player.remove_status_effect_by_name("hot_hand_buff")
+		GameManager.player.remove_status_effect_by_name("lucky_shot_buff")
+		GameManager.player.remove_status_effect_by_name("blindspot_buff")
 
 
-func create_and_add_buff(display_name: String, status_code: String,
-	modified_stat: StatusEffect.PlayerStatEnum, value: float, modify_type: StatusEffect.ModifyType):
-	var status_effect = StatusEffect.new()
-	status_effect.display_name = display_name
-	status_effect.status_code = status_code
-	status_effect.modified_stat = modified_stat
-	status_effect.value = value
-	status_effect.modify_type = modify_type
-	status_effect.duration = StatusEffect.INFINITE_DURATION
-	status_effect.is_bad_effect = false
-	status_effect.show_duration_ui = false
-	status_effect.show_value_on_ui = false
-	GameManager.player.add_status_effect(status_effect)
+func get_high_luck_threshold():
+	var calculated_value = ((GameManager.BASE_PLAYER_LUCK_THRESHOLD * 100) - (GameManager.player_level - 1) / 100.0)
+	return calculated_value

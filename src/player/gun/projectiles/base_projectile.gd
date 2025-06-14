@@ -89,12 +89,11 @@ func create_bullet_decal(pos: Vector3, normal: Vector3):
 func ricochet():
 	return
 
-## This will be added to normal projectile attack
+## This will be added to normal damage
 func get_damage_variance_modifier(_damage: int) -> int:
-	if GameManager.player.luck_component.current_luck_ratio >= GameManager.player.luck_component.high_luck_threshold:
-		# High luck will roll from 0 to 0.2 instead of usual -0.2 to 0.2
-		return int(randf_range(0, _damage * DAMAGE_VARIANCE))
-	return int(randf_range(_damage * -DAMAGE_VARIANCE, _damage * DAMAGE_VARIANCE))
+	var min_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE] - 1
+	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE] - 1
+	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
 func create_duplication() -> BaseProjectile:
 	var new_inst: BaseProjectile = self.duplicate()

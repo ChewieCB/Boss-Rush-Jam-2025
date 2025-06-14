@@ -7,6 +7,7 @@ class_name SkillTreeUI
 @onready var skill_title_label: Label = $SkillInfo/Title
 @onready var skill_description_label: Label = $SkillInfo/Description
 @onready var skill_point_label: Label = $SkillTreeView/SkillPointLabel
+@onready var level_label: Label = $SkillTreeView/LevelLabel
 @onready var level_up_button: Button = $LevelUpButton
 @onready var reset_button: Button = $ResetButton
 @onready var reset_timer: Timer = $ResetTimer
@@ -23,6 +24,7 @@ func _ready() -> void:
 
 func toggle():
 	SoundManager.play_sound(sfx_open, "SFX")
+	refresh_all_items()
 	if visible:
 		close()
 	else:
@@ -60,6 +62,8 @@ func refresh_all_items():
 	level_up_btn_clicked_once = false
 	reset_btn_clicked_once = false
 	skill_point_label.text = "Points left: {0}".format([GameManager.player_skill_points])
+	var new_high_luck_theshold = (GameManager.BASE_PLAYER_LUCK_THRESHOLD * 100) - (GameManager.player_level - 1)
+	level_label.text = "Level: {0}\nHigh luck threshold: {1}%".format([GameManager.player_level, new_high_luck_theshold])
 	update_level_up_button_text()
 	reset_button.text = "Reset all skills"
 	ui_opened.emit()

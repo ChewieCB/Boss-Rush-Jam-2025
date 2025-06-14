@@ -14,7 +14,8 @@ const RESOLUTION_ARRAY = [
 	Vector2i(1366, 768), Vector2i(1280, 720), Vector2i(1024, 768)
 ]
 
-const CHIP_COST_PER_LEVEL_UP = 2000
+const CHIP_COST_PER_LEVEL_UP = 500
+const BASE_PLAYER_LUCK_THRESHOLD = 0.95
 
 var pause_ui: PauseUI
 var setting_ui: SettingUI
@@ -230,3 +231,17 @@ func update_total_playtime():
 
 func _on_controller_connection(_device: int, connected: bool):
 	is_controller_connected = connected
+
+func create_and_add_buff(display_name: String, status_code: String,
+	modified_stat: StatusEffect.PlayerStatEnum, value: float, modify_type: StatusEffect.ModifyType):
+	var status_effect = StatusEffect.new()
+	status_effect.display_name = display_name
+	status_effect.status_code = status_code
+	status_effect.modified_stat = modified_stat
+	status_effect.value = value
+	status_effect.modify_type = modify_type
+	status_effect.duration = StatusEffect.INFINITE_DURATION
+	status_effect.is_bad_effect = false
+	status_effect.show_duration_ui = false
+	status_effect.show_value_on_ui = false
+	player.add_status_effect(status_effect)

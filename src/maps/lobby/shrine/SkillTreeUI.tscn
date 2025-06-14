@@ -131,7 +131,7 @@ offset_right = 64.0
 grow_horizontal = 2
 texture = ExtResource("8_mm72c")
 skill_name = "Hot Hand"
-description = "Increased minimum damage you dealt. By default, your weapon will dealt from 80% to 120% of its base damage.
+description = "Increased minimum damage you dealt when you have high luck. By default, your weapon will dealt from 80% to 120% of its base damage.
 
 Level 1: minimum at 85%.
 Level 2: minimum at 90%.
@@ -156,7 +156,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_s0fyt")
 skill_name = "Lucky Shot"
-description = "Increased your critical chance.
+description = "Increased your critical chance when you have high luck. By default, you have 0%. Some weapon effects also increased it and it stack additively.
 
 Level 1: +4% critical chance.
 Level 2: +7% critical chance.
@@ -279,7 +279,7 @@ grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("13_86mca")
 skill_name = "Cheat Death"
-description = "Lethal damage will leave you at a sliver of health instead, and empty your luck. Can only trigger once per fight."
+description = "Lethal damage when you are at high luck will leave you at a sliver of health instead, and empty your luck. Can only be triggered once per fight."
 skill_id_enum = 6
 prerequisite_skills = Array[int]([4, 5])
 
@@ -325,7 +325,7 @@ offset_right = 64.0
 grow_horizontal = 2
 texture = ExtResource("14_mdccr")
 skill_name = "Poker Face"
-description = "Increased boss telegraph time, give you more time to react.
+description = "Increased boss telegraph time when you have high luck, give you more time to react.
 
 Level 1: +10% duration.
 Level 2: +20% duration.
@@ -350,7 +350,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("15_ptimq")
 skill_name = "Blindspot"
-description = "Increased invulnerable duration when you dashed.
+description = "Increased invulnerable duration when you dashed when you have high luck.
 
 Level 1: +10% duration.
 Level 2: +20% duration.
@@ -422,7 +422,7 @@ offset_right = 64.0
 grow_horizontal = 2
 texture = ExtResource("17_3yjin")
 skill_name = "Jackpot"
-description = "Improved the value of chips dropped from enemies.
+description = "At high luck, improve the value of chips dropped from enemies.
 
 Level 1: Minimum chip value is 2.
 Level 2: Minimum chip value is 5.
@@ -473,19 +473,35 @@ grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("19_godxg")
 skill_name = "High Roller"
-description = "Barrel spin with higher cost will restoe more health for you."
+description = "Barrel spin with higher cost will restore more health for you."
 skill_id_enum = 12
 prerequisite_skills = Array[int]([10, 11])
 
-[node name="SkillPointLabel" type="Label" parent="SkillTreeView"]
+[node name="LevelLabel" type="Label" parent="SkillTreeView"]
 layout_mode = 1
 offset_left = 24.0
 offset_top = 24.0
-offset_right = 205.0
-offset_bottom = 54.0
+offset_right = 448.0
+offset_bottom = 87.0
 theme_override_fonts/font = ExtResource("11_scd5t")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 28
+text = "Level: 1
+High luck threshold: 95%"
+
+[node name="SkillPointLabel" type="Label" parent="SkillTreeView"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -256.0
+offset_top = 24.0
+offset_right = -21.0
+offset_bottom = 54.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("11_scd5t")
+theme_override_font_sizes/font_size = 28
 text = "Points left: 0"
+horizontal_alignment = 2
 
 [node name="SkillInfo" type="Control" parent="."]
 anchors_preset = 0

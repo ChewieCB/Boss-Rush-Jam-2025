@@ -155,12 +155,15 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
 	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
 	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
+	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # 80% = 0.8
+	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 120% = 1.2
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0, # 50% = 0.5
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0,
 }
 var current_stats = base_stats.duplicate(true)
 var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
-
 var aim_assist_target: Node3D = null
-
+var cheat_death_triggered = false
 
 func _ready():
 	GameManager.player = self
@@ -176,9 +179,6 @@ func _ready():
 	health_component.show_damage_text = false
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
-
-	luck_component.luck_changed.connect(_on_luck_changed)
-	luck_component.luck_maxed.connect(_on_luck_maxed)
 
 	gun_container_original_pos = gun_container.position
 	gun_container_original_rot = gun_container.rotation
@@ -197,6 +197,8 @@ func _ready():
 	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
 	update_ammo_counter_ui()
 
+	check_permanent_buffs()
+	luck_component.check_for_high_luck_buffs()
 
 func _unhandled_input(event):
 	if controls_disabled:
@@ -804,17 +806,13 @@ func add_iframe_on_dash():
 	iframe_dash_buff.status_icon = dash_iframe_icon
 	add_status_effect(iframe_dash_buff)
 
-func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
-	# TODO - update luck handler to apply bonuses
-	#if new_luck < prev_luck and prev_luck == luck_component.max_luck:
-	# TODO
-	pass
 
-
-func _on_luck_maxed() -> void:
-	# TODO
-	pass
-
+# Check buff from some non-high luck skills. Only do this once at scene start
+func check_permanent_buffs():
+	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.LUCKY_CRIT):
+		GameManager.create_and_add_buff("Lucky Crit", "lucky_crit_buff",
+		StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER, 0.5, StatusEffect.ModifyType.FLAT)
+	
 
 func apply_drunk_status(duration: float) -> void:
 	state_chart.send_event("add_status_drunk")
