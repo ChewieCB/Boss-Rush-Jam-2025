@@ -7428,3 +7428,9 @@
 "classname" "ElevatorDoors"
 "origin" "-553 -320 -160"
 }
+// entity 52
+{
+"classname" "SlidingDoor"
+"origin" "-536 -1867 -160"
+"angle" "90"
+}
