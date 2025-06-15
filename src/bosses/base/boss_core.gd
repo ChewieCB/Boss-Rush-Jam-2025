@@ -542,12 +542,12 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			# Increase chip spawn rate based on DPS
 			var chip_mult = snapped(dps_accumulated_in_window / chip_spawn_dps_threshold, 1)
 			chip_mult = min(chip_mult, chip_spawn_mult_cap)
+			chip_mult = chip_mult * GameManager.get_boss_chip_amount_drop_multiplier()
 			print("DPS dealt: %s | chips spawned: %s" % [dps_accumulated_in_window, chip_mult])
 			if chip_scene:
 				for i in chip_mult:
 					if randf() < chip_spawn_chance:
 						continue
-					# TODO - modify spawned chip value chance based on dps
 					var chip = chip_scene.instantiate() as RigidBody3D
 					scene_root.add_child(chip)
 					chip.global_position = self.global_position

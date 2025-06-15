@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://co2sgmxi41jsj"
-path.s3tc="res://.godot/imported/chip_gold.png-80368f2cb286b92448d9d1a6d7899493.s3tc.ctex"
+uid="uid://c42mlytv8sdoj"
+path.s3tc="res://.godot/imported/lucky_shot.png-f5b746e229bab08727bf3c1462d158f6.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://src/collectibles/poker_chip/assets/chip_gold.png"
-dest_files=["res://.godot/imported/chip_gold.png-80368f2cb286b92448d9d1a6d7899493.s3tc.ctex"]
+source_file="res://assets/sprite/skilltree_icon/lucky_shot.png"
+dest_files=["res://.godot/imported/lucky_shot.png-f5b746e229bab08727bf3c1462d158f6.s3tc.ctex"]
 
 [params]
 

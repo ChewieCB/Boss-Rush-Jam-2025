@@ -1,0 +1,77 @@
+[gd_scene load_steps=6 format=3 uid="uid://bna8nm6mu0l1n"]
+
+[ext_resource type="Texture2D" uid="uid://8r1105may1j4" path="res://assets/sprite/buff_icon/bullet.png" id="1_a1s4x"]
+[ext_resource type="Script" path="res://src/maps/lobby/shrine/skill_item_ui.gd" id="2_4kuit"]
+[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_yco4b"]
+[ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="4_aolbk"]
+[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="5_rovbt"]
+
+[node name="SkillItemUI" type="TextureRect"]
+offset_right = 128.0
+offset_bottom = 128.0
+texture = ExtResource("1_a1s4x")
+expand_mode = 1
+script = ExtResource("2_4kuit")
+learned_color = Color(0.901961, 0.776471, 0, 1)
+unlearnable_color = Color(0.222656, 0.222656, 0.222656, 1)
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_rovbt")
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 2
+
+[node name="BorderNormal" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_yco4b")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="BorderSelected" type="NinePatchRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_aolbk")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="LevelLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -32.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("5_rovbt")
+theme_override_font_sizes/font_size = 20
+text = "1/4"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="focus_entered" from="Button" to="." method="_on_button_focus_entered"]
+[connection signal="focus_exited" from="Button" to="." method="_on_button_focus_exited"]
+[connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

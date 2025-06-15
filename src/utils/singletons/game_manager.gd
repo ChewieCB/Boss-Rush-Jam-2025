@@ -14,6 +14,12 @@ const RESOLUTION_ARRAY = [
 	Vector2i(1366, 768), Vector2i(1280, 720), Vector2i(1024, 768)
 ]
 
+const CHIP_COST_PER_LEVEL_UP = 500
+const BASE_PLAYER_LUCK_THRESHOLD = 0.95
+const PLOT_ARMOR_DAMAGE_ABSORB_PERC = 0.25 # Perc of damage taken by player will be absorbed by luck
+const PLOT_ARMOR_LUCK_DAMAGE_MULTIPLIER = 4.0 # Luck needed to absorb damage will multiplied by this
+const HIGH_ROLLER_BONUS_HEAL_PER_REROLL_TIME = 5
+
 var pause_ui: PauseUI
 var setting_ui: SettingUI
 var player: Player
@@ -38,11 +44,16 @@ var is_free_reroll: bool = false:
 		is_free_reroll = value
 		if is_free_reroll:
 			free_rerolls.emit()
+var reroll_time = 0
 
 @export var player_currency: int = 0:
 	set(value):
 		player_currency = value
 		currency_changed.emit(player_currency)
+
+var player_level = 1
+var player_skill_dict = {}
+var player_skill_points = 0
 
 var player_gained_first_barrel: bool = false
 var barrel_tutorial_shown: bool = false
@@ -59,11 +70,6 @@ var total_playtime = 0
 var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3
 var cached_camera_rotation: Vector3
-
-# SFX
-# TODO - find a good generic solution for calling these outside of the shop
-@export var sfx_purchase: AudioStream
-@export var sfx_too_expensive: AudioStream
 
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
@@ -168,16 +174,15 @@ func purchase_reroll() -> bool:
 			player_currency -= reroll_cost
 			# Increase the cost of re-rolling for this fight
 			reroll_cost = int(reroll_cost * reroll_cost_mult)
+			reroll_time += 1
 		reroll_cost_changed.emit(reroll_cost)
-		SoundManager.play_sound(sfx_purchase)
 		return true
-	SoundManager.play_sound(sfx_too_expensive)
 	return false
-
 
 func reset_reroll_cost() -> void:
 	reroll_cost = initial_reroll_cost
 	reroll_cost_changed.emit(reroll_cost)
+	reroll_time = 0
 
 
 func show_boss_special_dialog(content: String, duration: float):
@@ -224,3 +229,45 @@ func update_total_playtime():
 
 func _on_controller_connection(_device: int, connected: bool):
 	is_controller_connected = connected
+
+func create_and_add_buff(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
+	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, show_duration_ui = false, status_icon: Texture2D = null, ):
+	var status_effect = StatusEffect.new()
+	status_effect.display_name = display_name
+	status_effect.status_code = status_code
+	status_effect.modified_stat = modified_stat
+	status_effect.value = value
+	status_effect.modify_type = modify_type
+	status_effect.duration = duration
+	status_effect.is_bad_effect = false
+	status_effect.show_duration_ui = show_duration_ui
+	status_effect.show_value_on_ui = false
+	status_effect.status_icon = status_icon
+	player.add_status_effect(status_effect)
+
+
+# Boss telegraph time can be modified by difficulty or Poker Face skill
+func get_boss_telegraph_time_multiplier() -> float:
+	var mult = 1.0
+	# Poker Face skill
+	if player_skill_dict.has(SkillItemUI.SkillIdEnum.POKER_FACE) and player.luck_component.is_high_luck():
+		mult += 0.1 * player_skill_dict[SkillItemUI.SkillIdEnum.POKER_FACE]
+	# If difficulty also modified boss telegraph time, add it here
+	#
+
+	return mult
+
+func get_boss_chip_amount_drop_multiplier() -> float:
+	var mult = 1.0
+	# Blessed Chip skill
+	if player_skill_dict.has(SkillItemUI.SkillIdEnum.BLESSED_CHIP):
+		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLESSED_CHIP]:
+			1:
+				mult -= 0.1
+			2:
+				mult -= 0.2
+			3:
+				mult -= 0.3
+			4:
+				mult -= 0.4
+	return mult

@@ -21,7 +21,7 @@ func _ready() -> void:
 	is_controller_connected = Input.get_connected_joypads() != []
 	
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	# If the pause menu button is pressed, reset the pause menu and hide/show it
 	if event.is_action_pressed("pause_menu"):
 		SoundManager.play_button_click_sfx()
