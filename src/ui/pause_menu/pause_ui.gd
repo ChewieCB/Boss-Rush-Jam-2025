@@ -117,11 +117,12 @@ func _on_quit_button_pressed() -> void:
 		await SaveManager.save_game(GameManager.chosen_slot_id)
 	
 	# TODO - move promo UI to a higher node in the scene tree to avoid this shuffling
-	promo_ui.visible = true
-	remove_child(promo_ui)
-	get_parent().add_child(promo_ui)
-	self.visible = false
-	await get_tree().create_timer(3.0).timeout
+	# TODO - add toggle for promo ui for editor testing vs release
+	#promo_ui.visible = true
+	#remove_child(promo_ui)
+	#get_parent().add_child(promo_ui)
+	#self.visible = false
+	#await get_tree().create_timer(3.0).timeout
 	get_tree().quit()
 
 

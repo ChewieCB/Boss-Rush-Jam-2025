@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://doli6c54olace"]
+
+[ext_resource type="Script" path="res://src/maps/tutorial/triggers/base_trigger.gd" id="1_jo7pk"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_csg2r"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y2hda"]
+size = Vector3(6.17065, 8, 1.54825)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_txadw"]
+height = 0.1
+
+[node name="BaseTrigger" type="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.0684, 2, 8.05274)
+collision_layer = 32
+collision_mask = 8
+script = ExtResource("1_jo7pk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.215698, -0.5, 0.674124)
+shape = SubResource("BoxShape3D_y2hda")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_txadw")
+
+[node name="DamageTextSpawn" type="Marker3D" parent="MeshInstance3D"]
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0534945)
+text = "999"
+font_size = 64
+outline_size = 32
+
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("text_effect_location") instance=ExtResource("2_csg2r")]
+max_health = 1e+15
+text_effect_location = NodePath("../MeshInstance3D/DamageTextSpawn")

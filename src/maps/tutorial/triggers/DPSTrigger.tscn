@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://1gqb282iyjni"]
+
+[ext_resource type="PackedScene" uid="uid://doli6c54olace" path="res://src/maps/tutorial/triggers/BaseTrigger.tscn" id="1_pw408"]
+[ext_resource type="Script" path="res://src/maps/tutorial/triggers/dps_trigger.gd" id="2_dshp1"]
+
+[node name="DPSTrigger" instance=ExtResource("1_pw408")]
+script = ExtResource("2_dshp1")
+target_dps_count = 60.0
+dps_window_time = 1.1
+
+[node name="DPSWindowTimer" type="Timer" parent="." index="4"]
+one_shot = true
+
+[connection signal="timeout" from="DPSWindowTimer" to="." method="_on_dps_window_timer_timeout"]

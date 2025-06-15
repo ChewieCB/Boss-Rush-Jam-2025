@@ -12,6 +12,10 @@ func _ready() -> void:
 		anim_player.play("open")
 
 
+func activate() -> void:
+	open()
+
+
 func open() -> void:
 	anim_player.play("open")
 	SoundManager.play_sound(TEMP_sfx_open)
