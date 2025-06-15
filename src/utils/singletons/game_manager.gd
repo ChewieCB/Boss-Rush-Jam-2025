@@ -249,7 +249,7 @@ func create_and_add_buff(display_name: String, status_code: String, modified_sta
 # Boss telegraph time can be modified by difficulty or Poker Face skill
 func get_boss_telegraph_time_multiplier() -> float:
 	var mult = 1.0
-	# Poker Face skill 
+	# Poker Face skill
 	if player_skill_dict.has(SkillItemUI.SkillIdEnum.POKER_FACE) and player.luck_component.is_high_luck():
 		mult += 0.1 * player_skill_dict[SkillItemUI.SkillIdEnum.POKER_FACE]
 	# If difficulty also modified boss telegraph time, add it here
@@ -259,7 +259,7 @@ func get_boss_telegraph_time_multiplier() -> float:
 
 func get_boss_chip_amount_drop_multiplier() -> float:
 	var mult = 1.0
-	# Blessed Chip skill 
+	# Blessed Chip skill
 	if player_skill_dict.has(SkillItemUI.SkillIdEnum.BLESSED_CHIP):
 		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLESSED_CHIP]:
 			1:
