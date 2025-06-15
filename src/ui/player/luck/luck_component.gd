@@ -56,7 +56,7 @@ func initialize_luck() -> void:
 func check_for_high_luck_buffs():
 	var player_base_stat = GameManager.player.base_stats
 
-	if current_luck_ratio >= get_high_luck_threshold():
+	if is_high_luck():
 		# Hot Hand: 5% increased minimum damage per level
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HOT_HAND):
 			var increased_min_dmg = 0.05 * GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.HOT_HAND]
@@ -93,3 +93,6 @@ func check_for_high_luck_buffs():
 func get_high_luck_threshold():
 	var calculated_value = ((GameManager.BASE_PLAYER_LUCK_THRESHOLD * 100) - (GameManager.player_level - 1) / 100.0)
 	return calculated_value
+
+func is_high_luck():
+	return current_luck_ratio >= get_high_luck_threshold()

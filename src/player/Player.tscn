@@ -1,10 +1,9 @@
-[gd_scene load_steps=69 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=70 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
 [ext_resource type="AudioStream" uid="uid://14a1e70swgdk" path="res://src/player/assets/sfx/VOICE LINES/OWW!.mp3" id="2_cpvt1"]
 [ext_resource type="Script" path="res://src/player/shakeable_camera.gd" id="3_cy2wl"]
-[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_e4bmr"]
 [ext_resource type="AudioStream" uid="uid://bubn8d8stors5" path="res://src/player/assets/sfx/RUNNING/Running Individual 1.mp3" id="3_hiqt7"]
 [ext_resource type="AudioStream" uid="uid://bkin5hht4n4iw" path="res://src/player/assets/sfx/VOICE LINES/URGH 1.mp3" id="3_lb5n1"]
 [ext_resource type="Texture2D" uid="uid://t7scpy3771o6" path="res://src/player/assets/blob_shadow.png" id="3_tgexf"]
@@ -46,6 +45,8 @@
 [ext_resource type="AudioStream" uid="uid://dxp1qdaew521c" path="res://src/player/assets/sfx/New Dash Sound (maybe highpass later) w verb.mp3" id="30_bfwyi"]
 [ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="31_uqkio"]
 [ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="32_vsild"]
+[ext_resource type="Script" path="res://src/components/health/health_component_player.gd" id="34_6waar"]
+[ext_resource type="PackedScene" uid="uid://b052m61k5ht8i" path="res://src/player/gun/vfx/HitText.tscn" id="35_uogvx"]
 [ext_resource type="Shader" path="res://src/player/assets/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
@@ -127,7 +128,10 @@ health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
 reroll_heal_value = 20.0
 
-[node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
+[node name="HealthComponent" type="Node3D" parent="."]
+script = ExtResource("34_6waar")
+show_damage_text = false
+text_effect = ExtResource("35_uogvx")
 
 [node name="LuckComponent" parent="." instance=ExtResource("57_0cid7")]
 

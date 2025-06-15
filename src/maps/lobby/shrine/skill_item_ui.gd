@@ -109,6 +109,13 @@ func learn_skill():
 	button.disabled = true
 	skill_tree_ui.refresh_all_items()
 
+	# A quick hack to make some skill give effect immediately
+	# Cheat Death
+	if skill_id_enum == SkillIdEnum.CHEAT_DEATH and not GameManager.player.cheat_death_triggered:
+		print("AAA")
+		GameManager.create_and_add_buff("Cheat Death", "cheat_death_buff", StatusEffect.PlayerStatEnum.NONE,
+			0, StatusEffect.ModifyType.FLAT, StatusEffect.INFINITE_DURATION, true, GameManager.player.cheat_death_icon)
+
 func _on_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
 	for skill in prerequisite_skills:

@@ -649,12 +649,6 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 
 func _on_died() -> void:
-	if check_if_has_status_effect_by_name("cheat_death_buff") and not cheat_death_triggered:
-		cheat_death_triggered = true
-		health_component.current_health = 1
-		health_component.has_died = false
-		remove_status_effect_by_name("cheat_death_buff")
-		return
 	state_chart.send_event("death")
 	SoundManager.play_sound(sfx_dead.pick_random())
 
@@ -883,6 +877,7 @@ func check_permanent_buffs():
 	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.CHEAT_DEATH):
 		GameManager.create_and_add_buff("Cheat Death", "cheat_death_buff",
 		StatusEffect.PlayerStatEnum.NONE, 0, StatusEffect.ModifyType.FLAT, StatusEffect.INFINITE_DURATION, true, cheat_death_icon)
+
 
 func apply_drunk_status(duration: float) -> void:
 	state_chart.send_event("add_status_drunk")

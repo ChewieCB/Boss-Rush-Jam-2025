@@ -16,6 +16,8 @@ const RESOLUTION_ARRAY = [
 
 const CHIP_COST_PER_LEVEL_UP = 500
 const BASE_PLAYER_LUCK_THRESHOLD = 0.95
+const PLOT_ARMOR_DAMAGE_ABSORB_PERC = 0.25 # Perc of damage taken by player will be absorbed by luck
+const PLOT_ARMOR_LUCK_DAMAGE_MULTIPLIER = 4.0 # Luck needed to absorb damage will multiplied by this
 
 var pause_ui: PauseUI
 var setting_ui: SettingUI
@@ -238,3 +240,15 @@ func create_and_add_buff(display_name: String, status_code: String, modified_sta
 	status_effect.show_value_on_ui = false
 	status_effect.status_icon = status_icon
 	player.add_status_effect(status_effect)
+
+
+# Boss telegraph time can be modified by difficulty or Poker Face skill
+func get_boss_telegraph_time_multiplier() -> float:
+	var mult = 1.0
+	# Poker Face skill 
+	if player_skill_dict.has(SkillItemUI.SkillIdEnum.POKER_FACE) and player.luck_component.is_high_luck():
+		mult += 0.1 * player_skill_dict[SkillItemUI.SkillIdEnum.POKER_FACE]
+	# If difficulty also modified boss telegraph time, add it here
+	#
+
+	return mult
