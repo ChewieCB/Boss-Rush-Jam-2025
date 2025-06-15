@@ -94,7 +94,7 @@ jobs:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
           CHANNEL: windows
           ITCH_GAME: boss-rush-jam-2025-testing
-          ITCH_USER: chewiecb
+          ITCH_USER: gnarled-hand
           PACKAGE: crapshoot-win.zip
           VERSION: ${{ steps.download-windows.outputs.version }}
   release_testing_linux:
@@ -114,7 +114,7 @@ jobs:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
           CHANNEL: linux
           ITCH_GAME: boss-rush-jam-2025-testing
-          ITCH_USER: chewiecb
+          ITCH_USER: gnarled-hand
           PACKAGE: crapshoot-linux.zip
           VERSION: ${{ steps.download-linux.outputs.version }}
   notify-discord:
@@ -141,5 +141,5 @@ jobs:
           description: "${{ steps.get-tagged-release.outputs.body }}"
           details: "__This is a pre-release build and may be unstable__"
           footer: ${{ needs.export_game.outputs.tag }}
-          text: <@&1356614688313708814> A new build is available at https://chewiecb.itch.io/boss-rush-jam-2025-testing
+          text: <@&1356614688313708814> A new build is available at https://gnarled-hand.itch.io/boss-rush-jam-2025-testing
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
