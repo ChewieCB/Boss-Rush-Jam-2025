@@ -809,7 +809,10 @@ func spin_barrels() -> void:
 		cash_in_luck()
 		current_gun.spin_all_barrels()
 		# Provide small health buff (?)
-		health_component.heal(reroll_heal_value)
+		var modified_reroll_heal_value = reroll_heal_value
+		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HIGH_ROLLER):
+			modified_reroll_heal_value += int(GameManager.HIGH_ROLLER_BONUS_HEAL_PER_REROLL_TIME) * GameManager.reroll_time
+		health_component.heal(modified_reroll_heal_value)
 		SoundManager.play_sound(sfx_purchase)
 
 	# Spin with IOU skill
@@ -826,6 +829,7 @@ func spin_barrels() -> void:
 				hp_cost = 5
 		if health_component.current_health > hp_cost:
 			cash_in_luck()
+			GameManager.reroll_time += 1
 			current_gun.spin_all_barrels()
 			health_component.damage(hp_cost)
 			SoundManager.play_sound(sfx_purchase)

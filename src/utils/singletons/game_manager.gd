@@ -18,6 +18,7 @@ const CHIP_COST_PER_LEVEL_UP = 500
 const BASE_PLAYER_LUCK_THRESHOLD = 0.95
 const PLOT_ARMOR_DAMAGE_ABSORB_PERC = 0.25 # Perc of damage taken by player will be absorbed by luck
 const PLOT_ARMOR_LUCK_DAMAGE_MULTIPLIER = 4.0 # Luck needed to absorb damage will multiplied by this
+const HIGH_ROLLER_BONUS_HEAL_PER_REROLL_TIME = 5
 
 var pause_ui: PauseUI
 var setting_ui: SettingUI
@@ -43,6 +44,7 @@ var is_free_reroll: bool = false:
 		is_free_reroll = value
 		if is_free_reroll:
 			free_rerolls.emit()
+var reroll_time = 0
 
 @export var player_currency: int = 0:
 	set(value):
@@ -172,6 +174,7 @@ func purchase_reroll() -> bool:
 			player_currency -= reroll_cost
 			# Increase the cost of re-rolling for this fight
 			reroll_cost = int(reroll_cost * reroll_cost_mult)
+			reroll_time += 1
 		reroll_cost_changed.emit(reroll_cost)
 		return true
 	return false
@@ -179,6 +182,7 @@ func purchase_reroll() -> bool:
 func reset_reroll_cost() -> void:
 	reroll_cost = initial_reroll_cost
 	reroll_cost_changed.emit(reroll_cost)
+	reroll_time = 0
 
 
 func show_boss_special_dialog(content: String, duration: float):
@@ -251,4 +255,19 @@ func get_boss_telegraph_time_multiplier() -> float:
 	# If difficulty also modified boss telegraph time, add it here
 	#
 
+	return mult
+
+func get_boss_chip_amount_drop_multiplier() -> float:
+	var mult = 1.0
+	# Blessed Chip skill 
+	if player_skill_dict.has(SkillItemUI.SkillIdEnum.BLESSED_CHIP):
+		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLESSED_CHIP]:
+			1:
+				mult -= 0.1
+			2:
+				mult -= 0.2
+			3:
+				mult -= 0.3
+			4:
+				mult -= 0.4
 	return mult

@@ -1,12 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://b3x1bn1jpkwjo"]
+[gd_scene load_steps=17 format=3 uid="uid://b3x1bn1jpkwjo"]
 
-[ext_resource type="Script" path="res://src/collectibles/poker_chip/poker_chip_projectile.gd" id="1_1s0ep"]
+[ext_resource type="Script" path="res://src/collectibles/poker_chip/poker_chip.gd" id="1_1s0ep"]
 [ext_resource type="Texture2D" uid="uid://bvw52w4qxdtyx" path="res://src/collectibles/poker_chip/assets/chip_white.png" id="2_1g755"]
 [ext_resource type="AudioStream" uid="uid://6n3s0ojha33v" path="res://src/collectibles/poker_chip/assets/sfx/PICKING UP CHIPS.mp3" id="2_td1fs"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_12jep"]
 [ext_resource type="Texture2D" uid="uid://dlmpay1afw5o8" path="res://src/collectibles/poker_chip/assets/chip_red.png" id="3_soabj"]
 [ext_resource type="Texture2D" uid="uid://bssyw0bap2iux" path="res://src/collectibles/poker_chip/assets/chip_blue.png" id="4_c5koj"]
 [ext_resource type="Texture2D" uid="uid://b4atouetg5pla" path="res://src/collectibles/poker_chip/assets/chip_green.png" id="5_nd3i0"]
+[ext_resource type="Texture2D" uid="uid://co2sgmxi41jsj" path="res://src/collectibles/poker_chip/assets/chip_gold.png" id="6_kxhky"]
 [ext_resource type="Texture2D" uid="uid://pgkke4lg1qx7" path="res://src/collectibles/poker_chip/assets/chip_black.png" id="6_pkt8q"]
 [ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="9_gmasi"]
 
@@ -32,14 +33,14 @@ emission = Color(1, 1, 1, 1)
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[node name="PokerChipProjectile" type="RigidBody3D"]
+[node name="PokerChip" type="RigidBody3D"]
 collision_layer = 16
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
 physics_material_override = SubResource("PhysicsMaterial_ipprj")
 script = ExtResource("1_1s0ep")
-sprite_array = Array[Texture2D]([ExtResource("2_1g755"), ExtResource("3_soabj"), ExtResource("4_c5koj"), ExtResource("5_nd3i0"), ExtResource("6_pkt8q")])
+sprite_array = Array[Texture2D]([ExtResource("2_1g755"), ExtResource("2_1g755"), ExtResource("3_soabj"), ExtResource("4_c5koj"), ExtResource("5_nd3i0"), ExtResource("6_kxhky"), ExtResource("6_pkt8q")])
 sfx_pickup = Array[AudioStream]([ExtResource("2_td1fs")])
 
 [node name="Sprite3D" type="Sprite3D" parent="."]

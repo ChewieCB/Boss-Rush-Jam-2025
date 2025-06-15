@@ -62,6 +62,7 @@ func reset():
 
 func check_skill_status():
 	self_modulate = Color.WHITE
+	level_label.self_modulate = Color.WHITE
 	button.disabled = false
 	for path in highlight_paths:
 		path.self_modulate = unlearnable_color
