@@ -10,9 +10,10 @@ extends BaseProjectile
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
+const CONTACT_DAMAGE = 1
+
 var sticked = false
 var explosion_damage = 0
-
 
 func _ready() -> void:
 	super ()
@@ -42,7 +43,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	damage = 1
+	damage = CONTACT_DAMAGE
 	explosion_damage = _damage
 	current_dir = dir
 	ricochet_count_left = ricochet_count
@@ -97,7 +98,8 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 func _on_explode_timer_timeout() -> void:
 	var inst = explosion_prefab.instantiate()
-	inst.init(explosion_damage)
+	var calculated_explosion_damage = calculate_bullet_damage()
+	inst.init(calculated_explosion_damage)
 	get_parent().add_child(inst)
 	inst.global_position = global_position
 

@@ -1,5 +1,6 @@
 class_name StatusEffect
 
+## Chance stuff are in decimal (0.5 = 50%)
 enum PlayerStatEnum {
 	NONE,
 	RUN_SPEED_MODIFIER,

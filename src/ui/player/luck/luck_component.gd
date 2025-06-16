@@ -64,9 +64,9 @@ func check_for_high_luck_buffs():
 			StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, increased_min_dmg, StatusEffect.ModifyType.FLAT)
 
 		# Lucky Shot: increased crit chance
-		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HOT_HAND):
+		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.LUCKY_SHOT):
 			var increased_crit = 0
-			match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.HOT_HAND]:
+			match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.LUCKY_SHOT]:
 				1:
 					increased_crit = 0.04
 				2:

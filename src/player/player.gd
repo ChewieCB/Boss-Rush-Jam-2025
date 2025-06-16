@@ -157,9 +157,9 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
 	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
 	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
-	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # 80% = 0.8
-	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 120% = 1.2
-	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0, # 50% = 0.5
+	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # In decimal, so 0.8 = 80%
+	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0, # In decimal, so 0.5 = 50%
 	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0,
 }
 var current_stats = base_stats.duplicate(true)
@@ -874,14 +874,15 @@ func add_iframe_on_dash():
 
 # Check buff from some non-high luck skills. Only do this once at scene start
 func check_permanent_buffs():
+	remove_status_effect_by_name("lucky_crit_buff")
+	remove_status_effect_by_name("cheat_death_buff")
 	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.LUCKY_CRIT):
 		GameManager.create_and_add_buff("Lucky Crit", "lucky_crit_buff",
 		StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER, 0.5, StatusEffect.ModifyType.FLAT)
 	# Only show this to let player know if they still have Cheat Death 
-	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.CHEAT_DEATH):
+	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.CHEAT_DEATH) and not cheat_death_triggered:
 		GameManager.create_and_add_buff("Cheat Death", "cheat_death_buff",
 		StatusEffect.PlayerStatEnum.NONE, 0, StatusEffect.ModifyType.FLAT, StatusEffect.INFINITE_DURATION, true, cheat_death_icon)
-
 
 func apply_drunk_status(duration: float) -> void:
 	state_chart.send_event("add_status_drunk")

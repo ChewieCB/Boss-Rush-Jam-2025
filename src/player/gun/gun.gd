@@ -179,8 +179,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		var bullet_start_pos = bullet_spawn_marker.global_position
 
 		for j in range(modified_projectile_amount):
-			for barrel in installed_barrels:
-				barrel.get_active_effect().on_projectile_spawn()
 			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
 			var spread_direction = GunUtils.get_spread_direction(aim_direction, modified_spread_angle)
 			if modified_projectile_prefab:
@@ -232,6 +230,8 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 	bullet_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
 	bullet_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
 	bullet_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_projectile_spawn(bullet_inst)
 	bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
 func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
