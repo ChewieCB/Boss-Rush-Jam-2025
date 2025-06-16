@@ -1,5 +1,6 @@
 extends Node3D
 class_name BaseProjectile
+# ^ It's a silly name. Should be BaseAttack or BaseBullet instead since both projectile and hitscan inherit from this
 
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
@@ -13,7 +14,10 @@ signal destroyed
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
 
+## Base damage / initial damage
 var damage = 1
+## In decimal
+var crit_chance = 0
 var ricochet_count_left = 0
 var owner_gun: Gun
 var is_ricochet_shot = false
@@ -39,6 +43,7 @@ var travelled_distance = 0
 func _ready() -> void:
 	spawn_pos = global_position
 	life_time = 0
+	crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
 
 func _process(delta: float) -> void:
 	life_time += delta
@@ -85,6 +90,16 @@ func create_bullet_decal(pos: Vector3, normal: Vector3):
 	# Rotate the decal a bit for variety
 	decal_inst.rotate_object_local(Vector3(0, 1, 0), randf_range(0.0, 360.0))
 
+func calculate_bullet_damage():
+	var rand_damage_mod = get_damage_variance_modifier(damage)
+	var calculated_damage = damage + rand_damage_mod
+	# Crit
+	var roll = randi_range(1, 100)
+	var roll_target = int(crit_chance * 100)
+	if roll <= roll_target:
+		calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
+		owner_gun.crit_damage(calculated_damage)
+	return calculated_damage
 
 func ricochet():
 	return

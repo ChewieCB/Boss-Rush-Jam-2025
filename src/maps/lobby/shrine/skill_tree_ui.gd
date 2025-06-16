@@ -79,6 +79,8 @@ func reset_skill_points():
 	GameManager.player_skill_points += allocated_points
 	GameManager.player_skill_dict = {}
 	refresh_all_items()
+	GameManager.player.check_permanent_buffs()
+	GameManager.player.luck_component.check_for_high_luck_buffs()
 
 	
 func get_first_item_for_focus():

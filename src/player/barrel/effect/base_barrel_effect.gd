@@ -86,7 +86,7 @@ func on_reload_interrupted():
 	return
 
 ## When bullet spawned / actual shooting happened
-func on_projectile_spawn():
+func on_projectile_spawn(_projectile: BaseProjectile):
 	return
 
 func on_projectile_travel_tick():
