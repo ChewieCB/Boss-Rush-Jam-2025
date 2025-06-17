@@ -1,0 +1,107 @@
+[gd_scene load_steps=10 format=3 uid="uid://cirwjooirf3y0"]
+
+[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_mo1qw"]
+[ext_resource type="Texture2D" uid="uid://ducd2yl2ijqin" path="res://src/bosses/tutorial/minions/chipling_temp.png" id="2_3sgky"]
+[ext_resource type="Script" path="res://src/bosses/tutorial/minions/chipling.gd" id="2_73vok"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_uvoqr"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_5dxlb"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_rs4ag"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cbvoj"]
+height = 1.4
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_odydg"]
+height = 1.4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ed3lh"]
+radius = 1.0
+
+[node name="Chipling" instance=ExtResource("1_mo1qw")]
+collision_mask = 9
+script = ExtResource("2_73vok")
+spark_scene = null
+DESIRED_DISTANCE = 20.0
+desired_distance = null
+wave_amplitude = 7.0
+wave_frequency = 5.0
+time_elapsed = 0.0
+idle_radius = 1.5
+angle_speed = 1.0
+orbit_angle = 0.0
+orbit_radius = 40.0
+max_wander_distance = 20.0
+wander_delay_min = 0.5
+wander_delay_max = 0.9
+wander_radius = 30.0
+wander_timeout = 1.2
+chip_scene = null
+barrel_pickup_scene = null
+sfx_slowmo = null
+attack_recovery_time = 0.5
+projectile_scene = null
+delay_per_projectile = 0.6
+MAX_SPEED = 3.0
+
+[node name="Sprite3D" parent="." index="0"]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0.00313074, 0.781227, 0)
+texture = ExtResource("2_3sgky")
+
+[node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.699379, 0)
+shape = SubResource("CapsuleShape3D_cbvoj")
+
+[node name="DebugMesh" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.699, 0)
+visible = true
+mesh = SubResource("CapsuleMesh_odydg")
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_ed3lh")
+
+[node name="HealthComponent" parent="." index="4"]
+max_health = 100.0
+
+[node name="NavigationComponent" parent="." index="5"]
+follow_target = false
+enabled = false
+
+[node name="Phase" parent="StateChart/Root" index="4"]
+initial_state = NodePath("Passive")
+
+[node name="Passive" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("3_uvoqr")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Passive" index="0"]
+script = ExtResource("4_5dxlb")
+
+[node name="toWander" type="Node" parent="StateChart/Root/Phase/Passive/Idle" index="0"]
+script = ExtResource("5_rs4ag")
+to = NodePath("../../Wander")
+event = &"start_wander"
+delay_in_seconds = "0.0"
+
+[node name="Wander" type="Node" parent="StateChart/Root/Phase/Passive" index="1"]
+script = ExtResource("4_5dxlb")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Passive/Wander" index="0"]
+script = ExtResource("5_rs4ag")
+to = NodePath("../../Idle")
+event = &"end_wander"
+delay_in_seconds = "0.0"
+
+[node name="NavigationAgent3D" parent="." index="8"]
+debug_enabled = true
+
+[node name="IdleTimer" type="Timer" parent="." index="20"]
+one_shot = true
+
+[node name="WanderTimer" type="Timer" parent="." index="21"]
+one_shot = true
+
+[connection signal="state_entered" from="StateChart/Root/Phase/Passive/Idle" to="." method="_on_passive_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Passive/Wander" to="." method="_on_passive_wander_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Passive/Wander" to="." method="_on_passive_wander_state_physics_processing"]
+[connection signal="timeout" from="IdleTimer" to="." method="_on_wander_idle_timer_timeout"]
+[connection signal="timeout" from="WanderTimer" to="." method="_on_wander_timer_timeout"]

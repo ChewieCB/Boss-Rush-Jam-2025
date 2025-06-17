@@ -27,3 +27,8 @@ func _on_elevator_door_trigger_volume_body_entered(body: Node3D) -> void:
 func _on_elevator_door_trigger_volume_body_exited(body: Node3D) -> void:
 	if body is Player:
 		exit_doors.close()
+
+
+func _on_debug_boss_trigger_body_entered(body: Node3D) -> void:
+	if body is Player:
+		pass
