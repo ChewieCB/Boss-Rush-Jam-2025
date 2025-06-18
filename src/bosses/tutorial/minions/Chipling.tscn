@@ -16,7 +16,7 @@ height = 1.4
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ed3lh"]
 radius = 1.0
 
-[node name="Chipling" instance=ExtResource("1_mo1qw")]
+[node name="Chipling" node_paths=PackedStringArray("wander_waypoints") instance=ExtResource("1_mo1qw")]
 collision_mask = 9
 script = ExtResource("2_73vok")
 spark_scene = null
@@ -29,12 +29,16 @@ idle_radius = 1.5
 angle_speed = 1.0
 orbit_angle = 0.0
 orbit_radius = 40.0
+wander_waypoints = []
 max_wander_distance = 20.0
-wander_delay_min = 0.5
-wander_delay_max = 0.9
+max_waypoint_jitter_radius = 4.0
+wander_delay_min = 0.3
+wander_delay_max = 0.7
 wander_radius = 30.0
 wander_timeout = 1.2
-chip_scene = null
+chip_spawn_chance = 0.0
+chip_spawn_dps_threshold = 1.0
+chip_spawn_mult_cap = 1
 barrel_pickup_scene = null
 sfx_slowmo = null
 attack_recovery_time = 0.5

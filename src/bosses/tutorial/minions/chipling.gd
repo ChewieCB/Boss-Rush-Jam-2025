@@ -17,7 +17,9 @@ var center_pos: Vector3
 @export var orbit_angle: float = 0.0 # track this over time
 @export var orbit_radius: float = 40.0
 @export_subgroup("Wandering Movement")
+@export var wander_waypoints: Array[Marker3D] = []
 @export var max_wander_distance: float = 20.0
+@export var max_waypoint_jitter_radius: float = 4.0
 @export var wander_delay_min: float = 0.5
 @export var wander_delay_max: float = 2.3
 @export var wander_radius: float = 30.0
@@ -58,20 +60,21 @@ func _on_passive_wander_state_entered() -> void:
 	navigation_component.follow_target = false
 	navigation_component.enabled = true
 	# Pick a random location to wander to
-	var wander_point_chosen: bool = false
-	var new_wander_location: Vector3 = NavigationServer3D.map_get_random_point(
-			nav_map_rid, 1, true
-		)
-	# TODO - limit chipling wander distance
-	#while not wander_point_chosen:
-		#new_wander_location = NavigationServer3D.map_get_random_point(
-			#nav_map_rid, 1, true
-		#)
-		#if new_wander_location.distance_to(self.global_position) <= max_wander_distance:
-			#wander_point_chosen = true
-	
-	draw_debug_sphere(new_wander_location, 0.5, Color.PURPLE)
-	navigation_component.set_nav_target_position(new_wander_location)
+	# TODO - replace this with a set of manual waypoints, 
+	# this way we can region lock them to areas of the map
+	var nearby_wander_points = wander_waypoints.filter(
+		func(point):
+			return point.global_position.distance_to(self.global_position) <= max_wander_distance
+	)
+	var new_wander_point: Vector3 = nearby_wander_points.pick_random().global_position
+	# Jitter that position a bit to make it less uniform
+	var offset_vector := Vector3.FORWARD * randf_range(0, max_waypoint_jitter_radius)
+	var jittered_point: Vector3 = new_wander_point + offset_vector.rotated(
+		Vector3.UP, randf_range(0, 2 * PI)
+	)
+	draw_debug_sphere(new_wander_point, 0.5, Color.PURPLE)
+	draw_debug_sphere(jittered_point, 0.5, Color.MAGENTA)
+	navigation_component.set_nav_target_position(jittered_point)
 	wander_idle_timer.start(wander_timeout)
 
 
