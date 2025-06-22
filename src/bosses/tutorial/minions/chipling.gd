@@ -4,7 +4,7 @@ class_name Chipling
 @export var spark_scene: PackedScene
 
 @export_group("Spawning")
-#@export var spawn_points: Array[Marker3D]
+@export var spawn_group: int = 1
 @export var respawn_time: float = 2.0
 #@onready var spawn_points: Array[Node] = get_tree().get_nodes_in_group("boss_chipling_spawn_marker")
 @export_group("Movement")

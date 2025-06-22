@@ -151,6 +151,7 @@ shadow_mesh = SubResource("ArrayMesh_kam6c")
 collision_mask = 9
 script = ExtResource("2_73vok")
 spark_scene = null
+spawn_group = 1
 respawn_time = 2.0
 DESIRED_DISTANCE = 20.0
 desired_distance = null
