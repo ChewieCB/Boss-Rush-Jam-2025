@@ -1,7 +1,106 @@
-[gd_scene load_steps=3 format=3 uid="uid://8pcmjsth72ha"]
+[gd_scene load_steps=12 format=3 uid="uid://8pcmjsth72ha"]
 
 [ext_resource type="Script" path="res://src/maps/ending_cutscene/ending_cutscene.gd" id="1_h4cln"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="2_jnc5l"]
+[ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="3_51l04"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="4_52ohj"]
+[ext_resource type="Texture2D" uid="uid://ccn08me1il1m4" path="res://src/ui/main_menu/bg2.png" id="5_37g7u"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="6_nl6fj"]
+[ext_resource type="Texture2D" uid="uid://dj0uvxjv6d486" path="res://assets/sprite/gnarled_hand_logo.png" id="6_tio8p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8m5q7"]
+shader = ExtResource("4_52ohj")
+shader_parameter/scroll_speed = 0.02
+shader_parameter/angle_degrees = 90.0
+shader_parameter/repeat_x = 1.0
+shader_parameter/repeat_y = 3.5
+shader_parameter/row_offset = 0.0
+shader_parameter/texture_to_scroll = ExtResource("5_37g7u")
+
+[sub_resource type="Animation" id="Animation_jolwb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CreditScroll/Scroll:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CreditScroll/Scroll:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CreditScroll/Scroll2:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 736)]
+}
+
+[sub_resource type="Animation" id="Animation_omm7k"]
+resource_name = "run_credit"
+length = 12.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CreditScroll/Scroll:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(2.03333, 12),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -2752)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CreditScroll/Scroll:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CreditScroll/Scroll2:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 9.06667, 12),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 736), Vector2(0, 736), Vector2(0, 32)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8kahb"]
+_data = {
+"RESET": SubResource("Animation_jolwb"),
+"run_credit": SubResource("Animation_omm7k")
+}
 
 [node name="EndingCutscene" type="Control"]
 layout_mode = 3
@@ -22,6 +121,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="Label" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -37,25 +137,413 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 40
 text = "Endgame cutscene play here"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="CreditScroll" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Static" type="Control" parent="CreditScroll"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftDeco" type="TextureRect" parent="CreditScroll/Static"]
+material = SubResource("ShaderMaterial_8m5q7")
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = -392.0
+offset_top = -88.0
+offset_right = 64.0
+offset_bottom = 131.0
+grow_vertical = 2
+texture = ExtResource("6_nl6fj")
+
+[node name="RightDeco" type="TextureRect" parent="CreditScroll/Static"]
+material = SubResource("ShaderMaterial_8m5q7")
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 1856.0
+offset_top = -64.0
+offset_right = 2312.0
+offset_bottom = 155.0
+grow_vertical = 2
+texture = ExtResource("6_nl6fj")
+
+[node name="Scroll" type="Control" parent="CreditScroll"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 1720.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameLogo" type="TextureRect" parent="CreditScroll/Scroll"]
+modulate = Color(0.366595, 0.366595, 0.366595, 1)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -153.0
+offset_top = 424.0
+offset_right = 153.0
+offset_bottom = 730.0
+grow_horizontal = 2
+pivot_offset = Vector2(155.142, 153.952)
+texture = ExtResource("3_51l04")
+expand_mode = 1
+
+[node name="GameTitle" type="RichTextLabel" parent="CreditScroll/Scroll"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -352.0
+offset_top = 464.0
+offset_right = 352.0
+offset_bottom = 826.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/normal_font_size = 150
+theme_override_font_sizes/bold_font_size = 150
+bbcode_enabled = true
+text = "[center]Crapshoot[/center]"
+fit_content = true
+
+[node name="AGameBy" type="Label" parent="CreditScroll/Scroll"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -248.0
+offset_right = 320.0
+offset_bottom = -128.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 45
+text = "a game by"
+horizontal_alignment = 1
+
+[node name="StudioLogo" type="TextureRect" parent="CreditScroll/Scroll"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -152.0
+offset_right = 250.0
+offset_bottom = 348.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_tio8p")
+
+[node name="RoleText" type="VBoxContainer" parent="CreditScroll/Scroll"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -432.0
+offset_top = 392.0
+offset_right = 432.0
+offset_bottom = 1166.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="CreditScroll/Scroll/RoleText"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer6"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.901961, 0.776471, 0, 1)
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Art[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditScroll/Scroll/RoleText/HBoxContainer6"]
+layout_mode = 2
+
+[node name="Name3" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer6/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 42
+text = "Grace Althea"
+fit_content = true
+scroll_active = false
+
+[node name="Name2" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer6/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 42
+text = "Spencer Krigbaum"
+fit_content = true
+scroll_active = false
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CreditScroll/Scroll/RoleText"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer2"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.901961, 0.776471, 0, 1)
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Concept Art[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditScroll/Scroll/RoleText/HBoxContainer2"]
+layout_mode = 2
+
+[node name="Name" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 42
+text = "Akashdeep Hehar"
+fit_content = true
+scroll_active = false
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CreditScroll/Scroll/RoleText"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer3"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.901961, 0.776471, 0, 1)
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Music[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditScroll/Scroll/RoleText/HBoxContainer3"]
+layout_mode = 2
+
+[node name="Name" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer3/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 42
+text = "Lachlan James"
+fit_content = true
+scroll_active = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CreditScroll/Scroll/RoleText"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.901961, 0.776471, 0, 1)
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Programming"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditScroll/Scroll/RoleText/HBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 40
+text = "Jack McCaffrey"
+fit_content = true
+scroll_active = false
+
+[node name="Name2" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 40
+text = "Lam Nguyen"
+fit_content = true
+scroll_active = false
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="CreditScroll/Scroll/RoleText"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer4"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.901961, 0.776471, 0, 1)
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]Sound Design[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditScroll/Scroll/RoleText/HBoxContainer4"]
+layout_mode = 2
+
+[node name="Name" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer4/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 42
+text = "Kieran Morrison"
+fit_content = true
+scroll_active = false
+
+[node name="Name2" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer4/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 42
+text = "Joshua Stead"
+fit_content = true
+scroll_active = false
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="CreditScroll/Scroll/RoleText"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Role" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer5"]
+custom_minimum_size = Vector2(420, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0.901961, 0.776471, 0, 1)
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "[right]3rd Party Assets[/right]"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditScroll/Scroll/RoleText/HBoxContainer5"]
+layout_mode = 2
+
+[node name="Name" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer5/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 42
+text = "Bell by Quaternius"
+fit_content = true
+scroll_active = false
+
+[node name="Name2" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer5/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 42
+text = "Bomb by Poly by Google [CC-BY] via Poly Pizza"
+fit_content = true
+scroll_active = false
+
+[node name="Name3" type="RichTextLabel" parent="CreditScroll/Scroll/RoleText/HBoxContainer5/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 42
+text = "Kenney.nl"
+fit_content = true
+scroll_active = false
+
+[node name="Scroll2" type="Control" parent="CreditScroll"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 736.0
+offset_bottom = 736.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ThanksPlaying" type="Label" parent="CreditScroll/Scroll2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -60.0
+offset_right = 320.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 60
+text = "Thanks for playing"
+horizontal_alignment = 1
+
+[node name="SkipPrompt" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -152.0
+offset_left = -169.0
 offset_top = -72.0
 offset_right = -29.0
 offset_bottom = -24.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="DeviceInputPrompt" parent="HBoxContainer" instance=ExtResource("2_jnc5l")]
+[node name="DeviceInputPrompt" parent="SkipPrompt" instance=ExtResource("2_jnc5l")]
 layout_mode = 2
 assigned_action = "interact"
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="SkipPrompt"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "to skip"
+text = "  to skip"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8kahb")
+}
+autoplay = "run_credit"
+speed_scale = 0.6

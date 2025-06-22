@@ -239,7 +239,6 @@ offset_right = 248.0
 is_at_main_menu = true
 
 [node name="CreditsUI" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -563,6 +562,7 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [node name="StoryUI" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
