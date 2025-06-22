@@ -1,4 +1,4 @@
-[gd_scene load_steps=750 format=4 uid="uid://bi8ar5jx08vp7"]
+[gd_scene load_steps=751 format=4 uid="uid://bi8ar5jx08vp7"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_hm1ph"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="2_1es71"]
@@ -20,6 +20,7 @@
 [ext_resource type="Material" uid="uid://b6kha01qoq52c" path="res://assets/textures/walls/rusty_metal_moasicd.tres" id="9_2lh7a"]
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="10_o2ae0"]
 [ext_resource type="Material" uid="uid://bnwpgixup0n8o" path="res://assets/textures/temp_void.tres" id="11_12y2l"]
+[ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="11_wdoig"]
 [ext_resource type="Material" uid="uid://dtl8ybjw5mgl5" path="res://assets/textures/posters/surveillance_poster.tres" id="13_cs26s"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="13_qb6rk"]
 [ext_resource type="Material" uid="uid://ro5lsxexjte4" path="res://assets/textures/walls/wood_trim_1.tres" id="14_m1ccp"]
@@ -2891,6 +2892,7 @@ collision_mask = 79
 script = ExtResource("3_41qek")
 interact_text = Array[String](["You ain't gonna get very far with that pea-shooter!", "I'll sell you some firepower if you clear up some of these bloody chiplings!"])
 exit_text = Array[String](["Good luck!"])
+hurt_text = Array[String](["Ow!"])
 purchase_text = Array[String](["Pleasure doing business with ya."])
 too_expensive_text = Array[String](["This aint a charity!", "Clear up those damn chiplings and scrounge together some chips!"])
 
@@ -2931,7 +2933,19 @@ visible = false
 shop_title = "Chipling Processing"
 current_inventory = Array[ExtResource("7_ptpn0")]([ExtResource("8_ta3hv")])
 
-[node name="FuncGodotMap" parent="." index="9"]
+[node name="WorkshopNPC" parent="." index="9" instance=ExtResource("11_wdoig")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.9, -5, -3)
+has_shop = false
+interact_text = Array[String](["Nasty burn you've got there, feed some chips into that gun of yours and give 'er a spin. Lady luck will heal you right up.", "Better spin that thing like your life depends on it kid — 'cause it does."])
+exit_text = Array[String](["See ya!"])
+hurt_text = Array[String](["Ow!"])
+purchase_text = Array[String]([" "])
+too_expensive_text = Array[String]([" "])
+
+[node name="Label3D" parent="WorkshopNPC" index="2"]
+font_size = 52
+
+[node name="FuncGodotMap" parent="." index="10"]
 local_map_file = "res://src/maps/tutorial/tutorial.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]
@@ -5141,7 +5155,7 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -10, -2.
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -10, -5.0625, -45.625)
 
 [node name="entity_43_Chandellier1" parent="FuncGodotMap" index="28" instance=ExtResource("28_c1um6")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -26, -1.75, -13)
+transform = Transform3D(-0.3, 0, -4.52987e-08, 0, 0.3, 0, 4.52987e-08, 0, -0.3, -26, -1.75, -13)
 
 [node name="entity_44_ElevatorDoors" parent="FuncGodotMap" index="29" instance=ExtResource("13_qb6rk")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -36, -2, 7.75)
@@ -5902,18 +5916,18 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 5.
 [node name="entity_143_SlidingDoor" parent="FuncGodotMap" index="102" instance=ExtResource("35_o3hah")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -4.25, 0, 1)
 
-[node name="DPSTrigger" parent="." index="10" node_paths=PackedStringArray("connected_object") instance=ExtResource("35_xalqe")]
+[node name="DPSTrigger" parent="." index="11" node_paths=PackedStringArray("connected_object") instance=ExtResource("35_xalqe")]
 target_dps_count = 70.0
 connected_object = NodePath("../FuncGodotMap/entity_44_ElevatorDoors")
 
-[node name="BarrelEffectTrigger" parent="." index="11" node_paths=PackedStringArray("connected_object") instance=ExtResource("36_dxxq2")]
+[node name="BarrelEffectTrigger" parent="." index="12" node_paths=PackedStringArray("connected_object") instance=ExtResource("36_dxxq2")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -58.0684, -3, -13.9473)
 connected_object = NodePath("../FuncGodotMap/entity_46_SlidingDoor")
 
 [node name="CollisionShape3D" parent="BarrelEffectTrigger" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.501022, 1.65, 0)
 
-[node name="DEBUGBossTrigger" type="Area3D" parent="." index="12"]
+[node name="DEBUGBossTrigger" type="Area3D" parent="." index="13"]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -36.282, 0, 3.14908)
 collision_layer = 32
 collision_mask = 2
@@ -5921,7 +5935,7 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DEBUGBossTrigger" index="0"]
 shape = SubResource("BoxShape3D_pp7jc")
 
-[node name="TutorialInfoTrigger1" parent="." index="13" instance=ExtResource("41_t1wx2")]
+[node name="TutorialInfoTrigger1" parent="." index="14" instance=ExtResource("41_t1wx2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 collision_layer = 32
 collision_mask = 2
@@ -5933,7 +5947,7 @@ close_trigger_actions = Array[String](["move_left", "move_right", "move_up", "mo
 [node name="CollisionShape3D" parent="TutorialInfoTrigger1" index="0"]
 shape = SubResource("BoxShape3D_s0j8a")
 
-[node name="TutorialInfoTrigger2" parent="." index="14" instance=ExtResource("41_t1wx2")]
+[node name="TutorialInfoTrigger2" parent="." index="15" instance=ExtResource("41_t1wx2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 8.5)
 collision_layer = 32
 collision_mask = 2
@@ -5944,7 +5958,7 @@ close_trigger_actions = Array[String](["jump"])
 [node name="CollisionShape3D" parent="TutorialInfoTrigger2" index="0"]
 shape = SubResource("BoxShape3D_s0j8a")
 
-[node name="TutorialInfoTrigger4" parent="." index="15" instance=ExtResource("41_t1wx2")]
+[node name="TutorialInfoTrigger4" parent="." index="16" instance=ExtResource("41_t1wx2")]
 transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, -0.614231, 2, 16.406)
 collision_layer = 32
 collision_mask = 2
@@ -5955,7 +5969,7 @@ close_trigger_actions = Array[String](["crouch"])
 [node name="CollisionShape3D" parent="TutorialInfoTrigger4" index="0"]
 shape = SubResource("BoxShape3D_s0j8a")
 
-[node name="TutorialInfoTrigger3" parent="." index="16" instance=ExtResource("41_t1wx2")]
+[node name="TutorialInfoTrigger3" parent="." index="17" instance=ExtResource("41_t1wx2")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -9.20921, 2, 21.7191)
 collision_layer = 32
 collision_mask = 2
@@ -5966,7 +5980,7 @@ close_trigger_actions = Array[String](["dash"])
 [node name="CollisionShape3D" parent="TutorialInfoTrigger3" index="0"]
 shape = SubResource("BoxShape3D_s0j8a")
 
-[node name="TutorialInfoTrigger5" parent="." index="17" instance=ExtResource("41_t1wx2")]
+[node name="TutorialInfoTrigger5" parent="." index="18" instance=ExtResource("41_t1wx2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.03, 2, 29.4973)
 collision_layer = 32
 collision_mask = 2
@@ -5977,13 +5991,13 @@ close_trigger_actions = Array[String](["shoot", "spin_reload"])
 [node name="CollisionShape3D" parent="TutorialInfoTrigger5" index="0"]
 shape = SubResource("BoxShape3D_s0j8a")
 
-[node name="SmokeParticles" parent="." index="18" instance=ExtResource("42_g2irt")]
+[node name="SmokeParticles" parent="." index="19" instance=ExtResource("42_g2irt")]
 transform = Transform3D(0.707107, -4.37114e-08, -0.707107, 2.26267e-08, -1, 8.44439e-08, -0.707107, -7.57103e-08, -0.707107, -14.6163, 1.90131, 24.0872)
 amount = 512
 lifetime = 4.0
 speed_scale = 2.4
 
-[node name="SmokeHurtArea" type="Area3D" parent="." index="19"]
+[node name="SmokeHurtArea" type="Area3D" parent="." index="20"]
 transform = Transform3D(-0.709571, 0, 0.704634, 0, 1, 0, -0.704634, 0, -0.709571, -13.0475, 0, 25.4599)
 collision_mask = 2
 script = ExtResource("43_jfqjj")
@@ -6011,6 +6025,7 @@ shape = SubResource("BoxShape3D_fc8gm")
 [connection signal="body_entered" from="TutorialInfoTrigger5" to="TutorialInfoTrigger5" method="_on_body_entered"]
 [connection signal="body_entered" from="SmokeHurtArea" to="SmokeHurtArea" method="_on_body_entered"]
 
+[editable path="WorkshopNPC"]
 [editable path="BarrelEffectTrigger"]
 [editable path="TutorialInfoTrigger1"]
 [editable path="TutorialInfoTrigger2"]

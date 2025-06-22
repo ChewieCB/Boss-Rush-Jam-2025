@@ -6,6 +6,7 @@ class_name Vendor
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var interact_area: Area3D = $InteractArea
 
+@export var has_shop: bool = true
 @export var interact_text: Array[String]
 @export var exit_text: Array[String]
 @export var hurt_text: Array[String]
@@ -21,10 +22,11 @@ func _ready() -> void:
 
 
 func interact() -> void:
-	shop_ui.toggle()
-	GameManager.player.input_dir = Vector2.ZERO
-	GameManager.player.vel_horizontal = Vector2.ZERO
-	GameManager.player.velocity = Vector3.ZERO
+	if has_shop:
+		shop_ui.toggle()
+		GameManager.player.input_dir = Vector2.ZERO
+		GameManager.player.vel_horizontal = Vector2.ZERO
+		GameManager.player.velocity = Vector3.ZERO
 
 
 func show_dialogue(dialogue: String) -> void:
@@ -73,6 +75,6 @@ func _on_body_entered(body: Node3D) -> void:
 
 func _on_body_exited(body: Node3D) -> void:
 	if body is Player:
-		show_dialogue(exit_text.pick_random())
+		show_dialogue(exit_text.pick_random()) 
 		#show_dialogue("Good luck!")
 		shop_ui.close()
