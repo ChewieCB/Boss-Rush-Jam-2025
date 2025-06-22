@@ -1,13 +1,14 @@
 extends Control
 class_name InfoBox
 
-
+@onready var panel_container = $PanelContainer
 @onready var content_container = $PanelContainer/Background/NinePatchRect/VBoxContainer
-@onready var header_label = $PanelContainer/Background/NinePatchRect/VBoxContainer/WinLabelHeader
-@onready var subheader_label = $PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer2/WinLabelSubHeader
-@onready var separator = $PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer/HSeparator
+@onready var header_label = $PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/WinLabelHeader
+@onready var subheader_label = $PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer2/WinLabelSubHeader
+@onready var separator = $PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer/HSeparator
 
 @export var max_resize_steps: int = 40
+@export var show_header: bool = true
 
 
 func text_no_resize(header_text: String, subheader_text: String) -> void:
@@ -36,9 +37,14 @@ func _resize_font(label: RichTextLabel) -> void:
 
 
 func show_text(header_text: String, subheader_text: String) -> void:
+	if not show_header:
+		header_label.visible = false
+		separator.visible = false
 	text_no_resize(header_text, subheader_text)
-	_resize_font(header_label)
-	_resize_font(subheader_label)
+	var lines = subheader_label.get_line_count()
+	panel_container.size.y = panel_container.get_minimum_size().y + ((48 + 16) * lines)
+	#_resize_font(header_label)
+	#_resize_font(subheader_label)
 
 
 func lose(hint_text: String = "") -> void:

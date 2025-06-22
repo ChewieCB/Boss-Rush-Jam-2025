@@ -2,6 +2,7 @@ extends Node3D
 class_name SlidingDoor
 
 @export var is_open: bool = false
+@export var is_autodoor: bool = true
 @export var TEMP_sfx_open: AudioStream
 @export var TEMP_sfx_close: AudioStream
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
@@ -27,10 +28,12 @@ func close() -> void:
 
 
 func _on_door_trigger_area_body_entered(body: Node3D) -> void:
-	if body is Player:
-		open()
+	if is_autodoor:
+		if body is Player:
+			open()
 
 
 func _on_door_trigger_area_body_exited(body: Node3D) -> void:
-	if body is Player:
-		close()
+	if is_autodoor:
+		if body is Player:
+			close()
