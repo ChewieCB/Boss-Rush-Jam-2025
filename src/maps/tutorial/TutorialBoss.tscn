@@ -1,4 +1,4 @@
-[gd_scene load_steps=697 format=4 uid="uid://bi8ar5jx08vp7"]
+[gd_scene load_steps=700 format=4 uid="uid://bi8ar5jx08vp7"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_hm1ph"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="2_1es71"]
@@ -7,6 +7,7 @@
 [ext_resource type="Material" uid="uid://cb5sx56lvbk2m" path="res://assets/textures/placeholder/texture_light_01.tres" id="3_i8sl5"]
 [ext_resource type="Material" uid="uid://b0ctqc57ph8u7" path="res://assets/textures/walls/grunge-concrete.tres" id="3_ja00o"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="4_5tofl"]
+[ext_resource type="PackedScene" uid="uid://dfpynfqwpew5x" path="res://src/ui/common/info_text/InfoBoxUI.tscn" id="4_e7ode"]
 [ext_resource type="Material" uid="uid://jnnisx0gc2xt" path="res://assets/textures/doors/elevator_door_processed.tres" id="4_ifwy3"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="5_nedgi"]
 [ext_resource type="Material" uid="uid://bt8sgbg77a1nw" path="res://assets/textures/placeholder/texture_green_green_green_10.tres" id="5_yh3hi"]
@@ -39,6 +40,7 @@
 [ext_resource type="PackedScene" uid="uid://b4e7pbfet0kfb" path="res://src/maps/tutorial/triggers/BarrelEffectTrigger.tscn" id="36_dxxq2"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_position_marker.gd" id="36_ekmdp"]
 [ext_resource type="PackedScene" uid="uid://cirwjooirf3y0" path="res://src/bosses/tutorial/minions/Chipling.tscn" id="38_lied7"]
+[ext_resource type="PackedScene" uid="uid://t2n4jn1pgkyt" path="res://src/maps/tutorial/triggers/TutorialInfoTrigger.tscn" id="41_t1wx2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ihjg0"]
 resource_local_to_scene = true
@@ -2646,6 +2648,9 @@ _surfaces = [{
 [sub_resource type="BoxShape3D" id="BoxShape3D_pp7jc"]
 size = Vector3(10, 10, 10)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_s0j8a"]
+size = Vector3(6, 6, 6)
+
 [node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_hm1ph")]
 script = ExtResource("2_t1yvw")
 boss_doors = NodePath("FuncGodotMap/group_672_Elevator/entity_42_ElevatorDoors")
@@ -2653,6 +2658,7 @@ exit_doors = NodePath("FuncGodotMap/entity_45_ElevatorDoors")
 chipling_prefab = ExtResource("38_lied7")
 chiplings_to_spawn_1 = 4
 chiplings_to_spawn_2 = 8
+info_ui_prefab = ExtResource("4_e7ode")
 nav_parent = NodePath("FuncGodotMap/entity_50_floor_walkable_1a")
 floor_parent = NodePath("FuncGodotMap/entity_50_floor_walkable_1a")
 floor_mesh = NodePath("FuncGodotMap/entity_50_floor_walkable_1a/entity_50_mesh_instance")
@@ -2690,6 +2696,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 0, 29.7)
 collision_layer = 96
 collision_mask = 79
 script = ExtResource("3_41qek")
+interact_text = Array[String](["You ain't gonna get very far with that pea-shooter!", "I'll sell you some firepower if you clear up some of these bloody chiplings!"])
+exit_text = Array[String](["Good luck!"])
+purchase_text = Array[String](["Pleasure doing business with ya."])
+too_expensive_text = Array[String](["This aint a charity!", "Clear up those damn chiplings and scrounge together some chips!"])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Vendor1" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 1.55, -0.15)
@@ -2705,9 +2715,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
 billboard = 1
 no_depth_test = true
 render_priority = 2
-text = "VENDOR DIALOGUE GOES HERE"
-font_size = 128
+text = "VENDOR DIALOGUE GOES HERE LALALALALALALALALALALA asdsadsadsadasdsadsadsadasd"
+font_size = 64
 outline_size = 24
+autowrap_mode = 3
 
 [node name="HealthComponent" parent="Vendor1" index="3" instance=ExtResource("5_nedgi")]
 max_health = 1e+07
@@ -5573,6 +5584,37 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DEBUGBossTrigger" index="0"]
 shape = SubResource("BoxShape3D_pp7jc")
 
+[node name="TutorialInfoTrigger1" parent="." index="13" instance=ExtResource("41_t1wx2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+collision_layer = 32
+collision_mask = 2
+trigger_on_spawn = true
+header_text = "Movement"
+body_text = "Use WASD to Move"
+
+[node name="CollisionShape3D" parent="TutorialInfoTrigger1" index="0"]
+shape = SubResource("BoxShape3D_s0j8a")
+
+[node name="TutorialInfoTrigger2" parent="." index="14" instance=ExtResource("41_t1wx2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 14)
+collision_layer = 32
+collision_mask = 2
+header_text = "Movement"
+body_text = "Space to Jump"
+
+[node name="CollisionShape3D" parent="TutorialInfoTrigger2" index="0"]
+shape = SubResource("BoxShape3D_s0j8a")
+
+[node name="TutorialInfoTrigger3" parent="." index="15" instance=ExtResource("41_t1wx2")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -14.2212, 2, 25.9217)
+collision_layer = 32
+collision_mask = 2
+header_text = "Movement"
+body_text = "Shift to Dash"
+
+[node name="CollisionShape3D" parent="TutorialInfoTrigger3" index="0"]
+shape = SubResource("BoxShape3D_s0j8a")
+
 [connection signal="body_entered" from="BossDoorTriggerVolume" to="." method="_on_boss_door_trigger_volume_body_entered"]
 [connection signal="body_exited" from="BossDoorTriggerVolume" to="." method="_on_boss_door_trigger_volume_body_exited"]
 [connection signal="body_entered" from="ElevatorDoorTriggerVolume" to="." method="_on_elevator_door_trigger_volume_body_entered"]
@@ -5580,5 +5622,14 @@ shape = SubResource("BoxShape3D_pp7jc")
 [connection signal="body_entered" from="Vendor1/InteractArea" to="Vendor1" method="_on_body_entered"]
 [connection signal="body_exited" from="Vendor1/InteractArea" to="Vendor1" method="_on_body_exited"]
 [connection signal="body_entered" from="DEBUGBossTrigger" to="." method="_on_debug_boss_trigger_body_entered"]
+[connection signal="activate" from="TutorialInfoTrigger1" to="." method="show_tutorial_panel"]
+[connection signal="body_entered" from="TutorialInfoTrigger1" to="TutorialInfoTrigger1" method="_on_body_entered"]
+[connection signal="activate" from="TutorialInfoTrigger2" to="." method="show_tutorial_panel"]
+[connection signal="body_entered" from="TutorialInfoTrigger2" to="TutorialInfoTrigger2" method="_on_body_entered"]
+[connection signal="activate" from="TutorialInfoTrigger3" to="." method="show_tutorial_panel"]
+[connection signal="body_entered" from="TutorialInfoTrigger3" to="TutorialInfoTrigger3" method="_on_body_entered"]
 
 [editable path="BarrelEffectTrigger"]
+[editable path="TutorialInfoTrigger1"]
+[editable path="TutorialInfoTrigger2"]
+[editable path="TutorialInfoTrigger3"]

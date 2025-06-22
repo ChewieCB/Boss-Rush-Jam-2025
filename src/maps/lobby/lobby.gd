@@ -9,7 +9,7 @@ signal ui_accept
 @onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
 @onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
 
-@onready var tutorial_ui: Control = $UI/TutorialUI
+@onready var info_ui: Control = $UI/InfoBoxUI
 @onready var game_win_ui: Control = $UI/GameWinUI
 
 @onready var SFXDoorOpen: AudioStreamPlayer3D = $SFXDoorOpen
@@ -43,11 +43,11 @@ func _ready() -> void:
 	# HACK
 	if GameManager.player_gained_first_barrel:
 		if not GameManager.barrel_tutorial_shown:
-			tutorial_ui.text_no_resize(
+			info_ui.text_no_resize(
 				"You've gained a barrel!",
 				"Talk to the vendor to change your loadout and buy new barrels."
 			)
-			show_panel(tutorial_ui)
+			show_panel(info_ui)
 			GameManager.barrel_tutorial_shown = true
 	
 	if GameManager.all_bosses_defeated:

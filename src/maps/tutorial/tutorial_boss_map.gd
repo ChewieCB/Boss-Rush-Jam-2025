@@ -1,5 +1,7 @@
 extends BossMap
 
+signal ui_accept
+
 @export var boss_doors: ElevatorDoors
 @export var exit_doors: ElevatorDoors
 @export var chipling_prefab: PackedScene
@@ -10,12 +12,32 @@ extends BossMap
 @onready var chipling_spawns_2: Array[Node] = get_tree().get_nodes_in_group("boss_chipling_spawn_2_marker")
 @onready var chipling_wander_points_2: Array[Node] = get_tree().get_nodes_in_group("boss_chipling_wander_2_marker")
 
+@export var info_ui_prefab: PackedScene
 
 func _ready() -> void:
 	super()
 	boss_doors.close()
 	for i in range(chiplings_to_spawn_1):
 		spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_type():
+	#if event.is_action_pressed("interact"):
+		ui_accept.emit()
+
+
+func show_tutorial_panel(header_text: String, body_text: String) -> void:
+	var new_panel: InfoBox = info_ui_prefab.instantiate()
+	$UI.add_child(new_panel)
+	new_panel.show_text(header_text, body_text)
+	new_panel.visible = true
+	var tween = get_tree().create_tween()
+	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 1.0), 1.0)
+	await tween.finished
+	await ui_accept
+	tween = get_tree().create_tween()
+	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 0.0), 1.0)
 
 
 func spawn_chipling(spawn_group: int, spawn_points: Array[Node], wander_points: Array[Node]) -> void:
