@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://do18fbvnpcin7"
-path="res://.godot/imported/programmer_credit_1.png-cff9ce2ce2722283701e8a525c504093.ctex"
+uid="uid://coprvxfpx4kyo"
+path="res://.godot/imported/defeat_final_boss_6.png-c84f9d338b04c1fafc6899fc2d817360.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/credit/programmer_credit_1.png"
-dest_files=["res://.godot/imported/programmer_credit_1.png-cff9ce2ce2722283701e8a525c504093.ctex"]
+source_file="res://assets/picture/defeat_final_boss_6.png"
+dest_files=["res://.godot/imported/defeat_final_boss_6.png-c84f9d338b04c1fafc6899fc2d817360.ctex"]
 
 [params]
 

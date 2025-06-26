@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gsxbep2s5ql0"
-path="res://.godot/imported/gramophone_disc.png-633b5f75e17d9a2b89f256d7f3717756.ctex"
+uid="uid://ddj4ix0xh2lo5"
+path="res://.godot/imported/programmer_credit_2.png-35acfaf89e21ec359f5454080cda7ad3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/credit/gramophone_disc.png"
-dest_files=["res://.godot/imported/gramophone_disc.png-633b5f75e17d9a2b89f256d7f3717756.ctex"]
+source_file="res://assets/picture/programmer_credit_2.png"
+dest_files=["res://.godot/imported/programmer_credit_2.png-35acfaf89e21ec359f5454080cda7ad3.ctex"]
 
 [params]
 

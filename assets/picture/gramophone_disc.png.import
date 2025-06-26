@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bcsqhg6xya4u1"
-path="res://.godot/imported/weapon_art_credit.png-26ff035300099969d81bce9e5db2eef7.ctex"
+uid="uid://gsxbep2s5ql0"
+path="res://.godot/imported/gramophone_disc.png-ecd1a94357e0040494424e198a168c4f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/credit/weapon_art_credit.png"
-dest_files=["res://.godot/imported/weapon_art_credit.png-26ff035300099969d81bce9e5db2eef7.ctex"]
+source_file="res://assets/picture/gramophone_disc.png"
+dest_files=["res://.godot/imported/gramophone_disc.png-ecd1a94357e0040494424e198a168c4f.ctex"]
 
 [params]
 
