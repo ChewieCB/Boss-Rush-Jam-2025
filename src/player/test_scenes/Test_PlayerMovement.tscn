@@ -171,6 +171,9 @@ data = ExtResource("21_8043w")
 
 [node name="ShootWallTest" parent="." instance=ExtResource("19_cev3k")]
 
+[node name="ShootWallTest9" parent="." instance=ExtResource("19_cev3k")]
+transform = Transform3D(1.91069e-15, 1, 4.37114e-08, 4.37114e-08, -4.37114e-08, 1, 1, 0, -4.37114e-08, -14.7314, 2.09071, 0)
+
 [node name="ShootWallTest7" parent="." instance=ExtResource("19_cev3k")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 8.72625, 3.61703, -19.5232)
 

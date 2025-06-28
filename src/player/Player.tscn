@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=71 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -61,6 +61,9 @@
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="57_sguas"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ujv4f"]
+height = 1.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_w3btf"]
 
@@ -135,8 +138,19 @@ text_effect = ExtResource("35_uogvx")
 
 [node name="LuckComponent" parent="." instance=ExtResource("57_0cid7")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionStanding" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_le58x")
+
+[node name="CollisionCrouching" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("CapsuleShape3D_ujv4f")
+
+[node name="CheckStandingCollision" type="Area3D" parent="."]
+collision_layer = 0
+
+[node name="CollisionCrouching" type="CollisionShape3D" parent="CheckStandingCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CapsuleShape3D_ujv4f")
 
 [node name="DebugMeshes" type="Node3D" parent="."]
 
@@ -542,6 +556,8 @@ delay_in_seconds = "0.0"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1, 0.2)
 light_color = Color(0.78, 0.897333, 1, 1)
 
+[connection signal="body_entered" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_entered"]
+[connection signal="body_exited" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_exited"]
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
 [connection signal="state_input" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_input"]
