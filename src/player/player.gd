@@ -44,6 +44,8 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var neck: Node3D = $Neck
 @onready var state_chart: StateChart = $StateChart
 @onready var wall_raycast: RayCast3D = $WallRaycast
+@onready var standing_shape: CollisionShape3D = $CollisionStanding
+@onready var crouching_shape: CollisionShape3D = $CollisionCrouching
 
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/Camera3D/AimRay
@@ -111,10 +113,14 @@ var is_crouching: bool = false:
 		if value != is_crouching:
 			movement_crouched.emit()
 		is_crouching = value
+		standing_shape.disabled = is_crouching
+		crouching_shape.disabled = not is_crouching
+
+var uncrouch_collision_check_count = 0
 
 var internal_bonus_speed: float = 0
 
-var raw_input_dir := Vector2(0, 0):
+var raw_input_dir = Vector2(0, 0):
 	set(value):
 		if is_on_floor() and raw_input_dir == Vector2.ZERO and value != Vector2.ZERO:
 			movement_sfx_player = SoundManager.play_sound(sfx_movement_loop, "SFX")
@@ -122,11 +128,11 @@ var raw_input_dir := Vector2(0, 0):
 		if is_instance_valid(movement_sfx_player):
 			if raw_input_dir == Vector2.ZERO and movement_sfx_player.playing:
 				SoundManager.stop_sound(sfx_movement_loop)
-var input_dir := Vector2(0, 0)
+var input_dir = Vector2(0, 0)
 
 var last_dashed_timestamp
 var current_air_jump_count: int = 0
-var slide_dir := Vector2(0, 0)
+var slide_dir = Vector2(0, 0)
 
 var controls_disabled: bool = false
 var dash_disabled: bool = false
@@ -191,6 +197,9 @@ func _ready():
 
 	interact_ui.visible = false
 	boss_special_dialog.visible = false
+
+	standing_shape.disabled = false
+	crouching_shape.disabled = true
 
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
@@ -553,7 +562,8 @@ func _on_grounded_state_physics_processing(_delta: float):
 		if Input.is_action_pressed("crouch"):
 			is_crouching = true
 		else:
-			is_crouching = false
+			if uncrouch_collision_check_count == 0 and is_crouching:
+				is_crouching = false
 
 
 func _on_airborne_state_input(event: InputEvent):
@@ -917,3 +927,10 @@ func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
 
 func _on_drunk_timer_timeout() -> void:
 	state_chart.send_event("remove_status_drunk")
+
+
+func _on_check_standing_collision_body_exited(_body: Node3D) -> void:
+	uncrouch_collision_check_count -= 1
+
+func _on_check_standing_collision_body_entered(_body: Node3D) -> void:
+	uncrouch_collision_check_count += 1
