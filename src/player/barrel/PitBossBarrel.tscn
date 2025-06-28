@@ -44,12 +44,19 @@ script = ExtResource("7_tbyy7")
 display_text_title = "Tag n Shred"
 display_text_tag = "Wear them down"
 display_text_desc = "-50% damage
+-40% projectile amount
 +1 damage per projectile hit"
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/TagAndShred"]
 script = ExtResource("8_m5ved")
 attribute = 1
 modify_value = -50.0
+is_perc = true
+
+[node name="ModifyProjectileAmount" type="Node3D" parent="EffectContainer/TagAndShred"]
+script = ExtResource("8_m5ved")
+attribute = 2
+modify_value = -40.0
 is_perc = true
 
 [node name="DamageShred" type="Node3D" parent="EffectContainer/TagAndShred"]

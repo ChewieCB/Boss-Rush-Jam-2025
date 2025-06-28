@@ -33,6 +33,8 @@ func on_effect_set():
 		AttributeNameEnum.PROJECTILE_AMOUNT:
 			owner_barrel.owner_gun.modified_projectile_amount = calculate_new_value(
 				owner_barrel.owner_gun.modified_projectile_amount, modify_value, is_perc)
+			if owner_barrel.owner_gun.modified_projectile_amount < 1:
+				owner_barrel.owner_gun.modified_projectile_amount = 1
 		AttributeNameEnum.PROJECTILE_SPEED:
 			owner_barrel.owner_gun.modified_projectile_speed = calculate_new_value(
 				owner_barrel.owner_gun.modified_projectile_speed, modify_value, is_perc, false)
@@ -79,6 +81,8 @@ func on_prepare_to_fire():
 		AttributeNameEnum.PROJECTILE_AMOUNT:
 			owner_barrel.owner_gun.modified_projectile_amount = calculate_new_value(
 				owner_barrel.owner_gun.modified_projectile_amount, modify_value, is_perc)
+			if owner_barrel.owner_gun.modified_projectile_amount < 1:
+				owner_barrel.owner_gun.modified_projectile_amount = 1
 		AttributeNameEnum.PROJECTILE_SPEED:
 			owner_barrel.owner_gun.modified_projectile_speed = calculate_new_value(
 				owner_barrel.owner_gun.modified_projectile_speed, modify_value, is_perc, false)
