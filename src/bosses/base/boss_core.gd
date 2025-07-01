@@ -20,13 +20,11 @@ enum BossIdEnum {
 	CHIPS
 }
 
-enum StatusEffects {
+enum BossStatusEffect {
 	NONE,
 	BURNING,
 	POISONED
 }
-@onready var burning_timer: Timer = $StateChart/Root/Status/Burning/BurningTimer
-@onready var poisoned_timer: Timer = $StateChart/Root/Status/Poisoned/PoisonedTimer
 
 @export var boss_id: BossIdEnum
 @export var chip_scene: PackedScene
@@ -34,6 +32,21 @@ enum StatusEffects {
 @export var chip_spawn_force: float = 700.0
 @export var chip_spawn_dps_threshold: float = 25.0
 @export var chip_spawn_mult_cap: int = 3
+
+@export_subgroup("Resistance")
+@onready var burning_timer: Timer = $StateChart/Root/Status/Burning/BurningTimer
+@onready var poisoned_timer: Timer = $StateChart/Root/Status/Poisoned/PoisonedTimer
+## 1 = BURN, 2 = POISON
+@export var status_resist: Dictionary = {
+	BossStatusEffect.BURNING: 1000,
+	BossStatusEffect.POISONED: 1000,
+}
+@export var status_duration = 10
+var current_status_buildup: Dictionary = {
+	BossStatusEffect.BURNING: 0,
+	BossStatusEffect.POISONED: 0,
+}
+
 @export_subgroup("DPS Dealt In Last X Seconds")
 @export var dps_dealt_window: float = 1.8
 @onready var dps_dealt_window_timer: Timer = $DPSWindowTimer
@@ -183,9 +196,9 @@ func _physics_process(delta: float) -> void:
 	# TODO - add export var for burning status length so we can configure it
 	# per boss/effect
 	#if Input.is_action_just_pressed("input_1"):
-		#apply_status(StatusEffects.BURNING, 5.0)
+		#apply_status(BossStatusEffect.BURNING, 5.0)
 	#if Input.is_action_just_pressed("input_2"):
-		#apply_status(StatusEffects.POISONED, 12.0)
+		#apply_status(BossStatusEffect.POISONED, 12.0)
 
 
 func jump(multiplier = 1.0) -> void:
@@ -586,15 +599,20 @@ func _on_hurt_frame_timer_timeout() -> void:
 
 ## STATUS EFFECTS
 
-func apply_status(status: StatusEffects, duration: float) -> void:
-	var event_string: String = "status_%s" % StatusEffects.keys()[status].to_lower()
+func apply_status_buildup(status: BossStatusEffect, amount: float) -> void:
+		current_status_buildup[status] += amount
+		if current_status_buildup[status] > status_resist[status]:
+			apply_status(status, status_duration)
+
+func apply_status(status: BossStatusEffect, duration: float) -> void:
+	var event_string: String = "status_%s" % BossStatusEffect.keys()[status].to_lower()
 	state_chart.send_event("add_" + event_string)
 	await get_tree().create_timer(duration).timeout
-	state_chart.send_event("remove_" + event_string)
+	remove_status(status)
 
 
-func remove_status(status: StatusEffects) -> void:
-	var event_string: String = "status_%s" % StatusEffects.keys()[status].to_lower()
+func remove_status(status: BossStatusEffect) -> void:
+	var event_string: String = "status_%s" % BossStatusEffect.keys()[status].to_lower()
 	state_chart.send_event("remove_" + event_string)
 
 
@@ -627,7 +645,7 @@ func _on_status_burning_active_state_entered() -> void:
 	burning_timer.start(0.6)
 
 
-func _on_status_burning_active_state_physics_processing(delta: float) -> void:
+func _on_status_burning_active_state_physics_processing(_delta: float) -> void:
 	pass
 
 
@@ -644,7 +662,7 @@ func _on_status_poisoned_active_state_entered() -> void:
 	poisoned_timer.start(1.8)
 
 
-func _on_status_poisoned_active_state_physics_processing(delta: float) -> void:
+func _on_status_poisoned_active_state_physics_processing(_delta: float) -> void:
 	pass
 
 
