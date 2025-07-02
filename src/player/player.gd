@@ -493,7 +493,7 @@ func stun(time: float) -> void:
 
 
 func spin_reload() -> void:
-	if not current_gun.is_reloading:
+	if not current_gun.is_reloading and not current_gun.is_spinning:
 		current_gun.spin_all_barrels()
 
 
@@ -812,7 +812,7 @@ func get_assist_rotation_velocity(delta: float):
 
 
 func spin_barrels() -> void:
-	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading:
+	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading or current_gun.is_spinning:
 		return
 	# Check if we have enough chips
 	if GameManager.purchase_reroll():

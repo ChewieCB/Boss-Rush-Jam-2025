@@ -118,3 +118,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 func _on_life_timer_timeout() -> void:
 	destroyed.emit()
 	call_deferred("queue_free")
+
+
+func change_bullet_color(_new_color: Color):
+	mesh_instance.mesh.material.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.5)

@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_xa5jf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u7eax"]
+resource_local_to_scene = true
 albedo_color = Color(1, 0.668348, 0, 1)
 emission_enabled = true
 emission = Color(1, 0.794963, 0, 1)
@@ -19,6 +20,7 @@ size = Vector3(0.05, 0.05, 0.1)
 radius = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pphwl"]
+resource_local_to_scene = true
 transparency = 1
 albedo_color = Color(1, 0.766048, 0, 0.713726)
 emission_enabled = true

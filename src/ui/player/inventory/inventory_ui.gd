@@ -144,7 +144,8 @@ func close():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	#Engine.time_scale = 1
 	GameManager.player.is_in_inventory = false
-	if visible and not GameManager.player.current_gun.is_reloading:
+	if visible and not GameManager.player.current_gun.is_reloading \
+		and not GameManager.player.current_gun.is_spinning:
 		visible = false
 		GameManager.player.current_gun.spin_all_barrels()
 

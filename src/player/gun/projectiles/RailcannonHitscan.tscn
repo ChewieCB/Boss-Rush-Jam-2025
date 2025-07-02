@@ -17,18 +17,20 @@ shader_parameter/origin_position = null
 shader_parameter/fade_distance = 10.0
 shader_parameter/fade_multiplier = 1.0
 shader_parameter/color = Color(0.101563, 0.204432, 1, 1)
-shader_parameter/taper_amount = -2.0
+shader_parameter/taper_amount = -0.5
 shader_parameter/emission_color = Color(0.119992, 0.757934, 1, 1)
 shader_parameter/emission_intensity = 1.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_yehfg"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_ka6s1")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_kk8sx"]
 radius = 500.0
 
 [node name="GunHitscan" type="Node3D"]
 script = ExtResource("1_gwc3y")
-thickness = 30
+thickness = 15
 fade_speed = 1.0
 spark_effect = ExtResource("2_ircxh")
 generic_blood_splatter = ExtResource("3_vqvrn")
@@ -36,7 +38,6 @@ bullet_decal_prefab = ExtResource("4_8emp0")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_ka6s1")
 mesh = SubResource("BoxMesh_yehfg")
 
 [node name="Timer" type="Timer" parent="."]

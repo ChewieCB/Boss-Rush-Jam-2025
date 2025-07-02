@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cl8gwigkfvwca"]
+
+[ext_resource type="Texture2D" uid="uid://c55205brymqa0" path="res://src/player/barrel/resource/sprite/elemental.png" id="1_j6r7a"]
+[ext_resource type="PackedScene" uid="uid://b8idyobhu4ucw" path="res://src/player/barrel/ElementalBarrel.tscn" id="2_217pc"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_somjb"]
+
+[resource]
+script = ExtResource("3_somjb")
+barrel_id = 46
+barrel_name = "Elemental"
+barrel_desc = "[b]Elemental Barrel[/b]
+Infuse bullets with element and status effects.
+
+Possible rolls:
+[ul]
+Fire Infusion: Reduce damage but bullets can cause Burning status build up.
+Poison Infusion: Reduce fire rate but bullets can cause Poisoned status build up.
+[/ul]
+"
+barrel_image = ExtResource("1_j6r7a")
+barrel_cost = 1500
+barrel_prefab = ExtResource("2_217pc")
+is_archetype_barrel = false

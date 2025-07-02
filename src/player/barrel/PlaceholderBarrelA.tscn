@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="5_ncjv1"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_n2kuu"]
-[ext_resource type="Script" path="res://src/player/barrel/add_elemental_effect.gd" id="6_vgoxo"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="6_vgoxo"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="8_8ud1i"]
 [ext_resource type="Script" path="res://src/player/barrel/card_counting_system_effect.gd" id="11_4doj4"]
 

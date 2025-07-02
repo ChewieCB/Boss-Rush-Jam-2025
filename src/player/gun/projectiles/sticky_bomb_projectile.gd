@@ -9,6 +9,8 @@ extends BaseProjectile
 @onready var explode_timer: Timer = $ExplodeTimer
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
+@onready var mesh: MeshInstance3D = $MeshInstance3D
+@onready var trail: Trail3D = $Trail/Trail3D
 
 const CONTACT_DAMAGE = 1
 
@@ -115,3 +117,9 @@ func _on_explode_timer_timeout() -> void:
 		await get_tree().create_timer(0.25).timeout
 		destroyed.emit()
 		call_deferred("queue_free")
+
+func change_bullet_color(_new_color: Color):
+	mesh.mesh.material.albedo_color = _new_color
+	mesh.mesh.material.emission = _new_color
+	trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
+	trail.material_override.emission = _new_color

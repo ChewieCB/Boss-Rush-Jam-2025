@@ -146,3 +146,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		# Splitted bullet cant ricochet
 		new_inst.splitted = true
 		new_inst.init(new_pos, new_dir, int(damage / split_count), 0, projectile_speed, max_range)
+
+
+func change_bullet_color(_new_color: Color):
+	return

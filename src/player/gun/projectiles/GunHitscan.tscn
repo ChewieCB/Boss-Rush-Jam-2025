@@ -22,6 +22,8 @@ shader_parameter/emission_color = Color(1, 0.776373, 0, 1)
 shader_parameter/emission_intensity = 1.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_yehfg"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_3ch4f")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_kk8sx"]
 radius = 500.0
@@ -34,7 +36,6 @@ bullet_decal_prefab = ExtResource("4_coueb")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_3ch4f")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_yehfg")
 

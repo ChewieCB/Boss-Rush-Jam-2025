@@ -5,6 +5,9 @@ class_name Dummy
 @export var status_resist: Dictionary = {
 	BossCore.BossStatusEffect.BURNING: 1000,
 	BossCore.BossStatusEffect.POISONED: 1000,
+	BossCore.BossStatusEffect.FROZEN: 1000,
+	BossCore.BossStatusEffect.SHOCKED: 1000,
+	BossCore.BossStatusEffect.BLEEDING: 1000,
 }
 @export var status_duration = 10
 
@@ -17,6 +20,9 @@ class_name Dummy
 var current_status_buildup: Dictionary = {
 	BossCore.BossStatusEffect.BURNING: 0,
 	BossCore.BossStatusEffect.POISONED: 0,
+	BossCore.BossStatusEffect.FROZEN: 0,
+	BossCore.BossStatusEffect.SHOCKED: 0,
+	BossCore.BossStatusEffect.BLEEDING: 1000,
 }
 
 var last_hit = 0

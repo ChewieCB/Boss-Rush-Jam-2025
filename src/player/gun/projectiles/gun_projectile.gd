@@ -5,6 +5,8 @@ class_name GunProjectile
 
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
+@onready var mesh: MeshInstance3D = $MeshInstance3D
+@onready var trail: Trail3D = $Trail/Trail3D
 
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
@@ -127,3 +129,9 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 		homing_locked_in = true
 		homing_target = body
 		homing_area.set_deferred("monitoring", false)
+
+func change_bullet_color(_new_color: Color):
+	mesh.mesh.material.albedo_color = _new_color
+	mesh.mesh.material.emission = _new_color
+	trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
+	trail.material_override.emission = _new_color

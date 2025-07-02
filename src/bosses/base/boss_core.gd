@@ -22,8 +22,11 @@ enum BossIdEnum {
 
 enum BossStatusEffect {
 	NONE,
-	BURNING,
-	POISONED
+	BURNING, # High DoT over short time
+	POISONED, # DoT over long time
+	FROZEN, # Slow movement
+	SHOCKED, # Take increased damage
+	BLEEDING # Take damage based on their movement
 }
 
 @export var boss_id: BossIdEnum
@@ -40,11 +43,17 @@ enum BossStatusEffect {
 @export var status_resist: Dictionary = {
 	BossStatusEffect.BURNING: 1000,
 	BossStatusEffect.POISONED: 1000,
+	BossStatusEffect.FROZEN: 1000,
+	BossStatusEffect.SHOCKED: 1000,
+	BossStatusEffect.BLEEDING: 1000,
 }
 @export var status_duration = 10
 var current_status_buildup: Dictionary = {
 	BossStatusEffect.BURNING: 0,
 	BossStatusEffect.POISONED: 0,
+	BossStatusEffect.FROZEN: 0,
+	BossStatusEffect.SHOCKED: 0,
+	BossStatusEffect.BLEEDING: 1000,
 }
 
 @export_subgroup("DPS Dealt In Last X Seconds")

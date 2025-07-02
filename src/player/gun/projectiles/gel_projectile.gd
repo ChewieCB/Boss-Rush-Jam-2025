@@ -12,6 +12,7 @@ extends BaseProjectile
 @onready var stick_timer: Timer = $StickTimer
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
+@onready var trail: Trail3D = $Trail/Trail3D
 
 # When gel projectile collide, if the hitscan_col_point is valid and not too
 # far from current global_position, snap to hitscan_col_point so it look better.
@@ -126,3 +127,8 @@ func _on_stick_timer_timeout() -> void:
 		ricochet()
 	else:
 		start_deflate = true
+
+func change_bullet_color(_new_color: Color):
+	mesh_instance.mesh.material.albedo_color = _new_color
+	trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.5)
+	trail.material_override.emission = _new_color
