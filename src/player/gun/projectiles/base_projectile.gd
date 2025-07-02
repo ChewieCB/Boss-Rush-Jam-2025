@@ -35,6 +35,7 @@ var splitted = false
 var is_hitscan = false
 
 # Statistics traking or barrel effect
+var color_changed_count = 0
 var life_time = 0
 var spawn_pos = Vector3.ZERO
 var travelled_distance = 0
@@ -86,7 +87,7 @@ func create_bullet_decal(pos: Vector3, normal: Vector3):
 	if abs(normal.dot(Vector3.UP)) < 0.999:
 		decal_inst.look_at(pos + normal, Vector3.UP)
 		decal_inst.rotate_object_local(Vector3(1, 0, 0), 90)
-	
+
 	# Rotate the decal a bit for variety
 	decal_inst.rotate_object_local(Vector3(0, 1, 0), randf_range(0.0, 360.0))
 
@@ -149,4 +150,4 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 
 
 func change_bullet_color(_new_color: Color):
-	return
+	color_changed_count += 1

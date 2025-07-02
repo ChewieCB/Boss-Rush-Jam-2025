@@ -178,5 +178,12 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 
 
 func change_bullet_color(_new_color: Color):
-	mesh.mesh.material.set_shader_parameter("color", _new_color)
-	mesh.mesh.material.set_shader_parameter("emission_color", Color(_new_color.r, _new_color.g, _new_color.b, 0.7))
+	super (_new_color)
+	if color_changed_count > 1:
+		var current_mesh_color = mesh.mesh.material.get_shader_parameter("color")
+		var current_emission_color = mesh.mesh.material.get_shader_parameter("emission_color")
+		mesh.mesh.material.set_shader_parameter("color", current_mesh_color.lerp(_new_color, 0.5))
+		mesh.mesh.material.set_shader_parameter("emission_color", current_emission_color.lerp(_new_color, 0.5))
+	else:
+		mesh.mesh.material.set_shader_parameter("color", _new_color)
+		mesh.mesh.material.set_shader_parameter("emission_color", Color(_new_color.r, _new_color.g, _new_color.b, 0.7))

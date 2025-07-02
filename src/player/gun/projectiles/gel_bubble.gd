@@ -121,4 +121,8 @@ func _on_life_timer_timeout() -> void:
 
 
 func change_bullet_color(_new_color: Color):
-	mesh_instance.mesh.material.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.5)
+	super (_new_color)
+	if color_changed_count > 1:
+		mesh_instance.mesh.material.albedo_color = mesh_instance.mesh.material.albedo_color.lerp(_new_color, 0.5)
+	else:
+		mesh_instance.mesh.material.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.5)

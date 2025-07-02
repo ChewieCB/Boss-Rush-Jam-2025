@@ -45,6 +45,8 @@ Bullets build up Burn effect"
 script = ExtResource("6_vgoxo")
 status_effect = 1
 flat_build_up_amount = 500.0
+change_color = true
+new_color = Color(1, 0.32549, 0, 1)
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/FireInfusion"]
 script = ExtResource("6_n2kuu")
@@ -63,9 +65,51 @@ Bullets build up Poison effect"
 script = ExtResource("6_vgoxo")
 status_effect = 2
 flat_build_up_amount = 500.0
+change_color = true
+new_color = Color(0.164706, 0.658824, 0, 1)
 
 [node name="ModifyFirerate" type="Node3D" parent="EffectContainer/PoisonInfusion"]
 script = ExtResource("6_n2kuu")
 attribute = 4
+modify_value = -20.0
+is_perc = true
+
+[node name="ColdInfusion" type="Node3D" parent="EffectContainer"]
+script = ExtResource("5_ncjv1")
+display_text_title = "Cold Infusion"
+display_text_tag = "Let it go!"
+display_text_desc = "-20% magazine size
+Bullets build up Frozen effect"
+
+[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ColdInfusion"]
+script = ExtResource("6_vgoxo")
+status_effect = 3
+flat_build_up_amount = 500.0
+change_color = true
+new_color = Color(0, 0.533333, 0.658824, 0.866667)
+
+[node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ColdInfusion"]
+script = ExtResource("6_n2kuu")
+attribute = 5
+modify_value = -20.0
+is_perc = true
+
+[node name="ElectricInfusion" type="Node3D" parent="EffectContainer"]
+script = ExtResource("5_ncjv1")
+display_text_title = "Electric Infusion"
+display_text_tag = "...and his music was..."
+display_text_desc = "+20% recoil
+Bullets build up Shocked effect"
+
+[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ElectricInfusion"]
+script = ExtResource("6_vgoxo")
+status_effect = 4
+flat_build_up_amount = 500.0
+change_color = true
+new_color = Color(0.981201, 1, 0.496776, 1)
+
+[node name="ModifyRecoil" type="Node3D" parent="EffectContainer/ElectricInfusion"]
+script = ExtResource("6_n2kuu")
+attribute = 11
 modify_value = -20.0
 is_perc = true

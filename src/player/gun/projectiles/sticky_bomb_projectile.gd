@@ -119,7 +119,14 @@ func _on_explode_timer_timeout() -> void:
 		call_deferred("queue_free")
 
 func change_bullet_color(_new_color: Color):
-	mesh.mesh.material.albedo_color = _new_color
-	mesh.mesh.material.emission = _new_color
-	trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
-	trail.material_override.emission = _new_color
+	super (_new_color)
+	if color_changed_count > 1:
+		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
+		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
+		trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
+		trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
+	else:
+		mesh.mesh.material.albedo_color = _new_color
+		mesh.mesh.material.emission = _new_color
+		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
+		trail.material_override.emission = _new_color
