@@ -51,7 +51,7 @@ enum BarrelIdEnum {
 	RECKLESS_ABANDON,
 	LEG_EYE_COORDINATE,
 	KINEMATIC_EQUATION,
-	ELEMENTAL
+	ELEMENTAL_INFUSION
 }
 
 @export var barrel_id: BarrelIdEnum

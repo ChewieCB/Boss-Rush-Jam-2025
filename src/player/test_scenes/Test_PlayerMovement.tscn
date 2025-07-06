@@ -17,7 +17,7 @@
 [ext_resource type="Resource" uid="uid://7xfi8anly2u3" path="res://src/player/barrel/resource/archetype_automatic_spec_barrrel_data.tres" id="8_4asxy"]
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="9_vb777"]
 [ext_resource type="Resource" uid="uid://l1nys7kixqcl" path="res://src/player/barrel/resource/placeholderA_barrrel_data.tres" id="10_0mcpf"]
-[ext_resource type="Resource" uid="uid://cl8gwigkfvwca" path="res://src/player/barrel/resource/elemental_barrel_data.tres" id="10_7lixb"]
+[ext_resource type="Resource" uid="uid://cl8gwigkfvwca" path="res://src/player/barrel/resource/elemental_infusion_barrel_data.tres" id="10_7lixb"]
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="10_28dwd"]
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="12_2rf45"]
 [ext_resource type="PackedScene" uid="uid://dow4ee3qublb7" path="res://src/maps/common/ShootWallTest.tscn" id="19_cev3k"]

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c55205brymqa0"
-path="res://.godot/imported/elemental.png-a05a16bf69fcc74af112596c38712919.ctex"
+path="res://.godot/imported/elemental_infusion.png-4f1a79d1cbbf550b6be21a99925bc78c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/player/barrel/resource/sprite/elemental.png"
-dest_files=["res://.godot/imported/elemental.png-a05a16bf69fcc74af112596c38712919.ctex"]
+source_file="res://src/player/barrel/resource/sprite/elemental_infusion.png"
+dest_files=["res://.godot/imported/elemental_infusion.png-4f1a79d1cbbf550b6be21a99925bc78c.ctex"]
 
 [params]
 

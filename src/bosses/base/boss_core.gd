@@ -646,7 +646,7 @@ func remove_status_label(status: String) -> void:
 	label.queue_free()
 
 
-# Burning
+# ====================== Status ==========================
 func _on_status_burning_active_state_entered() -> void:
 	create_status_label("Burning", Color.ORANGE)
 	# TODO - add burning effect particles/shader/icon
@@ -696,3 +696,34 @@ func _on_poisoned_timer_timeout() -> void:
 	sprite.modulate = Color.WEB_GREEN
 	await get_tree().create_timer(0.4).timeout
 	sprite.modulate = Color.WHITE
+
+
+func _on_status_frozen_active_state_entered() -> void:
+	pass # Replace with function body.
+
+
+func _on_status_frozen_active_state_exited() -> void:
+	pass # Replace with function body.
+
+func _on_status_frozen_active_state_physics_processing(_delta: float) -> void:
+	pass # Replace with function body.
+
+
+func _on_status_bleeding_active_state_entered() -> void:
+	pass # Replace with function body.
+
+func _on_status_bleeding_active_state_exited() -> void:
+	pass # Replace with function body.
+
+func _on_status_bleeding_active_state_physics_processing(_delta: float) -> void:
+	pass # Replace with function body.
+
+
+func _on_status_shocked_active_state_entered() -> void:
+	pass # Replace with function body.
+
+func _on_status_shocked_active_state_exited() -> void:
+	pass # Replace with function body.
+
+func _on_status_shocked_active_state_physics_processing(_delta: float) -> void:
+	pass # Replace with function body.
