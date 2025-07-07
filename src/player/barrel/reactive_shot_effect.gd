@@ -4,7 +4,7 @@ extends BaseBarrelEffect
 @export var damage_modify_perc: float = 100
 
 var timer: Timer
-var status_icon = preload("res://assets/sprite/buff_icon/reactive_shot.png")
+var status_icon = preload("res://assets/sprite/status_icon/reactive_shot.png")
 
 func _ready():
 	if timer == null:

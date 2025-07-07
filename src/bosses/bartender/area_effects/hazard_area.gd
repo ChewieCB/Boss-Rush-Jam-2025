@@ -23,8 +23,8 @@ var bodies_inside = []
 var is_active = false
 var stopped_moving = false
 
-var dash_speed_buff_icon = preload("res://assets/sprite/buff_icon/dash_speed_down.png")
-var run_speed_buff_icon = preload("res://assets/sprite/buff_icon/run_speed_down.png")
+var dash_speed_buff_icon = preload("res://assets/sprite/status_icon/dash_speed_down.png")
+var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_down.png")
 
 func _ready() -> void:
 	is_active = true

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cs3pihvswdkxr"
-path="res://.godot/imported/drunk.png-90fbe744cf050aff1543687d6681d97b.ctex"
+uid="uid://btcwyudc3pntu"
+path="res://.godot/imported/reactive_shot.png-81ce3af6177e3fa80f8ded0efbd94958.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/buff_icon/drunk.png"
-dest_files=["res://.godot/imported/drunk.png-90fbe744cf050aff1543687d6681d97b.ctex"]
+source_file="res://assets/sprite/status_icon/reactive_shot.png"
+dest_files=["res://.godot/imported/reactive_shot.png-81ce3af6177e3fa80f8ded0efbd94958.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brphfwed4572m"
-path="res://.godot/imported/shield.png-9b1caadd38c548e88d0533000a4de5ab.ctex"
+uid="uid://cs3pihvswdkxr"
+path="res://.godot/imported/drunk.png-1f3ebcff15b12b276ad22ad8c9484ab7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/buff_icon/shield.png"
-dest_files=["res://.godot/imported/shield.png-9b1caadd38c548e88d0533000a4de5ab.ctex"]
+source_file="res://assets/sprite/status_icon/drunk.png"
+dest_files=["res://.godot/imported/drunk.png-1f3ebcff15b12b276ad22ad8c9484ab7.ctex"]
 
 [params]
 

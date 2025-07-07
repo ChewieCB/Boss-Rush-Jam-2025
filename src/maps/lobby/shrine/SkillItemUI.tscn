@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bna8nm6mu0l1n"]
 
-[ext_resource type="Texture2D" uid="uid://8r1105may1j4" path="res://assets/sprite/buff_icon/bullet.png" id="1_a1s4x"]
+[ext_resource type="Texture2D" uid="uid://8r1105may1j4" path="res://assets/sprite/status_icon/bullet.png" id="1_a1s4x"]
 [ext_resource type="Script" path="res://src/maps/lobby/shrine/skill_item_ui.gd" id="2_4kuit"]
 [ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_yco4b"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="4_aolbk"]

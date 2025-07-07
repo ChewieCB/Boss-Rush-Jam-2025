@@ -6,7 +6,7 @@ extends BaseBarrelEffect
 
 var timer: Timer
 var heal_barrier_inst = null
-var recovery_status_icon = preload("res://assets/sprite/buff_icon/health_normal.png")
+var recovery_status_icon = preload("res://assets/sprite/status_icon/health_normal.png")
 
 
 func _ready():

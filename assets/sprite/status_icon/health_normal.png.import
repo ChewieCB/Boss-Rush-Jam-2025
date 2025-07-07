@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8p6dg4l4l1ys"
-path="res://.godot/imported/prevent_dash.png-35e0c35a996fee33ae0a8dbb82b14d3c.ctex"
+uid="uid://deeklpptwqj6c"
+path="res://.godot/imported/health_normal.png-f193c247555f8ad266461c855ff52cc3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/buff_icon/prevent_dash.png"
-dest_files=["res://.godot/imported/prevent_dash.png-35e0c35a996fee33ae0a8dbb82b14d3c.ctex"]
+source_file="res://assets/sprite/status_icon/health_normal.png"
+dest_files=["res://.godot/imported/health_normal.png-f193c247555f8ad266461c855ff52cc3.ctex"]
 
 [params]
 

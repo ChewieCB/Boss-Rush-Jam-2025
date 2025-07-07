@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfqtt53fu6r4o"
-path="res://.godot/imported/medical_payout.png-271de13ed4772dfbb3f32d0e938be77c.ctex"
+uid="uid://cnmb1pr4ec65r"
+path="res://.godot/imported/dash_speed_down.png-d07927de3231ce958b624a9407069c5a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/buff_icon/medical_payout.png"
-dest_files=["res://.godot/imported/medical_payout.png-271de13ed4772dfbb3f32d0e938be77c.ctex"]
+source_file="res://assets/sprite/status_icon/dash_speed_down.png"
+dest_files=["res://.godot/imported/dash_speed_down.png-d07927de3231ce958b624a9407069c5a.ctex"]
 
 [params]
 

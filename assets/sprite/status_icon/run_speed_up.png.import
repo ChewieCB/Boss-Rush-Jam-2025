@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://btcwyudc3pntu"
-path="res://.godot/imported/reactive_shot.png-47718af312f4a7a625c999f3190aa36c.ctex"
+uid="uid://dltdl1xe57bo7"
+path="res://.godot/imported/run_speed_up.png-31557902c32f52b44cf26cce3be9da72.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/buff_icon/reactive_shot.png"
-dest_files=["res://.godot/imported/reactive_shot.png-47718af312f4a7a625c999f3190aa36c.ctex"]
+source_file="res://assets/sprite/status_icon/run_speed_up.png"
+dest_files=["res://.godot/imported/run_speed_up.png-31557902c32f52b44cf26cce3be9da72.ctex"]
 
 [params]
 

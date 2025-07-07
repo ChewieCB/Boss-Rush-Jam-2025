@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6h85ewtcxeuk"
-path="res://.godot/imported/default_status_down.png-d0436d0a15e14ccc91ab6c9b4fbf0e5e.ctex"
+uid="uid://beqyxuvocv7t1"
+path="res://.godot/imported/invincible.png-a5e01fc395d0a7e9c6981e430c248dc4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/buff_icon/default_status_down.png"
-dest_files=["res://.godot/imported/default_status_down.png-d0436d0a15e14ccc91ab6c9b4fbf0e5e.ctex"]
+source_file="res://assets/sprite/status_icon/invincible.png"
+dest_files=["res://.godot/imported/invincible.png-a5e01fc395d0a7e9c6981e430c248dc4.ctex"]
 
 [params]
 

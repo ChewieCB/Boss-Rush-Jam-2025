@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cnmb1pr4ec65r"
-path="res://.godot/imported/dash_speed_down.png-4198b338bef70e460e519c738985f2ce.ctex"
+uid="uid://bfki3npylok25"
+path="res://.godot/imported/burning.png-c2cf0395ce7415e8a30f913e6fac8f96.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/buff_icon/dash_speed_down.png"
-dest_files=["res://.godot/imported/dash_speed_down.png-4198b338bef70e460e519c738985f2ce.ctex"]
+source_file="res://assets/sprite/status_icon/burning.png"
+dest_files=["res://.godot/imported/burning.png-c2cf0395ce7415e8a30f913e6fac8f96.ctex"]
 
 [params]
 

@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://o2fyfbhejvaj" path="res://assets/sprite/skilltree_icon/cheat_death.png" id="13_86mca"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="14_eenjl"]
 [ext_resource type="Texture2D" uid="uid://dcmspffm0o7y6" path="res://assets/sprite/skilltree_icon/poker_face.png" id="14_mdccr"]
-[ext_resource type="Texture2D" uid="uid://beqyxuvocv7t1" path="res://assets/sprite/buff_icon/invincible.png" id="15_ptimq"]
+[ext_resource type="Texture2D" uid="uid://beqyxuvocv7t1" path="res://assets/sprite/status_icon/invincible.png" id="15_ptimq"]
 [ext_resource type="Texture2D" uid="uid://dx4pm7e2prfc1" path="res://assets/sprite/skilltree_icon/plot_armor.png" id="16_svlk1"]
 [ext_resource type="Texture2D" uid="uid://d2cwrf2viaill" path="res://assets/sprite/skilltree_icon/jackpot.png" id="17_3yjin"]
 [ext_resource type="Texture2D" uid="uid://bsq70jbhv0gjh" path="res://assets/sprite/skilltree_icon/blessed_chip.png" id="18_6y8gx"]

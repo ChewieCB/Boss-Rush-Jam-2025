@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdy3agmojex03"
-path="res://.godot/imported/tag_n_shred.png-36e34b40b229633dc594b8b58fb75139.ctex"
+uid="uid://dn3l76qv0r61l"
+path="res://.godot/imported/frozen.png-c8d69990876f01afbf79af5af402c677.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/buff_icon/tag_n_shred.png"
-dest_files=["res://.godot/imported/tag_n_shred.png-36e34b40b229633dc594b8b58fb75139.ctex"]
+source_file="res://assets/sprite/status_icon/frozen.png"
+dest_files=["res://.godot/imported/frozen.png-c8d69990876f01afbf79af5af402c677.ctex"]
 
 [params]
 

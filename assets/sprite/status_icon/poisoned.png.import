@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dltdl1xe57bo7"
-path="res://.godot/imported/run_speed_up.png-cbe0b27387c53e617d5dfb656562dce4.ctex"
+uid="uid://cgl8nwe6bq83i"
+path="res://.godot/imported/poisoned.png-c52d5410b7f784652c74e73e22f58641.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/buff_icon/run_speed_up.png"
-dest_files=["res://.godot/imported/run_speed_up.png-cbe0b27387c53e617d5dfb656562dce4.ctex"]
+source_file="res://assets/sprite/status_icon/poisoned.png"
+dest_files=["res://.godot/imported/poisoned.png-c52d5410b7f784652c74e73e22f58641.ctex"]
 
 [params]
 

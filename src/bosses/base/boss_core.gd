@@ -151,7 +151,7 @@ var spawned_area_objects = []
 
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var hurtbox: Area3D = $Hurtbox
-@onready var health_ui = $UI/HealthUI/BossHealthContainer
+@onready var health_ui: BossHealthBar = $UI/HealthUI/BossHealthContainer
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 @export_group("Movement")
@@ -625,30 +625,30 @@ func remove_status(status: BossStatusEffect) -> void:
 	state_chart.send_event("remove_" + event_string)
 
 
-func create_status_label(status: String, color: Color) -> void:
-	var status_label := Label3D.new()
-	status_label.text = status
-	status_label.modulate = color
-	status_label.font_size = 128
-	status_label.outline_size = 32
-	status_label.uppercase = true
-	status_label.double_sided = true
-	status_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	debug_status_label_parent.add_child(status_label)
-	status_label.position.y = 0.6 * debug_status_label_parent.get_child_count()
+# func create_status_label(status: String, color: Color) -> void:
+# 	var status_label := Label3D.new()
+# 	status_label.text = status
+# 	status_label.modulate = color
+# 	status_label.font_size = 128
+# 	status_label.outline_size = 32
+# 	status_label.uppercase = true
+# 	status_label.double_sided = true
+# 	status_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+# 	debug_status_label_parent.add_child(status_label)
+# 	status_label.position.y = 0.6 * debug_status_label_parent.get_child_count()
 
 
-func remove_status_label(status: String) -> void:
-	var status_labels = debug_status_label_parent.get_children()
-	status_labels.filter(func(x): return x.text == status)
-	var label = status_labels.front()
-	debug_status_label_parent.remove_child(label)
-	label.queue_free()
+# func remove_status_label(status: String) -> void:
+# 	var status_labels = debug_status_label_parent.get_children()
+# 	status_labels.filter(func(x): return x.text == status)
+# 	var label = status_labels.front()
+# 	debug_status_label_parent.remove_child(label)
+# 	label.queue_free()
 
 
 # ====================== Status ==========================
 func _on_status_burning_active_state_entered() -> void:
-	create_status_label("Burning", Color.ORANGE)
+	health_ui.change_status_label_visibility(BossStatusEffect.BURNING, true)
 	# TODO - add burning effect particles/shader/icon
 	#
 	burning_timer.start(0.6)
@@ -659,14 +659,14 @@ func _on_status_burning_active_state_physics_processing(_delta: float) -> void:
 
 
 func _on_status_burning_active_state_exited() -> void:
-	remove_status_label("Burning")
+	health_ui.change_status_label_visibility(BossStatusEffect.BURNING, false)
 	# TODO - remove burning effect particles/shader/icon
 	#
 	burning_timer.stop()
 
 
 func _on_status_poisoned_active_state_entered() -> void:
-	create_status_label("Poisoned", Color.WEB_GREEN)
+	health_ui.change_status_label_visibility(BossStatusEffect.POISONED, true)
 	# TODO - add burning effect particles/shader/icon
 	poisoned_timer.start(1.8)
 
@@ -676,7 +676,7 @@ func _on_status_poisoned_active_state_physics_processing(_delta: float) -> void:
 
 
 func _on_status_poisoned_active_state_exited() -> void:
-	remove_status_label("Poisoned")
+	health_ui.change_status_label_visibility(BossStatusEffect.POISONED, false)
 	# TODO - remove burning effect particles/shader/icon
 	#
 	poisoned_timer.stop()
@@ -699,31 +699,31 @@ func _on_poisoned_timer_timeout() -> void:
 
 
 func _on_status_frozen_active_state_entered() -> void:
-	pass # Replace with function body.
+	health_ui.change_status_label_visibility(BossStatusEffect.FROZEN, true)
 
 
 func _on_status_frozen_active_state_exited() -> void:
-	pass # Replace with function body.
+	health_ui.change_status_label_visibility(BossStatusEffect.FROZEN, false)
 
 func _on_status_frozen_active_state_physics_processing(_delta: float) -> void:
-	pass # Replace with function body.
-
+	pass
 
 func _on_status_bleeding_active_state_entered() -> void:
-	pass # Replace with function body.
+	health_ui.change_status_label_visibility(BossStatusEffect.BLEEDING, true)
+
 
 func _on_status_bleeding_active_state_exited() -> void:
-	pass # Replace with function body.
+	health_ui.change_status_label_visibility(BossStatusEffect.BLEEDING, false)
 
 func _on_status_bleeding_active_state_physics_processing(_delta: float) -> void:
-	pass # Replace with function body.
+	pass
 
 
 func _on_status_shocked_active_state_entered() -> void:
-	pass # Replace with function body.
+	health_ui.change_status_label_visibility(BossStatusEffect.SHOCKED, true)
 
 func _on_status_shocked_active_state_exited() -> void:
-	pass # Replace with function body.
+	health_ui.change_status_label_visibility(BossStatusEffect.SHOCKED, false)
 
 func _on_status_shocked_active_state_physics_processing(_delta: float) -> void:
-	pass # Replace with function body.
+	pass

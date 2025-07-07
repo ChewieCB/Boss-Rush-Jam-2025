@@ -13,8 +13,10 @@ Infuse bullets with element and status effects.
 
 Possible rolls:
 [ul]
-Fire Infusion: Reduce damage but bullets can cause Burning status build up.
-Poison Infusion: Reduce fire rate but bullets can cause Poisoned status build up.
+Fire Infusion: Reduce damage but bullets can cause Burning status build up, which deal high damage over time in  a short duration.
+Poison Infusion: Reduce fire rate but bullets can cause Poisoned status build up, which deal damage over time over a long duration.
+Cold Infusion: Reduce fire rate but bullets can cause Frozen status build up, which slow enemy movement speed.
+Electric Infusion: Reduce fire rate but bullets can cause Shocked status build up, which increases damage enemy taken.
 [/ul]
 "
 barrel_image = ExtResource("1_ducvj")

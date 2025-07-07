@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cgjpqjw32dtqe"
-path="res://.godot/imported/run_speed_down.png-1afd5deff10210ef99f14ffbefc1c4bb.ctex"
+uid="uid://cdy3agmojex03"
+path="res://.godot/imported/tag_n_shred.png-4cd5a802a5be4bea6a82bba475ec0798.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprite/buff_icon/run_speed_down.png"
-dest_files=["res://.godot/imported/run_speed_down.png-1afd5deff10210ef99f14ffbefc1c4bb.ctex"]
+source_file="res://assets/sprite/status_icon/tag_n_shred.png"
+dest_files=["res://.godot/imported/tag_n_shred.png-4cd5a802a5be4bea6a82bba475ec0798.ctex"]
 
 [params]
 

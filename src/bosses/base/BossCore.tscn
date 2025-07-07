@@ -447,7 +447,7 @@ script = ExtResource("7_0t8qy")
 [node name="toActive" type="Node" parent="StateChart/Root/Status/Shocked/Inactive"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../Active")
-event = &"add_status_frozen"
+event = &"add_status_shocked"
 guard = ExtResource("18_e2occ")
 delay_in_seconds = "0.0"
 
@@ -457,7 +457,7 @@ script = ExtResource("7_0t8qy")
 [node name="toInactive" type="Node" parent="StateChart/Root/Status/Shocked/Active"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../Inactive")
-event = &"remove_status_frozen"
+event = &"remove_status_shocked"
 delay_in_seconds = "0.0"
 
 [node name="PoisonedTimer" type="Timer" parent="StateChart/Root/Status/Shocked"]
@@ -472,7 +472,7 @@ script = ExtResource("7_0t8qy")
 [node name="toActive" type="Node" parent="StateChart/Root/Status/Bleeding/Inactive"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../Active")
-event = &"add_status_frozen"
+event = &"add_status_bleeding"
 guard = ExtResource("18_e2occ")
 delay_in_seconds = "0.0"
 
@@ -482,7 +482,7 @@ script = ExtResource("7_0t8qy")
 [node name="toInactive" type="Node" parent="StateChart/Root/Status/Bleeding/Active"]
 script = ExtResource("8_lsrry")
 to = NodePath("../../Inactive")
-event = &"remove_status_frozen"
+event = &"remove_status_bleeding"
 delay_in_seconds = "0.0"
 
 [node name="PoisonedTimer" type="Timer" parent="StateChart/Root/Status/Bleeding"]

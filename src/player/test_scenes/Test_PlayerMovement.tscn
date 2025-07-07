@@ -81,6 +81,13 @@ shape = SubResource("BoxShape3D_xq4fj")
 
 [node name="Player" parent="." instance=ExtResource("1_h4pew")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+can_wall_jump = null
+can_wall_cling = null
+dash_cd = null
+angular_momentum_multiplier = null
+luck_redeem_time = null
+drunk_movement_drift = null
+drunk_movement_drift_change_interval = null
 
 [node name="Dummy" parent="." instance=ExtResource("2_lrk4j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.38672, 0.952686, -11.856)

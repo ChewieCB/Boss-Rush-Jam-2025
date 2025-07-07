@@ -6,7 +6,7 @@ var missed_shot_stack_count = 0
 var hit_count = 0
 var projectile_count = 0
 
-var status_icon = preload("res://assets/sprite/buff_icon/bullet.png")
+var status_icon = preload("res://assets/sprite/status_icon/bullet.png")
 
 # FIXME: Not work properly with fast firing weapon
 # If the 2nd bullet is created before the 1st bullet destroyed, it wont care about the 1st bullet
