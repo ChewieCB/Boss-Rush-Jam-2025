@@ -20,7 +20,6 @@ Bullets build up Burn effect"
 [node name="AddElementalEffect" type="Node3D" parent="EffectContainer/FireInfusion"]
 script = ExtResource("3_lgco5")
 status_effect = 1
-flat_build_up_amount = 500.0
 change_color = true
 new_color = Color(1, 0.324769, 0, 1)
 
@@ -40,7 +39,6 @@ Bullets build up Poison effect"
 [node name="AddElementalEffect" type="Node3D" parent="EffectContainer/PoisonInfusion"]
 script = ExtResource("3_lgco5")
 status_effect = 2
-flat_build_up_amount = 500.0
 change_color = true
 new_color = Color(0.162939, 0.660156, 0, 1)
 
@@ -60,7 +58,6 @@ Bullets build up Frozen effect"
 [node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ColdInfusion"]
 script = ExtResource("3_lgco5")
 status_effect = 3
-flat_build_up_amount = 500.0
 change_color = true
 new_color = Color(0, 0.533333, 0.658824, 0.866667)
 
@@ -80,12 +77,11 @@ Bullets build up Shocked effect"
 [node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ElectricInfusion"]
 script = ExtResource("3_lgco5")
 status_effect = 4
-flat_build_up_amount = 500.0
 change_color = true
 new_color = Color(0.981201, 1, 0.496776, 1)
 
 [node name="ModifyRecoil" type="Node3D" parent="EffectContainer/ElectricInfusion"]
 script = ExtResource("4_o15qj")
 attribute = 11
-modify_value = -20.0
+modify_value = 20.0
 is_perc = true

@@ -48,6 +48,8 @@ enum BossStatusEffect {
 	BossStatusEffect.BLEEDING: 1000,
 }
 @export var status_duration = 10
+## Status resist increased by this amount after each status application
+@export var increased_tolerance = 500
 var current_status_buildup: Dictionary = {
 	BossStatusEffect.BURNING: 0,
 	BossStatusEffect.POISONED: 0,
@@ -621,6 +623,8 @@ func apply_status(status: BossStatusEffect, duration: float) -> void:
 
 
 func remove_status(status: BossStatusEffect) -> void:
+	status_resist[status] += increased_tolerance
+	current_status_buildup[status] = 0
 	var event_string: String = "status_%s" % BossStatusEffect.keys()[status].to_lower()
 	state_chart.send_event("remove_" + event_string)
 
@@ -720,9 +724,11 @@ func _on_status_bleeding_active_state_physics_processing(_delta: float) -> void:
 
 
 func _on_status_shocked_active_state_entered() -> void:
+	health_component.received_dmg_multiplier += 0.2
 	health_ui.change_status_label_visibility(BossStatusEffect.SHOCKED, true)
 
 func _on_status_shocked_active_state_exited() -> void:
+	health_component.received_dmg_multiplier -= 0.2
 	health_ui.change_status_label_visibility(BossStatusEffect.SHOCKED, false)
 
 func _on_status_shocked_active_state_physics_processing(_delta: float) -> void:
