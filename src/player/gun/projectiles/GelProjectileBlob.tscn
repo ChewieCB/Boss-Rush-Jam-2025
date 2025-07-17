@@ -1,15 +1,30 @@
-[gd_scene load_steps=10 format=3 uid="uid://dij705shy7t2i"]
+[gd_scene load_steps=13 format=3 uid="uid://dij705shy7t2i"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_projectile_blob.gd" id="1_qak0o"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_d3tjp"]
+[ext_resource type="Shader" path="res://src/player/assets/shaders/spiky_gel_sphere.gdshader" id="2_t2nfw"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uyanh"]
-roughness = 0.0
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xk3gl"]
+noise_type = 2
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_t4oah"]
+seamless = true
+noise = SubResource("FastNoiseLite_xk3gl")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gtuul"]
+render_priority = 0
+shader = ExtResource("2_t2nfw")
+shader_parameter/spike_strength = 0.05
+shader_parameter/noise_scale = 5.0
+shader_parameter/time_speed = 0.25
+shader_parameter/base_color = Color(1, 1, 1, 1)
+shader_parameter/highlight_color = Color(1, 1, 1, 1)
+shader_parameter/noise_tex = SubResource("NoiseTexture3D_t4oah")
 
 [sub_resource type="SphereMesh" id="SphereMesh_j6dyv"]
-material = SubResource("StandardMaterial3D_uyanh")
-radius = 0.2
-height = 0.4
+material = SubResource("ShaderMaterial_gtuul")
+radius = 0.15
+height = 0.3
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0jwuq"]
 radius = 0.242954

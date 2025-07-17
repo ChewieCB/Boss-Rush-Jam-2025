@@ -36,6 +36,22 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			global_position = hitscan_col_point
 
 
+func change_bullet_color(_new_color: Color):
+	color_changed_count += 1 # Can't use super() here
+	if color_changed_count > 1:
+		var old_color = mesh_instance.mesh.material.get_shader_parameter("base_color")
+		mesh_instance.mesh.material.set_shader_parameter("base_color", old_color.lerp(_new_color, 0.5))
+		old_color = mesh_instance.mesh.material.get_shader_parameter("highlight_color")
+		mesh_instance.mesh.material.set_shader_parameter("highlight_color", old_color.lerp(_new_color, 0.5))
+		trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
+		trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
+	else:
+		mesh_instance.mesh.material.set_shader_parameter("base_color", _new_color)
+		mesh_instance.mesh.material.set_shader_parameter("highlight_color", _new_color)
+		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.5)
+		trail.material_override.emission = _new_color
+
+
 func _on_stick_timer_timeout() -> void:
 	life_timer.start()
 	damage_tick_timer.stop()
