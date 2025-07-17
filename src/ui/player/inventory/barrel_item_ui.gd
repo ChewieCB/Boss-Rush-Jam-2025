@@ -40,7 +40,7 @@ func _ready() -> void:
 
 	button.mouse_entered.connect(play_button_hover_sfx)
 	button.focus_entered.connect(play_button_hover_sfx)
-	
+
 	button.mouse_entered.connect(expand_button_size)
 	button.mouse_exited.connect(return_button_size)
 	button.focus_entered.connect(expand_button_size)

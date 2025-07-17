@@ -1,4 +1,5 @@
 extends BaseProjectile
+class_name GelProjectile
 
 @export var stick_time = 1
 @export var max_scale = 3

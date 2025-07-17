@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://src/ui/pause_menu/pause_ui.gd" id="1_y22bm"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="2_mnul8"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="3_fbfq4"]
-[ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="4_5h1bl"]
+[ext_resource type="Shader" path="res://src/player/assets/shaders/old_movie.gdshader" id="4_5h1bl"]
 [ext_resource type="Texture2D" uid="uid://csw0xjbbqsivg" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-016.png" id="6_3n3jr"]
 [ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="6_vrelk"]
 [ext_resource type="Script" path="res://src/bosses/base/test/end_panel_ui.gd" id="8_vyjnr"]
