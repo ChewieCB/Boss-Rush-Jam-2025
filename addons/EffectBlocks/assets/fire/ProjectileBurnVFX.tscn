@@ -1,8 +1,8 @@
 [gd_scene load_steps=28 format=4 uid="uid://c54o67tient15"]
 
-[ext_resource type="Material" uid="uid://cjgoj12p3pb0g" path="res://addons/EffectBlocks/source_files/materials/fire_billboard.material" id="1_yh0xe"]
-[ext_resource type="Material" uid="uid://ks1kly3dfqvc" path="res://addons/EffectBlocks/source_files/materials/smoke_billboard.material" id="2_ob3go"]
-[ext_resource type="Script" path="res://addons/EffectBlocks/source_files/scripts/light_flicker.gd" id="3_catbm"]
+[ext_resource type="Script" path="res://addons/EffectBlocks/assets/fire/gpu_particle_controller.gd" id="1_yaaoq"]
+[ext_resource type="Material" uid="uid://cjgoj12p3pb0g" path="res://addons/EffectBlocks/source_files/materials/fire_billboard.material" id="2_uihrt"]
+[ext_resource type="Material" uid="uid://ks1kly3dfqvc" path="res://addons/EffectBlocks/source_files/materials/smoke_billboard.material" id="3_b8npb"]
 
 [sub_resource type="Gradient" id="Gradient_35pg8"]
 colors = PackedColorArray(0.94902, 0, 0, 1, 1, 0.776471, 0.0823529, 1)
@@ -61,7 +61,7 @@ _surfaces = [{
 "format": 34896613399,
 "index_count": 18,
 "index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
-"material": ExtResource("1_yh0xe"),
+"material": ExtResource("2_uihrt"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 8,
@@ -114,7 +114,7 @@ _surfaces = [{
 "format": 34896613399,
 "index_count": 18,
 "index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
-"material": ExtResource("2_ob3go"),
+"material": ExtResource("3_b8npb"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 8,
@@ -186,11 +186,15 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_udcdq")
 
-[node name="FireSmall" type="Node3D"]
+[node name="ProjectileBurnVFX" type="Node3D" node_paths=PackedStringArray("gpu_particles", "lights")]
+script = ExtResource("1_yaaoq")
+gpu_particles = [NodePath("Flame"), NodePath("Smoke"), NodePath("Sparks")]
+lights = [NodePath("OmniLight3D")]
+time_until_queue_free = 2
 
 [node name="Flame" type="GPUParticles3D" parent="."]
 amount = 64
-fixed_fps = 60
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
 process_material = SubResource("ParticleProcessMaterial_tq50w")
 draw_pass_1 = SubResource("ArrayMesh_83sco")
 
@@ -198,7 +202,7 @@ draw_pass_1 = SubResource("ArrayMesh_83sco")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.312395, 0)
 amount = 64
 lifetime = 3.0
-fixed_fps = 60
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
 process_material = SubResource("ParticleProcessMaterial_e5tbc")
 draw_pass_1 = SubResource("ArrayMesh_biwkl")
 
@@ -207,9 +211,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00946045, 0.54473, 0.000244
 amount = 32
 lifetime = 3.0
 randomness = 1.0
-fixed_fps = 60
-local_coords = true
-draw_order = 3
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
 process_material = SubResource("ParticleProcessMaterial_pgid1")
 draw_pass_1 = SubResource("ArrayMesh_cmt5e")
 
@@ -217,5 +219,4 @@ draw_pass_1 = SubResource("ArrayMesh_cmt5e")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.424942, 0)
 light_color = Color(2, 1.2, 0, 1)
 omni_range = 2.0
-script = ExtResource("3_catbm")
-movement_radius = 0.05
+omni_attenuation = 2.0

@@ -5,6 +5,9 @@ class_name BaseProjectile
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
 @export var bullet_decal_prefab: PackedScene
+# Check BossCore.BossStatusEffect for order
+@export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet persist
+# @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
 
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
@@ -34,7 +37,7 @@ var max_range
 var splitted = false
 var is_hitscan = false
 
-# Statistics traking or barrel effect
+# Statistics tracking for barrel effect
 var color_changed_count = 0
 var life_time = 0
 var spawn_pos = Vector3.ZERO
@@ -45,6 +48,11 @@ func _ready() -> void:
 	spawn_pos = global_position
 	life_time = 0
 	crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
+	for elem in elemental_emitting_vfx:
+		if elem:
+			elem.visible = false
+			if elem.has_method("turn_off"):
+				elem.turn_off()
 
 func _process(delta: float) -> void:
 	life_time += delta
@@ -151,3 +159,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 
 func change_bullet_color(_new_color: Color):
 	color_changed_count += 1
+
+
+func applied_elemental_vfx(_status_effect: BossCore.BossStatusEffect):
+	return

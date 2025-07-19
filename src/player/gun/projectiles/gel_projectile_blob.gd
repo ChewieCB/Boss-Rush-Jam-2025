@@ -53,7 +53,7 @@ func change_bullet_color(_new_color: Color):
 
 
 func _on_stick_timer_timeout() -> void:
-	life_timer.start()
+	life_timer.start(1)
 	damage_tick_timer.stop()
 	if ricochet_count_left > 0 and found_hitscal_col:
 		sticked = false

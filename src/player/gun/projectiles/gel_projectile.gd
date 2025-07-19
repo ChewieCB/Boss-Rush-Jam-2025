@@ -139,3 +139,11 @@ func change_bullet_color(_new_color: Color):
 		mesh_instance.mesh.material.albedo_color = _new_color
 		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.5)
 		trail.material_override.emission = _new_color
+
+func applied_elemental_vfx(status_effect: BossCore.BossStatusEffect):
+	if status_effect == BossCore.BossStatusEffect.BURNING:
+		var element_vfx_node = elemental_emitting_vfx[int(status_effect) - 1]
+		if element_vfx_node:
+			element_vfx_node.visible = true
+			if element_vfx_node.has_method("turn_on"):
+				element_vfx_node.turn_on()

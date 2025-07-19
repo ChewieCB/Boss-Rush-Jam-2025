@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://dij705shy7t2i"]
+[gd_scene load_steps=14 format=3 uid="uid://dij705shy7t2i"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_projectile_blob.gd" id="1_qak0o"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_d3tjp"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/spiky_gel_sphere.gdshader" id="2_t2nfw"]
+[ext_resource type="PackedScene" uid="uid://c20c16eqqr7kn" path="res://addons/EffectBlocks/assets/fire/FireBig.tscn" id="4_b0ndk"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xk3gl"]
 noise_type = 2
@@ -44,10 +45,11 @@ point_count = 2
 [sub_resource type="SphereShape3D" id="SphereShape3D_m0ts0"]
 radius = 1.0
 
-[node name="GelProjectileBlob" type="Node3D"]
+[node name="GelProjectileBlob" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
 script = ExtResource("1_qak0o")
 tick_per_second = 2
 stick_time = 5
+elemental_emitting_vfx = [NodePath("ElementalVFX/Burning"), null, null, null, null]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -95,6 +97,11 @@ wait_time = 2.0
 one_shot = true
 
 [node name="DamageTickTimer" type="Timer" parent="."]
+
+[node name="ElementalVFX" type="Node3D" parent="."]
+
+[node name="Burning" parent="ElementalVFX" instance=ExtResource("4_b0ndk")]
+visible = false
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_entered" from="HomingArea3D" to="." method="_on_homing_area_3d_body_entered"]

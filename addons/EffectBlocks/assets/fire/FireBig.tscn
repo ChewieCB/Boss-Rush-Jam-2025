@@ -1,8 +1,8 @@
-[gd_scene load_steps=28 format=3 uid="uid://c20c16eqqr7kn"]
+[gd_scene load_steps=28 format=4 uid="uid://c20c16eqqr7kn"]
 
+[ext_resource type="Script" path="res://addons/EffectBlocks/assets/fire/gpu_particle_controller.gd" id="1_htktt"]
 [ext_resource type="Material" uid="uid://cjgoj12p3pb0g" path="res://addons/EffectBlocks/source_files/materials/fire_billboard.material" id="1_u868s"]
 [ext_resource type="Material" uid="uid://ks1kly3dfqvc" path="res://addons/EffectBlocks/source_files/materials/smoke_billboard.material" id="2_tf07e"]
-[ext_resource type="Script" path="res://addons/EffectBlocks/source_files/scripts/light_flicker.gd" id="3_vhvav"]
 
 [sub_resource type="Gradient" id="Gradient_35pg8"]
 colors = PackedColorArray(0.94902, 0, 0, 1, 1, 0.776471, 0.0823529, 1)
@@ -44,11 +44,11 @@ _surfaces = [{
 "aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
 "format": 34896613377,
 "index_count": 18,
-"index_data": PackedByteArray(4, 0, 1, 0, 7, 0, 0, 0, 7, 0, 1, 0, 1, 0, 3, 0, 2, 0, 4, 0, 3, 0, 1, 0, 4, 0, 6, 0, 5, 0, 6, 0, 4, 0, 7, 0),
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 8,
-"vertex_data": PackedByteArray(106, 147, 254, 255, 135, 2, 0, 0, 39, 67, 247, 238, 186, 2, 0, 0, 0, 0, 205, 128, 73, 1, 0, 0, 21, 36, 233, 36, 90, 0, 0, 0, 234, 161, 0, 0, 0, 0, 0, 0, 246, 235, 165, 54, 217, 0, 0, 0, 255, 255, 228, 122, 31, 1, 0, 0, 26, 240, 234, 187, 78, 1, 0, 0)
+"vertex_data": PackedByteArray("apP+/4cCAAAnQ/fuugIAAAAAzYBJAQAAFSTpJFoAAADqoQAAAAAAAPbrpTbZAAAA///keh8BAAAa8Oq7TgEAAA==")
 }]
 blend_shape_mode = 0
 
@@ -56,15 +56,15 @@ blend_shape_mode = 0
 resource_name = "particle_circle_particle_circle"
 _surfaces = [{
 "aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
-"attribute_data": PackedByteArray(0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255),
+"attribute_data": PackedByteArray("AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8="),
 "format": 34896613399,
 "index_count": 18,
-"index_data": PackedByteArray(4, 0, 1, 0, 7, 0, 0, 0, 7, 0, 1, 0, 1, 0, 3, 0, 2, 0, 4, 0, 3, 0, 1, 0, 4, 0, 6, 0, 5, 0, 6, 0, 4, 0, 7, 0),
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
 "material": ExtResource("1_u868s"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 8,
-"vertex_data": PackedByteArray(106, 147, 254, 255, 135, 2, 254, 127, 39, 67, 247, 238, 186, 2, 254, 127, 0, 0, 205, 128, 73, 1, 254, 127, 21, 36, 233, 36, 90, 0, 254, 127, 234, 161, 0, 0, 0, 0, 254, 127, 246, 235, 165, 54, 217, 0, 254, 127, 255, 255, 228, 122, 31, 1, 254, 127, 26, 240, 234, 187, 78, 1, 254, 127, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255)
+"vertex_data": PackedByteArray("apP+/4cC/n8nQ/fuugL+fwAAzYBJAf5/FSTpJFoA/n/qoQAAAAD+f/brpTbZAP5////keh8B/n8a8Oq7TgH+f/9/////f////3////9/////f////3////9/////f///")
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_udcdq")
@@ -108,15 +108,15 @@ turbulence_influence_over_life = SubResource("CurveTexture_er5xf")
 resource_name = "particle_circle_particle_circle"
 _surfaces = [{
 "aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
-"attribute_data": PackedByteArray(0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255),
+"attribute_data": PackedByteArray("AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8="),
 "format": 34896613399,
 "index_count": 18,
-"index_data": PackedByteArray(4, 0, 1, 0, 7, 0, 0, 0, 7, 0, 1, 0, 1, 0, 3, 0, 2, 0, 4, 0, 3, 0, 1, 0, 4, 0, 6, 0, 5, 0, 6, 0, 4, 0, 7, 0),
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
 "material": ExtResource("2_tf07e"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 8,
-"vertex_data": PackedByteArray(106, 147, 254, 255, 135, 2, 254, 127, 39, 67, 247, 238, 186, 2, 254, 127, 0, 0, 205, 128, 73, 1, 254, 127, 21, 36, 233, 36, 90, 0, 254, 127, 234, 161, 0, 0, 0, 0, 254, 127, 246, 235, 165, 54, 217, 0, 254, 127, 255, 255, 228, 122, 31, 1, 254, 127, 26, 240, 234, 187, 78, 1, 254, 127, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255)
+"vertex_data": PackedByteArray("apP+/4cC/n8nQ/fuugL+fwAAzYBJAf5/FSTpJFoA/n/qoQAAAAD+f/brpTbZAP5////keh8B/n8a8Oq7TgH+f/9/////f////3////9/////f////3////9/////f///")
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_udcdq")
@@ -171,20 +171,23 @@ particles_anim_loop = false
 resource_name = "particle_circle_particle_circle"
 _surfaces = [{
 "aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
-"attribute_data": PackedByteArray(0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255),
+"attribute_data": PackedByteArray("AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8="),
 "format": 34896613399,
 "index_count": 18,
-"index_data": PackedByteArray(4, 0, 1, 0, 7, 0, 0, 0, 7, 0, 1, 0, 1, 0, 3, 0, 2, 0, 4, 0, 3, 0, 1, 0, 4, 0, 6, 0, 5, 0, 6, 0, 4, 0, 7, 0),
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
 "material": SubResource("StandardMaterial3D_2knnp"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 8,
-"vertex_data": PackedByteArray(106, 147, 254, 255, 135, 2, 254, 127, 39, 67, 247, 238, 186, 2, 254, 127, 0, 0, 205, 128, 73, 1, 254, 127, 21, 36, 233, 36, 90, 0, 254, 127, 234, 161, 0, 0, 0, 0, 254, 127, 246, 235, 165, 54, 217, 0, 254, 127, 255, 255, 228, 122, 31, 1, 254, 127, 26, 240, 234, 187, 78, 1, 254, 127, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255)
+"vertex_data": PackedByteArray("apP+/4cC/n8nQ/fuugL+fwAAzYBJAf5/FSTpJFoA/n/qoQAAAAD+f/brpTbZAP5////keh8B/n8a8Oq7TgH+f/9/////f////3////9/////f////3////9/////f///")
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_udcdq")
 
-[node name="FireBig" type="Node3D"]
+[node name="FireBig" type="Node3D" node_paths=PackedStringArray("gpu_particles", "lights")]
+script = ExtResource("1_htktt")
+gpu_particles = [NodePath("Flame"), NodePath("Smoke"), NodePath("Sparks")]
+lights = [NodePath("OmniLight3D")]
 
 [node name="Flame" type="GPUParticles3D" parent="."]
 amount = 128
@@ -200,6 +203,7 @@ lifetime = 3.0
 fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_ckvv1")
 draw_pass_1 = SubResource("ArrayMesh_biwkl")
+script = ExtResource("1_htktt")
 
 [node name="Sparks" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00946045, 0.535898, 0.000244141)
@@ -217,4 +221,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12605, 0)
 light_color = Color(2, 1.2, 0, 1)
 light_energy = 2.0
 omni_range = 4.0
-script = ExtResource("3_vhvav")

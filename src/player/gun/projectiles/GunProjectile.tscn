@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://guegep2ueo26"]
+[gd_scene load_steps=14 format=3 uid="uid://guegep2ueo26"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_projectile.gd" id="1_x0ax1"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_bxb8l"]
 [ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_7tm1i"]
 [ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/BulletDecal.tscn" id="4_5dvet"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_xa5jf"]
+[ext_resource type="PackedScene" uid="uid://c54o67tient15" path="res://addons/EffectBlocks/assets/fire/ProjectileBurnVFX.tscn" id="6_q13y4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u7eax"]
 resource_local_to_scene = true
@@ -35,11 +36,12 @@ point_count = 2
 [sub_resource type="SphereShape3D" id="SphereShape3D_m0ts0"]
 radius = 1.0
 
-[node name="GunProjectile" type="Node3D"]
+[node name="GunProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
 script = ExtResource("1_x0ax1")
 spark_effect = ExtResource("2_bxb8l")
 generic_blood_splatter = ExtResource("3_7tm1i")
 bullet_decal_prefab = ExtResource("4_5dvet")
+elemental_emitting_vfx = [NodePath("ElementalVFX/Burning"), null, null, null, null]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -81,6 +83,11 @@ monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HomingArea3D"]
 shape = SubResource("SphereShape3D_m0ts0")
+
+[node name="ElementalVFX" type="Node3D" parent="."]
+
+[node name="Burning" parent="ElementalVFX" instance=ExtResource("6_q13y4")]
+visible = false
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
