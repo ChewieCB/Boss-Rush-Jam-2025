@@ -611,8 +611,9 @@ func _on_hurt_frame_timer_timeout() -> void:
 ## STATUS EFFECTS
 
 func apply_status_buildup(status: BossStatusEffect, amount: float) -> void:
+	if current_status_buildup[status] < status_resist[status]:
 		current_status_buildup[status] += amount
-		if current_status_buildup[status] > status_resist[status]:
+		if current_status_buildup[status] >= status_resist[status]:
 			apply_status(status, status_duration)
 
 func apply_status(status: BossStatusEffect, duration: float) -> void:
@@ -629,33 +630,12 @@ func remove_status(status: BossStatusEffect) -> void:
 	state_chart.send_event("remove_" + event_string)
 
 
-# func create_status_label(status: String, color: Color) -> void:
-# 	var status_label := Label3D.new()
-# 	status_label.text = status
-# 	status_label.modulate = color
-# 	status_label.font_size = 128
-# 	status_label.outline_size = 32
-# 	status_label.uppercase = true
-# 	status_label.double_sided = true
-# 	status_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-# 	debug_status_label_parent.add_child(status_label)
-# 	status_label.position.y = 0.6 * debug_status_label_parent.get_child_count()
-
-
-# func remove_status_label(status: String) -> void:
-# 	var status_labels = debug_status_label_parent.get_children()
-# 	status_labels.filter(func(x): return x.text == status)
-# 	var label = status_labels.front()
-# 	debug_status_label_parent.remove_child(label)
-# 	label.queue_free()
-
-
 # ====================== Status ==========================
 func _on_status_burning_active_state_entered() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.BURNING, true)
 	# TODO - add burning effect particles/shader/icon
 	#
-	burning_timer.start(0.6)
+	burning_timer.start(0.5) # Interval between damage
 
 
 func _on_status_burning_active_state_physics_processing(_delta: float) -> void:
@@ -672,7 +652,7 @@ func _on_status_burning_active_state_exited() -> void:
 func _on_status_poisoned_active_state_entered() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.POISONED, true)
 	# TODO - add burning effect particles/shader/icon
-	poisoned_timer.start(1.8)
+	poisoned_timer.start(2.5) # Interval between damage
 
 
 func _on_status_poisoned_active_state_physics_processing(_delta: float) -> void:
@@ -688,7 +668,8 @@ func _on_status_poisoned_active_state_exited() -> void:
 
 func _on_burning_timer_timeout() -> void:
 	# TODO - let specific attacks/modifiers change how much damage the effect does
-	health_component.damage(5, Color.ORANGE)
+	var burn_dmg = int(health_component.max_health * 0.005) # (0.5% max hp dmg per tick)
+	health_component.damage(burn_dmg, Color.ORANGE)
 	sprite.modulate = Color.ORANGE
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE
@@ -696,7 +677,8 @@ func _on_burning_timer_timeout() -> void:
 
 func _on_poisoned_timer_timeout() -> void:
 	# TODO - let specific attacks/modifiers change how much damage the effect does
-	health_component.damage(12, Color.WEB_GREEN)
+	var poison_dmg = int(health_component.max_health * 0.03) # (3% max hp dmg per tick)
+	health_component.damage(poison_dmg, Color.WEB_GREEN)
 	sprite.modulate = Color.WEB_GREEN
 	await get_tree().create_timer(0.4).timeout
 	sprite.modulate = Color.WHITE
