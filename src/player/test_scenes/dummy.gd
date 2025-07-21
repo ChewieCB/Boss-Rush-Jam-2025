@@ -2,6 +2,7 @@ extends CharacterBody3D
 class_name Dummy
 
 @export var health_component: HealthComponent
+@export var increased_tolerance = 500
 @export var status_resist: Dictionary = {
 	BossCore.BossStatusEffect.BURNING: 1000,
 	BossCore.BossStatusEffect.POISONED: 1000,
@@ -10,7 +11,6 @@ class_name Dummy
 	BossCore.BossStatusEffect.BLEEDING: 1000,
 }
 @export var status_duration = 10
-
 @onready var damage_label: Label3D = $DamageLabel
 @onready var status_label: Label3D = $StatusLabel
 @onready var happy_face_label: Label3D = $HappyFaceLabel
@@ -85,6 +85,7 @@ func apply_status(status: BossCore.BossStatusEffect, duration: float) -> void:
 
 
 func remove_status(status: BossCore.BossStatusEffect) -> void:
+	status_resist[status] += increased_tolerance
+	current_status_buildup[status] = 0
 	var status_text = BossCore.BossStatusEffect.keys()[status].to_lower() + " "
 	status_label.text = status_label.text.replace(status_text, "")
-	current_status_buildup[status] = 0

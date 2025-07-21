@@ -6,8 +6,8 @@ class_name BaseProjectile
 @export var generic_blood_splatter: PackedScene
 @export var bullet_decal_prefab: PackedScene
 # Check BossCore.BossStatusEffect for order
-@export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet persist
-# @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
+@export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
+@export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
 
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
@@ -36,6 +36,7 @@ var projectile_speed = 100
 var max_range
 var splitted = false
 var is_hitscan = false
+var infused_status_effect = [false, false, false, false, false]
 
 # Statistics tracking for barrel effect
 var color_changed_count = 0
@@ -58,8 +59,10 @@ func _process(delta: float) -> void:
 	life_time += delta
 
 func create_spark(pos: Vector3, normal: Vector3):
+	create_status_effect_impact(pos, normal)
 	if spark_effect == null:
 		return
+
 	var spark_inst = spark_effect.instantiate()
 	get_parent().add_child(spark_inst)
 	spark_inst.global_position = pos
@@ -72,8 +75,10 @@ func create_spark(pos: Vector3, normal: Vector3):
 		spark_inst.look_at(pos + normal, Vector3.UP)
 
 func create_blood_splatter(pos: Vector3, normal: Vector3):
+	create_status_effect_impact(pos, normal)
 	if generic_blood_splatter == null:
 		return
+		
 	var blood_inst = generic_blood_splatter.instantiate()
 	get_parent().add_child(blood_inst)
 	blood_inst.global_position = pos
@@ -98,6 +103,19 @@ func create_bullet_decal(pos: Vector3, normal: Vector3):
 
 	# Rotate the decal a bit for variety
 	decal_inst.rotate_object_local(Vector3(0, 1, 0), randf_range(0.0, 360.0))
+
+func create_status_effect_impact(pos: Vector3, normal: Vector3):
+	var impact_effect = null
+	for i in range(len(infused_status_effect)):
+		if infused_status_effect[i] and elemental_impact_vfx[i]:
+			impact_effect = elemental_impact_vfx[i]
+			var impact_inst = impact_effect.instantiate()
+			get_parent().add_child(impact_inst)
+			impact_inst.global_position = pos
+
+			if abs(normal.dot(Vector3.UP)) < 0.999:
+				impact_inst.look_at(pos + normal, Vector3.UP)
+				impact_inst.rotate_object_local(Vector3(1, 0, 0), 90)
 
 func calculate_bullet_damage():
 	var rand_damage_mod = get_damage_variance_modifier(damage)
@@ -161,5 +179,21 @@ func change_bullet_color(_new_color: Color):
 	color_changed_count += 1
 
 
-func applied_elemental_vfx(_status_effect: BossCore.BossStatusEffect):
-	return
+func infuse_status_effect(_status_effect: BossCore.BossStatusEffect):
+	infused_status_effect[int(_status_effect) - 1] = true
+
+
+func stop_elemental_particles():
+	for elem in elemental_emitting_vfx:
+		if elem:
+			elem.queue_free_after_time()
+
+func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
+	# Wait a bit to make the effect look better
+	await get_tree().create_timer(0.1).timeout
+	if status_effect == BossCore.BossStatusEffect.BURNING:
+		var element_vfx_node = elemental_emitting_vfx[int(status_effect) - 1]
+		if element_vfx_node:
+			element_vfx_node.visible = true
+			if element_vfx_node.has_method("turn_on"):
+				element_vfx_node.turn_on()

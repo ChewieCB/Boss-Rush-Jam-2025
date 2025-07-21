@@ -144,19 +144,3 @@ func change_bullet_color(_new_color: Color):
 		mesh.mesh.material.emission = _new_color
 		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
 		trail.material_override.emission = _new_color
-
-func applied_elemental_vfx(status_effect: BossCore.BossStatusEffect):
-	# Wait a bit to make the effect look better
-	await get_tree().create_timer(0.1).timeout
-	if status_effect == BossCore.BossStatusEffect.BURNING:
-		var element_vfx_node = elemental_emitting_vfx[int(status_effect) - 1]
-		if element_vfx_node:
-			element_vfx_node.visible = true
-			if element_vfx_node.has_method("turn_on"):
-				element_vfx_node.turn_on()
-
-
-func stop_elemental_particles():
-	for elem in elemental_emitting_vfx:
-		if elem and elem.has_method("queue_free_after_time"):
-			elem.queue_free_after_time()

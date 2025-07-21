@@ -14,6 +14,7 @@ script = ExtResource("1_2a2qf")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="BulletTime" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("3_q7s8s")
 display_text_title = "Bullet Time"
 display_text_tag = "You are not Neo though"
@@ -60,6 +61,7 @@ modify_value = -50.0
 is_perc = true
 
 [node name="MedicalPayout" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("8_0by4g")
 display_text_title = "Medical Payout"
 display_text_tag = "Hurt others to heal yourself"

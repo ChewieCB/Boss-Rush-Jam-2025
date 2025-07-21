@@ -57,10 +57,10 @@ func _on_stick_timer_timeout() -> void:
 	damage_tick_timer.stop()
 	if ricochet_count_left > 0 and found_hitscal_col:
 		sticked = false
-		damage_tick_timer.stop()
 		self.reparent.call_deferred(get_tree().get_root())
 		ricochet()
 	else:
+		stop_elemental_particles()
 		start_deflate = true
 
 

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_projectile_blob.gd" id="1_qak0o"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_d3tjp"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/spiky_gel_sphere.gdshader" id="2_t2nfw"]
-[ext_resource type="PackedScene" uid="uid://c20c16eqqr7kn" path="res://addons/EffectBlocks/assets/fire/FireBig.tscn" id="4_b0ndk"]
+[ext_resource type="PackedScene" uid="uid://bab1ejq76oubu" path="res://addons/EffectBlocks/assets/fire/ProjectileBurnEmitBig.tscn" id="4_xti10"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xk3gl"]
 noise_type = 2
@@ -49,7 +49,7 @@ radius = 1.0
 script = ExtResource("1_qak0o")
 tick_per_second = 2
 stick_time = 5
-elemental_emitting_vfx = [NodePath("ElementalVFX/Burning"), null, null, null, null]
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitBig"), null, null, null, null]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -100,8 +100,7 @@ one_shot = true
 
 [node name="ElementalVFX" type="Node3D" parent="."]
 
-[node name="Burning" parent="ElementalVFX" instance=ExtResource("4_b0ndk")]
-visible = false
+[node name="ProjectileBurnEmitBig" parent="ElementalVFX" instance=ExtResource("4_xti10")]
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_entered" from="HomingArea3D" to="." method="_on_homing_area_3d_body_entered"]

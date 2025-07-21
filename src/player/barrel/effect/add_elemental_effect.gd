@@ -9,7 +9,8 @@ extends BaseBarrelEffect
 func on_projectile_spawn(_projectile: BaseProjectile):
 	if change_color:
 		_projectile.change_bullet_color(new_color)
-	_projectile.applied_elemental_vfx(status_effect)
+	_projectile.infuse_status_effect(status_effect)
+	_projectile.applied_emitting_elemental_vfx(status_effect)
 	
 
 func on_before_damage_applied(enemy: CharacterBody3D, _projectile: BaseProjectile):

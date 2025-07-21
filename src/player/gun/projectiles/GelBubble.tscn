@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://fsh2tr0s517i"]
+[gd_scene load_steps=12 format=3 uid="uid://fsh2tr0s517i"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_bubble.gd" id="1_72qkr"]
 [ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="1_jvmu0"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_4hpp2"]
+[ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://addons/EffectBlocks/assets/fire/ProjectileBurnImpact.tscn" id="2_cea51"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ucajo"]
 transparency = 1
@@ -38,6 +39,7 @@ radius = 1.0
 script = ExtResource("1_72qkr")
 max_scale = 5
 grow_speed = 25
+elemental_impact_vfx = Array[PackedScene]([ExtResource("2_cea51"), null, null, null, null])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0

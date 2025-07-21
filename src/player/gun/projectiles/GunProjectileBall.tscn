@@ -1,24 +1,28 @@
-[gd_scene load_steps=7 format=3 uid="uid://71phynp62d0y"]
+[gd_scene load_steps=8 format=3 uid="uid://71phynp62d0y"]
 
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="1_dfyk2"]
-[ext_resource type="Texture2D" uid="uid://bir3bjle34i7" path="res://assets/textures/placeholder/texture_dark_09.png" id="2_qv0ob"]
+[ext_resource type="Texture2D" uid="uid://xqhack4uhgdb" path="res://assets/textures/placeholder/texture_dark_06.png" id="2_c4tgf"]
+[ext_resource type="PackedScene" uid="uid://bu6amtwoa4tax" path="res://addons/EffectBlocks/assets/fire/ProjectileBurnImpactBig.tscn" id="2_fjism"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cm2h5"]
-albedo_texture = ExtResource("2_qv0ob")
+albedo_texture = ExtResource("2_c4tgf")
 
 [sub_resource type="SphereMesh" id="SphereMesh_5h75q"]
 material = SubResource("StandardMaterial3D_cm2h5")
+radius = 0.4
+height = 0.8
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_6o3jq"]
-radius = 0.6
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5q8h"]
 transparency = 1
 albedo_color = Color(1, 0.995527, 0.960938, 0.713726)
 emission = Color(1, 0.731834, 0.032858, 1)
 
-[node name="GunProjectileBall" instance=ExtResource("1_dfyk2")]
+[node name="GunProjectileBall" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_dfyk2")]
 gravity_modifier = 1.0
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmit"), null, null, null, null]
+elemental_impact_vfx = Array[PackedScene]([ExtResource("2_fjism"), null, null, null, null])
 
 [node name="MeshInstance3D" parent="." index="0"]
 mesh = SubResource("SphereMesh_5h75q")
@@ -31,3 +35,6 @@ target_position = Vector3(0, 0, -20)
 
 [node name="Trail3D" parent="Trail" index="0"]
 material_override = SubResource("StandardMaterial3D_r5q8h")
+
+[node name="ProjectileBurnEmit" parent="ElementalVFX" index="0"]
+visible = true
