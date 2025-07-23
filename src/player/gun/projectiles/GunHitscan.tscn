@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_j44ol"]
 [ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="3_d15wr"]
 [ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_vycbx"]
-[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/BulletDecal.tscn" id="4_coueb"]
-[ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://addons/EffectBlocks/assets/fire/ProjectileBurnImpact.tscn" id="5_w6u08"]
+[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/decal/BulletDecal.tscn" id="4_coueb"]
+[ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpact.tscn" id="5_w6u08"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ch4f"]
 resource_local_to_scene = true

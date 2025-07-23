@@ -3,9 +3,9 @@
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_hitscan.gd" id="1_gwc3y"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_ircxh"]
 [ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_vqvrn"]
-[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/BulletDecal.tscn" id="4_8emp0"]
+[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/decal/BulletDecal.tscn" id="4_8emp0"]
 [ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="4_mqx5a"]
-[ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://addons/EffectBlocks/assets/fire/ProjectileBurnImpact.tscn" id="5_88yu2"]
+[ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpact.tscn" id="5_88yu2"]
 [ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="5_q8kxl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ka6s1"]

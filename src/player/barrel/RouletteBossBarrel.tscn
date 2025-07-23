@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_2bruo"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/protective_barrier.gd" id="6_61sk6"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="7_6c636"]
-[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/ShieldBarrier.tscn" id="7_n73is"]
+[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/misc/ShieldBarrier.tscn" id="7_n73is"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="7_o6cqq"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/apply_knockback_self.gd" id="8_1u0d3"]
 [ext_resource type="PackedScene" uid="uid://71phynp62d0y" path="res://src/player/gun/projectiles/GunProjectileBall.tscn" id="8_ueih2"]

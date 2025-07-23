@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://d3ulx8v6ei5uu"]
 
-[ext_resource type="Texture2D" uid="uid://d3mpl1yg7s51e" path="res://src/player/gun/vfx/muzzle_flash.png" id="1_vxaw8"]
-[ext_resource type="Script" path="res://src/player/gun/vfx/muzzle_flash.gd" id="2_5hqqh"]
+[ext_resource type="Texture2D" uid="uid://d3mpl1yg7s51e" path="res://src/player/gun/vfx/muzzle_flash/muzzle_flash.png" id="1_vxaw8"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/muzzle_flash/muzzle_flash.gd" id="2_5hqqh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jnvrt"]
 atlas = ExtResource("1_vxaw8")

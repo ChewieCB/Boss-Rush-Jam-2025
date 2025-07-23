@@ -1,6 +1,6 @@
 [gd_scene load_steps=21 format=3 uid="uid://b3qmxcwnu2wu0"]
 
-[ext_resource type="Script" path="res://src/player/gun/vfx/explosion_vfx_2d.gd" id="1_cshkv"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/explosion/explosion_vfx_2d.gd" id="1_cshkv"]
 [ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="2_nbj2j"]
 
 [sub_resource type="Gradient" id="Gradient_n6jnf"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=28 format=4 uid="uid://bu6amtwoa4tax"]
 
-[ext_resource type="Script" path="res://addons/EffectBlocks/assets/fire/gpu_particle_controller.gd" id="1_bnlny"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/elemental/fire/gpu_particle_controller.gd" id="1_bnlny"]
 [ext_resource type="Material" uid="uid://cjgoj12p3pb0g" path="res://addons/EffectBlocks/source_files/materials/fire_billboard.material" id="2_8glpy"]
 [ext_resource type="Material" uid="uid://ks1kly3dfqvc" path="res://addons/EffectBlocks/source_files/materials/smoke_billboard.material" id="3_t2tls"]
 

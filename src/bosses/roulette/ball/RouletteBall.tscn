@@ -1,7 +1,7 @@
 [gd_scene load_steps=34 format=3 uid="uid://cpicsh5bemc0b"]
 
 [ext_resource type="Script" path="res://src/bosses/roulette/ball/roulette_ball.gd" id="1_onkcb"]
-[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_3sdjd"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="2_3sdjd"]
 [ext_resource type="AudioStream" uid="uid://d1qjywjnfqec0" path="res://src/bosses/roulette/assets/sfx/Ball Launch Sound 1.mp3" id="2_108so"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="3_g45k2"]
 [ext_resource type="AudioStream" uid="uid://5otvtcdfnuum" path="res://src/bosses/roulette/assets/sfx/Ball Launch Sound 2.mp3" id="3_luxd2"]

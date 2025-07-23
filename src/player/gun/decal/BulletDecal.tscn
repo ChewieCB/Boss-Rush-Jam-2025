@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://okcqj4inb2gf"]
 
 [ext_resource type="Texture2D" uid="uid://cp6uknjrmtsy5" path="res://src/player/gun/assets/sprite/bullet_decal.png" id="1_ghckc"]
-[ext_resource type="Script" path="res://src/player/gun/bullet_decal.gd" id="2_yrc0a"]
+[ext_resource type="Script" path="res://src/player/gun/decal/bullet_decal.gd" id="2_yrc0a"]
 
 [node name="Decal" type="Decal"]
 size = Vector3(0.2, 0.2, 0.2)

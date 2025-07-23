@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_bubble.gd" id="1_72qkr"]
 [ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="1_jvmu0"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_4hpp2"]
-[ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://addons/EffectBlocks/assets/fire/ProjectileBurnImpact.tscn" id="2_cea51"]
+[ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpact.tscn" id="2_cea51"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ucajo"]
 transparency = 1

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_projectile_blob.gd" id="1_qak0o"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_d3tjp"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/spiky_gel_sphere.gdshader" id="2_t2nfw"]
-[ext_resource type="PackedScene" uid="uid://bab1ejq76oubu" path="res://addons/EffectBlocks/assets/fire/ProjectileBurnEmitBig.tscn" id="4_xti10"]
+[ext_resource type="PackedScene" uid="uid://bab1ejq76oubu" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmitBig.tscn" id="4_xti10"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xk3gl"]
 noise_type = 2
