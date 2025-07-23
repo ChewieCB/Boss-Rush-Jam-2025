@@ -17,6 +17,9 @@ func _ready() -> void:
 		turn_off_light = true
 		for elem in gpu_particles:
 			elem.emitting = true
+	else:
+		for elem in gpu_particles:
+			elem.emitting = false
 	
 	if self_destroy_after_time > 0:
 		await get_tree().create_timer(self_destroy_after_time).timeout
@@ -26,6 +29,8 @@ func turn_on():
 	for elem in gpu_particles:
 		elem.emitting = true
 
+# Turn off while leaving left over particles disappear on their own.
+# Without `elem.lifetime = 1`, the left ove particles will instantly disappear.
 func turn_off():
 	for elem in gpu_particles:
 		elem.lifetime = 1

@@ -52,8 +52,6 @@ func _ready() -> void:
 	for elem in elemental_emitting_vfx:
 		if elem:
 			elem.visible = false
-			if elem.has_method("turn_off"):
-				elem.turn_off()
 
 func _process(delta: float) -> void:
 	life_time += delta
@@ -191,9 +189,8 @@ func stop_elemental_particles():
 func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 	# Wait a bit to make the effect look better
 	await get_tree().create_timer(0.1).timeout
-	if status_effect == BossCore.BossStatusEffect.BURNING:
-		var element_vfx_node = elemental_emitting_vfx[int(status_effect) - 1]
-		if element_vfx_node:
-			element_vfx_node.visible = true
-			if element_vfx_node.has_method("turn_on"):
-				element_vfx_node.turn_on()
+	var element_vfx_node = elemental_emitting_vfx[int(status_effect) - 1]
+	if element_vfx_node:
+		element_vfx_node.visible = true
+		if element_vfx_node.has_method("turn_on"):
+			element_vfx_node.turn_on()
