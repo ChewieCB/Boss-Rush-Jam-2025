@@ -22,6 +22,9 @@ func _ready() -> void:
 	$FuncGodotMap/entity_149_ElevatorButton.pushed.connect(_on_level_select)
 	for i in range(chiplings_to_spawn_1):
 		spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
+	
+	# FIXME - workaround
+	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_147_SlidingDoor
 
 
 func _input(event: InputEvent) -> void:

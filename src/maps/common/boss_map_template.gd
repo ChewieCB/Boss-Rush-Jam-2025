@@ -14,7 +14,7 @@ var nav_region: NavigationRegion3D
 @export_group("Actors")
 @onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
-@onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
+@onready var elevator_doors: SlidingDoor = find_children("*", "ElevatorDoors").front()
 
 @export_group("UI")
 @export var win_subtext: Array[String] = [""]
