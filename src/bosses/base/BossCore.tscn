@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="2_5bmmu"]
-[ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChipProjectile.tscn" id="2_hj7qa"]
+[ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChip.tscn" id="2_hj7qa"]
 [ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="2_s3pnh"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_fy6mc"]
 [ext_resource type="PackedScene" uid="uid://bwei3cifjg1sq" path="res://src/ui/boss/BossHealthBar.tscn" id="3_ybtoo"]

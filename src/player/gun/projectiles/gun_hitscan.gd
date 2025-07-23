@@ -68,8 +68,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 	# Normal hitscan start here
 	life_timer.start()
-	var rand_damage_mod = get_damage_variance_modifier(_damage)
-	damage = _damage + rand_damage_mod
+	damage = _damage
 	projectile_speed = _speed
 	ricochet_count_left = ricochet_count
 	max_range = _max_range
@@ -87,10 +86,11 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		end_pos = hitscan_col_point
 		travelled_distance += start_pos.distance_to(end_pos)
 		impacted.emit(self, true, hitscan_col_point)
+		var calculated_damage = calculate_bullet_damage()
 		if target is CharacterBody3D:
 			before_damage_applied.emit(target, self)
-			target.health_component.damage(damage)
-			damage_applied.emit(damage, true, target.global_position)
+			target.health_component.damage(calculated_damage)
+			damage_applied.emit(calculated_damage, true, target.global_position)
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 		else:
 			if "health_component" in target:

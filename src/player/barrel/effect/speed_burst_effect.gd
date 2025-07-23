@@ -6,7 +6,7 @@ extends BaseBarrelEffect
 @export var duration: float = 1
 
 var dash_speed_buff_icon = preload("res://assets/sprite/buff_icon/dash_speed_up.png")
-var run_speed_buff_icon = preload("res://assets/sprite/buff_icon/run_speed_up.png")
+# var run_speed_buff_icon = preload("res://assets/sprite/buff_icon/run_speed_up.png")
 
 func on_ammo_consumed():
     var dash_slide_speed_buff = StatusEffect.new()
@@ -26,5 +26,6 @@ func on_ammo_consumed():
     run_speed_buff.value = bonus_run_speed_perc
     run_speed_buff.modify_type = StatusEffect.ModifyType.PERCENTAGE
     run_speed_buff.duration = duration
-    run_speed_buff.status_icon = run_speed_buff_icon
+    # run_speed_buff.status_icon = run_speed_buff_icon
+    run_speed_buff.show_duration_ui = false
     GameManager.player.add_status_effect(run_speed_buff)

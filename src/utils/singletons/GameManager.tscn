@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://bf0e8h28gl1ae"]
+[gd_scene load_steps=44 format=3 uid="uid://bf0e8h28gl1ae"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/game_manager.gd" id="1_rn441"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_m6fe3"]
@@ -13,7 +13,6 @@
 [ext_resource type="Resource" uid="uid://cipovlqeojqla" path="res://src/player/barrel/resource/archetype_gelthrower_spec_barrrel_data.tres" id="10_ol55s"]
 [ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="10_sxhit"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="11_pbpm2"]
-[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="11_rdxq7"]
 [ext_resource type="Resource" uid="uid://bibe88ibu2n4d" path="res://src/player/barrel/resource/leg_eye_coordinate_barrel_data.tres" id="12_046jp"]
 [ext_resource type="Resource" uid="uid://yx1psxr1obhn" path="res://src/player/barrel/resource/projectile_count_barrel_data.tres" id="12_b3bxi"]
 [ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="13_aamrg"]

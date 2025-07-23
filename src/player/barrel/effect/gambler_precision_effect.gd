@@ -25,12 +25,9 @@ func on_projectile_destroyed():
 			if roll <= jam_chance_if_missed:
 				owner_barrel.owner_gun.jam_the_gun(2)
 
-func on_damage_calculation():
-	super ()
-	var roll = randi_range(1, 100)
-	if roll <= crit_chance:
-		owner_barrel.owner_gun.modified_damage = owner_barrel.owner_gun.modified_damage * 2
-		owner_barrel.owner_gun.crit_damage(owner_barrel.owner_gun.modified_damage)
+
+func on_projectile_spawn(projectile: BaseProjectile):
+	projectile.crit_chance += (crit_chance / 100.0)
 
 func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	super ()

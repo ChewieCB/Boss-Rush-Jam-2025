@@ -66,8 +66,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	var rand_damage_mod = get_damage_variance_modifier(_damage)
-	damage = _damage + rand_damage_mod
+	damage = _damage
 	current_dir = dir
 	ricochet_count_left = ricochet_count
 	look_at_from_position(start_pos, start_pos + dir)
@@ -94,11 +93,12 @@ func ricochet():
 	gravity_accel = 0
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
+	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			body.health_component.damage(damage)
-			damage_applied.emit(damage, true, global_position)
+			body.health_component.damage(calculated_damage)
+			damage_applied.emit(calculated_damage, true, global_position)
 			ricochet_count_left = 0
 		if found_hitscal_col:
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)

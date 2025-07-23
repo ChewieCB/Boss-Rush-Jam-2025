@@ -66,8 +66,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	var rand_damage_mod = get_damage_variance_modifier(_damage)
-	damage = _damage + rand_damage_mod
+	damage = _damage
 	current_dir = dir
 	ricochet_count_left = ricochet_count
 	look_at_from_position(start_pos, start_pos + dir)
@@ -88,17 +87,18 @@ func ricochet():
 
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
+	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			body.health_component.damage(damage)
-			damage_applied.emit(damage, true, global_position)
+			body.health_component.damage(calculated_damage)
+			damage_applied.emit(calculated_damage, true, global_position)
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
-			body.health_component.damage(damage)
+			body.health_component.damage(calculated_damage)
 		elif "health_component" in body:
-			body.health_component.damage(damage)
+			body.health_component.damage(calculated_damage)
 	self.reparent.call_deferred(body)
 	impacted.emit(self, true, global_position)
 	if ricochet_count_left > 0 and found_hitscal_col:

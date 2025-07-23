@@ -62,6 +62,7 @@
 [ext_resource type="Material" uid="uid://dnhblhjk8if2e" path="res://assets/textures/posters/shop_odds_board.tres" id="52_p4602"]
 [ext_resource type="AudioStream" uid="uid://cuge1lwxr3m82" path="res://src/maps/lobby/assets/Lift Door Open.mp3" id="56_4ys2i"]
 [ext_resource type="AudioStream" uid="uid://brxmaksjy6431" path="res://src/maps/lobby/assets/Lift Door Close.mp3" id="57_wqqjr"]
+[ext_resource type="PackedScene" uid="uid://cm1sitbvy6aye" path="res://src/maps/lobby/shrine/SkillShrine.tscn" id="58_gmegp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ckxgb"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -3642,6 +3643,9 @@ stream = ExtResource("57_wqqjr")
 volume_db = -5.0
 unit_size = 2.0
 bus = &"SFX"
+
+[node name="SkillShrine" parent="." instance=ExtResource("58_gmegp")]
+transform = Transform3D(0.545122, 0, -0.838357, 0, 1, 0, 0.838357, 0, 0.545122, -5.67673, 0.0931455, -0.799994)
 
 [connection signal="body_entered" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_entered"]
 [connection signal="body_exited" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_exited"]

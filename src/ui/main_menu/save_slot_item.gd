@@ -26,12 +26,13 @@ func _ready() -> void:
 
 	save_data = SaveManager.load_data_only(slot_id)
 	if not save_data.is_empty():
+		var level = save_data.get("player_level", 1)
 		var chips = save_data.get("player_currency", 0)
 		var barrel_collected = len(save_data.get("equipped_barrels", [])) + len(save_data.get("inventory_barrels", []))
 		var playtime = save_data.get("total_playtime", 0)
 		load_button_label.text = "[b][color=gold]Slot {0}[/color][/b] \
-			\nChips: {1} | Barrels collected: {2} \
-			\nPlaytime: {3}".format([slot_id, chips, barrel_collected, format_time(playtime)])
+			\nLevels: {1} | Chips: {2} | Barrels collected: {3} \
+			\nPlaytime: {4}".format([slot_id, level, chips, barrel_collected, format_time(playtime)])
 		delete_button.disabled = false
 	else:
 		load_button_label.text = "[b][color=gold]Slot {0}[/color][/b] \

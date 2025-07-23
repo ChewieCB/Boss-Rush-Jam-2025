@@ -1,5 +1,7 @@
 extends Node
 
+# On Windows, save files are located in C:\Users\[Name]\AppData\Roaming\Godot\app_userdata\Crapshoot
+
 var save_data_is_loaded = false
 var is_saving = false
 
@@ -33,6 +35,12 @@ func convert_id_to_boss_enum(array_id: Array) -> Array[BossCore.BossIdEnum]:
 		result.append(elem as BossCore.BossIdEnum)
 	return result
 
+func convert_id_to_skill_enum(dict_id: Dictionary) -> Dictionary:
+	var result = {}
+	for key in dict_id:
+		var new_key = (key as SkillItemUI.SkillIdEnum)
+		result[new_key] = dict_id[key]
+	return result
 
 func delete_save_file(slot_id: int):
 	var save_path = get_savefile_name(slot_id)
@@ -60,7 +68,10 @@ func save_game(slot_id):
 		"barrel_tutorial_shown": GameManager.barrel_tutorial_shown,
 		"bosses_defeated": GameManager.bosses_defeated,
 		"victory_ui_shown": GameManager.victory_ui_shown,
-		"total_playtime": GameManager.total_playtime
+		"total_playtime": GameManager.total_playtime,
+		"player_level": GameManager.player_level,
+		"player_skill_points": GameManager.player_skill_points,
+		"player_skill_dict": GameManager.player_skill_dict,
 	}
 	var save_file = FileAccess.open(get_savefile_name(slot_id), FileAccess.WRITE)
 	var json_string = JSON.stringify(save_dict)
@@ -96,17 +107,19 @@ func load_game(slot_id):
 		GameManager.load_new_save_data()
 		savefile_loaded.emit()
 		return
-
 	
-	GameManager.player_currency = save_data["player_currency"]
+	GameManager.player_currency = save_data.get("player_currency", 0)
 	GameManager.equipped_barrels = convert_id_to_resource(save_data["equipped_barrels"])
 	GameManager.inventory_barrels = convert_id_to_resource(save_data["inventory_barrels"])
 	GameManager.shop_barrels = convert_id_to_resource(save_data["shop_barrels"])
-	GameManager.player_gained_first_barrel = save_data["player_gained_first_barrel"]
-	GameManager.barrel_tutorial_shown = save_data["barrel_tutorial_shown"]
+	GameManager.player_gained_first_barrel = save_data.get("player_gained_first_barrel", false)
+	GameManager.barrel_tutorial_shown = save_data.get("barrel_tutorial_shown", false)
 	GameManager.bosses_defeated = convert_id_to_boss_enum(save_data["bosses_defeated"])
-	GameManager.victory_ui_shown = save_data["victory_ui_shown"]
-	GameManager.total_playtime = save_data["total_playtime"]
+	GameManager.victory_ui_shown = save_data.get("victory_ui_shown", false)
+	GameManager.total_playtime = save_data.get("total_playtime", 0)
+	GameManager.player_level = save_data.get("player_level", 1)
+	GameManager.player_skill_points = save_data.get("player_skill_points", 0)
+	GameManager.player_skill_dict = convert_id_to_skill_enum(save_data.get("player_skill_dict", {}))
 
 	check_for_new_update_barrels()
 	

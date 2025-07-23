@@ -1,5 +1,6 @@
 extends Node3D
 class_name BaseProjectile
+# ^ It's a silly name. Should be BaseAttack or BaseBullet instead since both projectile and hitscan inherit from this
 
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
@@ -13,7 +14,10 @@ signal destroyed
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
 
+## Base damage / initial damage
 var damage = 1
+## In decimal
+var crit_chance = 0
 var ricochet_count_left = 0
 var owner_gun: Gun
 var is_ricochet_shot = false
@@ -39,6 +43,7 @@ var travelled_distance = 0
 func _ready() -> void:
 	spawn_pos = global_position
 	life_time = 0
+	crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
 
 func _process(delta: float) -> void:
 	life_time += delta
@@ -85,16 +90,25 @@ func create_bullet_decal(pos: Vector3, normal: Vector3):
 	# Rotate the decal a bit for variety
 	decal_inst.rotate_object_local(Vector3(0, 1, 0), randf_range(0.0, 360.0))
 
+func calculate_bullet_damage():
+	var rand_damage_mod = get_damage_variance_modifier(damage)
+	var calculated_damage = damage + rand_damage_mod
+	# Crit
+	var roll = randi_range(1, 100)
+	var roll_target = int(crit_chance * 100)
+	if roll <= roll_target:
+		calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
+		owner_gun.crit_damage(calculated_damage)
+	return calculated_damage
 
 func ricochet():
 	return
 
-## This will be added to normal projectile attack
+## This will be added to normal damage
 func get_damage_variance_modifier(_damage: int) -> int:
-	if GameManager.player.luck_component.current_luck_ratio >= GameManager.player.HIGH_LUCK_THRESHOLD:
-		# High luck will roll from 0 to 0.2 instead of usual -0.2 to 0.2
-		return int(randf_range(0, _damage * DAMAGE_VARIANCE))
-	return int(randf_range(_damage * -DAMAGE_VARIANCE, _damage * DAMAGE_VARIANCE))
+	var min_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE] - 1
+	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE] - 1
+	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
 func create_duplication() -> BaseProjectile:
 	var new_inst: BaseProjectile = self.duplicate()

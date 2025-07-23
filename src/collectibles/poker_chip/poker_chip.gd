@@ -1,7 +1,7 @@
 extends RigidBody3D
 class_name PokerChip
 
-@export var value_array: Array[int] = [1, 5, 10, 25, 100]
+@export var value_array: Array[int] = [1, 2, 5, 10, 25, 50, 100]
 @export var sprite_array: Array[Texture2D] = []
 @export var sfx_pickup: Array[AudioStream]
 
@@ -16,23 +16,38 @@ const SPIN_RATE = 5
 
 func _ready() -> void:
 	# Roll random for chip value
-	# 10% chip 1
-	# 30% chip 5
-	# 40% chip 10
+	# 5% chip 1
+	# 5% chip 2
+	# 25% chip 5
+	# 35% chip 10
 	# 15% chip 25
+	# 10% chip 50
 	# 5% chip 100
 	for i in randi_range(0, 99):
-		if i < 10:
+		if i < 5:
 			chosen_idx = 0
-		elif i < 40:
+		elif i < 10:
 			chosen_idx = 1
-		elif i < 80:
+		elif i < 35:
 			chosen_idx = 2
-		elif i < 95:
+		elif i < 70:
 			chosen_idx = 3
-		else:
+		elif i < 85:
 			chosen_idx = 4
+		elif i < 95:
+			chosen_idx = 5
+		else:
+			chosen_idx = 6
+
+	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.JACKPOT):
+		var min_chosen_idx = GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.JACKPOT]
+		if chosen_idx < min_chosen_idx:
+			chosen_idx = min_chosen_idx
+
 	sprite.texture = sprite_array[chosen_idx]
+	# Little hack to make chip value 1 slightly different from chip value 2
+	if chosen_idx == 1:
+		sprite.modulate = Color.GRAY
 	value = value_array[chosen_idx]
 	value_label_1.text = str(value)
 	value_label_2.text = str(value)
@@ -47,8 +62,18 @@ func _process(delta: float) -> void:
 func _on_collect() -> void:
 	GameManager.player_currency += value
 	SoundManager.play_sound_with_pitch(sfx_pickup.pick_random(), randf_range(0.8, 1.1), "SFX")
-	# TODO - sfx
-	# TODO - particles
+	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.BLESSED_CHIP):
+		var bonus_luck = 0
+		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLESSED_CHIP]:
+			1:
+				bonus_luck = 1
+			2:
+				bonus_luck = 2
+			3:
+				bonus_luck = 3
+			4:
+				bonus_luck = 4
+		GameManager.player.luck_component.current_luck += bonus_luck
 	queue_free()
 
 
