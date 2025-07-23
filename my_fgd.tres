@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=28 format=3 uid="uid://bb5aobsi08anx"]
+[gd_resource type="Resource" script_class="FuncGodotFGDFile" load_steps=29 format=3 uid="uid://bb5aobsi08anx"]
 
 [ext_resource type="Resource" uid="uid://dq458eynubrqg" path="res://assets/trenchbroom/PlayerRef.tres" id="1_aaqsq"]
 [ext_resource type="Resource" uid="uid://crgpdahjaj" path="res://addons/func_godot/fgd/func_godot_fgd.tres" id="1_v87b8"]
@@ -27,6 +27,7 @@
 [ext_resource type="Resource" uid="uid://6nswkt6y3x4u" path="res://assets/trenchbroom/RisingPlatform.tres" id="24_j78om"]
 [ext_resource type="Resource" uid="uid://bj3p2umxysjak" path="res://assets/trenchbroom/SnakePathMarker.tres" id="25_ppybx"]
 [ext_resource type="Resource" uid="uid://c2j60bs07fwy8" path="res://assets/trenchbroom/WallLight.tres" id="26_asgd7"]
+[ext_resource type="Resource" uid="uid://b06t7e471wq3t" path="res://assets/trenchbroom/BossTutorial.tres" id="27_va0x0"]
 
 [resource]
 script = ExtResource("2_daboe")
@@ -34,4 +35,4 @@ export_file = false
 target_map_editor = 1
 fgd_name = "FuncGodot"
 base_fgd_files = Array[Resource]([ExtResource("1_v87b8")])
-entity_definitions = Array[Resource]([ExtResource("1_aaqsq"), ExtResource("4_jt43q"), ExtResource("6_8ycue"), ExtResource("5_s6gss"), ExtResource("7_ls432"), ExtResource("7_8kdmy"), ExtResource("8_tfoyg"), ExtResource("9_geeyq"), ExtResource("10_1fjbd"), ExtResource("11_os4xu"), ExtResource("12_8ses4"), ExtResource("13_w55fb"), ExtResource("14_75rhd"), ExtResource("2_fkeva"), ExtResource("16_6pasw"), ExtResource("17_adfc1"), ExtResource("18_fndcj"), ExtResource("19_fjusf"), ExtResource("20_pcy3w"), ExtResource("21_6pdid"), ExtResource("22_7wj14"), ExtResource("23_wjyyf"), ExtResource("24_j78om"), ExtResource("25_ppybx"), ExtResource("26_asgd7")])
+entity_definitions = Array[Resource]([ExtResource("1_aaqsq"), ExtResource("4_jt43q"), ExtResource("6_8ycue"), ExtResource("5_s6gss"), ExtResource("7_ls432"), ExtResource("7_8kdmy"), ExtResource("8_tfoyg"), ExtResource("9_geeyq"), ExtResource("10_1fjbd"), ExtResource("11_os4xu"), ExtResource("12_8ses4"), ExtResource("13_w55fb"), ExtResource("14_75rhd"), ExtResource("2_fkeva"), ExtResource("16_6pasw"), ExtResource("17_adfc1"), ExtResource("18_fndcj"), ExtResource("19_fjusf"), ExtResource("20_pcy3w"), ExtResource("21_6pdid"), ExtResource("22_7wj14"), ExtResource("23_wjyyf"), ExtResource("24_j78om"), ExtResource("25_ppybx"), ExtResource("26_asgd7"), ExtResource("27_va0x0")])

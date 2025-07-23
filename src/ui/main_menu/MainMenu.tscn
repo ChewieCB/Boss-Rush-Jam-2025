@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://csw0xjbbqsivg" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-016.png" id="6_tem84"]
 [ext_resource type="AudioStream" uid="uid://c6w10um3o4jvk" path="res://src/ui/main_menu/assets/sfx/drumMenu5.mp3" id="7_bs3mo"]
 [ext_resource type="AudioStream" uid="uid://2j7e6yrpg06p" path="res://src/ui/main_menu/assets/sfx/drumMenuStartGame.mp3" id="8_e8blx"]
-[ext_resource type="PackedScene" uid="uid://v6jgq46mkg4n" path="res://src/maps/lobby/Lobby.tscn" id="9_hsakg"]
+[ext_resource type="PackedScene" uid="uid://bi8ar5jx08vp7" path="res://src/maps/tutorial/TutorialBoss.tscn" id="9_ioe07"]
 [ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="18_wr3ef"]
 [ext_resource type="Script" path="res://src/ui/main_menu/credits_ui.gd" id="19_2s5jh"]
 [ext_resource type="FontFile" uid="uid://bi7vx7s04krj" path="res://assets/fonts/kleptocracy titling/kleptocracy titling bd.otf" id="19_nwl4i"]
@@ -92,7 +92,7 @@ script = ExtResource("1_bnujd")
 bgm = ExtResource("2_ef670")
 button_sfx = Array[AudioStream]([ExtResource("3_7ak47"), ExtResource("4_oermb"), ExtResource("5_7tag1"), ExtResource("6_hri1i"), ExtResource("7_bs3mo")])
 start_game_sfx = ExtResource("8_e8blx")
-lobby_scene = ExtResource("9_hsakg")
+lobby_scene = ExtResource("9_ioe07")
 
 [node name="OverallBackground" type="TextureRect" parent="."]
 layout_mode = 1

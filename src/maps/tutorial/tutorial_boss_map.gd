@@ -19,6 +19,7 @@ var current_trigger_actions: Array[String] = []
 func _ready() -> void:
 	super()
 	boss_doors.close()
+	$FuncGodotMap/entity_149_ElevatorButton.pushed.connect(_on_level_select)
 	for i in range(chiplings_to_spawn_1):
 		spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
 
@@ -96,3 +97,9 @@ func _on_debug_boss_trigger_body_entered(body: Node3D) -> void:
 			spawn_chipling(2, chipling_spawns_2, chipling_wander_points_2)
 			await get_tree().create_timer(0.2).timeout
 	$DEBUGBossTrigger.queue_free()
+
+
+func _on_level_select(level_path: String) -> void:
+	GameManager.tutorial_completed = true
+	GameManager.player_currency = 0
+	super(level_path)

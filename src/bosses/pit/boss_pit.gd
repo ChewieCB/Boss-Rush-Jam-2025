@@ -84,7 +84,7 @@ var shield_tween: Tween
 
 
 func _ready() -> void:
-	super ()
+	super()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 

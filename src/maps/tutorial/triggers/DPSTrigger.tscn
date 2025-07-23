@@ -8,6 +8,9 @@ script = ExtResource("2_dshp1")
 target_dps_count = 60.0
 dps_window_time = 1.1
 
+[node name="MeshInstance3D" parent="." index="1"]
+visible = false
+
 [node name="DPSWindowTimer" type="Timer" parent="." index="4"]
 one_shot = true
 
