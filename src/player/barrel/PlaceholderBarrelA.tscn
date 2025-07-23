@@ -35,7 +35,6 @@ display_text_desc = "-50% spread, +25% damage when stationary
 +100% spread, -25% damage when moving"
 
 [node name="FireInfusion" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("5_ncjv1")
 display_text_title = "Fire Infusion"
 display_text_tag = "Toasty!"

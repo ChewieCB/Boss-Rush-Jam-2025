@@ -188,7 +188,7 @@ func stop_elemental_particles():
 
 func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 	# Wait a bit to make the effect look better
-	await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.05).timeout
 	var element_vfx_node = elemental_emitting_vfx[int(status_effect) - 1]
 	if element_vfx_node:
 		element_vfx_node.visible = true

@@ -35,6 +35,3 @@ target_position = Vector3(0, 0, -20)
 
 [node name="Trail3D" parent="Trail" index="0"]
 material_override = SubResource("StandardMaterial3D_r5q8h")
-
-[node name="ProjectileBurnEmit" parent="ElementalVFX" index="0"]
-visible = true

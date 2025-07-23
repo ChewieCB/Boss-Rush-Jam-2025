@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://dij705shy7t2i"]
+[gd_scene load_steps=15 format=3 uid="uid://dij705shy7t2i"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_projectile_blob.gd" id="1_qak0o"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_d3tjp"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/spiky_gel_sphere.gdshader" id="2_t2nfw"]
 [ext_resource type="PackedScene" uid="uid://bab1ejq76oubu" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmitBig.tscn" id="4_xti10"]
+[ext_resource type="PackedScene" uid="uid://dthdgt8rwdg7x" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitBig.tscn" id="5_fuh73"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xk3gl"]
 noise_type = 2
@@ -49,7 +50,7 @@ radius = 1.0
 script = ExtResource("1_qak0o")
 tick_per_second = 2
 stick_time = 5
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitBig"), null, null, null, null]
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitBig"), NodePath("ElementalVFX/ProjectilePoisonEmitBig"), null, null, null]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -101,6 +102,10 @@ one_shot = true
 [node name="ElementalVFX" type="Node3D" parent="."]
 
 [node name="ProjectileBurnEmitBig" parent="ElementalVFX" instance=ExtResource("4_xti10")]
+visible = false
+
+[node name="ProjectilePoisonEmitBig" parent="ElementalVFX" instance=ExtResource("5_fuh73")]
+visible = false
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_entered" from="HomingArea3D" to="." method="_on_homing_area_3d_body_entered"]
