@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://71phynp62d0y"]
+[gd_scene load_steps=11 format=3 uid="uid://71phynp62d0y"]
 
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="1_dfyk2"]
 [ext_resource type="Texture2D" uid="uid://xqhack4uhgdb" path="res://assets/textures/placeholder/texture_dark_06.png" id="2_c4tgf"]
 [ext_resource type="PackedScene" uid="uid://bu6amtwoa4tax" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpactBig.tscn" id="2_fjism"]
 [ext_resource type="PackedScene" uid="uid://khw8twnrv6by" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonImpactBig.tscn" id="3_0rmwu"]
+[ext_resource type="PackedScene" uid="uid://bn5r3h21hsv0j" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeImpactBig.tscn" id="4_8ybgg"]
 [ext_resource type="PackedScene" uid="uid://ohirhr6ifqye" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockImpactBig.tscn" id="4_rsbvh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cm2h5"]
@@ -24,7 +25,7 @@ emission = Color(1, 0.731834, 0.032858, 1)
 [node name="GunProjectileBall" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_dfyk2")]
 gravity_modifier = 1.0
 elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmit"), null, null, null, null]
-elemental_impact_vfx = Array[PackedScene]([ExtResource("2_fjism"), ExtResource("3_0rmwu"), null, ExtResource("4_rsbvh"), null])
+elemental_impact_vfx = Array[PackedScene]([ExtResource("2_fjism"), ExtResource("3_0rmwu"), ExtResource("4_8ybgg"), ExtResource("4_rsbvh"), null])
 
 [node name="MeshInstance3D" parent="." index="0"]
 mesh = SubResource("SphereMesh_5h75q")

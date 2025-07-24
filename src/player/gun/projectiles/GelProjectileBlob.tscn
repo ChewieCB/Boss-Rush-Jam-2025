@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://dij705shy7t2i"]
+[gd_scene load_steps=17 format=3 uid="uid://dij705shy7t2i"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_projectile_blob.gd" id="1_qak0o"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_d3tjp"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/spiky_gel_sphere.gdshader" id="2_t2nfw"]
 [ext_resource type="PackedScene" uid="uid://bab1ejq76oubu" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmitBig.tscn" id="4_xti10"]
 [ext_resource type="PackedScene" uid="uid://dthdgt8rwdg7x" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitBig.tscn" id="5_fuh73"]
+[ext_resource type="PackedScene" uid="uid://chjxj0x3rwotr" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmitBig.tscn" id="6_7v551"]
 [ext_resource type="PackedScene" uid="uid://b770x0fkaf7ha" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitBig.tscn" id="6_h3m5e"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xk3gl"]
@@ -51,7 +52,7 @@ radius = 1.0
 script = ExtResource("1_qak0o")
 tick_per_second = 2
 stick_time = 5
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitBig"), NodePath("ElementalVFX/ProjectilePoisonEmitBig"), null, NodePath("ElementalVFX/ProjectileShockEmitBig"), null]
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitBig"), NodePath("ElementalVFX/ProjectilePoisonEmitBig"), NodePath("ElementalVFX/ProjectileFreezeEmitBig"), NodePath("ElementalVFX/ProjectileShockEmitBig"), null]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -106,6 +107,9 @@ one_shot = true
 visible = false
 
 [node name="ProjectilePoisonEmitBig" parent="ElementalVFX" instance=ExtResource("5_fuh73")]
+visible = false
+
+[node name="ProjectileFreezeEmitBig" parent="ElementalVFX" instance=ExtResource("6_7v551")]
 visible = false
 
 [node name="ProjectileShockEmitBig" parent="ElementalVFX" instance=ExtResource("6_h3m5e")]

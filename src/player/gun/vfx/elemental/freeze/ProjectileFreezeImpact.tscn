@@ -1,0 +1,164 @@
+[gd_scene load_steps=23 format=4 uid="uid://byqcqd8oy0lou"]
+
+[ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="1_cicvi"]
+[ext_resource type="Texture2D" uid="uid://dw2srwyd4ryfi" path="res://assets/sprite/misc/snowflake.png" id="2_xosem"]
+
+[sub_resource type="Curve" id="Curve_ku08s"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.492424, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_mh21h"]
+curve = SubResource("Curve_ku08s")
+
+[sub_resource type="Gradient" id="Gradient_se1p8"]
+colors = PackedColorArray(0.232941, 1, 0.95521, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6y7kj"]
+gradient = SubResource("Gradient_se1p8")
+
+[sub_resource type="Curve" id="Curve_gcxtp"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.166667, 1), 0.0, 0.0, 0, 0, Vector2(0.507576, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -0.159099, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_e1tu2"]
+curve = SubResource("Curve_gcxtp")
+
+[sub_resource type="Curve" id="Curve_flt3w"]
+_data = [Vector2(0.243682, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_58t08"]
+curve = SubResource("Curve_flt3w")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2jldy"]
+emission_shape = 1
+emission_sphere_radius = 0.1
+angle_max = 90.0
+spread = 180.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, -2, 0)
+damping_min = 1.0
+damping_max = 2.0
+scale_min = 0.05
+scale_max = 0.1
+scale_curve = SubResource("CurveTexture_e1tu2")
+color_ramp = SubResource("GradientTexture1D_6y7kj")
+alpha_curve = SubResource("CurveTexture_mh21h")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 1.0
+turbulence_influence_over_life = SubResource("CurveTexture_58t08")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_75dx6"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_xosem")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_0id2y"]
+material = SubResource("StandardMaterial3D_75dx6")
+
+[sub_resource type="Gradient" id="Gradient_4a7af"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fke7x"]
+gradient = SubResource("Gradient_4a7af")
+
+[sub_resource type="Curve" id="Curve_i8htr"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 1), 0.0, 0.0, 0, 0, Vector2(0.587329, 0.501806), -3.14482, -3.14482, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_gehla"]
+curve = SubResource("Curve_i8htr")
+
+[sub_resource type="Curve" id="Curve_vljc1"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_x4721"]
+curve = SubResource("Curve_vljc1")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0q8nm"]
+emission_shape = 1
+emission_sphere_radius = 0.3
+angle_max = 90.0
+direction = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 0.5, 0)
+scale_min = 0.2
+scale_max = 0.2
+scale_curve = SubResource("CurveTexture_gehla")
+color = Color(0.313276, 0.542969, 0.526751, 0.843137)
+color_ramp = SubResource("GradientTexture1D_fke7x")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 5.0
+turbulence_influence_over_life = SubResource("CurveTexture_x4721")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dst3a"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_dx7tw"]
+resource_name = "particle_circle_particle_circle"
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"attribute_data": PackedByteArray("AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"material": SubResource("StandardMaterial3D_dst3a"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cC/n8nQ/fuugL+fwAAzYBJAf5/FSTpJFoA/n/qoQAAAAD+f/brpTbZAP5////keh8B/n8a8Oq7TgH+f/9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+
+[node name="ProjectileFreezeImpact" type="Node3D" node_paths=PackedStringArray("gpu_particles", "lights")]
+script = ExtResource("1_cicvi")
+is_oneshot = true
+self_destroy_after_time = 2
+gpu_particles = [NodePath("Snowflake"), NodePath("Cloud")]
+lights = [NodePath("OmniLight3D")]
+
+[node name="Snowflake" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 32
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.9
+randomness = 0.8
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_2jldy")
+draw_pass_1 = SubResource("QuadMesh_0id2y")
+
+[node name="Cloud" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 32
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.9
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_0q8nm")
+draw_pass_1 = SubResource("ArrayMesh_dx7tw")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+light_color = Color(0.592969, 1.95523, 2, 1)
+light_energy = 0.25
+light_bake_mode = 1
+omni_range = 0.5
+omni_attenuation = 2.0

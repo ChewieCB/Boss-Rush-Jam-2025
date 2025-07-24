@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://guegep2ueo26"]
+[gd_scene load_steps=21 format=3 uid="uid://guegep2ueo26"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_projectile.gd" id="1_x0ax1"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_bxb8l"]
@@ -9,8 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://c54o67tient15" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmit.tscn" id="6_q13y4"]
 [ext_resource type="PackedScene" uid="uid://ordrsmmhta58" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonImpact.tscn" id="6_uupf0"]
 [ext_resource type="PackedScene" uid="uid://c7ax3gowds2j3" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockImpact.tscn" id="7_2wwsd"]
+[ext_resource type="PackedScene" uid="uid://byqcqd8oy0lou" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeImpact.tscn" id="7_fmptl"]
 [ext_resource type="PackedScene" uid="uid://cmgohkgojrv34" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmit.tscn" id="8_cfhry"]
 [ext_resource type="PackedScene" uid="uid://ca0xt7tqp4c1g" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmit.tscn" id="10_1hvph"]
+[ext_resource type="PackedScene" uid="uid://7r4o8qm4v3km" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmit.tscn" id="12_hmgch"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u7eax"]
 resource_local_to_scene = true
@@ -46,8 +48,8 @@ script = ExtResource("1_x0ax1")
 spark_effect = ExtResource("2_bxb8l")
 generic_blood_splatter = ExtResource("3_7tm1i")
 bullet_decal_prefab = ExtResource("4_5dvet")
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmit"), NodePath("ElementalVFX/ProjectilePoisonEmit"), null, NodePath("ElementalVFX/ProjectileShockEmit"), null]
-elemental_impact_vfx = Array[PackedScene]([ExtResource("5_h0gas"), ExtResource("6_uupf0"), null, ExtResource("7_2wwsd"), null])
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmit"), NodePath("ElementalVFX/ProjectilePoisonEmit"), NodePath("ElementalVFX/ProjectileFreezeEmit"), NodePath("ElementalVFX/ProjectileShockEmit"), null]
+elemental_impact_vfx = Array[PackedScene]([ExtResource("5_h0gas"), ExtResource("6_uupf0"), ExtResource("7_fmptl"), ExtResource("7_2wwsd"), null])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -99,6 +101,9 @@ time_until_queue_free = 1.0
 [node name="ProjectilePoisonEmit" parent="ElementalVFX" instance=ExtResource("8_cfhry")]
 visible = false
 time_until_queue_free = 1.0
+
+[node name="ProjectileFreezeEmit" parent="ElementalVFX" instance=ExtResource("12_hmgch")]
+visible = false
 
 [node name="ProjectileShockEmit" parent="ElementalVFX" instance=ExtResource("10_1hvph")]
 visible = false

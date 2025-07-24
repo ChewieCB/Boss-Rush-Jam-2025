@@ -77,7 +77,6 @@ modify_value = -20.0
 is_perc = true
 
 [node name="ColdInfusion" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("5_ncjv1")
 display_text_title = "Cold Infusion"
 display_text_tag = "Let it go!"
@@ -98,6 +97,7 @@ modify_value = -20.0
 is_perc = true
 
 [node name="ElectricInfusion" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("5_ncjv1")
 display_text_title = "Electric Infusion"
 display_text_tag = "...and his music was..."
