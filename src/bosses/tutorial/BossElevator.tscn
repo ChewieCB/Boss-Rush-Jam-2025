@@ -1,0 +1,332 @@
+[gd_scene load_steps=18 format=3 uid="uid://bbqw4deyycof"]
+
+[ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
+[ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
+[ext_resource type="Texture2D" uid="uid://khi1n6a5qqgw" path="res://src/bosses/tutorial/assets/sprites/temp/puddy_2.png" id="2_epl72"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_irtaj"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fo57y"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_x341f"]
+size = Vector3(1, 1, 5)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3w5db"]
+radius = 1.0
+height = 4.6
+
+[sub_resource type="Animation" id="Animation_8e3f2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1.309, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dshkv"]
+resource_name = "death"
+length = 0.1
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3pryd"]
+_data = {
+"RESET": SubResource("Animation_8e3f2"),
+"death": SubResource("Animation_dshkv")
+}
+
+[sub_resource type="Animation" id="Animation_85u7l"]
+resource_name = "backswipe"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2, 0.25, 0.3),
+"transitions": PackedFloat32Array(1, 1.93187, 0.210224, 1.56917, 0.210224),
+"update": 0,
+"values": [Vector3(0, 4.53786, 0), Vector3(0, 4.88692, 0), Vector3(0, 1.309, 0), Vector3(0, 0.785398, 0), Vector3(0, 1.309, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1nv8l"]
+resource_name = "slam"
+length = 0.76
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.25, 0.7),
+"transitions": PackedFloat32Array(0.297302, 1, 3.13834, 1),
+"update": 0,
+"values": [Vector3(-0.349066, 0, 1.5708), Vector3(-3.49066, 0, 1.5708), Vector3(-3.49066, 0, 1.5708), Vector3(-3.42085, -1.66679, 1.5708)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+
+[sub_resource type="Animation" id="Animation_ona5m"]
+resource_name = "slam_telegraph"
+length = 0.9
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.9),
+"transitions": PackedFloat32Array(1.62451, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.225313, 1),
+"update": 0,
+"values": [Vector3(0, 1.309, 0), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.558505, 0.10472, 1.44862), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.331613, -0.10472, 1.69297), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.558505, 0.10472, 1.44862), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.331613, -0.10472, 1.69297), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.349066, 0, 1.5708)]
+}
+
+[sub_resource type="Animation" id="Animation_52j13"]
+resource_name = "spin"
+length = 0.2
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.435275, 1),
+"update": 0,
+"values": [Vector3(0, 1.309, 0), Vector3(0, 6.28319, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_eps3w"]
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.35, 0.4),
+"transitions": PackedFloat32Array(0.210224, 1.56917, 0.210224, 1.93187, 1),
+"update": 0,
+"values": [Vector3(0, 1.309, 0), Vector3(0, 0.785398, 0), Vector3(0, 1.309, 0), Vector3(0, 4.88692, 0), Vector3(0, 4.53786, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
+_data = {
+"backswipe": SubResource("Animation_85u7l"),
+"slam": SubResource("Animation_1nv8l"),
+"slam_telegraph": SubResource("Animation_ona5m"),
+"spin": SubResource("Animation_52j13"),
+"swipe": SubResource("Animation_eps3w")
+}
+
+[node name="BossElevator" instance=ExtResource("1_7pmj2")]
+script = ExtResource("2_6u4e1")
+MOVE_SPEED = 10.0
+wave_amplitude = 7.0
+wave_frequency = 5.0
+time_elapsed = 0.0
+hurtbox_range_close = 3.5
+hurtbox_range_far = 4.5
+sfx_melee = Array[AudioStream]([])
+swipe_damage = 7.0
+hook_damage = 8.0
+slam_delay = 0.3
+slam_time = 0.5
+chip_scene = null
+barrel_pickup_scene = null
+sfx_slowmo = null
+attack_recovery_time = 0.5
+projectile_scene = null
+delay_per_projectile = 0.6
+
+[node name="Sprite3D" parent="." index="0"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 2.93273, 0)
+texture = ExtResource("2_epl72")
+
+[node name="DebugAnimPivot" type="Marker3D" parent="." index="1"]
+transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DebugAnimPivot" index="0"]
+transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, -1.04907e-07, 0, 2.4)
+mesh = SubResource("BoxMesh_x341f")
+
+[node name="SlamSpawn" type="Marker3D" parent="DebugAnimPivot/MeshInstance3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.4)
+
+[node name="CollisionShape3D" parent="." index="2"]
+shape = SubResource("CapsuleShape3D_3w5db")
+
+[node name="DebugMesh" parent="." index="3"]
+visible = true
+
+[node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
+boss_name = "Tutorial Boss"
+
+[node name="toIntro" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Intro")
+event = &"start_intro"
+delay_in_seconds = "0.0"
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Phase1")
+event = &"activate"
+delay_in_seconds = "0.0"
+
+[node name="Intro" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("3_irtaj")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Intro" index="0"]
+script = ExtResource("4_fo57y")
+
+[node name="toIntroAnim" type="Node" parent="StateChart/Root/Phase/Intro/Idle" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../IntroAnim")
+event = &"start_intro_anim"
+delay_in_seconds = "0.0"
+
+[node name="IntroAnim" type="Node" parent="StateChart/Root/Phase/Intro" index="1"]
+script = ExtResource("4_fo57y")
+
+[node name="toIntroAnim" type="Node" parent="StateChart/Root/Phase/Intro/IntroAnim" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../EndIntro")
+event = &"end_intro_anim"
+delay_in_seconds = "0.0"
+
+[node name="EndIntro" type="Node" parent="StateChart/Root/Phase/Intro" index="2"]
+script = ExtResource("4_fo57y")
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Intro/EndIntro" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../../Phase1")
+event = &"start_phase_1"
+delay_in_seconds = "0.0"
+
+[node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="2"]
+script = ExtResource("3_irtaj")
+initial_state = NodePath("MeleeCombo")
+
+[node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1" index="0"]
+script = ExtResource("3_irtaj")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="0"]
+script = ExtResource("4_fo57y")
+
+[node name="toSwipe" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Targeting" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Swipe")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="1"]
+script = ExtResource("4_fo57y")
+
+[node name="toHook" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Hook")
+event = &"melee_attack"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Hook" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="2"]
+script = ExtResource("4_fo57y")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="3"]
+script = ExtResource("4_fo57y")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Recover" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="LineSlam" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
+script = ExtResource("3_irtaj")
+initial_state = NodePath("Recover")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/LineSlam" index="0"]
+script = ExtResource("4_fo57y")
+
+[node name="toSlam" type="Node" parent="StateChart/Root/Phase/Phase1/LineSlam/Targeting" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Slam")
+event = &"start_slam"
+delay_in_seconds = "0.0"
+
+[node name="Slam" type="Node" parent="StateChart/Root/Phase/Phase1/LineSlam" index="1"]
+script = ExtResource("4_fo57y")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/LineSlam/Slam" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"end_slam"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/LineSlam" index="2"]
+script = ExtResource("4_fo57y")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/LineSlam/Recover" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="Spin" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
+script = ExtResource("3_irtaj")
+
+[node name="NavigationAgent3D" parent="." index="9"]
+debug_enabled = true
+
+[node name="AnimationPlayer" parent="." index="19"]
+libraries = {
+"": SubResource("AnimationLibrary_3pryd"),
+"elevator_boss": SubResource("AnimationLibrary_1cydh")
+}
+
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Targeting" to="." method="_on_melee_combo_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Targeting" to="." method="_on_melee_combo_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" to="." method="_on_melee_combo_swipe_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" to="." method="_on_melee_combo_hook_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Recover" to="." method="_on_melee_combo_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LineSlam/Targeting" to="." method="_on_line_slam_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LineSlam/Slam" to="." method="_on_line_slam_sweep_state_entered"]

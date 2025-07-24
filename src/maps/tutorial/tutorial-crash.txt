@@ -1,0 +1,50 @@
+OS:	Manjaro Linux
+Qt:	5.15.16
+GL_VENDOR:	NVIDIA Corporation
+GL_RENDERER:	NVIDIA GeForce RTX 3060/PCIe/SSE2
+GL_VERSION:	4.6.0 NVIDIA 550.144.03
+TrenchBroom Version:	2023.1
+TrenchBroom Build:	v2023.1-510-g279aea18f Release Linux-
+Reason:	SIGSEGV
+Stack trace:
+/usr/bin/trenchbroom(+0x670d71) [0x5b1f78cfad71]
+/usr/bin/trenchbroom(+0x66d753) [0x5b1f78cf7753]
+/usr/lib/libc.so.6(+0x3dcd0) [0x7d671704bcd0]
+/usr/bin/trenchbroom(+0x599818) [0x5b1f78c23818]
+/usr/bin/trenchbroom(+0x599ba9) [0x5b1f78c23ba9]
+/usr/bin/trenchbroom(+0x4b8d94) [0x5b1f78b42d94]
+/usr/bin/trenchbroom(+0x4b91dd) [0x5b1f78b431dd]
+/usr/bin/trenchbroom(+0x4bb37b) [0x5b1f78b4537b]
+/usr/bin/trenchbroom(+0x4be30f) [0x5b1f78b4830f]
+/usr/bin/trenchbroom(+0x7e315a) [0x5b1f78e6d15a]
+/usr/bin/trenchbroom(+0x82d017) [0x5b1f78eb7017]
+/usr/lib/libQt5Core.so.5(+0x2e4b1e) [0x7d67178e4b1e]
+/usr/lib/libQt5Widgets.so.5(_ZN7QAction9triggeredEb+0x45) [0x7d6718549305]
+/usr/lib/libQt5Widgets.so.5(_ZN7QAction8activateENS_11ActionEventE+0xd0) [0x7d671854f030]
+/usr/lib/libQt5Widgets.so.5(+0x2e194b) [0x7d67186e194b]
+/usr/lib/libQt5Widgets.so.5(+0x2e1a74) [0x7d67186e1a74]
+/usr/lib/libQt5Widgets.so.5(_ZN7QWidget5eventEP6QEvent+0xb56) [0x7d67185900e6]
+/usr/lib/libQt5Widgets.so.5(_ZN19QApplicationPrivate13notify_helperEP7QObjectP6QEvent+0x91) [0x7d6718556581]
+/usr/lib/libQt5Widgets.so.5(_ZN12QApplication6notifyEP7QObjectP6QEvent+0x1611) [0x7d671855c401]
+/usr/bin/trenchbroom(+0x670662) [0x5b1f78cfa662]
+/usr/lib/libQt5Core.so.5(_ZN16QCoreApplication15notifyInternal2EP7QObjectP6QEvent+0x128) [0x7d67178b0418]
+/usr/lib/libQt5Widgets.so.5(_ZN19QApplicationPrivate14sendMouseEventEP7QWidgetP11QMouseEventS1_S1_PS1_R8QPointerIS0_Ebb+0x1d5) [0x7d671855a0f5]
+/usr/lib/libQt5Widgets.so.5(+0x1aa175) [0x7d67185aa175]
+/usr/lib/libQt5Widgets.so.5(+0x1ab937) [0x7d67185ab937]
+/usr/lib/libQt5Widgets.so.5(_ZN19QApplicationPrivate13notify_helperEP7QObjectP6QEvent+0x91) [0x7d6718556581]
+/usr/bin/trenchbroom(+0x670662) [0x5b1f78cfa662]
+/usr/lib/libQt5Core.so.5(_ZN16QCoreApplication15notifyInternal2EP7QObjectP6QEvent+0x128) [0x7d67178b0418]
+/usr/lib/libQt5Gui.so.5(_ZN22QGuiApplicationPrivate17processMouseEventEPN29QWindowSystemInterfacePrivate10MouseEventE+0x780) [0x7d6717d3c2e0]
+/usr/lib/libQt5Gui.so.5(_ZN22QWindowSystemInterface22sendWindowSystemEventsE6QFlagsIN10QEventLoop17ProcessEventsFlagEE+0xad) [0x7d6717d1d2cd]
+/usr/lib/libQt5XcbQpa.so.5(+0x60a98) [0x7d671372fa98]
+/usr/lib/libglib-2.0.so.0(+0x5d919) [0x7d6715f0d919]
+/usr/lib/libglib-2.0.so.0(+0xc05d7) [0x7d6715f705d7]
+/usr/lib/libglib-2.0.so.0(g_main_context_iteration+0x35) [0x7d6715f0ce15]
+/usr/lib/libQt5Core.so.5(_ZN20QEventDispatcherGlib13processEventsE6QFlagsIN10QEventLoop17ProcessEventsFlagEE+0x6f) [0x7d67178ff72f]
+/usr/lib/libQt5Core.so.5(_ZN10QEventLoop4execE6QFlagsINS_17ProcessEventsFlagEE+0x13c) [0x7d67178a80dc]
+/usr/lib/libQt5Core.so.5(_ZN16QCoreApplication4execEv+0x9d) [0x7d67178b45dd]
+/usr/bin/trenchbroom(+0x2bdd45) [0x5b1f78947d45]
+/usr/lib/libc.so.6(+0x27488) [0x7d6717035488]
+/usr/lib/libc.so.6(__libc_start_main+0x8c) [0x7d671703554c]
+/usr/bin/trenchbroom(+0x2cb715) [0x5b1f78955715]
+

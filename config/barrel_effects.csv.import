@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cu1wsuumhl2ep"
+
+[deps]
+
+files=["res://config/barrel_effects. Barrel Name.translation", "res://config/barrel_effects. Barrel Description.translation"]
+
+source_file="res://config/barrel_effects.csv"
+dest_files=["res://config/barrel_effects. Barrel Name.translation", "res://config/barrel_effects. Barrel Description.translation"]
+
+[params]
+
+compress=true
+delimiter=0

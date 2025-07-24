@@ -23,7 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://cfet1iu6amfuj" path="res://assets/picture/sound_design_credit_2.png" id="21_tbppp"]
 [ext_resource type="Texture2D" uid="uid://ctkubrh2pkprm" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-002.png" id="22_kloq4"]
 [ext_resource type="Texture2D" uid="uid://csw0xjbbqsivg" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-016.png" id="23_e74rm"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="24_kg4vo"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="24_kg4vo"]
 [ext_resource type="Texture2D" uid="uid://cy8p7d36yuk4v" path="res://assets/crapshoot_thumbnail_no_text.png" id="24_usitj"]
 [ext_resource type="AudioStream" uid="uid://dwpnsaa005tbw" path="res://assets/music/BalrogCreditRemix.mp3" id="25_sgmvv"]
 

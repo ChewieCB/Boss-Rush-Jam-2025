@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="6_g72qs"]
 [ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="7_x1uxm"]
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_ui.gd" id="8_12af2"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="8_esel0"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="8_esel0"]
 [ext_resource type="Texture2D" uid="uid://dktkrabxua7mo" path="res://src/player/assets/ammo.png" id="9_8qhrl"]
 [ext_resource type="PackedScene" uid="uid://bicxns6d0ciub" path="res://src/ui/player/reroll/RerollUI.tscn" id="10_tkawr"]
 

@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dd1spfk53wqt" path="res://assets/picture/defeat_final_boss_5.png" id="5_my58c"]
 [ext_resource type="Texture2D" uid="uid://coprvxfpx4kyo" path="res://assets/picture/defeat_final_boss_6.png" id="6_1nj83"]
 [ext_resource type="Texture2D" uid="uid://djmtk1c27j0u" path="res://assets/picture/defeat_final_boss_7.png" id="7_ttd4a"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="12_wxlbe"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="12_wxlbe"]
 
 [sub_resource type="Animation" id="Animation_wstuu"]
 resource_name = "start"

@@ -169,7 +169,8 @@ func _ready() -> void:
 	debug_trajectory_mesh.mesh = ImmediateMesh.new()
 	scene_root.add_child.call_deferred(debug_trajectory_mesh)
 	#debug_mesh.visible = false
-	await owner.ready
+	if owner:
+		await owner.ready
 
 
 func _physics_process(delta: float) -> void:

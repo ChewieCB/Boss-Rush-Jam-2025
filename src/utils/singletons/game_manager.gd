@@ -58,6 +58,8 @@ var player_skill_points = 0
 var player_gained_first_barrel: bool = false
 var barrel_tutorial_shown: bool = false
 
+var tutorial_completed: bool = false
+
 var bosses_defeated: Array[BossCore.BossIdEnum] = []
 var all_bosses_defeated: bool = false
 var victory_ui_shown: bool = false

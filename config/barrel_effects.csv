@@ -1,0 +1,159 @@
+Barrel ID, Barrel Name, Barrel Description
+10,Archetype Automatic Spec,"Archetype Barrel - Automatic Specialization
+Change the innate nature of the gun.
+
+Possible rolls:
+
+American Rifle: Easy to use and handle.
+Russian Rifle: Harder to use but much more power.
+Vector SMG: High firerate and fast reload time.
+LMG: Good firerate with huge magazine, but increased reload time.
+"
+2,Archetype,"Archetype Barrel
+Change the innate nature of the gun.
+
+Possible rolls:
+
+SMG: High firerate and magazine. Low damage.
+Shotgun: High damage and multiple projectiles, but high spread.
+Railgun: Low magazine size and firerate, but high damage and high bullet velocity.
+"
+39,Archetype Gelthrower,"Archetype Barrel - Gelthrower
+Change the innate nature of the gun.
+
+Possible rolls:
+
+Gel stream: Very high firerate and magazine, but low damage. Projectiles stick on contact.
+Gel blob: Fire single, big projectile, that stick around for a longer amount of time. Deal moderate damage.
+Gel bubble: Fire a flurry of bubbles. Has very high projectile counts, but zero damage.
+"
+9,Archetype Railgun Spec,"Archetype Barrel - Railgun Specialization
+Change the innate nature of the gun.
+
+Possible rolls:
+
+Gauss Rifle: High firerate and magazine, but lower damage.
+Scatter Beam: Limited magazine size and high spread, but high projectile count.
+Railcannon: Powerful oneshot wonder.
+"
+7,Archetype Shotgun Spec,"Archetype Barrel - Shotgun Specialization
+Change the innate nature of the gun.
+
+Possible rolls:
+
+Combat shotgun: High firerate and magazine. Lower spread and projectile count.
+Double-barrel shotgun: Limited magazine size and high spread, but huge damage.
+Slug shotgun: Low spread and firerate. Very high damage but only one projectile.
+"
+12,Bartender's Cellar,"Bartender's Cellar Barrel
+Barrel collected from the Bartender. Grants you abilities similar to its owner.
+
+Possible rolls:
+
+Molotov Dash: After dash, create a puddle of burning flame at your previous position.
+Toxin Mist: Chance to create a poison cloud upon hiting an enemy.
+Cognac Reload: Drop a bottle of cognac when you reload, which heals you a small amount.
+"
+13,Delayed Gratification,"Delayed Gratification Barrel
+Be patient for some big returns.
+
+Possible rolls:
+
+Sticky Bomb : Bullets stick to enemies and detonate after 2 seconds.
+Bullet Time: Bullets travel slower, but heavily increases their damage.
+Medical Payout: Accumulate dealt damage to convert into health on reload.
+"
+3,Dynamic Advantage,"Dynamic Advantage
+Change things up to keep the odds in your favour.
+
+Possible rolls:
+
+Ramp Up: Shoot faster as you shoot continuously.
+Extended Drum: Increased magazine size and reload time.
+Explosive Bullet: Explosive bullets.
+"
+4,Fool Roller,"Fool Roller Barrel
+High risk, high reward.
+
+Possible rolls:
+
+Double Tap: Shoot in two-round bursts.
+Ammo Leech: Small chance to refund ammo on hit, but reduces base bullet damage.
+Gambler's Precision: Chance to crit on hit and jam gun on miss.
+"
+45,Kinematic Equation,"Kinematic Equation Barrel
+Keep your distance and pick your placements.
+
+Possible rolls:
+
+Slow Roller: Bullets move slower, but damage increases the further they travel.
+Long Shot: Bullets are more accurate, and deal more damage the further away they are fired from their target.
+Snap Call: Bullets move faster, and deal more damage the higher their speed is. Minimal benefit for hitscan weapons.
+
+"
+44,Leg Eye Coordinate,"Flight or Fight Barrel
+Focus on your movement and verticality.
+
+Possible rolls:
+
+Trigger Leg: You can only shoot when you dash. Your dash is longer. Increased damage and critical hit chance
+Springy Feet: You can only shoot while you are midair. You jump higher. Reduce spread and recoil.
+Flexible Knee: You can only shoot while you are crouching. Your crouch can let you dodge if you time it right. Increased fire rate and magazine size.
+
+"
+11,Pit Boss,"Pit Boss Barrel
+Barrel collected from the Pit Boss. Grant you abilities similar to its owner.
+
+Possible rolls:
+
+Empowered Dash: Gain bonus dash speed for a short amount of time after you shoot.
+Fortitude: Recover a small amount of health over time.
+Death From Above: Increased damage when mid-air and increased crit chance when shoot downward.
+Tag'n'Shred: Reduced initial damage, but increased damage for every projectile hit target.
+"
+40,Placeholder A,"Placeholder A
+If you are a player, you shouldn't see this barrel"
+5,Projectile Count,"Projectile Count Barrel
+Add more bullet to your shot.
+
+Possible rolls:
+
+-2 projectile
+-1 projectile
++1 projectile
++2 projectile
+-25% projectile
+-50% projectile
++25% projectile
++50% projectile
++100% projectile
+"
+43,Reckless Abandon,"Reckless Abandon Barrel
+I'm all in!
+
+Possible rolls:
+
+Glass Cannon: Deal and take increased damage.
+Executioner Round: Deal more damage to enemies under 50% HP, but reduced damage otherwise.
+Reactive Shot: Significantly increases bullet damage for a short time after taking damage.
+
+"
+8,Roulette Lady,"Roulett Barrel
+Barrel collected from the Roulette Boss. Grants you abilities similar to its owner.
+
+Possible rolls:
+
+Newton's Third Law: Adds knockback when shoot the nearby environment, enabling rocket jumping. Increased damage but decreased firerate.
+Protective Barrier: A group of blue shields circle you, granting you damage resistance.
+Ball Bullet: Shoot a single huge bouncy ball projectile. Significantly increased damage but reduce firerate and projectile speed.
+"
+6,Trickshot,"Trickshot Barrel
+Cover all the angles.
+
+Possible rolls:
+
+Ricochet Bullet: Bullets bounce of walls and enemies.
+Homing Bullet: Bullets homing toward enemies, but significantly reduced damage.
+Split Bullet: Bullets split into 3 on impact, which deal reduced damage.
+
+"
