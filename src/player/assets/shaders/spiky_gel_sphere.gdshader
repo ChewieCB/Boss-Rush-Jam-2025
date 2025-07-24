@@ -7,7 +7,7 @@ uniform float spike_strength = 0.6;
 uniform float noise_scale = 1.5;
 uniform float time_speed = 1.0;
 
-uniform vec4 base_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);      
+uniform vec4 base_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 highlight_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 
 varying float v_noise_val;

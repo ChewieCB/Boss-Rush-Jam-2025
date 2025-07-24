@@ -91,7 +91,6 @@ shape = SubResource("SphereShape3D_m0ts0")
 [node name="ElementalVFX" type="Node3D" parent="."]
 
 [node name="ProjectileBurnEmit" parent="ElementalVFX" instance=ExtResource("6_q13y4")]
-visible = false
 
 [node name="ProjectilePoisonEmit" parent="ElementalVFX" instance=ExtResource("8_cfhry")]
 visible = false
