@@ -17,7 +17,7 @@
 [ext_resource type="FontFile" uid="uid://cf4ghtgpa7pbl" path="res://assets/engebrechtre.rg-bold.otf" id="7_o47kk"]
 [ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="8_a25qv"]
 [ext_resource type="Material" uid="uid://jnnisx0gc2xt" path="res://assets/textures/doors/elevator_door_processed.tres" id="8_djaoh"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="9_qykf5"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="9_qykf5"]
 [ext_resource type="Material" uid="uid://caoyj1kh0pty6" path="res://assets/textures/walls/column_0.tres" id="10_6rl80"]
 [ext_resource type="Texture2D" uid="uid://dvv8dgq51ktn1" path="res://assets/textures/walls/painting_decal.png" id="12_codcn"]
 [ext_resource type="Material" uid="uid://n34cnqh7s2w0" path="res://assets/textures/floor/carpet-red.tres" id="12_oa3or"]

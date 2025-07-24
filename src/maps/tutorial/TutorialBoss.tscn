@@ -7,7 +7,7 @@
 [ext_resource type="Material" uid="uid://cb5sx56lvbk2m" path="res://assets/textures/placeholder/texture_light_01.tres" id="3_i8sl5"]
 [ext_resource type="Material" uid="uid://b0ctqc57ph8u7" path="res://assets/textures/walls/grunge-concrete.tres" id="3_ja00o"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="4_5tofl"]
-[ext_resource type="PackedScene" uid="uid://dfpynfqwpew5x" path="res://src/ui/common/info_text/InfoBoxUI.tscn" id="4_e7ode"]
+[ext_resource type="PackedScene" uid="uid://c2b8d2f8w0t0g" path="res://src/ui/common/info_text/PromptBoxUI.tscn" id="4_c5p5t"]
 [ext_resource type="Material" uid="uid://jnnisx0gc2xt" path="res://assets/textures/doors/elevator_door_processed.tres" id="4_ifwy3"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="5_nedgi"]
 [ext_resource type="Material" uid="uid://bt8sgbg77a1nw" path="res://assets/textures/placeholder/texture_green_green_green_10.tres" id="5_yh3hi"]
@@ -3435,13 +3435,16 @@ size = Vector3(6, 6, 6)
 [sub_resource type="BoxShape3D" id="BoxShape3D_fc8gm"]
 size = Vector3(1.7, 4.2, 4.3)
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors") instance=ExtResource("1_hm1ph")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_hm1ph")]
 script = ExtResource("2_t1yvw")
 boss_doors = NodePath("FuncGodotMap/entity_40_ElevatorDoors")
 chipling_prefab = ExtResource("38_lied7")
 chiplings_to_spawn_1 = 5
 chiplings_to_spawn_2 = 8
-info_ui_prefab = ExtResource("4_e7ode")
+info_ui_prefab = ExtResource("4_c5p5t")
+nav_parent = NodePath("FuncGodotMap/group_819_floor_walkable_1a/entity_139_floor_walkable_1a")
+floor_parent = NodePath("FuncGodotMap/group_819_floor_walkable_1a/entity_139_floor_walkable_1a")
+floor_mesh = NodePath("FuncGodotMap/group_819_floor_walkable_1a/entity_139_floor_walkable_1a/entity_139_mesh_instance")
 
 [node name="BossTriggerVolume" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.98993, -0.428299, -23.5213)
@@ -7053,7 +7056,7 @@ collision_layer = 32
 collision_mask = 2
 trigger_on_spawn = true
 header_text = "Movement"
-body_text = "Use WASD to Move"
+body_items = Array[String](["[move_generic]", "to move"])
 close_trigger_actions = Array[String](["move_left", "move_right", "move_up", "move_down"])
 
 [node name="CollisionShape3D" parent="TutorialInfoTrigger1" index="0"]
@@ -7064,7 +7067,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 8.5)
 collision_layer = 32
 collision_mask = 2
 header_text = "Movement"
-body_text = "Space to Jump"
+body_items = Array[String](["[jump]", "to jump"])
 close_trigger_actions = Array[String](["jump"])
 
 [node name="CollisionShape3D" parent="TutorialInfoTrigger2" index="0"]
@@ -7075,7 +7078,7 @@ transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 
 collision_layer = 32
 collision_mask = 2
 header_text = "Movement"
-body_text = "Ctrl to Crouch"
+body_items = Array[String](["[crouch]", "to crouch"])
 close_trigger_actions = Array[String](["crouch"])
 
 [node name="CollisionShape3D" parent="TutorialInfoTrigger4" index="0"]
@@ -7086,7 +7089,7 @@ transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 
 collision_layer = 32
 collision_mask = 2
 header_text = "Movement"
-body_text = "Shift to Dash"
+body_items = Array[String](["[dash]", "to dash"])
 close_trigger_actions = Array[String](["dash"])
 
 [node name="CollisionShape3D" parent="TutorialInfoTrigger3" index="0"]
@@ -7097,7 +7100,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.03, 2, 29.4973)
 collision_layer = 32
 collision_mask = 2
 header_text = "Combat"
-body_text = "LMB to shoot, R to reload"
+body_items = Array[String](["[shoot]", "to shoot  ", "[spin_reload]", "to reload"])
 close_trigger_actions = Array[String](["shoot", "spin_reload"])
 
 [node name="CollisionShape3D" parent="TutorialInfoTrigger5" index="0"]
@@ -7108,7 +7111,7 @@ transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 
 collision_layer = 32
 collision_mask = 2
 header_text = "Combat"
-body_text = "Q to re-roll equipped barrels"
+body_items = Array[String](["[spin_barrels]", "to re-roll barrels"])
 close_trigger_actions = Array[String](["spin_barrels"])
 
 [node name="CollisionShape3D" parent="TutorialInfoTrigger6" index="0"]

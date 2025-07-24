@@ -22,6 +22,7 @@ var kbm_input_icon_mapping = {
 	"mouse middle button": "mouse_scroll",
 	"mouse button 4": "mouse_scroll_up",
 	"mouse button 5": "mouse_scroll_down",
+	"move_generic": "keyboard_arrows",
 	"up": "keyboard_arrows_up",
 	"down": "keyboard_arrows_down",
 	"left": "keyboard_arrows_left",
@@ -36,6 +37,7 @@ var kbm_input_icon_mapping = {
 
 # use InputHelper's XBOX_BUTTON_LABELS
 var xbox_input_icon_mapping = {
+	"move_generic": "xbox_stick_l",
 	"left stick up": "xbox_stick_l_up",
 	"left stick down": "xbox_stick_l_down",
 	"left stick left": "xbox_stick_l_left",
@@ -65,6 +67,7 @@ var xbox_input_icon_mapping = {
 
 # use InputHelper's PLAYSTATION_3_4_BUTTON_LABELS
 var sony_input_icon_mapping = {
+	"move_generic": "playstation_stick_l",
 	"left stick up": "playstation_stick_l_up",
 	"left stick down": "playstation_stick_l_down",
 	"left stick left": "playstation_stick_l_left",
@@ -129,12 +132,16 @@ func update_texture():
 
 
 func get_image_for_keyboard_input(action: String):
-	var kbm_event = InputHelper.get_keyboard_input_for_action(action)
-	var kbm_input_label = InputHelper.get_label_for_input(kbm_event).to_lower()
-	if kbm_input_icon_mapping.has(kbm_input_label):
-		kbm_input_label = kbm_input_icon_mapping[kbm_input_label]
+	var kbm_input_label: String
+	if action == "move_generic":
+		kbm_input_label = "keyboard_arrows"
 	else:
-		kbm_input_label = "keyboard_" + kbm_input_label
+		var kbm_event = InputHelper.get_keyboard_input_for_action(action)
+		kbm_input_label = InputHelper.get_label_for_input(kbm_event).to_lower()
+		if kbm_input_icon_mapping.has(kbm_input_label):
+			kbm_input_label = kbm_input_icon_mapping[kbm_input_label]
+		else:
+			kbm_input_label = "keyboard_" + kbm_input_label
 	var kbm_icon_path = "res://assets/sprite/input/keyboard_and_mouse/{0}.png".format([kbm_input_label])
 
 	var icon_texture = null
@@ -162,11 +169,15 @@ func get_image_for_controller_input(device: String, action: String):
 		# Forcing using text instead of icon
 		controller_icon_mapping = {}
 		icon_pathname = "{0}"
+	
+	if action == "move_generic":
+		controller_input_label = "move_generic"
 
 	if controller_icon_mapping.has(controller_input_label):
 		controller_input_label = controller_icon_mapping[controller_input_label]
 	else:
 		controller_input_label = ""
+	
 	var controller_icon_path = icon_pathname.format([controller_input_label])
 	
 	var icon_texture = null

@@ -34,12 +34,14 @@ func _input(event: InputEvent) -> void:
 			current_trigger_actions = []
 
 
-func show_tutorial_panel(header_text: String, body_text: String, close_trigger_actions: Array[String]) -> void:
-	var new_panel: InfoBox = info_ui_prefab.instantiate()
+func show_tutorial_panel(prompt_elements: Array[String], close_trigger_actions: Array[String]) -> void:
+	ui_accept.emit()
+	var new_panel: Control = info_ui_prefab.instantiate()
+	new_panel.elements = prompt_elements
 	current_trigger_actions = close_trigger_actions
 	$UI.add_child(new_panel)
 	new_panel.show_header = false
-	new_panel.show_text(header_text, body_text)
+	#new_panel.show_text(header_text, body_text)
 	new_panel.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 1.0), 0.4)
