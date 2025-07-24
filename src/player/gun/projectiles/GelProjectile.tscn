@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://bpfgkk1ymtl18"]
+[gd_scene load_steps=13 format=3 uid="uid://bpfgkk1ymtl18"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_projectile.gd" id="1_a0ek6"]
 [ext_resource type="PackedScene" uid="uid://cagqbtwkkinfl" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmitSmall.tscn" id="3_63hgl"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_iatnh"]
 [ext_resource type="PackedScene" uid="uid://dohipsr30pdoj" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitSmall.tscn" id="4_woqu5"]
+[ext_resource type="PackedScene" uid="uid://b52c6uqlwvbfp" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitSmall.tscn" id="5_e6y25"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_88ae1"]
 roughness = 0.0
@@ -33,7 +34,7 @@ radius = 1.0
 
 [node name="GelProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
 script = ExtResource("1_a0ek6")
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitSmall"), NodePath("ElementalVFX/ProjectilePoisonEmitSmall"), null, null, null]
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitSmall"), NodePath("ElementalVFX/ProjectilePoisonEmitSmall"), null, NodePath("ElementalVFX/ProjectileShockEmitSmall"), null]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -86,6 +87,10 @@ one_shot = true
 visible = false
 
 [node name="ProjectilePoisonEmitSmall" parent="ElementalVFX" instance=ExtResource("4_woqu5")]
+visible = false
+
+[node name="ProjectileShockEmitSmall" parent="ElementalVFX" instance=ExtResource("5_e6y25")]
+visible = false
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_entered" from="HomingArea3D" to="." method="_on_homing_area_3d_body_entered"]

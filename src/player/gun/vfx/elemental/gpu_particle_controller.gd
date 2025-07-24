@@ -6,7 +6,7 @@ class_name GPUParticleController
 @export var self_destroy_after_time = -1
 @export var gpu_particles: Array[GPUParticles3D]
 @export var lights: Array[Light3D]
-@export var time_until_queue_free = 1
+@export var time_until_queue_free: float = 1
 
 const LIGHT_FADE_SPEED = 1
 

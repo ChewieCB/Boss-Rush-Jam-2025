@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://35lbaqwytewn"]
+[gd_scene load_steps=18 format=3 uid="uid://35lbaqwytewn"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/sticky_bomb_projectile.gd" id="1_oktax"]
 [ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="2_c01wk"]
@@ -6,8 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpact.tscn" id="4_mp8wv"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_qa43f"]
 [ext_resource type="PackedScene" uid="uid://ordrsmmhta58" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonImpact.tscn" id="5_8l5x6"]
+[ext_resource type="PackedScene" uid="uid://c7ax3gowds2j3" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockImpact.tscn" id="6_farcl"]
 [ext_resource type="PackedScene" uid="uid://cagqbtwkkinfl" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmitSmall.tscn" id="6_quv1y"]
 [ext_resource type="PackedScene" uid="uid://dohipsr30pdoj" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitSmall.tscn" id="7_udfh0"]
+[ext_resource type="PackedScene" uid="uid://b52c6uqlwvbfp" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitSmall.tscn" id="9_wt430"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hch7l"]
 albedo_color = Color(0.860888, 0.539123, 3.85046e-07, 1)
@@ -42,8 +44,8 @@ radius = 1.0
 script = ExtResource("1_oktax")
 explosion_prefab = ExtResource("2_c01wk")
 explosion_vfx = ExtResource("3_h00rf")
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitSmall"), NodePath("ElementalVFX/ProjectilePoisonEmitSmall"), null, null, null]
-elemental_impact_vfx = Array[PackedScene]([ExtResource("4_mp8wv"), ExtResource("5_8l5x6"), null, null, null])
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitSmall"), NodePath("ElementalVFX/ProjectilePoisonEmitSmall"), null, NodePath("ElementalVFX/ProjectileShockEmitSmall"), null]
+elemental_impact_vfx = Array[PackedScene]([ExtResource("4_mp8wv"), ExtResource("5_8l5x6"), null, ExtResource("6_farcl"), null])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_ynnlg")
@@ -97,6 +99,9 @@ collision_mask = 29
 visible = false
 
 [node name="ProjectilePoisonEmitSmall" parent="ElementalVFX" instance=ExtResource("7_udfh0")]
+visible = false
+
+[node name="ProjectileShockEmitSmall" parent="ElementalVFX" instance=ExtResource("9_wt430")]
 visible = false
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
