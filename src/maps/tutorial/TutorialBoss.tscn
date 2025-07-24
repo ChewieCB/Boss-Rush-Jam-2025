@@ -6224,7 +6224,7 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -10, -2.
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -10, -5.0625, -77.625)
 
 [node name="entity_39_Chandellier1" parent="FuncGodotMap" index="24" instance=ExtResource("28_c1um6")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -26, -1.75, -13)
+transform = Transform3D(-0.3, 0, -4.52987e-08, 0, 0.3, 0, 4.52987e-08, 0, -0.3, -26, -1.75, -13)
 
 [node name="entity_40_ElevatorDoors" parent="FuncGodotMap" index="25" instance=ExtResource("13_qb6rk")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -36, -2, 7.75)
@@ -7103,13 +7103,24 @@ close_trigger_actions = Array[String](["shoot", "spin_reload"])
 [node name="CollisionShape3D" parent="TutorialInfoTrigger5" index="0"]
 shape = SubResource("BoxShape3D_s0j8a")
 
-[node name="SmokeParticles" parent="." index="19" instance=ExtResource("42_g2irt")]
+[node name="TutorialInfoTrigger6" parent="." index="19" instance=ExtResource("41_t1wx2")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -46, -2.2, -6)
+collision_layer = 32
+collision_mask = 2
+header_text = "Combat"
+body_text = "Q to re-roll equipped barrels"
+close_trigger_actions = Array[String](["spin_barrels"])
+
+[node name="CollisionShape3D" parent="TutorialInfoTrigger6" index="0"]
+shape = SubResource("BoxShape3D_s0j8a")
+
+[node name="SmokeParticles" parent="." index="20" instance=ExtResource("42_g2irt")]
 transform = Transform3D(0.707107, -4.37114e-08, -0.707107, 2.26267e-08, -1, 8.44439e-08, -0.707107, -7.57103e-08, -0.707107, -14.6163, 1.90131, 24.0872)
 amount = 512
 lifetime = 4.0
 speed_scale = 2.4
 
-[node name="SmokeHurtArea" type="Area3D" parent="." index="20"]
+[node name="SmokeHurtArea" type="Area3D" parent="." index="21"]
 transform = Transform3D(-0.709571, 0, 0.704634, 0, 1, 0, -0.704634, 0, -0.709571, -13.0475, 0, 25.4599)
 collision_mask = 2
 script = ExtResource("43_jfqjj")
@@ -7135,6 +7146,8 @@ shape = SubResource("BoxShape3D_fc8gm")
 [connection signal="body_entered" from="TutorialInfoTrigger3" to="TutorialInfoTrigger3" method="_on_body_entered"]
 [connection signal="activate" from="TutorialInfoTrigger5" to="." method="show_tutorial_panel"]
 [connection signal="body_entered" from="TutorialInfoTrigger5" to="TutorialInfoTrigger5" method="_on_body_entered"]
+[connection signal="activate" from="TutorialInfoTrigger6" to="." method="show_tutorial_panel"]
+[connection signal="body_entered" from="TutorialInfoTrigger6" to="TutorialInfoTrigger6" method="_on_body_entered"]
 [connection signal="body_entered" from="SmokeHurtArea" to="SmokeHurtArea" method="_on_body_entered"]
 
 [editable path="WorkshopNPC"]
@@ -7144,3 +7157,4 @@ shape = SubResource("BoxShape3D_fc8gm")
 [editable path="TutorialInfoTrigger4"]
 [editable path="TutorialInfoTrigger3"]
 [editable path="TutorialInfoTrigger5"]
+[editable path="TutorialInfoTrigger6"]
