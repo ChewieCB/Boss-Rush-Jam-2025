@@ -3435,16 +3435,13 @@ size = Vector3(6, 6, 6)
 [sub_resource type="BoxShape3D" id="BoxShape3D_fc8gm"]
 size = Vector3(1.7, 4.2, 4.3)
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_hm1ph")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors") instance=ExtResource("1_hm1ph")]
 script = ExtResource("2_t1yvw")
 boss_doors = NodePath("FuncGodotMap/entity_40_ElevatorDoors")
 chipling_prefab = ExtResource("38_lied7")
 chiplings_to_spawn_1 = 5
 chiplings_to_spawn_2 = 8
 info_ui_prefab = ExtResource("4_e7ode")
-nav_parent = NodePath("FuncGodotMap/group_819_floor_walkable_1a/entity_139_floor_walkable_1a")
-floor_parent = NodePath("FuncGodotMap/group_819_floor_walkable_1a/entity_139_floor_walkable_1a")
-floor_mesh = NodePath("FuncGodotMap/group_819_floor_walkable_1a/entity_139_floor_walkable_1a/entity_139_mesh_instance")
 
 [node name="BossTriggerVolume" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.98993, -0.428299, -23.5213)
