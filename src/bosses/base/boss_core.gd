@@ -57,6 +57,7 @@ var current_status_buildup: Dictionary = {
 	BossStatusEffect.SHOCKED: 0,
 	BossStatusEffect.BLEEDING: 1000,
 }
+@export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 
 @export_subgroup("DPS Dealt In Last X Seconds")
 @export var dps_dealt_window: float = 1.8
@@ -193,6 +194,10 @@ func _ready() -> void:
 	debug_trajectory_mesh.mesh = ImmediateMesh.new()
 	scene_root.add_child.call_deferred(debug_trajectory_mesh)
 	#debug_mesh.visible = false
+	for elem in elemental_emitting_vfx:
+		if elem:
+			elem.visible = false
+
 	await owner.ready
 
 
@@ -610,6 +615,18 @@ func _on_hurt_frame_timer_timeout() -> void:
 
 ## STATUS EFFECTS
 
+func toggle_emitting_elemental_vfx(status: BossStatusEffect, is_on: bool = true):
+	var element_vfx_node = elemental_emitting_vfx[int(status) - 1]
+	if element_vfx_node:
+		element_vfx_node.visible = is_on
+		if is_on:
+			if element_vfx_node.has_method("turn_on"):
+				element_vfx_node.turn_on()
+		else:
+			if element_vfx_node.has_method("turn_off"):
+				element_vfx_node.turn_off()
+
+
 func apply_status_buildup(status: BossStatusEffect, amount: float) -> void:
 	if current_status_buildup[status] < status_resist[status]:
 		current_status_buildup[status] += amount
@@ -617,17 +634,18 @@ func apply_status_buildup(status: BossStatusEffect, amount: float) -> void:
 			apply_status(status, status_duration)
 
 func apply_status(status: BossStatusEffect, duration: float) -> void:
+	toggle_emitting_elemental_vfx(status, true)
 	var event_string: String = "status_%s" % BossStatusEffect.keys()[status].to_lower()
 	state_chart.send_event("add_" + event_string)
 	await get_tree().create_timer(duration).timeout
 	remove_status(status)
-
 
 func remove_status(status: BossStatusEffect) -> void:
 	status_resist[status] += increased_tolerance
 	current_status_buildup[status] = 0
 	var event_string: String = "status_%s" % BossStatusEffect.keys()[status].to_lower()
 	state_chart.send_event("remove_" + event_string)
+	toggle_emitting_elemental_vfx(status, false)
 
 
 # ====================== Status ==========================

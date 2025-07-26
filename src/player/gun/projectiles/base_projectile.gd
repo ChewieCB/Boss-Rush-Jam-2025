@@ -76,7 +76,7 @@ func create_blood_splatter(pos: Vector3, normal: Vector3):
 	create_status_effect_impact(pos, normal)
 	if generic_blood_splatter == null:
 		return
-		
+
 	var blood_inst = generic_blood_splatter.instantiate()
 	get_parent().add_child(blood_inst)
 	blood_inst.global_position = pos
