@@ -5,16 +5,16 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_k0t2c"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_ky52g"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/explosive_bullet_effect.gd" id="6_ayuco"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="7_mtmmu"]
 [ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="7_tc2w0"]
-[ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/explosion/ExplosionVFX3D.tscn" id="8_x4fhu"]
 
 [node name="DynamicAdvantageBarrel" type="Node3D"]
 script = ExtResource("1_54i25")
-barrel_id = 3
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="RampUpEffect" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("3_w70eq")
 bonus_firerate_per_interval = 5.0
 interval_time = 0.2
@@ -25,6 +25,7 @@ display_text_desc = "+5% firerate per 0.2s
 non-stop shooting"
 
 [node name="ExtendedDrumEffect" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("4_k0t2c")
 display_text_title = "Extended Drum"
 display_text_tag = "More dakka!"
@@ -47,7 +48,7 @@ is_perc = true
 script = ExtResource("6_ayuco")
 damage = 10
 explosion_damage = ExtResource("7_tc2w0")
-explosion_vfx = ExtResource("8_x4fhu")
+explosion_vfx = ExtResource("7_mtmmu")
 display_text_title = "Explosive bullet"
 display_text_tag = "Don't hurt yourself!"
 display_text_desc = "Make bullets go boom"
