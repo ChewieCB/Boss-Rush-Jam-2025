@@ -13,7 +13,7 @@
 [ext_resource type="FontFile" uid="uid://cf4ghtgpa7pbl" path="res://assets/engebrechtre.rg-bold.otf" id="11_ecy6m"]
 [ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="12_ixudt"]
 [ext_resource type="Texture2D" uid="uid://cwmhx1u0uxo4b" path="res://assets/misc/https_gnarled-hand_itch_io_.png" id="13_5ll6d"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="14_emu32"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="14_emu32"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_1s2yq"]
 

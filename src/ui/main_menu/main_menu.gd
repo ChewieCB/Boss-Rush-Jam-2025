@@ -40,6 +40,7 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	print(event)
 	if event.is_action_pressed("ui_cancel"):
 		if save_ui.visible:
 			save_ui.visible = false
@@ -115,7 +116,12 @@ func start_game():
 	await get_tree().create_timer(next_beat_time - current_beat_time).timeout
 	bgm_player.stop()
 	SoundManager.play_ui_sound(start_game_sfx, "UI")
-	LoadingHandler.start_loading("Lobby")
+	
+	if not GameManager.tutorial_completed:
+		LoadingHandler.current_scene_path = "res://src/maps/tutorial/TutorialBoss.tscn"
+		LoadingHandler.start_loading("Tutorial")
+	else:
+		LoadingHandler.start_loading("Lobby")
 
 
 func play_button_hover_sfx():

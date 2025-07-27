@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4e7pbfet0kfb"]
+
+[ext_resource type="PackedScene" uid="uid://doli6c54olace" path="res://src/maps/tutorial/triggers/BaseTrigger.tscn" id="1_h0p6x"]
+[ext_resource type="Script" path="res://src/maps/tutorial/triggers/barrel_effect_trigger.gd" id="2_6aunn"]
+
+[node name="BarrelEffectTrigger" instance=ExtResource("1_h0p6x")]
+script = ExtResource("2_6aunn")
+target_effect_hit_count = 3

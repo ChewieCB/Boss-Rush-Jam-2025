@@ -51,7 +51,7 @@
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
 [ext_resource type="PackedScene" uid="uid://diyo7ftvwcl0r" path="res://src/ui/player/status/DrunkUI.tscn" id="46_587r8"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="46_br567"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="46_br567"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/old_movie.gdshader" id="46_fqoxl"]
 [ext_resource type="PackedScene" uid="uid://crvu72pwcnneq" path="res://src/ui/player/StatUI.tscn" id="46_ob8n4"]

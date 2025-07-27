@@ -6,6 +6,14 @@ class_name Vendor
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var interact_area: Area3D = $InteractArea
 
+@export var has_shop: bool = true
+@export var interact_text: Array[String]
+@export var exit_text: Array[String]
+@export var hurt_text: Array[String]
+@export var purchase_text: Array[String]
+@export var too_expensive_text: Array[String]
+
+
 func _ready() -> void:
 	health_component.hurt.connect(_on_hurt)
 	dialogue_label.text = ""
@@ -14,10 +22,11 @@ func _ready() -> void:
 
 
 func interact() -> void:
-	shop_ui.toggle()
-	GameManager.player.input_dir = Vector2.ZERO
-	GameManager.player.vel_horizontal = Vector2.ZERO
-	GameManager.player.velocity = Vector3.ZERO
+	if has_shop:
+		shop_ui.toggle()
+		GameManager.player.input_dir = Vector2.ZERO
+		GameManager.player.vel_horizontal = Vector2.ZERO
+		GameManager.player.velocity = Vector3.ZERO
 
 
 func show_dialogue(dialogue: String) -> void:
@@ -28,39 +37,44 @@ func show_dialogue(dialogue: String) -> void:
 
 
 func _on_hurt() -> void:
-	var hurt_dialogue = [
-		"Hey!",
-		"Cmon now!",
-		"Quit it!",
-	]
-	show_dialogue(hurt_dialogue.pick_random())
+	#var hurt_dialogue = [
+		#"Hey!",
+		#"Cmon now!",
+		#"Quit it!",
+	#]
+	#show_dialogue(hurt_dialogue.pick_random())
+	show_dialogue(hurt_text.pick_random())
 
 
 func _on_purchase(_data: BarrelDataResource) -> void:
-	var purchase_dialogue = [
-		"Excellent choice!",
-		"A fine aquisition sir.",
-		"A patron of taste I see!",
-	]
-	show_dialogue(purchase_dialogue.pick_random())
+	#var purchase_dialogue = [
+		#"Excellent choice!",
+		#"A fine aquisition sir.",
+		#"A patron of taste I see!",
+	#]
+	#show_dialogue(purchase_dialogue.pick_random())
+	show_dialogue(purchase_text.pick_random())
 
 
 func _on_too_expensive(_data: BarrelDataResource) -> void:
-	var fail_dialogue = [
-		"Perhaps something a little more\nin budget, sir?",
-		"Another time perhaps.",
-		"Taste better than your luck, eh?",
-		"Come back when you're a little \nmmmm richer!"
-	]
-	show_dialogue(fail_dialogue.pick_random())
+	#var fail_dialogue = [
+		#"Perhaps something a little more\nin budget, sir?",
+		#"Another time perhaps.",
+		#"Taste better than your luck, eh?",
+		#"Come back when you're a little \nmmmm richer!"
+	#]
+	#show_dialogue(fail_dialogue.pick_random())
+	show_dialogue(too_expensive_text.pick_random())
 
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
-		show_dialogue("Get your barrels here!\nAll chips accepted!")
+		show_dialogue(interact_text.pick_random())
+		#show_dialogue("Get your barrels here!\nAll chips accepted!")
 
 
 func _on_body_exited(body: Node3D) -> void:
 	if body is Player:
-		show_dialogue("Good luck!")
+		show_dialogue(exit_text.pick_random()) 
+		#show_dialogue("Good luck!")
 		shop_ui.close()

@@ -43,7 +43,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_state_charts/plugin.cfg", "res://addons/input_helper/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
+enabled=PackedStringArray("res://addons/func_godot/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/input_helper/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
 
 [global_group]
 
@@ -201,6 +201,10 @@ look_right={
 "deadzone": 0.05,
 "events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":2,"axis_value":1.0,"script":null)
 ]
+}
+move_generic={
+"deadzone": 0.05,
+"events": []
 }
 
 [layer_names]

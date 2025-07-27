@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/ui/common/keybind_button/keybind_button.gd" id="1_4qnba"]
 [ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="2_5y1fg"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="2_j1jea"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="2_j1jea"]
 
 [node name="MarginContainer" type="MarginContainer"]
 custom_minimum_size = Vector2(0, 56)

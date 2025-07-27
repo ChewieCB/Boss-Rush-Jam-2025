@@ -96,8 +96,10 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			if "health_component" in target:
 				if target is Shield:
 					target.impact(self.global_position)
-				target.health_component.damage(calculated_damage)
-				damage_applied.emit(calculated_damage, true, global_position)
+				elif target is BarrelEffectTrigger:
+					target.hit_with_effect(self.owner_gun.installed_barrels)
+				target.health_component.damage(damage)
+				damage_applied.emit(damage, true, global_position)
 			elif target is BartenderBottle:
 				target.call_deferred("queue_free")
 			create_spark(hitscan_col_point, hitscan_col_normal)

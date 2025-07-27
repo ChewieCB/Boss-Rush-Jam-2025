@@ -198,7 +198,8 @@ func _ready() -> void:
 		if elem:
 			elem.visible = false
 
-	await owner.ready
+	if owner:
+		await owner.ready
 
 
 func _physics_process(delta: float) -> void:
