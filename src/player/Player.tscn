@@ -181,7 +181,7 @@ shape = SubResource("BoxShape3D_sjjg0")
 [node name="Camera3D" type="Camera3D" parent="Neck/ShakeCameraWrapper"]
 current = true
 fov = 90.0
-near = 0.02
+near = 0.001
 
 [node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.947067)
@@ -226,6 +226,9 @@ texture = ExtResource("5_nkt42")
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
 
 [node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("39_lhbas")]
+
+[node name="EffectIcon1Sprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent/Barrel1Sprite" index="1"]
+modulate = Color(1, 1, 1, 0)
 
 [node name="AimAssistRaycast" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
@@ -573,4 +576,5 @@ light_color = Color(0.78, 0.897333, 1, 1)
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_physics_processing"]
 [connection signal="timeout" from="StateChart/Root/Status/Drunk/DrunkTimer" to="." method="_on_drunk_timer_timeout"]
 
+[editable path="Neck/ShakeCameraWrapper/GunContainer/BlankGun"]
 [editable path="UI/HurtOverlay"]

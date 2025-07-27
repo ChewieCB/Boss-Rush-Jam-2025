@@ -4,6 +4,8 @@ class_name BaseBarrelEffect
 @export_multiline var display_text_title: String
 @export_multiline var display_text_tag: String
 @export_multiline var display_text_desc: String
+# FIXME - make this dynamic and cover all barrel anims, lookup table/key maybe?
+@export var icon: CompressedTexture2D = load("res://assets/sprite/effect_icons/anim_test/0010.png")
 
 var owner_barrel: SpinBarrel
 ## This variable is to prevent a single shot trigger the effect multiple times.

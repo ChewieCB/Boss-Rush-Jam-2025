@@ -24,12 +24,16 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
 @onready var barrel_1_label: Label3D = $SpriteParent/Barrel1Sprite/Label3D
+@onready var barrel_1_icon_sprite: Sprite3D = $SpriteParent/Barrel1Sprite/EffectIcon1Sprite
 @onready var barrel_2_sprite: Sprite3D = $SpriteParent/Barrel2Sprite
 @onready var barrel_2_label: Label3D = $SpriteParent/Barrel2Sprite/Label3D
+@onready var barrel_2_icon_sprite: Sprite3D = $SpriteParent/Barrel2Sprite/EffectIcon2Sprite
 @onready var barrel_3_sprite: Sprite3D = $SpriteParent/Barrel3Sprite
 @onready var barrel_3_label: Label3D = $SpriteParent/Barrel3Sprite/Label3D
+@onready var barrel_3_icon_sprite: Sprite3D = $SpriteParent/Barrel3Sprite/EffectIcon3Sprite
 @onready var barrel_sprites: Array[Sprite3D] = [barrel_1_sprite, barrel_2_sprite, barrel_3_sprite]
 @onready var barrel_labels: Array[Label3D] = [barrel_1_label, barrel_2_label, barrel_3_label]
+@onready var effect_icon_sprites: Array[Sprite3D] = [barrel_1_icon_sprite, barrel_2_icon_sprite, barrel_3_icon_sprite]
 
 @onready var anim_tree: AnimationTree = $AnimationTree
 
@@ -331,7 +335,10 @@ func _spin_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_start_spin()
 	barrel.start_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
-	state_machine.travel("spin")
+	# If we don't have an effect equipped, 
+	# travel straight to the spin anim without the decal start anim
+	state_machine.travel("spin_start")
+	#state_machine.travel("spin")
 	SoundManager.play_sound(TEMP_sfx_spin, "Gun")
 	barrel_spin_started.emit(barrel, barrel_idx)
 
@@ -347,6 +354,9 @@ func _stop_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
+	# Pick barrel icon
+	# FIXME
+	#effect_icon_sprites[barrel_idx].texture = barrel.get_active_effect().icon
 	SoundManager.stop_sound(TEMP_sfx_spin)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
 

@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=47 format=3 uid="uid://cyxkgv6ghxahc"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=51 format=3 uid="uid://cyxkgv6ghxahc"]
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_3t03u"]
 
@@ -10,12 +10,14 @@ animation = &"barrel_1_idle"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4hgky"]
 animation = &"barrel_1_spin"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_60q47"]
+animation = &"barrel_1_spin_end"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nuuey"]
+animation = &"barrel_1_spin_start"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bylso"]
 animation = &"barrel_1_unequipped"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ta74k"]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_16f2i"]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dphti"]
 advance_mode = 2
@@ -24,15 +26,32 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5if47"]
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hmrm1"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_oyd6m"]
+reset = false
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5mw3y"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_s1poa"]
+switch_mode = 2
+advance_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_dv2wq"]
 states/idle/node = SubResource("AnimationNodeAnimation_7j3hm")
-states/idle/position = Vector2(395, 100)
+states/idle/position = Vector2(385, 100)
 states/spin/node = SubResource("AnimationNodeAnimation_4hgky")
-states/spin/position = Vector2(585, 100)
+states/spin/position = Vector2(608, 100)
+states/spin_end/node = SubResource("AnimationNodeAnimation_60q47")
+states/spin_end/position = Vector2(488, 168)
+states/spin_start/node = SubResource("AnimationNodeAnimation_nuuey")
+states/spin_start/position = Vector2(518, 36)
 states/unequip/node = SubResource("AnimationNodeAnimation_bylso")
-states/unequip/position = Vector2(490, -1)
-transitions = ["idle", "spin", SubResource("AnimationNodeStateMachineTransition_ta74k"), "spin", "idle", SubResource("AnimationNodeStateMachineTransition_16f2i"), "Start", "unequip", SubResource("AnimationNodeStateMachineTransition_dphti"), "unequip", "idle", SubResource("AnimationNodeStateMachineTransition_6svg3"), "idle", "unequip", SubResource("AnimationNodeStateMachineTransition_5if47")]
-graph_offset = Vector2(-84, -34)
+states/unequip/position = Vector2(460, -34)
+transitions = ["Start", "unequip", SubResource("AnimationNodeStateMachineTransition_dphti"), "unequip", "idle", SubResource("AnimationNodeStateMachineTransition_6svg3"), "idle", "unequip", SubResource("AnimationNodeStateMachineTransition_5if47"), "idle", "spin_start", SubResource("AnimationNodeStateMachineTransition_hmrm1"), "spin_start", "spin", SubResource("AnimationNodeStateMachineTransition_oyd6m"), "spin", "spin_end", SubResource("AnimationNodeStateMachineTransition_5mw3y"), "spin_end", "idle", SubResource("AnimationNodeStateMachineTransition_s1poa")]
+graph_offset = Vector2(-53, -67)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8vjv8"]
 animation = &"barrel_2_idle"
@@ -62,7 +81,7 @@ states/spin/position = Vector2(530, 101)
 states/unequip/node = SubResource("AnimationNodeAnimation_eojki")
 states/unequip/position = Vector2(439, -8)
 transitions = ["idle", "spin", SubResource("AnimationNodeStateMachineTransition_ejcvk"), "spin", "idle", SubResource("AnimationNodeStateMachineTransition_2vib7"), "Start", "unequip", SubResource("AnimationNodeStateMachineTransition_d8rwm"), "unequip", "idle", SubResource("AnimationNodeStateMachineTransition_avqwe"), "idle", "unequip", SubResource("AnimationNodeStateMachineTransition_fda6e")]
-graph_offset = Vector2(-77, -104)
+graph_offset = Vector2(-88, -59)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4758f"]
 animation = &"barrel_3_idle"
@@ -148,7 +167,7 @@ transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(-39, -63)
 
 [resource]
-graph_offset = Vector2(-128.987, 222.875)
+graph_offset = Vector2(-761.594, -100.54)
 nodes/barrel_1+2/node = SubResource("AnimationNodeAdd2_3t03u")
 nodes/barrel_1+2/position = Vector2(-240, 0)
 nodes/barrel_12+3/node = SubResource("AnimationNodeAdd2_vi7yb")
