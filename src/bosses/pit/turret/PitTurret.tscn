@@ -4,7 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://cm7vo0nnq0djm" path="res://src/bosses/pit/assets/sfx/TURRET FILES/PIT BOSS TURRET SPAWN 1.mp3" id="2_1f73h"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_nwx76"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_oqn11"]
-[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_r6yck"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="2_r6yck"]
 [ext_resource type="AudioStream" uid="uid://k05rbo6uf4c4" path="res://src/bosses/pit/assets/sfx/TURRET FILES/PIT BOSS TURRET SPAWN 2.mp3" id="3_rcb7o"]
 [ext_resource type="PackedScene" uid="uid://bw11sgcr0wtk4" path="res://src/bosses/base/attacks/ranged/LaserProjectile.tscn" id="3_xvg4j"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="4_b87ak"]

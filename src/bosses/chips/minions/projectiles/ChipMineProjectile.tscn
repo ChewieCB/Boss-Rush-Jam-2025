@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://ge1558qgjpow"]
 
 [ext_resource type="Script" path="res://src/bosses/chips/minions/chip_mine_projectile.gd" id="1_362ni"]
-[ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/ExplosionVFX3D.tscn" id="2_tp0w1"]
+[ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/explosion/ExplosionVFX3D.tscn" id="2_tp0w1"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_uugp1"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_42ewo"]

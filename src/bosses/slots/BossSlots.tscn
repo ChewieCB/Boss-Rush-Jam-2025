@@ -188,7 +188,7 @@ _data = {
 "death": SubResource("Animation_mppog")
 }
 
-[node name="BossSlots" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_qxyx0")]
+[node name="BossSlots" node_paths=PackedStringArray("elemental_emitting_vfx", "sfx_players") instance=ExtResource("1_qxyx0")]
 motion_mode = 1
 script = ExtResource("2_b0b3s")
 phase_2_health_percentage_trigger = 0.5
@@ -251,6 +251,7 @@ sfx_bomb_launch = Array[AudioStream]([ExtResource("45_ishi6"), ExtResource("46_v
 boss_id = 1
 chip_spawn_chance = 0.3
 chip_spawn_force = 1200.0
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_to_drop = ExtResource("11_5va1t")
 sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8"), NodePath("SFXPlayer9"), NodePath("SFXPlayer10"), NodePath("SFXPlayer11"), NodePath("SFXPlayer12")]
 sfx_awaken = ExtResource("51_nikje")

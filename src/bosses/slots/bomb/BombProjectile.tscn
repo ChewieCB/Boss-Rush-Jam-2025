@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/bosses/slots/bomb/bomb_projectile.gd" id="1_4scaw"]
 [ext_resource type="ArrayMesh" uid="uid://d5m2g14coy2c" path="res://src/bosses/slots/bell/bomb_mesh.tres" id="1_pne0t"]
-[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_gd1st"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="2_gd1st"]
 [ext_resource type="AudioStream" uid="uid://dsk2dfx34iy6m" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 1.mp3" id="2_tkyk2"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="3_e47h8"]
 [ext_resource type="AudioStream" uid="uid://b1h5uugbn6oed" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 2.mp3" id="3_l4xhx"]

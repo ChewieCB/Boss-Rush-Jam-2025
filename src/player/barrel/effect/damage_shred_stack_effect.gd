@@ -5,7 +5,7 @@ extends BaseBarrelEffect
 
 var stack_count = 0
 
-var buff_icon = preload("res://assets/sprite/buff_icon/tag_n_shred.png")
+var buff_icon = preload("res://assets/sprite/status_icon/tag_n_shred.png")
 
 func remove_effect():
 	stack_count = 0

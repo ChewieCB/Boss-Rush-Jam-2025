@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=35 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -17,6 +17,7 @@
 [ext_resource type="Resource" uid="uid://7xfi8anly2u3" path="res://src/player/barrel/resource/archetype_automatic_spec_barrrel_data.tres" id="8_4asxy"]
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="9_vb777"]
 [ext_resource type="Resource" uid="uid://l1nys7kixqcl" path="res://src/player/barrel/resource/placeholderA_barrrel_data.tres" id="10_0mcpf"]
+[ext_resource type="Resource" uid="uid://cl8gwigkfvwca" path="res://src/player/barrel/resource/elemental_infusion_barrel_data.tres" id="10_7lixb"]
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="10_28dwd"]
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="12_2rf45"]
 [ext_resource type="PackedScene" uid="uid://dow4ee3qublb7" path="res://src/maps/common/ShootWallTest.tscn" id="19_cev3k"]
@@ -80,6 +81,13 @@ shape = SubResource("BoxShape3D_xq4fj")
 
 [node name="Player" parent="." instance=ExtResource("1_h4pew")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+can_wall_jump = null
+can_wall_cling = null
+dash_cd = null
+angular_momentum_multiplier = null
+luck_redeem_time = null
+drunk_movement_drift = null
+drunk_movement_drift_change_interval = null
 
 [node name="Dummy" parent="." instance=ExtResource("2_lrk4j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.38672, 0.952686, -11.856)
@@ -98,7 +106,7 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.776
 
 [node name="CheatMoney" parent="." instance=ExtResource("19_sk1dt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6221, 1.02637, -11.1613)
-value_array = Array[int]([100000, 100000, 100000, 100000, 100000])
+value_array = Array[int]([100000, 100000, 100000, 100000, 100000, 100000, 100000])
 
 [node name="barrel stuff" type="Node3D" parent="."]
 
@@ -110,8 +118,12 @@ data = ExtResource("4_bjy76")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9177, 0.599205, -1.038)
 
 [node name="BarrelItemPickup13" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.94303, 0.599205, -1.038)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.86488, 0.599205, -1.038)
 data = ExtResource("6_gecbk")
+
+[node name="BarrelItemPickup18" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.86488, 0.599205, 0.674865)
+data = ExtResource("10_7lixb")
 
 [node name="BarrelItemPickup14" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.94303, 0.599205, 0.808412)

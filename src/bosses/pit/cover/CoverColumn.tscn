@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/bosses/pit/cover/cover_column.gd" id="1_a0mm0"]
 [ext_resource type="AudioStream" uid="uid://bb7rrjhgxeejg" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS MOVING_SPAWNING_.mp3" id="2_b4q0o"]
-[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/ExplosionVFX2D.tscn" id="2_baljf"]
+[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="2_baljf"]
 [ext_resource type="AudioStream" uid="uid://56mdeui8rvsv" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS BREAK 1.mp3" id="3_wjhth"]
 [ext_resource type="Material" uid="uid://i1urvbtkthfg" path="res://assets/textures/floor/marble.tres" id="4_60mmn"]
 [ext_resource type="AudioStream" uid="uid://qrfqoob00pwl" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS BREAK 2.mp3" id="4_nhnhh"]

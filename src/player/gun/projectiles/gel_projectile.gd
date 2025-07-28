@@ -1,4 +1,5 @@
 extends BaseProjectile
+class_name GelProjectile
 
 @export var stick_time = 1
 @export var max_scale = 3
@@ -12,6 +13,7 @@ extends BaseProjectile
 @onready var stick_timer: Timer = $StickTimer
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
+@onready var trail: Trail3D = $Trail/Trail3D
 
 # When gel projectile collide, if the hitscan_col_point is valid and not too
 # far from current global_position, snap to hitscan_col_point so it look better.
@@ -125,4 +127,16 @@ func _on_stick_timer_timeout() -> void:
 		self.reparent.call_deferred(get_tree().get_root())
 		ricochet()
 	else:
+		stop_elemental_particles()
 		start_deflate = true
+
+func change_bullet_color(_new_color: Color):
+	super (_new_color)
+	if color_changed_count > 1:
+		mesh_instance.mesh.material.albedo_color = mesh_instance.mesh.material.albedo_color.lerp(_new_color, 0.5)
+		trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
+		trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
+	else:
+		mesh_instance.mesh.material.albedo_color = _new_color
+		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.5)
+		trail.material_override.emission = _new_color

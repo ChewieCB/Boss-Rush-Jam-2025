@@ -4,7 +4,7 @@ extends BaseBarrelEffect
 @export var crouch_iframe_cd = 1
 
 var active = false
-var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
+var dash_iframe_icon = preload("res://assets/sprite/status_icon/invincible.png")
 var timer: Timer
 
 func _ready():

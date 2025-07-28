@@ -5,6 +5,8 @@ class_name GunProjectile
 
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
+@onready var mesh: MeshInstance3D = $MeshInstance3D
+@onready var trail: Trail3D = $Trail/Trail3D
 
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
@@ -81,6 +83,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit()
+	stop_elemental_particles()
 	call_deferred("queue_free")
 
 func ricochet():
@@ -120,6 +123,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
+		stop_elemental_particles()
 		destroyed.emit()
 		call_deferred("queue_free")
 
@@ -129,3 +133,16 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 		homing_locked_in = true
 		homing_target = body
 		homing_area.set_deferred("monitoring", false)
+
+func change_bullet_color(_new_color: Color):
+	super (_new_color)
+	if color_changed_count > 1:
+		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
+		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
+		trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
+		trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
+	else:
+		mesh.mesh.material.albedo_color = _new_color
+		mesh.mesh.material.emission = _new_color
+		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
+		trail.material_override.emission = _new_color

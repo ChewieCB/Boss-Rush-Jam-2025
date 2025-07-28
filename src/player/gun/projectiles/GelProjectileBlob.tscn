@@ -1,26 +1,122 @@
-[gd_scene load_steps=5 format=3 uid="uid://dij705shy7t2i"]
+[gd_scene load_steps=17 format=3 uid="uid://dij705shy7t2i"]
 
-[ext_resource type="PackedScene" uid="uid://bpfgkk1ymtl18" path="res://src/player/gun/projectiles/GelProjectile.tscn" id="1_pvpt3"]
+[ext_resource type="Script" path="res://src/player/gun/projectiles/gel_projectile_blob.gd" id="1_qak0o"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_d3tjp"]
+[ext_resource type="Shader" path="res://src/player/assets/shaders/spiky_gel_sphere.gdshader" id="2_t2nfw"]
+[ext_resource type="PackedScene" uid="uid://bab1ejq76oubu" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmitBig.tscn" id="4_xti10"]
+[ext_resource type="PackedScene" uid="uid://dthdgt8rwdg7x" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitBig.tscn" id="5_fuh73"]
+[ext_resource type="PackedScene" uid="uid://chjxj0x3rwotr" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmitBig.tscn" id="6_7v551"]
+[ext_resource type="PackedScene" uid="uid://b770x0fkaf7ha" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitBig.tscn" id="6_h3m5e"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uyanh"]
-roughness = 0.0
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xk3gl"]
+noise_type = 2
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_t4oah"]
+seamless = true
+noise = SubResource("FastNoiseLite_xk3gl")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gtuul"]
+render_priority = 0
+shader = ExtResource("2_t2nfw")
+shader_parameter/spike_strength = 0.05
+shader_parameter/noise_scale = 5.0
+shader_parameter/time_speed = 0.25
+shader_parameter/base_color = Color(1, 1, 1, 1)
+shader_parameter/highlight_color = Color(1, 1, 1, 1)
+shader_parameter/noise_tex = SubResource("NoiseTexture3D_t4oah")
 
 [sub_resource type="SphereMesh" id="SphereMesh_j6dyv"]
-material = SubResource("StandardMaterial3D_uyanh")
-radius = 0.2
-height = 0.4
+material = SubResource("ShaderMaterial_gtuul")
+radius = 0.15
+height = 0.3
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0jwuq"]
 radius = 0.242954
 
-[node name="GelProjectileBlob" instance=ExtResource("1_pvpt3")]
-stick_time = 5
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pphwl"]
+transparency = 1
+albedo_color = Color(1, 0.766048, 0, 0.713726)
+emission_enabled = true
+emission = Color(1, 0.731834, 0.032858, 1)
 
-[node name="MeshInstance3D" parent="." index="0"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_hlqus"]
+
+[sub_resource type="Curve" id="Curve_inxyf"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_m0ts0"]
+radius = 1.0
+
+[node name="GelProjectileBlob" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
+script = ExtResource("1_qak0o")
+tick_per_second = 2
+stick_time = 5
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitBig"), NodePath("ElementalVFX/ProjectilePoisonEmitBig"), NodePath("ElementalVFX/ProjectileFreezeEmitBig"), NodePath("ElementalVFX/ProjectileShockEmitBig"), null]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
 mesh = SubResource("SphereMesh_j6dyv")
 
-[node name="Area3D" parent="." index="1"]
+[node name="Area3D" type="Area3D" parent="."]
 collision_layer = 8
+collision_mask = 221
 
-[node name="CollisionShape3D" parent="Area3D" index="0"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("SphereShape3D_0jwuq")
+
+[node name="Trail" type="Node3D" parent="."]
+visible = false
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_pphwl")
+mesh = SubResource("ImmediateMesh_hlqus")
+script = ExtResource("2_d3tjp")
+segments = 10
+base_width = 0.1
+width_profile = SubResource("Curve_inxyf")
+
+[node name="HomingArea3D" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 196
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HomingArea3D"]
+shape = SubResource("SphereShape3D_m0ts0")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.610737)
+target_position = Vector3(0, 0, -100)
+collision_mask = 29
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="StickTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="DamageTickTimer" type="Timer" parent="."]
+
+[node name="ElementalVFX" type="Node3D" parent="."]
+
+[node name="ProjectileBurnEmitBig" parent="ElementalVFX" instance=ExtResource("4_xti10")]
+visible = false
+
+[node name="ProjectilePoisonEmitBig" parent="ElementalVFX" instance=ExtResource("5_fuh73")]
+visible = false
+
+[node name="ProjectileFreezeEmitBig" parent="ElementalVFX" instance=ExtResource("6_7v551")]
+visible = false
+
+[node name="ProjectileShockEmitBig" parent="ElementalVFX" instance=ExtResource("6_h3m5e")]
+visible = false
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_entered" from="HomingArea3D" to="." method="_on_homing_area_3d_body_entered"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
+[connection signal="timeout" from="StickTimer" to="." method="_on_stick_timer_timeout"]
+[connection signal="timeout" from="DamageTickTimer" to="." method="_on_damage_tick_timer_timeout"]

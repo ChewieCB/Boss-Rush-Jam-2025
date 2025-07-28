@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_dicom"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/speed_burst_effect.gd" id="3_u0w13"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/recovery_effect.gd" id="4_croek"]
-[ext_resource type="PackedScene" uid="uid://d4fgeytwm1c2r" path="res://src/player/gun/vfx/HealBarrier.tscn" id="5_bj72g"]
+[ext_resource type="PackedScene" uid="uid://d4fgeytwm1c2r" path="res://src/player/gun/vfx/misc/HealBarrier.tscn" id="5_bj72g"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/death_from_above_effect.gd" id="6_mqo2u"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/damage_shred_stack_effect.gd" id="7_j1pfi"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="7_tbyy7"]

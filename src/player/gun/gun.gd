@@ -82,6 +82,7 @@ var base_reload_time = 1
 
 var magazine_ammo_left = 0
 var is_reloading = false
+var is_spinning = false
 var is_jammed = false
 var time_since_last_shot = 0
 var installed_barrels: Array[SpinBarrel] = []
@@ -139,7 +140,7 @@ func _process(delta: float) -> void:
 
 ## Return true if shot successful
 func shoot(aim_ray: RayCast3D) -> bool:
-	if is_reloading or is_jammed:
+	if is_reloading or is_spinning or is_jammed:
 		play_failed_shoot_sfx()
 		return false
 	if magazine_ammo_left <= 0:
@@ -259,6 +260,8 @@ func check_barrel_effect_on_player_damaged():
 		barrel.get_active_effect().on_player_damaged()
 
 func pull_trigger():
+	if is_reloading or is_spinning:
+		return
 	if not is_trigger_pulled:
 		is_trigger_pulled = true
 		for barrel in installed_barrels:
@@ -278,7 +281,8 @@ func spin_all_barrels() -> void:
 		return
 
 	release_trigger()
-	is_reloading = true
+
+	is_spinning = true
 
 	# EXPERIMENTAL for hold/release spinning
 	#var state_machine = anim_tree.get("parameters/spin_state/playback")
@@ -288,6 +292,7 @@ func spin_all_barrels() -> void:
 	await spin_anim_trigger
 
 	# TODO - add catch for HELD barrels
+	barrels_to_spin = installed_barrels.size() # Check again to prevent bug
 	for i in barrels_to_spin:
 		if i > barrels_to_spin:
 			break
@@ -300,30 +305,31 @@ func spin_all_barrels() -> void:
 	reset_modifier(true)
 	#gun_status_label.visible = false
 	stop_all_barrels()
-	is_reloading = false
+	is_spinning = false
+
 	reload(true)
 
 
-func spin_single_barrel(barrel_idx: int) -> void:
-	if barrel_idx >= installed_barrels.size():
-		return
+# func spin_single_barrel(barrel_idx: int) -> void:
+# 	if barrel_idx >= installed_barrels.size():
+# 		return
 
-	is_reloading = true
-	release_trigger()
+# 	is_reloading = true
+# 	release_trigger()
 
-	# TODO - move spin arm up/down gun depending on barrel count
-	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-	await spin_anim_trigger
+# 	# TODO - move spin arm up/down gun depending on barrel count
+# 	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+# 	await spin_anim_trigger
 
-	_spin_barrel(barrel_idx)
+# 	_spin_barrel(barrel_idx)
 
-	# TODO - replace with a dedicated spin time value now reloading
-	# isn't directly tied to spinning
-	await get_tree().create_timer(base_spin_time).timeout
+# 	# TODO - replace with a dedicated spin time value now reloading
+# 	# isn't directly tied to spinning
+# 	await get_tree().create_timer(base_spin_time).timeout
 
-	_stop_barrel(barrel_idx)
-	reload(true)
-	is_reloading = false
+# 	_stop_barrel(barrel_idx)
+# 	reload(true)
+# 	is_reloading = false
 
 
 func _spin_barrel(barrel_idx: int) -> void:

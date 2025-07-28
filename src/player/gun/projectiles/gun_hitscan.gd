@@ -22,18 +22,18 @@ const BEAM_RANGE_IF_NOT_COLLIDE = 50
 func _ready():
 	super ()
 	is_hitscan = true
-	var dup_mat = mesh.material_override.duplicate()
-	mesh.material_override = dup_mat
+	var dup_mat = mesh.mesh.material.duplicate()
+	mesh.mesh.material = dup_mat
 	if shot_flash_start:
 		var rotate_amount = randi_range(0, 90)
 		shot_flash_start.rotate_z(rotate_amount)
-		shot_flash_start.modulate = mesh.material_override.get_shader_parameter("color")
+		shot_flash_start.modulate = mesh.mesh.material.get_shader_parameter("color")
 
 func _process(delta):
 	super (delta)
 	alpha -= delta * fade_speed
 	alpha = clamp(alpha, 0, 1)
-	mesh.material_override.set_shader_parameter("fade_multiplier", alpha)
+	mesh.mesh.material.set_shader_parameter("fade_multiplier", alpha)
 	if shot_flash_start:
 		shot_flash_start.modulate.a = clamp(alpha, 0, 1)
 
@@ -113,13 +113,13 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	position += current_dir * (distance / 2.0)
 	mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)
 	if is_ricochet_shot:
-		mesh.material_override.set_shader_parameter("enable_fade", false)
-		mesh.material_override.set_shader_parameter("enable_taper", false)
+		mesh.mesh.material.set_shader_parameter("enable_fade", false)
+		mesh.mesh.material.set_shader_parameter("enable_taper", false)
 	else:
-		mesh.material_override.set_shader_parameter("enable_fade", true)
-		mesh.material_override.set_shader_parameter("enable_taper", true)
-		mesh.material_override.set_shader_parameter("fade_distance", distance / 4)
-		mesh.material_override.set_shader_parameter("origin_position", start_pos)
+		mesh.mesh.material.set_shader_parameter("enable_fade", true)
+		mesh.mesh.material.set_shader_parameter("enable_taper", true)
+		mesh.mesh.material.set_shader_parameter("fade_distance", distance / 4)
+		mesh.mesh.material.set_shader_parameter("origin_position", start_pos)
 	visible = true
 
 
@@ -135,7 +135,7 @@ func ricochet():
 	new_hitscan_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 func get_projectile_color() -> Color:
-	return mesh.material_override.get_shader_parameter("color")
+	return mesh.mesh.material.get_shader_parameter("color")
 
 func _on_timer_timeout():
 	destroyed.emit()
@@ -177,3 +177,15 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		new_pos = hitscan_col_point - current_dir * 0.01
 		new_inst.init(new_pos, new_dir, int(damage / split_count), ricochet_count_left, projectile_speed, max_range)
 		new_inst.splitted = true
+
+
+func change_bullet_color(_new_color: Color):
+	super (_new_color)
+	if color_changed_count > 1:
+		var current_mesh_color = mesh.mesh.material.get_shader_parameter("color")
+		var current_emission_color = mesh.mesh.material.get_shader_parameter("emission_color")
+		mesh.mesh.material.set_shader_parameter("color", current_mesh_color.lerp(_new_color, 0.5))
+		mesh.mesh.material.set_shader_parameter("emission_color", current_emission_color.lerp(_new_color, 0.5))
+	else:
+		mesh.mesh.material.set_shader_parameter("color", _new_color)
+		mesh.mesh.material.set_shader_parameter("emission_color", Color(_new_color.r, _new_color.g, _new_color.b, 0.7))
