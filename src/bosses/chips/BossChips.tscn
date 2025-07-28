@@ -271,7 +271,7 @@ _data = {
 "slam_start": SubResource("Animation_crbi3")
 }
 
-[node name="BossChips" instance=ExtResource("1_xyff2")]
+[node name="BossChips" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_xyff2")]
 collision_mask = 11
 script = ExtResource("2_2er6y")
 phase_2_health_percentage_trigger = 0.5
@@ -360,6 +360,7 @@ sfx_chiptopede_shoot = Array[AudioStream]([ExtResource("41_x4ksd"), ExtResource(
 sfx_chiptopede_retreat = Array[AudioStream]([ExtResource("38_xoi1t")])
 boss_id = 5
 chip_spawn_dps_threshold = 70.0
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_to_drop = ExtResource("28_a82g3")
 sfx_awaken = ExtResource("54_7lt4w")
 sfx_hit = Array[AudioStream]([ExtResource("13_hq7h1"), ExtResource("14_k6k1b"), ExtResource("15_dog2d"), ExtResource("16_ompdj")])

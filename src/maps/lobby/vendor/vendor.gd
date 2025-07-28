@@ -75,6 +75,6 @@ func _on_body_entered(body: Node3D) -> void:
 
 func _on_body_exited(body: Node3D) -> void:
 	if body is Player:
-		show_dialogue(exit_text.pick_random()) 
+		show_dialogue(exit_text.pick_random())
 		#show_dialogue("Good luck!")
 		shop_ui.close()
