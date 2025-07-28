@@ -43,7 +43,8 @@ func _on_hurt() -> void:
 		#"Quit it!",
 	#]
 	#show_dialogue(hurt_dialogue.pick_random())
-	show_dialogue(hurt_text.pick_random())
+	if hurt_text:
+		show_dialogue(hurt_text.pick_random())
 
 
 func _on_purchase(_data: BarrelDataResource) -> void:
@@ -53,7 +54,8 @@ func _on_purchase(_data: BarrelDataResource) -> void:
 		#"A patron of taste I see!",
 	#]
 	#show_dialogue(purchase_dialogue.pick_random())
-	show_dialogue(purchase_text.pick_random())
+	if purchase_text:
+		show_dialogue(purchase_text.pick_random())
 
 
 func _on_too_expensive(_data: BarrelDataResource) -> void:
@@ -64,17 +66,20 @@ func _on_too_expensive(_data: BarrelDataResource) -> void:
 		#"Come back when you're a little \nmmmm richer!"
 	#]
 	#show_dialogue(fail_dialogue.pick_random())
-	show_dialogue(too_expensive_text.pick_random())
+	if too_expensive_text:
+		show_dialogue(too_expensive_text.pick_random())
 
 
 func _on_body_entered(body: Node3D) -> void:
-	if body is Player:
-		show_dialogue(interact_text.pick_random())
-		#show_dialogue("Get your barrels here!\nAll chips accepted!")
+	if interact_text:
+		if body is Player:
+			show_dialogue(interact_text.pick_random())
+			#show_dialogue("Get your barrels here!\nAll chips accepted!")
 
 
 func _on_body_exited(body: Node3D) -> void:
-	if body is Player:
-		show_dialogue(exit_text.pick_random()) 
-		#show_dialogue("Good luck!")
-		shop_ui.close()
+	if exit_text:
+		if body is Player:
+			show_dialogue(exit_text.pick_random()) 
+			#show_dialogue("Good luck!")
+			shop_ui.close()

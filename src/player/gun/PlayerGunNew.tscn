@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=3 uid="uid://beunw631r018y"]
+[gd_scene load_steps=114 format=3 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -22,29 +22,72 @@
 [ext_resource type="Texture2D" uid="uid://tpbqrtskhc32" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_1.png" id="15_a1yho"]
 [ext_resource type="Texture2D" uid="uid://drrr4aotn87ol" path="res://src/player/gun/assets/sprite/rescale/idle/arm_idle.png" id="15_x3kbv"]
 [ext_resource type="Texture2D" uid="uid://dbjgf5actedu7" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_2.png" id="16_5bgyl"]
-[ext_resource type="Texture2D" uid="uid://bfrjki0y77bog" path="res://assets/sprite/effect_icons/anim_test/0010.png" id="16_6oocn"]
 [ext_resource type="Texture2D" uid="uid://do0ikpg17kjko" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1_spin_2.png" id="21_oipg7"]
 [ext_resource type="Texture2D" uid="uid://lg2nbxli2fls" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2_spin_1.png" id="22_q6pxd"]
 [ext_resource type="Texture2D" uid="uid://cobuk6xmebxqk" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2_spin_2.png" id="23_kl067"]
 [ext_resource type="AnimationNodeBlendTree" uid="uid://cyxkgv6ghxahc" path="res://src/player/gun/assets/anims/BarrelsAnimBlendTree.tres" id="24_ge7dn"]
+[ext_resource type="Texture2D" uid="uid://bisvvyyjex6tb" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinIn/0001.png" id="24_jff7o"]
 [ext_resource type="Texture2D" uid="uid://lfkd4xwje0jd" path="res://src/player/gun/assets/sprite/rescale/spin/hand_spin_0.png" id="25_1dhx6"]
+[ext_resource type="Texture2D" uid="uid://xtm3l7f13g7q" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinIn/0003.png" id="26_4wgcw"]
 [ext_resource type="Texture2D" uid="uid://dq0rxf7lhl8g2" path="res://src/player/gun/assets/sprite/rescale/spin/hand_spin_1.png" id="26_kvxvp"]
 [ext_resource type="Texture2D" uid="uid://cx7vidsyvx8yh" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_1.png" id="27_6hxas"]
+[ext_resource type="Texture2D" uid="uid://d1kog62te1ibr" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinIn/0004.png" id="27_8doi3"]
+[ext_resource type="Texture2D" uid="uid://ce4mf7aqtc6t5" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinIn/0005.png" id="28_p4eat"]
 [ext_resource type="Texture2D" uid="uid://cdp2vrgsg8vk7" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_2.png" id="28_vfi2f"]
 [ext_resource type="Texture2D" uid="uid://cdi2hskp63cj8" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_3.png" id="29_egcby"]
-[ext_resource type="Texture2D" uid="uid://bev828k4y6oug" path="res://assets/sprite/effect_icons/anim_test/0001.png" id="31_1maxd"]
-[ext_resource type="Texture2D" uid="uid://bcuiah1vkh4lg" path="res://assets/sprite/effect_icons/anim_test/0002.png" id="31_y23t1"]
-[ext_resource type="Texture2D" uid="uid://ddknfnatwoyt4" path="res://assets/sprite/effect_icons/anim_test/0003.png" id="32_1mtwm"]
-[ext_resource type="Texture2D" uid="uid://b6wdqoydmi4fu" path="res://assets/sprite/effect_icons/anim_test/0004.png" id="33_p1g3p"]
-[ext_resource type="Texture2D" uid="uid://ch348v86mqeij" path="res://assets/sprite/effect_icons/anim_test/0005.png" id="34_yspgv"]
-[ext_resource type="Texture2D" uid="uid://c4m7neo6ai8ha" path="res://assets/sprite/effect_icons/anim_test/0006.png" id="35_5akhf"]
-[ext_resource type="Texture2D" uid="uid://dhfhsutmpbm8g" path="res://assets/sprite/effect_icons/anim_test/0007.png" id="36_loipt"]
-[ext_resource type="Texture2D" uid="uid://iqdp8npovmh7" path="res://assets/sprite/effect_icons/anim_test/0008.png" id="37_mgndh"]
-[ext_resource type="Texture2D" uid="uid://c5mfwi705ncrv" path="res://assets/sprite/effect_icons/anim_test/0009.png" id="38_spds5"]
-[ext_resource type="Texture2D" uid="uid://cyu8xjmbejsrq" path="res://assets/sprite/effect_icons/anim_test/gun_decal_test_spin_out_0007.png" id="47_ac1wf"]
-[ext_resource type="Texture2D" uid="uid://djlugg7fxcml5" path="res://assets/sprite/effect_icons/anim_test/gun_decal_test_spin_out_0008.png" id="48_u4m0y"]
-[ext_resource type="Texture2D" uid="uid://cmpn668ybvla1" path="res://assets/sprite/effect_icons/anim_test/gun_decal_test_spin_out_0009.png" id="49_t63tp"]
-[ext_resource type="Texture2D" uid="uid://db5kkvdnm5auu" path="res://assets/sprite/effect_icons/anim_test/gun_decal_test_spin_out_0010.png" id="50_1q17p"]
+[ext_resource type="Texture2D" uid="uid://bpcplvq3jfebs" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinIn/0006.png" id="29_gc67q"]
+[ext_resource type="Texture2D" uid="uid://c6tmejouxsim2" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinIn/0007.png" id="30_xlpvi"]
+[ext_resource type="Texture2D" uid="uid://c3xmp02k5lcn6" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinIn/0008.png" id="31_4ersy"]
+[ext_resource type="Texture2D" uid="uid://dwxo6j815832a" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinIn/0009.png" id="32_jvmyx"]
+[ext_resource type="Texture2D" uid="uid://bm257edb0nbh5" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinIn/0010.png" id="33_5yf74"]
+[ext_resource type="Texture2D" uid="uid://ccemr3copaqiy" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinOut/0001.png" id="34_d4snq"]
+[ext_resource type="Texture2D" uid="uid://bdojptqw4f2bb" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinOut/0002.png" id="35_6vnbt"]
+[ext_resource type="Texture2D" uid="uid://ct8p2r008xfpw" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinOut/0003.png" id="36_3r8bh"]
+[ext_resource type="Texture2D" uid="uid://wc2xk4n7umji" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinOut/0004.png" id="37_fm7sh"]
+[ext_resource type="Texture2D" uid="uid://dp6y466epgjf3" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinOut/0005.png" id="38_riwxa"]
+[ext_resource type="Texture2D" uid="uid://dw5ovtt3l1jta" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinOut/0006.png" id="39_wamnx"]
+[ext_resource type="Texture2D" uid="uid://cbp4opmyjgead" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinOut/0007.png" id="40_ju34n"]
+[ext_resource type="Texture2D" uid="uid://bsqi1pgrdqtg5" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinOut/0008.png" id="41_jlb3q"]
+[ext_resource type="Texture2D" uid="uid://bnddg783adbl6" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinOut/0009.png" id="42_hjoyb"]
+[ext_resource type="Texture2D" uid="uid://bmr3egeje672a" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel1/IconSpinOut/0010.png" id="43_nbk5l"]
+[ext_resource type="Texture2D" uid="uid://bms5xik6rnibx" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinOut/0001.png" id="52_vt308"]
+[ext_resource type="Texture2D" uid="uid://bfm1hn2i2a1a2" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinOut/0002.png" id="53_p0e65"]
+[ext_resource type="Texture2D" uid="uid://dohmuslt50fmv" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinOut/0003.png" id="54_dj6e2"]
+[ext_resource type="Texture2D" uid="uid://dsdpchdtneod4" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinOut/0004.png" id="55_nxds5"]
+[ext_resource type="Texture2D" uid="uid://dyo87lcvxd0at" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinOut/0005.png" id="56_djocp"]
+[ext_resource type="Texture2D" uid="uid://th1bdtl6tro" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinOut/0006.png" id="57_bd3sk"]
+[ext_resource type="Texture2D" uid="uid://cyb0yt5lsu4ge" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinOut/0007.png" id="58_dhkg4"]
+[ext_resource type="Texture2D" uid="uid://52i7tngopchu" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinOut/0008.png" id="59_4w1kw"]
+[ext_resource type="Texture2D" uid="uid://cw5a1lg455hxx" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinOut/0009.png" id="60_0u5bj"]
+[ext_resource type="Texture2D" uid="uid://bi225hs84nhi6" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinOut/0010.png" id="61_2ycs7"]
+[ext_resource type="Texture2D" uid="uid://drr31osjflvbt" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinIn/0002.png" id="62_lnpwa"]
+[ext_resource type="Texture2D" uid="uid://m3djco33a7j" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinIn/0004.png" id="63_q7iey"]
+[ext_resource type="Texture2D" uid="uid://cxkmcj3o2ro4r" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinIn/0010.png" id="64_b3ca1"]
+[ext_resource type="Texture2D" uid="uid://bbhtjrwlnpnqa" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinIn/0005.png" id="64_i1n77"]
+[ext_resource type="Texture2D" uid="uid://bcvs0ya1ypr1s" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinIn/0006.png" id="65_f8px3"]
+[ext_resource type="Texture2D" uid="uid://o0t2qd37k76d" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinIn/0007.png" id="66_p1ufq"]
+[ext_resource type="Texture2D" uid="uid://5kfy5c0fbuko" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinIn/0008.png" id="67_152r8"]
+[ext_resource type="Texture2D" uid="uid://be8qrbji4xtc5" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinIn/0009.png" id="68_53lrt"]
+[ext_resource type="Texture2D" uid="uid://cdlemoopucj6t" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel2/IconSpinIn/0010.png" id="69_2bxbq"]
+[ext_resource type="Texture2D" uid="uid://ddajdpde2roln" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinOut/0001.png" id="69_u6gsu"]
+[ext_resource type="Texture2D" uid="uid://d1hnr06hj0d8c" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinOut/0002.png" id="70_bndk8"]
+[ext_resource type="Texture2D" uid="uid://dt0ojbewen28" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinOut/0003.png" id="71_7bk51"]
+[ext_resource type="Texture2D" uid="uid://cnjb1lyk5swrf" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinOut/0004.png" id="72_4r6mt"]
+[ext_resource type="Texture2D" uid="uid://bty53hs7ga6sn" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinOut/0005.png" id="73_21t6o"]
+[ext_resource type="Texture2D" uid="uid://d2yb2b2dvnh4r" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinOut/0006.png" id="74_01i63"]
+[ext_resource type="Texture2D" uid="uid://bvrvlyb1ip0an" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinOut/0007.png" id="75_7gudf"]
+[ext_resource type="Texture2D" uid="uid://bqlqv3l64jkaw" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinOut/0008.png" id="76_yau3g"]
+[ext_resource type="Texture2D" uid="uid://brhlyeto25bop" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinOut/0009.png" id="77_vccvp"]
+[ext_resource type="Texture2D" uid="uid://tfo2xib0x2q0" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinOut/0010.png" id="78_64yf0"]
+[ext_resource type="Texture2D" uid="uid://bnk7ucrvht45x" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinIn/0001.png" id="79_gr28w"]
+[ext_resource type="Texture2D" uid="uid://cvt2wqaepdpbv" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinIn/0002.png" id="80_gkbte"]
+[ext_resource type="Texture2D" uid="uid://rkbu1q33oe26" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinIn/0003.png" id="81_l1ciy"]
+[ext_resource type="Texture2D" uid="uid://b3s6evpc60dnj" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinIn/0004.png" id="82_3h5uw"]
+[ext_resource type="Texture2D" uid="uid://blxfk4k8hkold" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinIn/0005.png" id="83_he8vb"]
+[ext_resource type="Texture2D" uid="uid://dq2glfnesbqrg" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinIn/0006.png" id="84_31nht"]
+[ext_resource type="Texture2D" uid="uid://c33ny2snbfpdb" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinIn/0007.png" id="85_5pex1"]
+[ext_resource type="Texture2D" uid="uid://bahnk47memr0t" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinIn/0008.png" id="86_4gjqm"]
+[ext_resource type="Texture2D" uid="uid://co4xcs3o1hnmy" path="res://assets/sprite/icon_batch_render_test/effect_icon_0_barrel3/IconSpinIn/0009.png" id="87_k2nfi"]
 
 [sub_resource type="Animation" id="Animation_64i2r"]
 length = 0.001
@@ -163,10 +206,10 @@ tracks/9/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:texture")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
 "update": 1,
-"values": [null]
+"values": []
 }
 tracks/10/type = "value"
 tracks/10/imported = false
@@ -175,10 +218,58 @@ tracks/10/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:modulate
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": []
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:texture")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:modulate")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 0,
+"values": []
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 0,
+"values": []
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
 }
 
 [sub_resource type="Animation" id="Animation_6xcgv"]
@@ -208,7 +299,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("16_6oocn")]
+"values": [ExtResource("33_5yf74")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -253,6 +344,9 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Resource" id="Resource_oufn7"]
+metadata/__load_path__ = "res://assets/sprite/effect_icons/icon_anim_test/effect_icon_0_barrel2/IconSpinIn/0002.png"
+
 [sub_resource type="Animation" id="Animation_4bem3"]
 resource_name = "barrel_1_spin_end"
 length = 0.35
@@ -279,7 +373,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [null, ExtResource("31_1maxd"), ExtResource("31_y23t1"), ExtResource("32_1mtwm"), ExtResource("33_p1g3p"), ExtResource("34_yspgv"), ExtResource("35_5akhf"), ExtResource("36_loipt"), ExtResource("37_mgndh"), ExtResource("38_spds5"), ExtResource("16_6oocn")]
+"values": [null, ExtResource("24_jff7o"), SubResource("Resource_oufn7"), ExtResource("26_4wgcw"), ExtResource("27_8doi3"), ExtResource("28_p4eat"), ExtResource("29_gc67q"), ExtResource("30_xlpvi"), ExtResource("31_4ersy"), ExtResource("32_jvmyx"), ExtResource("33_5yf74")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -296,8 +390,8 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_n0a45"]
 resource_name = "barrel_1_spin_start"
-length = 0.35
-step = 0.03
+length = 0.2
+step = 0.02
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -305,10 +399,10 @@ tracks/0/path = NodePath("SpriteParent/Barrel1Sprite:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq"), ExtResource("21_oipg7")]
+"values": [ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -317,10 +411,10 @@ tracks/1/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:texture")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.034482, 0.068965, 0.103448, 0.137931),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("47_ac1wf"), ExtResource("48_u4m0y"), ExtResource("49_t63tp"), ExtResource("50_1q17p"), null]
+"values": [ExtResource("34_d4snq"), ExtResource("35_6vnbt"), ExtResource("36_3r8bh"), ExtResource("37_fm7sh"), ExtResource("38_riwxa"), ExtResource("39_wamnx"), ExtResource("40_ju34n"), ExtResource("41_jlb3q"), ExtResource("42_hjoyb"), ExtResource("43_nbk5l")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -329,10 +423,10 @@ tracks/2/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:modulate"
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.151515),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.16, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_wqh6a"]
@@ -370,6 +464,30 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("12_vi2pp")]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("69_2bxbq")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_pkm0u"]
 resource_name = "barrel_2_spin"
@@ -387,6 +505,94 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd")]
+}
+
+[sub_resource type="Resource" id="Resource_bgk0r"]
+metadata/__load_path__ = "res://assets/sprite/effect_icons/anim_test/0010.png"
+
+[sub_resource type="Resource" id="Resource_n3p4u"]
+metadata/__load_path__ = "res://assets/sprite/effect_icons/anim_test/0010.png"
+
+[sub_resource type="Animation" id="Animation_6qpow"]
+resource_name = "barrel_2_spin_end"
+length = 0.35
+step = 0.035
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [null, SubResource("Resource_bgk0r"), ExtResource("62_lnpwa"), SubResource("Resource_n3p4u"), ExtResource("63_q7iey"), ExtResource("64_i1n77"), ExtResource("65_f8px3"), ExtResource("66_p1ufq"), ExtResource("67_152r8"), ExtResource("68_53lrt"), ExtResource("69_2bxbq")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/Barrel2Sprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd")]
+}
+
+[sub_resource type="Animation" id="Animation_q7g0e"]
+resource_name = "barrel_2_spin_start"
+length = 0.2
+step = 0.02
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/Barrel2Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("52_vt308"), ExtResource("53_p0e65"), ExtResource("54_dj6e2"), ExtResource("55_nxds5"), ExtResource("56_djocp"), ExtResource("57_bd3sk"), ExtResource("58_dhkg4"), ExtResource("59_4w1kw"), ExtResource("60_0u5bj"), ExtResource("61_2ycs7")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.16, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_sucgk"]
@@ -423,6 +629,30 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("13_u0vae")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("64_b3ca1")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_xu0n1"]
@@ -782,6 +1012,88 @@ tracks/4/keys = {
 "values": [Vector3(0.364854, -0.394036, 0), Vector3(0.648092, -0.383788, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_wc336"]
+resource_name = "barrel_3_spin_start"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/Barrel3Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("69_u6gsu"), ExtResource("70_bndk8"), ExtResource("71_7bk51"), ExtResource("72_4r6mt"), ExtResource("73_21t6o"), ExtResource("74_01i63"), ExtResource("75_7gudf"), ExtResource("76_yau3g"), ExtResource("77_vccvp"), ExtResource("78_64yf0")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.16, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_sn0mj"]
+resource_name = "barrel_3_spin_end"
+length = 0.35
+step = 0.035
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/Barrel3Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [null, ExtResource("79_gr28w"), ExtResource("80_gkbte"), ExtResource("81_l1ciy"), ExtResource("82_3h5uw"), ExtResource("83_he8vb"), ExtResource("84_31nht"), ExtResource("85_5pex1"), ExtResource("86_4gjqm"), ExtResource("87_k2nfi"), ExtResource("64_b3ca1")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mu0sm"]
 _data = {
 "RESET": SubResource("Animation_64i2r"),
@@ -792,9 +1104,13 @@ _data = {
 "barrel_1_unequipped": SubResource("Animation_wqh6a"),
 "barrel_2_idle": SubResource("Animation_ekhmh"),
 "barrel_2_spin": SubResource("Animation_pkm0u"),
+"barrel_2_spin_end": SubResource("Animation_6qpow"),
+"barrel_2_spin_start": SubResource("Animation_q7g0e"),
 "barrel_2_unequipped": SubResource("Animation_sucgk"),
 "barrel_3_idle": SubResource("Animation_vwvod"),
 "barrel_3_spin": SubResource("Animation_xu0n1"),
+"barrel_3_spin_end": SubResource("Animation_sn0mj"),
+"barrel_3_spin_start": SubResource("Animation_wc336"),
 "barrel_3_unequipped": SubResource("Animation_vooid"),
 "idle": SubResource("Animation_pwnrm"),
 "reload": SubResource("Animation_3r35k"),
@@ -859,9 +1175,8 @@ outline_size = 32
 horizontal_alignment = 0
 
 [node name="EffectIcon3Sprite" type="Sprite3D" parent="SpriteParent/Barrel3Sprite"]
-visible = false
 render_priority = 3
-texture = ExtResource("16_6oocn")
+texture = ExtResource("64_b3ca1")
 
 [node name="Barrel2Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 2.0
@@ -880,9 +1195,8 @@ outline_size = 32
 horizontal_alignment = 0
 
 [node name="EffectIcon2Sprite" type="Sprite3D" parent="SpriteParent/Barrel2Sprite"]
-visible = false
 render_priority = 3
-texture = ExtResource("16_6oocn")
+texture = ExtResource("69_2bxbq")
 
 [node name="Barrel1Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 3.0
@@ -902,8 +1216,8 @@ outline_size = 32
 horizontal_alignment = 0
 
 [node name="EffectIcon1Sprite" type="Sprite3D" parent="SpriteParent/Barrel1Sprite"]
-modulate = Color(1, 1, 1, 0)
 render_priority = 3
+texture = ExtResource("33_5yf74")
 
 [node name="ForegripSprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 4.0

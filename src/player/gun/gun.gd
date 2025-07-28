@@ -295,6 +295,8 @@ func spin_all_barrels() -> void:
 	for i in barrels_to_spin:
 		if i > barrels_to_spin:
 			break
+		# Optional delay between each barrel spinning
+		#await get_tree().create_timer(0.05).timeout
 		_spin_barrel(i)
 
 	# TODO - replace with a dedicated spin time value now reloading isn't directly
@@ -346,6 +348,7 @@ func _spin_barrel(barrel_idx: int) -> void:
 func stop_all_barrels() -> void:
 	for i in installed_barrels.size():
 		_stop_barrel(i)
+		await get_tree().create_timer(0.1).timeout
 
 
 func _stop_barrel(barrel_idx: int) -> void:
