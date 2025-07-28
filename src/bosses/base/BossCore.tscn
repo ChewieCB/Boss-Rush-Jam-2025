@@ -19,10 +19,10 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="12_1g6yn"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="13_ai5vk"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="18_e2occ"]
-[ext_resource type="PackedScene" uid="uid://bab1ejq76oubu" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmitBig.tscn" id="20_1f0hm"]
-[ext_resource type="PackedScene" uid="uid://dthdgt8rwdg7x" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitBig.tscn" id="21_qlu6n"]
-[ext_resource type="PackedScene" uid="uid://chjxj0x3rwotr" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmitBig.tscn" id="22_hhnke"]
-[ext_resource type="PackedScene" uid="uid://b770x0fkaf7ha" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitBig.tscn" id="23_u6rqo"]
+[ext_resource type="PackedScene" uid="uid://c4kj3fub8rjgh" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmitBoss.tscn" id="20_w7q5g"]
+[ext_resource type="PackedScene" uid="uid://8r3wmjnp5n1e" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitBoss.tscn" id="21_tfgrr"]
+[ext_resource type="PackedScene" uid="uid://5870aiiy0cj0" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmitBoss.tscn" id="22_m4oop"]
+[ext_resource type="PackedScene" uid="uid://ccohk42f3e4ii" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitBoss.tscn" id="23_61k5s"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m057l"]
 radius = 1.0
@@ -69,7 +69,7 @@ collision_layer = 4
 collision_mask = 27
 script = ExtResource("1_tem3i")
 chip_scene = ExtResource("2_hj7qa")
-elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBig"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBig"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBig"), NodePath("StatusEffectVFX/ProjectileShockEmitBig"), null]
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_pickup_scene = ExtResource("2_5bmmu")
 sfx_slowmo = ExtResource("4_rbx6b")
 navigation_component = NodePath("NavigationComponent")
@@ -567,16 +567,15 @@ bus = &"SFX"
 [node name="StatusEffectVFX" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.15613, 0)
 
-[node name="ProjectileBurnEmitBig" parent="StatusEffectVFX" instance=ExtResource("20_1f0hm")]
+[node name="ProjectileBurnEmitBoss" parent="StatusEffectVFX" instance=ExtResource("20_w7q5g")]
 visible = false
 
-[node name="ProjectilePoisonEmitBig" parent="StatusEffectVFX" instance=ExtResource("21_qlu6n")]
+[node name="ProjectilePoisonEmitBoss" parent="StatusEffectVFX" instance=ExtResource("21_tfgrr")]
 visible = false
 
-[node name="ProjectileFreezeEmitBig" parent="StatusEffectVFX" instance=ExtResource("22_hhnke")]
-visible = false
+[node name="ProjectileFreezeEmitBoss" parent="StatusEffectVFX" instance=ExtResource("22_m4oop")]
 
-[node name="ProjectileShockEmitBig" parent="StatusEffectVFX" instance=ExtResource("23_u6rqo")]
+[node name="ProjectileShockEmitBoss" parent="StatusEffectVFX" instance=ExtResource("23_61k5s")]
 visible = false
 
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
