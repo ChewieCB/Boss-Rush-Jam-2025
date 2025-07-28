@@ -4,8 +4,7 @@ class_name BaseBarrelEffect
 @export_multiline var display_text_title: String
 @export_multiline var display_text_tag: String
 @export_multiline var display_text_desc: String
-# FIXME - make this dynamic and cover all barrel anims, lookup table/key maybe?
-@export var icon: CompressedTexture2D = load("res://assets/sprite/effect_icons/anim_test/0010.png")
+@export var icon_id: int = -1
 
 var owner_barrel: SpinBarrel
 ## This variable is to prevent a single shot trigger the effect multiple times.
@@ -13,6 +12,11 @@ var owner_barrel: SpinBarrel
 ## For example, a shotgun with 20 projectile counts may trigger refund bullet 
 ## effect up to 20 times, while only cost 1 ammo, in a single shot.
 var triggered_this_shot = false
+
+
+func get_icon_path() -> String:
+	return "res://src/player/gun/assets/sprite/effect_icons/%s" % icon_id
+
 
 func calculate_new_value(old_value: float, modify_value: float, is_perc: bool, rounding: bool = true):
 	var new_value = 0

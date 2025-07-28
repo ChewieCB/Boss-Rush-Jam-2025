@@ -227,6 +227,10 @@ transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249
 
 [node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("39_lhbas")]
 
+[node name="EffectIcon2Sprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent/Barrel2Sprite" index="1"]
+modulate = Color(1, 1, 1, 1)
+texture = null
+
 [node name="AimAssistRaycast" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
 target_position = Vector3(0, 0, -500)

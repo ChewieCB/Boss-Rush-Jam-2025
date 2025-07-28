@@ -1,4 +1,4 @@
-[gd_scene load_steps=540 format=4 uid="uid://v6jgq46mkg4n"]
+[gd_scene load_steps=542 format=4 uid="uid://v6jgq46mkg4n"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
@@ -63,6 +63,8 @@
 [ext_resource type="AudioStream" uid="uid://cuge1lwxr3m82" path="res://src/maps/lobby/assets/Lift Door Open.mp3" id="56_4ys2i"]
 [ext_resource type="AudioStream" uid="uid://brxmaksjy6431" path="res://src/maps/lobby/assets/Lift Door Close.mp3" id="57_wqqjr"]
 [ext_resource type="PackedScene" uid="uid://cm1sitbvy6aye" path="res://src/maps/lobby/shrine/SkillShrine.tscn" id="58_gmegp"]
+[ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="64_11vga"]
+[ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="65_22g2w"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ckxgb"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -3646,6 +3648,9 @@ bus = &"SFX"
 
 [node name="SkillShrine" parent="." instance=ExtResource("58_gmegp")]
 transform = Transform3D(0.545122, 0, -0.838357, 0, 1, 0, 0.838357, 0, 0.545122, -5.67673, 0.0931455, -0.799994)
+
+[node name="BarrelItemPickup" parent="." instance=ExtResource("64_11vga")]
+data = ExtResource("65_22g2w")
 
 [connection signal="body_entered" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_entered"]
 [connection signal="body_exited" from="DoorTransitionArea" to="." method="_on_door_transition_area_body_exited"]
