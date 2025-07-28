@@ -21,6 +21,7 @@ shield_barrier_prefab = ExtResource("7_n73is")
 display_text_title = "Protective Barrier"
 display_text_tag = "Tough up!"
 display_text_desc = "25% damage resistance"
+icon_id = 43
 
 [node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_rhvms")
@@ -28,6 +29,7 @@ display_text_title = "Newton's Third Law"
 display_text_tag = "Safer Rocket Jump"
 display_text_desc = "+50% damage
 -25% firerate"
+icon_id = 42
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
 script = ExtResource("6_2bruo")
@@ -51,6 +53,7 @@ script = ExtResource("3_rhvms")
 display_text_title = "Ball Bullet"
 display_text_tag = "Massize ball!"
 display_text_desc = "Ball"
+icon_id = 41
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/BallBullet"]
 script = ExtResource("7_6c636")

@@ -399,6 +399,47 @@ tracks/0/keys = {
 "values": [ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd")]
 }
 
+[sub_resource type="Animation" id="Animation_6lg4l"]
+resource_name = "barrel_2_spin_end"
+length = 0.35
+step = 0.035
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/Barrel2Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [null, null, null, null, null, null, null, null, null, null, null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="Animation" id="Animation_q7g0e"]
 resource_name = "barrel_2_spin_start"
 length = 0.2
@@ -516,6 +557,88 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho")]
+}
+
+[sub_resource type="Animation" id="Animation_sn0mj"]
+resource_name = "barrel_3_spin_end"
+length = 0.35
+step = 0.035
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/Barrel3Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [null, null, null, null, null, null, null, null, null, null, null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wc336"]
+resource_name = "barrel_3_spin_start"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/Barrel3Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [null, null, null, null, null, null, null, null, null, null]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.16, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_vooid"]
@@ -857,129 +980,6 @@ tracks/4/keys = {
 "values": [Vector3(0.364854, -0.394036, 0), Vector3(0.648092, -0.383788, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_wc336"]
-resource_name = "barrel_3_spin_start"
-length = 0.2
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/Barrel3Sprite:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [null, null, null, null, null, null, null, null, null, null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.16, 0.18),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_sn0mj"]
-resource_name = "barrel_3_spin_end"
-length = 0.35
-step = 0.035
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/Barrel3Sprite:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [null, null, null, null, null, null, null, null, null, null, null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_6lg4l"]
-resource_name = "barrel_2_spin_end"
-length = 0.35
-step = 0.035
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/Barrel2Sprite:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [null, null, null, null, null, null, null, null, null, null, null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mu0sm"]
 _data = {
 "RESET": SubResource("Animation_64i2r"),
@@ -1061,6 +1061,7 @@ outline_size = 32
 horizontal_alignment = 0
 
 [node name="EffectIcon3Sprite" type="Sprite3D" parent="SpriteParent/Barrel3Sprite"]
+modulate = Color(0, 0, 0, 1)
 render_priority = 3
 
 [node name="Barrel2Sprite" type="Sprite3D" parent="SpriteParent"]
@@ -1100,6 +1101,7 @@ outline_size = 32
 horizontal_alignment = 0
 
 [node name="EffectIcon1Sprite" type="Sprite3D" parent="SpriteParent/Barrel1Sprite"]
+modulate = Color(0, 0, 0, 1)
 render_priority = 3
 
 [node name="ForegripSprite" type="Sprite3D" parent="SpriteParent"]

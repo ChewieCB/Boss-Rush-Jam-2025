@@ -20,6 +20,7 @@ bonus_dash_speed_perc = 100.0
 display_text_title = "Empowered Dash"
 display_text_tag = "Shoot n Dash!"
 display_text_desc = "+100% dash speed after shot"
+icon_id = 35
 
 [node name="Fortitude" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_croek")
@@ -29,6 +30,7 @@ heal_interval = 5.0
 display_text_title = "Fortitude"
 display_text_tag = "Don't give up"
 display_text_desc = "Regain 2 hp every 5s"
+icon_id = 36
 
 [node name="DeathFromAbove" type="Node3D" parent="EffectContainer"]
 script = ExtResource("6_mqo2u")
@@ -38,6 +40,7 @@ display_text_title = "Death From Above"
 display_text_tag = "Fly up, look down"
 display_text_desc = "+25% damage when midair
 25% crit chance when shoot downward"
+icon_id = 34
 
 [node name="TagAndShred" type="Node3D" parent="EffectContainer"]
 script = ExtResource("7_tbyy7")
@@ -46,6 +49,7 @@ display_text_tag = "Wear them down"
 display_text_desc = "-50% damage
 -40% projectile amount
 +1 damage per projectile hit"
+icon_id = 37
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/TagAndShred"]
 script = ExtResource("8_m5ved")

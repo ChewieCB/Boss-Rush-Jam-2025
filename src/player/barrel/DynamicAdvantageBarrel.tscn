@@ -10,7 +10,6 @@
 
 [node name="DynamicAdvantageBarrel" type="Node3D"]
 script = ExtResource("1_54i25")
-barrel_id = 3
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
@@ -23,6 +22,7 @@ display_text_title = "Ramp up"
 display_text_tag = "Keep shooting"
 display_text_desc = "+5% firerate per 0.2s
 non-stop shooting"
+icon_id = 24
 
 [node name="ExtendedDrumEffect" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_k0t2c")
@@ -30,6 +30,7 @@ display_text_title = "Extended Drum"
 display_text_tag = "More dakka!"
 display_text_desc = "+100% magazine size
 +200% reload time"
+icon_id = 23
 
 [node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ExtendedDrumEffect"]
 script = ExtResource("5_ky52g")
@@ -51,3 +52,4 @@ explosion_vfx = ExtResource("8_x4fhu")
 display_text_title = "Explosive bullet"
 display_text_tag = "Don't hurt yourself!"
 display_text_desc = "Make bullets go boom"
+icon_id = 22

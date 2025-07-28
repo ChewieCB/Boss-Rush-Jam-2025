@@ -392,7 +392,7 @@ func set_barrel_icon_animations(barrel_idx: int, icon_id: int) -> void:
 	
 	# Update the spin_start and spin_end animations with the new textures
 	for anim_name in ["spin_start", "spin_end", "idle"]:
-		var anim: Animation = anim_player.get_animation("barrel_%s_%s" % [barrel_idx, anim_name])
+		var anim: Animation = anim_player.get_animation("barrel_%s_%s" % [barrel_idx + 1, anim_name])
 		var sprite_arr: Array 
 		var anim_frames: int
 		var effect_texture_key: int

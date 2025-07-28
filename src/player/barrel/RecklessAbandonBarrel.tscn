@@ -20,6 +20,7 @@ display_text_tag = "Deal and take more damage"
 display_text_desc = "+30% damage
 +30% damage taken
 "
+icon_id = 39
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/GlassCannon"]
 script = ExtResource("4_762nm")
@@ -42,9 +43,11 @@ display_text_title = "Executioner Round"
 display_text_tag = "Finish them"
 display_text_desc = "+25% damage when enemy is less than 50% hp
 -25% damage otherwise"
+icon_id = 38
 
 [node name="ReactiveShot" type="Node3D" parent="EffectContainer"]
 script = ExtResource("6_tghp2")
 display_text_title = "Reactive Shot"
 display_text_tag = "Payback time!"
 display_text_desc = "+100% damage for 1s after get hit"
+icon_id = 40

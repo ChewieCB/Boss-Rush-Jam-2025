@@ -38,6 +38,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("4_cri1e")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_m8udd"), ExtResource("6_c4q6k"), ExtResource("7_cy8ya"), ExtResource("8_sx1ku"), ExtResource("9_7r7iv"), ExtResource("10_ptb2v"), ExtResource("11_2chv5"), ExtResource("12_bisv8"), ExtResource("13_qcjda"), ExtResource("14_8snm5"), ExtResource("15_8f242")])
 display_text_title = "Archetype: Gauss Rifle"
 display_text_tag = "Fire faster and more ammo"
+icon_id = 10
 
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
@@ -81,6 +82,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("5_lxmwo"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("7_lr8ap"), ExtResource("8_5pbtv")])
 display_text_title = "Archetype: Scatter Beam"
 display_text_tag = "Closer...closer..."
+icon_id = 12
 
 [node name="SetDamage" type="Node3D" parent="EffectContainer/ScatterBeam"]
 script = ExtResource("4_3n82e")
@@ -129,6 +131,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("5_5hv6s")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("6_hwm5a"), ExtResource("7_phtfe"), ExtResource("8_c4uy7")])
 display_text_title = "Archetype: Railcannon"
 display_text_tag = "Don't miss it!"
+icon_id = 11
 
 [node name="SetDamage" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")

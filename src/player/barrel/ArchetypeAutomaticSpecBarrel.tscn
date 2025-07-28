@@ -28,6 +28,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("4_kgobi")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_4i0i4"), ExtResource("6_bveej"), ExtResource("7_bndrm"), ExtResource("8_vho48"), ExtResource("9_dvoqs"), ExtResource("10_s6p7a"), ExtResource("11_3vyf8"), ExtResource("12_ht47e"), ExtResource("13_cptry"), ExtResource("14_m0o8m"), ExtResource("15_26t8n")])
 display_text_title = "Archetype: American Rifle"
 display_text_tag = "Easy to control"
+icon_id = 3
 
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
@@ -70,6 +71,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("4_kgobi")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_4i0i4"), ExtResource("6_bveej"), ExtResource("7_bndrm"), ExtResource("8_vho48"), ExtResource("9_dvoqs"), ExtResource("10_s6p7a"), ExtResource("11_3vyf8"), ExtResource("12_ht47e"), ExtResource("13_cptry"), ExtResource("14_m0o8m"), ExtResource("15_26t8n")])
 display_text_title = "Archetype: Russian Rifle"
 display_text_tag = "Hard to master"
+icon_id = 5
 
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/RussianRifle"]
 script = ExtResource("4_p3s2o")
@@ -112,6 +114,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("4_kgobi")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_4i0i4"), ExtResource("6_bveej"), ExtResource("7_bndrm"), ExtResource("8_vho48"), ExtResource("9_dvoqs"), ExtResource("10_s6p7a"), ExtResource("11_3vyf8"), ExtResource("12_ht47e"), ExtResource("13_cptry"), ExtResource("14_m0o8m"), ExtResource("15_26t8n")])
 display_text_title = "Archetype: Vector SMG"
 display_text_tag = "Very fast firerate"
+icon_id = 6
 
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
@@ -154,6 +157,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("4_kgobi")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_4i0i4"), ExtResource("6_bveej"), ExtResource("7_bndrm"), ExtResource("8_vho48"), ExtResource("9_dvoqs"), ExtResource("10_s6p7a"), ExtResource("11_3vyf8"), ExtResource("12_ht47e"), ExtResource("13_cptry"), ExtResource("14_m0o8m"), ExtResource("15_26t8n")])
 display_text_title = "Archetype: LMG"
 display_text_tag = "Dakka forever"
+icon_id = 4
 
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")

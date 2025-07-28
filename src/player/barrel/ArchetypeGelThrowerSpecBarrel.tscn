@@ -36,6 +36,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_td2sj"), ExtResource("6_8lxby"), ExtResource("7_0s8ux"), ExtResource("8_edm41"), ExtResource("9_2krpk"), ExtResource("10_botf5"), ExtResource("11_6abxt"), ExtResource("12_8f28h"), ExtResource("13_l3foa"), ExtResource("14_nmsjh"), ExtResource("15_sylvt")])
 display_text_title = "Archetype: Gel stream"
 display_text_tag = "Very high firerate but low damage"
+icon_id = 9
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("7_jkbd8")
@@ -92,6 +93,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_td2sj"), ExtResource("6_8lxby"), ExtResource("7_0s8ux"), ExtResource("8_edm41"), ExtResource("9_2krpk"), ExtResource("10_botf5"), ExtResource("11_6abxt"), ExtResource("12_8f28h"), ExtResource("13_l3foa"), ExtResource("14_nmsjh"), ExtResource("15_sylvt")])
 display_text_title = "Archetype: Gel blob"
 display_text_tag = "Single, big, sticky projectile"
+icon_id = 7
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelBlob"]
 script = ExtResource("7_jkbd8")
@@ -148,6 +150,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("20_73alt"), ExtResource("21_gik88"), ExtResource("22_fit1i")])
 display_text_title = "Archetype: Gel bubbles"
 display_text_tag = "Dense projectile count yet zero damage"
+icon_id = 8
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelBubble"]
 script = ExtResource("7_jkbd8")

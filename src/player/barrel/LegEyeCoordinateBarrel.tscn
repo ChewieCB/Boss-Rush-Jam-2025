@@ -22,6 +22,7 @@ display_text_desc = "Can only shoot when you dash
 Dash improved
 +50% crit chance
 +50% damage"
+icon_id = 33
 
 [node name="TriggerLegEffect" type="Node3D" parent="EffectContainer/TriggerLeg"]
 script = ExtResource("3_wqy0s")
@@ -62,6 +63,7 @@ display_text_desc = "Can only shoot while you are midair
 Jump improved
 -50% recoil
 -50% spread"
+icon_id = 32
 
 [node name="SpringyFeetEffect" type="Node3D" parent="EffectContainer/SpringyFeet"]
 script = ExtResource("7_ouncf")
@@ -95,6 +97,7 @@ display_text_desc = "Can only shoot while you are crouching
 Improved crouch
 +50% magazine size
 +50% firerate"
+icon_id = 31
 
 [node name="FlexibleKnee" type="Node3D" parent="EffectContainer/FlexibleKnee"]
 script = ExtResource("8_ghm3r")

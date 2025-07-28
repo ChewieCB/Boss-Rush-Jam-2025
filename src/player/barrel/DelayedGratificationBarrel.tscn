@@ -19,6 +19,7 @@ display_text_title = "Bullet Time"
 display_text_tag = "You are not Neo though"
 display_text_desc = "-50% projectile speed
 +25% damage"
+icon_id = 19
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("4_duuhv")
@@ -42,6 +43,7 @@ display_text_title = "Sticky Bomb"
 display_text_tag = "Keep distance"
 display_text_desc = "+30% damage
 -50% firerate"
+icon_id = 21
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/StickyBomb"]
 script = ExtResource("6_j8ucp")
@@ -65,3 +67,4 @@ display_text_title = "Medical Payout"
 display_text_tag = "Hurt others to heal yourself"
 display_text_desc = "Store 1 HP every 100 damage dealt
 Recover HP on reload"
+icon_id = 20
