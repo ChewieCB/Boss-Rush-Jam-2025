@@ -26,6 +26,17 @@ modulate_color = Color(0.901961, 0.776471, 0, 1)
 [node name="EffectInfoUI" type="MarginContainer"]
 clip_contents = true
 custom_minimum_size = Vector2(450, 208)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -104.0
+offset_bottom = 104.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(450, 104)
 size_flags_horizontal = 0
 size_flags_vertical = 0
 mouse_filter = 2
@@ -61,6 +72,7 @@ offset_top = -13.0
 offset_bottom = 22.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
@@ -68,26 +80,32 @@ theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background/NinePatchRect/MarginContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="HeaderContainer" type="MarginContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 8
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 8
 
 [node name="IconContainer" type="MarginContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="Panel2" type="Panel" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_1ovww")
 
 [node name="MarginContainer" type="MarginContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
@@ -96,23 +114,27 @@ theme_override_constants/margin_bottom = 8
 [node name="TextureRect" type="TextureRect" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer/MarginContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("2_weccn")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="Panel" type="Panel" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_lpchg")
 
 [node name="HeaderTextContainer" type="VBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
+mouse_filter = 2
 theme_override_constants/separation = -4
 
 [node name="TitleContainer" type="MarginContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer"]
 layout_mode = 2
 size_flags_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_bottom = 4
@@ -121,6 +143,7 @@ theme_override_constants/margin_bottom = 4
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("4_r750q")
 theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
@@ -131,6 +154,7 @@ scroll_active = false
 [node name="DescriptionContainer" type="MarginContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer"]
 layout_mode = 2
 size_flags_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 24
 theme_override_constants/margin_right = 24
 
@@ -138,6 +162,7 @@ theme_override_constants/margin_right = 24
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 theme_override_colors/default_color = Color(0.60933, 0.60933, 0.60933, 1)
 theme_override_fonts/normal_font = ExtResource("4_r750q")
 theme_override_font_sizes/normal_font_size = 24
@@ -149,17 +174,20 @@ scroll_active = false
 [node name="DividerContainer" type="MarginContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer"]
 layout_mode = 2
 size_flags_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_bottom = 4
 
 [node name="HSeparator" type="HSeparator" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DividerContainer"]
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
 theme_override_styles/separator = SubResource("StyleBoxTexture_gt652")
 
 [node name="BodyContainer" type="MarginContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
@@ -167,18 +195,22 @@ theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 8
 
 [node name="PositivesContainer" type="VBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer/HBoxContainer"]
 modulate = Color(0.1886, 0.82, 0.230693, 1)
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("6_154b7")
 expand_mode = 1
 stretch_mode = 5
@@ -187,6 +219,7 @@ stretch_mode = 5
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("4_r750q")
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
@@ -196,14 +229,17 @@ scroll_active = false
 
 [node name="NegativesContainer" type="VBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer/HBoxContainer"]
 modulate = Color(0.82, 0.1886, 0.1886, 1)
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("7_rktqp")
 expand_mode = 1
 stretch_mode = 5
@@ -212,6 +248,7 @@ stretch_mode = 5
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 theme_override_fonts/normal_font = ExtResource("4_r750q")
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true

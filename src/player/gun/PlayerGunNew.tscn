@@ -1064,6 +1064,9 @@ horizontal_alignment = 0
 modulate = Color(0, 0, 0, 1)
 render_priority = 3
 
+[node name="Marker3D" type="Marker3D" parent="SpriteParent/Barrel3Sprite"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -1.2, 0)
+
 [node name="Barrel2Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 2.0
 render_priority = 2
@@ -1082,6 +1085,9 @@ horizontal_alignment = 0
 
 [node name="EffectIcon2Sprite" type="Sprite3D" parent="SpriteParent/Barrel2Sprite"]
 render_priority = 3
+
+[node name="Marker3D" type="Marker3D" parent="SpriteParent/Barrel2Sprite"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.6, 0)
 
 [node name="Barrel1Sprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 3.0
@@ -1103,6 +1109,9 @@ horizontal_alignment = 0
 [node name="EffectIcon1Sprite" type="Sprite3D" parent="SpriteParent/Barrel1Sprite"]
 modulate = Color(0, 0, 0, 1)
 render_priority = 3
+
+[node name="Marker3D" type="Marker3D" parent="SpriteParent/Barrel1Sprite"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, -2.3, 0)
 
 [node name="ForegripSprite" type="Sprite3D" parent="SpriteParent"]
 sorting_offset = 4.0
