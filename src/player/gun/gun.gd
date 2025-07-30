@@ -587,10 +587,10 @@ func recheck_installed_barrels():
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		if i < barrel_count:
 			state_machine.travel("idle")
-			barrel_label.visible = true
+			#barrel_label.visible = true
 		else:
 			state_machine.travel("unequip")
-			barrel_label.visible = false
+			#barrel_label.visible = false
 
 
 func reinstall_barrels():
