@@ -1,6 +1,8 @@
 extends BaseTrigger
 class_name BarrelEffectTrigger
 
+signal triggered
+
 var applied_effects = []
 @export var target_effect_hit_count: int = 3
 var current_effect_hit_count: int = 0:
@@ -25,6 +27,7 @@ func hit_with_effect(installed_barrels: Array[SpinBarrel]) -> void:
 		if not current_effect in applied_effects:
 			applied_effects.append(current_effect)
 			current_effect_hit_count += 1
+			triggered.emit()
 
 
 func _on_health_diff(diff: float) -> void:

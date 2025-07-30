@@ -23,6 +23,12 @@ func _ready() -> void:
 	for i in range(chiplings_to_spawn_1):
 		spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
 	
+	# Trigger tutorial popup when barrel purchased
+	$Vendor1.shop_ui.inventory_closed.connect(_on_barrel_purchased)
+	
+	# Trigger spin tutorial popup when barrel effect trigger first hit
+	$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
+	
 	# FIXME - workaround
 	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_147_SlidingDoor
 
@@ -74,6 +80,17 @@ func _on_chipling_died(chipling: Chipling) -> void:
 			spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
 		2:
 			spawn_chipling(2, chipling_spawns_2, chipling_wander_points_2)
+
+
+func _on_barrel_purchased() -> void:
+	if $TutorialInfoTrigger7:
+		if GameManager.equipped_barrels.size() > 0:
+			$TutorialInfoTrigger7._on_body_entered(player)
+
+func _trigger_spin_tutorial() -> void:
+	if $TutorialInfoTrigger6:
+		if $BarrelEffectTrigger.applied_effects.size() == 1:
+			$TutorialInfoTrigger6._on_body_entered(player)
 
 
 func _on_boss_door_trigger_volume_body_entered(body: Node3D) -> void:
