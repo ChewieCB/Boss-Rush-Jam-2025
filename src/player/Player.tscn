@@ -38,7 +38,6 @@
 [ext_resource type="AudioStream" uid="uid://clrb5tuaish36" path="res://src/player/assets/sfx/RUNNING/Running Individual 13.mp3" id="15_w5gjb"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
 [ext_resource type="AudioStream" uid="uid://l2hmqeiq76ff" path="res://src/player/assets/sfx/RUNNING/Running Individual 14.mp3" id="16_tto8i"]
-[ext_resource type="PackedScene" uid="uid://xtemm86x5ftx" path="res://src/ui/player/EffectDetailUI.tscn" id="20_ic8us"]
 [ext_resource type="AudioStream" uid="uid://bmdb3aap303b0" path="res://src/player/assets/sfx/CROUCH.mp3" id="26_skrud"]
 [ext_resource type="AudioStream" uid="uid://dckgsngjsbl02" path="res://src/player/assets/sfx/STAND.mp3" id="27_6gtc3"]
 [ext_resource type="AudioStream" uid="uid://b1j1n3jwte3cg" path="res://src/player/assets/sfx/New Jump from ground.mp3" id="29_5swy3"]
@@ -56,6 +55,7 @@
 [ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
 [ext_resource type="PackedScene" uid="uid://crvu72pwcnneq" path="res://src/ui/player/StatUI.tscn" id="46_ob8n4"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
+[ext_resource type="PackedScene" uid="uid://bqgedwbxkh8xa" path="res://src/ui/player/barrel_detail/BarrelDetailUI.tscn" id="48_6dr3i"]
 [ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="57_sguas"]
@@ -297,44 +297,24 @@ luck_component = NodePath("../../LuckComponent")
 
 [node name="GunUI" type="Control" parent="UI"]
 layout_mode = 3
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 576.0
-offset_right = 958.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="GunStatusUI" type="MarginContainer" parent="UI/GunUI"]
+[node name="ColorRect" type="ColorRect" parent="UI/GunUI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+color = Color(0.14, 0.14, 0.14, 0.639216)
 
-[node name="AllBarrelEffectUI" type="VBoxContainer" parent="UI/GunUI/GunStatusUI"]
-layout_mode = 2
-size_flags_horizontal = 8
-mouse_filter = 2
-theme_override_constants/separation = 24
-alignment = 1
-
-[node name="EffectDetailUI" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
-layout_mode = 2
-
-[node name="EffectDetailUI2" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
-layout_mode = 2
-
-[node name="EffectDetailUI3" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
-layout_mode = 2
+[node name="BarrelDetailUI" parent="UI/GunUI" instance=ExtResource("48_6dr3i")]
+layout_mode = 1
 
 [node name="BossSpecialDialog" type="Control" parent="UI"]
 process_mode = 3

@@ -1,32 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://bqgedwbxkh8xa"]
+[gd_scene load_steps=2 format=3 uid="uid://bqgedwbxkh8xa"]
 
-[ext_resource type="PackedScene" uid="uid://xtemm86x5ftx" path="res://src/ui/player/EffectDetailUI.tscn" id="1_d1i3v"]
-[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="2_ihdbu"]
-[ext_resource type="Texture2D" uid="uid://b7q22s8n2gnso" path="res://assets/sprite/effect_icons/Dynamic Advantage/22_Explosive_Bullet.png" id="3_63oxf"]
-[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="4_311el"]
-[ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="4_jclc7"]
-[ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="6_irbak"]
-[ext_resource type="Texture2D" uid="uid://dwyt08w82u6ne" path="res://assets/sprite/placeholder/health.png" id="7_1xrqq"]
-[ext_resource type="Texture2D" uid="uid://c0eun8o1343gk" path="res://assets/sprite/placeholder/star.png" id="8_qhkyf"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ovww"]
-bg_color = Color(1, 1, 1, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lpchg"]
-texture = ExtResource("4_311el")
-modulate_color = Color(0.902281, 0.776745, 0, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gt652"]
-texture = ExtResource("6_irbak")
-texture_margin_top = 16.0
-texture_margin_right = 16.0
-region_rect = Rect2(0, 0, 93.7968, 22)
-modulate_color = Color(0.901961, 0.776471, 0, 1)
+[ext_resource type="PackedScene" uid="uid://h5pyccx2ulc" path="res://src/ui/player/barrel_detail/EffectInfoUI.tscn" id="1_uuxt1"]
 
 [node name="BarrelDetailUI" type="MarginContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 113.0
+offset_top = 143.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -35,228 +16,35 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="AllBarrelEffectUI" type="VBoxContainer" parent="."]
-layout_mode = 2
-size_flags_horizontal = 8
-mouse_filter = 2
-theme_override_constants/separation = 24
-alignment = 1
-
-[node name="EffectDetailUI" parent="AllBarrelEffectUI" instance=ExtResource("1_d1i3v")]
-layout_mode = 2
-
-[node name="EffectDetailUI2" parent="AllBarrelEffectUI" instance=ExtResource("1_d1i3v")]
-layout_mode = 2
-
-[node name="EffectDetailUI3" parent="AllBarrelEffectUI" instance=ExtResource("1_d1i3v")]
-layout_mode = 2
-
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 256
+theme_override_constants/margin_top = 128
 
-[node name="BarrelnfoContainer" type="Control" parent="MarginContainer"]
-process_mode = 3
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
-mouse_filter = 2
 
-[node name="PanelContainer" type="MarginContainer" parent="MarginContainer/BarrelnfoContainer"]
-clip_contents = true
-custom_minimum_size = Vector2(450, 208)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -384.0
-offset_top = -254.0
-offset_right = 66.0
-offset_bottom = -54.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Background" type="ColorRect" parent="MarginContainer/BarrelnfoContainer/PanelContainer"]
-custom_minimum_size = Vector2(428, 192)
+[node name="Box1Padding" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 0.72549)
-
-[node name="NinePatchRect" type="NinePatchRect" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-custom_minimum_size = Vector2(428, 192)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_ihdbu")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -13.0
-offset_bottom = 22.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
+theme_override_constants/margin_left = 256
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer"]
+[node name="EffectInfoUI" parent="MarginContainer/VBoxContainer/Box1Padding" instance=ExtResource("1_uuxt1")]
 layout_mode = 2
 
-[node name="HeaderContainer" type="MarginContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="Box2Padding" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 8
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="IconContainer" type="MarginContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="Panel2" type="Panel" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_1ovww")
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer/MarginContainer"]
-layout_mode = 2
-texture = ExtResource("3_63oxf")
-expand_mode = 3
-stretch_mode = 5
-
-[node name="Panel" type="Panel" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_lpchg")
-
-[node name="HeaderTextContainer" type="VBoxContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 0
-theme_override_constants/separation = -4
-
-[node name="TitleContainer" type="MarginContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer"]
-layout_mode = 2
-size_flags_vertical = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_bottom = 4
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/TitleContainer"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/normal_font = ExtResource("4_jclc7")
-theme_override_font_sizes/normal_font_size = 32
-bbcode_enabled = true
-text = "Explosive Bullets"
-fit_content = true
-scroll_active = false
-
-[node name="DescriptionContainer" type="MarginContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer"]
-layout_mode = 2
-size_flags_vertical = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_right = 24
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DescriptionContainer"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/default_color = Color(0.60933, 0.60933, 0.60933, 1)
-theme_override_fonts/normal_font = ExtResource("4_jclc7")
-theme_override_font_sizes/normal_font_size = 24
-bbcode_enabled = true
-text = "Try not to hurt yourself!"
-fit_content = true
-scroll_active = false
-
-[node name="DividerContainer" type="MarginContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer"]
-layout_mode = 2
-size_flags_vertical = 2
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_bottom = 4
-
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DividerContainer"]
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/separator = SubResource("StyleBoxTexture_gt652")
-
-[node name="BodyContainer" type="MarginContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
+theme_override_constants/margin_left = 128
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="PositivesContainer" type="VBoxContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer"]
+[node name="EffectInfoUI" parent="MarginContainer/VBoxContainer/Box2Padding" instance=ExtResource("1_uuxt1")]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer"]
+[node name="Box3Padding" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_bottom = 0
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer/HBoxContainer"]
-modulate = Color(0.1886, 0.82, 0.230693, 1)
+[node name="EffectInfoUI" parent="MarginContainer/VBoxContainer/Box3Padding" instance=ExtResource("1_uuxt1")]
 layout_mode = 2
-texture = ExtResource("7_1xrqq")
-expand_mode = 2
-stretch_mode = 5
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/normal_font = ExtResource("4_jclc7")
-theme_override_font_sizes/normal_font_size = 24
-bbcode_enabled = true
-text = "Bullets explode on impact for extra damage"
-fit_content = true
-scroll_active = false
-
-[node name="NegativesContainer" type="VBoxContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer"]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer/HBoxContainer"]
-modulate = Color(0.82, 0.1886, 0.1886, 1)
-layout_mode = 2
-texture = ExtResource("8_qhkyf")
-expand_mode = 2
-stretch_mode = 5
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/BarrelnfoContainer/PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/normal_font = ExtResource("4_jclc7")
-theme_override_font_sizes/normal_font_size = 24
-bbcode_enabled = true
-text = "Explosion damage can hurt you as well"
-fit_content = true
-scroll_active = false
