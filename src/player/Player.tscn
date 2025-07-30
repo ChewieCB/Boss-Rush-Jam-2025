@@ -296,19 +296,28 @@ assigned_action = "interact"
 health_component = NodePath("../../HealthComponent")
 luck_component = NodePath("../../LuckComponent")
 
-[node name="DimScreen" type="ColorRect" parent="UI"]
-visible = false
+[node name="GunUI" type="Control" parent="UI"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.14, 0.14, 0.14, 0.639216)
 
-[node name="GunUI" type="Control" parent="UI"]
+[node name="DimScreen" type="ColorRect" parent="UI/GunUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.14, 0.14, 0.14, 0)
+
+[node name="BarrelEffectsUI" type="Control" parent="UI/GunUI"]
 z_index = 1
-layout_mode = 3
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -317,7 +326,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("48_8tfyi")
 
-[node name="BarrelDetailUI" parent="UI/GunUI" instance=ExtResource("48_6dr3i")]
+[node name="BarrelDetailUI" parent="UI/GunUI/BarrelEffectsUI" instance=ExtResource("48_6dr3i")]
 layout_mode = 1
 offset_left = -556.0
 offset_top = -273.0

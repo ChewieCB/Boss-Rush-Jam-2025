@@ -7,6 +7,5 @@ class_name EffectInfoUI
 
 
 # Called when the node enters the scene tree for the first time.
-#func _ready() -> void:
-	#icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	#icon_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+func _ready() -> void:
+	self.modulate.a = 0.0

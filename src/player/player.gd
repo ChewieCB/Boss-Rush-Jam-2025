@@ -53,7 +53,10 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
-@onready var all_barrel_effect_ui = $UI/GunUI
+@onready var barrel_effect_ui = $UI/GunUI
+@onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
+@onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
+#@onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI/BarrelDetailUI
 
 @onready var stat_ui: StatUI = $UI/StatUI
 @onready var health_ui = stat_ui.health_ui
@@ -147,7 +150,7 @@ var current_gun: Gun = null
 var is_in_inventory = false:
 	set(value):
 		is_in_inventory = value
-		#all_barrel_effect_ui.visible = !is_in_inventory
+		#barrel_effect_ui.visible = !is_in_inventory
 		if is_in_inventory:
 			stat_ui.hide_non_luck_ui()
 		else:
@@ -293,6 +296,11 @@ func _unhandled_input(event):
 		SoundManager.play_sound(sfx_crouch.pick_random(), "SFX")
 	elif Input.is_action_just_released("crouch"):
 		SoundManager.play_sound(sfx_stand.pick_random(), "SFX")
+	
+	if Input.is_action_just_pressed("show_detail"):
+		show_barrel_effect_ui()
+	elif Input.is_action_just_released("show_detail"):
+		hide_barrel_effect_ui()
 
 
 func _process(delta):
@@ -426,12 +434,41 @@ func update_ammo_counter_ui() -> void:
 	stat_ui.magazine_size_label.text = "/{0}".format([current_gun.modified_magazine_size])
 
 
+func show_barrel_effect_ui() -> void:
+	if current_gun.max_barrels == 0:
+		return
+	
+	var tween: Tween = get_tree().create_tween()
+	tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
+	for i in range(current_gun.max_barrels):
+		var effect_ui_idx: int = i
+		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		if i < current_gun.barrel_container.get_child_count():
+			tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
+	await tween.finished
+	
+	Engine.time_scale = 0.1
+
+
+func hide_barrel_effect_ui() -> void:
+	Engine.time_scale = 1.0
+	
+	var tween: Tween = get_tree().create_tween()
+	tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
+	for i in range(current_gun.max_barrels):
+		var effect_ui_idx: int = i
+		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		if i < current_gun.barrel_container.get_child_count():
+			tween.parallel().tween_property(effect_ui, "modulate:a", 0.0, 0.1)
+	await tween.finished
+
+
 func update_barrel_effect_ui() -> void:
 	for i in range(current_gun.max_barrels):
 		var effect_ui_idx: int = i
-		var effect_ui = all_barrel_effect_ui.effect_boxes[effect_ui_idx]
+		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
 		if i < current_gun.barrel_container.get_child_count():
-			effect_ui.modulate.a = 1.0
+			#effect_ui.modulate.a = 1.0
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
