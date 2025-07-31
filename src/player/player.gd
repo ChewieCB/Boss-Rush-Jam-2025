@@ -476,6 +476,17 @@ func update_barrel_effect_ui() -> void:
 			effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
 			effect_ui.name_label.text = _effect.display_text_title
 			effect_ui.desc_label.text = _effect.display_text_tag
+			
+			for container in effect_ui.positives_container.get_children():
+				container.queue_free()
+			for container in effect_ui.negatives_container.get_children():
+				container.queue_free()
+			
+			for text in _effect.positive_desc:
+				effect_ui.add_positive(text)
+			for text in _effect.negative_desc:
+				effect_ui.add_negative(text)
+			
 			#effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
 			#effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
 			#effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc

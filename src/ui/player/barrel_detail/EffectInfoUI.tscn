@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://h5pyccx2ulc"]
+[gd_scene load_steps=13 format=3 uid="uid://h5pyccx2ulc"]
 
 [ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="1_d3mw5"]
 [ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_info_ui.gd" id="1_jlotj"]
@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="4_r750q"]
 [ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="5_hyr3m"]
 [ext_resource type="Texture2D" uid="uid://dwyt08w82u6ne" path="res://assets/sprite/placeholder/health.png" id="6_154b7"]
+[ext_resource type="PackedScene" uid="uid://cfymts31mi6p" path="res://src/ui/player/barrel_detail/EffectInfoIconText.tscn" id="7_b4bhs"]
 [ext_resource type="Texture2D" uid="uid://c0eun8o1343gk" path="res://assets/sprite/placeholder/star.png" id="7_rktqp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ovww"]
@@ -41,6 +42,9 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 mouse_filter = 2
 script = ExtResource("1_jlotj")
+positive_icon = ExtResource("6_154b7")
+negative_icon = ExtResource("7_rktqp")
+effect_info_textbox = ExtResource("7_b4bhs")
 
 [node name="Background" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(428, 192)
@@ -202,56 +206,12 @@ theme_override_constants/separation = 8
 layout_mode = 2
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer"]
+[node name="EffectInfoText" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer" instance=ExtResource("7_b4bhs")]
 layout_mode = 2
-mouse_filter = 2
-
-[node name="TextureRect" type="TextureRect" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer/HBoxContainer"]
-modulate = Color(0.1886, 0.82, 0.230693, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("6_154b7")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_fonts/normal_font = ExtResource("4_r750q")
-theme_override_font_sizes/normal_font_size = 24
-bbcode_enabled = true
-text = "Bullets explode on impact for extra damage"
-fit_content = true
-scroll_active = false
 
 [node name="NegativesContainer" type="VBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer"]
+[node name="HBoxContainer" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer" instance=ExtResource("7_b4bhs")]
 layout_mode = 2
-mouse_filter = 2
-
-[node name="TextureRect" type="TextureRect" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer/HBoxContainer"]
-modulate = Color(0.82, 0.1886, 0.1886, 1)
-custom_minimum_size = Vector2(24, 24)
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("7_rktqp")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer/HBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_fonts/normal_font = ExtResource("4_r750q")
-theme_override_font_sizes/normal_font_size = 24
-bbcode_enabled = true
-text = "Explosion damage can hurt you as well"
-fit_content = true
-scroll_active = false

@@ -4,6 +4,8 @@ class_name BaseBarrelEffect
 @export_multiline var display_text_title: String
 @export_multiline var display_text_tag: String
 @export_multiline var display_text_desc: String
+@export var positive_desc: Array[String]
+@export var negative_desc: Array[String]
 @export var icon_id: int = -1
 
 var owner_barrel: SpinBarrel
