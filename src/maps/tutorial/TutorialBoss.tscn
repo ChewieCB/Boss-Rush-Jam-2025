@@ -7104,7 +7104,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.03, 2, 29.4973)
 collision_layer = 32
 collision_mask = 2
 header_text = "Combat"
-body_items = Array[String](["[shoot]", "to shoot  ", "[spin_reload]", "to reload"])
+body_items = Array[String](["[shoot]", "to shoot", "[spin_reload]", "to reload"])
 close_trigger_actions = Array[String](["shoot", "spin_reload"])
 
 [node name="CollisionShape3D" parent="TutorialInfoTrigger5" index="0"]
@@ -7116,7 +7116,7 @@ collision_layer = 32
 collision_mask = 2
 monitoring = false
 header_text = "Combat"
-body_items = Array[String]([" Hold ", "[show_detail]", " to check barrels  "])
+body_items = Array[String]([" Hold", "[show_detail]", "to check barrels  "])
 close_trigger_actions = Array[String](["show_detail"])
 
 [node name="CollisionShape3D" parent="TutorialInfoTrigger7" index="0"]

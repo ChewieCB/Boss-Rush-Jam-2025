@@ -74,5 +74,6 @@ theme_override_constants/margin_bottom = 18
 
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer4"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/separation = 32
 alignment = 2

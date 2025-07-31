@@ -27,6 +27,8 @@ func _ready() -> void:
 			var _label = Label.new()
 			_label.add_theme_font_size_override("font_size", 64)
 			_label.text = element
+			_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			node = _label
 			
 		prompt_container.add_child(node)
