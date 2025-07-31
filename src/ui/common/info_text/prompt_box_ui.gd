@@ -8,7 +8,7 @@ class_name PromptInfoBox
 @onready var content_container = $PanelContainer/Background/NinePatchRect/VBoxContainer
 @onready var header_label = $PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/WinLabelHeader
 @onready var separator = $PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer/HSeparator
-@onready var prompt_container = $PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer4/HBoxContainer
+@onready var prompt_container = $PanelContainer/MarginContainer/VBoxContainer/MarginContainer4/HBoxContainer
 
 @export var max_resize_steps: int = 40
 @export var show_header: bool = true

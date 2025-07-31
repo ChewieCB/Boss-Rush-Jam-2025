@@ -1,11 +1,11 @@
 extends MarginContainer
 class_name EffectInfoUI
 
-@onready var icon_rect: TextureRect = $Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer/MarginContainer/TextureRect
-@onready var name_label: RichTextLabel = $Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/TitleContainer/RichTextLabel
-@onready var desc_label: RichTextLabel = $Background/NinePatchRect/MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DescriptionContainer/RichTextLabel
-@onready var positives_container: Control = $Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer
-@onready var negatives_container: Control = $Background/NinePatchRect/MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer
+@onready var icon_rect: TextureRect = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer/MarginContainer/TextureRect
+@onready var name_label: RichTextLabel = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/TitleContainer/RichTextLabel
+@onready var desc_label: RichTextLabel = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DescriptionContainer/RichTextLabel
+@onready var positives_container: Control = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer
+@onready var negatives_container: Control = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer
 
 @export var positive_icon: Texture2D
 @export var negative_icon: Texture2D
