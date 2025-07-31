@@ -56,7 +56,8 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var barrel_effect_ui = $UI/GunUI
 @onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
 @onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
-#@onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI/BarrelDetailUI
+@onready var barrel_ui_tween: Tween = null
+var barrel_ui_active: bool = false
 
 @onready var stat_ui: StatUI = $UI/StatUI
 @onready var health_ui = stat_ui.health_ui
@@ -435,32 +436,50 @@ func update_ammo_counter_ui() -> void:
 
 
 func show_barrel_effect_ui() -> void:
+	if barrel_ui_active:
+		return
+	
 	if current_gun.max_barrels == 0:
 		return
 	
-	var tween: Tween = get_tree().create_tween()
-	tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
+	barrel_ui_active = true
+	
+	if barrel_ui_tween:
+		if barrel_ui_tween.is_running():
+			barrel_ui_tween.pause()
+	
+	barrel_ui_tween = get_tree().create_tween()
+	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
 	for i in range(current_gun.max_barrels):
 		var effect_ui_idx: int = i
 		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
 		if i < current_gun.barrel_container.get_child_count():
-			tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
-	await tween.finished
+			barrel_ui_tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
+	await barrel_ui_tween.finished
 	
 	Engine.time_scale = 0.1
 
 
 func hide_barrel_effect_ui() -> void:
+	if not barrel_ui_active:
+		return
+	
+	if barrel_ui_tween:
+		if barrel_ui_tween.is_running():
+			barrel_ui_tween.pause()
+	
+	barrel_ui_tween = get_tree().create_tween()
+	
 	Engine.time_scale = 1.0
 	
-	var tween: Tween = get_tree().create_tween()
-	tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
+	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
 	for i in range(current_gun.max_barrels):
 		var effect_ui_idx: int = i
 		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
 		if i < current_gun.barrel_container.get_child_count():
-			tween.parallel().tween_property(effect_ui, "modulate:a", 0.0, 0.1)
-	await tween.finished
+			barrel_ui_tween.parallel().tween_property(effect_ui, "modulate:a", 0.0, 0.1)
+	barrel_ui_tween.tween_callback(func(): barrel_ui_active = false)
+	await barrel_ui_tween.finished
 
 
 func update_barrel_effect_ui() -> void:
