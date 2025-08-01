@@ -1193,6 +1193,8 @@ func _on_phase_3_state_entered() -> void:
 func activate_chiptopede() -> void:
 	# Re-fill health bar, change name, and show
 	health_component.has_died = false
+	if GameManager.CHEAT_oneshot:
+		chiptopede_max_health = 1
 	health_component.max_health = chiptopede_max_health
 	health_component.current_health = chiptopede_max_health
 	health_component.received_dmg_multiplier = 0.5
