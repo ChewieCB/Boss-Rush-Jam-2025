@@ -137,7 +137,7 @@ func _on_boss_died(boss: BossCore = boss) -> void:
 
 func _on_boss_defeated(boss: BossCore) -> void:
 	collect_all_chips()
-	win_ui.win("Floor Cleared", win_subtext.pick_random())
+	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 	
 	if not boss.boss_id in GameManager.bosses_defeated:

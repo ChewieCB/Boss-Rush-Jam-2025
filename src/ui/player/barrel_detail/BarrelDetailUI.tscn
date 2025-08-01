@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=3 uid="uid://bqgedwbxkh8xa"]
+
+[ext_resource type="PackedScene" uid="uid://h5pyccx2ulc" path="res://src/ui/player/barrel_detail/EffectInfoUI.tscn" id="1_uuxt1"]
+
+[node name="BarrelDetailUI" type="MarginContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -841.0
+offset_top = -300.0
+offset_right = 841.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 128
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+
+[node name="Box1Padding" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 256
+theme_override_constants/margin_bottom = 16
+
+[node name="EffectInfoUI" parent="MarginContainer/HBoxContainer/VBoxContainer/Box1Padding" instance=ExtResource("1_uuxt1")]
+layout_mode = 2
+
+[node name="Box2Padding" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_bottom = 16
+
+[node name="EffectInfoUI" parent="MarginContainer/HBoxContainer/VBoxContainer/Box2Padding" instance=ExtResource("1_uuxt1")]
+layout_mode = 2
+
+[node name="Box3Padding" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_constants/margin_left = 192
+theme_override_constants/margin_bottom = 96
+
+[node name="EffectInfoUI" parent="MarginContainer/HBoxContainer/Box3Padding" instance=ExtResource("1_uuxt1")]
+layout_mode = 2

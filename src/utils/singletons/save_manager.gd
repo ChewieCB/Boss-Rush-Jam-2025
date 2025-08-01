@@ -72,6 +72,7 @@ func save_game(slot_id):
 		"player_level": GameManager.player_level,
 		"player_skill_points": GameManager.player_skill_points,
 		"player_skill_dict": GameManager.player_skill_dict,
+		"tutorial_completed": GameManager.tutorial_completed,
 	}
 	var save_file = FileAccess.open(get_savefile_name(slot_id), FileAccess.WRITE)
 	var json_string = JSON.stringify(save_dict)
@@ -120,7 +121,8 @@ func load_game(slot_id):
 	GameManager.player_level = save_data.get("player_level", 1)
 	GameManager.player_skill_points = save_data.get("player_skill_points", 0)
 	GameManager.player_skill_dict = convert_id_to_skill_enum(save_data.get("player_skill_dict", {}))
-
+	GameManager.tutorial_completed = save_data.get("tutorial_completed", false)
+	
 	check_for_new_update_barrels()
 	
 	savefile_loaded.emit()
@@ -149,7 +151,7 @@ func save_setting_config():
 	config.set_value("Audio", "bgm_audio", GameManager.bgm_audio)
 	config.set_value("Audio", "sfx_audio", GameManager.sfx_audio)
 	config.set_value("Audio", "ui_audio", GameManager.ui_audio)
-
+	
 	config.save("user://setting.cfg")
 
 
@@ -180,7 +182,7 @@ func load_setting_config():
 	GameManager.bgm_audio = config.get_value("Audio", "bgm_audio", 100)
 	GameManager.sfx_audio = config.get_value("Audio", "sfx_audio", 100)
 	GameManager.ui_audio = config.get_value("Audio", "ui_audio", 100)
-
+	
 	setting_config_loaded.emit()
 
 # If we update the game and add new barrel into GameManager's shop,

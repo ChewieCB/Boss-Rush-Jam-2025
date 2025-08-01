@@ -1979,7 +1979,7 @@ theme_override_font_sizes/normal_font_size = 52
 bbcode_enabled = true
 text = "You beat all the bosses! 
 
-Go spend your hard-earned chips on some new barrels and give them another shot - The enemies became stronger and can take more of a beating."
+Go spend your hard-earned chips on some new barrels and give them another shot - we've buffed the bosses' health so they can take more of a beating."
 fit_content = true
 scroll_active = false
 

@@ -20,6 +20,9 @@ prefab = ExtResource("4_2fxr8")
 display_text_title = "Molotov Dash"
 display_text_tag = "A burning gift"
 display_text_desc = "Create a burning puddle after dash"
+positive_desc = Array[String](["Drop a fiery puddle when dashing "])
+negative_desc = Array[String](["Burning puddle hurts you too"])
+icon_id = 17
 
 [node name="ToxinMist" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_vhyyg")
@@ -30,6 +33,9 @@ chance_perc = 20.0
 display_text_title = "Toxin Mist"
 display_text_tag = "Poison 'em!"
 display_text_desc = "20% chance to create poison cloud on enemy hit"
+positive_desc = Array[String](["Chance to spawn poison cloud"])
+negative_desc = Array[String](["Poison cloud affects you too"])
+icon_id = 18
 
 [node name="CognacReload" type="Node3D" parent="EffectContainer"]
 script = ExtResource("5_ntkq2")
@@ -37,6 +43,9 @@ display_text_title = "Cognac Reload"
 display_text_tag = "Take a break, take a sip"
 display_text_desc = "Recover HP on reload
 +200% reload time"
+positive_desc = Array[String](["Recover health on reload"])
+negative_desc = Array[String](["Much slower reload speed"])
+icon_id = 16
 
 [node name="CreateHealCloud" type="Node3D" parent="EffectContainer/CognacReload"]
 script = ExtResource("3_vhyyg")

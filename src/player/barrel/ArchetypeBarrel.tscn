@@ -37,6 +37,9 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("4_75jst")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_volit"), ExtResource("6_pcx57"), ExtResource("7_m2140")])
 display_text_title = "Archetype: Railgun"
 display_text_tag = "Precision is important!"
+positive_desc = Array[String](["High damage", "Higher shot velocity"])
+negative_desc = Array[String](["Slow firerate", "Low magazine size"])
+icon_id = 0
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Railgun"]
 script = ExtResource("2_soqa0")
@@ -85,6 +88,9 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("6_rdcja")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("10_mirek"), ExtResource("11_wfx2f"), ExtResource("12_q3id7"), ExtResource("13_qsixs"), ExtResource("14_gji11"), ExtResource("15_emgbq"), ExtResource("16_4rinr"), ExtResource("17_asvda"), ExtResource("18_s8p45"), ExtResource("19_gskni"), ExtResource("20_3esr5")])
 display_text_title = " Archetype: SMG"
 display_text_tag = "Spray and pray!"
+positive_desc = Array[String](["High firerate", "Large magazine size"])
+negative_desc = Array[String](["Low damage", "High recoil"])
+icon_id = 2
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/SMG"]
 script = ExtResource("2_soqa0")
@@ -132,6 +138,9 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("7_27wu3"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("23_fbci2"), ExtResource("24_biu37"), ExtResource("25_l4gj7")])
 display_text_title = "Archetype: Shotgun"
 display_text_tag = "Strong at close range!"
+positive_desc = Array[String](["High damage", "Multiple projectiles per shot"])
+negative_desc = Array[String](["High spread", "Shorter range"])
+icon_id = 1
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Shotgun"]
 script = ExtResource("2_soqa0")

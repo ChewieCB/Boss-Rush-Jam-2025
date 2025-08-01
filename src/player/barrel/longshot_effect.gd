@@ -8,8 +8,8 @@ extends BaseBarrelEffect
 @export var dmg_modify_perc_per_unit: float = 5
 
 func on_before_damage_applied(_enemy: CharacterBody3D, projectile: BaseProjectile):
-    var dist_diff = abs(distance_threshold - projectile.travelled_distance)
-    var perc_changed = dist_diff * dmg_modify_perc_per_unit
-    if projectile.travelled_distance < distance_threshold:
-        perc_changed = - perc_changed
-    projectile.damage = projectile.damage * (1 + perc_changed / 100)
+	var dist_diff = abs(distance_threshold - projectile.travelled_distance)
+	var perc_changed = dist_diff * dmg_modify_perc_per_unit
+	if projectile.travelled_distance < distance_threshold:
+		perc_changed = - perc_changed
+	projectile.damage = projectile.damage * (1 + perc_changed / 100)

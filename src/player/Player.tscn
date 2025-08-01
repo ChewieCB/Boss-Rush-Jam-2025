@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=72 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -38,7 +38,6 @@
 [ext_resource type="AudioStream" uid="uid://clrb5tuaish36" path="res://src/player/assets/sfx/RUNNING/Running Individual 13.mp3" id="15_w5gjb"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
 [ext_resource type="AudioStream" uid="uid://l2hmqeiq76ff" path="res://src/player/assets/sfx/RUNNING/Running Individual 14.mp3" id="16_tto8i"]
-[ext_resource type="PackedScene" uid="uid://xtemm86x5ftx" path="res://src/ui/player/EffectDetailUI.tscn" id="20_ic8us"]
 [ext_resource type="AudioStream" uid="uid://bmdb3aap303b0" path="res://src/player/assets/sfx/CROUCH.mp3" id="26_skrud"]
 [ext_resource type="AudioStream" uid="uid://dckgsngjsbl02" path="res://src/player/assets/sfx/STAND.mp3" id="27_6gtc3"]
 [ext_resource type="AudioStream" uid="uid://b1j1n3jwte3cg" path="res://src/player/assets/sfx/New Jump from ground.mp3" id="29_5swy3"]
@@ -56,6 +55,8 @@
 [ext_resource type="Shader" path="res://src/player/assets/shaders/old_movie.gdshader" id="46_fqoxl"]
 [ext_resource type="PackedScene" uid="uid://crvu72pwcnneq" path="res://src/ui/player/StatUI.tscn" id="46_ob8n4"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
+[ext_resource type="PackedScene" uid="uid://bqgedwbxkh8xa" path="res://src/ui/player/barrel_detail/BarrelDetailUI.tscn" id="48_6dr3i"]
+[ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_detail_ui.gd" id="48_8tfyi"]
 [ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="57_sguas"]
@@ -181,7 +182,7 @@ shape = SubResource("BoxShape3D_sjjg0")
 [node name="Camera3D" type="Camera3D" parent="Neck/ShakeCameraWrapper"]
 current = true
 fov = 90.0
-near = 0.02
+near = 0.001
 
 [node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.947067)
@@ -297,44 +298,40 @@ luck_component = NodePath("../../LuckComponent")
 
 [node name="GunUI" type="Control" parent="UI"]
 layout_mode = 3
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 576.0
-offset_right = 958.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="GunStatusUI" type="MarginContainer" parent="UI/GunUI"]
+[node name="DimScreen" type="ColorRect" parent="UI/GunUI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
 mouse_filter = 2
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+color = Color(0.14, 0.14, 0.14, 0)
 
-[node name="AllBarrelEffectUI" type="VBoxContainer" parent="UI/GunUI/GunStatusUI"]
-layout_mode = 2
-size_flags_horizontal = 8
+[node name="BarrelEffectsUI" type="Control" parent="UI/GunUI"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 24
-alignment = 1
+script = ExtResource("48_8tfyi")
 
-[node name="EffectDetailUI" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
-layout_mode = 2
-
-[node name="EffectDetailUI2" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
-layout_mode = 2
-
-[node name="EffectDetailUI3" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
-layout_mode = 2
+[node name="BarrelDetailUI" parent="UI/GunUI/BarrelEffectsUI" instance=ExtResource("48_6dr3i")]
+layout_mode = 1
+offset_left = -556.0
+offset_top = -273.0
+offset_right = 1126.0
+offset_bottom = 391.0
 
 [node name="BossSpecialDialog" type="Control" parent="UI"]
 process_mode = 3
@@ -573,4 +570,5 @@ light_color = Color(0.78, 0.897333, 1, 1)
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_physics_processing"]
 [connection signal="timeout" from="StateChart/Root/Status/Drunk/DrunkTimer" to="." method="_on_drunk_timer_timeout"]
 
+[editable path="Neck/ShakeCameraWrapper/GunContainer/BlankGun"]
 [editable path="UI/HurtOverlay"]

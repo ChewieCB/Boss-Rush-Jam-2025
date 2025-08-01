@@ -53,37 +53,27 @@ size_flags_horizontal = 4
 mouse_filter = 2
 color = Color(0, 0, 0, 0.72549)
 
-[node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer/Background"]
+[node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 custom_minimum_size = Vector2(768, 256)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 texture = ExtResource("2_3qgyu")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/Background/NinePatchRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Background/NinePatchRect/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
 custom_minimum_size = Vector2(768, 256)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="WinLabelHeader" type="RichTextLabel" parent="PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="WinLabelHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme = SubResource("Theme_5idyq")
@@ -95,17 +85,17 @@ text = "[wave][center]Header Text[/center][/wave]"
 fit_content = true
 scroll_active = false
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_right = 32
 
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxTexture_vbj68")
 
-[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -114,7 +104,7 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 16
 
-[node name="WinLabelSubHeader" type="RichTextLabel" parent="PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer2"]
+[node name="WinLabelSubHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer2"]
 custom_minimum_size = Vector2(512, 64)
 layout_mode = 2
 mouse_filter = 2
@@ -123,24 +113,25 @@ theme_override_fonts/normal_font = ExtResource("4_1eg4l")
 theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
 text = "Body text goes here lorem ipsum you had 200 dragon bones stored sdfdsf sfdsf dsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfsdfdsfdsfsdfdsfdsfdsfdsfdsfsdfdsf"
+fit_content = true
 scroll_active = false
 
-[node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme_override_constants/margin_bottom = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer3"]
 layout_mode = 2
 alignment = 2
 
-[node name="DeviceInputPrompt" parent="PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer3/HBoxContainer" instance=ExtResource("6_2wm54")]
+[node name="DeviceInputPrompt" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer3/HBoxContainer" instance=ExtResource("6_2wm54")]
 layout_mode = 2
 assigned_action = "interact"
 hide_background = true
 
-[node name="ContinueLabel" type="Label" parent="PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer3/HBoxContainer"]
+[node name="ContinueLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer3/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 48

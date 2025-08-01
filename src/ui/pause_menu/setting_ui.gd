@@ -165,6 +165,12 @@ func _on_audio_option_pressed() -> void:
 	reset_on_tab_changed()
 	SoundManager.play_button_click_sfx()
 
+func _on_debug_option_pressed() -> void:
+	tab_container.current_tab = 3
+	reset_on_tab_changed()
+	SoundManager.play_button_click_sfx()
+
+
 func _on_back_button_pressed() -> void:
 	setting_back_button_pressed.emit()
 	SoundManager.play_button_click_sfx()
@@ -423,3 +429,18 @@ func _on_tab_container_tab_changed(tab: int) -> void:
 	mouse_sen_slider.focus_neighbor_top = tab_header_container.get_child(tab).get_path()
 	fov_slider.focus_neighbor_top = tab_header_container.get_child(tab).get_path()
 	master_slider.focus_neighbor_top = tab_header_container.get_child(tab).get_path()
+
+
+func _on_boss_one_shot_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_oneshot = toggled_on
+
+
+func _on_gode_mode_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_godmode = toggled_on
+
+
+func _on_freecam_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_freecam = toggled_on

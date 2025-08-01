@@ -49,7 +49,12 @@ func initial_load() -> void:
 func start_loading(scene_name: String = "") -> void:
 	ScreenTransition.transition_out()
 	await ScreenTransition.transition_finished
-
+	
+	# Save the game when loading a new scene
+	if GameManager.chosen_slot_id != -1:
+		GameManager.update_total_playtime()
+		await SaveManager.save_game(GameManager.chosen_slot_id)
+	
 	if not is_materials_compiled:
 		initial_load()
 		await materials_compiled

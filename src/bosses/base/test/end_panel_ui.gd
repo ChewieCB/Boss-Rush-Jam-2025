@@ -2,16 +2,16 @@ extends Control
 class_name InfoBox
 
 @onready var panel_container = $PanelContainer
-@onready var content_container = $PanelContainer/Background/NinePatchRect/VBoxContainer
-@onready var header_label = $PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/WinLabelHeader
-@onready var subheader_label = $PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer2/WinLabelSubHeader
-@onready var separator = $PanelContainer/Background/NinePatchRect/MarginContainer/VBoxContainer/MarginContainer/HSeparator
+@onready var content_container = $PanelContainer/MarginContainer/VBoxContainer
+@onready var header_label = $PanelContainer/MarginContainer/VBoxContainer/WinLabelHeader
+@onready var subheader_label = $PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/WinLabelSubHeader
+@onready var separator = $PanelContainer/MarginContainer/VBoxContainer/MarginContainer/HSeparator
 
 @export var max_resize_steps: int = 40
 @export var show_header: bool = true
 
 
-func text_no_resize(header_text: String, subheader_text: String) -> void:
+func text_no_resize(header_text: String, subheader_text: String = "") -> void:
 	header_label.text = "[center]%s[/center]" % [header_text]
 	subheader_label.text = "[center]%s[/center]" % [subheader_text]
 
