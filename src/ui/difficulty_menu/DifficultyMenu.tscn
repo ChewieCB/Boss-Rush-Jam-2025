@@ -1,0 +1,371 @@
+[gd_scene load_steps=10 format=3 uid="uid://djcipi6xiw7yn"]
+
+[ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="1_5ie53"]
+[ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="2_y6xrk"]
+[ext_resource type="FontFile" uid="uid://bfduksv0gcvwn" path="res://assets/fonts/Semplicita/Semplicita Medium Italic.otf" id="3_0n16t"]
+[ext_resource type="Texture2D" uid="uid://dcs5o482rkb4e" path="res://src/collectibles/poker_chip/assets/chip_icon_128.png" id="3_uirlk"]
+[ext_resource type="Texture2D" uid="uid://c7ke7ng2lktnx" path="res://src/collectibles/poker_chip/assets/chip_icon_gold_64.png" id="5_divwu"]
+[ext_resource type="PackedScene" uid="uid://doawgaf4fslbl" path="res://src/ui/difficulty_menu/RiskItem.tscn" id="5_myk8s"]
+[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="6_wg5mh"]
+[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="7_wqijn"]
+[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="8_myf6w"]
+
+[node name="DifficultyMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TitleRegion" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 208.0
+grow_horizontal = 2
+color = Color(0.390625, 0.0448029, 0, 1)
+
+[node name="BossSpriteContainer" type="Control" parent="TitleRegion"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -456.0
+offset_top = -96.0
+offset_right = -8.0
+offset_bottom = 96.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="BossSprite" type="TextureRect" parent="TitleRegion/BossSpriteContainer"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -305.0
+offset_right = 767.0
+offset_bottom = 1072.0
+mouse_filter = 2
+texture = ExtResource("1_5ie53")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="TitleRegion/BossSpriteContainer"]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_y6xrk")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="FlavorLabel" type="Label" parent="TitleRegion"]
+layout_mode = 0
+offset_left = 864.0
+offset_top = 96.0
+offset_right = 1454.0
+offset_bottom = 116.0
+theme_override_fonts/font = ExtResource("3_0n16t")
+theme_override_font_sizes/font_size = 20
+text = "\"Betting your chips, risking your life for a feeble chance of winning big\""
+
+[node name="TitleLabel" type="Label" parent="TitleRegion"]
+layout_mode = 1
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 537.0
+offset_bottom = 113.0
+theme_override_colors/font_color = Color(1, 0.973208, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 10
+theme_override_constants/shadow_offset_y = 10
+theme_override_font_sizes/font_size = 80
+text = "ESCALATING STAKES"
+
+[node name="TargetLabel" type="Label" parent="TitleRegion"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -648.0
+offset_top = 16.0
+offset_right = -464.0
+offset_bottom = 113.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 0.973208, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 10
+theme_override_constants/shadow_offset_y = 10
+theme_override_font_sizes/font_size = 60
+text = "TARGET"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TitleRegion"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 136.0
+offset_right = 1432.0
+offset_bottom = 200.0
+
+[node name="ChipSprite" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite2" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite3" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("5_divwu")
+expand_mode = 1
+
+[node name="ChipSprite4" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite5" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite6" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("5_divwu")
+expand_mode = 1
+
+[node name="ChipSprite7" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite8" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite9" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite10" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite11" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite12" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite13" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite14" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="ChipSprite15" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="RiskTitle" type="Label" parent="."]
+modulate = Color(1, 0.252252, 0.162162, 1)
+layout_mode = 0
+offset_left = 64.0
+offset_top = 264.0
+offset_right = 312.0
+offset_bottom = 325.0
+theme_override_font_sizes/font_size = 50
+text = "Risk (only stat modifiers here)"
+
+[node name="ColorRect" type="ColorRect" parent="RiskTitle"]
+layout_mode = 0
+offset_top = 56.0
+offset_right = 888.0
+offset_bottom = 64.0
+
+[node name="RiskContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 352.0
+offset_right = 960.0
+offset_bottom = 1024.0
+
+[node name="RiskItem" parent="RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+
+[node name="RiskItem2" parent="RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+
+[node name="RiskItem3" parent="RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+
+[node name="RiskItem4" parent="RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+
+[node name="RiskItem5" parent="RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+
+[node name="RiskItem6" parent="RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+
+[node name="RiskItem7" parent="RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+
+[node name="DifficultyDescription" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 128.0
+offset_top = -760.0
+offset_right = 896.0
+offset_bottom = -312.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.505882, 0.505882, 0.505882, 0.27451)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="DifficultyDescription"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("6_wg5mh")
+theme_override_fonts/bold_font = ExtResource("7_wqijn")
+theme_override_font_sizes/normal_font_size = 34
+theme_override_font_sizes/bold_font_size = 38
+bbcode_enabled = true
+text = "[b]Stake level 3/5:[/b]
+(This show what non-stat modifier stuff boss will have. Every 3 risk level will increased stake by 1).
+
+- [Stake 2] Enemy have enhanced moveset.
+- [Stake 3] Enemy can lit the whole floor on fire.
+[color=black]- [Stake 4] ???[/color]
+[color=black]- [Stake 5] ???[/color]
+
+"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="DifficultyDescription"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_myf6w")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="RewardTitle" type="Label" parent="."]
+modulate = Color(1, 0.972549, 0.0705882, 1)
+layout_mode = 0
+offset_left = 1088.0
+offset_top = 832.0
+offset_right = 1336.0
+offset_bottom = 893.0
+theme_override_font_sizes/font_size = 50
+text = "Reward"
+
+[node name="ColorRect" type="ColorRect" parent="RewardTitle"]
+layout_mode = 0
+offset_top = 56.0
+offset_right = 760.0
+offset_bottom = 64.0
+
+[node name="RewardBox" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 1328.0
+offset_top = 920.0
+offset_right = 1627.0
+offset_bottom = 1048.0
+theme_override_constants/separation = 20
+
+[node name="RewardValue" type="Label" parent="RewardBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "20,000"
+
+[node name="RewardSprite" type="TextureRect" parent="RewardBox"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_uirlk")
+expand_mode = 1
