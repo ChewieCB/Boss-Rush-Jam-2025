@@ -21,6 +21,8 @@ shield_barrier_prefab = ExtResource("7_n73is")
 display_text_title = "Protective Barrier"
 display_text_tag = "Tough up!"
 display_text_desc = "25% damage resistance"
+positive_desc = Array[String](["Increases damage resistance"])
+negative_desc = Array[String](["TODO: add drawback (slower speed?)"])
 icon_id = 43
 
 [node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]
@@ -28,7 +30,10 @@ script = ExtResource("3_rhvms")
 display_text_title = "Newton's Third Law"
 display_text_tag = "Safer Rocket Jump"
 display_text_desc = "+50% damage
--25% firerate"
+-25% firerate
+Adds knockback when shoot the nearby environment, enabling rocket jumping. Increased damage but decreased firerate."
+positive_desc = Array[String](["Enables rocket-jumping knockback", "Higher damage"])
+negative_desc = Array[String](["Slower firerate"])
 icon_id = 42
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
@@ -52,7 +57,9 @@ max_range = 3.0
 script = ExtResource("3_rhvms")
 display_text_title = "Ball Bullet"
 display_text_tag = "Massize ball!"
-display_text_desc = "Ball"
+display_text_desc = "Shoot a single huge bouncy ball projectile. Significantly increased damage but reduce firerate and projectile speed."
+positive_desc = Array[String](["Significantly higher damage", "Fires large projectile", "Adds richochet to projectile"])
+negative_desc = Array[String](["Slower firerate", "Slower projectile speed"])
 icon_id = 41
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/BallBullet"]

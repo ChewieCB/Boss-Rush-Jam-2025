@@ -37,7 +37,7 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("4_75jst")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_volit"), ExtResource("6_pcx57"), ExtResource("7_m2140")])
 display_text_title = "Archetype: Railgun"
 display_text_tag = "Precision is important!"
-positive_desc = Array[String](["High damage", "Precise"])
+positive_desc = Array[String](["High damage", "Higher shot velocity"])
 negative_desc = Array[String](["Slow firerate", "Low magazine size"])
 icon_id = 0
 
@@ -139,7 +139,7 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("23_fbci2"), ExtResource("2
 display_text_title = "Archetype: Shotgun"
 display_text_tag = "Strong at close range!"
 positive_desc = Array[String](["High damage", "Multiple projectiles per shot"])
-negative_desc = Array[String](["High spread", "Low range"])
+negative_desc = Array[String](["High spread", "Shorter range"])
 icon_id = 1
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Shotgun"]

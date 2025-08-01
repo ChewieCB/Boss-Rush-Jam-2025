@@ -36,6 +36,8 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_td2sj"), ExtResource("6_8lxby"), ExtResource("7_0s8ux"), ExtResource("8_edm41"), ExtResource("9_2krpk"), ExtResource("10_botf5"), ExtResource("11_6abxt"), ExtResource("12_8f28h"), ExtResource("13_l3foa"), ExtResource("14_nmsjh"), ExtResource("15_sylvt")])
 display_text_title = "Archetype: Gel stream"
 display_text_tag = "Very high firerate but low damage"
+positive_desc = Array[String](["Projectiles stick on contact", "Very high firerate", "Large magazine"])
+negative_desc = Array[String](["Low per-round damage"])
 icon_id = 9
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelStream"]
@@ -93,6 +95,8 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_td2sj"), ExtResource("6_8lxby"), ExtResource("7_0s8ux"), ExtResource("8_edm41"), ExtResource("9_2krpk"), ExtResource("10_botf5"), ExtResource("11_6abxt"), ExtResource("12_8f28h"), ExtResource("13_l3foa"), ExtResource("14_nmsjh"), ExtResource("15_sylvt")])
 display_text_title = "Archetype: Gel blob"
 display_text_tag = "Single, big, sticky projectile"
+positive_desc = Array[String](["Sticky projectile", "Projectile sticks around for a long time"])
+negative_desc = Array[String](["Fires one projectile"])
 icon_id = 7
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelBlob"]
@@ -149,7 +153,9 @@ is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("20_73alt"), ExtResource("21_gik88"), ExtResource("22_fit1i")])
 display_text_title = "Archetype: Gel bubbles"
-display_text_tag = "Dense projectile count yet zero damage"
+display_text_tag = "Pairs well with a nice elemental infusion!"
+positive_desc = Array[String](["Fires projectiles in a stream"])
+negative_desc = Array[String](["Base projectile deals no damage"])
 icon_id = 8
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelBubble"]

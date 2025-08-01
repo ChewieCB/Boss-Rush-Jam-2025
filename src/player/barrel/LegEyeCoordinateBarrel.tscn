@@ -22,6 +22,8 @@ display_text_desc = "Can only shoot when you dash
 Dash improved
 +50% crit chance
 +50% damage"
+positive_desc = Array[String](["Longer dash", "Longer I-frames during dash", "High crit chance", "Increasd damage"])
+negative_desc = Array[String](["Can only shoot after dashing"])
 icon_id = 33
 
 [node name="TriggerLegEffect" type="Node3D" parent="EffectContainer/TriggerLeg"]
@@ -63,6 +65,8 @@ display_text_desc = "Can only shoot while you are midair
 Jump improved
 -50% recoil
 -50% spread"
+positive_desc = Array[String](["Improved jump", "Lower recoil", "Tighter spread"])
+negative_desc = Array[String](["Can only shoot in mid-air"])
 icon_id = 32
 
 [node name="SpringyFeetEffect" type="Node3D" parent="EffectContainer/SpringyFeet"]
@@ -97,6 +101,8 @@ display_text_desc = "Can only shoot while you are crouching
 Improved crouch
 +50% magazine size
 +50% firerate"
+positive_desc = Array[String](["Allows you to dodge by crouching", "Larger magazine size", "Faster firerate"])
+negative_desc = Array[String](["Can only shoot while crouched"])
 icon_id = 31
 
 [node name="FlexibleKnee" type="Node3D" parent="EffectContainer/FlexibleKnee"]

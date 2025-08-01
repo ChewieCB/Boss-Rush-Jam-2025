@@ -19,6 +19,8 @@ display_text_title = "Bullet Time"
 display_text_tag = "You are not Neo though"
 display_text_desc = "-50% projectile speed
 +25% damage"
+positive_desc = Array[String](["Increased damage"])
+negative_desc = Array[String](["Projectile speed decreased"])
 icon_id = 19
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/BulletTime"]
@@ -42,7 +44,10 @@ script = ExtResource("3_q7s8s")
 display_text_title = "Sticky Bomb"
 display_text_tag = "Keep distance"
 display_text_desc = "+30% damage
--50% firerate"
+-50% firerate
+ Bullets stick to enemies and detonate after 2 seconds."
+positive_desc = Array[String](["Slightly increased damage", "Rounds stick and explode after 2s"])
+negative_desc = Array[String](["Slower firerate", "Explosions hurt you too"])
 icon_id = 21
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/StickyBomb"]
@@ -67,4 +72,6 @@ display_text_title = "Medical Payout"
 display_text_tag = "Hurt others to heal yourself"
 display_text_desc = "Store 1 HP every 100 damage dealt
 Recover HP on reload"
+positive_desc = Array[String](["Convert damage dealt into health on reload."])
+negative_desc = Array[String](["TODO: add a drawback"])
 icon_id = 20
