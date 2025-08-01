@@ -212,6 +212,7 @@ func load_new_save_data():
 	for data in starting_shop_barrels:
 		shop_barrels.append(data)
 
+
 func reset_current_save_data():
 	equipped_barrels = []
 	inventory_barrels = []
