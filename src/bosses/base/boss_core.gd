@@ -169,6 +169,12 @@ func _ready() -> void:
 	debug_trajectory_mesh.mesh = ImmediateMesh.new()
 	scene_root.add_child.call_deferred(debug_trajectory_mesh)
 	#debug_mesh.visible = false
+	
+	# Cheat/debug flags
+	if GameManager.CHEAT_oneshot:
+		health_component.max_health = 1
+		health_component.current_health = 1
+	
 	if owner:
 		await owner.ready
 

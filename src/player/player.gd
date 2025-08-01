@@ -222,6 +222,11 @@ func _ready():
 
 	check_permanent_buffs()
 	luck_component.check_for_high_luck_buffs()
+	
+	# CHEATS
+	if GameManager.CHEAT_godmode:
+		health_component.is_invincible = true
+
 
 func _unhandled_input(event):
 	if controls_disabled:

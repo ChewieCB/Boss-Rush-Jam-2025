@@ -99,6 +99,11 @@ var drunk_blur_disabled: bool = false
 var is_controller_connected: bool = false
 var aim_assist_strength: float = 0.5
 
+# DEBUG CHEATS
+var CHEAT_oneshot: bool = false
+var CHEAT_godmode: bool = false
+var CHEAT_freecam: bool = false
+
 
 func _ready() -> void:
 	barrel_database.append_array(debug_barrel_database)
