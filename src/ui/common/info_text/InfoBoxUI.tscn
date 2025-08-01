@@ -113,6 +113,7 @@ theme_override_fonts/normal_font = ExtResource("4_1eg4l")
 theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
 text = "Body text goes here lorem ipsum you had 200 dragon bones stored sdfdsf sfdsf dsfdsfdsfdsfdsfdsfdsfdsfdsfdsfdsfsdfdsfdsfsdfdsfdsfdsfdsfdsfsdfdsf"
+fit_content = true
 scroll_active = false
 
 [node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]

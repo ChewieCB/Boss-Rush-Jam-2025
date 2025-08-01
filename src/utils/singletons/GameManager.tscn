@@ -17,7 +17,7 @@
 [ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="13_aamrg"]
 [ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel_data.tres" id="13_iyynv"]
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="14_lbyk3"]
-[ext_resource type="Resource" uid="uid://cl8gwigkfvwca" path="res://src/player/barrel/resource/elemental_infusion_barrel_data.tres" id="14_wr4dx"]
+[ext_resource type="Resource" path="res://src/player/barrel/resource/elemental_infusion_barrel_data.tres" id="14_wr4dx"]
 [ext_resource type="Resource" uid="uid://dtjfyb374gapa" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ammo_leech.tres" id="16_8l4bp"]
 [ext_resource type="Resource" uid="uid://l1nys7kixqcl" path="res://src/player/barrel/resource/placeholderA_barrrel_data.tres" id="16_lo202"]
 [ext_resource type="Resource" uid="uid://cioys44ppioym" path="res://src/player/barrel/resource/reckless_abandon_barrel_data.tres" id="17_7q02m"]
