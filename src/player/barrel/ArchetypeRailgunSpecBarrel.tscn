@@ -8,7 +8,6 @@
 [ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="5_lxmwo"]
 [ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="5_m8udd"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="5_uqnjt"]
-[ext_resource type="PackedScene" uid="uid://w52vphhedtws" path="res://src/player/gun/projectiles/RailcannonHitscan.tscn" id="6_3vdu1"]
 [ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="6_bxoxn"]
 [ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="6_c4q6k"]
 [ext_resource type="AudioStream" uid="uid://dqr1710c1o8py" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 1.mp3" id="6_hwm5a"]
@@ -25,6 +24,7 @@
 [ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="13_qcjda"]
 [ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="14_8snm5"]
 [ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="15_8f242"]
+[ext_resource type="PackedScene" uid="uid://06y3ehv3d68n" path="res://src/player/gun/projectiles/GunHitscanBig.tscn" id="25_tj15x"]
 
 [node name="ArchetypeRailgunSpecBarrel" type="Node3D"]
 script = ExtResource("1_5qelq")
@@ -46,7 +46,7 @@ icon_id = 10
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 4
-new_value = 6.0
+new_value = 9.0
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
@@ -66,7 +66,7 @@ new_value = 20.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 1
-new_value = 15.0
+new_value = 10.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
@@ -182,4 +182,4 @@ new_value = 3.5
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("5_uqnjt")
-new_prefab = ExtResource("6_3vdu1")
+new_prefab = ExtResource("25_tj15x")

@@ -110,8 +110,7 @@ func on_projectile_destroyed():
 func on_damage_calculation():
 	return
 
-# When bullet hit enemy but JUST before applied damage
-# TODO: Make BallProjectile also work with this
+## When bullet hit enemy but JUST before applied damage
 func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
 	return
 

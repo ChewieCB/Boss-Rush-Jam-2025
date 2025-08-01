@@ -1,0 +1,133 @@
+[gd_scene load_steps=21 format=4 uid="uid://dohipsr30pdoj"]
+
+[ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="1_b2j7y"]
+[ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="2_8tmka"]
+
+[sub_resource type="Gradient" id="Gradient_h523t"]
+offsets = PackedFloat32Array(0, 0.368644, 1)
+colors = PackedColorArray(0.0407865, 1, 0, 1, 0.0123134, 0.1875, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7ccxl"]
+gradient = SubResource("Gradient_h523t")
+
+[sub_resource type="Curve" id="Curve_vlxe7"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.231164, 1), 0.0, 0.0, 0, 0, Vector2(0.640411, 0.407905), -1.4431, -1.4431, 0, 0, Vector2(1, 0), -0.159099, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_ms4yh"]
+curve = SubResource("Curve_vlxe7")
+
+[sub_resource type="Curve" id="Curve_y6yc7"]
+_data = [Vector2(0.243682, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_bcryg"]
+curve = SubResource("Curve_y6yc7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mp8h5"]
+emission_shape = 1
+emission_sphere_radius = 0.1
+angle_max = 90.0
+gravity = Vector3(0, -4, 0)
+scale_min = 0.1
+scale_max = 0.2
+scale_curve = SubResource("CurveTexture_ms4yh")
+color_ramp = SubResource("GradientTexture1D_7ccxl")
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 1.0
+turbulence_influence_over_life = SubResource("CurveTexture_bcryg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6fphj"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_8tmka")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_feurq"]
+material = SubResource("StandardMaterial3D_6fphj")
+
+[sub_resource type="Gradient" id="Gradient_o1bcj"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_u3cou"]
+gradient = SubResource("Gradient_o1bcj")
+
+[sub_resource type="Curve" id="Curve_tbxpq"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 1), 0.0, 0.0, 0, 0, Vector2(0.587329, 0.501806), -3.14482, -3.14482, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_tskhu"]
+curve = SubResource("Curve_tbxpq")
+
+[sub_resource type="Curve" id="Curve_8t8x3"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_dedc3"]
+curve = SubResource("Curve_8t8x3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tgf03"]
+emission_shape = 1
+emission_sphere_radius = 0.15
+angle_max = 90.0
+direction = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 0.5, 0)
+scale_min = 0.1
+scale_max = 0.1
+scale_curve = SubResource("CurveTexture_tskhu")
+color = Color(0.299416, 0.542969, 0, 0.843137)
+color_ramp = SubResource("GradientTexture1D_u3cou")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 5.0
+turbulence_influence_over_life = SubResource("CurveTexture_dedc3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dst3a"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_dx7tw"]
+resource_name = "particle_circle_particle_circle"
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"attribute_data": PackedByteArray("AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"material": SubResource("StandardMaterial3D_dst3a"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cC/n8nQ/fuugL+fwAAzYBJAf5/FSTpJFoA/n/qoQAAAAD+f/brpTbZAP5////keh8B/n8a8Oq7TgH+f/9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+
+[node name="ProjectilePoisonEmitSmall" type="Node3D" node_paths=PackedStringArray("gpu_particles")]
+script = ExtResource("1_b2j7y")
+gpu_particles = [NodePath("Drop"), NodePath("Cloud")]
+time_until_queue_free = 2
+
+[node name="Drop" type="GPUParticles3D" parent="."]
+randomness = 0.5
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_mp8h5")
+draw_pass_1 = SubResource("QuadMesh_feurq")
+
+[node name="Cloud" type="GPUParticles3D" parent="."]
+amount = 32
+lifetime = 2.0
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_tgf03")
+draw_pass_1 = SubResource("ArrayMesh_dx7tw")

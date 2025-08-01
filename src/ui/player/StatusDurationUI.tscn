@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://q6qasacer4wj"]
 
-[ext_resource type="Texture2D" uid="uid://beqyxuvocv7t1" path="res://assets/sprite/buff_icon/invincible.png" id="1_ppsxb"]
+[ext_resource type="Texture2D" uid="uid://beqyxuvocv7t1" path="res://assets/sprite/status_icon/invincible.png" id="1_ppsxb"]
 [ext_resource type="Script" path="res://src/ui/player/status_duration_ui.gd" id="2_2xq5q"]
-[ext_resource type="Texture2D" uid="uid://b6h85ewtcxeuk" path="res://assets/sprite/buff_icon/default_status_down.png" id="3_17ouo"]
-[ext_resource type="Texture2D" uid="uid://cuxy2kx47ip57" path="res://assets/sprite/buff_icon/default_status_up.png" id="4_a22mu"]
+[ext_resource type="Texture2D" uid="uid://b6h85ewtcxeuk" path="res://assets/sprite/status_icon/default_status_down.png" id="3_17ouo"]
+[ext_resource type="Texture2D" uid="uid://cuxy2kx47ip57" path="res://assets/sprite/status_icon/default_status_up.png" id="4_a22mu"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="5_fdk32"]
 
 [node name="StatusDurationUI" type="TextureProgressBar"]

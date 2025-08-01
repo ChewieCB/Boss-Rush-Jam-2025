@@ -5,8 +5,8 @@ extends BaseBarrelEffect
 @export var bonus_run_speed_perc: float = 0
 @export var duration: float = 1
 
-var dash_speed_buff_icon = preload("res://assets/sprite/buff_icon/dash_speed_up.png")
-# var run_speed_buff_icon = preload("res://assets/sprite/buff_icon/run_speed_up.png")
+var dash_speed_buff_icon = preload("res://assets/sprite/status_icon/dash_speed_up.png")
+# var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_up.png")
 
 func on_ammo_consumed():
     var dash_slide_speed_buff = StatusEffect.new()

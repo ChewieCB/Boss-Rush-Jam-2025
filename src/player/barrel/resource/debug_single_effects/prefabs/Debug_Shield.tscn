@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_hfx0t"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/protective_barrier.gd" id="8_n3nue"]
-[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/ShieldBarrier.tscn" id="9_knf72"]
+[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/misc/ShieldBarrier.tscn" id="9_knf72"]
 
 [node name="DebugShieldBarrel" type="Node3D"]
 script = ExtResource("1_hfx0t")

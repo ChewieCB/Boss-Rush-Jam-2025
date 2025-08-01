@@ -87,6 +87,7 @@ var camera_tilt: bool = true
 var vsync_option_index: int = 1
 @export_range(0, 2, 1) var window_mode_index: int = 1 # From 0 to 2
 var scaling_3d: float = 100.0
+var enable_elemental_vfx = true # : TODO
 var hide_ui = false
 # Accessibility setting flags
 var screen_shake_disabled: bool = false
@@ -157,7 +158,7 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 
 
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
-	if player.current_gun.is_reloading:
+	if player.current_gun.is_reloading or player.current_gun.is_spinning:
 		return "Can not change barrel while reloading"
 	var found_data: BarrelDataResource = null
 	var barrel_idx: int = -1

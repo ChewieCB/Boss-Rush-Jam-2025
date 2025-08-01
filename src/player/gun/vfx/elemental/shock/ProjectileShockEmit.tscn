@@ -1,0 +1,87 @@
+[gd_scene load_steps=13 format=4 uid="uid://ca0xt7tqp4c1g"]
+
+[ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="1_yr3rr"]
+
+[sub_resource type="Curve" id="Curve_fvx5s"]
+_data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6prro"]
+curve = SubResource("Curve_fvx5s")
+
+[sub_resource type="Gradient" id="Gradient_60nkr"]
+colors = PackedColorArray(1, 0.996535, 0.943663, 1, 1, 0.936585, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wxykd"]
+gradient = SubResource("Gradient_60nkr")
+
+[sub_resource type="Curve" id="Curve_tsc6s"]
+max_value = 5.0
+_data = [Vector2(0.164179, 5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_h71mh"]
+curve = SubResource("Curve_tsc6s")
+
+[sub_resource type="Curve" id="Curve_8vnxd"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.141791, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_plkgn"]
+curve = SubResource("Curve_8vnxd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_egrc2"]
+lifetime_randomness = 0.4
+particle_flag_align_y = true
+emission_shape = 4
+emission_point_count = 1
+angle_max = 180.0
+velocity_pivot = Vector3(1, 1, 1)
+direction = Vector3(1, 1, 1)
+spread = 180.0
+initial_velocity_min = 2.0
+initial_velocity_max = 3.0
+gravity = Vector3(0, -0.5, 0)
+damping_min = 2.0
+damping_max = 5.0
+scale_min = 0.2
+scale_max = 0.4
+scale_curve = SubResource("CurveTexture_plkgn")
+color = Color(1, 0.976476, 0.651139, 1)
+color_initial_ramp = SubResource("GradientTexture1D_wxykd")
+alpha_curve = SubResource("CurveTexture_6prro")
+emission_curve = SubResource("CurveTexture_h71mh")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0isau"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0hkbl"]
+resource_name = "cylinder_Cylinder"
+_surfaces = [{
+"aabb": AABB(-0.0402224, -0.702579, -0.0464448, 0.0804447, 0.739765, 0.0696672),
+"attribute_data": PackedByteArray("qar//1TV////////qar/f1TV/3//f/9///+2jv9/to5U1baOqaq2jg=="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BgAIAAQACAAJAAMACQAHAAUAAAAHAAkAAQAJAAgAAgAIAAYA"),
+"material": SubResource("StandardMaterial3D_0isau"),
+"primitive": 3,
+"uv_scale": Vector4(2, 1, 0, 0),
+"vertex_count": 10,
+"vertex_data": PackedByteArray("/38AAKmqjOL/fwAAqar/v/9/AACpqozi/3///6mq/7//f///qaqM4v9///+pqozi/3+j6wAA5P3/f6PrAADk/f//o+v//3uwAACj6///mKypMVLjAAD/f1NjVU7///9/Vc6sHKucqbEsoPET8ZPS33SpEgFvtADe")
+}]
+blend_shape_mode = 0
+
+[node name="ProjectileShockEmit" type="Node3D" node_paths=PackedStringArray("gpu_particles")]
+script = ExtResource("1_yr3rr")
+gpu_particles = [NodePath("ElectricSpark")]
+
+[node name="ElectricSpark" type="GPUParticles3D" parent="."]
+sorting_offset = -1.0
+amount = 64
+lifetime = 0.8
+randomness = 1.0
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_egrc2")
+draw_pass_1 = SubResource("ArrayMesh_0hkbl")

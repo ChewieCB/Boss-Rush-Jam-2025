@@ -58,9 +58,9 @@ func start_loading(scene_name: String = "") -> void:
 	if not is_materials_compiled:
 		initial_load()
 		await materials_compiled
-	
+
 	ScreenTransition.set_loading_detail_text(scene_name)
-	
+
 	can_transition = true
 
 
@@ -79,7 +79,7 @@ func _process(_delta: float) -> void:
 		var progress = []
 		ResourceLoader.load_threaded_get_status(current_scene_path, progress)
 		ScreenTransition.progress_bar.value = progress[0] * 100
-		
+
 		if progress[0] == 1 and can_transition:
 			var packed_scene = ResourceLoader.load_threaded_get(current_scene_path)
 			load_scene(packed_scene)
@@ -95,13 +95,13 @@ func parse_scene_paths_to_compile() -> void:
 	var regex_pattern := "(sub_resource|ext_resource) type=\"(ParticleProcessMaterial|ShaderMaterial|Material|CanvasItemMaterial)\""
 	var regex = RegEx.new()
 	regex.compile(regex_pattern)
-	
+
 	var instantiation_list := []
 	var filepaths = get_filepaths_from_nested_directory("res://src", true)
 	for filepath in filepaths:
 		if filepath.get_extension() in IGNORED_PATH_EXTENSIONS:
 			continue
-		
+
 		var file = FileAccess.open(filepath, FileAccess.READ)
 		if file == null:
 			continue
@@ -109,11 +109,11 @@ func parse_scene_paths_to_compile() -> void:
 		var regex_match = regex.search(text)
 		if regex_match:
 			instantiation_list.append(filepath)
-	
+
 	for scene_path in instantiation_list:
 		ResourceLoader.load(scene_path)
 		scene_path_list.append(scene_path)
-	
+
 	var save_file = FileAccess.open(PRECOMPILE_CONFIG_PATH, FileAccess.WRITE)
 	for path in instantiation_list:
 		save_file.store_line(path)
@@ -124,12 +124,12 @@ func get_filepaths_from_nested_directory(dir_path: String, incl_files_from_given
 	var files = []
 	var item
 	var item_path
-	
+
 	var dir := DirAccess.open(dir_path)
 	if dir == null:
 		printerr("Could not open folder", dir_path)
 		return files
-	
+
 	dir.list_dir_begin()
 	item = dir.get_next()
 	while item != "":
@@ -140,7 +140,7 @@ func get_filepaths_from_nested_directory(dir_path: String, incl_files_from_given
 			files.append(item_path)
 		item = dir.get_next()
 	dir.list_dir_end()
-	
+
 	return files
 
 
@@ -152,7 +152,7 @@ func compile_materials() -> void:
 		scenes_to_compile.pop_front()
 		if count == max_materials_compiled_per_frame:
 			break
-	
+
 	if scenes_to_compile.size() == 0 and compiling_materials_count == 0:
 		print("All scenes compiled.")
 		is_materials_compiled = true
@@ -164,17 +164,17 @@ func compile_materials() -> void:
 func _compile_material(scene_path: String) -> void:
 	print("Precompile shader materials in %s" % scene_path)
 	var scene = ResourceLoader.load(scene_path).instantiate()
-	
+
 	if scene is GPUParticles3D:
 		_compile_particles_node(scene)
 		print("Precompile particle material in %s for child %s" % [scene_path, scene.name])
 		pass
-	
+
 	elif scene is Node3D and scene.get("material") != null:
 		_compile_material_node(scene)
 		print("Precompile material in %s for child %s" % [scene_path, scene.name])
 		pass
-	
+
 	var children = scene.get_children()
 	for child in children:
 		if child is GPUParticles3D:
@@ -183,7 +183,7 @@ func _compile_material(scene_path: String) -> void:
 		elif child is Node3D and child.owner == scene and child.get("material") != null:
 			_compile_material_node(child)
 			print("Precompile material in %s for child %s" % [scene_path, child.name])
-	
+
 	scene.queue_free()
 
 
@@ -191,21 +191,21 @@ func _compile_material_node(child: Node3D) -> void:
 	if child.material.resource_path in compiled_material_paths:
 		print("Found %s in cache, skipping." % child.material.resource_path)
 		return
-	
+
 	compiling_materials_count += 1
 	print("Caching material from %s" % child.name)
-	
+
 	var node = MeshInstance3D.new()
 	node.mesh = QuadMesh.new()
 	node.material = child.material
 	compile_parent.add_child(node)
-	
+
 	if child.material.resource_path:
 		compiled_material_paths.append(child.material.resource_path)
 		print("Caching %s" % child.material.resource_path)
-	
+
 	await get_tree().create_timer(0.5).timeout
-	
+
 	compiling_materials_count -= 1
 	if is_instance_valid(node):
 		node.queue_free()
@@ -215,21 +215,21 @@ func _compile_particles_node(child: GPUParticles3D) -> void:
 	if child.process_material.resource_path in compiled_material_paths:
 		print("Found %s in cache, skipping." % child.process_material.resource_path)
 		return
-	
+
 	compiling_materials_count += 1
 	print("Caching material from %s" % child.name)
-	
+
 	var particles = GPUParticles3D.new()
 	particles.process_material = child.process_material
 	particles.emitting = true
 	compile_parent.add_child(particles)
-	
+
 	if child.process_material.resource_path:
 		compiled_material_paths.append(child.process_material.resource_path)
 		print("Caching %s" % [child.process_material.resource_path])
-	
+
 	await get_tree().create_timer(0.5).timeout
-	
+
 	compiling_materials_count -= 1
 	if is_instance_valid(particles):
 		particles.queue_free()

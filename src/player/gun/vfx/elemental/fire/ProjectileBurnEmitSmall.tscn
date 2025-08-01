@@ -1,0 +1,152 @@
+[gd_scene load_steps=21 format=4 uid="uid://cagqbtwkkinfl"]
+
+[ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="1_7uasm"]
+[ext_resource type="Material" uid="uid://cjgoj12p3pb0g" path="res://addons/EffectBlocks/source_files/materials/fire_billboard.material" id="2_oawua"]
+[ext_resource type="Material" uid="uid://ks1kly3dfqvc" path="res://addons/EffectBlocks/source_files/materials/smoke_billboard.material" id="3_8nhrx"]
+
+[sub_resource type="Gradient" id="Gradient_ukmm6"]
+colors = PackedColorArray(0.94902, 0, 0, 1, 1, 0.776471, 0.0823529, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_smo8y"]
+gradient = SubResource("Gradient_ukmm6")
+
+[sub_resource type="Curve" id="Curve_ic856"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.231164, 1), 0.0, 0.0, 0, 0, Vector2(0.640411, 0.407905), -1.4431, -1.4431, 0, 0, Vector2(1, 0), -0.159099, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_r3hgf"]
+curve = SubResource("Curve_ic856")
+
+[sub_resource type="Curve" id="Curve_bem3d"]
+_data = [Vector2(0.243682, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wuljt"]
+curve = SubResource("Curve_bem3d")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3o3op"]
+emission_shape = 1
+emission_sphere_radius = 0.1
+angle_max = 90.0
+direction = Vector3(0, 4, 0)
+spread = 0.0
+gravity = Vector3(0, 4, 0)
+scale_min = 0.1
+scale_max = 0.1
+scale_curve = SubResource("CurveTexture_r3hgf")
+color_ramp = SubResource("GradientTexture1D_smo8y")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 1.0
+turbulence_influence_over_life = SubResource("CurveTexture_wuljt")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_udcdq"]
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cCAAAnQ/fuugIAAAAAzYBJAQAAFSTpJFoAAADqoQAAAAAAAPbrpTbZAAAA///keh8BAAAa8Oq7TgEAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_83sco"]
+resource_name = "particle_circle_particle_circle"
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"attribute_data": PackedByteArray("AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"material": ExtResource("2_oawua"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cC/n8nQ/fuugL+fwAAzYBJAf5/FSTpJFoA/n/qoQAAAAD+f/brpTbZAP5////keh8B/n8a8Oq7TgH+f/9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_udcdq")
+
+[sub_resource type="Gradient" id="Gradient_w1xq8"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_37ixe"]
+gradient = SubResource("Gradient_w1xq8")
+
+[sub_resource type="Curve" id="Curve_oivjt"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 1), 0.0, 0.0, 0, 0, Vector2(0.587329, 0.501806), -3.14482, -3.14482, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_xt7fr"]
+curve = SubResource("Curve_oivjt")
+
+[sub_resource type="Curve" id="Curve_y74xa"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ll1jw"]
+curve = SubResource("Curve_y74xa")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qyq4w"]
+emission_shape = 1
+emission_sphere_radius = 0.1
+angle_max = 90.0
+direction = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 2, 0)
+scale_min = 0.1
+scale_max = 0.1
+scale_curve = SubResource("CurveTexture_xt7fr")
+color = Color(0.414704, 0.414704, 0.414704, 0.219608)
+color_ramp = SubResource("GradientTexture1D_37ixe")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 5.0
+turbulence_influence_over_life = SubResource("CurveTexture_ll1jw")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_biwkl"]
+resource_name = "particle_circle_particle_circle"
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"attribute_data": PackedByteArray("AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"material": ExtResource("3_8nhrx"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cC/n8nQ/fuugL+fwAAzYBJAf5/FSTpJFoA/n/qoQAAAAD+f/brpTbZAP5////keh8B/n8a8Oq7TgH+f/9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_udcdq")
+
+[node name="ProjectileBurnEmitSmall" type="Node3D" node_paths=PackedStringArray("gpu_particles", "lights")]
+script = ExtResource("1_7uasm")
+gpu_particles = [NodePath("Flame"), NodePath("Smoke")]
+lights = [NodePath("OmniLight3D")]
+time_until_queue_free = 3
+
+[node name="Flame" type="GPUParticles3D" parent="."]
+amount = 32
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_3o3op")
+draw_pass_1 = SubResource("ArrayMesh_83sco")
+
+[node name="Smoke" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.312395, 0)
+amount = 32
+lifetime = 2.0
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_qyq4w")
+draw_pass_1 = SubResource("ArrayMesh_biwkl")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+light_color = Color(2, 1.2, 0, 1)
+light_energy = 0.25
+light_bake_mode = 1
+omni_range = 0.5
+omni_attenuation = 2.0

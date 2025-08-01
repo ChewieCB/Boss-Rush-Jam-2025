@@ -175,7 +175,7 @@ var base_stats = {
 }
 var current_stats = base_stats.duplicate(true)
 
-var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
+var dash_iframe_icon = preload("res://assets/sprite/status_icon/invincible.png")
 var cheat_death_icon = preload("res://assets/sprite/skilltree_icon/cheat_death.png")
 var double_down_icon = preload("res://assets/sprite/skilltree_icon/double_down.png")
 
@@ -572,7 +572,7 @@ func stun(time: float) -> void:
 
 
 func spin_reload() -> void:
-	if not current_gun.is_reloading:
+	if not current_gun.is_reloading and not current_gun.is_spinning:
 		current_gun.spin_all_barrels()
 
 
@@ -855,7 +855,7 @@ func get_assist_rotation_velocity(delta: float):
 	# Essentially this make the player only auto-aim to the edge of enemy hitbox
 	if aim_assist_ray_boss_check.is_colliding():
 		return
-	
+
 	var cam = player_camera
 	var aim_target_pos: Vector3 = aim_assist_target.global_position
 	if aim_assist_target.get_node("Marker3D") != null:
@@ -902,7 +902,7 @@ func get_barrel_sprite_screen_positions() -> Array[Vector2]:
 
 
 func spin_barrels() -> void:
-	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading:
+	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading or current_gun.is_spinning:
 		return
 	# Check if we have enough chips
 	if GameManager.purchase_reroll():
@@ -979,7 +979,7 @@ func check_permanent_buffs():
 	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.LUCKY_CRIT):
 		GameManager.create_and_add_buff("Lucky Crit", "lucky_crit_buff",
 		StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER, 0.5, StatusEffect.ModifyType.FLAT)
-	# Only show this to let player know if they still have Cheat Death 
+	# Only show this to let player know if they still have Cheat Death
 	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.CHEAT_DEATH) and not cheat_death_triggered:
 		GameManager.create_and_add_buff("Cheat Death", "cheat_death_buff",
 		StatusEffect.PlayerStatEnum.NONE, 0, StatusEffect.ModifyType.FLAT, StatusEffect.INFINITE_DURATION, true, cheat_death_icon)
@@ -1002,7 +1002,7 @@ func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
 	# Don't move the player when they're standing still
 	if raw_input_dir == Vector2.ZERO:
 		return
-	
+
 	# Drunk movement drift
 	drunk_drift_timer += delta
 	if drunk_drift_timer >= drunk_movement_drift_change_interval:
