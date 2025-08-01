@@ -35,9 +35,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -390.5
+offset_left = -514.0
 offset_top = -179.0
-offset_right = 390.5
+offset_right = 514.0
 offset_bottom = 179.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -48,30 +48,26 @@ layout_mode = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.72549)
 
-[node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer/Background"]
+[node name="NinePatchRect" type="NinePatchRect" parent="PanelContainer"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 texture = ExtResource("2_tbhyd")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/Background/NinePatchRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 21.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="WinLabelHeader" type="RichTextLabel" parent="PanelContainer/Background/NinePatchRect/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="WinLabelHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme = SubResource("Theme_5idyq")
@@ -81,21 +77,22 @@ text = "[center]Floor Cleared[/center]"
 fit_content = true
 scroll_active = false
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/Background/NinePatchRect/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_right = 32
 
-[node name="HSeparator" type="HSeparator" parent="PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer"]
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxTexture_vbj68")
 
-[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/Background/NinePatchRect/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="WinLabelSubHeader" type="RichTextLabel" parent="PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer2"]
+[node name="WinLabelSubHeader" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer2"]
 layout_mode = 2
 mouse_filter = 2
 theme = SubResource("Theme_5idyq")
