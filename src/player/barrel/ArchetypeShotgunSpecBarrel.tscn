@@ -20,6 +20,9 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("4_wabqs"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("6_xoagj"), ExtResource("7_a20w1")])
 display_text_title = "Archetype: Combat Shotgun"
 display_text_tag = "Fire faster and more ammo"
+positive_desc = Array[String](["Higher firerate", "Larger magazine", "Tighter spread"])
+negative_desc = Array[String](["Lower projectile count"])
+icon_id = 13
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CombatShotgun"]
 script = ExtResource("4_cnlm3")
@@ -67,6 +70,10 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("4_wabqs"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("6_xoagj"), ExtResource("7_a20w1")])
 display_text_title = "Archetype: Double-Barrel Shotgun"
 display_text_tag = "Come close for a huge burst"
+display_text_desc = " Limited magazine size and high spread, but huge damage."
+positive_desc = Array[String](["Increased damage per-round"])
+negative_desc = Array[String](["Increased spread", "2 shot magazine"])
+icon_id = 14
 
 [node name="SetDamage" type="Node3D" parent="EffectContainer/DoubleBarrel"]
 script = ExtResource("4_cnlm3")
@@ -114,6 +121,10 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("4_wabqs"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("6_xoagj"), ExtResource("7_a20w1")])
 display_text_title = "Archetype: Slug Shotgun"
 display_text_tag = "We have Railgun at home"
+display_text_desc = "Low spread and firerate. Very high damage but only one projectile."
+positive_desc = Array[String](["High damage", "Tigher spread"])
+negative_desc = Array[String](["Slower firerate", "Single shot magazine"])
+icon_id = 15
 
 [node name="SetDamage" type="Node3D" parent="EffectContainer/Slug"]
 script = ExtResource("4_cnlm3")

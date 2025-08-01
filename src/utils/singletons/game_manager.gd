@@ -100,6 +100,11 @@ var drunk_blur_disabled: bool = false
 var is_controller_connected: bool = false
 var aim_assist_strength: float = 0.5
 
+# DEBUG CHEATS
+var CHEAT_oneshot: bool = false
+var CHEAT_godmode: bool = false
+var CHEAT_freecam: bool = false
+
 
 func _ready() -> void:
 	barrel_database.append_array(debug_barrel_database)
@@ -202,9 +207,12 @@ func show_boss_special_dialog(content: String, duration: float):
 
 func load_new_save_data():
 	for data in starting_barrels:
+		if data in equipped_barrels:
+			continue
 		equipped_barrels.append(data)
 	for data in starting_shop_barrels:
 		shop_barrels.append(data)
+
 
 func reset_current_save_data():
 	equipped_barrels = []

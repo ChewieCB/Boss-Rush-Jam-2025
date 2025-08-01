@@ -88,7 +88,7 @@ func _on_bosses_defeated(boss: BossCore) -> void:
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 	
 	collect_all_chips()
-	win_ui.win("Floor Cleared", win_subtext.pick_random())
+	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 	show_end_panel()
 

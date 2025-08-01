@@ -92,10 +92,11 @@ func get_less_used_effects() -> int:
 					func(id):
 						return id not in last_chosen_queue
 				)
-				if chance <= 0.6:
-					effect_id = unused_effects.front()
-				else:
-					effect_id = unused_effects.back()
+				if unused_effects:
+					if chance <= 0.6:
+						effect_id = unused_effects.front()
+					else:
+						effect_id = unused_effects.back()
 				#effect_id = unused_effects.pick_random()
 	
 	return effect_id

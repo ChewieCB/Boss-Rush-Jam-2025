@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://biqm56x6ewbmo"]
+[gd_scene load_steps=10 format=3 uid="uid://biqm56x6ewbmo"]
 
 [ext_resource type="Script" path="res://src/ui/pause_menu/setting_ui.gd" id="1_05qbb"]
 [ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="2_b71wb"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bbt0eaqh5wvv1" path="res://assets/sprite/game_icon/film.png" id="5_knue1"]
 [ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="5_oipns"]
 [ext_resource type="Texture2D" uid="uid://db7w5onrhapvt" path="res://assets/sprite/game_icon/audioOn.png" id="6_fqt2w"]
+[ext_resource type="Texture2D" uid="uid://dqo7dxystt7l1" path="res://assets/sprite/game_icon/question.png" id="7_5c6c4"]
 
 [node name="SettingUI" type="Control"]
 layout_mode = 3
@@ -59,6 +60,15 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = "Audio"
 icon = ExtResource("6_fqt2w")
+icon_alignment = 2
+
+[node name="DEBUGOption" parent="HBoxContainer" instance=ExtResource("5_oipns")]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "DEBUG"
+icon = ExtResource("7_5c6c4")
 icon_alignment = 2
 
 [node name="TabContainer" type="TabContainer" parent="."]
@@ -749,6 +759,90 @@ grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
+[node name="DEBUG" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="Title" type="Label" parent="TabContainer/DEBUG"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -71.0
+offset_top = 16.0
+offset_right = 71.0
+offset_bottom = 71.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "DEBUG"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/DEBUG"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 80.0
+offset_right = 800.0
+offset_bottom = 472.0
+theme_override_constants/separation = 10
+
+[node name="GodMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/GodMode"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "God Mode"
+
+[node name="GodeModeToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/GodMode"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="BossOneShot" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/BossOneShot"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Set all bosses to 1 HP"
+
+[node name="BossOneShotToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/BossOneShot"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="Freecam" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/Freecam"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Unlock freecam mode (`)"
+
+[node name="FreecamToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/Freecam"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
 [node name="SettingUIBorder" type="NinePatchRect" parent="."]
 self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 1
@@ -794,6 +888,8 @@ text = "Back"
 [connection signal="pressed" from="HBoxContainer/GraphicOption" to="." method="_on_graphic_option_pressed"]
 [connection signal="mouse_entered" from="HBoxContainer/AudioOption" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="HBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/DEBUGOption" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="HBoxContainer/DEBUGOption" to="." method="_on_debug_option_pressed"]
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_tab_container_tab_changed"]
 [connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
@@ -833,6 +929,12 @@ text = "Back"
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/SFX/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="_on_gode_mode_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="_on_boss_one_shot_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="_on_freecam_toggle_toggled"]
 [connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="timeout" from="KeybindTimer" to="." method="_on_keybind_timer_timeout"]

@@ -18,6 +18,9 @@ display_text_title = "Slow Roller"
 display_text_tag = "Oh, the anticipation!"
 display_text_desc = "More damage with bullet flight time
 -50% projectile speed"
+positive_desc = Array[String](["Damage increases the longer the round is in-flight"])
+negative_desc = Array[String](["Slower projectile speed"])
+icon_id = 29
 
 [node name="SlowRollerEffect" type="Node3D" parent="EffectContainer/SlowRoller"]
 script = ExtResource("3_b2svt")
@@ -34,6 +37,9 @@ display_text_title = "Long Shot"
 display_text_tag = "Oh, the separation!"
 display_text_desc = "More damage with distance
 -50% spread"
+positive_desc = Array[String](["Shots from further away do more damage", "Tighter spread"])
+negative_desc = Array[String](["Close range shots do less damage"])
+icon_id = 28
 
 [node name="LongshotEffect" type="Node3D" parent="EffectContainer/LongShot"]
 script = ExtResource("5_12stn")
@@ -49,7 +55,12 @@ script = ExtResource("2_yv5q3")
 display_text_title = "Snap Call"
 display_text_tag = "Oh, the attraction!"
 display_text_desc = "More damage with bullet speed
-+25% projectile speed"
++25% projectile speed
+
+Bullets move faster, and deal more damage the higher their speed is. Minimal benefit for hitscan weapons."
+positive_desc = Array[String](["Projectiles move faster", "Damage increased with projectile speed"])
+negative_desc = Array[String](["Does not affect hitscan shots"])
+icon_id = 30
 
 [node name="SnapCallEffect" type="Node3D" parent="EffectContainer/SnapCall"]
 script = ExtResource("6_t0qlc")
