@@ -35,8 +35,11 @@ func _process(delta: float) -> void:
 	input_dir += right * Input.get_axis("move_left", "move_right")
 	input_dir += up * Input.get_axis("crouch", "jump")
 	input_dir += forward * Input.get_axis("move_down", "move_up")
-		
+	
 	var target_velocity := input_dir * target_speed
+	
+	if Input.is_action_pressed("dash"):
+		target_velocity *= 2
 	
 	velocity = lerp(velocity, target_velocity, ACCELERATION)
 	self.global_position += velocity
