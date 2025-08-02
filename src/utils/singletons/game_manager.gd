@@ -79,6 +79,8 @@ var cached_camera_rotation: Vector3
 	set(value):
 		if value != camera_fov && player:
 			player.player_camera.set_fov(value)
+			if player.freecam:
+				player.freecam.set_fov(value)
 		camera_fov = value
 var camera_tilt: bool = true
 
@@ -103,8 +105,9 @@ var aim_assist_strength: float = 0.5
 # DEBUG CHEATS
 var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
-var CHEAT_freecam: bool = false
+var CHEAT_freecam: bool = true
 
+@export var sfx_screenshot: AudioStream
 
 func _ready() -> void:
 	barrel_database.append_array(debug_barrel_database)
@@ -113,6 +116,28 @@ func _ready() -> void:
 	SaveManager.load_setting_config()
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("toggle_freecam"):
+		if CHEAT_freecam:
+			player._disable_freecam() if player.freecam else player._enable_freecam()
+	if Input.is_action_just_pressed("debug_increase_timescale"):
+		if Engine.time_scale < 1.0:
+			Engine.time_scale += 0.1
+	elif Input.is_action_just_pressed("debug_decrease_timescale"):
+		if Engine.time_scale >= 0.1:
+			Engine.time_scale -= 0.1
+	
+	if Input.is_action_just_pressed("screenshot"):
+		var screen_cap := get_viewport().get_texture().get_image()
+		var dir := DirAccess.open("user://")
+		if not dir.dir_exists("screenshots"):
+			dir.make_dir("screenshots")
+		var filename := "user://screenshots/crapshoot_%s.png" % [Time.get_unix_time_from_system()]
+		screen_cap.save_png(filename)
+		print("Screenshot captured at %s" % filename)
+		SoundManager.play_ui_sound(sfx_screenshot)
 
 
 func add_barrel_to_inventory(data: BarrelDataResource):

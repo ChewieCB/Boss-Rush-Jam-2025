@@ -48,6 +48,10 @@ signal setting_back_button_pressed
 @onready var keybind_return_button: Button = $TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton
 @onready var keybind_timer: Timer = $KeybindTimer
 
+@export var sfx_free_money: AudioStream
+@onready var timescale_slider: HSlider = $TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider
+@onready var timescale_value: Label = $TabContainer/DEBUG/VBoxContainer/Timescale/Value
+
 const KEYBIND_TIME_LIMIT = 5
 
 var keybindable_action_list = {
@@ -128,6 +132,9 @@ func _input(event):
 
 func open_menu():
 	visible = true
+	timescale_slider.value = Engine.time_scale
+	timescale_value.text = "{0}".format([Engine.time_scale])
+	
 	tab_container.current_tab = 0
 	mouse_sen_slider.focus_neighbor_top = $HBoxContainer.get_child(0).get_path()
 	tab_header_container.get_child(tab_container.current_tab).grab_focus()
@@ -365,6 +372,9 @@ func refresh_setting_value():
 	sfx_value.text = "{0}".format([GameManager.sfx_audio])
 	ui_slider.value = GameManager.ui_audio
 	ui_value.text = "{0}".format([GameManager.ui_audio])
+	
+	timescale_slider.value = Engine.time_scale
+	timescale_value.text = "{0}".format([Engine.time_scale])
 
 
 func reset_on_tab_changed():
@@ -444,3 +454,13 @@ func _on_gode_mode_toggle_toggled(toggled_on: bool) -> void:
 func _on_freecam_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.CHEAT_freecam = toggled_on
+
+
+func _on_timescale_slider_value_changed(value: float) -> void:
+	Engine.time_scale = value
+	timescale_value.text = "{0}".format([value])
+
+
+func _on_free_money_button_pressed() -> void:
+	GameManager.player_currency += 1000
+	SoundManager.play_ui_sound(sfx_free_money)

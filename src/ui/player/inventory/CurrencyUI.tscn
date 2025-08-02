@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bjxsljtv5nhy8" path="res://src/collectibles/poker_chip/assets/chip_icon_64.png" id="3_g1ig1"]
 
 [node name="CurrencyUI" type="MarginContainer"]
+process_mode = 3
 offset_right = 305.0
 offset_bottom = 64.0
 script = ExtResource("1_w6gyf")
