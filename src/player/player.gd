@@ -1028,6 +1028,7 @@ func _enable_freecam() -> void:
 	controls_disabled = true
 	dash_disabled = true
 	player_camera.camera.current = false
+	gun_container.visible = false
 	
 	# Spawn freecam
 	freecam = freecam_prefab.instantiate()
@@ -1043,6 +1044,7 @@ func _enable_freecam() -> void:
 func _disable_freecam() -> void:
 	controls_disabled = false
 	dash_disabled = false
+	gun_container.visible = true
 	player_camera.camera.current = true
 
 	freecam.queue_free()
