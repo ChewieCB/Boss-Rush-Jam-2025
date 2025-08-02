@@ -79,6 +79,8 @@ var cached_camera_rotation: Vector3
 	set(value):
 		if value != camera_fov && player:
 			player.player_camera.set_fov(value)
+			if player.freecam:
+				player.freecam.set_fov(value)
 		camera_fov = value
 var camera_tilt: bool = true
 
@@ -103,7 +105,7 @@ var aim_assist_strength: float = 0.5
 # DEBUG CHEATS
 var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
-var CHEAT_freecam: bool = false
+var CHEAT_freecam: bool = true
 
 
 func _ready() -> void:

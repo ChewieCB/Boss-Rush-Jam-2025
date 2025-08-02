@@ -28,6 +28,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export_category("Prefabs")
 @export var health_component: HealthComponent
 @export var luck_component: LuckComponent
+@export var freecam_prefab: PackedScene
 
 @export_category("Luck")
 @export var luck_redeem_time: float = 2.0
@@ -53,6 +54,8 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
+
+@onready var ui_parent = $UI
 @onready var barrel_effect_ui = $UI/GunUI
 @onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
 @onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
@@ -182,6 +185,9 @@ var double_down_icon = preload("res://assets/sprite/skilltree_icon/double_down.p
 var aim_assist_target: Node3D = null
 var cheat_death_triggered = false
 
+var freecam: FreeCam
+
+
 func _ready():
 	GameManager.player = self
 	for mesh in debug_meshes.get_children():
@@ -229,6 +235,10 @@ func _ready():
 
 
 func _unhandled_input(event):
+	if Input.is_action_just_pressed("toggle_freecam"):
+		if GameManager.CHEAT_freecam:
+			_disable_freecam() if freecam else await _enable_freecam()
+	
 	if controls_disabled:
 		return
 
@@ -1016,3 +1026,33 @@ func _on_check_standing_collision_body_exited(_body: Node3D) -> void:
 
 func _on_check_standing_collision_body_entered(_body: Node3D) -> void:
 	uncrouch_collision_check_count += 1
+
+
+func _enable_freecam() -> void:
+	controls_disabled = true
+	dash_disabled = true
+	#ui_parent.visible = false
+	player_camera.camera.current = false
+	
+	# Spawn freecam
+	freecam = freecam_prefab.instantiate()
+	get_parent().add_child(freecam)
+	await freecam.ready
+	freecam.global_position = self.global_position
+	freecam.global_rotation = neck.global_rotation
+	freecam.camera.global_rotation = player_camera.global_rotation
+	freecam.camera.current = true
+	
+	#Engine.time_scale = 0.0
+
+
+func _disable_freecam() -> void:
+	controls_disabled = false
+	dash_disabled = false
+	#ui_parent.visible = true
+	player_camera.camera.current = true
+
+	freecam.queue_free()
+	freecam = null
+	
+	#Engine.time_scale = 1.0

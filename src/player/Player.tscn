@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=73 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -45,6 +45,7 @@
 [ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="31_uqkio"]
 [ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="32_vsild"]
 [ext_resource type="Script" path="res://src/components/health/health_component_player.gd" id="34_6waar"]
+[ext_resource type="PackedScene" uid="uid://di1fwsgnfbfd" path="res://src/utils/freecam/FreeCam.tscn" id="34_kq3ih"]
 [ext_resource type="PackedScene" uid="uid://b052m61k5ht8i" path="res://src/player/gun/vfx/misc/HitText.tscn" id="35_uogvx"]
 [ext_resource type="Shader" path="res://src/player/assets/shaders/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
@@ -130,6 +131,7 @@ max_air_jump = 1
 speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
+freecam_prefab = ExtResource("34_kq3ih")
 reroll_heal_value = 20.0
 
 [node name="HealthComponent" type="Node3D" parent="."]
