@@ -497,7 +497,10 @@ func update_barrel_effect_ui() -> void:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
 			#if barrel:
-			effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
+			if _effect.icon_id != -1:
+				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
+			else:
+				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/tmp-barrel-icon.png")
 			effect_ui.name_label.text = _effect.display_text_title
 			effect_ui.desc_label.text = _effect.display_text_tag
 			
