@@ -121,6 +121,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):
 		if CHEAT_freecam:
 			player._disable_freecam() if player.freecam else player._enable_freecam()
+	if Input.is_action_just_pressed("debug_increase_timescale"):
+		if Engine.time_scale < 1.0:
+			Engine.time_scale += 0.1
+	elif Input.is_action_just_pressed("debug_decrease_timescale"):
+		if Engine.time_scale >= 0.1:
+			Engine.time_scale -= 0.1
 
 
 func add_barrel_to_inventory(data: BarrelDataResource):
