@@ -45,8 +45,8 @@ func get_point_before_wall() -> Vector3:
 	var query_end: Vector3 = query_start - (self.global_transform.basis.z * spin_forward_check_distance)
 	var query = PhysicsRayQueryParameters3D.create(
 		query_start,
-		query_end, 
-		pow(2, 1-1)
+		query_end,
+		int(pow(2, 1 - 1))
 	)
 	var arena_wall_pos = space_state.intersect_ray(query)["position"]
 	var target_point = arena_wall_pos + Vector3(0, 0, spin_forward_buffer).rotated(Vector3.UP, self.rotation.y)
@@ -71,9 +71,9 @@ func roll_to_point(point: Vector3, time: float) -> void:
 	#roll_end_pos_sphere = draw_debug_sphere(point, 1.0, Color.SKY_BLUE)
 	
 	var tween = get_tree().create_tween()
-	tween.tween_property(self, "global_position", half_way_point, time/2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tween.tween_property(self, "global_position", half_way_point, time / 2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	#tween.parallel().tween_property(mesh_pivot, "gldobal_rotation:x", -PI*spin_rotation_speed, time/2).set_trans(Tween.TRANS_CUBIC)
-	tween.chain().tween_property(self, "global_position", point, time/2).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+	tween.chain().tween_property(self, "global_position", point, time / 2).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	#tween.parallel().tween_property(mesh_pivot, "global_rotation:x", -PI*spin_rotation_speed, time/2).set_trans(Tween.TRANS_QUART)
 
 	await tween.finished
@@ -82,12 +82,12 @@ func roll_to_point(point: Vector3, time: float) -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_EXIT_TREE:
-		for mesh in [
+		for elem in [
 			wall_pos_sphere, target_pos_sphere, roll_start_pos_sphere,
 			roll_mid_pos_sphere, roll_end_pos_sphere
 		]:
-			if mesh:
-				mesh.queue_free()
+			if elem:
+				elem.queue_free()
 
 
 func _physics_process(delta: float) -> void:

@@ -470,7 +470,7 @@ func return_big_stack_to_center() -> void:
 	
 	return
 
-func big_stack_jump(goal_pos: Vector3, height: float = jump_height, hover: bool = true) -> void:
+func big_stack_jump(goal_pos: Vector3, _height: float = jump_height, hover: bool = true) -> void:
 	anim_player.play("big_stack/jump_start")
 	big_stack_sfx_player.stream = sfx_jump.pick_random()
 	big_stack_sfx_player.play()
@@ -533,7 +533,7 @@ func show_big_stack() -> void:
 	await get_tree().create_timer(0.1).timeout
 	
 	self.collision_layer = 4
-	self.collision_mask = (pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1))
+	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1))
 	
 	return
 
@@ -625,7 +625,7 @@ func _on_split_stacks_state_entered_phase_2() -> void:
 	# If we already have the Big Stack form before we call _reset_to_big_stack(),
 	# this is the first transition from Phase1 -> Phase2 so do the AoE Merge
 	if current_form == ChipBossForms.SPLIT_STACKS:
-		await cancel_substack_attacks()
+		cancel_substack_attacks()
 		state_chart.send_event("change_form_big_aoe_merge")
 		return
 	
@@ -1270,9 +1270,9 @@ func _on_chiptopede_leap_impact(segment: Node) -> void:
 		# Check if we're impacting the water or a solid mesh
 		var space_state = get_world_3d().direct_space_state
 		var query = PhysicsRayQueryParameters3D.create(
-			segment.global_position + Vector3(0, 30, 0), 
+			segment.global_position + Vector3(0, 30, 0),
 			segment.global_position,
-			pow(2, 1-1) + pow(2, 9-1), 
+			int(pow(2, 1 - 1) + pow(2, 9 - 1)),
 		)
 		query.collide_with_areas = true
 		var result = space_state.intersect_ray(query)
@@ -1370,7 +1370,6 @@ func _on_chiptopede_snake_moving_state_entered() -> void:
 	chiptopede_sfx_player.stream = sfx_chiptopede_snake.pick_random()
 	chiptopede_sfx_player.play()
 	
-
 
 func _on_chiptopede_snake_moving_state_physics_processing(delta: float) -> void:
 	move_segments_along_path(
@@ -1557,7 +1556,7 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 	return spawned_stacks
 
 
-func despawn_stacks(despawn_time: float = stack_spawn_time) -> void:
+func despawn_stacks(_despawn_time: float = stack_spawn_time) -> void:
 	for stack in spawned_sub_stacks:
 		big_stack_sfx_player.stream = sfx_stack_despawn.pick_random()
 		big_stack_sfx_player.play()
@@ -1598,8 +1597,8 @@ func _small_stack_dead(stack: CharacterBody3D) -> void:
 #### CHIPTOPEDE HELPER METHODS
 func get_chiptopede_spawn_pos(
 	spawn_marker_group: Array[Node],
-	min_spawn_distance: float = 0.0,
-	max_spawn_distance: float = 0.0,
+	_min_spawn_distance: float = 0.0,
+	_max_spawn_distance: float = 0.0,
 	previous_pos: Vector3 = Vector3.ZERO,
 	filter_func: Callable = Callable()
 ) -> Node:
@@ -1631,15 +1630,15 @@ func get_chiptopede_spawn_pos(
 	)
 	# If we have a minimum spawn distance, filter out any spawns within this distance 
 	var filtered_spawns = available_spawns
-	if min_spawn_distance:
+	if _min_spawn_distance:
 		filtered_spawns = filtered_spawns.filter(
 			func(spawn):
-				return spawn.global_position.distance_to(sort_target) >= min_spawn_distance
+				return spawn.global_position.distance_to(sort_target) >= _min_spawn_distance
 		)
-	if max_spawn_distance:
+	if _max_spawn_distance:
 		filtered_spawns = filtered_spawns.filter(
 			func(spawn):
-				return spawn.global_position.distance_to(sort_target) <= max_spawn_distance
+				return spawn.global_position.distance_to(sort_target) <= _max_spawn_distance
 		)
 	#
 	if filter_func:
@@ -1702,7 +1701,7 @@ func _create_leap_path(start_pos: Vector3, goal_pos: Vector3, _follow_path: Arra
 	return curve
 
 
-func _create_snake_path(_start_pos: Vector3, _goal_pos: Vector3, follow_path: Array) -> Curve3D:
+func _create_snake_path(_start_pos: Vector3, _goal_pos: Vector3, _follow_path: Array) -> Curve3D:
 	var curve = Curve3D.new()
 	
 	for i in range(snake_path.size() - 1):
@@ -1970,7 +1969,7 @@ func spawn_aoe_wave(
 	damage: float = 10.0,
 	spawned_wave_time: float = 1.0,
 	area_pos: Vector3 = self.global_position,
-	pushback_source: Node3D = self,
+	# pushback_source: Node3D = self,
 	spawned_wave_height: float = 0.3,
 	_telegraph: bool = false,
 	callback: Callable = func(): pass ,

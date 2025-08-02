@@ -47,7 +47,7 @@ var nav_agent_rid: RID
 func _ready() -> void:
 	self.visible = false
 	GRAVITY = 0
-	super()
+	super ()
 	
 	nav_map_rid = get_world_3d().get_navigation_map()
 	nav_agent_rid = NavigationServer3D.agent_create()
@@ -89,8 +89,8 @@ func _on_died() -> void:
 
 func _on_passive_idle_state_entered() -> void:
 	navigation_component.enabled = false
-	var idle_time: float = randf_range(wander_delay_min, wander_delay_max)
-	wander_delay_timer.start(idle_time)
+	var wait_time: float = randf_range(wander_delay_min, wander_delay_max)
+	wander_delay_timer.start(wait_time)
 
 
 func _on_passive_wander_state_entered() -> void:
@@ -116,7 +116,7 @@ func _on_passive_wander_state_entered() -> void:
 	wander_idle_timer.start(wander_timeout)
 
 
-func _on_passive_wander_state_physics_processing(delta: float) -> void:
+func _on_passive_wander_state_physics_processing(_delta: float) -> void:
 	pass # Replace with function body.
 
 
@@ -141,7 +141,7 @@ func _on_spawning_dropping_state_entered() -> void:
 	GRAVITY = 14
 
 
-func _on_spawning_dropping_state_physics_processing(delta: float) -> void:
+func _on_spawning_dropping_state_physics_processing(_delta: float) -> void:
 	if self.is_on_floor():
 		# TODO - add a bit of juice, squash/stretch and dust particles here?
 		state_chart.send_event("finish_spawn")

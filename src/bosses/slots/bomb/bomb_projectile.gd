@@ -51,7 +51,7 @@ func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
 			spark_inst.look_at(pos + normal, Vector3.UP)
 
 
-func destroy(explode: bool = true) -> void:
+func destroy(_explode: bool = true) -> void:
 	explosion_area.set_deferred("monitoring", true)
 	var explosion_vfx = explosion_scene.instantiate()
 	get_tree().get_root().add_child(explosion_vfx)

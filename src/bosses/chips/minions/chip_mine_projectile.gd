@@ -87,7 +87,7 @@ func detonate() -> void:
 	explosion_vfx.change_mesh_scale(2)
 	# TODO - make explosion size of area
 	
-	var test0 = explosion_area.get_overlapping_bodies()
+	# var _test0 = explosion_area.get_overlapping_bodies()
 	for body in explosion_area.get_overlapping_bodies():
 		if body == self:
 			continue

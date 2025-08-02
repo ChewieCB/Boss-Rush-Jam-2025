@@ -25,12 +25,12 @@ extends BossCore
 
 
 func _ready() -> void:
-	super()
+	super ()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 
 func activate() -> void:
-	super()
+	super ()
 	#state_chart.send_event("start_intro")
 	state_chart.send_event("activate")
 
@@ -49,7 +49,7 @@ func _physics_process(delta: float) -> void:
 
 
 func select_attack_phase_1() -> void:
-	var dist_to_target = self.global_position.distance_to(target.global_position)
+	# var dist_to_target = self.global_position.distance_to(target.global_position)
 	var _possible_phases = [
 		"start_melee_combo_attack",
 	]
@@ -165,9 +165,9 @@ func _on_line_slam_sweep_state_entered() -> void:
 	state_chart.send_event("end_sweep")
 
 func slam_aoe() -> void:
-	var slam_proj # TODO:  = chip_sweep_prefab.instantiate()
-	scene_root.add_child(slam_proj)
-	slam_proj.global_transform = self.global_transform
+	var _slam_proj = null # TODO:  = chip_sweep_prefab.instantiate()
+	# scene_root.add_child(slam_proj)
+	# slam_proj.global_transform = self.global_transform
 	
-	var dist_to_player: int = int(slam_proj.global_position.distance_to(target.global_position))
-	slam_proj.anim_time = slam_time / dist_to_player
+	# var dist_to_player: int = int(slam_proj.global_position.distance_to(target.global_position))
+	# slam_proj.anim_time = slam_time / dist_to_player

@@ -91,7 +91,7 @@ func _on_level_select(level_path: String) -> void:
 	if is_inside_tree():
 		# TODO - fade this out via tween
 		lobby_music_player.stop()
-		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
+		# var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
 		# TODO - fixme
 		#if new_bgm:
 			#SoundManager.play_music(new_bgm, 0.25, "BGM")
