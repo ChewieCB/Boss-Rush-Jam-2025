@@ -535,6 +535,7 @@ size_flags_vertical = 4
 is_static = true
 
 [node name="RerollUI" parent="." instance=ExtResource("10_tkawr")]
+process_mode = 1
 layout_mode = 1
 anchors_preset = 7
 anchor_top = 1.0

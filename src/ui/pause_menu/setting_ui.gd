@@ -48,6 +48,7 @@ signal setting_back_button_pressed
 @onready var keybind_return_button: Button = $TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton
 @onready var keybind_timer: Timer = $KeybindTimer
 
+@export var sfx_free_money: AudioStream
 @onready var timescale_slider: HSlider = $TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider
 @onready var timescale_value: Label = $TabContainer/DEBUG/VBoxContainer/Timescale/Value
 
@@ -458,3 +459,8 @@ func _on_freecam_toggle_toggled(toggled_on: bool) -> void:
 func _on_timescale_slider_value_changed(value: float) -> void:
 	Engine.time_scale = value
 	timescale_value.text = "{0}".format([value])
+
+
+func _on_free_money_button_pressed() -> void:
+	GameManager.player_currency += 1000
+	SoundManager.play_ui_sound(sfx_free_money)
