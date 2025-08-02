@@ -510,19 +510,11 @@ func update_barrel_effect_ui() -> void:
 				effect_ui.add_positive(text)
 			for text in _effect.negative_desc:
 				effect_ui.add_negative(text)
-			
-			#effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
-			#effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
-			#effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
-			#else:
-				#effect_ui.get_node("Title").text = ""
-				#effect_ui.get_node("Tag").text = ""
-				#effect_ui.get_node("Desc").text = ""
+		
 		else:
 			effect_ui.modulate.a = 0.0
 			effect_ui.name_label.text = ""
 			effect_ui.desc_label.text = ""
-			#effect_ui.get_node("Desc").text = ""
 
 
 func show_debug_label():
