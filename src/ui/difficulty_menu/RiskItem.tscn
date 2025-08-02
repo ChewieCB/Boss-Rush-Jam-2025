@@ -27,6 +27,10 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "+ 50%"
 
+[node name="Spacer2" type="Control" parent="."]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
 [node name="TemplateButton" parent="." instance=ExtResource("2_nl86j")]
 layout_mode = 2
 text = "  -  "
