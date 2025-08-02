@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bf0e8h28gl1ae"]
+[gd_scene load_steps=46 format=3 uid="uid://bf0e8h28gl1ae"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/game_manager.gd" id="1_rn441"]
 [ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_m6fe3"]
@@ -44,6 +44,7 @@
 [ext_resource type="Resource" uid="uid://mrxt3egtibbf" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_sticky_bomb.tres" id="38_f3sy1"]
 [ext_resource type="Resource" uid="uid://uvem1037bxmd" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_tag_and_shred.tres" id="39_i56c5"]
 [ext_resource type="Resource" uid="uid://bndnrynsldd1b" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_toxin_mist.tres" id="40_3cilc"]
+[ext_resource type="AudioStream" uid="uid://bvfd0na411nvf" path="res://src/ui/common/assets/sfx/gui_click.ogg" id="45_64xou"]
 
 [node name="GameManager" type="Node"]
 process_mode = 3
@@ -55,3 +56,4 @@ debug_barrel_database = Array[Resource]([ExtResource("16_lo202"), ExtResource("1
 initial_reroll_cost = 100
 reroll_cost_mult = 1.2
 player_currency = 3000
+sfx_screenshot = ExtResource("45_64xou")

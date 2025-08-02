@@ -107,6 +107,7 @@ var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
 var CHEAT_freecam: bool = true
 
+@export var sfx_screenshot: AudioStream
 
 func _ready() -> void:
 	barrel_database.append_array(debug_barrel_database)
@@ -127,6 +128,16 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif Input.is_action_just_pressed("debug_decrease_timescale"):
 		if Engine.time_scale >= 0.1:
 			Engine.time_scale -= 0.1
+	
+	if Input.is_action_just_pressed("screenshot"):
+		var screen_cap := get_viewport().get_texture().get_image()
+		var dir := DirAccess.open("user://")
+		if not dir.dir_exists("screenshots"):
+			dir.make_dir("screenshots")
+		var filename := "user://screenshots/crapshoot_%s.png" % [Time.get_unix_time_from_system()]
+		screen_cap.save_png(filename)
+		print("Screenshot captured at %s" % filename)
+		SoundManager.play_ui_sound(sfx_screenshot)
 
 
 func add_barrel_to_inventory(data: BarrelDataResource):
