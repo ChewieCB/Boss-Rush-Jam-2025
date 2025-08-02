@@ -235,10 +235,6 @@ func _ready():
 
 
 func _unhandled_input(event):
-	if Input.is_action_just_pressed("toggle_freecam"):
-		if GameManager.CHEAT_freecam:
-			_disable_freecam() if freecam else await _enable_freecam()
-	
 	if controls_disabled:
 		return
 
@@ -1031,28 +1027,25 @@ func _on_check_standing_collision_body_entered(_body: Node3D) -> void:
 func _enable_freecam() -> void:
 	controls_disabled = true
 	dash_disabled = true
-	#ui_parent.visible = false
 	player_camera.camera.current = false
 	
 	# Spawn freecam
 	freecam = freecam_prefab.instantiate()
 	get_parent().add_child(freecam)
-	await freecam.ready
 	freecam.global_position = self.global_position
 	freecam.global_rotation = neck.global_rotation
 	freecam.camera.global_rotation = player_camera.global_rotation
 	freecam.camera.current = true
 	
-	#Engine.time_scale = 0.0
+	Engine.time_scale = 0.0
 
 
 func _disable_freecam() -> void:
 	controls_disabled = false
 	dash_disabled = false
-	#ui_parent.visible = true
 	player_camera.camera.current = true
 
 	freecam.queue_free()
 	freecam = null
 	
-	#Engine.time_scale = 1.0
+	Engine.time_scale = 1.0

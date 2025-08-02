@@ -21,9 +21,13 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		rotate_camera(event.relative.x, event.relative.y)
-		#self.rotate_y(-event.relative.x * GameManager.mouse_sensitivity)
-		#camera.rotate_x(-event.relative.y * GameManager.mouse_sensitivity)
-		#camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
+	
+	if Input.is_action_just_pressed("debug_increase_timescale"):
+		if Engine.time_scale < 1.0:
+			Engine.time_scale += 0.1
+	elif Input.is_action_just_pressed("debug_decrease_timescale"):
+		if Engine.time_scale > 0.0:
+			Engine.time_scale -= 0.1
 
 func _process(delta: float) -> void:
 	# Local directions

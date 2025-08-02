@@ -117,6 +117,12 @@ func _ready() -> void:
 	Input.joy_connection_changed.connect(_on_controller_connection)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("toggle_freecam"):
+		if CHEAT_freecam:
+			player._disable_freecam() if player.freecam else player._enable_freecam()
+
+
 func add_barrel_to_inventory(data: BarrelDataResource):
 	if data in inventory_barrels:
 		push_warning("Barrel [%s] already collected!" % data.barrel_name)
