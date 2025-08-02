@@ -78,7 +78,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		await boss.chiptopede_emerges
 		music_playback.switch_to_clip(3)
 	else:
-		win_ui.win("Floor Cleared", win_subtext.pick_random())
+		win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 		print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 		
 		if not boss.boss_id in GameManager.bosses_defeated:

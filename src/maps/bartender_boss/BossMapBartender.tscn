@@ -2075,10 +2075,11 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.514
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -28, 4.2, -35.3)
 texture_albedo = ExtResource("21_4yyfc")
 
-[node name="BossBartender" parent="." index="9" node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "target") instance=ExtResource("31_p2107")]
+[node name="BossBartender" parent="." index="9" node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "elemental_emitting_vfx", "target") instance=ExtResource("31_p2107")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45.0618)
 floor_fize_hazard_marker = NodePath("../BossMarker/FloorFireHazard")
 behind_bar_move_points = [NodePath("../BossMarker/BossMoveMarker"), NodePath("../BossMarker/BossMoveMarker2"), NodePath("../BossMarker/BossMoveMarker3"), NodePath("../BossMarker/BossMoveMarker4"), NodePath("../BossMarker/BossMoveMarker5")]
 boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")
 boss_jump_phase3_marker = NodePath("../BossMarker/BossJumpPhase3Marker")
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 target = NodePath("../FuncGodotMap/entity_45_PlayerRef")

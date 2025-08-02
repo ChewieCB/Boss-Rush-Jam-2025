@@ -42,6 +42,7 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var dash_duration_timer: Timer = $DashDuration
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var neck: Node3D = $Neck
+@onready var gun: Node3D = $Neck/ShakeCameraWrapper/GunContainer/BlankGun
 @onready var state_chart: StateChart = $StateChart
 @onready var wall_raycast: RayCast3D = $WallRaycast
 @onready var standing_shape: CollisionShape3D = $CollisionStanding
@@ -52,7 +53,11 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
-@onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
+@onready var barrel_effect_ui = $UI/GunUI
+@onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
+@onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
+@onready var barrel_ui_tween: Tween = null
+var barrel_ui_active: bool = false
 
 @onready var stat_ui: StatUI = $UI/StatUI
 @onready var health_ui = stat_ui.health_ui
@@ -146,7 +151,7 @@ var current_gun: Gun = null
 var is_in_inventory = false:
 	set(value):
 		is_in_inventory = value
-		all_barrel_effect_ui.visible = !is_in_inventory
+		#barrel_effect_ui.visible = !is_in_inventory
 		if is_in_inventory:
 			stat_ui.hide_non_luck_ui()
 		else:
@@ -217,6 +222,11 @@ func _ready():
 
 	check_permanent_buffs()
 	luck_component.check_for_high_luck_buffs()
+	
+	# CHEATS
+	if GameManager.CHEAT_godmode:
+		health_component.is_invincible = true
+
 
 func _unhandled_input(event):
 	if controls_disabled:
@@ -292,6 +302,11 @@ func _unhandled_input(event):
 		SoundManager.play_sound(sfx_crouch.pick_random(), "SFX")
 	elif Input.is_action_just_released("crouch"):
 		SoundManager.play_sound(sfx_stand.pick_random(), "SFX")
+	
+	if Input.is_action_just_pressed("show_detail"):
+		show_barrel_effect_ui()
+	elif Input.is_action_just_released("show_detail"):
+		hide_barrel_effect_ui()
 
 
 func _process(delta):
@@ -425,25 +440,89 @@ func update_ammo_counter_ui() -> void:
 	stat_ui.magazine_size_label.text = "/{0}".format([current_gun.modified_magazine_size])
 
 
+func show_barrel_effect_ui() -> void:
+	if barrel_ui_active:
+		return
+	
+	if current_gun.max_barrels == 0:
+		return
+	
+	barrel_ui_active = true
+	
+	if barrel_ui_tween:
+		if barrel_ui_tween.is_running():
+			barrel_ui_tween.pause()
+	
+	barrel_ui_tween = get_tree().create_tween()
+	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
+	for i in range(current_gun.max_barrels):
+		var effect_ui_idx: int = i
+		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		if i < current_gun.barrel_container.get_child_count():
+			barrel_ui_tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
+	await barrel_ui_tween.finished
+	
+	Engine.time_scale = 0.1
+
+
+func hide_barrel_effect_ui() -> void:
+	if not barrel_ui_active:
+		return
+	
+	if barrel_ui_tween:
+		if barrel_ui_tween.is_running():
+			barrel_ui_tween.pause()
+	
+	barrel_ui_tween = get_tree().create_tween()
+	
+	Engine.time_scale = 1.0
+	
+	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
+	for i in range(current_gun.max_barrels):
+		var effect_ui_idx: int = i
+		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		if i < current_gun.barrel_container.get_child_count():
+			barrel_ui_tween.parallel().tween_property(effect_ui, "modulate:a", 0.0, 0.1)
+	barrel_ui_tween.tween_callback(func(): barrel_ui_active = false)
+	await barrel_ui_tween.finished
+
+
 func update_barrel_effect_ui() -> void:
 	for i in range(current_gun.max_barrels):
-		var effect_ui_idx: int = all_barrel_effect_ui.get_child_count() - i - 1
-		var effect_ui = all_barrel_effect_ui.get_child(effect_ui_idx)
+		var effect_ui_idx: int = i
+		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
 		if i < current_gun.barrel_container.get_child_count():
+			#effect_ui.modulate.a = 1.0
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
+			var _effect: BaseBarrelEffect = barrel.get_active_effect()
 			#if barrel:
-			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
-			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
-			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
+			effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
+			effect_ui.name_label.text = _effect.display_text_title
+			effect_ui.desc_label.text = _effect.display_text_tag
+			
+			for container in effect_ui.positives_container.get_children():
+				container.queue_free()
+			for container in effect_ui.negatives_container.get_children():
+				container.queue_free()
+			
+			for text in _effect.positive_desc:
+				effect_ui.add_positive(text)
+			for text in _effect.negative_desc:
+				effect_ui.add_negative(text)
+			
+			#effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
+			#effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
+			#effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
 			#else:
 				#effect_ui.get_node("Title").text = ""
 				#effect_ui.get_node("Tag").text = ""
 				#effect_ui.get_node("Desc").text = ""
 		else:
-			effect_ui.get_node("Title").text = ""
-			effect_ui.get_node("Tag").text = ""
-			effect_ui.get_node("Desc").text = ""
+			effect_ui.modulate.a = 0.0
+			effect_ui.name_label.text = ""
+			effect_ui.desc_label.text = ""
+			#effect_ui.get_node("Desc").text = ""
 
 
 func show_debug_label():
@@ -809,6 +888,17 @@ func get_assist_rotation_velocity(delta: float):
 	player_camera.rotation.y = 0
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
+
+
+func get_barrel_sprite_screen_positions() -> Array[Vector2]:
+	var sprite_positions: Array[Vector2] = []
+	
+	for sprite in gun.barrel_sprites:
+		var pos_marker: Marker3D = sprite.get_node("Marker3D")
+		var _pos: Vector2 = player_camera.camera.unproject_position(pos_marker.global_position)
+		sprite_positions.append(_pos)
+	
+	return sprite_positions
 
 
 func spin_barrels() -> void:

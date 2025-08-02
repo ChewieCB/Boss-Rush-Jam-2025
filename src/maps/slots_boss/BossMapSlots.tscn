@@ -1714,8 +1714,9 @@ entProperties = {
 [node name="group_626_WallDetail1" type="Node3D" parent="FuncGodotMap" index="12"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_15_BossSlots" parent="FuncGodotMap" index="13" node_paths=PackedStringArray("target") instance=ExtResource("21_5oyqj")]
+[node name="entity_15_BossSlots" parent="FuncGodotMap" index="13" node_paths=PackedStringArray("elemental_emitting_vfx", "target") instance=ExtResource("21_5oyqj")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.25, 0.75, -23.625)
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 target = NodePath("../entity_37_PlayerRef")
 
 [node name="entity_16_SlotRollerDecal" parent="FuncGodotMap" index="14" instance=ExtResource("25_l15rp")]
