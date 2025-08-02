@@ -15,7 +15,7 @@ func tween_label_text(value: float):
 	label.text = str(value)
 
 
-func _on_health_diff(diff: float) -> void:
+func _on_health_diff(_diff: float) -> void:
 	pass
 
 

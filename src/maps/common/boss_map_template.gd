@@ -130,12 +130,12 @@ func collect_all_chips() -> void:
 		chip_tween.tween_property(chip, "global_position", player.global_position, chip_move_time).set_ease(Tween.EASE_IN)
 
 
-func _on_boss_died(boss: BossCore = boss) -> void:
+func _on_boss_died(_boss: BossCore = boss) -> void:
 	var tween = self.create_tween()
 	tween.tween_property(directional_light, "light_energy", 0, 1)
 
 
-func _on_boss_defeated(boss: BossCore) -> void:
+func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
@@ -193,7 +193,7 @@ func _on_level_select(level_path: String) -> void:
 	if is_inside_tree():
 		# TODO - fade this out via tween
 		SoundManager.stop_music(0.5)
-		var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
+		# var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
 		# TODO - fixme
 		#if new_bgm:
 			#SoundManager.play_music(new_bgm, 0.25, "BGM")

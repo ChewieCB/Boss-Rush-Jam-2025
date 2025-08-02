@@ -110,7 +110,7 @@ func _ready() -> void:
 	get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	return
 
 
@@ -189,7 +189,7 @@ func return_split_stack_to_center() -> void:
 	var goal_pos: Vector3 = center_pos
 	if group_size > 1:
 		goal_pos += Vector3(0, 0, 1.0).rotated(
-			Vector3.UP, 
+			Vector3.UP,
 			(2 * PI / group_size) * (group_idx - 1)
 		)
 	
@@ -198,10 +198,10 @@ func return_split_stack_to_center() -> void:
 	return
 
 # JUMPING
-func split_stack_jump(goal_pos: Vector3, height: float = jump_height, hover: bool = true) -> void:
+func split_stack_jump(goal_pos: Vector3, _height: float = jump_height, hover: bool = true) -> void:
 	if group_size > 1:
 		goal_pos += Vector3(0, 0, 1.0).rotated(
-			Vector3.UP, 
+			Vector3.UP,
 			(2 * PI / group_size) * (group_idx - 1)
 		)
 	
@@ -232,7 +232,7 @@ func split_stack_jump_to_center(height: float = jump_height, hover: bool = true)
 	goal_pos.y = jump_height
 	if group_size > 1:
 		goal_pos += Vector3(0, 0, 1.0).rotated(
-			Vector3.UP, 
+			Vector3.UP,
 			(2 * PI / group_size) * (group_idx - 1)
 		)
 	
@@ -298,7 +298,7 @@ func _on_small_blind_phase_2_targeting_state_entered() -> void:
 	state_chart.send_event("start_shooting")
 
 
-func _on_small_blind_phase_2_targeting_state_physics_processing(delta: float) -> void:
+func _on_small_blind_phase_2_targeting_state_physics_processing(_delta: float) -> void:
 	return
 	#platform_idle(delta)
 
@@ -316,7 +316,7 @@ func _on_small_blind_shooting_state_entered() -> void:
 	_telegraph_attack()
 	
 	for i in num_bursts:
-		for j in chip_shots_per_burst: 
+		for j in chip_shots_per_burst:
 			# HACK - break out of this loop if we've exited the state
 			if not $StateChart/Root/Phase/SmallBlindProjectile.active and not $StateChart/Root/Phase/SmallBlindProjectilePhase2.active:
 				return
@@ -338,7 +338,7 @@ func _on_small_blind_shooting_state_entered() -> void:
 	state_chart.send_event("stop_shooting")
 
 
-func _on_small_blind_shooting_state_physics_processing(delta: float) -> void:
+func _on_small_blind_shooting_state_physics_processing(_delta: float) -> void:
 	return
 	#orbit_target_in_group(delta)
 
@@ -379,7 +379,7 @@ func _on_arc_swipe_phase_2_targeting_state_entered() -> void:
 	state_chart.send_event("start_closing")
 
 
-func _on_arc_swipe_phase_2_targeting_state_physics_processing(delta: float) -> void:
+func _on_arc_swipe_phase_2_targeting_state_physics_processing(_delta: float) -> void:
 	return
 	#platform_idle(delta)
 
@@ -420,12 +420,12 @@ func _on_arc_swipe_phase_2_closing_state_entered() -> void:
 	swipe_targeting_timer.start(swipe_targeting_timeout)
 
 
-func _on_arc_swipe_phase_2_closing_state_physics_processing(delta: float) -> void:
+func _on_arc_swipe_phase_2_closing_state_physics_processing(_delta: float) -> void:
 	# Trigger swipe
 	if self.global_position.distance_to(target.global_position) <= swipe_range:
 		swipe_targeting_timer.stop()
 		state_chart.send_event("start_targeting")
-		state_chart.send_event("attack_telegraph") 
+		state_chart.send_event("attack_telegraph")
 		
 		await get_tree().create_timer(telegraph_time).timeout
 		state_chart.send_event("attack_start")
@@ -483,10 +483,10 @@ func _spawn_arc_proj() -> void:
 	active_arc_projectiles.append(arc_proj)
 
 
-func _on_arc_swipe_phase_2_swiping_state_entered(delta: float) -> void:
+func _on_arc_swipe_phase_2_swiping_state_entered(_delta: float) -> void:
+	# Suppose to jitter around a bit but it was broken so Chewie bypassed it
+	# platform_idle(delta)
 	return
-	platform_idle(delta)
-
 
 ## SPLIT RUSH
 
@@ -542,7 +542,7 @@ func _on_split_rush_charging_state_entered() -> void:
 	var charge_time: float = self.global_position.distance_to(charge_target_pos) / charge_speed
 	# Ignore collisions with player and other stacks
 	self.collision_layer = 0
-	self.collision_mask -= pow(2, 2-1)
+	self.collision_mask -= int(pow(2, 2 - 1))
 	charge_tween.tween_property(self, "global_position", charge_target_pos, charge_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	#sfx_player.stream = sfx_charge.pick_random()
 	#sfx_player.play()
@@ -703,10 +703,10 @@ func _on_charge_back_leaping_state_entered() -> void:
 	state_chart.send_event("end_leap")
 
 
-func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, jump_height: float = chargeback_leap_height, debug: bool = false) -> Array:
+func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, charge_jump_height: float = chargeback_leap_height, debug: bool = false) -> Array:
 	var start_pos = self.global_position
 	var highest_y = max(start_pos.y, goal_pos.y)
-	var apex_y = highest_y + jump_height
+	var apex_y = highest_y + charge_jump_height
 	
 	var velocity_v: float = sqrt(
 		2 * GRAVITY * (apex_y - start_pos.y)
@@ -795,7 +795,7 @@ func spark(spark_pos: Vector3) -> void:
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if not $StateChart/Root/Phase/SmallBlindProjectile.active or $StateChart/Root/Phase/SmallBlindProjectilePhase2.active:
-		super(new_health, prev_health)
+		super (new_health, prev_health)
 	else:
 		if new_health < prev_health:
 			state_chart.send_event("start_damage")
