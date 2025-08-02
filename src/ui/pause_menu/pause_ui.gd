@@ -7,7 +7,7 @@ signal ui_accept_pressed
 @onready var pause_option_list: Control = $PauseOptionBG
 @onready var setting_button: Button = $PauseOptionBG/VBoxContainer/SettingButton
 @onready var setting_ui: SettingUI = $SettingUI
-@onready var promo_ui: Control = $QRLinkUI
+# @onready var promo_ui: Control = $QRLinkUI
 
 var is_paused: bool = false
 var is_in_submenu: bool = false
