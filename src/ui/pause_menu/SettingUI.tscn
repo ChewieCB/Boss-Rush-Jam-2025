@@ -881,6 +881,7 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/Timescale"]
+layout_mode = 0
 offset_right = 59.0
 offset_bottom = 42.0
 theme_override_font_sizes/font_size = 26
@@ -888,6 +889,7 @@ text = "Engine Timescale
 "
 
 [node name="TimescaleSlider" type="HSlider" parent="TabContainer/DEBUG/VBoxContainer/Timescale"]
+layout_mode = 0
 offset_left = 296.0
 offset_top = 16.0
 offset_right = 672.0
