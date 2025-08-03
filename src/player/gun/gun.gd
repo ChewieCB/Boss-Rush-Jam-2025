@@ -372,26 +372,37 @@ func _stop_barrel(barrel_idx: int) -> void:
 	barrel_spin_stopped.emit(barrel, barrel_idx)
 
 
+func load_barrel_icon_sprites(sprite_path: String, anim_dir: String) -> Array[CompressedTexture2D]:
+	var sprite_arr: Array[CompressedTexture2D] = []
+	var dir = DirAccess.open(sprite_path + anim_dir + "/")
+	
+	print(dir.get_files())
+	
+	for image_path in dir.get_files():
+		if image_path.ends_with(".import"):
+			image_path = image_path.replace(".import", "")
+		elif image_path.ends_with(".remap"):
+			image_path = image_path.replace(".remap", "")
+		
+		var full_path := sprite_path + anim_dir + "/" + image_path
+		sprite_arr.append(load(full_path))
+	
+	return sprite_arr
+
+
 func set_barrel_icon_animations(barrel_idx: int, icon_id: int) -> void:
 	# Build a path to the icon sprites
 	var icon_sprites_path := "res://src/player/gun/assets/sprite/effect_icons/%s/barrel_%s/" % [icon_id, barrel_idx + 1]
 	
 	# Get the array of sprites for spin_start and spin_end for the given icon
-	var spin_start_sprites: Array[CompressedTexture2D] = []
-	var spin_start_dir = DirAccess.open(icon_sprites_path + "IconSpinOut/")
-	for image_path in spin_start_dir.get_files():
-		if image_path.ends_with(".import"):
-			continue
-		var full_path := icon_sprites_path + "IconSpinOut/" + image_path
-		spin_start_sprites.append(load(full_path))
-	
-	var spin_end_sprites: Array[CompressedTexture2D] = [null]
-	var spin_end_dir = DirAccess.open(icon_sprites_path + "IconSpinIn/")
-	for image_path in spin_end_dir.get_files():
-		if image_path.ends_with(".import"):
-			continue
-		var full_path := icon_sprites_path + "IconSpinIn/" + image_path
-		spin_end_sprites.append(load(full_path))
+	var spin_start_sprites: Array[CompressedTexture2D] = load_barrel_icon_sprites(
+		icon_sprites_path,
+		"IconSpinOut"
+	)
+	var spin_end_sprites = [null] + load_barrel_icon_sprites(
+		icon_sprites_path,
+		"IconSpinIn"
+	)
 	
 	# Update the spin_start and spin_end animations with the new textures
 	for anim_name in ["spin_start", "spin_end", "idle"]:
@@ -412,13 +423,10 @@ func set_barrel_icon_animations(barrel_idx: int, icon_id: int) -> void:
 				sprite_arr = [spin_end_sprites[-1]]
 				anim_frames = 1
 				effect_texture_key = 1
+	
 	# Get the effect sprite3d texture track and iterate over the keyframes to update them
 		for i in range(anim_frames):
 			anim.track_set_key_value(effect_texture_key, i, sprite_arr[i])
-	
-	#effect_icon_sprites[barrel_idx].texture = spin_end_sprites[-1]
-	
-	return
 
 
 func reload(already_spin_barrel = false):
