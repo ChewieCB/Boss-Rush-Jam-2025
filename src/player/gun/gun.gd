@@ -373,9 +373,6 @@ func _stop_barrel(barrel_idx: int) -> void:
 
 
 func set_barrel_icon_animations(barrel_idx: int, icon_id: int) -> void:
-	if icon_id == -1:
-		return
-	
 	# Build a path to the icon sprites
 	var icon_sprites_path := "res://src/player/gun/assets/sprite/effect_icons/%s/barrel_%s/" % [icon_id, barrel_idx + 1]
 	

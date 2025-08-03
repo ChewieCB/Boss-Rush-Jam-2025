@@ -28,6 +28,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export_category("Prefabs")
 @export var health_component: HealthComponent
 @export var luck_component: LuckComponent
+@export var freecam_prefab: PackedScene
 
 @export_category("Luck")
 @export var luck_redeem_time: float = 2.0
@@ -53,6 +54,8 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
+
+@onready var ui_parent = $UI
 @onready var barrel_effect_ui = $UI/GunUI
 @onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
 @onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
@@ -181,6 +184,9 @@ var double_down_icon = preload("res://assets/sprite/skilltree_icon/double_down.p
 
 var aim_assist_target: Node3D = null
 var cheat_death_triggered = false
+
+var freecam: FreeCam
+
 
 func _ready():
 	GameManager.player = self
@@ -513,19 +519,11 @@ func update_barrel_effect_ui() -> void:
 				effect_ui.add_positive(text)
 			for text in _effect.negative_desc:
 				effect_ui.add_negative(text)
-			
-			#effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
-			#effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
-			#effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
-			#else:
-				#effect_ui.get_node("Title").text = ""
-				#effect_ui.get_node("Tag").text = ""
-				#effect_ui.get_node("Desc").text = ""
+		
 		else:
 			effect_ui.modulate.a = 0.0
 			effect_ui.name_label.text = ""
 			effect_ui.desc_label.text = ""
-			#effect_ui.get_node("Desc").text = ""
 
 
 func show_debug_label():
@@ -1027,3 +1025,32 @@ func _on_check_standing_collision_body_exited(_body: Node3D) -> void:
 
 func _on_check_standing_collision_body_entered(_body: Node3D) -> void:
 	uncrouch_collision_check_count += 1
+
+
+func _enable_freecam() -> void:
+	controls_disabled = true
+	dash_disabled = true
+	player_camera.camera.current = false
+	gun_container.visible = false
+	
+	# Spawn freecam
+	freecam = freecam_prefab.instantiate()
+	get_parent().add_child(freecam)
+	freecam.global_position = self.global_position
+	freecam.global_rotation = neck.global_rotation
+	freecam.camera.global_rotation = player_camera.global_rotation
+	freecam.camera.current = true
+	
+	Engine.time_scale = 0.0
+
+
+func _disable_freecam() -> void:
+	controls_disabled = false
+	dash_disabled = false
+	gun_container.visible = true
+	player_camera.camera.current = true
+
+	freecam.queue_free()
+	freecam = null
+	
+	Engine.time_scale = 1.0
