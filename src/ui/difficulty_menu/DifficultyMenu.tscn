@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://djcipi6xiw7yn"]
+[gd_scene load_steps=26 format=3 uid="uid://djcipi6xiw7yn"]
 
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/difficulty_menu.gd" id="1_5c00o"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="1_5ie53"]
+[ext_resource type="AudioStream" uid="uid://6n3s0ojha33v" path="res://src/collectibles/poker_chip/assets/sfx/PICKING UP CHIPS.mp3" id="2_0aqwx"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="2_y6xrk"]
 [ext_resource type="FontFile" uid="uid://bfduksv0gcvwn" path="res://assets/fonts/Semplicita/Semplicita Medium Italic.otf" id="3_0n16t"]
 [ext_resource type="Texture2D" uid="uid://dcs5o482rkb4e" path="res://src/collectibles/poker_chip/assets/chip_icon_128.png" id="3_uirlk"]
@@ -23,10 +24,14 @@
 [ext_resource type="Texture2D" uid="uid://bpc0t2p6uy17" path="res://assets/sprite/misc/cycle.png" id="20_xxan1"]
 [ext_resource type="Texture2D" uid="uid://casrjel7p52p1" path="res://assets/sprite/misc/stopwatch.png" id="21_qtdie"]
 
+[sub_resource type="Environment" id="Environment_3xf7b"]
+background_mode = 3
+glow_enabled = true
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rqucu"]
 shader = ExtResource("8_c7hct")
 shader_parameter/scroll_speed = 0.02
-shader_parameter/angle_degrees = 90.0
+shader_parameter/angle_degrees = 45.0
 shader_parameter/repeat_x = 4.0
 shader_parameter/repeat_y = 2.0
 shader_parameter/row_offset = 0.964
@@ -40,6 +45,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5c00o")
+chip_sfx = ExtResource("2_0aqwx")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3xf7b")
 
 [node name="BG" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_rqucu")
@@ -104,7 +113,7 @@ offset_left = 24.0
 offset_top = 16.0
 offset_right = 537.0
 offset_bottom = 113.0
-theme_override_colors/font_color = Color(1, 0.973208, 0, 1)
+theme_override_colors/font_color = Color(1, 0.973, 0, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 10
 theme_override_constants/shadow_offset_y = 10
@@ -481,6 +490,7 @@ offset_right = 864.0
 offset_bottom = 536.0
 
 [node name="AnteItem" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+modulate = Color(5, 5, 5, 1)
 layout_mode = 2
 ante_number = 1
 ante_name = "Ante 1: 
@@ -545,6 +555,8 @@ alignment = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "10,000"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="RightRegion/Bet/BetInfo"]
 custom_minimum_size = Vector2(96, 96)

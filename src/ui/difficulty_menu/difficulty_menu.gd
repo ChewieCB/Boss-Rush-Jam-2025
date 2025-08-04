@@ -1,15 +1,22 @@
 extends Control
 class_name DifficultyMenu
 
+@export var chip_sfx: AudioStream
+
 @onready var risk_level_container: Container = $TitleRegion/HBoxContainer
 @onready var risk_item_container: Container = $LeftRegion/RiskContainer
 @onready var bet_value_label: Label = $RightRegion/Bet/BetInfo/BetValue
 @onready var reward_label: Label = $RightRegion/Reward/RewardInfo/RewardValue
 @onready var start_button: TemplateButton = $LeftRegion/StartButton
 @onready var not_enough_chip_timer: Timer = $NotEnoughChipTimer
+@onready var bet_chip_sprite: TextureRect = $RightRegion/Bet/BetInfo/TextureRect
+@onready var reward_chip_sprite: TextureRect = $RightRegion/Reward/RewardInfo/TextureRect
+
 
 var bet_value = 0
 var reward_value = 0
+var bet_sprite_scale_tween = null
+var reward_sprite_scale_tween = null
 
 
 func _ready() -> void:
@@ -33,7 +40,8 @@ func set_risk_level(level: int):
 			risk_level_container.get_child(i).self_modulate = Color.BLACK
 			if i >= 15:
 				risk_level_container.get_child(i).visible = false
-			
+
+	play_juicy_chip_sprite_anim()
 
 func _on_risk_level_changed():
 	bet_value = GameManager.risk_level * 1000
@@ -41,6 +49,7 @@ func _on_risk_level_changed():
 	reward_value = bet_value * payout_mult
 	bet_value_label.text = format_number_with_commas(bet_value)
 	reward_label.text = format_number_with_commas(int(reward_value))
+
 
 func format_number_with_commas(n: int) -> String:
 	var str_n = str(n)
@@ -69,3 +78,19 @@ func _on_start_button_pressed() -> void:
 func _on_not_enough_chip_timer_timeout() -> void:
 	start_button.text = "Start"
 	start_button.set_text_color(Color.WHITE)
+
+func play_juicy_chip_sprite_anim():
+	if bet_sprite_scale_tween and bet_sprite_scale_tween.is_running():
+		bet_sprite_scale_tween.stop()
+	bet_sprite_scale_tween = get_tree().create_tween()
+	bet_chip_sprite.custom_minimum_size = Vector2(96, 96) * 1.4
+	bet_sprite_scale_tween.tween_property(bet_chip_sprite, "custom_minimum_size", Vector2(96, 96), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+
+	if reward_sprite_scale_tween and reward_sprite_scale_tween.is_running():
+		reward_sprite_scale_tween.stop()
+	reward_sprite_scale_tween = get_tree().create_tween()
+	reward_chip_sprite.custom_minimum_size = Vector2(96, 96) * 1.4
+	reward_sprite_scale_tween.tween_property(reward_chip_sprite, "custom_minimum_size", Vector2(96, 96), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+
+	var pitch = randf_range(0.8, 1.2)
+	SoundManager.play_ui_sound_with_pitch(chip_sfx, pitch)
