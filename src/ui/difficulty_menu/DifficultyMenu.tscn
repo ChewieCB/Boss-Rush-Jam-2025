@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://djcipi6xiw7yn"]
+[gd_scene load_steps=24 format=3 uid="uid://djcipi6xiw7yn"]
 
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/difficulty_menu.gd" id="1_5c00o"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="1_5ie53"]
@@ -8,12 +8,20 @@
 [ext_resource type="PackedScene" uid="uid://doawgaf4fslbl" path="res://src/ui/difficulty_menu/RiskItem.tscn" id="5_myk8s"]
 [ext_resource type="Texture2D" uid="uid://cyridr3xco78k" path="res://src/collectibles/poker_chip/assets/chip_icon_gold_128.png" id="6_seafr"]
 [ext_resource type="Texture2D" uid="uid://dy3dl8bil7nds" path="res://assets/sprite/game_icon/plus.png" id="7_8w1ew"]
-[ext_resource type="Texture2D" uid="uid://o2fyfbhejvaj" path="res://assets/sprite/skilltree_icon/cheat_death.png" id="8_ae06j"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="8_c7hct"]
 [ext_resource type="Texture2D" uid="uid://ccn08me1il1m4" path="res://src/ui/main_menu/bg2.png" id="9_crl3w"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="10_0vdpo"]
 [ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="11_0u1hd"]
+[ext_resource type="Texture2D" uid="uid://b4p6melvvt7k2" path="res://assets/sprite/misc/hearts.png" id="13_ttr4t"]
 [ext_resource type="PackedScene" uid="uid://bgdrie48ccxvw" path="res://src/ui/difficulty_menu/AnteItem.tscn" id="14_o6emp"]
+[ext_resource type="Texture2D" uid="uid://cwrh4rwu3ts6p" path="res://assets/sprite/skilltree_icon/double_down.png" id="14_os3tf"]
+[ext_resource type="Texture2D" uid="uid://dltdl1xe57bo7" path="res://assets/sprite/status_icon/run_speed_up.png" id="15_sgbte"]
+[ext_resource type="Texture2D" uid="uid://dx4pm7e2prfc1" path="res://assets/sprite/skilltree_icon/plot_armor.png" id="16_ubvm4"]
+[ext_resource type="Texture2D" uid="uid://bsq70jbhv0gjh" path="res://assets/sprite/skilltree_icon/blessed_chip.png" id="17_s5hxg"]
+[ext_resource type="Texture2D" uid="uid://bae10gvdt7y0t" path="res://assets/sprite/status_icon/bleeding.png" id="18_nydee"]
+[ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="19_10nox"]
+[ext_resource type="Texture2D" uid="uid://bpc0t2p6uy17" path="res://assets/sprite/misc/cycle.png" id="20_xxan1"]
+[ext_resource type="Texture2D" uid="uid://casrjel7p52p1" path="res://assets/sprite/misc/stopwatch.png" id="21_qtdie"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rqucu"]
 shader = ExtResource("8_c7hct")
@@ -354,55 +362,63 @@ layout_mode = 2
 risk_modifier = 1
 risk_description = "Increase target's maximum health"
 prefix_value_text = "+"
-icon_sprite = ExtResource("8_ae06j")
+icon_sprite = ExtResource("13_ttr4t")
 
 [node name="RiskItem2" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
 layout_mode = 2
 risk_modifier = 2
 risk_description = "Increase target's damage"
 prefix_value_text = "+"
+icon_sprite = ExtResource("14_os3tf")
 
 [node name="RiskItem3" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
 layout_mode = 2
 risk_modifier = 3
 risk_description = "Increase target's attack and move speed"
 prefix_value_text = "+"
+icon_sprite = ExtResource("15_sgbte")
 
 [node name="RiskItem4" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
 layout_mode = 2
 risk_modifier = 4
 risk_description = "Increase target's status resistance"
 prefix_value_text = "+"
+icon_sprite = ExtResource("16_ubvm4")
 
 [node name="RiskItem5" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
 layout_mode = 2
 risk_modifier = 5
 risk_description = "Increase player's spin cost"
 prefix_value_text = "+"
+icon_sprite = ExtResource("17_s5hxg")
 
 [node name="RiskItem6" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
 layout_mode = 2
 risk_modifier = 6
 risk_description = "Decrease player's healing effectiveness"
 prefix_value_text = "-"
+icon_sprite = ExtResource("18_nydee")
 
 [node name="RiskItem7" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
 layout_mode = 2
 risk_modifier = 7
 risk_description = "Decrease player's luck build up"
 prefix_value_text = "-"
+icon_sprite = ExtResource("19_10nox")
 
 [node name="RiskItem8" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
 layout_mode = 2
 risk_modifier = 8
 risk_description = "Limit number of time player can spin barrels"
 value_unit_text = "time(s)"
+icon_sprite = ExtResource("20_xxan1")
 
 [node name="RiskItem9" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
 layout_mode = 2
 risk_modifier = 9
 risk_description = "Limit fight duration"
 value_unit_text = "min(s)"
+icon_sprite = ExtResource("21_qtdie")
 
 [node name="TemplateButton" parent="LeftRegion" instance=ExtResource("11_0u1hd")]
 layout_mode = 1
