@@ -420,21 +420,21 @@ risk_description = "Limit fight duration"
 value_unit_text = "min(s)"
 icon_sprite = ExtResource("21_qtdie")
 
-[node name="TemplateButton" parent="LeftRegion" instance=ExtResource("11_0u1hd")]
+[node name="StartButton" parent="LeftRegion" instance=ExtResource("11_0u1hd")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -192.0
+offset_left = -224.0
 offset_top = -136.0
-offset_right = 192.0
+offset_right = 224.0
 offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 60
-text = "Start the Bet"
+theme_override_font_sizes/font_size = 52
+text = "Start"
 
 [node name="RightRegion" type="Control" parent="."]
 layout_mode = 1
@@ -619,4 +619,10 @@ theme_override_font_sizes/font_size = 28
 text = "Ratio: 2 to 1"
 horizontal_alignment = 1
 
+[node name="NotEnoughChipTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
 [connection signal="pressed" from="LeftRegion/ResetRiskButton" to="." method="_on_reset_risk_button_pressed"]
+[connection signal="pressed" from="LeftRegion/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="timeout" from="NotEnoughChipTimer" to="." method="_on_not_enough_chip_timer_timeout"]
