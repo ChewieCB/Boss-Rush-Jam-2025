@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://djcipi6xiw7yn"]
+[gd_scene load_steps=16 format=3 uid="uid://djcipi6xiw7yn"]
 
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/difficulty_menu.gd" id="1_5c00o"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="1_5ie53"]
@@ -7,15 +7,13 @@
 [ext_resource type="Texture2D" uid="uid://dcs5o482rkb4e" path="res://src/collectibles/poker_chip/assets/chip_icon_128.png" id="3_uirlk"]
 [ext_resource type="PackedScene" uid="uid://doawgaf4fslbl" path="res://src/ui/difficulty_menu/RiskItem.tscn" id="5_myk8s"]
 [ext_resource type="Texture2D" uid="uid://cyridr3xco78k" path="res://src/collectibles/poker_chip/assets/chip_icon_gold_128.png" id="6_seafr"]
-[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="6_wg5mh"]
 [ext_resource type="Texture2D" uid="uid://dy3dl8bil7nds" path="res://assets/sprite/game_icon/plus.png" id="7_8w1ew"]
-[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="7_wqijn"]
 [ext_resource type="Texture2D" uid="uid://o2fyfbhejvaj" path="res://assets/sprite/skilltree_icon/cheat_death.png" id="8_ae06j"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="8_c7hct"]
-[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="8_myf6w"]
 [ext_resource type="Texture2D" uid="uid://ccn08me1il1m4" path="res://src/ui/main_menu/bg2.png" id="9_crl3w"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="10_0vdpo"]
 [ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="11_0u1hd"]
+[ext_resource type="PackedScene" uid="uid://bgdrie48ccxvw" path="res://src/ui/difficulty_menu/AnteItem.tscn" id="14_o6emp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rqucu"]
 shader = ExtResource("8_c7hct")
@@ -432,60 +430,69 @@ offset_top = 208.0
 offset_bottom = 1080.0
 grow_horizontal = 0
 
-[node name="AnteDescription" type="ColorRect" parent="RightRegion"]
+[node name="AnteTitle" type="Label" parent="RightRegion"]
+modulate = Color(1, 0.252252, 0.162162, 1)
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
 offset_left = -384.0
-offset_top = -348.0
+offset_top = 40.0
 offset_right = 384.0
-offset_bottom = 100.0
+offset_bottom = 101.0
 grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.505882, 0.505882, 0.505882, 0.27451)
+theme_override_font_sizes/font_size = 50
+text = "Antes"
+horizontal_alignment = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="RightRegion/AnteDescription"]
+[node name="ColorRect" type="ColorRect" parent="RightRegion/AnteTitle"]
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = -16.0
-offset_bottom = -16.0
+offset_top = -5.0
+offset_bottom = 3.0
 grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/normal_font = ExtResource("6_wg5mh")
-theme_override_fonts/bold_font = ExtResource("7_wqijn")
-theme_override_font_sizes/normal_font_size = 34
-theme_override_font_sizes/bold_font_size = 38
-bbcode_enabled = true
-text = "[b]Ante level 3/5:[/b]
-(This show what non-stat modifier stuff boss will have. Every 3 risk level will increased ante by 1).
+grow_vertical = 0
 
-- [Ante 2] Enemy have enhanced moveset.
-- [Ante 3] Enemy can lit the whole floor on fire.
-[color=black]- [Ante 4] ???[/color]
-[color=black]- [Ante 5] ???[/color]
+[node name="AnteSection" type="HBoxContainer" parent="RightRegion"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 128.0
+offset_right = 864.0
+offset_bottom = 536.0
 
-"
+[node name="AnteItem" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+layout_mode = 2
+ante_number = 1
+ante_name = "Ante 1: 
+Fast Firing Shotgun"
 
-[node name="NinePatchRect" type="NinePatchRect" parent="RightRegion/AnteDescription"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("8_myf6w")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
+[node name="AnteItem2" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+layout_mode = 2
+ante_number = 2
+ante_name = "Ante 2: 
+Bottle Volley"
+
+[node name="AnteItem3" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+layout_mode = 2
+ante_number = 3
+ante_name = "Ante 3: 
+Burning Ground"
+
+[node name="AnteItem4" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+layout_mode = 2
+ante_number = 4
+ante_name = "Ante 4: 
+TBD"
+
+[node name="AnteItem5" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+layout_mode = 2
+ante_number = 5
+ante_name = "Ante 5: 
+TBD"
 
 [node name="Bet" type="VBoxContainer" parent="RightRegion"]
 layout_mode = 1

@@ -9,9 +9,9 @@ class_name DifficultyMenu
 func _ready() -> void:
 	set_risk_level(0)
 	GameManager.difficulty_menu = self
-	for elem in risk_item_container.get_children():
-		var risk_item = elem as RiskItem
-		risk_item.risk_level_changed.connect(_on_risk_level_changed)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	GameManager.risk_level_changed.connect(_on_risk_level_changed)
 	_on_risk_level_changed()
 
 ## Max lv 15
@@ -47,19 +47,7 @@ func format_number_with_commas(n: int) -> String:
 	return result
 	
 func _on_reset_risk_button_pressed() -> void:
-	GameManager.risk_modifier_level_dict = {
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
-		RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
-		RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
-		RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
-		RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
-		RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
-	}
-	GameManager.risk_level = 0
-	GameManager.boss_ante = 1
+	GameManager.reset_difficulty_modifier()
 	for elem in risk_item_container.get_children():
 		var risk_item = elem as RiskItem
 		risk_item.refresh_value_label()

@@ -7,6 +7,7 @@ signal reroll_cost_changed(new_cost: int)
 signal free_rerolls
 signal refresh_shop_ui
 signal setting_changed
+signal risk_level_changed
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -81,8 +82,15 @@ var risk_modifier_level_dict = {
 	RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
 	RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
 }
-var risk_level = 0
-var boss_ante = 1
+var boss_ante = 0
+var risk_level = 0:
+	set(value):
+		risk_level = value
+		if risk_level >= 15:
+			boss_ante = 5
+		else:
+			boss_ante = int(risk_level / 3)
+		risk_level_changed.emit()
 
 
 # HACK - do this dynamically with level loading/unloading in the elevator
@@ -260,6 +268,21 @@ func load_new_save_data():
 		shop_barrels.append(data)
 
 
+func reset_difficulty_modifier():
+	risk_modifier_level_dict = {
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
+		RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
+		RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
+		RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
+		RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
+		RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
+	}
+	risk_level = 0
+	boss_ante = 0
+
 func reset_current_save_data():
 	equipped_barrels = []
 	inventory_barrels = []
@@ -273,19 +296,7 @@ func reset_current_save_data():
 	chosen_slot_id = -1
 	start_record_timestamp = 0
 	total_playtime = 0
-	risk_modifier_level_dict = {
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
-		RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
-		RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
-		RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
-		RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
-		RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
-	}
-	risk_level = 0
-	boss_ante = 1
+	reset_difficulty_modifier()
 
 
 func start_record_playtime():

@@ -2,8 +2,6 @@
 extends HBoxContainer
 class_name RiskItem
 
-signal risk_level_changed
-
 enum RiskModifierEnum {
 	NONE,
 	INCREASE_BOSS_HP,
@@ -60,10 +58,9 @@ func _ready() -> void:
 	name_label.text = risk_description
 	risk_icon.texture = icon_sprite
 
-	await get_tree().process_frame
-	await get_tree().process_frame
-
 	if not Engine.is_editor_hint():
+		await get_tree().process_frame
+		await get_tree().process_frame
 		refresh_value_label()
 
 
@@ -100,11 +97,9 @@ func _on_plus_button_pressed() -> void:
 		GameManager.risk_modifier_level_dict[risk_modifier] += 1
 		GameManager.risk_level += 1
 	refresh_value_label()
-	risk_level_changed.emit()
 
 func _on_minus_button_pressed() -> void:
 	if GameManager.risk_modifier_level_dict[risk_modifier] > 0:
 		GameManager.risk_modifier_level_dict[risk_modifier] -= 1
 		GameManager.risk_level -= 1
 	refresh_value_label()
-	risk_level_changed.emit()
