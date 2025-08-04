@@ -24,6 +24,8 @@ enum RiskModifierEnum {
 @onready var name_label: Label = $RiskName
 @onready var value_label: Label = $ModifyValue
 @onready var risk_icon: TextureRect = $RiskIcon
+@onready var minus_button: Button = $MinusButton
+@onready var plus_button: Button = $PlusButton
 
 const STARTING_MAX_LIMIT_PLAYER_SPIN_AMOUNT = 10
 const STARTING_MAX_LIMIT_FIGHT_TIME = 5
@@ -90,6 +92,15 @@ func refresh_value_label():
 		value_label.self_modulate = Color.RED
 	value_label.text = "{0} {1} {2}".format([prefix_value_text, value, value_unit_text])
 	GameManager.difficulty_menu.set_risk_level(GameManager.risk_level)
+
+	if GameManager.risk_modifier_level_dict[risk_modifier] == 0:
+		minus_button.disabled = true
+	else:
+		minus_button.disabled = false
+	if GameManager.risk_modifier_level_dict[risk_modifier] == max_risk_level_dict[risk_modifier]:
+		plus_button.disabled = true
+	else:
+		plus_button.disabled = false
 
 
 func _on_plus_button_pressed() -> void:
