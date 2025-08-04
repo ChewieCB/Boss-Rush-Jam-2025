@@ -23,6 +23,7 @@ const HIGH_ROLLER_BONUS_HEAL_PER_REROLL_TIME = 5
 var pause_ui: PauseUI
 var setting_ui: SettingUI
 var player: Player
+var difficulty_menu: DifficultyMenu
 
 # Barrels
 @export var starting_barrels: Array[BarrelDataResource]
@@ -67,6 +68,22 @@ var victory_ui_shown: bool = false
 var chosen_slot_id = -1
 var start_record_timestamp = 0
 var total_playtime = 0
+
+# Difficulty modifiers
+var risk_modifier_level_dict = {
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
+	RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
+	RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
+	RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
+	RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
+	RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
+}
+var risk_level = 0
+var boss_ante = 1
+
 
 # HACK - do this dynamically with level loading/unloading in the elevator
 var cached_player_pos_relative_to_elevator_doors: Vector3
@@ -118,10 +135,14 @@ func _ready() -> void:
 	Input.joy_connection_changed.connect(_on_controller_connection)
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):
 		if CHEAT_freecam:
-			player._disable_freecam() if player.freecam else player._enable_freecam()
+			# Spawn freecam if not exist, else despawm it
+			if player.freecam:
+				player._disable_freecam()
+			else:
+				player._enable_freecam()
 	if Input.is_action_just_pressed("debug_increase_timescale"):
 		if Engine.time_scale < 1.0:
 			Engine.time_scale += 0.1
@@ -252,6 +273,19 @@ func reset_current_save_data():
 	chosen_slot_id = -1
 	start_record_timestamp = 0
 	total_playtime = 0
+	risk_modifier_level_dict = {
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
+		RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
+		RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
+		RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
+		RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
+		RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
+	}
+	risk_level = 0
+	boss_ante = 1
 
 
 func start_record_playtime():
