@@ -125,7 +125,7 @@ func _on_debug_boss_trigger_body_entered(body: Node3D) -> void:
 		for i in range(chiplings_to_spawn_2):
 			spawn_chipling(2, chipling_spawns_2, chipling_wander_points_2)
 			await get_tree().create_timer(0.2).timeout
-	$DEBUGBossTrigger.queue_free()
+		$DEBUGBossTrigger.queue_free()
 
 
 func _on_level_select(level_path: String) -> void:

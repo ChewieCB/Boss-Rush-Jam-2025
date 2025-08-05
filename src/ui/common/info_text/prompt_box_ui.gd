@@ -36,6 +36,7 @@ func _ready() -> void:
 				# Create a new label on a new line and remove the \n
 				var newline_box = line_container.instantiate()
 				_label.text = _label.text.trim_prefix("\\n")
+				_label.add_theme_font_size_override("font_size", 42)
 				newline_box.get_node("HBoxContainer").add_child(_label)
 				prompt_line_container.add_child(newline_box)
 				continue

@@ -7133,9 +7133,7 @@ transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 
 collision_layer = 32
 collision_mask = 2
 monitoring = false
-header_text = "Combat"
-body_items = Array[String](["[spin_barrels]", "to re-roll barrels", "\\nSpinning heals you"])
-close_trigger_actions = Array[String](["spin_barrels"])
+script = null
 
 [node name="CollisionShape3D" parent="TutorialInfoTrigger6" index="0"]
 shape = SubResource("BoxShape3D_s0j8a")
@@ -7184,7 +7182,6 @@ shape = SubResource("BoxShape3D_74c26")
 [connection signal="body_entered" from="TutorialInfoTrigger5" to="TutorialInfoTrigger5" method="_on_body_entered"]
 [connection signal="activate" from="TutorialInfoTrigger7" to="." method="show_tutorial_panel"]
 [connection signal="body_entered" from="TutorialInfoTrigger7" to="TutorialInfoTrigger7" method="_on_body_entered"]
-[connection signal="activate" from="TutorialInfoTrigger6" to="." method="show_tutorial_panel"]
 [connection signal="body_entered" from="TutorialInfoTrigger6" to="TutorialInfoTrigger6" method="_on_body_entered"]
 [connection signal="body_entered" from="SmokeHurtArea" to="SmokeHurtArea" method="_on_body_entered"]
 [connection signal="body_entered" from="SmokeStartTrigger" to="." method="_on_smoke_start_trigger_body_entered"]
