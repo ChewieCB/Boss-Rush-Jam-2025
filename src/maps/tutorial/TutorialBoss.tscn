@@ -7008,8 +7008,9 @@ metadata/_tb_type = "_tb_group"
 [node name="group_783_SpawnElevator" type="Node3D" parent="FuncGodotMap/group_822_BossRoom" index="2"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_144_TutorialBoss" parent="FuncGodotMap/group_822_BossRoom" index="3" node_paths=PackedStringArray("target") instance=ExtResource("40_2up6c")]
+[node name="entity_144_TutorialBoss" parent="FuncGodotMap/group_822_BossRoom" index="3" node_paths=PackedStringArray("elemental_emitting_vfx", "target") instance=ExtResource("40_2up6c")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10, -4.25, -64)
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 target = NodePath("../../entity_1_PlayerRef")
 
 [node name="group_820_SpawnElevator" type="Node3D" parent="FuncGodotMap/group_822_BossRoom" index="4"]

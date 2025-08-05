@@ -254,3 +254,8 @@ screenshot={
 common/physics_ticks_per_second=120
 common/physics_jitter_fix=0.0
 common/physics_interpolation=true
+
+[rendering]
+
+lights_and_shadows/directional_shadow/size=2048
+lights_and_shadows/directional_shadow/size.mobile=1024
