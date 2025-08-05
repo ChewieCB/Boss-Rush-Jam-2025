@@ -7134,7 +7134,7 @@ collision_layer = 32
 collision_mask = 2
 monitoring = false
 header_text = "Combat"
-body_items = Array[String](["[spin_barrels]", "to re-roll barrels"])
+body_items = Array[String](["[spin_barrels]", "to re-roll barrels", "\\nSpinning heals you"])
 close_trigger_actions = Array[String](["spin_barrels"])
 
 [node name="CollisionShape3D" parent="TutorialInfoTrigger6" index="0"]

@@ -22,6 +22,8 @@ signal ui_accept
 var current_trigger_actions: Array[String] = []
 
 func _ready() -> void:
+	GameManager.equipped_barrels = []
+	player.gun.reinstall_barrels()
 	super()
 	boss_doors.close()
 	$FuncGodotMap/entity_149_ElevatorButton.pushed.connect(_on_level_select)
