@@ -71,6 +71,8 @@ func initialize_health() -> void:
 	current_health = max_health
 
 func create_text(pos: Vector3, text: String, color: Color = Color.WHITE, size: float = 92.0) -> void:
+	if GameManager.hide_damage_number:
+		return
 	var text_inst = text_effect.instantiate()
 	get_parent().add_child(text_inst)
 	var variance = 1
