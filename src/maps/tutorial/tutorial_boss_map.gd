@@ -14,6 +14,11 @@ signal ui_accept
 
 @export var info_ui_prefab: PackedScene
 
+@onready var smoke_start_trigger: Area3D = $SmokeStartTrigger
+@onready var smoke_particles: GPUParticles3D = $SmokeParticles
+@onready var smoke_hurt_area: Area3D = $SmokeHurtArea
+@onready var dash_tutorial_trigger: Area3D = $TutorialInfoTrigger3
+
 var current_trigger_actions: Array[String] = []
 
 func _ready() -> void:
@@ -130,3 +135,13 @@ func _on_level_select(level_path: String) -> void:
 		await SaveManager.save_game(GameManager.chosen_slot_id)
 	
 	super(level_path)
+
+
+func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
+	smoke_particles.emitting = true
+	smoke_hurt_area._on_body_entered(body)
+	smoke_hurt_area.monitoring = true
+	smoke_start_trigger.monitoring = false
+	smoke_start_trigger.queue_free()
+	# Trigger dash tutorial
+	dash_tutorial_trigger._on_body_entered(body)

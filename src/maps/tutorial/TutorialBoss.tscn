@@ -1,4 +1,4 @@
-[gd_scene load_steps=923 format=4 uid="uid://bi8ar5jx08vp7"]
+[gd_scene load_steps=924 format=4 uid="uid://bi8ar5jx08vp7"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_hm1ph"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="2_1es71"]
@@ -3437,6 +3437,9 @@ size = Vector3(10, 10, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fc8gm"]
 size = Vector3(1.7, 4.2, 4.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_74c26"]
+size = Vector3(6, 5, 3)
 
 [node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_hm1ph")]
 script = ExtResource("2_t1yvw")
@@ -7093,6 +7096,7 @@ shape = SubResource("BoxShape3D_s0j8a")
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -9.20921, 2, 21.7191)
 collision_layer = 32
 collision_mask = 2
+monitoring = false
 header_text = "Movement"
 body_items = Array[String](["[dash]", "to dash"])
 close_trigger_actions = Array[String](["dash"])
@@ -7138,18 +7142,28 @@ shape = SubResource("BoxShape3D_s0j8a")
 
 [node name="SmokeParticles" parent="." index="21" instance=ExtResource("42_g2irt")]
 transform = Transform3D(0.707107, -4.37114e-08, -0.707107, 2.26267e-08, -1, 8.44439e-08, -0.707107, -7.57103e-08, -0.707107, -14.6163, 1.90131, 24.0872)
+emitting = false
 amount = 512
 lifetime = 4.0
-speed_scale = 2.4
+speed_scale = 4.9
 
 [node name="SmokeHurtArea" type="Area3D" parent="." index="22"]
 transform = Transform3D(-0.709571, 0, 0.704634, 0, 1, 0, -0.704634, 0, -0.709571, -13.0475, 0, 25.4599)
 collision_mask = 2
+monitoring = false
 script = ExtResource("43_jfqjj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SmokeHurtArea" index="0"]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0, 0)
 shape = SubResource("BoxShape3D_fc8gm")
+
+[node name="SmokeStartTrigger" type="Area3D" parent="." index="23"]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -14.0808, 2, 25.7879)
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SmokeStartTrigger" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.500004, 0, 7.62939e-06)
+shape = SubResource("BoxShape3D_74c26")
 
 [connection signal="body_entered" from="BossDoorTriggerVolume" to="." method="_on_boss_door_trigger_volume_body_entered"]
 [connection signal="body_exited" from="BossDoorTriggerVolume" to="." method="_on_boss_door_trigger_volume_body_exited"]
@@ -7173,6 +7187,7 @@ shape = SubResource("BoxShape3D_fc8gm")
 [connection signal="activate" from="TutorialInfoTrigger6" to="." method="show_tutorial_panel"]
 [connection signal="body_entered" from="TutorialInfoTrigger6" to="TutorialInfoTrigger6" method="_on_body_entered"]
 [connection signal="body_entered" from="SmokeHurtArea" to="SmokeHurtArea" method="_on_body_entered"]
+[connection signal="body_entered" from="SmokeStartTrigger" to="." method="_on_smoke_start_trigger_body_entered"]
 
 [editable path="WorkshopNPC"]
 [editable path="BarrelEffectTrigger"]
