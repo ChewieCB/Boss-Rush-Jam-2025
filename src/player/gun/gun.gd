@@ -344,7 +344,7 @@ func _spin_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_start_spin()
 	barrel.start_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
-	# If we don't have an effect equipped, 
+	# If we don't have an effect equipped,
 	# travel straight to the spin anim without the decal start anim
 	state_machine.travel("spin_start")
 	#state_machine.travel("spin")
@@ -376,15 +376,15 @@ func _stop_barrel(barrel_idx: int) -> void:
 func set_barrel_icon_animations(barrel_idx: int, icon_id: int) -> void:
 	# Build a path to the icon sprites
 	var icon_sprites_path := "res://src/player/gun/assets/sprite/effect_icons/%s/barrel_%s/" % [icon_id, barrel_idx + 1]
-	
+
 	# Read from an in-memory cache of sprites
 	var spin_start_sprites = GameManager.cached_icon_anim_sprites["barrel_%s" % [barrel_idx + 1]][str(icon_id)]["spin_start"]
 	var spin_end_sprites = GameManager.cached_icon_anim_sprites["barrel_%s" % [barrel_idx + 1]][str(icon_id)]["spin_end"]
-	
+
 	# Update the spin_start and spin_end animations with the new textures
 	for anim_name in ["spin_start", "spin_end", "idle"]:
 		var anim: Animation = anim_player.get_animation("barrel_%s_%s" % [barrel_idx + 1, anim_name])
-		var sprite_arr: Array 
+		var sprite_arr: Array
 		var anim_frames: int
 		var effect_texture_key: int
 		match anim_name:
@@ -400,7 +400,7 @@ func set_barrel_icon_animations(barrel_idx: int, icon_id: int) -> void:
 				sprite_arr = [spin_end_sprites[-1]]
 				anim_frames = 1
 				effect_texture_key = 1
-	
+
 	# Get the effect sprite3d texture track and iterate over the keyframes to update them
 		for i in range(anim_frames):
 			anim.track_set_key_value(effect_texture_key, i, sprite_arr[i])
