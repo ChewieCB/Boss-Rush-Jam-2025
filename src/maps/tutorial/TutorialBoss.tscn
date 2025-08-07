@@ -5030,14 +5030,28 @@ close_trigger_actions = Array[String](["spin_barrels"])
 [node name="CollisionShape3D" parent="TutorialInfoTrigger6" index="0"]
 shape = SubResource("BoxShape3D_s0j8a")
 
-[node name="SmokeParticles" parent="." index="21" instance=ExtResource("42_g2irt")]
+[node name="SpinTooExpensiveWarning" parent="." index="21" instance=ExtResource("41_t1wx2")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -87.7193, -2.2, -59.033)
+collision_layer = 32
+collision_mask = 2
+monitoring = false
+one_shot = false
+header_text = "Combat"
+body_items = Array[String](["Not enough chips to spin!", "\\nFight chiplings to get some more chips"])
+close_trigger_actions = Array[String](["interact", "shoot", "reload"])
+
+[node name="CollisionShape3D" parent="SpinTooExpensiveWarning" index="0"]
+shape = SubResource("BoxShape3D_s0j8a")
+disabled = true
+
+[node name="SmokeParticles" parent="." index="22" instance=ExtResource("42_g2irt")]
 transform = Transform3D(0.707107, -4.37114e-08, -0.707107, 2.26267e-08, -1, 8.44439e-08, -0.707107, -7.57103e-08, -0.707107, -14.6163, 1.90131, 24.0872)
 emitting = false
 amount = 512
 lifetime = 4.0
 speed_scale = 4.9
 
-[node name="SmokeHurtArea" type="Area3D" parent="." index="22"]
+[node name="SmokeHurtArea" type="Area3D" parent="." index="23"]
 transform = Transform3D(-0.709571, 0, 0.704634, 0, 1, 0, -0.704634, 0, -0.709571, -13.0475, 0, 25.4599)
 collision_mask = 2
 monitoring = false
@@ -5047,7 +5061,7 @@ script = ExtResource("43_jfqjj")
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0, 0)
 shape = SubResource("BoxShape3D_fc8gm")
 
-[node name="SmokeStartTrigger" type="Area3D" parent="." index="23"]
+[node name="SmokeStartTrigger" type="Area3D" parent="." index="24"]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -14.0808, 2, 25.7879)
 collision_mask = 2
 
@@ -5055,10 +5069,10 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.500004, 0, 7.62939e-06)
 shape = SubResource("BoxShape3D_74c26")
 
-[node name="ChandellierLight1" parent="." index="24" instance=ExtResource("52_wvxwn")]
+[node name="ChandellierLight1" parent="." index="25" instance=ExtResource("52_wvxwn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 2.4, 9.8)
 
-[node name="ChandellierLight2" parent="." index="25" instance=ExtResource("52_wvxwn")]
+[node name="ChandellierLight2" parent="." index="26" instance=ExtResource("52_wvxwn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -3.6, -15)
 
 [connection signal="body_entered" from="BossDoorTriggerVolume" to="." method="_on_boss_door_trigger_volume_body_entered"]
@@ -5081,7 +5095,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -3.6, -15)
 [connection signal="activate" from="TutorialInfoTrigger7" to="." method="show_tutorial_panel"]
 [connection signal="body_entered" from="TutorialInfoTrigger7" to="TutorialInfoTrigger7" method="_on_body_entered"]
 [connection signal="activate" from="TutorialInfoTrigger6" to="." method="show_tutorial_panel"]
+[connection signal="body_entered" from="TutorialInfoTrigger6" to="." method="_on_tutorial_info_trigger_6_body_entered"]
 [connection signal="body_entered" from="TutorialInfoTrigger6" to="TutorialInfoTrigger6" method="_on_body_entered"]
+[connection signal="activate" from="SpinTooExpensiveWarning" to="." method="show_tutorial_panel"]
+[connection signal="body_entered" from="SpinTooExpensiveWarning" to="SpinTooExpensiveWarning" method="_on_body_entered"]
 [connection signal="body_entered" from="SmokeHurtArea" to="SmokeHurtArea" method="_on_body_entered"]
 [connection signal="body_entered" from="SmokeStartTrigger" to="." method="_on_smoke_start_trigger_body_entered"]
 
@@ -5093,3 +5110,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -3.6, -15)
 [editable path="TutorialInfoTrigger5"]
 [editable path="TutorialInfoTrigger7"]
 [editable path="TutorialInfoTrigger6"]
+[editable path="SpinTooExpensiveWarning"]
