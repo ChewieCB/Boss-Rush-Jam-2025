@@ -70,8 +70,8 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	generate_navigation()
 	
-	if elevator_doors:
-		elevator_doors.open()
+	#if elevator_doors:
+		#elevator_doors.open()
 
 
 func generate_navigation() -> void:

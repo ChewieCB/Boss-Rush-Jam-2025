@@ -137,6 +137,7 @@ reroll_heal_value = 20.0
 
 [node name="HealthComponent" type="Node3D" parent="."]
 script = ExtResource("34_6waar")
+max_health = 200.0
 show_damage_text = false
 text_effect = ExtResource("35_uogvx")
 
