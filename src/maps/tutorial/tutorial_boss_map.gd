@@ -57,7 +57,7 @@ func _input(event: InputEvent) -> void:
 				spin_warning_prompt._on_body_entered(player)
 
 
-func show_tutorial_panel(prompt_elements: Array[String], close_trigger_actions: Array[String]) -> void:
+func show_tutorial_panel(prompt_elements: Array[String], close_trigger_actions: Array[String], timeout: float = 0.0) -> void:
 	ui_accept.emit()
 	var new_panel: Control = info_ui_prefab.instantiate()
 	new_panel.elements = prompt_elements
@@ -68,8 +68,12 @@ func show_tutorial_panel(prompt_elements: Array[String], close_trigger_actions: 
 	new_panel.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 1.0), 0.4)
-	await tween.finished
-	await ui_accept
+	if timeout > 0.0:
+		await get_tree().create_timer(timeout).timeout
+	else:
+		await ui_accept
+	if tween.is_running():
+		tween.kill()
 	tween = get_tree().create_tween()
 	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 0.0), 0.2)
 
