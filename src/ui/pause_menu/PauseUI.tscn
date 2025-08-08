@@ -12,7 +12,7 @@
 [ext_resource type="FontFile" uid="uid://bs58em2h8opfu" path="res://assets/fonts/BLACKJAC.TTF" id="10_72h53"]
 [ext_resource type="FontFile" uid="uid://cf4ghtgpa7pbl" path="res://assets/engebrechtre.rg-bold.otf" id="11_ecy6m"]
 [ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="12_ixudt"]
-[ext_resource type="Texture2D" uid="uid://c3wpei546o8uf" path="res://src/ui/pause_menu/itch-qr-code.png" id="13_yw8gi"]
+[ext_resource type="Texture2D" uid="uid://vgfiolcae3cd" path="res://src/ui/pause_menu/steam-qr-code.png" id="13_2kpcg"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="14_emu32"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_1s2yq"]
@@ -251,7 +251,7 @@ theme = SubResource("Theme_f2ch4")
 theme_override_fonts/normal_font = ExtResource("11_ecy6m")
 theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
-text = "Crapshoot is currently in active development, feel free to follow us on itch.io for regular updates!"
+text = "Crapshoot is currently in active development, feel free to wishlist via the QR code below and follow us on itch.io for regular updates!"
 fit_content = true
 scroll_active = false
 
@@ -266,7 +266,7 @@ theme_override_constants/margin_bottom = 0
 [node name="TextureRect" type="TextureRect" parent="QRLinkUI/PanelContainer/Background/NinePatchRect/VBoxContainer/MarginContainer4"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = ExtResource("13_yw8gi")
+texture = ExtResource("13_2kpcg")
 expand_mode = 3
 stretch_mode = 5
 

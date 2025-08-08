@@ -2364,9 +2364,8 @@ size = Vector3(1.7, 4.2, 4.3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_74c26"]
 size = Vector3(6, 5, 3)
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_elevator_button", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_hm1ph")]
+[node name="TutorialMap" node_paths=PackedStringArray("exit_elevator_button", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_hm1ph")]
 script = ExtResource("2_t1yvw")
-boss_doors = NodePath("")
 chipling_prefab = ExtResource("38_lied7")
 chiplings_to_spawn_1 = 5
 chiplings_to_spawn_2 = 8
