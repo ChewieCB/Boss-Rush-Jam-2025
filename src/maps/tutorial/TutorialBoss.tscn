@@ -5038,6 +5038,7 @@ one_shot = false
 header_text = "Combat"
 body_items = Array[String](["Not enough chips to spin!", "\\nFight chiplings to get some more chips"])
 close_trigger_actions = Array[String](["interact", "shoot", "reload"])
+timeout = 1.2
 
 [node name="CollisionShape3D" parent="SpinTooExpensiveWarning" index="0"]
 shape = SubResource("BoxShape3D_s0j8a")
