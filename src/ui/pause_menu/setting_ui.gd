@@ -70,6 +70,7 @@ var keybindable_action_list = {
 	"shoot": "Shoot",
 	"spin_reload": "Reload",
 	"spin_barrels": "Re-roll Barrels",
+	"show_detail": "Show Barrel Effects",
 	"interact": "Interact",
 }
 var is_remapping = false

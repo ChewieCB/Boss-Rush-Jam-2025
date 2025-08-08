@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_5dxlb"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_rs4ag"]
 [ext_resource type="PackedScene" uid="uid://dj6ifyci05l4y" path="res://src/bosses/chips/assets/particles/ChipDeathParticles.tscn" id="7_fv37m"]
-[ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/ExplosionVFX3D.tscn" id="8_diuhq"]
+[ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/explosion/ExplosionVFX3D.tscn" id="8_diuhq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cbvoj"]
 height = 1.4
@@ -147,7 +147,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_kam6c")
 
-[node name="Chipling" node_paths=PackedStringArray("wander_waypoints") instance=ExtResource("1_mo1qw")]
+[node name="Chipling" node_paths=PackedStringArray("wander_waypoints", "elemental_emitting_vfx") instance=ExtResource("1_mo1qw")]
 collision_mask = 9
 script = ExtResource("2_73vok")
 spark_scene = null
@@ -174,6 +174,7 @@ explosion_particle_prefab = ExtResource("8_diuhq")
 chip_spawn_chance = 0.0
 chip_spawn_dps_threshold = 1.0
 chip_spawn_mult_cap = 1
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_pickup_scene = null
 sfx_slowmo = null
 attack_recovery_time = 0.5
@@ -191,7 +192,6 @@ shape = SubResource("CapsuleShape3D_cbvoj")
 
 [node name="DebugMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.699, 0)
-visible = true
 mesh = SubResource("CapsuleMesh_odydg")
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]

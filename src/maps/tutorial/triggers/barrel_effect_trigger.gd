@@ -15,6 +15,11 @@ var current_effect_hit_count: int = 0:
 			activate()
 			return
 
+@onready var icon_decal_1: Decal = $MeshInstance3D3/EffectIconDecal
+@onready var icon_decal_2: Decal = $MeshInstance3D2/EffectIconDecal
+@onready var icon_decal_3: Decal = $MeshInstance3D/EffectIconDecal
+@onready var icon_decals = [icon_decal_1, icon_decal_2, icon_decal_3]
+
 
 func _ready() -> void:
 	super()
@@ -27,6 +32,9 @@ func hit_with_effect(installed_barrels: Array[SpinBarrel]) -> void:
 		if not current_effect in applied_effects:
 			applied_effects.append(current_effect)
 			current_effect_hit_count += 1
+			
+			icon_decals[current_effect.icon_id].modulate = Color(0, 100, 0)
+			
 			triggered.emit()
 
 

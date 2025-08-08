@@ -14,12 +14,24 @@ signal ui_accept
 
 @export var info_ui_prefab: PackedScene
 
+@onready var smoke_start_trigger: Area3D = $SmokeStartTrigger
+@onready var smoke_particles: GPUParticles3D = $SmokeParticles
+@onready var smoke_hurt_area: Area3D = $SmokeHurtArea
+@onready var dash_tutorial_trigger: Area3D = $TutorialInfoTrigger3
+@onready var spin_warning_prompt: Area3D = $SpinTooExpensiveWarning
+var spin_warning_trigger_active: bool = false
+
+@export var exit_elevator_button: Area3D
+
 var current_trigger_actions: Array[String] = []
 
 func _ready() -> void:
+	GameManager.equipped_barrels = []
+	player.gun.reinstall_barrels()
 	super()
-	boss_doors.close()
-	$FuncGodotMap/entity_149_ElevatorButton.pushed.connect(_on_level_select)
+	if boss_doors:
+		boss_doors.close()
+	exit_elevator_button.pushed.connect(_on_level_select)
 	for i in range(chiplings_to_spawn_1):
 		spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
 	
@@ -30,7 +42,7 @@ func _ready() -> void:
 	$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
 	
 	# FIXME - workaround
-	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_147_SlidingDoor
+	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_88_SlidingDoor
 
 
 func _input(event: InputEvent) -> void:
@@ -38,6 +50,11 @@ func _input(event: InputEvent) -> void:
 		if event.is_action(action_str):
 			ui_accept.emit()
 			current_trigger_actions = []
+	
+	if Input.is_action_just_pressed("spin_barrels"):
+		if GameManager.player_currency < GameManager.reroll_cost:
+			if spin_warning_trigger_active:
+				spin_warning_prompt._on_body_entered(player)
 
 
 func show_tutorial_panel(prompt_elements: Array[String], close_trigger_actions: Array[String]) -> void:
@@ -91,6 +108,7 @@ func _trigger_spin_tutorial() -> void:
 	if $TutorialInfoTrigger6:
 		if $BarrelEffectTrigger.applied_effects.size() == 1:
 			$TutorialInfoTrigger6._on_body_entered(player)
+			spin_warning_trigger_active = true
 
 
 func _on_boss_door_trigger_volume_body_entered(body: Node3D) -> void:
@@ -118,15 +136,26 @@ func _on_debug_boss_trigger_body_entered(body: Node3D) -> void:
 		for i in range(chiplings_to_spawn_2):
 			spawn_chipling(2, chipling_spawns_2, chipling_wander_points_2)
 			await get_tree().create_timer(0.2).timeout
-	$DEBUGBossTrigger.queue_free()
+		#$DEBUGBossTrigger.queue_free()
 
 
 func _on_level_select(level_path: String) -> void:
 	GameManager.tutorial_completed = true
 	GameManager.player_currency = 0
+	GameManager.equipped_barrels = GameManager.starting_barrels
 	
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
 	
 	super(level_path)
+
+
+func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
+	smoke_particles.emitting = true
+	smoke_hurt_area._on_body_entered(body)
+	smoke_hurt_area.monitoring = true
+	smoke_start_trigger.monitoring = false
+	smoke_start_trigger.queue_free()
+	# Trigger dash tutorial
+	dash_tutorial_trigger._on_body_entered(body)

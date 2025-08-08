@@ -41,7 +41,6 @@ environment = SubResource("Environment_jn580")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.75, -0.43301, 0, 5.85933, -11.3552)
 light_color = Color(0.9375, 0.913561, 0.642888, 1)
-shadow_enabled = true
 
 [node name="LightmapGI" type="LightmapGI" parent="."]
 quality = 2
