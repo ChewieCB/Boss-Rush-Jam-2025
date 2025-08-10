@@ -116,6 +116,8 @@ var vsync_option_index: int = 1
 var scaling_3d: float = 100.0
 var enable_elemental_vfx = true # : TODO
 var hide_ui = false
+var hide_hurt_overlay = false
+var hide_damage_number = false
 # Accessibility setting flags
 var screen_shake_disabled: bool = false
 var drunk_blur_disabled: bool = false
@@ -133,6 +135,10 @@ var CHEAT_godmode: bool = false
 var CHEAT_freecam: bool = true
 
 @export var sfx_screenshot: AudioStream
+
+# Gun Icon animation caching
+var cached_icon_anim_sprites: Dictionary = {}
+
 
 func _ready() -> void:
 	barrel_database.append_array(debug_barrel_database)

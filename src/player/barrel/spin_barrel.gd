@@ -68,12 +68,13 @@ func get_active_effect():
 func get_less_used_effects() -> int:
 	var effect_id: int = -1
 	var chance: float = randf()
+	var max_idx: int = effect_list.size()
 	match last_chosen_queue.size():
 		# If we haven't chosen any effects, pick one at random
 		0:
 			effect_id = randi_range(0, len(effect_list) - 1)
 		# If we have chosen all effects previously, pick the least recent effect
-		3:
+		max_idx:
 			# 20% chance to get same barrel
 			if chance <= 0.4:
 				effect_id = last_chosen_queue.front()

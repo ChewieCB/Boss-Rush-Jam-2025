@@ -1,8 +1,47 @@
-[gd_scene load_steps=3 format=3 uid="uid://b4e7pbfet0kfb"]
+[gd_scene load_steps=7 format=3 uid="uid://b4e7pbfet0kfb"]
 
 [ext_resource type="PackedScene" uid="uid://doli6c54olace" path="res://src/maps/tutorial/triggers/BaseTrigger.tscn" id="1_h0p6x"]
 [ext_resource type="Script" path="res://src/maps/tutorial/triggers/barrel_effect_trigger.gd" id="2_6aunn"]
+[ext_resource type="Texture2D" uid="uid://b78fi3t1fhevw" path="res://assets/sprite/effect_icons/Archetype/2_SMG.png" id="3_250l6"]
+[ext_resource type="Texture2D" uid="uid://bwtimhxmfb4vg" path="res://assets/sprite/effect_icons/Archetype/1_Shotgun.png" id="4_nkqiu"]
+[ext_resource type="Texture2D" uid="uid://cjiqf8i74px48" path="res://assets/sprite/effect_icons/Archetype/0_Railgun.png" id="5_nqfaj"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5qmgd"]
+height = 0.1
 
 [node name="BarrelEffectTrigger" instance=ExtResource("1_h0p6x")]
 script = ExtResource("2_6aunn")
 target_effect_hit_count = 3
+
+[node name="EffectIconDecal" type="Decal" parent="MeshInstance3D" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0, 0, 0)
+size = Vector3(0.6, 0.6, 0.6)
+texture_albedo = ExtResource("3_250l6")
+modulate = Color(100, 1, 1, 1)
+
+[node name="Label3D" parent="." index="2"]
+visible = false
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." index="4"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -1.2, 0, 0)
+mesh = SubResource("CylinderMesh_5qmgd")
+
+[node name="DamageTextSpawn" type="Marker3D" parent="MeshInstance3D2" index="0"]
+
+[node name="EffectIconDecal" type="Decal" parent="MeshInstance3D2" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, -8.35188e-23, 0, -8.35188e-23, 1, 0, 0, 0)
+size = Vector3(0.6, 0.6, 0.6)
+texture_albedo = ExtResource("4_nkqiu")
+modulate = Color(100, 1, 1, 1)
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -2.4, 0, 0)
+mesh = SubResource("CylinderMesh_5qmgd")
+
+[node name="DamageTextSpawn" type="Marker3D" parent="MeshInstance3D3" index="0"]
+
+[node name="EffectIconDecal" type="Decal" parent="MeshInstance3D3" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, -8.35188e-23, 0, -8.35188e-23, 1, 0, 0, 0)
+size = Vector3(0.6, 0.6, 0.6)
+texture_albedo = ExtResource("5_nqfaj")
+modulate = Color(100, 1, 1, 1)

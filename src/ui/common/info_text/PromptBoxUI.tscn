@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c2b8d2f8w0t0g"]
+[gd_scene load_steps=5 format=3 uid="uid://c2b8d2f8w0t0g"]
 
 [ext_resource type="Script" path="res://src/ui/common/info_text/prompt_box_ui.gd" id="1_khrjr"]
 [ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="2_i6q7e"]
+[ext_resource type="PackedScene" uid="uid://di7bmsw28rqlg" path="res://src/ui/common/info_text/PromptBoxLineContainer.tscn" id="4_p838e"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="6_kamy6"]
 
 [node name="PromptBox" type="Control"]
@@ -16,6 +17,7 @@ mouse_filter = 2
 script = ExtResource("1_khrjr")
 elements = Array[String](["Press", "[shoot]", "to shoot"])
 input_prompt_prefab = ExtResource("6_kamy6")
+line_container = ExtResource("4_p838e")
 
 [node name="PanelContainer" type="MarginContainer" parent="."]
 custom_minimum_size = Vector2(400, 160)
@@ -64,16 +66,5 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 mouse_filter = 2
 
-[node name="MarginContainer4" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("4_p838e")]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 18
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/MarginContainer4"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 32
-alignment = 2

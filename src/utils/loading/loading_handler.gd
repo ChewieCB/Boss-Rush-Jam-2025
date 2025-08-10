@@ -1,6 +1,7 @@
 extends Node
 
 signal materials_compiled
+signal icon_anims_compiled
 signal loading_finished(scene: PackedScene)
 
 # Loading
@@ -38,10 +39,13 @@ func collect_scenes_to_compile() -> void:
 func initial_load() -> void:
 	# Pre-cache files we know contain materials to load
 	if OS.is_debug_build() and not debug_skip_pre_compile:
+		await Engine.get_main_loop().process_frame
 		ScreenTransition.set_loading_detail_text("Parsing scene paths to compile")
 		parse_scene_paths_to_compile()
+	await Engine.get_main_loop().process_frame
 	ScreenTransition.set_loading_detail_text("Collecting scenes to compile")
 	collect_scenes_to_compile()
+	await Engine.get_main_loop().process_frame
 	ScreenTransition.set_loading_detail_text("Compiling materials")
 	is_compiling = true
 
@@ -58,7 +62,14 @@ func start_loading(scene_name: String = "") -> void:
 	if not is_materials_compiled:
 		initial_load()
 		await materials_compiled
-
+	
+	ScreenTransition.set_loading_detail_text("Caching effect icons")
+	await Engine.get_main_loop().process_frame
+	
+	if GameManager.cached_icon_anim_sprites == {}:
+		cache_initial_icon_anim_sprites()
+	
+	await Engine.get_main_loop().process_frame
 	ScreenTransition.set_loading_detail_text(scene_name)
 
 	can_transition = true
@@ -76,11 +87,12 @@ func load_scene(packed_scene: PackedScene) -> void:
 
 func _process(_delta: float) -> void:
 	if current_scene_path:
-		var progress = []
-		ResourceLoader.load_threaded_get_status(current_scene_path, progress)
-		ScreenTransition.progress_bar.value = progress[0] * 100
-
-		if progress[0] == 1 and can_transition:
+		var level_progress = []
+		ResourceLoader.load_threaded_get_status(current_scene_path, level_progress)
+		
+		ScreenTransition.progress_bar.value = level_progress[0] * 100
+		
+		if level_progress[0] == 1 and can_transition:
 			var packed_scene = ResourceLoader.load_threaded_get(current_scene_path)
 			load_scene(packed_scene)
 
@@ -233,3 +245,60 @@ func _compile_particles_node(child: GPUParticles3D) -> void:
 	compiling_materials_count -= 1
 	if is_instance_valid(particles):
 		particles.queue_free()
+
+
+func load_barrel_icon_sprites(sprite_path: String, anim_dir: String) -> Array[CompressedTexture2D]:
+	var sprite_arr: Array[CompressedTexture2D] = []
+	var dir = DirAccess.open(sprite_path + anim_dir + "/")
+	
+	# Build an array of paths to load threaded
+	var full_paths = []
+	
+	for image_path in dir.get_files():
+		if image_path.ends_with(".import"):
+			# If we run this from the editor then we get double anim frames
+			if EngineDebugger.is_active():
+				continue
+			image_path = image_path.replace(".import", "")
+		elif image_path.ends_with(".remap"):
+			image_path = image_path.replace(".remap", "")
+		
+		full_paths.append(sprite_path + anim_dir + "/" + image_path)
+		
+	for full_path in full_paths:
+		ResourceLoader.load_threaded_request(full_path)
+	
+	var loaded_count: int = 0
+	while loaded_count < full_paths.size():
+		for i in range(full_paths.size()):
+			var full_path = full_paths[i]
+			if full_path == "":
+				continue
+			var progress = ResourceLoader.load_threaded_get_status(full_path)
+			if progress < 1.0:
+				continue
+			else:
+				sprite_arr.append(ResourceLoader.load_threaded_get(full_path))
+				full_paths[i] = ""
+				loaded_count += 1
+	
+	return sprite_arr
+
+
+func cache_initial_icon_anim_sprites() -> void:
+	var icon_sprites_path := "res://src/player/gun/assets/sprite/effect_icons/%s/barrel_%s/"
+	
+	for j in range(3):
+		GameManager.cached_icon_anim_sprites["barrel_%s" % [j + 1]] = {}
+		for i in range(-1, 47):
+			GameManager.cached_icon_anim_sprites["barrel_%s" % [j + 1]][str(i)] = {}
+			for anim_name in ["IconSpinOut", "IconSpinIn"]:
+				var anim_sprites = load_barrel_icon_sprites(
+					icon_sprites_path % [i, j + 1], 
+					anim_name
+				)
+				if anim_name == "IconSpinIn":
+					anim_sprites.push_front(null)
+				GameManager.cached_icon_anim_sprites["barrel_%s" % [j + 1]][str(i)][
+					"spin_start" if anim_name == "IconSpinOut" else "spin_end"
+				] = anim_sprites

@@ -29,9 +29,18 @@ func _input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseMotion:
 		rotate_camera(event.relative.x, event.relative.y)
+	elif event is InputEventJoypadMotion:
+		if not InputHelper.get_label_for_input(event).to_lower().contains("trigger"):
+			# Disable joystick support to prevent PS4 touchpad triggering aim events
+			# Has to check Trigger buttons first, since they are also InputEventJoypadMotion
+			return
 
 
 func _process(delta: float) -> void:
+	if disable_input:
+		return
+	
+	handle_controller_look(delta)
 	# Local directions
 	var forward := -camera.global_transform.basis.z.normalized()
 	var right := camera.global_transform.basis.x.normalized()
@@ -46,9 +55,20 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_pressed("dash"):
 		target_velocity *= 2
+	elif Input.is_action_pressed("shoot"):
+		target_velocity /= 2
 	
 	velocity = lerp(velocity, target_velocity, ACCELERATION)
 	self.global_position += velocity
+
+
+func handle_controller_look(_delta):
+	var look_x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
+	var look_y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
+
+	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
+		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
+		rotate_camera(look_x * sensitivity, look_y * sensitivity)
 
 
 func rotate_camera(x: float, y: float):
