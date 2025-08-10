@@ -1,7 +1,8 @@
-[gd_scene load_steps=35 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=38 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
+[ext_resource type="PackedScene" uid="uid://djcipi6xiw7yn" path="res://src/ui/difficulty_menu/DifficultyMenu.tscn" id="2_7ndch"]
 [ext_resource type="Texture2D" uid="uid://xqhack4uhgdb" path="res://assets/textures/placeholder/texture_dark_06.png" id="2_gh1kv"]
 [ext_resource type="PackedScene" uid="uid://d0uqv7xitfwnt" path="res://src/player/test_scenes/Dummy.tscn" id="2_lrk4j"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="3_g5u1p"]
@@ -26,6 +27,8 @@
 [ext_resource type="Resource" uid="uid://cioys44ppioym" path="res://src/player/barrel/resource/reckless_abandon_barrel_data.tres" id="21_8043w"]
 [ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="22_qlyyk"]
 [ext_resource type="PackedScene" uid="uid://cm1sitbvy6aye" path="res://src/maps/lobby/shrine/SkillShrine.tscn" id="25_janht"]
+[ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="27_x0fgt"]
+[ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="29_o1a3k"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -59,8 +62,14 @@ height = 4.0
 height = 4.0
 radius = 4.0
 
-[node name="TestPlayerMovement" type="Node3D"]
+[node name="TestPlayerMovement" type="Node3D" node_paths=PackedStringArray("elevator_buttons")]
 script = ExtResource("1_ky5mp")
+elevator_buttons = [NodePath("ElevatorMock/group_672_Elevator/entity_14_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_12_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_13_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_10_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_11_ElevatorButton")]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="DifficultyMenu" parent="UI" instance=ExtResource("2_7ndch")]
+visible = false
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
@@ -79,11 +88,11 @@ mesh = SubResource("BoxMesh_ny80a")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("BoxShape3D_xq4fj")
 
-[node name="Player" parent="." instance=ExtResource("1_h4pew")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
-
 [node name="Dummy" parent="." instance=ExtResource("2_lrk4j")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.38672, 0.952686, -11.856)
+
+[node name="Player" parent="." instance=ExtResource("1_h4pew")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175792, 10.3644)
@@ -176,6 +185,9 @@ data = ExtResource("21_8043w")
 
 [node name="ShootWallTest" parent="." instance=ExtResource("19_cev3k")]
 
+[node name="ShootWallTest10" parent="." instance=ExtResource("19_cev3k")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -1.9106, 3.61703, 29.5695)
+
 [node name="ShootWallTest9" parent="." instance=ExtResource("19_cev3k")]
 transform = Transform3D(1.91069e-15, 1, 4.37114e-08, 4.37114e-08, -4.37114e-08, 1, 1, 0, -4.37114e-08, -14.7314, 2.09071, 0)
 
@@ -200,5 +212,70 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4.729
 [node name="ShootWallTest5" parent="." instance=ExtResource("19_cev3k")]
 transform = Transform3D(-1, 0, 8.74228e-08, 8.74228e-08, -4.37114e-08, 1, 3.82137e-15, 1, 4.37114e-08, -4.77851, 7.19081, -29.7185)
 
-[node name="LevelupShrine" parent="." instance=ExtResource("25_janht")]
+[node name="SkillShrine" parent="." instance=ExtResource("25_janht")]
 transform = Transform3D(-0.00677179, 0, 0.999977, 0, 1, 0, -0.999977, 0, -0.00677179, 14.9781, 1, -4)
+
+[node name="ElevatorMock" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.932004, 16.0841)
+metadata/_tb_type = "_tb_layer"
+
+[node name="group_672_Elevator" type="Node3D" parent="ElevatorMock"]
+metadata/_tb_type = "_tb_group"
+
+[node name="entity_14_ElevatorButton" parent="ElevatorMock/group_672_Elevator" instance=ExtResource("27_x0fgt")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.0625, 13)
+entProperties = {
+"_tb_group": "672",
+"boss_name": "One Armed Bandit",
+"classname": "ElevatorButton",
+"linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
+"origin": "416 -2 34"
+}
+boss_id = 1
+
+[node name="entity_12_ElevatorButton" parent="ElevatorMock/group_672_Elevator" instance=ExtResource("27_x0fgt")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.8125, 13)
+entProperties = {
+"_tb_group": "672",
+"boss_name": "Roulette Dares",
+"classname": "ElevatorButton",
+"linked_level": "res://src/maps/roulette_boss/BossMapRoulette.tscn",
+"origin": "416 -2 26"
+}
+boss_id = 2
+
+[node name="entity_13_ElevatorButton" parent="ElevatorMock/group_672_Elevator" instance=ExtResource("27_x0fgt")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.5625, 13)
+entProperties = {
+"_tb_group": "672",
+"boss_name": "Last Orders",
+"classname": "ElevatorButton",
+"linked_level": "res://src/maps/bartender_boss/BossMapBartender.tscn",
+"origin": "416 -2 18"
+}
+boss_id = 3
+
+[node name="entity_10_ElevatorButton" parent="ElevatorMock/group_672_Elevator" instance=ExtResource("27_x0fgt")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.3125, 13)
+entProperties = {
+"_tb_group": "672",
+"boss_name": "Open This Pit Up!",
+"classname": "ElevatorButton",
+"linked_level": "res://src/maps/pit_boss/BossMapPit.tscn",
+"origin": "416 -2 10"
+}
+boss_id = 4
+
+[node name="entity_11_ElevatorButton" parent="ElevatorMock/group_672_Elevator" instance=ExtResource("27_x0fgt")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.0625, 13)
+entProperties = {
+"_tb_group": "672",
+"boss_name": "Slow Roll'em",
+"classname": "ElevatorButton",
+"linked_level": "res://src/maps/chip_boss/BossMapChip.tscn",
+"origin": "416 -2 2"
+}
+boss_id = 5
+
+[node name="entity_16_ElevatorDoors" parent="ElevatorMock/group_672_Elevator" instance=ExtResource("29_o1a3k")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.9375, 8.375)

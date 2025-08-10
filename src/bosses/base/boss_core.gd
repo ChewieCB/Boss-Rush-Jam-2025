@@ -184,6 +184,7 @@ var cached_target: Node3D
 func _ready() -> void:
 	print_debug("BossCore ready")
 	randomize()
+	apply_risk_modifier()
 	# If the player has beaten all bosses, buff them for the replay value
 	if GameManager.all_bosses_defeated:
 		health_component.max_health *= 2
@@ -265,6 +266,12 @@ func activate() -> void:
 	print_debug("BossCore activate called")
 	show_health()
 	SoundManager.play_sound(sfx_awaken, "SFX")
+
+func apply_risk_modifier():
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP]
+	health_component.max_health *= value
+	health_component.initialize_health()
 
 
 ## GENERIC STATE HELPERS

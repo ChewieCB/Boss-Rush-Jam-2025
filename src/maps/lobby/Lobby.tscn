@@ -1,4 +1,4 @@
-[gd_scene load_steps=534 format=4 uid="uid://v6jgq46mkg4n"]
+[gd_scene load_steps=535 format=4 uid="uid://v6jgq46mkg4n"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
@@ -7,6 +7,7 @@
 [ext_resource type="LightmapGIData" uid="uid://ctkoowgm6c66x" path="res://src/maps/lobby/Lobby.lmbake" id="2_wjq6h"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="3_cmr84"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_nbyib"]
+[ext_resource type="PackedScene" uid="uid://djcipi6xiw7yn" path="res://src/ui/difficulty_menu/DifficultyMenu.tscn" id="4_armnw"]
 [ext_resource type="PackedScene" uid="uid://dfpynfqwpew5x" path="res://src/ui/common/info_text/InfoBoxUI.tscn" id="4_vrjxl"]
 [ext_resource type="Material" uid="uid://dj7ojpb1ijsks" path="res://assets/textures/placeholder/texture_orange_12.tres" id="5_kwpqm"]
 [ext_resource type="PackedScene" uid="uid://bcwjmyo4msefk" path="res://src/maps/lobby/ui/GameWinUI.tscn" id="5_wx0im"]
@@ -1874,6 +1875,9 @@ visible = false
 [node name="GameWinUI" parent="UI" instance=ExtResource("5_wx0im")]
 visible = false
 
+[node name="DifficultyMenu" parent="UI" instance=ExtResource("4_armnw")]
+visible = false
+
 [node name="Vendor" parent="." instance=ExtResource("19_fr53g")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.4, 1.6, -9.2)
 interact_text = Array[String](["Get your barrels here! All chips accepted!"])
@@ -3424,25 +3428,16 @@ metadata/_tb_type = "_tb_layer"
 [node name="group_672_Elevator" type="Node3D" parent="FuncGodotMap/layer_0_Decorations"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_10_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.3125, 13)
+[node name="entity_14_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.0625, 13)
 entProperties = {
 "_tb_group": "672",
-"boss_name": "Open This Pit Up!",
+"boss_name": "One Armed Bandit",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/pit_boss/BossMapPit.tscn",
-"origin": "416 -2 10"
+"linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
+"origin": "416 -2 34"
 }
-
-[node name="entity_11_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.0625, 13)
-entProperties = {
-"_tb_group": "672",
-"boss_name": "Slow Roll'em",
-"classname": "ElevatorButton",
-"linked_level": "res://src/maps/chip_boss/BossMapChip.tscn",
-"origin": "416 -2 2"
-}
+boss_id = 1
 
 [node name="entity_12_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.8125, 13)
@@ -3453,6 +3448,7 @@ entProperties = {
 "linked_level": "res://src/maps/roulette_boss/BossMapRoulette.tscn",
 "origin": "416 -2 26"
 }
+boss_id = 2
 
 [node name="entity_13_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.5625, 13)
@@ -3463,16 +3459,29 @@ entProperties = {
 "linked_level": "res://src/maps/bartender_boss/BossMapBartender.tscn",
 "origin": "416 -2 18"
 }
+boss_id = 3
 
-[node name="entity_14_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.0625, 13)
+[node name="entity_10_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.3125, 13)
 entProperties = {
 "_tb_group": "672",
-"boss_name": "One Armed Bandit",
+"boss_name": "Open This Pit Up!",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
-"origin": "416 -2 34"
+"linked_level": "res://src/maps/pit_boss/BossMapPit.tscn",
+"origin": "416 -2 10"
 }
+boss_id = 4
+
+[node name="entity_11_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.0625, 13)
+entProperties = {
+"_tb_group": "672",
+"boss_name": "Slow Roll'em",
+"classname": "ElevatorButton",
+"linked_level": "res://src/maps/chip_boss/BossMapChip.tscn",
+"origin": "416 -2 2"
+}
+boss_id = 5
 
 [node name="entity_15_Chandellier2LightOnly" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("31_fmlub")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.9375, 10.5)

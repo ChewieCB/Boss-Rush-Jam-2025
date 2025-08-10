@@ -71,6 +71,8 @@ var start_record_timestamp = 0
 var total_playtime = 0
 
 # Difficulty modifiers
+var selected_level_path: String
+var selected_boss_id: BossCore.BossIdEnum
 var risk_modifier_level_dict = {
 	RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
 	RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,

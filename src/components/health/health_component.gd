@@ -2,13 +2,18 @@ extends BaseComponent
 class_name HealthComponent
 
 signal health_changed(new_health: float, prev_health: float)
+signal max_health_changed(new_max_health: float, prev_max_health: float)
 signal health_diff(diff: float)
 signal died
 signal hurt
 
 @export_category("Health")
 @export var is_invincible: bool = false
-@export var max_health: float = 100
+@export var max_health: float = 100:
+	set(value):
+		var prev_max_health = max_health
+		max_health = value
+		max_health_changed.emit(max_health, prev_max_health)
 @export var show_damage_text: bool = true
 @export var text_effect: PackedScene
 @export var text_effect_location: Node3D

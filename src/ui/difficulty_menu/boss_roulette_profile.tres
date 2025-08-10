@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BossDifficultyProfile" load_steps=2 format=3 uid="uid://dwnejm41e6krv"]
+
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="1_yj4co"]
+
+[resource]
+script = ExtResource("1_yj4co")
+boss_id = 2
+boss_quote = "\"Go on, handsome… give the wheel something worth spinning for.\""
+ante_name = Array[String](["", "", "", "", ""])

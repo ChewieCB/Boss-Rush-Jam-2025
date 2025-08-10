@@ -2,30 +2,76 @@ extends Control
 class_name DifficultyMenu
 
 @export var chip_sfx: AudioStream
+## Order matter
+@export var boss_sprites: Array[TextureRect]
+@export var boss_diff_profiles: Array[BossDifficultyProfile]
 
 @onready var risk_level_container: Container = $TitleRegion/HBoxContainer
 @onready var risk_item_container: Container = $LeftRegion/RiskContainer
 @onready var bet_value_label: Label = $RightRegion/Bet/BetInfo/BetValue
 @onready var reward_label: Label = $RightRegion/Reward/RewardInfo/RewardValue
-@onready var start_button: TemplateButton = $LeftRegion/StartButton
+@onready var start_button: TemplateButton = $LeftRegion/HBoxContainer/StartButton
 @onready var not_enough_chip_timer: Timer = $NotEnoughChipTimer
 @onready var bet_chip_sprite: TextureRect = $RightRegion/Bet/BetInfo/TextureRect
 @onready var reward_chip_sprite: TextureRect = $RightRegion/Reward/RewardInfo/TextureRect
+@onready var reset_risk_button: Button = $LeftRegion/ResetRiskButton
+@onready var target_quite_label: Label = $TitleRegion/TargetLabel/TargetQuoteLabel
+@onready var ante_card_container: Control = $RightRegion/AnteSection
 
+signal bet_started
+signal bet_cancelled
 
 var bet_value = 0
 var reward_value = 0
 var bet_sprite_scale_tween = null
 var reward_sprite_scale_tween = null
-
+var is_controller_connected: bool = false
+var locked = false
 
 func _ready() -> void:
+	visible = false
 	set_risk_level(0)
 	GameManager.difficulty_menu = self
 	await get_tree().process_frame
 	await get_tree().process_frame
 	GameManager.risk_level_changed.connect(_on_risk_level_changed)
 	_on_risk_level_changed()
+	is_controller_connected = Input.get_connected_joypads() != []
+
+
+func _input(event: InputEvent) -> void:
+	if visible:
+		if event.is_action_pressed("ui_cancel"):
+			hide_menu()
+			get_viewport().set_input_as_handled()
+
+func show_menu():
+	if locked:
+		return
+	visible = true
+	GameManager.player.is_in_menu = true
+	if not is_controller_connected:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+	start_button.grab_focus()
+	refresh_display()
+
+
+func hide_menu():
+	visible = false
+	GameManager.player.is_in_menu = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func refresh_display():
+	for elem in boss_sprites:
+		elem.visible = false
+	var boss_profile = boss_diff_profiles[int(GameManager.selected_boss_id) - 1]
+	boss_sprites[int(GameManager.selected_boss_id) - 1].visible = true
+	target_quite_label.text = boss_profile.boss_quote
+
+	for i in range(ante_card_container.get_child_count()):
+		var ante_item: AnteItem = ante_card_container.get_child(i)
+		ante_item.set_ante_label(boss_profile.ante_names[i])
 
 ## Max lv 15
 func set_risk_level(level: int):
@@ -49,7 +95,12 @@ func _on_risk_level_changed():
 	reward_value = bet_value * payout_mult
 	bet_value_label.text = format_number_with_commas(bet_value)
 	reward_label.text = format_number_with_commas(int(reward_value))
-
+	start_button.text = "Start"
+	start_button.set_text_color(Color.WHITE)
+	if GameManager.risk_level > 0:
+		reset_risk_button.visible = true
+	else:
+		reset_risk_button.visible = false
 
 func format_number_with_commas(n: int) -> String:
 	var str_n = str(n)
@@ -61,7 +112,7 @@ func format_number_with_commas(n: int) -> String:
 		if count % 3 == 0 and i != 0:
 			result = "," + result
 	return result
-	
+
 func _on_reset_risk_button_pressed() -> void:
 	GameManager.reset_difficulty_modifier()
 	for elem in risk_item_container.get_children():
@@ -73,6 +124,16 @@ func _on_start_button_pressed() -> void:
 		start_button.text = "Not enough chips!"
 		start_button.set_text_color(Color.RED)
 		not_enough_chip_timer.start()
+	else:
+		# GameManager.player_currency -= bet_value
+		hide_menu()
+		locked = true
+		bet_started.emit()
+
+
+func _on_cancel_button_pressed() -> void:
+	hide_menu()
+	bet_cancelled.emit()
 
 
 func _on_not_enough_chip_timer_timeout() -> void:

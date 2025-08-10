@@ -151,11 +151,11 @@ var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
 
-var is_in_inventory = false:
+# Hide most HUD and stop player control
+var is_in_menu = false:
 	set(value):
-		is_in_inventory = value
-		#barrel_effect_ui.visible = !is_in_inventory
-		if is_in_inventory:
+		is_in_menu = value
+		if is_in_menu:
 			stat_ui.hide_non_luck_ui()
 		else:
 			stat_ui.show_non_luck_ui()
@@ -241,7 +241,7 @@ func _unhandled_input(event):
 	#if event.is_action_pressed("open_inventory"):
 		#inventory_ui.toggle()
 
-	if is_in_inventory:
+	if is_in_menu:
 		return
 
 	if event is InputEventMouseMotion:
@@ -326,7 +326,7 @@ func _process(delta):
 			if status.duration <= 0:
 				remove_status_effect(status)
 
-	if aim_ray.is_colliding() and not is_in_inventory:
+	if aim_ray.is_colliding() and not is_in_menu:
 		var interact_collider = aim_ray.get_collider()
 		if interact_collider and \
 			interact_collider.has_method("interact") and \
@@ -341,7 +341,7 @@ func _process(delta):
 		interact_ui.visible = false
 
 
-	if controls_disabled or is_in_inventory:
+	if controls_disabled or is_in_menu:
 		return
 
 	if Input.is_action_pressed("shoot"):
@@ -365,7 +365,7 @@ func _physics_process(delta):
 			raw_input_dir = Vector2(0, -1)
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
-	if not is_dashing and not is_in_inventory:
+	if not is_dashing and not is_in_menu:
 		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
@@ -543,7 +543,7 @@ func show_debug_label():
 
 
 func jump(local_multiplier = 1.0):
-	if is_in_inventory or controls_disabled:
+	if is_in_menu or controls_disabled:
 		return
 
 	vel_vertical = JUMP_FORCE * current_stats[StatusEffect.PlayerStatEnum.JUMP_HEIGHT] * local_multiplier

@@ -40,7 +40,6 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	print(event)
 	if event.is_action_pressed("ui_cancel"):
 		if save_ui.visible:
 			save_ui.visible = false

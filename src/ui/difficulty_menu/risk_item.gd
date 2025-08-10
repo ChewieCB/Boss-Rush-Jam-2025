@@ -38,7 +38,7 @@ static var risk_value_per_level_dict = {
 	RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0.25,
 	RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0.25,
 	RiskModifierEnum.REDUCE_PLAYER_HEALING: 0.25,
-	RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0.25,
+	RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0.20,
 	RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 3, # 3 times each lv
 	RiskModifierEnum.LIMIT_FIGHT_TIME: 1 # 1 min each lv
 }

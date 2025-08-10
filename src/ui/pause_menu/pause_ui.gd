@@ -70,12 +70,12 @@ func toggle_pause_menu() -> void:
 func return_to_pause_menu():
 	is_in_submenu = false
 	pause_option_list.visible = true
-	promo_ui.visible = true
+	# promo_ui.visible = true
 	setting_button.grab_focus()
 
 
 func _on_setting_button_pressed() -> void:
-	promo_ui.visible = false
+	# promo_ui.visible = false
 	setting_ui.open_menu()
 	is_in_submenu = true
 	pause_option_list.visible = false

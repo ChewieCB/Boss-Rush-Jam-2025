@@ -139,7 +139,7 @@ func open():
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	#Engine.time_scale = 0.2
-	GameManager.player.is_in_inventory = true
+	GameManager.player.is_in_menu = true
 	get_first_item_for_focus()
 	inventory_opened.emit()
 
@@ -147,7 +147,7 @@ func open():
 func close():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	#Engine.time_scale = 1
-	GameManager.player.is_in_inventory = false
+	GameManager.player.is_in_menu = false
 	if visible and not GameManager.player.current_gun.is_reloading \
 		and not GameManager.player.current_gun.is_spinning:
 		visible = false

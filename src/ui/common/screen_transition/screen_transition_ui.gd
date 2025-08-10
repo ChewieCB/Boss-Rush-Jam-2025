@@ -39,7 +39,7 @@ func _clear_screen() -> void:
 func transition_in(duration: float = 0.7) -> void:
 	set_loading_visible(false)
 	_clear_screen()
-	tween_transition(1.0, -1.0, duration)
+	await tween_transition(1.0, -1.0, duration)
 	transition_finished.emit()
 
 

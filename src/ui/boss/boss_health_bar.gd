@@ -17,6 +17,7 @@ func _ready() -> void:
 	if health_component:
 		init_health_ui(health_component.current_health)
 		health_component.health_changed.connect(_on_health_changed)
+		health_component.max_health_changed.connect(_on_max_health_changed)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	GameManager.setting_ui.setting_changed.connect(check_after_setting_changed)

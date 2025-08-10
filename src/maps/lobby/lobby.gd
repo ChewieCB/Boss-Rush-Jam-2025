@@ -11,9 +11,10 @@ signal ui_accept
 
 @onready var info_ui: Control = $UI/InfoBoxUI
 @onready var game_win_ui: Control = $UI/GameWinUI
+@onready var difficulty_menu: DifficultyMenu = $UI/DifficultyMenu
 
-@onready var SFXDoorOpen: AudioStreamPlayer3D = $SFXDoorOpen
-@onready var SFXDoorClose: AudioStreamPlayer3D = $SFXDoorClose
+@onready var sfx_door_open: AudioStreamPlayer3D = $SFXDoorOpen
+@onready var sfx_door_close: AudioStreamPlayer3D = $SFXDoorClose
 
 var display_barrels: Array = []
 
@@ -23,6 +24,7 @@ func _ready() -> void:
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
+	difficulty_menu.bet_started.connect(load_selected_level)
 	
 	get_tree().paused = false
 	
@@ -74,7 +76,12 @@ func show_panel(panel: Control) -> void:
 
 
 func _on_level_select(level_path: String) -> void:
-	SFXDoorClose.play()
+	GameManager.selected_level_path = level_path
+	difficulty_menu.show_menu()
+
+func load_selected_level():
+	var level_path = GameManager.selected_level_path
+	sfx_door_close.play()
 	ResourceLoader.load_threaded_request(level_path)
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
@@ -102,10 +109,10 @@ func _on_level_select(level_path: String) -> void:
 func _on_door_transition_area_body_entered(body: Node3D) -> void:
 	if body is Player:
 		elevator_doors.open()
-		SFXDoorOpen.play()
+		sfx_door_open.play()
 
 
 func _on_door_transition_area_body_exited(body: Node3D) -> void:
 	if body is Player:
 		elevator_doors.close()
-		SFXDoorClose.play()
+		sfx_door_close.play()

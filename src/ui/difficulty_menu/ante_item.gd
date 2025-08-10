@@ -26,3 +26,19 @@ func _on_risk_level_changed():
 	else:
 		self_modulate = Color.BLACK
 		ante_label.add_theme_color_override("font_color", Color.WHITE)
+
+		
+func set_ante_label(content: String):
+	ante_label.text = ""
+	match ante_number:
+		1:
+			ante_label.text = "Ante I:"
+		2:
+			ante_label.text = "Ante II:"
+		3:
+			ante_label.text = "Ante III:"
+		4:
+			ante_label.text = "Ante IV:"
+		5:
+			ante_label.text = "Ante V:"
+	ante_label.text += "\n{0}".format([content])
