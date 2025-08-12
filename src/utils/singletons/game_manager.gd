@@ -73,6 +73,8 @@ var total_playtime = 0
 # Difficulty modifiers
 var selected_level_path: String
 var selected_boss_id: BossCore.BossIdEnum
+var bet_value = 0
+var reward_value = 0
 var risk_modifier_level_dict = {
 	RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
 	RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
@@ -290,6 +292,8 @@ func reset_difficulty_modifier():
 	}
 	risk_level = 0
 	boss_ante = 0
+	bet_value = 0
+	reward_value = 0
 
 func reset_current_save_data():
 	equipped_barrels = []

@@ -20,7 +20,7 @@ const BASE_DAMAGE_MODIFIER: float = 1.0
 const BASE_RESISTANCE_MODIFIER: float = 1.0
 const BASE_SPEED_MODIFIER: float = 1.0
 const BASE_DELAY_MODIFIER: float = 1.0
-var damage_modifier: float = BASE_DAMAGE_MODIFIER
+var damage_modifier: float = BASE_DAMAGE_MODIFIER * get_risk_dmg_mult()
 var speed_modifier: float = BASE_SPEED_MODIFIER
 var delay_modifier: float = BASE_DELAY_MODIFIER:
 	set(value):
@@ -864,7 +864,7 @@ func _on_no_buff_state_entered() -> void:
 	last_brew_type = current_brew_type
 	status_icon.texture = null
 	health_component.received_dmg_multiplier = BASE_RESISTANCE_MODIFIER
-	damage_modifier = BASE_DAMAGE_MODIFIER
+	damage_modifier = BASE_DAMAGE_MODIFIER * get_risk_dmg_mult()
 	speed_modifier = BASE_SPEED_MODIFIER
 	#
 	delay_modifier = 1
@@ -876,7 +876,7 @@ func _on_strength_buff_state_entered() -> void:
 	#  - damage output INCREASED
 	#  - movement speed UNAFFECTED
 	health_component.received_dmg_multiplier = strength_buff_modifier
-	damage_modifier = strength_buff_modifier
+	damage_modifier = strength_buff_modifier * get_risk_dmg_mult()
 	speed_modifier = BASE_SPEED_MODIFIER
 	delay_modifier = BASE_DELAY_MODIFIER
 
@@ -889,7 +889,7 @@ func _on_defence_buff_state_entered() -> void:
 	#  - damage output UNAFFECTED
 	#  - movement speed DECREASED
 	health_component.received_dmg_multiplier = defense_buff_modifier
-	damage_modifier = BASE_DAMAGE_MODIFIER
+	damage_modifier = BASE_DAMAGE_MODIFIER * get_risk_dmg_mult()
 	speed_modifier = 1 - defense_buff_modifier
 	delay_modifier = 1 + speed_buff_modifier
 
@@ -903,7 +903,7 @@ func _on_speed_buff_state_entered() -> void:
 	#  - damage output DECREASED
 	#  - movement speed INCREASED
 	health_component.received_dmg_multiplier = BASE_RESISTANCE_MODIFIER
-	damage_modifier = speed_buff_modifier
+	damage_modifier = BASE_DAMAGE_MODIFIER * get_risk_dmg_mult()
 	speed_modifier = 1 + speed_buff_modifier
 	delay_modifier = 1 - speed_buff_modifier
 

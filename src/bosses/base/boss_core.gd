@@ -747,3 +747,9 @@ func _on_status_shocked_active_state_exited() -> void:
 
 func _on_status_shocked_active_state_physics_processing(_delta: float) -> void:
 	pass
+
+
+func get_risk_dmg_mult():
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG]
+	return value

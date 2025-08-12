@@ -128,6 +128,8 @@ func _on_start_button_pressed() -> void:
 		# GameManager.player_currency -= bet_value
 		hide_menu()
 		locked = true
+		GameManager.bet_value = bet_value
+		GameManager.reward_value = reward_value
 		bet_started.emit()
 
 

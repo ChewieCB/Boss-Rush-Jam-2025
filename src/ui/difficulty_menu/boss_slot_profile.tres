@@ -6,4 +6,4 @@
 script = ExtResource("1_tyj4h")
 boss_id = 1
 boss_quote = "\"Danger in, fortune out. Or nothing at all. That’s how my gears like it.\""
-ante_name = Array[String](["", "", "", "", ""])
+ante_names = Array[String](["", "", "", "", ""])

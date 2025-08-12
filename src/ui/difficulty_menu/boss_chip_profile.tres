@@ -6,4 +6,4 @@
 script = ExtResource("1_llkqi")
 boss_id = 5
 boss_quote = "\"Do not be afraid.\""
-ante_name = Array[String](["", "", "", "", ""])
+ante_names = Array[String](["", "", "", "", ""])

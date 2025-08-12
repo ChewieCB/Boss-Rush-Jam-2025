@@ -61,6 +61,8 @@ var slot_ticks: int = SLOT_TICKS
 @onready var slot_decals: Array[Node] = get_tree().get_root().get_child(3).find_children("*", "SlotRollerDecal")
 
 @export_subgroup("Coin Burst")
+@export var coin_damage: float = 10
+@export var coin_speed: float = 50
 @export var coin_projectile: PackedScene
 @export var coin_shots_per_burst: int = 8
 @export var num_bursts: int = 1
@@ -69,6 +71,7 @@ var slot_ticks: int = SLOT_TICKS
 @export var sfx_coin_shot: Array[AudioStream]
 
 @export_subgroup("Bell Drop")
+@export var bell_damage: float = 20
 @export var bell_scene: PackedScene
 @export var bell_aoe_marker_ring: CompressedTexture2D
 @export var bell_aoe_marker_arrows: CompressedTexture2D
@@ -100,6 +103,8 @@ var charge_locked: bool = false
 @export var sfx_charge_impact: Array[AudioStream]
 
 @export_subgroup("Homing Diamonds")
+@export var diamond_damage: float = 3
+@export var diamond_speed: float = 35
 @export var diamond_projectile: PackedScene
 @export var diamond_shots_per_attack: int = 12
 @export var diamond_shot_time: float = 1.3
@@ -107,6 +112,7 @@ var charge_locked: bool = false
 @export var sfx_diamond_shot: Array[AudioStream]
 
 @export_subgroup("Cherry Bombs")
+@export var bomb_damage: float = 10
 @export var bomb_projectile: PackedScene
 @export var bombs_per_attack: int = 5
 @export var bomb_fuse_time: float = 2.5
@@ -125,14 +131,14 @@ var active_bombs: Array = []
 
 
 func activate() -> void:
-	super()
+	super ()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	state_chart.send_event("start_phase_1")
 
 
 func _physics_process(delta: float) -> void:
-	super(delta)
+	super (delta)
 	
 	if target:
 		projectile_marker_pivot.look_at(target.global_position)
@@ -188,7 +194,7 @@ func select_attack_phase_2() -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super(new_health, prev_health)
+	super (new_health, prev_health)
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		state_chart.send_event("start_phase_2")
 
@@ -351,9 +357,9 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 	for i in num_bursts:
 		for j in coin_shots_per_burst:
 			await get_tree().create_timer(delay_per_projectile).timeout
-			fire_projectile(coin_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
+			var proj = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
+			proj.init(coin_damage * get_risk_dmg_mult(), coin_speed)
 		await get_tree().create_timer(delay_between_burst).timeout
-	
 	state_chart.send_event("stop_shooting")
 
 
@@ -408,7 +414,7 @@ func drop_shadow(
 	aoe_tween.parallel().tween_property(decal_arrows, "size", Vector3(max_radius * 2, 1, max_radius * 2), drop_time)
 	aoe_tween.parallel().tween_property(decal_arrows, "rotation_degrees:y", 360, drop_time)
 	aoe_tween.chain().tween_callback(_spawn_bell.bind(target_pos, max_radius, [decal_arrows, decal_ring]))
-	aoe_tween.chain().tween_property(decal_arrows, "size", Vector3.ZERO, 1.04)  # Based on bell sfx sample timing
+	aoe_tween.chain().tween_property(decal_arrows, "size", Vector3.ZERO, 1.04) # Based on bell sfx sample timing
 
 
 func _cleanup_aoe_decals(decals_to_remove: Array) -> void:
@@ -436,6 +442,7 @@ func spawn_bell(pos: Vector3, size: float) -> Bell:
 	var bell: Bell = bell_scene.instantiate()
 	bell.global_position = pos
 	get_tree().root.get_child(7).add_child(bell)
+	bell.init(bell_damage * get_risk_dmg_mult())
 	bell.mesh.scale *= size
 	bell.collider.shape.radius = size
 	bell.collider.shape.height = size * 2
@@ -531,7 +538,7 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 	
 	# Hit player in melee range and flee away
 	if target in hurtbox.get_overlapping_bodies():
-		target.health_component.damage(swipe_damage)
+		target.health_component.damage(swipe_damage * get_risk_dmg_mult())
 		hurtbox.set_deferred("monitoring", false)
 		# TODO - fix this knockback
 		var knockback_vector = - self.global_basis.z * swipe_knockback
@@ -626,6 +633,7 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 		_sfx_player.play()
 		
 		var projectile := diamond_projectile.instantiate()
+		projectile.init(diamond_damage * get_risk_dmg_mult(), diamond_speed)
 		#get_tree().root.get_child(2).
 		get_parent().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
@@ -700,7 +708,7 @@ func _on_charge_charging_state_entered() -> void:
 func _on_charge_collision(body: Node3D) -> void:
 	if body == target:
 		velocity = Vector3.ZERO
-		body.health_component.damage(charge_damage)
+		body.health_component.damage(charge_damage * get_risk_dmg_mult())
 		hurtbox.body_entered.disconnect(_on_charge_collision)
 		hurtbox.set_deferred("monitoring", false)
 
@@ -773,7 +781,7 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 		sfx_player.stream = sfx_bomb_launch.pick_random()
 		sfx_player.play()
 		var projectile := bomb_projectile.instantiate() as RigidBody3D
-		projectile.fuse_time = bomb_fuse_time
+		projectile.init(bomb_damage * get_risk_dmg_mult(), bomb_fuse_time)
 		get_parent().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * dir_counter)

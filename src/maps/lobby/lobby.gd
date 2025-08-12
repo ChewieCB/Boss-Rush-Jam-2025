@@ -41,6 +41,8 @@ func _ready() -> void:
 	
 	GameManager.reset_reroll_cost()
 	GameManager.is_free_reroll = true
+	GameManager.bet_value = 0
+	GameManager.reward_value = 0
 	
 	# HACK
 	if GameManager.player_gained_first_barrel:

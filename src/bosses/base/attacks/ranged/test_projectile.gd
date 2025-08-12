@@ -8,10 +8,13 @@ class_name TestProjectile
 
 # TODO - rework this using the gun projectile so we can get impacts and ricochets
 
+func init(_damage: float):
+	projectile_damage = _damage
+
+
 func _physics_process(delta: float) -> void:
 	self.global_position -= transform.basis.z * projectile_speed * delta
 	
-
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
