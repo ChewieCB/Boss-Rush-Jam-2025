@@ -35,6 +35,7 @@ var shields_destroyed: int = 0
 
 # Barrier
 @export_group("Barrier Sweep")
+@export var barrier_damage: float = 20
 @export var barrier_targeting_delay: float = 2.0
 @export var barrier_sweep_time: float = 1.7
 @onready var barrier_targeting_timer = $BarrierTargetingTimer
@@ -45,6 +46,7 @@ var barrier_tween: Tween
 # Multiball
 @export_group("Multiball")
 @export var ball_scene: PackedScene
+@export var ball_damage: float = 15
 @export var balls_to_spawn_phase_1: int = 3
 @export var balls_to_spawn_phase_2: int = 6
 @export var balls_to_spawn_phase_3: int = 11
@@ -68,6 +70,7 @@ var available_spawns: Array
 var shockwave_tween: Tween
 @export_subgroup("Center Pushback")
 @onready var pushback_area: Area3D = $PushbackArea
+@export var pushback_damage: float = 1
 @export var max_center_pushback_radius: float = 8.0
 @export_subgroup("SFX")
 @export var sfx_shockwave_amb: Array[AudioStream]
@@ -86,7 +89,7 @@ var dropped_segments: Array
 
 
 func _ready() -> void:
-	super()
+	super ()
 	GRAVITY = 0.0
 	hurtbox.visible = false
 	
@@ -100,12 +103,12 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	super(delta)
+	super (delta)
 	held_ball_marker_pivot.look_at(target.global_position)
 
 
 func activate() -> void:
-	super()
+	super ()
 	change_phase(current_phase)
 
 
@@ -273,6 +276,7 @@ func spawn_ball(
 	get_tree().get_root().add_child(new_ball)
 	new_ball = ball_prop_func.call(new_ball, _target)
 	new_ball.global_position = spawn.global_position
+	new_ball.init(ball_damage * get_risk_dmg_mult())
 	new_ball.look_at(Vector3.ZERO)
 	new_ball.destroyed.connect(_on_ball_destroyed)
 	
@@ -317,6 +321,7 @@ func spawn_center_wave(
 	max_radius: float,
 	spawned_wave_time: float = wave_time,
 	spawned_wave_height: float = wave_height,
+	is_small: bool = false,
 	telegraph: bool = false,
 	callback: Callable = func(): pass
 ) -> void:
@@ -338,7 +343,10 @@ func spawn_center_wave(
 	get_tree().get_root().add_child(area_collider)
 	
 	area_collider.global_position = area_pos
-	area_collider.body_entered.connect(_on_wave_collision)
+	if is_small:
+		area_collider.body_entered.connect(_on_small_wave_collision)
+	else:
+		area_collider.body_entered.connect(_on_wave_collision)
 	area_collider.body_entered.connect(area_collider.queue_free)
 	
 	var debug_mesh_instance = MeshInstance3D.new()
@@ -388,8 +396,8 @@ func spawn_center_wave(
 	shockwave_tween.tween_callback(callback)
 
 
-func _pushback_effect(body: Node3D) -> void:
-	body.health_component.damage(wave_damage)
+func _pushback_effect(body: Node3D, damage: float) -> void:
+	body.health_component.damage(damage)
 	var pushback_vector = self.global_position.direction_to(body.global_position)
 	
 	body.velocity = Vector3.ZERO
@@ -442,7 +450,7 @@ func shake_segment(segment: MeshInstance3D, shake_count: int = 30, shake_amount:
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	#SoundManager.play_sound(TEMP_sfx_charge_impact)
 	if body == target:
-		target.health_component.damage(20)
+		target.health_component.damage(barrier_damage * get_risk_dmg_mult())
 		hurtbox.set_deferred("monitoring", false)
 		await get_tree().create_timer(0.2).timeout
 		hurtbox.set_deferred("monitoring", true)
@@ -522,7 +530,7 @@ func _on_pushback_area_body_entered(body: Node3D) -> void:
 	if body is Player:
 		wave_damage /= 10.0
 		body.dash_disabled = true
-		spawn_center_wave(max_center_pushback_radius, 0.1, 58)
+		spawn_center_wave(max_center_pushback_radius, 0.1, 58, true)
 		wave_damage *= 10.0
 		await get_tree().create_timer(0.8).timeout
 		body.dash_disabled = false
@@ -537,7 +545,11 @@ func _on_movement_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_wave_collision(body: Node3D) -> void:
 	if body is Player:
-		_pushback_effect(body)
+		_pushback_effect(body, wave_damage * get_risk_dmg_mult())
+
+func _on_small_wave_collision(body: Node3D) -> void:
+	if body is Player:
+		_pushback_effect(body, pushback_damage * get_risk_dmg_mult())
 
 
 func _on_attack_telegraph_state_entered() -> void:
@@ -792,7 +804,7 @@ func _on_phase_2_pushback_wave_spawn_wave_state_entered() -> void:
 	
 	var wave_attack_callback: Callable = func():
 		state_chart.send_event("finish_wave")
-	spawn_center_wave(max_wave_radius, wave_time, wave_height, true, wave_attack_callback)
+	spawn_center_wave(max_wave_radius, wave_time, wave_height, wave_damage, false, wave_attack_callback)
 
 func _on_phase_2_pushback_wave_recover_state_entered() -> void:
 	debug_state_label.text = "Shockwave | Recovering"
