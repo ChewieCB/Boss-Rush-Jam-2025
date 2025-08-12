@@ -65,9 +65,10 @@ func start_loading(scene_name: String = "") -> void:
 	
 	ScreenTransition.set_loading_detail_text("Caching effect icons")
 	await Engine.get_main_loop().process_frame
-	
-	if GameManager.cached_icon_anim_sprites == {}:
-		cache_initial_icon_anim_sprites()
+
+	# TODO: Fix why performance drop	
+	# if GameManager.cached_icon_anim_sprites == {}:
+	# 	cache_initial_icon_anim_sprites()
 	
 	await Engine.get_main_loop().process_frame
 	ScreenTransition.set_loading_detail_text(scene_name)
@@ -294,7 +295,7 @@ func cache_initial_icon_anim_sprites() -> void:
 			GameManager.cached_icon_anim_sprites["barrel_%s" % [j + 1]][str(i)] = {}
 			for anim_name in ["IconSpinOut", "IconSpinIn"]:
 				var anim_sprites = load_barrel_icon_sprites(
-					icon_sprites_path % [i, j + 1], 
+					icon_sprites_path % [i, j + 1],
 					anim_name
 				)
 				if anim_name == "IconSpinIn":
