@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://beunw631r018y"]
+[gd_scene load_steps=55 format=3 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -31,6 +31,11 @@
 [ext_resource type="Texture2D" uid="uid://cx7vidsyvx8yh" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_1.png" id="27_6hxas"]
 [ext_resource type="Texture2D" uid="uid://cdp2vrgsg8vk7" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_2.png" id="28_vfi2f"]
 [ext_resource type="Texture2D" uid="uid://cdi2hskp63cj8" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_3.png" id="29_egcby"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wqldo"]
+random_pitch = 1.19
+streams_count = 1
+stream_0/stream = ExtResource("2_3jkil")
 
 [sub_resource type="Animation" id="Animation_64i2r"]
 length = 0.001
@@ -1010,7 +1015,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, -6.51926
 script = ExtResource("1_ferpt")
 gun_name = "Blank gun"
 description = "A ordinary gun, waiting to be modified with various special barrels."
-TEMP_sfx_shoot = ExtResource("2_3jkil")
+TEMP_sfx_shoot = SubResource("AudioStreamRandomizer_wqldo")
 TEMP_sfx_dry = ExtResource("3_doij6")
 TEMP_sfx_spin = ExtResource("4_jq6y4")
 TEMP_sfx_click = ExtResource("5_cutjd")
