@@ -12,7 +12,7 @@ func _ready() -> void:
 	progress_bar.value_changed.connect(_on_progress_changed)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	_update_reroll_max(GameManager.reroll_cost)
+	_update_reroll_max(int(GameManager.reroll_cost * GameManager.get_risk_spin_cost_mult()))
 	GameManager.currency_changed.connect(_on_currency_changed)
 	GameManager.reroll_cost_changed.connect(_update_reroll_max)
 	GameManager.free_rerolls.connect(_update_reroll_max.bind(progress_bar.max_value))

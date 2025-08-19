@@ -36,7 +36,7 @@ static var risk_value_per_level_dict = {
 	RiskModifierEnum.INCREASE_BOSS_DMG: 0.25,
 	RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0.2,
 	RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0.25,
-	RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0.25,
+	RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0.3,
 	RiskModifierEnum.REDUCE_PLAYER_HEALING: 0.25,
 	RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0.20,
 	RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 3, # 3 times each lv
@@ -49,7 +49,7 @@ static var max_risk_level_dict = {
 	RiskModifierEnum.INCREASE_BOSS_DMG: 10,
 	RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 10,
 	RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 10,
-	RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 10,
+	RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 5,
 	RiskModifierEnum.REDUCE_PLAYER_HEALING: 4,
 	RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 4,
 	RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 4,

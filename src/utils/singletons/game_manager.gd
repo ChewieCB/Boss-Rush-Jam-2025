@@ -241,11 +241,13 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 
 
 func purchase_reroll() -> bool:
+	if reroll_time == 0:
+		reroll_cost = int(reroll_cost * get_risk_spin_cost_mult())
 	if player_currency >= reroll_cost or is_free_reroll:
 		if not is_free_reroll:
 			player_currency -= reroll_cost
 			# Increase the cost of re-rolling for this fight
-			reroll_cost = int(reroll_cost * reroll_cost_mult)
+			reroll_cost = int(reroll_cost * (reroll_cost_mult + (GameManager.get_risk_spin_cost_mult() - 1)))
 			reroll_time += 1
 		reroll_cost_changed.emit(reroll_cost)
 		return true
@@ -384,4 +386,9 @@ func get_risk_atk_move_speed_mult() -> float:
 func get_risk_status_resist_mult() -> float:
 	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST] * \
 		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST]
+	return value
+
+func get_risk_spin_cost_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST]
 	return value

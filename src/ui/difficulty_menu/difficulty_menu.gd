@@ -20,6 +20,7 @@ class_name DifficultyMenu
 
 signal bet_started
 signal bet_cancelled
+signal risk_changed
 
 var bet_value = 0
 var reward_value = 0
@@ -86,7 +87,6 @@ func set_risk_level(level: int):
 			risk_level_container.get_child(i).self_modulate = Color.BLACK
 			if i >= 15:
 				risk_level_container.get_child(i).visible = false
-
 	play_juicy_chip_sprite_anim()
 
 func _on_risk_level_changed():
