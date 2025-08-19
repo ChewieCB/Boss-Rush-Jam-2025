@@ -375,3 +375,13 @@ func get_risk_dmg_mult() -> float:
 	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG] * \
 		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG]
 	return value
+
+func get_risk_atk_move_speed_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED]
+	return value
+
+func get_risk_status_resist_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST]
+	return value

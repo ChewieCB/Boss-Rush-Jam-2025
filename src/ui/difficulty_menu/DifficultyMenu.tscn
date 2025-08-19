@@ -431,7 +431,8 @@ risk_description = "Increase target's damage"
 prefix_value_text = "+"
 icon_sprite = ExtResource("14_os3tf")
 
-[node name="RiskItem3" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+[node name="RiskItem3(TBD)" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+visible = false
 layout_mode = 2
 risk_modifier = 3
 risk_description = "Increase target's attack and move speed"
