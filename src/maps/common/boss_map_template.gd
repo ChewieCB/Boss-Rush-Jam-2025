@@ -145,6 +145,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		print(GameManager.bosses_defeated)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 
+	reward_bet_money()
 	show_end_panel()
 
 
@@ -199,3 +200,7 @@ func _on_level_select(level_path: String) -> void:
 			#SoundManager.play_music(new_bgm, 0.25, "BGM")
 		#GameManager.is_free_reroll = false
 		get_tree().change_scene_to_packed(loaded_scene)
+
+
+func reward_bet_money():
+	GameManager.player_currency += GameManager.reward_value

@@ -22,6 +22,16 @@ signal bet_started
 signal bet_cancelled
 signal risk_changed
 
+const BASE_REWARD_MULT = 1.5
+const REWARD_MULT_PER_RISK = 0.05 # Extra 5% per risk lv
+const HIGH_RISK_REWARD_MULT_PER_RISK = 0.15
+const HIGH_RISK_THRESHOLD = 9
+const OVER_RISK_REWARD_MULT_PER_RISK = 0.4
+const OVER_RISK_THRESHOLD = 15
+
+# const RISK_THRESHOLDS = [0, 3, 6, 9, 12, 15]
+# const RISK_REWARD_MULT_PER_RISKS = [0.05, 0.1, 0.2, 0.25, 0.3, 0.4]
+
 var bet_value = 0
 var reward_value = 0
 var bet_sprite_scale_tween = null
@@ -91,7 +101,12 @@ func set_risk_level(level: int):
 
 func _on_risk_level_changed():
 	bet_value = GameManager.risk_level * 1000
-	var payout_mult = 2 + ((GameManager.risk_level - 1) * 0.05) # Extra 5% per risk lv
+	var payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * REWARD_MULT_PER_RISK)
+	if GameManager.risk_level >= HIGH_RISK_THRESHOLD:
+		payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * HIGH_RISK_REWARD_MULT_PER_RISK)
+	elif GameManager.risk_level >= OVER_RISK_THRESHOLD:
+		payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * OVER_RISK_REWARD_MULT_PER_RISK)
+
 	reward_value = bet_value * payout_mult
 	bet_value_label.text = format_number_with_commas(bet_value)
 	reward_label.text = format_number_with_commas(int(reward_value))
@@ -125,11 +140,11 @@ func _on_start_button_pressed() -> void:
 		start_button.set_text_color(Color.RED)
 		not_enough_chip_timer.start()
 	else:
-		# GameManager.player_currency -= bet_value
 		hide_menu()
 		locked = true
 		GameManager.bet_value = bet_value
 		GameManager.reward_value = reward_value
+		GameManager.player_currency -= bet_value
 		bet_started.emit()
 
 
