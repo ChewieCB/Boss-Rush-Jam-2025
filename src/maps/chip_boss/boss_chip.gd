@@ -39,7 +39,7 @@ var music_playback: AudioStreamPlaybackInteractive
 
 
 func _ready() -> void:
-	super()
+	super ()
 	boss.flood_chamber.connect(raise_water)
 	boss.drain_chamber.connect(lower_water)
 	boss.break_floor.connect(break_floor)
@@ -65,7 +65,7 @@ func _process(delta) -> void:
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	music_playback.switch_to_clip(1)
-	super(_body)
+	super (_body)
 
 
 func _on_boss_defeated(_boss: BossCore) -> void:
@@ -86,6 +86,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 			print(GameManager.bosses_defeated)
 			GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 
+		reward_bet_money()
 		show_end_panel()
 
 
@@ -93,7 +94,7 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 	if boss.current_phase != 3:
 		music_playback.switch_to_clip(2)
 		return
-	super(_boss)
+	super (_boss)
 
 
 #func _input(event: InputEvent) -> void:
@@ -142,10 +143,10 @@ func raise_water() -> void:
 	var water_tween: Tween = get_tree().create_tween()
 	for mesh in waterfall_meshses_vertical:
 		water_tween.parallel().tween_property(
-			mesh, 
-			"scale:x", 
-			1.0, 
-			water_raise_time/3
+			mesh,
+			"scale:x",
+			1.0,
+			water_raise_time / 3
 		)
 		get_node("WaterfallArea").set_deferred("monitoring", true)
 	water_tween.chain().tween_property(water_surface, "global_position:y", upper_water_level, water_raise_time)

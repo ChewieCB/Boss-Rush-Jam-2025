@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BossDifficultyProfile" load_steps=2 format=3 uid="uid://bblkebtod2bhm"]
+
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="1_tyj4h"]
+
+[resource]
+script = ExtResource("1_tyj4h")
+boss_id = 1
+boss_quote = "\"Danger in, fortune out. Or nothing at all. That’s how my gears like it.\""
+ante_names = Array[String](["", "", "", "", ""])

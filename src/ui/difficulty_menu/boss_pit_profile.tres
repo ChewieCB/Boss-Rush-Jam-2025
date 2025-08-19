@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="BossDifficultyProfile" load_steps=2 format=3 uid="uid://dknw5bjh6ipm5"]
+
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="1_21ocl"]
+
+[resource]
+script = ExtResource("1_21ocl")
+boss_id = 4
+boss_quote = "\"Raise the risk, and I’ll raise the reward. Just don’t expect to walk out smiling every time.\""
+ante_names = Array[String](["", "", "", "", ""])

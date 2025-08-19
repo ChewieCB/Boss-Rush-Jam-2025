@@ -15,6 +15,10 @@ var spawned_chips := []
 @export var sweep_damage: float = 10.0
 
 
+func init(_damage: float) -> void:
+	sweep_damage = _damage
+
+
 func add_chips(chip_count: int) -> void:
 	for i in range(chip_count):
 		var chip_tuple: Array = await _add_chip()
@@ -30,7 +34,7 @@ func remove_chips() -> void:
 		var _collider = chip_tuple[1]
 		var tween: Tween = get_tree().create_tween()
 		tween.tween_property(_mesh, "global_position", _mesh.global_position - Vector3(0, 0, sweep_offset), anim_time).set_ease(Tween.EASE_OUT)
-		tween.parallel().tween_property(_mesh, "global_position",  _collider.global_position - Vector3(0, 0, sweep_offset), anim_time).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(_mesh, "global_position", _collider.global_position - Vector3(0, 0, sweep_offset), anim_time).set_ease(Tween.EASE_OUT)
 		tween.parallel().tween_property(_collider, "scale", Vector3.ZERO, anim_time).set_ease(Tween.EASE_OUT)
 		
 		await tween.finished

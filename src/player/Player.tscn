@@ -133,7 +133,6 @@ speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
 freecam_prefab = ExtResource("34_kq3ih")
-reroll_heal_value = 20.0
 
 [node name="HealthComponent" type="Node3D" parent="."]
 script = ExtResource("34_6waar")

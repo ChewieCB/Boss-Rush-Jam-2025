@@ -8,6 +8,7 @@ signal pushed(level_path: String)
 	"linked_level": "",
 	"boss_name": "",
 }
+@export var boss_id: BossCore.BossIdEnum
 
 var linked_level: String
 var boss_name: String
@@ -25,6 +26,7 @@ func _ready() -> void:
 
 func interact() -> void:
 	anim_player.play("push")
+	GameManager.selected_boss_id = boss_id
 	if linked_level:
 		pushed.emit(linked_level)
 		SFXButtonPress.play()

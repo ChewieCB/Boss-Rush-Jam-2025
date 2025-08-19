@@ -41,6 +41,9 @@ func _ready() -> void:
 	explosion_collider.shape.radius = explosion_radius
 	fuse_time += randf_range(0, fuse_variance)
 
+func init(_damage: float) -> void:
+	explosion_damage = _damage
+
 
 func arm() -> void:
 	acivation_area.set_deferred("monitoring", true)
@@ -87,7 +90,7 @@ func detonate() -> void:
 	explosion_vfx.change_mesh_scale(2)
 	# TODO - make explosion size of area
 	
-	var test0 = explosion_area.get_overlapping_bodies()
+	# var _test0 = explosion_area.get_overlapping_bodies()
 	for body in explosion_area.get_overlapping_bodies():
 		if body == self:
 			continue

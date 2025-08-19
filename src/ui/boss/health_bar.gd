@@ -47,6 +47,10 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		await tween.finished
 		heath_bar.value = new_health
 
+func _on_max_health_changed(new_max_health: float, _prev_max_health: float) -> void:
+	damage_bar.max_value = new_max_health
+	heath_bar.max_value = new_max_health
+
 
 func _on_timer_timeout():
 	damage_bar.value = health_component.current_health

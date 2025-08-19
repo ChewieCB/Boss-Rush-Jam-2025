@@ -374,6 +374,9 @@ func _stop_barrel(barrel_idx: int) -> void:
 
 
 func set_barrel_icon_animations(barrel_idx: int, icon_id: int) -> void:
+	if GameManager.cached_icon_anim_sprites.size() == 0:
+		return
+		
 	# Build a path to the icon sprites
 	var icon_sprites_path := "res://src/player/gun/assets/sprite/effect_icons/%s/barrel_%s/" % [icon_id, barrel_idx + 1]
 
@@ -471,13 +474,13 @@ func jam_the_gun(duration: float = 1.0):
 
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
-func regain_ammo(ammo: int) -> void:
+func regain_ammo(_ammo: int) -> void:
 	#show_gun_status("Regained +%s ammo" % [ammo], Color.CYAN)
 	SoundManager.play_sound(TEMP_regain_ammo, "Gun")
 
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
-func crit_damage(damage: int) -> void:
+func crit_damage(_damage: int) -> void:
 	#show_gun_status("CRIT! %s damage" % [damage], Color.RED)
 	SoundManager.play_sound(TEMP_crit, "Gun")
 
@@ -571,7 +574,7 @@ func recheck_installed_barrels():
 	barrel_count = installed_barrels.size()
 
 	for i in barrel_sprites.size():
-		var barrel_label: Label3D = barrel_labels[i]
+		# var barrel_label: Label3D = barrel_labels[i]
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		if i < barrel_count:
 			state_machine.travel("idle")

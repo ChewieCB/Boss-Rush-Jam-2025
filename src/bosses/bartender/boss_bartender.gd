@@ -20,7 +20,7 @@ const BASE_DAMAGE_MODIFIER: float = 1.0
 const BASE_RESISTANCE_MODIFIER: float = 1.0
 const BASE_SPEED_MODIFIER: float = 1.0
 const BASE_DELAY_MODIFIER: float = 1.0
-var damage_modifier: float = BASE_DAMAGE_MODIFIER
+var damage_modifier: float = BASE_DAMAGE_MODIFIER * GameManager.get_risk_dmg_mult()
 var speed_modifier: float = BASE_SPEED_MODIFIER
 var delay_modifier: float = BASE_DELAY_MODIFIER:
 	set(value):
@@ -355,7 +355,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 
 func _on_died() -> void:
-	super()
+	super ()
 	if fire_sfx:
 		fire_sfx.stop()
 	if floor_fire_hazard:
@@ -376,7 +376,7 @@ func fire_shotgun():
 	var proj_damage = 3 * damage_modifier
 	var proj_speed = 40
 	var spread_angle = 6
-	var delay_between_burst = 0.5 * delay_modifier
+	# var delay_between_burst = 0.5 * delay_modifier
 	# TODO - this needs to be cancellable for when the boss dies mid attack
 	# Make this function shoot once and then we can call it 3 times and allow
 	# an interrupt for death after each shot.
@@ -712,7 +712,7 @@ func _on_brew_drink_targeting_state_entered() -> void:
 		return
 
 	state_chart.send_event("start_targeting")
-	current_brew_type = get_random_enum_key(BrewType.keys(), last_brew_type)
+	current_brew_type = get_random_enum_key(BrewType.keys(), last_brew_type) as BrewType
 
 	await get_tree().create_timer(0.2 * delay_modifier).timeout
 
@@ -779,7 +779,7 @@ func _on_throw_drink_targeting_state_entered() -> void:
 	else:
 		var bottle_types_no_barrel = BottleAttack.keys().duplicate()
 		bottle_types_no_barrel.remove_at(BottleAttack.BARREL)
-		current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack)
+		current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack) as BottleAttack
 
 	await get_tree().create_timer(0.2 * delay_modifier).timeout
 
@@ -864,7 +864,7 @@ func _on_no_buff_state_entered() -> void:
 	last_brew_type = current_brew_type
 	status_icon.texture = null
 	health_component.received_dmg_multiplier = BASE_RESISTANCE_MODIFIER
-	damage_modifier = BASE_DAMAGE_MODIFIER
+	damage_modifier = BASE_DAMAGE_MODIFIER * GameManager.get_risk_dmg_mult()
 	speed_modifier = BASE_SPEED_MODIFIER
 	#
 	delay_modifier = 1
@@ -876,7 +876,7 @@ func _on_strength_buff_state_entered() -> void:
 	#  - damage output INCREASED
 	#  - movement speed UNAFFECTED
 	health_component.received_dmg_multiplier = strength_buff_modifier
-	damage_modifier = strength_buff_modifier
+	damage_modifier = strength_buff_modifier * GameManager.get_risk_dmg_mult()
 	speed_modifier = BASE_SPEED_MODIFIER
 	delay_modifier = BASE_DELAY_MODIFIER
 
@@ -889,7 +889,7 @@ func _on_defence_buff_state_entered() -> void:
 	#  - damage output UNAFFECTED
 	#  - movement speed DECREASED
 	health_component.received_dmg_multiplier = defense_buff_modifier
-	damage_modifier = BASE_DAMAGE_MODIFIER
+	damage_modifier = BASE_DAMAGE_MODIFIER * GameManager.get_risk_dmg_mult()
 	speed_modifier = 1 - defense_buff_modifier
 	delay_modifier = 1 + speed_buff_modifier
 
@@ -903,7 +903,7 @@ func _on_speed_buff_state_entered() -> void:
 	#  - damage output DECREASED
 	#  - movement speed INCREASED
 	health_component.received_dmg_multiplier = BASE_RESISTANCE_MODIFIER
-	damage_modifier = speed_buff_modifier
+	damage_modifier = BASE_DAMAGE_MODIFIER * GameManager.get_risk_dmg_mult()
 	speed_modifier = 1 + speed_buff_modifier
 	delay_modifier = 1 - speed_buff_modifier
 

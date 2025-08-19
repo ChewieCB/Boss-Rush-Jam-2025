@@ -23,6 +23,10 @@ func _ready() -> void:
 	homing_delay_timer.start(homing_delay)
 	homing_timer.start(homing_time)
 
+func init(_damage: float, _speed: float):
+	damage = _damage
+	speed = _speed
+
 # TODO - rework this using the gun projectile so we can get impacts and ricochets
 
 func _physics_process(delta: float) -> void:

@@ -55,10 +55,13 @@ func _ready() -> void:
 		if is_flaming:
 			sfx_player_loop_2.volume_db = linear_to_db(0.1)
 			sfx_player_loop_2.stream = sfx_fire.pick_random()
-			sfx_player_loop_2.play() 
+			sfx_player_loop_2.play()
 		var tween = get_tree().create_tween()
 		tween.tween_property(sfx_player_loop_2, "volume_db", linear_to_db(1.0), 0.4).set_trans(Tween.TRANS_SINE)
 		tween.parallel().tween_property(sfx_player_loop_2, "volume_db", linear_to_db(1.0), 0.4).set_trans(Tween.TRANS_SINE)
+
+func init(_damage: float):
+	damage = _damage
 
 
 func _physics_process(_delta: float) -> void:

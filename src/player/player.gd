@@ -32,7 +32,7 @@ var movement_sfx_player: AudioStreamPlayer
 
 @export_category("Luck")
 @export var luck_redeem_time: float = 2.0
-@export var reroll_heal_value: float = 15.0
+@export var reroll_heal_value: float = 25.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
 @onready var interact_ui: Control = $UI/InteractUI
@@ -151,11 +151,11 @@ var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
 
-var is_in_inventory = false:
+# Hide most HUD and stop player control
+var is_in_menu = false:
 	set(value):
-		is_in_inventory = value
-		#barrel_effect_ui.visible = !is_in_inventory
-		if is_in_inventory:
+		is_in_menu = value
+		if is_in_menu:
 			stat_ui.hide_non_luck_ui()
 		else:
 			stat_ui.show_non_luck_ui()
@@ -202,6 +202,7 @@ func _ready():
 	health_component.show_damage_text = false
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
+	health_component.is_owned_by_player = true
 
 	gun_container_original_pos = gun_container.position
 	gun_container_original_rot = gun_container.rotation
@@ -241,7 +242,7 @@ func _unhandled_input(event):
 	#if event.is_action_pressed("open_inventory"):
 		#inventory_ui.toggle()
 
-	if is_in_inventory:
+	if is_in_menu:
 		return
 
 	if event is InputEventMouseMotion:
@@ -326,7 +327,7 @@ func _process(delta):
 			if status.duration <= 0:
 				remove_status_effect(status)
 
-	if aim_ray.is_colliding() and not is_in_inventory:
+	if aim_ray.is_colliding() and not is_in_menu:
 		var interact_collider = aim_ray.get_collider()
 		if interact_collider and \
 			interact_collider.has_method("interact") and \
@@ -341,7 +342,7 @@ func _process(delta):
 		interact_ui.visible = false
 
 
-	if controls_disabled or is_in_inventory:
+	if controls_disabled or is_in_menu:
 		return
 
 	if Input.is_action_pressed("shoot"):
@@ -365,7 +366,7 @@ func _physics_process(delta):
 			raw_input_dir = Vector2(0, -1)
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
-	if not is_dashing and not is_in_inventory:
+	if not is_dashing and not is_in_menu:
 		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
@@ -503,7 +504,10 @@ func update_barrel_effect_ui() -> void:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
 			#if barrel:
-			effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
+			if _effect.icon_id != -1:
+				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
+			else:
+				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/tmp-barrel-icon.png")
 			effect_ui.name_label.text = _effect.display_text_title
 			effect_ui.desc_label.text = _effect.display_text_tag
 			
@@ -540,7 +544,7 @@ func show_debug_label():
 
 
 func jump(local_multiplier = 1.0):
-	if is_in_inventory or controls_disabled:
+	if is_in_menu or controls_disabled:
 		return
 
 	vel_vertical = JUMP_FORCE * current_stats[StatusEffect.PlayerStatEnum.JUMP_HEIGHT] * local_multiplier

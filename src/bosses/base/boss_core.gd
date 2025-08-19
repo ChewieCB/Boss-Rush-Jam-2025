@@ -184,6 +184,7 @@ var cached_target: Node3D
 func _ready() -> void:
 	print_debug("BossCore ready")
 	randomize()
+	apply_risk_modifier()
 	# If the player has beaten all bosses, buff them for the replay value
 	if GameManager.all_bosses_defeated:
 		health_component.max_health *= 2
@@ -266,6 +267,12 @@ func activate() -> void:
 	show_health()
 	SoundManager.play_sound(sfx_awaken, "SFX")
 
+func apply_risk_modifier():
+	health_component.max_health *= GameManager.get_risk_max_hp_mult()
+	health_component.initialize_health()
+	for key in status_resist.keys():
+		status_resist[key] *= GameManager.get_risk_status_resist_mult()
+
 
 ## GENERIC STATE HELPERS
 func _targeting_entered(next_state: String, attack_name: String = "", delay: float = attack_targeting_time) -> void:
@@ -276,7 +283,7 @@ func _targeting_entered(next_state: String, attack_name: String = "", delay: flo
 	await get_tree().create_timer(delay).timeout
 	state_chart.send_event(next_state)
 
-func _telegraph_attack(attack_name: String = "") -> void:
+func _telegraph_attack(_attack_name: String = "") -> void:
 	state_chart.send_event("attack_telegraph")
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
@@ -295,7 +302,7 @@ func _recover_entered() -> void:
 
 func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInstance3D:
 	# Will usually work, but you might need to adjust this.
-	var scene_root = get_tree().root.get_children()[8]
+	var another_scene_root = get_tree().root.get_children()[8]
 	# Create sphere with low detail of size.
 	var sphere = SphereMesh.new()
 	sphere.radial_segments = 4
@@ -311,7 +318,7 @@ func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInst
 	# Add to meshinstance in the right place.
 	var node = MeshInstance3D.new()
 	node.mesh = sphere
-	scene_root.add_child.call_deferred(node)
+	another_scene_root.add_child.call_deferred(node)
 	node.global_transform.origin = location
 
 	return node

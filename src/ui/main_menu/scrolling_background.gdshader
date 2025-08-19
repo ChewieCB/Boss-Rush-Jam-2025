@@ -2,8 +2,8 @@ shader_type canvas_item;
 
 uniform float scroll_speed : hint_range(0, 2) = 0.08;
 uniform float angle_degrees : hint_range(0, 360) = 45.0;
-uniform float repeat_x : hint_range(1, 20) = 20;
-uniform float repeat_y : hint_range(1, 20) = 12;
+uniform float repeat_x : hint_range(1, 50) = 20;
+uniform float repeat_y : hint_range(1, 50) = 12;
 uniform float row_offset : hint_range(0, 1) = 1;
 uniform sampler2D texture_to_scroll;
 
