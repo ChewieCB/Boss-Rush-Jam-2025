@@ -67,7 +67,7 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 	dead_boss_count += 1
 	
 	if dead_boss_count == 2:
-		boss.defeated.connect(_on_boss_defeated)
+		boss.defeated.connect(_on_bosses_defeated)
 		boss.drop_barrel()
 		var tween = self.create_tween()
 		tween.tween_property(directional_light, "light_energy", 0, 1)
@@ -81,8 +81,7 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 	remaining_boss.state_chart.send_event("start_phase_3")
 
 
-func _on_boss_defeated(_boss: BossCore) -> void:
-	super (_boss)
+func _on_bosses_defeated(_boss: BossCore) -> void:
 	if not _boss.boss_id in GameManager.bosses_defeated:
 		GameManager.bosses_defeated.append(_boss.boss_id)
 		print(GameManager.bosses_defeated)
@@ -91,6 +90,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
+	reward_bet_money()
 	show_end_panel()
 
 
