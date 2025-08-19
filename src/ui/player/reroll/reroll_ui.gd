@@ -28,6 +28,12 @@ func _on_progress_changed(value: float) -> void:
 		progress_label.modulate = Color.WHITE
 		anim_player.stop()
 
+	if GameManager.reroll_time >= GameManager.get_risk_limit_spin_amount():
+		progress_bar.tint_over.a = 0
+		progress_label.modulate = Color.GRAY
+		progress_label.text = "Limited"
+		anim_player.stop()
+
 
 func _on_currency_changed(new_value: int) -> void:
 	var progress_tween: Tween = get_tree().create_tween()

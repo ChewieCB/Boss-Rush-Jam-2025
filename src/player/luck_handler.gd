@@ -87,6 +87,7 @@ func gain_dps_dealt(dps_dealt: float) -> void:
 
 
 func increase_luck(amount: float) -> void:
+	amount *= GameManager.get_risk_luck_buildup_mult()
 	luck_increased.emit(amount)
 
 

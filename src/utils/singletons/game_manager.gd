@@ -38,8 +38,8 @@ var shop_barrels: Array[BarrelDataResource] = []
 
 
 # Re-rolls
-@export var initial_reroll_cost: int = 200
-@export var reroll_cost_mult: float = 1.5
+@export var initial_reroll_cost: int = 100
+@export var reroll_cost_mult: float = 1.2
 var reroll_cost: int = initial_reroll_cost
 var is_free_reroll: bool = false:
 	set(value):
@@ -243,10 +243,11 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 func purchase_reroll() -> bool:
 	if reroll_time == 0:
 		reroll_cost = int(reroll_cost * get_risk_spin_cost_mult())
-	if player_currency >= reroll_cost or is_free_reroll:
+	if (player_currency >= reroll_cost and reroll_time < get_risk_limit_spin_amount()) or is_free_reroll:
 		if not is_free_reroll:
 			player_currency -= reroll_cost
 			# Increase the cost of re-rolling for this fight
+			# reroll_cost = int(reroll_cost * reroll_cost_mult)
 			reroll_cost = int(reroll_cost * (reroll_cost_mult + (GameManager.get_risk_spin_cost_mult() - 1)))
 			reroll_time += 1
 		reroll_cost_changed.emit(reroll_cost)
@@ -396,4 +397,17 @@ func get_risk_spin_cost_mult() -> float:
 func get_risk_healing_effectiveness_mult() -> float:
 	var value = 1 - GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING] * \
 		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING]
+	return value
+
+func get_risk_luck_buildup_mult() -> float:
+	var value = 1 - GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP]
+	return value
+
+func get_risk_limit_spin_amount() -> int:
+	var value = 999999
+	if risk_modifier_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT] > 0:
+		value = RiskItem.STARTING_MAX_LIMIT_PLAYER_SPIN_AMOUNT - \
+			((risk_modifier_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT] - 1) * \
+			RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT])
 	return value
