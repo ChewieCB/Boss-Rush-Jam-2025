@@ -67,6 +67,7 @@ func start_loading(scene_name: String = "") -> void:
 	await Engine.get_main_loop().process_frame
 
 	# TODO: Fix why performance drop	
+	# NOTE: Lam: I temporarily disabled it to improve performance
 	# if GameManager.cached_icon_anim_sprites == {}:
 	# 	cache_initial_icon_anim_sprites()
 	
