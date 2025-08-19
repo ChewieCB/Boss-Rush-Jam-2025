@@ -139,7 +139,7 @@ func _on_standard_attack_firing_state_entered() -> void:
 		for proj_spawn in projectile_spawns:
 			var projectile: TestProjectile = projectile_scene.instantiate()
 			get_parent().get_parent().add_child(projectile)
-			projectile.init(laser_proj_damage * get_risk_dmg_mult())
+			projectile.init(laser_proj_damage * GameManager.get_risk_dmg_mult())
 			projectile.global_position = proj_spawn.global_position
 			projectile.look_at(target.global_position)
 			projectile.projectile_speed = 42.0
@@ -204,9 +204,3 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 	fallback_player.stop()
 
 	return fallback_player
-
-
-func get_risk_dmg_mult():
-	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG] * \
-		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG]
-	return value

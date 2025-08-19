@@ -56,6 +56,7 @@ var small_attacks_performed: int = 0
 ## BIG STACK
 @export_group("Attacks | Big Stack")
 @export_subgroup("Backspin Chip")
+@export var rolling_chip_damage: float = 15
 @export var rolling_chip_projectile: PackedScene
 @export var chips_per_attack: int = 2
 var chips_fired: int = 0
@@ -64,6 +65,7 @@ var active_rolling_chip: RollingChip
 @export var sfx_chip_fire: Array[AudioStream]
 #
 @export_subgroup("Chip Sweep")
+@export var chip_sweep_damage: float = 10
 @export var chip_sweep_count: int = 3
 @export var sweep_time: float = 0.05
 @export var sweep_delay: float = 0.4
@@ -113,6 +115,7 @@ var last_stack: ChipBossSubStack
 # SFX
 #
 @export_subgroup("Chip Mines")
+@export var chip_mine_damage: float = 10
 @export var chip_mine_count: int = 8
 @export var chip_mine_layers: int = 2
 @export var chip_mine_spawn_area_radius: float = 9.0
@@ -188,6 +191,7 @@ var snake_distance: float
 var stance_path: Path3D
 var emerge_speed: float = 10.0
 var emerge_distance: float
+@export var chiptopede_projectile_damage: float = 15
 @export var max_projectile_spawn_distance: float = 36.0
 @export var chiptopede_targeting_speed: float = 3.0
 @export var chiptopede_projectile: PackedScene
@@ -223,6 +227,7 @@ func _ready() -> void:
 					print(prop.name, " → ", value)
 	super ()
 	leap_finished.connect(_on_chiptopede_leap_impact)
+	chiptopede_max_health *= GameManager.get_risk_max_hp_mult()
 
 
 func activate() -> void:
@@ -690,6 +695,7 @@ func _on_backspin_chip_forward_spin_state_entered() -> void:
 	
 	# Instance a chip projectile
 	var chip_inst: RollingChip = rolling_chip_projectile.instantiate()
+	chip_inst.init(rolling_chip_damage * GameManager.get_risk_dmg_mult())
 	active_rolling_chip = chip_inst
 	scene_root.add_child(chip_inst)
 	chip_inst.global_transform = self.global_transform
@@ -766,6 +772,7 @@ func _on_chip_sweep_sweep_state_entered() -> void:
 		if "end_attack" in state_chart._queued_events:
 			return
 		var sweep_proj: ChipSweepProjectile = chip_sweep_prefab.instantiate()
+		sweep_proj.init(chip_sweep_damage * GameManager.get_risk_dmg_mult())
 		scene_root.add_child(sweep_proj)
 		sweep_proj.global_transform = self.global_transform
 		chip_sweep_instances.append(sweep_proj)
@@ -834,7 +841,7 @@ func _on_stack_slam_slam_state_entered() -> void:
 	shockwave.global_transform = self.global_transform
 	shockwave.global_position.y = aoe_floor
 	shockwave.max_radius = slam_wave_radius
-	shockwave.damage = slam_damage
+	shockwave.damage = slam_damage * GameManager.get_risk_dmg_mult()
 	shockwave.wave_time = slam_wave_speed
 	shockwave.start_shockwave()
 	
@@ -954,7 +961,7 @@ func _on_ss_charge_merging_state_entered() -> void:
 	scene_root.add_child(area_collider)
 	
 	area_collider.global_position = self.global_position
-	area_collider.body_entered.connect(_on_wave_collision.bind(split_rush_damage))
+	area_collider.body_entered.connect(_on_wave_collision.bind(split_rush_damage * GameManager.get_risk_dmg_mult()))
 	
 	await get_tree().create_timer(0.3).timeout
 	
@@ -1030,7 +1037,7 @@ func _on_merge_aoe_slam_state_entered() -> void:
 	shockwave.max_radius = slam_wave_radius
 	shockwave.arc_angle = 360
 	shockwave.arc_thickness_ratio = 0.7
-	shockwave.damage = slam_damage
+	shockwave.damage = slam_damage * GameManager.get_risk_dmg_mult()
 	shockwave.wave_time = 1.4
 	shockwave.start_shockwave()
 	
@@ -1076,7 +1083,7 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 	
 	await _telegraph_attack()
 	await big_stack_slam(target_pos)
-	await spawn_aoe_wave(aoe_radius, drop_damage, 0.1)
+	await spawn_aoe_wave(aoe_radius, drop_damage * GameManager.get_risk_dmg_mult(), 0.1)
 	# TODO - destroy platform
 	#
 	# Re-enable collision after pushback to avoid clipping
@@ -1155,7 +1162,7 @@ func _on_ss_place_your_bets_attacking_state_entered() -> void:
 		
 		spawn_aoe_wave(
 			aoe_radius,
-			drop_damage / spawned_sub_stacks.size(),
+			(drop_damage * GameManager.get_risk_dmg_mult()) / spawned_sub_stacks.size(),
 			aoe_wave_time,
 			stack.global_position,
 			stack
@@ -1301,7 +1308,7 @@ func _on_chiptopede_leap_impact(segment: Node) -> void:
 		chiptopede_sfx_player.stream = sfx_chiptopede_impact.pick_random()
 		chiptopede_sfx_player.play()
 		#
-		spawn_aoe_bubble(leap_aoe_radius, leap_damage, segment.global_position, 0.4, segment)
+		spawn_aoe_bubble(leap_aoe_radius, leap_damage * GameManager.get_risk_dmg_mult(), segment.global_position, 0.4, segment)
 		#spawn_aoe_wave(8.0, leap_damage, 0.1, segment.global_position, 0.5)
 		# Create an explosion
 		var explosion_inst = explosion_scene.instantiate()
@@ -1461,7 +1468,8 @@ func _on_chiptopede_shoot_shooting_state_entered() -> void:
 			chiptopede_sfx_player.stream = sfx_chiptopede_shoot.pick_random()
 			chiptopede_sfx_player.play()
 			#
-			fire_projectile(chiptopede_projectile, follow_nodes[0].global_position)
+			var proj_inst = fire_projectile(chiptopede_projectile, follow_nodes[0].global_position)
+			proj_inst.init(chiptopede_projectile_damage * GameManager.get_risk_dmg_mult())
 		await get_tree().create_timer(delay_between_burst).timeout
 	
 	state_chart.send_event("stop_shooting")
@@ -1893,7 +1901,7 @@ func _on_chip_mines_jump_state_entered() -> void:
 	jump_tween.tween_property(self, "global_position", target_pos, drop_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
 	await jump_tween.finished
-	await spawn_aoe_wave(aoe_radius, drop_damage, aoe_wave_time)
+	await spawn_aoe_wave(aoe_radius, drop_damage * GameManager.get_risk_dmg_mult(), aoe_wave_time)
 	
 	state_chart.send_event("start_spawn")
 
@@ -1904,6 +1912,7 @@ func _on_chip_mines_spawn_mines_state_entered() -> void:
 	for i in range(chip_mine_layers):
 		for j in range(chip_mine_count / (chip_mine_layers - i)):
 			var mine = chip_mine_prefab.instantiate()
+			mine.init(chip_mine_damage * GameManager.get_risk_dmg_mult())
 			active_mines.append(mine)
 			scene_root.add_child(mine)
 			

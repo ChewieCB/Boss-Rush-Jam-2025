@@ -41,6 +41,9 @@ func _ready() -> void:
 	explosion_collider.shape.radius = explosion_radius
 	fuse_time += randf_range(0, fuse_variance)
 
+func init(_damage: float) -> void:
+	explosion_damage = _damage
+
 
 func arm() -> void:
 	acivation_area.set_deferred("monitoring", true)

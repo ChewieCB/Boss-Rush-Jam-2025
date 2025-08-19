@@ -478,7 +478,7 @@ func _on_laser_beam_recover_state_entered() -> void:
 
 func _on_laser_hurtbox_body_entered(_body: Node3D) -> void:
 	if _body == target and is_beam_tracking:
-		target.health_component.damage(laser_damage * get_risk_dmg_mult())
+		target.health_component.damage(laser_damage * GameManager.get_risk_dmg_mult())
 		laser_sfx_player.stop()
 		laser_sfx_player.stream = sfx_laser_impact.pick_random()
 		laser_sfx_player.play()

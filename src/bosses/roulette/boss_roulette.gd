@@ -276,7 +276,7 @@ func spawn_ball(
 	get_tree().get_root().add_child(new_ball)
 	new_ball = ball_prop_func.call(new_ball, _target)
 	new_ball.global_position = spawn.global_position
-	new_ball.init(ball_damage * get_risk_dmg_mult())
+	new_ball.init(ball_damage * GameManager.get_risk_dmg_mult())
 	new_ball.look_at(Vector3.ZERO)
 	new_ball.destroyed.connect(_on_ball_destroyed)
 	
@@ -450,7 +450,7 @@ func shake_segment(segment: MeshInstance3D, shake_count: int = 30, shake_amount:
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	#SoundManager.play_sound(TEMP_sfx_charge_impact)
 	if body == target:
-		target.health_component.damage(barrier_damage * get_risk_dmg_mult())
+		target.health_component.damage(barrier_damage * GameManager.get_risk_dmg_mult())
 		hurtbox.set_deferred("monitoring", false)
 		await get_tree().create_timer(0.2).timeout
 		hurtbox.set_deferred("monitoring", true)
@@ -545,11 +545,11 @@ func _on_movement_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_wave_collision(body: Node3D) -> void:
 	if body is Player:
-		_pushback_effect(body, wave_damage * get_risk_dmg_mult())
+		_pushback_effect(body, wave_damage * GameManager.get_risk_dmg_mult())
 
 func _on_small_wave_collision(body: Node3D) -> void:
 	if body is Player:
-		_pushback_effect(body, pushback_damage * get_risk_dmg_mult())
+		_pushback_effect(body, pushback_damage * GameManager.get_risk_dmg_mult())
 
 
 func _on_attack_telegraph_state_entered() -> void:

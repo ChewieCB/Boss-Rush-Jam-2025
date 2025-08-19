@@ -257,7 +257,7 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 			if body is Cover:
 				destroy_cover(body)
 			elif body == target:
-				damage_in_hurtbox(lunge_damage * get_risk_dmg_mult())
+				damage_in_hurtbox(lunge_damage * GameManager.get_risk_dmg_mult())
 				hurtbox.set_deferred("monitoring", false)
 				velocity.x = 0
 				velocity.z = 0
@@ -289,16 +289,16 @@ func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
 
 
 func swipe() -> void:
-	target.health_component.damage(swipe_damage * get_risk_dmg_mult())
+	target.health_component.damage(swipe_damage * GameManager.get_risk_dmg_mult())
 
 
 func hook() -> void:
-	target.health_component.damage(hook_damage * get_risk_dmg_mult())
+	target.health_component.damage(hook_damage * GameManager.get_risk_dmg_mult())
 
 
 func uppercut(uppercut_force: float) -> void:
 	if target in hurtbox.get_overlapping_bodies():
-		target.health_component.damage(uppercut_damage * get_risk_dmg_mult())
+		target.health_component.damage(uppercut_damage * GameManager.get_risk_dmg_mult())
 		target.velocity = Vector3.ZERO
 		target.vel_vertical += uppercut_force
 		var xz_force := Vector2(-self.global_basis.z.x, -self.global_basis.z.z)
@@ -577,7 +577,7 @@ func air_slam_attack(slam_force: float, _target_pos: Vector3 = slam_target_pos) 
 	# TODO - replace this with a properly configurable trajectory
 	sfx_player.stream = sfx_slam.pick_random()
 	sfx_player.play()
-	target.health_component.damage(air_slam_damage * get_risk_dmg_mult())
+	target.health_component.damage(air_slam_damage * GameManager.get_risk_dmg_mult())
 	target.vel_vertical -= slam_force
 	self.vel_vertical -= slam_force
 
@@ -725,7 +725,7 @@ func spawn_center_wave(
 
 func _on_wave_collision(body: Node3D) -> void:
 	if body == target:
-		body.health_component.damage(ground_wave_damage * get_risk_dmg_mult())
+		body.health_component.damage(ground_wave_damage * GameManager.get_risk_dmg_mult())
 	elif body is Cover:
 		destroy_cover(body)
 

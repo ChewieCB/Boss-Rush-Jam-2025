@@ -37,6 +37,9 @@ func _ready() -> void:
 	sfx_player_loop.stream = sfx_rolling.pick_random()
 	sfx_player_loop.play()
 
+func init(_damage: float) -> void:
+	damage = _damage
+
 
 func get_point_before_wall() -> Vector3:
 	# Get end point of forward spin

@@ -358,7 +358,7 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 		for j in coin_shots_per_burst:
 			await get_tree().create_timer(delay_per_projectile).timeout
 			var proj = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
-			proj.init(coin_damage * get_risk_dmg_mult())
+			proj.init(coin_damage * GameManager.get_risk_dmg_mult())
 		await get_tree().create_timer(delay_between_burst).timeout
 	state_chart.send_event("stop_shooting")
 
@@ -442,7 +442,7 @@ func spawn_bell(pos: Vector3, size: float) -> Bell:
 	var bell: Bell = bell_scene.instantiate()
 	bell.global_position = pos
 	get_tree().root.get_child(7).add_child(bell)
-	bell.init(bell_damage * get_risk_dmg_mult())
+	bell.init(bell_damage * GameManager.get_risk_dmg_mult())
 	bell.mesh.scale *= size
 	bell.collider.shape.radius = size
 	bell.collider.shape.height = size * 2
@@ -538,7 +538,7 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 	
 	# Hit player in melee range and flee away
 	if target in hurtbox.get_overlapping_bodies():
-		target.health_component.damage(swipe_damage * get_risk_dmg_mult())
+		target.health_component.damage(swipe_damage * GameManager.get_risk_dmg_mult())
 		hurtbox.set_deferred("monitoring", false)
 		# TODO - fix this knockback
 		var knockback_vector = - self.global_basis.z * swipe_knockback
@@ -633,7 +633,7 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 		_sfx_player.play()
 		
 		var projectile := diamond_projectile.instantiate()
-		projectile.init(diamond_damage * get_risk_dmg_mult(), diamond_speed)
+		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
 		#get_tree().root.get_child(2).
 		get_parent().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
@@ -708,7 +708,7 @@ func _on_charge_charging_state_entered() -> void:
 func _on_charge_collision(body: Node3D) -> void:
 	if body == target:
 		velocity = Vector3.ZERO
-		body.health_component.damage(charge_damage * get_risk_dmg_mult())
+		body.health_component.damage(charge_damage * GameManager.get_risk_dmg_mult())
 		hurtbox.body_entered.disconnect(_on_charge_collision)
 		hurtbox.set_deferred("monitoring", false)
 
@@ -781,7 +781,7 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 		sfx_player.stream = sfx_bomb_launch.pick_random()
 		sfx_player.play()
 		var projectile := bomb_projectile.instantiate() as RigidBody3D
-		projectile.init(bomb_damage * get_risk_dmg_mult(), bomb_fuse_time)
+		projectile.init(bomb_damage * GameManager.get_risk_dmg_mult(), bomb_fuse_time)
 		get_parent().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * dir_counter)

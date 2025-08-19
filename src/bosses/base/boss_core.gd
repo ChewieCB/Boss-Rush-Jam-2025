@@ -268,9 +268,7 @@ func activate() -> void:
 	SoundManager.play_sound(sfx_awaken, "SFX")
 
 func apply_risk_modifier():
-	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP] * \
-		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP]
-	health_component.max_health *= value
+	health_component.max_health *= GameManager.get_risk_max_hp_mult()
 	health_component.initialize_health()
 
 
@@ -747,9 +745,3 @@ func _on_status_shocked_active_state_exited() -> void:
 
 func _on_status_shocked_active_state_physics_processing(_delta: float) -> void:
 	pass
-
-
-func get_risk_dmg_mult():
-	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG] * \
-		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG]
-	return value

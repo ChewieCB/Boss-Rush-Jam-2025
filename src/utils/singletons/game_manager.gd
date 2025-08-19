@@ -364,3 +364,14 @@ func get_boss_chip_amount_drop_multiplier() -> float:
 			4:
 				mult -= 0.4
 	return mult
+
+
+func get_risk_max_hp_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP]
+	return value
+
+func get_risk_dmg_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG]
+	return value
