@@ -474,7 +474,8 @@ risk_description = "Limit number of time player can spin barrels"
 value_unit_text = "time(s)"
 icon_sprite = ExtResource("20_xxan1")
 
-[node name="RiskItem9" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+[node name="RiskItem9(TBD)" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+visible = false
 layout_mode = 2
 risk_modifier = 9
 risk_description = "Limit fight duration"

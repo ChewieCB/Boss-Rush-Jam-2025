@@ -61,7 +61,7 @@ var slot_ticks: int = SLOT_TICKS
 @onready var slot_decals: Array[Node] = get_tree().get_root().get_child(3).find_children("*", "SlotRollerDecal")
 
 @export_subgroup("Coin Burst")
-@export var coin_damage: float = 10
+@export var coin_damage: float = 2
 @export var coin_speed: float = 50
 @export var coin_projectile: PackedScene
 @export var coin_shots_per_burst: int = 8

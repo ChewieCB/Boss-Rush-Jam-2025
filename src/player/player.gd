@@ -32,7 +32,7 @@ var movement_sfx_player: AudioStreamPlayer
 
 @export_category("Luck")
 @export var luck_redeem_time: float = 2.0
-@export var reroll_heal_value: float = 15.0
+@export var reroll_heal_value: float = 25.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
 @onready var interact_ui: Control = $UI/InteractUI
@@ -202,6 +202,7 @@ func _ready():
 	health_component.show_damage_text = false
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
+	health_component.is_owned_by_player = true
 
 	gun_container_original_pos = gun_container.position
 	gun_container_original_rot = gun_container.rotation

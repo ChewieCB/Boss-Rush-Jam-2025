@@ -19,6 +19,8 @@ signal hurt
 @export var text_effect_location: Node3D
 
 var received_dmg_multiplier = 1
+var heal_multiplier = 1
+var is_owned_by_player = false
 
 var current_health: float:
 	set(value):
@@ -62,7 +64,10 @@ func damage(_damage: float, _color: Color = Color.WHITE) -> void:
 
 func heal(health: float, _color: Color = Color.GREEN) -> void:
 	if enabled:
-		current_health += health
+		var health_amount: float = health * heal_multiplier
+		if is_owned_by_player:
+			health_amount *= GameManager.get_risk_healing_effectiveness_mult()
+		current_health += round(health_amount)
 		if show_damage_text:
 			if not text_effect:
 				return

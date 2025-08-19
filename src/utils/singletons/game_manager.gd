@@ -392,3 +392,8 @@ func get_risk_spin_cost_mult() -> float:
 	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST] * \
 		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST]
 	return value
+
+func get_risk_healing_effectiveness_mult() -> float:
+	var value = 1 - GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING]
+	return value
