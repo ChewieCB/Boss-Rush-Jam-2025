@@ -102,10 +102,10 @@ func _on_level_select(level_path: String) -> void:
 func _on_door_transition_area_body_entered(body: Node3D) -> void:
 	if body is Player:
 		elevator_doors.open()
-		SFXDoorOpen.play()
+		
 
 
 func _on_door_transition_area_body_exited(body: Node3D) -> void:
 	if body is Player:
 		elevator_doors.close()
-		SFXDoorClose.play()
+		
