@@ -247,6 +247,7 @@ surface_material_override/0 = null
 
 [node name="Barrel1Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="3"]
 transform = Transform3D(0.743941, -0.0342097, -0.666855, -0.665129, 0.0405117, -0.745142, 0.0587072, 0.892489, 0.00826234, -0.411454, 0.00172222, 3.20794)
+visible = false
 surface_material_override/0 = null
 
 [node name="AimAssistRaycast" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]

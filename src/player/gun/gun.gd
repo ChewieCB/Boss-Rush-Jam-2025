@@ -345,6 +345,8 @@ func _spin_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_start_spin()
 	barrel.start_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
+	# Spin the effect mesh UV
+	# TODO 
 	# If we don't have an effect equipped,
 	# travel straight to the spin anim without the decal start anim
 	state_machine.travel("spin_start")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=63 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -146,6 +146,30 @@ tracks/8/keys = {
 "update": 1,
 "values": [null]
 }
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:rotation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.840748, -1.55841, -1.5028)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_6xcgv"]
 resource_name = "barrel_1_idle"
@@ -163,6 +187,30 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("11_hubp1")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.840748, -1.55841, -1.5028)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_bn85l"]
@@ -182,11 +230,23 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq")]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_4bem3"]
 resource_name = "barrel_1_spin_end"
 length = 0.35
-step = 0.035
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -198,6 +258,30 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1.6245, 1),
+"update": 0,
+"values": [Vector3(0.989133, 1.46345, 1.48823), Vector3(0.840748, -1.55841, -1.5028)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_n0a45"]
@@ -215,6 +299,30 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.366022, 1),
+"update": 0,
+"values": [Vector3(0.840748, -1.55841, -1.5028), Vector3(-0.737024, -1.65029, -1.50956)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_wqh6a"]
@@ -861,22 +969,6 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_xp3ts")
 
-[sub_resource type="Animation" id="Animation_kkl8v"]
-resource_name = "IconSpinIn_001"
-length = 0.333333
-tracks/0/type = "rotation_3d"
-tracks/0/imported = true
-tracks/0/enabled = true
-tracks/0/path = NodePath("RotationRef1_001")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 0, -0.519921, 0, 0.854214, 0.0333333, 1, 0, -0.519921, 0, 0.854214, 0.0666667, 1, 0, -0.495288, 0, 0.868729, 0.1, 1, 0, -0.425137, 0, 0.905129, 0.133333, 1, 0, -0.314262, 0, 0.949336, 0.166667, 1, 0, -0.16913, 0, 0.985594, 0.2, 1, 0, 0, 0, 1, 0.233333, 1, 0, 0.119201, 0, 0.99287, 0.266667, 1, 0, 0, 0, 1, 0.3, 1, 0.0216359, -0.0584464, -0.0791473, 0.994913, 0.333333, 1, 0, 0, 0, 1)
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_23w3v"]
-_data = {
-"IconSpinIn_001": SubResource("Animation_kkl8v")
-}
-
 [node name="BlankGun" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, -6.51926e-09)
 script = ExtResource("1_ferpt")
@@ -1064,20 +1156,10 @@ skeleton = NodePath("")
 surface_material_override/0 = ExtResource("34_tk7r4")
 
 [node name="Barrel1Icon" type="MeshInstance3D" parent="EffectIconsViewport/EffectIconsParent"]
-transform = Transform3D(0.743941, -0.0342096, -0.666855, -0.665129, 0.0405116, -0.745142, 0.0587071, 0.892489, 0.00826239, -0.411454, 0.00172222, 3.20794)
+transform = Transform3D(0.743941, -0.0342097, -0.666855, -0.665129, 0.0405117, -0.745142, 0.0587072, 0.892489, 0.00826234, -0.411454, 0.00172222, 3.20794)
+visible = false
 mesh = SubResource("ArrayMesh_eevs2")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("34_tk7r4")
-
-[node name="RotationRef1" type="Node3D" parent="EffectIconsViewport/EffectIconsParent"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.17692, 1.38153, 0.941709)
-
-[node name="RotationRef1_001" type="Node3D" parent="EffectIconsViewport/EffectIconsParent"]
-transform = Transform3D(0.459365, 0, -0.888248, 0, 1, 0, 0.888248, 0, 0.459365, 7.17692, 1.38153, 0.941709)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="EffectIconsViewport/EffectIconsParent"]
-libraries = {
-"": SubResource("AnimationLibrary_23w3v")
-}
 
 [connection signal="timeout" from="JamTimer" to="." method="_on_jam_timer_timeout"]
