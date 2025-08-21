@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=65 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -31,8 +31,6 @@
 [ext_resource type="Texture2D" uid="uid://cx7vidsyvx8yh" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_1.png" id="27_6hxas"]
 [ext_resource type="Texture2D" uid="uid://cdp2vrgsg8vk7" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_2.png" id="28_vfi2f"]
 [ext_resource type="Texture2D" uid="uid://cdi2hskp63cj8" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_3.png" id="29_egcby"]
-[ext_resource type="Texture2D" uid="uid://cjiqf8i74px48" path="res://assets/sprite/effect_icons/Archetype/0_Railgun.png" id="32_brbe4"]
-[ext_resource type="Texture2D" uid="uid://bwtimhxmfb4vg" path="res://assets/sprite/effect_icons/Archetype/1_Shotgun.png" id="33_v6u2p"]
 [ext_resource type="Material" uid="uid://bdnq13wgr3cmj" path="res://src/player/gun/assets/material/default_effect_icon_mat.tres" id="34_tk7r4"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rlyuh"]
@@ -795,11 +793,6 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_mpiuv")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yir1n"]
-transparency = 1
-albedo_texture = ExtResource("32_brbe4")
-texture_repeat = false
-
 [sub_resource type="ArrayMesh" id="ArrayMesh_yooti"]
 _surfaces = [{
 "aabb": AABB(-1.28, -0.45, -1.28, 2.56, 0.9, 2.56),
@@ -833,11 +826,6 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_yooti")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t5t73"]
-transparency = 1
-albedo_texture = ExtResource("33_v6u2p")
-texture_repeat = false
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_xp3ts"]
 _surfaces = [{
@@ -1067,13 +1055,13 @@ far = 1000.0
 transform = Transform3D(0.735053, -0.0466665, -0.676402, -0.67801, -0.0493597, -0.733394, 0.000837915, 0.99769, -0.0679223, -0.00193595, 0, 0.555438)
 mesh = SubResource("ArrayMesh_fw2vn")
 skeleton = NodePath("")
-surface_material_override/0 = SubResource("StandardMaterial3D_yir1n")
+surface_material_override/0 = ExtResource("34_tk7r4")
 
 [node name="Barrel2Icon" type="MeshInstance3D" parent="EffectIconsViewport/EffectIconsParent"]
 transform = Transform3D(0.693706, -0.052336, -0.718354, -0.71934, -1.19209e-07, -0.694658, 0.0363556, 0.99863, -0.0376475, -0.15, 0, 1.76)
 mesh = SubResource("ArrayMesh_l1gaq")
 skeleton = NodePath("")
-surface_material_override/0 = SubResource("StandardMaterial3D_t5t73")
+surface_material_override/0 = ExtResource("34_tk7r4")
 
 [node name="Barrel1Icon" type="MeshInstance3D" parent="EffectIconsViewport/EffectIconsParent"]
 transform = Transform3D(0.743941, -0.0342096, -0.666855, -0.665129, 0.0405116, -0.745142, 0.0587071, 0.892489, 0.00826239, -0.411454, 0.00172222, 3.20794)

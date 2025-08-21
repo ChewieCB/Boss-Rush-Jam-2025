@@ -363,7 +363,7 @@ func _stop_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	barrel.stop_spin()
 	# Update barrel icon
-	set_barrel_icon_animations(barrel_idx, barrel.get_active_effect().icon_id)
+	set_barrel_icon(barrel_idx, barrel.get_active_effect().icon_id)
 	barrel.get_active_effect().on_barrel_stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
@@ -374,7 +374,7 @@ func _stop_barrel(barrel_idx: int) -> void:
 	barrel_spin_stopped.emit(barrel, barrel_idx)
 
 
-func set_barrel_icon_animations(barrel_idx: int, icon_id: int) -> void:
+func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
 	var barrel_mesh: MeshInstance3D = barrel_icon_meshes[barrel_idx]
 	
 	var mat: StandardMaterial3D = barrel_mesh.get_surface_override_material(0)
@@ -509,7 +509,7 @@ func install_barrel(barrel_prefab: PackedScene) -> void:
 	barrel_count = installed_barrels.size()
 
 	barrel_inst.get_active_effect().on_barrel_install()
-	set_barrel_icon_animations(barrel_idx, barrel_inst.get_active_effect().icon_id)
+	set_barrel_icon(barrel_idx, barrel_inst.get_active_effect().icon_id)
 	barrel_equipped.emit(barrel_inst, barrel_idx)
 
 	recheck_installed_barrels()
@@ -532,7 +532,9 @@ func remove_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_remove()
 	barrel_unequipped.emit(null, barrel_idx)
 	barrel.queue_free()
-
+	
+	barrel_icon_meshes[barrel_idx].set_surface_override_material(0, default_barrel_icon_mat)
+	
 	recheck_installed_barrels()
 
 	# Re-apply the effects of the currently equipped barrels

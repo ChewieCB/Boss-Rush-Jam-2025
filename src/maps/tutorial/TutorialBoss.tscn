@@ -4665,6 +4665,7 @@ entProperties = {
 "linked_level": "res://src/maps/lobby/Lobby.tscn",
 "origin": "-647 -320 -108"
 }
+boss_id = 0
 
 [node name="entity_91_BossPositionMarker" type="Marker3D" parent="FuncGodotMap" index="81"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -48.75, -7.75, 12.25)
