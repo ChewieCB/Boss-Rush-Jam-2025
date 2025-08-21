@@ -369,9 +369,7 @@ func _stop_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
-	# Pick barrel icon
-	# FIXME
-	#effect_icon_sprites[barrel_idx].texture = barrel.get_active_effect().icon
+	
 	SoundManager.stop_sound(TEMP_sfx_spin)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
 

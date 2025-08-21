@@ -140,9 +140,6 @@ var CHEAT_freecam: bool = true
 
 @export var sfx_screenshot: AudioStream
 
-# Gun Icon animation caching
-var cached_icon_anim_sprites: Dictionary = {}
-
 
 func _ready() -> void:
 	barrel_database.append_array(debug_barrel_database)
