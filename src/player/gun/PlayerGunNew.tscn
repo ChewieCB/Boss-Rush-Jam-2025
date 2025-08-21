@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=69 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -33,7 +33,7 @@
 [ext_resource type="Texture2D" uid="uid://cdi2hskp63cj8" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_3.png" id="29_egcby"]
 [ext_resource type="Texture2D" uid="uid://cjiqf8i74px48" path="res://assets/sprite/effect_icons/Archetype/0_Railgun.png" id="32_brbe4"]
 [ext_resource type="Texture2D" uid="uid://bwtimhxmfb4vg" path="res://assets/sprite/effect_icons/Archetype/1_Shotgun.png" id="33_v6u2p"]
-[ext_resource type="Texture2D" uid="uid://b78fi3t1fhevw" path="res://assets/sprite/effect_icons/Archetype/2_SMG.png" id="34_cxfyp"]
+[ext_resource type="Material" uid="uid://bdnq13wgr3cmj" path="res://src/player/gun/assets/material/default_effect_icon_mat.tres" id="34_tk7r4"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rlyuh"]
 viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
@@ -148,30 +148,6 @@ tracks/8/keys = {
 "update": 1,
 "values": [null]
 }
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:modulate")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:texture")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
 
 [sub_resource type="Animation" id="Animation_6xcgv"]
 resource_name = "barrel_1_idle"
@@ -189,30 +165,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("11_hubp1")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_bn85l"]
@@ -232,18 +184,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq")]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
 
 [sub_resource type="Animation" id="Animation_4bem3"]
 resource_name = "barrel_1_spin_end"
@@ -261,30 +201,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq")]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [null, null, null, null, null, null, null, null, null, null, null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_n0a45"]
 resource_name = "barrel_1_spin_start"
@@ -301,30 +217,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq"), ExtResource("21_oipg7"), ExtResource("14_rhmcq")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [null, null, null, null, null, null, null, null, null, null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel1Sprite/EffectIcon1Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.16, 0.18),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_wqh6a"]
@@ -362,30 +254,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("12_vi2pp")]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_pkm0u"]
 resource_name = "barrel_2_spin"
@@ -421,30 +289,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd")]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [null, null, null, null, null, null, null, null, null, null, null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_q7g0e"]
 resource_name = "barrel_2_spin_start"
@@ -461,30 +305,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd"), ExtResource("23_kl067"), ExtResource("22_q6pxd")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [null, null, null, null, null, null, null, null, null, null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel2Sprite/EffectIcon2Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.16, 0.18),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_sucgk"]
@@ -522,30 +342,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("13_u0vae")]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_xu0n1"]
 resource_name = "barrel_3_spin"
@@ -581,30 +377,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho")]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.0344828, 0.0689655, 0.103448, 0.137931, 0.172414, 0.206897, 0.241379, 0.275862, 0.310345, 0.344828),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [null, null, null, null, null, null, null, null, null, null, null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_wc336"]
 resource_name = "barrel_3_spin_start"
@@ -621,30 +393,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho"), ExtResource("16_5bgyl"), ExtResource("15_a1yho")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [null, null, null, null, null, null, null, null, null, null]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent/Barrel3Sprite/EffectIcon3Sprite:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.16, 0.18),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_vooid"]
@@ -1013,17 +761,6 @@ _data = {
 
 [sub_resource type="World3D" id="World3D_srv2o"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ovpij"]
-load_path = "res://.godot/imported/gun_cylinder_ref_test_7_45.png-b566d7d2ff9679a10d8522dd818ca843.s3tc.ctex"
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mdsyx"]
-resource_name = "Material.002"
-transparency = 4
-cull_mode = 2
-albedo_texture = SubResource("CompressedTexture2D_ovpij")
-roughness = 0.5
-texture_repeat = false
-
 [sub_resource type="ArrayMesh" id="ArrayMesh_mpiuv"]
 _surfaces = [{
 "aabb": AABB(-1.28, -0.54, -1.28, 2.56, 1.08, 2.56),
@@ -1048,7 +785,7 @@ _surfaces = [{
 "index_count": 372,
 "index_data": PackedByteArray("AQAKAAQAAQAHAAoACAAQAAsACAANABAADgAWABEADgATABYAFAAcABcAFAAZABwAGgAiAB0AGgAfACIAIAAoACMAIAAlACgAJgAuACkAJgArAC4ALAA1AC8ALAAyADUAMQA7ADQAMQA4ADsANwBBADoANwA+AEEAPQBHAEAAPQBEAEcAQwBNAEYAQwBKAE0ASQBTAEwASQBQAFMATwBZAFIATwBWAFkAVQBfAFgAVQBcAF8AWwBkAF4AWwBhAGQAYgBqAGUAYgBnAGoAaABwAGsAaABtAHAAbgB2AHEAbgBzAHYAdAB8AHcAdAB5AHwAegCCAH0AegB/AIIAgACIAIMAgACFAIgAhgCOAIkAhgCLAI4AjACUAI8AjACRAJQAkgCbAJUAkgCYAJsAlwChAJoAlwCeAKEAnQCnAKAAnQCkAKcAowCtAKYAowCqAK0AqQCzAKwAqQCwALMArwC5ALIArwC2ALkADwADAAkAAwC3AL0AtwCrALEAqwCfAKUAnwCTAJkAkwCHAI0AhwB7AIEAewBvAHUAbwBjAGkAYwBXAF0AVwBLAFEASwA/AEUAPwAzADkAMwAnAC0AJwAbACEAGwAPABUADwC3AAMAtwCfAKsAnwCHAJMAhwBvAHsAbwBXAGMAVwA/AEsAPwAnADMAJwAPABsADwCfALcAnwBvAIcAbwA/AFcAPwAPACcADwBvAJ8AbwAPAD8AtQC/ALgAtQC8AL8AuwAFAL4AuwACAAUAugAGAAAABgASAAwAEgAeABgAHgAqACQAKgA2ADAANgBCADwAQgBOAEgATgBaAFQAWgBmAGAAZgByAGwAcgB+AHgAfgCKAIQAigCWAJAAlgCiAJwAogCuAKgArgC6ALQAugASAAYAEgAqAB4AKgBCADYAQgBaAE4AWgByAGYAcgCKAH4AigCiAJYAogC6AK4AugAqABIAKgBaAEIAWgCKAHIAigC6AKIAugBaACoAWgC6AIoA"),
 "lods": [0.127419, PackedByteArray("uwAQAAQAuwANABAAuwAEALgAtQC7ALgArwC1ALgArwC4AKwAowCvAKwAnQCjAKwAnQCsAKAADgAcABEADgATABwAEwAfABwAHwAoABwAHwArACgAKwA0ACgAKwAxADQAMQBAADQAMQA9AEAAPQBNAEAAPQBKAE0ASQBTAEwASQBQAFMATwBYAFIATwBVAFgAVQBfAFgAVQBcAF8AWwBkAF4AWwBnAGQAZwBwAGQAZwBzAHAAcwB/AHAAfwCIAHAAfwCLAIgAiwCRAIgAkQCbAIgAkQCYAJsAlwChAJoAlwCeAKEAnwCHAJkAnwBvAIcAtwCfAKsADwCfALcADwBvAJ8ADwC3AAMAbwAPAD8APwAPACcAJwAPABsAPwAnADMAbwA/AFcAVwA/AEsAVwBLAFEAbwBXAGMAYwBXAF0AugASAAwAEgAqAB4AugAqABIAKgA8ADAAKgBaADwAugBaACoAPABOAEgAPABaAE4ATgBaAFQArgC6ALQAogC6AK4AWgC6AIoAigC6AKIAWgCKAHIAWgByAGYAcgCKAH4AigCiAJYAlgCiAJwAigCWAJAA"), 0.625119, PackedByteArray("rwAQALgArwANABAAnQCvALgAnQC4AKAADgAoABEADgAxACgAMQBNACgAMQBKAE0ASQBTAEwASQBQAFMATwBYAFIATwBVAFgAVQBfAFgAVQBcAF8AwADBAF4AwADCAMEAwgCbAMEAwgCYAJsAlwChAJoAlwCeAKEAnwBvAJkADwBvAJ8ADwCfALcAbwAPACcAbwAnAFcAbwBXAF0AVwAnAEsAVwBLAFEArgAwAAwAlgCuAJwAigCuAJYAWgCuAIoArgBaADAAMABaAE4ATgBaAFQAMABOAEgA")],
-"material": SubResource("StandardMaterial3D_mdsyx"),
+"material": ExtResource("34_tk7r4"),
 "name": "Material.002",
 "primitive": 3,
 "uv_scale": Vector4(4.03962, 3.52626, 0, 0),
@@ -1061,14 +798,6 @@ shadow_mesh = SubResource("ArrayMesh_mpiuv")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yir1n"]
 transparency = 1
 albedo_texture = ExtResource("32_brbe4")
-texture_repeat = false
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p5ded"]
-resource_name = "Material.001"
-transparency = 4
-cull_mode = 2
-albedo_texture = SubResource("CompressedTexture2D_ovpij")
-roughness = 0.5
 texture_repeat = false
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_yooti"]
@@ -1095,7 +824,7 @@ _surfaces = [{
 "index_count": 372,
 "index_data": PackedByteArray("AQAKAAQAAQAHAAoACAAQAAsACAANABAADgAWABEADgATABYAFAAcABcAFAAZABwAGgAiAB0AGgAfACIAIAAoACMAIAAlACgAJgAuACkAJgArAC4ALAA1AC8ALAAyADUAMQA7ADQAMQA4ADsANwBBADoANwA+AEEAPQBHAEAAPQBEAEcAQwBNAEYAQwBKAE0ASQBTAEwASQBQAFMATwBZAFIATwBWAFkAVQBfAFgAVQBcAF8AWwBkAF4AWwBhAGQAYgBqAGUAYgBnAGoAaABwAGsAaABtAHAAbgB2AHEAbgBzAHYAdAB8AHcAdAB5AHwAegCCAH0AegB/AIIAgACIAIMAgACFAIgAhgCOAIkAhgCLAI4AjACUAI8AjACRAJQAkgCbAJUAkgCYAJsAlwChAJoAlwCeAKEAnQCnAKAAnQCkAKcAowCtAKYAowCqAK0AqQCzAKwAqQCwALMArwC5ALIArwC2ALkADwADAAkAAwC3AL0AtwCrALEAqwCfAKUAnwCTAJkAkwCHAI0AhwB7AIEAewBvAHUAbwBjAGkAYwBXAF0AVwBLAFEASwA/AEUAPwAzADkAMwAnAC0AJwAbACEAGwAPABUADwC3AAMAtwCfAKsAnwCHAJMAhwBvAHsAbwBXAGMAVwA/AEsAPwAnADMAJwAPABsADwCfALcAnwBvAIcAbwA/AFcAPwAPACcADwBvAJ8AbwAPAD8AtQC/ALgAtQC8AL8AuwAFAL4AuwACAAUAugAGAAAABgASAAwAEgAeABgAHgAqACQAKgA2ADAANgBCADwAQgBOAEgATgBaAFQAWgBmAGAAZgByAGwAcgB+AHgAfgCKAIQAigCWAJAAlgCiAJwAogCuAKgArgC6ALQAugASAAYAEgAqAB4AKgBCADYAQgBaAE4AWgByAGYAcgCKAH4AigCiAJYAogC6AK4AugAqABIAKgBaAEIAWgCKAHIAigC6AKIAugBaACoAWgC6AIoA"),
 "lods": [0.104787, PackedByteArray("uwAQAAQAuwANABAAuwAEALgAtQC7ALgArwC1ALgArwC4AKwAowCvAKwAnQCjAKwAnQCsAKAADgAcABEADgAZABwAGQAfABwAHwAoABwAHwArACgAKwA0ACgAKwAxADQAMQBAADQAMQA9AEAAPQBNAEAAPQBKAE0ASQBTAEwASQBQAFMATwBYAFIATwBVAFgAVQBfAFgAVQBcAF8AWwBwAF4AWwBnAHAAZwBzAHAAcwB8AHAAcwB/AHwAfwCIAHwAfwCLAIgAiwCRAIgAkQCbAIgAkQCYAJsAlwChAJoAlwCeAKEAnwCHAJkAnwBvAIcAhwBvAHsAtwCfAKsADwCfALcADwBvAJ8ADwC3AAMAbwBXAF0AbwAPAD8AbwA/AFcAVwA/AEsAVwBLAFEAPwAPACcAJwAPABsAPwAnADMAugAYAAwAGAAqAB4AugAqABgAKgA8ADAAKgBaADwAugBaACoAPABOAEgAPABaAE4ATgBaAFQArgC6ALQAogC6AK4AWgC6AIoAigC6AKIAWgCKAHIAWgByAGYAcgCKAH4AigCiAJYAlgCiAJwAigCWAJAA"), 0.620727, PackedByteArray("rwAQALgArwANABAAnQCvALgAnQC4AKAADgAoABEADgDAACgAwABNACgAwABKAE0ASQBTAEwASQBQAFMATwBYAFIATwBVAFgAVQBfAFgAVQBcAF8AWwDCAF4AwQDEAMIAiwCbAMMAiwCYAJsAlwChAJoAlwCeAKEAnwBvAJkADwBvAJ8ADwCfALcAbwAPACcAbwAnAFcAbwBXAF0AVwAnAEsAVwBLAFEArgAqAAwAlgCuAJwAigCuAJYAWgCuAIoArgBaACoAKgBaAE4ATgBaAFQAKgBOAEgA")],
-"material": SubResource("StandardMaterial3D_p5ded"),
+"material": ExtResource("34_tk7r4"),
 "name": "Material.001",
 "primitive": 3,
 "uv_scale": Vector4(4.03962, 3.52626, 0, 0),
@@ -1108,14 +837,6 @@ shadow_mesh = SubResource("ArrayMesh_yooti")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t5t73"]
 transparency = 1
 albedo_texture = ExtResource("33_v6u2p")
-texture_repeat = false
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dq1qi"]
-resource_name = "IconTransparent"
-transparency = 4
-cull_mode = 2
-albedo_texture = SubResource("CompressedTexture2D_ovpij")
-roughness = 0.5
 texture_repeat = false
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_xp3ts"]
@@ -1142,7 +863,7 @@ _surfaces = [{
 "index_count": 372,
 "index_data": PackedByteArray("AQAKAAQAAQAHAAoACAAQAAsACAANABAADgAWABEADgATABYAFAAcABcAFAAZABwAGgAiAB0AGgAfACIAIAAoACMAIAAlACgAJgAuACkAJgArAC4ALAA1AC8ALAAyADUAMQA7ADQAMQA4ADsANwBBADoANwA+AEEAPQBHAEAAPQBEAEcAQwBNAEYAQwBKAE0ASQBTAEwASQBQAFMATwBZAFIATwBWAFkAVQBfAFgAVQBcAF8AWwBkAF4AWwBhAGQAYgBqAGUAYgBnAGoAaABwAGsAaABtAHAAbgB2AHEAbgBzAHYAdAB8AHcAdAB5AHwAegCCAH0AegB/AIIAgACIAIMAgACFAIgAhgCOAIkAhgCLAI4AjACUAI8AjACRAJQAkgCbAJUAkgCYAJsAlwChAJoAlwCeAKEAnQCnAKAAnQCkAKcAowCtAKYAowCqAK0AqQCzAKwAqQCwALMArwC5ALIArwC2ALkADwADAAkAAwC3AL0AtwCrALEAqwCfAKUAnwCTAJkAkwCHAI0AhwB7AIEAewBvAHUAbwBjAGkAYwBXAF0AVwBLAFEASwA/AEUAPwAzADkAMwAnAC0AJwAbACEAGwAPABUADwC3AAMAtwCfAKsAnwCHAJMAhwBvAHsAbwBXAGMAVwA/AEsAPwAnADMAJwAPABsADwCfALcAnwBvAIcAbwA/AFcAPwAPACcADwBvAJ8AbwAPAD8AtQC/ALgAtQC8AL8AuwAFAL4AuwACAAUAugAGAAAABgASAAwAEgAeABgAHgAqACQAKgA2ADAANgBCADwAQgBOAEgATgBaAFQAWgBmAGAAZgByAGwAcgB+AHgAfgCKAIQAigCWAJAAlgCiAJwAogCuAKgArgC6ALQAugASAAYAEgAqAB4AKgBCADYAQgBaAE4AWgByAGYAcgCKAH4AigCiAJYAogC6AK4AugAqABIAKgBaAEIAWgCKAHIAigC6AKIAugBaACoAWgC6AIoA"),
 "lods": [0.151956, PackedByteArray("uwAQAAQAuwANABAAuwAEALgAtQC7ALgArwC1ALgArwC4AKwAowCvAKwAnQCjAKwAnQCsAKAADgAcABEADgATABwAEwAfABwAHwAoABwAHwArACgAKwA0ACgAKwAxADQAMQBAADQAMQA9AEAAPQBNAEAAPQBKAE0ASQBTAEwASQBQAFMATwBYAFIATwBVAFgAVQBfAFgAVQBcAF8AWwBwAF4AWwBnAHAAZwBzAHAAcwB8AHAAcwB/AHwAfwCIAHwAfwCLAIgAiwCRAIgAkQCbAIgAkQCYAJsAlwChAJoAlwCeAKEAnwCHAJkAnwBvAIcAhwBvAHsAtwCfAKsADwCfALcADwBvAJ8ADwC3AAMAbwBXAF0AbwAPAD8AbwA/AFcAVwA/AEsAVwBLAFEAPwAPACcAJwAPABsAPwAnADMAugASAAwAEgAqAB4AugAqABIAKgA8ADAAKgBaADwAugBaACoAPABOAEgAPABaAE4ATgBaAFQArgC6ALQAogC6AK4AWgC6AIoAigC6AKIAWgCKAHIAWgByAGYAcgCKAH4AigCiAJYAlgCiAJwAigCWAJAA"), 0.899469, PackedByteArray("rwAQALgArwANABAAnQCvALgAnQC4AKAADgAoABEADgAxACgAMQBNACgAMQBKAE0ASQBTAEwASQBQAFMATwBYAFIATwBVAFgAVQBfAFgAVQBcAF8AWwDBAF4AwADCAMEAwgCbAMEAwgCYAJsAlwChAJoAlwCeAKEAnwBvAJkADwBvAJ8ADwCfALcAbwAPACcAbwAnAFcAbwBXAF0AVwAnAEsAVwBLAFEArgAwAAwAlgCuAJwAigCuAJYAWgCuAIoArgBaADAAMABaAE4ATgBaAFQAMABOAEgA")],
-"material": SubResource("StandardMaterial3D_dq1qi"),
+"material": ExtResource("34_tk7r4"),
 "name": "IconTransparent",
 "primitive": 3,
 "uv_scale": Vector4(4.03962, 3.52626, 0, 0),
@@ -1151,11 +872,6 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_xp3ts")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3ecor"]
-transparency = 1
-albedo_texture = ExtResource("34_cxfyp")
-texture_repeat = false
 
 [sub_resource type="Animation" id="Animation_kkl8v"]
 resource_name = "IconSpinIn_001"
@@ -1228,10 +944,6 @@ font_size = 64
 outline_size = 32
 horizontal_alignment = 0
 
-[node name="EffectIcon3Sprite" type="Sprite3D" parent="SpriteParent/Barrel3Sprite"]
-modulate = Color(0, 0, 0, 1)
-render_priority = 3
-
 [node name="Marker3D" type="Marker3D" parent="SpriteParent/Barrel3Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -1.2, 0)
 
@@ -1250,9 +962,6 @@ text = "Barrel 2 Text Label"
 font_size = 64
 outline_size = 32
 horizontal_alignment = 0
-
-[node name="EffectIcon2Sprite" type="Sprite3D" parent="SpriteParent/Barrel2Sprite"]
-render_priority = 3
 
 [node name="Marker3D" type="Marker3D" parent="SpriteParent/Barrel2Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.6, 0)
@@ -1274,10 +983,6 @@ font_size = 64
 outline_size = 32
 horizontal_alignment = 0
 
-[node name="EffectIcon1Sprite" type="Sprite3D" parent="SpriteParent/Barrel1Sprite"]
-modulate = Color(0, 0, 0, 1)
-render_priority = 3
-
 [node name="Marker3D" type="Marker3D" parent="SpriteParent/Barrel1Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, -2.3, 0)
 
@@ -1296,7 +1001,6 @@ sorting_offset = 3.0
 render_priority = 2
 
 [node name="EffectIconsSprite" type="Sprite3D" parent="SpriteParent"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 render_priority = 3
 texture = SubResource("ViewportTexture_rlyuh")
 
@@ -1375,7 +1079,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_t5t73")
 transform = Transform3D(0.743941, -0.0342096, -0.666855, -0.665129, 0.0405116, -0.745142, 0.0587071, 0.892489, 0.00826239, -0.411454, 0.00172222, 3.20794)
 mesh = SubResource("ArrayMesh_eevs2")
 skeleton = NodePath("")
-surface_material_override/0 = SubResource("StandardMaterial3D_3ecor")
+surface_material_override/0 = ExtResource("34_tk7r4")
 
 [node name="RotationRef1" type="Node3D" parent="EffectIconsViewport/EffectIconsParent"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.17692, 1.38153, 0.941709)

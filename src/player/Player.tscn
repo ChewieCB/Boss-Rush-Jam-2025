@@ -239,6 +239,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, 0)
 [node name="EffectIconsSprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent" index="8"]
 texture = SubResource("ViewportTexture_rj1ni")
 
+[node name="Barrel3Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="1"]
+surface_material_override/0 = null
+
+[node name="Barrel2Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="2"]
+surface_material_override/0 = null
+
+[node name="Barrel1Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="3"]
+surface_material_override/0 = null
+
 [node name="AimAssistRaycast" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
 target_position = Vector3(0, 0, -500)
