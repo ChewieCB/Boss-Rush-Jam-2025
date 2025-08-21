@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=75 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -98,6 +98,9 @@ shader_parameter/grazing_angle_modulation_factor = 50.0
 material = SubResource("ShaderMaterial_cjv3t")
 flip_faces = true
 size = Vector2(2, 2)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
+viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
@@ -231,6 +234,23 @@ texture = ExtResource("5_nkt42")
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
 
 [node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("39_lhbas")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, 0)
+
+[node name="EffectIconsSprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent" index="8"]
+texture = SubResource("ViewportTexture_rj1ni")
+
+[node name="Barrel3Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="1"]
+transform = Transform3D(0.735053, -0.0466666, -0.676402, -0.67801, -0.0493597, -0.733394, 0.000837997, 0.99769, -0.0679223, -0.00193595, 0, 0.555438)
+surface_material_override/0 = null
+
+[node name="Barrel2Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="2"]
+transform = Transform3D(0.693706, -0.052336, -0.718354, -0.71934, -3.14434e-08, -0.694658, 0.0363556, 0.99863, -0.0376474, -0.15, 0, 1.76)
+surface_material_override/0 = null
+
+[node name="Barrel1Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="3"]
+transform = Transform3D(0.743941, -0.0342097, -0.666855, -0.665129, 0.0405117, -0.745142, 0.0587072, 0.892489, 0.00826234, -0.411454, 0.00172222, 3.20794)
+visible = false
+surface_material_override/0 = null
 
 [node name="AimAssistRaycast" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
