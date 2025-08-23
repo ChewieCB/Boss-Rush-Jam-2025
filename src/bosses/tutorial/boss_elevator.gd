@@ -32,6 +32,11 @@ extends BossCore
 @export var nail_damage: float = 3.0
 # SFX
 @export var sfx_nail_shot: Array[AudioStream]
+@export_subgroup("Laser AoE")
+@export var laser_aoe: PackedScene
+@export var laser_spawn: Marker3D
+@export var laser_damage: float = 40.0
+var laser_instance
 
 
 
@@ -55,6 +60,7 @@ func select_attack_phase_1() -> void:
 	var _possible_phases = [
 		"start_melee_combo_attack",
 		"start_dual_nails_attack",
+		"start_laser_aoe_attack",
 	]
 	state_chart.send_event(_possible_phases.pick_random())
 
@@ -193,6 +199,8 @@ func slam_aoe() -> void:
 	# slam_proj.anim_time = slam_time / dist_to_player
 
 
+## Dual Nailguns ranged attack
+
 func _on_ranged_nails_targeting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Targeting"
 	
@@ -216,9 +224,7 @@ func _on_ranged_nails_targeting_state_physics_processing(delta: float) -> void:
 func _on_ranged_nails_shooting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Shooting"
 	
-	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time).timeout
-	state_chart.send_event("attack_start")
+	await _telegraph_attack()
 	
 	for i in num_bursts:
 		for j in shots_per_burst:
@@ -230,6 +236,7 @@ func _on_ranged_nails_shooting_state_entered() -> void:
 			var proj = fire_projectile(nail_projectile, spawn_marker.global_position, sfx_nail_shot)
 			proj.init(nail_damage * GameManager.get_risk_dmg_mult())
 		await get_tree().create_timer(delay_between_burst).timeout
+	
 	state_chart.send_event("stop_shooting")
 
 
@@ -239,6 +246,79 @@ func _on_ranged_nails_shooting_state_physics_processing(delta: float) -> void:
 
 func _on_ranged_nails_recover_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Recovering"
+	
+	state_chart.send_event("attack_end")
+	await get_tree().create_timer(attack_recovery_time).timeout
+	state_chart.send_event("cooldown_end")
+	
+	desired_distance = DESIRED_DISTANCE
+	
+	select_attack()
+	state_chart.send_event("end_recovery")
+
+
+## Spartan Laser AoE
+
+
+func _on_laser_aoe_targeting_state_entered() -> void:
+	debug_state_label.text = "Spartan Laser Level | Targeting"
+	
+	# DEBUG - to be replaced with sprite frames for each attack
+	$DebugAnimPivot.visible = false
+	$DebugLaserPivot.visible = true
+	$DebugRangedPivot.visible = false
+	
+	# TODO - spawn in elevator and sort positions, telegraphing, etc.
+	
+	desired_distance = 80
+	
+	state_chart.send_event("start_targeting")
+	anim_player.play("elevator_boss/laser_arm")
+	await anim_player.animation_finished
+	state_chart.send_event("charge_laser")
+
+
+func _on_laser_aoe_charging_state_entered() -> void:
+	debug_state_label.text = "Spartan Laser Level | Charging"
+	
+	state_chart.send_event("attack_buildup")
+	anim_player.play("elevator_boss/laser_telegraph")
+	# TODO - start showing/building telegraphing mesh/texture for the AoE
+	await get_tree().create_timer(0.175 * 6).timeout
+	await _telegraph_attack()
+	state_chart.send_event("start_firing")
+
+
+func _on_laser_aoe_firing_state_entered() -> void:
+	# Spawn big cube AoE mesh
+	# Check for player presence
+	# Damage player
+	anim_player.play("elevator_boss/laser_fire")
+	laser_instance = laser_aoe.instantiate()
+	get_parent().add_child(laser_instance)
+	laser_instance.global_position = laser_spawn.global_position
+	laser_instance.global_rotation.y = self.global_rotation.y
+	
+	# TODO - move this into the laser aoe object itself to handle
+	var laser_tween := get_tree().create_tween()
+	laser_tween.tween_property(
+		laser_instance.get_node("MeshInstance3D"), 
+		"mesh:material:albedo_color:a",
+		0,
+		2.0
+	)
+	laser_tween.tween_callback(
+		func():
+			laser_instance.queue_free()
+			laser_instance = null
+			state_chart.send_event("stop_firing")
+	)
+	
+	#state_chart.send_event("stop_firing")
+
+
+func _on_laser_aoe_recover_state_entered() -> void:
+	debug_state_label.text = "Spartan Laser Level | Recovering"
 	
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time).timeout
