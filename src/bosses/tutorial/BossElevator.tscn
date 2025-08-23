@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=19 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -12,7 +12,10 @@ size = Vector3(1, 1, 5)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3w5db"]
 radius = 1.0
-height = 4.6
+height = 3.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_holc6"]
+size = Vector3(2.5, 3.756, 2.5)
 
 [sub_resource type="Animation" id="Animation_8e3f2"]
 length = 0.001
@@ -144,7 +147,7 @@ _data = {
 "swipe": SubResource("Animation_eps3w")
 }
 
-[node name="BossElevator" instance=ExtResource("1_7pmj2")]
+[node name="BossElevator" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_7pmj2")]
 script = ExtResource("2_6u4e1")
 MOVE_SPEED = 10.0
 wave_amplitude = 7.0
@@ -158,6 +161,7 @@ hook_damage = 8.0
 slam_delay = 0.3
 slam_time = 0.5
 chip_scene = null
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_pickup_scene = null
 sfx_slowmo = null
 attack_recovery_time = 0.5
@@ -165,7 +169,7 @@ projectile_scene = null
 delay_per_projectile = 0.6
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 2.93273, 0)
+transform = Transform3D(0.8, 0, 0, 0, 0.615, 0, 0, 0, 0.8, 0, 2.23273, 0)
 texture = ExtResource("2_epl72")
 
 [node name="DebugAnimPivot" type="Marker3D" parent="." index="1"]
@@ -182,7 +186,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.4)
 shape = SubResource("CapsuleShape3D_3w5db")
 
 [node name="DebugMesh" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
 visible = true
+mesh = SubResource("BoxMesh_holc6")
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Tutorial Boss"
