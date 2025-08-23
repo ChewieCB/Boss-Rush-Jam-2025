@@ -289,6 +289,7 @@ func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
 
 
 func swipe() -> void:
+	# FIXME - add a range check to these? 
 	target.health_component.damage(swipe_damage * GameManager.get_risk_dmg_mult())
 
 

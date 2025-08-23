@@ -6230,6 +6230,8 @@ shape = SubResource("ConcavePolygonShape3D_t2ln2")
 
 [node name="entity_143_TutorialBoss" parent="FuncGodotMap" index="98" node_paths=PackedStringArray("elemental_emitting_vfx", "target") instance=ExtResource("36_sym1x")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10, -4.25, -31.5)
+hurtbox_range_close = 3.5
+hurtbox_range_far = 5.5
 elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 target = NodePath("../entity_5_PlayerRef")
 

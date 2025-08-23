@@ -104,20 +104,15 @@ _data = {
 }
 point_count = 13
 
-[node name="SubStack" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_t3h5b")]
+[node name="SubStack" node_paths=PackedStringArray("elemental_emitting_vfx", "sfx_players") instance=ExtResource("1_t3h5b")]
 collision_mask = 9
 motion_mode = 1
 script = ExtResource("2_u1ibk")
 spark_scene = ExtResource("3_0yylu")
-DESIRED_DISTANCE = 20.0
-desired_distance = null
 wave_amplitude = 7.0
 wave_frequency = 5.0
 time_elapsed = 0.0
 idle_radius = 1.5
-angle_speed = 1.0
-orbit_angle = 0.0
-orbit_radius = 40.0
 chip_projectile = ExtResource("4_llp1i")
 chip_shots_per_burst = 4
 num_bursts = 1
@@ -152,6 +147,7 @@ drop_time = 0.3
 sfx_jump = Array[AudioStream]([ExtResource("23_yipf0"), ExtResource("24_7biya")])
 sfx_slam = Array[AudioStream]([ExtResource("25_84v2k"), ExtResource("26_apgft"), ExtResource("27_l1fai")])
 sfx_dive_telegraph = Array[AudioStream]([ExtResource("28_ult5e")])
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer1")]
 sfx_hit = Array[AudioStream]([ExtResource("5_4sojs"), ExtResource("6_16fho"), ExtResource("7_u10vx"), ExtResource("8_bpeyj")])
@@ -163,6 +159,8 @@ telegraph_time = 0.45
 projectile_scene = null
 delay_per_projectile = 0.6
 GRAVITY = 0.0
+DESIRED_DISTANCE = 20.0
+orbit_radius = 40.0
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.09105, 0)

@@ -13,7 +13,7 @@ extends BossCore
 @export_group("Attacks")
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 3.5
-@export var hurtbox_range_far: float = 4.5
+@export var hurtbox_range_far: float = 5.5
 @export var sfx_melee: Array[AudioStream]
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 7.0
@@ -22,6 +22,17 @@ extends BossCore
 @export_subgroup("Slam")
 @export var slam_delay: float = 0.3
 @export var slam_time: float = 0.5
+@export_subgroup("Nailguns")
+@export var nail_projectile: PackedScene
+@export var proj_spawn_l: Marker3D
+@export var proj_spawn_r: Marker3D
+@export var num_bursts: int = 1
+@export var shots_per_burst: int = 12
+@export var delay_between_burst: float = 0.5
+@export var nail_damage: float = 3.0
+# SFX
+@export var sfx_nail_shot: Array[AudioStream]
+
 
 
 func _ready() -> void:
@@ -36,24 +47,16 @@ func activate() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	velocity.y -= GRAVITY * delta
-	time_elapsed += delta
-	var chase_direction: Vector3 = self.global_position.direction_to(target.global_position)
-	var perpendicular: Vector3 = chase_direction.rotated(Vector3.UP, PI / 2)
-	var wave_offset = perpendicular * sin(time_elapsed * wave_frequency) * wave_amplitude
-	var desired_position = target.global_position + wave_offset
-	navigation_component.set_nav_target_position(desired_position)
-	move_and_slide()
-	
-	debug_dist_label.text = str(self.global_position.distance_to(target.global_position))
+	super(delta)
 
 
 func select_attack_phase_1() -> void:
 	# var dist_to_target = self.global_position.distance_to(target.global_position)
 	var _possible_phases = [
 		"start_melee_combo_attack",
+		"start_dual_nails_attack",
 	]
-	state_chart.send_event("start_melee_combo_attack")
+	state_chart.send_event(_possible_phases.pick_random())
 
 
 func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
@@ -66,25 +69,34 @@ func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
 
 
 func swipe() -> void:
-	target.health_component.damage(swipe_damage)
+	if target.global_position.distance_to(self.global_position) < 5.0:
+		target.health_component.damage(swipe_damage)
 
 
 func hook() -> void:
-	target.health_component.damage(hook_damage)
+	if target.global_position.distance_to(self.global_position) < 5.0:
+		target.health_component.damage(hook_damage)
 
 
 #### Phase 1 | Melee Combo
 # TARGETING
 func _on_melee_combo_targeting_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Targeting"
+	
+	# DEBUG - to be replaced with sprite frames for each attack
+	$DebugAnimPivot.visible = true
+	$DebugLaserPivot.visible = false
+	$DebugRangedPivot.visible = false
+	
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
 
-func _on_melee_combo_targeting_state_physics_processing(_delta: float) -> void:
+func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
+	orbit_towards_player(delta)
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("start_attack")
-	elif self.global_position.distance_to(target.global_position) > 12:
-		select_attack()
+	#elif self.global_position.distance_to(target.global_position) > 12:
+		#select_attack()
 
 
 # SWIPE
@@ -92,10 +104,9 @@ func _on_melee_combo_swipe_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Swipe"
 	hurtbox.set_deferred("monitoring", true)
 	
-	state_chart.send_event("stop_moving")
-	velocity.x = 0
-	velocity.z = 0
+	state_chart.send_event("start_targeting")
 	
+	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
 	anim_player.play("elevator_boss/swipe")
@@ -109,6 +120,11 @@ func _on_melee_combo_swipe_state_entered() -> void:
 		state_chart.send_event("combo_end")
 
 
+func _on_melee_combo_swipe_state_physics_processing(delta: float) -> void:
+	velocity.x = lerp(velocity.x, 0.0, 0.6)
+	velocity.z = lerp(velocity.z, 0.0, 0.6)
+
+
 # HOOK
 func _on_melee_combo_hook_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Hook"
@@ -116,6 +132,7 @@ func _on_melee_combo_hook_state_entered() -> void:
 	
 	state_chart.send_event("start_targeting")
 	
+	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
 	anim_player.play("elevator_boss/backswipe")
@@ -135,6 +152,9 @@ func _on_melee_combo_recover_state_entered() -> void:
 	
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+func _on_melee_combo_recover_state_physics_processing(delta: float) -> void:
+	orbit_player(delta)
 
 
 #### Phase 1 | Line Slam
@@ -171,3 +191,60 @@ func slam_aoe() -> void:
 	
 	# var dist_to_player: int = int(slam_proj.global_position.distance_to(target.global_position))
 	# slam_proj.anim_time = slam_time / dist_to_player
+
+
+func _on_ranged_nails_targeting_state_entered() -> void:
+	debug_state_label.text = "Dual Nailguns | Targeting"
+	
+	# DEBUG - to be replaced with sprite frames for each attack
+	$DebugAnimPivot.visible = false
+	$DebugLaserPivot.visible = false
+	$DebugRangedPivot.visible = true
+	
+	desired_distance = 40
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(0.8).timeout
+	state_chart.send_event("start_shooting")
+
+
+func _on_ranged_nails_targeting_state_physics_processing(delta: float) -> void:
+	orbit_player(delta)
+
+
+func _on_ranged_nails_shooting_state_entered() -> void:
+	debug_state_label.text = "Dual Nailguns | Shooting"
+	
+	state_chart.send_event("attack_telegraph")
+	await get_tree().create_timer(telegraph_time).timeout
+	state_chart.send_event("attack_start")
+	
+	for i in num_bursts:
+		for j in shots_per_burst:
+			await get_tree().create_timer(delay_per_projectile).timeout
+			# Alternate firing between each gun
+			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
+			var anim_name = "elevator_boss/ranged_shoot_%s" % ["l" if j % 2 == 0 else "r"]
+			anim_player.play(anim_name)
+			var proj = fire_projectile(nail_projectile, spawn_marker.global_position, sfx_nail_shot)
+			proj.init(nail_damage * GameManager.get_risk_dmg_mult())
+		await get_tree().create_timer(delay_between_burst).timeout
+	state_chart.send_event("stop_shooting")
+
+
+func _on_ranged_nails_shooting_state_physics_processing(delta: float) -> void:
+	orbit_player(delta)
+
+
+func _on_ranged_nails_recover_state_entered() -> void:
+	debug_state_label.text = "Dual Nailguns | Recovering"
+	
+	state_chart.send_event("attack_end")
+	await get_tree().create_timer(attack_recovery_time).timeout
+	state_chart.send_event("cooldown_end")
+	
+	desired_distance = DESIRED_DISTANCE
+	
+	select_attack()
+	state_chart.send_event("end_recovery")

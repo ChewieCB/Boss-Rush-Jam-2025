@@ -1,18 +1,25 @@
-[gd_scene load_steps=19 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=27 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
 [ext_resource type="Texture2D" uid="uid://khi1n6a5qqgw" path="res://src/bosses/tutorial/assets/sprites/temp/puddy_2.png" id="2_epl72"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_irtaj"]
+[ext_resource type="PackedScene" uid="uid://ponw4bhivvke" path="res://src/bosses/base/attacks/ranged/NailProjectile.tscn" id="3_v4gcb"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fo57y"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_x341f"]
 size = Vector3(1, 1, 5)
 
+[sub_resource type="BoxMesh" id="BoxMesh_dhiwq"]
+size = Vector3(0.7, 0.7, 3.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cbf68"]
+size = Vector3(0.35, 0.35, 1.2)
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3w5db"]
 radius = 1.0
-height = 3.2
+height = 4.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_holc6"]
 size = Vector3(2.5, 3.756, 2.5)
@@ -30,6 +37,42 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("DebugRangedPivot/PivotL:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DebugRangedPivot/PivotR:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DebugLaserPivot:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_dshkv"]
@@ -57,6 +100,20 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1.93187, 0.210224, 1.56917, 0.210224),
 "update": 0,
 "values": [Vector3(0, 4.53786, 0), Vector3(0, 4.88692, 0), Vector3(0, 1.309, 0), Vector3(0, 0.785398, 0), Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"hook"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_1nv8l"]
@@ -137,36 +194,150 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector3(0, 1.309, 0), Vector3(0, 0.785398, 0), Vector3(0, 1.309, 0), Vector3(0, 4.88692, 0), Vector3(0, 4.53786, 0)]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"swipe"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_tf56t"]
+resource_name = "ranged_shoot_l"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugRangedPivot/PivotL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2),
+"transitions": PackedFloat32Array(0.241484, 1.68179, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.872665, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_imvni"]
+resource_name = "ranged_shoot_r"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugRangedPivot/PivotR:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2),
+"transitions": PackedFloat32Array(0.241, 1.68179, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.872665, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ua1dm"]
+resource_name = "laser_telegraph"
+length = 0.175
+loop_mode = 1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugLaserPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.0869335, -0.0875981, -0.00762499), Vector3(0, 0, 0), Vector3(-0.0872665, 0.0872665, 0), Vector3(0, 0, 0), Vector3(0.0872665, 0.0872665, 0), Vector3(0, 0, 0), Vector3(-0.0872665, -0.0872665, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ywtcr"]
+resource_name = "laser_arm"
+length = 0.35
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugLaserPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.35),
+"transitions": PackedFloat32Array(3.13834, 1),
+"update": 0,
+"values": [Vector3(-0.261799, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_oq3a7"]
+resource_name = "laser_fire"
+length = 0.55
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugLaserPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.175, 0.55),
+"transitions": PackedFloat32Array(0.183011, 1.7411, 3.24901, 3.13834),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.4288, 0, 0), Vector3(0.430099, 0, 0), Vector3(-0.261799, 0, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
 _data = {
 "backswipe": SubResource("Animation_85u7l"),
+"laser_arm": SubResource("Animation_ywtcr"),
+"laser_fire": SubResource("Animation_oq3a7"),
+"laser_telegraph": SubResource("Animation_ua1dm"),
+"ranged_shoot_l": SubResource("Animation_tf56t"),
+"ranged_shoot_r": SubResource("Animation_imvni"),
 "slam": SubResource("Animation_1nv8l"),
 "slam_telegraph": SubResource("Animation_ona5m"),
 "spin": SubResource("Animation_52j13"),
 "swipe": SubResource("Animation_eps3w")
 }
 
-[node name="BossElevator" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_7pmj2")]
+[node name="BossElevator" node_paths=PackedStringArray("proj_spawn_l", "proj_spawn_r", "elemental_emitting_vfx") instance=ExtResource("1_7pmj2")]
 script = ExtResource("2_6u4e1")
 MOVE_SPEED = 10.0
 wave_amplitude = 7.0
 wave_frequency = 5.0
 time_elapsed = 0.0
-hurtbox_range_close = 3.5
-hurtbox_range_far = 4.5
+hurtbox_range_close = 6.0
+hurtbox_range_far = 7.5
 sfx_melee = Array[AudioStream]([])
 swipe_damage = 7.0
 hook_damage = 8.0
 slam_delay = 0.3
 slam_time = 0.5
+nail_projectile = ExtResource("3_v4gcb")
+proj_spawn_l = NodePath("DebugRangedPivot/PivotL/DebugGun1/ProjSpawnL")
+proj_spawn_r = NodePath("DebugRangedPivot/PivotR/DebugGun1/ProjSpawnR")
+num_bursts = 1
+shots_per_burst = 12
+delay_between_burst = 0.5
+nail_damage = 3.0
+sfx_nail_shot = Array[AudioStream]([])
 chip_scene = null
 elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_pickup_scene = null
 sfx_slowmo = null
 attack_recovery_time = 0.5
 projectile_scene = null
-delay_per_projectile = 0.6
+delay_per_projectile = 0.2
+orbit_radius = 5.0
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(0.8, 0, 0, 0, 0.615, 0, 0, 0, 0.8, 0, 2.23273, 0)
@@ -175,20 +346,59 @@ texture = ExtResource("2_epl72")
 [node name="DebugAnimPivot" type="Marker3D" parent="." index="1"]
 transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="DebugAnimPivot" index="0"]
+[node name="DebugWrench" type="MeshInstance3D" parent="DebugAnimPivot" index="0"]
 transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, -1.04907e-07, 0, 2.4)
 mesh = SubResource("BoxMesh_x341f")
 
-[node name="SlamSpawn" type="Marker3D" parent="DebugAnimPivot/MeshInstance3D" index="0"]
+[node name="SlamSpawn" type="Marker3D" parent="DebugAnimPivot/DebugWrench" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.4)
 
-[node name="CollisionShape3D" parent="." index="2"]
+[node name="DebugLaserPivot" type="Marker3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="DebugLaser" type="MeshInstance3D" parent="DebugLaserPivot" index="0"]
+transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, -0.6, 0, -0.7)
+mesh = SubResource("BoxMesh_dhiwq")
+
+[node name="LaserSpawn" type="Marker3D" parent="DebugLaserPivot/DebugLaser" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
+
+[node name="DebugRangedPivot" type="Marker3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+
+[node name="PivotL" type="Marker3D" parent="DebugRangedPivot" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="DebugGun1" type="MeshInstance3D" parent="DebugRangedPivot/PivotL" index="0"]
+transform = Transform3D(1, 5.20417e-17, -6.98492e-09, 0, 1, 7.45058e-09, 6.98492e-09, -7.45058e-09, 1, 0, 0, -1)
+mesh = SubResource("BoxMesh_cbf68")
+skeleton = NodePath("../../../DebugAnimPivot")
+
+[node name="ProjSpawnL" type="Marker3D" parent="DebugRangedPivot/PivotL/DebugGun1" index="0"]
+transform = Transform3D(1, -6.61744e-24, 0, 0, 1, 8.88178e-16, 0, 0, 1, 0, 0, -0.6)
+
+[node name="PivotR" type="Marker3D" parent="DebugRangedPivot" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.999999, 0, 0)
+
+[node name="DebugGun1" type="MeshInstance3D" parent="DebugRangedPivot/PivotR" index="0"]
+transform = Transform3D(1, 5.20417e-17, -6.98492e-09, 0, 1, 7.45058e-09, 6.98492e-09, -7.45058e-09, 1, 0, 0, -1)
+mesh = SubResource("BoxMesh_cbf68")
+skeleton = NodePath("../../../DebugAnimPivot")
+
+[node name="ProjSpawnR" type="Marker3D" parent="DebugRangedPivot/PivotR/DebugGun1" index="0"]
+transform = Transform3D(1, -3.30872e-24, 0, 0, 1, 4.44089e-16, 0, 0, 1, 0, 0, -0.6)
+
+[node name="CollisionShape3D" parent="." index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("CapsuleShape3D_3w5db")
 
-[node name="DebugMesh" parent="." index="3"]
+[node name="DebugMesh" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
 visible = true
 mesh = SubResource("BoxMesh_holc6")
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -2.5)
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Tutorial Boss"
@@ -286,6 +496,12 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
+[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="4"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../DualNailsRanged")
+event = &"start_dual_nails_attack"
+delay_in_seconds = "0.0"
+
 [node name="LineSlam" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Recover")
@@ -320,10 +536,50 @@ delay_in_seconds = "0.0"
 [node name="Spin" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
 script = ExtResource("3_irtaj")
 
-[node name="NavigationAgent3D" parent="." index="9"]
+[node name="DualNailsRanged" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+script = ExtResource("3_irtaj")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged" index="0"]
+script = ExtResource("4_fo57y")
+
+[node name="toShooting" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged/Targeting" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Shooting")
+event = &"start_shooting"
+delay_in_seconds = "0.0"
+
+[node name="Shooting" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged" index="1"]
+script = ExtResource("4_fo57y")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged/Shooting" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"stop_shooting"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged" index="2"]
+script = ExtResource("4_fo57y")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged/Recover" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged" index="3"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../MeleeCombo")
+event = &"start_melee_combo_attack"
+delay_in_seconds = "0.0"
+
+[node name="LaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+script = ExtResource("3_irtaj")
+
+[node name="NavigationAgent3D" parent="." index="11"]
 debug_enabled = true
 
-[node name="AnimationPlayer" parent="." index="19"]
+[node name="AnimationPlayer" parent="." index="21"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "elevator_boss": SubResource("AnimationLibrary_1cydh")
@@ -332,7 +588,14 @@ libraries = {
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Targeting" to="." method="_on_melee_combo_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Targeting" to="." method="_on_melee_combo_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" to="." method="_on_melee_combo_swipe_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" to="." method="_on_melee_combo_swipe_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" to="." method="_on_melee_combo_hook_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Recover" to="." method="_on_melee_combo_recover_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Recover" to="." method="_on_melee_combo_recover_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LineSlam/Targeting" to="." method="_on_line_slam_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LineSlam/Slam" to="." method="_on_line_slam_sweep_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DualNailsRanged/Targeting" to="." method="_on_ranged_nails_targeting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/DualNailsRanged/Targeting" to="." method="_on_ranged_nails_targeting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DualNailsRanged/Shooting" to="." method="_on_ranged_nails_shooting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/DualNailsRanged/Shooting" to="." method="_on_ranged_nails_shooting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DualNailsRanged/Recover" to="." method="_on_ranged_nails_recover_state_entered"]

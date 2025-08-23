@@ -8,8 +8,6 @@ class_name Chipling
 @export var respawn_time: float = 2.0
 #@onready var spawn_points: Array[Node] = get_tree().get_nodes_in_group("boss_chipling_spawn_marker")
 @export_group("Movement")
-@export var DESIRED_DISTANCE: float = 20.0
-@export var desired_distance: float = DESIRED_DISTANCE
 @export var MOVE_SPEED: float = 10.0
 @onready var move_speed: float = MOVE_SPEED:
 	set(value):
@@ -21,10 +19,6 @@ class_name Chipling
 @export var idle_radius := 1.5
 var idle_time := 0.0
 var center_pos: Vector3
-@export_subgroup("Orbiting Movement")
-@export var angle_speed: float = 1.0 # radians/second
-@export var orbit_angle: float = 0.0 # track this over time
-@export var orbit_radius: float = 40.0
 @export_subgroup("Wandering Movement")
 @export var wander_waypoints: Array[Node] = []
 @export var max_wander_distance: float = 20.0
