@@ -10,6 +10,8 @@ extends BossCore
 @export var wave_frequency: float = 5.0
 @export var time_elapsed: float = 0.0
 
+var previous_phase: String
+
 @export_group("Attacks")
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 3.5
@@ -36,8 +38,7 @@ extends BossCore
 @export var laser_aoe: PackedScene
 @export var laser_spawn: Marker3D
 @export var laser_damage: float = 40.0
-var laser_instance
-
+@onready var laser_particles: GPUParticles3D = $DebugLaserPivot/DebugLaser/LaserSpawn/LaserEndParticles
 
 
 func _ready() -> void:
@@ -62,6 +63,12 @@ func select_attack_phase_1() -> void:
 		"start_dual_nails_attack",
 		"start_laser_aoe_attack",
 	]
+	if previous_phase:
+		_possible_phases.erase(previous_phase)
+	
+	var new_phase = _possible_phases.pick_random()
+	previous_phase = new_phase
+	
 	state_chart.send_event(_possible_phases.pick_random())
 
 
@@ -283,8 +290,11 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	
 	state_chart.send_event("attack_buildup")
 	anim_player.play("elevator_boss/laser_telegraph")
+	laser_particles.visible = true
+	laser_particles.emitting = true
 	# TODO - start showing/building telegraphing mesh/texture for the AoE
 	await get_tree().create_timer(0.175 * 6).timeout
+	state_chart.send_event("stop_moving")
 	await _telegraph_attack()
 	state_chart.send_event("start_firing")
 
@@ -294,27 +304,14 @@ func _on_laser_aoe_firing_state_entered() -> void:
 	# Check for player presence
 	# Damage player
 	anim_player.play("elevator_boss/laser_fire")
-	laser_instance = laser_aoe.instantiate()
+	laser_particles.emitting = false
+	var laser_instance = laser_aoe.instantiate()
 	get_parent().add_child(laser_instance)
 	laser_instance.global_position = laser_spawn.global_position
 	laser_instance.global_rotation.y = self.global_rotation.y
 	
-	# TODO - move this into the laser aoe object itself to handle
-	var laser_tween := get_tree().create_tween()
-	laser_tween.tween_property(
-		laser_instance.get_node("MeshInstance3D"), 
-		"mesh:material:albedo_color:a",
-		0,
-		2.0
-	)
-	laser_tween.tween_callback(
-		func():
-			laser_instance.queue_free()
-			laser_instance = null
-			state_chart.send_event("stop_firing")
-	)
-	
-	#state_chart.send_event("stop_firing")
+	laser_particles.visible = false
+	state_chart.send_event("stop_firing")
 
 
 func _on_laser_aoe_recover_state_entered() -> void:

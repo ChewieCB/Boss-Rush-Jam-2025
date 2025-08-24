@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=35 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -8,12 +8,54 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fo57y"]
 [ext_resource type="PackedScene" uid="uid://byharrqwvi4cp" path="res://src/bosses/base/attacks/ranged/LaserAoE.tscn" id="4_hx1ss"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
+[ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="6_fqvnt"]
+[ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="7_6pf3s"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_x341f"]
 size = Vector3(1, 1, 5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_dhiwq"]
 size = Vector3(0.7, 0.7, 3.5)
+
+[sub_resource type="Curve" id="Curve_o4bek"]
+_data = [Vector2(0, 0.549451), 0.0, 0.0, 0, 0, Vector2(0.241803, 1), 0.70225, 0.70225, 0, 0, Vector2(0.372951, 0.681319), 0.0, 0.0, 0, 0, Vector2(0.934426, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_wywhv"]
+curve = SubResource("Curve_o4bek")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ikhkx"]
+emission_shape = 1
+emission_sphere_radius = 0.5
+direction = Vector3(0, 0, 0)
+spread = 80.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = 0.999998
+linear_accel_max = 4.0
+radial_accel_min = -2.23517e-06
+radial_accel_max = 10.2
+scale_min = 2.0
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_wywhv")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_um6ea"]
+transparency = 1
+albedo_color = Color(1, 0.168627, 0.168627, 0.980392)
+albedo_texture = ExtResource("7_6pf3s")
+emission_enabled = true
+emission = Color(1, 0.168627, 0.168627, 1)
+emission_energy_multiplier = 10.0
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_mvva7"]
+material = SubResource("StandardMaterial3D_um6ea")
+size = Vector2(0.2, 0.2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cbf68"]
 size = Vector3(0.35, 0.35, 1.2)
@@ -117,6 +159,92 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_ywtcr"]
+resource_name = "laser_arm"
+length = 0.35
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugLaserPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.35),
+"transitions": PackedFloat32Array(3.13834, 1),
+"update": 0,
+"values": [Vector3(-0.261799, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_oq3a7"]
+resource_name = "laser_fire"
+length = 0.55
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugLaserPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.175, 0.55),
+"transitions": PackedFloat32Array(0.183011, 1.7411, 3.24901, 3.13834),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.4288, 0, 0), Vector3(0.430099, 0, 0), Vector3(-0.261799, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ua1dm"]
+resource_name = "laser_telegraph"
+length = 0.175
+loop_mode = 1
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugLaserPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.0869335, -0.0875981, -0.00762499), Vector3(0, 0, 0), Vector3(-0.0872665, 0.0872665, 0), Vector3(0, 0, 0), Vector3(0.0872665, 0.0872665, 0), Vector3(0, 0, 0), Vector3(-0.0872665, -0.0872665, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_tf56t"]
+resource_name = "ranged_shoot_l"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugRangedPivot/PivotL:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2),
+"transitions": PackedFloat32Array(0.241484, 1.68179, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.872665, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_imvni"]
+resource_name = "ranged_shoot_r"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugRangedPivot/PivotR:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2),
+"transitions": PackedFloat32Array(0.241, 1.68179, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.872665, 0, 0), Vector3(0, 0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_1nv8l"]
 resource_name = "slam"
 length = 0.76
@@ -210,92 +338,6 @@ tracks/1/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_tf56t"]
-resource_name = "ranged_shoot_l"
-length = 0.2
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DebugRangedPivot/PivotL:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.2),
-"transitions": PackedFloat32Array(0.241484, 1.68179, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.872665, 0, 0), Vector3(0, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_imvni"]
-resource_name = "ranged_shoot_r"
-length = 0.2
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DebugRangedPivot/PivotR:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.2),
-"transitions": PackedFloat32Array(0.241, 1.68179, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.872665, 0, 0), Vector3(0, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_ua1dm"]
-resource_name = "laser_telegraph"
-length = 0.175
-loop_mode = 1
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DebugLaserPivot:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.0869335, -0.0875981, -0.00762499), Vector3(0, 0, 0), Vector3(-0.0872665, 0.0872665, 0), Vector3(0, 0, 0), Vector3(0.0872665, 0.0872665, 0), Vector3(0, 0, 0), Vector3(-0.0872665, -0.0872665, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_ywtcr"]
-resource_name = "laser_arm"
-length = 0.35
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DebugLaserPivot:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.35),
-"transitions": PackedFloat32Array(3.13834, 1),
-"update": 0,
-"values": [Vector3(-0.261799, 0, 0), Vector3(0, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_oq3a7"]
-resource_name = "laser_fire"
-length = 0.55
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DebugLaserPivot:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.125, 0.175, 0.55),
-"transitions": PackedFloat32Array(0.183011, 1.7411, 3.24901, 3.13834),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.4288, 0, 0), Vector3(0.430099, 0, 0), Vector3(-0.261799, 0, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
 _data = {
 "backswipe": SubResource("Animation_85u7l"),
@@ -366,6 +408,19 @@ mesh = SubResource("BoxMesh_dhiwq")
 
 [node name="LaserSpawn" type="Marker3D" parent="DebugLaserPivot/DebugLaser" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
+
+[node name="LaserEndParticles" parent="DebugLaserPivot/DebugLaser/LaserSpawn" index="0" instance=ExtResource("6_fqvnt")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+visible = false
+amount = 100
+lifetime = 0.7
+preprocess = 0.06
+speed_scale = 1.3
+explosiveness = 0.08
+randomness = 0.6
+visibility_aabb = AABB(-6, -6, -6, 12, 12, 12)
+process_material = SubResource("ParticleProcessMaterial_ikhkx")
+draw_pass_1 = SubResource("QuadMesh_mvva7")
 
 [node name="DebugRangedPivot" type="Marker3D" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
