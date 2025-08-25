@@ -1,6 +1,13 @@
 extends BossCore
 class_name BossChips
 
+# Antes note:
+# Ante 1: Place Your Bet - Enable place your bet attack
+# Ante 2 (new): Chip Siphon - All attack will steal a percentage of chips from you.
+# Ante 3 (new): Poisonous Blob - Chiptopede attack will leave behind a sticky poison puddle
+# Ante 4 (new): Five of a kind - Spawn 5 substack instead of 3
+# Ante 5 (new): 
+
 signal substack_attack_finished
 signal substack_all_attacks_finished
 signal flood_chamber
@@ -87,6 +94,7 @@ var aoe_floor = 0.0
 @export var sfx_slam: Array[AudioStream]
 #
 @export_subgroup("Place Your Bets")
+@export var enable_place_your_bet_attack = true
 @export var jump_height: float = 9.0
 @export var jump_time: float = 0.8
 @export var jump_hang_time: float = 1.2
@@ -98,6 +106,7 @@ var aoe_floor = 0.0
 ## SMALL STACK
 @export_group("Attacks | Small Stacks")
 @export_subgroup("Split Stacks")
+@export var small_stack_count: int = 3
 @export var small_stack_prefab: PackedScene
 @export var stack_spawn_time: float = 0.1
 var spawned_sub_stacks: Array = []
@@ -204,7 +213,6 @@ var emerge_distance: float
 @export var sfx_chiptopede_shoot: Array[AudioStream]
 @export var sfx_chiptopede_retreat: Array[AudioStream]
 #
-
 @onready var big_stack_sfx_player: AudioStreamPlayer3D = $BigStackSFXPlayer
 @onready var chiptopede_sfx_player: AudioStreamPlayer3D = $ChiptopedeHeadSFXPlayer
 @onready var chip_death_particles: GPUParticles3D = $ChipDeathParticles
@@ -584,7 +592,7 @@ func split_stacks(spawn_func: Callable) -> void:
 	state_chart.send_event("end_attack")
 
 func _spawn_stacks_close() -> void:
-	spawned_sub_stacks = await spawn_stacks(3, 2.5)
+	spawned_sub_stacks = await spawn_stacks(small_stack_count, 2.5)
 	return
 
 func _spawn_stacks_on_platforms() -> void:
@@ -594,7 +602,7 @@ func _spawn_stacks_on_platforms() -> void:
 	)
 	far_platforms = far_platforms.map(_map_marker_to_position)
 	
-	spawned_sub_stacks = await spawn_stacks(3, 0.0, far_platforms)
+	spawned_sub_stacks = await spawn_stacks(small_stack_count, 0.0, far_platforms)
 	return
 
 # Merging
@@ -1978,7 +1986,7 @@ func spawn_aoe_wave(
 	damage: float = 10.0,
 	spawned_wave_time: float = 1.0,
 	area_pos: Vector3 = self.global_position,
-	# pushback_source: Node3D = self,
+	_pushback_source: Node3D = self,
 	spawned_wave_height: float = 0.3,
 	_telegraph: bool = false,
 	callback: Callable = func(): pass ,
