@@ -1,5 +1,13 @@
 extends BossCore
 
+# Antes note:
+# Ante 1: Fast Firing Shotgun - shotgun can shoot more time in a burst in phase 2 and 3
+# Ante 2: Volatile Concoctions - Enable fire, poison and tar bottles attack
+# Ante 3: Burning Ground - Floor on fire in phase 3
+# Ante 4 (new): Fragile Furniture: Most tables and chairs can be broken now (less ground to stand on phase 3)
+# Ante 5 (new): Crafted Cocktails - Buffs last longer and have additional effects
+#               str: barrel explode / spd: chance to dash around by read player input (need new sprite) / def: resist status effect		
+
 signal fire_started
 
 @export_category("Phases")

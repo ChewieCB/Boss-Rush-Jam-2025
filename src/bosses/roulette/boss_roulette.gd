@@ -2,6 +2,13 @@ extends BossCore
 
 signal change_wheel_speed(speed: float)
 
+# Antes note:
+# Ante 1: House of cards - Increase shield /cards count from 2 to 8
+# Ante 2: Unstable Platforms - Enable drop segments attack
+# Ante 3 (new): Double Sweep - Add a second sweep bar
+# Ante 4 (new): Lasting Heat - Multiball now leave trails of flame
+# Ante 5 (new): Need suggestion
+
 @onready var debug_phase_label: Label3D = $DebugPhaseLabel
 @onready var held_ball_marker_pivot: Node3D = $HeldBallPivot
 @onready var hurtbox_mesh: MeshInstance3D = hurtbox.get_node("MeshInstance3D")
@@ -22,7 +29,7 @@ var previous_phase: String
 @export var shields_max_time: float = 12.0
 @onready var shields_spawn_timer: Timer = $ShieldsSpawnTimer
 @onready var shields_absorb_timer: Timer = $ShieldsAbsorbTimer
-@export var shield_count: int = 4
+@export var shield_count: int = 8
 @export var shield_distance: float = 6.0
 @export var shield_height: float = 3.3
 @export var shields_destroyed_threshold: int = 2

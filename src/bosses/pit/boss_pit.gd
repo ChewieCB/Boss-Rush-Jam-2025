@@ -1,6 +1,13 @@
 extends BossCore
 class_name BossPit
 
+# Antes note:
+# Ante 1: Caged Brawl - Enable caged attack where it trap player inside
+# Ante 2: Mini Turrets - Enable Surveillance summons mini turrets
+# Ante 3 (new): Shock Tactics : Pit Boss attack can applied Shock (receive additional dmg) / Surveillance laser beam leaving electrified ground
+# Ante 4 (new): Serious Mode - Enhanced Pit Boss melee moveset (combo faster, longer reach)
+# Ante 5 (new): Unfair Fight - Pit Boss and Surveillance will attack together all the time
+
 signal charge_ended
 
 enum Stance {DEFENSIVE, AGGRESSIVE}

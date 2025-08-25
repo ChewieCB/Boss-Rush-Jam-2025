@@ -4,6 +4,14 @@ class_name BossSlots
 signal charge_lined_up
 signal desired_height_reached
 
+# Antes note:
+# Ante 1: Toll of Fortune - Enable falling bell attack
+# Ante 2: Seeking Luxury - Enable homing diamond projectile attack
+# Ante 3 (new): Pinball Gamble - Enable new projectile attack that can ricochet 10 times
+# Ante 4 (new): Hidden Motive - Hide the slot UI / attack indicator
+# Ante 5 (new): Greed Machine - Boss can pick up / steal dropped chips to recover HP
+
+
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
 @onready var slot_icons_parent: Node3D = $Sprite3D/SlotIcons

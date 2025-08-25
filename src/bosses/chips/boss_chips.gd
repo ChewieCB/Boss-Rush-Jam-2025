@@ -4,9 +4,9 @@ class_name BossChips
 # Antes note:
 # Ante 1: Place Your Bet - Enable place your bet attack
 # Ante 2 (new): Chip Siphon - All attack will steal a percentage of chips from you.
-# Ante 3 (new): Poisonous Blob - Chiptopede attack will leave behind a sticky poison puddle
+# Ante 3 (new): Poisonous Blob - Chiptopede spit proj will spread out and leave behind a sticky poison puddle
 # Ante 4 (new): Five of a kind - Spawn 5 substack instead of 3
-# Ante 5 (new): 
+# Ante 5 (new): Unreliable Wealth - Piles of chips in phase 3 can be destroyed (but will regenerate over time)
 
 signal substack_attack_finished
 signal substack_all_attacks_finished
