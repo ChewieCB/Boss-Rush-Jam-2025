@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://djcipi6xiw7yn"]
+[gd_scene load_steps=36 format=3 uid="uid://djcipi6xiw7yn"]
 
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/difficulty_menu.gd" id="1_5c00o"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="1_5ie53"]
@@ -33,6 +33,7 @@
 [ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="19_10nox"]
 [ext_resource type="Texture2D" uid="uid://bpc0t2p6uy17" path="res://assets/sprite/misc/cycle.png" id="20_xxan1"]
 [ext_resource type="Texture2D" uid="uid://casrjel7p52p1" path="res://assets/sprite/misc/stopwatch.png" id="21_qtdie"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="34_xjabm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rqucu"]
 shader = ExtResource("8_c7hct")
@@ -700,6 +701,20 @@ horizontal_alignment = 1
 [node name="NotEnoughChipTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
+
+[node name="CurrencyUI" parent="." instance=ExtResource("34_xjabm")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -312.0
+offset_top = -72.0
+offset_right = -7.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [connection signal="pressed" from="LeftRegion/ResetRiskButton" to="." method="_on_reset_risk_button_pressed"]
 [connection signal="pressed" from="LeftRegion/HBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
