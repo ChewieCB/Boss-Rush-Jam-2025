@@ -11,10 +11,8 @@
 [ext_resource type="AudioStream" uid="uid://vjjoalu8btt5" path="res://src/bosses/slots/assets/sfx/SLOT MACHINE - JUST DING DING DING COIN TELEGRAPH ISOLATED.mp3" id="5_lghps"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_lu46i"]
 [ext_resource type="Texture2D" uid="uid://bgeh57tcie1pi" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss.png" id="5_wqq5t"]
-[ext_resource type="Texture2D" uid="uid://cw6dplkvdrqcc" path="res://src/bosses/slots/assets/icons/temp/shield.png" id="6_opr8o"]
 [ext_resource type="AudioStream" uid="uid://6j2g27g0yi0d" path="res://src/bosses/slots/assets/sfx/SLOT MACHINE - JUST COINS.mp3" id="6_q1utd"]
 [ext_resource type="AudioStream" uid="uid://dkvp444gcr566" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS TELEGRAPH BELL ISOLATED.mp3" id="7_1c6a3"]
-[ext_resource type="Texture2D" uid="uid://bc7ur1o66fgkl" path="res://src/bosses/slots/assets/icons/temp/fire.png" id="7_ri7nv"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="8_0tk6i"]
 [ext_resource type="AudioStream" uid="uid://c1qu2s17kgr8h" path="res://src/bosses/slots/assets/sfx/Slot Melee Improved Temp.mp3" id="8_po7hj"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="9_1g4bc"]
@@ -25,6 +23,8 @@
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="11_5va1t"]
 [ext_resource type="PackedScene" uid="uid://40024fnpmf14" path="res://src/bosses/base/attacks/ranged/DiamondProjectile.tscn" id="11_dqr52"]
 [ext_resource type="PackedScene" uid="uid://yw8o87v7ydx1" path="res://src/bosses/slots/bomb/BombProjectile.tscn" id="12_xbq02"]
+[ext_resource type="Texture2D" uid="uid://b5j7lvip5mjnj" path="res://src/bosses/slots/assets/icons/bull-horns.png" id="13_nh3cu"]
+[ext_resource type="Texture2D" uid="uid://11i81ijkmtni" path="res://src/bosses/slots/assets/icons/unlit-bomb.png" id="15_gni4v"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="16_52y3v"]
 [ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="17_6xi00"]
 [ext_resource type="AudioStream" uid="uid://cbf7hkjdjvljq" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 2.mp3" id="18_0lbrd"]
@@ -211,9 +211,9 @@ sfx_slot_pick_diamond = ExtResource("9_qwmyu")
 sfx_slot_pick_cherry = ExtResource("10_88yvd")
 icon_coin = ExtResource("3_say4o")
 icon_bell = ExtResource("4_oaydl")
-icon_bar = ExtResource("6_opr8o")
+icon_charge = ExtResource("13_nh3cu")
 icon_diamond = ExtResource("4_6oj0s")
-icon_cherry = ExtResource("7_ri7nv")
+icon_cherry_bomb = ExtResource("15_gni4v")
 coin_damage = 2.0
 coin_speed = 50.0
 coin_projectile = ExtResource("16_52y3v")

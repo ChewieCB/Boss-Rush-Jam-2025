@@ -11,7 +11,6 @@ signal desired_height_reached
 # Ante 4 (new): Hidden Motive - Hide the slot UI / attack indicator
 # Ante 5 (new): Greed Machine - Boss can pick up / steal dropped chips to recover HP
 
-
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
 @onready var slot_icons_parent: Node3D = $Sprite3D/SlotIcons
@@ -60,11 +59,11 @@ var slot_ticks: int = SLOT_TICKS
 @export_subgroup("Slot Icons")
 @export var icon_coin: Texture
 @export var icon_bell: Texture
-@export var icon_bar: Texture
+@export var icon_charge: Texture
 @export var icon_diamond: Texture
-@export var icon_cherry: Texture
+@export var icon_cherry_bomb: Texture
 @onready var slot_icons: Array[Texture] = [
-	icon_coin, icon_bell, icon_bar, icon_diamond, icon_cherry
+	icon_coin, icon_bell, icon_charge, icon_diamond, icon_cherry_bomb
 ]
 @onready var slot_decals: Array[Node] = get_tree().get_root().get_child(3).find_children("*", "SlotRollerDecal")
 
@@ -79,6 +78,7 @@ var slot_ticks: int = SLOT_TICKS
 @export var sfx_coin_shot: Array[AudioStream]
 
 @export_subgroup("Bell Drop")
+var bell_attack_enabled = false # Based on ante 1
 @export var bell_damage: float = 20
 @export var bell_scene: PackedScene
 @export var bell_aoe_marker_ring: CompressedTexture2D
@@ -111,6 +111,7 @@ var charge_locked: bool = false
 @export var sfx_charge_impact: Array[AudioStream]
 
 @export_subgroup("Homing Diamonds")
+var homing_diamond_enabled = false # Based on ante 2
 @export var diamond_damage: float = 3
 @export var diamond_speed: float = 35
 @export var diamond_projectile: PackedScene
@@ -138,6 +139,13 @@ var active_bombs: Array = []
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 
+func _ready() -> void:
+	if GameManager.boss_ante >= 1:
+		bell_attack_enabled = true
+	if GameManager.boss_ante >= 2:
+		homing_diamond_enabled = true
+
+
 func activate() -> void:
 	super ()
 	navigation_component.follow_target = false
@@ -147,32 +155,33 @@ func activate() -> void:
 
 func _physics_process(delta: float) -> void:
 	super (delta)
-	
+
 	if target:
 		projectile_marker_pivot.look_at(target.global_position)
 		slot_icons_parent.look_at(target.global_position)
-	
+
 	if hurtbox.monitoring:
 		if target in hurtbox.get_overlapping_bodies():
 			# TODO - add cooldown
 			state_chart.send_event("start_lever_attack")
-	
+
 	if self.global_position.y > desired_height:
 		self.global_position.y -= delta * drop_factor
 	elif self.global_position.y < desired_height:
 		self.global_position.y += delta * drop_factor
-	
+
 	if abs(self.global_position.y - desired_height) < 0.1:
 		desired_height_reached.emit()
 
 
 func select_attack_phase_1() -> void:
 	var possible_phases = [
-		# Tuples of event string and icon windex 
+		# Tuples of event string and icon index
 		["start_coin_attack", 0],
-		["start_bell_attack", 1],
 		["start_charge_attack", 2],
 	]
+	if bell_attack_enabled:
+		possible_phases.append(["start_bell_attack", 1])
 	if prev_phase:
 		possible_phases.erase(prev_phase)
 	# TODO - add random weighting
@@ -185,12 +194,16 @@ func select_attack_phase_1() -> void:
 
 func select_attack_phase_2() -> void:
 	var possible_phases = [
-		# Tuples of event string and icon windex 
-		["start_bell_attack", 1],
+		# Tuples of event string and icon index
+		["start_coin_attack", 0],
 		["start_charge_attack", 2],
-		["start_diamond_attack", 3],
 		["start_bomb_attack", 4],
 	]
+	if bell_attack_enabled:
+		possible_phases.append(["start_bell_attack", 1])
+	if homing_diamond_enabled:
+		possible_phases.append(["start_diamond_attack", 3])
+		possible_phases.erase(["start_coin_attack", 0]) # Replace coin with diamond
 	if prev_phase:
 		possible_phases.erase(prev_phase)
 	# TODO - add random weighting
@@ -209,20 +222,20 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 func _on_died() -> void:
 	_cleanup_bombs()
-	
+
 	anim_player.stop()
 	set_physics_process(false)
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
-	
+
 	await tween.finished
-	
+
 	died.emit()
 	state_chart.send_event("death")
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("deactivate")
 	drop_barrel()
-	
+
 	await boss_death_slow_mo()
 
 
@@ -261,11 +274,11 @@ func orbit_towards_player(
 	delta: float, approach_speed: float = 1.0, min_radius: float = 10.0
 ) -> void:
 	orbit_angle += angle_speed * delta
-	
+
 	orbit_radius -= approach_speed * delta
 	if min_radius:
 		orbit_radius = max(orbit_radius, min_radius)
-	
+
 	# offset in XZ-plane
 	var offset_x = cos(orbit_angle) * orbit_radius
 	var offset_z = sin(orbit_angle) * orbit_radius
@@ -282,7 +295,7 @@ func _on_spin_slots_state_physics_processing(delta: float) -> void:
 
 func _on_spin_slots_targeting_state_entered() -> void:
 	debug_state_label.text = "Spin Slots | Targeting"
-	
+
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
 	state_chart.send_event("start_slots")
@@ -291,13 +304,13 @@ func _on_spin_slots_spinning_state_entered() -> void:
 	debug_state_label.text = "Spin Slots | Spinning"
 	for slot_sprite in slot_icons_parent.get_children():
 		slot_sprite.texture = slot_icons.pick_random()
-	
+
 	next_attack_texture = slot_icons[next_attack_idx]
-	
+
 	# Spinning
 	sfx_player.stream = sfx_slot_roll_long if current_phase == 1 else sfx_slot_roll_short
 	sfx_player.play()
-	
+
 	for i in range(slot_ticks):
 		for slot_sprite in slot_icons_parent.get_children():
 			var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
@@ -314,24 +327,24 @@ func _on_spin_slots_spinning_state_entered() -> void:
 				var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
 				var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size())
 				slot_sprite.texture = slot_icons[new_idx]
-	
+
 	#for decal in slot_decals:
 		#decal.mesh.material.albedo_texture = slot_icons[next_attack_idx]
-	
+
 	sfx_player.stop()
 	var choice_sfx: AudioStream = sfx_slot_picks[next_attack_idx]
 	sfx_player.stream = choice_sfx
 	sfx_player.play()
-	
+
 	state_chart.send_event("attack_start")
 	state_chart.send_event("end_slots")
 
 func _on_spin_slots_recover_state_entered() -> void:
 	debug_state_label.text = "Spin Slots | Recovering"
 	state_chart.send_event("attack_end")
-	
+
 	#await get_tree().create_timer(attack_recovery_time).timeout
-	
+
 	state_chart.send_event("cooldown_end")
 	state_chart.send_event(next_attack)
 	state_chart.send_event("end_recovery")
@@ -339,7 +352,7 @@ func _on_spin_slots_recover_state_entered() -> void:
 
 #### COIN BURST - RICOCHET IN PHASE 2
 # 3 Coins on rollers
-# Rapid fire coin projectiles 
+# Rapid fire coin projectiles
 
 
 func _on_coin_projectiles_state_physics_processing(delta: float) -> void:
@@ -348,7 +361,7 @@ func _on_coin_projectiles_state_physics_processing(delta: float) -> void:
 
 func _on_coin_projectiles_targeting_state_entered() -> void:
 	debug_state_label.text = "Coin Burst | Targeting"
-	
+
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	await get_tree().create_timer(0.8).timeout
@@ -357,27 +370,27 @@ func _on_coin_projectiles_targeting_state_entered() -> void:
 
 func _on_coin_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Coin Burst | Shooting"
-	
+
 	state_chart.send_event("attack_telegraph")
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
-	
+
 	for i in num_bursts:
 		for j in coin_shots_per_burst:
 			await get_tree().create_timer(delay_per_projectile).timeout
 			var proj = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
-			proj.init(coin_damage * GameManager.get_risk_dmg_mult())
+			proj.init(coin_damage * GameManager.get_risk_dmg_mult(), coin_speed)
 		await get_tree().create_timer(delay_between_burst).timeout
 	state_chart.send_event("stop_shooting")
 
 
 func _on_coin_projectiles_recover_state_entered() -> void:
 	debug_state_label.text = "Coin Burst | Recovering"
-	
+
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
-	
+
 	select_attack()
 	state_chart.send_event("end_recovery")
 
@@ -403,7 +416,7 @@ func drop_shadow(
 	if result:
 		target_pos.y = result.position.y
 		#draw_debug_sphere(target_pos, 1.0, Color.PURPLE)
-	
+
 	# AoE decal
 	var aoe_tween: Tween = get_tree().create_tween()
 	var decal_ring := Decal.new()
@@ -411,13 +424,13 @@ func drop_shadow(
 	decal_ring.size = Vector3(0, 1, 0)
 	get_parent().get_parent().add_child(decal_ring)
 	decal_ring.global_position = target_pos
-	
+
 	var decal_arrows := Decal.new()
 	decal_arrows.texture_albedo = bell_aoe_marker_arrows
 	decal_arrows.size = Vector3(0, 1, 0)
 	get_parent().get_parent().add_child(decal_arrows)
 	decal_arrows.global_position = target_pos
-	
+
 	aoe_tween.tween_property(decal_ring, "size", Vector3(max_radius * 2, 1, max_radius * 2), drop_time * 0.75)
 	aoe_tween.parallel().tween_property(decal_arrows, "size", Vector3(max_radius * 2, 1, max_radius * 2), drop_time)
 	aoe_tween.parallel().tween_property(decal_arrows, "rotation_degrees:y", 360, drop_time)
@@ -446,7 +459,7 @@ func spawn_bell(pos: Vector3, size: float) -> Bell:
 	var result = space_state.intersect_ray(query)
 	if result:
 		pos.y = result.position.y
-	
+
 	var bell: Bell = bell_scene.instantiate()
 	bell.global_position = pos
 	get_tree().root.get_child(7).add_child(bell)
@@ -459,7 +472,7 @@ func spawn_bell(pos: Vector3, size: float) -> Bell:
 	bell.hurtbox_collider.shape.height = size * 2
 	bell.hurtbox_collider.position.y = size / 2
 	bell.drop()
-	
+
 	return bell
 
 
@@ -475,7 +488,7 @@ func _on_bell_drop_state_exited() -> void:
 
 func _on_bell_drop_targeting_state_entered() -> void:
 	debug_state_label.text = "Bell Drop | Targeting"
-	
+
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	await get_tree().create_timer(1.2).timeout
@@ -484,11 +497,11 @@ func _on_bell_drop_targeting_state_entered() -> void:
 
 func _on_bell_drop_dropping_state_entered() -> void:
 	debug_state_label.text = "Bell Drop | Dropping"
-	
+
 	state_chart.send_event("attack_telegraph")
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
-	
+
 	# Get a bunch of evenly distributed points clamped to the navmesh
 	bell_spawn_points = Poisson.generate_points_for_circle(
 		Vector2.ZERO,
@@ -514,11 +527,11 @@ func _on_bell_drop_dropping_state_exited() -> void:
 
 func _on_bell_drop_recover_state_entered() -> void:
 	debug_state_label.text = "Bell Drop | Recovering"
-	
+
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
-	
+
 	select_attack()
 	state_chart.send_event("end_recovery")
 
@@ -527,7 +540,7 @@ func _on_bell_drop_recover_state_entered() -> void:
 # Whacks player with slot level arm if they get too close
 func _on_lever_swipe_targeting_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Targeting"
-	
+
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_telegraph")
 	await get_tree().create_timer(telegraph_time).timeout
@@ -537,13 +550,13 @@ func _on_lever_swipe_targeting_state_entered() -> void:
 
 func _on_lever_swipe_swipe_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Swipe"
-	
+
 	state_chart.send_event("attack_start")
 	sprite.modulate = Color.ORANGE
-	
+
 	sfx_player.stream = sfx_lever_swipe.pick_random()
 	sfx_player.play()
-	
+
 	# Hit player in melee range and flee away
 	if target in hurtbox.get_overlapping_bodies():
 		target.health_component.damage(swipe_damage * GameManager.get_risk_dmg_mult())
@@ -553,9 +566,9 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 		target.velocity.x = 0
 		target.velocity.z = 0
 		target.velocity += knockback_vector
-		
+
 		var dodge_vector = self.global_basis.z * swipe_dodge_speed
-		
+
 		# Make sure we don't dodge into a wall
 		var space_state = get_world_3d().direct_space_state
 		var dodge_collisions = []
@@ -572,7 +585,7 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 				continue
 			else:
 				break
-		
+
 		# If all options collide, pick the furthest direction to dodge in
 		if dodge_collisions.size() == 4:
 			dodge_collisions.sort_custom(
@@ -584,13 +597,13 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 					return false
 			)
 			dodge_vector = dodge_collisions.front()
-		
+
 		self.velocity.x = dodge_vector.x
 		self.velocity.z = dodge_vector.z
-	
+
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE
-	
+
 	state_chart.send_event("end_swipe")
 
 
@@ -598,11 +611,11 @@ func _on_lever_swipe_recover_state_entered() -> void:
 	debug_state_label.text = "Lever Swipe | Recovery"
 	hurtbox.set_deferred("monitoring", true)
 	sfx_player.stream = null
-	
+
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
-	
+
 	select_attack()
 	state_chart.send_event("end_recovery")
 
@@ -624,7 +637,7 @@ func _on_homing_projectiles_state_physics_processing(delta: float) -> void:
 
 func _on_homing_projectiles_targeting_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Targeting"
-	
+
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	await get_tree().create_timer(0.8).timeout
@@ -639,7 +652,7 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 		var _sfx_player = get_available_sfx_player()
 		_sfx_player.stream = sfx_diamond_shot.pick_random()
 		_sfx_player.play()
-		
+
 		var projectile := diamond_projectile.instantiate()
 		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
 		#get_tree().root.get_child(2).
@@ -652,11 +665,11 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 
 func _on_homing_projectiles_recover_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Recovering"
-	
+
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
-	
+
 	select_attack()
 	state_chart.send_event("end_recovery")
 
@@ -664,13 +677,13 @@ func _on_homing_projectiles_recover_state_entered() -> void:
 # 3 BARs on rollers
 func _on_charge_targeting_state_entered() -> void:
 	debug_state_label.text = "Charge | Targeting"
-	
+
 	navigation_component.enable()
 	desired_distance = min_charge_distance * 2
 	MAX_SPEED *= 1.6
 	charge_locked = false
 	state_chart.send_event("start_moving")
-	
+
 	await charge_lined_up
 	#velocity = Vector3.ZERO
 	state_chart.send_event("attack_telegraph")
@@ -686,24 +699,24 @@ func _on_charge_targeting_state_physics_processing(delta: float) -> void:
 			int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 7 - 1))
 		)
 		var result = space_state.intersect_ray(query)
-		
+
 		if self.global_position.distance_to(target.global_position) >= min_charge_distance:
 			if result == null or result.collider == target:
 				state_chart.send_event("stop_moving")
 				charge_lined_up.emit()
 				charge_locked = true
 				return
-		
+
 		orbit_player(delta)
 
 func _on_charge_charging_state_entered() -> void:
 	debug_state_label.text = "Charge | Charging"
 	state_chart.send_event("attack_start")
-	
+
 	MAX_SPEED /= 1.6
 	desired_height = 0.2
 	drop_factor = 12.0
-	
+
 	navigation_component.disable()
 	hurtbox.set_deferred("monitoring", true)
 	hurtbox.body_entered.connect(_on_charge_collision)
@@ -735,17 +748,17 @@ func _on_charge_recover_state_entered() -> void:
 	debug_state_label.text = "Charge | Recovering"
 	state_chart.send_event("attack_end")
 	navigation_component.enable()
-	
+
 	desired_distance = DESIRED_DISTANCE
 	desired_height = DESIRED_HEIGHT
 	drop_factor = DROP_FACTOR
-	
+
 	hurtbox.set_deferred("monitoring", true)
 	if hurtbox.body_entered.is_connected(_on_charge_collision):
 		hurtbox.body_entered.disconnect(_on_charge_collision)
-	
+
 	await get_tree().create_timer(attack_recovery_time).timeout
-	
+
 	state_chart.send_event("cooldown_end")
 	select_attack()
 	state_chart.send_event("end_recovery")
@@ -756,7 +769,7 @@ func _on_charge_recover_state_entered() -> void:
 # Bouncing explosive projectiles
 func _on_cherry_bombs_targeting_state_entered() -> void:
 	debug_state_label.text = "Cherry Bomb | Targeting"
-	
+
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 
@@ -772,12 +785,12 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 	drop_factor = 3.0
 	MAX_SPEED *= 1.6
 	navigation_component.follow_target = true
-	
+
 	state_chart.send_event("start_targeting")
 	await desired_height_reached
-	
+
 	state_chart.send_event("attack_start")
-	
+
 	var dir_counter: int = -1
 	sfx_player.volume_db = 3.0
 	for i in range(bombs_per_attack):
@@ -795,10 +808,10 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 		projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * dir_counter)
 		projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
 		active_bombs.append(projectile)
-		
+
 		dir_counter += 1
 		dir_counter = wrapi(dir_counter, -1, 2)
-	
+
 	sfx_player.volume_db = 0.0
 	state_chart.send_event("stop_dropping_bombs")
 
@@ -806,16 +819,16 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 func _on_cherry_bombs_recover_state_entered() -> void:
 	debug_state_label.text = "Cherry Bomb | Recovering"
 	state_chart.send_event("attack_end")
-	
+
 	navigation_component.follow_target = false
 	drop_factor = DROP_FACTOR
 	desired_height = DESIRED_HEIGHT
 	MAX_SPEED /= 2.0
-	
+
 	await desired_height_reached
-	
+
 	await get_tree().create_timer(attack_recovery_time).timeout
-	
+
 	state_chart.send_event("cooldown_end")
 	select_attack()
 	state_chart.send_event("end_recovery")
