@@ -199,7 +199,6 @@ func _ready() -> void:
 		if elem:
 			elem.visible = false
 
-
 	# Cheat/debug flags
 	if GameManager.CHEAT_oneshot:
 		health_component.max_health = 1

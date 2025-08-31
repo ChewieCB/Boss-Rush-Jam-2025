@@ -140,6 +140,7 @@ var active_bombs: Array = []
 
 
 func _ready() -> void:
+	super ()
 	if GameManager.boss_ante >= 1:
 		bell_attack_enabled = true
 	if GameManager.boss_ante >= 2:
