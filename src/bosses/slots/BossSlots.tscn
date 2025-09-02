@@ -1,4 +1,4 @@
-[gd_scene load_steps=98 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=100 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -26,6 +26,7 @@
 [ext_resource type="Texture2D" uid="uid://b5j7lvip5mjnj" path="res://src/bosses/slots/assets/icons/bull-horns.png" id="13_nh3cu"]
 [ext_resource type="Texture2D" uid="uid://11i81ijkmtni" path="res://src/bosses/slots/assets/icons/unlit-bomb.png" id="15_gni4v"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="16_52y3v"]
+[ext_resource type="Texture2D" uid="uid://cmleylm1metko" path="res://src/bosses/slots/assets/icons/pinball.png" id="16_xk200"]
 [ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="17_6xi00"]
 [ext_resource type="AudioStream" uid="uid://cbf7hkjdjvljq" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 2.mp3" id="18_0lbrd"]
 [ext_resource type="AudioStream" uid="uid://dv5u41740s0hh" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 3.mp3" id="19_aidds"]
@@ -56,6 +57,7 @@
 [ext_resource type="AudioStream" uid="uid://dsk2dfx34iy6m" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 1.mp3" id="45_ishi6"]
 [ext_resource type="AudioStream" uid="uid://b1h5uugbn6oed" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 2.mp3" id="46_vgcme"]
 [ext_resource type="AudioStream" uid="uid://dtumhkhlkde2g" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 3.mp3" id="47_hafh8"]
+[ext_resource type="PackedScene" uid="uid://xsg605o1mpcb" path="res://src/bosses/base/attacks/ranged/RicochetPinballProjectile.tscn" id="48_1shbk"]
 [ext_resource type="AudioStream" uid="uid://bu1ukh2e2to0u" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 4.mp3" id="48_qbsnc"]
 [ext_resource type="AudioStream" uid="uid://ek641dpub6ow" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 5.mp3" id="49_sigie"]
 [ext_resource type="AudioStream" uid="uid://dnirkeyfxwj7d" path="res://src/bosses/slots/assets/sfx/SLOT BOSS STARTING SOUND (first pass).mp3" id="51_nikje"]
@@ -209,11 +211,13 @@ sfx_slot_pick_bell = ExtResource("7_1c6a3")
 sfx_slot_pick_bar = ExtResource("8_po7hj")
 sfx_slot_pick_diamond = ExtResource("9_qwmyu")
 sfx_slot_pick_cherry = ExtResource("10_88yvd")
+sfx_slot_pick_pinball = ExtResource("6_q1utd")
 icon_coin = ExtResource("3_say4o")
 icon_bell = ExtResource("4_oaydl")
 icon_charge = ExtResource("13_nh3cu")
 icon_diamond = ExtResource("4_6oj0s")
 icon_cherry_bomb = ExtResource("15_gni4v")
+icon_pinball = ExtResource("16_xk200")
 coin_damage = 2.0
 coin_speed = 50.0
 coin_projectile = ExtResource("16_52y3v")
@@ -246,6 +250,13 @@ diamond_projectile = ExtResource("11_dqr52")
 diamond_shots_per_attack = 12
 diamond_shot_time = 1.3
 sfx_diamond_shot = Array[AudioStream]([ExtResource("36_pqkkl"), ExtResource("37_0sig5"), ExtResource("38_hfhsu"), ExtResource("39_gde5g"), ExtResource("40_8wl1k"), ExtResource("41_182io"), ExtResource("42_vntjg"), ExtResource("43_2donj")])
+pinball_damage = 2.0
+pinball_speed = 100.0
+pinball_ricochet_count = 5
+pinball_projectile = ExtResource("48_1shbk")
+pinball_shots_per_attack = 6
+pinball_shot_time = 1.3
+sfx_pinball_shot = Array[AudioStream]([])
 bomb_damage = 10.0
 bomb_projectile = ExtResource("12_xbq02")
 bombs_per_attack = 8
@@ -313,7 +324,7 @@ mesh = SubResource("SphereMesh_lr0sl")
 monitoring = true
 
 [node name="HealthComponent" parent="." index="5"]
-max_health = 4400.0
+max_health = 1000.0
 
 [node name="NavigationComponent" parent="." index="6"]
 follow_target = false
@@ -695,28 +706,35 @@ event = &"start_diamond_attack"
 guard = SubResource("Resource_v0uhn")
 delay_in_seconds = "0.0"
 
-[node name="toCherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="2"]
+[node name="toPinballProjectiles" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="2"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../PinballProjectiles")
+event = &"start_pinball_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toCherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="3"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../CherryBombs")
 event = &"start_bomb_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="toBellDrop" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="3"]
+[node name="toBellDrop" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="4"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../BellDrop")
 event = &"start_bell_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="4"]
+[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="5"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../LeverSwipe")
 event = &"start_lever_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="toCharge" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="5"]
+[node name="toCharge" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="6"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../Charge")
 event = &"start_charge_attack"
@@ -762,28 +780,35 @@ event = &"start_diamond_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="toCherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="4"]
+[node name="toPinballProjectiles" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="4"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../PinballProjectiles")
+event = &"start_pinball_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toCherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="5"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../CherryBombs")
 event = &"start_bomb_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="toBellDrop" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="5"]
+[node name="toBellDrop" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="6"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../BellDrop")
 event = &"start_bell_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="6"]
+[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="7"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../LeverSwipe")
 event = &"start_level_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="toCharge" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="7"]
+[node name="toCharge" type="Node" parent="StateChart/Root/Phase/Phase2/SpinSlots" index="8"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../Charge")
 event = &"start_charge_attack"
@@ -836,7 +861,53 @@ event = &"start_lever_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="CherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
+[node name="PinballProjectiles" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
+script = ExtResource("8_0tk6i")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/PinballProjectiles" index="0"]
+script = ExtResource("9_5a0pq")
+
+[node name="toShooting" type="Node" parent="StateChart/Root/Phase/Phase2/PinballProjectiles/Targeting" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Shooting")
+event = &"start_shooting"
+guard = SubResource("Resource_swquk")
+delay_in_seconds = "0.0"
+
+[node name="Shooting" type="Node" parent="StateChart/Root/Phase/Phase2/PinballProjectiles" index="1"]
+script = ExtResource("9_5a0pq")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/PinballProjectiles/Shooting" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Recover")
+event = &"stop_shooting"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/PinballProjectiles" index="2"]
+script = ExtResource("9_5a0pq")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/PinballProjectiles/Recover" index="0"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toSpinSlots" type="Node" parent="StateChart/Root/Phase/Phase2/PinballProjectiles" index="3"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../SpinSlots")
+event = &"start_spin_slots"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toLeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase2/PinballProjectiles" index="4"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../LeverSwipe")
+event = &"start_lever_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="CherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2" index="4"]
 script = ExtResource("8_0tk6i")
 initial_state = NodePath("Targeting")
 
@@ -885,7 +956,7 @@ event = &"start_lever_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="BellDrop" type="Node" parent="StateChart/Root/Phase/Phase2" index="4"]
+[node name="BellDrop" type="Node" parent="StateChart/Root/Phase/Phase2" index="5"]
 script = ExtResource("8_0tk6i")
 initial_state = NodePath("Targeting")
 
@@ -952,7 +1023,7 @@ event = &"start_lever_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="Charge" type="Node" parent="StateChart/Root/Phase/Phase2" index="5"]
+[node name="Charge" type="Node" parent="StateChart/Root/Phase/Phase2" index="6"]
 script = ExtResource("8_0tk6i")
 initial_state = NodePath("Targeting")
 
@@ -991,7 +1062,7 @@ event = &"start_spin_slots"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="LeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase2" index="6"]
+[node name="LeverSwipe" type="Node" parent="StateChart/Root/Phase/Phase2" index="7"]
 script = ExtResource("8_0tk6i")
 initial_state = NodePath("Targeting")
 
@@ -1044,21 +1115,28 @@ event = &"start_diamond_attack"
 guard = SubResource("Resource_kklh8")
 delay_in_seconds = "0.0"
 
-[node name="toCherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe" index="6"]
+[node name="toPinballProjectiles" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe" index="6"]
+script = ExtResource("5_lu46i")
+to = NodePath("../../PinballProjectiles")
+event = &"start_pinball_attack"
+guard = ExtResource("5_3q2k6")
+delay_in_seconds = "0.0"
+
+[node name="toCherryBombs" type="Node" parent="StateChart/Root/Phase/Phase2/LeverSwipe" index="7"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../CherryBombs")
 event = &"start_bomb_attack"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Phase2" index="7"]
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Phase2" index="8"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../Phase1")
 event = &"start_phase_1"
 guard = ExtResource("5_3q2k6")
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="8"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase2" index="9"]
 script = ExtResource("5_lu46i")
 to = NodePath("../../Inactive")
 event = &"deactivate"
@@ -1185,6 +1263,10 @@ libraries = {
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/HomingProjectiles/Targeting" to="." method="_on_homing_projectiles_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/HomingProjectiles/Shooting" to="." method="_on_homing_projectiles_shooting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/HomingProjectiles/Recover" to="." method="_on_homing_projectiles_recover_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/PinballProjectiles" to="." method="_on_pinball_projectiles_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PinballProjectiles/Targeting" to="." method="_on_pinball_projectiles_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PinballProjectiles/Shooting" to="." method="_on_pinball_projectiles_shooting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/PinballProjectiles/Recover" to="." method="_on_pinball_projectiles_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/CherryBombs/Targeting" to="." method="_on_cherry_bombs_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase2/CherryBombs/Targeting" to="." method="_on_cherry_bombs_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/CherryBombs/DroppingBombs" to="." method="_on_cherry_bombs_dropping_bombs_state_entered"]

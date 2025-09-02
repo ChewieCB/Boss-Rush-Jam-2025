@@ -20,7 +20,7 @@ func _ready() -> void:
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	
+
 	if raycast.is_colliding():
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
@@ -36,11 +36,18 @@ func init(_damage: float, _speed: float):
 func ricochet():
 	if ricochet_count_left <= 0:
 		return
+	timer.stop()
+	timer.start()
 	is_ricochet_shot = true
 	var new_dir = current_dir.bounce(hitscan_col_normal)
 	look_at_from_position(global_position, global_position + new_dir)
 	ricochet_count_left -= 1
 	raycast.rotation = Vector3.ZERO
+	found_hitscal_col = false
+
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+
 	if raycast.is_colliding():
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
@@ -69,7 +76,10 @@ func _on_body_entered(body: Node3D) -> void:
 		pass
 	else:
 		create_spark(global_position, body.global_position.direction_to(global_position))
-		queue_free()
+		if ricochet_count_left > 0 and found_hitscal_col:
+			ricochet()
+		else:
+			queue_free()
 
 func destroy() -> void:
 	queue_free()

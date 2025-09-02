@@ -7,7 +7,7 @@ signal desired_height_reached
 # Antes note:
 # Ante 1: Toll of Fortune - Enable falling bell attack
 # Ante 2: Seeking Luxury - Enable homing diamond projectile attack
-# Ante 3 (new): Pinball Gamble - Enable new projectile attack that can ricochet 10 times
+# Ante 3 (new): Pinball Gamble - Enable new projectile attack that can ricochet
 # Ante 4 (new): Hidden Motive - Hide the slot UI / attack indicator
 # Ante 5 (new): Greed Machine - Boss can pick up / steal dropped chips to recover HP
 
@@ -48,12 +48,14 @@ var slot_ticks: int = SLOT_TICKS
 @export var sfx_slot_pick_bar: AudioStream
 @export var sfx_slot_pick_diamond: AudioStream
 @export var sfx_slot_pick_cherry: AudioStream
+@export var sfx_slot_pick_pinball: AudioStream
 @onready var sfx_slot_picks: Array[AudioStream] = [
 	sfx_slot_pick_coin,
 	sfx_slot_pick_bell,
 	sfx_slot_pick_bar,
 	sfx_slot_pick_diamond,
-	sfx_slot_pick_cherry
+	sfx_slot_pick_cherry,
+	sfx_slot_pick_pinball
 ]
 
 @export_subgroup("Slot Icons")
@@ -62,8 +64,9 @@ var slot_ticks: int = SLOT_TICKS
 @export var icon_charge: Texture
 @export var icon_diamond: Texture
 @export var icon_cherry_bomb: Texture
+@export var icon_pinball: Texture
 @onready var slot_icons: Array[Texture] = [
-	icon_coin, icon_bell, icon_charge, icon_diamond, icon_cherry_bomb
+	icon_coin, icon_bell, icon_charge, icon_diamond, icon_cherry_bomb, icon_pinball
 ]
 @onready var slot_decals: Array[Node] = get_tree().get_root().get_child(3).find_children("*", "SlotRollerDecal")
 
@@ -119,6 +122,17 @@ var homing_diamond_enabled = false # Based on ante 2
 @export var diamond_shot_time: float = 1.3
 # SFX
 @export var sfx_diamond_shot: Array[AudioStream]
+
+@export_subgroup("Ricochet Pinball")
+var pinball_enabled = false # Based on ante 3
+@export var pinball_damage: float = 2
+@export var pinball_speed: float = 50
+@export var pinball_ricochet_count: int = 5
+@export var pinball_projectile: PackedScene
+@export var pinball_shots_per_attack: int = 6
+@export var pinball_shot_time: float = 1.3
+# SFX
+@export var sfx_pinball_shot: Array[AudioStream]
 
 @export_subgroup("Cherry Bombs")
 @export var bomb_damage: float = 10
@@ -199,6 +213,7 @@ func select_attack_phase_2() -> void:
 		["start_coin_attack", 0],
 		["start_charge_attack", 2],
 		["start_bomb_attack", 4],
+		["start_pinball_attack", 5],
 	]
 	if bell_attack_enabled:
 		possible_phases.append(["start_bell_attack", 1])
@@ -654,7 +669,7 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 		_sfx_player.stream = sfx_diamond_shot.pick_random()
 		_sfx_player.play()
 
-		var projectile := diamond_projectile.instantiate()
+		var projectile: DiamondProjectile = diamond_projectile.instantiate()
 		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
 		#get_tree().root.get_child(2).
 		get_parent().add_child(projectile)
@@ -673,6 +688,51 @@ func _on_homing_projectiles_recover_state_entered() -> void:
 
 	select_attack()
 	state_chart.send_event("end_recovery")
+
+
+#### PINBALL SCATTERSHOT
+# Ricochet pinball projectile, fired in a spiral/radial pattern from boss
+func _on_pinball_projectiles_state_physics_processing(delta: float) -> void:
+	orbit_player(delta)
+
+
+func _on_pinball_projectiles_targeting_state_entered() -> void:
+	debug_state_label.text = "Pinball Riochet | Targeting"
+
+	state_chart.send_event("start_moving")
+	state_chart.send_event("attack_buildup")
+	await get_tree().create_timer(0.8).timeout
+	state_chart.send_event("start_shooting")
+
+
+func _on_pinball_projectiles_shooting_state_entered() -> void:
+	debug_state_label.text = "Pinball Riochet | Shooting"
+	# Fire out projctiles in a spiral, each projectile can ricochet
+	for i in range(pinball_shots_per_attack):
+		await get_tree().create_timer(pinball_shot_time / pinball_shots_per_attack).timeout
+		var _sfx_player = get_available_sfx_player()
+		_sfx_player.stream = sfx_diamond_shot.pick_random()
+		_sfx_player.play()
+
+		var projectile: BaseBossProjectile = pinball_projectile.instantiate()
+		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
+		projectile.ricochet_count_left = pinball_ricochet_count
+		get_parent().add_child(projectile)
+		projectile.global_position = projectile_spawn_marker.global_position
+		projectile.global_rotation.y = self.global_rotation.y
+
+	state_chart.send_event("stop_shooting")
+
+func _on_pinball_projectiles_recover_state_entered() -> void:
+	debug_state_label.text = "Pinball Riochet | Recovering"
+
+	state_chart.send_event("attack_end")
+	await get_tree().create_timer(attack_recovery_time).timeout
+	state_chart.send_event("cooldown_end")
+
+	select_attack()
+	state_chart.send_event("end_recovery")
+
 
 #### CHARGE/HEADBUTT
 # 3 BARs on rollers
