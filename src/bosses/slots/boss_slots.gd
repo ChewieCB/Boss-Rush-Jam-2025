@@ -5,9 +5,9 @@ signal charge_lined_up
 signal desired_height_reached
 
 # Antes note:
-# Ante 1: Toll of Fortune - Enable falling bell attack
-# Ante 2: Seeking Luxury - Enable homing diamond projectile attack
-# Ante 3 (new): Pinball Gamble - Enable new projectile attack that can ricochet
+# Ante 1: Toll of Fortune - Enable falling bell attack + Enhance Coin Burst
+# Ante 2: Seeking Luxury - Enable homing diamond projectile attack + Enhance Cherry Bomb
+# Ante 3 (new): Pinball Gamble - Enable new projectile attack that can ricochet + Enhance Diamond
 # Ante 4 (new): Hidden Motive - Hide the slot UI / attack indicator
 # Ante 5 (new): Greed Machine - Boss can pick up / steal dropped chips to recover HP
 
@@ -210,16 +210,18 @@ func select_attack_phase_1() -> void:
 func select_attack_phase_2() -> void:
 	var possible_phases = [
 		# Tuples of event string and icon index
-		["start_coin_attack", 0],
+		# ["start_coin_attack", 0],
 		["start_charge_attack", 2],
-		["start_bomb_attack", 4],
-		["start_pinball_attack", 5],
+		# ["start_bomb_attack", 4],
+		["start_pinball_attack", 5]
 	]
 	if bell_attack_enabled:
 		possible_phases.append(["start_bell_attack", 1])
 	if homing_diamond_enabled:
 		possible_phases.append(["start_diamond_attack", 3])
 		possible_phases.erase(["start_coin_attack", 0]) # Replace coin with diamond
+	if pinball_enabled:
+		possible_phases.append(["start_pinball_attack", 5])
 	if prev_phase:
 		possible_phases.erase(prev_phase)
 	# TODO - add random weighting
@@ -317,6 +319,7 @@ func _on_spin_slots_targeting_state_entered() -> void:
 	state_chart.send_event("start_slots")
 
 func _on_spin_slots_spinning_state_entered() -> void:
+	print("POPO START SPIN ", next_attack_idx)
 	debug_state_label.text = "Spin Slots | Spinning"
 	for slot_sprite in slot_icons_parent.get_children():
 		slot_sprite.texture = slot_icons.pick_random()
@@ -337,7 +340,7 @@ func _on_spin_slots_spinning_state_entered() -> void:
 		await get_tree().create_timer(0.1).timeout
 	# Settle each roller one by one
 	for i in range(slot_icons_parent.get_child_count()):
-		while not slot_icons_parent.get_child(i).texture == next_attack_texture:
+		while slot_icons_parent.get_child(i).texture != next_attack_texture:
 			for j in range(i, slot_icons_parent.get_child_count()):
 				var slot_sprite = slot_icons_parent.get_child(j)
 				var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
