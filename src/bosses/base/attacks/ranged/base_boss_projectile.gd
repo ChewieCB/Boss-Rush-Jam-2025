@@ -17,6 +17,7 @@ var hitscan_col_normal: Vector3 = Vector3.ZERO
 
 func _ready() -> void:
 	current_dir = - global_transform.basis.z.normalized()
+	raycast.look_at(raycast.global_position + current_dir)
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -27,6 +28,7 @@ func _ready() -> void:
 		found_hitscal_col = true
 
 func _physics_process(delta: float) -> void:
+	current_dir = - transform.basis.z.normalized()
 	global_position -= transform.basis.z * projectile_speed * delta
 
 func init(_damage: float, _speed: float):
@@ -34,16 +36,13 @@ func init(_damage: float, _speed: float):
 	projectile_speed = _speed
 
 func ricochet():
-	if ricochet_count_left <= 0:
-		return
 	timer.stop()
 	timer.start()
+	ricochet_count_left -= 1
+	found_hitscal_col = false
 	is_ricochet_shot = true
 	var new_dir = current_dir.bounce(hitscan_col_normal)
 	look_at_from_position(global_position, global_position + new_dir)
-	ricochet_count_left -= 1
-	raycast.rotation = Vector3.ZERO
-	found_hitscal_col = false
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -52,6 +51,7 @@ func ricochet():
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
 		found_hitscal_col = true
+	raycast.rotation = Vector3.ZERO
 
 func create_spark(pos: Vector3, normal: Vector3):
 	if spark_effect == null:

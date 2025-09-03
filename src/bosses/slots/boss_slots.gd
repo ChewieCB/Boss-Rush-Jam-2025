@@ -210,10 +210,9 @@ func select_attack_phase_1() -> void:
 func select_attack_phase_2() -> void:
 	var possible_phases = [
 		# Tuples of event string and icon index
-		# ["start_coin_attack", 0],
+		["start_coin_attack", 0],
 		["start_charge_attack", 2],
-		# ["start_bomb_attack", 4],
-		["start_pinball_attack", 5]
+		["start_bomb_attack", 4],
 	]
 	if bell_attack_enabled:
 		possible_phases.append(["start_bell_attack", 1])
@@ -319,7 +318,6 @@ func _on_spin_slots_targeting_state_entered() -> void:
 	state_chart.send_event("start_slots")
 
 func _on_spin_slots_spinning_state_entered() -> void:
-	print("POPO START SPIN ", next_attack_idx)
 	debug_state_label.text = "Spin Slots | Spinning"
 	for slot_sprite in slot_icons_parent.get_children():
 		slot_sprite.texture = slot_icons.pick_random()
@@ -675,7 +673,7 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 		var projectile: DiamondProjectile = diamond_projectile.instantiate()
 		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
 		#get_tree().root.get_child(2).
-		get_parent().add_child(projectile)
+		get_tree().get_root().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.target = target
 		projectile.global_rotation.y = self.global_rotation.y
@@ -713,16 +711,9 @@ func _on_pinball_projectiles_shooting_state_entered() -> void:
 	# Fire out projctiles in a spiral, each projectile can ricochet
 	for i in range(pinball_shots_per_attack):
 		await get_tree().create_timer(pinball_shot_time / pinball_shots_per_attack).timeout
-		var _sfx_player = get_available_sfx_player()
-		_sfx_player.stream = sfx_diamond_shot.pick_random()
-		_sfx_player.play()
-
-		var projectile: BaseBossProjectile = pinball_projectile.instantiate()
+		var projectile = fire_projectile(pinball_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
 		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
 		projectile.ricochet_count_left = pinball_ricochet_count
-		get_parent().add_child(projectile)
-		projectile.global_position = projectile_spawn_marker.global_position
-		projectile.global_rotation.y = self.global_rotation.y
 
 	state_chart.send_event("stop_shooting")
 
@@ -867,7 +858,7 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 		sfx_player.play()
 		var projectile := bomb_projectile.instantiate() as RigidBody3D
 		projectile.init(bomb_damage * GameManager.get_risk_dmg_mult(), bomb_fuse_time)
-		get_parent().add_child(projectile)
+		get_tree().get_root().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.global_rotation.y = self.global_rotation.y + (PI / 8 * dir_counter)
 		projectile.apply_central_force(-projectile.global_basis.z * bomb_impulse)
