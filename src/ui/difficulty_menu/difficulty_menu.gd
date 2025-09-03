@@ -32,12 +32,12 @@ const OVER_RISK_THRESHOLD = 15
 # const RISK_THRESHOLDS = [0, 3, 6, 9, 12, 15]
 # const RISK_REWARD_MULT_PER_RISKS = [0.05, 0.1, 0.2, 0.25, 0.3, 0.4]
 
-var bet_value = 0
-var reward_value = 0
+var bet_value: int = 0
+var reward_value: int = 0
 var bet_sprite_scale_tween = null
 var reward_sprite_scale_tween = null
 var is_controller_connected: bool = false
-var locked = false
+var locked: bool = false
 
 func _ready() -> void:
 	visible = false
@@ -64,6 +64,9 @@ func show_menu():
 	if not is_controller_connected:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	start_button.grab_focus()
+	bet_value = GameManager.risk_level * 1000
+	update_bet_and_reward_value()
+
 	refresh_display()
 
 
@@ -84,6 +87,9 @@ func refresh_display():
 		var ante_item: AnteItem = ante_card_container.get_child(i)
 		ante_item.set_ante_label(boss_profile.ante_names[i])
 
+	bet_value_label.text = format_number_with_commas(bet_value)
+	reward_label.text = format_number_with_commas(reward_value)
+	
 ## Max lv 15
 func set_risk_level(level: int):
 	for i in range(risk_level_container.get_child_count()):
@@ -100,22 +106,24 @@ func set_risk_level(level: int):
 	play_juicy_chip_sprite_anim()
 
 func _on_risk_level_changed():
-	bet_value = GameManager.risk_level * 1000
-	var payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * REWARD_MULT_PER_RISK)
-	if GameManager.risk_level >= HIGH_RISK_THRESHOLD:
-		payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * HIGH_RISK_REWARD_MULT_PER_RISK)
-	elif GameManager.risk_level >= OVER_RISK_THRESHOLD:
-		payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * OVER_RISK_REWARD_MULT_PER_RISK)
-
-	reward_value = bet_value * payout_mult
+	update_bet_and_reward_value()
 	bet_value_label.text = format_number_with_commas(bet_value)
-	reward_label.text = format_number_with_commas(int(reward_value))
+	reward_label.text = format_number_with_commas(reward_value)
 	start_button.text = "Start"
 	start_button.set_text_color(Color.WHITE)
 	if GameManager.risk_level > 0:
 		reset_risk_button.visible = true
 	else:
 		reset_risk_button.visible = false
+
+func update_bet_and_reward_value():
+	bet_value = GameManager.risk_level * 1000
+	var payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * REWARD_MULT_PER_RISK)
+	if GameManager.risk_level >= HIGH_RISK_THRESHOLD:
+		payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * HIGH_RISK_REWARD_MULT_PER_RISK)
+	elif GameManager.risk_level >= OVER_RISK_THRESHOLD:
+		payout_mult = BASE_REWARD_MULT + ((GameManager.risk_level - 1) * OVER_RISK_REWARD_MULT_PER_RISK)
+	reward_value = int(bet_value * payout_mult * boss_diff_profiles[int(GameManager.selected_boss_id) - 1].boss_risk_reward_mult)
 
 func format_number_with_commas(n: int) -> String:
 	var str_n = str(n)

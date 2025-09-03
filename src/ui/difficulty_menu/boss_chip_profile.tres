@@ -7,3 +7,4 @@ script = ExtResource("1_llkqi")
 boss_id = 5
 boss_quote = "\"Do not be afraid.\""
 ante_names = Array[String](["", "", "", "", ""])
+boss_risk_reward_mult = 1.5

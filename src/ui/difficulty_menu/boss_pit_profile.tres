@@ -7,3 +7,4 @@ script = ExtResource("1_21ocl")
 boss_id = 4
 boss_quote = "\"Raise the risk, and I’ll raise the reward. Just don’t expect to walk out smiling every time.\""
 ante_names = Array[String](["", "", "", "", ""])
+boss_risk_reward_mult = 1.3
