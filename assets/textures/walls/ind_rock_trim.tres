@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://ckaugx0otthke"]
+
+[ext_resource type="Texture2D" uid="uid://cmuthnevfmftk" path="res://assets/textures/walls/ind_rock_trim.png" id="1_ugq5h"]
+
+[resource]
+albedo_texture = ExtResource("1_ugq5h")
+metallic_specular = 0.0
+texture_filter = 2

@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cih1iufif28ya"]
+
+[ext_resource type="Texture2D" uid="uid://b6i72jbbaiqc6" path="res://assets/textures/walls/tiled_wall_brick_0.png" id="1_bedbh"]
+
+[resource]
+albedo_texture = ExtResource("1_bedbh")
+metallic_specular = 0.0
+texture_filter = 2
