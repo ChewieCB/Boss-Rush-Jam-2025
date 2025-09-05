@@ -265,6 +265,9 @@ bomb_impulse = 170000.0
 max_drop_distance = 20.0
 bomb_drop_delay = 0.4
 sfx_bomb_launch = Array[AudioStream]([ExtResource("45_ishi6"), ExtResource("46_vgcme"), ExtResource("47_hafh8"), ExtResource("48_qbsnc"), ExtResource("49_sigie")])
+absorb_chip_interval = 10.0
+absorb_chip_range = 25.0
+chip_value_to_heal_ratio = 0.5
 boss_id = 1
 chip_spawn_chance = 0.3
 chip_spawn_force = 1200.0
@@ -1309,6 +1312,8 @@ libraries = {
 "slot_boss_anims": ExtResource("64_5u1vo")
 }
 
+[node name="AbsorbChipTimer" type="Timer" parent="." index="34"]
+
 [connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/SpinSlots" to="." method="_on_spin_slots_state_physics_processing"]
@@ -1370,3 +1375,4 @@ libraries = {
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LeverSwipe/Targeting" to="." method="_on_lever_swipe_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LeverSwipe/Swipe" to="." method="_on_lever_swipe_swipe_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/LeverSwipe/Recover" to="." method="_on_lever_swipe_recover_state_entered"]
+[connection signal="timeout" from="AbsorbChipTimer" to="." method="_on_absorb_chip_timer_timeout"]

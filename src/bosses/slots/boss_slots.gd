@@ -152,6 +152,13 @@ var active_bombs: Array = []
 
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
+@export_group("Passive")
+@export_subgroup("Absorb Chip")
+var absorb_chip_enabled = false
+@onready var absorb_chip_timer: Timer = $AbsorbChipTimer
+@export var absorb_chip_interval: float = 10
+@export var absorb_chip_range: float = 25
+@export var chip_value_to_heal_ratio: float = 0.5
 
 func _ready() -> void:
 	super ()
@@ -159,6 +166,13 @@ func _ready() -> void:
 		bell_attack_enabled = true
 	if GameManager.boss_ante >= 2:
 		homing_diamond_enabled = true
+	if GameManager.boss_ante >= 3:
+		pinball_enabled = true
+	if GameManager.boss_ante >= 4:
+		slot_icons_parent.visible = false
+	if GameManager.boss_ante >= 5:
+		absorb_chip_enabled = true
+		absorb_chip_timer.start(absorb_chip_interval)
 
 
 func activate() -> void:
@@ -895,3 +909,33 @@ func _cleanup_bombs() -> void:
 		if is_instance_valid(bomb):
 			bomb.destroy(false)
 	active_bombs = []
+
+
+func _on_boss_collect_chip(chip: PokerChip):
+	if !is_instance_valid(chip):
+		return
+	const CONFIRM_ABSORB_RANGE = 10
+	var chip_distance = chip.global_position.distance_to(global_position)
+	if chip_distance <= CONFIRM_ABSORB_RANGE:
+		health_component.current_health += chip.value * chip_value_to_heal_ratio
+		chip.queue_free()
+	else:
+		chip.absorbing_by_boss = false
+
+func boss_suck_chip() -> void:
+	if health_component.has_died:
+		return
+
+	for item in get_tree().get_nodes_in_group("currency_chips"):
+		if item is PokerChip:
+			var chip: PokerChip = item
+			var chip_distance = chip.global_position.distance_to(global_position)
+			if chip_distance <= absorb_chip_range and not chip.collecting_by_player:
+				chip.absorbing_by_boss = true
+				var chip_tween: Tween = get_tree().create_tween()
+				chip_tween.tween_property(chip, "global_position", global_position, 0.5).set_ease(Tween.EASE_IN)
+				chip_tween.tween_callback(_on_boss_collect_chip.bind(chip))
+
+
+func _on_absorb_chip_timer_timeout() -> void:
+	boss_suck_chip()

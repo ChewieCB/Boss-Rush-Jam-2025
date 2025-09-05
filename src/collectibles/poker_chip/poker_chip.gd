@@ -12,6 +12,9 @@ class_name PokerChip
 var chosen_idx = -1
 var value = 0
 
+var collecting_by_player = false
+var absorbing_by_boss = false
+
 const SPIN_RATE = 5
 
 func _ready() -> void:
@@ -78,7 +81,11 @@ func _on_collect() -> void:
 
 
 func _on_pickup_area_body_entered(body: Node3D) -> void:
+	if absorbing_by_boss:
+		return
+
 	if body is Player:
+		collecting_by_player = true
 		var tween = get_tree().create_tween()
 		set_linear_velocity(Vector3.ZERO)
 		freeze = true
