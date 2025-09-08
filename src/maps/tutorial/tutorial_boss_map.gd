@@ -42,7 +42,7 @@ func _ready() -> void:
 	$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
 	
 	# FIXME - workaround
-	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_77_SlidingDoor
+	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_48_SlidingDoor
 
 
 func _input(event: InputEvent) -> void:
