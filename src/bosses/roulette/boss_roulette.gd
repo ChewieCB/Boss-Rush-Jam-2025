@@ -65,6 +65,7 @@ var active_balls: Array = []
 var passive_balls: Array = []
 var ball_spawn_positions: Array
 var available_spawns: Array
+var ball_flame_puddle_enabled = false
 # TODO - add ball spawn SFX
 # Shockwave
 @export_group("Shockwave")
@@ -84,7 +85,7 @@ var shockwave_tween: Tween
 @onready var shockwave_sfx_player: AudioStreamPlayer3D = $CentralStreamPlayer
 # Drop Segments
 @export_group("Drop Segments")
-var enable_drop_segments = false # based on ante 2
+var drop_segments_enabled = false # based on ante 2
 @export var drop_delay: float = 0.5
 @export var drop_time: float = 1.0
 @export var drop_return_delay: float = 3.0
@@ -95,7 +96,6 @@ var dropped_segments: Array
 @export var sfx_drop_amb: Array[AudioStream]
 @onready var drop_sfx_player: AudioStreamPlayer3D = $SegmentStreamPlayer
 
-var enable_ball_flame_puddle = false
 
 func _ready() -> void:
 	super ()
@@ -113,11 +113,11 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 1:
 		shield_count = 8
 	if GameManager.boss_ante >= 2:
-		enable_drop_segments = true
+		drop_segments_enabled = true
 	if GameManager.boss_ante >= 3:
 		pass # In show_barrier() function
 	if GameManager.boss_ante >= 4:
-		enable_ball_flame_puddle = true
+		ball_flame_puddle_enabled = true
 	if GameManager.boss_ante >= 5:
 		pass
 
@@ -203,7 +203,7 @@ func select_attack_phase_3() -> void:
 	if randf() < 0.25:
 		possible_phases.append("start_pushback_attack")
 
-	if enable_drop_segments:
+	if drop_segments_enabled:
 		possible_phases.append("start_drop_attack")
 	
 	if previous_phase and possible_phases.size() > 1:
@@ -1014,7 +1014,7 @@ func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
 	for i in range(balls_to_attack_phase_3 - active_balls.size()):
 		var ball = spawn_ball()
 		ball.is_flaming = true
-		ball.leave_fire_puddle = enable_ball_flame_puddle
+		ball.leave_fire_puddle = ball_flame_puddle_enabled
 		ball = _set_ball_active_params(ball)
 		ball.central_force_magnitude = 9000.0
 		ball.homing_force_magnitude = 6500.0

@@ -44,6 +44,8 @@ var delay_modifier: float = BASE_DELAY_MODIFIER:
 @onready var shotgun_spawn_pos: Marker3D = $Sprite3D/ShotgunSpawnPos
 var shots_to_fire: int = 1
 var shots_fired: int = 0
+var shotgun_shots_phase_2 = 1
+var shotgun_shots_phase_3 = 1
 @export_subgroup("Throw Drink")
 @export var bottle_damage = 10
 enum BottleAttack {
@@ -56,6 +58,7 @@ enum BottleAttack {
 }
 var current_bottle_type: BottleAttack
 var last_bottle_attack: BottleAttack
+var special_bottle_enabled = false
 @export var empty_bottle_prefab: PackedScene
 @export var molotov_prefab: PackedScene
 @export var poison_bottle_prefab: PackedScene
@@ -98,7 +101,7 @@ var last_brew_type: BrewType
 @export var floor_fire_hazard_prefab: PackedScene
 @export var sfx_fire_started: AudioStream
 @export var sfx_fire_loop: AudioStream
-
+var floor_fire_enabled = false
 @export_group("Movement")
 @export var base_movespeed = 10
 @export var behind_bar_move_points: Array[Marker3D] = []
@@ -127,6 +130,17 @@ func _ready() -> void:
 	super ()
 	navigation_component.current_speed = base_movespeed * speed_modifier
 	brew_cooldown_timer.stop()
+	if GameManager.boss_ante >= 1:
+		shotgun_shots_phase_2 = 2
+		shotgun_shots_phase_3 = 3
+	if GameManager.boss_ante >= 2:
+		special_bottle_enabled = true
+	if GameManager.boss_ante >= 3:
+		floor_fire_enabled = true
+	if GameManager.boss_ante >= 4:
+		pass
+	if GameManager.boss_ante >= 5:
+		pass
 
 
 func _process(delta: float) -> void:
@@ -377,7 +391,7 @@ func _on_attack_telegraph_state_entered() -> void:
 
 #### Any Phase
 
-# Shotgun blastaa
+# Shotgun blast
 
 func fire_shotgun():
 	var proj_amount = 8
@@ -432,7 +446,7 @@ func _on_phase_1_idle_state_entered() -> void:
 func _on_phase_2_state_entered() -> void:
 	anim_player.play("RESET")
 	#SoundManager.play_sound(sfx_tape, "SFX")
-	shots_to_fire = 2
+	shots_to_fire = shotgun_shots_phase_2
 	#GameManager.show_boss_special_dialog("Playtime is OVER!", 1)
 	#await get_tree().create_timer(1).timeout
 	#SoundManager.stop_sound(sfx_tape)
@@ -456,7 +470,7 @@ func _on_phase_2_idle_state_entered() -> void:
 func _on_phase_3_state_entered() -> void:
 	anim_player.play("RESET")
 	#SoundManager.play_sound(sfx_tape, "SFX")
-	shots_to_fire = 3
+	shots_to_fire = shotgun_shots_phase_3
 	buff_duration *= 1.5
 	buff_cooldown /= 2
 	#GameManager.show_boss_special_dialog("You better hot foot it out of here while you still can!", 1.5)
@@ -467,11 +481,12 @@ func _on_phase_3_state_entered() -> void:
 
 	await get_tree().create_timer(2.0).timeout
 
-	fire_started.emit()
-	# TODO - move this to the map script
-	floor_fire_hazard = floor_fire_hazard_prefab.instantiate()
-	floor_fize_hazard_marker.add_child(floor_fire_hazard)
-	floor_fire_hazard.position = Vector3.ZERO
+	if floor_fire_enabled:
+		fire_started.emit()
+		# TODO - move this to the map script
+		floor_fire_hazard = floor_fire_hazard_prefab.instantiate()
+		floor_fize_hazard_marker.add_child(floor_fire_hazard)
+		floor_fire_hazard.position = Vector3.ZERO
 
 
 func _on_throw_heal_bottle_state_entered() -> void:
@@ -787,7 +802,10 @@ func _on_throw_drink_targeting_state_entered() -> void:
 	else:
 		var bottle_types_no_barrel = BottleAttack.keys().duplicate()
 		bottle_types_no_barrel.remove_at(BottleAttack.BARREL)
-		current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack) as BottleAttack
+		if special_bottle_enabled:
+			current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack) as BottleAttack
+		else:
+			current_bottle_type = BottleAttack.EMPTY
 
 	await get_tree().create_timer(0.2 * delay_modifier).timeout
 
