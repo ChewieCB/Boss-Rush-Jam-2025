@@ -95,6 +95,7 @@ var dropped_segments: Array
 @export var sfx_drop_amb: Array[AudioStream]
 @onready var drop_sfx_player: AudioStreamPlayer3D = $SegmentStreamPlayer
 
+var enable_ball_flame_puddle = false
 
 func _ready() -> void:
 	super ()
@@ -116,7 +117,7 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 3:
 		pass # In show_barrier() function
 	if GameManager.boss_ante >= 4:
-		pass
+		enable_ball_flame_puddle = true
 	if GameManager.boss_ante >= 5:
 		pass
 
@@ -1013,6 +1014,7 @@ func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
 	for i in range(balls_to_attack_phase_3 - active_balls.size()):
 		var ball = spawn_ball()
 		ball.is_flaming = true
+		ball.leave_fire_puddle = enable_ball_flame_puddle
 		ball = _set_ball_active_params(ball)
 		ball.central_force_magnitude = 9000.0
 		ball.homing_force_magnitude = 6500.0
