@@ -373,6 +373,8 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	# fade/hide the boss sprite, and disable boss collisions with player 
 	# and projectiles
 	anim_player.play("drop_smoke")
+	health_component.is_invincible = true
+	health_component.show_damage_text = false
 	
 	await anim_player.animation_finished
 	
@@ -383,10 +385,14 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	
 	anim_player.play("RESET")
 	sprite.modulate.a = 1.0
+	self.collision_layer = pow(2, 3)
 	state_chart.send_event("open_doors")
 
 
 func _on_smokescreen_open_doors_state_entered() -> void:
+	health_component.is_invincible = false
+	health_component.show_damage_text = true
+	
 	# Trigger the sub elevator doors to open
 	active_sub_door.open()
 	
