@@ -10,7 +10,15 @@ extends BossCore
 @export var wave_frequency: float = 5.0
 @export var time_elapsed: float = 0.0
 
-var previous_phase: String
+var elevator_spawns: Array[Node]
+var sub_elevator_doors: Array[SlidingDoor]
+var active_spawn: Node
+var active_sub_door: SlidingDoor
+
+var previous_phase: String = "start_melee_combo_attack"
+
+var melee_phase_count: int = 0
+
 
 @export_group("Attacks")
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
@@ -57,19 +65,28 @@ func _physics_process(delta: float) -> void:
 
 
 func select_attack_phase_1() -> void:
-	# var dist_to_target = self.global_position.distance_to(target.global_position)
-	var _possible_phases = [
-		"start_melee_combo_attack",
-		"start_dual_nails_attack",
-		"start_laser_aoe_attack",
-	]
-	if previous_phase:
-		_possible_phases.erase(previous_phase)
+	var new_phase: String
 	
-	var new_phase = _possible_phases.pick_random()
+	if previous_phase == "start_melee_combo_attack":
+		if melee_phase_count < max_sequential_phases:
+			if randf() < 0.7:
+				new_phase = "start_melee_combo_attack"
+			else:
+				melee_phase_count = 0
+				new_phase = "start_smokescreen"
+		else:
+			melee_phase_count = 0
+			new_phase = "start_smokescreen"
+	
+	elif previous_phase == "start_smokescreen":
+		if ranged_phase_count < max_sequential_phases:
+			new_phase = "start_smokescreen"
+		else:
+			ranged_phase_count = 0
+			new_phase = "start_melee_combo_attack"
+	
 	previous_phase = new_phase
-	
-	state_chart.send_event(_possible_phases.pick_random())
+	state_chart.send_event(new_phase)
 
 
 func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
@@ -95,6 +112,7 @@ func hook() -> void:
 # TARGETING
 func _on_melee_combo_targeting_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Targeting"
+	melee_phase_count += 1
 	
 	# DEBUG - to be replaced with sprite frames for each attack
 	$DebugAnimPivot.visible = true
@@ -164,6 +182,7 @@ func _on_melee_combo_recover_state_entered() -> void:
 	anim_player.play("RESET")
 	
 	select_attack()
+	
 	state_chart.send_event("end_recovery")
 
 func _on_melee_combo_recover_state_physics_processing(delta: float) -> void:
@@ -210,6 +229,7 @@ func slam_aoe() -> void:
 
 func _on_ranged_nails_targeting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Targeting"
+	ranged_phase_count += 1
 	
 	# DEBUG - to be replaced with sprite frames for each attack
 	$DebugAnimPivot.visible = false
@@ -261,6 +281,7 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	desired_distance = DESIRED_DISTANCE
 	
 	select_attack()
+	
 	state_chart.send_event("end_recovery")
 
 
@@ -269,6 +290,7 @@ func _on_ranged_nails_recover_state_entered() -> void:
 
 func _on_laser_aoe_targeting_state_entered() -> void:
 	debug_state_label.text = "Spartan Laser Level | Targeting"
+	ranged_phase_count += 1
 	
 	# DEBUG - to be replaced with sprite frames for each attack
 	$DebugAnimPivot.visible = false
@@ -324,4 +346,80 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	desired_distance = DESIRED_DISTANCE
 	
 	select_attack()
+	
+	if active_sub_door:
+		active_sub_door.close()
+		active_sub_door = null
+	
 	state_chart.send_event("end_recovery")
+
+
+
+## SMOKESCREEN ATTACK TRANSITION
+# Drop a smokescreen particle emitter to mask the boss teleporting into
+# one of the sub-elevators before starting a ranged attack
+
+func _on_smokescreen_idle_state_entered() -> void:
+	state_chart.send_event("stop_moving")
+	if active_spawn:
+		if self.global_position.distance_to(active_spawn.global_position) < 4:
+			state_chart.send_event("start_no_smoke")
+			return
+	state_chart.send_event("start_smoke")
+
+
+func _on_smokescreen_smoke_state_entered() -> void:
+	# Emit a large amount of smoke particles that conceal the boss,
+	# fade/hide the boss sprite, and disable boss collisions with player 
+	# and projectiles
+	anim_player.play("drop_smoke")
+	
+	await anim_player.animation_finished
+	
+	# Move the boss to a new spawn point and turn to face the player
+	var new_spawn: Node = get_elevator_spawn_no_repeats()
+	self.global_position = new_spawn.global_position
+	self.global_rotation = new_spawn.global_rotation
+	
+	anim_player.play("RESET")
+	sprite.modulate.a = 1.0
+	state_chart.send_event("open_doors")
+
+
+func _on_smokescreen_open_doors_state_entered() -> void:
+	# Trigger the sub elevator doors to open
+	active_sub_door.open()
+	
+	var ranged_attacks = [
+		"start_dual_nails_attack",
+		"start_laser_aoe_attack",
+	]
+	state_chart.send_event(ranged_attacks.pick_random())
+	state_chart.send_event("end_smoke")
+
+
+func _on_smokescreen_move_no_smoke_state_entered() -> void:
+	# Close the doors
+	active_sub_door.close()
+	await active_sub_door.anim_player.animation_finished
+	
+	# Move the boss to a new spawn point and turn to face the player
+	var new_spawn = get_elevator_spawn_no_repeats()
+	self.global_position = new_spawn.global_position
+	self.global_rotation = new_spawn.global_rotation
+	
+	state_chart.send_event("open_doors")
+
+
+func get_elevator_spawn_no_repeats() -> Node:
+	var spawns = elevator_spawns.duplicate()
+	
+	if active_spawn:
+		spawns.erase(active_spawn)
+	
+	var new_spawn = spawns.pick_random()
+	active_spawn = new_spawn
+	var idx = elevator_spawns.find(active_spawn)
+	active_sub_door = sub_elevator_doors[idx]
+	
+	return active_spawn

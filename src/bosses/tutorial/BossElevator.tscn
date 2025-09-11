@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=37 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="6_fqvnt"]
 [ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="7_6pf3s"]
+[ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="11_1crh5"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_x341f"]
 size = Vector3(1, 1, 5)
@@ -117,15 +118,153 @@ tracks/3/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = false
+tracks/5/path = NodePath("DebugAnimPivot:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = false
+tracks/6/path = NodePath("DebugLaserPivot:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = false
+tracks/7/path = NodePath("DebugRangedPivot:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath(".:collision_mask")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [27]
+}
 
 [sub_resource type="Animation" id="Animation_dshkv"]
 resource_name = "death"
 length = 0.1
 
+[sub_resource type="Animation" id="Animation_ffby2"]
+resource_name = "drop_smoke"
+length = 3.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SmokeParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0333333, 1.1, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DebugAnimPivot:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DebugLaserPivot:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("DebugRangedPivot:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:collision_mask")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [19]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3pryd"]
 _data = {
 "RESET": SubResource("Animation_8e3f2"),
-"death": SubResource("Animation_dshkv")
+"death": SubResource("Animation_dshkv"),
+"drop_smoke": SubResource("Animation_ffby2")
 }
 
 [sub_resource type="Animation" id="Animation_85u7l"]
@@ -453,7 +592,6 @@ shape = SubResource("CapsuleShape3D_3w5db")
 
 [node name="DebugMesh" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
-visible = true
 mesh = SubResource("BoxMesh_holc6")
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
@@ -509,7 +647,65 @@ delay_in_seconds = "0.0"
 script = ExtResource("3_irtaj")
 initial_state = NodePath("MeleeCombo")
 
-[node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1" index="0"]
+[node name="Smokescreen" type="Node" parent="StateChart/Root/Phase/Phase1" index="0"]
+script = ExtResource("3_irtaj")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="0"]
+script = ExtResource("4_fo57y")
+
+[node name="toSmoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen/Idle" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Smoke")
+event = &"start_smoke"
+delay_in_seconds = "0.0"
+
+[node name="toMoveNoSmoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen/Idle" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../MoveNoSmoke")
+event = &"start_no_smoke"
+delay_in_seconds = "0.0"
+
+[node name="Smoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="1"]
+script = ExtResource("4_fo57y")
+
+[node name="toOpenDoors" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen/Smoke" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../OpenDoors")
+event = &"open_doors"
+delay_in_seconds = "0.0"
+
+[node name="MoveNoSmoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="2"]
+script = ExtResource("4_fo57y")
+
+[node name="toOpenDoors" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen/MoveNoSmoke" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../OpenDoors")
+event = &"open_doors"
+delay_in_seconds = "0.0"
+
+[node name="OpenDoors" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="3"]
+script = ExtResource("4_fo57y")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen/OpenDoors" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Idle")
+event = &"end_smoke"
+delay_in_seconds = "0.0"
+
+[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="4"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../DualNailsRanged")
+event = &"start_dual_nails_attack"
+delay_in_seconds = "0.0"
+
+[node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="5"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../LaserAoE")
+event = &"start_laser_aoe_attack"
+delay_in_seconds = "0.0"
+
+[node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Targeting")
 
@@ -567,7 +763,13 @@ to = NodePath("../../LaserAoE")
 event = &"start_laser_aoe_attack"
 delay_in_seconds = "0.0"
 
-[node name="LineSlam" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
+[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="6"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Smokescreen")
+event = &"start_smokescreen"
+delay_in_seconds = "0.0"
+
+[node name="LineSlam" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Recover")
 
@@ -598,10 +800,22 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="Spin" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
+[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/LineSlam" index="3"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Smokescreen")
+event = &"start_smokescreen"
+delay_in_seconds = "0.0"
+
+[node name="Spin" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
 script = ExtResource("3_irtaj")
 
-[node name="DualNailsRanged" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
+[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/Spin" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Smokescreen")
+event = &"start_smokescreen"
+delay_in_seconds = "0.0"
+
+[node name="DualNailsRanged" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Targeting")
 
@@ -644,7 +858,13 @@ to = NodePath("../../LaserAoE")
 event = &"start_laser_aoe_attack"
 delay_in_seconds = "0.0"
 
-[node name="LaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged" index="5"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Smokescreen")
+event = &"start_smokescreen"
+delay_in_seconds = "0.0"
+
+[node name="LaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Targeting")
 
@@ -696,15 +916,27 @@ to = NodePath("../../MeleeCombo")
 event = &"start_melee_combo_attack"
 delay_in_seconds = "0.0"
 
-[node name="NavigationAgent3D" parent="." index="11"]
+[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/LaserAoE" index="6"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Smokescreen")
+event = &"start_smokescreen"
+delay_in_seconds = "0.0"
+
+[node name="NavigationAgent3D" parent="." index="12"]
 debug_enabled = true
 
-[node name="AnimationPlayer" parent="." index="21"]
+[node name="AnimationPlayer" parent="." index="22"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "elevator_boss": SubResource("AnimationLibrary_1cydh")
 }
 
+[node name="SmokeParticles" parent="." index="24" instance=ExtResource("11_1crh5")]
+
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Smokescreen/Idle" to="." method="_on_smokescreen_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Smokescreen/Smoke" to="." method="_on_smokescreen_smoke_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Smokescreen/MoveNoSmoke" to="." method="_on_smokescreen_move_no_smoke_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Smokescreen/OpenDoors" to="." method="_on_smokescreen_open_doors_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Targeting" to="." method="_on_melee_combo_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Targeting" to="." method="_on_melee_combo_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" to="." method="_on_melee_combo_swipe_state_entered"]

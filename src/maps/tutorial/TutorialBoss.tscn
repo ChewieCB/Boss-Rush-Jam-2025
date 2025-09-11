@@ -6458,7 +6458,7 @@ size = Vector3(1.7, 4.2, 4.3)
 [sub_resource type="BoxShape3D" id="BoxShape3D_74c26"]
 size = Vector3(6, 5, 3)
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "exit_elevator_button", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_hm1ph")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "exit_elevator_button", "sub_elevator_doors", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_hm1ph")]
 script = ExtResource("2_t1yvw")
 boss_doors = NodePath("FuncGodotMap/group_819_floor_walkable_1a/entity_10_ElevatorDoors")
 exit_doors = NodePath("FuncGodotMap/group_819_floor_walkable_1a/entity_10_ElevatorDoors")
@@ -6467,6 +6467,7 @@ chiplings_to_spawn_1 = 5
 chiplings_to_spawn_2 = 8
 info_ui_prefab = ExtResource("4_c5p5t")
 exit_elevator_button = NodePath("FuncGodotMap/entity_46_ElevatorButton")
+sub_elevator_doors = [NodePath("FuncGodotMap/group_865_BossElevatorSub/entity_158_SubElevatorDoors"), NodePath("FuncGodotMap/group_1359_BossElevatorSub/entity_164_SubElevatorDoors"), NodePath("FuncGodotMap/group_1362_BossElevatorSub/entity_170_SubElevatorDoors"), NodePath("FuncGodotMap/group_1365_BossElevatorSub/entity_176_SubElevatorDoors")]
 nav_parent = NodePath("FuncGodotMap/group_819_floor_walkable_1a/group_823_floor_walkable_1a/entity_12_floor_walkable_1a")
 floor_parent = NodePath("FuncGodotMap/group_819_floor_walkable_1a/group_823_floor_walkable_1a/entity_12_floor_walkable_1a")
 floor_mesh = NodePath("FuncGodotMap/group_819_floor_walkable_1a/group_823_floor_walkable_1a/entity_12_floor_walkable_1a/entity_12_mesh_instance")

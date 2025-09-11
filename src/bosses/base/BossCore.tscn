@@ -128,7 +128,10 @@ health_component = NodePath("../../../HealthComponent")
 show_on_ready = false
 hide_ui_on_death = true
 
-[node name="StateChartDebugger" parent="UI" instance=ExtResource("6_4cg3x")]
+[node name="DebugUI" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="StateChartDebugger" parent="DebugUI" instance=ExtResource("6_4cg3x")]
 visible = false
 top_level = true
 z_index = 10
