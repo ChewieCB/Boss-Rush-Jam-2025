@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dehp6syyqgi8j"
-path.s3tc="res://.godot/imported/ElevatorDoors_0.png-dcb5e904e263bd4fbadd766a8bee3485.s3tc.ctex"
+uid="uid://cqxackesw37of"
+path.s3tc="res://.godot/imported/ElevatorDoors_1.png-c1432699b3dfd274cbb30d6ee8973f25.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/trenchbroom/models/ElevatorDoors_0.png"
-dest_files=["res://.godot/imported/ElevatorDoors_0.png-dcb5e904e263bd4fbadd766a8bee3485.s3tc.ctex"]
+source_file="res://assets/trenchbroom/models/ElevatorDoors_1.png"
+dest_files=["res://.godot/imported/ElevatorDoors_1.png-c1432699b3dfd274cbb30d6ee8973f25.s3tc.ctex"]
 
 [params]
 
