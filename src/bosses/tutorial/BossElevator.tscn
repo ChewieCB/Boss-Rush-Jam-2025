@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=38 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fo57y"]
 [ext_resource type="PackedScene" uid="uid://byharrqwvi4cp" path="res://src/bosses/base/attacks/ranged/LaserAoE.tscn" id="4_hx1ss"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
+[ext_resource type="Texture2D" uid="uid://bunn8a0pce2b2" path="res://assets/sprite/aoe_markers/laser_aoe_warn.png" id="5_pbhfx"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="6_fqvnt"]
 [ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="7_6pf3s"]
 [ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="11_1crh5"]
@@ -538,6 +539,7 @@ sfx_nail_shot = Array[AudioStream]([])
 laser_aoe = ExtResource("4_hx1ss")
 laser_spawn = NodePath("DebugLaserPivot/DebugLaser/LaserSpawn")
 laser_damage = 40.0
+laser_aoe_marker = ExtResource("5_pbhfx")
 chip_scene = null
 elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_pickup_scene = null
@@ -976,5 +978,6 @@ libraries = {
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/DualNailsRanged/Recover" to="." method="_on_ranged_nails_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserAoE/Targeting" to="." method="_on_laser_aoe_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserAoE/Charging" to="." method="_on_laser_aoe_charging_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/LaserAoE/Charging" to="." method="_on_laser_aoe_charging_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserAoE/Firing" to="." method="_on_laser_aoe_firing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LaserAoE/Recover" to="." method="_on_laser_aoe_recover_state_entered"]

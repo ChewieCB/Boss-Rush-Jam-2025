@@ -46,6 +46,8 @@ var melee_phase_count: int = 0
 @export var laser_aoe: PackedScene
 @export var laser_spawn: Marker3D
 @export var laser_damage: float = 40.0
+var aoe_warn_decal: Decal
+@export var laser_aoe_marker: CompressedTexture2D
 @onready var laser_particles: GPUParticles3D = $DebugLaserPivot/DebugLaser/LaserSpawn/LaserEndParticles
 
 
@@ -314,14 +316,61 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	anim_player.play("elevator_boss/laser_telegraph")
 	laser_particles.visible = true
 	laser_particles.emitting = true
-	# TODO - start showing/building telegraphing mesh/texture for the AoE
-	await get_tree().create_timer(0.175 * 6).timeout
+	
+	# AoE warning visual
+	if aoe_warn_decal:
+		aoe_warn_decal.queue_free()
+		aoe_warn_decal = null
+	
+	aoe_warn_decal = Decal.new()
+	aoe_warn_decal.texture_albedo = laser_aoe_marker
+	aoe_warn_decal.size = Vector3(4, 4, 1)
+	get_parent().get_parent().add_child(aoe_warn_decal)
+	aoe_warn_decal.global_position = laser_spawn.global_position
+	aoe_warn_decal.global_rotation = laser_spawn.global_rotation
+	aoe_warn_decal.global_position.y = -4.6
+	
+	# laser_aoe_marker
+	var warn_tween := get_tree().create_tween()
+	warn_tween.tween_property(
+		aoe_warn_decal, 
+		"size:z",
+		100,
+		0.175 * 6
+	)
+	#warn_tween.parallel().tween_property(
+		#aoe_warn_decal,
+		#"global_position",
+		#laser_spawn.global_position + -basis.z * 50,
+		#0.175 * 6
+	#)
+	await warn_tween.finished
+	#await get_tree().create_timer(0.175 * 6).timeout
 	state_chart.send_event("stop_moving")
 	await _telegraph_attack()
+	#debug_mesh_instance.queue_free()
+	#debug_mesh_instance = null
 	state_chart.send_event("start_firing")
 
 
+func _on_laser_aoe_charging_state_physics_processing(delta: float) -> void:
+	aoe_warn_decal.global_rotation = self.global_rotation
+
+
 func _on_laser_aoe_firing_state_entered() -> void:
+	var aoe_tween := get_tree().create_tween()
+	aoe_tween.tween_property(
+		aoe_warn_decal, 
+		"modulate:a",
+		0.0,
+		0.8
+	)
+	aoe_tween.tween_callback(
+		func(): 
+			aoe_warn_decal.queue_free()
+			aoe_warn_decal = null
+	)
+	
 	# Spawn big cube AoE mesh
 	# Check for player presence
 	# Damage player
