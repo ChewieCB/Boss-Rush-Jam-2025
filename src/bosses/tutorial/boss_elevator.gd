@@ -8,8 +8,8 @@ extends BossCore
 		navigation_component.current_speed = move_speed
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
-@export var time_elapsed: float = 0.0
 
+var boss_origin: Node
 var elevator_spawns: Array[Node]
 var sub_elevator_doors: Array[SlidingDoor]
 var active_spawn: Node
@@ -347,10 +347,6 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	
 	select_attack()
 	
-	if active_sub_door:
-		active_sub_door.close()
-		active_sub_door = null
-	
 	state_chart.send_event("end_recovery")
 
 
@@ -396,15 +392,37 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	# Trigger the sub elevator doors to open
 	active_sub_door.open()
 	
+	await active_sub_door.anim_player.animation_finished
+	
+	# Move the boss out of the elevator to fire
+	var tween = get_tree().create_tween()
+	var forward_dir: Vector3 = -active_sub_door.basis.z
+	var peek_pos: Vector3 = self.global_position + forward_dir * 3
+	tween.tween_property(
+		self, "global_position", peek_pos, 0.5
+	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	await tween.finished
+	
 	var ranged_attacks = [
 		"start_dual_nails_attack",
 		"start_laser_aoe_attack",
 	]
 	state_chart.send_event(ranged_attacks.pick_random())
 	state_chart.send_event("end_smoke")
+	
+	#await get_tree().create_timer(1.0).timeout
+	#active_sub_door.close()
 
 
 func _on_smokescreen_move_no_smoke_state_entered() -> void:
+	var tween = get_tree().create_tween()
+	var forward_dir: Vector3 = -active_sub_door.basis.z
+	var peek_pos: Vector3 = self.global_position - forward_dir * 3
+	tween.tween_property(
+		self, "global_position", peek_pos, 0.5
+	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	await tween.finished
+	
 	# Close the doors
 	active_sub_door.close()
 	await active_sub_door.anim_player.animation_finished

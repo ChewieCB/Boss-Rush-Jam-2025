@@ -22,7 +22,6 @@ enum Stance {DEFENSIVE, AGGRESSIVE}
 		navigation_component.current_speed = move_speed
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
-@export var time_elapsed: float = 0.0
 
 @export_category("Phases")
 @export var surveillance_boss: BossSurveillance

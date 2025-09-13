@@ -24,9 +24,11 @@ var spin_warning_trigger_active: bool = false
 @export var exit_elevator_button: Area3D
 
 @onready var elevator_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_elevator_spawn_marker")
+@onready var boss_origin: Array[Node] = get_tree().get_nodes_in_group("boss_arena_origin_marker")
 @export var sub_elevator_doors: Array[SlidingDoor]
 
 var current_trigger_actions: Array[String] = []
+
 
 func _ready() -> void:
 	GameManager.equipped_barrels = []
@@ -46,9 +48,9 @@ func _ready() -> void:
 	
 	# FIXME - workaround
 	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_48_SlidingDoor
+	boss.boss_origin = boss_origin[0]
 	boss.elevator_spawns = elevator_spawns
 	boss.sub_elevator_doors = sub_elevator_doors
-	
 
 
 func _input(event: InputEvent) -> void:

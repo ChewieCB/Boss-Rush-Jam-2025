@@ -172,6 +172,7 @@ const JUMP_FORCE: float = 8
 @export var angle_speed: float = 1.0 # radians/second
 @export var orbit_angle: float = 0.0 # track this over time
 @export var orbit_radius: float = 20.0
+var time_elapsed: float = 0
 
 var vel_vertical: float = 0
 

@@ -15,7 +15,6 @@ class_name Chipling
 		navigation_component.current_speed = move_speed
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
-@export var time_elapsed: float = 0.0
 @export var idle_radius := 1.5
 var idle_time := 0.0
 var center_pos: Vector3
