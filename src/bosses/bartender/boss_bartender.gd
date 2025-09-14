@@ -5,8 +5,7 @@ extends BossCore
 # Ante 2: Volatile Concoctions - Enable fire, poison and tar bottles attack
 # Ante 3: Burning Ground - Floor on fire in phase 3
 # Ante 4 (new): Premium Bullets: Shotgun projectile bigger, faster and can ricochet
-# Ante 5 (new): Crafted Cocktails - Buffs last longer and have additional effects
-#               str: barrel explode / spd: chance to dash around by read player input (need new sprite) / def: resist status effect		
+# Ante 5 (new): Sleight of Hand - Can throw cocktails in interval without taking an action/attack
 
 signal fire_started
 
@@ -66,6 +65,10 @@ enum BottleAttack {
 var current_bottle_type: BottleAttack
 var last_bottle_attack: BottleAttack
 var special_bottle_enabled = false
+@export var min_n_bottle_per_attack: int = 2
+@export var max_n_bottle_per_attack: int = 4
+@export var min_bottles_spread: float = 5
+@export var max_bottles_spread: float = 10
 @export var empty_bottle_prefab: PackedScene
 @export var molotov_prefab: PackedScene
 @export var poison_bottle_prefab: PackedScene
@@ -117,6 +120,12 @@ var floor_fire_enabled = false
 @export_subgroup("SFX")
 @export var sfx_jump: Array[AudioStream]
 
+@export_group("Passive")
+@export_subgroup("Sleight of Hand")
+var sleight_of_hand_enabled = false
+@export var sleight_of_hand_interval: float = 5
+@onready var sleight_of_hand_timer: Timer = $SleightOfHandTimer
+
 @onready var proj_spawn_marker = $Sprite3D/ThrowableSprite/ProjectileSpawnPos
 @onready var status_icon: Sprite3D = $StatusIcon
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
@@ -150,13 +159,13 @@ func _ready() -> void:
 		shotgun_proj_speed = 60
 		chosen_shotgun_proj_prefab = enhanced_shotgun_proj_prefab
 	if GameManager.boss_ante >= 5:
-		pass
+		sleight_of_hand_enabled = true
+		sleight_of_hand_timer.start(sleight_of_hand_interval)
 
 
 func _process(delta: float) -> void:
 	if target:
 		_turn_towards_target(TURN_SPEED_SLOW, delta)
-
 
 func activate() -> void:
 	super ()
@@ -511,16 +520,17 @@ func _on_throw_heal_bottle_state_entered() -> void:
 func throw_projectile(throw_barrel: bool = false) -> void:
 	if throw_barrel:
 		current_bottle_type = BottleAttack.BARREL
-		_throw_bottle(1, 1, barrel_damage)
+		_throw_bottle(current_bottle_type, 1, 1, barrel_damage)
 	else:
-		var n_bottle = randi_range(2, 4)
-		var spread = randf_range(5, 10)
-		_throw_bottle(n_bottle, spread, bottle_damage)
+		var n_bottle = randi_range(min_n_bottle_per_attack, max_n_bottle_per_attack)
+		var spread = randf_range(min_bottles_spread, max_bottles_spread)
+		_throw_bottle(current_bottle_type, n_bottle, spread, bottle_damage)
 
 
-func _throw_bottle(n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> void:
+func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> void:
+	proj_damage *= damage_modifier
 	var prefab: PackedScene
-	match current_bottle_type:
+	match bottle_type:
 		BottleAttack.EMPTY:
 			prefab = empty_bottle_prefab
 		BottleAttack.FIRE:
@@ -530,7 +540,7 @@ func _throw_bottle(n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> v
 		BottleAttack.SLOW:
 			prefab = slow_bottle_prefab
 		BottleAttack.HEAL:
-			pass
+			prefab = empty_bottle_prefab
 		BottleAttack.BARREL:
 			prefab = beer_barrel_prefab
 		_:
@@ -546,8 +556,6 @@ func _throw_bottle(n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> v
 	else:
 		aim_direction += Vector3(0, 0.5, 0) # Make it arc upwards a bit
 	aim_direction = aim_direction.normalized()
-
-	proj_damage *= damage_modifier
 
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
 
@@ -799,9 +807,9 @@ func _on_brew_drink_recover_state_entered() -> void:
 
 func _on_throw_drink_targeting_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Targeting"
-	
+
 	#anim_player.speed_scale *= 1.5
-	
+
 	state_chart.send_event("start_targeting")
 	# Only throw the barrel if we have the strength buff
 	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
@@ -873,7 +881,7 @@ func _on_throw_drink_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	last_bottle_attack = current_bottle_type
 	anim_player.play("RESET")
-	
+
 	#anim_player.speed_scale /= 1.5
 
 	await get_tree().create_timer(attack_recovery_time * delay_modifier).timeout
@@ -952,3 +960,14 @@ func _on_buff_expire_timer_timeout() -> void:
 
 func _on_shotgun_blast_state_exited() -> void:
 	shotgun_timer.stop()
+
+
+func _on_sleight_of_hand_timer_timeout() -> void:
+	var n_bottle = randi_range(min_n_bottle_per_attack, max_n_bottle_per_attack)
+	var spread = randf_range(min_bottles_spread, max_bottles_spread)
+	var bottle_types_no_barrel = BottleAttack.keys().duplicate()
+	bottle_types_no_barrel.remove_at(BottleAttack.BARREL)
+	var sleight_bottle_type = BottleAttack.EMPTY
+	if special_bottle_enabled:
+		sleight_bottle_type = get_random_enum_key(bottle_types_no_barrel) as BottleAttack
+	_throw_bottle(sleight_bottle_type, n_bottle, spread, bottle_damage)
