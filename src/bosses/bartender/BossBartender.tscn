@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=88 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://dc551puah5jwj" path="res://src/bosses/bartender/projectiles/BartenderTarBottle.tscn" id="7_hy3po"]
 [ext_resource type="Texture2D" uid="uid://b0dwoqbf2pxac" path="res://src/bosses/bartender/assets/Bartender_Hit.png" id="8_jooce"]
 [ext_resource type="PackedScene" uid="uid://dpahplwrr1ndt" path="res://src/bosses/bartender/projectiles/BartenderHealBottle.tscn" id="8_y61gp"]
+[ext_resource type="PackedScene" uid="uid://d0xmsa0sjubi7" path="res://src/bosses/bartender/projectiles/BartenderEnhancedShotgunProjectile.tscn" id="9_1fd3p"]
 [ext_resource type="Texture2D" uid="uid://c84m7xsqkv4lg" path="res://src/bosses/bartender/assets/Bartender_Death_1.png" id="9_fm23x"]
 [ext_resource type="AudioStream" uid="uid://c1hbnru2upykl" path="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER THROW BOTTLE 1.mp3" id="9_g736w"]
 [ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="9_pkguc"]
@@ -1437,7 +1438,12 @@ reload_sprite = ExtResource("5_av4in")
 throw_sprite = ExtResource("5_rirhf")
 brew_sprite = ExtResource("6_0y3ym")
 sfx_tape = ExtResource("7_c226c")
+shotgun_proj_amount = 8
+shotgun_proj_damage = 3
+shotgun_proj_speed = 40.0
+shotgun_spread_angle = 6.0
 shotgun_proj_prefab = ExtResource("3_ycarf")
+enhanced_shotgun_proj_prefab = ExtResource("9_1fd3p")
 sfx_shotgun = Array[AudioStream]([ExtResource("9_pkguc"), ExtResource("10_awx3m")])
 bottle_damage = 6
 empty_bottle_prefab = ExtResource("4_vwmjv")

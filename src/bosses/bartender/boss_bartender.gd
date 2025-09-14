@@ -4,7 +4,7 @@ extends BossCore
 # Ante 1: Fast Firing Shotgun - shotgun can shoot more time in a burst in phase 2 and 3
 # Ante 2: Volatile Concoctions - Enable fire, poison and tar bottles attack
 # Ante 3: Burning Ground - Floor on fire in phase 3
-# Ante 4 (new): Fragile Furniture: Most tables and chairs can be broken now (less ground to stand on phase 3)
+# Ante 4 (new): Premium Bullets: Shotgun projectile bigger, faster and can ricochet
 # Ante 5 (new): Crafted Cocktails - Buffs last longer and have additional effects
 #               str: barrel explode / spd: chance to dash around by read player input (need new sprite) / def: resist status effect		
 
@@ -38,7 +38,14 @@ var delay_modifier: float = BASE_DELAY_MODIFIER:
 			await anim_player.animation_finished
 		anim_player.speed_scale = 1.0 / (delay_modifier * 1.5)
 @export_subgroup("Shotgun")
+@export var shotgun_proj_amount: int = 8
+@export var shotgun_proj_damage: int = 3
+@export var shotgun_proj_speed: float = 40 # Based on ante 4
+@export var shotgun_spread_angle: float = 6
+var shotgun_ricochet_count = 0 # Based on ante 4
 @export var shotgun_proj_prefab: PackedScene
+@export var enhanced_shotgun_proj_prefab: PackedScene # Based on ante 4
+var chosen_shotgun_proj_prefab: PackedScene
 @export var sfx_shotgun: Array[AudioStream]
 @onready var shotgun_timer: Timer = $ShotgunTimer
 @onready var shotgun_spawn_pos: Marker3D = $Sprite3D/ShotgunSpawnPos
@@ -128,6 +135,7 @@ const MIN_ACTION_BEFORE_HEAL = 8
 
 func _ready() -> void:
 	super ()
+	chosen_shotgun_proj_prefab = shotgun_proj_prefab
 	navigation_component.current_speed = base_movespeed * speed_modifier
 	brew_cooldown_timer.stop()
 	if GameManager.boss_ante >= 1:
@@ -138,7 +146,9 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 3:
 		floor_fire_enabled = true
 	if GameManager.boss_ante >= 4:
-		pass
+		shotgun_ricochet_count = 3
+		shotgun_proj_speed = 60
+		chosen_shotgun_proj_prefab = enhanced_shotgun_proj_prefab
 	if GameManager.boss_ante >= 5:
 		pass
 
@@ -394,22 +404,19 @@ func _on_attack_telegraph_state_entered() -> void:
 # Shotgun blast
 
 func fire_shotgun():
-	var proj_amount = 8
-	var proj_damage = 3 * damage_modifier
-	var proj_speed = 40
-	var spread_angle = 6
+	var proj_damage = shotgun_proj_damage * damage_modifier
 	# var delay_between_burst = 0.5 * delay_modifier
 	# TODO - this needs to be cancellable for when the boss dies mid attack
 	# Make this function shoot once and then we can call it 3 times and allow
 	# an interrupt for death after each shot.
 	sfx_player.stream = sfx_shotgun.pick_random()
 	sfx_player.play()
-	for j in range(proj_amount):
+	for j in range(shotgun_proj_amount):
 		var aim_direction = shotgun_spawn_pos.global_position.direction_to(target.global_position)
-		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
-		var bullet_inst = shotgun_proj_prefab.instantiate()
+		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, shotgun_spread_angle)
+		var bullet_inst: BartenderShotgunProjectile = chosen_shotgun_proj_prefab.instantiate()
 		get_parent().add_child(bullet_inst)
-		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, proj_speed)
+		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, shotgun_ricochet_count, shotgun_proj_speed)
 
 
 #### Phase 1

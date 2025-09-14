@@ -1,5 +1,6 @@
 extends Area3D
 class_name BaseBossProjectile
+# Should remove this and use BaseProjectile instead, like Bartender's shotgun proj
 
 @export var projectile_damage: float = 10.0
 @export var projectile_speed: float = 50.0
