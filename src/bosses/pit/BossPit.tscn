@@ -250,7 +250,7 @@ lunge_sprite = ExtResource("5_my4lc")
 uppercut_sprite = null
 slam_sprite = ExtResource("28_1qowr")
 wave_material = SubResource("ShaderMaterial_2s76u")
-MOVE_SPEED = 10.0
+BASE_MOVE_SPEED = 10.0
 wave_amplitude = 7.0
 wave_frequency = 5.0
 time_elapsed = 0.0
@@ -272,6 +272,8 @@ lunge_friction = 0.05
 lunge_damage = 5.0
 lunge_force = 6.5
 lunge_cooldown = 5.0
+lunge_slow_debuff_duration = 1.0
+lunge_slow_debuff_perc = 50.0
 sfx_lunge = Array[AudioStream]([ExtResource("16_q6xxl")])
 shield_radius = 4.0
 boss_id = 5
@@ -301,7 +303,7 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugL" index="0"]
-transform = Transform3D(-0.905967, 1.1274, 0.39775, 0.933456, 0.978886, -0.648424, -0.746919, -0.144112, -1.29281, -1.94809, 2.26694, -0.0607154)
+transform = Transform3D(-0.905967, 1.1274, 0.397751, 0.933456, 0.978886, -0.648424, -0.746919, -0.144112, -1.29281, -1.94809, 2.26694, -0.0607154)
 mesh = SubResource("BoxMesh_g5e5v")
 skeleton = NodePath("../../../Sprite3D")
 

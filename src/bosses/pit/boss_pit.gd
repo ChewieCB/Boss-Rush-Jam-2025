@@ -2,7 +2,7 @@ extends BossCore
 class_name BossPit
 
 # Antes note:
-# Ante 1: Caged Brawl - Enable caged attack where it trap player inside
+# Ante 1 (new): Concussion Charge - Enable charge/lunge attack to give slow debuff
 # Ante 2: Mini Turrets - Enable Surveillance summons mini turrets
 # Ante 3 (new): Shock Tactics : Pit Boss attack can applied Shock (receive additional dmg) / Surveillance laser beam leaving electrified ground
 # Ante 4 (new): Serious Mode - Enhanced Pit Boss melee moveset (combo faster, longer reach)
@@ -22,8 +22,8 @@ enum Stance {DEFENSIVE, AGGRESSIVE}
 @export var wave_material: ShaderMaterial
 
 @export_category("Movement")
-@export var MOVE_SPEED: float = 10.0
-@onready var move_speed: float = MOVE_SPEED:
+@export var BASE_MOVE_SPEED: float = 10.0
+@onready var move_speed: float = BASE_MOVE_SPEED:
 	set(value):
 		move_speed = value
 		navigation_component.current_speed = move_speed
@@ -41,7 +41,7 @@ var phase_stance: Stance = Stance.AGGRESSIVE:
 		elif phase_stance == Stance.DEFENSIVE:
 			state_chart.send_event("defensive_stance")
 		phase_debug_label.text = "Phase %s (%s)" % [current_phase, Stance.keys()[phase_stance]]
-
+var unfair_fight_enabled = false
 @export_group("Attacks")
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 3.5
@@ -75,6 +75,11 @@ var slam_target_pos := Vector3.ZERO
 @export var lunge_force: float = 6.5
 @export var lunge_cooldown: float = 15.0
 @onready var lunge_timer: Timer = $LungeCooldown
+@export var lunge_slow_debuff_duration: float = 1 # Boss ante 1
+@export var lunge_slow_debuff_perc: float = 50 # Boss ante 1
+var lunge_slow_debuff_enabled = false
+var dash_speed_buff_icon = preload("res://assets/sprite/status_icon/dash_speed_down.png")
+var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_down.png")
 # SFX
 @export var sfx_lunge: Array[AudioStream]
 
@@ -93,6 +98,16 @@ var shield_tween: Tween
 func _ready() -> void:
 	super ()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
+	if GameManager.boss_ante >= 1:
+		lunge_slow_debuff_enabled = true
+	if GameManager.boss_ante >= 2:
+		pass # In Surveillance code
+	if GameManager.boss_ante >= 3:
+		pass
+	if GameManager.boss_ante >= 4:
+		pass
+	if GameManager.boss_ante >= 5:
+		unfair_fight_enabled = true
 
 
 func activate() -> void:
@@ -101,6 +116,10 @@ func activate() -> void:
 
 
 func toggle_stance() -> void:
+	if unfair_fight_enabled:
+		phase_stance = Stance.AGGRESSIVE
+		return
+
 	if phase_stance == Stance.AGGRESSIVE:
 		phase_stance = Stance.DEFENSIVE
 	elif phase_stance == Stance.DEFENSIVE:
@@ -265,6 +284,8 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 				destroy_cover(body)
 			elif body == target:
 				damage_in_hurtbox(lunge_damage * GameManager.get_risk_dmg_mult())
+				if lunge_slow_debuff_enabled:
+					create_and_add_slow_debuff(lunge_slow_debuff_duration, lunge_slow_debuff_perc)
 				hurtbox.set_deferred("monitoring", false)
 				velocity.x = 0
 				velocity.z = 0
@@ -838,10 +859,33 @@ func _on_defensive_state_exited() -> void:
 
 func _on_stagger() -> void:
 	if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
-		move_speed = MOVE_SPEED / 5
+		move_speed = BASE_MOVE_SPEED / 5
 	super ()
 
 
 func _on_hurt_frame_timer_timeout() -> void:
-	move_speed = MOVE_SPEED
+	move_speed = BASE_MOVE_SPEED
 	super ()
+
+func create_and_add_slow_debuff(debuff_duration: float = 1, slow_perc: float = 50):
+	var slow_run_debuff = StatusEffect.new()
+	slow_run_debuff.display_name = "Run speed down"
+	slow_run_debuff.status_code = "lunge_concussion_run_speed"
+	slow_run_debuff.modified_stat = StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER
+	slow_run_debuff.value = - slow_perc
+	slow_run_debuff.modify_type = StatusEffect.ModifyType.PERCENTAGE
+	slow_run_debuff.duration = debuff_duration
+	slow_run_debuff.is_bad_effect = true
+	slow_run_debuff.status_icon = run_speed_buff_icon
+	GameManager.player.add_status_effect(slow_run_debuff)
+
+	var slow_dash_debuff = StatusEffect.new()
+	slow_dash_debuff.display_name = "Dash speed down"
+	slow_dash_debuff.status_code = "lunge_concussion_slide_speed"
+	slow_dash_debuff.modified_stat = StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER
+	slow_dash_debuff.value = - slow_perc
+	slow_dash_debuff.modify_type = StatusEffect.ModifyType.PERCENTAGE
+	slow_dash_debuff.duration = debuff_duration
+	slow_dash_debuff.is_bad_effect = true
+	slow_dash_debuff.status_icon = dash_speed_buff_icon
+	GameManager.player.add_status_effect(slow_dash_debuff)
