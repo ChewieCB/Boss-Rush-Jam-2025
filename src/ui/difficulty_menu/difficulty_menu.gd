@@ -22,11 +22,11 @@ signal bet_started
 signal bet_cancelled
 signal risk_changed
 
-const BASE_REWARD_MULT = 1.5
+const BASE_REWARD_MULT = 1.2
 const REWARD_MULT_PER_RISK = 0.05 # Extra 5% per risk lv
-const HIGH_RISK_REWARD_MULT_PER_RISK = 0.15
+const HIGH_RISK_REWARD_MULT_PER_RISK = 0.1
 const HIGH_RISK_THRESHOLD = 9
-const OVER_RISK_REWARD_MULT_PER_RISK = 0.4
+const OVER_RISK_REWARD_MULT_PER_RISK = 0.2
 const OVER_RISK_THRESHOLD = 15
 
 # const RISK_THRESHOLDS = [0, 3, 6, 9, 12, 15]
