@@ -36,7 +36,7 @@ transparency = 1
 albedo_color = Color(1, 0, 0, 0.337255)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d0jfy"]
-size = Vector3(3, 2.2, 3)
+size = Vector3(3, 2.2, 4.3)
 
 [sub_resource type="Resource" id="Resource_vq1e8"]
 script = ExtResource("11_j156m")

@@ -1204,27 +1204,32 @@ muzzle_smoke_prefab = ExtResource("10_ipycd")
 transform = Transform3D(0.165, 0, 0, 0, 0.165, 0, 0, 0, 0.165, 0.364854, -0.394036, 0)
 
 [node name="GunSilhouetteSprite" type="Sprite3D" parent="SpriteParent"]
+layers = 2
 sorting_offset = -1.0
 render_priority = 2
 texture = ExtResource("14_qn47w")
 
 [node name="GunSprite" type="Sprite3D" parent="SpriteParent"]
+layers = 2
 render_priority = 2
 texture = ExtResource("11_n85hu")
 
 [node name="MuzzleflareLightSprite" type="Sprite3D" parent="SpriteParent/GunSprite"]
 visible = false
+layers = 2
 sorting_offset = 1.0
 render_priority = 2
 texture = ExtResource("11_cwod4")
 
 [node name="MuzzleFlashSprite" type="Sprite3D" parent="SpriteParent/GunSprite/MuzzleflareLightSprite"]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+layers = 2
 sorting_offset = -1.0
 render_priority = 2
 texture = ExtResource("12_fgtrf")
 
 [node name="Barrel3Sprite" type="Sprite3D" parent="SpriteParent"]
+layers = 2
 sorting_offset = 1.0
 render_priority = 2
 texture = ExtResource("29_egcby")
@@ -1244,6 +1249,7 @@ horizontal_alignment = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, -1.2, 0)
 
 [node name="Barrel2Sprite" type="Sprite3D" parent="SpriteParent"]
+layers = 2
 sorting_offset = 2.0
 render_priority = 2
 texture = ExtResource("28_vfi2f")
@@ -1263,6 +1269,7 @@ horizontal_alignment = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -1.6, 0)
 
 [node name="Barrel1Sprite" type="Sprite3D" parent="SpriteParent"]
+layers = 2
 sorting_offset = 3.0
 render_priority = 2
 texture = ExtResource("27_6hxas")
@@ -1283,20 +1290,24 @@ horizontal_alignment = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, -2.3, 0)
 
 [node name="ForegripSprite" type="Sprite3D" parent="SpriteParent"]
+layers = 2
 sorting_offset = 4.0
 render_priority = 2
 texture = ExtResource("14_8rp44")
 
 [node name="ArmSprite" type="Sprite3D" parent="SpriteParent"]
+layers = 2
 sorting_offset = 5.0
 render_priority = 2
 texture = ExtResource("15_x3kbv")
 
 [node name="ArmSpriteR" type="Sprite3D" parent="SpriteParent"]
+layers = 2
 sorting_offset = 3.0
 render_priority = 2
 
 [node name="EffectIconsSprite" type="Sprite3D" parent="SpriteParent"]
+layers = 2
 render_priority = 3
 texture = SubResource("ViewportTexture_rlyuh")
 
@@ -1359,19 +1370,19 @@ near = 0.1
 far = 1000.0
 
 [node name="Barrel3Icon" type="MeshInstance3D" parent="EffectIconsViewport/EffectIconsParent"]
-transform = Transform3D(0.735053, -0.0466666, -0.676402, -0.67801, -0.0493597, -0.733394, 0.000837997, 0.99769, -0.0679223, -0.00193595, 0, 0.555438)
+transform = Transform3D(0.735053, -0.0466678, -0.676402, -0.67801, -0.0493604, -0.733394, 0.000838399, 0.99769, -0.0679237, -0.00193595, 0, 0.555438)
 mesh = SubResource("ArrayMesh_fw2vn")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("34_tk7r4")
 
 [node name="Barrel2Icon" type="MeshInstance3D" parent="EffectIconsViewport/EffectIconsParent"]
-transform = Transform3D(0.693706, -0.0523361, -0.718354, -0.71934, -3.14434e-08, -0.694658, 0.0363556, 0.99863, -0.0376474, -0.15, 0, 1.76)
+transform = Transform3D(0.693706, -0.0523373, -0.718354, -0.71934, -2.604e-06, -0.694658, 0.0363546, 0.99863, -0.0376501, -0.15, 0, 1.76)
 mesh = SubResource("ArrayMesh_l1gaq")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("34_tk7r4")
 
 [node name="Barrel1Icon" type="MeshInstance3D" parent="EffectIconsViewport/EffectIconsParent"]
-transform = Transform3D(0.743941, -0.0342097, -0.666855, -0.665129, 0.0405117, -0.745142, 0.0587072, 0.892488, 0.00826234, -0.411454, 0.00172222, 3.20794)
+transform = Transform3D(0.743941, -0.0342128, -0.666855, -0.665129, 0.0405119, -0.745142, 0.0587099, 0.892488, 0.00826027, -0.411454, 0.00172222, 3.20794)
 visible = false
 mesh = SubResource("ArrayMesh_eevs2")
 skeleton = NodePath("")
