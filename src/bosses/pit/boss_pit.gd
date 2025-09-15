@@ -4,7 +4,7 @@ class_name BossPit
 # Antes note:
 # Ante 1 (new): Concussion Charge - Enable charge/lunge attack to give slow debuff
 # Ante 2: Mini Turrets - Enable Surveillance summons mini turrets
-# Ante 3 (new): Shock Tactics : Pit Boss attack can applied Shock (receive additional dmg) / Surveillance laser beam leaving electrified ground
+# Ante 3 (new): Electric Hazard : Destroyed cover will leave behind electric hazard
 # Ante 4 (new): Serious Mode - Enhanced Pit Boss melee moveset (combo faster, longer reach)
 # Ante 5 (new): Unfair Fight - Pit Boss and Surveillance will attack together all the time
 
@@ -44,6 +44,7 @@ var phase_stance: Stance = Stance.AGGRESSIVE:
 var unfair_fight_enabled = false
 @export_group("Attacks")
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
+@export var electric_hazard_prefab: PackedScene
 @export var hurtbox_range_close: float = 3.5
 @export var hurtbox_range_far: float = 4.5
 @export var sfx_melee: Array[AudioStream]
@@ -73,7 +74,7 @@ var slam_target_pos := Vector3.ZERO
 @export var lunge_friction: float = 0.05
 @export var lunge_damage: float = 5.0
 @export var lunge_force: float = 6.5
-@export var lunge_cooldown: float = 15.0
+@export var lunge_cooldown: float = 5.0
 @onready var lunge_timer: Timer = $LungeCooldown
 @export var lunge_slow_debuff_duration: float = 1 # Boss ante 1
 @export var lunge_slow_debuff_perc: float = 50 # Boss ante 1
@@ -86,6 +87,7 @@ var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_dow
 @onready var phase_debug_label: Label3D = $DebugPhaseLabel
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
+@export_subgroup("Shield")
 @export var shield_radius: float = 4.0
 @onready var shield_body: StaticBody3D = $Shield
 @onready var shield_mesh_solid: MeshInstance3D = $Shield/ShieldMeshSolid
@@ -93,6 +95,12 @@ var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_dow
 @onready var shield_collider: CollisionShape3D = $Shield/CollisionShape3D
 @onready var shield_sfx_player: AudioStreamPlayer3D = $Shield/ShieldSFXPlayer
 var shield_tween: Tween
+
+@export_group("Passive")
+@export_subgroup("Electric Hazard")
+var electric_hazard_enabled = false # Based on ante 3
+@export var electric_hazard_damage: int = 5
+@export var electric_hazard_duration: float = 5
 
 
 func _ready() -> void:
@@ -103,7 +111,7 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 2:
 		pass # In Surveillance code
 	if GameManager.boss_ante >= 3:
-		pass
+		electric_hazard_enabled = true
 	if GameManager.boss_ante >= 4:
 		pass
 	if GameManager.boss_ante >= 5:
@@ -269,9 +277,20 @@ func _on_movement_charging_state_entered() -> void:
 
 func destroy_cover(body: Node3D) -> void:
 	if body is Cover:
+		var cover: Cover = body
+		# Create electric shock at cover position
+		if electric_hazard_enabled:
+			var inst: HazardArea = electric_hazard_prefab.instantiate()
+			get_tree().get_root().add_child(inst)
+			inst.global_position = cover.mesh.global_position
+			inst.rotation = cover.rotation
+			inst.damage_per_tick = electric_hazard_damage
+			inst.set_duration(electric_hazard_duration)
+
 		sfx_player.stream = sfx_melee.pick_random()
 		sfx_player.play()
-		body.destroy()
+		cover.destroy()
+
 
 func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, lunge_friction)

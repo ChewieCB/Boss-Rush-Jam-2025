@@ -7,17 +7,12 @@
 height = 1.0
 radius = 6.0
 
-[node name="SlowHazardArea" type="Node3D"]
+[node name="SlowHazardArea" type="Node3D" node_paths=PackedStringArray("puddle_decal")]
 script = ExtResource("1_d3qr7")
 damage_per_tick = 0
 duration = 20.0
 slow_perc = 50.0
-
-[node name="Puddle" type="Sprite3D" parent="."]
-transform = Transform3D(4.5, 0, 0, 0, -1.96701e-07, 4.5, 0, -4.5, -1.96701e-07, 0, 0.01, 0)
-visible = false
-modulate = Color(0.0828836, 0.092301, 0.0762992, 0.854902)
-texture = ExtResource("2_jiri2")
+puddle_decal = NodePath("Decal")
 
 [node name="Decal" type="Decal" parent="."]
 size = Vector3(12, 4, 12)

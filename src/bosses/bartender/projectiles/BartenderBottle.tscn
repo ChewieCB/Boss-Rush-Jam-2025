@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://bwmyhssb82fyu"]
+[gd_scene load_steps=16 format=3 uid="uid://bwmyhssb82fyu"]
 
 [ext_resource type="Script" path="res://src/bosses/bartender/projectiles/bartender_bottle.gd" id="1_7et0k"]
 [ext_resource type="AudioStream" uid="uid://dg4say1gjl3rx" path="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER BOTTLE SMASH 1.mp3" id="2_67wqu"]
 [ext_resource type="Texture2D" uid="uid://711teiotxavy" path="res://src/bosses/bartender/assets/empty_bottle.png" id="2_exhjm"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_qatxh"]
 [ext_resource type="AudioStream" uid="uid://cf0sjgmq0hrsn" path="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER BOTTLE SMASH 2.mp3" id="3_q00sn"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_7fntn"]
 [ext_resource type="AudioStream" uid="uid://daht0xs8su3gw" path="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER BOTTLE SMASH 3.mp3" id="4_r8lpx"]
@@ -31,6 +32,7 @@ point_count = 2
 collision_layer = 0
 collision_mask = 11
 script = ExtResource("1_7et0k")
+spark_effect = ExtResource("2_qatxh")
 sfx_break = Array[AudioStream]([ExtResource("2_67wqu"), ExtResource("3_q00sn"), ExtResource("4_r8lpx"), ExtResource("5_yaaf8"), ExtResource("6_1gl1w"), ExtResource("7_iixm0")])
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
