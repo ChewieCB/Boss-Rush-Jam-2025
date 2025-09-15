@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=40 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -10,8 +10,13 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
 [ext_resource type="Texture2D" uid="uid://bunn8a0pce2b2" path="res://assets/sprite/aoe_markers/laser_aoe_warn.png" id="5_pbhfx"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="6_fqvnt"]
+[ext_resource type="PackedScene" uid="uid://dl8cnd88fnws2" path="res://src/bosses/tutorial/SlamParticles.tscn" id="7_2uohy"]
 [ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="7_6pf3s"]
 [ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="11_1crh5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_klk0f"]
+transparency = 1
+albedo_color = Color(0.894, 0.361, 0.141, 0.643)
 
 [sub_resource type="BoxMesh" id="BoxMesh_x341f"]
 size = Vector3(1, 1, 5)
@@ -432,9 +437,12 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"values": []
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [Vector3(0, 0, 0), 30.0],
+"method": &"slam_line"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_ona5m"]
@@ -516,7 +524,7 @@ _data = {
 "swipe": SubResource("Animation_eps3w")
 }
 
-[node name="BossElevator" node_paths=PackedStringArray("proj_spawn_l", "proj_spawn_r", "laser_spawn", "elemental_emitting_vfx") instance=ExtResource("1_7pmj2")]
+[node name="BossElevator" node_paths=PackedStringArray("slam_particles", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "elemental_emitting_vfx") instance=ExtResource("1_7pmj2")]
 script = ExtResource("2_6u4e1")
 MOVE_SPEED = 10.0
 wave_amplitude = 7.0
@@ -524,17 +532,20 @@ wave_frequency = 5.0
 hurtbox_range_close = 6.0
 hurtbox_range_far = 7.5
 sfx_melee = Array[AudioStream]([])
-swipe_damage = 7.0
-hook_damage = 8.0
+swipe_damage = 14.0
+hook_damage = 12.0
+slam_damage = 26.0
 slam_delay = 0.3
-slam_time = 0.5
+slam_time = 1.1
+slam_particles = NodePath("DebugAnimPivot/DebugWrench/SlamSpawn/SlamParticles")
+slam_wave_material = SubResource("StandardMaterial3D_klk0f")
 nail_projectile = ExtResource("3_v4gcb")
 proj_spawn_l = NodePath("DebugRangedPivot/PivotL/DebugGun1/ProjSpawnL")
 proj_spawn_r = NodePath("DebugRangedPivot/PivotR/DebugGun1/ProjSpawnR")
 num_bursts = 1
 shots_per_burst = 12
 delay_between_burst = 0.5
-nail_damage = 3.0
+nail_damage = 7.0
 sfx_nail_shot = Array[AudioStream]([])
 laser_aoe = ExtResource("4_hx1ss")
 laser_spawn = NodePath("DebugLaserPivot/DebugLaser/LaserSpawn")
@@ -563,6 +574,10 @@ mesh = SubResource("BoxMesh_x341f")
 
 [node name="SlamSpawn" type="Marker3D" parent="DebugAnimPivot/DebugWrench" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.4)
+
+[node name="SlamParticles" parent="DebugAnimPivot/DebugWrench/SlamSpawn" index="0" instance=ExtResource("7_2uohy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
 
 [node name="DebugLaserPivot" type="Marker3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
@@ -762,16 +777,46 @@ to = NodePath("../../Recover")
 event = &"combo_end"
 delay_in_seconds = "0.0"
 
+[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" index="2"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../LeapBack")
+event = &"melee_backstep"
+delay_in_seconds = "0.0"
+
 [node name="Hook" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="2"]
 script = ExtResource("4_fo57y")
 
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="0"]
+[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../LeapBack")
+event = &"melee_backstep"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
 delay_in_seconds = "0.0"
 
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="3"]
+[node name="LeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="3"]
+script = ExtResource("4_fo57y")
+
+[node name="toSlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/LeapBack" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../SlamLine")
+event = &"melee_line"
+delay_in_seconds = "0.0"
+
+[node name="SlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="4"]
+script = ExtResource("4_fo57y")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/SlamLine" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"combo_end"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="5"]
 script = ExtResource("4_fo57y")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Recover" index="0"]
@@ -780,19 +825,19 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="4"]
+[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="6"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../DualNailsRanged")
 event = &"start_dual_nails_attack"
 delay_in_seconds = "0.0"
 
-[node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="5"]
+[node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="7"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LaserAoE")
 event = &"start_laser_aoe_attack"
 delay_in_seconds = "0.0"
 
-[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="6"]
+[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="8"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smokescreen")
 event = &"start_smokescreen"
@@ -971,6 +1016,9 @@ libraries = {
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" to="." method="_on_melee_combo_swipe_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" to="." method="_on_melee_combo_swipe_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" to="." method="_on_melee_combo_hook_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/LeapBack" to="." method="_on_melee_combo_leap_back_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/LeapBack" to="." method="_on_melee_combo_leap_back_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/SlamLine" to="." method="_on_melee_combo_slam_line_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Recover" to="." method="_on_melee_combo_recover_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Recover" to="." method="_on_melee_combo_recover_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/LineSlam/Targeting" to="." method="_on_line_slam_targeting_state_entered"]

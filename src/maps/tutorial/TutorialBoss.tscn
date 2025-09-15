@@ -1,4 +1,4 @@
-[gd_scene load_steps=1771 format=4 uid="uid://bi8ar5jx08vp7"]
+[gd_scene load_steps=1772 format=4 uid="uid://bi8ar5jx08vp7"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_hm1ph"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="2_1es71"]
@@ -85,6 +85,7 @@
 [ext_resource type="Material" uid="uid://chfbuquwjmmvs" path="res://assets/textures/posters/megacasino.tres" id="66_v3ijd"]
 [ext_resource type="Material" uid="uid://c21k5cw2fd0br" path="res://assets/textures/walls/paint-red.tres" id="68_fdkb0"]
 [ext_resource type="PackedScene" uid="uid://d28beg1mj2x4j" path="res://src/maps/tutorial/SubElevatorDoor.tscn" id="77_l6skn"]
+[ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChip.tscn" id="78_0wkgp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vb4tn"]
 resource_local_to_scene = true
@@ -12195,6 +12196,12 @@ mesh = SubResource("ArrayMesh_ifmaw")
 
 [node name="entity_112_TutorialBoss" parent="FuncGodotMap" index="73" node_paths=PackedStringArray("elemental_emitting_vfx", "target") instance=ExtResource("36_sym1x")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10, -4.25, -31.5)
+swipe_damage = 14.0
+hook_damage = 12.0
+slam_damage = 26.0
+slam_time = 1.1
+nail_damage = 7.0
+chip_scene = ExtResource("78_0wkgp")
 elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 target = NodePath("../entity_21_PlayerRef")
 

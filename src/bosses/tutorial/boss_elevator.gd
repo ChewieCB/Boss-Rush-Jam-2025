@@ -26,12 +26,15 @@ var melee_phase_count: int = 0
 @export var hurtbox_range_far: float = 5.5
 @export var sfx_melee: Array[AudioStream]
 @export_subgroup("Swipe")
-@export var swipe_damage: float = 7.0
+@export var swipe_damage: float = 14.0
 @export_subgroup("Hook")
-@export var hook_damage: float = 8.0
+@export var hook_damage: float = 12.0
 @export_subgroup("Slam")
+@export var slam_damage: float = 26.0
 @export var slam_delay: float = 0.3
-@export var slam_time: float = 0.5
+@export var slam_time: float = 1.1
+@export var slam_particles: GPUParticles3D
+@export var slam_wave_material: StandardMaterial3D
 @export_subgroup("Nailguns")
 @export var nail_projectile: PackedScene
 @export var proj_spawn_l: Marker3D
@@ -39,7 +42,7 @@ var melee_phase_count: int = 0
 @export var num_bursts: int = 1
 @export var shots_per_burst: int = 12
 @export var delay_between_burst: float = 0.5
-@export var nail_damage: float = 3.0
+@export var nail_damage: float = 7.0
 # SFX
 @export var sfx_nail_shot: Array[AudioStream]
 @export_subgroup("Laser AoE")
@@ -150,7 +153,8 @@ func _on_melee_combo_swipe_state_entered() -> void:
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_attack")
 	else:
-		state_chart.send_event("combo_end")
+		state_chart.send_event("melee_backstep")
+		#state_chart.send_event("combo_end")
 
 
 func _on_melee_combo_swipe_state_physics_processing(delta: float) -> void:
@@ -169,6 +173,56 @@ func _on_melee_combo_hook_state_entered() -> void:
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
 	anim_player.play("elevator_boss/backswipe")
+	await anim_player.animation_finished
+	
+	state_chart.send_event("melee_backstep")
+	#state_chart.send_event("combo_end")
+
+
+func _on_melee_combo_leap_back_state_entered() -> void:
+	state_chart.send_event("start_targeting")
+	
+	# TODO - raycast this to make sure we don't overshoot
+	var goal_pos = self.global_position + self.basis.z * 20.0
+	
+	var space_state := get_world_3d().direct_space_state
+	var query := PhysicsRayQueryParameters3D.create(
+		self.global_position,
+		goal_pos
+	)
+	var result = space_state.intersect_ray(query)
+	if result:
+		goal_pos = result.position
+	
+	var jump_results = charge_back_jump(goal_pos, 35.0, true)
+	
+	#anim_player.play("elevator_boss/slam_telegraph")
+	#sfx_player.stream = sfx_jump.pick_random()
+	#sfx_player.play()
+	
+	self.velocity = jump_results[0]
+	var time_up = jump_results[1]
+	var time_down = jump_results[2]
+	
+	await get_tree().create_timer(time_up).timeout
+	await get_tree().create_timer(time_down).timeout
+	
+	#sfx_player.stream = sfx_slam.pick_random()
+	#sfx_player.play()
+	
+	state_chart.send_event("melee_line")
+
+
+func _on_melee_combo_leap_back_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
+func _on_melee_combo_slam_line_state_entered() -> void:
+	anim_player.play("elevator_boss/slam_telegraph")
+	await anim_player.animation_finished
+	
+	anim_player.play("elevator_boss/slam")
 	await anim_player.animation_finished
 	
 	state_chart.send_event("combo_end")
@@ -496,3 +550,170 @@ func get_elevator_spawn_no_repeats() -> Node:
 	active_sub_door = sub_elevator_doors[idx]
 	
 	return active_spawn
+
+
+func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, charge_jump_height: float = 20.0, debug: bool = false) -> Array:
+	var start_pos = self.global_position
+	var highest_y = max(start_pos.y, goal_pos.y)
+	var apex_y = highest_y + charge_jump_height
+	
+	var velocity_v: float = sqrt(
+		2 * GRAVITY * (apex_y - start_pos.y)
+	)
+	
+	# TODO - make time_up and time_down configurable so we can set a jump time
+	var time_up: float = velocity_v / GRAVITY
+	var time_down: float = sqrt(2.0 * (apex_y - goal_pos.y) / GRAVITY)
+	var time: float = time_up + time_down
+	
+	var displacement_xz: Vector2 = Vector2(goal_pos.x, goal_pos.z) - Vector2(start_pos.x, start_pos.z)
+	var horizontal_distance: float = displacement_xz.length()
+	var velocity_h = horizontal_distance / time
+	var horizontal_dir: Vector2 = displacement_xz.normalized()
+	
+	var initial_velocity := Vector3(
+		horizontal_dir.x * velocity_h,
+		velocity_v,
+		horizontal_dir.y * velocity_h,
+	)
+	
+	# Drawing
+	if debug:
+		var trajectory_points: Array = []
+		
+		for i in range(1, 151):
+			var t = time * float(i) / float(151)
+			var x = start_pos.x + initial_velocity.x * t
+			var y = start_pos.y + initial_velocity.y * t - 0.5 * GRAVITY * t * t
+			var z = start_pos.z + initial_velocity.z * t
+			trajectory_points.append(Vector3(x, y, z))
+		
+		debug_trajectory_mesh.mesh.clear_surfaces()
+		debug_trajectory_mesh.mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
+		for p in trajectory_points:
+			debug_trajectory_mesh.mesh.surface_set_color(Color.RED)
+			debug_trajectory_mesh.mesh.surface_add_vertex(p)
+		debug_trajectory_mesh.mesh.surface_end()
+		
+	return [initial_velocity, time_up, time_down]
+
+
+func slam_line(spawn_pos: Vector3, range: float = 30.0) -> void:
+	# Spawn line aoe that grows from boss to target
+	spawn_aoe_line(
+		self.global_position.distance_to(target.global_position), 
+		4.0, 0.4, 
+		slam_damage, slam_time, 
+		$DebugAnimPivot/DebugWrench/SlamSpawn.global_position,
+		0.2, false,
+		state_chart.send_event.bind("combo_end")
+	)
+
+
+func spawn_aoe_line(
+	max_range: float,
+	width: float,
+	height: float = 2.0,
+	damage: float = 10.0,
+	spawned_wave_time: float = 1.0,
+	area_pos: Vector3 = self.global_position,
+	# pushback_source: Node3D = self,
+	spawned_wave_height: float = 0.3,
+	_telegraph: bool = false,
+	callback: Callable = func(): pass,
+) -> void:
+	# Generate a collider
+	var area_collider := Area3D.new()
+	var area_collider_shape := CollisionShape3D.new()
+	var collider_shape := BoxShape3D.new()
+	collider_shape.size = Vector3(width, height, 0.1)
+	area_collider_shape.shape = collider_shape
+	area_collider.add_child(area_collider_shape)
+	area_collider.collision_layer = int(pow(2, 7))
+	area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
+	area_collider.monitoring = true
+	
+	scene_root.add_child(area_collider)
+	
+	area_collider.global_position = area_pos
+	area_collider.global_rotation = self.global_rotation
+	area_collider.body_entered.connect(_on_wave_collision.bind(damage, area_collider, max_range))
+	#area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
+	
+	var debug_mesh_instance = MeshInstance3D.new()
+	var mesh = BoxMesh.new()
+	
+	spawned_area_objects.append([area_collider, debug_mesh_instance])
+	
+	# Generate a visual
+	scene_root.add_child(debug_mesh_instance)
+	
+	debug_mesh_instance.mesh = mesh
+	debug_mesh_instance.cast_shadow = false
+	debug_mesh_instance.global_position = area_pos
+	debug_mesh_instance.global_rotation = self.global_rotation
+	
+	mesh.size = Vector3(width, height, 0.05)
+	mesh.material = slam_wave_material
+	
+	# Spawn moving wave particles that stay at end of line
+	$DebugAnimPivot/DebugWrench/SlamSpawn.remove_child(slam_particles)
+	scene_root.add_child(slam_particles)
+	slam_particles.global_position = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * 0.1
+	slam_particles.global_rotation = self.global_rotation + Vector3(0, PI, 0)
+	slam_particles.visible = true
+	slam_particles.emitting = true
+	slam_particles.is_on_floor = true
+	
+	# Animate the visual
+	# TODO - SFX
+	#sfx_player.stream = sfx_ground_pound.pick_random()
+	#sfx_player.play()
+	var tween = get_tree().create_tween()
+	var end_pos: Vector3 = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * (max_range + 0.1)
+	tween.tween_property(mesh, "size:z", max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(debug_mesh_instance, "global_position", debug_mesh_instance.global_position - debug_mesh_instance.basis.z * max_range / 2, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(area_collider_shape, "shape:size:z", max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(area_collider, "global_position", debug_mesh_instance.global_position - debug_mesh_instance.basis.z * max_range / 2, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(slam_particles, "global_position", end_pos, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	tween.tween_callback(debug_mesh_instance.queue_free)
+	tween.tween_callback(area_collider.queue_free)
+	tween.tween_callback(
+		func():
+			slam_particles.emitting = false
+			await slam_particles.finished
+			slam_particles.visible = false
+			slam_particles.is_on_floor = false
+			$DebugAnimPivot/DebugWrench/SlamSpawn.add_child(slam_particles)
+			slam_particles.position = Vector3.ZERO
+			slam_particles.rotation = Vector3.ZERO
+	)
+	tween.tween_callback(callback)
+	
+	await tween.finished
+	
+	return
+
+
+func _on_wave_collision(
+	body: Node3D,
+	aoe_damage: float,
+	pushback_source: Node3D = self,
+	pushback_radius: float = pushback_source.collider.shape.radius
+) -> void:
+	if body == target:
+		body.health_component.damage(aoe_damage)
+		trigger_pushback(10.0, pushback_source, pushback_radius)
+		InputHelper.rumble_medium()
+
+
+func trigger_pushback(
+	force: float,
+	pushback_source: Node3D = self,
+	pushback_radius: float = pushback_source.collider.shape.radius
+) -> void:
+	if target.global_position.distance_to(pushback_source.global_position) <= pushback_radius:
+		var pushback_vector = pushback_source.global_position.direction_to(target.global_position)
+		target.velocity = Vector3.ZERO
+		target.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * force
+		target.vel_vertical += 15.0
