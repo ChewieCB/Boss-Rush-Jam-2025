@@ -94,7 +94,7 @@ var aoe_floor = 0.0
 @export var sfx_slam: Array[AudioStream]
 #
 @export_subgroup("Place Your Bets")
-@export var enable_place_your_bet_attack = true
+@export var place_your_bet_attack_enabled = true
 @export var jump_height: float = 9.0
 @export var jump_time: float = 0.8
 @export var jump_hang_time: float = 1.2
@@ -235,6 +235,16 @@ func _ready() -> void:
 				else:
 					print(prop.name, " → ", value)
 	super ()
+	if GameManager.boss_ante >= 1:
+		place_your_bet_attack_enabled = true
+	if GameManager.boss_ante >= 2:
+		pass
+	if GameManager.boss_ante >= 3:
+		pass
+	if GameManager.boss_ante >= 4:
+		pass
+	if GameManager.boss_ante >= 5:
+		pass
 	leap_finished.connect(_on_chiptopede_leap_impact)
 	chiptopede_max_health *= GameManager.get_risk_max_hp_mult()
 
@@ -408,15 +418,22 @@ func select_attack_phase_2() -> void:
 			#if chip_mine_spawn_timer.is_stopped():
 				#attack_str = "start_chip_mines"
 			#else:
-			if attack_roll < 25:
-				attack_str = "start_chip_sweep"
-			elif attack_roll < 35:
-				attack_str = "start_backspin_chip"
-			elif attack_roll < 65:
-				attack_str = "start_place_your_bets_attack"
+			if place_your_bet_attack_enabled:
+				if attack_roll < 25:
+					attack_str = "start_chip_sweep"
+				elif attack_roll < 35:
+					attack_str = "start_backspin_chip"
+				elif attack_roll < 65:
+					attack_str = "start_place_your_bets_attack"
+				else:
+					attack_str = "start_slam_attack"
 			else:
-				attack_str = "start_slam_attack"
-
+				if attack_roll < 35:
+					attack_str = "start_chip_sweep"
+				elif attack_roll < 65:
+					attack_str = "start_backspin_chip"
+				else:
+					attack_str = "start_slam_attack"
 			big_attacks_performed += 1
 
 		ChipBossForms.SPLIT_STACKS:
