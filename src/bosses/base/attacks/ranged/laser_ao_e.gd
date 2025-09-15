@@ -29,4 +29,13 @@ func _ready() -> void:
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player:
-		body.health_component.damage(damage)
+		knockback(body, damage, 15.0)
+
+
+func knockback(body: Node3D, damage: float, force: float) -> void:
+	body.health_component.damage(damage)
+	var pushback_vector = self.global_position.direction_to(body.global_position)
+	
+	body.velocity = Vector3.ZERO
+	body.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * force
+	body.vel_vertical += pushback_vector.y * force

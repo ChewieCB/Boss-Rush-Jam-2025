@@ -400,7 +400,6 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
-
 ## SMOKESCREEN ATTACK TRANSITION
 # Drop a smokescreen particle emitter to mask the boss teleporting into
 # one of the sub-elevators before starting a ranged attack
