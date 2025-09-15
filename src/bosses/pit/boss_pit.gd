@@ -4,8 +4,8 @@ class_name BossPit
 # Antes note:
 # Ante 1 (new): Concussion Charge - Enable charge/lunge attack to give slow debuff
 # Ante 2: Mini Turrets - Enable Surveillance summons mini turrets
-# Ante 3 (new): Electric Hazard : Destroyed cover will leave behind electric hazard
-# Ante 4 (new): Serious Mode - Enhanced Pit Boss melee moveset (combo faster, longer reach)
+# Ante 3 (new): Electric Hazard - Destroyed cover will leave behind electric hazard
+# Ante 4 (new): Serious Mode - Pit Boss move and act 30% faster
 # Ante 5 (new): Unfair Fight - Pit Boss and Surveillance will attack together all the time
 
 signal charge_ended
@@ -105,7 +105,6 @@ var electric_hazard_enabled = false # Based on ante 3
 
 func _ready() -> void:
 	super ()
-	hurtbox_collider.shape.size.z = hurtbox_range_close
 	if GameManager.boss_ante >= 1:
 		lunge_slow_debuff_enabled = true
 	if GameManager.boss_ante >= 2:
@@ -113,9 +112,13 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 3:
 		electric_hazard_enabled = true
 	if GameManager.boss_ante >= 4:
-		pass
+		BASE_MOVE_SPEED += 3
+		move_speed = BASE_MOVE_SPEED
+		anim_player.speed_scale = 1.3
 	if GameManager.boss_ante >= 5:
 		unfair_fight_enabled = true
+
+	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 
 func activate() -> void:
