@@ -63,13 +63,12 @@ _data = {
 "death": SubResource("Animation_dshkv")
 }
 
-[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("elemental_emitting_vfx", "navigation_component", "health_component")]
+[node name="BossCore" type="CharacterBody3D" node_paths=PackedStringArray("navigation_component", "health_component")]
 process_mode = 1
 collision_layer = 4
 collision_mask = 27
 script = ExtResource("1_tem3i")
 chip_scene = ExtResource("2_hj7qa")
-elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_pickup_scene = ExtResource("2_5bmmu")
 sfx_slowmo = ExtResource("4_rbx6b")
 navigation_component = NodePath("NavigationComponent")
@@ -80,6 +79,7 @@ delay_per_projectile = 0.3
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+layers = 2
 billboard = 2
 texture = ExtResource("6_04mqs")
 
@@ -90,6 +90,7 @@ shape = SubResource("CapsuleShape3D_m057l")
 [node name="DebugMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 visible = false
+layers = 2
 mesh = SubResource("BoxMesh_rkhu1")
 surface_material_override/0 = SubResource("StandardMaterial3D_a1ebn")
 

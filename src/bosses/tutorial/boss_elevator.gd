@@ -52,7 +52,7 @@ var aoe_warn_decal: Decal
 
 
 func _ready() -> void:
-	super ()
+	super()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 
@@ -324,6 +324,7 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	
 	aoe_warn_decal = Decal.new()
 	aoe_warn_decal.texture_albedo = laser_aoe_marker
+	aoe_warn_decal.cull_mask = pow(2, 1-1)
 	aoe_warn_decal.size = Vector3(4, 4, 1)
 	get_parent().get_parent().add_child(aoe_warn_decal)
 	aoe_warn_decal.global_position = laser_spawn.global_position
