@@ -32,7 +32,7 @@ var melee_phase_count: int = 0
 @export_subgroup("Slam")
 @export var slam_damage: float = 26.0
 @export var slam_delay: float = 0.3
-@export var slam_time: float = 1.1
+@export var slam_time: float = 0.7
 @export var slam_particles: GPUParticles3D
 @export var slam_wave_material: StandardMaterial3D
 @export_subgroup("Nailguns")
@@ -66,7 +66,8 @@ func activate() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	super(delta)
+	#super(delta)
+	return
 
 
 func select_attack_phase_1() -> void:
@@ -183,23 +184,18 @@ func _on_melee_combo_leap_back_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	
 	# TODO - raycast this to make sure we don't overshoot
-	var goal_pos = self.global_position + self.basis.z * 20.0
+	var goal_pos = self.global_position + self.basis.z * 8.0
+	var nav_pos = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, goal_pos)
 	
-	var space_state := get_world_3d().direct_space_state
-	var query := PhysicsRayQueryParameters3D.create(
-		self.global_position,
-		goal_pos
-	)
-	var result = space_state.intersect_ray(query)
-	if result:
-		goal_pos = result.position
-	
-	var jump_results = charge_back_jump(goal_pos, 35.0, true)
+	var jump_results = charge_back_jump(nav_pos, 3.0, true)
 	
 	#anim_player.play("elevator_boss/slam_telegraph")
 	#sfx_player.stream = sfx_jump.pick_random()
 	#sfx_player.play()
-	
+	anim_player.play("elevator_boss/slam_telegraph_start")
+	await anim_player.animation_finished
+	anim_player.play("elevator_boss/slam_telegraph")
+	vel_vertical = 0
 	self.velocity = jump_results[0]
 	var time_up = jump_results[1]
 	var time_down = jump_results[2]
@@ -219,9 +215,6 @@ func _on_melee_combo_leap_back_state_physics_processing(delta: float) -> void:
 
 
 func _on_melee_combo_slam_line_state_entered() -> void:
-	anim_player.play("elevator_boss/slam_telegraph")
-	await anim_player.animation_finished
-	
 	anim_player.play("elevator_boss/slam")
 	await anim_player.animation_finished
 	

@@ -12196,11 +12196,7 @@ mesh = SubResource("ArrayMesh_ifmaw")
 
 [node name="entity_112_TutorialBoss" parent="FuncGodotMap" index="73" node_paths=PackedStringArray("elemental_emitting_vfx", "target") instance=ExtResource("36_sym1x")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10, -4.25, -31.5)
-swipe_damage = 14.0
-hook_damage = 12.0
-slam_damage = 26.0
-slam_time = 1.1
-nail_damage = 7.0
+slam_time = 0.7
 chip_scene = ExtResource("78_0wkgp")
 elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 target = NodePath("../entity_21_PlayerRef")

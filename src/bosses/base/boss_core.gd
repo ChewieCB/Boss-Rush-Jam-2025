@@ -220,7 +220,6 @@ func _physics_process(delta: float) -> void:
 	vel_vertical -= GRAVITY * delta
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	velocity.y = vel_vertical
-
 	move_and_slide()
 
 	# DEBUG
