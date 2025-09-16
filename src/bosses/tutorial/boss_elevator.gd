@@ -154,13 +154,10 @@ func _on_melee_combo_swipe_state_entered() -> void:
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_attack")
 	else:
-		if self.global_position.distance_to(target.global_position) < 4:
+		if randf() < 0.5:
 			state_chart.send_event("melee_backstep")
 		else:
-			if randf() < 0.5:
-				state_chart.send_event("melee_line")
-			else:
-				state_chart.send_event("combo_end")
+			state_chart.send_event("combo_end")
 
 
 func _on_melee_combo_swipe_state_physics_processing(delta: float) -> void:
@@ -181,13 +178,10 @@ func _on_melee_combo_hook_state_entered() -> void:
 	anim_player.play("elevator_boss/backswipe")
 	await anim_player.animation_finished
 	
-	if self.global_position.distance_to(target.global_position) < 10:
+	if randf() < 0.5:
 		state_chart.send_event("melee_backstep")
 	else:
-		if randf() < 0.5:
-			state_chart.send_event("melee_line")
-		else:
-			state_chart.send_event("combo_end")
+		state_chart.send_event("combo_end")
 
 
 func _on_melee_combo_leap_back_state_entered() -> void:
@@ -719,4 +713,4 @@ func trigger_pushback(
 		var pushback_vector = pushback_source.global_position.direction_to(target.global_position)
 		target.velocity = Vector3.ZERO
 		target.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * force
-		target.vel_vertical += 15.0
+		target.vel_vertical += 8.0
