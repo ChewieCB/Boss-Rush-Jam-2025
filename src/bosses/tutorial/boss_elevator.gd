@@ -154,8 +154,13 @@ func _on_melee_combo_swipe_state_entered() -> void:
 	if target in hurtbox.get_overlapping_bodies():
 		state_chart.send_event("melee_attack")
 	else:
-		state_chart.send_event("melee_backstep")
-		#state_chart.send_event("combo_end")
+		if self.global_position.distance_to(target.global_position) < 4:
+			state_chart.send_event("melee_backstep")
+		else:
+			if randf() < 0.5:
+				state_chart.send_event("melee_line")
+			else:
+				state_chart.send_event("combo_end")
 
 
 func _on_melee_combo_swipe_state_physics_processing(delta: float) -> void:
@@ -176,25 +181,30 @@ func _on_melee_combo_hook_state_entered() -> void:
 	anim_player.play("elevator_boss/backswipe")
 	await anim_player.animation_finished
 	
-	state_chart.send_event("melee_backstep")
-	#state_chart.send_event("combo_end")
+	if self.global_position.distance_to(target.global_position) < 10:
+		state_chart.send_event("melee_backstep")
+	else:
+		if randf() < 0.5:
+			state_chart.send_event("melee_line")
+		else:
+			state_chart.send_event("combo_end")
 
 
 func _on_melee_combo_leap_back_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	
 	# TODO - raycast this to make sure we don't overshoot
-	var goal_pos = self.global_position + self.basis.z * 8.0
+	var goal_pos = self.global_position + self.basis.z * 5.0
 	var nav_pos = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, goal_pos)
 	
-	var jump_results = charge_back_jump(nav_pos, 3.0, true)
+	var jump_results = charge_back_jump(nav_pos, 1.6)
 	
 	#anim_player.play("elevator_boss/slam_telegraph")
 	#sfx_player.stream = sfx_jump.pick_random()
 	#sfx_player.play()
 	anim_player.play("elevator_boss/slam_telegraph_start")
-	await anim_player.animation_finished
-	anim_player.play("elevator_boss/slam_telegraph")
+	#await anim_player.animation_finished
+	#anim_player.play("elevator_boss/slam_telegraph")
 	vel_vertical = 0
 	self.velocity = jump_results[0]
 	var time_up = jump_results[1]

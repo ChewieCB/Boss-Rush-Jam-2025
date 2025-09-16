@@ -795,7 +795,13 @@ to = NodePath("../../Recover")
 event = &"combo_end"
 delay_in_seconds = "0.0"
 
-[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" index="2"]
+[node name="toSlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" index="2"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../SlamLine")
+event = &"melee_line"
+delay_in_seconds = "0.0"
+
+[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
@@ -804,13 +810,19 @@ delay_in_seconds = "0.0"
 [node name="Hook" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="2"]
 script = ExtResource("4_fo57y")
 
-[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="0"]
+[node name="toSlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../SlamLine")
+event = &"melee_line"
+delay_in_seconds = "0.0"
+
+[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
 delay_in_seconds = "0.0"
 
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="1"]
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
