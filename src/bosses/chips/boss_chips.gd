@@ -3,10 +3,11 @@ class_name BossChips
 
 # Antes note:
 # Ante 1: Place Your Bet - Enable place your bet attack
-# Ante 2 (new): Chip Siphon - All attack will steal a percentage of chips from you.
-# Ante 3 (new): Poisonous Blob - Chiptopede spit proj will spread out and leave behind a sticky poison puddle
+# Ante 2 (new): Unstable Split - All splitted stack will drop a random hazard area on the ground over time.
+# Ante 3 (new): Empowered Avatar - Improved Chip Sweep, Shockwave and Backspin Chip
+#               Chip Sweep can now do volley of 3 per repeat / Shockwave apply long slow debuff / Backspin create 3 chips
 # Ante 4 (new): Five of a kind - Spawn 5 substack instead of 3
-# Ante 5 (new): Unreliable Wealth - Piles of chips in phase 3 can be destroyed (but will regenerate over time)
+# Ante 5 (new): Spiked Beer - Beer will deal hp damage and slow
 
 signal substack_attack_finished
 signal substack_all_attacks_finished
@@ -65,15 +66,18 @@ var small_attacks_performed: int = 0
 @export_subgroup("Backspin Chip")
 @export var rolling_chip_damage: float = 15
 @export var rolling_chip_projectile: PackedScene
-@export var chips_per_attack: int = 2
+@export var n_chips_per_roll: int = 1 # Based on ante 3
+@export var rolling_chip_repeat_per_attack: int = 2
 var chips_fired: int = 0
-var active_rolling_chip: RollingChip
+var active_rolling_chips: Array[RollingChip] = []
+var rolling_chip_spread_deg: float = 90 # Based on ante 3
 # SFX
 @export var sfx_chip_fire: Array[AudioStream]
 #
 @export_subgroup("Chip Sweep")
 @export var chip_sweep_damage: float = 10
-@export var chip_sweep_count: int = 3
+@export var n_chips_per_sweep_volley: int = 1 # Based on ante 3
+@export var chip_sweep_repeat: int = 3
 @export var sweep_time: float = 0.05
 @export var sweep_delay: float = 0.4
 @export var chip_sweep_prefab: PackedScene
@@ -83,18 +87,23 @@ var chip_sweep_instances: Array = []
 #
 @export_subgroup("Stack Slam")
 @export var slam_shockwave_prefab: PackedScene
-@export var slam_count: int = 4
+@export var slam_count: int = 3
 @export var slam_damage: float = 10.0
 @export var slam_wave_speed: float = 2.1
 @export var slam_wave_radius: float = 35.0
 @export var slam_delay: float = 0.4
+@export var shockwave_slow_duration: float = 2 # Based on ante 3
+@export var shockwave_slow_perc: float = 50 # Based on ante 3
 var completed_slams: int = 0
 var aoe_floor = 0.0
+var shockwave_apply_slow_enabled = false # Based on ante 3
+var dash_speed_debuff_icon = preload("res://assets/sprite/status_icon/dash_speed_down.png")
+var run_speed_debuff_icon = preload("res://assets/sprite/status_icon/run_speed_down.png")
 # SFX
 @export var sfx_slam: Array[AudioStream]
 #
 @export_subgroup("Place Your Bets")
-@export var place_your_bet_attack_enabled = true
+var place_your_bet_attack_enabled = false
 @export var jump_height: float = 9.0
 @export var jump_time: float = 0.8
 @export var jump_hang_time: float = 1.2
@@ -200,6 +209,14 @@ var snake_distance: float
 var stance_path: Path3D
 var emerge_speed: float = 10.0
 var emerge_distance: float
+
+@export_group("Passive")
+@export_subgroup("Unstable Split")
+var unstable_split_enabled = false # Based on ante 2
+@export var possible_hazards: Array[PackedScene]
+@export var hazard_duration: float = 5
+@export var time_between_drop: float = 6
+
 @export var chiptopede_projectile_damage: float = 15
 @export var chiptopede_projectile_speed: float = 50
 @export var max_projectile_spawn_distance: float = 36.0
@@ -240,9 +257,11 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 2:
 		pass
 	if GameManager.boss_ante >= 3:
-		pass
+		shockwave_apply_slow_enabled = true
+		n_chips_per_roll = 3
+		n_chips_per_sweep_volley = 3
 	if GameManager.boss_ante >= 4:
-		pass
+		small_stack_count = 5
 	if GameManager.boss_ante >= 5:
 		pass
 	leap_finished.connect(_on_chiptopede_leap_impact)
@@ -719,20 +738,24 @@ func _on_backspin_chip_forward_spin_state_entered() -> void:
 	await _telegraph_attack()
 	anim_player.play("big_stack/projectile_fire")
 
-	# Instance a chip projectile
-	var chip_inst: RollingChip = rolling_chip_projectile.instantiate()
-	chip_inst.init(rolling_chip_damage * GameManager.get_risk_dmg_mult())
-	active_rolling_chip = chip_inst
-	scene_root.add_child(chip_inst)
-	chip_inst.global_transform = self.global_transform
+	var rotate_deg_per_chip_idx = rolling_chip_get_angles(n_chips_per_roll, rolling_chip_spread_deg)
+	for i in range(n_chips_per_roll):
+		# Instance a chip projectile
+		var chip_inst: RollingChip = rolling_chip_projectile.instantiate()
+		chip_inst.init(rolling_chip_damage * GameManager.get_risk_dmg_mult())
+		active_rolling_chips.append(chip_inst)
+		scene_root.add_child(chip_inst)
+		chip_inst.global_transform = self.global_transform
+		chip_inst.rotate_y(deg_to_rad(rotate_deg_per_chip_idx[i]))
 
-	# Send it towards the player
+		# Send it towards the player
+		var forward_target: Vector3 = chip_inst.get_point_before_wall()
+		chip_inst.roll_to_point(forward_target, 0.8)
+
 	big_stack_sfx_player.stream = sfx_chip_fire.pick_random()
 	big_stack_sfx_player.play()
-	var forward_target: Vector3 = chip_inst.get_point_before_wall()
-	chip_inst.roll_to_point(forward_target, 0.8)
 
-	await chip_inst.spin_finished
+	await active_rolling_chips[0].spin_finished
 
 	state_chart.send_event("reverse_spin")
 
@@ -741,9 +764,9 @@ func _on_backspin_chip_back_spin_state_entered() -> void:
 	debug_state_label.text = "Backspin Chip | BackwardSpin"
 
 	# Send the chip rolling back to the stack
-	active_rolling_chip.roll_to_point(self.global_position, 0.8)
-
-	await active_rolling_chip.spin_finished
+	for chip in active_rolling_chips:
+		chip.roll_to_point(self.global_position, 0.8)
+	await active_rolling_chips[0].spin_finished
 
 	state_chart.send_event("end_spin")
 
@@ -755,7 +778,7 @@ func _on_backspin_chip_recover_state_entered() -> void:
 	chips_fired += 1
 	anim_player.play("big_stack/projectile_telegraph")
 
-	if chips_fired >= chips_per_attack:
+	if chips_fired >= rolling_chip_repeat_per_attack:
 		chips_fired = 0
 		state_chart.send_event("attack_end")
 
@@ -771,9 +794,11 @@ func _on_backspin_chip_recover_state_entered() -> void:
 
 
 func _cleanup_backspin_chip() -> void:
-	if is_instance_valid(active_rolling_chip):
-		active_rolling_chip.queue_free()
-		active_rolling_chip = null
+	for chip in active_rolling_chips:
+		if is_instance_valid(chip):
+			chip.queue_free()
+	
+	active_rolling_chips = []
 
 
 func _on_backspin_chip_state_exited() -> void:
@@ -793,36 +818,38 @@ func _on_chip_sweep_sweep_state_entered() -> void:
 	anim_player.play("big_stack/projectile_telegraph")
 	await _telegraph_attack()
 
-	for i in chip_sweep_count:
+	for i in chip_sweep_repeat:
 		# HACK - break out of this loop if we send an end_attack event
 		if "end_attack" in state_chart._queued_events:
 			return
-		var sweep_proj: ChipSweepProjectile = chip_sweep_prefab.instantiate()
-		sweep_proj.init(chip_sweep_damage * GameManager.get_risk_dmg_mult())
-		scene_root.add_child(sweep_proj)
-		sweep_proj.global_transform = self.global_transform
-		chip_sweep_instances.append(sweep_proj)
 
-		var chips_to_player: int = int(sweep_proj.global_position.distance_to(target.global_position))
-		sweep_proj.anim_time = sweep_time / chips_to_player
+		for j in range(n_chips_per_sweep_volley):
+			var sweep_proj: ChipSweepProjectile = chip_sweep_prefab.instantiate()
+			sweep_proj.init(chip_sweep_damage * GameManager.get_risk_dmg_mult())
+			scene_root.add_child(sweep_proj)
+			sweep_proj.global_transform = self.global_transform
+			chip_sweep_instances.append(sweep_proj)
 
-		anim_player.play("big_stack/projectile_fire")
-		# SFX
-		big_stack_sfx_player.stream = sfx_chip_sweep_out.pick_random()
-		big_stack_sfx_player.play()
+			var chips_to_player: int = int(sweep_proj.global_position.distance_to(target.global_position))
+			sweep_proj.anim_time = sweep_time / chips_to_player
 
-		sweep_proj.add_chips(chips_to_player + 2)
-		await sweep_proj.chips_placed
-		# TODO - return sfx
-		# SFX
-		#big_stack_sfx_player.stream = sfx_chip_sweep_out.pick_random()
-		#big_stack_sfx_player.play()
+			anim_player.play("big_stack/projectile_fire")
+			# SFX
+			big_stack_sfx_player.stream = sfx_chip_sweep_out.pick_random()
+			big_stack_sfx_player.play()
 
-		sweep_proj.remove_chips()
-		await sweep_proj.chips_removed
-		anim_player.play("big_stack/projectile_telegraph")
-		chip_sweep_instances.erase(sweep_proj)
-		sweep_proj.queue_free()
+			sweep_proj.add_chips(chips_to_player + 2)
+			await sweep_proj.chips_placed
+			# TODO - return sfx
+			# SFX
+			#big_stack_sfx_player.stream = sfx_chip_sweep_out.pick_random()
+			#big_stack_sfx_player.play()
+
+			sweep_proj.remove_chips()
+			await sweep_proj.chips_removed
+			anim_player.play("big_stack/projectile_telegraph")
+			chip_sweep_instances.erase(sweep_proj)
+			sweep_proj.queue_free()
 
 		await get_tree().create_timer(sweep_delay).timeout
 
@@ -872,6 +899,29 @@ func _on_stack_slam_slam_state_entered() -> void:
 	shockwave.start_shockwave()
 
 	completed_slams += 1
+
+	# Apply player slow
+	if shockwave_apply_slow_enabled:
+		GameManager.create_and_add_status_effect("Run speed down",
+			"lunge_concussion_run_speed",
+			StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER,
+			- shockwave_slow_perc,
+			StatusEffect.ModifyType.PERCENTAGE,
+			shockwave_slow_duration,
+			true,
+			true,
+			run_speed_debuff_icon
+		)
+		GameManager.create_and_add_status_effect("Dash speed down",
+			"lunge_concussion_slide_speed",
+			StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER,
+			- shockwave_slow_perc,
+			StatusEffect.ModifyType.PERCENTAGE,
+			shockwave_slow_duration,
+			true,
+			true,
+			dash_speed_debuff_icon
+		)
 
 	await get_tree().create_timer(slam_delay).timeout
 
@@ -2161,3 +2211,19 @@ func _on_attack_telegraph_state_entered() -> void:
 
 func _on_attack_telegraph_state_exited() -> void:
 	return
+
+func rolling_chip_get_angles(n: int, spread: float) -> Array[float]:
+	var result: Array[float] = []
+	if n <= 0:
+		return result
+	if n == 1:
+		return [0.0]
+		
+	# shrink the effective spread so items don't sit exactly at the edges
+	var effective_spread: float = spread * float(n - 1) / float(n)
+	var step: float = effective_spread / float(n - 1)
+	
+	for i in range(n):
+		var angle: float = - effective_spread / 2.0 + i * step
+		result.append(angle)
+	return result

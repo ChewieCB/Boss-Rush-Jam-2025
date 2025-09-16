@@ -79,8 +79,8 @@ var slam_target_pos := Vector3.ZERO
 @export var lunge_slow_debuff_duration: float = 1 # Boss ante 1
 @export var lunge_slow_debuff_perc: float = 50 # Boss ante 1
 var lunge_slow_debuff_enabled = false
-var dash_speed_buff_icon = preload("res://assets/sprite/status_icon/dash_speed_down.png")
-var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_down.png")
+var dash_speed_debuff_icon = preload("res://assets/sprite/status_icon/dash_speed_down.png")
+var run_speed_debuff_icon = preload("res://assets/sprite/status_icon/run_speed_down.png")
 # SFX
 @export var sfx_lunge: Array[AudioStream]
 
@@ -307,7 +307,26 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 			elif body == target:
 				damage_in_hurtbox(lunge_damage * GameManager.get_risk_dmg_mult())
 				if lunge_slow_debuff_enabled:
-					create_and_add_slow_debuff(lunge_slow_debuff_duration, lunge_slow_debuff_perc)
+					GameManager.create_and_add_status_effect("Run speed down",
+						"lunge_concussion_run_speed",
+						StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER,
+						- lunge_slow_debuff_perc,
+						StatusEffect.ModifyType.PERCENTAGE,
+						lunge_slow_debuff_duration,
+						true,
+						true,
+						run_speed_debuff_icon
+					)
+					GameManager.create_and_add_status_effect("Dash speed down",
+						"lunge_concussion_slide_speed",
+						StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER,
+						- lunge_slow_debuff_perc,
+						StatusEffect.ModifyType.PERCENTAGE,
+						lunge_slow_debuff_duration,
+						true,
+						true,
+						dash_speed_debuff_icon
+					)
 				hurtbox.set_deferred("monitoring", false)
 				velocity.x = 0
 				velocity.z = 0
@@ -888,26 +907,3 @@ func _on_stagger() -> void:
 func _on_hurt_frame_timer_timeout() -> void:
 	move_speed = BASE_MOVE_SPEED
 	super ()
-
-func create_and_add_slow_debuff(debuff_duration: float = 1, slow_perc: float = 50):
-	var slow_run_debuff = StatusEffect.new()
-	slow_run_debuff.display_name = "Run speed down"
-	slow_run_debuff.status_code = "lunge_concussion_run_speed"
-	slow_run_debuff.modified_stat = StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER
-	slow_run_debuff.value = - slow_perc
-	slow_run_debuff.modify_type = StatusEffect.ModifyType.PERCENTAGE
-	slow_run_debuff.duration = debuff_duration
-	slow_run_debuff.is_bad_effect = true
-	slow_run_debuff.status_icon = run_speed_buff_icon
-	GameManager.player.add_status_effect(slow_run_debuff)
-
-	var slow_dash_debuff = StatusEffect.new()
-	slow_dash_debuff.display_name = "Dash speed down"
-	slow_dash_debuff.status_code = "lunge_concussion_slide_speed"
-	slow_dash_debuff.modified_stat = StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER
-	slow_dash_debuff.value = - slow_perc
-	slow_dash_debuff.modify_type = StatusEffect.ModifyType.PERCENTAGE
-	slow_dash_debuff.duration = debuff_duration
-	slow_dash_debuff.is_bad_effect = true
-	slow_dash_debuff.status_icon = dash_speed_buff_icon
-	GameManager.player.add_status_effect(slow_dash_debuff)
