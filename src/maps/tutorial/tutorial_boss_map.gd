@@ -3,7 +3,7 @@ extends BossMap
 signal ui_accept
 
 @export var boss_doors: ElevatorDoors
-@export var exit_doors: ElevatorDoors
+@export var exit_doors: SlidingDoor
 @export var chipling_prefab: PackedScene
 @export var chiplings_to_spawn_1: int = 5
 @onready var chipling_spawns_1: Array[Node] = get_tree().get_nodes_in_group("boss_chipling_spawn_1_marker")
@@ -35,8 +35,7 @@ func _ready() -> void:
 	GameManager.equipped_barrels = []
 	player.gun.reinstall_barrels()
 	super()
-	if boss_doors:
-		boss_doors.close()
+	boss_doors.close()
 	exit_elevator_button.pushed.connect(_on_level_select)
 	for i in range(chiplings_to_spawn_1):
 		spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
@@ -48,7 +47,7 @@ func _ready() -> void:
 	$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
 	
 	# FIXME - workaround
-	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_48_SlidingDoor
+	elevator_doors = $FuncGodotMap/group_819_floor_walkable_1a/entity_10_ElevatorDoors
 	boss.boss_origin = boss_origin[0]
 	boss.elevator_spawns = elevator_spawns
 	boss.sub_elevator_doors = sub_elevator_doors
@@ -125,27 +124,17 @@ func _trigger_spin_tutorial() -> void:
 			spin_warning_trigger_active = true
 
 
-func _on_boss_door_trigger_volume_body_entered(body: Node3D) -> void:
+func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	if body is Player:
-		boss_doors.open()
-
-
-func _on_boss_door_trigger_volume_body_exited(body: Node3D) -> void:
-	if body is Player:
+		exit_doors.close()
+		boss_doors.is_autodoor = false
 		boss_doors.close()
+		boss_trigger.queue_free()
+		boss.activate()
+		LuckHandler.enabled = true
+		boss_trigger.queue_free()
 
 
-func _on_elevator_door_trigger_volume_body_entered(body: Node3D) -> void:
-	if body is Player:
-		exit_doors.open()
-
-
-func _on_elevator_door_trigger_volume_body_exited(body: Node3D) -> void:
-	if exit_doors:
-		if body is Player:
-			exit_doors.close()
-
-#
 func _on_debug_boss_trigger_body_entered(body: Node3D) -> void:
 	if body is Player:
 		for i in range(chiplings_to_spawn_2):
@@ -174,3 +163,19 @@ func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
 	smoke_start_trigger.queue_free()
 	# Trigger dash tutorial
 	dash_tutorial_trigger._on_body_entered(body)
+
+
+func _on_boss_defeated(_boss: BossCore) -> void:
+	collect_all_chips()
+	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
+	
+	exit_doors.open()
+	
+	if not boss.boss_id in GameManager.bosses_defeated:
+		GameManager.bosses_defeated.append(boss.boss_id)
+		print(GameManager.bosses_defeated)
+		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
+	
+	# TODO - re-apply this when we re-visit the tutorial boss
+	#reward_bet_money()
+	#show_end_panel()
