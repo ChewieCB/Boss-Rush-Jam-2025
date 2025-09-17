@@ -152,6 +152,9 @@ func _on_level_select(level_path: String) -> void:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
 	
+	exit_doors.close()
+	await exit_doors.anim_player.animation_finished
+	
 	super(level_path)
 
 
@@ -163,6 +166,10 @@ func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
 	smoke_start_trigger.queue_free()
 	# Trigger dash tutorial
 	dash_tutorial_trigger._on_body_entered(body)
+
+
+func _on_boss_died(_boss: BossCore = boss) -> void:
+	return
 
 
 func _on_boss_defeated(_boss: BossCore) -> void:
