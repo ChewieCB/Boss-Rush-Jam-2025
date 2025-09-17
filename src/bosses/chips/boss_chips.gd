@@ -267,7 +267,7 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 4:
 		small_stack_count = 5
 	if GameManager.boss_ante >= 5:
-		pass
+		pass # In boss_chip map script
 	leap_finished.connect(_on_chiptopede_leap_impact)
 	chiptopede_max_health *= GameManager.get_risk_max_hp_mult()
 

@@ -28,8 +28,10 @@ var music_playback: AudioStreamPlaybackInteractive
 
 # Water damage
 @onready var water_damage_timer: Timer = $WaterDamageTimer
-@export var water_damage_tick: float = 0.6
-@export var water_damage_amount: float = 5.0
+@export var water_damage_tick: float = 1.0
+@export var water_damage_amount: float = 2.0
+var water_damage_enabled = false
+const DRUNK_DURATION = 5.0
 @export var splash_particle_prefab: PackedScene
 @export var sfx_splash: Array[AudioStream]
 
@@ -55,6 +57,9 @@ func _ready() -> void:
 	water_surface.global_position.y = lower_water_level
 	
 	music_playback = music_player.get_stream_playback()
+
+	if GameManager.boss_ante >= 5:
+		water_damage_enabled = true
 
 
 func _process(delta) -> void:
@@ -189,9 +194,10 @@ func _on_water_damage_area_body_entered(body: Node3D) -> void:
 	# Add drunk effect instead of damage
 	# TODO - apply by building up a threshold instead of on/off
 	if body is Player:
-		player.apply_drunk_status(6.0)
-		#player.health_component.damage(water_damage_amount)
+		player.apply_drunk_status(DRUNK_DURATION)
 		water_damage_timer.start(water_damage_tick)
+		if water_damage_enabled:
+			player.health_component.damage(water_damage_amount)
 		
 	await splash.finished
 	splash.queue_free()
@@ -226,9 +232,10 @@ func _on_waterfall_body_entered(body: Node3D) -> void:
 	# Add drunk effect instead of damage
 	# TODO - apply by building up a threshold instead of on/off
 	if body is Player:
-		player.apply_drunk_status(6.0)
-		#player.health_component.damage(water_damage_amount)
+		player.apply_drunk_status(DRUNK_DURATION)
 		water_damage_timer.start(water_damage_tick)
+		if water_damage_enabled:
+			player.health_component.damage(water_damage_amount)
 		
 	await splash.finished
 	splash.queue_free()
@@ -247,4 +254,6 @@ func _on_water_damage_area_body_exited(body: Node3D) -> void:
 
 
 func _on_water_damage_timer_timeout() -> void:
-	player.apply_drunk_status(6.0)
+	player.apply_drunk_status(DRUNK_DURATION)
+	if water_damage_enabled:
+		player.health_component.damage(water_damage_amount)
