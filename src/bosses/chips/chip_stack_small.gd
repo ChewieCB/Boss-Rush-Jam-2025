@@ -109,6 +109,17 @@ func _ready() -> void:
 	debug_trajectory_mesh.mesh = ImmediateMesh.new()
 	get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
 
+	if GameManager.boss_ante >= 1:
+		pass
+	if GameManager.boss_ante >= 2:
+		pass
+	if GameManager.boss_ante >= 3:
+		pass
+	if GameManager.boss_ante >= 4:
+		pass
+	if GameManager.boss_ante >= 5:
+		pass
+
 
 func _physics_process(_delta: float) -> void:
 	return

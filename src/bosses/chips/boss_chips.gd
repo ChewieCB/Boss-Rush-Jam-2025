@@ -8,6 +8,8 @@ class_name BossChips
 #               Chip Sweep can now do volley of 3 per repeat / Shockwave apply long slow debuff / Backspin create 3 chips
 # Ante 4 (new): Five of a kind - Spawn 5 substack instead of 3
 # Ante 5 (new): Spiked Beer - Beer will deal hp damage and slow
+# TODO: Beer drunk effect seem to be bugged
+# TODO: The collision to detect player in Beer liquid is weird, fix it
 
 signal substack_attack_finished
 signal substack_all_attacks_finished
@@ -210,12 +212,7 @@ var stance_path: Path3D
 var emerge_speed: float = 10.0
 var emerge_distance: float
 
-@export_group("Passive")
-@export_subgroup("Unstable Split")
-var unstable_split_enabled = false # Based on ante 2
-@export var possible_hazards: Array[PackedScene]
-@export var hazard_duration: float = 5
-@export var time_between_drop: float = 6
+# CHIPTOPEDE stuff
 
 @export var chiptopede_projectile_damage: float = 15
 @export var chiptopede_projectile_speed: float = 50
@@ -235,10 +232,17 @@ var unstable_split_enabled = false # Based on ante 2
 @onready var chiptopede_sfx_player: AudioStreamPlayer3D = $ChiptopedeHeadSFXPlayer
 @onready var chip_death_particles: GPUParticles3D = $ChipDeathParticles
 
+@export_group("Passive")
+@export_subgroup("Unstable Split")
+var unstable_split_enabled = false # Based on ante 2
+@onready var unstable_split_timer: Timer = $UnstableSplitTimer
+@export var possible_hazards: Array[PackedScene] = []
+@export var hazard_duration: float = 5
+@export var unstable_split_interval: float = 6
+
 ## USEFUL GLOBALS
 #@onready var anim_player: AnimationPlayer = $AnimationPlayer
 #@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
-
 
 func _ready() -> void:
 	if OS.is_debug_build():
@@ -255,10 +259,10 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 1:
 		place_your_bet_attack_enabled = true
 	if GameManager.boss_ante >= 2:
-		pass
+		unstable_split_enabled = true
 	if GameManager.boss_ante >= 3:
 		shockwave_apply_slow_enabled = true
-		n_chips_per_roll = 3
+		n_chips_per_roll = 5
 		n_chips_per_sweep_volley = 3
 	if GameManager.boss_ante >= 4:
 		small_stack_count = 5
@@ -797,7 +801,7 @@ func _cleanup_backspin_chip() -> void:
 	for chip in active_rolling_chips:
 		if is_instance_valid(chip):
 			chip.queue_free()
-	
+
 	active_rolling_chips = []
 
 
@@ -1637,6 +1641,9 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 
 		await stack_spawn_tween.finished
 
+	if unstable_split_enabled:
+		unstable_split_timer.start(unstable_split_interval)
+
 	return spawned_stacks
 
 
@@ -1652,6 +1659,10 @@ func despawn_stacks(_despawn_time: float = stack_spawn_time) -> void:
 		await stack_spawn_tween.finished
 
 		stack.queue_free()
+
+	if unstable_split_enabled:
+		unstable_split_timer.stop()
+
 	spawned_sub_stacks = []
 
 
@@ -2218,12 +2229,21 @@ func rolling_chip_get_angles(n: int, spread: float) -> Array[float]:
 		return result
 	if n == 1:
 		return [0.0]
-		
+
 	# shrink the effective spread so items don't sit exactly at the edges
 	var effective_spread: float = spread * float(n - 1) / float(n)
 	var step: float = effective_spread / float(n - 1)
-	
+
 	for i in range(n):
 		var angle: float = - effective_spread / 2.0 + i * step
 		result.append(angle)
 	return result
+
+func _on_unstable_split_timer_timeout() -> void:
+	for substack in spawned_sub_stacks:
+		if is_instance_valid(substack):
+			var chosen_hazard_prefab: PackedScene = possible_hazards.pick_random()
+			var hazard_inst: HazardArea = chosen_hazard_prefab.instantiate()
+			get_tree().get_root().add_child(hazard_inst)
+			hazard_inst.global_position = substack.global_position
+			hazard_inst.set_duration_and_restart_timer(hazard_duration)

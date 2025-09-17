@@ -288,7 +288,7 @@ func destroy_cover(body: Node3D) -> void:
 			inst.global_position = cover.mesh.global_position
 			inst.rotation = cover.rotation
 			inst.damage_per_tick = electric_hazard_damage
-			inst.set_duration(electric_hazard_duration)
+			inst.set_duration_and_restart_timer(electric_hazard_duration)
 
 		sfx_player.stream = sfx_melee.pick_random()
 		sfx_player.play()

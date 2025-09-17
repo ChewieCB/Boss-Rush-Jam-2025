@@ -39,7 +39,7 @@ func _ready() -> void:
 		sfx_player.play()
 
 
-func set_duration(new_duration: float):
+func set_duration_and_restart_timer(new_duration: float):
 	duration = new_duration
 	life_timer.start(duration)
 
