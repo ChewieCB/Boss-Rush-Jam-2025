@@ -26,6 +26,7 @@ var spin_warning_trigger_active: bool = false
 @onready var elevator_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_elevator_spawn_marker")
 @onready var boss_origin: Array[Node] = get_tree().get_nodes_in_group("boss_arena_origin_marker")
 @export var sub_elevator_doors: Array[SlidingDoor]
+@export var sub_elevator_lights: Array[Node3D]
 
 var current_trigger_actions: Array[String] = []
 
@@ -51,6 +52,7 @@ func _ready() -> void:
 	boss.boss_origin = boss_origin[0]
 	boss.elevator_spawns = elevator_spawns
 	boss.sub_elevator_doors = sub_elevator_doors
+	boss.sub_elevator_lights = sub_elevator_lights
 
 
 func _input(event: InputEvent) -> void:

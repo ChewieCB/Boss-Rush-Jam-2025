@@ -463,6 +463,23 @@ tracks/0/keys = {
 "values": [Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.558505, 0.10472, 1.44862), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.331613, -0.10472, 1.69297), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.558505, 0.10472, 1.44862), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.331613, -0.10472, 1.69297)]
 }
 
+[sub_resource type="Animation" id="Animation_r0hqg"]
+resource_name = "slam_telegraph_start"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.3),
+"transitions": PackedFloat32Array(1.62451, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1.309, 0), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.785401, -5.97111e-08, 1.5708)]
+}
+
 [sub_resource type="Animation" id="Animation_52j13"]
 resource_name = "spin"
 length = 0.2
@@ -509,23 +526,6 @@ tracks/1/keys = {
 "args": [],
 "method": &"swipe"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_r0hqg"]
-resource_name = "slam_telegraph_start"
-length = 0.3
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DebugAnimPivot:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.3),
-"transitions": PackedFloat32Array(1.62451, 1, 1),
-"update": 0,
-"values": [Vector3(0, 1.309, 0), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.785401, -5.97111e-08, 1.5708)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]

@@ -12,8 +12,10 @@ extends BossCore
 var boss_origin: Node
 var elevator_spawns: Array[Node]
 var sub_elevator_doors: Array[SlidingDoor]
+var sub_elevator_lights: Array[Node3D]
 var active_spawn: Node
 var active_sub_door: SlidingDoor
+var active_sub_light: Node3D
 
 var previous_phase: String = "start_melee_combo_attack"
 
@@ -482,6 +484,11 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	anim_player.play("RESET")
 	sprite.modulate.a = 1.0
 	self.collision_layer = pow(2, 3)
+	
+	# TODO - configure delay and SFX for door opening
+	active_sub_light.yellow()
+	await get_tree().create_timer(0.6).timeout
+	
 	state_chart.send_event("open_doors")
 
 
@@ -489,6 +496,9 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
 	
+	active_sub_light.green()
+	# TODO - configure delay and SFX for door opening
+	await get_tree().create_timer(0.1).timeout
 	# Trigger the sub elevator doors to open
 	active_sub_door.open()
 	
@@ -524,8 +534,13 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 	await tween.finished
 	
 	# Close the doors
+	active_sub_light.yellow()
 	active_sub_door.close()
 	await active_sub_door.anim_player.animation_finished
+	
+	active_sub_light.red()
+	# TODO - configure delay and SFX for door opening
+	await get_tree().create_timer(0.3).timeout
 	
 	# Move the boss to a new spawn point and turn to face the player
 	var new_spawn = get_elevator_spawn_no_repeats()
@@ -545,6 +560,7 @@ func get_elevator_spawn_no_repeats() -> Node:
 	active_spawn = new_spawn
 	var idx = elevator_spawns.find(active_spawn)
 	active_sub_door = sub_elevator_doors[idx]
+	active_sub_light = sub_elevator_lights[idx]
 	
 	return active_spawn
 
