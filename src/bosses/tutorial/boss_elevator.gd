@@ -34,7 +34,7 @@ var melee_phase_count: int = 0
 @export_subgroup("Slam")
 @export var slam_damage: float = 26.0
 @export var slam_delay: float = 0.3
-@export var slam_time: float = 0.7
+@export var slam_time: float = 0.9
 @export var slam_particles: GPUParticles3D
 @export var slam_wave_material: StandardMaterial3D
 @export_subgroup("Nailguns")
@@ -129,6 +129,14 @@ func _on_melee_combo_targeting_state_entered() -> void:
 	
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
+	
+	if active_sub_door:
+		await get_tree().create_timer(1.6).timeout
+		active_sub_light.yellow()
+		active_sub_door.close()
+		await active_sub_door.anim_player.animation_finished
+		active_sub_light.red()
+
 
 func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
 	orbit_towards_player(delta)
@@ -519,9 +527,6 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	]
 	state_chart.send_event(ranged_attacks.pick_random())
 	state_chart.send_event("end_smoke")
-	
-	#await get_tree().create_timer(1.0).timeout
-	#active_sub_door.close()
 
 
 func _on_smokescreen_move_no_smoke_state_entered() -> void:
