@@ -2,6 +2,13 @@ extends BossCore
 
 signal change_wheel_speed(speed: float)
 
+# Antes note:
+# Ante 1: House of cards - Increase shield /cards count from 2 to 8
+# Ante 2: Unstable Platforms - Enable drop segments attack
+# Ante 3 (new): Double Sweep - Add a second sweep bar
+# Ante 4 (new): Lasting Heat - Multiball now leave trails of flame
+# Ante 5 (new): Center of Attention: TODO
+
 @onready var debug_phase_label: Label3D = $DebugPhaseLabel
 @onready var held_ball_marker_pivot: Node3D = $HeldBallPivot
 @onready var hurtbox_mesh: MeshInstance3D = hurtbox.get_node("MeshInstance3D")
@@ -22,7 +29,7 @@ var previous_phase: String
 @export var shields_max_time: float = 12.0
 @onready var shields_spawn_timer: Timer = $ShieldsSpawnTimer
 @onready var shields_absorb_timer: Timer = $ShieldsAbsorbTimer
-@export var shield_count: int = 4
+@export var shield_count: int = 2
 @export var shield_distance: float = 6.0
 @export var shield_height: float = 3.3
 @export var shields_destroyed_threshold: int = 2
@@ -58,6 +65,7 @@ var active_balls: Array = []
 var passive_balls: Array = []
 var ball_spawn_positions: Array
 var available_spawns: Array
+var ball_flame_puddle_enabled = false
 # TODO - add ball spawn SFX
 # Shockwave
 @export_group("Shockwave")
@@ -77,6 +85,7 @@ var shockwave_tween: Tween
 @onready var shockwave_sfx_player: AudioStreamPlayer3D = $CentralStreamPlayer
 # Drop Segments
 @export_group("Drop Segments")
+var drop_segments_enabled = false # based on ante 2
 @export var drop_delay: float = 0.5
 @export var drop_time: float = 1.0
 @export var drop_return_delay: float = 3.0
@@ -100,6 +109,17 @@ func _ready() -> void:
 	ball_spawn_positions = get_tree().get_nodes_in_group("boss_ball_marker")
 	available_spawns = ball_spawn_positions.duplicate()
 	ball_kill_timer.wait_time = max_ball_lifetime
+
+	if GameManager.boss_ante >= 1:
+		shield_count = 8
+	if GameManager.boss_ante >= 2:
+		drop_segments_enabled = true
+	if GameManager.boss_ante >= 3:
+		pass # In show_barrier() function
+	if GameManager.boss_ante >= 4:
+		ball_flame_puddle_enabled = true
+	if GameManager.boss_ante >= 5:
+		pass
 
 
 func _physics_process(delta: float) -> void:
@@ -177,12 +197,14 @@ func select_attack_phase_2() -> void:
 func select_attack_phase_3() -> void:
 	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
-		"start_drop_attack",
 		"start_ball_attack",
 	]
 	
 	if randf() < 0.25:
 		possible_phases.append("start_pushback_attack")
+
+	if drop_segments_enabled:
+		possible_phases.append("start_drop_attack")
 	
 	if previous_phase and possible_phases.size() > 1:
 		possible_phases.erase(previous_phase)
@@ -197,7 +219,6 @@ func select_attack_phase_3() -> void:
 	#for phase in possible_phases.duplicate():
 		#if phase != previous_phase:
 			#possible_phases.append(phase)
-	#
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	previous_phase = new_phase
@@ -659,9 +680,21 @@ func show_barrier() -> void:
 	hurtbox_mesh.position.x = 0
 	hurtbox_mesh.mesh.size.x = 0
 	hurtbox.visible = true
+	var new_pos_x = 17
+	var new_size_x = 35
+	if GameManager.boss_ante >= 3:
+		new_pos_x = 0
+		new_size_x = 70
+		var barrier_collision_shape: CollisionShape3D = get_node("Hurtbox/CollisionShape3D")
+		barrier_collision_shape.shape.size = Vector3(70, 2, 1)
+		barrier_collision_shape.position = Vector3(0, -0.5, 0)
+		var barrier_static_body_shape: CollisionShape3D = get_node("Hurtbox/StaticBody3D/CollisionShape3D")
+		barrier_static_body_shape.shape.size = Vector3(70, 2, 1)
+		barrier_static_body_shape.position = Vector3(0, -0.5, 0)
 	anim_player.play("roulette/attack")
-	barrier_tween.tween_property(hurtbox_mesh, "position:x", 17, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
-	barrier_tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 35, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	# TODO: Change size and stuff here
+	barrier_tween.tween_property(hurtbox_mesh, "position:x", new_pos_x, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	barrier_tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", new_size_x, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	barrier_tween.parallel().tween_property(barrier_sfx_player, "volume_db", linear_to_db(1.0), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	
 	await barrier_tween.finished
@@ -981,6 +1014,7 @@ func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
 	for i in range(balls_to_attack_phase_3 - active_balls.size()):
 		var ball = spawn_ball()
 		ball.is_flaming = true
+		ball.leave_fire_puddle = ball_flame_puddle_enabled
 		ball = _set_ball_active_params(ball)
 		ball.central_force_magnitude = 9000.0
 		ball.homing_force_magnitude = 6500.0

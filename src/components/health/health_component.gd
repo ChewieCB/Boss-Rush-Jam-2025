@@ -36,7 +36,7 @@ var current_health: float:
 		current_health_ratio = current_health / max_health
 		health_diff.emit(diff)
 		health_changed.emit(current_health, prev_health)
-		if current_health == 0:
+		if current_health <= 0:
 			has_died = true
 			died.emit()
 		if diff < 0:

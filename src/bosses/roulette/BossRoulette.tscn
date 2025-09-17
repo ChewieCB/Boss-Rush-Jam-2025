@@ -206,7 +206,7 @@ _data = {
 "attack": SubResource("Animation_5idxe")
 }
 
-[node name="BossRoulette" instance=ExtResource("1_jhwuw")]
+[node name="BossRoulette" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_jhwuw")]
 collision_mask = 10
 motion_mode = 1
 script = ExtResource("2_m116k")
@@ -215,17 +215,19 @@ phase_3_health_percentage_trigger = 0.45
 shield_scene = ExtResource("4_bcfal")
 shields_spawn_cooldown = 6.0
 shields_max_time = 15.0
-shield_count = 8
+shield_count = 2
 shield_distance = 6.0
 shield_height = -1.0
 shields_destroyed_threshold = 3
 shields_respawn_delay = 2.6
 shield_abosrb_time = 1.4
 sfx_shield_amb = Array[AudioStream]([ExtResource("4_f2bj1"), ExtResource("5_6k1wj"), ExtResource("6_j2w8r")])
+barrier_damage = 20.0
 barrier_targeting_delay = 2.0
 barrier_sweep_time = 2.2
 sfx_barrier_sweep = Array[AudioStream]([ExtResource("7_1eew5"), ExtResource("8_xqsun"), ExtResource("9_y71ey"), ExtResource("10_ccn1r")])
 ball_scene = ExtResource("4_pnl31")
+ball_damage = 15.0
 balls_to_spawn_phase_1 = 3
 balls_to_spawn_phase_2 = 6
 balls_to_spawn_phase_3 = 11
@@ -238,6 +240,7 @@ wave_height = 1.0
 wave_pushback_force = 35.0
 wave_damage = 10.0
 wave_material = ExtResource("5_tmeqi")
+pushback_damage = 1.0
 max_center_pushback_radius = 8.0
 sfx_shockwave_amb = Array[AudioStream]([ExtResource("13_lspi4"), ExtResource("14_mk8a1")])
 drop_delay = 0.5
@@ -247,6 +250,7 @@ sfx_drop_amb = Array[AudioStream]([ExtResource("15_ktveg"), ExtResource("16_6j6k
 boss_id = 2
 chip_spawn_chance = 0.2
 chip_spawn_force = 950.0
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_to_drop = ExtResource("6_7xocg")
 sfx_hit = Array[AudioStream]([ExtResource("27_myrgm"), ExtResource("28_a1wng"), ExtResource("29_dbt44"), ExtResource("30_jsef0"), ExtResource("23_2x3ho"), ExtResource("24_5q0lp"), ExtResource("25_as6wr"), ExtResource("26_3h2c2"), ExtResource("27_mipu3"), ExtResource("28_m3yqk"), ExtResource("29_cyun2"), ExtResource("30_xp8l2"), ExtResource("31_7wohx")])
 sfx_telegraph = ExtResource("31_jsqjw")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=92 format=3 uid="uid://ckss0n4oolai5"]
+[gd_scene load_steps=96 format=3 uid="uid://ckss0n4oolai5"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_xyff2"]
 [ext_resource type="Script" path="res://src/bosses/chips/boss_chips.gd" id="2_2er6y"]
@@ -69,10 +69,14 @@
 [ext_resource type="AudioStream" uid="uid://bg6k4fl7724xe" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 5.mp3" id="45_dshqp"]
 [ext_resource type="AudioStream" uid="uid://drhgtxwwk88l1" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 6.mp3" id="46_5w0b2"]
 [ext_resource type="AudioStream" uid="uid://cqmjaw7ch7kcg" path="res://src/bosses/chips/assets/sfx/Chiptopede Range Shot 7.mp3" id="47_4waef"]
+[ext_resource type="PackedScene" uid="uid://d4kkx2e8cqlh5" path="res://src/bosses/bartender/area_effects/ElectricHazardArea.tscn" id="53_e0l6u"]
 [ext_resource type="AudioStream" uid="uid://cgtunc0drpsxh" path="res://src/bosses/chips/assets/sfx/CHIPBOSS AWAKENING.mp3" id="54_7lt4w"]
+[ext_resource type="PackedScene" uid="uid://ovfcjowsr7df" path="res://src/bosses/bartender/area_effects/FireHazardArea.tscn" id="54_awa0j"]
 [ext_resource type="Texture2D" uid="uid://dcer0mc7kglbb" path="res://src/bosses/chips/assets/sprites/MCK_Death_1.png" id="54_hri1b"]
+[ext_resource type="PackedScene" uid="uid://dqw4c2ldowow3" path="res://src/bosses/bartender/area_effects/PoisonHazardArea.tscn" id="55_5w0af"]
 [ext_resource type="Texture2D" uid="uid://bi1md2pmoenl" path="res://src/bosses/chips/assets/sprites/MCK_Death_2.png" id="55_dxb8s"]
 [ext_resource type="Texture2D" uid="uid://dk3ythhh8s1fd" path="res://src/bosses/chips/assets/sprites/MCK_Death_3.png" id="56_e2pvt"]
+[ext_resource type="PackedScene" uid="uid://eclk54je77sy" path="res://src/bosses/bartender/area_effects/SlowHazardArea.tscn" id="56_sg4b6"]
 [ext_resource type="PackedScene" uid="uid://c6m6uaacee7aj" path="res://src/player/gun/vfx/StackSpark.tscn" id="65_1jthq"]
 [ext_resource type="PackedScene" uid="uid://dj6ifyci05l4y" path="res://src/bosses/chips/assets/particles/ChipDeathParticles.tscn" id="65_skpgp"]
 [ext_resource type="PackedScene" uid="uid://vkr6i7lrqkbi" path="res://src/bosses/chips/assets/particles/SplashParticles.tscn" id="66_ih6eo"]
@@ -292,20 +296,24 @@ sfx_stack_merge = Array[AudioStream]([ExtResource("9_3f4p8")])
 sfx_chiptopede_awaken = ExtResource("5_nbiu6")
 rolling_chip_damage = 15.0
 rolling_chip_projectile = ExtResource("6_dth1w")
-chips_per_attack = 2
+n_chips_per_roll = 1
+rolling_chip_repeat_per_attack = 2
 sfx_chip_fire = Array[AudioStream]([ExtResource("12_u68io")])
 chip_sweep_damage = 10.0
-chip_sweep_count = 3
+n_chips_per_sweep_volley = 1
+chip_sweep_repeat = 3
 sweep_time = 0.05
 sweep_delay = 0.4
 chip_sweep_prefab = ExtResource("5_dugfr")
 sfx_chip_sweep_out = Array[AudioStream]([ExtResource("11_exu11"), ExtResource("12_qk8ng"), ExtResource("13_hovi1")])
 slam_shockwave_prefab = ExtResource("7_s7i42")
-slam_count = 4
+slam_count = 3
 slam_damage = 10.0
-slam_wave_speed = 2.1
+slam_wave_speed = 3.0
 slam_wave_radius = 35.0
-slam_delay = 0.4
+slam_delay = 0.3
+shockwave_slow_duration = 2.0
+shockwave_slow_perc = 50.0
 sfx_slam = Array[AudioStream]([ExtResource("15_uq4e1"), ExtResource("16_kposs"), ExtResource("17_8nh4d")])
 jump_height = 9.0
 jump_time = 0.8
@@ -315,6 +323,7 @@ drop_damage = 20.0
 aoe_radius = 3.0
 aoe_wave_time = 0.4
 wave_material = ExtResource("5_vcykk")
+small_stack_count = 3
 small_stack_prefab = ExtResource("4_otar4")
 stack_spawn_time = 0.1
 split_rush_range = 3.5
@@ -352,6 +361,7 @@ snake_speed = 25.0
 sfx_chiptopede_snake = Array[AudioStream]([ExtResource("29_76lxc"), ExtResource("30_6ma7t")])
 shooting_stance_prefab = ExtResource("8_280mm")
 chiptopede_projectile_damage = 15.0
+chiptopede_projectile_speed = 50.0
 max_projectile_spawn_distance = 36.0
 chiptopede_targeting_speed = 3.0
 chiptopede_projectile = ExtResource("43_paol5")
@@ -362,6 +372,9 @@ delay_between_burst = 0.3
 sfx_chiptopede_emerge = Array[AudioStream]([ExtResource("33_ug8ld"), ExtResource("34_0flmo")])
 sfx_chiptopede_shoot = Array[AudioStream]([ExtResource("41_x4ksd"), ExtResource("42_nca3f"), ExtResource("43_laq2w"), ExtResource("44_6iecn"), ExtResource("45_dshqp"), ExtResource("46_5w0b2"), ExtResource("47_4waef")])
 sfx_chiptopede_retreat = Array[AudioStream]([ExtResource("38_xoi1t")])
+possible_hazards = Array[PackedScene]([ExtResource("53_e0l6u"), ExtResource("54_awa0j"), ExtResource("55_5w0af"), ExtResource("56_sg4b6")])
+hazard_duration = 5.0
+unstable_split_interval = 6.0
 boss_id = 5
 chip_spawn_dps_threshold = 70.0
 elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
@@ -1583,6 +1596,9 @@ delay_in_seconds = "0.0"
 [node name="Dead" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeDeath" index="2"]
 script = ExtResource("5_81kie")
 
+[node name="DebugStateLabel" parent="." index="9"]
+visible = true
+
 [node name="AnimationPlayer" parent="." index="18"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
@@ -1616,6 +1632,8 @@ sub_emitter = NodePath("../ChipSplashParticles")
 script = null
 
 [node name="ChipSplashParticles" parent="." index="25" instance=ExtResource("66_ih6eo")]
+
+[node name="UnstableSplitTimer" type="Timer" parent="." index="27"]
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_exited"]
@@ -1710,3 +1728,4 @@ script = null
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeDeath/Freeze" to="." method="_on_chiptopede_death_freeze_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeDeath/Exploding" to="." method="_on_chiptopede_death_exploding_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ChiptopedeDeath/Dead" to="." method="_on_chiptopede_death_dead_state_entered"]
+[connection signal="timeout" from="UnstableSplitTimer" to="." method="_on_unstable_split_timer_timeout"]

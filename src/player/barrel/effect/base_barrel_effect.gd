@@ -20,7 +20,7 @@ func get_icon_path() -> String:
 	return "res://src/player/gun/assets/sprite/effect_icons/%s" % icon_id
 
 
-func calculate_new_value(old_value: float, modify_value: float, is_perc: bool, rounding: bool = true):
+func calculate_new_value(old_value: float, modify_value: float, is_perc: bool, rounding: bool):
 	var new_value = 0
 	if is_perc:
 		new_value = old_value * (1 + (modify_value / 100.0))

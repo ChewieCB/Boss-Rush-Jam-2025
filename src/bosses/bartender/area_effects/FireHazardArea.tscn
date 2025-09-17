@@ -105,9 +105,10 @@ material = SubResource("StandardMaterial3D_67xip")
 height = 0.5
 radius = 3.0
 
-[node name="FireHazardArea" type="Node3D" node_paths=PackedStringArray("particle_effects")]
+[node name="FireHazardArea" type="Node3D" node_paths=PackedStringArray("puddle_decal", "particle_effects")]
 script = ExtResource("1_xogw5")
 duration = 20.0
+puddle_decal = NodePath("Decal")
 sfx_break = Array[AudioStream]([ExtResource("2_0sr16"), ExtResource("3_kfut2"), ExtResource("4_747aq")])
 sfx_effect = Array[AudioStream]([ExtResource("5_isufy")])
 particle_effects = [NodePath("Fire"), NodePath("Smoke")]
@@ -116,7 +117,7 @@ particle_effects = [NodePath("Fire"), NodePath("Smoke")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.220448, 0)
 amount = 40
 lifetime = 2.0
-visibility_aabb = AABB(-3.82821, -1.12446, -3.73806, 7.76815, 2.65475, 7.61359)
+visibility_aabb = AABB(-100, -100, -100, 200, 200, 200)
 process_material = SubResource("ParticleProcessMaterial_dq4mg")
 draw_pass_1 = SubResource("QuadMesh_5nj2i")
 
@@ -125,15 +126,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3607, 0)
 amount = 20
 lifetime = 2.0
 explosiveness = 0.2
-visibility_aabb = AABB(-3.29834, -1.46055, -3.63985, 6.89615, 9.95287, 6.95106)
+visibility_aabb = AABB(-100, -100, -100, 200, 200, 200)
 process_material = SubResource("ParticleProcessMaterial_ycs0i")
 draw_pass_1 = SubResource("QuadMesh_rnvrd")
-
-[node name="Puddle" type="Sprite3D" parent="."]
-transform = Transform3D(2.2, 0, 0, 0, -9.61651e-08, 2.2, 0, -2.2, -9.61651e-08, 0, 0.01, 0)
-visible = false
-modulate = Color(0.211765, 0, 0.0901961, 0.854902)
-texture = ExtResource("3_h2ljg")
 
 [node name="Decal" type="Decal" parent="."]
 size = Vector3(8, 4, 8)

@@ -1,6 +1,13 @@
 extends BossCore
 class_name BossPit
 
+# Antes note:
+# Ante 1 (new): Concussion Charge - Enable charge/lunge attack to give slow debuff
+# Ante 2: Mini Turrets - Enable Surveillance summons mini turrets
+# Ante 3 (new): Electric Hazard - Destroyed cover will leave behind electric hazard
+# Ante 4 (new): Serious Mode - Pit Boss move and act 30% faster
+# Ante 5 (new): Unfair Fight - Pit Boss and Surveillance will attack together all the time
+
 signal charge_ended
 
 enum Stance {DEFENSIVE, AGGRESSIVE}
@@ -15,8 +22,8 @@ enum Stance {DEFENSIVE, AGGRESSIVE}
 @export var wave_material: ShaderMaterial
 
 @export_category("Movement")
-@export var MOVE_SPEED: float = 10.0
-@onready var move_speed: float = MOVE_SPEED:
+@export var BASE_MOVE_SPEED: float = 10.0
+@onready var move_speed: float = BASE_MOVE_SPEED:
 	set(value):
 		move_speed = value
 		navigation_component.current_speed = move_speed
@@ -34,9 +41,10 @@ var phase_stance: Stance = Stance.AGGRESSIVE:
 		elif phase_stance == Stance.DEFENSIVE:
 			state_chart.send_event("defensive_stance")
 		phase_debug_label.text = "Phase %s (%s)" % [current_phase, Stance.keys()[phase_stance]]
-
+var unfair_fight_enabled = false
 @export_group("Attacks")
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
+@export var electric_hazard_prefab: PackedScene
 @export var hurtbox_range_close: float = 3.5
 @export var hurtbox_range_far: float = 4.5
 @export var sfx_melee: Array[AudioStream]
@@ -66,14 +74,20 @@ var slam_target_pos := Vector3.ZERO
 @export var lunge_friction: float = 0.05
 @export var lunge_damage: float = 5.0
 @export var lunge_force: float = 6.5
-@export var lunge_cooldown: float = 15.0
+@export var lunge_cooldown: float = 5.0
 @onready var lunge_timer: Timer = $LungeCooldown
+@export var lunge_slow_debuff_duration: float = 1 # Boss ante 1
+@export var lunge_slow_debuff_perc: float = 50 # Boss ante 1
+var lunge_slow_debuff_enabled = false
+var dash_speed_debuff_icon = preload("res://assets/sprite/status_icon/dash_speed_down.png")
+var run_speed_debuff_icon = preload("res://assets/sprite/status_icon/run_speed_down.png")
 # SFX
 @export var sfx_lunge: Array[AudioStream]
 
 @onready var phase_debug_label: Label3D = $DebugPhaseLabel
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
+@export_subgroup("Shield")
 @export var shield_radius: float = 4.0
 @onready var shield_body: StaticBody3D = $Shield
 @onready var shield_mesh_solid: MeshInstance3D = $Shield/ShieldMeshSolid
@@ -82,9 +96,28 @@ var slam_target_pos := Vector3.ZERO
 @onready var shield_sfx_player: AudioStreamPlayer3D = $Shield/ShieldSFXPlayer
 var shield_tween: Tween
 
+@export_group("Passive")
+@export_subgroup("Electric Hazard")
+var electric_hazard_enabled = false # Based on ante 3
+@export var electric_hazard_damage: int = 5
+@export var electric_hazard_duration: float = 5
+
 
 func _ready() -> void:
 	super ()
+	if GameManager.boss_ante >= 1:
+		lunge_slow_debuff_enabled = true
+	if GameManager.boss_ante >= 2:
+		pass # In Surveillance code
+	if GameManager.boss_ante >= 3:
+		electric_hazard_enabled = true
+	if GameManager.boss_ante >= 4:
+		BASE_MOVE_SPEED += 3
+		move_speed = BASE_MOVE_SPEED
+		anim_player.speed_scale = 1.3
+	if GameManager.boss_ante >= 5:
+		unfair_fight_enabled = true
+
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 
@@ -94,6 +127,10 @@ func activate() -> void:
 
 
 func toggle_stance() -> void:
+	if unfair_fight_enabled:
+		phase_stance = Stance.AGGRESSIVE
+		return
+
 	if phase_stance == Stance.AGGRESSIVE:
 		phase_stance = Stance.DEFENSIVE
 	elif phase_stance == Stance.DEFENSIVE:
@@ -243,9 +280,20 @@ func _on_movement_charging_state_entered() -> void:
 
 func destroy_cover(body: Node3D) -> void:
 	if body is Cover:
+		var cover: Cover = body
+		# Create electric shock at cover position
+		if electric_hazard_enabled:
+			var inst: HazardArea = electric_hazard_prefab.instantiate()
+			get_tree().get_root().add_child(inst)
+			inst.global_position = cover.mesh.global_position
+			inst.rotation = cover.rotation
+			inst.damage_per_tick = electric_hazard_damage
+			inst.set_duration_and_restart_timer(electric_hazard_duration)
+
 		sfx_player.stream = sfx_melee.pick_random()
 		sfx_player.play()
-		body.destroy()
+		cover.destroy()
+
 
 func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, lunge_friction)
@@ -258,6 +306,27 @@ func _on_movement_charging_state_physics_processing(_delta: float) -> void:
 				destroy_cover(body)
 			elif body == target:
 				damage_in_hurtbox(lunge_damage * GameManager.get_risk_dmg_mult())
+				if lunge_slow_debuff_enabled:
+					GameManager.create_and_add_status_effect("Run speed down",
+						"lunge_concussion_run_speed",
+						StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER,
+						- lunge_slow_debuff_perc,
+						StatusEffect.ModifyType.PERCENTAGE,
+						lunge_slow_debuff_duration,
+						true,
+						true,
+						run_speed_debuff_icon
+					)
+					GameManager.create_and_add_status_effect("Dash speed down",
+						"lunge_concussion_slide_speed",
+						StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER,
+						- lunge_slow_debuff_perc,
+						StatusEffect.ModifyType.PERCENTAGE,
+						lunge_slow_debuff_duration,
+						true,
+						true,
+						dash_speed_debuff_icon
+					)
 				hurtbox.set_deferred("monitoring", false)
 				velocity.x = 0
 				velocity.z = 0
@@ -831,10 +900,10 @@ func _on_defensive_state_exited() -> void:
 
 func _on_stagger() -> void:
 	if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
-		move_speed = MOVE_SPEED / 5
+		move_speed = BASE_MOVE_SPEED / 5
 	super ()
 
 
 func _on_hurt_frame_timer_timeout() -> void:
-	move_speed = MOVE_SPEED
+	move_speed = BASE_MOVE_SPEED
 	super ()

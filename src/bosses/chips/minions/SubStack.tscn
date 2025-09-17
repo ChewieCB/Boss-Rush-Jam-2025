@@ -104,7 +104,7 @@ _data = {
 }
 point_count = 13
 
-[node name="SubStack" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_t3h5b")]
+[node name="SubStack" node_paths=PackedStringArray("elemental_emitting_vfx", "sfx_players") instance=ExtResource("1_t3h5b")]
 collision_mask = 9
 motion_mode = 1
 script = ExtResource("2_u1ibk")
@@ -152,6 +152,7 @@ drop_time = 0.3
 sfx_jump = Array[AudioStream]([ExtResource("23_yipf0"), ExtResource("24_7biya")])
 sfx_slam = Array[AudioStream]([ExtResource("25_84v2k"), ExtResource("26_apgft"), ExtResource("27_l1fai")])
 sfx_dive_telegraph = Array[AudioStream]([ExtResource("28_ult5e")])
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer1")]
 sfx_hit = Array[AudioStream]([ExtResource("5_4sojs"), ExtResource("6_16fho"), ExtResource("7_u10vx"), ExtResource("8_bpeyj")])

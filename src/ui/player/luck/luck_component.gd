@@ -60,7 +60,7 @@ func check_for_high_luck_buffs():
 		# Hot Hand: 5% increased minimum damage per level
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HOT_HAND):
 			var increased_min_dmg = 0.05 * GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.HOT_HAND]
-			GameManager.create_and_add_buff("Hot Hand", "hot_hand_buff",
+			GameManager.create_and_add_status_effect("Hot Hand", "hot_hand_buff",
 			StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, increased_min_dmg, StatusEffect.ModifyType.FLAT)
 
 		# Lucky Shot: increased crit chance
@@ -75,14 +75,14 @@ func check_for_high_luck_buffs():
 					increased_crit = 0.1
 				4:
 					increased_crit = 0.15
-			GameManager.create_and_add_buff("Lucky Shot", "lucky_shot_buff",
+			GameManager.create_and_add_status_effect("Lucky Shot", "lucky_shot_buff",
 			StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE, increased_crit, StatusEffect.ModifyType.FLAT)
 
 		# Blindspot: 10% increased dash iframe duration per level
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.BLINDSPOT):
 			var increased_dash_duration = player_base_stat[StatusEffect.PlayerStatEnum.DASH_DURATION] * 0.1 * \
 				GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLINDSPOT]
-			GameManager.create_and_add_buff("Blindspot", "blindspot_buff",
+			GameManager.create_and_add_status_effect("Blindspot", "blindspot_buff",
 			StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION, increased_dash_duration, StatusEffect.ModifyType.FLAT)
 	else:
 		GameManager.player.remove_status_effect_by_name("hot_hand_buff")

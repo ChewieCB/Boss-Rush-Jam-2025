@@ -31,7 +31,7 @@ func _physics_process(delta: float) -> void:
 	if homing_locked_in and homing_target:
 		gravity_modifier = 0
 		gravity_accel = 0
-		# HACK catch for minions/boss sub-forms that die mid-ticka
+		# HACK catch for minions/boss sub-forms that die mid-flight
 		if not homing_target:
 			return
 		var target_pos = homing_target.global_position

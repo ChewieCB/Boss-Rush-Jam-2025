@@ -11,7 +11,7 @@ func on_projectile_spawn(_projectile: BaseProjectile):
 		_projectile.change_bullet_color(new_color)
 	_projectile.infuse_status_effect(status_effect)
 	_projectile.applied_emitting_elemental_vfx(status_effect)
-	
+
 
 func on_before_damage_applied(enemy: CharacterBody3D, _projectile: BaseProjectile):
 	if enemy.has_method("apply_status_buildup"):
