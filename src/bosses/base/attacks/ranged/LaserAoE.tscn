@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://byharrqwvi4cp"]
+
+[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/laser_ao_e.gd" id="1_l0ud2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n6dpb"]
+size = Vector3(4, 8, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_34ykl"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(1, 0, 0, 0.556863)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0b838"]
+material = SubResource("StandardMaterial3D_34ykl")
+size = Vector3(4, 8, 100)
+
+[node name="LaserAoE" type="Area3D"]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_l0ud2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -47.5)
+shape = SubResource("BoxShape3D_n6dpb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -47.5)
+mesh = SubResource("BoxMesh_0b838")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

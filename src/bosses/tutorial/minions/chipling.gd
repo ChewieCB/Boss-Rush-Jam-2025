@@ -8,31 +8,24 @@ class_name Chipling
 @export var respawn_time: float = 2.0
 #@onready var spawn_points: Array[Node] = get_tree().get_nodes_in_group("boss_chipling_spawn_marker")
 @export_group("Movement")
-@export var DESIRED_DISTANCE: float = 20.0
-@export var desired_distance: float = DESIRED_DISTANCE
-@export var MOVE_SPEED: float = 10.0
+@export var MOVE_SPEED: float = 4.0
 @onready var move_speed: float = MOVE_SPEED:
 	set(value):
 		move_speed = value
 		navigation_component.current_speed = move_speed
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
-@export var time_elapsed: float = 0.0
 @export var idle_radius := 1.5
 var idle_time := 0.0
 var center_pos: Vector3
-@export_subgroup("Orbiting Movement")
-@export var angle_speed: float = 1.0 # radians/second
-@export var orbit_angle: float = 0.0 # track this over time
-@export var orbit_radius: float = 40.0
 @export_subgroup("Wandering Movement")
 @export var wander_waypoints: Array[Node] = []
 @export var max_wander_distance: float = 20.0
 @export var max_waypoint_jitter_radius: float = 4.0
-@export var wander_delay_min: float = 0.5
-@export var wander_delay_max: float = 2.3
+@export var wander_delay_min: float = 1.2
+@export var wander_delay_max: float = 3.6
 @export var wander_radius: float = 30.0
-@export var wander_timeout: float = 1.2
+@export var wander_timeout: float = 3.6
 @onready var wander_idle_timer: Timer = $IdleTimer
 @onready var wander_delay_timer: Timer = $WanderTimer
 var current_wander_target: Vector3
@@ -71,6 +64,9 @@ func spawn() -> void:
 
 func _on_died() -> void:
 	died.emit()
+	var explosion = explosion_particle_prefab.instantiate()
+	add_child(explosion)
+	explosion.position.y = 0.781
 	sprite.visible = false
 	
 	health_component.show_damage_text = false
@@ -80,8 +76,6 @@ func _on_died() -> void:
 	await death_anim_finished
 	# TODO - add some juice, make the chipling explode with chips that have trails?
 	chip_particles.emitting = true
-	var explosion = explosion_particle_prefab.instantiate()
-	add_child(explosion)
 	await get_tree().create_timer(0.8).timeout
 	#
 	self.queue_free()

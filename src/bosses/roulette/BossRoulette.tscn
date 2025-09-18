@@ -908,10 +908,6 @@ to = NodePath("..")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="DebugStateLabel" parent="." index="14"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, 0)
-no_depth_test = true
-
 [node name="ShieldsAbsorbTimer" type="Timer" parent="." index="15"]
 one_shot = true
 
@@ -935,8 +931,8 @@ collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 29, 0)
 shape = SubResource("CylinderShape3D_cbruj")
 
-[node name="DebugDistanceLabel" parent="." index="19"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, 0)
+[node name="DebugStateLabel" parent="." index="19"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, 0)
 no_depth_test = true
 
 [node name="BarrierTargetingTimer" type="Timer" parent="." index="20"]
@@ -945,10 +941,14 @@ one_shot = true
 [node name="BallKillTimer" type="Timer" parent="." index="21"]
 one_shot = true
 
-[node name="DamageTextMarker" parent="." index="23"]
+[node name="DebugDistanceLabel" parent="." index="22"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, 0)
+no_depth_test = true
+
+[node name="DamageTextMarker" parent="." index="24"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.3112, 0)
 
-[node name="BodyCenter" parent="." index="24"]
+[node name="BodyCenter" parent="." index="25"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.28097, 0)
 
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
@@ -958,7 +958,7 @@ shape = SubResource("CapsuleShape3D_bhnnk")
 [node name="Marker3D" parent="AimAssistBubble" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51173, 1.86467, 0)
 
-[node name="AnimationPlayer" parent="." index="29"]
+[node name="AnimationPlayer" parent="." index="30"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "roulette": SubResource("AnimationLibrary_7ria6")

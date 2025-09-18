@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cf2bxlb0jp4xo"]
+
+[ext_resource type="Texture2D" uid="uid://dah2obexqii2e" path="res://assets/textures/walls/green_tiled_trim.png" id="1_x5fce"]
+
+[resource]
+albedo_texture = ExtResource("1_x5fce")
+metallic_specular = 0.0
+texture_filter = 2

@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cg0bm1qhrsyqb"]
+
+[ext_resource type="Texture2D" uid="uid://dnfgx5r5dnmy3" path="res://assets/textures/wrad_insulation.png" id="1_w0t33"]
+
+[resource]
+albedo_texture = ExtResource("1_w0t33")
+metallic_specular = 0.0
+texture_filter = 2

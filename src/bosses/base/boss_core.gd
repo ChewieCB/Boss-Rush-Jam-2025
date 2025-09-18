@@ -166,6 +166,13 @@ const MAX_FALL_SPEED: float = 50.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 8
 @export var GRAVITY: float = 14
+@export_subgroup("Orbiting")
+@export var DESIRED_DISTANCE: float = 10.0
+@export var desired_distance: float = DESIRED_DISTANCE
+@export var angle_speed: float = 1.0 # radians/second
+@export var orbit_angle: float = 0.0 # track this over time
+@export var orbit_radius: float = 20.0
+var time_elapsed: float = 0
 
 var vel_vertical: float = 0
 
@@ -212,7 +219,6 @@ func _physics_process(delta: float) -> void:
 	vel_vertical -= GRAVITY * delta
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	velocity.y = vel_vertical
-
 	move_and_slide()
 
 	# DEBUG
@@ -246,7 +252,34 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 	)
 
 
-func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> BaseBossProjectile:
+func orbit_player(delta: float) -> void:
+	orbit_angle += angle_speed * delta
+	# offset in XZ-plane
+	var offset_x = cos(orbit_angle) * desired_distance
+	var offset_z = sin(orbit_angle) * desired_distance
+	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	# Pathfind to orbit_pos
+	navigation_component.set_nav_target_position(orbit_pos)
+
+
+func orbit_towards_player(
+	delta: float, approach_speed: float = 1.0, min_radius: float = 10.0
+) -> void:
+	orbit_angle += angle_speed * delta
+	
+	orbit_radius -= approach_speed * delta
+	if min_radius:
+		orbit_radius = max(orbit_radius, min_radius)
+	
+	# offset in XZ-plane
+	var offset_x = cos(orbit_angle) * orbit_radius
+	var offset_z = sin(orbit_angle) * orbit_radius
+	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	# Pathfind to orbit_pos
+	navigation_component.set_nav_target_position(orbit_pos)
+
+
+func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> BaseProjectile:
 	var _sfx_player = get_available_sfx_player()
 	if not _sfx_player:
 		# TODO - error handling

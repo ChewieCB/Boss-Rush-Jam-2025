@@ -8,8 +8,6 @@ signal substack_idle(stack: ChipBossSubStack)
 @export var spark_scene: PackedScene
 
 @export_group("Movement")
-@export var DESIRED_DISTANCE: float = 20.0
-@export var desired_distance: float = DESIRED_DISTANCE
 #@export var MOVE_SPEED: float = 10.0
 #@onready var move_speed: float = MOVE_SPEED:
 	#set(value):
@@ -17,14 +15,9 @@ signal substack_idle(stack: ChipBossSubStack)
 		#navigation_component.current_speed = move_speed
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
-@export var time_elapsed: float = 0.0
 @export var idle_radius := 1.5
 var idle_time := 0.0
 var center_pos: Vector3
-@export_subgroup("Orbiting Movement")
-@export var angle_speed: float = 1.0 # radians/second
-@export var orbit_angle: float = 0.0 # track this over time
-@export var orbit_radius: float = 40.0
 
 @export_group("Attacks")
 @export_subgroup("Small Blind Burst")

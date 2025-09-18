@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dxuto5h6uh22o"]
+
+[ext_resource type="Texture2D" uid="uid://c4u5p4ff6f62p" path="res://assets/textures/posters/pitboss.png" id="1_npkq8"]
+
+[resource]
+albedo_texture = ExtResource("1_npkq8")
+metallic_specular = 0.0
+texture_filter = 2

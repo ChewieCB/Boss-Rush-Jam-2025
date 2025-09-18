@@ -259,3 +259,4 @@ common/physics_interpolation=true
 
 lights_and_shadows/directional_shadow/size=2048
 lights_and_shadows/directional_shadow/size.mobile=1024
+occlusion_culling/use_occlusion_culling=true

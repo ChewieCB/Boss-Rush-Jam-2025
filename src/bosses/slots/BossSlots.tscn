@@ -194,13 +194,8 @@ _data = {
 motion_mode = 1
 script = ExtResource("2_b0b3s")
 phase_2_health_percentage_trigger = 0.5
-DESIRED_DISTANCE = 10.0
-desired_distance = null
 DESIRED_HEIGHT = 3.1
 DROP_FACTOR = 1.0
-angle_speed = 1.0
-orbit_angle = 0.0
-orbit_radius = 20.0
 SLOT_TICKS = 20
 sfx_slot_roll_long = ExtResource("3_o5exi")
 sfx_slot_roll_short = ExtResource("4_vhne6")
@@ -335,7 +330,7 @@ follow_target = false
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Slotty 2 Hotty"
 
-[node name="StateChart" parent="." index="8"]
+[node name="StateChart" parent="." index="9"]
 process_mode = 1
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
@@ -1225,10 +1220,10 @@ to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="DebugStateLabel" parent="." index="10"]
+[node name="DebugStateLabel" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
 
-[node name="DebugDistanceLabel" parent="." index="11"]
+[node name="DebugDistanceLabel" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, 0)
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="14"]
@@ -1306,7 +1301,7 @@ bus = &"SFX"
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
 shape = SubResource("CapsuleShape3D_o53xj")
 
-[node name="AnimationPlayer" parent="." index="31"]
+[node name="AnimationPlayer" parent="." index="32"]
 libraries = {
 "": SubResource("AnimationLibrary_wocs5"),
 "slot_boss_anims": ExtResource("64_5u1vo")

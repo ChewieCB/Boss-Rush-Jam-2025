@@ -19,16 +19,10 @@ var prev_phase
 @export var phase_2_health_percentage_trigger: float = 0.5
 
 @export_group("Movement")
-@export var DESIRED_DISTANCE: float = 10.0
-@export var desired_distance: float = DESIRED_DISTANCE
 @export var DESIRED_HEIGHT: float = 3.1
 var desired_height: float = DESIRED_HEIGHT
 @export var DROP_FACTOR: float = 1.0
 var drop_factor: float = DROP_FACTOR
-@export_subgroup("Orbiting")
-@export var angle_speed: float = 1.0 # radians/second
-@export var orbit_angle: float = 0.0 # track this over time
-@export var orbit_radius: float = 20.0
 
 @export_group("Attacks")
 @export_subgroup("Spin Slots")
@@ -183,8 +177,8 @@ func activate() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	super (delta)
-
+	super(delta)
+	
 	if target:
 		projectile_marker_pivot.look_at(target.global_position)
 		slot_icons_parent.look_at(target.global_position)

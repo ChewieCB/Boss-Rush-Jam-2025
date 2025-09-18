@@ -34,16 +34,10 @@ var prev_form: ChipBossForms
 
 ## Movement attributes
 @export_group("Movement")
-@export var DESIRED_DISTANCE: float = 10.0
-@export var desired_distance: float = DESIRED_DISTANCE
 @export_subgroup("Jumping")
 var aoe_markers: Array[Node]
 var center_pos := Vector3(0, 0, -2)
 @export var slam_aoe_decal: CompressedTexture2D
-@export_subgroup("Orbiting")
-@export var angle_speed: float = 1.0 # radians/second
-@export var orbit_angle: float = 0.0 # track this over time
-@export var orbit_radius: float = 20.0
 
 ## Attacks
 @export_group("Attacks | General")

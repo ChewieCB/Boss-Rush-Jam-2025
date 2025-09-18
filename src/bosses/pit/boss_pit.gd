@@ -29,7 +29,6 @@ enum Stance {DEFENSIVE, AGGRESSIVE}
 		navigation_component.current_speed = move_speed
 @export var wave_amplitude: float = 7.0
 @export var wave_frequency: float = 5.0
-@export var time_elapsed: float = 0.0
 
 @export_category("Phases")
 @export var surveillance_boss: BossSurveillance
@@ -358,6 +357,7 @@ func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
 
 
 func swipe() -> void:
+	# FIXME - add a range check to these? 
 	target.health_component.damage(swipe_damage * GameManager.get_risk_dmg_mult())
 
 

@@ -19,6 +19,11 @@ func _ready() -> void:
 	visible = false
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	is_controller_connected = Input.get_connected_joypads() != []
+	# Tweak lobby button text if we're in the tutorial
+	if not GameManager.tutorial_completed:
+		$PauseOptionBG/VBoxContainer/LobbyButton.text = "Restart"
+	is_paused = false
+	get_tree().paused = false
 	
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -87,7 +92,10 @@ func _on_lobby_button_pressed() -> void:
 	#ScreenTransition.transition_out()
 	#await ScreenTransition.transition_finished
 	# TODO - background loading here
-	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	if GameManager.tutorial_completed:
+		LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	else:
+		LoadingHandler.current_scene_path = "res://src/maps/tutorial/TutorialBoss.tscn"
 	LoadingHandler.start_loading("Lobby")
 	# Toggle low pass filter for BGM
 	await LoadingHandler.loading_finished
