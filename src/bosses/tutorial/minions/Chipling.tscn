@@ -153,16 +153,10 @@ script = ExtResource("2_73vok")
 spark_scene = null
 spawn_group = 1
 respawn_time = 2.0
-DESIRED_DISTANCE = 20.0
-desired_distance = null
 MOVE_SPEED = 6.0
 wave_amplitude = 6.0
 wave_frequency = 2.0
-time_elapsed = 0.0
 idle_radius = 1.5
-angle_speed = 1.0
-orbit_angle = 0.0
-orbit_radius = 40.0
 wander_waypoints = []
 max_wander_distance = 20.0
 max_waypoint_jitter_radius = 4.0
@@ -181,6 +175,8 @@ attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.6
 MAX_SPEED = 3.0
+DESIRED_DISTANCE = 20.0
+orbit_radius = 40.0
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0.00313074, 0.781227, 0)
@@ -199,7 +195,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_ed3lh")
 
 [node name="HealthComponent" parent="." index="4"]
-max_health = 30.0
+max_health = 5.0
 
 [node name="NavigationComponent" parent="." index="5"]
 current_speed = 4.0

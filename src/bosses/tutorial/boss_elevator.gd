@@ -491,7 +491,6 @@ func _on_smokescreen_smoke_state_entered() -> void:
 	
 	anim_player.play("RESET")
 	sprite.modulate.a = 1.0
-	self.collision_layer = pow(2, 3)
 	
 	# TODO - configure delay and SFX for door opening
 	active_sub_light.yellow()
