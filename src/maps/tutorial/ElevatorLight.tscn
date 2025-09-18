@@ -182,3 +182,11 @@ libraries = {
 "": SubResource("AnimationLibrary_k4323")
 }
 autoplay = "red"
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, 0.636396, 0, -0.636396)
+light_color = Color(1, 0.129412, 0.129412, 1)
+light_energy = 2.0
+light_volumetric_fog_energy = 3.0
+omni_range = 3.0
+omni_attenuation = 2.0
