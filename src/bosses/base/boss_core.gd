@@ -279,7 +279,7 @@ func orbit_towards_player(
 	navigation_component.set_nav_target_position(orbit_pos)
 
 
-func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> BaseProjectile:
+func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> Area3D:
 	var _sfx_player = get_available_sfx_player()
 	if not _sfx_player:
 		# TODO - error handling
