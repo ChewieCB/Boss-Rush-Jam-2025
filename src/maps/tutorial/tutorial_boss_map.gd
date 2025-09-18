@@ -17,6 +17,8 @@ signal ui_accept
 @onready var smoke_start_trigger: Area3D = $SmokeStartTrigger
 @onready var smoke_particles: GPUParticles3D = $SmokeParticles
 @onready var smoke_hurt_area: Area3D = $SmokeHurtArea
+@onready var sfx_smoke_burst: AudioStreamPlayer3D = $SteamBurstPlayer
+@onready var sfx_smoke_loop: AudioStreamPlayer3D = $SteamLoopPlayer
 @onready var dash_tutorial_trigger: Area3D = $TutorialInfoTrigger3
 @onready var spin_warning_prompt: Area3D = $SpinTooExpensiveWarning
 var spin_warning_trigger_active: bool = false
@@ -159,6 +161,7 @@ func _on_level_select(level_path: String) -> void:
 
 
 func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
+	sfx_smoke_burst.play()
 	smoke_particles.emitting = true
 	smoke_hurt_area._on_body_entered(body)
 	smoke_hurt_area.monitoring = true
@@ -166,6 +169,8 @@ func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
 	smoke_start_trigger.queue_free()
 	# Trigger dash tutorial
 	dash_tutorial_trigger._on_body_entered(body)
+	await get_tree().create_timer(0.1).timeout
+	sfx_smoke_loop.play()
 
 
 func _on_boss_died(_boss: BossCore = boss) -> void:
