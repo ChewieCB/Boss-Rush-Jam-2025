@@ -37,7 +37,8 @@ func _ready() -> void:
 	GameManager.equipped_barrels = []
 	player.gun.reinstall_barrels()
 	super()
-	boss_doors.close()
+	if boss_doors:
+		boss_doors.close()
 	exit_elevator_button.pushed.connect(_on_level_select)
 	for i in range(chiplings_to_spawn_1):
 		spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
@@ -49,7 +50,7 @@ func _ready() -> void:
 	$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
 	
 	# FIXME - workaround
-	elevator_doors = $FuncGodotMap/group_819_floor_walkable_1a/entity_10_ElevatorDoors
+	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_42_SlidingDoor
 	boss.boss_origin = boss_origin[0]
 	boss.elevator_spawns = elevator_spawns
 	boss.sub_elevator_doors = sub_elevator_doors
@@ -129,8 +130,9 @@ func _trigger_spin_tutorial() -> void:
 func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	if body is Player:
 		exit_doors.close()
-		boss_doors.is_autodoor = false
-		boss_doors.close()
+		if boss_doors:
+			boss_doors.is_autodoor = false
+			boss_doors.close()
 		boss_trigger.queue_free()
 		boss.activate()
 		LuckHandler.enabled = true
