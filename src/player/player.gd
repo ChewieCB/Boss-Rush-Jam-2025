@@ -733,9 +733,9 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 						buff_value = 0.3
 						buff_time = 5
 				# Only need 1 to display duration
-				GameManager.create_and_add_buff("Double Down (Min damage)", "double_down_min_buff",
-					StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time, true, double_down_icon)
-				GameManager.create_and_add_buff("Double Down (Max damage)", "double_down_max_buff",
+				GameManager.create_and_add_status_effect("Double Down (Min damage)", "double_down_min_buff",
+					StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time, false, true, double_down_icon)
+				GameManager.create_and_add_status_effect("Double Down (Max damage)", "double_down_max_buff",
 					StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time)
 
 
@@ -979,12 +979,12 @@ func check_permanent_buffs():
 	remove_status_effect_by_name("lucky_crit_buff")
 	remove_status_effect_by_name("cheat_death_buff")
 	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.LUCKY_CRIT):
-		GameManager.create_and_add_buff("Lucky Crit", "lucky_crit_buff",
+		GameManager.create_and_add_status_effect("Lucky Crit", "lucky_crit_buff",
 		StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER, 0.5, StatusEffect.ModifyType.FLAT)
 	# Only show this to let player know if they still have Cheat Death
 	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.CHEAT_DEATH) and not cheat_death_triggered:
-		GameManager.create_and_add_buff("Cheat Death", "cheat_death_buff",
-		StatusEffect.PlayerStatEnum.NONE, 0, StatusEffect.ModifyType.FLAT, StatusEffect.INFINITE_DURATION, true, cheat_death_icon)
+		GameManager.create_and_add_status_effect("Cheat Death", "cheat_death_buff",
+		StatusEffect.PlayerStatEnum.NONE, 0, StatusEffect.ModifyType.FLAT, StatusEffect.INFINITE_DURATION, false, true, cheat_death_icon)
 
 func apply_drunk_status(duration: float) -> void:
 	state_chart.send_event("add_status_drunk")

@@ -1,0 +1,79 @@
+[gd_scene load_steps=12 format=3 uid="uid://ds644wo13mt7e"]
+
+[ext_resource type="Script" path="res://src/bosses/chips/rolling_chip_projectile.gd" id="1_7phyt"]
+[ext_resource type="AudioStream" uid="uid://jkyya4te2uwq" path="res://src/bosses/chips/assets/sfx/CHIP Chip Roll attack.mp3" id="2_mo3ty"]
+[ext_resource type="AudioStream" uid="uid://4sbfi7dje4wy" path="res://src/bosses/chips/assets/sfx/CHIP Chip Roll attack 2.mp3" id="3_psfoh"]
+[ext_resource type="AudioStream" uid="uid://dek8tv432gwnn" path="res://src/bosses/chips/assets/sfx/CHIP Rolling chip hits you 1.mp3" id="4_m844m"]
+[ext_resource type="AudioStream" uid="uid://dsaxb0r4go2hk" path="res://src/bosses/chips/assets/sfx/CHIP Rolling chip hits you 2.mp3" id="5_g5hbh"]
+[ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="6_r3ix2"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="7_q5ijl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qc288"]
+albedo_texture = ExtResource("6_r3ix2")
+metallic = 0.75
+metallic_specular = 0.3
+uv1_scale = Vector3(0.222, 0.222, 0.222)
+uv1_offset = Vector3(1.5, 0.5, 1.5)
+uv1_triplanar = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3roqw"]
+material = SubResource("StandardMaterial3D_qc288")
+top_radius = 2.0
+bottom_radius = 2.0
+height = 0.5
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_sea1u"]
+height = 0.8
+radius = 2.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_73q4i"]
+height = 0.5
+radius = 2.0
+
+[node name="RollingChipProjectileEnhanced" type="CharacterBody3D" node_paths=PackedStringArray("health_component")]
+collision_layer = 0
+collision_mask = 9
+script = ExtResource("1_7phyt")
+health_component = NodePath("HealthComponent")
+sfx_rolling = Array[AudioStream]([ExtResource("2_mo3ty"), ExtResource("3_psfoh")])
+sfx_impact = Array[AudioStream]([ExtResource("4_m844m"), ExtResource("5_g5hbh")])
+
+[node name="MeshPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshPivot"]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0, 0)
+mesh = SubResource("CylinderMesh_3roqw")
+skeleton = NodePath("../..")
+
+[node name="Hurtbox" type="Area3D" parent="MeshPivot"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshPivot/Hurtbox"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CylinderShape3D_sea1u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 2, 8.74228e-08)
+shape = SubResource("CylinderShape3D_73q4i")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -500)
+
+[node name="HealthComponent" parent="." instance=ExtResource("7_q5ijl")]
+is_invincible = true
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="HitTImer" type="Timer" parent="."]
+one_shot = true
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+bus = &"SFX"
+
+[node name="SFXPlayerLoop" type="AudioStreamPlayer3D" parent="."]
+volume_db = 5.0
+bus = &"SFX"
+
+[connection signal="body_entered" from="MeshPivot/Hurtbox" to="." method="_on_hurtbox_body_entered"]

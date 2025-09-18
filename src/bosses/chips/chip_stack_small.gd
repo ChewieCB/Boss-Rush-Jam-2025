@@ -93,14 +93,25 @@ var nav_agent_rid: RID
 
 func _ready() -> void:
 	health_component.health_changed.connect(_on_health_changed)
-	
+
 	nav_map_rid = get_world_3d().get_navigation_map()
 	nav_agent_rid = NavigationServer3D.agent_create()
 	NavigationServer3D.agent_set_map(nav_agent_rid, nav_map_rid)
-	
+
 	debug_trajectory_mesh = MeshInstance3D.new()
 	debug_trajectory_mesh.mesh = ImmediateMesh.new()
 	get_tree().get_root().add_child.call_deferred(debug_trajectory_mesh)
+
+	if GameManager.boss_ante >= 1:
+		pass
+	if GameManager.boss_ante >= 2:
+		pass
+	if GameManager.boss_ante >= 3:
+		pass
+	if GameManager.boss_ante >= 4:
+		pass
+	if GameManager.boss_ante >= 5:
+		pass
 
 
 func _physics_process(_delta: float) -> void:
@@ -154,13 +165,13 @@ func orbit_center_in_group(delta: float, is_evasive: bool = false) -> void:
 	var offset_x = cos(current_angle) * arena_radius
 	var offset_z = sin(current_angle) * arena_radius
 	var orbit_pos = Vector3(offset_x, 0, offset_z)
-	
+
 	if is_evasive:
 		var chase_direction: Vector3 = self.global_position.direction_to(target.global_position)
 		var perpendicular: Vector3 = chase_direction.rotated(Vector3.UP, PI / 2)
 		var wave_offset = perpendicular * sin(time_elapsed * wave_frequency) * wave_amplitude
 		orbit_pos += wave_offset
-	
+
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
 
@@ -173,9 +184,9 @@ func move_stack_to_pos(goal_pos: Vector3) -> void:
 	tween.tween_property(
 		self, "global_position", goal_pos, 0.8
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN_OUT)
-	
+
 	await tween.finished
-	
+
 	return
 
 func return_split_stack_to_center() -> void:
@@ -185,9 +196,9 @@ func return_split_stack_to_center() -> void:
 			Vector3.UP,
 			(2 * PI / group_size) * (group_idx - 1)
 		)
-	
+
 	await move_stack_to_pos(goal_pos)
-	
+
 	return
 
 # JUMPING
@@ -197,7 +208,7 @@ func split_stack_jump(goal_pos: Vector3, _height: float = jump_height, hover: bo
 			Vector3.UP,
 			(2 * PI / group_size) * (group_idx - 1)
 		)
-	
+
 	anim_player.play("substack/jump_start")
 	#
 	sfx_player.stream = sfx_jump.pick_random()
@@ -207,9 +218,9 @@ func split_stack_jump(goal_pos: Vector3, _height: float = jump_height, hover: bo
 	jump_tween.tween_property(
 		self, "global_position", goal_pos, jump_time
 	).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	
+
 	await jump_tween.finished
-	
+
 	if hover:
 		anim_player.play("substack/jump_apex")
 		#
@@ -217,7 +228,7 @@ func split_stack_jump(goal_pos: Vector3, _height: float = jump_height, hover: bo
 		sfx_player.play()
 		#
 		await get_tree().create_timer(jump_hang_time).timeout
-	
+
 	return
 
 func split_stack_jump_to_center(height: float = jump_height, hover: bool = true) -> void:
@@ -228,9 +239,9 @@ func split_stack_jump_to_center(height: float = jump_height, hover: bool = true)
 			Vector3.UP,
 			(2 * PI / group_size) * (group_idx - 1)
 		)
-	
+
 	await split_stack_jump(goal_pos, height, hover)
-	
+
 	return
 
 func split_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
@@ -239,9 +250,9 @@ func split_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
 	jump_tween.tween_property(
 		self, "global_position", target_pos, time
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
-	
+
 	await jump_tween.finished
-	
+
 	return
 
 
@@ -260,7 +271,7 @@ func _on_attack_telegraph_state_exited() -> void:
 func _on_small_blind_targeting_state_entered() -> void:
 	debug_state_label.text = "Small Blind Burst | Targeting"
 	navigation_component.enable()
-	
+
 	anim_player.play("substack/idle")
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
@@ -276,14 +287,14 @@ func _on_small_blind_phase_2_targeting_state_entered() -> void:
 	vel_vertical = 0
 	GRAVITY = 0
 	navigation_component.disable()
-	
+
 	# Pick a free platform far away from the player and move to it
 	var target_marker: Marker3D = aoe_markers[marker_target_idx]
-	
+
 	self.collision_layer = 0
 	await move_stack_to_pos(target_marker.global_position)
 	self.collision_layer = 4
-	
+
 	anim_player.play("substack/idle")
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
@@ -298,7 +309,7 @@ func _on_small_blind_phase_2_targeting_state_physics_processing(_delta: float) -
 
 func _on_small_blind_shooting_state_entered() -> void:
 	debug_state_label.text = "Small Blind Burst | Shooting"
-	
+
 	state_chart.send_event("start_targeting")
 	navigation_component.disable()
 	anim_player.play("substack/projectile_telegraph")
@@ -307,7 +318,7 @@ func _on_small_blind_shooting_state_entered() -> void:
 	sfx_player.play()
 	#
 	_telegraph_attack()
-	
+
 	for i in num_bursts:
 		for j in chip_shots_per_burst:
 			# HACK - break out of this loop if we've exited the state
@@ -325,9 +336,9 @@ func _on_small_blind_shooting_state_entered() -> void:
 			fire_projectile(chip_projectile, projectile_spawn_marker.global_position, sfx_chip_shot)
 			face_tween.chain().tween_property(face_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.1).set_ease(Tween.EASE_IN)
 			face_tween.tween_callback(func(): face_sprite.visible = false)
-			
+
 		await get_tree().create_timer(delay_between_burst).timeout
-	
+
 	state_chart.send_event("stop_shooting")
 
 
@@ -345,9 +356,9 @@ func _recover_state_entered() -> void:
 	anim_player.play("substack/RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
-	
+
 	#navigation_component.enable()
-	
+
 	state_chart.send_event("end_recovery")
 
 
@@ -388,16 +399,16 @@ func _on_arc_swipe_closing_state_physics_processing(delta: float) -> void:
 		swipe_targeting_timer.stop()
 		state_chart.send_event("start_targeting")
 		state_chart.send_event("attack_telegraph")
-		
+
 		var spark_marker: Marker3D = spark_spawn_marker_r if sprite.flip_h else spark_spawn_marker_l
 		spark(spark_marker.global_position)
 		anim_player.play("substack/slash_spark")
-		
+
 		await get_tree().create_timer(telegraph_time).timeout
 		state_chart.send_event("attack_start")
 		state_chart.send_event("start_swipe")
 		return
-	
+
 	melee_approach(delta)
 
 
@@ -405,11 +416,11 @@ func _on_arc_swipe_phase_2_closing_state_entered() -> void:
 	debug_state_label.text = "Arc Wave Swipe | Closing"
 	# Pick a free platform close to the player and move to it
 	var target_marker: Marker3D = aoe_markers[marker_target_idx]
-	
+
 	self.collision_layer = 0
 	await move_stack_to_pos(target_marker.global_position)
 	self.collision_layer = 4
-	
+
 	swipe_targeting_timer.start(swipe_targeting_timeout)
 
 
@@ -419,47 +430,47 @@ func _on_arc_swipe_phase_2_closing_state_physics_processing(_delta: float) -> vo
 		swipe_targeting_timer.stop()
 		state_chart.send_event("start_targeting")
 		state_chart.send_event("attack_telegraph")
-		
+
 		await get_tree().create_timer(telegraph_time).timeout
 		state_chart.send_event("attack_start")
 		state_chart.send_event("start_swipe")
-	
+
 	return
 	#platform_idle(delta)
 
 
 func _on_arc_swipe_swiping_state_entered() -> void:
 	debug_state_label.text = "Arc Wave Swipe | Swiping"
-	
+
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_telegraph")
-	
+
 	var spark_marker: Marker3D = spark_spawn_marker_r if sprite.flip_h else spark_spawn_marker_l
 	spark(spark_marker.global_position)
 	anim_player.play("substack/slash_spark")
-	
+
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
-	
+
 	for i in num_swipes:
 		if i % 2 == 0:
 			anim_player.play("substack/slash_attack_proj")
-			
+
 			await anim_player.animation_finished
 			await get_tree().create_timer(delay_between_swipe).timeout
-			
+
 			spark(spark_marker.global_position)
 			anim_player.play("substack/slash_spark_offhand")
 		else:
 			anim_player.play("substack/slash_attack_proj_offhand")
-			
+
 			await anim_player.animation_finished
 			await get_tree().create_timer(delay_between_swipe).timeout
-			
+
 			spark(spark_marker.global_position)
 			anim_player.play("substack/slash_spark")
 		sprite.flip_h = !sprite.flip_h
-	
+
 	sprite.flip_h = false
 	state_chart.send_event("end_swipe")
 
@@ -486,14 +497,14 @@ func _on_arc_swipe_phase_2_swiping_state_entered(_delta: float) -> void:
 
 func _on_split_rush_targeting_state_entered() -> void:
 	debug_state_label.text = "Split Rush | Targeting"
-	
+
 	navigation_component.enable()
-	
+
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
 	reform_charge_timer.start(split_rush_targeting_time)
 	await reform_charge_timer.timeout
-	
+
 	state_chart.send_event("attack_telegraph")
 	#
 	sfx_player.stream = sfx_charge_telegraph.pick_random()
@@ -504,15 +515,15 @@ func _on_split_rush_targeting_state_entered() -> void:
 	anim_player.play("substack/slash_spark")
 
 	await get_tree().create_timer(telegraph_time * 2).timeout
-	
+
 	# HACK - break out of this loop if we've exited the state
 	if not $StateChart/Root/Phase/SplitRush.active:
 		return
-	
+
 	charge_target_pos = target.global_position
 	charge_target_pos.y = 0
 	substack_charge_set.emit(charge_target_pos)
-	
+
 	state_chart.send_event("start_charge")
 
 
@@ -530,7 +541,7 @@ func _on_split_rush_charging_state_entered() -> void:
 	sfx_player.play()
 	#
 	navigation_component.disable()
-	
+
 	var charge_tween: Tween = get_tree().create_tween()
 	var charge_time: float = self.global_position.distance_to(charge_target_pos) / charge_speed
 	# Ignore collisions with player and other stacks
@@ -557,7 +568,7 @@ func merge_to_pos(pos: Vector3, time: float, destroy_on_merge: bool = true) -> v
 	#sfx_player.stream = sfx_charge.pick_random()
 	#sfx_player.play()
 	await tween.finished
-	
+
 	if destroy_on_merge:
 		self.queue_free()
 
@@ -573,7 +584,7 @@ func _on_split_rush_recover_state_entered() -> void:
 func _on_place_your_bets_jumping_state_entered() -> void:
 	vel_vertical = 0
 	GRAVITY = 0
-	
+
 	anim_player.play("substack/jump_telegraph")
 	await split_stack_jump_to_center()
 
@@ -582,12 +593,12 @@ func _on_place_your_bets_crashing_state_entered() -> void:
 	await _telegraph_attack("Place Your Bets")
 	self.collision_layer = 0
 	var target_marker: Marker3D = aoe_markers[marker_target_idx]
-	
+
 	await split_stack_slam(target_marker.global_position)
 	sfx_player.stream = sfx_slam.pick_random()
 	sfx_player.play()
 	anim_player.play("substack/slam_end")
-	
+
 	state_chart.send_event("end_dive")
 
 
@@ -614,10 +625,10 @@ func _on_melee_targeting_timer_timeout() -> void:
 
 func _on_charge_back_targeting_state_entered() -> void:
 	debug_state_label.text = "Charge Back | Targeting"
-	
+
 	GRAVITY = 14
 	navigation_component.enable()
-	
+
 	anim_player.play("substack/idle")
 	state_chart.send_event("start_moving")
 
@@ -628,32 +639,32 @@ func _on_charge_back_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_charge_back_charging_state_entered() -> void:
 	debug_state_label.text = "Chargeback | Charging"
-	
+
 	chargeback_return_pos = self.global_position
 	hurtbox.set_deferred("monitoring", true)
-	
+
 	var spark_marker: Marker3D = spark_spawn_marker_r if sprite.flip_h else spark_spawn_marker_l
 	spark(spark_marker.global_position)
 	anim_player.play("substack/slash_spark")
-	
+
 	#
 	sfx_player.stream = sfx_charge_telegraph.pick_random()
 	sfx_player.play()
 	#
 	await _telegraph_attack()
-	
+
 	# HACK - break out of this loop if we've exited the state
 	if not $StateChart/Root/Phase/ChargeBack.active:
 		return
-	
+
 	charge_target_pos = target.global_position
 	charge_target_pos.y = 0
 	substack_charge_set.emit(charge_target_pos)
-	
+
 	state_chart.send_event("attack_start")
 	state_chart.send_event("start_targeting")
 	navigation_component.disable()
-	
+
 	#
 	sfx_player.stream = sfx_charge.pick_random()
 	sfx_player.play()
@@ -672,7 +683,7 @@ func _on_charge_back_leaping_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", false)
 	anim_player.play("substack/jump_telegraph")
 	var jump_results = charge_back_jump(chargeback_return_pos)
-	
+
 	anim_player.play("substack/jump_start")
 	#
 	sfx_player.stream = sfx_jump.pick_random()
@@ -681,9 +692,9 @@ func _on_charge_back_leaping_state_entered() -> void:
 	self.velocity = jump_results[0]
 	var time_up = jump_results[1]
 	var time_down = jump_results[2]
-	
+
 	await get_tree().create_timer(time_up).timeout
-	
+
 	await get_tree().create_timer(time_down).timeout
 
 	anim_player.play("substack/slam_end")
@@ -692,7 +703,7 @@ func _on_charge_back_leaping_state_entered() -> void:
 	sfx_player.play()
 	#
 	await anim_player.animation_finished
-	
+
 	state_chart.send_event("end_leap")
 
 
@@ -700,45 +711,45 @@ func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, charge_jump_height: floa
 	var start_pos = self.global_position
 	var highest_y = max(start_pos.y, goal_pos.y)
 	var apex_y = highest_y + charge_jump_height
-	
+
 	var velocity_v: float = sqrt(
 		2 * GRAVITY * (apex_y - start_pos.y)
 	)
-	
+
 	# TODO - make time_up and time_down configurable so we can set a jump time
 	var time_up: float = velocity_v / GRAVITY
 	var time_down: float = sqrt(2.0 * (apex_y - goal_pos.y) / GRAVITY)
 	var time: float = time_up + time_down
-	
+
 	var displacement_xz: Vector2 = Vector2(goal_pos.x, goal_pos.z) - Vector2(start_pos.x, start_pos.z)
 	var horizontal_distance: float = displacement_xz.length()
 	var velocity_h = horizontal_distance / time
 	var horizontal_dir: Vector2 = displacement_xz.normalized()
-	
+
 	var initial_velocity := Vector3(
 		horizontal_dir.x * velocity_h,
 		velocity_v,
 		horizontal_dir.y * velocity_h,
 	)
-	
+
 	# Drawing
 	if debug:
 		var trajectory_points: Array = []
-		
+
 		for i in range(1, 151):
 			var t = time * float(i) / float(151)
 			var x = start_pos.x + initial_velocity.x * t
 			var y = start_pos.y + initial_velocity.y * t - 0.5 * GRAVITY * t * t
 			var z = start_pos.z + initial_velocity.z * t
 			trajectory_points.append(Vector3(x, y, z))
-		
+
 		debug_trajectory_mesh.mesh.clear_surfaces()
 		debug_trajectory_mesh.mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
 		for p in trajectory_points:
 			debug_trajectory_mesh.mesh.surface_set_color(Color.RED)
 			debug_trajectory_mesh.mesh.surface_add_vertex(p)
 		debug_trajectory_mesh.mesh.surface_end()
-		
+
 	return [initial_velocity, time_up, time_down]
 
 
@@ -758,19 +769,19 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 
 func _on_aoe_merge_targeting_state_entered() -> void:
 	debug_state_label.text = "Merge AoE | Targeting"
-	
+
 	vel_vertical = 0
 	GRAVITY = 0
 	navigation_component.disable()
-	
+
 	state_chart.send_event("start_merge")
 
 
 func _on_aoe_merge_merging_state_entered() -> void:
 	debug_state_label.text = "Merge AoE | Jumping"
-	
+
 	merge_to_pos(Vector3(0, 9.0, 0), 0.9, false)
-	
+
 	state_chart.send_event("end_merge")
 
 

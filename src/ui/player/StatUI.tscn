@@ -526,13 +526,13 @@ assigned_action = "spin_barrels"
 [node name="MarginContainer2" type="MarginContainer" parent="PlayerConsumables/ConsumableUI"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
 
 [node name="CurrencyUI" parent="PlayerConsumables/ConsumableUI/MarginContainer2" instance=ExtResource("1_v8jbf")]
 custom_minimum_size = Vector2(200, 96)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
-is_static = true
 
 [node name="RerollUI" parent="." instance=ExtResource("10_tkawr")]
 process_mode = 1

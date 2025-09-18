@@ -18,6 +18,7 @@ var phase_stance: Stance = Stance.DEFENSIVE:
 			state_chart.send_event("defensive_stance")
 		phase_debug_label.text = "Phase %s (%s)" % [current_phase, Stance.keys()[phase_stance]]
 		select_attack()
+var unfair_fight_enabled = false
 
 @onready var elevation_speed: float = deg_to_rad(elevation_speed_deg)
 @onready var rotation_speed: float = deg_to_rad(rotation_speed_deg)
@@ -44,6 +45,7 @@ var previous_phase: String
 
 # Turrets
 @export_group("Turrets")
+var turret_attack_enabled = false
 var turret_spawns: Array:
 	set(value):
 		turret_spawns = value
@@ -86,7 +88,16 @@ func _ready() -> void:
 	super ()
 	GRAVITY = 0
 	head.rotate_x(PI)
-
+	if GameManager.boss_ante >= 1:
+		pass
+	if GameManager.boss_ante >= 2:
+		turret_attack_enabled = true
+	if GameManager.boss_ante >= 3:
+		pass
+	if GameManager.boss_ante >= 4:
+		pass
+	if GameManager.boss_ante >= 5:
+		unfair_fight_enabled = true
 
 func _physics_process(_delta: float) -> void:
 	if barrier_sfx_player.playing:
@@ -107,6 +118,10 @@ func activate() -> void:
 
 
 func toggle_stance() -> void:
+	if unfair_fight_enabled:
+		phase_stance = Stance.AGGRESSIVE
+		return
+
 	if phase_stance == Stance.AGGRESSIVE:
 		phase_stance = Stance.DEFENSIVE
 	elif phase_stance == Stance.DEFENSIVE:
@@ -142,6 +157,12 @@ func select_attack_phase_2() -> void:
 			"start_laser_attack",
 		]
 	
+	if unfair_fight_enabled:
+		possible_phases = [
+			"start_barrier_cage_attack",
+			"start_laser_attack",
+		]
+
 	#if previous_phase:
 		#possible_phases.erase(previous_phase)
 	
@@ -153,10 +174,12 @@ func select_attack_phase_2() -> void:
 func select_attack_phase_3() -> void:
 	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
-		"start_spawn_turrets_attack",
 		"start_laser_attack",
 		"start_barrier_cage_attack",
 	]
+
+	if turret_attack_enabled:
+		possible_phases.append("start_spawn_turrets_attack")
 	
 	if previous_phase:
 		possible_phases.erase(previous_phase)

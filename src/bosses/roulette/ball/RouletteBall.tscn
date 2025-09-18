@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://cpicsh5bemc0b"]
+[gd_scene load_steps=35 format=3 uid="uid://cpicsh5bemc0b"]
 
 [ext_resource type="Script" path="res://src/bosses/roulette/ball/roulette_ball.gd" id="1_onkcb"]
 [ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="2_3sdjd"]
@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://bs2usxb6ufu8p" path="res://src/bosses/roulette/assets/sfx/Ball Rolling 3.mp3" id="18_qtr5d"]
 [ext_resource type="AudioStream" uid="uid://fq4hcec72gfe" path="res://src/bosses/roulette/assets/sfx/Flame Ball 1.mp3" id="19_3f2bp"]
 [ext_resource type="AudioStream" uid="uid://iyhckokmohp3" path="res://src/bosses/roulette/assets/sfx/Flame Ball 2.mp3" id="20_dt76y"]
+[ext_resource type="PackedScene" uid="uid://ovfcjowsr7df" path="res://src/bosses/bartender/area_effects/FireHazardArea.tscn" id="21_c3q26"]
 [ext_resource type="AudioStream" uid="uid://cvymqo6ghxgl2" path="res://src/bosses/roulette/assets/sfx/Flame Ball 3.mp3" id="21_yeaf7"]
 [ext_resource type="AudioStream" uid="uid://c8up1bjmm46lf" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 1.mp3" id="22_77vdp"]
 [ext_resource type="AudioStream" uid="uid://ih5kcfb4vcxk" path="res://src/bosses/roulette/assets/sfx/Ball Metal Impact 2.mp3" id="23_vfope"]
@@ -88,6 +89,7 @@ sfx_rolling = Array[AudioStream]([ExtResource("16_2gn0d"), ExtResource("17_ba3bi
 sfx_fire = Array[AudioStream]([ExtResource("19_3f2bp"), ExtResource("20_dt76y"), ExtResource("21_yeaf7")])
 sfx_impact = Array[AudioStream]([ExtResource("22_77vdp"), ExtResource("23_vfope"), ExtResource("24_snoeh"), ExtResource("25_fm5h3"), ExtResource("26_ti6xf"), ExtResource("27_pigpk")])
 damage = 12.0
+fire_puddle_prefab = ExtResource("21_c3q26")
 radial_force_magnitude = 2500.0
 central_force_magnitude = 10000.0
 homing_force_magnitude = 6000.0
@@ -102,8 +104,11 @@ mesh = SubResource("SphereMesh_q2wve")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_hwqll")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="HomingTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="FirePuddleTimer" type="Timer" parent="."]
+wait_time = 2.0
 
 [node name="HealthComponent" parent="." instance=ExtResource("4_elsvf")]
 max_health = 25.0
@@ -126,3 +131,4 @@ unit_size = 12.0
 bus = &"SFX"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="FirePuddleTimer" to="." method="_on_fire_puddle_timer_timeout"]

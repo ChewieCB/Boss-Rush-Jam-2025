@@ -34,7 +34,7 @@ texture = ExtResource("1_tb6pl")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_umuy3")
 
-[node name="LifeTimer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="."]
 wait_time = 10.0
 one_shot = true
 autostart = true
@@ -58,7 +58,10 @@ autostart = true
 one_shot = true
 autostart = true
 
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -100)
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]
-[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="HomingDelay" to="." method="_on_homing_delay_timeout"]
