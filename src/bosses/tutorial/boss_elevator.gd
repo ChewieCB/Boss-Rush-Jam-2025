@@ -502,6 +502,8 @@ func _on_smokescreen_smoke_state_entered() -> void:
 func _on_smokescreen_open_doors_state_entered() -> void:
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
+	self.collision_layer = pow(2, 3-1)
+	self.collision_mask = pow(2, 1-1) + pow(2, 2-1) + pow(2, 4-1) + pow(2, 5-1)
 	
 	active_sub_light.green()
 	# TODO - configure delay and SFX for door opening
