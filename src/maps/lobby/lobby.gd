@@ -19,7 +19,7 @@ signal ui_accept
 var display_barrels: Array = []
 
 func _ready() -> void:
-	player.gun.reinstall_barrels()
+	#player.gun.reinstall_barrels()
 	#ScreenTransition.fill_screen()
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
