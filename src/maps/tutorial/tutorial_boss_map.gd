@@ -200,9 +200,6 @@ func _on_level_select(level_path: String) -> void:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
 	
-	exit_doors.close()
-	await exit_doors.anim_player.animation_finished
-	
 	super(level_path)
 
 
@@ -227,6 +224,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 	
+	exit_elevator_button.disabled = false
 	exit_doors.open()
 	
 	if not boss.boss_id in GameManager.bosses_defeated:
