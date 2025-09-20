@@ -58,7 +58,7 @@
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="48_5x1qu"]
 [ext_resource type="Script" path="res://src/maps/lobby/target_dummy.gd" id="48_lw5gn"]
 [ext_resource type="PackedScene" uid="uid://bmy7qgg3imyvv" path="res://src/maps/lobby/vendor/VendingMachine.tscn" id="48_u7c7o"]
-[ext_resource type="Material" path="res://assets/textures/posters/shop_odds_board.tres" id="52_p4602"]
+[ext_resource type="Material" uid="uid://dnhblhjk8if2e" path="res://assets/textures/posters/shop_odds_board.tres" id="52_p4602"]
 [ext_resource type="AudioStream" uid="uid://cuge1lwxr3m82" path="res://src/maps/lobby/assets/Lift Door Open.mp3" id="56_4ys2i"]
 [ext_resource type="Material" uid="uid://b3b8msym3jmcl" path="res://assets/textures/metal_corrode_0.tres" id="56_ff6r2"]
 [ext_resource type="Material" uid="uid://cb5sx56lvbk2m" path="res://assets/textures/placeholder/texture_light_01.tres" id="57_n1jb8"]
@@ -4238,7 +4238,6 @@ entProperties = {
 "linked_level": "res://src/maps/tutorial/TutorialBoss.tscn",
 "origin": "-862.5 16 108"
 }
-disabled = null
 
 [node name="group_7820_WallLightIndustrial1" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
@@ -4286,7 +4285,7 @@ entProperties = {
 "linked_level": "res://src/maps/pit_boss/BossMapPit.tscn",
 "origin": "416 -2 10"
 }
-disabled = null
+boss_id = 4
 
 [node name="entity_19_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.0625, 13)
@@ -4297,7 +4296,7 @@ entProperties = {
 "linked_level": "res://src/maps/chip_boss/BossMapChip.tscn",
 "origin": "416 -2 2"
 }
-disabled = null
+boss_id = 5
 
 [node name="entity_20_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.8125, 13)
@@ -4308,7 +4307,7 @@ entProperties = {
 "linked_level": "res://src/maps/roulette_boss/BossMapRoulette.tscn",
 "origin": "416 -2 26"
 }
-disabled = null
+boss_id = 2
 
 [node name="entity_21_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.5625, 13)
@@ -4319,7 +4318,7 @@ entProperties = {
 "linked_level": "res://src/maps/bartender_boss/BossMapBartender.tscn",
 "origin": "416 -2 18"
 }
-disabled = null
+boss_id = 3
 
 [node name="entity_22_ElevatorButton" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("15_4ent0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.0625, 13)
@@ -4330,7 +4329,7 @@ entProperties = {
 "linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
 "origin": "416 -2 34"
 }
-disabled = null
+boss_id = 1
 
 [node name="entity_23_Chandellier2LightOnly" parent="FuncGodotMap/layer_0_Decorations/group_672_Elevator" instance=ExtResource("31_fmlub")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.9375, 10.5)
