@@ -32,9 +32,9 @@ texture = ExtResource("2_30pyj")
 
 [node name="Emission" type="Sprite3D" parent="."]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+sorting_offset = 1.0
 billboard = 2
 shaded = true
-render_priority = 1
 texture = ExtResource("4_pa00x")
 
 [node name="DebugMesh" type="MeshInstance3D" parent="."]
