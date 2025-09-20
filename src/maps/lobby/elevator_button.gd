@@ -16,6 +16,7 @@ var boss_name: String
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var label: Label3D = $Label3D
 @onready var SFXButtonPress: AudioStreamPlayer3D = $SFXButtonPress
+@export var disabled: bool = false
 
 
 func _ready() -> void:
@@ -25,6 +26,9 @@ func _ready() -> void:
 
 
 func interact() -> void:
+	if disabled:
+		# TODO - locked button sfx
+		return
 	anim_player.play("push")
 	GameManager.selected_boss_id = boss_id
 	if linked_level:

@@ -6,7 +6,7 @@ extends Node3D
 signal ui_accept
 
 @onready var player: Player = find_children("*", "Player").front()
-@onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
+@onready var elevator_doors: SlidingDoor = find_children("*", "ElevatorDoors").front()
 @onready var elevator_buttons: Array[Node] = find_children("*", "ElevatorButton")
 
 @onready var info_ui: Control = $UI/InfoBoxUI
@@ -19,6 +19,7 @@ signal ui_accept
 var display_barrels: Array = []
 
 func _ready() -> void:
+	#player.gun.reinstall_barrels()
 	#ScreenTransition.fill_screen()
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
@@ -79,7 +80,11 @@ func show_panel(panel: Control) -> void:
 
 func _on_level_select(level_path: String) -> void:
 	GameManager.selected_level_path = level_path
-	difficulty_menu.show_menu()
+	if level_path == "res://src/maps/tutorial/TutorialBoss.tscn":
+		elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_6_SlidingDoor
+		load_selected_level()
+	else:
+		difficulty_menu.show_menu()
 
 func load_selected_level():
 	var level_path = GameManager.selected_level_path

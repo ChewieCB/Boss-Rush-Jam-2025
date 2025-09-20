@@ -553,7 +553,7 @@ func recheck_installed_barrels():
 		barrel.owner_gun = self
 		installed_barrels.append(barrel)
 		_set_barrel_effect_label(barrel, barrel.get_active_effect())
-
+	
 	barrel_count = installed_barrels.size()
 
 	for i in barrel_sprites.size():
@@ -561,9 +561,12 @@ func recheck_installed_barrels():
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		if i < barrel_count:
 			state_machine.travel("idle")
+			barrel_icon_meshes[i].visible = true
 			#barrel_label.visible = true
 		else:
 			state_machine.travel("unequip")
+			barrel_icon_meshes[i].visible = false
+			barrel_icon_meshes[i].set_surface_override_material(0, default_barrel_icon_mat)
 			#barrel_label.visible = false
 
 
