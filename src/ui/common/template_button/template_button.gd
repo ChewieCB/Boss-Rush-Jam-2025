@@ -43,3 +43,12 @@ func _on_hover_play_sfx():
 func get_signal_connection_count(emitter: Object, signal_name: String) -> int:
 	var connections = emitter.get_signal_connection_list(signal_name)
 	return connections.size()
+
+
+func set_text_color(color: Color):
+	add_theme_color_override("font_disabled_color", color)
+	add_theme_color_override("font_color", color)
+	add_theme_color_override("font_pressed_color", color)
+	add_theme_color_override("font_hover_color", color)
+	add_theme_color_override("font_hover_pressed_color", color)
+	add_theme_color_override("font_focus_color", color)

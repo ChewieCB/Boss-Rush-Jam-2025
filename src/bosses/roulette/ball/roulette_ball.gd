@@ -19,6 +19,7 @@ var body_state: PhysicsDirectBodyState3D
 @export var wheel_center: Vector3 = Vector3.ZERO
 @export var damage: float = 15
 @export var max_collisions: int = -1
+@export var fire_puddle_prefab: PackedScene
 var collision_count: int = 0
 @export_subgroup("Movement")
 @export var radial_force_magnitude: float = 1700
@@ -33,13 +34,20 @@ var collision_count: int = 0
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var fire_mesh: MeshInstance3D = $FireMesh
 @onready var material: StandardMaterial3D = mesh.mesh.material
-@onready var homing_timer: Timer = $Timer
+@onready var homing_timer: Timer = $HomingTimer
+@onready var fire_puddle_timer: Timer = $FirePuddleTimer
+
 
 var is_flaming: bool = false:
 	set(value):
 		is_flaming = value
 		fire_mesh.visible = is_flaming
 
+var leave_fire_puddle: bool = false:
+	set(value):
+		leave_fire_puddle = value
+		if leave_fire_puddle:
+			fire_puddle_timer.start()
 
 func _ready() -> void:
 	health_component.died.connect(destroy)
@@ -55,10 +63,13 @@ func _ready() -> void:
 		if is_flaming:
 			sfx_player_loop_2.volume_db = linear_to_db(0.1)
 			sfx_player_loop_2.stream = sfx_fire.pick_random()
-			sfx_player_loop_2.play() 
+			sfx_player_loop_2.play()
 		var tween = get_tree().create_tween()
 		tween.tween_property(sfx_player_loop_2, "volume_db", linear_to_db(1.0), 0.4).set_trans(Tween.TRANS_SINE)
 		tween.parallel().tween_property(sfx_player_loop_2, "volume_db", linear_to_db(1.0), 0.4).set_trans(Tween.TRANS_SINE)
+
+func init(_damage: float):
+	damage = _damage
 
 
 func _physics_process(_delta: float) -> void:
@@ -127,3 +138,9 @@ func _on_body_entered(body: Node) -> void:
 			collision_count += 1
 			if collision_count == max_collisions and max_collisions > 0:
 				destroy()
+
+
+func _on_fire_puddle_timer_timeout() -> void:
+	var inst = fire_puddle_prefab.instantiate()
+	get_tree().get_root().add_child(inst)
+	inst.position = global_position

@@ -40,6 +40,7 @@ disabled = true
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 light_color = Color(0.960906, 0.678553, 0.450889, 1)
 light_energy = 2.0
+light_bake_mode = 1
 omni_range = 20.0
 
 [node name="HealthComponent" type="Node" parent="."]

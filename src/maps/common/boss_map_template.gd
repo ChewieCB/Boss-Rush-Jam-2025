@@ -14,7 +14,7 @@ var nav_region: NavigationRegion3D
 @export_group("Actors")
 @onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
-@onready var elevator_doors: ElevatorDoors = find_children("*", "ElevatorDoors").front()
+@onready var elevator_doors: SlidingDoor = find_children("*", "ElevatorDoors").front()
 
 @export_group("UI")
 @export var win_subtext: Array[String] = [""]
@@ -50,11 +50,12 @@ func _ready() -> void:
 	
 	if not boss:
 		push_error("No boss defined for map.")
-	if not boss.is_node_ready():
-		await boss.ready
-	boss.died.connect(_on_boss_died)
-	boss.defeated.connect(_on_boss_defeated)
-	boss.chip_dropped.connect(_on_chip_dropped)
+	else:
+		if not boss.is_node_ready():
+			await boss.ready
+		boss.died.connect(_on_boss_died)
+		boss.defeated.connect(_on_boss_defeated)
+		boss.chip_dropped.connect(_on_chip_dropped)
 	
 	player.health_component.died.connect(_on_player_death)
 	# Sync the player's location in the elevator from the lobby
@@ -69,7 +70,8 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	generate_navigation()
 	
-	elevator_doors.open()
+	if elevator_doors:
+		elevator_doors.open()
 
 
 func generate_navigation() -> void:
@@ -128,14 +130,14 @@ func collect_all_chips() -> void:
 		chip_tween.tween_property(chip, "global_position", player.global_position, chip_move_time).set_ease(Tween.EASE_IN)
 
 
-func _on_boss_died(boss: BossCore = boss) -> void:
+func _on_boss_died(_boss: BossCore = boss) -> void:
 	var tween = self.create_tween()
 	tween.tween_property(directional_light, "light_energy", 0, 1)
 
 
-func _on_boss_defeated(boss: BossCore) -> void:
+func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
-	win_ui.win("Floor Cleared", win_subtext.pick_random())
+	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 	
 	if not boss.boss_id in GameManager.bosses_defeated:
@@ -143,6 +145,7 @@ func _on_boss_defeated(boss: BossCore) -> void:
 		print(GameManager.bosses_defeated)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 
+	reward_bet_money()
 	show_end_panel()
 
 
@@ -156,7 +159,8 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	boss.activate()
 	print_debug("Boss activate method called")
 	LuckHandler.enabled = true
-	elevator_doors.close()
+	if elevator_doors:
+		elevator_doors.close()
 	print_debug("Elevator doors closed, freeing trigger volume")
 	boss_trigger.queue_free()
 
@@ -171,3 +175,33 @@ func _on_spin_trigger_body_entered(body: Node3D) -> void:
 func _on_chip_dropped(value: int) -> void:
 	chips_dropped += 1
 	chip_value_collected += value
+
+
+func _on_level_select(level_path: String) -> void:
+	#SFXDoorClose.play()
+	ResourceLoader.load_threaded_request(level_path)
+	elevator_doors.close()
+	await elevator_doors.anim_player.animation_finished
+	# Wait until the level has been loaded on another thread
+	while ResourceLoader.load_threaded_get_status(level_path) != ResourceLoader.THREAD_LOAD_LOADED:
+		pass
+	# Get the player's position relative to the elevator doors
+	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
+	GameManager.cached_player_rotation = GameManager.player.rotation
+	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
+	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
+	# HACK - do this properly with dynamic loading of scenes
+  
+	if is_inside_tree():
+		# TODO - fade this out via tween
+		SoundManager.stop_music(0.5)
+		# var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
+		# TODO - fixme
+		#if new_bgm:
+			#SoundManager.play_music(new_bgm, 0.25, "BGM")
+		#GameManager.is_free_reroll = false
+		get_tree().change_scene_to_packed(loaded_scene)
+
+
+func reward_bet_money():
+	GameManager.player_currency += GameManager.reward_value

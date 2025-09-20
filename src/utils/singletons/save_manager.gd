@@ -1,5 +1,7 @@
 extends Node
 
+# On Windows, save files are located in C:\Users\[Name]\AppData\Roaming\Godot\app_userdata\Crapshoot
+
 var save_data_is_loaded = false
 var is_saving = false
 
@@ -33,6 +35,12 @@ func convert_id_to_boss_enum(array_id: Array) -> Array[BossCore.BossIdEnum]:
 		result.append(elem as BossCore.BossIdEnum)
 	return result
 
+func convert_id_to_skill_enum(dict_id: Dictionary) -> Dictionary:
+	var result = {}
+	for key in dict_id:
+		var new_key = (key as SkillItemUI.SkillIdEnum)
+		result[new_key] = dict_id[key]
+	return result
 
 func delete_save_file(slot_id: int):
 	var save_path = get_savefile_name(slot_id)
@@ -60,7 +68,11 @@ func save_game(slot_id):
 		"barrel_tutorial_shown": GameManager.barrel_tutorial_shown,
 		"bosses_defeated": GameManager.bosses_defeated,
 		"victory_ui_shown": GameManager.victory_ui_shown,
-		"total_playtime": GameManager.total_playtime
+		"total_playtime": GameManager.total_playtime,
+		"player_level": GameManager.player_level,
+		"player_skill_points": GameManager.player_skill_points,
+		"player_skill_dict": GameManager.player_skill_dict,
+		"tutorial_completed": GameManager.tutorial_completed,
 	}
 	var save_file = FileAccess.open(get_savefile_name(slot_id), FileAccess.WRITE)
 	var json_string = JSON.stringify(save_dict)
@@ -96,18 +108,21 @@ func load_game(slot_id):
 		GameManager.load_new_save_data()
 		savefile_loaded.emit()
 		return
-
 	
-	GameManager.player_currency = save_data["player_currency"]
+	GameManager.player_currency = save_data.get("player_currency", 0)
 	GameManager.equipped_barrels = convert_id_to_resource(save_data["equipped_barrels"])
 	GameManager.inventory_barrels = convert_id_to_resource(save_data["inventory_barrels"])
 	GameManager.shop_barrels = convert_id_to_resource(save_data["shop_barrels"])
-	GameManager.player_gained_first_barrel = save_data["player_gained_first_barrel"]
-	GameManager.barrel_tutorial_shown = save_data["barrel_tutorial_shown"]
+	GameManager.player_gained_first_barrel = save_data.get("player_gained_first_barrel", false)
+	GameManager.barrel_tutorial_shown = save_data.get("barrel_tutorial_shown", false)
 	GameManager.bosses_defeated = convert_id_to_boss_enum(save_data["bosses_defeated"])
-	GameManager.victory_ui_shown = save_data["victory_ui_shown"]
-	GameManager.total_playtime = save_data["total_playtime"]
-
+	GameManager.victory_ui_shown = save_data.get("victory_ui_shown", false)
+	GameManager.total_playtime = save_data.get("total_playtime", 0)
+	GameManager.player_level = save_data.get("player_level", 1)
+	GameManager.player_skill_points = save_data.get("player_skill_points", 0)
+	GameManager.player_skill_dict = convert_id_to_skill_enum(save_data.get("player_skill_dict", {}))
+	GameManager.tutorial_completed = save_data.get("tutorial_completed", false)
+	
 	check_for_new_update_barrels()
 	
 	savefile_loaded.emit()
@@ -130,13 +145,16 @@ func save_setting_config():
 	config.set_value("Graphic", "resolution_index", GameManager.resolution_index)
 	config.set_value("Graphic", "window_mode_index", GameManager.window_mode_index)
 	config.set_value("Graphic", "scaling_3d", GameManager.scaling_3d)
+	config.set_value("Graphic", "hide_ui", GameManager.hide_ui)
+	config.set_value("Graphic", "hide_damage_number", GameManager.hide_damage_number)
+	config.set_value("Graphic", "hide_hurt_overlay", GameManager.hide_hurt_overlay)
 	config.set_value("Graphic", "screen_shake_disabled", GameManager.screen_shake_disabled)
 	config.set_value("Graphic", "drunk_blur_disabled", GameManager.drunk_blur_disabled)
 	config.set_value("Audio", "master_audio", GameManager.master_audio)
 	config.set_value("Audio", "bgm_audio", GameManager.bgm_audio)
 	config.set_value("Audio", "sfx_audio", GameManager.sfx_audio)
 	config.set_value("Audio", "ui_audio", GameManager.ui_audio)
-
+	
 	config.save("user://setting.cfg")
 
 
@@ -167,7 +185,7 @@ func load_setting_config():
 	GameManager.bgm_audio = config.get_value("Audio", "bgm_audio", 100)
 	GameManager.sfx_audio = config.get_value("Audio", "sfx_audio", 100)
 	GameManager.ui_audio = config.get_value("Audio", "ui_audio", 100)
-
+	
 	setting_config_loaded.emit()
 
 # If we update the game and add new barrel into GameManager's shop,

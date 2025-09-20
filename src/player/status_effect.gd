@@ -1,5 +1,6 @@
 class_name StatusEffect
 
+## Chance stuff are in decimal (0.5 = 50%)
 enum PlayerStatEnum {
 	NONE,
 	RUN_SPEED_MODIFIER,
@@ -9,6 +10,11 @@ enum PlayerStatEnum {
     JUMP_HEIGHT,
     DASH_IFRAME_DURATION,
 	DASH_DURATION,
+    CHIP_DROPRATE_MULTIPLIER,
+    MIN_DAMAGE_VARIANCE,
+    MAX_DAMAGE_VARIANCE,
+    CRITICAL_HIT_CHANCE,
+    CRITICAL_HIT_DAMAGE_MULTIPLIER
 }
 enum ModifyType {FLAT, PERCENTAGE, BOOL} # How it interact with base value
 

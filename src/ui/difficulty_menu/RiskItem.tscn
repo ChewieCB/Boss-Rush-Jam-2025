@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://doawgaf4fslbl"]
+
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/risk_item.gd" id="1_42wr8"]
+[ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="2_nl86j"]
+[ext_resource type="Texture2D" uid="uid://lv21myguw6oh" path="res://assets/sprite/game_icon/minus.png" id="3_sp7s7"]
+[ext_resource type="Texture2D" uid="uid://dy3dl8bil7nds" path="res://assets/sprite/game_icon/plus.png" id="4_d1v8y"]
+
+[node name="RiskItem" type="HBoxContainer"]
+size_flags_vertical = 4
+theme_override_constants/separation = 10
+script = ExtResource("1_42wr8")
+
+[node name="RiskIcon" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 1
+
+[node name="RiskName" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+
+[node name="Spacer" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ModifyValue" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "+ 0%"
+
+[node name="Spacer2" type="Control" parent="."]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="MinusButton" parent="." instance=ExtResource("2_nl86j")]
+layout_mode = 2
+text = ""
+icon = ExtResource("3_sp7s7")
+
+[node name="PlusButton" parent="." instance=ExtResource("2_nl86j")]
+layout_mode = 2
+text = ""
+icon = ExtResource("4_d1v8y")
+
+[connection signal="pressed" from="MinusButton" to="." method="_on_minus_button_pressed"]
+[connection signal="pressed" from="PlusButton" to="." method="_on_plus_button_pressed"]

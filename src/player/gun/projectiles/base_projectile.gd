@@ -1,9 +1,13 @@
 extends Node3D
 class_name BaseProjectile
+# ^ It's a silly name. Should be BaseAttack or BaseBullet instead since both projectile and hitscan inherit from this
 
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
 @export var bullet_decal_prefab: PackedScene
+# Check BossCore.BossStatusEffect for order
+@export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
+@export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
 
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
@@ -13,7 +17,10 @@ signal destroyed
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
 
+## Base damage / initial damage
 var damage = 1
+## In decimal
+var crit_chance = 0
 var ricochet_count_left = 0
 var owner_gun: Gun
 var is_ricochet_shot = false
@@ -29,8 +36,10 @@ var projectile_speed = 100
 var max_range
 var splitted = false
 var is_hitscan = false
+var infused_status_effect = [false, false, false, false, false]
 
-# Statistics traking or barrel effect
+# Statistics tracking for barrel effect
+var color_changed_count = 0
 var life_time = 0
 var spawn_pos = Vector3.ZERO
 var travelled_distance = 0
@@ -39,13 +48,19 @@ var travelled_distance = 0
 func _ready() -> void:
 	spawn_pos = global_position
 	life_time = 0
+	crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
+	for elem in elemental_emitting_vfx:
+		if elem:
+			elem.visible = false
 
 func _process(delta: float) -> void:
 	life_time += delta
 
 func create_spark(pos: Vector3, normal: Vector3):
+	create_status_effect_impact(pos, normal)
 	if spark_effect == null:
 		return
+
 	var spark_inst = spark_effect.instantiate()
 	get_parent().add_child(spark_inst)
 	spark_inst.global_position = pos
@@ -58,8 +73,10 @@ func create_spark(pos: Vector3, normal: Vector3):
 		spark_inst.look_at(pos + normal, Vector3.UP)
 
 func create_blood_splatter(pos: Vector3, normal: Vector3):
+	create_status_effect_impact(pos, normal)
 	if generic_blood_splatter == null:
 		return
+
 	var blood_inst = generic_blood_splatter.instantiate()
 	get_parent().add_child(blood_inst)
 	blood_inst.global_position = pos
@@ -81,20 +98,42 @@ func create_bullet_decal(pos: Vector3, normal: Vector3):
 	if abs(normal.dot(Vector3.UP)) < 0.999:
 		decal_inst.look_at(pos + normal, Vector3.UP)
 		decal_inst.rotate_object_local(Vector3(1, 0, 0), 90)
-	
+
 	# Rotate the decal a bit for variety
 	decal_inst.rotate_object_local(Vector3(0, 1, 0), randf_range(0.0, 360.0))
 
+func create_status_effect_impact(pos: Vector3, normal: Vector3):
+	var impact_effect = null
+	for i in range(len(infused_status_effect)):
+		if infused_status_effect[i] and elemental_impact_vfx[i]:
+			impact_effect = elemental_impact_vfx[i]
+			var impact_inst = impact_effect.instantiate()
+			get_parent().add_child(impact_inst)
+			impact_inst.global_position = pos
+
+			if abs(normal.dot(Vector3.UP)) < 0.999:
+				impact_inst.look_at(pos + normal, Vector3.UP)
+				impact_inst.rotate_object_local(Vector3(1, 0, 0), 90)
+
+func calculate_bullet_damage():
+	var rand_damage_mod = get_damage_variance_modifier(damage)
+	var calculated_damage = damage + rand_damage_mod
+	# Crit
+	var roll = randi_range(1, 100)
+	var roll_target = int(crit_chance * 100)
+	if roll <= roll_target:
+		calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
+		owner_gun.crit_damage(calculated_damage)
+	return calculated_damage
 
 func ricochet():
 	return
 
-## This will be added to normal projectile attack
+## This will be added to normal damage
 func get_damage_variance_modifier(_damage: int) -> int:
-	if GameManager.player.luck_component.current_luck_ratio >= GameManager.player.HIGH_LUCK_THRESHOLD:
-		# High luck will roll from 0 to 0.2 instead of usual -0.2 to 0.2
-		return int(randf_range(0, _damage * DAMAGE_VARIANCE))
-	return int(randf_range(_damage * -DAMAGE_VARIANCE, _damage * DAMAGE_VARIANCE))
+	var min_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE] - 1
+	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE] - 1
+	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
 func create_duplication() -> BaseProjectile:
 	var new_inst: BaseProjectile = self.duplicate()
@@ -132,3 +171,26 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		# Splitted bullet cant ricochet
 		new_inst.splitted = true
 		new_inst.init(new_pos, new_dir, int(damage / split_count), 0, projectile_speed, max_range)
+
+
+func change_bullet_color(_new_color: Color):
+	color_changed_count += 1
+
+
+func infuse_status_effect(_status_effect: BossCore.BossStatusEffect):
+	infused_status_effect[int(_status_effect) - 1] = true
+
+
+func stop_elemental_particles():
+	for elem in elemental_emitting_vfx:
+		if elem:
+			elem.queue_free_after_time()
+
+func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
+	# Wait a bit to make the effect look better
+	await get_tree().create_timer(0.05).timeout
+	var element_vfx_node = elemental_emitting_vfx[int(status_effect) - 1]
+	if element_vfx_node:
+		element_vfx_node.visible = true
+		if element_vfx_node.has_method("turn_on"):
+			element_vfx_node.turn_on()

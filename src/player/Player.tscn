@@ -1,10 +1,9 @@
-[gd_scene load_steps=67 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=75 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
 [ext_resource type="AudioStream" uid="uid://14a1e70swgdk" path="res://src/player/assets/sfx/VOICE LINES/OWW!.mp3" id="2_cpvt1"]
 [ext_resource type="Script" path="res://src/player/shakeable_camera.gd" id="3_cy2wl"]
-[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_e4bmr"]
 [ext_resource type="AudioStream" uid="uid://bubn8d8stors5" path="res://src/player/assets/sfx/RUNNING/Running Individual 1.mp3" id="3_hiqt7"]
 [ext_resource type="AudioStream" uid="uid://bkin5hht4n4iw" path="res://src/player/assets/sfx/VOICE LINES/URGH 1.mp3" id="3_lb5n1"]
 [ext_resource type="Texture2D" uid="uid://t7scpy3771o6" path="res://src/player/assets/blob_shadow.png" id="3_tgexf"]
@@ -39,25 +38,35 @@
 [ext_resource type="AudioStream" uid="uid://clrb5tuaish36" path="res://src/player/assets/sfx/RUNNING/Running Individual 13.mp3" id="15_w5gjb"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="16_7a84q"]
 [ext_resource type="AudioStream" uid="uid://l2hmqeiq76ff" path="res://src/player/assets/sfx/RUNNING/Running Individual 14.mp3" id="16_tto8i"]
-[ext_resource type="PackedScene" uid="uid://xtemm86x5ftx" path="res://src/ui/player/EffectDetailUI.tscn" id="20_ic8us"]
 [ext_resource type="AudioStream" uid="uid://bmdb3aap303b0" path="res://src/player/assets/sfx/CROUCH.mp3" id="26_skrud"]
 [ext_resource type="AudioStream" uid="uid://dckgsngjsbl02" path="res://src/player/assets/sfx/STAND.mp3" id="27_6gtc3"]
 [ext_resource type="AudioStream" uid="uid://b1j1n3jwte3cg" path="res://src/player/assets/sfx/New Jump from ground.mp3" id="29_5swy3"]
 [ext_resource type="AudioStream" uid="uid://dxp1qdaew521c" path="res://src/player/assets/sfx/New Dash Sound (maybe highpass later) w verb.mp3" id="30_bfwyi"]
-[ext_resource type="Shader" path="res://src/player/assets/outline.gdshader" id="36_1ffwc"]
+[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="31_uqkio"]
+[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="32_vsild"]
+[ext_resource type="Script" path="res://src/components/health/health_component_player.gd" id="34_6waar"]
+[ext_resource type="PackedScene" uid="uid://di1fwsgnfbfd" path="res://src/utils/freecam/FreeCam.tscn" id="34_kq3ih"]
+[ext_resource type="PackedScene" uid="uid://b052m61k5ht8i" path="res://src/player/gun/vfx/misc/HitText.tscn" id="35_uogvx"]
+[ext_resource type="Shader" path="res://src/player/assets/shaders/outline.gdshader" id="36_1ffwc"]
 [ext_resource type="PackedScene" uid="uid://beunw631r018y" path="res://src/player/gun/PlayerGunNew.tscn" id="39_lhbas"]
 [ext_resource type="Script" path="res://src/player/player_ui.gd" id="41_63osp"]
+[ext_resource type="Script" path="res://src/player/aim_recticle.gd" id="42_rky08"]
 [ext_resource type="PackedScene" uid="uid://diyo7ftvwcl0r" path="res://src/ui/player/status/DrunkUI.tscn" id="46_587r8"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/device_input_prompt/DeviceInputPrompt.tscn" id="46_br567"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="46_br567"]
 [ext_resource type="Texture2D" uid="uid://dqtvfqbsmoyvm" path="res://src/ui/boss/special_dialog_background.png" id="46_fj1jc"]
-[ext_resource type="Shader" path="res://src/player/assets/old_movie.gdshader" id="46_fqoxl"]
+[ext_resource type="Shader" path="res://src/player/assets/shaders/old_movie.gdshader" id="46_fqoxl"]
 [ext_resource type="PackedScene" uid="uid://crvu72pwcnneq" path="res://src/ui/player/StatUI.tscn" id="46_ob8n4"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="47_yr3ov"]
+[ext_resource type="PackedScene" uid="uid://bqgedwbxkh8xa" path="res://src/ui/player/barrel_detail/BarrelDetailUI.tscn" id="48_6dr3i"]
+[ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_detail_ui.gd" id="48_8tfyi"]
 [ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="57_sguas"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ujv4f"]
+height = 1.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_w3btf"]
 
@@ -90,6 +99,9 @@ material = SubResource("ShaderMaterial_cjv3t")
 flip_faces = true
 size = Vector2(2, 2)
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
+viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7pe4k"]
@@ -117,18 +129,35 @@ sfx_jump_ground = Array[AudioStream]([ExtResource("29_5swy3")])
 sfx_jump_air = Array[AudioStream]([ExtResource("29_5swy3")])
 sfx_dash_floor = Array[AudioStream]([ExtResource("30_bfwyi")])
 sfx_dash_air = Array[AudioStream]([ExtResource("30_bfwyi")])
+sfx_purchase = ExtResource("31_uqkio")
+sfx_too_expensive = ExtResource("32_vsild")
 max_air_jump = 1
 speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
-reroll_heal_value = 20.0
+freecam_prefab = ExtResource("34_kq3ih")
 
-[node name="HealthComponent" parent="." instance=ExtResource("3_e4bmr")]
+[node name="HealthComponent" type="Node3D" parent="."]
+script = ExtResource("34_6waar")
+max_health = 200.0
+show_damage_text = false
+text_effect = ExtResource("35_uogvx")
 
 [node name="LuckComponent" parent="." instance=ExtResource("57_0cid7")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionStanding" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_le58x")
+
+[node name="CollisionCrouching" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("CapsuleShape3D_ujv4f")
+
+[node name="CheckStandingCollision" type="Area3D" parent="."]
+collision_layer = 0
+
+[node name="CollisionCrouching" type="CollisionShape3D" parent="CheckStandingCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CapsuleShape3D_ujv4f")
 
 [node name="DebugMeshes" type="Node3D" parent="."]
 
@@ -159,7 +188,7 @@ shape = SubResource("BoxShape3D_sjjg0")
 [node name="Camera3D" type="Camera3D" parent="Neck/ShakeCameraWrapper"]
 current = true
 fov = 90.0
-near = 0.02
+near = 0.001
 
 [node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.947067)
@@ -183,6 +212,7 @@ offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_ymis7")
+script = ExtResource("42_rky08")
 
 [node name="HitMarker" type="TextureRect" parent="Neck/ShakeCameraWrapper"]
 modulate = Color(1, 0.979667, 0.39, 0)
@@ -204,6 +234,22 @@ texture = ExtResource("5_nkt42")
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
 
 [node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("39_lhbas")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, 0)
+
+[node name="EffectIconsSprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent" index="8"]
+texture = SubResource("ViewportTexture_rj1ni")
+
+[node name="Barrel3Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="1"]
+transform = Transform3D(0.735053, -0.0466678, -0.676402, -0.67801, -0.0493604, -0.733394, 0.000838399, 0.99769, -0.0679237, -0.00193595, 0, 0.555438)
+surface_material_override/0 = null
+
+[node name="Barrel2Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="2"]
+transform = Transform3D(0.693706, -0.0523373, -0.718354, -0.71934, -2.604e-06, -0.694658, 0.0363546, 0.99863, -0.0376501, -0.15, 0, 1.76)
+surface_material_override/0 = null
+
+[node name="Barrel1Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="3"]
+transform = Transform3D(0.743941, -0.0342128, -0.666855, -0.665129, 0.040512, -0.745142, 0.05871, 0.892489, 0.00826027, -0.411454, 0.00172222, 3.20794)
+surface_material_override/0 = null
 
 [node name="AimAssistRaycast" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
@@ -275,44 +321,40 @@ luck_component = NodePath("../../LuckComponent")
 
 [node name="GunUI" type="Control" parent="UI"]
 layout_mode = 3
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 576.0
-offset_right = 958.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="GunStatusUI" type="MarginContainer" parent="UI/GunUI"]
+[node name="DimScreen" type="ColorRect" parent="UI/GunUI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
 mouse_filter = 2
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+color = Color(0.14, 0.14, 0.14, 0)
 
-[node name="AllBarrelEffectUI" type="VBoxContainer" parent="UI/GunUI/GunStatusUI"]
-layout_mode = 2
-size_flags_horizontal = 8
+[node name="BarrelEffectsUI" type="Control" parent="UI/GunUI"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 24
-alignment = 1
+script = ExtResource("48_8tfyi")
 
-[node name="EffectDetailUI" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
-layout_mode = 2
-
-[node name="EffectDetailUI2" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
-layout_mode = 2
-
-[node name="EffectDetailUI3" parent="UI/GunUI/GunStatusUI/AllBarrelEffectUI" instance=ExtResource("20_ic8us")]
-layout_mode = 2
+[node name="BarrelDetailUI" parent="UI/GunUI/BarrelEffectsUI" instance=ExtResource("48_6dr3i")]
+layout_mode = 1
+offset_left = -556.0
+offset_top = -273.0
+offset_right = 1126.0
+offset_bottom = 391.0
 
 [node name="BossSpecialDialog" type="Control" parent="UI"]
 process_mode = 3
@@ -530,10 +572,8 @@ delay_in_seconds = "0.0"
 
 [node name="DrunkTimer" type="Timer" parent="StateChart/Root/Status/Drunk"]
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1, 0.2)
-light_color = Color(0.78, 0.897333, 1, 1)
-
+[connection signal="body_entered" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_entered"]
+[connection signal="body_exited" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_exited"]
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
 [connection signal="state_input" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_input"]
@@ -549,4 +589,5 @@ light_color = Color(0.78, 0.897333, 1, 1)
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_physics_processing"]
 [connection signal="timeout" from="StateChart/Root/Status/Drunk/DrunkTimer" to="." method="_on_drunk_timer_timeout"]
 
+[editable path="Neck/ShakeCameraWrapper/GunContainer/BlankGun"]
 [editable path="UI/HurtOverlay"]

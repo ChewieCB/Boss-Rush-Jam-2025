@@ -17,6 +17,7 @@ func _ready() -> void:
 func _on_currency_changed(new_value: int) -> void:
 	var old_value: int = int(currency_label.text)
 	var tween = get_tree().create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween.tween_method(tween_label_text, old_value, new_value, 0.2) 
 
 

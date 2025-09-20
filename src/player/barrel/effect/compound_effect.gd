@@ -77,9 +77,9 @@ func on_reload_interrupted():
 	for child in child_effects:
 		child.on_reload_interrupted()
 
-func on_projectile_spawn():
+func on_projectile_spawn(_projectile: BaseProjectile):
 	for child in child_effects:
-		child.on_projectile_spawn()
+		child.on_projectile_spawn(_projectile)
 
 func on_projectile_travel_tick():
 	for child in child_effects:

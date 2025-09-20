@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xb2s2"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/explosive_bullet_effect.gd" id="6_l2mgc"]
 [ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="7_ichvy"]
-[ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/ExplosionVFX3D.tscn" id="8_0k0ub"]
+[ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/explosion/ExplosionVFX3D.tscn" id="8_0k0ub"]
 
 [node name="DebugExplosiveBulletBarrel" type="Node3D"]
 script = ExtResource("1_xb2s2")

@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://bu43hcl2orkct"]
+[gd_scene load_steps=9 format=3 uid="uid://bu43hcl2orkct"]
 
 [ext_resource type="Script" path="res://src/env/lighting/chandellier.gd" id="1_bf6g5"]
 [ext_resource type="Texture2D" uid="uid://dbjcmdnek20wd" path="res://src/env/lighting/assets/chandellier_1.png" id="1_jbfgn"]
 [ext_resource type="Texture2D" uid="uid://u3vyw6eyv5u7" path="res://src/env/lighting/assets/chain.png" id="2_30pyj"]
 [ext_resource type="Script" path="res://src/components/health/health_component.gd" id="4_gnatl"]
+[ext_resource type="Texture2D" uid="uid://3kmwmoj2hxq0" path="res://src/env/lighting/assets/chandellier_1_emission.png" id="4_pa00x"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_7vk1h"]
 size = Vector3(4, 3, 3.9)
@@ -29,6 +30,13 @@ transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.0753265, 3.72, 0)
 billboard = 2
 texture = ExtResource("2_30pyj")
 
+[node name="Emission" type="Sprite3D" parent="."]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+sorting_offset = 1.0
+billboard = 2
+shaded = true
+texture = ExtResource("4_pa00x")
+
 [node name="DebugMesh" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("BoxMesh_7vk1h")
@@ -49,7 +57,9 @@ light_energy = 4.0
 light_indirect_energy = 2.0
 light_volumetric_fog_energy = 2.0
 light_size = 2.0
+light_bake_mode = 1
 omni_range = 10.0
+omni_attenuation = 2.0
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("4_gnatl")

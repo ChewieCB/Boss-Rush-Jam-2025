@@ -1,0 +1,47 @@
+[gd_scene load_steps=6 format=3 uid="uid://bnro5qxjcbkx0"]
+
+[ext_resource type="Script" path="res://src/env/lighting/chandellier.gd" id="1_imu3c"]
+[ext_resource type="Texture2D" uid="uid://bhlr2v3ogxbd5" path="res://src/env/lighting/assets/Floor_Lamp.png" id="2_kgvxb"]
+[ext_resource type="Script" path="res://src/components/health/health_component.gd" id="3_t5pal"]
+[ext_resource type="Texture2D" uid="uid://d3kajunvydqs5" path="res://src/env/lighting/assets/Floor_Lamp_emission.png" id="3_vtpbt"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6se8u"]
+size = Vector3(1.1, 2.23406, 1)
+
+[node name="StandingLight" type="StaticBody3D"]
+collision_layer = 129
+collision_mask = 0
+script = ExtResource("1_imu3c")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.0348371, 1.05, 0)
+billboard = 2
+texture = ExtResource("2_kgvxb")
+
+[node name="Emission" type="Sprite3D" parent="."]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.0348371, 1.05, 0)
+billboard = 2
+shaded = true
+render_priority = 1
+texture = ExtResource("3_vtpbt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0115724, 1.12041, -0.1)
+shape = SubResource("BoxShape3D_6se8u")
+disabled = true
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+light_color = Color(0.985956, 0.819368, 0.563596, 1)
+light_energy = 4.0
+light_indirect_energy = 2.0
+light_volumetric_fog_energy = 2.0
+light_size = 2.0
+light_bake_mode = 1
+omni_range = 10.0
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_t5pal")
+max_health = 1.0
+
+[connection signal="died" from="HealthComponent" to="." method="_on_health_component_died"]

@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dnhblhjk8if2e"]
+
+[ext_resource type="Texture2D" uid="uid://cevd2dlsnr277" path="res://assets/textures/posters/shop_odds_board.png" id="1_2t765"]
+
+[resource]
+albedo_texture = ExtResource("1_2t765")
+metallic_specular = 0.0
+texture_filter = 2

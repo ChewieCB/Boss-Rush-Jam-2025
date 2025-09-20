@@ -15,6 +15,10 @@ var spawned_chips := []
 @export var sweep_damage: float = 10.0
 
 
+func init(_damage: float) -> void:
+	sweep_damage = _damage
+
+
 func add_chips(chip_count: int) -> void:
 	for i in range(chip_count):
 		var chip_tuple: Array = await _add_chip()
@@ -30,14 +34,14 @@ func remove_chips() -> void:
 		var _collider = chip_tuple[1]
 		var tween: Tween = get_tree().create_tween()
 		tween.tween_property(_mesh, "global_position", _mesh.global_position - Vector3(0, 0, sweep_offset), anim_time).set_ease(Tween.EASE_OUT)
-		tween.parallel().tween_property(_mesh, "global_position",  _collider.global_position - Vector3(0, 0, sweep_offset), anim_time).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(_mesh, "global_position", _collider.global_position - Vector3(0, 0, sweep_offset), anim_time).set_ease(Tween.EASE_OUT)
 		tween.parallel().tween_property(_collider, "scale", Vector3.ZERO, anim_time).set_ease(Tween.EASE_OUT)
-		
+
 		await tween.finished
-		
+
 		_mesh.queue_free()
 		_collider.queue_free()
-	
+
 	chips_removed.emit()
 
 
@@ -49,19 +53,19 @@ func _add_chip() -> Array:
 	new_collider.disabled = false
 	new_mesh.visible = true
 	new_mesh.scale = Vector3.ZERO
-	
+
 	var new_pos := Vector3(0, 0.3, -sweep_offset)
 	if last_chip_pos:
 		new_pos = last_chip_pos + Vector3(0, 0, -sweep_offset)
-	
+
 	var tween: Tween = get_tree().create_tween()
 	tween.tween_property(new_mesh, "position", new_pos, anim_time).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(new_collider, "position", new_pos, anim_time).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(new_mesh, "scale", mesh.scale, anim_time).set_ease(Tween.EASE_OUT)
 	last_chip_pos = new_pos
-	
+
 	await tween.finished
-	
+
 	return [new_mesh, new_collider]
 
 

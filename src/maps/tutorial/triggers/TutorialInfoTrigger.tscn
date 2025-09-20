@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://t2n4jn1pgkyt"]
+
+[ext_resource type="Script" path="res://src/maps/tutorial/triggers/tutorial_info_trigger.gd" id="1_c6a1w"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c7tdf"]
+size = Vector3(9, 7, 1)
+
+[node name="TutorialInfoTrigger" type="Area3D"]
+script = ExtResource("1_c6a1w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_c7tdf")

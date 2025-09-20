@@ -11,7 +11,7 @@ var stored_heal = 0:
 		if stored_heal == 0:
 			GameManager.player.remove_status_effect_by_name("medical_payout_stored_heal")
 
-var heal_icon = preload("res://assets/sprite/buff_icon/medical_payout.png")
+var heal_icon = preload("res://assets/sprite/status_icon/medical_payout.png")
 
 func remove_effect():
 	accumulated_damage = 0

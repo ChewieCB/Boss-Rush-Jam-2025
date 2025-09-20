@@ -1,0 +1,65 @@
+[gd_scene load_steps=10 format=3 uid="uid://xsg605o1mpcb"]
+
+[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/base_boss_projectile.gd" id="1_gsaep"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_tdsaa"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_jo1iu"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xflld"]
+albedo_color = Color(0.300781, 0.300781, 0.300781, 1)
+metallic = 1.0
+roughness = 0.25
+
+[sub_resource type="SphereMesh" id="SphereMesh_h1cwk"]
+material = SubResource("StandardMaterial3D_xflld")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wvsuv"]
+radius = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tr7ah"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.996, 0.961, 0.778)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_80j66"]
+
+[sub_resource type="Curve" id="Curve_bpr7s"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="RicochetPinballProjectile" type="Area3D"]
+collision_layer = 8
+collision_mask = 123
+script = ExtResource("1_gsaep")
+spark_effect = ExtResource("2_tdsaa")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 4.0
+autostart = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_h1cwk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_wvsuv")
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_tr7ah")
+cast_shadow = 0
+mesh = SubResource("ImmediateMesh_80j66")
+skeleton = NodePath("../../MeshInstance3D")
+script = ExtResource("3_jo1iu")
+segments = 10
+lifetime = 1.0
+base_width = 0.3
+width_profile = SubResource("Curve_bpr7s")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -100)
+collision_mask = 25
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -91,7 +91,7 @@ jobs:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
           CHANNEL: windows
           ITCH_GAME: boss-rush-jam-2025
-          ITCH_USER: chewiecb
+          ITCH_USER: gnarled-hand
           PACKAGE: crapshoot-win.zip
           VERSION: ${{ steps.download-windows.outputs.version }}
   release_testing_linux:
@@ -111,7 +111,7 @@ jobs:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_API_KEY }}
           CHANNEL: linux
           ITCH_GAME: boss-rush-jam-2025
-          ITCH_USER: chewiecb
+          ITCH_USER: gnarled-hand
           PACKAGE: crapshoot-linux.zip
           VERSION: ${{ steps.download-linux.outputs.version }}
   notify-discord:

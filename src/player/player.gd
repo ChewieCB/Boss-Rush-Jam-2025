@@ -14,6 +14,8 @@ var movement_sfx_player: AudioStreamPlayer
 @export var sfx_jump_air: Array[AudioStream]
 @export var sfx_dash_floor: Array[AudioStream]
 @export var sfx_dash_air: Array[AudioStream]
+@export var sfx_purchase: AudioStream
+@export var sfx_too_expensive: AudioStream
 
 @export_category("Movement")
 @export var can_wall_jump: bool
@@ -26,10 +28,11 @@ var movement_sfx_player: AudioStreamPlayer
 @export_category("Prefabs")
 @export var health_component: HealthComponent
 @export var luck_component: LuckComponent
+@export var freecam_prefab: PackedScene
 
 @export_category("Luck")
 @export var luck_redeem_time: float = 2.0
-@export var reroll_heal_value: float = 15.0
+@export var reroll_heal_value: float = 25.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
 @onready var interact_ui: Control = $UI/InteractUI
@@ -40,15 +43,24 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var dash_duration_timer: Timer = $DashDuration
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var neck: Node3D = $Neck
+@onready var gun: Node3D = $Neck/ShakeCameraWrapper/GunContainer/BlankGun
 @onready var state_chart: StateChart = $StateChart
 @onready var wall_raycast: RayCast3D = $WallRaycast
+@onready var standing_shape: CollisionShape3D = $CollisionStanding
+@onready var crouching_shape: CollisionShape3D = $CollisionCrouching
 
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/Camera3D/AimRay
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
-@onready var all_barrel_effect_ui = $UI/GunUI/GunStatusUI/AllBarrelEffectUI
+
+@onready var ui_parent = $UI
+@onready var barrel_effect_ui = $UI/GunUI
+@onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
+@onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
+@onready var barrel_ui_tween: Tween = null
+var barrel_ui_active: bool = false
 
 @onready var stat_ui: StatUI = $UI/StatUI
 @onready var health_ui = stat_ui.health_ui
@@ -96,9 +108,6 @@ const AIM_ASSIST_STRENGTH_COEFFICIENT = 4 # Higher = stronger auto rotate to tar
 const AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT = 0.8 # Higher = stronger stickiness when near target. 0-1
 const AIM_ASSIST_MAX_RANGE = 50
 
-const HIGH_LUCK_THRESHOLD = 0.6
-const HIGH_LUCK_DASH_IFRAME_MODIFIER = 2.0
-
 var max_speed: float = MAX_SPEED
 var floor_col_pos = Vector3.ZERO
 var jumped: bool = false
@@ -112,10 +121,14 @@ var is_crouching: bool = false:
 		if value != is_crouching:
 			movement_crouched.emit()
 		is_crouching = value
+		standing_shape.disabled = is_crouching
+		crouching_shape.disabled = not is_crouching
+
+var uncrouch_collision_check_count = 0
 
 var internal_bonus_speed: float = 0
 
-var raw_input_dir := Vector2(0, 0):
+var raw_input_dir = Vector2(0, 0):
 	set(value):
 		if is_on_floor() and raw_input_dir == Vector2.ZERO and value != Vector2.ZERO:
 			movement_sfx_player = SoundManager.play_sound(sfx_movement_loop, "SFX")
@@ -123,11 +136,11 @@ var raw_input_dir := Vector2(0, 0):
 		if is_instance_valid(movement_sfx_player):
 			if raw_input_dir == Vector2.ZERO and movement_sfx_player.playing:
 				SoundManager.stop_sound(sfx_movement_loop)
-var input_dir := Vector2(0, 0)
+var input_dir = Vector2(0, 0)
 
 var last_dashed_timestamp
 var current_air_jump_count: int = 0
-var slide_dir := Vector2(0, 0)
+var slide_dir = Vector2(0, 0)
 
 var controls_disabled: bool = false
 var dash_disabled: bool = false
@@ -138,11 +151,11 @@ var current_gun_slot = 0
 var is_swapping_gun = false
 var current_gun: Gun = null
 
-var is_in_inventory = false:
+# Hide most HUD and stop player control
+var is_in_menu = false:
 	set(value):
-		is_in_inventory = value
-		all_barrel_effect_ui.visible = !is_in_inventory
-		if is_in_inventory:
+		is_in_menu = value
+		if is_in_menu:
 			stat_ui.hide_non_luck_ui()
 		else:
 			stat_ui.show_non_luck_ui()
@@ -157,11 +170,22 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.JUMP_HEIGHT: 1,
 	StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION: 0.2,
 	StatusEffect.PlayerStatEnum.DASH_DURATION: 0.2,
+	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
+	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # In decimal, so 0.8 = 80%
+	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0, # In decimal, so 0.5 = 50%
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0,
 }
 var current_stats = base_stats.duplicate(true)
-var dash_iframe_icon = preload("res://assets/sprite/buff_icon/invincible.png")
+
+var dash_iframe_icon = preload("res://assets/sprite/status_icon/invincible.png")
+var cheat_death_icon = preload("res://assets/sprite/skilltree_icon/cheat_death.png")
+var double_down_icon = preload("res://assets/sprite/skilltree_icon/double_down.png")
 
 var aim_assist_target: Node3D = null
+var cheat_death_triggered = false
+
+var freecam: FreeCam
 
 
 func _ready():
@@ -178,15 +202,16 @@ func _ready():
 	health_component.show_damage_text = false
 	health_component.health_changed.connect(_on_health_changed)
 	health_component.died.connect(_on_died)
-
-	luck_component.luck_changed.connect(_on_luck_changed)
-	luck_component.luck_maxed.connect(_on_luck_maxed)
+	health_component.is_owned_by_player = true
 
 	gun_container_original_pos = gun_container.position
 	gun_container_original_rot = gun_container.rotation
 
 	interact_ui.visible = false
 	boss_special_dialog.visible = false
+
+	standing_shape.disabled = false
+	crouching_shape.disabled = true
 
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
@@ -199,6 +224,16 @@ func _ready():
 	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
 	update_ammo_counter_ui()
 
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	check_permanent_buffs()
+	luck_component.check_for_high_luck_buffs()
+	
+	# CHEATS
+	if GameManager.CHEAT_godmode:
+		health_component.is_invincible = true
+
 
 func _unhandled_input(event):
 	if controls_disabled:
@@ -207,7 +242,7 @@ func _unhandled_input(event):
 	#if event.is_action_pressed("open_inventory"):
 		#inventory_ui.toggle()
 
-	if is_in_inventory:
+	if is_in_menu:
 		return
 
 	if event is InputEventMouseMotion:
@@ -274,6 +309,11 @@ func _unhandled_input(event):
 		SoundManager.play_sound(sfx_crouch.pick_random(), "SFX")
 	elif Input.is_action_just_released("crouch"):
 		SoundManager.play_sound(sfx_stand.pick_random(), "SFX")
+	
+	if Input.is_action_just_pressed("show_detail"):
+		show_barrel_effect_ui()
+	elif Input.is_action_just_released("show_detail"):
+		hide_barrel_effect_ui()
 
 
 func _process(delta):
@@ -287,7 +327,7 @@ func _process(delta):
 			if status.duration <= 0:
 				remove_status_effect(status)
 
-	if aim_ray.is_colliding() and not is_in_inventory:
+	if aim_ray.is_colliding() and not is_in_menu:
 		var interact_collider = aim_ray.get_collider()
 		if interact_collider and \
 			interact_collider.has_method("interact") and \
@@ -302,7 +342,7 @@ func _process(delta):
 		interact_ui.visible = false
 
 
-	if controls_disabled or is_in_inventory:
+	if controls_disabled or is_in_menu:
 		return
 
 	if Input.is_action_pressed("shoot"):
@@ -326,7 +366,7 @@ func _physics_process(delta):
 			raw_input_dir = Vector2(0, -1)
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
-	if not is_dashing and not is_in_inventory:
+	if not is_dashing and not is_in_menu:
 		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
@@ -407,25 +447,84 @@ func update_ammo_counter_ui() -> void:
 	stat_ui.magazine_size_label.text = "/{0}".format([current_gun.modified_magazine_size])
 
 
+func show_barrel_effect_ui() -> void:
+	if barrel_ui_active:
+		return
+	
+	if current_gun.max_barrels == 0:
+		return
+	
+	barrel_ui_active = true
+	
+	if barrel_ui_tween:
+		if barrel_ui_tween.is_running():
+			barrel_ui_tween.pause()
+	
+	barrel_ui_tween = get_tree().create_tween()
+	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
+	for i in range(current_gun.max_barrels):
+		var effect_ui_idx: int = i
+		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		if i < current_gun.barrel_container.get_child_count():
+			barrel_ui_tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
+	await barrel_ui_tween.finished
+	
+	Engine.time_scale = 0.1
+
+
+func hide_barrel_effect_ui() -> void:
+	if not barrel_ui_active:
+		return
+	
+	if barrel_ui_tween:
+		if barrel_ui_tween.is_running():
+			barrel_ui_tween.pause()
+	
+	barrel_ui_tween = get_tree().create_tween()
+	
+	Engine.time_scale = 1.0
+	
+	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
+	for i in range(current_gun.max_barrels):
+		var effect_ui_idx: int = i
+		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		if i < current_gun.barrel_container.get_child_count():
+			barrel_ui_tween.parallel().tween_property(effect_ui, "modulate:a", 0.0, 0.1)
+	barrel_ui_tween.tween_callback(func(): barrel_ui_active = false)
+	await barrel_ui_tween.finished
+
+
 func update_barrel_effect_ui() -> void:
 	for i in range(current_gun.max_barrels):
-		var effect_ui_idx: int = all_barrel_effect_ui.get_child_count() - i - 1
-		var effect_ui = all_barrel_effect_ui.get_child(effect_ui_idx)
+		var effect_ui_idx: int = i
+		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
 		if i < current_gun.barrel_container.get_child_count():
+			#effect_ui.modulate.a = 1.0
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
+			var _effect: BaseBarrelEffect = barrel.get_active_effect()
 			#if barrel:
-			effect_ui.get_node("Title").text = barrel.get_active_effect().display_text_title
-			effect_ui.get_node("Tag").text = barrel.get_active_effect().display_text_tag
-			effect_ui.get_node("Desc").text = barrel.get_active_effect().display_text_desc
-			#else:
-				#effect_ui.get_node("Title").text = ""
-				#effect_ui.get_node("Tag").text = ""
-				#effect_ui.get_node("Desc").text = ""
+			if _effect.icon_id != -1:
+				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
+			else:
+				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/tmp-barrel-icon.png")
+			effect_ui.name_label.text = _effect.display_text_title
+			effect_ui.desc_label.text = _effect.display_text_tag
+			
+			for container in effect_ui.positives_container.get_children():
+				container.queue_free()
+			for container in effect_ui.negatives_container.get_children():
+				container.queue_free()
+			
+			for text in _effect.positive_desc:
+				effect_ui.add_positive(text)
+			for text in _effect.negative_desc:
+				effect_ui.add_negative(text)
+		
 		else:
-			effect_ui.get_node("Title").text = ""
-			effect_ui.get_node("Tag").text = ""
-			effect_ui.get_node("Desc").text = ""
+			effect_ui.modulate.a = 0.0
+			effect_ui.name_label.text = ""
+			effect_ui.desc_label.text = ""
 
 
 func show_debug_label():
@@ -445,7 +544,7 @@ func show_debug_label():
 
 
 func jump(local_multiplier = 1.0):
-	if is_in_inventory or controls_disabled:
+	if is_in_menu or controls_disabled:
 		return
 
 	vel_vertical = JUMP_FORCE * current_stats[StatusEffect.PlayerStatEnum.JUMP_HEIGHT] * local_multiplier
@@ -475,7 +574,7 @@ func stun(time: float) -> void:
 
 
 func spin_reload() -> void:
-	if not current_gun.is_reloading:
+	if not current_gun.is_reloading and not current_gun.is_spinning:
 		current_gun.spin_all_barrels()
 
 
@@ -544,7 +643,8 @@ func _on_grounded_state_physics_processing(_delta: float):
 		if Input.is_action_pressed("crouch"):
 			is_crouching = true
 		else:
-			is_crouching = false
+			if uncrouch_collision_check_count == 0 and is_crouching:
+				is_crouching = false
 
 
 func _on_airborne_state_input(event: InputEvent):
@@ -616,6 +716,27 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		SoundManager.play_sound(sfx_hurt.pick_random())
 		if new_health > 0:
 			state_chart.send_event("end_damage")
+			if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.DOUBLE_DOWN):
+				var buff_value = 0
+				var buff_time = 0
+				match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.DOUBLE_DOWN]:
+					1:
+						buff_value = 0.15
+						buff_time = 2
+					2:
+						buff_value = 0.15
+						buff_time = 3
+					3:
+						buff_value = 0.3
+						buff_time = 3
+					4:
+						buff_value = 0.3
+						buff_time = 5
+				# Only need 1 to display duration
+				GameManager.create_and_add_status_effect("Double Down (Min damage)", "double_down_min_buff",
+					StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time, false, true, double_down_icon)
+				GameManager.create_and_add_status_effect("Double Down (Max damage)", "double_down_max_buff",
+					StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE, buff_value, StatusEffect.ModifyType.FLAT, buff_time)
 
 
 func _on_died() -> void:
@@ -673,6 +794,14 @@ func remove_status_effect_by_name(find_name: String):
 		remove_status_effect(found)
 
 
+func check_if_has_status_effect_by_name(find_name: String):
+	var found = false
+	for status in status_effect_list:
+		if status.status_code == find_name:
+			found = true
+			break
+	return found
+
 func apply_status_effects():
 	# Reset current stats to base stats.
 	current_stats = base_stats.duplicate(true)
@@ -728,7 +857,7 @@ func get_assist_rotation_velocity(delta: float):
 	# Essentially this make the player only auto-aim to the edge of enemy hitbox
 	if aim_assist_ray_boss_check.is_colliding():
 		return
-	
+
 	var cam = player_camera
 	var aim_target_pos: Vector3 = aim_assist_target.global_position
 	if aim_assist_target.get_node("Marker3D") != null:
@@ -763,15 +892,53 @@ func get_assist_rotation_velocity(delta: float):
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
 
+func get_barrel_sprite_screen_positions() -> Array[Vector2]:
+	var sprite_positions: Array[Vector2] = []
+	
+	for sprite in gun.barrel_sprites:
+		var pos_marker: Marker3D = sprite.get_node("Marker3D")
+		var _pos: Vector2 = player_camera.camera.unproject_position(pos_marker.global_position)
+		sprite_positions.append(_pos)
+	
+	return sprite_positions
+
+
 func spin_barrels() -> void:
-	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading:
+	if current_gun.installed_barrels.size() == 0 or current_gun.is_reloading or current_gun.is_spinning:
 		return
 	# Check if we have enough chips
 	if GameManager.purchase_reroll():
 		cash_in_luck()
 		current_gun.spin_all_barrels()
 		# Provide small health buff (?)
-		health_component.heal(reroll_heal_value)
+		var modified_reroll_heal_value = reroll_heal_value
+		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HIGH_ROLLER):
+			modified_reroll_heal_value += int(GameManager.HIGH_ROLLER_BONUS_HEAL_PER_REROLL_TIME) * GameManager.reroll_time
+		health_component.heal(modified_reroll_heal_value)
+		SoundManager.play_sound(sfx_purchase)
+
+	# Spin with IOU skill
+	elif GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.IOU):
+		var hp_cost = 0
+		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.IOU]:
+			1:
+				hp_cost = 25
+			2:
+				hp_cost = 20
+			3:
+				hp_cost = 15
+			4:
+				hp_cost = 5
+		if health_component.current_health > hp_cost:
+			cash_in_luck()
+			GameManager.reroll_time += 1
+			current_gun.spin_all_barrels()
+			health_component.damage(hp_cost)
+			SoundManager.play_sound(sfx_purchase)
+		else:
+			SoundManager.play_sound(sfx_too_expensive)
+	else:
+		SoundManager.play_sound(sfx_too_expensive)
 
 
 func cash_in_luck() -> void:
@@ -796,8 +963,6 @@ func cash_in_luck() -> void:
 
 func add_iframe_on_dash():
 	var iframe_duration = current_stats[StatusEffect.PlayerStatEnum.DASH_IFRAME_DURATION]
-	if luck_component.current_luck_ratio >= HIGH_LUCK_THRESHOLD:
-		iframe_duration = iframe_duration * HIGH_LUCK_DASH_IFRAME_MODIFIER
 	var iframe_dash_buff = StatusEffect.new()
 	iframe_dash_buff.display_name = "Dodging"
 	iframe_dash_buff.status_code = "iframe_on_dash"
@@ -808,17 +973,18 @@ func add_iframe_on_dash():
 	iframe_dash_buff.status_icon = dash_iframe_icon
 	add_status_effect(iframe_dash_buff)
 
-func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
-	# TODO - update luck handler to apply bonuses
-	#if new_luck < prev_luck and prev_luck == luck_component.max_luck:
-	# TODO
-	pass
 
-
-func _on_luck_maxed() -> void:
-	# TODO
-	pass
-
+# Check buff from some non-high luck skills. Only do this once at scene start
+func check_permanent_buffs():
+	remove_status_effect_by_name("lucky_crit_buff")
+	remove_status_effect_by_name("cheat_death_buff")
+	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.LUCKY_CRIT):
+		GameManager.create_and_add_status_effect("Lucky Crit", "lucky_crit_buff",
+		StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER, 0.5, StatusEffect.ModifyType.FLAT)
+	# Only show this to let player know if they still have Cheat Death
+	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.CHEAT_DEATH) and not cheat_death_triggered:
+		GameManager.create_and_add_status_effect("Cheat Death", "cheat_death_buff",
+		StatusEffect.PlayerStatEnum.NONE, 0, StatusEffect.ModifyType.FLAT, StatusEffect.INFINITE_DURATION, false, true, cheat_death_icon)
 
 func apply_drunk_status(duration: float) -> void:
 	state_chart.send_event("add_status_drunk")
@@ -838,7 +1004,7 @@ func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
 	# Don't move the player when they're standing still
 	if raw_input_dir == Vector2.ZERO:
 		return
-	
+
 	# Drunk movement drift
 	drunk_drift_timer += delta
 	if drunk_drift_timer >= drunk_movement_drift_change_interval:
@@ -853,3 +1019,39 @@ func _on_status_drunk_active_state_physics_processing(delta: float) -> void:
 
 func _on_drunk_timer_timeout() -> void:
 	state_chart.send_event("remove_status_drunk")
+
+
+func _on_check_standing_collision_body_exited(_body: Node3D) -> void:
+	uncrouch_collision_check_count -= 1
+
+func _on_check_standing_collision_body_entered(_body: Node3D) -> void:
+	uncrouch_collision_check_count += 1
+
+
+func _enable_freecam() -> void:
+	controls_disabled = true
+	dash_disabled = true
+	player_camera.camera.current = false
+	gun_container.visible = false
+	
+	# Spawn freecam
+	freecam = freecam_prefab.instantiate()
+	get_parent().add_child(freecam)
+	freecam.global_position = self.global_position
+	freecam.global_rotation = neck.global_rotation
+	freecam.camera.global_rotation = player_camera.global_rotation
+	freecam.camera.current = true
+	
+	Engine.time_scale = 0.0
+
+
+func _disable_freecam() -> void:
+	controls_disabled = false
+	dash_disabled = false
+	gun_container.visible = true
+	player_camera.camera.current = true
+
+	freecam.queue_free()
+	freecam = null
+	
+	Engine.time_scale = 1.0

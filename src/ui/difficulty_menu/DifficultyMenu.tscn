@@ -1,0 +1,722 @@
+[gd_scene load_steps=36 format=3 uid="uid://djcipi6xiw7yn"]
+
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/difficulty_menu.gd" id="1_5c00o"]
+[ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="1_5ie53"]
+[ext_resource type="AudioStream" uid="uid://6n3s0ojha33v" path="res://src/collectibles/poker_chip/assets/sfx/PICKING UP CHIPS.mp3" id="2_0aqwx"]
+[ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="2_y6xrk"]
+[ext_resource type="FontFile" uid="uid://bfduksv0gcvwn" path="res://assets/fonts/Semplicita/Semplicita Medium Italic.otf" id="3_0n16t"]
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="3_rlha8"]
+[ext_resource type="Texture2D" uid="uid://dcs5o482rkb4e" path="res://src/collectibles/poker_chip/assets/chip_icon_128.png" id="3_uirlk"]
+[ext_resource type="Resource" uid="uid://bblkebtod2bhm" path="res://src/ui/difficulty_menu/boss_slot_profile.tres" id="4_25fox"]
+[ext_resource type="Resource" uid="uid://dwnejm41e6krv" path="res://src/ui/difficulty_menu/boss_roulette_profile.tres" id="5_iim28"]
+[ext_resource type="PackedScene" uid="uid://doawgaf4fslbl" path="res://src/ui/difficulty_menu/RiskItem.tscn" id="5_myk8s"]
+[ext_resource type="Resource" uid="uid://t8i2rvgy7p2i" path="res://src/ui/difficulty_menu/boss_bartender_profile.tres" id="6_atwte"]
+[ext_resource type="Texture2D" uid="uid://cyridr3xco78k" path="res://src/collectibles/poker_chip/assets/chip_icon_gold_128.png" id="6_seafr"]
+[ext_resource type="Texture2D" uid="uid://dy3dl8bil7nds" path="res://assets/sprite/game_icon/plus.png" id="7_8w1ew"]
+[ext_resource type="Texture2D" uid="uid://bgeh57tcie1pi" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss.png" id="7_nuj2c"]
+[ext_resource type="Texture2D" uid="uid://1kwq4wr6twd7" path="res://src/bosses/roulette/assets/roulette_boss_FINAL.png" id="7_rijwn"]
+[ext_resource type="Resource" uid="uid://dknw5bjh6ipm5" path="res://src/ui/difficulty_menu/boss_pit_profile.tres" id="7_t6tx6"]
+[ext_resource type="Texture2D" uid="uid://bww23gc1wfoj6" path="res://src/bosses/pit/assets/pit_boss_idle.png" id="7_wg0xp"]
+[ext_resource type="Texture2D" uid="uid://c6p7obfb2ndl7" path="res://src/bosses/chips/assets/sprites/MCK_Idle.png" id="8_bymgs"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="8_c7hct"]
+[ext_resource type="Resource" uid="uid://cev06jj3f40kv" path="res://src/ui/difficulty_menu/boss_chip_profile.tres" id="8_mh7r4"]
+[ext_resource type="Texture2D" uid="uid://ccn08me1il1m4" path="res://src/ui/main_menu/bg2.png" id="9_crl3w"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="10_0vdpo"]
+[ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="11_0u1hd"]
+[ext_resource type="Texture2D" uid="uid://b4p6melvvt7k2" path="res://assets/sprite/misc/hearts.png" id="13_ttr4t"]
+[ext_resource type="PackedScene" uid="uid://bgdrie48ccxvw" path="res://src/ui/difficulty_menu/AnteItem.tscn" id="14_o6emp"]
+[ext_resource type="Texture2D" uid="uid://cwrh4rwu3ts6p" path="res://assets/sprite/skilltree_icon/double_down.png" id="14_os3tf"]
+[ext_resource type="Texture2D" uid="uid://dltdl1xe57bo7" path="res://assets/sprite/status_icon/run_speed_up.png" id="15_sgbte"]
+[ext_resource type="Texture2D" uid="uid://dx4pm7e2prfc1" path="res://assets/sprite/skilltree_icon/plot_armor.png" id="16_ubvm4"]
+[ext_resource type="Texture2D" uid="uid://bsq70jbhv0gjh" path="res://assets/sprite/skilltree_icon/blessed_chip.png" id="17_s5hxg"]
+[ext_resource type="Texture2D" uid="uid://bae10gvdt7y0t" path="res://assets/sprite/status_icon/bleeding.png" id="18_nydee"]
+[ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="19_10nox"]
+[ext_resource type="Texture2D" uid="uid://bpc0t2p6uy17" path="res://assets/sprite/misc/cycle.png" id="20_xxan1"]
+[ext_resource type="Texture2D" uid="uid://casrjel7p52p1" path="res://assets/sprite/misc/stopwatch.png" id="21_qtdie"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="34_xjabm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rqucu"]
+shader = ExtResource("8_c7hct")
+shader_parameter/scroll_speed = 0.02
+shader_parameter/angle_degrees = 45.0
+shader_parameter/repeat_x = 4.0
+shader_parameter/repeat_y = 2.0
+shader_parameter/row_offset = 0.964
+shader_parameter/texture_to_scroll = ExtResource("9_crl3w")
+
+[node name="DifficultyMenu" type="Control" node_paths=PackedStringArray("boss_sprites")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5c00o")
+chip_sfx = ExtResource("2_0aqwx")
+boss_sprites = [NodePath("TitleRegion/BossSpriteContainer/Slot"), NodePath("TitleRegion/BossSpriteContainer/Roulette"), NodePath("TitleRegion/BossSpriteContainer/Bartender"), NodePath("TitleRegion/BossSpriteContainer/Pit"), NodePath("TitleRegion/BossSpriteContainer/Chip")]
+boss_diff_profiles = Array[ExtResource("3_rlha8")]([ExtResource("4_25fox"), ExtResource("5_iim28"), ExtResource("6_atwte"), ExtResource("7_t6tx6"), ExtResource("8_mh7r4")])
+
+[node name="BG" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_rqucu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_0vdpo")
+
+[node name="TitleRegion" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 208.0
+grow_horizontal = 2
+color = Color(0.390625, 0.0448029, 0, 1)
+
+[node name="BossSpriteContainer" type="Control" parent="TitleRegion"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -456.0
+offset_top = -96.0
+offset_right = -8.0
+offset_bottom = 96.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Slot" type="TextureRect" parent="TitleRegion/BossSpriteContainer"]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 56.0
+offset_top = -72.0
+offset_right = 440.0
+offset_bottom = 312.0
+mouse_filter = 2
+texture = ExtResource("7_nuj2c")
+expand_mode = 1
+
+[node name="Roulette" type="TextureRect" parent="TitleRegion/BossSpriteContainer"]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -344.0
+offset_top = -56.0
+offset_right = 624.0
+offset_bottom = 912.0
+mouse_filter = 2
+texture = ExtResource("7_rijwn")
+
+[node name="Bartender" type="TextureRect" parent="TitleRegion/BossSpriteContainer"]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -192.0
+offset_top = 8.0
+offset_right = 689.0
+offset_bottom = 889.0
+mouse_filter = 2
+texture = ExtResource("1_5ie53")
+
+[node name="Pit" type="TextureRect" parent="TitleRegion/BossSpriteContainer"]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -272.0
+offset_top = -16.0
+offset_right = 656.0
+offset_bottom = 912.0
+mouse_filter = 2
+texture = ExtResource("7_wg0xp")
+
+[node name="Chip" type="TextureRect" parent="TitleRegion/BossSpriteContainer"]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = -32.0
+offset_top = -96.0
+offset_right = 480.0
+offset_bottom = 416.0
+mouse_filter = 2
+texture = ExtResource("8_bymgs")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="TitleRegion/BossSpriteContainer"]
+self_modulate = Color(0.902344, 0.776165, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_y6xrk")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="TitleLabel" type="Label" parent="TitleRegion"]
+layout_mode = 1
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 537.0
+offset_bottom = 113.0
+theme_override_colors/font_color = Color(1, 0.973, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 10
+theme_override_constants/shadow_offset_y = 10
+theme_override_font_sizes/font_size = 80
+text = "ESCALATING STAKES"
+
+[node name="TargetLabel" type="Label" parent="TitleRegion"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -648.0
+offset_top = 16.0
+offset_right = -464.0
+offset_bottom = 113.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 0.973208, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 10
+theme_override_constants/shadow_offset_y = 10
+theme_override_font_sizes/font_size = 60
+text = "TARGET"
+
+[node name="TargetQuoteLabel" type="Label" parent="TitleRegion/TargetLabel"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -752.0
+offset_top = -20.0
+offset_bottom = 23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_0n16t")
+theme_override_font_sizes/font_size = 20
+text = "\"Every level up’s another shot of danger. But hey, the top shelf was never meant for cowards.\""
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TitleRegion"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 136.0
+offset_right = 1152.0
+offset_bottom = 200.0
+
+[node name="RedChip" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="RedChip2" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="GoldChip" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("6_seafr")
+expand_mode = 1
+
+[node name="RedChip3" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="RedChip4" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="GoldChip2" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("6_seafr")
+expand_mode = 1
+
+[node name="RedChip5" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="RedChip6" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="GoldChip3" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("6_seafr")
+expand_mode = 1
+
+[node name="RedChip7" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="RedChip8" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="GoldChip4" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("6_seafr")
+expand_mode = 1
+
+[node name="RedChip9" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="RedChip10" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="GoldChip5" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("6_seafr")
+expand_mode = 1
+
+[node name="PlusIcon" type="TextureRect" parent="TitleRegion/HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 5
+texture = ExtResource("7_8w1ew")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="TitleRegion/HBoxContainer/PlusIcon"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -24.0
+offset_right = 12.0
+offset_bottom = 13.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 24
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftRegion" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_top = 208.0
+offset_right = 960.0
+offset_bottom = 1080.0
+
+[node name="RiskTitle" type="Label" parent="LeftRegion"]
+modulate = Color(1, 0.252252, 0.162162, 1)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -416.0
+offset_top = 40.0
+offset_right = 480.0
+offset_bottom = 101.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 50
+text = "Risks"
+
+[node name="ColorRect" type="ColorRect" parent="LeftRegion/RiskTitle"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -5.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ResetRiskButton" parent="LeftRegion" instance=ExtResource("11_0u1hd")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -128.0
+offset_top = 48.0
+offset_right = 0.0
+offset_bottom = 88.0
+grow_horizontal = 0
+text = "Reset"
+
+[node name="RiskContainer" type="VBoxContainer" parent="LeftRegion"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -416.0
+offset_top = -316.0
+offset_right = 480.0
+offset_bottom = 292.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RiskItem" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+risk_modifier = 1
+risk_description = "Increase target's maximum health"
+prefix_value_text = "+"
+icon_sprite = ExtResource("13_ttr4t")
+
+[node name="RiskItem2" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+risk_modifier = 2
+risk_description = "Increase target's damage"
+prefix_value_text = "+"
+icon_sprite = ExtResource("14_os3tf")
+
+[node name="RiskItem3(TBD)" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+visible = false
+layout_mode = 2
+risk_modifier = 3
+risk_description = "Increase target's attack and move speed"
+prefix_value_text = "+"
+icon_sprite = ExtResource("15_sgbte")
+
+[node name="RiskItem4" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+risk_modifier = 4
+risk_description = "Increase target's status resistance"
+prefix_value_text = "+"
+icon_sprite = ExtResource("16_ubvm4")
+
+[node name="RiskItem5" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+risk_modifier = 5
+risk_description = "Increase player's spin cost"
+prefix_value_text = "+"
+icon_sprite = ExtResource("17_s5hxg")
+
+[node name="RiskItem6" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+risk_modifier = 6
+risk_description = "Decrease player's healing effectiveness"
+prefix_value_text = "-"
+icon_sprite = ExtResource("18_nydee")
+
+[node name="RiskItem7" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+risk_modifier = 7
+risk_description = "Decrease player's luck build up"
+prefix_value_text = "-"
+icon_sprite = ExtResource("19_10nox")
+
+[node name="RiskItem8" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+layout_mode = 2
+risk_modifier = 8
+risk_description = "Limit number of time player can spin barrels"
+value_unit_text = "time(s)"
+icon_sprite = ExtResource("20_xxan1")
+
+[node name="RiskItem9(TBD)" parent="LeftRegion/RiskContainer" instance=ExtResource("5_myk8s")]
+visible = false
+layout_mode = 2
+risk_modifier = 9
+risk_description = "Limit fight duration"
+value_unit_text = "min(s)"
+icon_sprite = ExtResource("21_qtdie")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LeftRegion"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -416.0
+offset_top = -152.0
+offset_right = 480.0
+offset_bottom = -57.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 40
+
+[node name="StartButton" parent="LeftRegion/HBoxContainer" instance=ExtResource("11_0u1hd")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 52
+text = "Start"
+
+[node name="CancelButton" parent="LeftRegion/HBoxContainer" instance=ExtResource("11_0u1hd")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 52
+text = "Cancel"
+
+[node name="RightRegion" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -960.0
+offset_top = 208.0
+offset_bottom = 1080.0
+grow_horizontal = 0
+
+[node name="AnteTitle" type="Label" parent="RightRegion"]
+modulate = Color(1, 0.252252, 0.162162, 1)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -384.0
+offset_top = 40.0
+offset_right = 384.0
+offset_bottom = 101.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 50
+text = "Antes"
+horizontal_alignment = 2
+
+[node name="ColorRect" type="ColorRect" parent="RightRegion/AnteTitle"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -5.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="AnteSection" type="HBoxContainer" parent="RightRegion"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 128.0
+offset_right = 864.0
+offset_bottom = 536.0
+
+[node name="AnteItem" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+modulate = Color(5, 5, 5, 1)
+layout_mode = 2
+ante_number = 1
+ante_name = "Ante I:
+Fast Firing Shotgun"
+
+[node name="AnteItem2" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+layout_mode = 2
+ante_number = 2
+ante_name = "Ante II:
+Bottle Volley"
+
+[node name="AnteItem3" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+layout_mode = 2
+ante_number = 3
+ante_name = "Ante III:
+Burning Ground"
+
+[node name="AnteItem4" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+layout_mode = 2
+ante_number = 4
+ante_name = "Ante IV:
+TBD"
+
+[node name="AnteItem5" parent="RightRegion/AnteSection" instance=ExtResource("14_o6emp")]
+layout_mode = 2
+ante_number = 5
+ante_name = "Ante V:
+TBD"
+
+[node name="Bet" type="VBoxContainer" parent="RightRegion"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 96.0
+offset_top = -312.0
+offset_right = 448.0
+offset_bottom = -62.0
+grow_vertical = 0
+
+[node name="RewardTitle" type="Label" parent="RightRegion/Bet"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.972549, 0.0705882, 1)
+theme_override_font_sizes/font_size = 50
+text = "Bet"
+
+[node name="ColorRect" type="ColorRect" parent="RightRegion/Bet"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+color = Color(1, 0.972549, 0.0705882, 1)
+
+[node name="Spacer" type="Control" parent="RightRegion/Bet"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="BetInfo" type="HBoxContainer" parent="RightRegion/Bet"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="BetValue" type="Label" parent="RightRegion/Bet/BetInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "10,000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="RightRegion/Bet/BetInfo"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="Reward" type="VBoxContainer" parent="RightRegion"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -448.0
+offset_top = -312.0
+offset_right = -96.0
+offset_bottom = -62.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="RewardTitle" type="Label" parent="RightRegion/Reward"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.972549, 0.0705882, 1)
+theme_override_font_sizes/font_size = 50
+text = "Payout"
+horizontal_alignment = 2
+
+[node name="ColorRect" type="ColorRect" parent="RightRegion/Reward"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+color = Color(1, 0.972549, 0.0705882, 1)
+
+[node name="Spacer" type="Control" parent="RightRegion/Reward"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="RewardInfo" type="HBoxContainer" parent="RightRegion/Reward"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="RewardValue" type="Label" parent="RightRegion/Reward/RewardInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "20,000"
+
+[node name="TextureRect" type="TextureRect" parent="RightRegion/Reward/RewardInfo"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("3_uirlk")
+expand_mode = 1
+
+[node name="RatioLabel" type="Label" parent="RightRegion"]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -176.0
+offset_top = -96.0
+offset_right = 176.0
+offset_bottom = -62.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.515625, 0.515625, 0.515625, 1)
+theme_override_font_sizes/font_size = 28
+text = "Ratio: 2 to 1"
+horizontal_alignment = 1
+
+[node name="NotEnoughChipTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="CurrencyUI" parent="." instance=ExtResource("34_xjabm")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -312.0
+offset_top = -72.0
+offset_right = -7.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[connection signal="pressed" from="LeftRegion/ResetRiskButton" to="." method="_on_reset_risk_button_pressed"]
+[connection signal="pressed" from="LeftRegion/HBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="LeftRegion/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="timeout" from="NotEnoughChipTimer" to="." method="_on_not_enough_chip_timer_timeout"]

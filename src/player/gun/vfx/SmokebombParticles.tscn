@@ -1,0 +1,80 @@
+[gd_scene load_steps=13 format=3 uid="uid://bhimnenvo0scq"]
+
+[sub_resource type="Gradient" id="Gradient_1xxu7"]
+offsets = PackedFloat32Array(0.0629139, 0.884106, 1)
+colors = PackedColorArray(0.188235, 0.188235, 0.188235, 0.87451, 0, 0, 0, 0.513726, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_i43qs"]
+gradient = SubResource("Gradient_1xxu7")
+
+[sub_resource type="Curve" id="Curve_yyggp"]
+_data = [Vector2(0.210526, 0.923077), 0.0, 0.0, 0, 0, Vector2(0.368421, 0.406593), -2.63445, -2.63445, 0, 0, Vector2(0.639676, 0.307692), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_wr3ww"]
+curve_y = SubResource("Curve_yyggp")
+
+[sub_resource type="CurveTexture" id="CurveTexture_vjqpg"]
+
+[sub_resource type="Curve" id="Curve_lovvc"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.222672, 0.978022), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ihe8u"]
+curve = SubResource("Curve_lovvc")
+
+[sub_resource type="Curve" id="Curve_py1lf"]
+max_value = 3.0
+_data = [Vector2(0.00809717, 2.9011), 0.0, 0.0, 0, 0, Vector2(0.283401, 2.34066), -5.58367, -5.58367, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ss1po"]
+curve = SubResource("Curve_py1lf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_54so2"]
+emission_shape_scale = Vector3(2, 2, 2)
+emission_shape = 1
+emission_sphere_radius = 1.0
+angle_min = -80.0
+angle_max = 80.0
+direction = Vector3(0, -1, 0)
+spread = 25.0
+initial_velocity_min = -1.0
+initial_velocity_max = -1.0
+directional_velocity_min = 1.0
+directional_velocity_max = 1.0
+directional_velocity_curve = SubResource("CurveXYZTexture_wr3ww")
+gravity = Vector3(0, -1, 0)
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_ihe8u")
+scale_over_velocity_min = 1.0
+scale_over_velocity_max = 4.0
+scale_over_velocity_curve = SubResource("CurveTexture_ss1po")
+color = Color(0.999643, 0.944103, 0.863035, 1)
+color_ramp = SubResource("GradientTexture1D_i43qs")
+emission_curve = SubResource("CurveTexture_vjqpg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_suivr"]
+render_priority = 2
+transparency = 1
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_dfn22"]
+material = SubResource("StandardMaterial3D_suivr")
+radius = 0.25
+height = 0.5
+
+[node name="SmokeParticles" type="GPUParticles3D"]
+emitting = false
+amount = 512
+lifetime = 3.0
+one_shot = true
+speed_scale = 1.3
+explosiveness = 0.83
+randomness = 0.16
+fixed_fps = 60
+visibility_aabb = AABB(-4.96533, -2.36527, -3.67267, 9.45307, 5.961, 8.53309)
+process_material = SubResource("ParticleProcessMaterial_54so2")
+draw_pass_1 = SubResource("SphereMesh_dfn22")
+
+[connection signal="finished" from="." to="." method="_on_finished"]

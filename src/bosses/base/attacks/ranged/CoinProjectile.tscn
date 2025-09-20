@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://bxshoefc1p3uy"]
+[gd_scene load_steps=9 format=3 uid="uid://bxshoefc1p3uy"]
 
-[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/test_projectile.gd" id="1_dekmn"]
+[ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/base_boss_projectile.gd" id="1_exjwd"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_4nicv"]
 [ext_resource type="Texture2D" uid="uid://cq6ltygg20okd" path="res://src/bosses/base/attacks/ranged/coin_16.png" id="2_5qvk8"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_jh5os"]
 
@@ -22,8 +23,9 @@ point_count = 2
 [node name="CoinProjectile" type="Area3D"]
 collision_layer = 8
 collision_mask = 7
-script = ExtResource("1_dekmn")
+script = ExtResource("1_exjwd")
 projectile_damage = 2.0
+spark_effect = ExtResource("2_4nicv")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
@@ -48,6 +50,9 @@ script = ExtResource("3_jh5os")
 segments = 10
 base_width = 0.1
 width_profile = SubResource("Curve_my72y")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -100)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

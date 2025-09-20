@@ -19,9 +19,14 @@ func _ready() -> void:
 	visible = false
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	is_controller_connected = Input.get_connected_joypads() != []
+	# Tweak lobby button text if we're in the tutorial
+	if not GameManager.tutorial_completed:
+		$PauseOptionBG/VBoxContainer/LobbyButton.text = "Restart"
+	is_paused = false
+	get_tree().paused = false
 	
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	# If the pause menu button is pressed, reset the pause menu and hide/show it
 	if event.is_action_pressed("pause_menu"):
 		SoundManager.play_button_click_sfx()
@@ -70,10 +75,12 @@ func toggle_pause_menu() -> void:
 func return_to_pause_menu():
 	is_in_submenu = false
 	pause_option_list.visible = true
+	promo_ui.visible = true
 	setting_button.grab_focus()
 
 
 func _on_setting_button_pressed() -> void:
+	promo_ui.visible = false
 	setting_ui.open_menu()
 	is_in_submenu = true
 	pause_option_list.visible = false
@@ -85,7 +92,10 @@ func _on_lobby_button_pressed() -> void:
 	#ScreenTransition.transition_out()
 	#await ScreenTransition.transition_finished
 	# TODO - background loading here
-	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	if GameManager.tutorial_completed:
+		LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	else:
+		LoadingHandler.current_scene_path = "res://src/maps/tutorial/TutorialBoss.tscn"
 	LoadingHandler.start_loading("Lobby")
 	# Toggle low pass filter for BGM
 	await LoadingHandler.loading_finished
@@ -117,11 +127,12 @@ func _on_quit_button_pressed() -> void:
 		await SaveManager.save_game(GameManager.chosen_slot_id)
 	
 	# TODO - move promo UI to a higher node in the scene tree to avoid this shuffling
-	promo_ui.visible = true
-	remove_child(promo_ui)
-	get_parent().add_child(promo_ui)
-	self.visible = false
-	await get_tree().create_timer(3.0).timeout
+	# TODO - add toggle for promo ui for editor testing vs release
+	#promo_ui.visible = true
+	#remove_child(promo_ui)
+	#get_parent().add_child(promo_ui)
+	#self.visible = false
+	#await get_tree().create_timer(3.0).timeout
 	get_tree().quit()
 
 

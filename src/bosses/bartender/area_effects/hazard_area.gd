@@ -4,6 +4,7 @@ class_name HazardArea
 @export var damage_per_tick: int = 5
 @export var duration: float = 5
 @export var slow_perc: float = 0
+@export var puddle_decal: Decal
 
 @export var sfx_break: Array[AudioStream]
 @export var sfx_effect: Array[AudioStream]
@@ -16,15 +17,14 @@ class_name HazardArea
 @onready var dot_timer: Timer = $DoTTimer
 @onready var life_timer: Timer = $LifeTimer
 @onready var raycast: RayCast3D = $RayCast3D
-@onready var puddle_sprite: Sprite3D = $Puddle
 @onready var light: OmniLight3D = $OmniLight3D
 
 var bodies_inside = []
 var is_active = false
 var stopped_moving = false
 
-var dash_speed_buff_icon = preload("res://assets/sprite/buff_icon/dash_speed_down.png")
-var run_speed_buff_icon = preload("res://assets/sprite/buff_icon/run_speed_down.png")
+var dash_speed_buff_icon = preload("res://assets/sprite/status_icon/dash_speed_down.png")
+var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_down.png")
 
 func _ready() -> void:
 	is_active = true
@@ -37,6 +37,11 @@ func _ready() -> void:
 			await sfx_player.finished
 		sfx_player.stream = sfx_effect.pick_random()
 		sfx_player.play()
+
+
+func set_duration_and_restart_timer(new_duration: float):
+	duration = new_duration
+	life_timer.start(duration)
 
 func _physics_process(delta: float) -> void:
 	if stopped_moving:
@@ -69,8 +74,9 @@ func clear_hazard():
 	is_active = false
 	for pe in particle_effects:
 		pe.emitting = false
-	var tween = self.create_tween()
-	tween.tween_property(puddle_sprite, "modulate:a", 0, 2.0)
+	if puddle_decal:
+		var tween = self.create_tween()
+		tween.tween_property(puddle_decal, "modulate:a", 0, 2.0)
 	var tween2 = self.create_tween()
 	tween2.tween_property(light, "light_energy", 0, 2.0)
 	# Wait until all particles expired

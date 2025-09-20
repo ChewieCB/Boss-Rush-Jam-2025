@@ -1,13 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://biqm56x6ewbmo"]
+[gd_scene load_steps=12 format=3 uid="uid://biqm56x6ewbmo"]
 
 [ext_resource type="Script" path="res://src/ui/pause_menu/setting_ui.gd" id="1_05qbb"]
 [ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="2_b71wb"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_1sxb2"]
+[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="3_qmj7g"]
 [ext_resource type="Texture2D" uid="uid://cr52bg7vx5ccm" path="res://assets/sprite/game_icon/gamepad.png" id="4_4x1kt"]
 [ext_resource type="Theme" uid="uid://c4j7kmv6avlsi" path="res://src/ui/theme/setting_theme.tres" id="4_fifb6"]
 [ext_resource type="Texture2D" uid="uid://bbt0eaqh5wvv1" path="res://assets/sprite/game_icon/film.png" id="5_knue1"]
 [ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="5_oipns"]
 [ext_resource type="Texture2D" uid="uid://db7w5onrhapvt" path="res://assets/sprite/game_icon/audioOn.png" id="6_fqt2w"]
+[ext_resource type="Texture2D" uid="uid://dqo7dxystt7l1" path="res://assets/sprite/game_icon/question.png" id="7_5c6c4"]
+[ext_resource type="Texture2D" uid="uid://ctoh8vq047sw7" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_back.png" id="9_akomy"]
 
 [node name="SettingUI" type="Control"]
 layout_mode = 3
@@ -19,6 +22,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_05qbb")
 keybind_button_prefab = ExtResource("2_b71wb")
+sfx_free_money = ExtResource("3_qmj7g")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(0, 70)
@@ -26,10 +30,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -320.0
-offset_top = 120.0
-offset_right = 320.0
-offset_bottom = 190.0
+offset_left = -390.5
+offset_top = 64.0
+offset_right = 390.5
+offset_bottom = 134.0
 grow_horizontal = 2
 theme_override_constants/separation = 15
 alignment = 1
@@ -61,6 +65,15 @@ text = "Audio"
 icon = ExtResource("6_fqt2w")
 icon_alignment = 2
 
+[node name="DEBUGOption" parent="HBoxContainer" instance=ExtResource("5_oipns")]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "DEBUG"
+icon = ExtResource("7_5c6c4")
+icon_alignment = 2
+
 [node name="TabContainer" type="TabContainer" parent="."]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
@@ -70,9 +83,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -416.0
-offset_top = -348.0
+offset_top = -404.0
 offset_right = 416.0
-offset_bottom = 356.0
+offset_bottom = 372.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
@@ -538,6 +551,44 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
+[node name="HideHurtOverlay" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/HideHurtOverlay"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Hide hurt overlay"
+
+[node name="HideHurtOverlayToggle" type="CheckButton" parent="TabContainer/Graphic/VBoxContainer/HideHurtOverlay"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="HideDamageNumber" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/HideDamageNumber"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Hide damage number"
+
+[node name="HideDamageNumberToggle" type="CheckButton" parent="TabContainer/Graphic/VBoxContainer/HideDamageNumber"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
 [node name="HSeparator" type="HSeparator" parent="TabContainer/Graphic/VBoxContainer"]
 layout_mode = 2
 
@@ -749,6 +800,158 @@ grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
+[node name="DEBUG" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="Title" type="Label" parent="TabContainer/DEBUG"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -71.0
+offset_top = 16.0
+offset_right = 71.0
+offset_bottom = 71.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "DEBUG"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/DEBUG"]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 80.0
+offset_right = 800.0
+offset_bottom = 472.0
+theme_override_constants/separation = 10
+
+[node name="GodMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/GodMode"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "God Mode"
+
+[node name="GodeModeToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/GodMode"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="FreeMoney" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/FreeMoney"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Give 1000 chips"
+
+[node name="FreeMoneyButton" type="Button" parent="TabContainer/DEBUG/VBoxContainer/FreeMoney"]
+custom_minimum_size = Vector2(64, 24)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -12.0
+offset_right = -24.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "+1000"
+icon = ExtResource("9_akomy")
+icon_alignment = 2
+expand_icon = true
+
+[node name="BossOneShot" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/BossOneShot"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Set all bosses to 1 HP"
+
+[node name="BossOneShotToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/BossOneShot"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="Freecam" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/Freecam"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Unlock freecam mode (`)"
+
+[node name="FreecamToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/Freecam"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="Timescale" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/Timescale"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Engine Timescale
+"
+
+[node name="TimescaleSlider" type="HSlider" parent="TabContainer/DEBUG/VBoxContainer/Timescale"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+theme = ExtResource("4_fifb6")
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="Value" type="Label" parent="TabContainer/DEBUG/VBoxContainer/Timescale"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "1.0"
+horizontal_alignment = 1
+
 [node name="SettingUIBorder" type="NinePatchRect" parent="."]
 self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 1
@@ -758,9 +961,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -416.0
-offset_top = -348.0
+offset_top = -404.0
 offset_right = 416.0
-offset_bottom = 356.0
+offset_bottom = 372.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_1sxb2")
@@ -778,9 +981,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -100.0
-offset_top = -176.0
+offset_top = -120.0
 offset_right = 100.0
-offset_bottom = -119.0
+offset_bottom = -63.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 40
@@ -794,6 +997,8 @@ text = "Back"
 [connection signal="pressed" from="HBoxContainer/GraphicOption" to="." method="_on_graphic_option_pressed"]
 [connection signal="mouse_entered" from="HBoxContainer/AudioOption" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="HBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
+[connection signal="mouse_entered" from="HBoxContainer/DEBUGOption" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="HBoxContainer/DEBUGOption" to="." method="_on_debug_option_pressed"]
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_tab_container_tab_changed"]
 [connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
@@ -821,6 +1026,10 @@ text = "Back"
 [connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider" to="." method="_on_scaling_3d_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/HideUI/HideUIToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/Graphic/VBoxContainer/HideUI/HideUIToggle" to="." method="_on_hide_ui_toggled"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/HideHurtOverlay/HideHurtOverlayToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/Graphic/VBoxContainer/HideHurtOverlay/HideHurtOverlayToggle" to="." method="_on_hide_hurt_overlay_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/HideDamageNumber/HideDamageNumberToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/Graphic/VBoxContainer/HideDamageNumber/HideDamageNumberToggle" to="." method="_on_hide_damage_number_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/ScreenShakeToggle/ScreenShakeToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/Graphic/VBoxContainer/ScreenShakeToggle/ScreenShakeToggle" to="." method="_on_screen_shake_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/DrunkBlurToggle/DrunkBlurToggle" to="." method="play_button_hover_sfx"]
@@ -833,6 +1042,15 @@ text = "Back"
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/SFX/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="_on_gode_mode_toggle_toggled"]
+[connection signal="pressed" from="TabContainer/DEBUG/VBoxContainer/FreeMoney/FreeMoneyButton" to="." method="_on_free_money_button_pressed"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="_on_boss_one_shot_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="_on_freecam_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider" to="." method="_on_timescale_slider_value_changed"]
 [connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="timeout" from="KeybindTimer" to="." method="_on_keybind_timer_timeout"]

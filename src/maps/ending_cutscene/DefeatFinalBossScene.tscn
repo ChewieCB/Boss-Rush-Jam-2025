@@ -1,0 +1,336 @@
+[gd_scene load_steps=16 format=3 uid="uid://yytvbyyjg5q6"]
+
+[ext_resource type="Script" path="res://src/maps/ending_cutscene/defeat_final_boss_scene.gd" id="1_6euio"]
+[ext_resource type="Texture2D" uid="uid://bocqpdog3s31g" path="res://assets/picture/defeat_final_boss_1.png" id="1_dksat"]
+[ext_resource type="Texture2D" uid="uid://b1pluqn5c7c8s" path="res://assets/picture/defeat_final_boss_2.png" id="2_abhbl"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="2_vttsr"]
+[ext_resource type="Texture2D" uid="uid://d10ww3b2ud1hs" path="res://assets/picture/defeat_final_boss_3.png" id="3_bhocd"]
+[ext_resource type="AudioStream" uid="uid://bdcqmijgrl2cc" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS SETS ROOM ON FIRE (TRIGGER JUST BEFORE FIRE LOOP).mp3" id="3_os7wn"]
+[ext_resource type="Texture2D" uid="uid://btph3vuamynsm" path="res://assets/picture/defeat_final_boss_4.png" id="4_ifxem"]
+[ext_resource type="PackedScene" uid="uid://8pcmjsth72ha" path="res://src/maps/ending_cutscene/CreditRoll.tscn" id="4_s5emq"]
+[ext_resource type="Texture2D" uid="uid://dd1spfk53wqt" path="res://assets/picture/defeat_final_boss_5.png" id="5_my58c"]
+[ext_resource type="Texture2D" uid="uid://coprvxfpx4kyo" path="res://assets/picture/defeat_final_boss_6.png" id="6_1nj83"]
+[ext_resource type="Texture2D" uid="uid://djmtk1c27j0u" path="res://assets/picture/defeat_final_boss_7.png" id="7_ttd4a"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="12_wxlbe"]
+
+[sub_resource type="Animation" id="Animation_wstuu"]
+resource_name = "start"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CutsceneArt/TextureRect:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CutsceneArt/TextureRect2:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CutsceneArt/TextureRect3:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 2.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CutsceneArt/TextureRect4:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 3.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CutsceneArt/TextureRect5:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CutsceneArt/TextureRect6:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("CutsceneArt/TextureRect7:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.766667, 5, 10),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"play_gun_shot_sfx"
+}, {
+"args": [],
+"method": &"play_fire_sfx"
+}, {
+"args": [],
+"method": &"set_cutscene_finished"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_hhnp2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CutsceneArt/TextureRect:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CutsceneArt/TextureRect2:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CutsceneArt/TextureRect3:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CutsceneArt/TextureRect4:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CutsceneArt/TextureRect5:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CutsceneArt/TextureRect6:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("CutsceneArt/TextureRect7:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mwetq"]
+_data = {
+"RESET": SubResource("Animation_hhnp2"),
+"start": SubResource("Animation_wstuu")
+}
+
+[node name="DefeatFinalBossScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6euio")
+gun_shot_sfx = ExtResource("2_vttsr")
+fire_sfx = ExtResource("3_os7wn")
+credit_scene = ExtResource("4_s5emq")
+
+[node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CutsceneArt" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="CutsceneArt"]
+layout_mode = 0
+offset_left = 232.0
+offset_top = 160.0
+offset_right = 664.0
+offset_bottom = 893.0
+texture = ExtResource("1_dksat")
+
+[node name="TextureRect2" type="TextureRect" parent="CutsceneArt"]
+visible = false
+layout_mode = 0
+offset_left = 744.0
+offset_top = 160.0
+offset_right = 1184.0
+offset_bottom = 358.0
+texture = ExtResource("2_abhbl")
+
+[node name="TextureRect3" type="TextureRect" parent="CutsceneArt"]
+visible = false
+layout_mode = 0
+offset_left = 744.0
+offset_top = 432.0
+offset_right = 1185.0
+offset_bottom = 645.0
+texture = ExtResource("3_bhocd")
+
+[node name="TextureRect4" type="TextureRect" parent="CutsceneArt"]
+visible = false
+layout_mode = 0
+offset_left = 744.0
+offset_top = 696.0
+offset_right = 1185.0
+offset_bottom = 886.0
+texture = ExtResource("4_ifxem")
+
+[node name="TextureRect5" type="TextureRect" parent="CutsceneArt"]
+visible = false
+layout_mode = 0
+offset_left = 1256.0
+offset_top = 160.0
+offset_right = 1448.0
+offset_bottom = 501.0
+texture = ExtResource("5_my58c")
+
+[node name="TextureRect6" type="TextureRect" parent="CutsceneArt"]
+visible = false
+layout_mode = 0
+offset_left = 1512.0
+offset_top = 160.0
+offset_right = 1689.0
+offset_bottom = 499.0
+texture = ExtResource("6_1nj83")
+
+[node name="TextureRect7" type="TextureRect" parent="CutsceneArt"]
+visible = false
+layout_mode = 0
+offset_left = 1256.0
+offset_top = 544.0
+offset_right = 1660.0
+offset_bottom = 892.0
+texture = ExtResource("7_ttd4a")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_mwetq")
+}
+autoplay = "start"
+
+[node name="ContinuePrompt" type="HBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -169.0
+offset_top = -72.0
+offset_right = -29.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="DeviceInputPrompt" parent="ContinuePrompt" instance=ExtResource("12_wxlbe")]
+layout_mode = 2
+assigned_action = "interact"
+
+[node name="Label" type="Label" parent="ContinuePrompt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "to continue"

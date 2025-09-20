@@ -1,8 +1,8 @@
-[gd_scene load_steps=30 format=3 uid="uid://ii5ocgeg86yx"]
+[gd_scene load_steps=34 format=3 uid="uid://ii5ocgeg86yx"]
 
 [ext_resource type="Script" path="res://src/bosses/base/boss_core.gd" id="1_tem3i"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="2_5bmmu"]
-[ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChipProjectile.tscn" id="2_hj7qa"]
+[ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChip.tscn" id="2_hj7qa"]
 [ext_resource type="PackedScene" uid="uid://cjklncq8p42y1" path="res://src/bosses/base/attacks/ranged/TestProjectile.tscn" id="2_s3pnh"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="3_fy6mc"]
 [ext_resource type="PackedScene" uid="uid://bwei3cifjg1sq" path="res://src/ui/boss/BossHealthBar.tscn" id="3_ybtoo"]
@@ -19,6 +19,10 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="12_1g6yn"]
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="13_ai5vk"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="18_e2occ"]
+[ext_resource type="PackedScene" uid="uid://c4kj3fub8rjgh" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmitBoss.tscn" id="20_w7q5g"]
+[ext_resource type="PackedScene" uid="uid://8r3wmjnp5n1e" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitBoss.tscn" id="21_tfgrr"]
+[ext_resource type="PackedScene" uid="uid://5870aiiy0cj0" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmitBoss.tscn" id="22_m4oop"]
+[ext_resource type="PackedScene" uid="uid://ccohk42f3e4ii" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitBoss.tscn" id="23_61k5s"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m057l"]
 radius = 1.0
@@ -32,7 +36,7 @@ transparency = 1
 albedo_color = Color(1, 0, 0, 0.337255)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d0jfy"]
-size = Vector3(3, 2.2, 3)
+size = Vector3(3, 2.2, 4.3)
 
 [sub_resource type="Resource" id="Resource_vq1e8"]
 script = ExtResource("11_j156m")
@@ -75,6 +79,7 @@ delay_per_projectile = 0.3
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+layers = 2
 billboard = 2
 texture = ExtResource("6_04mqs")
 
@@ -85,6 +90,7 @@ shape = SubResource("CapsuleShape3D_m057l")
 [node name="DebugMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
 visible = false
+layers = 2
 mesh = SubResource("BoxMesh_rkhu1")
 surface_material_override/0 = SubResource("StandardMaterial3D_a1ebn")
 
@@ -123,7 +129,10 @@ health_component = NodePath("../../../HealthComponent")
 show_on_ready = false
 hide_ui_on_death = true
 
-[node name="StateChartDebugger" parent="UI" instance=ExtResource("6_4cg3x")]
+[node name="DebugUI" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="StateChartDebugger" parent="DebugUI" instance=ExtResource("6_4cg3x")]
 visible = false
 top_level = true
 z_index = 10
@@ -412,6 +421,81 @@ delay_in_seconds = "0.0"
 
 [node name="PoisonedTimer" type="Timer" parent="StateChart/Root/Status/Poisoned"]
 
+[node name="Frozen" type="Node" parent="StateChart/Root/Status"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("Inactive")
+
+[node name="Inactive" type="Node" parent="StateChart/Root/Status/Frozen"]
+script = ExtResource("7_0t8qy")
+
+[node name="toActive" type="Node" parent="StateChart/Root/Status/Frozen/Inactive"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Active")
+event = &"add_status_frozen"
+guard = ExtResource("18_e2occ")
+delay_in_seconds = "0.0"
+
+[node name="Active" type="Node" parent="StateChart/Root/Status/Frozen"]
+script = ExtResource("7_0t8qy")
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Status/Frozen/Active"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Inactive")
+event = &"remove_status_frozen"
+delay_in_seconds = "0.0"
+
+[node name="PoisonedTimer" type="Timer" parent="StateChart/Root/Status/Frozen"]
+
+[node name="Shocked" type="Node" parent="StateChart/Root/Status"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("Inactive")
+
+[node name="Inactive" type="Node" parent="StateChart/Root/Status/Shocked"]
+script = ExtResource("7_0t8qy")
+
+[node name="toActive" type="Node" parent="StateChart/Root/Status/Shocked/Inactive"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Active")
+event = &"add_status_shocked"
+guard = ExtResource("18_e2occ")
+delay_in_seconds = "0.0"
+
+[node name="Active" type="Node" parent="StateChart/Root/Status/Shocked"]
+script = ExtResource("7_0t8qy")
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Status/Shocked/Active"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Inactive")
+event = &"remove_status_shocked"
+delay_in_seconds = "0.0"
+
+[node name="PoisonedTimer" type="Timer" parent="StateChart/Root/Status/Shocked"]
+
+[node name="Bleeding" type="Node" parent="StateChart/Root/Status"]
+script = ExtResource("6_nojwf")
+initial_state = NodePath("Inactive")
+
+[node name="Inactive" type="Node" parent="StateChart/Root/Status/Bleeding"]
+script = ExtResource("7_0t8qy")
+
+[node name="toActive" type="Node" parent="StateChart/Root/Status/Bleeding/Inactive"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Active")
+event = &"add_status_bleeding"
+guard = ExtResource("18_e2occ")
+delay_in_seconds = "0.0"
+
+[node name="Active" type="Node" parent="StateChart/Root/Status/Bleeding"]
+script = ExtResource("7_0t8qy")
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Status/Bleeding/Active"]
+script = ExtResource("8_lsrry")
+to = NodePath("../../Inactive")
+event = &"remove_status_bleeding"
+delay_in_seconds = "0.0"
+
+[node name="PoisonedTimer" type="Timer" parent="StateChart/Root/Status/Bleeding"]
+
 [node name="Phase" type="Node" parent="StateChart/Root"]
 script = ExtResource("6_nojwf")
 initial_state = NodePath("Inactive")
@@ -484,6 +568,21 @@ libraries = {
 [node name="HurtSFXPlayer" type="AudioStreamPlayer3D" parent="."]
 bus = &"SFX"
 
+[node name="StatusEffectVFX" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.15613, 0)
+
+[node name="ProjectileBurnEmitBoss" parent="StatusEffectVFX" instance=ExtResource("20_w7q5g")]
+visible = false
+
+[node name="ProjectilePoisonEmitBoss" parent="StatusEffectVFX" instance=ExtResource("21_tfgrr")]
+visible = false
+
+[node name="ProjectileFreezeEmitBoss" parent="StatusEffectVFX" instance=ExtResource("22_m4oop")]
+visible = false
+
+[node name="ProjectileShockEmitBoss" parent="StatusEffectVFX" instance=ExtResource("23_61k5s")]
+visible = false
+
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_physics_processing"]
@@ -509,6 +608,18 @@ bus = &"SFX"
 [connection signal="state_exited" from="StateChart/Root/Status/Poisoned/Active" to="." method="_on_status_poisoned_active_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Poisoned/Active" to="." method="_on_status_poisoned_active_state_physics_processing"]
 [connection signal="timeout" from="StateChart/Root/Status/Poisoned/PoisonedTimer" to="." method="_on_poisoned_timer_timeout"]
+[connection signal="state_entered" from="StateChart/Root/Status/Frozen/Active" to="." method="_on_status_frozen_active_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Status/Frozen/Active" to="." method="_on_status_frozen_active_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Status/Frozen/Active" to="." method="_on_status_frozen_active_state_physics_processing"]
+[connection signal="timeout" from="StateChart/Root/Status/Frozen/PoisonedTimer" to="." method="_on_poisoned_timer_timeout"]
+[connection signal="state_entered" from="StateChart/Root/Status/Shocked/Active" to="." method="_on_status_shocked_active_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Status/Shocked/Active" to="." method="_on_status_shocked_active_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Status/Shocked/Active" to="." method="_on_status_shocked_active_state_physics_processing"]
+[connection signal="timeout" from="StateChart/Root/Status/Shocked/PoisonedTimer" to="." method="_on_poisoned_timer_timeout"]
+[connection signal="state_entered" from="StateChart/Root/Status/Bleeding/Active" to="." method="_on_status_bleeding_active_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Status/Bleeding/Active" to="." method="_on_status_bleeding_active_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Status/Bleeding/Active" to="." method="_on_status_bleeding_active_state_physics_processing"]
+[connection signal="timeout" from="StateChart/Root/Status/Bleeding/PoisonedTimer" to="." method="_on_poisoned_timer_timeout"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_entered"]
 [connection signal="timeout" from="DPSWindowTimer" to="." method="_on_dps_window_timer_timeout"]
 [connection signal="timeout" from="HurtFrameTimer" to="." method="_on_hurt_frame_timer_timeout"]

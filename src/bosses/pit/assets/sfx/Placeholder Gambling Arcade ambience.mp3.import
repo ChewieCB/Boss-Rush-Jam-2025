@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bjx6uvlbw5h7r"
+path="res://.godot/imported/Placeholder Gambling Arcade ambience.mp3-70d33f067d286232fab24976a44fbf27.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/pit/assets/sfx/Placeholder Gambling Arcade ambience.mp3"
+dest_files=["res://.godot/imported/Placeholder Gambling Arcade ambience.mp3-70d33f067d286232fab24976a44fbf27.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

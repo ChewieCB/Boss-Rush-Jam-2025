@@ -12,7 +12,7 @@ func _ready() -> void:
 	progress_bar.value_changed.connect(_on_progress_changed)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	_update_reroll_max(GameManager.reroll_cost)
+	_update_reroll_max(int(GameManager.reroll_cost * GameManager.get_risk_spin_cost_mult()))
 	GameManager.currency_changed.connect(_on_currency_changed)
 	GameManager.reroll_cost_changed.connect(_update_reroll_max)
 	GameManager.free_rerolls.connect(_update_reroll_max.bind(progress_bar.max_value))
@@ -28,14 +28,22 @@ func _on_progress_changed(value: float) -> void:
 		progress_label.modulate = Color.WHITE
 		anim_player.stop()
 
+	if GameManager.reroll_time >= GameManager.get_risk_limit_spin_amount():
+		progress_bar.tint_over.a = 0
+		progress_label.modulate = Color.GRAY
+		progress_label.text = "Limited"
+		anim_player.stop()
+
 
 func _on_currency_changed(new_value: int) -> void:
 	var progress_tween: Tween = get_tree().create_tween()
+	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	progress_tween.tween_property(progress_bar, "value", new_value, fill_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-
 	progress_bar.scale = Vector2(1.4, 1.4)
 	progress_bar.pivot_offset = progress_bar.size / 2
+	
 	var scale_tween: Tween = get_tree().create_tween()
+	scale_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	scale_tween.tween_property(progress_bar, "scale", Vector2(1, 1), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 
 
@@ -49,6 +57,7 @@ func _update_reroll_max(new_max: int) -> void:
 		new_value = int(progress_bar.max_value)
 		progress_label.text = "Free"
 	var progress_tween: Tween = get_tree().create_tween()
+	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	progress_tween.tween_property(progress_bar, "value", 0, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	progress_tween.chain().tween_property(progress_bar, "value", new_value, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	_on_progress_changed(0)

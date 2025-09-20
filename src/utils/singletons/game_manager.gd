@@ -7,6 +7,7 @@ signal reroll_cost_changed(new_cost: int)
 signal free_rerolls
 signal refresh_shop_ui
 signal setting_changed
+signal risk_level_changed
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -14,9 +15,16 @@ const RESOLUTION_ARRAY = [
 	Vector2i(1366, 768), Vector2i(1280, 720), Vector2i(1024, 768)
 ]
 
+const CHIP_COST_PER_LEVEL_UP = 500
+const BASE_PLAYER_LUCK_THRESHOLD = 0.95
+const PLOT_ARMOR_DAMAGE_ABSORB_PERC = 0.25 # Perc of damage taken by player will be absorbed by luck
+const PLOT_ARMOR_LUCK_DAMAGE_MULTIPLIER = 4.0 # Luck needed to absorb damage will multiplied by this
+const HIGH_ROLLER_BONUS_HEAL_PER_REROLL_TIME = 5
+
 var pause_ui: PauseUI
 var setting_ui: SettingUI
 var player: Player
+var difficulty_menu: DifficultyMenu
 
 # Barrels
 @export var starting_barrels: Array[BarrelDataResource]
@@ -30,22 +38,29 @@ var shop_barrels: Array[BarrelDataResource] = []
 
 
 # Re-rolls
-@export var initial_reroll_cost: int = 200
-@export var reroll_cost_mult: float = 1.5
+@export var initial_reroll_cost: int = 100
+@export var reroll_cost_mult: float = 1.2
 var reroll_cost: int = initial_reroll_cost
 var is_free_reroll: bool = false:
 	set(value):
 		is_free_reroll = value
 		if is_free_reroll:
 			free_rerolls.emit()
+var reroll_time = 0
 
 @export var player_currency: int = 0:
 	set(value):
 		player_currency = value
 		currency_changed.emit(player_currency)
 
+var player_level = 1
+var player_skill_dict = {}
+var player_skill_points = 0
+
 var player_gained_first_barrel: bool = false
 var barrel_tutorial_shown: bool = false
+
+var tutorial_completed: bool = false
 
 var bosses_defeated: Array[BossCore.BossIdEnum] = []
 var all_bosses_defeated: bool = false
@@ -55,15 +70,37 @@ var chosen_slot_id = -1
 var start_record_timestamp = 0
 var total_playtime = 0
 
+# Difficulty modifiers
+var selected_level_path: String
+var selected_boss_id: BossCore.BossIdEnum
+var bet_value = 0
+var reward_value = 0
+var risk_modifier_level_dict = {
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
+	RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
+	RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
+	RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
+	RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
+	RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
+}
+var boss_ante = 0
+var risk_level = 0:
+	set(value):
+		risk_level = value
+		if risk_level >= 15:
+			boss_ante = 5
+		else:
+			boss_ante = int(risk_level / 3)
+		risk_level_changed.emit()
+
+
 # HACK - do this dynamically with level loading/unloading in the elevator
 var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3
 var cached_camera_rotation: Vector3
-
-# SFX
-# TODO - find a good generic solution for calling these outside of the shop
-@export var sfx_purchase: AudioStream
-@export var sfx_too_expensive: AudioStream
 
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
@@ -71,6 +108,8 @@ var cached_camera_rotation: Vector3
 	set(value):
 		if value != camera_fov && player:
 			player.player_camera.set_fov(value)
+			if player.freecam:
+				player.freecam.set_fov(value)
 		camera_fov = value
 var camera_tilt: bool = true
 
@@ -79,7 +118,10 @@ var camera_tilt: bool = true
 var vsync_option_index: int = 1
 @export_range(0, 2, 1) var window_mode_index: int = 1 # From 0 to 2
 var scaling_3d: float = 100.0
+var enable_elemental_vfx = true # : TODO
 var hide_ui = false
+var hide_hurt_overlay = false
+var hide_damage_number = false
 # Accessibility setting flags
 var screen_shake_disabled: bool = false
 var drunk_blur_disabled: bool = false
@@ -91,6 +133,13 @@ var drunk_blur_disabled: bool = false
 var is_controller_connected: bool = false
 var aim_assist_strength: float = 0.5
 
+# DEBUG CHEATS
+var CHEAT_oneshot: bool = false
+var CHEAT_godmode: bool = false
+var CHEAT_freecam: bool = true
+
+@export var sfx_screenshot: AudioStream
+
 
 func _ready() -> void:
 	barrel_database.append_array(debug_barrel_database)
@@ -99,6 +148,32 @@ func _ready() -> void:
 	SaveManager.load_setting_config()
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
+
+
+func _unhandled_input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("toggle_freecam"):
+		if CHEAT_freecam:
+			# Spawn freecam if not exist, else despawm it
+			if player.freecam:
+				player._disable_freecam()
+			else:
+				player._enable_freecam()
+	if Input.is_action_just_pressed("debug_increase_timescale"):
+		if Engine.time_scale < 1.0:
+			Engine.time_scale += 0.1
+	elif Input.is_action_just_pressed("debug_decrease_timescale"):
+		if Engine.time_scale >= 0.1:
+			Engine.time_scale -= 0.1
+	
+	if Input.is_action_just_pressed("screenshot"):
+		var screen_cap := get_viewport().get_texture().get_image()
+		var dir := DirAccess.open("user://")
+		if not dir.dir_exists("screenshots"):
+			dir.make_dir("screenshots")
+		var filename := "user://screenshots/crapshoot_%s.png" % [Time.get_unix_time_from_system()]
+		screen_cap.save_png(filename)
+		print("Screenshot captured at %s" % filename)
+		SoundManager.play_ui_sound(sfx_screenshot)
 
 
 func add_barrel_to_inventory(data: BarrelDataResource):
@@ -144,7 +219,7 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 
 
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
-	if player.current_gun.is_reloading:
+	if player.current_gun.is_reloading or player.current_gun.is_spinning:
 		return "Can not change barrel while reloading"
 	var found_data: BarrelDataResource = null
 	var barrel_idx: int = -1
@@ -163,21 +238,23 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 
 
 func purchase_reroll() -> bool:
-	if player_currency >= reroll_cost or is_free_reroll:
+	if reroll_time == 0:
+		reroll_cost = int(reroll_cost * get_risk_spin_cost_mult())
+	if (player_currency >= reroll_cost and reroll_time < get_risk_limit_spin_amount()) or is_free_reroll:
 		if not is_free_reroll:
 			player_currency -= reroll_cost
 			# Increase the cost of re-rolling for this fight
-			reroll_cost = int(reroll_cost * reroll_cost_mult)
+			# reroll_cost = int(reroll_cost * reroll_cost_mult)
+			reroll_cost = int(reroll_cost * (reroll_cost_mult + (GameManager.get_risk_spin_cost_mult() - 1)))
+			reroll_time += 1
 		reroll_cost_changed.emit(reroll_cost)
-		SoundManager.play_sound(sfx_purchase)
 		return true
-	SoundManager.play_sound(sfx_too_expensive)
 	return false
-
 
 func reset_reroll_cost() -> void:
 	reroll_cost = initial_reroll_cost
 	reroll_cost_changed.emit(reroll_cost)
+	reroll_time = 0
 
 
 func show_boss_special_dialog(content: String, duration: float):
@@ -193,10 +270,31 @@ func show_boss_special_dialog(content: String, duration: float):
 
 
 func load_new_save_data():
+	tutorial_completed = false
 	for data in starting_barrels:
+		if data in equipped_barrels:
+			continue
 		equipped_barrels.append(data)
 	for data in starting_shop_barrels:
 		shop_barrels.append(data)
+
+
+func reset_difficulty_modifier():
+	risk_modifier_level_dict = {
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
+		RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
+		RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
+		RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
+		RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
+		RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
+	}
+	risk_level = 0
+	boss_ante = 0
+	bet_value = 0
+	reward_value = 0
 
 func reset_current_save_data():
 	equipped_barrels = []
@@ -211,6 +309,8 @@ func reset_current_save_data():
 	chosen_slot_id = -1
 	start_record_timestamp = 0
 	total_playtime = 0
+	tutorial_completed = false
+	reset_difficulty_modifier()
 
 
 func start_record_playtime():
@@ -224,3 +324,89 @@ func update_total_playtime():
 
 func _on_controller_connection(_device: int, connected: bool):
 	is_controller_connected = connected
+
+func create_and_add_status_effect(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
+	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, is_bad_effect: bool = false, show_duration_ui = false, status_icon: Texture2D = null, ):
+	var status_effect = StatusEffect.new()
+	status_effect.display_name = display_name
+	status_effect.status_code = status_code
+	status_effect.modified_stat = modified_stat
+	status_effect.value = value
+	status_effect.modify_type = modify_type
+	status_effect.duration = duration
+	status_effect.is_bad_effect = is_bad_effect
+	status_effect.show_duration_ui = show_duration_ui
+	status_effect.show_value_on_ui = false
+	status_effect.status_icon = status_icon
+	player.add_status_effect(status_effect)
+
+
+# Boss telegraph time can be modified by difficulty or Poker Face skill
+func get_boss_telegraph_time_multiplier() -> float:
+	var mult = 1.0
+	# Poker Face skill
+	if player_skill_dict.has(SkillItemUI.SkillIdEnum.POKER_FACE) and player.luck_component.is_high_luck():
+		mult += 0.1 * player_skill_dict[SkillItemUI.SkillIdEnum.POKER_FACE]
+	# If difficulty also modified boss telegraph time, add it here
+	#
+
+	return mult
+
+func get_boss_chip_amount_drop_multiplier() -> float:
+	var mult = 1.0
+	# Blessed Chip skill
+	if player_skill_dict.has(SkillItemUI.SkillIdEnum.BLESSED_CHIP):
+		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLESSED_CHIP]:
+			1:
+				mult -= 0.1
+			2:
+				mult -= 0.2
+			3:
+				mult -= 0.3
+			4:
+				mult -= 0.4
+	return mult
+
+
+func get_risk_max_hp_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP]
+	return value
+
+func get_risk_dmg_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG]
+	return value
+
+func get_risk_atk_move_speed_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED]
+	return value
+
+func get_risk_status_resist_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST]
+	return value
+
+func get_risk_spin_cost_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST]
+	return value
+
+func get_risk_healing_effectiveness_mult() -> float:
+	var value = 1 - GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING]
+	return value
+
+func get_risk_luck_buildup_mult() -> float:
+	var value = 1 - GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP]
+	return value
+
+func get_risk_limit_spin_amount() -> int:
+	var value = 999999
+	if risk_modifier_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT] > 0:
+		value = RiskItem.STARTING_MAX_LIMIT_PLAYER_SPIN_AMOUNT - \
+			((risk_modifier_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT] - 1) * \
+			RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT])
+	return value

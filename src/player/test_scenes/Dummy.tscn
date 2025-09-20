@@ -30,12 +30,21 @@ shape = SubResource("BoxShape3D_uok4q")
 mesh = SubResource("BoxMesh_8yaim")
 
 [node name="DamageLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.89639, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.17208, 0)
 pixel_size = 0.01
 billboard = 1
 text = "Shoot me"
 font_size = 40
 outline_size = 20
+
+[node name="StatusLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.21262, 0)
+pixel_size = 0.01
+billboard = 1
+modulate = Color(1, 0.988364, 0.0366519, 1)
+text = "Status:"
+font_size = 30
+outline_size = 15
 
 [node name="HappyFaceLabel" type="Label3D" parent="."]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0.587421, 0.560004)

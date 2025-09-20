@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_2bruo"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/protective_barrier.gd" id="6_61sk6"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="7_6c636"]
-[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/ShieldBarrier.tscn" id="7_n73is"]
+[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/misc/ShieldBarrier.tscn" id="7_n73is"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="7_o6cqq"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/apply_knockback_self.gd" id="8_1u0d3"]
 [ext_resource type="PackedScene" uid="uid://71phynp62d0y" path="res://src/player/gun/projectiles/GunProjectileBall.tscn" id="8_ueih2"]
@@ -21,13 +21,20 @@ shield_barrier_prefab = ExtResource("7_n73is")
 display_text_title = "Protective Barrier"
 display_text_tag = "Tough up!"
 display_text_desc = "25% damage resistance"
+positive_desc = Array[String](["Increases damage resistance"])
+negative_desc = Array[String](["TODO: add drawback (slower speed?)"])
+icon_id = 43
 
 [node name="NewtonThirdLaw" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_rhvms")
 display_text_title = "Newton's Third Law"
 display_text_tag = "Safer Rocket Jump"
 display_text_desc = "+50% damage
--25% firerate"
+-25% firerate
+Adds knockback when shoot the nearby environment, enabling rocket jumping. Increased damage but decreased firerate."
+positive_desc = Array[String](["Enables rocket-jumping knockback", "Higher damage"])
+negative_desc = Array[String](["Slower firerate"])
+icon_id = 42
 
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/NewtonThirdLaw"]
 script = ExtResource("6_2bruo")
@@ -50,7 +57,10 @@ max_range = 3.0
 script = ExtResource("3_rhvms")
 display_text_title = "Ball Bullet"
 display_text_tag = "Massize ball!"
-display_text_desc = "Ball"
+display_text_desc = "Shoot a single huge bouncy ball projectile. Significantly increased damage but reduce firerate and projectile speed."
+positive_desc = Array[String](["Significantly higher damage", "Fires large projectile", "Adds richochet to projectile"])
+negative_desc = Array[String](["Slower firerate", "Slower projectile speed"])
+icon_id = 41
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/BallBullet"]
 script = ExtResource("7_6c636")

@@ -1,0 +1,77 @@
+[gd_scene load_steps=11 format=3 uid="uid://cm1sitbvy6aye"]
+
+[ext_resource type="Script" path="res://src/maps/lobby/shrine/skill_shrine.gd" id="1_yq3vh"]
+[ext_resource type="PackedScene" uid="uid://d0xksun1nqr31" path="res://src/maps/lobby/shrine/SkillTreeUI.tscn" id="2_m7yen"]
+[ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="3_4sh1n"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_eyws8"]
+size = Vector3(1, 2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q0yqi"]
+albedo_color = Color(0.382813, 0.227623, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ryl4p"]
+material = SubResource("StandardMaterial3D_q0yqi")
+size = Vector3(1, 2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c7bgo"]
+material = SubResource("StandardMaterial3D_q0yqi")
+size = Vector3(0.8, 0.5, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qu25s"]
+albedo_color = Color(1, 0.0808307, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qi8jq"]
+material = SubResource("StandardMaterial3D_qu25s")
+size = Vector3(0.75, 0.1, 0.75)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cu8es"]
+radius = 5.0
+
+[node name="SkillShrine" type="StaticBody3D"]
+collision_layer = 96
+collision_mask = 79
+script = ExtResource("1_yq3vh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_eyws8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ryl4p")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.284069, -0.380068)
+mesh = SubResource("BoxMesh_c7bgo")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000452399, -0.0652698, -0.377627)
+mesh = SubResource("BoxMesh_qi8jq")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.28298, 0)
+billboard = 1
+no_depth_test = true
+text = "Shrine of Fortune"
+font_size = 50
+outline_size = 24
+
+[node name="InteractArea" type="Area3D" parent="."]
+collision_layer = 64
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.9, 0)
+shape = SubResource("SphereShape3D_cu8es")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="SkillTreeUI" parent="UI" instance=ExtResource("2_m7yen")]
+visible = false
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(-0.0707107, 0.0707107, 0, -0.0707107, -0.0707107, 0, 0, 0, 0.1, 0, 0.559583, -0.539939)
+modulate = Color(0.11701, 1, 0, 1)
+texture = ExtResource("3_4sh1n")
+
+[connection signal="body_entered" from="InteractArea" to="." method="_on_interact_area_body_entered"]
+[connection signal="body_exited" from="InteractArea" to="." method="_on_interact_area_body_exited"]

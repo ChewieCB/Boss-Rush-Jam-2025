@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bwei3cifjg1sq"]
+[gd_scene load_steps=21 format=3 uid="uid://bwei3cifjg1sq"]
 
 [ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="1_8ja47"]
 [ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="1_ef7fu"]
@@ -7,6 +7,11 @@
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="5_wos4h"]
 [ext_resource type="Texture2D" uid="uid://jgscawd6skc" path="res://src/ui/common/assets/kenney_borders/default/Divider Fade/divider-fade-001.png" id="6_62y4p"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="7_bj4c4"]
+[ext_resource type="Texture2D" uid="uid://bfki3npylok25" path="res://assets/sprite/status_icon/burning.png" id="8_oo5ks"]
+[ext_resource type="Texture2D" uid="uid://cgl8nwe6bq83i" path="res://assets/sprite/status_icon/poisoned.png" id="9_t8xrp"]
+[ext_resource type="Texture2D" uid="uid://dn3l76qv0r61l" path="res://assets/sprite/status_icon/frozen.png" id="10_e2145"]
+[ext_resource type="Texture2D" uid="uid://b20sq43ynvj8c" path="res://assets/sprite/status_icon/shocked.png" id="11_4baf2"]
+[ext_resource type="Texture2D" uid="uid://bae10gvdt7y0t" path="res://assets/sprite/status_icon/bleeding.png" id="12_eavam"]
 
 [sub_resource type="Theme" id="Theme_y0f30"]
 default_font = ExtResource("5_wos4h")
@@ -151,7 +156,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -795.0
 offset_right = 795.0
-offset_bottom = 144.0
+offset_bottom = 176.0
 grow_horizontal = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 16
@@ -271,6 +276,111 @@ texture = ExtResource("6_62y4p")
 expand_mode = 3
 stretch_mode = 5
 flip_h = true
+
+[node name="StatusContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Burning" type="HBoxContainer" parent="VBoxContainer/StatusContainer"]
+visible = false
+modulate = Color(1, 0.289959, 0, 1)
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/StatusContainer/Burning"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("8_oo5ks")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/StatusContainer/Burning"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("7_bj4c4")
+theme_override_font_sizes/font_size = 20
+text = "Burning"
+
+[node name="Poisoned" type="HBoxContainer" parent="VBoxContainer/StatusContainer"]
+visible = false
+modulate = Color(0.28271, 0.597656, 0, 1)
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/StatusContainer/Poisoned"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("9_t8xrp")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/StatusContainer/Poisoned"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("7_bj4c4")
+theme_override_font_sizes/font_size = 20
+text = "Poisoned"
+
+[node name="Frozen" type="HBoxContainer" parent="VBoxContainer/StatusContainer"]
+visible = false
+modulate = Color(0, 1, 0.968702, 1)
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/StatusContainer/Frozen"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("10_e2145")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/StatusContainer/Frozen"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("7_bj4c4")
+theme_override_font_sizes/font_size = 20
+text = "Frozen"
+
+[node name="Shocked" type="HBoxContainer" parent="VBoxContainer/StatusContainer"]
+visible = false
+modulate = Color(0.972727, 1, 0, 1)
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/StatusContainer/Shocked"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("11_4baf2")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/StatusContainer/Shocked"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("7_bj4c4")
+theme_override_font_sizes/font_size = 20
+text = "Shocked"
+
+[node name="Bleeding" type="HBoxContainer" parent="VBoxContainer/StatusContainer"]
+visible = false
+modulate = Color(0.839844, 0.123867, 0, 1)
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/StatusContainer/Bleeding"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("12_eavam")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/StatusContainer/Bleeding"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("7_bj4c4")
+theme_override_font_sizes/font_size = 20
+text = "Bleeding"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

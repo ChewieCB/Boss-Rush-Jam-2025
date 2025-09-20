@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="FuncGodotFGDModelPointClass" load_steps=3 format=3 uid="uid://c2j60bs07fwy8"]
 
-[ext_resource type="PackedScene" uid="uid://n0jp5tbddwfx" path="res://src/env/lighting/WallLight1.tscn" id="1_4g0ld"]
+[ext_resource type="PackedScene" uid="uid://bnro5qxjcbkx0" path="res://src/env/lighting/StandingLight.tscn" id="1_fpluo"]
 [ext_resource type="Script" path="res://addons/func_godot/src/fgd/func_godot_fgd_model_point_class.gd" id="2_oh0qd"]
 
 [resource]
@@ -10,9 +10,9 @@ models_sub_folder = ""
 scale_expression = ""
 generate_size_property = false
 generate_gd_ignore_file = false
-scene_file = ExtResource("1_4g0ld")
+scene_file = ExtResource("1_fpluo")
 apply_rotation_on_map_build = true
-classname = "WallLight"
+classname = "StandingLamp"
 description = ""
 func_godot_internal = false
 base_classes = Array[Resource]([])

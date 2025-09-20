@@ -28,8 +28,10 @@ var music_playback: AudioStreamPlaybackInteractive
 
 # Water damage
 @onready var water_damage_timer: Timer = $WaterDamageTimer
-@export var water_damage_tick: float = 0.6
-@export var water_damage_amount: float = 5.0
+@export var water_damage_tick: float = 1.0
+@export var water_damage_amount: float = 2.0
+var water_damage_enabled = false
+const DRUNK_DURATION = 5.0
 @export var splash_particle_prefab: PackedScene
 @export var sfx_splash: Array[AudioStream]
 
@@ -39,7 +41,7 @@ var music_playback: AudioStreamPlaybackInteractive
 
 
 func _ready() -> void:
-	super()
+	super ()
 	boss.flood_chamber.connect(raise_water)
 	boss.drain_chamber.connect(lower_water)
 	boss.break_floor.connect(break_floor)
@@ -56,6 +58,9 @@ func _ready() -> void:
 	
 	music_playback = music_player.get_stream_playback()
 
+	if GameManager.boss_ante >= 5:
+		water_damage_enabled = true
+
 
 func _process(delta) -> void:
 	if waterfalls.visible:
@@ -65,7 +70,7 @@ func _process(delta) -> void:
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	music_playback.switch_to_clip(1)
-	super(_body)
+	super (_body)
 
 
 func _on_boss_defeated(_boss: BossCore) -> void:
@@ -78,7 +83,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		await boss.chiptopede_emerges
 		music_playback.switch_to_clip(3)
 	else:
-		win_ui.win("Floor Cleared", win_subtext.pick_random())
+		win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 		print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 		
 		if not boss.boss_id in GameManager.bosses_defeated:
@@ -86,6 +91,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 			print(GameManager.bosses_defeated)
 			GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 
+		reward_bet_money()
 		show_end_panel()
 
 
@@ -93,7 +99,7 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 	if boss.current_phase != 3:
 		music_playback.switch_to_clip(2)
 		return
-	super(_boss)
+	super (_boss)
 
 
 #func _input(event: InputEvent) -> void:
@@ -142,10 +148,10 @@ func raise_water() -> void:
 	var water_tween: Tween = get_tree().create_tween()
 	for mesh in waterfall_meshses_vertical:
 		water_tween.parallel().tween_property(
-			mesh, 
-			"scale:x", 
-			1.0, 
-			water_raise_time/3
+			mesh,
+			"scale:x",
+			1.0,
+			water_raise_time / 3
 		)
 		get_node("WaterfallArea").set_deferred("monitoring", true)
 	water_tween.chain().tween_property(water_surface, "global_position:y", upper_water_level, water_raise_time)
@@ -188,9 +194,10 @@ func _on_water_damage_area_body_entered(body: Node3D) -> void:
 	# Add drunk effect instead of damage
 	# TODO - apply by building up a threshold instead of on/off
 	if body is Player:
-		player.apply_drunk_status(6.0)
-		#player.health_component.damage(water_damage_amount)
+		player.apply_drunk_status(DRUNK_DURATION)
 		water_damage_timer.start(water_damage_tick)
+		if water_damage_enabled:
+			player.health_component.damage(water_damage_amount)
 		
 	await splash.finished
 	splash.queue_free()
@@ -225,9 +232,10 @@ func _on_waterfall_body_entered(body: Node3D) -> void:
 	# Add drunk effect instead of damage
 	# TODO - apply by building up a threshold instead of on/off
 	if body is Player:
-		player.apply_drunk_status(6.0)
-		#player.health_component.damage(water_damage_amount)
+		player.apply_drunk_status(DRUNK_DURATION)
 		water_damage_timer.start(water_damage_tick)
+		if water_damage_enabled:
+			player.health_component.damage(water_damage_amount)
 		
 	await splash.finished
 	splash.queue_free()
@@ -246,4 +254,6 @@ func _on_water_damage_area_body_exited(body: Node3D) -> void:
 
 
 func _on_water_damage_timer_timeout() -> void:
-	player.apply_drunk_status(6.0)
+	player.apply_drunk_status(DRUNK_DURATION)
+	if water_damage_enabled:
+		player.health_component.damage(water_damage_amount)

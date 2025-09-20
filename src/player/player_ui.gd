@@ -23,4 +23,6 @@ func hide_saving_indicator():
 func refresh_after_setting_changed():
 	stat_ui.visible = not GameManager.hide_ui
 	interact_ui.visible = not GameManager.hide_ui
-	gun_ui.visible = not GameManager.hide_ui
+	# NOTE: Currently GunUI only show barrels info when user press "tab" so no need to hide it
+	# However, if there is more elements are added in the future then it will need modification.
+	# gun_ui.visible = not GameManager.hide_ui

@@ -1,4 +1,4 @@
-[gd_scene load_steps=255 format=4 uid="uid://fccl23tqjubn"]
+[gd_scene load_steps=256 format=4 uid="uid://fccl23tqjubn"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_e32ik"]
 [ext_resource type="Script" path="res://src/maps/slots_boss/boss_map_slots.gd" id="1_wilwm"]
@@ -34,6 +34,7 @@
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="27_6a3fw"]
 [ext_resource type="PackedScene" uid="uid://dsipuwmnkxl5" path="res://src/env/lighting/ChandellierLight2.tscn" id="28_i4e3c"]
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="29_obsa8"]
+[ext_resource type="Texture2D" uid="uid://7gt8ejgtt5qu" path="res://assets/textures/posters/down_sign.png" id="35_icct7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kuy5n"]
 resource_local_to_scene = true
@@ -1714,8 +1715,9 @@ entProperties = {
 [node name="group_626_WallDetail1" type="Node3D" parent="FuncGodotMap" index="12"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_15_BossSlots" parent="FuncGodotMap" index="13" node_paths=PackedStringArray("target") instance=ExtResource("21_5oyqj")]
+[node name="entity_15_BossSlots" parent="FuncGodotMap" index="13" node_paths=PackedStringArray("elemental_emitting_vfx", "target") instance=ExtResource("21_5oyqj")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.25, 0.75, -23.625)
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 target = NodePath("../entity_37_PlayerRef")
 
 [node name="entity_16_SlotRollerDecal" parent="FuncGodotMap" index="14" instance=ExtResource("25_l15rp")]
@@ -1787,6 +1789,7 @@ entProperties = {
 "linked_level": "res://src/maps/pit_boss/BossMapPit.tscn",
 "origin": "220 -2 1406"
 }
+boss_id = 0
 
 [node name="entity_31_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="1" instance=ExtResource("26_t55c0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 43.6875, 6.875)
@@ -1797,6 +1800,7 @@ entProperties = {
 "linked_level": "res://src/maps/chip_boss/BossMapChip.tscn",
 "origin": "220 -2 1398"
 }
+boss_id = 0
 
 [node name="entity_32_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="2" instance=ExtResource("26_t55c0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 44.4375, 6.875)
@@ -1807,6 +1811,7 @@ entProperties = {
 "linked_level": "res://src/maps/roulette_boss/BossMapRoulette.tscn",
 "origin": "220 -2 1422"
 }
+boss_id = 0
 
 [node name="entity_33_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="3" instance=ExtResource("26_t55c0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 44.1875, 6.875)
@@ -1817,6 +1822,7 @@ entProperties = {
 "linked_level": "res://src/maps/bartender_boss/BossMapBartender.tscn",
 "origin": "220 -2 1414"
 }
+boss_id = 0
 
 [node name="entity_34_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="4" instance=ExtResource("26_t55c0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 44.6875, 6.875)
@@ -1827,12 +1833,20 @@ entProperties = {
 "linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
 "origin": "220 -2 1430"
 }
+boss_id = 0
 
 [node name="entity_35_Chandellier2LightOnly" parent="FuncGodotMap/group_672_Elevator" index="5" instance=ExtResource("28_i4e3c")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 45.5625, 4.375)
 
-[node name="entity_36_ElevatorDoors" parent="FuncGodotMap/group_672_Elevator" index="6" instance=ExtResource("27_6a3fw")]
+[node name="entity_35_Chandellier2LightOnly2" parent="FuncGodotMap/group_672_Elevator" index="6" instance=ExtResource("28_i4e3c")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3.75918e-07, 44.2625, 0.075)
+
+[node name="entity_36_ElevatorDoors" parent="FuncGodotMap/group_672_Elevator" index="7" instance=ExtResource("27_6a3fw")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 42.6875, 2.25)
 
 [node name="entity_37_PlayerRef" parent="FuncGodotMap" index="27" instance=ExtResource("29_obsa8")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -0.5, 43.9062, 4.375)
+
+[node name="Decal" type="Decal" parent="." index="7"]
+transform = Transform3D(0.996204, 0, 0.0870514, 0.0870514, -4.37114e-08, -0.996204, 3.80514e-09, 1, -4.35455e-08, 0, 44.382, -1.7)
+texture_albedo = ExtResource("35_icct7")

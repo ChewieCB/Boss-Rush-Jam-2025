@@ -181,9 +181,10 @@ _data = {
 radius = 4.0
 height = 8.0
 
-[node name="BossSurveillance" instance=ExtResource("1_rd2xm")]
+[node name="BossSurveillance" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_rd2xm")]
 motion_mode = 1
 script = ExtResource("2_p6rlf")
+laser_damage = 5.0
 elevation_speed_deg = 25.0
 rotation_speed_deg = 25.0
 shield_radius = 7.5
@@ -200,6 +201,7 @@ barrier_cage_material = ExtResource("3_bke04")
 sfx_barrier = ExtResource("6_xnsy2")
 boss_id = 4
 chip_spawn_chance = 0.24
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_to_drop = ExtResource("4_nqlwe")
 sfx_hit = Array[AudioStream]([ExtResource("8_8p6dj")])
 sfx_death = ExtResource("9_7awj5")

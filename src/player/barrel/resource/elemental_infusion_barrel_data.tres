@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cl8gwigkfvwca"]
+
+[ext_resource type="Texture2D" uid="uid://c55205brymqa0" path="res://src/player/barrel/resource/sprite/elemental_infusion.png" id="1_ducvj"]
+[ext_resource type="PackedScene" uid="uid://b8idyobhu4ucw" path="res://src/player/barrel/ElementalInfusionBarrel.tscn" id="2_wrun2"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_wsjs4"]
+
+[resource]
+script = ExtResource("3_wsjs4")
+barrel_id = 46
+barrel_name = "Elemental Infusion"
+barrel_desc = "[b]Elemental Infusion Barrel[/b]
+Infuse bullets with element and status effects.
+
+Possible rolls:
+[ul]
+Fire Infusion: Reduce damage and bullets can cause Burning status build up, which deal high damage over time in a short duration.
+Poison Infusion: Reduce fire rate and bullets can cause Poisoned status build up, which deal damage over time over a long duration.
+Cold Infusion: Reduce magazine size and bullets can cause Frozen status build up, which slow enemy movement speed.
+Electric Infusion: Increase recoiland bullets can cause Shocked status build up, which increases damage enemy taken.
+[/ul]
+"
+barrel_image = ExtResource("1_ducvj")
+barrel_cost = 1500
+barrel_prefab = ExtResource("2_wrun2")
+is_archetype_barrel = false

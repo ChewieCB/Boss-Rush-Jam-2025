@@ -9,10 +9,13 @@ extends BaseProjectile
 @onready var explode_timer: Timer = $ExplodeTimer
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
+@onready var mesh: MeshInstance3D = $MeshInstance3D
+@onready var trail: Trail3D = $Trail/Trail3D
+
+const CONTACT_DAMAGE = 1
 
 var sticked = false
 var explosion_damage = 0
-
 
 func _ready() -> void:
 	super ()
@@ -42,7 +45,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	damage = 1
+	damage = CONTACT_DAMAGE
 	explosion_damage = _damage
 	current_dir = dir
 	ricochet_count_left = ricochet_count
@@ -65,6 +68,7 @@ func ricochet():
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit()
+	stop_elemental_particles()
 	call_deferred("queue_free")
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
@@ -96,8 +100,9 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_explode_timer_timeout() -> void:
-	var inst = explosion_prefab.instantiate()
-	inst.init(explosion_damage)
+	var inst: ExplosionDamageArea = explosion_prefab.instantiate()
+	var calculated_explosion_damage = calculate_explosion_damage()
+	inst.init(calculated_explosion_damage)
 	get_parent().add_child(inst)
 	inst.global_position = global_position
 
@@ -112,4 +117,30 @@ func _on_explode_timer_timeout() -> void:
 	else:
 		await get_tree().create_timer(0.25).timeout
 		destroyed.emit()
+		stop_elemental_particles()
 		call_deferred("queue_free")
+
+func change_bullet_color(_new_color: Color):
+	super (_new_color)
+	if color_changed_count > 1:
+		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
+		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
+		trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
+		trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
+	else:
+		mesh.mesh.material.albedo_color = _new_color
+		mesh.mesh.material.emission = _new_color
+		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
+		trail.material_override.emission = _new_color
+
+
+func calculate_explosion_damage():
+	var rand_damage_mod = get_damage_variance_modifier(explosion_damage)
+	var calculated_damage = explosion_damage + rand_damage_mod
+	# Crit
+	var roll = randi_range(1, 100)
+	var roll_target = int(crit_chance * 100)
+	if roll <= roll_target:
+		calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
+		owner_gun.crit_damage(calculated_damage)
+	return calculated_damage

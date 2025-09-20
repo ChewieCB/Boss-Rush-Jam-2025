@@ -1,0 +1,637 @@
+[gd_scene load_steps=25 format=3 uid="uid://d0xksun1nqr31"]
+
+[ext_resource type="Script" path="res://src/maps/lobby/shrine/skill_tree_ui.gd" id="1_3mn7w"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="2_q58gh"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="3_4e5xo"]
+[ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="3_8ctpn"]
+[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="4_ciuek"]
+[ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="5_8xe5f"]
+[ext_resource type="PackedScene" uid="uid://bna8nm6mu0l1n" path="res://src/maps/lobby/shrine/SkillItemUI.tscn" id="7_h1uvb"]
+[ext_resource type="PackedScene" uid="uid://wpg3bn7jlyjp" path="res://src/maps/lobby/shrine/SkillTreePath.tscn" id="7_tcow0"]
+[ext_resource type="Texture2D" uid="uid://co107hhrp2wur" path="res://assets/sprite/skilltree_icon/hot_hand.png" id="8_mm72c"]
+[ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="9_s0fyt"]
+[ext_resource type="Texture2D" uid="uid://bvvadnny5vuht" path="res://assets/sprite/skilltree_icon/lucky_crit.png" id="10_r8suc"]
+[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="11_scd5t"]
+[ext_resource type="Texture2D" uid="uid://cwrh4rwu3ts6p" path="res://assets/sprite/skilltree_icon/double_down.png" id="11_smdqb"]
+[ext_resource type="Texture2D" uid="uid://bc7jwbln12cgj" path="res://assets/sprite/skilltree_icon/iou.png" id="12_8rcra"]
+[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="12_8x4rq"]
+[ext_resource type="Texture2D" uid="uid://o2fyfbhejvaj" path="res://assets/sprite/skilltree_icon/cheat_death.png" id="13_86mca"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="14_eenjl"]
+[ext_resource type="Texture2D" uid="uid://dcmspffm0o7y6" path="res://assets/sprite/skilltree_icon/poker_face.png" id="14_mdccr"]
+[ext_resource type="Texture2D" uid="uid://beqyxuvocv7t1" path="res://assets/sprite/status_icon/invincible.png" id="15_ptimq"]
+[ext_resource type="Texture2D" uid="uid://dx4pm7e2prfc1" path="res://assets/sprite/skilltree_icon/plot_armor.png" id="16_svlk1"]
+[ext_resource type="Texture2D" uid="uid://d2cwrf2viaill" path="res://assets/sprite/skilltree_icon/jackpot.png" id="17_3yjin"]
+[ext_resource type="Texture2D" uid="uid://bsq70jbhv0gjh" path="res://assets/sprite/skilltree_icon/blessed_chip.png" id="18_6y8gx"]
+[ext_resource type="Texture2D" uid="uid://c3gmdsvn0tvkq" path="res://assets/sprite/skilltree_icon/high_roller.png" id="19_godxg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4hu16"]
+shader = ExtResource("2_q58gh")
+shader_parameter/blur_amount = 2.0
+shader_parameter/mix_amount = 0.0
+shader_parameter/color_over = null
+
+[node name="SkillTreeUI" type="Control" node_paths=PackedStringArray("first_item_focus")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3mn7w")
+sfx_open = ExtResource("3_8ctpn")
+first_item_focus = NodePath("SkillTreeView/Tree/HotHand")
+
+[node name="BlurShader" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_4hu16")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_4e5xo")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.317647)
+
+[node name="SkillTreeView" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 0
+offset_left = 128.0
+offset_top = 128.0
+offset_right = 1280.0
+offset_bottom = 896.0
+
+[node name="ColorRect" type="ColorRect" parent="SkillTreeView"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.317647)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="SkillTreeView"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ciuek")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="Tree" type="Control" parent="SkillTreeView"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 128.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_vertical = 2
+
+[node name="SkillTreePath" parent="SkillTreeView/Tree" instance=ExtResource("7_tcow0")]
+layout_mode = 1
+offset_left = -8.0
+offset_top = 104.0
+offset_right = 8.0
+offset_bottom = 232.0
+
+[node name="SkillTreePath2" parent="SkillTreeView/Tree" instance=ExtResource("7_tcow0")]
+layout_mode = 1
+anchors_preset = 7
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -216.0
+offset_right = 8.0
+offset_bottom = -88.0
+grow_vertical = 0
+
+[node name="HotHand" parent="SkillTreeView/Tree" node_paths=PackedStringArray("highlight_paths") instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.0
+offset_right = 64.0
+grow_horizontal = 2
+texture = ExtResource("8_mm72c")
+skill_name = "Hot Hand"
+description = "Increased minimum damage you dealt when you have high luck. By default, your weapon will dealt from 80% to 120% of its base damage.
+
+Level 1: minimum at 85%.
+Level 2: minimum at 90%.
+Level 3: minimum at 95%.
+Level 4: minimum at 100%."
+skill_id_enum = 1
+max_level = 4
+highlight_paths = [NodePath("../SkillTreePath")]
+
+[node name="LuckyShot" parent="SkillTreeView/Tree" node_paths=PackedStringArray("highlight_paths") instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_s0fyt")
+skill_name = "Lucky Shot"
+description = "Increased your critical chance when you have high luck. By default, you have 0%. Some weapon effects also increased it and it stack additively.
+
+Level 1: +4% critical chance.
+Level 2: +7% critical chance.
+Level 3: +10% critical chance.
+Level 4: +15% critical chance."
+skill_id_enum = 2
+max_level = 4
+prerequisite_skills = Array[int]([1])
+highlight_paths = [NodePath("../SkillTreePath2")]
+
+[node name="LuckyCrit" parent="SkillTreeView/Tree" instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -128.0
+offset_right = 64.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("10_r8suc")
+skill_name = "Lucky Crit"
+description = "Increased the critical damage multiplier from 2.0x to 2.5x."
+skill_id_enum = 3
+prerequisite_skills = Array[int]([1, 2])
+
+[node name="Tree2" type="Control" parent="SkillTreeView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -256.0
+offset_right = -64.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SkillTreePath" parent="SkillTreeView/Tree2" instance=ExtResource("7_tcow0")]
+layout_mode = 1
+offset_left = -8.0
+offset_top = 104.0
+offset_right = 8.0
+offset_bottom = 232.0
+
+[node name="SkillTreePath2" parent="SkillTreeView/Tree2" instance=ExtResource("7_tcow0")]
+layout_mode = 1
+anchors_preset = 7
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -216.0
+offset_right = 8.0
+offset_bottom = -88.0
+grow_vertical = 0
+
+[node name="DoubleDown" parent="SkillTreeView/Tree2" node_paths=PackedStringArray("highlight_paths") instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.0
+offset_right = 64.0
+grow_horizontal = 2
+texture = ExtResource("11_smdqb")
+skill_name = "Double Down"
+description = "Deal bonus damage for a short time after taking a hit.
+
+Level 1: +15% damage for 2 seconds.
+Level 2: +15% damage for 3 seconds.
+Level 3: +30% damage for 3 seconds.
+Level 4: +30% damage for 5 seconds."
+skill_id_enum = 4
+max_level = 4
+highlight_paths = [NodePath("../SkillTreePath")]
+
+[node name="IOU" parent="SkillTreeView/Tree2" node_paths=PackedStringArray("highlight_paths") instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_8rcra")
+skill_name = "IOU"
+description = "You can spin gun's barrels even when you don't have enough chips. However, it will consume your health instead of restore it.
+
+Level 1: -25 HP.
+Level 2: -20 HP.
+Level 3: -15 HP.
+Level 4: -5 HP."
+skill_id_enum = 5
+max_level = 4
+prerequisite_skills = Array[int]([4])
+highlight_paths = [NodePath("../SkillTreePath2")]
+
+[node name="CheatDeath" parent="SkillTreeView/Tree2" instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -128.0
+offset_right = 64.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("13_86mca")
+skill_name = "Cheat Death"
+description = "Lethal damage when you are at high luck will leave you at a sliver of health instead, and empty your luck. Can only be triggered once per fight."
+skill_id_enum = 6
+prerequisite_skills = Array[int]([4, 5])
+
+[node name="Tree3" type="Control" parent="SkillTreeView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = -256.0
+offset_right = 192.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SkillTreePath" parent="SkillTreeView/Tree3" instance=ExtResource("7_tcow0")]
+layout_mode = 1
+offset_left = -8.0
+offset_top = 104.0
+offset_right = 8.0
+offset_bottom = 232.0
+
+[node name="SkillTreePath2" parent="SkillTreeView/Tree3" instance=ExtResource("7_tcow0")]
+layout_mode = 1
+anchors_preset = 7
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -216.0
+offset_right = 8.0
+offset_bottom = -88.0
+grow_vertical = 0
+
+[node name="PokerFace" parent="SkillTreeView/Tree3" node_paths=PackedStringArray("highlight_paths") instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.0
+offset_right = 64.0
+grow_horizontal = 2
+texture = ExtResource("14_mdccr")
+skill_name = "Poker Face"
+description = "Increased boss telegraph time when you have high luck, give you more time to react.
+
+Level 1: +10% duration.
+Level 2: +20% duration.
+Level 3: +30% duration.
+Level 4: +40% duration."
+skill_id_enum = 7
+max_level = 4
+highlight_paths = [NodePath("../SkillTreePath")]
+
+[node name="Blindspot" parent="SkillTreeView/Tree3" node_paths=PackedStringArray("highlight_paths") instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("15_ptimq")
+skill_name = "Blindspot"
+description = "Increased invulnerable duration when you dashed when you have high luck.
+
+Level 1: +10% duration.
+Level 2: +20% duration.
+Level 3: +30% duration.
+Level 4: +40% duration."
+skill_id_enum = 8
+max_level = 4
+prerequisite_skills = Array[int]([7])
+highlight_paths = [NodePath("../SkillTreePath2")]
+
+[node name="PlotArmor" parent="SkillTreeView/Tree3" instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -128.0
+offset_right = 64.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("16_svlk1")
+skill_name = "Plot Armor"
+description = "Luck act as an imaginary armor that can absorb a quarter of the damage you took."
+skill_id_enum = 9
+prerequisite_skills = Array[int]([7, 8])
+
+[node name="Tree4" type="Control" parent="SkillTreeView"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = -128.0
+offset_bottom = 256.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="SkillTreePath" parent="SkillTreeView/Tree4" instance=ExtResource("7_tcow0")]
+layout_mode = 1
+offset_left = -8.0
+offset_top = 104.0
+offset_right = 8.0
+offset_bottom = 232.0
+
+[node name="SkillTreePath2" parent="SkillTreeView/Tree4" instance=ExtResource("7_tcow0")]
+layout_mode = 1
+anchors_preset = 7
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -216.0
+offset_right = 8.0
+offset_bottom = -88.0
+grow_vertical = 0
+
+[node name="Jackpot" parent="SkillTreeView/Tree4" node_paths=PackedStringArray("highlight_paths") instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.0
+offset_right = 64.0
+grow_horizontal = 2
+texture = ExtResource("17_3yjin")
+skill_name = "Jackpot"
+description = "At high luck, improve the value of chips dropped from enemies.
+
+Level 1: Minimum chip value is 2.
+Level 2: Minimum chip value is 5.
+Level 3: Minimum chip value is 10.
+Level 4: Minimum chip value is 25."
+skill_id_enum = 10
+max_level = 4
+highlight_paths = [NodePath("../SkillTreePath")]
+
+[node name="BlessedChip" parent="SkillTreeView/Tree4" node_paths=PackedStringArray("highlight_paths") instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_6y8gx")
+skill_name = "Blessed Chip"
+description = "Reduced amount of chip dropped but picking chips will increased your luck.
+
+Level 1: -10% chips, gain 1 luck per chip.
+Level 2: -20% chips, gain 2 luck per chip.
+Level 3: -30% chips, gain 3 luck per chip.
+Level 4: -40% chips, gain 4 luck per chip."
+skill_id_enum = 11
+max_level = 4
+prerequisite_skills = Array[int]([10])
+highlight_paths = [NodePath("../SkillTreePath2")]
+
+[node name="HighRoller" parent="SkillTreeView/Tree4" instance=ExtResource("7_h1uvb")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -128.0
+offset_right = 64.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("19_godxg")
+skill_name = "High Roller"
+description = "Barrel spin with higher cost will restore more health for you."
+skill_id_enum = 12
+prerequisite_skills = Array[int]([10, 11])
+
+[node name="LevelLabel" type="Label" parent="SkillTreeView"]
+layout_mode = 1
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 448.0
+offset_bottom = 87.0
+theme_override_fonts/font = ExtResource("11_scd5t")
+theme_override_font_sizes/font_size = 28
+text = "Level: 1
+High luck threshold: 95%"
+
+[node name="SkillPointLabel" type="Label" parent="SkillTreeView"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -256.0
+offset_top = 24.0
+offset_right = -21.0
+offset_bottom = 54.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("11_scd5t")
+theme_override_font_sizes/font_size = 28
+text = "Points left: 0"
+horizontal_alignment = 2
+
+[node name="SkillInfo" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 1344.0
+offset_top = 128.0
+offset_right = 1792.0
+offset_bottom = 704.0
+
+[node name="ColorRect" type="ColorRect" parent="SkillInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.317647)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="SkillInfo"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ciuek")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="Title" type="Label" parent="SkillInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 32.0
+offset_right = -24.0
+offset_bottom = -520.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("11_scd5t")
+theme_override_font_sizes/font_size = 32
+text = "Skill Name"
+
+[node name="Description" type="Label" parent="SkillInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 128.0
+offset_right = -24.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("12_8x4rq")
+theme_override_font_sizes/font_size = 22
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+autowrap_mode = 2
+
+[node name="ControlHelpText" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -40.0
+offset_right = -32.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 24
+text = "WASD to move, E to Select"
+horizontal_alignment = 2
+
+[node name="LevelUpButton" parent="." instance=ExtResource("5_8xe5f")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+offset_left = 1344.0
+offset_top = 752.0
+offset_right = 1792.0
+offset_bottom = 810.0
+text = "Level up to 2 (1000 chips)"
+
+[node name="ResetButton" parent="." instance=ExtResource("5_8xe5f")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+offset_left = 1344.0
+offset_top = 840.0
+offset_right = 1792.0
+offset_bottom = 898.0
+text = "Reset all skills"
+
+[node name="ReturnButton" parent="." instance=ExtResource("5_8xe5f")]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -224.0
+offset_top = -120.0
+offset_right = 224.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Return"
+
+[node name="CurrencyUI" parent="." instance=ExtResource("14_eenjl")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -328.0
+offset_top = 24.0
+offset_right = -23.0
+offset_bottom = 88.0
+grow_horizontal = 0
+size_flags_horizontal = 6
+is_static = true
+
+[node name="ResetTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="pressed" from="LevelUpButton" to="." method="_on_level_up_button_pressed"]
+[connection signal="pressed" from="ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="ReturnButton" to="." method="_on_return_button_pressed"]
+[connection signal="timeout" from="ResetTimer" to="." method="_on_reset_timer_timeout"]

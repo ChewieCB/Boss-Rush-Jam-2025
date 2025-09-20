@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://y0uj184gr6pl"]
+
+[ext_resource type="Texture2D" uid="uid://x0wqff71dhha" path="res://assets/textures/walls/vertical_industrial_trim.png" id="1_nkbcd"]
+
+[resource]
+albedo_texture = ExtResource("1_nkbcd")
+metallic_specular = 0.0
+texture_filter = 2

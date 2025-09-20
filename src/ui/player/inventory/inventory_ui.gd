@@ -1,6 +1,9 @@
 extends Control
 class_name InventoryUI
 
+signal inventory_opened
+signal inventory_closed
+
 @export var shop_title: String
 @export var barrel_item_ui_prefab: PackedScene
 @export var shop_item_ui_prefab: PackedScene
@@ -72,7 +75,7 @@ func toggle():
 		open()
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if visible:
 		if event.is_action_pressed("interact") or event.is_action_pressed("ui_cancel"):
 			close()
@@ -136,17 +139,20 @@ func open():
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	#Engine.time_scale = 0.2
-	GameManager.player.is_in_inventory = true
+	GameManager.player.is_in_menu = true
 	get_first_item_for_focus()
+	inventory_opened.emit()
 
 
 func close():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	#Engine.time_scale = 1
-	GameManager.player.is_in_inventory = false
-	if visible and not GameManager.player.current_gun.is_reloading:
+	GameManager.player.is_in_menu = false
+	if visible and not GameManager.player.current_gun.is_reloading \
+		and not GameManager.player.current_gun.is_spinning:
 		visible = false
 		GameManager.player.current_gun.spin_all_barrels()
+	inventory_closed.emit()
 
 
 func show_warning(content: String, color: Color = Color.RED):

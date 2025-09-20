@@ -8,7 +8,6 @@
 [ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="5_lxmwo"]
 [ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="5_m8udd"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="5_uqnjt"]
-[ext_resource type="PackedScene" uid="uid://w52vphhedtws" path="res://src/player/gun/projectiles/RailcannonHitscan.tscn" id="6_3vdu1"]
 [ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="6_bxoxn"]
 [ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="6_c4q6k"]
 [ext_resource type="AudioStream" uid="uid://dqr1710c1o8py" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 1.mp3" id="6_hwm5a"]
@@ -25,6 +24,7 @@
 [ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="13_qcjda"]
 [ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="14_8snm5"]
 [ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="15_8f242"]
+[ext_resource type="PackedScene" uid="uid://06y3ehv3d68n" path="res://src/player/gun/projectiles/GunHitscanBig.tscn" id="25_tj15x"]
 
 [node name="ArchetypeRailgunSpecBarrel" type="Node3D"]
 script = ExtResource("1_5qelq")
@@ -37,12 +37,16 @@ is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("4_cri1e")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("5_m8udd"), ExtResource("6_c4q6k"), ExtResource("7_cy8ya"), ExtResource("8_sx1ku"), ExtResource("9_7r7iv"), ExtResource("10_ptb2v"), ExtResource("11_2chv5"), ExtResource("12_bisv8"), ExtResource("13_qcjda"), ExtResource("14_8snm5"), ExtResource("15_8f242")])
 display_text_title = "Archetype: Gauss Rifle"
-display_text_tag = "Fire faster and more ammo"
+display_text_tag = "Fires faster, weaker shots with more ammo"
+display_text_desc = "High firerate and magazine, but lower damage."
+positive_desc = Array[String](["High firerate", "Large magazine"])
+negative_desc = Array[String](["Lower per-round damage"])
+icon_id = 10
 
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 4
-new_value = 6.0
+new_value = 9.0
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
@@ -62,7 +66,7 @@ new_value = 20.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
 attribute = 1
-new_value = 15.0
+new_value = 10.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/GaussRifle"]
 script = ExtResource("4_3n82e")
@@ -81,6 +85,10 @@ archetype_reload_sfx = Array[AudioStream]([ExtResource("5_lxmwo"), ExtResource("
 archetype_shot_sfx = Array[AudioStream]([ExtResource("7_lr8ap"), ExtResource("8_5pbtv")])
 display_text_title = "Archetype: Scatter Beam"
 display_text_tag = "Closer...closer..."
+display_text_desc = "Limited magazine size and high spread, but high projectile count."
+positive_desc = Array[String](["High projectile count", "Wide beam spread"])
+negative_desc = Array[String](["Lower magazine size"])
+icon_id = 12
 
 [node name="SetDamage" type="Node3D" parent="EffectContainer/ScatterBeam"]
 script = ExtResource("4_3n82e")
@@ -128,7 +136,10 @@ is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("5_5hv6s")])
 archetype_shot_sfx = Array[AudioStream]([ExtResource("6_hwm5a"), ExtResource("7_phtfe"), ExtResource("8_c4uy7")])
 display_text_title = "Archetype: Railcannon"
-display_text_tag = "Don't miss it!"
+display_text_tag = "One shot, one kill"
+positive_desc = Array[String](["Massive per-round damage"])
+negative_desc = Array[String](["Single shot magazine"])
+icon_id = 11
 
 [node name="SetDamage" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("4_3n82e")
@@ -171,4 +182,4 @@ new_value = 3.5
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/Railcannon"]
 script = ExtResource("5_uqnjt")
-new_prefab = ExtResource("6_3vdu1")
+new_prefab = ExtResource("25_tj15x")

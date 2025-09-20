@@ -1,0 +1,204 @@
+[gd_scene load_steps=13 format=3 uid="uid://h5pyccx2ulc"]
+
+[ext_resource type="Texture2D" uid="uid://bai0mllc38ec1" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-003.png" id="1_d3mw5"]
+[ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_info_ui.gd" id="1_jlotj"]
+[ext_resource type="Texture2D" uid="uid://dy3dl8bil7nds" path="res://assets/sprite/game_icon/plus.png" id="2_ahy74"]
+[ext_resource type="Texture2D" uid="uid://b7q22s8n2gnso" path="res://assets/sprite/effect_icons/Dynamic Advantage/22_Explosive_Bullet.png" id="2_weccn"]
+[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_2haqd"]
+[ext_resource type="Texture2D" uid="uid://lv21myguw6oh" path="res://assets/sprite/game_icon/minus.png" id="3_6ldpg"]
+[ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="4_r750q"]
+[ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="5_hyr3m"]
+[ext_resource type="PackedScene" uid="uid://cfymts31mi6p" path="res://src/ui/player/barrel_detail/EffectInfoIconText.tscn" id="7_b4bhs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ovww"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lpchg"]
+texture = ExtResource("3_2haqd")
+modulate_color = Color(0.902281, 0.776745, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gt652"]
+texture = ExtResource("5_hyr3m")
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+region_rect = Rect2(0, 0, 93.7968, 22)
+modulate_color = Color(0.901961, 0.776471, 0, 1)
+
+[node name="EffectInfoUI" type="MarginContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(450, 208)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -104.0
+offset_bottom = 104.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(450, 104)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+mouse_filter = 2
+script = ExtResource("1_jlotj")
+positive_icon = ExtResource("2_ahy74")
+negative_icon = ExtResource("3_6ldpg")
+effect_info_textbox = ExtResource("7_b4bhs")
+
+[node name="Background" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(428, 192)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.72549)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+custom_minimum_size = Vector2(428, 192)
+layout_mode = 2
+texture = ExtResource("1_d3mw5")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HeaderContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="IconContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Panel2" type="Panel" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ovww")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer/MarginContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_weccn")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/IconContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_lpchg")
+
+[node name="HeaderTextContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = -4
+
+[node name="TitleContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/TitleContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("4_r750q")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "Explosive Bullets"
+fit_content = true
+scroll_active = false
+
+[node name="DescriptionContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DescriptionContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.60933, 0.60933, 0.60933, 1)
+theme_override_fonts/normal_font = ExtResource("4_r750q")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "Try not to hurt yourself!"
+fit_content = true
+scroll_active = false
+
+[node name="DividerContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DividerContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxTexture_gt652")
+
+[node name="BodyContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BodyContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="PositivesContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BodyContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="EffectInfoText" parent="MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer" instance=ExtResource("7_b4bhs")]
+layout_mode = 2
+
+[node name="NegativesContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BodyContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" parent="MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer" instance=ExtResource("7_b4bhs")]
+layout_mode = 2

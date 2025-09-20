@@ -25,6 +25,10 @@ signal setting_back_button_pressed
 @onready var scaling_3d_slider: HSlider = $TabContainer/Graphic/VBoxContainer/Scaling3D/Scaling3DSlider
 @onready var scaling_3d_value: Label = $TabContainer/Graphic/VBoxContainer/Scaling3D/Value
 @onready var hide_ui_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideUI/HideUIToggle
+@onready var hide_hurt_overlay_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideHurtOverlay/HideHurtOverlayToggle
+@onready var hide_damage_number_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/HideDamageNumber/HideDamageNumberToggle
+
+
 # Accessibility
 @onready var screen_shake_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/ScreenShakeToggle/ScreenShakeToggle
 @onready var drunk_blur_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/DrunkBlurToggle/DrunkBlurToggle
@@ -48,6 +52,10 @@ signal setting_back_button_pressed
 @onready var keybind_return_button: Button = $TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton
 @onready var keybind_timer: Timer = $KeybindTimer
 
+@export var sfx_free_money: AudioStream
+@onready var timescale_slider: HSlider = $TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider
+@onready var timescale_value: Label = $TabContainer/DEBUG/VBoxContainer/Timescale/Value
+
 const KEYBIND_TIME_LIMIT = 5
 
 var keybindable_action_list = {
@@ -62,6 +70,7 @@ var keybindable_action_list = {
 	"shoot": "Shoot",
 	"spin_reload": "Reload",
 	"spin_barrels": "Re-roll Barrels",
+	"show_detail": "Show Barrel Effects",
 	"interact": "Interact",
 }
 var is_remapping = false
@@ -128,6 +137,9 @@ func _input(event):
 
 func open_menu():
 	visible = true
+	timescale_slider.value = Engine.time_scale
+	timescale_value.text = "{0}".format([Engine.time_scale])
+
 	tab_container.current_tab = 0
 	mouse_sen_slider.focus_neighbor_top = $HBoxContainer.get_child(0).get_path()
 	tab_header_container.get_child(tab_container.current_tab).grab_focus()
@@ -164,6 +176,12 @@ func _on_audio_option_pressed() -> void:
 	tab_container.current_tab = 2
 	reset_on_tab_changed()
 	SoundManager.play_button_click_sfx()
+
+func _on_debug_option_pressed() -> void:
+	tab_container.current_tab = 3
+	reset_on_tab_changed()
+	SoundManager.play_button_click_sfx()
+
 
 func _on_back_button_pressed() -> void:
 	setting_back_button_pressed.emit()
@@ -300,6 +318,16 @@ func _on_hide_ui_toggled(toggled_on: bool) -> void:
 	GameManager.hide_ui = toggled_on
 	setting_changed.emit()
 
+func _on_hide_hurt_overlay_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.hide_hurt_overlay = toggled_on
+	setting_changed.emit()
+
+
+func _on_hide_damage_number_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.hide_damage_number = toggled_on
+	setting_changed.emit()
 
 func _on_screen_shake_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
@@ -327,6 +355,8 @@ func refresh_setting_value():
 
 	camera_tilt_toggle.set_pressed_no_signal(GameManager.camera_tilt)
 	hide_ui_toggle.set_pressed_no_signal(GameManager.hide_ui)
+	hide_hurt_overlay_toggle.set_pressed_no_signal(GameManager.hide_hurt_overlay)
+	hide_damage_number_toggle.set_pressed_no_signal(GameManager.hide_damage_number)
 	screen_shake_toggle.set_pressed_no_signal(!GameManager.screen_shake_disabled)
 	drunk_blur_toggle.set_pressed_no_signal(!GameManager.drunk_blur_disabled)
 
@@ -359,6 +389,9 @@ func refresh_setting_value():
 	sfx_value.text = "{0}".format([GameManager.sfx_audio])
 	ui_slider.value = GameManager.ui_audio
 	ui_value.text = "{0}".format([GameManager.ui_audio])
+
+	timescale_slider.value = Engine.time_scale
+	timescale_value.text = "{0}".format([Engine.time_scale])
 
 
 func reset_on_tab_changed():
@@ -414,7 +447,7 @@ func _on_controller_connection(_device: int, connected: bool):
 		aim_assist_slider.editable = true
 		if not aim_assist_slider.is_connected("value_changed", _on_aim_assist_slider_value_changed):
 			aim_assist_slider.value_changed.connect(_on_aim_assist_slider_value_changed)
-	
+
 	if keybinding_control_options_section.visible:
 		create_keybind_buttons()
 
@@ -423,3 +456,28 @@ func _on_tab_container_tab_changed(tab: int) -> void:
 	mouse_sen_slider.focus_neighbor_top = tab_header_container.get_child(tab).get_path()
 	fov_slider.focus_neighbor_top = tab_header_container.get_child(tab).get_path()
 	master_slider.focus_neighbor_top = tab_header_container.get_child(tab).get_path()
+
+
+func _on_boss_one_shot_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_oneshot = toggled_on
+
+
+func _on_gode_mode_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_godmode = toggled_on
+
+
+func _on_freecam_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_freecam = toggled_on
+
+
+func _on_timescale_slider_value_changed(value: float) -> void:
+	Engine.time_scale = value
+	timescale_value.text = "{0}".format([value])
+
+
+func _on_free_money_button_pressed() -> void:
+	GameManager.player_currency += 1000
+	SoundManager.play_ui_sound(sfx_free_money)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://c0rwch0vd24ro"]
+[gd_scene load_steps=82 format=3 uid="uid://c0rwch0vd24ro"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_opefu"]
 [ext_resource type="Script" path="res://src/bosses/pit/boss_pit.gd" id="2_a8b8q"]
@@ -11,6 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://b7nfp4x27l0np" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 1.mp3" id="8_16sah"]
 [ext_resource type="Texture2D" uid="uid://bww23gc1wfoj6" path="res://src/bosses/pit/assets/pit_boss_idle.png" id="8_d716h"]
 [ext_resource type="Material" uid="uid://bd4w05ja6v5n8" path="res://src/bosses/pit/surveillance/barrier_cage_material.tres" id="8_fo0ij"]
+[ext_resource type="PackedScene" uid="uid://d4kkx2e8cqlh5" path="res://src/bosses/bartender/area_effects/ElectricHazardArea.tscn" id="8_p7x2u"]
 [ext_resource type="AudioStream" uid="uid://caojs0svhgxl3" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 2.mp3" id="9_iolon"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="9_juug2"]
 [ext_resource type="AudioStream" uid="uid://b03ragdpxedsv" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 3.mp3" id="10_3o63l"]
@@ -241,7 +242,7 @@ _data = {
 "death": SubResource("Animation_ny4xv")
 }
 
-[node name="BossPit" instance=ExtResource("1_opefu")]
+[node name="BossPit" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_opefu")]
 collision_mask = 75
 script = ExtResource("2_a8b8q")
 swipe_sprite = ExtResource("13_qgkan")
@@ -250,10 +251,10 @@ lunge_sprite = ExtResource("5_my4lc")
 uppercut_sprite = null
 slam_sprite = ExtResource("28_1qowr")
 wave_material = SubResource("ShaderMaterial_2s76u")
-MOVE_SPEED = 10.0
+BASE_MOVE_SPEED = 10.0
 wave_amplitude = 7.0
 wave_frequency = 5.0
-time_elapsed = 0.0
+electric_hazard_prefab = ExtResource("8_p7x2u")
 hurtbox_range_close = 3.5
 hurtbox_range_far = 4.5
 sfx_melee = Array[AudioStream]([ExtResource("8_16sah"), ExtResource("9_iolon"), ExtResource("10_3o63l")])
@@ -272,11 +273,16 @@ lunge_friction = 0.05
 lunge_damage = 5.0
 lunge_force = 6.5
 lunge_cooldown = 5.0
+lunge_slow_debuff_duration = 2.0
+lunge_slow_debuff_perc = 50.0
 sfx_lunge = Array[AudioStream]([ExtResource("16_q6xxl")])
 shield_radius = 4.0
+electric_hazard_damage = 5
+electric_hazard_duration = 5.0
 boss_id = 5
 chip_spawn_chance = 0.15
 chip_spawn_force = 1500.0
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_to_drop = ExtResource("7_koy73")
 sfx_awaken = ExtResource("18_e8yae")
 sfx_hit = Array[AudioStream]([ExtResource("19_ku61b"), ExtResource("20_j42ea"), ExtResource("21_pnx0u"), ExtResource("22_rtc4r"), ExtResource("23_0bbok"), ExtResource("24_ia7ug")])
@@ -297,7 +303,7 @@ transform = Transform3D(-1, 0, -2.53518e-06, 0, 1, 0, 2.53518e-06, 0, -1, 0, 0, 
 visible = false
 
 [node name="ArmsDebugL" type="Node3D" parent="ArmsDEbug" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.999999, 0, 0, 0)
+transform = Transform3D(-0.12373, 0.177657, 0.976282, -0.365998, 0.906308, -0.211308, -0.922354, -0.383463, -0.0471154, -0.4, -0.4, 0.0931801)
 
 [node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugL" index="0"]
 transform = Transform3D(-0.905967, 1.1274, 0.397751, 0.933456, 0.978886, -0.648424, -0.746919, -0.144112, -1.29281, -1.94809, 2.26694, -0.0607154)
@@ -305,6 +311,7 @@ mesh = SubResource("BoxMesh_g5e5v")
 skeleton = NodePath("../../../Sprite3D")
 
 [node name="ArmsDebugR" type="Node3D" parent="ArmsDEbug" index="1"]
+transform = Transform3D(0.726626, -0.00388527, 0.687022, 0.0918519, 0.991556, -0.0915391, -0.680866, 0.129619, 0.720847, 0.372336, 0, -0.225533)
 
 [node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugR" index="0"]
 transform = Transform3D(0.789815, -1.17876, -0.486546, 1.14907, 0.906037, -0.329769, 0.553034, -0.19908, 1.38004, 2.05191, 2.26694, 0.0392845)
@@ -1298,16 +1305,13 @@ font_size = 128
 outline_size = 32
 uppercase = true
 
-[node name="DebugStateLabel" parent="." index="12"]
+[node name="DebugStateLabel" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 text = "STATE"
 
-[node name="DebugDistanceLabel" parent="." index="13"]
+[node name="DebugDistanceLabel" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, 0)
 text = "DISTANCE"
-
-[node name="DamageTextMarker" parent="." index="15"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.131287, 4.12246, 0)
 
 [node name="LungeCooldown" type="Timer" parent="." index="16"]
 one_shot = true
@@ -1318,7 +1322,10 @@ one_shot = true
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="18"]
 unit_size = 25.0
 
-[node name="BodyCenter" parent="." index="19"]
+[node name="DamageTextMarker" parent="." index="19"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.131287, 4.12246, 0)
+
+[node name="BodyCenter" parent="." index="20"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.25923, 0)
 
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
@@ -1328,7 +1335,7 @@ shape = SubResource("CapsuleShape3D_mew0r")
 [node name="Marker3D" parent="AimAssistBubble" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.16769, 0)
 
-[node name="AnimationPlayer" parent="." index="24"]
+[node name="AnimationPlayer" parent="." index="25"]
 libraries = {
 "": SubResource("AnimationLibrary_4yxgi"),
 "pit_boss_anims": ExtResource("33_vitgm")

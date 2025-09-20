@@ -5,6 +5,8 @@ class_name GunProjectile
 
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
+@onready var mesh: MeshInstance3D = $MeshInstance3D
+@onready var trail: Trail3D = $Trail/Trail3D
 
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
@@ -29,7 +31,7 @@ func _physics_process(delta: float) -> void:
 	if homing_locked_in and homing_target:
 		gravity_modifier = 0
 		gravity_accel = 0
-		# HACK catch for minions/boss sub-forms that die mid-ticka
+		# HACK catch for minions/boss sub-forms that die mid-flight
 		if not homing_target:
 			return
 		var target_pos = homing_target.global_position
@@ -66,8 +68,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 	life_timer.start()
 	projectile_speed = _speed
 	max_range = _max_range
-	var rand_damage_mod = get_damage_variance_modifier(_damage)
-	damage = _damage + rand_damage_mod
+	damage = _damage
 	current_dir = dir
 	ricochet_count_left = ricochet_count
 	look_at_from_position(start_pos, start_pos + dir)
@@ -82,6 +83,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit()
+	stop_elemental_particles()
 	call_deferred("queue_free")
 
 func ricochet():
@@ -94,11 +96,12 @@ func ricochet():
 	gravity_accel = 0
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
+	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			body.health_component.damage(damage)
-			damage_applied.emit(damage, true, global_position)
+			body.health_component.damage(calculated_damage)
+			damage_applied.emit(calculated_damage, true, global_position)
 			ricochet_count_left = 0
 		if found_hitscal_col:
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
@@ -106,6 +109,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		if "health_component" in body:
 			if body is Shield:
 				body.impact(self.global_position)
+			elif body is BarrelEffectTrigger:
+				body.hit_with_effect(self.owner_gun.installed_barrels)
 			body.health_component.damage(damage)
 			damage_applied.emit(damage, true, global_position)
 		if found_hitscal_col and gravity_accel == 0:
@@ -118,6 +123,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
+		stop_elemental_particles()
 		destroyed.emit()
 		call_deferred("queue_free")
 
@@ -127,3 +133,16 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 		homing_locked_in = true
 		homing_target = body
 		homing_area.set_deferred("monitoring", false)
+
+func change_bullet_color(_new_color: Color):
+	super (_new_color)
+	if color_changed_count > 1:
+		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
+		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
+		trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
+		trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
+	else:
+		mesh.mesh.material.albedo_color = _new_color
+		mesh.mesh.material.emission = _new_color
+		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
+		trail.material_override.emission = _new_color
