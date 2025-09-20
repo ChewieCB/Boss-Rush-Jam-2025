@@ -1,7 +1,7 @@
 extends BossCore
 
 @export_category("Movement")
-@export var MOVE_SPEED: float = 10.0
+@export var MOVE_SPEED: float = 6
 @onready var move_speed: float = MOVE_SPEED:
 	set(value):
 		move_speed = value
@@ -24,8 +24,8 @@ var melee_phase_count: int = 0
 
 @export_group("Attacks")
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
-@export var hurtbox_range_close: float = 3.5
-@export var hurtbox_range_far: float = 5.5
+@export var hurtbox_range_close: float = 2.0
+@export var hurtbox_range_far: float = 3.8
 @export var sfx_melee: Array[AudioStream]
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 14.0
@@ -140,7 +140,9 @@ func _on_melee_combo_targeting_state_entered() -> void:
 
 func _on_melee_combo_targeting_state_physics_processing(delta: float) -> void:
 	orbit_towards_player(delta)
-	if target in hurtbox.get_overlapping_bodies():
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+	if self.global_position.distance_to(target.global_position) < 3.0:
 		state_chart.send_event("start_attack")
 	#elif self.global_position.distance_to(target.global_position) > 12:
 		#select_attack()
@@ -173,6 +175,8 @@ func _on_melee_combo_swipe_state_entered() -> void:
 func _on_melee_combo_swipe_state_physics_processing(delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, 0.6)
 	velocity.z = lerp(velocity.z, 0.0, 0.6)
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
 
 
 # HOOK
@@ -192,6 +196,11 @@ func _on_melee_combo_hook_state_entered() -> void:
 		state_chart.send_event("melee_backstep")
 	else:
 		state_chart.send_event("combo_end")
+
+
+func _on_melee_combo_hook_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
 
 
 func _on_melee_combo_leap_back_state_entered() -> void:
@@ -235,6 +244,11 @@ func _on_melee_combo_slam_line_state_entered() -> void:
 	state_chart.send_event("combo_end")
 
 
+func _on_melee_combo_slam_line_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
 # RECOVERY
 func _on_melee_combo_recover_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Recovery"
@@ -250,6 +264,8 @@ func _on_melee_combo_recover_state_entered() -> void:
 
 func _on_melee_combo_recover_state_physics_processing(delta: float) -> void:
 	orbit_player(delta)
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
 
 
 #### Phase 1 | Line Slam
@@ -308,7 +324,7 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 
 
 func _on_ranged_nails_targeting_state_physics_processing(delta: float) -> void:
-	orbit_player(delta)
+	return
 
 
 func _on_ranged_nails_shooting_state_entered() -> void:
@@ -331,7 +347,7 @@ func _on_ranged_nails_shooting_state_entered() -> void:
 
 
 func _on_ranged_nails_shooting_state_physics_processing(delta: float) -> void:
-	orbit_player(delta)
+	return
 
 
 func _on_ranged_nails_recover_state_entered() -> void:
