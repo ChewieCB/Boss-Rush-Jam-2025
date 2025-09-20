@@ -194,7 +194,7 @@ func _on_debug_boss_trigger_body_entered(body: Node3D) -> void:
 func _on_level_select(level_path: String) -> void:
 	GameManager.tutorial_completed = true
 	GameManager.player_currency = 0
-	GameManager.equipped_barrels = GameManager.starting_barrels
+	#GameManager.equipped_barrels = GameManager.starting_barrels
 	
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
