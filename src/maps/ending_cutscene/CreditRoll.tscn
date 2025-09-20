@@ -1253,7 +1253,6 @@ libraries = {
 autoplay = "spin_chip"
 
 [node name="FadeThirdParty" type="Control" parent="CreditScroll"]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1332,7 +1331,7 @@ custom_minimum_size = Vector2(420, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_font_sizes/normal_font_size = 42
+theme_override_font_sizes/normal_font_size = 36
 text = "Bell by Quaternius"
 fit_content = true
 scroll_active = false
@@ -1342,7 +1341,7 @@ custom_minimum_size = Vector2(420, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_font_sizes/normal_font_size = 42
+theme_override_font_sizes/normal_font_size = 36
 text = "Bomb by Poly by Google [CC-BY] via Poly Pizza"
 fit_content = true
 scroll_active = false
@@ -1352,8 +1351,18 @@ custom_minimum_size = Vector2(420, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_font_sizes/normal_font_size = 42
+theme_override_font_sizes/normal_font_size = 36
 text = "Kenney.nl"
+fit_content = true
+scroll_active = false
+
+[node name="Name4" type="RichTextLabel" parent="CreditScroll/FadeThirdParty/Credit/VBoxContainer"]
+custom_minimum_size = Vector2(420, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/normal_font_size = 36
+text = "Icons by game-icons.net"
 fit_content = true
 scroll_active = false
 

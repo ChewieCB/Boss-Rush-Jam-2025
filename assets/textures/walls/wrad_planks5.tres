@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dy6qdedio5bpr"]
+
+[ext_resource type="Texture2D" uid="uid://dvadbadoq4evu" path="res://assets/textures/walls/wrad_planks5.png" id="1_fc72y"]
+
+[resource]
+albedo_texture = ExtResource("1_fc72y")
+metallic_specular = 0.0
+texture_filter = 2

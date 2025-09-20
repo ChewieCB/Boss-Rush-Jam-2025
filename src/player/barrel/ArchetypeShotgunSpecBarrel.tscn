@@ -56,12 +56,12 @@ new_value = 9.0
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/CombatShotgun"]
 script = ExtResource("4_cnlm3")
 attribute = 11
-new_value = 0.08
+new_value = 0.1
 
 [node name="SetReloadTime" type="Node3D" parent="EffectContainer/CombatShotgun"]
 script = ExtResource("4_cnlm3")
 attribute = 8
-new_value = 2.0
+new_value = 2.2
 
 [node name="DoubleBarrel" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_eatto")
@@ -112,7 +112,7 @@ new_value = 0.12
 [node name="SetReloadTime" type="Node3D" parent="EffectContainer/DoubleBarrel"]
 script = ExtResource("4_cnlm3")
 attribute = 8
-new_value = 2.1
+new_value = 2.0
 
 [node name="Slug" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_eatto")

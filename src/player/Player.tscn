@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=75 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -99,6 +99,9 @@ material = SubResource("ShaderMaterial_cjv3t")
 flip_faces = true
 size = Vector2(2, 2)
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
+viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7pe4k"]
@@ -133,7 +136,6 @@ speedline_vfx_prefab = ExtResource("55_pporq")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
 freecam_prefab = ExtResource("34_kq3ih")
-reroll_heal_value = 20.0
 
 [node name="HealthComponent" type="Node3D" parent="."]
 script = ExtResource("34_6waar")
@@ -232,6 +234,22 @@ texture = ExtResource("5_nkt42")
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
 
 [node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("39_lhbas")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, 0)
+
+[node name="EffectIconsSprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent" index="8"]
+texture = SubResource("ViewportTexture_rj1ni")
+
+[node name="Barrel3Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="1"]
+transform = Transform3D(0.735053, -0.0466678, -0.676402, -0.67801, -0.0493604, -0.733394, 0.000838399, 0.99769, -0.0679237, -0.00193595, 0, 0.555438)
+surface_material_override/0 = null
+
+[node name="Barrel2Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="2"]
+transform = Transform3D(0.693706, -0.0523373, -0.718354, -0.71934, -2.604e-06, -0.694658, 0.0363546, 0.99863, -0.0376501, -0.15, 0, 1.76)
+surface_material_override/0 = null
+
+[node name="Barrel1Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="3"]
+transform = Transform3D(0.743941, -0.0342128, -0.666855, -0.665129, 0.040512, -0.745142, 0.05871, 0.892489, 0.00826027, -0.411454, 0.00172222, 3.20794)
+surface_material_override/0 = null
 
 [node name="AimAssistRaycast" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
@@ -553,10 +571,6 @@ event = &"remove_status_drunk"
 delay_in_seconds = "0.0"
 
 [node name="DrunkTimer" type="Timer" parent="StateChart/Root/Status/Drunk"]
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 1, 0.2)
-light_color = Color(0.78, 0.897333, 1, 1)
 
 [connection signal="body_entered" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_entered"]
 [connection signal="body_exited" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_exited"]

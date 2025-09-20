@@ -10,7 +10,7 @@ var current_effect_hit_count: int = 0:
 		var old_value: int = int(current_effect_hit_count)
 		current_effect_hit_count = value
 		var tween = get_tree().create_tween()
-		tween.tween_method(tween_label_text, old_value, current_effect_hit_count, 0.2) 
+		tween.tween_method(tween_label_text, old_value, current_effect_hit_count, 0.2)
 		if current_effect_hit_count >= target_effect_hit_count:
 			activate()
 			return
@@ -22,7 +22,7 @@ var current_effect_hit_count: int = 0:
 
 
 func _ready() -> void:
-	super()
+	super ()
 	current_effect_hit_count = 0
 
 
@@ -38,13 +38,13 @@ func hit_with_effect(installed_barrels: Array[SpinBarrel]) -> void:
 			triggered.emit()
 
 
-func _on_health_diff(diff: float) -> void:
+func _on_health_diff(_diff: float) -> void:
 	pass
 	#current_dps_count += abs(diff)
 
 
 func activate() -> void:
-	super()
+	super ()
 
 
 func _on_dps_window_timer_timeout() -> void:

@@ -1,5 +1,12 @@
 extends BossCore
 
+# Antes note:
+# Ante 1: Fast Firing Shotgun - shotgun can shoot more time in a burst in phase 2 and 3
+# Ante 2: Volatile Concoctions - Enable fire, poison and tar bottles attack
+# Ante 3: Burning Ground - Floor on fire in phase 3
+# Ante 4 (new): Premium Bullets: Shotgun projectile bigger, faster and can ricochet
+# Ante 5 (new): Sleight of Hand - Can throw cocktails in interval without taking an action/attack
+
 signal fire_started
 
 @export_category("Phases")
@@ -20,7 +27,7 @@ const BASE_DAMAGE_MODIFIER: float = 1.0
 const BASE_RESISTANCE_MODIFIER: float = 1.0
 const BASE_SPEED_MODIFIER: float = 1.0
 const BASE_DELAY_MODIFIER: float = 1.0
-var damage_modifier: float = BASE_DAMAGE_MODIFIER
+var damage_modifier: float = BASE_DAMAGE_MODIFIER * GameManager.get_risk_dmg_mult()
 var speed_modifier: float = BASE_SPEED_MODIFIER
 var delay_modifier: float = BASE_DELAY_MODIFIER:
 	set(value):
@@ -30,12 +37,21 @@ var delay_modifier: float = BASE_DELAY_MODIFIER:
 			await anim_player.animation_finished
 		anim_player.speed_scale = 1.0 / (delay_modifier * 1.5)
 @export_subgroup("Shotgun")
+@export var shotgun_proj_amount: int = 8
+@export var shotgun_proj_damage: int = 3
+@export var shotgun_proj_speed: float = 40 # Based on ante 4
+@export var shotgun_spread_angle: float = 6
+var shotgun_ricochet_count = 0 # Based on ante 4
 @export var shotgun_proj_prefab: PackedScene
+@export var enhanced_shotgun_proj_prefab: PackedScene # Based on ante 4
+var chosen_shotgun_proj_prefab: PackedScene
 @export var sfx_shotgun: Array[AudioStream]
 @onready var shotgun_timer: Timer = $ShotgunTimer
 @onready var shotgun_spawn_pos: Marker3D = $Sprite3D/ShotgunSpawnPos
 var shots_to_fire: int = 1
 var shots_fired: int = 0
+var shotgun_shots_phase_2 = 1
+var shotgun_shots_phase_3 = 1
 @export_subgroup("Throw Drink")
 @export var bottle_damage = 10
 enum BottleAttack {
@@ -48,6 +64,11 @@ enum BottleAttack {
 }
 var current_bottle_type: BottleAttack
 var last_bottle_attack: BottleAttack
+var special_bottle_enabled = false
+@export var min_n_bottle_per_attack: int = 2
+@export var max_n_bottle_per_attack: int = 4
+@export var min_bottles_spread: float = 5
+@export var max_bottles_spread: float = 10
 @export var empty_bottle_prefab: PackedScene
 @export var molotov_prefab: PackedScene
 @export var poison_bottle_prefab: PackedScene
@@ -90,7 +111,7 @@ var last_brew_type: BrewType
 @export var floor_fire_hazard_prefab: PackedScene
 @export var sfx_fire_started: AudioStream
 @export var sfx_fire_loop: AudioStream
-
+var floor_fire_enabled = false
 @export_group("Movement")
 @export var base_movespeed = 10
 @export var behind_bar_move_points: Array[Marker3D] = []
@@ -98,6 +119,12 @@ var last_brew_type: BrewType
 @export var boss_jump_phase3_marker: Marker3D
 @export_subgroup("SFX")
 @export var sfx_jump: Array[AudioStream]
+
+@export_group("Passive")
+@export_subgroup("Sleight of Hand")
+var sleight_of_hand_enabled = false
+@export var sleight_of_hand_interval: float = 5
+@onready var sleight_of_hand_timer: Timer = $SleightOfHandTimer
 
 @onready var proj_spawn_marker = $Sprite3D/ThrowableSprite/ProjectileSpawnPos
 @onready var status_icon: Sprite3D = $StatusIcon
@@ -117,14 +144,28 @@ const MIN_ACTION_BEFORE_HEAL = 8
 
 func _ready() -> void:
 	super ()
+	chosen_shotgun_proj_prefab = shotgun_proj_prefab
 	navigation_component.current_speed = base_movespeed * speed_modifier
 	brew_cooldown_timer.stop()
+	if GameManager.boss_ante >= 1:
+		shotgun_shots_phase_2 = 2
+		shotgun_shots_phase_3 = 3
+	if GameManager.boss_ante >= 2:
+		special_bottle_enabled = true
+	if GameManager.boss_ante >= 3:
+		floor_fire_enabled = true
+	if GameManager.boss_ante >= 4:
+		shotgun_ricochet_count = 3
+		shotgun_proj_speed = 60
+		chosen_shotgun_proj_prefab = enhanced_shotgun_proj_prefab
+	if GameManager.boss_ante >= 5:
+		sleight_of_hand_enabled = true
+		sleight_of_hand_timer.start(sleight_of_hand_interval)
 
 
 func _process(delta: float) -> void:
 	if target:
 		_turn_towards_target(TURN_SPEED_SLOW, delta)
-
 
 func activate() -> void:
 	super ()
@@ -355,7 +396,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 
 func _on_died() -> void:
-	super()
+	super ()
 	if fire_sfx:
 		fire_sfx.stop()
 	if floor_fire_hazard:
@@ -369,25 +410,22 @@ func _on_attack_telegraph_state_entered() -> void:
 
 #### Any Phase
 
-# Shotgun blastaa
+# Shotgun blast
 
 func fire_shotgun():
-	var proj_amount = 8
-	var proj_damage = 3 * damage_modifier
-	var proj_speed = 40
-	var spread_angle = 6
-	var delay_between_burst = 0.5 * delay_modifier
+	var proj_damage = shotgun_proj_damage * damage_modifier
+	# var delay_between_burst = 0.5 * delay_modifier
 	# TODO - this needs to be cancellable for when the boss dies mid attack
 	# Make this function shoot once and then we can call it 3 times and allow
 	# an interrupt for death after each shot.
 	sfx_player.stream = sfx_shotgun.pick_random()
 	sfx_player.play()
-	for j in range(proj_amount):
+	for j in range(shotgun_proj_amount):
 		var aim_direction = shotgun_spawn_pos.global_position.direction_to(target.global_position)
-		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
-		var bullet_inst = shotgun_proj_prefab.instantiate()
+		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, shotgun_spread_angle)
+		var bullet_inst: BartenderShotgunProjectile = chosen_shotgun_proj_prefab.instantiate()
 		get_parent().add_child(bullet_inst)
-		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, proj_speed)
+		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, shotgun_ricochet_count, shotgun_proj_speed)
 
 
 #### Phase 1
@@ -424,7 +462,7 @@ func _on_phase_1_idle_state_entered() -> void:
 func _on_phase_2_state_entered() -> void:
 	anim_player.play("RESET")
 	#SoundManager.play_sound(sfx_tape, "SFX")
-	shots_to_fire = 2
+	shots_to_fire = shotgun_shots_phase_2
 	#GameManager.show_boss_special_dialog("Playtime is OVER!", 1)
 	#await get_tree().create_timer(1).timeout
 	#SoundManager.stop_sound(sfx_tape)
@@ -448,7 +486,7 @@ func _on_phase_2_idle_state_entered() -> void:
 func _on_phase_3_state_entered() -> void:
 	anim_player.play("RESET")
 	#SoundManager.play_sound(sfx_tape, "SFX")
-	shots_to_fire = 3
+	shots_to_fire = shotgun_shots_phase_3
 	buff_duration *= 1.5
 	buff_cooldown /= 2
 	#GameManager.show_boss_special_dialog("You better hot foot it out of here while you still can!", 1.5)
@@ -459,11 +497,12 @@ func _on_phase_3_state_entered() -> void:
 
 	await get_tree().create_timer(2.0).timeout
 
-	fire_started.emit()
-	# TODO - move this to the map script
-	floor_fire_hazard = floor_fire_hazard_prefab.instantiate()
-	floor_fize_hazard_marker.add_child(floor_fire_hazard)
-	floor_fire_hazard.position = Vector3.ZERO
+	if floor_fire_enabled:
+		fire_started.emit()
+		# TODO - move this to the map script
+		floor_fire_hazard = floor_fire_hazard_prefab.instantiate()
+		floor_fize_hazard_marker.add_child(floor_fire_hazard)
+		floor_fire_hazard.position = Vector3.ZERO
 
 
 func _on_throw_heal_bottle_state_entered() -> void:
@@ -481,16 +520,17 @@ func _on_throw_heal_bottle_state_entered() -> void:
 func throw_projectile(throw_barrel: bool = false) -> void:
 	if throw_barrel:
 		current_bottle_type = BottleAttack.BARREL
-		_throw_bottle(1, 1, barrel_damage)
+		_throw_bottle(current_bottle_type, 1, 1, barrel_damage)
 	else:
-		var n_bottle = randi_range(2, 4)
-		var spread = randf_range(5, 10)
-		_throw_bottle(n_bottle, spread, bottle_damage)
+		var n_bottle = randi_range(min_n_bottle_per_attack, max_n_bottle_per_attack)
+		var spread = randf_range(min_bottles_spread, max_bottles_spread)
+		_throw_bottle(current_bottle_type, n_bottle, spread, bottle_damage)
 
 
-func _throw_bottle(n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> void:
+func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> void:
+	proj_damage *= damage_modifier
 	var prefab: PackedScene
-	match current_bottle_type:
+	match bottle_type:
 		BottleAttack.EMPTY:
 			prefab = empty_bottle_prefab
 		BottleAttack.FIRE:
@@ -500,7 +540,7 @@ func _throw_bottle(n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> v
 		BottleAttack.SLOW:
 			prefab = slow_bottle_prefab
 		BottleAttack.HEAL:
-			pass
+			prefab = empty_bottle_prefab
 		BottleAttack.BARREL:
 			prefab = beer_barrel_prefab
 		_:
@@ -516,8 +556,6 @@ func _throw_bottle(n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> v
 	else:
 		aim_direction += Vector3(0, 0.5, 0) # Make it arc upwards a bit
 	aim_direction = aim_direction.normalized()
-
-	proj_damage *= damage_modifier
 
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
 
@@ -712,7 +750,7 @@ func _on_brew_drink_targeting_state_entered() -> void:
 		return
 
 	state_chart.send_event("start_targeting")
-	current_brew_type = get_random_enum_key(BrewType.keys(), last_brew_type)
+	current_brew_type = get_random_enum_key(BrewType.keys(), last_brew_type) as BrewType
 
 	await get_tree().create_timer(0.2 * delay_modifier).timeout
 
@@ -769,9 +807,9 @@ func _on_brew_drink_recover_state_entered() -> void:
 
 func _on_throw_drink_targeting_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Targeting"
-	
+
 	#anim_player.speed_scale *= 1.5
-	
+
 	state_chart.send_event("start_targeting")
 	# Only throw the barrel if we have the strength buff
 	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
@@ -779,7 +817,10 @@ func _on_throw_drink_targeting_state_entered() -> void:
 	else:
 		var bottle_types_no_barrel = BottleAttack.keys().duplicate()
 		bottle_types_no_barrel.remove_at(BottleAttack.BARREL)
-		current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack)
+		if special_bottle_enabled:
+			current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack) as BottleAttack
+		else:
+			current_bottle_type = BottleAttack.EMPTY
 
 	await get_tree().create_timer(0.2 * delay_modifier).timeout
 
@@ -840,7 +881,7 @@ func _on_throw_drink_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	last_bottle_attack = current_bottle_type
 	anim_player.play("RESET")
-	
+
 	#anim_player.speed_scale /= 1.5
 
 	await get_tree().create_timer(attack_recovery_time * delay_modifier).timeout
@@ -864,7 +905,7 @@ func _on_no_buff_state_entered() -> void:
 	last_brew_type = current_brew_type
 	status_icon.texture = null
 	health_component.received_dmg_multiplier = BASE_RESISTANCE_MODIFIER
-	damage_modifier = BASE_DAMAGE_MODIFIER
+	damage_modifier = BASE_DAMAGE_MODIFIER * GameManager.get_risk_dmg_mult()
 	speed_modifier = BASE_SPEED_MODIFIER
 	#
 	delay_modifier = 1
@@ -876,7 +917,7 @@ func _on_strength_buff_state_entered() -> void:
 	#  - damage output INCREASED
 	#  - movement speed UNAFFECTED
 	health_component.received_dmg_multiplier = strength_buff_modifier
-	damage_modifier = strength_buff_modifier
+	damage_modifier = strength_buff_modifier * GameManager.get_risk_dmg_mult()
 	speed_modifier = BASE_SPEED_MODIFIER
 	delay_modifier = BASE_DELAY_MODIFIER
 
@@ -889,7 +930,7 @@ func _on_defence_buff_state_entered() -> void:
 	#  - damage output UNAFFECTED
 	#  - movement speed DECREASED
 	health_component.received_dmg_multiplier = defense_buff_modifier
-	damage_modifier = BASE_DAMAGE_MODIFIER
+	damage_modifier = BASE_DAMAGE_MODIFIER * GameManager.get_risk_dmg_mult()
 	speed_modifier = 1 - defense_buff_modifier
 	delay_modifier = 1 + speed_buff_modifier
 
@@ -903,7 +944,7 @@ func _on_speed_buff_state_entered() -> void:
 	#  - damage output DECREASED
 	#  - movement speed INCREASED
 	health_component.received_dmg_multiplier = BASE_RESISTANCE_MODIFIER
-	damage_modifier = speed_buff_modifier
+	damage_modifier = BASE_DAMAGE_MODIFIER * GameManager.get_risk_dmg_mult()
 	speed_modifier = 1 + speed_buff_modifier
 	delay_modifier = 1 - speed_buff_modifier
 
@@ -919,3 +960,14 @@ func _on_buff_expire_timer_timeout() -> void:
 
 func _on_shotgun_blast_state_exited() -> void:
 	shotgun_timer.stop()
+
+
+func _on_sleight_of_hand_timer_timeout() -> void:
+	var n_bottle = randi_range(min_n_bottle_per_attack, max_n_bottle_per_attack)
+	var spread = randf_range(min_bottles_spread, max_bottles_spread)
+	var bottle_types_no_barrel = BottleAttack.keys().duplicate()
+	bottle_types_no_barrel.remove_at(BottleAttack.BARREL)
+	var sleight_bottle_type = BottleAttack.EMPTY
+	if special_bottle_enabled:
+		sleight_bottle_type = get_random_enum_key(bottle_types_no_barrel) as BottleAttack
+	_throw_bottle(sleight_bottle_type, n_bottle, spread, bottle_damage)

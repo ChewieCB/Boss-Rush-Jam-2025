@@ -2,18 +2,25 @@ extends BaseComponent
 class_name HealthComponent
 
 signal health_changed(new_health: float, prev_health: float)
+signal max_health_changed(new_max_health: float, prev_max_health: float)
 signal health_diff(diff: float)
 signal died
 signal hurt
 
 @export_category("Health")
 @export var is_invincible: bool = false
-@export var max_health: float = 100
+@export var max_health: float = 100:
+	set(value):
+		var prev_max_health = max_health
+		max_health = value
+		max_health_changed.emit(max_health, prev_max_health)
 @export var show_damage_text: bool = true
 @export var text_effect: PackedScene
 @export var text_effect_location: Node3D
 
 var received_dmg_multiplier = 1
+var heal_multiplier = 1
+var is_owned_by_player = false
 
 var current_health: float:
 	set(value):
@@ -29,7 +36,7 @@ var current_health: float:
 		current_health_ratio = current_health / max_health
 		health_diff.emit(diff)
 		health_changed.emit(current_health, prev_health)
-		if current_health == 0:
+		if current_health <= 0:
 			has_died = true
 			died.emit()
 		if diff < 0:
@@ -57,7 +64,10 @@ func damage(_damage: float, _color: Color = Color.WHITE) -> void:
 
 func heal(health: float, _color: Color = Color.GREEN) -> void:
 	if enabled:
-		current_health += health
+		var health_amount: float = health * heal_multiplier
+		if is_owned_by_player:
+			health_amount *= GameManager.get_risk_healing_effectiveness_mult()
+		current_health += round(health_amount)
 		if show_damage_text:
 			if not text_effect:
 				return

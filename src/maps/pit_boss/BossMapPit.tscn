@@ -3009,6 +3009,7 @@ entProperties = {
 "linked_level": "res://src/maps/pit_boss/BossMapPit.tscn",
 "origin": "1952 -2 38"
 }
+boss_id = 0
 
 [node name="entity_56_ElevatorButton" parent="FuncGodotMap/group_635_Elevator/group_672_Elevator" index="1" instance=ExtResource("32_jpkwx")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.9375, 61)
@@ -3019,6 +3020,7 @@ entProperties = {
 "linked_level": "res://src/maps/chip_boss/BossMapChip.tscn",
 "origin": "1952 -2 30"
 }
+boss_id = 0
 
 [node name="entity_57_ElevatorButton" parent="FuncGodotMap/group_635_Elevator/group_672_Elevator" index="2" instance=ExtResource("32_jpkwx")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.6875, 61)
@@ -3029,6 +3031,7 @@ entProperties = {
 "linked_level": "res://src/maps/roulette_boss/BossMapRoulette.tscn",
 "origin": "1952 -2 54"
 }
+boss_id = 0
 
 [node name="entity_58_ElevatorButton" parent="FuncGodotMap/group_635_Elevator/group_672_Elevator" index="3" instance=ExtResource("32_jpkwx")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.4375, 61)
@@ -3039,6 +3042,7 @@ entProperties = {
 "linked_level": "res://src/maps/bartender_boss/BossMapBartender.tscn",
 "origin": "1952 -2 46"
 }
+boss_id = 0
 
 [node name="entity_59_ElevatorButton" parent="FuncGodotMap/group_635_Elevator/group_672_Elevator" index="4" instance=ExtResource("32_jpkwx")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.9375, 61)
@@ -3049,6 +3053,7 @@ entProperties = {
 "linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
 "origin": "1952 -2 62"
 }
+boss_id = 0
 
 [node name="entity_60_Chandellier2LightOnly" parent="FuncGodotMap/group_635_Elevator/group_672_Elevator" index="5" instance=ExtResource("34_um28q")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.8125, 58.5)

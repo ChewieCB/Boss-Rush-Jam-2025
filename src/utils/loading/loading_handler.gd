@@ -63,15 +63,9 @@ func start_loading(scene_name: String = "") -> void:
 		initial_load()
 		await materials_compiled
 	
-	ScreenTransition.set_loading_detail_text("Caching effect icons")
-	await Engine.get_main_loop().process_frame
-	
-	if GameManager.cached_icon_anim_sprites == {}:
-		cache_initial_icon_anim_sprites()
-	
 	await Engine.get_main_loop().process_frame
 	ScreenTransition.set_loading_detail_text(scene_name)
-
+	
 	can_transition = true
 
 
@@ -245,60 +239,3 @@ func _compile_particles_node(child: GPUParticles3D) -> void:
 	compiling_materials_count -= 1
 	if is_instance_valid(particles):
 		particles.queue_free()
-
-
-func load_barrel_icon_sprites(sprite_path: String, anim_dir: String) -> Array[CompressedTexture2D]:
-	var sprite_arr: Array[CompressedTexture2D] = []
-	var dir = DirAccess.open(sprite_path + anim_dir + "/")
-	
-	# Build an array of paths to load threaded
-	var full_paths = []
-	
-	for image_path in dir.get_files():
-		if image_path.ends_with(".import"):
-			# If we run this from the editor then we get double anim frames
-			if EngineDebugger.is_active():
-				continue
-			image_path = image_path.replace(".import", "")
-		elif image_path.ends_with(".remap"):
-			image_path = image_path.replace(".remap", "")
-		
-		full_paths.append(sprite_path + anim_dir + "/" + image_path)
-		
-	for full_path in full_paths:
-		ResourceLoader.load_threaded_request(full_path)
-	
-	var loaded_count: int = 0
-	while loaded_count < full_paths.size():
-		for i in range(full_paths.size()):
-			var full_path = full_paths[i]
-			if full_path == "":
-				continue
-			var progress = ResourceLoader.load_threaded_get_status(full_path)
-			if progress < 1.0:
-				continue
-			else:
-				sprite_arr.append(ResourceLoader.load_threaded_get(full_path))
-				full_paths[i] = ""
-				loaded_count += 1
-	
-	return sprite_arr
-
-
-func cache_initial_icon_anim_sprites() -> void:
-	var icon_sprites_path := "res://src/player/gun/assets/sprite/effect_icons/%s/barrel_%s/"
-	
-	for j in range(3):
-		GameManager.cached_icon_anim_sprites["barrel_%s" % [j + 1]] = {}
-		for i in range(-1, 47):
-			GameManager.cached_icon_anim_sprites["barrel_%s" % [j + 1]][str(i)] = {}
-			for anim_name in ["IconSpinOut", "IconSpinIn"]:
-				var anim_sprites = load_barrel_icon_sprites(
-					icon_sprites_path % [i, j + 1], 
-					anim_name
-				)
-				if anim_name == "IconSpinIn":
-					anim_sprites.push_front(null)
-				GameManager.cached_icon_anim_sprites["barrel_%s" % [j + 1]][str(i)][
-					"spin_start" if anim_name == "IconSpinOut" else "spin_end"
-				] = anim_sprites

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://chl4kfxabg06s"
+path="res://.godot/imported/Pipe Burst Steam Loop.wav-bc9e650621bbef2b7ec08c16bf9417d2.sample"
+
+[deps]
+
+source_file="res://src/maps/tutorial/assets/sfx/Pipe Burst Steam Loop.wav"
+dest_files=["res://.godot/imported/Pipe Burst Steam Loop.wav-bc9e650621bbef2b7ec08c16bf9417d2.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=true
+edit/loop_mode=2
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

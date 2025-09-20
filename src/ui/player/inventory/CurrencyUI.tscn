@@ -9,12 +9,14 @@ process_mode = 3
 offset_right = 305.0
 offset_bottom = 64.0
 script = ExtResource("1_w6gyf")
+is_static = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+alignment = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(64, 64)

@@ -36,6 +36,9 @@ func _ready() -> void:
 		tween.chain().tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 0.152, tick_time / 2).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 		await tween.finished
 
+func init(_damage: float, _fuse_time: float):
+	explosion_damage = _damage
+	fuse_time = _fuse_time
 
 func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
 	var spark_inst = spark_scene.instantiate()
@@ -51,7 +54,7 @@ func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
 			spark_inst.look_at(pos + normal, Vector3.UP)
 
 
-func destroy(explode: bool = true) -> void:
+func destroy(_explode: bool = true) -> void:
 	explosion_area.set_deferred("monitoring", true)
 	var explosion_vfx = explosion_scene.instantiate()
 	get_tree().get_root().add_child(explosion_vfx)

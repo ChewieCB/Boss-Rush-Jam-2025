@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BossDifficultyProfile" load_steps=2 format=3 uid="uid://cev06jj3f40kv"]
+
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="1_llkqi"]
+
+[resource]
+script = ExtResource("1_llkqi")
+boss_id = 5
+boss_quote = "\"Do not be afraid.\""
+ante_names = Array[String](["Place Your Bet", "Unstable Split", "Empowered Avatar", "Five of a Kind", "Spiked Beer"])
+boss_risk_reward_mult = 1.5

@@ -21,6 +21,9 @@ var floor_y: float = 0.0
 @export var sfx_bell_impact: Array[AudioStream]
 
 
+func init(_damage: float):
+	damage = _damage
+
 func drop() -> void:
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
@@ -84,7 +87,7 @@ func _on_destroyed() -> void:
 	hurtbox_collider.disabled = true
 	collider.disabled = true
 	if sfx_player.playing:
-		await sfx_player.finished 
+		await sfx_player.finished
 	queue_free()
 
 

@@ -35,5 +35,5 @@ func _draw() -> void:
 				draw_line(pos, ui_box_anchor, Color("e6c600"), 8.0)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	queue_redraw()

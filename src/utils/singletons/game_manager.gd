@@ -7,6 +7,7 @@ signal reroll_cost_changed(new_cost: int)
 signal free_rerolls
 signal refresh_shop_ui
 signal setting_changed
+signal risk_level_changed
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -23,6 +24,7 @@ const HIGH_ROLLER_BONUS_HEAL_PER_REROLL_TIME = 5
 var pause_ui: PauseUI
 var setting_ui: SettingUI
 var player: Player
+var difficulty_menu: DifficultyMenu
 
 # Barrels
 @export var starting_barrels: Array[BarrelDataResource]
@@ -36,8 +38,8 @@ var shop_barrels: Array[BarrelDataResource] = []
 
 
 # Re-rolls
-@export var initial_reroll_cost: int = 200
-@export var reroll_cost_mult: float = 1.5
+@export var initial_reroll_cost: int = 100
+@export var reroll_cost_mult: float = 1.2
 var reroll_cost: int = initial_reroll_cost
 var is_free_reroll: bool = false:
 	set(value):
@@ -67,6 +69,33 @@ var victory_ui_shown: bool = false
 var chosen_slot_id = -1
 var start_record_timestamp = 0
 var total_playtime = 0
+
+# Difficulty modifiers
+var selected_level_path: String
+var selected_boss_id: BossCore.BossIdEnum
+var bet_value = 0
+var reward_value = 0
+var risk_modifier_level_dict = {
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
+	RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
+	RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
+	RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
+	RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
+	RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
+	RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
+}
+var boss_ante = 0
+var risk_level = 0:
+	set(value):
+		risk_level = value
+		if risk_level >= 15:
+			boss_ante = 5
+		else:
+			boss_ante = int(risk_level / 3)
+		risk_level_changed.emit()
+
 
 # HACK - do this dynamically with level loading/unloading in the elevator
 var cached_player_pos_relative_to_elevator_doors: Vector3
@@ -111,9 +140,6 @@ var CHEAT_freecam: bool = true
 
 @export var sfx_screenshot: AudioStream
 
-# Gun Icon animation caching
-var cached_icon_anim_sprites: Dictionary = {}
-
 
 func _ready() -> void:
 	barrel_database.append_array(debug_barrel_database)
@@ -124,10 +150,14 @@ func _ready() -> void:
 	Input.joy_connection_changed.connect(_on_controller_connection)
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):
 		if CHEAT_freecam:
-			player._disable_freecam() if player.freecam else player._enable_freecam()
+			# Spawn freecam if not exist, else despawm it
+			if player.freecam:
+				player._disable_freecam()
+			else:
+				player._enable_freecam()
 	if Input.is_action_just_pressed("debug_increase_timescale"):
 		if Engine.time_scale < 1.0:
 			Engine.time_scale += 0.1
@@ -208,11 +238,14 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 
 
 func purchase_reroll() -> bool:
-	if player_currency >= reroll_cost or is_free_reroll:
+	if reroll_time == 0:
+		reroll_cost = int(reroll_cost * get_risk_spin_cost_mult())
+	if (player_currency >= reroll_cost and reroll_time < get_risk_limit_spin_amount()) or is_free_reroll:
 		if not is_free_reroll:
 			player_currency -= reroll_cost
 			# Increase the cost of re-rolling for this fight
-			reroll_cost = int(reroll_cost * reroll_cost_mult)
+			# reroll_cost = int(reroll_cost * reroll_cost_mult)
+			reroll_cost = int(reroll_cost * (reroll_cost_mult + (GameManager.get_risk_spin_cost_mult() - 1)))
 			reroll_time += 1
 		reroll_cost_changed.emit(reroll_cost)
 		return true
@@ -237,6 +270,7 @@ func show_boss_special_dialog(content: String, duration: float):
 
 
 func load_new_save_data():
+	tutorial_completed = false
 	for data in starting_barrels:
 		if data in equipped_barrels:
 			continue
@@ -244,6 +278,23 @@ func load_new_save_data():
 	for data in starting_shop_barrels:
 		shop_barrels.append(data)
 
+
+func reset_difficulty_modifier():
+	risk_modifier_level_dict = {
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
+		RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
+		RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
+		RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
+		RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
+		RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
+	}
+	risk_level = 0
+	boss_ante = 0
+	bet_value = 0
+	reward_value = 0
 
 func reset_current_save_data():
 	equipped_barrels = []
@@ -258,6 +309,8 @@ func reset_current_save_data():
 	chosen_slot_id = -1
 	start_record_timestamp = 0
 	total_playtime = 0
+	tutorial_completed = false
+	reset_difficulty_modifier()
 
 
 func start_record_playtime():
@@ -272,8 +325,8 @@ func update_total_playtime():
 func _on_controller_connection(_device: int, connected: bool):
 	is_controller_connected = connected
 
-func create_and_add_buff(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
-	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, show_duration_ui = false, status_icon: Texture2D = null, ):
+func create_and_add_status_effect(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
+	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, is_bad_effect: bool = false, show_duration_ui = false, status_icon: Texture2D = null, ):
 	var status_effect = StatusEffect.new()
 	status_effect.display_name = display_name
 	status_effect.status_code = status_code
@@ -281,7 +334,7 @@ func create_and_add_buff(display_name: String, status_code: String, modified_sta
 	status_effect.value = value
 	status_effect.modify_type = modify_type
 	status_effect.duration = duration
-	status_effect.is_bad_effect = false
+	status_effect.is_bad_effect = is_bad_effect
 	status_effect.show_duration_ui = show_duration_ui
 	status_effect.show_value_on_ui = false
 	status_effect.status_icon = status_icon
@@ -313,3 +366,47 @@ func get_boss_chip_amount_drop_multiplier() -> float:
 			4:
 				mult -= 0.4
 	return mult
+
+
+func get_risk_max_hp_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP]
+	return value
+
+func get_risk_dmg_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG]
+	return value
+
+func get_risk_atk_move_speed_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED]
+	return value
+
+func get_risk_status_resist_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST]
+	return value
+
+func get_risk_spin_cost_mult() -> float:
+	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST]
+	return value
+
+func get_risk_healing_effectiveness_mult() -> float:
+	var value = 1 - GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING]
+	return value
+
+func get_risk_luck_buildup_mult() -> float:
+	var value = 1 - GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP] * \
+		RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP]
+	return value
+
+func get_risk_limit_spin_amount() -> int:
+	var value = 999999
+	if risk_modifier_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT] > 0:
+		value = RiskItem.STARTING_MAX_LIMIT_PLAYER_SPIN_AMOUNT - \
+			((risk_modifier_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT] - 1) * \
+			RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT])
+	return value

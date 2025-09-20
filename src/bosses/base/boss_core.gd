@@ -4,7 +4,7 @@ class_name BossCore
 ## Emit when boss HP drop to 0.
 signal died
 signal death_anim_finished
-## Emit after collected the barrel, 
+## Emit after collected the barrel,
 ## Emit after collected the barrel,
 ## or same time as `died` signal if already collected.
 signal defeated(boss: BossCore)
@@ -166,6 +166,13 @@ const MAX_FALL_SPEED: float = 50.0
 const ACCEL_RATE: float = 40.0
 const JUMP_FORCE: float = 8
 @export var GRAVITY: float = 14
+@export_subgroup("Orbiting")
+@export var DESIRED_DISTANCE: float = 10.0
+@export var desired_distance: float = DESIRED_DISTANCE
+@export var angle_speed: float = 1.0 # radians/second
+@export var orbit_angle: float = 0.0 # track this over time
+@export var orbit_radius: float = 20.0
+var time_elapsed: float = 0
 
 var vel_vertical: float = 0
 
@@ -184,6 +191,7 @@ var cached_target: Node3D
 func _ready() -> void:
 	print_debug("BossCore ready")
 	randomize()
+	apply_risk_modifier()
 	# If the player has beaten all bosses, buff them for the replay value
 	if GameManager.all_bosses_defeated:
 		health_component.max_health *= 2
@@ -198,12 +206,11 @@ func _ready() -> void:
 		if elem:
 			elem.visible = false
 
-	
 	# Cheat/debug flags
 	if GameManager.CHEAT_oneshot:
 		health_component.max_health = 1
 		health_component.current_health = 1
-	
+
 	if owner:
 		await owner.ready
 
@@ -212,7 +219,6 @@ func _physics_process(delta: float) -> void:
 	vel_vertical -= GRAVITY * delta
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	velocity.y = vel_vertical
-
 	move_and_slide()
 
 	# DEBUG
@@ -246,7 +252,34 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 	)
 
 
-func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> BaseProjectile:
+func orbit_player(delta: float) -> void:
+	orbit_angle += angle_speed * delta
+	# offset in XZ-plane
+	var offset_x = cos(orbit_angle) * desired_distance
+	var offset_z = sin(orbit_angle) * desired_distance
+	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	# Pathfind to orbit_pos
+	navigation_component.set_nav_target_position(orbit_pos)
+
+
+func orbit_towards_player(
+	delta: float, approach_speed: float = 1.0, min_radius: float = 10.0
+) -> void:
+	orbit_angle += angle_speed * delta
+	
+	orbit_radius -= approach_speed * delta
+	if min_radius:
+		orbit_radius = max(orbit_radius, min_radius)
+	
+	# offset in XZ-plane
+	var offset_x = cos(orbit_angle) * orbit_radius
+	var offset_z = sin(orbit_angle) * orbit_radius
+	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	# Pathfind to orbit_pos
+	navigation_component.set_nav_target_position(orbit_pos)
+
+
+func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> Area3D:
 	var _sfx_player = get_available_sfx_player()
 	if not _sfx_player:
 		# TODO - error handling
@@ -266,17 +299,23 @@ func activate() -> void:
 	show_health()
 	SoundManager.play_sound(sfx_awaken, "SFX")
 
+func apply_risk_modifier():
+	health_component.max_health *= GameManager.get_risk_max_hp_mult()
+	health_component.initialize_health()
+	for key in status_resist.keys():
+		status_resist[key] *= GameManager.get_risk_status_resist_mult()
+
 
 ## GENERIC STATE HELPERS
 func _targeting_entered(next_state: String, attack_name: String = "", delay: float = attack_targeting_time) -> void:
 	debug_state_label.text = "%s | Targeting" % attack_name
-	
+
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
 	await get_tree().create_timer(delay).timeout
 	state_chart.send_event(next_state)
 
-func _telegraph_attack(attack_name: String = "") -> void:
+func _telegraph_attack(_attack_name: String = "") -> void:
 	state_chart.send_event("attack_telegraph")
 	await get_tree().create_timer(telegraph_time).timeout
 	state_chart.send_event("attack_start")
@@ -284,9 +323,9 @@ func _telegraph_attack(attack_name: String = "") -> void:
 
 func _recover_entered() -> void:
 	state_chart.send_event("attack_end")
-	
+
 	await get_tree().create_timer(attack_recovery_time).timeout
-	
+
 	state_chart.send_event("cooldown_end")
 	select_attack()
 	# Reset the current state to Targeting
@@ -295,7 +334,7 @@ func _recover_entered() -> void:
 
 func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInstance3D:
 	# Will usually work, but you might need to adjust this.
-	var scene_root = get_tree().root.get_children()[8]
+	var another_scene_root = get_tree().root.get_children()[8]
 	# Create sphere with low detail of size.
 	var sphere = SphereMesh.new()
 	sphere.radial_segments = 4
@@ -311,7 +350,7 @@ func draw_debug_sphere(location: Vector3, size: float, color: Color) -> MeshInst
 	# Add to meshinstance in the right place.
 	var node = MeshInstance3D.new()
 	node.mesh = sphere
-	scene_root.add_child.call_deferred(node)
+	another_scene_root.add_child.call_deferred(node)
 	node.global_transform.origin = location
 
 	return node
@@ -537,10 +576,10 @@ func _on_health_dead_state_entered() -> void:
 		anim_player.stop()
 		anim_player.play("RESET")
 	anim_player.play("death")
-	
+
 	await anim_player.animation_finished
 	anim_player.process_mode = Node.PROCESS_MODE_DISABLED
-	
+
 	sprite.modulate = Color.DARK_SLATE_BLUE
 	death_anim_finished.emit()
 
@@ -571,7 +610,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		hurt_sfx_player.stream = sfx_hit.pick_random()
 		hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
 		hurt_sfx_player.play()
-		
+
 		dps_accumulated_in_window += abs(prev_health - new_health)
 		if dps_accumulated_in_window > chip_spawn_dps_threshold:
 			_on_stagger()
@@ -693,7 +732,10 @@ func _on_status_poisoned_active_state_exited() -> void:
 
 func _on_burning_timer_timeout() -> void:
 	# TODO - let specific attacks/modifiers change how much damage the effect does
-	var burn_dmg = int(health_component.max_health * 0.005) # (0.5% max hp dmg per tick)
+	const BURN_DMG_MAX_HP_PERC_PER_TICK = 0.002
+	const BURN_DMG_FLAT_PER_TICK = 25
+	# (0.2% max hp dmg per tick and flat 25)
+	var burn_dmg = int(health_component.max_health * BURN_DMG_MAX_HP_PERC_PER_TICK + BURN_DMG_FLAT_PER_TICK)
 	health_component.damage(burn_dmg, Color.ORANGE)
 	sprite.modulate = Color.ORANGE
 	await get_tree().create_timer(0.2).timeout
@@ -702,10 +744,13 @@ func _on_burning_timer_timeout() -> void:
 
 func _on_poisoned_timer_timeout() -> void:
 	# TODO - let specific attacks/modifiers change how much damage the effect does
-	var poison_dmg = int(health_component.max_health * 0.03) # (3% max hp dmg per tick)
+	const POISON_DMG_MAX_HP_PERC_PER_TICK = 0.012
+	const POISON_DMG_FLAT_PER_TICK = 140
+	# (1.2% max hp dmg per tick and flat 140)
+	var poison_dmg = int(health_component.max_health * POISON_DMG_MAX_HP_PERC_PER_TICK + POISON_DMG_FLAT_PER_TICK)
 	health_component.damage(poison_dmg, Color.WEB_GREEN)
 	sprite.modulate = Color.WEB_GREEN
-	await get_tree().create_timer(0.4).timeout
+	await get_tree().create_timer(1).timeout
 	sprite.modulate = Color.WHITE
 
 

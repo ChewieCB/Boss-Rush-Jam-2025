@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=88 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -17,9 +17,12 @@
 [ext_resource type="PackedScene" uid="uid://dc551puah5jwj" path="res://src/bosses/bartender/projectiles/BartenderTarBottle.tscn" id="7_hy3po"]
 [ext_resource type="Texture2D" uid="uid://b0dwoqbf2pxac" path="res://src/bosses/bartender/assets/Bartender_Hit.png" id="8_jooce"]
 [ext_resource type="PackedScene" uid="uid://dpahplwrr1ndt" path="res://src/bosses/bartender/projectiles/BartenderHealBottle.tscn" id="8_y61gp"]
+[ext_resource type="PackedScene" uid="uid://d0xmsa0sjubi7" path="res://src/bosses/bartender/projectiles/BartenderEnhancedShotgunProjectile.tscn" id="9_1fd3p"]
 [ext_resource type="Texture2D" uid="uid://c84m7xsqkv4lg" path="res://src/bosses/bartender/assets/Bartender_Death_1.png" id="9_fm23x"]
 [ext_resource type="AudioStream" uid="uid://c1hbnru2upykl" path="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER THROW BOTTLE 1.mp3" id="9_g736w"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="9_pkguc"]
 [ext_resource type="PackedScene" uid="uid://lmvhnu7j64r7" path="res://src/bosses/bartender/projectiles/BartenderBeerBarrel.tscn" id="9_u87s1"]
+[ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="10_awx3m"]
 [ext_resource type="Texture2D" uid="uid://cucyy5fv7mxp0" path="res://src/bosses/bartender/assets/Bartender_Death_2.png" id="10_d78ef"]
 [ext_resource type="Texture2D" uid="uid://cfkua1w43rgb4" path="res://src/bosses/bartender/assets/speed_icon.png" id="10_p58cf"]
 [ext_resource type="AudioStream" uid="uid://dlqcniyte5gv3" path="res://src/bosses/bartender/assets/sfx/BOTTLE THROW/BARTENDER THROW BOTTLE 2.mp3" id="10_wyqju"]
@@ -1425,7 +1428,7 @@ _data = {
 "shotgun_telegraph": SubResource("Animation_6h31p")
 }
 
-[node name="BossBartender" node_paths=PackedStringArray("behind_bar_move_points") instance=ExtResource("1_bp57a")]
+[node name="BossBartender" node_paths=PackedStringArray("behind_bar_move_points", "elemental_emitting_vfx") instance=ExtResource("1_bp57a")]
 collision_mask = 11
 script = ExtResource("2_ns3xp")
 phase_2_health_percentage_trigger = 0.6
@@ -1435,9 +1438,18 @@ reload_sprite = ExtResource("5_av4in")
 throw_sprite = ExtResource("5_rirhf")
 brew_sprite = ExtResource("6_0y3ym")
 sfx_tape = ExtResource("7_c226c")
+shotgun_proj_amount = 8
+shotgun_proj_damage = 3
+shotgun_proj_speed = 40.0
+shotgun_spread_angle = 6.0
 shotgun_proj_prefab = ExtResource("3_ycarf")
-sfx_shotgun = Array[AudioStream]([])
+enhanced_shotgun_proj_prefab = ExtResource("9_1fd3p")
+sfx_shotgun = Array[AudioStream]([ExtResource("9_pkguc"), ExtResource("10_awx3m")])
 bottle_damage = 6
+min_n_bottle_per_attack = 2
+max_n_bottle_per_attack = 4
+min_bottles_spread = 5.0
+max_bottles_spread = 10.0
 empty_bottle_prefab = ExtResource("4_vwmjv")
 molotov_prefab = ExtResource("5_e3e4s")
 poison_bottle_prefab = ExtResource("6_ei8fn")
@@ -1463,11 +1475,13 @@ floor_fire_hazard_prefab = ExtResource("11_fes67")
 sfx_fire_started = null
 sfx_fire_loop = ExtResource("15_o40bi")
 base_movespeed = 10
-behind_bar_move_points = Array[AudioStream]([])
+behind_bar_move_points = []
 sfx_jump = Array[AudioStream]([ExtResource("18_nhb38")])
+sleight_of_hand_interval = 5.0
 boss_id = 3
 chip_spawn_chance = 0.3
 chip_spawn_force = 1500.0
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_to_drop = ExtResource("15_817ob")
 sfx_awaken = ExtResource("26_lq1hd")
 sfx_hit = Array[AudioStream]([ExtResource("31_a4u5n"), ExtResource("32_vtq3o"), ExtResource("33_rnf52"), ExtResource("34_nkrfy"), ExtResource("35_efay1")])
@@ -2508,6 +2522,9 @@ libraries = {
 "": SubResource("AnimationLibrary_k4utu")
 }
 
+[node name="SleightOfHandTimer" type="Timer" parent="." index="28"]
+wait_time = 3.0
+
 [connection signal="state_entered" from="StateChart/Root/Status/BrewBuffs/NoBuff" to="." method="_on_no_buff_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Status/BrewBuffs/StrengthBuff" to="." method="_on_strength_buff_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Status/BrewBuffs/DefenceBuff" to="." method="_on_defence_buff_state_entered"]
@@ -2565,3 +2582,4 @@ libraries = {
 [connection signal="body_exited" from="ShotgunTriggerArea" to="." method="_on_shotgun_trigger_area_body_exited"]
 [connection signal="timeout" from="BuffExpireTimer" to="." method="_on_buff_expire_timer_timeout"]
 [connection signal="timeout" from="ShotgunTimer" to="." method="_on_shotgun_timer_timeout"]
+[connection signal="timeout" from="SleightOfHandTimer" to="." method="_on_sleight_of_hand_timer_timeout"]

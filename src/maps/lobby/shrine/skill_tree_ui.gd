@@ -39,7 +39,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func open():
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
-	GameManager.player.is_in_inventory = true
+	GameManager.player.is_in_menu = true
 	update_description("", "")
 	get_first_item_for_focus()
 	skill_point_label.text = "Points left: {0}".format([GameManager.player_skill_points])
@@ -50,7 +50,7 @@ func open():
 
 func close():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	GameManager.player.is_in_inventory = false
+	GameManager.player.is_in_menu = false
 	visible = false
 
 

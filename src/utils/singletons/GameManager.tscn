@@ -49,10 +49,7 @@
 [node name="GameManager" type="Node"]
 process_mode = 3
 script = ExtResource("1_rn441")
-starting_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("3_23s84")])
 starting_shop_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2"), ExtResource("10_ol55s"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg"), ExtResource("14_wr4dx")])
 barrel_database = Array[Resource]([ExtResource("6_pgp6q"), ExtResource("3_23s84"), ExtResource("8_fntlm"), ExtResource("7_upwdb"), ExtResource("10_83sf6"), ExtResource("9_juqu2"), ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("11_pbpm2"), ExtResource("12_b3bxi"), ExtResource("13_iyynv"), ExtResource("14_lbyk3"), ExtResource("10_ol55s"), ExtResource("16_lo202"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg"), ExtResource("14_wr4dx")])
 debug_barrel_database = Array[Resource]([ExtResource("16_lo202"), ExtResource("16_8l4bp"), ExtResource("17_rr7ua"), ExtResource("18_i21jw"), ExtResource("19_c2uqn"), ExtResource("21_8s4w2"), ExtResource("22_hxj0e"), ExtResource("23_oeafg"), ExtResource("24_43pof"), ExtResource("25_ub3jn"), ExtResource("26_5pvpg"), ExtResource("27_r43al"), ExtResource("28_31w6r"), ExtResource("29_e1hqf"), ExtResource("30_6palp"), ExtResource("31_tfgny"), ExtResource("32_if6fu"), ExtResource("33_t2wjc"), ExtResource("34_k0sis"), ExtResource("35_iofua"), ExtResource("36_8equh"), ExtResource("37_2c257"), ExtResource("38_f3sy1"), ExtResource("39_i56c5"), ExtResource("40_3cilc")])
-initial_reroll_cost = 100
-reroll_cost_mult = 1.2
 sfx_screenshot = ExtResource("45_64xou")

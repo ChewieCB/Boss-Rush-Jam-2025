@@ -100,7 +100,6 @@ size_flags_horizontal = 10
 [node name="CurrencyUI" parent="Background/MarginContainer" instance=ExtResource("13_subkd")]
 layout_mode = 2
 size_flags_horizontal = 6
-is_static = true
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 1

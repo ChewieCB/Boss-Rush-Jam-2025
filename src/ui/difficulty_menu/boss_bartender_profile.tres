@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BossDifficultyProfile" load_steps=2 format=3 uid="uid://t8i2rvgy7p2i"]
+
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="1_tllfo"]
+
+[resource]
+script = ExtResource("1_tllfo")
+boss_id = 3
+boss_quote = "\"Every level up’s another shot of danger. But hey, the top shelf was never meant for cowards.\""
+ante_names = Array[String](["Fast Firing Shotgun", "Special Concoctions", "Burning Ground", "Premium Bullets", "Sleight of Hand"])
+boss_risk_reward_mult = 1.2

@@ -4,10 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://ducd2yl2ijqin" path="res://src/bosses/tutorial/minions/chipling_temp.png" id="2_3sgky"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/minions/chipling.gd" id="2_73vok"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_uvoqr"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="3_xx2l5"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_5dxlb"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_rs4ag"]
 [ext_resource type="PackedScene" uid="uid://dj6ifyci05l4y" path="res://src/bosses/chips/assets/particles/ChipDeathParticles.tscn" id="7_fv37m"]
-[ext_resource type="PackedScene" uid="uid://bj782mjdfn7v8" path="res://src/player/gun/vfx/explosion/ExplosionVFX3D.tscn" id="8_diuhq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cbvoj"]
 height = 1.4
@@ -153,16 +153,10 @@ script = ExtResource("2_73vok")
 spark_scene = null
 spawn_group = 1
 respawn_time = 2.0
-DESIRED_DISTANCE = 20.0
-desired_distance = null
-MOVE_SPEED = 6.0
+MOVE_SPEED = 4.0
 wave_amplitude = 6.0
 wave_frequency = 2.0
-time_elapsed = 0.0
 idle_radius = 1.5
-angle_speed = 1.0
-orbit_angle = 0.0
-orbit_radius = 40.0
 wander_waypoints = []
 max_wander_distance = 20.0
 max_waypoint_jitter_radius = 4.0
@@ -170,7 +164,7 @@ wander_delay_min = 0.3
 wander_delay_max = 0.7
 wander_radius = 30.0
 wander_timeout = 0.6
-explosion_particle_prefab = ExtResource("8_diuhq")
+explosion_particle_prefab = ExtResource("3_xx2l5")
 chip_spawn_chance = 0.0
 chip_spawn_dps_threshold = 1.0
 chip_spawn_mult_cap = 1
@@ -181,6 +175,8 @@ attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.6
 MAX_SPEED = 3.0
+DESIRED_DISTANCE = 20.0
+orbit_radius = 40.0
 
 [node name="Sprite3D" parent="." index="0"]
 transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0.00313074, 0.781227, 0)
@@ -199,7 +195,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_ed3lh")
 
 [node name="HealthComponent" parent="." index="4"]
-max_health = 30.0
+max_health = 5.0
 
 [node name="NavigationComponent" parent="." index="5"]
 current_speed = 4.0

@@ -24,16 +24,17 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
 @onready var barrel_1_label: Label3D = $SpriteParent/Barrel1Sprite/Label3D
-@onready var barrel_1_icon_sprite: Sprite3D = $SpriteParent/Barrel1Sprite/EffectIcon1Sprite
 @onready var barrel_2_sprite: Sprite3D = $SpriteParent/Barrel2Sprite
 @onready var barrel_2_label: Label3D = $SpriteParent/Barrel2Sprite/Label3D
-@onready var barrel_2_icon_sprite: Sprite3D = $SpriteParent/Barrel2Sprite/EffectIcon2Sprite
 @onready var barrel_3_sprite: Sprite3D = $SpriteParent/Barrel3Sprite
 @onready var barrel_3_label: Label3D = $SpriteParent/Barrel3Sprite/Label3D
-@onready var barrel_3_icon_sprite: Sprite3D = $SpriteParent/Barrel3Sprite/EffectIcon3Sprite
 @onready var barrel_sprites: Array[Sprite3D] = [barrel_1_sprite, barrel_2_sprite, barrel_3_sprite]
 @onready var barrel_labels: Array[Label3D] = [barrel_1_label, barrel_2_label, barrel_3_label]
-@onready var effect_icon_sprites: Array[Sprite3D] = [barrel_1_icon_sprite, barrel_2_icon_sprite, barrel_3_icon_sprite]
+@onready var barrel_icon_mesh_1: MeshInstance3D = $EffectIconsViewport/EffectIconsParent/Barrel1Icon
+@onready var barrel_icon_mesh_2: MeshInstance3D = $EffectIconsViewport/EffectIconsParent/Barrel2Icon
+@onready var barrel_icon_mesh_3: MeshInstance3D = $EffectIconsViewport/EffectIconsParent/Barrel3Icon
+@onready var barrel_icon_meshes: Array[MeshInstance3D] = [barrel_icon_mesh_1, barrel_icon_mesh_2, barrel_icon_mesh_3]
+@onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
 
 
 @onready var anim_tree: AnimationTree = $AnimationTree
@@ -227,7 +228,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 
 
 func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
-	var bullet_inst = bullet_prefab.instantiate()
+	var bullet_inst: BaseProjectile = bullet_prefab.instantiate()
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
 	get_tree().get_root().add_child(bullet_inst)
@@ -344,6 +345,8 @@ func _spin_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_start_spin()
 	barrel.start_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
+	# Spin the effect mesh UV
+	# TODO 
 	# If we don't have an effect equipped,
 	# travel straight to the spin anim without the decal start anim
 	state_machine.travel("spin_start")
@@ -362,48 +365,29 @@ func _stop_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	barrel.stop_spin()
 	# Update barrel icon
-	set_barrel_icon_animations(barrel_idx, barrel.get_active_effect().icon_id)
+	set_barrel_icon(barrel_idx, barrel.get_active_effect().icon_id)
 	barrel.get_active_effect().on_barrel_stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
-	# Pick barrel icon
-	# FIXME
-	#effect_icon_sprites[barrel_idx].texture = barrel.get_active_effect().icon
+	
 	SoundManager.stop_sound(TEMP_sfx_spin)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
 
 
-func set_barrel_icon_animations(barrel_idx: int, icon_id: int) -> void:
-	# Build a path to the icon sprites
-	var icon_sprites_path := "res://src/player/gun/assets/sprite/effect_icons/%s/barrel_%s/" % [icon_id, barrel_idx + 1]
-
-	# Read from an in-memory cache of sprites
-	var spin_start_sprites = GameManager.cached_icon_anim_sprites["barrel_%s" % [barrel_idx + 1]][str(icon_id)]["spin_start"]
-	var spin_end_sprites = GameManager.cached_icon_anim_sprites["barrel_%s" % [barrel_idx + 1]][str(icon_id)]["spin_end"]
-
-	# Update the spin_start and spin_end animations with the new textures
-	for anim_name in ["spin_start", "spin_end", "idle"]:
-		var anim: Animation = anim_player.get_animation("barrel_%s_%s" % [barrel_idx + 1, anim_name])
-		var sprite_arr: Array
-		var anim_frames: int
-		var effect_texture_key: int
-		match anim_name:
-			"spin_start":
-				sprite_arr = spin_start_sprites
-				anim_frames = 10
-				effect_texture_key = 1
-			"spin_end":
-				sprite_arr = spin_end_sprites
-				anim_frames = 11
-				effect_texture_key = 1
-			"idle":
-				sprite_arr = [spin_end_sprites[-1]]
-				anim_frames = 1
-				effect_texture_key = 1
-
-	# Get the effect sprite3d texture track and iterate over the keyframes to update them
-		for i in range(anim_frames):
-			anim.track_set_key_value(effect_texture_key, i, sprite_arr[i])
+func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
+	var barrel_mesh: MeshInstance3D = barrel_icon_meshes[barrel_idx]
+	
+	var mat: StandardMaterial3D = barrel_mesh.get_surface_override_material(0)
+	if mat == null:
+		mat = default_barrel_icon_mat
+	var new_mat: StandardMaterial3D = mat.duplicate()
+	
+	var icon_sprite_path := "res://assets/sprite/effect_icons/%s.png" % [icon_id]
+	var icon_texture: CompressedTexture2D = load(icon_sprite_path)
+	
+	new_mat.albedo_color = Color.WHITE
+	new_mat.albedo_texture = icon_texture
+	barrel_mesh.set_surface_override_material(0, new_mat)
 
 
 func reload(already_spin_barrel = false):
@@ -471,13 +455,13 @@ func jam_the_gun(duration: float = 1.0):
 
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
-func regain_ammo(ammo: int) -> void:
+func regain_ammo(_ammo: int) -> void:
 	#show_gun_status("Regained +%s ammo" % [ammo], Color.CYAN)
 	SoundManager.play_sound(TEMP_regain_ammo, "Gun")
 
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
-func crit_damage(damage: int) -> void:
+func crit_damage(_damage: int) -> void:
 	#show_gun_status("CRIT! %s damage" % [damage], Color.RED)
 	SoundManager.play_sound(TEMP_crit, "Gun")
 
@@ -525,7 +509,7 @@ func install_barrel(barrel_prefab: PackedScene) -> void:
 	barrel_count = installed_barrels.size()
 
 	barrel_inst.get_active_effect().on_barrel_install()
-	set_barrel_icon_animations(barrel_idx, barrel_inst.get_active_effect().icon_id)
+	set_barrel_icon(barrel_idx, barrel_inst.get_active_effect().icon_id)
 	barrel_equipped.emit(barrel_inst, barrel_idx)
 
 	recheck_installed_barrels()
@@ -548,7 +532,9 @@ func remove_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_remove()
 	barrel_unequipped.emit(null, barrel_idx)
 	barrel.queue_free()
-
+	
+	barrel_icon_meshes[barrel_idx].set_surface_override_material(0, default_barrel_icon_mat)
+	
 	recheck_installed_barrels()
 
 	# Re-apply the effects of the currently equipped barrels
@@ -567,17 +553,20 @@ func recheck_installed_barrels():
 		barrel.owner_gun = self
 		installed_barrels.append(barrel)
 		_set_barrel_effect_label(barrel, barrel.get_active_effect())
-
+	
 	barrel_count = installed_barrels.size()
 
 	for i in barrel_sprites.size():
-		var barrel_label: Label3D = barrel_labels[i]
+		# var barrel_label: Label3D = barrel_labels[i]
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		if i < barrel_count:
 			state_machine.travel("idle")
+			barrel_icon_meshes[i].visible = true
 			#barrel_label.visible = true
 		else:
 			state_machine.travel("unequip")
+			barrel_icon_meshes[i].visible = false
+			barrel_icon_meshes[i].set_surface_override_material(0, default_barrel_icon_mat)
 			#barrel_label.visible = false
 
 

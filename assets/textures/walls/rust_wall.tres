@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://c80e30b133ni7"]
+
+[ext_resource type="Texture2D" uid="uid://ldiw116au05e" path="res://assets/textures/walls/rust_wall.png" id="1_pgvxl"]
+
+[resource]
+albedo_texture = ExtResource("1_pgvxl")
+metallic_specular = 0.0
+texture_filter = 2

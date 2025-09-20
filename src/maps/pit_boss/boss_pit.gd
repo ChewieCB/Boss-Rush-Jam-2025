@@ -23,7 +23,7 @@ var cover_spawn_points: Array = []
 
 
 func _ready() -> void:
-	await super()
+	await super ()
 	
 	pit_boss.health_component.health_changed.connect(_on_boss_health_changed)
 	pit_boss.health_component.died.connect(_on_boss_died.bind(pit_boss))
@@ -63,7 +63,7 @@ func _on_boss_health_changed(_new_health: float, _prev_health: float) -> void:
 			stance_timer.start(phase_2_stance_time + randf_range(-1.5, 1.5))
 
 
-func _on_boss_died(boss: BossCore = boss) -> void:
+func _on_boss_died(_boss: BossCore = boss) -> void:
 	dead_boss_count += 1
 	
 	if dead_boss_count == 2:
@@ -81,15 +81,16 @@ func _on_boss_died(boss: BossCore = boss) -> void:
 	remaining_boss.state_chart.send_event("start_phase_3")
 
 
-func _on_bosses_defeated(boss: BossCore) -> void:
-	if not boss.boss_id in GameManager.bosses_defeated:
-		GameManager.bosses_defeated.append(boss.boss_id)
+func _on_bosses_defeated(_boss: BossCore) -> void:
+	if not _boss.boss_id in GameManager.bosses_defeated:
+		GameManager.bosses_defeated.append(_boss.boss_id)
 		print(GameManager.bosses_defeated)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
 	
 	collect_all_chips()
 	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
+	reward_bet_money()
 	show_end_panel()
 
 

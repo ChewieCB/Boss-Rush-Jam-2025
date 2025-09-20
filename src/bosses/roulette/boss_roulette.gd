@@ -2,6 +2,13 @@ extends BossCore
 
 signal change_wheel_speed(speed: float)
 
+# Antes note:
+# Ante 1: House of cards - Increase shield /cards count from 2 to 8
+# Ante 2: Unstable Platforms - Enable drop segments attack
+# Ante 3 (new): Double Sweep - Add a second sweep bar
+# Ante 4 (new): Lasting Heat - Multiball now leave trails of flame
+# Ante 5 (new): Center of Attention: TODO
+
 @onready var debug_phase_label: Label3D = $DebugPhaseLabel
 @onready var held_ball_marker_pivot: Node3D = $HeldBallPivot
 @onready var hurtbox_mesh: MeshInstance3D = hurtbox.get_node("MeshInstance3D")
@@ -22,7 +29,7 @@ var previous_phase: String
 @export var shields_max_time: float = 12.0
 @onready var shields_spawn_timer: Timer = $ShieldsSpawnTimer
 @onready var shields_absorb_timer: Timer = $ShieldsAbsorbTimer
-@export var shield_count: int = 4
+@export var shield_count: int = 2
 @export var shield_distance: float = 6.0
 @export var shield_height: float = 3.3
 @export var shields_destroyed_threshold: int = 2
@@ -35,6 +42,7 @@ var shields_destroyed: int = 0
 
 # Barrier
 @export_group("Barrier Sweep")
+@export var barrier_damage: float = 20
 @export var barrier_targeting_delay: float = 2.0
 @export var barrier_sweep_time: float = 1.7
 @onready var barrier_targeting_timer = $BarrierTargetingTimer
@@ -45,6 +53,7 @@ var barrier_tween: Tween
 # Multiball
 @export_group("Multiball")
 @export var ball_scene: PackedScene
+@export var ball_damage: float = 15
 @export var balls_to_spawn_phase_1: int = 3
 @export var balls_to_spawn_phase_2: int = 6
 @export var balls_to_spawn_phase_3: int = 11
@@ -56,6 +65,7 @@ var active_balls: Array = []
 var passive_balls: Array = []
 var ball_spawn_positions: Array
 var available_spawns: Array
+var ball_flame_puddle_enabled = false
 # TODO - add ball spawn SFX
 # Shockwave
 @export_group("Shockwave")
@@ -68,12 +78,14 @@ var available_spawns: Array
 var shockwave_tween: Tween
 @export_subgroup("Center Pushback")
 @onready var pushback_area: Area3D = $PushbackArea
+@export var pushback_damage: float = 1
 @export var max_center_pushback_radius: float = 8.0
 @export_subgroup("SFX")
 @export var sfx_shockwave_amb: Array[AudioStream]
 @onready var shockwave_sfx_player: AudioStreamPlayer3D = $CentralStreamPlayer
 # Drop Segments
 @export_group("Drop Segments")
+var drop_segments_enabled = false # based on ante 2
 @export var drop_delay: float = 0.5
 @export var drop_time: float = 1.0
 @export var drop_return_delay: float = 3.0
@@ -86,7 +98,7 @@ var dropped_segments: Array
 
 
 func _ready() -> void:
-	super()
+	super ()
 	GRAVITY = 0.0
 	hurtbox.visible = false
 	
@@ -98,14 +110,25 @@ func _ready() -> void:
 	available_spawns = ball_spawn_positions.duplicate()
 	ball_kill_timer.wait_time = max_ball_lifetime
 
+	if GameManager.boss_ante >= 1:
+		shield_count = 8
+	if GameManager.boss_ante >= 2:
+		drop_segments_enabled = true
+	if GameManager.boss_ante >= 3:
+		pass # In show_barrier() function
+	if GameManager.boss_ante >= 4:
+		ball_flame_puddle_enabled = true
+	if GameManager.boss_ante >= 5:
+		pass
+
 
 func _physics_process(delta: float) -> void:
-	super(delta)
+	super (delta)
 	held_ball_marker_pivot.look_at(target.global_position)
 
 
 func activate() -> void:
-	super()
+	super ()
 	change_phase(current_phase)
 
 
@@ -174,12 +197,14 @@ func select_attack_phase_2() -> void:
 func select_attack_phase_3() -> void:
 	var _dist_to_target = self.global_position.distance_to(target.global_position)
 	var possible_phases = [
-		"start_drop_attack",
 		"start_ball_attack",
 	]
 	
 	if randf() < 0.25:
 		possible_phases.append("start_pushback_attack")
+
+	if drop_segments_enabled:
+		possible_phases.append("start_drop_attack")
 	
 	if previous_phase and possible_phases.size() > 1:
 		possible_phases.erase(previous_phase)
@@ -194,7 +219,6 @@ func select_attack_phase_3() -> void:
 	#for phase in possible_phases.duplicate():
 		#if phase != previous_phase:
 			#possible_phases.append(phase)
-	#
 	
 	var new_phase: String = possible_phases[randi_range(0, possible_phases.size() - 1)]
 	previous_phase = new_phase
@@ -273,6 +297,7 @@ func spawn_ball(
 	get_tree().get_root().add_child(new_ball)
 	new_ball = ball_prop_func.call(new_ball, _target)
 	new_ball.global_position = spawn.global_position
+	new_ball.init(ball_damage * GameManager.get_risk_dmg_mult())
 	new_ball.look_at(Vector3.ZERO)
 	new_ball.destroyed.connect(_on_ball_destroyed)
 	
@@ -317,6 +342,7 @@ func spawn_center_wave(
 	max_radius: float,
 	spawned_wave_time: float = wave_time,
 	spawned_wave_height: float = wave_height,
+	is_small: bool = false,
 	telegraph: bool = false,
 	callback: Callable = func(): pass
 ) -> void:
@@ -338,7 +364,10 @@ func spawn_center_wave(
 	get_tree().get_root().add_child(area_collider)
 	
 	area_collider.global_position = area_pos
-	area_collider.body_entered.connect(_on_wave_collision)
+	if is_small:
+		area_collider.body_entered.connect(_on_small_wave_collision)
+	else:
+		area_collider.body_entered.connect(_on_wave_collision)
 	area_collider.body_entered.connect(area_collider.queue_free)
 	
 	var debug_mesh_instance = MeshInstance3D.new()
@@ -388,8 +417,8 @@ func spawn_center_wave(
 	shockwave_tween.tween_callback(callback)
 
 
-func _pushback_effect(body: Node3D) -> void:
-	body.health_component.damage(wave_damage)
+func _pushback_effect(body: Node3D, damage: float) -> void:
+	body.health_component.damage(damage)
 	var pushback_vector = self.global_position.direction_to(body.global_position)
 	
 	body.velocity = Vector3.ZERO
@@ -442,7 +471,7 @@ func shake_segment(segment: MeshInstance3D, shake_count: int = 30, shake_amount:
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	#SoundManager.play_sound(TEMP_sfx_charge_impact)
 	if body == target:
-		target.health_component.damage(20)
+		target.health_component.damage(barrier_damage * GameManager.get_risk_dmg_mult())
 		hurtbox.set_deferred("monitoring", false)
 		await get_tree().create_timer(0.2).timeout
 		hurtbox.set_deferred("monitoring", true)
@@ -522,7 +551,7 @@ func _on_pushback_area_body_entered(body: Node3D) -> void:
 	if body is Player:
 		wave_damage /= 10.0
 		body.dash_disabled = true
-		spawn_center_wave(max_center_pushback_radius, 0.1, 58)
+		spawn_center_wave(max_center_pushback_radius, 0.1, 58, true)
 		wave_damage *= 10.0
 		await get_tree().create_timer(0.8).timeout
 		body.dash_disabled = false
@@ -537,7 +566,11 @@ func _on_movement_targeting_state_physics_processing(delta: float) -> void:
 
 func _on_wave_collision(body: Node3D) -> void:
 	if body is Player:
-		_pushback_effect(body)
+		_pushback_effect(body, wave_damage * GameManager.get_risk_dmg_mult())
+
+func _on_small_wave_collision(body: Node3D) -> void:
+	if body is Player:
+		_pushback_effect(body, pushback_damage * GameManager.get_risk_dmg_mult())
 
 
 func _on_attack_telegraph_state_entered() -> void:
@@ -647,9 +680,21 @@ func show_barrier() -> void:
 	hurtbox_mesh.position.x = 0
 	hurtbox_mesh.mesh.size.x = 0
 	hurtbox.visible = true
+	var new_pos_x = 17
+	var new_size_x = 35
+	if GameManager.boss_ante >= 3:
+		new_pos_x = 0
+		new_size_x = 70
+		var barrier_collision_shape: CollisionShape3D = get_node("Hurtbox/CollisionShape3D")
+		barrier_collision_shape.shape.size = Vector3(70, 2, 1)
+		barrier_collision_shape.position = Vector3(0, -0.5, 0)
+		var barrier_static_body_shape: CollisionShape3D = get_node("Hurtbox/StaticBody3D/CollisionShape3D")
+		barrier_static_body_shape.shape.size = Vector3(70, 2, 1)
+		barrier_static_body_shape.position = Vector3(0, -0.5, 0)
 	anim_player.play("roulette/attack")
-	barrier_tween.tween_property(hurtbox_mesh, "position:x", 17, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
-	barrier_tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", 35, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	# TODO: Change size and stuff here
+	barrier_tween.tween_property(hurtbox_mesh, "position:x", new_pos_x, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	barrier_tween.parallel().tween_property(hurtbox_mesh, "mesh:size:x", new_size_x, 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	barrier_tween.parallel().tween_property(barrier_sfx_player, "volume_db", linear_to_db(1.0), 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	
 	await barrier_tween.finished
@@ -792,7 +837,7 @@ func _on_phase_2_pushback_wave_spawn_wave_state_entered() -> void:
 	
 	var wave_attack_callback: Callable = func():
 		state_chart.send_event("finish_wave")
-	spawn_center_wave(max_wave_radius, wave_time, wave_height, true, wave_attack_callback)
+	spawn_center_wave(max_wave_radius, wave_time, wave_height, wave_damage, false, wave_attack_callback)
 
 func _on_phase_2_pushback_wave_recover_state_entered() -> void:
 	debug_state_label.text = "Shockwave | Recovering"
@@ -969,6 +1014,7 @@ func _on_phase_3_ball_projectile_launch_balls_state_entered() -> void:
 	for i in range(balls_to_attack_phase_3 - active_balls.size()):
 		var ball = spawn_ball()
 		ball.is_flaming = true
+		ball.leave_fire_puddle = ball_flame_puddle_enabled
 		ball = _set_ball_active_params(ball)
 		ball.central_force_magnitude = 9000.0
 		ball.homing_force_magnitude = 6500.0
