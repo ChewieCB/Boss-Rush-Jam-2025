@@ -270,6 +270,7 @@ func show_boss_special_dialog(content: String, duration: float):
 
 
 func load_new_save_data():
+	tutorial_completed = false
 	for data in starting_barrels:
 		if data in equipped_barrels:
 			continue
@@ -308,6 +309,7 @@ func reset_current_save_data():
 	chosen_slot_id = -1
 	start_record_timestamp = 0
 	total_playtime = 0
+	tutorial_completed = false
 	reset_difficulty_modifier()
 
 
