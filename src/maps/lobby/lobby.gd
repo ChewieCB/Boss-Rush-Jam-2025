@@ -116,10 +116,8 @@ func load_selected_level():
 func _on_door_transition_area_body_entered(body: Node3D) -> void:
 	if body is Player:
 		elevator_doors.open()
-		sfx_door_open.play()
 
 
 func _on_door_transition_area_body_exited(body: Node3D) -> void:
 	if body is Player:
 		elevator_doors.close()
-		sfx_door_close.play()

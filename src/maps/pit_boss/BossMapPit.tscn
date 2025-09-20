@@ -1,4 +1,4 @@
-[gd_scene load_steps=439 format=4 uid="uid://c2tfsc1tlxlpk"]
+[gd_scene load_steps=443 format=4 uid="uid://c2tfsc1tlxlpk"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_mky1f"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/boss_pit.gd" id="2_6oq1m"]
@@ -47,6 +47,10 @@
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="33_6f4v2"]
 [ext_resource type="PackedScene" uid="uid://dsipuwmnkxl5" path="res://src/env/lighting/ChandellierLight2.tscn" id="34_um28q"]
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="35_4vv5w"]
+[ext_resource type="AudioStream" uid="uid://cm318neelgc3w" path="res://src/bosses/pit/assets/sfx/Placeholder Gambling Arcade ambience shorter 1.mp3" id="48_n2kod"]
+[ext_resource type="AudioStream" uid="uid://dpjwcgxle5fsi" path="res://src/bosses/pit/assets/sfx/Placeholder Gambling Arcade ambience shorter 2.mp3" id="49_tv2p8"]
+[ext_resource type="AudioStream" uid="uid://chjwa0b2ebojp" path="res://src/bosses/pit/assets/sfx/Placeholder Gambling Arcade ambience shorter 3.mp3" id="50_r8qb3"]
+[ext_resource type="AudioStream" uid="uid://d2dupge042jnt" path="res://src/bosses/pit/assets/sfx/Placeholder Gambling Arcade ambience shorter 4.mp3" id="51_v0u31"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kn00t"]
 resource_local_to_scene = true
@@ -3065,5 +3069,25 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.0937
 is_open = true
 
 [node name="StanceTimer" type="Timer" parent="." index="7"]
+
+[node name="AmbiencePlayer1" type="AudioStreamPlayer3D" parent="." index="8"]
+transform = Transform3D(0.995186, 0, 0.0979998, 0, 1, 0, -0.0979998, 0, 0.995186, -24.7499, 4.87477, 0.333623)
+stream = ExtResource("48_n2kod")
+autoplay = true
+
+[node name="AmbiencePlayer2" type="AudioStreamPlayer3D" parent="." index="9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.41746, 13.8617)
+stream = ExtResource("49_tv2p8")
+autoplay = true
+
+[node name="AmbiencePlayer3" type="AudioStreamPlayer3D" parent="." index="10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.03, 6.26975, 0)
+stream = ExtResource("50_r8qb3")
+autoplay = true
+
+[node name="AmbiencePlayer4" type="AudioStreamPlayer3D" parent="." index="11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.22864, -13.9532)
+stream = ExtResource("51_v0u31")
+autoplay = true
 
 [connection signal="timeout" from="StanceTimer" to="." method="_on_stance_timer_timeout"]

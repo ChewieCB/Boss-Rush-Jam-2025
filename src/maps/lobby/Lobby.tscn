@@ -58,7 +58,7 @@
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="48_5x1qu"]
 [ext_resource type="Script" path="res://src/maps/lobby/target_dummy.gd" id="48_lw5gn"]
 [ext_resource type="PackedScene" uid="uid://bmy7qgg3imyvv" path="res://src/maps/lobby/vendor/VendingMachine.tscn" id="48_u7c7o"]
-[ext_resource type="Material" uid="uid://dnhblhjk8if2e" path="res://assets/textures/posters/shop_odds_board.tres" id="52_p4602"]
+[ext_resource type="Material" path="res://assets/textures/posters/shop_odds_board.tres" id="52_p4602"]
 [ext_resource type="AudioStream" uid="uid://cuge1lwxr3m82" path="res://src/maps/lobby/assets/Lift Door Open.mp3" id="56_4ys2i"]
 [ext_resource type="Material" uid="uid://b3b8msym3jmcl" path="res://assets/textures/metal_corrode_0.tres" id="56_ff6r2"]
 [ext_resource type="Material" uid="uid://cb5sx56lvbk2m" path="res://assets/textures/placeholder/texture_light_01.tres" id="57_n1jb8"]
