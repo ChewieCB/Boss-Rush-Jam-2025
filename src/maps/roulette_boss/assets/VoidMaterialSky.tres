@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dgmol1r8w5ni5"]
+
+[ext_resource type="Shader" path="res://src/maps/roulette_boss/void_shader_sky.gdshader" id="1_kdxa6"]
+[ext_resource type="Texture2D" uid="uid://blm66cqdis6a4" path="res://assets/textures/temp_void.png" id="2_cucco"]
+
+[resource]
+shader = ExtResource("1_kdxa6")
+shader_parameter/uv_scale = 12.0
+shader_parameter/warp_speed = 0.1
+shader_parameter/texture_albedo = ExtResource("2_cucco")

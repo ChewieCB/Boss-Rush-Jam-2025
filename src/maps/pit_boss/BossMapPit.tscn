@@ -20,7 +20,7 @@
 [ext_resource type="Material" uid="uid://jnnisx0gc2xt" path="res://assets/textures/doors/elevator_door_processed.tres" id="15_r2kbb"]
 [ext_resource type="Material" uid="uid://c42rborvicsq2" path="res://assets/textures/floor/wood_0.tres" id="16_mw25v"]
 [ext_resource type="Material" uid="uid://i1urvbtkthfg" path="res://assets/textures/floor/marble.tres" id="17_00k5w"]
-[ext_resource type="Material" uid="uid://boemicqsapjag" path="res://src/maps/roulette_boss/assets/VoidMaterial.tres" id="17_fw5l7"]
+[ext_resource type="Material" uid="uid://dgmol1r8w5ni5" path="res://src/maps/roulette_boss/assets/VoidMaterialSky.tres" id="17_exm2i"]
 [ext_resource type="Material" uid="uid://n34cnqh7s2w0" path="res://assets/textures/floor/carpet-red.tres" id="18_5ruwo"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="19_1sakl"]
 [ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="20_p0xh1"]
@@ -189,7 +189,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 156,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAEAATABQAFQAWABcAFQAXABgAGQAaABsAGQAbABwAHQAeAB8AHQAfACAAIQAiACMAIQAjACQAIQAkACUAJgAnACgAJgAoACkAKgArACwAKgAsAC0ALgAvADAALgAwADEAMgAzADQAMgA0ADUANgA3ADgANgA4ADkAOgA7ADwAOgA8AD0APgA/AEAAPgBAAEEAPgBBAEIAQwBEAEUAQwBFAEYARwBIAEkARwBJAEoASwBMAE0ASwBNAE4ASwBOAE8AUABRAFIAUABSAFMAVABVAFYAVABWAFcAWABZAFoAWABaAFsAXABdAF4AXABeAF8AYABhAGIAYABiAGMA"),
-"material": ExtResource("17_fw5l7"),
+"material": ExtResource("17_exm2i"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 100,

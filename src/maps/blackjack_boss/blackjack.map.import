@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://b2dlwfknbuph5"
+path="res://.godot/imported/blackjack.map-09130e63b562ad7ccc5d3d7ed237efaf.tres"
+
+[deps]
+
+source_file="res://src/maps/blackjack_boss/blackjack.map"
+dest_files=["res://.godot/imported/blackjack.map-09130e63b562ad7ccc5d3d7ed237efaf.tres"]
+
+[params]
+
