@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dxui67spyijhu"]
+[gd_scene load_steps=23 format=3 uid="uid://dxui67spyijhu"]
 
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="1_8p1b0"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="2_ne0sc"]
@@ -11,8 +11,12 @@
 [ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/gun-sideview.png" id="7_y2wx5"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="8_3luuh"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="11_72rqy"]
+[ext_resource type="Texture2D" uid="uid://rgiumjfjwf7y" path="res://assets/sprite/placeholder/circle-ring.png" id="11_amvm8"]
 [ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="12_0t0od"]
+[ext_resource type="Texture2D" uid="uid://cjiqf8i74px48" path="res://assets/sprite/effect_icons/Archetype/0_Railgun.png" id="12_qi5lx"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="13_6c083"]
+[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="13_dxwhv"]
+[ext_resource type="Texture2D" uid="uid://8xbqicp62xfx" path="res://src/player/barrel/resource/sprite/archetype.png" id="14_vysgx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yd8qc"]
 shader = ExtResource("1_8p1b0")
@@ -184,7 +188,6 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_cxwao")
 
 [node name="ModifyUI" type="Control" parent="MainRegion"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -241,19 +244,191 @@ layout_mode = 2
 [node name="BarrelItemUI3" parent="MainRegion/ModifyUI/LeftRegion/GunSideview/OtherBarrelContainer" instance=ExtResource("8_3luuh")]
 layout_mode = 2
 
-[node name="BarrelDescription" type="ColorRect" parent="MainRegion/ModifyUI/LeftRegion"]
+[node name="BarrelInfoRegion" type="Control" parent="MainRegion/ModifyUI/LeftRegion"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 32.0
-offset_top = -504.0
-offset_right = 944.0
+offset_top = -520.0
+offset_right = 928.0
 offset_bottom = -32.0
+grow_vertical = 0
+
+[node name="CircleRing" type="TextureRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion"]
+self_modulate = Color(1, 1, 1, 0.47)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 48.0
+offset_top = -188.0
+offset_right = 432.0
+offset_bottom = 196.0
+grow_vertical = 2
+texture = ExtResource("11_amvm8")
+expand_mode = 3
+
+[node name="RollEffectIcon" type="ColorRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 144.0
+offset_top = -24.0
+offset_right = -140.0
+offset_bottom = -308.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing/RollEffectIcon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_qi5lx")
+expand_mode = 1
+
+[node name="BorderNormal" type="NinePatchRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing/RollEffectIcon"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_dxwhv")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="RollEffectIcon2" type="ColorRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 272.0
+offset_right = -260.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing/RollEffectIcon2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_qi5lx")
+expand_mode = 1
+
+[node name="BorderNormal" type="NinePatchRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing/RollEffectIcon2"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_dxwhv")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="RollEffectIcon3" type="ColorRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 272.0
+offset_top = 272.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing/RollEffectIcon3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_qi5lx")
+expand_mode = 1
+
+[node name="BorderNormal" type="NinePatchRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing/RollEffectIcon3"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_dxwhv")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="BarrelIcon" type="ColorRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing/BarrelIcon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_vysgx")
+expand_mode = 1
+
+[node name="BorderNormal" type="NinePatchRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/CircleRing/BarrelIcon"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_dxwhv")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="PanelDescription" type="ColorRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 480.0
+offset_top = -408.0
+offset_right = 880.0
+offset_bottom = -88.0
 grow_vertical = 0
 color = Color(0, 0, 0, 1)
 
-[node name="Border" type="NinePatchRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription"]
+[node name="Border" type="NinePatchRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/PanelDescription"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -267,7 +442,7 @@ patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
-[node name="BarrelIcon" type="TextureRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription"]
+[node name="Icon" type="TextureRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/PanelDescription"]
 self_modulate = Color(1, 1, 1, 0.2)
 layout_mode = 1
 anchors_preset = 8
@@ -283,7 +458,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("7_6qc1x")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/PanelDescription"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -296,12 +471,12 @@ grow_horizontal = 2
 grow_vertical = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer"]
+[node name="VBoxContainer" type="MarginContainer" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/PanelDescription/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SummaryLabel" type="RichTextLabel" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/ModifyUI/LeftRegion/BarrelInfoRegion/PanelDescription/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 focus_mode = 2
 theme_override_fonts/normal_font = ExtResource("4_uag4j")
@@ -309,136 +484,17 @@ theme_override_fonts/bold_font = ExtResource("5_tqs3a")
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 26
 bbcode_enabled = true
-text = "[b]Fool Roller Barrel[/b]
-Short explanation: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio. Est pariatur velit vero facilis non perferendis odit eos. Nihil pariatur deleniti earum.
+text = "[b]Effect Name[/b]
 
-Possible roll:"
-fit_content = true
+Sed excepturi dolores similique asperiores ut.
 
-[node name="BarrelRollInfoItem" type="VBoxContainer" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Roll A"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NinePatchRect" type="NinePatchRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem/Label"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_ep68i")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="MarginContainer" type="MarginContainer" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem/MarginContainer"]
-layout_mode = 2
-focus_mode = 2
-theme_override_fonts/normal_font = ExtResource("4_uag4j")
-theme_override_fonts/bold_font = ExtResource("5_tqs3a")
-theme_override_font_sizes/normal_font_size = 22
-theme_override_font_sizes/bold_font_size = 24
-bbcode_enabled = true
-text = "[b]Roll A[/b]: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio."
-fit_content = true
-
-[node name="BarrelRollInfoItem2" type="VBoxContainer" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Roll B"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NinePatchRect" type="NinePatchRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2/Label"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_ep68i")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="MarginContainer" type="MarginContainer" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2/MarginContainer"]
-layout_mode = 2
-focus_mode = 2
-theme_override_fonts/normal_font = ExtResource("4_uag4j")
-theme_override_fonts/bold_font = ExtResource("5_tqs3a")
-theme_override_font_sizes/normal_font_size = 22
-theme_override_font_sizes/bold_font_size = 24
-bbcode_enabled = true
-text = "[b]Roll B[/b]: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio. Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint"
-fit_content = true
-
-[node name="BarrelRollInfoItem3" type="VBoxContainer" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Roll C"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NinePatchRect" type="NinePatchRect" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3/Label"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_ep68i")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="MarginContainer" type="MarginContainer" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/ModifyUI/LeftRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3/MarginContainer"]
-layout_mode = 2
-focus_mode = 2
-theme_override_fonts/normal_font = ExtResource("4_uag4j")
-theme_override_fonts/bold_font = ExtResource("5_tqs3a")
-theme_override_font_sizes/normal_font_size = 22
-theme_override_font_sizes/bold_font_size = 24
-bbcode_enabled = true
-text = "[b]Roll C[/b]: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio."
+[color=green]
++ positive
++ positive
+[/color][color=red]
+- negative
+-negative
+[/color]"
 fit_content = true
 
 [node name="RightRegion" type="Control" parent="MainRegion/ModifyUI"]
@@ -577,6 +633,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="ShopUI" type="Control" parent="MainRegion"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
