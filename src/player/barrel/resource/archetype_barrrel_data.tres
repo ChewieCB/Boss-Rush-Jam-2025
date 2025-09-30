@@ -17,6 +17,7 @@ SMG: High firerate and magazine. Low damage.
 Shotgun: High damage and multiple projectiles, but high spread.
 Railgun: Low magazine size and firerate, but high damage and high bullet velocity.
 [/ul]"
+barrel_info_summary = "Change the innate nature of the gun."
 barrel_image = ExtResource("1_1q24l")
 barrel_cost = 100
 barrel_prefab = ExtResource("2_6yxa3")

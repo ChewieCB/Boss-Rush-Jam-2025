@@ -39,7 +39,7 @@ func stop_spin():
 	is_spinning = false
 	#prevent_roll_same_effect()
 	chosen_id = get_less_used_effects()
-	# When we pick a new effect, move it to the front of the last used queue 
+	# When we pick a new effect, move it to the front of the last used queue
 	# so we can deprioritise it next spin
 	if chosen_id in last_chosen_queue:
 		last_chosen_queue.pop_at(last_chosen_queue.find(chosen_id))
@@ -99,5 +99,20 @@ func get_less_used_effects() -> int:
 					else:
 						effect_id = unused_effects.back()
 				#effect_id = unused_effects.pick_random()
-	
+
 	return effect_id
+
+
+func get_number_of_barrel_effect() -> int:
+	return effect_container.get_child_count()
+
+func get_barrel_effect_data_at(index: int) -> Dictionary:
+	var barrel_effect: BaseBarrelEffect = effect_container.get_child(index)
+	var res = {
+		"display_text_title": barrel_effect.display_text_title,
+		"display_text_tag": barrel_effect.display_text_tag,
+		"is_archetype": barrel_effect.is_archetype,
+		"positive_desc": barrel_effect.positive_desc,
+		"negative_desc": barrel_effect.negative_desc,
+	 }
+	return res

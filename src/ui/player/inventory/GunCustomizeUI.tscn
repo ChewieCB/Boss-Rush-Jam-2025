@@ -1,0 +1,806 @@
+[gd_scene load_steps=21 format=3 uid="uid://dxui67spyijhu"]
+
+[ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="1_o6gc7"]
+[ext_resource type="Texture2D" uid="uid://dj6ce7qdoeue" path="res://src/ui/player/inventory/inventory-background.png" id="2_jffbc"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="3_1ywl0"]
+[ext_resource type="Texture2D" uid="uid://diasxpp75hggq" path="res://src/ui/player/inventory/shop-background.png" id="4_rxrje"]
+[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="5_u0jpm"]
+[ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/gun-sideview.png" id="6_tkikf"]
+[ext_resource type="Script" path="res://src/ui/player/inventory/barrel_modify_ui.gd" id="6_yuo0o"]
+[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="7_78f5u"]
+[ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="9_wboqf"]
+[ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="12_u3ssy"]
+[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="13_36r5j"]
+[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="14_lj5v6"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="15_ici8l"]
+[ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="16_1lncy"]
+[ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="17_l7b4t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yd8qc"]
+shader = ExtResource("1_o6gc7")
+shader_parameter/scroll_speed = 0.02
+shader_parameter/angle_degrees = 45.0
+shader_parameter/repeat_x = 14.2
+shader_parameter/repeat_y = 8.0
+shader_parameter/row_offset = 0.65
+shader_parameter/texture_to_scroll = ExtResource("2_jffbc")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pve14"]
+shader = ExtResource("1_o6gc7")
+shader_parameter/scroll_speed = 0.02
+shader_parameter/angle_degrees = 135.0
+shader_parameter/repeat_x = 14.2
+shader_parameter/repeat_y = 8.0
+shader_parameter/row_offset = 0.65
+shader_parameter/texture_to_scroll = ExtResource("4_rxrje")
+
+[sub_resource type="Gradient" id="Gradient_gcfb7"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cxwao"]
+gradient = SubResource("Gradient_gcfb7")
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.504274, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ex4kc"]
+bg_color = Color(0.792969, 0.788848, 0.725959, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="GunCustomizeUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ModifyBG" type="TextureRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_yd8qc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_1ywl0")
+
+[node name="ShopBG" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_pve14")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_1ywl0")
+
+[node name="DarkenOverlay" type="TextureRect" parent="."]
+self_modulate = Color(0, 0, 0, 0.708)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_1ywl0")
+
+[node name="TitleRegion" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 128.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TitleRegion"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="ModifyTab" type="ColorRect" parent="TitleRegion/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.464844, 0.0511328, 0, 1)
+
+[node name="Button" type="Button" parent="TitleRegion/HBoxContainer/ModifyTab"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 60
+text = "Modify"
+
+[node name="Border" type="NinePatchRect" parent="TitleRegion/HBoxContainer/ModifyTab/Button"]
+visible = false
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_u0jpm")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="ShopTab" type="ColorRect" parent="TitleRegion/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.392157, 0.349384, 0.0134799, 1)
+
+[node name="Button" type="Button" parent="TitleRegion/HBoxContainer/ShopTab"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 60
+text = "* Shop *"
+
+[node name="Border" type="NinePatchRect" parent="TitleRegion/HBoxContainer/ShopTab/Button"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_u0jpm")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="MainRegion" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -952.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="FadeDarkBG" type="TextureRect" parent="MainRegion"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_cxwao")
+
+[node name="BarrelModifyUI" type="Control" parent="MainRegion"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_yuo0o")
+
+[node name="LeftRegion" type="Control" parent="MainRegion/BarrelModifyUI"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 960.0
+grow_vertical = 2
+
+[node name="GunSideview" type="TextureRect" parent="MainRegion/BarrelModifyUI/LeftRegion"]
+layout_mode = 0
+offset_left = 168.0
+offset_top = 8.0
+offset_right = 788.0
+offset_bottom = 228.0
+texture = ExtResource("6_tkikf")
+
+[node name="Line2D" type="Line2D" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+points = PackedVector2Array(208, 88, 144, 288)
+
+[node name="Line2D2" type="Line2D" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+position = Vector2(72, 0)
+points = PackedVector2Array(200, 88, 200, 288)
+
+[node name="Line2D3" type="Line2D" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+position = Vector2(168, 8)
+points = PackedVector2Array(192, 96, 208, 296)
+
+[node name="OtherBarrelContainer" type="HBoxContainer" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = 248.0
+offset_right = -124.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/OtherBarrelContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI2" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/OtherBarrelContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI3" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/OtherBarrelContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelInfoRegion" parent="MainRegion/BarrelModifyUI/LeftRegion" instance=ExtResource("9_wboqf")]
+layout_mode = 1
+offset_left = 32.0
+offset_top = -520.0
+offset_right = 928.0
+offset_bottom = -32.0
+
+[node name="RightRegion" type="Control" parent="MainRegion/BarrelModifyUI"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -960.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="InventoryBarrelSection" type="ScrollContainer" parent="MainRegion/BarrelModifyUI/RightRegion"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 64.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="ArchetypeLabel" type="Label" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "Archetype Barrels"
+horizontal_alignment = 1
+
+[node name="ArchetypeContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 7
+
+[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI2" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI3" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI4" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI5" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI6" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="NormalLabel" type="Label" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "Normal Barrels"
+horizontal_alignment = 1
+
+[node name="NormalContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 7
+
+[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI2" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI3" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI4" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI5" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI6" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI7" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI8" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI9" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI10" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI11" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI12" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI13" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelShopUI" type="Control" parent="MainRegion"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftRegion" type="Control" parent="MainRegion/BarrelShopUI"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 960.0
+grow_vertical = 2
+
+[node name="InventoryBarrelSection" type="ScrollContainer" parent="MainRegion/BarrelShopUI/LeftRegion"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 48.0
+offset_right = -24.0
+offset_bottom = -136.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="ArchetypeLabel" type="Label" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "Archetype Barrels"
+horizontal_alignment = 1
+
+[node name="ArchetypeContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 7
+
+[node name="BarrelItemUI" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI2" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI3" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI4" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI5" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI6" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="NormalLabel" type="Label" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "Normal Barrels"
+horizontal_alignment = 1
+
+[node name="NormalContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 7
+
+[node name="BarrelItemUI" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI2" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI3" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI4" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI5" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI6" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI7" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI8" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI9" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI10" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI11" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI12" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="BarrelItemUI13" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
+
+[node name="CurrencyUI" parent="MainRegion/BarrelShopUI/LeftRegion" instance=ExtResource("15_ici8l")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -88.0
+offset_right = 105.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 6
+
+[node name="RightRegion" type="Control" parent="MainRegion/BarrelShopUI"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -960.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VendorAvatar" type="ColorRect" parent="MainRegion/BarrelShopUI/RightRegion"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 56.0
+offset_right = 848.0
+offset_bottom = 296.0
+color = Color(0, 0, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 733.0
+offset_bottom = 224.0
+texture = ExtResource("16_1lncy")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar"]
+layout_mode = 0
+offset_left = 208.0
+offset_top = -80.0
+offset_right = 536.0
+offset_bottom = 248.0
+texture = ExtResource("17_l7b4t")
+expand_mode = 3
+
+[node name="Chatbox" type="Panel" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 256.0
+offset_right = 736.0
+offset_bottom = 360.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ex4kc")
+
+[node name="ColorRect" type="ColorRect" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar/Chatbox"]
+layout_mode = 0
+offset_left = 424.0
+offset_top = -24.0
+offset_right = 464.0
+offset_bottom = 16.0
+rotation = 0.785397
+color = Color(0.792157, 0.788235, 0.72549, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/BarrelShopUI/RightRegion/VendorAvatar/Chatbox"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 704.0
+offset_bottom = 96.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 26
+theme_override_font_sizes/bold_font_size = 30
+text = "Welcome to my store !"
+
+[node name="BarrelDescription" type="ColorRect" parent="MainRegion/BarrelShopUI/RightRegion"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -504.0
+offset_right = 928.0
+offset_bottom = -32.0
+grow_vertical = 0
+color = Color(0, 0, 0, 1)
+
+[node name="Border" type="NinePatchRect" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_u0jpm")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="BarrelIcon" type="TextureRect" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription"]
+self_modulate = Color(1, 1, 1, 0.2)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -160.0
+offset_right = 160.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_u3ssy")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SummaryLabel" type="RichTextLabel" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+focus_mode = 2
+theme_override_fonts/normal_font = ExtResource("13_36r5j")
+theme_override_fonts/bold_font = ExtResource("14_lj5v6")
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "[b]Fool Roller Barrel[/b]
+Short explanation: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio. Est pariatur velit vero facilis non perferendis odit eos. Nihil pariatur deleniti earum.
+
+Possible roll:"
+fit_content = true
+
+[node name="BarrelRollInfoItem" type="VBoxContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Roll A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem/Label"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_u0jpm")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem/MarginContainer"]
+layout_mode = 2
+focus_mode = 2
+theme_override_fonts/normal_font = ExtResource("13_36r5j")
+theme_override_fonts/bold_font = ExtResource("14_lj5v6")
+theme_override_font_sizes/normal_font_size = 22
+theme_override_font_sizes/bold_font_size = 24
+bbcode_enabled = true
+text = "[b]Roll A[/b]: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio."
+fit_content = true
+
+[node name="BarrelRollInfoItem2" type="VBoxContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Roll B"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2/Label"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_u0jpm")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2/MarginContainer"]
+layout_mode = 2
+focus_mode = 2
+theme_override_fonts/normal_font = ExtResource("13_36r5j")
+theme_override_fonts/bold_font = ExtResource("14_lj5v6")
+theme_override_font_sizes/normal_font_size = 22
+theme_override_font_sizes/bold_font_size = 24
+bbcode_enabled = true
+text = "[b]Roll B[/b]: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio. Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint"
+fit_content = true
+
+[node name="BarrelRollInfoItem3" type="VBoxContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Roll C"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3/Label"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_u0jpm")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3/MarginContainer"]
+layout_mode = 2
+focus_mode = 2
+theme_override_fonts/normal_font = ExtResource("13_36r5j")
+theme_override_fonts/bold_font = ExtResource("14_lj5v6")
+theme_override_font_sizes/normal_font_size = 22
+theme_override_font_sizes/bold_font_size = 24
+bbcode_enabled = true
+text = "[b]Roll C[/b]: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio."
+fit_content = true
