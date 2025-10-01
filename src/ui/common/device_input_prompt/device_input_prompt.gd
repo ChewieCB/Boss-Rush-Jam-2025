@@ -6,6 +6,7 @@ enum DeviceType {
 	KEYBOARD_MOUSE,
 	XBOX,
 	SONY,
+	STEAMDECK,
 }
 
 ## Example: ui_action, ui_up, shoot, jump, reload
@@ -17,6 +18,7 @@ enum DeviceType {
 @export var force_non_kbm = false
 
 var kbm_input_icon_mapping = {
+	"device_icon": "keyboard",
 	"mouse left button": "mouse_left",
 	"mouse right button": "mouse_right",
 	"mouse middle button": "mouse_scroll",
@@ -37,6 +39,7 @@ var kbm_input_icon_mapping = {
 
 # use InputHelper's XBOX_BUTTON_LABELS
 var xbox_input_icon_mapping = {
+	"device_icon": "controller_xboxseries",
 	"move_generic": "xbox_stick_l",
 	"left stick up": "xbox_stick_l_up",
 	"left stick down": "xbox_stick_l_down",
@@ -67,6 +70,7 @@ var xbox_input_icon_mapping = {
 
 # use InputHelper's PLAYSTATION_3_4_BUTTON_LABELS
 var sony_input_icon_mapping = {
+	"device_icon": "controller_playstation5",
 	"move_generic": "playstation_stick_l",
 	"left stick up": "playstation_stick_l_up",
 	"left stick down": "playstation_stick_l_down",
@@ -95,6 +99,35 @@ var sony_input_icon_mapping = {
 	"ps button": "",
 }
 
+var steamdeck_input_icon_mapping = {
+	"device_icon": "controller_steamdeck",
+	"move_generic": "steamdeck_stick_l",
+	"left stick up": "steamdeck_stick_l_up",
+	"left stick down": "steamdeck_stick_l_down",
+	"left stick left": "steamdeck_stick_l_left",
+	"left stick right": "steamdeck_stick_l_right",
+	"left stick button": "steamdeck_stick_l_press",
+	"right stick up": "steamdeck_stick_r_up",
+	"right stick down": "steamdeck_stick_r_down",
+	"right stick left": "steamdeck_stick_r_left",
+	"right stick right": "steamdeck_stick_r_right",
+	"right stick button": "steamdeck_stick_r_press",
+	"a button": "steamdeck_button_a",
+	"b button": "steamdeck_button_b",
+	"x button": "steamdeck_button_x",
+	"y button": "steamdeck_button_y",
+	"up button": "steamdeck_dpad_up",
+	"down button": "steamdeck_dpad_down",
+	"left button": "steamdeck_dpad_left",
+	"right button": "steamdeck_dpad_right",
+	"l1 button": "steamdeck_button_l1",
+	"r1 button": "steamdeck_button_r1",
+	"left trigger": "steamdeck_button_l2",
+	"right trigger": "steamdeck_button_r2",
+	"view button": "steamdeck_button_view",
+	"options button": "steamdeck_button_options",
+}
+
 func _ready() -> void:
 	InputHelper.keyboard_input_changed.connect(func(_action, _input_event): update_texture())
 	InputHelper.joypad_input_changed.connect(func(_action, _input_event): update_texture())
@@ -118,9 +151,13 @@ func update_texture():
 		DeviceType.SONY:
 			loaded_texture = get_image_for_controller_input("playstation", assigned_action)
 			texture = loaded_texture
+		DeviceType.STEAMDECK:
+			loaded_texture = get_image_for_controller_input("steamdeck", assigned_action)
+			texture = loaded_texture
 		DeviceType.AUTO:
 			var guessed_device = InputHelper.device
-			if ["xbox", "playstation"].has(guessed_device):
+			print("Guessed device %s" % guessed_device)
+			if ["xbox", "playstation", "steamdeck"].has(guessed_device):
 				loaded_texture = get_image_for_controller_input(guessed_device, assigned_action)
 			else:
 				if force_non_kbm:
@@ -135,6 +172,8 @@ func get_image_for_keyboard_input(action: String):
 	var kbm_input_label: String
 	if action == "move_generic":
 		kbm_input_label = "keyboard_arrows"
+	elif action == "device_icon":
+		kbm_input_label = kbm_input_icon_mapping["device_icon"]
 	else:
 		var kbm_event = InputHelper.get_keyboard_input_for_action(action)
 		kbm_input_label = InputHelper.get_label_for_input(kbm_event).to_lower()
@@ -158,13 +197,16 @@ func get_image_for_controller_input(device: String, action: String):
 	# Decide what type of controller player is using
 	var controller_icon_mapping = {}
 	var icon_pathname = ""
-
+	print("IMAGE FOR CONTROLLER INPUT: %s - %s" % [device, action])
 	if device == "playstation":
 		controller_icon_mapping = sony_input_icon_mapping
 		icon_pathname = "res://assets/sprite/input/sony/{0}.png"
 	elif device == "xbox":
 		controller_icon_mapping = xbox_input_icon_mapping
 		icon_pathname = "res://assets/sprite/input/xbox/{0}.png"
+	elif device == "steamdeck":
+		controller_icon_mapping = steamdeck_input_icon_mapping
+		icon_pathname = "res://assets/sprite/input/steam_deck/{0}.png"
 	else:
 		# Forcing using text instead of icon
 		controller_icon_mapping = {}
@@ -172,6 +214,8 @@ func get_image_for_controller_input(device: String, action: String):
 	
 	if action == "move_generic":
 		controller_input_label = "move_generic"
+	elif action == "device_icon":
+		controller_input_label = "device_icon"
 
 	if controller_icon_mapping.has(controller_input_label):
 		controller_input_label = controller_icon_mapping[controller_input_label]

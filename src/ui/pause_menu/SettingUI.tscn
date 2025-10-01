@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://biqm56x6ewbmo"]
+[gd_scene load_steps=14 format=3 uid="uid://biqm56x6ewbmo"]
 
 [ext_resource type="Script" path="res://src/ui/pause_menu/setting_ui.gd" id="1_05qbb"]
 [ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://src/ui/common/keybind_button/KeybindButton.tscn" id="2_b71wb"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://db7w5onrhapvt" path="res://assets/sprite/game_icon/audioOn.png" id="6_fqt2w"]
 [ext_resource type="Texture2D" uid="uid://dqo7dxystt7l1" path="res://assets/sprite/game_icon/question.png" id="7_5c6c4"]
 [ext_resource type="Texture2D" uid="uid://ctoh8vq047sw7" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_back.png" id="9_akomy"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="10_vvjbc"]
+[ext_resource type="Texture2D" uid="uid://c4brubgvfwrmn" path="res://assets/sprite/input/keyboard_and_mouse/keyboard.png" id="11_pg8t6"]
 
 [node name="SettingUI" type="Control"]
 layout_mode = 3
@@ -119,7 +121,7 @@ anchor_bottom = 1.0
 offset_left = 32.0
 offset_top = 80.0
 offset_right = -32.0
-offset_bottom = -40.0
+offset_bottom = -109.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
@@ -130,13 +132,18 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="ParentSection" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="MouseSens" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+[node name="MouseSens" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -149,7 +156,7 @@ theme_override_font_sizes/font_size = 26
 text = "Aiming Sensitivity
 "
 
-[node name="MouseSenSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
+[node name="MouseSenSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -166,7 +173,7 @@ theme = ExtResource("4_fifb6")
 min_value = 1.0
 value = 15.0
 
-[node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
+[node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -181,11 +188,11 @@ grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
-[node name="ControllerAimAssistSens" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+[node name="ControllerAimAssistSens" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens"]
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -198,7 +205,7 @@ theme_override_font_sizes/font_size = 26
 text = "Controller 
 Aim Assist strength"
 
-[node name="AimAssistSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens"]
+[node name="AimAssistSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -214,7 +221,7 @@ grow_vertical = 2
 theme = ExtResource("4_fifb6")
 editable = false
 
-[node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens"]
+[node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -229,11 +236,11 @@ grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
-[node name="SetControllerBinding" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+[node name="SetControllerBinding" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding"]
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/SetControllerBinding"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -245,7 +252,7 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 26
 text = "Keybindings"
 
-[node name="EditKeybindButton" parent="TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding" instance=ExtResource("5_oipns")]
+[node name="EditKeybindButton" parent="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/SetControllerBinding" instance=ExtResource("5_oipns")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
 anchors_preset = 8
@@ -261,39 +268,57 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Edit keybindings"
 
-[node name="KeybindingSection" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer"]
+[node name="KeybindingSection" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/KeybindingSection"]
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Keyboard keybinding"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Control/ScrollContainer/KeybindingSection"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="KeybindingReturnButton" parent="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer" instance=ExtResource("5_oipns")]
+[node name="KeybindingReturnButton" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/HBoxContainer" instance=ExtResource("5_oipns")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 4
 text = "Return"
 
-[node name="KeybindDefaultButton" parent="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer" instance=ExtResource("5_oipns")]
+[node name="KeybindDefaultButton" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/HBoxContainer" instance=ExtResource("5_oipns")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 4
 text = "Reset to default"
 
-[node name="KeybindContainer" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer/KeybindingSection"]
+[node name="KeybindContainer" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection"]
 layout_mode = 2
+
+[node name="ControllerIconContainer" type="MarginContainer" parent="TabContainer/Control"]
+layout_mode = 2
+offset_left = 752.0
+offset_top = 688.0
+offset_right = 800.0
+offset_bottom = 736.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 10
+
+[node name="ControllerIcon" parent="TabContainer/Control/ControllerIconContainer" instance=ExtResource("10_vvjbc")]
+layout_mode = 2
+texture = ExtResource("11_pg8t6")
+expand_mode = 3
+stretch_mode = 5
+assigned_action = "device_icon"
 
 [node name="Graphic" type="Control" parent="TabContainer"]
 visible = false
@@ -1000,16 +1025,16 @@ text = "Back"
 [connection signal="mouse_entered" from="HBoxContainer/DEBUGOption" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="HBoxContainer/DEBUGOption" to="." method="_on_debug_option_pressed"]
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_tab_container_tab_changed"]
-[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
-[connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
-[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/AimAssistSlider" to="." method="play_button_hover_sfx"]
-[connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/AimAssistSlider" to="." method="_on_aim_assist_slider_value_changed"]
-[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding/EditKeybindButton" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding/EditKeybindButton" to="." method="_on_edit_keybind_button_pressed"]
-[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton" to="." method="_on_keybinding_return_button_pressed"]
-[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindDefaultButton" to="." method="play_button_hover_sfx"]
-[connection signal="pressed" from="TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindDefaultButton" to="." method="_on_keybind_default_button_pressed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/AimAssistSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/AimAssistSlider" to="." method="_on_aim_assist_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/SetControllerBinding/EditKeybindButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/SetControllerBinding/EditKeybindButton" to="." method="_on_edit_keybind_button_pressed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton" to="." method="_on_keybinding_return_button_pressed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/HBoxContainer/KeybindDefaultButton" to="." method="play_button_hover_sfx"]
+[connection signal="pressed" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/HBoxContainer/KeybindDefaultButton" to="." method="_on_keybind_default_button_pressed"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="_on_fov_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle" to="." method="play_button_hover_sfx"]

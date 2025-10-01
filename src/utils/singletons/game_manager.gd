@@ -141,6 +141,11 @@ var CHEAT_freecam: bool = true
 @export var sfx_screenshot: AudioStream
 
 
+#func _init() -> void:
+	#var steam_response: Dictionary = Steam.steamInitEx(3926630)
+	#print(steam_response)
+
+
 func _ready() -> void:
 	barrel_database.append_array(debug_barrel_database)
 	await get_tree().process_frame
