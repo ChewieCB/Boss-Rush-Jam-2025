@@ -37,6 +37,8 @@ func return_button_size():
 	var tween = self.create_tween()
 	tween.tween_property(self, "scale", Vector2(1, 1), 0.1)
 
+func play_button_hover_sfx():
+	SoundManager.play_button_hover_sfx()
 
 func _on_focus_exited() -> void:
 	border_focus.visible = false
@@ -44,6 +46,7 @@ func _on_focus_exited() -> void:
 
 
 func _on_focus_entered() -> void:
+	play_button_hover_sfx()
 	border_focus.visible = true
 	self_modulate = Color(1, 1, 1)
 	var content = "[center]{0}[/center]\n\n{1}\n".format([

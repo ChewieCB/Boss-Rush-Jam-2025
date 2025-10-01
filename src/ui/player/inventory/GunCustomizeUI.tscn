@@ -1,20 +1,31 @@
-[gd_scene load_steps=21 format=3 uid="uid://dxui67spyijhu"]
+[gd_scene load_steps=27 format=3 uid="uid://dxui67spyijhu"]
 
+[ext_resource type="Script" path="res://src/ui/player/inventory/gun_customize_ui.gd" id="1_g1lei"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="1_o6gc7"]
 [ext_resource type="Texture2D" uid="uid://dj6ce7qdoeue" path="res://src/ui/player/inventory/inventory-background.png" id="2_jffbc"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="3_1ywl0"]
+[ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="3_qq6pb"]
+[ext_resource type="AudioStream" uid="uid://bnt0hxmrnje7n" path="res://src/ui/common/assets/sfx/Open the shop new.mp3" id="4_ftv6l"]
 [ext_resource type="Texture2D" uid="uid://diasxpp75hggq" path="res://src/ui/player/inventory/shop-background.png" id="4_rxrje"]
+[ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="5_q6fhm"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="5_u0jpm"]
+[ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_i05nn"]
 [ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/gun-sideview.png" id="6_tkikf"]
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_modify_ui.gd" id="6_yuo0o"]
+[ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="7_1f1kf"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="7_78f5u"]
+[ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="8_b21fk"]
+[ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="9_mbb0v"]
 [ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="9_wboqf"]
-[ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="12_u3ssy"]
-[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="13_36r5j"]
-[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="14_lj5v6"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="15_ici8l"]
 [ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="16_1lncy"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="17_l7b4t"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bfj2n"]
+random_pitch = 1.36
+streams_count = 2
+stream_0/stream = ExtResource("4_ftv6l")
+stream_1/stream = ExtResource("5_q6fhm")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yd8qc"]
 shader = ExtResource("1_o6gc7")
@@ -56,9 +67,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_g1lei")
+shop_title = "Yuya's Barrels"
+barrel_item_ui_prefab = ExtResource("7_78f5u")
+shop_item_ui_prefab = ExtResource("3_qq6pb")
+sfx_open = SubResource("AudioStreamRandomizer_bfj2n")
+sfx_click = ExtResource("6_i05nn")
+sfx_purchase = ExtResource("7_1f1kf")
+sfx_too_expensive = ExtResource("8_b21fk")
+sfx_barrel_equip = ExtResource("9_mbb0v")
 
 [node name="ModifyBG" type="TextureRect" parent="."]
-visible = false
 material = SubResource("ShaderMaterial_yd8qc")
 layout_mode = 1
 anchors_preset = 15
@@ -69,6 +88,7 @@ grow_vertical = 2
 texture = ExtResource("3_1ywl0")
 
 [node name="ShopBG" type="TextureRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_pve14")
 layout_mode = 1
 anchors_preset = 15
@@ -110,7 +130,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0.464844, 0.0511328, 0, 1)
 
-[node name="Button" type="Button" parent="TitleRegion/HBoxContainer/ModifyTab"]
+[node name="ModifyTabButton" type="Button" parent="TitleRegion/HBoxContainer/ModifyTab"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -121,8 +141,7 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 60
 text = "Modify"
 
-[node name="Border" type="NinePatchRect" parent="TitleRegion/HBoxContainer/ModifyTab/Button"]
-visible = false
+[node name="Border" type="NinePatchRect" parent="TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -141,7 +160,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 color = Color(0.392157, 0.349384, 0.0134799, 1)
 
-[node name="Button" type="Button" parent="TitleRegion/HBoxContainer/ShopTab"]
+[node name="ShopTabButton" type="Button" parent="TitleRegion/HBoxContainer/ShopTab"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -150,9 +169,10 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 60
-text = "* Shop *"
+text = "Shop"
 
-[node name="Border" type="NinePatchRect" parent="TitleRegion/HBoxContainer/ShopTab/Button"]
+[node name="Border" type="NinePatchRect" parent="TitleRegion/HBoxContainer/ShopTab/ShopTabButton"]
+visible = false
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -605,202 +625,14 @@ theme_override_font_sizes/normal_font_size = 26
 theme_override_font_sizes/bold_font_size = 30
 text = "Welcome to my store !"
 
-[node name="BarrelDescription" type="ColorRect" parent="MainRegion/BarrelShopUI/RightRegion"]
+[node name="BarrelInfoRegion" parent="MainRegion/BarrelShopUI/RightRegion" instance=ExtResource("9_wboqf")]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = -504.0
+offset_left = 32.0
+offset_top = -520.0
 offset_right = 928.0
 offset_bottom = -32.0
-grow_vertical = 0
-color = Color(0, 0, 0, 1)
 
-[node name="Border" type="NinePatchRect" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_u0jpm")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="BarrelIcon" type="TextureRect" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription"]
-self_modulate = Color(1, 1, 1, 0.2)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -160.0
-offset_top = -160.0
-offset_right = 160.0
-offset_bottom = 160.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("12_u3ssy")
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = -16.0
-offset_bottom = -16.0
-grow_horizontal = 2
-grow_vertical = 2
-follow_focus = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="SummaryLabel" type="RichTextLabel" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-focus_mode = 2
-theme_override_fonts/normal_font = ExtResource("13_36r5j")
-theme_override_fonts/bold_font = ExtResource("14_lj5v6")
-theme_override_font_sizes/normal_font_size = 24
-theme_override_font_sizes/bold_font_size = 26
-bbcode_enabled = true
-text = "[b]Fool Roller Barrel[/b]
-Short explanation: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio. Est pariatur velit vero facilis non perferendis odit eos. Nihil pariatur deleniti earum.
-
-Possible roll:"
-fit_content = true
-
-[node name="BarrelRollInfoItem" type="VBoxContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Roll A"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NinePatchRect" type="NinePatchRect" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem/Label"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_u0jpm")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem/MarginContainer"]
-layout_mode = 2
-focus_mode = 2
-theme_override_fonts/normal_font = ExtResource("13_36r5j")
-theme_override_fonts/bold_font = ExtResource("14_lj5v6")
-theme_override_font_sizes/normal_font_size = 22
-theme_override_font_sizes/bold_font_size = 24
-bbcode_enabled = true
-text = "[b]Roll A[/b]: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio."
-fit_content = true
-
-[node name="BarrelRollInfoItem2" type="VBoxContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Roll B"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NinePatchRect" type="NinePatchRect" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2/Label"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_u0jpm")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem2/MarginContainer"]
-layout_mode = 2
-focus_mode = 2
-theme_override_fonts/normal_font = ExtResource("13_36r5j")
-theme_override_fonts/bold_font = ExtResource("14_lj5v6")
-theme_override_font_sizes/normal_font_size = 22
-theme_override_font_sizes/bold_font_size = 24
-bbcode_enabled = true
-text = "[b]Roll B[/b]: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio. Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint"
-fit_content = true
-
-[node name="BarrelRollInfoItem3" type="VBoxContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Roll C"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NinePatchRect" type="NinePatchRect" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3/Label"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_u0jpm")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MainRegion/BarrelShopUI/RightRegion/BarrelDescription/ScrollContainer/VBoxContainer/BarrelRollInfoItem3/MarginContainer"]
-layout_mode = 2
-focus_mode = 2
-theme_override_fonts/normal_font = ExtResource("13_36r5j")
-theme_override_fonts/bold_font = ExtResource("14_lj5v6")
-theme_override_font_sizes/normal_font_size = 22
-theme_override_font_sizes/bold_font_size = 24
-bbcode_enabled = true
-text = "[b]Roll C[/b]: Sed excepturi dolores similique asperiores ut. Ipsum incidunt minima aut eos unde sint. Fuga mollitia odit accusantium delectus distinctio."
-fit_content = true
+[connection signal="focus_entered" from="TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton" to="." method="_on_modify_tab_button_focus_entered"]
+[connection signal="pressed" from="TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton" to="." method="_on_modify_tab_button_pressed"]
+[connection signal="focus_entered" from="TitleRegion/HBoxContainer/ShopTab/ShopTabButton" to="." method="_on_shop_tab_button_focus_entered"]
+[connection signal="pressed" from="TitleRegion/HBoxContainer/ShopTab/ShopTabButton" to="." method="_on_shop_tab_button_pressed"]
