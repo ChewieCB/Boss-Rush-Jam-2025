@@ -33,6 +33,16 @@ func _ready() -> void:
 	modify_tab_btn.grab_focus()
 	modify_tab_btn.disabled = true
 
+	modify_tab_btn.mouse_entered.connect(_on_modify_tab_button_focus_entered)
+	modify_tab_btn.focus_entered.connect(_on_modify_tab_button_focus_entered)
+	modify_tab_btn.mouse_exited.connect(_on_modify_tab_button_focus_exited)
+	modify_tab_btn.focus_exited.connect(_on_modify_tab_button_focus_exited)
+
+	shop_tab_btn.mouse_entered.connect(_on_shop_tab_button_focus_entered)
+	shop_tab_btn.focus_entered.connect(_on_shop_tab_button_focus_entered)
+	shop_tab_btn.mouse_exited.connect(_on_shop_tab_button_focus_exited)
+	shop_tab_btn.focus_exited.connect(_on_shop_tab_button_focus_exited)
+
 func full_refresh_ui():
 	return
 	# barrel_desc.text = ""
@@ -148,12 +158,30 @@ func _on_modify_tab_button_focus_entered() -> void:
 	play_hover_sfx()
 	modify_tab_btn.text = "* Modify *"
 	# modify_tab_btn.add_theme_color_override("font_color", Color(0.9, 0.77, 0))
-	shop_tab_btn.text = "Shop"
 	# shop_tab_btn.add_theme_color_override("font_color", Color(0, 0, 0))
 
 func _on_shop_tab_button_focus_entered() -> void:
 	play_hover_sfx()
-	modify_tab_btn.text = "Modify"
 	# modify_tab_btn.add_theme_color_override("font_color", Color(0, 0, 0))
 	shop_tab_btn.text = "* Shop *"
 	# shop_tab_btn.add_theme_color_override("font_color", Color(0.9, 0.77, 0))
+
+func _on_modify_tab_button_focus_exited() -> void:
+	modify_tab_btn.text = "Modify"
+
+func _on_shop_tab_button_focus_exited() -> void:
+	shop_tab_btn.text = "Shop"
+
+
+func expand_button_size(tab_button: Control):
+	const SCALE_FACTOR = 1.1
+	pivot_offset = size / 2
+	if tab_button.disabled:
+		return
+	var tween = tab_button.create_tween()
+	tween.tween_property(tab_button, "scale", Vector2(SCALE_FACTOR, SCALE_FACTOR), 0.1)
+
+func return_button_size(tab_button: Control):
+	pivot_offset = size / 2
+	var tween = tab_button.create_tween()
+	tween.tween_property(tab_button, "scale", Vector2(1, 1), 0.1)
