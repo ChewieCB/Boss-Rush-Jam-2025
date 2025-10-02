@@ -11,10 +11,10 @@ signal setting_back_button_pressed
 
 @onready var tab_container: TabContainer = $TabContainer
 
-@onready var mouse_sen_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider
-@onready var mouse_sen_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/Value
-@onready var aim_assist_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/AimAssistSlider
-@onready var aim_assist_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/Value
+@onready var mouse_sen_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/MouseSenSlider
+@onready var mouse_sen_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/Value
+@onready var aim_assist_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/AimAssistSlider
+@onready var aim_assist_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/Value
 @onready var fov_slider: HSlider = $TabContainer/Graphic/VBoxContainer/FOV/FOVSlider
 @onready var fov_value: Label = $TabContainer/Graphic/VBoxContainer/FOV/Value
 @onready var camera_tilt_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle
@@ -44,13 +44,14 @@ signal setting_back_button_pressed
 @onready var ui_value: Label = $TabContainer/Audio/VBoxContainer/UI/Value
 
 @onready var tab_header_container: Container = $HBoxContainer
-@onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/KeybindingSection/KeybindContainer
+@onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/KeybindContainer
 
-@onready var normal_control_options_section: Control = $TabContainer/Control/ScrollContainer/VBoxContainer
-@onready var keybinding_control_options_section: Control = $TabContainer/Control/ScrollContainer/KeybindingSection
-@onready var edit_keybind_button: Button = $TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding/EditKeybindButton
-@onready var keybind_return_button: Button = $TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton
+@onready var normal_control_options_section: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection
+@onready var keybinding_control_options_section: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection
+@onready var edit_keybind_button: Button = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/SetControllerBinding/EditKeybindButton
+@onready var keybind_return_button: Button = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton
 @onready var keybind_timer: Timer = $KeybindTimer
+@onready var controller_icon: TextureRect = $TabContainer/Control/ControllerIconContainer/ControllerIcon
 
 @export var sfx_free_money: AudioStream
 @onready var timescale_slider: HSlider = $TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider
