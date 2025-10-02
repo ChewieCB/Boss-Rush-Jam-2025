@@ -3,6 +3,7 @@ class_name GunCustomizationUI
 
 signal ui_opened
 signal ui_closed
+signal reset_barrel_info
 
 @export var shop_title: String
 @export var barrel_item_ui_prefab: PackedScene
@@ -14,24 +15,37 @@ signal ui_closed
 @export var sfx_too_expensive: AudioStream
 @export var sfx_barrel_equip: AudioStream
 
+@onready var has_custom_inventory: bool = current_inventory.size() > 0
 @onready var modify_bg: Control = $ModifyBG
 @onready var modify_tab_btn: Button = $TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton
+@onready var barrel_modify_ui: Control = $MainRegion/BarrelModifyUI
+@onready var equip_barrel_container: HBoxContainer = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer
+@onready var inventory_archetype_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer
+@onready var inventory_normal_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer
+
 @onready var shop_bg: Control = $ShopBG
 @onready var shop_tab_btn: Button = $TitleRegion/HBoxContainer/ShopTab/ShopTabButton
+@onready var barrel_shop_ui: Control = $MainRegion/BarrelShopUI
+@onready var shop_archetype_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer
+@onready var shop_normal_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer
 
 var current_selected_item_ui = null
+var barrel_info_region: BarrelInfoRegion = null
 
 func _ready() -> void:
 	# warning_label.visible = false
 	# visible = false
-	# barrel_desc.text = ""
-	# GameManager.currency_changed.connect(full_refresh_ui.unbind(1))
-	# GameManager.refresh_shop_ui.connect(full_refresh_ui)
-	# shop_title_label.text = shop_title
+	GameManager.currency_changed.connect(full_refresh_ui.unbind(1))
+	GameManager.refresh_shop_ui.connect(full_refresh_ui)
 	modify_bg.visible = true
+	barrel_modify_ui.visible = true
 	shop_bg.visible = false
+	barrel_shop_ui.visible = false
 	modify_tab_btn.grab_focus()
 	modify_tab_btn.disabled = true
+
+	barrel_info_region = get_node("MainRegion/BarrelModifyUI/LeftRegion/BarrelInfoRegion")
+	barrel_info_region.reset_ui()
 
 	modify_tab_btn.mouse_entered.connect(_on_modify_tab_button_focus_entered)
 	modify_tab_btn.focus_entered.connect(_on_modify_tab_button_focus_entered)
@@ -44,52 +58,52 @@ func _ready() -> void:
 	shop_tab_btn.focus_exited.connect(_on_shop_tab_button_focus_exited)
 
 func full_refresh_ui():
-	return
-	# barrel_desc.text = ""
-
 	# # EQUIPPED BARRELS
-	# for child in archetype_barrel_container.get_children():
-	# 	child.queue_free()
-	# for child in equip_barrel_container.get_children():
-	# 	child.queue_free()
-	# for barrel_data in GameManager.equipped_barrels:
-	# 	var item_inst = barrel_item_ui_prefab.instantiate()
-	# 	if barrel_data.is_archetype_barrel:
-	# 		archetype_barrel_container.add_child(item_inst)
-	# 	else:
-	# 		equip_barrel_container.add_child(item_inst)
-	# 	item_inst.init(barrel_data, true, true)
-	# 	item_inst.select_item.connect(_on_item_ui_select)
-	# 	item_inst.interact_item.connect(_on_item_ui_interact)
-	# 	item_inst.show_warning.connect(show_warning)
-	# equip_title.text = "Equipped ({0}/{1})".format([len(GameManager.equipped_barrels), GameManager.player.current_gun.max_barrels])
+	for child in equip_barrel_container.get_children():
+		child.queue_free()
+	for barrel_data in GameManager.equipped_barrels:
+		var item_inst = barrel_item_ui_prefab.instantiate()
+		equip_barrel_container.add_child(item_inst)
+		item_inst.init(barrel_data, true, true)
+		item_inst.select_item.connect(_on_item_ui_select)
+		item_inst.interact_item.connect(_on_item_ui_interact)
+		item_inst.show_warning.connect(show_warning)
 
-	# # INVENTORY BARRELS
-	# for child in inventory_barrel_container.get_children():
-	# 	child.queue_free()
-	# for barrel_data in GameManager.inventory_barrels:
-	# 	var item_inst = barrel_item_ui_prefab.instantiate()
-	# 	inventory_barrel_container.add_child(item_inst)
-	# 	item_inst.init(barrel_data, false, true)
-	# 	item_inst.select_item.connect(_on_item_ui_select)
-	# 	item_inst.interact_item.connect(_on_item_ui_interact)
-	# 	item_inst.show_warning.connect(show_warning)
+	# INVENTORY BARRELS
+	for child in inventory_archetype_barrel_container.get_children():
+		child.queue_free()
+	for child in inventory_normal_barrel_container.get_children():
+		child.queue_free()
+	for barrel_data in GameManager.inventory_barrels:
+		var item_inst = barrel_item_ui_prefab.instantiate()
+		if barrel_data.is_archetype_barrel:
+			inventory_archetype_barrel_container.add_child(item_inst)
+		else:
+			inventory_normal_barrel_container.add_child(item_inst)
+		item_inst.init(barrel_data, false, true)
+		item_inst.select_item.connect(_on_item_ui_select)
+		item_inst.interact_item.connect(_on_item_ui_interact)
+		item_inst.show_warning.connect(show_warning)
 
 	# # SHOP BARRELS
-	# for child in shop_barrel_container.get_children():
-	# 	child.queue_free()
-	# if not has_custom_inventory:
-	# 	current_inventory = GameManager.shop_barrels
-	# for barrel_data in current_inventory:
-	# 	if barrel_data in GameManager.inventory_barrels:
-	# 		current_inventory.erase(barrel_data)
-
-	# 	var shop_item_inst = shop_item_ui_prefab.instantiate()
-	# 	shop_barrel_container.add_child(shop_item_inst)
-	# 	shop_item_inst.init(barrel_data)
-	# 	shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
-	# 	shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
-	# 	shop_item_inst.item_ui.show_warning.connect(show_warning)
+	for child in shop_archetype_barrel_container.get_children():
+		child.queue_free()
+	for child in shop_normal_barrel_container.get_children():
+		child.queue_free()
+	if not has_custom_inventory:
+		current_inventory = GameManager.shop_barrels
+	for barrel_data in current_inventory:
+		if barrel_data in GameManager.inventory_barrels:
+			current_inventory.erase(barrel_data)
+		var shop_item_inst = shop_item_ui_prefab.instantiate()
+		if barrel_data.is_archetype_barrel:
+			shop_archetype_barrel_container.add_child(shop_item_inst)
+		else:
+			shop_normal_barrel_container.add_child(shop_item_inst)
+		shop_item_inst.init(barrel_data)
+		shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
+		shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
+		shop_item_inst.item_ui.show_warning.connect(show_warning)
 
 func update_description(content: String) -> void:
 	return
@@ -133,22 +147,45 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 
 
 func _on_modify_tab_button_pressed() -> void:
+	SoundManager.play_ui_sound(sfx_click, "UI")
+	barrel_info_region = get_node("MainRegion/BarrelModifyUI/LeftRegion/BarrelInfoRegion")
+	barrel_info_region.reset_ui()
 	modify_bg.visible = true
 	modify_tab_btn.get_node("Border").visible = true
 	modify_tab_btn.disabled = true
 	shop_bg.visible = false
 	shop_tab_btn.get_node("Border").visible = false
 	shop_tab_btn.disabled = false
-	SoundManager.play_ui_sound(sfx_click, "UI")
+	barrel_modify_ui.modulate.a = 0
+	barrel_modify_ui.visible = true
+	var tween = self.create_tween()
+	tween.tween_property(barrel_modify_ui, "modulate:a", 1, 0.25)
+	var tween2 = self.create_tween()
+	tween2.tween_property(barrel_shop_ui, "modulate:a", 0, 0.25)
+	await tween2.finished
+	barrel_shop_ui.visible = false
+	modify_tab_btn.grab_focus()
 
 func _on_shop_tab_button_pressed() -> void:
+	SoundManager.play_ui_sound(sfx_click, "UI")
+	barrel_info_region = get_node("MainRegion/BarrelShopUI/RightRegion/BarrelInfoRegion")
+	barrel_info_region.reset_ui()
 	modify_bg.visible = false
 	modify_tab_btn.get_node("Border").visible = false
 	modify_tab_btn.disabled = false
 	shop_bg.visible = true
 	shop_tab_btn.get_node("Border").visible = true
 	shop_tab_btn.disabled = true
-	SoundManager.play_ui_sound(sfx_click, "UI")
+	barrel_shop_ui.modulate.a = 0
+	barrel_shop_ui.visible = true
+	var tween = self.create_tween()
+	tween.tween_property(barrel_modify_ui, "modulate:a", 0, 0.25)
+	var tween2 = self.create_tween()
+	tween2.tween_property(barrel_shop_ui, "modulate:a", 1, 0.25)
+	await tween.finished
+	barrel_modify_ui.visible = false
+	shop_tab_btn.grab_focus()
+
 
 func play_hover_sfx():
 	SoundManager.play_button_hover_sfx()
@@ -171,17 +208,3 @@ func _on_modify_tab_button_focus_exited() -> void:
 
 func _on_shop_tab_button_focus_exited() -> void:
 	shop_tab_btn.text = "Shop"
-
-
-func expand_button_size(tab_button: Control):
-	const SCALE_FACTOR = 1.1
-	pivot_offset = size / 2
-	if tab_button.disabled:
-		return
-	var tween = tab_button.create_tween()
-	tween.tween_property(tab_button, "scale", Vector2(SCALE_FACTOR, SCALE_FACTOR), 0.1)
-
-func return_button_size(tab_button: Control):
-	pivot_offset = size / 2
-	var tween = tab_button.create_tween()
-	tween.tween_property(tab_button, "scale", Vector2(1, 1), 0.1)

@@ -62,3 +62,9 @@ func get_circle_positions(count: int) -> Array[Vector2]:
 
 func set_description_content(content: String):
 	desc_label.text = content
+
+func reset_ui():
+	set_description_content("")
+	panel_bg_icon.texture = null
+	for child in circle_ring.get_children():
+		child.queue_free()
