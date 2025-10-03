@@ -18,6 +18,7 @@ display_text_desc = "-20% damage
 Bullets build up Burn effect"
 positive_desc = Array[String](["Applies burning status"])
 negative_desc = Array[String](["Reduced damage"])
+icon_id = 48
 
 [node name="AddElementalEffect" type="Node3D" parent="EffectContainer/FireInfusion"]
 script = ExtResource("3_7ikxm")

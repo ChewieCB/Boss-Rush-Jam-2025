@@ -18,6 +18,7 @@ display_text_desc = "-20% fire rate
 Bullets build up Poison effect"
 positive_desc = Array[String](["Applies poison status"])
 negative_desc = Array[String](["Slower firerate"])
+icon_id = 49
 
 [node name="AddElementalEffect" type="Node3D" parent="EffectContainer/PoisonInfusion"]
 script = ExtResource("3_g0q51")

@@ -53,7 +53,7 @@ func _run() -> void:
 			
 			# Create a corresponding resource for each debug barrel
 			var debug_effect_resource: BarrelDataResource = debug_barrel_resource_template.duplicate()
-			# TODO - properly assign this
+			# Find the correct barrel ID
 			var barrel_id_keys = BarrelDataResource.BarrelIdEnum.keys()
 			var barrel_id = barrel_id_keys.find("DEBUG_%s" % effect_name.to_snake_case().to_upper())
 			debug_effect_resource.barrel_id = barrel_id
