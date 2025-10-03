@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cdff14we6n781"]
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://b380kty1atnet"]
 
 [ext_resource type="Texture2D" uid="uid://d1iyc4n7o8the" path="res://assets/sprite/effect_icons/28.png" id="1_3wbvk"]
 [ext_resource type="PackedScene" uid="uid://bkevtvpvmyrdv" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelLongShot.tscn" id="2_k6i35"]
@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("6_l8xqh")
-barrel_id = 0
+barrel_id = 57
 barrel_name = "LongShot"
-barrel_desc = ""
+barrel_desc = "Oh, the separation!"
 barrel_image = ExtResource("1_3wbvk")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_k6i35")

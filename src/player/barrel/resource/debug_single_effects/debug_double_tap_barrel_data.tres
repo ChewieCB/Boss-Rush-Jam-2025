@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dp1bnqojlydju"]
+
+[ext_resource type="Texture2D" uid="uid://btxw85e46utue" path="res://assets/sprite/effect_icons/26.png" id="1_yg712"]
+[ext_resource type="PackedScene" uid="uid://g2sa3e5hybty" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelDoubleTap.tscn" id="2_m28aa"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_01ctv"]
+
+[resource]
+script = ExtResource("3_01ctv")
+barrel_id = 18
+barrel_name = "DoubleTap"
+barrel_desc = "Bang Bang!"
+barrel_image = ExtResource("1_yg712")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_m28aa")
+is_archetype_barrel = false

@@ -54,8 +54,11 @@ func _run() -> void:
 			# Create a corresponding resource for each debug barrel
 			var debug_effect_resource: BarrelDataResource = debug_barrel_resource_template.duplicate()
 			# TODO - properly assign this
-			debug_effect_resource.barrel_id = 0
+			var barrel_id_keys = BarrelDataResource.BarrelIdEnum.keys()
+			var barrel_id = barrel_id_keys.find("DEBUG_%s" % effect_name.to_snake_case().to_upper())
+			debug_effect_resource.barrel_id = barrel_id
 			debug_effect_resource.barrel_name = effect_name
+			debug_effect_resource.barrel_desc = new_effect.display_text_tag
 			# Assign the effect icon as the barrel image using the ID on the original barrel
 			debug_effect_resource.barrel_image = load("%s%s.png" % [effect_icon_dir, icon_id])
 			debug_effect_resource.barrel_cost = 0

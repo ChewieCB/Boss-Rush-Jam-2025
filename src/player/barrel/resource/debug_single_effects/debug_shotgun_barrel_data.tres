@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dwdxvchlhtbda"]
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cqwtsbcxqjm6y"]
 
 [ext_resource type="Texture2D" uid="uid://gl1bdts75eax" path="res://assets/sprite/effect_icons/1.png" id="1_v7tvf"]
 [ext_resource type="PackedScene" uid="uid://x2hrj1v7sutc" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelShotgun.tscn" id="2_0weyu"]
@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("10_ko6nf")
-barrel_id = 0
+barrel_id = 16
 barrel_name = "Shotgun"
-barrel_desc = ""
+barrel_desc = "Strong at close range!"
 barrel_image = ExtResource("1_v7tvf")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_0weyu")

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bwi6r6xu5s7cp"]
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dutn4nx5ruxjs"]
 
 [ext_resource type="Texture2D" uid="uid://b2batio3r8lhn" path="res://assets/sprite/effect_icons/12.png" id="1_wo1xf"]
 [ext_resource type="PackedScene" uid="uid://cgorgyl4a7fh3" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelScatterBeam.tscn" id="2_vvf7h"]
@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("9_4wbul")
-barrel_id = 0
+barrel_id = 68
 barrel_name = "ScatterBeam"
-barrel_desc = ""
+barrel_desc = "Closer...closer..."
 barrel_image = ExtResource("1_wo1xf")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_vvf7h")

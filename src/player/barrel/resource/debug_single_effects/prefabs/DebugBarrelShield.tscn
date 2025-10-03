@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://da5d50thigd3d"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_pjnrs"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/protective_barrier.gd" id="2_3qp3u"]
+[ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/misc/ShieldBarrier.tscn" id="3_8re0h"]
+
+[node name="DebugBarrelShield" type="Node3D"]
+script = ExtResource("1_pjnrs")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="Shield" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_3qp3u")
+shield_barrier_prefab = ExtResource("3_8re0h")
+display_text_title = "Protective Barrier"
+display_text_tag = "Tough up!"
+display_text_desc = "25% damage resistance"
+positive_desc = Array[String](["Increases damage resistance"])
+negative_desc = Array[String](["TODO: add drawback (slower speed?)"])
+icon_id = 43

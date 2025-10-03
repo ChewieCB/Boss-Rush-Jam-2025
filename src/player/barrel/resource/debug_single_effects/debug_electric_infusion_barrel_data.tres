@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dhkwh1rdcswp0"]
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dfxgr00ikk8e"]
 
 [ext_resource type="Texture2D" uid="uid://b7leq4ajnjvq4" path="res://assets/sprite/effect_icons/-1.png" id="1_hfjxq"]
 [ext_resource type="PackedScene" uid="uid://cyb54qbs2cw3w" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelElectricInfusion.tscn" id="2_y726k"]
@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("6_qpe74")
-barrel_id = 0
+barrel_id = 51
 barrel_name = "ElectricInfusion"
-barrel_desc = ""
+barrel_desc = "...and his music was..."
 barrel_image = ExtResource("1_hfjxq")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_y726k")

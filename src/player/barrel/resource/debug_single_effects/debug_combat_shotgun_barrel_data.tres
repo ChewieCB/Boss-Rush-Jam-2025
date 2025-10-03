@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://8y1w3pqi26i5"]
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bpq86e27n765d"]
 
 [ext_resource type="Texture2D" uid="uid://cnwquwnix0uqf" path="res://assets/sprite/effect_icons/13.png" id="1_4uxtb"]
 [ext_resource type="PackedScene" uid="uid://b6e41ail73rte" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelCombatShotgun.tscn" id="2_e40ud"]
@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("9_o5sfl")
-barrel_id = 0
+barrel_id = 64
 barrel_name = "CombatShotgun"
-barrel_desc = ""
+barrel_desc = "Fire faster and more ammo"
 barrel_image = ExtResource("1_4uxtb")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_e40ud")

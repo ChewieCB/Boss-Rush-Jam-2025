@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://2b1tmk1qjsdg"]
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://djvryr8xxi54c"]
 
 [ext_resource type="Texture2D" uid="uid://bsx60hmwor5bx" path="res://assets/sprite/effect_icons/19.png" id="1_2pktd"]
 [ext_resource type="PackedScene" uid="uid://dyocbfehxgyyf" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelBulletTime.tscn" id="2_7202q"]
@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("6_3thod")
-barrel_id = 0
+barrel_id = 23
 barrel_name = "BulletTime"
-barrel_desc = ""
+barrel_desc = "You are not Neo though"
 barrel_image = ExtResource("1_2pktd")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_7202q")

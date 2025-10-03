@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cclski1stp8l2"]
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://buknyi85lvmuk"]
 
 [ext_resource type="Texture2D" uid="uid://ccfs3efw1odv5" path="res://assets/sprite/effect_icons/38.png" id="1_4c43f"]
 [ext_resource type="PackedScene" uid="uid://dahoxrm1s8qfl" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelExecutionerRound.tscn" id="2_apecf"]
@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("4_tcv4n")
-barrel_id = 0
+barrel_id = 54
 barrel_name = "ExecutionerRound"
-barrel_desc = ""
+barrel_desc = "Finish them"
 barrel_image = ExtResource("1_4c43f")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_apecf")

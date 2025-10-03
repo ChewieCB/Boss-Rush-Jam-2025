@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dnstfmntpfmbp"]
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://j8gt2bdovf12"]
 
 [ext_resource type="Texture2D" uid="uid://yrtm2vf2sqt1" path="res://assets/sprite/effect_icons/40.png" id="1_3fs1y"]
 [ext_resource type="PackedScene" uid="uid://fk41qjiif05n" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelReactiveShot.tscn" id="2_6trcl"]
@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("4_hlh17")
-barrel_id = 0
+barrel_id = 58
 barrel_name = "ReactiveShot"
-barrel_desc = ""
+barrel_desc = "Payback time!"
 barrel_image = ExtResource("1_3fs1y")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_6trcl")
