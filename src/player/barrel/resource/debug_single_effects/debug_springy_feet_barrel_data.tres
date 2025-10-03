@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cnt8k4yvccrd3"]
+
+[ext_resource type="Texture2D" uid="uid://b2uofi2xveyd5" path="res://assets/sprite/effect_icons/32.png" id="1_c188x"]
+[ext_resource type="PackedScene" uid="uid://dkojc0pkhatlx" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSpringyFeet.tscn" id="2_6kxnx"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="7_ibgbg"]
+
+[resource]
+script = ExtResource("7_ibgbg")
+barrel_id = 0
+barrel_name = "SpringyFeet"
+barrel_desc = ""
+barrel_image = ExtResource("1_c188x")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_6kxnx")
+is_archetype_barrel = false

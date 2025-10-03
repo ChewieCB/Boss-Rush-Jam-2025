@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://ccrsh3eujjg0w"]
+
+[ext_resource type="Texture2D" uid="uid://bc0giw0lg0yc3" path="res://assets/sprite/effect_icons/46.png" id="1_ptmhi"]
+[ext_resource type="PackedScene" uid="uid://bgmgc08npv75k" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSplitBullet.tscn" id="2_0fmmo"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="4_i5h7u"]
+
+[resource]
+script = ExtResource("4_i5h7u")
+barrel_id = 0
+barrel_name = "SplitBullet"
+barrel_desc = ""
+barrel_image = ExtResource("1_ptmhi")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_0fmmo")
+is_archetype_barrel = false

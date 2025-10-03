@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cnlxlttbfjwaq"]
+
+[ext_resource type="Texture2D" uid="uid://d3eow5wgx63ds" path="res://assets/sprite/effect_icons/7.png" id="1_hdugn"]
+[ext_resource type="PackedScene" uid="uid://dnjsdkuwp2c3q" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelGelBlob.tscn" id="2_qddhp"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="20_h50qn"]
+
+[resource]
+script = ExtResource("20_h50qn")
+barrel_id = 0
+barrel_name = "GelBlob"
+barrel_desc = ""
+barrel_image = ExtResource("1_hdugn")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_qddhp")
+is_archetype_barrel = false

@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://ycywyugxki3g"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_weeip"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_xfdrs"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="3_7ikxm"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_cr6ny"]
+
+[node name="DebugBarrelFireInfusion" type="Node3D"]
+script = ExtResource("1_weeip")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="FireInfusion" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_xfdrs")
+display_text_title = "Fire Infusion"
+display_text_tag = "Toasty!"
+display_text_desc = "-20% damage
+Bullets build up Burn effect"
+positive_desc = Array[String](["Applies burning status"])
+negative_desc = Array[String](["Reduced damage"])
+
+[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/FireInfusion"]
+script = ExtResource("3_7ikxm")
+status_effect = 1
+change_color = true
+new_color = Color(1, 0.324769, 0, 1)
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/FireInfusion"]
+script = ExtResource("4_cr6ny")
+attribute = 1
+modify_value = -20.0
+is_perc = true

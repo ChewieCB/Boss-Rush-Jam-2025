@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dd5dcviwqrsvx"]
+
+[ext_resource type="Texture2D" uid="uid://b8imov5wl2ev0" path="res://assets/sprite/effect_icons/11.png" id="1_0hhuy"]
+[ext_resource type="PackedScene" uid="uid://b15qtxcyiu18k" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelRailcannon.tscn" id="2_0k5f4"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="11_r68rm"]
+
+[resource]
+script = ExtResource("11_r68rm")
+barrel_id = 0
+barrel_name = "Railcannon"
+barrel_desc = ""
+barrel_image = ExtResource("1_0hhuy")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_0k5f4")
+is_archetype_barrel = false

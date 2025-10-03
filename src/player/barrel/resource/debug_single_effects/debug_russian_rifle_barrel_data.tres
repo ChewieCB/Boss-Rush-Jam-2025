@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://b86odlldiw8a0"]
+
+[ext_resource type="Texture2D" uid="uid://cq6ap6aaq6d11" path="res://assets/sprite/effect_icons/5.png" id="1_rj13n"]
+[ext_resource type="PackedScene" uid="uid://1lip5c5nrt37" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelRussianRifle.tscn" id="2_ge7qn"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="17_1hwgk"]
+
+[resource]
+script = ExtResource("17_1hwgk")
+barrel_id = 0
+barrel_name = "RussianRifle"
+barrel_desc = ""
+barrel_image = ExtResource("1_rj13n")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_ge7qn")
+is_archetype_barrel = false

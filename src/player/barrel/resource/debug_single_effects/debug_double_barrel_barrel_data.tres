@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://ifpux0gnwc80"]
+
+[ext_resource type="Texture2D" uid="uid://b6acjp0vl4prc" path="res://assets/sprite/effect_icons/14.png" id="1_c1jwu"]
+[ext_resource type="PackedScene" uid="uid://cqqrswnh1b8j3" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelDoubleBarrel.tscn" id="2_0deug"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="9_pt556"]
+
+[resource]
+script = ExtResource("9_pt556")
+barrel_id = 0
+barrel_name = "DoubleBarrel"
+barrel_desc = ""
+barrel_image = ExtResource("1_c1jwu")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_0deug")
+is_archetype_barrel = false

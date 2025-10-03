@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://id4a2ja3i8lp"]
+
+[ext_resource type="Texture2D" uid="uid://ewscdfkwpiti" path="res://assets/sprite/effect_icons/24.png" id="1_lnqdk"]
+[ext_resource type="PackedScene" uid="uid://dm7d7t55k85ie" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelRampUpEffect.tscn" id="2_dkcl6"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="4_8ultn"]
+
+[resource]
+script = ExtResource("4_8ultn")
+barrel_id = 0
+barrel_name = "RampUpEffect"
+barrel_desc = ""
+barrel_image = ExtResource("1_lnqdk")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_dkcl6")
+is_archetype_barrel = false

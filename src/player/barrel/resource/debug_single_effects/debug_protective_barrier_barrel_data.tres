@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://c0vx4a4j8abep"]
+
+[ext_resource type="Texture2D" uid="uid://c0btfka5g280s" path="res://assets/sprite/effect_icons/43.png" id="1_i5g74"]
+[ext_resource type="PackedScene" uid="uid://xysflqme2824" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelProtectiveBarrier.tscn" id="2_s4j2v"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="5_18f2s"]
+
+[resource]
+script = ExtResource("5_18f2s")
+barrel_id = 0
+barrel_name = "ProtectiveBarrier"
+barrel_desc = ""
+barrel_image = ExtResource("1_i5g74")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_s4j2v")
+is_archetype_barrel = false

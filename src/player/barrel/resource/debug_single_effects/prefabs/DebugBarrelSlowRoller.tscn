@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://ck14uoalscxjn"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_onecj"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_2u1wd"]
+[ext_resource type="Script" path="res://src/player/barrel/slow_roller_effect.gd" id="3_c7ejn"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_byjo3"]
+
+[node name="DebugBarrelSlowRoller" type="Node3D"]
+script = ExtResource("1_onecj")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="SlowRoller" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_2u1wd")
+display_text_title = "Slow Roller"
+display_text_tag = "Oh, the anticipation!"
+display_text_desc = "More damage with bullet flight time
+-50% projectile speed"
+positive_desc = Array[String](["Damage increases the longer the round is in-flight"])
+negative_desc = Array[String](["Slower projectile speed"])
+icon_id = 29
+
+[node name="SlowRollerEffect" type="Node3D" parent="EffectContainer/SlowRoller"]
+script = ExtResource("3_c7ejn")
+
+[node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/SlowRoller"]
+script = ExtResource("4_byjo3")
+attribute = 3
+modify_value = -50.0
+is_perc = true

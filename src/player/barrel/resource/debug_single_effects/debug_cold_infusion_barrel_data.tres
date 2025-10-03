@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://1o1naut40b8p"]
+
+[ext_resource type="Texture2D" uid="uid://b7leq4ajnjvq4" path="res://assets/sprite/effect_icons/-1.png" id="1_oj3u5"]
+[ext_resource type="PackedScene" uid="uid://bplb8xjwa5f4u" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelColdInfusion.tscn" id="2_5rj03"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="6_o4t10"]
+
+[resource]
+script = ExtResource("6_o4t10")
+barrel_id = 0
+barrel_name = "ColdInfusion"
+barrel_desc = ""
+barrel_image = ExtResource("1_oj3u5")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_5rj03")
+is_archetype_barrel = false

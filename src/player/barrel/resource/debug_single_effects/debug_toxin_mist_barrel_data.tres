@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://c7fs2soe0lmdq"]
+
+[ext_resource type="Texture2D" uid="uid://y6am5jjtjdph" path="res://assets/sprite/effect_icons/18.png" id="1_h11ii"]
+[ext_resource type="PackedScene" uid="uid://dexbvc1itq6bm" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelToxinMist.tscn" id="2_xem2w"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="5_vdg7k"]
+
+[resource]
+script = ExtResource("5_vdg7k")
+barrel_id = 0
+barrel_name = "ToxinMist"
+barrel_desc = ""
+barrel_image = ExtResource("1_h11ii")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_xem2w")
+is_archetype_barrel = false

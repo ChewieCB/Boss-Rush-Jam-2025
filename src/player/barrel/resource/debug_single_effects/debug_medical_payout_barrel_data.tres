@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bydsteb86f77n"]
+
+[ext_resource type="Texture2D" uid="uid://cjh50nb7ga330" path="res://assets/sprite/effect_icons/20.png" id="1_wabjw"]
+[ext_resource type="PackedScene" uid="uid://bslsgcdkit14b" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelMedicalPayout.tscn" id="2_eqcma"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="4_na73y"]
+
+[resource]
+script = ExtResource("4_na73y")
+barrel_id = 0
+barrel_name = "MedicalPayout"
+barrel_desc = ""
+barrel_image = ExtResource("1_wabjw")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_eqcma")
+is_archetype_barrel = false

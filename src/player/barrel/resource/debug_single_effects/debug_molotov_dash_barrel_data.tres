@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://c66wt6naper5s"]
+
+[ext_resource type="Texture2D" uid="uid://3gfqrsv61kyv" path="res://assets/sprite/effect_icons/17.png" id="1_qvlms"]
+[ext_resource type="PackedScene" uid="uid://bq4povmsadkjk" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelMolotovDash.tscn" id="2_lfrnj"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="5_dm808"]
+
+[resource]
+script = ExtResource("5_dm808")
+barrel_id = 0
+barrel_name = "MolotovDash"
+barrel_desc = ""
+barrel_image = ExtResource("1_qvlms")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_lfrnj")
+is_archetype_barrel = false

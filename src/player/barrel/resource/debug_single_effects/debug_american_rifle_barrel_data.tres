@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dpydxyjvuptd2"]
+
+[ext_resource type="Texture2D" uid="uid://cgj034lfpdswt" path="res://assets/sprite/effect_icons/3.png" id="1_1pllf"]
+[ext_resource type="PackedScene" uid="uid://dojfg3ulpktla" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelAmericanRifle.tscn" id="2_sxubl"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="17_fhydl"]
+
+[resource]
+script = ExtResource("17_fhydl")
+barrel_id = 0
+barrel_name = "AmericanRifle"
+barrel_desc = ""
+barrel_image = ExtResource("1_1pllf")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_sxubl")
+is_archetype_barrel = false

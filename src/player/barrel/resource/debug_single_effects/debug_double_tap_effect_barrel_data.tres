@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://up6q6jo4fsds"]
+
+[ext_resource type="Texture2D" uid="uid://btxw85e46utue" path="res://assets/sprite/effect_icons/26.png" id="1_prtfo"]
+[ext_resource type="PackedScene" uid="uid://qpmhgg2bw366" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelDoubleTapEffect.tscn" id="2_trtxy"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="4_1qbft"]
+
+[resource]
+script = ExtResource("4_1qbft")
+barrel_id = 0
+barrel_name = "DoubleTapEffect"
+barrel_desc = ""
+barrel_image = ExtResource("1_prtfo")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_trtxy")
+is_archetype_barrel = false

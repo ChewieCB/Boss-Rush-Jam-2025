@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://dwkmd2wji0tn6"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_8vuh0"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_xii2f"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="3_44tp8"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="4_ajeot"]
+[ext_resource type="AudioStream" uid="uid://dgkubhibl6i66" path="res://src/player/gun/assets/sfx/shot/bubble/bubbles1.mp3" id="5_6g4q3"]
+[ext_resource type="AudioStream" uid="uid://c30vsy4ydh8yq" path="res://src/player/gun/assets/sfx/shot/bubble/bubbles2.mp3" id="6_k5l3c"]
+[ext_resource type="AudioStream" uid="uid://jywk1r8a4sgw" path="res://src/player/gun/assets/sfx/shot/bubble/bubbles3.mp3" id="7_xb7sx"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="8_buer7"]
+[ext_resource type="PackedScene" uid="uid://fsh2tr0s517i" path="res://src/player/gun/projectiles/GelBubble.tscn" id="9_1vdmq"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="10_qhy3l"]
+
+[node name="DebugBarrelGelBubble" type="Node3D"]
+script = ExtResource("1_8vuh0")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="GelBubble" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_xii2f")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_44tp8"), ExtResource("4_ajeot")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_6g4q3"), ExtResource("6_k5l3c"), ExtResource("7_xb7sx")])
+display_text_title = "Archetype: Gel bubbles"
+display_text_tag = "Pairs well with a nice elemental infusion!"
+positive_desc = Array[String](["Fires projectiles in a stream"])
+negative_desc = Array[String](["Base projectile deals no damage"])
+icon_id = 8
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("8_buer7")
+new_prefab = ExtResource("9_1vdmq")
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("10_qhy3l")
+attribute = 2
+new_value = 28.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("10_qhy3l")
+attribute = 4
+new_value = 2.0
+
+[node name="SetSpreadAngle" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("10_qhy3l")
+attribute = 7
+new_value = 10.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("10_qhy3l")
+attribute = 6
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("10_qhy3l")
+attribute = 5
+new_value = 10.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("10_qhy3l")
+attribute = 1
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("10_qhy3l")
+attribute = 11
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("10_qhy3l")
+attribute = 3
+new_value = 30.0
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/GelBubble"]
+script = ExtResource("10_qhy3l")
+attribute = 8
+new_value = 1.8

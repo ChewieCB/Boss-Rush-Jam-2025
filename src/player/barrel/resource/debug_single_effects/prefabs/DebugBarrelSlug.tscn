@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=3 uid="uid://c3gfkknfxvox6"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_kfjf7"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_8xcm6"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="3_qjr0i"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="4_8mx7r"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="5_nfg7w"]
+[ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="6_godol"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="7_i0lfu"]
+
+[node name="DebugBarrelSlug" type="Node3D"]
+script = ExtResource("1_kfjf7")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="Slug" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_8xcm6")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_qjr0i"), ExtResource("4_8mx7r")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_nfg7w"), ExtResource("6_godol")])
+display_text_title = "Archetype: Slug Shotgun"
+display_text_tag = "We have Railgun at home"
+display_text_desc = "Low spread and firerate. Very high damage but only one projectile."
+positive_desc = Array[String](["High damage", "Tigher spread"])
+negative_desc = Array[String](["Slower firerate", "Single shot magazine"])
+icon_id = 15
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/Slug"]
+script = ExtResource("7_i0lfu")
+attribute = 1
+new_value = 80.0
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/Slug"]
+script = ExtResource("7_i0lfu")
+attribute = 3
+new_value = 100.0
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Slug"]
+script = ExtResource("7_i0lfu")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/Slug"]
+script = ExtResource("7_i0lfu")
+attribute = 4
+new_value = 1.2
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/Slug"]
+script = ExtResource("7_i0lfu")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/Slug"]
+script = ExtResource("7_i0lfu")
+attribute = 7
+new_value = 1.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/Slug"]
+script = ExtResource("7_i0lfu")
+attribute = 5
+new_value = 6.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/Slug"]
+script = ExtResource("7_i0lfu")
+attribute = 11
+new_value = 0.15
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/Slug"]
+script = ExtResource("7_i0lfu")
+attribute = 8
+new_value = 2.3

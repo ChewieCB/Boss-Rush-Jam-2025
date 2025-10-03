@@ -1,0 +1,67 @@
+[gd_scene load_steps=16 format=3 uid="uid://1lip5c5nrt37"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_moc6s"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_7hufl"]
+[ext_resource type="AudioStream" uid="uid://cte0yqejjtu7j" path="res://src/player/gun/assets/sfx/reloading/smg/smg_reload_1.mp3" id="3_k03rh"]
+[ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="4_eox0f"]
+[ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="5_g7d0x"]
+[ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="6_ivtgi"]
+[ext_resource type="AudioStream" uid="uid://cf460otm0xrf3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 4.mp3" id="7_pnlge"]
+[ext_resource type="AudioStream" uid="uid://dpcvjx6i8qmt7" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 5.mp3" id="8_rjwwd"]
+[ext_resource type="AudioStream" uid="uid://dhilfnn0tk1u5" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 6.mp3" id="9_nvyiu"]
+[ext_resource type="AudioStream" uid="uid://dtyk4el1l2a1n" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 7.mp3" id="10_wkq75"]
+[ext_resource type="AudioStream" uid="uid://t5oqkgi1pmg3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 8.mp3" id="11_p4ayc"]
+[ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="12_g576r"]
+[ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="13_ib4ni"]
+[ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="14_hx36k"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="15_ys8t6"]
+
+[node name="DebugBarrelRussianRifle" type="Node3D"]
+script = ExtResource("1_moc6s")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="RussianRifle" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_7hufl")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_k03rh")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("4_eox0f"), ExtResource("5_g7d0x"), ExtResource("6_ivtgi"), ExtResource("7_pnlge"), ExtResource("8_rjwwd"), ExtResource("9_nvyiu"), ExtResource("10_wkq75"), ExtResource("11_p4ayc"), ExtResource("12_g576r"), ExtResource("13_ib4ni"), ExtResource("14_hx36k")])
+display_text_title = "Archetype: Russian Rifle"
+display_text_tag = "Hard to master"
+positive_desc = Array[String](["Higher damage per round"])
+negative_desc = Array[String](["Harder to control"])
+icon_id = 5
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/RussianRifle"]
+script = ExtResource("15_ys8t6")
+attribute = 4
+new_value = 10.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/RussianRifle"]
+script = ExtResource("15_ys8t6")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/RussianRifle"]
+script = ExtResource("15_ys8t6")
+attribute = 7
+new_value = 2.5
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/RussianRifle"]
+script = ExtResource("15_ys8t6")
+attribute = 5
+new_value = 30.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/RussianRifle"]
+script = ExtResource("15_ys8t6")
+attribute = 1
+new_value = 18.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/RussianRifle"]
+script = ExtResource("15_ys8t6")
+attribute = 11
+new_value = 0.1
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/RussianRifle"]
+script = ExtResource("15_ys8t6")
+attribute = 8
+new_value = 2.0

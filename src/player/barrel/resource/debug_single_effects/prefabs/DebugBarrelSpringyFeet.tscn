@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3 uid="uid://dkojc0pkhatlx"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_iiqbo"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_0goaf"]
+[ext_resource type="Script" path="res://src/player/barrel/springy_feet_effect.gd" id="3_t02bk"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_o6jhr"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="5_72wlh"]
+
+[node name="DebugBarrelSpringyFeet" type="Node3D"]
+script = ExtResource("1_iiqbo")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="SpringyFeet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_0goaf")
+display_text_title = "Spingy Feet"
+display_text_tag = "Jump and pump!"
+display_text_desc = "Can only shoot while you are midair
+Jump improved
+-50% recoil
+-50% spread"
+positive_desc = Array[String](["Improved jump", "Lower recoil", "Tighter spread"])
+negative_desc = Array[String](["Can only shoot in mid-air"])
+icon_id = 32
+
+[node name="SpringyFeetEffect" type="Node3D" parent="EffectContainer/SpringyFeet"]
+script = ExtResource("3_t02bk")
+
+[node name="ModifyRecoil" type="Node3D" parent="EffectContainer/SpringyFeet"]
+script = ExtResource("4_o6jhr")
+attribute = 11
+modify_value = -50.0
+is_perc = true
+
+[node name="ModifySpread" type="Node3D" parent="EffectContainer/SpringyFeet"]
+script = ExtResource("4_o6jhr")
+attribute = 7
+modify_value = -50.0
+is_perc = true
+
+[node name="IncreaseJumpHeight" type="Node3D" parent="EffectContainer/SpringyFeet"]
+script = ExtResource("5_72wlh")
+display_name = "Increased jump height"
+status_code = "springy_feet_increased_jump_height"
+modified_stat = 5
+modify_type = 1
+value = 50.0
+is_infinite_duration = true

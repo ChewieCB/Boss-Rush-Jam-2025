@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://dyocbfehxgyyf"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_421d1"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_tgns0"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="3_fn138"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_308t4"]
+
+[node name="DebugBarrelBulletTime" type="Node3D"]
+script = ExtResource("1_421d1")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="BulletTime" type="Node3D" parent="EffectContainer"]
+visible = false
+script = ExtResource("2_tgns0")
+display_text_title = "Bullet Time"
+display_text_tag = "You are not Neo though"
+display_text_desc = "-50% projectile speed
++25% damage"
+positive_desc = Array[String](["Increased damage"])
+negative_desc = Array[String](["Projectile speed decreased"])
+icon_id = 19
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/BulletTime"]
+script = ExtResource("3_fn138")
+attribute = 6
+
+[node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/BulletTime"]
+script = ExtResource("4_308t4")
+attribute = 3
+modify_value = -80.0
+is_perc = true
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/BulletTime"]
+script = ExtResource("4_308t4")
+attribute = 1
+modify_value = 25.0
+is_perc = true

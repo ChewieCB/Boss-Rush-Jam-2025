@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://sdiulgwsqt0w"]
+
+[ext_resource type="Texture2D" uid="uid://dklbwqbhdy3v7" path="res://assets/sprite/effect_icons/10.png" id="1_d6usj"]
+[ext_resource type="PackedScene" uid="uid://bf3y82onct355" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelGaussRifle.tscn" id="2_d6ljd"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="17_si87d"]
+
+[resource]
+script = ExtResource("17_si87d")
+barrel_id = 0
+barrel_name = "GaussRifle"
+barrel_desc = ""
+barrel_image = ExtResource("1_d6usj")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_d6ljd")
+is_archetype_barrel = false

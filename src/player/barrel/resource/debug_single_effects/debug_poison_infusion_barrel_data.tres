@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://clui42mt52d5g"]
+
+[ext_resource type="Texture2D" uid="uid://b7leq4ajnjvq4" path="res://assets/sprite/effect_icons/-1.png" id="1_4j433"]
+[ext_resource type="PackedScene" uid="uid://cwhextppcwvbu" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelPoisonInfusion.tscn" id="2_5mrie"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="6_uhy65"]
+
+[resource]
+script = ExtResource("6_uhy65")
+barrel_id = 0
+barrel_name = "PoisonInfusion"
+barrel_desc = ""
+barrel_image = ExtResource("1_4j433")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_5mrie")
+is_archetype_barrel = false

@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://csg7nkw4llmvo"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_ci7ud"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_tgxl2"]
+[ext_resource type="Script" path="res://src/player/barrel/flexible_knee_effect.gd" id="3_egdw6"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_wfl1q"]
+
+[node name="DebugBarrelFlexibleKnee" type="Node3D"]
+script = ExtResource("1_ci7ud")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="FlexibleKnee" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_tgxl2")
+display_text_title = "Flexible Knee"
+display_text_tag = "Sit down and blitz out!"
+display_text_desc = "Can only shoot while you are crouching
+Improved crouch
++50% magazine size
++50% firerate"
+positive_desc = Array[String](["Allows you to dodge by crouching", "Larger magazine size", "Faster firerate"])
+negative_desc = Array[String](["Can only shoot while crouched"])
+icon_id = 31
+
+[node name="FlexibleKnee" type="Node3D" parent="EffectContainer/FlexibleKnee"]
+script = ExtResource("3_egdw6")
+crouch_iframe_duration = 0.4
+
+[node name="ModifyFirerate" type="Node3D" parent="EffectContainer/FlexibleKnee"]
+script = ExtResource("4_wfl1q")
+attribute = 4
+modify_value = 50.0
+is_perc = true
+
+[node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/FlexibleKnee"]
+script = ExtResource("4_wfl1q")
+attribute = 5
+modify_value = 50.0
+is_perc = true

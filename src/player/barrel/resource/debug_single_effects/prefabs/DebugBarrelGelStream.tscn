@@ -1,0 +1,84 @@
+[gd_scene load_steps=19 format=3 uid="uid://ci6bihofc20mt"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_p84gm"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_0eu5r"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="3_3o1fp"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="4_sxep4"]
+[ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="5_amkl6"]
+[ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="6_cqa78"]
+[ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="7_eeeit"]
+[ext_resource type="AudioStream" uid="uid://cf460otm0xrf3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 4.mp3" id="8_3jt4n"]
+[ext_resource type="AudioStream" uid="uid://dpcvjx6i8qmt7" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 5.mp3" id="9_jabk6"]
+[ext_resource type="AudioStream" uid="uid://dhilfnn0tk1u5" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 6.mp3" id="10_8c6ev"]
+[ext_resource type="AudioStream" uid="uid://dtyk4el1l2a1n" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 7.mp3" id="11_om5cs"]
+[ext_resource type="AudioStream" uid="uid://t5oqkgi1pmg3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 8.mp3" id="12_0omid"]
+[ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="13_bvg5c"]
+[ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="14_cpn4a"]
+[ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="15_k2gud"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="16_h1hvy"]
+[ext_resource type="PackedScene" uid="uid://bpfgkk1ymtl18" path="res://src/player/gun/projectiles/GelProjectile.tscn" id="17_2s4at"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="18_tsuna"]
+
+[node name="DebugBarrelGelStream" type="Node3D"]
+script = ExtResource("1_p84gm")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="GelStream" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_0eu5r")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_3o1fp"), ExtResource("4_sxep4")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_amkl6"), ExtResource("6_cqa78"), ExtResource("7_eeeit"), ExtResource("8_3jt4n"), ExtResource("9_jabk6"), ExtResource("10_8c6ev"), ExtResource("11_om5cs"), ExtResource("12_0omid"), ExtResource("13_bvg5c"), ExtResource("14_cpn4a"), ExtResource("15_k2gud")])
+display_text_title = "Archetype: Gel stream"
+display_text_tag = "Very high firerate but low damage"
+positive_desc = Array[String](["Projectiles stick on contact", "Very high firerate", "Large magazine"])
+negative_desc = Array[String](["Low per-round damage"])
+icon_id = 9
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("16_h1hvy")
+new_prefab = ExtResource("17_2s4at")
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("18_tsuna")
+attribute = 2
+new_value = 2.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("18_tsuna")
+attribute = 4
+new_value = 20.0
+
+[node name="SetSpreadAngle" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("18_tsuna")
+attribute = 7
+new_value = 10.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("18_tsuna")
+attribute = 6
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("18_tsuna")
+attribute = 5
+new_value = 50.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("18_tsuna")
+attribute = 1
+new_value = 3.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("18_tsuna")
+attribute = 11
+new_value = 0.01
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("18_tsuna")
+attribute = 3
+new_value = 60.0
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/GelStream"]
+script = ExtResource("18_tsuna")
+attribute = 8
+new_value = 2.5

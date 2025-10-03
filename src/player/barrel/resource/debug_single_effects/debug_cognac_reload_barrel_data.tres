@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://b5sh8xwbrdcjy"]
+
+[ext_resource type="Texture2D" uid="uid://csfwngkb0rbkd" path="res://assets/sprite/effect_icons/16.png" id="1_4bua3"]
+[ext_resource type="PackedScene" uid="uid://b4b3psl64gv5r" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelCognacReload.tscn" id="2_hqtuh"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="7_lsqj8"]
+
+[resource]
+script = ExtResource("7_lsqj8")
+barrel_id = 0
+barrel_name = "CognacReload"
+barrel_desc = ""
+barrel_image = ExtResource("1_4bua3")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_hqtuh")
+is_archetype_barrel = false

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dl6lv71aggh2s"]
+
+[ext_resource type="Texture2D" uid="uid://bwjcbirccc4cv" path="res://assets/sprite/effect_icons/36.png" id="1_sqlbc"]
+[ext_resource type="PackedScene" uid="uid://6xrmneo6pby" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelFortitude.tscn" id="2_iro1g"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="5_w5t0f"]
+
+[resource]
+script = ExtResource("5_w5t0f")
+barrel_id = 0
+barrel_name = "Fortitude"
+barrel_desc = ""
+barrel_image = ExtResource("1_sqlbc")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_iro1g")
+is_archetype_barrel = false

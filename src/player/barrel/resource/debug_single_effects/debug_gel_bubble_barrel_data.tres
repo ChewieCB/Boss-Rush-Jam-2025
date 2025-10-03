@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://djgcf7xyg48mk"]
+
+[ext_resource type="Texture2D" uid="uid://ctvfaukhci0rw" path="res://assets/sprite/effect_icons/8.png" id="1_jh0of"]
+[ext_resource type="PackedScene" uid="uid://dwkmd2wji0tn6" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelGelBubble.tscn" id="2_mqast"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="12_ajjcn"]
+
+[resource]
+script = ExtResource("12_ajjcn")
+barrel_id = 0
+barrel_name = "GelBubble"
+barrel_desc = ""
+barrel_image = ExtResource("1_jh0of")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_mqast")
+is_archetype_barrel = false
