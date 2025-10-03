@@ -7,7 +7,7 @@ signal inventory_closed
 @export var shop_title: String
 @export var barrel_item_ui_prefab: PackedScene
 @export var shop_item_ui_prefab: PackedScene
-@export var current_inventory: Array[BarrelDataResource]
+@export var current_inventory: Array[Resource]
 @export var sfx_open: AudioStream
 @export var sfx_click: AudioStream
 @export var sfx_purchase: AudioStream

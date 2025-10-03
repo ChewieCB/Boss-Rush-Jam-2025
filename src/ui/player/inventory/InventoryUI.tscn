@@ -42,11 +42,13 @@ script = ExtResource("1_ipm0i")
 shop_title = "Yuya's Barrels"
 barrel_item_ui_prefab = ExtResource("2_ll5g3")
 shop_item_ui_prefab = ExtResource("4_2cim8")
+current_inventory = null
 sfx_open = SubResource("AudioStreamRandomizer_k1v6f")
 sfx_click = ExtResource("6_r2p6i")
 sfx_purchase = ExtResource("7_7ms08")
 sfx_too_expensive = ExtResource("8_26bi3")
 sfx_barrel_equip = ExtResource("9_1namh")
+has_custom_inventory = null
 
 [node name="BlurShader" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_kjq12")

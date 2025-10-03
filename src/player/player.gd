@@ -235,6 +235,9 @@ func _ready():
 	# CHEATS
 	if GameManager.CHEAT_godmode:
 		health_component.is_invincible = true
+	
+	debug_inventory_ui.has_custom_inventory = true
+	debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
 
 
 func _unhandled_input(event):
