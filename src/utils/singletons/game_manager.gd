@@ -137,6 +137,7 @@ var aim_assist_strength: float = 0.5
 var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
 var CHEAT_freecam: bool = true
+var CHEAT_always_inventory: bool = false
 
 @export var sfx_screenshot: AudioStream
 

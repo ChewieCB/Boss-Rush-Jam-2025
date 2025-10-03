@@ -11,7 +11,6 @@ script = ExtResource("1_421d1")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="BulletTime" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("2_tgns0")
 display_text_title = "Bullet Time"
 display_text_tag = "You are not Neo though"

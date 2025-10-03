@@ -53,7 +53,12 @@ signal setting_back_button_pressed
 @onready var keybind_timer: Timer = $KeybindTimer
 @onready var controller_icon: TextureRect = $TabContainer/Control/ControllerIconContainer/ControllerIcon
 
+# DEBUG
 @export var sfx_free_money: AudioStream
+@onready var god_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle
+@onready var always_inventory_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle
+@onready var boss_one_shot_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle
+@onready var freecam_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle
 @onready var timescale_slider: HSlider = $TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider
 @onready var timescale_value: Label = $TabContainer/DEBUG/VBoxContainer/Timescale/Value
 
@@ -390,7 +395,13 @@ func refresh_setting_value():
 	sfx_value.text = "{0}".format([GameManager.sfx_audio])
 	ui_slider.value = GameManager.ui_audio
 	ui_value.text = "{0}".format([GameManager.ui_audio])
-
+	
+	# DEBUG
+	god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_godmode)
+	always_inventory_toggle.set_pressed_no_signal(GameManager.CHEAT_always_inventory)
+	boss_one_shot_toggle.set_pressed_no_signal(GameManager.CHEAT_oneshot)
+	freecam_toggle.set_pressed_no_signal(GameManager.CHEAT_freecam)
+	
 	timescale_slider.value = Engine.time_scale
 	timescale_value.text = "{0}".format([Engine.time_scale])
 
@@ -482,3 +493,8 @@ func _on_timescale_slider_value_changed(value: float) -> void:
 func _on_free_money_button_pressed() -> void:
 	GameManager.player_currency += 1000
 	SoundManager.play_ui_sound(sfx_free_money)
+
+
+func _on_always_inventory_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_always_inventory = toggled_on
