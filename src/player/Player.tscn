@@ -101,7 +101,7 @@ flip_faces = true
 size = Vector2(2, 2)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
-viewport_path = NodePath("EffectIconsViewport")
+viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
