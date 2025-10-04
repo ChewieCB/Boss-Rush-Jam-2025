@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://58s7cq658s0e"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_arblu"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/speed_burst_effect.gd" id="2_nmoj6"]
+
+[node name="DebugBarrelEmpoweredDash" type="Node3D"]
+script = ExtResource("1_arblu")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="EmpoweredDash" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_nmoj6")
+bonus_dash_speed_perc = 100.0
+display_text_title = "Empowered Dash"
+display_text_tag = "Shoot n Dash!"
+display_text_desc = "+100% dash speed after shot"
+positive_desc = Array[String](["Dash speed increased after shooting"])
+negative_desc = Array[String](["TODO: add drawback"])
+icon_id = 35

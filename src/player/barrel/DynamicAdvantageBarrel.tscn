@@ -13,7 +13,7 @@ script = ExtResource("1_54i25")
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
-[node name="RampUpEffect" type="Node3D" parent="EffectContainer"]
+[node name="RampUp" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_w70eq")
 bonus_firerate_per_interval = 5.0
 interval_time = 0.2
@@ -26,7 +26,7 @@ positive_desc = Array[String](["Firerate increases as you keep firing"])
 negative_desc = Array[String](["Burns through ammo faster"])
 icon_id = 24
 
-[node name="ExtendedDrumEffect" type="Node3D" parent="EffectContainer"]
+[node name="ExtendedDrum" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_k0t2c")
 display_text_title = "Extended Drum"
 display_text_tag = "More dakka!"
@@ -36,19 +36,19 @@ positive_desc = Array[String](["Double magazine size"])
 negative_desc = Array[String](["Much slower reload speed"])
 icon_id = 23
 
-[node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ExtendedDrumEffect"]
+[node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ExtendedDrum"]
 script = ExtResource("5_ky52g")
 attribute = 5
 modify_value = 100.0
 is_perc = true
 
-[node name="ModifyReloadTime" type="Node3D" parent="EffectContainer/ExtendedDrumEffect"]
+[node name="ModifyReloadTime" type="Node3D" parent="EffectContainer/ExtendedDrum"]
 script = ExtResource("5_ky52g")
 attribute = 8
 modify_value = 150.0
 is_perc = true
 
-[node name="ExplosiveBulletEffect" type="Node3D" parent="EffectContainer"]
+[node name="ExplosiveBullet" type="Node3D" parent="EffectContainer"]
 script = ExtResource("6_ayuco")
 damage = 10
 explosion_damage = ExtResource("7_tc2w0")

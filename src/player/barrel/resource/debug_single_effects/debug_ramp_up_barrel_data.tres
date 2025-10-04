@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://7s6y05lhydve"]
+
+[ext_resource type="Texture2D" uid="uid://ewscdfkwpiti" path="res://assets/sprite/effect_icons/24.png" id="1_6luto"]
+[ext_resource type="PackedScene" uid="uid://16e4km1vfwv8" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelRampUp.tscn" id="2_5mamy"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_x5wtk"]
+
+[resource]
+script = ExtResource("3_x5wtk")
+barrel_id = 22
+barrel_name = "RampUp"
+barrel_desc = "Keep shooting"
+barrel_image = ExtResource("1_6luto")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_5mamy")
+is_archetype_barrel = false

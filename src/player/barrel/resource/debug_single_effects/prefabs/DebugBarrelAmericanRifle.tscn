@@ -1,0 +1,67 @@
+[gd_scene load_steps=16 format=3 uid="uid://dojfg3ulpktla"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_0cdfi"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_ln46w"]
+[ext_resource type="AudioStream" uid="uid://cte0yqejjtu7j" path="res://src/player/gun/assets/sfx/reloading/smg/smg_reload_1.mp3" id="3_qukhy"]
+[ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="4_m8fsy"]
+[ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="5_8s3fe"]
+[ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="6_4fxus"]
+[ext_resource type="AudioStream" uid="uid://cf460otm0xrf3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 4.mp3" id="7_a5lyt"]
+[ext_resource type="AudioStream" uid="uid://dpcvjx6i8qmt7" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 5.mp3" id="8_3o03d"]
+[ext_resource type="AudioStream" uid="uid://dhilfnn0tk1u5" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 6.mp3" id="9_s1hlm"]
+[ext_resource type="AudioStream" uid="uid://dtyk4el1l2a1n" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 7.mp3" id="10_y7a4p"]
+[ext_resource type="AudioStream" uid="uid://t5oqkgi1pmg3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 8.mp3" id="11_mh6yy"]
+[ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="12_8looy"]
+[ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="13_m2t6q"]
+[ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="14_5ybii"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="15_q4v2i"]
+
+[node name="DebugBarrelAmericanRifle" type="Node3D"]
+script = ExtResource("1_0cdfi")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="AmericanRifle" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_ln46w")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_qukhy")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("4_m8fsy"), ExtResource("5_8s3fe"), ExtResource("6_4fxus"), ExtResource("7_a5lyt"), ExtResource("8_3o03d"), ExtResource("9_s1hlm"), ExtResource("10_y7a4p"), ExtResource("11_mh6yy"), ExtResource("12_8looy"), ExtResource("13_m2t6q"), ExtResource("14_5ybii")])
+display_text_title = "Archetype: American Rifle"
+display_text_tag = "USA! USA!"
+positive_desc = Array[String](["Easy to handle"])
+negative_desc = Array[String](["Lower damage per round"])
+icon_id = 3
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/AmericanRifle"]
+script = ExtResource("15_q4v2i")
+attribute = 4
+new_value = 12.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/AmericanRifle"]
+script = ExtResource("15_q4v2i")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/AmericanRifle"]
+script = ExtResource("15_q4v2i")
+attribute = 7
+new_value = 1.5
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/AmericanRifle"]
+script = ExtResource("15_q4v2i")
+attribute = 5
+new_value = 30.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/AmericanRifle"]
+script = ExtResource("15_q4v2i")
+attribute = 1
+new_value = 12.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/AmericanRifle"]
+script = ExtResource("15_q4v2i")
+attribute = 11
+new_value = 0.06
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/AmericanRifle"]
+script = ExtResource("15_q4v2i")
+attribute = 8
+new_value = 2.1

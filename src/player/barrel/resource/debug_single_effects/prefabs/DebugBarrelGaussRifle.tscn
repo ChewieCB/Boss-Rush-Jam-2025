@@ -1,0 +1,69 @@
+[gd_scene load_steps=16 format=3 uid="uid://bf3y82onct355"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xgrmp"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_4fuuk"]
+[ext_resource type="AudioStream" uid="uid://cte0yqejjtu7j" path="res://src/player/gun/assets/sfx/reloading/smg/smg_reload_1.mp3" id="3_j58nw"]
+[ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="4_hqy5j"]
+[ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="5_pmxwf"]
+[ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="6_sku2w"]
+[ext_resource type="AudioStream" uid="uid://cf460otm0xrf3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 4.mp3" id="7_fiqri"]
+[ext_resource type="AudioStream" uid="uid://dpcvjx6i8qmt7" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 5.mp3" id="8_raltl"]
+[ext_resource type="AudioStream" uid="uid://dhilfnn0tk1u5" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 6.mp3" id="9_eked8"]
+[ext_resource type="AudioStream" uid="uid://dtyk4el1l2a1n" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 7.mp3" id="10_hhlqf"]
+[ext_resource type="AudioStream" uid="uid://t5oqkgi1pmg3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 8.mp3" id="11_fwbcn"]
+[ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="12_hhb3l"]
+[ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="13_5beam"]
+[ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="14_5kra0"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="15_bh57b"]
+
+[node name="DebugBarrelGaussRifle" type="Node3D"]
+script = ExtResource("1_xgrmp")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="GaussRifle" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_4fuuk")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_j58nw")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("4_hqy5j"), ExtResource("5_pmxwf"), ExtResource("6_sku2w"), ExtResource("7_fiqri"), ExtResource("8_raltl"), ExtResource("9_eked8"), ExtResource("10_hhlqf"), ExtResource("11_fwbcn"), ExtResource("12_hhb3l"), ExtResource("13_5beam"), ExtResource("14_5kra0")])
+display_text_title = "Archetype: Gauss Rifle"
+display_text_tag = "Fires faster, weaker shots with more ammo"
+display_text_desc = "High firerate and magazine, but lower damage."
+positive_desc = Array[String](["High firerate", "Large magazine"])
+negative_desc = Array[String](["Lower per-round damage"])
+icon_id = 10
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/GaussRifle"]
+script = ExtResource("15_bh57b")
+attribute = 4
+new_value = 9.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/GaussRifle"]
+script = ExtResource("15_bh57b")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/GaussRifle"]
+script = ExtResource("15_bh57b")
+attribute = 7
+new_value = 0.5
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/GaussRifle"]
+script = ExtResource("15_bh57b")
+attribute = 5
+new_value = 20.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/GaussRifle"]
+script = ExtResource("15_bh57b")
+attribute = 1
+new_value = 10.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/GaussRifle"]
+script = ExtResource("15_bh57b")
+attribute = 11
+new_value = 0.02
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/GaussRifle"]
+script = ExtResource("15_bh57b")
+attribute = 8
+new_value = 2.2

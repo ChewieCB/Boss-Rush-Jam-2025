@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bnxahx060n2fl"]
+
+[ext_resource type="Texture2D" uid="uid://bjg3wxh335h1u" path="res://assets/sprite/effect_icons/34.png" id="1_tcr8b"]
+[ext_resource type="PackedScene" uid="uid://c05ofergieuja" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelDeathFromAbove.tscn" id="2_b514r"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="4_gdev5"]
+
+[resource]
+script = ExtResource("4_gdev5")
+barrel_id = 32
+barrel_name = "DeathFromAbove"
+barrel_desc = "Fly up, look down"
+barrel_image = ExtResource("1_tcr8b")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_b514r")
+is_archetype_barrel = false

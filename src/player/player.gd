@@ -62,6 +62,8 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var barrel_ui_tween: Tween = null
 var barrel_ui_active: bool = false
 
+@onready var debug_inventory_ui = $UI/InventoryUI
+
 @onready var stat_ui: StatUI = $UI/StatUI
 @onready var health_ui = stat_ui.health_ui
 @onready var luck_bar_ui = stat_ui.luck_bar_ui
@@ -233,6 +235,9 @@ func _ready():
 	# CHEATS
 	if GameManager.CHEAT_godmode:
 		health_component.is_invincible = true
+	
+	debug_inventory_ui.has_custom_inventory = true
+	debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
 
 
 func _unhandled_input(event):
@@ -304,6 +309,11 @@ func _unhandled_input(event):
 		if object_to_be_interacted:
 			object_to_be_interacted.interact()
 			get_viewport().set_input_as_handled()
+		elif GameManager.CHEAT_always_inventory:
+			debug_inventory_ui.toggle()
+			GameManager.player.input_dir = Vector2.ZERO
+			GameManager.player.vel_horizontal = Vector2.ZERO
+			GameManager.player.velocity = Vector3.ZERO
 
 	if Input.is_action_just_pressed("crouch"):
 		SoundManager.play_sound(sfx_crouch.pick_random(), "SFX")

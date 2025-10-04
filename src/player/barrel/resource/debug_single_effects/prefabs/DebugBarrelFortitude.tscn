@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://6xrmneo6pby"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_spphc"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/recovery_effect.gd" id="2_l504x"]
+[ext_resource type="PackedScene" uid="uid://d4fgeytwm1c2r" path="res://src/player/gun/vfx/misc/HealBarrier.tscn" id="3_5j62w"]
+
+[node name="DebugBarrelFortitude" type="Node3D"]
+script = ExtResource("1_spphc")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="Fortitude" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_l504x")
+heal_barrier_prefab = ExtResource("3_5j62w")
+heal_amount = 2
+heal_interval = 5.0
+display_text_title = "Fortitude"
+display_text_tag = "Don't give up"
+display_text_desc = "Regain 2 hp every 5s"
+positive_desc = Array[String](["Recover health over time"])
+negative_desc = Array[String](["TODO: add drawback"])
+icon_id = 36

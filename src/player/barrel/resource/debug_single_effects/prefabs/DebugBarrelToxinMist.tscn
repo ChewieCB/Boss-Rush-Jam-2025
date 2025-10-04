@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dexbvc1itq6bm"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_2gfpi"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/create_on_action_effect.gd" id="2_ppgm2"]
+[ext_resource type="PackedScene" uid="uid://ce1fdy8od0511" path="res://src/player/gun/damage_effect/ToxinMistHazard.tscn" id="3_pxuea"]
+
+[node name="DebugBarrelToxinMist" type="Node3D"]
+script = ExtResource("1_2gfpi")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="ToxinMist" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_ppgm2")
+trigger_action = 3
+prefab = ExtResource("3_pxuea")
+limit_once_per_shot = true
+chance_perc = 20.0
+display_text_title = "Toxin Mist"
+display_text_tag = "Poison 'em!"
+display_text_desc = "20% chance to create poison cloud on enemy hit"
+positive_desc = Array[String](["Chance to spawn poison cloud"])
+negative_desc = Array[String](["Poison cloud affects you too"])
+icon_id = 18

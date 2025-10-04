@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://bba6sk3m5ohhy"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_3uua0"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_a3i5r"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="3_3ktu2"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_ae3ga"]
+
+[node name="DebugBarrelHomingBullet" type="Node3D"]
+script = ExtResource("1_3uua0")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="HomingBullet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_a3i5r")
+display_text_title = "Homing bullet"
+display_text_tag = "Skill issues solved!"
+display_text_desc = "+5 homing strength
+-30% damage"
+positive_desc = Array[String](["Shots move towards enemies"])
+negative_desc = Array[String](["Reduced damage"])
+icon_id = 44
+
+[node name="SetHomingStrength" type="Node3D" parent="EffectContainer/HomingBullet"]
+script = ExtResource("3_3ktu2")
+attribute = 10
+new_value = 5.0
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/HomingBullet"]
+script = ExtResource("4_ae3ga")
+attribute = 1
+modify_value = -30.0
+is_perc = true

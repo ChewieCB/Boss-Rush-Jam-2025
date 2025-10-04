@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=76 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -61,6 +61,7 @@
 [ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_detail_ui.gd" id="48_8tfyi"]
 [ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
+[ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="57_ojgux"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="57_sguas"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
@@ -419,6 +420,11 @@ mouse_filter = 2
 
 [node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
 process_mode = 1
+
+[node name="InventoryUI" parent="UI" instance=ExtResource("57_ojgux")]
+visible = false
+shop_title = "Debug Hotswap Inventory"
+has_custom_inventory = true
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("6_t33b7")

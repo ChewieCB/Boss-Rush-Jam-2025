@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bdnsbxkwkecxk"]
+
+[ext_resource type="Texture2D" uid="uid://cvhh5k6yarcsn" path="res://assets/sprite/effect_icons/0.png" id="1_vrj64"]
+[ext_resource type="PackedScene" uid="uid://d4bwff2x7a7rl" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelRailgun.tscn" id="2_836bn"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="9_4tgn5"]
+
+[resource]
+script = ExtResource("9_4tgn5")
+barrel_id = 14
+barrel_name = "Railgun"
+barrel_desc = "Precision is important!"
+barrel_image = ExtResource("1_vrj64")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_836bn")
+is_archetype_barrel = false

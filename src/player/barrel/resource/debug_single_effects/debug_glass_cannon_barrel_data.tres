@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cfd4d8yrqmc6o"]
+
+[ext_resource type="Texture2D" uid="uid://clo3mp8vaxflg" path="res://assets/sprite/effect_icons/39.png" id="1_iw80e"]
+[ext_resource type="PackedScene" uid="uid://yfu0tme8fppx" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelGlassCannon.tscn" id="2_amrhm"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="6_rhp4i"]
+
+[resource]
+script = ExtResource("6_rhp4i")
+barrel_id = 56
+barrel_name = "GlassCannon"
+barrel_desc = "Deal and take more damage"
+barrel_image = ExtResource("1_iw80e")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_amrhm")
+is_archetype_barrel = false

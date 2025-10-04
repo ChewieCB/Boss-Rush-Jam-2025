@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://dahoxrm1s8qfl"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_g2ydc"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_wq5iw"]
+
+[node name="DebugBarrelExecutionerRound" type="Node3D"]
+script = ExtResource("1_g2ydc")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="ExecutionerRound" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_wq5iw")
+enemy_hp_threshold_perc = 50
+display_text_title = "Executioner Round"
+display_text_tag = "Finish them"
+display_text_desc = "+25% damage when enemy is less than 50% hp
+-25% damage otherwise"
+positive_desc = Array[String](["Increased damage when enemy is below half health"])
+negative_desc = Array[String](["Reduced damage when enemy is above half health"])
+icon_id = 38

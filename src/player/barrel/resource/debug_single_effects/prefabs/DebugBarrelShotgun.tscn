@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=3 uid="uid://x2hrj1v7sutc"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_43ygs"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_vjwvl"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="3_xq2g1"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="4_511tg"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="5_0bl2t"]
+[ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="6_1osqo"]
+[ext_resource type="AudioStream" uid="uid://bh8fwafto05bl" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ WITHCOIN1.mp3" id="7_hwr8r"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="8_fnxk6"]
+
+[node name="DebugBarrelShotgun" type="Node3D"]
+script = ExtResource("1_43ygs")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="Shotgun" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_vjwvl")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_xq2g1"), ExtResource("4_511tg")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_0bl2t"), ExtResource("6_1osqo"), ExtResource("7_hwr8r")])
+display_text_title = "Archetype: Shotgun"
+display_text_tag = "Strong at close range!"
+positive_desc = Array[String](["High damage", "Multiple projectiles per shot"])
+negative_desc = Array[String](["High spread", "Shorter range"])
+icon_id = 1
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Shotgun"]
+script = ExtResource("8_fnxk6")
+attribute = 2
+new_value = 8.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/Shotgun"]
+script = ExtResource("8_fnxk6")
+attribute = 4
+new_value = 2.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/Shotgun"]
+script = ExtResource("8_fnxk6")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/Shotgun"]
+script = ExtResource("8_fnxk6")
+attribute = 7
+new_value = 8.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/Shotgun"]
+script = ExtResource("8_fnxk6")
+attribute = 5
+new_value = 10.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/Shotgun"]
+script = ExtResource("8_fnxk6")
+attribute = 1
+new_value = 10.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/Shotgun"]
+script = ExtResource("8_fnxk6")
+attribute = 11
+new_value = 0.1
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/Shotgun"]
+script = ExtResource("8_fnxk6")
+attribute = 8
+new_value = 1.7
