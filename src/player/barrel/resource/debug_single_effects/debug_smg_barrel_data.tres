@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://6kx44y32it2j"]
+
+[ext_resource type="Texture2D" uid="uid://cwwk7cgg34hx" path="res://assets/sprite/effect_icons/2.png" id="1_e1vi2"]
+[ext_resource type="PackedScene" uid="uid://bbvt8ixw2ft3k" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSMG.tscn" id="2_0qjdt"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="17_824jo"]
+
+[resource]
+script = ExtResource("17_824jo")
+barrel_id = 15
+barrel_name = "SMG"
+barrel_desc = "Spray and pray!"
+barrel_image = ExtResource("1_e1vi2")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_0qjdt")
+is_archetype_barrel = false

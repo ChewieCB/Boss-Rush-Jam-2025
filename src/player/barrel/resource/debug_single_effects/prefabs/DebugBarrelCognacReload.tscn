@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://b4b3psl64gv5r"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_or6b3"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_dr44c"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/create_on_action_effect.gd" id="3_kpn67"]
+[ext_resource type="PackedScene" uid="uid://2a8xpe58m4sr" path="res://src/player/gun/damage_effect/CognacReloadHealCloud.tscn" id="4_hl4j6"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_2ph53"]
+
+[node name="DebugBarrelCognacReload" type="Node3D"]
+script = ExtResource("1_or6b3")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CognacReload" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_dr44c")
+display_text_title = "Cognac Reload"
+display_text_tag = "Take a break, take a sip"
+display_text_desc = "Recover HP on reload
++200% reload time"
+positive_desc = Array[String](["Recover health on reload"])
+negative_desc = Array[String](["Much slower reload speed"])
+icon_id = 16
+
+[node name="CreateHealCloud" type="Node3D" parent="EffectContainer/CognacReload"]
+script = ExtResource("3_kpn67")
+trigger_action = 2
+prefab = ExtResource("4_hl4j6")
+
+[node name="ModifyReload" type="Node3D" parent="EffectContainer/CognacReload"]
+script = ExtResource("5_2ph53")
+attribute = 8
+modify_value = 200.0
+is_perc = true

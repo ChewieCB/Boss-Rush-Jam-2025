@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dpixaarbfxtgo"]
+
+[ext_resource type="Texture2D" uid="uid://cxh2t8h5figcd" path="res://assets/sprite/effect_icons/21.png" id="1_y61da"]
+[ext_resource type="PackedScene" uid="uid://cct4668v0aa4r" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelStickyBomb.tscn" id="2_1b78s"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="7_hhia2"]
+
+[resource]
+script = ExtResource("7_hhia2")
+barrel_id = 24
+barrel_name = "StickyBomb"
+barrel_desc = "Keep distance"
+barrel_image = ExtResource("1_y61da")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_1b78s")
+is_archetype_barrel = false

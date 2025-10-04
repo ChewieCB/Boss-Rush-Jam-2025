@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bq4povmsadkjk"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_yvtrj"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/create_on_action_effect.gd" id="2_vm81j"]
+[ext_resource type="PackedScene" uid="uid://dn7kkvfjqnktd" path="res://src/player/gun/damage_effect/MolotovDashHazard.tscn" id="3_y167l"]
+
+[node name="DebugBarrelMolotovDash" type="Node3D"]
+script = ExtResource("1_yvtrj")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="MolotovDash" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_vm81j")
+trigger_action = 1
+prefab = ExtResource("3_y167l")
+display_text_title = "Molotov Dash"
+display_text_tag = "A burning gift"
+display_text_desc = "Create a burning puddle after dash"
+positive_desc = Array[String](["Drop a fiery puddle when dashing "])
+negative_desc = Array[String](["Burning puddle hurts you too"])
+icon_id = 17

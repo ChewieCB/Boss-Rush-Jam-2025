@@ -7,14 +7,15 @@ signal inventory_closed
 @export var shop_title: String
 @export var barrel_item_ui_prefab: PackedScene
 @export var shop_item_ui_prefab: PackedScene
-@export var current_inventory: Array[BarrelDataResource]
+@export var current_inventory: Array[Resource]
 @export var sfx_open: AudioStream
 @export var sfx_click: AudioStream
 @export var sfx_purchase: AudioStream
 @export var sfx_too_expensive: AudioStream
 @export var sfx_barrel_equip: AudioStream
 
-@onready var has_custom_inventory: bool = current_inventory.size() > 0
+@export var has_custom_inventory: bool = false
+#@onready var has_custom_inventory: bool = current_inventory.size() > 0
 @onready var shop_title_label: Label = $Title
 @onready var equip_title: Label = $EquipBarrelSection/EquipTitle
 @onready var archetype_barrel_container: HBoxContainer = $EquipBarrelSection/ArchetypeBarrelBorder/ArchetypeBarrelContainer

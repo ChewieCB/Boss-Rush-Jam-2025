@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=3 uid="uid://b6e41ail73rte"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_pmxk6"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_u13dw"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="3_o8eqa"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="4_hdg37"]
+[ext_resource type="AudioStream" uid="uid://dnwq8qjgumtwf" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN1.mp3" id="5_bcjl2"]
+[ext_resource type="AudioStream" uid="uid://cojr3tiyvhch7" path="res://src/player/gun/assets/sfx/shot/shotgun/SHOTGUN FINAL_ NOCOIN2.mp3" id="6_tii40"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="7_6hu02"]
+
+[node name="DebugBarrelCombatShotgun" type="Node3D"]
+script = ExtResource("1_pmxk6")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CombatShotgun" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_u13dw")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_o8eqa"), ExtResource("4_hdg37")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_bcjl2"), ExtResource("6_tii40")])
+display_text_title = "Archetype: Combat Shotgun"
+display_text_tag = "Fire faster and more ammo"
+positive_desc = Array[String](["Higher firerate", "Larger magazine", "Tighter spread"])
+negative_desc = Array[String](["Lower projectile count"])
+icon_id = 13
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/CombatShotgun"]
+script = ExtResource("7_6hu02")
+attribute = 2
+new_value = 6.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/CombatShotgun"]
+script = ExtResource("7_6hu02")
+attribute = 4
+new_value = 3.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/CombatShotgun"]
+script = ExtResource("7_6hu02")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/CombatShotgun"]
+script = ExtResource("7_6hu02")
+attribute = 7
+new_value = 5.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/CombatShotgun"]
+script = ExtResource("7_6hu02")
+attribute = 5
+new_value = 12.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/CombatShotgun"]
+script = ExtResource("7_6hu02")
+attribute = 1
+new_value = 9.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/CombatShotgun"]
+script = ExtResource("7_6hu02")
+attribute = 11
+new_value = 0.1
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/CombatShotgun"]
+script = ExtResource("7_6hu02")
+attribute = 8
+new_value = 2.2

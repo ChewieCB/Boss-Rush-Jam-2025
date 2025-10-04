@@ -17,13 +17,13 @@ func convert_resource_to_id(array_resource: Array) -> Array[int]:
 			result.append(elem.barrel_id)
 	return result
 
-func convert_id_to_resource(array_id: Array) -> Array[BarrelDataResource]:
+func convert_id_to_resource(array_id: Array) -> Array[Resource]:
 	if len(GameManager.barrel_database) == 0:
 		push_warning("GameManger.barrel_database is empty / not loaded yet!")
-	var result: Array[BarrelDataResource] = []
+	var result: Array[Resource] = []
 	for elem in array_id:
 		for item in GameManager.barrel_database:
-			var barrel_data_item = item as BarrelDataResource
+			var barrel_data_item = item as Resource
 			if barrel_data_item.barrel_id == elem:
 				result.append(item)
 	return result

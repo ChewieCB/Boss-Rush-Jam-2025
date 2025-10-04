@@ -18,6 +18,7 @@ display_text_desc = "-20% damage
 Bullets build up Burn effect"
 positive_desc = Array[String](["Applies burning status"])
 negative_desc = Array[String](["Reduced damage"])
+icon_id = 48
 
 [node name="AddElementalEffect" type="Node3D" parent="EffectContainer/FireInfusion"]
 script = ExtResource("3_lgco5")
@@ -39,6 +40,7 @@ display_text_desc = "-20% fire rate
 Bullets build up Poison effect"
 positive_desc = Array[String](["Applies poison status"])
 negative_desc = Array[String](["Slower firerate"])
+icon_id = 49
 
 [node name="AddElementalEffect" type="Node3D" parent="EffectContainer/PoisonInfusion"]
 script = ExtResource("3_lgco5")
@@ -60,6 +62,7 @@ display_text_desc = "-20% magazine size
 Bullets build up Frozen effect"
 positive_desc = Array[String](["Applies frozen status"])
 negative_desc = Array[String](["Smaller magazine size"])
+icon_id = 47
 
 [node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ColdInfusion"]
 script = ExtResource("3_lgco5")
@@ -81,6 +84,7 @@ display_text_desc = "+20% recoil
 Bullets build up Shocked effect"
 positive_desc = Array[String](["Applies shocked status"])
 negative_desc = Array[String](["Increased recoil"])
+icon_id = 50
 
 [node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ElectricInfusion"]
 script = ExtResource("3_lgco5")

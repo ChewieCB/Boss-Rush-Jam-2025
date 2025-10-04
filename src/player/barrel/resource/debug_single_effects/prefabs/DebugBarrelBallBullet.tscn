@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://c6qyhc8vvw03g"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_bcgfb"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_k7spx"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="3_q5k3e"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_2btha"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="5_aosur"]
+[ext_resource type="PackedScene" uid="uid://71phynp62d0y" path="res://src/player/gun/projectiles/GunProjectileBall.tscn" id="6_die5y"]
+
+[node name="DebugBarrelBallBullet" type="Node3D"]
+script = ExtResource("1_bcgfb")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="BallBullet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_k7spx")
+display_text_title = "Ball Bullet"
+display_text_tag = "Massize ball!"
+display_text_desc = "Shoot a single huge bouncy ball projectile. Significantly increased damage but reduce firerate and projectile speed."
+positive_desc = Array[String](["Significantly higher damage", "Fires large projectile", "Adds richochet to projectile"])
+negative_desc = Array[String](["Slower firerate", "Slower projectile speed"])
+icon_id = 41
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/BallBullet"]
+script = ExtResource("3_q5k3e")
+attribute = 2
+new_value = 1.0
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/BallBullet"]
+script = ExtResource("4_2btha")
+attribute = 1
+modify_value = 50.0
+is_perc = true
+
+[node name="ModifySpeed" type="Node3D" parent="EffectContainer/BallBullet"]
+script = ExtResource("4_2btha")
+attribute = 3
+modify_value = -50.0
+is_perc = true
+
+[node name="ModifyFirerate" type="Node3D" parent="EffectContainer/BallBullet"]
+script = ExtResource("4_2btha")
+attribute = 4
+modify_value = -25.0
+is_perc = true
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/BallBullet"]
+script = ExtResource("5_aosur")
+new_prefab = ExtResource("6_die5y")
+
+[node name="ModifyRicochet" type="Node3D" parent="EffectContainer/BallBullet"]
+script = ExtResource("4_2btha")
+attribute = 9
+modify_value = 1.0

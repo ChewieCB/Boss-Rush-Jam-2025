@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bh8gffd8mgvke"]
+
+[ext_resource type="Texture2D" uid="uid://sqwi84n78ocr" path="res://assets/sprite/effect_icons/42.png" id="1_qrf06"]
+[ext_resource type="PackedScene" uid="uid://bkuqtrbnbivqk" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelNewtonThirdLaw.tscn" id="2_xol13"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="6_myym3"]
+
+[resource]
+script = ExtResource("6_myym3")
+barrel_id = 27
+barrel_name = "NewtonThirdLaw"
+barrel_desc = "Safer Rocket Jump"
+barrel_image = ExtResource("1_qrf06")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_xol13")
+is_archetype_barrel = false

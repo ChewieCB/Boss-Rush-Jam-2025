@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://yfu0tme8fppx"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_fwkof"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_ksk6c"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_jvep5"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="4_5rtqh"]
+
+[node name="DebugBarrelGlassCannon" type="Node3D"]
+script = ExtResource("1_fwkof")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="GlassCannon" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_ksk6c")
+display_text_title = "Glass Cannon
+"
+display_text_tag = "Deal and take more damage"
+display_text_desc = "+30% damage
++30% damage taken
+"
+positive_desc = Array[String](["Deal more damage"])
+negative_desc = Array[String](["Take more damage"])
+icon_id = 39
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/GlassCannon"]
+script = ExtResource("3_jvep5")
+attribute = 1
+modify_value = 30.0
+is_perc = true
+
+[node name="ModifyDamageTaken" type="Node3D" parent="EffectContainer/GlassCannon"]
+script = ExtResource("4_5rtqh")
+display_name = "Increased damage taken"
+status_code = "glass_cannon_damage_reduction_debuff"
+modified_stat = 4
+value = -30.0
+is_infinite_duration = true

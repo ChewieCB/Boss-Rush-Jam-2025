@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://drn53v17uq1xw"]
+
+[ext_resource type="Texture2D" uid="uid://5hd3c8n3a0yp" path="res://assets/sprite/effect_icons/35.png" id="1_b14yi"]
+[ext_resource type="PackedScene" uid="uid://58s7cq658s0e" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelEmpoweredDash.tscn" id="2_aty4w"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="4_nc7xv"]
+
+[resource]
+script = ExtResource("4_nc7xv")
+barrel_id = 33
+barrel_name = "EmpoweredDash"
+barrel_desc = "Shoot n Dash!"
+barrel_image = ExtResource("1_b14yi")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_aty4w")
+is_archetype_barrel = false

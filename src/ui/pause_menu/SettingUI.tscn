@@ -901,6 +901,24 @@ icon = ExtResource("9_akomy")
 icon_alignment = 2
 expand_icon = true
 
+[node name="AlwaysInventory" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/AlwaysInventory"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Inventory always accessible"
+
+[node name="AlwaysInventoryToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/AlwaysInventory"]
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
 [node name="BossOneShot" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -1070,6 +1088,8 @@ text = "Back"
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="_on_gode_mode_toggle_toggled"]
 [connection signal="pressed" from="TabContainer/DEBUG/VBoxContainer/FreeMoney/FreeMoneyButton" to="." method="_on_free_money_button_pressed"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="_on_always_inventory_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="_on_boss_one_shot_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="play_button_hover_sfx"]

@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://bj0d4ppwx6gnu"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_8cim4"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_gkxv4"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_tik40"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/damage_shred_stack_effect.gd" id="4_hbmpe"]
+
+[node name="DebugBarrelTagAndShred" type="Node3D"]
+script = ExtResource("1_8cim4")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="TagAndShred" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_gkxv4")
+display_text_title = "Tag n Shred"
+display_text_tag = "Wear them down
+
+Reduced initial damage, but increased damage for every projectile hit target."
+display_text_desc = "-50% damage
+-40% projectile amount
++1 damage per projectile hit"
+positive_desc = Array[String](["Damage increases for every shot that hits"])
+negative_desc = Array[String](["Reduced damage", "Reduced projectile count"])
+icon_id = 37
+
+[node name="ModifyDamage" type="Node3D" parent="EffectContainer/TagAndShred"]
+script = ExtResource("3_tik40")
+attribute = 1
+modify_value = -50.0
+is_perc = true
+
+[node name="ModifyProjectileAmount" type="Node3D" parent="EffectContainer/TagAndShred"]
+script = ExtResource("3_tik40")
+attribute = 2
+modify_value = -40.0
+is_perc = true
+
+[node name="DamageShred" type="Node3D" parent="EffectContainer/TagAndShred"]
+script = ExtResource("4_hbmpe")
+flat_damage_bonus = 1

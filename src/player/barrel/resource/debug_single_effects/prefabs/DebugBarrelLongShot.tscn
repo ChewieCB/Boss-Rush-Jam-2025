@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://bkevtvpvmyrdv"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_bmfog"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_yn68y"]
+[ext_resource type="Script" path="res://src/player/barrel/longshot_effect.gd" id="3_mfrqg"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_42u65"]
+
+[node name="DebugBarrelLongShot" type="Node3D"]
+script = ExtResource("1_bmfog")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="LongShot" type="Node3D" parent="EffectContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0242209, 0, 0.0132322)
+script = ExtResource("2_yn68y")
+display_text_title = "Long Shot"
+display_text_tag = "Oh, the separation!"
+display_text_desc = "More damage with distance
+-50% spread"
+positive_desc = Array[String](["Shots from further away do more damage", "Tighter spread"])
+negative_desc = Array[String](["Close range shots do less damage"])
+icon_id = 28
+
+[node name="LongshotEffect" type="Node3D" parent="EffectContainer/LongShot"]
+script = ExtResource("3_mfrqg")
+
+[node name="ModifySpread" type="Node3D" parent="EffectContainer/LongShot"]
+script = ExtResource("4_42u65")
+attribute = 7
+modify_value = -50.0
+is_perc = true

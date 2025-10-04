@@ -1,0 +1,70 @@
+[gd_scene load_steps=10 format=3 uid="uid://b15qtxcyiu18k"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_l44ox"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_qbbgt"]
+[ext_resource type="AudioStream" uid="uid://edneq2x4wm78" path="res://src/player/gun/assets/sfx/reloading/railgun/railgun_reload_1.mp3" id="3_eq3qs"]
+[ext_resource type="AudioStream" uid="uid://dqr1710c1o8py" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 1.mp3" id="4_w1nih"]
+[ext_resource type="AudioStream" uid="uid://i3coc5gtyk0w" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 2.mp3" id="5_rrqmx"]
+[ext_resource type="AudioStream" uid="uid://bjp2ylixw7dhg" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 3.mp3" id="6_kx86e"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="7_qw8v6"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="8_6vhni"]
+[ext_resource type="PackedScene" uid="uid://06y3ehv3d68n" path="res://src/player/gun/projectiles/GunHitscanBig.tscn" id="9_k0dui"]
+
+[node name="DebugBarrelRailcannon" type="Node3D"]
+script = ExtResource("1_l44ox")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="Railcannon" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_qbbgt")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_eq3qs")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("4_w1nih"), ExtResource("5_rrqmx"), ExtResource("6_kx86e")])
+display_text_title = "Archetype: Railcannon"
+display_text_tag = "One shot, one kill"
+positive_desc = Array[String](["Massive per-round damage"])
+negative_desc = Array[String](["Single shot magazine"])
+icon_id = 11
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/Railcannon"]
+script = ExtResource("7_qw8v6")
+attribute = 1
+new_value = 250.0
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Railcannon"]
+script = ExtResource("7_qw8v6")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/Railcannon"]
+script = ExtResource("7_qw8v6")
+attribute = 4
+new_value = 0.5
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/Railcannon"]
+script = ExtResource("7_qw8v6")
+attribute = 6
+new_value = 1.0
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/Railcannon"]
+script = ExtResource("7_qw8v6")
+attribute = 7
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/Railcannon"]
+script = ExtResource("7_qw8v6")
+attribute = 5
+new_value = 1.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/Railcannon"]
+script = ExtResource("7_qw8v6")
+attribute = 11
+new_value = 0.4
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/Railcannon"]
+script = ExtResource("7_qw8v6")
+attribute = 8
+new_value = 3.5
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/Railcannon"]
+script = ExtResource("8_6vhni")
+new_prefab = ExtResource("9_k0dui")

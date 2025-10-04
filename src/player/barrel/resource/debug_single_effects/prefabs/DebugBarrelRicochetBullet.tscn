@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bw060bos3fo5b"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_tqqra"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="2_abvo6"]
+
+[node name="DebugBarrelRicochetBullet" type="Node3D"]
+script = ExtResource("1_tqqra")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="RicochetBullet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_abvo6")
+attribute = 9
+modify_value = 3.0
+display_text_title = "Ricochet Bullet"
+display_text_tag = "Make stylish shot"
+display_text_desc = "+3 richochet count"
+positive_desc = Array[String](["Shots bounce off of surfaces"])
+negative_desc = Array[String](["Ricochet shots can hurt you too"])
+icon_id = 45

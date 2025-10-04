@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bk6xrea5mremr"]
+
+[ext_resource type="Texture2D" uid="uid://b2dn2glfckobq" path="res://assets/sprite/effect_icons/15.png" id="1_2tqo3"]
+[ext_resource type="PackedScene" uid="uid://c3gfkknfxvox6" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSlug.tscn" id="2_solyh"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="9_rsqdu"]
+
+[resource]
+script = ExtResource("9_rsqdu")
+barrel_id = 66
+barrel_name = "Slug"
+barrel_desc = "We have Railgun at home"
+barrel_image = ExtResource("1_2tqo3")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_solyh")
+is_archetype_barrel = false

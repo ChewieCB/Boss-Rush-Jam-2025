@@ -27,14 +27,14 @@ var player: Player
 var difficulty_menu: DifficultyMenu
 
 # Barrels
-@export var starting_barrels: Array[BarrelDataResource]
-@export var starting_shop_barrels: Array[BarrelDataResource]
+@export var starting_barrels: Array[Resource]
+@export var starting_shop_barrels: Array[Resource]
 @export var barrel_database: Array[Resource]
 @export var debug_barrel_database: Array[Resource]
 
-var equipped_barrels: Array[BarrelDataResource] = []
-var inventory_barrels: Array[BarrelDataResource] = []
-var shop_barrels: Array[BarrelDataResource] = []
+var equipped_barrels: Array[Resource] = []
+var inventory_barrels: Array[Resource] = []
+var shop_barrels: Array[Resource] = []
 
 
 # Re-rolls
@@ -137,6 +137,7 @@ var aim_assist_strength: float = 0.5
 var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
 var CHEAT_freecam: bool = true
+var CHEAT_always_inventory: bool = false
 
 @export var sfx_screenshot: AudioStream
 

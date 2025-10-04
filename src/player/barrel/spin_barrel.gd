@@ -68,36 +68,39 @@ func get_active_effect():
 func get_less_used_effects() -> int:
 	var effect_id: int = -1
 	var chance: float = randf()
-	var max_idx: int = effect_list.size()
-	match last_chosen_queue.size():
-		# If we haven't chosen any effects, pick one at random
-		0:
-			effect_id = randi_range(0, len(effect_list) - 1)
-		# If we have chosen all effects previously, pick the least recent effect
-		max_idx:
-			# 20% chance to get same barrel
-			if chance <= 0.4:
-				effect_id = last_chosen_queue.front()
-			elif chance <= 0.7:
-				effect_id = last_chosen_queue[1]
-			else:
-				effect_id = last_chosen_queue.back()
-		# If we've chosen some, but not all, effects before, pick a random effect we haven't chosen yet
-		_:
-			# 20% chance to get same barrel
-			if chance <= 0.2:
-				effect_id = last_chosen_queue.front()
-			else:
-				var unused_effects = range(0, len(effect_list))
-				unused_effects = unused_effects.filter(
-					func(id):
-						return id not in last_chosen_queue
-				)
-				if unused_effects:
-					if chance <= 0.6:
-						effect_id = unused_effects.front()
-					else:
-						effect_id = unused_effects.back()
-				#effect_id = unused_effects.pick_random()
+	var max_idx: int = effect_list.size() - 1
+	if max_idx == 0:
+		effect_id = 0
+	else:
+		match last_chosen_queue.size():
+			# If we haven't chosen any effects, pick one at random
+			0:
+				effect_id = randi_range(0, len(effect_list) - 1)
+			# If we have chosen all effects previously, pick the least recent effect
+			max_idx:
+				# 20% chance to get same barrel
+				if chance <= 0.4:
+					effect_id = last_chosen_queue.front()
+				elif chance <= 0.7:
+					effect_id = last_chosen_queue[1]
+				else:
+					effect_id = last_chosen_queue.back()
+			# If we've chosen some, but not all, effects before, pick a random effect we haven't chosen yet
+			_:
+				# 20% chance to get same barrel
+				if chance <= 0.2:
+					effect_id = last_chosen_queue.front()
+				else:
+					var unused_effects = range(0, len(effect_list))
+					unused_effects = unused_effects.filter(
+						func(id):
+							return id not in last_chosen_queue
+					)
+					if unused_effects:
+						if chance <= 0.6:
+							effect_id = unused_effects.front()
+						else:
+							effect_id = unused_effects.back()
+					#effect_id = unused_effects.pick_random()
 	
 	return effect_id
