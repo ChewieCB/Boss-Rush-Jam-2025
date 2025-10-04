@@ -279,12 +279,7 @@ _data = {
 collision_mask = 11
 script = ExtResource("2_2er6y")
 phase_2_health_percentage_trigger = 0.5
-DESIRED_DISTANCE = 10.0
-desired_distance = null
 slam_aoe_decal = ExtResource("3_vww1n")
-angle_speed = 1.0
-orbit_angle = 0.0
-orbit_radius = 20.0
 explosion_scene = ExtResource("3_7sirk")
 pushback_force = 20.0
 sfx_jump = Array[AudioStream]([ExtResource("5_ausvj"), ExtResource("6_x0ywq"), ExtResource("7_updhw")])
@@ -417,11 +412,6 @@ enabled = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Shortstack"
-
-[node name="StateChartDebugger" parent="UI" index="1"]
-process_mode = 3
-z_index = 100
-z_as_relative = false
 
 [node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("3_hbmr3")
@@ -1596,18 +1586,15 @@ delay_in_seconds = "0.0"
 [node name="Dead" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeDeath" index="2"]
 script = ExtResource("5_81kie")
 
-[node name="DebugStateLabel" parent="." index="9"]
+[node name="DebugStateLabel" parent="." index="10"]
 visible = true
 
-[node name="AnimationPlayer" parent="." index="18"]
+[node name="AnimationPlayer" parent="." index="19"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "big_stack": SubResource("AnimationLibrary_ri8wq")
 }
 autoplay = "big_stack/idle"
-
-[node name="HurtSFXPlayer" parent="." index="19"]
-unit_size = 12.3
 
 [node name="ChipMineSpawnTimer" type="Timer" parent="." index="20"]
 one_shot = true
@@ -1632,6 +1619,9 @@ sub_emitter = NodePath("../ChipSplashParticles")
 script = null
 
 [node name="ChipSplashParticles" parent="." index="25" instance=ExtResource("66_ih6eo")]
+
+[node name="HurtSFXPlayer" parent="." index="26"]
+unit_size = 12.3
 
 [node name="UnstableSplitTimer" type="Timer" parent="." index="27"]
 

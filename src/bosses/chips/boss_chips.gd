@@ -268,7 +268,7 @@ func _ready() -> void:
 
 func activate() -> void:
 	print_debug("BossChips activate called")
-	super ()
+	super()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	if not self.is_node_ready():
