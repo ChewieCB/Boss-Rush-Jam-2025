@@ -8,7 +8,7 @@ signal display_description(content)
 
 const SCALE_FACTOR = 1.2
 var barrel_info_region: BarrelInfoRegion = null
-var barrel_data: Dictionary = {
+var barrel_roll_data: Dictionary = {
 	"display_text_title": "",
 	"display_text_tag": "",
 	"is_archetype": false,
@@ -23,8 +23,8 @@ func _ready() -> void:
 	focus_exited.connect(return_button_size)
 
 
-func set_barrel_data(_data) -> void:
-	barrel_data = _data
+func set_barrel_roll_data(_data) -> void:
+	barrel_roll_data = _data
 
 
 func expand_button_size():
@@ -50,17 +50,17 @@ func _on_focus_entered() -> void:
 	border_focus.visible = true
 	self_modulate = Color(1, 1, 1)
 	var content = "[center]{0}[/center]\n\n{1}\n".format([
-		barrel_data["display_text_title"],
-		barrel_data["display_text_tag"]]
+		barrel_roll_data["display_text_title"],
+		barrel_roll_data["display_text_tag"]]
 	)
-	if len(barrel_data["positive_desc"]) > 0:
+	if len(barrel_roll_data["positive_desc"]) > 0:
 		content += "[color=green]\n"
-		for line in barrel_data["positive_desc"]:
+		for line in barrel_roll_data["positive_desc"]:
 			content += "+ " + line + "\n"
 		content += "[/color]"
-	if len(barrel_data["negative_desc"]) > 0:
+	if len(barrel_roll_data["negative_desc"]) > 0:
 		content += "[color=red]\n"
-		for line in barrel_data["negative_desc"]:
+		for line in barrel_roll_data["negative_desc"]:
 			content += "- " + line + "\n"
 		content += "[/color]"
 	barrel_info_region.set_description_content(content)

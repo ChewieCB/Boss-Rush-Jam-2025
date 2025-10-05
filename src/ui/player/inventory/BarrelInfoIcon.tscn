@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bl1msq3x8c3ar"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_info_icon.gd" id="1_01pn5"]
-[ext_resource type="Texture2D" uid="uid://cjiqf8i74px48" path="res://assets/sprite/effect_icons/Archetype/0_Railgun.png" id="1_ipf8j"]
+[ext_resource type="Texture2D" uid="uid://b7leq4ajnjvq4" path="res://assets/sprite/effect_icons/-1.png" id="2_k6234"]
 [ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="2_nlnbh"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="4_jbemo"]
 
@@ -19,7 +19,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_ipf8j")
+texture = ExtResource("2_k6234")
 expand_mode = 1
 
 [node name="BorderNormal" type="NinePatchRect" parent="."]

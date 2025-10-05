@@ -1,8 +1,8 @@
 extends Control
 class_name GunCustomizationUI
 
-signal ui_opened
-signal ui_closed
+signal inventory_opened
+signal inventory_closed
 signal reset_barrel_info
 
 @export var shop_title: String
@@ -15,6 +15,7 @@ signal reset_barrel_info
 @export var sfx_too_expensive: AudioStream
 @export var sfx_barrel_equip: AudioStream
 
+@onready var warning_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/WarningLabel
 @onready var has_custom_inventory: bool = current_inventory.size() > 0
 @onready var modify_bg: Control = $ModifyBG
 @onready var modify_tab_btn: Button = $TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton
@@ -34,7 +35,6 @@ var barrel_info_region: BarrelInfoRegion = null
 
 func _ready() -> void:
 	# warning_label.visible = false
-	# visible = false
 	GameManager.currency_changed.connect(full_refresh_ui.unbind(1))
 	GameManager.refresh_shop_ui.connect(full_refresh_ui)
 	modify_bg.visible = true
@@ -57,13 +57,28 @@ func _ready() -> void:
 	shop_tab_btn.mouse_exited.connect(_on_shop_tab_button_focus_exited)
 	shop_tab_btn.focus_exited.connect(_on_shop_tab_button_focus_exited)
 
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	full_refresh_ui()
+
+
+func _input(event: InputEvent) -> void:
+	if visible:
+		if event.is_action_pressed("interact") or event.is_action_pressed("ui_cancel"):
+			close()
+			get_viewport().set_input_as_handled()
+
 func full_refresh_ui():
-	# # EQUIPPED BARRELS
+	# EQUIPPED BARRELS
 	for child in equip_barrel_container.get_children():
-		child.queue_free()
+		if child.has_node("BarrelItemUI"):
+			child.get_node("BarrelItemUI").queue_free()
+	var index = 2
 	for barrel_data in GameManager.equipped_barrels:
 		var item_inst = barrel_item_ui_prefab.instantiate()
-		equip_barrel_container.add_child(item_inst)
+		equip_barrel_container.get_child(index).add_child(item_inst)
+		index -= 1
 		item_inst.init(barrel_data, true, true)
 		item_inst.select_item.connect(_on_item_ui_select)
 		item_inst.interact_item.connect(_on_item_ui_interact)
@@ -85,7 +100,7 @@ func full_refresh_ui():
 		item_inst.interact_item.connect(_on_item_ui_interact)
 		item_inst.show_warning.connect(show_warning)
 
-	# # SHOP BARRELS
+	# SHOP BARRELS
 	for child in shop_archetype_barrel_container.get_children():
 		child.queue_free()
 	for child in shop_normal_barrel_container.get_children():
@@ -95,6 +110,7 @@ func full_refresh_ui():
 	for barrel_data in current_inventory:
 		if barrel_data in GameManager.inventory_barrels:
 			current_inventory.erase(barrel_data)
+			continue
 		var shop_item_inst = shop_item_ui_prefab.instantiate()
 		if barrel_data.is_archetype_barrel:
 			shop_archetype_barrel_container.add_child(shop_item_inst)
@@ -105,8 +121,36 @@ func full_refresh_ui():
 		shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
 		shop_item_inst.item_ui.show_warning.connect(show_warning)
 
-func update_description(content: String) -> void:
-	return
+func toggle():
+	warning_label.self_modulate = Color.WHITE
+	warning_label.text = "Barrel effects applied in stock-to-muzzle direction"
+	warning_label.visible = true
+	SoundManager.play_sound(sfx_open, "SFX")
+	if visible:
+		close()
+	else:
+		open()
+
+func open():
+	full_refresh_ui()
+	visible = true
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+	#Engine.time_scale = 0.2
+	GameManager.player.is_in_menu = true
+	get_first_item_for_focus()
+	inventory_opened.emit()
+
+
+func close():
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	#Engine.time_scale = 1
+	GameManager.player.is_in_menu = false
+	if visible and not GameManager.player.current_gun.is_reloading \
+		and not GameManager.player.current_gun.is_spinning:
+		visible = false
+		GameManager.player.current_gun.spin_all_barrels()
+	inventory_closed.emit()
+
 
 func show_warning(content: String, color: Color = Color.RED) -> void:
 	if content.contains("Warning"):
@@ -122,7 +166,7 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	if (current_selected_item_ui != null):
 		current_selected_item_ui.unselected()
 	current_selected_item_ui = item_ui
-	update_description(data.barrel_desc)
+	barrel_info_region.set_barrel_data_resource(data)
 	SoundManager.play_ui_sound(sfx_click, "UI")
 
 

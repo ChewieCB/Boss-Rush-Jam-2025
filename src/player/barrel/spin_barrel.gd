@@ -108,10 +108,13 @@ func get_number_of_barrel_effect() -> int:
 
 func get_barrel_effect_data_at(index: int) -> Dictionary:
 	var barrel_effect: BaseBarrelEffect = effect_container.get_child(index)
+	var is_archetype = false
+	if barrel_effect.get("is_archetype") && barrel_effect.is_archetype:
+		is_archetype = true
 	var res = {
 		"display_text_title": barrel_effect.display_text_title,
 		"display_text_tag": barrel_effect.display_text_tag,
-		"is_archetype": barrel_effect.is_archetype,
+		"is_archetype": is_archetype,
 		"positive_desc": barrel_effect.positive_desc,
 		"negative_desc": barrel_effect.negative_desc,
 	 }

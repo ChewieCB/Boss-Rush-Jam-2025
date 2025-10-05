@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bdotmbmcpnnup"]
+[gd_scene load_steps=8 format=3 uid="uid://bdotmbmcpnnup"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_info_region.gd" id="1_4g30l"]
 [ext_resource type="Texture2D" uid="uid://rgiumjfjwf7y" path="res://assets/sprite/placeholder/circle-ring.png" id="2_3m8fx"]
 [ext_resource type="PackedScene" uid="uid://bl1msq3x8c3ar" path="res://src/ui/player/inventory/BarrelInfoIcon.tscn" id="3_6lcb6"]
-[ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrrel_data.tres" id="3_w8oh5"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="6_lxvge"]
 [ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="7_ggvao"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="8_c2skj"]
@@ -20,7 +19,6 @@ offset_bottom = -592.0
 grow_vertical = 0
 script = ExtResource("1_4g30l")
 barrel_info_icon_prefab = ExtResource("3_6lcb6")
-debug_barrel_data = ExtResource("3_w8oh5")
 
 [node name="CircleRing" type="TextureRect" parent="."]
 self_modulate = Color(1, 1, 1, 0.47)
@@ -106,7 +104,6 @@ bbcode_enabled = true
 text = "[b]Effect Name[/b]
 
 Sed excepturi dolores similique asperiores ut.
-
 [color=green]
 + positive
 + positive

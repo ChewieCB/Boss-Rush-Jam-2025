@@ -1,36 +1,11 @@
-[gd_scene load_steps=35 format=4 uid="uid://bmy7qgg3imyvv"]
+[gd_scene load_steps=10 format=4 uid="uid://bmy7qgg3imyvv"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/vendor/vendor.gd" id="1_q25t3"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="1_r5vfn"]
 [ext_resource type="Material" uid="uid://b2r7uow4jc8v0" path="res://assets/textures/placeholder/texture_orange_10.tres" id="2_il1cf"]
 [ext_resource type="Material" uid="uid://bsm5c6b4ncugr" path="res://assets/textures/placeholder/texture_light_13.tres" id="3_yxy2g"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="4_ql423"]
-[ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="5_b7an8"]
-[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="6_qqfkm"]
-[ext_resource type="Resource" uid="uid://dtjfyb374gapa" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ammo_leech.tres" id="7_w8qpy"]
-[ext_resource type="Resource" uid="uid://xodkopxrm4f2" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_shotgun.tres" id="8_m0arp"]
-[ext_resource type="Resource" uid="uid://cql0l7x1w3urb" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_smg.tres" id="9_oc20r"]
-[ext_resource type="Resource" uid="uid://bf7j6nykfjy5w" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_double_tap.tres" id="9_t37n2"]
-[ext_resource type="Resource" uid="uid://dfhl5t0jpftd5" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_gamblers_precision.tres" id="10_hcac1"]
-[ext_resource type="Resource" uid="uid://cbped3pwpq8gx" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_archetype_railgun.tres" id="10_yhgbb"]
-[ext_resource type="Resource" uid="uid://bs7u4ckswam2f" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ramp_up.tres" id="11_rqjiq"]
-[ext_resource type="Resource" uid="uid://flq0lkjfimuf" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_extended_drum.tres" id="12_qo2ly"]
-[ext_resource type="Resource" uid="uid://okv7b5p22t5g" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_explosive_bullet.tres" id="13_2fs0b"]
-[ext_resource type="Resource" uid="uid://do2l2svihllsk" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_bullet_time.tres" id="13_5f2k0"]
-[ext_resource type="Resource" uid="uid://dk6xc7t1fhhlc" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_death_from_above.tres" id="14_4sgpc"]
-[ext_resource type="Resource" uid="uid://b1epv0co28m3f" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_empowered_dash.tres" id="16_o0ero"]
-[ext_resource type="Resource" uid="uid://in3s5eph31kk" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_fortitude.tres" id="19_oo5sd"]
-[ext_resource type="Resource" uid="uid://bxaqsgyj2gcgs" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_homing_bullets.tres" id="21_jpwd4"]
-[ext_resource type="Resource" uid="uid://dsgygur0314m2" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_hyperfocus.tres" id="22_scu43"]
-[ext_resource type="Resource" uid="uid://dm04bq0pv7c1j" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_medical_payout.tres" id="23_vfyqf"]
-[ext_resource type="Resource" uid="uid://catoesfsr51ok" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_newtons_third.tres" id="24_2kilb"]
-[ext_resource type="Resource" uid="uid://bmy7206nh0maq" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_ricochet.tres" id="26_px180"]
-[ext_resource type="Resource" uid="uid://d2cgitpcvf4g0" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_shield.tres" id="27_j5rnn"]
-[ext_resource type="Resource" uid="uid://mrxt3egtibbf" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_sticky_bomb.tres" id="28_mhb3c"]
-[ext_resource type="Resource" uid="uid://uvem1037bxmd" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_tag_and_shred.tres" id="29_btcgv"]
-[ext_resource type="Resource" uid="uid://o6ewuiqdmmmt" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_molotov_dash.tres" id="30_yhhcr"]
-[ext_resource type="Resource" uid="uid://bndnrynsldd1b" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_toxin_mist.tres" id="31_382ao"]
-[ext_resource type="Resource" uid="uid://dsh30snmwhk8l" path="res://src/player/barrel/resource/debug_single_effects/DEBUG_cognac_reload.tres" id="32_ed8yr"]
+[ext_resource type="PackedScene" uid="uid://dxui67spyijhu" path="res://src/ui/player/inventory/GunCustomizeUI.tscn" id="6_kcljk"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_am2uw"]
 _surfaces = [{
@@ -115,7 +90,5 @@ shape = SubResource("BoxShape3D_2202f")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="InventoryUI" parent="UI" instance=ExtResource("5_b7an8")]
+[node name="GunCustomizeUI" parent="UI" instance=ExtResource("6_kcljk")]
 visible = false
-shop_title = "Debug Vending Machine"
-current_inventory = Array[ExtResource("6_qqfkm")]([ExtResource("8_m0arp"), ExtResource("9_oc20r"), ExtResource("10_yhgbb"), ExtResource("7_w8qpy"), ExtResource("13_5f2k0"), ExtResource("14_4sgpc"), ExtResource("9_t37n2"), ExtResource("16_o0ero"), ExtResource("13_2fs0b"), ExtResource("12_qo2ly"), ExtResource("19_oo5sd"), ExtResource("10_hcac1"), ExtResource("21_jpwd4"), ExtResource("22_scu43"), ExtResource("23_vfyqf"), ExtResource("24_2kilb"), ExtResource("11_rqjiq"), ExtResource("26_px180"), ExtResource("27_j5rnn"), ExtResource("28_mhb3c"), ExtResource("29_btcgv"), ExtResource("30_yhhcr"), ExtResource("31_382ao"), ExtResource("32_ed8yr")])

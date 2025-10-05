@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/maps/lobby/vendor/vendor.gd" id="1_xd7ad"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_q1oya"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="2_ut4j6"]
-[ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="4_454y0"]
+[ext_resource type="PackedScene" uid="uid://dxui67spyijhu" path="res://src/ui/player/inventory/GunCustomizeUI.tscn" id="5_68842"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dp6qw"]
 size = Vector3(2.5, 3.1, 2.3)
@@ -15,6 +15,11 @@ radius = 5.0
 collision_layer = 96
 collision_mask = 79
 script = ExtResource("1_xd7ad")
+interact_text = Array[String](["Get your barrels here! All chips accepted!"])
+exit_text = Array[String](["Bye bye!"])
+hurt_text = Array[String](["Ouch!"])
+purchase_text = Array[String](["Thank you!"])
+too_expensive_text = Array[String](["You don't have enough!"])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 1.55, -0.15)
@@ -47,8 +52,7 @@ shape = SubResource("SphereShape3D_rsf6f")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="InventoryUI" parent="UI" instance=ExtResource("4_454y0")]
-visible = false
+[node name="GunCustomizeUI" parent="UI" instance=ExtResource("5_68842")]
 
 [connection signal="body_entered" from="InteractArea" to="." method="_on_body_entered"]
 [connection signal="body_exited" from="InteractArea" to="." method="_on_body_exited"]

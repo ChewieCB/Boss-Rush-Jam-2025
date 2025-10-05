@@ -149,6 +149,9 @@ func _ready() -> void:
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
 
+	if OS.is_debug_build():
+		shop_barrels = starting_shop_barrels
+
 
 func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):
