@@ -9,6 +9,7 @@ signal all_hand_attacks_finished
 @export var hand_scene: PackedScene
 @export var hand_spacing: float = 5.0
 var spawned_hands = []
+var despawned_hands = []
 var finished_hands = []
 var last_hand
 
@@ -35,6 +36,7 @@ func activate() -> void:
 # with their own state charts, we direct them here.
 #
 # Spawn/despawn methods
+# Spawn a new hand from a packed scene
 func spawn_hand(is_instant: bool = false) -> BlackjackHand:
 	var new_hand := hand_scene.instantiate()
 	spawned_hands.append(new_hand)
@@ -48,6 +50,29 @@ func spawn_hand(is_instant: bool = false) -> BlackjackHand:
 	await _anchor_hand.bind(args)
 	
 	return new_hand
+
+
+# For when we want to "destroy" a hand, but not actually free and re-instantiate a new scene
+func despawn_hand(hand: BlackjackHand) -> void:
+	if hand not in spawned_hands:
+		push_error("Can't despawn hand that wasn't spawned")
+	
+	spawned_hands.erase(hand)
+	despawned_hands.append(hand)
+	_release_hand(hand)
+	await hand.fake_destroy()
+
+# Bring a "dead" hand back as a new hand without instantiating a new scene
+func respawn_hand(hand: BlackjackHand) -> void:
+	if hand not in despawned_hands:
+		push_error("Can't respawn hand that wasn't despawned")
+	
+	despawned_hands.erase(hand)
+	spawned_hands.append(hand)
+	hand.position = Vector3.ZERO
+	hand.global_position = hand_spawn_pos.global_position
+	hand.reinstate()
+	await _anchor_hand(hand)
 
 
 # Move the hand scene to a child of the boss so they can move together
@@ -169,3 +194,14 @@ func _on_intro_state_entered() -> void:
 	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[intro_path_points.size() - 1].global_position + Vector3(-5, 0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
 	
 	await move_tween.finished
+	
+	# Test despawning and respawning methods
+	while true:
+		await get_tree().create_timer(0.5).timeout
+		await despawn_hand(hand_l)
+		await despawn_hand(hand_r)
+		await get_tree().create_timer(0.5).timeout
+		await respawn_hand(hand_l)
+		await respawn_hand(hand_r)
+	
+	
