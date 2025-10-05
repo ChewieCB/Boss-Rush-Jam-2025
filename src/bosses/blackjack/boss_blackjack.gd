@@ -34,6 +34,12 @@ func activate() -> void:
 	state_chart.send_event("start_intro")
 
 
+func select_attack_phase_1() -> void:
+	state_chart.send_event("end_attack")
+	state_chart.send_event("start_hand_slam_attack")
+	
+
+
 ## HAND HELPER METHODS
 # Since the floating hands are CharacterBody3D instances
 # with their own state charts, we direct them here.
@@ -45,7 +51,11 @@ func spawn_hand(is_visible: bool = true) -> BlackjackHand:
 	spawned_hands.append(new_hand)
 	scene_root.add_child(new_hand)
 	
+	new_hand.state_chart.event_received.connect(_hand_on_event_received.bind(new_hand))
+	
 	# Set hand spawn position
+	new_hand.controller_boss = self
+	new_hand.target = self.target
 	new_hand.visible = is_visible
 	new_hand.position = Vector3.ZERO
 	new_hand.global_position = hand_spawn_pos.global_position
@@ -80,6 +90,18 @@ func respawn_hand(hand: BlackjackHand) -> void:
 	hand.spawn_dust()
 	hand.spawn_explosion()
 	await _anchor_hand(hand)
+
+
+func get_hand_anchor_point(hand: BlackjackHand) -> Vector3:
+	if not hand in spawned_hands:
+		push_error("Hand %s not found in spawned hands array" % [hand.name])
+	
+	var hand_idx = spawned_hands.find(hand)
+	var lr_sign: int = 1 if hand_idx % 2 == 0 else -1
+	var idx_spacing = ceil(float(hand_idx + 1) / 2)
+	var hand_offset := Vector3(hand_spacing * idx_spacing * lr_sign, 2.0 * idx_spacing, 0)
+	
+	return self.global_position + hand_offset
 
 
 # Move the hand scene to a child of the boss so they can move together
@@ -126,8 +148,8 @@ func _release_hand(hand: BlackjackHand) -> void:
 
 # General event handler methods
 func _hand_on_event_received(event: String, hand: BossCore) -> void:
-	if event == "end_recovery":
-		hand.state_chart.send_event("end_attack")
+	if event == "hand_finished":
+		#hand.state_chart.send_event("hand_finished")
 		_hand_finished(hand)
 
 func _hand_finished(hand: BossCore) -> void:
@@ -209,15 +231,33 @@ func _on_intro_state_entered() -> void:
 	_anchor_hand(hand_l)
 	_anchor_hand(hand_r)
 	
-	# Test despawning and respawning methods
-	while true:
-		await get_tree().create_timer(2.8).timeout
-		await despawn_hand(hand_l)
-		await get_tree().create_timer(0.3).timeout
-		await despawn_hand(hand_r)
-		await get_tree().create_timer(0.3).timeout
-		await get_tree().create_timer(1.1).timeout
-		await respawn_hand(hand_l)
-		await respawn_hand(hand_r)
-	
-	
+	state_chart.send_event("finish_intro")
+
+
+## DEALING
+
+func _on_dealing_idle_state_entered() -> void:
+	# TODO
+	state_chart.send_event("start_deal")
+
+
+func _on_dealing_dealing_state_entered() -> void:
+	# TODO
+	state_chart.send_event("end_deal")
+
+
+func _on_dealing_recover_state_entered() -> void:
+	# TODO
+	state_chart.send_event("trigger_phase_1")
+	select_attack()
+	state_chart.send_event("end_recovery")
+
+
+## HIT
+
+func _on_hand_hit_attacking_state_entered() -> void:
+	match current_phase:
+		1:
+			trigger_all_hand_attacks_seq("activate", "start_hit_attack")
+		#2:
+			#trigger_substack_attack("start_small_projectile_attack_phase_2")

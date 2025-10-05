@@ -1,10 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://c75qkumkprb7m"]
+[gd_scene load_steps=11 format=3 uid="uid://c75qkumkprb7m"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_vy3jw"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/minions/blackjack_hand.gd" id="2_ktxam"]
 [ext_resource type="Texture2D" uid="uid://dok41mylohiof" path="res://src/bosses/blackjack/assets/sprites/fist_temp.png" id="2_mlpb3"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_4jfnf"]
 [ext_resource type="PackedScene" uid="uid://qahk60dlm5l5" path="res://src/bosses/blackjack/assets/particles/HandDust.tscn" id="4_6tcna"]
 [ext_resource type="PackedScene" uid="uid://cpythm85h6h8" path="res://addons/EffectBlocks/assets/ExplosionPolyBigReusable.tscn" id="5_ayxa5"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_c4mgp"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_a6hkh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kslsp"]
 size = Vector3(3, 3, 3)
@@ -14,6 +17,7 @@ size = Vector3(3, 3, 3)
 
 [node name="BlackjackHand" instance=ExtResource("1_vy3jw")]
 script = ExtResource("2_ktxam")
+slam_time = 0.85
 chip_scene = null
 barrel_pickup_scene = null
 sfx_slowmo = null
@@ -35,8 +39,64 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 visible = true
 mesh = SubResource("BoxMesh_0gbvr")
 
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Idle")
+event = &"activate"
+delay_in_seconds = "0.0"
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("5_c4mgp")
+
+[node name="toHit" type="Node" parent="StateChart/Root/Phase/Idle" index="0"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Hit")
+event = &"start_hit_attack"
+delay_in_seconds = "0.0"
+
+[node name="Hit" type="Node" parent="StateChart/Root/Phase" index="2"]
+script = ExtResource("6_a6hkh")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Hit" index="0"]
+script = ExtResource("5_c4mgp")
+
+[node name="toSlamming" type="Node" parent="StateChart/Root/Phase/Hit/Targeting" index="0"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Slamming")
+event = &"hand_slam"
+delay_in_seconds = "0.0"
+
+[node name="Slamming" type="Node" parent="StateChart/Root/Phase/Hit" index="1"]
+script = ExtResource("5_c4mgp")
+
+[node name="toReturning" type="Node" parent="StateChart/Root/Phase/Hit/Slamming" index="0"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Returning")
+event = &"hand_return"
+delay_in_seconds = "0.0"
+
+[node name="Returning" type="Node" parent="StateChart/Root/Phase/Hit" index="2"]
+script = ExtResource("5_c4mgp")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Hit/Returning" index="0"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Targeting")
+event = &"hand_finished"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Hit" index="3"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Idle")
+event = &"end_attack"
+delay_in_seconds = "0.0"
+
 [node name="HandDust" parent="." index="22" instance=ExtResource("4_6tcna")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.64659, 0)
 
 [node name="DeathExplosion" parent="." index="23" instance=ExtResource("5_ayxa5")]
 size = 3.0
+
+[connection signal="state_entered" from="StateChart/Root/Phase/Hit/Targeting" to="." method="_on_hit_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Hit/Slamming" to="." method="_on_hit_slamming_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Hit/Returning" to="." method="_on_hit_returning_state_entered"]

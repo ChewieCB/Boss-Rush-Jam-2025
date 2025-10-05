@@ -318,3 +318,9 @@ event = &"end_attack"
 delay_in_seconds = "0.0"
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Dealing/Idle" to="." method="_on_dealing_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Dealing/Dealing" to="." method="_on_dealing_dealing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Dealing/Recover" to="." method="_on_dealing_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandSlam/Targeting" to="." method="_start_hand_attack"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandSlam/Attacking" to="." method="_on_hand_hit_attacking_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandSlam/Recover" to="." method="_recover_entered"]
