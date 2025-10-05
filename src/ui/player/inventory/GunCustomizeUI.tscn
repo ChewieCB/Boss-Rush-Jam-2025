@@ -264,19 +264,17 @@ custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 texture = ExtResource("3_1ywl0")
 
-[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot" instance=ExtResource("7_78f5u")]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = -50.0
-offset_right = 50.0
-offset_bottom = 50.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
+
+[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot/HBoxContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
 
 [node name="BorderNormal" type="NinePatchRect" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
@@ -298,19 +296,17 @@ custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 texture = ExtResource("3_1ywl0")
 
-[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot2" instance=ExtResource("7_78f5u")]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot2"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = -50.0
-offset_right = 50.0
-offset_bottom = 50.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
+
+[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot2/HBoxContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
 
 [node name="BorderNormal" type="NinePatchRect" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot2"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
@@ -332,19 +328,17 @@ custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 texture = ExtResource("3_1ywl0")
 
-[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot3" instance=ExtResource("7_78f5u")]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot3"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = -50.0
-offset_right = 50.0
-offset_bottom = 50.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
+
+[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot3/HBoxContainer" instance=ExtResource("7_78f5u")]
+layout_mode = 2
 
 [node name="BorderNormal" type="NinePatchRect" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot3"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
@@ -354,7 +348,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("14_ynme0")
+texture = ExtResource("17_tev6s")
 patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
@@ -367,9 +361,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -63.0
+offset_left = -64.0
 offset_top = 2.0
-offset_right = 65.0
+offset_right = 64.0
 offset_bottom = 31.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -764,6 +758,7 @@ anchor_bottom = 1.0
 offset_top = -56.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 color = Color(0, 0, 0, 0)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ControlHelp"]

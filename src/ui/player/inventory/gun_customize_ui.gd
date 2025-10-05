@@ -71,13 +71,14 @@ func _input(event: InputEvent) -> void:
 
 func full_refresh_ui():
 	# EQUIPPED BARRELS
-	for child in equip_barrel_container.get_children():
-		if child.has_node("BarrelItemUI"):
-			child.get_node("BarrelItemUI").queue_free()
+	for barrel_slot in equip_barrel_container.get_children():
+		var container = barrel_slot.get_node("HBoxContainer")
+		for child in container.get_children():
+			child.queue_free()
 	var index = 2
 	for barrel_data in GameManager.equipped_barrels:
 		var item_inst = barrel_item_ui_prefab.instantiate()
-		equip_barrel_container.get_child(index).add_child(item_inst)
+		equip_barrel_container.get_child(index).get_node("HBoxContainer").add_child(item_inst)
 		index -= 1
 		item_inst.init(barrel_data, true, true)
 		item_inst.select_item.connect(_on_item_ui_select)
