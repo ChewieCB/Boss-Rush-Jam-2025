@@ -85,6 +85,8 @@ _surfaces = [{
 
 [node name="BossBlackjack" node_paths=PackedStringArray("intro_path_points") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
+hand_scene = ExtResource("13_ereo8")
+hand_spacing = 5.0
 intro_path_points = []
 chip_scene = null
 barrel_pickup_scene = null
@@ -116,7 +118,7 @@ cast_shadow = 2
 gi_mode = 0
 mesh = SubResource("ArrayMesh_w7kb0")
 
-[node name="Hands" type="Node3D" parent="." index="4"]
+[node name="HandAnchor" type="Marker3D" parent="." index="4"]
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Blackjack"
@@ -312,11 +314,5 @@ script = ExtResource("3_db3k6")
 to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
-
-[node name="BlackjackHandL" parent="." index="24" instance=ExtResource("13_ereo8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
-
-[node name="BlackjackHandR" parent="." index="25" instance=ExtResource("13_ereo8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_entered"]

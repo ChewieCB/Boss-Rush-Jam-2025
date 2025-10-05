@@ -8511,8 +8511,8 @@
 // entity 56
 {
 "classname" "BossBlackjack"
-"origin" "-1496 0 380"
-"angle" "0"
+"origin" "-1512 0 380"
+"angle" "180"
 }
 // entity 57
 {

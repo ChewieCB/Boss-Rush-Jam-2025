@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://c75qkumkprb7m"]
+[gd_scene load_steps=6 format=3 uid="uid://c75qkumkprb7m"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_vy3jw"]
+[ext_resource type="Script" path="res://src/bosses/blackjack/minions/blackjack_hand.gd" id="2_ktxam"]
 [ext_resource type="Texture2D" uid="uid://dok41mylohiof" path="res://src/bosses/blackjack/assets/sprites/fist_temp.png" id="2_mlpb3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kslsp"]
@@ -10,6 +11,13 @@ size = Vector3(3, 3, 3)
 size = Vector3(3, 3, 3)
 
 [node name="BlackjackHand" instance=ExtResource("1_vy3jw")]
+script = ExtResource("2_ktxam")
+chip_scene = null
+barrel_pickup_scene = null
+sfx_slowmo = null
+attack_recovery_time = 0.5
+projectile_scene = null
+delay_per_projectile = 0.6
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]

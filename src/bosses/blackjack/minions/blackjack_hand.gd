@@ -1,0 +1,2 @@
+extends BossCore
+class_name BlackjackHand
