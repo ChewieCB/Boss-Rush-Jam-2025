@@ -1,6 +1,6 @@
-[gd_scene load_steps=42 format=4 uid="uid://sowc1idunj2o"]
+[gd_scene load_steps=42 format=4 uid="uid://cpythm85h6h8"]
 
-[ext_resource type="Script" path="res://addons/EffectBlocks/source_files/scripts/explosion_vfx.gd" id="1_1bngt"]
+[ext_resource type="Script" path="res://addons/EffectBlocks/assets/explosion_poly_big_reusable.gd" id="1_idl4o"]
 
 [sub_resource type="Curve" id="Curve_56try"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -291,8 +291,8 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_2oxcc")
 
-[node name="ExplosionPolyBig" type="Node3D" node_paths=PackedStringArray("gpu_particles_arr")]
-script = ExtResource("1_1bngt")
+[node name="ExplosionPolyBigReusable" type="Node3D" node_paths=PackedStringArray("gpu_particles_arr")]
+script = ExtResource("1_idl4o")
 gpu_particles_arr = [NodePath("Sparks"), NodePath("Smoke"), NodePath("Debri"), NodePath("Debri/DebriSmoke")]
 
 [node name="Sparks" type="GPUParticles3D" parent="."]

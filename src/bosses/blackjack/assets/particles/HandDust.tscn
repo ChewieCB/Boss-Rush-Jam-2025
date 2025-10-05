@@ -57,9 +57,9 @@ size = Vector2(5, 5)
 [node name="HandDust" type="GPUParticles3D"]
 emitting = false
 amount = 40
-lifetime = 0.6
+lifetime = 0.5
 one_shot = true
-explosiveness = 0.94
+explosiveness = 0.04
 randomness = 0.05
 visibility_aabb = AABB(-0.452503, -0.204213, -1.28575, 0.830573, 0.973868, 1.38575)
 process_material = SubResource("ParticleProcessMaterial_2g4hp")

@@ -1960,9 +1960,10 @@ spot_angle = 21.77
 spot_angle_attenuation = 1.7411
 
 [node name="HandSpawnPos" type="Marker3D" parent="." index="8"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, -62)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.6, -156.757)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="HandSpawnPos" index="0"]
+visible = false
 mesh = SubResource("CapsuleMesh_25egh")
 
 [node name="BossIntroPath" type="Node3D" parent="." index="9"]
@@ -1970,10 +1971,10 @@ mesh = SubResource("CapsuleMesh_25egh")
 [node name="PlatformPath" type="Node3D" parent="BossIntroPath" index="0"]
 
 [node name="Marker3D" type="Marker3D" parent="BossIntroPath/PlatformPath" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, -38.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, -43.2372)
 
 [node name="Marker3D2" type="Marker3D" parent="BossIntroPath/PlatformPath" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.7, -41.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.7, -40.2399)
 
 [node name="Marker3D3" type="Marker3D" parent="BossIntroPath/PlatformPath" index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.7, -45.6)

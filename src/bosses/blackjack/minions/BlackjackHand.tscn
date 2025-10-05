@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://c75qkumkprb7m"]
+[gd_scene load_steps=8 format=3 uid="uid://c75qkumkprb7m"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_vy3jw"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/minions/blackjack_hand.gd" id="2_ktxam"]
 [ext_resource type="Texture2D" uid="uid://dok41mylohiof" path="res://src/bosses/blackjack/assets/sprites/fist_temp.png" id="2_mlpb3"]
 [ext_resource type="PackedScene" uid="uid://qahk60dlm5l5" path="res://src/bosses/blackjack/assets/particles/HandDust.tscn" id="4_6tcna"]
+[ext_resource type="PackedScene" uid="uid://cpythm85h6h8" path="res://addons/EffectBlocks/assets/ExplosionPolyBigReusable.tscn" id="5_ayxa5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kslsp"]
 size = Vector3(3, 3, 3)
@@ -36,3 +37,6 @@ mesh = SubResource("BoxMesh_0gbvr")
 
 [node name="HandDust" parent="." index="22" instance=ExtResource("4_6tcna")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.64659, 0)
+
+[node name="DeathExplosion" parent="." index="23" instance=ExtResource("5_ayxa5")]
+size = 3.0

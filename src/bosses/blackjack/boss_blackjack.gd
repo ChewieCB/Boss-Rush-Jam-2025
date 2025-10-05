@@ -13,6 +13,9 @@ var despawned_hands = []
 var finished_hands = []
 var last_hand
 
+# Particles Misc
+@export var explosion_scene: PackedScene
+
 # Intro
 @export var intro_path_points: Array[Marker3D] = []
 
@@ -37,17 +40,18 @@ func activate() -> void:
 #
 # Spawn/despawn methods
 # Spawn a new hand from a packed scene
-func spawn_hand(is_instant: bool = false) -> BlackjackHand:
+func spawn_hand(is_visible: bool = true) -> BlackjackHand:
 	var new_hand := hand_scene.instantiate()
 	spawned_hands.append(new_hand)
 	scene_root.add_child(new_hand)
 	
 	# Set hand spawn position
+	new_hand.visible = is_visible
 	new_hand.position = Vector3.ZERO
 	new_hand.global_position = hand_spawn_pos.global_position
 	
-	var args = [new_hand, 0.0] if is_instant else [new_hand]
-	await _anchor_hand.bind(args)
+	new_hand.spawn_dust()
+	new_hand.spawn_explosion()
 	
 	return new_hand
 
@@ -60,6 +64,7 @@ func despawn_hand(hand: BlackjackHand) -> void:
 	spawned_hands.erase(hand)
 	despawned_hands.append(hand)
 	_release_hand(hand)
+	
 	await hand.fake_destroy()
 
 # Bring a "dead" hand back as a new hand without instantiating a new scene
@@ -72,6 +77,8 @@ func respawn_hand(hand: BlackjackHand) -> void:
 	hand.position = Vector3.ZERO
 	hand.global_position = hand_spawn_pos.global_position
 	hand.reinstate()
+	hand.spawn_dust()
+	hand.spawn_explosion()
 	await _anchor_hand(hand)
 
 
@@ -84,10 +91,11 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 	var hand_idx = spawned_hands.find(hand)
 	var lr_sign: int = 1 if hand_idx % 2 == 0 else -1
 	var idx_spacing = ceil(float(hand_idx + 1) / 2)
-	var hand_offset := Vector3(hand_spacing * idx_spacing * lr_sign, 2.0 * (idx_spacing - 1), 0)
+	var hand_offset := Vector3(hand_spacing * idx_spacing * lr_sign, 2.0 * idx_spacing, 0)
 	
 	var spawn_tween := get_tree().create_tween()
 	spawn_tween.tween_property(hand, "global_position", self.global_position + hand_offset, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	spawn_tween.parallel().tween_property(hand, "scale", Vector3.ONE, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await spawn_tween.finished
 	
 	# Move the hand node inside of the boss to anchor
@@ -108,10 +116,12 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 # Move the new hand to the scene root so it can move independently
 func _release_hand(hand: BlackjackHand) -> void:
 	var hand_parent: Node3D = hand.get_parent()
+	var cached_pos: Vector3 = hand.global_position
 	if hand_parent:
 		hand_parent.remove_child(hand)
 	
 	scene_root.add_child(hand)
+	hand.global_position = cached_pos
 
 
 # General event handler methods
@@ -173,34 +183,40 @@ func _on_intro_state_entered() -> void:
 	
 	# Spawn two initial hands
 	for i in range(2):
-		await spawn_hand()
+		var _hand = spawn_hand(false)
+		#_hand.visible = false
 	
 	var move_tween := get_tree().create_tween()
 	var hand_l = spawned_hands[0]
 	var hand_r = spawned_hands[1]
 	self.global_position = intro_path_points[0].global_position
-	for point in intro_path_points.slice(1, intro_path_points.size() - 1):
-		move_tween.tween_property(hand_l, "global_position", point.global_position + Vector3(5, -1 ,0), 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		move_tween.parallel().tween_property(hand_r, "global_position", point.global_position + Vector3(-5, -1, 0), 0.36).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		move_tween.tween_interval(0.25)
-		move_tween.chain().tween_property(self, "global_position", point.global_position, 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		move_tween.parallel().tween_property(hand_l, "global_position", point.global_position + Vector3(5, 0.5, 2), 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		move_tween.parallel().tween_property(hand_r, "global_position", point.global_position + Vector3(-5, 0.5, 2), 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	hand_l.position = Vector3(5, 0, 0)
-	hand_r.position = Vector3(-5, 0, 0)
-	#move_tween.tween_interval(0.1)
-	move_tween.parallel().tween_property(self, "global_position", intro_path_points[intro_path_points.size() - 1].global_position, 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
-	move_tween.parallel().tween_property(hand_l, "global_position", intro_path_points[intro_path_points.size() - 1].global_position + Vector3(5, 0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
-	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[intro_path_points.size() - 1].global_position + Vector3(-5, 0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	hand_l.global_position = intro_path_points[0].global_position
+	hand_l.visible = true
+	hand_r.global_position = intro_path_points[0].global_position
+	hand_r.visible = true
+	
+	move_tween.tween_property(hand_l, "global_position", intro_path_points[1].global_position + Vector3(hand_spacing, -1 ,0), 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[1].global_position + Vector3(-hand_spacing, -1, 0), 0.36).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		
+	move_tween.chain().tween_property(self, "global_position", intro_path_points[1].global_position, 1.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	
+	move_tween.chain().tween_property(self, "global_position", intro_path_points[2].global_position, 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	move_tween.parallel().tween_property(hand_l, "global_position", intro_path_points[2].global_position + Vector3(hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[2].global_position + Vector3(-hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
 	
 	await move_tween.finished
 	
+	_anchor_hand(hand_l)
+	_anchor_hand(hand_r)
+	
 	# Test despawning and respawning methods
 	while true:
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(2.8).timeout
 		await despawn_hand(hand_l)
+		await get_tree().create_timer(0.3).timeout
 		await despawn_hand(hand_r)
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(1.1).timeout
 		await respawn_hand(hand_l)
 		await respawn_hand(hand_r)
 	
