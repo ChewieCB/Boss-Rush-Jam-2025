@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c75qkumkprb7m"]
+[gd_scene load_steps=12 format=3 uid="uid://c75qkumkprb7m"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_vy3jw"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/minions/blackjack_hand.gd" id="2_ktxam"]
@@ -15,9 +15,14 @@ size = Vector3(3, 3, 3)
 [sub_resource type="BoxMesh" id="BoxMesh_0gbvr"]
 size = Vector3(3, 3, 3)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_uy85v"]
+radius = 2.3
+
 [node name="BlackjackHand" instance=ExtResource("1_vy3jw")]
+collision_mask = 25
 script = ExtResource("2_ktxam")
 slam_time = 0.85
+hit_damage = 10.0
 chip_scene = null
 barrel_pickup_scene = null
 sfx_slowmo = null
@@ -38,6 +43,10 @@ shape = SubResource("BoxShape3D_kslsp")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 visible = true
 mesh = SubResource("BoxMesh_0gbvr")
+
+[node name="CollisionShape3D" parent="Hurtbox" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+shape = SubResource("SphereShape3D_uy85v")
 
 [node name="toIdle" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("4_4jfnf")

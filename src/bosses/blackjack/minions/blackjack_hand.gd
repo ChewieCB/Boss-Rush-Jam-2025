@@ -14,6 +14,7 @@ class_name BlackjackHand
 # Hit
 var slam_target: Vector3
 @export var slam_time: float = 0.85
+@export var hit_damage: float = 10
 
 
 func _ready() -> void:
@@ -32,7 +33,7 @@ func fake_destroy() -> void:
 
 func reinstate() -> void:
 	self.collision_layer = pow(2, 3-1)
-	self.collision_mask = pow(2, 1-1) + pow(2, 2-1) + pow(2, 4-1) + pow(2, 5-1)
+	self.collision_mask = pow(2, 1-1) + pow(2, 4-1) + pow(2, 5-1)
 	hurtbox.monitoring = true
 	sprite.visible = true
 	debug_mesh.visible = true
@@ -79,11 +80,13 @@ func _on_hit_slamming_state_entered() -> void:
 	
 	# Quickly zoom towards the target point, 
 	# creating a small AoE and some particles on impact
+	hurtbox.set_deferred("monitoring", true)
 	var slam_tween := get_tree().create_tween()
 	slam_tween.tween_property(self, "global_position", slam_target, slam_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	await slam_tween.finished
 	# TODO - generate explosion and damage
-	explosion_particle.explosion()
+	spawn_dust()
+	spawn_explosion()
 	
 	state_chart.send_event("hand_return")
 
@@ -92,6 +95,7 @@ func _on_hit_slamming_state_entered() -> void:
 func _on_hit_returning_state_entered() -> void:
 	debug_state_label.text = "Hit | Returning"
 	
+	hurtbox.set_deferred("monitoring", false)
 	# Return to the boss slightly slower than the slam speed
 	var target_pos: Vector3 = controller_boss.get_hand_anchor_point(self)
 	#draw_debug_sphere(target_pos, 2.0, Color.GREEN)
@@ -104,3 +108,9 @@ func _on_hit_returning_state_entered() -> void:
 	# TODO
 	state_chart.send_event("hand_finished")
 	state_chart.send_event("end_attack")
+
+
+func _on_hurtbox_body_entered(body: Node3D) -> void:
+	if body is Player:
+		body.health_component.damage(hit_damage)
+		
