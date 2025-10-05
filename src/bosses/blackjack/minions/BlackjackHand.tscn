@@ -21,7 +21,7 @@ radius = 2.3
 [node name="BlackjackHand" instance=ExtResource("1_vy3jw")]
 collision_mask = 25
 script = ExtResource("2_ktxam")
-slam_time = 0.85
+slam_time = 0.6
 hit_damage = 10.0
 chip_scene = null
 barrel_pickup_scene = null

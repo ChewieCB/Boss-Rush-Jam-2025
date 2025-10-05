@@ -13,7 +13,7 @@ class_name BlackjackHand
 ## Attacks
 # Hit
 var slam_target: Vector3
-@export var slam_time: float = 0.85
+@export var slam_time: float = 0.6
 @export var hit_damage: float = 10
 
 
@@ -67,9 +67,21 @@ func _on_hit_targeting_state_entered() -> void:
 	await get_tree().create_timer(0.6).timeout
 	_telegraph_attack("Hit")
 	
-	# Target the players position
-	slam_target = target.global_position
-	#draw_debug_sphere(slam_target, 2.0, Color.YELLOW)
+	# Target just in front of the players position
+	slam_target = target.global_position - target.global_basis.z * 1.35
+	# TODO - lock the target pos to the walkable player floor mesh
+	#
+	# Lock the target pos to the floor
+	var space_state = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(
+		slam_target,
+		slam_target + Vector3(0, -50, 0),
+		int(pow(2, 1 - 1))
+	)
+	var result = space_state.intersect_ray(query)
+	if result:
+		slam_target.y = result.position.y
+	#draw_debug_sphere(slam_target, 1.0, Color.YELLOW)
 	# TODO - raycast down to get floor y (reuse the bell AoE code)
 	
 	state_chart.send_event("hand_slam")
