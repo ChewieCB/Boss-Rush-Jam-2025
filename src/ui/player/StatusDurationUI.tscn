@@ -8,6 +8,7 @@
 
 [node name="StatusDurationUI" type="TextureProgressBar"]
 custom_minimum_size = Vector2(64, 64)
+mouse_filter = 2
 value = 35.0
 fill_mode = 3
 nine_patch_stretch = true
