@@ -19,6 +19,7 @@ var slam_target: Vector3
 
 func _ready() -> void:
 	super()
+	state_chart.send_event("start_targeting")
 
 
 func fake_destroy() -> void:
@@ -32,7 +33,7 @@ func fake_destroy() -> void:
 
 
 func reinstate() -> void:
-	self.collision_layer = pow(2, 3-1)
+	self.collision_layer = pow(2, 7-1)
 	self.collision_mask = pow(2, 1-1) + pow(2, 4-1) + pow(2, 5-1)
 	hurtbox.monitoring = true
 	sprite.visible = true
@@ -68,7 +69,7 @@ func _on_hit_targeting_state_entered() -> void:
 	_telegraph_attack("Hit")
 	
 	# Target just in front of the players position
-	slam_target = target.global_position - target.global_basis.z * 1.35
+	slam_target = target.global_position - target.global_basis.z * 1.15
 	# TODO - lock the target pos to the walkable player floor mesh
 	#
 	# Lock the target pos to the floor
@@ -82,7 +83,6 @@ func _on_hit_targeting_state_entered() -> void:
 	if result:
 		slam_target.y = result.position.y
 	#draw_debug_sphere(slam_target, 1.0, Color.YELLOW)
-	# TODO - raycast down to get floor y (reuse the bell AoE code)
 	
 	state_chart.send_event("hand_slam")
 
@@ -101,7 +101,6 @@ func _on_hit_slamming_state_entered() -> void:
 	spawn_explosion()
 	
 	state_chart.send_event("hand_return")
-
 
 
 func _on_hit_returning_state_entered() -> void:
