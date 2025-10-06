@@ -1,0 +1,114 @@
+[gd_scene load_steps=8 format=3 uid="uid://bdotmbmcpnnup"]
+
+[ext_resource type="Script" path="res://src/ui/player/inventory/barrel_info_region.gd" id="1_4g30l"]
+[ext_resource type="Texture2D" uid="uid://rgiumjfjwf7y" path="res://assets/sprite/placeholder/circle-ring.png" id="2_3m8fx"]
+[ext_resource type="PackedScene" uid="uid://bl1msq3x8c3ar" path="res://src/ui/player/inventory/BarrelInfoIcon.tscn" id="3_6lcb6"]
+[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="6_lxvge"]
+[ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="7_ggvao"]
+[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="8_c2skj"]
+[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="9_d8lkm"]
+
+[node name="BarrelInfoRegion" type="Control"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -1080.0
+offset_right = 896.0
+offset_bottom = -592.0
+grow_vertical = 0
+script = ExtResource("1_4g30l")
+barrel_info_icon_prefab = ExtResource("3_6lcb6")
+
+[node name="CircleRing" type="TextureRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.47)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 48.0
+offset_top = -188.0
+offset_right = 432.0
+offset_bottom = 196.0
+grow_vertical = 2
+texture = ExtResource("2_3m8fx")
+expand_mode = 3
+
+[node name="PanelDescription" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 488.0
+offset_top = -408.0
+offset_right = 888.0
+offset_bottom = -88.0
+grow_vertical = 0
+color = Color(0, 0, 0, 1)
+
+[node name="Border" type="NinePatchRect" parent="PanelDescription"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_lxvge")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="PanelBGIcon" type="TextureRect" parent="PanelDescription"]
+self_modulate = Color(1, 1, 1, 0.2)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.0
+offset_top = -124.0
+offset_right = 124.0
+offset_bottom = 124.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_ggvao")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelDescription"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+
+[node name="VBoxContainer" type="MarginContainer" parent="PanelDescription/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="PanelDescription/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("8_c2skj")
+theme_override_fonts/bold_font = ExtResource("9_d8lkm")
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "[b]Effect Name[/b]
+
+Sed excepturi dolores similique asperiores ut.
+[color=green]
++ positive
++ positive
+[/color][color=red]
+- negative
+-negative
+[/color]"
+fit_content = true

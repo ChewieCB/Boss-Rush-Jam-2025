@@ -258,7 +258,7 @@ description = "You can spin gun's barrels even when you don't have enough chips.
 Level 1: -25 HP.
 Level 2: -20 HP.
 Level 3: -15 HP.
-Level 4: -5 HP."
+Level 4: -10 HP."
 skill_id_enum = 5
 max_level = 4
 prerequisite_skills = Array[int]([4])
@@ -625,7 +625,6 @@ offset_right = -23.0
 offset_bottom = 88.0
 grow_horizontal = 0
 size_flags_horizontal = 6
-is_static = true
 
 [node name="ResetTimer" type="Timer" parent="."]
 wait_time = 3.0

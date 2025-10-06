@@ -2333,11 +2333,6 @@ visible = false
 
 [node name="Vendor" parent="." instance=ExtResource("19_fr53g")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -13.4, 1.6, -9.2)
-interact_text = Array[String](["Get your barrels here! All chips accepted!"])
-exit_text = Array[String](["Bye bye!"])
-hurt_text = Array[String](["Ouch!"])
-purchase_text = Array[String](["Thank you!"])
-too_expensive_text = Array[String](["You don't have enough!"])
 
 [node name="GoldSymbolDecal" type="Decal" parent="."]
 transform = Transform3D(-1, 0, 0, 0, 4.37114e-08, -1, 0, 1, 4.37114e-08, -0.0047609, 4.9899, 7)

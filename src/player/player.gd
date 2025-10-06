@@ -938,8 +938,8 @@ func spin_barrels() -> void:
 			3:
 				hp_cost = 15
 			4:
-				hp_cost = 5
-		if health_component.current_health > hp_cost:
+				hp_cost = 10
+		if health_component.current_health > hp_cost and GameManager.reroll_time < GameManager.get_risk_limit_spin_amount():
 			cash_in_luck()
 			GameManager.reroll_time += 1
 			current_gun.spin_all_barrels()

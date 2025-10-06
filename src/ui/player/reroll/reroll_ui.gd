@@ -1,11 +1,14 @@
 extends Control
 
+@export_group("Progress Animation")
+@export var fill_time: float = 0.1
+
+@onready var roll_left_label: Label = $RollLeftLabel
 @onready var progress_bar: TextureProgressBar = $ProgressBar
 @onready var progress_label: Label = $Label
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
-@export_group("Progress Animation")
-@export var fill_time: float = 0.1
+var out_of_reroll = false
 
 
 func _ready() -> void:
@@ -16,9 +19,17 @@ func _ready() -> void:
 	GameManager.currency_changed.connect(_on_currency_changed)
 	GameManager.reroll_cost_changed.connect(_update_reroll_max)
 	GameManager.free_rerolls.connect(_update_reroll_max.bind(progress_bar.max_value))
+	_update_roll_left_label()
 
 
 func _on_progress_changed(value: float) -> void:
+	if out_of_reroll:
+		progress_bar.tint_over.a = 0
+		progress_label.modulate = Color.GRAY
+		progress_label.text = "Limited"
+		anim_player.stop()
+		return
+		
 	if value >= progress_bar.max_value:
 		progress_bar.tint_over.a = 255
 		progress_label.modulate = Color.GOLD
@@ -26,12 +37,6 @@ func _on_progress_changed(value: float) -> void:
 	else:
 		progress_bar.tint_over.a = 0
 		progress_label.modulate = Color.WHITE
-		anim_player.stop()
-
-	if GameManager.reroll_time >= GameManager.get_risk_limit_spin_amount():
-		progress_bar.tint_over.a = 0
-		progress_label.modulate = Color.GRAY
-		progress_label.text = "Limited"
 		anim_player.stop()
 
 
@@ -60,4 +65,15 @@ func _update_reroll_max(new_max: int) -> void:
 	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	progress_tween.tween_property(progress_bar, "value", 0, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	progress_tween.chain().tween_property(progress_bar, "value", new_value, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	_on_progress_changed(0)
+	_update_roll_left_label()
+	
+func _update_roll_left_label() -> void:
+	out_of_reroll = false
+	roll_left_label.visible = false
+	var roll_left = GameManager.get_risk_limit_spin_amount() - GameManager.reroll_time
+	if roll_left < 100:
+		roll_left_label.visible = true
+		roll_left_label.text = "{0} left".format([roll_left])
+	
+	if roll_left <= 0:
+		out_of_reroll = true
