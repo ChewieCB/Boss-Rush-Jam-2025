@@ -15,11 +15,11 @@ radius = 5.0
 collision_layer = 96
 collision_mask = 79
 script = ExtResource("1_xd7ad")
-interact_text = Array[String](["Get your barrels here! All chips accepted!"])
-exit_text = Array[String](["Bye bye!"])
-hurt_text = Array[String](["Ouch!"])
-purchase_text = Array[String](["Thank you!"])
-too_expensive_text = Array[String](["You don't have enough!"])
+interact_text = Array[String](["Get your barrels here! All chips accepted!", "Welcome to my shop!", "Welcome, welcome!"])
+exit_text = Array[String](["Bye bye!", "See you soon!"])
+hurt_text = Array[String](["Ouch!", "Quit it!", "Hey!"])
+purchase_text = Array[String](["Thank you!", "Thanks for your patron!", "Excellent choice!", "A fine aquisition!"])
+too_expensive_text = Array[String](["You don't have enough!", "Another time perhaps?", "Perhaps something a little more in budget, sir?", "Come back when you're a little mmmm richer"])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 1.55, -0.15)

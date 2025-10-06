@@ -38,8 +38,6 @@ func refresh_ui() -> void:
 		inst.barrel_info_region = self
 		inst.global_position = positions[i] - (inst.size / 2)
 		inst.set_barrel_roll_data(barrel_roll_data)
-		if i == 0:
-			inst.grab_focus()
 
 	# Spawn the barrel summary info at center
 	var center_inst: BarrelInfoIcon = barrel_info_icon_prefab.instantiate()
