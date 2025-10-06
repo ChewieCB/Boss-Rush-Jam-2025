@@ -4,6 +4,9 @@ class_name BossBlackjack
 signal hand_attack_finished(hand)
 signal all_hand_attacks_finished
 
+@export var flyable_nav: NavigationRegion3D
+@export var walkable_floor_nav: NavigationRegion3D
+
 @onready var hand_anchor: Marker3D = $HandAnchor
 @export var hand_spawn_pos: Marker3D
 @export var hand_scene: PackedScene
@@ -36,7 +39,10 @@ func activate() -> void:
 
 func select_attack_phase_1() -> void:
 	state_chart.send_event("end_attack")
-	state_chart.send_event("start_hand_slam_attack")
+	if randf() < 0.5:
+		state_chart.send_event("start_hand_slam_attack")
+	else:
+		state_chart.send_event("start_hand_stand_attack")
 	
 
 
@@ -55,6 +61,7 @@ func spawn_hand(is_visible: bool = true) -> BlackjackHand:
 	
 	# Set hand spawn position
 	new_hand.controller_boss = self
+	new_hand.walkable_floor_nav = walkable_floor_nav
 	new_hand.target = self.target
 	new_hand.visible = is_visible
 	new_hand.position = Vector3.ZERO
@@ -90,6 +97,7 @@ func respawn_hand(hand: BlackjackHand) -> void:
 	hand.spawn_dust()
 	hand.spawn_explosion()
 	await _anchor_hand(hand)
+	hand.state_chart.send_event("activate")
 
 
 func get_hand_anchor_point(hand: BlackjackHand) -> Vector3:
@@ -154,6 +162,7 @@ func _hand_on_event_received(event: String, hand: BossCore) -> void:
 
 func _hand_finished(hand: BossCore) -> void:
 	finished_hands.append(hand)
+	_anchor_hand(hand)
 	hand_attack_finished.emit(hand)
 	if finished_hands.size() == spawned_hands.size():
 		last_hand = hand
@@ -172,6 +181,8 @@ func _start_hand_attack() -> void:
 
 func trigger_all_hand_attacks_sim(attack_event: String, hand_delay: float = 0.0) -> void:
 	for hand in spawned_hands:
+		hand.state_chart.send_event("activate")
+		_release_hand(hand)
 		hand.state_chart.send_event(attack_event)
 		if hand_delay:
 			await get_tree().create_timer(hand_delay).timeout
@@ -180,10 +191,11 @@ func trigger_all_hand_attacks_sim(attack_event: String, hand_delay: float = 0.0)
 
 	state_chart.send_event("finish_attack")
 
-func trigger_all_hand_attacks_seq(activate_event: String, attack_event: String) -> void:
+func trigger_all_hand_attacks_seq(attack_event: String) -> void:
 	for hand in spawned_hands:
-		hand.state_chart.send_event(activate_event)
-	for hand in spawned_hands:
+		hand.state_chart.send_event("activate")
+		_release_hand(hand)
+		print("Sending %s event: %s" % [hand.name, attack_event])
 		hand.state_chart.send_event(attack_event)
 		await hand_attack_finished
 
@@ -192,7 +204,6 @@ func trigger_all_hand_attacks_seq(activate_event: String, attack_event: String) 
 func cancel_active_hand_attacks() -> void:
 	for hand in spawned_hands:
 		hand.state_chart.send_event("end_attack")
-
 
 
 ## PHASE STATES
@@ -258,6 +269,14 @@ func _on_dealing_recover_state_entered() -> void:
 func _on_hand_hit_attacking_state_entered() -> void:
 	match current_phase:
 		1:
-			trigger_all_hand_attacks_seq("activate", "start_hit_attack")
+			trigger_all_hand_attacks_seq("start_hit_attack")
+		#2:
+			#trigger_substack_attack("start_small_projectile_attack_phase_2")
+
+
+func _on_hand_stand_attacking_state_entered() -> void:
+	match current_phase:
+		1:
+			trigger_all_hand_attacks_sim("start_stand_attack", 0.5)
 		#2:
 			#trigger_substack_attack("start_small_projectile_attack_phase_2")

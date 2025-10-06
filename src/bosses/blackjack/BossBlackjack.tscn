@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://bsdh38vyreful"]
+[gd_scene load_steps=21 format=4 uid="uid://bsdh38vyreful"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_262ft"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/boss_blackjack.gd" id="2_km6gh"]
@@ -84,6 +84,19 @@ _surfaces = [{
 "vertex_data": PackedByteArray("0ex/v7CDHT8A4yE+0ex/vyg+sb8A4yE+mAmAPyg+sb8A4yE+mAmAP7CDHT8A4yE+0ex/v7CDHT8A4yE+0ex/v7CDHT+A8ZA+0ex/vyg+sb+A8ZA+0ex/vyg+sb8A4yE+mAmAPyg+sb8A4yE+0ex/vyg+sb8A4yE+0ex/vyg+sb+A8ZA+mAmAPyg+sb+A8ZA+mAmAP7CDHT8A4yE+mAmAP7CDHT+A8ZA+0ex/v7CDHT+A8ZA+0ex/v7CDHT8A4yE+mAmAP7CDHT8A4yE+mAmAPyg+sb8A4yE+mAmAPyg+sb+A8ZA+mAmAP7CDHT+A8ZA+0ex/v7CDHT+A8ZA+mAmAP7CDHT+A8ZA+mAmAPyg+sb+A8ZA+0ex/vyg+sb+A8ZA+/////wAA/7//////AAD/v/////8AAP+//////wAA/78AAP9//3//vwAA/3//f/+/AAD/f/9//78AAP9//3//v/9/AAD//////38AAP//////fwAA//////9/AAD//////3////9//7//f////3//v/9/////f/+//3////9//7////9//////////3//////////f/////////9///////9//3////+//3//f////7//f/9/////v/9//3////+/")
 }]
 
+[sub_resource type="Animation" id="Animation_8e3f2"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_dshkv"]
+resource_name = "death"
+length = 0.1
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3pryd"]
+_data = {
+"RESET": SubResource("Animation_8e3f2"),
+"death": SubResource("Animation_dshkv")
+}
+
 [node name="BossBlackjack" node_paths=PackedStringArray("intro_path_points") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
 hand_scene = ExtResource("13_ereo8")
@@ -102,7 +115,7 @@ TURN_SPEED_SLOW = 1.0
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(2.13, 0, 0, 0, 1.215, 0, 0, 0, 2.13, 0, 3.6, 0)
+transform = Transform3D(1.6, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 3.497, 0)
 texture = ExtResource("3_a6t5q")
 
 [node name="CollisionShape3D" parent="." index="1"]
@@ -115,7 +128,7 @@ visible = true
 mesh = SubResource("BoxMesh_g4eca")
 
 [node name="HoverPlatform" type="MeshInstance3D" parent="." index="3"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -1, -4)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -1, -3)
 cast_shadow = 2
 gi_mode = 0
 mesh = SubResource("ArrayMesh_w7kb0")
@@ -280,6 +293,12 @@ to = NodePath("../../HandSlam")
 event = &"start_hand_slam_attack"
 delay_in_seconds = "0.0"
 
+[node name="toHandStand" type="Node" parent="StateChart/Root/Phase/Main/AttackPhase/Phase1/Idle" index="1"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../HandStand")
+event = &"start_hand_stand_attack"
+delay_in_seconds = "0.0"
+
 [node name="HandSlam" type="Node" parent="StateChart/Root/Phase/Main/AttackPhase/Phase1" index="2"]
 script = ExtResource("6_pje5c")
 initial_state = NodePath("Targeting")
@@ -317,6 +336,48 @@ to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
 
+[node name="HandStand" type="Node" parent="StateChart/Root/Phase/Main/AttackPhase/Phase1" index="3"]
+script = ExtResource("6_pje5c")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandStand" index="0"]
+script = ExtResource("4_3jupp")
+
+[node name="toAttacking" type="Node" parent="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandStand/Targeting" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Attacking")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandStand" index="1"]
+script = ExtResource("4_3jupp")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandStand/Attacking" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Recover")
+event = &"finish_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandStand" index="2"]
+script = ExtResource("4_3jupp")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandStand/Recover" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandStand" index="3"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Idle")
+event = &"end_attack"
+delay_in_seconds = "0.0"
+
+[node name="AnimationPlayer" parent="." index="21"]
+libraries = {
+"": SubResource("AnimationLibrary_3pryd")
+}
+
 [connection signal="state_entered" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Dealing/Idle" to="." method="_on_dealing_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Dealing/Dealing" to="." method="_on_dealing_dealing_state_entered"]
@@ -324,3 +385,6 @@ delay_in_seconds = "0.0"
 [connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandSlam/Targeting" to="." method="_start_hand_attack"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandSlam/Attacking" to="." method="_on_hand_hit_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandSlam/Recover" to="." method="_recover_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandStand/Targeting" to="." method="_start_hand_attack"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandStand/Attacking" to="." method="_on_hand_stand_attacking_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Main/AttackPhase/Phase1/HandStand/Recover" to="." method="_recover_entered"]
