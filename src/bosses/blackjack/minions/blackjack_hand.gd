@@ -1,7 +1,6 @@
 extends BossCore
 class_name BlackjackHand
 
-
 @onready var dust_particle: GPUParticles3D = $HandDust
 @onready var death_particles: GPUParticles3D = $DeathDust
 @onready var explosion_particle = $DeathExplosion
@@ -9,17 +8,21 @@ class_name BlackjackHand
 @export var controller_boss: BossBlackjack
 @export var walkable_floor_nav: NavigationRegion3D
 
+@export var slam_shockwave_prefab: PackedScene
 
 ## Attacks
 # Hit
 var slam_target: Vector3
-@export var slam_time: float = 0.6
+@export var slam_time: float = 0.35
 @export var hit_damage: float = 10
 
 # Stand
 var stand_target: Vector3
 @export var stand_slam_down_time: float = 0.1
 @export var stand_slam_up_time: float = 0.1
+@export var stand_wave_radius: float = 7.0
+@export var stand_wave_damage: float = 10.0
+@export var stand_wave_time: float = 0.8
 var stand_repeat_counter: int = 0
 @export var stand_repeat_max: int = 3
 
@@ -27,6 +30,10 @@ var stand_repeat_counter: int = 0
 func _ready() -> void:
 	super()
 	state_chart.send_event("start_targeting")
+
+
+func _physics_process(delta: float) -> void:
+	return
 
 
 func fake_destroy() -> void:
@@ -129,42 +136,33 @@ func _on_hit_returning_state_entered() -> void:
 	debug_state_label.text = "Hit | Returning"
 	
 	hurtbox.set_deferred("monitoring", false)
-	# Return to the boss slightly slower than the slam speed
-	var target_pos: Vector3 = controller_boss.get_hand_anchor_point(self)
-	#draw_debug_sphere(target_pos, 2.0, Color.GREEN)
-	var return_tween := get_tree().create_tween()
-	return_tween.tween_property(self, "global_position", target_pos, slam_time * 3).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
-	
-	await return_tween.finished
 	
 	# We emit the hand_finished signal and the boss uses this to re-anchor the hand
-	# TODO
 	state_chart.send_event("end_attack")
 	state_chart.send_event("hand_finished")
 
 
 func _on_stand_targeting_state_entered() -> void:
 	debug_state_label.text = "Stand | Targeting"
-	print(self.name, " : ", "Stand | Targeting")
 	anim_player.play("blackjack_hand/to_vertical")
 	anim_player.queue("blackjack_hand/vertical")
 	# Pick a location on the walkable floor to double tap
 	# TODO - pick a location a distance away from the player, rotated so the aoe happens in view
-	stand_target = target.global_position - (target.global_basis.z * 8.0).rotated(Vector3.UP, randf_range(-PI/4, PI/4))
-	#stand_target = NavigationServer3D.map_get_closest_point(walkable_floor_nav.get_navigation_map(), stand_target)
-	#draw_debug_sphere(stand_target, 1.5, Color.PURPLE)
+	var target_spread_angle: float = randf_range(-PI/2, PI/2)
+	# TODO - figure out a good way to maintain separation between hands when choosing a new stand target
+	stand_target = target.global_position - (target.global_basis.z * 8.0).rotated(Vector3.UP, target_spread_angle)
 	
 	state_chart.send_event("hand_move")
 
 
 func _on_stand_move_to_target_state_entered() -> void:
 	debug_state_label.text = "Stand | Move To Target"
-	print(self.name, " : ", "Stand | Move To Target")
 	# Fly to the a point above the target location
-	var stand_tween := get_tree().create_tween()
 	var stand_hover_target = stand_target
 	stand_hover_target.y = self.global_position.y
-	stand_tween.tween_property(self, "global_position", stand_hover_target, slam_time*2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	
+	var stand_tween := get_tree().create_tween()
+	stand_tween.tween_property(self, "global_position", stand_hover_target, slam_time * 2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	
 	await stand_tween.finished
 	
@@ -173,27 +171,43 @@ func _on_stand_move_to_target_state_entered() -> void:
 
 func _on_stand_double_tap_state_entered() -> void:
 	debug_state_label.text = "Stand | Double Tap"
-	print(self.name, " : ", "Stand | Double Tap")
 	
 	# Slam the ground vertically twice, spawning AoE waves
 	var cached_y: float = self.global_position.y
+	
+	# Lock target to the floor
+	# Lock the target pos to the floor
+	var space_state = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(
+		stand_target,
+		stand_target + Vector3(0, -50, 0),
+		int(pow(2, 1 - 1))
+	)
+	var result = space_state.intersect_ray(query)
+	if result:
+		stand_target.y = result.position.y
+	
 	var slam_tween := get_tree().create_tween()
 	for i in range(2):
-		slam_tween.chain().tween_property(self, "global_position", stand_target, stand_slam_down_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+		slam_tween.tween_property(self, "global_position", stand_target, stand_slam_down_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 		slam_tween.tween_callback(
 			func(): 
 				spawn_dust()
 				spawn_explosion()
+				spawn_shockwave(self.global_position, stand_wave_radius, stand_wave_damage, stand_wave_time)
 		)
 		slam_tween.chain().tween_property(self, "global_position:y", cached_y, stand_slam_up_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
 	await slam_tween.finished
-	# TODO - generate explosion and damage
-	#
-	# TODO - spawn wave
-	#
+	
 	stand_repeat_counter += 1
 	if stand_repeat_counter <= stand_repeat_max:
+		var target_spread_angle: float = randf_range(-PI/2, PI/2)
+		# TODO - figure out a good way to maintain separation between hands when choosing a new stand target
+		stand_target = target.global_position - (target.global_basis.z * 8.0).rotated(Vector3.UP, target_spread_angle)
+		# Use the previous floor height to save re-calculating
+		if result:
+			stand_target.y = result.position.y
 		state_chart.send_event("hand_repeat")
 	else:
 		stand_repeat_counter = 0
@@ -202,18 +216,31 @@ func _on_stand_double_tap_state_entered() -> void:
 
 func _on_stand_returning_state_entered() -> void:
 	debug_state_label.text = "Stand | Returning"
-	print(self.name, " : ", "Stand | Returning")
+	
 	anim_player.play("blackjack_hand/to_horizontal")
 	anim_player.queue("blackjack_hand/horizontal")
 	
 	# Return to boss 
-	var target_pos: Vector3 = controller_boss.get_hand_anchor_point(self)
-	#draw_debug_sphere(target_pos, 2.0, Color.GREEN)
-	var return_tween := get_tree().create_tween()
-	return_tween.tween_property(self, "global_position", target_pos, slam_time * 3).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
+	#var target_pos: Vector3 = controller_boss.get_hand_anchor_point(self)
+	##draw_debug_sphere(target_pos, 2.0, Color.GREEN)
+	#var return_tween := get_tree().create_tween()
+	#return_tween.tween_property(self, "global_position", target_pos, slam_time * 3).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
+	#
+	#await return_tween.finished
 	
-	await return_tween.finished
-
-	print(self.name, " : ", "Stand | Returning to Idle")
 	state_chart.send_event("end_attack")
 	state_chart.send_event("hand_finished")
+
+
+func spawn_shockwave(spawn_pos: Vector3 = self.global_position, max_radius: float = stand_wave_radius, damage: float = stand_wave_damage, time: float = stand_wave_time) -> void:
+	var shockwave = slam_shockwave_prefab.instantiate()
+	scene_root.add_child(shockwave)
+
+	shockwave.global_transform = self.global_transform
+	shockwave.global_position = spawn_pos
+	shockwave.arc_angle = 360
+	shockwave.arc_thickness_ratio = 2.0
+	shockwave.max_radius = max_radius
+	shockwave.damage = damage * GameManager.get_risk_dmg_mult()
+	shockwave.wave_time = time
+	shockwave.start_shockwave()

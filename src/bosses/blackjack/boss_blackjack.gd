@@ -16,6 +16,22 @@ var despawned_hands = []
 var finished_hands = []
 var last_hand
 
+# TODO - make this configurable per-attack
+@export var wave_material: ShaderMaterial
+@export var slam_shockwave_prefab: PackedScene
+
+# Dealing
+const SUIT_CARDS: Dictionary = {
+	"ACE": 11, "TWO": 2, "THREE": 3, "FOUR": 4, "FIVE": 5, "SIX": 6, "SEVEN": 7, 
+	"EIGHT": 8, "NINE": 9, "TEN": 10, "JACK": 10, "QUEEN": 10, "KING": 10
+}
+@export var card_textures: Array[CompressedTexture2D]
+@export var dealing_anim_points: Array[Marker3D]
+@export var hand_count_label: Label3D
+@export var card_particles: GPUParticles3D
+@export var card_explosion_particles: GPUParticles3D
+var hand_count: int = 0
+
 # Particles Misc
 @export var explosion_scene: PackedScene
 
@@ -26,6 +42,10 @@ var last_hand
 func _ready() -> void:
 	super()
 	self.global_position = intro_path_points[0].global_position
+
+
+func _physics_process(delta: float) -> void:
+	return
 
 
 func activate() -> void:
@@ -249,11 +269,67 @@ func _on_intro_state_entered() -> void:
 
 func _on_dealing_idle_state_entered() -> void:
 	# TODO
+	hand_count_label.text = "0"
+	hand_count_label.modulate = Color.WHITE
 	state_chart.send_event("start_deal")
 
 
 func _on_dealing_dealing_state_entered() -> void:
 	# TODO
+	
+	var hand_r: BlackjackHand = spawned_hands[1]
+	_release_hand(hand_r)
+	
+	# Keep dealing until we hit stand, blackjack, or bust
+	hand_count = 0
+	
+	var deal_tween := get_tree().create_tween()
+	var cached_pos: Vector3 = hand_r.global_position
+	deal_tween.set_loops()
+	while deal_tween.is_running():
+		deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[0].global_position, 0.1)#.set_ease(Tween.EASE_IN)
+		deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[1].global_position, 0.15)#.set_ease(Tween.EASE_IN_OUT)
+		deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[2].global_position, 0.1)#.set_ease(Tween.EASE_OUT)
+		
+		# Pick a card, update the count, and change the particle texture accordingly
+		var card_key = SUIT_CARDS.keys().pick_random()
+		var card_value = SUIT_CARDS[card_key]
+		card_particles.draw_pass_1.surface_get_material(0).albedo_texture = card_textures[SUIT_CARDS.keys().find(card_key)]
+		hand_count += card_value
+		
+		if hand_count > 21 and card_value == 11 and hand_count - 10 <= 21:
+			card_value -= 10
+			hand_count -= 10
+		
+		deal_tween.tween_callback(
+			func():
+				card_particles.emitting = true
+				card_explosion_particles.emitting = true
+				hand_count_label.text = str(hand_count)
+		)
+		deal_tween.tween_property(hand_r, "global_position", cached_pos, 0.85)#.set_ease(Tween.EASE_OUT)
+		
+		await deal_tween.loop_finished
+		
+		if hand_count > 21:
+			# BUST
+			# TODO
+			hand_count_label.modulate = Color.RED
+			deal_tween.kill()
+		#
+		if hand_count == 21:
+			# BLACKJACK
+			# TODO
+			hand_count_label.modulate = Color.GREEN
+			deal_tween.kill()
+		#
+		elif hand_count >= 16:
+			# STAND
+			# TODO
+			hand_count_label.modulate = Color.WHITE
+			deal_tween.kill()
+	
+	_anchor_hand(hand_r)
 	state_chart.send_event("end_deal")
 
 
@@ -280,3 +356,30 @@ func _on_hand_stand_attacking_state_entered() -> void:
 			trigger_all_hand_attacks_sim("start_stand_attack", 0.5)
 		#2:
 			#trigger_substack_attack("start_small_projectile_attack_phase_2")
+
+
+func _recover_entered() -> void:
+	state_chart.send_event("attack_end")
+
+	await get_tree().create_timer(attack_recovery_time).timeout
+
+	state_chart.send_event("cooldown_end")
+	state_chart.send_event("start_dealing")
+	state_chart.send_event("end_recovery")
+
+
+func _on_phase_1_state_entered() -> void:
+	select_attack()
+
+
+func _on_wave_collision(
+	body: Node3D,
+	aoe_damage: float,
+	pushback_source: Node3D = self,
+	pushback_radius: float = pushback_source.collider.shape.radius
+) -> void:
+	if body == target:
+		body.health_component.damage(aoe_damage)
+		# TODO - pushback
+		#trigger_pushback(pushback_force, pushback_source, pushback_radius)
+		InputHelper.rumble_medium()
