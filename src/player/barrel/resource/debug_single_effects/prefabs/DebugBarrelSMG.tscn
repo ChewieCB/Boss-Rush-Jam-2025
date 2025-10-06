@@ -1,0 +1,72 @@
+[gd_scene load_steps=16 format=3 uid="uid://bbvt8ixw2ft3k"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_oyfqr"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_6hjyw"]
+[ext_resource type="AudioStream" uid="uid://cte0yqejjtu7j" path="res://src/player/gun/assets/sfx/reloading/smg/smg_reload_1.mp3" id="3_g08lb"]
+[ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="4_2k6lo"]
+[ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="5_5maxe"]
+[ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="6_0p5pj"]
+[ext_resource type="AudioStream" uid="uid://cf460otm0xrf3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 4.mp3" id="7_76adu"]
+[ext_resource type="AudioStream" uid="uid://dpcvjx6i8qmt7" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 5.mp3" id="8_7674d"]
+[ext_resource type="AudioStream" uid="uid://dhilfnn0tk1u5" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 6.mp3" id="9_nu1bf"]
+[ext_resource type="AudioStream" uid="uid://dtyk4el1l2a1n" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 7.mp3" id="10_mraa5"]
+[ext_resource type="AudioStream" uid="uid://t5oqkgi1pmg3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 8.mp3" id="11_e0e1c"]
+[ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="12_8wnln"]
+[ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="13_ccssc"]
+[ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="14_hsjvs"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="15_jhtim"]
+
+[node name="DebugBarrelSMG" type="Node3D"]
+script = ExtResource("1_oyfqr")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="SMG" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_6hjyw")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_g08lb")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("4_2k6lo"), ExtResource("5_5maxe"), ExtResource("6_0p5pj"), ExtResource("7_76adu"), ExtResource("8_7674d"), ExtResource("9_nu1bf"), ExtResource("10_mraa5"), ExtResource("11_e0e1c"), ExtResource("12_8wnln"), ExtResource("13_ccssc"), ExtResource("14_hsjvs")])
+display_text_title = " Archetype: SMG"
+display_text_tag = "Spray and pray!"
+positive_desc = Array[String](["High firerate", "Large magazine size"])
+negative_desc = Array[String](["Low damage", "High recoil"])
+icon_id = 2
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/SMG"]
+script = ExtResource("15_jhtim")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/SMG"]
+script = ExtResource("15_jhtim")
+attribute = 4
+new_value = 10.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/SMG"]
+script = ExtResource("15_jhtim")
+attribute = 6
+
+[node name="SetSpread" type="Node3D" parent="EffectContainer/SMG"]
+script = ExtResource("15_jhtim")
+attribute = 7
+new_value = 2.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/SMG"]
+script = ExtResource("15_jhtim")
+attribute = 1
+new_value = 8.0
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/SMG"]
+script = ExtResource("15_jhtim")
+attribute = 5
+new_value = 30.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/SMG"]
+script = ExtResource("15_jhtim")
+attribute = 11
+new_value = 0.04
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/SMG"]
+script = ExtResource("15_jhtim")
+attribute = 8
+new_value = 1.6

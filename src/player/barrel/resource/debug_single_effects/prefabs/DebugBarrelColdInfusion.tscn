@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://bplb8xjwa5f4u"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_wy6pu"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_jkthn"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="3_ptw2n"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_m440v"]
+
+[node name="DebugBarrelColdInfusion" type="Node3D"]
+script = ExtResource("1_wy6pu")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="ColdInfusion" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_jkthn")
+display_text_title = "Cold Infusion"
+display_text_tag = "Let it go!"
+display_text_desc = "-20% magazine size
+Bullets build up Frozen effect"
+positive_desc = Array[String](["Applies frozen status"])
+negative_desc = Array[String](["Smaller magazine size"])
+icon_id = 47
+
+[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ColdInfusion"]
+script = ExtResource("3_ptw2n")
+status_effect = 3
+change_color = true
+new_color = Color(0, 0.533333, 0.658824, 0.866667)
+
+[node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ColdInfusion"]
+script = ExtResource("4_m440v")
+attribute = 5
+modify_value = -20.0
+is_perc = true

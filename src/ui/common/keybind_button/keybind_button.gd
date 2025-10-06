@@ -59,12 +59,15 @@ func update_button_detail() -> void:
 		controller_key_icon.modulate = Color.DARK_GRAY
 		controller_button_border.visible = false
 
+
 func update_kbm_icon():
 	kbm_key_icon.assigned_action = assigned_action_name
 	kbm_key_icon.update_texture()
 	if kbm_key_icon.texture == null:
 		var kbm_event = InputHelper.get_keyboard_input_for_action(assigned_action_name)
 		kbm_button.text = InputHelper.get_label_for_input(kbm_event).to_lower()
+	else:
+		kbm_button.text = ""
 
 
 func update_controller_icon():
@@ -73,3 +76,5 @@ func update_controller_icon():
 	if controller_key_icon.texture == null:
 		var controller_event = InputHelper.get_joypad_input_for_action(assigned_action_name)
 		controller_button.text = InputHelper.get_label_for_input(controller_event).to_lower()
+	else:
+		controller_button.text = ""

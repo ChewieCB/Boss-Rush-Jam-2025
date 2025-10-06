@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://kn5sa7yhbuy3"]
+
+[ext_resource type="Texture2D" uid="uid://bjw7rr78p1t5" path="res://assets/sprite/effect_icons/37.png" id="1_6f2qf"]
+[ext_resource type="PackedScene" uid="uid://bj0d4ppwx6gnu" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelTagAndShred.tscn" id="2_pnt7i"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="6_441ka"]
+
+[resource]
+script = ExtResource("6_441ka")
+barrel_id = 35
+barrel_name = "TagAndShred"
+barrel_desc = "Wear them down
+
+Reduced initial damage, but increased damage for every projectile hit target."
+barrel_image = ExtResource("1_6f2qf")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_pnt7i")
+is_archetype_barrel = false

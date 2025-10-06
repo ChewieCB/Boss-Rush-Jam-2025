@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://j46rs0g5xi8"]
+
+[ext_resource type="Texture2D" uid="uid://c0btfka5g280s" path="res://assets/sprite/effect_icons/43.png" id="1_jexph"]
+[ext_resource type="PackedScene" uid="uid://da5d50thigd3d" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelShield.tscn" id="2_6dvos"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_xj1vj"]
+
+[resource]
+script = ExtResource("3_xj1vj")
+barrel_id = 28
+barrel_name = "Shield"
+barrel_desc = "Tough up!"
+barrel_image = ExtResource("1_jexph")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_6dvos")
+is_archetype_barrel = false

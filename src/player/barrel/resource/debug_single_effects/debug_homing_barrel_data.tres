@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://ch58fnvg1myyk"]
+
+[ext_resource type="Texture2D" uid="uid://dpgp8ib342ujs" path="res://assets/sprite/effect_icons/44.png" id="1_8fl3s"]
+[ext_resource type="PackedScene" uid="uid://bcokp00qpepux" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelHoming.tscn" id="2_y8r0x"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_ixg24"]
+
+[resource]
+script = ExtResource("3_ixg24")
+barrel_id = 29
+barrel_name = "Homing"
+barrel_desc = "Skill issues solved!"
+barrel_image = ExtResource("1_8fl3s")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_y8r0x")
+is_archetype_barrel = false

@@ -10,7 +10,7 @@ script = ExtResource("1_iw80l")
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
-[node name="AmmoLeechEffect" type="Node3D" parent="EffectContainer"]
+[node name="AmmoLeech" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_psr82")
 refund_chance = 20.0
 perc_damage_modify = -25.0
@@ -22,7 +22,7 @@ positive_desc = Array[String](["Chance to refund ammo on hit"])
 negative_desc = Array[String](["Slightly reduced damage"])
 icon_id = 25
 
-[node name="DoubleTapEffect" type="Node3D" parent="EffectContainer"]
+[node name="DoubleTap" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_bgcdx")
 shot_count_per_trigger_modify = 1
 display_text_title = "Double Tap"
@@ -32,7 +32,7 @@ positive_desc = Array[String](["Fires in 2-round bursts"])
 negative_desc = Array[String](["Increased recoil"])
 icon_id = 26
 
-[node name="GamblerPrecision" type="Node3D" parent="EffectContainer"]
+[node name="GamblersPrecision" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_s01a7")
 crit_chance = 50.0
 jam_chance_if_missed = 20.0

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c7wkgakgeu0fw"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_s7tjg"]
+
+[node name="DebugBarrel" type="Node3D"]
+script = ExtResource("1_s7tjg")
+
+[node name="EffectContainer" type="Node3D" parent="."]

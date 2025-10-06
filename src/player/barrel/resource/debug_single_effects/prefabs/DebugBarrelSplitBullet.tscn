@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgmgc08npv75k"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_cssm8"]
+[ext_resource type="Script" path="res://src/player/barrel/split_bullet_effect.gd" id="2_h4pfm"]
+
+[node name="DebugBarrelSplitBullet" type="Node3D"]
+script = ExtResource("1_cssm8")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="SplitBullet" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_h4pfm")
+split_count = 3
+split_spread_radius = 90.0
+display_text_title = "Split Bullet"
+display_text_tag = "Extra bullets on impact!"
+display_text_desc = "Bullets splitted into 3 on impact"
+positive_desc = Array[String](["Shots split into multiple sub-shots on impact"])
+negative_desc = Array[String](["Split shots can hurt you too"])
+icon_id = 46

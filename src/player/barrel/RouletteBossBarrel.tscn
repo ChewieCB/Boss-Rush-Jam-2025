@@ -15,7 +15,7 @@ script = ExtResource("1_w6qw3")
 
 [node name="EffectContainer" type="Node3D" parent="."]
 
-[node name="ProtectiveBarrier" type="Node3D" parent="EffectContainer"]
+[node name="Shield" type="Node3D" parent="EffectContainer"]
 script = ExtResource("6_61sk6")
 shield_barrier_prefab = ExtResource("7_n73is")
 display_text_title = "Protective Barrier"

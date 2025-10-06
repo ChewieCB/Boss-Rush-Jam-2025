@@ -1,0 +1,84 @@
+[gd_scene load_steps=19 format=3 uid="uid://dnjsdkuwp2c3q"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_gj2e3"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_177gr"]
+[ext_resource type="AudioStream" uid="uid://cyu5mpmkq07yx" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_1.mp3" id="3_6844l"]
+[ext_resource type="AudioStream" uid="uid://b6honqx0xu72" path="res://src/player/gun/assets/sfx/reloading/shotgun/shotgun_reload_2.mp3" id="4_3qoas"]
+[ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="5_jbkim"]
+[ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="6_jdv2h"]
+[ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="7_a4s3w"]
+[ext_resource type="AudioStream" uid="uid://cf460otm0xrf3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 4.mp3" id="8_ygg07"]
+[ext_resource type="AudioStream" uid="uid://dpcvjx6i8qmt7" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 5.mp3" id="9_dfllh"]
+[ext_resource type="AudioStream" uid="uid://dhilfnn0tk1u5" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 6.mp3" id="10_xwjxk"]
+[ext_resource type="AudioStream" uid="uid://dtyk4el1l2a1n" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 7.mp3" id="11_jc8hb"]
+[ext_resource type="AudioStream" uid="uid://t5oqkgi1pmg3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 8.mp3" id="12_yrsen"]
+[ext_resource type="AudioStream" uid="uid://c36bsv7txioe1" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 9.mp3" id="13_7jn5b"]
+[ext_resource type="AudioStream" uid="uid://dyfxmxnbwiup4" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 10.mp3" id="14_cjpes"]
+[ext_resource type="AudioStream" uid="uid://cjx6nrxa6dwpv" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 11.mp3" id="15_hv430"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="16_5kmhn"]
+[ext_resource type="PackedScene" uid="uid://dij705shy7t2i" path="res://src/player/gun/projectiles/GelProjectileBlob.tscn" id="17_adntv"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="18_jyvk7"]
+
+[node name="DebugBarrelGelBlob" type="Node3D"]
+script = ExtResource("1_gj2e3")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="GelBlob" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_177gr")
+is_archetype = true
+archetype_reload_sfx = Array[AudioStream]([ExtResource("3_6844l"), ExtResource("4_3qoas")])
+archetype_shot_sfx = Array[AudioStream]([ExtResource("5_jbkim"), ExtResource("6_jdv2h"), ExtResource("7_a4s3w"), ExtResource("8_ygg07"), ExtResource("9_dfllh"), ExtResource("10_xwjxk"), ExtResource("11_jc8hb"), ExtResource("12_yrsen"), ExtResource("13_7jn5b"), ExtResource("14_cjpes"), ExtResource("15_hv430")])
+display_text_title = "Archetype: Gel blob"
+display_text_tag = "Single, big, sticky projectile"
+positive_desc = Array[String](["Sticky projectile", "Projectile sticks around for a long time"])
+negative_desc = Array[String](["Fires one projectile"])
+icon_id = 7
+
+[node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("16_5kmhn")
+new_prefab = ExtResource("17_adntv")
+
+[node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("18_jyvk7")
+attribute = 2
+new_value = 1.0
+
+[node name="SetFirerate" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("18_jyvk7")
+attribute = 4
+new_value = 1.0
+
+[node name="SetSpreadAngle" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("18_jyvk7")
+attribute = 7
+new_value = 1.0
+
+[node name="SetHitscan" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("18_jyvk7")
+attribute = 6
+
+[node name="SetMagazine" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("18_jyvk7")
+attribute = 5
+new_value = 2.0
+
+[node name="SetDamage" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("18_jyvk7")
+attribute = 1
+new_value = 20.0
+
+[node name="SetRecoil" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("18_jyvk7")
+attribute = 11
+new_value = 0.05
+
+[node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("18_jyvk7")
+attribute = 3
+new_value = 60.0
+
+[node name="SetReloadTime" type="Node3D" parent="EffectContainer/GelBlob"]
+script = ExtResource("18_jyvk7")
+attribute = 8
+new_value = 2.0

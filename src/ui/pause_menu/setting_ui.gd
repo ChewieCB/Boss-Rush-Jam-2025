@@ -11,10 +11,10 @@ signal setting_back_button_pressed
 
 @onready var tab_container: TabContainer = $TabContainer
 
-@onready var mouse_sen_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider
-@onready var mouse_sen_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/Value
-@onready var aim_assist_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/AimAssistSlider
-@onready var aim_assist_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ControllerAimAssistSens/Value
+@onready var mouse_sen_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/MouseSenSlider
+@onready var mouse_sen_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/Value
+@onready var aim_assist_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/AimAssistSlider
+@onready var aim_assist_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/Value
 @onready var fov_slider: HSlider = $TabContainer/Graphic/VBoxContainer/FOV/FOVSlider
 @onready var fov_value: Label = $TabContainer/Graphic/VBoxContainer/FOV/Value
 @onready var camera_tilt_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle
@@ -44,15 +44,21 @@ signal setting_back_button_pressed
 @onready var ui_value: Label = $TabContainer/Audio/VBoxContainer/UI/Value
 
 @onready var tab_header_container: Container = $HBoxContainer
-@onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/KeybindingSection/KeybindContainer
+@onready var keybind_container: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/KeybindContainer
 
-@onready var normal_control_options_section: Control = $TabContainer/Control/ScrollContainer/VBoxContainer
-@onready var keybinding_control_options_section: Control = $TabContainer/Control/ScrollContainer/KeybindingSection
-@onready var edit_keybind_button: Button = $TabContainer/Control/ScrollContainer/VBoxContainer/SetControllerBinding/EditKeybindButton
-@onready var keybind_return_button: Button = $TabContainer/Control/ScrollContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton
+@onready var normal_control_options_section: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection
+@onready var keybinding_control_options_section: Control = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection
+@onready var edit_keybind_button: Button = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/SetControllerBinding/EditKeybindButton
+@onready var keybind_return_button: Button = $TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/HBoxContainer/KeybindingReturnButton
 @onready var keybind_timer: Timer = $KeybindTimer
+@onready var controller_icon: TextureRect = $TabContainer/Control/ControllerIconContainer/ControllerIcon
 
+# DEBUG
 @export var sfx_free_money: AudioStream
+@onready var god_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle
+@onready var always_inventory_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle
+@onready var boss_one_shot_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle
+@onready var freecam_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle
 @onready var timescale_slider: HSlider = $TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider
 @onready var timescale_value: Label = $TabContainer/DEBUG/VBoxContainer/Timescale/Value
 
@@ -389,7 +395,13 @@ func refresh_setting_value():
 	sfx_value.text = "{0}".format([GameManager.sfx_audio])
 	ui_slider.value = GameManager.ui_audio
 	ui_value.text = "{0}".format([GameManager.ui_audio])
-
+	
+	# DEBUG
+	god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_godmode)
+	always_inventory_toggle.set_pressed_no_signal(GameManager.CHEAT_always_inventory)
+	boss_one_shot_toggle.set_pressed_no_signal(GameManager.CHEAT_oneshot)
+	freecam_toggle.set_pressed_no_signal(GameManager.CHEAT_freecam)
+	
 	timescale_slider.value = Engine.time_scale
 	timescale_value.text = "{0}".format([Engine.time_scale])
 
@@ -481,3 +493,8 @@ func _on_timescale_slider_value_changed(value: float) -> void:
 func _on_free_money_button_pressed() -> void:
 	GameManager.player_currency += 1000
 	SoundManager.play_ui_sound(sfx_free_money)
+
+
+func _on_always_inventory_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_always_inventory = toggled_on

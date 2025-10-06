@@ -104,6 +104,10 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	for action_str in current_trigger_actions:
 		if event.is_action(action_str):
+			# Prevents stick drift/tiny stick movements from closing the popup
+			if event is InputEventJoypadMotion:
+				if abs(event.axis_value) < 0.075:
+					continue
 			ui_accept.emit()
 			current_trigger_actions = []
 	
@@ -119,8 +123,6 @@ func show_tutorial_panel(prompt_elements: Array[String], close_trigger_actions: 
 	new_panel.elements = prompt_elements
 	current_trigger_actions = close_trigger_actions
 	$UI.add_child(new_panel)
-	new_panel.show_header = false
-	#new_panel.show_text(header_text, body_text)
 	new_panel.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 1.0), 0.4)

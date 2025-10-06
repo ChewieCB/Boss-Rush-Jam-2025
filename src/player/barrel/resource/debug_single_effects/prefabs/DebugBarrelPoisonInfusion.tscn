@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwhextppcwvbu"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_pchgn"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_km8bc"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="3_g0q51"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_16tmw"]
+
+[node name="DebugBarrelPoisonInfusion" type="Node3D"]
+script = ExtResource("1_pchgn")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="PoisonInfusion" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_km8bc")
+display_text_title = "Poison Infusion"
+display_text_tag = "With Iocane powder"
+display_text_desc = "-20% fire rate
+Bullets build up Poison effect"
+positive_desc = Array[String](["Applies poison status"])
+negative_desc = Array[String](["Slower firerate"])
+icon_id = 49
+
+[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/PoisonInfusion"]
+script = ExtResource("3_g0q51")
+status_effect = 2
+change_color = true
+new_color = Color(0.162939, 0.660156, 0, 1)
+
+[node name="ModifyFirerate" type="Node3D" parent="EffectContainer/PoisonInfusion"]
+script = ExtResource("4_16tmw")
+attribute = 4
+modify_value = -20.0
+is_perc = true

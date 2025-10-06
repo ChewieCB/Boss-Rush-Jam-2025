@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cpfvug22y8kjg"]
+
+[ext_resource type="Texture2D" uid="uid://cwfyv13qm50wa" path="res://assets/sprite/effect_icons/30.png" id="1_lkqpe"]
+[ext_resource type="PackedScene" uid="uid://c3few0j78k2fr" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSnapCall.tscn" id="2_cekks"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="6_r0vce"]
+
+[resource]
+script = ExtResource("6_r0vce")
+barrel_id = 60
+barrel_name = "SnapCall"
+barrel_desc = "Oh, the attraction!"
+barrel_image = ExtResource("1_lkqpe")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_cekks")
+is_archetype_barrel = false

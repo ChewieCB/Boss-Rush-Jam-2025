@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://dm7d7t55k85ie"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_fswnw"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/ramp_up_effect.gd" id="2_mwip8"]
+
+[node name="DebugBarrelRampUpEffect" type="Node3D"]
+script = ExtResource("1_fswnw")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="RampUpEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_mwip8")
+bonus_firerate_per_interval = 5.0
+interval_time = 0.2
+is_perc = true
+display_text_title = "Ramp up"
+display_text_tag = "Keep shooting"
+display_text_desc = "+5% firerate per 0.2s
+non-stop shooting"
+positive_desc = Array[String](["Firerate increases as you keep firing"])
+negative_desc = Array[String](["Burns through ammo faster"])
+icon_id = 24

@@ -1,11 +1,111 @@
-[gd_scene load_steps=10 format=4 uid="uid://bmy7qgg3imyvv"]
+[gd_scene load_steps=161 format=4 uid="uid://bmy7qgg3imyvv"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/vendor/vendor.gd" id="1_q25t3"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="1_r5vfn"]
 [ext_resource type="Material" uid="uid://b2r7uow4jc8v0" path="res://assets/textures/placeholder/texture_orange_10.tres" id="2_il1cf"]
 [ext_resource type="Material" uid="uid://bsm5c6b4ncugr" path="res://assets/textures/placeholder/texture_light_13.tres" id="3_yxy2g"]
 [ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="4_ql423"]
-[ext_resource type="PackedScene" uid="uid://dxui67spyijhu" path="res://src/ui/player/inventory/GunCustomizeUI.tscn" id="6_kcljk"]
+[ext_resource type="PackedScene" uid="uid://gwlfcdvj2q8w" path="res://src/ui/player/inventory/InventoryUI.tscn" id="5_b7an8"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="6_qqfkm"]
+[ext_resource type="Texture2D" uid="uid://cgj034lfpdswt" path="res://assets/sprite/effect_icons/3.png" id="8_oyu30"]
+[ext_resource type="PackedScene" uid="uid://dojfg3ulpktla" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelAmericanRifle.tscn" id="9_yaj0o"]
+[ext_resource type="Texture2D" uid="uid://cv2hytvgeoa4y" path="res://assets/sprite/effect_icons/25.png" id="10_d344g"]
+[ext_resource type="PackedScene" uid="uid://db1mc1l7w76wb" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelAmmoLeechEffect.tscn" id="11_a3621"]
+[ext_resource type="Texture2D" uid="uid://byrkp0g2hdvim" path="res://assets/sprite/effect_icons/41.png" id="12_d50qt"]
+[ext_resource type="PackedScene" uid="uid://c6qyhc8vvw03g" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelBallBullet.tscn" id="13_860l5"]
+[ext_resource type="Texture2D" uid="uid://bsx60hmwor5bx" path="res://assets/sprite/effect_icons/19.png" id="14_6p7o2"]
+[ext_resource type="PackedScene" uid="uid://dyocbfehxgyyf" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelBulletTime.tscn" id="15_wvj3k"]
+[ext_resource type="Texture2D" uid="uid://csfwngkb0rbkd" path="res://assets/sprite/effect_icons/16.png" id="16_nsord"]
+[ext_resource type="PackedScene" uid="uid://b4b3psl64gv5r" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelCognacReload.tscn" id="17_8v1lk"]
+[ext_resource type="Texture2D" uid="uid://b7leq4ajnjvq4" path="res://assets/sprite/effect_icons/-1.png" id="18_fmact"]
+[ext_resource type="PackedScene" uid="uid://bplb8xjwa5f4u" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelColdInfusion.tscn" id="19_o1u57"]
+[ext_resource type="Texture2D" uid="uid://cnwquwnix0uqf" path="res://assets/sprite/effect_icons/13.png" id="20_8io2l"]
+[ext_resource type="PackedScene" uid="uid://b6e41ail73rte" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelCombatShotgun.tscn" id="21_1fe8b"]
+[ext_resource type="Texture2D" uid="uid://bjg3wxh335h1u" path="res://assets/sprite/effect_icons/34.png" id="22_41e3w"]
+[ext_resource type="PackedScene" uid="uid://c05ofergieuja" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelDeathFromAbove.tscn" id="23_pj28v"]
+[ext_resource type="Texture2D" uid="uid://b6acjp0vl4prc" path="res://assets/sprite/effect_icons/14.png" id="24_8pdaf"]
+[ext_resource type="PackedScene" uid="uid://cqqrswnh1b8j3" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelDoubleBarrel.tscn" id="25_dkj8b"]
+[ext_resource type="Texture2D" uid="uid://btxw85e46utue" path="res://assets/sprite/effect_icons/26.png" id="26_y3yr6"]
+[ext_resource type="PackedScene" uid="uid://qpmhgg2bw366" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelDoubleTapEffect.tscn" id="27_u77ux"]
+[ext_resource type="PackedScene" uid="uid://cyb54qbs2cw3w" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelElectricInfusion.tscn" id="28_52che"]
+[ext_resource type="Texture2D" uid="uid://5hd3c8n3a0yp" path="res://assets/sprite/effect_icons/35.png" id="29_kcphg"]
+[ext_resource type="PackedScene" uid="uid://58s7cq658s0e" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelEmpoweredDash.tscn" id="30_e0t3c"]
+[ext_resource type="Texture2D" uid="uid://ccfs3efw1odv5" path="res://assets/sprite/effect_icons/38.png" id="31_ur0iu"]
+[ext_resource type="PackedScene" uid="uid://dahoxrm1s8qfl" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelExecutionerRound.tscn" id="32_x0brv"]
+[ext_resource type="Texture2D" uid="uid://dbtmdysh1jbr1" path="res://assets/sprite/effect_icons/22.png" id="33_l1f8b"]
+[ext_resource type="PackedScene" uid="uid://bkisa5v3ge283" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelExplosiveBulletEffect.tscn" id="34_kdh61"]
+[ext_resource type="Texture2D" uid="uid://c2n6l8vsjkhsm" path="res://assets/sprite/effect_icons/23.png" id="35_r0kbw"]
+[ext_resource type="PackedScene" uid="uid://ds18irkd5edof" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelExtendedDrumEffect.tscn" id="36_dxq6d"]
+[ext_resource type="PackedScene" uid="uid://ycywyugxki3g" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelFireInfusion.tscn" id="37_6qlrs"]
+[ext_resource type="Texture2D" uid="uid://bu4rgip5u2dt1" path="res://assets/sprite/effect_icons/31.png" id="38_gjjmx"]
+[ext_resource type="PackedScene" uid="uid://csg7nkw4llmvo" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelFlexibleKnee.tscn" id="39_h1din"]
+[ext_resource type="Texture2D" uid="uid://bwjcbirccc4cv" path="res://assets/sprite/effect_icons/36.png" id="40_qqsl4"]
+[ext_resource type="PackedScene" uid="uid://6xrmneo6pby" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelFortitude.tscn" id="41_ektxx"]
+[ext_resource type="Texture2D" uid="uid://ssyfdfc5p01q" path="res://assets/sprite/effect_icons/27.png" id="42_s3by0"]
+[ext_resource type="PackedScene" uid="uid://3yngoyypsy6s" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelGamblerPrecision.tscn" id="43_k4mq8"]
+[ext_resource type="Texture2D" uid="uid://dklbwqbhdy3v7" path="res://assets/sprite/effect_icons/10.png" id="44_nbwr4"]
+[ext_resource type="PackedScene" uid="uid://bf3y82onct355" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelGaussRifle.tscn" id="45_ci4og"]
+[ext_resource type="Texture2D" uid="uid://d3eow5wgx63ds" path="res://assets/sprite/effect_icons/7.png" id="46_hnqo0"]
+[ext_resource type="PackedScene" uid="uid://dnjsdkuwp2c3q" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelGelBlob.tscn" id="47_at5l7"]
+[ext_resource type="Texture2D" uid="uid://ctvfaukhci0rw" path="res://assets/sprite/effect_icons/8.png" id="48_7tajw"]
+[ext_resource type="PackedScene" uid="uid://dwkmd2wji0tn6" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelGelBubble.tscn" id="49_2wpjf"]
+[ext_resource type="Texture2D" uid="uid://wycbifqgfth1" path="res://assets/sprite/effect_icons/9.png" id="50_gvpob"]
+[ext_resource type="PackedScene" uid="uid://ci6bihofc20mt" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelGelStream.tscn" id="51_l7v8e"]
+[ext_resource type="Texture2D" uid="uid://clo3mp8vaxflg" path="res://assets/sprite/effect_icons/39.png" id="52_p8pua"]
+[ext_resource type="PackedScene" uid="uid://yfu0tme8fppx" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelGlassCannon.tscn" id="53_4grb6"]
+[ext_resource type="Texture2D" uid="uid://dpgp8ib342ujs" path="res://assets/sprite/effect_icons/44.png" id="54_4vbfk"]
+[ext_resource type="PackedScene" uid="uid://bba6sk3m5ohhy" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelHomingBullet.tscn" id="55_bcfu1"]
+[ext_resource type="Texture2D" uid="uid://ce1mj01rihby5" path="res://assets/sprite/effect_icons/4.png" id="56_q7yrf"]
+[ext_resource type="PackedScene" uid="uid://101yjotm7fjs" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelLMG.tscn" id="57_2f42g"]
+[ext_resource type="Texture2D" uid="uid://d1iyc4n7o8the" path="res://assets/sprite/effect_icons/28.png" id="58_capww"]
+[ext_resource type="PackedScene" uid="uid://bkevtvpvmyrdv" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelLongShot.tscn" id="59_n44ia"]
+[ext_resource type="Texture2D" uid="uid://cjh50nb7ga330" path="res://assets/sprite/effect_icons/20.png" id="60_jsppw"]
+[ext_resource type="PackedScene" uid="uid://bslsgcdkit14b" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelMedicalPayout.tscn" id="61_7dtfn"]
+[ext_resource type="Texture2D" uid="uid://3gfqrsv61kyv" path="res://assets/sprite/effect_icons/17.png" id="62_4pk1h"]
+[ext_resource type="PackedScene" uid="uid://bq4povmsadkjk" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelMolotovDash.tscn" id="63_3hvdm"]
+[ext_resource type="Texture2D" uid="uid://sqwi84n78ocr" path="res://assets/sprite/effect_icons/42.png" id="64_hmcun"]
+[ext_resource type="PackedScene" uid="uid://bkuqtrbnbivqk" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelNewtonThirdLaw.tscn" id="65_qqp1s"]
+[ext_resource type="PackedScene" uid="uid://cwhextppcwvbu" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelPoisonInfusion.tscn" id="66_cjqm0"]
+[ext_resource type="Texture2D" uid="uid://c0btfka5g280s" path="res://assets/sprite/effect_icons/43.png" id="67_alw7d"]
+[ext_resource type="PackedScene" uid="uid://xysflqme2824" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelProtectiveBarrier.tscn" id="68_2icmw"]
+[ext_resource type="Texture2D" uid="uid://b8imov5wl2ev0" path="res://assets/sprite/effect_icons/11.png" id="69_cpj60"]
+[ext_resource type="PackedScene" uid="uid://b15qtxcyiu18k" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelRailcannon.tscn" id="70_yup17"]
+[ext_resource type="Texture2D" uid="uid://cvhh5k6yarcsn" path="res://assets/sprite/effect_icons/0.png" id="71_j2ody"]
+[ext_resource type="PackedScene" uid="uid://d4bwff2x7a7rl" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelRailgun.tscn" id="72_nef2b"]
+[ext_resource type="Texture2D" uid="uid://ewscdfkwpiti" path="res://assets/sprite/effect_icons/24.png" id="73_jssl2"]
+[ext_resource type="PackedScene" uid="uid://dm7d7t55k85ie" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelRampUpEffect.tscn" id="74_4l83p"]
+[ext_resource type="Texture2D" uid="uid://yrtm2vf2sqt1" path="res://assets/sprite/effect_icons/40.png" id="75_cvuvj"]
+[ext_resource type="PackedScene" uid="uid://fk41qjiif05n" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelReactiveShot.tscn" id="76_dmpbv"]
+[ext_resource type="Texture2D" uid="uid://d1k5ffoompmfe" path="res://assets/sprite/effect_icons/45.png" id="77_h0x22"]
+[ext_resource type="PackedScene" uid="uid://bw060bos3fo5b" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelRicochetBullet.tscn" id="78_2748h"]
+[ext_resource type="Texture2D" uid="uid://cq6ap6aaq6d11" path="res://assets/sprite/effect_icons/5.png" id="79_myd4b"]
+[ext_resource type="PackedScene" uid="uid://1lip5c5nrt37" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelRussianRifle.tscn" id="80_fxhsb"]
+[ext_resource type="Texture2D" uid="uid://b2batio3r8lhn" path="res://assets/sprite/effect_icons/12.png" id="81_v6ctb"]
+[ext_resource type="PackedScene" uid="uid://cgorgyl4a7fh3" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelScatterBeam.tscn" id="82_hpn3y"]
+[ext_resource type="Texture2D" uid="uid://gl1bdts75eax" path="res://assets/sprite/effect_icons/1.png" id="83_mujso"]
+[ext_resource type="PackedScene" uid="uid://x2hrj1v7sutc" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelShotgun.tscn" id="84_lldiu"]
+[ext_resource type="Texture2D" uid="uid://o1sybpmroljg" path="res://assets/sprite/effect_icons/29.png" id="85_xat5h"]
+[ext_resource type="PackedScene" uid="uid://ck14uoalscxjn" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSlowRoller.tscn" id="86_2ttb5"]
+[ext_resource type="Texture2D" uid="uid://b2dn2glfckobq" path="res://assets/sprite/effect_icons/15.png" id="87_0ownd"]
+[ext_resource type="PackedScene" uid="uid://c3gfkknfxvox6" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSlug.tscn" id="88_p0tpi"]
+[ext_resource type="Texture2D" uid="uid://cwwk7cgg34hx" path="res://assets/sprite/effect_icons/2.png" id="89_6vaeb"]
+[ext_resource type="PackedScene" uid="uid://bbvt8ixw2ft3k" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSMG.tscn" id="90_tqfex"]
+[ext_resource type="Texture2D" uid="uid://cwfyv13qm50wa" path="res://assets/sprite/effect_icons/30.png" id="91_iuefk"]
+[ext_resource type="PackedScene" uid="uid://c3few0j78k2fr" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSnapCall.tscn" id="92_3w61m"]
+[ext_resource type="Texture2D" uid="uid://bc0giw0lg0yc3" path="res://assets/sprite/effect_icons/46.png" id="93_hg31a"]
+[ext_resource type="PackedScene" uid="uid://bgmgc08npv75k" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSplitBullet.tscn" id="94_fcyat"]
+[ext_resource type="Texture2D" uid="uid://b2uofi2xveyd5" path="res://assets/sprite/effect_icons/32.png" id="95_h63u3"]
+[ext_resource type="PackedScene" uid="uid://dkojc0pkhatlx" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSpringyFeet.tscn" id="96_ilddt"]
+[ext_resource type="Texture2D" uid="uid://cxh2t8h5figcd" path="res://assets/sprite/effect_icons/21.png" id="97_tm81r"]
+[ext_resource type="PackedScene" uid="uid://cct4668v0aa4r" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelStickyBomb.tscn" id="98_8ittv"]
+[ext_resource type="Texture2D" uid="uid://bjw7rr78p1t5" path="res://assets/sprite/effect_icons/37.png" id="99_xiyqf"]
+[ext_resource type="PackedScene" uid="uid://bj0d4ppwx6gnu" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelTagAndShred.tscn" id="100_knys3"]
+[ext_resource type="Texture2D" uid="uid://y6am5jjtjdph" path="res://assets/sprite/effect_icons/18.png" id="101_h2h0h"]
+[ext_resource type="PackedScene" uid="uid://dexbvc1itq6bm" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelToxinMist.tscn" id="102_5jqpe"]
+[ext_resource type="Texture2D" uid="uid://ctfqv36d8bxuy" path="res://assets/sprite/effect_icons/33.png" id="103_5jaf3"]
+[ext_resource type="PackedScene" uid="uid://nisaioekixfh" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelTriggerLeg.tscn" id="104_rmo11"]
+[ext_resource type="Texture2D" uid="uid://koqvlgq85ryq" path="res://assets/sprite/effect_icons/6.png" id="105_pkc18"]
+[ext_resource type="PackedScene" uid="uid://dy8gopfkjkfe0" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelVector.tscn" id="106_k1ql0"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_am2uw"]
 _surfaces = [{
@@ -52,6 +152,516 @@ size = Vector3(1.2, 2.5, 2.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_2202f"]
 size = Vector3(2.5, 3.1, 2.3)
 
+[sub_resource type="Resource" id="Resource_js3lr"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "AmericanRifle"
+barrel_desc = ""
+barrel_image = ExtResource("8_oyu30")
+barrel_cost = 0
+barrel_prefab = ExtResource("9_yaj0o")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_bb8d4"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "AmmoLeechEffect"
+barrel_desc = ""
+barrel_image = ExtResource("10_d344g")
+barrel_cost = 0
+barrel_prefab = ExtResource("11_a3621")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_jm4om"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "BallBullet"
+barrel_desc = ""
+barrel_image = ExtResource("12_d50qt")
+barrel_cost = 0
+barrel_prefab = ExtResource("13_860l5")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_hwvr8"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "BulletTime"
+barrel_desc = ""
+barrel_image = ExtResource("14_6p7o2")
+barrel_cost = 0
+barrel_prefab = ExtResource("15_wvj3k")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_ls2bv"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "CognacReload"
+barrel_desc = ""
+barrel_image = ExtResource("16_nsord")
+barrel_cost = 0
+barrel_prefab = ExtResource("17_8v1lk")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_ppk76"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "ColdInfusion"
+barrel_desc = ""
+barrel_image = ExtResource("18_fmact")
+barrel_cost = 0
+barrel_prefab = ExtResource("19_o1u57")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_t1cc3"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "CombatShotgun"
+barrel_desc = ""
+barrel_image = ExtResource("20_8io2l")
+barrel_cost = 0
+barrel_prefab = ExtResource("21_1fe8b")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_cxxa1"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "DeathFromAbove"
+barrel_desc = ""
+barrel_image = ExtResource("22_41e3w")
+barrel_cost = 0
+barrel_prefab = ExtResource("23_pj28v")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_topbx"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "DoubleBarrel"
+barrel_desc = ""
+barrel_image = ExtResource("24_8pdaf")
+barrel_cost = 0
+barrel_prefab = ExtResource("25_dkj8b")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_epy7l"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "DoubleTapEffect"
+barrel_desc = ""
+barrel_image = ExtResource("26_y3yr6")
+barrel_cost = 0
+barrel_prefab = ExtResource("27_u77ux")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_ns4i3"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "ElectricInfusion"
+barrel_desc = ""
+barrel_image = ExtResource("18_fmact")
+barrel_cost = 0
+barrel_prefab = ExtResource("28_52che")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_g582y"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "EmpoweredDash"
+barrel_desc = ""
+barrel_image = ExtResource("29_kcphg")
+barrel_cost = 0
+barrel_prefab = ExtResource("30_e0t3c")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_ubeco"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "ExecutionerRound"
+barrel_desc = ""
+barrel_image = ExtResource("31_ur0iu")
+barrel_cost = 0
+barrel_prefab = ExtResource("32_x0brv")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_3b2yb"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "ExplosiveBulletEffect"
+barrel_desc = ""
+barrel_image = ExtResource("33_l1f8b")
+barrel_cost = 0
+barrel_prefab = ExtResource("34_kdh61")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_lrejf"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "ExtendedDrumEffect"
+barrel_desc = ""
+barrel_image = ExtResource("35_r0kbw")
+barrel_cost = 0
+barrel_prefab = ExtResource("36_dxq6d")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_jwrhc"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "FireInfusion"
+barrel_desc = ""
+barrel_image = ExtResource("18_fmact")
+barrel_cost = 0
+barrel_prefab = ExtResource("37_6qlrs")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_kqi73"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "FlexibleKnee"
+barrel_desc = ""
+barrel_image = ExtResource("38_gjjmx")
+barrel_cost = 0
+barrel_prefab = ExtResource("39_h1din")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_behei"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "Fortitude"
+barrel_desc = ""
+barrel_image = ExtResource("40_qqsl4")
+barrel_cost = 0
+barrel_prefab = ExtResource("41_ektxx")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_tqpkw"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "GamblerPrecision"
+barrel_desc = ""
+barrel_image = ExtResource("42_s3by0")
+barrel_cost = 0
+barrel_prefab = ExtResource("43_k4mq8")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_ojd2e"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "GaussRifle"
+barrel_desc = ""
+barrel_image = ExtResource("44_nbwr4")
+barrel_cost = 0
+barrel_prefab = ExtResource("45_ci4og")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_hv7s5"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "GelBlob"
+barrel_desc = ""
+barrel_image = ExtResource("46_hnqo0")
+barrel_cost = 0
+barrel_prefab = ExtResource("47_at5l7")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_1rx6f"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "GelBubble"
+barrel_desc = ""
+barrel_image = ExtResource("48_7tajw")
+barrel_cost = 0
+barrel_prefab = ExtResource("49_2wpjf")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_rlh63"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "GelStream"
+barrel_desc = ""
+barrel_image = ExtResource("50_gvpob")
+barrel_cost = 0
+barrel_prefab = ExtResource("51_l7v8e")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_3calr"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "GlassCannon"
+barrel_desc = ""
+barrel_image = ExtResource("52_p8pua")
+barrel_cost = 0
+barrel_prefab = ExtResource("53_4grb6")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_01to6"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "HomingBullet"
+barrel_desc = ""
+barrel_image = ExtResource("54_4vbfk")
+barrel_cost = 0
+barrel_prefab = ExtResource("55_bcfu1")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_vufyu"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "LMG"
+barrel_desc = ""
+barrel_image = ExtResource("56_q7yrf")
+barrel_cost = 0
+barrel_prefab = ExtResource("57_2f42g")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_ghht4"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "LongShot"
+barrel_desc = ""
+barrel_image = ExtResource("58_capww")
+barrel_cost = 0
+barrel_prefab = ExtResource("59_n44ia")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_t01sj"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "MedicalPayout"
+barrel_desc = ""
+barrel_image = ExtResource("60_jsppw")
+barrel_cost = 0
+barrel_prefab = ExtResource("61_7dtfn")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_ws125"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "MolotovDash"
+barrel_desc = ""
+barrel_image = ExtResource("62_4pk1h")
+barrel_cost = 0
+barrel_prefab = ExtResource("63_3hvdm")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_crveb"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "NewtonThirdLaw"
+barrel_desc = ""
+barrel_image = ExtResource("64_hmcun")
+barrel_cost = 0
+barrel_prefab = ExtResource("65_qqp1s")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_j08mo"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "PoisonInfusion"
+barrel_desc = ""
+barrel_image = ExtResource("18_fmact")
+barrel_cost = 0
+barrel_prefab = ExtResource("66_cjqm0")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_2sr04"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "ProtectiveBarrier"
+barrel_desc = ""
+barrel_image = ExtResource("67_alw7d")
+barrel_cost = 0
+barrel_prefab = ExtResource("68_2icmw")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_m55sj"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "Railcannon"
+barrel_desc = ""
+barrel_image = ExtResource("69_cpj60")
+barrel_cost = 0
+barrel_prefab = ExtResource("70_yup17")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_tjcgp"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "Railgun"
+barrel_desc = ""
+barrel_image = ExtResource("71_j2ody")
+barrel_cost = 0
+barrel_prefab = ExtResource("72_nef2b")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_taski"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "RampUpEffect"
+barrel_desc = ""
+barrel_image = ExtResource("73_jssl2")
+barrel_cost = 0
+barrel_prefab = ExtResource("74_4l83p")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_k2g33"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "ReactiveShot"
+barrel_desc = ""
+barrel_image = ExtResource("75_cvuvj")
+barrel_cost = 0
+barrel_prefab = ExtResource("76_dmpbv")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_mgo7g"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "RicochetBullet"
+barrel_desc = ""
+barrel_image = ExtResource("77_h0x22")
+barrel_cost = 0
+barrel_prefab = ExtResource("78_2748h")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_6sqm7"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "RussianRifle"
+barrel_desc = ""
+barrel_image = ExtResource("79_myd4b")
+barrel_cost = 0
+barrel_prefab = ExtResource("80_fxhsb")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_6jwxr"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "ScatterBeam"
+barrel_desc = ""
+barrel_image = ExtResource("81_v6ctb")
+barrel_cost = 0
+barrel_prefab = ExtResource("82_hpn3y")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_axix8"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "Shotgun"
+barrel_desc = ""
+barrel_image = ExtResource("83_mujso")
+barrel_cost = 0
+barrel_prefab = ExtResource("84_lldiu")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_5b4ou"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "SlowRoller"
+barrel_desc = ""
+barrel_image = ExtResource("85_xat5h")
+barrel_cost = 0
+barrel_prefab = ExtResource("86_2ttb5")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_tm2hq"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "Slug"
+barrel_desc = ""
+barrel_image = ExtResource("87_0ownd")
+barrel_cost = 0
+barrel_prefab = ExtResource("88_p0tpi")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_u5066"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "SMG"
+barrel_desc = ""
+barrel_image = ExtResource("89_6vaeb")
+barrel_cost = 0
+barrel_prefab = ExtResource("90_tqfex")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_ambgl"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "SnapCall"
+barrel_desc = ""
+barrel_image = ExtResource("91_iuefk")
+barrel_cost = 0
+barrel_prefab = ExtResource("92_3w61m")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_pnlaw"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "SplitBullet"
+barrel_desc = ""
+barrel_image = ExtResource("93_hg31a")
+barrel_cost = 0
+barrel_prefab = ExtResource("94_fcyat")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_vow72"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "SpringyFeet"
+barrel_desc = ""
+barrel_image = ExtResource("95_h63u3")
+barrel_cost = 0
+barrel_prefab = ExtResource("96_ilddt")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_iivnw"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "StickyBomb"
+barrel_desc = ""
+barrel_image = ExtResource("97_tm81r")
+barrel_cost = 0
+barrel_prefab = ExtResource("98_8ittv")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_gg46k"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "TagAndShred"
+barrel_desc = ""
+barrel_image = ExtResource("99_xiyqf")
+barrel_cost = 0
+barrel_prefab = ExtResource("100_knys3")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_yg8mt"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "ToxinMist"
+barrel_desc = ""
+barrel_image = ExtResource("101_h2h0h")
+barrel_cost = 0
+barrel_prefab = ExtResource("102_5jqpe")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_oecsn"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "TriggerLeg"
+barrel_desc = ""
+barrel_image = ExtResource("103_5jaf3")
+barrel_cost = 0
+barrel_prefab = ExtResource("104_rmo11")
+is_archetype_barrel = false
+
+[sub_resource type="Resource" id="Resource_qc067"]
+script = ExtResource("6_qqfkm")
+barrel_id = 0
+barrel_name = "Vector"
+barrel_desc = ""
+barrel_image = ExtResource("105_pkc18")
+barrel_cost = 0
+barrel_prefab = ExtResource("106_k1ql0")
+is_archetype_barrel = false
+
 [node name="VendingMachine" type="StaticBody3D"]
 collision_layer = 33
 collision_mask = 127
@@ -90,5 +700,8 @@ shape = SubResource("BoxShape3D_2202f")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="GunCustomizeUI" parent="UI" instance=ExtResource("6_kcljk")]
+[node name="InventoryUI" parent="UI" instance=ExtResource("5_b7an8")]
 visible = false
+shop_title = "Debug Vending Machine"
+current_inventory = Array[ExtResource("6_qqfkm")]([SubResource("Resource_js3lr"), SubResource("Resource_bb8d4"), SubResource("Resource_jm4om"), SubResource("Resource_hwvr8"), SubResource("Resource_ls2bv"), SubResource("Resource_ppk76"), SubResource("Resource_t1cc3"), SubResource("Resource_cxxa1"), SubResource("Resource_topbx"), SubResource("Resource_epy7l"), SubResource("Resource_ns4i3"), SubResource("Resource_g582y"), SubResource("Resource_ubeco"), SubResource("Resource_3b2yb"), SubResource("Resource_lrejf"), SubResource("Resource_jwrhc"), SubResource("Resource_kqi73"), SubResource("Resource_behei"), SubResource("Resource_tqpkw"), SubResource("Resource_ojd2e"), SubResource("Resource_hv7s5"), SubResource("Resource_1rx6f"), SubResource("Resource_rlh63"), SubResource("Resource_3calr"), SubResource("Resource_01to6"), SubResource("Resource_vufyu"), SubResource("Resource_ghht4"), SubResource("Resource_t01sj"), SubResource("Resource_ws125"), SubResource("Resource_crveb"), SubResource("Resource_j08mo"), SubResource("Resource_2sr04"), SubResource("Resource_m55sj"), SubResource("Resource_tjcgp"), SubResource("Resource_taski"), SubResource("Resource_k2g33"), SubResource("Resource_mgo7g"), SubResource("Resource_6sqm7"), SubResource("Resource_6jwxr"), SubResource("Resource_axix8"), SubResource("Resource_5b4ou"), SubResource("Resource_tm2hq"), SubResource("Resource_u5066"), SubResource("Resource_ambgl"), SubResource("Resource_pnlaw"), SubResource("Resource_vow72"), SubResource("Resource_iivnw"), SubResource("Resource_gg46k"), SubResource("Resource_yg8mt"), SubResource("Resource_oecsn"), SubResource("Resource_qc067")])
+has_custom_inventory = true

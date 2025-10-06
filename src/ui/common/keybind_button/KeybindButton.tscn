@@ -29,17 +29,6 @@ layout_mode = 2
 
 [node name="DeviceInputPrompt" parent="HBoxContainer/KBMButton" instance=ExtResource("2_j1jea")]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -24.0
-offset_top = -24.0
-offset_right = 24.0
-offset_bottom = 24.0
-grow_horizontal = 2
-grow_vertical = 2
 device_type = 1
 hide_background = true
 
@@ -67,17 +56,6 @@ layout_mode = 2
 
 [node name="DeviceInputPrompt" parent="HBoxContainer/ControllerButton" instance=ExtResource("2_j1jea")]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -24.0
-offset_top = -24.0
-offset_right = 24.0
-offset_bottom = 24.0
-grow_horizontal = 2
-grow_vertical = 2
 hide_background = true
 force_non_kbm = true
 
