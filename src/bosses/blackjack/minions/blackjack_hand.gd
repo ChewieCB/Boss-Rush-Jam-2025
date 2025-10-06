@@ -2,7 +2,6 @@ extends BossCore
 class_name BlackjackHand
 
 @onready var dust_particle: GPUParticles3D = $HandDust
-@onready var death_particles: GPUParticles3D = $DeathDust
 @onready var explosion_particle = $DeathExplosion
 
 @export var controller_boss: BossBlackjack
@@ -20,7 +19,8 @@ var slam_target: Vector3
 var stand_target: Vector3
 @export var stand_slam_down_time: float = 0.1
 @export var stand_slam_up_time: float = 0.1
-@export var stand_wave_radius: float = 7.0
+@export var stand_range: float = 6.7
+@export var stand_wave_radius: float = 8.0
 @export var stand_wave_damage: float = 10.0
 @export var stand_wave_time: float = 0.8
 var stand_repeat_counter: int = 0
@@ -150,7 +150,7 @@ func _on_stand_targeting_state_entered() -> void:
 	# TODO - pick a location a distance away from the player, rotated so the aoe happens in view
 	var target_spread_angle: float = randf_range(-PI/2, PI/2)
 	# TODO - figure out a good way to maintain separation between hands when choosing a new stand target
-	stand_target = target.global_position - (target.global_basis.z * 8.0).rotated(Vector3.UP, target_spread_angle)
+	stand_target = target.global_position - (target.global_basis.z * stand_range).rotated(Vector3.UP, target_spread_angle)
 	
 	state_chart.send_event("hand_move")
 
@@ -204,7 +204,7 @@ func _on_stand_double_tap_state_entered() -> void:
 	if stand_repeat_counter <= stand_repeat_max:
 		var target_spread_angle: float = randf_range(-PI/2, PI/2)
 		# TODO - figure out a good way to maintain separation between hands when choosing a new stand target
-		stand_target = target.global_position - (target.global_basis.z * 8.0).rotated(Vector3.UP, target_spread_angle)
+		stand_target = target.global_position - (target.global_basis.z * stand_range).rotated(Vector3.UP, target_spread_angle)
 		# Use the previous floor height to save re-calculating
 		if result:
 			stand_target.y = result.position.y
@@ -239,7 +239,6 @@ func spawn_shockwave(spawn_pos: Vector3 = self.global_position, max_radius: floa
 	shockwave.global_transform = self.global_transform
 	shockwave.global_position = spawn_pos
 	shockwave.arc_angle = 360
-	shockwave.arc_thickness_ratio = 2.0
 	shockwave.max_radius = max_radius
 	shockwave.damage = damage * GameManager.get_risk_dmg_mult()
 	shockwave.wave_time = time

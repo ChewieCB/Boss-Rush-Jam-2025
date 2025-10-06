@@ -286,11 +286,19 @@ func _on_dealing_dealing_state_entered() -> void:
 	var deal_tween := get_tree().create_tween()
 	var cached_pos: Vector3 = hand_r.global_position
 	deal_tween.set_loops()
+	
+	deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[0].global_position, 0.1)#.set_ease(Tween.EASE_IN)
+	deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[1].global_position, 0.15)#.set_ease(Tween.EASE_IN_OUT)
+	deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[2].global_position, 0.1)#.set_ease(Tween.EASE_OUT)
+	deal_tween.tween_callback(
+		func():
+			card_particles.emitting = true
+			card_explosion_particles.emitting = true
+			hand_count_label.text = str(hand_count)
+	)
+	deal_tween.tween_property(hand_r, "global_position", cached_pos, 0.85)#.set_ease(Tween.EASE_OUT)
+	
 	while deal_tween.is_running():
-		deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[0].global_position, 0.1)#.set_ease(Tween.EASE_IN)
-		deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[1].global_position, 0.15)#.set_ease(Tween.EASE_IN_OUT)
-		deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[2].global_position, 0.1)#.set_ease(Tween.EASE_OUT)
-		
 		# Pick a card, update the count, and change the particle texture accordingly
 		var card_key = SUIT_CARDS.keys().pick_random()
 		var card_value = SUIT_CARDS[card_key]
@@ -300,14 +308,6 @@ func _on_dealing_dealing_state_entered() -> void:
 		if hand_count > 21 and card_value == 11 and hand_count - 10 <= 21:
 			card_value -= 10
 			hand_count -= 10
-		
-		deal_tween.tween_callback(
-			func():
-				card_particles.emitting = true
-				card_explosion_particles.emitting = true
-				hand_count_label.text = str(hand_count)
-		)
-		deal_tween.tween_property(hand_r, "global_position", cached_pos, 0.85)#.set_ease(Tween.EASE_OUT)
 		
 		await deal_tween.loop_finished
 		

@@ -18,7 +18,7 @@ size = Vector3(3, 3, 3)
 size = Vector3(3, 3, 3)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_uy85v"]
-radius = 3.0
+radius = 3.5
 
 [sub_resource type="Animation" id="Animation_8e3f2"]
 length = 0.001
@@ -316,7 +316,8 @@ slam_time = 0.35
 hit_damage = 10.0
 stand_slam_down_time = 0.1
 stand_slam_up_time = 0.1
-stand_wave_radius = 7.0
+stand_range = 6.7
+stand_wave_radius = 8.0
 stand_wave_damage = 10.0
 stand_wave_time = 0.8
 stand_repeat_max = 3
