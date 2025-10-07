@@ -6,6 +6,13 @@ signal all_hand_attacks_finished
 
 @export var flyable_nav: NavigationRegion3D
 @export var walkable_floor_nav: NavigationRegion3D
+@export var flyable_points: Array
+@export var max_wander_distance: float = 100.0
+var current_wander_target: Vector3
+@export var wander_timeout: float = 0.5
+@onready var wander_timer: Timer = $WanderTimer
+var move_tween: Tween
+var active_point_debug: Node3D
 
 @onready var hand_anchor: Marker3D = $HandAnchor
 @export var hand_spawn_pos: Marker3D
@@ -58,12 +65,12 @@ func activate() -> void:
 
 
 func select_attack_phase_1() -> void:
-	state_chart.send_event("end_attack")
+	#state_chart.send_event("end_attack")
+	state_chart.send_event("end_recovery")
 	if randf() < 0.5:
 		state_chart.send_event("start_hand_slam_attack")
 	else:
 		state_chart.send_event("start_hand_stand_attack")
-	
 
 
 ## HAND HELPER METHODS
@@ -142,6 +149,7 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 	var lr_sign: int = 1 if hand_idx % 2 == 0 else -1
 	var idx_spacing = ceil(float(hand_idx + 1) / 2)
 	var hand_offset := Vector3(hand_spacing * idx_spacing * lr_sign, 2.0 * idx_spacing, 0)
+	hand.anchor_offset = hand_offset
 	
 	var spawn_tween := get_tree().create_tween()
 	spawn_tween.tween_property(hand, "global_position", self.global_position + hand_offset, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -172,6 +180,7 @@ func _release_hand(hand: BlackjackHand) -> void:
 	
 	scene_root.add_child(hand)
 	hand.global_position = cached_pos
+	hand.anchor_offset = Vector3.ZERO
 
 
 # General event handler methods
@@ -226,6 +235,53 @@ func cancel_active_hand_attacks() -> void:
 		hand.state_chart.send_event("end_attack")
 
 
+#### HOVERING (Extnded from base WALKING state)
+func _on_movement_walking_state_entered() -> void:
+	# Pick a random location to wander to from the point cloud
+	#var nearby_wander_points = flyable_points.filter(
+		#func(point):
+			#var dist: float = point.distance_to(self.global_position)
+			#var vert_dist: float = abs(point.y - self.global_position.y)
+			#return dist <= max_wander_distance and dist >= 20.0 and vert_dist > 2.0
+	#)
+	var new_wander_point: Vector3 = flyable_points.pick_random()
+	# Jitter that position a bit to make it less uniform
+	#var offset_vector := Vector3.FORWARD * randf_range(0, max_waypoint_jitter_radius)
+	#var jittered_point: Vector3 = new_wander_point + offset_vector.rotated(
+		#Vector3.UP, randf_range(0, 2 * PI)
+	#)
+	active_point_debug = draw_debug_sphere(new_wander_point, 0.5, Color.PURPLE)
+	#draw_debug_sphere(jittered_point, 0.5, Color.MAGENTA)
+	var wander_dist: float = new_wander_point.distance_to(self.global_position)
+	var wander_time: float = wander_dist / 5.0
+	
+	var move_tween: Tween = get_tree().create_tween()
+	move_tween.tween_property(self, "global_position", new_wander_point, wander_time).set_ease(Tween.EASE_OUT)
+	# Add noise to movement
+	var initial_pos: Vector3 = self.position
+	# FIXME - add noise to movement
+	#var noise_tween: Tween = get_tree().create_tween()
+	#var noise_amount: float = 0.2
+	#for i in 10:
+		#var offset := Vector3(randf_range(-noise_amount, noise_amount), randf_range(-noise_amount, noise_amount), randf_range(-noise_amount, noise_amount))
+		#noise_tween.chain().tween_property(self, "position", initial_pos + offset, wander_time / 10)
+	move_tween.tween_callback(_movement_callback)
+
+func _movement_callback() -> void:
+	state_chart.send_event("start_targeting")
+	wander_timer.start(wander_timeout)
+	if is_instance_valid(active_point_debug):
+		active_point_debug.queue_free()
+
+func _on_movement_walking_state_exited() -> void:
+	if move_tween:
+		move_tween.kill()
+	if is_instance_valid(active_point_debug):
+		active_point_debug.queue_free()
+
+func _on_wander_timer_timeout() -> void:
+	state_chart.send_event("start_moving")
+
 ## PHASE STATES
 
 ## INTRO
@@ -237,9 +293,9 @@ func _on_intro_state_entered() -> void:
 	# Spawn two initial hands
 	for i in range(2):
 		var _hand = spawn_hand(false)
-		#_hand.visible = false
+		_hand.visible = false
 	
-	var move_tween := get_tree().create_tween()
+	move_tween = get_tree().create_tween()
 	var hand_l = spawned_hands[0]
 	var hand_r = spawned_hands[1]
 	self.global_position = intro_path_points[0].global_position
@@ -250,7 +306,7 @@ func _on_intro_state_entered() -> void:
 	
 	move_tween.tween_property(hand_l, "global_position", intro_path_points[1].global_position + Vector3(hand_spacing, -1 ,0), 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[1].global_position + Vector3(-hand_spacing, -1, 0), 0.36).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		
+	
 	move_tween.chain().tween_property(self, "global_position", intro_path_points[1].global_position, 1.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	
 	move_tween.chain().tween_property(self, "global_position", intro_path_points[2].global_position, 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
@@ -262,6 +318,7 @@ func _on_intro_state_entered() -> void:
 	_anchor_hand(hand_l)
 	_anchor_hand(hand_r)
 	
+	state_chart.send_event("start_moving")
 	state_chart.send_event("finish_intro")
 
 
@@ -275,28 +332,26 @@ func _on_dealing_idle_state_entered() -> void:
 
 
 func _on_dealing_dealing_state_entered() -> void:
-	# TODO
-	
 	var hand_r: BlackjackHand = spawned_hands[1]
-	_release_hand(hand_r)
+	await _anchor_hand(hand_r, 0.0)
 	
 	# Keep dealing until we hit stand, blackjack, or bust
 	hand_count = 0
 	
 	var deal_tween := get_tree().create_tween()
-	var cached_pos: Vector3 = hand_r.global_position
+	var cached_pos: Vector3 = hand_r.position
 	deal_tween.set_loops()
 	
-	deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[0].global_position, 0.1)#.set_ease(Tween.EASE_IN)
-	deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[1].global_position, 0.15)#.set_ease(Tween.EASE_IN_OUT)
-	deal_tween.tween_property(hand_r, "global_position", dealing_anim_points[2].global_position, 0.1)#.set_ease(Tween.EASE_OUT)
+	deal_tween.tween_property(hand_r, "position", dealing_anim_points[0].position, 0.1)#.set_ease(Tween.EASE_IN)
+	deal_tween.tween_property(hand_r, "position", dealing_anim_points[1].position, 0.15)#.set_ease(Tween.EASE_IN_OUT)
+	deal_tween.tween_property(hand_r, "position", dealing_anim_points[2].position, 0.1)#.set_ease(Tween.EASE_OUT)
 	deal_tween.tween_callback(
 		func():
 			card_particles.emitting = true
 			card_explosion_particles.emitting = true
 			hand_count_label.text = str(hand_count)
 	)
-	deal_tween.tween_property(hand_r, "global_position", cached_pos, 0.85)#.set_ease(Tween.EASE_OUT)
+	deal_tween.tween_property(hand_r, "position",  cached_pos, 0.85)#.set_ease(Tween.EASE_OUT)
 	
 	while deal_tween.is_running():
 		# Pick a card, update the count, and change the particle texture accordingly
@@ -329,20 +384,19 @@ func _on_dealing_dealing_state_entered() -> void:
 			hand_count_label.modulate = Color.WHITE
 			deal_tween.kill()
 	
-	_anchor_hand(hand_r)
 	state_chart.send_event("end_deal")
 
 
 func _on_dealing_recover_state_entered() -> void:
 	# TODO
 	state_chart.send_event("trigger_phase_1")
-	select_attack()
 	state_chart.send_event("end_recovery")
 
 
 ## HIT
 
 func _on_hand_hit_attacking_state_entered() -> void:
+	state_chart.send_event("start_targeting")
 	match current_phase:
 		1:
 			trigger_all_hand_attacks_seq("start_hit_attack")
@@ -364,12 +418,24 @@ func _recover_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 
 	state_chart.send_event("cooldown_end")
+	
+	if move_tween.is_running():
+		move_tween.kill()
+	if is_instance_valid(active_point_debug):
+		active_point_debug.queue_free()
+	#state_chart.send_event("start_moving")
+	
 	state_chart.send_event("start_dealing")
-	state_chart.send_event("end_recovery")
 
 
 func _on_phase_1_state_entered() -> void:
+	#state_chart.send_event("start_moving")
 	select_attack()
+
+
+func _on_phase_1_state_exited() -> void:
+	#state_chart.send_event("start_targeting")
+	pass
 
 
 func _on_wave_collision(

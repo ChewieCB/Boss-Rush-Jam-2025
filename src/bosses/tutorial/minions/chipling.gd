@@ -111,7 +111,7 @@ func _on_passive_wander_state_entered() -> void:
 
 
 func _on_passive_wander_state_physics_processing(_delta: float) -> void:
-	pass # Replace with function body.
+	pass
 
 
 func _on_wander_timer_timeout() -> void:

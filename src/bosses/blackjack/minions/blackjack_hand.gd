@@ -9,6 +9,9 @@ class_name BlackjackHand
 
 @export var slam_shockwave_prefab: PackedScene
 
+
+var anchor_offset: Vector3
+
 ## Attacks
 # Hit
 var slam_target: Vector3

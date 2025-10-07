@@ -242,9 +242,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, 0)
 texture = SubResource("ViewportTexture_rj1ni")
 
 [node name="Barrel3Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="1"]
+transform = Transform3D(0.735053, -0.0466678, -0.676402, -0.67801, -0.0493604, -0.733394, 0.000838399, 0.99769, -0.0679237, -0.00193595, 0, 0.555438)
 surface_material_override/0 = null
 
 [node name="Barrel2Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="2"]
+transform = Transform3D(0.693706, -0.0523373, -0.718354, -0.71934, -2.604e-06, -0.694658, 0.0363546, 0.99863, -0.0376501, -0.15, 0, 1.76)
 surface_material_override/0 = null
 
 [node name="Barrel1Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="3"]
