@@ -256,15 +256,8 @@ func _on_movement_walking_state_entered() -> void:
 	var wander_time: float = wander_dist / 5.0
 	
 	move_tween = get_tree().create_tween()
-	move_tween.tween_property(self, "global_position", new_wander_point, wander_time).set_ease(Tween.EASE_OUT)
-	# Add noise to movement
-	var initial_pos: Vector3 = self.position
-	# FIXME - add noise to movement
-	#var noise_tween: Tween = get_tree().create_tween()
-	#var noise_amount: float = 0.2
-	#for i in 10:
-		#var offset := Vector3(randf_range(-noise_amount, noise_amount), randf_range(-noise_amount, noise_amount), randf_range(-noise_amount, noise_amount))
-		#noise_tween.chain().tween_property(self, "position", initial_pos + offset, wander_time / 10)
+	move_tween.tween_property(self, "global_position", new_wander_point, wander_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	anim_player.play("blackjack_boss/moving")
 	move_tween.tween_callback(_movement_callback)
 
 func _movement_callback() -> void:
@@ -274,6 +267,7 @@ func _movement_callback() -> void:
 		active_point_debug.queue_free()
 
 func _on_movement_walking_state_exited() -> void:
+	anim_player.play("blackjack_boss/RESET")
 	if move_tween:
 		move_tween.pause()
 		move_tween.kill()

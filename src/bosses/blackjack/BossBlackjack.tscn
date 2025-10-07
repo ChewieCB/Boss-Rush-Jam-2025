@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=4 uid="uid://bsdh38vyreful"]
+[gd_scene load_steps=55 format=4 uid="uid://bsdh38vyreful"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_262ft"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/boss_blackjack.gd" id="2_km6gh"]
@@ -100,19 +100,6 @@ _surfaces = [{
 "vertex_data": PackedByteArray("0ex/v7CDHT8A4yE+0ex/vyg+sb8A4yE+mAmAPyg+sb8A4yE+mAmAP7CDHT8A4yE+0ex/v7CDHT8A4yE+0ex/v7CDHT+A8ZA+0ex/vyg+sb+A8ZA+0ex/vyg+sb8A4yE+mAmAPyg+sb8A4yE+0ex/vyg+sb8A4yE+0ex/vyg+sb+A8ZA+mAmAPyg+sb+A8ZA+mAmAP7CDHT8A4yE+mAmAP7CDHT+A8ZA+0ex/v7CDHT+A8ZA+0ex/v7CDHT8A4yE+mAmAP7CDHT8A4yE+mAmAPyg+sb8A4yE+mAmAPyg+sb+A8ZA+mAmAP7CDHT+A8ZA+0ex/v7CDHT+A8ZA+mAmAP7CDHT+A8ZA+mAmAPyg+sb+A8ZA+0ex/vyg+sb+A8ZA+/////wAA/7//////AAD/v/////8AAP+//////wAA/78AAP9//3//vwAA/3//f/+/AAD/f/9//78AAP9//3//v/9/AAD//////38AAP//////fwAA//////9/AAD//////3////9//7//f////3//v/9/////f/+//3////9//7////9//////////3//////////f/////////9///////9//3////+//3//f////7//f/9/////v/9//3////+/")
 }]
 
-[sub_resource type="Animation" id="Animation_8e3f2"]
-length = 0.001
-
-[sub_resource type="Animation" id="Animation_dshkv"]
-resource_name = "death"
-length = 0.1
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_3pryd"]
-_data = {
-"RESET": SubResource("Animation_8e3f2"),
-"death": SubResource("Animation_dshkv")
-}
-
 [sub_resource type="Curve" id="Curve_ka3ae"]
 _data = [Vector2(0, 0.549451), 0.0, 0.0, 0, 0, Vector2(0.241803, 1), 0.70225, 0.70225, 0, 0, Vector2(0.372951, 0.681319), 0.0, 0.0, 0, 0, Vector2(0.934426, 0), 0.0, 0.0, 0, 0]
 point_count = 4
@@ -211,6 +198,125 @@ billboard_mode = 2
 material = SubResource("StandardMaterial3D_07x65")
 size = Vector2(2, 3)
 
+[sub_resource type="Animation" id="Animation_8e3f2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 3.497, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HoverPlatform:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -1, -3)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("HoverPlatform:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dshkv"]
+resource_name = "death"
+length = 0.1
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3pryd"]
+_data = {
+"RESET": SubResource("Animation_8e3f2"),
+"death": SubResource("Animation_dshkv")
+}
+
+[sub_resource type="Animation" id="Animation_b4jix"]
+length = 1.6
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8, 1.2, 1.6),
+"transitions": PackedFloat32Array(0.840897, 3.73213, 0.535887, 2.37841, 1.46409),
+"update": 0,
+"values": [Vector3(0, 3.497, 0), Vector3(0, 3.697, 0), Vector3(0, 3.497, 0), Vector3(0, 3.297, 0), Vector3(0, 3.497, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HoverPlatform:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8, 1.2, 1.6),
+"transitions": PackedFloat32Array(0.840897, 3.73213, 0.535887, 2.37841, 1.46409),
+"update": 0,
+"values": [Vector3(0, -1, -3), Vector3(0, -0.8, -3), Vector3(0, -1, -3), Vector3(0, -1.2, -3), Vector3(0, -1, -3)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("HoverPlatform:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(0, -3.14159, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mg07b"]
+_data = {
+"moving": SubResource("Animation_b4jix")
+}
+
 [node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "intro_path_points") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
 flyable_points = []
@@ -222,9 +328,9 @@ wave_material = null
 slam_shockwave_prefab = ExtResource("4_cv1yb")
 card_textures = Array[CompressedTexture2D]([ExtResource("5_xw57y"), ExtResource("6_ddotp"), ExtResource("7_c86wt"), ExtResource("8_b64we"), ExtResource("9_pmm6f"), ExtResource("10_g7vdy"), ExtResource("11_234n0"), ExtResource("12_mkj6f"), ExtResource("13_r13ax"), ExtResource("14_y7i18"), ExtResource("15_ktoks"), ExtResource("16_l5820"), ExtResource("17_nr1bx")])
 dealing_anim_points = [NodePath("DealingAnimPoints/DealMarkerStart"), NodePath("DealingAnimPoints/DealMarkerMid"), NodePath("DealingAnimPoints/DealMarkerEnd")]
-hand_count_label = NodePath("DealLabel")
-card_particles = NodePath("DealCardParticle")
-card_explosion_particles = NodePath("NumberParticles")
+hand_count_label = NodePath("HoverPlatform/DealLabel")
+card_particles = NodePath("HoverPlatform/DealCardParticle")
+card_explosion_particles = NodePath("HoverPlatform/NumberParticles")
 explosion_scene = ExtResource("4_rafbt")
 intro_path_points = []
 chip_scene = null
@@ -252,10 +358,41 @@ visible = true
 mesh = SubResource("BoxMesh_g4eca")
 
 [node name="HoverPlatform" type="MeshInstance3D" parent="." index="3"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -1, -3)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, -1, -3)
 cast_shadow = 2
 gi_mode = 0
 mesh = SubResource("ArrayMesh_w7kb0")
+
+[node name="DealLabel" type="Label3D" parent="HoverPlatform" index="0"]
+transform = Transform3D(1, 0, -6.3573e-08, 0, 1, 0, 6.3573e-08, 0, 1, -0.1, -0.3, 0.3)
+shaded = true
+render_priority = 1
+text = "0"
+font = ExtResource("16_d0lcj")
+font_size = 256
+outline_size = 64
+
+[node name="NumberParticles" type="GPUParticles3D" parent="HoverPlatform" index="1"]
+transform = Transform3D(1, 0, -6.3573e-08, 0, 1, 0, 6.3573e-08, 0, 1, 1.50996e-07, 1, -1)
+emitting = false
+amount = 160
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.57
+randomness = 0.12
+process_material = SubResource("ParticleProcessMaterial_tmh01")
+draw_pass_1 = SubResource("QuadMesh_ipksg")
+script = ExtResource("18_8bso6")
+
+[node name="DealCardParticle" type="GPUParticles3D" parent="HoverPlatform" index="2"]
+transform = Transform3D(1, 0, -6.3573e-08, 0, 1, 0, 6.3573e-08, 0, 1, 1.50996e-07, 1, -1)
+emitting = false
+amount = 1
+lifetime = 0.5
+one_shot = true
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_84jow")
+draw_pass_1 = SubResource("QuadMesh_ohy4g")
 
 [node name="HandAnchor" type="Marker3D" parent="." index="4"]
 
@@ -507,41 +644,11 @@ delay_in_seconds = "0.0"
 
 [node name="AnimationPlayer" parent="." index="22"]
 libraries = {
-"": SubResource("AnimationLibrary_3pryd")
+"": SubResource("AnimationLibrary_3pryd"),
+"blackjack_boss": SubResource("AnimationLibrary_mg07b")
 }
 
-[node name="DealLabel" type="Label3D" parent="." index="25"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.1, -1.3, -3.3)
-shaded = true
-render_priority = 1
-text = "0"
-font = ExtResource("16_d0lcj")
-font_size = 256
-outline_size = 64
-
-[node name="NumberParticles" type="GPUParticles3D" parent="." index="26"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -2)
-emitting = false
-amount = 160
-lifetime = 0.5
-one_shot = true
-explosiveness = 0.57
-randomness = 0.12
-process_material = SubResource("ParticleProcessMaterial_tmh01")
-draw_pass_1 = SubResource("QuadMesh_ipksg")
-script = ExtResource("18_8bso6")
-
-[node name="DealCardParticle" type="GPUParticles3D" parent="." index="27"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -2)
-emitting = false
-amount = 1
-lifetime = 0.5
-one_shot = true
-local_coords = true
-process_material = SubResource("ParticleProcessMaterial_84jow")
-draw_pass_1 = SubResource("QuadMesh_ohy4g")
-
-[node name="WanderTimer" type="Timer" parent="." index="28"]
+[node name="WanderTimer" type="Timer" parent="." index="25"]
 one_shot = true
 
 [connection signal="state_exited" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_exited"]
