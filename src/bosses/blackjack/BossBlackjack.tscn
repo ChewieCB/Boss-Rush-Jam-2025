@@ -537,6 +537,7 @@ emitting = false
 amount = 1
 lifetime = 0.5
 one_shot = true
+local_coords = true
 process_material = SubResource("ParticleProcessMaterial_84jow")
 draw_pass_1 = SubResource("QuadMesh_ohy4g")
 
