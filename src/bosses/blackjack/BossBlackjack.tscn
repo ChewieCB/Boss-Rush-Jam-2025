@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=4 uid="uid://bsdh38vyreful"]
+[gd_scene load_steps=64 format=4 uid="uid://bsdh38vyreful"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_262ft"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/boss_blackjack.gd" id="2_km6gh"]
@@ -30,6 +30,7 @@
 [ext_resource type="Texture2D" uid="uid://gkc05qvm7vdw" path="res://assets/sprite/playing_cards/king_of_hearts.png" id="17_nr1bx"]
 [ext_resource type="Texture2D" uid="uid://cmbk0ee2ycfr7" path="res://assets/sprite/playing_cards/ace_of_clubs.png" id="17_r11fw"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/slam_particles.gd" id="18_8bso6"]
+[ext_resource type="PackedScene" uid="uid://yr332iklwi21" path="res://addons/EffectBlocks/assets/ExplosionPolyReusable.tscn" id="28_0fb4b"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_brmua"]
 size = Vector3(5, 5, 5)
@@ -140,6 +141,64 @@ particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_ipksg"]
 material = SubResource("StandardMaterial3D_jqltw")
+size = Vector2(0.3, 0.3)
+
+[sub_resource type="Curve" id="Curve_6v3ni"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, -145.946), 0.0, 0.0, 0, 0, Vector2(0.505376, 0), 0.0, 0.0, 0, 0, Vector2(1, -13.5135), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_1bjap"]
+curve = SubResource("Curve_6v3ni")
+
+[sub_resource type="Curve" id="Curve_ipcfd"]
+_data = [Vector2(0, 0.549451), 0.0, 0.0, 0, 0, Vector2(0.241803, 1), 0.70225, 0.70225, 0, 0, Vector2(0.521505, 0.587838), 0.0, 0.0, 0, 0, Vector2(0.934426, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_msyve"]
+curve = SubResource("Curve_ipcfd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g55fh"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 3.0
+emission_ring_inner_radius = 2.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 30, 0)
+spread = 0.0
+initial_velocity_max = 4.0
+radial_velocity_min = -2.00002
+radial_velocity_max = 1.99998
+gravity = Vector3(0, 50, 0)
+linear_accel_min = -2.23517e-06
+linear_accel_max = 2.0
+linear_accel_curve = SubResource("CurveTexture_1bjap")
+scale_min = 0.7
+scale_max = 1.95
+scale_curve = SubResource("CurveTexture_msyve")
+turbulence_enabled = true
+turbulence_noise_strength = 20.0
+sub_emitter_mode = 2
+sub_emitter_amount_at_end = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1tll4"]
+render_priority = 1
+transparency = 1
+albedo_color = Color(0.123133, 0.648704, 0.462292, 0.980392)
+emission_enabled = true
+emission = Color(0.121569, 0.647059, 0.462745, 1)
+emission_energy_multiplier = 10.0
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_is66h"]
+material = SubResource("StandardMaterial3D_1tll4")
 size = Vector2(0.3, 0.3)
 
 [sub_resource type="Gradient" id="Gradient_vhpt6"]
@@ -312,12 +371,67 @@ tracks/3/keys = {
 "values": [Vector3(0, -3.14159, 0), Vector3(0, -3.14159, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_ukeun"]
+resource_name = "bust"
+length = 0.4
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.6),
+"transitions": PackedFloat32Array(0.840897, 1.46409),
+"update": 0,
+"values": [Vector3(0, 3.497, 0), Vector3(0, 3.497, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HoverPlatform:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.6),
+"transitions": PackedFloat32Array(0.840897, 1.46409),
+"update": 0,
+"values": [Vector3(0, -1, -3), Vector3(0, -1, -3)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("HoverPlatform:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 1.6),
+"transitions": PackedFloat32Array(0.535887, 1.56917, 0.840896, 1.46409, 0.482968, 2, 0.5, 1.93187, 0.840896, 1),
+"update": 0,
+"values": [Vector3(0, -3.14159, 0), Vector3(-0.174533, -2.96706, 0), Vector3(0, -3.14159, 0.0872665), Vector3(0.174533, -3.31613, 0), Vector3(0, -3.14159, -0.0872665), Vector3(-0.174533, -3.31613, 0), Vector3(0, -3.14159, 0.0872665), Vector3(0.174533, -2.96706, 0), Vector3(0, -3.14159, 0), Vector3(0, -3.14159, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mg07b"]
 _data = {
+"bust": SubResource("Animation_ukeun"),
 "moving": SubResource("Animation_b4jix")
 }
 
-[node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "intro_path_points") instance=ExtResource("1_262ft")]
+[node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent", "intro_path_points") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
 flyable_points = []
 max_wander_distance = 100.0
@@ -331,6 +445,11 @@ dealing_anim_points = [NodePath("DealingAnimPoints/DealMarkerStart"), NodePath("
 hand_count_label = NodePath("HoverPlatform/DealLabel")
 card_particles = NodePath("HoverPlatform/DealCardParticle")
 card_explosion_particles = NodePath("HoverPlatform/NumberParticles")
+blackjack_particles = NodePath("HoverPlatform/BlackjackParticles")
+blackjack_time_min = 8.0
+blackjack_time_max = 25.0
+blackjack_timer = NodePath("BlackjackTimer")
+bust_particles_parent = NodePath("HoverPlatform/BustParticles")
 explosion_scene = ExtResource("4_rafbt")
 intro_path_points = []
 chip_scene = null
@@ -384,7 +503,17 @@ process_material = SubResource("ParticleProcessMaterial_tmh01")
 draw_pass_1 = SubResource("QuadMesh_ipksg")
 script = ExtResource("18_8bso6")
 
-[node name="DealCardParticle" type="GPUParticles3D" parent="HoverPlatform" index="2"]
+[node name="BlackjackParticles" type="GPUParticles3D" parent="HoverPlatform" index="2"]
+transform = Transform3D(1, 0, -6.3573e-08, 0, 1, 0, 6.3573e-08, 0, 1, 4.68087e-07, 0.899284, -3.1)
+emitting = false
+amount = 300
+lifetime = 0.73
+randomness = 0.12
+visibility_aabb = AABB(-4, -4, -4, 8, 12, 8)
+process_material = SubResource("ParticleProcessMaterial_g55fh")
+draw_pass_1 = SubResource("QuadMesh_is66h")
+
+[node name="DealCardParticle" type="GPUParticles3D" parent="HoverPlatform" index="3"]
 transform = Transform3D(1, 0, -6.3573e-08, 0, 1, 0, 6.3573e-08, 0, 1, 1.50996e-07, 1, -1)
 emitting = false
 amount = 1
@@ -393,6 +522,32 @@ one_shot = true
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_84jow")
 draw_pass_1 = SubResource("QuadMesh_ohy4g")
+
+[node name="BustParticles" type="Node3D" parent="HoverPlatform" index="4"]
+
+[node name="ExplosionPoly" parent="HoverPlatform/BustParticles" index="0" instance=ExtResource("28_0fb4b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3, 0.8, -0.5)
+
+[node name="ExplosionPoly2" parent="HoverPlatform/BustParticles" index="1" instance=ExtResource("28_0fb4b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 0.8, -3)
+
+[node name="ExplosionPoly3" parent="HoverPlatform/BustParticles" index="2" instance=ExtResource("28_0fb4b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.8, -0.7)
+
+[node name="ExplosionPoly4" parent="HoverPlatform/BustParticles" index="3" instance=ExtResource("28_0fb4b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1, 0.8, -3.3)
+
+[node name="ExplosionPoly5" parent="HoverPlatform/BustParticles" index="4" instance=ExtResource("28_0fb4b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9, 0.8, -4.3)
+
+[node name="ExplosionPoly6" parent="HoverPlatform/BustParticles" index="5" instance=ExtResource("28_0fb4b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0.8, -5.2)
+
+[node name="ExplosionPoly7" parent="HoverPlatform/BustParticles" index="6" instance=ExtResource("28_0fb4b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 0.8, -1.3)
+
+[node name="ExplosionPoly8" parent="HoverPlatform/BustParticles" index="7" instance=ExtResource("28_0fb4b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.8, -3.2)
 
 [node name="HandAnchor" type="Marker3D" parent="." index="4"]
 
@@ -473,6 +628,12 @@ to = NodePath("../../Recover")
 event = &"end_deal"
 delay_in_seconds = "0.0"
 
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Dealing/Dealing" index="1"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Idle")
+event = &"end_deal_special"
+delay_in_seconds = "0.0"
+
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/AttackPhase/Dealing" index="2"]
 script = ExtResource("4_3jupp")
 
@@ -516,6 +677,12 @@ to = NodePath("../../PlatformBulletHell")
 event = &"start_bullet_hell"
 delay_in_seconds = "0.0"
 
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AttackPhase/Bust/Exploding" index="1"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Recover")
+event = &"end_bust"
+delay_in_seconds = "0.0"
+
 [node name="PlatformBulletHell" type="Node" parent="StateChart/Root/Phase/AttackPhase/Bust" index="2"]
 script = ExtResource("4_3jupp")
 
@@ -539,7 +706,7 @@ script = ExtResource("4_3jupp")
 
 [node name="toIdle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Bust/Recover" index="0"]
 script = ExtResource("3_db3k6")
-to = NodePath("../../Idle")
+to = NodePath("../../../Dealing")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
@@ -553,7 +720,13 @@ to = NodePath("../../Dealing")
 event = &"start_dealing"
 delay_in_seconds = "0.0"
 
-[node name="Idle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="1"]
+[node name="toBust" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="1"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Bust")
+event = &"start_bust"
+delay_in_seconds = "0.0"
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="2"]
 script = ExtResource("4_3jupp")
 
 [node name="toHandSlam" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/Idle" index="0"]
@@ -568,7 +741,7 @@ to = NodePath("../../HandStand")
 event = &"start_hand_stand_attack"
 delay_in_seconds = "0.0"
 
-[node name="HandSlam" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="2"]
+[node name="HandSlam" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="3"]
 script = ExtResource("6_pje5c")
 initial_state = NodePath("Targeting")
 
@@ -605,7 +778,7 @@ to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
 
-[node name="HandStand" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="3"]
+[node name="HandStand" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="4"]
 script = ExtResource("6_pje5c")
 initial_state = NodePath("Targeting")
 
@@ -651,11 +824,19 @@ libraries = {
 [node name="WanderTimer" type="Timer" parent="." index="25"]
 one_shot = true
 
+[node name="BlackjackTimer" type="Timer" parent="." index="26"]
+one_shot = true
+
 [connection signal="state_exited" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Status/Blackjack/Active" to="." method="_on_blackjack_active_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Status/Blackjack/Active" to="." method="_on_blackjack_active_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Dealing/Idle" to="." method="_on_dealing_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Dealing/Dealing" to="." method="_on_dealing_dealing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Dealing/Recover" to="." method="_on_dealing_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Bust/Idle" to="." method="_on_bust_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Bust/Exploding" to="." method="_on_bust_exploding_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Bust/Recover" to="." method="_on_bust_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/AttackPhase/Phase1" to="." method="_on_phase_1_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandSlam/Targeting" to="." method="_start_hand_attack"]
@@ -665,3 +846,4 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandStand/Attacking" to="." method="_on_hand_stand_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandStand/Recover" to="." method="_recover_entered"]
 [connection signal="timeout" from="WanderTimer" to="." method="_on_wander_timer_timeout"]
+[connection signal="timeout" from="BlackjackTimer" to="." method="_on_blackjack_timer_timeout"]

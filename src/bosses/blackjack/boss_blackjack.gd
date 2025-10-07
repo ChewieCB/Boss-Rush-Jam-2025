@@ -37,7 +37,14 @@ const SUIT_CARDS: Dictionary = {
 @export var hand_count_label: Label3D
 @export var card_particles: GPUParticles3D
 @export var card_explosion_particles: GPUParticles3D
+@export var blackjack_particles: GPUParticles3D
 var hand_count: int = 0
+
+@export var blackjack_time_min: float = 8.0
+@export var blackjack_time_max: float = 25.0
+@export var blackjack_timer: Timer
+
+@export var bust_particles_parent: Node3D
 
 # Particles Misc
 @export var explosion_scene: PackedScene
@@ -49,6 +56,8 @@ var hand_count: int = 0
 func _ready() -> void:
 	super()
 	self.global_position = intro_path_points[0].global_position
+	for emitter in bust_particles_parent.get_children():
+		emitter.size = 6.0
 
 
 func _physics_process(delta: float) -> void:
@@ -250,7 +259,7 @@ func _on_movement_walking_state_entered() -> void:
 	#var jittered_point: Vector3 = new_wander_point + offset_vector.rotated(
 		#Vector3.UP, randf_range(0, 2 * PI)
 	#)
-	active_point_debug = draw_debug_sphere(new_wander_point, 0.5, Color.PURPLE)
+	#active_point_debug = draw_debug_sphere(new_wander_point, 0.5, Color.PURPLE)
 	#draw_debug_sphere(jittered_point, 0.5, Color.MAGENTA)
 	var wander_dist: float = new_wander_point.distance_to(self.global_position)
 	var wander_time: float = wander_dist / 5.0
@@ -365,21 +374,23 @@ func _on_dealing_dealing_state_entered() -> void:
 			# BUST
 			# TODO
 			hand_count_label.modulate = Color.RED
+			state_chart.send_event("start_bust")
 			deal_tween.kill()
+			state_chart.send_event("end_deal_special")
 		#
 		if hand_count == 21:
 			# BLACKJACK
-			# TODO
 			hand_count_label.modulate = Color.GREEN
+			state_chart.send_event("start_blackjack")
 			deal_tween.kill()
+			state_chart.send_event("end_deal_special")
 		#
 		elif hand_count >= 16:
 			# STAND
 			# TODO
 			hand_count_label.modulate = Color.WHITE
 			deal_tween.kill()
-	
-	state_chart.send_event("end_deal")
+			state_chart.send_event("end_deal")
 
 
 func _on_dealing_recover_state_entered() -> void:
@@ -438,3 +449,62 @@ func _on_wave_collision(
 		# TODO - pushback
 		#trigger_pushback(pushback_force, pushback_source, pushback_radius)
 		InputHelper.rumble_medium()
+
+
+func _on_blackjack_active_state_entered() -> void:
+	# Play particle effects and juice
+	blackjack_particles.emitting = true
+	# Spawn 2 more hands
+	for i in range(2):
+		var _hand = spawn_hand()
+		_anchor_hand(_hand)
+	# Trigger attack
+	state_chart.send_event("trigger_phase_1")
+	# Start timer
+	blackjack_timer.start(randf_range(blackjack_time_min, blackjack_time_max))
+
+
+func _on_blackjack_timer_timeout() -> void:
+	state_chart.send_event("end_blackjack")
+
+
+func _on_blackjack_active_state_exited() -> void:
+	for i in range(spawned_hands.size() - 2):
+		var _hand = spawned_hands[spawned_hands.size() - 1 - i]
+		despawn_hand(_hand)
+	blackjack_particles.emitting = false
+
+
+func _on_bust_idle_state_entered() -> void:
+	state_chart.send_event("stop_moving")
+	# Cancel out any active blackjacks
+	state_chart.send_event("end_blackjack")
+	if not blackjack_timer.is_stopped():
+		blackjack_timer.stop()
+	
+	anim_player.play("blackjack_boss/bust")
+	self.set_deferred("collision_mask", 0)
+	move_tween = get_tree().create_tween()
+	move_tween.tween_property(self, "global_position", target.global_position, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	state_chart.send_event("start_explode")
+
+
+func _on_bust_exploding_state_entered() -> void:
+	var emitters = bust_particles_parent.get_children()
+	for emitter in emitters:
+		emitter.explosion()
+		await get_tree().create_timer(randf_range(0.05, 0.2)).timeout
+	await get_tree().create_timer(0.3).timeout
+	state_chart.send_event("end_bust")
+
+
+func _on_bust_recover_state_entered() -> void:
+	# Stop animation
+	anim_player.play("RESET")
+	move_tween = get_tree().create_tween()
+	var return_pos: Vector3 = flyable_points.pick_random()
+	move_tween.tween_property(self, "global_position", return_pos, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	await move_tween.finished
+	state_chart.send_event("start_targeting")
+	# TODO
+	state_chart.send_event("end_recovery")
