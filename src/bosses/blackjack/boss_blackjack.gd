@@ -255,7 +255,7 @@ func _on_movement_walking_state_entered() -> void:
 	var wander_dist: float = new_wander_point.distance_to(self.global_position)
 	var wander_time: float = wander_dist / 5.0
 	
-	var move_tween: Tween = get_tree().create_tween()
+	move_tween = get_tree().create_tween()
 	move_tween.tween_property(self, "global_position", new_wander_point, wander_time).set_ease(Tween.EASE_OUT)
 	# Add noise to movement
 	var initial_pos: Vector3 = self.position
@@ -275,6 +275,7 @@ func _movement_callback() -> void:
 
 func _on_movement_walking_state_exited() -> void:
 	if move_tween:
+		move_tween.pause()
 		move_tween.kill()
 	if is_instance_valid(active_point_debug):
 		active_point_debug.queue_free()
@@ -418,13 +419,7 @@ func _recover_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time).timeout
 
 	state_chart.send_event("cooldown_end")
-	
-	if move_tween.is_running():
-		move_tween.kill()
-	if is_instance_valid(active_point_debug):
-		active_point_debug.queue_free()
-	#state_chart.send_event("start_moving")
-	
+	state_chart.send_event("start_moving")
 	state_chart.send_event("start_dealing")
 
 

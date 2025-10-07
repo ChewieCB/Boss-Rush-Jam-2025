@@ -1,8 +1,8 @@
 [gd_scene load_steps=3 format=3 uid="uid://cl1dbui3xfnmt"]
 
-[ext_resource type="PackedScene" uid="uid://g0uvgxdeneuj" path="res://src/maps/blackjack_boss/flying_nav_mesh_points.glb" id="1_xs8ry"]
+[ext_resource type="PackedScene" uid="uid://ddyg513l4urdc" path="res://src/maps/blackjack_boss/flying_nav_mesh_points.glb" id="1_xs8ry"]
 [ext_resource type="Script" path="res://src/maps/blackjack_boss/flyable_navigation_mesh.gd" id="2_lc5yi"]
 
-[node name="flying_nav_mesh_points" node_paths=PackedStringArray("mesh") instance=ExtResource("1_xs8ry")]
+[node name="FlyingNavMeshPoints" node_paths=PackedStringArray("mesh") instance=ExtResource("1_xs8ry")]
 script = ExtResource("2_lc5yi")
 mesh = NodePath("FlyingNavMesh")
