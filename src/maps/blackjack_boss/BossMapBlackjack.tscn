@@ -1858,6 +1858,7 @@ _surfaces = [{
 [node name="BossMapBlackjack" node_paths=PackedStringArray("flying_navmesh") instance=ExtResource("1_87kc6")]
 script = ExtResource("2_e8fnj")
 flying_navmesh = NodePath("FlyingNavPoints")
+metadata/_edit_group_ = true
 
 [node name="WorldEnvironment" parent="." index="0"]
 environment = SubResource("Environment_0xe65")

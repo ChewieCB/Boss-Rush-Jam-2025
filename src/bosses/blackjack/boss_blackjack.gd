@@ -52,6 +52,10 @@ var hand_count: int = 0
 # Intro
 @export var intro_path_points: Array[Marker3D] = []
 
+# Sweep
+@export var sweep_dist: float = 16.0
+@export var sweep_angle_deg: float = 70.0
+
 
 func _ready() -> void:
 	super()
@@ -76,10 +80,11 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
-	if randf() < 0.5:
-		state_chart.send_event("start_hand_slam_attack")
-	else:
-		state_chart.send_event("start_hand_stand_attack")
+	#if randf() < 0.5:
+		#state_chart.send_event("start_hand_slam_attack")
+	#else:
+		#state_chart.send_event("start_hand_stand_attack")
+	state_chart.send_event("start_hand_sweep_attack")
 
 
 ## HAND HELPER METHODS
@@ -166,7 +171,7 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 	await spawn_tween.finished
 	
 	# Move the hand node inside of the boss to anchor
-	var hand_parent: Node3D = hand.get_parent()
+	var hand_parent = hand.get_parent()
 	if hand_parent:
 		hand_parent.remove_child(hand)
 	
@@ -276,7 +281,7 @@ func _movement_callback() -> void:
 		active_point_debug.queue_free()
 
 func _on_movement_walking_state_exited() -> void:
-	anim_player.play("blackjack_boss/RESET")
+	anim_player.play("RESET")
 	if move_tween:
 		move_tween.pause()
 		move_tween.kill()
@@ -414,6 +419,17 @@ func _on_hand_stand_attacking_state_entered() -> void:
 	match current_phase:
 		1:
 			trigger_all_hand_attacks_sim("start_stand_attack", 0.5)
+		#2:
+			#trigger_substack_attack("start_small_projectile_attack_phase_2")
+
+func _on_hand_sweep_attacking_state_entered() -> void:
+	for hand in spawned_hands:
+		# Pick a sweep start point near the target
+		hand.sweep_start_pos = target.global_position + Vector3(0, 0, -sweep_dist).rotated(Vector3.UP, -rad_to_deg(sweep_angle_deg)/2)
+		hand.sweep_end_pos = target.global_position + Vector3(0, 0, -sweep_dist).rotated(Vector3.UP, rad_to_deg(sweep_angle_deg)/2)
+	match current_phase:
+		1:
+			trigger_all_hand_attacks_seq("start_sweep_attack")
 		#2:
 			#trigger_substack_attack("start_small_projectile_attack_phase_2")
 

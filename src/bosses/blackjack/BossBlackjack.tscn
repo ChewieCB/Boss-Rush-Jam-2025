@@ -452,6 +452,8 @@ blackjack_timer = NodePath("BlackjackTimer")
 bust_particles_parent = NodePath("HoverPlatform/BustParticles")
 explosion_scene = ExtResource("4_rafbt")
 intro_path_points = []
+sweep_dist = 16.0
+sweep_angle_deg = 70.0
 chip_scene = null
 barrel_pickup_scene = null
 sfx_slowmo = null
@@ -741,6 +743,12 @@ to = NodePath("../../HandStand")
 event = &"start_hand_stand_attack"
 delay_in_seconds = "0.0"
 
+[node name="toHandSweep" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/Idle" index="2"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../HandSweep")
+event = &"start_hand_sweep_attack"
+delay_in_seconds = "0.0"
+
 [node name="HandSlam" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="3"]
 script = ExtResource("6_pje5c")
 initial_state = NodePath("Targeting")
@@ -815,6 +823,37 @@ to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
 
+[node name="HandSweep" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="5"]
+script = ExtResource("6_pje5c")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep" index="0"]
+script = ExtResource("4_3jupp")
+
+[node name="toAttacking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Targeting" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Attacking")
+event = &"start_attack"
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep" index="1"]
+script = ExtResource("4_3jupp")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Attacking" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Recovering")
+event = &"finish_attack"
+delay_in_seconds = "0.0"
+
+[node name="Recovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep" index="2"]
+script = ExtResource("4_3jupp")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Recovering" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
 [node name="AnimationPlayer" parent="." index="22"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
@@ -845,5 +884,8 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandStand/Targeting" to="." method="_start_hand_attack"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandStand/Attacking" to="." method="_on_hand_stand_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandStand/Recover" to="." method="_recover_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Targeting" to="." method="_start_hand_attack"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Attacking" to="." method="_on_hand_sweep_attacking_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Recovering" to="." method="_recover_entered"]
 [connection signal="timeout" from="WanderTimer" to="." method="_on_wander_timer_timeout"]
 [connection signal="timeout" from="BlackjackTimer" to="." method="_on_blackjack_timer_timeout"]

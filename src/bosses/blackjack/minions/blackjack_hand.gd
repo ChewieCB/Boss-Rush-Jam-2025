@@ -29,6 +29,12 @@ var stand_target: Vector3
 var stand_repeat_counter: int = 0
 @export var stand_repeat_max: int = 3
 
+# Sweep
+var sweep_start_pos: Vector3
+var sweep_end_pos: Vector3
+var sweep_target_pos: Vector3
+@export var sweep_particles: GPUParticles3D
+
 
 func _ready() -> void:
 	super()
@@ -77,7 +83,7 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 
 func _telegraph_attack(_attack_name: String = "") -> void:
 	state_chart.send_event("attack_telegraph")
-	anim_player.play("telegraph")
+	anim_player.play("blackjack_hand/telegraph")
 	await anim_player.animation_finished
 	state_chart.send_event("attack_start")
 	return
@@ -178,7 +184,6 @@ func _on_stand_double_tap_state_entered() -> void:
 	# Slam the ground vertically twice, spawning AoE waves
 	var cached_y: float = self.global_position.y
 	
-	# Lock target to the floor
 	# Lock the target pos to the floor
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
@@ -246,3 +251,127 @@ func spawn_shockwave(spawn_pos: Vector3 = self.global_position, max_radius: floa
 	shockwave.damage = damage * GameManager.get_risk_dmg_mult()
 	shockwave.wave_time = time
 	shockwave.start_shockwave()
+
+
+func _on_sweep_targeting_state_entered() -> void:
+	debug_state_label.text = "Sweep | Targeting"
+	state_chart.send_event("hand_move")
+
+
+func _on_sweep_move_to_target_state_entered() -> void:
+	sweep_target_pos = target.global_position
+	
+	# Lock the target points to the floor
+	var space_state = get_world_3d().direct_space_state
+	#for _pos in [sweep_start_pos, sweep_target_pos, sweep_end_pos]:
+	# sweep_start_pos
+	var query = PhysicsRayQueryParameters3D.create(
+		sweep_start_pos,
+		sweep_start_pos + Vector3(0, -50, 0),
+		int(pow(2, 1 - 1))
+	)
+	var result = space_state.intersect_ray(query)
+	if result:
+		sweep_start_pos.y = result.position.y
+	# sweep_target_pos
+	query = PhysicsRayQueryParameters3D.create(
+		sweep_target_pos,
+		sweep_target_pos + Vector3(0, -50, 0),
+		int(pow(2, 1 - 1))
+	)
+	result = space_state.intersect_ray(query)
+	if result:
+		sweep_target_pos.y = result.position.y
+	# sweep_end_pos
+	query = PhysicsRayQueryParameters3D.create(
+		sweep_end_pos,
+		sweep_end_pos + Vector3(0, -50, 0),
+		int(pow(2, 1 - 1))
+	)
+	result = space_state.intersect_ray(query)
+	if result:
+		sweep_end_pos.y = result.position.y
+	
+	# Move to the nearest walkable surface point ready to launch
+	var move_tween := get_tree().create_tween()
+	move_tween.tween_property(self, "global_position", sweep_start_pos, 0.7)
+	
+	# Telegraph sweep windup
+	anim_player.play("blackjack_hand/shake")
+	await get_tree().create_timer(telegraph_time).timeout
+	
+	state_chart.send_event("hand_sweep")
+
+
+func _on_sweep_sweeping_state_entered() -> void:
+	anim_player.play("RESET")
+	# Generate a curved path3D to sweep along, 
+	# targeting the player position in the middle of the curve.
+	var start_pos: Vector3 = sweep_start_pos
+	var goal_pos: Vector3 = sweep_end_pos
+	# Generate path to follow
+	var path = Path3D.new()
+	var curve = Curve3D.new()
+	var mid_point: Vector3 = sweep_target_pos  # start_pos.lerp(goal_pos, 0.5) + Vector3(0, 5.0, 0)
+
+	# Calculate a bezier curve contolrs so the curve intersects the target position at some point
+	var t: float = 0.5  # Point the curve intersects the target
+	var u: float = 1.0 - t
+	var w0: float = pow(u, 3)
+	var w1: float = 3.0 * pow(u, 2) * t
+	var w2: float = 3.0 * u * pow(t, 2)
+	var w3: float = pow(t, 3)
+	
+	var rhs = sweep_target_pos - (w0 * sweep_start_pos + w3 * sweep_end_pos)
+	
+	# You only get a constraint on the weighted sum of P1,P2
+	# Example: pick P1, solve for P2
+	var p1 = (sweep_start_pos + sweep_target_pos) * 0.5  # arbitrary choice (e.g. halfway between start and target)
+	var p2 = (rhs - (w1 * p1)) / w2
+	
+	curve.add_point(start_pos, Vector3.ZERO, p1 - sweep_start_pos)
+	#curve.add_point(mid_point)
+	curve.add_point(goal_pos, p2 - sweep_end_pos, Vector3.ZERO)
+	path.curve = curve
+	
+	# Add the path to the scene
+	scene_root.add_child(path)
+	var path_follow = PathFollow3D.new()
+	path.add_child(path_follow)
+
+	# Add the barrel to the path
+	get_parent().remove_child(self)
+	path_follow.add_child(self)
+	self.global_position = path_follow.global_position
+	
+	#
+	hurtbox.set_deferred("monitoring", true)
+	sweep_particles.emitting = true
+	spawn_dust()
+	
+	# Move along the path
+	var tween = get_tree().create_tween()
+	tween.tween_property(path_follow, "progress_ratio", 1.0, 1.3).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+	tween.tween_callback(
+		func():
+			path_follow.remove_child(self)
+			scene_root.add_child(self)
+			self.global_position = goal_pos
+			scene_root.remove_child(path)
+			path.queue_free()
+	)
+	await tween.finished
+
+	# TODO
+	state_chart.send_event("hand_return")
+
+
+func _on_sweep_returning_state_entered() -> void:
+	debug_state_label.text = "Sweep | Returning"
+	hurtbox.set_deferred("monitoring", false)
+	sweep_particles.emitting = false
+	
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("end_attack")
+	state_chart.send_event("hand_finished")
