@@ -13,7 +13,6 @@ script = ExtResource("1_54i25")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="RampUp" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("3_w70eq")
 bonus_firerate_per_interval = 5.0
 interval_time = 0.2
@@ -27,7 +26,6 @@ negative_desc = Array[String](["Burns through ammo faster"])
 icon_id = 24
 
 [node name="ExtendedDrum" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("4_k0t2c")
 display_text_title = "Extended Drum"
 display_text_tag = "More dakka!"

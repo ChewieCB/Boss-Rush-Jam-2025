@@ -1,3 +1,8 @@
-[gd_scene format=3 uid="uid://c70h2xecs66jh"]
+[gd_scene load_steps=3 format=3 uid="uid://c70h2xecs66jh"]
+
+[ext_resource type="Script" path="res://src/utils/singletons/object_pooling_manager.gd" id="1_ddkpc"]
+[ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="2_nk1ge"]
 
 [node name="ObjectPoolingManager" type="Node3D"]
+script = ExtResource("1_ddkpc")
+explosion_node_prefab = ExtResource("2_nk1ge")

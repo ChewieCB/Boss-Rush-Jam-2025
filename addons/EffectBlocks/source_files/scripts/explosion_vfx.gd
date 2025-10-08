@@ -5,12 +5,10 @@ extends Node3D
 
 signal finished
 
-func _ready() -> void:
-	explosion()
-
-func explosion():
+func explode():
 	for elem in gpu_particles_arr:
 		elem.emitting = true
 	await get_tree().create_timer(time_until_queue_free).timeout
+	for elem in gpu_particles_arr:
+		elem.emitting = false
 	finished.emit()
-	queue_free()
