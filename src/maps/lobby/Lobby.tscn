@@ -1,4 +1,4 @@
-[gd_scene load_steps=662 format=4 uid="uid://v6jgq46mkg4n"]
+[gd_scene load_steps=663 format=4 uid="uid://v6jgq46mkg4n"]
 
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="1_akhik"]
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_ywg7j"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://doscr7i44h7fy" path="res://assets/music/Lobby R1.mp3" id="2_ho2it"]
 [ext_resource type="LightmapGIData" uid="uid://ctkoowgm6c66x" path="res://src/maps/lobby/Lobby.lmbake" id="2_wjq6h"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="3_cmr84"]
+[ext_resource type="PackedScene" uid="uid://c70h2xecs66jh" path="res://src/utils/singletons/ObjectPoolingManager.tscn" id="3_ieg5u"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="3_nbyib"]
 [ext_resource type="PackedScene" uid="uid://djcipi6xiw7yn" path="res://src/ui/difficulty_menu/DifficultyMenu.tscn" id="4_armnw"]
 [ext_resource type="PackedScene" uid="uid://dfpynfqwpew5x" path="res://src/ui/common/info_text/InfoBoxUI.tscn" id="4_vrjxl"]
@@ -2302,6 +2303,8 @@ _surfaces = [{
 [node name="Lobby" type="Node3D"]
 script = ExtResource("1_ywg7j")
 bgm = ExtResource("2_ho2it")
+
+[node name="ObjectPoolingManager" parent="." instance=ExtResource("3_ieg5u")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_oh44f")
