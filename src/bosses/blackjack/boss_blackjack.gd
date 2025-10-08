@@ -483,9 +483,6 @@ func _on_bust_idle_state_entered() -> void:
 		blackjack_timer.stop()
 	
 	anim_player.play("blackjack_boss/bust")
-	self.set_deferred("collision_mask", 0)
-	move_tween = get_tree().create_tween()
-	move_tween.tween_property(self, "global_position", target.global_position, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	state_chart.send_event("start_explode")
 
 
