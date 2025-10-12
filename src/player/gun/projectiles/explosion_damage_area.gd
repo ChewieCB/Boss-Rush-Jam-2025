@@ -8,7 +8,7 @@ const LINGERING_DURATION = 0.1
 
 var active = false
 var damage = 0
-var damage_disabled = false
+var damage_disabled = true
 
 func init(_damage: int):
 	damage = _damage

@@ -43,6 +43,7 @@ icon_id = 9
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("7_jkbd8")
 new_prefab = ExtResource("8_wtxnw")
+prefab_can_be_pooled = true
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")
@@ -89,6 +90,7 @@ attribute = 8
 new_value = 2.5
 
 [node name="GelBlob" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_lnx2f")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])
@@ -148,6 +150,7 @@ attribute = 8
 new_value = 2.0
 
 [node name="GelBubble" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_lnx2f")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])

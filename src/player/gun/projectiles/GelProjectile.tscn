@@ -36,6 +36,7 @@ radius = 1.0
 [node name="GelProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
 script = ExtResource("1_a0ek6")
 elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitSmall"), NodePath("ElementalVFX/ProjectilePoisonEmitSmall"), NodePath("ElementalVFX/ProjectileFreezeEmitSmall"), NodePath("ElementalVFX/ProjectileShockEmitSmall"), null]
+can_be_object_pooled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0

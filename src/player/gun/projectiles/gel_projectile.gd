@@ -14,6 +14,8 @@ class_name GelProjectile
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 @onready var trail: Trail3D = $Trail/Trail3D
+@onready var impact_shape: CollisionShape3D = $Area3D/CollisionShape3D
+@onready var homing_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
 # When gel projectile collide, if the hitscan_col_point is valid and not too
 # far from current global_position, snap to hitscan_col_point so it look better.
@@ -21,10 +23,10 @@ const SNAP_STICK_DISTANCE = 5
 
 var sticked = false
 var start_deflate = false
-
+var active = false
 
 func _ready() -> void:
-	super ()
+	return
 
 
 func _process(delta: float) -> void:
@@ -140,3 +142,28 @@ func change_bullet_color(_new_color: Color):
 		mesh_instance.mesh.material.albedo_color = _new_color
 		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.5)
 		trail.material_override.emission = _new_color
+
+
+func activate(start_pos: Vector3) -> void:
+	spawn_pos = global_position
+	life_time = 0
+	crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
+	for elem in elemental_emitting_vfx:
+		if elem:
+			elem.visible = false
+
+	global_position = start_pos
+	active = true
+	visible = true
+	impact_shape.call_deferred("set_disabled", false)
+	homing_shape.call_deferred("set_disabled", false)
+
+func deactivate() -> void:
+	visible = false
+	active = false
+	impact_shape.call_deferred("set_disabled", true)
+	homing_shape.call_deferred("set_disabled", true)
+
+	for elem in elemental_emitting_vfx:
+		if elem:
+			elem.visible = false

@@ -114,6 +114,7 @@ var modified_spin_time
 var modified_ricochet_count = 0
 var modified_homing_strength: float = 0 # radius to search for enemy
 var modified_projectile_prefab: PackedScene = null
+var projectile_prefab_can_be_pooled = false
 var modified_recoil
 var modified_screenshake
 
@@ -446,6 +447,7 @@ func reset_modifier(reload_reset = false):
 		modified_reload_time = base_reload_time
 		modified_magazine_size = base_magazine_size
 		modified_projectile_prefab = null
+		projectile_prefab_can_be_pooled = false
 
 
 func jam_the_gun(duration: float = 1.0):

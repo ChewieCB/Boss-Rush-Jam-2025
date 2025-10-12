@@ -1,36 +1,41 @@
 extends Node3D
 class_name ObjectPoolingManager # Not an Autoload
 
-@export var explosion_node_prefab: PackedScene
-@export var explosion_pool_size: int = 10
+enum PooledObjectEnum {
+	EXPLOSION,
+}
 
-var explosion_pool: Array[ExplosionDamageArea] = []
-var explosion_next_index: int = 0
+@export var pooled_object_prefabs: Array[PackedScene] = []
+@export var pooled_object_init_arr_size: Array[int] = []
+
+var object_pool: Array[Array] = []
 
 func _ready() -> void:
+	assert(len(PooledObjectEnum.values()) == len(pooled_object_prefabs))
 	# Pooled object should have activate() and deactivate() funcs
 	# Pre-instantiate
-	for i in range(explosion_pool_size):
-		create_new_explosion_node()
+	for object_enum in PooledObjectEnum.values():
+		object_pool.append([])
+		for i in range(pooled_object_init_arr_size[int(object_enum as PooledObjectEnum)]):
+			create_new_pooled_object(object_enum as PooledObjectEnum)
 
 	await get_tree().process_frame
 	await get_tree().process_frame
 	GameManager.object_pooling_manager = self
 
 
-func create_new_explosion_node() -> ExplosionDamageArea:
-	var explosion_inst: ExplosionDamageArea = explosion_node_prefab.instantiate()
-	explosion_inst.visible = false
-	explosion_inst.damage_disabled = true
-	explosion_inst.active = false
-	add_child(explosion_inst)
-	explosion_pool.append(explosion_inst)
-	return explosion_inst
+func create_new_pooled_object(object_enum: PooledObjectEnum):
+	var inst = pooled_object_prefabs[int(object_enum)].instantiate()
+	add_child(inst)
+	inst.deactivate()
+	object_pool[int(object_enum)].append(inst)
+	return inst
 
-func get_explosion_node() -> ExplosionDamageArea:
-	for child in explosion_pool:
+
+func get_pooled_object(object_enum: PooledObjectEnum):
+	for child in object_pool[object_enum]:
 		if not child.active:
 			return child
 
 	# If all are active, create new 
-	return create_new_explosion_node()
+	return create_new_pooled_object(object_enum)

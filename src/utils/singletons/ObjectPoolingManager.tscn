@@ -5,4 +5,5 @@
 
 [node name="ObjectPoolingManager" type="Node3D"]
 script = ExtResource("1_ddkpc")
-explosion_node_prefab = ExtResource("2_nk1ge")
+pooled_object_prefabs = Array[PackedScene]([ExtResource("2_nk1ge")])
+pooled_object_init_arr_size = Array[int]([50])

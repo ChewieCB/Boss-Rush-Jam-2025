@@ -12,6 +12,7 @@ script = ExtResource("1_eccsf")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="Ricochet" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("3_8iiph")
 attribute = 9
 modify_value = 3.0
@@ -23,6 +24,7 @@ negative_desc = Array[String](["Ricochet shots can hurt you too"])
 icon_id = 45
 
 [node name="Homing" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("3_khhtx")
 display_text_title = "Homing bullet"
 display_text_tag = "Skill issues solved!"

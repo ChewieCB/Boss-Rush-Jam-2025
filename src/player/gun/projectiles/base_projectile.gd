@@ -8,6 +8,7 @@ class_name BaseProjectile
 # Check BossCore.BossStatusEffect for order
 @export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
+@export var can_be_object_pooled: bool = false
 
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)

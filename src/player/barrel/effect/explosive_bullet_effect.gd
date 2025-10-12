@@ -11,7 +11,7 @@ func on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _
 
 
 func create_explosion(pos: Vector3):
-	var explosion_inst = GameManager.object_pooling_manager.get_explosion_node()
+	var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
 	# Explosion damage equal to 50% of original damage
 	explosion_inst.init(round(owner_barrel.owner_gun.modified_damage / 2.0))
 	explosion_inst.activate(pos)
