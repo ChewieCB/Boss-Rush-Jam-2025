@@ -90,7 +90,6 @@ attribute = 8
 new_value = 2.5
 
 [node name="GelBlob" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("2_lnx2f")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])
@@ -150,7 +149,6 @@ attribute = 8
 new_value = 2.0
 
 [node name="GelBubble" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("2_lnx2f")
 is_archetype = true
 archetype_reload_sfx = Array[AudioStream]([ExtResource("3_ahv8e"), ExtResource("4_nlnie")])
