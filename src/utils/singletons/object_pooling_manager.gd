@@ -3,6 +3,7 @@ class_name ObjectPoolingManager # Not an Autoload
 
 enum PooledObjectEnum {
 	EXPLOSION,
+	GEL_STREAM_PROJECTILE
 }
 
 @export var pooled_object_prefabs: Array[PackedScene] = []
@@ -37,5 +38,5 @@ func get_pooled_object(object_enum: PooledObjectEnum):
 		if not child.active:
 			return child
 
-	# If all are active, create new 
+	# If all are active, create new
 	return create_new_pooled_object(object_enum)

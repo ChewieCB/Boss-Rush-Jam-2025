@@ -13,7 +13,6 @@ class_name GelProjectile
 @onready var stick_timer: Timer = $StickTimer
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
-@onready var trail: Trail3D = $Trail/Trail3D
 @onready var impact_shape: CollisionShape3D = $Area3D/CollisionShape3D
 @onready var homing_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
@@ -34,6 +33,9 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not active:
+		return
+
 	if sticked:
 		if start_deflate:
 			if mesh_instance.scale.x > 0:
@@ -84,6 +86,26 @@ func ricochet():
 	is_ricochet_shot = true
 	init(global_position, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, projectile_speed, max_range)
 
+func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
+	if splitted:
+		return
+
+	var center_dir = - current_dir
+	var new_pos = global_position
+	if found_hitscal_col:
+		center_dir = hitscan_col_normal
+	if _has_pos:
+		new_pos = _pos
+
+	for i in range(split_count):
+		if not is_instance_valid(self):
+			return
+		var new_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.GEL_STREAM_PROJECTILE)
+		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
+		# Splitted bullet CAN NOT ricochet or split again
+		new_inst.activate(new_pos, new_dir)
+		new_inst.splitted = true
+		new_inst.init(new_pos, new_dir, int(damage / split_count), 0, projectile_speed, max_range)
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
@@ -119,14 +141,19 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 func _on_life_timer_timeout() -> void:
 	destroyed.emit()
-	call_deferred("queue_free")
+	deactivate()
 
 
 func _on_stick_timer_timeout() -> void:
-	life_timer.start()
+	# This must be less than normal lifetime
+	const STICKED_NO_RICOCHET_LIFETIME = 3
+	if ricochet_count_left == 0:
+		life_timer.start(STICKED_NO_RICOCHET_LIFETIME)
+	else:
+		life_timer.start()
 	if ricochet_count_left > 0 and found_hitscal_col:
 		sticked = false
-		self.reparent.call_deferred(get_tree().get_root())
+		self.reparent.call_deferred(GameManager.object_pooling_manager)
 		ricochet()
 	else:
 		stop_elemental_particles()
@@ -136,34 +163,55 @@ func change_bullet_color(_new_color: Color):
 	super (_new_color)
 	if color_changed_count > 1:
 		mesh_instance.mesh.material.albedo_color = mesh_instance.mesh.material.albedo_color.lerp(_new_color, 0.5)
-		trail.material_override.albedo_color = trail.material_override.albedo_color.lerp(_new_color, 0.5)
-		trail.material_override.emission = trail.material_override.emission.lerp(_new_color, 0.5)
 	else:
 		mesh_instance.mesh.material.albedo_color = _new_color
-		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.5)
-		trail.material_override.emission = _new_color
 
+func stop_elemental_particles():
+	for elem in elemental_emitting_vfx:
+		if elem:
+			elem.deactivate()
 
-func activate(start_pos: Vector3) -> void:
-	spawn_pos = global_position
+func activate(start_pos: Vector3, dir: Vector3) -> void:
+	look_at_from_position(start_pos, start_pos + dir)
+	sticked = false
+	start_deflate = false
+	mesh_instance.scale = Vector3.ONE
+	mesh_instance.visible = true
+	deflate_speed = 1
+	homing_locked_in = false
+	homing_target = null
+	color_changed_count = 0
 	life_time = 0
+	travelled_distance = 0
+	spawn_pos = global_position
+	is_ricochet_shot = false
+	splitted = false
+
 	crit_chance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE]
 	for elem in elemental_emitting_vfx:
 		if elem:
-			elem.visible = false
+			elem.activate()
 
 	global_position = start_pos
 	active = true
 	visible = true
 	impact_shape.call_deferred("set_disabled", false)
 	homing_shape.call_deferred("set_disabled", false)
-
+	raycast.set_deferred("enabled", false)
+	set_process(true)
+	set_physics_process(true)
+	
 func deactivate() -> void:
+	if GameManager.object_pooling_manager:
+		self.reparent.call_deferred(GameManager.object_pooling_manager)
 	visible = false
 	active = false
+	ricochet_count_left = 0
+	life_timer.stop()
+	stick_timer.stop()
 	impact_shape.call_deferred("set_disabled", true)
 	homing_shape.call_deferred("set_disabled", true)
-
-	for elem in elemental_emitting_vfx:
-		if elem:
-			elem.visible = false
+	raycast.set_deferred("enabled", true)
+	stop_elemental_particles()
+	set_process(false)
+	set_physics_process(false)

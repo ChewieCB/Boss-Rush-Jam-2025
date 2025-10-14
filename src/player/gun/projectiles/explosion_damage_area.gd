@@ -20,12 +20,14 @@ func activate(start_pos: Vector3) -> void:
 	visible = true
 	collision_shape.call_deferred("set_disabled", false)
 	explode()
+	process_mode = PROCESS_MODE_INHERIT
 
 func deactivate() -> void:
 	visible = false
 	active = false
 	damage_disabled = true
 	collision_shape.call_deferred("set_disabled", true)
+	process_mode = PROCESS_MODE_DISABLED
 
 
 func explode():

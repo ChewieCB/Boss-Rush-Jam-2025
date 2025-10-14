@@ -169,7 +169,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		var new_inst = create_duplication()
 		get_tree().get_root().add_child(new_inst)
 		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
-		# Splitted bullet cant ricochet
+		# Splitted bullet CAN NOT ricochet or split again
 		new_inst.splitted = true
 		new_inst.init(new_pos, new_dir, int(damage / split_count), 0, projectile_speed, max_range)
 
