@@ -95,7 +95,7 @@ wait_time = 12.0
 one_shot = true
 
 [node name="Decal" type="Decal" parent="."]
-size = Vector3(2.079, 0.02, 3.226)
+size = Vector3(2.079, 0.5, 3.226)
 texture_albedo = ExtResource("1_ns6c0")
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

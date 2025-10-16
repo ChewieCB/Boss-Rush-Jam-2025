@@ -53,7 +53,7 @@ var hand_count: int = 0
 @export var intro_path_points: Array[Marker3D] = []
 
 # Sweep
-@export var sweep_dist: float = 16.0
+@export var sweep_dist: float = 12.0
 @export var sweep_angle_deg: float = 70.0
 
 
@@ -80,13 +80,13 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
-	#var chance = randf()
-	#if chance < 0.33:
-		#state_chart.send_event("start_hand_slam_attack")
-	#elif chance < 0.66:
-	state_chart.send_event("start_hand_sweep_attack")
-	#else:
-		#state_chart.send_event("start_hand_stand_attack")
+	var chance = randf()
+	if chance < 0.33:
+		state_chart.send_event("start_hand_slam_attack")
+	elif chance < 0.66:
+		state_chart.send_event("start_hand_sweep_attack")
+	else:
+		state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS
@@ -414,7 +414,10 @@ func _on_hand_hit_attacking_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	match current_phase:
 		1:
-			trigger_all_hand_attacks_seq("start_hit_attack")
+			if $StateChart/Root/Status/Blackjack/Active.active:
+				trigger_all_hand_attacks_sim("start_hit_attack", 0.7)
+			else:
+				trigger_all_hand_attacks_seq("start_hit_attack")
 		#2:
 			#trigger_substack_attack("start_small_projectile_attack_phase_2")
 
@@ -422,21 +425,27 @@ func _on_hand_hit_attacking_state_entered() -> void:
 func _on_hand_stand_attacking_state_entered() -> void:
 	match current_phase:
 		1:
-			trigger_all_hand_attacks_sim("start_stand_attack", 0.5)
+			if $StateChart/Root/Status/Blackjack/Active.active:
+				trigger_all_hand_attacks_sim("start_stand_attack", 0.5)
+			else:
+				trigger_all_hand_attacks_sim("start_stand_attack", 0.8)
 		#2:
 			#trigger_substack_attack("start_small_projectile_attack_phase_2")
 
 func _on_hand_sweep_attacking_state_entered() -> void:
-	for hand in spawned_hands:
-		var _angle: float = rad_to_deg(sweep_angle_deg)/2
-		var l_angle: float = _angle if hand.is_offhand else -_angle
-		var r_angle: float = -_angle if hand.is_offhand else _angle
-		# Pick a sweep start point near the target
-		hand.sweep_start_pos = target.global_position + Vector3(0, 0, -sweep_dist).rotated(Vector3.UP, l_angle)
-		hand.sweep_end_pos = target.global_position + Vector3(0, 0, -sweep_dist).rotated(Vector3.UP, r_angle)
+	#for hand in spawned_hands:
+		#var _angle: float = rad_to_deg(sweep_angle_deg)/2
+		#var l_angle: float = _angle if hand.is_offhand else -_angle
+		#var r_angle: float = -_angle if hand.is_offhand else _angle
+		## Pick a sweep start point near the target
+		#hand.sweep_start_pos = target.global_position - (target.global_basis.z * sweep_dist).rotated(Vector3.UP, l_angle)
+		#hand.sweep_end_pos = target.global_position - (target.global_basis.z * sweep_dist).rotated(Vector3.UP, r_angle)
 	match current_phase:
 		1:
-			trigger_all_hand_attacks_seq("start_sweep_attack")
+			if $StateChart/Root/Status/Blackjack/Active.active:
+				trigger_all_hand_attacks_sim("start_sweep_attack", 0.65)
+			else:
+				trigger_all_hand_attacks_seq("start_sweep_attack")
 		#2:
 			#trigger_substack_attack("start_small_projectile_attack_phase_2")
 
