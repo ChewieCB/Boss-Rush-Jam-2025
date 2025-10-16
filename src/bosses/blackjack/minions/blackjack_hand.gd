@@ -35,6 +35,10 @@ var sweep_end_pos: Vector3
 var sweep_target_pos: Vector3
 @export var sweep_particles: GPUParticles3D
 @export var sweep_card_scene: PackedScene
+var sweep_num_cards: int = 5
+var sweep_progress: float = 0.0
+var sweep_path_follow: PathFollow3D
+var sweep_card_follows := []
 
 
 func _ready() -> void:
@@ -338,13 +342,13 @@ func _on_sweep_sweeping_state_entered() -> void:
 	
 	# Add the path to the scene
 	scene_root.add_child(path)
-	var path_follow = PathFollow3D.new()
-	path.add_child(path_follow)
+	sweep_path_follow = PathFollow3D.new()
+	path.add_child(sweep_path_follow)
 
 	# Add the hand to the path follow node
 	get_parent().remove_child(self)
-	path_follow.add_child(self)
-	self.global_position = path_follow.global_position
+	sweep_path_follow.add_child(self)
+	self.global_position = sweep_path_follow.global_position
 	
 	#
 	hurtbox.set_deferred("monitoring", true)
@@ -353,65 +357,63 @@ func _on_sweep_sweeping_state_entered() -> void:
 	
 	# Spawn face down playing cards throughout the arc movement
 	var tween = get_tree().create_tween()
-	tween.set_parallel()
 	tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	# Parent hand motion
-	tween.tween_property(path_follow, "progress_ratio", 1.0, 1.3)
+	tween.tween_property(self, "sweep_progress", 1.0, 1.3)
+	tween.chain().tween_callback(func():
+		# Re-parent hand
+		sweep_path_follow.remove_child(self)
+		scene_root.add_child(self)
+		self.global_position = goal_pos
+		scene_root.remove_child(path)
+		# Reset the sweep vars
+		sweep_card_follows = []
+		sweep_progress = 0.0
+		# Cleanup path
+		path.queue_free()
+		# Exit state
+		state_chart.send_event("hand_return")
+	)
 	
 	# Card mesh width is 2.08, and we overlap around 0.1-0.3
-	var num_cards: int = 5
 	var curve_length: float  = curve.get_baked_length()
-	
 	var _path_follows := []
 	var _cards := []
 	# Tween each card in parallel to follow the hand
-	for i in range(num_cards):
+	for i in range(sweep_num_cards):
 		# Create a new path follow for the card to use
 		var card_path_follow = PathFollow3D.new()
-		_path_follows.append(card_path_follow)
 		path.add_child(card_path_follow)
-
-		var min_progress_ratio = 0.4
-		var max_progress_ratio = 0.6
-		var target_progress_ratio = min_progress_ratio + ((max_progress_ratio - min_progress_ratio) / num_cards * (i + 1))
 		
 		# TODO - pre-instantiate 5-6 cards on scene load and recycle them
 		var _card = sweep_card_scene.instantiate()
-		_cards.append(_card)
 		card_path_follow.add_child(_card)
+		
+		sweep_card_follows.append({"path_follow": card_path_follow, "card": _card})
+		
 		_card.global_transform = card_path_follow.global_transform
 		_card.rotate_y(PI/2)
 		_card.visible = false
 		_card.particles.emitting = true
-		
-		# We need to vary the timings on all of these card tweens so they move with the same easing as the hand
-		var full_curve_speed: float = curve_length / 1.3
-		var curve_point = curve.sample_baked(target_progress_ratio)
-		var curve_dist: float = curve.get_closest_offset(curve_point)
-		var _card_time: float = curve_length * curve_dist / full_curve_speed
-		var easing_time: float = 0.0
-		
-		tween.tween_property(_card, "visible", true, _card_time)
-		tween.tween_property(card_path_follow, "progress_ratio", target_progress_ratio, _card_time + easing_time)
-	
-	await tween.finished
-	
-	for i in range(_cards.size()):
-		var _card = _cards[i]
-		var _path_follow = _path_follows[i]
-		var cached_card_trans: Transform3D = _card.global_transform
-		_path_follow.remove_child(_card)
-		scene_root.add_child(_card)
-		_card.global_transform = cached_card_trans
-	
-	path_follow.remove_child(self)
-	scene_root.add_child(self)
-	self.global_position = goal_pos
-	scene_root.remove_child(path)
-	path.queue_free()
 
-	# TODO
-	state_chart.send_event("hand_return")
+
+func _on_sweep_sweeping_state_physics_processing(delta: float) -> void:
+	sweep_path_follow.progress_ratio = sweep_progress
+	
+	var min_progress_ratio = 0.4
+	var max_progress_ratio = 0.6
+	for i in range(sweep_num_cards):
+		var target_progress_ratio = min_progress_ratio + ((max_progress_ratio - min_progress_ratio) / sweep_num_cards * (i + 1))
+		var _path_follow = sweep_card_follows[i]["path_follow"]
+		var _card = sweep_card_follows[i]["card"]
+		
+		var card_progress = clamp(
+			(sweep_progress - min_progress_ratio) / (target_progress_ratio - min_progress_ratio),
+			0.0,
+			1.0
+		)
+		_path_follow.progress_ratio = lerp(0.0, target_progress_ratio, card_progress)
+		_card.visible = card_progress > 0.05
 
 
 func _on_sweep_returning_state_entered() -> void:

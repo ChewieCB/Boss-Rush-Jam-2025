@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://y34et07aumwl"]
+[gd_scene load_steps=12 format=3 uid="uid://y34et07aumwl"]
 
 [ext_resource type="Texture2D" uid="uid://b8lh8xi3vb1bm" path="res://assets/sprite/playing_cards/red_backing.png" id="1_ns6c0"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/card_floor.gd" id="1_u60lr"]
@@ -22,6 +22,7 @@ point_count = 4
 curve = SubResource("Curve_jxa3l")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ej4g"]
+resource_local_to_scene = true
 emission_shape_scale = Vector3(1.585, 0.76, 0.945)
 emission_shape = 1
 emission_sphere_radius = 1.0
@@ -59,10 +60,14 @@ size = Vector2(0.24, 0.24)
 [sub_resource type="PrismMesh" id="PrismMesh_orci3"]
 size = Vector3(1, 0.5, 0)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_gl1w3"]
+size = Vector3(2.2, 2.6, 2.7)
+
 [node name="CardFloor" type="Node3D" node_paths=PackedStringArray("mesh", "particles")]
 script = ExtResource("1_u60lr")
 mesh = NodePath("Mesh")
 particles = NodePath("SlamParticles")
+lifetime = 12.0
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_sjtyy")
@@ -80,3 +85,18 @@ visible = false
 mesh = SubResource("PrismMesh_orci3")
 
 [node name="RayCast3D" type="RayCast3D" parent="SlamParticles"]
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 32
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.96046e-08, 1.3, -0.0499999)
+shape = SubResource("BoxShape3D_gl1w3")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 12.0
+one_shot = true
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
