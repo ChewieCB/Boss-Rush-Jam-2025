@@ -33,6 +33,8 @@ var stand_repeat_counter: int = 0
 var sweep_start_pos: Vector3
 var sweep_end_pos: Vector3
 var sweep_target_pos: Vector3
+@export var sweep_time: float = 1.6
+@export var sweep_offset: float = 2.1
 @export var sweep_particles: GPUParticles3D
 @export var sweep_card_scene: PackedScene
 var sweep_num_cards: int = 5
@@ -106,7 +108,7 @@ func _on_hit_targeting_state_entered() -> void:
 	
 	# TODO - play windup anim (shake)
 	#anim_player.play("substack/idle")
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(1.1).timeout
 	_telegraph_attack("Hit")
 	
 	# Target just in front of the players position
@@ -265,7 +267,14 @@ func _on_sweep_targeting_state_entered() -> void:
 
 func _on_sweep_move_to_target_state_entered() -> void:
 	var target_offset: Vector3 = target.global_position.direction_to(controller_boss.global_position)
-	sweep_target_pos = target.global_position + target_offset * 2.0
+	sweep_target_pos = target.global_position + target_offset * sweep_offset
+	
+	var _angle: float = rad_to_deg(controller_boss.sweep_angle_deg)/2
+	var l_angle: float = _angle if is_offhand else -_angle
+	var r_angle: float = -_angle if is_offhand else _angle
+	# Pick a sweep start point near the target
+	sweep_start_pos = target.global_position + (controller_boss.global_basis.z * controller_boss.sweep_dist).rotated(Vector3.UP, l_angle)
+	sweep_end_pos = target.global_position + (controller_boss.global_basis.z * controller_boss.sweep_dist).rotated(Vector3.UP, r_angle)
 	
 	# Lock the target points to the floor
 	var space_state = get_world_3d().direct_space_state
@@ -314,8 +323,6 @@ func _on_sweep_sweeping_state_entered() -> void:
 	# targeting the player position in the middle of the curve.
 	var start_pos: Vector3 = sweep_start_pos 
 	var goal_pos: Vector3 = sweep_end_pos
-	draw_debug_sphere(start_pos, 1.0, Color.GREEN)
-	draw_debug_sphere(goal_pos, 1.0, Color.RED)
 	# Generate path to follow
 	var path = Path3D.new()
 	var curve = Curve3D.new()
@@ -360,7 +367,7 @@ func _on_sweep_sweeping_state_entered() -> void:
 	var tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	# Parent hand motion
-	tween.tween_property(self, "sweep_progress", 1.0, 1.3)
+	tween.tween_property(self, "sweep_progress", 1.0, sweep_time)
 	
 	# Card mesh width is 2.08, and we overlap around 0.1-0.3
 	var curve_length: float  = curve.get_baked_length()
