@@ -1,0 +1,82 @@
+[gd_scene load_steps=11 format=3 uid="uid://y34et07aumwl"]
+
+[ext_resource type="Texture2D" uid="uid://b8lh8xi3vb1bm" path="res://assets/sprite/playing_cards/red_backing.png" id="1_ns6c0"]
+[ext_resource type="Script" path="res://src/bosses/blackjack/card_floor.gd" id="1_u60lr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5146k"]
+transparency = 1
+albedo_texture = ExtResource("1_ns6c0")
+uv1_scale = Vector3(0.469, 0.469, 0.306)
+uv1_offset = Vector3(0.495, 0, -0.5)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_sjtyy"]
+material = SubResource("StandardMaterial3D_5146k")
+size = Vector3(2.08, 0.01, 3.2)
+
+[sub_resource type="Curve" id="Curve_jxa3l"]
+_data = [Vector2(0, 0.549451), 0.0, 0.0, 0, 0, Vector2(0.241803, 1), 0.70225, 0.70225, 0, 0, Vector2(0.372951, 0.681319), 0.0, 0.0, 0, 0, Vector2(0.934426, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_v2qwj"]
+curve = SubResource("Curve_jxa3l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ej4g"]
+emission_shape_scale = Vector3(1.585, 0.76, 0.945)
+emission_shape = 1
+emission_sphere_radius = 1.0
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 30, 0)
+spread = 82.143
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 20, 0)
+scale_min = 0.7
+scale_max = 1.95
+scale_curve = SubResource("CurveTexture_v2qwj")
+turbulence_enabled = true
+turbulence_noise_strength = 6.25
+turbulence_noise_scale = 3.828
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4gd7f"]
+render_priority = 1
+transparency = 1
+albedo_color = Color(3.85046e-07, 0.61164, 0.764265, 0.980392)
+emission_enabled = true
+emission = Color(0, 0.611765, 0.764706, 1)
+emission_energy_multiplier = 10.0
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_5ocv8"]
+material = SubResource("StandardMaterial3D_4gd7f")
+size = Vector2(0.24, 0.24)
+
+[sub_resource type="PrismMesh" id="PrismMesh_orci3"]
+size = Vector3(1, 0.5, 0)
+
+[node name="CardFloor" type="Node3D" node_paths=PackedStringArray("mesh", "particles")]
+script = ExtResource("1_u60lr")
+mesh = NodePath("Mesh")
+particles = NodePath("SlamParticles")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_sjtyy")
+
+[node name="SlamParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+amount = 550
+lifetime = 0.6
+process_material = SubResource("ParticleProcessMaterial_0ej4g")
+draw_pass_1 = SubResource("QuadMesh_5ocv8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SlamParticles"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.2)
+visible = false
+mesh = SubResource("PrismMesh_orci3")
+
+[node name="RayCast3D" type="RayCast3D" parent="SlamParticles"]

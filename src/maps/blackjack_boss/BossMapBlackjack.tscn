@@ -1955,7 +1955,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.7, -40.2399)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.7, -45.6)
 
 [node name="FlyingNavPoints" parent="." index="10" instance=ExtResource("25_fbrhi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, -34.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.5, -34.25)
 visible = false
 
 [node name="FuncGodotMap" parent="." index="11"]

@@ -34,6 +34,7 @@ var sweep_start_pos: Vector3
 var sweep_end_pos: Vector3
 var sweep_target_pos: Vector3
 @export var sweep_particles: GPUParticles3D
+@export var sweep_card_scene: PackedScene
 
 
 func _ready() -> void:
@@ -259,7 +260,8 @@ func _on_sweep_targeting_state_entered() -> void:
 
 
 func _on_sweep_move_to_target_state_entered() -> void:
-	sweep_target_pos = target.global_position
+	var target_offset: Vector3 = target.global_position.direction_to(controller_boss.global_position)
+	sweep_target_pos = target.global_position + target_offset * 2.0
 	
 	# Lock the target points to the floor
 	var space_state = get_world_3d().direct_space_state
@@ -339,7 +341,7 @@ func _on_sweep_sweeping_state_entered() -> void:
 	var path_follow = PathFollow3D.new()
 	path.add_child(path_follow)
 
-	# Add the barrel to the path
+	# Add the hand to the path follow node
 	get_parent().remove_child(self)
 	path_follow.add_child(self)
 	self.global_position = path_follow.global_position
@@ -349,18 +351,64 @@ func _on_sweep_sweeping_state_entered() -> void:
 	sweep_particles.emitting = true
 	spawn_dust()
 	
-	# Move along the path
+	# Spawn face down playing cards throughout the arc movement
 	var tween = get_tree().create_tween()
-	tween.tween_property(path_follow, "progress_ratio", 1.0, 1.3).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
-	tween.tween_callback(
-		func():
-			path_follow.remove_child(self)
-			scene_root.add_child(self)
-			self.global_position = goal_pos
-			scene_root.remove_child(path)
-			path.queue_free()
-	)
+	tween.set_parallel()
+	tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+	# Parent hand motion
+	tween.tween_property(path_follow, "progress_ratio", 1.0, 1.3)
+	
+	# Card mesh width is 2.08, and we overlap around 0.1-0.3
+	var num_cards: int = 5
+	var curve_length: float  = curve.get_baked_length()
+	
+	var _path_follows := []
+	var _cards := []
+	# Tween each card in parallel to follow the hand
+	for i in range(num_cards):
+		# Create a new path follow for the card to use
+		var card_path_follow = PathFollow3D.new()
+		_path_follows.append(card_path_follow)
+		path.add_child(card_path_follow)
+
+		var min_progress_ratio = 0.4
+		var max_progress_ratio = 0.6
+		var target_progress_ratio = min_progress_ratio + ((max_progress_ratio - min_progress_ratio) / num_cards * (i + 1))
+		
+		# TODO - pre-instantiate 5-6 cards on scene load and recycle them
+		var _card = sweep_card_scene.instantiate()
+		_cards.append(_card)
+		card_path_follow.add_child(_card)
+		_card.global_transform = card_path_follow.global_transform
+		_card.rotate_y(PI/2)
+		_card.visible = false
+		_card.particles.emitting = true
+		
+		# We need to vary the timings on all of these card tweens so they move with the same easing as the hand
+		var full_curve_speed: float = curve_length / 1.3
+		var curve_point = curve.sample_baked(target_progress_ratio)
+		var curve_dist: float = curve.get_closest_offset(curve_point)
+		var _card_time: float = curve_length * curve_dist / full_curve_speed
+		var easing_time: float = 0.0
+		
+		tween.tween_property(_card, "visible", true, _card_time)
+		tween.tween_property(card_path_follow, "progress_ratio", target_progress_ratio, _card_time + easing_time)
+	
 	await tween.finished
+	
+	for i in range(_cards.size()):
+		var _card = _cards[i]
+		var _path_follow = _path_follows[i]
+		var cached_card_trans: Transform3D = _card.global_transform
+		_path_follow.remove_child(_card)
+		scene_root.add_child(_card)
+		_card.global_transform = cached_card_trans
+	
+	path_follow.remove_child(self)
+	scene_root.add_child(self)
+	self.global_position = goal_pos
+	scene_root.remove_child(path)
+	path.queue_free()
 
 	# TODO
 	state_chart.send_event("hand_return")
