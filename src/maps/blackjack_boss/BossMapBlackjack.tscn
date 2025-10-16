@@ -3630,6 +3630,7 @@ mesh = SubResource("ArrayMesh_qpe6u")
 [node name="entity_16_BossBlackjack" parent="FuncGodotMap" index="5" node_paths=PackedStringArray("hand_spawn_pos", "intro_path_points", "target") instance=ExtResource("26_prh6q")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 11.875, -47.25)
 hand_spawn_pos = NodePath("../../HandSpawnPos")
+bust_self_damage = 150.0
 intro_path_points = [NodePath("../../BossIntroPath/PlatformPath/Marker3D"), NodePath("../../BossIntroPath/PlatformPath/Marker3D2"), NodePath("../../BossIntroPath/PlatformPath/Marker3D3")]
 target = NodePath("../group_673_Elevator/entity_2_PlayerRef")
 

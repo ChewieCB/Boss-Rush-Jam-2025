@@ -45,6 +45,7 @@ var hand_count: int = 0
 @export var blackjack_timer: Timer
 
 @export var bust_particles_parent: Node3D
+@export var bust_self_damage: float = 150.0
 
 # Particles Misc
 @export var explosion_scene: PackedScene
@@ -340,7 +341,6 @@ func _on_intro_state_entered() -> void:
 func _on_dealing_idle_state_entered() -> void:
 	# TODO
 	hand_count_label.text = "0"
-	hand_count_label.modulate = Color.WHITE
 	state_chart.send_event("start_deal")
 
 
@@ -382,14 +382,12 @@ func _on_dealing_dealing_state_entered() -> void:
 		if hand_count > 21:
 			# BUST
 			# TODO
-			hand_count_label.modulate = Color.RED
 			state_chart.send_event("start_bust")
 			deal_tween.kill()
 			state_chart.send_event("end_deal_special")
 		#
 		if hand_count == 21:
 			# BLACKJACK
-			hand_count_label.modulate = Color.GREEN
 			state_chart.send_event("start_blackjack")
 			deal_tween.kill()
 			state_chart.send_event("end_deal_special")
@@ -397,7 +395,6 @@ func _on_dealing_dealing_state_entered() -> void:
 		elif hand_count >= 16:
 			# STAND
 			# TODO
-			hand_count_label.modulate = Color.WHITE
 			deal_tween.kill()
 			state_chart.send_event("end_deal")
 
@@ -484,6 +481,7 @@ func _on_wave_collision(
 
 
 func _on_blackjack_active_state_entered() -> void:
+	hand_count_label.modulate = Color.GREEN
 	# Play particle effects and juice
 	blackjack_particles.emitting = true
 	# Spawn 2 more hands
@@ -501,6 +499,7 @@ func _on_blackjack_timer_timeout() -> void:
 
 
 func _on_blackjack_active_state_exited() -> void:
+	hand_count_label.modulate = Color.WHITE
 	for i in range(spawned_hands.size() - 2):
 		var _hand = spawned_hands[spawned_hands.size() - 1 - i]
 		despawn_hand(_hand)
@@ -508,6 +507,7 @@ func _on_blackjack_active_state_exited() -> void:
 
 
 func _on_bust_idle_state_entered() -> void:
+	hand_count_label.modulate = Color.RED
 	state_chart.send_event("stop_moving")
 	# Cancel out any active blackjacks
 	state_chart.send_event("end_blackjack")
@@ -522,12 +522,14 @@ func _on_bust_exploding_state_entered() -> void:
 	var emitters = bust_particles_parent.get_children()
 	for emitter in emitters:
 		emitter.explosion()
+		self.health_component.damage(bust_self_damage * randf_range(0.7, 1.3) / emitters.size(), Color.RED)
 		await get_tree().create_timer(randf_range(0.05, 0.2)).timeout
 	await get_tree().create_timer(0.3).timeout
 	state_chart.send_event("end_bust")
 
 
 func _on_bust_recover_state_entered() -> void:
+	hand_count_label.modulate = Color.WHITE
 	# Stop animation
 	anim_player.play("RESET")
 	move_tween = get_tree().create_tween()

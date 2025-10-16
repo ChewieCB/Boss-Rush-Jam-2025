@@ -450,6 +450,7 @@ blackjack_time_min = 8.0
 blackjack_time_max = 25.0
 blackjack_timer = NodePath("BlackjackTimer")
 bust_particles_parent = NodePath("HoverPlatform/BustParticles")
+bust_self_damage = 150.0
 explosion_scene = ExtResource("4_rafbt")
 intro_path_points = []
 sweep_dist = 12.0
