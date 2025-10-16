@@ -360,20 +360,6 @@ func _on_sweep_sweeping_state_entered() -> void:
 	tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	# Parent hand motion
 	tween.tween_property(self, "sweep_progress", 1.0, 1.3)
-	tween.chain().tween_callback(func():
-		# Re-parent hand
-		sweep_path_follow.remove_child(self)
-		scene_root.add_child(self)
-		self.global_position = goal_pos
-		scene_root.remove_child(path)
-		# Reset the sweep vars
-		sweep_card_follows = []
-		sweep_progress = 0.0
-		# Cleanup path
-		path.queue_free()
-		# Exit state
-		state_chart.send_event("hand_return")
-	)
 	
 	# Card mesh width is 2.08, and we overlap around 0.1-0.3
 	var curve_length: float  = curve.get_baked_length()
@@ -395,6 +381,31 @@ func _on_sweep_sweeping_state_entered() -> void:
 		_card.rotate_y(PI/2)
 		_card.visible = false
 		_card.particles.emitting = true
+	
+	await tween.finished
+	
+	# Re-parent hand
+	sweep_path_follow.remove_child(self)
+	scene_root.add_child(self)
+	self.global_position = goal_pos
+	
+	for kvm in sweep_card_follows:
+		var _card = kvm["card"]
+		var _follow = kvm["path_follow"]
+		var cached_pos: Vector3 = _card.global_position
+		var cached_trans: Transform3D = _card.global_transform
+		_follow.remove_child(_card)
+		scene_root.add_child(_card)
+		_card.global_transform = cached_trans
+		_card.global_position = cached_pos
+		
+	sweep_card_follows = []
+	sweep_progress = 0.0
+	
+	scene_root.remove_child(path)
+	path.queue_free()
+	
+	state_chart.send_event("hand_return")
 
 
 func _on_sweep_sweeping_state_physics_processing(delta: float) -> void:
