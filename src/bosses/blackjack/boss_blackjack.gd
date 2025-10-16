@@ -80,11 +80,13 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
-	#if randf() < 0.5:
-		#state_chart.send_event("start_hand_slam_attack")
-	#else:
-		#state_chart.send_event("start_hand_stand_attack")
-	state_chart.send_event("start_hand_sweep_attack")
+	var chance = randf()
+	if chance < 0.33:
+		state_chart.send_event("start_hand_slam_attack")
+	elif chance < 0.66:
+		state_chart.send_event("start_hand_sweep_attack")
+	else:
+		state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS

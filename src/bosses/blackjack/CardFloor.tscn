@@ -1,17 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://y34et07aumwl"]
+[gd_scene load_steps=11 format=3 uid="uid://y34et07aumwl"]
 
 [ext_resource type="Texture2D" uid="uid://b8lh8xi3vb1bm" path="res://assets/sprite/playing_cards/red_backing.png" id="1_ns6c0"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/card_floor.gd" id="1_u60lr"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5146k"]
-transparency = 1
-albedo_texture = ExtResource("1_ns6c0")
-uv1_scale = Vector3(0.469, 0.469, 0.306)
-uv1_offset = Vector3(0.495, 0, -0.5)
-uv1_triplanar = true
-
 [sub_resource type="BoxMesh" id="BoxMesh_sjtyy"]
-material = SubResource("StandardMaterial3D_5146k")
 size = Vector3(2.08, 0.01, 3.2)
 
 [sub_resource type="Curve" id="Curve_jxa3l"]
@@ -63,17 +55,21 @@ size = Vector3(1, 0.5, 0)
 [sub_resource type="BoxShape3D" id="BoxShape3D_gl1w3"]
 size = Vector3(2.2, 2.6, 2.7)
 
-[node name="CardFloor" type="Node3D" node_paths=PackedStringArray("mesh", "particles")]
+[node name="CardFloor" type="Node3D" node_paths=PackedStringArray("mesh", "decal", "particles")]
 script = ExtResource("1_u60lr")
 mesh = NodePath("Mesh")
+decal = NodePath("Decal")
 particles = NodePath("SlamParticles")
 lifetime = 12.0
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+visible = false
 mesh = SubResource("BoxMesh_sjtyy")
 
 [node name="SlamParticles" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+emitting = false
 amount = 550
 lifetime = 0.6
 process_material = SubResource("ParticleProcessMaterial_0ej4g")
@@ -97,6 +93,10 @@ shape = SubResource("BoxShape3D_gl1w3")
 [node name="Timer" type="Timer" parent="."]
 wait_time = 12.0
 one_shot = true
+
+[node name="Decal" type="Decal" parent="."]
+size = Vector3(2.079, 0.02, 3.226)
+texture_albedo = ExtResource("1_ns6c0")
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
