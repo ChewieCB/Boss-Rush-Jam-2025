@@ -9,8 +9,8 @@ class_name BlackjackHand
 
 @export var slam_shockwave_prefab: PackedScene
 
-
 var anchor_offset: Vector3
+var is_offhand: bool = false  # flag to set handed-ness so we can flip sweep direction
 
 ## Attacks
 # Hit
@@ -269,7 +269,6 @@ func _on_sweep_move_to_target_state_entered() -> void:
 	
 	# Lock the target points to the floor
 	var space_state = get_world_3d().direct_space_state
-	#for _pos in [sweep_start_pos, sweep_target_pos, sweep_end_pos]:
 	# sweep_start_pos
 	var query = PhysicsRayQueryParameters3D.create(
 		sweep_start_pos,
@@ -313,8 +312,10 @@ func _on_sweep_sweeping_state_entered() -> void:
 	anim_player.play("RESET")
 	# Generate a curved path3D to sweep along, 
 	# targeting the player position in the middle of the curve.
-	var start_pos: Vector3 = sweep_start_pos
+	var start_pos: Vector3 = sweep_start_pos 
 	var goal_pos: Vector3 = sweep_end_pos
+	draw_debug_sphere(start_pos, 1.0, Color.GREEN)
+	draw_debug_sphere(goal_pos, 1.0, Color.RED)
 	# Generate path to follow
 	var path = Path3D.new()
 	var curve = Curve3D.new()
@@ -335,8 +336,8 @@ func _on_sweep_sweeping_state_entered() -> void:
 	var p1 = (sweep_start_pos + sweep_target_pos) * 0.5  # arbitrary choice (e.g. halfway between start and target)
 	var p2 = (rhs - (w1 * p1)) / w2
 	
+	# Reverse point order for left hands so they sweep left to right
 	curve.add_point(start_pos, Vector3.ZERO, p1 - sweep_start_pos)
-	#curve.add_point(mid_point)
 	curve.add_point(goal_pos, p2 - sweep_end_pos, Vector3.ZERO)
 	path.curve = curve
 	

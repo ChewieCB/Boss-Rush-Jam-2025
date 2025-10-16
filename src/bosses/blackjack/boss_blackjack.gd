@@ -80,13 +80,13 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
-	var chance = randf()
-	if chance < 0.33:
-		state_chart.send_event("start_hand_slam_attack")
-	elif chance < 0.66:
-		state_chart.send_event("start_hand_sweep_attack")
-	else:
-		state_chart.send_event("start_hand_stand_attack")
+	#var chance = randf()
+	#if chance < 0.33:
+		#state_chart.send_event("start_hand_slam_attack")
+	#elif chance < 0.66:
+	state_chart.send_event("start_hand_sweep_attack")
+	#else:
+		#state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS
@@ -166,6 +166,8 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 	var idx_spacing = ceil(float(hand_idx + 1) / 2)
 	var hand_offset := Vector3(hand_spacing * idx_spacing * lr_sign, 2.0 * idx_spacing, 0)
 	hand.anchor_offset = hand_offset
+	# Add offhand flag for even index hands so we can flip paths directions for left sided hands
+	hand.is_offhand = (lr_sign == -1)
 	
 	var spawn_tween := get_tree().create_tween()
 	spawn_tween.tween_property(hand, "global_position", self.global_position + hand_offset, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
@@ -426,9 +428,12 @@ func _on_hand_stand_attacking_state_entered() -> void:
 
 func _on_hand_sweep_attacking_state_entered() -> void:
 	for hand in spawned_hands:
+		var _angle: float = rad_to_deg(sweep_angle_deg)/2
+		var l_angle: float = _angle if hand.is_offhand else -_angle
+		var r_angle: float = -_angle if hand.is_offhand else _angle
 		# Pick a sweep start point near the target
-		hand.sweep_start_pos = target.global_position + Vector3(0, 0, -sweep_dist).rotated(Vector3.UP, -rad_to_deg(sweep_angle_deg)/2)
-		hand.sweep_end_pos = target.global_position + Vector3(0, 0, -sweep_dist).rotated(Vector3.UP, rad_to_deg(sweep_angle_deg)/2)
+		hand.sweep_start_pos = target.global_position + Vector3(0, 0, -sweep_dist).rotated(Vector3.UP, l_angle)
+		hand.sweep_end_pos = target.global_position + Vector3(0, 0, -sweep_dist).rotated(Vector3.UP, r_angle)
 	match current_phase:
 		1:
 			trigger_all_hand_attacks_seq("start_sweep_attack")
