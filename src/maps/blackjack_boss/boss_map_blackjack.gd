@@ -35,3 +35,14 @@ func _ready() -> void:
 		##stack_collider.rotate_y(_rotation)
 	
 	super()
+
+
+
+func _on_killbox_area_body_entered(body: Node3D) -> void:
+	if "health_component" in body:
+		if body is Player:
+			body.fall_death()
+		else:
+			body.health_component.damage(9999999)
+	else:
+		body.queue_free()
