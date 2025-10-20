@@ -4,9 +4,9 @@ class_name BossBlackjack
 signal hand_attack_finished(hand)
 signal all_hand_attacks_finished
 
-@export var flyable_nav: NavigationRegion3D
-@export var walkable_floor_nav: NavigationRegion3D
-@export var flyable_points: Array
+var flyable_nav: NavigationRegion3D
+var walkable_floor_nav: NavigationRegion3D
+var flyable_points: Array
 @export var max_wander_distance: float = 100.0
 var current_wander_target: Vector3
 @export var wander_timeout: float = 0.5
@@ -15,7 +15,7 @@ var move_tween: Tween
 var active_point_debug: Node3D
 
 @onready var hand_anchor: Marker3D = $HandAnchor
-@export var hand_spawn_pos: Marker3D
+var hand_spawn_pos: Node
 @export var hand_scene: PackedScene
 @export var hand_spacing: float = 5.0
 var spawned_hands = []
@@ -51,18 +51,38 @@ var hand_count: int = 0
 @export var explosion_scene: PackedScene
 
 # Intro
-@export var intro_path_points: Array[Marker3D] = []
+var intro_path_points: Array[Node] = []
 
 # Sweep
 @export var sweep_dist: float = 12.0
 @export var sweep_angle_deg: float = 70.0
 
+# Tilt
+var tilt_platform_origin_marker: Node
+var tilt_hand_markers: Array[Node]
+@export var tilt_mesh: Node3D
+@export var tilt_animateable_floor: AnimatableBody3D
+@export var tilt_max_deg: float = 25.0
+@export var tilt_max_floor_speed: float = 7.8
+@export var tilt_duration: float = 2.8
+@export var tilt_floor_friction_mod: float = 0.30
+var slippery_debuff: StatusEffect
+
 
 func _ready() -> void:
 	super()
-	self.global_position = intro_path_points[0].global_position
 	for emitter in bust_particles_parent.get_children():
 		emitter.size = 6.0
+	
+	slippery_debuff = StatusEffect.new()
+	slippery_debuff.display_name = "Reduce movement friction"
+	slippery_debuff.status_code = "blackjack_tilted_floor_slippery"
+	slippery_debuff.modified_stat = StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER
+	slippery_debuff.value = -tilt_floor_friction_mod
+	slippery_debuff.modify_type = StatusEffect.ModifyType.PERCENTAGE
+	slippery_debuff.duration = tilt_duration
+	slippery_debuff.is_bad_effect = true
+	#slow_run_debuff.status_icon = run_speed_buff_icon
 
 
 func _physics_process(delta: float) -> void:
@@ -81,13 +101,14 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
-	var chance = randf()
-	if chance < 0.33:
-		state_chart.send_event("start_hand_slam_attack")
-	elif chance < 0.66:
-		state_chart.send_event("start_hand_sweep_attack")
-	else:
-		state_chart.send_event("start_hand_stand_attack")
+	state_chart.send_event("start_hand_tilt_attack")
+	#var chance = randf()
+	#if chance < 0.33:
+		#state_chart.send_event("start_hand_slam_attack")
+	#elif chance < 0.66:
+		#state_chart.send_event("start_hand_sweep_attack")
+	#else:
+		#state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS
@@ -312,10 +333,10 @@ func _on_intro_state_entered() -> void:
 	move_tween = get_tree().create_tween()
 	var hand_l = spawned_hands[0]
 	var hand_r = spawned_hands[1]
-	self.global_position = intro_path_points[0].global_position
-	hand_l.global_position = intro_path_points[0].global_position
+	self.global_position = intro_path_points[2].global_position
+	hand_l.global_position = intro_path_points[2].global_position
 	hand_l.visible = true
-	hand_r.global_position = intro_path_points[0].global_position
+	hand_r.global_position = intro_path_points[2].global_position
 	hand_r.visible = true
 	
 	move_tween.tween_property(hand_l, "global_position", intro_path_points[1].global_position + Vector3(hand_spacing, -1 ,0), 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
@@ -323,9 +344,9 @@ func _on_intro_state_entered() -> void:
 	
 	move_tween.chain().tween_property(self, "global_position", intro_path_points[1].global_position, 1.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	
-	move_tween.chain().tween_property(self, "global_position", intro_path_points[2].global_position, 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
-	move_tween.parallel().tween_property(hand_l, "global_position", intro_path_points[2].global_position + Vector3(hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
-	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[2].global_position + Vector3(-hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	move_tween.chain().tween_property(self, "global_position", intro_path_points[0].global_position, 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	move_tween.parallel().tween_property(hand_l, "global_position", intro_path_points[0].global_position + Vector3(hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[0].global_position + Vector3(-hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
 	
 	await move_tween.finished
 	
@@ -538,4 +559,84 @@ func _on_bust_recover_state_entered() -> void:
 	await move_tween.finished
 	state_chart.send_event("start_targeting")
 	# TODO
+	state_chart.send_event("end_recovery")
+
+
+func _on_tilt_moving_to_pos_state_entered() -> void:
+	state_chart.send_event("start_targeting")
+	# Move two hands to marker positions
+	var hand_tween = get_tree().create_tween()
+	hand_tween.set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	hand_tween.tween_property(self, "global_position", tilt_platform_origin_marker.global_position, 0.8)
+	for i in range(2):
+		var _hand = spawned_hands[i]
+		_release_hand(_hand)
+		hand_tween.tween_property(_hand, "global_position", tilt_hand_markers[i].global_position, 0.8)
+	
+	await hand_tween.finished
+	
+	state_chart.send_event("start_tilting")
+
+
+func _on_tilt_tilting_state_entered() -> void:
+	# Enable the player controller to slide on slopes
+	target.floor_stop_on_slope = false
+	target.add_status_effect(slippery_debuff)
+	
+	# Tilt the arena by a rotation degree amount
+	var tilt_tween = get_tree().create_tween()
+	tilt_tween.set_parallel(true)
+	tilt_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", -tilt_max_deg, tilt_duration/2)
+	tilt_tween.tween_property(tilt_animateable_floor, "constant_linear_velocity:z", -tilt_max_floor_speed, tilt_duration/2)
+	
+	await tilt_tween.finished
+	target.vel_horizontal += Vector2(0, -8.0)
+	
+	await get_tree().create_timer(5.0).timeout
+	
+	state_chart.send_event("stop_tilting")
+
+
+func _on_tilt_tilting_state_physics_processing(delta: float) -> void:
+	self.global_position = tilt_platform_origin_marker.global_position
+	self.rotation_degrees.x = tilt_mesh.rotation_degrees.x
+	for i in range(2):
+		var _hand = spawned_hands[i]
+		_hand.global_position =  tilt_hand_markers[i].global_position
+
+
+func _on_tilt_untilting_state_entered() -> void:
+	# Return the arena to the original zeroed rotation
+	var tilt_tween = get_tree().create_tween()
+	tilt_tween.set_parallel(true)
+	tilt_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", 0, tilt_duration/2)
+	tilt_tween.tween_property(tilt_animateable_floor, "constant_linear_velocity:z", 0, tilt_duration/2)
+	
+	await tilt_tween.finished
+	
+	state_chart.send_event("start_recovery")
+
+
+func _on_tilt_untilting_state_physics_processing(delta: float) -> void:
+	self.global_position = tilt_platform_origin_marker.global_position
+	self.rotation_degrees.x = tilt_mesh.rotation_degrees.x
+	for i in range(2):
+		var _hand = spawned_hands[i]
+		_hand.global_position =  tilt_hand_markers[i].global_position
+
+
+func _on_tilt_recovering_state_entered() -> void:
+	target.floor_stop_on_slope = true
+	target.remove_status_effect(slippery_debuff)
+	# Return the hands to the anchored position
+	var return_tween = get_tree().create_tween()
+	return_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	return_tween.tween_property(self, "global_position", intro_path_points[0].global_position, 0.6)
+	
+	for i in range(2):
+		var _hand = spawned_hands[i]
+		_anchor_hand(_hand)
+	
 	state_chart.send_event("end_recovery")

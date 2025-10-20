@@ -101,7 +101,7 @@ flip_faces = true
 size = Vector2(2, 2)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
-viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
+viewport_path = NodePath("EffectIconsViewport")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
@@ -117,7 +117,9 @@ shader_parameter/distortionTexture = SubResource("NoiseTexture2D_7pe4k")
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component", "luck_component")]
 collision_layer = 2
-collision_mask = 221
+collision_mask = 157
+wall_min_slide_angle = 0.0872665
+floor_stop_on_slope = false
 script = ExtResource("1_rl0vi")
 sfx_hurt = Array[AudioStream]([ExtResource("2_cpvt1"), ExtResource("3_lb5n1"), ExtResource("4_broo0"), ExtResource("5_lkuup"), ExtResource("6_vqbwb")])
 sfx_dead = Array[AudioStream]([ExtResource("7_lluik"), ExtResource("8_h2aj6"), ExtResource("9_wamw4"), ExtResource("10_mowd1")])

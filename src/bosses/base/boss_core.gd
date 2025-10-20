@@ -29,6 +29,15 @@ enum BossStatusEffect {
 	BLEEDING # Take damage based on their movement
 }
 
+@export var target: Node3D:
+	set(value):
+		target = value
+		if target:
+			if not target.is_node_ready():
+				await target.ready
+			navigation_component.target = target
+var cached_target: Node3D
+
 @export var boss_id: BossIdEnum
 @export var chip_scene: PackedScene
 @export var chip_spawn_chance: float = 0.4
@@ -175,15 +184,6 @@ const JUMP_FORCE: float = 8
 var time_elapsed: float = 0
 
 var vel_vertical: float = 0
-
-@export var target: Node3D:
-	set(value):
-		target = value
-		if target:
-			if not target.is_node_ready():
-				await target.ready
-			navigation_component.target = target
-var cached_target: Node3D
 
 @onready var scene_root = get_parent().get_parent()
 

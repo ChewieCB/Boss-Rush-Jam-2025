@@ -431,9 +431,8 @@ _data = {
 "moving": SubResource("Animation_b4jix")
 }
 
-[node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent", "intro_path_points") instance=ExtResource("1_262ft")]
+[node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
-flyable_points = []
 max_wander_distance = 100.0
 wander_timeout = 0.5
 hand_scene = ExtResource("13_ereo8")
@@ -452,9 +451,12 @@ blackjack_timer = NodePath("BlackjackTimer")
 bust_particles_parent = NodePath("HoverPlatform/BustParticles")
 bust_self_damage = 150.0
 explosion_scene = ExtResource("4_rafbt")
-intro_path_points = []
 sweep_dist = 12.0
 sweep_angle_deg = 70.0
+tilt_max_deg = 25.0
+tilt_max_floor_speed = 7.8
+tilt_duration = 2.8
+tilt_floor_friction_mod = 0.3
 chip_scene = null
 barrel_pickup_scene = null
 sfx_slowmo = null
@@ -750,6 +752,12 @@ to = NodePath("../../HandSweep")
 event = &"start_hand_sweep_attack"
 delay_in_seconds = "0.0"
 
+[node name="toHandTilt" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/Idle" index="3"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../HandTilt")
+event = &"start_hand_tilt_attack"
+delay_in_seconds = "0.0"
+
 [node name="HandSlam" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="3"]
 script = ExtResource("6_pje5c")
 initial_state = NodePath("Targeting")
@@ -855,6 +863,46 @@ to = NodePath("../../Targeting")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
+[node name="HandTilt" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="6"]
+script = ExtResource("6_pje5c")
+initial_state = NodePath("MovingToPos")
+
+[node name="MovingToPos" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="0"]
+script = ExtResource("4_3jupp")
+
+[node name="toTilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/MovingToPos" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Tilting")
+event = &"start_tilting"
+delay_in_seconds = "0.0"
+
+[node name="Tilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="1"]
+script = ExtResource("4_3jupp")
+
+[node name="toUntilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Untilting")
+event = &"stop_tilting"
+delay_in_seconds = "0.0"
+
+[node name="Untilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="2"]
+script = ExtResource("4_3jupp")
+
+[node name="toRecovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Untilting" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Recovering")
+event = &"start_recovery"
+delay_in_seconds = "0.0"
+
+[node name="Recovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="3"]
+script = ExtResource("4_3jupp")
+
+[node name="toMovingToPos" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Recovering" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../MovingToPos")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
 [node name="AnimationPlayer" parent="." index="22"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
@@ -888,5 +936,11 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Targeting" to="." method="_start_hand_attack"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Attacking" to="." method="_on_hand_sweep_attacking_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Recovering" to="." method="_recover_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/MovingToPos" to="." method="_on_tilt_moving_to_pos_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" to="." method="_on_tilt_tilting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" to="." method="_on_tilt_tilting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Untilting" to="." method="_on_tilt_untilting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Untilting" to="." method="_on_tilt_untilting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Recovering" to="." method="_on_tilt_recovering_state_entered"]
 [connection signal="timeout" from="WanderTimer" to="." method="_on_wander_timer_timeout"]
 [connection signal="timeout" from="BlackjackTimer" to="." method="_on_blackjack_timer_timeout"]
