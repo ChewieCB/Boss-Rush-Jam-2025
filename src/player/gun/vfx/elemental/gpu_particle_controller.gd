@@ -11,6 +11,7 @@ class_name GPUParticleController
 const LIGHT_FADE_SPEED = 1
 
 var turn_off_light = false
+var light_off_counter = 0
 
 func _ready() -> void:
 	if is_oneshot:
@@ -25,16 +26,28 @@ func _ready() -> void:
 		await get_tree().create_timer(self_destroy_after_time).timeout
 		queue_free()
 
+
+func _process(delta: float) -> void:
+	if turn_off_light and light_off_counter < len(lights):
+		for light in lights:
+			light.light_energy -= LIGHT_FADE_SPEED * delta
+			if light.light_energy < 0:
+				light.light_energy = 0
+				light_off_counter += 1
+
+
 func turn_on():
+	light_off_counter = 0
 	for elem in gpu_particles:
 		elem.emitting = true
 
 # Turn off while leaving left over particles disappear on their own.
-# Without `elem.lifetime = 1`, the left ove particles will instantly disappear.
+# Without `elem.lifetime = 1`, the left over particles will instantly disappear.
 func turn_off():
 	for elem in gpu_particles:
-		elem.lifetime = 1
-		elem.emitting = false
+		if elem:
+			elem.lifetime = 1
+			elem.emitting = false
 
 
 func smooth_turn_off():
@@ -50,9 +63,17 @@ func queue_free_after_time():
 	await get_tree().create_timer(time_until_queue_free).timeout
 	call_deferred("queue_free")
 
-func _process(delta: float) -> void:
-	if turn_off_light:
-		for light in lights:
-			light.light_energy -= LIGHT_FADE_SPEED * delta
-			if light.light_energy < 0:
-				light.light_energy = 0
+
+func activate():
+	process_mode = PROCESS_MODE_INHERIT
+	turn_on()
+
+
+func deactivate():
+	turn_off_light = true
+	turn_off()
+	for elem in gpu_particles:
+		if elem:
+			elem.emitting = false
+	visible = false
+	process_mode = PROCESS_MODE_DISABLED

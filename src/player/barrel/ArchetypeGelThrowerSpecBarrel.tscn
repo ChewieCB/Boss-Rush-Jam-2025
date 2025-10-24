@@ -43,6 +43,7 @@ icon_id = 9
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("7_jkbd8")
 new_prefab = ExtResource("8_wtxnw")
+prefab_can_be_pooled = true
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/GelStream"]
 script = ExtResource("9_cg85h")

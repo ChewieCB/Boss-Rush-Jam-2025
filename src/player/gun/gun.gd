@@ -114,6 +114,7 @@ var modified_spin_time
 var modified_ricochet_count = 0
 var modified_homing_strength: float = 0 # radius to search for enemy
 var modified_projectile_prefab: PackedScene = null
+var projectile_prefab_can_be_pooled = false
 var modified_recoil
 var modified_screenshake
 
@@ -228,17 +229,31 @@ func shoot(aim_ray: RayCast3D) -> bool:
 
 
 func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
-	var bullet_inst: BaseProjectile = bullet_prefab.instantiate()
+	var bullet_inst: BaseProjectile = null
+	if projectile_prefab_can_be_pooled:
+		bullet_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.GEL_STREAM_PROJECTILE)
+		bullet_inst.activate(start_pos, direction)
+	else:
+		bullet_inst = bullet_prefab.instantiate()
+		get_tree().get_root().add_child(bullet_inst)
+
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
-	get_tree().get_root().add_child(bullet_inst)
-	bullet_inst.before_damage_applied.connect(check_barrel_effect_on_before_damage_applied)
-	bullet_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
-	bullet_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
-	bullet_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
-	bullet_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
+	if not bullet_inst.is_connected("before_damage_applied", check_barrel_effect_on_before_damage_applied):
+		bullet_inst.before_damage_applied.connect(check_barrel_effect_on_before_damage_applied)
+
+	if not bullet_inst.is_connected("damage_applied", check_barrel_effect_on_damage_applied):
+		bullet_inst.damage_applied.connect(check_barrel_effect_on_damage_applied)
+
+	if not bullet_inst.is_connected("impacted", check_barrel_effect_on_projectile_impact):
+		bullet_inst.impacted.connect(check_barrel_effect_on_projectile_impact)
+
+	if not bullet_inst.is_connected("destroyed", check_barrel_effect_on_projectile_destroyed):
+		bullet_inst.destroyed.connect(check_barrel_effect_on_projectile_destroyed)
+
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_projectile_spawn(bullet_inst)
+
 	bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
 func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
@@ -248,6 +263,7 @@ func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _proj
 func check_barrel_effect_on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_damage_applied(_has_pos, _pos)
+	LuckHandler.accumulate_dps_dealt(_damage)
 
 func check_barrel_effect_on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
@@ -446,6 +462,7 @@ func reset_modifier(reload_reset = false):
 		modified_reload_time = base_reload_time
 		modified_magazine_size = base_magazine_size
 		modified_projectile_prefab = null
+		projectile_prefab_can_be_pooled = false
 
 
 func jam_the_gun(duration: float = 1.0):

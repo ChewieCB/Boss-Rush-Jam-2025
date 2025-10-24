@@ -1,11 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dy7nqvo7uq1ti"]
+[gd_scene load_steps=7 format=3 uid="uid://dy7nqvo7uq1ti"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_54i25"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/ramp_up_effect.gd" id="3_w70eq"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_k0t2c"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_ky52g"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/explosive_bullet_effect.gd" id="6_ayuco"]
-[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="7_mtmmu"]
 [ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="7_tc2w0"]
 
 [node name="DynamicAdvantageBarrel" type="Node3D"]
@@ -52,7 +51,6 @@ is_perc = true
 script = ExtResource("6_ayuco")
 damage = 10
 explosion_damage = ExtResource("7_tc2w0")
-explosion_vfx = ExtResource("7_mtmmu")
 display_text_title = "Explosive bullet"
 display_text_tag = "Don't hurt yourself!"
 display_text_desc = "Make bullets go boom"

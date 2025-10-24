@@ -8,6 +8,7 @@ class_name BaseProjectile
 # Check BossCore.BossStatusEffect for order
 @export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
+@export var can_be_object_pooled: bool = false
 
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
@@ -168,7 +169,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		var new_inst = create_duplication()
 		get_tree().get_root().add_child(new_inst)
 		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
-		# Splitted bullet cant ricochet
+		# Splitted bullet CAN NOT ricochet or split again
 		new_inst.splitted = true
 		new_inst.init(new_pos, new_dir, int(damage / split_count), 0, projectile_speed, max_range)
 
