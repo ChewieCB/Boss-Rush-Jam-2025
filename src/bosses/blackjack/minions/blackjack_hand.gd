@@ -343,7 +343,6 @@ func _on_sweep_sweeping_state_entered() -> void:
 	var p1 = (sweep_start_pos + sweep_target_pos) * 0.5  # arbitrary choice (e.g. halfway between start and target)
 	var p2 = (rhs - (w1 * p1)) / w2
 	
-	# Reverse point order for left hands so they sweep left to right
 	curve.add_point(start_pos, Vector3.ZERO, p1 - sweep_start_pos)
 	curve.add_point(goal_pos, p2 - sweep_end_pos, Vector3.ZERO)
 	path.curve = curve

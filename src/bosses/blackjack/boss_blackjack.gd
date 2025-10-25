@@ -4,16 +4,21 @@ class_name BossBlackjack
 signal hand_attack_finished(hand)
 signal all_hand_attacks_finished
 
-var flyable_nav: NavigationRegion3D
-var walkable_floor_nav: NavigationRegion3D
-var flyable_points: Array
-@export var max_wander_distance: float = 100.0
+@export_group("Movement")
+var flying_nav: NavigationRegion3D
+@export var min_flying_height: float = 0.0
+@export var max_flying_height: float = 14.0
+#
+@export var min_wander_distance: float = 2.0
+@export var max_wander_distance: float = 8.0
+@export var wander_speed: float = 4.0
 var current_wander_target: Vector3
 @export var wander_timeout: float = 0.5
 @onready var wander_timer: Timer = $WanderTimer
 var move_tween: Tween
 var active_point_debug: Node3D
 
+@export_group("Hands")
 @onready var hand_anchor: Marker3D = $HandAnchor
 var hand_spawn_pos: Node
 @export var hand_scene: PackedScene
@@ -23,10 +28,13 @@ var despawned_hands = []
 var finished_hands = []
 var last_hand
 
+@export_group("Particles")
 # TODO - make this configurable per-attack
 @export var wave_material: ShaderMaterial
 @export var slam_shockwave_prefab: PackedScene
+@export var explosion_scene: PackedScene
 
+@export_group("Dealing")
 # Dealing
 const SUIT_CARDS: Dictionary = {
 	"ACE": 11, "TWO": 2, "THREE": 3, "FOUR": 4, "FIVE": 5, "SIX": 6, "SEVEN": 7, 
@@ -39,25 +47,24 @@ const SUIT_CARDS: Dictionary = {
 @export var card_explosion_particles: GPUParticles3D
 @export var blackjack_particles: GPUParticles3D
 var hand_count: int = 0
-
+@export_subgroup("Blackjack")
 @export var blackjack_time_min: float = 8.0
 @export var blackjack_time_max: float = 25.0
 @export var blackjack_timer: Timer
-
+@export_subgroup("Bust")
 @export var bust_particles_parent: Node3D
 @export var bust_self_damage: float = 150.0
-
-# Particles Misc
-@export var explosion_scene: PackedScene
 
 # Intro
 var intro_path_points: Array[Node] = []
 
-# Sweep
+@export_group("Attacks")
+
+@export_subgroup("Sweep")
 @export var sweep_dist: float = 12.0
 @export var sweep_angle_deg: float = 70.0
 
-# Tilt
+@export_subgroup("Tilt")
 var tilt_platform_origin_marker: Node
 var tilt_hand_markers: Array[Node]
 @export var tilt_mesh: Node3D
@@ -67,6 +74,15 @@ var tilt_hand_markers: Array[Node]
 @export var tilt_duration: float = 2.8
 @export var tilt_floor_friction_mod: float = 0.30
 var slippery_debuff: StatusEffect
+@export_subgroup("Tilt Projectile")
+@export var tilt_proj_scene: PackedScene
+@export var tilt_explosion_scene: PackedScene
+@export var tilt_proj_speed: float = 12.0
+@export var tilt_explosion_radius: float = 4.0
+@export var tilt_proj_arc_height: float = 5.0
+@export var tilt_proj_explosion_area_scene: PackedScene
+var tilt_proj_explosion_area: Area3D
+@export var tilt_explosion_damage: float = 25.0
 
 
 func _ready() -> void:
@@ -83,6 +99,15 @@ func _ready() -> void:
 	slippery_debuff.duration = tilt_duration
 	slippery_debuff.is_bad_effect = true
 	#slow_run_debuff.status_icon = run_speed_buff_icon
+	
+	# Create the explosion area collider when the scene has finished setting up
+	scene_root.ready.connect(func(): 
+		tilt_proj_explosion_area = tilt_proj_explosion_area_scene.instantiate()
+		scene_root.add_child(tilt_proj_explosion_area)
+		tilt_proj_explosion_area.global_position = self.global_position
+		tilt_proj_explosion_area.get_child(0).shape.radius = tilt_explosion_radius
+		#tilt_proj_explosion_area.set_deferred("monitoring", false)
+	)
 
 
 func _physics_process(delta: float) -> void:
@@ -101,14 +126,15 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
-	state_chart.send_event("start_hand_tilt_attack")
-	#var chance = randf()
-	#if chance < 0.33:
-		#state_chart.send_event("start_hand_slam_attack")
-	#elif chance < 0.66:
-		#state_chart.send_event("start_hand_sweep_attack")
-	#else:
-		#state_chart.send_event("start_hand_stand_attack")
+	var chance = randf()
+	if chance < 0.25:
+		state_chart.send_event("start_hand_slam_attack")
+	elif chance < 0.50:
+		state_chart.send_event("start_hand_sweep_attack")
+	elif chance < 0.75:
+		state_chart.send_event("start_hand_tilt_attack")
+	else:
+		state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS
@@ -126,7 +152,7 @@ func spawn_hand(is_visible: bool = true) -> BlackjackHand:
 	
 	# Set hand spawn position
 	new_hand.controller_boss = self
-	new_hand.walkable_floor_nav = walkable_floor_nav
+	#new_hand.walkable_floor_nav = walkable_floor_nav
 	new_hand.target = self.target
 	new_hand.visible = is_visible
 	new_hand.position = Vector3.ZERO
@@ -278,22 +304,16 @@ func cancel_active_hand_attacks() -> void:
 #### HOVERING (Extnded from base WALKING state)
 func _on_movement_walking_state_entered() -> void:
 	# Pick a random location to wander to from the point cloud
-	#var nearby_wander_points = flyable_points.filter(
-		#func(point):
-			#var dist: float = point.distance_to(self.global_position)
-			#var vert_dist: float = abs(point.y - self.global_position.y)
-			#return dist <= max_wander_distance and dist >= 20.0 and vert_dist > 2.0
-	#)
-	var new_wander_point: Vector3 = flyable_points.pick_random()
-	# Jitter that position a bit to make it less uniform
-	#var offset_vector := Vector3.FORWARD * randf_range(0, max_waypoint_jitter_radius)
-	#var jittered_point: Vector3 = new_wander_point + offset_vector.rotated(
-		#Vector3.UP, randf_range(0, 2 * PI)
-	#)
-	#active_point_debug = draw_debug_sphere(new_wander_point, 0.5, Color.PURPLE)
-	#draw_debug_sphere(jittered_point, 0.5, Color.MAGENTA)
-	var wander_dist: float = new_wander_point.distance_to(self.global_position)
-	var wander_time: float = wander_dist / 5.0
+	var new_wander_point: Vector3 = NavigationServer3D.map_get_random_point(
+		flying_nav.get_navigation_map(),
+		1,
+		true
+	)
+	new_wander_point.y = randf_range(min_flying_height, max_flying_height)
+	var wander_dir: Vector3 = self.global_position.direction_to(new_wander_point)
+	#var wander_dist: float = randf_range(min_wander_distance, max_wander_distance)
+	var wander_dist: float = self.global_position.distance_to(new_wander_point)
+	var wander_time: float = wander_dist / wander_speed
 	
 	move_tween = get_tree().create_tween()
 	move_tween.tween_property(self, "global_position", new_wander_point, wander_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
@@ -333,10 +353,10 @@ func _on_intro_state_entered() -> void:
 	move_tween = get_tree().create_tween()
 	var hand_l = spawned_hands[0]
 	var hand_r = spawned_hands[1]
-	self.global_position = intro_path_points[2].global_position
-	hand_l.global_position = intro_path_points[2].global_position
+	self.global_position = intro_path_points[0].global_position
+	hand_l.global_position = intro_path_points[0].global_position
 	hand_l.visible = true
-	hand_r.global_position = intro_path_points[2].global_position
+	hand_r.global_position = intro_path_points[0].global_position
 	hand_r.visible = true
 	
 	move_tween.tween_property(hand_l, "global_position", intro_path_points[1].global_position + Vector3(hand_spacing, -1 ,0), 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
@@ -344,9 +364,9 @@ func _on_intro_state_entered() -> void:
 	
 	move_tween.chain().tween_property(self, "global_position", intro_path_points[1].global_position, 1.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	
-	move_tween.chain().tween_property(self, "global_position", intro_path_points[0].global_position, 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
-	move_tween.parallel().tween_property(hand_l, "global_position", intro_path_points[0].global_position + Vector3(hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
-	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[0].global_position + Vector3(-hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	move_tween.chain().tween_property(self, "global_position", intro_path_points[2].global_position, 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	move_tween.parallel().tween_property(hand_l, "global_position", intro_path_points[2].global_position + Vector3(hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[2].global_position + Vector3(-hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
 	
 	await move_tween.finished
 	
@@ -553,10 +573,17 @@ func _on_bust_recover_state_entered() -> void:
 	hand_count_label.modulate = Color.WHITE
 	# Stop animation
 	anim_player.play("RESET")
+	
 	move_tween = get_tree().create_tween()
-	var return_pos: Vector3 = flyable_points.pick_random()
+	var return_pos: Vector3 = NavigationServer3D.map_get_random_point(
+		flying_nav.get_navigation_map(),
+		1,
+		true
+	)
+	return_pos.y = randf_range(min_flying_height, max_flying_height)
 	move_tween.tween_property(self, "global_position", return_pos, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	await move_tween.finished
+
 	state_chart.send_event("start_targeting")
 	# TODO
 	state_chart.send_event("end_recovery")
@@ -593,9 +620,7 @@ func _on_tilt_tilting_state_entered() -> void:
 	await tilt_tween.finished
 	target.vel_horizontal += Vector2(0, -8.0)
 	
-	await get_tree().create_timer(5.0).timeout
-	
-	state_chart.send_event("stop_tilting")
+	state_chart.send_event("start_firing")
 
 
 func _on_tilt_tilting_state_physics_processing(delta: float) -> void:
@@ -604,6 +629,75 @@ func _on_tilt_tilting_state_physics_processing(delta: float) -> void:
 	for i in range(2):
 		var _hand = spawned_hands[i]
 		_hand.global_position =  tilt_hand_markers[i].global_position
+
+
+func _on_tilt_firing_state_entered() -> void:
+	var bounding_box: AABB = tilt_animateable_floor.get_child(0).mesh.get_aabb()
+	for i in range(3):
+		# Fire a curved projectile that explodes into an AoE on impact with the floor
+		var path = Path3D.new()
+		# TODO - aim these in a cluster around the arena as an obstacle
+		# TODO - lock target position to the floor surface
+		var target_pos: Vector3 = target.global_position
+		
+		var space_state = get_world_3d().direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(
+			target_pos,
+			target_pos - tilt_mesh.global_basis.y * 20,
+			int(pow(2, 1 - 1))
+		)
+		var result = space_state.intersect_ray(query)
+		if result:
+			target_pos.y = result.position.y
+		
+		target_pos -= tilt_mesh.global_basis.z * 10.0
+		if abs(target_pos.z) > bounding_box.size.z:
+			var sign: int = 1 if target_pos.z > 0 else -1
+			target_pos.z = bounding_box.size.z * sign
+			
+		var curve = _create_curved_path(self.global_position, target_pos, tilt_proj_arc_height)
+		path.curve = curve
+		
+		# Add the path to the scene
+		scene_root.add_child(path)
+		var curve_path_follow = PathFollow3D.new()
+		path.add_child(curve_path_follow)
+
+		# Add the projectile/particle to the path follow
+		var tilt_proj = tilt_proj_scene.instantiate()
+		curve_path_follow.add_child(tilt_proj)
+		tilt_proj.global_position = curve_path_follow.global_position
+		
+		# Animate the projectile along the path
+		var curve_tween = get_tree().create_tween()
+		curve_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+		# Parent hand motion
+		curve_tween.tween_property(curve_path_follow, "progress_ratio", 1.0, 0.45)
+		
+		await curve_tween.finished
+		
+		var hit_pos: Vector3 = tilt_proj.global_position
+		path.queue_free()
+		
+		# Spawn a damaging area 3d
+		#tilt_proj_explosion_area.set_deferred("monitoring", true)
+		tilt_proj_explosion_area.global_position = hit_pos
+		for body in tilt_proj_explosion_area.get_overlapping_bodies():
+			if "health_component" in body:
+				body.health_component.damage(tilt_explosion_damage)
+			else:
+				body.queue_free()
+		#tilt_proj_explosion_area.set_deferred("monitoring", false)
+		# Spawn an explosion on impact
+		for j in range(10):
+			var _pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
+			var explosion = tilt_explosion_scene.instantiate()
+			scene_root.add_child(explosion)
+			explosion.global_position = _pos
+			await get_tree().create_timer(randf_range(0.05, 0.12))
+		# TODO
+	
+	state_chart.send_event("stop_firing")
 
 
 func _on_tilt_untilting_state_entered() -> void:
@@ -616,7 +710,7 @@ func _on_tilt_untilting_state_entered() -> void:
 	
 	await tilt_tween.finished
 	
-	state_chart.send_event("start_recovery")
+	state_chart.send_event("stop_tilting")
 
 
 func _on_tilt_untilting_state_physics_processing(delta: float) -> void:
@@ -633,10 +727,23 @@ func _on_tilt_recovering_state_entered() -> void:
 	# Return the hands to the anchored position
 	var return_tween = get_tree().create_tween()
 	return_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
-	return_tween.tween_property(self, "global_position", intro_path_points[0].global_position, 0.6)
+	return_tween.tween_property(self, "global_position", intro_path_points[2].global_position, 0.6)
 	
 	for i in range(2):
 		var _hand = spawned_hands[i]
 		_anchor_hand(_hand)
 	
-	state_chart.send_event("end_recovery")
+	_recover_entered()
+
+
+func _create_curved_path(start_pos: Vector3, goal_pos: Vector3, height: float, apex_ratio: float = 0.5, out_ratio: float = 0.6667, in_ratio: float = 0.6667) -> Curve3D:
+	var curve = Curve3D.new()
+	var mid_point: Vector3 = start_pos.lerp(goal_pos, apex_ratio) + Vector3(0, height, 0)
+
+	# Calculate bezier control points
+	var out_0 = (mid_point - start_pos) * out_ratio
+	var in_1 = (mid_point - goal_pos) * in_ratio
+	curve.add_point(start_pos, Vector3.ZERO, out_0)
+	curve.add_point(goal_pos, in_1, Vector3.ZERO)
+
+	return curve

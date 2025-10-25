@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=4 uid="uid://bsdh38vyreful"]
+[gd_scene load_steps=66 format=4 uid="uid://bsdh38vyreful"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_262ft"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/boss_blackjack.gd" id="2_km6gh"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="3_db3k6"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_3jupp"]
 [ext_resource type="PackedScene" uid="uid://cbb2iyep64uu" path="res://src/bosses/chips/minions/SlamShockwave.tscn" id="4_cv1yb"]
-[ext_resource type="PackedScene" uid="uid://sowc1idunj2o" path="res://addons/EffectBlocks/assets/ExplosionPolyBig.tscn" id="4_rafbt"]
 [ext_resource type="Texture2D" uid="uid://bpysy3ognjwre" path="res://assets/sprite/playing_cards/ace_of_hearts.png" id="5_xw57y"]
 [ext_resource type="Texture2D" uid="uid://dskrto7f2esrm" path="res://assets/sprite/playing_cards/two_of_hearts.png" id="6_ddotp"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_pje5c"]
@@ -30,6 +29,9 @@
 [ext_resource type="Texture2D" uid="uid://gkc05qvm7vdw" path="res://assets/sprite/playing_cards/king_of_hearts.png" id="17_nr1bx"]
 [ext_resource type="Texture2D" uid="uid://cmbk0ee2ycfr7" path="res://assets/sprite/playing_cards/ace_of_clubs.png" id="17_r11fw"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/slam_particles.gd" id="18_8bso6"]
+[ext_resource type="PackedScene" uid="uid://dh07gvrl3yr1o" path="res://src/bosses/base/attacks/ranged/ExplodingProjectile.tscn" id="19_sbdjh"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="20_1mflx"]
+[ext_resource type="PackedScene" uid="uid://bl721ikop8rr" path="res://src/bosses/base/attacks/ranged/ExplodingProjectileExplosionArea.tscn" id="21_v5jtk"]
 [ext_resource type="PackedScene" uid="uid://yr332iklwi21" path="res://addons/EffectBlocks/assets/ExplosionPolyReusable.tscn" id="28_0fb4b"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_brmua"]
@@ -433,12 +435,17 @@ _data = {
 
 [node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
-max_wander_distance = 100.0
+min_flying_height = 0.0
+max_flying_height = 14.0
+min_wander_distance = 2.0
+max_wander_distance = 8.0
+wander_speed = 4.0
 wander_timeout = 0.5
 hand_scene = ExtResource("13_ereo8")
 hand_spacing = 5.0
 wave_material = null
 slam_shockwave_prefab = ExtResource("4_cv1yb")
+explosion_scene = null
 card_textures = Array[CompressedTexture2D]([ExtResource("5_xw57y"), ExtResource("6_ddotp"), ExtResource("7_c86wt"), ExtResource("8_b64we"), ExtResource("9_pmm6f"), ExtResource("10_g7vdy"), ExtResource("11_234n0"), ExtResource("12_mkj6f"), ExtResource("13_r13ax"), ExtResource("14_y7i18"), ExtResource("15_ktoks"), ExtResource("16_l5820"), ExtResource("17_nr1bx")])
 dealing_anim_points = [NodePath("DealingAnimPoints/DealMarkerStart"), NodePath("DealingAnimPoints/DealMarkerMid"), NodePath("DealingAnimPoints/DealMarkerEnd")]
 hand_count_label = NodePath("HoverPlatform/DealLabel")
@@ -450,13 +457,19 @@ blackjack_time_max = 25.0
 blackjack_timer = NodePath("BlackjackTimer")
 bust_particles_parent = NodePath("HoverPlatform/BustParticles")
 bust_self_damage = 150.0
-explosion_scene = ExtResource("4_rafbt")
 sweep_dist = 12.0
 sweep_angle_deg = 70.0
 tilt_max_deg = 25.0
 tilt_max_floor_speed = 7.8
 tilt_duration = 2.8
 tilt_floor_friction_mod = 0.3
+tilt_proj_scene = ExtResource("19_sbdjh")
+tilt_explosion_scene = ExtResource("20_1mflx")
+tilt_proj_speed = 12.0
+tilt_explosion_radius = 4.0
+tilt_proj_arc_height = 5.0
+tilt_proj_explosion_area_scene = ExtResource("21_v5jtk")
+tilt_explosion_damage = 25.0
 chip_scene = null
 barrel_pickup_scene = null
 sfx_slowmo = null
@@ -879,22 +892,31 @@ delay_in_seconds = "0.0"
 [node name="Tilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="1"]
 script = ExtResource("4_3jupp")
 
-[node name="toUntilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" index="0"]
+[node name="toFiring" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" index="0"]
 script = ExtResource("3_db3k6")
-to = NodePath("../../Untilting")
-event = &"stop_tilting"
+to = NodePath("../../Firing")
+event = &"start_firing"
 delay_in_seconds = "0.0"
 
-[node name="Untilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="2"]
+[node name="Firing" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="2"]
+script = ExtResource("4_3jupp")
+
+[node name="toUntilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Firing" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Untilting")
+event = &"stop_firing"
+delay_in_seconds = "0.0"
+
+[node name="Untilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="3"]
 script = ExtResource("4_3jupp")
 
 [node name="toRecovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Untilting" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Recovering")
-event = &"start_recovery"
+event = &"stop_tilting"
 delay_in_seconds = "0.0"
 
-[node name="Recovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="3"]
+[node name="Recovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="4"]
 script = ExtResource("4_3jupp")
 
 [node name="toMovingToPos" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Recovering" index="0"]
@@ -939,6 +961,7 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/MovingToPos" to="." method="_on_tilt_moving_to_pos_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" to="." method="_on_tilt_tilting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" to="." method="_on_tilt_tilting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Firing" to="." method="_on_tilt_firing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Untilting" to="." method="_on_tilt_untilting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Untilting" to="." method="_on_tilt_untilting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Recovering" to="." method="_on_tilt_recovering_state_entered"]
