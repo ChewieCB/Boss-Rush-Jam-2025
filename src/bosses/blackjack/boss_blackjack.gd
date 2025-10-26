@@ -23,6 +23,7 @@ var active_point_debug: Node3D
 var hand_spawn_pos: Node
 @export var hand_scene: PackedScene
 @export var hand_spacing: float = 5.0
+@export var hand_respawn_time: float = 3.5
 var spawned_hands = []
 var despawned_hands = []
 var finished_hands = []
@@ -69,6 +70,7 @@ var sweep_card_instance_pool := []
 @export_subgroup("Tilt")
 var tilt_platform_origin_marker: Node
 var tilt_hand_markers: Array[Node]
+var tilt_tween: Tween
 @export var tilt_mesh: Node3D
 @export var tilt_animateable_floor: AnimatableBody3D
 var tilt_particles: GPUParticles3D
@@ -143,15 +145,20 @@ func activate() -> void:
 func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
-	var chance = randf()
-	if chance < 0.25:
-		state_chart.send_event("start_hand_slam_attack")
-	elif chance < 0.50:
-		state_chart.send_event("start_hand_sweep_attack")
-	elif chance < 0.75:
-		state_chart.send_event("start_hand_tilt_attack")
-	else:
-		state_chart.send_event("start_hand_stand_attack")
+	
+	while spawned_hands.size() < 2:
+		await respawn_hand(despawned_hands.front())
+	
+	state_chart.send_event("start_hand_tilt_attack")
+	#var chance = randf()
+	#if chance < 0.25:
+		#state_chart.send_event("start_hand_slam_attack")
+	#elif chance < 0.50:
+		#state_chart.send_event("start_hand_sweep_attack")
+	#elif chance < 0.75:
+		#state_chart.send_event("start_hand_tilt_attack")
+	#else:
+		#state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS
@@ -166,6 +173,8 @@ func spawn_hand(is_visible: bool = true) -> BlackjackHand:
 	scene_root.add_child(new_hand)
 	
 	new_hand.state_chart.event_received.connect(_hand_on_event_received.bind(new_hand))
+	new_hand.health_component.health_diff.connect(_hand_hurt)
+	new_hand.health_component.died.connect(_hand_dead.bind(new_hand))
 	
 	# Set hand spawn position
 	new_hand.controller_boss = self
@@ -285,8 +294,11 @@ func _hand_finished(hand: BossCore) -> void:
 func _hand_hurt(health_diff: float) -> void:
 	health_component.damage(abs(health_diff))
 
-func _hand_dead(stack: CharacterBody3D) -> void:
-	_hand_finished(stack)
+func _hand_dead(hand: BlackjackHand) -> void:
+	_hand_finished(hand)
+	despawn_hand(hand)
+	if $StateChart/Root/Phase/AttackPhase/Dealing.active and spawned_hands.size() == 0:
+		state_chart.send_event("start_bust")
 
 # Attack trigger methods
 func _start_hand_attack() -> void:
@@ -404,7 +416,11 @@ func _on_dealing_idle_state_entered() -> void:
 
 
 func _on_dealing_dealing_state_entered() -> void:
-	var hand_r: BlackjackHand = spawned_hands[1]
+	var hand_r: BlackjackHand = spawned_hands.back()
+	# Catch if the player has destroyed all hands during the deal
+	if not hand_r:
+		state_chart.send_event("end_deal")
+		return
 	await _anchor_hand(hand_r, 0.0)
 	
 	# Keep dealing until we hit stand, blackjack, or bust
@@ -449,7 +465,7 @@ func _on_dealing_dealing_state_entered() -> void:
 			# BLACKJACK
 			state_chart.send_event("start_blackjack")
 			deal_tween.kill()
-			state_chart.send_event("end_deal_special")
+			state_chart.send_event("end_deal")
 		#
 		elif hand_count >= 16:
 			# STAND
@@ -629,7 +645,7 @@ func _on_tilt_tilting_state_entered() -> void:
 	target.add_status_effect(slippery_debuff)
 	
 	# Tilt the arena by a rotation degree amount
-	var tilt_tween = get_tree().create_tween()
+	tilt_tween = get_tree().create_tween()
 	tilt_tween.set_parallel(true)
 	tilt_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", -tilt_max_deg, tilt_duration/2)
@@ -645,7 +661,15 @@ func _on_tilt_tilting_state_entered() -> void:
 func _on_tilt_tilting_state_physics_processing(delta: float) -> void:
 	self.global_position = tilt_platform_origin_marker.global_position
 	self.rotation_degrees.x = tilt_mesh.rotation_degrees.x
+	
+	if spawned_hands.size() == 0:
+		if tilt_tween:
+			tilt_tween.kill()
+			state_chart.send_event("stop_firing")
+	
 	for i in range(2):
+		if i >= spawned_hands.size():
+			return
 		var _hand = spawned_hands[i]
 		_hand.global_position =  tilt_hand_markers[i].global_position
 
@@ -744,10 +768,15 @@ func _on_tilt_firing_state_entered() -> void:
 	state_chart.send_event("stop_firing")
 
 
+func _on_tilt_firing_state_physics_processing(delta: float) -> void:
+	if spawned_hands.size() == 0:
+		state_chart.send_event("stop_firing")
+
+
 func _on_tilt_untilting_state_entered() -> void:
 	# Return the arena to the original zeroed rotation
 	tilt_particles.emitting = false
-	var tilt_tween = get_tree().create_tween()
+	tilt_tween = get_tree().create_tween()
 	tilt_tween.set_parallel(true)
 	tilt_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", 0, tilt_duration/2)
@@ -761,7 +790,10 @@ func _on_tilt_untilting_state_entered() -> void:
 func _on_tilt_untilting_state_physics_processing(delta: float) -> void:
 	self.global_position = tilt_platform_origin_marker.global_position
 	self.rotation_degrees.x = tilt_mesh.rotation_degrees.x
+	
 	for i in range(2):
+		if i >= spawned_hands.size():
+			return
 		var _hand = spawned_hands[i]
 		_hand.global_position =  tilt_hand_markers[i].global_position
 
@@ -775,6 +807,8 @@ func _on_tilt_recovering_state_entered() -> void:
 	return_tween.tween_property(self, "global_position", intro_path_points[2].global_position, 0.6)
 	
 	for i in range(2):
+		if spawned_hands.size() <= i:
+			break
 		var _hand = spawned_hands[i]
 		_anchor_hand(_hand)
 	

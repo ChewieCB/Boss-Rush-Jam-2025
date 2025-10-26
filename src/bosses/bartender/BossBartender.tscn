@@ -2472,14 +2472,14 @@ to = NodePath("../../Idle")
 event = &"reposition"
 delay_in_seconds = "0.0"
 
-[node name="NavigationAgent3D" parent="." index="8"]
+[node name="NavigationAgent3D" parent="." index="9"]
 target_desired_distance = 1.0
 radius = 1.0
 
-[node name="DebugStateLabel" parent="." index="9"]
+[node name="DebugStateLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.25628, 0)
 
-[node name="DebugDistanceLabel" parent="." index="10"]
+[node name="DebugDistanceLabel" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.06476, 0)
 
 [node name="ShotgunTriggerArea" type="Area3D" parent="." index="13"]
@@ -2517,7 +2517,7 @@ one_shot = true
 [node name="ShotgunTimer" type="Timer" parent="." index="24"]
 one_shot = true
 
-[node name="AnimationPlayer" parent="." index="25"]
+[node name="AnimationPlayer" parent="." index="26"]
 libraries = {
 "": SubResource("AnimationLibrary_k4utu")
 }

@@ -53,6 +53,13 @@ func _physics_process(delta: float) -> void:
 	return
 
 
+func _on_died() -> void:
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
+	return
+
+
 func fake_destroy() -> void:
 	spawn_dust()
 	spawn_explosion()
@@ -66,6 +73,8 @@ func fake_destroy() -> void:
 func reinstate() -> void:
 	self.collision_layer = pow(2, 7-1)
 	self.collision_mask = pow(2, 1-1) + pow(2, 4-1) + pow(2, 5-1)
+	state_chart.send_event("respawn")
+	health_component.current_health = health_component.max_health
 	hurtbox.monitoring = true
 	sprite.visible = true
 	debug_mesh.visible = true
