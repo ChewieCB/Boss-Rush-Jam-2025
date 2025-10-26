@@ -69,6 +69,7 @@ var tilt_platform_origin_marker: Node
 var tilt_hand_markers: Array[Node]
 @export var tilt_mesh: Node3D
 @export var tilt_animateable_floor: AnimatableBody3D
+var tilt_particles: GPUParticles3D
 @export var tilt_max_deg: float = 25.0
 @export var tilt_max_floor_speed: float = 7.8
 @export var tilt_duration: float = 2.8
@@ -77,6 +78,7 @@ var slippery_debuff: StatusEffect
 @export_subgroup("Tilt Projectile")
 @export var tilt_proj_scene: PackedScene
 @export var tilt_proj_speed: float = 12.0
+@export var tilt_proj_shots: int = 3
 @export var tilt_proj_explosion_count: int = 1
 @export var tilt_explosion_radius: float = 4.0
 @export var tilt_proj_arc_height: float = 5.0
@@ -108,7 +110,7 @@ func _ready() -> void:
 		tilt_proj_explosion_area.get_child(0).shape.radius = tilt_explosion_radius
 		#tilt_proj_explosion_area.set_deferred("monitoring", false)
 		# Instance re-usable explosion scenes for later
-		for i in range(tilt_proj_explosion_count):
+		for i in range(tilt_proj_explosion_count * 3):
 			var _explosion: ExplosionParticles = explosion_scene.instantiate()
 			_explosion.scale_factor = tilt_explosion_radius
 			_explosion.explode_on_spawn = false
@@ -617,6 +619,7 @@ func _on_tilt_tilting_state_entered() -> void:
 	# Enable the player controller to slide on slopes
 	target.floor_stop_on_slope = false
 	target.add_status_effect(slippery_debuff)
+	tilt_particles.emitting = true
 	
 	# Tilt the arena by a rotation degree amount
 	var tilt_tween = get_tree().create_tween()
@@ -641,70 +644,94 @@ func _on_tilt_tilting_state_physics_processing(delta: float) -> void:
 
 func _on_tilt_firing_state_entered() -> void:
 	var bounding_box: AABB = tilt_animateable_floor.get_child(0).mesh.get_aabb()
-	for i in range(3):
-		# Fire a curved projectile that explodes into an AoE on impact with the floor
-		var path = Path3D.new()
-		# TODO - aim these in a cluster around the arena as an obstacle
-		# TODO - lock target position to the floor surface
-		var target_pos: Vector3 = target.global_position
-		
-		var space_state = get_world_3d().direct_space_state
-		var query = PhysicsRayQueryParameters3D.create(
-			target_pos,
-			target_pos - tilt_mesh.global_basis.y * 20,
-			int(pow(2, 1 - 1))
-		)
-		var result = space_state.intersect_ray(query)
-		if result:
-			target_pos.y = result.position.y
-		
-		target_pos -= tilt_mesh.global_basis.z * 10.0
-		if abs(target_pos.z) > bounding_box.size.z:
-			var sign: int = 1 if target_pos.z > 0 else -1
-			target_pos.z = bounding_box.size.z * sign
+	for i in range(tilt_proj_shots):
+		# If we have blackjack active, fire additional curved 
+		# exploding projectiles from the extra hands
+		var proj_sources: int = 3 if $StateChart/Root/Status/Blackjack/Active.active else 1
+		var proj_origin: Vector3
+		var target_offset: Vector3
+		for j in range(proj_sources):
+			# We want to fire in the order: CENTER, LEFT HAND, RIGHT HAND
+			match j:
+				0:
+					# Center platform projectile, aim for the player
+					proj_origin = self.global_position
+					target_offset = Vector3.ZERO
+				1:
+					# Left Hand projectile, aim wide to the left
+					proj_origin = spawned_hands[2].global_position
+					target_offset = Vector3(7.5, 0, 0)
+				2:
+					# Right Hand projectile, aim wide to the right
+					proj_origin = spawned_hands[3].global_position
+					target_offset = Vector3(-7.5, 0, 0)
 			
-		var curve = _create_curved_path(self.global_position, target_pos, tilt_proj_arc_height)
-		path.curve = curve
-		
-		# Add the path to the scene
-		scene_root.add_child(path)
-		var curve_path_follow = PathFollow3D.new()
-		path.add_child(curve_path_follow)
+			# TODO - break this up into sub functions for readability
+			#
+			#
+			# Fire a curved projectile that explodes into an AoE on impact with the floor
+			var path = Path3D.new()
+			# TODO - aim these in a cluster around the arena as an obstacle
+			# TODO - lock target position to the floor surface
+			var target_pos: Vector3 = target.global_position + target_offset
+			
+			var space_state = get_world_3d().direct_space_state
+			var query = PhysicsRayQueryParameters3D.create(
+				target_pos,
+				target_pos - tilt_mesh.global_basis.y * 20,
+				int(pow(2, 1 - 1))
+			)
+			var result = space_state.intersect_ray(query)
+			if result:
+				target_pos.y = result.position.y
+			
+			target_pos -= tilt_mesh.global_basis.z * 10.0
+			if abs(target_pos.z) > bounding_box.size.z:
+				var sign: int = 1 if target_pos.z > 0 else -1
+				target_pos.z = bounding_box.size.z * sign
+				
+			var curve = _create_curved_path(proj_origin, target_pos, tilt_proj_arc_height)
+			path.curve = curve
+			
+			# Add the path to the scene
+			scene_root.add_child(path)
+			var curve_path_follow = PathFollow3D.new()
+			path.add_child(curve_path_follow)
 
-		# Add the projectile/particle to the path follow
-		var tilt_proj = tilt_proj_scene.instantiate()
-		curve_path_follow.add_child(tilt_proj)
-		tilt_proj.global_position = curve_path_follow.global_position
-		
-		# Animate the projectile along the path
-		var curve_tween = get_tree().create_tween()
-		curve_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
-		# Parent hand motion
-		curve_tween.tween_property(curve_path_follow, "progress_ratio", 1.0, 0.45)
-		
-		await curve_tween.finished
-		
-		var hit_pos: Vector3 = tilt_proj.global_position
-		path.queue_free()
-		
-		# Spawn a damaging area 3d
-		#tilt_proj_explosion_area.set_deferred("monitoring", true)
-		tilt_proj_explosion_area.global_position = hit_pos
-		for body in tilt_proj_explosion_area.get_overlapping_bodies():
-			if "health_component" in body:
-				body.health_component.damage(tilt_explosion_damage)
-			else:
-				body.queue_free()
-		#tilt_proj_explosion_area.set_deferred("monitoring", false)
-		# Spawn an explosion on impact
-		for j in range(tilt_proj_explosion_count):
-			var _pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
-			var explosion = tilt_explosion_instances.pop_front()
-			explosion.global_position = _pos
-			explosion.explosion()
-			await get_tree().create_timer(randf_range(0.05, 0.12))
-			tilt_explosion_instances.push_back(explosion)
-		# TODO
+			# Add the projectile/particle to the path follow
+			var tilt_proj = tilt_proj_scene.instantiate()
+			curve_path_follow.add_child(tilt_proj)
+			tilt_proj.global_position = curve_path_follow.global_position
+			
+			# Animate the projectile along the path
+			var curve_tween = get_tree().create_tween()
+			curve_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+			# Parent hand motion
+			curve_tween.tween_property(curve_path_follow, "progress_ratio", 1.0, 0.45)
+			
+			await curve_tween.finished
+			
+			var hit_pos: Vector3 = tilt_proj.global_position
+			path.queue_free()
+			
+			# Spawn a damaging area 3d
+			#tilt_proj_explosion_area.set_deferred("monitoring", true)
+			tilt_proj_explosion_area.global_position = hit_pos
+			for body in tilt_proj_explosion_area.get_overlapping_bodies():
+				if "health_component" in body:
+					body.health_component.damage(tilt_explosion_damage)
+				else:
+					body.queue_free()
+			#tilt_proj_explosion_area.set_deferred("monitoring", false)
+			# Spawn an explosion on impact
+			for k in range(tilt_proj_explosion_count):
+				var _pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
+				var explosion = tilt_explosion_instances.pop_front()
+				explosion.global_position = _pos
+				explosion.explosion()
+				await get_tree().create_timer(randf_range(0.05, 0.4))
+				tilt_explosion_instances.push_back(explosion)
+			# TODO
 	
 	state_chart.send_event("stop_firing")
 
@@ -733,6 +760,7 @@ func _on_tilt_untilting_state_physics_processing(delta: float) -> void:
 func _on_tilt_recovering_state_entered() -> void:
 	target.floor_stop_on_slope = true
 	target.remove_status_effect(slippery_debuff)
+	tilt_particles.emitting = false
 	# Return the hands to the anchored position
 	var return_tween = get_tree().create_tween()
 	return_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)

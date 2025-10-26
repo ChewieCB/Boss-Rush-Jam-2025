@@ -1,6 +1,8 @@
 extends BossMap
 
 @export var flying_nav_mesh: NavigationRegion3D
+@export var tiltable_parent: Node3D
+@export var tilt_particles: GPUParticles3D
 @export var chip_stacks_parent: Node3D
 @export var min_stack_height: float = 0.3
 @export var max_stack_height: float = 1.0
@@ -12,8 +14,12 @@ extends BossMap
 
 
 func _ready() -> void:
+	remove_child(tilt_particles)
+	tiltable_parent.add_child(tilt_particles)
+	
 	boss.flying_nav = flying_nav_mesh
 	boss.tilt_platform_origin_marker = boss_tilt_platform_origin_marker.front()
+	boss.tilt_particles = tilt_particles
 	boss.tilt_hand_markers = tilt_grab_markers
 	boss.intro_path_points = boss_intro_path_markers
 	boss.hand_spawn_pos = hand_spawn_marker.front()
