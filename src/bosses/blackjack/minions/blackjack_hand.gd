@@ -37,6 +37,7 @@ var sweep_target_pos: Vector3
 @export var sweep_offset: float = 2.1
 @export var sweep_particles: GPUParticles3D
 @export var sweep_card_scene: PackedScene
+var sweep_card_instance_pool: Array
 var sweep_num_cards: int = 5
 var sweep_progress: float = 0.0
 var sweep_path_follow: PathFollow3D
@@ -378,8 +379,11 @@ func _on_sweep_sweeping_state_entered() -> void:
 		var card_path_follow = PathFollow3D.new()
 		path.add_child(card_path_follow)
 		
-		# TODO - pre-instantiate 5-6 cards on scene load and recycle them
-		var _card = sweep_card_scene.instantiate()
+		# Pull a pre-instanced card from the boss' pool of card face scenes
+		var _card = sweep_card_instance_pool.pop_front()
+		# If we don't have any cards left, spawn a new one and add it to the pool
+		if not _card:
+			_card = sweep_card_scene.instantiate()
 		card_path_follow.add_child(_card)
 		
 		sweep_card_follows.append({"path_follow": card_path_follow, "card": _card})
@@ -405,6 +409,7 @@ func _on_sweep_sweeping_state_entered() -> void:
 		scene_root.add_child(_card)
 		_card.global_transform = cached_trans
 		_card.global_position = cached_pos
+		sweep_card_instance_pool.push_back(_card)
 		
 	sweep_card_follows = []
 	sweep_progress = 0.0

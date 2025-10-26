@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=4 uid="uid://bsdh38vyreful"]
+[gd_scene load_steps=66 format=4 uid="uid://bsdh38vyreful"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_262ft"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/boss_blackjack.gd" id="2_km6gh"]
@@ -30,6 +30,7 @@
 [ext_resource type="Texture2D" uid="uid://cmbk0ee2ycfr7" path="res://assets/sprite/playing_cards/ace_of_clubs.png" id="17_r11fw"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/slam_particles.gd" id="18_8bso6"]
 [ext_resource type="PackedScene" uid="uid://dh07gvrl3yr1o" path="res://src/bosses/base/attacks/ranged/ExplodingProjectile.tscn" id="19_sbdjh"]
+[ext_resource type="PackedScene" uid="uid://y34et07aumwl" path="res://src/bosses/blackjack/CardFloor.tscn" id="19_x10en"]
 [ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="20_1mflx"]
 [ext_resource type="PackedScene" uid="uid://bl721ikop8rr" path="res://src/bosses/base/attacks/ranged/ExplodingProjectileExplosionArea.tscn" id="21_v5jtk"]
 
@@ -458,6 +459,7 @@ bust_particles_parent = NodePath("HoverPlatform/BustParticles")
 bust_self_damage = 150.0
 sweep_dist = 12.0
 sweep_angle_deg = 70.0
+sweep_card_scene = ExtResource("19_x10en")
 tilt_max_deg = 25.0
 tilt_max_floor_speed = 9.2
 tilt_duration = 2.8

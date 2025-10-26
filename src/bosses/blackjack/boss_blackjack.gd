@@ -63,6 +63,8 @@ var intro_path_points: Array[Node] = []
 @export_subgroup("Sweep")
 @export var sweep_dist: float = 12.0
 @export var sweep_angle_deg: float = 70.0
+@export var sweep_card_scene: PackedScene
+var sweep_card_instance_pool := []
 
 @export_subgroup("Tilt")
 var tilt_platform_origin_marker: Node
@@ -117,6 +119,11 @@ func _ready() -> void:
 			_explosion.free_on_finished = false
 			tilt_explosion_instances.append(_explosion)
 			scene_root.add_child(_explosion)
+		
+		# Instance some cards for sweep attack
+		for i in range(30):
+			var _card = sweep_card_scene.instantiate()
+			sweep_card_instance_pool.append(_card)
 	)
 
 
@@ -162,6 +169,7 @@ func spawn_hand(is_visible: bool = true) -> BlackjackHand:
 	
 	# Set hand spawn position
 	new_hand.controller_boss = self
+	new_hand.sweep_card_instance_pool = sweep_card_instance_pool
 	#new_hand.walkable_floor_nav = walkable_floor_nav
 	new_hand.target = self.target
 	new_hand.visible = is_visible
