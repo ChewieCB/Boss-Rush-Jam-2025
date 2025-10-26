@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=41 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -30,6 +30,8 @@
 [ext_resource type="PackedScene" uid="uid://cm1sitbvy6aye" path="res://src/maps/lobby/shrine/SkillShrine.tscn" id="25_janht"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="27_x0fgt"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="29_o1a3k"]
+[ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="31_ac1of"]
+[ext_resource type="Script" path="res://src/player/test_scenes/test_pulse_sprite.gd" id="31_r1jkv"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -282,3 +284,10 @@ boss_id = 5
 
 [node name="entity_16_ElevatorDoors" parent="ElevatorMock/group_672_Elevator" instance=ExtResource("29_o1a3k")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.9375, 8.375)
+
+[node name="TestPulseSprite" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.53399, -8.0827)
+script = ExtResource("31_r1jkv")
+
+[node name="Sprite3D" type="Sprite3D" parent="TestPulseSprite"]
+texture = ExtResource("31_ac1of")

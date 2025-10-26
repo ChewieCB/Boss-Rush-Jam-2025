@@ -1,35 +1,32 @@
-[gd_scene load_steps=301 format=4 uid="uid://cgk2mraaxwvxd"]
+[gd_scene load_steps=298 format=4 uid="uid://ch2e1yyykdi14"]
 
-[ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_vcodf"]
-[ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="2_ikfam"]
-[ext_resource type="Material" uid="uid://cpmnrcuro67h8" path="res://assets/textures/walls/paint-green.tres" id="3_7q842"]
-[ext_resource type="AudioStream" uid="uid://bdcqmijgrl2cc" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS SETS ROOM ON FIRE (TRIGGER JUST BEFORE FIRE LOOP).mp3" id="3_qvoi0"]
-[ext_resource type="Material" uid="uid://c162u3li2i84m" path="res://assets/textures/walls/wallpaper_0.tres" id="4_rdf0i"]
-[ext_resource type="AudioStream" uid="uid://cm6h6wj6m5ybu" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS ROOM ON FIRE LOOP.mp3" id="4_w5yjf"]
-[ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="5_psrfu"]
-[ext_resource type="LightmapGIData" uid="uid://crmsxh2cqhmb2" path="res://src/maps/bartender_boss/BossMapBartender.lmbake" id="6_4rrpe"]
-[ext_resource type="Material" uid="uid://b0ctqc57ph8u7" path="res://assets/textures/walls/grunge-concrete.tres" id="6_dsjuu"]
-[ext_resource type="Material" uid="uid://c42rborvicsq2" path="res://assets/textures/floor/wood_0.tres" id="7_erqd4"]
-[ext_resource type="Material" uid="uid://n34cnqh7s2w0" path="res://assets/textures/floor/carpet-red.tres" id="8_oo7i2"]
-[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="10_0pfu5"]
-[ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="11_83px8"]
-[ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="12_cxv14"]
-[ext_resource type="Material" uid="uid://i1urvbtkthfg" path="res://assets/textures/floor/marble.tres" id="13_n0rdv"]
-[ext_resource type="Material" uid="uid://dtl8ybjw5mgl5" path="res://assets/textures/posters/surveillance_poster.tres" id="13_sakwo"]
-[ext_resource type="Material" uid="uid://ro5lsxexjte4" path="res://assets/textures/walls/wood_trim_1.tres" id="14_bl0mw"]
-[ext_resource type="PackedScene" uid="uid://rxldux0ag0my" path="res://src/env/lighting/Chandellier2.tscn" id="14_qwtwc"]
-[ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="15_2oqcf"]
-[ext_resource type="Material" uid="uid://blk6d0ywnx6nx" path="res://assets/textures/posters/grand_opening.tres" id="15_uoo17"]
-[ext_resource type="Material" uid="uid://btuhn4hpus54d" path="res://assets/textures/walls/brass.tres" id="16_mwooj"]
-[ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="16_n0tja"]
-[ext_resource type="Material" uid="uid://dmkk1mgbrg368" path="res://assets/textures/walls/marbling.tres" id="17_rrycj"]
-[ext_resource type="PackedScene" uid="uid://dsipuwmnkxl5" path="res://src/env/lighting/ChandellierLight2.tscn" id="17_u740c"]
-[ext_resource type="Material" uid="uid://mxeoucc8vmen" path="res://assets/textures/walls/bronze_plaque.tres" id="18_lb4wy"]
-[ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="19_cjyp3"]
-[ext_resource type="Material" uid="uid://boe1pn246iwrh" path="res://assets/textures/posters/grand_opening_scuffed.tres" id="19_i0pjr"]
-[ext_resource type="Material" uid="uid://b678qslmidbq0" path="res://assets/textures/floor/yellow-tiles.tres" id="20_5s57s"]
-[ext_resource type="Texture2D" uid="uid://b0jvmdu1nkww5" path="res://src/env/decor/assets/dart_board.png" id="21_4yyfc"]
-[ext_resource type="PackedScene" uid="uid://uwn1wb0neu46" path="res://src/bosses/bartender/BossBartender.tscn" id="31_p2107"]
+[ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_00mjg"]
+[ext_resource type="Script" path="res://src/maps/singer_boss/boss_map_singer.gd" id="2_21l7f"]
+[ext_resource type="LightmapGIData" uid="uid://crmsxh2cqhmb2" path="res://src/maps/bartender_boss/BossMapBartender.lmbake" id="5_3ad44"]
+[ext_resource type="Texture2D" uid="uid://b0jvmdu1nkww5" path="res://src/env/decor/assets/dart_board.png" id="6_fdjgv"]
+[ext_resource type="Material" uid="uid://cpmnrcuro67h8" path="res://assets/textures/walls/paint-green.tres" id="8_724wr"]
+[ext_resource type="Material" uid="uid://c162u3li2i84m" path="res://assets/textures/walls/wallpaper_0.tres" id="9_l131n"]
+[ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="10_sdxrs"]
+[ext_resource type="Material" uid="uid://b0ctqc57ph8u7" path="res://assets/textures/walls/grunge-concrete.tres" id="11_0dfrm"]
+[ext_resource type="Material" uid="uid://c42rborvicsq2" path="res://assets/textures/floor/wood_0.tres" id="12_02mga"]
+[ext_resource type="Material" uid="uid://n34cnqh7s2w0" path="res://assets/textures/floor/carpet-red.tres" id="13_quf0o"]
+[ext_resource type="Material" uid="uid://dtl8ybjw5mgl5" path="res://assets/textures/posters/surveillance_poster.tres" id="14_qvo1g"]
+[ext_resource type="Material" uid="uid://ro5lsxexjte4" path="res://assets/textures/walls/wood_trim_1.tres" id="15_xprda"]
+[ext_resource type="Material" uid="uid://blk6d0ywnx6nx" path="res://assets/textures/posters/grand_opening.tres" id="16_xej6l"]
+[ext_resource type="Material" uid="uid://btuhn4hpus54d" path="res://assets/textures/walls/brass.tres" id="17_uk61v"]
+[ext_resource type="Material" uid="uid://dmkk1mgbrg368" path="res://assets/textures/walls/marbling.tres" id="18_3lp6w"]
+[ext_resource type="Material" uid="uid://mxeoucc8vmen" path="res://assets/textures/walls/bronze_plaque.tres" id="19_d3np5"]
+[ext_resource type="Material" uid="uid://boe1pn246iwrh" path="res://assets/textures/posters/grand_opening_scuffed.tres" id="20_pwpkh"]
+[ext_resource type="Material" uid="uid://b678qslmidbq0" path="res://assets/textures/floor/yellow-tiles.tres" id="21_tv3gp"]
+[ext_resource type="Material" uid="uid://i1urvbtkthfg" path="res://assets/textures/floor/marble.tres" id="22_881l7"]
+[ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="23_l75b1"]
+[ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="24_d2k4s"]
+[ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="25_13inm"]
+[ext_resource type="PackedScene" uid="uid://rxldux0ag0my" path="res://src/env/lighting/Chandellier2.tscn" id="26_221dd"]
+[ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="27_bkuvf"]
+[ext_resource type="PackedScene" uid="uid://dsipuwmnkxl5" path="res://src/env/lighting/ChandellierLight2.tscn" id="28_4m3as"]
+[ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="29_bv0lb"]
+[ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="30_35d0g"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gki5r"]
 resource_local_to_scene = true
@@ -47,7 +44,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 108,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsACAALAAwAAwANAAkAAwAJAA4AAwAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAFAAXABgAGQAaABsAGQAbABwAGQAcAB0AHgAfACAAHgAgACEAIgAjAB4AIgAeACQAIgAkACUAIgAmACcAIgAnACgAIgAoACkAKgArACwAKgAsAC0ALgAvADAALgAwADEAMgAzADQAMgA0ADUAMgA1ADYANwA4ADkANwA5ADoANwA6ADsA"),
-"material": ExtResource("3_7q842"),
+"material": ExtResource("8_724wr"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 60,
@@ -58,7 +55,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 18,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsA"),
-"material": ExtResource("4_rdf0i"),
+"material": ExtResource("9_l131n"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 12,
@@ -69,7 +66,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 102,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAHAAdAB4AHAAeAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8AMAAxADIAMAAyADMANAA1ADYANAA2ADcAOAA5ADoAOAA6ADsAPAA9AD4APAA+AD8AQABBAEIAQABCAEMA"),
-"material": ExtResource("5_psrfu"),
+"material": ExtResource("10_sdxrs"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 68,
@@ -80,7 +77,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 36,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcA"),
-"material": ExtResource("6_dsjuu"),
+"material": ExtResource("11_0dfrm"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 24,
@@ -91,7 +88,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 3864,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAHAAdAB4AHAAeAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8AMAAxADIAMAAyADMANAA1ADYANAA2ADcAOAA5ADoAOAA6ADsAPAA9AD4APAA+AD8AQABBAEIAQABCAEMAFQBEAEUAFQBFABYARgBHAEgARgBIAEkASgBLAEwASgBMAE0ATgBPAFAATgBQAFEAUgBTAFQAUgBUAFUAVgBXAFgAVgBYAFkAWgBbAFwAWgBcAF0AXgBfAGAAXgBgAGEAYgBjAGQAYgBkAGUAZgBnAGgAZgBoAGkAagBrAGwAagBsAG0AbgBvAHAAbgBwAHEAcgBzAHQAcgB0AHUAdgB3AHgAdgB4AHkAegB7AHwAegB8AH0AfgB/AIAAfgCAAIEAggCDAIQAggCEAIUAhgCHAIgAhgCIAIkAigCLAIwAigCMAI0AjgCPAJAAjgCQAJEAkgCTAJQAkgCUAJUAlgCXAJgAlgCYAJkAmgCbAJwAmgCcAJ0AngCfAKAAngCgAKEAogCjAKQAogCkAKUApgCnAKgApgCoAKkAqgCrAKwAqgCsAK0ArgCvALAArgCwALEAsgCzALQAsgC0ALUAtgC3ALgAtgC4ALkAugC7ALwAugC8AL0AvgC/AMAAvgDAAMEAwgDDAMQAwgDEAMUAxgDHAMgAxgDIAMkAygDLAMwAygDMAM0AzgDPANAAzgDQANEA0gDTANQA0gDUANUA1gDXANgA1gDYANIA2QDaANsA2QDbANwA3QDeAN8A3QDfAOAA4QDiAOMA4QDjAOQA5QDmAOIA5QDiAOEA5wDoAOYA5wDmAOUA6QDqAOsA6QDrAOwA7QDuAO8A7QDvAPAA8QDyAPMA8QDzAPQA9QD2APcA9QD3APgA+QD6APsA+QD7APwA/QD+APoA/QD6APkA/wAAAQEB/wABAQIBAwEEAQUBAwEFAQYBBwEIAQkBBwEJAQoBCwEMAQ0BCwENAQ4BDwEQAREBDwERARIBEwEUAf4AEwH+AP0AFQEWARcBFQEXARgBGQEaARsBGQEbARwBHQEeAR8BHQEfASABIQEiASMBIQEjASQBJQEmAScBJQEnASgBKQEqASsBKQErASwBLQEuAS8BLQEvATABMQEyATMBMQEzATQBNQE2ATcBNQE3ATgBOQE6ATsBOQE7ATwBPQE+AT8BPQE/AUABQQFCAUMBQQFDAUQBRQFGAUcBRQFHAUgBSQFKAUsBSQFLAUwBTQFOAU8BTQFPAVABUQFSAVMBUQFTAVQBVQFWAVcBVQFXAVgBWQFaAVsBWQFbAVwBXQFeAV8BXQFfAWABYQFiAWMBYQFjAR0BZAFlAWYBZAFmAWcBaAFpAWoBaAFqAWsBbAFtAW4BbAFuAW8BcAFxAXIBcAFyAXMBdAF1AXYBdAF2AXcBeAF5AXoBeAF6AXsBfAF9AX4BfAF+AX8BgAGBAYIBgAGCAYMBhAGFAYYBhAGGAYcBiAGJAYoBiAGKAYsBjAGNAY4BjAGOAY8BkAGRAZIBkAGSAZMBlAGVAZYBlAGWAZcBmAGZAZoBmAGaAZsBnAGdAZ4BnAGeAZ8BoAGhAaIBoAGiAaMBpAGlAaYBpAGmAacBqAGpAaoBqAGqAasBrAGtAa4BrAGuAa8BsAGxAbIBsAGyAbMBtAG1AbYBtAG2AbcBuAG5AboBuAG6AbsBvAG9Ab4BvAG+Ab8BwAHBAcIBwAHCAcMBxAHFAcYBxAHGAccByAHJAcoByAHKAcsBzAHNAc4BzAHOAc8B0AHRAdIB0AHSAdMB1AHVAdYB1AHWAdcB2AHZAdoB2AHaAdsB3AHdAd4B3AHeAd8B4AHhAeIB4AHiAeMB5AHlAeYB5AHmAecB6AHpAeoB6AHqAesB7AHtAe4B7AHuAe8B8AHxAfIB8AHyAfMB9AH1AfYB9AH2AfcB+AH5AfoB+AH6AfsB/AH9Af4B/AH+Af8BAAIBAgICAAICAgMCBAIFAgYCBAIGAgcCCAIJAgoCCAIKAgsCDAINAg4CDAIOAg8CEAIRAhICEAISAhMCFAIVAhYCFAIWAhcCGAIZAhoCGAIaAhsCHAIdAh4CHAIeAh8CIAIhAiICIAIiAiMCJAIlAiYCJAImAicCKAIpAioCKAIqAisCLAItAi4CLAIuAi8CMAIxAjICMAIyAjMCNAI1AjYCNAI2AjcCOAI5AjoCOAI6AjsCPAI9Aj4CPAI+Aj8CQAJBAkICQAJCAkMCRAJFAkYCRAJGAkcCSAJJAkoCSAJKAksCTAJNAk4CTAJOAk8CUAJRAlICUAJSAlMCVAJVAlYCVAJWAlcCWAJZAloCWAJaAlsCXAJdAl4CXAJeAl8CYAJhAmICYAJiAmMCZAJlAmYCZAJmAmcCaAJpAmoCaAJqAmsCbAJtAm4CbAJuAm8CcAJxAnICcAJyAnMCdAJ1AnYCdAJ2AncCeAJ5AnoCeAJ6AnsCfAJ9An4CfAJ+An8CgAKBAoICgAKCAoMChAKFAoYChAKGAocCiAKJAooCiAKKAosCjAKNAo4CjAKOAo8CkAKRApICkAKSApMClAKVApYClAKWApcCmAKZApoCmAKaApsCnAKdAp4CnAKeAp8CoAKhAqICoAKiAqMCpAKlAqYCpAKmAqcCqAKpAqoCqAKqAqsCrAKtAq4CrAKuAq8CsAKxArICsAKyArMCtAK1ArYCtAK2ArcCuAK5AroCuAK6ArsCvAK9Ar4CvAK+Ar8CwALBAsICwALCAsMCxALFAsYCxALGAscCyALJAsoCyALKAssCzALNAs4CzALOAs8C0ALRAtIC0ALSAtMC1ALVAtYC1ALWAtcC2ALZAtoC2ALaAtsC3ALdAt4C3ALeAt8C4ALhAuIC4ALiAuMC5ALlAuYC5ALmAucC6ALpAuoC6ALqAusC7ALtAu4C7ALuAu8C8ALxAvIC8ALyAvMC9AL1AvYC9AL2AvcC+AL5AvoC+AL6AvsC/AL9Av4C/AL+Av8CAAMBAwIDAAMCAwMDBAMFAwYDBAMGAwcDCAMJAwoDCAMKAwsDDAMNAw4DDAMOAw8DEAMRAxIDEAMSAxMDFAMVAxYDFAMWAxcDGAMZAxoDGAMaAxsDHAMdAx4DHAMeAx8DIAMhAyIDIAMiAyMDJAMlAyYDJAMmAycDKAMpAyoDKAMqAysDLAMtAy4DLAMuAy8DMAMxAzIDMAMyAzMDNAM1AzYDNAM2AzcDOAM5AzoDOAM6AzsDPAM9Az4DPAM+Az8DQANBA0IDQANCA0MDRANFA0YDRANGA0cDSANJA0oDSANKA0sDTANNA04DTANOA08DUANRA1IDUANSA1MDVANVA1YDVANWA1cDWANZA1oDWANaA1sDXANdA14DXANeA18DYANhA2IDYANiA2MDZANlA2YDZANmA2cDaANpA2oDaANqA2sDbANtA24DbANuA28DcANxA3IDcANyA3MDdAN1A3YDdAN2A3cDeAN5A3oDeAN6A3sDfAN9A34DfAN+A38DgAOBA4IDgAOCA4MDhAOFA4YDhAOGA4cDiAOJA4oDiAOKA4sDjAONA44DjAOOA48DkAORA5IDkAOSA5MDlAOVA5YDlAOWA5cDmAOZA5oDmAOaA5sDnAOdA54DnAOeA58DoAOhA6IDoAOiA6MDpAOlA6YDpAOmA6cDqAOpA6oDqAOqA6sDrAOtA64DrAOuA68DsAOxA7IDsAOyA7MDtAO1A7YDtAO2A7cDuAO5A7oDuAO6A7sDvAO9A74DvAO+A78DwAPBA8IDwAPCA8MDxAPFA8YDxAPGA8cDyAPJA8oDyAPKA8sDzAPNA84DzAPOA88D0APRA9ID0APSA9MD1APVA9YD1APWA9cD2APZA9oD2APaA9sD3APdA94D3APeA98D4APhA+ID4APiA+MD5APlA+YD5APmA+cD6APpA+oD6APqA+sD7APtA+4D7APuA+8D8APxA/ID8APyA/MD9AP1A/YD9AP2A/cD+AP5A/oD+AP6A/sD/AP9A/4D/AP+A/8DAAQBBAIEAAQCBAMEBAQFBAYEBAQGBAcECAQJBAoECAQKBAsEDAQNBA4EDAQOBA8EEAQRBBIEEAQSBBMEFAQVBBYEFAQWBBcEGAQZBBoEGAQaBBsEHAQdBB4EHAQeBB8EIAQhBCIEIAQiBCMEJAQlBCYEJAQmBCcEKAQpBCoEKAQqBCsELAQtBC4ELAQuBC8EMAQxBDIEMAQyBDMENAQ1BDYENAQ2BDcEOAQ5BDoEOAQ6BDsEPAQ9BD4EPAQ+BD8EQARBBEIEQARCBEMERARFBEYERARGBEcESARJBEoESARKBEsETARNBE4ETAROBE8EUARRBFIEUARSBFMEVARVBFYEVARWBFcEWARZBFoEWARaBFsEXARdBF4EXAReBF8EYARhBGIEYARiBGMEZARlBGYEZARmBGcEaARpBGoEaARqBGsEbARtBG4EbARuBG8EcARxBHIEcARyBHMEdAR1BHYEdAR2BHcEeAR5BHoEeAR6BHsEfAR9BH4EfAR+BH8EgASBBIIEgASCBIMEhASFBIYEhASGBIcEiASJBIoEiASKBIsEjASNBI4EjASOBI8EkASRBJIEkASSBJMElASVBJYElASWBJcEmASZBJoEmASaBJsEnASdBJ4EnASeBJ8EoAShBKIEoASiBKMEpASlBKYEpASmBKcEqASpBKoEqASqBKsErAStBK4ErASuBK8EsASxBLIEsASyBLMEtAS1BLYEtAS2BLcEuAS5BLoEuAS6BLsEvAS9BL4EvAS+BL8EwATBBMIEwATCBMMExATFBMYExATGBMcEyATJBMoEyATKBMsEzATNBM4EzATOBM8E0ATRBNIE0ATSBNME1ATVBNYE1ATWBNcE2ATZBNoE2ATaBNsE3ATdBN4E3ATeBN8E4AThBOIE4ATiBOME5ATlBOYE5ATmBOcE6ATpBOoE6ATqBOsE7ATtBO4E7ATuBO8E8ATxBPIE8ATyBPME9AT1BPYE9AT2BPcE+AT5BPoE+AT6BPsE/AT9BP4E/AT+BP8EAAUBBQIFAAUCBQMFBAUFBQYFBAUGBQcFCAUJBQoFCAUKBQsFDAUNBQ4FDAUOBQ8FEAURBRIFEAUSBRMFFAUVBRYFFAUWBRcFGAUZBRoFGAUaBRsFHAUdBR4FHAUeBR8FIAUhBSIFIAUiBSMFJAUlBSYFJAUmBScFKAUpBSoFKAUqBSsFLAUtBS4FLAUuBS8FMAUxBTIFMAUyBTMFNAU1BTYFNAU2BTcFOAU5BToFOAU6BTsFPAU9BT4FPAU+BT8FQAVBBUIFQAVCBUMFRAVFBUYFRAVGBUcFSAVJBUoFSAVKBUsFTAVNBU4FTAVOBU8FUAVRBVIFUAVSBVMFVAVVBVYFVAVWBVcFWAVZBVoFWAVaBVsFXAVdBV4FXAVeBV8FYAVhBWIFYAViBWMFZAVlBWYFZAVmBWcFaAVpBWoFaAVqBWsFbAVtBW4FbAVuBW8FcAVxBXIFcAVyBXMFdAV1BXYFdAV2BXcFeAV5BXoFeAV6BXsFfAV9BX4FfAV+BX8FgAWBBYIFgAWCBYMFhAWFBYYFhAWGBYcFiAWJBYoFiAWKBYsFjAWNBY4FjAWOBY8FkAWRBZIFkAWSBZMFlAWVBZYFlAWWBZcFmAWZBZoFmAWaBZsFnAWdBZ4FnAWeBZ8FoAWhBaIFoAWiBaMFpAWlBaYFpAWmBacFqAWpBaoFqAWqBasFrAWtBa4FrAWuBa8FsAWxBbIFsAWyBbMFtAW1BbYFtAW2BbcFuAW5BboFuAW6BbsFvAW9Bb4FvAW+Bb8FwAXBBcIFwAXCBcMFxAXFBcYFxAXGBccFyAXJBcoFyAXKBcsFzAXNBc4FzAXOBc8F0AXRBdIF0AXSBdMF1AXVBdYF1AXWBdcF2AXZBdoF2AXaBdsF3AXdBd4F3AXeBd8F4AXhBeIF4AXiBeMF5AXlBeYF5AXmBecF6AXpBeoF6AXqBesF7AXtBe4F7AXuBe8F8AXxBfIF8AXyBfMF9AX1BfYF9AX2BfcF+AX5BfoF+AX6BfsF/AX9Bf4F/AX+Bf8FAAYBBgIGAAYCBgMGBAYFBgYGBAYGBgcGCAYJBgoGCAYKBgsGDAYNBg4GDAYOBg8GEAYRBhIGEAYSBhMGFAYVBhYGFAYWBhcGGAYZBhoGGAYaBhsGHAYdBh4GHAYeBh8GIAYhBiIGIAYiBiMGJAYlBiYGJAYmBicGKAYpBioGKAYqBisGLAYtBi4GLAYuBi8GMAYxBjIGMAYyBjMGNAY1BjYGNAY2BjcGOAY5BjoGOAY6BjsGPAY9Bj4GPAY+Bj8GQAZBBkIGQAZCBkMGRAZFBkYGRAZGBkcGSAZJBkoGSAZKBksGTAZNBk4GTAZOBk8GUAZRBlIGUAZSBlMGVAZVBlYGVAZWBlcGWAZZBloGWAZaBlsGXAZdBl4GXAZeBl8GYAZhBmIGYAZiBmMGZAZlBmYGZAZmBmcGaAZpBmoGaAZqBmsGbAZtBm4GbAZuBm8GcAZxBnIGcAZyBnMGdAZ1BnYGdAZ2BncGeAZ5BnoGeAZ6BnsGfAZ9Bn4GfAZ+Bn8GgAaBBoIGgAaCBoMGhAaFBoYGhAaGBocGiAaJBooGiAaKBosGjAaNBo4GjAaOBo8GkAaRBpIGkAaSBpMGlAaVBpYGlAaWBpcGmAaZBpoGmAaaBpsGnAadBp4GnAaeBp8GoAahBqIGoAaiBqMGpAalBqYGpAamBqcGqAapBqoGqAaqBqsGrAatBq4GrAauBq8GsAaxBrIGsAayBrMGtAa1BrYGtAa2BrcGuAa5BroGuAa6BrsGvAa9Br4GvAa+Br8GwAbBBsIGwAbCBsMGxAbFBsYGxAbGBscGyAbJBsoGyAbKBssGzAbNBs4GzAbOBs8G0AbRBtIG0AbSBtMG1AbVBtYG1AbWBtcG2AbZBtoG2AbaBtsG3AbdBt4G3AbeBt8G4AbhBuIG4AbiBuMG5AblBuYG5AbmBucG6AbpBuoG6AbqBusG7AbtBu4G7AbuBu8G8AbxBvIG8AbyBvMG9Ab1BvYG9Ab2BvcG+Ab5BvoG+Ab6BvsG/Ab9Bv4G/Ab+Bv8GAAcBBwIHAAcCBwMHBAcFBwYHBAcGBwcHCAcJBwoHCAcKBwsHDAcNBw4HDAcOBw8HEAcRBxIHEAcSBxMHFAcVBxYHFAcWBxcHGAcZBxoHGAcaBxsHHAcdBx4HHAceBx8HIAchByIHIAciByMHJAclByYHJAcmBycHKAcpByoHKAcqBysHLActBy4HLAcuBy8HMAcxBzIHMAcyBzMHNAc1BzYHNAc2BzcHOAc5BzoHOAc6BzsHPAc9Bz4HPAc+Bz8HQAdBB0IHQAdCB0MHRAdFB0YHRAdGB0cHSAdJB0oHSAdKB0sHTAdNB04HTAdOB08HUAdRB1IHUAdSB1MHVAdVB1YHVAdWB1cHWAdZB1oHWAdaB1sHXAddB14HXAdeB18HYAdhB2IHYAdiB2MHZAdlB2YHZAdmB2cHaAdpB2oHaAdqB2sHbAdtB24HbAduB28HcAdxB3IHcAdyB3MHdAd1B3YHdAd2B3cHeAd5B3oHeAd6B3sHfAd9B34HfAd+B38HgAeBB4IHgAeCB4MHhAeFB4YHhAeGB4cHiAeJB4oHiAeKB4sHjAeNB44HjAeOB48HkAeRB5IHkAeSB5MHlAeVB5YHlAeWB5cHmAeZB5oHmAeaB5sHnAedB54HnAeeB58HoAehB6IHoAeiB6MHpAelB6YHpAemB6cHqAepB6oHqAeqB6sHrAetB64HrAeuB68HsAexB7IHsAeyB7MHtAe1B7YHtAe2B7cHuAe5B7oHuAe6B7sHvAe9B74HvAe+B78HwAfBB8IHwAfCB8MHxAfFB8YHxAfGB8cHyAfJB8oHyAfKB8sHzAfNB84HzAfOB88H0AfRB9IH0AfSB9MH1AfVB9YH1AfWB9cH2AfZB9oH2AfaB9sH3AfdB94H3AfeB98H4AfhB+IH4AfiB+MH5AflB+YH5AfmB+cH6AfpB+oH6AfqB+sH7AftB+4H7AfuB+8H8AfxB/IH8AfyB/MH9Af1B/YH9Af2B/cH+Af5B/oH+Af6B/sH/Af9B/4H/Af+B/8HAAgBCAIIAAgCCAMIBAgFCAYIBAgGCAcICAgJCAoICAgKCAsIDAgNCA4IDAgOCA8IEAgRCBIIEAgSCBMIFAgVCBYIFAgWCBcIGAgZCBoIGAgaCBsIHAgdCB4IHAgeCB8IIAghCCIIIAgiCCMIJAglCCYIJAgmCCcIKAgpCCoIKAgqCCsILAgtCC4ILAguCC8IMAgxCDIIMAgyCDMINAg1CDYINAg2CDcIOAg5CDoIOAg6CDsIPAg9CD4IPAg+CD8IQAhBCEIIQAhCCEMIRAhFCEYIRAhGCEcISAhJCEoISAhKCEsITAhNCE4ITAhOCE8IUAhRCFIIUAhSCFMIVAhVCFYIVAhWCFcIWAhZCFoIWAhaCFsIXAhdCF4IXAheCF8IYAhhCGIIYAhiCGMIZAhlCGYIZAhmCGcIaAhpCGoIaAhqCGsIbAhtCG4IbAhuCG8IcAhxCHIIcAhyCHMIdAh1CHYIdAh2CHcIeAh5CHoIeAh6CHsIfAh9CH4IfAh+CH8IgAiBCIIIgAiCCIMIhAiFCIYIhAiGCIcIiAiJCIoIiAiKCIsIjAiNCI4IjAiOCI8IkAiRCJIIkAiSCJMIlAiVCJYIlAiWCJcImAiZCJoImAiaCJsInAidCJ4InAieCJ8IoAihCKIIoAiiCKMIpAilCKYIpAimCKcIqAipCKoIqAiqCKsIrAitCK4IrAiuCK8IsAixCLIIsAiyCLMItAi1CLYItAi2CLcIuAi5CLoIuAi6CLsIvAi9CL4IvAi+CL8IwAjBCMIIwAjCCMMIxAjFCMYIxAjGCMcIyAjJCMoIyAjKCMsIzAjNCM4IzAjOCM8I0AjRCNII0AjSCNMI1AjVCNYI1AjWCNcI2AjZCNoI2AjaCNsI3AjdCN4I3AjeCN8I4AjhCOII4AjiCOMI5AjlCOYI5AjmCOcI6AjpCOoI6AjqCOsI7AjtCO4I7AjuCO8I8AjxCPII8AjyCPMI9Aj1CPYI9Aj2CPcI+Aj5CPoI+Aj6CPsI/Aj9CP4I/Aj+CP8IAAkBCQIJAAkCCQMJBAkFCQYJBAkGCQcJCAkJCQoJCAkKCQsJDAkNCQ4JDAkOCQ8JEAkRCRIJEAkSCRMJFAkVCRYJFAkWCRcJGAkZCRoJGAkaCRsJHAkdCR4JHAkeCR8JIAkhCSIJIAkiCSMJJAklCSYJJAkmCScJKAkpCSoJKAkqCSsJLAktCS4JLAkuCS8JMAkxCTIJMAkyCTMJNAk1CTYJNAk2CTcJOAk5CToJOAk6CTsJPAk9CT4JPAk+CT8JQAlBCUIJQAlCCUMJRAlFCUYJRAlGCUcJSAlJCUoJSAlKCUsJTAlNCU4JTAlOCU8JUAlRCVIJUAlSCVMJVAlVCVYJVAlWCVcJWAlZCVoJWAlaCVsJXAldCV4JXAleCV8JYAlhCWIJYAliCWMJZAllCWYJZAlmCWcJaAlpCWoJaAlqCWsJbAltCW4JbAluCW8JcAlxCXIJcAlyCXMJdAl1CXYJdAl2CXcJeAl5CXoJeAl6CXsJfAl9CX4JfAl+CX8JgAmBCYIJgAmCCYMJhAmFCYYJhAmGCYcJiAmJCYoJiAmKCYsJjAmNCY4JjAmOCY8JkAmRCZIJkAmSCZMJlAmVCZYJlAmWCZcJmAmZCZoJmAmaCZsJnAmdCZ4JnAmeCZ8JoAmhCaIJoAmiCaMJpAmlCaYJpAmmCacJqAmpCaoJqAmqCasJrAmtCa4JrAmuCa8JsAmxCbIJsAmyCbMJtAm1CbYJtAm2CbcJuAm5CboJuAm6CbsJvAm9Cb4JvAm+Cb8JwAnBCcIJwAnCCcMJxAnFCcYJxAnGCccJyAnJCcoJyAnKCcsJzAnNCc4JzAnOCc8J0AnRCdIJ0AnSCdMJ1AnVCdYJ1AnWCdcJ2AnZCdoJ2AnaCdsJ3AndCd4J3AneCd8J4AnhCeIJ4AniCeMJ5AnlCeYJ5AnmCecJ6AnpCeoJ6AnqCesJ7AntCe4J7AnuCe8J8AnxCfIJ8AnyCfMJ9An1CfYJ9An2CfcJ+An5CfoJ+An6CfsJ/An9Cf4J/An+Cf8JAAoBCgIKAAoCCgMK"),
-"material": ExtResource("7_erqd4"),
+"material": ExtResource("12_02mga"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 2564,
@@ -102,7 +99,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 672,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAHAAdAB4AHAAeAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8AMAAxADIAMAAyADMANAA1ADYANAA2ADcAOAA5ADoAOAA6ADsAPAA9AD4APAA+AD8AQABBAEIAQABCAEMARABFAEYARABGAEcASABJAEoASABKAEsATABNAE4ATABOAE8AUABRAFIAUABSAFMAVABVAFYAVABWAFcAWABZAFoAWABaAFsAXABdAF4AXABeAF8AYABhAGIAYABiAGMAZABlAGYAZABmAGcAaABpAGoAaABqAGsAbABtAG4AbABuAG8AcABxAHIAcAByAHMAdAB1AHYAdAB2AHcAeAB5AHoAeAB6AHsAfAB9AH4AfAB+AH8AgACBAIIAgACCAIMAhACFAIYAhACGAIcAiACJAIoAiACKAIsAjACNAI4AjACOAI8AkACRAJIAkACSAJMAlACVAJYAlACWAJcAmACZAJoAmACaAJsAnACdAJ4AnACeAJ8AoAChAKIAoACiAKMApAClAKYApACmAKcAqACpAKoAqACqAKsArACtAK4ArACuAK8AsACxALIAsACyALMAtAC1ALYAtAC2ALcAuAC5ALoAuAC6ALsAvAC9AL4AvAC+AL8AwADBAMIAwADCAMMAxADFAMYAxADGAMcAyADJAMoAyADKAMsAzADNAM4AzADOAM8A0ADRANIA0ADSANMA1ADVANYA1ADWANcA2ADZANoA2ADaANsA3ADdAN4A3ADeAN8A4ADhAOIA4ADiAOMA5ADlAOYA5ADmAOcA6ADpAOoA6ADqAOsA7ADtAO4A7ADuAO8A8ADxAPIA8ADyAPMA9AD1APYA9AD2APcA+AD5APoA+AD6APsA/AD9AP4A/AD+AP8AAAEBAQIBAAECAQMBBAEFAQYBBAEGAQcBCAEJAQoBCAEKAQsBDAENAQ4BDAEOAQ8BEAERARIBEAESARMBFAEVARYBFAEWARcBGAEZARoBGAEaARsBHAEdAR4BHAEeAR8BIAEhASIBIAEiASMBJAElASYBJAEmAScBKAEpASoBKAEqASsBLAEtAS4BLAEuAS8BMAExATIBMAEyATMBNAE1ATYBNAE2ATcBOAE5AToBOAE6ATsBPAE9AT4BPAE+AT8BQAFBAUIBQAFCAUMBRAFFAUYBRAFGAUcBSAFJAUoBSAFKAUsBTAFNAU4BTAFOAU8BUAFRAVIBUAFSAVMBVAFVAVYBVAFWAVcBWAFZAVoBWAFaAVsBXAFdAV4BXAFeAV8BYAFhAWIBYAFiAWMBZAFlAWYBZAFmAWcBaAFpAWoBaAFqAWsBbAFtAW4BbAFuAW8BcAFxAXIBcAFyAXMBdAF1AXYBdAF2AXcBeAF5AXoBeAF6AXsBfAF9AX4BfAF+AX8BgAGBAYIBgAGCAYMBhAGFAYYBhAGGAYcBiAGJAYoBiAGKAYsBjAGNAY4BjAGOAY8BkAGRAZIBkAGSAZMBlAGVAZYBlAGWAZcBmAGZAZoBmAGaAZsBnAGdAZ4BnAGeAZ8BoAGhAaIBoAGiAaMBpAGlAaYBpAGmAacBqAGpAaoBqAGqAasBrAGtAa4BrAGuAa8BsAGxAbIBsAGyAbMBtAG1AbYBtAG2AbcBuAG5AboBuAG6AbsBvAG9Ab4BvAG+Ab8B"),
-"material": ExtResource("8_oo7i2"),
+"material": ExtResource("13_quf0o"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 448,
@@ -113,7 +110,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 24,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8A"),
-"material": ExtResource("13_sakwo"),
+"material": ExtResource("14_qvo1g"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 16,
@@ -124,7 +121,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 48,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAHAAdAB4AHAAeAB8A"),
-"material": ExtResource("14_bl0mw"),
+"material": ExtResource("15_xprda"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 32,
@@ -135,7 +132,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 6,
 "index_data": PackedByteArray("AAABAAIAAAACAAMA"),
-"material": ExtResource("15_uoo17"),
+"material": ExtResource("16_xej6l"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 4,
@@ -146,7 +143,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 2208,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsACAALAAwACAAMAA0ADgAPABAADgAQABEAEgATABQAEgAUABUAEgAVABYAEgAWABcAGAAZABoAGAAaABsAHAAdAB4AHAAeAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8AMAAxADIAMAAyADMANAA1ADYANAA2ADcANAA3ADgANAA4ADkANAA5ADoANAA6ADsAPAA9AD4APAA+AD8APAA/AEAAPABAAEEAPABBAEIAPABCAEMARABFAEYARABGAEcASABJAEoASABKAEsATABNAE4ATABOAE8AUABRAFIAUABSAFMAVABVAFYAVwBYAFkAWgBbAFwAXQBeAF8AYABhAGIAYwBkAGUAZgBnAGgAaQBqAGsAbABtAG4AbwBwAHEAbwBxAHIAcwB0AHUAdgB3AHgAeQB6AHsAfAB9AH4AfwCAAIEAggCDAIQAhQCGAIcAiACJAIoAiwCMAI0AjgCPAJAAjgCQAJEAkgCTAJQAkgCUAJUAlgCXAJgAlgCYAJkAmgCbAJwAmgCcAJ0AngCfAKAAngCgAKEAngChAKIAngCiAKMAngCjAKQAngCkAKUApgCnAKgApgCoAKkApgCpAKoApgCqAKsApgCrAKwApgCsAK0ArgCvALAArgCwALEAsgCzALQAsgC0ALUAtgC3ALgAtgC4ALkAugC7ALwAugC8AL0AvgC/AMAAwQDCAMMAxADFAMYAxwDIAMkAygDLAMwAzQDOAM8A0ADRANIA0wDUANUA1gDXANgA1gDYANkA2gDbANwA3QDeAN8A4ADhAOIA4wDkAOUA5gDnAOgA6QDqAOsA7ADtAO4A7wDwAPEA8gDzAPQA9QD2APcA+AD5APoA+AD6APsA/AD9AP4A/AD+AP8AAAEBAQIBAAECAQMBAAEDAQQBAAEEAQUBBgEHAQgBBgEIAQkBBgEJAQoBBgEKAQsBDAENAQ4BDAEOAQ8BEAERARIBEAESARMBFAEVARYBFAEWARcBGAEZARoBGAEaARsBHAEdAR4BHAEeAR8BIAEhASIBIAEiASMBJAElASYBJAEmAScBKAEpASoBKAEqASsBKAErASwBKAEsAS0BLgEvATABLgEwATEBMgEzATQBMgE0ATUBMgE1ATYBMgE2ATcBOAE5AToBOAE6ATsBPAE9AT4BPAE+AT8BQAFBAUIBQwFEAUUBRgFHAUgBSQFKAUsBTAFNAU4BTwFQAVEBUgFTAVQBVQFWAVcBWAFZAVoBWwFcAV0BXgFfAWABYQFiAWMBZAFlAWYBZwFoAWkBagFrAWwBbQFuAW8BcAFxAXIBcwF0AXUBdgF3AXgBeQF6AXsBfAF9AX4BfAF+AX8BgAGBAYIBgAGCAYMBhAGFAYYBhAGGAYcBiAGJAYoBiAGKAYsBjAGNAY4BjAGOAY8BjAGPAZABjAGQAZEBjAGRAZIBjAGSAZMBlAGVAZYBlAGWAZcBlAGXAZgBlAGYAZkBlAGZAZoBlAGaAZsBnAGdAZ4BnAGeAZ8BoAGhAaIBoAGiAaMBpAGlAaYBpAGmAacBqAGpAaoBqAGqAasBrAGtAa4BrAGuAa8BsAGxAbIBsAGyAbMBtAG1AbYBtAG2AbcBtAG3AbgBtAG4AbkBugG7AbwBugG8Ab0BvgG/AcABvgHAAcEBvgHBAcIBvgHCAcMBxAHFAcYBxAHGAccByAHJAcoByAHKAcsBzAHNAc4BzAHOAc8B0AHRAdIB0wHUAdUB1gHXAdgB2QHaAdsB3AHdAd4B3wHgAeEB4gHjAeQB5QHmAecB6AHpAeoB6wHsAe0B7gHvAfAB7gHwAfEB8gHzAfQB9QH2AfcB+AH5AfoB+wH8Af0B/gH/AQACAQICAgMCBAIFAgYCBwIIAgkCCgILAgwCCgIMAg0CDgIPAhACDgIQAhECEgITAhQCEgIUAhUCEgIVAhYCEgIWAhcCGAIZAhoCGAIaAhsCHAIdAh4CHAIeAh8CHAIfAiACHAIgAiECIgIjAiQCIgIkAiUCJgInAigCJgIoAikCKgIrAiwCKgIsAi0CLgIvAjACLgIwAjECMgIzAjQCMgI0AjUCNgI3AjgCNgI4AjkCOgI7AjwCOgI8Aj0COgI9Aj4COgI+Aj8CQAJBAkICQAJCAkMCRAJFAkYCRAJGAkcCRAJHAkgCRAJIAkkCSgJLAkwCSgJMAk0CTgJPAlACTgJQAlECUgJTAlQCVQJWAlcCVQJXAlgCVQJYAlkCWgJbAlwCWgJcAl0CWgJdAl4CWgJeAl8CWgJfAmACWgJgAmECWgJhAmICYwJkAmUCYwJlAmYCYwJmAmcCYwJnAmgCaQJqAmsCaQJrAmwCbQJuAm8CcAJxAnICcAJyAnMCdAJ1AnYCdwJ4AnkCegJ7AnwCfQJ+An8CgAKBAoICgAKCAoMCgAKDAoQChQKGAocChQKHAogChQKIAokChQKJAooCiwKMAo0CjgKPApACkQKSApMClAKVApYClwKYApkCmgKbApwCmgKcAp0CngKfAqACoQKiAqMCpAKlAqYCpwKoAqkCqgKrAqwCrQKuAq8CsAKxArICsAKyArMCtAK1ArYCtwK4ArkCugK7ArwCugK8Ar0CvgK/AsACvgLAAsECwgLDAsQCxQLGAscCyALJAsoCyALKAssCyALLAswCzQLOAs8C0ALRAtIC0wLUAtUC0wLVAtYC0wLWAtcC2ALZAtoC2ALaAtsC2ALbAtwC2ALcAt0C3gLfAuAC3gLgAuEC4gLjAuQC4gLkAuUC5gLnAugC5gLoAukC6gLrAuwC6gLsAu0C7gLvAvAC7gLwAvEC8gLzAvQC8gL0AvUC8gL1AvYC8gL2AvcC+AL5AvoC+AL6AvsC/AL9Av4C/AL+Av8C/AL/AgAD/AIAAwEDAgMDAwQDAgMEAwUDBgMHAwgDBgMIAwkDCgMLAwwDCgMMAw0DDgMPAxADDgMQAxEDEgMTAxQDEgMUAxUDFgMXAxgDFgMYAxkDFgMZAxoDFgMaAxsDHAMdAx4DHAMeAx8DIAMhAyIDIAMiAyMDIAMjAyQDIAMkAyUDIAMlAyYDIAMmAycDIAMnAygDKQMqAysDLAMtAy4DLwMwAzEDLwMxAzIDMwM0AzUDMwM1AzYDMwM2AzcDOAM5AzoDOAM6AzsDOAM7AzwDPQM+Az8DPQM/A0ADQQNCA0MDQQNDA0QDRQNGA0cDRQNHA0gDSQNKA0sDSQNLA0wDSQNMA00DSQNNA04DSQNOA08DUANRA1IDUANSA1MDUANTA1QDUANUA1UDVgNXA1gDVgNYA1kDVgNZA1oDVgNaA1sDVgNbA1wDVgNcA10DVgNdA14DXwNgA2EDXwNhA2IDYwNkA2UDYwNlA2YDZwNoA2kDZwNpA2oDawNsA20DawNtA24DawNuA28DcANxA3IDcANyA3MDcANzA3QDdQN2A3cDdQN3A3gDeQN6A3sDfAN9A34DfwOAA4EDfwOBA4IDfwOCA4MDfwODA4QDfwOEA4UDhgOHA4gDhgOIA4kDhgOJA4oDhgOKA4sDjAONA44DjwOQA5EDkgOTA5QDkgOUA5UDkgOVA5YDkgOWA5cDmAOZA5oDmAOaA5sDmAObA5wDmAOcA50DmAOdA54DmAOeA58DmAOfA6ADoQOiA6MDoQOjA6QDpQOmA6cDqAOpA6oDqwOsA60DrgOvA7ADrgOwA7EDrgOxA7IDswO0A7UDswO1A7YDtwO4A7kDugO7A7wDvQO+A78DwAPBA8IDwwPEA8UDwwPFA8YDxwPIA8kDygPLA8wDzQPOA88D0APRA9ID0wPUA9UD1gPXA9gD2QPaA9sD3APdA94D3APeA98D4APhA+ID4wPkA+UD5gPnA+gD6QPqA+sD7APtA+4D7wPwA/ED8gPzA/QD9QP2A/cD+AP5A/oD+wP8A/0D/gP/AwAE/gMABAEEAgQDBAQEAgQEBAUEBgQHBAgECQQKBAsEDAQNBA4EDAQOBA8EDAQPBBAEEQQSBBMEFAQVBBYEFwQYBBkEFwQZBBoEFwQaBBsEHAQdBB4EHAQeBB8EHAQfBCAEHAQgBCEEHAQhBCIEHAQiBCMEJAQlBCYEJAQmBCcEKAQpBCoEKAQqBCsELAQtBC4ELAQuBC8EMAQxBDQDMAQ0AzMDMgQzBDQEMgQ0BDUENgQ3BDgENgQ4BDkEOgRBA0QDOgREAzsEPAQ9BEYDPARGA0UDPgQ/BEAEPgRABEEEPgRBBEIEPgRCBEMEPgRDBEQEPgREBEUERgRHBEgERgRIBEkESgRLBEwESgRMBE0ETgRPBFAETgRQBFEEUgRTBFQEUgRUBFUEVgRXBFgEVgRYBFkEVgRZBFoEVgRaBFsEVgRbBFwEVgRcBF0EXgRfBGAEXgRgBGEEXgRhBGIEXgRiBGMEXgRjBGQEXgRkBGUEZgRnBGgEZgRoBGkEagRrBGwEagRsBG0EbgRvBHAEbgRwBHEEcgRzBHQEcgR0BHUEdgR3BHgEdgR4BHkEegR7BDMCegQzAjICfAQOAhECfAQRAn0EfgR/BDcCfgQ3AjYCgASBBIIEgASCBIMEgASDBIQEgASEBIUEgASFBIYEgASGBIcEiASJBIoEiASKBIsEiASLBIwEiASMBI0EiASNBI4EiASOBI8EkAQiAiUCkAQlApEEkgSTBEsCkgRLAkoCKQIoApQEKQKUBJUElgSXBJgElgSYBJkEmgSbBJwEmgScBJ0EngSfBKAEngSgBKEEogSjBKQEogSkBKUEpgSnBKgEpgSoBKkEqgSrBKwEqgSsBK0EqgStBK4EqgSuBK8EqgSvBLAEqgSwBLEEsgSzBLQEsgS0BLUEsgS1BLYEsgS2BLcEsgS3BLgEsgS4BLkEugS7BLwEugS8BL0EvgS/BMAEvgTABMEEwgTDBMQEwgTEBMUExgTHBMgExgTIBMkEeQR4BMoEeQTKBMsEzATNBHsEzAR7BHoEzgR8BH0EzgR9BM8E0ATRBNIE0ATSBNME0ATTBNQE1QTWBNcE1QTXBNgE1QTYBNkE1QTZBNoE1QTaBNsE1QTbBNwE1QTcBN0E3gTfBOAE3gTgBOEE3gThBOIE3gTiBOME5ATlBJAE5ASQBJEE5ASRBOYE5wToBJME5wSTBJIE6QTqBOsE6QTrBOwE6QTsBO0E6QTtBO4E6QTuBO8E8ATxBPIE8wT0BPUE9gT3BH0B9gR9AXwBgwGCAfgEgwH4BPkEhQH6BPsEhQH7BIYB/AT9BP4E/AT+BP8E/AT/BAAFAQUCBQMFAQUDBQQFAQUEBQUFAQUFBQYFBwUIBQkFBwUJBQoFBwUKBQsFBwULBQwFBwUMBQ0FBwUNBQ4FBwUOBQ8FnQEQBREFnQERBRIFnQESBZ4BEwWjAaIBEwWiARQFFQUWBRcFFQUXBRgFFQUYBRkFFQUZBRoFFQUaBRsFHAUdBR4FHwUgBSEFIgUjBSQFIgUkBSUFIgUlBSYFIgUmBScFIgUnBSgFIgUoBSkFKgUrBWADKgVgA18DLAVjA2YDLAVmAy0FLgUvBWgDLgVoA2cDMAUxBTIFMAUyBTMFNAU1BTYFNAU2BTcFOAV1A3gDOAV4AzkFOgU7BTwFOgU8BT0FPgU/BUAFPgVABUEFQgVDBUQFQgVEBUUFQgVFBUYFQgVGBUcFQgVHBUgFQgVIBUkFSgVLBUwFSgVMBU0FTgVPBVAFTgVQBVEFUgVTBVQFUgVUBVUFVgVXBVgFVgVYBVkFVgVZBVoFVgVaBVsFXAVdBV4FXAVeBV8FYAVhBWIFYAViBWMFYAVjBWQFYAVkBWUFZgVnBWgFZgVoBWkFagVrBWwFagVsBW0F"),
-"material": ExtResource("16_mwooj"),
+"material": ExtResource("17_uk61v"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 1390,
@@ -157,7 +154,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 54,
 "index_data": PackedByteArray("AAABAAIAAwAEAAUABgAHAAgACQAKAAsADAANAA4ADwAQABEAEgATABQAEgAUABUAFgAXABgAGQAaABsAGQAbABwAHQAeAB8AHQAfACAAIQAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsA"),
-"material": ExtResource("17_rrycj"),
+"material": ExtResource("18_3lp6w"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 44,
@@ -168,7 +165,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 36,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcA"),
-"material": ExtResource("18_lb4wy"),
+"material": ExtResource("19_d3np5"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 24,
@@ -179,7 +176,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 6,
 "index_data": PackedByteArray("AAABAAIAAAACAAMA"),
-"material": ExtResource("19_i0pjr"),
+"material": ExtResource("20_pwpkh"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 4,
@@ -190,7 +187,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 96,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAHAAdAB4AHAAeAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8AMAAxADIAMAAyADMANAA1ADYANAA2ADcAOAA5ADoAOAA6ADsAPAA9AD4APAA+AD8A"),
-"material": ExtResource("20_5s57s"),
+"material": ExtResource("21_tv3gp"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 64,
@@ -201,7 +198,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 30,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMA"),
-"material": ExtResource("13_n0rdv"),
+"material": ExtResource("22_881l7"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 20,
@@ -212,7 +209,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 24,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8A"),
-"material": ExtResource("12_cxv14"),
+"material": ExtResource("23_l75b1"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 16,
@@ -223,7 +220,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 12,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcA"),
-"material": ExtResource("11_83px8"),
+"material": ExtResource("24_d2k4s"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 8,
@@ -234,7 +231,7 @@ _surfaces = [{
 "format": 34359742519,
 "index_count": 78,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAHAAdAB4AHAAeAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8AMAAxADIAMAAyADMA"),
-"material": ExtResource("10_0pfu5"),
+"material": ExtResource("25_13inm"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 52,
@@ -1043,13 +1040,11 @@ points = PackedVector3Array(0.75, 3.8125, -0.75, 0.75, 2.875, -0.75, 2, 2.875, -
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_s3n3l"]
 points = PackedVector3Array(0.946931, 1.22226, 2.0865, 0.943972, 1.22522, 2.08762, 0.899778, 1.18103, 2.08762, 0.902737, 1.17807, 2.0865, 0.941012, 1.13979, 2.11775, 0.985206, 1.18399, 2.11775, 0.949099, 1.13171, 2.16043, 0.993293, 1.1759, 2.16043, 0.899778, 1.18103, 2.22488, 0.927, 1.15381, 2.21456, 0.943972, 1.22522, 2.22488, 0.971194, 1.198, 2.21456)
 
-[node name="BossMapBartender" instance=ExtResource("1_vcodf")]
-script = ExtResource("2_ikfam")
-sfx_fire_start = ExtResource("3_qvoi0")
-sfx_fire_loop = ExtResource("4_w5yjf")
+[node name="BossMapSinger" instance=ExtResource("1_00mjg")]
+script = ExtResource("2_21l7f")
 
 [node name="LightmapGI" parent="." index="3"]
-light_data = ExtResource("6_4rrpe")
+light_data = ExtResource("5_3ad44")
 
 [node name="BossTriggerVolume" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -20)
@@ -1062,46 +1057,11 @@ shape = SubResource("BoxShape3D_gki5r")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.44824, -4.5)
 shape = SubResource("BoxShape3D_bavf7")
 
-[node name="BossMarker" type="Node3D" parent="." index="7"]
-
-[node name="BossMoveMarker" type="Marker3D" parent="BossMarker" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.741, 0.68626, -45.1419)
-
-[node name="BossMoveMarker2" type="Marker3D" parent="BossMarker" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.397888, 0.330918, -45.1419)
-
-[node name="BossMoveMarker3" type="Marker3D" parent="BossMarker" index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.9523, 0.330918, -45.1419)
-
-[node name="BossMoveMarker4" type="Marker3D" parent="BossMarker" index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96243, 0.330918, -45.1419)
-
-[node name="BossMoveMarker5" type="Marker3D" parent="BossMarker" index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.26166, 0.330918, -45.1419)
-
-[node name="BossJumpPhase2Marker" type="Marker3D" parent="BossMarker" index="5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.243006, 0.330918, -35.8964)
-
-[node name="BossJumpPhase3Marker" type="Marker3D" parent="BossMarker" index="6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.243006, 0.330918, -45.3435)
-
-[node name="FloorFireHazard" type="Marker3D" parent="BossMarker" index="7"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.514174, 2.49487, -29.9838)
-
-[node name="Decal" type="Decal" parent="." index="8"]
+[node name="Decal" type="Decal" parent="." index="7"]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -28, 4.2, -35.3)
-texture_albedo = ExtResource("21_4yyfc")
+texture_albedo = ExtResource("6_fdjgv")
 
-[node name="BossBartender" parent="." index="9" node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "elemental_emitting_vfx", "target") instance=ExtResource("31_p2107")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45.0618)
-floor_fize_hazard_marker = NodePath("../BossMarker/FloorFireHazard")
-behind_bar_move_points = [NodePath("../BossMarker/BossMoveMarker"), NodePath("../BossMarker/BossMoveMarker2"), NodePath("../BossMarker/BossMoveMarker3"), NodePath("../BossMarker/BossMoveMarker4"), NodePath("../BossMarker/BossMoveMarker5")]
-boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")
-boss_jump_phase3_marker = NodePath("../BossMarker/BossJumpPhase3Marker")
-elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
-target = NodePath("../FuncGodotMap/entity_45_PlayerRef")
-
-[node name="FuncGodotMap" parent="." index="10"]
+[node name="FuncGodotMap" parent="." index="8"]
 local_map_file = "res://src/maps/bartender_boss/bartender.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]
@@ -2001,28 +1961,28 @@ metadata/_tb_type = "_tb_group"
 [node name="group_670_BigTable" type="Node3D" parent="FuncGodotMap" index="30"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_31_Chandellier2" parent="FuncGodotMap" index="31" instance=ExtResource("14_qwtwc")]
+[node name="entity_31_Chandellier2" parent="FuncGodotMap" index="31" instance=ExtResource("26_221dd")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 8.5, -24)
 
-[node name="entity_32_Chandellier2" parent="FuncGodotMap" index="32" instance=ExtResource("14_qwtwc")]
+[node name="entity_32_Chandellier2" parent="FuncGodotMap" index="32" instance=ExtResource("26_221dd")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 8.5, -38)
 
-[node name="entity_33_Chandellier2" parent="FuncGodotMap" index="33" instance=ExtResource("14_qwtwc")]
+[node name="entity_33_Chandellier2" parent="FuncGodotMap" index="33" instance=ExtResource("26_221dd")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 18, 6, -40)
 
-[node name="entity_34_Chandellier2" parent="FuncGodotMap" index="34" instance=ExtResource("14_qwtwc")]
+[node name="entity_34_Chandellier2" parent="FuncGodotMap" index="34" instance=ExtResource("26_221dd")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 18, 6, -21)
 
-[node name="entity_35_Chandellier2" parent="FuncGodotMap" index="35" instance=ExtResource("14_qwtwc")]
+[node name="entity_35_Chandellier2" parent="FuncGodotMap" index="35" instance=ExtResource("26_221dd")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -18, 6, -21)
 
-[node name="entity_36_Chandellier2" parent="FuncGodotMap" index="36" instance=ExtResource("14_qwtwc")]
+[node name="entity_36_Chandellier2" parent="FuncGodotMap" index="36" instance=ExtResource("26_221dd")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -18, 6, -40)
 
 [node name="group_672_Elevator" type="Node3D" parent="FuncGodotMap" index="37"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_38_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="0" instance=ExtResource("15_2oqcf")]
+[node name="entity_38_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="0" instance=ExtResource("27_bkuvf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.1875, 2.5)
 entProperties = {
 "_tb_group": "672",
@@ -2032,7 +1992,7 @@ entProperties = {
 "origin": "80 -2 38"
 }
 
-[node name="entity_39_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="1" instance=ExtResource("15_2oqcf")]
+[node name="entity_39_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="1" instance=ExtResource("27_bkuvf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.9375, 2.5)
 entProperties = {
 "_tb_group": "672",
@@ -2042,7 +2002,7 @@ entProperties = {
 "origin": "80 -2 30"
 }
 
-[node name="entity_40_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="2" instance=ExtResource("15_2oqcf")]
+[node name="entity_40_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="2" instance=ExtResource("27_bkuvf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.6875, 2.5)
 entProperties = {
 "_tb_group": "672",
@@ -2052,7 +2012,7 @@ entProperties = {
 "origin": "80 -2 54"
 }
 
-[node name="entity_41_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="3" instance=ExtResource("15_2oqcf")]
+[node name="entity_41_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="3" instance=ExtResource("27_bkuvf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.4375, 2.5)
 entProperties = {
 "_tb_group": "672",
@@ -2062,7 +2022,7 @@ entProperties = {
 "origin": "80 -2 46"
 }
 
-[node name="entity_42_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="4" instance=ExtResource("15_2oqcf")]
+[node name="entity_42_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="4" instance=ExtResource("27_bkuvf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.9375, 2.5)
 entProperties = {
 "_tb_group": "672",
@@ -2072,11 +2032,11 @@ entProperties = {
 "origin": "80 -2 62"
 }
 
-[node name="entity_43_Chandellier2LightOnly" parent="FuncGodotMap/group_672_Elevator" index="5" instance=ExtResource("17_u740c")]
+[node name="entity_43_Chandellier2LightOnly" parent="FuncGodotMap/group_672_Elevator" index="5" instance=ExtResource("28_4m3as")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.8125, 0)
 
-[node name="entity_44_ElevatorDoors" parent="FuncGodotMap/group_672_Elevator" index="6" instance=ExtResource("16_n0tja")]
+[node name="entity_44_ElevatorDoors" parent="FuncGodotMap/group_672_Elevator" index="6" instance=ExtResource("29_bv0lb")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.0625, -2.125)
 
-[node name="entity_45_PlayerRef" parent="FuncGodotMap" index="38" instance=ExtResource("19_cjyp3")]
+[node name="entity_45_PlayerRef" parent="FuncGodotMap" index="38" instance=ExtResource("30_35d0g")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -0.5, 1.15625, 0)
