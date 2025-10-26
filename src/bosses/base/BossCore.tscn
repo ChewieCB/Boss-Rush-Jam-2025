@@ -121,6 +121,7 @@ offset_left = -486.0
 offset_right = 486.0
 offset_bottom = 168.0
 grow_horizontal = 2
+mouse_filter = 2
 
 [node name="BossHealthContainer" parent="UI/HealthUI" node_paths=PackedStringArray("health_component") instance=ExtResource("3_ybtoo")]
 layout_mode = 1

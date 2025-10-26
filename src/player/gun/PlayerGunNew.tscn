@@ -39,7 +39,7 @@ streams_count = 1
 stream_0/stream = ExtResource("2_3jkil")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rlyuh"]
-viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
+viewport_path = NodePath("EffectIconsViewport")
 
 [sub_resource type="Animation" id="Animation_64i2r"]
 length = 0.001
