@@ -137,14 +137,14 @@ func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
 	var chance = randf()
-	#if chance < 0.25:
-		#state_chart.send_event("start_hand_slam_attack")
-	#elif chance < 0.50:
-		#state_chart.send_event("start_hand_sweep_attack")
-	#elif chance < 0.75:
-	state_chart.send_event("start_hand_tilt_attack")
-	#else:
-		#state_chart.send_event("start_hand_stand_attack")
+	if chance < 0.25:
+		state_chart.send_event("start_hand_slam_attack")
+	elif chance < 0.50:
+		state_chart.send_event("start_hand_sweep_attack")
+	elif chance < 0.75:
+		state_chart.send_event("start_hand_tilt_attack")
+	else:
+		state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS
@@ -619,7 +619,6 @@ func _on_tilt_tilting_state_entered() -> void:
 	# Enable the player controller to slide on slopes
 	target.floor_stop_on_slope = false
 	target.add_status_effect(slippery_debuff)
-	tilt_particles.emitting = true
 	
 	# Tilt the arena by a rotation degree amount
 	var tilt_tween = get_tree().create_tween()
@@ -630,6 +629,7 @@ func _on_tilt_tilting_state_entered() -> void:
 	
 	await tilt_tween.finished
 	target.vel_horizontal += Vector2(0, -8.0)
+	tilt_particles.emitting = true
 	
 	state_chart.send_event("start_firing")
 
@@ -738,6 +738,7 @@ func _on_tilt_firing_state_entered() -> void:
 
 func _on_tilt_untilting_state_entered() -> void:
 	# Return the arena to the original zeroed rotation
+	tilt_particles.emitting = false
 	var tilt_tween = get_tree().create_tween()
 	tilt_tween.set_parallel(true)
 	tilt_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
@@ -760,7 +761,6 @@ func _on_tilt_untilting_state_physics_processing(delta: float) -> void:
 func _on_tilt_recovering_state_entered() -> void:
 	target.floor_stop_on_slope = true
 	target.remove_status_effect(slippery_debuff)
-	tilt_particles.emitting = false
 	# Return the hands to the anchored position
 	var return_tween = get_tree().create_tween()
 	return_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
