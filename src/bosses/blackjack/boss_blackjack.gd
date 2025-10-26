@@ -76,19 +76,18 @@ var tilt_hand_markers: Array[Node]
 var slippery_debuff: StatusEffect
 @export_subgroup("Tilt Projectile")
 @export var tilt_proj_scene: PackedScene
-@export var tilt_explosion_scene: PackedScene
 @export var tilt_proj_speed: float = 12.0
+@export var tilt_proj_explosion_count: int = 1
 @export var tilt_explosion_radius: float = 4.0
 @export var tilt_proj_arc_height: float = 5.0
 @export var tilt_proj_explosion_area_scene: PackedScene
 var tilt_proj_explosion_area: Area3D
 @export var tilt_explosion_damage: float = 25.0
+var tilt_explosion_instances := []
 
 
 func _ready() -> void:
 	super()
-	for emitter in bust_particles_parent.get_children():
-		emitter.size = 6.0
 	
 	slippery_debuff = StatusEffect.new()
 	slippery_debuff.display_name = "Reduce movement friction"
@@ -102,11 +101,20 @@ func _ready() -> void:
 	
 	# Create the explosion area collider when the scene has finished setting up
 	scene_root.ready.connect(func(): 
+		# Collider
 		tilt_proj_explosion_area = tilt_proj_explosion_area_scene.instantiate()
 		scene_root.add_child(tilt_proj_explosion_area)
 		tilt_proj_explosion_area.global_position = self.global_position
 		tilt_proj_explosion_area.get_child(0).shape.radius = tilt_explosion_radius
 		#tilt_proj_explosion_area.set_deferred("monitoring", false)
+		# Instance re-usable explosion scenes for later
+		for i in range(tilt_proj_explosion_count):
+			var _explosion: ExplosionParticles = explosion_scene.instantiate()
+			_explosion.scale_factor = tilt_explosion_radius
+			_explosion.explode_on_spawn = false
+			_explosion.free_on_finished = false
+			tilt_explosion_instances.append(_explosion)
+			scene_root.add_child(_explosion)
 	)
 
 
@@ -127,14 +135,14 @@ func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
 	var chance = randf()
-	if chance < 0.25:
-		state_chart.send_event("start_hand_slam_attack")
-	elif chance < 0.50:
-		state_chart.send_event("start_hand_sweep_attack")
-	elif chance < 0.75:
-		state_chart.send_event("start_hand_tilt_attack")
-	else:
-		state_chart.send_event("start_hand_stand_attack")
+	#if chance < 0.25:
+		#state_chart.send_event("start_hand_slam_attack")
+	#elif chance < 0.50:
+		#state_chart.send_event("start_hand_sweep_attack")
+	#elif chance < 0.75:
+	state_chart.send_event("start_hand_tilt_attack")
+	#else:
+		#state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS
@@ -689,12 +697,13 @@ func _on_tilt_firing_state_entered() -> void:
 				body.queue_free()
 		#tilt_proj_explosion_area.set_deferred("monitoring", false)
 		# Spawn an explosion on impact
-		for j in range(10):
+		for j in range(tilt_proj_explosion_count):
 			var _pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
-			var explosion = tilt_explosion_scene.instantiate()
-			scene_root.add_child(explosion)
+			var explosion = tilt_explosion_instances.pop_front()
 			explosion.global_position = _pos
+			explosion.explosion()
 			await get_tree().create_timer(randf_range(0.05, 0.12))
+			tilt_explosion_instances.push_back(explosion)
 		# TODO
 	
 	state_chart.send_event("stop_firing")
