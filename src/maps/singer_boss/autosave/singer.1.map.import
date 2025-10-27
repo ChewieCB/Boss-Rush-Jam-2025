@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://ioy36djkxnaq"
+path="res://.godot/imported/singer.1.map-6d5deb37016399e90efe970d2116f982.tres"
+
+[deps]
+
+source_file="res://src/maps/singer_boss/autosave/singer.1.map"
+dest_files=["res://.godot/imported/singer.1.map-6d5deb37016399e90efe970d2116f982.tres"]
+
+[params]
+

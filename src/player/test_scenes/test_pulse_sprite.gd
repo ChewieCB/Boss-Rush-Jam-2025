@@ -62,7 +62,6 @@ func _on_beat():
 	# Pulse back in
 	_tween.tween_property(sprite, "scale:y", _original_scale_y, pulse_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
-
 func play_lyrics() -> void:
 	await display_lyrics()
 	print("All lyrics finished")

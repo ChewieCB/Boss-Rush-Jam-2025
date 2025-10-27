@@ -41,13 +41,13 @@ func _ready() -> void:
 					print("!! Unset or invalid export: ", prop.name)
 				else:
 					print(prop.name, " → ", value)
-	
+
 	if bgm:
 		SoundManager.play_music(bgm, 0.5, "BGM")
-	
+
 	# Pre-load the lobby scene for faster level transitions
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
-	
+
 	if not boss:
 		push_error("No boss defined for map.")
 	else:
@@ -56,7 +56,7 @@ func _ready() -> void:
 		boss.died.connect(_on_boss_died)
 		boss.defeated.connect(_on_boss_defeated)
 		boss.chip_dropped.connect(_on_chip_dropped)
-	
+
 	player.health_component.died.connect(_on_player_death)
 	# Sync the player's location in the elevator from the lobby
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
@@ -64,12 +64,12 @@ func _ready() -> void:
 		player.global_position = player_start_pos
 		player.rotation = GameManager.cached_player_rotation
 		player.player_camera.rotation = GameManager.cached_camera_rotation
-	
+
 	player.stat_ui.show_luck_ui()
-	
+
 	await get_tree().physics_frame
 	generate_navigation()
-	
+
 	if elevator_doors:
 		elevator_doors.open()
 
@@ -78,26 +78,26 @@ func generate_navigation() -> void:
 	if not nav_parent or not floor_mesh:
 		push_warning("Navmesh nodes not configured, navigation generation aborted")
 		return
-	
+
 	nav_region = NavigationRegion3D.new()
 	var nav_mesh := NavigationMesh.new()
 	nav_mesh.agent_radius = 1.2
 	#nav_mesh.agent_height = 1.0
 	nav_region.navigation_mesh = nav_mesh
-	
+
 	nav_parent.add_child(nav_region)
 	nav_parent.move_child(nav_region, 0)
-	
+
 	floor_parent.remove_child(floor_mesh)
 	nav_region.add_child(floor_mesh)
 	nav_region.move_child(floor_mesh, 0)
-	
+
 	_rebake_nav()
-	# Switch the parse type to colliders after the initial bake 
+	# Switch the parse type to colliders after the initial bake
 	# to reduce performance impact of runtime rebaking
 	#
 	# FIXME - this wipes out the nav mesh on rebaking,
-	# have a proper refactor of the cover navigation 
+	# have a proper refactor of the cover navigation
 	# to accomodate this gemoetry type parsing.
 	#nav_mesh.geometry_parsed_geometry_type = NavigationMesh.ParsedGeometryType.PARSED_GEOMETRY_STATIC_COLLIDERS
 
@@ -118,7 +118,7 @@ func show_end_panel() -> void:
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
 	await tween.finished
-	
+
 	LoadingHandler.start_loading("Lobby")
 
 
@@ -139,7 +139,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
-	
+
 	if not boss.boss_id in GameManager.bosses_defeated:
 		GameManager.bosses_defeated.append(boss.boss_id)
 		print(GameManager.bosses_defeated)
@@ -191,7 +191,7 @@ func _on_level_select(level_path: String) -> void:
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
 	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
 	# HACK - do this properly with dynamic loading of scenes
-  
+
 	if is_inside_tree():
 		# TODO - fade this out via tween
 		SoundManager.stop_music(0.5)

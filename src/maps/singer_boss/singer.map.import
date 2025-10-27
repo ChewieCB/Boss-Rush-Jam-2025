@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://cxl8fj7cqowdw"
+path="res://.godot/imported/singer.map-e5d391de96682f69cd460ccc6c6cf948.tres"
+
+[deps]
+
+source_file="res://src/maps/singer_boss/singer.map"
+dest_files=["res://.godot/imported/singer.map-e5d391de96682f69cd460ccc6c6cf948.tres"]
+
+[params]
+
