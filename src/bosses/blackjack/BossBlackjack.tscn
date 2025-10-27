@@ -435,6 +435,7 @@ _data = {
 
 [node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
+DEBUG_blackjack = false
 min_flying_height = 0.0
 max_flying_height = 14.0
 min_wander_distance = 2.0

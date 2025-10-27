@@ -4,6 +4,8 @@ class_name BossBlackjack
 signal hand_attack_finished(hand)
 signal all_hand_attacks_finished
 
+@export var DEBUG_blackjack: bool = false
+
 @export_group("Movement")
 var flying_nav: NavigationRegion3D
 @export var min_flying_height: float = 0.0
@@ -146,10 +148,11 @@ func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
 	
-	while spawned_hands.size() < 2:
+	var max_hand_spawn: int = 4 if $StateChart/Root/Status/Blackjack/Active.active else 2
+	while spawned_hands.size() < max_hand_spawn:
 		await respawn_hand(despawned_hands.front())
 	
-	state_chart.send_event("start_hand_tilt_attack")
+	state_chart.send_event("start_hand_slam_attack")
 	#var chance = randf()
 	#if chance < 0.25:
 		#state_chart.send_event("start_hand_slam_attack")
@@ -454,6 +457,9 @@ func _on_dealing_dealing_state_entered() -> void:
 		
 		await deal_tween.loop_finished
 		
+		if DEBUG_blackjack:
+			hand_count = 21
+		
 		if hand_count > 21:
 			# BUST
 			# TODO
@@ -691,10 +697,14 @@ func _on_tilt_firing_state_entered() -> void:
 					target_offset = Vector3.ZERO
 				1:
 					# Left Hand projectile, aim wide to the left
+					if spawned_hands.size() < 3:
+						break
 					proj_origin = spawned_hands[2].global_position
 					target_offset = Vector3(7.5, 0, 0)
 				2:
 					# Right Hand projectile, aim wide to the right
+					if spawned_hands.size() < 4:
+						break
 					proj_origin = spawned_hands[3].global_position
 					target_offset = Vector3(-7.5, 0, 0)
 			

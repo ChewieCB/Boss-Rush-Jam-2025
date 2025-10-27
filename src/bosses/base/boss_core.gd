@@ -583,6 +583,10 @@ func _on_health_dead_state_entered() -> void:
 	sprite.modulate = Color.DARK_SLATE_BLUE
 	death_anim_finished.emit()
 
+#### Revival
+func _on_health_idle_state_entered() -> void:
+	sprite.modulate = Color.WHITE
+
 ### ATTACKING --------------------------------
 #### TELEGRAPH
 func _on_attack_telegraph_state_entered() -> void:

@@ -1503,6 +1503,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -4.
 
 [node name="entity_11_BossBlackjack" parent="FuncGodotMap" index="2" node_paths=PackedStringArray("tilt_mesh", "tilt_animateable_floor", "target") instance=ExtResource("25_e6qq0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -16.625, -28)
+DEBUG_blackjack = false
 tilt_mesh = NodePath("../group_7833_Tiltable")
 tilt_animateable_floor = NodePath("../group_7833_Tiltable/group_7841_FloorSurface/entity_32_func_moving")
 target = NodePath("../group_673_Elevator/entity_2_PlayerRef")
