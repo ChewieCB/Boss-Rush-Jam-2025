@@ -28,6 +28,7 @@ var stand_target: Vector3
 @export var stand_wave_time: float = 0.8
 var stand_repeat_counter: int = 0
 @export var stand_repeat_max: int = 3
+var shockwave_instance_pool: Array
 
 # Sweep
 var sweep_start_pos: Vector3
@@ -126,10 +127,12 @@ func _on_hit_targeting_state_entered() -> void:
 	# TODO - lock the target pos to the walkable player floor mesh
 	#
 	# Lock the target pos to the floor
+	var floor_target = slam_target
+	floor_target.y = -0.1
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(
 		slam_target,
-		slam_target + Vector3(0, -50, 0),
+		floor_target,
 		int(pow(2, 1 - 1))
 	)
 	var result = space_state.intersect_ray(query)
@@ -203,14 +206,17 @@ func _on_stand_double_tap_state_entered() -> void:
 	
 	# Lock the target pos to the floor
 	var space_state = get_world_3d().direct_space_state
+	var floor_target = stand_target
+	floor_target.y = -0.2
 	var query = PhysicsRayQueryParameters3D.create(
 		stand_target,
-		stand_target + Vector3(0, -50, 0),
+		floor_target,
 		int(pow(2, 1 - 1))
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
 		stand_target.y = result.position.y
+	#draw_debug_sphere(stand_target, 0.5, Color.YELLOW)
 	
 	var slam_tween := get_tree().create_tween()
 	for i in range(2):
@@ -219,7 +225,15 @@ func _on_stand_double_tap_state_entered() -> void:
 			func(): 
 				spawn_dust()
 				spawn_explosion()
-				spawn_shockwave(self.global_position, stand_wave_radius, stand_wave_damage, stand_wave_time)
+				var _shockwave = spawn_shockwave()
+				if not _shockwave:
+					return
+				_shockwave.set_deferred("monitoring", true)
+				#_shockwave.global_transform = self.global_transform
+				_shockwave.global_position = self.global_position
+				_shockwave.start_shockwave()
+				await _shockwave.finished
+				shockwave_instance_pool.push_back(_shockwave)
 		)
 		slam_tween.chain().tween_property(self, "global_position:y", cached_y, stand_slam_up_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
@@ -257,17 +271,18 @@ func _on_stand_returning_state_entered() -> void:
 	state_chart.send_event("hand_finished")
 
 
-func spawn_shockwave(spawn_pos: Vector3 = self.global_position, max_radius: float = stand_wave_radius, damage: float = stand_wave_damage, time: float = stand_wave_time) -> void:
-	var shockwave = slam_shockwave_prefab.instantiate()
-	scene_root.add_child(shockwave)
-
-	shockwave.global_transform = self.global_transform
-	shockwave.global_position = spawn_pos
+func spawn_shockwave(spawn_pos: Vector3 = self.global_position, max_radius: float = stand_wave_radius, damage: float = stand_wave_damage, time: float = stand_wave_time) -> Area3D:
+	var shockwave = shockwave_instance_pool.pop_front()
+	if not shockwave:
+		return
+	shockwave.set_deferred("monitoring", false)
+	shockwave.free_on_finished = false
 	shockwave.arc_angle = 360
 	shockwave.max_radius = max_radius
 	shockwave.damage = damage * GameManager.get_risk_dmg_mult()
 	shockwave.wave_time = time
-	shockwave.start_shockwave()
+	
+	return shockwave
 
 
 func _on_sweep_targeting_state_entered() -> void:
@@ -289,27 +304,33 @@ func _on_sweep_move_to_target_state_entered() -> void:
 	# Lock the target points to the floor
 	var space_state = get_world_3d().direct_space_state
 	# sweep_start_pos
+	var floor_target = sweep_start_pos
+	floor_target.y = -0.1
 	var query = PhysicsRayQueryParameters3D.create(
 		sweep_start_pos,
-		sweep_start_pos + Vector3(0, -50, 0),
+		floor_target,
 		int(pow(2, 1 - 1))
 	)
 	var result = space_state.intersect_ray(query)
 	if result:
 		sweep_start_pos.y = result.position.y
 	# sweep_target_pos
+	floor_target = sweep_start_pos
+	floor_target.y = -0.1
 	query = PhysicsRayQueryParameters3D.create(
 		sweep_target_pos,
-		sweep_target_pos + Vector3(0, -50, 0),
+		floor_target,
 		int(pow(2, 1 - 1))
 	)
 	result = space_state.intersect_ray(query)
 	if result:
 		sweep_target_pos.y = result.position.y
 	# sweep_end_pos
+	floor_target = sweep_start_pos
+	floor_target.y = -0.1
 	query = PhysicsRayQueryParameters3D.create(
 		sweep_end_pos,
-		sweep_end_pos + Vector3(0, -50, 0),
+		floor_target,
 		int(pow(2, 1 - 1))
 	)
 	result = space_state.intersect_ray(query)

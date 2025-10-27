@@ -603,7 +603,6 @@ max_scale = 4.2
 emission_radius = 2.8
 free_on_finished = false
 
-[connection signal="state_entered" from="StateChart/Root/Health/Idle" to="." method="_on_health_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Hit/Targeting" to="." method="_on_hit_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Hit/Slamming" to="." method="_on_hit_slamming_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Hit/Returning" to="." method="_on_hit_returning_state_entered"]

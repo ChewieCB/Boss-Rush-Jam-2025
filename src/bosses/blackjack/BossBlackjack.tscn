@@ -435,7 +435,7 @@ _data = {
 
 [node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
-DEBUG_blackjack = false
+DEBUG_blackjack = true
 min_flying_height = 0.0
 max_flying_height = 14.0
 min_wander_distance = 2.0
@@ -446,7 +446,6 @@ hand_scene = ExtResource("13_ereo8")
 hand_spacing = 5.0
 hand_respawn_time = 3.5
 wave_material = null
-slam_shockwave_prefab = ExtResource("4_cv1yb")
 explosion_scene = ExtResource("20_1mflx")
 card_textures = Array[CompressedTexture2D]([ExtResource("5_xw57y"), ExtResource("6_ddotp"), ExtResource("7_c86wt"), ExtResource("8_b64we"), ExtResource("9_pmm6f"), ExtResource("10_g7vdy"), ExtResource("11_234n0"), ExtResource("12_mkj6f"), ExtResource("13_r13ax"), ExtResource("14_y7i18"), ExtResource("15_ktoks"), ExtResource("16_l5820"), ExtResource("17_nr1bx")])
 dealing_anim_points = [NodePath("DealingAnimPoints/DealMarkerStart"), NodePath("DealingAnimPoints/DealMarkerMid"), NodePath("DealingAnimPoints/DealMarkerEnd")]
@@ -459,6 +458,7 @@ blackjack_time_max = 25.0
 blackjack_timer = NodePath("BlackjackTimer")
 bust_particles_parent = NodePath("HoverPlatform/BustParticles")
 bust_self_damage = 150.0
+slam_shockwave_prefab = ExtResource("4_cv1yb")
 sweep_dist = 12.0
 sweep_angle_deg = 70.0
 sweep_card_scene = ExtResource("19_x10en")

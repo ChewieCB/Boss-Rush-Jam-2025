@@ -34,7 +34,6 @@ var last_hand
 @export_group("Particles")
 # TODO - make this configurable per-attack
 @export var wave_material: ShaderMaterial
-@export var slam_shockwave_prefab: PackedScene
 @export var explosion_scene: PackedScene
 
 @export_group("Dealing")
@@ -62,6 +61,10 @@ var hand_count: int = 0
 var intro_path_points: Array[Node] = []
 
 @export_group("Attacks")
+
+@export_subgroup("Stand")
+@export var slam_shockwave_prefab: PackedScene
+var shockwave_instance_pool := []
 
 @export_subgroup("Sweep")
 @export var sweep_dist: float = 12.0
@@ -115,6 +118,7 @@ func _ready() -> void:
 		tilt_proj_explosion_area.global_position = self.global_position
 		tilt_proj_explosion_area.get_child(0).shape.radius = tilt_explosion_radius
 		#tilt_proj_explosion_area.set_deferred("monitoring", false)
+		
 		# Instance re-usable explosion scenes for later
 		for i in range(tilt_proj_explosion_count * 3):
 			var _explosion: ExplosionParticles = explosion_scene.instantiate()
@@ -128,6 +132,13 @@ func _ready() -> void:
 		for i in range(30):
 			var _card = sweep_card_scene.instantiate()
 			sweep_card_instance_pool.append(_card)
+		
+		# Instance shockwaves for stand attack
+		for i in range(24):
+			var shockwave = slam_shockwave_prefab.instantiate()
+			scene_root.add_child(shockwave)
+			shockwave.global_position = Vector3(0, -50, 0)
+			shockwave_instance_pool.push_back(shockwave)
 	)
 
 
@@ -152,7 +163,7 @@ func select_attack_phase_1() -> void:
 	while spawned_hands.size() < max_hand_spawn:
 		await respawn_hand(despawned_hands.front())
 	
-	state_chart.send_event("start_hand_slam_attack")
+	state_chart.send_event("start_hand_stand_attack")
 	#var chance = randf()
 	#if chance < 0.25:
 		#state_chart.send_event("start_hand_slam_attack")
@@ -181,6 +192,7 @@ func spawn_hand(is_visible: bool = true) -> BlackjackHand:
 	
 	# Set hand spawn position
 	new_hand.controller_boss = self
+	new_hand.shockwave_instance_pool = shockwave_instance_pool
 	new_hand.sweep_card_instance_pool = sweep_card_instance_pool
 	#new_hand.walkable_floor_nav = walkable_floor_nav
 	new_hand.target = self.target
