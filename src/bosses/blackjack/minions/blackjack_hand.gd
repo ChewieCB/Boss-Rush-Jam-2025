@@ -17,6 +17,7 @@ var is_offhand: bool = false  # flag to set handed-ness so we can flip sweep dir
 var slam_target: Vector3
 @export var slam_time: float = 0.35
 @export var hit_damage: float = 10
+var slam_tween: Tween
 
 # Stand
 var stand_target: Vector3
@@ -29,6 +30,7 @@ var stand_target: Vector3
 var stand_repeat_counter: int = 0
 @export var stand_repeat_max: int = 3
 var shockwave_instance_pool: Array
+var stand_tween: Tween
 
 # Sweep
 var sweep_start_pos: Vector3
@@ -43,6 +45,7 @@ var sweep_num_cards: int = 5
 var sweep_progress: float = 0.0
 var sweep_path_follow: PathFollow3D
 var sweep_card_follows := []
+var sweep_tween: Tween
 
 
 func _ready() -> void:
@@ -55,8 +58,16 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_died() -> void:
-	state_chart.send_event("death")
+	for tween in [slam_tween, stand_tween, sweep_tween]:
+		if tween:
+			tween.kill()
+	
 	state_chart.send_event("stop_moving")
+	#
+	state_chart.send_event("end_attack")
+	state_chart.send_event("hand_finished")
+	#
+	state_chart.send_event("death")
 	state_chart.send_event("deactivate")
 	return
 
@@ -151,7 +162,7 @@ func _on_hit_slamming_state_entered() -> void:
 	# Quickly zoom towards the target point, 
 	# creating a small AoE and some particles on impact
 	hurtbox.set_deferred("monitoring", true)
-	var slam_tween := get_tree().create_tween()
+	slam_tween = get_tree().create_tween()
 	slam_tween.tween_property(self, "global_position", slam_target, slam_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	await slam_tween.finished
 	# TODO - generate explosion and damage
@@ -159,6 +170,9 @@ func _on_hit_slamming_state_entered() -> void:
 	spawn_explosion()
 	
 	state_chart.send_event("hand_return")
+
+func _on_hit_slamming_state_physics_process(delta: float) -> void:
+	pass
 
 
 func _on_hit_returning_state_entered() -> void:
@@ -190,7 +204,7 @@ func _on_stand_move_to_target_state_entered() -> void:
 	var stand_hover_target = stand_target
 	stand_hover_target.y = self.global_position.y
 	
-	var stand_tween := get_tree().create_tween()
+	stand_tween = get_tree().create_tween()
 	stand_tween.tween_property(self, "global_position", stand_hover_target, slam_time * 2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	
 	await stand_tween.finished

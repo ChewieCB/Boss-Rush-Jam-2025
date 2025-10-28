@@ -101,7 +101,7 @@ flip_faces = true
 size = Vector2(2, 2)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
-viewport_path = NodePath("EffectIconsViewport")
+viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
@@ -244,7 +244,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, 0)
 texture = SubResource("ViewportTexture_rj1ni")
 
 [node name="Barrel3Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="1"]
-transform = Transform3D(0.735052, -0.0466678, -0.676402, -0.67801, -0.0493604, -0.733394, 0.000838399, 0.99769, -0.0679237, -0.00193595, 0, 0.555438)
+transform = Transform3D(0.735052, -0.0466678, -0.676402, -0.678009, -0.0493604, -0.733394, 0.000838399, 0.99769, -0.0679237, -0.00193595, 0, 0.555438)
 surface_material_override/0 = null
 
 [node name="Barrel2Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="2"]
@@ -252,7 +252,7 @@ transform = Transform3D(0.693706, -0.0523373, -0.718354, -0.71934, -2.604e-06, -
 surface_material_override/0 = null
 
 [node name="Barrel1Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="3"]
-transform = Transform3D(0.743941, -0.0342128, -0.666855, -0.665129, 0.040512, -0.745142, 0.0587099, 0.892489, 0.00826027, -0.411454, 0.00172222, 3.20794)
+transform = Transform3D(0.743941, -0.0342128, -0.666855, -0.665129, 0.040512, -0.745142, 0.05871, 0.892489, 0.00826027, -0.411454, 0.00172222, 3.20794)
 surface_material_override/0 = null
 
 [node name="AimAssistRaycast" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]

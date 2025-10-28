@@ -26,6 +26,7 @@ var hand_spawn_pos: Node
 @export var hand_scene: PackedScene
 @export var hand_spacing: float = 5.0
 @export var hand_respawn_time: float = 3.5
+var hand_spawn_tween: Tween
 var spawned_hands = []
 var despawned_hands = []
 var finished_hands = []
@@ -42,6 +43,7 @@ const SUIT_CARDS: Dictionary = {
 	"ACE": 11, "TWO": 2, "THREE": 3, "FOUR": 4, "FIVE": 5, "SIX": 6, "SEVEN": 7, 
 	"EIGHT": 8, "NINE": 9, "TEN": 10, "JACK": 10, "QUEEN": 10, "KING": 10
 }
+var deal_tween: Tween
 @export var card_textures: Array[CompressedTexture2D]
 @export var dealing_anim_points: Array[Marker3D]
 @export var hand_count_label: Label3D
@@ -159,11 +161,7 @@ func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
 	
-	var max_hand_spawn: int = 4 if $StateChart/Root/Status/Blackjack/Active.active else 2
-	while spawned_hands.size() < max_hand_spawn:
-		await respawn_hand(despawned_hands.front())
-	
-	state_chart.send_event("start_hand_stand_attack")
+	state_chart.send_event("start_hand_slam_attack")
 	#var chance = randf()
 	#if chance < 0.25:
 		#state_chart.send_event("start_hand_slam_attack")
@@ -223,7 +221,7 @@ func respawn_hand(hand: BlackjackHand) -> void:
 		push_error("Can't respawn hand that wasn't despawned")
 	
 	despawned_hands.erase(hand)
-	spawned_hands.append(hand)
+	spawned_hands.push_back(hand)
 	hand.position = Vector3.ZERO
 	hand.global_position = hand_spawn_pos.global_position
 	hand.reinstate()
@@ -259,24 +257,29 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 	# Add offhand flag for even index hands so we can flip paths directions for left sided hands
 	hand.is_offhand = (lr_sign == -1)
 	
-	var spawn_tween := get_tree().create_tween()
-	spawn_tween.tween_property(hand, "global_position", self.global_position + hand_offset, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	spawn_tween.parallel().tween_property(hand, "scale", Vector3.ONE, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	await spawn_tween.finished
+	# If this loop breaks, the hand has been despawned mid-move so we need to kill the tween
+	while hand in spawned_hands:
+		hand_spawn_tween = get_tree().create_tween()
+		hand_spawn_tween.tween_property(hand, "global_position", self.global_position + hand_offset, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		hand_spawn_tween.parallel().tween_property(hand, "scale", Vector3.ONE, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		await hand_spawn_tween.finished
+		
+		# Move the hand node inside of the boss to anchor
+		var hand_parent = hand.get_parent()
+		if hand_parent:
+			hand_parent.remove_child(hand)
+		
+		hand_anchor.add_child(hand)
+		# Position needs to be flipped for some reason, relative rotation issue?
+		hand.position = hand_offset * Vector3(-1, 1, 1)
+		
+		# TODO - over scoping, come back to this if we need it. Having hands undock and return is the basic behaviour.
+		# An exception to this is when a hand has undocked, if we undock a hand and immediately spawn
+		# another - we could want the spawned hand to take the place of the undocked one for a quick reload
+		# type behaviour.
+		return
 	
-	# Move the hand node inside of the boss to anchor
-	var hand_parent = hand.get_parent()
-	if hand_parent:
-		hand_parent.remove_child(hand)
-	
-	hand_anchor.add_child(hand)
-	# Position needs to be flipped for some reason, relative rotation issue?
-	hand.position = hand_offset * Vector3(-1, 1, 1)
-	
-	# TODO - over scoping, come back to this if we need it. Having hands undock and return is the basic behaviour.
-	# An exception to this is when a hand has undocked, if we undock a hand and immediately spawn
-	# another - we could want the spawned hand to take the place of the undocked one for a quick reload
-	# type behaviour.
+	hand_spawn_tween.kill()
 	
 
 # Move the new hand to the scene root so it can move independently
@@ -301,7 +304,7 @@ func _hand_finished(hand: BossCore) -> void:
 	finished_hands.append(hand)
 	_anchor_hand(hand)
 	hand_attack_finished.emit(hand)
-	if finished_hands.size() == spawned_hands.size():
+	if finished_hands.size() >= spawned_hands.size():
 		last_hand = hand
 		all_hand_attacks_finished.emit()
 		finished_hands = []
@@ -310,9 +313,10 @@ func _hand_hurt(health_diff: float) -> void:
 	health_component.damage(abs(health_diff))
 
 func _hand_dead(hand: BlackjackHand) -> void:
-	_hand_finished(hand)
 	despawn_hand(hand)
 	if $StateChart/Root/Phase/AttackPhase/Dealing.active and spawned_hands.size() == 0:
+		if deal_tween:
+			deal_tween.kill()
 		state_chart.send_event("start_bust")
 
 # Attack trigger methods
@@ -321,24 +325,33 @@ func _start_hand_attack() -> void:
 
 func trigger_all_hand_attacks_sim(attack_event: String, hand_delay: float = 0.0) -> void:
 	for hand in spawned_hands:
-		hand.state_chart.send_event("activate")
-		_release_hand(hand)
-		hand.state_chart.send_event(attack_event)
-		if hand_delay:
-			await get_tree().create_timer(hand_delay).timeout
-
+		while hand:
+			hand.state_chart.send_event("activate")
+			_release_hand(hand)
+			hand.state_chart.send_event(attack_event)
+			if hand_delay:
+				await get_tree().create_timer(hand_delay).timeout
+			break
+		
+		if spawned_hands.size() == 0:
+			state_chart.send_event("finish_attack")
+			return
+	
 	await all_hand_attacks_finished
 
 	state_chart.send_event("finish_attack")
 
 func trigger_all_hand_attacks_seq(attack_event: String) -> void:
 	for hand in spawned_hands:
-		hand.state_chart.send_event("activate")
-		_release_hand(hand)
-		print("Sending %s event: %s" % [hand.name, attack_event])
-		hand.state_chart.send_event(attack_event)
-		await hand_attack_finished
-
+		while hand:
+			hand.state_chart.send_event("activate")
+			_release_hand(hand)
+			hand.state_chart.send_event(attack_event)
+			await hand_attack_finished
+			break
+		if spawned_hands.size() == 0:
+			break
+	
 	state_chart.send_event("finish_attack")
 
 func cancel_active_hand_attacks() -> void:
@@ -427,11 +440,18 @@ func _on_intro_state_entered() -> void:
 func _on_dealing_idle_state_entered() -> void:
 	# TODO
 	hand_count_label.text = "0"
+	
+	var max_hand_spawn: int = 4 if $StateChart/Root/Status/Blackjack/Active.active else 2
+	while spawned_hands.size() < max_hand_spawn:
+		await respawn_hand(despawned_hands.front())
+	
 	state_chart.send_event("start_deal")
 
 
 func _on_dealing_dealing_state_entered() -> void:
-	var hand_r: BlackjackHand = spawned_hands.back()
+	# TODO - fix the hand index arrangement when hands are killed/despawned
+	var hand_r: BlackjackHand = spawned_hands[1] if spawned_hands.size() > 1 \
+		else spawned_hands[0]
 	# Catch if the player has destroyed all hands during the deal
 	if not hand_r:
 		state_chart.send_event("end_deal")
@@ -441,7 +461,7 @@ func _on_dealing_dealing_state_entered() -> void:
 	# Keep dealing until we hit stand, blackjack, or bust
 	hand_count = 0
 	
-	var deal_tween := get_tree().create_tween()
+	deal_tween = get_tree().create_tween()
 	var cached_pos: Vector3 = hand_r.position
 	deal_tween.set_loops()
 	
