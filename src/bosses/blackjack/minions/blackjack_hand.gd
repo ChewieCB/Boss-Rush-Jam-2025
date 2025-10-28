@@ -61,14 +61,16 @@ func _on_died() -> void:
 	for tween in [slam_tween, stand_tween, sweep_tween]:
 		if tween:
 			tween.kill()
+	sweep_particles.emitting = false
 	
 	state_chart.send_event("stop_moving")
 	#
-	state_chart.send_event("end_attack")
-	state_chart.send_event("hand_finished")
-	#
 	state_chart.send_event("death")
 	state_chart.send_event("deactivate")
+	#
+	await get_tree().create_timer(attack_recovery_time).timeout
+	state_chart.send_event("end_attack")
+	state_chart.send_event("hand_finished")
 	return
 
 
@@ -221,7 +223,7 @@ func _on_stand_double_tap_state_entered() -> void:
 	# Lock the target pos to the floor
 	var space_state = get_world_3d().direct_space_state
 	var floor_target = stand_target
-	floor_target.y = -0.2
+	floor_target.y = -0.1
 	var query = PhysicsRayQueryParameters3D.create(
 		stand_target,
 		floor_target,
@@ -408,10 +410,10 @@ func _on_sweep_sweeping_state_entered() -> void:
 	spawn_dust()
 	
 	# Spawn face down playing cards throughout the arc movement
-	var tween = get_tree().create_tween()
-	tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+	sweep_tween = get_tree().create_tween()
+	sweep_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	# Parent hand motion
-	tween.tween_property(self, "sweep_progress", 1.0, sweep_time)
+	sweep_tween.tween_property(self, "sweep_progress", 1.0, sweep_time)
 	
 	# Card mesh width is 2.08, and we overlap around 0.1-0.3
 	var curve_length: float  = curve.get_baked_length()
@@ -437,7 +439,7 @@ func _on_sweep_sweeping_state_entered() -> void:
 		_card.visible = false
 		_card.particles.emitting = true
 	
-	await tween.finished
+	await sweep_tween.finished
 	
 	# Re-parent hand
 	sweep_path_follow.remove_child(self)
@@ -449,11 +451,12 @@ func _on_sweep_sweeping_state_entered() -> void:
 		var _follow = kvm["path_follow"]
 		var cached_pos: Vector3 = _card.global_position
 		var cached_trans: Transform3D = _card.global_transform
-		_follow.remove_child(_card)
-		scene_root.add_child(_card)
-		_card.global_transform = cached_trans
-		_card.global_position = cached_pos
-		sweep_card_instance_pool.push_back(_card)
+		if is_instance_valid(_card):
+			_follow.remove_child(_card)
+			scene_root.add_child(_card)
+			_card.global_transform = cached_trans
+			_card.global_position = cached_pos
+			sweep_card_instance_pool.push_back(_card)
 		
 	sweep_card_follows = []
 	sweep_progress = 0.0
@@ -473,14 +476,14 @@ func _on_sweep_sweeping_state_physics_processing(delta: float) -> void:
 		var target_progress_ratio = min_progress_ratio + ((max_progress_ratio - min_progress_ratio) / sweep_num_cards * (i + 1))
 		var _path_follow = sweep_card_follows[i]["path_follow"]
 		var _card = sweep_card_follows[i]["card"]
-		
-		var card_progress = clamp(
-			(sweep_progress - min_progress_ratio) / (target_progress_ratio - min_progress_ratio),
-			0.0,
-			1.0
-		)
-		_path_follow.progress_ratio = lerp(0.0, target_progress_ratio, card_progress)
-		_card.visible = card_progress > 0.05
+		if is_instance_valid(_card):
+			var card_progress = clamp(
+				(sweep_progress - min_progress_ratio) / (target_progress_ratio - min_progress_ratio),
+				0.0,
+				1.0
+			)
+			_path_follow.progress_ratio = lerp(0.0, target_progress_ratio, card_progress)
+			_card.visible = card_progress > 0.05
 
 
 func _on_sweep_returning_state_entered() -> void:

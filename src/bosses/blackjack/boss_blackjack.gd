@@ -161,16 +161,16 @@ func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
 	
-	state_chart.send_event("start_hand_slam_attack")
-	#var chance = randf()
-	#if chance < 0.25:
-		#state_chart.send_event("start_hand_slam_attack")
-	#elif chance < 0.50:
-		#state_chart.send_event("start_hand_sweep_attack")
-	#elif chance < 0.75:
-		#state_chart.send_event("start_hand_tilt_attack")
-	#else:
-		#state_chart.send_event("start_hand_stand_attack")
+	#state_chart.send_event("start_hand_stand_attack")
+	var chance = randf()
+	if chance < 0.25:
+		state_chart.send_event("start_hand_slam_attack")
+	elif chance < 0.50:
+		state_chart.send_event("start_hand_sweep_attack")
+	elif chance < 0.75:
+		state_chart.send_event("start_hand_tilt_attack")
+	else:
+		state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS
@@ -669,15 +669,15 @@ func _on_bust_recover_state_entered() -> void:
 	# Stop animation
 	anim_player.play("RESET")
 	
-	move_tween = get_tree().create_tween()
-	var return_pos: Vector3 = NavigationServer3D.map_get_random_point(
-		flying_nav.get_navigation_map(),
-		1,
-		true
-	)
-	return_pos.y = randf_range(min_flying_height, max_flying_height)
-	move_tween.tween_property(self, "global_position", return_pos, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
-	await move_tween.finished
+	#move_tween = get_tree().create_tween()
+	#var return_pos: Vector3 = NavigationServer3D.map_get_random_point(
+		#flying_nav.get_navigation_map(),
+		#1,
+		#true
+	#)
+	#return_pos.y = randf_range(min_flying_height, max_flying_height)
+	#move_tween.tween_property(self, "global_position", return_pos, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	#await move_tween.finished
 
 	state_chart.send_event("start_targeting")
 	# TODO
@@ -691,9 +691,11 @@ func _on_tilt_moving_to_pos_state_entered() -> void:
 	hand_tween.set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 	hand_tween.tween_property(self, "global_position", tilt_platform_origin_marker.global_position, 0.8)
 	for i in range(2):
-		var _hand = spawned_hands[i]
-		_release_hand(_hand)
-		hand_tween.tween_property(_hand, "global_position", tilt_hand_markers[i].global_position, 0.8)
+		var idx: int = 1 - i
+		if idx < spawned_hands.size():
+			var _hand = spawned_hands[idx]
+			_release_hand(_hand)
+			hand_tween.tween_property(_hand, "global_position", tilt_hand_markers[i].global_position, 0.8)
 	
 	await hand_tween.finished
 	
