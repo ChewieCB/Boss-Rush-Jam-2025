@@ -16,11 +16,11 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 
 ## SPRITES
 @export_group("Sprites")
-@onready var gun_sprite: Sprite3D = $SpriteParent/GunSprite
-@onready var barrel_flare_sprite: Sprite3D = $SpriteParent/GunSprite/MuzzleflareLightSprite
-@onready var muzzle_flash_sprite: Sprite3D = $SpriteParent/GunSprite/MuzzleflareLightSprite/MuzzleFlashSprite
+@onready var shotgun_sprite: Sprite3D = $SpriteParent/GunSilhouetteSprite/GunSprite
+@onready var barrel_flare_sprite: Sprite3D = $SpriteParent/GunSilhouetteSprite/GunSprite/MuzzleflareLightSprite
+@onready var muzzle_flash_sprite: Sprite3D = $SpriteParent/GunSilhouetteSprite/GunSprite/MuzzleflareLightSprite/MuzzleFlashSprite
 @export var muzzle_flash_hold_frames: int = 2
-@onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
+@onready var foregrip_sprite: Sprite3D = $SpriteParent/GunSilhouetteSprite/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
 @onready var barrel_1_label: Label3D = $SpriteParent/Barrel1Sprite/Label3D

@@ -1,4 +1,4 @@
-[gd_scene load_steps=64 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=71 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://tpbqrtskhc32" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_1.png" id="15_a1yho"]
 [ext_resource type="Texture2D" uid="uid://drrr4aotn87ol" path="res://src/player/gun/assets/sprite/rescale/idle/arm_idle.png" id="15_x3kbv"]
 [ext_resource type="Texture2D" uid="uid://dbjgf5actedu7" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_2.png" id="16_5bgyl"]
+[ext_resource type="Texture2D" uid="uid://cwdvcgrkegtm8" path="res://src/player/gun/assets/sprite/smg_frame/smg_frame.png" id="16_n0wph"]
 [ext_resource type="Texture2D" uid="uid://do0ikpg17kjko" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1_spin_2.png" id="21_oipg7"]
 [ext_resource type="Texture2D" uid="uid://lg2nbxli2fls" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2_spin_1.png" id="22_q6pxd"]
 [ext_resource type="Texture2D" uid="uid://cobuk6xmebxqk" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2_spin_2.png" id="23_kl067"]
@@ -46,7 +47,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/ForegripSprite:position")
+tracks/0/path = NodePath("SpriteParent/GunSilhouetteSprite/ForegripSprite:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -75,9 +76,9 @@ tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(2.07053),
 "update": 0,
-"values": [Vector3(0.364854, -0.394036, 0)]
+"values": [Vector3(0.0469371, -0.936687, 0)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -87,9 +88,9 @@ tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(2.07053),
 "update": 0,
-"values": [Vector3(0, 0, 0)]
+"values": [Vector3(0, 0, 0.408651)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -222,6 +223,30 @@ tracks/14/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0.823301, -1.67088, -1.64347)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("SpriteParent/GunSilhouetteSprite:visible")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("SpriteParent/SMGSprite:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_6xcgv"]
@@ -740,129 +765,6 @@ tracks/0/keys = {
 "values": [ExtResource("29_egcby")]
 }
 
-[sub_resource type="Animation" id="Animation_pwnrm"]
-resource_name = "idle"
-length = 0.1
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/ForegripSprite:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(0.435275),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/ArmSprite:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(0.435275),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1.1487),
-"update": 0,
-"values": [Vector3(0.364854, -0.394036, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SpriteParent:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1.1487),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_3r35k"]
-resource_name = "reload"
-length = 0.55
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SpriteParent/ForegripSprite:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.25, 0.45),
-"transitions": PackedFloat32Array(0.435275, 0.435275, 1, 1.56917),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(-0.13, 0, 0.85), Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteParent/ArmSprite:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.25, 0.45),
-"transitions": PackedFloat32Array(0.435275, 0.435275, 1.23114, 1.56917),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(-0.13, 0, 0.85), Vector3(0, 0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteParent:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3, 0.55),
-"transitions": PackedFloat32Array(1.1487, 1, 0.554785, 1.56917),
-"update": 0,
-"values": [Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("SpriteParent:rotation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3, 0.55),
-"transitions": PackedFloat32Array(1.1487, 1, 0.554785, 1.56917),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.331613), Vector3(0, 0, -0.331613), Vector3(0, 0, 0)]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.2, 0.55),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"_play_reload_end_sfx"
-}, {
-"args": [],
-"method": &"_end_reload_anim"
-}]
-}
-
 [sub_resource type="Animation" id="Animation_n22ld"]
 resource_name = "start_spin"
 length = 0.6
@@ -1061,6 +963,476 @@ tracks/4/keys = {
 "values": [Vector3(0.364854, -0.394036, 0), Vector3(0.648092, -0.383788, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_dtp06"]
+resource_name = "idle_smg"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ArmSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.20644, -0.581784, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.1487),
+"update": 0,
+"values": [Vector3(0.364854, -0.394036, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.1487),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/SMGSprite:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_pwnrm"]
+resource_name = "idle_shotgun"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/GunSilhouetteSprite/ForegripSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.435275),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ArmSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.435275),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.1487),
+"update": 0,
+"values": [Vector3(0.364854, -0.394036, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.1487),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/GunSilhouetteSprite:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_j4hxv"]
+resource_name = "reload_smg"
+length = 0.85
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ArmSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.35, 0.45, 0.625, 0.675, 0.75, 0.85),
+"transitions": PackedFloat32Array(0.435, 1.62451, 1, 0.482968, 0.287175, 0.574349, 2.46229, 1),
+"update": 0,
+"values": [Vector3(0.20644, -0.581784, 0), Vector3(1.00644, -2.58178, 0), Vector3(0.50644, -4.58178, 0), Vector3(0.50644, -4.58178, 0), Vector3(1.00644, -2.58178, 0), Vector3(1.17254, -2.01704, 0), Vector3(1.00644, -2.58178, 0), Vector3(0.20644, -0.581784, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.625, 0.675, 0.75, 0.85),
+"transitions": PackedFloat32Array(1.1487, 1, 0.554785, 1, 1, 1.56917),
+"update": 0,
+"values": [Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.625, 0.675, 0.75, 0.85),
+"transitions": PackedFloat32Array(1.1487, 1, 0.287175, 0.574349, 2.46229, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.331613), Vector3(0, 0, -0.331613), Vector3(0, 0, -0.436332), Vector3(0, 0, -0.331613), Vector3(0, 0, 0)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.2, 0.85),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"_play_reload_end_sfx"
+}, {
+"args": [],
+"method": &"_end_reload_anim"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_hfsi4"]
+resource_name = "equip_smg"
+length = 0.25
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ArmSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.2, 0.25),
+"transitions": PackedFloat32Array(2.07053, 0.466517, 2.07053, 1),
+"update": 0,
+"values": [Vector3(-1.68115, -1.42965, 0), Vector3(0.20644, -0.581784, 0), Vector3(0.0511251, -0.164026, -0.000508198), Vector3(0.20644, -0.581784, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.2, 0.25),
+"transitions": PackedFloat32Array(2.07053, 0.466517, 2.07053, 1.1487),
+"update": 0,
+"values": [Vector3(0.0469371, -0.936687, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.448849, 0.000732422), Vector3(0.364854, -0.394036, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.2, 0.25),
+"transitions": PackedFloat32Array(2.07053, 0.466517, 2.07053, 1.1487),
+"update": 0,
+"values": [Vector3(0, 0, 0.408651), Vector3(0, 0, 0), Vector3(-0.00379597, 0.0138534, 0.107678), Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/SMGSprite:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_xspxr"]
+resource_name = "equip_shotgun"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ArmSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.35),
+"transitions": PackedFloat32Array(2.07053, 0.435275, 3.73117, 0.435275),
+"update": 0,
+"values": [Vector3(-1.68115, -1.42965, 0), Vector3(0, 0, 0), Vector3(0.382801, -0.714845, -0.000508198), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.4),
+"transitions": PackedFloat32Array(2.07053, 0.466517, 3.73117, 1.1487),
+"update": 0,
+"values": [Vector3(0.0469371, -0.936687, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.448849, 0.000732422), Vector3(0.364854, -0.394036, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.4),
+"transitions": PackedFloat32Array(2.07053, 0.466517, 3.73117, 1.1487),
+"update": 0,
+"values": [Vector3(0, 0, 0.408651), Vector3(0, 0, 0), Vector3(-0.00379597, 0.0138534, 0.107678), Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/GunSilhouetteSprite:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/GunSilhouetteSprite/ForegripSprite:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.35),
+"transitions": PackedFloat32Array(1, 0.466517, 3.73117, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0.331676, -0.550818, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dy5yh"]
+resource_name = "unequip_shotgun"
+length = 0.15
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ArmSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.277392, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.627685, -1.84314, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.277392, 1),
+"update": 0,
+"values": [Vector3(0.364854, -0.394036, 0), Vector3(0.290281, -1.07265, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.277392, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.0522726)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/GunSilhouetteSprite:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.277392, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_ebw7k"]
+resource_name = "unequip_smg"
+length = 0.15
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ArmSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.277392, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.627685, -1.84314, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.277392, 1),
+"update": 0,
+"values": [Vector3(0.364854, -0.394036, 0), Vector3(0.290281, -1.07265, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.277392, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.0522726)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/SMGSprite:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_3r35k"]
+resource_name = "reload_shotgun"
+length = 0.55
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/GunSilhouetteSprite/ForegripSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.25, 0.45),
+"transitions": PackedFloat32Array(0.435275, 0.329877, 1.74, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0.260353, -0.452549, 0.85), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent/ArmSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.25, 0.45),
+"transitions": PackedFloat32Array(0.435275, 0.329877, 1.74, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0.260353, -0.452549, 0.85), Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.25, 0.45, 0.55),
+"transitions": PackedFloat32Array(1.1487, 0.329877, 1.74, 0.554785, 1.56917),
+"update": 0,
+"values": [Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.510089, -0.399719, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.25, 0.45, 0.55),
+"transitions": PackedFloat32Array(1.1487, 0.329877, 1.74, 0.554785, 1.56917),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.331613), Vector3(0, 0, -0.240961), Vector3(0, 0, -0.331613), Vector3(0, 0, 0)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.2, 0.55),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"_play_reload_end_sfx"
+}, {
+"args": [],
+"method": &"_end_reload_anim"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mu0sm"]
 _data = {
 "RESET": SubResource("Animation_64i2r"),
@@ -1079,11 +1451,17 @@ _data = {
 "barrel_3_spin_end": SubResource("Animation_sn0mj"),
 "barrel_3_spin_start": SubResource("Animation_wc336"),
 "barrel_3_unequipped": SubResource("Animation_vooid"),
-"idle": SubResource("Animation_pwnrm"),
-"reload": SubResource("Animation_3r35k"),
+"equip_shotgun": SubResource("Animation_xspxr"),
+"equip_smg": SubResource("Animation_hfsi4"),
+"idle_shotgun": SubResource("Animation_pwnrm"),
+"idle_smg": SubResource("Animation_dtp06"),
+"reload_shotgun": SubResource("Animation_3r35k"),
+"reload_smg": SubResource("Animation_j4hxv"),
 "start_spin": SubResource("Animation_n22ld"),
 "start_spin_down": SubResource("Animation_86ihn"),
-"start_spin_up": SubResource("Animation_t6xjk")
+"start_spin_up": SubResource("Animation_t6xjk"),
+"unequip_shotgun": SubResource("Animation_dy5yh"),
+"unequip_smg": SubResource("Animation_ebw7k")
 }
 
 [sub_resource type="World3D" id="World3D_srv2o"]
@@ -1203,28 +1581,49 @@ projectile_prefab = ExtResource("9_hhraw")
 muzzle_smoke_prefab = ExtResource("10_ipycd")
 
 [node name="SpriteParent" type="Node3D" parent="."]
-transform = Transform3D(0.165, 0, 0, 0, 0.165, 0, 0, 0, 0.165, 0.364854, -0.394036, 0)
+transform = Transform3D(0.151414, -0.0655664, 0, 0.0655664, 0.151413, 0, 0, 0, 0.165, 0.0469371, -0.936687, 0)
 
 [node name="GunSilhouetteSprite" type="Sprite3D" parent="SpriteParent"]
+visible = false
 layers = 2
 sorting_offset = -1.0
 render_priority = 2
 texture = ExtResource("14_qn47w")
 
-[node name="GunSprite" type="Sprite3D" parent="SpriteParent"]
+[node name="GunSprite" type="Sprite3D" parent="SpriteParent/GunSilhouetteSprite"]
 layers = 2
 render_priority = 2
 texture = ExtResource("11_n85hu")
 
-[node name="MuzzleflareLightSprite" type="Sprite3D" parent="SpriteParent/GunSprite"]
+[node name="MuzzleflareLightSprite" type="Sprite3D" parent="SpriteParent/GunSilhouetteSprite/GunSprite"]
 visible = false
 layers = 2
 sorting_offset = 1.0
 render_priority = 2
 texture = ExtResource("11_cwod4")
 
-[node name="MuzzleFlashSprite" type="Sprite3D" parent="SpriteParent/GunSprite/MuzzleflareLightSprite"]
+[node name="MuzzleFlashSprite" type="Sprite3D" parent="SpriteParent/GunSilhouetteSprite/GunSprite/MuzzleflareLightSprite"]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+layers = 2
+sorting_offset = -1.0
+render_priority = 2
+texture = ExtResource("12_fgtrf")
+
+[node name="ForegripSprite" type="Sprite3D" parent="SpriteParent/GunSilhouetteSprite"]
+layers = 2
+sorting_offset = 4.0
+render_priority = 2
+texture = ExtResource("14_8rp44")
+
+[node name="SMGSprite" type="Sprite3D" parent="SpriteParent"]
+visible = false
+layers = 2
+render_priority = 2
+texture = ExtResource("16_n0wph")
+
+[node name="MuzzleFlashSprite" type="Sprite3D" parent="SpriteParent/SMGSprite"]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+visible = false
 layers = 2
 sorting_offset = -1.0
 render_priority = 2
@@ -1291,12 +1690,6 @@ horizontal_alignment = 0
 [node name="Marker3D" type="Marker3D" parent="SpriteParent/Barrel1Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, -2.3, 0)
 
-[node name="ForegripSprite" type="Sprite3D" parent="SpriteParent"]
-layers = 2
-sorting_offset = 4.0
-render_priority = 2
-texture = ExtResource("14_8rp44")
-
 [node name="ArmSprite" type="Sprite3D" parent="SpriteParent"]
 layers = 2
 sorting_offset = 5.0
@@ -1340,17 +1733,20 @@ libraries = {
 callback_mode_process = 0
 tree_root = ExtResource("24_ge7dn")
 anim_player = NodePath("../AnimationPlayer")
+parameters/Blend2/blend_amount = 0
 parameters/barrel_1+2/add_amount = 1.0
 parameters/barrel_12+3/add_amount = 1.0
 parameters/barrels+reload/add_amount = 1.0
-parameters/reload+spin/add_amount = 1.0
+parameters/reload+spin/add_amount = 0
 parameters/reload_shot/active = false
 parameters/reload_shot/internal_active = false
 parameters/reload_shot/request = 0
+"parameters/reload_shot 2/active" = false
+"parameters/reload_shot 2/internal_active" = false
+"parameters/reload_shot 2/request" = 0
 parameters/reload_timescale/scale = 1.0
-parameters/spin_shot/active = false
-parameters/spin_shot/internal_active = false
-parameters/spin_shot/request = 0
+parameters/reload_timescale_smg/scale = 1.0
+parameters/shotgun_OR_smg/blend_amount = 0
 
 [node name="SmokeTimer" type="Timer" parent="."]
 one_shot = true

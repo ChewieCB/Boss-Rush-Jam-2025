@@ -101,7 +101,7 @@ flip_faces = true
 size = Vector2(2, 2)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
-viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
+viewport_path = NodePath("EffectIconsViewport")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
@@ -237,7 +237,13 @@ transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249
 [node name="BlankGun" parent="Neck/ShakeCameraWrapper/GunContainer" instance=ExtResource("39_lhbas")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, 0)
 
-[node name="EffectIconsSprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent" index="8"]
+[node name="GunSilhouetteSprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent" index="0"]
+visible = true
+
+[node name="SMGSprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent" index="1"]
+visible = false
+
+[node name="EffectIconsSprite" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/SpriteParent" index="7"]
 texture = SubResource("ViewportTexture_rj1ni")
 
 [node name="Barrel3Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="1"]

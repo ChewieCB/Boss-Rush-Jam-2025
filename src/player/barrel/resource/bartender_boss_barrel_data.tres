@@ -17,6 +17,7 @@ Molotov Dash: After dash, create a puddle of burning flame at your previous posi
 Toxin Mist: Chance to create a poison cloud upon hiting an enemy.
 Cognac Reload: Drop a bottle of cognac when you reload, which heals you a small amount.
 [/ul]"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_ma3kv")
 barrel_cost = 200
 barrel_prefab = ExtResource("1_8ixwb")
