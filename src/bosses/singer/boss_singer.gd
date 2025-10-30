@@ -22,6 +22,17 @@ extends BossCore
 @export var line_pause := 0.8 # pause before next line
 
 
+@export_group("Attacks")
+@export_subgroup("Melody Wave") # Skill that shoot a long-lasting orizontal wave require player to double jump or duck
+@export_subgroup("Dance Along") # Boss will move left and right in a certain order. Player then must follow or risk take damage from floor
+@export_subgroup("Rhymth Words") # Projectile that homing toward player in beat. Can be destroyed or iframed.
+@export_subgroup("Call and Response") # Projectile that spawned above boss, with boss spawn them in a rhytm such as 3-2-1-1, and player must
+                                    # shoot them back in such rhymth. Check https://www.youtube.com/shorts/WU2bg2ULQYk
+@export_subgroup("Echoing Voice") # Large AoE projectile attack that can bounce of wall. The bounce direction is always the same. No random.
+@export_group("Passive")
+@export_subgroup("The Choir") # Bodyguards that cover the boss in a form of a horizontal wall, but leave empty space between (so 1-0-1-0-1) and move left/right in beat
+
+
 @onready var lyric_label: Label3D = $LyricLabel
 
 var _original_scale_y: float

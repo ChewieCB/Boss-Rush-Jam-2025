@@ -14,7 +14,6 @@ signal fire_started
 @export var phase_3_health_percentage_trigger: float = 0.33
 
 @export_group("Display")
-#@export var base_sprite: CompressedTexture2D
 @export var shotgun_sprite: CompressedTexture2D
 @export var reload_sprite: CompressedTexture2D
 @export var throw_sprite: CompressedTexture2D
