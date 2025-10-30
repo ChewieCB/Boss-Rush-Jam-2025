@@ -1,4 +1,4 @@
-[gd_scene load_steps=145 format=4 uid="uid://ch2e1yyykdi14"]
+[gd_scene load_steps=146 format=4 uid="uid://ch2e1yyykdi14"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_00mjg"]
 [ext_resource type="Script" path="res://src/maps/singer_boss/boss_map_singer.gd" id="2_21l7f"]
@@ -19,6 +19,7 @@
 [ext_resource type="Material" uid="uid://4ivwi5xypyle" path="res://assets/textures/placeholder/texture_dark_02.tres" id="23_l75b1"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="24_d2k4s"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="25_13inm"]
+[ext_resource type="PackedScene" uid="uid://bekk1ucvfpa3h" path="res://src/bosses/singer/BossSinger.tscn" id="25_hbida"]
 [ext_resource type="PackedScene" uid="uid://rxldux0ag0my" path="res://src/env/lighting/Chandellier2.tscn" id="26_221dd"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="27_bkuvf"]
 [ext_resource type="PackedScene" uid="uid://dsipuwmnkxl5" path="res://src/env/lighting/ChandellierLight2.tscn" id="28_4m3as"]
@@ -1038,3 +1039,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.
 
 [node name="entity_15_PlayerRef" parent="FuncGodotMap" index="8" instance=ExtResource("30_35d0g")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -0.5, 1.15625, 0)
+
+[node name="BossSinger" parent="FuncGodotMap" index="9" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("25_hbida")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0509, 2.16893, -43.6381)
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]

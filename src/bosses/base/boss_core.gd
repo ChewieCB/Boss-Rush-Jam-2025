@@ -17,7 +17,8 @@ enum BossIdEnum {
 	ROULETTE,
 	BARTENDER,
 	PIT,
-	CHIPS
+	CHIPS,
+	SINGER
 }
 
 enum BossStatusEffect {
