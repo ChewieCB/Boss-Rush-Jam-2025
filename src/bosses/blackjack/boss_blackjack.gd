@@ -41,7 +41,7 @@ var last_hand
 # Dealing
 const SUIT_CARDS: Dictionary = {
 	"ACE": 11, "TWO": 2, "THREE": 3, "FOUR": 4, "FIVE": 5, "SIX": 6, "SEVEN": 7, 
-	"EIGHT": 8, "NINE": 9, "TEN": 10, "JACK": 10, "QUEEN": 10, "KING": 10
+	"EIGHT": 8, "NINE": 9, "TEN": 10, "JACK": 10, "QUEEN": 10, "KING": 10, "JOKER": 0
 }
 var deal_tween: Tween
 @export var deal_speed_scale: float = 0.5
@@ -670,6 +670,12 @@ func _on_bust_idle_state_entered() -> void:
 	state_chart.send_event("end_blackjack")
 	if not blackjack_timer.is_stopped():
 		blackjack_timer.stop()
+	
+	# Show joker card anim
+	card_particles.draw_pass_1.surface_get_material(0).albedo_texture = card_textures[13]
+	card_particles.emitting = true
+	card_particles.lifetime *= 2
+	card_explosion_particles.emitting = true
 	
 	anim_player.play("blackjack_boss/bust")
 	state_chart.send_event("start_explode")
