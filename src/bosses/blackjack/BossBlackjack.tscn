@@ -447,6 +447,7 @@ hand_spacing = 5.0
 hand_respawn_time = 3.5
 wave_material = null
 explosion_scene = ExtResource("20_1mflx")
+deal_speed_scale = 0.5
 card_textures = Array[CompressedTexture2D]([ExtResource("5_xw57y"), ExtResource("6_ddotp"), ExtResource("7_c86wt"), ExtResource("8_b64we"), ExtResource("9_pmm6f"), ExtResource("10_g7vdy"), ExtResource("11_234n0"), ExtResource("12_mkj6f"), ExtResource("13_r13ax"), ExtResource("14_y7i18"), ExtResource("15_ktoks"), ExtResource("16_l5820"), ExtResource("17_nr1bx")])
 dealing_anim_points = [NodePath("DealingAnimPoints/DealMarkerStart"), NodePath("DealingAnimPoints/DealMarkerMid"), NodePath("DealingAnimPoints/DealMarkerEnd")]
 hand_count_label = NodePath("HoverPlatform/DealLabel")
@@ -980,6 +981,7 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Dealing/Idle" to="." method="_on_dealing_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Dealing/Dealing" to="." method="_on_dealing_dealing_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Dealing/Dealing" to="." method="_on_dealing_dealing_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Dealing/Recover" to="." method="_on_dealing_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Bust/Idle" to="." method="_on_bust_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Bust/Exploding" to="." method="_on_bust_exploding_state_entered"]

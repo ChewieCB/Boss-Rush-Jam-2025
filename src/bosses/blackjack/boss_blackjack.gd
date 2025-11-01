@@ -44,6 +44,7 @@ const SUIT_CARDS: Dictionary = {
 	"EIGHT": 8, "NINE": 9, "TEN": 10, "JACK": 10, "QUEEN": 10, "KING": 10
 }
 var deal_tween: Tween
+@export var deal_speed_scale: float = 0.5
 @export var card_textures: Array[CompressedTexture2D]
 @export var dealing_anim_points: Array[Marker3D]
 @export var hand_count_label: Label3D
@@ -232,10 +233,12 @@ func respawn_hand(hand: BlackjackHand) -> void:
 	spawned_hands.push_back(hand)
 	hand.position = Vector3.ZERO
 	hand.global_position = hand_spawn_pos.global_position
+	hand.health_component.is_invincible = true
 	hand.reinstate()
 	hand.spawn_dust()
 	hand.spawn_explosion()
 	await _anchor_hand(hand)
+	hand.health_component.is_invincible = false
 	hand.state_chart.send_event("activate")
 
 
@@ -287,7 +290,8 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 		# type behaviour.
 		return
 	
-	hand_spawn_tween.kill()
+	if hand_spawn_tween:
+		hand_spawn_tween.kill()
 	
 
 # Move the new hand to the scene root so it can move independently
@@ -321,17 +325,7 @@ func _hand_hurt(health_diff: float) -> void:
 	health_component.damage(abs(health_diff))
 
 func _hand_dead(hand: BlackjackHand) -> void:
-	var is_reorder: bool = true
-	if $StateChart/Root/Phase/AttackPhase/Dealing.active:
-		match spawned_hands.size():
-			1:
-				is_reorder = true
-			0:
-				if deal_tween:
-					deal_tween.kill()
-				state_chart.send_event("start_bust")
-	
-	despawn_hand(hand, is_reorder)
+	despawn_hand(hand, true)
 
 # Attack trigger methods
 func _start_hand_attack() -> void:
@@ -421,6 +415,7 @@ func _on_intro_state_entered() -> void:
 	for i in range(2):
 		var _hand = spawn_hand(false)
 		_hand.visible = false
+		_hand.health_component.is_invincible = true
 	
 	move_tween = get_tree().create_tween()
 	var hand_l = spawned_hands[1]
@@ -445,6 +440,9 @@ func _on_intro_state_entered() -> void:
 	_anchor_hand(hand_l)
 	_anchor_hand(hand_r)
 	
+	for _hand in [hand_l, hand_r]:
+		_hand.health_component.is_invincible = false
+	
 	state_chart.send_event("start_moving")
 	state_chart.send_event("finish_intro")
 
@@ -456,8 +454,9 @@ func _on_dealing_idle_state_entered() -> void:
 	hand_count_label.text = "0"
 	
 	var max_hand_spawn: int = 4 if $StateChart/Root/Status/Blackjack/Active.active else 2
-	while spawned_hands.size() < max_hand_spawn:
-		await respawn_hand(despawned_hands.front())
+	if spawned_hands.size() < max_hand_spawn:
+		for i in range(max_hand_spawn - spawned_hands.size()):
+			await respawn_hand(despawned_hands.front())
 	
 	state_chart.send_event("start_deal")
 
@@ -466,73 +465,95 @@ func _on_dealing_dealing_state_entered() -> void:
 	# Keep dealing until we hit stand, blackjack, or bust
 	hand_count = 0
 	
-	while true:
+	# Loop here so we can update the dealing hand tween if the current hand is killed
+	while hand_count < 30:
 		# Re-check the hand each loop so we can swap a new hand in as the dealing hand
 		# if the dealing hand is destroyed 
 		var hand_r: BlackjackHand
-		var num_hands: int = spawned_hands.size()
-		match num_hands:
-			# Catch if the player has destroyed all hands during the deal
-			0:
-				state_chart.send_event("end_deal")
-				deal_tween.kill()
-				break
-			_:
-				hand_r = spawned_hands[0]
+		if spawned_hands.size() == 0:
+			state_chart.send_event("start_bust")
+			state_chart.send_event("end_deal")
+			return
+		
+		hand_r = spawned_hands[0]
+		hand_r.health_component.died.connect(_abort_deal_tween)
+		# Disconnect the deal tween kill callback from hands we've re-ordered
+		for hand in spawned_hands.slice(1):
+			if hand.health_component.died.is_connected(_abort_deal_tween):
+				hand.health_component.died.disconnect(_abort_deal_tween)
 		
 		await _anchor_hand(hand_r, 0.0)
 		var cached_pos: Vector3 = hand_r.position
 		
+		# Pick a card, update the count, and change the particle texture accordingly
+		var card_key = SUIT_CARDS.keys().pick_random()
+		var card_value = SUIT_CARDS[card_key]
+		card_particles.draw_pass_1.surface_get_material(0).albedo_texture = card_textures[SUIT_CARDS.keys().find(card_key)]
+		
+		hand_count += card_value
+		# Dealing with aces high and aces low
+		if hand_count > 21 and card_value == 11 and hand_count - 10 <= 21:
+			card_value -= 10
+			hand_count -= 10
+		
+		if DEBUG_blackjack:
+			hand_count = 21
+		
 		deal_tween = get_tree().create_tween()
-	
-		deal_tween.tween_property(hand_r, "position", dealing_anim_points[0].position, 0.1)#.set_ease(Tween.EASE_IN)
-		deal_tween.tween_property(hand_r, "position", dealing_anim_points[1].position, 0.15)#.set_ease(Tween.EASE_IN_OUT)
-		deal_tween.tween_property(hand_r, "position", dealing_anim_points[2].position, 0.1)#.set_ease(Tween.EASE_OUT)
+		deal_tween.set_parallel(false)
+
+		deal_tween.tween_property(hand_r, "position", dealing_anim_points[0].position, 0.1 / deal_speed_scale).set_ease(Tween.EASE_IN)
+		deal_tween.tween_property(hand_r, "position", dealing_anim_points[1].position, 0.15 / deal_speed_scale).set_ease(Tween.EASE_IN_OUT)
+		deal_tween.tween_property(hand_r, "position", dealing_anim_points[2].position, 0.1 / deal_speed_scale).set_ease(Tween.EASE_OUT)
 		deal_tween.tween_callback(
 			func():
 				card_particles.emitting = true
 				card_explosion_particles.emitting = true
 				hand_count_label.text = str(hand_count)
 		)
-		deal_tween.tween_property(hand_r, "position",  cached_pos, 0.85)#.set_ease(Tween.EASE_OUT)
-	
-	#while deal_tween.is_running():
-		# Pick a card, update the count, and change the particle texture accordingly
-		var card_key = SUIT_CARDS.keys().pick_random()
-		var card_value = SUIT_CARDS[card_key]
-		card_particles.draw_pass_1.surface_get_material(0).albedo_texture = card_textures[SUIT_CARDS.keys().find(card_key)]
-		hand_count += card_value
-		
-		if hand_count > 21 and card_value == 11 and hand_count - 10 <= 21:
-			card_value -= 10
-			hand_count -= 10
+		deal_tween.tween_property(hand_r, "position",  cached_pos, 0.85 / deal_speed_scale).set_ease(Tween.EASE_OUT)
 		
 		await deal_tween.finished
 		
-		if DEBUG_blackjack:
-			hand_count = 21
-		
-		if hand_count > 21:
+		if hand_count > 16:
 			# BUST
-			# TODO
-			state_chart.send_event("start_bust")
-			deal_tween.kill()
-			state_chart.send_event("end_deal_special")
-			break
-		#
-		if hand_count == 21:
+			if hand_count > 21:
+				state_chart.send_event("start_bust")
+				_abort_deal_tween()
+				state_chart.send_event("end_deal_special")
+				return
+			
 			# BLACKJACK
-			state_chart.send_event("start_blackjack")
-			deal_tween.kill()
+			elif hand_count == 21:
+				state_chart.send_event("start_blackjack")
+			
+			_abort_deal_tween()
 			state_chart.send_event("end_deal")
-			break
-		#
-		elif hand_count >= 16:
-			# STAND
-			# TODO
-			deal_tween.kill()
+			return
+	
+	# We can force the loop to break and kill the deal tween early by
+	# setting the hand_count to > 30
+	_abort_deal_tween()
+
+
+func _abort_deal_tween() -> void:
+	if deal_tween:
+		deal_tween.kill()
+		deal_tween.finished.emit()
+	if spawned_hands.size() == 0:
+		state_chart.send_event("start_bust")
+		state_chart.send_event("end_deal")
+
+
+func _on_dealing_dealing_state_physics_processing(_delta: float) -> void:
+	var num_hands: int = spawned_hands.size()
+	match num_hands:
+		# Catch if the player has destroyed all hands during the deal
+		0:
+			state_chart.send_event("start_bust")
 			state_chart.send_event("end_deal")
-			break
+			_abort_deal_tween()
+			return
 
 
 func _on_dealing_recover_state_entered() -> void:
