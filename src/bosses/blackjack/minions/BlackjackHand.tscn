@@ -128,7 +128,7 @@ tracks/5/path = NodePath("Sprite3D:billboard")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0.0666667),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [2]
@@ -743,6 +743,7 @@ libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "blackjack_hand": SubResource("AnimationLibrary_b4vtw")
 }
+autoplay = "blackjack_hand/RESET"
 
 [node name="HandDust" parent="." index="22" instance=ExtResource("4_6tcna")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.64659, 0)

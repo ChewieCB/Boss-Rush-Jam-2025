@@ -174,9 +174,9 @@ func select_attack_phase_1() -> void:
 	state_chart.send_event("end_recovery")
 	
 	#state_chart.send_event("start_hand_slam_attack")
-	#state_chart.send_event("start_hand_stand_attack")
+	state_chart.send_event("start_hand_stand_attack")
 	#state_chart.send_event("start_hand_sweep_attack")
-	state_chart.send_event("start_hand_tilt_attack")
+	#state_chart.send_event("start_hand_tilt_attack")
 	#var chance = randf()
 	#if chance < 0.25:
 		#state_chart.send_event("start_hand_slam_attack")

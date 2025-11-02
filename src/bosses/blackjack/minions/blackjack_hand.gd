@@ -60,6 +60,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_died() -> void:
+	anim_player.stop()
+	anim_player.clear_queue()
 	anim_player.play("blackjack_hand/RESET")
 	state_chart.send_event("hand_finished")
 	for tween in [slam_tween, stand_tween, sweep_tween]:
@@ -68,13 +70,20 @@ func _on_died() -> void:
 	sweep_particles.emitting = false
 	
 	state_chart.send_event("stop_moving")
-	#
 	state_chart.send_event("death")
 	state_chart.send_event("deactivate")
 	#
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("end_attack")
 	return
+
+
+func _on_health_dead_state_entered() -> void:
+	# Override the default state so we don't disable the anim player on death
+	# Since hands are re-used after death, most of the death logic is handled
+	# in _on_died(), this method currently just changes the sprite colour
+	sprite.modulate = Color.DARK_SLATE_BLUE
+	death_anim_finished.emit()
 
 
 func fake_destroy() -> void:
@@ -133,8 +142,6 @@ func _on_hit_targeting_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
 	
-	# TODO - play windup anim (shake)
-	#anim_player.play("substack/idle")
 	await get_tree().create_timer(1.1).timeout
 	_telegraph_attack("Hit")
 	
@@ -197,16 +204,14 @@ func _on_hit_returning_state_entered() -> void:
 
 func _on_stand_targeting_state_entered() -> void:
 	debug_state_label.text = "Stand | Targeting"
-	anim_player.play("blackjack_hand/to_vertical")
+	anim_player.play("blackjack_hand/RESET")
+	anim_player.queue("blackjack_hand/to_vertical")
 	anim_player.queue("blackjack_hand/vertical")
 	# Pick a location on the walkable floor to double tap
 	# TODO - pick a location a distance away from the player, rotated so the aoe happens in view
 	var target_spread_angle: float = randf_range(-PI/2, PI/2)
 	# TODO - figure out a good way to maintain separation between hands when choosing a new stand target
 	stand_target = target.global_position - (target.global_basis.z * stand_range).rotated(Vector3.UP, target_spread_angle)
-	
-	#if anim_player.is_playing():
-		#await anim_player.animation_finished
 	
 	state_chart.send_event("hand_move")
 
@@ -298,11 +303,9 @@ func _on_stand_double_tap_state_entered() -> void:
 func _on_stand_returning_state_entered() -> void:
 	debug_state_label.text = "Stand | Returning"
 	
-	anim_player.play("blackjack_hand/to_horizontal")
+	anim_player.play("blackjack_hand/RESET")
+	anim_player.queue("blackjack_hand/to_horizontal")
 	anim_player.queue("blackjack_hand/horizontal")
-	
-	#if anim_player.is_playing():
-		#await anim_player.animation_finished
 	
 	state_chart.send_event("end_attack")
 	state_chart.send_event("hand_finished")
