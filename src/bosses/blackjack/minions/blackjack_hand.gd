@@ -60,6 +60,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_died() -> void:
+	state_chart.send_event("hand_finished")
 	for tween in [slam_tween, stand_tween, sweep_tween]:
 		if tween:
 			tween.kill()
@@ -72,7 +73,6 @@ func _on_died() -> void:
 	#
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("end_attack")
-	state_chart.send_event("hand_finished")
 	return
 
 

@@ -4,7 +4,7 @@ class_name BossBlackjack
 signal hand_attack_finished(hand)
 signal all_hand_attacks_finished
 
-@export var DEBUG_blackjack: bool = false
+@export var DEBUG_blackjack: bool = true
 
 @export_group("Movement")
 var flying_nav: NavigationRegion3D
@@ -225,20 +225,26 @@ func despawn_hand(hand: BlackjackHand, reorder_hands: bool = false) -> void:
 		push_error("Can't despawn hand that wasn't spawned")
 	
 	var despawned_idx: int = spawned_hands.find(hand)
-	spawned_hands.erase(hand)
+	spawned_hands.pop_at(despawned_idx)
 	despawned_hands.push_back(hand)
-	_release_hand(hand)
 	
 	# When we erase a hand from the spawned hands array, the other hands move up.
 	# So we want to re-anchor all hands when this happens.
 	if reorder_hands:
 		# Only re-order the first two hands
 		if despawned_idx <= 1:
+			# Prioritise replacing the dealing hand with idx 3 during blackjack
+			if spawned_hands.size() == 4:
+				var _hand = spawned_hands.pop_at(3)
+				spawned_hands.push_front(_hand)
+				_anchor_hand(_hand)
 			for i in range(despawned_idx, spawned_hands.size()):
 				var _hand = spawned_hands[i]
 				_anchor_hand(_hand)
 	
 	await hand.fake_destroy()
+	await hand.dust_particle.finished
+	_release_hand(hand)
 
 # Bring a "dead" hand back as a new hand without instantiating a new scene
 func respawn_hand(hand: BlackjackHand) -> void:
@@ -338,10 +344,12 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 func _release_hand(hand: BlackjackHand) -> void:
 	var hand_parent: Node3D = hand.get_parent()
 	var cached_pos: Vector3 = hand.global_position
+	
 	if hand_parent:
 		hand_parent.remove_child(hand)
-	
 	scene_root.add_child(hand)
+	
+	hand.position = Vector3.ZERO
 	hand.global_position = cached_pos
 	hand.anchor_offset = Vector3.ZERO
 
@@ -380,11 +388,14 @@ func _start_hand_attack() -> void:
 func trigger_all_hand_attacks_sim(attack_event: String, hand_delay: float = 0.0) -> void:
 	var hands_to_attack = spawned_hands.duplicate()
 	for hand in hands_to_attack:
-		hand.state_chart.send_event("activate")
-		_release_hand(hand)
-		hand.state_chart.send_event(attack_event)
-		if hand_delay:
-			await get_tree().create_timer(hand_delay).timeout
+		while hand in spawned_hands:
+			hand.state_chart.send_event("activate")
+			_release_hand(hand)
+			hand.state_chart.send_event(attack_event)
+			hand.state_chart.send_event("hand_targeting")
+			if hand_delay:
+				await get_tree().create_timer(hand_delay).timeout
+			break
 		if spawned_hands.size() == 0:
 			break
 	
