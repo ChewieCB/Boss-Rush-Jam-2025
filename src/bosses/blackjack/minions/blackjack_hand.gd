@@ -12,6 +12,8 @@ class_name BlackjackHand
 var anchor_offset: Vector3
 var is_offhand: bool = false  # flag to set handed-ness so we can flip sweep direction
 
+@export var attack_speed_scale: float = 1.0
+
 ## Attacks
 # Hit
 var slam_target: Vector3
@@ -165,7 +167,12 @@ func _on_hit_slamming_state_entered() -> void:
 	# creating a small AoE and some particles on impact
 	hurtbox.set_deferred("monitoring", true)
 	slam_tween = get_tree().create_tween()
-	slam_tween.tween_property(self, "global_position", slam_target, slam_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	slam_tween.tween_property(
+		self, 
+		"global_position", 
+		slam_target, 
+		slam_time * attack_speed_scale
+	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	await slam_tween.finished
 	# TODO - generate explosion and damage
 	spawn_dust()
@@ -207,7 +214,12 @@ func _on_stand_move_to_target_state_entered() -> void:
 	stand_hover_target.y = self.global_position.y
 	
 	stand_tween = get_tree().create_tween()
-	stand_tween.tween_property(self, "global_position", stand_hover_target, slam_time * 2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	stand_tween.tween_property(
+		self, 
+		"global_position", 
+		stand_hover_target, 
+		slam_time * 2 * attack_speed_scale
+	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	
 	await stand_tween.finished
 	
@@ -234,9 +246,14 @@ func _on_stand_double_tap_state_entered() -> void:
 		stand_target.y = result.position.y
 	#draw_debug_sphere(stand_target, 0.5, Color.YELLOW)
 	
-	var slam_tween := get_tree().create_tween()
+	slam_tween = get_tree().create_tween()
 	for i in range(2):
-		slam_tween.tween_property(self, "global_position", stand_target, stand_slam_down_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+		slam_tween.tween_property(
+			self, 
+			"global_position", 
+			stand_target, 
+			stand_slam_down_time * attack_speed_scale
+		).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 		slam_tween.tween_callback(
 			func(): 
 				spawn_dust()
@@ -251,7 +268,12 @@ func _on_stand_double_tap_state_entered() -> void:
 				await _shockwave.finished
 				shockwave_instance_pool.push_back(_shockwave)
 		)
-		slam_tween.chain().tween_property(self, "global_position:y", cached_y, stand_slam_up_time).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+		slam_tween.chain().tween_property(
+			self, 
+			"global_position:y", 
+			cached_y, 
+			stand_slam_up_time * attack_speed_scale
+		).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
 	await slam_tween.finished
 	
@@ -413,7 +435,12 @@ func _on_sweep_sweeping_state_entered() -> void:
 	sweep_tween = get_tree().create_tween()
 	sweep_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	# Parent hand motion
-	sweep_tween.tween_property(self, "sweep_progress", 1.0, sweep_time)
+	sweep_tween.tween_property(
+		self, 
+		"sweep_progress", 
+		1.0, 
+		sweep_time * attack_speed_scale
+	)
 	
 	# Card mesh width is 2.08, and we overlap around 0.1-0.3
 	var curve_length: float  = curve.get_baked_length()
