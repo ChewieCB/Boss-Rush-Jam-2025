@@ -574,6 +574,13 @@ func _on_dealing_dealing_state_entered() -> void:
 	_abort_deal_tween()
 
 
+func _on_dealing_dealing_state_exited() -> void:
+	for hand_arr in [spawned_hands, despawned_hands, finished_hands]:
+		for hand in hand_arr:
+			if hand.health_component.died.is_connected(_abort_deal_tween):
+				hand.health_component.died.disconnect(_abort_deal_tween)
+
+
 func _abort_deal_tween() -> void:
 	if deal_tween:
 		deal_tween.kill()
@@ -592,10 +599,6 @@ func _on_dealing_dealing_state_physics_processing(_delta: float) -> void:
 
 
 func _on_dealing_recover_state_entered() -> void:
-	# TODO
-	for hand in spawned_hands:
-		if hand.health_component.died.is_connected(_abort_deal_tween):
-			hand.health_component.died.disconnect(_abort_deal_tween)
 	state_chart.send_event("trigger_phase_1")
 	state_chart.send_event("end_recovery")
 

@@ -436,7 +436,7 @@ _data = {
 
 [node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
-DEBUG_blackjack = false
+DEBUG_blackjack = true
 min_flying_height = 0.0
 max_flying_height = 14.0
 min_wander_distance = 2.0
@@ -995,6 +995,7 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Dealing/Idle" to="." method="_on_dealing_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Dealing/Dealing" to="." method="_on_dealing_dealing_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/AttackPhase/Dealing/Dealing" to="." method="_on_dealing_dealing_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Dealing/Dealing" to="." method="_on_dealing_dealing_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Dealing/Recover" to="." method="_on_dealing_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Bust/Idle" to="." method="_on_bust_idle_state_entered"]
