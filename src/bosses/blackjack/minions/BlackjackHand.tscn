@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://c75qkumkprb7m"]
+[gd_scene load_steps=39 format=3 uid="uid://c75qkumkprb7m"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_vy3jw"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/minions/blackjack_hand.gd" id="2_ktxam"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="5_c4mgp"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_a6hkh"]
 [ext_resource type="Texture2D" uid="uid://cqk3cj3gm501e" path="res://src/bosses/blackjack/assets/sprites/fist_temp_vert.png" id="7_drl3q"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="8_y3b8c"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="9_0o8um"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="9_spp24"]
 [ext_resource type="PackedScene" uid="uid://dl8cnd88fnws2" path="res://src/bosses/tutorial/SlamParticles.tscn" id="11_7ncmo"]
 [ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="11_a3iol"]
@@ -23,8 +25,28 @@ size = Vector3(3, 3, 3)
 [sub_resource type="SphereShape3D" id="SphereShape3D_uy85v"]
 radius = 3.5
 
+[sub_resource type="Resource" id="Resource_vm1to"]
+script = ExtResource("8_y3b8c")
+state = NodePath("../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_2xrt7"]
+script = ExtResource("9_0o8um")
+guard = SubResource("Resource_vm1to")
+
 [sub_resource type="Animation" id="Animation_8e3f2"]
 length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:billboard")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
 
 [sub_resource type="Animation" id="Animation_dshkv"]
 resource_name = "death"
@@ -98,6 +120,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 1.497, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:billboard")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.0666667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
 }
 
 [sub_resource type="Animation" id="Animation_7csh5"]
@@ -392,8 +426,8 @@ delay_per_projectile = 0.6
 GRAVITY = 0.0
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(0.635, 0, 0, 0, 0.635, 0, 0, 0, 0.635, 0, 1.497, 0)
-texture = ExtResource("2_mlpb3")
+transform = Transform3D(-2.29869e-06, -0.635, 0, 0.635, -2.29869e-06, 0, 0, 0, 0.635, 0, 1.497, 0)
+texture = ExtResource("7_drl3q")
 
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -430,21 +464,21 @@ script = ExtResource("5_c4mgp")
 script = ExtResource("4_4jfnf")
 to = NodePath("../../Hit")
 event = &"start_hit_attack"
-guard = ExtResource("9_spp24")
+guard = SubResource("Resource_2xrt7")
 delay_in_seconds = "0.0"
 
 [node name="toStand" type="Node" parent="StateChart/Root/Phase/Idle" index="1"]
 script = ExtResource("4_4jfnf")
 to = NodePath("../../Stand")
 event = &"start_stand_attack"
-guard = ExtResource("9_spp24")
+guard = SubResource("Resource_2xrt7")
 delay_in_seconds = "0.0"
 
 [node name="toSweep" type="Node" parent="StateChart/Root/Phase/Idle" index="2"]
 script = ExtResource("4_4jfnf")
 to = NodePath("../../Sweep")
 event = &"start_sweep_attack"
-guard = ExtResource("9_spp24")
+guard = SubResource("Resource_2xrt7")
 delay_in_seconds = "0.0"
 
 [node name="toInactive" type="Node" parent="StateChart/Root/Phase/Idle" index="3"]
@@ -525,9 +559,19 @@ delay_in_seconds = "0.0"
 
 [node name="Stand" type="Node" parent="StateChart/Root/Phase" index="3"]
 script = ExtResource("6_a6hkh")
-initial_state = NodePath("Targeting")
+initial_state = NodePath("Idle")
 
-[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Stand" index="0"]
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Stand" index="0"]
+script = ExtResource("5_c4mgp")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Stand/Idle" index="0"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Targeting")
+event = &"hand_targeting"
+guard = ExtResource("9_spp24")
+delay_in_seconds = "0.0"
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Stand" index="1"]
 script = ExtResource("5_c4mgp")
 
 [node name="toMoveToTarget" type="Node" parent="StateChart/Root/Phase/Stand/Targeting" index="0"]
@@ -537,7 +581,14 @@ event = &"hand_move"
 guard = ExtResource("9_spp24")
 delay_in_seconds = "0.0"
 
-[node name="MoveToTarget" type="Node" parent="StateChart/Root/Phase/Stand" index="1"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Stand/Targeting" index="1"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Idle")
+event = &"hand_finished"
+guard = ExtResource("9_spp24")
+delay_in_seconds = "0.0"
+
+[node name="MoveToTarget" type="Node" parent="StateChart/Root/Phase/Stand" index="2"]
 script = ExtResource("5_c4mgp")
 
 [node name="toDoubleTap" type="Node" parent="StateChart/Root/Phase/Stand/MoveToTarget" index="0"]
@@ -547,7 +598,14 @@ event = &"hand_double_tap"
 guard = ExtResource("9_spp24")
 delay_in_seconds = "0.0"
 
-[node name="DoubleTap" type="Node" parent="StateChart/Root/Phase/Stand" index="2"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Stand/MoveToTarget" index="1"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Idle")
+event = &"hand_finished"
+guard = ExtResource("9_spp24")
+delay_in_seconds = "0.0"
+
+[node name="DoubleTap" type="Node" parent="StateChart/Root/Phase/Stand" index="3"]
 script = ExtResource("5_c4mgp")
 
 [node name="toReturning" type="Node" parent="StateChart/Root/Phase/Stand/DoubleTap" index="0"]
@@ -564,23 +622,30 @@ event = &"hand_repeat"
 guard = ExtResource("9_spp24")
 delay_in_seconds = "0.0"
 
-[node name="Returning" type="Node" parent="StateChart/Root/Phase/Stand" index="3"]
-script = ExtResource("5_c4mgp")
-
-[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Stand/Returning" index="0"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Stand/DoubleTap" index="2"]
 script = ExtResource("4_4jfnf")
-to = NodePath("../../Targeting")
+to = NodePath("../../Idle")
 event = &"hand_finished"
 guard = ExtResource("9_spp24")
 delay_in_seconds = "0.0"
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Stand" index="4"]
+[node name="Returning" type="Node" parent="StateChart/Root/Phase/Stand" index="4"]
+script = ExtResource("5_c4mgp")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Stand/Returning" index="0"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Idle")
+event = &"hand_finished"
+guard = ExtResource("9_spp24")
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Stand" index="5"]
 script = ExtResource("4_4jfnf")
 to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Stand" index="5"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Stand" index="6"]
 script = ExtResource("4_4jfnf")
 to = NodePath("../../Inactive")
 event = &"deactivate"
@@ -588,9 +653,19 @@ delay_in_seconds = "0.0"
 
 [node name="Sweep" type="Node" parent="StateChart/Root/Phase" index="4"]
 script = ExtResource("6_a6hkh")
-initial_state = NodePath("Targeting")
+initial_state = NodePath("Idle")
 
-[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Sweep" index="0"]
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Sweep" index="0"]
+script = ExtResource("5_c4mgp")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Sweep/Idle" index="0"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Targeting")
+event = &"hand_targeting"
+guard = ExtResource("9_spp24")
+delay_in_seconds = "0.0"
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Sweep" index="1"]
 script = ExtResource("5_c4mgp")
 
 [node name="toMoveToTarget" type="Node" parent="StateChart/Root/Phase/Sweep/Targeting" index="0"]
@@ -600,7 +675,14 @@ event = &"hand_move"
 guard = ExtResource("9_spp24")
 delay_in_seconds = "0.0"
 
-[node name="MoveToTarget" type="Node" parent="StateChart/Root/Phase/Sweep" index="1"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Sweep/Targeting" index="1"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Idle")
+event = &"hand_finished"
+guard = ExtResource("9_spp24")
+delay_in_seconds = "0.0"
+
+[node name="MoveToTarget" type="Node" parent="StateChart/Root/Phase/Sweep" index="2"]
 script = ExtResource("5_c4mgp")
 
 [node name="toSweeping" type="Node" parent="StateChart/Root/Phase/Sweep/MoveToTarget" index="0"]
@@ -610,7 +692,14 @@ event = &"hand_sweep"
 guard = ExtResource("9_spp24")
 delay_in_seconds = "0.0"
 
-[node name="Sweeping" type="Node" parent="StateChart/Root/Phase/Sweep" index="2"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Sweep/MoveToTarget" index="1"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Idle")
+event = &"hand_finished"
+guard = ExtResource("9_spp24")
+delay_in_seconds = "0.0"
+
+[node name="Sweeping" type="Node" parent="StateChart/Root/Phase/Sweep" index="3"]
 script = ExtResource("5_c4mgp")
 
 [node name="toReturning" type="Node" parent="StateChart/Root/Phase/Sweep/Sweeping" index="0"]
@@ -620,23 +709,30 @@ event = &"hand_return"
 guard = ExtResource("9_spp24")
 delay_in_seconds = "0.0"
 
-[node name="Returning" type="Node" parent="StateChart/Root/Phase/Sweep" index="3"]
-script = ExtResource("5_c4mgp")
-
-[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Sweep/Returning" index="0"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Sweep/Sweeping" index="1"]
 script = ExtResource("4_4jfnf")
-to = NodePath("../../Targeting")
+to = NodePath("../../Idle")
 event = &"hand_finished"
 guard = ExtResource("9_spp24")
 delay_in_seconds = "0.0"
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Sweep" index="4"]
+[node name="Returning" type="Node" parent="StateChart/Root/Phase/Sweep" index="4"]
+script = ExtResource("5_c4mgp")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Sweep/Returning" index="0"]
+script = ExtResource("4_4jfnf")
+to = NodePath("../../Idle")
+event = &"hand_finished"
+guard = ExtResource("9_spp24")
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Sweep" index="5"]
 script = ExtResource("4_4jfnf")
 to = NodePath("../../Idle")
 event = &"end_attack"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Sweep" index="5"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Sweep" index="6"]
 script = ExtResource("4_4jfnf")
 to = NodePath("../../Inactive")
 event = &"deactivate"
@@ -673,6 +769,7 @@ free_on_finished = false
 [connection signal="state_entered" from="StateChart/Root/Phase/Hit/Slamming" to="." method="_on_hit_slamming_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Hit/Slamming" to="." method="_on_hit_slamming_state_physics_process"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Hit/Returning" to="." method="_on_hit_returning_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Stand" to="." method="_on_stand_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Stand/Targeting" to="." method="_on_stand_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Stand/MoveToTarget" to="." method="_on_stand_move_to_target_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Stand/DoubleTap" to="." method="_on_stand_double_tap_state_entered"]

@@ -436,7 +436,7 @@ _data = {
 
 [node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
-DEBUG_blackjack = true
+DEBUG_blackjack = false
 min_flying_height = 0.0
 max_flying_height = 14.0
 min_wander_distance = 2.0
@@ -460,7 +460,7 @@ blackjack_time_max = 25.0
 blackjack_timer = NodePath("BlackjackTimer")
 bust_particles_parent = NodePath("HoverPlatform/BustParticles")
 bust_self_damage = 150.0
-attack_speed_scale = 4.0
+attack_speed_scale = 1.5
 slam_shockwave_prefab = ExtResource("4_cv1yb")
 sweep_dist = 12.0
 sweep_angle_deg = 70.0
@@ -616,9 +616,6 @@ max_health = 6000.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Blackjack"
-
-[node name="StateChartDebugger" parent="DebugUI" index="0"]
-enabled = true
 
 [node name="Blackjack" type="Node" parent="StateChart/Root/Status" index="5"]
 script = ExtResource("6_pje5c")

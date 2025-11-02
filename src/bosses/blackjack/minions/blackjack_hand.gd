@@ -60,6 +60,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_died() -> void:
+	anim_player.play("blackjack_hand/RESET")
 	state_chart.send_event("hand_finished")
 	for tween in [slam_tween, stand_tween, sweep_tween]:
 		if tween:
@@ -161,7 +162,7 @@ func _on_hit_targeting_state_entered() -> void:
 func _on_hit_slamming_state_entered() -> void:
 	debug_state_label.text = "Hit | Slamming"
 	
-	anim_player.play("RESET")
+	anim_player.play("blackjack_hand/RESET")
 	
 	# Quickly zoom towards the target point, 
 	# creating a small AoE and some particles on impact
@@ -203,6 +204,9 @@ func _on_stand_targeting_state_entered() -> void:
 	var target_spread_angle: float = randf_range(-PI/2, PI/2)
 	# TODO - figure out a good way to maintain separation between hands when choosing a new stand target
 	stand_target = target.global_position - (target.global_basis.z * stand_range).rotated(Vector3.UP, target_spread_angle)
+	
+	#if anim_player.is_playing():
+		#await anim_player.animation_finished
 	
 	state_chart.send_event("hand_move")
 
@@ -297,16 +301,15 @@ func _on_stand_returning_state_entered() -> void:
 	anim_player.play("blackjack_hand/to_horizontal")
 	anim_player.queue("blackjack_hand/horizontal")
 	
-	# Return to boss 
-	#var target_pos: Vector3 = controller_boss.get_hand_anchor_point(self)
-	##draw_debug_sphere(target_pos, 2.0, Color.GREEN)
-	#var return_tween := get_tree().create_tween()
-	#return_tween.tween_property(self, "global_position", target_pos, slam_time * 3).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
-	#
-	#await return_tween.finished
+	#if anim_player.is_playing():
+		#await anim_player.animation_finished
 	
 	state_chart.send_event("end_attack")
 	state_chart.send_event("hand_finished")
+
+
+func _on_stand_state_exited() -> void:
+	anim_player.play("blackjack_hand/RESET")
 
 
 func spawn_shockwave(spawn_pos: Vector3 = self.global_position, max_radius: float = stand_wave_radius, damage: float = stand_wave_damage, time: float = stand_wave_time) -> Area3D:
@@ -387,7 +390,7 @@ func _on_sweep_move_to_target_state_entered() -> void:
 
 
 func _on_sweep_sweeping_state_entered() -> void:
-	anim_player.play("RESET")
+	anim_player.play("blackjack_hand/RESET")
 	# Generate a curved path3D to sweep along, 
 	# targeting the player position in the middle of the curve.
 	var start_pos: Vector3 = sweep_start_pos 

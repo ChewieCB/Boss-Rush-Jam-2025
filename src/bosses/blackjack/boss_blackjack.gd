@@ -4,7 +4,7 @@ class_name BossBlackjack
 signal hand_attack_finished(hand)
 signal all_hand_attacks_finished
 
-@export var DEBUG_blackjack: bool = true
+@export var DEBUG_blackjack: bool = false
 
 @export_group("Movement")
 var flying_nav: NavigationRegion3D
@@ -65,7 +65,7 @@ var hand_count: int = 0
 var intro_path_points: Array[Node] = []
 
 @export_group("Attacks")
-@export var attack_speed_scale: float = 4.0:
+@export var attack_speed_scale: float = 1.5:
 	set(value):
 		attack_speed_scale = value
 		for hand in spawned_hands:
@@ -172,8 +172,8 @@ func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
 	
-	state_chart.send_event("start_hand_slam_attack")
-	#state_chart.send_event("start_hand_stand_attack")
+	#state_chart.send_event("start_hand_slam_attack")
+	state_chart.send_event("start_hand_stand_attack")
 	#state_chart.send_event("start_hand_sweep_attack")
 	#state_chart.send_event("start_hand_tilt_attack")
 	#var chance = randf()
@@ -323,7 +323,7 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 		hand_spawn_tween.tween_property(hand, "position", hand_offset * Vector3(-1, 1, 1), move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		#hand_spawn_tween.tween_property(hand, "global_position", self.global_position + hand_offset, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		hand_spawn_tween.parallel().tween_property(hand, "scale", Vector3.ONE, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		print("Tweening hand")
+		print("Tweening hand to %s" % [hand_offset * Vector3(-1, 1, 1)])
 		await hand_spawn_tween.finished
 		print("Tween finished")
 		
