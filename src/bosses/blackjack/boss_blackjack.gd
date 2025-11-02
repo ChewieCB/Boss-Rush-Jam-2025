@@ -85,6 +85,7 @@ var sweep_card_instance_pool := []
 var tilt_platform_origin_marker: Node
 var tilt_hand_markers: Array[Node]
 var tilt_tween: Tween
+var hand_tween: Tween
 @export var tilt_mesh: Node3D
 @export var tilt_animateable_floor: AnimatableBody3D
 var tilt_particles: GPUParticles3D
@@ -174,8 +175,8 @@ func select_attack_phase_1() -> void:
 	
 	#state_chart.send_event("start_hand_slam_attack")
 	#state_chart.send_event("start_hand_stand_attack")
-	state_chart.send_event("start_hand_sweep_attack")
-	#state_chart.send_event("start_hand_tilt_attack")
+	#state_chart.send_event("start_hand_sweep_attack")
+	state_chart.send_event("start_hand_tilt_attack")
 	#var chance = randf()
 	#if chance < 0.25:
 		#state_chart.send_event("start_hand_slam_attack")
@@ -592,6 +593,9 @@ func _on_dealing_dealing_state_physics_processing(_delta: float) -> void:
 
 func _on_dealing_recover_state_entered() -> void:
 	# TODO
+	for hand in spawned_hands:
+		if hand.health_component.died.is_connected(_abort_deal_tween):
+			hand.health_component.died.disconnect(_abort_deal_tween)
 	state_chart.send_event("trigger_phase_1")
 	state_chart.send_event("end_recovery")
 
@@ -711,8 +715,8 @@ func _on_blackjack_active_state_exited() -> void:
 	max_hand_spawn = 2
 	var current_hand_count: int = spawned_hands.size()
 	if current_hand_count > 2:
-		for i in range(current_hand_count - 2):
-			var _hand = spawned_hands[spawned_hands.size() - 1 - i]
+		for i in range(1, current_hand_count - 1):
+			var _hand = spawned_hands[-i]
 			despawn_hand(_hand)
 	blackjack_particles.emitting = false
 
@@ -767,7 +771,7 @@ func _on_bust_recover_state_entered() -> void:
 func _on_tilt_moving_to_pos_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	# Move two hands to marker positions
-	var hand_tween = get_tree().create_tween()
+	hand_tween = get_tree().create_tween()
 	hand_tween.set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 	hand_tween.tween_property(self, "global_position", tilt_platform_origin_marker.global_position, 0.8)
 	for i in range(2):
@@ -780,6 +784,15 @@ func _on_tilt_moving_to_pos_state_entered() -> void:
 	await hand_tween.finished
 	
 	state_chart.send_event("start_tilting")
+
+
+func _on_tilt_moving_to_pos_state_physics_processing(delta: float) -> void:
+	if spawned_hands.size() == 0:
+		if hand_tween:
+			hand_tween.kill()
+			state_chart.send_event("end_attack")
+			_recover_entered()
+
 
 
 func _on_tilt_tilting_state_entered() -> void:
