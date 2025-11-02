@@ -45,7 +45,7 @@ const SUIT_CARDS: Dictionary = {
 	"EIGHT": 8, "NINE": 9, "TEN": 10, "JACK": 10, "QUEEN": 10, "KING": 10, "JOKER": 0
 }
 var deal_tween: Tween
-@export var deal_speed_scale: float = 1.5
+@export var deal_speed_scale: float = 1.0
 @export var card_textures: Array[CompressedTexture2D]
 @export var dealing_anim_points: Array[Marker3D]
 @export var hand_count_label: Label3D
@@ -65,7 +65,7 @@ var hand_count: int = 0
 var intro_path_points: Array[Node] = []
 
 @export_group("Attacks")
-@export var attack_speed_scale: float = 1.5:
+@export var attack_speed_scale: float = 1.0:
 	set(value):
 		attack_speed_scale = value
 		for hand in spawned_hands:
@@ -173,8 +173,8 @@ func select_attack_phase_1() -> void:
 	state_chart.send_event("end_recovery")
 	
 	#state_chart.send_event("start_hand_slam_attack")
-	state_chart.send_event("start_hand_stand_attack")
-	#state_chart.send_event("start_hand_sweep_attack")
+	#state_chart.send_event("start_hand_stand_attack")
+	state_chart.send_event("start_hand_sweep_attack")
 	#state_chart.send_event("start_hand_tilt_attack")
 	#var chance = randf()
 	#if chance < 0.25:
@@ -260,11 +260,7 @@ func respawn_hand(hand: BlackjackHand) -> void:
 	hand.reinstate()
 	hand.spawn_dust()
 	hand.spawn_explosion()
-	print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-	print("Hand spawned, anchoring")
 	await _anchor_hand(hand)
-	print("Hand anchored")
-	print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 	hand.health_component.is_invincible = false
 	hand.state_chart.send_event("activate")
 
@@ -283,7 +279,6 @@ func get_hand_anchor_point(hand: BlackjackHand) -> Vector3:
 
 # Move the hand scene to a child of the boss so they can move together
 func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
-	print("Anchoring hand %s" % hand.name)
 	# Cache hand position so we can add the hand as a child of the hand anchor
 	# to get smooth, relative movement, but start in the same position without snapping
 	var cached_hand_pos: Vector3 = hand.global_position
@@ -300,20 +295,12 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 	# in the array of spawned hands.
 	var hand_idx = spawned_hands.find(hand)
 	if hand_idx == -1:
-		print("Hand %s not found in spawned hands" % hand.name)
 		return
 	
 	var lr_sign: int = -1 if hand_idx % 2 == 0 else 1
 	var idx_spacing = ceil(float(hand_idx + 1) / 2)
 	var hand_offset := Vector3(hand_spacing * idx_spacing * lr_sign, 2.0 * idx_spacing, 0)
 	hand.anchor_offset = hand_offset
-	print("===========================================")
-	print("hand idx: %s" % hand_idx)
-	print("hand global pos set to: %s" % cached_hand_pos)
-	print("hand local pos: %s" % hand.position)
-	print("hand anchor pos: %s" % hand_anchor.position)
-	print("anchor offset: %s" % hand_offset)
-	print("===========================================")
 	# Add offhand flag for even index hands so we can flip paths directions for left sided hands
 	hand.is_offhand = (lr_sign == -1)
 	
@@ -323,9 +310,7 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 		hand_spawn_tween.tween_property(hand, "position", hand_offset * Vector3(-1, 1, 1), move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		#hand_spawn_tween.tween_property(hand, "global_position", self.global_position + hand_offset, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		hand_spawn_tween.parallel().tween_property(hand, "scale", Vector3.ONE, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		print("Tweening hand to %s" % [hand_offset * Vector3(-1, 1, 1)])
 		await hand_spawn_tween.finished
-		print("Tween finished")
 		
 		## Position needs to be flipped for some reason, relative rotation issue?
 		#hand.position = hand_offset * Vector3(-1, 1, 1)
@@ -335,7 +320,6 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 		# another - we could want the spawned hand to take the place of the undocked one for a quick reload
 		# type behaviour.
 		return
-	print("Hand despawned")
 	if hand_spawn_tween:
 		hand_spawn_tween.kill()
 
@@ -362,10 +346,7 @@ func _hand_on_event_received(event: String, hand: BossCore) -> void:
 
 func _hand_finished(hand: BossCore) -> void:
 	finished_hands.append(hand)
-	print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-	print("Hand finished")
 	_anchor_hand(hand)
-	print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 	hand_attack_finished.emit(hand)
 	# Check against the max current hand size, not currently spawned hands
 	# since this will end early if the player destroys a hand mid-attack
@@ -511,7 +492,6 @@ func _on_dealing_idle_state_entered() -> void:
 	var start_hand_count: int = spawned_hands.size()
 	if start_hand_count < max_hand_spawn:
 		for i in range(max_hand_spawn - start_hand_count):
-			print("Respawning hand %s" % i)
 			await respawn_hand(despawned_hands.front())
 	
 	state_chart.send_event("start_deal")
@@ -753,7 +733,6 @@ func _on_bust_exploding_state_entered() -> void:
 	# Show joker card anim
 	card_particles.draw_pass_1.surface_get_material(0).albedo_texture = card_textures[13]
 	card_particles.emitting = true
-	card_particles.lifetime *= 2
 	card_explosion_particles.emitting = true
 	
 	var emitters = bust_particles_parent.get_children()

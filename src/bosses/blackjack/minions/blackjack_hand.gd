@@ -479,9 +479,9 @@ func _on_sweep_sweeping_state_entered() -> void:
 	for kvm in sweep_card_follows:
 		var _card = kvm["card"]
 		var _follow = kvm["path_follow"]
-		var cached_pos: Vector3 = _card.global_position
-		var cached_trans: Transform3D = _card.global_transform
 		if is_instance_valid(_card):
+			var cached_pos: Vector3 = _card.global_position
+			var cached_trans: Transform3D = _card.global_transform
 			_follow.remove_child(_card)
 			scene_root.add_child(_card)
 			_card.global_transform = cached_trans
