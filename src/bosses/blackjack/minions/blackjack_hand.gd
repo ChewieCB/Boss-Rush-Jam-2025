@@ -80,6 +80,7 @@ func _on_died() -> void:
 
 func _on_health_dead_state_entered() -> void:
 	# Override the default state so we don't disable the anim player on death
+	#
 	# Since hands are re-used after death, most of the death logic is handled
 	# in _on_died(), this method currently just changes the sprite colour
 	sprite.modulate = Color.DARK_SLATE_BLUE

@@ -153,10 +153,6 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# DEBUG - force destroy all spawned hands
-	if Input.is_action_just_pressed("input_1"):
-		for hand in spawned_hands:
-			despawn_hand(hand)
 	return
 
 
@@ -174,18 +170,18 @@ func select_attack_phase_1() -> void:
 	state_chart.send_event("end_recovery")
 	
 	#state_chart.send_event("start_hand_slam_attack")
-	state_chart.send_event("start_hand_stand_attack")
+	#state_chart.send_event("start_hand_stand_attack")
 	#state_chart.send_event("start_hand_sweep_attack")
 	#state_chart.send_event("start_hand_tilt_attack")
-	#var chance = randf()
-	#if chance < 0.25:
-		#state_chart.send_event("start_hand_slam_attack")
-	#elif chance < 0.50:
-		#state_chart.send_event("start_hand_sweep_attack")
-	#elif chance < 0.75:
-		#state_chart.send_event("start_hand_tilt_attack")
-	#else:
-		#state_chart.send_event("start_hand_stand_attack")
+	var chance = randf()
+	if chance < 0.25:
+		state_chart.send_event("start_hand_slam_attack")
+	elif chance < 0.50:
+		state_chart.send_event("start_hand_sweep_attack")
+	elif chance < 0.75:
+		state_chart.send_event("start_hand_tilt_attack")
+	else:
+		state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS
