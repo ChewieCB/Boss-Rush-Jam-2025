@@ -125,9 +125,9 @@ func _ready() -> void:
 		# Collider
 		tilt_proj_explosion_area = tilt_proj_explosion_area_scene.instantiate()
 		scene_root.add_child(tilt_proj_explosion_area)
-		tilt_proj_explosion_area.global_position = self.global_position
+		tilt_proj_explosion_area.global_position = hand_spawn_pos.global_position
 		tilt_proj_explosion_area.get_child(0).shape.radius = tilt_explosion_radius
-		#tilt_proj_explosion_area.set_deferred("monitoring", false)
+		tilt_proj_explosion_area.set_deferred("monitoring", false)
 		
 		# Instance re-usable explosion scenes for later
 		for i in range(tilt_proj_explosion_count * 3):
@@ -712,11 +712,14 @@ func _on_blackjack_timer_timeout() -> void:
 func _on_blackjack_active_state_exited() -> void:
 	hand_count_label.modulate = Color.WHITE
 	max_hand_spawn = 2
-	var current_hand_count: int = spawned_hands.size()
-	if current_hand_count > 2:
-		for i in range(1, current_hand_count - 1):
-			var _hand = spawned_hands[-i]
-			despawn_hand(_hand)
+	var current_hands := spawned_hands.duplicate()
+	var current_hand_count: int = current_hands.size()
+	match current_hand_count:
+		4:
+			despawn_hand(current_hands[3], true)
+			despawn_hand(current_hands[2], true)
+		3:
+			despawn_hand(current_hands[2], true)
 	blackjack_particles.emitting = false
 
 
@@ -849,13 +852,13 @@ func _on_tilt_firing_state_entered() -> void:
 					if spawned_hands.size() < 3:
 						break
 					proj_origin = spawned_hands[2].global_position
-					target_offset = Vector3(7.5, 0, 0)
+					target_offset = Vector3(-7.5, 0, 0)
 				2:
 					# Right Hand projectile, aim wide to the right
 					if spawned_hands.size() < 4:
 						break
 					proj_origin = spawned_hands[3].global_position
-					target_offset = Vector3(-7.5, 0, 0)
+					target_offset = Vector3(7.5, 0, 0)
 			
 			# TODO - break this up into sub functions for readability
 			#
@@ -906,14 +909,15 @@ func _on_tilt_firing_state_entered() -> void:
 			path.queue_free()
 			
 			# Spawn a damaging area 3d
-			#tilt_proj_explosion_area.set_deferred("monitoring", true)
+			tilt_proj_explosion_area.set_deferred("monitoring", true)
 			tilt_proj_explosion_area.global_position = hit_pos
 			for body in tilt_proj_explosion_area.get_overlapping_bodies():
 				if "health_component" in body:
 					body.health_component.damage(tilt_explosion_damage)
 				else:
 					body.queue_free()
-			#tilt_proj_explosion_area.set_deferred("monitoring", false)
+			tilt_proj_explosion_area.set_deferred("monitoring", false)
+			tilt_proj_explosion_area.global_position = hand_spawn_pos.global_position
 			# Spawn an explosion on impact
 			for k in range(tilt_proj_explosion_count):
 				var _pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
