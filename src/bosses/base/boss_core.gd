@@ -789,3 +789,23 @@ func _on_status_shocked_active_state_exited() -> void:
 
 func _on_status_shocked_active_state_physics_processing(_delta: float) -> void:
 	pass
+
+
+## Attack spawn helpers
+#
+## DECALS
+func spawn_decal_at_pos(pos: Vector3, texture: CompressedTexture2D, size: Vector3 = Vector3(0, 1, 0)) -> Decal:
+	var _decal := _create_decal(texture, size)
+	scene_root.add_child(_decal)
+	_decal.global_position = pos
+	return _decal
+
+func _create_decal(texture: CompressedTexture2D, size: Vector3 = Vector3(0, 1, 0)) -> Decal:
+	var _decal := Decal.new()
+	_decal.texture_albedo = texture
+	_decal.size = size
+	return _decal
+
+func _cleanup_aoe_decals(decals_to_remove: Array) -> void:
+	for decal in decals_to_remove:
+		decal.queue_free()
