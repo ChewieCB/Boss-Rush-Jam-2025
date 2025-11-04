@@ -45,7 +45,6 @@ func stop_spin():
 		last_chosen_queue.pop_at(last_chosen_queue.find(chosen_id))
 	last_chosen_queue.push_front(chosen_id)
 
-
 func _process(delta: float) -> void:
 	if not is_spinning:
 		return
@@ -66,23 +65,20 @@ func get_active_effect():
 
 
 func get_less_used_effects() -> int:
-	var effect_id: int = -1
+	var effect_id: int = 0
 	var chance: float = randf()
-	var max_idx: int = effect_list.size() - 1
-	if max_idx == 0:
+	var effect_size: int = effect_list.size()
+	if effect_size <= 1:
 		effect_id = 0
 	else:
 		match last_chosen_queue.size():
 			# If we haven't chosen any effects, pick one at random
 			0:
-				effect_id = randi_range(0, len(effect_list) - 1)
-			# If we have chosen all effects previously, pick the least recent effect
-			max_idx:
-				# 20% chance to get same barrel
-				if chance <= 0.4:
-					effect_id = last_chosen_queue.front()
-				elif chance <= 0.7:
-					effect_id = last_chosen_queue[1]
+				effect_id = randi_range(0, effect_size - 1)
+			# If we have chosen all effects previously, 50% pick least recent, 50% pick randomly
+			effect_size:
+				if chance <= 0.5:
+					effect_id = randi_range(0, effect_size - 1)
 				else:
 					effect_id = last_chosen_queue.back()
 			# If we've chosen some, but not all, effects before, pick a random effect we haven't chosen yet
@@ -91,17 +87,13 @@ func get_less_used_effects() -> int:
 				if chance <= 0.2:
 					effect_id = last_chosen_queue.front()
 				else:
-					var unused_effects = range(0, len(effect_list))
+					var unused_effects = range(0, effect_size)
 					unused_effects = unused_effects.filter(
 						func(id):
 							return id not in last_chosen_queue
 					)
 					if unused_effects:
-						if chance <= 0.6:
-							effect_id = unused_effects.front()
-						else:
-							effect_id = unused_effects.back()
-					#effect_id = unused_effects.pick_random()
+						effect_id = unused_effects.pick_random()
 
 	return effect_id
 
