@@ -5,6 +5,7 @@ signal hand_attack_finished(hand)
 signal all_hand_attacks_finished
 
 @export var DEBUG_blackjack: bool = false
+@export var DEBUG_bust: bool = false
 
 @export_group("Movement")
 var flying_nav: NavigationRegion3D
@@ -37,6 +38,8 @@ var last_hand
 # TODO - make this configurable per-attack
 @export var wave_material: ShaderMaterial
 @export var explosion_scene: PackedScene
+@export var explosion_shake_min_range: float = 8.0
+@export var explosion_shake_max_range: float = 22.0
 
 @export_group("Dealing")
 # Dealing
@@ -62,11 +65,12 @@ var hand_count: int = 0
 @export var bust_self_damage: float = 150.0
 @export var aoe_marker_ring: CompressedTexture2D
 @export var aoe_marker_arrows: CompressedTexture2D
-@export var bust_proj_speed: float = 1.5
+@export var bust_proj_speed: float = 0.9
 @export var bust_proj_shots: int = 5
 @export var bust_proj_explosion_count: int = 1
 @export var bust_explosion_radius: float = 5.0
-@export var bust_proj_arc_height: float = 8.0
+@export var bust_proj_arc_height: float = 25.0
+var bust_targets: Array[Vector3] = []
 
 # Intro
 var intro_path_points: Array[Node] = []
@@ -95,6 +99,7 @@ var tilt_tween: Tween
 var hand_tween: Tween
 @export var tilt_mesh: Node3D
 @export var tilt_animateable_floor: AnimatableBody3D
+@onready var bounding_box: AABB = tilt_animateable_floor.get_child(0).mesh.get_aabb()
 var tilt_particles: GPUParticles3D
 @export var tilt_max_deg: float = 25.0
 @export var tilt_max_floor_speed: float = 7.8
@@ -130,8 +135,8 @@ func _ready() -> void:
 	# Create the explosion area collider when the scene has finished setting up
 	scene_root.ready.connect(func(): 
 		# Collider
-		for i in range(6):
-			_create_new_damage_area(bust_explosion_radius)
+		#for i in range(6):
+			#_create_new_damage_area(bust_explosion_radius, tilt_explosion_damage)
 		
 		# Instance re-usable explosion scenes for later
 		for i in range(tilt_proj_explosion_count * 3):
@@ -536,6 +541,8 @@ func _on_dealing_dealing_state_entered() -> void:
 		
 		if DEBUG_blackjack:
 			hand_count = 21
+		if DEBUG_bust:
+			hand_count = 25
 		
 		deal_tween = get_tree().create_tween()
 		deal_tween.set_parallel(false)
@@ -735,6 +742,9 @@ func _on_bust_idle_state_entered() -> void:
 	if not blackjack_timer.is_stopped():
 		blackjack_timer.stop()
 	
+	for hand in spawned_hands:
+		hand.health_component.is_invincible = true
+	
 	anim_player.play("blackjack_boss/bust")
 	state_chart.send_event("start_explode")
 
@@ -744,6 +754,8 @@ func _on_bust_exploding_state_entered() -> void:
 	card_particles.draw_pass_1.surface_get_material(0).albedo_texture = card_textures[13]
 	card_particles.emitting = true
 	card_explosion_particles.emitting = true
+	InputHelper.rumble_medium()
+	target.player_camera.add_trauma(0.5)
 	
 	var emitters = bust_particles_parent.get_children()
 	for emitter in emitters:
@@ -757,36 +769,90 @@ func _on_bust_exploding_state_entered() -> void:
 
 func _on_bust_arena_aoe_state_entered() -> void:
 	# Pick spots to fire AoE explosive shots at
-	var targets = [target.global_position, ]
-	# TODO
-	
-	for target_pos in targets:
-		# Spawn decals at these spots
-		# TODO
-		var _aoe_decals := await spawn_aoe_decals(target_pos + Vector3(0, 2.0, 0), bust_explosion_radius, bust_proj_speed/4)
-		#
-		# Fire curved exploding projecitles
-		var hit_pos: Vector3 = await _fire_curved_proj(
-			tilt_proj_scene, 
-			self.global_position, 
-			target_pos, 
-			bust_proj_arc_height,
-			bust_proj_speed
+	bust_targets = []
+	var space_state = get_world_3d().direct_space_state
+	var bounds_offset: float = 12.0
+	for h in range(bust_proj_shots):
+		var _pos = tilt_animateable_floor.global_position + Vector3(
+			randi_range(-bounds_offset, bounds_offset),
+			5.0,
+			randi_range(-bounds_offset / 2.5, bounds_offset),
 		)
-		_spawn_damage_area(hit_pos, bust_explosion_radius, tilt_explosion_damage)
-		# Spawn an explosion on impact
-		for k in range(bust_proj_explosion_count):
-			var _pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
-			var explosion = tilt_explosion_instances.pop_front()
-			explosion.global_position = _pos
-			explosion.explosion()
-			await get_tree().create_timer(randf_range(0.05, 0.4))
-			tilt_explosion_instances.push_back(explosion)
-		_cleanup_aoe_decals(_aoe_decals)
+		var query = PhysicsRayQueryParameters3D.create(
+			_pos,
+			_pos - tilt_mesh.global_basis.y * 20,
+			int(pow(2, 1 - 1))
+		)
+		var result = space_state.intersect_ray(query)
+		if result:
+			_pos.y = result.position.y
+		bust_targets.append(_pos)
 	
-	# TODO
-	#
+	# Animate the fists slamming the platform, shaking it
+	hand_tween = get_tree().create_tween()
+	hand_tween.set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	hand_tween.tween_property(self, "global_position", tilt_platform_origin_marker.global_position, 0.3)
+	for i in range(2):
+		var idx: int = 1 - i
+		if idx < spawned_hands.size():
+			var _hand = spawned_hands[idx]
+			_release_hand(_hand)
+			hand_tween.tween_property(_hand, "global_position", tilt_hand_markers[i].global_position, 0.3)
+	
+	await hand_tween.finished
+	
+	for j in range(bust_proj_shots):
+		# Alternate between hand idx 1 and hand idx 2
+		var k: int = 0 if j % 2 == 0 else 1
+		var idx: int = 1 - k
+		var _hand = spawned_hands[idx]
+		hand_tween = get_tree().create_tween()
+		hand_tween.set_parallel(false)
+		hand_tween.chain().tween_property(
+			_hand, 
+			"global_position", 
+			tilt_hand_markers[k].global_position + Vector3(0, 2.4, 0), 
+			0.25
+		).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+		hand_tween.tween_callback(_bust_projectile)
+		hand_tween.chain().tween_property(
+			_hand, 
+			"global_position", 
+			tilt_hand_markers[k].global_position, 
+			0.15
+		).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+		await hand_tween.finished
+	
 	state_chart.send_event("end_bust")
+
+
+func _bust_projectile() -> void:
+	if bust_targets.size() == 0:
+		return
+	# Pick target
+	var target_pos: Vector3 = bust_targets.pop_at(randi_range(0, bust_targets.size() - 1))
+	# Spawn warning decals
+	var _aoe_decals := await spawn_aoe_decals(
+		target_pos + Vector3(0, 0.5, 0), 
+		bust_explosion_radius, 
+		bust_proj_speed/4
+	)
+	 # Fire projectile
+	var hit_pos: Vector3 = await _fire_curved_proj(
+		tilt_proj_scene, 
+		self.global_position, 
+		target_pos, 
+		bust_proj_arc_height,
+		bust_proj_speed
+	)
+	# Check for damage
+	_spawn_damage_area(hit_pos, bust_explosion_radius, tilt_explosion_damage)
+	# Spawn an explosion on impact
+	for k in range(bust_proj_explosion_count):
+		var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
+		_spawn_explosion(pos)
+	
+	_cleanup_aoe_decals(_aoe_decals)
 
 
 func spawn_aoe_decals(target_pos: Vector3, radius: float, time: float, is_blocking: bool = false) -> Array[Decal]:
@@ -816,15 +882,14 @@ func _on_bust_recover_state_entered() -> void:
 	# Stop animation
 	anim_player.play("RESET")
 	
-	#move_tween = get_tree().create_tween()
-	#var return_pos: Vector3 = NavigationServer3D.map_get_random_point(
-		#flying_nav.get_navigation_map(),
-		#1,
-		#true
-	#)
-	#return_pos.y = randf_range(min_flying_height, max_flying_height)
-	#move_tween.tween_property(self, "global_position", return_pos, 0.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
-	#await move_tween.finished
+	for hand in spawned_hands:
+		hand.health_component.is_invincible = false
+	
+	for i in range(2):
+		if spawned_hands.size() <= i:
+			break
+		var _hand = spawned_hands[i]
+		_anchor_hand(_hand)
 
 	state_chart.send_event("start_targeting")
 	# TODO
@@ -855,7 +920,6 @@ func _on_tilt_moving_to_pos_state_physics_processing(delta: float) -> void:
 			hand_tween.kill()
 			state_chart.send_event("end_attack")
 			_recover_entered()
-
 
 
 func _on_tilt_tilting_state_entered() -> void:
@@ -937,35 +1001,41 @@ func _on_tilt_firing_state_entered() -> void:
 			_spawn_damage_area(hit_pos, tilt_explosion_radius, tilt_explosion_damage)
 			# Spawn an explosion on impact
 			for k in range(tilt_proj_explosion_count):
-				var _pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
-				var explosion = tilt_explosion_instances.pop_front()
-				explosion.global_position = _pos
-				explosion.explosion()
-				await get_tree().create_timer(randf_range(0.05, 0.4))
-				tilt_explosion_instances.push_back(explosion)
+				var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
+				_spawn_explosion(pos)
 			
 			_cleanup_aoe_decals(_aoe_decals)
 	
 	state_chart.send_event("stop_firing")
 
 
+func _spawn_explosion(spawn_pos: Vector3) -> void:
+	var explosion = tilt_explosion_instances.pop_front()
+	explosion.global_position = spawn_pos
+	explosion.explosion()
+	
+	# Distance-scaling rumble/screen shake
+	var target_dist: float = target.global_position.distance_to(explosion.global_position)
+	if target_dist <= explosion_shake_min_range:
+		InputHelper.rumble_small()
+	elif target_dist <= explosion_shake_max_range:
+		InputHelper.rumble_medium()
+	var explosion_trauma: float = remap(target_dist, explosion_shake_max_range, 0.0, 0.0, 0.7)
+	target.player_camera.add_trauma(explosion_trauma)
+	
+	await get_tree().create_timer(randf_range(0.05, 0.4))
+	tilt_explosion_instances.push_back(explosion)
+
+
 func _spawn_damage_area(spawn_pos: Vector3, radius: float, damage: float) -> void:
-	var damage_area: Area3D = tilt_proj_explosion_areas.pop_front()
-	if not damage_area:
-		damage_area = _create_new_damage_area(radius)
-	else:
-		damage_area.get_child(0).shape.radius = radius
-		
-	damage_area.set_deferred("monitoring", true)
-	await get_tree().physics_frame
-	damage_area.global_position = spawn_pos
-	for body in damage_area.get_overlapping_bodies():
-		if "health_component" in body:
-			body.health_component.damage(damage)
-		else:
-			body.queue_free()
-	damage_area.set_deferred("monitoring", false)
-	damage_area.global_position = hand_spawn_pos.global_position
+	var area_rid: RID = _create_new_damage_area(spawn_pos, radius, damage)
+	
+	await get_tree().create_timer(0.5, false).timeout
+	
+	PhysicsServer3D.area_set_monitorable(area_rid, false)
+	PhysicsServer3D.area_set_transform(area_rid, Transform3D(Basis.IDENTITY, hand_spawn_pos.global_position))
+	
+	PhysicsServer3D.free_rid(area_rid)
 
 
 func _on_tilt_firing_state_physics_processing(delta: float) -> void:
@@ -1029,7 +1099,6 @@ func _fire_curved_proj(proj_scene: PackedScene, proj_origin: Vector3, target_pos
 	if result:
 		target_pos.y = result.position.y
 	
-	var bounding_box: AABB = tilt_animateable_floor.get_child(0).mesh.get_aabb()
 	if abs(target_pos.z) > bounding_box.size.z:
 		var sign: int = 1 if target_pos.z > 0 else -1
 		target_pos.z = bounding_box.size.z * sign
@@ -1049,7 +1118,7 @@ func _fire_curved_proj(proj_scene: PackedScene, proj_origin: Vector3, target_pos
 	
 	# Animate the projectile along the path
 	var curve_tween = get_tree().create_tween()
-	curve_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+	curve_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
 	# Parent hand motion
 	curve_tween.tween_property(curve_path_follow, "progress_ratio", 1.0, proj_speed)
 	
@@ -1074,14 +1143,32 @@ func _create_curved_path(start_pos: Vector3, goal_pos: Vector3, height: float, a
 	return curve
 
 
-func _create_new_damage_area(radius: float) -> Area3D:
-	var _damage_area: Area3D = tilt_proj_explosion_area_scene.instantiate()
-	scene_root.add_child(_damage_area)
+func _damage_area_callback(
+	status: int, body_rid: RID, instance_id: int, 
+	area_shape_idx: int, self_shape_idx: int, 
+	damage: float, area_rid: RID
+) -> void:
+	if status == PhysicsServer3D.AREA_BODY_ADDED:
+		var body: Object = instance_from_id(instance_id)
+		if "health_component" in body:
+			body.health_component.damage(damage)
+		else:
+			body.queue_free()
+
+
+func _create_new_damage_area(pos: Vector3, radius: float, damage: float) -> RID:
+	# Create a collision shape using the provided radius
+	var shape_rid: RID = PhysicsServer3D.sphere_shape_create()
+	PhysicsServer3D.shape_set_data(shape_rid, {"radius": radius})
+	# Setup area instance
+	var area_rid: RID = PhysicsServer3D.area_create()
+	PhysicsServer3D.area_set_space(area_rid, get_world_3d().space)
+	PhysicsServer3D.area_add_shape(area_rid, shape_rid)
+	PhysicsServer3D.area_set_transform(area_rid, hand_spawn_pos.global_transform)
+	PhysicsServer3D.area_set_collision_layer(area_rid, 0)
+	PhysicsServer3D.area_set_collision_mask(area_rid, pow(2, 2-1))
+	PhysicsServer3D.area_set_monitor_callback(area_rid, _damage_area_callback.bind(damage, area_rid))
+	PhysicsServer3D.area_set_transform(area_rid, Transform3D(Basis.IDENTITY, pos))
+	PhysicsServer3D.area_set_monitorable(area_rid, true)
 	
-	_damage_area.global_position = hand_spawn_pos.global_position
-	_damage_area.get_child(0).shape.radius = radius
-	_damage_area.set_deferred("monitoring", false)
-	
-	tilt_proj_explosion_areas.append(_damage_area)
-	
-	return _damage_area
+	return area_rid

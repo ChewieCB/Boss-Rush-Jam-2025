@@ -802,6 +802,7 @@ func spawn_decal_at_pos(pos: Vector3, texture: CompressedTexture2D, size: Vector
 
 func _create_decal(texture: CompressedTexture2D, size: Vector3 = Vector3(0, 1, 0)) -> Decal:
 	var _decal := Decal.new()
+	_decal.cull_mask = 1
 	_decal.texture_albedo = texture
 	_decal.size = size
 	return _decal
