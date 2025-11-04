@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=9 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="5_7n48w"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="5_ncjv1"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_n2kuu"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="6_vgoxo"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="8_8ud1i"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/card_counting_system_effect.gd" id="11_4doj4"]
 
@@ -14,6 +16,7 @@ script = ExtResource("1_xtoip")
 script = ExtResource("2_nse0w")
 
 [node name="TheSystemEffect" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("5_ncjv1")
 display_text_title = "The System"
 display_text_tag = "Trust me brother"
@@ -44,3 +47,33 @@ display_text_desc = "-50% spread, +25% damage when stationary
 +100% spread, -25% damage when moving"
 positive_desc = Array[String](["-50% spread, +25% damage when stationary"])
 negative_desc = Array[String](["+100% spread, -25% damage when moving"])
+
+[node name="BloodyScalpel" type="Node3D" parent="EffectContainer"]
+script = ExtResource("5_ncjv1")
+display_text_title = "Bloody Scalpel"
+display_text_tag = "Sharp and cut like butter"
+positive_desc = Array[String](["Applies bleed status", "+2 projectile count"])
+negative_desc = Array[String](["Increase spread horizontally", "-60% damage"])
+
+[node name="Add2ProjectileCount" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("6_n2kuu")
+attribute = 2
+modify_value = 2.0
+
+[node name="ReduceDamage" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("6_n2kuu")
+attribute = 1
+modify_value = -60.0
+is_perc = true
+
+[node name="IncreaseSpread" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("6_n2kuu")
+attribute = 7
+modify_value = 50.0
+is_perc = true
+
+[node name="AddBleedEffect" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("6_vgoxo")
+status_effect = 5
+change_color = true
+new_color = Color(0.644531, 0.00711507, 0, 1)

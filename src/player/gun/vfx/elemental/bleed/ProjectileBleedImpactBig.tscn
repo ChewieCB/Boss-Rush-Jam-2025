@@ -1,0 +1,81 @@
+[gd_scene load_steps=12 format=3 uid="uid://b2fmnrvnh6b6d"]
+
+[ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="1_g45n6"]
+[ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="2_6xajb"]
+
+[sub_resource type="Gradient" id="Gradient_3b8pr"]
+offsets = PackedFloat32Array(0, 0.568027, 1)
+colors = PackedColorArray(0.046875, 0.000813771, 0, 1, 0.136719, 0.0109302, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tehmb"]
+gradient = SubResource("Gradient_3b8pr")
+
+[sub_resource type="Curve" id="Curve_p72sd"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.231164, 1), 0.0, 0.0, 0, 0, Vector2(0.640411, 0.407905), -1.4431, -1.4431, 0, 0, Vector2(1, 0), -0.159099, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_abv05"]
+curve = SubResource("Curve_p72sd")
+
+[sub_resource type="Curve" id="Curve_g3d0q"]
+_data = [Vector2(0.243682, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_m4iu1"]
+curve = SubResource("Curve_g3d0q")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n6jre"]
+emission_shape = 1
+emission_sphere_radius = 0.4
+angle_min = 1.07288e-05
+angle_max = 180.0
+spread = 180.0
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+gravity = Vector3(0, -6, 0)
+scale_min = 0.15
+scale_max = 0.3
+scale_curve = SubResource("CurveTexture_abv05")
+color_ramp = SubResource("GradientTexture1D_tehmb")
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 1.0
+turbulence_influence_over_life = SubResource("CurveTexture_m4iu1")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6fphj"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_6xajb")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_ysfyt"]
+material = SubResource("StandardMaterial3D_6fphj")
+
+[node name="ProjectileBleedImpactBig" type="Node3D" node_paths=PackedStringArray("gpu_particles", "lights")]
+script = ExtResource("1_g45n6")
+is_oneshot = true
+self_destroy_after_time = 2
+gpu_particles = [NodePath("Drop")]
+lights = [NodePath("OmniLight3D")]
+
+[node name="Drop" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 32
+one_shot = true
+explosiveness = 0.9
+randomness = 0.8
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_n6jre")
+draw_pass_1 = SubResource("QuadMesh_ysfyt")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+light_color = Color(2, 0.163916, 0.0594152, 1)
+light_energy = 0.25
+light_bake_mode = 1
+omni_range = 0.5
+omni_attenuation = 2.0

@@ -1,0 +1,65 @@
+[gd_scene load_steps=12 format=3 uid="uid://fsjvw1o2anit"]
+
+[ext_resource type="Script" path="res://src/player/gun/vfx/elemental/gpu_particle_controller.gd" id="1_i73rm"]
+[ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="2_m4unj"]
+
+[sub_resource type="Gradient" id="Gradient_3b8pr"]
+offsets = PackedFloat32Array(0, 0.568027, 1)
+colors = PackedColorArray(0.046875, 0.000813771, 0, 1, 0.136719, 0.0109302, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ekf6y"]
+gradient = SubResource("Gradient_3b8pr")
+
+[sub_resource type="Curve" id="Curve_qde0l"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.231164, 1), 0.0, 0.0, 0, 0, Vector2(0.640411, 0.407905), -1.4431, -1.4431, 0, 0, Vector2(1, 0), -0.159099, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_4dxfn"]
+curve = SubResource("Curve_qde0l")
+
+[sub_resource type="Curve" id="Curve_t6tox"]
+_data = [Vector2(0.243682, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6h4uy"]
+curve = SubResource("Curve_t6tox")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sra74"]
+emission_shape = 1
+emission_sphere_radius = 0.5
+angle_max = 90.0
+gravity = Vector3(0, -6, 0)
+scale_min = 0.15
+scale_max = 0.3
+scale_curve = SubResource("CurveTexture_4dxfn")
+color_ramp = SubResource("GradientTexture1D_ekf6y")
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 1.0
+turbulence_influence_over_life = SubResource("CurveTexture_6h4uy")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6fphj"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_m4unj")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_feurq"]
+material = SubResource("StandardMaterial3D_6fphj")
+
+[node name="ProjectileBleedEmitBig" type="Node3D" node_paths=PackedStringArray("gpu_particles")]
+script = ExtResource("1_i73rm")
+gpu_particles = [NodePath("Drop")]
+time_until_queue_free = 2
+
+[node name="Drop" type="GPUParticles3D" parent="."]
+amount = 16
+lifetime = 2.0
+randomness = 0.5
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_sra74")
+draw_pass_1 = SubResource("QuadMesh_feurq")

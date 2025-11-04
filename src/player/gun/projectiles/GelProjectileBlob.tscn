@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dij705shy7t2i"]
+[gd_scene load_steps=18 format=3 uid="uid://dij705shy7t2i"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_projectile_blob.gd" id="1_qak0o"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_d3tjp"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dthdgt8rwdg7x" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitBig.tscn" id="5_fuh73"]
 [ext_resource type="PackedScene" uid="uid://chjxj0x3rwotr" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmitBig.tscn" id="6_7v551"]
 [ext_resource type="PackedScene" uid="uid://b770x0fkaf7ha" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitBig.tscn" id="6_h3m5e"]
+[ext_resource type="PackedScene" uid="uid://fsjvw1o2anit" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedEmitBig.tscn" id="8_srm2u"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xk3gl"]
 noise_type = 2
@@ -52,7 +53,7 @@ radius = 1.0
 script = ExtResource("1_qak0o")
 tick_per_second = 2
 stick_time = 5
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitBig"), NodePath("ElementalVFX/ProjectilePoisonEmitBig"), NodePath("ElementalVFX/ProjectileFreezeEmitBig"), NodePath("ElementalVFX/ProjectileShockEmitBig"), null]
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitBig"), NodePath("ElementalVFX/ProjectilePoisonEmitBig"), NodePath("ElementalVFX/ProjectileFreezeEmitBig"), NodePath("ElementalVFX/ProjectileShockEmitBig"), NodePath("ElementalVFX/ProjectileBleedEmitBig")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -113,6 +114,9 @@ visible = false
 visible = false
 
 [node name="ProjectileShockEmitBig" parent="ElementalVFX" instance=ExtResource("6_h3m5e")]
+visible = false
+
+[node name="ProjectileBleedEmitBig" parent="ElementalVFX" instance=ExtResource("8_srm2u")]
 visible = false
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
