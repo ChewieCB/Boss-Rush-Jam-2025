@@ -1,5 +1,6 @@
 extends Node
 
+@export var enable_play_video = true
 @export var idle_time: float = 60.0
 @export var video_list: Array[VideoStream] = []
 
@@ -44,11 +45,12 @@ func _is_user_input(event: InputEvent) -> bool:
 		or event is InputEventJoypadMotion
 	)
 
-
 func stop_idle_video():
 	_idle_timer = 0.0 # reset timer
 	video_player.stop()
 	canvas_layer.visible = false
+
+	# Reset audio to saved value
 	AudioServer.set_bus_volume_db(1, saved_bgm_volume)
 	AudioServer.set_bus_volume_db(2, saved_sfx_volume)
 	AudioServer.set_bus_volume_db(3, saved_ui_volume)
@@ -56,9 +58,9 @@ func stop_idle_video():
 	AudioServer.set_bus_volume_db(5, saved_gun_volume)
 
 
-# Called after 1 minute of inactivity
-func _on_idle_timeout() -> void:
-	print("No input detected for 1 minute! Running idle function...")
+func play_idle_video() -> void:
+	if not enable_play_video:
+		return
 	# Saved other audio bus volume
 	saved_bgm_volume = AudioServer.get_bus_volume_db(1)
 	saved_sfx_volume = AudioServer.get_bus_volume_db(2)
@@ -78,3 +80,8 @@ func _on_idle_timeout() -> void:
 	video_player.stream = video_list.pick_random()
 	video_player.play()
 	canvas_layer.visible = true
+
+
+func _on_idle_timeout() -> void:
+	print("No input detected for 1 minute! Running idle function...")
+	play_idle_video()
