@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=4 uid="uid://bsdh38vyreful"]
+[gd_scene load_steps=69 format=4 uid="uid://bsdh38vyreful"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_262ft"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/boss_blackjack.gd" id="2_km6gh"]
@@ -31,8 +31,10 @@
 [ext_resource type="Texture2D" uid="uid://bdk7t0sy2alt2" path="res://assets/sprite/playing_cards/joker.png" id="18_6mxre"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/slam_particles.gd" id="18_8bso6"]
 [ext_resource type="PackedScene" uid="uid://dh07gvrl3yr1o" path="res://src/bosses/base/attacks/ranged/ExplodingProjectile.tscn" id="19_sbdjh"]
+[ext_resource type="Texture2D" uid="uid://dndtyj8hh404v" path="res://assets/sprite/aoe_markers/aoe_ring.png" id="19_vq3wl"]
 [ext_resource type="PackedScene" uid="uid://y34et07aumwl" path="res://src/bosses/blackjack/CardFloor.tscn" id="19_x10en"]
 [ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="20_1mflx"]
+[ext_resource type="Texture2D" uid="uid://cjm0gilmb52sa" path="res://assets/sprite/aoe_markers/aoe_arrows.png" id="20_an7di"]
 [ext_resource type="PackedScene" uid="uid://bl721ikop8rr" path="res://src/bosses/base/attacks/ranged/ExplodingProjectileExplosionArea.tscn" id="21_v5jtk"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_brmua"]
@@ -460,6 +462,13 @@ blackjack_time_max = 25.0
 blackjack_timer = NodePath("BlackjackTimer")
 bust_particles_parent = NodePath("HoverPlatform/BustParticles")
 bust_self_damage = 150.0
+aoe_marker_ring = ExtResource("19_vq3wl")
+aoe_marker_arrows = ExtResource("20_an7di")
+bust_proj_speed = 1.5
+bust_proj_shots = 5
+bust_proj_explosion_count = 1
+bust_explosion_radius = 5.0
+bust_proj_arc_height = 8.0
 attack_speed_scale = 1.0
 slam_shockwave_prefab = ExtResource("4_cv1yb")
 sweep_dist = 12.0
@@ -470,7 +479,7 @@ tilt_max_floor_speed = 9.2
 tilt_duration = 2.8
 tilt_floor_friction_mod = 0.23
 tilt_proj_scene = ExtResource("19_sbdjh")
-tilt_proj_speed = 12.0
+tilt_proj_speed = 0.45
 tilt_proj_shots = 3
 tilt_proj_explosion_count = 1
 tilt_explosion_radius = 4.0
@@ -729,7 +738,13 @@ to = NodePath("../../PlatformBulletHell")
 event = &"start_bullet_hell"
 delay_in_seconds = "0.0"
 
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AttackPhase/Bust/Exploding" index="1"]
+[node name="toBustArenaAoE" type="Node" parent="StateChart/Root/Phase/AttackPhase/Bust/Exploding" index="1"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../BustArenaAoE")
+event = &"start_arena_aoe"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AttackPhase/Bust/Exploding" index="2"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Recover")
 event = &"end_bust"
@@ -1000,6 +1015,7 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Dealing/Recover" to="." method="_on_dealing_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Bust/Idle" to="." method="_on_bust_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Bust/Exploding" to="." method="_on_bust_exploding_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Bust/BustArenaAoE" to="." method="_on_bust_arena_aoe_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Bust/Recover" to="." method="_on_bust_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/AttackPhase/Phase1" to="." method="_on_phase_1_state_exited"]
