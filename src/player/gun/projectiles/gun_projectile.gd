@@ -82,7 +82,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		found_hitscal_col = true
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit()
+	destroyed.emit(hit_boss)
 	stop_elemental_particles()
 	call_deferred("queue_free")
 
@@ -103,6 +103,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			body.health_component.damage(calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
 			ricochet_count_left = 0
+			hit_boss = true
 		if found_hitscal_col:
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 	else:
@@ -113,6 +114,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 				body.hit_with_effect(self.owner_gun.installed_barrels)
 			body.health_component.damage(damage)
 			damage_applied.emit(damage, true, global_position)
+			hit_boss = true
 		if found_hitscal_col and gravity_accel == 0:
 			create_spark(hitscan_col_point, hitscan_col_normal)
 			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
@@ -124,7 +126,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		ricochet()
 	else:
 		stop_elemental_particles()
-		destroyed.emit()
+		destroyed.emit(hit_boss)
 		call_deferred("queue_free")
 
 

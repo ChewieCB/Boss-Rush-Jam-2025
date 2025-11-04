@@ -13,8 +13,8 @@ func on_prepare_to_fire():
 	hit_count = 0
 	projectile_count = 0
 
-func on_projectile_destroyed():
-	super ()
+func on_projectile_destroyed(_hit_boss: bool):
+	super (_hit_boss)
 	projectile_count += 1
 	# print("projectile_count {0}, modified_projectile_amount{1}".format([projectile_count, owner_barrel.owner_gun.modified_projectile_amount]))'
 	

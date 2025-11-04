@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_8iiph"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_khhtx"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="3_xhp4t"]
-[ext_resource type="Script" path="res://src/player/barrel/split_bullet_effect.gd" id="5_ai2fh"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/split_bullet_effect.gd" id="5_ai2fh"]
 
 [node name="TrickshotBarrel" type="Node3D"]
 script = ExtResource("1_eccsf")

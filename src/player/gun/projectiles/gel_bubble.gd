@@ -93,18 +93,21 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			before_damage_applied.emit(body, self)
 			body.health_component.damage(calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
+			hit_boss = true
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
 			body.health_component.damage(calculated_damage)
+			hit_boss = true
 		elif "health_component" in body:
 			body.health_component.damage(calculated_damage)
+			hit_boss = true
 	self.reparent.call_deferred(body)
 	impacted.emit(self, true, global_position)
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		destroyed.emit()
+		destroyed.emit(hit_boss)
 		call_deferred("queue_free")
 
 
@@ -116,7 +119,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit()
+	destroyed.emit(false)
 	call_deferred("queue_free")
 
 

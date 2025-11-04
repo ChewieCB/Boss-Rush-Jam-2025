@@ -67,7 +67,7 @@ func ricochet():
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit()
+	destroyed.emit(false)
 	stop_elemental_particles()
 	call_deferred("queue_free")
 
@@ -79,12 +79,15 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			before_damage_applied.emit(body, self)
 			body.health_component.damage(damage)
 			damage_applied.emit(damage, true, global_position)
+			hit_boss = true
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
 			body.health_component.damage(damage)
+			hit_boss = true
 		elif "health_component" in body:
 			body.health_component.damage(damage)
+			hit_boss = true
 	self.reparent.call_deferred(body)
 	sticked = true
 	life_timer.stop()
@@ -116,7 +119,7 @@ func _on_explode_timer_timeout() -> void:
 		ricochet()
 	else:
 		await get_tree().create_timer(0.25).timeout
-		destroyed.emit()
+		destroyed.emit(hit_boss)
 		stop_elemental_particles()
 		call_deferred("queue_free")
 

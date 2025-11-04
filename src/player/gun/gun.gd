@@ -269,9 +269,9 @@ func check_barrel_effect_on_projectile_impact(_projectile: BaseProjectile, _has_
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_projectile_impact(_projectile, _has_pos, _pos)
 
-func check_barrel_effect_on_projectile_destroyed():
+func check_barrel_effect_on_projectile_destroyed(hit_boss: bool):
 	for barrel in installed_barrels:
-		barrel.get_active_effect().on_projectile_destroyed()
+		barrel.get_active_effect().on_projectile_destroyed(hit_boss)
 
 func check_barrel_effect_on_dash_movement():
 	for barrel in installed_barrels:

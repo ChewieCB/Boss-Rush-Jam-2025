@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://di42x2venbaxx"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_kk2hi"]
-[ext_resource type="Script" path="res://src/player/barrel/split_bullet_effect.gd" id="2_nwf0t"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/split_bullet_effect.gd" id="2_nwf0t"]
 
 [node name="DebugBarrelSplit" type="Node3D"]
 script = ExtResource("1_kk2hi")

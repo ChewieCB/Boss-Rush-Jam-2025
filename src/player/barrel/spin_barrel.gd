@@ -102,7 +102,7 @@ func get_less_used_effects() -> int:
 						else:
 							effect_id = unused_effects.back()
 					#effect_id = unused_effects.pick_random()
-	
+
 	return effect_id
 
 

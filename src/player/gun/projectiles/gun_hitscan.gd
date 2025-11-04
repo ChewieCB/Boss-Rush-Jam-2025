@@ -91,6 +91,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			before_damage_applied.emit(target, self)
 			target.health_component.damage(calculated_damage)
 			damage_applied.emit(calculated_damage, true, target.global_position)
+			hit_boss = true
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
 		else:
 			if "health_component" in target:
@@ -100,6 +101,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 					target.hit_with_effect(self.owner_gun.installed_barrels)
 				target.health_component.damage(damage)
 				damage_applied.emit(damage, true, global_position)
+				hit_boss = true
 			elif target is BartenderBottle:
 				target.call_deferred("queue_free")
 			create_spark(hitscan_col_point, hitscan_col_normal)
@@ -138,7 +140,7 @@ func get_projectile_color() -> Color:
 	return mesh.mesh.material.get_shader_parameter("color")
 
 func _on_timer_timeout():
-	destroyed.emit()
+	destroyed.emit(hit_boss)
 	queue_free()
 
 

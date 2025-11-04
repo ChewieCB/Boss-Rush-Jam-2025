@@ -89,9 +89,9 @@ func on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _
 	for child in child_effects:
 		child.on_projectile_impact(_projectile, _has_pos, _pos)
 
-func on_projectile_destroyed():
+func on_projectile_destroyed(_hit_boss: bool):
 	for child in child_effects:
-		child.on_projectile_destroyed()
+		child.on_projectile_destroyed(_hit_boss)
 
 func on_damage_calculation():
 	for child in child_effects:

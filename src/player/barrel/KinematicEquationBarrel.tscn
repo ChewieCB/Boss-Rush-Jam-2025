@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_v4d5e"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_yv5q3"]
-[ext_resource type="Script" path="res://src/player/barrel/slow_roller_effect.gd" id="3_b2svt"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/slow_roller_effect.gd" id="3_b2svt"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_2xsnk"]
-[ext_resource type="Script" path="res://src/player/barrel/longshot_effect.gd" id="5_12stn"]
-[ext_resource type="Script" path="res://src/player/barrel/snap_call_effect.gd" id="6_t0qlc"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/longshot_effect.gd" id="5_12stn"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/snap_call_effect.gd" id="6_t0qlc"]
 
 [node name="KinematicEquationBarrel" type="Node3D"]
 script = ExtResource("1_v4d5e")

@@ -13,7 +13,7 @@ class_name BaseProjectile
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
 signal impacted(projectile: BaseProjectile, has_pos: bool, pos: Vector3)
-signal destroyed
+signal destroyed(hit_boss: bool)
 
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
@@ -44,6 +44,7 @@ var color_changed_count = 0
 var life_time = 0
 var spawn_pos = Vector3.ZERO
 var travelled_distance = 0
+var hit_boss = false
 
 
 func _ready() -> void:

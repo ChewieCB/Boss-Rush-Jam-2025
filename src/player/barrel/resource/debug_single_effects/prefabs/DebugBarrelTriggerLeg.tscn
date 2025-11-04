@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_4i25l"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_fiduk"]
-[ext_resource type="Script" path="res://src/player/barrel/trigger_leg_effect.gd" id="3_7lows"]
-[ext_resource type="Script" path="res://src/player/barrel/crit_chance_effect.gd" id="4_bxqqo"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/trigger_leg_effect.gd" id="3_7lows"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/crit_chance_effect.gd" id="4_bxqqo"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_i72yn"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="6_67h32"]
 
