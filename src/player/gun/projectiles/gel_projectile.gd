@@ -110,6 +110,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
 		return
+
 	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):

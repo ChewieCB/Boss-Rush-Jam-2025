@@ -1,6 +1,24 @@
 extends Node
 class_name BaseBarrelEffect
 
+# NOTE: Do not change the enum order
+enum AttributeNameEnum {
+	NONE,
+	DAMAGE,
+	PROJECTILE_AMOUNT,
+	PROJECTILE_SPEED,
+	FIRERATE,
+	MAGAZINE_SIZE,
+	IS_HITSCAN,
+	SPREAD_ANGLE,
+	RELOAD_TIME,
+	RICOCHET_COUNT,
+	HOMING_STRENGTH,
+	RECOIL,
+	SCREENSHAKE,
+	SPREAD_HORIZONTAL_BIAS
+}
+
 @export_multiline var display_text_title: String
 @export_multiline var display_text_tag: String
 @export_multiline var display_text_desc: String

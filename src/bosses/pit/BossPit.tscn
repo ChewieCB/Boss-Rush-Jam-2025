@@ -242,7 +242,7 @@ _data = {
 "death": SubResource("Animation_ny4xv")
 }
 
-[node name="BossPit" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_opefu")]
+[node name="BossPit" instance=ExtResource("1_opefu")]
 collision_mask = 75
 script = ExtResource("2_a8b8q")
 swipe_sprite = ExtResource("13_qgkan")
@@ -282,7 +282,6 @@ electric_hazard_duration = 5.0
 boss_id = 5
 chip_spawn_chance = 0.15
 chip_spawn_force = 1500.0
-elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_to_drop = ExtResource("7_koy73")
 sfx_awaken = ExtResource("18_e8yae")
 sfx_hit = Array[AudioStream]([ExtResource("19_ku61b"), ExtResource("20_j42ea"), ExtResource("21_pnx0u"), ExtResource("22_rtc4r"), ExtResource("23_0bbok"), ExtResource("24_ia7ug")])

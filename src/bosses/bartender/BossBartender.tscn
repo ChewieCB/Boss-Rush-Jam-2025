@@ -1428,7 +1428,7 @@ _data = {
 "shotgun_telegraph": SubResource("Animation_6h31p")
 }
 
-[node name="BossBartender" node_paths=PackedStringArray("behind_bar_move_points", "elemental_emitting_vfx") instance=ExtResource("1_bp57a")]
+[node name="BossBartender" node_paths=PackedStringArray("behind_bar_move_points") instance=ExtResource("1_bp57a")]
 collision_mask = 11
 script = ExtResource("2_ns3xp")
 phase_2_health_percentage_trigger = 0.6
@@ -1481,7 +1481,6 @@ sleight_of_hand_interval = 5.0
 boss_id = 3
 chip_spawn_chance = 0.3
 chip_spawn_force = 1500.0
-elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_to_drop = ExtResource("15_817ob")
 sfx_awaken = ExtResource("26_lq1hd")
 sfx_hit = Array[AudioStream]([ExtResource("31_a4u5n"), ExtResource("32_vtq3o"), ExtResource("33_rnf52"), ExtResource("34_nkrfy"), ExtResource("35_efay1")])
@@ -2472,14 +2471,14 @@ to = NodePath("../../Idle")
 event = &"reposition"
 delay_in_seconds = "0.0"
 
-[node name="NavigationAgent3D" parent="." index="8"]
+[node name="NavigationAgent3D" parent="." index="9"]
 target_desired_distance = 1.0
 radius = 1.0
 
-[node name="DebugStateLabel" parent="." index="9"]
+[node name="DebugStateLabel" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.25628, 0)
 
-[node name="DebugDistanceLabel" parent="." index="10"]
+[node name="DebugDistanceLabel" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.06476, 0)
 
 [node name="ShotgunTriggerArea" type="Area3D" parent="." index="13"]
@@ -2517,7 +2516,7 @@ one_shot = true
 [node name="ShotgunTimer" type="Timer" parent="." index="24"]
 one_shot = true
 
-[node name="AnimationPlayer" parent="." index="25"]
+[node name="AnimationPlayer" parent="." index="26"]
 libraries = {
 "": SubResource("AnimationLibrary_k4utu")
 }

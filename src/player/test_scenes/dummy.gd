@@ -22,7 +22,7 @@ var current_status_buildup: Dictionary = {
 	BossCore.BossStatusEffect.POISONED: 0,
 	BossCore.BossStatusEffect.FROZEN: 0,
 	BossCore.BossStatusEffect.SHOCKED: 0,
-	BossCore.BossStatusEffect.BLEEDING: 1000,
+	BossCore.BossStatusEffect.BLEEDING: 0,
 }
 
 var last_hit = 0

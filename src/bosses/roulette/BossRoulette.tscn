@@ -206,7 +206,7 @@ _data = {
 "attack": SubResource("Animation_5idxe")
 }
 
-[node name="BossRoulette" node_paths=PackedStringArray("elemental_emitting_vfx") instance=ExtResource("1_jhwuw")]
+[node name="BossRoulette" instance=ExtResource("1_jhwuw")]
 collision_mask = 10
 motion_mode = 1
 script = ExtResource("2_m116k")
@@ -250,7 +250,6 @@ sfx_drop_amb = Array[AudioStream]([ExtResource("15_ktveg"), ExtResource("16_6j6k
 boss_id = 2
 chip_spawn_chance = 0.2
 chip_spawn_force = 950.0
-elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 barrel_to_drop = ExtResource("6_7xocg")
 sfx_hit = Array[AudioStream]([ExtResource("27_myrgm"), ExtResource("28_a1wng"), ExtResource("29_dbt44"), ExtResource("30_jsef0"), ExtResource("23_2x3ho"), ExtResource("24_5q0lp"), ExtResource("25_as6wr"), ExtResource("26_3h2c2"), ExtResource("27_mipu3"), ExtResource("28_m3yqk"), ExtResource("29_cyun2"), ExtResource("30_xp8l2"), ExtResource("31_7wohx")])
 sfx_telegraph = ExtResource("31_jsqjw")

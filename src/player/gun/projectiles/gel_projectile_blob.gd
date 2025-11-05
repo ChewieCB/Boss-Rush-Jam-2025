@@ -7,6 +7,11 @@ extends GelProjectile
 
 var stick_target = null
 
+
+func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float):
+	super (start_pos, dir, _damage, ricochet_count, _speed, _max_range)
+	activate(start_pos, dir)
+
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
 		return

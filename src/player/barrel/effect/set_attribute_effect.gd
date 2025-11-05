@@ -1,21 +1,5 @@
 extends BaseBarrelEffect
 
-enum AttributeNameEnum {
-	NONE,
-	DAMAGE,
-	PROJECTILE_AMOUNT,
-	PROJECTILE_SPEED,
-	FIRERATE,
-	MAGAZINE_SIZE,
-	IS_HITSCAN,
-	SPREAD_ANGLE,
-	RELOAD_TIME,
-	RICOCHET_COUNT,
-	HOMING_STRENGTH,
-	RECOIL,
-	SCREENSHAKE
-}
-
 @export var attribute: AttributeNameEnum
 ## For boolean value, 0 for false and 1 for true
 @export var new_value: float
@@ -39,6 +23,8 @@ func on_effect_set():
 			owner_barrel.owner_gun.modified_is_hitscan = res
 		AttributeNameEnum.SPREAD_ANGLE:
 			owner_barrel.owner_gun.modified_spread_angle = new_value
+		AttributeNameEnum.SPREAD_HORIZONTAL_BIAS:
+			owner_barrel.owner_gun.modified_spread_horizontal_bias = new_value
 		AttributeNameEnum.RICOCHET_COUNT:
 			owner_barrel.owner_gun.modified_ricochet_count = new_value
 		AttributeNameEnum.HOMING_STRENGTH:
@@ -74,6 +60,8 @@ func on_prepare_to_fire():
 			owner_barrel.owner_gun.modified_is_hitscan = res
 		AttributeNameEnum.SPREAD_ANGLE:
 			owner_barrel.owner_gun.modified_spread_angle = new_value
+		AttributeNameEnum.SPREAD_HORIZONTAL_BIAS:
+			owner_barrel.owner_gun.modified_spread_horizontal_bias = new_value
 		AttributeNameEnum.RICOCHET_COUNT:
 			owner_barrel.owner_gun.modified_ricochet_count = new_value
 		AttributeNameEnum.HOMING_STRENGTH:

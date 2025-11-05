@@ -109,6 +109,7 @@ var modified_magazine_size
 var modified_projectile_speed
 var modified_is_hitscan
 var modified_spread_angle
+var modified_spread_horizontal_bias = 0.5
 var modified_reload_time
 var modified_spin_time
 var modified_ricochet_count = 0
@@ -188,7 +189,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 
 		for j in range(modified_projectile_amount):
 			var aim_direction = aim_ray.aim_ray_end.global_position - bullet_spawn_marker.global_position
-			var spread_direction = GunUtils.get_spread_direction(aim_direction, modified_spread_angle)
+			var spread_direction = GunUtils.get_spread_direction(aim_direction, modified_spread_angle, modified_spread_horizontal_bias)
 			if modified_projectile_prefab:
 				create_gun_attack(modified_projectile_prefab, bullet_start_pos, spread_direction, modified_damage, modified_projectile_speed)
 			elif modified_is_hitscan:
@@ -454,6 +455,7 @@ func reset_modifier(reload_reset = false):
 	modified_projectile_speed = base_projectile_speed
 	modified_is_hitscan = is_hitscan
 	modified_spread_angle = base_spread_angle
+	modified_spread_horizontal_bias = 0.5
 	modified_ricochet_count = 0
 	modified_homing_strength = 0
 	modified_recoil = recoil_amount

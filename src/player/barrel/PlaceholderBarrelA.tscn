@@ -52,25 +52,30 @@ negative_desc = Array[String](["+100% spread, -25% damage when moving"])
 script = ExtResource("5_ncjv1")
 display_text_title = "Bloody Scalpel"
 display_text_tag = "Sharp and cut like butter"
-positive_desc = Array[String](["Applies bleed status", "+2 projectile count"])
-negative_desc = Array[String](["Increase spread horizontally", "-60% damage"])
+positive_desc = Array[String](["Applies bleed status", "Double projectile count"])
+negative_desc = Array[String](["Increase spread horizontally", "-50% damage"])
 
-[node name="Add2ProjectileCount" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+[node name="DoubleProjectileCount" type="Node3D" parent="EffectContainer/BloodyScalpel"]
 script = ExtResource("6_n2kuu")
 attribute = 2
-modify_value = 2.0
+modify_value = 100.0
+is_perc = true
 
 [node name="ReduceDamage" type="Node3D" parent="EffectContainer/BloodyScalpel"]
 script = ExtResource("6_n2kuu")
 attribute = 1
-modify_value = -60.0
+modify_value = -50.0
 is_perc = true
 
 [node name="IncreaseSpread" type="Node3D" parent="EffectContainer/BloodyScalpel"]
 script = ExtResource("6_n2kuu")
 attribute = 7
-modify_value = 50.0
-is_perc = true
+modify_value = 2.0
+
+[node name="IncreaseSpreadHorizontalBias" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("6_n2kuu")
+attribute = 13
+modify_value = 0.4
 
 [node name="AddBleedEffect" type="Node3D" parent="EffectContainer/BloodyScalpel"]
 script = ExtResource("6_vgoxo")
