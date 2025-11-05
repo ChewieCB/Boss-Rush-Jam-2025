@@ -6,9 +6,10 @@
 
 [resource]
 script = ExtResource("6_rhp4i")
-barrel_id = 56
-barrel_name = "GlassCannon"
+barrel_id = 74
+barrel_name = "Blackjack"
 barrel_desc = "Deal and take more damage"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_iw80e")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_amrhm")

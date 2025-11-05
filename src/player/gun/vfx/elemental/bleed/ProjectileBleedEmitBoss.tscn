@@ -30,8 +30,8 @@ emission_sphere_radius = 1.4
 angle_max = 90.0
 direction = Vector3(0, -1, 0)
 spread = 180.0
-initial_velocity_min = 1.0
-initial_velocity_max = 2.0
+initial_velocity_min = 3.0
+initial_velocity_max = 6.0
 gravity = Vector3(0, -6, 0)
 scale_min = 0.15
 scale_max = 0.3
@@ -61,9 +61,9 @@ gpu_particles = [NodePath("Drop")]
 time_until_queue_free = 2
 
 [node name="Drop" type="GPUParticles3D" parent="."]
-amount = 64
-lifetime = 3.0
-explosiveness = 0.25
+amount = 128
+lifetime = 2.0
+explosiveness = 0.75
 randomness = 0.5
 visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
 process_material = SubResource("ParticleProcessMaterial_k0bil")

@@ -79,7 +79,9 @@ enum BarrelIdEnum {
 	DEBUG_AMERICAN_RIFLE,
 	DEBUG_RUSSIAN_RIFLE,
 	DEBUG_LMG,
-	DEBUG_VECTOR
+	DEBUG_VECTOR,
+
+	BLACKJACK
 }
 
 @export var barrel_id: BarrelIdEnum
