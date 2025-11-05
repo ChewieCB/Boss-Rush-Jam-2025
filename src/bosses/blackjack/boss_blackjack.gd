@@ -471,6 +471,7 @@ func _on_intro_state_entered() -> void:
 	
 	move_tween.tween_property(hand_l, "global_position", intro_path_points[1].global_position + Vector3(hand_spacing, -1 ,0), 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[1].global_position + Vector3(-hand_spacing, -1, 0), 0.36).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	move_tween.chain().tween_callback(_shake_platform.bind(0.55, 0.6, 12))
 	
 	move_tween.chain().tween_property(self, "global_position", intro_path_points[1].global_position, 1.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	
@@ -826,26 +827,7 @@ func _on_bust_arena_aoe_state_entered() -> void:
 			func():
 				_hand.spawn_dust
 				_hand.spawn_explosion()
-				var shake_strength: float = 0.45
-				var shake_tween := get_tree().create_tween()
-				shake_tween.set_parallel(false).set_trans(Tween.TRANS_BOUNCE)
-				shake_tween.set_loops(6)
-				shake_tween.tween_property(
-					tilt_mesh, 
-					"rotation_degrees",
-					Vector3(
-						randf_range(-shake_strength, shake_strength),
-						randf_range(-shake_strength, shake_strength),
-						randf_range(-shake_strength, shake_strength),
-					), 
-					0.15 / 12
-				)
-				shake_tween.tween_property(
-					tilt_mesh, 
-					"rotation_degrees",
-					Vector3.ZERO,
-					0.15 / 12
-				)
+				_shake_platform(0.8, 0.3)
 		)
 		await hand_tween.finished
 	
@@ -1198,3 +1180,26 @@ func _create_new_damage_area(pos: Vector3, radius: float, damage: float) -> RID:
 	PhysicsServer3D.area_set_monitorable(area_rid, true)
 	
 	return area_rid
+
+
+func _shake_platform(strength: float, time: float, loops: int = 6) -> void:
+	InputHelper.rumble_medium()
+	var shake_tween := get_tree().create_tween()
+	shake_tween.set_parallel(false).set_trans(Tween.TRANS_BOUNCE)
+	shake_tween.set_loops(loops)
+	shake_tween.tween_property(
+		tilt_mesh, 
+		"rotation_degrees",
+		Vector3(
+			randf_range(-strength, strength),
+			randf_range(-strength, strength),
+			randf_range(-strength, strength),
+		), 
+		time / 2 / loops / 2
+	)
+	shake_tween.tween_property(
+		tilt_mesh, 
+		"rotation_degrees",
+		Vector3.ZERO,
+		time / 2 / loops / 2
+	)
