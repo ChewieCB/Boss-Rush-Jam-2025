@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=40 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -22,6 +22,7 @@
 [ext_resource type="Resource" uid="uid://cl8gwigkfvwca" path="res://src/player/barrel/resource/elemental_infusion_barrel_data.tres" id="10_7lixb"]
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="10_28dwd"]
 [ext_resource type="PackedScene" uid="uid://dcjxhb84sgq6f" path="res://src/maps/lobby/vendor/Vendor.tscn" id="12_2rf45"]
+[ext_resource type="Resource" uid="uid://dgt2ro31j7l13" path="res://src/player/barrel/resource/blackjack_barrel_data.tres" id="13_stgv5"]
 [ext_resource type="PackedScene" uid="uid://dow4ee3qublb7" path="res://src/maps/common/ShootWallTest.tscn" id="19_cev3k"]
 [ext_resource type="PackedScene" uid="uid://b3x1bn1jpkwjo" path="res://src/collectibles/poker_chip/PokerChip.tscn" id="19_sk1dt"]
 [ext_resource type="Resource" uid="uid://bibe88ibu2n4d" path="res://src/player/barrel/resource/leg_eye_coordinate_barrel_data.tres" id="21_7d46j"]
@@ -129,6 +130,10 @@ data = ExtResource("6_gecbk")
 [node name="BarrelItemPickup18" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.86488, 0.599205, 0.674865)
 data = ExtResource("10_7lixb")
+
+[node name="BarrelItemPickup19" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.86488, 0.599205, 2.05361)
+data = ExtResource("13_stgv5")
 
 [node name="BarrelItemPickup14" parent="barrel stuff" instance=ExtResource("3_g5u1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.94303, 0.599205, 0.808412)

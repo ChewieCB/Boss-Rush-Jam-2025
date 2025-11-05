@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bue0axdtvr84v"]
+[gd_scene load_steps=8 format=3 uid="uid://bue0axdtvr84v"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_fwfl1"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_3b88v"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="3_ftmnu"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_0sxmc"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_rbhad"]
+[ext_resource type="Script" path="res://src/player/barrel/insurance_crit_effect.gd" id="7_lci7i"]
 
 [node name="BlackjackBarrel" type="Node3D"]
 script = ExtResource("1_fwfl1")
@@ -13,6 +14,7 @@ script = ExtResource("1_fwfl1")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="TheSystemEffect" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_3b88v")
 display_text_title = "The System"
 display_text_tag = "Trust me brother"
@@ -31,6 +33,7 @@ attribute = 2
 new_value = 1.0
 
 [node name="BloodyScalpel" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("2_3b88v")
 display_text_title = "Bloody Scalpel"
 display_text_tag = "Sharp and cut like butter"
@@ -64,3 +67,10 @@ script = ExtResource("3_ftmnu")
 status_effect = 5
 change_color = true
 new_color = Color(0.644531, 0.00711507, 0, 1)
+
+[node name="CriticalInsurance" type="Node3D" parent="EffectContainer"]
+script = ExtResource("7_lci7i")
+display_text_title = "Critical Insurance"
+display_text_tag = "Definitely not a scam"
+positive_desc = Array[String](["Guarantee next bullet critical hit if previous one missed"])
+negative_desc = Array[String](["Critical damage reduce by 50%"])

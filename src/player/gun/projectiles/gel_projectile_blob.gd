@@ -19,7 +19,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			body.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
 			stick_target = body
 		else:
@@ -27,9 +27,9 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
-			body.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 		elif "health_component" in body:
-			body.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 	self.reparent.call_deferred(body)
 	sticked = true
 	damage_tick_timer.start(1.0 / tick_per_second)

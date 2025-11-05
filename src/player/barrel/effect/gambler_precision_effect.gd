@@ -1,5 +1,8 @@
 extends BaseBarrelEffect
 
+
+# TODO: Possible rework into roll a dice from 1 to 6 and do something with crit dmg with it
+
 ## In %, so 50 = 50%
 @export var crit_chance: float
 ## In %, so 50 = 50%

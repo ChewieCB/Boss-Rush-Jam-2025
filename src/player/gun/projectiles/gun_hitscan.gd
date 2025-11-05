@@ -89,7 +89,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		var calculated_damage = calculate_bullet_damage()
 		if target is CharacterBody3D:
 			before_damage_applied.emit(target, self)
-			target.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(target.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, target.global_position)
 			hit_boss = true
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
@@ -99,7 +99,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 					target.impact(self.global_position)
 				elif target is BarrelEffectTrigger:
 					target.hit_with_effect(self.owner_gun.installed_barrels)
-				target.health_component.damage(damage)
+				apply_damage_to_health_component(target.health_component, calculated_damage)
 				damage_applied.emit(damage, true, global_position)
 				hit_boss = true
 			elif target is BartenderBottle:

@@ -44,6 +44,7 @@ var life_time = 0
 var spawn_pos = Vector3.ZERO
 var travelled_distance = 0
 var hit_boss = false
+var is_crit = false
 
 
 func _ready() -> void:
@@ -125,6 +126,7 @@ func calculate_bullet_damage():
 	if roll <= roll_target:
 		calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
 		owner_gun.crit_damage(calculated_damage)
+		is_crit = true
 	return calculated_damage
 
 func ricochet():
@@ -195,3 +197,10 @@ func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 		element_vfx_node.visible = true
 		if element_vfx_node.has_method("turn_on"):
 			element_vfx_node.turn_on()
+
+
+func apply_damage_to_health_component(health_component: HealthComponent, damage_value: int):
+	var text_color = Color(1, 1, 1)
+	if is_crit:
+		text_color = Color(1, 0.4, 0)
+	health_component.damage(damage_value, text_color)

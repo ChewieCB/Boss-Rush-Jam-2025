@@ -100,7 +100,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			body.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
 			ricochet_count_left = 0
 			hit_boss = true
@@ -112,7 +112,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 				body.impact(self.global_position)
 			elif body is BarrelEffectTrigger:
 				body.hit_with_effect(self.owner_gun.installed_barrels)
-			body.health_component.damage(damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(damage, true, global_position)
 			hit_boss = true
 		if found_hitscal_col and gravity_accel == 0:
