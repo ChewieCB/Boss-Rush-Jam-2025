@@ -755,16 +755,17 @@ func _on_bust_exploding_state_entered() -> void:
 	card_particles.emitting = true
 	card_explosion_particles.emitting = true
 	InputHelper.rumble_medium()
-	target.player_camera.add_trauma(0.5)
+	target.player_camera.add_trauma(0.6)
 	
 	var emitters = bust_particles_parent.get_children()
 	for emitter in emitters:
 		emitter.explosion()
 		self.health_component.damage(bust_self_damage * randf_range(0.7, 1.3) / emitters.size(), Color.RED)
 		await get_tree().create_timer(randf_range(0.05, 0.2)).timeout
+		
 	await get_tree().create_timer(0.3).timeout
+	
 	state_chart.send_event("start_arena_aoe")
-	#state_chart.send_event("end_bust")
 
 
 func _on_bust_arena_aoe_state_entered() -> void:
@@ -821,6 +822,31 @@ func _on_bust_arena_aoe_state_entered() -> void:
 			tilt_hand_markers[k].global_position, 
 			0.15
 		).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+		hand_tween.tween_callback(
+			func():
+				_hand.spawn_dust
+				_hand.spawn_explosion()
+				var shake_strength: float = 0.45
+				var shake_tween := get_tree().create_tween()
+				shake_tween.set_parallel(false).set_trans(Tween.TRANS_BOUNCE)
+				shake_tween.set_loops(6)
+				shake_tween.tween_property(
+					tilt_mesh, 
+					"rotation_degrees",
+					Vector3(
+						randf_range(-shake_strength, shake_strength),
+						randf_range(-shake_strength, shake_strength),
+						randf_range(-shake_strength, shake_strength),
+					), 
+					0.15 / 12
+				)
+				shake_tween.tween_property(
+					tilt_mesh, 
+					"rotation_degrees",
+					Vector3.ZERO,
+					0.15 / 12
+				)
+		)
 		await hand_tween.finished
 	
 	state_chart.send_event("end_bust")
@@ -1168,7 +1194,7 @@ func _create_new_damage_area(pos: Vector3, radius: float, damage: float) -> RID:
 	PhysicsServer3D.area_set_collision_layer(area_rid, 0)
 	PhysicsServer3D.area_set_collision_mask(area_rid, pow(2, 2-1))
 	PhysicsServer3D.area_set_monitor_callback(area_rid, _damage_area_callback.bind(damage, area_rid))
-	PhysicsServer3D.area_set_transform(area_rid, Transform3D(Basis.IDENTITY, pos))
+	PhysicsServer3D.area_set_transform(area_rid, Transform3D(Basis(), pos))
 	PhysicsServer3D.area_set_monitorable(area_rid, true)
 	
 	return area_rid
