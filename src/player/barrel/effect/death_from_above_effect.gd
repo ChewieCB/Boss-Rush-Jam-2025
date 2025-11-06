@@ -5,7 +5,7 @@ extends BaseBarrelEffect
 @export var crit_chance: float = 20
 
 
-func on_projectile_spawn(projectile: BaseProjectile):
+func on_projectile_spawn(projectile: BaseBullet):
 	# If the player is looking downward (negative local Y axis points up)
 	if GameManager.player.player_camera.transform.basis.z.y > 0:
 		projectile.crit_chance += (crit_chance / 100.0)

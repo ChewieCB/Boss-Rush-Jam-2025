@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 class_name GunProjectile
 
 @export var gravity_modifier = 0.0

@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 class_name GelProjectile
 
 @export var stick_time = 1

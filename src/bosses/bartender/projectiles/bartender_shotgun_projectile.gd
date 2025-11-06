@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 class_name BartenderShotgunProjectile
 
 @onready var push_force = 20

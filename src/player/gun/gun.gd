@@ -230,7 +230,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 
 
 func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction: Vector3, damage: int, proj_speed, max_range: float = 500):
-	var bullet_inst: BaseProjectile = null
+	var bullet_inst: BaseBullet = null
 	if projectile_prefab_can_be_pooled:
 		bullet_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.GEL_STREAM_PROJECTILE)
 		bullet_inst.activate(start_pos, direction)
@@ -257,7 +257,7 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 
 	bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
 
-func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
+func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_before_damage_applied(_enemy, _projectile)
 
@@ -266,7 +266,7 @@ func check_barrel_effect_on_damage_applied(_damage: float, _has_pos: bool = fals
 		barrel.get_active_effect().on_damage_applied(_has_pos, _pos)
 	LuckHandler.accumulate_dps_dealt(_damage)
 
-func check_barrel_effect_on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func check_barrel_effect_on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_projectile_impact(_projectile, _has_pos, _pos)
 

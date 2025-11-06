@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 class_name GunHitscan
 
 ## Only affect visual

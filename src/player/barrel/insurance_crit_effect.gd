@@ -24,7 +24,7 @@ func on_projectile_destroyed(hit_boss: bool):
 		sure_crit = true
 
 
-func on_projectile_spawn(projectile: BaseProjectile):
+func on_projectile_spawn(projectile: BaseBullet):
 	if sure_crit:
 		projectile.crit_chance = 100
 		sure_crit = false

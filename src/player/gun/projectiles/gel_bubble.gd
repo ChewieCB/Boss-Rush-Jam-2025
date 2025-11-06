@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 
 @export var stick_time = 1
 @export var max_scale = 3

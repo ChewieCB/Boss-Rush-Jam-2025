@@ -29,7 +29,7 @@ func on_projectile_destroyed(_hit_boss: bool):
 				owner_barrel.owner_gun.jam_the_gun(2)
 
 
-func on_projectile_spawn(projectile: BaseProjectile):
+func on_projectile_spawn(projectile: BaseBullet):
 	projectile.crit_chance += (crit_chance / 100.0)
 
 func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):

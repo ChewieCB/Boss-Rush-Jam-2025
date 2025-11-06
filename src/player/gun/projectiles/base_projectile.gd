@@ -1,6 +1,5 @@
 extends Node3D
-class_name BaseProjectile
-# ^ It's a silly name. Should be BaseAttack or BaseBullet instead since both projectile and hitscan inherit from this
+class_name BaseBullet
 
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
@@ -9,9 +8,9 @@ class_name BaseProjectile
 @export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
 
-signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
+signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
-signal impacted(projectile: BaseProjectile, has_pos: bool, pos: Vector3)
+signal impacted(projectile: BaseBullet, has_pos: bool, pos: Vector3)
 signal destroyed(hit_boss: bool)
 
 const DAMAGE_VARIANCE = 0.2
@@ -138,8 +137,8 @@ func get_damage_variance_modifier(_damage: int) -> int:
 	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE] - 1
 	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
-func create_duplication() -> BaseProjectile:
-	var new_inst: BaseProjectile = self.duplicate()
+func create_duplication() -> BaseBullet:
+	var new_inst: BaseBullet = self.duplicate()
 	new_inst.owner_gun = owner_gun
 	new_inst.is_ricochet_shot = true
 	new_inst.homing_strength = homing_strength

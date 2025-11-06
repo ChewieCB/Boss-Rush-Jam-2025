@@ -112,13 +112,13 @@ func on_reload_interrupted():
 	return
 
 ## When bullet spawned / actual shooting happened
-func on_projectile_spawn(_projectile: BaseProjectile):
+func on_projectile_spawn(_projectile: BaseBullet):
 	return
 
 func on_projectile_travel_tick():
 	return
 
-func on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	return
 
 func on_projectile_destroyed(_hit_boss: bool):
@@ -129,7 +129,7 @@ func on_damage_calculation():
 	return
 
 ## When bullet hit enemy but JUST before applied damage
-func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
+func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	return
 
 ## After deal damage to enemy.

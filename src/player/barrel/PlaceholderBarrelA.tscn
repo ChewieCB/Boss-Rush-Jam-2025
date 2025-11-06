@@ -1,38 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=4 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="5_7n48w"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="5_ncjv1"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_n2kuu"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="6_vgoxo"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="8_8ud1i"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/card_counting_system_effect.gd" id="11_4doj4"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
 
 [node name="EffectContainer" type="Node3D" parent="."]
 script = ExtResource("2_nse0w")
-
-[node name="TheSystemEffect" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("5_ncjv1")
-display_text_title = "The System"
-display_text_tag = "Trust me brother"
-display_text_desc = "+10% damage for each missed bullet
-Projectile count set to 1
-Reset on reload"
-positive_desc = Array[String](["+10% damage for each missed bulletsssssss"])
-negative_desc = Array[String](["Projectile count set to 1", "Reset bonus on reload"])
-
-[node name="CardCountingEffect" type="Node3D" parent="EffectContainer/TheSystemEffect"]
-script = ExtResource("11_4doj4")
-
-[node name="SetProjectileCountTo1" type="Node3D" parent="EffectContainer/TheSystemEffect"]
-script = ExtResource("5_7n48w")
-attribute = 2
-new_value = 1.0
 
 [node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
 visible = false
@@ -48,37 +24,4 @@ display_text_desc = "-50% spread, +25% damage when stationary
 positive_desc = Array[String](["-50% spread, +25% damage when stationary"])
 negative_desc = Array[String](["+100% spread, -25% damage when moving"])
 
-[node name="BloodyScalpel" type="Node3D" parent="EffectContainer"]
-script = ExtResource("5_ncjv1")
-display_text_title = "Bloody Scalpel"
-display_text_tag = "Sharp and cut like butter"
-positive_desc = Array[String](["Applies bleed status", "Double projectile count"])
-negative_desc = Array[String](["Increase spread horizontally", "-50% damage"])
-
-[node name="DoubleProjectileCount" type="Node3D" parent="EffectContainer/BloodyScalpel"]
-script = ExtResource("6_n2kuu")
-attribute = 2
-modify_value = 100.0
-is_perc = true
-
-[node name="ReduceDamage" type="Node3D" parent="EffectContainer/BloodyScalpel"]
-script = ExtResource("6_n2kuu")
-attribute = 1
-modify_value = -50.0
-is_perc = true
-
-[node name="IncreaseSpread" type="Node3D" parent="EffectContainer/BloodyScalpel"]
-script = ExtResource("6_n2kuu")
-attribute = 7
-modify_value = 2.0
-
-[node name="IncreaseSpreadHorizontalBias" type="Node3D" parent="EffectContainer/BloodyScalpel"]
-script = ExtResource("6_n2kuu")
-attribute = 13
-modify_value = 0.4
-
-[node name="AddBleedEffect" type="Node3D" parent="EffectContainer/BloodyScalpel"]
-script = ExtResource("6_vgoxo")
-status_effect = 5
-change_color = true
-new_color = Color(0.644531, 0.00711507, 0, 1)
+[node name="Node3D" type="Node3D" parent="EffectContainer"]
