@@ -21,7 +21,7 @@ display_text_tag = "Trust me brother"
 display_text_desc = "+10% damage for each missed bullet
 Projectile count set to 1
 Reset on reload"
-positive_desc = Array[String](["+10% damage for each missed bulletsssssss"])
+positive_desc = Array[String](["+10% damage for each missed bullet"])
 negative_desc = Array[String](["Projectile count set to 1", "Reset bonus on reload"])
 
 [node name="CardCountingEffect" type="Node3D" parent="EffectContainer/TheSystemEffect"]

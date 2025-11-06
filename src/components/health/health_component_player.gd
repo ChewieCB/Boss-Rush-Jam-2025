@@ -1,6 +1,6 @@
 extends HealthComponent
 
-func damage(_damage: float, _color: Color = Color.WHITE) -> void:
+func damage(_damage: float, _color: Color = Color.WHITE, _text_scale_pop: float = 1.3) -> void:
 	_damage = round(_damage * received_dmg_multiplier)
 	if enabled:
 		if not is_invincible:

@@ -200,7 +200,9 @@ func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 
 
 func apply_damage_to_health_component(health_component: HealthComponent, damage_value: int):
-	var text_color = Color(1, 1, 1)
+	const CRIT_TEXT_SCALE_POP = 2.0
+	const CRIT_TEXT_COLOR = Color(1, 0.4, 0)
 	if is_crit:
-		text_color = Color(1, 0.4, 0)
-	health_component.damage(damage_value, text_color)
+		health_component.damage(damage_value, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP)
+	else:
+		health_component.damage(damage_value)
