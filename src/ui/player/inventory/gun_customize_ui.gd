@@ -63,7 +63,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	full_refresh_ui()
+	full_refresh_ui(true)
 	modify_tab_btn.grab_focus()
 
 
@@ -77,7 +77,10 @@ func _input(event: InputEvent) -> void:
 			close()
 			get_viewport().set_input_as_handled()
 
-func full_refresh_ui():
+func full_refresh_ui(forced = false):
+	if not visible and not forced:
+		return
+	
 	# EQUIPPED BARRELS
 	for barrel_slot in equip_barrel_container.get_children():
 		var container = barrel_slot.get_node("HBoxContainer")
@@ -141,7 +144,7 @@ func toggle():
 		open()
 
 func open():
-	full_refresh_ui()
+	full_refresh_ui(true)
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	GameManager.player.is_in_menu = true

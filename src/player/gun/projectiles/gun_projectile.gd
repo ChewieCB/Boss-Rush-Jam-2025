@@ -113,7 +113,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			elif body is BarrelEffectTrigger:
 				body.hit_with_effect(self.owner_gun.installed_barrels)
 			apply_damage_to_health_component(body.health_component, calculated_damage)
-			damage_applied.emit(damage, true, global_position)
+			damage_applied.emit(calculated_damage, true, global_position)
 			hit_boss = true
 		if found_hitscal_col and gravity_accel == 0:
 			create_spark(hitscan_col_point, hitscan_col_normal)

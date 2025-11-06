@@ -101,7 +101,7 @@ flip_faces = true
 size = Vector2(2, 2)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
-viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
+viewport_path = NodePath("EffectIconsViewport")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
@@ -425,6 +425,7 @@ process_mode = 1
 [node name="InventoryUI" parent="UI" instance=ExtResource("57_ojgux")]
 visible = false
 shop_title = "Debug Hotswap Inventory"
+current_inventory = Array[Resource]([])
 has_custom_inventory = true
 
 [node name="StateChart" type="Node" parent="."]

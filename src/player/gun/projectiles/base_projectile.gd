@@ -36,6 +36,7 @@ var max_range
 var splitted = false
 var is_hitscan = false
 var infused_status_effect = [false, false, false, false, false]
+var can_be_aim_guided = false # or Laser-guided, homing to where player is aiming at
 
 # Statistics tracking for barrel effect
 var color_changed_count = 0

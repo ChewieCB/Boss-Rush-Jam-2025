@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=5 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
+[ext_resource type="Script" path="res://src/player/barrel/loaded_dice_effect.gd" id="4_783so"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="8_8ud1i"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
@@ -24,4 +25,9 @@ display_text_desc = "-50% spread, +25% damage when stationary
 positive_desc = Array[String](["-50% spread, +25% damage when stationary"])
 negative_desc = Array[String](["+100% spread, -25% damage when moving"])
 
-[node name="Node3D" type="Node3D" parent="EffectContainer"]
+[node name="LoadedDice" type="Node3D" parent="EffectContainer"]
+script = ExtResource("4_783so")
+display_text_title = "Loaded Dice"
+display_text_tag = "Pay the price and the favour is yours"
+positive_desc = Array[String](["Increase your critical chance by 25%"])
+negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])

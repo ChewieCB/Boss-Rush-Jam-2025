@@ -100,7 +100,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 				elif target is BarrelEffectTrigger:
 					target.hit_with_effect(self.owner_gun.installed_barrels)
 				apply_damage_to_health_component(target.health_component, calculated_damage)
-				damage_applied.emit(damage, true, global_position)
+				damage_applied.emit(calculated_damage, true, global_position)
 				hit_boss = true
 			elif target is BartenderBottle:
 				target.call_deferred("queue_free")

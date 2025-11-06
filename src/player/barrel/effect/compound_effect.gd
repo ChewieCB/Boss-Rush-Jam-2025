@@ -101,9 +101,9 @@ func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	for child in child_effects:
 		child.on_before_damage_applied(_enemy, _projectile)
 
-func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for child in child_effects:
-		child.on_damage_applied(_has_pos, _pos)
+		child.on_damage_applied(_damage, _has_pos, _pos)
 
 func on_enemy_killed():
 	for child in child_effects:

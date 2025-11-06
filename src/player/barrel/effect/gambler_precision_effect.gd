@@ -32,6 +32,6 @@ func on_projectile_destroyed(_hit_boss: bool):
 func on_projectile_spawn(projectile: BaseBullet):
 	projectile.crit_chance += (crit_chance / 100.0)
 
-func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
-	super ()
+func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+	super (_damage, _has_pos, _pos)
 	hit_count += 1

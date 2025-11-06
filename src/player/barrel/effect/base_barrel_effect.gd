@@ -133,7 +133,7 @@ func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	return
 
 ## After deal damage to enemy.
-func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	return
 
 func on_enemy_killed():

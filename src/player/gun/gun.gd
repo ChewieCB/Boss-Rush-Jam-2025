@@ -263,7 +263,7 @@ func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _proj
 
 func check_barrel_effect_on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for barrel in installed_barrels:
-		barrel.get_active_effect().on_damage_applied(_has_pos, _pos)
+		barrel.get_active_effect().on_damage_applied(_damage, _has_pos, _pos)
 	LuckHandler.accumulate_dps_dealt(_damage)
 
 func check_barrel_effect_on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
