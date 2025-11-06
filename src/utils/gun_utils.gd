@@ -27,3 +27,14 @@ func get_spread_direction(center_direction: Vector3, spread_angle: float, horizo
 	rotated = rotated.rotated(basis.x, pitch) # vertical
 
 	return rotated.normalized()
+
+
+func get_player_aiming_position() -> Vector3:
+	if not GameManager.player:
+		return Vector3.ZERO
+
+	var laser_guide_ray: RayCast3D = GameManager.player.laser_guide_ray
+	if laser_guide_ray.is_colliding():
+		var hit_position: Vector3 = laser_guide_ray.get_collision_point()
+		return hit_position
+	return laser_guide_ray.to_global(laser_guide_ray.target_position)

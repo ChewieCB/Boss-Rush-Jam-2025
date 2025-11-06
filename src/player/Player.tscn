@@ -200,6 +200,10 @@ mesh = SubResource("QuadMesh_bbump")
 collision_mask = 125
 collide_with_areas = true
 
+[node name="LaserGuideRayCast" type="RayCast3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
+target_position = Vector3(0, 0, -100)
+collision_mask = 5
+
 [node name="AimRecticle" type="TextureRect" parent="Neck/ShakeCameraWrapper"]
 anchors_preset = 8
 anchor_left = 0.5

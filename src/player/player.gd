@@ -51,6 +51,7 @@ var movement_sfx_player: AudioStreamPlayer
 
 @onready var gun_container = $Neck/ShakeCameraWrapper/GunContainer
 @onready var aim_ray: AimRay = $Neck/ShakeCameraWrapper/Camera3D/AimRay
+@onready var laser_guide_ray: RayCast3D = $Neck/ShakeCameraWrapper/Camera3D/LaserGuideRayCast
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
 @onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker

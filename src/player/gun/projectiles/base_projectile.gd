@@ -62,7 +62,10 @@ func create_spark(pos: Vector3, normal: Vector3):
 	create_status_effect_impact(pos, normal)
 	if spark_effect == null:
 		return
-
+	if can_be_aim_guided:
+		pos = global_position
+		normal = Vector3.UP
+		
 	var spark_inst = spark_effect.instantiate()
 	get_parent().add_child(spark_inst)
 	spark_inst.global_position = pos
@@ -78,6 +81,9 @@ func create_blood_splatter(pos: Vector3, normal: Vector3):
 	create_status_effect_impact(pos, normal)
 	if generic_blood_splatter == null:
 		return
+	if can_be_aim_guided:
+		pos = global_position
+		normal = Vector3.UP
 
 	var blood_inst = generic_blood_splatter.instantiate()
 	get_parent().add_child(blood_inst)
@@ -93,6 +99,10 @@ func create_blood_splatter(pos: Vector3, normal: Vector3):
 func create_bullet_decal(pos: Vector3, normal: Vector3):
 	if bullet_decal_prefab == null:
 		return
+	if can_be_aim_guided:
+		pos = global_position
+		normal = Vector3.UP
+
 	var decal_inst = bullet_decal_prefab.instantiate()
 	get_tree().get_root().add_child(decal_inst)
 	decal_inst.global_position = pos
