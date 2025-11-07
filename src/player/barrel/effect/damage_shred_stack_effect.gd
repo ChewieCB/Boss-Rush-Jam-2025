@@ -16,7 +16,7 @@ func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = V
 	stack_count += 1
 	add_buff_that_track_stack_count()
 
-func on_damage_calculation():
+func on_gun_damage_calculation():
 	super ()
 	owner_barrel.owner_gun.modified_damage += flat_damage_bonus * stack_count
 	owner_barrel.owner_gun.modified_damage = round(owner_barrel.owner_gun.modified_damage * (1 + (perc_damage_bonus * stack_count / 100.0)))

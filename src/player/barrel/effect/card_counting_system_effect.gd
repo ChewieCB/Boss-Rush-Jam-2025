@@ -28,7 +28,7 @@ func on_projectile_destroyed(hit_boss):
 		missed_shot_stack_count += 1
 		show_stack_count_ui_effect()
 
-func on_damage_calculation():
+func on_gun_damage_calculation():
 	super ()
 	var sum_perc = damage_modify_perc_per_stack * missed_shot_stack_count
 	owner_barrel.owner_gun.modified_damage = round(owner_barrel.owner_gun.modified_damage * (1 + (sum_perc / 100.0)))

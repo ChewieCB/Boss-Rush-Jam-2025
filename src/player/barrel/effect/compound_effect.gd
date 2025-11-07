@@ -93,9 +93,9 @@ func on_projectile_destroyed(_hit_boss: bool):
 	for child in child_effects:
 		child.on_projectile_destroyed(_hit_boss)
 
-func on_damage_calculation():
+func on_gun_damage_calculation():
 	for child in child_effects:
-		child.on_damage_calculation()
+		child.on_gun_damage_calculation()
 
 func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	for child in child_effects:

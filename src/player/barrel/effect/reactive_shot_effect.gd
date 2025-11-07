@@ -13,7 +13,7 @@ func _ready():
 		timer.one_shot = true
 		add_child(timer)
 
-func on_damage_calculation():
+func on_gun_damage_calculation():
 	super ()
 	if not timer.is_stopped():
 		owner_barrel.owner_gun.modified_damage = round(owner_barrel.owner_gun.modified_damage * (1 + (damage_modify_perc / 100.0)))

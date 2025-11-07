@@ -124,11 +124,12 @@ func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos:
 func on_projectile_destroyed(_hit_boss: bool):
 	return
 
-## When bullet go out of barrel
-func on_damage_calculation():
+## Before bullet go out of barrel. Not take into account bullet effect yet.
+func on_gun_damage_calculation():
 	return
 
-## When bullet hit enemy but JUST before applied damage
+## When bullet hit enemy but JUST before applied damage (but after normal damage calculation).
+## You can modify bullet damage which take into account bonus of each bullet here.
 func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	return
 

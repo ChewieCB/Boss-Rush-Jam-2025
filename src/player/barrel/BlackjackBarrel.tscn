@@ -14,7 +14,6 @@ script = ExtResource("1_fwfl1")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="TheSystemEffect" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("2_3b88v")
 display_text_title = "The System"
 display_text_tag = "Trust me brother"
@@ -33,7 +32,6 @@ attribute = 2
 new_value = 1.0
 
 [node name="BloodyScalpel" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("2_3b88v")
 display_text_title = "Bloody Scalpel"
 display_text_tag = "Sharp and cut like butter"
@@ -72,5 +70,5 @@ new_color = Color(0.644531, 0.00711507, 0, 1)
 script = ExtResource("7_lci7i")
 display_text_title = "Critical Insurance"
 display_text_tag = "Definitely not a scam"
-positive_desc = Array[String](["Guarantee next bullet critical hit if previous one missed"])
+positive_desc = Array[String](["Guarantee the next bullet critical hit if previous one missed"])
 negative_desc = Array[String](["Critical damage reduce by 50%"])

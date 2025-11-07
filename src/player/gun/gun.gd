@@ -179,7 +179,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	GameManager.player.player_camera.add_trauma(modified_screenshake)
 
 	for barrel in installed_barrels:
-		barrel.get_active_effect().on_damage_calculation()
+		barrel.get_active_effect().on_gun_damage_calculation()
 
 	for i in range(n_shot_repeat):
 		if barrel_count == 0 or not check_if_archetype_barrel_installed():
@@ -240,6 +240,7 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
+
 	if not bullet_inst.is_connected("before_damage_applied", check_barrel_effect_on_before_damage_applied):
 		bullet_inst.before_damage_applied.connect(check_barrel_effect_on_before_damage_applied)
 

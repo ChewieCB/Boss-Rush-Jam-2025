@@ -10,7 +10,7 @@ func on_projectile_spawn(projectile: BaseBullet):
 	if GameManager.player.player_camera.transform.basis.z.y > 0:
 		projectile.crit_chance += (crit_chance / 100.0)
 
-func on_damage_calculation():
+func on_gun_damage_calculation():
 	super ()
 	if not GameManager.player.is_on_floor():
 		owner_barrel.owner_gun.modified_damage = round(owner_barrel.owner_gun.modified_damage * (1 + (damage_modify_perc / 100.0)))

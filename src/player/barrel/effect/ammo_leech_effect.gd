@@ -6,9 +6,9 @@ extends BaseBarrelEffect
 ## In %, so 50 = 50%
 @export var perc_damage_modify: float
 
-func on_damage_calculation():
+func on_gun_damage_calculation():
 	super ()
-	# print("on_damage_calculation with {0}".format([display_text]))
+	# print("on_gun_damage_calculation with {0}".format([display_text]))
 	owner_barrel.owner_gun.modified_damage += flat_damage_modify
 	owner_barrel.owner_gun.modified_damage = round(owner_barrel.owner_gun.modified_damage * (1 + (perc_damage_modify / 100.0)))
 	# print("damage: {0}".format([owner_barrel.owner_gun.modified_damage]))

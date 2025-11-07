@@ -41,7 +41,7 @@ script = ExtResource("5_0nmke")
 display_text_title = "Guided Hand"
 display_text_tag = "Keep aiming at the target"
 positive_desc = Array[String](["Bullet homing to aimed location"])
-negative_desc = Array[String](["-50% projectile speed"])
+negative_desc = Array[String](["-50% projectile speed", "Doesn't work with hitscan bullet"])
 
 [node name="LaserGuidedEffect" type="Node3D" parent="EffectContainer/GuidedHand"]
 script = ExtResource("6_s01hw")
