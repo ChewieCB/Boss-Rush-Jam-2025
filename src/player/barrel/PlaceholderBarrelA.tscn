@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=9 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/laser_guided_effect.gd" id="6_s01hw"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_uwm1l"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="8_8ud1i"]
+[ext_resource type="Script" path="res://src/player/barrel/safety_fold_effect.gd" id="8_dkjpk"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
@@ -37,6 +38,7 @@ positive_desc = Array[String](["Increase your critical chance by 25%"])
 negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
 
 [node name="GuidedHand" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("5_0nmke")
 display_text_title = "Guided Hand"
 display_text_tag = "Keep aiming at the target"
@@ -50,4 +52,20 @@ script = ExtResource("6_s01hw")
 script = ExtResource("6_uwm1l")
 attribute = 3
 modify_value = -50.0
+is_perc = true
+
+[node name="SafetyFold" type="Node3D" parent="EffectContainer"]
+script = ExtResource("5_0nmke")
+display_text_title = "Safety Fold"
+display_text_tag = "..know when to fold 'em"
+positive_desc = Array[String](["Gain 50% damage resistance during reload"])
+negative_desc = Array[String](["-50% reload speed"])
+
+[node name="SafetyFoldEffect" type="Node3D" parent="EffectContainer/SafetyFold"]
+script = ExtResource("8_dkjpk")
+
+[node name="ModifyProjectileSpeedEffect" type="Node3D" parent="EffectContainer/SafetyFold"]
+script = ExtResource("6_uwm1l")
+attribute = 8
+modify_value = 50.0
 is_perc = true
