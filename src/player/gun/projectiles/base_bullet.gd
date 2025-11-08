@@ -15,7 +15,6 @@ signal destroyed(hit_boss: bool)
 
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
-const MIN_LIFETIME_BEFORE_AIM_GUIDED = 0.2
 
 ## Base damage / initial damage
 var damage = 1
@@ -38,6 +37,7 @@ var splitted = false
 var is_hitscan = false
 var infused_status_effect = [false, false, false, false, false]
 var can_be_aim_guided = false # or Laser-guided, homing to where player is aiming at
+var min_lifetime_before_can_be_aim_guided = 0.2
 
 # Statistics tracking for barrel effect
 var color_changed_count = 0

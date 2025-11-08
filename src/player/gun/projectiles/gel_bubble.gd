@@ -13,6 +13,8 @@ extends BaseBullet
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
 
+const MIN_PROJECTILE_SPEED = 1
+
 ## Each bubble has a random delayed time before it start moving
 var delayed = true
 var start_deflate = false
@@ -29,7 +31,7 @@ func _ready() -> void:
 	life_timer.start()
 	delayed = false
 	mesh_instance.visible = true
-
+	min_lifetime_before_can_be_aim_guided = 0.3
 
 func _process(delta: float) -> void:
 	super (delta)
@@ -42,8 +44,9 @@ func _physics_process(delta: float) -> void:
 	if mesh_instance.scale.x < max_scale:
 		mesh_instance.scale += Vector3.ONE * grow_speed * delta
 
-	if projectile_speed > 0:
+	if projectile_speed > MIN_PROJECTILE_SPEED:
 		projectile_speed -= projectile_speed_decay * delta
+		projectile_speed = max(projectile_speed, MIN_PROJECTILE_SPEED)
 
 
 	if homing_locked_in and homing_target:
@@ -51,6 +54,10 @@ func _physics_process(delta: float) -> void:
 		if homing_target.get_node("BodyCenter"):
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
+		look_at(global_position + dir_to_target)
+	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
+		var aiming_position = GunUtils.get_player_aiming_position()
+		var dir_to_target = global_position.direction_to(aiming_position)
 		look_at(global_position + dir_to_target)
 
 	global_position -= transform.basis.z * projectile_speed * delta
