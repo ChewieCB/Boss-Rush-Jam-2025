@@ -15,6 +15,7 @@ signal destroyed(hit_boss: bool)
 
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
+const MIN_LIFETIME_BEFORE_AIM_GUIDED = 0.2
 
 ## Base damage / initial damage
 var damage = 1

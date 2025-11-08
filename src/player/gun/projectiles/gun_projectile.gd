@@ -39,7 +39,7 @@ func _physics_process(delta: float) -> void:
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
-	elif can_be_aim_guided:
+	elif can_be_aim_guided and life_time >= MIN_LIFETIME_BEFORE_AIM_GUIDED:
 		var aiming_position = GunUtils.get_player_aiming_position()
 		var dir_to_target = global_position.direction_to(aiming_position)
 		look_at(global_position + dir_to_target)
