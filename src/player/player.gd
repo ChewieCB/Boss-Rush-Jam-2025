@@ -72,6 +72,8 @@ var barrel_ui_active: bool = false
 
 @onready var boss_special_dialog = $UI/BossSpecialDialog
 @onready var boss_special_dialog_label: Label = $UI/BossSpecialDialog/Label
+@onready var near_enemy_area: Area3D = $NearEnemyRadius
+var enemy_near_counter = 0
 
 @export_group("Status Effects")
 @export_subgroup("Drunk")
@@ -1066,3 +1068,15 @@ func _disable_freecam() -> void:
 	freecam = null
 	
 	Engine.time_scale = 1.0
+
+
+func change_near_enemy_radius(new_radius: float) -> void:
+	var coll_shape: CollisionShape3D = near_enemy_area.get_node("CollisionShape3D")
+	coll_shape.shape.radius = new_radius
+
+
+func _on_near_enemy_radius_body_entered(_body: Node3D) -> void:
+	enemy_near_counter += 1
+
+func _on_near_enemy_radius_body_exited(_body: Node3D) -> void:
+	enemy_near_counter -= 1
