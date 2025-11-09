@@ -33,7 +33,7 @@ func check_if_can_trigger() -> bool:
 		return false
 	if min_time_passed > 0 and not timer.is_stopped():
 		return false
-	var roll = randf_range(0, 100)
+	var roll = randf_range(1, 100)
 	if roll > chance_perc:
 		return false
 

@@ -180,6 +180,7 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
 	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0, # In decimal, so 0.5 = 50%
 	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0,
+	StatusEffect.PlayerStatEnum.DODGE_CHANCE: 0, # In decimal
 }
 var current_stats = base_stats.duplicate(true)
 

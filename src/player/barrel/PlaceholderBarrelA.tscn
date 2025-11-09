@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=13 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
@@ -9,6 +9,9 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="8_8ud1i"]
 [ext_resource type="Script" path="res://src/player/barrel/safety_fold_effect.gd" id="8_dkjpk"]
 [ext_resource type="Script" path="res://src/player/barrel/daredevil_effect.gd" id="9_5tuyi"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="10_fn6a4"]
+[ext_resource type="Texture2D" uid="uid://ddfqokjq1u61n" path="res://assets/sprite/status_icon/defense-down.png" id="11_oh2rg"]
+[ext_resource type="Texture2D" uid="uid://dlw4dtm637qxu" path="res://assets/sprite/status_icon/feather.png" id="12_lj377"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
@@ -73,9 +76,38 @@ modify_value = 50.0
 is_perc = true
 
 [node name="DaredevilEffect" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("9_5tuyi")
 min_distance_to_boss = 7.0
 display_text_title = "Daredevil"
 display_text_tag = "Get close, get personal"
 positive_desc = Array[String](["Increases bullet damage the longer you stay in close range to enemies"])
 negative_desc = Array[String](["Decreases damage otherwise"])
+
+[node name="FragileFeather" type="Node3D" parent="EffectContainer"]
+script = ExtResource("5_0nmke")
+display_text_title = "Fragile Feather"
+display_text_tag = "Better dodge more"
+positive_desc = Array[String](["+25% dodge chance"])
+negative_desc = Array[String](["+25% damage taken"])
+
+[node name="IncreaseDamageTaken" type="Node3D" parent="EffectContainer/FragileFeather"]
+script = ExtResource("10_fn6a4")
+display_name = "Increase damage taken"
+status_code = "fragile_feather_reduce_damage_resistance"
+modified_stat = 4
+value = -0.25
+is_infinite_duration = true
+is_bad_effect = true
+status_icon = ExtResource("11_oh2rg")
+show_duration_ui = true
+
+[node name="IncreaseDodgeChance" type="Node3D" parent="EffectContainer/FragileFeather"]
+script = ExtResource("10_fn6a4")
+display_name = "Increase dodge chance"
+status_code = "fragile_feather_increase_dodge_chance"
+modified_stat = 13
+value = 0.25
+is_infinite_duration = true
+status_icon = ExtResource("12_lj377")
+show_duration_ui = true
