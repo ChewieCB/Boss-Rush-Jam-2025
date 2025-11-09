@@ -238,9 +238,9 @@ shadow_mesh = SubResource("ArrayMesh_iu3uw")
 script = ExtResource("1_jvvc4")
 gpu_particles_arr = [NodePath("Fire"), NodePath("Sparks"), NodePath("Smoke")]
 explode_on_spawn = false
-free_on_finished = null
 
 [node name="Fire" type="GPUParticles3D" parent="."]
+layers = 2
 sorting_offset = 1.0
 emitting = false
 amount = 64
@@ -253,6 +253,7 @@ process_material = SubResource("ParticleProcessMaterial_ibgcb")
 draw_pass_1 = SubResource("ArrayMesh_hgjeb")
 
 [node name="Sparks" type="GPUParticles3D" parent="."]
+layers = 2
 sorting_offset = -1.0
 emitting = false
 amount = 16
@@ -266,6 +267,7 @@ draw_pass_1 = SubResource("ArrayMesh_b1vad")
 
 [node name="Smoke" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+layers = 2
 sorting_offset = -2.0
 emitting = false
 amount = 32

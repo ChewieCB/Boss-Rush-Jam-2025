@@ -33,8 +33,9 @@ func _physics_process(delta: float) -> void:
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
-
-	global_position -= transform.basis.z * projectile_speed * delta
+	
+	velocity = -transform.basis.z * projectile_speed * delta
+	global_position += velocity 
 	travelled_distance += projectile_speed * delta
 
 

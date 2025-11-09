@@ -3,6 +3,7 @@ class_name GunProjectile
 
 @export var gravity_modifier = 0.0
 
+@onready var collider: Area3D = $Area3D
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
 @onready var mesh: MeshInstance3D = $MeshInstance3D
@@ -39,7 +40,8 @@ func _physics_process(delta: float) -> void:
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
-	global_position -= transform.basis.z * projectile_speed * delta
+	velocity = -transform.basis.z * projectile_speed * delta
+	global_position += velocity 
 	travelled_distance += projectile_speed * delta
 
 
@@ -123,9 +125,10 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		stop_elemental_particles()
-		destroyed.emit()
-		call_deferred("queue_free")
+		if not keep_alive:
+			stop_elemental_particles()
+			destroyed.emit()
+			call_deferred("queue_free")
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:

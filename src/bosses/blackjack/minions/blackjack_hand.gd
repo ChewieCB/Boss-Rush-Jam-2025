@@ -1,6 +1,8 @@
 extends BossCore
 class_name BlackjackHand
 
+signal return_timeout(hand: BlackjackHand)
+
 @onready var dust_particle: GPUParticles3D = $HandDust
 @onready var explosion_particle = $DeathExplosion
 
@@ -48,7 +50,9 @@ var sweep_progress: float = 0.0
 var sweep_path_follow: PathFollow3D
 var sweep_card_follows := []
 var sweep_tween: Tween
+# Block
 
+@export var return_timer: Timer
 
 func _ready() -> void:
 	super()
@@ -125,10 +129,13 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 		body.health_component.damage(hit_damage)
 
 
-func _telegraph_attack(_attack_name: String = "") -> void:
+func _telegraph_attack(_attack_name: String = "", time: float = 0.0) -> void:
 	state_chart.send_event("attack_telegraph")
+	if time > 0.0:
+		anim_player.speed_scale = 0.3 / time
 	anim_player.play("blackjack_hand/telegraph")
 	await anim_player.animation_finished
+	anim_player.speed_scale = 1.0
 	state_chart.send_event("attack_start")
 	return
 
@@ -529,3 +536,7 @@ func _on_sweep_returning_state_entered() -> void:
 	
 	state_chart.send_event("end_attack")
 	state_chart.send_event("hand_finished")
+
+
+func _on_return_timer_timeout() -> void:
+	return_timeout.emit(self)

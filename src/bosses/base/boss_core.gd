@@ -666,6 +666,9 @@ func _on_hurt_frame_timer_timeout() -> void:
 ## STATUS EFFECTS
 
 func toggle_emitting_elemental_vfx(status: BossStatusEffect, is_on: bool = true):
+	if elemental_emitting_vfx.size() == 0:
+		return
+	
 	var element_vfx_node = elemental_emitting_vfx[int(status) - 1]
 	if element_vfx_node:
 		element_vfx_node.visible = is_on
