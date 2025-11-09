@@ -123,7 +123,7 @@ var tilt_explosion_instances := []
 @export var blocking_detection_area: Area3D
 @export var block_detection_radius: float = 18.0
 @export var blocking_time: float = 6.5
-@export var hand_block_timeout: float = 2.0
+@export var hand_block_timeout: float = 0.4
 var absorbed_shots: Array = []
 var block_timers: Array = []
 
@@ -176,6 +176,8 @@ func _ready() -> void:
 			timer.one_shot = true
 			scene_root.add_child(timer)
 			block_timers.push_back(timer)
+		
+		blocking_detection_area.raycast_hit.connect(_block_interecept_projectile)
 	)
 
 
@@ -1310,6 +1312,10 @@ func _on_hand_defensive_firing_state_entered() -> void:
 		var speed: float = shot.owner_gun.modified_projectile_speed
 		shot.keep_alive = false
 		shot.visible = true
+		
+		if shot is GunHitscan:
+			shot.alpha = 1.0
+		
 		for elem in shot.elemental_emitting_vfx:
 			if elem:
 				elem.turn_on()
@@ -1333,18 +1339,8 @@ func _on_hand_defensive_recovering_state_entered() -> void:
 	_recover_entered()
 
 
-func _on_blocking_detection_area_area_entered(area: Area3D) -> void:
-	# If the defensive state isn't active, return
-	if not $StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Blocking.active:
-		return
-	
-	if available_hands.size() == 0:
-		return
-	
-	# Store the projectile instance to be re-fired later
-	var proj = area.owner as BaseProjectile
-	if proj is GunProjectile:
-		proj.life_timer.stop()
+func _block_interecept_projectile(proj: BaseProjectile, pos: Vector3 = Vector3.ZERO) -> void:
+	proj.life_timer.stop()
 	proj.life_time = 0.0
 	proj.keep_alive = true
 	proj.travelled_distance = 0.0
@@ -1371,6 +1367,8 @@ func _on_blocking_detection_area_area_entered(area: Area3D) -> void:
 	var intercept_dist: float = closest_hand.global_position.distance_to(proj.global_position)
 	var intercept_time: float = get_intercept_time(closest_hand.global_position, 130.0, proj.global_position, proj.velocity)
 	var intercept_pos: Vector3 = proj.global_position + proj.velocity * intercept_time
+	if proj is GunHitscan:
+		intercept_time = 0.01
 	# Shift the intercept pos back a bit so we guarentee a hit
 	intercept_pos -= proj.transform.basis.z * 2.0
 	
@@ -1388,6 +1386,10 @@ func _on_blocking_detection_area_area_entered(area: Area3D) -> void:
 		proj.global_position = Vector3(-20, -20, -20)
 		proj.collider.collision_mask -= pow(2, 3-1) + pow(2, 4-1)
 		proj.collider.collision_mask += pow(2, 2-1)
+	elif proj is GunHitscan:
+		proj.raycast.collision_mask = pow(2, 1-1) + pow(2, 2-1)
+		proj.raycast.collide_with_areas = false
+	
 	for elem in proj.elemental_emitting_vfx:
 		if elem:
 			elem.turn_off()
@@ -1404,6 +1406,19 @@ func _on_blocking_detection_area_area_entered(area: Area3D) -> void:
 	# TODO - add a shader/mesh effect to show shots that are stored in the hands
 	# visually like the needler from halo or something - just a rectangular mesh
 	# matching the projectile direction on impact for now 
+
+func _on_blocking_detection_area_area_entered(area: Area3D) -> void:
+	# If the defensive state isn't active, return
+	if not $StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Blocking.active:
+		return
+	
+	if available_hands.size() == 0:
+		return
+	
+	# Store the projectile instance to be re-fired later
+	var proj = area.owner as BaseProjectile
+	_block_interecept_projectile(proj.global_position, proj)
+	
 
 
 func get_intercept_time(interceptor_pos: Vector3, interceptor_speed: float, target_pos: Vector3, target_velocity: Vector3) -> float:

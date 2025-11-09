@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=4 uid="uid://bsdh38vyreful"]
+[gd_scene load_steps=71 format=4 uid="uid://bsdh38vyreful"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_262ft"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/boss_blackjack.gd" id="2_km6gh"]
@@ -36,6 +36,7 @@
 [ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="20_1mflx"]
 [ext_resource type="Texture2D" uid="uid://cjm0gilmb52sa" path="res://assets/sprite/aoe_markers/aoe_arrows.png" id="20_an7di"]
 [ext_resource type="PackedScene" uid="uid://bl721ikop8rr" path="res://src/bosses/base/attacks/ranged/ExplodingProjectileExplosionArea.tscn" id="21_v5jtk"]
+[ext_resource type="Script" path="res://src/bosses/blackjack/blocking_detection_area.gd" id="34_ihkxb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_brmua"]
 size = Vector3(5, 5, 5)
@@ -495,7 +496,7 @@ tilt_explosion_damage = 25.0
 blocking_detection_area = NodePath("BlockingDetectionArea")
 block_detection_radius = 18.0
 blocking_time = 6.5
-hand_block_timeout = 2.0
+hand_block_timeout = 0.4
 chip_scene = null
 barrel_pickup_scene = null
 sfx_slowmo = null
@@ -637,6 +638,7 @@ max_health = 6000.0
 [node name="BlockingDetectionArea" type="Area3D" parent="." index="9"]
 collision_layer = 4
 collision_mask = 8
+script = ExtResource("34_ihkxb")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BlockingDetectionArea" index="0"]
 shape = SubResource("SphereShape3D_aol33")

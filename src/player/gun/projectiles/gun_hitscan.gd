@@ -85,6 +85,26 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		hitscan_col_normal = raycast.get_collision_normal()
 		end_pos = hitscan_col_point
 		travelled_distance += start_pos.distance_to(end_pos)
+		
+		if target is BlockingDetectionArea:
+			var buffered_hit_pos: Vector3 = hitscan_col_point + current_dir * 2.0
+			target._raycast_hit(self, buffered_hit_pos)
+			create_spark(buffered_hit_pos, hitscan_col_normal)
+			
+			var distance = start_pos.distance_to(end_pos)
+			position += current_dir * (distance / 2.0)
+			mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)
+			if is_ricochet_shot:
+				mesh.mesh.material.set_shader_parameter("enable_fade", false)
+				mesh.mesh.material.set_shader_parameter("enable_taper", false)
+			else:
+				mesh.mesh.material.set_shader_parameter("enable_fade", true)
+				mesh.mesh.material.set_shader_parameter("enable_taper", true)
+				mesh.mesh.material.set_shader_parameter("fade_distance", distance / 4)
+				mesh.mesh.material.set_shader_parameter("origin_position", start_pos)
+			visible = true
+			return
+		
 		impacted.emit(self, true, hitscan_col_point)
 		var calculated_damage = calculate_bullet_damage()
 		if target is CharacterBody3D:
