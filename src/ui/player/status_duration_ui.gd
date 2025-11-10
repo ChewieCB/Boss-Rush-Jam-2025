@@ -52,6 +52,8 @@ func init(_status_effect: StatusEffect) -> void:
 		value_label.text = ""
 		info_text_label.text = ""
 
+	info_text_label.text = status_effect.display_name
+
 func refresh(updated_status: StatusEffect):
 	status_effect = updated_status
 	max_time = status_effect.duration
@@ -62,6 +64,8 @@ func refresh(updated_status: StatusEffect):
 	else:
 		value_label.text = ""
 		info_text_label.text = ""
+
+	info_text_label.text = status_effect.display_name
 
 func remove():
 	call_deferred("queue_free")

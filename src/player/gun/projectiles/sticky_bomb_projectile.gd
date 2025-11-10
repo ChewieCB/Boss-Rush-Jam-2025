@@ -78,7 +78,7 @@ func _on_life_timer_timeout() -> void:
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
 		return
-	var calculated_damage = calculate_bullet_damage() # Recalculate damage after before_damage_applied effect
+	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
@@ -113,7 +113,7 @@ func _on_explode_timer_timeout() -> void:
 	var calculated_explosion_damage = calculate_explosion_damage()
 	inst.init(calculated_explosion_damage)
 	get_parent().add_child(inst)
-	inst.global_position = global_position
+	inst.activate(global_position)
 
 	var vfx = explosion_vfx.instantiate()
 	get_parent().add_child(vfx)
