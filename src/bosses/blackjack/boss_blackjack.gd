@@ -19,6 +19,7 @@ var current_wander_target: Vector3
 @export var wander_timeout: float = 0.5
 @onready var wander_timer: Timer = $WanderTimer
 var move_tween: Tween
+var return_tween: Tween
 var active_point_debug: Node3D
 
 @export_group("Hands")
@@ -204,7 +205,7 @@ func _on_died() -> void:
 	
 	blackjack_particles.emitting = false
 	blackjack_timer.stop()
-	for tween in [move_tween, hand_spawn_tween, deal_tween, tilt_tween, hand_tween]:
+	for tween in [move_tween, return_tween, hand_spawn_tween, deal_tween, tilt_tween, hand_tween]:
 		if tween:
 			tween.kill()
 	
@@ -254,6 +255,12 @@ func _on_health_dead_state_entered() -> void:
 	
 	# Crash platform into center of map
 	var crash_tween := get_tree().create_tween()
+	crash_tween.tween_property(
+		self, "global_position", intro_path_points[2].global_position, 0.6
+	).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	crash_tween.chain().tween_property(
+		self, "global_position", Vector3(0, 1.6, -27), 0.8
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	crash_tween.parallel().tween_property(
 		self, "global_position", Vector3(0, 1.6, -27), 0.8
 	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
@@ -286,8 +293,6 @@ func _on_health_dead_state_entered() -> void:
 	
 	await crash_tween.finished
 	
-	await get_tree().create_timer(3.4).timeout
-
 	#await anim_player.animation_finished
 	anim_player.process_mode = Node.PROCESS_MODE_DISABLED
 
@@ -631,6 +636,10 @@ func _on_intro_state_entered() -> void:
 
 func _on_dealing_idle_state_entered() -> void:
 	hand_count_label.text = "0"
+	
+	return_tween = get_tree().create_tween()
+	return_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	return_tween.tween_property(self, "global_position", intro_path_points[2].global_position, 0.6)
 	
 	var start_hand_count: int = spawned_hands.size()
 	if start_hand_count < max_hand_spawn:
@@ -1217,7 +1226,7 @@ func _on_tilt_recovering_state_entered() -> void:
 	target.floor_stop_on_slope = true
 	target.remove_status_effect(slippery_debuff)
 	# Return the hands to the anchored position
-	var return_tween = get_tree().create_tween()
+	return_tween = get_tree().create_tween()
 	return_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 	return_tween.tween_property(self, "global_position", intro_path_points[2].global_position, 0.6)
 	
