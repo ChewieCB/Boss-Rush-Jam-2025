@@ -1,6 +1,8 @@
 extends BaseProjectile
 class_name GunHitscan
 
+signal end_pos_set(pos: Vector3)
+
 ## Only affect visual
 @export var thickness = 10
 @export var fade_speed = 2.0
@@ -87,11 +89,11 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		travelled_distance += start_pos.distance_to(end_pos)
 		
 		if target is BlockingDetectionArea:
-			var buffered_hit_pos: Vector3 = hitscan_col_point + current_dir * 2.0
-			target._raycast_hit(self, buffered_hit_pos)
+			var buffered_hit_pos: Vector3 = target._raycast_hit(self, end_pos)
+			end_pos_set.emit(buffered_hit_pos)
 			create_spark(buffered_hit_pos, hitscan_col_normal)
 			
-			var distance = start_pos.distance_to(end_pos)
+			var distance = start_pos.distance_to(buffered_hit_pos)
 			position += current_dir * (distance / 2.0)
 			mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)
 			if is_ricochet_shot:
@@ -128,7 +130,9 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			ricochet()
 	else:
 		end_pos = start_pos + current_dir * BEAM_RANGE_IF_NOT_COLLIDE
-
+	
+	end_pos_set.emit(end_pos)
+	
 	var distance = start_pos.distance_to(end_pos)
 	position += current_dir * (distance / 2.0)
 	mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)

@@ -51,7 +51,7 @@ var sweep_path_follow: PathFollow3D
 var sweep_card_follows := []
 var sweep_tween: Tween
 # Block
-
+@export var cycle_jitter: float = 0.2
 @export var return_timer: Timer
 
 func _ready() -> void:
@@ -540,3 +540,11 @@ func _on_sweep_returning_state_entered() -> void:
 
 func _on_return_timer_timeout() -> void:
 	return_timeout.emit(self)
+
+
+func _on_blocking_targeting_state_entered() -> void:
+	anim_player.play("blackjack_hand/shake")
+
+
+func _on_blocking_targeting_state_exited() -> void:
+	anim_player.play("blackjack_hand/RESET")

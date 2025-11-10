@@ -495,8 +495,8 @@ tilt_proj_explosion_area_scene = ExtResource("21_v5jtk")
 tilt_explosion_damage = 25.0
 blocking_detection_area = NodePath("BlockingDetectionArea")
 block_detection_radius = 18.0
-blocking_time = 6.5
-hand_block_timeout = 0.4
+blocking_time = 3.1
+hand_block_timeout = 0.35
 chip_scene = null
 barrel_pickup_scene = null
 sfx_slowmo = null
@@ -636,8 +636,10 @@ visible = false
 max_health = 6000.0
 
 [node name="BlockingDetectionArea" type="Area3D" parent="." index="9"]
+process_mode = 4
 collision_layer = 4
 collision_mask = 8
+monitorable = false
 script = ExtResource("34_ihkxb")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BlockingDetectionArea" index="0"]
@@ -1125,6 +1127,7 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Targeting" to="." method="_on_hand_defensive_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/MovingToBlock" to="." method="_on_hand_defensive_moving_to_block_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Blocking" to="." method="_on_hand_defensive_blocking_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Blocking" to="." method="_on_hand_defensive_blocking_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Firing" to="." method="_on_hand_defensive_firing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Recovering" to="." method="_on_hand_defensive_recovering_state_entered"]
 [connection signal="timeout" from="WanderTimer" to="." method="_on_wander_timer_timeout"]

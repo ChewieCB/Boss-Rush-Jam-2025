@@ -1,4 +1,5 @@
 extends BaseProjectile
+class_name StickyBombProjectile
 
 @export var delay_explosion_time = 2
 @export var explosion_prefab: PackedScene

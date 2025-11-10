@@ -122,8 +122,8 @@ var tilt_explosion_instances := []
 @export_subgroup("Block")
 @export var blocking_detection_area: Area3D
 @export var block_detection_radius: float = 18.0
-@export var blocking_time: float = 6.5
-@export var hand_block_timeout: float = 0.4
+@export var blocking_time: float = 3.1
+@export var hand_block_timeout: float = 0.35
 var absorbed_shots: Array = []
 var block_timers: Array = []
 
@@ -306,7 +306,7 @@ func get_hand_anchor_point(hand: BlackjackHand) -> Vector3:
 
 
 # Move the hand scene to a child of the boss so they can move together
-func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
+func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6, return_to_offset: bool = true) -> void:
 	# Cache hand position so we can add the hand as a child of the hand anchor
 	# to get smooth, relative movement, but start in the same position without snapping
 	var cached_hand_pos: Vector3 = hand.global_position
@@ -332,25 +332,26 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6) -> void:
 	# Add offhand flag for even index hands so we can flip paths directions for left sided hands
 	hand.is_offhand = (lr_sign == -1)
 	
-	# If this loop breaks, the hand has been despawned mid-move so we need to kill the tween
-	while hand in spawned_hands:
-		hand_spawn_tween = get_tree().create_tween()
-		hand_spawn_tween.tween_property(hand, "position", hand_offset * Vector3(-1, 1, 1), move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		#hand_spawn_tween.tween_property(hand, "global_position", self.global_position + hand_offset, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		hand_spawn_tween.parallel().tween_property(hand, "scale", Vector3.ONE, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		await hand_spawn_tween.finished
-		
-		## Position needs to be flipped for some reason, relative rotation issue?
-		#hand.position = hand_offset * Vector3(-1, 1, 1)
-		
-		# TODO - over scoping, come back to this if we need it. Having hands undock and return is the basic behaviour.
-		# An exception to this is when a hand has undocked, if we undock a hand and immediately spawn
-		# another - we could want the spawned hand to take the place of the undocked one for a quick reload
-		# type behaviour.
-		
-		return
-	if hand_spawn_tween:
-		hand_spawn_tween.kill()
+	if return_to_offset:
+		# If this loop breaks, the hand has been despawned mid-move so we need to kill the tween
+		while hand in spawned_hands:
+			hand_spawn_tween = get_tree().create_tween()
+			hand_spawn_tween.tween_property(hand, "position", hand_offset * Vector3(-1, 1, 1), move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			#hand_spawn_tween.tween_property(hand, "global_position", self.global_position + hand_offset, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			hand_spawn_tween.parallel().tween_property(hand, "scale", Vector3.ONE, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			await hand_spawn_tween.finished
+			
+			## Position needs to be flipped for some reason, relative rotation issue?
+			#hand.position = hand_offset * Vector3(-1, 1, 1)
+			
+			# TODO - over scoping, come back to this if we need it. Having hands undock and return is the basic behaviour.
+			# An exception to this is when a hand has undocked, if we undock a hand and immediately spawn
+			# another - we could want the spawned hand to take the place of the undocked one for a quick reload
+			# type behaviour.
+			
+			return
+		if hand_spawn_tween:
+			hand_spawn_tween.kill()
 
 
 # Move the new hand to the scene root so it can move independently
@@ -1238,14 +1239,14 @@ func _shake_platform(strength: float, time: float, loops: int = 6) -> void:
 
 func _on_hand_defensive_targeting_state_entered() -> void:
 	# Update and activate the blocking detection area3d
-	var block_detecton_col = blocking_detection_area.get_child(0)
-	var _shape = block_detecton_col.shape
+	var block_detection_col = blocking_detection_area.get_child(0)
+	var _shape = block_detection_col.shape
 	_shape.radius = block_detection_radius
-	block_detecton_col.shape = _shape
-	blocking_detection_area.set_deferred("monitoring", true)
+	block_detection_col.shape = _shape
 	
 	# DEBUG - for testing, implement handling for killing hands mid-attack later
 	for hand in spawned_hands:
+		hand.position.y = 0.0
 		hand.health_component.is_invincible = true
 	
 	state_chart.send_event("start_defense")
@@ -1254,7 +1255,27 @@ func _on_hand_defensive_targeting_state_entered() -> void:
 func _on_hand_defensive_moving_to_block_state_entered() -> void:
 	# Move spawned hands into a blocking position in front of the boss' face,
 	# trying to place themselves between the player and the boss
-	# TODO
+	#trigger_all_hand_attacks_sim("start_block_attack")
+	var move_block_tween := get_tree().create_tween()
+	move_block_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	move_block_tween.set_parallel(true)
+	
+	if hand_spawn_tween:
+		hand_spawn_tween.kill()
+	
+	for hand in spawned_hands:
+		var hand_idx = spawned_hands.find(hand)
+		var blocking_pos := Vector3(
+			-hand_spacing/2, 0.0, -hand_spacing/2
+		).rotated(
+			Vector3.UP, 
+			2 * PI / spawned_hands.size() * hand_idx
+		)
+		
+		move_block_tween.tween_property(hand, "position", blocking_pos, 0.2)
+		move_block_tween.tween_property(hand, "position:y", 0.0, 0.2)
+	
+	await move_block_tween.finished
 	
 	state_chart.send_event("start_blocking")
 
@@ -1263,46 +1284,80 @@ func _on_hand_defensive_blocking_state_entered() -> void:
 	# For every projectile that comes into a range/detection area of the boss,
 	# pick the closest hand and move it towards the projectile in an attempt
 	# to block - limiting the max range the hand can move away from it's position
-	# TODO
+	blocking_detection_area.process_mode = Node.PROCESS_MODE_INHERIT
 	# For each shot that hits the hand, reduce the damage taken and store a copy
 	# of the shot projectile instance so we can fire it back next phase
 	for hand in spawned_hands:
-		hand.sprite.modulate = Color.ORANGE
+		#hand.sprite.modulate = Color.ORANGE
 		hand.health_component.received_dmg_multiplier = 0.5
 		available_hands.push_back(hand)
 	
 	await get_tree().create_timer(blocking_time, false).timeout
 	
+	blocking_detection_area.process_mode = Node.PROCESS_MODE_DISABLED
+	
+	var anchor_tween := get_tree().create_tween()
+	var rotation_zero: float = 0.0 if hand_anchor.rotation.y < 180 else 360.0
+	anchor_tween.tween_property(hand_anchor, "rotation:y", rotation_zero, 0.3)\
+	.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	await anchor_tween.finished
+	
 	for hand in spawned_hands:
 		hand.return_timer.stop()
-		_anchor_hand(hand)
+		if hand_spawn_tween:
+			hand_spawn_tween.kill()
+		#hand.state_chart.send_event("start_blocking")
 	
 	state_chart.send_event("start_firing")
+
+
+func _on_hand_defensive_blocking_state_physics_processing(delta: float) -> void:
+	self.hand_anchor.rotate_y(delta * 2.5)
+	#self.hand_anchor.rotation.y = clamp(self.hand_anchor.rotation.y, 0, 2 * PI)
 
 
 func _on_hand_defensive_firing_state_entered() -> void:
 	# For each shot that hit the hands in the blocking phase, fire the same
 	# shot instance back at the player rapidly - like the hands are "reflecting"
-	# the stored up shots
-	# TODO
-	for hand in spawned_hands:
-		hand.sprite.modulate = Color.YELLOW
-		hand.health_component.received_dmg_multiplier = 1.0
+	# the stored up shots	
+	var move_block_tween := get_tree().create_tween()
+	move_block_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	move_block_tween.set_parallel(true)
 	
-	await get_tree().create_timer(0.6, false).timeout
+	for hand in spawned_hands:
+		#hand.sprite.modulate = Color.YELLOW
+		hand.health_component.received_dmg_multiplier = 1.0
+		#hand.state_chart.send_event("start_reflecting")
+		hand.anim_player.play("blackjack_hand/shake")
+		
+		_anchor_hand(hand, 0.6, false)
+		
+		var hand_idx = spawned_hands.find(hand)
+		var blocking_pos := Vector3(
+			-1.4, randf_range(-1.4, 1.4), -1.4
+		).rotated(
+			Vector3.UP, 
+			2 * PI / spawned_hands.size() * hand_idx
+		)
+		move_block_tween.tween_property(hand, "position", blocking_pos, 0.2)
+	
+	await move_block_tween.finished
+	await get_tree().create_timer(0.3 * spawned_hands.size(), false).timeout
 	
 	var hand_idx: int = 0
-	for i in range(absorbed_shots.size() - 1):
+	for i in range(absorbed_shots.size()):
 		var shot: BaseProjectile = absorbed_shots[i]
 		# Cycle through hands to fire from
 		hand_idx += 1
 		if hand_idx >= spawned_hands.size():
 			hand_idx = 0
 		var hand: BlackjackHand = spawned_hands[hand_idx]
-		var shot_time: float = 1.0 / shot.owner_gun.modified_firerate
-		await hand._telegraph_attack("Reflect fire", shot_time)
+		# FIXME - handle split effect softlock
+		hand._telegraph_attack()
+		var shot_time: float = 0.45 / shot.owner_gun.modified_firerate
+		await get_tree().create_timer(shot_time, false).timeout
 		
-		var start_pos: Vector3 = hand.global_position - hand.global_basis.z * 1.5
+		var start_pos: Vector3 = hand.global_position - hand.global_basis.z * 1.5 + Vector3(0, 1.7, 0)
 		
 		shot.spawn_pos = start_pos
 		
@@ -1324,6 +1379,8 @@ func _on_hand_defensive_firing_state_entered() -> void:
 		
 	absorbed_shots = []
 	
+	await get_tree().create_timer(0.4, false).timeout
+	
 	state_chart.send_event("stop_firing")
 
 
@@ -1333,6 +1390,8 @@ func _on_hand_defensive_recovering_state_entered() -> void:
 		hand.health_component.received_dmg_multiplier = 1.0
 		# DEBUG - for testing, implement handling for killing hands mid-attack later
 		hand.health_component.is_invincible = false
+		_anchor_hand(hand)
+		#hand.state_chart.send_event("hand_finished")
 		
 		available_hands = []
 	
@@ -1360,7 +1419,9 @@ func _block_interecept_projectile(proj: BaseProjectile, pos: Vector3 = Vector3.Z
 	
 	absorbed_shots.append(proj)
 	closest_hand.return_timer.stop()
+	#closest_hand.state_chart.send_event("start_blocking")
 	_release_hand(closest_hand)
+	finished_hands.append(closest_hand)
 	
 	# Figure out the projectile's intercept course given the projectile's
 	# velocity, hand position, and time-to-intercept
@@ -1369,8 +1430,10 @@ func _block_interecept_projectile(proj: BaseProjectile, pos: Vector3 = Vector3.Z
 	var intercept_pos: Vector3 = proj.global_position + proj.velocity * intercept_time
 	if proj is GunHitscan:
 		intercept_time = 0.01
+		intercept_pos = pos
 	# Shift the intercept pos back a bit so we guarentee a hit
-	intercept_pos -= proj.transform.basis.z * 2.0
+	else:
+		intercept_pos -= proj.transform.basis.z * 2.0
 	
 	# Tween the hand to tank the shot
 	var intercept_tween := get_tree().create_tween()
@@ -1384,8 +1447,11 @@ func _block_interecept_projectile(proj: BaseProjectile, pos: Vector3 = Vector3.Z
 		proj.projectile_speed = 0
 		proj.visible = false
 		proj.global_position = Vector3(-20, -20, -20)
-		proj.collider.collision_mask -= pow(2, 3-1) + pow(2, 4-1)
-		proj.collider.collision_mask += pow(2, 2-1)
+		proj.collider.collision_mask = pow(2, 1-1) + pow(2, 2-1)
+	# TODO StickyBombProjectile
+	# TODO GelBubble
+	# TODO GelProjectile
+	# TODO GelProjectileBlob
 	elif proj is GunHitscan:
 		proj.raycast.collision_mask = pow(2, 1-1) + pow(2, 2-1)
 		proj.raycast.collide_with_areas = false
@@ -1394,14 +1460,18 @@ func _block_interecept_projectile(proj: BaseProjectile, pos: Vector3 = Vector3.Z
 		if elem:
 			elem.turn_off()
 	
-	# Let the hands move to close-by projectiles, but if there are 
-	# no projectiles to block after a while, anchor the hand
-	available_hands.push_back(closest_hand)
-	closest_hand.return_timer.start(hand_block_timeout)
-	
 	# Add an impact mesh/visual to the hand, with a transform based on the 
 	# movement direction of the projectile.
 	_spawn_explosion(intercept_pos, 0.25)
+	
+	await get_tree().create_timer(0.25, false).timeout
+	# Let the hands move to close-by projectiles, but if there are 
+	# no projectiles to block after a while, anchor the hand
+	available_hands.push_back(closest_hand)
+	finished_hands.erase(closest_hand)
+	closest_hand.return_timer.start(hand_block_timeout)
+	#closest_hand.state_chart.send_event("start_returning")
+	#_anchor_hand(closest_hand, 2.5)
 	
 	# TODO - add a shader/mesh effect to show shots that are stored in the hands
 	# visually like the needler from halo or something - just a rectangular mesh
@@ -1417,8 +1487,11 @@ func _on_blocking_detection_area_area_entered(area: Area3D) -> void:
 	
 	# Store the projectile instance to be re-fired later
 	var proj = area.owner as BaseProjectile
-	_block_interecept_projectile(proj.global_position, proj)
-	
+	if proj is GunHitscan:
+		await proj.end_pos_set
+		_block_interecept_projectile(proj, proj.end_pos)
+	else:
+		_block_interecept_projectile(proj, proj.global_position)
 
 
 func get_intercept_time(interceptor_pos: Vector3, interceptor_speed: float, target_pos: Vector3, target_velocity: Vector3) -> float:
@@ -1436,4 +1509,5 @@ func get_intercept_time(interceptor_pos: Vector3, interceptor_speed: float, targ
 
 
 func _on_hand_return_timeout(hand: BlackjackHand) -> void:
-	_anchor_hand(hand)
+	pass
+	#_anchor_hand(hand)
