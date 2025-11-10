@@ -194,6 +194,107 @@ func activate() -> void:
 	state_chart.send_event("start_intro")
 
 
+func _on_died() -> void:
+	died.emit()
+	state_chart.send_event("death")
+	state_chart.send_event("stop_moving")
+	state_chart.send_event("deactivate")
+	
+	self.collision_layer = 0
+	
+	blackjack_particles.emitting = false
+	blackjack_timer.stop()
+	for tween in [move_tween, hand_spawn_tween, deal_tween, tilt_tween, hand_tween]:
+		if tween:
+			tween.kill()
+	
+	await death_anim_finished
+	
+	drop_barrel()
+	
+	await boss_death_slow_mo()
+
+
+func _destroy_all_hands(hand_delay: float = 0.2, initial_delay: float = 0.0) -> void:
+	var hands_to_destroy = spawned_hands.duplicate()
+	
+	if initial_delay:
+		await get_tree().create_timer(initial_delay, false).timeout
+	
+	for hand in hands_to_destroy:
+		despawn_hand(hand, false)
+		await get_tree().create_timer(hand_delay, false).timeout
+
+
+func _on_health_dead_state_entered() -> void:
+	if anim_player.is_playing():
+		anim_player.stop()
+		anim_player.play("RESET")
+		await anim_player.animation_finished
+	
+	anim_player.play("blackjack_boss/bust")
+	
+	card_explosion_particles.emitting = true
+	InputHelper.rumble_medium()
+	target.player_camera.add_trauma(0.6)
+	
+	_destroy_all_hands(0.2, 0.5)
+	
+	# Untilt platform if it is tilted
+	target.floor_stop_on_slope = true
+	target.remove_status_effect(slippery_debuff)
+	tilt_particles.emitting = false
+	tilt_tween = get_tree().create_tween()
+	tilt_tween.set_parallel(true)
+	tilt_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BOUNCE)
+	tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", 0, 0.2)
+	tilt_tween.tween_property(tilt_animateable_floor, "constant_linear_velocity:z", 0, 0.2)
+	
+	await tilt_tween.finished
+	
+	# Crash platform into center of map
+	var crash_tween := get_tree().create_tween()
+	crash_tween.parallel().tween_property(
+		self, "global_position", Vector3(0, 1.6, -27), 0.8
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	crash_tween.parallel().tween_property(
+		self, "rotation_degrees:x", -2.1, 0.8
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
+	crash_tween.tween_callback(
+		func():
+			var _emitters = bust_particles_parent.get_children()
+			for emitter in _emitters:
+				emitter.explosion()
+				await get_tree().create_timer(randf_range(0.05, 0.2)).timeout
+	)
+	crash_tween.chain().tween_property(
+		self, "rotation_degrees:x", 4.5, 0.7
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	crash_tween.parallel().tween_property(
+		self, "global_position", Vector3(0, 1.5, -16), 0.7
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	crash_tween.tween_callback(
+		func():
+			var _emitters = bust_particles_parent.get_children()
+			for emitter in _emitters:
+				emitter.explosion()
+				await get_tree().create_timer(randf_range(0.05, 0.2)).timeout
+	)
+	crash_tween.chain().tween_property(
+		anim_player, "speed_scale", 0.0, 2.5
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	
+	await crash_tween.finished
+	
+	await get_tree().create_timer(3.4).timeout
+
+	#await anim_player.animation_finished
+	anim_player.process_mode = Node.PROCESS_MODE_DISABLED
+
+	sprite.modulate = Color.DARK_SLATE_BLUE
+	death_anim_finished.emit()
+
+
 func select_attack_phase_1() -> void:
 	#state_chart.send_event("end_attack")
 	state_chart.send_event("end_recovery")
@@ -202,16 +303,18 @@ func select_attack_phase_1() -> void:
 	#state_chart.send_event("start_hand_stand_attack")
 	#state_chart.send_event("start_hand_sweep_attack")
 	#state_chart.send_event("start_hand_tilt_attack")
-	state_chart.send_event("start_hand_block_attack")
-	#var chance = randf()
-	#if chance < 0.25:
-		#state_chart.send_event("start_hand_slam_attack")
-	#elif chance < 0.50:
-		#state_chart.send_event("start_hand_sweep_attack")
-	#elif chance < 0.75:
-		#state_chart.send_event("start_hand_tilt_attack")
-	#else:
-		#state_chart.send_event("start_hand_stand_attack")
+	#state_chart.send_event("start_hand_block_attack")
+	var chance = randf()
+	if chance < 0.2:
+		state_chart.send_event("start_hand_slam_attack")
+	elif chance < 0.4:
+		state_chart.send_event("start_hand_sweep_attack")
+	elif chance < 0.6:
+		state_chart.send_event("start_hand_tilt_attack")
+	elif chance < 0.8:
+		state_chart.send_event("start_hand_block_attack")
+	else:
+		state_chart.send_event("start_hand_stand_attack")
 
 
 ## HAND HELPER METHODS
@@ -253,6 +356,8 @@ func despawn_hand(hand: BlackjackHand, reorder_hands: bool = false) -> void:
 		push_error("Can't despawn hand that wasn't spawned")
 	
 	var despawned_idx: int = spawned_hands.find(hand)
+	if despawned_idx == -1:
+		return
 	spawned_hands.pop_at(despawned_idx)
 	despawned_hands.push_back(hand)
 	
@@ -1079,7 +1184,7 @@ func _spawn_damage_area(spawn_pos: Vector3, radius: float, damage: float) -> voi
 
 
 func _on_tilt_firing_state_physics_processing(delta: float) -> void:
-	if spawned_hands.size() == 0:
+	if spawned_hands.size() == 0 or health_component.current_health == 0:
 		state_chart.send_event("stop_firing")
 
 
