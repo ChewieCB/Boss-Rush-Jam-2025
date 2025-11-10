@@ -118,5 +118,5 @@ show_duration_ui = true
 script = ExtResource("13_pralp")
 display_text_title = "Critical Insurance"
 display_text_tag = "Definitely not a scam"
-positive_desc = Array[String](["Guarantee the next bullet critical hit if previous one missed"])
-negative_desc = Array[String](["Critical damage reduce by 50%"])
+positive_desc = Array[String](["Guarantee the next shot critical if previous one missed"])
+negative_desc = Array[String](["-50% critical damage"])
