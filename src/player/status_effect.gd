@@ -31,6 +31,7 @@ var status_code: String
 var modified_stat: PlayerStatEnum
 var modify_type: ModifyType
 var value: float
+var info_text: String
 var duration: float = 0
 var is_bad_effect: bool
 var status_icon: Texture2D
@@ -44,6 +45,7 @@ func _to_string() -> String:
         "modified_stat": PlayerStatEnum.keys()[modified_stat],
         "modify_type": ModifyType.keys()[modify_type],
         "value": value,
+        "info_text": info_text,
         "duration": duration,
         "is_bad_effect": is_bad_effect,
         "show_duration_ui": show_duration_ui

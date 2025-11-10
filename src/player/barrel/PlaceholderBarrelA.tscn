@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=14 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="10_fn6a4"]
 [ext_resource type="Texture2D" uid="uid://ddfqokjq1u61n" path="res://assets/sprite/status_icon/defense-down.png" id="11_oh2rg"]
 [ext_resource type="Texture2D" uid="uid://dlw4dtm637qxu" path="res://assets/sprite/status_icon/feather.png" id="12_lj377"]
+[ext_resource type="Script" path="res://src/player/barrel/twenty_one_effect.gd" id="13_xqotu"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
@@ -32,14 +33,6 @@ display_text_desc = "-50% spread, +25% damage when stationary
 +100% spread, -25% damage when moving"
 positive_desc = Array[String](["-50% spread, +25% damage when stationary"])
 negative_desc = Array[String](["+100% spread, -25% damage when moving"])
-
-[node name="LoadedDice" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("4_783so")
-display_text_title = "Loaded Dice"
-display_text_tag = "Pay the price and the favour is yours"
-positive_desc = Array[String](["Increase your critical chance by 25%"])
-negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
 
 [node name="GuidedHand" type="Node3D" parent="EffectContainer"]
 visible = false
@@ -80,14 +73,23 @@ visible = false
 script = ExtResource("9_5tuyi")
 min_distance_to_boss = 7.0
 display_text_title = "Daredevil"
-display_text_tag = "Get close, get personal"
+display_text_tag = "Stick close to the enemy"
 positive_desc = Array[String](["Increases bullet damage the longer you stay in close range to enemies"])
 negative_desc = Array[String](["Decreases damage otherwise"])
 
+[node name="LoadedDice" type="Node3D" parent="EffectContainer"]
+visible = false
+script = ExtResource("4_783so")
+display_text_title = "Loaded Dice"
+display_text_tag = "I hope you have some saving"
+positive_desc = Array[String](["Increase your critical chance by 25%"])
+negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
+
 [node name="FragileFeather" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("5_0nmke")
 display_text_title = "Fragile Feather"
-display_text_tag = "Better dodge more"
+display_text_tag = "Does it actually benefit you?"
 positive_desc = Array[String](["+25% dodge chance"])
 negative_desc = Array[String](["+25% damage taken"])
 
@@ -111,3 +113,10 @@ value = 0.25
 is_infinite_duration = true
 status_icon = ExtResource("12_lj377")
 show_duration_ui = true
+
+[node name="WhereTwentyOneEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("13_xqotu")
+display_text_title = "Where is Twenty-One"
+display_text_tag = "A nice suprise whenever the number 21 appear"
+positive_desc = Array[String](["Something may happen if you deal 21 damage, or have 21 bullets, ..."])
+negative_desc = Array[String](["The surprise isn’t necessarily beneficial"])

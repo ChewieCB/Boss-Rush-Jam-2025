@@ -74,7 +74,7 @@ func on_trigger_pulled():
 func on_trigger_released():
 	return
 
-## Check if can be shot.
+## Check if can be shot. Return bool.
 ## [Ex: Check for jamming chance / overheat / or simply not enough bullet left.]
 func on_fire_attempt() -> bool:
 	return true
