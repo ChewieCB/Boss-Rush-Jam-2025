@@ -1285,11 +1285,13 @@ func _on_hand_defensive_blocking_state_entered() -> void:
 	# pick the closest hand and move it towards the projectile in an attempt
 	# to block - limiting the max range the hand can move away from it's position
 	blocking_detection_area.process_mode = Node.PROCESS_MODE_INHERIT
+	
 	# For each shot that hits the hand, reduce the damage taken and store a copy
 	# of the shot projectile instance so we can fire it back next phase
 	for hand in spawned_hands:
 		#hand.sprite.modulate = Color.ORANGE
 		hand.health_component.received_dmg_multiplier = 0.5
+		hand.collision_layer = 0
 		available_hands.push_back(hand)
 	
 	await get_tree().create_timer(blocking_time, false).timeout
@@ -1353,16 +1355,22 @@ func _on_hand_defensive_firing_state_entered() -> void:
 			hand_idx = 0
 		var hand: BlackjackHand = spawned_hands[hand_idx]
 		# FIXME - handle split effect softlock
+		# Grab direction before we wait to give the player a change to dodge raycast projectiles
+		var start_pos: Vector3 = hand.global_position - hand.global_basis.z * 1.5 + Vector3(0, 1.7, 0)
+		var direction: Vector3 = start_pos.direction_to(target.global_position)
+		
 		hand._telegraph_attack()
+		
 		var shot_time: float = 0.45 / shot.owner_gun.modified_firerate
 		await get_tree().create_timer(shot_time, false).timeout
 		
-		var start_pos: Vector3 = hand.global_position - hand.global_basis.z * 1.5 + Vector3(0, 1.7, 0)
+		# Make the non-hitscan weapons more accurate
+		if shot is not GunHitscan:
+			direction = start_pos.direction_to(target.global_position)
 		
 		shot.spawn_pos = start_pos
 		
 		# Fire the shot as a new projectile
-		var direction: Vector3 = start_pos.direction_to(target.global_position)
 		var damage: float = shot.owner_gun.modified_damage
 		var speed: float = shot.owner_gun.modified_projectile_speed
 		shot.keep_alive = false
@@ -1390,6 +1398,7 @@ func _on_hand_defensive_recovering_state_entered() -> void:
 		hand.health_component.received_dmg_multiplier = 1.0
 		# DEBUG - for testing, implement handling for killing hands mid-attack later
 		hand.health_component.is_invincible = false
+		hand.collision_layer = pow(2, 7-1)
 		_anchor_hand(hand)
 		#hand.state_chart.send_event("hand_finished")
 		
@@ -1428,6 +1437,11 @@ func _block_interecept_projectile(proj: BaseProjectile, pos: Vector3 = Vector3.Z
 	var intercept_dist: float = closest_hand.global_position.distance_to(proj.global_position)
 	var intercept_time: float = get_intercept_time(closest_hand.global_position, 130.0, proj.global_position, proj.velocity)
 	var intercept_pos: Vector3 = proj.global_position + proj.velocity * intercept_time
+	
+	# FIXME - projectile shouldn't be freed
+	if not proj:
+		return
+	
 	if proj is GunHitscan:
 		intercept_time = 0.01
 		intercept_pos = pos
@@ -1487,6 +1501,7 @@ func _on_blocking_detection_area_area_entered(area: Area3D) -> void:
 	
 	# Store the projectile instance to be re-fired later
 	var proj = area.owner as BaseProjectile
+	proj.keep_alive = true
 	if proj is GunHitscan:
 		await proj.end_pos_set
 		_block_interecept_projectile(proj, proj.end_pos)

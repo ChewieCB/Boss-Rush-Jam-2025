@@ -84,9 +84,10 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		found_hitscal_col = true
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit()
-	stop_elemental_particles()
-	call_deferred("queue_free")
+	if not keep_alive:
+		destroyed.emit()
+		stop_elemental_particles()
+		call_deferred("queue_free")
 
 func ricochet():
 	super ()
