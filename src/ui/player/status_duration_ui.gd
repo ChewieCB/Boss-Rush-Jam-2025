@@ -47,12 +47,8 @@ func init(_status_effect: StatusEffect) -> void:
 
 	if status_effect.show_value_on_ui:
 		value_label.text = str(int(status_effect.value))
-		info_text_label.text = status_effect.display_name
 	else:
 		value_label.text = ""
-		info_text_label.text = ""
-
-	info_text_label.text = status_effect.display_name
 
 func refresh(updated_status: StatusEffect):
 	status_effect = updated_status
@@ -60,12 +56,8 @@ func refresh(updated_status: StatusEffect):
 	timer.start(status_effect.duration)
 	if status_effect.show_value_on_ui:
 		value_label.text = str(int(status_effect.value))
-		info_text_label.text = status_effect.display_name
 	else:
 		value_label.text = ""
-		info_text_label.text = ""
-
-	info_text_label.text = status_effect.display_name
 
 func remove():
 	call_deferred("queue_free")

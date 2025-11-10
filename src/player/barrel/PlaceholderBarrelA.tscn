@@ -12,7 +12,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="10_fn6a4"]
 [ext_resource type="Texture2D" uid="uid://ddfqokjq1u61n" path="res://assets/sprite/status_icon/defense-down.png" id="11_oh2rg"]
 [ext_resource type="Texture2D" uid="uid://dlw4dtm637qxu" path="res://assets/sprite/status_icon/feather.png" id="12_lj377"]
-[ext_resource type="Script" path="res://src/player/barrel/twenty_one_effect.gd" id="13_xqotu"]
+[ext_resource type="Script" path="res://src/player/barrel/insurance_crit_effect.gd" id="13_pralp"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
@@ -114,9 +114,9 @@ is_infinite_duration = true
 status_icon = ExtResource("12_lj377")
 show_duration_ui = true
 
-[node name="WhereTwentyOneEffect" type="Node3D" parent="EffectContainer"]
-script = ExtResource("13_xqotu")
-display_text_title = "Where is Twenty-One"
-display_text_tag = "A nice suprise whenever the number 21 appear"
-positive_desc = Array[String](["Something may happen if you deal 21 damage, or have 21 bullets, ..."])
-negative_desc = Array[String](["The surprise isn’t necessarily beneficial"])
+[node name="CriticalInsurance" type="Node3D" parent="EffectContainer"]
+script = ExtResource("13_pralp")
+display_text_title = "Critical Insurance"
+display_text_tag = "Definitely not a scam"
+positive_desc = Array[String](["Guarantee the next bullet critical hit if previous one missed"])
+negative_desc = Array[String](["Critical damage reduce by 50%"])

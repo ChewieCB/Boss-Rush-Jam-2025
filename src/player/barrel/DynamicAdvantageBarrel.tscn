@@ -22,7 +22,6 @@ display_text_tag = "Keep shooting"
 display_text_desc = "+5% firerate per 0.2s
 non-stop shooting"
 positive_desc = Array[String](["Firerate increases as you keep firing"])
-negative_desc = Array[String](["Burns through ammo faster"])
 icon_id = 24
 
 [node name="ExtendedDrum" type="Node3D" parent="EffectContainer"]
@@ -31,8 +30,8 @@ display_text_title = "Extended Drum"
 display_text_tag = "More dakka!"
 display_text_desc = "+100% magazine size
 +200% reload time"
-positive_desc = Array[String](["Double magazine size"])
-negative_desc = Array[String](["Much slower reload speed"])
+positive_desc = Array[String](["+100% magazine size"])
+negative_desc = Array[String](["+200% reload speed"])
 icon_id = 23
 
 [node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ExtendedDrum"]
@@ -54,6 +53,6 @@ explosion_damage = ExtResource("7_tc2w0")
 display_text_title = "Explosive bullet"
 display_text_tag = "Don't hurt yourself!"
 display_text_desc = "Make bullets go boom"
-positive_desc = Array[String](["Rounds explode on impact"])
+positive_desc = Array[String](["Rounds explode on impact, deal flat 10 damage"])
 negative_desc = Array[String](["Explosive damage hurts you too"])
 icon_id = 22

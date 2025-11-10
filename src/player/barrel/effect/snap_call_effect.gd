@@ -6,12 +6,12 @@ extends BaseBarrelEffect
 ## How much dmg projectile is modified depend on difference between this 
 ## and threshold, per godot's unit
 @export var dmg_modify_perc_per_unit: float = 1
-@export var dmg_modify_for_hitscan: float = 2.0
+# @export var dmg_modify_for_hitscan: float = 2.0
 
 func on_before_damage_applied(_enemy: CharacterBody3D, projectile: BaseBullet):
-	# If hitscan, just straight buff it
+	# If hitscan, just ignore it
 	if projectile.is_hitscan:
-		projectile.damage = projectile.damage * dmg_modify_for_hitscan
+		# projectile.damage = projectile.damage * dmg_modify_for_hitscan
 		return
 	var dist_diff = abs(speed_threshold - projectile.projectile_speed)
 	var perc_changed = dist_diff * dmg_modify_perc_per_unit
