@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_bmfog"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_yn68y"]
-[ext_resource type="Script" path="res://src/player/barrel/longshot_effect.gd" id="3_mfrqg"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/longshot_effect.gd" id="3_mfrqg"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_42u65"]
 
 [node name="DebugBarrelLongShot" type="Node3D"]

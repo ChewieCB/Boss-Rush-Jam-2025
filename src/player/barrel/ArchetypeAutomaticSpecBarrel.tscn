@@ -54,7 +54,7 @@ new_value = 30.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
 attribute = 1
-new_value = 12.0
+new_value = 14.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/AmericanRifle"]
 script = ExtResource("4_p3s2o")
@@ -144,7 +144,7 @@ new_value = 20.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
 attribute = 1
-new_value = 6.0
+new_value = 9.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("4_p3s2o")
@@ -187,7 +187,7 @@ new_value = 80.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")
 attribute = 1
-new_value = 15.0
+new_value = 16.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/LMG"]
 script = ExtResource("4_p3s2o")

@@ -18,12 +18,14 @@ func remove_effect():
 	stored_heal = 0
 	GameManager.player.remove_status_effect_by_name("medical_payout_stored_heal")
 
-func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+	super (_damage, _has_pos, _pos)
 	accumulated_damage += owner_barrel.owner_gun.modified_damage
 	stored_heal = round(accumulated_damage / damage_to_heal_ratio)
 
 func on_reload_start():
 	GameManager.player.health_component.heal(stored_heal)
+	GameManager.player_currency -= round(GameManager.player.health_component.current_health)
 	remove_effect()
 
 func on_barrel_remove():

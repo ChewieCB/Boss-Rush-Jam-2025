@@ -1,21 +1,5 @@
 extends BaseBarrelEffect
 
-enum AttributeNameEnum {
-	NONE,
-	DAMAGE,
-	PROJECTILE_AMOUNT,
-	PROJECTILE_SPEED,
-	FIRERATE,
-	MAGAZINE_SIZE,
-	IS_HITSCAN,
-	SPREAD_ANGLE,
-	RELOAD_TIME,
-	RICOCHET_COUNT,
-	HOMING_STRENGTH,
-	RECOIL,
-	SCREENSHAKE,
-}
-
 @export var attribute: AttributeNameEnum
 ## By default is flat value. If is_perc is true, 50 = 50%. For boolean value, 0 for false and 1 for true
 @export var modify_value: float
@@ -49,6 +33,9 @@ func on_effect_set():
 		AttributeNameEnum.SPREAD_ANGLE:
 			owner_barrel.owner_gun.modified_spread_angle = calculate_new_value(
 				owner_barrel.owner_gun.modified_spread_angle, modify_value, is_perc, false)
+		AttributeNameEnum.SPREAD_HORIZONTAL_BIAS:
+			owner_barrel.owner_gun.modified_spread_horizontal_bias = calculate_new_value(
+				owner_barrel.owner_gun.modified_spread_horizontal_bias, modify_value, is_perc, false)
 		AttributeNameEnum.RICOCHET_COUNT:
 			owner_barrel.owner_gun.modified_ricochet_count = calculate_new_value(
 				owner_barrel.owner_gun.modified_ricochet_count, modify_value, is_perc, true)
@@ -94,6 +81,9 @@ func on_prepare_to_fire():
 		AttributeNameEnum.SPREAD_ANGLE:
 			owner_barrel.owner_gun.modified_spread_angle = calculate_new_value(
 				owner_barrel.owner_gun.modified_spread_angle, modify_value, is_perc, false)
+		AttributeNameEnum.SPREAD_HORIZONTAL_BIAS:
+			owner_barrel.owner_gun.modified_spread_horizontal_bias = calculate_new_value(
+				owner_barrel.owner_gun.modified_spread_horizontal_bias, modify_value, is_perc, false)
 		AttributeNameEnum.RICOCHET_COUNT:
 			owner_barrel.owner_gun.modified_ricochet_count = calculate_new_value(
 				owner_barrel.owner_gun.modified_ricochet_count, modify_value, is_perc, true)

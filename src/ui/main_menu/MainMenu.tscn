@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://ctddgvd003sjr"]
+[gd_scene load_steps=31 format=3 uid="uid://ctddgvd003sjr"]
 
 [ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
 [ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://biqm56x6ewbmo" path="res://src/ui/pause_menu/SettingUI.tscn" id="23_8rbfy"]
 [ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="24_prxld"]
 [ext_resource type="PackedScene" uid="uid://dif5ua57y8udh" path="res://src/ui/main_menu/SaveSlotItem.tscn" id="24_re1j0"]
+[ext_resource type="PackedScene" uid="uid://cj5se3crnuwsq" path="res://src/utils/singletons/IdleDetector.tscn" id="25_bigae"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2x62q"]
 shader = ExtResource("1_jqa14")
@@ -93,6 +94,8 @@ bgm = ExtResource("2_ef670")
 button_sfx = Array[AudioStream]([ExtResource("3_7ak47"), ExtResource("4_oermb"), ExtResource("5_7tag1"), ExtResource("6_hri1i"), ExtResource("7_bs3mo")])
 start_game_sfx = ExtResource("8_e8blx")
 lobby_scene = ExtResource("9_ioe07")
+
+[node name="IdleDetector" parent="." instance=ExtResource("25_bigae")]
 
 [node name="OverallBackground" type="TextureRect" parent="."]
 layout_mode = 1

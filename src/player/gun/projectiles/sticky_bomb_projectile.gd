@@ -34,6 +34,10 @@ func _physics_process(delta: float) -> void:
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
+	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
+		var aiming_position = GunUtils.get_player_aiming_position()
+		var dir_to_target = global_position.direction_to(aiming_position)
+		look_at(global_position + dir_to_target)
 	
 	velocity = -transform.basis.z * projectile_speed * delta
 	global_position += velocity 
@@ -69,24 +73,29 @@ func ricochet():
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit()
+	destroyed.emit(false)
 	stop_elemental_particles()
 	call_deferred("queue_free")
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
 		return
+	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			body.health_component.damage(damage)
+			calculated_damage = calculate_bullet_damage() # Recalculate damage after before_damage_applied effect
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(damage, true, global_position)
+			hit_boss = true
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
-			body.health_component.damage(damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
+			hit_boss = true
 		elif "health_component" in body:
-			body.health_component.damage(damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
+			hit_boss = true
 	self.reparent.call_deferred(body)
 	sticked = true
 	life_timer.stop()
@@ -106,7 +115,7 @@ func _on_explode_timer_timeout() -> void:
 	var calculated_explosion_damage = calculate_explosion_damage()
 	inst.init(calculated_explosion_damage)
 	get_parent().add_child(inst)
-	inst.global_position = global_position
+	inst.activate(global_position)
 
 	var vfx = explosion_vfx.instantiate()
 	get_parent().add_child(vfx)
@@ -118,7 +127,7 @@ func _on_explode_timer_timeout() -> void:
 		ricochet()
 	else:
 		await get_tree().create_timer(0.25).timeout
-		destroyed.emit()
+		destroyed.emit(hit_boss)
 		stop_elemental_particles()
 		call_deferred("queue_free")
 

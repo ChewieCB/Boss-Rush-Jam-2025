@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://fk41qjiif05n"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_eox1s"]
-[ext_resource type="Script" path="res://src/player/barrel/reactive_shot_effect.gd" id="2_nm2hf"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/reactive_shot_effect.gd" id="2_nm2hf"]
 
 [node name="DebugBarrelReactiveShot" type="Node3D"]
 script = ExtResource("1_eox1s")

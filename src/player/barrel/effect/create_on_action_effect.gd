@@ -33,7 +33,7 @@ func check_if_can_trigger() -> bool:
 		return false
 	if min_time_passed > 0 and not timer.is_stopped():
 		return false
-	var roll = randf_range(0, 100)
+	var roll = randf_range(1, 100)
 	if roll > chance_perc:
 		return false
 
@@ -44,12 +44,12 @@ func check_if_can_trigger() -> bool:
 	return true
 
 func on_prepare_to_fire():
-	super()
+	super ()
 	triggered = false
 
 
-func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
-	super()
+func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+	super (_damage, _has_pos, _pos)
 	if trigger_action == TriggerActionEnum.DAMAGE_APPLIED:
 		if not check_if_can_trigger():
 			return
@@ -59,7 +59,7 @@ func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 			inst.global_position = _pos
 
 func on_dash_movement():
-	super()
+	super ()
 	if trigger_action == TriggerActionEnum.DASH:
 		if not check_if_can_trigger():
 			print("FALLLLLL")
@@ -70,7 +70,7 @@ func on_dash_movement():
 
 
 func on_reload_start():
-	super()
+	super ()
 	if trigger_action == TriggerActionEnum.RELOAD:
 		if not check_if_can_trigger():
 			return

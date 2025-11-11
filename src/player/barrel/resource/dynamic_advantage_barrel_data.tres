@@ -17,6 +17,7 @@ Ramp Up: Shoot faster as you shoot continuously.
 Extended Drum: Increased magazine size and reload time.
 Explosive Bullet: Explosive bullets.
 [/ul]"
+barrel_info_summary = "A weird mix of effects. Change things up to keep the odds in your favour."
 barrel_image = ExtResource("1_vp1f6")
 barrel_cost = 630
 barrel_prefab = ExtResource("1_nrto8")

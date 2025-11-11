@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://bl1msq3x8c3ar"]
+
+[ext_resource type="Script" path="res://src/ui/player/inventory/barrel_info_icon.gd" id="1_01pn5"]
+[ext_resource type="Texture2D" uid="uid://b7leq4ajnjvq4" path="res://assets/sprite/effect_icons/-1.png" id="2_k6234"]
+[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="2_nlnbh"]
+[ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="4_jbemo"]
+
+[node name="BarrelInfoIcon" type="ColorRect"]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 100.0
+offset_bottom = 100.0
+focus_mode = 2
+script = ExtResource("1_01pn5")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_k6234")
+expand_mode = 1
+
+[node name="BorderNormal" type="NinePatchRect" parent="."]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_nlnbh")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="BorderFocus" type="NinePatchRect" parent="."]
+visible = false
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_jbemo")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]

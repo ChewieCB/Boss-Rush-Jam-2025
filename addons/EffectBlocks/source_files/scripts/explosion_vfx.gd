@@ -22,6 +22,7 @@ class_name ExplosionParticles
 
 @export var time_until_queue_free: float = 2.0
 
+signal finished
 
 func _ready() -> void:
 	if explode_on_spawn:

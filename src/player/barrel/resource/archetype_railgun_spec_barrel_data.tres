@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://di2x3xsnfojlh"]
+
+[ext_resource type="Texture2D" uid="uid://dtqva43dg4qfk" path="res://src/player/barrel/resource/sprite/archetype_railgun.png" id="1_f4tt0"]
+[ext_resource type="PackedScene" uid="uid://ckiren6h4keb6" path="res://src/player/barrel/ArchetypeRailgunSpecBarrel.tscn" id="2_ijulb"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_o0mqq"]
+
+[resource]
+script = ExtResource("3_o0mqq")
+barrel_id = 9
+barrel_name = "Archetype Railgun Spec"
+barrel_desc = "[b]Archetype Barrel - Railgun Specialization[/b]
+Change the innate nature of the gun.
+
+Possible rolls:
+[ul]
+Gauss Rifle: High firerate and magazine, but lower damage.
+Scatter Beam: Limited magazine size and high spread, but high projectile count.
+Railcannon: Powerful oneshot wonder.
+[/ul]"
+barrel_info_summary = "Change the innate nature of the gun. Specialize in hitscan weapons."
+barrel_image = ExtResource("1_f4tt0")
+barrel_cost = 2200
+barrel_prefab = ExtResource("2_ijulb")
+is_archetype_barrel = true

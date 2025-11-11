@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_762nm"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="4_b5x1l"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="5_83dk4"]
-[ext_resource type="Script" path="res://src/player/barrel/reactive_shot_effect.gd" id="6_tghp2"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/reactive_shot_effect.gd" id="6_tghp2"]
 
 [node name="RecklessAbandon" type="Node3D"]
 script = ExtResource("1_7qs68")

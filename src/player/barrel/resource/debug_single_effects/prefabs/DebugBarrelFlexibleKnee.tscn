@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_ci7ud"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_tgxl2"]
-[ext_resource type="Script" path="res://src/player/barrel/flexible_knee_effect.gd" id="3_egdw6"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/flexible_knee_effect.gd" id="3_egdw6"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_wfl1q"]
 
 [node name="DebugBarrelFlexibleKnee" type="Node3D"]

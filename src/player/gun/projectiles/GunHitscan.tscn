@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dtf2h2dydbopt"]
+[gd_scene load_steps=15 format=3 uid="uid://dtf2h2dydbopt"]
 
 [ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="1_1gwnq"]
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_hitscan.gd" id="1_uqjuh"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://ordrsmmhta58" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonImpact.tscn" id="6_v6c43"]
 [ext_resource type="PackedScene" uid="uid://byqcqd8oy0lou" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeImpact.tscn" id="7_762a4"]
 [ext_resource type="PackedScene" uid="uid://c7ax3gowds2j3" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockImpact.tscn" id="7_qec00"]
+[ext_resource type="PackedScene" uid="uid://du6plnrfa56ov" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedImpact.tscn" id="9_3uwup"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ch4f"]
 resource_local_to_scene = true
@@ -37,7 +38,7 @@ script = ExtResource("1_uqjuh")
 spark_effect = ExtResource("2_j44ol")
 generic_blood_splatter = ExtResource("3_vycbx")
 bullet_decal_prefab = ExtResource("4_coueb")
-elemental_impact_vfx = Array[PackedScene]([ExtResource("5_w6u08"), ExtResource("6_v6c43"), ExtResource("7_762a4"), ExtResource("7_qec00"), null])
+elemental_impact_vfx = Array[PackedScene]([ExtResource("5_w6u08"), ExtResource("6_v6c43"), ExtResource("7_762a4"), ExtResource("7_qec00"), ExtResource("9_3uwup")])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)

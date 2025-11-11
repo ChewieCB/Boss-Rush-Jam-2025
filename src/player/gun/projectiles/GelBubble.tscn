@@ -1,9 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://fsh2tr0s517i"]
+[gd_scene load_steps=16 format=3 uid="uid://fsh2tr0s517i"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gel_bubble.gd" id="1_72qkr"]
 [ext_resource type="Texture2D" uid="uid://r7wn76oipgt" path="res://assets/sprite/placeholder/circle.png" id="1_jvmu0"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="2_4hpp2"]
 [ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpact.tscn" id="2_cea51"]
+[ext_resource type="PackedScene" uid="uid://ordrsmmhta58" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonImpact.tscn" id="3_pjcvv"]
+[ext_resource type="PackedScene" uid="uid://byqcqd8oy0lou" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeImpact.tscn" id="4_41v2f"]
+[ext_resource type="PackedScene" uid="uid://c7ax3gowds2j3" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockImpact.tscn" id="5_ityrg"]
+[ext_resource type="PackedScene" uid="uid://du6plnrfa56ov" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedImpact.tscn" id="6_x7k0d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ucajo"]
 transparency = 1
@@ -39,7 +43,7 @@ radius = 1.0
 script = ExtResource("1_72qkr")
 max_scale = 5
 grow_speed = 25
-elemental_impact_vfx = Array[PackedScene]([ExtResource("2_cea51"), null, null, null, null])
+elemental_impact_vfx = Array[PackedScene]([ExtResource("2_cea51"), ExtResource("3_pjcvv"), ExtResource("4_41v2f"), ExtResource("5_ityrg"), ExtResource("6_x7k0d")])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0

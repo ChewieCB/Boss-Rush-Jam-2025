@@ -10,11 +10,12 @@ enum PlayerStatEnum {
 	JUMP_HEIGHT,
 	DASH_IFRAME_DURATION,
 	DASH_DURATION,
-	CHIP_DROPRATE_MULTIPLIER,
-	MIN_DAMAGE_VARIANCE,
-	MAX_DAMAGE_VARIANCE,
-	CRITICAL_HIT_CHANCE,
-	CRITICAL_HIT_DAMAGE_MULTIPLIER,
+    CHIP_DROPRATE_MULTIPLIER,
+    MIN_DAMAGE_VARIANCE,
+    MAX_DAMAGE_VARIANCE,
+    CRITICAL_HIT_CHANCE,
+    CRITICAL_HIT_DAMAGE_MULTIPLIER,
+    DODGE_CHANCE,
 	FLOOR_FRICTION_MODIFIER,
 }
 enum ModifyType {FLAT, PERCENTAGE, BOOL} # How it interact with base value
@@ -31,6 +32,7 @@ var status_code: String
 var modified_stat: PlayerStatEnum
 var modify_type: ModifyType
 var value: float
+var info_text: String
 var duration: float = 0
 var is_bad_effect: bool
 var status_icon: Texture2D
@@ -38,17 +40,18 @@ var show_duration_ui: bool = true
 var show_value_on_ui: bool = false
 
 func _to_string() -> String:
-	var data = {
-		"display_name": display_name,
-		"status_code": status_code,
-		"modified_stat": PlayerStatEnum.keys()[modified_stat],
-		"modify_type": ModifyType.keys()[modify_type],
-		"value": value,
-		"duration": duration,
-		"is_bad_effect": is_bad_effect,
-		"show_duration_ui": show_duration_ui
-	}
-	return JSON.stringify(data)
+    var data = {
+        "display_name": display_name,
+        "status_code": status_code,
+        "modified_stat": PlayerStatEnum.keys()[modified_stat],
+        "modify_type": ModifyType.keys()[modify_type],
+        "value": value,
+        "info_text": info_text,
+        "duration": duration,
+        "is_bad_effect": is_bad_effect,
+        "show_duration_ui": show_duration_ui
+    }
+    return JSON.stringify(data)
 
 
 # For debugging

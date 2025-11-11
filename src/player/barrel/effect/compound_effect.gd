@@ -77,7 +77,7 @@ func on_reload_interrupted():
 	for child in child_effects:
 		child.on_reload_interrupted()
 
-func on_projectile_spawn(_projectile: BaseProjectile):
+func on_projectile_spawn(_projectile: BaseBullet):
 	for child in child_effects:
 		child.on_projectile_spawn(_projectile)
 
@@ -85,25 +85,25 @@ func on_projectile_travel_tick():
 	for child in child_effects:
 		child.on_projectile_travel_tick()
 
-func on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for child in child_effects:
 		child.on_projectile_impact(_projectile, _has_pos, _pos)
 
-func on_projectile_destroyed():
+func on_projectile_destroyed(_hit_boss: bool):
 	for child in child_effects:
-		child.on_projectile_destroyed()
+		child.on_projectile_destroyed(_hit_boss)
 
-func on_damage_calculation():
+func on_gun_damage_calculation():
 	for child in child_effects:
-		child.on_damage_calculation()
+		child.on_gun_damage_calculation()
 
-func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseProjectile):
+func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	for child in child_effects:
 		child.on_before_damage_applied(_enemy, _projectile)
 
-func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	for child in child_effects:
-		child.on_damage_applied(_has_pos, _pos)
+		child.on_damage_applied(_damage, _has_pos, _pos)
 
 func on_enemy_killed():
 	for child in child_effects:

@@ -1,16 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://lkmsej14wwix"]
+[gd_scene load_steps=4 format=3 uid="uid://lkmsej14wwix"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/explosion_damage_area.gd" id="1_8p7nj"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="2_pipiq"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_e5ac2"]
-radius = 1.0
+radius = 1.2
 
 [node name="ExplosionDamageArea" type="Area3D"]
 collision_layer = 0
 collision_mask = 223
+monitorable = false
 script = ExtResource("1_8p7nj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_e5ac2")
+
+[node name="ExplosionVFX" parent="." instance=ExtResource("2_pipiq")]
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

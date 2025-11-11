@@ -84,6 +84,9 @@ func _input(event: InputEvent) -> void:
 
 
 func full_refresh_ui():
+	if not visible:
+		return
+		
 	barrel_desc.text = ""
 
 	# EQUIPPED BARRELS

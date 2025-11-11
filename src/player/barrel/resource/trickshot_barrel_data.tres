@@ -18,6 +18,7 @@ Homing Bullet: Bullets homing toward enemies, but significantly reduced damage.
 Split Bullet: Bullets split into 3 on impact, which deal reduced damage.
 [/ul]
 "
+barrel_info_summary = "Bullets fly in all kinds of ways, covering every angle. Taken from The Slot."
 barrel_image = ExtResource("1_qqx0r")
 barrel_cost = 200
 barrel_prefab = ExtResource("2_pg4nx")

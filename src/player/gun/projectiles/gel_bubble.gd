@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 
 @export var stick_time = 1
 @export var max_scale = 3
@@ -12,6 +12,8 @@ extends BaseProjectile
 @onready var life_timer: Timer = $LifeTimer
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
+
+const MIN_PROJECTILE_SPEED = 1
 
 ## Each bubble has a random delayed time before it start moving
 var delayed = true
@@ -29,7 +31,7 @@ func _ready() -> void:
 	life_timer.start()
 	delayed = false
 	mesh_instance.visible = true
-
+	min_lifetime_before_can_be_aim_guided = 0.3
 
 func _process(delta: float) -> void:
 	super (delta)
@@ -42,8 +44,9 @@ func _physics_process(delta: float) -> void:
 	if mesh_instance.scale.x < max_scale:
 		mesh_instance.scale += Vector3.ONE * grow_speed * delta
 
-	if projectile_speed > 0:
+	if projectile_speed > MIN_PROJECTILE_SPEED:
 		projectile_speed -= projectile_speed_decay * delta
+		projectile_speed = max(projectile_speed, MIN_PROJECTILE_SPEED)
 
 
 	if homing_locked_in and homing_target:
@@ -51,6 +54,10 @@ func _physics_process(delta: float) -> void:
 		if homing_target.get_node("BodyCenter"):
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
+		look_at(global_position + dir_to_target)
+	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
+		var aiming_position = GunUtils.get_player_aiming_position()
+		var dir_to_target = global_position.direction_to(aiming_position)
 		look_at(global_position + dir_to_target)
 
 	global_position -= transform.basis.z * projectile_speed * delta
@@ -91,20 +98,24 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			body.health_component.damage(calculated_damage)
+			calculated_damage = calculate_bullet_damage() # Recalculate damage after before_damage_applied effect
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
+			hit_boss = true
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
-			body.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
+			hit_boss = true
 		elif "health_component" in body:
-			body.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
+			hit_boss = true
 	self.reparent.call_deferred(body)
 	impacted.emit(self, true, global_position)
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
-		destroyed.emit()
+		destroyed.emit(hit_boss)
 		call_deferred("queue_free")
 
 
@@ -116,7 +127,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit()
+	destroyed.emit(false)
 	call_deferred("queue_free")
 
 

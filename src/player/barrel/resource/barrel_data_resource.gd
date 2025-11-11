@@ -79,12 +79,16 @@ enum BarrelIdEnum {
 	DEBUG_AMERICAN_RIFLE,
 	DEBUG_RUSSIAN_RIFLE,
 	DEBUG_LMG,
-	DEBUG_VECTOR
+	DEBUG_VECTOR,
+	
+	BLACKJACK,
+	DUBIOUS_BENEFIT
 }
 
 @export var barrel_id: BarrelIdEnum
 @export var barrel_name: String
 @export_multiline var barrel_desc: String
+@export_multiline var barrel_info_summary: String
 @export var barrel_image: Texture2D
 @export var barrel_cost: int = 200
 @export var barrel_prefab: PackedScene

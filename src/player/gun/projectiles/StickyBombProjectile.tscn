@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://35lbaqwytewn"]
+[gd_scene load_steps=22 format=3 uid="uid://35lbaqwytewn"]
 
 [ext_resource type="Script" path="res://src/player/gun/projectiles/sticky_bomb_projectile.gd" id="1_oktax"]
 [ext_resource type="PackedScene" uid="uid://lkmsej14wwix" path="res://src/player/gun/damage_effect/ExplosionDamageArea.tscn" id="2_c01wk"]
@@ -6,11 +6,14 @@
 [ext_resource type="PackedScene" uid="uid://tt1ywqprndoi" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnImpact.tscn" id="4_mp8wv"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_qa43f"]
 [ext_resource type="PackedScene" uid="uid://ordrsmmhta58" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonImpact.tscn" id="5_8l5x6"]
+[ext_resource type="PackedScene" uid="uid://byqcqd8oy0lou" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeImpact.tscn" id="6_e5scs"]
 [ext_resource type="PackedScene" uid="uid://c7ax3gowds2j3" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockImpact.tscn" id="6_farcl"]
 [ext_resource type="PackedScene" uid="uid://cagqbtwkkinfl" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmitSmall.tscn" id="6_quv1y"]
 [ext_resource type="PackedScene" uid="uid://dohipsr30pdoj" path="res://src/player/gun/vfx/elemental/poison/ProjectilePoisonEmitSmall.tscn" id="7_udfh0"]
+[ext_resource type="PackedScene" uid="uid://du6plnrfa56ov" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedImpact.tscn" id="8_dkvnk"]
 [ext_resource type="PackedScene" uid="uid://b52c6uqlwvbfp" path="res://src/player/gun/vfx/elemental/shock/ProjectileShockEmitSmall.tscn" id="9_wt430"]
 [ext_resource type="PackedScene" uid="uid://cj4t17atvmu7v" path="res://src/player/gun/vfx/elemental/freeze/ProjectileFreezeEmitSmall.tscn" id="10_m0cuo"]
+[ext_resource type="PackedScene" uid="uid://vpa0pjfgcoxj" path="res://src/player/gun/vfx/elemental/bleed/ProjectileBleedEmitSmall.tscn" id="14_k6cjs"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hch7l"]
 albedo_color = Color(0.860888, 0.539123, 3.85046e-07, 1)
@@ -45,8 +48,8 @@ radius = 1.0
 script = ExtResource("1_oktax")
 explosion_prefab = ExtResource("2_c01wk")
 explosion_vfx = ExtResource("3_h00rf")
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitSmall"), NodePath("ElementalVFX/ProjectilePoisonEmitSmall"), NodePath("ElementalVFX/ProjectileFreezeEmitSmall"), NodePath("ElementalVFX/ProjectileShockEmitSmall"), null]
-elemental_impact_vfx = Array[PackedScene]([ExtResource("4_mp8wv"), ExtResource("5_8l5x6"), null, ExtResource("6_farcl"), null])
+elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitSmall"), NodePath("ElementalVFX/ProjectilePoisonEmitSmall"), NodePath("ElementalVFX/ProjectileFreezeEmitSmall"), NodePath("ElementalVFX/ProjectileShockEmitSmall"), NodePath("ElementalVFX/ProjectileBleedEmitSmall")]
+elemental_impact_vfx = Array[PackedScene]([ExtResource("4_mp8wv"), ExtResource("5_8l5x6"), ExtResource("6_e5scs"), ExtResource("6_farcl"), ExtResource("8_dkvnk")])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_ynnlg")
@@ -106,6 +109,9 @@ visible = false
 visible = false
 
 [node name="ProjectileShockEmitSmall" parent="ElementalVFX" instance=ExtResource("9_wt430")]
+visible = false
+
+[node name="ProjectileBleedEmitSmall" parent="ElementalVFX" instance=ExtResource("14_k6cjs")]
 visible = false
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

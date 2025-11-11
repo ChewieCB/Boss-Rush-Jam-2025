@@ -18,6 +18,7 @@ Long Shot: Bullets are more accurate, and deal more damage the further away they
 Snap Call: Bullets move faster, and deal more damage the higher their speed is. Minimal benefit for hitscan weapons.
 [/ul]
 "
+barrel_info_summary = "Inspired by a classic physic formula."
 barrel_image = ExtResource("1_k28iw")
 barrel_cost = 1850
 barrel_prefab = ExtResource("2_rn8gl")

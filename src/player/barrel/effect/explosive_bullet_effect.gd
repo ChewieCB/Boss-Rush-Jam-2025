@@ -1,25 +1,15 @@
 extends BaseBarrelEffect
 
-@export var explosion_range: float = 1
 @export var damage: int
-@export var explosion_damage: PackedScene
-@export var explosion_vfx: PackedScene
 
 
-func on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	if (_has_pos):
 		create_explosion(_pos)
 
 
 func create_explosion(pos: Vector3):
-	var explosion_dmg_inst: ExplosionDamageArea = explosion_damage.instantiate()
+	var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
 	# Explosion damage equal to 50% of original damage
-	explosion_dmg_inst.init(round(owner_barrel.owner_gun.modified_damage / 2.0))
-	GameManager.player.get_parent().add_child(explosion_dmg_inst)
-	explosion_dmg_inst.global_position = pos
-	explosion_dmg_inst.scale = Vector3(explosion_range, explosion_range, explosion_range)
-
-	var explosion_vfx_inst = explosion_vfx.instantiate()
-	GameManager.player.get_parent().add_child(explosion_vfx_inst)
-	explosion_vfx_inst.global_position = pos
-	# explosion_vfx_inst.change_mesh_scale(explosion_range)
+	explosion_inst.init(round(owner_barrel.owner_gun.modified_damage / 2.0))
+	explosion_inst.activate(pos)
