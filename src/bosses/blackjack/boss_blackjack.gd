@@ -896,7 +896,7 @@ func _on_phase_1_state_entered() -> void:
 	current_phase = 1
 	blackjack_chance = blackjack_chance_phase_1
 	bust_chance = bust_chance_phase_1
-	bust_proj_speed = bust_proj_shots_phase_1
+	bust_proj_shots = bust_proj_shots_phase_1
 	
 	select_attack()
 
@@ -908,7 +908,7 @@ func _on_phase_2_state_entered() -> void:
 	current_phase = 2
 	blackjack_chance = blackjack_chance_phase_2
 	bust_chance = bust_chance_phase_2
-	bust_proj_speed = bust_proj_shots_phase_2
+	bust_proj_shots = bust_proj_shots_phase_2
 	
 	cancel_active_hand_attacks()
 	
