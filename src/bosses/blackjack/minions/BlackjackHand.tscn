@@ -59,6 +59,18 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector3(0, 1.497, 0)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.641103, 0.641103, 0.641103)]
+}
 
 [sub_resource type="Animation" id="Animation_dshkv"]
 resource_name = "death"
@@ -217,7 +229,7 @@ tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.3),
-"transitions": PackedFloat32Array(0.297302, 0.210224, 1),
+"transitions": PackedFloat32Array(0.297302, 1.56917, 1),
 "update": 0,
 "values": [Vector3(0.635, 0.635, 0.635), Vector3(0.8, 0.8, 0.8), Vector3(0.635, 0.635, 0.635)]
 }
@@ -416,16 +428,16 @@ collision_mask = 25
 script = ExtResource("2_ktxam")
 slam_shockwave_prefab = ExtResource("3_jwew0")
 attack_speed_scale = 1.0
-slam_time = 0.35
+slam_time = 0.45
 hit_damage = 10.0
 stand_slam_down_time = 0.1
 stand_slam_up_time = 0.1
 stand_range = 6.7
-stand_wave_radius = 8.0
+stand_wave_radius = 6.0
 stand_wave_damage = 10.0
 stand_wave_time = 0.8
-stand_repeat_max = 3
-sweep_time = 1.6
+stand_repeat_max = 2
+sweep_time = 1.9
 sweep_offset = 2.1
 sweep_particles = NodePath("SlamParticles")
 sweep_card_scene = ExtResource("4_ikfbn")
@@ -442,7 +454,7 @@ GRAVITY = 0.0
 orbit_radius = 0.002
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(0.635, 0, 0, 0, 0.635, 0, 0, 0, 0.635, 0, 1.497, 0)
+transform = Transform3D(0.641103, 0, 0, 0, 0.641103, 0, 0, 0, 0.641103, 0, 1.497, 0)
 texture = ExtResource("2_mlpb3")
 
 [node name="CollisionShape3D" parent="." index="1"]

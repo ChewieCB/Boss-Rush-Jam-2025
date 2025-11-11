@@ -11,6 +11,7 @@ signal bust_finished
 @export_group("Phases")
 @export var phase_2_health_threshold: float = 0.5
 var skip_deal: bool = false
+var last_attack_str: String = ""
 
 @export_group("Movement")
 var flying_nav: NavigationRegion3D
@@ -187,8 +188,9 @@ func _ready() -> void:
 		# Instance shockwaves for stand attack
 		for i in range(24):
 			var shockwave = slam_shockwave_prefab.instantiate()
+			shockwave.process_mode = Node.PROCESS_MODE_DISABLED
 			scene_root.add_child(shockwave)
-			shockwave.global_position = Vector3(0, -50, 0)
+			shockwave.global_position = Vector3(-20, -20, -20)
 			shockwave_instance_pool.push_back(shockwave)
 		
 		# Timers for block attack return
@@ -261,7 +263,13 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			_abort_deal_tween()
 			if $StateChart/Root/Phase/AttackPhase/Bust.active:
 				await bust_finished
+			
+			cancel_active_hand_attacks()
+			state_chart.send_event("end_attack")
 			state_chart.send_event("trigger_phase_2")
+			
+			last_attack_str = "start_hand_tilt_attack"
+			state_chart.send_event("start_hand_tilt_attack")
 
 
 func _on_health_dead_state_entered() -> void:
@@ -345,17 +353,20 @@ func select_attack_phase_1() -> void:
 	blocking_detection_area.process_mode = Node.PROCESS_MODE_DISABLED
 	state_chart.send_event("end_recovery")
 	
-	var attack_str: String = ""
-	var attack_roll: int = randi_range(0, 99)
+	var attack_str: String = last_attack_str
 	# 45% chance of Hit
 	# 30% chance of Stand (Double Tap)
 	# 25% chance of Sweep
-	if attack_roll < 45:
-		attack_str = "start_hand_slam_attack"
-	elif attack_roll < 75:
-		attack_str = "start_hand_stand_attack"
-	else:
-		attack_str = "start_hand_sweep_attack"
+	while attack_str == last_attack_str:
+		var attack_roll: int = randi_range(0, 99)
+		if attack_roll < 45:
+			attack_str = "start_hand_slam_attack"
+		elif attack_roll < 75:
+			attack_str = "start_hand_stand_attack"
+		else:
+			attack_str = "start_hand_sweep_attack"
+	
+	last_attack_str = attack_str
 	state_chart.send_event(attack_str)
 
 
@@ -363,21 +374,23 @@ func select_attack_phase_2() -> void:
 	blocking_detection_area.process_mode = Node.PROCESS_MODE_DISABLED
 	state_chart.send_event("end_recovery")
 	
-	var attack_str: String = ""
-	var attack_roll: int = randi_range(0, 99)
+	var attack_str: String = last_attack_str
 	# 30% chance of Tilt
-	# 25% chance of Block
-	# 30% chance of Sweep
+	# 35% chance of Block
+	# 20% chance of Sweep
 	# 15% chance of Stand (Double Tap)
-	if attack_roll < 30:
-		attack_str = "start_hand_tilt_attack"
-	elif attack_roll < 55:
-		attack_str = "start_hand_block_attack"
-	elif attack_roll < 85:
-		attack_str = "start_hand_sweep_attack"
-	else:
-		attack_str = "start_hand_stand_attack"
-
+	while attack_str == last_attack_str:
+		var attack_roll: int = randi_range(0, 99)
+		if attack_roll < 30:
+			attack_str = "start_hand_tilt_attack"
+		elif attack_roll < 65:
+			attack_str = "start_hand_block_attack"
+		elif attack_roll < 85:
+			attack_str = "start_hand_sweep_attack"
+		else:
+			attack_str = "start_hand_stand_attack"
+	
+	last_attack_str = attack_str
 	state_chart.send_event(attack_str)
 
 
@@ -847,14 +860,11 @@ func _on_dealing_recover_state_entered() -> void:
 
 func _on_hand_hit_attacking_state_entered() -> void:
 	state_chart.send_event("start_targeting")
-	match current_phase:
-		1:
-			if $StateChart/Root/Status/Blackjack/Active.active:
-				trigger_all_hand_attacks_sim("start_hit_attack", 0.7)
-			else:
-				trigger_all_hand_attacks_seq("start_hit_attack")
-		#2:
-			#trigger_substack_attack("start_small_projectile_attack_phase_2")
+	
+	if $StateChart/Root/Status/Blackjack/Active.active:
+		trigger_all_hand_attacks_sim("start_hit_attack", 0.7)
+	else:
+		trigger_all_hand_attacks_seq("start_hit_attack")
 
 func _on_hand_hit_attacking_physics_process(_delta: float) -> void:
 	if spawned_hands.size() == 0:
@@ -863,14 +873,10 @@ func _on_hand_hit_attacking_physics_process(_delta: float) -> void:
 
 
 func _on_hand_stand_attacking_state_entered() -> void:
-	match current_phase:
-		1:
-			if $StateChart/Root/Status/Blackjack/Active.active:
-				trigger_all_hand_attacks_sim("start_stand_attack", 0.5)
-			else:
-				trigger_all_hand_attacks_sim("start_stand_attack", 0.8)
-		#2:
-			#trigger_substack_attack("start_small_projectile_attack_phase_2")
+	if $StateChart/Root/Status/Blackjack/Active.active:
+		trigger_all_hand_attacks_sim("start_stand_attack", 0.5)
+	else:
+		trigger_all_hand_attacks_sim("start_stand_attack", 0.8)
 
 func _on_hand_stand_attacking_physics_process(_delta: float) -> void:
 	if spawned_hands.size() == 0:
@@ -879,21 +885,10 @@ func _on_hand_stand_attacking_physics_process(_delta: float) -> void:
 
 
 func _on_hand_sweep_attacking_state_entered() -> void:
-	#for hand in spawned_hands:
-		#var _angle: float = rad_to_deg(sweep_angle_deg)/2
-		#var l_angle: float = _angle if hand.is_offhand else -_angle
-		#var r_angle: float = -_angle if hand.is_offhand else _angle
-		## Pick a sweep start point near the target
-		#hand.sweep_start_pos = target.global_position - (target.global_basis.z * sweep_dist).rotated(Vector3.UP, l_angle)
-		#hand.sweep_end_pos = target.global_position - (target.global_basis.z * sweep_dist).rotated(Vector3.UP, r_angle)
-	match current_phase:
-		1:
-			if $StateChart/Root/Status/Blackjack/Active.active:
-				trigger_all_hand_attacks_sim("start_sweep_attack", 0.65)
-			else:
-				trigger_all_hand_attacks_seq("start_sweep_attack")
-		#2:
-			#trigger_substack_attack("start_small_projectile_attack_phase_2")
+	if $StateChart/Root/Status/Blackjack/Active.active:
+		trigger_all_hand_attacks_sim("start_sweep_attack", 0.65)
+	else:
+		trigger_all_hand_attacks_seq("start_sweep_attack")
 
 func _on_hand_sweep_attacking_physics_process(_delta: float) -> void:
 	if spawned_hands.size() == 0:
@@ -930,10 +925,9 @@ func _on_phase_2_state_entered() -> void:
 	bust_chance = bust_chance_phase_2
 	bust_proj_shots = bust_proj_shots_phase_2
 	
-	cancel_active_hand_attacks()
-	
-	state_chart.send_event("end_attack")
-	state_chart.send_event("start_hand_tilt_attack")
+	if not skip_deal:
+		select_attack()
+
 
 func _on_phase_2_state_exited() -> void:
 	return
@@ -962,7 +956,11 @@ func _on_blackjack_active_state_entered() -> void:
 		var _hand = spawn_hand()
 		_anchor_hand(_hand)
 	# Trigger attack
-	state_chart.send_event("trigger_phase_1")
+	match current_phase:
+		1:
+			state_chart.send_event("trigger_phase_1")
+		2:
+			state_chart.send_event("trigger_phase_2")
 	# Start timer
 	blackjack_timer.start(randf_range(blackjack_time_min, blackjack_time_max))
 
@@ -1093,7 +1091,9 @@ func _on_bust_arena_aoe_state_entered() -> void:
 		# Alternate between hand idx 1 and hand idx 2
 		var k: int = 0 if j % 2 == 0 else 1
 		var idx: int = 1 - k
-		var _hand = spawned_hands[idx]
+		var _hand = spawned_hands.get(idx)
+		if not _hand:
+			break
 		hand_tween = get_tree().create_tween()
 		hand_tween.set_parallel(false)
 		hand_tween.chain().tween_property(
@@ -1291,7 +1291,8 @@ func _on_tilt_firing_state_entered() -> void:
 			var _damage_area := _spawn_damage_area(
 				target_pos, 
 				tilt_explosion_radius, 
-				tilt_explosion_damage
+				tilt_explosion_damage,
+				0.2
 			)
 			# Lead the target a bit so the player can see the attack coming
 			target_pos -= tilt_mesh.global_basis.z * 8.0
@@ -1333,14 +1334,14 @@ func _spawn_explosion(spawn_pos: Vector3, scale_factor: float = 1.0) -> void:
 	tilt_explosion_instances.push_back(explosion)
 
 
-func _spawn_damage_area(spawn_pos: Vector3, radius: float, damage: int) -> ExplosionDamageProjectileArea:
+func _spawn_damage_area(spawn_pos: Vector3, radius: float, damage: int, pushback_scale: float = 1.0) -> ExplosionDamageProjectileArea:
 	if explosion_damage_areas.size() == 0:
 		_create_new_damage_area(spawn_pos, radius, damage)
 	
 	var damage_area: ExplosionDamageProjectileArea = explosion_damage_areas.pop_front()
 	
 	damage_area.global_position = spawn_pos
-	damage_area.init(damage, radius)
+	damage_area.init(damage, radius, pushback_scale)
 	
 	return damage_area
 
@@ -1743,7 +1744,7 @@ func _block_interecept_projectile(proj: BaseProjectile, pos: Vector3 = Vector3.Z
 
 func _on_blocking_detection_area_area_entered(area: Area3D) -> void:
 	# If the defensive state isn't active, return
-	if not $StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Blocking.active:
+	if not $StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/Blocking.active:
 		return
 	
 	if available_hands.size() == 0:

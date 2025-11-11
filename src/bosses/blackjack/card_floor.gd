@@ -30,5 +30,5 @@ func _on_timer_timeout() -> void:
 	tween.tween_property(mesh, "scale", Vector3.ZERO, 0.4).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property(decal, "scale", Vector3.ZERO, 0.4).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 	#tween.tween_property(material, "albedo_color:a", 0.0, 0.6).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	tween.tween_callback(self.queue_free)
-	#self.queue_free()
+	await tween.finished
+	queue_free()

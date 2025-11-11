@@ -585,7 +585,7 @@ _data = {
 [node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent", "blocking_detection_area") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
 DEBUG_blackjack = false
-DEBUG_bust = true
+DEBUG_bust = false
 phase_2_health_threshold = 0.5
 min_flying_height = 0.0
 max_flying_height = 14.0
@@ -790,8 +790,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="HealthComponent" parent="." index="7"]
 visible = false
-is_invincible = true
-max_health = 500.0
+max_health = 6000.0
 
 [node name="BlockingDetectionArea" type="Area3D" parent="." index="9"]
 process_mode = 4

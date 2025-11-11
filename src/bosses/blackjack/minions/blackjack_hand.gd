@@ -19,7 +19,7 @@ var is_offhand: bool = false  # flag to set handed-ness so we can flip sweep dir
 ## Attacks
 # Hit
 var slam_target: Vector3
-@export var slam_time: float = 0.35
+@export var slam_time: float = 0.45
 @export var hit_damage: float = 10
 var slam_tween: Tween
 
@@ -28,11 +28,11 @@ var stand_target: Vector3
 @export var stand_slam_down_time: float = 0.1
 @export var stand_slam_up_time: float = 0.1
 @export var stand_range: float = 6.7
-@export var stand_wave_radius: float = 8.0
+@export var stand_wave_radius: float = 6.0
 @export var stand_wave_damage: float = 10.0
 @export var stand_wave_time: float = 0.8
 var stand_repeat_counter: int = 0
-@export var stand_repeat_max: int = 3
+@export var stand_repeat_max: int = 2
 var shockwave_instance_pool: Array
 var stand_tween: Tween
 
@@ -40,7 +40,7 @@ var stand_tween: Tween
 var sweep_start_pos: Vector3
 var sweep_end_pos: Vector3
 var sweep_target_pos: Vector3
-@export var sweep_time: float = 1.6
+@export var sweep_time: float = 1.9
 @export var sweep_offset: float = 2.1
 @export var sweep_particles: GPUParticles3D
 @export var sweep_card_scene: PackedScene
@@ -137,8 +137,10 @@ func _telegraph_attack(_attack_name: String = "", time: float = 0.0) -> void:
 	state_chart.send_event("attack_telegraph")
 	if time > 0.0:
 		anim_player.speed_scale = 0.3 / time
+	sprite.modulate = Color.AQUA
 	anim_player.play("blackjack_hand/telegraph")
 	await anim_player.animation_finished
+	sprite.modulate = Color.WHITE
 	anim_player.speed_scale = 1.0
 	state_chart.send_event("attack_start")
 	return
@@ -155,7 +157,7 @@ func _on_hit_targeting_state_entered() -> void:
 	state_chart.send_event("attack_buildup")
 	
 	await get_tree().create_timer(1.1).timeout
-	_telegraph_attack("Hit")
+	await _telegraph_attack("Hit")
 	
 	# Target just in front of the players position
 	slam_target = target.global_position - target.global_basis.z * 1.15
@@ -282,11 +284,12 @@ func _on_stand_double_tap_state_entered() -> void:
 				var _shockwave = spawn_shockwave()
 				if not _shockwave:
 					return
-				_shockwave.set_deferred("monitoring", true)
+				_shockwave.process_mode = Node.PROCESS_MODE_PAUSABLE
 				#_shockwave.global_transform = self.global_transform
 				_shockwave.global_position = self.global_position
 				_shockwave.start_shockwave()
 				await _shockwave.finished
+				_shockwave.process_mode = Node.PROCESS_MODE_DISABLED
 				shockwave_instance_pool.push_back(_shockwave)
 		)
 		slam_tween.chain().tween_property(
@@ -331,7 +334,6 @@ func spawn_shockwave(spawn_pos: Vector3 = self.global_position, max_radius: floa
 	var shockwave = shockwave_instance_pool.pop_front()
 	if not shockwave:
 		return
-	shockwave.set_deferred("monitoring", false)
 	shockwave.free_on_finished = false
 	shockwave.arc_angle = 360
 	shockwave.max_radius = max_radius
@@ -400,6 +402,7 @@ func _on_sweep_move_to_target_state_entered() -> void:
 	# Telegraph sweep windup
 	anim_player.play("blackjack_hand/shake")
 	await get_tree().create_timer(telegraph_time).timeout
+	await _telegraph_attack()
 	
 	state_chart.send_event("hand_sweep")
 
