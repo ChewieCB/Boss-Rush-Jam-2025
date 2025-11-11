@@ -6,6 +6,7 @@ extends BossMap
 @export var chip_stacks_parent: Node3D
 @export var min_stack_height: float = 0.3
 @export var max_stack_height: float = 1.0
+@export var explosive_spawn_parent: Node3D
 
 @onready var tilt_grab_markers = get_tree().get_nodes_in_group("boss_tilt_grab_marker")
 @onready var boss_tilt_platform_origin_marker = get_tree().get_nodes_in_group("boss_tilt_platform_origin_marker")
@@ -23,6 +24,7 @@ func _ready() -> void:
 	boss.tilt_hand_markers = tilt_grab_markers
 	boss.intro_path_points = boss_intro_path_markers
 	boss.hand_spawn_pos = hand_spawn_marker.front()
+	boss.explosive_spawn_meshes = explosive_spawn_parent.get_children()
 	
 	#for stack in chip_stacks_parent.get_children():
 		#var _rotation: float = randf_range(0, 2*PI)

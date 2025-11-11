@@ -22,6 +22,28 @@ static func generate_points_for_circle(circle_position: Vector2, max_gen_radius:
 	return _generate_points(ShapeType.CIRCLE, sample_region_rect, poisson_radius, retries, start_point, max_points)
 
 
+static func generate_points_for_polygon(polygon: PackedVector2Array, poisson_radius: float, retries: int, start_point := Vector2.INF) -> PackedVector2Array:
+	var start: Vector2 = polygon[0]
+	var end: Vector2 = polygon[0]
+	for i in range(1, polygon.size()):
+		start.x = min(start.x, polygon[i].x)
+		start.y = min(start.y, polygon[i].y)
+		end.x = max(end.x, polygon[i].x)
+		end.y = max(end.y, polygon[i].y)
+	var sample_region_rect = Rect2(start, end - start)
+	
+	if start_point.x == INF:
+		var n: int = polygon.size()
+		var i: int = randi() % n
+		start_point = polygon[i] + (polygon[(i + 1) % n] - polygon[i]) * randf()
+	elif not Geometry2D.is_point_in_polygon(start_point, polygon):
+		push_error("Starting point ", start_point, " is not a valid point inside the polygon!")
+		return PackedVector2Array()
+	
+	shape_info[ShapeType.POLYGON] = {"points" = polygon}
+	return _generate_points(ShapeType.POLYGON, sample_region_rect, poisson_radius, retries, start_point)
+
+
 static func _generate_points(shape: int, sample_region_rect: Rect2, poisson_radius: float, retries: int, start_pos: Vector2, max_points: int = -1) -> PackedVector2Array:
 	var points: PackedVector2Array = PackedVector2Array()
 	points.clear()

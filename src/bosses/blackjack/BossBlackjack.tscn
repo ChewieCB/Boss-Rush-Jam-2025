@@ -585,7 +585,7 @@ _data = {
 [node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent", "blocking_detection_area") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
 DEBUG_blackjack = false
-DEBUG_bust = false
+DEBUG_bust = true
 phase_2_health_threshold = 0.5
 min_flying_height = 0.0
 max_flying_height = 14.0
@@ -600,6 +600,8 @@ wave_material = null
 explosion_scene = ExtResource("20_1mflx")
 explosion_shake_min_range = 8.0
 explosion_shake_max_range = 22.0
+explosion_damage_area_scene = ExtResource("21_v5jtk")
+explosive_spawn_meshes = []
 deal_speed_scale = 1.0
 card_textures = Array[CompressedTexture2D]([ExtResource("5_xw57y"), ExtResource("6_ddotp"), ExtResource("7_c86wt"), ExtResource("8_b64we"), ExtResource("9_pmm6f"), ExtResource("10_g7vdy"), ExtResource("11_234n0"), ExtResource("12_mkj6f"), ExtResource("13_r13ax"), ExtResource("14_y7i18"), ExtResource("15_ktoks"), ExtResource("16_l5820"), ExtResource("17_nr1bx"), ExtResource("18_6mxre")])
 dealing_anim_points = [NodePath("DealingAnimPoints/DealMarkerStart"), NodePath("DealingAnimPoints/DealMarkerMid"), NodePath("DealingAnimPoints/DealMarkerEnd")]
@@ -624,6 +626,7 @@ bust_proj_shots_phase_2 = 10
 bust_proj_explosion_count = 1
 bust_explosion_radius = 5.0
 bust_proj_arc_height = 25.0
+max_explosion_search_radius = 15.0
 attack_speed_scale = 1.0
 slam_shockwave_prefab = ExtResource("4_cv1yb")
 sweep_dist = 12.0
@@ -787,6 +790,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="HealthComponent" parent="." index="7"]
 visible = false
+is_invincible = true
 max_health = 500.0
 
 [node name="BlockingDetectionArea" type="Area3D" parent="." index="9"]
@@ -801,9 +805,6 @@ shape = SubResource("SphereShape3D_aol33")
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Blackjack"
-
-[node name="StateChartDebugger" parent="DebugUI" index="0"]
-enabled = true
 
 [node name="Blackjack" type="Node" parent="StateChart/Root/Status" index="5"]
 script = ExtResource("6_pje5c")

@@ -90,6 +90,7 @@ var bust_proj_shots: int = bust_proj_shots_phase_1
 @export var bust_explosion_radius: float = 5.0
 @export var bust_proj_arc_height: float = 25.0
 var bust_targets: Array[Vector3] = []
+@export var max_explosion_search_radius: float = 15.0
 
 # Intro
 var intro_path_points: Array[Node] = []
@@ -1018,17 +1019,51 @@ func _on_bust_exploding_state_entered() -> void:
 	state_chart.send_event("start_arena_aoe")
 
 
+func _get_evenly_spaced_points_for_explosion(
+	count: int, 
+	explosion_radius: float, 
+	meshes_to_consider: Array
+) -> Array:
+	var points := []
+	
+	for mesh in meshes_to_consider:
+		# Use Poisson disc sampling to get evenly spaced points in each radius
+		var _pos = mesh.global_position
+		var _pos_2d = Vector2(_pos.x, _pos.z)
+		var _radius = mesh.mesh.top_radius
+		var _points = Poisson.generate_points_for_circle(
+			_pos_2d, _radius, explosion_radius, 30
+		)
+		# Convert the points to 3D positions
+		var _3d_points = []
+		for p in _points:
+			_3d_points.append(Vector3(p.x, 2.0, p.y))
+		
+		points += _3d_points
+	
+	points.shuffle()
+	
+	return points.slice(0, count)
+
+
 func _on_bust_arena_aoe_state_entered() -> void:
+	var space_state = get_world_3d().direct_space_state
+	
 	# Pick spots to fire AoE explosive shots at
 	bust_targets = []
-	var space_state = get_world_3d().direct_space_state
-	var bounds_offset: float = 12.0
+	# Get the closest meshes to direct the fire somewhat
+	var nearest_meshes = explosive_spawn_meshes.filter(
+		func(mesh):
+			var dist: float = mesh.global_position.distance_to(target.global_position)
+			return dist <= max_explosion_search_radius
+	)
+	
+	var possible_targets := _get_evenly_spaced_points_for_explosion(
+		bust_proj_shots, bust_explosion_radius, nearest_meshes
+	)
+	
 	for h in range(bust_proj_shots):
-		var _pos = tilt_animateable_floor.global_position + Vector3(
-			randi_range(-bounds_offset, bounds_offset),
-			5.0,
-			randi_range(-bounds_offset / 2.5, bounds_offset),
-		)
+		var _pos = possible_targets.pop_front()
 		var query = PhysicsRayQueryParameters3D.create(
 			_pos,
 			_pos - tilt_mesh.global_basis.y * 20,
