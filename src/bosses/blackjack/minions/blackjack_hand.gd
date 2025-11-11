@@ -27,7 +27,7 @@ var slam_tween: Tween
 var stand_target: Vector3
 @export var stand_slam_down_time: float = 0.1
 @export var stand_slam_up_time: float = 0.1
-@export var stand_range: float = 6.7
+@export var stand_range: float = 3.0
 @export var stand_wave_radius: float = 6.0
 @export var stand_wave_damage: float = 10.0
 @export var stand_wave_time: float = 0.8
@@ -40,7 +40,7 @@ var stand_tween: Tween
 var sweep_start_pos: Vector3
 var sweep_end_pos: Vector3
 var sweep_target_pos: Vector3
-@export var sweep_time: float = 1.9
+@export var sweep_time: float = 1.65
 @export var sweep_offset: float = 2.1
 @export var sweep_particles: GPUParticles3D
 @export var sweep_card_scene: PackedScene

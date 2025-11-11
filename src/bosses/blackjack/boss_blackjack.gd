@@ -129,7 +129,7 @@ var tilt_particles: GPUParticles3D
 var slippery_debuff: StatusEffect
 @export_subgroup("Tilt Projectile")
 @export var tilt_proj_scene: PackedScene
-@export var tilt_proj_speed: float = 0.45
+@export var tilt_proj_speed: float = 0.75
 @export var tilt_proj_shots: int = 3
 @export var tilt_proj_explosion_count: int = 1
 @export var tilt_explosion_radius: float = 4.0
