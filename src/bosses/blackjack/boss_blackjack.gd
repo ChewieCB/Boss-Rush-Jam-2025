@@ -1100,7 +1100,7 @@ func _bust_projectile() -> void:
 	# Spawn an explosion on impact
 	for k in range(bust_proj_explosion_count):
 		var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
-		_spawn_explosion(pos)
+		_spawn_explosion(pos, 4.0)
 	
 	_cleanup_aoe_decals(_aoe_decals)
 
