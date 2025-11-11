@@ -8,6 +8,7 @@ signal reset_barrel_info
 @export var shop_title: String
 @export var barrel_item_ui_prefab: PackedScene
 @export var shop_item_ui_prefab: PackedScene
+@export var has_custom_inventory: bool
 @export var current_inventory: Array[Resource]
 @export var sfx_open: AudioStream
 @export var sfx_click: AudioStream
@@ -16,7 +17,6 @@ signal reset_barrel_info
 @export var sfx_barrel_equip: AudioStream
 
 @onready var warning_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/WarningLabel
-@onready var has_custom_inventory: bool = current_inventory.size() > 0
 @onready var modify_bg: Control = $ModifyBG
 @onready var modify_tab_btn: Button = $TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton
 @onready var barrel_modify_ui: Control = $MainRegion/BarrelModifyUI

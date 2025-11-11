@@ -157,10 +157,6 @@ func _ready() -> void:
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
 
-	if OS.is_debug_build():
-		shop_barrels = starting_shop_barrels
-
-
 func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):
 		if CHEAT_freecam:
@@ -283,12 +279,11 @@ func show_boss_special_dialog(content: String, duration: float):
 func load_new_save_data():
 	tutorial_completed = false
 	for data in starting_barrels:
-		if data in equipped_barrels:
-			continue
-		equipped_barrels.append(data)
+		if data not in equipped_barrels:
+			equipped_barrels.append(data)
 	for data in starting_shop_barrels:
 		shop_barrels.append(data)
-
+	
 
 func reset_difficulty_modifier():
 	risk_modifier_level_dict = {

@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://b2ciesqygpo5a"]
 
 [ext_resource type="Script" path="res://src/player/barrel/item_pickup/barrel_item_pickup.gd" id="1_l8r1a"]
-[ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrrel_data.tres" id="2_15nf5"]
+[ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrel_data.tres" id="2_15nf5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8mavw"]
 resource_local_to_scene = true

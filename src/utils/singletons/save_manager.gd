@@ -102,10 +102,12 @@ func load_data_only(slot_id: int) -> Dictionary:
 
 func load_game(slot_id):
 	save_data_is_loaded = true
-
 	var save_data = load_data_only(slot_id)
+
 	if save_data.is_empty():
+		print("SAVE DATA EMPTY")
 		GameManager.load_new_save_data()
+		print("load_new_save_data")
 		savefile_loaded.emit()
 		return
 	
