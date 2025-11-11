@@ -18,6 +18,7 @@ Fortitude: Recover a small amount of health over time.
 Death From Above: Increased damage when mid-air and increased crit chance when shoot downward.
 Tag'n'Shred: Reduced initial damage, but increased damage for every projectile hit target.
 [/ul]"
+barrel_info_summary = "Grant you effect similar to its owner, Pitboss."
 barrel_image = ExtResource("1_t3h56")
 barrel_cost = 200
 barrel_prefab = ExtResource("1_24mrw")

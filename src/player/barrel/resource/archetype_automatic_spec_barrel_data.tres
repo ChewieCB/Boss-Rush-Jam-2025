@@ -18,6 +18,7 @@ Russian Rifle: Harder to use but much more power.
 Vector SMG: High firerate and fast reload time.
 LMG: Good firerate with huge magazine, but increased reload time.
 [/ul]"
+barrel_info_summary = "Change the innate nature of the gun. Specialize in automatic weapons."
 barrel_image = ExtResource("1_eha31")
 barrel_cost = 2500
 barrel_prefab = ExtResource("2_lh78w")

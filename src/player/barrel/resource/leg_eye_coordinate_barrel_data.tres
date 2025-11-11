@@ -18,6 +18,7 @@ Springy Feet: You can only shoot while you are midair. You jump higher. Reduce s
 Flexible Knee: You can only shoot while you are crouching. Your crouch can let you dodge if you time it right. Increased fire rate and magazine size.
 [/ul]
 "
+barrel_info_summary = "Effects focus on your movement and verticality."
 barrel_image = ExtResource("1_khihb")
 barrel_cost = 1650
 barrel_prefab = ExtResource("2_wlqqv")

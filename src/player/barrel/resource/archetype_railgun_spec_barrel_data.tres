@@ -17,6 +17,7 @@ Gauss Rifle: High firerate and magazine, but lower damage.
 Scatter Beam: Limited magazine size and high spread, but high projectile count.
 Railcannon: Powerful oneshot wonder.
 [/ul]"
+barrel_info_summary = "Change the innate nature of the gun. Specialize in hitscan weapons."
 barrel_image = ExtResource("1_f4tt0")
 barrel_cost = 2200
 barrel_prefab = ExtResource("2_ijulb")

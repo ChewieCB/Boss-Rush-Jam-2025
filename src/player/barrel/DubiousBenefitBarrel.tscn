@@ -6,8 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://ddfqokjq1u61n" path="res://assets/sprite/status_icon/defense-down.png" id="4_0oc8p"]
 [ext_resource type="Texture2D" uid="uid://dlw4dtm637qxu" path="res://assets/sprite/status_icon/feather.png" id="5_0oxj4"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_650bi"]
-[ext_resource type="Script" path="res://src/player/barrel/insurance_crit_effect.gd" id="6_g2yni"]
-[ext_resource type="Script" path="res://src/player/barrel/phantom_ammo_effect.gd" id="8_0b6yh"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/insurance_crit_effect.gd" id="6_g2yni"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/phantom_ammo_effect.gd" id="8_0b6yh"]
 
 [node name="DubiousBenefitBarrel" type="Node3D"]
 script = ExtResource("1_1gknq")

@@ -16,7 +16,7 @@ Possible rolls:
 
 [/ul]
 "
-barrel_info_summary = "Grant you effect similar to its owner."
+barrel_info_summary = "Grant you effect similar to its owner, Blackjack."
 barrel_image = ExtResource("1_2vd0e")
 barrel_cost = 1500
 barrel_prefab = ExtResource("2_eibd5")

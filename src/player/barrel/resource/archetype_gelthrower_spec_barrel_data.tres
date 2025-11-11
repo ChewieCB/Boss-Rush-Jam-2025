@@ -17,6 +17,7 @@ Gel stream: Very high firerate and magazine, but low damage. Projectiles stick o
 Gel blob: Fire single, big projectile, that stick around for a longer amount of time. Deal moderate damage on impact and small damage over time.
 Gel bubble: Fire a flurry of bubbles. Has very high projectile counts, but zero damage.
 [/ul]"
+barrel_info_summary = "Change the innate nature of the gun. Specialize in gel-like weapon."
 barrel_image = ExtResource("1_7u44n")
 barrel_cost = 1000
 barrel_prefab = ExtResource("2_u3ar6")

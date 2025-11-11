@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="3_ftmnu"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_0sxmc"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_rbhad"]
-[ext_resource type="Script" path="res://src/player/barrel/twenty_one_effect.gd" id="7_q0vm4"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/twenty_one_effect.gd" id="7_q0vm4"]
 
 [node name="BlackjackBarrel" type="Node3D"]
 script = ExtResource("1_fwfl1")
