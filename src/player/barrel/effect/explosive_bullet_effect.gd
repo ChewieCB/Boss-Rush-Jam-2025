@@ -1,11 +1,9 @@
 extends BaseBarrelEffect
 
-# @export var explosion_range: float = 1
 @export var damage: int
-@export var explosion_damage: PackedScene
 
 
-func on_projectile_impact(_projectile: BaseProjectile, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	if (_has_pos):
 		create_explosion(_pos)
 

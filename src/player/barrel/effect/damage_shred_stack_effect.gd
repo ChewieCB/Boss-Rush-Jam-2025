@@ -11,12 +11,12 @@ func remove_effect():
 	stack_count = 0
 	GameManager.player.remove_status_effect_by_name("tag_n_shred_stack")
 
-func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
-	super ()
+func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+	super (_damage, _has_pos, _pos)
 	stack_count += 1
 	add_buff_that_track_stack_count()
 
-func on_damage_calculation():
+func on_gun_damage_calculation():
 	super ()
 	owner_barrel.owner_gun.modified_damage += flat_damage_bonus * stack_count
 	owner_barrel.owner_gun.modified_damage = round(owner_barrel.owner_gun.modified_damage * (1 + (perc_damage_bonus * stack_count / 100.0)))

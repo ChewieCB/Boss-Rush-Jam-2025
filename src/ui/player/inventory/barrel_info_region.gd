@@ -47,8 +47,8 @@ func refresh_ui() -> void:
 	center_inst.texture_rect.texture = barrel_data.barrel_image
 	center_inst.barrel_info_region = self
 	var general_barrel_data = {
-		"display_text_title": barrel_data.barrel_name,
-		"display_text_tag": barrel_data.barrel_info_summary,
+		"title": barrel_data.barrel_name,
+		"description": barrel_data.barrel_info_summary,
 		"is_archetype": false,
 		"positive_desc": [],
 		"negative_desc": [],
@@ -56,6 +56,7 @@ func refresh_ui() -> void:
 	panel_bg_icon.texture = barrel_data.barrel_image
 	center_inst.set_barrel_roll_data(general_barrel_data)
 	barrel_inst.queue_free()
+	center_inst.focus_entered.emit()
 
 
 func get_circle_positions(count: int) -> Array[Vector2]:

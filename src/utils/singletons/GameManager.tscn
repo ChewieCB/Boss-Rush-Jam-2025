@@ -1,24 +1,25 @@
-[gd_scene load_steps=73 format=3 uid="uid://bf0e8h28gl1ae"]
+[gd_scene load_steps=74 format=3 uid="uid://bf0e8h28gl1ae"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/game_manager.gd" id="1_rn441"]
-[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="2_m6fe3"]
-[ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrrel_data.tres" id="3_23s84"]
+[ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrel_data.tres" id="3_23s84"]
 [ext_resource type="Resource" uid="uid://ceo6ncflyswt2" path="res://src/player/barrel/resource/dynamic_advantage_barrel_data.tres" id="4_ds0rn"]
 [ext_resource type="Resource" uid="uid://dhsc2lynivmc0" path="res://src/player/barrel/resource/fool_roller_barrel_data.tres" id="5_bj40w"]
-[ext_resource type="Resource" uid="uid://7xfi8anly2u3" path="res://src/player/barrel/resource/archetype_automatic_spec_barrrel_data.tres" id="6_pgp6q"]
-[ext_resource type="Resource" uid="uid://dpcew656ofo1q" path="res://src/player/barrel/resource/archetype_shotgun_spec_barrrel_data.tres" id="7_upwdb"]
-[ext_resource type="Resource" uid="uid://di2x3xsnfojlh" path="res://src/player/barrel/resource/archetype_railgun_spec_barrrel_data.tres" id="8_fntlm"]
+[ext_resource type="Resource" uid="uid://7xfi8anly2u3" path="res://src/player/barrel/resource/archetype_automatic_spec_barrel_data.tres" id="6_pgp6q"]
+[ext_resource type="Resource" uid="uid://dpcew656ofo1q" path="res://src/player/barrel/resource/archetype_shotgun_spec_barrel_data.tres" id="7_upwdb"]
+[ext_resource type="Resource" uid="uid://di2x3xsnfojlh" path="res://src/player/barrel/resource/archetype_railgun_spec_barrel_data.tres" id="8_fntlm"]
 [ext_resource type="Resource" uid="uid://bms2may2rm1q3" path="res://src/player/barrel/resource/delayed_gratification_barrel_data.tres" id="9_juqu2"]
 [ext_resource type="Resource" uid="uid://c4d5lv4t5vv4w" path="res://src/player/barrel/resource/bartender_boss_barrel_data.tres" id="10_83sf6"]
-[ext_resource type="Resource" uid="uid://cipovlqeojqla" path="res://src/player/barrel/resource/archetype_gelthrower_spec_barrrel_data.tres" id="10_ol55s"]
+[ext_resource type="Resource" uid="uid://cipovlqeojqla" path="res://src/player/barrel/resource/archetype_gelthrower_spec_barrel_data.tres" id="10_ol55s"]
 [ext_resource type="Resource" uid="uid://c4mbv2plccfx7" path="res://src/player/barrel/resource/pit_boss_barrel_data.tres" id="11_pbpm2"]
 [ext_resource type="Resource" uid="uid://bibe88ibu2n4d" path="res://src/player/barrel/resource/leg_eye_coordinate_barrel_data.tres" id="12_046jp"]
 [ext_resource type="Resource" uid="uid://yx1psxr1obhn" path="res://src/player/barrel/resource/projectile_count_barrel_data.tres" id="12_b3bxi"]
 [ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="13_aamrg"]
 [ext_resource type="Resource" uid="uid://c5utciavm70ve" path="res://src/player/barrel/resource/roulette_boss_barrel_data.tres" id="13_iyynv"]
+[ext_resource type="Resource" uid="uid://dgt2ro31j7l13" path="res://src/player/barrel/resource/blackjack_barrel_data.tres" id="13_upi04"]
 [ext_resource type="Resource" uid="uid://dpcckljfou2kt" path="res://src/player/barrel/resource/trickshot_barrel_data.tres" id="14_lbyk3"]
+[ext_resource type="Resource" uid="uid://ck0vnbufpyosc" path="res://src/player/barrel/resource/dubious_benefit_barrel_data.tres" id="14_mh44r"]
 [ext_resource type="Resource" uid="uid://cl8gwigkfvwca" path="res://src/player/barrel/resource/elemental_infusion_barrel_data.tres" id="14_wr4dx"]
-[ext_resource type="Resource" uid="uid://l1nys7kixqcl" path="res://src/player/barrel/resource/placeholderA_barrrel_data.tres" id="16_lo202"]
+[ext_resource type="Resource" uid="uid://l1nys7kixqcl" path="res://src/player/barrel/resource/placeholderA_barrel_data.tres" id="16_lo202"]
 [ext_resource type="Resource" uid="uid://cioys44ppioym" path="res://src/player/barrel/resource/reckless_abandon_barrel_data.tres" id="17_7q02m"]
 [ext_resource type="Resource" uid="uid://cvadtfmodrm4f" path="res://src/player/barrel/resource/debug_single_effects/debug_american_rifle_barrel_data.tres" id="21_dy2lq"]
 [ext_resource type="Resource" uid="uid://c6if37p14i377" path="res://src/player/barrel/resource/debug_single_effects/debug_ammo_leech_barrel_data.tres" id="22_r8wv5"]
@@ -76,7 +77,7 @@
 [node name="GameManager" type="Node"]
 process_mode = 3
 script = ExtResource("1_rn441")
-starting_shop_barrels = Array[ExtResource("2_m6fe3")]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2"), ExtResource("10_ol55s"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg"), ExtResource("14_wr4dx")])
-barrel_database = Array[Resource]([ExtResource("6_pgp6q"), ExtResource("3_23s84"), ExtResource("8_fntlm"), ExtResource("7_upwdb"), ExtResource("10_83sf6"), ExtResource("9_juqu2"), ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("11_pbpm2"), ExtResource("12_b3bxi"), ExtResource("13_iyynv"), ExtResource("14_lbyk3"), ExtResource("10_ol55s"), ExtResource("16_lo202"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg"), ExtResource("14_wr4dx")])
+starting_shop_barrels = Array[Resource]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2"), ExtResource("10_ol55s"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg"), ExtResource("14_wr4dx"), ExtResource("13_upi04"), ExtResource("14_mh44r")])
+barrel_database = Array[Resource]([ExtResource("6_pgp6q"), ExtResource("3_23s84"), ExtResource("8_fntlm"), ExtResource("7_upwdb"), ExtResource("10_83sf6"), ExtResource("9_juqu2"), ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("11_pbpm2"), ExtResource("12_b3bxi"), ExtResource("13_iyynv"), ExtResource("14_lbyk3"), ExtResource("10_ol55s"), ExtResource("16_lo202"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg"), ExtResource("14_wr4dx"), ExtResource("13_upi04"), ExtResource("14_mh44r")])
 debug_barrel_database = Array[Resource]([ExtResource("21_dy2lq"), ExtResource("22_r8wv5"), ExtResource("23_mry17"), ExtResource("24_tee28"), ExtResource("25_8xie0"), ExtResource("26_erbl1"), ExtResource("27_3dtem"), ExtResource("28_n6pyt"), ExtResource("29_jpg2o"), ExtResource("30_r0bwp"), ExtResource("31_drjkx"), ExtResource("32_378g5"), ExtResource("33_ax5nr"), ExtResource("34_daf8h"), ExtResource("35_pgpli"), ExtResource("36_fn4xt"), ExtResource("37_tpmbh"), ExtResource("38_arukk"), ExtResource("39_1b1fs"), ExtResource("40_m1s6w"), ExtResource("41_aeicd"), ExtResource("42_274ba"), ExtResource("43_285vf"), ExtResource("44_ubr3c"), ExtResource("45_nqgbh"), ExtResource("46_s8t28"), ExtResource("47_kjs1t"), ExtResource("48_f2x0g"), ExtResource("49_a46ix"), ExtResource("50_6viqg"), ExtResource("51_rqc8k"), ExtResource("52_rg6km"), ExtResource("53_8vpt8"), ExtResource("54_lykad"), ExtResource("55_bdo5j"), ExtResource("56_g6fhg"), ExtResource("57_sathf"), ExtResource("58_xd2cs"), ExtResource("59_fli8u"), ExtResource("60_mk8gw"), ExtResource("61_oflg1"), ExtResource("62_we1pc"), ExtResource("63_vkhvr"), ExtResource("64_pyj56"), ExtResource("65_8eyr3"), ExtResource("66_0pt10"), ExtResource("67_f23p7"), ExtResource("68_5ki4i"), ExtResource("69_6g2h4"), ExtResource("70_y5ila"), ExtResource("71_vh7ih")])
 sfx_screenshot = ExtResource("45_64xou")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=77 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -101,7 +101,7 @@ flip_faces = true
 size = Vector2(2, 2)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
-viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
+viewport_path = NodePath("EffectIconsViewport")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
@@ -114,6 +114,9 @@ shader = ExtResource("46_fqoxl")
 shader_parameter/projector_power = 0.2
 shader_parameter/vignette_param = 10.0
 shader_parameter/distortionTexture = SubResource("NoiseTexture2D_7pe4k")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_q6pr3"]
+radius = 5.0
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component", "luck_component")]
 collision_layer = 2
@@ -199,6 +202,10 @@ mesh = SubResource("QuadMesh_bbump")
 [node name="AimRay" parent="Neck/ShakeCameraWrapper/Camera3D" instance=ExtResource("5_dqbuo")]
 collision_mask = 125
 collide_with_areas = true
+
+[node name="LaserGuideRayCast" type="RayCast3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
+target_position = Vector3(0, 0, -100)
+collision_mask = 5
 
 [node name="AimRecticle" type="TextureRect" parent="Neck/ShakeCameraWrapper"]
 anchors_preset = 8
@@ -425,6 +432,7 @@ process_mode = 1
 [node name="InventoryUI" parent="UI" instance=ExtResource("57_ojgux")]
 visible = false
 shop_title = "Debug Hotswap Inventory"
+current_inventory = Array[Resource]([])
 has_custom_inventory = true
 
 [node name="StateChart" type="Node" parent="."]
@@ -578,6 +586,14 @@ delay_in_seconds = "0.0"
 
 [node name="DrunkTimer" type="Timer" parent="StateChart/Root/Status/Drunk"]
 
+[node name="NearEnemyRadius" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NearEnemyRadius"]
+shape = SubResource("SphereShape3D_q6pr3")
+
 [connection signal="body_entered" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_entered"]
 [connection signal="body_exited" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_exited"]
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
@@ -594,6 +610,8 @@ delay_in_seconds = "0.0"
 [connection signal="state_exited" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Status/Drunk/Active" to="." method="_on_status_drunk_active_state_physics_processing"]
 [connection signal="timeout" from="StateChart/Root/Status/Drunk/DrunkTimer" to="." method="_on_drunk_timer_timeout"]
+[connection signal="body_entered" from="NearEnemyRadius" to="." method="_on_near_enemy_radius_body_entered"]
+[connection signal="body_exited" from="NearEnemyRadius" to="." method="_on_near_enemy_radius_body_exited"]
 
 [editable path="Neck/ShakeCameraWrapper/GunContainer/BlankGun"]
 [editable path="UI/HurtOverlay"]

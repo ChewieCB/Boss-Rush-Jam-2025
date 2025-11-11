@@ -17,6 +17,7 @@ Newton's Third Law: Adds knockback when shoot the nearby environment, enabling r
 Protective Barrier: A group of blue shields circle you, granting you damage resistance.
 Ball Bullet: Shoot a single huge bouncy ball projectile. Significantly increased damage but reduce firerate and projectile speed.
 [/ul]"
+barrel_info_summary = "Grant you effect similar to its owner, Roulette Lady."
 barrel_image = ExtResource("1_lmo6o")
 barrel_cost = 200
 barrel_prefab = ExtResource("2_y352h")

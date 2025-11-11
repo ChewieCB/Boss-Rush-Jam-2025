@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_8l4ya"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_2ehy6"]
-[ext_resource type="Script" path="res://src/player/barrel/snap_call_effect.gd" id="3_ghido"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/snap_call_effect.gd" id="3_ghido"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_cyckh"]
 
 [node name="DebugBarrelSnapCall" type="Node3D"]

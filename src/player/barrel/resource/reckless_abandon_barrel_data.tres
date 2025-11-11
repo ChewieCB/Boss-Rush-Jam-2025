@@ -18,6 +18,7 @@ Executioner Round: Deal more damage to enemies under 50% HP, but reduced damage 
 Reactive Shot: Significantly increases bullet damage for a short time after taking damage.
 [/ul]
 "
+barrel_info_summary = "Reward reckless and aggressive playstyle. You won't live long like that though."
 barrel_image = ExtResource("1_tng3t")
 barrel_cost = 1400
 barrel_prefab = ExtResource("2_dpmig")

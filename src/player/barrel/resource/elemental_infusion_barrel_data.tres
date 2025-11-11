@@ -19,6 +19,7 @@ Cold Infusion: Reduce magazine size and bullets can cause Frozen status build up
 Electric Infusion: Increase recoiland bullets can cause Shocked status build up, which increases damage enemy taken.
 [/ul]
 "
+barrel_info_summary = "Infuse bullets with elemental or status effects."
 barrel_image = ExtResource("1_ducvj")
 barrel_cost = 1500
 barrel_prefab = ExtResource("2_wrun2")

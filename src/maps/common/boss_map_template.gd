@@ -28,7 +28,7 @@ var nav_region: NavigationRegion3D
 
 var chips_dropped: int = 0
 var chip_value_collected: int = 0
-
+var is_tutorial = false
 
 func _ready() -> void:
 	if OS.is_debug_build():
@@ -72,6 +72,8 @@ func _ready() -> void:
 	
 	if elevator_doors:
 		elevator_doors.open()
+
+	GameManager.current_boss_map = self
 
 
 func generate_navigation() -> void:

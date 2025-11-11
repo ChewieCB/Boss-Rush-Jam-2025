@@ -8,7 +8,9 @@ signal reset_barrel_info
 @export var shop_title: String
 @export var barrel_item_ui_prefab: PackedScene
 @export var shop_item_ui_prefab: PackedScene
+@export var has_custom_inventory: bool = false
 @export var current_inventory: Array[Resource]
+@export var show_shop_first: bool = false
 @export var sfx_open: AudioStream
 @export var sfx_click: AudioStream
 @export var sfx_purchase: AudioStream
@@ -16,7 +18,6 @@ signal reset_barrel_info
 @export var sfx_barrel_equip: AudioStream
 
 @onready var warning_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/WarningLabel
-@onready var has_custom_inventory: bool = current_inventory.size() > 0
 @onready var modify_bg: Control = $ModifyBG
 @onready var modify_tab_btn: Button = $TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton
 @onready var barrel_modify_ui: Control = $MainRegion/BarrelModifyUI
@@ -41,11 +42,15 @@ func _ready() -> void:
 	warning_label.visible = false
 	GameManager.currency_changed.connect(full_refresh_ui.unbind(1))
 	GameManager.refresh_shop_ui.connect(full_refresh_ui)
-	modify_bg.visible = true
-	barrel_modify_ui.visible = true
-	shop_bg.visible = false
-	barrel_shop_ui.visible = false
-	modify_tab_btn.disabled = true
+
+	modify_bg.visible = not show_shop_first
+	barrel_modify_ui.visible = not show_shop_first
+	modify_tab_btn.disabled = not show_shop_first
+	modify_tab_btn.get_node("Border").visible = not show_shop_first
+	shop_bg.visible = show_shop_first
+	barrel_shop_ui.visible = show_shop_first
+	shop_tab_btn.disabled = show_shop_first
+	shop_tab_btn.get_node("Border").visible = show_shop_first
 
 	barrel_info_region = get_node("MainRegion/BarrelModifyUI/LeftRegion/BarrelInfoRegion")
 	barrel_info_region.reset_ui()
@@ -63,7 +68,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	full_refresh_ui()
+	full_refresh_ui(true)
 	modify_tab_btn.grab_focus()
 
 
@@ -77,7 +82,10 @@ func _input(event: InputEvent) -> void:
 			close()
 			get_viewport().set_input_as_handled()
 
-func full_refresh_ui():
+func full_refresh_ui(forced = false):
+	if not visible and not forced:
+		return
+
 	# EQUIPPED BARRELS
 	for barrel_slot in equip_barrel_container.get_children():
 		var container = barrel_slot.get_node("HBoxContainer")
@@ -141,7 +149,7 @@ func toggle():
 		open()
 
 func open():
-	full_refresh_ui()
+	full_refresh_ui(true)
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	GameManager.player.is_in_menu = true
@@ -172,7 +180,10 @@ func set_shopkeeper_chat(content: String) -> void:
 
 
 func get_first_item_for_focus() -> void:
-	modify_tab_btn.grab_focus()
+	if show_shop_first:
+		shop_tab_btn.grab_focus()
+	else:
+		modify_tab_btn.grab_focus()
 	# await get_tree().create_timer(0.02).timeout
 	# if inventory_archetype_barrel_container.get_child_count() > 0:
 	# 	inventory_archetype_barrel_container.get_child(0).grab_focus()

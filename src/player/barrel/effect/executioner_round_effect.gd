@@ -5,7 +5,7 @@ extends BaseBarrelEffect
 @export var dmg_modify_perc_above_threshold = -25
 @export var dmg_modify_perc_below_threshold = 25
 
-func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile):
+func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
 	if enemy.health_component == null:
 		return
 	var health_component = enemy.health_component as HealthComponent

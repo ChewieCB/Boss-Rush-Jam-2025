@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 class_name GelProjectile
 
 @export var stick_time = 1
@@ -53,6 +53,10 @@ func _physics_process(delta: float) -> void:
 		if homing_target.get_node("BodyCenter"):
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
+		look_at(global_position + dir_to_target)
+	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
+		var aiming_position = GunUtils.get_player_aiming_position()
+		var dir_to_target = global_position.direction_to(aiming_position)
 		look_at(global_position + dir_to_target)
 
 	# Make it fly forward
@@ -110,18 +114,23 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if sticked:
 		return
+
 	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			body.health_component.damage(calculated_damage)
+			calculated_damage = calculate_bullet_damage() # Recalculate damage after before_damage_applied effect
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
+			hit_boss = true
 	else:
 		if body is Shield:
 			body.impact(self.global_position)
-			body.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
+			hit_boss = true
 		elif "health_component" in body:
-			body.health_component.damage(calculated_damage)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
+			hit_boss = true
 	self.reparent.call_deferred(body)
 	sticked = true
 	impacted.emit(self, true, global_position)
@@ -140,7 +149,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit()
+	destroyed.emit(hit_boss)
 	deactivate()
 
 

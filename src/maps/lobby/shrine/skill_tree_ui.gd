@@ -5,7 +5,7 @@ class_name SkillTreeUI
 @export var first_item_focus: SkillItemUI
 
 @onready var skill_title_label: Label = $SkillInfo/Title
-@onready var skill_description_label: Label = $SkillInfo/Description
+@onready var skill_description_label: RichTextLabel = $SkillInfo/Description
 @onready var skill_point_label: Label = $SkillTreeView/SkillPointLabel
 @onready var level_label: Label = $SkillTreeView/LevelLabel
 @onready var level_up_button: Button = $LevelUpButton

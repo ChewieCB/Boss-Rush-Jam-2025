@@ -6,7 +6,6 @@
 
 [node name="TestBarrel" type="Node3D"]
 script = ExtResource("1_yw1x6")
-barrel_id = 1
 
 [node name="CommonBarrelComponent" parent="." instance=ExtResource("2_ap0mc")]
 

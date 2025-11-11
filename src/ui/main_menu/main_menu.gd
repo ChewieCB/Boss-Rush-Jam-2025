@@ -118,7 +118,6 @@ func start_game():
 	
 	if not SaveManager.save_data_is_loaded:
 		SaveManager.load_game(GameManager.chosen_slot_id)
-	
 	if not GameManager.tutorial_completed:
 		LoadingHandler.current_scene_path = "res://src/maps/tutorial/TutorialBoss.tscn"
 		LoadingHandler.start_loading("Tutorial")

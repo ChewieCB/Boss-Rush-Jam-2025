@@ -1,6 +1,5 @@
 extends Node3D
-class_name BaseProjectile
-# ^ It's a silly name. Should be BaseAttack or BaseBullet instead since both projectile and hitscan inherit from this
+class_name BaseBullet
 
 @export var spark_effect: PackedScene
 @export var generic_blood_splatter: PackedScene
@@ -8,12 +7,11 @@ class_name BaseProjectile
 # Check BossCore.BossStatusEffect for order
 @export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
-@export var can_be_object_pooled: bool = false
 
-signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseProjectile)
+signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
-signal impacted(projectile: BaseProjectile, has_pos: bool, pos: Vector3)
-signal destroyed
+signal impacted(projectile: BaseBullet, has_pos: bool, pos: Vector3)
+signal destroyed(hit_boss: bool)
 
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
@@ -38,12 +36,16 @@ var max_range
 var splitted = false
 var is_hitscan = false
 var infused_status_effect = [false, false, false, false, false]
+var can_be_aim_guided = false # or Laser-guided, homing to where player is aiming at
+var min_lifetime_before_can_be_aim_guided = 0.2
 
 # Statistics tracking for barrel effect
 var color_changed_count = 0
 var life_time = 0
 var spawn_pos = Vector3.ZERO
 var travelled_distance = 0
+var hit_boss = false
+var is_crit = false
 
 
 func _ready() -> void:
@@ -61,7 +63,10 @@ func create_spark(pos: Vector3, normal: Vector3):
 	create_status_effect_impact(pos, normal)
 	if spark_effect == null:
 		return
-
+	if can_be_aim_guided:
+		pos = global_position
+		normal = Vector3.UP
+		
 	var spark_inst = spark_effect.instantiate()
 	get_parent().add_child(spark_inst)
 	spark_inst.global_position = pos
@@ -77,6 +82,9 @@ func create_blood_splatter(pos: Vector3, normal: Vector3):
 	create_status_effect_impact(pos, normal)
 	if generic_blood_splatter == null:
 		return
+	if can_be_aim_guided:
+		pos = global_position
+		normal = Vector3.UP
 
 	var blood_inst = generic_blood_splatter.instantiate()
 	get_parent().add_child(blood_inst)
@@ -92,6 +100,10 @@ func create_blood_splatter(pos: Vector3, normal: Vector3):
 func create_bullet_decal(pos: Vector3, normal: Vector3):
 	if bullet_decal_prefab == null:
 		return
+	if can_be_aim_guided:
+		pos = global_position
+		normal = Vector3.UP
+
 	var decal_inst = bullet_decal_prefab.instantiate()
 	get_tree().get_root().add_child(decal_inst)
 	decal_inst.global_position = pos
@@ -125,6 +137,7 @@ func calculate_bullet_damage():
 	if roll <= roll_target:
 		calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
 		owner_gun.crit_damage(calculated_damage)
+		is_crit = true
 	return calculated_damage
 
 func ricochet():
@@ -136,8 +149,8 @@ func get_damage_variance_modifier(_damage: int) -> int:
 	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE] - 1
 	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
-func create_duplication() -> BaseProjectile:
-	var new_inst: BaseProjectile = self.duplicate()
+func create_duplication() -> BaseBullet:
+	var new_inst: BaseBullet = self.duplicate()
 	new_inst.owner_gun = owner_gun
 	new_inst.is_ricochet_shot = true
 	new_inst.homing_strength = homing_strength
@@ -195,3 +208,12 @@ func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 		element_vfx_node.visible = true
 		if element_vfx_node.has_method("turn_on"):
 			element_vfx_node.turn_on()
+
+
+func apply_damage_to_health_component(health_component: HealthComponent, damage_value: int):
+	const CRIT_TEXT_SCALE_POP = 2.0
+	const CRIT_TEXT_COLOR = Color(1, 0.4, 0)
+	if is_crit:
+		health_component.damage(damage_value, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP)
+	else:
+		health_component.damage(damage_value)

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://ck0vnbufpyosc"]
+
+[ext_resource type="Texture2D" uid="uid://wfnf3uhfiukc" path="res://src/player/barrel/resource/sprite/dubious_benefit.png" id="1_3y0af"]
+[ext_resource type="PackedScene" uid="uid://cja5a1utmfoqe" path="res://src/player/barrel/DubiousBenefitBarrel.tscn" id="2_rptnp"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_wnvbw"]
+
+[resource]
+script = ExtResource("3_wnvbw")
+barrel_id = 75
+barrel_name = "Dubious Benefit"
+barrel_desc = "[b]Dubious Benefit Barrel[/b]
+Has really good effect, on paper. You may need to think carefully whether it worth it or not."
+barrel_info_summary = "Has really good effect (at first glance). You may need to think carefully whether it worth it or not. Or need to get a bit creative."
+barrel_image = ExtResource("1_3y0af")
+barrel_cost = 1500
+barrel_prefab = ExtResource("2_rptnp")
+is_archetype_barrel = false

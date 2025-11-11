@@ -131,7 +131,7 @@ offset_right = 64.0
 grow_horizontal = 2
 texture = ExtResource("8_mm72c")
 skill_name = "Hot Hand"
-description = "Increased minimum damage you dealt when you have high luck. By default, your weapon will dealt from 80% to 120% of its base damage.
+description = "Increased minimum damage you dealt when you have [color=yellow]high luck[/color]. By default, your weapon will dealt from 80% to 120% of its base damage.
 
 Level 1: minimum at 85%.
 Level 2: minimum at 90%.
@@ -156,7 +156,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_s0fyt")
 skill_name = "Lucky Shot"
-description = "Increased your critical chance when you have high luck. By default, you have 0%. Some weapon effects also increased it and it stack additively.
+description = "Increased your critical chance when you have [color=yellow]high luck[/color]. By default, you have 0%. Some weapon effects also increased it and it stack additively.
 
 Level 1: +4% critical chance.
 Level 2: +7% critical chance.
@@ -279,7 +279,7 @@ grow_horizontal = 2
 grow_vertical = 0
 texture = ExtResource("13_86mca")
 skill_name = "Cheat Death"
-description = "Lethal damage when you are at high luck will leave you at a sliver of health instead, and empty your luck. Can only be triggered once per fight."
+description = "Lethal damage when you are at [color=yellow]high luck[/color] will leave you at a sliver of health instead, and empty your luck. Can only be triggered once per fight."
 skill_id_enum = 6
 prerequisite_skills = Array[int]([4, 5])
 
@@ -325,7 +325,7 @@ offset_right = 64.0
 grow_horizontal = 2
 texture = ExtResource("14_mdccr")
 skill_name = "Poker Face"
-description = "Increased boss telegraph time when you have high luck, give you more time to react.
+description = "Increased boss telegraph time when you have [color=yellow]high luck[/color], give you more time to react.
 
 Level 1: +10% duration.
 Level 2: +20% duration.
@@ -350,7 +350,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("15_ptimq")
 skill_name = "Blindspot"
-description = "Increased invulnerable duration when you dashed when you have high luck.
+description = "Increased invulnerable duration when you dashed when you have [color=yellow]high luck[/color].
 
 Level 1: +10% duration.
 Level 2: +20% duration.
@@ -422,7 +422,7 @@ offset_right = 64.0
 grow_horizontal = 2
 texture = ExtResource("17_3yjin")
 skill_name = "Jackpot"
-description = "At high luck, improve the value of chips dropped from enemies.
+description = "At [color=yellow]high luck[/color], improve the value of chips dropped from enemies.
 
 Level 1: Minimum chip value is 2.
 Level 2: Minimum chip value is 5.
@@ -548,21 +548,18 @@ theme_override_fonts/font = ExtResource("11_scd5t")
 theme_override_font_sizes/font_size = 32
 text = "Skill Name"
 
-[node name="Description" type="Label" parent="SkillInfo"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="Description" type="RichTextLabel" parent="SkillInfo"]
+layout_mode = 0
 offset_left = 24.0
 offset_top = 128.0
-offset_right = -24.0
-offset_bottom = -16.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("12_8x4rq")
-theme_override_font_sizes/font_size = 22
+offset_right = 424.0
+offset_bottom = 552.0
+theme_override_constants/line_separation = 3
+theme_override_fonts/normal_font = ExtResource("12_8x4rq")
+theme_override_font_sizes/bold_italics_font_size = 22
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-autowrap_mode = 2
 
 [node name="ControlHelpText" type="Label" parent="."]
 layout_mode = 1

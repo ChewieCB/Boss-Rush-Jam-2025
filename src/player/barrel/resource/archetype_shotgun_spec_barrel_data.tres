@@ -17,6 +17,7 @@ Combat shotgun: High firerate and magazine. Lower spread and projectile count.
 Double-barrel shotgun: Limited magazine size and high spread, but huge damage.
 Slug shotgun: Low spread and firerate. Very high damage but only one projectile.
 [/ul]"
+barrel_info_summary = "Change the innate nature of the gun. Specialize in shotgun weapons."
 barrel_image = ExtResource("1_qifxw")
 barrel_cost = 1850
 barrel_prefab = ExtResource("2_v2xxy")

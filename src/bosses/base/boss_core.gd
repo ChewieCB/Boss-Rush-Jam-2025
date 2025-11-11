@@ -47,7 +47,13 @@ enum BossStatusEffect {
 	BossStatusEffect.SHOCKED: 1000,
 	BossStatusEffect.BLEEDING: 1000,
 }
-@export var status_duration = 10
+@export var status_duration: Dictionary = {
+	BossStatusEffect.BURNING: 10,
+	BossStatusEffect.POISONED: 10,
+	BossStatusEffect.FROZEN: 10,
+	BossStatusEffect.SHOCKED: 10,
+	BossStatusEffect.BLEEDING: 1,
+}
 ## Status resist increased by this amount after each status application
 @export var increased_tolerance = 500
 var current_status_buildup: Dictionary = {
@@ -55,9 +61,10 @@ var current_status_buildup: Dictionary = {
 	BossStatusEffect.POISONED: 0,
 	BossStatusEffect.FROZEN: 0,
 	BossStatusEffect.SHOCKED: 0,
-	BossStatusEffect.BLEEDING: 1000,
+	BossStatusEffect.BLEEDING: 0,
 }
 @export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
+const SHOCKED_DMG_MULTIPLIER = 0.25
 
 @export_subgroup("DPS Dealt In Last X Seconds")
 @export var dps_dealt_window: float = 1.8
@@ -677,7 +684,7 @@ func apply_status_buildup(status: BossStatusEffect, amount: float) -> void:
 	if current_status_buildup[status] < status_resist[status]:
 		current_status_buildup[status] += amount
 		if current_status_buildup[status] >= status_resist[status]:
-			apply_status(status, status_duration)
+			apply_status(status, status_duration[status])
 
 func apply_status(status: BossStatusEffect, duration: float) -> void:
 	toggle_emitting_elemental_vfx(status, true)
@@ -708,14 +715,11 @@ func _on_status_burning_active_state_physics_processing(_delta: float) -> void:
 
 func _on_status_burning_active_state_exited() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.BURNING, false)
-	# TODO - remove burning effect particles/shader/icon
-	#
 	burning_timer.stop()
 
 
 func _on_status_poisoned_active_state_entered() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.POISONED, true)
-	# TODO - add burning effect particles/shader/icon
 	poisoned_timer.start(2.5) # Interval between damage
 
 
@@ -725,33 +729,7 @@ func _on_status_poisoned_active_state_physics_processing(_delta: float) -> void:
 
 func _on_status_poisoned_active_state_exited() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.POISONED, false)
-	# TODO - remove burning effect particles/shader/icon
-	#
 	poisoned_timer.stop()
-
-
-func _on_burning_timer_timeout() -> void:
-	# TODO - let specific attacks/modifiers change how much damage the effect does
-	const BURN_DMG_MAX_HP_PERC_PER_TICK = 0.002
-	const BURN_DMG_FLAT_PER_TICK = 25
-	# (0.2% max hp dmg per tick and flat 25)
-	var burn_dmg = int(health_component.max_health * BURN_DMG_MAX_HP_PERC_PER_TICK + BURN_DMG_FLAT_PER_TICK)
-	health_component.damage(burn_dmg, Color.ORANGE)
-	sprite.modulate = Color.ORANGE
-	await get_tree().create_timer(0.2).timeout
-	sprite.modulate = Color.WHITE
-
-
-func _on_poisoned_timer_timeout() -> void:
-	# TODO - let specific attacks/modifiers change how much damage the effect does
-	const POISON_DMG_MAX_HP_PERC_PER_TICK = 0.012
-	const POISON_DMG_FLAT_PER_TICK = 140
-	# (1.2% max hp dmg per tick and flat 140)
-	var poison_dmg = int(health_component.max_health * POISON_DMG_MAX_HP_PERC_PER_TICK + POISON_DMG_FLAT_PER_TICK)
-	health_component.damage(poison_dmg, Color.WEB_GREEN)
-	sprite.modulate = Color.WEB_GREEN
-	await get_tree().create_timer(1).timeout
-	sprite.modulate = Color.WHITE
 
 
 func _on_status_frozen_active_state_entered() -> void:
@@ -762,26 +740,62 @@ func _on_status_frozen_active_state_exited() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.FROZEN, false)
 
 func _on_status_frozen_active_state_physics_processing(_delta: float) -> void:
+	# TODO: Implement frozen effect
 	pass
 
 func _on_status_bleeding_active_state_entered() -> void:
 	health_ui.change_status_label_visibility(BossStatusEffect.BLEEDING, true)
-
-
-func _on_status_bleeding_active_state_exited() -> void:
-	health_ui.change_status_label_visibility(BossStatusEffect.BLEEDING, false)
+	take_bleed_burst_damage()
 
 func _on_status_bleeding_active_state_physics_processing(_delta: float) -> void:
 	pass
 
+func _on_status_bleeding_active_state_exited() -> void:
+	health_ui.change_status_label_visibility(BossStatusEffect.BLEEDING, false)
+
 
 func _on_status_shocked_active_state_entered() -> void:
-	health_component.received_dmg_multiplier += 0.2
+	health_component.received_dmg_multiplier += SHOCKED_DMG_MULTIPLIER
 	health_ui.change_status_label_visibility(BossStatusEffect.SHOCKED, true)
 
 func _on_status_shocked_active_state_exited() -> void:
-	health_component.received_dmg_multiplier -= 0.2
+	health_component.received_dmg_multiplier -= SHOCKED_DMG_MULTIPLIER
 	health_ui.change_status_label_visibility(BossStatusEffect.SHOCKED, false)
 
 func _on_status_shocked_active_state_physics_processing(_delta: float) -> void:
 	pass
+
+
+func take_bleed_burst_damage() -> void:
+	# Take 4% max hp damage and 100 flat damage
+	const BLEED_DMG_MAX_HP_PERC = 0.04
+	const BLEED_DMG_FLAT = 100
+	var bleed_dmg = int(health_component.max_health * BLEED_DMG_MAX_HP_PERC + BLEED_DMG_FLAT)
+	health_component.damage(bleed_dmg, Color.DARK_RED)
+	sprite.modulate = Color.DARK_RED
+	await get_tree().create_timer(0.2).timeout
+	sprite.modulate = Color.WHITE
+
+
+func _on_burning_timer_timeout() -> void:
+	const BURN_DMG_MAX_HP_PERC_PER_TICK = 0.003
+	const BURN_DMG_FLAT_PER_TICK = 25
+	# (0.3% max hp dmg per tick and flat 25)
+	# With 20 ticks, 6% max hp and 500 flat damage
+	var burn_dmg = int(health_component.max_health * BURN_DMG_MAX_HP_PERC_PER_TICK + BURN_DMG_FLAT_PER_TICK)
+	health_component.damage(burn_dmg, Color.ORANGE)
+	sprite.modulate = Color.ORANGE
+	await get_tree().create_timer(0.2).timeout
+	sprite.modulate = Color.WHITE
+
+
+func _on_poisoned_timer_timeout() -> void:
+	const POISON_DMG_MAX_HP_PERC_PER_TICK = 0.02
+	const POISON_DMG_FLAT_PER_TICK = 140
+	# (2% max hp dmg per tick and flat 140)
+	# With 4 ticks, 8% max hp and 560 flat damage
+	var poison_dmg = int(health_component.max_health * POISON_DMG_MAX_HP_PERC_PER_TICK + POISON_DMG_FLAT_PER_TICK)
+	health_component.damage(poison_dmg, Color.WEB_GREEN)
+	sprite.modulate = Color.WEB_GREEN
+	await get_tree().create_timer(0.2).timeout
+	sprite.modulate = Color.WHITE

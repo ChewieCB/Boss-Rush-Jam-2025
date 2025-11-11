@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 class_name GunProjectile
 
 @export var gravity_modifier = 0.0
@@ -39,6 +39,11 @@ func _physics_process(delta: float) -> void:
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)
+	elif can_be_aim_guided and life_time >= min_lifetime_before_can_be_aim_guided:
+		var aiming_position = GunUtils.get_player_aiming_position()
+		var dir_to_target = global_position.direction_to(aiming_position)
+		look_at(global_position + dir_to_target)
+
 	global_position -= transform.basis.z * projectile_speed * delta
 	travelled_distance += projectile_speed * delta
 
@@ -82,7 +87,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		found_hitscal_col = true
 
 func _on_life_timer_timeout() -> void:
-	destroyed.emit()
+	destroyed.emit(hit_boss)
 	stop_elemental_particles()
 	call_deferred("queue_free")
 
@@ -100,19 +105,24 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			body.health_component.damage(calculated_damage)
+			calculated_damage = calculate_bullet_damage() # Recalculate damage after before_damage_applied effect
+			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
 			ricochet_count_left = 0
+			hit_boss = true
 		if found_hitscal_col:
 			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
+		else:
+			create_blood_splatter(global_position, Vector3.UP)
 	else:
 		if "health_component" in body:
 			if body is Shield:
 				body.impact(self.global_position)
 			elif body is BarrelEffectTrigger:
 				body.hit_with_effect(self.owner_gun.installed_barrels)
-			body.health_component.damage(damage)
-			damage_applied.emit(damage, true, global_position)
+			apply_damage_to_health_component(body.health_component, calculated_damage)
+			damage_applied.emit(calculated_damage, true, global_position)
+			hit_boss = true
 		if found_hitscal_col and gravity_accel == 0:
 			create_spark(hitscan_col_point, hitscan_col_normal)
 			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
@@ -124,7 +134,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		ricochet()
 	else:
 		stop_elemental_particles()
-		destroyed.emit()
+		destroyed.emit(hit_boss)
 		call_deferred("queue_free")
 
 

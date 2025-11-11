@@ -24,7 +24,7 @@ func create_status_effect() -> StatusEffect:
 		status.duration = StatusEffect.INFINITE_DURATION
 	else:
 		status.duration = duration
-	status.is_bad_effect = true
+	status.is_bad_effect = is_bad_effect
 	status.status_icon = status_icon
 	status.show_duration_ui = show_duration_ui
 	status.show_value_on_ui = show_value_on_ui

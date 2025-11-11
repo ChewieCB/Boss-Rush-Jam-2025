@@ -1,10 +1,16 @@
 extends HealthComponent
 
-func damage(_damage: float, _color: Color = Color.WHITE) -> void:
+func damage(_damage: float, _color: Color = Color.WHITE, _text_scale_pop: float = 1.3) -> void:
 	_damage = round(_damage * received_dmg_multiplier)
+
 	if enabled:
 		if not is_invincible:
 			var player: Player = get_parent()
+
+			# Dodge chance
+			var roll = randi_range(1, 100)
+			if roll <= player.current_stats[StatusEffect.PlayerStatEnum.DODGE_CHANCE] * 100:
+				return
 
 			if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.PLOT_ARMOR):
 				var damage_can_be_absorbed = _damage * GameManager.PLOT_ARMOR_DAMAGE_ABSORB_PERC

@@ -1,5 +1,8 @@
 extends BaseBarrelEffect
 
+
+# TODO: Possible rework into roll a dice from 1 to 6 and do something with crit dmg with it
+
 ## In %, so 50 = 50%
 @export var crit_chance: float
 ## In %, so 50 = 50%
@@ -13,8 +16,8 @@ func on_prepare_to_fire():
 	hit_count = 0
 	projectile_count = 0
 
-func on_projectile_destroyed():
-	super ()
+func on_projectile_destroyed(_hit_boss: bool):
+	super (_hit_boss)
 	projectile_count += 1
 	# print("projectile_count {0}, modified_projectile_amount{1}".format([projectile_count, owner_barrel.owner_gun.modified_projectile_amount]))'
 	
@@ -26,9 +29,9 @@ func on_projectile_destroyed():
 				owner_barrel.owner_gun.jam_the_gun(2)
 
 
-func on_projectile_spawn(projectile: BaseProjectile):
+func on_projectile_spawn(projectile: BaseBullet):
 	projectile.crit_chance += (crit_chance / 100.0)
 
-func on_damage_applied(_has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
-	super ()
+func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
+	super (_damage, _has_pos, _pos)
 	hit_count += 1

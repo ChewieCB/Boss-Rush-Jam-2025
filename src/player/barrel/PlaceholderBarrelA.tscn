@@ -1,12 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=10 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="5_ncjv1"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_n2kuu"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="6_vgoxo"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="8_8ud1i"]
-[ext_resource type="Script" path="res://src/player/barrel/card_counting_system_effect.gd" id="11_4doj4"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/loaded_dice_effect.gd" id="4_783so"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="5_0nmke"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/laser_guided_effect.gd" id="6_s01hw"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_uwm1l"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/safety_fold_effect.gd" id="8_dkjpk"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/daredevil_effect.gd" id="9_5tuyi"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/multishot_effect.gd" id="9_6lpn2"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
@@ -14,105 +16,63 @@ script = ExtResource("1_xtoip")
 [node name="EffectContainer" type="Node3D" parent="."]
 script = ExtResource("2_nse0w")
 
-[node name="CardCountingSystem" type="Node3D" parent="EffectContainer"]
+[node name="GuidedHand" type="Node3D" parent="EffectContainer"]
 visible = false
-script = ExtResource("11_4doj4")
-display_text_title = "The System"
-display_text_tag = "Trust me brother"
-display_text_desc = "+10% damage for each missed shot
-Reset on reload"
+script = ExtResource("5_0nmke")
+display_text_title = "Guided Hand"
+display_text_tag = "Keep aiming at the target"
+positive_desc = Array[String](["Bullet homing to aimed location"])
+negative_desc = Array[String](["-50% projectile speed", "Doesn't work with hitscan bullet"])
 
-[node name="HyperfocusEffect" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("8_8ud1i")
-modify_perc_spread_stationary = -50.0
-modify_perc_damage_stationary = 25.0
-modify_perc_spread_moving = 100.0
-modify_perc_damage_moving = -25.0
-display_text_title = "Hyperfocus"
-display_text_tag = "Take position and start blasting!"
-display_text_desc = "-50% spread, +25% damage when stationary
-+100% spread, -25% damage when moving"
+[node name="LaserGuidedEffect" type="Node3D" parent="EffectContainer/GuidedHand"]
+script = ExtResource("6_s01hw")
 
-[node name="FireInfusion" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("5_ncjv1")
-display_text_title = "Fire Infusion"
-display_text_tag = "Toasty!"
-display_text_desc = "-20% damage
-Bullets build up Burn effect"
-
-[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/FireInfusion"]
-script = ExtResource("6_vgoxo")
-status_effect = 1
-flat_build_up_amount = 500.0
-change_color = true
-new_color = Color(1, 0.32549, 0, 1)
-
-[node name="ModifyDamage" type="Node3D" parent="EffectContainer/FireInfusion"]
-script = ExtResource("6_n2kuu")
-attribute = 1
-modify_value = -20.0
+[node name="ModifyProjectileSpeedEffect" type="Node3D" parent="EffectContainer/GuidedHand"]
+script = ExtResource("6_uwm1l")
+attribute = 3
+modify_value = -50.0
 is_perc = true
 
-[node name="PoisonInfusion" type="Node3D" parent="EffectContainer"]
+[node name="SafetyFold" type="Node3D" parent="EffectContainer"]
+script = ExtResource("5_0nmke")
+display_text_title = "Safety Fold"
+display_text_tag = "..know when to fold 'em"
+positive_desc = Array[String](["Gain 50% damage resistance during reload"])
+negative_desc = Array[String](["-50% reload speed"])
+
+[node name="SafetyFoldEffect" type="Node3D" parent="EffectContainer/SafetyFold"]
+script = ExtResource("8_dkjpk")
+
+[node name="ModifyProjectileSpeedEffect" type="Node3D" parent="EffectContainer/SafetyFold"]
+script = ExtResource("6_uwm1l")
+attribute = 8
+modify_value = 50.0
+is_perc = true
+
+[node name="DaredevilEffect" type="Node3D" parent="EffectContainer"]
 visible = false
-script = ExtResource("5_ncjv1")
-display_text_title = "Poison Infusion"
-display_text_tag = "Too much alcohol"
-display_text_desc = "-20% fire rate
-Bullets build up Poison effect"
+script = ExtResource("9_5tuyi")
+min_distance_to_boss = 7.0
+display_text_title = "Daredevil"
+display_text_tag = "Stick close to the enemy"
+positive_desc = Array[String](["Increases bullet damage the longer you stay in close range to enemies"])
+negative_desc = Array[String](["Decreases damage otherwise"])
 
-[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/PoisonInfusion"]
-script = ExtResource("6_vgoxo")
-status_effect = 2
-flat_build_up_amount = 500.0
-change_color = true
-new_color = Color(0.164706, 0.658824, 0, 1)
-
-[node name="ModifyFirerate" type="Node3D" parent="EffectContainer/PoisonInfusion"]
-script = ExtResource("6_n2kuu")
-attribute = 4
-modify_value = -20.0
-is_perc = true
-
-[node name="ColdInfusion" type="Node3D" parent="EffectContainer"]
-script = ExtResource("5_ncjv1")
-display_text_title = "Cold Infusion"
-display_text_tag = "Let it go!"
-display_text_desc = "-20% magazine size
-Bullets build up Frozen effect"
-
-[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ColdInfusion"]
-script = ExtResource("6_vgoxo")
-status_effect = 3
-flat_build_up_amount = 500.0
-change_color = true
-new_color = Color(0, 0.533333, 0.658824, 0.866667)
-
-[node name="ModifyMagazineSize" type="Node3D" parent="EffectContainer/ColdInfusion"]
-script = ExtResource("6_n2kuu")
-attribute = 5
-modify_value = -20.0
-is_perc = true
-
-[node name="ElectricInfusion" type="Node3D" parent="EffectContainer"]
+[node name="LoadedDice" type="Node3D" parent="EffectContainer"]
 visible = false
-script = ExtResource("5_ncjv1")
-display_text_title = "Electric Infusion"
-display_text_tag = "...and his music was..."
-display_text_desc = "+20% recoil
-Bullets build up Shocked effect"
+script = ExtResource("4_783so")
+display_text_title = "Loaded Dice"
+display_text_tag = "I hope you have some saving"
+positive_desc = Array[String](["Increase your critical chance by 25%"])
+negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
 
-[node name="AddElementalEffect" type="Node3D" parent="EffectContainer/ElectricInfusion"]
-script = ExtResource("6_vgoxo")
-status_effect = 4
-flat_build_up_amount = 500.0
-change_color = true
-new_color = Color(0.981201, 1, 0.496776, 1)
-
-[node name="ModifyRecoil" type="Node3D" parent="EffectContainer/ElectricInfusion"]
-script = ExtResource("6_n2kuu")
-attribute = 11
-modify_value = -20.0
-is_perc = true
+[node name="DoubleTap" type="Node3D" parent="EffectContainer"]
+visible = false
+script = ExtResource("9_6lpn2")
+shot_count_per_trigger_modify = 1
+display_text_title = "Double Tap"
+display_text_tag = "Bang Bang!"
+display_text_desc = "Fire 2 shots in quick succession"
+positive_desc = Array[String](["Fires in 2-round bursts"])
+negative_desc = Array[String](["Increased recoil"])
+icon_id = 26
