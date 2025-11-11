@@ -53,7 +53,6 @@ func _process(delta: float) -> void:
 	if spin_interval_timer > SPIN_INTERVAL:
 		spin_interval_timer = 0
 		chosen_id = randi_range(0, len(effect_list) - 1)
-		#chosen_id = get_less_used_effects()
 
 
 func instant_spin():
@@ -83,8 +82,12 @@ func get_less_used_effects() -> int:
 					effect_id = last_chosen_queue.back()
 			# If we've chosen some, but not all, effects before, pick a random effect we haven't chosen yet
 			_:
-				# 20% chance to get same barrel
-				if chance <= 0.2:
+				# 20% chance to get same barrel, unless it tutorial room
+				var same_barrel_chance = 0.2
+				if GameManager.current_boss_map and GameManager.current_boss_map.is_tutorial:
+					same_barrel_chance = -0.1
+
+				if chance <= same_barrel_chance:
 					effect_id = last_chosen_queue.front()
 				else:
 					var unused_effects = range(0, effect_size)

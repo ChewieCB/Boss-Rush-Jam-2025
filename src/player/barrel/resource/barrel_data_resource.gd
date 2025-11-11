@@ -80,7 +80,7 @@ enum BarrelIdEnum {
 	DEBUG_RUSSIAN_RIFLE,
 	DEBUG_LMG,
 	DEBUG_VECTOR,
-
+	
 	BLACKJACK
 }
 

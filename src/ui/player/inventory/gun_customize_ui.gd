@@ -80,7 +80,7 @@ func _input(event: InputEvent) -> void:
 func full_refresh_ui(forced = false):
 	if not visible and not forced:
 		return
-	
+
 	# EQUIPPED BARRELS
 	for barrel_slot in equip_barrel_container.get_children():
 		var container = barrel_slot.get_node("HBoxContainer")

@@ -26,6 +26,7 @@ var setting_ui: SettingUI
 var player: Player
 var difficulty_menu: DifficultyMenu
 var object_pooling_manager: ObjectPoolingManager
+var current_boss_map: BossMap
 
 # Barrels
 @export var starting_barrels: Array[Resource]

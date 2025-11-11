@@ -32,13 +32,13 @@ var spin_warning_trigger_active: bool = false
 
 var current_trigger_actions: Array[String] = []
 
-
 func _ready() -> void:
 	#GameManager.equipped_barrels = []
 	#player.gun.reinstall_barrels()
 	# FIXME - workaround
+	is_tutorial = true
 	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_42_SlidingDoor
-	
+
 	## SUPER
 	if OS.is_debug_build():
 		print("\n[Export Variable Debug] Checking for unset exports in ", self.name)
@@ -50,13 +50,13 @@ func _ready() -> void:
 					print("!! Unset or invalid export: ", prop.name)
 				else:
 					print(prop.name, " → ", value)
-	
+
 	if bgm:
 		SoundManager.play_music(bgm, 0.5, "BGM")
-	
+
 	# Pre-load the lobby scene for faster level transitions
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
-	
+
 	if not boss:
 		push_error("No boss defined for map.")
 	else:
@@ -65,7 +65,7 @@ func _ready() -> void:
 		boss.died.connect(_on_boss_died)
 		boss.defeated.connect(_on_boss_defeated)
 		boss.chip_dropped.connect(_on_chip_dropped)
-	
+
 	player.health_component.died.connect(_on_player_death)
 	# Sync the player's location in the elevator from the lobby
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
@@ -73,28 +73,28 @@ func _ready() -> void:
 		player.global_position = player_start_pos
 		player.rotation = GameManager.cached_player_rotation
 		player.player_camera.rotation = GameManager.cached_camera_rotation
-	
+
 	player.stat_ui.show_luck_ui()
-	
+
 	await get_tree().physics_frame
 	generate_navigation()
-	
+
 	if elevator_doors:
 		elevator_doors.open()
 	## SUPER
-	
+
 	if boss_doors:
 		boss_doors.close()
 	exit_elevator_button.pushed.connect(_on_level_select)
 	for i in range(chiplings_to_spawn_1):
 		spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
-	
+
 	# Trigger tutorial popup when barrel purchased
 	$Vendor1.shop_ui.inventory_closed.connect(_on_barrel_purchased)
-	
+
 	# Trigger spin tutorial popup when barrel effect trigger first hit
 	$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
-	
+
 	boss.boss_origin = boss_origin[0]
 	boss.elevator_spawns = elevator_spawns
 	boss.sub_elevator_doors = sub_elevator_doors
@@ -110,7 +110,7 @@ func _input(event: InputEvent) -> void:
 					continue
 			ui_accept.emit()
 			current_trigger_actions = []
-	
+
 	if Input.is_action_just_pressed("spin_barrels"):
 		if GameManager.player_currency < GameManager.reroll_cost:
 			if spin_warning_trigger_active:
@@ -197,12 +197,12 @@ func _on_level_select(level_path: String) -> void:
 	GameManager.tutorial_completed = true
 	GameManager.player_currency = 0
 	#GameManager.equipped_barrels = GameManager.starting_barrels
-	
+
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
-	
-	super(level_path)
+
+	super (level_path)
 
 
 func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
@@ -225,15 +225,15 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
-	
+
 	exit_elevator_button.disabled = false
 	exit_doors.open()
-	
+
 	if not boss.boss_id in GameManager.bosses_defeated:
 		GameManager.bosses_defeated.append(boss.boss_id)
 		print(GameManager.bosses_defeated)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
-	
+
 	# TODO - re-apply this when we re-visit the tutorial boss
 	#reward_bet_money()
 	#show_end_panel()
