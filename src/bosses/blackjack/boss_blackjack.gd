@@ -33,6 +33,7 @@ var hand_spawn_pos: Node
 @export var hand_scene: PackedScene
 @export var hand_spacing: float = 5.0
 @export var hand_respawn_time: float = 3.5
+var hand_movement_tweens: Dictionary = {}
 var hand_spawn_tween: Tween
 var max_hand_spawn: int = 2
 var spawned_hands = []
@@ -218,7 +219,7 @@ func _on_died() -> void:
 	
 	blackjack_particles.emitting = false
 	blackjack_timer.stop()
-	for tween in [move_tween, return_tween, hand_spawn_tween, deal_tween, tilt_tween, hand_tween]:
+	for tween in [move_tween, return_tween, deal_tween, tilt_tween, hand_tween] + hand_movement_tweens.values():
 		if tween:
 			tween.kill()
 	
@@ -249,6 +250,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			# If we're currently busting, wait until 
 			# the bust attack has finished to transition 
 			# or this won't trigger the phase change
+			_abort_deal_tween()
 			if $StateChart/Root/Phase/AttackPhase/Bust.active:
 				await bust_finished
 			state_chart.send_event("trigger_phase_2")
@@ -333,7 +335,6 @@ func select_attack_phase_1() -> void:
 	
 	var attack_str: String = ""
 	var attack_roll: int = randi_range(0, 99)
-	# Focus on backspin chip, occasional slams and sweeps
 	# 45% chance of Hit
 	# 30% chance of Stand (Double Tap)
 	# 25% chance of Sweep
@@ -343,7 +344,6 @@ func select_attack_phase_1() -> void:
 		attack_str = "start_hand_stand_attack"
 	else:
 		attack_str = "start_hand_sweep_attack"
-
 	state_chart.send_event(attack_str)
 
 
@@ -353,7 +353,6 @@ func select_attack_phase_2() -> void:
 	
 	var attack_str: String = ""
 	var attack_roll: int = randi_range(0, 99)
-	# Focus on backspin chip, occasional slams and sweeps
 	# 30% chance of Tilt
 	# 25% chance of Block
 	# 30% chance of Sweep
@@ -463,6 +462,13 @@ func get_hand_anchor_point(hand: BlackjackHand) -> Vector3:
 	return self.global_position + hand_offset
 
 
+func kill_hand_tween(hand: BlackjackHand) -> void:
+	var _hand_spawn_tween: Tween = hand_movement_tweens.get(hand.name)
+	if _hand_spawn_tween:
+		_hand_spawn_tween.kill()
+		hand_movement_tweens.erase(hand.name)
+
+
 # Move the hand scene to a child of the boss so they can move together
 func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6, return_to_offset: bool = true) -> void:
 	# Cache hand position so we can add the hand as a child of the hand anchor
@@ -493,11 +499,13 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6, return_to_offset:
 	if return_to_offset:
 		# If this loop breaks, the hand has been despawned mid-move so we need to kill the tween
 		while hand in spawned_hands:
-			hand_spawn_tween = get_tree().create_tween()
-			hand_spawn_tween.tween_property(hand, "position", hand_offset * Vector3(-1, 1, 1), move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			var _hand_spawn_tween: Tween = get_tree().create_tween()
+			hand_movement_tweens[hand.name] = _hand_spawn_tween
+			
+			_hand_spawn_tween.tween_property(hand, "position", hand_offset * Vector3(-1, 1, 1), move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 			#hand_spawn_tween.tween_property(hand, "global_position", self.global_position + hand_offset, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-			hand_spawn_tween.parallel().tween_property(hand, "scale", Vector3.ONE, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-			await hand_spawn_tween.finished
+			_hand_spawn_tween.parallel().tween_property(hand, "scale", Vector3.ONE, move_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			await _hand_spawn_tween.finished
 			
 			## Position needs to be flipped for some reason, relative rotation issue?
 			#hand.position = hand_offset * Vector3(-1, 1, 1)
@@ -508,14 +516,13 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6, return_to_offset:
 			# type behaviour.
 			
 			return
-		if hand_spawn_tween:
-			hand_spawn_tween.kill()
+		
+		kill_hand_tween(hand)
 
 
 # Move the new hand to the scene root so it can move independently
 func _release_hand(hand: BlackjackHand) -> void:
-	if hand_spawn_tween:
-		hand_spawn_tween.kill()
+	kill_hand_tween(hand)
 	
 	var hand_parent: Node3D = hand.get_parent()
 	var cached_pos: Vector3 = hand.global_position
@@ -1459,10 +1466,9 @@ func _on_hand_defensive_moving_to_block_state_entered() -> void:
 	move_block_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	move_block_tween.set_parallel(true)
 	
-	if hand_spawn_tween:
-		hand_spawn_tween.kill()
-	
 	for hand in spawned_hands:
+		kill_hand_tween(hand)
+		
 		var hand_idx = spawned_hands.find(hand)
 		var blocking_pos := Vector3(
 			-hand_spacing/2, 0.0, -hand_spacing/2
@@ -1505,8 +1511,7 @@ func _on_hand_defensive_blocking_state_entered() -> void:
 	
 	for hand in spawned_hands:
 		hand.return_timer.stop()
-		if hand_spawn_tween:
-			hand_spawn_tween.kill()
+		kill_hand_tween(hand)
 		#hand.state_chart.send_event("start_blocking")
 	
 	state_chart.send_event("start_firing")
