@@ -1059,11 +1059,13 @@ func _on_bust_arena_aoe_state_entered() -> void:
 	)
 	
 	var possible_targets := _get_evenly_spaced_points_for_explosion(
-		bust_proj_shots, bust_explosion_radius, nearest_meshes
+		bust_proj_shots, bust_explosion_radius/2, nearest_meshes
 	)
 	
 	for h in range(bust_proj_shots):
 		var _pos = possible_targets.pop_front()
+		if not _pos:
+			break
 		var query = PhysicsRayQueryParameters3D.create(
 			_pos,
 			_pos - tilt_mesh.global_basis.y * 20,
