@@ -9,8 +9,8 @@ signal display_description(content)
 const SCALE_FACTOR = 1.2
 var barrel_info_region: BarrelInfoRegion = null
 var barrel_roll_data: Dictionary = {
-	"display_text_title": "",
-	"display_text_tag": "",
+	"title": "",
+	"description": "",
 	"is_archetype": false,
 	"positive_desc": [],
 	"negative_desc": [],
@@ -50,8 +50,8 @@ func _on_focus_entered() -> void:
 	border_focus.visible = true
 	self_modulate = Color(1, 1, 1)
 	var content = "[center]{0}[/center]\n\n{1}\n".format([
-		barrel_roll_data["display_text_title"],
-		barrel_roll_data["display_text_tag"]]
+		barrel_roll_data["title"],
+		barrel_roll_data["description"]]
 	)
 	if len(barrel_roll_data["positive_desc"]) > 0:
 		content += "[color=green]\n"
