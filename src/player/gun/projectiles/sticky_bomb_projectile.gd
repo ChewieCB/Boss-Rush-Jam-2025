@@ -1,4 +1,4 @@
-extends BaseProjectile
+extends BaseBullet
 class_name StickyBombProjectile
 
 @export var delay_explosion_time = 2
@@ -38,9 +38,9 @@ func _physics_process(delta: float) -> void:
 		var aiming_position = GunUtils.get_player_aiming_position()
 		var dir_to_target = global_position.direction_to(aiming_position)
 		look_at(global_position + dir_to_target)
-	
+
 	velocity = -transform.basis.z * projectile_speed * delta
-	global_position += velocity 
+	global_position += velocity
 	travelled_distance += projectile_speed * delta
 
 

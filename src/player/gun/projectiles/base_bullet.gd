@@ -61,7 +61,7 @@ func _ready() -> void:
 
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float) -> void:
-	push_error("BaseProjectile sub-class does not have an init method set.")
+	push_error("BaseBullet sub-class does not have an init method set.")
 
 
 func _process(delta: float) -> void:
@@ -74,7 +74,7 @@ func create_spark(pos: Vector3, normal: Vector3):
 	if can_be_aim_guided:
 		pos = global_position
 		normal = Vector3.UP
-		
+
 	var spark_inst = spark_effect.instantiate()
 	get_parent().add_child(spark_inst)
 	spark_inst.global_position = pos
@@ -157,8 +157,8 @@ func get_damage_variance_modifier(_damage: int) -> int:
 	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE] - 1
 	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
-func create_duplication(is_ricochet: bool = true) -> BaseProjectile:
-	var new_inst: BaseProjectile = self.duplicate()
+func create_duplication(is_ricochet: bool = true) -> BaseBullet:
+	var new_inst: BaseBullet = self.duplicate()
 	new_inst.owner_gun = owner_gun.duplicate()
 	new_inst.is_ricochet_shot = is_ricochet
 	new_inst.homing_strength = homing_strength

@@ -26,7 +26,7 @@ func activate(start_pos: Vector3) -> void:
 func set_damage_radius(radius: float) -> void:
 	var new_shape := SphereShape3D.new()
 	new_shape.radius = radius
-	collider.shape = new_shape
+	collision_shape.shape = new_shape
 
 
 func deactivate() -> void:
