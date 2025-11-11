@@ -25,6 +25,7 @@ func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = V
 
 func on_reload_start():
 	GameManager.player.health_component.heal(stored_heal)
+	GameManager.player_currency -= round(GameManager.player.health_component.current_health)
 	remove_effect()
 
 func on_barrel_remove():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=10 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
@@ -6,34 +6,15 @@
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="5_0nmke"]
 [ext_resource type="Script" path="res://src/player/barrel/laser_guided_effect.gd" id="6_s01hw"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_uwm1l"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/run_and_gun_effect.gd" id="8_8ud1i"]
 [ext_resource type="Script" path="res://src/player/barrel/safety_fold_effect.gd" id="8_dkjpk"]
 [ext_resource type="Script" path="res://src/player/barrel/daredevil_effect.gd" id="9_5tuyi"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="10_fn6a4"]
-[ext_resource type="Texture2D" uid="uid://ddfqokjq1u61n" path="res://assets/sprite/status_icon/defense-down.png" id="11_oh2rg"]
-[ext_resource type="Texture2D" uid="uid://dlw4dtm637qxu" path="res://assets/sprite/status_icon/feather.png" id="12_lj377"]
-[ext_resource type="Script" path="res://src/player/barrel/insurance_crit_effect.gd" id="13_pralp"]
-[ext_resource type="Script" path="res://src/player/barrel/phantom_ammo_effect.gd" id="14_61tm6"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/multishot_effect.gd" id="9_6lpn2"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
 
 [node name="EffectContainer" type="Node3D" parent="."]
 script = ExtResource("2_nse0w")
-
-[node name="Hyperfocus" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("8_8ud1i")
-modify_perc_spread_stationary = -50.0
-modify_perc_damage_stationary = 25.0
-modify_perc_spread_moving = 100.0
-modify_perc_damage_moving = -25.0
-display_text_title = "Hyperfocus"
-display_text_tag = "Take position and start blasting!"
-display_text_desc = "-50% spread, +25% damage when stationary
-+100% spread, -25% damage when moving"
-positive_desc = Array[String](["-50% spread, +25% damage when stationary"])
-negative_desc = Array[String](["+100% spread, -25% damage when moving"])
 
 [node name="GuidedHand" type="Node3D" parent="EffectContainer"]
 visible = false
@@ -53,7 +34,6 @@ modify_value = -50.0
 is_perc = true
 
 [node name="SafetyFold" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("5_0nmke")
 display_text_title = "Safety Fold"
 display_text_tag = "..know when to fold 'em"
@@ -86,55 +66,13 @@ display_text_tag = "I hope you have some saving"
 positive_desc = Array[String](["Increase your critical chance by 25%"])
 negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
 
-[node name="FragileFeather" type="Node3D" parent="EffectContainer"]
+[node name="DoubleTap" type="Node3D" parent="EffectContainer"]
 visible = false
-script = ExtResource("5_0nmke")
-display_text_title = "Fragile Feather"
-display_text_tag = "Does it actually benefit you?"
-positive_desc = Array[String](["+25% dodge chance"])
-negative_desc = Array[String](["+25% damage taken"])
-
-[node name="IncreaseDamageTaken" type="Node3D" parent="EffectContainer/FragileFeather"]
-script = ExtResource("10_fn6a4")
-display_name = "Increase damage taken"
-status_code = "fragile_feather_reduce_damage_resistance"
-modified_stat = 4
-value = -0.25
-is_infinite_duration = true
-is_bad_effect = true
-status_icon = ExtResource("11_oh2rg")
-show_duration_ui = true
-
-[node name="IncreaseDodgeChance" type="Node3D" parent="EffectContainer/FragileFeather"]
-script = ExtResource("10_fn6a4")
-display_name = "Increase dodge chance"
-status_code = "fragile_feather_increase_dodge_chance"
-modified_stat = 13
-value = 0.25
-is_infinite_duration = true
-status_icon = ExtResource("12_lj377")
-show_duration_ui = true
-
-[node name="CriticalInsurance" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("13_pralp")
-display_text_title = "Critical Insurance"
-display_text_tag = "Definitely not a scam"
-positive_desc = Array[String](["Guarantee the next shot critical if previous one missed"])
-negative_desc = Array[String](["-50% critical damage"])
-
-[node name="PhantomAmmo" type="Node3D" parent="EffectContainer"]
-script = ExtResource("5_0nmke")
-display_text_title = "Phantom Ammo"
-display_text_tag = "You have unlimited ammo! With tradeoff"
-positive_desc = Array[String](["Unlimited ammo"])
-negative_desc = Array[String](["-20% damage", "Firerate and accuracy keep getting worse as you shoot, until you reload"])
-
-[node name="ReduceDamage" type="Node3D" parent="EffectContainer/PhantomAmmo"]
-script = ExtResource("6_uwm1l")
-attribute = 1
-modify_value = -20.0
-is_perc = true
-
-[node name="PhantomAmmoEffect" type="Node3D" parent="EffectContainer/PhantomAmmo"]
-script = ExtResource("14_61tm6")
+script = ExtResource("9_6lpn2")
+shot_count_per_trigger_modify = 1
+display_text_title = "Double Tap"
+display_text_tag = "Bang Bang!"
+display_text_desc = "Fire 2 shots in quick succession"
+positive_desc = Array[String](["Fires in 2-round bursts"])
+negative_desc = Array[String](["Increased recoil"])
+icon_id = 26

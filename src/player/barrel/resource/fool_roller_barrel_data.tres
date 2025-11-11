@@ -17,6 +17,7 @@ Double Tap: Shoot in two-round bursts.
 Ammo Leech: Small chance to refund ammo on hit, but reduces base bullet damage.
 Gambler's Precision: Chance to crit on hit and jam gun on miss.
 [/ul]"
+barrel_info_summary = "A simple barrel with risky effect, but also potentially great reward for skillfully use of it."
 barrel_image = ExtResource("1_0ubde")
 barrel_cost = 650
 barrel_prefab = ExtResource("2_gxri0")

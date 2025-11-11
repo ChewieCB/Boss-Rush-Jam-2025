@@ -17,6 +17,7 @@ Sticky Bomb : Bullets stick to enemies and detonate after 2 seconds.
 Bullet Time: Bullets travel slower, but heavily increases their damage.
 Medical Payout: Accumulate dealt damage to convert into health on reload.
 [/ul]"
+barrel_info_summary = "It reward user who has patience. Or elaborated setup."
 barrel_image = ExtResource("1_4n2ic")
 barrel_cost = 1230
 barrel_prefab = ExtResource("1_i2um6")

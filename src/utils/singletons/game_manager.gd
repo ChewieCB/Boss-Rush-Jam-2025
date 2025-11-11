@@ -52,7 +52,7 @@ var reroll_time = 0
 
 @export var player_currency: int = 0:
 	set(value):
-		player_currency = value
+		player_currency = max(0, value)
 		currency_changed.emit(player_currency)
 
 var player_level = 1
