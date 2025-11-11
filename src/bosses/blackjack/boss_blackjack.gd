@@ -3,9 +3,14 @@ class_name BossBlackjack
 
 signal hand_attack_finished(hand)
 signal all_hand_attacks_finished
+signal bust_finished
 
 @export var DEBUG_blackjack: bool = false
 @export var DEBUG_bust: bool = false
+
+@export_group("Phases")
+@export var phase_2_health_threshold: float = 0.5
+var skip_deal: bool = false
 
 @export_group("Movement")
 var flying_nav: NavigationRegion3D
@@ -59,16 +64,24 @@ var deal_tween: Tween
 @export var blackjack_particles: GPUParticles3D
 var hand_count: int = 0
 @export_subgroup("Blackjack")
+@export var blackjack_chance_phase_1: float = 0.05
+@export var blackjack_chance_phase_2: float = 0.15
+var blackjack_chance: float = blackjack_chance_phase_1
 @export var blackjack_time_min: float = 8.0
 @export var blackjack_time_max: float = 25.0
 @export var blackjack_timer: Timer
 @export_subgroup("Bust")
+@export var bust_chance_phase_1: float = 0.25
+@export var bust_chance_phase_2: float = 0.10
+var bust_chance: float = bust_chance_phase_1
 @export var bust_particles_parent: Node3D
 @export var bust_self_damage: float = 150.0
 @export var aoe_marker_ring: CompressedTexture2D
 @export var aoe_marker_arrows: CompressedTexture2D
 @export var bust_proj_speed: float = 0.9
-@export var bust_proj_shots: int = 5
+@export var bust_proj_shots_phase_1: int = 5
+@export var bust_proj_shots_phase_2: int = 10
+var bust_proj_shots: int = bust_proj_shots_phase_1
 @export var bust_proj_explosion_count: int = 1
 @export var bust_explosion_radius: float = 5.0
 @export var bust_proj_arc_height: float = 25.0
@@ -227,6 +240,20 @@ func _destroy_all_hands(hand_delay: float = 0.2, initial_delay: float = 0.0) -> 
 		await get_tree().create_timer(hand_delay, false).timeout
 
 
+func _on_health_changed(new_health: float, prev_health: float) -> void:
+	super(new_health, prev_health)
+	if current_phase == 1:
+		if new_health / health_component.max_health < phase_2_health_threshold:
+			skip_deal = true
+			current_phase = 2
+			# If we're currently busting, wait until 
+			# the bust attack has finished to transition 
+			# or this won't trigger the phase change
+			if $StateChart/Root/Phase/AttackPhase/Bust.active:
+				await bust_finished
+			state_chart.send_event("trigger_phase_2")
+
+
 func _on_health_dead_state_entered() -> void:
 	if anim_player.is_playing():
 		anim_player.stop()
@@ -301,25 +328,46 @@ func _on_health_dead_state_entered() -> void:
 
 
 func select_attack_phase_1() -> void:
-	#state_chart.send_event("end_attack")
+	blocking_detection_area.process_mode = Node.PROCESS_MODE_DISABLED
 	state_chart.send_event("end_recovery")
 	
-	#state_chart.send_event("start_hand_slam_attack")
-	#state_chart.send_event("start_hand_stand_attack")
-	#state_chart.send_event("start_hand_sweep_attack")
-	#state_chart.send_event("start_hand_tilt_attack")
-	#state_chart.send_event("start_hand_block_attack")
-	var chance = randf()
-	if chance < 0.2:
-		state_chart.send_event("start_hand_slam_attack")
-	elif chance < 0.4:
-		state_chart.send_event("start_hand_sweep_attack")
-	elif chance < 0.6:
-		state_chart.send_event("start_hand_tilt_attack")
-	elif chance < 0.8:
-		state_chart.send_event("start_hand_block_attack")
+	var attack_str: String = ""
+	var attack_roll: int = randi_range(0, 99)
+	# Focus on backspin chip, occasional slams and sweeps
+	# 45% chance of Hit
+	# 30% chance of Stand (Double Tap)
+	# 25% chance of Sweep
+	if attack_roll < 45:
+		attack_str = "start_hand_slam_attack"
+	elif attack_roll < 75:
+		attack_str = "start_hand_stand_attack"
 	else:
-		state_chart.send_event("start_hand_stand_attack")
+		attack_str = "start_hand_sweep_attack"
+
+	state_chart.send_event(attack_str)
+
+
+func select_attack_phase_2() -> void:
+	blocking_detection_area.process_mode = Node.PROCESS_MODE_DISABLED
+	state_chart.send_event("end_recovery")
+	
+	var attack_str: String = ""
+	var attack_roll: int = randi_range(0, 99)
+	# Focus on backspin chip, occasional slams and sweeps
+	# 30% chance of Tilt
+	# 25% chance of Block
+	# 30% chance of Sweep
+	# 15% chance of Stand (Double Tap)
+	if attack_roll < 30:
+		attack_str = "start_hand_tilt_attack"
+	elif attack_roll < 55:
+		attack_str = "start_hand_block_attack"
+	elif attack_roll < 85:
+		attack_str = "start_hand_sweep_attack"
+	else:
+		attack_str = "start_hand_stand_attack"
+
+	state_chart.send_event(attack_str)
 
 
 ## HAND HELPER METHODS
@@ -548,6 +596,7 @@ func trigger_all_hand_attacks_seq(attack_event: String) -> void:
 
 func cancel_active_hand_attacks() -> void:
 	for hand in spawned_hands:
+		hand.cancel_hand_attack()
 		hand.state_chart.send_event("end_attack")
 
 
@@ -637,9 +686,9 @@ func _on_intro_state_entered() -> void:
 func _on_dealing_idle_state_entered() -> void:
 	hand_count_label.text = "0"
 	
-	return_tween = get_tree().create_tween()
-	return_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
-	return_tween.tween_property(self, "global_position", intro_path_points[2].global_position, 0.6)
+	#return_tween = get_tree().create_tween()
+	#return_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	#return_tween.tween_property(self, "global_position", intro_path_points[2].global_position, 0.6)
 	
 	var start_hand_count: int = spawned_hands.size()
 	if start_hand_count < max_hand_spawn:
@@ -652,6 +701,16 @@ func _on_dealing_idle_state_entered() -> void:
 func _on_dealing_dealing_state_entered() -> void:
 	# Keep dealing until we hit stand, blackjack, or bust
 	hand_count = 0
+	
+	var forced_hand = []
+	#
+	var is_blackjack: bool = randf() < blackjack_chance
+	if is_blackjack:
+		forced_hand = ["ACE", "JACK"]
+	#
+	var is_bust: bool = randf() < bust_chance
+	if is_bust:
+		forced_hand = ["KING", "TEN", "NINE"]
 	
 	# Loop here so we can update the dealing hand tween if the current hand is killed
 	while hand_count < 30:
@@ -676,6 +735,8 @@ func _on_dealing_dealing_state_entered() -> void:
 		
 		# Pick a card, update the count, and change the particle texture accordingly
 		var card_key = SUIT_CARDS.keys().pick_random()
+		if forced_hand:
+			card_key = forced_hand.pop_front()
 		var card_value = SUIT_CARDS[card_key]
 		card_particles.draw_pass_1.surface_get_material(0).albedo_texture = card_textures[SUIT_CARDS.keys().find(card_key)]
 		
@@ -711,7 +772,7 @@ func _on_dealing_dealing_state_entered() -> void:
 			if hand_count > 21:
 				state_chart.send_event("start_bust")
 				_abort_deal_tween()
-				state_chart.send_event("end_deal_special")
+				state_chart.send_event("end_deal")
 				return
 			
 			# BLACKJACK
@@ -752,7 +813,13 @@ func _on_dealing_dealing_state_physics_processing(_delta: float) -> void:
 
 
 func _on_dealing_recover_state_entered() -> void:
-	state_chart.send_event("trigger_phase_1")
+	if $StateChart/Root/Phase/AttackPhase/Bust.active:
+		await bust_finished
+	match current_phase:
+		1:
+			state_chart.send_event("trigger_phase_1")
+		2:
+			state_chart.send_event("trigger_phase_2")
 	state_chart.send_event("end_recovery")
 
 
@@ -821,17 +888,35 @@ func _recover_entered() -> void:
 
 	state_chart.send_event("cooldown_end")
 	state_chart.send_event("start_moving")
-	state_chart.send_event("start_dealing")
+	if not skip_deal:
+		state_chart.send_event("start_dealing")
 
 
 func _on_phase_1_state_entered() -> void:
-	#state_chart.send_event("start_moving")
+	current_phase = 1
+	blackjack_chance = blackjack_chance_phase_1
+	bust_chance = bust_chance_phase_1
+	bust_proj_speed = bust_proj_shots_phase_1
+	
 	select_attack()
 
-
 func _on_phase_1_state_exited() -> void:
-	#state_chart.send_event("start_targeting")
-	pass
+	return
+
+
+func _on_phase_2_state_entered() -> void:
+	current_phase = 2
+	blackjack_chance = blackjack_chance_phase_2
+	bust_chance = bust_chance_phase_2
+	bust_proj_speed = bust_proj_shots_phase_2
+	
+	cancel_active_hand_attacks()
+	
+	state_chart.send_event("end_attack")
+	state_chart.send_event("start_hand_tilt_attack")
+
+func _on_phase_2_state_exited() -> void:
+	return
 
 
 func _on_wave_collision(
@@ -1045,7 +1130,7 @@ func _on_bust_recover_state_entered() -> void:
 		_anchor_hand(_hand)
 
 	state_chart.send_event("start_targeting")
-	# TODO
+	bust_finished.emit()
 	state_chart.send_event("end_recovery")
 
 
@@ -1235,7 +1320,7 @@ func _on_tilt_recovering_state_entered() -> void:
 			break
 		var _hand = spawned_hands[i]
 		_anchor_hand(_hand)
-	
+	skip_deal = false
 	_recover_entered()
 
 
@@ -1398,7 +1483,7 @@ func _on_hand_defensive_blocking_state_entered() -> void:
 	# For every projectile that comes into a range/detection area of the boss,
 	# pick the closest hand and move it towards the projectile in an attempt
 	# to block - limiting the max range the hand can move away from it's position
-	blocking_detection_area.process_mode = Node.PROCESS_MODE_INHERIT
+	blocking_detection_area.process_mode = Node.PROCESS_MODE_PAUSABLE
 	
 	# For each shot that hits the hand, reduce the damage taken and store a copy
 	# of the shot projectile instance so we can fire it back next phase

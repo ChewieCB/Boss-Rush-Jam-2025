@@ -64,14 +64,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_died() -> void:
-	anim_player.stop()
-	anim_player.clear_queue()
-	anim_player.play("blackjack_hand/RESET")
-	state_chart.send_event("hand_finished")
-	for tween in [slam_tween, stand_tween, sweep_tween]:
-		if tween:
-			tween.kill()
-	sweep_particles.emitting = false
+	cancel_hand_attack()
 	
 	state_chart.send_event("stop_moving")
 	state_chart.send_event("death")
@@ -89,6 +82,17 @@ func _on_health_dead_state_entered() -> void:
 	# in _on_died(), this method currently just changes the sprite colour
 	sprite.modulate = Color.DARK_SLATE_BLUE
 	death_anim_finished.emit()
+
+
+func cancel_hand_attack() -> void:
+	anim_player.stop()
+	anim_player.clear_queue()
+	anim_player.play("blackjack_hand/RESET")
+	state_chart.send_event("hand_finished")
+	for tween in [slam_tween, stand_tween, sweep_tween]:
+		if tween:
+			tween.kill()
+	sweep_particles.emitting = false
 
 
 func fake_destroy() -> void:
@@ -494,7 +498,8 @@ func _on_sweep_sweeping_state_entered() -> void:
 			var cached_pos: Vector3 = _card.global_position
 			var cached_trans: Transform3D = _card.global_transform
 			_follow.remove_child(_card)
-			scene_root.add_child(_card)
+			# Add the card to the tilt mesh so it moves with it
+			controller_boss.tilt_mesh.add_child(_card)
 			_card.global_transform = cached_trans
 			_card.global_position = cached_pos
 			sweep_card_instance_pool.push_back(_card)

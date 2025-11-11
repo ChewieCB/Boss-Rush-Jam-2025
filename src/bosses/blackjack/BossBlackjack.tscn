@@ -585,7 +585,8 @@ _data = {
 [node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent", "blocking_detection_area") instance=ExtResource("1_262ft")]
 script = ExtResource("2_km6gh")
 DEBUG_blackjack = false
-DEBUG_bust = false
+DEBUG_bust = true
+phase_2_health_threshold = 0.5
 min_flying_height = 0.0
 max_flying_height = 14.0
 min_wander_distance = 2.0
@@ -606,15 +607,20 @@ hand_count_label = NodePath("HoverPlatform/DealLabel")
 card_particles = NodePath("HoverPlatform/DealCardParticle")
 card_explosion_particles = NodePath("HoverPlatform/NumberParticles")
 blackjack_particles = NodePath("HoverPlatform/BlackjackParticles")
+blackjack_chance_phase_1 = 0.05
+blackjack_chance_phase_2 = 0.15
 blackjack_time_min = 8.0
 blackjack_time_max = 25.0
 blackjack_timer = NodePath("BlackjackTimer")
+bust_chance_phase_1 = 0.25
+bust_chance_phase_2 = 0.1
 bust_particles_parent = NodePath("HoverPlatform/BustParticles")
 bust_self_damage = 150.0
 aoe_marker_ring = ExtResource("19_vq3wl")
 aoe_marker_arrows = ExtResource("20_an7di")
 bust_proj_speed = 0.9
-bust_proj_shots = 5
+bust_proj_shots_phase_1 = 5
+bust_proj_shots_phase_2 = 10
 bust_proj_explosion_count = 1
 bust_explosion_radius = 5.0
 bust_proj_arc_height = 25.0
@@ -781,7 +787,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="HealthComponent" parent="." index="7"]
 visible = false
-max_health = 6000.0
+max_health = 500.0
 
 [node name="BlockingDetectionArea" type="Area3D" parent="." index="9"]
 process_mode = 4
@@ -795,6 +801,10 @@ shape = SubResource("SphereShape3D_aol33")
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 boss_name = "Blackjack"
+
+[node name="StateChartDebugger" parent="DebugUI" index="0"]
+enabled = true
+initial_node_to_watch = NodePath("../../StateChart/Root/Phase")
 
 [node name="Blackjack" type="Node" parent="StateChart/Root/Status" index="5"]
 script = ExtResource("6_pje5c")
@@ -892,7 +902,14 @@ event = &"trigger_phase_1"
 guard = SubResource("Resource_fyq2s")
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/AttackPhase/Dealing" index="5"]
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/AttackPhase/Dealing" index="5"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Phase2")
+event = &"trigger_phase_2"
+guard = SubResource("Resource_fyq2s")
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/AttackPhase/Dealing" index="6"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../../Inactive")
 event = &"deactivate"
@@ -966,6 +983,26 @@ event = &"end_recovery"
 guard = ExtResource("38_3whmd")
 delay_in_seconds = "0.0"
 
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/AttackPhase/Bust" index="5"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/AttackPhase/Bust" index="6"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Phase1")
+event = &"trigger_phase_1"
+guard = SubResource("Resource_fyq2s")
+delay_in_seconds = "0.0"
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/AttackPhase/Bust" index="7"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Phase2")
+event = &"trigger_phase_2"
+guard = SubResource("Resource_fyq2s")
+delay_in_seconds = "0.0"
+
 [node name="Phase1" type="Node" parent="StateChart/Root/Phase/AttackPhase" index="2"]
 script = ExtResource("6_pje5c")
 initial_state = NodePath("Idle")
@@ -1005,20 +1042,6 @@ delay_in_seconds = "0.0"
 script = ExtResource("3_db3k6")
 to = NodePath("../../HandSweep")
 event = &"start_hand_sweep_attack"
-guard = ExtResource("38_3whmd")
-delay_in_seconds = "0.0"
-
-[node name="toHandTilt" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/Idle" index="3"]
-script = ExtResource("3_db3k6")
-to = NodePath("../../HandTilt")
-event = &"start_hand_tilt_attack"
-guard = ExtResource("38_3whmd")
-delay_in_seconds = "0.0"
-
-[node name="toHandDefensive" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/Idle" index="4"]
-script = ExtResource("3_db3k6")
-to = NodePath("../../HandDefensive")
-event = &"start_hand_block_attack"
 guard = ExtResource("38_3whmd")
 delay_in_seconds = "0.0"
 
@@ -1145,133 +1168,331 @@ event = &"end_attack"
 guard = SubResource("Resource_h3ju7")
 delay_in_seconds = "0.0"
 
-[node name="HandTilt" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="6"]
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="6"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Phase2")
+event = &"trigger_phase_2"
+guard = SubResource("Resource_fyq2s")
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="7"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../../Inactive")
+event = &"deactivate"
+delay_in_seconds = "0.0"
+
+[node name="Phase2" type="Node" parent="StateChart/Root/Phase/AttackPhase" index="3"]
+script = ExtResource("6_pje5c")
+initial_state = NodePath("Idle")
+
+[node name="toDealing" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Dealing")
+event = &"start_dealing"
+guard = SubResource("Resource_fyq2s")
+delay_in_seconds = "0.0"
+
+[node name="toBust" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2" index="1"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Bust")
+event = &"start_bust"
+guard = SubResource("Resource_o3pf7")
+delay_in_seconds = "0.0"
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2" index="2"]
+script = ExtResource("4_3jupp")
+
+[node name="toHandSlam" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/Idle" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../HandSlam")
+event = &"start_hand_slam_attack"
+guard = ExtResource("38_3whmd")
+delay_in_seconds = "0.0"
+
+[node name="toHandStand" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/Idle" index="1"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../HandStand")
+event = &"start_hand_stand_attack"
+guard = ExtResource("38_3whmd")
+delay_in_seconds = "0.0"
+
+[node name="toHandSweep" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/Idle" index="2"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../HandSweep")
+event = &"start_hand_sweep_attack"
+guard = ExtResource("38_3whmd")
+delay_in_seconds = "0.0"
+
+[node name="toHandTilt" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/Idle" index="3"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../HandTilt")
+event = &"start_hand_tilt_attack"
+guard = ExtResource("38_3whmd")
+delay_in_seconds = "0.0"
+
+[node name="toHandDefensive" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/Idle" index="4"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../HandDefensive")
+event = &"start_hand_block_attack"
+guard = ExtResource("38_3whmd")
+delay_in_seconds = "0.0"
+
+[node name="HandSlam" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2" index="3"]
+script = ExtResource("6_pje5c")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam" index="0"]
+script = ExtResource("4_3jupp")
+
+[node name="toAttacking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam/Targeting" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Attacking")
+event = &"start_attack"
+guard = SubResource("Resource_ge1s3")
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam" index="1"]
+script = ExtResource("4_3jupp")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam/Attacking" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Recover")
+event = &"finish_attack"
+guard = SubResource("Resource_toxd5")
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam" index="2"]
+script = ExtResource("4_3jupp")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam/Recover" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+guard = SubResource("Resource_exip6")
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam" index="3"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Idle")
+event = &"end_attack"
+guard = SubResource("Resource_gjhup")
+delay_in_seconds = "0.0"
+
+[node name="HandStand" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2" index="4"]
+script = ExtResource("6_pje5c")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandStand" index="0"]
+script = ExtResource("4_3jupp")
+
+[node name="toAttacking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandStand/Targeting" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Attacking")
+event = &"start_attack"
+guard = SubResource("Resource_b0gop")
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandStand" index="1"]
+script = ExtResource("4_3jupp")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandStand/Attacking" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Recover")
+event = &"finish_attack"
+guard = SubResource("Resource_1t5in")
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandStand" index="2"]
+script = ExtResource("4_3jupp")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandStand/Recover" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+guard = SubResource("Resource_yhmbq")
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandStand" index="3"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Idle")
+event = &"end_attack"
+guard = SubResource("Resource_bqmu4")
+delay_in_seconds = "0.0"
+
+[node name="HandSweep" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2" index="5"]
+script = ExtResource("6_pje5c")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep" index="0"]
+script = ExtResource("4_3jupp")
+
+[node name="toAttacking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep/Targeting" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Attacking")
+event = &"start_attack"
+guard = SubResource("Resource_f42dh")
+delay_in_seconds = "0.0"
+
+[node name="Attacking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep" index="1"]
+script = ExtResource("4_3jupp")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep/Attacking" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Recovering")
+event = &"finish_attack"
+guard = SubResource("Resource_cfug8")
+delay_in_seconds = "0.0"
+
+[node name="Recovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep" index="2"]
+script = ExtResource("4_3jupp")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep/Recovering" index="0"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+guard = SubResource("Resource_fynos")
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep" index="3"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../Idle")
+event = &"end_attack"
+guard = SubResource("Resource_h3ju7")
+delay_in_seconds = "0.0"
+
+[node name="HandTilt" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2" index="6"]
 script = ExtResource("6_pje5c")
 initial_state = NodePath("MovingToPos")
 
-[node name="MovingToPos" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="0"]
+[node name="MovingToPos" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt" index="0"]
 script = ExtResource("4_3jupp")
 
-[node name="toTilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/MovingToPos" index="0"]
+[node name="toTilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/MovingToPos" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Tilting")
 event = &"start_tilting"
 guard = SubResource("Resource_icy5o")
 delay_in_seconds = "0.0"
 
-[node name="Tilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="1"]
+[node name="Tilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt" index="1"]
 script = ExtResource("4_3jupp")
 
-[node name="toFiring" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" index="0"]
+[node name="toFiring" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Tilting" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Firing")
 event = &"start_firing"
 guard = SubResource("Resource_bc1qp")
 delay_in_seconds = "0.0"
 
-[node name="toUntilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" index="1"]
+[node name="toUntilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Tilting" index="1"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Untilting")
 event = &"stop_firing"
 guard = SubResource("Resource_icy5o")
 delay_in_seconds = "0.0"
 
-[node name="Firing" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="2"]
+[node name="Firing" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt" index="2"]
 script = ExtResource("4_3jupp")
 
-[node name="toUntilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Firing" index="0"]
+[node name="toUntilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Firing" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Untilting")
 event = &"stop_firing"
 guard = SubResource("Resource_n8ge8")
 delay_in_seconds = "0.0"
 
-[node name="Untilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="3"]
+[node name="Untilting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt" index="3"]
 script = ExtResource("4_3jupp")
 
-[node name="toRecovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Untilting" index="0"]
+[node name="toRecovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Untilting" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Recovering")
 event = &"stop_tilting"
 guard = SubResource("Resource_f4517")
 delay_in_seconds = "0.0"
 
-[node name="Recovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="4"]
+[node name="Recovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt" index="4"]
 script = ExtResource("4_3jupp")
 
-[node name="toMovingToPos" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Recovering" index="0"]
+[node name="toMovingToPos" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Recovering" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../MovingToPos")
 event = &"end_recovery"
 guard = SubResource("Resource_aw05m")
 delay_in_seconds = "0.0"
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt" index="5"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt" index="5"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Idle")
 event = &"end_attack"
 guard = SubResource("Resource_v6lwr")
 delay_in_seconds = "0.0"
 
-[node name="HandDefensive" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1" index="7"]
+[node name="HandDefensive" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2" index="7"]
 script = ExtResource("6_pje5c")
 initial_state = NodePath("Targeting")
 
-[node name="Targeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive" index="0"]
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive" index="0"]
 script = ExtResource("4_3jupp")
 
-[node name="toMovingToBlock" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Targeting" index="0"]
+[node name="toMovingToBlock" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/Targeting" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../MovingToBlock")
 event = &"start_defense"
 guard = SubResource("Resource_wy0h7")
 delay_in_seconds = "0.0"
 
-[node name="MovingToBlock" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive" index="1"]
+[node name="MovingToBlock" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive" index="1"]
 script = ExtResource("4_3jupp")
 
-[node name="toBlocking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/MovingToBlock" index="0"]
+[node name="toBlocking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/MovingToBlock" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Blocking")
 event = &"start_blocking"
 guard = SubResource("Resource_5mvor")
 delay_in_seconds = "0.0"
 
-[node name="Blocking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive" index="2"]
+[node name="Blocking" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive" index="2"]
 script = ExtResource("4_3jupp")
 
-[node name="toFiring" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Blocking" index="0"]
+[node name="toFiring" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/Blocking" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Firing")
 event = &"start_firing"
 guard = SubResource("Resource_3bjac")
 delay_in_seconds = "0.0"
 
-[node name="Firing" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive" index="3"]
+[node name="Firing" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive" index="3"]
 script = ExtResource("4_3jupp")
 
-[node name="toRecovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Firing" index="0"]
+[node name="toRecovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/Firing" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Recovering")
 event = &"stop_firing"
 guard = SubResource("Resource_ff4nb")
 delay_in_seconds = "0.0"
 
-[node name="Recovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive" index="4"]
+[node name="Recovering" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive" index="4"]
 script = ExtResource("4_3jupp")
 
-[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Recovering" index="0"]
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/Recovering" index="0"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
 guard = SubResource("Resource_k6sdx")
 delay_in_seconds = "0.0"
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive" index="5"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive" index="5"]
 script = ExtResource("3_db3k6")
 to = NodePath("../../Idle")
 event = &"end_attack"
 guard = SubResource("Resource_no6js")
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/AttackPhase/Phase2" index="8"]
+script = ExtResource("3_db3k6")
+to = NodePath("../../../Inactive")
+event = &"deactivate"
 delay_in_seconds = "0.0"
 
 [node name="AnimationPlayer" parent="." index="23"]
@@ -1314,20 +1535,33 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Attacking" to="." method="_on_hand_sweep_attacking_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Attacking" to="." method="_on_hand_sweep_attacking_physics_process"]
 [connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandSweep/Recovering" to="." method="_recover_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/MovingToPos" to="." method="_on_tilt_moving_to_pos_state_entered"]
-[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/MovingToPos" to="." method="_on_tilt_moving_to_pos_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" to="." method="_on_tilt_tilting_state_entered"]
-[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Tilting" to="." method="_on_tilt_tilting_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Firing" to="." method="_on_tilt_firing_state_entered"]
-[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Firing" to="." method="_on_tilt_firing_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Untilting" to="." method="_on_tilt_untilting_state_entered"]
-[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Untilting" to="." method="_on_tilt_untilting_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandTilt/Recovering" to="." method="_on_tilt_recovering_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Targeting" to="." method="_on_hand_defensive_targeting_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/MovingToBlock" to="." method="_on_hand_defensive_moving_to_block_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Blocking" to="." method="_on_hand_defensive_blocking_state_entered"]
-[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Blocking" to="." method="_on_hand_defensive_blocking_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Firing" to="." method="_on_hand_defensive_firing_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase1/HandDefensive/Recovering" to="." method="_on_hand_defensive_recovering_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2" to="." method="_on_phase_2_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam/Targeting" to="." method="_start_hand_attack"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam/Attacking" to="." method="_on_hand_hit_attacking_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam/Attacking" to="." method="_on_hand_hit_attacking_physics_process"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandSlam/Recover" to="." method="_recover_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandStand/Targeting" to="." method="_start_hand_attack"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandStand/Attacking" to="." method="_on_hand_stand_attacking_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase2/HandStand/Attacking" to="." method="_on_hand_stand_attacking_physics_process"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandStand/Recover" to="." method="_recover_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep/Targeting" to="." method="_start_hand_attack"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep/Attacking" to="." method="_on_hand_sweep_attacking_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep/Attacking" to="." method="_on_hand_sweep_attacking_physics_process"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandSweep/Recovering" to="." method="_recover_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/MovingToPos" to="." method="_on_tilt_moving_to_pos_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/MovingToPos" to="." method="_on_tilt_moving_to_pos_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Tilting" to="." method="_on_tilt_tilting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Tilting" to="." method="_on_tilt_tilting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Firing" to="." method="_on_tilt_firing_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Firing" to="." method="_on_tilt_firing_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Untilting" to="." method="_on_tilt_untilting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Untilting" to="." method="_on_tilt_untilting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandTilt/Recovering" to="." method="_on_tilt_recovering_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/Targeting" to="." method="_on_hand_defensive_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/MovingToBlock" to="." method="_on_hand_defensive_moving_to_block_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/Blocking" to="." method="_on_hand_defensive_blocking_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/Blocking" to="." method="_on_hand_defensive_blocking_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/Firing" to="." method="_on_hand_defensive_firing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/AttackPhase/Phase2/HandDefensive/Recovering" to="." method="_on_hand_defensive_recovering_state_entered"]
 [connection signal="timeout" from="WanderTimer" to="." method="_on_wander_timer_timeout"]
 [connection signal="timeout" from="BlackjackTimer" to="." method="_on_blackjack_timer_timeout"]
