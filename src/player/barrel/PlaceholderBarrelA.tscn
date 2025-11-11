@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=15 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://ddfqokjq1u61n" path="res://assets/sprite/status_icon/defense-down.png" id="11_oh2rg"]
 [ext_resource type="Texture2D" uid="uid://dlw4dtm637qxu" path="res://assets/sprite/status_icon/feather.png" id="12_lj377"]
 [ext_resource type="Script" path="res://src/player/barrel/insurance_crit_effect.gd" id="13_pralp"]
+[ext_resource type="Script" path="res://src/player/barrel/phantom_ammo_effect.gd" id="14_61tm6"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
 script = ExtResource("1_xtoip")
@@ -115,8 +116,25 @@ status_icon = ExtResource("12_lj377")
 show_duration_ui = true
 
 [node name="CriticalInsurance" type="Node3D" parent="EffectContainer"]
+visible = false
 script = ExtResource("13_pralp")
 display_text_title = "Critical Insurance"
 display_text_tag = "Definitely not a scam"
 positive_desc = Array[String](["Guarantee the next shot critical if previous one missed"])
 negative_desc = Array[String](["-50% critical damage"])
+
+[node name="PhantomAmmo" type="Node3D" parent="EffectContainer"]
+script = ExtResource("5_0nmke")
+display_text_title = "Phantom Ammo"
+display_text_tag = "You have unlimited ammo! With tradeoff"
+positive_desc = Array[String](["Unlimited ammo"])
+negative_desc = Array[String](["-20% damage", "Firerate and accuracy keep getting worse as you shoot, until you reload"])
+
+[node name="ReduceDamage" type="Node3D" parent="EffectContainer/PhantomAmmo"]
+script = ExtResource("6_uwm1l")
+attribute = 1
+modify_value = -20.0
+is_perc = true
+
+[node name="PhantomAmmoEffect" type="Node3D" parent="EffectContainer/PhantomAmmo"]
+script = ExtResource("14_61tm6")
