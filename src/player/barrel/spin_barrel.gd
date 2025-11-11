@@ -76,7 +76,10 @@ func get_less_used_effects() -> int:
 				effect_id = randi_range(0, effect_size - 1)
 			# If we have chosen all effects previously, 50% pick least recent, 50% pick randomly
 			effect_size:
-				if chance <= 0.5:
+				var same_barrel_chance = 0.5
+				if GameManager.current_boss_map and GameManager.current_boss_map.is_tutorial:
+					same_barrel_chance = -100
+				if chance <= same_barrel_chance:
 					effect_id = randi_range(0, effect_size - 1)
 				else:
 					effect_id = last_chosen_queue.back()
@@ -85,7 +88,7 @@ func get_less_used_effects() -> int:
 				# 20% chance to get same barrel, unless it tutorial room
 				var same_barrel_chance = 0.2
 				if GameManager.current_boss_map and GameManager.current_boss_map.is_tutorial:
-					same_barrel_chance = -0.1
+					same_barrel_chance = -100
 
 				if chance <= same_barrel_chance:
 					effect_id = last_chosen_queue.front()

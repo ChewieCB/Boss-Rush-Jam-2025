@@ -39,49 +39,7 @@ func _ready() -> void:
 	is_tutorial = true
 	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_42_SlidingDoor
 
-	## SUPER
-	if OS.is_debug_build():
-		print("\n[Export Variable Debug] Checking for unset exports in ", self.name)
-		var export_info = self.get_property_list()
-		for prop in export_info:
-			if "usage" in prop and (prop.usage & PROPERTY_USAGE_EDITOR) and prop.name != "script":
-				var value = self.get(prop.name)
-				if value == null or (value is Resource and not is_instance_valid(value)):
-					print("!! Unset or invalid export: ", prop.name)
-				else:
-					print(prop.name, " → ", value)
-
-	if bgm:
-		SoundManager.play_music(bgm, 0.5, "BGM")
-
-	# Pre-load the lobby scene for faster level transitions
-	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
-
-	if not boss:
-		push_error("No boss defined for map.")
-	else:
-		if not boss.is_node_ready():
-			await boss.ready
-		boss.died.connect(_on_boss_died)
-		boss.defeated.connect(_on_boss_defeated)
-		boss.chip_dropped.connect(_on_chip_dropped)
-
-	player.health_component.died.connect(_on_player_death)
-	# Sync the player's location in the elevator from the lobby
-	if GameManager.cached_player_pos_relative_to_elevator_doors:
-		var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
-		player.global_position = player_start_pos
-		player.rotation = GameManager.cached_player_rotation
-		player.player_camera.rotation = GameManager.cached_camera_rotation
-
-	player.stat_ui.show_luck_ui()
-
-	await get_tree().physics_frame
-	generate_navigation()
-
-	if elevator_doors:
-		elevator_doors.open()
-	## SUPER
+	super ()
 
 	if boss_doors:
 		boss_doors.close()
