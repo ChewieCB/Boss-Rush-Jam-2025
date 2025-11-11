@@ -804,7 +804,6 @@ boss_name = "Blackjack"
 
 [node name="StateChartDebugger" parent="DebugUI" index="0"]
 enabled = true
-initial_node_to_watch = NodePath("../../StateChart/Root/Phase")
 
 [node name="Blackjack" type="Node" parent="StateChart/Root/Status" index="5"]
 script = ExtResource("6_pje5c")

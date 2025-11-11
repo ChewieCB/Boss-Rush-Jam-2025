@@ -268,19 +268,23 @@ func _on_health_dead_state_entered() -> void:
 	InputHelper.rumble_medium()
 	target.player_camera.add_trauma(0.6)
 	
+	cancel_active_hand_attacks()
 	_destroy_all_hands(0.2, 0.5)
 	
 	# Untilt platform if it is tilted
 	target.floor_stop_on_slope = true
 	target.remove_status_effect(slippery_debuff)
 	tilt_particles.emitting = false
-	tilt_tween = get_tree().create_tween()
-	tilt_tween.set_parallel(true)
-	tilt_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_BOUNCE)
-	tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", 0, 0.2)
-	tilt_tween.tween_property(tilt_animateable_floor, "constant_linear_velocity:z", 0, 0.2)
 	
-	await tilt_tween.finished
+	if tilt_tween:
+		tilt_tween.kill()
+	state_chart.send_event("stop_firing")
+	tilt_animateable_floor.constant_linear_velocity.z = 0.0
+	var _tilt_tween = get_tree().create_tween()
+	_tilt_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_BOUNCE)
+	_tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", 0, 0.35)
+	
+	await _tilt_tween.finished
 	
 	# Crash platform into center of map
 	var crash_tween := get_tree().create_tween()
@@ -471,6 +475,7 @@ func kill_hand_tween(hand: BlackjackHand) -> void:
 
 # Move the hand scene to a child of the boss so they can move together
 func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6, return_to_offset: bool = true) -> void:
+	kill_hand_tween(hand)
 	# Cache hand position so we can add the hand as a child of the hand anchor
 	# to get smooth, relative movement, but start in the same position without snapping
 	var cached_hand_pos: Vector3 = hand.global_position
@@ -1689,7 +1694,7 @@ func _block_interecept_projectile(proj: BaseProjectile, pos: Vector3 = Vector3.Z
 	finished_hands.erase(closest_hand)
 	closest_hand.return_timer.start(hand_block_timeout)
 	#closest_hand.state_chart.send_event("start_returning")
-	#_anchor_hand(closest_hand, 2.5)
+	_anchor_hand(closest_hand, 2.5)
 	
 	# TODO - add a shader/mesh effect to show shots that are stored in the hands
 	# visually like the needler from halo or something - just a rectangular mesh
