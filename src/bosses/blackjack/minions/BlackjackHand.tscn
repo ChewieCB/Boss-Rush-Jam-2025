@@ -471,7 +471,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
 shape = SubResource("SphereShape3D_uy85v")
 
 [node name="HealthComponent" parent="." index="4"]
-max_health = 200.0
+max_health = 600.0
 
 [node name="toIdle" type="Node" parent="StateChart/Root/Health/Dead" index="0"]
 script = ExtResource("4_4jfnf")

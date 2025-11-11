@@ -1090,10 +1090,10 @@ func _on_bust_arena_aoe_state_entered() -> void:
 	for j in range(bust_proj_shots):
 		# Alternate between hand idx 1 and hand idx 2
 		var k: int = 0 if j % 2 == 0 else 1
-		var idx: int = 1 - k
-		var _hand = spawned_hands.get(idx)
-		if not _hand:
+		if k > spawned_hands.size():
 			break
+		var idx: int = 1 - k
+		var _hand = spawned_hands[idx]
 		hand_tween = get_tree().create_tween()
 		hand_tween.set_parallel(false)
 		hand_tween.chain().tween_property(
