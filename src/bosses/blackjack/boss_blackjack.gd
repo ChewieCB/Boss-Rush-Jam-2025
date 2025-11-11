@@ -48,6 +48,9 @@ var last_hand
 @export var explosion_scene: PackedScene
 @export var explosion_shake_min_range: float = 8.0
 @export var explosion_shake_max_range: float = 22.0
+@export var explosion_damage_area_scene: PackedScene
+var explosion_damage_areas: Array = []
+@export var explosive_spawn_meshes: Array
 
 @export_group("Dealing")
 # Dealing
@@ -159,8 +162,12 @@ func _ready() -> void:
 	# Create the explosion area collider when the scene has finished setting up
 	scene_root.ready.connect(func(): 
 		# Collider
-		#for i in range(6):
-			#_create_new_damage_area(bust_explosion_radius, tilt_explosion_damage)
+		for i in range(10):
+			var _damage_area = _create_new_damage_area(
+				Vector3(-20, -20, -20),
+				1.0,
+				0
+			)
 		
 		# Instance re-usable explosion scenes for later
 		for i in range(tilt_proj_explosion_count * 3):
@@ -1081,6 +1088,12 @@ func _bust_projectile() -> void:
 		return
 	# Pick target
 	var target_pos: Vector3 = bust_targets.pop_at(randi_range(0, bust_targets.size() - 1))
+	# Prep damage area
+	var _damage_area := _spawn_damage_area(
+		target_pos,
+		bust_explosion_radius, 
+		tilt_explosion_damage
+	)
 	# Spawn warning decals
 	var _aoe_decals := await spawn_aoe_decals(
 		target_pos + Vector3(0, 0.5, 0), 
@@ -1096,7 +1109,7 @@ func _bust_projectile() -> void:
 		bust_proj_speed
 	)
 	# Check for damage
-	_spawn_damage_area(hit_pos, bust_explosion_radius, tilt_explosion_damage)
+	_trigger_damage_area(_damage_area)
 	# Spawn an explosion on impact
 	for k in range(bust_proj_explosion_count):
 		var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
@@ -1237,6 +1250,12 @@ func _on_tilt_firing_state_entered() -> void:
 			# Fire a curved projectile that explodes into an AoE on impact with the floor
 			# TODO - aim these in a cluster around the arena as an obstacle
 			var target_pos: Vector3 = target.global_position + target_offset 
+			# Spawn a damage collider
+			var _damage_area := _spawn_damage_area(
+				target_pos, 
+				tilt_explosion_radius, 
+				tilt_explosion_damage
+			)
 			# Lead the target a bit so the player can see the attack coming
 			target_pos -= tilt_mesh.global_basis.z * 8.0
 			var _aoe_decals := await spawn_aoe_decals(target_pos + Vector3(0, 2.0, 0), tilt_explosion_radius, tilt_proj_speed/4)
@@ -1247,8 +1266,7 @@ func _on_tilt_firing_state_entered() -> void:
 				tilt_proj_arc_height,
 				tilt_proj_speed
 			)
-			# Spawn a damage collider
-			_spawn_damage_area(hit_pos, tilt_explosion_radius, tilt_explosion_damage)
+			_trigger_damage_area(_damage_area)
 			# Spawn an explosion on impact
 			for k in range(tilt_proj_explosion_count):
 				var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
@@ -1278,15 +1296,22 @@ func _spawn_explosion(spawn_pos: Vector3, scale_factor: float = 1.0) -> void:
 	tilt_explosion_instances.push_back(explosion)
 
 
-func _spawn_damage_area(spawn_pos: Vector3, radius: float, damage: float) -> void:
-	var area_rid: RID = _create_new_damage_area(spawn_pos, radius, damage)
+func _spawn_damage_area(spawn_pos: Vector3, radius: float, damage: int) -> ExplosionDamageProjectileArea:
+	if explosion_damage_areas.size() == 0:
+		_create_new_damage_area(spawn_pos, radius, damage)
 	
-	await get_tree().create_timer(0.5, false).timeout
+	var damage_area: ExplosionDamageProjectileArea = explosion_damage_areas.pop_front()
 	
-	PhysicsServer3D.area_set_monitorable(area_rid, false)
-	PhysicsServer3D.area_set_transform(area_rid, Transform3D(Basis.IDENTITY, hand_spawn_pos.global_position))
+	damage_area.global_position = spawn_pos
+	damage_area.init(damage, radius)
 	
-	PhysicsServer3D.free_rid(area_rid)
+	return damage_area
+
+
+func _trigger_damage_area(damage_area: ExplosionDamageProjectileArea) -> void:
+	damage_area.query()
+	damage_area.global_position = Vector3(-20, -20, -20)
+	explosion_damage_areas.push_back(damage_area)
 
 
 func _on_tilt_firing_state_physics_processing(delta: float) -> void:
@@ -1394,35 +1419,14 @@ func _create_curved_path(start_pos: Vector3, goal_pos: Vector3, height: float, a
 	return curve
 
 
-func _damage_area_callback(
-	status: int, body_rid: RID, instance_id: int, 
-	area_shape_idx: int, self_shape_idx: int, 
-	damage: float, area_rid: RID
-) -> void:
-	if status == PhysicsServer3D.AREA_BODY_ADDED:
-		var body: Object = instance_from_id(instance_id)
-		if "health_component" in body:
-			body.health_component.damage(damage)
-		else:
-			body.queue_free()
-
-
-func _create_new_damage_area(pos: Vector3, radius: float, damage: float) -> RID:
-	# Create a collision shape using the provided radius
-	var shape_rid: RID = PhysicsServer3D.sphere_shape_create()
-	PhysicsServer3D.shape_set_data(shape_rid, {"radius": radius})
-	# Setup area instance
-	var area_rid: RID = PhysicsServer3D.area_create()
-	PhysicsServer3D.area_set_space(area_rid, get_world_3d().space)
-	PhysicsServer3D.area_add_shape(area_rid, shape_rid)
-	PhysicsServer3D.area_set_transform(area_rid, hand_spawn_pos.global_transform)
-	PhysicsServer3D.area_set_collision_layer(area_rid, 0)
-	PhysicsServer3D.area_set_collision_mask(area_rid, pow(2, 2-1))
-	PhysicsServer3D.area_set_monitor_callback(area_rid, _damage_area_callback.bind(damage, area_rid))
-	PhysicsServer3D.area_set_transform(area_rid, Transform3D(Basis(), pos))
-	PhysicsServer3D.area_set_monitorable(area_rid, true)
+func _create_new_damage_area(pos: Vector3, radius: float, damage: int) -> ExplosionDamageProjectileArea:
+	var damage_area: ExplosionDamageProjectileArea = explosion_damage_area_scene.instantiate()
+	damage_area.init(damage, radius)
 	
-	return area_rid
+	explosion_damage_areas.append(damage_area)
+	scene_root.add_child(damage_area)
+	
+	return damage_area
 
 
 func _shake_platform(strength: float, time: float, loops: int = 6) -> void:
