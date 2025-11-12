@@ -8,6 +8,7 @@ signal free_rerolls
 signal refresh_shop_ui
 signal setting_changed
 signal risk_level_changed
+signal demo_time_changed
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -140,6 +141,11 @@ var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
 var CHEAT_freecam: bool = true
 var CHEAT_always_inventory: bool = false
+var CHEAT_demomode: bool = false
+var CHEAT_demomode_timeout: int = 10:
+	set(value):
+		CHEAT_demomode_timeout = value
+		demo_time_changed.emit(CHEAT_demomode_timeout)
 
 @export var sfx_screenshot: AudioStream
 
