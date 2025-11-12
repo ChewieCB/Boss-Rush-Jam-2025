@@ -16,6 +16,7 @@ var barrel_roll_data: Dictionary = {
 	"is_archetype": false,
 	"positive_desc": [],
 	"negative_desc": [],
+	"icon_id": - 1,
 }
 var _base_color: Color
 var _time: float = 0.0
@@ -38,6 +39,9 @@ func _process(delta: float) -> void:
 
 func set_barrel_roll_data(_data) -> void:
 	barrel_roll_data = _data
+	if _data["icon_id"] > -2:
+		var icon_texture = load("res://assets/sprite/effect_icons/%s.png" % _data["icon_id"])
+		texture_rect.texture = icon_texture
 
 
 func expand_button_size():

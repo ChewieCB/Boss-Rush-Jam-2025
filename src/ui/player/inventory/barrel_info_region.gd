@@ -71,6 +71,7 @@ func refresh_ui() -> void:
 		"is_archetype": false,
 		"positive_desc": [],
 		"negative_desc": [],
+		"icon_id": - 2 # Since -1 is the default icon for barrel effect that doesn't have custom one.
 	}
 	panel_bg_icon.texture = barrel_data.barrel_image
 	center_inst.set_barrel_roll_data(general_barrel_data)
