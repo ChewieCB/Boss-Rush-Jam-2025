@@ -20,6 +20,16 @@ grow_vertical = 0
 script = ExtResource("1_4g30l")
 barrel_info_icon_prefab = ExtResource("3_6lcb6")
 
+[node name="LineHolder" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Line2D" type="Line2D" parent="LineHolder"]
+points = PackedVector2Array(504, 232, 296, 80)
+width = 5.0
+default_color = Color(0.901961, 0.776471, 0, 1)
+
 [node name="CircleRing" type="TextureRect" parent="."]
 self_modulate = Color(1, 1, 1, 0.47)
 layout_mode = 1
@@ -33,6 +43,13 @@ offset_bottom = 196.0
 grow_vertical = 2
 texture = ExtResource("2_3m8fx")
 expand_mode = 3
+
+[node name="BarrelInfoIcon" parent="CircleRing" instance=ExtResource("3_6lcb6")]
+layout_mode = 0
+offset_left = 160.0
+offset_top = -24.0
+offset_right = 260.0
+offset_bottom = 76.0
 
 [node name="PanelDescription" type="ColorRect" parent="."]
 layout_mode = 1

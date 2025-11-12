@@ -31,6 +31,7 @@ func refresh_ui() -> void:
 	# Spawn the barrel roll effects around the circle
 	var roll_effect_count = barrel_inst.get_number_of_barrel_effect()
 	var positions = get_circle_positions(roll_effect_count)
+	var barrel_info_icon_to_highlight: BarrelInfoIcon = null
 	for i in range(roll_effect_count):
 		var barrel_roll_data = barrel_inst.get_barrel_effect_data_at(i)
 		var inst: BarrelInfoIcon = barrel_info_icon_prefab.instantiate()
@@ -38,6 +39,7 @@ func refresh_ui() -> void:
 		inst.barrel_info_region = self
 		inst.global_position = positions[i] - (inst.size / 2)
 		inst.set_barrel_roll_data(barrel_roll_data)
+		barrel_info_icon_to_highlight = inst
 
 	# Spawn the barrel summary info at center
 	var center_inst: BarrelInfoIcon = barrel_info_icon_prefab.instantiate()
@@ -56,7 +58,8 @@ func refresh_ui() -> void:
 	panel_bg_icon.texture = barrel_data.barrel_image
 	center_inst.set_barrel_roll_data(general_barrel_data)
 	barrel_inst.queue_free()
-	center_inst.focus_entered.emit()
+	if barrel_info_icon_to_highlight:
+		barrel_info_icon_to_highlight.focus_entered.emit()
 
 
 func get_circle_positions(count: int) -> Array[Vector2]:
@@ -80,3 +83,8 @@ func reset_ui():
 	panel_bg_icon.texture = null
 	for child in circle_ring.get_children():
 		child.queue_free()
+
+
+func unfocus_other_barrel_info_icon():
+	for child: BarrelInfoIcon in circle_ring.get_children():
+		child.focus_exited.emit()
