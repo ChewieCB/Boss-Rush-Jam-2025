@@ -168,7 +168,7 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 
 
 func _on_spin_trigger_body_entered(body: Node3D) -> void:
-	spin_trigger.monitoring = false
+	spin_trigger.set_deferred("monitoring", false)
 	spin_trigger.queue_free()
 	body.current_gun.spin_all_barrels()
 
