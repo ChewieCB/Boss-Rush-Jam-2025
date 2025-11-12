@@ -56,6 +56,8 @@ signal setting_back_button_pressed
 # DEBUG
 @export var sfx_free_money: AudioStream
 @onready var god_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle
+@onready var demo_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle
+@onready var demo_mode_time: SpinBox = $TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox
 @onready var always_inventory_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle
 @onready var boss_one_shot_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle
 @onready var freecam_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle
@@ -398,6 +400,8 @@ func refresh_setting_value():
 	
 	# DEBUG
 	god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_godmode)
+	demo_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_demomode)
+	demo_mode_time.value = GameManager.CHEAT_demomode_timeout
 	always_inventory_toggle.set_pressed_no_signal(GameManager.CHEAT_always_inventory)
 	boss_one_shot_toggle.set_pressed_no_signal(GameManager.CHEAT_oneshot)
 	freecam_toggle.set_pressed_no_signal(GameManager.CHEAT_freecam)
@@ -480,6 +484,11 @@ func _on_gode_mode_toggle_toggled(toggled_on: bool) -> void:
 	GameManager.CHEAT_godmode = toggled_on
 
 
+func _on_demo_mode_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_demomode = toggled_on
+
+
 func _on_freecam_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.CHEAT_freecam = toggled_on
@@ -498,3 +507,7 @@ func _on_free_money_button_pressed() -> void:
 func _on_always_inventory_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
 	GameManager.CHEAT_always_inventory = toggled_on
+
+
+func _on_demo_timeout_value_changed(value: float) -> void:
+	GameManager.CHEAT_demomode_timeout = clamp(value, 0, 60*5)

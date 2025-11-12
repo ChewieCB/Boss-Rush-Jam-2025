@@ -1,31 +1,71 @@
-[gd_scene load_steps=73 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=125 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
-[ext_resource type="Texture2D" uid="uid://khi1n6a5qqgw" path="res://src/bosses/tutorial/assets/sprites/temp/puddy_2.png" id="2_epl72"]
+[ext_resource type="AudioStream" uid="uid://0u431kpfno53" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing.mp3" id="3_5w7aw"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_irtaj"]
 [ext_resource type="PackedScene" uid="uid://ponw4bhivvke" path="res://src/bosses/base/attacks/ranged/NailProjectile.tscn" id="3_v4gcb"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fo57y"]
 [ext_resource type="PackedScene" uid="uid://byharrqwvi4cp" path="res://src/bosses/base/attacks/ranged/LaserAoE.tscn" id="4_hx1ss"]
+[ext_resource type="AudioStream" uid="uid://cqq422lmo5d7s" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing 2.mp3" id="4_pthoc"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
+[ext_resource type="AudioStream" uid="uid://dvsl5y8e4n4hr" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing and leap back.mp3" id="5_iynxh"]
 [ext_resource type="Texture2D" uid="uid://bunn8a0pce2b2" path="res://assets/sprite/aoe_markers/laser_aoe_warn.png" id="5_pbhfx"]
+[ext_resource type="AudioStream" uid="uid://due6c1u7ljts1" path="res://src/bosses/tutorial/assets/sfx/Wrench Ground Pound.mp3" id="6_elwvg"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="6_fqvnt"]
+[ext_resource type="Texture2D" uid="uid://bp7hure6j5kgv" path="res://src/bosses/tutorial/assets/sprites/STARTING_POSE.png" id="6_yp5yq"]
 [ext_resource type="PackedScene" uid="uid://dl8cnd88fnws2" path="res://src/bosses/tutorial/SlamParticles.tscn" id="7_2uohy"]
 [ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="7_6pf3s"]
+[ext_resource type="AudioStream" uid="uid://cj0y3jud36wc4" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Loop.mp3" id="7_xo7jb"]
+[ext_resource type="AudioStream" uid="uid://dcshtq5yyxdk1" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Impact.mp3" id="8_pvhqe"]
+[ext_resource type="AudioStream" uid="uid://rftdmhx827li" path="res://src/bosses/tutorial/assets/sfx/Nail Gun Activation.mp3" id="10_u246n"]
 [ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="11_1crh5"]
+[ext_resource type="AudioStream" uid="uid://37k158pyjqtf" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 1 V2.mp3" id="11_8tgau"]
+[ext_resource type="AudioStream" uid="uid://cus1umlbiwd56" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 2 V2.mp3" id="12_bt5kx"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="13_k65oo"]
+[ext_resource type="AudioStream" uid="uid://do4mm41k5wg0i" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 3 V2.mp3" id="13_qjtrx"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="14_kbpeg"]
+[ext_resource type="AudioStream" uid="uid://bj5hdchtswx3f" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 4 V2.mp3" id="14_l34ga"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="15_c0skh"]
+[ext_resource type="Texture2D" uid="uid://du746aotdbnq4" path="res://src/bosses/tutorial/assets/sprites/3_HIT_1.png" id="16_e0muj"]
+[ext_resource type="Texture2D" uid="uid://d1fy72k7lk74w" path="res://src/bosses/tutorial/assets/sprites/IDLE.png" id="16_ukgug"]
+[ext_resource type="Texture2D" uid="uid://c5qw83v0dnuq3" path="res://src/bosses/tutorial/assets/sprites/1_HIT_1.png" id="17_cu5tl"]
+[ext_resource type="Texture2D" uid="uid://cvr3a7aipo7m6" path="res://src/bosses/tutorial/assets/sprites/3_HIT_2.png" id="17_dmhhe"]
+[ext_resource type="AudioStream" uid="uid://ds224hyodfrif" path="res://src/bosses/tutorial/assets/sfx/Laser Charge Shepard Tone.mp3" id="17_mkqio"]
+[ext_resource type="AudioStream" uid="uid://dw60ntjht2e6" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 1.mp3" id="18_5elni"]
+[ext_resource type="Texture2D" uid="uid://de0va8w8bfuxl" path="res://src/bosses/tutorial/assets/sprites/1_HIT_2.png" id="18_22flk"]
+[ext_resource type="Texture2D" uid="uid://dv40bv156cgd1" path="res://src/bosses/tutorial/assets/sprites/3_HIT_3.png" id="18_lwmyv"]
+[ext_resource type="Texture2D" uid="uid://c7sifgttsfnh6" path="res://src/bosses/tutorial/assets/sprites/3_HIT_4.png" id="19_3rgkr"]
+[ext_resource type="AudioStream" uid="uid://dfqd3mr6bdaj4" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 2.mp3" id="19_upudo"]
+[ext_resource type="Texture2D" uid="uid://c4pai2cb140fx" path="res://src/bosses/tutorial/assets/sprites/1_HIT_3.png" id="19_xriv7"]
+[ext_resource type="Texture2D" uid="uid://ble8jl11xasb5" path="res://src/bosses/tutorial/assets/sprites/1_HIT_4.png" id="20_5ckod"]
+[ext_resource type="Texture2D" uid="uid://b8g53jvhe8v7v" path="res://src/bosses/tutorial/assets/sprites/3_HIT_5.png" id="20_7eher"]
+[ext_resource type="AudioStream" uid="uid://btioybgukily3" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 3.mp3" id="20_dvqnx"]
+[ext_resource type="Texture2D" uid="uid://dtj5yqywecnt" path="res://src/bosses/tutorial/assets/sprites/3_HIT_6.png" id="21_dj0x0"]
+[ext_resource type="Texture2D" uid="uid://dji3qkffxpmm3" path="res://src/bosses/tutorial/assets/sprites/1_HIT_5.png" id="21_yqrf4"]
+[ext_resource type="Texture2D" uid="uid://ktyfbh7u0l3q" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_2.png" id="23_m0iiy"]
+[ext_resource type="Texture2D" uid="uid://mj1luucsg1dc" path="res://src/bosses/tutorial/assets/sprites/LAZER_1.png" id="23_td4gs"]
+[ext_resource type="Texture2D" uid="uid://c2v0864bob7l3" path="res://src/bosses/tutorial/assets/sprites/LAZER_3.png" id="24_fp842"]
+[ext_resource type="Texture2D" uid="uid://ckaeoogplp7ij" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_3.png" id="24_hgqui"]
+[ext_resource type="Texture2D" uid="uid://0jl8svyfknfu" path="res://src/bosses/tutorial/assets/sprites/LAZER_2.png" id="25_8helj"]
+[ext_resource type="Texture2D" uid="uid://binuip83g50yf" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_4.png" id="25_pns3b"]
+[ext_resource type="Texture2D" uid="uid://dcac7a1w25lkr" path="res://src/bosses/tutorial/assets/sprites/2_HIT_1.png" id="28_i0kuu"]
+[ext_resource type="Texture2D" uid="uid://bgn83r6cstnhv" path="res://src/bosses/tutorial/assets/sprites/2_HIT_2.png" id="29_16jht"]
+[ext_resource type="Texture2D" uid="uid://dlkgunqq0nnd2" path="res://src/bosses/tutorial/assets/sprites/2_HIT_3.png" id="30_1gnvj"]
+[ext_resource type="Texture2D" uid="uid://3u0myth3mg26" path="res://src/bosses/tutorial/assets/sprites/2_HIT_4_HOLD_THIS_FRAME_FOR_EXTRA.png" id="31_6s54o"]
+[ext_resource type="Texture2D" uid="uid://0sts3t50hpk5" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_1.png" id="32_i0wff"]
+[ext_resource type="Texture2D" uid="uid://nufbjd0mupin" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_2.png" id="33_1fje0"]
+[ext_resource type="Texture2D" uid="uid://bk3514x2lemcq" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_3.png" id="34_mllv3"]
+[ext_resource type="Texture2D" uid="uid://cqpxq5rp4qp4a" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_4.png" id="35_aa4xm"]
+[ext_resource type="Texture2D" uid="uid://hbv3qixprt55" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_5.png" id="36_8adwb"]
+[ext_resource type="Texture2D" uid="uid://bhetlriykonh6" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_6.png" id="37_8ivp5"]
+[ext_resource type="Texture2D" uid="uid://c52mo1qekknqm" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_7.png" id="38_x4twh"]
+[ext_resource type="Texture2D" uid="uid://5ks3pvvqxv7y" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_8.png" id="39_gab4h"]
+[ext_resource type="Texture2D" uid="uid://b50hajeka4cfw" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_1.png" id="43_r6ljj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_klk0f"]
 transparency = 1
 albedo_color = Color(0.894, 0.361, 0.141, 0.643)
-
-[sub_resource type="BoxMesh" id="BoxMesh_x341f"]
-size = Vector3(1, 1, 5)
-
-[sub_resource type="BoxMesh" id="BoxMesh_dhiwq"]
-size = Vector3(0.7, 0.7, 3.5)
 
 [sub_resource type="Curve" id="Curve_o4bek"]
 _data = [Vector2(0, 0.549451), 0.0, 0.0, 0, 0, Vector2(0.241803, 1), 0.70225, 0.70225, 0, 0, Vector2(0.372951, 0.681319), 0.0, 0.0, 0, 0, Vector2(0.934426, 0), 0.0, 0.0, 0, 0]
@@ -35,8 +75,8 @@ point_count = 4
 curve = SubResource("Curve_o4bek")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ikhkx"]
-emission_shape = 1
-emission_sphere_radius = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(1.6, 3.5, 1.6)
 direction = Vector3(0, 0, 0)
 spread = 80.0
 initial_velocity_min = 1.0
@@ -57,22 +97,19 @@ albedo_texture = ExtResource("7_6pf3s")
 emission_enabled = true
 emission = Color(1, 0.168627, 0.168627, 1)
 emission_energy_multiplier = 10.0
-billboard_mode = 3
+billboard_mode = 2
 billboard_keep_scale = true
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_mvva7"]
 material = SubResource("StandardMaterial3D_um6ea")
 size = Vector2(0.2, 0.2)
 
-[sub_resource type="BoxMesh" id="BoxMesh_cbf68"]
-size = Vector3(0.35, 0.35, 1.2)
-
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3w5db"]
 radius = 1.0
-height = 3.8
+height = 4.6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iinou"]
+size = Vector3(6, 11.6, 6)
 
 [sub_resource type="BoxMesh" id="BoxMesh_holc6"]
 size = Vector3(2.5, 3.756, 2.5)
@@ -157,14 +194,6 @@ guard = SubResource("Resource_lhjct")
 script = ExtResource("14_kbpeg")
 guard = SubResource("Resource_lhjct")
 
-[sub_resource type="Resource" id="Resource_y3o0c"]
-script = ExtResource("13_k65oo")
-state = NodePath("../../../../Health/Dead")
-
-[sub_resource type="Resource" id="Resource_u3pji"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_y3o0c")
-
 [sub_resource type="Resource" id="Resource_bpbv3"]
 script = ExtResource("14_kbpeg")
 guard = SubResource("Resource_lhjct")
@@ -198,19 +227,19 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/path = NodePath("DebugRangedPivot/PivotL:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 1.309, 0)]
+"values": [Vector3(0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("DebugRangedPivot/PivotL:rotation")
+tracks/1/path = NodePath("DebugRangedPivot/PivotR:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -222,98 +251,146 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("DebugRangedPivot/PivotR:rotation")
+tracks/2/path = NodePath("Sprite3D:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, 0)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("DebugLaserPivot:rotation")
+tracks/3/path = NodePath(".:collision_mask")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
+"update": 1,
+"values": [27]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Sprite3D:modulate")
+tracks/4/path = NodePath(".:collision_layer")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
+"update": 1,
+"values": [4]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
-tracks/5/enabled = false
-tracks/5/path = NodePath("DebugAnimPivot:visible")
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:texture")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [ExtResource("16_ukgug")]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
-tracks/6/enabled = false
-tracks/6/path = NodePath("DebugLaserPivot:visible")
+tracks/6/enabled = true
+tracks/6/path = NodePath("DebugAnimPivot/SlamSpawn:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Vector3(-0.8, -1.9, 0.800001)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
-tracks/7/enabled = false
-tracks/7/path = NodePath("DebugRangedPivot:visible")
+tracks/7/enabled = true
+tracks/7/path = NodePath("Sprite3D:scale")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Vector3(1, 1, 1)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath(".:collision_mask")
+tracks/8/path = NodePath("CollisionShape3D:disabled")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [27]
+"values": [false]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath(".:collision_layer")
+tracks/9/path = NodePath("Sprite3D:position")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 2.6, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [4]
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("LaserSpawn/LaserEndParticles:visible")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("LaserCollider:disabled")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("LaserCollider:position")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 27.0765, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_dshkv"]
@@ -363,7 +440,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("DebugLaserPivot:visible")
+tracks/3/path = NodePath("DebugRangedPivot:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -375,34 +452,22 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("DebugRangedPivot:visible")
+tracks/4/path = NodePath(".:collision_mask")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(1.4),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath(".:collision_mask")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [19]
 }
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath(".:collision_layer")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:collision_layer")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -418,85 +483,458 @@ _data = {
 
 [sub_resource type="Animation" id="Animation_85u7l"]
 resource_name = "backswipe"
-length = 0.3
+length = 0.45
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"backswipe"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.15, 0.2, 0.25, 0.3, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("16_e0muj"), ExtResource("17_dmhhe"), ExtResource("18_lwmyv"), ExtResource("19_3rgkr"), ExtResource("20_7eher"), ExtResource("21_dj0x0"), ExtResource("16_ukgug")]
+}
+
+[sub_resource type="Animation" id="Animation_f2hbb"]
+resource_name = "idle"
+length = 0.01
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.2, 0.25, 0.3),
-"transitions": PackedFloat32Array(1, 1.93187, 0.210224, 1.56917, 0.210224),
-"update": 0,
-"values": [Vector3(0, 4.53786, 0), Vector3(0, 4.88692, 0), Vector3(0, 1.309, 0), Vector3(0, 0.785398, 0), Vector3(0, 1.309, 0)]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("16_ukgug")]
 }
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.05),
+
+[sub_resource type="Animation" id="Animation_cijff"]
+resource_name = "intro"
+length = 0.01
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("6_yp5yq")]
+}
+
+[sub_resource type="Animation" id="Animation_p5f0r"]
+resource_name = "kick"
+length = 0.25
+step = 0.025
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.075),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"hook"
 }]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.05, 0.075),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("28_i0kuu"), ExtResource("29_16jht"), ExtResource("30_1gnvj"), ExtResource("31_6s54o")]
+}
 
-[sub_resource type="Animation" id="Animation_ywtcr"]
-resource_name = "laser_arm"
-length = 0.35
+[sub_resource type="Animation" id="Animation_ejhby"]
+resource_name = "kick_end"
+length = 0.3
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("DebugLaserPivot:rotation")
+tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.35),
-"transitions": PackedFloat32Array(3.13834, 1),
+"times": PackedFloat32Array(0, 0.075, 0.125, 0.175, 0.225, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("31_6s54o"), ExtResource("30_1gnvj"), ExtResource("29_16jht"), ExtResource("28_i0kuu"), ExtResource("17_dmhhe"), ExtResource("16_ukgug")]
+}
+
+[sub_resource type="Animation" id="Animation_ywtcr"]
+resource_name = "laser_arm"
+length = 0.4
+step = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("23_td4gs")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-0.261799, 0, 0), Vector3(0, 0, 0)]
+"values": [Vector3(1.5, 1.5, 1.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape3D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.378929, 1),
+"update": 0,
+"values": [Vector3(0, 7.8, 0), Vector3(0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("LaserSpawn/LaserEndParticles:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("LaserCollider:disabled")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".:collision_mask")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [24]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("LaserCollider:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.378929, 1),
+"update": 0,
+"values": [Vector3(0, 7.87825, 0), Vector3(0, -0.121747, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_i43i0"]
+resource_name = "laser_disarm"
+length = 0.2
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("23_td4gs")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.5, 1.5, 1.5)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LaserSpawn:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(2.46, 1),
+"update": 0,
+"values": [Vector3(0.081, -6.4, -1.8), Vector3(0, 1.343, -1.8)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CollisionShape3D:disabled")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(2.46229, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 7.8, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("LaserSpawn/LaserEndParticles:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("LaserCollider:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(2.46, 1),
+"update": 0,
+"values": [Vector3(0, -0.121747, 0), Vector3(0, 7.87825, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("LaserCollider:disabled")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.175, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, false, true]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath(".:collision_mask")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
 }
 
 [sub_resource type="Animation" id="Animation_oq3a7"]
 resource_name = "laser_fire"
-length = 0.55
+length = 0.15
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("DebugLaserPivot:rotation")
+tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.125, 0.175, 0.55),
-"transitions": PackedFloat32Array(0.183011, 1.7411, 3.24901, 3.13834),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.4288, 0, 0), Vector3(0.430099, 0, 0), Vector3(-0.261799, 0, 0)]
+"times": PackedFloat32Array(0, 0.125),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("24_fp842"), ExtResource("23_td4gs")]
 }
 
 [sub_resource type="Animation" id="Animation_ua1dm"]
 resource_name = "laser_telegraph"
-length = 0.175
+length = 0.01
 loop_mode = 1
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("DebugLaserPivot:rotation")
+tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("25_8helj")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LaserSpawn/LaserEndParticles:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LaserSpawn:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.0869335, -0.0875981, -0.00762499), Vector3(0, 0, 0), Vector3(-0.0872665, 0.0872665, 0), Vector3(0, 0, 0), Vector3(0.0872665, 0.0872665, 0), Vector3(0, 0, 0), Vector3(-0.0872665, -0.0872665, 0)]
+"values": [Vector3(0, -2.657, -1.8)]
+}
+
+[sub_resource type="Animation" id="Animation_pm884"]
+resource_name = "ranged_arm"
+length = 0.25
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("43_r6ljj"), ExtResource("23_m0iiy")]
+}
+
+[sub_resource type="Animation" id="Animation_kr3rw"]
+resource_name = "ranged_disarm"
+length = 0.25
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("23_m0iiy"), ExtResource("43_r6ljj")]
 }
 
 [sub_resource type="Animation" id="Animation_tf56t"]
@@ -515,6 +953,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0.872665, 0, 0), Vector3(0, 0, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("23_m0iiy"), ExtResource("24_hgqui"), ExtResource("23_m0iiy")]
+}
 
 [sub_resource type="Animation" id="Animation_imvni"]
 resource_name = "ranged_shoot_r"
@@ -532,10 +982,22 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0.872665, 0, 0), Vector3(0, 0, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("23_m0iiy"), ExtResource("25_pns3b"), ExtResource("23_m0iiy")]
+}
 
-[sub_resource type="Animation" id="Animation_1nv8l"]
-resource_name = "slam"
-length = 0.76
+[sub_resource type="Animation" id="Animation_3wov1"]
+resource_name = "slam_jump_down"
+length = 0.15
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -544,47 +1006,82 @@ tracks/0/path = NodePath("DebugAnimPivot:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.25, 0.7),
-"transitions": PackedFloat32Array(0.297302, 1, 3.13834, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.62451),
 "update": 0,
-"values": [Vector3(-0.349066, 0, 1.5708), Vector3(-3.49066, 0, 1.5708), Vector3(-3.49066, 0, 1.5708), Vector3(-3.42085, -1.66679, 1.5708)]
+"values": [Vector3(0, 1.309, 0)]
 }
-tracks/1/type = "method"
+tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath(".")
+tracks/1/path = NodePath("Sprite3D:texture")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.2),
+"times": PackedFloat32Array(0, 0.05, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("35_aa4xm"), ExtResource("36_8adwb"), ExtResource("37_8ivp5")]
+}
+
+[sub_resource type="Animation" id="Animation_pl5ya"]
+resource_name = "slam_jump_impact"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.62451),
+"update": 0,
+"values": [Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.25, 0.325, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("38_x4twh"), ExtResource("39_gab4h"), ExtResource("33_1fje0"), ExtResource("32_i0wff"), ExtResource("16_ukgug")]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.05),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [Vector3(0, 0, 0), 30.0],
 "method": &"slam_line"
 }]
 }
-
-[sub_resource type="Animation" id="Animation_ona5m"]
-resource_name = "slam_telegraph"
-length = 0.35
-loop_mode = 1
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DebugAnimPivot:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DebugAnimPivot/SlamSpawn:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.558505, 0.10472, 1.44862), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.331613, -0.10472, 1.69297), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.558505, 0.10472, 1.44862), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.331613, -0.10472, 1.69297)]
+"values": [Vector3(-0.8, -1.9, 0.800001)]
 }
 
-[sub_resource type="Animation" id="Animation_r0hqg"]
-resource_name = "slam_telegraph_start"
-length = 0.3
+[sub_resource type="Animation" id="Animation_qmb3x"]
+resource_name = "slam_jump_prep"
+length = 0.1
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -593,10 +1090,51 @@ tracks/0/path = NodePath("DebugAnimPivot:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.3),
-"transitions": PackedFloat32Array(1.62451, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.62451),
 "update": 0,
-"values": [Vector3(0, 1.309, 0), Vector3(-0.785401, -5.97111e-08, 1.5708), Vector3(-0.785401, -5.97111e-08, 1.5708)]
+"values": [Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("32_i0wff"), ExtResource("33_1fje0")]
+}
+
+[sub_resource type="Animation" id="Animation_3tc4b"]
+resource_name = "slam_jump_up"
+length = 0.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.62451),
+"update": 0,
+"values": [Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("33_1fje0"), ExtResource("34_mllv3"), ExtResource("35_aa4xm")]
 }
 
 [sub_resource type="Animation" id="Animation_52j13"]
@@ -619,7 +1157,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_eps3w"]
 length = 0.4
-step = 0.05
+step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -646,37 +1184,128 @@ tracks/1/keys = {
 "method": &"swipe"
 }]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.125, 0.2, 0.275, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("16_ukgug"), ExtResource("17_cu5tl"), ExtResource("18_22flk"), ExtResource("19_xriv7"), ExtResource("20_5ckod"), ExtResource("21_yqrf4")]
+}
+
+[sub_resource type="Animation" id="Animation_6mcie"]
+resource_name = "swipe_end"
+length = 0.3
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.075, 0.15, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("21_yqrf4"), ExtResource("20_5ckod"), ExtResource("19_xriv7"), ExtResource("17_cu5tl"), ExtResource("16_ukgug")]
+}
+
+[sub_resource type="Animation" id="Animation_jt2i0"]
+resource_name = "impact_no_slam"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.62451),
+"update": 0,
+"values": [Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.25, 0.325, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("38_x4twh"), ExtResource("39_gab4h"), ExtResource("33_1fje0"), ExtResource("32_i0wff"), ExtResource("16_ukgug")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DebugAnimPivot/SlamSpawn:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, -1.9, 0.800001)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
 _data = {
 "backswipe": SubResource("Animation_85u7l"),
+"idle": SubResource("Animation_f2hbb"),
+"impact_no_slam": SubResource("Animation_jt2i0"),
+"intro": SubResource("Animation_cijff"),
+"kick": SubResource("Animation_p5f0r"),
+"kick_end": SubResource("Animation_ejhby"),
 "laser_arm": SubResource("Animation_ywtcr"),
+"laser_disarm": SubResource("Animation_i43i0"),
 "laser_fire": SubResource("Animation_oq3a7"),
 "laser_telegraph": SubResource("Animation_ua1dm"),
+"ranged_arm": SubResource("Animation_pm884"),
+"ranged_disarm": SubResource("Animation_kr3rw"),
 "ranged_shoot_l": SubResource("Animation_tf56t"),
 "ranged_shoot_r": SubResource("Animation_imvni"),
-"slam": SubResource("Animation_1nv8l"),
-"slam_telegraph": SubResource("Animation_ona5m"),
-"slam_telegraph_start": SubResource("Animation_r0hqg"),
+"slam_jump_down": SubResource("Animation_3wov1"),
+"slam_jump_impact": SubResource("Animation_pl5ya"),
+"slam_jump_prep": SubResource("Animation_qmb3x"),
+"slam_jump_up": SubResource("Animation_3tc4b"),
 "spin": SubResource("Animation_52j13"),
-"swipe": SubResource("Animation_eps3w")
+"swipe": SubResource("Animation_eps3w"),
+"swipe_end": SubResource("Animation_6mcie")
 }
 
-[node name="BossElevator" node_paths=PackedStringArray("slam_particles", "proj_spawn_l", "proj_spawn_r", "laser_spawn") instance=ExtResource("1_7pmj2")]
+[node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_particles", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "sfx_players") instance=ExtResource("1_7pmj2")]
 script = ExtResource("2_6u4e1")
 MOVE_SPEED = 6.0
 wave_amplitude = 7.0
 wave_frequency = 5.0
+laser_spawn_markers = []
 hurtbox_range_close = 6.0
 hurtbox_range_far = 7.5
-sfx_melee = Array[AudioStream]([])
+max_sequential_melee_phases = 5
+max_sequential_ranged_phases = 3
 swipe_damage = 14.0
+sfx_swipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
 hook_damage = 12.0
+sfx_kick = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
+backswipe_damage = 16.0
+sfx_backswipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
 slam_damage = 26.0
 slam_delay = 0.3
 slam_time = 0.9
-slam_particles = NodePath("DebugAnimPivot/DebugWrench/SlamSpawn/SlamParticles")
+slam_particles = NodePath("DebugAnimPivot/SlamSpawn/SlamParticles")
 slam_wave_material = SubResource("StandardMaterial3D_klk0f")
+slam_spawn_marker = NodePath("DebugAnimPivot/SlamSpawn")
+sfx_jump = Array[AudioStream]([ExtResource("5_iynxh")])
+sfx_slam = Array[AudioStream]([ExtResource("6_elwvg")])
+sfx_wave_loop = Array[AudioStream]([ExtResource("7_xo7jb")])
+sfx_wave_impact = Array[AudioStream]([ExtResource("8_pvhqe")])
 nail_projectile = ExtResource("3_v4gcb")
 proj_spawn_l = NodePath("DebugRangedPivot/PivotL/DebugGun1/ProjSpawnL")
 proj_spawn_r = NodePath("DebugRangedPivot/PivotR/DebugGun1/ProjSpawnR")
@@ -684,51 +1313,45 @@ num_bursts = 1
 shots_per_burst = 12
 delay_between_burst = 0.5
 nail_damage = 7.0
-sfx_nail_shot = Array[AudioStream]([])
+sfx_nail_equip = Array[AudioStream]([ExtResource("10_u246n")])
+sfx_nail_shot = Array[AudioStream]([ExtResource("11_8tgau"), ExtResource("12_bt5kx"), ExtResource("13_qjtrx"), ExtResource("14_l34ga")])
+sfx_nail_unequip = []
 laser_aoe = ExtResource("4_hx1ss")
-laser_spawn = NodePath("DebugLaserPivot/DebugLaser/LaserSpawn")
+laser_spawn = NodePath("LaserSpawn")
 laser_damage = 40.0
 laser_aoe_marker = ExtResource("5_pbhfx")
+sfx_laser_arm = Array[AudioStream]([ExtResource("11_8tgau"), ExtResource("12_bt5kx"), ExtResource("13_qjtrx"), ExtResource("14_l34ga")])
+sfx_laser_charging = Array[AudioStream]([ExtResource("17_mkqio")])
+sfx_laser_shoot = Array[AudioStream]([ExtResource("18_5elni"), ExtResource("19_upudo"), ExtResource("20_dvqnx")])
+sfx_laser_disarm = []
 boss_id = 6
 barrel_pickup_scene = null
+sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5")]
 attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.2
 orbit_radius = 5.0
 
 [node name="Sprite3D" parent="." index="0"]
-transform = Transform3D(0.8, 0, 0, 0, 0.615, 0, 0, 0, 0.8, 0, 2.23273, 0)
-texture = ExtResource("2_epl72")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
+texture = ExtResource("16_ukgug")
 
 [node name="DebugAnimPivot" type="Marker3D" parent="." index="1"]
 transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
 
-[node name="DebugWrench" type="MeshInstance3D" parent="DebugAnimPivot" index="0"]
-transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, -1.04907e-07, 0, 2.4)
-layers = 2
-mesh = SubResource("BoxMesh_x341f")
+[node name="SlamSpawn" type="Marker3D" parent="DebugAnimPivot" index="0"]
+transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, -0.8, -1.9, 0.800001)
 
-[node name="SlamSpawn" type="Marker3D" parent="DebugAnimPivot/DebugWrench" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.4)
-
-[node name="SlamParticles" parent="DebugAnimPivot/DebugWrench/SlamSpawn" index="0" instance=ExtResource("7_2uohy")]
+[node name="SlamParticles" parent="DebugAnimPivot/SlamSpawn" index="0" instance=ExtResource("7_2uohy")]
 visible = false
 
-[node name="DebugLaserPivot" type="Marker3D" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+[node name="LaserSpawn" type="Marker3D" parent="." index="2"]
+transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0, 1.343, -1.8)
 
-[node name="DebugLaser" type="MeshInstance3D" parent="DebugLaserPivot" index="0"]
-transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, -0.6, 0, -0.7)
-layers = 2
-mesh = SubResource("BoxMesh_dhiwq")
-
-[node name="LaserSpawn" type="Marker3D" parent="DebugLaserPivot/DebugLaser" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.8)
-
-[node name="LaserEndParticles" parent="DebugLaserPivot/DebugLaser/LaserSpawn" index="0" instance=ExtResource("6_fqvnt")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+[node name="LaserEndParticles" parent="LaserSpawn" index="0" instance=ExtResource("6_fqvnt")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -0.0096159, 0)
 visible = false
-amount = 100
+amount = 256
 lifetime = 0.7
 preprocess = 0.06
 speed_scale = 1.3
@@ -742,41 +1365,43 @@ draw_pass_1 = SubResource("QuadMesh_mvva7")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 
 [node name="PivotL" type="Marker3D" parent="DebugRangedPivot" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.33156, 1.9474, 0)
 
 [node name="DebugGun1" type="MeshInstance3D" parent="DebugRangedPivot/PivotL" index="0"]
 transform = Transform3D(1, 5.20417e-17, -6.98492e-09, 0, 1, 7.45058e-09, 6.98492e-09, -7.45058e-09, 1, 0, 0, -1)
 layers = 2
-mesh = SubResource("BoxMesh_cbf68")
 skeleton = NodePath("../../../DebugAnimPivot")
 
 [node name="ProjSpawnL" type="Marker3D" parent="DebugRangedPivot/PivotL/DebugGun1" index="0"]
 transform = Transform3D(1, -6.61744e-24, 0, 0, 1, 8.88178e-16, 0, 0, 1, 0, 0, -0.6)
 
 [node name="PivotR" type="Marker3D" parent="DebugRangedPivot" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.999999, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.999999, 1.95792, 0)
 
 [node name="DebugGun1" type="MeshInstance3D" parent="DebugRangedPivot/PivotR" index="0"]
 transform = Transform3D(1, 5.20417e-17, -6.98492e-09, 0, 1, 7.45058e-09, 6.98492e-09, -7.45058e-09, 1, 0, 0, -1)
 layers = 2
-mesh = SubResource("BoxMesh_cbf68")
 skeleton = NodePath("../../../DebugAnimPivot")
 
 [node name="ProjSpawnR" type="Marker3D" parent="DebugRangedPivot/PivotR/DebugGun1" index="0"]
 transform = Transform3D(1, -3.30872e-24, 0, 0, 1, 4.44089e-16, 0, 0, 1, 0, 0, -0.6)
 
 [node name="CollisionShape3D" parent="." index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
 shape = SubResource("CapsuleShape3D_3w5db")
 
-[node name="DebugMesh" parent="." index="5"]
+[node name="LaserCollider" type="CollisionShape3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 27.0765, 0)
+shape = SubResource("BoxShape3D_iinou")
+disabled = true
+
+[node name="DebugMesh" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
 mesh = SubResource("BoxMesh_holc6")
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -2.5)
 
-[node name="NavigationComponent" parent="." index="8"]
+[node name="NavigationComponent" parent="." index="9"]
 current_speed = 6.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
@@ -788,40 +1413,12 @@ to = NodePath("../../Intro")
 event = &"start_intro"
 delay_in_seconds = "0.0"
 
-[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Inactive" index="1"]
+[node name="Intro" type="Node" parent="StateChart/Root/Phase" index="1"]
+script = ExtResource("4_fo57y")
+
+[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Intro" index="0"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Phase1")
-event = &"activate"
-delay_in_seconds = "0.0"
-
-[node name="Intro" type="Node" parent="StateChart/Root/Phase" index="1"]
-script = ExtResource("3_irtaj")
-initial_state = NodePath("Idle")
-
-[node name="Idle" type="Node" parent="StateChart/Root/Phase/Intro" index="0"]
-script = ExtResource("4_fo57y")
-
-[node name="toIntroAnim" type="Node" parent="StateChart/Root/Phase/Intro/Idle" index="0"]
-script = ExtResource("5_7kc6y")
-to = NodePath("../../IntroAnim")
-event = &"start_intro_anim"
-delay_in_seconds = "0.0"
-
-[node name="IntroAnim" type="Node" parent="StateChart/Root/Phase/Intro" index="1"]
-script = ExtResource("4_fo57y")
-
-[node name="toIntroAnim" type="Node" parent="StateChart/Root/Phase/Intro/IntroAnim" index="0"]
-script = ExtResource("5_7kc6y")
-to = NodePath("../../EndIntro")
-event = &"end_intro_anim"
-delay_in_seconds = "0.0"
-
-[node name="EndIntro" type="Node" parent="StateChart/Root/Phase/Intro" index="2"]
-script = ExtResource("4_fo57y")
-
-[node name="toPhase1" type="Node" parent="StateChart/Root/Phase/Intro/EndIntro" index="0"]
-script = ExtResource("5_7kc6y")
-to = NodePath("../../../Phase1")
 event = &"start_phase_1"
 delay_in_seconds = "0.0"
 
@@ -860,6 +1457,13 @@ event = &"open_doors"
 guard = SubResource("Resource_8gf5u")
 delay_in_seconds = "0.0"
 
+[node name="toMoveNoSmoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen/Smoke" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../MoveNoSmoke")
+event = &"start_no_smoke"
+guard = SubResource("Resource_cyxlj")
+delay_in_seconds = "0.0"
+
 [node name="MoveNoSmoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="2"]
 script = ExtResource("4_fo57y")
 
@@ -868,6 +1472,13 @@ script = ExtResource("5_7kc6y")
 to = NodePath("../../OpenDoors")
 event = &"open_doors"
 guard = SubResource("Resource_5ojvj")
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen/MoveNoSmoke" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Idle")
+event = &"end_smoke"
+guard = SubResource("Resource_hr1gt")
 delay_in_seconds = "0.0"
 
 [node name="OpenDoors" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="3"]
@@ -949,21 +1560,45 @@ event = &"melee_line"
 guard = SubResource("Resource_w0wob")
 delay_in_seconds = "0.0"
 
-[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="1"]
+[node name="toBackswing" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Backswing")
+event = &"melee_backswing"
+guard = SubResource("Resource_w0wob")
+delay_in_seconds = "0.0"
+
+[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
 guard = SubResource("Resource_abs5n")
 delay_in_seconds = "0.0"
 
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="2"]
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
 guard = SubResource("Resource_6d0vi")
 delay_in_seconds = "0.0"
 
-[node name="LeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="3"]
+[node name="Backswing" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="3"]
+script = ExtResource("4_fo57y")
+
+[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Backswing" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../LeapBack")
+event = &"melee_backstep"
+guard = SubResource("Resource_abs5n")
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Backswing" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"combo_end"
+guard = SubResource("Resource_6d0vi")
+delay_in_seconds = "0.0"
+
+[node name="LeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="4"]
 script = ExtResource("4_fo57y")
 
 [node name="toSlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/LeapBack" index="0"]
@@ -973,7 +1608,7 @@ event = &"melee_line"
 guard = SubResource("Resource_fgsnr")
 delay_in_seconds = "0.0"
 
-[node name="SlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="4"]
+[node name="SlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="5"]
 script = ExtResource("4_fo57y")
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/SlamLine" index="0"]
@@ -983,7 +1618,7 @@ event = &"combo_end"
 guard = SubResource("Resource_72tnq")
 delay_in_seconds = "0.0"
 
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="5"]
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="6"]
 script = ExtResource("4_fo57y")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Recover" index="0"]
@@ -993,21 +1628,21 @@ event = &"end_recovery"
 guard = SubResource("Resource_v875p")
 delay_in_seconds = "0.0"
 
-[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="6"]
+[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="7"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../DualNailsRanged")
 event = &"start_dual_nails_attack"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="7"]
+[node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="8"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LaserAoE")
 event = &"start_laser_aoe_attack"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="8"]
+[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="9"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smokescreen")
 event = &"start_smokescreen"
@@ -1055,17 +1690,7 @@ event = &"start_smokescreen"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="Spin" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
-script = ExtResource("3_irtaj")
-
-[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/Spin" index="0"]
-script = ExtResource("5_7kc6y")
-to = NodePath("../../Smokescreen")
-event = &"start_smokescreen"
-guard = SubResource("Resource_u3pji")
-delay_in_seconds = "0.0"
-
-[node name="DualNailsRanged" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+[node name="DualNailsRanged" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Targeting")
 
@@ -1120,7 +1745,7 @@ event = &"start_smokescreen"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="LaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+[node name="LaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Targeting")
 
@@ -1185,17 +1810,37 @@ event = &"start_smokescreen"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="NavigationAgent3D" parent="." index="12"]
+[node name="toIntro" type="Node" parent="StateChart/Root/Phase/Phase1/LaserAoE" index="7"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../../Intro")
+event = &"start_intro"
+delay_in_seconds = "0.0"
+
+[node name="NavigationAgent3D" parent="." index="13"]
 debug_enabled = true
 
-[node name="AnimationPlayer" parent="." index="22"]
+[node name="AnimationPlayer" parent="." index="23"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "elevator_boss": SubResource("AnimationLibrary_1cydh")
 }
+autoplay = "RESET"
 
-[node name="SmokeParticles" parent="." index="24" instance=ExtResource("11_1crh5")]
+[node name="SmokeParticles" parent="." index="25" instance=ExtResource("11_1crh5")]
 
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="27"]
+
+[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="28"]
+
+[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="29"]
+
+[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="30"]
+
+[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="31"]
+
+[connection signal="state_entered" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Smokescreen/Idle" to="." method="_on_smokescreen_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Smokescreen/Smoke" to="." method="_on_smokescreen_smoke_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/Smokescreen/MoveNoSmoke" to="." method="_on_smokescreen_move_no_smoke_state_entered"]
@@ -1206,6 +1851,8 @@ libraries = {
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" to="." method="_on_melee_combo_swipe_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" to="." method="_on_melee_combo_hook_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" to="." method="_on_melee_combo_hook_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Backswing" to="." method="_on_melee_combo_backswing_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Backswing" to="." method="_on_melee_combo_backswing_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/LeapBack" to="." method="_on_melee_combo_leap_back_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/LeapBack" to="." method="_on_melee_combo_leap_back_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/SlamLine" to="." method="_on_melee_combo_slam_line_state_entered"]

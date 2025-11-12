@@ -871,6 +871,51 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
+[node name="DemoMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/DemoMode"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Demo Mode"
+
+[node name="GodeModeToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/DemoMode"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
+[node name="DemoModeTimeout" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/DemoModeTimeout"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Demo Mode Timeout"
+
+[node name="SpinBox" type="SpinBox" parent="TabContainer/DEBUG/VBoxContainer/DemoModeTimeout"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -14.0
+offset_right = -10.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 300.0
+
 [node name="FreeMoney" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -1088,6 +1133,9 @@ text = "Back"
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="_on_gode_mode_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle" to="." method="_on_demo_mode_toggle_toggled"]
+[connection signal="value_changed" from="TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox" to="." method="_on_demo_timeout_value_changed"]
 [connection signal="pressed" from="TabContainer/DEBUG/VBoxContainer/FreeMoney/FreeMoneyButton" to="." method="_on_free_money_button_pressed"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="_on_always_inventory_toggle_toggled"]

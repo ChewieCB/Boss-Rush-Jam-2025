@@ -153,6 +153,12 @@ func save_setting_config():
 	config.set_value("Audio", "bgm_audio", GameManager.bgm_audio)
 	config.set_value("Audio", "sfx_audio", GameManager.sfx_audio)
 	config.set_value("Audio", "ui_audio", GameManager.ui_audio)
+	config.set_value("DEBUG", "god_mode", GameManager.CHEAT_godmode)
+	config.set_value("DEBUG", "demo_mode", GameManager.CHEAT_demomode)
+	config.set_value("DEBUG", "demo_mode_timeout", GameManager.CHEAT_demomode_timeout)
+	config.set_value("DEBUG", "always_inventory", GameManager.CHEAT_always_inventory)
+	config.set_value("DEBUG", "boss_one_shot", GameManager.CHEAT_oneshot)
+	config.set_value("DEBUG", "freecam", GameManager.CHEAT_freecam)
 	
 	config.save("user://setting.cfg")
 
@@ -184,6 +190,13 @@ func load_setting_config():
 	GameManager.bgm_audio = config.get_value("Audio", "bgm_audio", 100)
 	GameManager.sfx_audio = config.get_value("Audio", "sfx_audio", 100)
 	GameManager.ui_audio = config.get_value("Audio", "ui_audio", 100)
+	
+	GameManager.CHEAT_godmode = config.get_value("DEBUG", "god_mode", false)
+	GameManager.CHEAT_demomode = config.get_value("DEBUG", "demo_mode", false)
+	GameManager.CHEAT_demomode_timeout = config.get_value("DEBUG", "demo_mode_timeout", 5)
+	GameManager.CHEAT_always_inventory = config.get_value("DEBUG", "always_inventory", false)
+	GameManager.CHEAT_oneshot = config.get_value("DEBUG", "boss_one_shot", false)
+	GameManager.CHEAT_freecam = config.get_value("DEBUG", "freecam", false)
 	
 	setting_config_loaded.emit()
 

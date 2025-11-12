@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cj5se3crnuwsq"]
+[gd_scene load_steps=3 format=3 uid="uid://dijn1g2vmnb8g"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/idle_detector.gd" id="1_gyd55"]
 [ext_resource type="VideoStream" path="res://assets/videos/idle-demo-1.ogv" id="2_vqlfr"]

@@ -25,12 +25,18 @@ var spin_warning_trigger_active: bool = false
 
 @export var exit_elevator_button: Area3D
 
+@export var boss_intro_spawn: Marker3D
+@export var boss_laser_spawn_markers: Array[Marker3D]
 @onready var elevator_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_elevator_spawn_marker")
 @onready var boss_origin: Array[Node] = get_tree().get_nodes_in_group("boss_arena_origin_marker")
 @export var sub_elevator_doors: Array[SlidingDoor]
 @export var sub_elevator_lights: Array[Node3D]
 
 var current_trigger_actions: Array[String] = []
+
+# MUSIC
+@onready var music_player: AudioStreamPlayer = $InteractiveMusicPlayer
+var music_playback: AudioStreamPlaybackInteractive
 
 func _ready() -> void:
 	#GameManager.equipped_barrels = []
@@ -39,7 +45,7 @@ func _ready() -> void:
 	is_tutorial = true
 	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_42_SlidingDoor
 
-	super ()
+	super()
 
 	if boss_doors:
 		boss_doors.close()
@@ -51,12 +57,17 @@ func _ready() -> void:
 	$Vendor1.shop_ui.inventory_closed.connect(_on_barrel_purchased)
 
 	# Trigger spin tutorial popup when barrel effect trigger first hit
-	$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
+	#$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
+	
+	music_playback = music_player.get_stream_playback()
 
 	boss.boss_origin = boss_origin[0]
 	boss.elevator_spawns = elevator_spawns
 	boss.sub_elevator_doors = sub_elevator_doors
 	boss.sub_elevator_lights = sub_elevator_lights
+	boss.intro_spawn_marker = boss_intro_spawn
+	boss.laser_spawn_markers = boss_laser_spawn_markers
+	boss.global_position = boss_intro_spawn.global_position
 
 
 func _input(event: InputEvent) -> void:
@@ -133,6 +144,7 @@ func _trigger_spin_tutorial() -> void:
 
 func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	if body is Player:
+		music_playback.switch_to_clip(1)
 		exit_doors.close()
 		if boss_doors:
 			boss_doors.is_autodoor = false
