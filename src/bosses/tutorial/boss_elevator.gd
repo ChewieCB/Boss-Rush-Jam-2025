@@ -378,6 +378,9 @@ func _on_ranged_nails_shooting_state_entered() -> void:
 	
 	for i in num_bursts:
 		for j in shots_per_burst:
+			# Catch to stop projectiles firing if the boss is killed mid-attack
+			if self.health_component.current_health == 0:
+				return
 			await get_tree().create_timer(delay_per_projectile).timeout
 			# Alternate firing between each gun
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
