@@ -21,7 +21,6 @@ var previous_phase: String = "start_melee_combo_attack"
 
 var melee_phase_count: int = 0
 
-
 @export var intro_spawn_marker: Marker3D
 @export var laser_spawn_markers: Array[Marker3D]
 
@@ -32,6 +31,8 @@ var next_attack: String = ""
 @export var hurtbox_range_close: float = 2.0
 @export var hurtbox_range_far: float = 3.8
 @export var sfx_melee: Array[AudioStream]
+@export var max_sequential_melee_phases: int = 5
+@export var max_sequential_ranged_phases: int = 3
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 14.0
 @export_subgroup("Hook")
@@ -82,7 +83,7 @@ func select_attack_phase_1() -> void:
 	var new_phase: String
 	
 	if previous_phase == "start_melee_combo_attack":
-		if melee_phase_count < max_sequential_phases:
+		if melee_phase_count < max_sequential_melee_phases:
 			if randf() < 0.7:
 				new_phase = "start_melee_combo_attack"
 			else:
@@ -93,18 +94,17 @@ func select_attack_phase_1() -> void:
 			new_phase = "start_smokescreen"
 	
 	elif previous_phase == "start_smokescreen":
-		if ranged_phase_count < max_sequential_phases:
+		if ranged_phase_count < max_sequential_ranged_phases:
 			new_phase = "start_smokescreen"
 		else:
 			ranged_phase_count = 0
 			new_phase = "start_melee_combo_attack"
 	
 	elif previous_phase == "start_laser_aoe_attack":
-		if ranged_phase_count < max_sequential_phases:
+		if ranged_phase_count < max_sequential_ranged_phases:
 			new_phase = "start_smokescreen"
 		else:
 			ranged_phase_count = 0
-			sprite.visible = true
 			await _intro_drop()
 			new_phase = "start_melee_combo_attack"
 	
@@ -371,7 +371,7 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Recovering"
 	
 	state_chart.send_event("attack_end")
-	anim_player.play("elevator_boss/ranged_arm")
+	anim_player.play("elevator_boss/ranged_disarm")
 	
 	await get_tree().create_timer(attack_recovery_time).timeout
 	anim_player.play("RESET")
@@ -454,7 +454,6 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	#debug_mesh_instance.queue_free()
 	#debug_mesh_instance = null
 	# FIXME 
-	laser_target_pos = target.global_position
 	state_chart.send_event("start_firing")
 
 
@@ -484,6 +483,7 @@ func _on_laser_aoe_firing_state_entered() -> void:
 	var laser_instance = laser_aoe.instantiate()
 	get_parent().add_child(laser_instance)
 	laser_instance.global_position = laser_spawn.global_position
+	laser_instance.global_position.y -= 2
 	laser_instance.global_rotation.y = self.global_rotation.y
 	
 	laser_particles.visible = false
@@ -501,6 +501,7 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	
 	await get_tree().create_timer(attack_recovery_time).timeout
 	anim_player.play("RESET")
+	sprite.visible = true
 	state_chart.send_event("cooldown_end")
 	
 	desired_distance = DESIRED_DISTANCE
@@ -514,8 +515,6 @@ func _intro_drop() -> void:
 	anim_player.play("RESET")
 	anim_player.play("elevator_boss/intro")
 	self.global_position = intro_spawn_marker.global_position
-	await get_tree().create_timer(0.6, false).timeout
-	anim_player.play("elevator_boss/idle")
 
 
 ## SMOKESCREEN ATTACK TRANSITION
@@ -560,7 +559,6 @@ func _on_smokescreen_smoke_state_entered() -> void:
 func _on_smokescreen_open_doors_state_entered() -> void:
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
-	sprite.visible = true
 	self.collision_layer = int(pow(2, 3 - 1))
 	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1))
 	
@@ -594,15 +592,14 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await tween.finished
 	
-	if active_sub_door:
-		# Close the doors
-		active_sub_light.yellow()
-		active_sub_door.close()
-		await active_sub_door.anim_player.animation_finished
-		
-		active_sub_light.red()
-		# TODO - configure delay and SFX for door opening
-		await get_tree().create_timer(0.3).timeout
+	# Close the doors
+	active_sub_light.yellow()
+	active_sub_door.close()
+	await active_sub_door.anim_player.animation_finished
+	
+	active_sub_light.red()
+	# TODO - configure delay and SFX for door opening
+	await get_tree().create_timer(0.3).timeout
 	
 	var ranged_attacks = [
 		"start_dual_nails_attack",
@@ -687,8 +684,8 @@ func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, charge_jump_height: floa
 func slam_line(_spawn_pos: Vector3, _range: float = 30.0) -> void:
 	# Spawn line aoe that grows from boss to target
 	spawn_aoe_line(
-		self.global_position.distance_to(target.global_position),
-		4.0, 0.4,
+		self.global_position.distance_to(target.global_position) + 5.0,
+		4.0, 0.6,
 		slam_damage, slam_time,
 		slam_spawn_marker.global_position,
 		0.2, false,
@@ -806,7 +803,7 @@ func trigger_pushback(
 
 
 func _on_intro_state_entered() -> void:
-	await _intro_drop()
+	_intro_drop()
 	state_chart.send_event("start_phase_1")
 
 
@@ -817,3 +814,8 @@ func _on_phase_1_state_entered() -> void:
 func _on_intro_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+	
+	if self.global_position.y <= -4.0:
+		anim_player.play("elevator_boss/idle")
+		await get_tree().create_timer(0.8, false).timeout
+		state_chart.send_event("start_phase_1")
