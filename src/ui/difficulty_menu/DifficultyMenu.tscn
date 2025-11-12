@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://djcipi6xiw7yn"]
+[gd_scene load_steps=38 format=3 uid="uid://djcipi6xiw7yn"]
 
 [ext_resource type="Script" path="res://src/ui/difficulty_menu/difficulty_menu.gd" id="1_5c00o"]
 [ext_resource type="Texture2D" uid="uid://dj574xdr6e1o" path="res://src/bosses/bartender/assets/Bartender_base.png" id="1_5ie53"]
@@ -20,8 +20,10 @@
 [ext_resource type="Texture2D" uid="uid://c6p7obfb2ndl7" path="res://src/bosses/chips/assets/sprites/MCK_Idle.png" id="8_bymgs"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="8_c7hct"]
 [ext_resource type="Resource" uid="uid://cev06jj3f40kv" path="res://src/ui/difficulty_menu/boss_chip_profile.tres" id="8_mh7r4"]
+[ext_resource type="Resource" uid="uid://bq1gw2oin0tuo" path="res://src/ui/difficulty_menu/boss_elevator_profile.tres" id="9_b2sjg"]
 [ext_resource type="Texture2D" uid="uid://ccn08me1il1m4" path="res://src/ui/main_menu/bg2.png" id="9_crl3w"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="10_0vdpo"]
+[ext_resource type="Resource" uid="uid://bfmgyr7k0l1xt" path="res://src/ui/difficulty_menu/boss_blackjack_profile.tres" id="10_75fix"]
 [ext_resource type="PackedScene" uid="uid://da707blxxuo3c" path="res://src/ui/common/template_button/TemplateButton.tscn" id="11_0u1hd"]
 [ext_resource type="Texture2D" uid="uid://b4p6melvvt7k2" path="res://assets/sprite/misc/hearts.png" id="13_ttr4t"]
 [ext_resource type="PackedScene" uid="uid://bgdrie48ccxvw" path="res://src/ui/difficulty_menu/AnteItem.tscn" id="14_o6emp"]
@@ -54,7 +56,7 @@ grow_vertical = 2
 script = ExtResource("1_5c00o")
 chip_sfx = ExtResource("2_0aqwx")
 boss_sprites = [NodePath("TitleRegion/BossSpriteContainer/Slot"), NodePath("TitleRegion/BossSpriteContainer/Roulette"), NodePath("TitleRegion/BossSpriteContainer/Bartender"), NodePath("TitleRegion/BossSpriteContainer/Pit"), NodePath("TitleRegion/BossSpriteContainer/Chip")]
-boss_diff_profiles = Array[ExtResource("3_rlha8")]([ExtResource("4_25fox"), ExtResource("5_iim28"), ExtResource("6_atwte"), ExtResource("7_t6tx6"), ExtResource("8_mh7r4")])
+boss_diff_profiles = Array[ExtResource("3_rlha8")]([ExtResource("4_25fox"), ExtResource("5_iim28"), ExtResource("6_atwte"), ExtResource("7_t6tx6"), ExtResource("8_mh7r4"), ExtResource("9_b2sjg"), ExtResource("10_75fix")])
 
 [node name="BG" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_rqucu")

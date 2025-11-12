@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BossDifficultyProfile" load_steps=2 format=3 uid="uid://bq1gw2oin0tuo"]
+
+[ext_resource type="Script" path="res://src/ui/difficulty_menu/boss_difficulty_profile_resource.gd" id="1_rqeet"]
+
+[resource]
+script = ExtResource("1_rqeet")
+boss_id = 6
+boss_quote = "\"Welcome, dear customer!\""
+ante_names = Array[String](["", "", "", "", ""])
+boss_risk_reward_mult = 1.0

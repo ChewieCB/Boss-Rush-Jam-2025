@@ -89,7 +89,7 @@ func refresh_display():
 
 	bet_value_label.text = format_number_with_commas(bet_value)
 	reward_label.text = format_number_with_commas(reward_value)
-	
+
 ## Max lv 15
 func set_risk_level(level: int):
 	for i in range(risk_level_container.get_child_count()):
