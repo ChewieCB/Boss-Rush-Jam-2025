@@ -57,7 +57,7 @@ func _ready() -> void:
 	$Vendor1.shop_ui.inventory_closed.connect(_on_barrel_purchased)
 
 	# Trigger spin tutorial popup when barrel effect trigger first hit
-	$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
+	#$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
 	
 	music_playback = music_player.get_stream_playback()
 
