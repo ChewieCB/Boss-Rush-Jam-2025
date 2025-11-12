@@ -29,6 +29,15 @@ enum BossStatusEffect {
 	BLEEDING # Take damage based on their movement
 }
 
+@export var target: Node3D:
+	set(value):
+		target = value
+		if target:
+			if not target.is_node_ready():
+				await target.ready
+			navigation_component.target = target
+var cached_target: Node3D
+
 @export var boss_id: BossIdEnum
 @export var chip_scene: PackedScene
 @export var chip_spawn_chance: float = 0.4
@@ -182,15 +191,6 @@ const JUMP_FORCE: float = 8
 var time_elapsed: float = 0
 
 var vel_vertical: float = 0
-
-@export var target: Node3D:
-	set(value):
-		target = value
-		if target:
-			if not target.is_node_ready():
-				await target.ready
-			navigation_component.target = target
-var cached_target: Node3D
 
 @onready var scene_root = get_parent().get_parent()
 
@@ -590,6 +590,10 @@ func _on_health_dead_state_entered() -> void:
 	sprite.modulate = Color.DARK_SLATE_BLUE
 	death_anim_finished.emit()
 
+#### Revival
+func _on_health_idle_state_entered() -> void:
+	sprite.modulate = Color.WHITE
+
 ### ATTACKING --------------------------------
 #### TELEGRAPH
 func _on_attack_telegraph_state_entered() -> void:
@@ -669,6 +673,9 @@ func _on_hurt_frame_timer_timeout() -> void:
 ## STATUS EFFECTS
 
 func toggle_emitting_elemental_vfx(status: BossStatusEffect, is_on: bool = true):
+	if elemental_emitting_vfx.size() == 0:
+		return
+	
 	var element_vfx_node = elemental_emitting_vfx[int(status) - 1]
 	if element_vfx_node:
 		element_vfx_node.visible = is_on
@@ -799,3 +806,24 @@ func _on_poisoned_timer_timeout() -> void:
 	sprite.modulate = Color.WEB_GREEN
 	await get_tree().create_timer(0.2).timeout
 	sprite.modulate = Color.WHITE
+
+
+## Attack spawn helpers
+#
+## DECALS
+func spawn_decal_at_pos(pos: Vector3, texture: CompressedTexture2D, size: Vector3 = Vector3(0, 1, 0)) -> Decal:
+	var _decal := _create_decal(texture, size)
+	scene_root.add_child(_decal)
+	_decal.global_position = pos
+	return _decal
+
+func _create_decal(texture: CompressedTexture2D, size: Vector3 = Vector3(0, 1, 0)) -> Decal:
+	var _decal := Decal.new()
+	_decal.cull_mask = 1
+	_decal.texture_albedo = texture
+	_decal.size = size
+	return _decal
+
+func _cleanup_aoe_decals(decals_to_remove: Array) -> void:
+	for decal in decals_to_remove:
+		decal.queue_free()

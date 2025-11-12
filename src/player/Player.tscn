@@ -101,7 +101,7 @@ flip_faces = true
 size = Vector2(2, 2)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rj1ni"]
-viewport_path = NodePath("EffectIconsViewport")
+viewport_path = NodePath("Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_h1qoy"]
 
@@ -120,7 +120,9 @@ radius = 5.0
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component", "luck_component")]
 collision_layer = 2
-collision_mask = 221
+collision_mask = 157
+wall_min_slide_angle = 0.0872665
+floor_stop_on_slope = false
 script = ExtResource("1_rl0vi")
 sfx_hurt = Array[AudioStream]([ExtResource("2_cpvt1"), ExtResource("3_lb5n1"), ExtResource("4_broo0"), ExtResource("5_lkuup"), ExtResource("6_vqbwb")])
 sfx_dead = Array[AudioStream]([ExtResource("7_lluik"), ExtResource("8_h2aj6"), ExtResource("9_wamw4"), ExtResource("10_mowd1")])
@@ -193,6 +195,7 @@ shape = SubResource("BoxShape3D_sjjg0")
 current = true
 fov = 90.0
 near = 0.001
+far = 6000.0
 
 [node name="ThickOutlineShader" type="MeshInstance3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.947067)
@@ -248,7 +251,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, 0)
 texture = SubResource("ViewportTexture_rj1ni")
 
 [node name="Barrel3Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="1"]
-transform = Transform3D(0.735053, -0.0466678, -0.676402, -0.67801, -0.0493604, -0.733394, 0.000838399, 0.99769, -0.0679237, -0.00193595, 0, 0.555438)
+transform = Transform3D(0.735052, -0.0466678, -0.676402, -0.678009, -0.0493604, -0.733394, 0.000838398, 0.99769, -0.0679237, -0.00193595, 0, 0.555438)
 surface_material_override/0 = null
 
 [node name="Barrel2Icon" parent="Neck/ShakeCameraWrapper/GunContainer/BlankGun/EffectIconsViewport/EffectIconsParent" index="2"]
@@ -373,6 +376,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="BG" type="TextureRect" parent="UI/BossSpecialDialog"]
 layout_mode = 1
@@ -422,9 +426,7 @@ theme_override_font_sizes/font_size = 40
 text = "Saving..."
 
 [node name="PauseUI" parent="UI" instance=ExtResource("7_db7x8")]
-visible = false
 z_index = 10
-mouse_filter = 2
 
 [node name="DrunkUI" parent="UI" instance=ExtResource("46_587r8")]
 process_mode = 1

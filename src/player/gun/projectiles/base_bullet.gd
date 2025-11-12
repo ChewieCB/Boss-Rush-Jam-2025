@@ -32,12 +32,15 @@ var hitscan_col_point: Vector3 = Vector3.ZERO
 var hitscan_col_normal: Vector3 = Vector3.ZERO
 var current_dir: Vector3
 var projectile_speed = 100
+var velocity: Vector3
 var max_range
 var splitted = false
 var is_hitscan = false
 var infused_status_effect = [false, false, false, false, false]
 var can_be_aim_guided = false # or Laser-guided, homing to where player is aiming at
 var min_lifetime_before_can_be_aim_guided = 0.2
+
+var keep_alive: bool = false
 
 # Statistics tracking for barrel effect
 var color_changed_count = 0
@@ -56,6 +59,11 @@ func _ready() -> void:
 		if elem:
 			elem.visible = false
 
+
+func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float) -> void:
+	push_error("BaseBullet sub-class does not have an init method set.")
+
+
 func _process(delta: float) -> void:
 	life_time += delta
 
@@ -66,7 +74,7 @@ func create_spark(pos: Vector3, normal: Vector3):
 	if can_be_aim_guided:
 		pos = global_position
 		normal = Vector3.UP
-		
+
 	var spark_inst = spark_effect.instantiate()
 	get_parent().add_child(spark_inst)
 	spark_inst.global_position = pos
@@ -149,10 +157,10 @@ func get_damage_variance_modifier(_damage: int) -> int:
 	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE] - 1
 	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
-func create_duplication() -> BaseBullet:
+func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	var new_inst: BaseBullet = self.duplicate()
-	new_inst.owner_gun = owner_gun
-	new_inst.is_ricochet_shot = true
+	new_inst.owner_gun = owner_gun.duplicate()
+	new_inst.is_ricochet_shot = is_ricochet
 	new_inst.homing_strength = homing_strength
 	new_inst.spawn_pos = spawn_pos
 	new_inst.life_time = life_time
@@ -197,7 +205,7 @@ func infuse_status_effect(_status_effect: BossCore.BossStatusEffect):
 
 func stop_elemental_particles():
 	for elem in elemental_emitting_vfx:
-		if elem:
+		if is_instance_valid(elem):
 			elem.queue_free_after_time()
 
 func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):

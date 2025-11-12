@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=73 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -13,6 +13,9 @@
 [ext_resource type="PackedScene" uid="uid://dl8cnd88fnws2" path="res://src/bosses/tutorial/SlamParticles.tscn" id="7_2uohy"]
 [ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="7_6pf3s"]
 [ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="11_1crh5"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="13_k65oo"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="14_kbpeg"]
+[ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="15_c0skh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_klk0f"]
 transparency = 1
@@ -73,6 +76,122 @@ height = 3.8
 
 [sub_resource type="BoxMesh" id="BoxMesh_holc6"]
 size = Vector3(2.5, 3.756, 2.5)
+
+[sub_resource type="Resource" id="Resource_lhjct"]
+script = ExtResource("13_k65oo")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_r3txr"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_cyxlj"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_8gf5u"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_5ojvj"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_hr1gt"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_0qfiu"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_8uqbu"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_n3lag"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_m4yva"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_ko7r0"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_w0wob"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_abs5n"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_6d0vi"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_fgsnr"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_72tnq"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_v875p"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_jkctx"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_3isg2"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_up65n"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_y3o0c"]
+script = ExtResource("13_k65oo")
+state = NodePath("../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_u3pji"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_y3o0c")
+
+[sub_resource type="Resource" id="Resource_bpbv3"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_2bu4d"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_cf6gn"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_ihpl0"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_8wahv"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_b70vm"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_t0e48"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
 
 [sub_resource type="Animation" id="Animation_8e3f2"]
 length = 0.001
@@ -723,12 +842,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smoke")
 event = &"start_smoke"
+guard = SubResource("Resource_r3txr")
 delay_in_seconds = "0.0"
 
 [node name="toMoveNoSmoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen/Idle" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MoveNoSmoke")
 event = &"start_no_smoke"
+guard = SubResource("Resource_cyxlj")
 delay_in_seconds = "0.0"
 
 [node name="Smoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="1"]
@@ -738,6 +859,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../OpenDoors")
 event = &"open_doors"
+guard = SubResource("Resource_8gf5u")
 delay_in_seconds = "0.0"
 
 [node name="MoveNoSmoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="2"]
@@ -747,6 +869,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../OpenDoors")
 event = &"open_doors"
+guard = SubResource("Resource_5ojvj")
 delay_in_seconds = "0.0"
 
 [node name="OpenDoors" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="3"]
@@ -756,18 +879,21 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Idle")
 event = &"end_smoke"
+guard = SubResource("Resource_hr1gt")
 delay_in_seconds = "0.0"
 
 [node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="4"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../DualNailsRanged")
 event = &"start_dual_nails_attack"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="5"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LaserAoE")
 event = &"start_laser_aoe_attack"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1" index="1"]
@@ -781,6 +907,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Swipe")
 event = &"start_attack"
+guard = SubResource("Resource_0qfiu")
 delay_in_seconds = "0.0"
 
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="1"]
@@ -790,24 +917,28 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Hook")
 event = &"melee_attack"
+guard = SubResource("Resource_8uqbu")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
+guard = SubResource("Resource_n3lag")
 delay_in_seconds = "0.0"
 
 [node name="toSlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
+guard = SubResource("Resource_m4yva")
 delay_in_seconds = "0.0"
 
 [node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
+guard = SubResource("Resource_ko7r0")
 delay_in_seconds = "0.0"
 
 [node name="Hook" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="2"]
@@ -817,18 +948,21 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
+guard = SubResource("Resource_w0wob")
 delay_in_seconds = "0.0"
 
 [node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
+guard = SubResource("Resource_abs5n")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
+guard = SubResource("Resource_6d0vi")
 delay_in_seconds = "0.0"
 
 [node name="LeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="3"]
@@ -838,6 +972,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
+guard = SubResource("Resource_fgsnr")
 delay_in_seconds = "0.0"
 
 [node name="SlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="4"]
@@ -847,6 +982,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
+guard = SubResource("Resource_72tnq")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="5"]
@@ -856,24 +992,28 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
+guard = SubResource("Resource_v875p")
 delay_in_seconds = "0.0"
 
 [node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="6"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../DualNailsRanged")
 event = &"start_dual_nails_attack"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="7"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LaserAoE")
 event = &"start_laser_aoe_attack"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="8"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smokescreen")
 event = &"start_smokescreen"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="LineSlam" type="Node" parent="StateChart/Root/Phase/Phase1" index="2"]
@@ -887,6 +1027,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Slam")
 event = &"start_slam"
+guard = SubResource("Resource_jkctx")
 delay_in_seconds = "0.0"
 
 [node name="Slam" type="Node" parent="StateChart/Root/Phase/Phase1/LineSlam" index="1"]
@@ -896,6 +1037,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_slam"
+guard = SubResource("Resource_3isg2")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/LineSlam" index="2"]
@@ -905,12 +1047,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
+guard = SubResource("Resource_up65n")
 delay_in_seconds = "0.0"
 
 [node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/LineSlam" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smokescreen")
 event = &"start_smokescreen"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="Spin" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
@@ -920,6 +1064,7 @@ script = ExtResource("3_irtaj")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smokescreen")
 event = &"start_smokescreen"
+guard = SubResource("Resource_u3pji")
 delay_in_seconds = "0.0"
 
 [node name="DualNailsRanged" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
@@ -933,6 +1078,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Shooting")
 event = &"start_shooting"
+guard = SubResource("Resource_bpbv3")
 delay_in_seconds = "0.0"
 
 [node name="Shooting" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged" index="1"]
@@ -942,6 +1088,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"stop_shooting"
+guard = SubResource("Resource_2bu4d")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged" index="2"]
@@ -951,24 +1098,28 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
+guard = SubResource("Resource_cf6gn")
 delay_in_seconds = "0.0"
 
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MeleeCombo")
 event = &"start_melee_combo_attack"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged" index="4"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LaserAoE")
 event = &"start_laser_aoe_attack"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/DualNailsRanged" index="5"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smokescreen")
 event = &"start_smokescreen"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="LaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
@@ -982,6 +1133,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Charging")
 event = &"charge_laser"
+guard = SubResource("Resource_ihpl0")
 delay_in_seconds = "0.0"
 
 [node name="Charging" type="Node" parent="StateChart/Root/Phase/Phase1/LaserAoE" index="1"]
@@ -991,6 +1143,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Firing")
 event = &"start_firing"
+guard = SubResource("Resource_8wahv")
 delay_in_seconds = "0.0"
 
 [node name="Firing" type="Node" parent="StateChart/Root/Phase/Phase1/LaserAoE" index="2"]
@@ -1000,6 +1153,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"stop_firing"
+guard = SubResource("Resource_b70vm")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/LaserAoE" index="3"]
@@ -1009,24 +1163,28 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
+guard = SubResource("Resource_t0e48")
 delay_in_seconds = "0.0"
 
 [node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/LaserAoE" index="4"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../DualNailsRanged")
 event = &"start_dual_nails_attack"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1/LaserAoE" index="5"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MeleeCombo")
 event = &"start_melee_combo_attack"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/LaserAoE" index="6"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smokescreen")
 event = &"start_smokescreen"
+guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
 [node name="NavigationAgent3D" parent="." index="12"]

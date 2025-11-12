@@ -22,6 +22,13 @@ func activate(start_pos: Vector3) -> void:
 	explode()
 	process_mode = PROCESS_MODE_INHERIT
 
+
+func set_damage_radius(radius: float) -> void:
+	var new_shape := SphereShape3D.new()
+	new_shape.radius = radius
+	collision_shape.shape = new_shape
+
+
 func deactivate() -> void:
 	visible = false
 	active = false

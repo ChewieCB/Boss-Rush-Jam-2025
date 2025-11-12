@@ -87,8 +87,9 @@ func get_less_used_effects() -> int:
 			_:
 				# 20% chance to get same barrel, unless it tutorial room
 				var same_barrel_chance = 0.2
-				if GameManager.current_boss_map and GameManager.current_boss_map.is_tutorial:
-					same_barrel_chance = -100
+				if GameManager.current_boss_map:
+					if GameManager.current_boss_map.is_tutorial:
+						same_barrel_chance = -100
 
 				if chance <= same_barrel_chance:
 					effect_id = last_chosen_queue.front()

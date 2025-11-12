@@ -181,6 +181,7 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0, # In decimal, so 0.5 = 50%
 	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0,
 	StatusEffect.PlayerStatEnum.DODGE_CHANCE: 0, # In decimal
+	StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER: 1.0,
 }
 var current_stats = base_stats.duplicate(true)
 
@@ -383,10 +384,19 @@ func _physics_process(delta):
 	if not is_dashing and not is_in_menu:
 		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
+	
+	# Let the player ignore the wheelspin if they are moving
+	var floor_velocity = get_platform_velocity()
+	if floor_velocity:# and input_dir != Vector2.ZERO:
+		var dir_weight = input_dir.dot(Vector2(
+			floor_velocity.normalized().x,
+			floor_velocity.normalized().z,
+		))
+		velocity += floor_velocity * dir_weight
 
 	# If the next line is for grounded only, we will have bunnyhop tech
 	# If not move, gradually reduce movespeed to 0 (speed decay)
-	vel_horizontal -= vel_horizontal.normalized() * (ACCEL_RATE / 2) * delta
+	vel_horizontal -= vel_horizontal.normalized() * (ACCEL_RATE / 2) * delta * current_stats[StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER]
 	# Stand still
 	if vel_horizontal.length_squared() < 1.0 and input_dir.length_squared() < 0.01:
 		vel_horizontal = Vector2.ZERO
@@ -410,16 +420,16 @@ func _physics_process(delta):
 	else:
 		max_speed = MAX_SPEED
 	var add_speed = clamp(max_speed - current_speed, 0.0, ACCEL_RATE * delta)
-
+	
 	if is_dashing:
 		vel_horizontal = input_dir * max_speed
 	elif is_crouching:
 		vel_horizontal += input_dir * add_speed
 	else:
 		vel_horizontal += input_dir * add_speed
-
+	
 	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats[StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER]
-
+	
 	# Bonus speed
 	if is_dashing:
 		internal_bonus_speed = DASH_SPEED
@@ -428,19 +438,10 @@ func _physics_process(delta):
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 9)
 		else:
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 3)
-
+	
 	var velocity_dir = velocity.normalized()
 	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats[StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER]
-
-	# Let the player ignore the wheelspin if they are moving
-	var floor_velocity = get_platform_velocity()
-	if floor_velocity and input_dir != Vector2.ZERO:
-		var dir_weight = input_dir.dot(Vector2(
-			floor_velocity.normalized().x,
-			floor_velocity.normalized().z,
-		))
-		velocity += floor_velocity * dir_weight
-
+	
 	move_and_slide()
 
 	#show_debug_label()

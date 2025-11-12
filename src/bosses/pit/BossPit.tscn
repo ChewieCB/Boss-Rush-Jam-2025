@@ -310,7 +310,7 @@ mesh = SubResource("BoxMesh_g5e5v")
 skeleton = NodePath("../../../Sprite3D")
 
 [node name="ArmsDebugR" type="Node3D" parent="ArmsDEbug" index="1"]
-transform = Transform3D(0.726626, -0.00388527, 0.687022, 0.0918519, 0.991556, -0.0915391, -0.680866, 0.129619, 0.720847, 0.372336, 0, -0.225533)
+transform = Transform3D(0.726626, -0.00388525, 0.687022, 0.0918519, 0.991556, -0.0915392, -0.680866, 0.129619, 0.720847, 0.372336, 0, -0.225533)
 
 [node name="Mesh" type="MeshInstance3D" parent="ArmsDEbug/ArmsDebugR" index="0"]
 transform = Transform3D(0.789815, -1.17876, -0.486546, 1.14907, 0.906037, -0.329769, 0.553034, -0.19908, 1.38004, 2.05191, 2.26694, 0.0392845)

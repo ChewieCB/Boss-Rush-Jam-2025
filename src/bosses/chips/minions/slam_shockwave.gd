@@ -1,5 +1,7 @@
 extends Area3D
 
+signal finished
+
 @export var max_radius: float = 20.0
 @export var wave_time: float = 1.8
 @export var arc_angle: float = 40.0
@@ -7,6 +9,7 @@ extends Area3D
 
 @export var arc_thickness_ratio: float = 0.8
 @export var arc_angle_deg := 90.0
+@export var free_on_finished: bool = true
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var collider: CollisionShape3D = $CollisionShape3D
@@ -15,7 +18,12 @@ extends Area3D
 var current_radius: float = 0.0
 
 
+func _ready() -> void:
+	self.visible = false
+
+
 func start_shockwave(wipe_arc: bool = false) -> void:
+	self.visible = true
 	mesh.mesh.inner_radius = 0.0
 	mesh.mesh.outer_radius = 0.1
 	collider.shape.radius = 0.0
@@ -34,7 +42,17 @@ func start_shockwave(wipe_arc: bool = false) -> void:
 	
 	await tween.finished
 	
-	self.queue_free()
+	self.visible = false
+	mesh.mesh.inner_radius = 0.0
+	mesh.mesh.outer_radius = 0.1
+	collider.shape.radius = 0.0
+	mesh_material.set_shader_parameter("arc_start_deg", 0)
+	mesh_material.set_shader_parameter("arc_end_deg", arc_angle)
+	
+	finished.emit()
+	
+	if free_on_finished:
+		self.queue_free()
 
 
 func _set_arc_angle(angle: float) -> void:

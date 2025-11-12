@@ -913,6 +913,7 @@ theme_override_font_sizes/font_size = 26
 text = "Inventory always accessible"
 
 [node name="AlwaysInventoryToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/AlwaysInventory"]
+layout_mode = 0
 offset_left = 288.0
 offset_top = 6.0
 offset_right = 332.0

@@ -444,28 +444,14 @@ func drop_shadow(
 
 	# AoE decal
 	var aoe_tween: Tween = get_tree().create_tween()
-	var decal_ring := Decal.new()
-	decal_ring.texture_albedo = bell_aoe_marker_ring
-	decal_ring.size = Vector3(0, 1, 0)
-	get_parent().get_parent().add_child(decal_ring)
-	decal_ring.global_position = target_pos
-
-	var decal_arrows := Decal.new()
-	decal_arrows.texture_albedo = bell_aoe_marker_arrows
-	decal_arrows.size = Vector3(0, 1, 0)
-	get_parent().get_parent().add_child(decal_arrows)
-	decal_arrows.global_position = target_pos
+	var decal_ring: Decal = spawn_decal_at_pos(target_pos, bell_aoe_marker_ring)
+	var decal_arrows: Decal = spawn_decal_at_pos(target_pos, bell_aoe_marker_arrows)
 
 	aoe_tween.tween_property(decal_ring, "size", Vector3(max_radius * 2, 1, max_radius * 2), drop_time * 0.75)
 	aoe_tween.parallel().tween_property(decal_arrows, "size", Vector3(max_radius * 2, 1, max_radius * 2), drop_time)
 	aoe_tween.parallel().tween_property(decal_arrows, "rotation_degrees:y", 360, drop_time)
 	aoe_tween.chain().tween_callback(_spawn_bell.bind(target_pos, max_radius, [decal_arrows, decal_ring]))
 	aoe_tween.chain().tween_property(decal_arrows, "size", Vector3.ZERO, 1.04) # Based on bell sfx sample timing
-
-
-func _cleanup_aoe_decals(decals_to_remove: Array) -> void:
-	for decal in decals_to_remove:
-		decal.queue_free()
 
 
 func _spawn_bell(pos: Vector3, size: float, decals: Array) -> void:

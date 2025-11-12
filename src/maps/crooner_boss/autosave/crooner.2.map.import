@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://clxldihvh6lhd"
+path="res://.godot/imported/crooner.2.map-fc2b3e99a0df6f97728cb06c11055a94.tres"
+
+[deps]
+
+source_file="res://src/maps/crooner_boss/autosave/crooner.2.map"
+dest_files=["res://.godot/imported/crooner.2.map-fc2b3e99a0df6f97728cb06c11055a94.tres"]
+
+[params]
+
