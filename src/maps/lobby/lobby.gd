@@ -25,7 +25,7 @@ func _ready() -> void:
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
-	difficulty_menu.bet_started.connect(load_selected_level)
+	difficulty_menu.bet_started.connect(load_selected_level) # Start load the boss level
 	
 	get_tree().paused = false
 	
@@ -101,7 +101,6 @@ func load_selected_level():
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
 	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
 	# HACK - do this properly with dynamic loading of scenes
-  
 	if is_inside_tree():
 		# TODO - fade this out via tween
 		lobby_music_player.stop()
