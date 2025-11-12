@@ -66,7 +66,7 @@ var cached_target: Node3D
 	BossStatusEffect.BLEEDING: 1,
 }
 ## Status resist increased by this amount after each status application
-@export var increased_tolerance = 500
+@export var increased_tolerance = 750
 var current_status_buildup: Dictionary = {
 	BossStatusEffect.BURNING: 0,
 	BossStatusEffect.POISONED: 0,
