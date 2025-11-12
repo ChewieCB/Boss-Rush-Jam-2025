@@ -1481,6 +1481,20 @@ sleight_of_hand_interval = 5.0
 boss_id = 3
 chip_spawn_chance = 0.3
 chip_spawn_force = 1500.0
+status_resist = {
+1: 500,
+2: 2000,
+3: 1000,
+4: 1000,
+5: 1000
+}
+increased_status_tolerance = {
+1: 350,
+2: 1000,
+3: 500,
+4: 500,
+5: 1000
+}
 barrel_to_drop = ExtResource("15_817ob")
 sfx_awaken = ExtResource("26_lq1hd")
 sfx_hit = Array[AudioStream]([ExtResource("31_a4u5n"), ExtResource("32_vtq3o"), ExtResource("33_rnf52"), ExtResource("34_nkrfy"), ExtResource("35_efay1")])

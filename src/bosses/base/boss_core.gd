@@ -710,7 +710,7 @@ func apply_status(status: BossStatusEffect, duration: float) -> void:
 	remove_status(status)
 
 func remove_status(status: BossStatusEffect) -> void:
-	status_resist[status] += increased_status_tolerance[status]
+	status_resist[status] += increased_status_tolerance[status] * GameManager.get_risk_status_resist_mult()
 	current_status_buildup[status] = 0
 	var event_string: String = "status_%s" % BossStatusEffect.keys()[status].to_lower()
 	state_chart.send_event("remove_" + event_string)
