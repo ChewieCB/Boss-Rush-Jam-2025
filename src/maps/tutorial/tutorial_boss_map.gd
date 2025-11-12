@@ -34,6 +34,10 @@ var spin_warning_trigger_active: bool = false
 
 var current_trigger_actions: Array[String] = []
 
+# MUSIC
+@onready var music_player: AudioStreamPlayer = $InteractiveMusicPlayer
+var music_playback: AudioStreamPlaybackInteractive
+
 func _ready() -> void:
 	#GameManager.equipped_barrels = []
 	#player.gun.reinstall_barrels()
@@ -54,6 +58,8 @@ func _ready() -> void:
 
 	# Trigger spin tutorial popup when barrel effect trigger first hit
 	$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
+	
+	music_playback = music_player.get_stream_playback()
 
 	boss.boss_origin = boss_origin[0]
 	boss.elevator_spawns = elevator_spawns
@@ -138,6 +144,7 @@ func _trigger_spin_tutorial() -> void:
 
 func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 	if body is Player:
+		music_playback.switch_to_clip(1)
 		exit_doors.close()
 		if boss_doors:
 			boss_doors.is_autodoor = false
