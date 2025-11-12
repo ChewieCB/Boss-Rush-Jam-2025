@@ -12,7 +12,7 @@ signal return_timeout(hand: BlackjackHand)
 @export var slam_shockwave_prefab: PackedScene
 
 var anchor_offset: Vector3
-var is_offhand: bool = false  # flag to set handed-ness so we can flip sweep direction
+var is_offhand: bool = false # flag to set handed-ness so we can flip sweep direction
 
 @export var attack_speed_scale: float = 1.0
 
@@ -55,11 +55,11 @@ var sweep_tween: Tween
 @export var return_timer: Timer
 
 func _ready() -> void:
-	super()
+	super ()
 	state_chart.send_event("start_targeting")
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	return
 
 
@@ -106,8 +106,8 @@ func fake_destroy() -> void:
 
 
 func reinstate() -> void:
-	self.collision_layer = pow(2, 7-1)
-	self.collision_mask = pow(2, 1-1) + pow(2, 4-1) + pow(2, 5-1)
+	self.collision_layer = int(pow(2, 7 - 1))
+	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1))
 	state_chart.send_event("respawn")
 	health_component.current_health = health_component.max_health
 	hurtbox.monitoring = true
@@ -190,9 +190,9 @@ func _on_hit_slamming_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", true)
 	slam_tween = get_tree().create_tween()
 	slam_tween.tween_property(
-		self, 
-		"global_position", 
-		slam_target, 
+		self,
+		"global_position",
+		slam_target,
 		slam_time * attack_speed_scale
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	await slam_tween.finished
@@ -202,7 +202,7 @@ func _on_hit_slamming_state_entered() -> void:
 	
 	state_chart.send_event("hand_return")
 
-func _on_hit_slamming_state_physics_process(delta: float) -> void:
+func _on_hit_slamming_state_physics_process(_delta: float) -> void:
 	pass
 
 
@@ -223,7 +223,7 @@ func _on_stand_targeting_state_entered() -> void:
 	anim_player.queue("blackjack_hand/vertical")
 	# Pick a location on the walkable floor to double tap
 	# TODO - pick a location a distance away from the player, rotated so the aoe happens in view
-	var target_spread_angle: float = randf_range(-PI/2, PI/2)
+	var target_spread_angle: float = randf_range(-PI / 2, PI / 2)
 	# TODO - figure out a good way to maintain separation between hands when choosing a new stand target
 	stand_target = target.global_position - (target.global_basis.z * stand_range).rotated(Vector3.UP, target_spread_angle)
 	
@@ -238,9 +238,9 @@ func _on_stand_move_to_target_state_entered() -> void:
 	
 	stand_tween = get_tree().create_tween()
 	stand_tween.tween_property(
-		self, 
-		"global_position", 
-		stand_hover_target, 
+		self,
+		"global_position",
+		stand_hover_target,
 		slam_time * 2 * attack_speed_scale
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	
@@ -272,13 +272,13 @@ func _on_stand_double_tap_state_entered() -> void:
 	slam_tween = get_tree().create_tween()
 	for i in range(2):
 		slam_tween.tween_property(
-			self, 
-			"global_position", 
-			stand_target, 
+			self,
+			"global_position",
+			stand_target,
 			stand_slam_down_time * attack_speed_scale
 		).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 		slam_tween.tween_callback(
-			func(): 
+			func():
 				spawn_dust()
 				spawn_explosion()
 				var _shockwave = spawn_shockwave()
@@ -293,9 +293,9 @@ func _on_stand_double_tap_state_entered() -> void:
 				shockwave_instance_pool.push_back(_shockwave)
 		)
 		slam_tween.chain().tween_property(
-			self, 
-			"global_position:y", 
-			cached_y, 
+			self,
+			"global_position:y",
+			cached_y,
 			stand_slam_up_time * attack_speed_scale
 		).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	
@@ -303,7 +303,7 @@ func _on_stand_double_tap_state_entered() -> void:
 	
 	stand_repeat_counter += 1
 	if stand_repeat_counter <= stand_repeat_max:
-		var target_spread_angle: float = randf_range(-PI/2, PI/2)
+		var target_spread_angle: float = randf_range(-PI / 2, PI / 2)
 		# TODO - figure out a good way to maintain separation between hands when choosing a new stand target
 		stand_target = target.global_position - (target.global_basis.z * stand_range).rotated(Vector3.UP, target_spread_angle)
 		# Use the previous floor height to save re-calculating
@@ -330,7 +330,7 @@ func _on_stand_state_exited() -> void:
 	anim_player.play("blackjack_hand/RESET")
 
 
-func spawn_shockwave(spawn_pos: Vector3 = self.global_position, max_radius: float = stand_wave_radius, damage: float = stand_wave_damage, time: float = stand_wave_time) -> Area3D:
+func spawn_shockwave(_spawn_pos: Vector3 = self.global_position, max_radius: float = stand_wave_radius, damage: float = stand_wave_damage, time: float = stand_wave_time) -> Area3D:
 	var shockwave = shockwave_instance_pool.pop_front()
 	if not shockwave:
 		return
@@ -352,9 +352,9 @@ func _on_sweep_move_to_target_state_entered() -> void:
 	var target_offset: Vector3 = target.global_position.direction_to(controller_boss.global_position)
 	sweep_target_pos = target.global_position + target_offset * sweep_offset
 	
-	var _angle: float = rad_to_deg(controller_boss.sweep_angle_deg)/2
+	var _angle: float = rad_to_deg(controller_boss.sweep_angle_deg) / 2
 	var l_angle: float = _angle if is_offhand else -_angle
-	var r_angle: float = -_angle if is_offhand else _angle
+	var r_angle: float = - _angle if is_offhand else _angle
 	# Pick a sweep start point near the target
 	sweep_start_pos = target.global_position + (controller_boss.global_basis.z * controller_boss.sweep_dist).rotated(Vector3.UP, l_angle)
 	sweep_end_pos = target.global_position + (controller_boss.global_basis.z * controller_boss.sweep_dist).rotated(Vector3.UP, r_angle)
@@ -411,15 +411,15 @@ func _on_sweep_sweeping_state_entered() -> void:
 	anim_player.play("blackjack_hand/RESET")
 	# Generate a curved path3D to sweep along, 
 	# targeting the player position in the middle of the curve.
-	var start_pos: Vector3 = sweep_start_pos 
+	var start_pos: Vector3 = sweep_start_pos
 	var goal_pos: Vector3 = sweep_end_pos
 	# Generate path to follow
 	var path = Path3D.new()
 	var curve = Curve3D.new()
-	var mid_point: Vector3 = sweep_target_pos  # start_pos.lerp(goal_pos, 0.5) + Vector3(0, 5.0, 0)
+	var _mid_point: Vector3 = sweep_target_pos # start_pos.lerp(goal_pos, 0.5) + Vector3(0, 5.0, 0)
 
 	# Calculate a bezier curve contolrs so the curve intersects the target position at some point
-	var t: float = 0.5  # Point the curve intersects the target
+	var t: float = 0.5 # Point the curve intersects the target
 	var u: float = 1.0 - t
 	var w0: float = pow(u, 3)
 	var w1: float = 3.0 * pow(u, 2) * t
@@ -430,7 +430,7 @@ func _on_sweep_sweeping_state_entered() -> void:
 	
 	# You only get a constraint on the weighted sum of P1,P2
 	# Example: pick P1, solve for P2
-	var p1 = (sweep_start_pos + sweep_target_pos) * 0.5  # arbitrary choice (e.g. halfway between start and target)
+	var p1 = (sweep_start_pos + sweep_target_pos) * 0.5 # arbitrary choice (e.g. halfway between start and target)
 	var p2 = (rhs - (w1 * p1)) / w2
 	
 	curve.add_point(start_pos, Vector3.ZERO, p1 - sweep_start_pos)
@@ -457,14 +457,14 @@ func _on_sweep_sweeping_state_entered() -> void:
 	sweep_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	# Parent hand motion
 	sweep_tween.tween_property(
-		self, 
-		"sweep_progress", 
-		1.0, 
+		self,
+		"sweep_progress",
+		1.0,
 		sweep_time * attack_speed_scale
 	)
 	
 	# Card mesh width is 2.08, and we overlap around 0.1-0.3
-	var curve_length: float  = curve.get_baked_length()
+	var _curve_length: float = curve.get_baked_length()
 	var _path_follows := []
 	var _cards := []
 	# Tween each card in parallel to follow the hand
@@ -483,7 +483,7 @@ func _on_sweep_sweeping_state_entered() -> void:
 		sweep_card_follows.append({"path_follow": card_path_follow, "card": _card})
 		
 		_card.global_transform = card_path_follow.global_transform
-		_card.rotate_y(PI/2)
+		_card.rotate_y(PI / 2)
 		_card.visible = false
 		_card.particles.emitting = true
 	
@@ -516,7 +516,7 @@ func _on_sweep_sweeping_state_entered() -> void:
 	state_chart.send_event("hand_return")
 
 
-func _on_sweep_sweeping_state_physics_processing(delta: float) -> void:
+func _on_sweep_sweeping_state_physics_processing(_delta: float) -> void:
 	sweep_path_follow.progress_ratio = sweep_progress
 	
 	var min_progress_ratio = 0.4

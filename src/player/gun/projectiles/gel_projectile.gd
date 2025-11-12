@@ -211,7 +211,7 @@ func activate(start_pos: Vector3, dir: Vector3) -> void:
 	set_physics_process(true)
 	
 func deactivate() -> void:
-	if GameManager.object_pooling_manager:
+	if GameManager.object_pooling_manager and self.get_parent() and not self.get_parent() is ObjectPoolingManager:
 		self.reparent.call_deferred(GameManager.object_pooling_manager)
 	visible = false
 	active = false

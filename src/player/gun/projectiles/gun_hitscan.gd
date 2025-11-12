@@ -93,16 +93,16 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			end_pos_set.emit(buffered_hit_pos)
 			create_spark(buffered_hit_pos, hitscan_col_normal)
 			
-			var distance = start_pos.distance_to(buffered_hit_pos)
-			position += current_dir * (distance / 2.0)
-			mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)
+			var distance_to_hit_pos = start_pos.distance_to(buffered_hit_pos)
+			position += current_dir * (distance_to_hit_pos / 2.0)
+			mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance_to_hit_pos)
 			if is_ricochet_shot:
 				mesh.mesh.material.set_shader_parameter("enable_fade", false)
 				mesh.mesh.material.set_shader_parameter("enable_taper", false)
 			else:
 				mesh.mesh.material.set_shader_parameter("enable_fade", true)
 				mesh.mesh.material.set_shader_parameter("enable_taper", true)
-				mesh.mesh.material.set_shader_parameter("fade_distance", distance / 4)
+				mesh.mesh.material.set_shader_parameter("fade_distance", distance_to_hit_pos / 4)
 				mesh.mesh.material.set_shader_parameter("origin_position", start_pos)
 			visible = true
 			return

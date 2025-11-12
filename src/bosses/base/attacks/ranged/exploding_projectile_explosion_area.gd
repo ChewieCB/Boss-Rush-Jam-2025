@@ -14,10 +14,10 @@ func init(_damage: int, _radius: float, _pushback_scale: float = 1.0):
 	_set_damage_radius(_radius)
 
 
-func _set_damage_radius(radius: float) -> void:
-	self.radius = radius
+func _set_damage_radius(_radius: float) -> void:
+	self.radius = _radius
 	var new_shape := SphereShape3D.new()
-	new_shape.radius = radius
+	new_shape.radius = _radius
 	collider.shape = new_shape
 
 

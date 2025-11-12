@@ -17,7 +17,9 @@ enum BossIdEnum {
 	ROULETTE,
 	BARTENDER,
 	PIT,
-	CHIPS
+	CHIPS,
+	ELEVATOR,
+	BLACKJACK
 }
 
 enum BossStatusEffect {
@@ -220,7 +222,8 @@ func _ready() -> void:
 
 	if owner:
 		await owner.ready
-
+	print_debug("BossCore ready end")
+	
 
 func _physics_process(delta: float) -> void:
 	vel_vertical -= GRAVITY * delta

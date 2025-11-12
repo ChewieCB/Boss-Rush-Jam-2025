@@ -4239,6 +4239,7 @@ entProperties = {
 "linked_level": "res://src/maps/tutorial/TutorialBoss.tscn",
 "origin": "-862.5 16 108"
 }
+boss_id = 6
 
 [node name="group_7820_WallLightIndustrial1" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"

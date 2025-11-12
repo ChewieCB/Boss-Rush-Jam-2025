@@ -60,7 +60,7 @@ func _ready() -> void:
 			elem.visible = false
 
 
-func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float) -> void:
+func init(_start_pos: Vector3, _dir: Vector3, _damage: int, _ricochet_count: int, _speed: float, _max_range: float) -> void:
 	push_error("BaseBullet sub-class does not have an init method set.")
 
 
