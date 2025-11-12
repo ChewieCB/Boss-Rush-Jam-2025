@@ -19,7 +19,7 @@ var barrel_roll_data: Dictionary = {
 }
 var _base_color: Color
 var _time: float = 0.0
-var is_expanded = false
+var is_expanded = false # Also can be used as a more consistent is_focused
 
 func _ready() -> void:
 	self_modulate = Color(0.5, 0.5, 0.5)
@@ -82,3 +82,5 @@ func _on_focus_entered() -> void:
 			content += "- " + line + "\n"
 		content += "[/color]"
 	barrel_info_region.set_description_content(content)
+	barrel_info_region.select_icon_line.visible = true
+	barrel_info_region.select_icon_line.points[1] = position + size
