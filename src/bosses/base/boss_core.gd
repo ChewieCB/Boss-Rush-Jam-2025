@@ -66,7 +66,13 @@ var cached_target: Node3D
 	BossStatusEffect.BLEEDING: 1,
 }
 ## Status resist increased by this amount after each status application
-@export var increased_tolerance = 750
+@export var increased_status_tolerance: Dictionary = {
+	BossStatusEffect.BURNING: 500,
+	BossStatusEffect.POISONED: 500,
+	BossStatusEffect.FROZEN: 500,
+	BossStatusEffect.SHOCKED: 500,
+	BossStatusEffect.BLEEDING: 1000,
+}
 var current_status_buildup: Dictionary = {
 	BossStatusEffect.BURNING: 0,
 	BossStatusEffect.POISONED: 0,
@@ -704,7 +710,7 @@ func apply_status(status: BossStatusEffect, duration: float) -> void:
 	remove_status(status)
 
 func remove_status(status: BossStatusEffect) -> void:
-	status_resist[status] += increased_tolerance
+	status_resist[status] += increased_status_tolerance[status]
 	current_status_buildup[status] = 0
 	var event_string: String = "status_%s" % BossStatusEffect.keys()[status].to_lower()
 	state_chart.send_event("remove_" + event_string)
