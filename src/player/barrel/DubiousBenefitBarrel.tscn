@@ -20,6 +20,7 @@ display_text_title = "Fragile Feather"
 display_text_tag = "Maybe increase your survivability a bit"
 positive_desc = Array[String](["+25% dodge chance"])
 negative_desc = Array[String](["+25% damage taken"])
+icon_id = 55
 
 [node name="IncreaseDamageTaken" type="Node3D" parent="EffectContainer/FragileFeather"]
 script = ExtResource("3_1vbrx")
@@ -46,8 +47,9 @@ show_duration_ui = true
 script = ExtResource("6_g2yni")
 display_text_title = "Critical Insurance"
 display_text_tag = "Definitely not a scam in term of DPS"
-positive_desc = Array[String](["Guarantee the next shot critical if previous one missed"])
+positive_desc = Array[String](["Guarantee the next consumed bullet critical if previous one missed"])
 negative_desc = Array[String](["-50% critical damage"])
+icon_id = 56
 
 [node name="PhantomAmmo" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_alk3p")
@@ -55,6 +57,7 @@ display_text_title = "Phantom Ammo"
 display_text_tag = "You have unlimited ammo! (with tradeoff)"
 positive_desc = Array[String](["Unlimited ammo"])
 negative_desc = Array[String](["-20% damage", "Firerate and accuracy keep getting worse as you shoot, until you reload"])
+icon_id = 57
 
 [node name="ReduceDamage" type="Node3D" parent="EffectContainer/PhantomAmmo"]
 script = ExtResource("5_650bi")

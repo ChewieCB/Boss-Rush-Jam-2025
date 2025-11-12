@@ -11,6 +11,9 @@ signal desired_height_reached
 # Ante 4 (new): Hidden Motive - Hide the slot UI / attack indicator
 # Ante 5 (new): Greed Machine - Boss can pick up / steal dropped chips to recover HP
 
+# Status
+# Weak to Shock (he's a machine), resist to Bleeding (same reason)
+
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
 @onready var slot_icons_parent: Node3D = $Sprite3D/SlotIcons
@@ -177,7 +180,7 @@ func activate() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	super(delta)
+	super (delta)
 	
 	if target:
 		projectile_marker_pivot.look_at(target.global_position)

@@ -7,6 +7,9 @@ extends BossCore
 # Ante 4 (new): Premium Bullets: Shotgun projectile bigger, faster and can ricochet
 # Ante 5 (new): Sleight of Hand - Can throw cocktails in interval without taking an action/attack
 
+# Status
+# Weak to Burning (he's serving alcolhol most of the time), resist to Poisoned (same reason)
+
 signal fire_started
 
 @export_category("Phases")

@@ -119,5 +119,6 @@ func get_barrel_effect_data_at(index: int) -> Dictionary:
 		"is_archetype": is_archetype,
 		"positive_desc": barrel_effect.positive_desc,
 		"negative_desc": barrel_effect.negative_desc,
+		"icon_id": barrel_effect.icon_id
 	 }
 	return res

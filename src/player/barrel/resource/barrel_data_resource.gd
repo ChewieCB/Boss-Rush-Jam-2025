@@ -82,7 +82,8 @@ enum BarrelIdEnum {
 	DEBUG_VECTOR,
 	
 	BLACKJACK,
-	DUBIOUS_BENEFIT
+	DUBIOUS_BENEFIT,
+	CAREFUL_MARKSMAN
 }
 
 @export var barrel_id: BarrelIdEnum

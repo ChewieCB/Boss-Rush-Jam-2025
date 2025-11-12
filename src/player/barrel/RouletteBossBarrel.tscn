@@ -23,6 +23,7 @@ display_text_title = "Protective Barrier"
 display_text_tag = "Tough up!"
 positive_desc = Array[String](["+25% damage resistance"])
 negative_desc = Array[String](["-20% move speed"])
+icon_id = 43
 
 [node name="ShieldEffect" type="Node3D" parent="EffectContainer/ProtectiveBarrier"]
 script = ExtResource("6_61sk6")

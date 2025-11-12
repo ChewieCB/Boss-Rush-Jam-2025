@@ -266,6 +266,20 @@ chip_value_to_heal_ratio = 0.5
 boss_id = 1
 chip_spawn_chance = 0.3
 chip_spawn_force = 1200.0
+status_resist = {
+1: 1000,
+2: 1000,
+3: 1000,
+4: 500,
+5: 2000
+}
+increased_status_tolerance = {
+1: 500,
+2: 500,
+3: 500,
+4: 250,
+5: 1500
+}
 barrel_to_drop = ExtResource("11_5va1t")
 sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8"), NodePath("SFXPlayer9"), NodePath("SFXPlayer10"), NodePath("SFXPlayer11"), NodePath("SFXPlayer12")]
 sfx_awaken = ExtResource("51_nikje")
