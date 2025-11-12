@@ -17,7 +17,7 @@ class_name ExplosionParticles
 @export var emitting: bool = false:
 	set(value):
 		emitting = value
-		explosion()
+		explode()
 		emitting = false
 
 @export var time_until_queue_free: float = 2.0
@@ -26,10 +26,10 @@ signal finished
 
 func _ready() -> void:
 	if explode_on_spawn:
-		explosion()
+		explode()
 
 
-func explosion():
+func explode():
 	for elem in gpu_particles_arr:
 		elem.process_material.scale_min = min_scale
 		elem.process_material.scale_max = max_scale
