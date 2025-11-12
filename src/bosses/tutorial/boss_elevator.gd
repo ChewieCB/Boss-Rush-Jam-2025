@@ -30,13 +30,20 @@ var next_attack: String = ""
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 2.0
 @export var hurtbox_range_far: float = 3.8
-@export var sfx_melee: Array[AudioStream]
 @export var max_sequential_melee_phases: int = 5
 @export var max_sequential_ranged_phases: int = 3
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 14.0
+# SFX
+@export var sfx_swipe: Array[AudioStream]
 @export_subgroup("Hook")
 @export var hook_damage: float = 12.0
+# SFX
+@export var sfx_kick: Array[AudioStream]
+@export_subgroup("Backswipe")
+@export var backswipe_damage: float = 16.0
+# SFX
+@export var sfx_backswipe: Array[AudioStream]
 @export_subgroup("Slam")
 @export var slam_damage: float = 26.0
 @export var slam_delay: float = 0.3
@@ -44,6 +51,11 @@ var next_attack: String = ""
 @export var slam_particles: GPUParticles3D
 @export var slam_wave_material: StandardMaterial3D
 @export var slam_spawn_marker: Marker3D
+# SFX
+@export var sfx_jump: Array[AudioStream]
+@export var sfx_slam: Array[AudioStream]
+@export var sfx_wave_loop: Array[AudioStream]
+@export var sfx_wave_impact: Array[AudioStream]
 @export_subgroup("Nailguns")
 @export var nail_projectile: PackedScene
 @export var proj_spawn_l: Marker3D
@@ -53,7 +65,9 @@ var next_attack: String = ""
 @export var delay_between_burst: float = 0.5
 @export var nail_damage: float = 7.0
 # SFX
+@export var sfx_nail_equip: Array[AudioStream]
 @export var sfx_nail_shot: Array[AudioStream]
+@export var sfx_nail_unequip: Array[AudioStream]
 @export_subgroup("Laser AoE")
 @export var laser_aoe: PackedScene
 @export var laser_spawn: Marker3D
@@ -62,6 +76,11 @@ var aoe_warn_decal: Decal
 var laser_target_pos: Vector3
 @export var laser_aoe_marker: CompressedTexture2D
 @onready var laser_particles: GPUParticles3D = $DebugLaserPivot/DebugLaser/LaserSpawn/LaserEndParticles
+# SFX
+@export var sfx_laser_arm : Array[AudioStream]
+@export var sfx_laser_charging : Array[AudioStream]
+@export var sfx_laser_shoot : Array[AudioStream]
+@export var sfx_laser_disarm : Array[AudioStream]
 
 
 func _ready() -> void:
@@ -84,11 +103,11 @@ func select_attack_phase_1() -> void:
 	
 	if previous_phase == "start_melee_combo_attack":
 		if melee_phase_count < max_sequential_melee_phases:
-			if randf() < 0.7:
-				new_phase = "start_melee_combo_attack"
-			else:
-				melee_phase_count = 0
-				new_phase = "start_smokescreen"
+			#if randf() < 0.7:
+			new_phase = "start_melee_combo_attack"
+			#else:
+				#melee_phase_count = 0
+				#new_phase = "start_smokescreen"
 		else:
 			melee_phase_count = 0
 			new_phase = "start_smokescreen"
@@ -122,13 +141,30 @@ func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
 
 
 func swipe() -> void:
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_swipe.pick_random()
+		sfx_player.play()
 	if target.global_position.distance_to(self.global_position) < 5.0:
 		target.health_component.damage(swipe_damage)
 
 
 func hook() -> void:
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_kick.pick_random()
+		sfx_player.play()
 	if target.global_position.distance_to(self.global_position) < 5.0:
 		target.health_component.damage(hook_damage)
+
+
+func backswipe() -> void:
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_backswipe.pick_random()
+		sfx_player.play()
+	if target.global_position.distance_to(self.global_position) < 5.0:
+		target.health_component.damage(backswipe_damage)
 
 
 #### Phase 1 | Melee Combo
@@ -257,8 +293,10 @@ func _on_melee_combo_leap_back_state_entered() -> void:
 	
 	var jump_results = charge_back_jump(nav_pos, 1.6)
 	
-	#sfx_player.stream = sfx_jump.pick_random()
-	#sfx_player.play()
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_jump.pick_random()
+		sfx_player.play()
 	anim_player.play("elevator_boss/slam_jump_up")
 	#await anim_player.animation_finished
 	vel_vertical = 0
@@ -282,6 +320,10 @@ func _on_melee_combo_leap_back_state_physics_processing(delta: float) -> void:
 
 
 func _on_melee_combo_slam_line_state_entered() -> void:
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_slam.pick_random()
+		sfx_player.play()
 	anim_player.play("elevator_boss/slam_jump_impact")
 	#sfx_player.stream = sfx_slam.pick_random()
 	#sfx_player.play()
@@ -360,6 +402,10 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
 	
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_nail_equip.pick_random()
+		sfx_player.play()
 	anim_player.play("elevator_boss/ranged_arm")
 	await anim_player.animation_finished
 	
@@ -387,6 +433,10 @@ func _on_ranged_nails_shooting_state_entered() -> void:
 			var anim_name = "elevator_boss/ranged_shoot_%s" % ["l" if j % 2 == 0 else "r"]
 			anim_player.play(anim_name)
 			var proj = fire_projectile(nail_projectile, spawn_marker.global_position, sfx_nail_shot)
+			var sfx_player = get_available_sfx_player()
+			if sfx_player:
+				sfx_player.stream = sfx_nail_shot.pick_random()
+				sfx_player.play()
 			proj.init(nail_damage * GameManager.get_risk_dmg_mult())
 		await get_tree().create_timer(delay_between_burst).timeout
 	
@@ -436,6 +486,10 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	desired_distance = 80
 	
 	state_chart.send_event("start_targeting")
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_laser_arm.pick_random()
+		sfx_player.play()
 	anim_player.play("elevator_boss/laser_arm")
 	await anim_player.animation_finished
 	state_chart.send_event("charge_laser")
@@ -445,6 +499,10 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	debug_state_label.text = "Spartan Laser Level | Charging"
 	
 	state_chart.send_event("attack_buildup")
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_laser_charging.pick_random()
+		sfx_player.play()
 	anim_player.play("elevator_boss/laser_telegraph")
 	laser_particles.visible = true
 	laser_particles.emitting = true
@@ -508,6 +566,10 @@ func _on_laser_aoe_firing_state_entered() -> void:
 	# Spawn big cube AoE mesh
 	# Check for player presence
 	# Damage player
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_laser_shoot.pick_random()
+		sfx_player.play()
 	anim_player.play("elevator_boss/laser_fire")
 	laser_particles.emitting = false
 	var laser_instance = laser_aoe.instantiate()
@@ -527,7 +589,6 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	anim_player.play("elevator_boss/laser_disarm")
 	await anim_player.animation_finished
 	sprite.visible = false
-	self.global_position = Vector3(-50, -50, -50)
 	
 	await get_tree().create_timer(attack_recovery_time).timeout
 	anim_player.play("RESET")
@@ -834,11 +895,6 @@ func trigger_pushback(
 
 func _on_intro_state_entered() -> void:
 	_intro_drop()
-	state_chart.send_event("start_phase_1")
-
-
-func _on_phase_1_state_entered() -> void:
-	select_attack()
 
 
 func _on_intro_state_physics_processing(delta: float) -> void:
@@ -849,3 +905,7 @@ func _on_intro_state_physics_processing(delta: float) -> void:
 		anim_player.play("elevator_boss/idle")
 		await get_tree().create_timer(0.8, false).timeout
 		state_chart.send_event("start_phase_1")
+
+
+func _on_phase_1_state_entered() -> void:
+	select_attack()

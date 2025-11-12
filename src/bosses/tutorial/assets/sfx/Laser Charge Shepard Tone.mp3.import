@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ds224hyodfrif"
+path="res://.godot/imported/Laser Charge Shepard Tone.mp3-339869afaebaf385acd87ab58f1e3e57.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/Laser Charge Shepard Tone.mp3"
+dest_files=["res://.godot/imported/Laser Charge Shepard Tone.mp3-339869afaebaf385acd87ab58f1e3e57.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
