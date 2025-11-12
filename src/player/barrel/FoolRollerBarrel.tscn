@@ -44,3 +44,4 @@ display_text_desc = "-50% spread, +25% damage when stationary
 +100% spread, -25% damage when moving"
 positive_desc = Array[String](["-50% spread, +25% damage when stationary"])
 negative_desc = Array[String](["+100% spread, -25% damage when moving"])
+icon_id = 51

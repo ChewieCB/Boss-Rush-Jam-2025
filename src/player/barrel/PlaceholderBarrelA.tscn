@@ -23,6 +23,7 @@ display_text_title = "Guided Hand"
 display_text_tag = "Keep aiming at the target"
 positive_desc = Array[String](["Bullet homing to aimed location"])
 negative_desc = Array[String](["-50% projectile speed", "Doesn't work with hitscan bullet"])
+icon_id = 58
 
 [node name="LaserGuidedEffect" type="Node3D" parent="EffectContainer/GuidedHand"]
 script = ExtResource("6_s01hw")
@@ -39,6 +40,7 @@ display_text_title = "Safety Fold"
 display_text_tag = "..know when to fold 'em"
 positive_desc = Array[String](["Gain 50% damage resistance during reload"])
 negative_desc = Array[String](["-50% reload speed"])
+icon_id = 59
 
 [node name="SafetyFoldEffect" type="Node3D" parent="EffectContainer/SafetyFold"]
 script = ExtResource("8_dkjpk")
@@ -57,6 +59,7 @@ display_text_title = "Daredevil"
 display_text_tag = "Stick close to the enemy"
 positive_desc = Array[String](["Increases bullet damage the longer you stay in close range to enemies"])
 negative_desc = Array[String](["Decreases damage otherwise"])
+icon_id = 60
 
 [node name="LoadedDice" type="Node3D" parent="EffectContainer"]
 visible = false
@@ -65,6 +68,7 @@ display_text_title = "Loaded Dice"
 display_text_tag = "I hope you have some saving"
 positive_desc = Array[String](["Increase your critical chance by 25%"])
 negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
+icon_id = 27
 
 [node name="DoubleTap" type="Node3D" parent="EffectContainer"]
 visible = false
