@@ -85,6 +85,8 @@ func _process(delta: float) -> void:
 
 	for i in range(barrel_info_icon_effect.size()):
 		var barrel_info_icon: BarrelInfoIcon = barrel_info_icon_effect[i]
+		if not is_instance_valid(barrel_info_icon):
+			return
 		barrel_info_icon_angle[i] = barrel_info_icon_angle[i] + rotation_speed * delta
 		var new_x = circle_ring_center.x + circle_ring_radius * cos(barrel_info_icon_angle[i])
 		var new_y = circle_ring_center.y + circle_ring_radius * sin(barrel_info_icon_angle[i])
