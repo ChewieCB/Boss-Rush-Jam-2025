@@ -204,18 +204,45 @@ func _on_melee_combo_hook_state_entered() -> void:
 	anim_player.play("elevator_boss/kick")
 	await anim_player.animation_finished
 	
-	if randf() < 0.5:
-		state_chart.send_event("melee_backstep")
+	
+	if target in hurtbox.get_overlapping_bodies():
+		state_chart.send_event("melee_backswing")
 	else:
-		anim_player.play("elevator_boss/kick_end")
-		await anim_player.animation_finished
-		state_chart.send_event("combo_end")
-		state_chart.send_event("combo_end")
+		if randf() < 0.5:
+			state_chart.send_event("melee_backstep")
+		else:
+			anim_player.play("elevator_boss/kick_end")
+			await anim_player.animation_finished
+			state_chart.send_event("combo_end")
 
 
 func _on_melee_combo_hook_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+
+
+func _on_melee_combo_backswing_state_entered() -> void:
+	debug_state_label.text = "Melee Combo | Backswing"
+	hurtbox.set_deferred("monitoring", true)
+	
+	state_chart.send_event("start_targeting")
+	
+	await _telegraph_attack()
+	#sfx_player.stream = sfx_melee.pick_random()
+	#sfx_player.play()
+	anim_player.play("elevator_boss/backswipe")
+	await anim_player.animation_finished
+
+	if randf() < 0.6:
+		state_chart.send_event("melee_backstep")
+	else:
+		state_chart.send_event("combo_end")
+
+
+func _on_melee_combo_backswing_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
 
 
 func _on_melee_combo_leap_back_state_entered() -> void:

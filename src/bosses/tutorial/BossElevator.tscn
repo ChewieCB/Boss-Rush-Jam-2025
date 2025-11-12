@@ -1404,21 +1404,45 @@ event = &"melee_line"
 guard = SubResource("Resource_w0wob")
 delay_in_seconds = "0.0"
 
-[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="1"]
+[node name="toBackswing" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Backswing")
+event = &"melee_backswing"
+guard = SubResource("Resource_w0wob")
+delay_in_seconds = "0.0"
+
+[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
 guard = SubResource("Resource_abs5n")
 delay_in_seconds = "0.0"
 
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="2"]
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
 guard = SubResource("Resource_6d0vi")
 delay_in_seconds = "0.0"
 
-[node name="LeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="3"]
+[node name="Backswing" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="3"]
+script = ExtResource("4_fo57y")
+
+[node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Backswing" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../LeapBack")
+event = &"melee_backstep"
+guard = SubResource("Resource_abs5n")
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Backswing" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"combo_end"
+guard = SubResource("Resource_6d0vi")
+delay_in_seconds = "0.0"
+
+[node name="LeapBack" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="4"]
 script = ExtResource("4_fo57y")
 
 [node name="toSlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/LeapBack" index="0"]
@@ -1428,7 +1452,7 @@ event = &"melee_line"
 guard = SubResource("Resource_fgsnr")
 delay_in_seconds = "0.0"
 
-[node name="SlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="4"]
+[node name="SlamLine" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="5"]
 script = ExtResource("4_fo57y")
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/SlamLine" index="0"]
@@ -1438,7 +1462,7 @@ event = &"combo_end"
 guard = SubResource("Resource_72tnq")
 delay_in_seconds = "0.0"
 
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="5"]
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="6"]
 script = ExtResource("4_fo57y")
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo/Recover" index="0"]
@@ -1448,21 +1472,21 @@ event = &"end_recovery"
 guard = SubResource("Resource_v875p")
 delay_in_seconds = "0.0"
 
-[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="6"]
+[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="7"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../DualNailsRanged")
 event = &"start_dual_nails_attack"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="7"]
+[node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="8"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LaserAoE")
 event = &"start_laser_aoe_attack"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="8"]
+[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/MeleeCombo" index="9"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smokescreen")
 event = &"start_smokescreen"
@@ -1665,6 +1689,8 @@ autoplay = "RESET"
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Swipe" to="." method="_on_melee_combo_swipe_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" to="." method="_on_melee_combo_hook_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Hook" to="." method="_on_melee_combo_hook_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/Backswing" to="." method="_on_melee_combo_backswing_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/Backswing" to="." method="_on_melee_combo_backswing_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/LeapBack" to="." method="_on_melee_combo_leap_back_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/MeleeCombo/LeapBack" to="." method="_on_melee_combo_leap_back_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/MeleeCombo/SlamLine" to="." method="_on_melee_combo_slam_line_state_entered"]
