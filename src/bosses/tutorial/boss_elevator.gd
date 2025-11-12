@@ -57,7 +57,7 @@ var aoe_warn_decal: Decal
 
 
 func _ready() -> void:
-	super()
+	super ()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 
@@ -67,7 +67,7 @@ func activate() -> void:
 	state_chart.send_event("activate")
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	#super(delta)
 	return
 
@@ -323,7 +323,7 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 	state_chart.send_event("start_shooting")
 
 
-func _on_ranged_nails_targeting_state_physics_processing(delta: float) -> void:
+func _on_ranged_nails_targeting_state_physics_processing(_delta: float) -> void:
 	return
 
 
@@ -346,7 +346,7 @@ func _on_ranged_nails_shooting_state_entered() -> void:
 	state_chart.send_event("stop_shooting")
 
 
-func _on_ranged_nails_shooting_state_physics_processing(delta: float) -> void:
+func _on_ranged_nails_shooting_state_physics_processing(_delta: float) -> void:
 	return
 
 
@@ -401,7 +401,7 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	
 	aoe_warn_decal = Decal.new()
 	aoe_warn_decal.texture_albedo = laser_aoe_marker
-	aoe_warn_decal.cull_mask = pow(2, 1-1)
+	aoe_warn_decal.cull_mask = int(pow(2, 1 - 1))
 	aoe_warn_decal.size = Vector3(4, 4, 1)
 	get_parent().get_parent().add_child(aoe_warn_decal)
 	aoe_warn_decal.global_position = laser_spawn.global_position
@@ -411,7 +411,7 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	# laser_aoe_marker
 	var warn_tween := get_tree().create_tween()
 	warn_tween.tween_property(
-		aoe_warn_decal, 
+		aoe_warn_decal,
 		"size:z",
 		100,
 		0.175 * 6
@@ -431,20 +431,20 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	state_chart.send_event("start_firing")
 
 
-func _on_laser_aoe_charging_state_physics_processing(delta: float) -> void:
+func _on_laser_aoe_charging_state_physics_processing(_delta: float) -> void:
 	aoe_warn_decal.global_rotation = self.global_rotation
 
 
 func _on_laser_aoe_firing_state_entered() -> void:
 	var aoe_tween := get_tree().create_tween()
 	aoe_tween.tween_property(
-		aoe_warn_decal, 
+		aoe_warn_decal,
 		"modulate:a",
 		0.0,
 		0.8
 	)
 	aoe_tween.tween_callback(
-		func(): 
+		func():
 			aoe_warn_decal.queue_free()
 			aoe_warn_decal = null
 	)
@@ -518,8 +518,8 @@ func _on_smokescreen_smoke_state_entered() -> void:
 func _on_smokescreen_open_doors_state_entered() -> void:
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
-	self.collision_layer = pow(2, 3-1)
-	self.collision_mask = pow(2, 1-1) + pow(2, 2-1) + pow(2, 4-1) + pow(2, 5-1)
+	self.collision_layer = int(pow(2, 3 - 1))
+	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1))
 	
 	active_sub_light.green()
 	# TODO - configure delay and SFX for door opening
@@ -531,7 +531,7 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	
 	# Move the boss out of the elevator to fire
 	var tween = get_tree().create_tween()
-	var forward_dir: Vector3 = -active_sub_door.basis.z
+	var forward_dir: Vector3 = - active_sub_door.basis.z
 	var peek_pos: Vector3 = self.global_position + forward_dir * 3
 	tween.tween_property(
 		self, "global_position", peek_pos, 0.5
@@ -548,7 +548,7 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 
 func _on_smokescreen_move_no_smoke_state_entered() -> void:
 	var tween = get_tree().create_tween()
-	var forward_dir: Vector3 = -active_sub_door.basis.z
+	var forward_dir: Vector3 = - active_sub_door.basis.z
 	var peek_pos: Vector3 = self.global_position - forward_dir * 3
 	tween.tween_property(
 		self, "global_position", peek_pos, 0.5
@@ -633,12 +633,12 @@ func charge_back_jump(goal_pos: Vector3 = Vector3.ZERO, charge_jump_height: floa
 	return [initial_velocity, time_up, time_down]
 
 
-func slam_line(spawn_pos: Vector3, range: float = 30.0) -> void:
+func slam_line(_spawn_pos: Vector3, _range: float = 30.0) -> void:
 	# Spawn line aoe that grows from boss to target
 	spawn_aoe_line(
-		self.global_position.distance_to(target.global_position), 
-		4.0, 0.4, 
-		slam_damage, slam_time, 
+		self.global_position.distance_to(target.global_position),
+		4.0, 0.4,
+		slam_damage, slam_time,
 		$DebugAnimPivot/DebugWrench/SlamSpawn.global_position,
 		0.2, false,
 		state_chart.send_event.bind("combo_end")
@@ -653,9 +653,9 @@ func spawn_aoe_line(
 	spawned_wave_time: float = 1.0,
 	area_pos: Vector3 = self.global_position,
 	# pushback_source: Node3D = self,
-	spawned_wave_height: float = 0.3,
+	_spawned_wave_height: float = 0.3,
 	_telegraph: bool = false,
-	callback: Callable = func(): pass,
+	callback: Callable = func(): pass ,
 ) -> void:
 	# Generate a collider
 	var area_collider := Area3D.new()

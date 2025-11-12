@@ -149,13 +149,13 @@ var block_timers: Array = []
 
 
 func _ready() -> void:
-	super()
+	super ()
 
 	slippery_debuff = StatusEffect.new()
 	slippery_debuff.display_name = "Reduce movement friction"
 	slippery_debuff.status_code = "blackjack_tilted_floor_slippery"
 	slippery_debuff.modified_stat = StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER
-	slippery_debuff.value = -tilt_floor_friction_mod
+	slippery_debuff.value = - tilt_floor_friction_mod
 	slippery_debuff.modify_type = StatusEffect.ModifyType.PERCENTAGE
 	slippery_debuff.duration = tilt_duration
 	slippery_debuff.is_bad_effect = true
@@ -206,12 +206,12 @@ func _ready() -> void:
 	)
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	return
 
 
 func activate() -> void:
-	super()
+	super ()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	if not self.is_node_ready():
@@ -252,7 +252,7 @@ func _destroy_all_hands(hand_delay: float = 0.2, initial_delay: float = 0.0) -> 
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super(new_health, prev_health)
+	super (new_health, prev_health)
 	if current_phase == 1:
 		if new_health / health_component.max_health < phase_2_health_threshold:
 			skip_deal = true
@@ -400,7 +400,7 @@ func select_attack_phase_2() -> void:
 #
 # Spawn/despawn methods
 # Spawn a new hand from a packed scene
-func spawn_hand(is_visible: bool = true) -> BlackjackHand:
+func spawn_hand(_is_visible: bool = true) -> BlackjackHand:
 	var new_hand := hand_scene.instantiate()
 	spawned_hands.push_back(new_hand)
 	scene_root.add_child(new_hand)
@@ -417,7 +417,7 @@ func spawn_hand(is_visible: bool = true) -> BlackjackHand:
 	new_hand.attack_speed_scale = attack_speed_scale
 	#new_hand.walkable_floor_nav = walkable_floor_nav
 	new_hand.target = self.target
-	new_hand.visible = is_visible
+	new_hand.visible = _is_visible
 	new_hand.position = Vector3.ZERO
 	new_hand.global_position = hand_spawn_pos.global_position
 
@@ -452,7 +452,7 @@ func despawn_hand(hand: BlackjackHand, reorder_hands: bool = false) -> void:
 				var _hand = spawned_hands[i]
 				_anchor_hand(_hand)
 
-	await hand.fake_destroy()
+	hand.fake_destroy()
 	await hand.dust_particle.finished
 	_release_hand(hand)
 
@@ -642,7 +642,7 @@ func _on_movement_walking_state_entered() -> void:
 		true
 	)
 	new_wander_point.y = randf_range(min_flying_height, max_flying_height)
-	var wander_dir: Vector3 = self.global_position.direction_to(new_wander_point)
+	var _wander_dir: Vector3 = self.global_position.direction_to(new_wander_point)
 	#var wander_dist: float = randf_range(min_wander_distance, max_wander_distance)
 	var wander_dist: float = self.global_position.distance_to(new_wander_point)
 	var wander_time: float = wander_dist / wander_speed
@@ -692,15 +692,15 @@ func _on_intro_state_entered() -> void:
 	hand_r.global_position = intro_path_points[0].global_position
 	hand_r.visible = true
 
-	move_tween.tween_property(hand_l, "global_position", intro_path_points[1].global_position + Vector3(hand_spacing, -1 ,0), 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	move_tween.tween_property(hand_l, "global_position", intro_path_points[1].global_position + Vector3(hand_spacing, -1, 0), 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[1].global_position + Vector3(-hand_spacing, -1, 0), 0.36).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	move_tween.chain().tween_callback(_shake_platform.bind(0.55, 0.6, 12))
 
 	move_tween.chain().tween_property(self, "global_position", intro_path_points[1].global_position, 1.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 	move_tween.chain().tween_property(self, "global_position", intro_path_points[2].global_position, 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
-	move_tween.parallel().tween_property(hand_l, "global_position", intro_path_points[2].global_position + Vector3(hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
-	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[2].global_position + Vector3(-hand_spacing, 2.0 ,0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	move_tween.parallel().tween_property(hand_l, "global_position", intro_path_points[2].global_position + Vector3(hand_spacing, 2.0, 0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[2].global_position + Vector3(-hand_spacing, 2.0, 0), 1.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
 
 	await move_tween.finished
 
@@ -796,7 +796,7 @@ func _on_dealing_dealing_state_entered() -> void:
 				card_explosion_particles.emitting = true
 				hand_count_label.text = str(hand_count)
 		)
-		deal_tween.tween_property(hand_r, "position",  cached_pos, 0.85 / deal_speed_scale).set_ease(Tween.EASE_OUT)
+		deal_tween.tween_property(hand_r, "position", cached_pos, 0.85 / deal_speed_scale).set_ease(Tween.EASE_OUT)
 
 		await deal_tween.finished
 
@@ -937,7 +937,7 @@ func _on_wave_collision(
 	body: Node3D,
 	aoe_damage: float,
 	pushback_source: Node3D = self,
-	pushback_radius: float = pushback_source.collider.shape.radius
+	_pushback_radius: float = pushback_source.collider.shape.radius
 ) -> void:
 	if body == target:
 		body.health_component.damage(aoe_damage)
@@ -1057,7 +1057,7 @@ func _on_bust_arena_aoe_state_entered() -> void:
 	)
 
 	var possible_targets := _get_evenly_spaced_points_for_explosion(
-		bust_proj_shots, bust_explosion_radius/2, nearest_meshes
+		bust_proj_shots, bust_explosion_radius / 2, nearest_meshes
 	)
 
 	for h in range(bust_proj_shots):
@@ -1111,7 +1111,7 @@ func _on_bust_arena_aoe_state_entered() -> void:
 		).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 		hand_tween.tween_callback(
 			func():
-				_hand.spawn_dust
+				_hand.spawn_dust()
 				_hand.spawn_explosion()
 				_shake_platform(0.8, 0.3)
 		)
@@ -1129,13 +1129,13 @@ func _bust_projectile() -> void:
 	var _damage_area := _spawn_damage_area(
 		target_pos,
 		bust_explosion_radius,
-		tilt_explosion_damage
+		int(tilt_explosion_damage)
 	)
 	# Spawn warning decals
 	var _aoe_decals := await spawn_aoe_decals(
 		target_pos + Vector3(0, 0.5, 0),
 		bust_explosion_radius,
-		bust_proj_speed/4
+		bust_proj_speed / 4
 	)
 	 # Fire projectile
 	var hit_pos: Vector3 = await _fire_curved_proj(
@@ -1149,7 +1149,7 @@ func _bust_projectile() -> void:
 	_trigger_damage_area(_damage_area)
 	# Spawn an explosion on impact
 	for k in range(bust_proj_explosion_count):
-		var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
+		var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2 * PI)) * 0.5
 		_spawn_explosion(pos, 4.0)
 
 	_cleanup_aoe_decals(_aoe_decals)
@@ -1214,7 +1214,7 @@ func _on_tilt_moving_to_pos_state_entered() -> void:
 	state_chart.send_event("start_tilting")
 
 
-func _on_tilt_moving_to_pos_state_physics_processing(delta: float) -> void:
+func _on_tilt_moving_to_pos_state_physics_processing(_delta: float) -> void:
 	if spawned_hands.size() == 0:
 		if hand_tween:
 			hand_tween.kill()
@@ -1231,8 +1231,8 @@ func _on_tilt_tilting_state_entered() -> void:
 	tilt_tween = get_tree().create_tween()
 	tilt_tween.set_parallel(true)
 	tilt_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
-	tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", -tilt_max_deg, tilt_duration/2)
-	tilt_tween.tween_property(tilt_animateable_floor, "constant_linear_velocity:z", -tilt_max_floor_speed, tilt_duration/2)
+	tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", -tilt_max_deg, tilt_duration / 2)
+	tilt_tween.tween_property(tilt_animateable_floor, "constant_linear_velocity:z", -tilt_max_floor_speed, tilt_duration / 2)
 
 	await tilt_tween.finished
 	target.vel_horizontal += Vector2(0, -8.0)
@@ -1241,7 +1241,7 @@ func _on_tilt_tilting_state_entered() -> void:
 	state_chart.send_event("start_firing")
 
 
-func _on_tilt_tilting_state_physics_processing(delta: float) -> void:
+func _on_tilt_tilting_state_physics_processing(_delta: float) -> void:
 	self.global_position = tilt_platform_origin_marker.global_position
 	self.rotation_degrees.x = tilt_mesh.rotation_degrees.x
 
@@ -1254,7 +1254,7 @@ func _on_tilt_tilting_state_physics_processing(delta: float) -> void:
 		if i >= spawned_hands.size():
 			return
 		var _hand = spawned_hands[i]
-		_hand.global_position =  tilt_hand_markers[i].global_position
+		_hand.global_position = tilt_hand_markers[i].global_position
 
 
 func _on_tilt_firing_state_entered() -> void:
@@ -1291,12 +1291,12 @@ func _on_tilt_firing_state_entered() -> void:
 			var _damage_area := _spawn_damage_area(
 				target_pos,
 				tilt_explosion_radius,
-				tilt_explosion_damage,
+				int(tilt_explosion_damage),
 				0.2
 			)
 			# Lead the target a bit so the player can see the attack coming
 			target_pos -= tilt_mesh.global_basis.z * 8.0
-			var _aoe_decals := await spawn_aoe_decals(target_pos + Vector3(0, 2.0, 0), tilt_explosion_radius, tilt_proj_speed/4)
+			var _aoe_decals := await spawn_aoe_decals(target_pos + Vector3(0, 2.0, 0), tilt_explosion_radius, tilt_proj_speed / 4)
 			var hit_pos: Vector3 = await _fire_curved_proj(
 				tilt_proj_scene,
 				proj_origin,
@@ -1307,7 +1307,7 @@ func _on_tilt_firing_state_entered() -> void:
 			_trigger_damage_area(_damage_area)
 			# Spawn an explosion on impact
 			for k in range(tilt_proj_explosion_count):
-				var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2*PI)) * 0.5
+				var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2 * PI)) * 0.5
 				_spawn_explosion(pos)
 
 			_cleanup_aoe_decals(_aoe_decals)
@@ -1330,7 +1330,7 @@ func _spawn_explosion(spawn_pos: Vector3, scale_factor: float = 1.0) -> void:
 	var explosion_trauma: float = remap(target_dist, explosion_shake_max_range, 0.0, 0.0, 0.7)
 	target.player_camera.add_trauma(explosion_trauma)
 
-	await get_tree().create_timer(randf_range(0.05, 0.4))
+	await get_tree().create_timer(randf_range(0.05, 0.4)).timeout
 	tilt_explosion_instances.push_back(explosion)
 
 
@@ -1352,7 +1352,7 @@ func _trigger_damage_area(damage_area: ExplosionDamageProjectileArea) -> void:
 	explosion_damage_areas.push_back(damage_area)
 
 
-func _on_tilt_firing_state_physics_processing(delta: float) -> void:
+func _on_tilt_firing_state_physics_processing(_delta: float) -> void:
 	if spawned_hands.size() == 0 or health_component.current_health == 0:
 		state_chart.send_event("stop_firing")
 
@@ -1363,15 +1363,15 @@ func _on_tilt_untilting_state_entered() -> void:
 	tilt_tween = get_tree().create_tween()
 	tilt_tween.set_parallel(true)
 	tilt_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
-	tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", 0, tilt_duration/2)
-	tilt_tween.tween_property(tilt_animateable_floor, "constant_linear_velocity:z", 0, tilt_duration/2)
+	tilt_tween.tween_property(tilt_mesh, "rotation_degrees:x", 0, tilt_duration / 2)
+	tilt_tween.tween_property(tilt_animateable_floor, "constant_linear_velocity:z", 0, tilt_duration / 2)
 
 	await tilt_tween.finished
 
 	state_chart.send_event("stop_tilting")
 
 
-func _on_tilt_untilting_state_physics_processing(delta: float) -> void:
+func _on_tilt_untilting_state_physics_processing(_delta: float) -> void:
 	self.global_position = tilt_platform_origin_marker.global_position
 	self.rotation_degrees.x = tilt_mesh.rotation_degrees.x
 
@@ -1379,7 +1379,7 @@ func _on_tilt_untilting_state_physics_processing(delta: float) -> void:
 		if i >= spawned_hands.size():
 			return
 		var _hand = spawned_hands[i]
-		_hand.global_position =  tilt_hand_markers[i].global_position
+		_hand.global_position = tilt_hand_markers[i].global_position
 
 
 func _on_tilt_recovering_state_entered() -> void:
@@ -1414,8 +1414,8 @@ func _fire_curved_proj(proj_scene: PackedScene, proj_origin: Vector3, target_pos
 		target_pos.y = result.position.y
 
 	if abs(target_pos.z) > bounding_box.size.z:
-		var sign: int = 1 if target_pos.z > 0 else -1
-		target_pos.z = bounding_box.size.z * sign
+		var _sign: int = 1 if target_pos.z > 0 else -1
+		target_pos.z = bounding_box.size.z * _sign
 
 	var curve = _create_curved_path(proj_origin, target_pos, arc_height)
 	path.curve = curve
@@ -1457,7 +1457,7 @@ func _create_curved_path(start_pos: Vector3, goal_pos: Vector3, height: float, a
 	return curve
 
 
-func _create_new_damage_area(pos: Vector3, radius: float, damage: int) -> ExplosionDamageProjectileArea:
+func _create_new_damage_area(_pos: Vector3, radius: float, damage: int) -> ExplosionDamageProjectileArea:
 	var damage_area: ExplosionDamageProjectileArea = explosion_damage_area_scene.instantiate()
 	damage_area.init(damage, radius)
 
@@ -1518,7 +1518,7 @@ func _on_hand_defensive_moving_to_block_state_entered() -> void:
 
 		var hand_idx = spawned_hands.find(hand)
 		var blocking_pos := Vector3(
-			-hand_spacing/2, 0.0, -hand_spacing/2
+			- hand_spacing / 2, 0.0, -hand_spacing / 2
 		).rotated(
 			Vector3.UP,
 			2 * PI / spawned_hands.size() * hand_idx
@@ -1552,7 +1552,7 @@ func _on_hand_defensive_blocking_state_entered() -> void:
 
 	var anchor_tween := get_tree().create_tween()
 	var rotation_zero: float = 0.0 if hand_anchor.rotation.y < 180 else 360.0
-	anchor_tween.tween_property(hand_anchor, "rotation:y", rotation_zero, 0.3)\
+	anchor_tween.tween_property(hand_anchor, "rotation:y", rotation_zero, 0.3) \
 	.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await anchor_tween.finished
 
@@ -1576,6 +1576,7 @@ func _on_hand_defensive_firing_state_entered() -> void:
 	var move_block_tween := get_tree().create_tween()
 	move_block_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	move_block_tween.set_parallel(true)
+	var hand_idx: int = 0
 
 	for hand in spawned_hands:
 		#hand.sprite.modulate = Color.YELLOW
@@ -1585,7 +1586,7 @@ func _on_hand_defensive_firing_state_entered() -> void:
 
 		_anchor_hand(hand, 0.6, false)
 
-		var hand_idx = spawned_hands.find(hand)
+		hand_idx = spawned_hands.find(hand)
 		var blocking_pos := Vector3(
 			-1.4, randf_range(-1.4, 1.4), -1.4
 		).rotated(
@@ -1597,7 +1598,7 @@ func _on_hand_defensive_firing_state_entered() -> void:
 	await move_block_tween.finished
 	await get_tree().create_timer(0.3 * spawned_hands.size(), false).timeout
 
-	var hand_idx: int = 0
+	hand_idx = 0
 	for i in range(absorbed_shots.size()):
 		var shot: BaseBullet = absorbed_shots[i]
 		# Cycle through hands to fire from
@@ -1633,7 +1634,7 @@ func _on_hand_defensive_firing_state_entered() -> void:
 		for elem in shot.elemental_emitting_vfx:
 			if elem:
 				elem.turn_on()
-		shot.init(start_pos, direction, damage, 0, speed, 500)
+		shot.init(start_pos, direction, int(damage), 0, speed, 500)
 		#await get_tree().create_timer(0.15, false).timeout
 
 	absorbed_shots = []
@@ -1649,7 +1650,7 @@ func _on_hand_defensive_recovering_state_entered() -> void:
 		hand.health_component.received_dmg_multiplier = 1.0
 		# DEBUG - for testing, implement handling for killing hands mid-attack later
 		hand.health_component.is_invincible = false
-		hand.collision_layer = pow(2, 7-1)
+		hand.collision_layer = pow(2, 7 - 1)
 		_anchor_hand(hand)
 		#hand.state_chart.send_event("hand_finished")
 
@@ -1685,7 +1686,7 @@ func _block_interecept_projectile(proj: BaseBullet, pos: Vector3 = Vector3.ZERO)
 
 	# Figure out the projectile's intercept course given the projectile's
 	# velocity, hand position, and time-to-intercept
-	var intercept_dist: float = closest_hand.global_position.distance_to(proj.global_position)
+	var _intercept_dist: float = closest_hand.global_position.distance_to(proj.global_position)
 	var intercept_time: float = get_intercept_time(closest_hand.global_position, 130.0, proj.global_position, proj.velocity)
 	var intercept_pos: Vector3 = proj.global_position + proj.velocity * intercept_time
 
@@ -1712,13 +1713,13 @@ func _block_interecept_projectile(proj: BaseBullet, pos: Vector3 = Vector3.ZERO)
 		proj.projectile_speed = 0
 		proj.visible = false
 		proj.global_position = Vector3(-20, -20, -20)
-		proj.collider.collision_mask = pow(2, 1-1) + pow(2, 2-1)
+		proj.collider.collision_mask = pow(2, 1 - 1) + pow(2, 2 - 1)
 	# TODO StickyBombProjectile
 	# TODO GelBubble
 	# TODO GelProjectile
 	# TODO GelProjectileBlob
 	elif proj is GunHitscan:
-		proj.raycast.collision_mask = pow(2, 1-1) + pow(2, 2-1)
+		proj.raycast.collision_mask = pow(2, 1 - 1) + pow(2, 2 - 1)
 		proj.raycast.collide_with_areas = false
 
 	for elem in proj.elemental_emitting_vfx:
@@ -1762,18 +1763,18 @@ func _on_blocking_detection_area_area_entered(area: Area3D) -> void:
 
 func get_intercept_time(interceptor_pos: Vector3, interceptor_speed: float, target_pos: Vector3, target_velocity: Vector3) -> float:
 	# Quadratic equation
-	var a: float = interceptor_speed**2 - target_velocity.dot(target_velocity)
+	var a: float = interceptor_speed ** 2 - target_velocity.dot(target_velocity)
 	var b: float = 2 * target_velocity.dot(target_pos - interceptor_pos)
 	var c: float = (target_pos - interceptor_pos).dot(target_pos - interceptor_pos)
 	# If the interceptor speed is slower than the target velocity,
 	# then they'll never intercept and this will error, so fallback to 0.0.
 	var time: float = 0.0
 	if interceptor_speed > target_velocity.length():
-		time = (b + sqrt(b**2 + 4 * a * c)) / (2*a)
+		time = (b + sqrt(b ** 2 + 4 * a * c)) / (2 * a)
 
 	return time
 
 
-func _on_hand_return_timeout(hand: BlackjackHand) -> void:
+func _on_hand_return_timeout(_hand: BlackjackHand) -> void:
 	pass
 	#_anchor_hand(hand)

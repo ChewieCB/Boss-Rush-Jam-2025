@@ -18,7 +18,7 @@ func _ready() -> void:
 	
 	var laser_tween := get_tree().create_tween()
 	laser_tween.tween_property(
-		mat, 
+		mat,
 		"albedo_color:a",
 		0.0,
 		2.0
@@ -32,8 +32,8 @@ func _on_body_entered(body: Node3D) -> void:
 		knockback(body, damage, 15.0)
 
 
-func knockback(body: Node3D, damage: float, force: float) -> void:
-	body.health_component.damage(damage)
+func knockback(body: Node3D, knockback_damage: float, force: float) -> void:
+	body.health_component.damage(knockback_damage)
 	var pushback_vector = self.global_position.direction_to(body.global_position)
 	
 	body.velocity = Vector3.ZERO
