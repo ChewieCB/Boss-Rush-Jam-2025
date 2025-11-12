@@ -1,4 +1,4 @@
-[gd_scene load_steps=126 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=124 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -29,9 +29,9 @@
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="15_c0skh"]
 [ext_resource type="Texture2D" uid="uid://du746aotdbnq4" path="res://src/bosses/tutorial/assets/sprites/3_HIT_1.png" id="16_e0muj"]
 [ext_resource type="Texture2D" uid="uid://d1fy72k7lk74w" path="res://src/bosses/tutorial/assets/sprites/IDLE.png" id="16_ukgug"]
-[ext_resource type="AudioStream" uid="uid://dbcg2so3iy86c" path="res://src/bosses/tutorial/assets/sfx/Laser Charging.mp3" id="17_53wre"]
 [ext_resource type="Texture2D" uid="uid://c5qw83v0dnuq3" path="res://src/bosses/tutorial/assets/sprites/1_HIT_1.png" id="17_cu5tl"]
 [ext_resource type="Texture2D" uid="uid://cvr3a7aipo7m6" path="res://src/bosses/tutorial/assets/sprites/3_HIT_2.png" id="17_dmhhe"]
+[ext_resource type="AudioStream" uid="uid://ds224hyodfrif" path="res://src/bosses/tutorial/assets/sfx/Laser Charge Shepard Tone.mp3" id="17_mkqio"]
 [ext_resource type="AudioStream" uid="uid://dw60ntjht2e6" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 1.mp3" id="18_5elni"]
 [ext_resource type="Texture2D" uid="uid://de0va8w8bfuxl" path="res://src/bosses/tutorial/assets/sprites/1_HIT_2.png" id="18_22flk"]
 [ext_resource type="Texture2D" uid="uid://dv40bv156cgd1" path="res://src/bosses/tutorial/assets/sprites/3_HIT_3.png" id="18_lwmyv"]
@@ -97,11 +97,8 @@ albedo_texture = ExtResource("7_6pf3s")
 emission_enabled = true
 emission = Color(1, 0.168627, 0.168627, 1)
 emission_energy_multiplier = 10.0
-billboard_mode = 3
+billboard_mode = 2
 billboard_keep_scale = true
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_mvva7"]
 material = SubResource("StandardMaterial3D_um6ea")
@@ -110,9 +107,6 @@ size = Vector2(0.2, 0.2)
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3w5db"]
 radius = 1.0
 height = 4.6
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_5jp0r"]
-size = Vector3(11, 15, 11)
 
 [sub_resource type="BoxMesh" id="BoxMesh_holc6"]
 size = Vector3(2.5, 3.756, 2.5)
@@ -196,14 +190,6 @@ guard = SubResource("Resource_lhjct")
 [sub_resource type="Resource" id="Resource_up65n"]
 script = ExtResource("14_kbpeg")
 guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_y3o0c"]
-script = ExtResource("13_k65oo")
-state = NodePath("../../../../Health/Dead")
-
-[sub_resource type="Resource" id="Resource_u3pji"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_y3o0c")
 
 [sub_resource type="Resource" id="Resource_bpbv3"]
 script = ExtResource("14_kbpeg")
@@ -334,62 +320,50 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("DebugLaserPivot/DebugLaser/LaserSpawn:position")
+tracks/8/path = NodePath("CollisionShape3D:disabled")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0.6, -13.9, -1.8)]
+"update": 1,
+"values": [false]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("CollisionShape3D:disabled")
+tracks/9/path = NodePath("Sprite3D:position")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector3(0, 2.6, 0)]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("LaserCollider:disabled")
+tracks/10/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Sprite3D:position")
+tracks/11/path = NodePath("LaserSpawn/LaserEndParticles:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 2.6, 0)]
-}
-tracks/12/type = "value"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath("LaserCollider:position")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, -23.2748, 0)]
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_dshkv"]
@@ -439,7 +413,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("DebugLaserPivot:visible")
+tracks/3/path = NodePath("DebugRangedPivot:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -451,34 +425,22 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("DebugRangedPivot:visible")
+tracks/4/path = NodePath(".:collision_mask")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(1.4),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath(".:collision_mask")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [19]
 }
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath(".:collision_layer")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:collision_layer")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -608,7 +570,7 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_ywtcr"]
 resource_name = "laser_arm"
 length = 0.4
-step = 0.025
+step = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -636,31 +598,31 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("DebugLaserPivot/DebugLaser/LaserSpawn:position")
+tracks/2/path = NodePath("CollisionShape3D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(0.378929, 1),
-"update": 0,
-"values": [Vector3(0.0810992, 1.34265, -1.8), Vector3(0.081, -6.4, -1.8)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("CollisionShape3D:disabled")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.378929, 1),
+"update": 0,
+"values": [Vector3(0, 7.8, 0), Vector3(0, 0, 0)]
+}
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("LaserCollider:disabled")
+tracks/4/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -672,26 +634,14 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Sprite3D:position")
+tracks/5/path = NodePath("LaserSpawn/LaserEndParticles:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(0.378929, 1),
-"update": 0,
-"values": [Vector3(0, 7.8, 0), Vector3(0, 0, 0)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("LaserCollider:position")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(0.378929, 1),
-"update": 0,
-"values": [Vector3(0, 7.47214, 0), Vector3(0, -0.228, 0)]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_i43i0"]
@@ -720,12 +670,12 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(2, 2, 2)]
+"values": [Vector3(1.5, 1.5, 1.5)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("DebugLaserPivot/DebugLaser/LaserSpawn:position")
+tracks/2/path = NodePath("LaserSpawn:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -749,38 +699,38 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("LaserCollider:disabled")
+tracks/4/path = NodePath("Sprite3D:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Sprite3D:position")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(2.46229, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 7.8, 0)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("LaserCollider:position")
+tracks/6/path = NodePath("LaserSpawn/LaserEndParticles:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(2.46229, 1),
-"update": 0,
-"values": [Vector3(0, -0.228, 0), Vector3(0, 7.472, 0)]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_oq3a7"]
@@ -816,6 +766,42 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("25_8helj")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LaserSpawn/LaserEndParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LaserSpawn/LaserEndParticles:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LaserSpawn:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -2.657, -1.8)]
 }
 
 [sub_resource type="Animation" id="Animation_pm884"]
@@ -1129,10 +1115,52 @@ tracks/0/keys = {
 "values": [ExtResource("21_yqrf4"), ExtResource("20_5ckod"), ExtResource("19_xriv7"), ExtResource("17_cu5tl"), ExtResource("16_ukgug")]
 }
 
+[sub_resource type="Animation" id="Animation_jt2i0"]
+resource_name = "impact_no_slam"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.62451),
+"update": 0,
+"values": [Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.25, 0.325, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("38_x4twh"), ExtResource("39_gab4h"), ExtResource("33_1fje0"), ExtResource("32_i0wff"), ExtResource("16_ukgug")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DebugAnimPivot/SlamSpawn:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, -1.9, 0.800001)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
 _data = {
 "backswipe": SubResource("Animation_85u7l"),
 "idle": SubResource("Animation_f2hbb"),
+"impact_no_slam": SubResource("Animation_jt2i0"),
 "intro": SubResource("Animation_cijff"),
 "kick": SubResource("Animation_p5f0r"),
 "kick_end": SubResource("Animation_ejhby"),
@@ -1161,7 +1189,7 @@ wave_frequency = 5.0
 laser_spawn_markers = []
 hurtbox_range_close = 6.0
 hurtbox_range_far = 7.5
-max_sequential_melee_phases = 5
+max_sequential_melee_phases = 1
 max_sequential_ranged_phases = 3
 swipe_damage = 14.0
 sfx_swipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
@@ -1190,16 +1218,16 @@ sfx_nail_equip = Array[AudioStream]([ExtResource("10_u246n")])
 sfx_nail_shot = Array[AudioStream]([ExtResource("11_8tgau"), ExtResource("12_bt5kx"), ExtResource("13_qjtrx"), ExtResource("14_l34ga")])
 sfx_nail_unequip = []
 laser_aoe = ExtResource("4_hx1ss")
-laser_spawn = NodePath("DebugLaserPivot/DebugLaser/LaserSpawn")
+laser_spawn = NodePath("LaserSpawn")
 laser_damage = 40.0
 laser_aoe_marker = ExtResource("5_pbhfx")
 sfx_laser_arm = Array[AudioStream]([ExtResource("11_8tgau"), ExtResource("12_bt5kx"), ExtResource("13_qjtrx"), ExtResource("14_l34ga")])
-sfx_laser_charging = Array[AudioStream]([ExtResource("17_53wre")])
+sfx_laser_charging = Array[AudioStream]([ExtResource("17_mkqio")])
 sfx_laser_shoot = Array[AudioStream]([ExtResource("18_5elni"), ExtResource("19_upudo"), ExtResource("20_dvqnx")])
 sfx_laser_disarm = []
 boss_id = 6
 barrel_pickup_scene = null
-sfx_players = [NodePath("SFXPlayer")]
+sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5")]
 attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.2
@@ -1210,7 +1238,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
 texture = ExtResource("16_ukgug")
 
 [node name="DebugAnimPivot" type="Marker3D" parent="." index="1"]
-transform = Transform3D(-0.173644, 0, -0.984809, 0, 1, 0, 0.984809, 0, -0.173644, 0, 2, 0)
+transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
 
 [node name="SlamSpawn" type="Marker3D" parent="DebugAnimPivot" index="0"]
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, -0.8, -1.9, 0.800001)
@@ -1218,18 +1246,11 @@ transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, -0.8, -1
 [node name="SlamParticles" parent="DebugAnimPivot/SlamSpawn" index="0" instance=ExtResource("7_2uohy")]
 visible = false
 
-[node name="DebugLaserPivot" type="Marker3D" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+[node name="LaserSpawn" type="Marker3D" parent="." index="2"]
+transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0, -2.657, -1.8)
 
-[node name="DebugLaser" type="MeshInstance3D" parent="DebugLaserPivot" index="0"]
-transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0, 0, 0)
-layers = 2
-
-[node name="LaserSpawn" type="Marker3D" parent="DebugLaserPivot/DebugLaser" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, -13.9, -1.8)
-
-[node name="LaserEndParticles" parent="DebugLaserPivot/DebugLaser/LaserSpawn" index="0" instance=ExtResource("6_fqvnt")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -0.4, 0)
+[node name="LaserEndParticles" parent="LaserSpawn" index="0" instance=ExtResource("6_fqvnt")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -0.0096159, 0)
 visible = false
 amount = 256
 lifetime = 0.7
@@ -1269,22 +1290,14 @@ transform = Transform3D(1, -3.30872e-24, 0, 0, 1, 4.44089e-16, 0, 0, 1, 0, 0, -0
 [node name="CollisionShape3D" parent="." index="4"]
 shape = SubResource("CapsuleShape3D_3w5db")
 
-[node name="LaserCollider" type="CollisionShape3D" parent="." index="5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -23.2748, 0)
-shape = SubResource("BoxShape3D_5jp0r")
-disabled = true
-
-[node name="DebugMesh" parent="." index="6"]
+[node name="DebugMesh" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
 mesh = SubResource("BoxMesh_holc6")
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -2.5)
 
-[node name="HealthComponent" parent="." index="8"]
-max_health = 5.0
-
-[node name="NavigationComponent" parent="." index="9"]
+[node name="NavigationComponent" parent="." index="8"]
 current_speed = 6.0
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
@@ -1338,6 +1351,13 @@ script = ExtResource("5_7kc6y")
 to = NodePath("../../OpenDoors")
 event = &"open_doors"
 guard = SubResource("Resource_8gf5u")
+delay_in_seconds = "0.0"
+
+[node name="toMoveNoSmoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen/Smoke" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../MoveNoSmoke")
+event = &"start_no_smoke"
+guard = SubResource("Resource_cyxlj")
 delay_in_seconds = "0.0"
 
 [node name="MoveNoSmoke" type="Node" parent="StateChart/Root/Phase/Phase1/Smokescreen" index="2"]
@@ -1566,17 +1586,7 @@ event = &"start_smokescreen"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="Spin" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
-script = ExtResource("3_irtaj")
-
-[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/Phase1/Spin" index="0"]
-script = ExtResource("5_7kc6y")
-to = NodePath("../../Smokescreen")
-event = &"start_smokescreen"
-guard = SubResource("Resource_u3pji")
-delay_in_seconds = "0.0"
-
-[node name="DualNailsRanged" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+[node name="DualNailsRanged" type="Node" parent="StateChart/Root/Phase/Phase1" index="3"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Targeting")
 
@@ -1631,7 +1641,7 @@ event = &"start_smokescreen"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="LaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+[node name="LaserAoE" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Targeting")
 
@@ -1696,27 +1706,33 @@ event = &"start_smokescreen"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="NavigationAgent3D" parent="." index="13"]
+[node name="toIntro" type="Node" parent="StateChart/Root/Phase/Phase1/LaserAoE" index="7"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../../Intro")
+event = &"start_intro"
+delay_in_seconds = "0.0"
+
+[node name="NavigationAgent3D" parent="." index="12"]
 debug_enabled = true
 
-[node name="AnimationPlayer" parent="." index="23"]
+[node name="AnimationPlayer" parent="." index="22"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
 "elevator_boss": SubResource("AnimationLibrary_1cydh")
 }
 autoplay = "RESET"
 
-[node name="SmokeParticles" parent="." index="25" instance=ExtResource("11_1crh5")]
+[node name="SmokeParticles" parent="." index="24" instance=ExtResource("11_1crh5")]
 
-[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="27"]
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="26"]
 
-[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="28"]
+[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="27"]
 
-[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="29"]
+[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="28"]
 
-[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="30"]
+[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="29"]
 
-[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="31"]
+[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="30"]
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_physics_processing"]
