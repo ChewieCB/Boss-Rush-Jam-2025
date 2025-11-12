@@ -33,7 +33,7 @@ var prev_attack: String = ""
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 2.0
 @export var hurtbox_range_far: float = 3.8
-@export var max_sequential_melee_phases: int = 1
+@export var max_sequential_melee_phases: int = 5
 @export var max_sequential_ranged_phases: int = 3
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 14.0
@@ -543,6 +543,7 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	aoe_warn_decal.global_position = laser_spawn.global_position
 	aoe_warn_decal.global_rotation = laser_spawn.global_rotation
 	aoe_warn_decal.global_position.y = -4.6
+	aoe_warn_decal.global_position.x -= 2.0
 	
 	# laser_aoe_marker
 	var warn_tween := get_tree().create_tween()
@@ -600,7 +601,7 @@ func _on_laser_aoe_firing_state_entered() -> void:
 	get_parent().add_child(laser_instance)
 	laser_instance.global_position = laser_spawn.global_position
 	laser_instance.global_position.y -= 2
-	laser_instance.global_position.z -= 2
+	laser_instance.global_position.x -= 2
 	laser_instance.global_rotation.y = self.global_rotation.y
 	
 	await anim_player.animation_finished
