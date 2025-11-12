@@ -91,7 +91,6 @@ func on_prepare_to_fire():
 			owner_barrel.owner_gun.modified_homing_strength = calculate_new_value(
 				owner_barrel.owner_gun.modified_homing_strength, modify_value, is_perc, false)
 		AttributeNameEnum.RECOIL:
-			print("recoil ", owner_barrel.owner_gun.modified_recoil, modify_value, is_perc)
 			owner_barrel.owner_gun.modified_recoil = calculate_new_value(
 				owner_barrel.owner_gun.modified_recoil, modify_value, is_perc, false)
 		AttributeNameEnum.SCREENSHAKE:

@@ -7,7 +7,7 @@ signal change_wheel_speed(speed: float)
 # Ante 2: Unstable Platforms - Enable drop segments attack
 # Ante 3 (new): Double Sweep - Add a second sweep bar
 # Ante 4 (new): Lasting Heat - Multiball now leave trails of flame
-# Ante 5 (new): Center of Attention: TODO
+# Ante 5 (new): Center of Attention: TODO / Ocassionally force player to look at her?
 
 @onready var debug_phase_label: Label3D = $DebugPhaseLabel
 @onready var held_ball_marker_pivot: Node3D = $HeldBallPivot

@@ -47,7 +47,7 @@ show_duration_ui = true
 script = ExtResource("6_g2yni")
 display_text_title = "Critical Insurance"
 display_text_tag = "Definitely not a scam in term of DPS"
-positive_desc = Array[String](["Guarantee the next shot critical if previous one missed"])
+positive_desc = Array[String](["Guarantee the next consumed bullet critical if previous one missed"])
 negative_desc = Array[String](["-50% critical damage"])
 icon_id = 56
 

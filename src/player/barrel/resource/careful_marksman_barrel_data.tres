@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://dpumylpghpaqv"]
+
+[ext_resource type="Texture2D" uid="uid://b8xiop154fer0" path="res://src/player/barrel/resource/sprite/careful_marksman.png" id="1_7xvkd"]
+[ext_resource type="PackedScene" uid="uid://dsr7gyu5w7ybg" path="res://src/player/barrel/CarefulMarksmanBarrel.tscn" id="1_et1i6"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_gceaa"]
+
+[resource]
+script = ExtResource("3_gceaa")
+barrel_id = 76
+barrel_name = "Careful Marskman"
+barrel_desc = "[b]Careful Marksman Barrel[/b]
+When you like to take it slow and avoid risk. Slow is smooth, and smooth is fast."
+barrel_info_summary = "When you like to take it slow and avoid risk. Slow is smooth, and smooth is fast."
+barrel_image = ExtResource("1_7xvkd")
+barrel_cost = 1500
+barrel_prefab = ExtResource("1_et1i6")
+is_archetype_barrel = false
