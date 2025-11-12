@@ -25,6 +25,8 @@ var spin_warning_trigger_active: bool = false
 
 @export var exit_elevator_button: Area3D
 
+@export var boss_intro_spawn: Marker3D
+@export var boss_laser_spawn_markers: Array[Marker3D]
 @onready var elevator_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_elevator_spawn_marker")
 @onready var boss_origin: Array[Node] = get_tree().get_nodes_in_group("boss_arena_origin_marker")
 @export var sub_elevator_doors: Array[SlidingDoor]
@@ -39,7 +41,7 @@ func _ready() -> void:
 	is_tutorial = true
 	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_42_SlidingDoor
 
-	super ()
+	super()
 
 	if boss_doors:
 		boss_doors.close()
@@ -57,6 +59,9 @@ func _ready() -> void:
 	boss.elevator_spawns = elevator_spawns
 	boss.sub_elevator_doors = sub_elevator_doors
 	boss.sub_elevator_lights = sub_elevator_lights
+	boss.intro_spawn_marker = boss_intro_spawn
+	boss.laser_spawn_markers = boss_laser_spawn_markers
+	boss.global_position = boss_intro_spawn.global_position
 
 
 func _input(event: InputEvent) -> void:

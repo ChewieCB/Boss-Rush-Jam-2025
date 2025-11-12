@@ -22,6 +22,11 @@ var previous_phase: String = "start_melee_combo_attack"
 var melee_phase_count: int = 0
 
 
+@export var intro_spawn_marker: Marker3D
+@export var laser_spawn_markers: Array[Marker3D]
+
+var next_attack: String = ""
+
 @export_group("Attacks")
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 2.0
@@ -37,6 +42,7 @@ var melee_phase_count: int = 0
 @export var slam_time: float = 0.9
 @export var slam_particles: GPUParticles3D
 @export var slam_wave_material: StandardMaterial3D
+@export var slam_spawn_marker: Marker3D
 @export_subgroup("Nailguns")
 @export var nail_projectile: PackedScene
 @export var proj_spawn_l: Marker3D
@@ -52,19 +58,19 @@ var melee_phase_count: int = 0
 @export var laser_spawn: Marker3D
 @export var laser_damage: float = 40.0
 var aoe_warn_decal: Decal
+var laser_target_pos: Vector3
 @export var laser_aoe_marker: CompressedTexture2D
 @onready var laser_particles: GPUParticles3D = $DebugLaserPivot/DebugLaser/LaserSpawn/LaserEndParticles
 
 
 func _ready() -> void:
-	super ()
+	super()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 
 func activate() -> void:
-	super ()
-	#state_chart.send_event("start_intro")
-	state_chart.send_event("activate")
+	super()
+	state_chart.send_event("start_intro")
 
 
 func _physics_process(_delta: float) -> void:
@@ -91,6 +97,15 @@ func select_attack_phase_1() -> void:
 			new_phase = "start_smokescreen"
 		else:
 			ranged_phase_count = 0
+			new_phase = "start_melee_combo_attack"
+	
+	elif previous_phase == "start_laser_aoe_attack":
+		if ranged_phase_count < max_sequential_phases:
+			new_phase = "start_smokescreen"
+		else:
+			ranged_phase_count = 0
+			sprite.visible = true
+			await _intro_drop()
 			new_phase = "start_melee_combo_attack"
 	
 	previous_phase = new_phase
@@ -121,11 +136,6 @@ func hook() -> void:
 func _on_melee_combo_targeting_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Targeting"
 	melee_phase_count += 1
-	
-	# DEBUG - to be replaced with sprite frames for each attack
-	$DebugAnimPivot.visible = true
-	$DebugLaserPivot.visible = false
-	$DebugRangedPivot.visible = false
 	
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
@@ -169,6 +179,8 @@ func _on_melee_combo_swipe_state_entered() -> void:
 		if randf() < 0.5:
 			state_chart.send_event("melee_backstep")
 		else:
+			anim_player.play("elevator_boss/swipe_end")
+			await anim_player.animation_finished
 			state_chart.send_event("combo_end")
 
 
@@ -189,12 +201,15 @@ func _on_melee_combo_hook_state_entered() -> void:
 	await _telegraph_attack()
 	#sfx_player.stream = sfx_melee.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/backswipe")
+	anim_player.play("elevator_boss/kick")
 	await anim_player.animation_finished
 	
 	if randf() < 0.5:
 		state_chart.send_event("melee_backstep")
 	else:
+		anim_player.play("elevator_boss/kick_end")
+		await anim_player.animation_finished
+		state_chart.send_event("combo_end")
 		state_chart.send_event("combo_end")
 
 
@@ -206,28 +221,30 @@ func _on_melee_combo_hook_state_physics_processing(delta: float) -> void:
 func _on_melee_combo_leap_back_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	
+	anim_player.play("elevator_boss/slam_jump_prep")
+	await anim_player.animation_finished
+	
 	# TODO - raycast this to make sure we don't overshoot
 	var goal_pos = self.global_position + self.basis.z * 5.0
 	var nav_pos = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, goal_pos)
 	
 	var jump_results = charge_back_jump(nav_pos, 1.6)
 	
-	#anim_player.play("elevator_boss/slam_telegraph")
 	#sfx_player.stream = sfx_jump.pick_random()
 	#sfx_player.play()
-	anim_player.play("elevator_boss/slam_telegraph_start")
+	anim_player.play("elevator_boss/slam_jump_up")
 	#await anim_player.animation_finished
-	#anim_player.play("elevator_boss/slam_telegraph")
 	vel_vertical = 0
 	self.velocity = jump_results[0]
 	var time_up = jump_results[1]
 	var time_down = jump_results[2]
 	
 	await get_tree().create_timer(time_up).timeout
-	await get_tree().create_timer(time_down).timeout
-	
-	#sfx_player.stream = sfx_slam.pick_random()
-	#sfx_player.play()
+	# Subtract the time the jump down animation lasts so we can sync the impact
+	var hangtime: float = time_down - 0.15  
+	await get_tree().create_timer(hangtime).timeout
+	anim_player.play("elevator_boss/slam_jump_down")
+	await anim_player.animation_finished
 	
 	state_chart.send_event("melee_line")
 
@@ -238,7 +255,9 @@ func _on_melee_combo_leap_back_state_physics_processing(delta: float) -> void:
 
 
 func _on_melee_combo_slam_line_state_entered() -> void:
-	anim_player.play("elevator_boss/slam")
+	anim_player.play("elevator_boss/slam_jump_impact")
+	#sfx_player.stream = sfx_slam.pick_random()
+	#sfx_player.play()
 	await anim_player.animation_finished
 	
 	state_chart.send_event("combo_end")
@@ -269,12 +288,11 @@ func _on_melee_combo_recover_state_physics_processing(delta: float) -> void:
 
 
 #### Phase 1 | Line Slam
+# FIXME - I think these state methods are deprecated
 func _on_line_slam_targeting_state_entered() -> void:
-	_targeting_entered("start_sweep", "Chip Sweep")
+	_targeting_entered("start_sweep", "Line Slam")
 
 func _on_line_slam_sweep_state_entered() -> void:
-	debug_state_label.text = "Chip Sweep | Sweep"
-	
 	state_chart.send_event("attack_telegraph")
 	anim_player.play("elevator_boss/slam_telegraph")
 	await anim_player.animation_finished
@@ -310,16 +328,15 @@ func _on_ranged_nails_targeting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Targeting"
 	ranged_phase_count += 1
 	
-	# DEBUG - to be replaced with sprite frames for each attack
-	$DebugAnimPivot.visible = false
-	$DebugLaserPivot.visible = false
-	$DebugRangedPivot.visible = true
-	
 	desired_distance = 40
 	
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(0.8).timeout
+	
+	anim_player.play("elevator_boss/ranged_arm")
+	await anim_player.animation_finished
+	
+	await get_tree().create_timer(0.3).timeout
 	state_chart.send_event("start_shooting")
 
 
@@ -354,7 +371,10 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Recovering"
 	
 	state_chart.send_event("attack_end")
+	anim_player.play("elevator_boss/ranged_arm")
+	
 	await get_tree().create_timer(attack_recovery_time).timeout
+	anim_player.play("RESET")
 	state_chart.send_event("cooldown_end")
 	
 	desired_distance = DESIRED_DISTANCE
@@ -371,12 +391,17 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 	debug_state_label.text = "Spartan Laser Level | Targeting"
 	ranged_phase_count += 1
 	
-	# DEBUG - to be replaced with sprite frames for each attack
-	$DebugAnimPivot.visible = false
-	$DebugLaserPivot.visible = true
-	$DebugRangedPivot.visible = false
-	
-	# TODO - spawn in elevator and sort positions, telegraphing, etc.
+	# Pick spawn furthest from player
+	var laser_spawns: Array[Marker3D] = laser_spawn_markers.duplicate()
+	laser_spawns.sort_custom(
+		func(a, b):
+			var a_dist: float = a.global_position.distance_to(target.global_position)
+			var b_dist: float = a.global_position.distance_to(target.global_position)
+			if a_dist > b_dist:
+				return true
+			return false
+	)
+	self.global_position = laser_spawns.front().global_position
 	
 	desired_distance = 80
 	
@@ -423,11 +448,13 @@ func _on_laser_aoe_charging_state_entered() -> void:
 		#0.175 * 6
 	#)
 	await warn_tween.finished
-	#await get_tree().create_timer(0.175 * 6).timeout
+	await get_tree().create_timer(0.175 * 6).timeout
 	state_chart.send_event("stop_moving")
 	await _telegraph_attack()
 	#debug_mesh_instance.queue_free()
 	#debug_mesh_instance = null
+	# FIXME 
+	laser_target_pos = target.global_position
 	state_chart.send_event("start_firing")
 
 
@@ -467,7 +494,13 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	debug_state_label.text = "Spartan Laser Level | Recovering"
 	
 	state_chart.send_event("attack_end")
+	anim_player.play("elevator_boss/laser_disarm")
+	await anim_player.animation_finished
+	sprite.visible = false
+	self.global_position = Vector3(-50, -50, -50)
+	
 	await get_tree().create_timer(attack_recovery_time).timeout
+	anim_player.play("RESET")
 	state_chart.send_event("cooldown_end")
 	
 	desired_distance = DESIRED_DISTANCE
@@ -477,6 +510,14 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	state_chart.send_event("end_recovery")
 
 
+func _intro_drop() -> void:
+	anim_player.play("RESET")
+	anim_player.play("elevator_boss/intro")
+	self.global_position = intro_spawn_marker.global_position
+	await get_tree().create_timer(0.6, false).timeout
+	anim_player.play("elevator_boss/idle")
+
+
 ## SMOKESCREEN ATTACK TRANSITION
 # Drop a smokescreen particle emitter to mask the boss teleporting into
 # one of the sub-elevators before starting a ranged attack
@@ -484,7 +525,8 @@ func _on_laser_aoe_recover_state_entered() -> void:
 func _on_smokescreen_idle_state_entered() -> void:
 	state_chart.send_event("stop_moving")
 	if active_spawn:
-		if self.global_position.distance_to(active_spawn.global_position) < 4:
+		if self.global_position.distance_to(active_spawn.global_position) < 4 \
+		or previous_phase == "start_laser_aoe_attack":
 			state_chart.send_event("start_no_smoke")
 			return
 	state_chart.send_event("start_smoke")
@@ -518,6 +560,7 @@ func _on_smokescreen_smoke_state_entered() -> void:
 func _on_smokescreen_open_doors_state_entered() -> void:
 	health_component.is_invincible = false
 	health_component.show_damage_text = true
+	sprite.visible = true
 	self.collision_layer = int(pow(2, 3 - 1))
 	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1) + pow(2, 5 - 1))
 	
@@ -538,11 +581,7 @@ func _on_smokescreen_open_doors_state_entered() -> void:
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await tween.finished
 	
-	var ranged_attacks = [
-		"start_dual_nails_attack",
-		"start_laser_aoe_attack",
-	]
-	state_chart.send_event(ranged_attacks.pick_random())
+	state_chart.send_event("start_dual_nails_attack")
 	state_chart.send_event("end_smoke")
 
 
@@ -555,14 +594,26 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 	).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	await tween.finished
 	
-	# Close the doors
-	active_sub_light.yellow()
-	active_sub_door.close()
-	await active_sub_door.anim_player.animation_finished
+	if active_sub_door:
+		# Close the doors
+		active_sub_light.yellow()
+		active_sub_door.close()
+		await active_sub_door.anim_player.animation_finished
+		
+		active_sub_light.red()
+		# TODO - configure delay and SFX for door opening
+		await get_tree().create_timer(0.3).timeout
 	
-	active_sub_light.red()
-	# TODO - configure delay and SFX for door opening
-	await get_tree().create_timer(0.3).timeout
+	var ranged_attacks = [
+		"start_dual_nails_attack",
+		"start_laser_aoe_attack",
+	]
+	next_attack = ranged_attacks.pick_random()
+	
+	if next_attack == "start_laser_aoe_attack":
+		state_chart.send_event(next_attack)
+		state_chart.send_event("end_smoke")
+		return
 	
 	# Move the boss to a new spawn point and turn to face the player
 	var new_spawn = get_elevator_spawn_no_repeats()
@@ -639,7 +690,7 @@ func slam_line(_spawn_pos: Vector3, _range: float = 30.0) -> void:
 		self.global_position.distance_to(target.global_position),
 		4.0, 0.4,
 		slam_damage, slam_time,
-		$DebugAnimPivot/DebugWrench/SlamSpawn.global_position,
+		slam_spawn_marker.global_position,
 		0.2, false,
 		state_chart.send_event.bind("combo_end")
 	)
@@ -692,7 +743,7 @@ func spawn_aoe_line(
 	mesh.material = slam_wave_material
 	
 	# Spawn moving wave particles that stay at end of line
-	$DebugAnimPivot/DebugWrench/SlamSpawn.remove_child(slam_particles)
+	slam_spawn_marker.remove_child(slam_particles)
 	scene_root.add_child(slam_particles)
 	slam_particles.global_position = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * 0.1
 	slam_particles.global_rotation = self.global_rotation + Vector3(0, PI, 0)
@@ -719,7 +770,7 @@ func spawn_aoe_line(
 			await slam_particles.finished
 			slam_particles.visible = false
 			slam_particles.is_on_floor = false
-			$DebugAnimPivot/DebugWrench/SlamSpawn.add_child(slam_particles)
+			slam_spawn_marker.add_child(slam_particles)
 			slam_particles.position = Vector3.ZERO
 			slam_particles.rotation = Vector3.ZERO
 	)
@@ -752,3 +803,17 @@ func trigger_pushback(
 		target.velocity = Vector3.ZERO
 		target.vel_horizontal += Vector2(pushback_vector.x, pushback_vector.z) * force
 		target.vel_vertical += 8.0
+
+
+func _on_intro_state_entered() -> void:
+	await _intro_drop()
+	state_chart.send_event("start_phase_1")
+
+
+func _on_phase_1_state_entered() -> void:
+	select_attack()
+
+
+func _on_intro_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
