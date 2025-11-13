@@ -29,6 +29,8 @@ var melee_phase_count: int = 0
 var next_attack: String = ""
 var prev_attack: String = ""
 
+@export var sfx_intro_land: Array[AudioStream]
+
 @export_group("Attacks")
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 2.0
@@ -39,6 +41,7 @@ var prev_attack: String = ""
 @export var swipe_damage: float = 14.0
 # SFX
 @export var sfx_swipe: Array[AudioStream]
+@export var sfx_swipe_miss: Array[AudioStream]
 @export_subgroup("Hook")
 @export var hook_damage: float = 12.0
 # SFX
@@ -155,29 +158,38 @@ func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
 
 func swipe() -> void:
 	var sfx_player = get_available_sfx_player()
-	if sfx_player:
-		sfx_player.stream = sfx_swipe.pick_random()
-		sfx_player.play()
+	var sfx_arr: Array[AudioStream] = sfx_swipe_miss
 	if target.global_position.distance_to(self.global_position) < 5.0:
+		sfx_arr = sfx_swipe
 		target.health_component.damage(swipe_damage)
+	
+	if sfx_player:
+		sfx_player.stream = sfx_arr.pick_random()
+		sfx_player.play()
 
 
 func hook() -> void:
 	var sfx_player = get_available_sfx_player()
-	if sfx_player:
-		sfx_player.stream = sfx_kick.pick_random()
-		sfx_player.play()
+	var sfx_arr: Array[AudioStream] = sfx_swipe_miss
 	if target.global_position.distance_to(self.global_position) < 5.0:
+		sfx_arr = sfx_kick
 		target.health_component.damage(hook_damage)
+	
+	if sfx_player:
+		sfx_player.stream = sfx_arr.pick_random()
+		sfx_player.play()
 
 
 func backswipe() -> void:
 	var sfx_player = get_available_sfx_player()
-	if sfx_player:
-		sfx_player.stream = sfx_backswipe.pick_random()
-		sfx_player.play()
+	var sfx_arr: Array[AudioStream] = sfx_swipe_miss
 	if target.global_position.distance_to(self.global_position) < 5.0:
+		sfx_arr = sfx_backswipe
 		target.health_component.damage(backswipe_damage)
+	
+	if sfx_player:
+		sfx_player.stream = sfx_arr.pick_random()
+		sfx_player.play()
 
 
 #### Phase 1 | Melee Combo
@@ -466,6 +478,10 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Recovering"
 	
 	state_chart.send_event("attack_end")
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_nail_unequip.pick_random()
+		sfx_player.play()
 	anim_player.play("elevator_boss/ranged_disarm")
 	
 	await get_tree().create_timer(attack_recovery_time).timeout
@@ -974,7 +990,7 @@ func _on_intro_state_entered() -> void:
 	
 	var sfx_player = get_available_sfx_player()
 	if sfx_player:
-		sfx_player.stream = sfx_wave_impact.pick_random()
+		sfx_player.stream = sfx_intro_land.pick_random()
 		sfx_player.play()
 		
 	InputHelper.rumble_small()

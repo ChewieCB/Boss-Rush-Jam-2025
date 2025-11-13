@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dpq2orrg4aawo"
+path="res://.godot/imported/ELEVATOR NOISE 2.mp3-92f81019331a001ce807edd10de73cb1.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/ELEVATOR NOISE 2.mp3"
+dest_files=["res://.godot/imported/ELEVATOR NOISE 2.mp3-92f81019331a001ce807edd10de73cb1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,21 +1,27 @@
-[gd_scene load_steps=125 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=132 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
 [ext_resource type="AudioStream" uid="uid://0u431kpfno53" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing.mp3" id="3_5w7aw"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_irtaj"]
 [ext_resource type="PackedScene" uid="uid://ponw4bhivvke" path="res://src/bosses/base/attacks/ranged/NailProjectile.tscn" id="3_v4gcb"]
+[ext_resource type="AudioStream" uid="uid://dbakj03xx5r3j" path="res://src/bosses/tutorial/assets/sfx/Tutorial Boss Landing.mp3" id="3_y4npe"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fo57y"]
 [ext_resource type="PackedScene" uid="uid://byharrqwvi4cp" path="res://src/bosses/base/attacks/ranged/LaserAoE.tscn" id="4_hx1ss"]
 [ext_resource type="AudioStream" uid="uid://cqq422lmo5d7s" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing 2.mp3" id="4_pthoc"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
+[ext_resource type="AudioStream" uid="uid://7v0fx558pjwl" path="res://src/bosses/tutorial/assets/sfx/Tutorial Kick 1.mp3" id="5_fu4i0"]
 [ext_resource type="AudioStream" uid="uid://dvsl5y8e4n4hr" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing and leap back.mp3" id="5_iynxh"]
 [ext_resource type="Texture2D" uid="uid://bunn8a0pce2b2" path="res://assets/sprite/aoe_markers/laser_aoe_warn.png" id="5_pbhfx"]
 [ext_resource type="AudioStream" uid="uid://due6c1u7ljts1" path="res://src/bosses/tutorial/assets/sfx/Wrench Ground Pound.mp3" id="6_elwvg"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="6_fqvnt"]
+[ext_resource type="AudioStream" uid="uid://btjwaw66o42jf" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing Miss 2.mp3" id="6_h17j0"]
+[ext_resource type="AudioStream" uid="uid://ufohavydweo4" path="res://src/bosses/tutorial/assets/sfx/Tutorial Kick 2.mp3" id="6_oht30"]
 [ext_resource type="Texture2D" uid="uid://bp7hure6j5kgv" path="res://src/bosses/tutorial/assets/sprites/STARTING_POSE.png" id="6_yp5yq"]
 [ext_resource type="PackedScene" uid="uid://dl8cnd88fnws2" path="res://src/bosses/tutorial/SlamParticles.tscn" id="7_2uohy"]
 [ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="7_6pf3s"]
+[ext_resource type="AudioStream" uid="uid://b1svhegbdr27d" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing Miss.mp3" id="7_cxehy"]
+[ext_resource type="AudioStream" uid="uid://dxj2f1psc0yqw" path="res://src/bosses/tutorial/assets/sfx/Tutorial Kick 3.mp3" id="7_ob3ew"]
 [ext_resource type="AudioStream" uid="uid://cj0y3jud36wc4" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Loop.mp3" id="7_xo7jb"]
 [ext_resource type="AudioStream" uid="uid://dcshtq5yyxdk1" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Impact.mp3" id="8_pvhqe"]
 [ext_resource type="AudioStream" uid="uid://rftdmhx827li" path="res://src/bosses/tutorial/assets/sfx/Nail Gun Activation.mp3" id="10_u246n"]
@@ -41,6 +47,7 @@
 [ext_resource type="Texture2D" uid="uid://ble8jl11xasb5" path="res://src/bosses/tutorial/assets/sprites/1_HIT_4.png" id="20_5ckod"]
 [ext_resource type="Texture2D" uid="uid://b8g53jvhe8v7v" path="res://src/bosses/tutorial/assets/sprites/3_HIT_5.png" id="20_7eher"]
 [ext_resource type="AudioStream" uid="uid://btioybgukily3" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 3.mp3" id="20_dvqnx"]
+[ext_resource type="AudioStream" uid="uid://cbate11bgay6b" path="res://src/bosses/tutorial/assets/sfx/Nail Gun Deactivation.mp3" id="21_4s6ft"]
 [ext_resource type="Texture2D" uid="uid://dtj5yqywecnt" path="res://src/bosses/tutorial/assets/sprites/3_HIT_6.png" id="21_dj0x0"]
 [ext_resource type="Texture2D" uid="uid://dji3qkffxpmm3" path="res://src/bosses/tutorial/assets/sprites/1_HIT_5.png" id="21_yqrf4"]
 [ext_resource type="Texture2D" uid="uid://ktyfbh7u0l3q" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_2.png" id="23_m0iiy"]
@@ -1287,14 +1294,16 @@ MOVE_SPEED = 6.0
 wave_amplitude = 7.0
 wave_frequency = 5.0
 laser_spawn_markers = []
+sfx_intro_land = Array[AudioStream]([ExtResource("3_y4npe")])
 hurtbox_range_close = 6.0
 hurtbox_range_far = 7.5
 max_sequential_melee_phases = 5
 max_sequential_ranged_phases = 3
 swipe_damage = 14.0
 sfx_swipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
+sfx_swipe_miss = Array[AudioStream]([ExtResource("6_h17j0"), ExtResource("7_cxehy")])
 hook_damage = 12.0
-sfx_kick = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
+sfx_kick = Array[AudioStream]([ExtResource("5_fu4i0"), ExtResource("6_oht30"), ExtResource("7_ob3ew")])
 backswipe_damage = 16.0
 sfx_backswipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
 slam_damage = 26.0
@@ -1316,7 +1325,7 @@ delay_between_burst = 0.5
 nail_damage = 7.0
 sfx_nail_equip = Array[AudioStream]([ExtResource("10_u246n")])
 sfx_nail_shot = Array[AudioStream]([ExtResource("11_8tgau"), ExtResource("12_bt5kx"), ExtResource("13_qjtrx"), ExtResource("14_l34ga")])
-sfx_nail_unequip = []
+sfx_nail_unequip = Array[AudioStream]([ExtResource("21_4s6ft")])
 laser_aoe = ExtResource("4_hx1ss")
 laser_spawn = NodePath("LaserSpawn")
 laser_damage = 40.0
@@ -1327,7 +1336,7 @@ sfx_laser_shoot = Array[AudioStream]([ExtResource("18_5elni"), ExtResource("19_u
 sfx_laser_disarm = []
 boss_id = 6
 barrel_pickup_scene = null
-sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5")]
+sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8")]
 attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.2
@@ -1842,6 +1851,15 @@ bus = &"SFX"
 bus = &"SFX"
 
 [node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="31"]
+bus = &"SFX"
+
+[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="32"]
+bus = &"SFX"
+
+[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="33"]
+bus = &"SFX"
+
+[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="34"]
 bus = &"SFX"
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_entered"]
