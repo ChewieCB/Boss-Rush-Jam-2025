@@ -13,7 +13,6 @@ script = ExtResource("1_xtoip")
 script = ExtResource("2_nse0w")
 
 [node name="DaredevilEffect" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("9_5tuyi")
 min_distance_to_boss = 7.0
 display_text_title = "Daredevil"
@@ -23,7 +22,6 @@ negative_desc = Array[String](["Decreases damage otherwise"])
 icon_id = 60
 
 [node name="LoadedDice" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("4_783so")
 display_text_title = "Loaded Dice"
 display_text_tag = "I hope you have some saving"
