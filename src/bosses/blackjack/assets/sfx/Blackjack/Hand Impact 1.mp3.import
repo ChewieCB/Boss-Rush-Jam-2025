@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://k5b5jcw3j4od"
+path="res://.godot/imported/Hand Impact 1.mp3-33dd88a02602f3c375a833bb8ecb9d32.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Hand Impact 1.mp3"
+dest_files=["res://.godot/imported/Hand Impact 1.mp3-33dd88a02602f3c375a833bb8ecb9d32.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

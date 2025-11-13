@@ -2,6 +2,7 @@ extends Node3D
 
 @export var mesh: MeshInstance3D
 @export var decal: Decal
+@export var sfx_player: AudioStreamPlayer3D
 @onready var material: StandardMaterial3D = mesh.mesh.surface_get_material(0)
 
 @export var particles: GPUParticles3D
@@ -10,8 +11,14 @@ extends Node3D
 @onready var timer: Timer = $Timer
 @export var lifetime: float = 5.0
 
+# SFX
+@export var sfx_burning: Array[AudioStream]
+
 
 func _ready() -> void:
+	sfx_player.stream = sfx_burning.pick_random()
+	sfx_player.play()
+	
 	timer.wait_time = lifetime
 	timer.start()
 
@@ -24,6 +31,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_timer_timeout() -> void:
+	sfx_player.stop()
 	particles.speed_scale = 2.0
 	particles.emitting = false
 	var tween = get_tree().create_tween()

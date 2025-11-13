@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c1mdesic2xeey"
+path="res://.godot/imported/Platform Shaking.mp3-de13b3853964ad72e136a0fb847a6612.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Platform Shaking.mp3"
+dest_files=["res://.godot/imported/Platform Shaking.mp3-de13b3853964ad72e136a0fb847a6612.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

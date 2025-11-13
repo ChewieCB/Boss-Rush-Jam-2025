@@ -55,10 +55,11 @@ size = Vector3(1, 0.5, 0)
 [sub_resource type="BoxShape3D" id="BoxShape3D_gl1w3"]
 size = Vector3(2.2, 2.6, 2.7)
 
-[node name="CardFloor" type="Node3D" node_paths=PackedStringArray("mesh", "decal", "particles")]
+[node name="CardFloor" type="Node3D" node_paths=PackedStringArray("mesh", "decal", "sfx_player", "particles")]
 script = ExtResource("1_u60lr")
 mesh = NodePath("Mesh")
 decal = NodePath("Decal")
+sfx_player = NodePath("SFXPlayer")
 particles = NodePath("SlamParticles")
 lifetime = 12.0
 
@@ -97,6 +98,10 @@ one_shot = true
 [node name="Decal" type="Decal" parent="."]
 size = Vector3(2.079, 0.5, 3.226)
 texture_albedo = ExtResource("1_ns6c0")
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+unit_size = 20.0
+bus = &"SFX"
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

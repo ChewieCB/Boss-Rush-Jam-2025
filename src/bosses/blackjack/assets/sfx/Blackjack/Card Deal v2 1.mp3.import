@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ccslfk4237goe"
+path="res://.godot/imported/Card Deal v2 1.mp3-a46bc2d7f7bbbae7bbd6b05f1c91b52b.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Card Deal v2 1.mp3"
+dest_files=["res://.godot/imported/Card Deal v2 1.mp3-a46bc2d7f7bbbae7bbd6b05f1c91b52b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

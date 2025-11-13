@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bgvfl846hxfng"
+path="res://.godot/imported/Hand Whoosh 2.mp3-c5b068664de8ef2f16ede855c443c248.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Hand Whoosh 2.mp3"
+dest_files=["res://.godot/imported/Hand Whoosh 2.mp3-c5b068664de8ef2f16ede855c443c248.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

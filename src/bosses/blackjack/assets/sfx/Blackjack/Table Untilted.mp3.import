@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d2pt7otyhbrhn"
+path="res://.godot/imported/Table Untilted.mp3-d249a75f0d7985e7a2fe4c89f06208a6.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Table Untilted.mp3"
+dest_files=["res://.godot/imported/Table Untilted.mp3-d249a75f0d7985e7a2fe4c89f06208a6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
