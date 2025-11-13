@@ -478,6 +478,10 @@ func _on_ranged_nails_recover_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Recovering"
 	
 	state_chart.send_event("attack_end")
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_nail_unequip.pick_random()
+		sfx_player.play()
 	anim_player.play("elevator_boss/ranged_disarm")
 	
 	await get_tree().create_timer(attack_recovery_time).timeout

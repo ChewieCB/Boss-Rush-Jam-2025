@@ -203,7 +203,7 @@ func _compile_material_node(child: Node3D) -> void:
 
 	var node = MeshInstance3D.new()
 	node.mesh = QuadMesh.new()
-	node.material = child.material
+	node.mesh.material = child.material
 	compile_parent.add_child(node)
 
 	if child.material.resource_path:
