@@ -35,7 +35,7 @@ var prev_attack: String = ""
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 2.0
 @export var hurtbox_range_far: float = 3.8
-@export var max_sequential_melee_phases: int = 5
+@export var max_sequential_melee_phases: int = 3
 @export var max_sequential_ranged_phases: int = 3
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 14.0

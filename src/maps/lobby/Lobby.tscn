@@ -4466,7 +4466,7 @@ entProperties = {
 "_tb_group": "673",
 "boss_name": "The Mechanic",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/tutorial/TutorialBoss.tscn",
+"linked_level": "res://src/maps/tutorial/TutorialBossOnly.tscn",
 "origin": "416 11 30"
 }
 boss_id = 6

@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://dneuclow6t33j"
+path="res://.godot/imported/tutorial_boss_only.map-a7d2946fdb37042d17b4d56edb66bee6.tres"
+
+[deps]
+
+source_file="res://src/maps/tutorial/tutorial_boss_only.map"
+dest_files=["res://.godot/imported/tutorial_boss_only.map-a7d2946fdb37042d17b4d56edb66bee6.tres"]
+
+[params]
+

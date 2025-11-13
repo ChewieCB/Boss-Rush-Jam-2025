@@ -141,7 +141,7 @@ var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
 var CHEAT_freecam: bool = true
 var CHEAT_always_inventory: bool = false
-var CHEAT_demomode: bool = false
+var CHEAT_demomode: bool = true
 var CHEAT_demomode_timeout: int = 10:
 	set(value):
 		CHEAT_demomode_timeout = value

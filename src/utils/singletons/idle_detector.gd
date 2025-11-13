@@ -1,7 +1,7 @@
 extends Node
 
-@export var enable_play_video = false
-@export var idle_time: float = 60.0
+var enable_play_video = true
+var idle_time: float = 10.0
 @export var video_list: Array[VideoStream] = []
 
 @onready var canvas_layer: CanvasLayer = $TopCanvasLayer
@@ -45,12 +45,15 @@ func _input(event: InputEvent) -> void:
 
 # Check if the event counts as user input
 func _is_user_input(event: InputEvent) -> bool:
+	if event is InputEventJoypadMotion:
+		if event.axis_value > 0.1:
+			return true
+	
 	return (
 		event is InputEventKey and not event.echo
 		or event is InputEventMouseMotion
 		or event is InputEventMouseButton
 		or event is InputEventJoypadButton
-		or event is InputEventJoypadMotion
 	)
 
 func stop_idle_video():
