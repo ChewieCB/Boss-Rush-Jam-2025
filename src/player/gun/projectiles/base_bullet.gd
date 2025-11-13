@@ -159,7 +159,7 @@ func get_damage_variance_modifier(_damage: int) -> int:
 
 func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	var new_inst: BaseBullet = self.duplicate()
-	new_inst.owner_gun = owner_gun.duplicate()
+	new_inst.owner_gun = owner_gun
 	new_inst.is_ricochet_shot = is_ricochet
 	new_inst.homing_strength = homing_strength
 	new_inst.spawn_pos = spawn_pos
