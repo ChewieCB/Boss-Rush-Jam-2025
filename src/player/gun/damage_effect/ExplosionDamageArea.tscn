@@ -16,5 +16,6 @@ script = ExtResource("1_8p7nj")
 shape = SubResource("SphereShape3D_e5ac2")
 
 [node name="ExplosionVFX" parent="." instance=ExtResource("2_pipiq")]
+free_on_finished = false
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

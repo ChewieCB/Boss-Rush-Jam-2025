@@ -18,7 +18,7 @@ display_text_title = "Guided Hand"
 display_text_tag = "Keep aiming at the target"
 positive_desc = Array[String](["Bullet homing to aimed location"])
 negative_desc = Array[String](["-50% projectile speed", "Doesn't work with hitscan bullet"])
-icon_id = 58
+icon_id = 57
 
 [node name="LaserGuidedEffect" type="Node3D" parent="EffectContainer/GuidedHand"]
 script = ExtResource("3_dfwsl")
@@ -50,7 +50,7 @@ is_perc = true
 script = ExtResource("2_o0oe4")
 display_text_title = "Measured Shot"
 display_text_tag = "Stay calm. Wait for the best moment. Shoot when you are ready."
-positive_desc = Array[String](["Wait for 2 seconds will stablize and massively powered the next shot"])
+positive_desc = Array[String](["Wait for 2 seconds to stablize and +200% damage for the next shot"])
 negative_desc = Array[String](["-50% damage when unstable", "+100% bullet spread when unstable"])
 icon_id = 19
 

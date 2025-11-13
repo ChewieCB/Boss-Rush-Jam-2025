@@ -57,7 +57,7 @@ display_text_title = "Phantom Ammo"
 display_text_tag = "You have unlimited ammo! (with tradeoff)"
 positive_desc = Array[String](["Unlimited ammo"])
 negative_desc = Array[String](["-20% damage", "Firerate and accuracy keep getting worse as you shoot, until you reload"])
-icon_id = 57
+icon_id = 58
 
 [node name="ReduceDamage" type="Node3D" parent="EffectContainer/PhantomAmmo"]
 script = ExtResource("5_650bi")

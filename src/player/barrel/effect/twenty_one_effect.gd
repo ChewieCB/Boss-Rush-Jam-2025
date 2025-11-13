@@ -15,6 +15,7 @@ var twenty_one_found = false
 var is_active = false
 
 var twenty_one_icon = preload("res://assets/sprite/status_icon/twenty-one.png")
+var explosion_sfx: AudioStream = preload("res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 2.mp3")
 
 func on_barrel_remove():
 	is_active = false
@@ -109,6 +110,9 @@ func resolve_quick_twenty_one_effect():
 		var explosion_inst: ExplosionDamageArea = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
 		explosion_inst.init(floor(GameManager.player.health_component.current_health * EXPLOSION_CURRENT_HP_DAMAGE_PERC))
 		explosion_inst.activate(GameManager.player.global_position)
+		# Explosion SFX
+		var rand_pitch = randf_range(0.8, 1.2)
+		SoundManager.play_sound_with_pitch(explosion_sfx, rand_pitch)
 		return
 
 

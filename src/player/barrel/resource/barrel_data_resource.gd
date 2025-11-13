@@ -83,7 +83,9 @@ enum BarrelIdEnum {
 	
 	BLACKJACK,
 	DUBIOUS_BENEFIT,
-	CAREFUL_MARKSMAN
+	CAREFUL_MARKSMAN,
+	CONTROLLED_RISK,
+	PURE_GAMBLE
 }
 
 @export var barrel_id: BarrelIdEnum
