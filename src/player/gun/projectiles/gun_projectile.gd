@@ -90,7 +90,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 func _on_life_timer_timeout() -> void:
 	if not keep_alive:
-		destroyed.emit(false)
+		destroyed.emit(hit_boss)
 		stop_elemental_particles()
 		call_deferred("queue_free")
 
@@ -133,12 +133,13 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			create_spark(global_position, Vector3.UP)
 			create_bullet_decal(global_position, Vector3.UP)
 	impacted.emit(self, true, global_position)
+
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
 		if not keep_alive:
 			stop_elemental_particles()
-			destroyed.emit(false)
+			destroyed.emit(hit_boss)
 			call_deferred("queue_free")
 
 
