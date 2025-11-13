@@ -7,4 +7,4 @@
 [node name="ObjectPoolingManager" type="Node3D"]
 script = ExtResource("1_ddkpc")
 pooled_object_prefabs = Array[PackedScene]([ExtResource("2_nk1ge"), ExtResource("3_5llqh")])
-pooled_object_init_arr_size = Array[int]([50, 150])
+pooled_object_init_arr_size = Array[int]([1, 150])

@@ -40,3 +40,6 @@ func explode():
 	if free_on_finished:
 		await get_tree().create_timer(time_until_queue_free).timeout
 		queue_free()
+	else:
+		await get_tree().create_timer(time_until_queue_free).timeout
+		finished.emit()
