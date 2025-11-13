@@ -1,10 +1,11 @@
 extends BaseBarrelEffect
 
 @export var chance_per_ammo_spent = 1
-@export var explosion_dmg_multiplier = 0.5
+@export var player_current_hp_explosion_dmg = 0.1
 
 var is_active = false
 var ammo_spent = 0
+var explosion_sfx: AudioStream = preload("res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 2.mp3")
 
 
 func on_barrel_remove():
@@ -37,7 +38,10 @@ func on_ammo_consumed():
 
 func gun_explode():
 	# Create explosion
-	var damage = int(owner_barrel.owner_gun.modified_damage * explosion_dmg_multiplier)
+	var damage = int(GameManager.player.health_component.current_health * player_current_hp_explosion_dmg)
 	var explosion_inst: ExplosionDamageArea = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
 	explosion_inst.init(damage)
 	explosion_inst.activate(GameManager.player.global_position)
+	# Explosion SFX
+	var rand_pitch = randf_range(0.8, 1.2)
+	SoundManager.play_sound_with_pitch(explosion_sfx, rand_pitch)

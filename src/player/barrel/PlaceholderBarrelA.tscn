@@ -1,12 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://k85gvtgbejwf"]
+[gd_scene load_steps=4 format=3 uid="uid://k85gvtgbejwf"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_xtoip"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/executioner_round_effect.gd" id="2_nse0w"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/loaded_wallet_effect.gd" id="4_783so"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="5_w8cjo"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_0rx2q"]
-[ext_resource type="Script" path="res://src/player/barrel/overdrive_effect.gd" id="6_jkytm"]
-[ext_resource type="Script" path="res://src/player/barrel/effect/daredevil_effect.gd" id="9_5tuyi"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/multishot_effect.gd" id="9_6lpn2"]
 
 [node name="PlaceholderBarrelA" type="Node3D"]
@@ -14,46 +9,6 @@ script = ExtResource("1_xtoip")
 
 [node name="EffectContainer" type="Node3D" parent="."]
 script = ExtResource("2_nse0w")
-
-[node name="DaredevilEffect" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("9_5tuyi")
-min_distance_to_boss = 7.0
-display_text_title = "Daredevil"
-display_text_tag = "Stick close to the enemy"
-positive_desc = Array[String](["Increases bullet damage the longer you stay in close range to enemies"])
-negative_desc = Array[String](["Decreases damage otherwise"])
-icon_id = 60
-
-[node name="LoadedWallet" type="Node3D" parent="EffectContainer"]
-visible = false
-script = ExtResource("4_783so")
-display_text_title = "Loaded Wallet"
-display_text_tag = "I hope you had some saving"
-positive_desc = Array[String](["+25% crit chance"])
-negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
-icon_id = 27
-
-[node name="Overdrive" type="Node3D" parent="EffectContainer"]
-script = ExtResource("5_w8cjo")
-display_text_title = "Overdrive"
-display_text_tag = "Keep count the ammo you spent"
-positive_desc = Array[String](["+10 flat magazine size", "+1 flat firerate (round per second)"])
-negative_desc = Array[String](["+1% chance to explode the gun per ammo spent", "100% will explode when you empty the magazine"])
-icon_id = 62
-
-[node name="OverdriveEffect" type="Node3D" parent="EffectContainer/Overdrive"]
-script = ExtResource("6_jkytm")
-
-[node name="IncreaseFlatMagazineSize" type="Node3D" parent="EffectContainer/Overdrive"]
-script = ExtResource("6_0rx2q")
-attribute = 5
-modify_value = 10.0
-
-[node name="IncreaseFlatFirerate" type="Node3D" parent="EffectContainer/Overdrive"]
-script = ExtResource("6_0rx2q")
-attribute = 4
-modify_value = 1.0
 
 [node name="DoubleTap" type="Node3D" parent="EffectContainer"]
 visible = false
