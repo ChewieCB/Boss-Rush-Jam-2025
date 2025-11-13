@@ -1585,9 +1585,6 @@ delay_in_seconds = "0.0"
 [node name="Dead" type="Node" parent="StateChart/Root/Phase/Phase3/ChiptopedeDeath" index="2"]
 script = ExtResource("5_81kie")
 
-[node name="DebugStateLabel" parent="." index="10"]
-visible = true
-
 [node name="AnimationPlayer" parent="." index="19"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
