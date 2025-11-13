@@ -1051,21 +1051,60 @@ sfx_fire_loop = ExtResource("4_w5yjf")
 bgm = ExtResource("2_pyfw2")
 nav_parent = NodePath("FuncGodotMap")
 
-[node name="LightmapGI" parent="." index="2"]
+[node name="LightmapGI" parent="." index="4"]
 light_data = ExtResource("6_4rrpe")
 
-[node name="BossTriggerVolume" parent="." index="4"]
+[node name="BossTriggerVolume" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -20)
 
 [node name="CollisionShape3D" parent="BossTriggerVolume" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 shape = SubResource("BoxShape3D_gki5r")
 
+[node name="BossMarker" type="Node3D" parent="." index="7"]
+
+[node name="BossMoveMarker" type="Marker3D" parent="BossMarker" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.741, 0.68626, -45.1419)
+
+[node name="BossMoveMarker2" type="Marker3D" parent="BossMarker" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.397888, 0.330918, -45.1419)
+
+[node name="BossMoveMarker3" type="Marker3D" parent="BossMarker" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.9523, 0.330918, -45.1419)
+
+[node name="BossMoveMarker4" type="Marker3D" parent="BossMarker" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96243, 0.330918, -45.1419)
+
+[node name="BossMoveMarker5" type="Marker3D" parent="BossMarker" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.26166, 0.330918, -45.1419)
+
+[node name="BossJumpPhase2Marker" type="Marker3D" parent="BossMarker" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.243006, 0.330918, -35.8964)
+
+[node name="BossJumpPhase3Marker" type="Marker3D" parent="BossMarker" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.243006, 0.330918, -45.3435)
+
+[node name="FloorFireHazard" type="Marker3D" parent="BossMarker" index="7"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.514174, 2.49487, -29.9838)
+
+[node name="Decal" type="Decal" parent="." index="8"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -28, 4.2, -35.3)
+texture_albedo = ExtResource("21_4yyfc")
+
+[node name="BossBartender" parent="." index="9" node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "target", "elemental_emitting_vfx") instance=ExtResource("31_p2107")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45.0618)
+floor_fize_hazard_marker = NodePath("../BossMarker/FloorFireHazard")
+behind_bar_move_points = [NodePath("../BossMarker/BossMoveMarker"), NodePath("../BossMarker/BossMoveMarker2"), NodePath("../BossMarker/BossMoveMarker3"), NodePath("../BossMarker/BossMoveMarker4"), NodePath("../BossMarker/BossMoveMarker5")]
+boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")
+boss_jump_phase3_marker = NodePath("../BossMarker/BossJumpPhase3Marker")
+target = NodePath("../FuncGodotMap/entity_45_PlayerRef")
+elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
+
 [node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.44824, -4.5)
 shape = SubResource("BoxShape3D_bavf7")
 
-[node name="FuncGodotMap" parent="." index="6"]
+[node name="FuncGodotMap" parent="." index="11"]
 local_map_file = "res://src/maps/bartender_boss/bartender.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]
@@ -1995,7 +2034,6 @@ entProperties = {
 "linked_level": "res://src/maps/pit_boss/BossMapPit.tscn",
 "origin": "80 -2 38"
 }
-boss_id = 0
 
 [node name="entity_39_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="1" instance=ExtResource("15_2oqcf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 0.9375, 2.5)
@@ -2006,7 +2044,6 @@ entProperties = {
 "linked_level": "res://src/maps/chip_boss/BossMapChip.tscn",
 "origin": "80 -2 30"
 }
-boss_id = 0
 
 [node name="entity_40_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="2" instance=ExtResource("15_2oqcf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.6875, 2.5)
@@ -2017,7 +2054,6 @@ entProperties = {
 "linked_level": "res://src/maps/roulette_boss/BossMapRoulette.tscn",
 "origin": "80 -2 54"
 }
-boss_id = 0
 
 [node name="entity_41_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="3" instance=ExtResource("15_2oqcf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.4375, 2.5)
@@ -2028,7 +2064,6 @@ entProperties = {
 "linked_level": "res://src/maps/bartender_boss/BossMapBartender.tscn",
 "origin": "80 -2 46"
 }
-boss_id = 0
 
 [node name="entity_42_ElevatorButton" parent="FuncGodotMap/group_672_Elevator" index="4" instance=ExtResource("15_2oqcf")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.0625, 1.9375, 2.5)
@@ -2039,7 +2074,6 @@ entProperties = {
 "linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
 "origin": "80 -2 62"
 }
-boss_id = 0
 
 [node name="entity_43_Chandellier2LightOnly" parent="FuncGodotMap/group_672_Elevator" index="5" instance=ExtResource("17_u740c")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.8125, 0)
@@ -2049,46 +2083,3 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.
 
 [node name="entity_45_PlayerRef" parent="FuncGodotMap" index="38" instance=ExtResource("19_cjyp3")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -0.5, 1.15625, 0)
-
-[node name="BossMarker" type="Node3D" parent="." index="7"]
-
-[node name="BossMoveMarker" type="Marker3D" parent="BossMarker" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.741, 0.68626, -45.1419)
-
-[node name="BossMoveMarker2" type="Marker3D" parent="BossMarker" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.397888, 0.330918, -45.1419)
-
-[node name="BossMoveMarker3" type="Marker3D" parent="BossMarker" index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.9523, 0.330918, -45.1419)
-
-[node name="BossMoveMarker4" type="Marker3D" parent="BossMarker" index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96243, 0.330918, -45.1419)
-
-[node name="BossMoveMarker5" type="Marker3D" parent="BossMarker" index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.26166, 0.330918, -45.1419)
-
-[node name="BossJumpPhase2Marker" type="Marker3D" parent="BossMarker" index="5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.243006, 0.330918, -35.8964)
-
-[node name="BossJumpPhase3Marker" type="Marker3D" parent="BossMarker" index="6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.243006, 0.330918, -45.3435)
-
-[node name="FloorFireHazard" type="Marker3D" parent="BossMarker" index="7"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.514174, 2.49487, -29.9838)
-
-[node name="Decal" type="Decal" parent="." index="8"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -28, 4.2, -35.3)
-texture_albedo = ExtResource("21_4yyfc")
-
-[node name="BossBartender" parent="." index="9" node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "elemental_emitting_vfx", "target") instance=ExtResource("31_p2107")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45.0618)
-min_n_bottle_per_attack = 2
-max_n_bottle_per_attack = 4
-min_bottles_spread = 5.0
-max_bottles_spread = 10.0
-floor_fize_hazard_marker = NodePath("../BossMarker/FloorFireHazard")
-behind_bar_move_points = [NodePath("../BossMarker/BossMoveMarker"), NodePath("../BossMarker/BossMoveMarker2"), NodePath("../BossMarker/BossMoveMarker3"), NodePath("../BossMarker/BossMoveMarker4"), NodePath("../BossMarker/BossMoveMarker5")]
-boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")
-boss_jump_phase3_marker = NodePath("../BossMarker/BossJumpPhase3Marker")
-elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
-target = NodePath("../FuncGodotMap/entity_45_PlayerRef")
