@@ -136,16 +136,18 @@ func create_status_effect_impact(pos: Vector3, normal: Vector3):
 				impact_inst.look_at(pos + normal, Vector3.UP)
 				impact_inst.rotate_object_local(Vector3(1, 0, 0), 90)
 
-func calculate_bullet_damage():
+func calculate_bullet_damage(reroll_crit = true):
 	var rand_damage_mod = get_damage_variance_modifier(damage)
 	var calculated_damage = damage + rand_damage_mod
 	# Crit
-	var roll = randi_range(1, 100)
-	var roll_target = int(crit_chance * 100)
-	if roll <= roll_target:
-		calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
-		owner_gun.crit_damage(calculated_damage)
-		is_crit = true
+	if reroll_crit:
+		var roll = randi_range(1, 100)
+		var roll_target = int(crit_chance * 100)
+		print("roll_target ", roll_target)
+		if roll <= roll_target:
+			calculated_damage = calculated_damage * GameManager.player.current_stats[StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER]
+			owner_gun.crit_damage(calculated_damage)
+			is_crit = true
 	return calculated_damage
 
 func ricochet():

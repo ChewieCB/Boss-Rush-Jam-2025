@@ -63,10 +63,11 @@ func check_for_high_luck_buffs():
 			GameManager.create_and_add_status_effect("Hot Hand", "hot_hand_buff",
 			StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE, increased_min_dmg, StatusEffect.ModifyType.FLAT)
 
+
 		# Lucky Shot: increased crit chance
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.LUCKY_SHOT):
 			var increased_crit = 0
-			match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.LUCKY_SHOT]:
+			match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.LUCKY_SHOT]):
 				1:
 					increased_crit = 0.04
 				2:
@@ -91,8 +92,9 @@ func check_for_high_luck_buffs():
 
 
 func get_high_luck_threshold():
-	var calculated_value = ((GameManager.BASE_PLAYER_LUCK_THRESHOLD * 100) - (GameManager.player_level - 1) / 100.0)
+	var calculated_value = (((GameManager.BASE_PLAYER_LUCK_THRESHOLD * 100) - (GameManager.player_level - 1)) / 100.0)
 	return calculated_value
 
 func is_high_luck():
-	return current_luck_ratio >= get_high_luck_threshold()
+	var res = current_luck_ratio >= get_high_luck_threshold()
+	return res

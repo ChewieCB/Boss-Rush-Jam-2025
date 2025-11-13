@@ -97,5 +97,4 @@ func play_idle_video() -> void:
 
 
 func _on_idle_timeout() -> void:
-	print("No input detected for 1 minute! Running idle function...")
 	play_idle_video()
