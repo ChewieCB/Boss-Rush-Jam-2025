@@ -4,6 +4,7 @@ class_name BossBlackjack
 signal hand_attack_finished(hand)
 signal all_hand_attacks_finished
 signal bust_finished
+signal phase_changed(new_phase: int)
 
 @export var DEBUG_blackjack: bool = false
 @export var DEBUG_bust: bool = false
@@ -27,6 +28,12 @@ var current_wander_target: Vector3
 var move_tween: Tween
 var return_tween: Tween
 var active_point_debug: Node3D
+# SFX
+@export var sfx_platform_zoom: Array[AudioStream]
+@export var sfx_platform_move_loop: Array[AudioStream]
+@export var sfx_platform_impact: Array[AudioStream]
+@export var sfx_platform_shake: Array[AudioStream]
+var movement_sfx_player: AudioStreamPlayer3D
 
 @export_group("Hands")
 @onready var hand_anchor: Marker3D = $HandAnchor
@@ -42,6 +49,7 @@ var despawned_hands = []
 var available_hands = []
 var finished_hands = []
 var last_hand
+
 
 @export_group("Particles")
 # TODO - make this configurable per-attack
@@ -68,6 +76,11 @@ var deal_tween: Tween
 @export var card_explosion_particles: GPUParticles3D
 @export var blackjack_particles: GPUParticles3D
 var hand_count: int = 0
+# SFX
+@export var sfx_deal_card: Array[AudioStream]
+@export var sfx_deal_shuffle: Array[AudioStream]
+@export var sfx_deal_stand: Array[AudioStream]
+
 @export_subgroup("Blackjack")
 @export var blackjack_chance_phase_1: float = 0.05
 @export var blackjack_chance_phase_2: float = 0.15
@@ -75,6 +88,10 @@ var blackjack_chance: float = blackjack_chance_phase_1
 @export var blackjack_time_min: float = 8.0
 @export var blackjack_time_max: float = 25.0
 @export var blackjack_timer: Timer
+# SFX
+@export var sfx_deal_blackjack: Array[AudioStream]
+@export var sfx_blackjack_loop: Array[AudioStream]
+
 @export_subgroup("Bust")
 @export var bust_chance_phase_1: float = 0.25
 @export var bust_chance_phase_2: float = 0.10
@@ -92,6 +109,11 @@ var bust_proj_shots: int = bust_proj_shots_phase_1
 @export var bust_proj_arc_height: float = 25.0
 var bust_targets: Array[Vector3] = []
 @export var max_explosion_search_radius: float = 15.0
+# SFX
+@export var sfx_deal_bust: Array[AudioStream]
+@export var sfx_deal_cancelled: Array[AudioStream]
+@export var sfx_bust_explosions: Array[AudioStream]
+@export var sfx_impact_table: Array[AudioStream]
 
 # Intro
 var intro_path_points: Array[Node] = []
@@ -127,6 +149,11 @@ var tilt_particles: GPUParticles3D
 @export var tilt_duration: float = 2.8
 @export var tilt_floor_friction_mod: float = 0.30
 var slippery_debuff: StatusEffect
+# SFX
+@export var sfx_tilt_hand_grab: Array[AudioStream]
+@export var sfx_table_tilt: Array[AudioStream]
+@export var sfx_table_untilt: Array[AudioStream]
+
 @export_subgroup("Tilt Projectile")
 @export var tilt_proj_scene: PackedScene
 @export var tilt_proj_speed: float = 0.75
@@ -138,6 +165,10 @@ var slippery_debuff: StatusEffect
 var tilt_proj_explosion_areas: Array[Area3D]
 @export var tilt_explosion_damage: float = 25.0
 var tilt_explosion_instances := []
+# SFX
+@export var sfx_tilt_proj_shot: Array[AudioStream]
+@export var sfx_tilt_proj_travel: Array[AudioStream]
+@export var sfx_tilt_proj_explosion: Array[AudioStream]
 
 @export_subgroup("Block")
 @export var blocking_detection_area: Area3D
@@ -146,6 +177,8 @@ var tilt_explosion_instances := []
 @export var hand_block_timeout: float = 0.35
 var absorbed_shots: Array = []
 var block_timers: Array = []
+# SFX
+@export var sfx_block_shot: Array[AudioStream]
 
 
 func _ready() -> void:
@@ -211,7 +244,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func activate() -> void:
-	super ()
+	super()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	if not self.is_node_ready():
@@ -266,6 +299,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 
 			cancel_active_hand_attacks()
 			state_chart.send_event("end_attack")
+			phase_changed.emit(2)
 			state_chart.send_event("trigger_phase_2")
 
 			last_attack_str = "start_hand_tilt_attack"
@@ -318,9 +352,11 @@ func _on_health_dead_state_entered() -> void:
 	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	crash_tween.tween_callback(
 		func():
+			play_positional_sound(sfx_platform_impact.pick_random())
 			var _emitters = bust_particles_parent.get_children()
 			for emitter in _emitters:
-				emitter.explosion()
+				emitter.explode()
+				play_positional_sound(sfx_bust_explosions.pick_random())
 				await get_tree().create_timer(randf_range(0.05, 0.2)).timeout
 	)
 	crash_tween.chain().tween_property(
@@ -333,7 +369,7 @@ func _on_health_dead_state_entered() -> void:
 		func():
 			var _emitters = bust_particles_parent.get_children()
 			for emitter in _emitters:
-				emitter.explosion()
+				emitter.explode()
 				await get_tree().create_timer(randf_range(0.05, 0.2)).timeout
 	)
 	crash_tween.chain().tween_property(
@@ -523,6 +559,7 @@ func _anchor_hand(hand: BlackjackHand, move_time: float = 0.6, return_to_offset:
 	hand.is_offhand = (lr_sign == -1)
 
 	if return_to_offset:
+		hand.whoosh()
 		# If this loop breaks, the hand has been despawned mid-move so we need to kill the tween
 		while hand in spawned_hands:
 			var _hand_spawn_tween: Tween = get_tree().create_tween()
@@ -646,6 +683,8 @@ func _on_movement_walking_state_entered() -> void:
 	#var wander_dist: float = randf_range(min_wander_distance, max_wander_distance)
 	var wander_dist: float = self.global_position.distance_to(new_wander_point)
 	var wander_time: float = wander_dist / wander_speed
+	
+	movement_sfx_player = play_positional_sound(sfx_platform_move_loop.pick_random())
 
 	move_tween = get_tree().create_tween()
 	move_tween.tween_property(self, "global_position", new_wander_point, wander_time).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
@@ -659,6 +698,7 @@ func _movement_callback() -> void:
 		active_point_debug.queue_free()
 
 func _on_movement_walking_state_exited() -> void:
+	movement_sfx_player.stop()
 	anim_player.play("RESET")
 	if move_tween:
 		move_tween.pause()
@@ -694,7 +734,12 @@ func _on_intro_state_entered() -> void:
 
 	move_tween.tween_property(hand_l, "global_position", intro_path_points[1].global_position + Vector3(hand_spacing, -1, 0), 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	move_tween.parallel().tween_property(hand_r, "global_position", intro_path_points[1].global_position + Vector3(-hand_spacing, -1, 0), 0.36).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	move_tween.chain().tween_callback(_shake_platform.bind(0.55, 0.6, 12))
+	move_tween.chain().tween_callback(
+		func():
+			_shake_platform(0.55, 0.6, 12)
+			hand_l.impact_table()
+			hand_r.impact_table()
+	)
 
 	move_tween.chain().tween_property(self, "global_position", intro_path_points[1].global_position, 1.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
@@ -783,7 +828,9 @@ func _on_dealing_dealing_state_entered() -> void:
 			hand_count = 21
 		if DEBUG_bust:
 			hand_count = 25
-
+		
+		play_positional_sound(sfx_deal_card.pick_random())
+		
 		deal_tween = get_tree().create_tween()
 		deal_tween.set_parallel(false)
 
@@ -804,14 +851,19 @@ func _on_dealing_dealing_state_entered() -> void:
 			# BUST
 			if hand_count > 21:
 				state_chart.send_event("start_bust")
+				play_positional_sound(sfx_deal_bust.pick_random())
 				_abort_deal_tween()
 				state_chart.send_event("end_deal")
 				return
 
 			# BLACKJACK
 			elif hand_count == 21:
+				play_positional_sound(sfx_deal_blackjack.pick_random())
 				state_chart.send_event("start_blackjack")
-
+			
+			else:
+				play_positional_sound(sfx_deal_stand.pick_random())
+			
 			_abort_deal_tween()
 			state_chart.send_event("end_deal")
 			return
@@ -833,6 +885,7 @@ func _abort_deal_tween() -> void:
 		deal_tween.kill()
 		deal_tween.finished.emit()
 	if spawned_hands.size() == 0:
+		play_positional_sound(sfx_deal_cancelled.pick_random())
 		state_chart.send_event("start_bust")
 		state_chart.send_event("end_deal")
 
@@ -1008,7 +1061,8 @@ func _on_bust_exploding_state_entered() -> void:
 
 	var emitters = bust_particles_parent.get_children()
 	for emitter in emitters:
-		emitter.explosion()
+		play_positional_sound(sfx_bust_explosions.pick_random())
+		emitter.explode()
 		self.health_component.damage(bust_self_damage * randf_range(0.7, 1.3) / emitters.size(), Color.RED)
 		await get_tree().create_timer(randf_range(0.05, 0.2)).timeout
 
@@ -1114,6 +1168,7 @@ func _on_bust_arena_aoe_state_entered() -> void:
 				_hand.spawn_dust()
 				_hand.spawn_explosion()
 				_shake_platform(0.8, 0.3)
+				_hand.impact_table()
 		)
 		await hand_tween.finished
 
@@ -1138,6 +1193,7 @@ func _bust_projectile() -> void:
 		bust_proj_speed / 4
 	)
 	 # Fire projectile
+	play_positional_sound(sfx_tilt_proj_shot.pick_random())
 	var hit_pos: Vector3 = await _fire_curved_proj(
 		tilt_proj_scene,
 		self.global_position,
@@ -1151,6 +1207,7 @@ func _bust_projectile() -> void:
 	for k in range(bust_proj_explosion_count):
 		var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2 * PI)) * 0.5
 		_spawn_explosion(pos, 4.0)
+		play_positional_sound(sfx_tilt_proj_explosion.pick_random())
 
 	_cleanup_aoe_decals(_aoe_decals)
 
@@ -1208,6 +1265,7 @@ func _on_tilt_moving_to_pos_state_entered() -> void:
 			var _hand = spawned_hands[idx]
 			_release_hand(_hand)
 			hand_tween.tween_property(_hand, "global_position", tilt_hand_markers[i].global_position, 0.8)
+			hand_tween.tween_callback(_hand.impact_table)
 
 	await hand_tween.finished
 
@@ -1226,6 +1284,8 @@ func _on_tilt_tilting_state_entered() -> void:
 	# Enable the player controller to slide on slopes
 	target.floor_stop_on_slope = false
 	target.add_status_effect(slippery_debuff)
+	
+	var tilt_sfx := SoundManager.play_sound(sfx_table_tilt.pick_random())
 
 	# Tilt the arena by a rotation degree amount
 	tilt_tween = get_tree().create_tween()
@@ -1235,6 +1295,8 @@ func _on_tilt_tilting_state_entered() -> void:
 	tilt_tween.tween_property(tilt_animateable_floor, "constant_linear_velocity:z", -tilt_max_floor_speed, tilt_duration / 2)
 
 	await tilt_tween.finished
+	
+	tilt_sfx.stop()
 	target.vel_horizontal += Vector2(0, -8.0)
 	tilt_particles.emitting = true
 
@@ -1297,6 +1359,7 @@ func _on_tilt_firing_state_entered() -> void:
 			# Lead the target a bit so the player can see the attack coming
 			target_pos -= tilt_mesh.global_basis.z * 8.0
 			var _aoe_decals := await spawn_aoe_decals(target_pos + Vector3(0, 2.0, 0), tilt_explosion_radius, tilt_proj_speed / 4)
+			play_positional_sound(sfx_tilt_proj_shot.pick_random())
 			var hit_pos: Vector3 = await _fire_curved_proj(
 				tilt_proj_scene,
 				proj_origin,
@@ -1309,6 +1372,8 @@ func _on_tilt_firing_state_entered() -> void:
 			for k in range(tilt_proj_explosion_count):
 				var pos: Vector3 = hit_pos - tilt_mesh.global_basis.z.rotated(Vector3.UP, randf_range(0, 2 * PI)) * 0.5
 				_spawn_explosion(pos)
+				# TODO - move this sfx player to the explosion scene itself
+				play_positional_sound(sfx_tilt_proj_explosion.pick_random())
 
 			_cleanup_aoe_decals(_aoe_decals)
 
@@ -1317,9 +1382,14 @@ func _on_tilt_firing_state_entered() -> void:
 
 func _spawn_explosion(spawn_pos: Vector3, scale_factor: float = 1.0) -> void:
 	var explosion = tilt_explosion_instances.pop_front()
+	if not explosion:
+		explosion = explosion_scene.instantiate()
+		explosion.explode_on_spawn = false
+		explosion.free_on_finished = false
+		
 	explosion.global_position = spawn_pos
 	explosion.scale_factor = scale_factor
-	explosion.explosion()
+	explosion.explode()
 
 	# Distance-scaling rumble/screen shake
 	var target_dist: float = target.global_position.distance_to(explosion.global_position)
@@ -1360,6 +1430,7 @@ func _on_tilt_firing_state_physics_processing(_delta: float) -> void:
 func _on_tilt_untilting_state_entered() -> void:
 	# Return the arena to the original zeroed rotation
 	tilt_particles.emitting = false
+	var tilt_sfx := SoundManager.play_sound(sfx_table_untilt.pick_random())
 	tilt_tween = get_tree().create_tween()
 	tilt_tween.set_parallel(true)
 	tilt_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
@@ -1368,6 +1439,7 @@ func _on_tilt_untilting_state_entered() -> void:
 
 	await tilt_tween.finished
 
+	tilt_sfx.stop()
 	state_chart.send_event("stop_tilting")
 
 
@@ -1434,9 +1506,13 @@ func _fire_curved_proj(proj_scene: PackedScene, proj_origin: Vector3, target_pos
 	var curve_tween = get_tree().create_tween()
 	curve_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
 	# Parent hand motion
+	var _travel_sfx := play_positional_sound(sfx_tilt_proj_travel.pick_random())
+	_travel_sfx.volume_db = -3.0
 	curve_tween.tween_property(curve_path_follow, "progress_ratio", 1.0, proj_speed)
 
 	await curve_tween.finished
+	_travel_sfx.stop()
+	_travel_sfx.volume_db = 0.0
 
 	var hit_pos: Vector3 = proj.global_position
 	path.queue_free()
@@ -1469,6 +1545,7 @@ func _create_new_damage_area(_pos: Vector3, radius: float, damage: int) -> Explo
 
 func _shake_platform(strength: float, time: float, loops: int = 6) -> void:
 	InputHelper.rumble_medium()
+	var _sfx_player := play_positional_sound(sfx_platform_shake.pick_random())
 	var shake_tween := get_tree().create_tween()
 	shake_tween.set_parallel(false).set_trans(Tween.TRANS_BOUNCE)
 	shake_tween.set_loops(loops)
@@ -1488,6 +1565,10 @@ func _shake_platform(strength: float, time: float, loops: int = 6) -> void:
 		Vector3.ZERO,
 		time / 2 / loops / 2
 	)
+	
+	await shake_tween.finished
+	
+	_sfx_player.stop()
 
 
 func _on_hand_defensive_targeting_state_entered() -> void:
@@ -1523,7 +1604,6 @@ func _on_hand_defensive_moving_to_block_state_entered() -> void:
 			Vector3.UP,
 			2 * PI / spawned_hands.size() * hand_idx
 		)
-
 		move_block_tween.tween_property(hand, "position", blocking_pos, 0.2)
 		move_block_tween.tween_property(hand, "position:y", 0.0, 0.2)
 
@@ -1634,6 +1714,7 @@ func _on_hand_defensive_firing_state_entered() -> void:
 		for elem in shot.elemental_emitting_vfx:
 			if elem:
 				elem.turn_on()
+		play_positional_sound(sfx_block_shot.pick_random())
 		shot.init(start_pos, direction, int(damage), 0, speed, 500)
 		#await get_tree().create_timer(0.15, false).timeout
 
@@ -1702,10 +1783,12 @@ func _block_interecept_projectile(proj: BaseBullet, pos: Vector3 = Vector3.ZERO)
 		intercept_pos -= proj.transform.basis.z * 2.0
 
 	# Tween the hand to tank the shot
+	closest_hand.whoosh()
 	var intercept_tween := get_tree().create_tween()
 	intercept_tween.set_parallel(false).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_EXPO)
 	intercept_tween.tween_property(closest_hand, "global_position", intercept_pos, intercept_time)
-	intercept_tween.tween_callback(_spawn_explosion.bind(intercept_pos, 0.25))
+	#intercept_tween.tween_callback(_spawn_explosion.bind(intercept_pos, 0.25))
+	#intercept_tween.tween_callback(closest_hand.block_shot)
 
 	await intercept_tween.finished
 
@@ -1728,6 +1811,7 @@ func _block_interecept_projectile(proj: BaseBullet, pos: Vector3 = Vector3.ZERO)
 
 	# Add an impact mesh/visual to the hand, with a transform based on the
 	# movement direction of the projectile.
+	closest_hand.block_shot()
 	_spawn_explosion(intercept_pos, 0.25)
 
 	await get_tree().create_timer(0.25, false).timeout

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bs4807yuuy3hg"
+path="res://.godot/imported/Razor Card Throw 2.mp3-edae6ec4f95390e9d04c620b6e1962da.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Razor Card Throw 2.mp3"
+dest_files=["res://.godot/imported/Razor Card Throw 2.mp3-edae6ec4f95390e9d04c620b6e1962da.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ddfkqq2ddcu5b"
+path="res://.godot/imported/Deal Bust - Explosion Separated v2 3.mp3-fac18473151f19bddf46fea7f050b606.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Bust - Explosion Separated v2 3.mp3"
+dest_files=["res://.godot/imported/Deal Bust - Explosion Separated v2 3.mp3-fac18473151f19bddf46fea7f050b606.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bcujxmm0vqwoc"
+path="res://.godot/imported/Card Riffle Shuffle loop.mp3-3f7b82d2131f47ee6bb9ec09bc0f222d.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Card Riffle Shuffle loop.mp3"
+dest_files=["res://.godot/imported/Card Riffle Shuffle loop.mp3-3f7b82d2131f47ee6bb9ec09bc0f222d.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

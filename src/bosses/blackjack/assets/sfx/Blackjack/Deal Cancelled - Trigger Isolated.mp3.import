@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bq72xtbrqjvjl"
+path="res://.godot/imported/Deal Cancelled - Trigger Isolated.mp3-3ec10a3eb9f0a5dfc4597a54c6c89c57.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Cancelled - Trigger Isolated.mp3"
+dest_files=["res://.godot/imported/Deal Cancelled - Trigger Isolated.mp3-3ec10a3eb9f0a5dfc4597a54c6c89c57.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

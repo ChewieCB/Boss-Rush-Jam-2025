@@ -1,18 +1,24 @@
-[gd_scene load_steps=109 format=4 uid="uid://bsdh38vyreful"]
+[gd_scene load_steps=153 format=4 uid="uid://bsdh38vyreful"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_262ft"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/boss_blackjack.gd" id="2_km6gh"]
 [ext_resource type="Texture2D" uid="uid://bitpdmnh0vncj" path="res://src/bosses/blackjack/assets/sprites/beau_temp.png" id="3_a6t5q"]
+[ext_resource type="AudioStream" uid="uid://ctp2afk7idkcv" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Platform Zooming 2.mp3" id="3_brjd8"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="3_db3k6"]
+[ext_resource type="AudioStream" uid="uid://dubqgp3pejwsr" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Platform Zooming.mp3" id="4_1n82d"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_3jupp"]
 [ext_resource type="PackedScene" uid="uid://cbb2iyep64uu" path="res://src/bosses/chips/minions/SlamShockwave.tscn" id="4_cv1yb"]
+[ext_resource type="AudioStream" uid="uid://csu8v2whk00ys" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Boss Ambience Movement Loop.mp3" id="5_0vhsm"]
 [ext_resource type="Texture2D" uid="uid://bpysy3ognjwre" path="res://assets/sprite/playing_cards/ace_of_hearts.png" id="5_xw57y"]
 [ext_resource type="Texture2D" uid="uid://dskrto7f2esrm" path="res://assets/sprite/playing_cards/two_of_hearts.png" id="6_ddotp"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_pje5c"]
+[ext_resource type="AudioStream" uid="uid://cfobsa1ic0r3w" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Hands Impact Table 1.mp3" id="6_wlq0w"]
 [ext_resource type="Texture2D" uid="uid://42yi613k61nt" path="res://assets/sprite/playing_cards/three_of_hearts.png" id="7_c86wt"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="7_lbgn8"]
+[ext_resource type="AudioStream" uid="uid://ddjjmetudddm2" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Hands Impact Table 2.mp3" id="7_u2ocp"]
 [ext_resource type="Texture2D" uid="uid://chdpbh5fy2gdj" path="res://assets/sprite/playing_cards/four_of_hearts.png" id="8_b64we"]
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="8_vqffi"]
+[ext_resource type="AudioStream" uid="uid://c1mdesic2xeey" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Platform Shaking.mp3" id="8_yjj1g"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="9_alky6"]
 [ext_resource type="Texture2D" uid="uid://sg50vif0oukn" path="res://assets/sprite/playing_cards/five_of_hearts.png" id="9_pmm6f"]
 [ext_resource type="Material" uid="uid://cuh405ors6lok" path="res://assets/textures/placeholder/texture_red_07.tres" id="10_1lrmi"]
@@ -36,10 +42,48 @@
 [ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="20_1mflx"]
 [ext_resource type="Texture2D" uid="uid://cjm0gilmb52sa" path="res://assets/sprite/aoe_markers/aoe_arrows.png" id="20_an7di"]
 [ext_resource type="PackedScene" uid="uid://bl721ikop8rr" path="res://src/bosses/base/attacks/ranged/ExplodingProjectileExplosionArea.tscn" id="21_v5jtk"]
+[ext_resource type="AudioStream" uid="uid://ccslfk4237goe" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Card Deal v2 1.mp3" id="26_eblj3"]
+[ext_resource type="AudioStream" uid="uid://dslnhwpkcrje5" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Card Deal v2 2.mp3" id="27_1e5uu"]
+[ext_resource type="AudioStream" uid="uid://bnvkp5jbwkvsx" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Card Deal v2 3.mp3" id="28_46xg1"]
+[ext_resource type="AudioStream" uid="uid://bxgbe5tbxbuo" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Card Deal v2 4.mp3" id="29_c8vlp"]
+[ext_resource type="AudioStream" uid="uid://b50fwti6wgm4s" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Card Riffle Shuffle loop 2.mp3" id="30_gsmmt"]
+[ext_resource type="AudioStream" uid="uid://bx7pep67rokkn" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Card Riffle Shuffle loop .mp3" id="31_hkohg"]
+[ext_resource type="AudioStream" uid="uid://bcujxmm0vqwoc" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Card Riffle Shuffle loop.mp3" id="32_70vix"]
+[ext_resource type="AudioStream" uid="uid://b4doujj5ycfbw" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Normal Attack.mp3" id="33_mqxqf"]
+[ext_resource type="AudioStream" uid="uid://c64cjc1t1wxl4" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Blackjack.mp3" id="34_hvi1c"]
 [ext_resource type="Script" path="res://src/bosses/blackjack/blocking_detection_area.gd" id="34_ihkxb"]
+[ext_resource type="AudioStream" uid="uid://t36yhsekul25" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Bust (Initial Sound).mp3" id="37_0hxfe"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="38_3whmd"]
+[ext_resource type="AudioStream" uid="uid://bq72xtbrqjvjl" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Cancelled - Trigger Isolated.mp3" id="38_8fgsd"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="39_brwx4"]
+[ext_resource type="AudioStream" uid="uid://b4rdepq1dnv88" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Bust - Explosion Separated v2 1.mp3" id="39_j2fqy"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="40_cwuof"]
+[ext_resource type="AudioStream" uid="uid://cykk78mk3vfb3" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Bust - Explosion Separated v2 2.mp3" id="40_ea6kb"]
+[ext_resource type="AudioStream" uid="uid://ddfkqq2ddcu5b" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Bust - Explosion Separated v2 3.mp3" id="41_ytqab"]
+[ext_resource type="AudioStream" uid="uid://cqqyf4u1o5g0w" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Bust - Explosion Separated v2 4.mp3" id="42_m2fnp"]
+[ext_resource type="AudioStream" uid="uid://co3bcvnnk7f5" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Hands Grab Table 1.mp3" id="45_xlffh"]
+[ext_resource type="AudioStream" uid="uid://l1voc7l5t2h7" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Hands Grab Table 2.mp3" id="46_v4y4c"]
+[ext_resource type="AudioStream" uid="uid://ddtxspoyh5r21" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Table Tilted.mp3" id="47_0prrk"]
+[ext_resource type="AudioStream" uid="uid://d2pt7otyhbrhn" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Table Untilted.mp3" id="48_ovavp"]
+[ext_resource type="AudioStream" uid="uid://cm31j0n0hdqm0" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Launch 1.mp3" id="50_ju1vp"]
+[ext_resource type="AudioStream" uid="uid://btcgtlyl71fkk" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Launch 2.mp3" id="51_1gbfb"]
+[ext_resource type="AudioStream" uid="uid://brcvg5jh1wsjl" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Launch 3.mp3" id="52_m56ug"]
+[ext_resource type="AudioStream" uid="uid://bc7v0y7r77ya7" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Falling 2.mp3" id="53_0udn1"]
+[ext_resource type="AudioStream" uid="uid://l7udilt065ns" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Falling 3.mp3" id="54_xhn0x"]
+[ext_resource type="AudioStream" uid="uid://3w0hirniu2rd" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Falling.mp3" id="55_instf"]
+[ext_resource type="AudioStream" uid="uid://c5kast1jfgjj4" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Explosions (and others) 1.mp3" id="56_nlad3"]
+[ext_resource type="AudioStream" uid="uid://cjq1dhnb7j0wk" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Explosions (and others) 2.mp3" id="57_cnm2j"]
+[ext_resource type="AudioStream" uid="uid://35bbuw5thaah" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Explosions (and others) 3.mp3" id="58_vllg3"]
+[ext_resource type="AudioStream" uid="uid://de2qq58d0q3x8" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Explosions (and others) 4.mp3" id="59_4laeg"]
+[ext_resource type="AudioStream" uid="uid://cfe0u2lxcycp2" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Hand Blocks Shot 1 .mp3" id="60_xui7a"]
+[ext_resource type="AudioStream" uid="uid://etsc41kmjg7d" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Hand Blocks Shot 2.mp3" id="61_i2upq"]
+[ext_resource type="AudioStream" uid="uid://ye3tkwdh8yvc" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Hand Blocks Shot Simple 1.mp3" id="62_kjcjq"]
+[ext_resource type="AudioStream" uid="uid://cm4m0vlkshcc" path="res://src/bosses/blackjack/assets/sfx/Blackjack/Hand Blocks Shot Simple 2.mp3" id="63_mx73x"]
+[ext_resource type="AudioStream" uid="uid://bpjefcq47oyr3" path="res://src/bosses/base/assets/sfx/temp/Hit 2.mp3" id="64_ef0pe"]
+[ext_resource type="AudioStream" uid="uid://ch0bkn7t2rb4i" path="res://src/bosses/base/assets/sfx/temp/Hit 3.mp3" id="65_8bjro"]
+[ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="66_0ywdd"]
+[ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="67_ifiaw"]
+[ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="68_pc8wl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_brmua"]
 size = Vector3(5, 5, 5)
@@ -582,7 +626,8 @@ _data = {
 "moving": SubResource("Animation_b4jix")
 }
 
-[node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent", "blocking_detection_area") instance=ExtResource("1_262ft")]
+[node name="BossBlackjack" node_paths=PackedStringArray("dealing_anim_points", "hand_count_label", "card_particles", "card_explosion_particles", "blackjack_particles", "blackjack_timer", "bust_particles_parent", "blocking_detection_area", "sfx_players") instance=ExtResource("1_262ft")]
+collision_mask = 11
 script = ExtResource("2_km6gh")
 DEBUG_blackjack = false
 DEBUG_bust = false
@@ -593,6 +638,10 @@ min_wander_distance = 2.0
 max_wander_distance = 8.0
 wander_speed = 4.0
 wander_timeout = 0.5
+sfx_platform_zoom = Array[AudioStream]([ExtResource("3_brjd8"), ExtResource("4_1n82d")])
+sfx_platform_move_loop = Array[AudioStream]([ExtResource("5_0vhsm")])
+sfx_platform_impact = Array[AudioStream]([ExtResource("6_wlq0w"), ExtResource("7_u2ocp")])
+sfx_platform_shake = Array[AudioStream]([ExtResource("8_yjj1g")])
 hand_scene = ExtResource("13_ereo8")
 hand_spacing = 5.0
 hand_respawn_time = 3.5
@@ -609,11 +658,16 @@ hand_count_label = NodePath("HoverPlatform/DealLabel")
 card_particles = NodePath("HoverPlatform/DealCardParticle")
 card_explosion_particles = NodePath("HoverPlatform/NumberParticles")
 blackjack_particles = NodePath("HoverPlatform/BlackjackParticles")
+sfx_deal_card = Array[AudioStream]([ExtResource("26_eblj3"), ExtResource("27_1e5uu"), ExtResource("28_46xg1"), ExtResource("29_c8vlp")])
+sfx_deal_shuffle = Array[AudioStream]([ExtResource("30_gsmmt"), ExtResource("31_hkohg"), ExtResource("32_70vix")])
+sfx_deal_stand = Array[AudioStream]([ExtResource("33_mqxqf")])
 blackjack_chance_phase_1 = 0.05
 blackjack_chance_phase_2 = 0.15
 blackjack_time_min = 8.0
 blackjack_time_max = 25.0
 blackjack_timer = NodePath("BlackjackTimer")
+sfx_deal_blackjack = Array[AudioStream]([ExtResource("34_hvi1c")])
+sfx_blackjack_loop = []
 bust_chance_phase_1 = 0.25
 bust_chance_phase_2 = 0.1
 bust_particles_parent = NodePath("HoverPlatform/BustParticles")
@@ -627,6 +681,10 @@ bust_proj_explosion_count = 1
 bust_explosion_radius = 5.0
 bust_proj_arc_height = 25.0
 max_explosion_search_radius = 15.0
+sfx_deal_bust = Array[AudioStream]([ExtResource("37_0hxfe")])
+sfx_deal_cancelled = Array[AudioStream]([ExtResource("38_8fgsd")])
+sfx_bust_explosions = Array[AudioStream]([ExtResource("39_j2fqy"), ExtResource("40_ea6kb"), ExtResource("41_ytqab"), ExtResource("42_m2fnp")])
+sfx_impact_table = Array[AudioStream]([ExtResource("6_wlq0w"), ExtResource("7_u2ocp")])
 attack_speed_scale = 1.0
 slam_shockwave_prefab = ExtResource("4_cv1yb")
 sweep_dist = 12.0
@@ -636,6 +694,9 @@ tilt_max_deg = 25.0
 tilt_max_floor_speed = 9.2
 tilt_duration = 2.8
 tilt_floor_friction_mod = 0.23
+sfx_tilt_hand_grab = Array[AudioStream]([ExtResource("45_xlffh"), ExtResource("46_v4y4c")])
+sfx_table_tilt = Array[AudioStream]([ExtResource("47_0prrk")])
+sfx_table_untilt = Array[AudioStream]([ExtResource("48_ovavp")])
 tilt_proj_scene = ExtResource("19_sbdjh")
 tilt_proj_speed = 0.75
 tilt_proj_shots = 3
@@ -644,12 +705,19 @@ tilt_explosion_radius = 4.0
 tilt_proj_arc_height = 5.0
 tilt_proj_explosion_area_scene = ExtResource("21_v5jtk")
 tilt_explosion_damage = 25.0
+sfx_tilt_proj_shot = Array[AudioStream]([ExtResource("50_ju1vp"), ExtResource("51_1gbfb"), ExtResource("52_m56ug")])
+sfx_tilt_proj_travel = Array[AudioStream]([ExtResource("53_0udn1"), ExtResource("54_xhn0x"), ExtResource("55_instf")])
+sfx_tilt_proj_explosion = Array[AudioStream]([ExtResource("56_nlad3"), ExtResource("57_cnm2j"), ExtResource("58_vllg3"), ExtResource("59_4laeg")])
 blocking_detection_area = NodePath("BlockingDetectionArea")
 block_detection_radius = 18.0
 blocking_time = 3.1
 hand_block_timeout = 0.35
-chip_scene = null
+sfx_block_shot = Array[AudioStream]([ExtResource("60_xui7a"), ExtResource("61_i2upq"), ExtResource("62_kjcjq"), ExtResource("63_mx73x")])
+boss_id = 7
+chip_spawn_force = 4500.0
 barrel_pickup_scene = null
+sfx_players = [NodePath("SFXPlayer1"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8"), NodePath("SFXPlayer9"), NodePath("SFXPlayer10"), NodePath("SFXPlayer11"), NodePath("SFXPlayer12"), NodePath("SFXPlayer13"), NodePath("SFXPlayer14"), NodePath("SFXPlayer15"), NodePath("SFXPlayer16")]
+sfx_hit = Array[AudioStream]([ExtResource("64_ef0pe"), ExtResource("65_8bjro"), ExtResource("66_0ywdd"), ExtResource("67_ifiaw"), ExtResource("68_pc8wl")])
 sfx_slowmo = null
 attack_recovery_time = 0.5
 projectile_scene = null
@@ -669,7 +737,6 @@ shape = SubResource("BoxShape3D_brmua")
 
 [node name="DebugMesh" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
-visible = true
 mesh = SubResource("BoxMesh_g4eca")
 
 [node name="HoverPlatform" type="MeshInstance3D" parent="." index="3"]
@@ -790,7 +857,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
 [node name="HealthComponent" parent="." index="7"]
 visible = false
-max_health = 6000.0
+max_health = 8000.0
 
 [node name="BlockingDetectionArea" type="Area3D" parent="." index="9"]
 process_mode = 4
@@ -1505,6 +1572,70 @@ one_shot = true
 
 [node name="BlackjackTimer" type="Timer" parent="." index="27"]
 one_shot = true
+
+[node name="SFXPlayer1" type="AudioStreamPlayer3D" parent="." index="28"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="29"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="30"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="31"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="32"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="33"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="34"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="35"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="." index="36"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="." index="37"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="." index="38"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer12" type="AudioStreamPlayer3D" parent="." index="39"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer13" type="AudioStreamPlayer3D" parent="." index="40"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer14" type="AudioStreamPlayer3D" parent="." index="41"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer15" type="AudioStreamPlayer3D" parent="." index="42"]
+unit_size = 19.0
+bus = &"SFX"
+
+[node name="SFXPlayer16" type="AudioStreamPlayer3D" parent="." index="43"]
+unit_size = 19.0
+bus = &"SFX"
 
 [connection signal="area_entered" from="BlockingDetectionArea" to="." method="_on_blocking_detection_area_area_entered"]
 [connection signal="state_exited" from="StateChart/Root/Movement/Walking" to="." method="_on_movement_walking_state_exited"]

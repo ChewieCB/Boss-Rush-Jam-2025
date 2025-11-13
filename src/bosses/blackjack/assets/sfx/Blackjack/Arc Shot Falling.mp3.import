@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://3w0hirniu2rd"
+path="res://.godot/imported/Arc Shot Falling.mp3-be5754d4e5e6e0fc7a9f6fde917994b4.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Arc Shot Falling.mp3"
+dest_files=["res://.godot/imported/Arc Shot Falling.mp3-be5754d4e5e6e0fc7a9f6fde917994b4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

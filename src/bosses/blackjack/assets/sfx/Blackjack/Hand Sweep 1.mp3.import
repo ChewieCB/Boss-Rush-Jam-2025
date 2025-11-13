@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bgoc82gj1lynh"
+path="res://.godot/imported/Hand Sweep 1.mp3-bcf6c9d85fa43226cbaed2b2476b0fde.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Hand Sweep 1.mp3"
+dest_files=["res://.godot/imported/Hand Sweep 1.mp3-bcf6c9d85fa43226cbaed2b2476b0fde.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -16,12 +16,19 @@ var is_offhand: bool = false # flag to set handed-ness so we can flip sweep dire
 
 @export var attack_speed_scale: float = 1.0
 
+ # SFX
+@export var sfx_hand_destroyed: Array[AudioStream]
+@export var sfx_impact_table: Array[AudioStream]
+@export var sfx_impact_target: Array[AudioStream]
+
 ## Attacks
 # Hit
 var slam_target: Vector3
 @export var slam_time: float = 0.45
 @export var hit_damage: float = 10
 var slam_tween: Tween
+# SFX
+@export var sfx_whoosh: Array[AudioStream]
 
 # Stand
 var stand_target: Vector3
@@ -35,6 +42,8 @@ var stand_repeat_counter: int = 0
 @export var stand_repeat_max: int = 2
 var shockwave_instance_pool: Array
 var stand_tween: Tween
+# SFX
+@export var sfx_aoe: Array[AudioStream]
 
 # Sweep
 var sweep_start_pos: Vector3
@@ -50,9 +59,15 @@ var sweep_progress: float = 0.0
 var sweep_path_follow: PathFollow3D
 var sweep_card_follows := []
 var sweep_tween: Tween
+# SFX
+@export var sfx_sweep: Array[AudioStream]
+
 # Block
 @export var cycle_jitter: float = 0.2
 @export var return_timer: Timer
+# SFX
+@export var sfx_hand_block: Array[AudioStream]
+
 
 func _ready() -> void:
 	super ()
@@ -96,6 +111,7 @@ func cancel_hand_attack() -> void:
 
 
 func fake_destroy() -> void:
+	play_positional_sound(sfx_hand_destroyed.pick_random())
 	spawn_dust()
 	spawn_explosion()
 	sprite.visible = false
@@ -123,13 +139,14 @@ func spawn_dust() -> void:
 	#death_particles.emitting = true
 
 func spawn_explosion() -> void:
-	explosion_particle.explosion()
+	explosion_particle.explode()
 
 
 ##
 
 func _on_hurtbox_body_entered(body: Node3D) -> void:
 	if body is Player:
+		play_positional_sound(sfx_impact_target.pick_random())
 		body.health_component.damage(hit_damage)
 
 
@@ -188,6 +205,7 @@ func _on_hit_slamming_state_entered() -> void:
 	# Quickly zoom towards the target point, 
 	# creating a small AoE and some particles on impact
 	hurtbox.set_deferred("monitoring", true)
+	whoosh()
 	slam_tween = get_tree().create_tween()
 	slam_tween.tween_property(
 		self,
@@ -195,7 +213,10 @@ func _on_hit_slamming_state_entered() -> void:
 		slam_target,
 		slam_time * attack_speed_scale
 	).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	slam_tween.tween_callback(impact_table)
+	
 	await slam_tween.finished
+	
 	# TODO - generate explosion and damage
 	spawn_dust()
 	spawn_explosion()
@@ -236,6 +257,7 @@ func _on_stand_move_to_target_state_entered() -> void:
 	var stand_hover_target = stand_target
 	stand_hover_target.y = self.global_position.y
 	
+	whoosh()
 	stand_tween = get_tree().create_tween()
 	stand_tween.tween_property(
 		self,
@@ -279,6 +301,8 @@ func _on_stand_double_tap_state_entered() -> void:
 		).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 		slam_tween.tween_callback(
 			func():
+				impact_table()
+				play_positional_sound(sfx_aoe.pick_random())
 				spawn_dust()
 				spawn_explosion()
 				var _shockwave = spawn_shockwave()
@@ -453,6 +477,7 @@ func _on_sweep_sweeping_state_entered() -> void:
 	spawn_dust()
 	
 	# Spawn face down playing cards throughout the arc movement
+	play_positional_sound(sfx_sweep.pick_random())
 	sweep_tween = get_tree().create_tween()
 	sweep_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
 	# Parent hand motion
@@ -556,3 +581,17 @@ func _on_blocking_targeting_state_entered() -> void:
 
 func _on_blocking_targeting_state_exited() -> void:
 	anim_player.play("blackjack_hand/RESET")
+
+
+## SFX helpers
+
+func whoosh() -> void:
+	play_positional_sound(sfx_whoosh.pick_random())
+
+
+func impact_table() -> void:
+	play_positional_sound(sfx_impact_table.pick_random())
+
+
+func block_shot() -> void:
+	play_positional_sound(sfx_hand_block.pick_random())

@@ -18,6 +18,8 @@ signal ui_accept
 
 var display_barrels: Array = []
 
+var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
+
 func _ready() -> void:
 	#player.gun.reinstall_barrels()
 	#ScreenTransition.fill_screen()
@@ -80,8 +82,7 @@ func show_panel(panel: Control) -> void:
 
 func _on_level_select(level_path: String) -> void:
 	GameManager.selected_level_path = level_path
-	if level_path == "res://src/maps/tutorial/TutorialBoss.tscn":
-		elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_6_SlidingDoor
+	if GameManager.selected_boss_id in no_difficulty_bosses:
 		load_selected_level()
 	else:
 		difficulty_menu.show_menu()

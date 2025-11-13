@@ -270,7 +270,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [27]
+"values": [11]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -529,6 +529,47 @@ tracks/0/keys = {
 "values": [ExtResource("16_ukgug")]
 }
 
+[sub_resource type="Animation" id="Animation_jt2i0"]
+resource_name = "impact_no_slam"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.62451),
+"update": 0,
+"values": [Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.25, 0.325, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("38_x4twh"), ExtResource("39_gab4h"), ExtResource("33_1fje0"), ExtResource("32_i0wff"), ExtResource("16_ukgug")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("DebugAnimPivot/SlamSpawn:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, -1.9, 0.800001)]
+}
+
 [sub_resource type="Animation" id="Animation_cijff"]
 resource_name = "intro"
 length = 0.01
@@ -692,7 +733,7 @@ tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [24]
+"values": [8]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -1214,47 +1255,6 @@ tracks/0/keys = {
 "values": [ExtResource("21_yqrf4"), ExtResource("20_5ckod"), ExtResource("19_xriv7"), ExtResource("17_cu5tl"), ExtResource("16_ukgug")]
 }
 
-[sub_resource type="Animation" id="Animation_jt2i0"]
-resource_name = "impact_no_slam"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DebugAnimPivot:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1.62451),
-"update": 0,
-"values": [Vector3(0, 1.309, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.25, 0.325, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("38_x4twh"), ExtResource("39_gab4h"), ExtResource("33_1fje0"), ExtResource("32_i0wff"), ExtResource("16_ukgug")]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("DebugAnimPivot/SlamSpawn:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.05),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(-0.8, -1.9, 0.800001)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
 _data = {
 "backswipe": SubResource("Animation_85u7l"),
@@ -1281,6 +1281,7 @@ _data = {
 }
 
 [node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_particles", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "sfx_players") instance=ExtResource("1_7pmj2")]
+collision_mask = 11
 script = ExtResource("2_6u4e1")
 MOVE_SPEED = 6.0
 wave_amplitude = 7.0
@@ -1346,7 +1347,7 @@ transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, -0.8, -1
 visible = false
 
 [node name="LaserSpawn" type="Marker3D" parent="." index="2"]
-transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0, 1.343, -1.8)
+transform = Transform3D(1, 0, 7.10543e-15, 0, 1, 0, -7.10543e-15, 0, 1, 0.081, -6.4, -1.8)
 
 [node name="LaserEndParticles" parent="LaserSpawn" index="0" instance=ExtResource("6_fqvnt")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, -0.0096159, 0)
@@ -1829,14 +1830,19 @@ autoplay = "RESET"
 [node name="SmokeParticles" parent="." index="25" instance=ExtResource("11_1crh5")]
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="27"]
+bus = &"SFX"
 
 [node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="28"]
+bus = &"SFX"
 
 [node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="29"]
+bus = &"SFX"
 
 [node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="30"]
+bus = &"SFX"
 
 [node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="31"]
+bus = &"SFX"
 
 [connection signal="state_entered" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Intro" to="." method="_on_intro_state_physics_processing"]

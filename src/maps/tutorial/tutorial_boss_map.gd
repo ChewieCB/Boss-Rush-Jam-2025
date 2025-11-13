@@ -24,6 +24,7 @@ signal ui_accept
 var spin_warning_trigger_active: bool = false
 
 @export var exit_elevator_button: Area3D
+@export var lobby_entry_elevator: Node3D
 
 @export var boss_intro_spawn: Marker3D
 @export var boss_laser_spawn_markers: Array[Marker3D]
@@ -43,9 +44,12 @@ func _ready() -> void:
 	#player.gun.reinstall_barrels()
 	# FIXME - workaround
 	is_tutorial = true
-	elevator_doors = $FuncGodotMap/group_675_MaintenanceElevator/entity_42_SlidingDoor
+	elevator_doors = lobby_entry_elevator
 
 	super()
+	if GameManager.cached_player_rotation:
+		player.global_position = elevator_doors.global_position - Vector3(0, 0, 1.5)
+		player.global_rotation.y = PI
 
 	if boss_doors:
 		boss_doors.close()

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b4doujj5ycfbw"
+path="res://.godot/imported/Deal Normal Attack.mp3-fbad122f4cdf2f2fa916917f1b135889.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Deal Normal Attack.mp3"
+dest_files=["res://.godot/imported/Deal Normal Attack.mp3-fbad122f4cdf2f2fa916917f1b135889.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

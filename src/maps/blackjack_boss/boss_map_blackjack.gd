@@ -13,10 +13,14 @@ extends BossMap
 @onready var boss_intro_path_markers = get_tree().get_nodes_in_group("boss_intro_path_marker")
 @onready var hand_spawn_marker = get_tree().get_nodes_in_group("boss_hand_spawn_marker")
 
+@onready var music_player: AudioStreamPlayer = $InteractiveMusicPlayer
+var music_playback: AudioStreamPlaybackInteractive
+
 
 func _ready() -> void:
 	remove_child(tilt_particles)
 	tiltable_parent.add_child(tilt_particles)
+	music_playback = music_player.get_stream_playback()
 	
 	boss.flying_nav = flying_nav_mesh
 	boss.tilt_platform_origin_marker = boss_tilt_platform_origin_marker.front()
@@ -25,6 +29,10 @@ func _ready() -> void:
 	boss.intro_path_points = boss_intro_path_markers
 	boss.hand_spawn_pos = hand_spawn_marker.front()
 	boss.explosive_spawn_meshes = explosive_spawn_parent.get_children()
+	boss.phase_changed.connect(
+		func(a: int):
+			music_playback.switch_to_clip(1)
+	)
 	
 	#for stack in chip_stacks_parent.get_children():
 		#var _rotation: float = randf_range(0, 2*PI)

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://npc00qksivq4"
+path="res://.godot/imported/Hand Destroyed 1.mp3-029c00eb6286c17c0305f8926d5f033a.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Hand Destroyed 1.mp3"
+dest_files=["res://.godot/imported/Hand Destroyed 1.mp3-029c00eb6286c17c0305f8926d5f033a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

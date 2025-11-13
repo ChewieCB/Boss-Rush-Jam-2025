@@ -395,6 +395,18 @@ func get_available_sfx_player() -> AudioStreamPlayer3D:
 	return null
 
 
+func play_positional_sound(stream: AudioStream) -> AudioStreamPlayer3D:
+	var _player: AudioStreamPlayer3D = get_available_sfx_player()
+	
+	if not _player:
+		return
+	
+	_player.stream = stream
+	_player.play()
+	
+	return _player
+
+
 func drop_barrel(target_pos: Vector3 = target.global_position) -> void:
 	# Check if we've already given the player this barrel
 	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:

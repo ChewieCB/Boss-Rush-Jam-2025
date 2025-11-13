@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://l1voc7l5t2h7"
+path="res://.godot/imported/Hands Grab Table 2.mp3-84805325edf0630ba72b5381501d4686.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/blackjack/assets/sfx/Blackjack/Hands Grab Table 2.mp3"
+dest_files=["res://.godot/imported/Hands Grab Table 2.mp3-84805325edf0630ba72b5381501d4686.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
