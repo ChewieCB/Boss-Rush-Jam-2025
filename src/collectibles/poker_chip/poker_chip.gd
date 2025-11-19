@@ -67,7 +67,7 @@ func _on_collect() -> void:
 	SoundManager.play_sound_with_pitch(sfx_pickup.pick_random(), randf_range(0.8, 1.1), "SFX")
 	if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.BLESSED_CHIP):
 		var bonus_luck = 0
-		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLESSED_CHIP]:
+		match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLESSED_CHIP]):
 			1:
 				bonus_luck = 1
 			2:

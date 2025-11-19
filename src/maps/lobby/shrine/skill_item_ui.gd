@@ -5,7 +5,7 @@ enum SkillIdEnum {
 	NONE,
 	HOT_HAND,
 	LUCKY_SHOT,
-	LUCKY_CRIT, # Replaced, Inreased crit mult from 2.0x to 2.5x
+	LUCKY_CRIT, # Inreased crit mult from 2.0x to 2.5x
 	DOUBLE_DOWN,
 	IOU,
 	CHEAT_DEATH,
@@ -14,7 +14,7 @@ enum SkillIdEnum {
 	PLOT_ARMOR,
 	JACKPOT,
 	BLESSED_CHIP,
-	HIGH_ROLLER # Replaced, spin barrel with higher cost will restore more hp
+	HIGH_ROLLER # spin barrel with higher cost will restore more hp
 }
 
 @export var skill_name: String

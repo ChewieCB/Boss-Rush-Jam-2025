@@ -179,7 +179,7 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # In decimal, so 0.8 = 80%
 	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
 	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0, # In decimal, so 0.5 = 50%
-	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0,
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0, # In decimal
 	StatusEffect.PlayerStatEnum.DODGE_CHANCE: 0, # In decimal
 	StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER: 1.0,
 }
@@ -387,7 +387,7 @@ func _physics_process(delta):
 	
 	# Let the player ignore the wheelspin if they are moving
 	var floor_velocity = get_platform_velocity()
-	if floor_velocity:# and input_dir != Vector2.ZERO:
+	if floor_velocity: # and input_dir != Vector2.ZERO:
 		var dir_weight = input_dir.dot(Vector2(
 			floor_velocity.normalized().x,
 			floor_velocity.normalized().z,
@@ -734,7 +734,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.DOUBLE_DOWN):
 				var buff_value = 0
 				var buff_time = 0
-				match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.DOUBLE_DOWN]:
+				match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.DOUBLE_DOWN]):
 					1:
 						buff_value = 0.15
 						buff_time = 2
@@ -935,7 +935,7 @@ func spin_barrels() -> void:
 	# Spin with IOU skill
 	elif GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.IOU):
 		var hp_cost = 0
-		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.IOU]:
+		match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.IOU]):
 			1:
 				hp_cost = 25
 			2:

@@ -23,11 +23,12 @@ icon_id = 60
 
 [node name="LoadedWallet" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_r1t4a")
+bonus_flat_crit_chance = 0.35
 display_text_title = "Loaded Wallet"
 display_text_tag = "I hope you had some saving"
-positive_desc = Array[String](["+25% crit chance"])
+positive_desc = Array[String](["+35% crit chance"])
 negative_desc = Array[String](["Bullet cost chips equal to its damage", "If not enough chips, cost health instead"])
-icon_id = 27
+icon_id = 61
 
 [node name="Overdrive" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_0ksuw")

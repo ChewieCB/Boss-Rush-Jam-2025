@@ -39,7 +39,7 @@ func _physics_process(delta: float) -> void:
 		var dir_to_target = global_position.direction_to(aiming_position)
 		look_at(global_position + dir_to_target)
 
-	velocity = -transform.basis.z * projectile_speed * delta
+	velocity = - transform.basis.z * projectile_speed * delta
 	global_position += velocity
 	travelled_distance += projectile_speed * delta
 
@@ -84,7 +84,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			calculated_damage = calculate_bullet_damage() # Recalculate damage after before_damage_applied effect
+			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(damage, true, global_position)
 			hit_boss = true

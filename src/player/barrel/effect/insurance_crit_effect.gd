@@ -26,7 +26,7 @@ func on_projectile_destroyed(hit_boss: bool):
 
 func on_projectile_spawn(projectile: BaseBullet):
 	if sure_crit:
-		projectile.crit_chance = 100
+		projectile.crit_chance += (100 / 100.0)
 
 
 func on_ammo_consumed():

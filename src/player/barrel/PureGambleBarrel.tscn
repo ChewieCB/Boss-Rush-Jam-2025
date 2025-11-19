@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=3 uid="uid://cni0oukv3jis3"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_dt6pw"]
+[ext_resource type="Script" path="res://src/player/barrel/coin_flip_effect.gd" id="4_4sneb"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="4_o3kuu"]
+[ext_resource type="Script" path="res://src/player/barrel/go_big_or_go_home_effect.gd" id="5_1rraj"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="6_8jb76"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="6_dycnc"]
+[ext_resource type="Texture2D" uid="uid://ck261kbp83vob" path="res://assets/sprite/status_icon/crit_up.png" id="7_vurrd"]
+
+[node name="PureGambleBarrel" type="Node3D"]
+script = ExtResource("1_dt6pw")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="BulletHeaven" type="Node3D" parent="EffectContainer"]
+script = ExtResource("4_o3kuu")
+display_text_title = "Bullet Heaven"
+display_text_tag = "No need to aim"
+positive_desc = Array[String](["+10 bullet ricochet times", "+100% projectile speed", "+25% damage"])
+negative_desc = Array[String](["+1000% bullet spread"])
+
+[node name="IncreaseSpread" type="Node3D" parent="EffectContainer/BulletHeaven"]
+script = ExtResource("6_8jb76")
+attribute = 7
+modify_value = 1000.0
+is_perc = true
+
+[node name="IncreaseRicochet" type="Node3D" parent="EffectContainer/BulletHeaven"]
+script = ExtResource("6_8jb76")
+attribute = 9
+modify_value = 10.0
+
+[node name="IncreaseProjectileSpeed" type="Node3D" parent="EffectContainer/BulletHeaven"]
+script = ExtResource("6_8jb76")
+attribute = 3
+modify_value = 100.0
+is_perc = true
+
+[node name="IncreaseDamage" type="Node3D" parent="EffectContainer/BulletHeaven"]
+script = ExtResource("6_8jb76")
+attribute = 1
+modify_value = 25.0
+is_perc = true
+
+[node name="CoinFlip" type="Node3D" parent="EffectContainer"]
+script = ExtResource("4_4sneb")
+display_text_title = "Coin Flip"
+display_text_tag = "Toss and see"
+positive_desc = Array[String](["50% chance to double your damage"])
+negative_desc = Array[String](["50% to deal zero damage"])
+
+[node name="GoBigOrGoHome" type="Node3D" parent="EffectContainer"]
+script = ExtResource("4_o3kuu")
+display_text_title = "Go Big or Go Home"
+display_text_tag = "Just wear more red-lens glasses"
+positive_desc = Array[String](["+100% damage if shot is a critical hit", "+10% crit chance"])
+negative_desc = Array[String](["-80% damage if shot is not a critical hit"])
+
+[node name="GoBigOrGoHomeEffect" type="Node3D" parent="EffectContainer/GoBigOrGoHome"]
+script = ExtResource("5_1rraj")
+not_crit_modify_dmg_perc = -80.0
+positive_desc = Array[String](["+100% damage if shot is a critical hit"])
+negative_desc = Array[String](["-10% critical chance", "-90% if shot is not a critical hit"])
+
+[node name="IncreaseCrit" type="Node3D" parent="EffectContainer/GoBigOrGoHome"]
+script = ExtResource("6_dycnc")
+display_name = "Increase critical chance"
+status_code = "go_big_go_home_increase_crit_chance"
+modified_stat = 11
+value = 0.1
+is_infinite_duration = true
+status_icon = ExtResource("7_vurrd")
+show_duration_ui = true

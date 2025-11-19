@@ -45,8 +45,8 @@ func _physics_process(delta: float) -> void:
 		var dir_to_target = global_position.direction_to(aiming_position)
 		look_at(global_position + dir_to_target)
 
-	velocity = -transform.basis.z * projectile_speed * delta
-	global_position += velocity 
+	velocity = - transform.basis.z * projectile_speed * delta
+	global_position += velocity
 	travelled_distance += projectile_speed * delta
 
 
@@ -90,7 +90,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 func _on_life_timer_timeout() -> void:
 	if not keep_alive:
-		destroyed.emit(false)
+		destroyed.emit(hit_boss)
 		stop_elemental_particles()
 		call_deferred("queue_free")
 
@@ -108,7 +108,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self)
-			calculated_damage = calculate_bullet_damage() # Recalculate damage after before_damage_applied effect
+			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
 			ricochet_count_left = 0
@@ -133,12 +133,13 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			create_spark(global_position, Vector3.UP)
 			create_bullet_decal(global_position, Vector3.UP)
 	impacted.emit(self, true, global_position)
+
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()
 	else:
 		if not keep_alive:
 			stop_elemental_particles()
-			destroyed.emit(false)
+			destroyed.emit(hit_boss)
 			call_deferred("queue_free")
 
 

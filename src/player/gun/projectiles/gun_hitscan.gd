@@ -111,7 +111,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		var calculated_damage = calculate_bullet_damage()
 		if target is CharacterBody3D:
 			before_damage_applied.emit(target, self)
-			calculated_damage = calculate_bullet_damage() # Recalculate damage after before_damage_applied effect
+			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(target.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, target.global_position)
 			hit_boss = true

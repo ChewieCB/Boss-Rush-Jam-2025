@@ -371,7 +371,7 @@ func get_boss_chip_amount_drop_multiplier() -> float:
 	var mult = 1.0
 	# Blessed Chip skill
 	if player_skill_dict.has(SkillItemUI.SkillIdEnum.BLESSED_CHIP):
-		match GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLESSED_CHIP]:
+		match int(GameManager.player_skill_dict[SkillItemUI.SkillIdEnum.BLESSED_CHIP]):
 			1:
 				mult -= 0.1
 			2:
