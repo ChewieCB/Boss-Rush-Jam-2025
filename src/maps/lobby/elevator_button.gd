@@ -36,5 +36,9 @@ func interact() -> void:
 		SFXButtonPress.play()
 
 
+func get_interact_text() -> String:
+	return "Select {0}".format([boss_name])
+
+
 func _func_godot_apply_properties(properties: Dictionary) -> void:
 	entProperties = properties

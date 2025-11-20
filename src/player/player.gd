@@ -35,7 +35,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var reroll_heal_value: float = 25.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
-@onready var interact_ui: Control = $UI/InteractUI
+@onready var interact_ui: InteractUI = $UI/InteractUI
 
 @onready var player_camera: ShakeCameraWrapper = $Neck/ShakeCameraWrapper
 @onready var debug_label: Label = $Neck/ShakeCameraWrapper/DebugLabel
@@ -349,6 +349,10 @@ func _process(delta):
 			interact_collider.global_position.distance_to(global_position) <= INTERACT_DISTANCE:
 			object_to_be_interacted = interact_collider
 			interact_ui.visible = true
+			if interact_collider.has_method("get_interact_text"):
+				interact_ui.show_custom_text(interact_collider.get_interact_text())
+			else:
+				interact_ui.show_default_text()
 		else:
 			object_to_be_interacted = null
 			interact_ui.visible = false
