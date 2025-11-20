@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=95 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -53,7 +53,9 @@
 [ext_resource type="Texture2D" uid="uid://dmibr0fgehn7l" path="res://src/bosses/bartender/assets/Bartender_base_open_hand_turned.png" id="47_tp2kw"]
 [ext_resource type="Texture2D" uid="uid://711teiotxavy" path="res://src/bosses/bartender/assets/empty_bottle.png" id="48_mdqxm"]
 [ext_resource type="Texture2D" uid="uid://q1tk7jybvho" path="res://src/bosses/bartender/assets/Bartender_Brew_nohand.png" id="49_b51rj"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="49_dfq8r"]
 [ext_resource type="Texture2D" uid="uid://dhrdqiil17twh" path="res://src/bosses/bartender/assets/Bartender_Brew_shaker.png" id="50_5pbak"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="50_sqxqa"]
 [ext_resource type="Texture2D" uid="uid://b28qdl1nkwuyl" path="res://src/bosses/bartender/assets/shaker_onlu.png" id="51_88g0k"]
 [ext_resource type="Texture2D" uid="uid://yllk3pjpb6k8" path="res://src/bosses/bartender/assets/Bartender_Brew_noarm_turned.png" id="52_dtrpn"]
 [ext_resource type="Texture2D" uid="uid://beo60ur1nlsti" path="res://src/bosses/bartender/assets/Bartender_Brew_arm_only.png" id="52_kdm2q"]
@@ -71,6 +73,22 @@ size = Vector3(1, 1, 2)
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5yo4q"]
 radius = 1.2
 height = 5.5
+
+[sub_resource type="Resource" id="Resource_8a6ux"]
+script = ExtResource("49_dfq8r")
+state = NodePath("../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_p23ea"]
+script = ExtResource("50_sqxqa")
+guard = SubResource("Resource_8a6ux")
+
+[sub_resource type="Resource" id="Resource_2ahex"]
+script = ExtResource("49_dfq8r")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_dtx5o"]
+script = ExtResource("50_sqxqa")
+guard = SubResource("Resource_2ahex")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_p0ajt"]
 radius = 15.0
@@ -1447,11 +1465,13 @@ shotgun_spread_angle = 6.0
 shotgun_proj_prefab = ExtResource("3_ycarf")
 enhanced_shotgun_proj_prefab = ExtResource("9_1fd3p")
 sfx_shotgun = Array[AudioStream]([ExtResource("9_pkguc"), ExtResource("10_awx3m")])
+min_shotgun_volley_burst = 2
+max_shotgun_volley_burst = 4
 bottle_damage = 6
 min_n_bottle_per_attack = 2
 max_n_bottle_per_attack = 4
-min_bottles_spread = 5.0
-max_bottles_spread = 10.0
+min_bottles_spread = 10.0
+max_bottles_spread = 20.0
 empty_bottle_prefab = ExtResource("4_vwmjv")
 molotov_prefab = ExtResource("5_e3e4s")
 poison_bottle_prefab = ExtResource("6_ei8fn")
@@ -1633,21 +1653,21 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../Phase1")
 event = &"start_phase_1"
-guard = ExtResource("28_8rmxp")
+guard = SubResource("Resource_p23ea")
 delay_in_seconds = "0.0"
 
 [node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Inactive" index="1"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Phase2")
 event = &"start_phase_2"
-guard = ExtResource("28_8rmxp")
+guard = SubResource("Resource_p23ea")
 delay_in_seconds = "0.0"
 
 [node name="toPhase3" type="Node" parent="StateChart/Root/Phase/Inactive" index="2"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Phase3")
 event = &"start_phase_3"
-guard = ExtResource("28_8rmxp")
+guard = SubResource("Resource_p23ea")
 delay_in_seconds = "0.0"
 
 [node name="Phase1" type="Node" parent="StateChart/Root/Phase" index="1"]
@@ -1668,6 +1688,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
+guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="2"]
@@ -1712,22 +1733,17 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
-delay_in_seconds = "0.0"
-
-[node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="4"]
-script = ExtResource("4_dheml")
-event = &"start_brew_drink"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="5"]
+[node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="4"]
 script = ExtResource("4_dheml")
 to = NodePath("../../ShotgunBlast")
 event = &"start_shotgun_blast"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="6"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowBrokenBottle" index="5"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Idle")
 event = &"reposition"
@@ -1780,20 +1796,14 @@ event = &"start_throw_broken_bottle"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="5"]
-script = ExtResource("4_dheml")
-event = &"start_brew_drink"
-guard = ExtResource("28_8rmxp")
-delay_in_seconds = "0.0"
-
-[node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="6"]
+[node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="5"]
 script = ExtResource("4_dheml")
 to = NodePath("../../ShotgunBlast")
 event = &"start_shotgun_blast"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="7"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ThrowDrink" index="6"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Idle")
 event = &"reposition"
@@ -1847,15 +1857,10 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
-delay_in_seconds = "0.0"
-
-[node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="5"]
-script = ExtResource("4_dheml")
-event = &"start_brew_drink"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="6"]
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunBlast" index="5"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Idle")
 event = &"reposition"
@@ -1871,7 +1876,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../Phase2")
 event = &"start_phase_2"
-guard = ExtResource("28_8rmxp")
+guard = SubResource("Resource_p23ea")
 delay_in_seconds = "0.0"
 
 [node name="Phase2" type="Node" parent="StateChart/Root/Phase" index="2"]
@@ -1888,7 +1893,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../Phase3")
 event = &"start_phase_3"
-guard = ExtResource("28_8rmxp")
+guard = SubResource("Resource_p23ea")
 delay_in_seconds = "0.0"
 
 [node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase2" index="2"]
@@ -1905,6 +1910,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
+guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="2"]
@@ -1956,6 +1962,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
+guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase2/ThrowBrokenBottle" index="4"]
@@ -2007,7 +2014,6 @@ script = ExtResource("6_kkb22")
 script = ExtResource("4_dheml")
 to = NodePath("../../Drinking")
 event = &"start_drink"
-guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="Drinking" type="Node" parent="StateChart/Root/Phase/Phase2/BrewDrink" index="3"]
@@ -2039,6 +2045,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
+guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase2/BrewDrink" index="7"]
@@ -2092,6 +2099,7 @@ script = ExtResource("6_kkb22")
 script = ExtResource("4_dheml")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
+guard = SubResource("Resource_dtx5o")
 delay_in_seconds = "0.0"
 
 [node name="toThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase2/ThrowDrink" index="4"]
@@ -2169,6 +2177,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
+guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunBlast" index="5"]
@@ -2208,6 +2217,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
+guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="2"]
@@ -2259,6 +2269,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
+guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase3/ThrowBrokenBottle" index="4"]
@@ -2310,7 +2321,6 @@ script = ExtResource("6_kkb22")
 script = ExtResource("4_dheml")
 to = NodePath("../../Drinking")
 event = &"start_drink"
-guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="Drinking" type="Node" parent="StateChart/Root/Phase/Phase3/BrewDrink" index="3"]
@@ -2342,6 +2352,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
+guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="toShotgunBlast" type="Node" parent="StateChart/Root/Phase/Phase3/BrewDrink" index="7"]
@@ -2472,6 +2483,7 @@ delay_in_seconds = "0.0"
 script = ExtResource("4_dheml")
 to = NodePath("../../ThrowDrink")
 event = &"start_throw_drink"
+guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="toBrewDrink" type="Node" parent="StateChart/Root/Phase/Phase3/ShotgunBlast" index="5"]
