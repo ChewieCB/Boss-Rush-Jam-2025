@@ -1,20 +1,27 @@
 extends BossCore
 
 # Antes note:
-# Ante 1: Shotgun Volley: Prepare shells and shotgun in 4 bursts in quick succession, two shot each burst
-# Ante 2: 
-# Ante 3: 
-# Ante 4 (new): Premium Bullets: Shotgun projectile bigger, faster and can ricochet
-# Ante 5 (new): Sleight of Hand - Can throw cocktails in interval without taking an action/attack
+# Ante 1: (new) Shotgun Volley: Prepare shells and shotgun in 2 to 4 bursts in quick succession, two shot each burst
+# Ante 2: (upgrade) Painkilling Alcohol: Drinking will grant DMG reduction.
+# Ante 3: (upgrade) 
+# Ante 4: (upgrade) Premium Bullets: Shotgun projectile bigger, faster and can ricochet
+# Ante 5: (new) Sleight of Hand - Can throw cocktails in interval without taking an action/attack
 
 # Upgrade TODO:
 # Fire Ring: A fire hazard that slowly expand out ring-shaped (so the inside is empty and player can jump into to stay safe)
 # Tar bottle can be ignited into Fire Ring
 #
-# New move: Bartender throw out several tar puddle onto the floor, then flick some matchstick and ignite them. (player also can ignite them first)
-# New move:
+# New move: Bartender throw out several tar puddle onto the floor, then flick some matchsticks and ignite them. (player also can ignite them first).
+#           In phase 3, tar puddle auto ignited due to Floor Fire.
+# Modify move: Drink powerup, but the drink should be much stronger, and longer channel time, and can be cancelled by player shooting the bottle/glass.
+#              Remove Defense buff (since it no fun), just Strength (for barrels) and Speed buff (for faster attacks)
+# Modify move: Barrel (which only used in Str buff) should be explosive by default.
+# Map edit: Clear out some table in the map, and raise the ceiling. Maybe add 2nd floor balconny for improved phase 3.
+# Map edit: Table should be its own scene, not stucked to map. And can be kicked (by pressing Interact probably) to work as cover. It will fall back 
+#           after some time. Use this to counter Shotgun Volley.
+# Improved phase 3: Bartender moved to second floor balcony and vertical play / shoot from above the player.
 
-# Thought:
+# Thoughts:
 # Maybe Ante powerup should be mostly enhance skills instead of new skills.
 # Some moves should be designed with a counterattack way / knowledge check
 
@@ -28,7 +35,6 @@ signal fire_started
 @export var phase_3_health_percentage_trigger: float = 0.33
 
 @export_group("Display")
-#@export var base_sprite: CompressedTexture2D
 @export var shotgun_sprite: CompressedTexture2D
 @export var reload_sprite: CompressedTexture2D
 @export var throw_sprite: CompressedTexture2D
@@ -51,6 +57,7 @@ var delay_modifier: float = BASE_DELAY_MODIFIER:
 		if anim_player.is_playing():
 			await anim_player.animation_finished
 		anim_player.speed_scale = 1.0 / (delay_modifier * 1.5)
+
 @export_subgroup("Shotgun")
 @export var shotgun_proj_amount: int = 8
 @export var shotgun_proj_damage: int = 3
@@ -67,6 +74,13 @@ var shots_to_fire: int = 1
 var shots_fired: int = 0
 const SHOTGUN_SHOTS_TO_FIRE_PHASE_2 = 2
 const SHOTGUN_SHOTS_TO_FIRE_PHASE_3 = 2
+
+@export_subgroup("Shotgun Volley")
+@export var min_shotgun_volley_burst: int = 2
+@export var max_shotgun_volley_burst: int = 4
+const SHOT_PER_BURST = 2
+var shotgun_volley_enabled = false
+
 @export_subgroup("Throw Drink")
 @export var bottle_damage = 10
 enum BottleAttack {
@@ -74,7 +88,7 @@ enum BottleAttack {
 	FIRE,
 	POISON,
 	SLOW,
-	HEAL,
+	# HEAL,
 	BARREL
 }
 var current_bottle_type: BottleAttack
@@ -82,23 +96,21 @@ var last_bottle_attack: BottleAttack
 var special_bottle_enabled = true
 @export var min_n_bottle_per_attack: int = 2
 @export var max_n_bottle_per_attack: int = 4
-@export var min_bottles_spread: float = 5
-@export var max_bottles_spread: float = 10
+@export var min_bottles_spread: float = 10
+@export var max_bottles_spread: float = 20
 @export var empty_bottle_prefab: PackedScene
 @export var molotov_prefab: PackedScene
 @export var poison_bottle_prefab: PackedScene
 @export var slow_bottle_prefab: PackedScene
 @export var heal_bottle_prefab: PackedScene
-# SFX
 @export var sfx_bottle_throw: Array[AudioStream]
 @export_subgroup("Barrel")
 @export var beer_barrel_prefab: PackedScene
 @export var barrel_damage = 45
-# SFX
 @export var sfx_barrel_throw: Array[AudioStream]
 @export_subgroup("Brewing")
 enum BrewType {
-	DEFENSE,
+	# DEFENSE,
 	SPEED,
 	STRENGTH
 }
@@ -111,11 +123,9 @@ var last_brew_type: BrewType
 @export var defense_icon: Texture2D
 @export var speed_icon: Texture2D
 @export var strength_icon: Texture2D
-## Received damage will multiply with this value
 @export var defense_buff_modifier = 0.5
 @export var speed_buff_modifier = 0.5
 @export var strength_buff_modifier = 1.5
-# SFX
 @export var sfx_brew: Array[AudioStream]
 @export var sfx_strength: AudioStream
 @export var sfx_speed: AudioStream
@@ -127,6 +137,7 @@ var last_brew_type: BrewType
 @export var sfx_fire_started: AudioStream
 @export var sfx_fire_loop: AudioStream
 var floor_fire_enabled = true
+
 @export_group("Movement")
 @export var base_movespeed = 10
 @export var behind_bar_move_points: Array[Marker3D] = []
@@ -141,6 +152,7 @@ var sleight_of_hand_enabled = false
 @export var sleight_of_hand_interval: float = 5
 @onready var sleight_of_hand_timer: Timer = $SleightOfHandTimer
 
+# Other stuff
 @onready var proj_spawn_marker = $Sprite3D/ThrowableSprite/ProjectileSpawnPos
 @onready var status_icon: Sprite3D = $StatusIcon
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
@@ -153,7 +165,6 @@ var floor_fire_hazard: HazardArea = null
 var action_used_before_heal = 0
 var fire_sfx: AudioStreamPlayer = null
 
-const DIFFICULTY_LV = 1
 const MIN_ACTION_BEFORE_HEAL = 8
 
 
@@ -515,16 +526,16 @@ func _on_phase_3_state_entered() -> void:
 		floor_fire_hazard.position = Vector3.ZERO
 
 
-func _on_throw_heal_bottle_state_entered() -> void:
-	sprite.texture = throw_sprite
-	debug_state_label.text = "Throw heal bottle"
-	state_chart.send_event("attack_start")
-	await get_tree().create_timer(0.25 * delay_modifier, false).timeout
-	throw_heal_bottle()
-	await get_tree().create_timer(2, false).timeout
-	state_chart.send_event("attack_end_now")
-	state_chart.send_event("return_idle")
-	sprite.texture = base_sprite
+# func _on_throw_heal_bottle_state_entered() -> void:
+# 	sprite.texture = throw_sprite
+# 	debug_state_label.text = "Throw heal bottle"
+# 	state_chart.send_event("attack_start")
+# 	await get_tree().create_timer(0.25 * delay_modifier, false).timeout
+# 	throw_heal_bottle()
+# 	await get_tree().create_timer(2, false).timeout
+# 	state_chart.send_event("attack_end_now")
+# 	state_chart.send_event("return_idle")
+# 	sprite.texture = base_sprite
 
 
 func throw_projectile(throw_barrel: bool = false) -> void:
@@ -549,8 +560,8 @@ func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle 
 			prefab = poison_bottle_prefab
 		BottleAttack.SLOW:
 			prefab = slow_bottle_prefab
-		BottleAttack.HEAL:
-			prefab = empty_bottle_prefab
+		# BottleAttack.HEAL:
+		# 	prefab = empty_bottle_prefab
 		BottleAttack.BARREL:
 			prefab = beer_barrel_prefab
 		_:
@@ -560,17 +571,17 @@ func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle 
 	var throw_force = proj_spawn_marker.global_position.distance_to(target.global_position)
 	# Magic number that make bartender throw better
 	if throw_force >= 30:
-		throw_force *= 0.8
+		throw_force *= 0.7
 	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
 		throw_force *= 2
 	else:
-		aim_direction += Vector3(0, 0.5, 0) # Make it arc upwards a bit
+		aim_direction += Vector3(0, 0.3, 0) # Make it arc upwards a bit
 	aim_direction = aim_direction.normalized()
 
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
 
 	for i in range(n_bottle_repeat):
-		var spread_direction = GunUtils.get_spread_direction(aim_direction, spread_angle)
+		var spread_direction = GunUtils.get_spread_direction(aim_direction, spread_angle, 1.0)
 		var bottle_inst = prefab.instantiate()
 		bottle_inst.bartender_owner = self
 
@@ -586,34 +597,34 @@ func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle 
 
 
 ## Throw upward to heal
-func throw_heal_bottle():
-	action_used_before_heal = 0
-	var throw_force = 5
-	var bottle_inst = heal_bottle_prefab.instantiate()
-	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
-	aim_direction += Vector3(0, 5, 0) # Make it upward a lot
-	aim_direction = aim_direction.normalized()
-	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction
-	get_parent().add_child(bottle_inst)
-	bottle_inst.init(modified_spawn_pos, aim_direction, 0, throw_force)
-	bottle_inst.bartender_owner = self
+# func throw_heal_bottle():
+# 	action_used_before_heal = 0
+# 	var throw_force = 5
+# 	var bottle_inst = heal_bottle_prefab.instantiate()
+# 	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
+# 	aim_direction += Vector3(0, 5, 0) # Make it upward a lot
+# 	aim_direction = aim_direction.normalized()
+# 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction
+# 	get_parent().add_child(bottle_inst)
+# 	bottle_inst.init(modified_spawn_pos, aim_direction, 0, throw_force)
+# 	bottle_inst.bartender_owner = self
 
 
 ## Choose a random bottle then throw
-func throw_concoction_bottle():
-	var possible_bottle_prefab = [
-		molotov_prefab,
-		poison_bottle_prefab,
-		slow_bottle_prefab,
-	]
-	var chosen_prefab = possible_bottle_prefab.pick_random()
-	var n_bottle = 1
-	if current_phase > 1:
-		n_bottle += 1
-	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
-		n_bottle += 1
-	var spread_angle = (n_bottle - 1) * 20
-	_throw_bottle(chosen_prefab, n_bottle, spread_angle)
+# func throw_concoction_bottle():
+# 	var possible_bottle_prefab = [
+# 		molotov_prefab,
+# 		poison_bottle_prefab,
+# 		slow_bottle_prefab,
+# 	]
+# 	var chosen_prefab = possible_bottle_prefab.pick_random()
+# 	var n_bottle = 1
+# 	if current_phase > 1:
+# 		n_bottle += 1
+# 	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
+# 		n_bottle += 1
+# 	var spread_angle = 1 + (n_bottle - 1) * 20
+# 	_throw_bottle(chosen_prefab, n_bottle, spread_angle)
 
 
 ## Choose a random drink to brew and buff
@@ -706,7 +717,6 @@ func _on_shotgun_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time, false).timeout
 
 	state_chart.send_event("reposition")
-	state_chart.send_event("end_recovery")
 
 
 func _on_shotgun_timer_timeout() -> void:
@@ -746,7 +756,6 @@ func _on_throw_broken_bottle_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
 
 	state_chart.send_event("reposition")
-	state_chart.send_event("end_recovery")
 
 
 ##
@@ -793,7 +802,6 @@ func _on_brew_drink_flourish_state_entered() -> void:
 func _on_brew_drink_drinking_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Drinking"
 
-	state_chart.send_event("start_attack")
 	anim_player.play("drink_consume")
 
 	# TODO - loop anim for a period, then break the loop
@@ -810,7 +818,6 @@ func _on_brew_drink_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
 
 	state_chart.send_event("reposition")
-	state_chart.send_event("end_recovery")
 
 ##
 
@@ -865,8 +872,6 @@ func _on_throw_drink_flourish_state_entered() -> void:
 func _on_throw_drink_throwing_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Drinking"
 
-	state_chart.send_event("start_attack")
-
 	# Get specific anim for type of attack
 	var throw_anim: String
 	match current_bottle_type:
@@ -897,13 +902,12 @@ func _on_throw_drink_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
 
 	state_chart.send_event("reposition")
-	state_chart.send_event("end_recovery")
 
 
 # TODO - should probably be a global utility function
 func get_random_enum_key(enum_keys: Array, previous_key: int = -1) -> int:
 	var possible_types := enum_keys.duplicate()
-	if previous_key != -1:
+	if previous_key != -1 and previous_key < possible_types.size():
 		possible_types.remove_at(previous_key)
 	var rand_key: String = possible_types.pick_random()
 	var type_idx: int = enum_keys.find(rand_key)
