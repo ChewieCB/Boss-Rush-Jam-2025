@@ -1,13 +1,24 @@
 extends BossCore
 
 # Antes note:
-# Ante 1: Fast Firing Shotgun - shotgun can shoot more time in a burst in phase 2 and 3
-# Ante 2: Volatile Concoctions - Enable fire, poison and tar bottles attack
-# Ante 3: Burning Ground - Floor on fire in phase 3
+# Ante 1: Shotgun Volley: Prepare shells and shotgun in 4 bursts in quick succession, two shot each burst
+# Ante 2: 
+# Ante 3: 
 # Ante 4 (new): Premium Bullets: Shotgun projectile bigger, faster and can ricochet
 # Ante 5 (new): Sleight of Hand - Can throw cocktails in interval without taking an action/attack
 
-# Status
+# Upgrade TODO:
+# Fire Ring: A fire hazard that slowly expand out ring-shaped (so the inside is empty and player can jump into to stay safe)
+# Tar bottle can be ignited into Fire Ring
+#
+# New move: Bartender throw out several tar puddle onto the floor, then flick some matchstick and ignite them. (player also can ignite them first)
+# New move:
+
+# Thought:
+# Maybe Ante powerup should be mostly enhance skills instead of new skills.
+# Some moves should be designed with a counterattack way / knowledge check
+
+# Status:
 # Weak to Burning (he's serving alcolhol most of the time), resist to Poisoned (same reason)
 
 signal fire_started
@@ -22,6 +33,7 @@ signal fire_started
 @export var reload_sprite: CompressedTexture2D
 @export var throw_sprite: CompressedTexture2D
 @export var brew_sprite: CompressedTexture2D
+@export var drink_sprite: CompressedTexture2D
 
 @export var sfx_tape: AudioStream
 
@@ -53,8 +65,8 @@ var chosen_shotgun_proj_prefab: PackedScene
 @onready var shotgun_spawn_pos: Marker3D = $Sprite3D/ShotgunSpawnPos
 var shots_to_fire: int = 1
 var shots_fired: int = 0
-var shotgun_shots_phase_2 = 1
-var shotgun_shots_phase_3 = 1
+const SHOTGUN_SHOTS_TO_FIRE_PHASE_2 = 2
+const SHOTGUN_SHOTS_TO_FIRE_PHASE_3 = 2
 @export_subgroup("Throw Drink")
 @export var bottle_damage = 10
 enum BottleAttack {
@@ -67,7 +79,7 @@ enum BottleAttack {
 }
 var current_bottle_type: BottleAttack
 var last_bottle_attack: BottleAttack
-var special_bottle_enabled = false
+var special_bottle_enabled = true
 @export var min_n_bottle_per_attack: int = 2
 @export var max_n_bottle_per_attack: int = 4
 @export var min_bottles_spread: float = 5
@@ -114,7 +126,7 @@ var last_brew_type: BrewType
 @export var floor_fire_hazard_prefab: PackedScene
 @export var sfx_fire_started: AudioStream
 @export var sfx_fire_loop: AudioStream
-var floor_fire_enabled = false
+var floor_fire_enabled = true
 @export_group("Movement")
 @export var base_movespeed = 10
 @export var behind_bar_move_points: Array[Marker3D] = []
@@ -151,12 +163,11 @@ func _ready() -> void:
 	navigation_component.current_speed = base_movespeed * speed_modifier
 	brew_cooldown_timer.stop()
 	if GameManager.boss_ante >= 1:
-		shotgun_shots_phase_2 = 2
-		shotgun_shots_phase_3 = 3
+		pass
 	if GameManager.boss_ante >= 2:
-		special_bottle_enabled = true
+		pass
 	if GameManager.boss_ante >= 3:
-		floor_fire_enabled = true
+		pass
 	if GameManager.boss_ante >= 4:
 		shotgun_ricochet_count = 3
 		shotgun_proj_speed = 60
@@ -437,14 +448,13 @@ func _on_phase_1_state_entered() -> void:
 	anim_player.play("RESET")
 	#SoundManager.play_sound(sfx_tape, "SFX")
 	shots_to_fire = 1
-	#GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
-	#await get_tree().create_timer(1.5).timeout
+	GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
 	#SoundManager.stop_sound(sfx_tape)
 
 
 func _on_phase_1_idle_state_entered() -> void:
 	debug_state_label.text = "Idle | "
-	await get_tree().create_timer(0.1 * delay_modifier).timeout
+	await get_tree().create_timer(0.1 * delay_modifier, false).timeout
 
 	# FIXME - re-implement the movement after each attack into part of the select attack
 	var move_point = get_behind_bar_move_point()
@@ -453,10 +463,7 @@ func _on_phase_1_idle_state_entered() -> void:
 		print("New nav target: %s" % navigation_component.target.name)
 		state_chart.send_event("start_moving")
 		navigation_component.target = move_point
-		#await $NavigationAgent3D.navigation_finished
-		#navigation_component.target = null
-		#print("Nav target reached & cleared")
-		await get_tree().create_timer(0.4 * delay_modifier).timeout
+		await get_tree().create_timer(0.4 * delay_modifier, false).timeout
 		state_chart.send_event("stop_moving")
 		select_attack()
 
@@ -465,9 +472,9 @@ func _on_phase_1_idle_state_entered() -> void:
 func _on_phase_2_state_entered() -> void:
 	anim_player.play("RESET")
 	#SoundManager.play_sound(sfx_tape, "SFX")
-	shots_to_fire = shotgun_shots_phase_2
+	shots_to_fire = SHOTGUN_SHOTS_TO_FIRE_PHASE_2
 	#GameManager.show_boss_special_dialog("Playtime is OVER!", 1)
-	#await get_tree().create_timer(1).timeout
+	#await get_tree().create_timer(1, false).timeout
 	#SoundManager.stop_sound(sfx_tape)
 	jump_to(boss_jump_phase2_marker.global_position)
 	state_chart.send_event("start_brew_drink")
@@ -475,13 +482,13 @@ func _on_phase_2_state_entered() -> void:
 
 func _on_phase_2_idle_state_entered() -> void:
 	debug_state_label.text = "Idle | "
-	#await get_tree().create_timer(0.5).timeout
+	#await get_tree().create_timer(0.5, false).timeout
 
 	navigation_component.current_speed = base_movespeed * speed_modifier
 	navigation_component.target = target
 	state_chart.send_event("start_moving")
 	debug_state_label.text = "Idle | Walking"
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.8, false).timeout
 	state_chart.send_event("stop_moving")
 	select_attack()
 
@@ -489,16 +496,16 @@ func _on_phase_2_idle_state_entered() -> void:
 func _on_phase_3_state_entered() -> void:
 	anim_player.play("RESET")
 	#SoundManager.play_sound(sfx_tape, "SFX")
-	shots_to_fire = shotgun_shots_phase_3
+	shots_to_fire = SHOTGUN_SHOTS_TO_FIRE_PHASE_3
 	buff_duration *= 1.5
 	buff_cooldown /= 2
 	#GameManager.show_boss_special_dialog("You better hot foot it out of here while you still can!", 1.5)
-	#await get_tree().create_timer(1.5).timeout
+	#await get_tree().create_timer(1.5, false).timeout
 	#SoundManager.stop_sound(sfx_tape)
 
 	jump_to(boss_jump_phase3_marker.global_position)
 
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 
 	if floor_fire_enabled:
 		fire_started.emit()
@@ -512,9 +519,9 @@ func _on_throw_heal_bottle_state_entered() -> void:
 	sprite.texture = throw_sprite
 	debug_state_label.text = "Throw heal bottle"
 	state_chart.send_event("attack_start")
-	await get_tree().create_timer(0.25 * delay_modifier).timeout
+	await get_tree().create_timer(0.25 * delay_modifier, false).timeout
 	throw_heal_bottle()
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(2, false).timeout
 	state_chart.send_event("attack_end_now")
 	state_chart.send_event("return_idle")
 	sprite.texture = base_sprite
@@ -696,7 +703,7 @@ func _on_shotgun_recover_state_entered() -> void:
 	shots_fired = 0
 	anim_player.play("RESET")
 
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time, false).timeout
 
 	state_chart.send_event("reposition")
 	state_chart.send_event("end_recovery")
@@ -736,7 +743,7 @@ func _on_throw_broken_bottle_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	anim_player.play("RESET")
 
-	await get_tree().create_timer(attack_recovery_time * delay_modifier).timeout
+	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
 
 	state_chart.send_event("reposition")
 	state_chart.send_event("end_recovery")
@@ -755,7 +762,7 @@ func _on_brew_drink_targeting_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	current_brew_type = get_random_enum_key(BrewType.keys(), last_brew_type) as BrewType
 
-	await get_tree().create_timer(0.2 * delay_modifier).timeout
+	await get_tree().create_timer(0.2 * delay_modifier, false).timeout
 
 	state_chart.send_event("start_brew")
 
@@ -800,7 +807,7 @@ func _on_brew_drink_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	anim_player.play("RESET")
 
-	await get_tree().create_timer(attack_recovery_time * delay_modifier).timeout
+	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
 
 	state_chart.send_event("reposition")
 	state_chart.send_event("end_recovery")
@@ -825,7 +832,7 @@ func _on_throw_drink_targeting_state_entered() -> void:
 		else:
 			current_bottle_type = BottleAttack.EMPTY
 
-	await get_tree().create_timer(0.2 * delay_modifier).timeout
+	await get_tree().create_timer(0.2 * delay_modifier, false).timeout
 
 	state_chart.send_event("telegraph_throw")
 
@@ -887,7 +894,7 @@ func _on_throw_drink_recover_state_entered() -> void:
 
 	#anim_player.speed_scale /= 1.5
 
-	await get_tree().create_timer(attack_recovery_time * delay_modifier).timeout
+	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
 
 	state_chart.send_event("reposition")
 	state_chart.send_event("end_recovery")
