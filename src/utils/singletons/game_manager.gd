@@ -253,7 +253,7 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 func purchase_reroll() -> bool:
 	if reroll_time == 0:
 		reroll_cost = int(reroll_cost * get_risk_spin_cost_mult())
-	if GameManager.current_boss_map and GameManager.current_boss_map.is_tutorial:
+	if is_instance_valid(GameManager.current_boss_map) and GameManager.current_boss_map.is_tutorial:
 		reroll_cost = 100
 	if (player_currency >= reroll_cost and reroll_time < get_risk_limit_spin_amount()) or is_free_reroll:
 		if not is_free_reroll:

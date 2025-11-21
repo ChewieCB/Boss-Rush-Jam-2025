@@ -3,22 +3,30 @@ extends BossCore
 # Antes note:
 # Ante 1: (new) Shotgun Volley: Prepare shells and shotgun in 2 to 4 bursts in quick succession, two shot each burst
 # Ante 2: (upgrade) Painkilling Alcohol: Drinking will grant DMG reduction.
-# Ante 3: (upgrade) 
+# Ante 3: (upgrade)
 # Ante 4: (upgrade) Premium Bullets: Shotgun projectile bigger, faster and can ricochet
 # Ante 5: (new) Sleight of Hand - Can throw cocktails in interval without taking an action/attack
 
 # Upgrade TODO:
 # Fire Ring: A fire hazard that slowly expand out ring-shaped (so the inside is empty and player can jump into to stay safe)
-# Tar bottle can be ignited into Fire Ring
+# Tar bottle can be ignited into Fire Ring.
 #
 # New move: Bartender throw out several tar puddle onto the floor, then flick some matchsticks and ignite them. (player also can ignite them first).
 #           In phase 3, tar puddle auto ignited due to Floor Fire.
+# New move: Slug Shell: Bartender reload a blue shell and take aim, then shoot a hitscan attack.
+#
+# New move: Dragon Breath Shell: Load an orange Dragon breath shell that has high projectile count and spread.
+#
 # Modify move: Drink powerup, but the drink should be much stronger, and longer channel time, and can be cancelled by player shooting the bottle/glass.
 #              Remove Defense buff (since it no fun), just Strength (for barrels) and Speed buff (for faster attacks)
+#
 # Modify move: Barrel (which only used in Str buff) should be explosive by default.
+#
 # Map edit: Clear out some table in the map, and raise the ceiling. Maybe add 2nd floor balconny for improved phase 3.
-# Map edit: Table should be its own scene, not stucked to map. And can be kicked (by pressing Interact probably) to work as cover. It will fall back 
+#
+# Map edit: Table should be its own scene, not stucked to map. And can be kicked (by pressing Interact probably) to work as cover. It will fall back
 #           after some time. Use this to counter Shotgun Volley.
+#
 # Improved phase 3: Bartender moved to second floor balcony and vertical play / shoot from above the player.
 
 # Thoughts:
@@ -693,7 +701,7 @@ func _on_shotgun_volley_targeting_state_entered() -> void:
 	await anim_player.animation_finished
 	shotgun_timer.start(telegraph_time)
 	burst_to_fire = randi_range(2, 4)
-	
+
 func _on_shotgun_volley_bursting_state_entered() -> void:
 	state_chart.send_event("attack_start")
 	anim_player.play("shotgun_burst")
@@ -713,7 +721,7 @@ func _on_shotgun_volley_recover_state_entered() -> void:
 
 func _on_shotgun_volley_state_exited() -> void:
 	shotgun_timer.stop()
-	
+
 #endregion
 
 
