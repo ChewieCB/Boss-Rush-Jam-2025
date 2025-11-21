@@ -80,7 +80,8 @@ const SHOTGUN_SHOTS_TO_FIRE_PHASE_3 = 2
 @export var max_shotgun_volley_burst: int = 4
 const SHOT_PER_BURST = 2
 var shotgun_volley_enabled = false
-
+var burst_to_fire = 0
+var burst_fired = 0
 @export_subgroup("Throw Drink")
 @export var bottle_damage = 10
 enum BottleAttack {
@@ -236,31 +237,34 @@ func select_attack_phase_1() -> void:
 		# Close range:
 		#
 		# Focus on shotgun attacks, sometimes bottle attacks, rarely elemental bottles
-		# 10% chance of molotov/tar/poison
-		# 15% chance of broken bottle
-		# 75% chance of shotgun blast
-		if attack_roll < 10:
+		# 15% chance of molotov/tar/poison
+		# 20% chance of broken bottle
+		# 20% chance of shotgun volley
+		# 65% chance of shotgun blast
+		if attack_roll < 15:
 			attack_str = "start_throw_drink"
-		elif attack_roll < 15:
+		elif attack_roll < 35:
 			attack_str = "start_throw_broken_bottle"
+		elif attack_roll < 55:
+			attack_str = "start_shotgun_volley"
 		else:
 			attack_str = "start_shotgun_blast"
 	else:
 		# Mid/Far range:
 		#
 		# Focus on bottle attacks, rarely elemental bottles, shotgun sometimes
-		# 35% chance of broken bottle
-		# 55% chance of molotov/tar/poison
-		# 10% chance of shotgun blast
-		if attack_roll < 35:
+		# 25% chance of broken bottle
+		# 40% chance of molotov/tar/poison
+		# 15% chance of shotgun volley
+		# 20% chance of shotgun blast
+		if attack_roll < 25:
 			attack_str = "start_throw_broken_bottle"
-		elif attack_roll < 90:
+		elif attack_roll < 65:
 			attack_str = "start_throw_drink"
+		elif attack_roll < 90:
+			attack_str = "start_shotgun_volley"
 		else:
 			attack_str = "start_shotgun_blast"
-
-	#if action_used_before_heal >= MIN_ACTION_BEFORE_HEAL:
-		#possible_attacks.append("start_throw_heal_bottle")
 
 	state_chart.send_event(attack_str)
 
@@ -451,7 +455,6 @@ func fire_shotgun():
 		var bullet_inst: BartenderShotgunProjectile = chosen_shotgun_proj_prefab.instantiate()
 		get_parent().add_child(bullet_inst)
 		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, shotgun_ricochet_count, shotgun_proj_speed)
-
 
 #### Phase 1
 
@@ -669,29 +672,44 @@ func _on_shotgun_recover_state_entered() -> void:
 	state_chart.send_event("reposition")
 
 
-func _on_shotgun_timer_timeout() -> void:
-	# We use the same timer for 2 attack
-	state_chart.send_event("start_shooting")
-	state_chart.send_event("start_bursting")
-
-
 func _on_shotgun_blast_state_exited() -> void:
 	shotgun_timer.stop()
+
+
+func _on_shotgun_timer_timeout() -> void:
+	# We use the same timer for 2 similar attacks
+	state_chart.send_event("start_shooting")
+	state_chart.send_event("start_bursting")
 
 #endregion
 
 
 #region Shotgun volley
 func _on_shotgun_volley_targeting_state_entered() -> void:
-	pass # Replace with function body.
-
-
+	debug_state_label.text = "Shotgun Volley | Targeting"
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_telegraph")
+	anim_player.play("shotgun_telegraph")
+	await anim_player.animation_finished
+	shotgun_timer.start(telegraph_time)
+	burst_to_fire = randi_range(2, 4)
+	
 func _on_shotgun_volley_bursting_state_entered() -> void:
-	pass # Replace with function body.
+	state_chart.send_event("attack_start")
+	anim_player.play("shotgun_burst")
+	await anim_player.animation_finished
+	if burst_fired < burst_to_fire - 1:
+		burst_fired += 1
+		state_chart.send_event("next_burst")
+		return
+	state_chart.send_event("end_bursting")
 
 
 func _on_shotgun_volley_recover_state_entered() -> void:
-	pass # Replace with function body.
+	burst_fired = 0
+	anim_player.play("RESET")
+	await get_tree().create_timer(attack_recovery_time, false).timeout
+	state_chart.send_event("reposition")
 
 func _on_shotgun_volley_state_exited() -> void:
 	shotgun_timer.stop()
