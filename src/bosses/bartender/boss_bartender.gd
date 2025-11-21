@@ -1,9 +1,9 @@
 extends BossCore
 
 # Antes note:
-# Ante 1: (new) Shotgun Volley: Prepare shells and shotgun in 2 to 4 bursts in quick succession, two shot each burst
-# Ante 2: (upgrade) Painkilling Alcohol: Drinking will grant DMG reduction.
-# Ante 3: (upgrade) 
+# Ante 1: TBD
+# Ante 2: TBD
+# Ante 3: TBD
 # Ante 4: (upgrade) Premium Bullets: Shotgun projectile bigger, faster and can ricochet
 # Ante 5: (new) Sleight of Hand - Can throw cocktails in interval without taking an action/attack
 
@@ -39,7 +39,6 @@ signal fire_started
 @export var reload_sprite: CompressedTexture2D
 @export var throw_sprite: CompressedTexture2D
 @export var brew_sprite: CompressedTexture2D
-@export var drink_sprite: CompressedTexture2D
 
 @export var sfx_tape: AudioStream
 
@@ -462,7 +461,7 @@ func _on_phase_1_state_entered() -> void:
 	anim_player.play("RESET")
 	#SoundManager.play_sound(sfx_tape, "SFX")
 	shots_to_fire = 1
-	GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
+	# GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
 	#SoundManager.stop_sound(sfx_tape)
 
 
