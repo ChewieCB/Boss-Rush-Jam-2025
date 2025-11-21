@@ -1,0 +1,68 @@
+[gd_scene load_steps=7 format=3 uid="uid://dn3eeknqbnsed"]
+
+[ext_resource type="Texture2D" uid="uid://ben1bmsxy5j8x" path="res://assets/textures/floor/wood_0.png" id="1_24sik"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eov4s"]
+albedo_texture = ExtResource("1_24sik")
+
+[sub_resource type="BoxMesh" id="BoxMesh_kib6y"]
+material = SubResource("StandardMaterial3D_eov4s")
+size = Vector3(3, 0.2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7qdo7"]
+size = Vector3(3, 0.2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7hvbq"]
+material = SubResource("StandardMaterial3D_eov4s")
+size = Vector3(0.2, 1, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nmxo7"]
+size = Vector3(0.2, 1, 0.2)
+
+[node name="BarTable" type="StaticBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_kib6y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_7qdo7")
+
+[node name="Leg" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, -0.5, 0.8)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Leg"]
+mesh = SubResource("BoxMesh_7hvbq")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Leg"]
+shape = SubResource("BoxShape3D_nmxo7")
+
+[node name="Leg2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, -0.5, 0.8)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Leg2"]
+mesh = SubResource("BoxMesh_7hvbq")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Leg2"]
+shape = SubResource("BoxShape3D_nmxo7")
+
+[node name="Leg3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, -0.5, -0.8)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Leg3"]
+mesh = SubResource("BoxMesh_7hvbq")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Leg3"]
+shape = SubResource("BoxShape3D_nmxo7")
+
+[node name="Leg4" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, -0.5, -0.8)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Leg4"]
+mesh = SubResource("BoxMesh_7hvbq")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Leg4"]
+shape = SubResource("BoxShape3D_nmxo7")

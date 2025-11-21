@@ -1,4 +1,4 @@
-[gd_scene load_steps=247 format=4 uid="uid://cgk2mraaxwvxd"]
+[gd_scene load_steps=248 format=4 uid="uid://cgk2mraaxwvxd"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_vcodf"]
 [ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="2_ikfam"]
@@ -32,6 +32,7 @@
 [ext_resource type="Material" uid="uid://b678qslmidbq0" path="res://assets/textures/floor/yellow-tiles.tres" id="20_5s57s"]
 [ext_resource type="Texture2D" uid="uid://b0jvmdu1nkww5" path="res://src/env/decor/assets/dart_board.png" id="21_4yyfc"]
 [ext_resource type="PackedScene" uid="uid://uwn1wb0neu46" path="res://src/bosses/bartender/BossBartender.tscn" id="31_p2107"]
+[ext_resource type="PackedScene" uid="uid://dn3eeknqbnsed" path="res://src/maps/bartender_boss/BarTable.tscn" id="33_gfr6u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gki5r"]
 resource_local_to_scene = true
@@ -1700,3 +1701,11 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3.75,
 
 [node name="entity_31_Chandellier2" parent="FuncGodotMap" index="24" instance=ExtResource("14_qwtwc")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3.75, 18.75, -30)
+
+[node name="TableHolder" type="Node3D" parent="." index="12"]
+
+[node name="BarTable" parent="TableHolder" index="0" instance=ExtResource("33_gfr6u")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -5.79791, 0.897496, -26.8239)
+
+[node name="BarTable2" parent="TableHolder" index="1" instance=ExtResource("33_gfr6u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.73433, 0.897496, -26.8239)
