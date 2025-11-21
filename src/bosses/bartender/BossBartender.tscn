@@ -1866,13 +1866,56 @@ to = NodePath("../../Idle")
 event = &"reposition"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+[node name="ShotgunVolley" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunVolley" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toBursting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunVolley/Targeting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Bursting")
+event = &"start_bursting"
+delay_in_seconds = "0.0"
+
+[node name="Bursting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunVolley" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunVolley/Bursting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Recover")
+event = &"end_bursting"
+delay_in_seconds = "0.0"
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunVolley/Bursting" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"next_burst"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunVolley" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunVolley/Recover" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunVolley" index="3"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"reposition"
+delay_in_seconds = "0.0"
+
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Phase2")
 event = &"start_phase_2"
