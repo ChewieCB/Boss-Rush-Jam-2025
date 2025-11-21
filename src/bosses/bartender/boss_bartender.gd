@@ -225,7 +225,7 @@ func select_attack() -> void:
 		_:
 			push_error("Invalid phase %s" % current_phase)
 
-
+#region SELECT ATTACK
 func select_attack_phase_1() -> void:
 	# Weighted random chance attacks
 	#
@@ -410,6 +410,8 @@ func select_attack_phase_3() -> void:
 
 	state_chart.send_event(attack_str)
 
+#endregion
+
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super (new_health, prev_health)
@@ -434,8 +436,6 @@ func _on_attack_telegraph_state_entered() -> void:
 	pass
 
 #### Any Phase
-
-# Shotgun blast
 
 func fire_shotgun():
 	var proj_damage = shotgun_proj_damage * damage_modifier
@@ -526,18 +526,6 @@ func _on_phase_3_state_entered() -> void:
 		floor_fire_hazard.position = Vector3.ZERO
 
 
-# func _on_throw_heal_bottle_state_entered() -> void:
-# 	sprite.texture = throw_sprite
-# 	debug_state_label.text = "Throw heal bottle"
-# 	state_chart.send_event("attack_start")
-# 	await get_tree().create_timer(0.25 * delay_modifier, false).timeout
-# 	throw_heal_bottle()
-# 	await get_tree().create_timer(2, false).timeout
-# 	state_chart.send_event("attack_end_now")
-# 	state_chart.send_event("return_idle")
-# 	sprite.texture = base_sprite
-
-
 func throw_projectile(throw_barrel: bool = false) -> void:
 	if throw_barrel:
 		current_bottle_type = BottleAttack.BARREL
@@ -596,38 +584,8 @@ func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle 
 		sfx_player.play()
 
 
-## Throw upward to heal
-# func throw_heal_bottle():
-# 	action_used_before_heal = 0
-# 	var throw_force = 5
-# 	var bottle_inst = heal_bottle_prefab.instantiate()
-# 	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
-# 	aim_direction += Vector3(0, 5, 0) # Make it upward a lot
-# 	aim_direction = aim_direction.normalized()
-# 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction
-# 	get_parent().add_child(bottle_inst)
-# 	bottle_inst.init(modified_spawn_pos, aim_direction, 0, throw_force)
-# 	bottle_inst.bartender_owner = self
-
-
-## Choose a random bottle then throw
-# func throw_concoction_bottle():
-# 	var possible_bottle_prefab = [
-# 		molotov_prefab,
-# 		poison_bottle_prefab,
-# 		slow_bottle_prefab,
-# 	]
-# 	var chosen_prefab = possible_bottle_prefab.pick_random()
-# 	var n_bottle = 1
-# 	if current_phase > 1:
-# 		n_bottle += 1
-# 	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
-# 		n_bottle += 1
-# 	var spread_angle = 1 + (n_bottle - 1) * 20
-# 	_throw_bottle(chosen_prefab, n_bottle, spread_angle)
-
-
-## Choose a random drink to brew and buff
+## Choose a random drink to brew and buff.
+## Used in animation event.
 func brew_drink():
 	var buff_event_str: String = BrewType.keys()[current_brew_type].to_lower()
 	state_chart.send_event("apply_%s_buff" % buff_event_str)
@@ -682,58 +640,73 @@ func jump_to(target_position: Vector3, jump_height: float = 5, jump_time: float 
 
 	await tween.finished
 
-
+#region Shotgun blast
 func _on_shotgun_targeting_state_entered() -> void:
 	debug_state_label.text = "Shotgun Blast | Targeting"
-
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_telegraph")
 	anim_player.play("shotgun_telegraph")
-
 	await anim_player.animation_finished
-
 	shotgun_timer.start(telegraph_time)
 
 
 func _on_shotgun_shooting_state_entered() -> void:
 	state_chart.send_event("attack_start")
 	anim_player.play("shotgun_fire")
-
 	await anim_player.animation_finished
-
 	if shots_to_fire > 1:
 		if shots_fired < shots_to_fire - 1:
 			shots_fired += 1
 			state_chart.send_event("next_shot")
 			return
-
 	state_chart.send_event("end_shooting")
 
 
 func _on_shotgun_recover_state_entered() -> void:
 	shots_fired = 0
 	anim_player.play("RESET")
-
 	await get_tree().create_timer(attack_recovery_time, false).timeout
-
 	state_chart.send_event("reposition")
 
 
 func _on_shotgun_timer_timeout() -> void:
+	# We use the same timer for 2 attack
 	state_chart.send_event("start_shooting")
+	state_chart.send_event("start_bursting")
 
-##
 
+func _on_shotgun_blast_state_exited() -> void:
+	shotgun_timer.stop()
+
+#endregion
+
+
+#region Shotgun volley
+func _on_shotgun_volley_targeting_state_entered() -> void:
+	pass # Replace with function body.
+
+
+func _on_shotgun_volley_bursting_state_entered() -> void:
+	pass # Replace with function body.
+
+
+func _on_shotgun_volley_recover_state_entered() -> void:
+	pass # Replace with function body.
+
+func _on_shotgun_volley_state_exited() -> void:
+	shotgun_timer.stop()
+	
+#endregion
+
+
+#region Throw broken bottle
 func _on_throw_broken_bottle_targeting_state_entered() -> void:
 	debug_state_label.text = "Throw Broken Bottle | Targeting"
-
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_telegraph")
 	current_bottle_type = BottleAttack.EMPTY
 	anim_player.play("bottle_telegraph")
-
 	await anim_player.animation_finished
-
 	state_chart.send_event("start_throw")
 
 
@@ -742,9 +715,7 @@ func _on_throw_broken_bottle_throwing_state_entered() -> void:
 
 	state_chart.send_event("attack_start")
 	anim_player.play("bottle_throw")
-
 	await anim_player.animation_finished
-
 	state_chart.send_event("end_throw")
 
 
@@ -752,81 +723,16 @@ func _on_throw_broken_bottle_recover_state_entered() -> void:
 	debug_state_label.text = "Throw Broken Bottle | Recovering"
 	state_chart.send_event("attack_end")
 	anim_player.play("RESET")
-
 	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
-
 	state_chart.send_event("reposition")
 
-
-##
-
-
-func _on_brew_drink_targeting_state_entered() -> void:
-	debug_state_label.text = "Brew Drink | Targeting"
-
-	if not brew_cooldown_timer.is_stopped():
-		state_chart.send_event("reposition")
-		return
-
-	state_chart.send_event("start_targeting")
-	current_brew_type = get_random_enum_key(BrewType.keys(), last_brew_type) as BrewType
-
-	await get_tree().create_timer(0.2 * delay_modifier, false).timeout
-
-	state_chart.send_event("start_brew")
+#endregion
 
 
-func _on_brew_drink_brewing_state_entered() -> void:
-	debug_state_label.text = "Brew Drink | Brewing"
-
-	state_chart.send_event("attack_buildup")
-	anim_player.play("drink_brew")
-
-	# TODO - loop anim for a period, then break the loop
-	await anim_player.animation_finished
-
-	state_chart.send_event("finish_brew")
-
-
-func _on_brew_drink_flourish_state_entered() -> void:
-	debug_state_label.text = "Brew Drink | Flourish"
-
-	state_chart.send_event("attack_telegraph")
-	anim_player.play("drink_flourish")
-
-	await anim_player.animation_finished
-
-	state_chart.send_event("start_drink")
-
-
-func _on_brew_drink_drinking_state_entered() -> void:
-	debug_state_label.text = "Brew Drink | Drinking"
-
-	anim_player.play("drink_consume")
-
-	# TODO - loop anim for a period, then break the loop
-	await anim_player.animation_finished
-
-	state_chart.send_event("end_drink")
-
-
-func _on_brew_drink_recover_state_entered() -> void:
-	debug_state_label.text = "Brew Drink | Recovering"
-	state_chart.send_event("attack_end")
-	anim_player.play("RESET")
-
-	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
-
-	state_chart.send_event("reposition")
-
-##
-
-
+#region Throw concoction
 func _on_throw_drink_targeting_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Targeting"
-
 	#anim_player.speed_scale *= 1.5
-
 	state_chart.send_event("start_targeting")
 	# Only throw the barrel if we have the strength buff
 	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
@@ -838,17 +744,13 @@ func _on_throw_drink_targeting_state_entered() -> void:
 			current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack) as BottleAttack
 		else:
 			current_bottle_type = BottleAttack.EMPTY
-
 	await get_tree().create_timer(0.2 * delay_modifier, false).timeout
-
 	state_chart.send_event("telegraph_throw")
 
 
 func _on_throw_drink_flourish_state_entered() -> void:
 	debug_state_label.text = "Throw Drink | Flourish"
-
 	state_chart.send_event("attack_telegraph")
-
 	# Get specific anim for type of attack
 	var flourish_anim: String
 	match current_bottle_type:
@@ -863,15 +765,12 @@ func _on_throw_drink_flourish_state_entered() -> void:
 		_:
 			state_chart.send_event("reposition")
 	anim_player.play(flourish_anim)
-
 	await anim_player.animation_finished
-
 	state_chart.send_event("start_throw")
 
 
 func _on_throw_drink_throwing_state_entered() -> void:
 	debug_state_label.text = "Brew Drink | Drinking"
-
 	# Get specific anim for type of attack
 	var throw_anim: String
 	match current_bottle_type:
@@ -884,24 +783,67 @@ func _on_throw_drink_throwing_state_entered() -> void:
 		BottleAttack.BARREL:
 			throw_anim = "bottle_throw_barrel"
 	anim_player.play(throw_anim)
-
 	await anim_player.animation_finished
-
 	state_chart.send_event("end_throw")
 
 
 func _on_throw_drink_recover_state_entered() -> void:
 	debug_state_label.text = "Throw Drink | Recovering"
-
 	state_chart.send_event("attack_end")
 	last_bottle_attack = current_bottle_type
 	anim_player.play("RESET")
-
 	#anim_player.speed_scale /= 1.5
-
 	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
-
 	state_chart.send_event("reposition")
+
+#endregion
+
+
+#region Brew drink
+func _on_brew_drink_targeting_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Targeting"
+	if not brew_cooldown_timer.is_stopped():
+		state_chart.send_event("reposition")
+		return
+	state_chart.send_event("start_targeting")
+	current_brew_type = get_random_enum_key(BrewType.keys(), last_brew_type) as BrewType
+	await get_tree().create_timer(0.2 * delay_modifier, false).timeout
+	state_chart.send_event("start_brew")
+
+
+func _on_brew_drink_brewing_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Brewing"
+	state_chart.send_event("attack_buildup")
+	anim_player.play("drink_brew")
+	# TODO - loop anim for a period, then break the loop
+	await anim_player.animation_finished
+	state_chart.send_event("finish_brew")
+
+
+func _on_brew_drink_flourish_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Flourish"
+	state_chart.send_event("attack_telegraph")
+	anim_player.play("drink_flourish")
+	await anim_player.animation_finished
+	state_chart.send_event("start_drink")
+
+
+func _on_brew_drink_drinking_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Drinking"
+	anim_player.play("drink_consume")
+	# TODO - loop anim for a period, then break the loop
+	await anim_player.animation_finished
+	state_chart.send_event("end_drink")
+
+
+func _on_brew_drink_recover_state_entered() -> void:
+	debug_state_label.text = "Brew Drink | Recovering"
+	state_chart.send_event("attack_end")
+	anim_player.play("RESET")
+	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
+	state_chart.send_event("reposition")
+
+#endregion
 
 
 # TODO - should probably be a global utility function
@@ -911,10 +853,10 @@ func get_random_enum_key(enum_keys: Array, previous_key: int = -1) -> int:
 		possible_types.remove_at(previous_key)
 	var rand_key: String = possible_types.pick_random()
 	var type_idx: int = enum_keys.find(rand_key)
-
 	return type_idx
 
 
+#region BUFF STATE
 func _on_no_buff_state_entered() -> void:
 	last_brew_type = current_brew_type
 	status_icon.texture = null
@@ -971,9 +913,7 @@ func _on_speed_buff_state_entered() -> void:
 func _on_buff_expire_timer_timeout() -> void:
 	state_chart.send_event("remove_buff")
 
-
-func _on_shotgun_blast_state_exited() -> void:
-	shotgun_timer.stop()
+#endregion
 
 
 func _on_sleight_of_hand_timer_timeout() -> void:
