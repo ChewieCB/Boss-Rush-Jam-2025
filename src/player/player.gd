@@ -277,8 +277,8 @@ func _unhandled_input(event):
 	#elif event.is_action_pressed("input_2"):
 		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
-	elif event.is_action_pressed("input_3"):
-		health_component.damage(20)
+	#elif event.is_action_pressed("input_3"):
+		#health_component.damage(20)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:

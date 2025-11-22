@@ -16,10 +16,17 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 
 ## SPRITES
 @export_group("Sprites")
-@onready var gun_sprite: Sprite3D = $SpriteParent/GunSprite
-@onready var barrel_flare_sprite: Sprite3D = $SpriteParent/GunSprite/MuzzleflareLightSprite
-@onready var muzzle_flash_sprite: Sprite3D = $SpriteParent/GunSprite/MuzzleflareLightSprite/MuzzleFlashSprite
+var barrel_flare_sprite: Sprite3D
+var muzzle_flash_sprite: Sprite3D
 @export var muzzle_flash_hold_frames: int = 2
+#
+@export var shotgun_flare_sprite: Sprite3D
+@export var shotgun_flash_sprite: Sprite3D
+@export var smg_flare_sprite: Sprite3D
+@export var smg_flash_sprite: Sprite3D
+@export var rifle_flare_sprite: Sprite3D
+@export var rifle_flash_sprite: Sprite3D
+
 @onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
@@ -36,8 +43,13 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 @onready var barrel_icon_meshes: Array[MeshInstance3D] = [barrel_icon_mesh_1, barrel_icon_mesh_2, barrel_icon_mesh_3]
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
 
-
 @onready var anim_tree: AnimationTree = $AnimationTree
+#
+@onready var idle_frame_state_1 = anim_tree.get("parameters/idle_frame_state/playback")
+@onready var idle_frame_state_2 = anim_tree.get("parameters/idle_frame_state_2/playback")
+@onready var idle_anim_state_machines: Array = [idle_frame_state_1, idle_frame_state_2]
+#
+@onready var reload_frame_state = anim_tree.get("parameters/reload_frame_state/playback")
 
 @export_group("SFX")
 ## TEMP SFX PLS CHANGE
@@ -135,7 +147,8 @@ func _ready() -> void:
 	reset_modifier(true)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	reload()
+	equip_frame(0)
+	#reload()
 
 
 func _process(delta: float) -> void:
@@ -144,6 +157,36 @@ func _process(delta: float) -> void:
 	#if Input.is_action_just_released("spin_barrels"):
 		#var state_machine = anim_tree.get("parameters/spin_state/playback")
 		#state_machine.travel("released")
+	if Input.is_action_just_pressed("input_1"):
+		equip_frame(0)
+	elif Input.is_action_just_pressed("input_2"):
+		equip_frame(1)
+	elif Input.is_action_just_pressed("input_3"):
+		equip_frame(2)
+
+
+func equip_frame(frame_id: int = 0) -> void:
+	# DEBUG: 0 = Shotgun, 1 = SMG, 2 = Rifle
+	var flare_sprites = [shotgun_flare_sprite, smg_flare_sprite, rifle_flare_sprite]
+	var flash_sprites = [shotgun_flash_sprite, smg_flash_sprite, rifle_flash_sprite]
+	barrel_flare_sprite = flare_sprites[frame_id]
+	muzzle_flash_sprite = flash_sprites[frame_id]
+	
+	for _state_machine in idle_anim_state_machines:
+		_state_machine.travel("RESET")
+		
+		var frame_prefixes = ["shotgun_idle", "smg_idle", "rifle_idle"]
+		var idle_state = frame_prefixes[frame_id]
+		_state_machine.travel(idle_state)
+	
+	var reload_states = ["shotgun_pump", "smg_reload", "rifle_reload"]
+	reload_frame_state.travel(reload_states[frame_id])
+
+
+func unequip_frame(frame_id: int = 0) -> void:
+	# DEBUG: 0 = Shotgun, 1 = SMG, 2 = Rifle
+	for _state_machine in idle_anim_state_machines:
+		_state_machine.travel("RESET")
 
 
 ## Return true if shot successful
