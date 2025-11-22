@@ -3,6 +3,7 @@ class_name GunFrameResource
 
 enum GunFrameIdEnum {
 	NONE,
+	DEFAULT,
 	SHOTGUN,
 	SMG,
 	SNIPER
@@ -10,6 +11,7 @@ enum GunFrameIdEnum {
 
 @export var frame_name: String
 @export var frame_id: GunFrameIdEnum
+@export_multiline var frame_description: String
 @export_group("Gun Properties")
 @export var base_damage: int = 20
 @export var base_projectile_amount: int = 1

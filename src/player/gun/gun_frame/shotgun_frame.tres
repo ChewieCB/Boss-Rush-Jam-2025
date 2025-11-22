@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="GunFrameResource" load_steps=2 format=3 uid="uid://8jn7pqk44l08"]
+
+[ext_resource type="Script" path="res://src/player/gun/gun_frame/gun_frame_resource.gd" id="1_212x6"]
+
+[resource]
+script = ExtResource("1_212x6")
+frame_name = "Shotgun"
+frame_id = 2
+frame_description = ""
+base_damage = 10
+base_projectile_amount = 8
+base_firerate = 1.5
+base_magazine_size = 10
+base_reload_time = 2.0
+base_spin_time = 1.0
+base_spread_angle = 8.0
+is_hitscan = false
+base_projectile_speed = 50.0
+recoil_amount = 0.1
+screenshake_amount = 0.2

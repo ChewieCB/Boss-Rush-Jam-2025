@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="GunFrameResource" load_steps=2 format=3 uid="uid://cid07th4gi8ov"]
+
+[ext_resource type="Script" path="res://src/player/gun/gun_frame/gun_frame_resource.gd" id="1_1b7fk"]
+
+[resource]
+script = ExtResource("1_1b7fk")
+frame_name = "Default"
+frame_id = 1
+frame_description = "This should not be used"
+base_damage = 20
+base_projectile_amount = 1
+base_firerate = 2.0
+base_magazine_size = 10
+base_reload_time = 1.0
+base_spin_time = 1.0
+base_spread_angle = 0.5
+is_hitscan = false
+base_projectile_speed = 50.0
+recoil_amount = 0.03
+screenshake_amount = 0.2

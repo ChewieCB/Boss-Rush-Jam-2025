@@ -13,6 +13,8 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 
 @export var gun_name: String
 @export_multiline var description: String
+@export var equipped_gun_frame: GunFrameResource
+@export var max_barrels: int = 3
 
 ## SPRITES
 @export_group("Sprites")
@@ -35,8 +37,6 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 @onready var barrel_icon_mesh_3: MeshInstance3D = $EffectIconsViewport/EffectIconsParent/Barrel3Icon
 @onready var barrel_icon_meshes: Array[MeshInstance3D] = [barrel_icon_mesh_1, barrel_icon_mesh_2, barrel_icon_mesh_3]
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
-
-
 @onready var anim_tree: AnimationTree = $AnimationTree
 
 @export_group("SFX")
@@ -49,25 +49,23 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 @export var TEMP_regain_ammo: AudioStream
 @export var TEMP_crit: AudioStream
 
-@export_group("Gun Properties")
-@export var max_barrels: int = 3
-@export var base_damage: int = 20
-@export var base_projectile_amount: int = 1
+var base_damage: int = 20
+var base_projectile_amount: int = 1
 ## Shot per second
-@export var base_firerate: float = 2
-@export var base_magazine_size: int = 10
-@export var base_reload_time: float = 1
-@export var base_spin_time: float = 1
+var base_firerate: float = 2
+var base_magazine_size: int = 10
+var base_reload_time: float = 1
+var base_spin_time: float = 1
 ## How spread out projectile can be from the aim center
-@export var base_spread_angle: float = 0.5
+var base_spread_angle: float = 0.5
 ## Projectile dont have travel time. Shot enemy is instanly damaged. If this ticked, ignore projectile_speed
-@export var is_hitscan: bool
+var is_hitscan: bool
 ## How fast projectile travel. Ignored if is_hitscan ticked. Shouldn't higher than 100 or collision detecion
 ## will be an issue
-@export var base_projectile_speed: float = 50
-@export var recoil_amount: float = 0.03
+var base_projectile_speed: float = 50
+var recoil_amount: float = 0.03
 ## How much screenshake when player shot
-@export var screenshake_amount: float = 0.2
+var screenshake_amount: float = 0.2
 
 @export_group("Prefab Scenes")
 @export var hitscan_prefab: PackedScene
@@ -88,6 +86,7 @@ var is_reloading = false
 var is_spinning = false
 var is_jammed = false
 var time_since_last_shot = 0
+
 var installed_barrels: Array[SpinBarrel] = []
 var barrel_count: int = 0
 
@@ -127,6 +126,8 @@ func _ready() -> void:
 		_on_savefile_loaded()
 	else:
 		reinstall_barrels()
+	set_stat_from_gun_frame()
+
 	magazine_ammo_left = base_magazine_size
 	muzzle_flash_light.light_energy = 0
 	reset_modifier(true)
@@ -138,6 +139,19 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	time_since_last_shot += delta
 
+
+func set_stat_from_gun_frame() -> void:
+	base_damage = equipped_gun_frame.base_damage
+	base_projectile_amount = equipped_gun_frame.base_projectile_amount
+	base_firerate = equipped_gun_frame.base_firerate
+	base_magazine_size = equipped_gun_frame.base_magazine_size
+	base_reload_time = equipped_gun_frame.base_reload_time
+	base_spin_time = equipped_gun_frame.base_spin_time
+	base_spread_angle = equipped_gun_frame.base_spread_angle
+	is_hitscan = equipped_gun_frame.is_hitscan
+	base_projectile_speed = equipped_gun_frame.base_projectile_speed
+	recoil_amount = equipped_gun_frame.recoil_amount
+	screenshake_amount = equipped_gun_frame.screenshake_amount
 
 ## Return true if shot successful
 func shoot(aim_ray: RayCast3D) -> bool:
