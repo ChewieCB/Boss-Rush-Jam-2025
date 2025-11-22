@@ -83,19 +83,19 @@ var laser_target_pos: Vector3
 @export var laser_aoe_marker: CompressedTexture2D
 @onready var laser_particles: GPUParticles3D = $DebugLaserPivot/DebugLaser/LaserSpawn/LaserEndParticles
 # SFX
-@export var sfx_laser_arm : Array[AudioStream]
-@export var sfx_laser_charging : Array[AudioStream]
-@export var sfx_laser_shoot : Array[AudioStream]
-@export var sfx_laser_disarm : Array[AudioStream]
+@export var sfx_laser_arm: Array[AudioStream]
+@export var sfx_laser_charging: Array[AudioStream]
+@export var sfx_laser_shoot: Array[AudioStream]
+@export var sfx_laser_disarm: Array[AudioStream]
 
 
 func _ready() -> void:
-	super()
+	super ()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 
 func activate() -> void:
-	super()
+	super ()
 	state_chart.send_event("start_intro")
 
 
@@ -305,7 +305,6 @@ func _on_melee_combo_backswing_state_physics_processing(delta: float) -> void:
 	move_and_slide()
 
 
-
 func _on_melee_combo_leap_back_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	
@@ -331,7 +330,7 @@ func _on_melee_combo_leap_back_state_entered() -> void:
 	
 	await get_tree().create_timer(time_up).timeout
 	# Subtract the time the jump down animation lasts so we can sync the impact
-	var hangtime: float = time_down - 0.15  
+	var hangtime: float = time_down - 0.15
 	await get_tree().create_timer(hangtime).timeout
 	anim_player.play("elevator_boss/slam_jump_down")
 	await anim_player.animation_finished
@@ -784,7 +783,7 @@ func get_furthest_laser_spawn() -> Node:
 	laser_spawns.sort_custom(
 		func(a, b):
 			var a_dist: float = a.global_position.distance_to(target.global_position)
-			var b_dist: float = a.global_position.distance_to(target.global_position)
+			var b_dist: float = b.global_position.distance_to(target.global_position)
 			if a_dist > b_dist:
 				return true
 			return false
