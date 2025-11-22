@@ -66,6 +66,7 @@ var base_projectile_speed: float = 50
 var recoil_amount: float = 0.03
 ## How much screenshake when player shot
 var screenshake_amount: float = 0.2
+var base_custom_projectile_prefab: PackedScene = null
 
 @export_group("Prefab Scenes")
 @export var hitscan_prefab: PackedScene
@@ -152,6 +153,7 @@ func set_stat_from_gun_frame() -> void:
 	base_projectile_speed = equipped_gun_frame.base_projectile_speed
 	recoil_amount = equipped_gun_frame.recoil_amount
 	screenshake_amount = equipped_gun_frame.screenshake_amount
+	base_custom_projectile_prefab = equipped_gun_frame.base_custom_projectile_prefab
 
 ## Return true if shot successful
 func shoot(aim_ray: RayCast3D) -> bool:
@@ -449,7 +451,7 @@ func reset_modifier(reload_reset = false):
 	if reload_reset:
 		modified_reload_time = base_reload_time
 		modified_magazine_size = base_magazine_size
-		modified_projectile_prefab = null
+		modified_projectile_prefab = base_custom_projectile_prefab
 		projectile_prefab_can_be_pooled = false
 
 

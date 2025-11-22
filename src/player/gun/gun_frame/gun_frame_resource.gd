@@ -30,3 +30,4 @@ enum GunFrameIdEnum {
 @export var recoil_amount: float = 0.03
 ## How much screenshake when player shot
 @export var screenshake_amount: float = 0.2
+@export var base_custom_projectile_prefab: PackedScene = null

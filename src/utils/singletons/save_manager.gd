@@ -2,6 +2,10 @@ extends Node
 
 # On Windows, save files are located in C:\Users\[Name]\AppData\Roaming\Godot\app_userdata\Crapshoot
 
+# Change this manually everytime there is a change to save format or item structure.
+# We can used them to patch or fix save data from older version.
+@export var save_version: int = 2
+
 var save_data_is_loaded = false
 var is_saving = false
 
@@ -73,6 +77,7 @@ func save_game(slot_id):
 		"player_skill_points": GameManager.player_skill_points,
 		"player_skill_dict": GameManager.player_skill_dict,
 		"tutorial_completed": GameManager.tutorial_completed,
+		"save_version": save_version
 	}
 	var save_file = FileAccess.open(get_savefile_name(slot_id), FileAccess.WRITE)
 	var json_string = JSON.stringify(save_dict)

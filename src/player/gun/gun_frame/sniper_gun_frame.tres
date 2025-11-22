@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="GunFrameResource" load_steps=2 format=3 uid="uid://geogstu8o3bh"]
+
+[ext_resource type="Script" path="res://src/player/gun/gun_frame/gun_frame_resource.gd" id="1_ggs7f"]
+
+[resource]
+script = ExtResource("1_ggs7f")
+frame_name = "Sniper"
+frame_id = 4
+frame_description = ""
+base_damage = 100
+base_projectile_amount = 1
+base_firerate = 1.0
+base_magazine_size = 5
+base_reload_time = 2.0
+base_spin_time = 1.0
+base_spread_angle = 0.5
+is_hitscan = true
+base_projectile_speed = 50.0
+recoil_amount = 0.3
+screenshake_amount = 0.2
