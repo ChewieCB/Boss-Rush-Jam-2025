@@ -35,7 +35,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var reroll_heal_value: float = 25.0
 
 @onready var hurt_overlay: Control = $UI/HurtOverlay
-@onready var interact_ui: Control = $UI/InteractUI
+@onready var interact_ui: InteractUI = $UI/InteractUI
 
 @onready var player_camera: ShakeCameraWrapper = $Neck/ShakeCameraWrapper
 @onready var debug_label: Label = $Neck/ShakeCameraWrapper/DebugLabel
@@ -236,11 +236,11 @@ func _ready():
 
 	check_permanent_buffs()
 	luck_component.check_for_high_luck_buffs()
-	
+
 	# CHEATS
 	if GameManager.CHEAT_godmode:
 		health_component.is_invincible = true
-	
+
 	debug_inventory_ui.has_custom_inventory = true
 	debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
 
@@ -324,7 +324,7 @@ func _unhandled_input(event):
 		SoundManager.play_sound(sfx_crouch.pick_random(), "SFX")
 	elif Input.is_action_just_released("crouch"):
 		SoundManager.play_sound(sfx_stand.pick_random(), "SFX")
-	
+
 	if Input.is_action_just_pressed("show_detail"):
 		show_barrel_effect_ui()
 	elif Input.is_action_just_released("show_detail"):
@@ -349,6 +349,10 @@ func _process(delta):
 			interact_collider.global_position.distance_to(global_position) <= INTERACT_DISTANCE:
 			object_to_be_interacted = interact_collider
 			interact_ui.visible = true
+			if interact_collider.has_method("get_interact_text"):
+				interact_ui.show_custom_text(interact_collider.get_interact_text())
+			else:
+				interact_ui.show_default_text()
 		else:
 			object_to_be_interacted = null
 			interact_ui.visible = false
@@ -384,7 +388,7 @@ func _physics_process(delta):
 	if not is_dashing and not is_in_menu:
 		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
-	
+
 	# Let the player ignore the wheelspin if they are moving
 	var floor_velocity = get_platform_velocity()
 	if floor_velocity: # and input_dir != Vector2.ZERO:
@@ -420,16 +424,16 @@ func _physics_process(delta):
 	else:
 		max_speed = MAX_SPEED
 	var add_speed = clamp(max_speed - current_speed, 0.0, ACCEL_RATE * delta)
-	
+
 	if is_dashing:
 		vel_horizontal = input_dir * max_speed
 	elif is_crouching:
 		vel_horizontal += input_dir * add_speed
 	else:
 		vel_horizontal += input_dir * add_speed
-	
+
 	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y) * current_stats[StatusEffect.PlayerStatEnum.RUN_SPEED_MODIFIER]
-	
+
 	# Bonus speed
 	if is_dashing:
 		internal_bonus_speed = DASH_SPEED
@@ -438,10 +442,10 @@ func _physics_process(delta):
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 9)
 		else:
 			internal_bonus_speed = lerpf(internal_bonus_speed, 0, delta * 3)
-	
+
 	var velocity_dir = velocity.normalized()
 	velocity += Vector3(velocity_dir.x, 0, velocity_dir.z) * internal_bonus_speed * current_stats[StatusEffect.PlayerStatEnum.DASH_SPEED_MODIFIER]
-	
+
 	move_and_slide()
 
 	#show_debug_label()
@@ -465,16 +469,16 @@ func update_ammo_counter_ui() -> void:
 func show_barrel_effect_ui() -> void:
 	if barrel_ui_active:
 		return
-	
+
 	if current_gun.max_barrels == 0:
 		return
-	
+
 	barrel_ui_active = true
-	
+
 	if barrel_ui_tween:
 		if barrel_ui_tween.is_running():
 			barrel_ui_tween.pause()
-	
+
 	barrel_ui_tween = get_tree().create_tween()
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
 	for i in range(current_gun.max_barrels):
@@ -483,22 +487,22 @@ func show_barrel_effect_ui() -> void:
 		if i < current_gun.barrel_container.get_child_count():
 			barrel_ui_tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
 	await barrel_ui_tween.finished
-	
+
 	Engine.time_scale = 0.1
 
 
 func hide_barrel_effect_ui() -> void:
 	if not barrel_ui_active:
 		return
-	
+
 	if barrel_ui_tween:
 		if barrel_ui_tween.is_running():
 			barrel_ui_tween.pause()
-	
+
 	barrel_ui_tween = get_tree().create_tween()
-	
+
 	Engine.time_scale = 1.0
-	
+
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
 	for i in range(current_gun.max_barrels):
 		var effect_ui_idx: int = i
@@ -525,17 +529,17 @@ func update_barrel_effect_ui() -> void:
 				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/tmp-barrel-icon.png")
 			effect_ui.name_label.text = _effect.display_text_title
 			effect_ui.desc_label.text = _effect.display_text_tag
-			
+
 			for container in effect_ui.positives_container.get_children():
 				container.queue_free()
 			for container in effect_ui.negatives_container.get_children():
 				container.queue_free()
-			
+
 			for text in _effect.positive_desc:
 				effect_ui.add_positive(text)
 			for text in _effect.negative_desc:
 				effect_ui.add_negative(text)
-		
+
 		else:
 			effect_ui.modulate.a = 0.0
 			effect_ui.name_label.text = ""
@@ -909,12 +913,12 @@ func get_assist_rotation_velocity(delta: float):
 
 func get_barrel_sprite_screen_positions() -> Array[Vector2]:
 	var sprite_positions: Array[Vector2] = []
-	
+
 	for sprite in gun.barrel_sprites:
 		var pos_marker: Marker3D = sprite.get_node("Marker3D")
 		var _pos: Vector2 = player_camera.camera.unproject_position(pos_marker.global_position)
 		sprite_positions.append(_pos)
-	
+
 	return sprite_positions
 
 
@@ -1048,7 +1052,7 @@ func _enable_freecam() -> void:
 	dash_disabled = true
 	player_camera.camera.current = false
 	gun_container.visible = false
-	
+
 	# Spawn freecam
 	freecam = freecam_prefab.instantiate()
 	get_parent().add_child(freecam)
@@ -1056,7 +1060,7 @@ func _enable_freecam() -> void:
 	freecam.global_rotation = neck.global_rotation
 	freecam.camera.global_rotation = player_camera.global_rotation
 	freecam.camera.current = true
-	
+
 	Engine.time_scale = 0.0
 
 
@@ -1068,7 +1072,7 @@ func _disable_freecam() -> void:
 
 	freecam.queue_free()
 	freecam = null
-	
+
 	Engine.time_scale = 1.0
 
 

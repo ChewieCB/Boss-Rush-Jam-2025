@@ -30,7 +30,7 @@ func _ready() -> void:
 	boss.hand_spawn_pos = hand_spawn_marker.front()
 	boss.explosive_spawn_meshes = explosive_spawn_parent.get_children()
 	boss.phase_changed.connect(
-		func(a: int):
+		func(_a: int):
 			music_playback.switch_to_clip(1)
 	)
 	
@@ -48,8 +48,7 @@ func _ready() -> void:
 		#stack_collider.position.y = new_y_pos
 		##stack_collider.rotate_y(_rotation)
 	
-	super()
-
+	super ()
 
 
 func _on_killbox_area_body_entered(body: Node3D) -> void:

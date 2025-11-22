@@ -1,4 +1,4 @@
-[gd_scene load_steps=132 format=3 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=137 format=3 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -56,11 +56,16 @@
 [ext_resource type="Texture2D" uid="uid://ckaeoogplp7ij" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_3.png" id="24_hgqui"]
 [ext_resource type="Texture2D" uid="uid://0jl8svyfknfu" path="res://src/bosses/tutorial/assets/sprites/LAZER_2.png" id="25_8helj"]
 [ext_resource type="Texture2D" uid="uid://binuip83g50yf" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_4.png" id="25_pns3b"]
+[ext_resource type="AudioStream" uid="uid://bpjefcq47oyr3" path="res://src/bosses/base/assets/sfx/temp/Hit 2.mp3" id="28_6ig1p"]
 [ext_resource type="Texture2D" uid="uid://dcac7a1w25lkr" path="res://src/bosses/tutorial/assets/sprites/2_HIT_1.png" id="28_i0kuu"]
 [ext_resource type="Texture2D" uid="uid://bgn83r6cstnhv" path="res://src/bosses/tutorial/assets/sprites/2_HIT_2.png" id="29_16jht"]
+[ext_resource type="AudioStream" uid="uid://ch0bkn7t2rb4i" path="res://src/bosses/base/assets/sfx/temp/Hit 3.mp3" id="29_d21ab"]
 [ext_resource type="Texture2D" uid="uid://dlkgunqq0nnd2" path="res://src/bosses/tutorial/assets/sprites/2_HIT_3.png" id="30_1gnvj"]
+[ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="30_jv36d"]
 [ext_resource type="Texture2D" uid="uid://3u0myth3mg26" path="res://src/bosses/tutorial/assets/sprites/2_HIT_4_HOLD_THIS_FRAME_FOR_EXTRA.png" id="31_6s54o"]
+[ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="31_t81ll"]
 [ext_resource type="Texture2D" uid="uid://0sts3t50hpk5" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_1.png" id="32_i0wff"]
+[ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="32_qvwbi"]
 [ext_resource type="Texture2D" uid="uid://nufbjd0mupin" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_2.png" id="33_1fje0"]
 [ext_resource type="Texture2D" uid="uid://bk3514x2lemcq" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_3.png" id="34_mllv3"]
 [ext_resource type="Texture2D" uid="uid://cqpxq5rp4qp4a" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_4.png" id="35_aa4xm"]
@@ -1337,6 +1342,7 @@ sfx_laser_disarm = []
 boss_id = 6
 barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8")]
+sfx_hit = Array[AudioStream]([ExtResource("28_6ig1p"), ExtResource("29_d21ab"), ExtResource("30_jv36d"), ExtResource("31_t81ll"), ExtResource("32_qvwbi")])
 attack_recovery_time = 0.5
 projectile_scene = null
 delay_per_projectile = 0.2
