@@ -50,19 +50,16 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 @export var TEMP_crit: AudioStream
 
 @export_group("Gun Properties")
-@export var max_barrels = 3
-@export var base_damage = 20
-@export var base_projectile_amount = 1
+@export var max_barrels: int = 3
+@export var base_damage: int = 20
+@export var base_projectile_amount: int = 1
 ## Shot per second
-@export var base_firerate = 2
-@export var base_magazine_size = 10
-# DONT CHANGE THIS base_reload_time, THIS BREAK THE GUN
-# I think the animation tied to 1s or so
-# But modify the reload time on barrel effect seem to be fine
-var base_reload_time = 1
-@export var base_spin_time = 1
+@export var base_firerate: float = 2
+@export var base_magazine_size: int = 10
+@export var base_reload_time: float = 1
+@export var base_spin_time: float = 1
 ## How spread out projectile can be from the aim center
-@export var base_spread_angle = 0.5
+@export var base_spread_angle: float = 0.5
 ## Projectile dont have travel time. Shot enemy is instanly damaged. If this ticked, ignore projectile_speed
 @export var is_hitscan: bool
 ## How fast projectile travel. Ignored if is_hitscan ticked. Shouldn't higher than 100 or collision detecion
@@ -140,10 +137,6 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	time_since_last_shot += delta
-	# EXPERIMENTAL for hold/release spinning
-	#if Input.is_action_just_released("spin_barrels"):
-		#var state_machine = anim_tree.get("parameters/spin_state/playback")
-		#state_machine.travel("released")
 
 
 ## Return true if shot successful
@@ -336,28 +329,6 @@ func spin_all_barrels() -> void:
 	reload(true)
 
 
-# func spin_single_barrel(barrel_idx: int) -> void:
-# 	if barrel_idx >= installed_barrels.size():
-# 		return
-
-# 	is_reloading = true
-# 	release_trigger()
-
-# 	# TODO - move spin arm up/down gun depending on barrel count
-# 	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-# 	await spin_anim_trigger
-
-# 	_spin_barrel(barrel_idx)
-
-# 	# TODO - replace with a dedicated spin time value now reloading
-# 	# isn't directly tied to spinning
-# 	await get_tree().create_timer(base_spin_time).timeout
-
-# 	_stop_barrel(barrel_idx)
-# 	reload(true)
-# 	is_reloading = false
-
-
 func _spin_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	barrel.get_active_effect().on_barrel_start_spin()
@@ -425,7 +396,7 @@ func reload(already_spin_barrel = false):
 		barrel.get_active_effect().on_reload_start()
 
 	is_reloading = true
-	anim_tree.set("parameters/reload_timescale/scale", 1 / modified_reload_time) # FIXME: Need to do sth with base_reload_time here
+	anim_tree.set("parameters/reload_timescale/scale", 1 / modified_reload_time)
 	anim_tree.set("parameters/reload_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 	await reload_anim_end
