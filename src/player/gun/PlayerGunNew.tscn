@@ -262,6 +262,20 @@ tracks/17/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/18/type = "method"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath(".")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["RESET", "entered"],
+"method": &"_debug_anim_tree_state_trace"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_6xcgv"]
 resource_name = "barrel_1_idle"
@@ -992,22 +1006,22 @@ tracks/3/path = NodePath("SpriteParent:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.5),
-"transitions": PackedFloat32Array(0.267943, 2.21914, 1),
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.6),
+"transitions": PackedFloat32Array(0.267, 2.21914, 2.21914, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.20944), Vector3(0, 0, 0)]
+"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.20944), Vector3(0, 0, -0.20944), Vector3(0, 0, 0)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
-tracks/4/enabled = true
+tracks/4/enabled = false
 tracks/4/path = NodePath("SpriteParent:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.5),
-"transitions": PackedFloat32Array(0.267943, 2.21, 1),
+"times": PackedFloat32Array(0, 0.2, 0.6),
+"transitions": PackedFloat32Array(0.267, 2.21, 1),
 "update": 0,
-"values": [Vector3(0.364854, -0.394036, 0), Vector3(0.648092, -0.383788, 0), Vector3(0.364854, -0.394036, 0)]
+"values": [Vector3(0.364854, -0.394036, 0), Vector3(0.322283, -0.435593, 0), Vector3(0.364854, -0.394036, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_86ihn"]
@@ -2165,6 +2179,23 @@ tracks/3/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": ["rifle/equip", "started"],
+"method": &"_debug_anim_tree_state_trace"
+}, {
+"args": ["rifle/equip", "finished"],
+"method": &"_debug_anim_tree_state_trace"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_n74wa"]
 resource_name = "idle"
@@ -2410,6 +2441,23 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": ["rifle/unqeuip", "started"],
+"method": &"_debug_anim_tree_state_trace"
+}, {
+"args": ["rifle/unqeuip", "finished"],
+"method": &"_debug_anim_tree_state_trace"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_w2b2s"]
@@ -2670,6 +2718,23 @@ tracks/3/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": ["shotgun/equip", "started"],
+"method": &"_debug_anim_tree_state_trace"
+}, {
+"args": ["shotgun/equip", "finished"],
+"method": &"_debug_anim_tree_state_trace"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_axnvj"]
 resource_name = "idle"
@@ -2747,10 +2812,10 @@ tracks/0/path = NodePath("SpriteParent/ArmSprite:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.75),
-"transitions": PackedFloat32Array(0.435275, 0.392292, 3.03143, 1, 1),
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"transitions": PackedFloat32Array(0.435275, 0.392292, 3.03143, 1.86607),
 "update": 0,
-"values": [Vector3(0.3, -0.5, 0), Vector3(0.17, -0.0999999, 0.85), Vector3(0.635, -0.9, 0.425), Vector3(0.27, -0.4, 0.85), Vector3(0.3, -0.5, 0)]
+"values": [Vector3(0.3, -0.5, 0), Vector3(0.29, -0.1, 0.85), Vector3(0.635, -0.9, 0.425), Vector3(0.27, -0.4, 0.85)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -2759,7 +2824,7 @@ tracks/1/path = NodePath("SpriteParent:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3, 0.75),
+"times": PackedFloat32Array(0, 0.1, 0.45, 0.75),
 "transitions": PackedFloat32Array(1.1487, 1, 0.554785, 1.56917),
 "update": 0,
 "values": [Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.364854, -0.394036, 0)]
@@ -2771,7 +2836,7 @@ tracks/2/path = NodePath("SpriteParent:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3, 0.75),
+"times": PackedFloat32Array(0, 0.1, 0.45, 0.75),
 "transitions": PackedFloat32Array(1.1487, 1, 0.554785, 1.56917),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, -0.331613), Vector3(0, 0, -0.331613), Vector3(0, 0, 0)]
@@ -2869,6 +2934,23 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": ["shotgun/unqeuip", "started"],
+"method": &"_debug_anim_tree_state_trace"
+}, {
+"args": ["shotgun/unqeuip", "finished"],
+"method": &"_debug_anim_tree_state_trace"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_grfdj"]
@@ -3116,6 +3198,23 @@ tracks/3/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": ["smg/equip", "started"],
+"method": &"_debug_anim_tree_state_trace"
+}, {
+"args": ["smg/equip", "finished"],
+"method": &"_debug_anim_tree_state_trace"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_dbk33"]
 resource_name = "idle"
@@ -3291,6 +3390,23 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": ["smg/unqeuip", "started"],
+"method": &"_debug_anim_tree_state_trace"
+}, {
+"args": ["smg/unqeuip", "finished"],
+"method": &"_debug_anim_tree_state_trace"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_saspt"]
@@ -3491,7 +3607,7 @@ visible = false
 [node name="RifleSprite" type="Sprite3D" parent="SpriteParent/FramesParent/RifleFrame"]
 layers = 2
 sorting_offset = 4.0
-render_priority = 2
+render_priority = 3
 texture = ExtResource("17_nwu8o")
 
 [node name="MuzzleflareLightSprite" type="Sprite3D" parent="SpriteParent/FramesParent/RifleFrame/RifleSprite"]
@@ -3573,7 +3689,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, -2.3, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, -2.8, 0)
 layers = 2
 sorting_offset = 5.0
-render_priority = 2
+render_priority = 3
 texture = ExtResource("15_x3kbv")
 
 [node name="ArmSpriteR" type="Sprite3D" parent="SpriteParent"]
@@ -3583,6 +3699,7 @@ render_priority = 2
 
 [node name="EffectIconsSprite" type="Sprite3D" parent="SpriteParent"]
 layers = 2
+sorting_offset = 3.0
 render_priority = 3
 texture = SubResource("ViewportTexture_rlyuh")
 
@@ -3604,7 +3721,9 @@ wait_time = 0.5
 one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+active = false
 callback_mode_process = 0
+callback_mode_discrete = 2
 libraries = {
 "": SubResource("AnimationLibrary_mu0sm"),
 "barrels": SubResource("AnimationLibrary_l82pn"),
@@ -3612,7 +3731,6 @@ libraries = {
 "shotgun": SubResource("AnimationLibrary_grfdj"),
 "smg": SubResource("AnimationLibrary_saspt")
 }
-playback_auto_capture = false
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 callback_mode_process = 0
@@ -3621,9 +3739,8 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/barrel_1+2/add_amount = 1.0
 parameters/barrel_12+3/add_amount = 1.0
 parameters/barrels+reload/add_amount = 1.0
-parameters/reload+spin/add_amount = 0.0
-parameters/reload_shot/active = true
-parameters/reload_shot/internal_active = true
+parameters/reload_shot/active = false
+parameters/reload_shot/internal_active = false
 parameters/reload_shot/request = 0
 parameters/reload_timescale/scale = 1.0
 parameters/spin_shot/active = false

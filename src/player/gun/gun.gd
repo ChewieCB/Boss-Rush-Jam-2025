@@ -45,10 +45,7 @@ var muzzle_flash_sprite: Sprite3D
 
 @onready var anim_tree: AnimationTree = $AnimationTree
 #
-@onready var idle_frame_state_1 = anim_tree.get("parameters/idle_frame_state/playback")
-@onready var idle_frame_state_2 = anim_tree.get("parameters/idle_frame_state_2/playback")
-@onready var idle_anim_state_machines: Array = [idle_frame_state_1, idle_frame_state_2]
-#
+@onready var idle_frame_state = anim_tree.get("parameters/idle_frame_state/playback")
 @onready var reload_frame_state = anim_tree.get("parameters/reload_frame_state/playback")
 
 @export_group("SFX")
@@ -158,12 +155,52 @@ func _process(delta: float) -> void:
 		#var state_machine = anim_tree.get("parameters/spin_state/playback")
 		#state_machine.travel("released")
 	
-	#if Input.is_action_just_pressed("input_1"):
-		#equip_frame(0)
-	#elif Input.is_action_just_pressed("input_2"):
-		#equip_frame(1)
-	#elif Input.is_action_just_pressed("input_3"):
-		#equip_frame(2)
+	# DEBUG
+	#print("=========== ANIM TREE DEBUG ===========")
+	#print(" > idle state: %s" % idle_frame_state.get_current_node())
+	#print(" > reload state: %s" % reload_frame_state.get_current_node())
+	
+	if Input.is_action_just_pressed("input_1"):
+		print("===== Equip Shotgun =====")
+		print("Equip Anim")
+		var shotgun_anim = anim_player.get_animation("shotgun/equip")
+		print(shotgun_anim.length)
+		print(shotgun_anim.get_track_count())
+		print(shotgun_anim.method_track_get_name(shotgun_anim.get_track_count() - 1, 0))
+		# unequip
+		print("Unequip Anim")
+		var shotgun_anim_2 = anim_player.get_animation("shotgun/unqeuip")
+		print(shotgun_anim_2.length)
+		print(shotgun_anim_2.get_track_count())
+		print(shotgun_anim_2.method_track_get_name(shotgun_anim_2.get_track_count() - 1, 0))
+		equip_frame(0)
+	elif Input.is_action_just_pressed("input_2"):
+		print("===== Equip SMG =====")
+		print("Equip Anim")
+		var smg_anim = anim_player.get_animation("smg/equip")
+		print(smg_anim.length)
+		print(smg_anim.get_track_count())
+		print(smg_anim.method_track_get_name(smg_anim.get_track_count() - 1, 0))
+		# unequip
+		print("Unequip Anim")
+		var smg_anim_2 = anim_player.get_animation("smg/unqeuip")
+		print(smg_anim_2.length)
+		print(smg_anim_2.get_track_count())
+		print(smg_anim_2.method_track_get_name(smg_anim_2.get_track_count() - 1, 0))
+		equip_frame(1)
+	elif Input.is_action_just_pressed("input_3"):
+		print("===== Equip Rifle =====")
+		var rifle_anim = anim_player.get_animation("rifle/equip")
+		print(rifle_anim.length)
+		print(rifle_anim.get_track_count())
+		print(rifle_anim.method_track_get_name(rifle_anim.get_track_count() - 1, 0))
+		# unequip
+		print("Unequip Anim")
+		var rifle_anim_2 = anim_player.get_animation("rifle/unqeuip")
+		print(rifle_anim_2.length)
+		print(rifle_anim_2.get_track_count())
+		print(rifle_anim_2.method_track_get_name(rifle_anim_2.get_track_count() - 1, 0))
+		equip_frame(2)
 
 
 func equip_frame(frame_id: int = 0) -> void:
@@ -173,21 +210,12 @@ func equip_frame(frame_id: int = 0) -> void:
 	barrel_flare_sprite = flare_sprites[frame_id]
 	muzzle_flash_sprite = flash_sprites[frame_id]
 	
-	for _state_machine in idle_anim_state_machines:
-		_state_machine.travel("RESET")
-		
-		var frame_prefixes = ["shotgun_idle", "smg_idle", "rifle_idle"]
-		var idle_state = frame_prefixes[frame_id]
-		_state_machine.travel(idle_state)
+	var frame_prefixes = ["shotgun_idle", "smg_idle", "rifle_idle"]
+	var idle_state = frame_prefixes[frame_id]
+	idle_frame_state.travel(idle_state)
 	
 	var reload_states = ["shotgun_pump", "smg_reload", "rifle_reload"]
 	reload_frame_state.travel(reload_states[frame_id])
-
-
-func unequip_frame(frame_id: int = 0) -> void:
-	# DEBUG: 0 = Shotgun, 1 = SMG, 2 = Rifle
-	for _state_machine in idle_anim_state_machines:
-		_state_machine.travel("RESET")
 
 
 ## Return true if shot successful
@@ -700,3 +728,7 @@ func check_if_archetype_barrel_installed() -> bool:
 		if barrel.is_archetype_barrel:
 			return true
 	return false
+
+
+func _debug_anim_tree_state_trace(state_name: String, transition: String) -> void:
+	print("Anim state: %s - %s" % [state_name, transition])
