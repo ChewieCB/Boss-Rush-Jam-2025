@@ -1,4 +1,4 @@
-[gd_resource type="AnimationNodeBlendTree" load_steps=113 format=3 uid="uid://cyxkgv6ghxahc"]
+[gd_resource type="AnimationNodeBlendTree" load_steps=100 format=3 uid="uid://cyxkgv6ghxahc"]
 
 [sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_3t03u"]
 
@@ -330,58 +330,6 @@ states/unqeuip_smg/position = Vector2(568, 320)
 transitions = ["Start", "RESET", SubResource("AnimationNodeStateMachineTransition_iohwt"), "RESET", "rifle_active", SubResource("AnimationNodeStateMachineTransition_2mrsr"), "RESET", "shotgun_active", SubResource("AnimationNodeStateMachineTransition_awlb8"), "RESET", "smg_active", SubResource("AnimationNodeStateMachineTransition_4l0qm"), "shotgun_active", "equip_shotgun", SubResource("AnimationNodeStateMachineTransition_aivnm"), "smg_active", "equip_smg", SubResource("AnimationNodeStateMachineTransition_23f4l"), "equip_shotgun", "shotgun_idle", SubResource("AnimationNodeStateMachineTransition_1xm1e"), "equip_smg", "smg_idle", SubResource("AnimationNodeStateMachineTransition_1xa3m"), "rifle_idle", "unqeuip_rifle", SubResource("AnimationNodeStateMachineTransition_tjb20"), "shotgun_idle", "unqeuip_shotgun", SubResource("AnimationNodeStateMachineTransition_c0trf"), "smg_idle", "unqeuip_smg", SubResource("AnimationNodeStateMachineTransition_usla5"), "unqeuip_smg", "smg_active", SubResource("AnimationNodeStateMachineTransition_g5rmn"), "unqeuip_shotgun", "shotgun_active", SubResource("AnimationNodeStateMachineTransition_nc6xd"), "rifle_active", "RESET", SubResource("AnimationNodeStateMachineTransition_kxxnd"), "shotgun_active", "RESET", SubResource("AnimationNodeStateMachineTransition_ffsv2"), "smg_active", "RESET", SubResource("AnimationNodeStateMachineTransition_ytaem"), "equip_rifle", "rifle_idle", SubResource("AnimationNodeStateMachineTransition_23byv"), "rifle_active", "equip_rifle", SubResource("AnimationNodeStateMachineTransition_6i5i0"), "unqeuip_rifle", "rifle_active", SubResource("AnimationNodeStateMachineTransition_owbow"), "rifle_idle", "rifle_rack", SubResource("AnimationNodeStateMachineTransition_ngopm"), "rifle_idle", "rifle_reload", SubResource("AnimationNodeStateMachineTransition_x1ob6"), "rifle_rack", "rifle_idle", SubResource("AnimationNodeStateMachineTransition_12oi4"), "rifle_reload", "rifle_idle", SubResource("AnimationNodeStateMachineTransition_sdmh3"), "shotgun_pump", "shotgun_idle", SubResource("AnimationNodeStateMachineTransition_upnbx"), "smg_reload", "smg_idle", SubResource("AnimationNodeStateMachineTransition_ebef5"), "shotgun_idle", "shotgun_pump", SubResource("AnimationNodeStateMachineTransition_5avt4"), "smg_idle", "smg_reload", SubResource("AnimationNodeStateMachineTransition_1arwe")]
 graph_offset = Vector2(134, -145)
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sef88"]
-animation = &"rifle/reload"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x4ta6"]
-animation = &"shotgun/pump"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kghjn"]
-animation = &"smg/reload"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r6qgm"]
-reset = false
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_d1pm4"]
-reset = false
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_diapb"]
-reset = false
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_tcji4"]
-reset = false
-switch_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nkj1g"]
-reset = false
-switch_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_f6614"]
-reset = false
-switch_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k4qhw"]
-reset = false
-switch_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_413o2"]
-switch_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_eatbx"]
-switch_mode = 2
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_qe05d"]
-state_machine_type = 1
-states/End/position = Vector2(676, 100)
-states/rifle_reload/node = SubResource("AnimationNodeAnimation_sef88")
-states/rifle_reload/position = Vector2(454, 100)
-states/shotgun_pump/node = SubResource("AnimationNodeAnimation_x4ta6")
-states/shotgun_pump/position = Vector2(345, -43)
-states/smg_reload/node = SubResource("AnimationNodeAnimation_kghjn")
-states/smg_reload/position = Vector2(345, 283)
-transitions = ["Start", "rifle_reload", SubResource("AnimationNodeStateMachineTransition_r6qgm"), "Start", "smg_reload", SubResource("AnimationNodeStateMachineTransition_d1pm4"), "Start", "shotgun_pump", SubResource("AnimationNodeStateMachineTransition_diapb"), "shotgun_pump", "rifle_reload", SubResource("AnimationNodeStateMachineTransition_tcji4"), "rifle_reload", "shotgun_pump", SubResource("AnimationNodeStateMachineTransition_nkj1g"), "rifle_reload", "smg_reload", SubResource("AnimationNodeStateMachineTransition_f6614"), "smg_reload", "rifle_reload", SubResource("AnimationNodeStateMachineTransition_k4qhw"), "smg_reload", "shotgun_pump", SubResource("AnimationNodeStateMachineTransition_413o2"), "shotgun_pump", "smg_reload", SubResource("AnimationNodeStateMachineTransition_eatbx")]
-graph_offset = Vector2(-61, -104)
-
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_utj7t"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_72aiu"]
@@ -426,7 +374,7 @@ transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(13, -91)
 
 [resource]
-graph_offset = Vector2(-529.443, 190.639)
+graph_offset = Vector2(-258.046, 81.8791)
 nodes/barrel_1+2/node = SubResource("AnimationNodeAdd2_3t03u")
 nodes/barrel_1+2/position = Vector2(-340, -140)
 nodes/barrel_12+3/node = SubResource("AnimationNodeAdd2_vi7yb")
@@ -442,8 +390,6 @@ nodes/barrels+reload/position = Vector2(400, 240)
 nodes/idle_frame_state/node = SubResource("AnimationNodeStateMachine_wwtw5")
 nodes/idle_frame_state/position = Vector2(-220, 480)
 nodes/output/position = Vector2(940, 300)
-nodes/reload_frame_state/node = SubResource("AnimationNodeStateMachine_qe05d")
-nodes/reload_frame_state/position = Vector2(-460, 560)
 nodes/reload_timescale/node = SubResource("AnimationNodeTimeScale_utj7t")
 nodes/reload_timescale/position = Vector2(20, 480)
 nodes/spin_barrel/node = SubResource("AnimationNodeAnimation_72aiu")

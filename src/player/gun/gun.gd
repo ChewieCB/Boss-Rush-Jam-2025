@@ -178,9 +178,6 @@ func equip_frame(frame_id: int = 0) -> void:
 	var frame_prefixes = ["shotgun_idle", "smg_idle", "rifle_idle"]
 	var idle_state = frame_prefixes[frame_id]
 	idle_frame_state.travel(idle_state)
-	
-	var reload_states = ["shotgun_pump", "smg_reload", "rifle_reload"]
-	reload_frame_state.travel(reload_states[frame_id])
 
 
 ## Return true if shot successful
