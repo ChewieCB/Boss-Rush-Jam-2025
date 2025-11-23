@@ -2355,7 +2355,7 @@ tracks/2/path = NodePath("SpriteParent:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3, 0.5, 0.8),
+"times": PackedFloat32Array(0.05, 0.1, 0.3, 0.5, 0.8),
 "transitions": PackedFloat32Array(1.1487, 1, 0.554785, 0.554785, 1.56917),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0, -0.20944), Vector3(0, 0, -0.20944), Vector3(0, 0, -0.20944), Vector3(0, 0, 0)]
@@ -3739,9 +3739,6 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/barrel_1+2/add_amount = 1.0
 parameters/barrel_12+3/add_amount = 1.0
 parameters/barrels+reload/add_amount = 1.0
-parameters/reload_shot/active = false
-parameters/reload_shot/internal_active = false
-parameters/reload_shot/request = 0
 parameters/reload_timescale/scale = 1.0
 parameters/spin_shot/active = false
 parameters/spin_shot/internal_active = false

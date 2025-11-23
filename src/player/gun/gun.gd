@@ -161,45 +161,10 @@ func _process(delta: float) -> void:
 	#print(" > reload state: %s" % reload_frame_state.get_current_node())
 	
 	if Input.is_action_just_pressed("input_1"):
-		print("===== Equip Shotgun =====")
-		print("Equip Anim")
-		var shotgun_anim = anim_player.get_animation("shotgun/equip")
-		print(shotgun_anim.length)
-		print(shotgun_anim.get_track_count())
-		print(shotgun_anim.method_track_get_name(shotgun_anim.get_track_count() - 1, 0))
-		# unequip
-		print("Unequip Anim")
-		var shotgun_anim_2 = anim_player.get_animation("shotgun/unqeuip")
-		print(shotgun_anim_2.length)
-		print(shotgun_anim_2.get_track_count())
-		print(shotgun_anim_2.method_track_get_name(shotgun_anim_2.get_track_count() - 1, 0))
 		equip_frame(0)
 	elif Input.is_action_just_pressed("input_2"):
-		print("===== Equip SMG =====")
-		print("Equip Anim")
-		var smg_anim = anim_player.get_animation("smg/equip")
-		print(smg_anim.length)
-		print(smg_anim.get_track_count())
-		print(smg_anim.method_track_get_name(smg_anim.get_track_count() - 1, 0))
-		# unequip
-		print("Unequip Anim")
-		var smg_anim_2 = anim_player.get_animation("smg/unqeuip")
-		print(smg_anim_2.length)
-		print(smg_anim_2.get_track_count())
-		print(smg_anim_2.method_track_get_name(smg_anim_2.get_track_count() - 1, 0))
 		equip_frame(1)
 	elif Input.is_action_just_pressed("input_3"):
-		print("===== Equip Rifle =====")
-		var rifle_anim = anim_player.get_animation("rifle/equip")
-		print(rifle_anim.length)
-		print(rifle_anim.get_track_count())
-		print(rifle_anim.method_track_get_name(rifle_anim.get_track_count() - 1, 0))
-		# unequip
-		print("Unequip Anim")
-		var rifle_anim_2 = anim_player.get_animation("rifle/unqeuip")
-		print(rifle_anim_2.length)
-		print(rifle_anim_2.get_track_count())
-		print(rifle_anim_2.method_track_get_name(rifle_anim_2.get_track_count() - 1, 0))
 		equip_frame(2)
 
 
@@ -498,11 +463,23 @@ func reload(already_spin_barrel = false):
 
 	is_reloading = true
 	anim_tree.set("parameters/reload_timescale/scale", 1 / modified_reload_time) # FIXME: Need to do sth with base_reload_time here
-	anim_tree.set("parameters/reload_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	
+	var reload_state = ""
+	match idle_frame_state.get_current_node():
+		"shotgun_idle":
+			reload_state = "shotgun_pump"
+		"smg_idle":
+			reload_state = "smg_reload"
+		"rifle_idle":
+			reload_state = "rifle_reload"
+	idle_frame_state.travel(reload_state)
+	#anim_tree.set("parameters/reload_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 	await reload_anim_end
 	is_reloading = false
 	anim_tree.set("parameters/reload_timescale/scale", 1)
+	anim_tree.set("parameters/idle_seek/seek_request", 0.0)
+	
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
