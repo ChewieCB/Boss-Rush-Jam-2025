@@ -157,12 +157,13 @@ func _process(delta: float) -> void:
 	#if Input.is_action_just_released("spin_barrels"):
 		#var state_machine = anim_tree.get("parameters/spin_state/playback")
 		#state_machine.travel("released")
-	if Input.is_action_just_pressed("input_1"):
-		equip_frame(0)
-	elif Input.is_action_just_pressed("input_2"):
-		equip_frame(1)
-	elif Input.is_action_just_pressed("input_3"):
-		equip_frame(2)
+	
+	#if Input.is_action_just_pressed("input_1"):
+		#equip_frame(0)
+	#elif Input.is_action_just_pressed("input_2"):
+		#equip_frame(1)
+	#elif Input.is_action_just_pressed("input_3"):
+		#equip_frame(2)
 
 
 func equip_frame(frame_id: int = 0) -> void:
