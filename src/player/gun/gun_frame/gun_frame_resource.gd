@@ -12,7 +12,10 @@ enum GunFrameIdEnum {
 @export var frame_name: String
 @export var frame_id: GunFrameIdEnum
 @export_multiline var frame_description: String
-@export_group("Gun Properties")
+@export var shop_ui_sprite: Texture2D
+@export var reload_sfx: Array[AudioStream] = []
+@export var shot_sfx: Array[AudioStream] = []
+
 @export var base_damage: int = 20
 @export var base_projectile_amount: int = 1
 ## Shot per second
