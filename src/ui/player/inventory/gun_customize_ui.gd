@@ -26,6 +26,7 @@ signal reset_barrel_info
 @onready var equip_barrel_container: HBoxContainer = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer
 @onready var inventory_gun_frame_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer/GridContainer
 @onready var inventory_normal_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer
+@onready var current_gun_frame_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/CurrentGunFrame
 
 @onready var shop_bg: Control = $ShopBG
 @onready var shop_tab_btn: Button = $TitleRegion/HBoxContainer/ShopTab/ShopTabButton
@@ -136,7 +137,6 @@ func full_refresh_ui(forced = false):
 		if barrel_data in GameManager.inventory_barrels:
 			current_inventory.erase(barrel_data)
 			continue
-
 		if not barrel_data.is_archetype_barrel:
 			var shop_item_inst = shop_barrel_item_ui_prefab.instantiate()
 			shop_normal_barrel_container.add_child(shop_item_inst)
@@ -151,6 +151,8 @@ func full_refresh_ui(forced = false):
 		shop_item_inst.init(gun_frame_data)
 		shop_item_inst.gun_frame_item_ui.select_gun_frame.connect(_on_gun_frame_item_ui_select)
 		shop_item_inst.gun_frame_item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
+
+	current_gun_frame_label.text = "Current frame: {0}".format([GameManager.equipped_gun_frame.frame_name])
 
 func toggle():
 	warning_label.self_modulate = Color.WHITE

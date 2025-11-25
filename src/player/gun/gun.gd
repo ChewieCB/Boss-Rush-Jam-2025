@@ -190,8 +190,10 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		barrel.get_active_effect().on_gun_damage_calculation()
 
 	for i in range(n_shot_repeat):
-		if barrel_count == 0 or not check_if_archetype_barrel_installed():
-			SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
+		if len(GameManager.equipped_gun_frame.shot_sfx) > 0:
+			SoundManager.play_sound_with_pitch(GameManager.equipped_gun_frame.shot_sfx.pick_random(), randf_range(0.85, 1.15), "Gun")
+		else:
+			SoundManager.play_sound_with_pitch(TEMP_sfx_shoot, randf_range(0.85, 1.15), "Gun")
 
 		var bullet_start_pos = bullet_spawn_marker.global_position
 
@@ -607,7 +609,10 @@ func _set_barrel_effect_label(barrel: SpinBarrel, effect: BaseBarrelEffect) -> v
 
 
 func _play_reload_start_sfx() -> void:
-	SoundManager.play_sound(TEMP_sfx_reload, "Gun")
+	if len(GameManager.equipped_gun_frame.reload_sfx) > 0:
+		SoundManager.play_sound(GameManager.equipped_gun_frame.reload_sfx, "Gun")
+	else:
+		SoundManager.play_sound(TEMP_sfx_reload, "Gun")
 
 func _play_reload_end_sfx() -> void:
 	SoundManager.play_sound(TEMP_sfx_click, "Gun")

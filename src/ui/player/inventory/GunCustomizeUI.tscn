@@ -413,6 +413,20 @@ theme_override_font_sizes/font_size = 24
 text = "Archetype Slot"
 horizontal_alignment = 1
 
+[node name="CurrentGunFrame" type="Label" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -476.0
+offset_top = 16.0
+offset_right = 44.0
+offset_bottom = 65.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 36
+text = "Current frame: Shotgun"
+horizontal_alignment = 2
+
 [node name="BarrelInfoRegion" parent="MainRegion/BarrelModifyUI/LeftRegion" instance=ExtResource("9_wboqf")]
 layout_mode = 1
 anchors_preset = 7
