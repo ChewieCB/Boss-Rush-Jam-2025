@@ -29,15 +29,21 @@ var difficulty_menu: DifficultyMenu
 var object_pooling_manager: ObjectPoolingManager
 var current_boss_map: BossMap
 
-# Barrels
+# Inventory
 @export var starting_barrels: Array[Resource]
 @export var starting_shop_barrels: Array[Resource]
 @export var barrel_database: Array[Resource]
 @export var debug_barrel_database: Array[Resource]
-
 var equipped_barrels: Array[Resource] = []
 var inventory_barrels: Array[Resource] = []
 var shop_barrels: Array[Resource] = []
+
+@export var starting_gun_frame: Resource
+@export var starting_shop_gun_frame: Array[Resource]
+@export var gun_frame_database: Array[Resource]
+var equipped_gun_frame: Resource = null
+var inventory_gun_frames: Array[Resource] = []
+var shop_gun_frames: Array[Resource] = []
 
 
 # Re-rolls

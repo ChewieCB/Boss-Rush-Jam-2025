@@ -4,7 +4,7 @@ extends Node
 
 # Change this manually everytime there is a change to save format or item structure.
 # We can used them to patch or fix save data from older version.
-@export var save_version: int = 2
+const SAVE_VERSION: int = 2
 
 var save_data_is_loaded = false
 var is_saving = false
@@ -14,37 +14,13 @@ signal finished_saving
 signal savefile_loaded
 signal setting_config_loaded
 
-func convert_resource_to_id(array_resource: Array) -> Array[int]:
-	var result: Array[int] = []
-	for elem in array_resource:
-		if not elem.barrel_name.to_lower().contains("debug"):
-			result.append(elem.barrel_id)
-	return result
 
-func convert_id_to_resource(array_id: Array) -> Array[Resource]:
-	if len(GameManager.barrel_database) == 0:
-		push_warning("GameManger.barrel_database is empty / not loaded yet!")
-	var result: Array[Resource] = []
-	for elem in array_id:
-		for item in GameManager.barrel_database:
-			var barrel_data_item = item as Resource
-			if barrel_data_item.barrel_id == elem:
-				result.append(item)
-	return result
+enum ResourceTypeEnum {
+	NONE,
+	BARREL,
+	GUN_FRAME,
+}
 
-
-func convert_id_to_boss_enum(array_id: Array) -> Array[BossCore.BossIdEnum]:
-	var result: Array[BossCore.BossIdEnum] = []
-	for elem in array_id:
-		result.append(elem as BossCore.BossIdEnum)
-	return result
-
-func convert_id_to_skill_enum(dict_id: Dictionary) -> Dictionary:
-	var result = {}
-	for key in dict_id:
-		var new_key = (key as SkillItemUI.SkillIdEnum)
-		result[new_key] = dict_id[key]
-	return result
 
 func delete_save_file(slot_id: int):
 	var save_path = get_savefile_name(slot_id)
@@ -64,20 +40,30 @@ func save_game(slot_id):
 	is_saving = true
 	started_saving.emit()
 	var save_dict = {
+		# Stats
 		"player_currency": GameManager.player_currency,
-		"equipped_barrels": convert_resource_to_id(GameManager.equipped_barrels),
-		"inventory_barrels": convert_resource_to_id(GameManager.inventory_barrels),
-		"shop_barrels": convert_resource_to_id(GameManager.shop_barrels),
-		"player_gained_first_barrel": GameManager.player_gained_first_barrel,
-		"barrel_tutorial_shown": GameManager.barrel_tutorial_shown,
-		"bosses_defeated": GameManager.bosses_defeated,
-		"victory_ui_shown": GameManager.victory_ui_shown,
-		"total_playtime": GameManager.total_playtime,
 		"player_level": GameManager.player_level,
+		"bosses_defeated": GameManager.bosses_defeated,
 		"player_skill_points": GameManager.player_skill_points,
 		"player_skill_dict": GameManager.player_skill_dict,
+
+		# Inventory & Shop
+		"equipped_barrels": convert_resources_to_ids(GameManager.equipped_barrels, ResourceTypeEnum.BARREL),
+		"inventory_barrels": convert_resources_to_ids(GameManager.inventory_barrels, ResourceTypeEnum.BARREL),
+		"shop_barrels": convert_resources_to_ids(GameManager.shop_barrels, ResourceTypeEnum.BARREL),
+		"equipped_gun_frame": convert_resources_to_ids([GameManager.equipped_gun_frame], ResourceTypeEnum.GUN_FRAME)[0], # Since it's an int
+		"inventory_gun_frames": convert_resources_to_ids(GameManager.inventory_gun_frames, ResourceTypeEnum.GUN_FRAME),
+		"shop_gun_frames": convert_resources_to_ids(GameManager.shop_gun_frames, ResourceTypeEnum.GUN_FRAME),
+
+		# First time player flags
+		"victory_ui_shown": GameManager.victory_ui_shown,
 		"tutorial_completed": GameManager.tutorial_completed,
-		"save_version": save_version
+		"player_gained_first_barrel": GameManager.player_gained_first_barrel,
+		"barrel_tutorial_shown": GameManager.barrel_tutorial_shown,
+
+		# Metadata
+		"total_playtime": GameManager.total_playtime,
+		"save_version": SAVE_VERSION
 	}
 	var save_file = FileAccess.open(get_savefile_name(slot_id), FileAccess.WRITE)
 	var json_string = JSON.stringify(save_dict)
@@ -107,25 +93,39 @@ func load_data_only(slot_id: int) -> Dictionary:
 
 func load_game(slot_id):
 	save_data_is_loaded = true
-	var save_data = load_data_only(slot_id)
+	var save_data: Dictionary = load_data_only(slot_id)
 	if save_data.is_empty():
 		GameManager.load_new_save_data()
 		savefile_loaded.emit()
 		return
-	
+
+	save_data = patch_save_version(save_data)
+
+	# Stats
 	GameManager.player_currency = save_data.get("player_currency", 0)
-	GameManager.equipped_barrels = convert_id_to_resource(save_data["equipped_barrels"])
-	GameManager.inventory_barrels = convert_id_to_resource(save_data["inventory_barrels"])
-	GameManager.shop_barrels = convert_id_to_resource(save_data["shop_barrels"])
-	GameManager.player_gained_first_barrel = save_data.get("player_gained_first_barrel", false)
-	GameManager.barrel_tutorial_shown = save_data.get("barrel_tutorial_shown", false)
-	GameManager.bosses_defeated = convert_id_to_boss_enum(save_data["bosses_defeated"])
-	GameManager.victory_ui_shown = save_data.get("victory_ui_shown", false)
-	GameManager.total_playtime = save_data.get("total_playtime", 0)
 	GameManager.player_level = save_data.get("player_level", 1)
 	GameManager.player_skill_points = save_data.get("player_skill_points", 0)
 	GameManager.player_skill_dict = convert_id_to_skill_enum(save_data.get("player_skill_dict", {}))
+	GameManager.bosses_defeated = convert_id_to_boss_enum(save_data.get("bosses_defeated", []))
+
+	# Inventory & Shop
+	# These don't use save_data.get() since if it corrupted, it better to know about the error right away and not overwrite the save
+	GameManager.equipped_barrels = convert_ids_to_resources(save_data["equipped_barrels"], ResourceTypeEnum.BARREL)
+	GameManager.inventory_barrels = convert_ids_to_resources(save_data["inventory_barrels"], ResourceTypeEnum.BARREL)
+	GameManager.shop_barrels = convert_ids_to_resources(save_data["shop_barrels"], ResourceTypeEnum.BARREL)
+	GameManager.equipped_gun_frame = convert_ids_to_resources([save_data["equipped_gun_frame"]], ResourceTypeEnum.GUN_FRAME)[0] # Since it's an int
+	GameManager.inventory_gun_frames = convert_ids_to_resources(save_data["inventory_gun_frames"], ResourceTypeEnum.GUN_FRAME)
+	GameManager.shop_gun_frames = convert_ids_to_resources(save_data["shop_gun_frames"], ResourceTypeEnum.GUN_FRAME)
+
+	# First time player flags
+	GameManager.player_gained_first_barrel = save_data.get("player_gained_first_barrel", false)
+	GameManager.barrel_tutorial_shown = save_data.get("barrel_tutorial_shown", false)
+	GameManager.victory_ui_shown = save_data.get("victory_ui_shown", false)
 	GameManager.tutorial_completed = save_data.get("tutorial_completed", false)
+
+	# Metadata
+	GameManager.total_playtime = save_data.get("total_playtime", 0)
+	var _this_file_save_version = save_data.get("save_version", SAVE_VERSION)
 	
 	check_for_new_update_barrels()
 	
@@ -213,3 +213,77 @@ func check_for_new_update_barrels():
 		not GameManager.inventory_barrels.has(barrel_data) and \
 		not GameManager.shop_barrels.has(barrel_data):
 			GameManager.shop_barrels.append(barrel_data)
+
+
+func convert_resources_to_ids(array_resource: Array[Resource], resource_type: ResourceTypeEnum) -> Array[int]:
+	var result: Array[int] = []
+	match resource_type:
+		ResourceTypeEnum.BARREL:
+			for elem in array_resource:
+				if not elem.barrel_name.to_lower().contains("debug"):
+					var barrel: BarrelDataResource = elem as BarrelDataResource
+					result.append(barrel.barrel_id)
+		ResourceTypeEnum.GUN_FRAME:
+			for elem in array_resource:
+				var gun_frame: GunFrameResource = elem as GunFrameResource
+				result.append(gun_frame.frame_id)
+	return result
+
+
+func convert_ids_to_resources(array_id: Array, resource_type: ResourceTypeEnum) -> Array[Resource]:
+	var result: Array[Resource] = []
+	match resource_type:
+		ResourceTypeEnum.BARREL:
+			if len(GameManager.barrel_database) == 0:
+				push_warning("GameManger.barrel_database is empty / not loaded yet!")
+			for elem in array_id:
+				for item in GameManager.barrel_database:
+					var barrel_data_item: BarrelDataResource = item as BarrelDataResource
+					if barrel_data_item.barrel_id == elem:
+						result.append(item)
+		ResourceTypeEnum.GUN_FRAME:
+			if len(GameManager.gun_frame_database) == 0:
+				push_warning("GameManger.gun_frame_database is empty / not loaded yet!")
+			for elem in array_id:
+				for item in GameManager.gun_frame_database:
+					var gun_frame_data_item: GunFrameResource = item as GunFrameResource
+					if gun_frame_data_item.frame_id == elem:
+						result.append(item)
+	return result
+
+
+func convert_id_to_boss_enum(array_id: Array) -> Array[BossCore.BossIdEnum]:
+	var result: Array[BossCore.BossIdEnum] = []
+	for elem in array_id:
+		result.append(elem as BossCore.BossIdEnum)
+	return result
+
+func convert_id_to_skill_enum(dict_id: Dictionary) -> Dictionary:
+	var result = {}
+	for key in dict_id:
+		var new_key = (key as SkillItemUI.SkillIdEnum)
+		result[new_key] = dict_id[key]
+	return result
+
+
+func patch_save_version(save_data) -> Dictionary:
+	if save_data.has("save_version"):
+		if save_data["save_version"] == SAVE_VERSION:
+			return save_data
+	else:
+		save_data["save_version"] = 1
+
+	while save_data["save_version"] < SAVE_VERSION:
+		if save_data["save_version"] == 1:
+			save_data = patch_save_version_1_to_2(save_data)
+	return save_data
+
+
+func patch_save_version_1_to_2(save_data: Dictionary) -> Dictionary:
+	# What changed: Added Gun Frame system, retire Archetype barrels
+	# TODO: Remove archetype barrels from inventory
+	save_data["equipped_gun_frame"] = 2
+	save_data["inventory_gun_frames"] = []
+	save_data["shop_gun_frames"] = [3, 4]
+	save_data["save_version"] = 2
+	return save_data

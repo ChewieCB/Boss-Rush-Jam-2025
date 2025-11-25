@@ -1,7 +1,7 @@
 extends Node
 
 var enable_play_video = true
-var idle_time: float = 10.0
+var idle_time: float = 30.0
 @export var video_list: Array[VideoStream] = []
 
 @onready var canvas_layer: CanvasLayer = $TopCanvasLayer
