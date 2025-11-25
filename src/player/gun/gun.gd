@@ -13,7 +13,6 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 
 @export var gun_name: String
 @export_multiline var description: String
-@export var equipped_gun_frame: GunFrameResource
 @export var max_barrels: int = 3
 
 ## SPRITES
@@ -142,18 +141,18 @@ func _process(delta: float) -> void:
 
 
 func set_stat_from_gun_frame() -> void:
-	base_damage = equipped_gun_frame.base_damage
-	base_projectile_amount = equipped_gun_frame.base_projectile_amount
-	base_firerate = equipped_gun_frame.base_firerate
-	base_magazine_size = equipped_gun_frame.base_magazine_size
-	base_reload_time = equipped_gun_frame.base_reload_time
-	base_spin_time = equipped_gun_frame.base_spin_time
-	base_spread_angle = equipped_gun_frame.base_spread_angle
-	is_hitscan = equipped_gun_frame.is_hitscan
-	base_projectile_speed = equipped_gun_frame.base_projectile_speed
-	recoil_amount = equipped_gun_frame.recoil_amount
-	screenshake_amount = equipped_gun_frame.screenshake_amount
-	base_custom_projectile_prefab = equipped_gun_frame.base_custom_projectile_prefab
+	base_damage = GameManager.equipped_gun_frame.base_damage
+	base_projectile_amount = GameManager.equipped_gun_frame.base_projectile_amount
+	base_firerate = GameManager.equipped_gun_frame.base_firerate
+	base_magazine_size = GameManager.equipped_gun_frame.base_magazine_size
+	base_reload_time = GameManager.equipped_gun_frame.base_reload_time
+	base_spin_time = GameManager.equipped_gun_frame.base_spin_time
+	base_spread_angle = GameManager.equipped_gun_frame.base_spread_angle
+	is_hitscan = GameManager.equipped_gun_frame.is_hitscan
+	base_projectile_speed = GameManager.equipped_gun_frame.base_projectile_speed
+	recoil_amount = GameManager.equipped_gun_frame.recoil_amount
+	screenshake_amount = GameManager.equipped_gun_frame.screenshake_amount
+	base_custom_projectile_prefab = GameManager.equipped_gun_frame.base_custom_projectile_prefab
 
 ## Return true if shot successful
 func shoot(aim_ray: RayCast3D) -> bool:

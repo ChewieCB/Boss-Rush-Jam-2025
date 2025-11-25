@@ -15,7 +15,7 @@ enum GunFrameIdEnum {
 @export var shop_ui_sprite: Texture2D
 @export var reload_sfx: Array[AudioStream] = []
 @export var shot_sfx: Array[AudioStream] = []
-
+@export var frame_cost: int = 100
 @export var base_damage: int = 20
 @export var base_projectile_amount: int = 1
 ## Shot per second

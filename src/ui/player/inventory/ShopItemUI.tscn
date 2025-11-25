@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_yis5u"]
 [ext_resource type="Texture2D" uid="uid://dc612cuygblo" path="res://src/collectibles/poker_chip/assets/chip_base.png" id="5_fggm4"]
 
-[node name="ShopItemContainer" type="VBoxContainer"]
+[node name="ShopItemUI" type="VBoxContainer"]
 theme_override_constants/separation = 16
 script = ExtResource("1_m7gx6")
 
@@ -13,6 +13,7 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
+alignment = 1
 
 [node name="PriceIcon" type="TextureRect" parent="HBoxContainer"]
 layout_mode = 2

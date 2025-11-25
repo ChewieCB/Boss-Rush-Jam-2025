@@ -2,7 +2,9 @@ extends Node
 
 signal currency_changed(new_currency: int)
 signal barrel_purchased(barrel_data: BarrelDataResource)
+signal gun_frame_purchased(gun_frame_data: GunFrameResource)
 signal barrel_too_expensive(barrel_data: BarrelDataResource)
+signal gun_frame_too_expensive(gun_frame_data: GunFrameResource)
 signal reroll_cost_changed(new_cost: int)
 signal free_rerolls
 signal refresh_shop_ui
@@ -213,6 +215,7 @@ func purchase_barrel(data: BarrelDataResource) -> bool:
 	barrel_too_expensive.emit(data)
 	return false
 
+
 ## Return error string if cant equipped
 func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading:
@@ -255,6 +258,32 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 		GameManager.player.current_gun.remove_barrel(barrel_idx)
 	return ""
 
+
+func purchase_gun_frame(data: GunFrameResource) -> bool:
+	if data.frame_cost <= player_currency:
+		player_currency -= data.frame_cost
+		inventory_gun_frames.append(data)
+		shop_gun_frames.erase(data)
+		refresh_shop_ui.emit()
+		gun_frame_purchased.emit(data)
+		return true
+	gun_frame_too_expensive.emit(data)
+	return false
+
+func equip_gun_frame(search_frame_id: GunFrameResource.GunFrameIdEnum) -> String:
+	if player.current_gun.is_reloading:
+		return "Can not change gun frame while reloading"
+	var found_data: GunFrameResource = null
+	for data in inventory_gun_frames:
+		if data.frame_id == search_frame_id:
+			found_data = data
+	if found_data:
+		inventory_gun_frames.append(equipped_gun_frame)
+		equipped_gun_frame = found_data
+		inventory_gun_frames.erase(found_data)
+		GameManager.player.gun.set_stat_from_gun_frame()
+		refresh_shop_ui.emit()
+	return ""
 
 func purchase_reroll() -> bool:
 	if reroll_time == 0:
