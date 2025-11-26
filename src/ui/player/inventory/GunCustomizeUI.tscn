@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dxui67spyijhu"]
+[gd_scene load_steps=34 format=3 uid="uid://dxui67spyijhu"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/gun_customize_ui.gd" id="1_g1lei"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="1_o6gc7"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c4s43jnwiod5e" path="res://src/ui/player/inventory/ShopItemUI.tscn" id="3_qq6pb"]
 [ext_resource type="AudioStream" uid="uid://bnt0hxmrnje7n" path="res://src/ui/common/assets/sfx/Open the shop new.mp3" id="4_ftv6l"]
 [ext_resource type="Texture2D" uid="uid://diasxpp75hggq" path="res://src/ui/player/inventory/shop-background.png" id="4_rxrje"]
+[ext_resource type="PackedScene" uid="uid://3ldvxjt8q5gk" path="res://src/ui/player/inventory/ShopGunFrameItemUI.tscn" id="5_fojg4"]
 [ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="5_q6fhm"]
 [ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_i05nn"]
 [ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/gun-sideview.png" id="6_tkikf"]
@@ -21,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="16_1lncy"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="17_l7b4t"]
 [ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="17_tev6s"]
+[ext_resource type="PackedScene" uid="uid://cireewkvow2ct" path="res://src/ui/player/inventory/GunFrameItemUI.tscn" id="19_p3q3v"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="21_dravj"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bfj2n"]
@@ -110,7 +112,9 @@ grow_vertical = 2
 script = ExtResource("1_g1lei")
 shop_title = "Yuya's Barrels"
 barrel_item_ui_prefab = ExtResource("7_78f5u")
-shop_item_ui_prefab = ExtResource("3_qq6pb")
+gun_frame_item_ui_prefab = ExtResource("19_p3q3v")
+shop_barrel_item_ui_prefab = ExtResource("3_qq6pb")
+shop_gun_frame_item_ui_prefab = ExtResource("5_fojg4")
 sfx_open = SubResource("AudioStreamRandomizer_bfj2n")
 sfx_click = ExtResource("6_i05nn")
 sfx_purchase = ExtResource("7_1f1kf")
@@ -409,6 +413,20 @@ theme_override_font_sizes/font_size = 24
 text = "Archetype Slot"
 horizontal_alignment = 1
 
+[node name="CurrentGunFrame" type="Label" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -476.0
+offset_top = 16.0
+offset_right = 44.0
+offset_bottom = 65.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 36
+text = "Current frame: Shotgun"
+horizontal_alignment = 2
+
 [node name="BarrelInfoRegion" parent="MainRegion/BarrelModifyUI/LeftRegion" instance=ExtResource("9_wboqf")]
 layout_mode = 1
 anchors_preset = 7
@@ -467,44 +485,29 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="ArchetypeLabel" type="Label" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer"]
+[node name="GunFrameLabel" type="Label" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 48
-text = "Archetype Barrels"
+text = "Gun Frames"
 horizontal_alignment = 1
 
-[node name="ArchetypeContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer"]
+[node name="GunFrameContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer"]
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
-columns = 7
+columns = 2
 
-[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
-layout_mode = 2
-
-[node name="BarrelItemUI2" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
-layout_mode = 2
-
-[node name="BarrelItemUI3" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
-layout_mode = 2
-
-[node name="BarrelItemUI4" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
-layout_mode = 2
-
-[node name="BarrelItemUI5" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
-layout_mode = 2
-
-[node name="BarrelItemUI6" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("7_78f5u")]
+[node name="GunFrameItemUI" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer/GridContainer" instance=ExtResource("19_p3q3v")]
 layout_mode = 2
 
 [node name="Spacer" type="Control" parent="MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer"]
@@ -608,41 +611,29 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="ArchetypeLabel" type="Label" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer"]
+[node name="GunFrameLabel" type="Label" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 48
-text = "Archetype Barrels"
+text = "Gun Frames"
 horizontal_alignment = 1
 
-[node name="ArchetypeContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer"]
+[node name="GunFrameContainer" type="MarginContainer" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer"]
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
-columns = 6
+columns = 2
 
-[node name="ShopItemContainer" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("3_qq6pb")]
-layout_mode = 2
-
-[node name="ShopItemContainer2" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("3_qq6pb")]
-layout_mode = 2
-
-[node name="ShopItemContainer3" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("3_qq6pb")]
-layout_mode = 2
-
-[node name="ShopItemContainer4" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("3_qq6pb")]
-layout_mode = 2
-
-[node name="ShopItemContainer5" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer" instance=ExtResource("3_qq6pb")]
+[node name="ShopGunFrameItemUI" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer/GridContainer" instance=ExtResource("5_fojg4")]
 layout_mode = 2
 
 [node name="Spacer" type="Control" parent="MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer"]

@@ -18,9 +18,10 @@ func _ready() -> void:
 	health_component.hurt.connect(_on_hurt)
 	dialogue_label.text = ""
 	shop_ui.visible = false
-	GameManager.barrel_purchased.connect(_on_purchase)
-	GameManager.barrel_too_expensive.connect(_on_too_expensive)
-
+	GameManager.barrel_purchased.connect(_on_purchase.unbind(1))
+	GameManager.barrel_too_expensive.connect(_on_too_expensive.unbind(1))
+	GameManager.gun_frame_purchased.connect(_on_purchase.unbind(1))
+	GameManager.gun_frame_too_expensive.connect(_on_too_expensive.unbind(1))
 
 func interact() -> void:
 	if has_shop:
@@ -43,12 +44,12 @@ func _on_hurt() -> void:
 		show_dialogue(hurt_text.pick_random())
 
 
-func _on_purchase(_data: BarrelDataResource) -> void:
+func _on_purchase() -> void:
 	if purchase_text:
 		show_dialogue(purchase_text.pick_random())
 
 
-func _on_too_expensive(_data: BarrelDataResource) -> void:
+func _on_too_expensive() -> void:
 	if too_expensive_text:
 		show_dialogue(too_expensive_text.pick_random())
 
