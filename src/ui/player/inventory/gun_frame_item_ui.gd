@@ -1,14 +1,13 @@
 extends TextureRect
-class_name ItemUI
+class_name GunFrameItemUI
 
-signal select_item(item_ui: ItemUI, data: BarrelDataResource)
-signal interact_item(item_ui: ItemUI, data: BarrelDataResource)
-signal show_warning(warning_text: String)
+signal select_gun_frame(item_ui: GunFrameItemUI, data: GunFrameResource)
+signal interact_gun_frame(item_ui: GunFrameItemUI, data: GunFrameResource)
 
 @onready var button: Button = $Button
 @onready var border_selected = $BorderSelected
 
-var data: BarrelDataResource
+var data: GunFrameResource
 var clicked_once = false
 var scale_factor = 1.1
 
@@ -23,17 +22,17 @@ var is_disabled: bool = false:
 var warning_text = ""
 
 
-func init(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: bool = false):
+func init(_data: GunFrameResource, _is_equipped: bool = false, _is_purchased: bool = false):
 	data = _data
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
-	texture = data.barrel_image
-	button.text = data.barrel_name
+	texture = data.shop_ui_sprite
+	button.text = data.frame_name
 
 
 func _ready() -> void:
 	if data:
-		button.text = data.barrel_name
+		button.text = data.frame_name
 
 	button.mouse_entered.connect(play_button_hover_sfx)
 	button.focus_entered.connect(play_button_hover_sfx)
@@ -46,7 +45,7 @@ func _ready() -> void:
 
 func _on_button_pressed() -> void:
 	if not clicked_once:
-		select_item.emit(self, data)
+		select_gun_frame.emit(self, data)
 		if not is_purchased:
 			if is_disabled:
 				button.text = "Not enough\nchips!"
@@ -59,13 +58,13 @@ func _on_button_pressed() -> void:
 		clicked_once = true
 		border_selected.visible = true
 	else:
-		interact_item.emit(self, data)
+		interact_gun_frame.emit(self, data)
 
 
 func unselected():
 	clicked_once = false
 	border_selected.visible = false
-	button.text = data.barrel_name
+	button.text = data.frame_name
 
 func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()
