@@ -144,8 +144,6 @@ func _ready() -> void:
 	reset_modifier(true)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	equip_frame(0)
-	#reload()
 
 
 func _process(delta: float) -> void:
@@ -159,40 +157,43 @@ func _process(delta: float) -> void:
 	#print("=========== ANIM TREE DEBUG ===========")
 	#print(" > idle state: %s" % idle_frame_state.get_current_node())
 	#print(" > reload state: %s" % reload_frame_state.get_current_node())
-	
-	if Input.is_action_just_pressed("input_1"):
-		equip_frame(0)
-	elif Input.is_action_just_pressed("input_2"):
-		equip_frame(1)
-	elif Input.is_action_just_pressed("input_3"):
-		equip_frame(2)
 
 
-func equip_frame(frame_id: int = 0) -> void:
-	# DEBUG: 0 = Shotgun, 1 = SMG, 2 = Rifle
-	var flare_sprites = [shotgun_flare_sprite, smg_flare_sprite, rifle_flare_sprite]
-	var flash_sprites = [shotgun_flash_sprite, smg_flash_sprite, rifle_flash_sprite]
+func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT) -> void:
+	# DEBUG: 
+	# enum GunFrameIdEnum {
+	#	NONE,
+	#	DEFAULT,
+	#	SHOTGUN,
+	#	SMG,
+	#	SNIPER
+	#}
+	var flare_sprites = [null, null, shotgun_flare_sprite, smg_flare_sprite, rifle_flare_sprite]
+	var flash_sprites = [null, null, shotgun_flash_sprite, smg_flash_sprite, rifle_flash_sprite]
 	barrel_flare_sprite = flare_sprites[frame_id]
 	muzzle_flash_sprite = flash_sprites[frame_id]
 	
-	var frame_prefixes = ["shotgun_idle", "smg_idle", "rifle_idle"]
+	var frame_prefixes = ["", "", "shotgun_idle", "smg_idle", "rifle_idle"]
 	var idle_state = frame_prefixes[frame_id]
 	idle_frame_state.travel(idle_state)
 
 
 func set_stat_from_gun_frame() -> void:
-	base_damage = GameManager.equipped_gun_frame.base_damage
-	base_projectile_amount = GameManager.equipped_gun_frame.base_projectile_amount
-	base_firerate = GameManager.equipped_gun_frame.base_firerate
-	base_magazine_size = GameManager.equipped_gun_frame.base_magazine_size
-	base_reload_time = GameManager.equipped_gun_frame.base_reload_time
-	base_spin_time = GameManager.equipped_gun_frame.base_spin_time
-	base_spread_angle = GameManager.equipped_gun_frame.base_spread_angle
-	is_hitscan = GameManager.equipped_gun_frame.is_hitscan
-	base_projectile_speed = GameManager.equipped_gun_frame.base_projectile_speed
-	recoil_amount = GameManager.equipped_gun_frame.recoil_amount
-	screenshake_amount = GameManager.equipped_gun_frame.screenshake_amount
-	base_custom_projectile_prefab = GameManager.equipped_gun_frame.base_custom_projectile_prefab
+	var current_frame: GunFrameResource = GameManager.equipped_gun_frame
+	base_damage = current_frame.base_damage
+	base_projectile_amount = current_frame.base_projectile_amount
+	base_firerate = current_frame.base_firerate
+	base_magazine_size = current_frame.base_magazine_size
+	base_reload_time = current_frame.base_reload_time
+	base_spin_time = current_frame.base_spin_time
+	base_spread_angle = current_frame.base_spread_angle
+	is_hitscan = current_frame.is_hitscan
+	base_projectile_speed = current_frame.base_projectile_speed
+	recoil_amount = current_frame.recoil_amount
+	screenshake_amount = current_frame.screenshake_amount
+	base_custom_projectile_prefab = current_frame.base_custom_projectile_prefab
+	#
+	set_frame_art(current_frame.frame_id)
 
 ## Return true if shot successful
 func shoot(aim_ray: RayCast3D) -> bool:
