@@ -1,4 +1,4 @@
-[gd_scene load_steps=104 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=107 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -33,6 +33,8 @@
 [ext_resource type="Texture2D" uid="uid://cx7vidsyvx8yh" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_1.png" id="27_6hxas"]
 [ext_resource type="Texture2D" uid="uid://cdp2vrgsg8vk7" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_2.png" id="28_vfi2f"]
 [ext_resource type="Texture2D" uid="uid://cdi2hskp63cj8" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_3.png" id="29_egcby"]
+[ext_resource type="Texture2D" uid="uid://bv2wn517ojkyq" path="res://src/player/gun/assets/sprite/frames/shotgun/reload/shotgun_reload_hand_1.png" id="33_u6v0u"]
+[ext_resource type="Texture2D" uid="uid://cytuuwmp2dfab" path="res://src/player/gun/assets/sprite/frames/shotgun/reload/shotgun_reload_hand_3.png" id="34_e26bd"]
 [ext_resource type="Material" uid="uid://bdnq13wgr3cmj" path="res://src/player/gun/assets/material/default_effect_icon_mat.tres" id="34_tk7r4"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wqldo"]
@@ -275,6 +277,18 @@ tracks/18/keys = {
 "args": ["RESET", "entered"],
 "method": &"_debug_anim_tree_state_trace"
 }]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("SpriteParent/ArmSpriteR:render_priority")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
 }
 
 [sub_resource type="Animation" id="Animation_6xcgv"]
@@ -2953,12 +2967,120 @@ tracks/4/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_ik8rl"]
+resource_name = "reload"
+length = 0.75
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.1487),
+"update": 0,
+"values": [Vector3(0.364854, -0.394036, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.1487),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"_play_reload_end_sfx"
+}, {
+"args": [],
+"method": &"_end_reload_anim"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("SpriteParent/FramesParent/ShotgunFrame:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SpriteParent/ArmSpriteR:texture")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.35, 0.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("33_u6v0u"), ExtResource("34_e26bd"), ExtResource("33_u6v0u"), null]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/ArmSpriteR:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.65),
+"transitions": PackedFloat32Array(0.258816, 2.63902, 1),
+"update": 0,
+"values": [Vector3(3.6, -3.3, 0), Vector3(0, 0, 0), Vector3(3.6, -3.3, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/ArmSpriteR:render_priority")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.65),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 2]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/ArmSprite:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(0.435275),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_grfdj"]
 _data = {
 "active": SubResource("Animation_wn1yt"),
 "equip": SubResource("Animation_gn12k"),
 "idle": SubResource("Animation_axnvj"),
 "pump": SubResource("Animation_orurc"),
+"reload": SubResource("Animation_ik8rl"),
 "unqeuip": SubResource("Animation_dmab2")
 }
 
