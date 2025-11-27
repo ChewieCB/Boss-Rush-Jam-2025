@@ -463,7 +463,8 @@ func reload(already_spin_barrel = false):
 		"shotgun_idle":
 			reload_state = "shotgun_reload"
 			post_reload_state = "shotgun_pump"
-			reload_count = modified_magazine_size
+			reload_count = modified_magazine_size - magazine_ammo_left
+			print(modified_magazine_size, " | ", magazine_ammo_left)
 			reload_timescale *= modified_magazine_size
 		"smg_idle":
 			reload_state = "smg_reload"
