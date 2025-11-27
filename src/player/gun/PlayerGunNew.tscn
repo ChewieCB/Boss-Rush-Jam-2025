@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
+[ext_resource type="Resource" uid="uid://8jn7pqk44l08" path="res://src/player/gun/gun_frame/shotgun_gun_frame.tres" id="2_xmj4m"]
 [ext_resource type="AudioStream" uid="uid://bxq16mdpw6cvr" path="res://src/player/gun/assets/sfx/temp/Shotgun_Dry_Fire.mp3" id="3_doij6"]
 [ext_resource type="AudioStream" uid="uid://cqdjicto0uwp2" path="res://src/player/gun/assets/sfx/reloading/slot_roller.mp3" id="4_jq6y4"]
 [ext_resource type="AudioStream" uid="uid://d3psu8yx8uldk" path="res://src/player/gun/assets/sfx/temp/Shotgun_Cock_only.mp3" id="5_cutjd"]
@@ -3646,6 +3647,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, -6.51926
 script = ExtResource("1_ferpt")
 gun_name = "Blank gun"
 description = "A ordinary gun, waiting to be modified with various special barrels."
+equipped_gun_frame = ExtResource("2_xmj4m")
 shotgun_flare_sprite = NodePath("SpriteParent/FramesParent/ShotgunFrame/ShotgunSprite/MuzzleflareLightSprite")
 shotgun_flash_sprite = NodePath("SpriteParent/FramesParent/ShotgunFrame/ShotgunSprite/MuzzleflareLightSprite/MuzzleFlashSprite")
 smg_flare_sprite = NodePath("SpriteParent/FramesParent/SMGFrame/SMGSprite/MuzzleflareLightSprite")

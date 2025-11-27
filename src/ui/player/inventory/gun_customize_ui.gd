@@ -7,7 +7,9 @@ signal reset_barrel_info
 
 @export var shop_title: String
 @export var barrel_item_ui_prefab: PackedScene
-@export var shop_item_ui_prefab: PackedScene
+@export var gun_frame_item_ui_prefab: PackedScene
+@export var shop_barrel_item_ui_prefab: PackedScene
+@export var shop_gun_frame_item_ui_prefab: PackedScene
 @export var has_custom_inventory: bool = false
 @export var current_inventory: Array[Resource]
 @export var show_shop_first: bool = false
@@ -22,13 +24,14 @@ signal reset_barrel_info
 @onready var modify_tab_btn: Button = $TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton
 @onready var barrel_modify_ui: Control = $MainRegion/BarrelModifyUI
 @onready var equip_barrel_container: HBoxContainer = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer
-@onready var inventory_archetype_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer
+@onready var inventory_gun_frame_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer/GridContainer
 @onready var inventory_normal_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer
+@onready var current_gun_frame_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/CurrentGunFrame
 
 @onready var shop_bg: Control = $ShopBG
 @onready var shop_tab_btn: Button = $TitleRegion/HBoxContainer/ShopTab/ShopTabButton
 @onready var barrel_shop_ui: Control = $MainRegion/BarrelShopUI
-@onready var shop_archetype_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/ArchetypeContainer/GridContainer
+@onready var shop_gun_frame_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer/GridContainer
 @onready var shop_normal_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer
 @onready var shopkeeper_chat: RichTextLabel = $MainRegion/BarrelShopUI/RightRegion/VendorAvatar/Chatbox/RichTextLabel
 
@@ -101,24 +104,30 @@ func full_refresh_ui(forced = false):
 		item_inst.interact_item.connect(_on_item_ui_interact)
 		item_inst.show_warning.connect(show_warning)
 
-	# INVENTORY BARRELS
-	for child in inventory_archetype_barrel_container.get_children():
+	# INVENTORY STUFF
+	for child in inventory_gun_frame_container.get_children():
 		child.queue_free()
 	for child in inventory_normal_barrel_container.get_children():
 		child.queue_free()
 	for barrel_data in GameManager.inventory_barrels:
-		var item_inst = barrel_item_ui_prefab.instantiate()
-		if barrel_data.is_archetype_barrel:
-			inventory_archetype_barrel_container.add_child(item_inst)
-		else:
+		if not barrel_data.is_archetype_barrel:
+			var item_inst: ItemUI = barrel_item_ui_prefab.instantiate()
 			inventory_normal_barrel_container.add_child(item_inst)
-		item_inst.init(barrel_data, false, true)
-		item_inst.select_item.connect(_on_item_ui_select)
-		item_inst.interact_item.connect(_on_item_ui_interact)
-		item_inst.show_warning.connect(show_warning)
+			item_inst.init(barrel_data, false, true)
+			item_inst.select_item.connect(_on_item_ui_select)
+			item_inst.interact_item.connect(_on_item_ui_interact)
+			item_inst.show_warning.connect(show_warning)
 
-	# SHOP BARRELS
-	for child in shop_archetype_barrel_container.get_children():
+	for gun_frame_data in GameManager.inventory_gun_frames:
+		var item_inst: GunFrameItemUI = gun_frame_item_ui_prefab.instantiate()
+		inventory_gun_frame_container.add_child(item_inst)
+		item_inst.init(gun_frame_data, false, true)
+		item_inst.select_gun_frame.connect(_on_gun_frame_item_ui_select)
+		item_inst.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
+
+
+	# SHOP STUFF
+	for child in shop_gun_frame_container.get_children():
 		child.queue_free()
 	for child in shop_normal_barrel_container.get_children():
 		child.queue_free()
@@ -128,15 +137,22 @@ func full_refresh_ui(forced = false):
 		if barrel_data in GameManager.inventory_barrels:
 			current_inventory.erase(barrel_data)
 			continue
-		var shop_item_inst = shop_item_ui_prefab.instantiate()
-		if barrel_data.is_archetype_barrel:
-			shop_archetype_barrel_container.add_child(shop_item_inst)
-		else:
+		if not barrel_data.is_archetype_barrel:
+			var shop_item_inst = shop_barrel_item_ui_prefab.instantiate()
 			shop_normal_barrel_container.add_child(shop_item_inst)
-		shop_item_inst.init(barrel_data)
-		shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
-		shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
-		shop_item_inst.item_ui.show_warning.connect(show_warning)
+			shop_item_inst.init(barrel_data)
+			shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
+			shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
+			shop_item_inst.item_ui.show_warning.connect(show_warning)
+
+	for gun_frame_data in GameManager.shop_gun_frames:
+		var shop_item_inst = shop_gun_frame_item_ui_prefab.instantiate()
+		shop_gun_frame_container.add_child(shop_item_inst)
+		shop_item_inst.init(gun_frame_data)
+		shop_item_inst.gun_frame_item_ui.select_gun_frame.connect(_on_gun_frame_item_ui_select)
+		shop_item_inst.gun_frame_item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
+
+	current_gun_frame_label.text = "Current frame: {0}".format([GameManager.equipped_gun_frame.frame_name])
 
 func toggle():
 	warning_label.self_modulate = Color.WHITE
@@ -184,15 +200,6 @@ func get_first_item_for_focus() -> void:
 		shop_tab_btn.grab_focus()
 	else:
 		modify_tab_btn.grab_focus()
-	# await get_tree().create_timer(0.02).timeout
-	# if inventory_archetype_barrel_container.get_child_count() > 0:
-	# 	inventory_archetype_barrel_container.get_child(0).grab_focus()
-	# elif inventory_normal_barrel_container.get_child_count() > 0:
-	# 	inventory_normal_barrel_container.get_child(0).grab_focus()
-	# elif shop_normal_barrel_container.get_child_count() > 0:
-	# 	shop_normal_barrel_container.get_child(0).grab_focus()
-	# elif shop_normal_barrel_container.get_child_count() > 0:
-	# 	shop_normal_barrel_container.get_child(0).grab_focus()
 
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	if (current_selected_item_ui != null):
@@ -221,6 +228,30 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	full_refresh_ui()
 	get_first_item_for_focus()
 
+
+func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, data: GunFrameResource) -> void:
+	if (current_selected_item_ui != null):
+		current_selected_item_ui.unselected()
+	current_selected_item_ui = gun_frame_item_ui
+	# TODO: Add UI show gun frame stat
+	# barrel_info_region.set_barrel_data_resource(data)
+	SoundManager.play_ui_sound(sfx_click, "UI")
+
+
+func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: GunFrameResource) -> void:
+	if not gun_frame_item_ui.is_purchased:
+		gun_frame_item_ui.is_purchased = GameManager.purchase_gun_frame(data)
+		if gun_frame_item_ui.is_purchased:
+			SoundManager.play_ui_sound(sfx_purchase, "UI")
+			gun_frame_item_ui.unselected()
+		else:
+			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
+	else:
+		var warning_text = GameManager.equip_gun_frame(data.frame_id)
+		show_warning(warning_text)
+		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
+	full_refresh_ui()
+	get_first_item_for_focus()
 
 func _on_modify_tab_button_pressed() -> void:
 	SoundManager.play_ui_sound(sfx_click, "UI")

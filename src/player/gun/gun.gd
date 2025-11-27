@@ -13,6 +13,7 @@ signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 
 @export var gun_name: String
 @export_multiline var description: String
+@export var max_barrels: int = 3
 
 ## SPRITES
 @export_group("Sprites")
@@ -58,28 +59,24 @@ var muzzle_flash_sprite: Sprite3D
 @export var TEMP_regain_ammo: AudioStream
 @export var TEMP_crit: AudioStream
 
-@export_group("Gun Properties")
-@export var max_barrels = 3
-@export var base_damage = 20
-@export var base_projectile_amount = 1
+var base_damage: int = 20
+var base_projectile_amount: int = 1
 ## Shot per second
-@export var base_firerate = 2
-@export var base_magazine_size = 10
-# DONT CHANGE THIS base_reload_time, THIS BREAK THE GUN
-# I think the animation tied to 1s or so
-# But modify the reload time on barrel effect seem to be fine
-var base_reload_time = 1
-@export var base_spin_time = 1
+var base_firerate: float = 2
+var base_magazine_size: int = 10
+var base_reload_time: float = 1
+var base_spin_time: float = 1
 ## How spread out projectile can be from the aim center
-@export var base_spread_angle = 0.5
+var base_spread_angle: float = 0.5
 ## Projectile dont have travel time. Shot enemy is instanly damaged. If this ticked, ignore projectile_speed
-@export var is_hitscan: bool
+var is_hitscan: bool
 ## How fast projectile travel. Ignored if is_hitscan ticked. Shouldn't higher than 100 or collision detecion
 ## will be an issue
-@export var base_projectile_speed: float = 50
-@export var recoil_amount: float = 0.03
+var base_projectile_speed: float = 50
+var recoil_amount: float = 0.03
 ## How much screenshake when player shot
-@export var screenshake_amount: float = 0.2
+var screenshake_amount: float = 0.2
+var base_custom_projectile_prefab: PackedScene = null
 
 @export_group("Prefab Scenes")
 @export var hitscan_prefab: PackedScene
@@ -100,6 +97,7 @@ var is_reloading = false
 var is_spinning = false
 var is_jammed = false
 var time_since_last_shot = 0
+
 var installed_barrels: Array[SpinBarrel] = []
 var barrel_count: int = 0
 
@@ -139,6 +137,8 @@ func _ready() -> void:
 		_on_savefile_loaded()
 	else:
 		reinstall_barrels()
+	set_stat_from_gun_frame()
+
 	magazine_ammo_left = base_magazine_size
 	muzzle_flash_light.light_energy = 0
 	reset_modifier(true)
@@ -180,6 +180,20 @@ func equip_frame(frame_id: int = 0) -> void:
 	idle_frame_state.travel(idle_state)
 
 
+func set_stat_from_gun_frame() -> void:
+	base_damage = GameManager.equipped_gun_frame.base_damage
+	base_projectile_amount = GameManager.equipped_gun_frame.base_projectile_amount
+	base_firerate = GameManager.equipped_gun_frame.base_firerate
+	base_magazine_size = GameManager.equipped_gun_frame.base_magazine_size
+	base_reload_time = GameManager.equipped_gun_frame.base_reload_time
+	base_spin_time = GameManager.equipped_gun_frame.base_spin_time
+	base_spread_angle = GameManager.equipped_gun_frame.base_spread_angle
+	is_hitscan = GameManager.equipped_gun_frame.is_hitscan
+	base_projectile_speed = GameManager.equipped_gun_frame.base_projectile_speed
+	recoil_amount = GameManager.equipped_gun_frame.recoil_amount
+	screenshake_amount = GameManager.equipped_gun_frame.screenshake_amount
+	base_custom_projectile_prefab = GameManager.equipped_gun_frame.base_custom_projectile_prefab
+
 ## Return true if shot successful
 func shoot(aim_ray: RayCast3D) -> bool:
 	if is_reloading or is_spinning or is_jammed:
@@ -216,8 +230,10 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		barrel.get_active_effect().on_gun_damage_calculation()
 
 	for i in range(n_shot_repeat):
-		if barrel_count == 0 or not check_if_archetype_barrel_installed():
-			SoundManager.play_sound(TEMP_sfx_shoot, "Gun")
+		if len(GameManager.equipped_gun_frame.shot_sfx) > 0:
+			SoundManager.play_sound_with_pitch(GameManager.equipped_gun_frame.shot_sfx.pick_random(), randf_range(0.85, 1.15), "Gun")
+		else:
+			SoundManager.play_sound_with_pitch(TEMP_sfx_shoot, randf_range(0.85, 1.15), "Gun")
 
 		var bullet_start_pos = bullet_spawn_marker.global_position
 
@@ -370,28 +386,6 @@ func spin_all_barrels() -> void:
 	reload(true)
 
 
-# func spin_single_barrel(barrel_idx: int) -> void:
-# 	if barrel_idx >= installed_barrels.size():
-# 		return
-
-# 	is_reloading = true
-# 	release_trigger()
-
-# 	# TODO - move spin arm up/down gun depending on barrel count
-# 	anim_tree.set("parameters/spin_shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-# 	await spin_anim_trigger
-
-# 	_spin_barrel(barrel_idx)
-
-# 	# TODO - replace with a dedicated spin time value now reloading
-# 	# isn't directly tied to spinning
-# 	await get_tree().create_timer(base_spin_time).timeout
-
-# 	_stop_barrel(barrel_idx)
-# 	reload(true)
-# 	is_reloading = false
-
-
 func _spin_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	barrel.get_active_effect().on_barrel_start_spin()
@@ -520,7 +514,7 @@ func reset_modifier(reload_reset = false):
 	if reload_reset:
 		modified_reload_time = base_reload_time
 		modified_magazine_size = base_magazine_size
-		modified_projectile_prefab = null
+		modified_projectile_prefab = base_custom_projectile_prefab
 		projectile_prefab_can_be_pooled = false
 
 
@@ -677,7 +671,10 @@ func _set_barrel_effect_label(barrel: SpinBarrel, effect: BaseBarrelEffect) -> v
 
 
 func _play_reload_start_sfx() -> void:
-	SoundManager.play_sound(TEMP_sfx_reload, "Gun")
+	if len(GameManager.equipped_gun_frame.reload_sfx) > 0:
+		SoundManager.play_sound(GameManager.equipped_gun_frame.reload_sfx, "Gun")
+	else:
+		SoundManager.play_sound(TEMP_sfx_reload, "Gun")
 
 func _play_reload_end_sfx() -> void:
 	SoundManager.play_sound(TEMP_sfx_click, "Gun")
