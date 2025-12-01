@@ -93,6 +93,7 @@ var base_custom_projectile_prefab: PackedScene = null
 @onready var smoke_timer: Timer = $SmokeTimer
 
 var magazine_ammo_left = 0
+var can_fire: bool = true
 var is_reloading = false
 var is_spinning = false
 var is_jammed = false
@@ -211,7 +212,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 
 	reset_modifier()
 
-	var can_fire = true
 	for barrel in installed_barrels:
 		can_fire = can_fire and barrel.get_active_effect().on_fire_attempt()
 	if not can_fire:
@@ -223,7 +223,9 @@ func shoot(aim_ray: RayCast3D) -> bool:
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_prepare_to_fire()
-
+	
+	can_fire = false
+	
 	GameManager.player.player_camera.set_recoil_power(modified_recoil)
 	GameManager.player.player_camera.add_trauma(modified_screenshake)
 
@@ -268,15 +270,41 @@ func shoot(aim_ray: RayCast3D) -> bool:
 			for j in range(muzzle_flash_hold_frames):
 				await get_tree().physics_frame
 			barrel_flare_sprite.visible = false
-
-	if magazine_ammo_left <= 0:
-		for barrel in installed_barrels:
-			barrel.get_active_effect().on_clip_empty()
-
+	
 	# Create muzzle smoke effect
 	create_muzzle_smoke(aim_ray)
 	create_muzzle_flash_light()
+	
+	## POST-SHOT animations
+	await play_post_shot_anim()
+	
+	can_fire = true
+	
+	return true
 
+
+func play_post_shot_anim() -> bool:
+	var post_shot_state: String
+	match idle_frame_state.get_current_node():
+		"shotgun_idle":
+			pass
+		"smg_idle":
+			pass
+		"rifle_idle":
+			post_shot_state = "rifle_rack"
+	
+	var reload_timescale: float = 1.5 / modified_reload_time
+	anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
+	
+	if post_shot_state: 
+		idle_frame_state.travel(post_shot_state)
+		await reload_anim_end
+		
+	anim_tree.set("parameters/reload_timescale/scale", 1.0)
+	
+	if magazine_ammo_left <= 0:
+		reload()
+	
 	return true
 
 
