@@ -285,7 +285,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	return true
 
 
-func play_equip_anim(frame_id: int) -> void:
+func play_equip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
 	var equip_state: String
 	match frame_id:
 		GunFrameResource.GunFrameIdEnum.SHOTGUN:
@@ -299,7 +299,7 @@ func play_equip_anim(frame_id: int) -> void:
 	idle_frame_state.start(equip_state)
 
 
-func play_unequip_anim(frame_id: int) -> void:
+func play_unequip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
 	var unequip_state: String
 	match frame_id:
 		GunFrameResource.GunFrameIdEnum.SHOTGUN:

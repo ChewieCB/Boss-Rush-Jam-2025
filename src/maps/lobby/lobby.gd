@@ -16,9 +16,12 @@ signal ui_accept
 @onready var sfx_door_open: AudioStreamPlayer3D = $SFXDoorOpen
 @onready var sfx_door_close: AudioStreamPlayer3D = $SFXDoorClose
 
+@onready var vendors: Array[Node] = find_children("*", "Vendor")
+
 var display_barrels: Array = []
 
 var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
+
 
 func _ready() -> void:
 	#player.gun.reinstall_barrels()
@@ -28,6 +31,9 @@ func _ready() -> void:
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
 	difficulty_menu.bet_started.connect(load_selected_level) # Start load the boss level
+	for vendor in vendors:
+		vendor.inventory_opened.connect(player.current_gun.play_unequip_anim)
+		vendor.inventory_closed.connect(player.current_gun.play_equip_anim)
 	
 	get_tree().paused = false
 	

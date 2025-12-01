@@ -1,6 +1,9 @@
 extends PhysicsBody3D
 class_name Vendor
 
+signal inventory_opened
+signal inventory_closed
+
 @onready var dialogue_label: Label3D = $Label3D
 @onready var shop_ui: GunCustomizationUI = $UI/GunCustomizeUI
 @onready var health_component: HealthComponent = $HealthComponent
@@ -16,6 +19,8 @@ class_name Vendor
 
 func _ready() -> void:
 	health_component.hurt.connect(_on_hurt)
+	shop_ui.inventory_opened.connect(inventory_opened.emit)
+	shop_ui.inventory_closed.connect(inventory_closed.emit)
 	dialogue_label.text = ""
 	shop_ui.visible = false
 	GameManager.barrel_purchased.connect(_on_purchase.unbind(1))
@@ -64,4 +69,5 @@ func _on_body_exited(body: Node3D) -> void:
 	if exit_text:
 		if body is Player:
 			show_dialogue(exit_text.pick_random())
-			shop_ui.close()
+			#if shop_ui.visible:
+				#shop_ui.close()
