@@ -6,7 +6,7 @@ extends Node
 @onready var canvas_layer: CanvasLayer = $TopCanvasLayer
 @onready var video_player: VideoStreamPlayer = $TopCanvasLayer/Control/VideoStreamPlayer
 
-# Time in seconds before idle function triggers
+# Time in seconds before idle fun ction triggers
 var _idle_timer = 0.0
 var is_video_playing: bool = false
 

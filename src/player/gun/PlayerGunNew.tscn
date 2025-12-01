@@ -398,10 +398,10 @@ tracks/2/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:rota
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.2, 0.225, 0.275, 0.35),
+"transitions": PackedFloat32Array(0.965936, 1.23114, 0.450625, 1.6245, 1),
 "update": 0,
-"values": [Vector3(0.840748, -1.55841, -1.5028)]
+"values": [Vector3(0.0564414, -1.60655, -1.5254), Vector3(0.840748, -1.55841, -1.5028), Vector3(0.642151, -1.59464, -1.53578), Vector3(1.24383, -1.50506, -1.45791), Vector3(0.840748, -1.55841, -1.5028)]
 }
 
 [sub_resource type="Animation" id="Animation_n0a45"]
@@ -439,10 +439,10 @@ tracks/2/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:rota
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.210224, 1),
 "update": 0,
-"values": [Vector3(0.840748, -1.55841, -1.5028)]
+"values": [Vector3(0.840748, -1.55841, -1.5028), Vector3(-0.453786, -1.62316, -1.5708)]
 }
 
 [sub_resource type="Animation" id="Animation_wqh6a"]
@@ -1528,10 +1528,10 @@ tracks/2/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:rota
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.2, 0.225, 0.275, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0.840748, -1.55841, -1.5028)]
+"values": [Vector3(0.0564414, -1.60655, -1.5254), Vector3(0.840748, -1.55841, -1.5028), Vector3(0.642151, -1.59464, -1.53578), Vector3(1.24383, -1.50506, -1.45791), Vector3(0.840748, -1.55841, -1.5028)]
 }
 
 [sub_resource type="Animation" id="Animation_dstk1"]
@@ -1569,10 +1569,10 @@ tracks/2/path = NodePath("EffectIconsViewport/EffectIconsParent/Barrel1Icon:rota
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0.840748, -1.55841, -1.5028)]
+"values": [Vector3(0.840748, -1.55841, -1.5028), Vector3(-0.453786, -1.62316, -1.5708)]
 }
 
 [sub_resource type="Animation" id="Animation_dpc2k"]
