@@ -196,7 +196,10 @@ func set_stat_from_gun_frame() -> void:
 	screenshake_amount = current_frame.screenshake_amount
 	base_custom_projectile_prefab = current_frame.base_custom_projectile_prefab
 	#
+	cancel_reload()
+	reload_no_anim()
 	set_frame_art(current_frame.frame_id)
+	#play_equip_anim(current_frame.frame_id)
 
 ## Return true if shot successful
 func shoot(aim_ray: RayCast3D) -> bool:
@@ -286,6 +289,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 
 
 func play_equip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
+	cancel_reload()
 	var equip_state: String
 	match frame_id:
 		GunFrameResource.GunFrameIdEnum.SHOTGUN:
@@ -300,6 +304,7 @@ func play_equip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) ->
 
 
 func play_unequip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
+	cancel_reload()
 	var unequip_state: String
 	match frame_id:
 		GunFrameResource.GunFrameIdEnum.SHOTGUN:
@@ -495,6 +500,19 @@ func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
 	barrel_mesh.set_surface_override_material(0, new_mat)
 
 
+func cancel_reload() -> void:
+	is_reloading = false
+	is_jammed = false
+	
+	match idle_frame_state.get_current_node():
+		"shotgun_reload":
+			idle_frame_state.travel("shotgun_idle")
+		"smg_reload":
+			idle_frame_state.travel("smg_idle")
+		"rifle_reload":
+			idle_frame_state.travel("rifle_idle")
+
+
 func reload(already_spin_barrel = false):
 	# TODO - make this more generic and less tied to spinning barrels so we can call it elsewhere
 	if is_reloading:
@@ -551,8 +569,18 @@ func reload(already_spin_barrel = false):
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
+
+
+func reload_no_anim() -> void:
+	reset_modifier(true)
+	magazine_ammo_left = modified_magazine_size
 	
-	#gun_reloaded.emit()
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_reload_end()
+	
+	is_reloading = false
+	reload_anim_end.emit()
+	gun_reloaded.emit()
 
 
 func _end_reload_anim() -> void:
