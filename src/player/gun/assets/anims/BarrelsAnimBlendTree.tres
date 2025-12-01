@@ -11,10 +11,10 @@ animation = &"barrel_1_idle"
 animation = &"barrel_1_spin"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_60q47"]
-animation = &"barrels/barrel_1_spin_end"
+animation = &"barrel_1_spin_end"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nuuey"]
-animation = &"barrels/barrel_1_spin_start"
+animation = &"barrel_1_spin_start"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bylso"]
 animation = &"barrel_1_unequipped"
@@ -90,7 +90,7 @@ advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_ia1sj"]
 states/idle/node = SubResource("AnimationNodeAnimation_8vjv8")
-states/idle/position = Vector2(349, 99)
+states/idle/position = Vector2(349, 100)
 states/spin/node = SubResource("AnimationNodeAnimation_tqesv")
 states/spin/position = Vector2(530, 101)
 states/spin_end/node = SubResource("AnimationNodeAnimation_iimcd")
@@ -145,7 +145,7 @@ states/idle/position = Vector2(353, 151)
 states/spin/node = SubResource("AnimationNodeAnimation_jkjt6")
 states/spin/position = Vector2(607, 151)
 states/spin_end/node = SubResource("AnimationNodeAnimation_y6e6q")
-states/spin_end/position = Vector2(492, 211)
+states/spin_end/position = Vector2(492, 210)
 states/spin_start/node = SubResource("AnimationNodeAnimation_c6ajb")
 states/spin_start/position = Vector2(480, 60)
 states/unequip/node = SubResource("AnimationNodeAnimation_cxuk0")
@@ -386,7 +386,7 @@ transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition
 graph_offset = Vector2(13, -91)
 
 [resource]
-graph_offset = Vector2(-732.132, -249.514)
+graph_offset = Vector2(-313.214, -74.8675)
 nodes/barrel_1+2/node = SubResource("AnimationNodeAdd2_3t03u")
 nodes/barrel_1+2/position = Vector2(-340, -140)
 nodes/barrel_12+3/node = SubResource("AnimationNodeAdd2_vi7yb")
