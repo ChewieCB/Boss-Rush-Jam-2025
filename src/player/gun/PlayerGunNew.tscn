@@ -1661,11 +1661,14 @@ tracks/3/path = NodePath(".")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0.2, 0.8),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.2, 0.65, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"_play_reload_end_sfx"
+}, {
+"args": [],
+"method": &"_emit_reloaded_signal"
 }, {
 "args": [],
 "method": &"_end_reload_anim"
@@ -2216,7 +2219,7 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
-"method": &"_play_reload_end_sfx"
+"method": &"_emit_reloaded_signal"
 }, {
 "args": [],
 "method": &"_end_reload_anim"
@@ -2717,11 +2720,14 @@ tracks/3/path = NodePath(".")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0.2, 0.75),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.2, 0.55, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"_play_reload_end_sfx"
+}, {
+"args": [],
+"method": &"_emit_reloaded_signal"
 }, {
 "args": [],
 "method": &"_end_reload_anim"

@@ -474,8 +474,15 @@ func reload(already_spin_barrel = false):
 	
 	anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
 	
+	var cached_ammo_left: int = magazine_ammo_left
 	for i in range(reload_count):
 		idle_frame_state.travel(reload_state)
+		# If we're loading ammo one at a time, tick the ammo count up
+		match reload_count:
+			1:
+				magazine_ammo_left = modified_magazine_size
+			_:
+				magazine_ammo_left = cached_ammo_left + i + 1
 		await reload_anim_end
 	
 	if post_reload_state:
@@ -486,13 +493,16 @@ func reload(already_spin_barrel = false):
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
-
-	magazine_ammo_left = modified_magazine_size
-	gun_reloaded.emit()
+	
+	#gun_reloaded.emit()
 
 
 func _end_reload_anim() -> void:
 	reload_anim_end.emit()
+
+
+func _emit_reloaded_signal() -> void:
+	gun_reloaded.emit()
 
 
 func _trigger_spin_anim() -> void:
