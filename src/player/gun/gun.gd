@@ -455,7 +455,7 @@ func reload(already_spin_barrel = false):
 
 	is_reloading = true
 	
-	var reload_timescale: float = 1 / modified_reload_time
+	var reload_timescale: float = 1.5 / modified_reload_time
 	var reload_state: String = ""
 	var post_reload_state: String = ""
 	var reload_count: int = 1  # Used to reload per-shot in the case of the shotgun
@@ -475,17 +475,11 @@ func reload(already_spin_barrel = false):
 	anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
 	
 	for i in range(reload_count):
-		print("Travelling to reload state from %s" % idle_frame_state.get_current_node())
 		idle_frame_state.travel(reload_state)
-		print(idle_frame_state.get_current_node())
 		await reload_anim_end
-		print(idle_frame_state.get_current_node())
 	
 	if post_reload_state:
-		print("Post reload state")
-		print(idle_frame_state.get_current_node())
 		idle_frame_state.travel(post_reload_state)
-		print(idle_frame_state.get_current_node())
 	
 	is_reloading = false
 	anim_tree.set("parameters/reload_timescale/scale", 1)
