@@ -329,7 +329,7 @@ func play_post_shot_anim() -> bool:
 		"rifle_idle":
 			post_shot_state = "rifle_rack"
 	
-	var reload_timescale: float = 1.5 / modified_reload_time
+	var reload_timescale: float = 0.9 / modified_reload_time
 	anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
 	
 	if post_shot_state: 
