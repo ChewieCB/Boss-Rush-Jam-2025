@@ -143,8 +143,10 @@ func _ready() -> void:
 	magazine_ammo_left = base_magazine_size
 	muzzle_flash_light.light_energy = 0
 	reset_modifier(true)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	
+	idle_frame_state.start("RESET")
+	await ScreenTransition.transition_midpoint
+	play_equip_anim(GameManager.equipped_gun_frame.frame_id)
 
 
 func _process(delta: float) -> void:
@@ -281,6 +283,34 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	can_fire = true
 	
 	return true
+
+
+func play_equip_anim(frame_id: int) -> void:
+	var equip_state: String
+	match frame_id:
+		GunFrameResource.GunFrameIdEnum.SHOTGUN:
+			equip_state = "equip_shotgun"
+		GunFrameResource.GunFrameIdEnum.SMG:
+			equip_state = "equip_smg"
+		GunFrameResource.GunFrameIdEnum.SNIPER:
+			equip_state = "equip_rifle"
+	
+	# Teleport to the equip anim state
+	idle_frame_state.start(equip_state)
+
+
+func play_unequip_anim(frame_id: int) -> void:
+	var unequip_state: String
+	match frame_id:
+		GunFrameResource.GunFrameIdEnum.SHOTGUN:
+			unequip_state = "unequip_shotgun"
+		GunFrameResource.GunFrameIdEnum.SMG:
+			unequip_state = "unequip_smg"
+		GunFrameResource.GunFrameIdEnum.SNIPER:
+			unequip_state = "unequip_rifle"
+	
+	# Teleport to the equip anim state
+	idle_frame_state.start(unequip_state)
 
 
 func play_post_shot_anim() -> bool:
