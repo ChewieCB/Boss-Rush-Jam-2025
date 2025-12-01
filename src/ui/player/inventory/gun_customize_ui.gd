@@ -176,10 +176,8 @@ func open():
 func close():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	GameManager.player.is_in_menu = false
-	if visible and not GameManager.player.current_gun.is_reloading \
-		and not GameManager.player.current_gun.is_spinning:
+	if visible:
 		visible = false
-		GameManager.player.current_gun.spin_all_barrels()
 	inventory_closed.emit()
 
 

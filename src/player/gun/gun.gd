@@ -288,34 +288,35 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	return true
 
 
-func play_equip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
+func _play_anim_cancel(
+	anim_prefix: String, 
+	frame_id: int = GameManager.equipped_gun_frame.frame_id,
+	callback: Callable = Callable(),
+) -> void:
 	cancel_reload()
-	var equip_state: String
+	stop_all_barrels(0.0)
+	var anim_state: String = anim_prefix
 	match frame_id:
 		GunFrameResource.GunFrameIdEnum.SHOTGUN:
-			equip_state = "equip_shotgun"
+			anim_state += "shotgun"
 		GunFrameResource.GunFrameIdEnum.SMG:
-			equip_state = "equip_smg"
+			anim_state += "equip_smg"
 		GunFrameResource.GunFrameIdEnum.SNIPER:
-			equip_state = "equip_rifle"
+			anim_state += "equip_rifle"
 	
 	# Teleport to the equip anim state
-	idle_frame_state.start(equip_state)
+	idle_frame_state.start(anim_state)
+	
+	if callback:
+		callback.call()
+
+
+func play_equip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
+	_play_anim_cancel("equip_", frame_id, spin_all_barrels)
 
 
 func play_unequip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
-	cancel_reload()
-	var unequip_state: String
-	match frame_id:
-		GunFrameResource.GunFrameIdEnum.SHOTGUN:
-			unequip_state = "unequip_shotgun"
-		GunFrameResource.GunFrameIdEnum.SMG:
-			unequip_state = "unequip_smg"
-		GunFrameResource.GunFrameIdEnum.SNIPER:
-			unequip_state = "unequip_rifle"
-	
-	# Teleport to the equip anim state
-	idle_frame_state.start(unequip_state)
+	_play_anim_cancel("unequip_", frame_id)
 
 
 func play_post_shot_anim() -> bool:
@@ -413,6 +414,9 @@ func release_trigger():
 
 
 func spin_all_barrels() -> void:
+	if is_reloading:
+		await gun_reloaded
+	
 	var barrels_to_spin: int = installed_barrels.size()
 	if barrels_to_spin == 0:
 		reload()
@@ -445,7 +449,6 @@ func spin_all_barrels() -> void:
 	reset_modifier(true)
 	#gun_status_label.visible = false
 	stop_all_barrels()
-	is_spinning = false
 
 	reload(true)
 
@@ -465,10 +468,11 @@ func _spin_barrel(barrel_idx: int) -> void:
 	barrel_spin_started.emit(barrel, barrel_idx)
 
 
-func stop_all_barrels() -> void:
+func stop_all_barrels(delay_offset: float = 0.1) -> void:
 	for i in installed_barrels.size():
 		_stop_barrel(i)
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(delay_offset).timeout
+	is_spinning = false
 
 
 func _stop_barrel(barrel_idx: int) -> void:
