@@ -300,9 +300,9 @@ func _play_anim_cancel(
 		GunFrameResource.GunFrameIdEnum.SHOTGUN:
 			anim_state += "shotgun"
 		GunFrameResource.GunFrameIdEnum.SMG:
-			anim_state += "equip_smg"
+			anim_state += "smg"
 		GunFrameResource.GunFrameIdEnum.SNIPER:
-			anim_state += "equip_rifle"
+			anim_state += "rifle"
 	
 	# Teleport to the equip anim state
 	idle_frame_state.start(anim_state)
