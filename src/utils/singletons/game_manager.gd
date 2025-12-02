@@ -150,7 +150,7 @@ var CHEAT_godmode: bool = false
 var CHEAT_freecam: bool = true
 var CHEAT_always_inventory: bool = false
 var CHEAT_demomode: bool = true
-var CHEAT_demomode_timeout: int = 10:
+var CHEAT_demomode_timeout: int = 60:
 	set(value):
 		CHEAT_demomode_timeout = value
 		demo_time_changed.emit(CHEAT_demomode_timeout)

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7l2ljlus5rae"
-path.s3tc="res://.godot/imported/tmp-barrel-icon.png-3eaa1a6a2174f3a266b1cdda0a3018da.s3tc.ctex"
+uid="uid://bv2wn517ojkyq"
+path.s3tc="res://.godot/imported/shotgun_reload_hand_1.png-44e844a51290c0d88d56c39a22dd8687.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/sprite/effect_icons/tmp-barrel-icon.png"
-dest_files=["res://.godot/imported/tmp-barrel-icon.png-3eaa1a6a2174f3a266b1cdda0a3018da.s3tc.ctex"]
+source_file="res://src/player/gun/assets/sprite/frames/shotgun/reload/shotgun_reload_hand_1.png"
+dest_files=["res://.godot/imported/shotgun_reload_hand_1.png-44e844a51290c0d88d56c39a22dd8687.s3tc.ctex"]
 
 [params]
 

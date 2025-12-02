@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7l2ljlus5rae"
-path.s3tc="res://.godot/imported/tmp-barrel-icon.png-3eaa1a6a2174f3a266b1cdda0a3018da.s3tc.ctex"
+uid="uid://geoujd7g83jk"
+path.s3tc="res://.godot/imported/gun_frame_rifle.png-44883ba9d2963b1a70797e16193840b9.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/sprite/effect_icons/tmp-barrel-icon.png"
-dest_files=["res://.godot/imported/tmp-barrel-icon.png-3eaa1a6a2174f3a266b1cdda0a3018da.s3tc.ctex"]
+source_file="res://src/player/gun/assets/sprite/frames/rifle/gun_frame_rifle.png"
+dest_files=["res://.godot/imported/gun_frame_rifle.png-44883ba9d2963b1a70797e16193840b9.s3tc.ctex"]
 
 [params]
 

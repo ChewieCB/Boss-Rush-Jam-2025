@@ -277,8 +277,8 @@ func _unhandled_input(event):
 	#elif event.is_action_pressed("input_2"):
 		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
-	elif event.is_action_pressed("input_3"):
-		health_component.damage(20)
+	#elif event.is_action_pressed("input_3"):
+		#health_component.damage(20)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -365,9 +365,10 @@ func _process(delta):
 		return
 
 	if Input.is_action_pressed("shoot"):
-		# Raycast to target and damage them if hit
-		current_gun.pull_trigger()
-		current_gun.shoot(aim_ray)
+		if current_gun.can_fire:
+			# Raycast to target and damage them if hit
+			current_gun.pull_trigger()
+			current_gun.shoot(aim_ray)
 
 	if Input.is_action_just_released("shoot"):
 		current_gun.release_trigger()

@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+signal transition_midpoint
 signal transition_finished
 
 @onready var ui: ColorRect = $UI/ColorRect
@@ -51,10 +52,16 @@ func transition_out(duration: float = 0.7) -> void:
 
 
 func tween_transition(start: float, finish: float, duration: float = 0.7) -> void:
+	var diff: float = finish - start
 	var transition_tween := get_tree().create_tween()
 	transition_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	transition_tween.set_parallel(false)
 	transition_tween.tween_method(
-		_set_transition_height, start, finish, duration
+		_set_transition_height, start, start + diff / 2, duration / 2
+	)
+	transition_tween.tween_callback(transition_midpoint.emit)
+	transition_tween.tween_method(
+		_set_transition_height, start + diff / 2, finish, duration / 2
 	)
 	await transition_tween.finished
 

@@ -1,13 +1,12 @@
 extends Node
 
-var enable_play_video = true
-var idle_time: float = 30.0
+@export var idle_time: float = 60.0
 @export var video_list: Array[VideoStream] = []
 
 @onready var canvas_layer: CanvasLayer = $TopCanvasLayer
 @onready var video_player: VideoStreamPlayer = $TopCanvasLayer/Control/VideoStreamPlayer
 
-# Time in seconds before idle function triggers
+# Time in seconds before idle fun ction triggers
 var _idle_timer = 0.0
 var is_video_playing: bool = false
 
@@ -19,7 +18,6 @@ var saved_gun_volume = 0
 
 func _ready() -> void:
 	canvas_layer.visible = false
-	enable_play_video = GameManager.CHEAT_demomode
 	idle_time = GameManager.CHEAT_demomode_timeout
 	GameManager.demo_time_changed.connect(
 		func(time: int):
@@ -71,7 +69,7 @@ func stop_idle_video():
 
 
 func play_idle_video() -> void:
-	if not enable_play_video:
+	if not GameManager.CHEAT_demomode:
 		return
 	
 	is_video_playing = true
