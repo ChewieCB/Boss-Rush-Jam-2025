@@ -1,5 +1,7 @@
 extends Node
 
+# FMOD guide https://fmod-gdextension.readthedocs.io/en/latest/user-guide/4-loading-banks/
+
 signal currency_changed(new_currency: int)
 signal barrel_purchased(barrel_data: BarrelDataResource)
 signal gun_frame_purchased(gun_frame_data: GunFrameResource)

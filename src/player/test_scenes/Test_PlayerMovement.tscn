@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=44 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -57,6 +57,10 @@ size = Vector3(100, 1, 100)
 [sub_resource type="BoxShape3D" id="BoxShape3D_xq4fj"]
 size = Vector3(100, 1, 100)
 
+[sub_resource type="BoxMesh" id="BoxMesh_b1dsn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4q6pe"]
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_oe1jg"]
 top_radius = 4.0
 bottom_radius = 4.0
@@ -69,6 +73,12 @@ radius = 4.0
 [node name="TestPlayerMovement" type="Node3D" node_paths=PackedStringArray("elevator_buttons")]
 script = ExtResource("1_ky5mp")
 elevator_buttons = [NodePath("ElevatorMock/group_672_Elevator/entity_14_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_12_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_13_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_10_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_11_ElevatorButton")]
+
+[node name="FmodBankLoader" type="FmodBankLoader" parent="."]
+bank_paths = ["res://assets/fmod_banks/Master.strings.bank", "res://assets/fmod_banks/Master.bank"]
+
+[node name="FmodEventEmitter3D" type="FmodEventEmitter3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.83376)
 
 [node name="ObjectPoolingManager" parent="." instance=ExtResource("2_7nlyw")]
 
@@ -99,15 +109,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.38672, 0.952686, -11.856)
 
 [node name="Player" parent="." instance=ExtResource("1_h4pew")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175792, 10.3644)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
-mesh = SubResource("CylinderMesh_oe1jg")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("CylinderShape3D_63wrj")
 
 [node name="Vendor" parent="." instance=ExtResource("12_2rf45")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 11.7766, 0.00510705, -8.4)
@@ -201,35 +202,6 @@ data = ExtResource("22_qlyyk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.89, 0.599205, 7.53859)
 data = ExtResource("21_8043w")
 
-[node name="ShootWallTest" parent="." instance=ExtResource("19_cev3k")]
-
-[node name="ShootWallTest10" parent="." instance=ExtResource("19_cev3k")]
-transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -1.9106, 3.61703, 29.5695)
-
-[node name="ShootWallTest9" parent="." instance=ExtResource("19_cev3k")]
-transform = Transform3D(1.91069e-15, 1, 4.37114e-08, 4.37114e-08, -4.37114e-08, 1, 1, 0, -4.37114e-08, -14.7314, 2.09071, 0)
-
-[node name="ShootWallTest7" parent="." instance=ExtResource("19_cev3k")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 8.72625, 3.61703, -19.5232)
-
-[node name="ShootWallTest8" parent="." instance=ExtResource("19_cev3k")]
-transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 18.9701, 3.61703, 7.94599)
-
-[node name="ShootWallTest6" parent="." instance=ExtResource("19_cev3k")]
-transform = Transform3D(-2.18557e-08, 0.866025, -0.5, 3.78552e-08, 0.5, 0.866025, 1, 0, -4.37114e-08, -1.88214, 10.3533, -15.182)
-
-[node name="ShootWallTest2" parent="." instance=ExtResource("19_cev3k")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.2796, 3.61703, -27.6038)
-
-[node name="ShootWallTest3" parent="." instance=ExtResource("19_cev3k")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.538738, 3.61703, -27.6038)
-
-[node name="ShootWallTest4" parent="." instance=ExtResource("19_cev3k")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4.7296, 3.61703, -33.2212)
-
-[node name="ShootWallTest5" parent="." instance=ExtResource("19_cev3k")]
-transform = Transform3D(-1, 0, 8.74228e-08, 8.74228e-08, -4.37114e-08, 1, 3.82137e-15, 1, 4.37114e-08, -4.77851, 7.19081, -29.7185)
-
 [node name="SkillShrine" parent="." instance=ExtResource("25_janht")]
 transform = Transform3D(-0.00677179, 0, 0.999977, 0, 1, 0, -0.999977, 0, -0.00677179, 14.9781, 1, -4)
 
@@ -297,3 +269,52 @@ boss_id = 5
 
 [node name="entity_16_ElevatorDoors" parent="ElevatorMock/group_672_Elevator" instance=ExtResource("29_o1a3k")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.9375, 8.375)
+
+[node name="FmodMusicBox" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.5, 3)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="FmodMusicBox"]
+mesh = SubResource("BoxMesh_b1dsn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FmodMusicBox"]
+shape = SubResource("BoxShape3D_4q6pe")
+
+[node name="WallStuff" type="Node3D" parent="."]
+
+[node name="ShootWallTest" parent="WallStuff" instance=ExtResource("19_cev3k")]
+
+[node name="ShootWallTest10" parent="WallStuff" instance=ExtResource("19_cev3k")]
+transform = Transform3D(1, 0, -1.06581e-14, 0, 1, 0, 1.06581e-14, 0, 1, -1.9106, 3.61703, 29.5695)
+
+[node name="ShootWallTest9" parent="WallStuff" instance=ExtResource("19_cev3k")]
+transform = Transform3D(1.91069e-15, 1, 4.37114e-08, 4.37114e-08, -4.37114e-08, 1, 1, 0, -4.37114e-08, -14.7314, 2.09071, 0)
+
+[node name="ShootWallTest7" parent="WallStuff" instance=ExtResource("19_cev3k")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 8.72625, 3.61703, -19.5232)
+
+[node name="ShootWallTest8" parent="WallStuff" instance=ExtResource("19_cev3k")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 18.9701, 3.61703, 7.94599)
+
+[node name="ShootWallTest6" parent="WallStuff" instance=ExtResource("19_cev3k")]
+transform = Transform3D(-2.18557e-08, 0.866025, -0.5, 3.78552e-08, 0.5, 0.866025, 1, 0, -4.37114e-08, -1.88214, 10.3533, -15.182)
+
+[node name="ShootWallTest2" parent="WallStuff" instance=ExtResource("19_cev3k")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -10.2796, 3.61703, -27.6038)
+
+[node name="ShootWallTest3" parent="WallStuff" instance=ExtResource("19_cev3k")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.538738, 3.61703, -27.6038)
+
+[node name="ShootWallTest4" parent="WallStuff" instance=ExtResource("19_cev3k")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -4.7296, 3.61703, -33.2212)
+
+[node name="ShootWallTest5" parent="WallStuff" instance=ExtResource("19_cev3k")]
+transform = Transform3D(-1, 0, 8.74228e-08, 8.74228e-08, -4.37114e-08, 1, 3.82137e-15, 1, 4.37114e-08, -4.77851, 7.19081, -29.7185)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="WallStuff"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175792, 10.3644)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallStuff/StaticBody3D"]
+mesh = SubResource("CylinderMesh_oe1jg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallStuff/StaticBody3D"]
+shape = SubResource("CylinderShape3D_63wrj")
