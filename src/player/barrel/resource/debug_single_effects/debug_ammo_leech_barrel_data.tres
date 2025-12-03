@@ -9,6 +9,7 @@ script = ExtResource("3_k0lm2")
 barrel_id = 17
 barrel_name = "AmmoLeech"
 barrel_desc = "Take back those puny bullets!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_5uwyh")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_5fcl3")

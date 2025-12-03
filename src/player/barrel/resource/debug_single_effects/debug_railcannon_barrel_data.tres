@@ -9,6 +9,7 @@ script = ExtResource("11_r68rm")
 barrel_id = 69
 barrel_name = "Railcannon"
 barrel_desc = "One shot, one kill"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_0hhuy")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_0k5f4")

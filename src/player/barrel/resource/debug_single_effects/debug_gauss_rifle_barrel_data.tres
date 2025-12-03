@@ -9,6 +9,7 @@ script = ExtResource("17_si87d")
 barrel_id = 67
 barrel_name = "GaussRifle"
 barrel_desc = "Fires faster, weaker shots with more ammo"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_d6usj")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_d6ljd")

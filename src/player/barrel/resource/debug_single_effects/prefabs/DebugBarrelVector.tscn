@@ -54,7 +54,7 @@ new_value = 20.0
 [node name="SetDamage" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("15_3j4jh")
 attribute = 1
-new_value = 6.0
+new_value = 9.0
 
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/Vector"]
 script = ExtResource("15_3j4jh")

@@ -9,6 +9,7 @@ script = ExtResource("6_myym3")
 barrel_id = 27
 barrel_name = "NewtonThirdLaw"
 barrel_desc = "Safer Rocket Jump"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_qrf06")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_xol13")

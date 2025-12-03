@@ -9,6 +9,7 @@ script = ExtResource("3_1jt73")
 barrel_id = 61
 barrel_name = "Split"
 barrel_desc = "Extra bullets on impact!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_ql3bb")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_htd1b")

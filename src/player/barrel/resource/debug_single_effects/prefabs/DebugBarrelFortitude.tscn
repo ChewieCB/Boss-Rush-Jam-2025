@@ -18,5 +18,4 @@ display_text_title = "Fortitude"
 display_text_tag = "Don't give up"
 display_text_desc = "Regain 2 hp every 5s"
 positive_desc = Array[String](["Recover health over time"])
-negative_desc = Array[String](["TODO: add drawback"])
 icon_id = 36

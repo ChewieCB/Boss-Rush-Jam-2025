@@ -9,6 +9,7 @@ script = ExtResource("20_h50qn")
 barrel_id = 47
 barrel_name = "GelBlob"
 barrel_desc = "Single, big, sticky projectile"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_hdugn")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_qddhp")

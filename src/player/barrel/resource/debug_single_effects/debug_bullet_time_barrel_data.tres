@@ -8,7 +8,8 @@
 script = ExtResource("6_3thod")
 barrel_id = 23
 barrel_name = "BulletTime"
-barrel_desc = "You are not Neo though"
+barrel_desc = "You are not N*o though"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_2pktd")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_7202q")

@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://o1t5gn5ms5e5"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_2jatc"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_jwk2q"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_xpdpw"]
+
+[node name="DebugBarrelBulletHeaven" type="Node3D"]
+script = ExtResource("1_2jatc")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="BulletHeaven" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_jwk2q")
+display_text_title = "Bullet Heaven"
+display_text_tag = "No need to aim"
+positive_desc = Array[String](["+10 bullet ricochet times", "+100% projectile speed", "+25% damage"])
+negative_desc = Array[String](["+1000% bullet spread"])
+
+[node name="IncreaseSpread" type="Node3D" parent="EffectContainer/BulletHeaven"]
+script = ExtResource("3_xpdpw")
+attribute = 7
+modify_value = 1000.0
+is_perc = true
+
+[node name="IncreaseRicochet" type="Node3D" parent="EffectContainer/BulletHeaven"]
+script = ExtResource("3_xpdpw")
+attribute = 9
+modify_value = 10.0
+
+[node name="IncreaseProjectileSpeed" type="Node3D" parent="EffectContainer/BulletHeaven"]
+script = ExtResource("3_xpdpw")
+attribute = 3
+modify_value = 100.0
+is_perc = true
+
+[node name="IncreaseDamage" type="Node3D" parent="EffectContainer/BulletHeaven"]
+script = ExtResource("3_xpdpw")
+attribute = 1
+modify_value = 25.0
+is_perc = true

@@ -15,5 +15,4 @@ display_text_title = "Empowered Dash"
 display_text_tag = "Shoot n Dash!"
 display_text_desc = "+100% dash speed after shot"
 positive_desc = Array[String](["Dash speed increased after shooting"])
-negative_desc = Array[String](["TODO: add drawback"])
 icon_id = 35

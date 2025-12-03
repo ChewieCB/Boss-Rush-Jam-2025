@@ -28,12 +28,12 @@ icon_id = 15
 [node name="SetDamage" type="Node3D" parent="EffectContainer/Slug"]
 script = ExtResource("7_i0lfu")
 attribute = 1
-new_value = 80.0
+new_value = 90.0
 
 [node name="SetProjectileSpeed" type="Node3D" parent="EffectContainer/Slug"]
 script = ExtResource("7_i0lfu")
 attribute = 3
-new_value = 100.0
+new_value = 150.0
 
 [node name="SetProjectileCount" type="Node3D" parent="EffectContainer/Slug"]
 script = ExtResource("7_i0lfu")
@@ -43,7 +43,7 @@ new_value = 1.0
 [node name="SetFirerate" type="Node3D" parent="EffectContainer/Slug"]
 script = ExtResource("7_i0lfu")
 attribute = 4
-new_value = 1.2
+new_value = 1.5
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/Slug"]
 script = ExtResource("7_i0lfu")
@@ -62,7 +62,7 @@ new_value = 6.0
 [node name="SetRecoil" type="Node3D" parent="EffectContainer/Slug"]
 script = ExtResource("7_i0lfu")
 attribute = 11
-new_value = 0.15
+new_value = 0.4
 
 [node name="SetReloadTime" type="Node3D" parent="EffectContainer/Slug"]
 script = ExtResource("7_i0lfu")
