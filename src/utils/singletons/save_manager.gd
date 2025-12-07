@@ -39,6 +39,8 @@ func delete_save_file(slot_id: int):
 func save_game(slot_id):
 	is_saving = true
 	started_saving.emit()
+	if not GameManager.equipped_gun_frame:
+		GameManager.equipped_gun_frame = GameManager.starting_gun_frame
 	var save_dict = {
 		# Stats
 		"player_currency": GameManager.player_currency,
@@ -51,7 +53,7 @@ func save_game(slot_id):
 		"equipped_barrels": convert_resources_to_ids(GameManager.equipped_barrels, ResourceTypeEnum.BARREL),
 		"inventory_barrels": convert_resources_to_ids(GameManager.inventory_barrels, ResourceTypeEnum.BARREL),
 		"shop_barrels": convert_resources_to_ids(GameManager.shop_barrels, ResourceTypeEnum.BARREL),
-		"equipped_gun_frame": convert_resources_to_ids([GameManager.equipped_gun_frame], ResourceTypeEnum.GUN_FRAME)[0], # Since it's an int
+		"equipped_gun_frame": convert_resources_to_ids([GameManager.equipped_gun_frame], ResourceTypeEnum.GUN_FRAME).front(),
 		"inventory_gun_frames": convert_resources_to_ids(GameManager.inventory_gun_frames, ResourceTypeEnum.GUN_FRAME),
 		"shop_gun_frames": convert_resources_to_ids(GameManager.shop_gun_frames, ResourceTypeEnum.GUN_FRAME),
 
@@ -113,7 +115,7 @@ func load_game(slot_id):
 	GameManager.equipped_barrels = convert_ids_to_resources(save_data["equipped_barrels"], ResourceTypeEnum.BARREL)
 	GameManager.inventory_barrels = convert_ids_to_resources(save_data["inventory_barrels"], ResourceTypeEnum.BARREL)
 	GameManager.shop_barrels = convert_ids_to_resources(save_data["shop_barrels"], ResourceTypeEnum.BARREL)
-	GameManager.equipped_gun_frame = convert_ids_to_resources([save_data["equipped_gun_frame"]], ResourceTypeEnum.GUN_FRAME)[0] # Since it's an int
+	GameManager.equipped_gun_frame = convert_ids_to_resources([save_data["equipped_gun_frame"]], ResourceTypeEnum.GUN_FRAME).front()
 	GameManager.inventory_gun_frames = convert_ids_to_resources(save_data["inventory_gun_frames"], ResourceTypeEnum.GUN_FRAME)
 	GameManager.shop_gun_frames = convert_ids_to_resources(save_data["shop_gun_frames"], ResourceTypeEnum.GUN_FRAME)
 
