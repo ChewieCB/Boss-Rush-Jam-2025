@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://if82gjapumtk"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_fy5hl"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/insurance_crit_effect.gd" id="2_uq55a"]
+
+[node name="DebugBarrelCriticalInsurance" type="Node3D"]
+script = ExtResource("1_fy5hl")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CriticalInsurance" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_uq55a")
+display_text_title = "Critical Insurance"
+display_text_tag = "Definitely not a scam in term of DPS"
+positive_desc = Array[String](["Guarantee the next consumed bullet critical if previous one missed"])
+negative_desc = Array[String](["-50% critical damage"])
+icon_id = 56

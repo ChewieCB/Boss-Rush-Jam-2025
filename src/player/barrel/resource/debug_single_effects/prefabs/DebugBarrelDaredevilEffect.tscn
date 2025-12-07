@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://0kc5x1lgn5qp"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_34kbt"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/daredevil_effect.gd" id="2_q3l47"]
+
+[node name="DebugBarrelDaredevilEffect" type="Node3D"]
+script = ExtResource("1_34kbt")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="DaredevilEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_q3l47")
+min_distance_to_boss = 7.0
+display_text_title = "Daredevil"
+display_text_tag = "Stick close to the enemy"
+positive_desc = Array[String](["Increases bullet damage the longer you stay in close range to enemies"])
+negative_desc = Array[String](["Decreases damage otherwise"])
+icon_id = 60

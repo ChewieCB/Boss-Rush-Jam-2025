@@ -16,6 +16,5 @@ display_text_title = "Death From Above"
 display_text_tag = "Fly up, look down"
 display_text_desc = "+25% damage when midair
 25% crit chance when shoot downward"
-positive_desc = Array[String](["Increasd damage while mid-air", "Increasd crit chance while shooting at enemies below"])
-negative_desc = Array[String](["TODO: add drawback"])
+positive_desc = Array[String](["+25% damage while mid-air", "+25% crit chance while shooting at enemies below"])
 icon_id = 34

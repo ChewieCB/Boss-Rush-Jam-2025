@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://chdv283wox3c2"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_thlna"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_rutba"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/safety_fold_effect.gd" id="3_4k5dy"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_isvux"]
+
+[node name="DebugBarrelSafetyFold" type="Node3D"]
+script = ExtResource("1_thlna")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="SafetyFold" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_rutba")
+display_text_title = "Safety Fold"
+display_text_tag = "..know when to fold 'em"
+positive_desc = Array[String](["Gain 50% damage resistance during reload"])
+negative_desc = Array[String](["-50% reload speed"])
+icon_id = 59
+
+[node name="SafetyFoldEffect" type="Node3D" parent="EffectContainer/SafetyFold"]
+script = ExtResource("3_4k5dy")
+
+[node name="ModifyProjectileSpeedEffect" type="Node3D" parent="EffectContainer/SafetyFold"]
+script = ExtResource("4_isvux")
+attribute = 8
+modify_value = 50.0
+is_perc = true

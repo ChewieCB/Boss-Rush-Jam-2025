@@ -9,6 +9,7 @@ script = ExtResource("3_ukjnd")
 barrel_id = 19
 barrel_name = "ExplosiveBullet"
 barrel_desc = "Don't hurt yourself!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_3k6l7")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_3bwvu")

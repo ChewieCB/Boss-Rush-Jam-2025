@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://ds5fymc0rgfpu"]
+
+[ext_resource type="Texture2D" uid="uid://d0w2a6mgvmead" path="res://assets/sprite/effect_icons/55.png" id="1_m4f37"]
+[ext_resource type="PackedScene" uid="uid://oqw080dfccof" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelFragileFeather.tscn" id="2_gc8h1"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_fd6wc"]
+
+[resource]
+script = ExtResource("3_fd6wc")
+barrel_id = -1
+barrel_name = "FragileFeather"
+barrel_desc = "Maybe increase your survivability a bit"
+barrel_info_summary = ""
+barrel_image = ExtResource("1_m4f37")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_gc8h1")
+is_archetype_barrel = false

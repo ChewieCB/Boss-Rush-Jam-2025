@@ -14,12 +14,12 @@ script = ExtResource("1_58mha")
 [node name="StickyBomb" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_b80op")
 display_text_title = "Sticky Bomb"
-display_text_tag = "Keep distance"
+display_text_tag = "Keep your distance"
 display_text_desc = "+30% damage
 -50% firerate
  Bullets stick to enemies and detonate after 2 seconds."
-positive_desc = Array[String](["Slightly increased damage", "Rounds stick and explode after 2s"])
-negative_desc = Array[String](["Slower firerate", "Explosions hurt you too"])
+positive_desc = Array[String](["+30% damage", "Rounds stick and explode after 2s"])
+negative_desc = Array[String](["-50% firerate", "The explosion hurt you too"])
 icon_id = 21
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/StickyBomb"]

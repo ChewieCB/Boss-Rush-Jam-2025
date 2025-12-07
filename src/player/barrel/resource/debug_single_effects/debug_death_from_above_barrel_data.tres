@@ -9,6 +9,7 @@ script = ExtResource("4_gdev5")
 barrel_id = 32
 barrel_name = "DeathFromAbove"
 barrel_desc = "Fly up, look down"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_tcr8b")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_b514r")

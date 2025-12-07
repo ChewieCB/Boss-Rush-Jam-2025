@@ -15,7 +15,7 @@ script = ExtResource("1_bcgfb")
 [node name="BallBullet" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_k7spx")
 display_text_title = "Ball Bullet"
-display_text_tag = "Massize ball!"
+display_text_tag = "Massive ball!"
 display_text_desc = "Shoot a single huge bouncy ball projectile. Significantly increased damage but reduce firerate and projectile speed."
 positive_desc = Array[String](["Significantly higher damage", "Fires large projectile", "Adds richochet to projectile"])
 negative_desc = Array[String](["Slower firerate", "Slower projectile speed"])

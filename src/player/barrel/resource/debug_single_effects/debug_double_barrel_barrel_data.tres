@@ -9,6 +9,7 @@ script = ExtResource("9_pt556")
 barrel_id = 65
 barrel_name = "DoubleBarrel"
 barrel_desc = "Come close for a huge burst"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_c1jwu")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_0deug")

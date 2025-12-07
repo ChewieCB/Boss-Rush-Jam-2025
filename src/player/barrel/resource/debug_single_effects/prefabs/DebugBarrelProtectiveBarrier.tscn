@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://xysflqme2824"]
+[gd_scene load_steps=7 format=3 uid="uid://xysflqme2824"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_01on3"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_r326p"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/protective_barrier.gd" id="2_wg65y"]
 [ext_resource type="PackedScene" uid="uid://chkipxd8ctjen" path="res://src/player/gun/vfx/misc/ShieldBarrier.tscn" id="3_v36ns"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="5_dfllo"]
+[ext_resource type="Texture2D" uid="uid://cgjpqjw32dtqe" path="res://assets/sprite/status_icon/run_speed_down.png" id="6_1i840"]
 
 [node name="DebugBarrelProtectiveBarrier" type="Node3D"]
 script = ExtResource("1_01on3")
@@ -10,11 +13,26 @@ script = ExtResource("1_01on3")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="ProtectiveBarrier" type="Node3D" parent="EffectContainer"]
-script = ExtResource("2_wg65y")
-shield_barrier_prefab = ExtResource("3_v36ns")
+script = ExtResource("2_r326p")
 display_text_title = "Protective Barrier"
 display_text_tag = "Tough up!"
-display_text_desc = "25% damage resistance"
-positive_desc = Array[String](["Increases damage resistance"])
-negative_desc = Array[String](["TODO: add drawback (slower speed?)"])
+positive_desc = Array[String](["+25% damage resistance"])
+negative_desc = Array[String](["-20% move speed"])
 icon_id = 43
+
+[node name="ShieldEffect" type="Node3D" parent="EffectContainer/ProtectiveBarrier"]
+script = ExtResource("2_wg65y")
+shield_barrier_prefab = ExtResource("3_v36ns")
+icon_id = 43
+
+[node name="DecreaseMoveSpeed" type="Node3D" parent="EffectContainer/ProtectiveBarrier"]
+script = ExtResource("5_dfllo")
+display_name = "Reduce movespeed"
+status_code = "protective_barrier_reduce_movepseed"
+modified_stat = 1
+modify_type = 1
+value = -20.0
+is_infinite_duration = true
+is_bad_effect = true
+status_icon = ExtResource("6_1i840")
+show_duration_ui = true

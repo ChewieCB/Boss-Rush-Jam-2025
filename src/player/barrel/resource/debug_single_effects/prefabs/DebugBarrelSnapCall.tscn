@@ -15,16 +15,13 @@ script = ExtResource("2_2ehy6")
 display_text_title = "Snap Call"
 display_text_tag = "Oh, the attraction!"
 display_text_desc = "More damage with bullet speed
-+25% projectile speed
-
-Bullets move faster, and deal more damage the higher their speed is. Minimal benefit for hitscan weapons."
-positive_desc = Array[String](["Projectiles move faster", "Damage increased with projectile speed"])
++25% projectile speed"
+positive_desc = Array[String](["Damage increased with projectile speed", "+25% projectile speed"])
 negative_desc = Array[String](["Does not affect hitscan shots"])
 icon_id = 30
 
 [node name="SnapCallEffect" type="Node3D" parent="EffectContainer/SnapCall"]
 script = ExtResource("3_ghido")
-dmg_modify_for_hitscan = 1.25
 
 [node name="ModifyProjectileSpeed" type="Node3D" parent="EffectContainer/SnapCall"]
 script = ExtResource("4_cyckh")

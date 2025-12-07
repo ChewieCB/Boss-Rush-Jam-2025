@@ -23,10 +23,13 @@ var muzzle_flash_sprite: Sprite3D
 #
 @export var shotgun_flare_sprite: Sprite3D
 @export var shotgun_flash_sprite: Sprite3D
+@export var shotgun_shell_particles: GPUParticles3D
 @export var smg_flare_sprite: Sprite3D
 @export var smg_flash_sprite: Sprite3D
+@export var smg_shell_particles: GPUParticles3D
 @export var rifle_flare_sprite: Sprite3D
 @export var rifle_flash_sprite: Sprite3D
+@export var rifle_shell_particles: GPUParticles3D
 
 @onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
@@ -321,9 +324,10 @@ func play_unequip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) 
 
 func play_post_shot_anim() -> bool:
 	var post_shot_state: String
-	match idle_frame_state.get_current_node():
+	var idle_state: String = idle_frame_state.get_current_node()
+	match idle_state:
 		"shotgun_idle":
-			pass
+			post_shot_state = "shotgun_pump"
 		"smg_idle":
 			pass
 		"rifle_idle":
@@ -340,6 +344,8 @@ func play_post_shot_anim() -> bool:
 	
 	if magazine_ammo_left <= 0:
 		reload()
+	
+	idle_frame_state.travel(idle_state)
 	
 	return true
 
@@ -419,7 +425,7 @@ func spin_all_barrels() -> void:
 	
 	var barrels_to_spin: int = installed_barrels.size()
 	if barrels_to_spin == 0:
-		reload()
+		#reload()
 		return
 
 	release_trigger()
@@ -535,6 +541,7 @@ func reload(already_spin_barrel = false):
 
 	is_reloading = true
 	
+	var cached_ammo_left: int = magazine_ammo_left
 	var reload_timescale: float = 1.5 / modified_reload_time
 	var reload_state: String = ""
 	var post_reload_state: String = ""
@@ -542,10 +549,11 @@ func reload(already_spin_barrel = false):
 	match idle_frame_state.get_current_node():
 		"shotgun_idle":
 			reload_state = "shotgun_reload"
-			post_reload_state = "shotgun_pump"
+			if cached_ammo_left == modified_magazine_size:
+				post_reload_state = "shotgun_pump"
+			else:
+				post_reload_state = "shotgun_pump_no_shell"
 			reload_count = modified_magazine_size - magazine_ammo_left
-			print(modified_magazine_size, " | ", magazine_ammo_left)
-			#reload_timescale *= modified_magazine_size
 		"smg_idle":
 			reload_state = "smg_reload"
 		"rifle_idle":
@@ -554,9 +562,8 @@ func reload(already_spin_barrel = false):
 	
 	anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
 	
-	var cached_ammo_left: int = magazine_ammo_left
 	for i in range(reload_count):
-		idle_frame_state.travel(reload_state)
+		idle_frame_state.start(reload_state)
 		# If we're loading ammo one at a time, tick the ammo count up
 		match reload_count:
 			1:
@@ -585,6 +592,12 @@ func reload_no_anim() -> void:
 	is_reloading = false
 	reload_anim_end.emit()
 	gun_reloaded.emit()
+
+
+func _shotgun_eject_shell() -> void:
+	# TODO - pool/instance individual particle emitters per-shell so we 
+	# can have them bouncing around? Then create a decal on particle end.
+	pass
 
 
 func _end_reload_anim() -> void:

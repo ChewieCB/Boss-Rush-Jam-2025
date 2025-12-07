@@ -9,6 +9,7 @@ script = ExtResource("12_ajjcn")
 barrel_id = 48
 barrel_name = "GelBubble"
 barrel_desc = "Pairs well with a nice elemental infusion!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_jh0of")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_mqast")

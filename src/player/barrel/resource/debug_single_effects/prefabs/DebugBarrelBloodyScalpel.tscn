@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://s002bp1jsbgf"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_oi2sl"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_iariu"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_xt7tq"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_elemental_effect.gd" id="4_jc258"]
+
+[node name="DebugBarrelBloodyScalpel" type="Node3D"]
+script = ExtResource("1_oi2sl")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="BloodyScalpel" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_iariu")
+display_text_title = "Bloody Scalpel"
+display_text_tag = "Sharp and cut like butter"
+positive_desc = Array[String](["Applies bleed status", "Double projectile count"])
+negative_desc = Array[String](["Increase spread horizontally", "-50% damage"])
+icon_id = 53
+
+[node name="DoubleProjectileCount" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("3_xt7tq")
+attribute = 2
+modify_value = 100.0
+is_perc = true
+
+[node name="ReduceDamage" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("3_xt7tq")
+attribute = 1
+modify_value = -50.0
+is_perc = true
+
+[node name="IncreaseSpread" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("3_xt7tq")
+attribute = 7
+modify_value = 2.0
+
+[node name="IncreaseSpreadHorizontalBias" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("3_xt7tq")
+attribute = 13
+modify_value = 0.4
+
+[node name="AddBleedEffect" type="Node3D" parent="EffectContainer/BloodyScalpel"]
+script = ExtResource("4_jc258")
+status_effect = 5
+change_color = true
+new_color = Color(0.644531, 0.00711507, 0, 1)
