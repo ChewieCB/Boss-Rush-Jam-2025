@@ -9,6 +9,9 @@ signal setting_back_button_pressed
 @export var is_at_main_menu = false
 @export var keybind_button_prefab: PackedScene
 
+# Mac specific race condition bodge
+@export var mac_display_wait: float = 2.0
+
 @onready var tab_container: TabContainer = $TabContainer
 
 @onready var mouse_sen_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/MouseSenSlider
@@ -255,9 +258,11 @@ func play_button_hover_sfx():
 
 func set_window_mode(index: int) -> void:
 	# Hack workaround to fix crash on mac, figure out a better solution maybe
+	#if OS.get_name() == "macOS":
+		#if index == 2:
+			#index = 1
 	if OS.get_name() == "macOS":
-		if index == 2:
-			index = 1
+		await get_tree().create_timer(mac_display_wait).timeout
 	match index:
 		0: # Fullscreen
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
