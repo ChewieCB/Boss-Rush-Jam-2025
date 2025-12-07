@@ -126,13 +126,14 @@ func _ready() -> void:
 		_on_savefile_loaded()
 	else:
 		reinstall_barrels()
-	set_stat_from_gun_frame()
 
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	set_stat_from_gun_frame()
 	magazine_ammo_left = base_magazine_size
 	muzzle_flash_light.light_energy = 0
 	reset_modifier(true)
-	await get_tree().process_frame
-	await get_tree().process_frame
 	reload()
 
 
@@ -352,7 +353,7 @@ func _spin_barrel(barrel_idx: int) -> void:
 	barrel.start_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	# Spin the effect mesh UV
-	# TODO 
+	# TODO
 	# If we don't have an effect equipped,
 	# travel straight to the spin anim without the decal start anim
 	state_machine.travel("spin_start")
@@ -375,22 +376,22 @@ func _stop_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
-	
+
 	SoundManager.stop_sound(TEMP_sfx_spin)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
 
 
 func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
 	var barrel_mesh: MeshInstance3D = barrel_icon_meshes[barrel_idx]
-	
+
 	var mat: StandardMaterial3D = barrel_mesh.get_surface_override_material(0)
 	if mat == null:
 		mat = default_barrel_icon_mat
 	var new_mat: StandardMaterial3D = mat.duplicate()
-	
+
 	var icon_sprite_path := "res://assets/sprite/effect_icons/%s.png" % [icon_id]
 	var icon_texture: CompressedTexture2D = load(icon_sprite_path)
-	
+
 	new_mat.albedo_color = Color.WHITE
 	new_mat.albedo_texture = icon_texture
 	barrel_mesh.set_surface_override_material(0, new_mat)
@@ -540,9 +541,9 @@ func remove_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_remove()
 	barrel_unequipped.emit(null, barrel_idx)
 	barrel.queue_free()
-	
+
 	barrel_icon_meshes[barrel_idx].set_surface_override_material(0, default_barrel_icon_mat)
-	
+
 	recheck_installed_barrels()
 
 	# Re-apply the effects of the currently equipped barrels
@@ -561,7 +562,7 @@ func recheck_installed_barrels():
 		barrel.owner_gun = self
 		installed_barrels.append(barrel)
 		_set_barrel_effect_label(barrel, barrel.get_active_effect())
-	
+
 	barrel_count = installed_barrels.size()
 
 	for i in barrel_sprites.size():

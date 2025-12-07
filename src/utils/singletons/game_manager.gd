@@ -1,6 +1,7 @@
 extends Node
 
 # FMOD guide https://fmod-gdextension.readthedocs.io/en/latest/user-guide/4-loading-banks/
+#            https://www.youtube.com/watch?v=7kD7Q3O5P-s
 
 signal currency_changed(new_currency: int)
 signal barrel_purchased(barrel_data: BarrelDataResource)
@@ -45,7 +46,7 @@ var shop_barrels: Array[Resource] = []
 @export var starting_gun_frame: Resource
 @export var starting_shop_gun_frame: Array[Resource]
 @export var gun_frame_database: Array[Resource]
-var equipped_gun_frame: Resource = null
+var equipped_gun_frame: Resource
 var inventory_gun_frames: Array[Resource] = []
 var shop_gun_frames: Array[Resource] = []
 
@@ -172,6 +173,7 @@ func _ready() -> void:
 	SaveManager.load_setting_config()
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
+	equipped_gun_frame = starting_gun_frame
 
 func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):
