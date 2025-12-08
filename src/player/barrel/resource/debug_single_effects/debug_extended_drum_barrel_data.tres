@@ -9,6 +9,7 @@ script = ExtResource("3_2ucl0")
 barrel_id = 20
 barrel_name = "ExtendedDrum"
 barrel_desc = "More dakka!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_wlcc7")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_4mqmm")

@@ -13,11 +13,11 @@ script = ExtResource("1_421d1")
 [node name="BulletTime" type="Node3D" parent="EffectContainer"]
 script = ExtResource("2_tgns0")
 display_text_title = "Bullet Time"
-display_text_tag = "You are not Neo though"
+display_text_tag = "You are not N*o though"
 display_text_desc = "-50% projectile speed
 +25% damage"
-positive_desc = Array[String](["Increased damage"])
-negative_desc = Array[String](["Projectile speed decreased"])
+positive_desc = Array[String](["+25% damage"])
+negative_desc = Array[String](["-50% projectile speed"])
 icon_id = 19
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/BulletTime"]

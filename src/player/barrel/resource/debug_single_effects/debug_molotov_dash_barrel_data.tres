@@ -9,6 +9,7 @@ script = ExtResource("5_dm808")
 barrel_id = 36
 barrel_name = "MolotovDash"
 barrel_desc = "A burning gift"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_qvlms")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_lfrnj")

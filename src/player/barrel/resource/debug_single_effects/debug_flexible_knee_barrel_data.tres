@@ -9,6 +9,7 @@ script = ExtResource("6_a0s43")
 barrel_id = 55
 barrel_name = "FlexibleKnee"
 barrel_desc = "Sit down and blitz out!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_we0mp")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_vwpyq")

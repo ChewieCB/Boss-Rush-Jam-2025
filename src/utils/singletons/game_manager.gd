@@ -29,7 +29,7 @@ var setting_ui: SettingUI
 var player: Player
 var difficulty_menu: DifficultyMenu
 var object_pooling_manager: ObjectPoolingManager
-var current_boss_map: BossMap
+var current_boss_map: Node3D
 
 # Inventory
 @export var starting_barrels: Array[Resource]
@@ -43,9 +43,9 @@ var shop_barrels: Array[Resource] = []
 @export var starting_gun_frame: Resource
 @export var starting_shop_gun_frame: Array[Resource]
 @export var gun_frame_database: Array[Resource]
-var equipped_gun_frame: Resource = null
+var equipped_gun_frame: Resource = starting_gun_frame
 var inventory_gun_frames: Array[Resource] = []
-var shop_gun_frames: Array[Resource] = []
+@onready var shop_gun_frames: Array[Resource] = starting_shop_gun_frame
 
 
 # Re-rolls

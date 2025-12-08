@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://cl2tfxk1tvmc6"]
+
+[ext_resource type="Texture2D" uid="uid://bsx60hmwor5bx" path="res://assets/sprite/effect_icons/19.png" id="1_8jrf4"]
+[ext_resource type="PackedScene" uid="uid://d2ibf80niny3y" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelMeasuredShot.tscn" id="2_uuaax"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_wi3p5"]
+
+[resource]
+script = ExtResource("3_wi3p5")
+barrel_id = -1
+barrel_name = "MeasuredShot"
+barrel_desc = "Stay calm. Wait for the best moment. Shoot when you are ready."
+barrel_info_summary = ""
+barrel_image = ExtResource("1_8jrf4")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_uuaax")
+is_archetype_barrel = false

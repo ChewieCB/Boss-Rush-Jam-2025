@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://d2ibf80niny3y"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_fdvhi"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_xdd0c"]
+[ext_resource type="Script" path="res://src/player/barrel/measured_shot_effect.gd" id="3_earv6"]
+
+[node name="DebugBarrelMeasuredShot" type="Node3D"]
+script = ExtResource("1_fdvhi")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="MeasuredShot" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_xdd0c")
+display_text_title = "Measured Shot"
+display_text_tag = "Stay calm. Wait for the best moment. Shoot when you are ready."
+positive_desc = Array[String](["Wait for 2 seconds to stablize and +200% damage for the next shot"])
+negative_desc = Array[String](["-50% damage when unstable", "+100% bullet spread when unstable"])
+icon_id = 19
+
+[node name="MeasuredShotEffect" type="Node3D" parent="EffectContainer/MeasuredShot"]
+script = ExtResource("3_earv6")

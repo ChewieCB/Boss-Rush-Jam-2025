@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://db7w5onrhapvt" path="res://assets/sprite/game_icon/audioOn.png" id="6_fqt2w"]
 [ext_resource type="Texture2D" uid="uid://dqo7dxystt7l1" path="res://assets/sprite/game_icon/question.png" id="7_5c6c4"]
 [ext_resource type="Texture2D" uid="uid://ctoh8vq047sw7" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_back.png" id="9_akomy"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="10_vvjbc"]
+[ext_resource type="PackedScene" path="res://src/ui/common/DeviceInputPrompt.tscn" id="10_vvjbc"]
 [ext_resource type="Texture2D" uid="uid://c4brubgvfwrmn" path="res://assets/sprite/input/keyboard_and_mouse/keyboard.png" id="11_pg8t6"]
 
 [node name="SettingUI" type="Control"]

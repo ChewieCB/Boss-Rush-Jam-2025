@@ -9,6 +9,7 @@ script = ExtResource("9_rsqdu")
 barrel_id = 66
 barrel_name = "Slug"
 barrel_desc = "We have Railgun at home"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_2tqo3")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_solyh")

@@ -37,6 +37,8 @@ func _ready() -> void:
 	
 	get_tree().paused = false
 	
+	GameManager.current_boss_map = self
+	
 	lobby_music_player.play()
 
 	# Save and load check

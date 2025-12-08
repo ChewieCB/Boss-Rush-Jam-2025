@@ -9,6 +9,7 @@ script = ExtResource("9_o5sfl")
 barrel_id = 64
 barrel_name = "CombatShotgun"
 barrel_desc = "Fire faster and more ammo"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_4uxtb")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_e40ud")

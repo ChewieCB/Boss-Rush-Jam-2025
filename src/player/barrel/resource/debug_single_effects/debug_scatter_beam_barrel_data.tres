@@ -9,6 +9,7 @@ script = ExtResource("9_4wbul")
 barrel_id = 68
 barrel_name = "ScatterBeam"
 barrel_desc = "Closer...closer..."
+barrel_info_summary = ""
 barrel_image = ExtResource("1_wo1xf")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_vvf7h")

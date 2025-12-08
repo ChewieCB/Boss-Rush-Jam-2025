@@ -63,7 +63,7 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var barrel_ui_tween: Tween = null
 var barrel_ui_active: bool = false
 
-@onready var debug_inventory_ui = $UI/InventoryUI
+@onready var debug_inventory_ui = $UI/DebugInventoryUI
 
 @onready var stat_ui: StatUI = $UI/StatUI
 @onready var health_ui = stat_ui.health_ui
@@ -241,8 +241,8 @@ func _ready():
 	if GameManager.CHEAT_godmode:
 		health_component.is_invincible = true
 
-	debug_inventory_ui.has_custom_inventory = true
-	debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
+	#debug_inventory_ui.has_custom_inventory = true
+	#debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
 
 
 func _unhandled_input(event):
