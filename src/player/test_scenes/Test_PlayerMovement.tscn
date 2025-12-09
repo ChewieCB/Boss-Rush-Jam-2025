@@ -77,9 +77,6 @@ elevator_buttons = [NodePath("ElevatorMock/group_672_Elevator/entity_14_Elevator
 [node name="FmodBankLoader" type="FmodBankLoader" parent="."]
 bank_paths = ["res://assets/fmod_banks/Master.strings.bank", "res://assets/fmod_banks/Master.bank"]
 
-[node name="FmodEventEmitter3D" type="FmodEventEmitter3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.83376)
-
 [node name="ObjectPoolingManager" parent="." instance=ExtResource("2_7nlyw")]
 
 [node name="UI" type="CanvasLayer" parent="."]
