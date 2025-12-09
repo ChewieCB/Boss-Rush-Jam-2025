@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://c6jdpksq7cx2p"
+path="res://.godot/imported/backroom.4.map-9111054c7d50d64f851523ae6777de05.tres"
+
+[deps]
+
+source_file="res://src/maps/backroom/autosave/backroom.4.map"
+dest_files=["res://.godot/imported/backroom.4.map-9111054c7d50d64f851523ae6777de05.tres"]
+
+[params]
+

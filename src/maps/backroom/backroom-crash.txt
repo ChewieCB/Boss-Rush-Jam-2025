@@ -1,0 +1,12 @@
+OS:	Manjaro Linux
+Qt:	6.7.0
+GL_VENDOR:	NVIDIA Corporation
+GL_RENDERER:	NVIDIA GeForce RTX 3060/PCIe/SSE2
+GL_VERSION:	4.6.0 NVIDIA 580.82.09
+TrenchBroom Version:	2025.3
+TrenchBroom Build:	v2025.3 Release Linux
+Reason:	/home/runner/work/TrenchBroom/TrenchBroom/common/src/ui/ShearObjectsTool.cpp line 166: Condition '!m_resizing' failed (must not be resizing already)
+Stack trace:
+[0x7ffc55641470]
+[0x7ffc55641580]
+
