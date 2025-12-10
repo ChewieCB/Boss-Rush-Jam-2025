@@ -156,7 +156,6 @@ func update_texture():
 			texture = loaded_texture
 		DeviceType.AUTO:
 			var guessed_device = InputHelper.device
-			print("Guessed device %s" % guessed_device)
 			if ["xbox", "playstation", "steamdeck"].has(guessed_device):
 				loaded_texture = get_image_for_controller_input(guessed_device, assigned_action)
 			else:

@@ -151,8 +151,9 @@ func full_refresh_ui(forced = false):
 		shop_item_inst.init(gun_frame_data)
 		shop_item_inst.gun_frame_item_ui.select_gun_frame.connect(_on_gun_frame_item_ui_select)
 		shop_item_inst.gun_frame_item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
-
-	current_gun_frame_label.text = "Current frame: {0}".format([GameManager.equipped_gun_frame.frame_name])
+	
+	if GameManager.equipped_gun_frame:
+		current_gun_frame_label.text = "Current frame: {0}".format([GameManager.equipped_gun_frame.frame_name])
 
 func toggle():
 	warning_label.self_modulate = Color.WHITE

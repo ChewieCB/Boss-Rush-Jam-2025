@@ -136,20 +136,22 @@ const TIME_BETWEEN_MUZZLE_SMOKE = 0.25
 
 
 func _ready() -> void:
+	idle_frame_state.start("RESET")
+	# Delay the equip anim so it isn't hidden by the screen transition
+	await ScreenTransition.transition_midpoint
+	
+	if GameManager.equipped_gun_frame:
+		set_stat_from_gun_frame()
+	
 	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
 	if SaveManager.save_data_is_loaded:
 		_on_savefile_loaded()
 	else:
 		reinstall_barrels()
-	set_stat_from_gun_frame()
 
 	magazine_ammo_left = base_magazine_size
 	muzzle_flash_light.light_energy = 0
 	reset_modifier(true)
-	
-	idle_frame_state.start("RESET")
-	await ScreenTransition.transition_midpoint
-	play_equip_anim(GameManager.equipped_gun_frame.frame_id)
 
 
 func _process(delta: float) -> void:
@@ -186,6 +188,9 @@ func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT) -> v
 
 func set_stat_from_gun_frame() -> void:
 	var current_frame: GunFrameResource = GameManager.equipped_gun_frame
+	if current_frame.frame_id == GunFrameResource.GunFrameIdEnum.NONE:
+		return
+	
 	base_damage = current_frame.base_damage
 	base_projectile_amount = current_frame.base_projectile_amount
 	base_firerate = current_frame.base_firerate
@@ -202,10 +207,18 @@ func set_stat_from_gun_frame() -> void:
 	cancel_reload()
 	reload_no_anim()
 	set_frame_art(current_frame.frame_id)
-	#play_equip_anim(current_frame.frame_id)
+	
+	if current_frame.frame_id != GunFrameResource.GunFrameIdEnum.NONE:
+		play_equip_anim(current_frame.frame_id)
+
 
 ## Return true if shot successful
 func shoot(aim_ray: RayCast3D) -> bool:
+	if not GameManager.equipped_gun_frame:
+		return false
+	if GameManager.equipped_gun_frame.frame_id == GunFrameResource.GunFrameIdEnum.NONE:
+		return false
+	
 	if is_reloading or is_spinning or is_jammed:
 		play_failed_shoot_sfx()
 		return false
