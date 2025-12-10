@@ -57,8 +57,6 @@ func _ready() -> void:
 		boss.defeated.connect(_on_boss_defeated)
 		boss.chip_dropped.connect(_on_chip_dropped)
 	
-	ScreenTransition.transition_midpoint.connect(player.current_gun.equip_active)
-	LoadingHandler.loaded_seamless.connect(player.current_gun.equip_active)
 	player.health_component.died.connect(_on_player_death)
 	# Sync the player's location in the elevator from the lobby
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
@@ -127,6 +125,7 @@ func show_end_panel() -> void:
 		LoadingHandler.level_paths[LoadingHandler.LEVELS.LOBBY],
 		"Lobby"
 	)
+	await ScreenTransition.transition_finished
 	LoadingHandler.load_scene_transition()
 
 
@@ -152,7 +151,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		GameManager.bosses_defeated.append(boss.boss_id)
 		print(GameManager.bosses_defeated)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
-
+	
 	reward_bet_money()
 	show_end_panel()
 
@@ -192,12 +191,13 @@ func _on_level_select(level_path: String, loading_name: String = "") -> void:
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
 	
+	# Set the skip equip anim flag for seamless transition
+	LoadingHandler.skip_equip_anim = true
 	# Get the player's position relative to the elevator doors
 	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
 	GameManager.cached_player_rotation = GameManager.player.rotation
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
 	SoundManager.stop_music(0.5)
-	
 	LoadingHandler.load_scene_seamless()
 
 

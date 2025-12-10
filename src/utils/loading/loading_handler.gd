@@ -42,6 +42,7 @@ var current_scene_path: String:
 		current_scene_path = value
 		ResourceLoader.load_threaded_request(current_scene_path)
 var can_transition: bool = false
+var skip_equip_anim: bool = false
 
 # Shader pre-compilation
 const PRECOMPILE_CONFIG_PATH: String = "res://config/precompile_list.config"
@@ -125,13 +126,15 @@ func load_scene_seamless() -> void:
 	
 	var packed_scene = ResourceLoader.load_threaded_get(current_scene_path)
 	_load_scene(packed_scene)
+	await loading_finished
 	loaded_seamless.emit()
 
 
 func _load_scene(packed_scene: PackedScene) -> void:
 	can_transition = false
-	loading_finished.emit(packed_scene)
 	get_tree().change_scene_to_packed(packed_scene)
+	await Engine.get_main_loop().process_frame
+	loading_finished.emit(packed_scene)
 
 
 func _process(_delta: float) -> void:

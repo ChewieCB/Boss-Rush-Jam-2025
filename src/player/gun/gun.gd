@@ -136,11 +136,11 @@ const TIME_BETWEEN_MUZZLE_SMOKE = 0.25
 
 
 func _ready() -> void:
-	idle_frame_state.start("RESET")
-	## Delay the equip anim so it isn't hidden by the screen transition
-	#await ScreenTransition.transition_midpoint
-	
+	LoadingHandler.loaded_seamless.connect(equip_active)
+	ScreenTransition.transition_midpoint.connect(equip_active)
 	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
+	idle_frame_state.start("RESET")
+	
 	if SaveManager.save_data_is_loaded:
 		_on_savefile_loaded()
 	else:
@@ -210,7 +210,14 @@ func set_stat_from_gun_frame() -> void:
 	set_frame_art(current_frame.frame_id)
 	
 	if current_frame.frame_id != GunFrameResource.GunFrameIdEnum.NONE:
-		play_equip_anim(current_frame.frame_id)
+		if LoadingHandler.skip_equip_anim:
+			play_equip_anim(current_frame.frame_id)
+			# FIXME - this anim doesn't work for some reason
+			#play_active_anim(current_frame.frame_id)
+		else:
+			play_equip_anim(current_frame.frame_id)
+	
+	LoadingHandler.skip_equip_anim = false
 
 
 ## Return true if shot successful
@@ -306,13 +313,13 @@ func shoot(aim_ray: RayCast3D) -> bool:
 
 
 func _play_anim_cancel(
-	anim_prefix: String, 
+	anim_suffix: String, 
 	frame_id: int = GameManager.equipped_gun_frame.frame_id,
 	callback: Callable = Callable(),
 ) -> void:
 	cancel_reload()
 	stop_all_barrels(0.0)
-	var anim_state: String = anim_prefix
+	var anim_state: String = ""
 	match frame_id:
 		GunFrameResource.GunFrameIdEnum.SHOTGUN:
 			anim_state += "shotgun"
@@ -320,6 +327,7 @@ func _play_anim_cancel(
 			anim_state += "smg"
 		GunFrameResource.GunFrameIdEnum.SNIPER:
 			anim_state += "rifle"
+	anim_state += "_" + anim_suffix
 	
 	# Teleport to the equip anim state
 	idle_frame_state.start(anim_state)
@@ -327,13 +335,16 @@ func _play_anim_cancel(
 	if callback:
 		callback.call()
 
+func play_active_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
+	_play_anim_cancel("active", frame_id, spin_all_barrels)
+
 
 func play_equip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
-	_play_anim_cancel("equip_", frame_id, spin_all_barrels)
+	_play_anim_cancel("equip", frame_id, spin_all_barrels)
 
 
 func play_unequip_anim(frame_id: int = GameManager.equipped_gun_frame.frame_id) -> void:
-	_play_anim_cancel("unequip_", frame_id)
+	_play_anim_cancel("unequip", frame_id)
 
 
 func play_post_shot_anim() -> bool:

@@ -23,9 +23,7 @@ var display_barrels: Array = []
 var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
 
 
-func _ready() -> void:
-	#player.gun.reinstall_barrels()
-	#ScreenTransition.transition_in()
+func _ready() -> void:	
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
@@ -71,8 +69,6 @@ func _ready() -> void:
 			GameManager.victory_ui_shown = true
 	
 	player.stat_ui.show_health_ui()
-	ScreenTransition.transition_midpoint.connect(player.current_gun.equip_active)
-	LoadingHandler.loaded_seamless.connect(player.current_gun.equip_active)
 
 
 func _input(event: InputEvent) -> void:
@@ -99,12 +95,14 @@ func _on_level_select(level_path: String) -> void:
 
 
 func load_selected_level():
-	LoadingHandler.start_loading(GameManager.selected_level_path)
+	LoadingHandler.start_loading(GameManager.selected_level_path, "", false)
 	
 	sfx_door_close.play()
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
 	
+	# Set the skip equip anim flag for seamless transition
+	LoadingHandler.skip_equip_anim = true
 	# Get the player's position relative to the elevator doors
 	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
 	GameManager.cached_player_rotation = GameManager.player.rotation
