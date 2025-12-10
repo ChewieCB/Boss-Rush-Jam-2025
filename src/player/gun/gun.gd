@@ -137,11 +137,8 @@ const TIME_BETWEEN_MUZZLE_SMOKE = 0.25
 
 func _ready() -> void:
 	idle_frame_state.start("RESET")
-	# Delay the equip anim so it isn't hidden by the screen transition
-	await ScreenTransition.transition_midpoint
-	
-	if GameManager.equipped_gun_frame:
-		set_stat_from_gun_frame()
+	## Delay the equip anim so it isn't hidden by the screen transition
+	#await ScreenTransition.transition_midpoint
 	
 	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
 	if SaveManager.save_data_is_loaded:
@@ -149,6 +146,10 @@ func _ready() -> void:
 	else:
 		reinstall_barrels()
 
+
+func equip_active() -> void:
+	if GameManager.equipped_gun_frame:
+		set_stat_from_gun_frame()
 	magazine_ammo_left = base_magazine_size
 	muzzle_flash_light.light_energy = 0
 	reset_modifier(true)
