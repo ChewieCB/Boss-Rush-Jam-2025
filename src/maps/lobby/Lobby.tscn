@@ -2321,7 +2321,6 @@ _surfaces = [{
 
 [node name="Lobby" type="Node3D"]
 script = ExtResource("1_ywg7j")
-bgm = ExtResource("2_ho2it")
 
 [node name="IdleDetector" parent="." instance=ExtResource("3_26j5i")]
 

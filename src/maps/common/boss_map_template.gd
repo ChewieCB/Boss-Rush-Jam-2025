@@ -42,8 +42,8 @@ func _ready() -> void:
 				else:
 					print(prop.name, " → ", value)
 	
-	if bgm:
-		SoundManager.play_music(bgm, 0.5, "BGM")
+	# if bgm:
+	# 	SoundManager.play_music(bgm, 0.5, "BGM")
 	
 	# Pre-load the lobby scene for faster level transitions
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"

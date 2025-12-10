@@ -1,8 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://b1aj8e7ult44k"]
+[gd_scene load_steps=12 format=3 uid="uid://b1aj8e7ult44k"]
 
 [ext_resource type="Script" path="res://src/maps/common/boss_map_template.gd" id="1_0in43"]
-[ext_resource type="PackedScene" path="res://src/utils/singletons/ObjectPoolingManager.tscn" id="2_g1px2"]
-[ext_resource type="PackedScene" uid="uid://dijn1g2vmnb8g" path="res://src/utils/singletons/IdleDetector.tscn" id="2_myta8"]
+[ext_resource type="PackedScene" uid="uid://crfnb1ar1e1ot" path="res://src/maps/common/CommonObjectForMap.tscn" id="2_seakx"]
 [ext_resource type="LightmapGIData" uid="uid://bei114xif3db4" path="res://src/bosses/base/test/Test_BossCore.lmbake" id="2_yfo4x"]
 [ext_resource type="PackedScene" uid="uid://bboeh48xujyik" path="res://src/ui/temp/BossEndPanelUI.tscn" id="3_ysao1"]
 [ext_resource type="Script" path="res://addons/func_godot/src/map/func_godot_map.gd" id="4_y81i5"]
@@ -37,9 +36,7 @@ size = Vector3(10, 10, 10)
 [node name="BossMapCore" type="Node3D"]
 script = ExtResource("1_0in43")
 
-[node name="IdleDetector" parent="." instance=ExtResource("2_myta8")]
-
-[node name="ObjectPoolingManager" parent="." instance=ExtResource("2_g1px2")]
+[node name="CommonObjectForMap" parent="." instance=ExtResource("2_seakx")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_jn580")

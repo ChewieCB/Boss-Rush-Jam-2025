@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
 [ext_resource type="PackedScene" uid="uid://djcipi6xiw7yn" path="res://src/ui/difficulty_menu/DifficultyMenu.tscn" id="2_7ndch"]
-[ext_resource type="PackedScene" uid="uid://c70h2xecs66jh" path="res://src/utils/singletons/ObjectPoolingManager.tscn" id="2_7nlyw"]
+[ext_resource type="PackedScene" uid="uid://crfnb1ar1e1ot" path="res://src/maps/common/CommonObjectForMap.tscn" id="2_41q44"]
 [ext_resource type="Texture2D" uid="uid://xqhack4uhgdb" path="res://assets/textures/placeholder/texture_dark_06.png" id="2_gh1kv"]
 [ext_resource type="PackedScene" uid="uid://d0uqv7xitfwnt" path="res://src/player/test_scenes/Dummy.tscn" id="2_lrk4j"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="3_g5u1p"]
@@ -74,10 +74,7 @@ radius = 4.0
 script = ExtResource("1_ky5mp")
 elevator_buttons = [NodePath("ElevatorMock/group_672_Elevator/entity_14_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_12_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_13_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_10_ElevatorButton"), NodePath("ElevatorMock/group_672_Elevator/entity_11_ElevatorButton")]
 
-[node name="FmodBankLoader" type="FmodBankLoader" parent="."]
-bank_paths = ["res://assets/fmod_banks/Master.strings.bank", "res://assets/fmod_banks/Master.bank"]
-
-[node name="ObjectPoolingManager" parent="." instance=ExtResource("2_7nlyw")]
+[node name="CommonObjectForMap" parent="." instance=ExtResource("2_41q44")]
 
 [node name="UI" type="CanvasLayer" parent="."]
 

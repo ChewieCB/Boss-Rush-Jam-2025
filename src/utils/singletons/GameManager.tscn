@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://bf0e8h28gl1ae"]
+[gd_scene load_steps=82 format=3 uid="uid://bf0e8h28gl1ae"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/game_manager.gd" id="1_rn441"]
 [ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrel_data.tres" id="3_23s84"]
@@ -80,6 +80,7 @@
 [ext_resource type="Resource" uid="uid://dl715empacnm0" path="res://src/player/gun/gun_frame/smg_gun_frame.tres" id="77_6d5uj"]
 [ext_resource type="Resource" uid="uid://geogstu8o3bh" path="res://src/player/gun/gun_frame/sniper_gun_frame.tres" id="78_tmpnu"]
 [ext_resource type="Resource" uid="uid://cid07th4gi8ov" path="res://src/player/gun/gun_frame/default_frame.tres" id="79_sm3w3"]
+[ext_resource type="Script" path="res://src/maps/common/main_bgm_emitter.gd" id="81_rhasn"]
 
 [node name="GameManager" type="Node"]
 process_mode = 3
@@ -91,3 +92,21 @@ starting_gun_frame = ExtResource("76_i6j6r")
 starting_shop_gun_frame = Array[Resource]([ExtResource("77_6d5uj"), ExtResource("78_tmpnu")])
 gun_frame_database = Array[Resource]([ExtResource("79_sm3w3"), ExtResource("76_i6j6r"), ExtResource("77_6d5uj"), ExtResource("78_tmpnu")])
 sfx_screenshot = ExtResource("45_64xou")
+
+[node name="FmodBankLoader" type="FmodBankLoader" parent="."]
+bank_paths = ["res://assets/fmod_banks/Master.strings.bank", "res://assets/fmod_banks/Master.bank"]
+
+[node name="MainBGMEmitter" type="FmodEventEmitter3D" parent="."]
+event_name = "event:/Maingame"
+event_guid = "{b4fc8925-f21b-42e6-8fb6-c4f87d7d05cd}"
+fmod_parameters/MusicState/id = -6754846447219950286
+fmod_parameters/MusicState = "Menu"
+fmod_parameters/MusicState/labels = PackedStringArray("Menu", "Roulette", "Lobby", "Slotty", "Roulette", "PitbossHallway", "PitbossMainfight", "Bartender", "ChipbossStart", "ChipbossInt", "BlackjackStart", "Tutorial1", "Tutorial2", "TutorialBossfight", "GenericBossAftermath")
+fmod_parameters/MusicState/variant_type = 4
+fmod_parameters/playerIsDead/id = 4284843263952535423
+fmod_parameters/playerIsDead = 0.0
+fmod_parameters/playerIsDead/variant_type = 3
+fmod_parameters/menuIsUp/id = 1961036125644975886
+fmod_parameters/menuIsUp = 0.0
+fmod_parameters/menuIsUp/variant_type = 3
+script = ExtResource("81_rhasn")

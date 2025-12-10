@@ -1,7 +1,6 @@
 extends Node3D
 
-@export var bgm: AudioStream
-@onready var lobby_music_player: AudioStreamPlayer3D = $LobbyMusicPlayer
+# @onready var lobby_music_player: AudioStreamPlayer3D = $LobbyMusicPlayer
 
 signal ui_accept
 
@@ -31,7 +30,8 @@ func _ready() -> void:
 	
 	get_tree().paused = false
 	
-	lobby_music_player.play()
+	# lobby_music_player.play()
+	# GameManager.change_fmod_bgm_music_state("Lobby")
 
 	# Save and load check
 	if SaveManager.save_data_is_loaded:
@@ -88,6 +88,7 @@ func _on_level_select(level_path: String) -> void:
 		difficulty_menu.show_menu()
 
 func load_selected_level():
+	find_and_load_boss_bgm()
 	var level_path = GameManager.selected_level_path
 	sfx_door_close.play()
 	ResourceLoader.load_threaded_request(level_path)
@@ -104,13 +105,31 @@ func load_selected_level():
 	# HACK - do this properly with dynamic loading of scenes
 	if is_inside_tree():
 		# TODO - fade this out via tween
-		lobby_music_player.stop()
+		# lobby_music_player.stop()
 		# var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
 		# TODO - fixme
 		#if new_bgm:
 			#SoundManager.play_music(new_bgm, 0.25, "BGM")
 		GameManager.is_free_reroll = false
 		get_tree().change_scene_to_packed(loaded_scene)
+
+
+func find_and_load_boss_bgm() -> void:
+	match GameManager.selected_boss_id:
+		BossCore.BossIdEnum.SLOTS:
+			GameManager.change_fmod_bgm_music_state("Slotty")
+		BossCore.BossIdEnum.BARTENDER:
+			GameManager.change_fmod_bgm_music_state("Bartender")
+		BossCore.BossIdEnum.PIT:
+			GameManager.change_fmod_bgm_music_state("PitbossHallway")
+		BossCore.BossIdEnum.ROULETTE:
+			GameManager.change_fmod_bgm_music_state("Roulette")
+		BossCore.BossIdEnum.CHIPS:
+			GameManager.change_fmod_bgm_music_state("ChipbossInt")
+		BossCore.BossIdEnum.BLACKJACK:
+			GameManager.change_fmod_bgm_music_state("BlackjackStart")
+		BossCore.BossIdEnum.ELEVATOR:
+			GameManager.change_fmod_bgm_music_state("TutorialBossfight")
 
 
 func _on_door_transition_area_body_entered(body: Node3D) -> void:
