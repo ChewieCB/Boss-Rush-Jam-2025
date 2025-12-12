@@ -232,7 +232,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	
 	if is_reloading or is_spinning or is_jammed:
 		# TODO - shotgun reload interrupt
-		if is_reloading and GameManager.equipped_gun_frame.frame_id == GunFrameResource.GunFrameIdEnum.SHOTGUN:
+		if is_reloading and GameManager.equipped_gun_frame.frame_id == GunFrameResource.GunFrameIdEnum.SHOTGUN and reload_interrupt == false:
 			# When the player tries to shoot during a shotgun reload,
 			# finish the current shell loading anim and interrupt the reload,
 			# keeping the ammo count at whatever it is after the last shell,
@@ -246,11 +246,11 @@ func shoot(aim_ray: RayCast3D) -> bool:
 				# Play the post-reload pump to chamber a round if we started reloading from empty
 				idle_frame_state.travel("shotgun_pump_no_shell")
 				await post_reload_anim_end
-			
-			reload_interrupt = false
 		else:
 			play_failed_shoot_sfx()
 			return false
+	
+	reload_interrupt = false
 	
 	if magazine_ammo_left <= 0:
 		play_failed_shoot_sfx()
@@ -380,7 +380,7 @@ func play_post_shot_anim() -> bool:
 		"rifle_idle":
 			post_shot_state = "rifle_rack"
 	
-	var reload_timescale: float = 0.9 / modified_reload_time
+	var reload_timescale: float = 1.35 / modified_reload_time
 	anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
 	
 	if post_shot_state: 
@@ -625,8 +625,10 @@ func reload(already_spin_barrel = false):
 	
 	if post_reload_state:
 		idle_frame_state.travel(post_reload_state)
+		await post_reload_anim_end
 	
 	is_reloading = false
+	can_fire = true
 	anim_tree.set("parameters/reload_timescale/scale", 1)
 
 	for barrel in installed_barrels:
