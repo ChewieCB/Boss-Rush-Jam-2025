@@ -2333,7 +2333,6 @@ environment = SubResource("Environment_oh44f")
 [node name="LightmapGI" type="LightmapGI" parent="."]
 quality = 2
 bounces = 4
-interior = true
 light_data = ExtResource("2_wjq6h")
 
 [node name="DoorTransitionArea" type="Area3D" parent="."]

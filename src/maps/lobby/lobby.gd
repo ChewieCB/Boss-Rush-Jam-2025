@@ -18,6 +18,7 @@ signal ui_accept
 
 @onready var vendors: Array[Node] = find_children("*", "Vendor")
 
+var is_tutorial: bool = false
 var display_barrels: Array = []
 
 var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
