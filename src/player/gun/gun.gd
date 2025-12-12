@@ -231,19 +231,16 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		return false
 	
 	if is_reloading or is_spinning or is_jammed:
-		# TODO - shotgun reload interrupt
 		if is_reloading and GameManager.equipped_gun_frame.frame_id == GunFrameResource.GunFrameIdEnum.SHOTGUN and reload_interrupt == false:
 			# When the player tries to shoot during a shotgun reload,
 			# finish the current shell loading anim and interrupt the reload,
-			# keeping the ammo count at whatever it is after the last shell,
-			# and playing the post-reload animation IF THE RELOAD STARTED FROM EMPTY
-			# otherwise shoot immediately.
+			# keeping the ammo count at whatever it is after the last shell.
 			reload_interrupt = true
 			idle_frame_state.travel("shotgun_idle")
 			await reload_anim_end
 			
+			# Play the post-reload pump to chamber a round if we started reloading from empty
 			if cached_reload_start_ammo == 0:
-				# Play the post-reload pump to chamber a round if we started reloading from empty
 				idle_frame_state.travel("shotgun_pump_no_shell")
 				await post_reload_anim_end
 		else:
