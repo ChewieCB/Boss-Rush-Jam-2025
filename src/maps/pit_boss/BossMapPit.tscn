@@ -1,11 +1,9 @@
-[gd_scene load_steps=443 format=4 uid="uid://c2tfsc1tlxlpk"]
+[gd_scene load_steps=441 format=4 uid="uid://c2tfsc1tlxlpk"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_mky1f"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/boss_pit.gd" id="2_6oq1m"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="2_fby76"]
-[ext_resource type="AudioStream" uid="uid://yq2sk127dfov" path="res://assets/music/Remix R1.mp3" id="3_51kcm"]
 [ext_resource type="Material" uid="uid://bc40wnkmbkgcl" path="res://assets/textures/floor/carpet-blue.tres" id="3_kobi6"]
-[ext_resource type="AudioStream" uid="uid://ds7xvkwqd62rm" path="res://assets/music/PissbotAmbience.mp3" id="4_ce2q6"]
 [ext_resource type="PackedScene" uid="uid://2ss8hk0shm7i" path="res://src/bosses/pit/cover/CoverSpawnPoint.tscn" id="4_i1jcx"]
 [ext_resource type="Material" uid="uid://c162u3li2i84m" path="res://assets/textures/walls/wallpaper_0.tres" id="4_ro2xq"]
 [ext_resource type="Material" uid="uid://c7spfpeimpdf3" path="res://assets/textures/floor/black-tiles.tres" id="5_nx41u"]
@@ -1624,22 +1622,26 @@ _surfaces = [{
 
 [node name="BossMapPit" node_paths=PackedStringArray("nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_mky1f")]
 script = ExtResource("2_6oq1m")
-active_bgm = ExtResource("3_51kcm")
 phase_2_stance_time = 14.0
 phase_2_health_percentage_trigger = 0.7
 phase_3_health_percentage_trigger = 0.35
 cover_spawn_scene = ExtResource("4_i1jcx")
-bgm = ExtResource("4_ce2q6")
 nav_parent = NodePath("FuncGodotMap")
 floor_parent = NodePath("FuncGodotMap/entity_0_worldspawn")
 floor_mesh = NodePath("FuncGodotMap/entity_0_worldspawn/entity_0_mesh_instance")
 
-[node name="BossTriggerVolume" parent="." index="6"]
+[node name="BossTriggerVolume" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 26)
 
 [node name="CollisionShape3D" parent="BossTriggerVolume" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("BoxShape3D_kn00t")
+
+[node name="SpinTriggerVolume" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50.661)
+
+[node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
+shape = SubResource("BoxShape3D_b8nxk")
 
 [node name="StanceTimer" type="Timer" parent="." index="7"]
 
@@ -1667,13 +1669,7 @@ stream = ExtResource("51_v0u31")
 autoplay = true
 bus = &"Ambience"
 
-[node name="SpinTriggerVolume" parent="." index="12"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50.661)
-
-[node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
-shape = SubResource("BoxShape3D_b8nxk")
-
-[node name="FuncGodotMap" parent="." index="13"]
+[node name="FuncGodotMap" parent="." index="12"]
 local_map_file = "res://src/maps/pit_boss/pit.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]
