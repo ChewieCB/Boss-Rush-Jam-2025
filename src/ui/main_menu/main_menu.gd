@@ -116,13 +116,22 @@ func start_game():
 	bgm_player.stop()
 	SoundManager.play_ui_sound(start_game_sfx, "UI")
 	
-	if not SaveManager.save_data_is_loaded:
-		SaveManager.load_game(GameManager.chosen_slot_id)
+	#if not SaveManager.save_data_is_loaded:
+	SaveManager.load_game(GameManager.chosen_slot_id)
+	
 	if not GameManager.tutorial_completed:
-		LoadingHandler.current_scene_path = "res://src/maps/tutorial/TutorialBoss.tscn"
-		LoadingHandler.start_loading("Tutorial")
+		LoadingHandler.start_loading(
+			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL], 
+			"Tutorial"
+		)
 	else:
-		LoadingHandler.start_loading("Lobby")
+		LoadingHandler.start_loading(
+			LoadingHandler.level_paths[LoadingHandler.LEVELS.LOBBY],
+			"Lobby"
+		)
+	
+	await ScreenTransition.transition_finished
+	LoadingHandler.load_scene_transition()
 
 
 func play_button_hover_sfx():

@@ -18,14 +18,13 @@ signal ui_accept
 
 @onready var vendors: Array[Node] = find_children("*", "Vendor")
 
+var is_tutorial: bool = false
 var display_barrels: Array = []
 
 var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
 
 
-func _ready() -> void:
-	#player.gun.reinstall_barrels()
-	#ScreenTransition.fill_screen()
+func _ready() -> void:	
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
@@ -95,30 +94,24 @@ func _on_level_select(level_path: String) -> void:
 	else:
 		difficulty_menu.show_menu()
 
+
 func load_selected_level():
-	var level_path = GameManager.selected_level_path
+	LoadingHandler.start_loading(GameManager.selected_level_path, "", false)
+	
 	sfx_door_close.play()
-	ResourceLoader.load_threaded_request(level_path)
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
-	# Wait until the level has been loaded on another thread
-	while ResourceLoader.load_threaded_get_status(level_path) != ResourceLoader.THREAD_LOAD_LOADED:
-		pass
+	
+	# Set the skip equip anim flag for seamless transition
+	LoadingHandler.skip_equip_anim = true
 	# Get the player's position relative to the elevator doors
 	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
 	GameManager.cached_player_rotation = GameManager.player.rotation
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
-	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
-	# HACK - do this properly with dynamic loading of scenes
-	if is_inside_tree():
-		# TODO - fade this out via tween
-		lobby_music_player.stop()
-		# var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
-		# TODO - fixme
-		#if new_bgm:
-			#SoundManager.play_music(new_bgm, 0.25, "BGM")
-		GameManager.is_free_reroll = false
-		get_tree().change_scene_to_packed(loaded_scene)
+	GameManager.is_free_reroll = false
+	lobby_music_player.stop()
+	
+	LoadingHandler.load_scene_seamless()
 
 
 func _on_door_transition_area_body_entered(body: Node3D) -> void:

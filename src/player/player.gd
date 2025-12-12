@@ -365,10 +365,9 @@ func _process(delta):
 		return
 
 	if Input.is_action_pressed("shoot"):
-		if current_gun.can_fire:
-			# Raycast to target and damage them if hit
-			current_gun.pull_trigger()
-			current_gun.shoot(aim_ray)
+		# Raycast to target and damage them if hit
+		current_gun.pull_trigger()
+		current_gun.shoot(aim_ray)
 
 	if Input.is_action_just_released("shoot"):
 		current_gun.release_trigger()

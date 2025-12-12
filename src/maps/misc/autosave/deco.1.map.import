@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://drpijsal4rjs4"
+path="res://.godot/imported/deco.1.map-84489a05d63c896d74aa4e03cc251cc7.tres"
+
+[deps]
+
+source_file="res://src/maps/misc/autosave/deco.1.map"
+dest_files=["res://.godot/imported/deco.1.map-84489a05d63c896d74aa4e03cc251cc7.tres"]
+
+[params]
+

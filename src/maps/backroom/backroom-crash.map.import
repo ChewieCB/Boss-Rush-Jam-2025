@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://c11m4mcrvbwe5"
+path="res://.godot/imported/backroom-crash.map-d6f8c38b3ee688a9a610a96c0b6c3c6f.tres"
+
+[deps]
+
+source_file="res://src/maps/backroom/backroom-crash.map"
+dest_files=["res://.godot/imported/backroom-crash.map-d6f8c38b3ee688a9a610a96c0b6c3c6f.tres"]
+
+[params]
+

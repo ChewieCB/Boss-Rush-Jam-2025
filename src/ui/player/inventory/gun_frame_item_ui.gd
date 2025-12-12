@@ -26,8 +26,9 @@ func init(_data: GunFrameResource, _is_equipped: bool = false, _is_purchased: bo
 	data = _data
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
-	texture = data.shop_ui_sprite
-	button.text = data.frame_name
+	if data:
+		texture = data.shop_ui_sprite
+		button.text = data.frame_name
 
 
 func _ready() -> void:

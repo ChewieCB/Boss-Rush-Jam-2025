@@ -59,11 +59,15 @@ func tween_transition(start: float, finish: float, duration: float = 0.7) -> voi
 	transition_tween.tween_method(
 		_set_transition_height, start, start + diff / 2, duration / 2
 	)
-	transition_tween.tween_callback(transition_midpoint.emit)
+	transition_tween.tween_callback(_transition_midway)
 	transition_tween.tween_method(
 		_set_transition_height, start + diff / 2, finish, duration / 2
 	)
 	await transition_tween.finished
+
+
+func _transition_midway() -> void:
+	transition_midpoint.emit()
 
 
 func _set_transition_height(height: float) -> void:
