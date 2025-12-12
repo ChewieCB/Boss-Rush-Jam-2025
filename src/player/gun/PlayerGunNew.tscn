@@ -1643,7 +1643,7 @@ tracks/3/keys = {
 "method": &"_play_reload_end_sfx"
 }, {
 "args": [],
-"method": &"_end_reload_anim"
+"method": &"_end_post_reload_anim"
 }]
 }
 tracks/4/type = "value"
@@ -2197,7 +2197,7 @@ tracks/3/keys = {
 "method": &"_play_reload_end_sfx"
 }, {
 "args": [],
-"method": &"_end_reload_anim"
+"method": &"_end_post_reload_anim"
 }]
 }
 tracks/4/type = "value"
@@ -2291,7 +2291,7 @@ tracks/3/keys = {
 "method": &"_play_reload_end_sfx"
 }, {
 "args": [],
-"method": &"_end_reload_anim"
+"method": &"_end_post_reload_anim"
 }]
 }
 tracks/4/type = "value"

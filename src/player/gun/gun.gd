@@ -3,6 +3,7 @@ class_name Gun
 
 signal gun_shot
 signal reload_anim_end
+signal post_reload_anim_end
 signal spin_anim_trigger
 signal gun_reloaded
 
@@ -95,12 +96,14 @@ var base_custom_projectile_prefab: PackedScene = null
 @onready var muzzle_flash_light: OmniLight3D = $BulletStartPos/MuzzleFlashLight
 @onready var smoke_timer: Timer = $SmokeTimer
 
-var magazine_ammo_left = 0
+var magazine_ammo_left: int = 0
+var cached_reload_start_ammo: int = magazine_ammo_left
+var reload_interrupt: bool = false
 var can_fire: bool = true
-var is_reloading = false
-var is_spinning = false
-var is_jammed = false
-var time_since_last_shot = 0
+var is_reloading: bool = false
+var is_spinning: bool = false
+var is_jammed: bool = false
+var time_since_last_shot: float = 0.0
 
 var installed_barrels: Array[SpinBarrel] = []
 var barrel_count: int = 0
@@ -228,8 +231,27 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		return false
 	
 	if is_reloading or is_spinning or is_jammed:
-		play_failed_shoot_sfx()
-		return false
+		# TODO - shotgun reload interrupt
+		if is_reloading and GameManager.equipped_gun_frame.frame_id == GunFrameResource.GunFrameIdEnum.SHOTGUN:
+			# When the player tries to shoot during a shotgun reload,
+			# finish the current shell loading anim and interrupt the reload,
+			# keeping the ammo count at whatever it is after the last shell,
+			# and playing the post-reload animation IF THE RELOAD STARTED FROM EMPTY
+			# otherwise shoot immediately.
+			reload_interrupt = true
+			idle_frame_state.travel("shotgun_idle")
+			await reload_anim_end
+			
+			if cached_reload_start_ammo == 0:
+				# Play the post-reload pump to chamber a round if we started reloading from empty
+				idle_frame_state.travel("shotgun_pump_no_shell")
+				await post_reload_anim_end
+			
+			reload_interrupt = false
+		else:
+			play_failed_shoot_sfx()
+			return false
+	
 	if magazine_ammo_left <= 0:
 		play_failed_shoot_sfx()
 		reload()
@@ -363,7 +385,7 @@ func play_post_shot_anim() -> bool:
 	
 	if post_shot_state: 
 		idle_frame_state.travel(post_shot_state)
-		await reload_anim_end
+		await post_reload_anim_end
 		
 	anim_tree.set("parameters/reload_timescale/scale", 1.0)
 	
@@ -566,35 +588,39 @@ func reload(already_spin_barrel = false):
 
 	is_reloading = true
 	
-	var cached_ammo_left: int = magazine_ammo_left
+	cached_reload_start_ammo = magazine_ammo_left
 	var reload_timescale: float = 1.5 / modified_reload_time
 	var reload_state: String = ""
 	var post_reload_state: String = ""
 	var reload_count: int = 1  # Used to reload per-shot in the case of the shotgun
-	match idle_frame_state.get_current_node():
-		"shotgun_idle":
+	match GameManager.equipped_gun_frame.frame_id:
+		GunFrameResource.GunFrameIdEnum.SHOTGUN:
 			reload_state = "shotgun_reload"
-			if cached_ammo_left == modified_magazine_size:
-				post_reload_state = "shotgun_pump"
-			else:
+			if cached_reload_start_ammo == 0:
 				post_reload_state = "shotgun_pump_no_shell"
+			#if cached_reload_start_ammo == modified_magazine_size:
+				#post_reload_state = ""  # "shotgun_pump" - do we want to pump after reload? 
+			#else:
+				#post_reload_state = "" # "shotgun_pump_no_shell" - do we want to pump after reload? 
 			reload_count = modified_magazine_size - magazine_ammo_left
-		"smg_idle":
+		GunFrameResource.GunFrameIdEnum.SMG:
 			reload_state = "smg_reload"
-		"rifle_idle":
+		GunFrameResource.GunFrameIdEnum.SNIPER:
 			reload_state = "rifle_reload"
 			post_reload_state = "rifle_rack"
 	
 	anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
 	
 	for i in range(reload_count):
+		if reload_interrupt:
+			break
 		idle_frame_state.start(reload_state)
 		# If we're loading ammo one at a time, tick the ammo count up
 		match reload_count:
 			1:
 				magazine_ammo_left = modified_magazine_size
 			_:
-				magazine_ammo_left = cached_ammo_left + i + 1
+				magazine_ammo_left = cached_reload_start_ammo + i + 1
 		await reload_anim_end
 	
 	if post_reload_state:
@@ -616,6 +642,7 @@ func reload_no_anim() -> void:
 	
 	is_reloading = false
 	reload_anim_end.emit()
+	post_reload_anim_end.emit()
 	gun_reloaded.emit()
 
 
@@ -627,6 +654,10 @@ func _shotgun_eject_shell() -> void:
 
 func _end_reload_anim() -> void:
 	reload_anim_end.emit()
+
+
+func _end_post_reload_anim() -> void:
+	post_reload_anim_end.emit()
 
 
 func _emit_reloaded_signal() -> void:
