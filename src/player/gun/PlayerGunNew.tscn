@@ -3193,11 +3193,10 @@ texture = ExtResource("29_egcby")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel3Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7837, -0.7, 0)
-visible = false
 render_priority = 1
 outline_render_priority = 0
 modulate = Color(1, 0.882353, 0.219608, 1)
-text = "Barrel 3 Text Label"
+text = "2/2"
 font_size = 64
 outline_size = 32
 horizontal_alignment = 0
@@ -3213,11 +3212,10 @@ texture = ExtResource("28_vfi2f")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel2Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25547, -1.2, 0)
-visible = false
 render_priority = 1
 outline_render_priority = 0
 modulate = Color(1, 0.882353, 0.219608, 1)
-text = "Barrel 2 Text Label"
+text = "4/4"
 font_size = 64
 outline_size = 32
 horizontal_alignment = 0
@@ -3233,12 +3231,11 @@ texture = ExtResource("27_6hxas")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel1Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.05428, -1.7, 0)
-visible = false
 sorting_offset = 1.0
 render_priority = 1
 outline_render_priority = 0
 modulate = Color(1, 0.882353, 0.219608, 1)
-text = "Barrel 1 Text Label"
+text = "3/3"
 font_size = 64
 outline_size = 32
 horizontal_alignment = 0

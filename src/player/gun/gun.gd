@@ -507,6 +507,12 @@ func _spin_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	barrel.get_active_effect().on_barrel_start_spin()
 	barrel.start_spin()
+	# TODO - tidy this up and make the setting/resetting of the reload label generic
+	var barrel_label: Label3D = barrel_labels[barrel_idx]
+	barrel_label.text = "[%s]" % [
+		barrel.reloads_before_spin - barrel.reload_count
+	]
+	barrel.reload_count = 0
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	# Spin the effect mesh UV
 	# TODO 
@@ -536,6 +542,11 @@ func _stop_barrel(barrel_idx: int) -> void:
 	
 	SoundManager.stop_sound(TEMP_sfx_spin)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
+	
+	var barrel_label: Label3D = barrel_labels[barrel_idx]
+	barrel_label.text = "[%s]" % [
+		barrel.reloads_before_spin - barrel.reload_count
+	]
 
 
 func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
@@ -630,6 +641,19 @@ func reload(already_spin_barrel = false):
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
+	
+	for i in range(barrel_container.get_child_count()):
+		var barrel = barrel_container.get_child(i)
+		barrel.reload_count += 1
+		var barrel_label: Label3D = barrel_labels[i]
+		barrel_label.text = "[%s]" % [
+			barrel.reloads_before_spin -barrel.reload_count
+		]
+		if barrel.reload_count == barrel.reloads_before_spin:
+			_spin_barrel(i)
+			get_tree().create_timer(base_spin_time).timeout.connect(
+				func(): _stop_barrel(i)
+			)
 
 
 func reload_no_anim() -> void:
@@ -735,9 +759,9 @@ func install_barrel(barrel_prefab: PackedScene) -> void:
 		return
 
 	var barrel_inst = barrel_prefab.instantiate()
-	barrel_inst.barrel_effect_changed.connect(_set_barrel_effect_label)
+	#barrel_inst.barrel_effect_changed.connect(_set_barrel_effect_label)
 	barrel_container.add_child(barrel_inst)
-	_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
+	#_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
 
 	magazine_ammo_left = 0
 
@@ -792,22 +816,26 @@ func recheck_installed_barrels():
 		var barrel = barrel_container.get_child(i)
 		barrel.owner_gun = self
 		installed_barrels.append(barrel)
-		_set_barrel_effect_label(barrel, barrel.get_active_effect())
+		#_set_barrel_effect_label(barrel, barrel.get_active_effect())
+		var barrel_label: Label3D = barrel_labels[i]
+		barrel_label.text = "[%s]" % [
+			barrel.reloads_before_spin -barrel.reload_count
+		]
 	
 	barrel_count = installed_barrels.size()
 
 	for i in barrel_sprites.size():
-		# var barrel_label: Label3D = barrel_labels[i]
+		var barrel_label: Label3D = barrel_labels[i]
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		if i < barrel_count:
 			state_machine.travel("idle")
 			barrel_icon_meshes[i].visible = true
-			#barrel_label.visible = true
+			barrel_label.visible = true
 		else:
 			state_machine.travel("unequip")
 			barrel_icon_meshes[i].visible = false
 			barrel_icon_meshes[i].set_surface_override_material(0, default_barrel_icon_mat)
-			#barrel_label.visible = false
+			barrel_label.visible = false
 
 
 func reinstall_barrels():
