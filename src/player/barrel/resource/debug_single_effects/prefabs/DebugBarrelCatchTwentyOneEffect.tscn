@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxnh5o3aq7fvu"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_0lgto"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/twenty_one_effect.gd" id="2_ey7xu"]
+
+[node name="DebugBarrelCatchTwentyOneEffect" type="Node3D"]
+script = ExtResource("1_0lgto")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="CatchTwentyOneEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_ey7xu")
+display_text_title = "Catch Twenty-One"
+display_text_tag = "A nice suprise whenever the number 21 appear"
+positive_desc = Array[String](["Something may happen if you deal 21 damage, or have 21 bullets, ..."])
+negative_desc = Array[String](["The surprise isn’t necessarily beneficial"])
+icon_id = 54

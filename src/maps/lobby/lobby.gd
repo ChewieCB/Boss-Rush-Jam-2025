@@ -15,24 +15,28 @@ signal ui_accept
 @onready var sfx_door_open: AudioStreamPlayer3D = $SFXDoorOpen
 @onready var sfx_door_close: AudioStreamPlayer3D = $SFXDoorClose
 
+@onready var vendors: Array[Node] = find_children("*", "Vendor")
+
+var is_tutorial: bool = false
 var display_barrels: Array = []
 
 var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
 
+
 func _ready() -> void:
-	#player.gun.reinstall_barrels()
-	#ScreenTransition.fill_screen()
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
 		button.pushed.connect(_on_level_select)
 	difficulty_menu.bet_started.connect(load_selected_level) # Start load the boss level
+	for vendor in vendors:
+		vendor.inventory_opened.connect(player.current_gun.play_unequip_anim)
+		vendor.inventory_closed.connect(player.current_gun.play_equip_anim)
 	
 	get_tree().paused = false
 	
-	# lobby_music_player.play()
-	# GameManager.change_fmod_bgm_music_state("Lobby")
-
+	GameManager.current_boss_map = self
+	
 	# Save and load check
 	if SaveManager.save_data_is_loaded:
 		GameManager.update_total_playtime()
@@ -87,20 +91,26 @@ func _on_level_select(level_path: String) -> void:
 	else:
 		difficulty_menu.show_menu()
 
+
 func load_selected_level():
+<< << << < HEAD
 	find_and_load_boss_bgm()
 	var level_path = GameManager.selected_level_path
+== == == =
+	LoadingHandler.start_loading(GameManager.selected_level_path, "", false)
+	
+>> >> >> > testing
 	sfx_door_close.play()
-	ResourceLoader.load_threaded_request(level_path)
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
-	# Wait until the level has been loaded on another thread
-	while ResourceLoader.load_threaded_get_status(level_path) != ResourceLoader.THREAD_LOAD_LOADED:
-		pass
+	
+	# Set the skip equip anim flag for seamless transition
+	LoadingHandler.skip_equip_anim = true
 	# Get the player's position relative to the elevator doors
 	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
 	GameManager.cached_player_rotation = GameManager.player.rotation
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
+<< << << < HEAD
 	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
 	# HACK - do this properly with dynamic loading of scenes
 	if is_inside_tree():
@@ -112,6 +122,12 @@ func load_selected_level():
 			#SoundManager.play_music(new_bgm, 0.25, "BGM")
 		GameManager.is_free_reroll = false
 		get_tree().change_scene_to_packed(loaded_scene)
+== == == =
+	GameManager.is_free_reroll = false
+	lobby_music_player.stop()
+	
+	LoadingHandler.load_scene_seamless()
+>> >> >> > testing
 
 
 func find_and_load_boss_bgm() -> void:

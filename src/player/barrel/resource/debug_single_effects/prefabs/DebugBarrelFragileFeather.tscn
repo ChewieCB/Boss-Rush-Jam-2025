@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://oqw080dfccof"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_3m3nv"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_qgo57"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/add_player_status_effect.gd" id="3_7y0tx"]
+[ext_resource type="Texture2D" uid="uid://ddfqokjq1u61n" path="res://assets/sprite/status_icon/defense-down.png" id="4_okwl7"]
+[ext_resource type="Texture2D" uid="uid://dlw4dtm637qxu" path="res://assets/sprite/status_icon/feather.png" id="5_rj3i3"]
+
+[node name="DebugBarrelFragileFeather" type="Node3D"]
+script = ExtResource("1_3m3nv")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="FragileFeather" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_qgo57")
+display_text_title = "Fragile Feather"
+display_text_tag = "Maybe increase your survivability a bit"
+positive_desc = Array[String](["+25% dodge chance"])
+negative_desc = Array[String](["+25% damage taken"])
+icon_id = 55
+
+[node name="IncreaseDamageTaken" type="Node3D" parent="EffectContainer/FragileFeather"]
+script = ExtResource("3_7y0tx")
+display_name = "Increase damage taken"
+status_code = "fragile_feather_reduce_damage_resistance"
+modified_stat = 4
+value = -0.25
+is_infinite_duration = true
+is_bad_effect = true
+status_icon = ExtResource("4_okwl7")
+show_duration_ui = true
+
+[node name="IncreaseDodgeChance" type="Node3D" parent="EffectContainer/FragileFeather"]
+script = ExtResource("3_7y0tx")
+display_name = "Increase dodge chance"
+status_code = "fragile_feather_increase_dodge_chance"
+modified_stat = 13
+value = 0.25
+is_infinite_duration = true
+status_icon = ExtResource("5_rj3i3")
+show_duration_ui = true

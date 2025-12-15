@@ -32,7 +32,7 @@ var setting_ui: SettingUI
 var player: Player
 var difficulty_menu: DifficultyMenu
 var object_pooling_manager: ObjectPoolingManager
-var current_boss_map: BossMap
+var current_boss_map: Node3D
 
 @onready var main_bgm_emitter: MainBGMEmitter = $MainBGMEmitter
 
@@ -48,9 +48,9 @@ var shop_barrels: Array[Resource] = []
 @export var starting_gun_frame: Resource
 @export var starting_shop_gun_frame: Array[Resource]
 @export var gun_frame_database: Array[Resource]
-var equipped_gun_frame: Resource
+var equipped_gun_frame: Resource = starting_gun_frame
 var inventory_gun_frames: Array[Resource] = []
-var shop_gun_frames: Array[Resource] = []
+@onready var shop_gun_frames: Array[Resource] = starting_shop_gun_frame
 
 
 # Re-rolls
@@ -161,7 +161,7 @@ var CHEAT_godmode: bool = false
 var CHEAT_freecam: bool = true
 var CHEAT_always_inventory: bool = false
 var CHEAT_demomode: bool = true
-var CHEAT_demomode_timeout: int = 10:
+var CHEAT_demomode_timeout: int = 60:
 	set(value):
 		CHEAT_demomode_timeout = value
 		demo_time_changed.emit(CHEAT_demomode_timeout)
@@ -181,7 +181,6 @@ func _ready() -> void:
 	SaveManager.load_setting_config()
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
-	equipped_gun_frame = starting_gun_frame
 	main_bgm_emitter.play()
 
 func _unhandled_input(_event: InputEvent) -> void:

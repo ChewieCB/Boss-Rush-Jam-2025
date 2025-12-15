@@ -9,6 +9,7 @@ script = ExtResource("3_t6jvg")
 barrel_id = 21
 barrel_name = "GamblersPrecision"
 barrel_desc = "Are you feeling lucky?"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_v7xjp")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_uidrk")

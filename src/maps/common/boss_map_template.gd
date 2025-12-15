@@ -116,7 +116,12 @@ func show_end_panel() -> void:
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
 	await tween.finished
 	
-	LoadingHandler.start_loading("Lobby")
+	LoadingHandler.start_loading(
+		LoadingHandler.level_paths[LoadingHandler.LEVELS.LOBBY],
+		"Lobby"
+	)
+	await ScreenTransition.transition_finished
+	LoadingHandler.load_scene_transition()
 
 
 func collect_all_chips() -> void:
@@ -141,7 +146,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		GameManager.bosses_defeated.append(boss.boss_id)
 		print(GameManager.bosses_defeated)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
-
+	
 	reward_bet_money()
 	show_end_panel()
 
@@ -174,30 +179,21 @@ func _on_chip_dropped(value: int) -> void:
 	chip_value_collected += value
 
 
-func _on_level_select(level_path: String) -> void:
-	#SFXDoorClose.play()
-	ResourceLoader.load_threaded_request(level_path)
+func _on_level_select(level_path: String, loading_name: String = "") -> void:
+	LoadingHandler.start_loading(level_path, loading_name, false)
+	
+	#sfx_door_close.play()
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
-	# Wait until the level has been loaded on another thread
-	while ResourceLoader.load_threaded_get_status(level_path) != ResourceLoader.THREAD_LOAD_LOADED:
-		pass
+	
+	# Set the skip equip anim flag for seamless transition
+	LoadingHandler.skip_equip_anim = true
 	# Get the player's position relative to the elevator doors
 	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
 	GameManager.cached_player_rotation = GameManager.player.rotation
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
-	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
-	# HACK - do this properly with dynamic loading of scenes
-  
-	if is_inside_tree():
-		# TODO - fade this out via tween
-		SoundManager.stop_music(0.5)
-		# var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
-		# TODO - fixme
-		#if new_bgm:
-			#SoundManager.play_music(new_bgm, 0.25, "BGM")
-		#GameManager.is_free_reroll = false
-		get_tree().change_scene_to_packed(loaded_scene)
+	SoundManager.stop_music(0.5)
+	LoadingHandler.load_scene_seamless()
 
 
 func reward_bet_money():

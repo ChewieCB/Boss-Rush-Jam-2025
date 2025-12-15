@@ -9,6 +9,7 @@ script = ExtResource("6_r0vce")
 barrel_id = 60
 barrel_name = "SnapCall"
 barrel_desc = "Oh, the attraction!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_lkqpe")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_cekks")

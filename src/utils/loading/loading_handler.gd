@@ -2,7 +2,39 @@ extends Node
 
 signal materials_compiled
 signal icon_anims_compiled
+signal scene_path_loaded(scene_path: String)
 signal loading_finished(scene: PackedScene)
+signal loaded_seamless
+
+
+enum LEVELS {
+	TUTORIAL,
+	TUTORIAL_BOSS_ONLY,
+	BACKROOM,
+	LOBBY,
+	SLOTS,
+	ROULETTE,
+	BARTENDER,
+	PIT,
+	CHIPS,
+	BLACKJACK,
+	CROONER
+}
+
+const level_paths: Array[String] = [
+	"res://src/maps/tutorial/TutorialBoss.tscn",
+	"res://src/maps/tutorial/TutorialBossOnly.tscn",
+	"res://src/maps/backroom/Backroom.tscn",
+	"res://src/maps/lobby/Lobby.tscn",
+	"res://src/maps/slots_boss/BossMapSlots.tscn",
+	"res://src/maps/roulette_boss/BossMapRoulette.tscn",
+	"res://src/maps/bartender_boss/BossMapBartender.tscn",
+	"res://src/maps/pit_boss/BossMapPit.tscn",
+	"res://src/maps/chip_boss/BossMapChip.tscn",
+	"res://src/maps/blackjack_boss/BossMapBlackjack.tscn",
+	"res://src/maps/crooner_boss/BossMapCrooner.tscn",
+]
+
 
 # Loading
 var current_scene_path: String:
@@ -10,6 +42,7 @@ var current_scene_path: String:
 		current_scene_path = value
 		ResourceLoader.load_threaded_request(current_scene_path)
 var can_transition: bool = false
+var skip_equip_anim: bool = false
 
 # Shader pre-compilation
 const PRECOMPILE_CONFIG_PATH: String = "res://config/precompile_list.config"
@@ -50,10 +83,13 @@ func initial_load() -> void:
 	is_compiling = true
 
 
-func start_loading(scene_name: String = "") -> void:
+func start_loading(scene_path: String, scene_name: String = "", transition_out: bool = true) -> void:
 	find_and_load_scene_bgm(scene_name)
-	ScreenTransition.transition_out()
-	await ScreenTransition.transition_finished
+	if transition_out:
+		ScreenTransition.transition_out()
+		await ScreenTransition.transition_finished
+	
+	current_scene_path = scene_path
 	
 	# Save the game when loading a new scene
 	if GameManager.chosen_slot_id != -1:
@@ -66,15 +102,17 @@ func start_loading(scene_name: String = "") -> void:
 	
 	await Engine.get_main_loop().process_frame
 	ScreenTransition.set_loading_detail_text(scene_name)
+
+
+func load_scene_transition() -> void:
+	if not is_materials_compiled:
+		await materials_compiled
 	
 	can_transition = true
-
-
-func load_scene(packed_scene: PackedScene) -> void:
-	can_transition = false
-	loading_finished.emit(packed_scene)
-	LuckHandler.enabled = false
-	get_tree().change_scene_to_packed(packed_scene)
+	await scene_path_loaded
+	
+	var packed_scene = ResourceLoader.load_threaded_get(current_scene_path)
+	_load_scene(packed_scene)
 	ScreenTransition.set_loading_visible(false)
 	ScreenTransition.transition_in()
 	await ScreenTransition.transition_finished
@@ -96,6 +134,25 @@ func find_and_load_scene_bgm(scene_name: String = "") -> void:
 	if music_state != "":
 		GameManager.change_fmod_bgm_music_state(music_state)
 
+func load_scene_seamless() -> void:
+	if not is_materials_compiled:
+		await materials_compiled
+	
+	can_transition = true
+	await scene_path_loaded
+	
+	var packed_scene = ResourceLoader.load_threaded_get(current_scene_path)
+	_load_scene(packed_scene)
+	await loading_finished
+	loaded_seamless.emit()
+
+
+func _load_scene(packed_scene: PackedScene) -> void:
+	can_transition = false
+	get_tree().change_scene_to_packed(packed_scene)
+	await Engine.get_main_loop().process_frame
+	loading_finished.emit(packed_scene)
+
 
 func _process(_delta: float) -> void:
 	if current_scene_path:
@@ -105,8 +162,7 @@ func _process(_delta: float) -> void:
 		ScreenTransition.progress_bar.value = level_progress[0] * 100
 		
 		if level_progress[0] == 1 and can_transition:
-			var packed_scene = ResourceLoader.load_threaded_get(current_scene_path)
-			load_scene(packed_scene)
+			scene_path_loaded.emit(current_scene_path)
 
 
 func _physics_process(_delta: float) -> void:

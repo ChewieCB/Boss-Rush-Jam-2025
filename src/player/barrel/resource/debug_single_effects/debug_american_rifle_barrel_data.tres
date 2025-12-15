@@ -9,6 +9,7 @@ script = ExtResource("17_fhydl")
 barrel_id = 70
 barrel_name = "AmericanRifle"
 barrel_desc = "USA! USA!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_1pllf")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_sxubl")

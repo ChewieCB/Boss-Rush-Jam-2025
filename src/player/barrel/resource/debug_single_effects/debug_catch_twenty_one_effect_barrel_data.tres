@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bvtb34wryofl"]
+
+[ext_resource type="Texture2D" uid="uid://xxqoihu0qwk7" path="res://assets/sprite/effect_icons/54.png" id="1_wcyic"]
+[ext_resource type="PackedScene" uid="uid://bxnh5o3aq7fvu" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelCatchTwentyOneEffect.tscn" id="2_uqlk0"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_27ifc"]
+
+[resource]
+script = ExtResource("3_27ifc")
+barrel_id = -1
+barrel_name = "CatchTwentyOneEffect"
+barrel_desc = "A nice suprise whenever the number 21 appear"
+barrel_info_summary = ""
+barrel_image = ExtResource("1_wcyic")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_uqlk0")
+is_archetype_barrel = false

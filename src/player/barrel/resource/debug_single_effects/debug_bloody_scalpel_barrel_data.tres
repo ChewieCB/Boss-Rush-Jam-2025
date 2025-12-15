@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://doxv4xqr2u8ge"]
+
+[ext_resource type="Texture2D" uid="uid://dvq2lkbqeybb" path="res://assets/sprite/effect_icons/53.png" id="1_38as3"]
+[ext_resource type="PackedScene" uid="uid://s002bp1jsbgf" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelBloodyScalpel.tscn" id="2_nvfb0"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_kckci"]
+
+[resource]
+script = ExtResource("3_kckci")
+barrel_id = -1
+barrel_name = "BloodyScalpel"
+barrel_desc = "Sharp and cut like butter"
+barrel_info_summary = ""
+barrel_image = ExtResource("1_38as3")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_nvfb0")
+is_archetype_barrel = false

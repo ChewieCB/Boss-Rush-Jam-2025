@@ -1,6 +1,9 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://bdnq13wgr3cmj"]
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bdnq13wgr3cmj"]
+
+[ext_resource type="Texture2D" uid="uid://7l2ljlus5rae" path="res://assets/sprite/effect_icons/tmp-barrel-icon.png" id="1_bf7yh"]
 
 [resource]
 transparency = 1
 albedo_color = Color(1, 1, 1, 0)
+albedo_texture = ExtResource("1_bf7yh")
 texture_repeat = false

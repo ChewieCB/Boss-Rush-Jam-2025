@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dbx4c8ydql2ng"]
+
+[ext_resource type="Texture2D" uid="uid://djx3kocayiju8" path="res://assets/textures/posters/mechanic_boss_profile.png" id="1_41ltp"]
+
+[resource]
+albedo_texture = ExtResource("1_41ltp")
+metallic_specular = 0.0
+texture_filter = 2

@@ -8,7 +8,8 @@
 script = ExtResource("8_6ud0l")
 barrel_id = 26
 barrel_name = "BallBullet"
-barrel_desc = "Massize ball!"
+barrel_desc = "Massive ball!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_uc3s8")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_o73nu")

@@ -9,6 +9,7 @@ script = ExtResource("20_h3687")
 barrel_id = 49
 barrel_name = "GelStream"
 barrel_desc = "Very high firerate but low damage"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_3a3yc")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_3rd3p")

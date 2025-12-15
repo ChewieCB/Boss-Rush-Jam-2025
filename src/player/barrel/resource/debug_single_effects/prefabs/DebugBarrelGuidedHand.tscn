@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://dg7bpfj10df22"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_tnj46"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_e6k34"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/laser_guided_effect.gd" id="3_2o88p"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="4_utv15"]
+
+[node name="DebugBarrelGuidedHand" type="Node3D"]
+script = ExtResource("1_tnj46")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="GuidedHand" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_e6k34")
+display_text_title = "Guided Hand"
+display_text_tag = "Keep aiming at the target"
+positive_desc = Array[String](["Bullet homing to aimed location"])
+negative_desc = Array[String](["-50% projectile speed", "Doesn't work with hitscan bullet"])
+icon_id = 57
+
+[node name="LaserGuidedEffect" type="Node3D" parent="EffectContainer/GuidedHand"]
+script = ExtResource("3_2o88p")
+
+[node name="ModifyProjectileSpeedEffect" type="Node3D" parent="EffectContainer/GuidedHand"]
+script = ExtResource("4_utv15")
+attribute = 3
+modify_value = -50.0
+is_perc = true

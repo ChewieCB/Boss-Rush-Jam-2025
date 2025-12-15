@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://b2hsc441kj76w"]
+
+[ext_resource type="Texture2D" uid="uid://bbt43bkwvnb41" path="res://assets/sprite/effect_icons/59.png" id="1_fh6x0"]
+[ext_resource type="PackedScene" uid="uid://chdv283wox3c2" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelSafetyFold.tscn" id="2_o2kd7"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_aoqew"]
+
+[resource]
+script = ExtResource("3_aoqew")
+barrel_id = -1
+barrel_name = "SafetyFold"
+barrel_desc = "..know when to fold 'em"
+barrel_info_summary = ""
+barrel_image = ExtResource("1_fh6x0")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_o2kd7")
+is_archetype_barrel = false

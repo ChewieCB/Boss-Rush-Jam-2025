@@ -9,6 +9,7 @@ script = ExtResource("5_vdg7k")
 barrel_id = 37
 barrel_name = "ToxinMist"
 barrel_desc = "Poison 'em!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_h11ii")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_xem2w")
