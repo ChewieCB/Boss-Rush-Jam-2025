@@ -1,4 +1,4 @@
-[gd_scene load_steps=97 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=99 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -24,7 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://drrr4aotn87ol" path="res://src/player/gun/assets/sprite/rescale/idle/arm_idle.png" id="15_x3kbv"]
 [ext_resource type="Texture2D" uid="uid://dodoyoe76rvq8" path="res://src/player/gun/assets/sprite/frames/smg/gun_frame_smg.png" id="16_3c26h"]
 [ext_resource type="Texture2D" uid="uid://dbjgf5actedu7" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_2.png" id="16_5bgyl"]
-[ext_resource type="Texture2D" uid="uid://geoujd7g83jk" path="res://src/player/gun/assets/sprite/frames/rifle/gun_frame_rifle.png" id="17_nwu8o"]
+[ext_resource type="Texture2D" uid="uid://sm2x7tkxr0kj" path="res://src/player/gun/assets/sprite/frames/rifle/gun_frame_rifle_bolthole.png" id="18_3vdnn"]
 [ext_resource type="Texture2D" uid="uid://do0ikpg17kjko" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1_spin_2.png" id="21_oipg7"]
 [ext_resource type="Texture2D" uid="uid://lg2nbxli2fls" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2_spin_1.png" id="22_q6pxd"]
 [ext_resource type="Texture2D" uid="uid://cobuk6xmebxqk" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2_spin_2.png" id="23_kl067"]
@@ -36,7 +36,9 @@
 [ext_resource type="Texture2D" uid="uid://cdi2hskp63cj8" path="res://src/player/gun/assets/sprite/rescale/barrel_cover_3.png" id="29_egcby"]
 [ext_resource type="Texture2D" uid="uid://bv2wn517ojkyq" path="res://src/player/gun/assets/sprite/frames/shotgun/reload/shotgun_reload_hand_1.png" id="33_u6v0u"]
 [ext_resource type="Texture2D" uid="uid://cytuuwmp2dfab" path="res://src/player/gun/assets/sprite/frames/shotgun/reload/shotgun_reload_hand_3.png" id="34_e26bd"]
+[ext_resource type="Texture2D" uid="uid://kcbio1f4oxj1" path="res://src/player/gun/assets/sprite/frames/rifle/reload/gun_frame_rifle_bolthole_reload_1.png" id="34_mg5og"]
 [ext_resource type="Material" uid="uid://bdnq13wgr3cmj" path="res://src/player/gun/assets/material/default_effect_icon_mat.tres" id="34_tk7r4"]
+[ext_resource type="Texture2D" uid="uid://cxn60kvgmo6jy" path="res://src/player/gun/assets/sprite/frames/rifle/reload/gun_frame_rifle_bolthole_reload_2.png" id="35_5cowo"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wqldo"]
 random_pitch = 1.19
@@ -334,6 +336,18 @@ tracks/20/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("SpriteParent/FramesParent/RifleFrame/RifleSprite:texture")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("18_3vdnn")]
 }
 
 [sub_resource type="Animation" id="Animation_6xcgv"]
@@ -1600,10 +1614,10 @@ tracks/0/path = NodePath("SpriteParent/ArmSprite:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3, 0.5, 0.7),
-"transitions": PackedFloat32Array(1.68179, 0.297302, 1.03526, 2.54912, 1),
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1.68179, 1),
 "update": 0,
-"values": [Vector3(0.5, -0.8, 0), Vector3(0.4, 0.3, 0), Vector3(1.36667, -1.7, 0), Vector3(0.5, -0.8, 0), Vector3(0.5, -0.8, 0)]
+"values": [Vector3(0.5, -0.8, 0), Vector3(0.5, -0.8, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1657,6 +1671,42 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SpriteParent/FramesParent/RifleFrame/RifleSprite:texture")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.3, 0.35, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("18_3vdnn"), ExtResource("34_mg5og"), ExtResource("35_5cowo"), ExtResource("34_mg5og"), ExtResource("18_3vdnn")]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SpriteParent/ArmSpriteR:texture")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("33_u6v0u"), null]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SpriteParent/ArmSpriteR:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.45, 0.7),
+"transitions": PackedFloat32Array(1, 0.450625, 1.36604, 1, 1),
+"update": 0,
+"values": [Vector3(3.6, -3.3, 0), Vector3(1.3, -1.3, 0), Vector3(2.62, -2.44, 0), Vector3(1.3, -1.3, 0), Vector3(3.6, -3.3, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_vfnkp"]
@@ -3169,7 +3219,7 @@ visible = false
 layers = 2
 sorting_offset = 4.0
 render_priority = 3
-texture = ExtResource("17_nwu8o")
+texture = ExtResource("18_3vdnn")
 
 [node name="MuzzleflareLightSprite" type="Sprite3D" parent="SpriteParent/FramesParent/RifleFrame/RifleSprite"]
 visible = false
@@ -3193,6 +3243,7 @@ texture = ExtResource("29_egcby")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel3Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7837, -0.7, 0)
+visible = false
 render_priority = 1
 outline_render_priority = 0
 modulate = Color(1, 0.882353, 0.219608, 1)
@@ -3212,6 +3263,7 @@ texture = ExtResource("28_vfi2f")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel2Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25547, -1.2, 0)
+visible = false
 render_priority = 1
 outline_render_priority = 0
 modulate = Color(1, 0.882353, 0.219608, 1)
@@ -3231,6 +3283,7 @@ texture = ExtResource("27_6hxas")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel1Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.05428, -1.7, 0)
+visible = false
 sorting_offset = 1.0
 render_priority = 1
 outline_render_priority = 0
@@ -3251,6 +3304,7 @@ render_priority = 3
 texture = ExtResource("15_x3kbv")
 
 [node name="ArmSpriteR" type="Sprite3D" parent="SpriteParent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 2
 sorting_offset = 3.0
 render_priority = 2
@@ -3279,7 +3333,6 @@ wait_time = 0.5
 one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-active = false
 callback_mode_process = 0
 callback_mode_discrete = 2
 libraries = {
