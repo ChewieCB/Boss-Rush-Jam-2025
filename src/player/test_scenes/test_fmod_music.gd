@@ -2,16 +2,25 @@ extends Node2D
 
 @export var log_line_prefab: PackedScene
 
+@onready var disc_image: TextureRect = $CanvasLayer/Disc
 @onready var anim_player: AnimationPlayer = $CanvasLayer/AnimationPlayer
 @onready var music_state_option_button: OptionButton = $CanvasLayer/MusicState/OptionButton
 @onready var log_scroll_container: ScrollContainer = $CanvasLayer/Panel/ScrollContainer
 @onready var log_container: Container = $CanvasLayer/Panel/ScrollContainer/VBoxContainer
+@onready var bpm_label: Label = $CanvasLayer/BPMLabel
 
 var music_state_list = ["Menu", "Lobby", "Slotty", "Roulette", "Bartender"]
+
+var tween: Tween
+var original_disc_scale: Vector2
+var pulse_scale: float = 1.05 # max scale factor
+var pulse_duration: float = 0.1 # how fast pulse animates (seconds)
 
 func _ready() -> void:
 	for elem in music_state_list:
 		music_state_option_button.add_item(elem)
+	original_disc_scale = disc_image.scale
+	GameManager.main_bgm_emitter.timeline_beat.connect(timeline_beat_callback)
 
 func add_log_line(content: String):
 	var log_line: RichTextLabel = log_line_prefab.instantiate()
@@ -51,3 +60,22 @@ func _on_player_in_menu_toggled(toggled_on: bool) -> void:
 func _on_player_dead_toggled(toggled_on: bool) -> void:
 	GameManager.change_fmod_bgm_player_is_dead(toggled_on)
 	add_log_line("Changed [color=yellow]playerIsDead[/color] param to [color=yellow]{0}[/color]".format([toggled_on]))
+
+
+func timeline_beat_callback(params: Dictionary) -> void:
+	var beat = params['beat']
+	var bar = params['bar']
+	var tempo = params['tempo']
+	bpm_label.text = "Beat: {0}\nBar: {1}\nBPM: {2}".format([beat, bar, tempo])
+	_on_beat()
+
+func _on_beat():
+	# Cancel previous tween if still playing
+	if tween and tween.is_running():
+		tween.stop()
+		disc_image.scale = original_disc_scale
+	tween = create_tween()
+	# Pulse out
+	tween.tween_property(disc_image, "scale", original_disc_scale * pulse_scale, pulse_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	# Pulse back in
+	tween.tween_property(disc_image, "scale", original_disc_scale, pulse_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)

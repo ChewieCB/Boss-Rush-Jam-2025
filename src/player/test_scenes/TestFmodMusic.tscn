@@ -11,7 +11,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("TextureRect:rotation")
+tracks/0/path = NodePath("Disc:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -26,7 +26,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("TextureRect:rotation")
+tracks/0/path = NodePath("Disc:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -48,7 +48,7 @@ log_line_prefab = ExtResource("2_bkrtf")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+[node name="Disc" type="TextureRect" parent="CanvasLayer"]
 self_modulate = Color(1, 1, 1, 0.552941)
 anchors_preset = 8
 anchor_left = 0.5
@@ -63,6 +63,23 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(192.5, 195.5)
 texture = ExtResource("3_3x8ku")
+
+[node name="BPMLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 184.0
+offset_top = -40.5
+offset_right = 253.0
+offset_bottom = 40.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Beat: 1
+Bar: 1
+BPM: 120"
 
 [node name="Title" type="Label" parent="CanvasLayer"]
 anchors_preset = 5
