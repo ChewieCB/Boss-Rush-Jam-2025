@@ -26,6 +26,7 @@ const BASE_PLAYER_LUCK_THRESHOLD = 0.95
 const PLOT_ARMOR_DAMAGE_ABSORB_PERC = 0.25 # Perc of damage taken by player will be absorbed by luck
 const PLOT_ARMOR_LUCK_DAMAGE_MULTIPLIER = 4.0 # Luck needed to absorb damage will multiplied by this
 const HIGH_ROLLER_BONUS_HEAL_PER_REROLL_TIME = 5
+const BASE_FMOD_VOLUME = 5
 
 var pause_ui: PauseUI
 var setting_ui: SettingUI
@@ -181,6 +182,7 @@ func _ready() -> void:
 	SaveManager.load_setting_config()
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
+	main_bgm_emitter.volume = BASE_FMOD_VOLUME
 	main_bgm_emitter.play()
 
 func _unhandled_input(_event: InputEvent) -> void:
@@ -477,8 +479,7 @@ func change_fmod_bgm_menu_is_up(menu_up: bool) -> void:
 	main_bgm_emitter.set_parameter("menuIsUp", 1 if menu_up else 0)
 
 func update_fmod_bgm_volume_from_setting() -> void:
-	const BASE_VOLUME = 5
-	main_bgm_emitter.volume = BASE_VOLUME * (GameManager.master_audio / 100.0) * (GameManager.bgm_audio / 100.0)
+	main_bgm_emitter.volume = BASE_FMOD_VOLUME * (GameManager.master_audio / 100.0) * (GameManager.bgm_audio / 100.0)
 
 func create_and_add_status_effect(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
 	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, is_bad_effect: bool = false, show_duration_ui = false, status_icon: Texture2D = null, ):
