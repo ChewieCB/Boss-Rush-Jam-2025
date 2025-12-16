@@ -1,13 +1,68 @@
-[gd_scene load_steps=3 format=3 uid="uid://cgh3x4wiq7agd"]
+[gd_scene load_steps=7 format=3 uid="uid://cgh3x4wiq7agd"]
 
 [ext_resource type="Script" path="res://src/player/test_scenes/test_fmod_music.gd" id="1_npb0c"]
 [ext_resource type="PackedScene" uid="uid://dvaqw2d36ik5y" path="res://src/maps/test/RichTextLogLine.tscn" id="2_bkrtf"]
+[ext_resource type="Texture2D" uid="uid://gsxbep2s5ql0" path="res://assets/picture/gramophone_disc.png" id="3_3x8ku"]
+
+[sub_resource type="Animation" id="Animation_inuas"]
+resource_name = "spin_disc"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2, 3, 4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.5708, 3.14159, 4.71239, 6.26573]
+}
+
+[sub_resource type="Animation" id="Animation_t0djf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m4ydu"]
+_data = {
+"RESET": SubResource("Animation_t0djf"),
+"spin_disc": SubResource("Animation_inuas")
+}
 
 [node name="TestFmodMusic" type="Node2D"]
 script = ExtResource("1_npb0c")
 log_line_prefab = ExtResource("2_bkrtf")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+self_modulate = Color(1, 1, 1, 0.552941)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.5
+offset_top = -207.5
+offset_right = 192.5
+offset_bottom = 207.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(192.5, 195.5)
+texture = ExtResource("3_3x8ku")
 
 [node name="Title" type="Label" parent="CanvasLayer"]
 anchors_preset = 5
@@ -104,6 +159,7 @@ step = 0.1
 value = 5.0
 
 [node name="Label" type="Label" parent="CanvasLayer/Volume"]
+layout_mode = 0
 offset_top = -48.0
 offset_right = 75.0
 offset_bottom = -11.0
@@ -142,6 +198,12 @@ size_flags_horizontal = 3
 
 [node name="LogLine" parent="CanvasLayer/Panel/ScrollContainer/VBoxContainer" instance=ExtResource("2_bkrtf")]
 layout_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer"]
+libraries = {
+"": SubResource("AnimationLibrary_m4ydu")
+}
+autoplay = "spin_disc"
 
 [connection signal="pressed" from="CanvasLayer/StartControl/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/StartControl/StopButton" to="." method="_on_stop_button_pressed"]

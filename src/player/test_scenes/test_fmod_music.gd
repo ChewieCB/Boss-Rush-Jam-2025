@@ -2,6 +2,7 @@ extends Node2D
 
 @export var log_line_prefab: PackedScene
 
+@onready var anim_player: AnimationPlayer = $CanvasLayer/AnimationPlayer
 @onready var music_state_option_button: OptionButton = $CanvasLayer/MusicState/OptionButton
 @onready var log_scroll_container: ScrollContainer = $CanvasLayer/Panel/ScrollContainer
 @onready var log_container: Container = $CanvasLayer/Panel/ScrollContainer/VBoxContainer
@@ -23,11 +24,13 @@ func add_log_line(content: String):
 	
 func _on_start_button_pressed() -> void:
 	GameManager.main_bgm_emitter.play()
+	anim_player.play("spin_disc")
 	add_log_line("Start BGM")
 
 
 func _on_stop_button_pressed() -> void:
 	GameManager.main_bgm_emitter.stop()
+	anim_player.pause()
 	add_log_line("Stop BGM")
 
 
