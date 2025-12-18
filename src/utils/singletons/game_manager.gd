@@ -147,6 +147,12 @@ var aim_assist_strength: float = 0.5
 # DEBUG CHEATS
 var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
+enum DebugSpinMode {
+	ON_RELOAD,
+	MANUAL_SPIN,
+	SEEDED_AUTO_SPIN,
+}
+var CHEAT_spin_mode: int = DebugSpinMode.SEEDED_AUTO_SPIN
 var CHEAT_freecam: bool = true
 var CHEAT_always_inventory: bool = false
 var CHEAT_demomode: bool = true

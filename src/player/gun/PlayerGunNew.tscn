@@ -3243,9 +3243,8 @@ texture = ExtResource("29_egcby")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel3Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7837, -0.7, 0)
-visible = false
-render_priority = 1
-outline_render_priority = 0
+render_priority = 5
+outline_render_priority = 4
 modulate = Color(1, 0.882353, 0.219608, 1)
 text = "2/2"
 font_size = 64
@@ -3263,9 +3262,8 @@ texture = ExtResource("28_vfi2f")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel2Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25547, -1.2, 0)
-visible = false
-render_priority = 1
-outline_render_priority = 0
+render_priority = 5
+outline_render_priority = 4
 modulate = Color(1, 0.882353, 0.219608, 1)
 text = "4/4"
 font_size = 64
@@ -3283,10 +3281,8 @@ texture = ExtResource("27_6hxas")
 
 [node name="Label3D" type="Label3D" parent="SpriteParent/Barrel1Sprite"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.05428, -1.7, 0)
-visible = false
-sorting_offset = 1.0
-render_priority = 1
-outline_render_priority = 0
+render_priority = 5
+outline_render_priority = 4
 modulate = Color(1, 0.882353, 0.219608, 1)
 text = "3/3"
 font_size = 64
@@ -3304,7 +3300,6 @@ render_priority = 3
 texture = ExtResource("15_x3kbv")
 
 [node name="ArmSpriteR" type="Sprite3D" parent="SpriteParent"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 layers = 2
 sorting_offset = 3.0
 render_priority = 2

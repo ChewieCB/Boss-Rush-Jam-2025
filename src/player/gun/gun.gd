@@ -500,7 +500,7 @@ func spin_all_barrels() -> void:
 	#gun_status_label.visible = false
 	stop_all_barrels()
 
-	reload(true)
+	#reload(true)
 
 
 func _spin_barrel(barrel_idx: int) -> void:
@@ -642,18 +642,22 @@ func reload(already_spin_barrel = false):
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
 	
-	for i in range(barrel_container.get_child_count()):
-		var barrel = barrel_container.get_child(i)
-		barrel.reload_count += 1
-		var barrel_label: Label3D = barrel_labels[i]
-		barrel_label.text = "[%s]" % [
-			barrel.reloads_before_spin -barrel.reload_count
-		]
-		if barrel.reload_count == barrel.reloads_before_spin:
-			_spin_barrel(i)
-			get_tree().create_timer(base_spin_time).timeout.connect(
-				func(): _stop_barrel(i)
-			)
+	match GameManager.CHEAT_spin_mode:
+		GameManager.DebugSpinMode.SEEDED_AUTO_SPIN:
+			for i in range(barrel_container.get_child_count()):
+				var barrel = barrel_container.get_child(i)
+				barrel.reload_count += 1
+				var barrel_label: Label3D = barrel_labels[i]
+				barrel_label.text = "[%s]" % [
+					barrel.reloads_before_spin -barrel.reload_count
+				]
+				if barrel.reload_count == barrel.reloads_before_spin:
+					_spin_barrel(i)
+					get_tree().create_timer(base_spin_time).timeout.connect(
+						func(): _stop_barrel(i)
+					)
+		GameManager.DebugSpinMode.ON_RELOAD:
+			spin_all_barrels()
 
 
 func reload_no_anim() -> void:

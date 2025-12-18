@@ -270,7 +270,8 @@ func _unhandled_input(event):
 	if event.is_action_pressed("spin_reload"):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
-		spin_barrels()
+		if GameManager.CHEAT_spin_mode != GameManager.DebugSpinMode.ON_RELOAD:
+			spin_barrels()
 	# DEBUG
 	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
