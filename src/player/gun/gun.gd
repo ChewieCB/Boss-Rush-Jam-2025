@@ -9,6 +9,7 @@ signal gun_reloaded
 
 signal barrel_spin_started(barrel: SpinBarrel, barrel_idx: int)
 signal barrel_spin_stopped(barrel: SpinBarrel, barrel_idx: int)
+signal barrel_effect_set(barrel_idx: int, effect: BaseBarrelEffect)
 signal barrel_equipped(barrel: SpinBarrel, barrel_idx: int)
 signal barrel_unequipped(barrel: SpinBarrel, barrel_idx: int)
 
@@ -171,7 +172,7 @@ func _process(delta: float) -> void:
 	#print(" > reload state: %s" % reload_frame_state.get_current_node())
 
 
-func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT) -> void:
+func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip_animation: bool = false) -> void:
 	# DEBUG: 
 	# enum GunFrameIdEnum {
 	#	NONE,
@@ -187,7 +188,11 @@ func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT) -> v
 	
 	var frame_prefixes = ["", "", "shotgun_idle", "smg_idle", "rifle_idle"]
 	var idle_state = frame_prefixes[frame_id]
-	idle_frame_state.travel(idle_state)
+	
+	if skip_animation:
+		idle_frame_state.start(idle_state)
+	else:
+		idle_frame_state.travel(idle_state)
 
 
 func set_stat_from_gun_frame() -> void:
@@ -764,6 +769,7 @@ func install_barrel(barrel_prefab: PackedScene) -> void:
 
 	var barrel_inst = barrel_prefab.instantiate()
 	#barrel_inst.barrel_effect_changed.connect(_set_barrel_effect_label)
+	barrel_inst.barrel_effect_changed.connect(_on_barrel_effect_changed)
 	barrel_container.add_child(barrel_inst)
 	#_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
 
@@ -789,6 +795,18 @@ func install_barrel(barrel_prefab: PackedScene) -> void:
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
+
+
+func _on_barrel_effect_changed(barrel: SpinBarrel, effect: BaseBarrelEffect) -> void:
+	barrel_effect_set.emit(barrel, effect)
+	# Update the gun frame if we're using the archetype barrel
+	match effect.icon_id:
+		0:  # Rifle
+			set_frame_art(GunFrameResource.GunFrameIdEnum.SNIPER, true)
+		1:  # Shotgun
+			set_frame_art(GunFrameResource.GunFrameIdEnum.SHOTGUN, true)
+		2:  # SMG
+			set_frame_art(GunFrameResource.GunFrameIdEnum.SMG, true)
 
 
 func remove_barrel(barrel_idx: int) -> void:
@@ -834,7 +852,10 @@ func recheck_installed_barrels():
 		if i < barrel_count:
 			state_machine.travel("idle")
 			barrel_icon_meshes[i].visible = true
-			barrel_label.visible = true
+			if GameManager.CHEAT_spin_mode == GameManager.DebugSpinMode.SEEDED_AUTO_SPIN:
+				barrel_label.visible = true
+			else:
+				barrel_label.visible = false
 		else:
 			state_machine.travel("unequip")
 			barrel_icon_meshes[i].visible = false

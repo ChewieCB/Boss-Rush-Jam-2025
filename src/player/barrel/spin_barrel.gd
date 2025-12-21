@@ -49,6 +49,7 @@ func stop_spin():
 		last_chosen_queue.pop_at(last_chosen_queue.find(chosen_id))
 	last_chosen_queue.push_front(chosen_id)
 
+
 func _process(delta: float) -> void:
 	if not is_spinning:
 		return
@@ -61,9 +62,10 @@ func _process(delta: float) -> void:
 
 func instant_spin():
 	chosen_id = randi_range(0, len(effect_list) - 1)
+	get_active_effect().on_effect_set()
 
 
-func get_active_effect():
+func get_active_effect() -> BaseBarrelEffect:
 	return effect_list[chosen_id]
 
 
