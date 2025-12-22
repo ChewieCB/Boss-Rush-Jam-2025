@@ -93,13 +93,8 @@ func _on_level_select(level_path: String) -> void:
 
 
 func load_selected_level():
-<< << << < HEAD
 	find_and_load_boss_bgm()
-	var level_path = GameManager.selected_level_path
-== == == =
 	LoadingHandler.start_loading(GameManager.selected_level_path, "", false)
-	
->> >> >> > testing
 	sfx_door_close.play()
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
@@ -110,24 +105,8 @@ func load_selected_level():
 	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
 	GameManager.cached_player_rotation = GameManager.player.rotation
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
-<< << << < HEAD
-	var loaded_scene = ResourceLoader.load_threaded_get(level_path)
-	# HACK - do this properly with dynamic loading of scenes
-	if is_inside_tree():
-		# TODO - fade this out via tween
-		# lobby_music_player.stop()
-		# var new_bgm = loaded_scene.get_state().get_node_property_value(0, 1)
-		# TODO - fixme
-		#if new_bgm:
-			#SoundManager.play_music(new_bgm, 0.25, "BGM")
-		GameManager.is_free_reroll = false
-		get_tree().change_scene_to_packed(loaded_scene)
-== == == =
 	GameManager.is_free_reroll = false
-	lobby_music_player.stop()
-	
 	LoadingHandler.load_scene_seamless()
->> >> >> > testing
 
 
 func find_and_load_boss_bgm() -> void:
