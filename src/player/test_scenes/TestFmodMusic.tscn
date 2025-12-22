@@ -4,6 +4,21 @@
 [ext_resource type="PackedScene" uid="uid://dvaqw2d36ik5y" path="res://src/maps/test/RichTextLogLine.tscn" id="2_bkrtf"]
 [ext_resource type="Texture2D" uid="uid://gsxbep2s5ql0" path="res://assets/picture/gramophone_disc.png" id="3_3x8ku"]
 
+[sub_resource type="Animation" id="Animation_t0djf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Disc:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
 [sub_resource type="Animation" id="Animation_inuas"]
 resource_name = "spin_disc"
 length = 4.0
@@ -19,21 +34,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [0.0, 1.5708, 3.14159, 4.71239, 6.26573]
-}
-
-[sub_resource type="Animation" id="Animation_t0djf"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Disc:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m4ydu"]

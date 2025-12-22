@@ -1,5 +1,8 @@
 extends Node2D
 
+
+@export var music_state_list = ["Menu", "Lobby", "Slotty", "Roulette", "Bartender", "GenericBossAftermath", "PitbossHallway",
+	"PitbossMainfight", "ChipbossInt", "ChipbossStart", "BlackjackStart", "TutorialBossfight", "Tutorial1", "Tutorial2"]
 @export var log_line_prefab: PackedScene
 
 @onready var disc_image: TextureRect = $CanvasLayer/Disc
@@ -9,7 +12,6 @@ extends Node2D
 @onready var log_container: Container = $CanvasLayer/Panel/ScrollContainer/VBoxContainer
 @onready var bpm_label: Label = $CanvasLayer/BPMLabel
 
-var music_state_list = ["Menu", "Lobby", "Slotty", "Roulette", "Bartender"]
 
 var tween: Tween
 var original_disc_scale: Vector2
