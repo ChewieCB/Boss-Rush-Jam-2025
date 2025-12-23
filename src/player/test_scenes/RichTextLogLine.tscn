@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://bfduksv0gcvwn" path="res://assets/fonts/Semplicita/Semplicita Medium Italic.otf" id="2_r2pqh"]
 [ext_resource type="FontFile" uid="uid://b2nugjfldry8h" path="res://assets/fonts/Semplicita/Semplicita Bold Italic.otf" id="3_7s7ub"]
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="4_8mrpk"]
-[ext_resource type="Script" path="res://src/maps/test/rich_text_log_line.gd" id="5_q5mif"]
+[ext_resource type="Script" path="res://src/player/test_scenes/rich_text_log_line.gd" id="5_q5mif"]
 
 [node name="LogLine" type="RichTextLabel"]
 theme_override_fonts/normal_font = ExtResource("1_kxhla")
