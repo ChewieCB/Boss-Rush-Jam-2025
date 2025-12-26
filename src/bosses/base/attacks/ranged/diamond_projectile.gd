@@ -11,7 +11,6 @@ class_name DiamondProjectile
 var target: CharacterBody3D
 var velocity: Vector3
 var rot: Vector3
-var collision_count: int = 0
 
 func _ready() -> void:
 	super ()
@@ -35,22 +34,6 @@ func _physics_process(delta: float) -> void:
 		global_translate(-global_transform.basis.z * projectile_speed * delta)
 	else:
 		global_position -= transform.basis.z * projectile_speed * delta
-
-
-func create_spark(pos: Vector3, normal: Vector3):
-	if spark_effect == null:
-		return
-
-	var spark_inst = spark_effect.instantiate()
-	get_parent().add_child(spark_inst)
-	spark_inst.global_position = pos
-
-	if normal.is_equal_approx(Vector3.DOWN):
-		spark_inst.rotation_degrees.x = -90
-	elif normal.is_equal_approx(Vector3.UP):
-		spark_inst.rotation_degrees.x = 90
-	else:
-		spark_inst.look_at(pos + normal, Vector3.UP)
 
 func _on_homing_delay_timeout() -> void:
 	homing_timer.start(homing_delay)

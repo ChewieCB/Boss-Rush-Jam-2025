@@ -10,7 +10,7 @@ signal desired_height_reached
 # Add VFX when started shooting.
 # -Coin Spray: Fire in a burst-of-5, with higher firerate, speed, and recoil. Maybe let the coin ricochet once.
 # -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.__draw
-# -Bell of Fortune: Add 3D VFX indicator to better telegraph.
+# -Bell of Fortune: Add 3D VFX indicator to better telegraph. Add screenshake and dust cloud on impact.
 # -General: Add dust particle below to show that he's hovering.
 
 
@@ -18,7 +18,7 @@ signal desired_height_reached
 # Ante 1: Room of Fortune - Add a slot machine that add modifier to stages. Boss can interact with it too ( on a CD)
 # Ante 2: Hidden Motive - Hide the slot UI / attack indicator
 # Ante 3: Pinball Gamble - Enable new projectile attack that can ricochet
-# Ante 4: 
+# Ante 4: New phase? At 20% HP, Overclock, where the boss significantly reduce its attack cooldown
 # Ante 5: Greed Machine - Boss can pick up / steal dropped chips to recover HP
 
 # Status
@@ -358,7 +358,7 @@ func _on_spin_slots_spinning_state_entered() -> void:
 			slot_sprite.texture = slot_icons[new_idx]
 			#for decal in slot_decals:
 				#decal.mesh.material.albedo_texture = slot_icons[new_idx]
-		await get_tree().create_timer(0.1).timeout
+		await get_tree().create_timer(0.1, false).timeout
 	# Settle each roller one by one
 	for i in range(slot_icons_parent.get_child_count()):
 		while slot_icons_parent.get_child(i).texture != next_attack_texture:
@@ -383,7 +383,7 @@ func _on_spin_slots_recover_state_entered() -> void:
 	debug_state_label.text = "Spin Slots | Recovering"
 	state_chart.send_event("attack_end")
 
-	#await get_tree().create_timer(attack_recovery_time).timeout
+	#await get_tree().create_timer(attack_recovery_time, false).timeout
 
 	state_chart.send_event("cooldown_end")
 	state_chart.send_event(next_attack)
@@ -404,7 +404,7 @@ func _on_coin_projectiles_targeting_state_entered() -> void:
 
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.8, false).timeout
 	state_chart.send_event("start_shooting")
 
 
@@ -412,15 +412,15 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Coin Burst | Shooting"
 
 	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time).timeout
+	await get_tree().create_timer(telegraph_time, false).timeout
 	state_chart.send_event("attack_start")
 
 	for i in num_bursts:
 		for j in coin_shots_per_burst:
-			await get_tree().create_timer(delay_per_projectile).timeout
+			await get_tree().create_timer(delay_per_projectile, false).timeout
 			var proj: BaseBossProjectile = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
 			proj.init(coin_damage * GameManager.get_risk_dmg_mult(), coin_speed)
-		await get_tree().create_timer(delay_between_burst).timeout
+		await get_tree().create_timer(delay_between_burst, false).timeout
 	state_chart.send_event("stop_shooting")
 
 
@@ -428,7 +428,7 @@ func _on_coin_projectiles_recover_state_entered() -> void:
 	debug_state_label.text = "Coin Burst | Recovering"
 
 	state_chart.send_event("attack_end")
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time, false).timeout
 	state_chart.send_event("cooldown_end")
 
 	select_attack()
@@ -517,7 +517,7 @@ func _on_bell_drop_targeting_state_entered() -> void:
 
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(1.2).timeout
+	await get_tree().create_timer(1.2, false).timeout
 	state_chart.send_event("start_drop")
 
 
@@ -525,7 +525,7 @@ func _on_bell_drop_dropping_state_entered() -> void:
 	debug_state_label.text = "Bell Drop | Dropping"
 
 	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time).timeout
+	await get_tree().create_timer(telegraph_time, false).timeout
 	state_chart.send_event("attack_start")
 
 	# Get a bunch of evenly distributed points clamped to the navmesh
@@ -548,14 +548,14 @@ func _on_bell_drop_dropping_state_exited() -> void:
 		var spawn := Vector3(point.x, 2.5, point.y)
 		# Spawn shadow/mesh to show AoE, grow in size as it drops
 		drop_shadow(spawn, 6.0, bell_shadow_time)
-		await get_tree().create_timer(0.2).timeout
+		await get_tree().create_timer(0.2, false).timeout
 
 
 func _on_bell_drop_recover_state_entered() -> void:
 	debug_state_label.text = "Bell Drop | Recovering"
 
 	state_chart.send_event("attack_end")
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time, false).timeout
 	state_chart.send_event("cooldown_end")
 
 	select_attack()
@@ -569,7 +569,7 @@ func _on_lever_swipe_targeting_state_entered() -> void:
 
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time).timeout
+	await get_tree().create_timer(telegraph_time, false).timeout
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_swipe")
 
@@ -627,7 +627,7 @@ func _on_lever_swipe_swipe_state_entered() -> void:
 		self.velocity.x = dodge_vector.x
 		self.velocity.z = dodge_vector.z
 
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.2, false).timeout
 	sprite.modulate = Color.WHITE
 
 	state_chart.send_event("end_swipe")
@@ -639,7 +639,7 @@ func _on_lever_swipe_recover_state_entered() -> void:
 	sfx_player.stream = null
 
 	state_chart.send_event("attack_end")
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time, false).timeout
 	state_chart.send_event("cooldown_end")
 
 	select_attack()
@@ -666,7 +666,7 @@ func _on_homing_projectiles_targeting_state_entered() -> void:
 
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.8, false).timeout
 	state_chart.send_event("start_shooting")
 
 
@@ -674,7 +674,7 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Shooting"
 	# Fire out projctiles in a spiral, each projectile homes in on the player
 	for i in range(diamond_shots_per_attack):
-		await get_tree().create_timer(diamond_shot_time / diamond_shots_per_attack).timeout
+		await get_tree().create_timer(diamond_shot_time / diamond_shots_per_attack, false).timeout
 		var _sfx_player = get_available_sfx_player()
 		_sfx_player.stream = sfx_diamond_shot.pick_random()
 		_sfx_player.play()
@@ -693,7 +693,7 @@ func _on_homing_projectiles_recover_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Recovering"
 
 	state_chart.send_event("attack_end")
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time, false).timeout
 	state_chart.send_event("cooldown_end")
 
 	select_attack()
@@ -711,7 +711,7 @@ func _on_pinball_projectiles_targeting_state_entered() -> void:
 
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(0.8).timeout
+	await get_tree().create_timer(0.8, false).timeout
 	state_chart.send_event("start_shooting")
 
 
@@ -719,7 +719,7 @@ func _on_pinball_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Pinball Riochet | Shooting"
 	# Fire out projctiles in a spiral, each projectile can ricochet
 	for i in range(pinball_shots_per_attack):
-		await get_tree().create_timer(pinball_shot_time / pinball_shots_per_attack).timeout
+		await get_tree().create_timer(pinball_shot_time / pinball_shots_per_attack, false).timeout
 		var projectile = fire_projectile(pinball_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
 		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
 		projectile.ricochet_count_left = pinball_ricochet_count
@@ -730,7 +730,7 @@ func _on_pinball_projectiles_recover_state_entered() -> void:
 	debug_state_label.text = "Pinball Riochet | Recovering"
 
 	state_chart.send_event("attack_end")
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time, false).timeout
 	state_chart.send_event("cooldown_end")
 
 	select_attack()
@@ -751,7 +751,7 @@ func _on_charge_targeting_state_entered() -> void:
 	await charge_lined_up
 	#velocity = Vector3.ZERO
 	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time * 2).timeout
+	await get_tree().create_timer(telegraph_time * 2, false).timeout
 	state_chart.send_event("start_charge_attack")
 
 func _on_charge_targeting_state_physics_processing(delta: float) -> void:
@@ -821,7 +821,7 @@ func _on_charge_recover_state_entered() -> void:
 	if hurtbox.body_entered.is_connected(_on_charge_collision):
 		hurtbox.body_entered.disconnect(_on_charge_collision)
 
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time, false).timeout
 
 	state_chart.send_event("cooldown_end")
 	select_attack()
@@ -862,7 +862,7 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 			break
 		bomb_drop_timer.start(bomb_drop_delay)
 		await bomb_drop_timer.timeout
-		#await get_tree().create_timer(bomb_drop_delay).timeout
+		#await get_tree().create_timer(bomb_drop_delay, false).timeout
 		sfx_player.stream = sfx_bomb_launch.pick_random()
 		sfx_player.play()
 		var projectile := bomb_projectile.instantiate() as RigidBody3D
@@ -891,7 +891,7 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 
 	await desired_height_reached
 
-	await get_tree().create_timer(attack_recovery_time).timeout
+	await get_tree().create_timer(attack_recovery_time, false).timeout
 
 	state_chart.send_event("cooldown_end")
 	select_attack()
