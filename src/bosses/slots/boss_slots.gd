@@ -4,12 +4,22 @@ class_name BossSlots
 signal charge_lined_up
 signal desired_height_reached
 
+
+# Juice TODO:
+# -Homing Diamond: Change the homing diamond to spawn all at once (instead of one by one), wait a bit then homing at player. 
+# Add VFX when started shooting.
+# -Coin Spray: Fire in a burst-of-5, with higher firerate, speed, and recoil. Maybe let the coin ricochet once.
+# -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.__draw
+# -Bell of Fortune: Add 3D VFX indicator to better telegraph.
+# -General: Add dust particle below to show that he's hovering.
+
+
 # Antes note:
-# Ante 1: Toll of Fortune - Enable falling bell attack + Enhance Coin Burst
-# Ante 2: Seeking Luxury - Enable homing diamond projectile attack + Enhance Cherry Bomb
-# Ante 3 (new): Pinball Gamble - Enable new projectile attack that can ricochet + Enhance Diamond
-# Ante 4 (new): Hidden Motive - Hide the slot UI / attack indicator
-# Ante 5 (new): Greed Machine - Boss can pick up / steal dropped chips to recover HP
+# Ante 1: Room of Fortune - Add a slot machine that add modifier to stages. Boss can interact with it too ( on a CD)
+# Ante 2: Hidden Motive - Hide the slot UI / attack indicator
+# Ante 3: Pinball Gamble - Enable new projectile attack that can ricochet
+# Ante 4: 
+# Ante 5: Greed Machine - Boss can pick up / steal dropped chips to recover HP
 
 # Status
 # Weak to Shock (he's a machine), resist to Bleeding (same reason)
@@ -159,12 +169,14 @@ var absorb_chip_enabled = false
 
 func _ready() -> void:
 	super ()
+	bell_attack_enabled = true
+	homing_diamond_enabled = true
 	if GameManager.boss_ante >= 1:
-		bell_attack_enabled = true
+		pass
 	if GameManager.boss_ante >= 2:
-		homing_diamond_enabled = true
-	if GameManager.boss_ante >= 3:
 		pinball_enabled = true
+	if GameManager.boss_ante >= 3:
+		pass
 	if GameManager.boss_ante >= 4:
 		slot_icons_parent.visible = false
 	if GameManager.boss_ante >= 5:
