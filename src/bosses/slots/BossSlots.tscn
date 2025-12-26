@@ -1,4 +1,4 @@
-[gd_scene load_steps=100 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=101 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -68,6 +68,7 @@
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="57_f27rp"]
 [ext_resource type="Texture2D" uid="uid://cy008ijk50dtk" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_hit.png" id="62_ci6xi"]
 [ext_resource type="AnimationLibrary" uid="uid://cbukxypul85wr" path="res://src/bosses/slots/assets/slot_boss_anims.res" id="64_5u1vo"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="65_q3x8w"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="66_4ktje"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="67_h7fvy"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
@@ -240,10 +241,11 @@ min_charge_distance = 10.0
 sfx_charge = Array[AudioStream]([ExtResource("37_cawc0")])
 sfx_charge_impact = Array[AudioStream]([])
 diamond_damage = 3.0
-diamond_speed = 35.0
+diamond_speed = 20.0
+diamond_homing_speed = 40.0
+diamond_spread = 30.0
 diamond_projectile = ExtResource("11_dqr52")
-diamond_shots_per_attack = 12
-diamond_shot_time = 1.3
+diamond_shots_per_attack = 7
 sfx_diamond_shot = Array[AudioStream]([ExtResource("36_pqkkl"), ExtResource("37_0sig5"), ExtResource("38_hfhsu"), ExtResource("39_gde5g"), ExtResource("40_8wl1k"), ExtResource("41_182io"), ExtResource("42_vntjg"), ExtResource("43_2donj")])
 pinball_damage = 3.0
 pinball_speed = 300.0
@@ -324,12 +326,15 @@ mesh = SubResource("SphereMesh_unuxb")
 [node name="MarkerPivot" type="Node3D" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, 0)
 
-[node name="Marker3D" type="Marker3D" parent="MarkerPivot" index="0"]
+[node name="ProjectileSpawnMarker" type="Marker3D" parent="MarkerPivot" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="MarkerPivot/Marker3D" index="0"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MarkerPivot/ProjectileSpawnMarker" index="0"]
 visible = false
 mesh = SubResource("SphereMesh_lr0sl")
+
+[node name="ExplosionPoly" parent="MarkerPivot/ProjectileSpawnMarker" index="1" instance=ExtResource("65_q3x8w")]
+free_on_finished = false
 
 [node name="Hurtbox" parent="." index="4"]
 monitoring = true

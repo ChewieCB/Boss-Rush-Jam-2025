@@ -25,8 +25,9 @@ signal desired_height_reached
 # Weak to Shock (he's a machine), resist to Bleeding (same reason)
 
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
-@onready var projectile_spawn_marker: Marker3D = $MarkerPivot/Marker3D
+@onready var projectile_spawn_marker: Marker3D = $MarkerPivot/ProjectileSpawnMarker
 @onready var slot_icons_parent: Node3D = $Sprite3D/SlotIcons
+@onready var explode_vfx = $MarkerPivot/ProjectileSpawnMarker/ExplosionPoly
 
 var prev_phase
 @export var phase_2_health_percentage_trigger: float = 0.5
@@ -123,10 +124,11 @@ var charge_locked: bool = false
 @export_subgroup("Homing Diamonds")
 var homing_diamond_enabled = false # Based on ante 2
 @export var diamond_damage: float = 3
-@export var diamond_speed: float = 35
+@export var diamond_speed: float = 20
+@export var diamond_homing_speed: float = 40
+@export var diamond_spread: float = 30
 @export var diamond_projectile: PackedScene
-@export var diamond_shots_per_attack: int = 12
-@export var diamond_shot_time: float = 1.3
+@export var diamond_shots_per_attack: int = 7
 # SFX
 @export var sfx_diamond_shot: Array[AudioStream]
 
@@ -673,19 +675,24 @@ func _on_homing_projectiles_targeting_state_entered() -> void:
 func _on_homing_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Shooting"
 	# Fire out projctiles in a spiral, each projectile homes in on the player
+	explode_vfx.explode()
 	for i in range(diamond_shots_per_attack):
-		await get_tree().create_timer(diamond_shot_time / diamond_shots_per_attack, false).timeout
+		# await get_tree().create_timer(diamond_shot_time / diamond_shots_per_attack, false).timeout
 		var _sfx_player = get_available_sfx_player()
 		_sfx_player.stream = sfx_diamond_shot.pick_random()
 		_sfx_player.play()
 
 		var projectile: DiamondProjectile = diamond_projectile.instantiate()
 		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
+		projectile.diamond_homing_speed = diamond_homing_speed
 		#get_tree().root.get_child(2).
 		get_tree().get_root().add_child(projectile)
 		projectile.global_position = projectile_spawn_marker.global_position
 		projectile.target = target
-		projectile.global_rotation.y = self.global_rotation.y
+		# projectile.global_rotation.y = self.global_rotation.y
+		var dir_to_target = projectile_spawn_marker.global_position.direction_to(target.global_position)
+		var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, diamond_spread)
+		projectile.look_at(projectile.global_position + spreaded_direction, Vector3.UP)
 	#
 	state_chart.send_event("stop_shooting")
 
