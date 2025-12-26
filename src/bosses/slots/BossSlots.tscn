@@ -1,7 +1,8 @@
-[gd_scene load_steps=101 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=102 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
+[ext_resource type="Texture2D" uid="uid://cwskh10bq3msx" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Pulled_Lever.png" id="3_dsptn"]
 [ext_resource type="AudioStream" uid="uid://biv0t34kylfov" path="res://src/bosses/slots/assets/sfx/Basic Long Slot Machine Improved.mp3" id="3_o5exi"]
 [ext_resource type="Texture2D" uid="uid://bbblp8vkvd3no" path="res://src/bosses/slots/assets/icons/temp/flip_full.png" id="3_say4o"]
 [ext_resource type="Texture2D" uid="uid://v67yeqhnxlbd" path="res://src/bosses/slots/assets/icons/temp/suit_diamonds.png" id="4_6oj0s"]
@@ -195,6 +196,7 @@ _data = {
 motion_mode = 1
 script = ExtResource("2_b0b3s")
 phase_2_health_percentage_trigger = 0.5
+pulled_lever_sprite = ExtResource("3_dsptn")
 DESIRED_HEIGHT = 3.1
 DROP_FACTOR = 1.0
 SLOT_TICKS = 20

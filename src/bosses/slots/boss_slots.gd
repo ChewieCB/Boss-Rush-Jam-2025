@@ -30,7 +30,11 @@ signal desired_height_reached
 @onready var explode_vfx = $MarkerPivot/ProjectileSpawnMarker/ExplosionPoly
 
 var prev_phase
+@export_group("Phase")
 @export var phase_2_health_percentage_trigger: float = 0.5
+
+@export_group("Display")
+@export var pulled_lever_sprite: CompressedTexture2D
 
 @export_group("Movement")
 @export var DESIRED_HEIGHT: float = 3.1
@@ -337,7 +341,9 @@ func _on_spin_slots_state_physics_processing(delta: float) -> void:
 
 func _on_spin_slots_targeting_state_entered() -> void:
 	debug_state_label.text = "Spin Slots | Targeting"
-
+	sprite.texture = pulled_lever_sprite
+	await get_tree().create_timer(0.2, false).timeout
+	sprite.texture = base_sprite
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
 	state_chart.send_event("start_slots")
@@ -358,8 +364,6 @@ func _on_spin_slots_spinning_state_entered() -> void:
 			var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
 			var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size() - 1)
 			slot_sprite.texture = slot_icons[new_idx]
-			#for decal in slot_decals:
-				#decal.mesh.material.albedo_texture = slot_icons[new_idx]
 		await get_tree().create_timer(0.1, false).timeout
 	# Settle each roller one by one
 	for i in range(slot_icons_parent.get_child_count()):
@@ -369,9 +373,6 @@ func _on_spin_slots_spinning_state_entered() -> void:
 				var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
 				var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size())
 				slot_sprite.texture = slot_icons[new_idx]
-
-	#for decal in slot_decals:
-		#decal.mesh.material.albedo_texture = slot_icons[next_attack_idx]
 
 	sfx_player.stop()
 	var choice_sfx: AudioStream = sfx_slot_picks[next_attack_idx]
@@ -384,9 +385,9 @@ func _on_spin_slots_spinning_state_entered() -> void:
 func _on_spin_slots_recover_state_entered() -> void:
 	debug_state_label.text = "Spin Slots | Recovering"
 	state_chart.send_event("attack_end")
-
-	#await get_tree().create_timer(attack_recovery_time, false).timeout
-
+	sprite.texture = pulled_lever_sprite
+	await get_tree().create_timer(0.2, false).timeout
+	sprite.texture = base_sprite
 	state_chart.send_event("cooldown_end")
 	state_chart.send_event(next_attack)
 	state_chart.send_event("end_recovery")
