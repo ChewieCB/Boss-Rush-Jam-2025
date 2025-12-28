@@ -28,7 +28,7 @@ projectile_damage = 2.0
 spark_effect = ExtResource("2_4nicv")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 modulate = Color(1, 0.933333, 0, 1)
 billboard = 1
 texture = ExtResource("2_5qvk8")

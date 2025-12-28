@@ -121,6 +121,8 @@ var debug_trajectory_mesh: MeshInstance3D
 @export var base_sprite: CompressedTexture2D
 @export var hurt_sprite: CompressedTexture2D
 @export var death_sprites: Array[CompressedTexture2D]
+# const HIT_EFFECT_INITIAL_VALUE = 0.4
+# const HIT_EFFECT_FADE_SPEED = 1.5
 @export_subgroup("Hurt Frame")
 # TODO - make this an actual stagger that delays/interrupts attacks?
 @export var hurt_frame_window: float = 0.6
@@ -196,15 +198,23 @@ const JUMP_FORCE: float = 8
 @export var angle_speed: float = 1.0 # radians/second
 @export var orbit_angle: float = 0.0 # track this over time
 @export var orbit_radius: float = 20.0
-var time_elapsed: float = 0
-
-var vel_vertical: float = 0
 
 @onready var scene_root = get_parent().get_parent()
 
+var time_elapsed: float = 0
+var vel_vertical: float = 0
+
+# Hit effect
+var hit_effect_shake_strength = 0.08
+var hit_effect_shake_duration = 0.12
+var hit_effect_flash_duration = 0.08
+var _original_sprite_position: Vector3
+var _original_sprite_modulate: Color
 
 func _ready() -> void:
 	print_debug("BossCore ready")
+	_original_sprite_position = sprite.position
+	_original_sprite_modulate = sprite.modulate
 	randomize()
 	apply_risk_modifier()
 	# If the player has beaten all bosses, buff them for the replay value
@@ -229,8 +239,15 @@ func _ready() -> void:
 	if owner:
 		await owner.ready
 	print_debug("BossCore ready end")
-	
 
+
+# func _process(delta: float) -> void:
+# 	var current_sprite_shader_hit_effect = sprite.material_override.get_shader_parameter("hit_effect")
+# 	if current_sprite_shader_hit_effect > 0:
+# 		current_sprite_shader_hit_effect -= HIT_EFFECT_FADE_SPEED * delta
+# 		sprite.material_override.set_shader_parameter("hit_effect", current_sprite_shader_hit_effect)
+
+	
 func _physics_process(delta: float) -> void:
 	vel_vertical -= GRAVITY * delta
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
@@ -590,13 +607,44 @@ func _on_movement_jumping_state_physics_processing(_delta: float) -> void:
 
 ### HEALTH --------------------------------
 #### HIT
+func hit_effect_sprite_shake():
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_OUT)
+	var shake_time = 6
+	for i in range(shake_time):
+		var offset = Vector3(
+			randf_range(-hit_effect_shake_strength, hit_effect_shake_strength),
+			randf_range(-hit_effect_shake_strength, hit_effect_shake_strength),
+			0
+		)
+		tween.tween_property(
+			sprite,
+			"position",
+			_original_sprite_position + offset,
+			hit_effect_shake_duration / shake_time
+		)
+	tween.tween_property(self, "position", _original_sprite_position, hit_effect_shake_duration / shake_time)
+
+func hit_effect_sprite_flash():
+	var tween = create_tween()
+	tween.tween_property(sprite, "modulate", Color.RED, hit_effect_flash_duration)
+	tween.tween_property(sprite, "modulate", _original_sprite_modulate, hit_effect_flash_duration)
+
+func play_sprite_hit_effect() -> void:
+	# hit_effect_sprite_shake()
+	# hit_effect_sprite_flash()
+	pass
+
 func _on_health_hit_state_entered() -> void:
+	play_sprite_hit_effect()
 	sprite.modulate = Color.RED
 	await get_tree().create_timer(0.05).timeout
 	state_chart.send_event("end_damage")
 
 func _on_health_hit_state_exited() -> void:
 	sprite.modulate = Color.WHITE
+	pass
 
 #### DEAD
 func _on_health_dead_state_entered() -> void:

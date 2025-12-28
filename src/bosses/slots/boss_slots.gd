@@ -6,11 +6,11 @@ signal desired_height_reached
 
 
 # Juice TODO:
-# -Homing Diamond: Change the homing diamond to spawn all at once (instead of one by one), wait a bit then homing at player. 
-# Add VFX when started shooting.
+# -Homing Diamond: Change the homing diamond to spawn all at once (instead of one by one), wait a bit then homing at player.  DONE
 # -Coin Spray: Fire in a burst-of-5, with higher firerate, speed, and recoil. Maybe let the coin ricochet once.
-# -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.__draw
+# -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.
 # -Bell of Fortune: Add 3D VFX indicator to better telegraph. Add screenshake and dust cloud on impact.
+# -Charge: Add ground decal effect on charge path to show its power. Add speedline
 # -General: Add dust particle below to show that he's hovering.
 
 
@@ -27,7 +27,7 @@ signal desired_height_reached
 @onready var projectile_marker_pivot: Node3D = $MarkerPivot
 @onready var projectile_spawn_marker: Marker3D = $MarkerPivot/ProjectileSpawnMarker
 @onready var slot_icons_parent: Node3D = $Sprite3D/SlotIcons
-@onready var explode_vfx = $MarkerPivot/ProjectileSpawnMarker/ExplosionPoly
+@onready var explode_vfx: ExplosionParticles = $MarkerPivot/ProjectileSpawnMarker/ExplosionPoly
 
 var prev_phase
 @export_group("Phase")
@@ -84,11 +84,12 @@ var slot_ticks: int = SLOT_TICKS
 
 @export_subgroup("Coin Burst")
 @export var coin_damage: float = 2
-@export var coin_speed: float = 50
+@export var coin_speed: float = 60
 @export var coin_projectile: PackedScene
-@export var coin_shots_per_burst: int = 8
-@export var num_bursts: int = 1
-@export var delay_between_burst: float = 0.6
+@export var coin_shots_per_burst: int = 4
+@export var coin_burst_repeat: int = 3
+@export var coin_firerate: float = 4
+@export var delay_between_coin_burst: float = 0.5
 # SFX
 @export var sfx_coin_shot: Array[AudioStream]
 
@@ -199,7 +200,7 @@ func activate() -> void:
 
 func _physics_process(delta: float) -> void:
 	super (delta)
-	
+
 	if target:
 		projectile_marker_pivot.look_at(target.global_position)
 		slot_icons_parent.look_at(target.global_position)
@@ -418,12 +419,13 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 	await get_tree().create_timer(telegraph_time, false).timeout
 	state_chart.send_event("attack_start")
 
-	for i in num_bursts:
+	for i in coin_burst_repeat:
+		explode_vfx.explode()
 		for j in coin_shots_per_burst:
-			await get_tree().create_timer(delay_per_projectile, false).timeout
+			await get_tree().create_timer(1.0 / coin_firerate, false).timeout
 			var proj: BaseBossProjectile = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
 			proj.init(coin_damage * GameManager.get_risk_dmg_mult(), coin_speed)
-		await get_tree().create_timer(delay_between_burst, false).timeout
+		await get_tree().create_timer(delay_between_coin_burst, false).timeout
 	state_chart.send_event("stop_shooting")
 
 
@@ -490,8 +492,8 @@ func spawn_bell(pos: Vector3, size: float) -> Bell:
 		pos.y = result.position.y
 
 	var bell: Bell = bell_scene.instantiate()
-	bell.global_position = pos
 	get_tree().root.get_child(7).add_child(bell)
+	bell.global_position = pos
 	bell.init(bell_damage * GameManager.get_risk_dmg_mult())
 	bell.mesh.scale *= size
 	bell.collider.shape.radius = size
