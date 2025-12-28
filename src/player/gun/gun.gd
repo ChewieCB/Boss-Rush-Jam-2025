@@ -64,24 +64,38 @@ var muzzle_flash_sprite: Sprite3D
 @export var TEMP_regain_ammo: AudioStream
 @export var TEMP_crit: AudioStream
 
-var base_damage: int = 20
-var base_projectile_amount: int = 1
+# Init gun stat values
+const BASE_DAMAGE: int = 20
+const BASE_PROJECTILE_AMOUNT: int = 1
+const BASE_FIRERATE: float = 2.0
+const BASE_MAGAZINE_SIZE: int = 10
+const BASE_RELOAD_TIME: float = 1.0
+const BASE_SPIN_TIME: float = 1.0
+const BASE_SPREAD_ANGLE: float = 0.5
+const IS_HITSCAN: bool = false
+const BASE_PROJECTILE_SPEED: float = 50.0
+const RECOIL_AMOUNT: float = 0.03
+const SCREENSHAKE_AMOUNT: float = 0.2
+const BASE_CUSTOM_PROJECTILE_PREFAB: PackedScene = null
+
+var base_damage: int = BASE_DAMAGE
+var base_projectile_amount: int = BASE_PROJECTILE_AMOUNT
 ## Shot per second
-var base_firerate: float = 2
-var base_magazine_size: int = 10
-var base_reload_time: float = 1
-var base_spin_time: float = 1
+var base_firerate: float = BASE_FIRERATE
+var base_magazine_size: int = BASE_MAGAZINE_SIZE
+var base_reload_time: float = BASE_RELOAD_TIME
+var base_spin_time: float = BASE_SPIN_TIME
 ## How spread out projectile can be from the aim center
-var base_spread_angle: float = 0.5
+var base_spread_angle: float = BASE_SPREAD_ANGLE
 ## Projectile dont have travel time. Shot enemy is instanly damaged. If this ticked, ignore projectile_speed
-var is_hitscan: bool
+var is_hitscan: bool = IS_HITSCAN
 ## How fast projectile travel. Ignored if is_hitscan ticked. Shouldn't higher than 100 or collision detecion
 ## will be an issue
-var base_projectile_speed: float = 50
-var recoil_amount: float = 0.03
+var base_projectile_speed: float = BASE_PROJECTILE_SPEED
+var recoil_amount: float = RECOIL_AMOUNT
 ## How much screenshake when player shot
-var screenshake_amount: float = 0.2
-var base_custom_projectile_prefab: PackedScene = null
+var screenshake_amount: float = SCREENSHAKE_AMOUNT
+var base_custom_projectile_prefab: PackedScene = BASE_CUSTOM_PROJECTILE_PREFAB
 
 @export_group("Prefab Scenes")
 @export var hitscan_prefab: PackedScene
@@ -143,6 +157,10 @@ func _ready() -> void:
 	LoadingHandler.loaded_seamless.connect(equip_active)
 	ScreenTransition.transition_midpoint.connect(equip_active)
 	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
+	
+	barrel_equipped.connect(_on_archetype_equipped)
+	barrel_unequipped.connect(_on_archetype_unequipped)
+	
 	idle_frame_state.start("RESET")
 	
 	if SaveManager.save_data_is_loaded:
@@ -228,6 +246,24 @@ func set_stat_from_gun_frame() -> void:
 	LoadingHandler.skip_equip_anim = false
 
 
+func clear_gun_stats() -> void:
+	base_damage = BASE_DAMAGE
+	base_projectile_amount = BASE_PROJECTILE_AMOUNT
+	base_firerate = BASE_FIRERATE
+	base_magazine_size = BASE_MAGAZINE_SIZE
+	base_reload_time = BASE_RELOAD_TIME
+	base_spin_time = BASE_SPIN_TIME
+	base_spread_angle = BASE_SPREAD_ANGLE
+	is_hitscan = IS_HITSCAN
+	base_projectile_speed = BASE_PROJECTILE_SPEED
+	recoil_amount = RECOIL_AMOUNT
+	screenshake_amount = SCREENSHAKE_AMOUNT
+	base_custom_projectile_prefab = BASE_CUSTOM_PROJECTILE_PREFAB
+	#
+	cancel_reload()
+	reload_no_anim()
+
+
 ## Return true if shot successful
 func shoot(aim_ray: RayCast3D) -> bool:
 	if not GameManager.equipped_gun_frame:
@@ -236,7 +272,10 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		return false
 	
 	if is_reloading or is_spinning or is_jammed:
-		if is_reloading and GameManager.equipped_gun_frame.frame_id == GunFrameResource.GunFrameIdEnum.SHOTGUN and reload_interrupt == false:
+		if is_reloading and \
+		idle_frame_state.get_current_node().begins_with("shotgun") and \
+		#GameManager.equipped_gun_frame.frame_id == GunFrameResource.GunFrameIdEnum.SHOTGUN and \
+		reload_interrupt == false:
 			# When the player tries to shoot during a shotgun reload,
 			# finish the current shell loading anim and interrupt the reload,
 			# keeping the ammo count at whatever it is after the last shell.
@@ -407,7 +446,7 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 	else:
 		bullet_inst = bullet_prefab.instantiate()
 		get_tree().get_root().add_child(bullet_inst)
-
+	
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
 
@@ -478,7 +517,7 @@ func spin_all_barrels() -> void:
 		return
 
 	release_trigger()
-
+	
 	is_spinning = true
 
 	# EXPERIMENTAL for hold/release spinning
@@ -534,6 +573,7 @@ func stop_all_barrels(delay_offset: float = 0.1) -> void:
 		_stop_barrel(i)
 		await get_tree().create_timer(delay_offset).timeout
 	is_spinning = false
+	can_fire = true
 
 
 func _stop_barrel(barrel_idx: int) -> void:
@@ -606,8 +646,14 @@ func reload(already_spin_barrel = false):
 	var reload_state: String = ""
 	var post_reload_state: String = ""
 	var reload_count: int = 1  # Used to reload per-shot in the case of the shotgun
-	match GameManager.equipped_gun_frame.frame_id:
-		GunFrameResource.GunFrameIdEnum.SHOTGUN:
+	var idle_state: String = idle_frame_state.get_current_node()
+	if not idle_state.ends_with("idle"):
+		await post_reload_anim_end
+		idle_state = idle_frame_state.get_current_node()
+	match idle_state:
+	#match GameManager.equipped_gun_frame.frame_id:
+		#GunFrameResource.GunFrameIdEnum.SHOTGUN:
+		"shotgun_idle":
 			reload_state = "shotgun_reload"
 			if cached_reload_start_ammo == 0:
 				post_reload_state = "shotgun_pump_no_shell"
@@ -616,9 +662,11 @@ func reload(already_spin_barrel = false):
 			#else:
 				#post_reload_state = "" # "shotgun_pump_no_shell" - do we want to pump after reload? 
 			reload_count = modified_magazine_size - magazine_ammo_left
-		GunFrameResource.GunFrameIdEnum.SMG:
+		#GunFrameResource.GunFrameIdEnum.SMG:
+		"smg_idle":
 			reload_state = "smg_reload"
-		GunFrameResource.GunFrameIdEnum.SNIPER:
+		#GunFrameResource.GunFrameIdEnum.SNIPER:
+		"rifle_idle":
 			reload_state = "rifle_reload"
 			post_reload_state = "rifle_rack"
 	
@@ -649,6 +697,7 @@ func reload(already_spin_barrel = false):
 	
 	match GameManager.CHEAT_spin_mode:
 		GameManager.DebugSpinMode.SEEDED_AUTO_SPIN:
+			var barrels_to_auto_spin := []
 			for i in range(barrel_container.get_child_count()):
 				var barrel = barrel_container.get_child(i)
 				barrel.reload_count += 1
@@ -657,9 +706,20 @@ func reload(already_spin_barrel = false):
 					barrel.reloads_before_spin -barrel.reload_count
 				]
 				if barrel.reload_count == barrel.reloads_before_spin:
+					barrels_to_auto_spin.append(barrel)
+			
+			if len(barrels_to_auto_spin) == len(installed_barrels):
+				spin_all_barrels()
+			else:
+				for _barrel in barrels_to_auto_spin:
+					var i = barrel_container.get_children().find(_barrel)
+					if i == -1:
+						continue
 					_spin_barrel(i)
 					get_tree().create_timer(base_spin_time).timeout.connect(
-						func(): _stop_barrel(i)
+						func(): 
+							_stop_barrel(i)
+							can_fire = true
 					)
 		GameManager.DebugSpinMode.ON_RELOAD:
 			spin_all_barrels()
@@ -915,6 +975,7 @@ func create_muzzle_smoke(aim_ray: RayCast3D):
 	smoke_inst.global_position = bullet_spawn_marker.global_position
 	smoke_inst.look_at(smoke_inst.global_position + smoke_direction)
 
+
 func create_muzzle_flash_light():
 	muzzle_flash_light.light_energy = 3
 	if muzzle_light_tween and muzzle_light_tween.is_running():
@@ -922,16 +983,30 @@ func create_muzzle_flash_light():
 	muzzle_light_tween = create_tween()
 	muzzle_light_tween.tween_property(muzzle_flash_light, "light_energy", 0, 0.2).set_trans(Tween.TRANS_SINE)
 
+
 func _on_savefile_loaded():
 	if not reinstalled_barrel_from_savefile:
 		reinstalled_barrel_from_savefile = true
 		reinstall_barrels()
+
 
 func check_if_archetype_barrel_installed() -> bool:
 	for barrel in GameManager.equipped_barrels:
 		if barrel.is_archetype_barrel:
 			return true
 	return false
+
+
+func _on_archetype_equipped(barrel: SpinBarrel, _barrel_idx: int) -> void:
+	if barrel:
+		if barrel.get_active_effect().is_archetype:
+			clear_gun_stats()
+
+
+func _on_archetype_unequipped(barrel: SpinBarrel, _barrel_idx: int) -> void:
+	if barrel:
+		if barrel.get_active_effect().is_archetype:
+			set_stat_from_gun_frame()
 
 
 func _debug_anim_tree_state_trace(state_name: String, transition: String) -> void:
