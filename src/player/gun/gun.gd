@@ -349,6 +349,11 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		if magazine_ammo_left <= 0 and i < n_shot_repeat - 1:
 			break
 		
+		var test0 = idle_frame_state.get_current_node()
+		if idle_frame_state.get_current_node().begins_with("smg"):
+			smg_shell_particles.emitting = true
+			smg_shell_particles.restart()
+		
 		gun_shot.emit()
 		
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:

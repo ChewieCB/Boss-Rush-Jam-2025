@@ -1,4 +1,4 @@
-[gd_scene load_steps=101 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=107 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://dbjgf5actedu7" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_2.png" id="16_5bgyl"]
 [ext_resource type="Texture2D" uid="uid://b0magitfwgp0" path="res://src/player/gun/assets/sprite/frames/smg/gun_frame_smg_grip.png" id="17_rwkjl"]
 [ext_resource type="Texture2D" uid="uid://sm2x7tkxr0kj" path="res://src/player/gun/assets/sprite/frames/rifle/gun_frame_rifle_bolthole.png" id="18_3vdnn"]
+[ext_resource type="Texture2D" uid="uid://boidc466t78nf" path="res://src/player/gun/assets/sprite/frames/smg/smg_casing.png" id="18_e4t48"]
 [ext_resource type="Texture2D" uid="uid://do0ikpg17kjko" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1_spin_2.png" id="21_oipg7"]
 [ext_resource type="Texture2D" uid="uid://lg2nbxli2fls" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2_spin_1.png" id="22_q6pxd"]
 [ext_resource type="Texture2D" uid="uid://cobuk6xmebxqk" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2_spin_2.png" id="23_kl067"]
@@ -77,6 +78,38 @@ particles_anim_loop = false
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_1kjr0"]
 material = SubResource("StandardMaterial3D_hm77k")
+orientation = 2
+
+[sub_resource type="Curve" id="Curve_n7axb"]
+max_value = 120.0
+_data = [Vector2(0, 52.7473), 0.0, 0.0, 0, 0, Vector2(0.0912281, 56.5763), 0.0, 0.0, 0, 0, Vector2(0.146597, 67.2527), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_vilc0"]
+curve = SubResource("Curve_n7axb")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_obhub"]
+direction = Vector3(-2, 0.6, -4)
+spread = 4.0
+flatness = 0.176
+initial_velocity_min = 55.0
+initial_velocity_max = 60.0
+angular_velocity_min = 90.0
+angular_velocity_max = 100.0
+angular_velocity_curve = SubResource("CurveTexture_vilc0")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_utfua"]
+render_priority = 5
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("18_e4t48")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_nrikq"]
+material = SubResource("StandardMaterial3D_utfua")
 orientation = 2
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rlyuh"]
@@ -3178,7 +3211,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_xp3ts")
 
-[node name="BlankGun" type="Node3D" node_paths=PackedStringArray("shotgun_flare_sprite", "shotgun_flash_sprite", "shotgun_shell_particles", "smg_flare_sprite", "smg_flash_sprite", "rifle_flare_sprite", "rifle_flash_sprite")]
+[node name="BlankGun" type="Node3D" node_paths=PackedStringArray("shotgun_flare_sprite", "shotgun_flash_sprite", "shotgun_shell_particles", "smg_flare_sprite", "smg_flash_sprite", "smg_shell_particles", "rifle_flare_sprite", "rifle_flash_sprite")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, -6.51926e-09)
 script = ExtResource("1_ferpt")
 gun_name = "Blank gun"
@@ -3188,6 +3221,7 @@ shotgun_flash_sprite = NodePath("SpriteParent/FramesParent/ShotgunFrame/ShotgunS
 shotgun_shell_particles = NodePath("SpriteParent/FramesParent/ShotgunFrame/ShotgunSprite/ShellSpawnPos/GPUParticles3D")
 smg_flare_sprite = NodePath("SpriteParent/FramesParent/SMGFrame/SMGSprite/MuzzleflareLightSprite")
 smg_flash_sprite = NodePath("SpriteParent/FramesParent/SMGFrame/SMGSprite/MuzzleflareLightSprite/MuzzleFlashSprite")
+smg_shell_particles = NodePath("SpriteParent/FramesParent/SMGFrame/SMGSprite/ShellSpawnPos/GPUParticles3D")
 rifle_flare_sprite = NodePath("SpriteParent/FramesParent/RifleFrame/RifleSprite/MuzzleflareLightSprite")
 rifle_flash_sprite = NodePath("SpriteParent/FramesParent/RifleFrame/RifleSprite/MuzzleflareLightSprite/MuzzleFlashSprite")
 TEMP_sfx_shoot = SubResource("AudioStreamRandomizer_wqldo")
@@ -3273,6 +3307,20 @@ layers = 2
 sorting_offset = -1.0
 render_priority = 2
 texture = ExtResource("12_fgtrf")
+
+[node name="ShellSpawnPos" type="Marker3D" parent="SpriteParent/FramesParent/SMGFrame/SMGSprite"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, -3.6, 0)
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="SpriteParent/FramesParent/SMGFrame/SMGSprite/ShellSpawnPos"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, -8.50756)
+sorting_offset = 3.0
+emitting = false
+amount = 1
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.84
+process_material = SubResource("ParticleProcessMaterial_obhub")
+draw_pass_1 = SubResource("PlaneMesh_nrikq")
 
 [node name="RifleFrame" type="Node3D" parent="SpriteParent/FramesParent"]
 visible = false
