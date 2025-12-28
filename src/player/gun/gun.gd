@@ -157,10 +157,10 @@ func _ready() -> void:
 	LoadingHandler.loaded_seamless.connect(equip_active)
 	ScreenTransition.transition_midpoint.connect(equip_active)
 	SaveManager.savefile_loaded.connect(_on_savefile_loaded)
-	
 	barrel_equipped.connect(_on_archetype_equipped)
 	barrel_unequipped.connect(_on_archetype_unequipped)
 	
+	reset_modifier(true)
 	idle_frame_state.start("RESET")
 	
 	if SaveManager.save_data_is_loaded:
@@ -297,20 +297,20 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		play_failed_shoot_sfx()
 		reload()
 		return false
-
-	var time_until_next_shot = 1.0 / modified_firerate
-	if time_until_next_shot > time_since_last_shot:
-		return false
-
+	
 	for barrel in installed_barrels:
 		can_fire = can_fire and barrel.get_active_effect().on_fire_attempt()
 	if not can_fire:
 		play_failed_shoot_sfx()
 		return false
-
+	
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_fire_rate_check()
-
+	
+	var time_until_next_shot = 1.0 / modified_firerate
+	if time_until_next_shot > time_since_last_shot:
+		return false
+	
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_prepare_to_fire()
 	
@@ -734,7 +734,7 @@ func reload_no_anim() -> void:
 	
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
-		
+	
 	magazine_ammo_left = modified_magazine_size
 	is_reloading = false
 	reload_anim_end.emit()
@@ -827,11 +827,11 @@ func play_failed_shoot_sfx():
 		failed_shoot_sfx_timer.start()
 
 
-func install_barrel(barrel_prefab: PackedScene) -> void:
+func install_barrel(barrel_data: BarrelDataResource) -> void:
 	if len(installed_barrels) >= max_barrels:
 		return
-
-	var barrel_inst = barrel_prefab.instantiate()
+	
+	var barrel_inst = barrel_data.barrel_prefab.instantiate()
 	#barrel_inst.barrel_effect_changed.connect(_set_barrel_effect_label)
 	barrel_inst.barrel_effect_changed.connect(_on_barrel_effect_changed)
 	barrel_container.add_child(barrel_inst)
@@ -843,6 +843,7 @@ func install_barrel(barrel_prefab: PackedScene) -> void:
 	var barrel_idx: int = barrel_count - 1 if barrel_count > 0 else 0
 
 	barrel_inst.owner_gun = self
+	barrel_inst.reloads_before_spin = barrel_data.reloads_before_spin
 	installed_barrels.append(barrel_inst)
 	barrel_count = installed_barrels.size()
 
@@ -938,7 +939,7 @@ func reinstall_barrels():
 
 	# Instantiate barrels onto gun
 	for i in GameManager.equipped_barrels.size():
-		var barrel = GameManager.equipped_barrels[i].barrel_prefab
+		var barrel = GameManager.equipped_barrels[i]
 		install_barrel(barrel)
 
 

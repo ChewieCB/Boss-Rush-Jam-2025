@@ -19,7 +19,7 @@ var is_equipped = false
 var last_chosen_queue = []
 
 # TODO - reloads before spin for each barrel should be generated on save file creation, seeded
-@export var reloads_before_spin: int = randi_range(1, 6)
+var reloads_before_spin: int
 var reload_count: int = 0
 
 
@@ -125,6 +125,6 @@ func get_barrel_effect_data_at(index: int) -> Dictionary:
 		"is_archetype": is_archetype,
 		"positive_desc": barrel_effect.positive_desc,
 		"negative_desc": barrel_effect.negative_desc,
-		"icon_id": barrel_effect.icon_id
+		"icon_id": barrel_effect.icon_id,
 	 }
 	return res

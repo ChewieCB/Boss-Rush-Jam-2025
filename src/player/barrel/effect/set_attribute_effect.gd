@@ -39,7 +39,7 @@ func on_effect_set():
 			owner_barrel.owner_gun.modified_reload_time = new_value
 
 func on_fire_rate_check():
-	super ()
+	super()
 	match attribute:
 		AttributeNameEnum.FIRERATE:
 			owner_barrel.owner_gun.modified_firerate = new_value
