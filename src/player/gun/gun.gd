@@ -578,6 +578,8 @@ func stop_all_barrels(delay_offset: float = 0.1) -> void:
 
 func _stop_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
+	if not barrel:
+		return
 	barrel.stop_spin()
 	# Update barrel icon
 	set_barrel_icon(barrel_idx, barrel.get_active_effect().icon_id)
@@ -876,7 +878,7 @@ func remove_barrel(barrel_idx: int) -> void:
 	var barrel: SpinBarrel = barrel_container.get_child(barrel_idx)
 	barrel_container.remove_child(barrel)
 	barrel.get_active_effect().on_barrel_remove()
-	barrel_unequipped.emit(null, barrel_idx)
+	barrel_unequipped.emit(barrel, barrel_idx)
 	barrel.queue_free()
 	
 	barrel_icon_meshes[barrel_idx].set_surface_override_material(0, default_barrel_icon_mat)
