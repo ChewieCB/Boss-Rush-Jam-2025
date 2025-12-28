@@ -170,11 +170,11 @@ func _ready() -> void:
 
 
 func equip_active() -> void:
+	#reset_modifier(true)
 	if GameManager.equipped_gun_frame:
 		set_stat_from_gun_frame()
-	magazine_ammo_left = base_magazine_size
+	#magazine_ammo_left = modified_magazine_size
 	muzzle_flash_light.light_energy = 0
-	reset_modifier(true)
 
 
 func _process(delta: float) -> void:
@@ -302,8 +302,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	if time_until_next_shot > time_since_last_shot:
 		return false
 
-	reset_modifier()
-
 	for barrel in installed_barrels:
 		can_fire = can_fire and barrel.get_active_effect().on_fire_attempt()
 	if not can_fire:
@@ -350,9 +348,9 @@ func shoot(aim_ray: RayCast3D) -> bool:
 			barrel.get_active_effect().on_ammo_consumed()
 		if magazine_ammo_left <= 0 and i < n_shot_repeat - 1:
 			break
-
+		
 		gun_shot.emit()
-
+		
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
 			barrel_flare_sprite.visible = true
 			await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
@@ -370,6 +368,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	## POST-SHOT animations
 	await play_post_shot_anim()
 	
+	reset_modifier()
 	can_fire = true
 	
 	return true
@@ -540,7 +539,7 @@ func spin_all_barrels() -> void:
 	# tied to spinning
 	await get_tree().create_timer(base_spin_time).timeout
 
-	reset_modifier(true)
+	#reset_modifier(true)
 	#gun_status_label.visible = false
 	stop_all_barrels()
 
@@ -569,6 +568,7 @@ func _spin_barrel(barrel_idx: int) -> void:
 
 
 func stop_all_barrels(delay_offset: float = 0.1) -> void:
+	reset_modifier(true)
 	for i in installed_barrels.size():
 		_stop_barrel(i)
 		await get_tree().create_timer(delay_offset).timeout
@@ -588,6 +588,8 @@ func _stop_barrel(barrel_idx: int) -> void:
 	state_machine.travel("idle")
 	
 	SoundManager.stop_sound(TEMP_sfx_spin)
+	barrel.get_active_effect().on_effect_set()
+	magazine_ammo_left = clamp(magazine_ammo_left, 0, modified_magazine_size)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
 	
 	var barrel_label: Label3D = barrel_labels[barrel_idx]
@@ -635,8 +637,8 @@ func reload(already_spin_barrel = false):
 
 	release_trigger()
 
-	if not already_spin_barrel:
-		reset_modifier(true)
+	#if not already_spin_barrel:
+		#reset_modifier(true)
 
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_start()
@@ -693,7 +695,7 @@ func reload(already_spin_barrel = false):
 	is_reloading = false
 	can_fire = true
 	anim_tree.set("parameters/reload_timescale/scale", 1)
-
+	
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
 	
@@ -728,12 +730,12 @@ func reload(already_spin_barrel = false):
 
 
 func reload_no_anim() -> void:
-	reset_modifier(true)
-	magazine_ammo_left = modified_magazine_size
+	#reset_modifier(true)
 	
 	for barrel in installed_barrels:
 		barrel.get_active_effect().on_reload_end()
-	
+		
+	magazine_ammo_left = modified_magazine_size
 	is_reloading = false
 	reload_anim_end.emit()
 	post_reload_anim_end.emit()
@@ -884,7 +886,7 @@ func remove_barrel(barrel_idx: int) -> void:
 	barrel_icon_meshes[barrel_idx].set_surface_override_material(0, default_barrel_icon_mat)
 	
 	recheck_installed_barrels()
-
+	
 	# Re-apply the effects of the currently equipped barrels
 	reset_modifier(true)
 	for _barrel in barrel_container.get_children():

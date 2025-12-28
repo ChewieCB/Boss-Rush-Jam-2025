@@ -25,6 +25,7 @@ enum AttributeNameEnum {
 @export var positive_desc: Array[String]
 @export var negative_desc: Array[String]
 @export var icon_id: int = -1
+@export var is_archetype: bool = false
 
 var owner_barrel: SpinBarrel
 ## This variable is to prevent a single shot trigger the effect multiple times.

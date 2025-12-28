@@ -95,5 +95,5 @@ new_color = Color(0.981201, 1, 0.496776, 1)
 [node name="ModifyRecoil" type="Node3D" parent="EffectContainer/ElectricInfusion"]
 script = ExtResource("4_o15qj")
 attribute = 11
-modify_value = 20.0
+modify_value = 40.0
 is_perc = true

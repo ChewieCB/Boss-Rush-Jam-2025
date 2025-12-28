@@ -20,6 +20,7 @@ signal hide
 @onready var magazine_size_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/MagazineSize
 @onready var status_ui_container: GridContainer = $PlayerHealthBarUI/VBoxContainer/StatusUIContainer
 
+
 func _ready() -> void:
 	# Await player ready
 	await get_owner().ready
