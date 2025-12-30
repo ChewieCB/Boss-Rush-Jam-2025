@@ -89,6 +89,7 @@ var slot_ticks: int = SLOT_TICKS
 @export var coin_shots_per_burst: int = 4
 @export var coin_burst_repeat: int = 3
 @export var coin_firerate: float = 4
+@export var coin_spread: float = 15
 @export var delay_between_coin_burst: float = 0.5
 # SFX
 @export var sfx_coin_shot: Array[AudioStream]
@@ -423,7 +424,7 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 		explode_vfx.explode()
 		for j in coin_shots_per_burst:
 			await get_tree().create_timer(1.0 / coin_firerate, false).timeout
-			var proj: BaseBossProjectile = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
+			var proj: BaseBossProjectile = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, coin_spread, sfx_coin_shot)
 			proj.init(coin_damage * GameManager.get_risk_dmg_mult(), coin_speed)
 		await get_tree().create_timer(delay_between_coin_burst, false).timeout
 	state_chart.send_event("stop_shooting")
@@ -681,22 +682,9 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 	explode_vfx.explode()
 	for i in range(diamond_shots_per_attack):
 		# await get_tree().create_timer(diamond_shot_time / diamond_shots_per_attack, false).timeout
-		var _sfx_player = get_available_sfx_player()
-		_sfx_player.stream = sfx_diamond_shot.pick_random()
-		_sfx_player.play()
-
-		var projectile: DiamondProjectile = diamond_projectile.instantiate()
+		var projectile: DiamondProjectile = fire_projectile(diamond_projectile, projectile_spawn_marker.global_position, diamond_spread, sfx_diamond_shot)
 		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
 		projectile.diamond_homing_speed = diamond_homing_speed
-		#get_tree().root.get_child(2).
-		get_tree().get_root().add_child(projectile)
-		projectile.global_position = projectile_spawn_marker.global_position
-		projectile.target = target
-		# projectile.global_rotation.y = self.global_rotation.y
-		var dir_to_target = projectile_spawn_marker.global_position.direction_to(target.global_position)
-		var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, diamond_spread)
-		projectile.look_at(projectile.global_position + spreaded_direction, Vector3.UP)
-	#
 	state_chart.send_event("stop_shooting")
 
 func _on_homing_projectiles_recover_state_entered() -> void:
@@ -730,7 +718,7 @@ func _on_pinball_projectiles_shooting_state_entered() -> void:
 	# Fire out projctiles in a spiral, each projectile can ricochet
 	for i in range(pinball_shots_per_attack):
 		await get_tree().create_timer(pinball_shot_time / pinball_shots_per_attack, false).timeout
-		var projectile = fire_projectile(pinball_projectile, projectile_spawn_marker.global_position, sfx_coin_shot)
+		var projectile = fire_projectile(pinball_projectile, projectile_spawn_marker.global_position, 0, sfx_coin_shot)
 		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
 		projectile.ricochet_count_left = pinball_ricochet_count
 

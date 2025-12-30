@@ -8,11 +8,12 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_so2kb"]
 radius = 0.4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mcyja"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ki6kr"]
 transparency = 1
 albedo_color = Color(1, 0.766048, 0, 0.713726)
 emission_enabled = true
 emission = Color(1, 0.731834, 0.032858, 1)
+emission_energy_multiplier = 0.6
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_bli60"]
 
@@ -29,7 +30,7 @@ spark_effect = ExtResource("2_4nicv")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-modulate = Color(1, 0.933333, 0, 1)
+modulate = Color(0.8125, 0.749256, 0, 1)
 billboard = 1
 texture = ExtResource("2_5qvk8")
 
@@ -44,11 +45,11 @@ autostart = true
 
 [node name="Trail3D" type="MeshInstance3D" parent="Trail"]
 top_level = true
-material_override = SubResource("StandardMaterial3D_mcyja")
+material_override = SubResource("StandardMaterial3D_ki6kr")
 mesh = SubResource("ImmediateMesh_bli60")
 script = ExtResource("3_jh5os")
 segments = 10
-base_width = 0.1
+base_width = 0.2
 width_profile = SubResource("Curve_my72y")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]

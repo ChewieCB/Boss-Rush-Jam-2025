@@ -222,6 +222,7 @@ coin_projectile = ExtResource("16_52y3v")
 coin_shots_per_burst = 8
 coin_burst_repeat = 3
 coin_firerate = 10.0
+coin_spread = 15.0
 delay_between_coin_burst = 0.5
 sfx_coin_shot = Array[AudioStream]([ExtResource("17_6xi00"), ExtResource("18_0lbrd"), ExtResource("19_aidds"), ExtResource("20_tmjxh"), ExtResource("21_wokd2"), ExtResource("22_0em2w"), ExtResource("23_sjuev")])
 bell_damage = 20.0

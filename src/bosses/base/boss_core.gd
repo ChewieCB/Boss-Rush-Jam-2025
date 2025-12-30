@@ -312,7 +312,7 @@ func orbit_towards_player(
 	navigation_component.set_nav_target_position(orbit_pos)
 
 
-func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> Area3D:
+func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
 	var _sfx_player = get_available_sfx_player()
 	if not _sfx_player:
 		# TODO - error handling
@@ -323,7 +323,9 @@ func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_ar
 	var projectile := _projectile_prefab.instantiate()
 	scene_root.add_child(projectile)
 	projectile.global_position = spawn_pos
-	projectile.look_at(target.global_position, Vector3.UP)
+	var dir_to_target = spawn_pos.direction_to(target.global_position)
+	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
+	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
 	return projectile
 
 
@@ -632,6 +634,8 @@ func hit_effect_sprite_flash():
 	tween.tween_property(sprite, "modulate", _original_sprite_modulate, hit_effect_flash_duration)
 
 func play_sprite_hit_effect() -> void:
+	# TODO: Add a SpriteHolder so we can modify sprite position and scale without
+	# affecting AnimationPlayer.
 	# hit_effect_sprite_shake()
 	# hit_effect_sprite_flash()
 	pass
@@ -644,7 +648,6 @@ func _on_health_hit_state_entered() -> void:
 
 func _on_health_hit_state_exited() -> void:
 	sprite.modulate = Color.WHITE
-	pass
 
 #### DEAD
 func _on_health_dead_state_entered() -> void:
