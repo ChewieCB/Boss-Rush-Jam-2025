@@ -343,9 +343,11 @@ func _on_spin_slots_state_physics_processing(delta: float) -> void:
 
 func _on_spin_slots_targeting_state_entered() -> void:
 	debug_state_label.text = "Spin Slots | Targeting"
+	block_hurt_frame = true
 	sprite.texture = pulled_lever_sprite
 	await get_tree().create_timer(0.2, false).timeout
 	sprite.texture = base_sprite
+	block_hurt_frame = false
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_buildup")
 	state_chart.send_event("start_slots")
@@ -387,8 +389,10 @@ func _on_spin_slots_spinning_state_entered() -> void:
 func _on_spin_slots_recover_state_entered() -> void:
 	debug_state_label.text = "Spin Slots | Recovering"
 	state_chart.send_event("attack_end")
+	block_hurt_frame = true
 	sprite.texture = pulled_lever_sprite
 	await get_tree().create_timer(0.2, false).timeout
+	block_hurt_frame = false
 	sprite.texture = base_sprite
 	state_chart.send_event("cooldown_end")
 	state_chart.send_event(next_attack)
@@ -417,7 +421,10 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Coin Burst | Shooting"
 
 	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time, false).timeout
+	# await get_tree().create_timer(0.4, false).timeout
+	anim_player.play("coin_shot_telegraph")
+	await anim_player.animation_finished
+	anim_player.play("RESET")
 	state_chart.send_event("attack_start")
 
 	for i in coin_burst_repeat:
@@ -672,7 +679,10 @@ func _on_homing_projectiles_targeting_state_entered() -> void:
 
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(0.8, false).timeout
+	# await get_tree().create_timer(0.8, false).timeout
+	anim_player.play("diamond_shot_telegraph")
+	await anim_player.animation_finished
+	anim_player.play("RESET")
 	state_chart.send_event("start_shooting")
 
 

@@ -129,6 +129,8 @@ var debug_trajectory_mesh: MeshInstance3D
 @export var hurt_frame_cooldown: float = 1.5
 @onready var hurt_frame_timer: Timer = $HurtFrameTimer
 @onready var hurt_frame_cooldown_timer: Timer = $HurtFrameCooldownTimer
+## So hurt frame doesnt override telegraph frames
+var block_hurt_frame = false
 
 @export_group("Phase")
 @export var current_phase: int = 1
@@ -676,13 +678,17 @@ func _on_attack_telegraph_state_exited() -> void:
 	sprite.modulate = Color.WHITE
 
 
+func toggle_block_hurt_frame(_enabled: bool) -> void:
+	block_hurt_frame = _enabled
+
+
 ## ======== Signal Callback Methods ========
 
 func _on_stagger() -> void:
 	# Play a hurt frame when we do enough DPS
 	# TODO - let this interrupt/restart the attack telegraph for some attacks
 	if hurt_sprite:
-		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
+		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped() and not block_hurt_frame:
 			sprite.texture = hurt_sprite
 			hurt_frame_timer.start(hurt_frame_window)
 

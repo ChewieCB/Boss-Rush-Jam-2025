@@ -33,29 +33,29 @@ void fragment() {
 	gradient_to_edge = gradient_to_edge * Distortion;
 	gradient_to_edge = 1.0 - gradient_to_edge;
 	vec2 rotaded_uv = rotate_uv(UV, vec2(0.5, 0.5), Rotation_deg, true);
-	
+
 	float remapped_position;
 	{
 		float output_range = Position_Max - Position_Min;
 		remapped_position = Position_Min + output_range * Position;
 	}
-	
+
 	float remapped_time = TIME * Speed + remapped_position;
 	remapped_time = fract(remapped_time);
 	{
 		remapped_time = -2.0 + 4.0 * remapped_time;
 	}
-	
+
 	vec2 offset_uv = vec2(rotaded_uv.xy) + vec2(remapped_time, 0.0);
 	float line = vec3(offset_uv, 0.0).x;
 	line = abs(line);
 	line = gradient_to_edge * line;
 	line = sqrt(line);
-	
+
 	float line_smoothness = clamp(Line_Smoothness, 0.001, 1.0);
 	float offset_plus = Line_Width + line_smoothness;
 	float offset_minus = Line_Width - line_smoothness;
-	
+
 	float remapped_line;
 	{
 		float input_range = offset_minus - offset_plus;
@@ -63,7 +63,7 @@ void fragment() {
 	}
 	remapped_line *= Brightness;
 	remapped_line = min(remapped_line, Alpha);
-	
+
 	vec4 surface_tex = texture(surface, UV);
 	COLOR.rgba *= vec4(remapped_line) * surface_tex.a;
 }
