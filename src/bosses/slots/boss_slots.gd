@@ -103,7 +103,7 @@ var bell_attack_enabled = false # Based on ante 1
 @export var drop_shadow_material: Material
 @export var bell_shadow_time: float = 1.4
 @export var bell_spawn_area_radius: float = 28.0
-@export var bells_to_spawn: int = 6
+@export var bells_to_spawn: int = 4
 var bell_spawn_points: Array = []
 # SFX
 #@export var sfx_bell_Spawn: Array[AudioStream]  - TODO: Get spawn sounds
@@ -433,7 +433,11 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 			await get_tree().create_timer(1.0 / coin_firerate, false).timeout
 			var proj: BaseBossProjectile = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, coin_spread, sfx_coin_shot)
 			proj.init(coin_damage * GameManager.get_risk_dmg_mult(), coin_speed)
-		await get_tree().create_timer(delay_between_coin_burst, false).timeout
+		# Dont play animation for the last one (since boss no longer actually shoot)
+		if i < coin_burst_repeat - 1:
+			anim_player.play("quick_coin_shot")
+			await anim_player.animation_finished
+			anim_player.play("RESET")
 	state_chart.send_event("stop_shooting")
 
 
@@ -451,6 +455,7 @@ func _on_coin_projectiles_recover_state_entered() -> void:
 #### BELL DROP
 # 3 Bells on rollers
 # Single large AoE bell drops from ceiling
+# TODO: Also tween flares from boss to these position so it better telegraph
 func drop_shadow(
 	target_pos: Vector3,
 	max_radius: float,
@@ -530,16 +535,21 @@ func _on_bell_drop_targeting_state_entered() -> void:
 
 	state_chart.send_event("start_moving")
 	state_chart.send_event("attack_buildup")
-	await get_tree().create_timer(1.2, false).timeout
+	await get_tree().create_timer(0.5, false).timeout
+	anim_player.play("summon_bell_raise_gun")
+	await anim_player.animation_finished
+	anim_player.play("RESET")
+	state_chart.send_event("attack_start")
 	state_chart.send_event("start_drop")
 
 
 func _on_bell_drop_dropping_state_entered() -> void:
 	debug_state_label.text = "Bell Drop | Dropping"
-
 	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time, false).timeout
-	state_chart.send_event("attack_start")
+	for i in range(bells_to_spawn):
+		anim_player.play("summon_bell_shoot")
+		await anim_player.animation_finished
+	anim_player.play("RESET")
 
 	# Get a bunch of evenly distributed points clamped to the navmesh
 	bell_spawn_points = Poisson.generate_points_for_circle(
@@ -561,10 +571,13 @@ func _on_bell_drop_dropping_state_exited() -> void:
 		var spawn := Vector3(point.x, 2.5, point.y)
 		# Spawn shadow/mesh to show AoE, grow in size as it drops
 		drop_shadow(spawn, 6.0, bell_shadow_time)
-		await get_tree().create_timer(0.2, false).timeout
+		anim_player.play("summon_bell_shoot")
+		await anim_player.animation_finished
+		anim_player.play("RESET")
 
 
 func _on_bell_drop_recover_state_entered() -> void:
+	anim_player.play("RESET")
 	debug_state_label.text = "Bell Drop | Recovering"
 
 	state_chart.send_event("attack_end")
