@@ -315,13 +315,7 @@ func orbit_towards_player(
 
 
 func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
-	var _sfx_player = get_available_sfx_player()
-	if not _sfx_player:
-		# TODO - error handling
-		pass
-	if sfx_arr:
-		_sfx_player.stream = sfx_arr.pick_random()
-		_sfx_player.play()
+	play_positional_sound(sfx_arr.pick_random())
 	var projectile := _projectile_prefab.instantiate()
 	scene_root.add_child(projectile)
 	projectile.global_position = spawn_pos

@@ -92,12 +92,14 @@ var slot_ticks: int = SLOT_TICKS
 @export var coin_spread: float = 15
 @export var delay_between_coin_burst: float = 0.5
 # SFX
+@export var sfx_coin_gun_blast: Array[AudioStream]
 @export var sfx_coin_shot: Array[AudioStream]
 
 @export_subgroup("Bell Drop")
 var bell_attack_enabled = false # Based on ante 1
 @export var bell_damage: float = 20
 @export var bell_scene: PackedScene
+@export var bell_flare_prefab: PackedScene
 @export var bell_aoe_marker_ring: CompressedTexture2D
 @export var bell_aoe_marker_arrows: CompressedTexture2D
 @export var drop_shadow_material: Material
@@ -108,6 +110,7 @@ var bell_spawn_points: Array = []
 # SFX
 #@export var sfx_bell_Spawn: Array[AudioStream]  - TODO: Get spawn sounds
 # Moved to the bell objects
+@export var sfx_shoot_bell_flare: Array[AudioStream]
 @export var sfx_bell_windup: Array[AudioStream]
 @export var sfx_bell_impact: Array[AudioStream]
 
@@ -136,6 +139,7 @@ var homing_diamond_enabled = false # Based on ante 2
 @export var diamond_projectile: PackedScene
 @export var diamond_shots_per_attack: int = 7
 # SFX
+@export var sfx_diamond_gun_blast: Array[AudioStream]
 @export var sfx_diamond_shot: Array[AudioStream]
 
 @export_subgroup("Ricochet Pinball")
@@ -429,6 +433,7 @@ func _on_coin_projectiles_shooting_state_entered() -> void:
 
 	for i in coin_burst_repeat:
 		explode_vfx.explode()
+		play_positional_sound(sfx_coin_gun_blast.pick_random())
 		for j in coin_shots_per_burst:
 			await get_tree().create_timer(1.0 / coin_firerate, false).timeout
 			var proj: BaseBossProjectile = fire_projectile(coin_projectile, projectile_spawn_marker.global_position, coin_spread, sfx_coin_shot)
@@ -455,7 +460,6 @@ func _on_coin_projectiles_recover_state_entered() -> void:
 #### BELL DROP
 # 3 Bells on rollers
 # Single large AoE bell drops from ceiling
-# TODO: Also tween flares from boss to these position so it better telegraph
 func drop_shadow(
 	target_pos: Vector3,
 	max_radius: float,
@@ -485,6 +489,14 @@ func drop_shadow(
 	aoe_tween.parallel().tween_property(decal_arrows, "rotation_degrees:y", 360, drop_time)
 	aoe_tween.chain().tween_callback(_spawn_bell.bind(target_pos, max_radius, [decal_arrows, decal_ring]))
 	aoe_tween.chain().tween_property(decal_arrows, "size", Vector3.ZERO, 1.04) # Based on bell sfx sample timing
+
+
+func shoot_bell_flare(target_pos: Vector3) -> void:
+	play_positional_sound(sfx_shoot_bell_flare.pick_random())
+	var inst = bell_flare_prefab.instantiate()
+	get_tree().get_root().add_child(inst)
+	const FLARE_PEAK_HEIGHT = 15
+	inst.init(projectile_spawn_marker.global_position, target_pos, FLARE_PEAK_HEIGHT)
 
 
 func _spawn_bell(pos: Vector3, size: float, decals: Array) -> void:
@@ -546,10 +558,6 @@ func _on_bell_drop_targeting_state_entered() -> void:
 func _on_bell_drop_dropping_state_entered() -> void:
 	debug_state_label.text = "Bell Drop | Dropping"
 	state_chart.send_event("attack_telegraph")
-	for i in range(bells_to_spawn):
-		anim_player.play("summon_bell_shoot")
-		await anim_player.animation_finished
-	anim_player.play("RESET")
 
 	# Get a bunch of evenly distributed points clamped to the navmesh
 	bell_spawn_points = Poisson.generate_points_for_circle(
@@ -561,6 +569,14 @@ func _on_bell_drop_dropping_state_entered() -> void:
 		bells_to_spawn,
 	)
 	bell_spawn_points.insert(0, Vector2(target.global_position.x, target.global_position.z))
+
+	for point in bell_spawn_points:
+		var spawn := Vector3(point.x, 0, point.y)
+		anim_player.play("summon_bell_shoot")
+		shoot_bell_flare(spawn)
+		await anim_player.animation_finished
+
+	anim_player.play("RESET")
 	state_chart.send_event("finish_drop")
 
 
@@ -571,9 +587,7 @@ func _on_bell_drop_dropping_state_exited() -> void:
 		var spawn := Vector3(point.x, 2.5, point.y)
 		# Spawn shadow/mesh to show AoE, grow in size as it drops
 		drop_shadow(spawn, 6.0, bell_shadow_time)
-		anim_player.play("summon_bell_shoot")
-		await anim_player.animation_finished
-		anim_player.play("RESET")
+		await get_tree().create_timer(0.2, false).timeout
 
 
 func _on_bell_drop_recover_state_entered() -> void:
@@ -703,9 +717,11 @@ func _on_homing_projectiles_shooting_state_entered() -> void:
 	debug_state_label.text = "Diamond Scattershot | Shooting"
 	# Fire out projctiles in a spiral, each projectile homes in on the player
 	explode_vfx.explode()
+	play_positional_sound(sfx_diamond_gun_blast.pick_random())
 	for i in range(diamond_shots_per_attack):
 		# await get_tree().create_timer(diamond_shot_time / diamond_shots_per_attack, false).timeout
 		var projectile: DiamondProjectile = fire_projectile(diamond_projectile, projectile_spawn_marker.global_position, diamond_spread, sfx_diamond_shot)
+		projectile.target = target
 		projectile.init(diamond_damage * GameManager.get_risk_dmg_mult(), diamond_speed)
 		projectile.diamond_homing_speed = diamond_homing_speed
 	state_chart.send_event("stop_shooting")

@@ -28,7 +28,7 @@ func init(_damage: float, _speed: float):
 	projectile_speed = _speed
 
 func _physics_process(delta: float) -> void:
-	if is_homing:
+	if is_homing and target != null:
 		var direction = target.global_transform.origin - global_transform.origin
 		direction = direction.normalized()
 		var rotation_amount: Vector3 = direction.cross(global_transform.basis.z)
