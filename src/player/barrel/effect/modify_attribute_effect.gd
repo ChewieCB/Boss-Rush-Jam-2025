@@ -54,10 +54,10 @@ func on_effect_set():
 
 func on_fire_rate_check():
 	super()
-	match attribute:
-		AttributeNameEnum.FIRERATE:
-			owner_barrel.owner_gun.modified_firerate = calculate_new_value(
-				owner_barrel.owner_gun.modified_firerate, modify_value, is_perc, false)
+	#match attribute:
+		#AttributeNameEnum.FIRERATE:
+			#owner_barrel.owner_gun.modified_firerate = calculate_new_value(
+				#owner_barrel.owner_gun.modified_firerate, modify_value, is_perc, false)
 
 func on_prepare_to_fire():
 	super()

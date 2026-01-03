@@ -22,3 +22,4 @@ barrel_image = ExtResource("1_ma3kv")
 barrel_cost = 200
 barrel_prefab = ExtResource("1_8ixwb")
 is_archetype_barrel = false
+reloads_before_spin = 3
