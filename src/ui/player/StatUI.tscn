@@ -498,9 +498,7 @@ custom_minimum_size = Vector2(200, 96)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
-
-[node name="RerollUI" parent="PlayerConsumables/ConsumableUI/MarginContainer2/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer" index="0"]
-custom_minimum_size = Vector2(64, 64)
+is_static = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -509,5 +507,3 @@ libraries = {
 
 [connection signal="timeout" from="MarginContainer/VBoxContainer/PlayerHealthBarUI/VBoxContainer/MarginContainer/HealthBar/Timer" to="MarginContainer/VBoxContainer/PlayerHealthBarUI" method="_on_timer_timeout"]
 [connection signal="timeout" from="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar/Timer" to="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI" method="_on_timer_timeout"]
-
-[editable path="PlayerConsumables/ConsumableUI/MarginContainer2/CurrencyUI"]
