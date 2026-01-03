@@ -417,7 +417,8 @@ tint_under = Color(0.113725, 0.113725, 0.113725, 1)
 tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 
 [node name="Timer" type="Timer" parent="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar"]
-wait_time = 0.4
+process_callback = 0
+wait_time = 0.05
 one_shot = true
 
 [node name="LuckBuffsUI" type="MarginContainer" parent="MarginContainer/VBoxContainer/PlayerLuckUI"]
