@@ -717,6 +717,11 @@ func reload(already_spin_barrel = false):
 				if barrel.reload_count == barrel.reloads_before_spin:
 					barrels_to_auto_spin.append(barrel)
 			
+			# Decrease luck for each barrel triggering auto-spin
+			LuckHandler.decrease_luck(
+				LuckHandler.luck_cost_per_auto_spin * len(barrels_to_auto_spin)
+			)
+			
 			if len(barrels_to_auto_spin) == len(installed_barrels):
 				spin_all_barrels()
 			else:

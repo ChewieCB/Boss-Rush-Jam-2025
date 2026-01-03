@@ -161,9 +161,9 @@ var is_in_menu = false:
 	set(value):
 		is_in_menu = value
 		if is_in_menu:
-			stat_ui.hide_non_luck_ui()
+			stat_ui.hide_all_ui()
 		else:
-			stat_ui.show_non_luck_ui()
+			stat_ui.show_all_ui()
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
@@ -278,7 +278,8 @@ func _unhandled_input(event):
 	# DEBUG
 	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
-	#elif event.is_action_pressed("input_2"):
+	elif event.is_action_pressed("input_1"):
+		LuckHandler.increase_luck(20.0)
 		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
 	#elif event.is_action_pressed("input_3"):

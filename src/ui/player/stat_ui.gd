@@ -12,13 +12,13 @@ signal hide
 @export var hide_ui_on_death: bool = true
 @export var status_duration_ui_prefab: PackedScene
 
-@onready var health_ui: Control = $PlayerHealthBarUI
-@onready var luck_bar_ui: LuckBar = $PlayerLuckUI/PlayerLuckBarUI
-@onready var luck_buffs_ui: Control = $PlayerLuckUI/LuckBuffsUI
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
+@export var health_ui: Control
+@export var luck_bar_ui: LuckBar
+@export var luck_buffs_ui: Control
+@export var anim_player: AnimationPlayer
 @onready var current_ammo_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/CurrentAmmo
 @onready var magazine_size_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/MagazineSize
-@onready var status_ui_container: GridContainer = $PlayerHealthBarUI/VBoxContainer/StatusUIContainer
+@export var status_ui_container: Container
 
 
 func _ready() -> void:

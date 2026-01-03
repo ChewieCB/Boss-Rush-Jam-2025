@@ -8,9 +8,15 @@ signal modifier_message(text: String, is_gain: bool)
 @export var enabled: bool = false
 
 # Luck decay per second
-@export var luck_decay: float = 1.4
+@export_group("Luck Loss Over Time")
+@export_subgroup("Luck Decay")
+@export var luck_decay_enabled: bool = true
+@export var luck_decay: float = 0.05
 @export var max_luck_decay_buffer_time: float = 2.0
 @onready var luck_decay_timer: Timer = $LuckDecayTimer
+#
+@export_subgroup("Auto Spin Luck Cost")
+@export var luck_cost_per_auto_spin: float = 10.0
 
 @export_subgroup("No Damage Taken For X Seconds")
 @export var no_damage_taken_threshold: float = 5.0
@@ -32,13 +38,26 @@ var dps_accumulated_in_window: float = 0.0:
 			dps_dealt_window_timer.start(dps_dealt_window)
 
 
+## Modify luck
+func increase_luck(amount: float) -> void:
+	amount *= GameManager.get_risk_luck_buildup_mult()
+	luck_increased.emit(amount)
+
+func decrease_luck(amount: float) -> void:
+	luck_decreased.emit(amount)
+
+
 func _physics_process(delta: float) -> void:
 	if not enabled:
 		return
 	
+	# TODO - store all per-physics-tick luck trigger checks as an array of callables to be called here
 	track_no_damage_taken(delta)
 
 
+##
+## LUCK TRIGGER: Take no damage for X seconds
+##
 func track_no_damage_taken(delta: float) -> void:
 	time_since_last_hurt += delta
 	
@@ -61,6 +80,9 @@ func gain_no_damage_taken(threshold_mult: int) -> void:
 	)
 
 
+##
+## LUCK TRIGGER: Deal at least X damage in Y seconds
+##
 func accumulate_dps_dealt(damage: float) -> void:
 	if not enabled:
 		return
@@ -86,15 +108,6 @@ func gain_dps_dealt(dps_dealt: float) -> void:
 	])
 
 
-func increase_luck(amount: float) -> void:
-	amount *= GameManager.get_risk_luck_buildup_mult()
-	luck_increased.emit(amount)
-
-
-func decrease_luck(amount: float) -> void:
-	luck_decreased.emit(amount)
-
-
 func max_luck_decay_buffer() -> void:
 	# When we max out luck, stop the decay for a short time 
 	# to make sure we can cash it in.
@@ -103,8 +116,11 @@ func max_luck_decay_buffer() -> void:
 	luck_decay_timer.start()
 
 
+# Deprecated - for use with manual spin DEBUG
+# Old luck system decayed over time, new luck system decays per auto-spin
 func _on_luck_decay_timer_timeout() -> void:
-	luck_decreased.emit(luck_decay)
+	if luck_decay_enabled:
+		luck_decreased.emit(luck_decay)
 
 
 func _on_dps_dealt_window_timer_timeout() -> void:
