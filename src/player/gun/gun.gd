@@ -862,14 +862,16 @@ func install_barrel(barrel_data: BarrelDataResource) -> void:
 	barrel_equipped.emit(barrel_inst, barrel_idx)
 
 	recheck_installed_barrels()
-
+	
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	
 	# Re-apply the effects of the currently equipped barrels
 	reset_modifier(true)
 	for barrel in barrel_container.get_children():
 		barrel.get_active_effect().on_effect_set()
-
-	await get_tree().physics_frame
-	await get_tree().physics_frame
+	
+	reload_no_anim()
 
 
 func _on_barrel_effect_changed(barrel: SpinBarrel, effect: BaseBarrelEffect) -> void:
