@@ -125,6 +125,7 @@ var bell_spawn_points: Array = []
 @export var charge_damage: float = 10.0
 @export var charge_knockback: float = 50.0
 @export var min_charge_distance: float = 10.0
+@export var speedline_vfx_prefab: PackedScene
 var charge_locked: bool = false
 # SFX
 @export var sfx_charge: Array[AudioStream]
@@ -829,6 +830,12 @@ func _on_charge_charging_state_entered() -> void:
 	velocity += charge_dir * charge_impulse
 	sfx_player.stream = sfx_charge.pick_random()
 	sfx_player.play()
+	# Speedline VFX
+	var pe: Node3D = speedline_vfx_prefab.instantiate()
+	add_child(pe)
+	pe.global_position = global_position
+	pe.look_at(pe.global_position + charge_dir)
+	pe.rotate_y(deg_to_rad(90))
 
 func _on_charge_collision(body: Node3D) -> void:
 	if body == target:

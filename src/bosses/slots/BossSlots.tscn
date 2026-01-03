@@ -1,4 +1,4 @@
-[gd_scene load_steps=117 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=118 format=3 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -63,6 +63,7 @@
 [ext_resource type="AudioStream" uid="uid://bra43p42twq7c" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 7.mp3" id="42_vntjg"]
 [ext_resource type="AudioStream" uid="uid://b3a487rtqugc6" path="res://src/bosses/slots/assets/sfx/DIAMOND SHOT/SLOT BOSS DIAMOND SHOT 8.mp3" id="43_2donj"]
 [ext_resource type="AudioStream" uid="uid://dsk2dfx34iy6m" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 1.mp3" id="45_ishi6"]
+[ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="46_36cao"]
 [ext_resource type="AudioStream" uid="uid://b1h5uugbn6oed" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 2.mp3" id="46_vgcme"]
 [ext_resource type="AudioStream" uid="uid://dtumhkhlkde2g" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 3.mp3" id="47_hafh8"]
 [ext_resource type="PackedScene" uid="uid://xsg605o1mpcb" path="res://src/bosses/base/attacks/ranged/RicochetPinballProjectile.tscn" id="48_1shbk"]
@@ -859,6 +860,7 @@ sfx_lever_swipe = Array[AudioStream]([ExtResource("32_1rwgx"), ExtResource("33_3
 charge_damage = 10.0
 charge_knockback = 50.0
 min_charge_distance = 10.0
+speedline_vfx_prefab = ExtResource("46_36cao")
 sfx_charge = Array[AudioStream]([ExtResource("37_cawc0")])
 sfx_charge_impact = Array[AudioStream]([])
 diamond_damage = 3.0
