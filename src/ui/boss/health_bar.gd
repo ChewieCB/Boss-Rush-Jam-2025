@@ -11,10 +11,10 @@ signal hide
 @export var animate_show_hide: bool = true
 @export var hide_ui_on_death: bool = false
 
-@onready var timer: Timer = $VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer
-@onready var heath_bar: TextureProgressBar = $VBoxContainer/MarginContainer2/MarginContainer/HealthBar
-@onready var damage_bar: TextureProgressBar = $VBoxContainer/MarginContainer2/MarginContainer/HealthBar/DamageBar
-@onready var health_label: Label = $VBoxContainer/MarginContainer2/MarginContainer/Label
+@onready var timer: Timer = $VBoxContainer/MarginContainer/HealthBar/Timer
+@onready var heath_bar: TextureProgressBar = $VBoxContainer/MarginContainer/HealthBar
+@onready var damage_bar: TextureProgressBar = $VBoxContainer/MarginContainer/HealthBar/DamageBar
+@onready var health_label: Label = $VBoxContainer/MarginContainer/Label
 
 
 func _ready() -> void:

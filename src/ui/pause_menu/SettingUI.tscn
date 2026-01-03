@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://db7w5onrhapvt" path="res://assets/sprite/game_icon/audioOn.png" id="6_fqt2w"]
 [ext_resource type="Texture2D" uid="uid://dqo7dxystt7l1" path="res://assets/sprite/game_icon/question.png" id="7_5c6c4"]
 [ext_resource type="Texture2D" uid="uid://ctoh8vq047sw7" path="res://src/bosses/chips/assets/meshes/chiptopede_segment_chiptopede_back.png" id="9_akomy"]
-[ext_resource type="PackedScene" path="res://src/ui/common/DeviceInputPrompt.tscn" id="10_vvjbc"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="10_vvjbc"]
 [ext_resource type="Texture2D" uid="uid://c4brubgvfwrmn" path="res://assets/sprite/input/keyboard_and_mouse/keyboard.png" id="11_pg8t6"]
 
 [node name="SettingUI" type="Control"]
@@ -984,6 +984,31 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
+[node name="BarrelSpinMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Barrel Spin Mode"
+
+[node name="BarrelSpinModeDropdown" type="OptionButton" parent="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 372.0
+offset_bottom = 34.0
+selected = 2
+item_count = 3
+popup/item_0/text = "On Reload"
+popup/item_1/text = "Manual Spin"
+popup/item_1/id = 1
+popup/item_2/text = "Seeded Auto-spin"
+popup/item_2/id = 2
+
 [node name="Freecam" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -1141,6 +1166,9 @@ text = "Back"
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle" to="." method="_on_always_inventory_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="_on_boss_one_shot_toggle_toggled"]
+[connection signal="item_selected" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_barrel_spin_mode_dropdown_item_selected"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_boss_one_shot_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="_on_freecam_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider" to="." method="play_button_hover_sfx"]

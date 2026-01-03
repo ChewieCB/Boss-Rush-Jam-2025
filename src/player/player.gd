@@ -161,9 +161,9 @@ var is_in_menu = false:
 	set(value):
 		is_in_menu = value
 		if is_in_menu:
-			stat_ui.hide_non_luck_ui()
+			stat_ui.hide_all_ui()
 		else:
-			stat_ui.show_non_luck_ui()
+			stat_ui.show_all_ui()
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
@@ -224,8 +224,11 @@ func _ready():
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
 	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
 	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_spin_stopped.connect(update_ammo_counter_ui.unbind(2))
 	current_gun.barrel_equipped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
 	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
@@ -270,11 +273,13 @@ func _unhandled_input(event):
 	if event.is_action_pressed("spin_reload"):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
-		spin_barrels()
+		if GameManager.CHEAT_spin_mode != GameManager.DebugSpinMode.ON_RELOAD:
+			spin_barrels()
 	# DEBUG
 	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
-	#elif event.is_action_pressed("input_2"):
+	elif event.is_action_pressed("input_1"):
+		LuckHandler.increase_luck(20.0)
 		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
 	#elif event.is_action_pressed("input_3"):
@@ -522,7 +527,7 @@ func update_barrel_effect_ui() -> void:
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
-			#if barrel:
+			
 			if _effect.icon_id != -1:
 				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
 			else:

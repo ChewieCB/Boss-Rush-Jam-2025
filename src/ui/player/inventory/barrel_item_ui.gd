@@ -7,6 +7,7 @@ signal show_warning(warning_text: String)
 
 @onready var button: Button = $Button
 @onready var border_selected = $BorderSelected
+@onready var spin_value_label: RichTextLabel = $CenterContainer/ReloadSpinValueLabel
 
 var data: BarrelDataResource
 var clicked_once = false
@@ -29,6 +30,11 @@ func init(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: 
 	is_purchased = _is_purchased
 	texture = data.barrel_image
 	button.text = data.barrel_name
+	if data.reloads_before_spin > 0:
+		spin_value_label.text = "[center][b](%s)[/b][/center]" % [data.reloads_before_spin]
+		spin_value_label.visible = true
+	else:
+		spin_value_label.visible = false
 
 
 func _ready() -> void:

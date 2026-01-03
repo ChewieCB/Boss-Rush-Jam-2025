@@ -40,7 +40,7 @@ func _ready() -> void:
 
 
 func decrease_luck(_reduction: float) -> void:
-	_reduction = round(_reduction * luck_loss_modifier)
+	_reduction = _reduction * luck_loss_modifier
 	if enabled:
 		current_luck -= _reduction
 	check_for_high_luck_buffs()

@@ -96,3 +96,4 @@ enum BarrelIdEnum {
 @export var barrel_cost: int = 200
 @export var barrel_prefab: PackedScene
 @export var is_archetype_barrel: bool = false
+@export var reloads_before_spin: int = 3
