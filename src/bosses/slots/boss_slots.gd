@@ -788,7 +788,10 @@ func _on_charge_targeting_state_entered() -> void:
 	await charge_lined_up
 	#velocity = Vector3.ZERO
 	state_chart.send_event("attack_telegraph")
-	await get_tree().create_timer(telegraph_time * 2, false).timeout
+	anim_player.play("charge_telegraph")
+	await anim_player.animation_finished
+	anim_player.play("RESET")
+	# await get_tree().create_timer(telegraph_time * 2, false).timeout
 	state_chart.send_event("start_charge_attack")
 
 func _on_charge_targeting_state_physics_processing(delta: float) -> void:
