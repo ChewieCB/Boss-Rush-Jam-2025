@@ -1,6 +1,6 @@
 [gd_scene load_steps=26 format=3 uid="uid://d2m0w0bro5j5l"]
 
-[ext_resource type="Script" path="res://src/ui/player/stat_ui_new.gd" id="1_awes1"]
+[ext_resource type="Script" path="res://src/ui/player/radial_ammo_ui.gd" id="1_awes1"]
 [ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_f4uki"]
 [ext_resource type="Script" path="res://src/ui/boss/health_bar.gd" id="2_5adv1"]
 [ext_resource type="PackedScene" uid="uid://q6qasacer4wj" path="res://src/ui/player/StatusDurationUI.tscn" id="2_7qugk"]
@@ -431,7 +431,7 @@ theme_override_font_sizes/font_size = 22
 text = "99,999"
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI"]
-modulate = Color(0, 0, 0, 1)
+modulate = Color(0.22538, 0.180709, 0.151444, 1)
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 8

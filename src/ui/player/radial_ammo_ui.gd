@@ -9,13 +9,12 @@ extends Control
 
 
 func _draw() -> void:
-	#draw_circle(Vector2.ZERO, 84.0, Color.BLACK)
-	# Inactive
-	_draw_radial_segments(max_radial_segment_count, max_radial_segment_count, 12.0, PI / 64, Color.DARK_GRAY)
 	# Background
-	_draw_radial_segments(active_radial_segment_count, max_radial_segment_count, 24.0, PI / 128, Color.DARK_GOLDENROD)
+	_draw_radial_segments(max_radial_segment_count, max_radial_segment_count, 24.0, 0.0, Color("#020202"))
+	# Inactive
+	_draw_radial_segments(max_radial_segment_count, max_radial_segment_count, 12.0, PI / 64, Color("#2a2a2a"))
 	# Active
-	_draw_radial_segments(active_radial_segment_count, max_radial_segment_count, 16.0, PI / 42, Color.WHITE)
+	_draw_radial_segments(active_radial_segment_count, max_radial_segment_count, 18.0, PI / 92, Color("#C11E1E"), Color("#C1BEBE"))
 	# Icons
 	_draw_radial_icons(active_radial_segment_count, max_radial_segment_count, 16.0, PI / 42)
 	
@@ -39,7 +38,7 @@ func _process(_delta: float) -> void:
 			#active_radial_segment_count -= 1
 
 
-func _draw_radial_segments(segment_count: int, max_segment_count: int, thickness: float, segment_padding: float, colour: Color, is_ccw: bool = false) -> void:
+func _draw_radial_segments(segment_count: int, max_segment_count: int, thickness: float, segment_padding: float, colour: Color, alternating_colour: Color = Color(), is_ccw: bool = false) -> void:
 	# Draw arc segments with a small amount of padding between them
 	var segment_angle: float = (TAU / float(max_segment_count))
 	var init_angle: float = 0.75 * PI
@@ -47,13 +46,19 @@ func _draw_radial_segments(segment_count: int, max_segment_count: int, thickness
 	for i in range(segment_count):
 		var _start_angle: float = init_angle + (i * segment_angle)
 		var _end_angle: float = _start_angle + segment_angle
+		
+		var arc_colour: Color = colour
+		if alternating_colour != Color():
+			if i % 2 != 0:
+				arc_colour = alternating_colour
+		
 		draw_arc(
 			Vector2.ZERO,
 			80.0,
 			(_start_angle + segment_padding) * dir,
 			(_end_angle - segment_padding) * dir,
 			50,
-			colour,
+			arc_colour,
 			thickness,
 			true
 		)
@@ -82,4 +87,10 @@ func _draw_radial_icons(active_segment_count: int, max_segment_count: int, thick
 			ammo_single_texture,
 			-ammo_single_texture.get_size() * 0.5
 		)
-	
+
+
+func animate_full_reload(reload_time: float) -> void:
+	var segments_to_reload: int = max_radial_segment_count - active_radial_segment_count
+	for i in segments_to_reload:
+		active_radial_segment_count += 1
+		await get_tree().create_timer(reload_time / segments_to_reload, false).timeout
