@@ -122,7 +122,7 @@ health_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/Health
 luck_bar_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer")
 luck_buffs_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/ActiveLuckBuffsRow/ActiveLuckBuffs")
 anim_player = NodePath("AnimationPlayer")
-status_ui_container = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/StatusIconsRow/StatusIcons")
+status_ui_container = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/StatusIconsRow/StatusIcons")
 radial_ui_center_node = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/ProgressBar/RadialDrawCenter")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -147,6 +147,17 @@ layout_mode = 2
 
 [node name="BarsVBox" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars"]
 layout_mode = 2
+
+[node name="StatusIconsRow" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 148
+
+[node name="StatusIcons" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/StatusIconsRow"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
 
 [node name="HealthContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox"]
 layout_mode = 2
@@ -232,15 +243,6 @@ tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 [node name="Timer" type="Timer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer/HealthBar"]
 wait_time = 0.4
 one_shot = true
-
-[node name="StatusIconsRow" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_left = 56
-
-[node name="StatusIcons" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/StatusIconsRow"]
-layout_mode = 2
 
 [node name="LuckContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox" node_paths=PackedStringArray("timer", "luck_bar", "luck_gain_bar")]
 layout_mode = 2
@@ -359,6 +361,8 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_top = 24.0
+offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_awes1")
