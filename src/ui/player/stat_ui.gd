@@ -21,8 +21,10 @@ signal hide
 
 
 func _ready() -> void:
-	# Await player ready
-	await get_owner().ready
+	# Await player ready 
+	if get_owner():
+		await get_owner().ready
+	
 	health_ui.health_component = health_component
 	luck_bar_ui.luck_component = luck_component
 	if health_component:
@@ -32,11 +34,12 @@ func _ready() -> void:
 		luck_bar_ui.init_luck_ui(luck_component.current_luck, luck_component.max_luck)
 		luck_component.luck_changed.connect(luck_bar_ui._on_luck_changed)
 		luck_component.luck_maxed.connect(luck_bar_ui._on_luck_maxed)
-	#if show_on_ready:
-		#show_ui()
-	GameManager.player.new_status_effect_added.connect(add_refresh_status_ui)
-	GameManager.player.status_effect_removed.connect(remove_status_ui)
-	hide_all_ui()
+	# FIXME - remove conditional after debugging?
+	if GameManager.player:
+		GameManager.player.new_status_effect_added.connect(add_refresh_status_ui)
+		GameManager.player.status_effect_removed.connect(remove_status_ui)
+	
+	#hide_all_ui()
 
 
 ## Only for adding or refreshing status UI. UI usually be removed by the

@@ -3,8 +3,8 @@ extends Control
 @export var ammo_single_texture: CompressedTexture2D
 #@export var radial_ui_center_node: Control
 
-@export var max_radial_segment_count: int = 10
-@export var active_radial_segment_count: int = 9
+@export var max_radial_segment_count: int = 7
+@export var active_radial_segment_count: int = 5
 
 
 func _draw() -> void:
@@ -21,14 +21,27 @@ func _draw() -> void:
 
 func _process(_delta: float) -> void:
 	queue_redraw()
+	# FIXME FIXME FIXME FIXME - remove this when done testing
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
+	elif Input.is_action_just_pressed("input_1"):
+		if Input.is_action_pressed("dash"):
+			max_radial_segment_count -= 1
+			active_radial_segment_count -= 1
+		else:
+			active_radial_segment_count += 1
+	elif Input.is_action_just_pressed("input_2"):
+		if Input.is_action_pressed("dash"):
+			max_radial_segment_count += 1
+			active_radial_segment_count += 1
+		else:
+			active_radial_segment_count -= 1
 
 
 func _draw_radial_segments(segment_count: int, max_segment_count: int, thickness: float, segment_padding: float, colour: Color, is_ccw: bool = false) -> void:
 	# Draw arc segments with a small amount of padding between them
 	var segment_angle: float = (TAU / float(max_segment_count))
-	var init_angle: float = -PI/2 * max_radial_segment_count / 2
+	var init_angle: float = 1.25 * PI# * max_radial_segment_count / 2
 	var dir: float = 1.0 if is_ccw else -1.0
 	#var angle_offset: float = 2 * PI / (max_radial_segment_count / 2)
 	for i in range(segment_count):
