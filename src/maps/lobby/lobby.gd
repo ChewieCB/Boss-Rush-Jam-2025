@@ -69,7 +69,7 @@ func _ready() -> void:
 			show_panel(game_win_ui)
 			GameManager.victory_ui_shown = true
 	
-	player.stat_ui.show_health_ui()
+	player.stat_ui.show_all_ui()
 
 
 func _input(event: InputEvent) -> void:

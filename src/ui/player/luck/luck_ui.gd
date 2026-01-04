@@ -7,9 +7,9 @@ signal hide
 @export_category("Components")
 @export var luck_component: LuckComponent
 
-@onready var timer: Timer = $VBoxContainer/MarginContainer2/MarginContainer/LuckBar/Timer
-@onready var luck_bar: TextureProgressBar = $VBoxContainer/MarginContainer2/MarginContainer/LuckBar
-@onready var luck_gain_bar: TextureProgressBar = $VBoxContainer/MarginContainer2/MarginContainer/LuckBar/LuckGain
+@export var timer: Timer
+@export var luck_bar: TextureProgressBar
+@export var luck_gain_bar: TextureProgressBar
 #@onready var luck_modifier_sign_label: Label = $HBoxContainer/MarginContainer2/HBoxContainer/SignLabel
 #@onready var luck_modifier_label: Label = $HBoxContainer/MarginContainer2/HBoxContainer/LuckModifierText
 #@export var luck_modifier_text_lifetime: float = 2.0

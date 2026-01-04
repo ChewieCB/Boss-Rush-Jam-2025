@@ -13,12 +13,11 @@ signal hide
 @export var status_duration_ui_prefab: PackedScene
 
 @export var health_ui: Control
-@export var luck_bar_ui: LuckBar
+@export var luck_bar_ui: Control
 @export var luck_buffs_ui: Control
 @export var anim_player: AnimationPlayer
-@onready var current_ammo_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/CurrentAmmo
-@onready var magazine_size_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/MagazineSize
 @export var status_ui_container: Container
+@export var radial_ui_center_node: Control
 
 
 func _ready() -> void:
@@ -37,6 +36,7 @@ func _ready() -> void:
 		#show_ui()
 	GameManager.player.new_status_effect_added.connect(add_refresh_status_ui)
 	GameManager.player.status_effect_removed.connect(remove_status_ui)
+	hide_all_ui()
 
 
 ## Only for adding or refreshing status UI. UI usually be removed by the
@@ -54,11 +54,13 @@ func add_refresh_status_ui(new_status: StatusEffect):
 	status_ui_container.add_child(ui_inst)
 	ui_inst.init(new_status)
 
+
 ## Usually used for infinite duration status
 func remove_status_ui(status_code: String):
 	for child in status_ui_container.get_children():
 		if child.status_effect.status_code == status_code:
 			child.remove()
+
 
 func show_health_ui() -> void:
 	_animate_ui_element("health")
