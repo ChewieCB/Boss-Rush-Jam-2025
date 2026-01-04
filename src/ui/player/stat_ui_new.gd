@@ -1,3 +1,4 @@
+@tool
 extends Control
 
 @export var ammo_single_texture: CompressedTexture2D
@@ -8,7 +9,7 @@ extends Control
 
 
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, 84.0, Color.BLACK)
+	#draw_circle(Vector2.ZERO, 84.0, Color.BLACK)
 	# Inactive
 	_draw_radial_segments(max_radial_segment_count, max_radial_segment_count, 12.0, PI / 64, Color.DARK_GRAY)
 	# Background

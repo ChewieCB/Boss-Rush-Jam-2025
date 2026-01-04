@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://d2m0w0bro5j5l"]
+[gd_scene load_steps=26 format=3 uid="uid://d2m0w0bro5j5l"]
 
 [ext_resource type="Script" path="res://src/ui/player/stat_ui_new.gd" id="1_awes1"]
 [ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_f4uki"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="8_kblky"]
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_ui.gd" id="9_7pd86"]
 [ext_resource type="Texture2D" uid="uid://d2hifp16c0ssf" path="res://src/player/assets/ammo_single.png" id="9_ua0m7"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="13_ey5n2"]
+[ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="14_oh4g2"]
 
 [sub_resource type="Theme" id="Theme_sph0g"]
 default_font = ExtResource("4_6gcbv")
@@ -108,7 +110,7 @@ _data = {
 "show_non_luck": SubResource("Animation_pwctn")
 }
 
-[node name="StatUI" type="Control" node_paths=PackedStringArray("health_ui", "luck_bar_ui", "luck_buffs_ui", "anim_player", "status_ui_container", "radial_ui_center_node")]
+[node name="StatUI" type="Control" node_paths=PackedStringArray("health_ui", "luck_bar_ui", "luck_buffs_ui", "anim_player", "status_ui_container", "spin_ability_ui", "radial_ui_center_node", "currency_ui")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -123,7 +125,9 @@ luck_bar_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/Luck
 luck_buffs_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/ActiveLuckBuffsRow/ActiveLuckBuffs")
 anim_player = NodePath("AnimationPlayer")
 status_ui_container = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/StatusIconsRow/StatusIcons")
-radial_ui_center_node = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/ProgressBar/RadialDrawCenter")
+spin_ability_ui = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI")
+radial_ui_center_node = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter")
+currency_ui = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -339,11 +343,11 @@ layout_mode = 2
 [node name="CircularUIContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = -24
-theme_override_constants/margin_top = -126
+theme_override_constants/margin_top = -106
 
-[node name="ProgressBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/CircularUIContainer"]
+[node name="SpinAbilityUI" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/CircularUIContainer"]
 process_mode = 1
-custom_minimum_size = Vector2(192, 192)
+custom_minimum_size = Vector2(132, 132)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -351,9 +355,12 @@ max_value = 200.0
 value = 98.0
 fill_mode = 3
 nine_patch_stretch = true
-tint_over = Color(1, 1, 1, 0)
+texture_under = ExtResource("3_khwir")
+texture_progress = ExtResource("3_khwir")
+tint_under = Color(0.306923, 0.306923, 0.306923, 1)
+tint_progress = Color(0.461167, 1, 0.39, 1)
 
-[node name="RadialDrawCenter" type="Control" parent="MarginContainer/HBoxContainer/CircularUIContainer/ProgressBar"]
+[node name="RadialDrawCenter" type="Control" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI"]
 z_index = 3
 layout_mode = 1
 anchors_preset = 8
@@ -361,12 +368,86 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = 24.0
-offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_awes1")
 ammo_single_texture = ExtResource("9_ua0m7")
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -51.0
+offset_top = -22.0
+offset_right = 51.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CurrencyUI" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer" instance=ExtResource("13_ey5n2")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="MarginContainer" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI" index="0"]
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer" index="0"]
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(0, 0)
+
+[node name="RerollUI" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer" index="0"]
+visible = false
+
+[node name="StaticChipIcon" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer" index="1"]
+visible = true
+custom_minimum_size = Vector2(32, 32)
+size_flags_horizontal = 8
+size_flags_vertical = 4
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer2" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer" index="1"]
+size_flags_horizontal = 0
+theme_override_constants/margin_top = -12
+theme_override_constants/margin_bottom = -16
+
+[node name="CurrencyLabel" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer2" index="0"]
+custom_minimum_size = Vector2(64, 64)
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 22
+text = "99,999"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI"]
+modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -92.5
+offset_top = -92.5
+offset_right = 92.5
+offset_bottom = 92.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_oh4g2")
+expand_mode = 3
+stretch_mode = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -375,3 +456,8 @@ libraries = {
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(960, 540)
+
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI" to="." method="_on_spin_ability_progress_changed"]
+
+[editable path="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI"]
+[editable path="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer/RerollUI"]

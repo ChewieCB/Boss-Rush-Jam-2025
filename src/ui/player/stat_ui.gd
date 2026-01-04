@@ -17,7 +17,14 @@ signal hide
 @export var luck_buffs_ui: Control
 @export var anim_player: AnimationPlayer
 @export var status_ui_container: Container
+
+@export var spin_ability_ui: TextureProgressBar
+@export var fill_time: float = 0.1
+@export var roll_left_label: Label
+var out_of_reroll = false
+
 @export var radial_ui_center_node: Control
+@export var currency_ui: Control
 
 
 func _ready() -> void:
@@ -40,6 +47,53 @@ func _ready() -> void:
 		GameManager.player.status_effect_removed.connect(remove_status_ui)
 	
 	#hide_all_ui()
+	
+	# Spin abiltiy UI
+	_update_reroll_max(int(GameManager.reroll_cost * GameManager.get_risk_spin_cost_mult()))
+	GameManager.currency_changed.connect(_on_currency_changed)
+	GameManager.reroll_cost_changed.connect(_update_reroll_max)
+	GameManager.free_rerolls.connect(_update_reroll_max.bind(spin_ability_ui.max_value))
+	#_update_roll_left_label()
+
+
+func _on_spin_ability_progress_changed(value: float) -> void:
+	if out_of_reroll:
+		spin_ability_ui.tint_progress = Color.GRAY
+		#progress_label.text = "Limited"
+		#anim_player.stop()
+		return
+		
+	if value >= spin_ability_ui.max_value:
+		spin_ability_ui.tint_progress = Color.GOLD
+		#progress_label.modulate = Color.GOLD
+		#anim_player.play("spin")
+	else:
+		spin_ability_ui.tint_progress = Color.LIGHT_GREEN
+		#progress_label.modulate = Color.GRAY
+		#anim_player.stop()
+
+
+func _on_currency_changed(new_value: int) -> void:
+	var fill_time: float = 0.5
+	var progress_tween: Tween = get_tree().create_tween()
+	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+	progress_tween.tween_property(spin_ability_ui, "value", new_value, fill_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+
+
+func _update_reroll_max(new_max: int) -> void:
+	spin_ability_ui.max_value = float(new_max)
+	var new_value: int
+	if not GameManager.is_free_reroll:
+		new_value = min(GameManager.player_currency, spin_ability_ui.max_value)
+		#progress_label.text = "%s" % new_max
+	else:
+		new_value = int(spin_ability_ui.max_value)
+		#progress_label.text = "Free"
+	var progress_tween: Tween = get_tree().create_tween()
+	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+	progress_tween.tween_property(spin_ability_ui, "value", 0, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	progress_tween.chain().tween_property(spin_ability_ui, "value", new_value, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	#_update_roll_left_label()
 
 
 ## Only for adding or refreshing status UI. UI usually be removed by the
