@@ -54,7 +54,10 @@ func _is_user_input(event: InputEvent) -> bool:
 		or event is InputEventJoypadButton
 	)
 
-func stop_idle_video():
+func stop_idle_video() -> void:
+	if not is_video_playing:
+		return 
+	
 	_idle_timer = 0.0 # reset timer
 	video_player.stop()
 	canvas_layer.visible = false

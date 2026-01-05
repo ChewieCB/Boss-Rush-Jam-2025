@@ -1,6 +1,5 @@
 extends BaseBarrelEffect
 
-@export var is_archetype: bool = false
 @export var archetype_reload_sfx: Array[AudioStream]
 @export var archetype_shot_sfx: Array[AudioStream]
 

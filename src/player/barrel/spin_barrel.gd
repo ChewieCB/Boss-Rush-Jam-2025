@@ -18,6 +18,10 @@ var chosen_id: int:
 var is_equipped = false
 var last_chosen_queue = []
 
+# TODO - reloads before spin for each barrel should be generated on save file creation, seeded
+var reloads_before_spin: int
+var reload_count: int = 0
+
 
 func _ready() -> void:
 	for child in effect_container.get_children():
@@ -45,6 +49,7 @@ func stop_spin():
 		last_chosen_queue.pop_at(last_chosen_queue.find(chosen_id))
 	last_chosen_queue.push_front(chosen_id)
 
+
 func _process(delta: float) -> void:
 	if not is_spinning:
 		return
@@ -57,9 +62,10 @@ func _process(delta: float) -> void:
 
 func instant_spin():
 	chosen_id = randi_range(0, len(effect_list) - 1)
+	get_active_effect().on_effect_set()
 
 
-func get_active_effect():
+func get_active_effect() -> BaseBarrelEffect:
 	return effect_list[chosen_id]
 
 
@@ -119,6 +125,6 @@ func get_barrel_effect_data_at(index: int) -> Dictionary:
 		"is_archetype": is_archetype,
 		"positive_desc": barrel_effect.positive_desc,
 		"negative_desc": barrel_effect.negative_desc,
-		"icon_id": barrel_effect.icon_id
+		"icon_id": barrel_effect.icon_id,
 	 }
 	return res
