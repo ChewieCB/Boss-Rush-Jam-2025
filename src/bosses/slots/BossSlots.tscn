@@ -1962,6 +1962,9 @@ libraries = {
 
 [node name="AbsorbChipTimer" type="Timer" parent="." index="34"]
 
+[node name="FloorRaycast" type="RayCast3D" parent="." index="37"]
+exclude_parent = false
+
 [connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1/SpinSlots" to="." method="_on_spin_slots_state_physics_processing"]

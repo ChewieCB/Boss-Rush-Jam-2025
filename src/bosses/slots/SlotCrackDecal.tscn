@@ -4,14 +4,14 @@
 [ext_resource type="Script" path="res://src/bosses/base/crack_decal.gd" id="2_2ulva"]
 
 [node name="SlotCrackDecal" type="Decal"]
-size = Vector3(4, 1, 4)
+size = Vector3(8, 4, 8)
 texture_albedo = ExtResource("1_a4q8e")
 texture_emission = ExtResource("1_a4q8e")
-emission_energy = 0.0
-modulate = Color(0.160156, 0.0270908, 0, 1)
+emission_energy = 8.0
+modulate = Color(0.277344, 0.0469134, 0, 1)
 upper_fade = 1e+06
 script = ExtResource("2_2ulva")
-glow = true
+fade_speed = 0.3
 
 [node name="Timer" type="Timer" parent="."]
 

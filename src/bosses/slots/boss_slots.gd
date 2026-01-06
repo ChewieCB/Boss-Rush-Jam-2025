@@ -127,7 +127,7 @@ var bell_spawn_points: Array = []
 @export var min_charge_distance: float = 10.0
 @export var speedline_vfx_prefab: PackedScene
 @export var crack_decal_prefab: PackedScene
-const CHARGE_CRACK_INTERVAL = 0.2
+const CHARGE_CRACK_INTERVAL = 0.1
 var charge_crack_interval_timer = 0
 var charge_locked: bool = false
 # SFX
@@ -182,6 +182,8 @@ var absorb_chip_enabled = false
 @export var absorb_chip_interval: float = 10
 @export var absorb_chip_range: float = 25
 @export var chip_value_to_heal_ratio: float = 0.5
+
+@onready var floor_raycast: RayCast3D = $FloorRaycast
 
 func _ready() -> void:
 	super ()
@@ -825,6 +827,7 @@ func _on_charge_charging_state_entered() -> void:
 	desired_height = 0.2
 	drop_factor = 12.0
 	charge_crack_interval_timer = 0
+	spawn_charge_crack()
 
 	navigation_component.disable()
 	hurtbox.set_deferred("monitoring", true)
@@ -841,6 +844,7 @@ func _on_charge_charging_state_entered() -> void:
 	pe.look_at(pe.global_position + charge_dir)
 	pe.rotate_y(deg_to_rad(90))
 
+
 func _on_charge_collision(body: Node3D) -> void:
 	if body == target:
 		velocity = Vector3.ZERO
@@ -854,9 +858,8 @@ func _on_charge_charging_state_physics_processing(delta: float) -> void:
 
 	charge_crack_interval_timer += delta
 	if charge_crack_interval_timer > CHARGE_CRACK_INTERVAL:
-		var inst = crack_decal_prefab.instantiate()
-		get_tree().get_root().add_child(inst)
-		inst.global_position = Vector3(global_position.x, 0, global_position.z)
+		charge_crack_interval_timer = 0
+		spawn_charge_crack()
 
 
 	if abs(velocity.x) < 0.1 and abs(velocity.z) < 0.1:
@@ -886,6 +889,14 @@ func _on_charge_recover_state_entered() -> void:
 	select_attack()
 	state_chart.send_event("end_recovery")
 
+
+func spawn_charge_crack():
+	var inst = crack_decal_prefab.instantiate()
+	get_tree().get_root().add_child(inst)
+	var spawn_pos = Vector3(global_position.x, global_position.y - 1, global_position.z)
+	if floor_raycast.is_colliding():
+		spawn_pos = floor_raycast.get_collision_point() + Vector3(0, 0.1, 0)
+	inst.global_position = spawn_pos
 
 #### CHERRY BOMB
 # 3 Cherries on rollers
