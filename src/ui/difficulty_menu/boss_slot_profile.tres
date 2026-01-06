@@ -6,5 +6,5 @@
 script = ExtResource("1_tyj4h")
 boss_id = 1
 boss_quote = "\"Danger in, fortune out. Or nothing at all. That’s how my gears like it.\""
-ante_names = Array[String](["Toll of Fortune", "Seeking Luxury", "Pinball Gamble", "Hidden Motive", "Greed Machine"])
+ante_names = Array[String](["TBD", "Hidden Motive", "Pinball Gamble", "TBD", "Greed Machine"])
 boss_risk_reward_mult = 1.0

@@ -7,7 +7,7 @@ signal desired_height_reached
 
 # Juice TODO:
 # -Homing Diamond: Change the homing diamond to spawn all at once (instead of one by one), wait a bit then homing at player.  DONE
-# -Coin Spray: Fire in a burst-of-5, with higher firerate, speed, and recoil. Maybe let the coin ricochet once.
+# -Coin Spray: Fire in a burst-of-5, with higher firerate, speed, and recoil. Maybe let the coin ricochet once at higher difficulty. DONE
 # -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.
 # -Bell of Fortune: Add 3D VFX indicator to better telegraph. Add screenshake and dust cloud on impact.
 # -Charge: Add ground decal effect on charge path to show its power. Add speedline
@@ -126,6 +126,9 @@ var bell_spawn_points: Array = []
 @export var charge_knockback: float = 50.0
 @export var min_charge_distance: float = 10.0
 @export var speedline_vfx_prefab: PackedScene
+@export var crack_decal_prefab: PackedScene
+const CHARGE_CRACK_INTERVAL = 0.2
+var charge_crack_interval_timer = 0
 var charge_locked: bool = false
 # SFX
 @export var sfx_charge: Array[AudioStream]
@@ -821,6 +824,7 @@ func _on_charge_charging_state_entered() -> void:
 	MAX_SPEED /= 1.6
 	desired_height = 0.2
 	drop_factor = 12.0
+	charge_crack_interval_timer = 0
 
 	navigation_component.disable()
 	hurtbox.set_deferred("monitoring", true)
@@ -844,9 +848,16 @@ func _on_charge_collision(body: Node3D) -> void:
 		hurtbox.body_entered.disconnect(_on_charge_collision)
 		hurtbox.set_deferred("monitoring", false)
 
-func _on_charge_charging_state_physics_processing(_delta: float) -> void:
+func _on_charge_charging_state_physics_processing(delta: float) -> void:
 	velocity.x = lerp(velocity.x, 0.0, 0.05)
 	velocity.z = lerp(velocity.z, 0.0, 0.05)
+
+	charge_crack_interval_timer += delta
+	if charge_crack_interval_timer > CHARGE_CRACK_INTERVAL:
+		var inst = crack_decal_prefab.instantiate()
+		get_tree().get_root().add_child(inst)
+		inst.global_position = Vector3(global_position.x, 0, global_position.z)
+
 
 	if abs(velocity.x) < 0.1 and abs(velocity.z) < 0.1:
 		velocity.x = 0
@@ -854,6 +865,7 @@ func _on_charge_charging_state_physics_processing(_delta: float) -> void:
 		state_chart.send_event("end_charge_attack")
 	elif is_on_floor():
 		state_chart.send_event("end_charge_attack")
+
 
 func _on_charge_recover_state_entered() -> void:
 	debug_state_label.text = "Charge | Recovering"

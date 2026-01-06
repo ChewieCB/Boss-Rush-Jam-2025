@@ -7,7 +7,7 @@ class_name BossHealthBar
 		if name_label:
 			name_label.text = boss_name
 
-@onready var name_label: Label = $VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2/Label
+@onready var name_label: Label = $VBoxContainer/MarginContainer2/HBoxContainer/MarginContainer2/Label
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var status_container: Container = $VBoxContainer/StatusContainer
 

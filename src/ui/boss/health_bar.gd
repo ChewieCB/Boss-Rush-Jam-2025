@@ -11,7 +11,7 @@ signal hide
 @export var animate_show_hide: bool = true
 @export var hide_ui_on_death: bool = false
 
-@onready var timer: Timer = $VBoxContainer/MarginContainer/HealthBar/Timer
+@onready var health_timer: Timer = $VBoxContainer/MarginContainer/HealthBar/Timer
 @onready var heath_bar: TextureProgressBar = $VBoxContainer/MarginContainer/HealthBar
 @onready var damage_bar: TextureProgressBar = $VBoxContainer/MarginContainer/HealthBar/DamageBar
 @onready var health_label: Label = $VBoxContainer/MarginContainer/Label
@@ -38,7 +38,7 @@ func init_health_ui(_health) -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		heath_bar.value = new_health
-		timer.start()
+		health_timer.start()
 	else:
 		damage_bar.value = new_health
 		await get_tree().create_timer(0.3).timeout
