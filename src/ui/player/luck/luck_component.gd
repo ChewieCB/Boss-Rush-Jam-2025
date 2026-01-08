@@ -4,6 +4,8 @@ class_name LuckComponent
 signal luck_changed(new_luck: float, prev_luck: float)
 signal luck_diff(diff: float)
 signal luck_maxed()
+signal high_luck_entered()
+signal high_luck_exited()
 
 @export_category("Luck")
 @export var max_luck: float = 100
@@ -62,6 +64,10 @@ func check_for_high_luck_buffs():
 		# Indicate high luck to player
 		GameManager.create_and_add_status_effect("High Luck", "high_luck_buff",
 			StatusEffect.PlayerStatEnum.NONE, 0, StatusEffect.ModifyType.FLAT, StatusEffect.INFINITE_DURATION, false, true, high_luck_icon)
+		high_luck_entered.emit()
+		
+		# TODO - add buffs to luck bar UI
+		#
 
 		# Hot Hand: 5% increased minimum damage per level
 		if GameManager.player_skill_dict.has(SkillItemUI.SkillIdEnum.HOT_HAND):
@@ -96,6 +102,7 @@ func check_for_high_luck_buffs():
 		GameManager.player.remove_status_effect_by_name("hot_hand_buff")
 		GameManager.player.remove_status_effect_by_name("lucky_shot_buff")
 		GameManager.player.remove_status_effect_by_name("blindspot_buff")
+		high_luck_exited.emit()
 
 
 func get_high_luck_threshold():

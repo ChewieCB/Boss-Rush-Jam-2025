@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://d2m0w0bro5j5l"]
+[gd_scene load_steps=31 format=3 uid="uid://d2m0w0bro5j5l"]
 
 [ext_resource type="Script" path="res://src/ui/player/radial_ammo_ui.gd" id="1_awes1"]
 [ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_f4uki"]
@@ -8,15 +8,34 @@
 [ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="4_6gcbv"]
 [ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="5_2xecb"]
 [ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="6_es2ki"]
+[ext_resource type="Material" uid="uid://xk3ab4luhvq" path="res://src/ui/player/SkewedTextureProgressBar.tres" id="6_uywjm"]
 [ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="7_w71kr"]
 [ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="8_kblky"]
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_ui.gd" id="9_7pd86"]
 [ext_resource type="Texture2D" uid="uid://d2hifp16c0ssf" path="res://src/player/assets/ammo_single.png" id="9_ua0m7"]
+[ext_resource type="Shader" path="res://src/ui/player/spin_ability_wave.gdshader" id="11_xew03"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="12_o6f4s"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="13_ey5n2"]
 [ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="14_oh4g2"]
 
 [sub_resource type="Theme" id="Theme_sph0g"]
 default_font = ExtResource("4_6gcbv")
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_iadbw"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+grow_end = 2.0
+thickness = 4
+vertical = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rh6ui"]
+shader = ExtResource("11_xew03")
+shader_parameter/speed = 2.305
+shader_parameter/frequency = 9.99
+shader_parameter/amplitude = 0.03
+shader_parameter/progress = 114.605
+shader_parameter/max_value = 200.0
+shader_parameter/fill_colour = Color(0.462745, 1, 0.388235, 1)
 
 [sub_resource type="Animation" id="Animation_kjov7"]
 length = 0.001
@@ -207,6 +226,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HealthBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer"]
+material = ExtResource("6_uywjm")
 custom_minimum_size = Vector2(304, 20)
 layout_mode = 2
 size_flags_vertical = 4
@@ -225,6 +245,7 @@ tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
 
 [node name="DamageBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer/HealthBar"]
 z_index = -1
+material = ExtResource("6_uywjm")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -248,13 +269,14 @@ tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 wait_time = 0.4
 one_shot = true
 
-[node name="LuckContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox" node_paths=PackedStringArray("timer", "luck_bar", "luck_gain_bar")]
+[node name="LuckContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox" node_paths=PackedStringArray("timer", "luck_bar", "luck_gain_bar", "high_luck_mark_margin_ui")]
 layout_mode = 2
 theme_override_constants/margin_right = -36
 script = ExtResource("9_7pd86")
 timer = NodePath("VBoxContainer/MainRow/LuckBarContainer/LuckBar/Timer")
 luck_bar = NodePath("VBoxContainer/MainRow/LuckBarContainer/LuckBar")
 luck_gain_bar = NodePath("VBoxContainer/MainRow/LuckBarContainer/LuckBar/LuckGainBar")
+high_luck_mark_margin_ui = NodePath("VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer"]
 layout_mode = 2
@@ -291,6 +313,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LuckBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer"]
+material = ExtResource("6_uywjm")
 custom_minimum_size = Vector2(240, 20)
 layout_mode = 2
 size_flags_vertical = 4
@@ -309,6 +332,7 @@ tint_progress = Color(1, 0.74902, 0, 1)
 
 [node name="LuckGainBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
 z_index = -1
+material = ExtResource("6_uywjm")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -332,6 +356,43 @@ tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 wait_time = 0.4
 one_shot = true
 
+[node name="HighLuckBarMargin" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_right = -54.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 7
+
+[node name="HighLuckIndicator" type="VSeparator" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin"]
+modulate = Color(0.989911, 0.852883, 1.92523e-06, 1)
+material = ExtResource("6_uywjm")
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/separator = SubResource("StyleBoxLine_iadbw")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin/HighLuckIndicator"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_constants/margin_top = -64
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin/HighLuckIndicator/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "100%"
+horizontal_alignment = 1
+
 [node name="ActiveLuckBuffsRow" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -347,6 +408,7 @@ theme_override_constants/margin_top = -106
 
 [node name="SpinAbilityUI" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/CircularUIContainer"]
 process_mode = 1
+material = SubResource("ShaderMaterial_rh6ui")
 custom_minimum_size = Vector2(132, 132)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -355,8 +417,8 @@ max_value = 200.0
 value = 98.0
 fill_mode = 3
 nine_patch_stretch = true
-texture_under = ExtResource("3_khwir")
-texture_progress = ExtResource("3_khwir")
+texture_under = ExtResource("12_o6f4s")
+texture_progress = ExtResource("12_o6f4s")
 tint_under = Color(0.306923, 0.306923, 0.306923, 1)
 tint_progress = Color(0.461167, 1, 0.39, 1)
 

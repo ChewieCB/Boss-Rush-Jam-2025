@@ -22,7 +22,7 @@ func _draw() -> void:
 	# Active
 	_draw_radial_segments(active_radial_segment_count, max_radial_segment_count, 18.0, PI / 92, Color("#C11E1E"), Color("#C1BEBE"))
 	# Icons
-	_draw_radial_icons(active_radial_segment_count, max_radial_segment_count, 16.0, PI / 42)
+	#_draw_radial_icons(active_radial_segment_count, max_radial_segment_count, 16.0, PI / 42)
 	
 
 func _process(_delta: float) -> void:
@@ -93,6 +93,7 @@ func _draw_radial_icons(active_segment_count: int, max_segment_count: int, thick
 			ammo_single_texture,
 			-ammo_single_texture.get_size() * 0.5
 		)
+
 
 func update(new_active_count: int, new_max_count: int) -> void:
 	if is_reload_ui_anim_active:

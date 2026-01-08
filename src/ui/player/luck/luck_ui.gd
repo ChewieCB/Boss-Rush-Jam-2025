@@ -10,6 +10,7 @@ signal hide
 @export var timer: Timer
 @export var luck_bar: TextureProgressBar
 @export var luck_gain_bar: TextureProgressBar
+@export var high_luck_mark_margin_ui: Control
 #@onready var luck_modifier_sign_label: Label = $HBoxContainer/MarginContainer2/HBoxContainer/SignLabel
 #@onready var luck_modifier_label: Label = $HBoxContainer/MarginContainer2/HBoxContainer/LuckModifierText
 #@export var luck_modifier_text_lifetime: float = 2.0
@@ -25,6 +26,13 @@ func init_luck_ui(_luck, _max_luck) -> void:
 	luck_bar.value = _luck
 	luck_gain_bar.max_value = _max_luck
 	luck_gain_bar.value = _luck
+	
+	# Map max luck to vertical line margin to indicate max luck left -> right
+	var high_luck_threshold: float = luck_component.get_high_luck_threshold()
+	high_luck_mark_margin_ui.get_node("HighLuckIndicator/MarginContainer/Label").text = "{0}%".format([high_luck_threshold * 100])
+	var high_margin_l: float = high_luck_mark_margin_ui.size.x
+	var high_luck_margin: float = remap(high_luck_threshold, 1.0, 0.0, 0.0, high_margin_l)
+	high_luck_mark_margin_ui.add_theme_constant_override("margin_left", high_luck_margin * 2)
 
 
 #func show_luck_modifier(text: String, is_gain: bool = true) -> void:

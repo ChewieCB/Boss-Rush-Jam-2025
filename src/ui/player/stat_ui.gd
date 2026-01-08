@@ -57,18 +57,24 @@ func _ready() -> void:
 
 
 func _on_spin_ability_progress_changed(value: float) -> void:
+	var progress_mat: ShaderMaterial = spin_ability_ui.material
+	progress_mat.set_shader_parameter("progress", value)
+	
 	if out_of_reroll:
 		spin_ability_ui.tint_progress = Color.GRAY
+		spin_ability_ui.material.set_shader_parameter("fill_colour", Color.GRAY)
 		#progress_label.text = "Limited"
 		#anim_player.stop()
 		return
 		
 	if value >= spin_ability_ui.max_value:
 		spin_ability_ui.tint_progress = Color.GOLD
+		spin_ability_ui.material.set_shader_parameter("fill_colour", Color.GOLD)
 		#progress_label.modulate = Color.GOLD
 		#anim_player.play("spin")
 	else:
 		spin_ability_ui.tint_progress = Color.LIGHT_GREEN
+		spin_ability_ui.material.set_shader_parameter("fill_colour", Color.LIGHT_GREEN)
 		#progress_label.modulate = Color.GRAY
 		#anim_player.stop()
 
@@ -82,6 +88,8 @@ func _on_currency_changed(new_value: int) -> void:
 
 func _update_reroll_max(new_max: int) -> void:
 	spin_ability_ui.max_value = float(new_max)
+	spin_ability_ui.material.set_shader_parameter("max_value", new_max)
+	
 	var new_value: int
 	if not GameManager.is_free_reroll:
 		new_value = min(GameManager.player_currency, spin_ability_ui.max_value)
