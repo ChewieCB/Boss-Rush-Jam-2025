@@ -10,7 +10,7 @@ signal desired_height_reached
 # -Coin Spray: Fire in a burst-of-5, with higher firerate, speed, and recoil. Maybe let the coin ricochet once at higher difficulty. DONE
 # -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.
 # -Bell of Fortune: Add 3D VFX indicator to better telegraph. Add screenshake and dust cloud on impact.
-# -Charge: Add ground decal effect on charge path to show its power. Add speedline
+# -Charge: Add ground decal effect on charge path to show its power. Add speedline. DONE
 # -General: Add dust particle below to show that he's hovering.
 
 
@@ -32,6 +32,7 @@ signal desired_height_reached
 var prev_phase
 @export_group("Phase")
 @export var phase_2_health_percentage_trigger: float = 0.5
+@onready var phase_2_smoke_effect: GPUParticles3D = $Phase2Smoke
 
 @export_group("Display")
 @export var pulled_lever_sprite: CompressedTexture2D
@@ -696,6 +697,7 @@ func _on_lever_swipe_recover_state_entered() -> void:
 #
 func _on_phase_2_state_entered() -> void:
 	current_phase = 2
+	phase_2_smoke_effect.emitting = true
 	slot_ticks /= 4
 	select_attack()
 

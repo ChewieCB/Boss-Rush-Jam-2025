@@ -1,4 +1,4 @@
-[gd_scene load_steps=119 format=3 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=131 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -808,6 +808,88 @@ _data = {
 "summon_bell_shoot": SubResource("Animation_lvnig")
 }
 
+[sub_resource type="Gradient" id="Gradient_1uxvx"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_u81y5"]
+gradient = SubResource("Gradient_1uxvx")
+
+[sub_resource type="Gradient" id="Gradient_ahqq8"]
+offsets = PackedFloat32Array(0, 0.801527, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.371094, 0.371094, 0.371094, 1, 1, 1, 1, 0.466667)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5bleu"]
+gradient = SubResource("Gradient_ahqq8")
+
+[sub_resource type="Curve" id="Curve_v4c7c"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 1), 0.0, 0.0, 0, 0, Vector2(0.587329, 0.501806), -3.14482, -3.14482, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_28epx"]
+curve = SubResource("Curve_v4c7c")
+
+[sub_resource type="Curve" id="Curve_cy6xi"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_alkr5"]
+curve = SubResource("Curve_cy6xi")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s7jl4"]
+emission_shape = 1
+emission_sphere_radius = 2.0
+angle_max = 90.0
+direction = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 3, 0)
+scale_min = 0.7
+scale_curve = SubResource("CurveTexture_28epx")
+color = Color(1, 1, 1, 0.458824)
+color_ramp = SubResource("GradientTexture1D_5bleu")
+color_initial_ramp = SubResource("GradientTexture1D_u81y5")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 5.0
+turbulence_influence_over_life = SubResource("CurveTexture_alkr5")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3d7j"]
+transparency = 1
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_udcdq"]
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cCAAAnQ/fuugIAAAAAzYBJAQAAFSTpJFoAAADqoQAAAAAAAPbrpTbZAAAA///keh8BAAAa8Oq7TgEAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_t626q"]
+resource_name = "particle_circle_particle_circle"
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"attribute_data": PackedByteArray("AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"material": SubResource("StandardMaterial3D_t3d7j"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cC/n8nQ/fuugL+fwAAzYBJAf5/FSTpJFoA/n/qoQAAAAD+f/brpTbZAP5////keh8B/n8a8Oq7TgH+f/9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_udcdq")
+
 [node name="BossSlots" node_paths=PackedStringArray("sfx_players") instance=ExtResource("1_qxyx0")]
 motion_mode = 1
 script = ExtResource("2_b0b3s")
@@ -909,7 +991,7 @@ increased_status_tolerance = {
 5: 1500
 }
 barrel_to_drop = ExtResource("11_5va1t")
-sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8"), NodePath("SFXPlayer9"), NodePath("SFXPlayer10"), NodePath("SFXPlayer11"), NodePath("SFXPlayer12")]
+sfx_players = [NodePath("SFXPlayerHolder/SFXPlayer"), NodePath("SFXPlayerHolder/SFXPlayer2"), NodePath("SFXPlayerHolder/SFXPlayer3"), NodePath("SFXPlayerHolder/SFXPlayer4"), NodePath("SFXPlayerHolder/SFXPlayer5"), NodePath("SFXPlayerHolder/SFXPlayer6"), NodePath("SFXPlayerHolder/SFXPlayer7"), NodePath("SFXPlayerHolder/SFXPlayer8"), NodePath("SFXPlayerHolder/SFXPlayer9"), NodePath("SFXPlayerHolder/SFXPlayer10"), NodePath("SFXPlayerHolder/SFXPlayer11"), NodePath("SFXPlayerHolder/SFXPlayer12")]
 sfx_awaken = ExtResource("51_nikje")
 sfx_hit = Array[AudioStream]([ExtResource("53_c2xtu"), ExtResource("54_56pdr"), ExtResource("55_5buyr"), ExtResource("56_ft1nf"), ExtResource("57_f27rp")])
 sfx_death = ExtResource("67_pi67a")
@@ -945,7 +1027,7 @@ billboard = 2
 texture = ExtResource("4_6oj0s")
 
 [node name="GunOnlySprite" type="Sprite3D" parent="Sprite3D" index="1"]
-transform = Transform3D(1.01626, 0.264051, 0, -0.264051, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
+transform = Transform3D(1.01626, 0.26405, 0, -0.26405, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
 visible = false
 layers = 2
 billboard = 2
@@ -1880,73 +1962,75 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
 [node name="DebugDistanceLabel" parent="." index="12"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, 0)
 
-[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="14"]
+[node name="SFXPlayerHolder" type="Node3D" parent="." index="14"]
+
+[node name="SFXPlayer" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="0"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="15"]
+[node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="1"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="16"]
+[node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="2"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="17"]
+[node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="3"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="18"]
+[node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="4"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="19"]
+[node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="5"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="20"]
+[node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="6"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="21"]
+[node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="7"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="." index="22"]
+[node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="8"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="." index="23"]
+[node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="9"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="." index="24"]
+[node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="10"]
 volume_db = 2.0
 unit_size = 25.0
 max_polyphony = 10
 bus = &"SFX"
 
-[node name="SFXPlayer12" type="AudioStreamPlayer3D" parent="." index="25"]
+[node name="SFXPlayer12" type="AudioStreamPlayer3D" parent="SFXPlayerHolder" index="11"]
 volume_db = 2.0
 unit_size = 20.0
 max_polyphony = 10
@@ -1955,15 +2039,25 @@ bus = &"SFX"
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
 shape = SubResource("CapsuleShape3D_o53xj")
 
-[node name="AnimationPlayer" parent="." index="32"]
+[node name="AnimationPlayer" parent="." index="21"]
 libraries = {
 "": SubResource("AnimationLibrary_wocs5")
 }
 
-[node name="AbsorbChipTimer" type="Timer" parent="." index="34"]
+[node name="AbsorbChipTimer" type="Timer" parent="." index="23"]
 
-[node name="FloorRaycast" type="RayCast3D" parent="." index="37"]
+[node name="FloorRaycast" type="RayCast3D" parent="." index="26"]
 exclude_parent = false
+
+[node name="Phase2Smoke" type="GPUParticles3D" parent="." index="27"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.36659, 0)
+emitting = false
+amount = 64
+lifetime = 4.0
+explosiveness = 0.3
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_s7jl4")
+draw_pass_1 = SubResource("ArrayMesh_t626q")
 
 [connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]

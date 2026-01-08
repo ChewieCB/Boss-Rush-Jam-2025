@@ -24,6 +24,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var dash_cd: float = 1
 @export var angular_momentum_multiplier = 0.4
 @export var speedline_vfx_prefab: PackedScene
+@export var jump_dust_ring_prefab: PackedScene
 
 @export_category("Prefabs")
 @export var health_component: HealthComponent
@@ -418,6 +419,7 @@ func _physics_process(delta):
 				player_camera.add_trauma(HEAVY_FALL_SHAKE_TRAUMA)
 			jumped = false
 			vel_vertical = 0
+			create_jump_dust_ring()
 	else:
 		state_chart.send_event("airborne")
 
@@ -527,7 +529,7 @@ func update_barrel_effect_ui() -> void:
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
-			
+
 			if _effect.icon_id != -1:
 				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
 			else:
@@ -578,6 +580,8 @@ func jump(local_multiplier = 1.0):
 	is_dashing = false
 	is_crouching = false
 
+	create_jump_dust_ring()
+
 	if is_on_floor():
 		SoundManager.play_sound_with_pitch(
 			sfx_jump_ground.pick_random(), randf_range(0.8, 1.1), "SFX"
@@ -587,6 +591,11 @@ func jump(local_multiplier = 1.0):
 			sfx_jump_air.pick_random(), randf_range(0.8, 1.1), "SFX"
 		)
 
+
+func create_jump_dust_ring():
+	var dust_ring_inst = jump_dust_ring_prefab.instantiate()
+	get_tree().get_root().add_child(dust_ring_inst)
+	dust_ring_inst.global_position = global_position - Vector3(0, 1, 0)
 
 func stun(time: float) -> void:
 	max_speed = MAX_SPEED / 4
