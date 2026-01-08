@@ -1,4 +1,4 @@
-[gd_scene load_steps=131 format=4 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=132 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -83,6 +83,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="67_h7fvy"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
 [ext_resource type="Texture2D" uid="uid://c40sn6u84htf2" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_No_Gun.png" id="74_lmlvi"]
+[ext_resource type="PackedScene" uid="uid://cscttl1c3m6e1" path="res://src/bosses/slots/SlotDustHover.tscn" id="84_3o44s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
 render_priority = 0
@@ -2058,6 +2059,10 @@ explosiveness = 0.3
 visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
 process_material = SubResource("ParticleProcessMaterial_s7jl4")
 draw_pass_1 = SubResource("ArrayMesh_t626q")
+
+[node name="SlotDustHover" parent="." index="28" instance=ExtResource("84_3o44s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+script = null
 
 [connection signal="state_exited" from="StateChart/Root/Phase/Inactive" to="." method="_on_phase_inactive_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1" to="." method="_on_phase_1_state_entered"]

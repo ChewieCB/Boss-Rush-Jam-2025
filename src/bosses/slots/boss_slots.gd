@@ -174,7 +174,7 @@ var active_bombs: Array = []
 #@export var sfx_bomb_bounce: Array[AudioStream]
 #@export var sfx_bomb_explode: Array[AudioStream]
 
-@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayerHolder/SFXPlayer
 
 @export_group("Passive")
 @export_subgroup("Absorb Chip")
