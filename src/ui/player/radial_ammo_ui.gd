@@ -1,11 +1,17 @@
 @tool
 extends Control
 
+signal reload_ui_animation_finished
+
 @export var ammo_single_texture: CompressedTexture2D
 #@export var radial_ui_center_node: Control
 
 @export var max_radial_segment_count: int = 7
-@export var active_radial_segment_count: int = 5
+@export var active_radial_segment_count: int = 5:
+	set(value):
+		active_radial_segment_count = clamp(value, 0, max_radial_segment_count)
+
+var is_reload_ui_anim_active: bool = false
 
 
 func _draw() -> void:
@@ -88,9 +94,33 @@ func _draw_radial_icons(active_segment_count: int, max_segment_count: int, thick
 			-ammo_single_texture.get_size() * 0.5
 		)
 
+func update(new_active_count: int, new_max_count: int) -> void:
+	if is_reload_ui_anim_active:
+		await reload_ui_animation_finished
+	
+	max_radial_segment_count = new_max_count
+	active_radial_segment_count = new_active_count
+
 
 func animate_full_reload(reload_time: float) -> void:
-	var segments_to_reload: int = max_radial_segment_count - active_radial_segment_count
-	for i in segments_to_reload:
+	is_reload_ui_anim_active = true
+	var segments_to_unload: int = active_radial_segment_count
+	var segments_to_reload: int = max_radial_segment_count
+	var reload_time_padding: float = 0.07
+	var reload_time_per_segment: float = (reload_time - reload_time_padding) / (segments_to_reload + segments_to_unload)
+	
+	await get_tree().create_timer(reload_time_padding/2, false).timeout
+	# Unload before we reload
+	#while active_radial_segment_count > 0:
+	for i in range(segments_to_unload):
+		active_radial_segment_count -= 1
+		await get_tree().create_timer(reload_time_per_segment, false).timeout
+	
+	for i in range(segments_to_reload):
 		active_radial_segment_count += 1
-		await get_tree().create_timer(reload_time / segments_to_reload, false).timeout
+		await get_tree().create_timer(reload_time_per_segment, false).timeout
+	
+	await get_tree().create_timer(reload_time_padding/2, false).timeout
+	
+	is_reload_ui_anim_active = false
+	reload_ui_animation_finished.emit()

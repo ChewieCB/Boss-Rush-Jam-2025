@@ -468,8 +468,9 @@ func _physics_process(delta):
 
 
 func update_ammo_counter_ui() -> void:
-	stat_ui.radial_ui_center_node.max_radial_segment_count = current_gun.modified_magazine_size
-	stat_ui.radial_ui_center_node.active_radial_segment_count = current_gun.magazine_ammo_left
+	stat_ui.radial_ui_center_node.update(current_gun.magazine_ammo_left, current_gun.modified_magazine_size)
+	#stat_ui.radial_ui_center_node.max_radial_segment_count = current_gun.modified_magazine_size
+	#stat_ui.radial_ui_center_node.active_radial_segment_count = current_gun.magazine_ammo_left
 
 
 func full_reload_ammo_counter_ui() -> void:

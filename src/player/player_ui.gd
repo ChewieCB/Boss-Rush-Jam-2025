@@ -4,7 +4,7 @@ class_name PlayerUI
 @onready var saving_indicator: Label = $SavingIndicator
 @onready var pause_ui: PauseUI = $PauseUI
 
-#@onready var stat_ui: StatUI = $StatUI
+@onready var stat_ui: StatUI = $StatUI
 @onready var interact_ui = $InteractUI
 @onready var gun_ui = $GunUI
 
@@ -22,7 +22,7 @@ func hide_saving_indicator():
 
 
 func refresh_after_setting_changed():
-	#stat_ui.visible = not GameManager.hide_ui
+	stat_ui.visible = not GameManager.hide_ui
 	interact_ui.visible = not GameManager.hide_ui
 	# NOTE: Currently GunUI only show barrels info when user press "tab" so no need to hide it
 	# However, if there is more elements are added in the future then it will need modification.
