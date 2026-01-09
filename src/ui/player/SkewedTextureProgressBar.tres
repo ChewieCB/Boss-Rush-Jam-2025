@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://xk3ab4luhvq"]
+
+[ext_resource type="Shader" path="res://src/ui/player/stat_ui_bar_skewed.gdshader" id="1_8xc5k"]
+
+[resource]
+shader = ExtResource("1_8xc5k")
+shader_parameter/skew_factor = 0.5

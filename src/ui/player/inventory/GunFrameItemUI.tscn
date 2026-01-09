@@ -1,13 +1,13 @@
 [gd_scene load_steps=5 format=3 uid="uid://cireewkvow2ct"]
 
-[ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/gun-sideview.png" id="1_wm3wv"]
+[ext_resource type="Texture2D" uid="uid://5a51ghh4cpmw" path="res://src/ui/player/inventory/assets/frames/frame_sideview_shotgun.png" id="1_n0lsv"]
 [ext_resource type="Script" path="res://src/ui/player/inventory/gun_frame_item_ui.gd" id="2_0e07s"]
 [ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="2_ax6s6"]
 [ext_resource type="Texture2D" uid="uid://dmnuc1rmciuv3" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-014.png" id="3_qln6d"]
 
 [node name="GunFrameItemUI" type="TextureRect"]
-custom_minimum_size = Vector2(0, 120)
-texture = ExtResource("1_wm3wv")
+custom_minimum_size = Vector2(340, 120)
+texture = ExtResource("1_n0lsv")
 expand_mode = 3
 script = ExtResource("2_0e07s")
 
