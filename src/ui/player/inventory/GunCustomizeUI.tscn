@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://3ldvxjt8q5gk" path="res://src/ui/player/inventory/ShopGunFrameItemUI.tscn" id="5_fojg4"]
 [ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="5_q6fhm"]
 [ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_i05nn"]
-[ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/gun-sideview.png" id="6_tkikf"]
+[ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/assets/frames/shotgun_frame_sideview.png" id="6_tkikf"]
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_modify_ui.gd" id="6_yuo0o"]
 [ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="7_1f1kf"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="7_78f5u"]
@@ -102,7 +102,7 @@ _data = {
 "shopkeeper_idle": SubResource("Animation_dro8h")
 }
 
-[node name="GunCustomizeUI" type="Control"]
+[node name="GunCustomizeUI" type="Control" node_paths=PackedStringArray("current_gun_frame_icon")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -120,6 +120,7 @@ sfx_click = ExtResource("6_i05nn")
 sfx_purchase = ExtResource("7_1f1kf")
 sfx_too_expensive = ExtResource("8_b21fk")
 sfx_barrel_equip = ExtResource("9_mbb0v")
+current_gun_frame_icon = NodePath("MainRegion/BarrelModifyUI/LeftRegion/GunSideview")
 
 [node name="ModifyBG" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_yd8qc")

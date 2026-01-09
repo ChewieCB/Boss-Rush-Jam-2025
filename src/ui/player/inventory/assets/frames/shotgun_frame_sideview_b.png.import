@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkk2usr4k2bhb"
-path="res://.godot/imported/gun-sideview.png-86f53b6799d5d47aa783e118b32df79f.ctex"
+uid="uid://dfd512kk3tm6v"
+path="res://.godot/imported/shotgun_frame_sideview_b.png-9bb82e1a8f4c82edf63664696e359d69.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/ui/player/inventory/gun-sideview.png"
-dest_files=["res://.godot/imported/gun-sideview.png-86f53b6799d5d47aa783e118b32df79f.ctex"]
+source_file="res://src/ui/player/inventory/assets/frames/shotgun_frame_sideview_b.png"
+dest_files=["res://.godot/imported/shotgun_frame_sideview_b.png-9bb82e1a8f4c82edf63664696e359d69.ctex"]
 
 [params]
 

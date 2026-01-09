@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="GunFrameResource" load_steps=3 format=3 uid="uid://cid07th4gi8ov"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun_frame/gun_frame_resource.gd" id="1_1b7fk"]
-[ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/gun-sideview.png" id="2_xsjhn"]
+[ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/assets/frames/shotgun_frame_sideview.png" id="2_xsjhn"]
 
 [resource]
 script = ExtResource("1_1b7fk")
