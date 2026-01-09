@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://d2m0w0bro5j5l"]
+[gd_scene load_steps=34 format=3 uid="uid://d2m0w0bro5j5l"]
 
 [ext_resource type="Script" path="res://src/ui/player/radial_ammo_ui.gd" id="1_awes1"]
 [ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_f4uki"]
@@ -14,12 +14,25 @@
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_ui.gd" id="9_7pd86"]
 [ext_resource type="Texture2D" uid="uid://d2hifp16c0ssf" path="res://src/player/assets/ammo_single.png" id="9_ua0m7"]
 [ext_resource type="Shader" path="res://src/ui/player/spin_ability_wave.gdshader" id="11_xew03"]
+[ext_resource type="Shader" path="res://src/ui/player/luck_glow.gdshader" id="12_bmj6s"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="12_o6f4s"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="13_ey5n2"]
+[ext_resource type="Texture2D" uid="uid://cx26td1agki7o" path="res://assets/sprite/placeholder/rounded-square-gradient.png" id="13_fidr8"]
 [ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="14_oh4g2"]
 
 [sub_resource type="Theme" id="Theme_sph0g"]
 default_font = ExtResource("4_6gcbv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ielym"]
+shader = ExtResource("12_bmj6s")
+shader_parameter/scale_mult = Vector2(1, 1)
+shader_parameter/aura_progress = 0.0
+shader_parameter/aura_colour = Color(1, 0.75, 0, 1)
+shader_parameter/texture_load_mult = 8.0
+shader_parameter/tiling = 1.71
+shader_parameter/movment_dir_speed = Vector2(-1.8, 3)
+shader_parameter/movment_dir_speed2 = Vector2(1.8, 3)
+shader_parameter/noise_seed = Vector2(1, 1)
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_iadbw"]
 color = Color(1, 1, 1, 1)
@@ -141,7 +154,7 @@ script = ExtResource("1_f4uki")
 status_duration_ui_prefab = ExtResource("2_7qugk")
 health_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer")
 luck_bar_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer")
-luck_buffs_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/ActiveLuckBuffsRow/ActiveLuckBuffs")
+luck_buffs_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/ActiveLuckBuffsRow/ActiveLuckBuffs")
 anim_player = NodePath("AnimationPlayer")
 status_ui_container = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/StatusIconsRow/StatusIcons")
 spin_ability_ui = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI")
@@ -195,6 +208,7 @@ layout_mode = 2
 
 [node name="HealthIconContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow"]
 layout_mode = 2
+theme_override_constants/margin_right = 16
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthIconContainer"]
 layout_mode = 2
@@ -269,37 +283,61 @@ tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 wait_time = 0.4
 one_shot = true
 
-[node name="LuckContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox" node_paths=PackedStringArray("timer", "luck_bar", "luck_gain_bar", "high_luck_mark_margin_ui")]
+[node name="LuckContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox" node_paths=PackedStringArray("timer", "luck_bar", "luck_gain_bar", "high_luck_mark_margin_ui", "high_luck_glow", "luck_buff_container")]
 layout_mode = 2
 theme_override_constants/margin_right = -36
 script = ExtResource("9_7pd86")
-timer = NodePath("VBoxContainer/MainRow/LuckBarContainer/LuckBar/Timer")
-luck_bar = NodePath("VBoxContainer/MainRow/LuckBarContainer/LuckBar")
-luck_gain_bar = NodePath("VBoxContainer/MainRow/LuckBarContainer/LuckBar/LuckGainBar")
-high_luck_mark_margin_ui = NodePath("VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin")
+timer = NodePath("MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/Timer")
+luck_bar = NodePath("MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar")
+luck_gain_bar = NodePath("MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/LuckGainBar")
+high_luck_mark_margin_ui = NodePath("MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin")
+high_luck_glow = NodePath("HighLuckGlowMargin/HighLuckGlow")
+luck_buff_container = NodePath("MarginContainer/VBoxContainer/ActiveLuckBuffsRow/ActiveLuckBuffs")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer"]
+[node name="HighLuckGlowMargin" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer"]
+z_index = -2
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_top = -14
+theme_override_constants/margin_right = -64
+theme_override_constants/margin_bottom = -48
+
+[node name="HighLuckGlow" type="TextureRect" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/HighLuckGlowMargin"]
+material = SubResource("ShaderMaterial_ielym")
+custom_minimum_size = Vector2(512, 32)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = ExtResource("13_fidr8")
+expand_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="MainRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer"]
+[node name="MainRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LuckIconContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow"]
+[node name="LuckIconContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow"]
 layout_mode = 2
+theme_override_constants/margin_right = 16
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckIconContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckIconContainer"]
 layout_mode = 2
 texture = ExtResource("8_kblky")
 expand_mode = 3
 
-[node name="LuckBarContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow"]
+[node name="LuckBarContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 mouse_filter = 2
 theme_override_constants/margin_left = 8
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer"]
 visible = false
 z_index = 1
 layout_mode = 2
@@ -312,7 +350,7 @@ text = "10,000/10,000"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LuckBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer"]
+[node name="LuckBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer"]
 material = ExtResource("6_uywjm")
 custom_minimum_size = Vector2(240, 20)
 layout_mode = 2
@@ -330,7 +368,7 @@ texture_progress = ExtResource("6_es2ki")
 tint_over = Color(0.901961, 0.776471, 0, 1)
 tint_progress = Color(1, 0.74902, 0, 1)
 
-[node name="LuckGainBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
+[node name="LuckGainBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
 z_index = -1
 material = ExtResource("6_uywjm")
 layout_mode = 1
@@ -352,11 +390,11 @@ texture_progress = ExtResource("7_w71kr")
 tint_under = Color(0.113725, 0.113725, 0.113725, 1)
 tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 
-[node name="Timer" type="Timer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
+[node name="Timer" type="Timer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
 wait_time = 0.4
 one_shot = true
 
-[node name="HighLuckBarMargin" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
+[node name="HighLuckBarMargin" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -369,14 +407,14 @@ theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_bottom = 7
 
-[node name="HighLuckIndicator" type="VSeparator" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin"]
+[node name="HighLuckIndicator" type="VSeparator" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin"]
 modulate = Color(0.989911, 0.852883, 1.92523e-06, 1)
 material = ExtResource("6_uywjm")
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/separator = SubResource("StyleBoxLine_iadbw")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin/HighLuckIndicator"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin/HighLuckIndicator"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -387,18 +425,18 @@ offset_bottom = 40.0
 grow_horizontal = 2
 theme_override_constants/margin_top = -64
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin/HighLuckIndicator/MarginContainer"]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin/HighLuckIndicator/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "100%"
 horizontal_alignment = 1
 
-[node name="ActiveLuckBuffsRow" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer"]
+[node name="ActiveLuckBuffsRow" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_constants/margin_left = 56
 
-[node name="ActiveLuckBuffs" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/VBoxContainer/ActiveLuckBuffsRow"]
+[node name="ActiveLuckBuffs" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/ActiveLuckBuffsRow"]
 layout_mode = 2
 
 [node name="CircularUIContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]

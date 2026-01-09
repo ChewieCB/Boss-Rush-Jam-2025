@@ -11,6 +11,8 @@ signal hide
 @export var luck_bar: TextureProgressBar
 @export var luck_gain_bar: TextureProgressBar
 @export var high_luck_mark_margin_ui: Control
+@export var high_luck_glow: TextureRect
+@export var luck_buff_container: Control
 #@onready var luck_modifier_sign_label: Label = $HBoxContainer/MarginContainer2/HBoxContainer/SignLabel
 #@onready var luck_modifier_label: Label = $HBoxContainer/MarginContainer2/HBoxContainer/LuckModifierText
 #@export var luck_modifier_text_lifetime: float = 2.0
@@ -19,6 +21,12 @@ signal hide
 func _ready() -> void:
 	await get_owner().ready
 	#LuckHandler.modifier_message.connect(show_luck_modifier)
+	_set_high_luck_glow_progress(0.0)
+
+
+func _set_high_luck_glow_progress(progress: float) -> void:
+	high_luck_glow.material.set_shader_parameter("aura_progress", progress)
+	high_luck_glow.material.set_shader_parameter("aura_colour:a", progress)
 
 
 func init_luck_ui(_luck, _max_luck) -> void:
@@ -63,3 +71,23 @@ func cash_in_luck() -> void:
 func _on_timer_timeout():
 	luck_bar.value = luck_component.current_luck
 	luck_gain_bar.value = luck_component.current_luck
+
+
+func _on_high_luck_entered() -> void:
+	# Show add an icon for each luck buff active
+	# TODO
+	# Animate luck bar glow
+	var luck_glow_tween: Tween = get_tree().create_tween()
+	luck_glow_tween.tween_method(
+		_set_high_luck_glow_progress, 1.0, 0.0, 0.3
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)
+
+
+func _on_high_luck_exited() -> void:
+	# remove the luck buff icons
+	# TODO
+	# Animate luck bar dimming
+	var luck_glow_tween: Tween = get_tree().create_tween()
+	luck_glow_tween.tween_method(
+		_set_high_luck_glow_progress, 0.0, 1.0, 0.3
+	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CIRC)

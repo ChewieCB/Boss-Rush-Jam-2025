@@ -41,6 +41,8 @@ func _ready() -> void:
 		luck_bar_ui.init_luck_ui(luck_component.current_luck, luck_component.max_luck)
 		luck_component.luck_changed.connect(luck_bar_ui._on_luck_changed)
 		luck_component.luck_maxed.connect(luck_bar_ui._on_luck_maxed)
+		luck_component.high_luck_entered.connect(luck_bar_ui._on_high_luck_entered)
+		luck_component.high_luck_exited.connect(luck_bar_ui._on_high_luck_exited)
 	# FIXME - remove conditional after debugging?
 	if GameManager.player:
 		GameManager.player.new_status_effect_added.connect(add_refresh_status_ui)
