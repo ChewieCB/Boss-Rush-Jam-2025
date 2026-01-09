@@ -74,8 +74,6 @@ func _on_timer_timeout():
 
 
 func _on_high_luck_entered() -> void:
-	# Show add an icon for each luck buff active
-	# TODO
 	# Animate luck bar glow
 	var luck_glow_tween: Tween = get_tree().create_tween()
 	luck_glow_tween.tween_method(
@@ -84,8 +82,6 @@ func _on_high_luck_entered() -> void:
 
 
 func _on_high_luck_exited() -> void:
-	# remove the luck buff icons
-	# TODO
 	# Animate luck bar dimming
 	var luck_glow_tween: Tween = get_tree().create_tween()
 	luck_glow_tween.tween_method(

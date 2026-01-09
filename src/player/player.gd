@@ -810,7 +810,7 @@ func add_status_effect(new_status: StatusEffect):
 
 func remove_status_effect(status: StatusEffect):
 	status_effect_list.erase(status)
-	status_effect_removed.emit(status.status_code)
+	status_effect_removed.emit(status)
 	apply_status_effects()
 
 

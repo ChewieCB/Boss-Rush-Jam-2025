@@ -426,6 +426,7 @@ grow_horizontal = 2
 theme_override_constants/margin_top = -64
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin/HighLuckIndicator/MarginContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 text = "100%"

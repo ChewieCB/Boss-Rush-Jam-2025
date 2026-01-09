@@ -111,21 +111,25 @@ func _update_reroll_max(new_max: int) -> void:
 func add_refresh_status_ui(new_status: StatusEffect):
 	if not new_status.show_duration_ui:
 		return
+	
+	var _status_container = luck_buffs_ui if new_status.is_luck_buff else status_ui_container
+	
 	# Check if it already exist, then refresh it
-	for child in status_ui_container.get_children():
+	for child in _status_container.get_children():
 		if child.status_effect.status_code == new_status.status_code:
 			child.refresh(new_status)
 			return
 	# Else, add new status UI item
 	var ui_inst = status_duration_ui_prefab.instantiate()
-	status_ui_container.add_child(ui_inst)
+	_status_container.add_child(ui_inst)
 	ui_inst.init(new_status)
 
 
 ## Usually used for infinite duration status
-func remove_status_ui(status_code: String):
-	for child in status_ui_container.get_children():
-		if child.status_effect.status_code == status_code:
+func remove_status_ui(status_to_remove: StatusEffect):
+	var _status_container = luck_buffs_ui if status_to_remove.is_luck_buff else status_ui_container
+	for child in _status_container.get_children():
+		if child.status_effect == status_to_remove:
 			child.remove()
 
 
