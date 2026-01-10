@@ -107,6 +107,7 @@ var bell_attack_enabled = false # Based on ante 1
 @export var bell_shadow_time: float = 1.4
 @export var bell_spawn_area_radius: float = 28.0
 @export var bells_to_spawn: int = 4
+const BELL_RADIUS = 6.0
 var bell_spawn_points: Array = []
 # SFX
 #@export var sfx_bell_Spawn: Array[AudioStream]  - TODO: Get spawn sounds
@@ -526,7 +527,7 @@ func spawn_bell(pos: Vector3, size: float) -> Bell:
 	var bell: Bell = bell_scene.instantiate()
 	get_tree().root.get_child(7).add_child(bell)
 	bell.global_position = pos
-	bell.init(bell_damage * GameManager.get_risk_dmg_mult())
+	bell.init(bell_damage * GameManager.get_risk_dmg_mult(), size)
 	bell.mesh.scale *= size
 	bell.collider.shape.radius = size
 	bell.collider.shape.height = size * 2
@@ -593,7 +594,7 @@ func _on_bell_drop_dropping_state_exited() -> void:
 			break
 		var spawn := Vector3(point.x, 2.5, point.y)
 		# Spawn shadow/mesh to show AoE, grow in size as it drops
-		drop_shadow(spawn, 6.0, bell_shadow_time)
+		drop_shadow(spawn, BELL_RADIUS, bell_shadow_time)
 		await get_tree().create_timer(0.2, false).timeout
 
 

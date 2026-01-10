@@ -38,13 +38,16 @@ flatness = 1.0
 radial_velocity_min = 0.999978
 radial_velocity_max = 1.99998
 radial_velocity_curve = SubResource("CurveTexture_fv878")
-gravity = Vector3(0, -1, 0)
+gravity = Vector3(0, -3, 0)
 scale_min = 2.0
 scale_max = 3.0
 scale_curve = SubResource("CurveTexture_kq3wo")
 color = Color(0.234375, 0.234375, 0.234375, 0.658824)
 color_ramp = SubResource("GradientTexture1D_xahh7")
 alpha_curve = SubResource("CurveTexture_235l2")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 5.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pb3us"]
 transparency = 1
@@ -83,7 +86,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_3h1ni")
 
 [node name="SlotDustHover" type="GPUParticles3D"]
-amount = 32
+amount = 64
 lifetime = 2.0
 fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_s4v4v")

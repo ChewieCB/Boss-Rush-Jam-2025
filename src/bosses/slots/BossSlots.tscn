@@ -1028,7 +1028,7 @@ billboard = 2
 texture = ExtResource("4_6oj0s")
 
 [node name="GunOnlySprite" type="Sprite3D" parent="Sprite3D" index="1"]
-transform = Transform3D(1.01626, 0.26405, 0, -0.26405, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
+transform = Transform3D(1.01626, 0.264048, 0, -0.264048, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
 visible = false
 layers = 2
 billboard = 2
