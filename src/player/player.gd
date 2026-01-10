@@ -395,7 +395,7 @@ func _physics_process(delta):
 		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
-	# Let the player ignore the wheelspin if they are moving
+	# Let the player ignore the wheelspin in Roulette boss if they are moving
 	var floor_velocity = get_platform_velocity()
 	if floor_velocity: # and input_dir != Vector2.ZERO:
 		var dir_weight = input_dir.dot(Vector2(
@@ -456,9 +456,12 @@ func _physics_process(delta):
 	move_and_slide()
 
 	#show_debug_label()
+	# Gun sway when moving effect
 	var gun_sway_velocity = velocity * transform.basis
 	if not is_swapping_gun:
-		gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
+		var target_gun_container_pos = gun_container_original_pos - (gun_sway_velocity / 500)
+		target_gun_container_pos.y = clamp(target_gun_container_pos.y, gun_container_original_pos.y - 0.05, gun_container_original_pos.y + 0.05)
+		gun_container.position = lerp(gun_container.position, target_gun_container_pos, delta * 10)
 		if is_dashing:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z - (gun_sway_velocity.x / 250), delta * 10)
 		else:
