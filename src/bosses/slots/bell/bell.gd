@@ -5,6 +5,7 @@ signal destroyed(bell: Bell)
 
 @export var damage: float = 20.0
 @export var explosion_prefab: PackedScene
+@export var dust_cloud_prefab: PackedScene
 @export_group("SFX")
 @export var sfx_bell_full: Array[AudioStream]
 @export var sfx_bell_windup: Array[AudioStream]
@@ -17,23 +18,17 @@ signal destroyed(bell: Bell)
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 @onready var raycast: RayCast3D = $RayCast3D
 
+const PERSIST_TIME = 1.0
+
 var size: float = 1
 var floor_y: float = 0.0
+
 
 func init(_damage: float, _size: float):
 	damage = _damage
 	size = _size
 
 func drop() -> void:
-	# var space_state = get_world_3d().direct_space_state
-	# var query = PhysicsRayQueryParameters3D.create(
-	# 	self.global_position,
-	# 	self.global_position - Vector3(0, 100, 0),
-	# 	int(pow(2, 1 - 1) + pow(2, 7 - 1))
-	# )
-	# var result = space_state.intersect_ray(query)
-	# if result:
-	# 	floor_y = result.position.y
 	if raycast.is_colliding():
 		floor_y = raycast.get_collision_point().y
 	
@@ -48,12 +43,19 @@ func drop() -> void:
 
 
 func destroy() -> void:
+	# Impact
+	var dust_cloud_vfx = dust_cloud_prefab.instantiate()
+	get_tree().get_root().add_child(dust_cloud_vfx)
+	dust_cloud_vfx.global_position = global_position + Vector3(0, 1, 0)
+	await get_tree().create_timer(PERSIST_TIME).timeout
+
+	# Explode and destroyed
 	sfx_player.stream = sfx_bell_impact.pick_random()
 	sfx_player.play()
 	var explosion_vfx: ExplosionParticles = explosion_prefab.instantiate()
 	get_tree().get_root().add_child(explosion_vfx)
+	explosion_vfx.global_position = global_position + Vector3(0, 1, 0)
 	explosion_vfx.scale_factor = size
-	explosion_vfx.global_position = global_position
 	explosion_vfx.explode()
 	var tween = get_tree().create_tween()
 	tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:a", 0, 0.14).set_trans(Tween.TRANS_EXPO)
