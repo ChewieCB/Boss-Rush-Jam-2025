@@ -19,6 +19,9 @@ signal destroyed(bell: Bell)
 @onready var raycast: RayCast3D = $RayCast3D
 
 const PERSIST_TIME = 1.0
+const TREMOR_INTENSITY = 0.3
+const CLOSE_TREMOR_DISTANCE = 20
+const CLOSE_TREMOR_INTENSITY = 0.6
 
 var size: float = 1
 var floor_y: float = 0.0
@@ -47,6 +50,13 @@ func destroy() -> void:
 	var dust_cloud_vfx = dust_cloud_prefab.instantiate()
 	get_tree().get_root().add_child(dust_cloud_vfx)
 	dust_cloud_vfx.global_position = global_position + Vector3(0, 1, 0)
+	# If player near, shake their camera stronger
+	var player_distance_to_bell = GameManager.player.global_position.distance_to(global_position)
+	if player_distance_to_bell < CLOSE_TREMOR_DISTANCE:
+		GameManager.player.player_camera.add_trauma(CLOSE_TREMOR_INTENSITY)
+	else:
+		GameManager.player.player_camera.add_trauma(TREMOR_INTENSITY)
+
 	await get_tree().create_timer(PERSIST_TIME).timeout
 
 	# Explode and destroyed
