@@ -9,9 +9,9 @@ signal desired_height_reached
 # -Homing Diamond: Change the homing diamond to spawn all at once (instead of one by one), wait a bit then homing at player.  DONE
 # -Coin Spray: Fire in a burst-of-5, with higher firerate, speed, and recoil. Maybe let the coin ricochet once at higher difficulty. DONE
 # -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.
-# -Bell of Fortune: Add 3D VFX indicator to better telegraph. Add screenshake and dust cloud on impact.
+# -Bell of Fortune: Add 3D VFX indicator to better telegraph. Add screenshake and dust cloud on impact. DONE
 # -Charge: Add ground decal effect on charge path to show its power. Add speedline. DONE
-# -General: Add dust particle below to show that he's hovering.
+# -General: Add dust particle below to show that he's hovering. DONE
 
 
 # Antes note:
@@ -97,7 +97,6 @@ var slot_ticks: int = SLOT_TICKS
 @export var sfx_coin_shot: Array[AudioStream]
 
 @export_subgroup("Bell Drop")
-var bell_attack_enabled = false # Based on ante 1
 @export var bell_damage: float = 20
 @export var bell_scene: PackedScene
 @export var bell_flare_prefab: PackedScene
@@ -137,7 +136,6 @@ var charge_locked: bool = false
 @export var sfx_charge_impact: Array[AudioStream]
 
 @export_subgroup("Homing Diamonds")
-var homing_diamond_enabled = false # Based on ante 2
 @export var diamond_damage: float = 3
 @export var diamond_speed: float = 20
 @export var diamond_homing_speed: float = 40
@@ -189,16 +187,15 @@ var absorb_chip_enabled = false
 
 func _ready() -> void:
 	super ()
-	bell_attack_enabled = true
-	homing_diamond_enabled = true
 	if GameManager.boss_ante >= 1:
+		# pinball_enabled = true
 		pass
 	if GameManager.boss_ante >= 2:
-		pinball_enabled = true
-	if GameManager.boss_ante >= 3:
 		pass
-	if GameManager.boss_ante >= 4:
+	if GameManager.boss_ante >= 3:
 		slot_icons_parent.visible = false
+	if GameManager.boss_ante >= 4:
+		pass
 	if GameManager.boss_ante >= 5:
 		absorb_chip_enabled = true
 		absorb_chip_timer.start(absorb_chip_interval)
@@ -236,10 +233,9 @@ func select_attack_phase_1() -> void:
 	var possible_phases = [
 		# Tuples of event string and icon index
 		["start_coin_attack", 0],
+		["start_bell_attack", 1],
 		["start_charge_attack", 2],
 	]
-	if bell_attack_enabled:
-		possible_phases.append(["start_bell_attack", 1])
 	if prev_phase:
 		possible_phases.erase(prev_phase)
 	# TODO - add random weighting
@@ -254,14 +250,11 @@ func select_attack_phase_2() -> void:
 	var possible_phases = [
 		# Tuples of event string and icon index
 		["start_coin_attack", 0],
+		["start_bell_attack", 1],
 		["start_charge_attack", 2],
+		["start_diamond_attack", 3],
 		["start_bomb_attack", 4],
 	]
-	if bell_attack_enabled:
-		possible_phases.append(["start_bell_attack", 1])
-	if homing_diamond_enabled:
-		possible_phases.append(["start_diamond_attack", 3])
-		possible_phases.erase(["start_coin_attack", 0]) # Replace coin with diamond
 	if pinball_enabled:
 		possible_phases.append(["start_pinball_attack", 5])
 	if prev_phase:

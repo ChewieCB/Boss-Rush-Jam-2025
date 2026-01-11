@@ -6,7 +6,6 @@
 [ext_resource type="AudioStream" uid="uid://biv0t34kylfov" path="res://src/bosses/slots/assets/sfx/Basic Long Slot Machine Improved.mp3" id="3_o5exi"]
 [ext_resource type="Texture2D" uid="uid://bbblp8vkvd3no" path="res://src/bosses/slots/assets/icons/temp/flip_full.png" id="3_say4o"]
 [ext_resource type="Texture2D" uid="uid://v67yeqhnxlbd" path="res://src/bosses/slots/assets/icons/temp/suit_diamonds.png" id="4_6oj0s"]
-[ext_resource type="Texture2D" uid="uid://8rlesfd54n8r" path="res://src/bosses/slots/assets/icons/temp/suit_hearts.png" id="4_oaydl"]
 [ext_resource type="AudioStream" uid="uid://djvdypgx1y3j6" path="res://src/bosses/slots/assets/sfx/Basic Short Slot Machine Improved.mp3" id="4_vhne6"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="5_3q2k6"]
 [ext_resource type="AudioStream" uid="uid://vjjoalu8btt5" path="res://src/bosses/slots/assets/sfx/COIN SHOT/SLOT BOSS TELEGRAPH COINS ISOLATED.mp3" id="5_lghps"]
@@ -25,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://40024fnpmf14" path="res://src/bosses/base/attacks/ranged/DiamondProjectile.tscn" id="11_dqr52"]
 [ext_resource type="PackedScene" uid="uid://yw8o87v7ydx1" path="res://src/bosses/slots/bomb/BombProjectile.tscn" id="12_xbq02"]
 [ext_resource type="Texture2D" uid="uid://b5j7lvip5mjnj" path="res://src/bosses/slots/assets/icons/bull-horns.png" id="13_nh3cu"]
+[ext_resource type="Texture2D" uid="uid://cof4mcbiwepqn" path="res://src/bosses/slots/assets/icons/ringing-bell.png" id="13_uxh3c"]
 [ext_resource type="Texture2D" uid="uid://11i81ijkmtni" path="res://src/bosses/slots/assets/icons/unlit-bomb.png" id="15_gni4v"]
 [ext_resource type="PackedScene" uid="uid://bxshoefc1p3uy" path="res://src/bosses/base/attacks/ranged/CoinProjectile.tscn" id="16_52y3v"]
 [ext_resource type="Texture2D" uid="uid://cmleylm1metko" path="res://src/bosses/slots/assets/icons/pinball.png" id="16_xk200"]
@@ -910,7 +910,7 @@ sfx_slot_pick_diamond = ExtResource("9_qwmyu")
 sfx_slot_pick_cherry = ExtResource("10_88yvd")
 sfx_slot_pick_pinball = ExtResource("6_q1utd")
 icon_coin = ExtResource("3_say4o")
-icon_bell = ExtResource("4_oaydl")
+icon_bell = ExtResource("13_uxh3c")
 icon_charge = ExtResource("13_nh3cu")
 icon_diamond = ExtResource("4_6oj0s")
 icon_cherry_bomb = ExtResource("15_gni4v")
@@ -1028,7 +1028,7 @@ billboard = 2
 texture = ExtResource("4_6oj0s")
 
 [node name="GunOnlySprite" type="Sprite3D" parent="Sprite3D" index="1"]
-transform = Transform3D(1.01626, 0.264048, 0, -0.264048, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
+transform = Transform3D(1.01626, 0.264047, 0, -0.264047, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
 visible = false
 layers = 2
 billboard = 2
