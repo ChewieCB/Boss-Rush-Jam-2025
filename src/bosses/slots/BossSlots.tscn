@@ -1028,7 +1028,7 @@ billboard = 2
 texture = ExtResource("4_6oj0s")
 
 [node name="GunOnlySprite" type="Sprite3D" parent="Sprite3D" index="1"]
-transform = Transform3D(1.01626, 0.264047, 0, -0.264047, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
+transform = Transform3D(1.01626, 0.264046, 0, -0.264046, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
 visible = false
 layers = 2
 billboard = 2
@@ -1059,7 +1059,7 @@ free_on_finished = false
 monitoring = true
 
 [node name="HealthComponent" parent="." index="5"]
-max_health = 4000.0
+max_health = 1000.0
 
 [node name="NavigationComponent" parent="." index="6"]
 follow_target = false
