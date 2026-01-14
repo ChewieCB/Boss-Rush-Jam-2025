@@ -21,23 +21,25 @@ class_name BombProjectile
 @onready var explosion_collider: CollisionShape3D = $ExplosionArea/CollisionShape3D
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 @onready var explosion_range_indicator: MeshInstance3D = $ExplosionRangeIndicator
+@onready var burn_vfx: GPUParticleController = $ProjectileBurnEmit
 
 const TREMOR_INTENSITY = 0.5
+
 var body_state: PhysicsDirectBodyState3D
 
 
 func _ready() -> void:
 	explosion_collider.shape.radius = explosion_radius
-	fuse_time += randf_range(0, fuse_variance)
 	timer.start(fuse_time)
 	var tween = get_tree().create_tween()
 	explosion_range_indicator.scale = Vector3.ONE * explosion_radius
 	tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 1.0, fuse_time)
-	tween.parallel().tween_property(explosion_range_indicator.mesh.surface_get_material(0), "albedo_color:r", 0.05, fuse_time)
+	burn_vfx.activate()
 
 func init(_damage: float, _fuse_time: float):
 	explosion_damage = _damage
 	fuse_time = _fuse_time
+	fuse_time += randf_range(0, fuse_variance)
 
 func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
 	var spark_inst = spark_scene.instantiate()
@@ -53,17 +55,21 @@ func create_spark(pos: Vector3, normal: Vector3 = Vector3.ZERO):
 			spark_inst.look_at(pos + normal, Vector3.UP)
 
 
-func destroy(_explode: bool = true) -> void:
-	explosion_area.set_deferred("monitoring", true)
-	var explosion_vfx = explosion_prefab.instantiate()
-	get_tree().get_root().add_child(explosion_vfx)
-	explosion_vfx.global_position = self.global_position
-	const EXPLOSION_VFX_SCALE_MODIFIER = 8.0
-	explosion_vfx.scale_factor = explosion_radius / EXPLOSION_VFX_SCALE_MODIFIER
-	explosion_vfx.explode()
+func destroy(explode: bool = true) -> void:
+	if explode:
+		explosion_area.set_deferred("monitoring", true)
+		var explosion_vfx = explosion_prefab.instantiate()
+		get_tree().get_root().add_child(explosion_vfx)
+		explosion_vfx.global_position = self.global_position
+		const EXPLOSION_VFX_SCALE_MODIFIER = 1.0
+		explosion_vfx.scale_factor = explosion_radius / EXPLOSION_VFX_SCALE_MODIFIER
+		explosion_vfx.explode()
+		sfx_player.stream = sfx_bomb_explode.pick_random()
+		sfx_player.play()
 
-	sfx_player.stream = sfx_bomb_explode.pick_random()
-	sfx_player.play()
+	var tween = get_tree().create_tween()
+	tween.tween_property(mesh, "scale", Vector3.ZERO, 0.4).set_trans(Tween.TRANS_SINE)
+	tween.tween_callback(self.queue_free)
 
 func _integrate_forces(state):
 	body_state = state
@@ -84,6 +90,8 @@ func _on_body_entered(_body: Node) -> void:
 func _on_explosion_area_body_entered(body: Node3D) -> void:
 	if body is Player or body is BossCore:
 		body.health_component.damage(explosion_damage)
-		body.player_camera.add_trauma(TREMOR_INTENSITY)
-	elif body is BombProjectile:
-		body.destroy()
+		if body is Player:
+			body.player_camera.add_trauma(TREMOR_INTENSITY)
+
+func _on_lifetime_timer_timeout() -> void:
+	queue_free()

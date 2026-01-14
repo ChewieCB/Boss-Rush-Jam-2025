@@ -1,4 +1,4 @@
-[gd_scene load_steps=132 format=4 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=133 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -797,6 +797,85 @@ tracks/6/keys = {
 "values": [Vector3(1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_kh5dm"]
+resource_name = "quick_bomb_shot"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("74_lmlvi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [true],
+"method": &"toggle_block_hurt_frame"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/GunOnlySprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/GunOnlySprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.05, 1.05, 1.05), Vector3(1.2, 1.2, 1.2), Vector3(1.6, 1.6, 1.6), Vector3(1.05, 1.05, 1.05)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/GunOnlySprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0.85567, 0, 1), Color(1, 0.412919, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 1, 1), Vector3(0.9, 0.9, 0.9), Vector3(1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wocs5"]
 _data = {
 "RESET": SubResource("Animation_1pgvl"),
@@ -804,6 +883,7 @@ _data = {
 "coin_shot_telegraph": SubResource("Animation_5n3pr"),
 "death": SubResource("Animation_mppog"),
 "diamond_shot_telegraph": SubResource("Animation_gp6ku"),
+"quick_bomb_shot": SubResource("Animation_kh5dm"),
 "quick_coin_shot": SubResource("Animation_cf6fg"),
 "summon_bell_raise_gun": SubResource("Animation_600pn"),
 "summon_bell_shoot": SubResource("Animation_lvnig")
@@ -1028,7 +1108,7 @@ billboard = 2
 texture = ExtResource("4_6oj0s")
 
 [node name="GunOnlySprite" type="Sprite3D" parent="Sprite3D" index="1"]
-transform = Transform3D(1.01626, 0.264046, 0, -0.264046, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
+transform = Transform3D(1.01626, 0.264044, 0, -0.264044, 1.01626, 0, 0, 0, 1.05, 1.9, -0.28, -0.1)
 visible = false
 layers = 2
 billboard = 2

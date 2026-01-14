@@ -166,7 +166,6 @@ var pinball_enabled = false # Based on ante 3
 @export var bomb_impulse: float = 100000.0
 @export var max_drop_distance: float = 20.0
 @export var bomb_drop_delay: float = 0.4
-@onready var bomb_drop_timer: Timer = $StateChart/Root/Phase/Phase2/CherryBombs/DroppingBombs/DropTimer
 var active_bombs: Array = []
 # SFX
 # Moved to the bomb objects
@@ -927,9 +926,9 @@ func _on_cherry_bombs_dropping_bombs_state_entered() -> void:
 	for i in range(bombs_per_attack):
 		if $StateChart/Root/Health/Dead.active:
 			break
-		bomb_drop_timer.start(bomb_drop_delay)
-		await bomb_drop_timer.timeout
-		#await get_tree().create_timer(bomb_drop_delay, false).timeout
+		anim_player.play("quick_bomb_shot")
+		await anim_player.animation_finished
+		anim_player.play("RESET")
 		sfx_player.stream = sfx_bomb_launch.pick_random()
 		sfx_player.play()
 		var projectile := bomb_projectile.instantiate() as RigidBody3D
@@ -966,7 +965,6 @@ func _on_cherry_bombs_recover_state_entered() -> void:
 
 
 func _cleanup_bombs() -> void:
-	bomb_drop_timer.stop()
 	for bomb in active_bombs:
 		if is_instance_valid(bomb):
 			bomb.destroy(false)
