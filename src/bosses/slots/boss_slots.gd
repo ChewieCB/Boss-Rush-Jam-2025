@@ -11,7 +11,7 @@ signal desired_height_reached
 # -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.
 # -Bell of Fortune: Add 3D VFX indicator to better telegraph. Add screenshake and dust cloud on impact. DONE
 # -Charge: Add ground decal effect on charge path to show its power. Add speedline. DONE
-# -Cherry Bomb:
+# -Cherry Bomb: Add burning wick. Add explosion range indicator. Improve sfx. DONE
 # -General: Add dust particle below to show that he's hovering. DONE
 
 

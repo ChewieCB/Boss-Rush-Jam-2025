@@ -4,7 +4,6 @@ class_name BombProjectile
 @export_group("Bomb Behaviour")
 @export var fuse_time: float = 1.0
 @export var fuse_variance: float = 1.4
-@export var ticks: int = 3
 @export var explosion_radius: float = 8.0
 @export var explosion_damage: float = 10.0
 @export_group("SFX")
@@ -66,10 +65,20 @@ func destroy(explode: bool = true) -> void:
 		explosion_vfx.explode()
 		sfx_player.stream = sfx_bomb_explode.pick_random()
 		sfx_player.play()
-
 	var tween = get_tree().create_tween()
+
+	# Hide the bomb
 	tween.tween_property(mesh, "scale", Vector3.ZERO, 0.4).set_trans(Tween.TRANS_SINE)
-	tween.tween_callback(self.queue_free)
+	explosion_range_indicator.visible = false
+	burn_vfx.deactivate()
+	freeze = true
+	
+	# Wait for effect finished
+	if sfx_player.playing:
+		await sfx_player.finished
+	else:
+		await tween.finished
+	queue_free()
 
 func _integrate_forces(state):
 	body_state = state
@@ -94,4 +103,5 @@ func _on_explosion_area_body_entered(body: Node3D) -> void:
 			body.player_camera.add_trauma(TREMOR_INTENSITY)
 
 func _on_lifetime_timer_timeout() -> void:
+	# Fall back in case something wrong
 	queue_free()
