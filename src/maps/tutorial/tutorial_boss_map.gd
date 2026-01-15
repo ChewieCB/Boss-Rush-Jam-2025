@@ -53,25 +53,25 @@ func _ready() -> void:
 
 	if boss_doors:
 		boss_doors.close()
-	exit_elevator_button.pushed.connect(_on_level_select)
-	for i in range(chiplings_to_spawn_1):
-		spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
+	#exit_elevator_button.pushed.connect(_on_level_select)
+	#for i in range(chiplings_to_spawn_1):
+		#spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
 
 	# Trigger tutorial popup when barrel purchased
-	$Vendor1.shop_ui.inventory_closed.connect(_on_barrel_purchased)
+	#$Vendor1.shop_ui.inventory_closed.connect(_on_barrel_purchased)
 
 	# Trigger spin tutorial popup when barrel effect trigger first hit
 	#$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
 	
 	music_playback = music_player.get_stream_playback()
 
-	boss.boss_origin = boss_origin[0]
-	boss.elevator_spawns = elevator_spawns
-	boss.sub_elevator_doors = sub_elevator_doors
-	boss.sub_elevator_lights = sub_elevator_lights
-	boss.intro_spawn_marker = boss_intro_spawn
-	boss.laser_spawn_markers = boss_laser_spawn_markers
-	boss.global_position = boss_intro_spawn.global_position
+	#boss.boss_origin = boss_origin[0]
+	#boss.elevator_spawns = elevator_spawns
+	#boss.sub_elevator_doors = sub_elevator_doors
+	#boss.sub_elevator_lights = sub_elevator_lights
+	#boss.intro_spawn_marker = boss_intro_spawn
+	#boss.laser_spawn_markers = boss_laser_spawn_markers
+	#boss.global_position = boss_intro_spawn.global_position
 
 
 func _input(event: InputEvent) -> void:
