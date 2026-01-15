@@ -1,4 +1,4 @@
-[gd_scene load_steps=658 format=4 uid="uid://b50odhnpvpy07"]
+[gd_scene load_steps=668 format=4 uid="uid://b50odhnpvpy07"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -43,9 +43,19 @@
 [ext_resource type="Texture2D" uid="uid://bww23gc1wfoj6" path="res://src/bosses/pit/assets/pit_boss_idle.png" id="63_30qyb"]
 [ext_resource type="Material" uid="uid://ckn8uwkgb3cq1" path="res://assets/textures/walls/concrete-paint.tres" id="63_h8ndg"]
 [ext_resource type="Texture2D" uid="uid://cm52o61isok1h" path="res://src/bosses/pit/assets/pit_boss_lunge.png" id="64_73c0f"]
+[ext_resource type="AudioStream" uid="uid://b2ybl22l1pb1" path="res://src/bosses/bartender/assets/bottle_break.mp3" id="64_q3n6f"]
+[ext_resource type="AudioStream" uid="uid://56mdeui8rvsv" path="res://src/bosses/pit/assets/sfx/PIT BOSS BLOCKS BREAK 1.mp3" id="64_w73j6"]
+[ext_resource type="AudioStream" uid="uid://b502yfiotar67" path="res://src/bosses/tutorial/assets/sfx/PIT BOSS BIG JUMP.mp3" id="65_1at6t"]
 [ext_resource type="Material" uid="uid://ha0xas6i35jb" path="res://assets/textures/walls/vertical_industrial_wall.tres" id="65_hbk3c"]
+[ext_resource type="AudioStream" uid="uid://dbakj03xx5r3j" path="res://src/bosses/base/assets/sfx/Tutorial Boss Landing.mp3" id="65_q10vp"]
+[ext_resource type="AudioStream" uid="uid://due6c1u7ljts1" path="res://src/bosses/tutorial/assets/sfx/Wrench Ground Pound.mp3" id="66_y5gs4"]
+[ext_resource type="AudioStream" uid="uid://dcshtq5yyxdk1" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Impact.mp3" id="67_er3ko"]
 [ext_resource type="Material" uid="uid://cf2bxlb0jp4xo" path="res://assets/textures/walls/green_tiled_trim.tres" id="69_gk1uq"]
+[ext_resource type="AudioStream" uid="uid://b7nfp4x27l0np" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 1.mp3" id="69_hm453"]
+[ext_resource type="AudioStream" uid="uid://itnieslv461" path="res://src/player/assets/sfx/VOICE LINES/URGH 4.mp3" id="70_kla1o"]
+[ext_resource type="AudioStream" uid="uid://ds7xvkwqd62rm" path="res://assets/music/PissbotAmbience.mp3" id="70_qjou6"]
 [ext_resource type="Material" uid="uid://cggtlusxv65jc" path="res://assets/textures/walls/concrete-paint-dark-gold.tres" id="71_bmqcg"]
+[ext_resource type="AudioStream" uid="uid://bm0hm1pxy0o7a" path="res://src/maps/lobby/assets/Lift Door Shut Foley 1.mp3" id="71_ghqpp"]
 [ext_resource type="Material" uid="uid://bt8sgbg77a1nw" path="res://assets/textures/placeholder/texture_green_green_green_10.tres" id="72_ka5wf"]
 [ext_resource type="Material" uid="uid://cw84j8uef55sq" path="res://assets/textures/walls/painting_decal.tres" id="73_xo6rn"]
 [ext_resource type="Material" uid="uid://oioorwq5iec4" path="res://assets/textures/walls/dutch_wall_3.tres" id="74_bjkup"]
@@ -5022,7 +5032,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -5034,7 +5044,7 @@ tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(-20, 0, 22)]
+"values": [Vector3(-24.1585, 1.74925, 29.5983)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -5046,7 +5056,7 @@ tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector3(0, 0, 0)]
+"values": [Vector3(0.224414, -1.5708, 1.72331e-08)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -5142,7 +5152,7 @@ tracks/15/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/16/type = "value"
 tracks/16/imported = false
@@ -5156,11 +5166,34 @@ tracks/16/keys = {
 "update": 0,
 "values": [Vector3(-24.75, 0, 29.5)]
 }
+tracks/17/type = "audio"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("CustceneSFXPlayer")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"clips": [],
+"times": PackedFloat32Array()
+}
+tracks/17/use_blend = true
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("CustceneSFXPlayer:volume_db")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_xlg8b"]
 resource_name = "mechanic_enter"
 length = 6.0
-step = 0.05
+step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -5367,6 +5400,112 @@ tracks/16/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/17/type = "audio"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("CustceneSFXPlayer")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("64_q3n6f")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("65_q10vp")
+}],
+"times": PackedFloat32Array(0.1, 0.55)
+}
+tracks/17/use_blend = true
+tracks/18/type = "audio"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("CustceneSFXPlayer")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.3161,
+"stream": ExtResource("65_1at6t")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/18/use_blend = true
+tracks/19/type = "audio"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("CustceneSFXPlayer")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("66_y5gs4")
+}],
+"times": PackedFloat32Array(0.466667)
+}
+tracks/19/use_blend = true
+tracks/20/type = "audio"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("CustceneSFXPlayer")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("67_er3ko")
+}],
+"times": PackedFloat32Array(0.533333)
+}
+tracks/20/use_blend = true
+tracks/21/type = "audio"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("CustceneSFXPlayer")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("64_w73j6")
+}],
+"times": PackedFloat32Array(0.05)
+}
+tracks/21/use_blend = true
+tracks/22/type = "audio"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("CustceneSFXPlayer")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("70_qjou6")
+}],
+"times": PackedFloat32Array(1.175)
+}
+tracks/22/use_blend = true
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("CustceneSFXPlayer:volume_db")
+tracks/23/interp = 2
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(0.075, 0.1, 5.5, 6),
+"transitions": PackedFloat32Array(0.170755, 1, 10.1965, 1),
+"update": 0,
+"values": [-80.0, 0.0, 0.0, -80.0]
+}
 
 [sub_resource type="Animation" id="Animation_yuyap"]
 resource_name = "pit_boss_shove"
@@ -5441,7 +5580,7 @@ tracks/5/path = NodePath("PitBossIntro:texture")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.175, 0.375, 1.275),
+"times": PackedFloat32Array(0, 0.175, 0.275, 1.275),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("63_30qyb"), ExtResource("64_73c0f"), ExtResource("63_30qyb"), ExtResource("63_30qyb")]
@@ -5470,6 +5609,51 @@ tracks/7/keys = {
 "update": 0,
 "values": [Vector3(-24.75, 3.2, 29.5), Vector3(-24.75, 3.2, 29.5), Vector3(-24.75, 0, 29.5)]
 }
+tracks/8/type = "audio"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("CustceneSFXPlayer")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("69_hm453")
+}],
+"times": PackedFloat32Array(0.175)
+}
+tracks/8/use_blend = true
+tracks/9/type = "audio"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("CustceneSFXPlayer")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("70_kla1o")
+}],
+"times": PackedFloat32Array(0.175)
+}
+tracks/9/use_blend = true
+tracks/10/type = "audio"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("CustceneSFXPlayer")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("71_ghqpp")
+}],
+"times": PackedFloat32Array(0.65)
+}
+tracks/10/use_blend = true
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fd4ep"]
 _data = {
@@ -6817,6 +7001,7 @@ shape = SubResource("ConcavePolygonShape3D_t27j2")
 
 [node name="entity_11_PlayerRef" parent="FuncGodotMap" index="6" instance=ExtResource("84_udjkb")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -25.625, 1, 29.5)
+visible = false
 
 [node name="entity_12_SlidingDoor" parent="FuncGodotMap" index="7" instance=ExtResource("86_1uyek")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -24.75, 0, 29.5)
@@ -8428,7 +8613,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.4788, 0.144639, 29.5743)
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-1.7321e-07, -0.877212, -0.480041, -5.96046e-08, 0.480041, -0.877212, 1, -1.2333e-07, -1.35434e-07, -51.478, 0.145, 29.574)
+transform = Transform3D(-1.7321e-07, -0.877205, -0.480037, -5.96046e-08, 0.480037, -0.877205, 1, -1.23328e-07, -1.35433e-07, -51.478, 0.145, 29.574)
 loop = false
 tilt_enabled = false
 
@@ -8441,9 +8626,14 @@ target = NodePath("../../../FuncGodotMap/entity_11_PlayerRef")
 transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
 
 [node name="CutsceneCamera" type="Camera3D" parent="." index="18"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 22)
+transform = Transform3D(7.16629e-08, -0.222536, -0.974925, 1.6801e-08, 0.974925, -0.222536, 1, -4.32124e-10, 7.36048e-08, -24.1585, 1.74925, 29.5983)
+current = true
 
-[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="19"]
+[node name="CustceneSFXPlayer" type="AudioStreamPlayer" parent="." index="19"]
+max_polyphony = 8
+bus = &"SFX"
+
+[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="20"]
 layer = 3
 visible = false
 
@@ -8485,6 +8675,7 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_top = -155.0
+offset_right = -0.00012207
 offset_bottom = 155.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -8509,7 +8700,7 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PitBossIntro" type="Sprite3D" parent="." index="20"]
+[node name="PitBossIntro" type="Sprite3D" parent="." index="21"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -23, 1.5, 29.5)
 billboard = 2
 texture = ExtResource("63_30qyb")

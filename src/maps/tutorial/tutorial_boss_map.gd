@@ -74,6 +74,7 @@ func _ready() -> void:
 	
 	music_playback = music_player.get_stream_playback()
 	
+	await ScreenTransition.transition_finished
 	$AnimationPlayer.play("pit_boss_shove")
 	await $AnimationPlayer.animation_finished
 	_on_boss_trigger_volume_body_entered(player)
@@ -172,6 +173,7 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	
 	boss.activate()
 	LuckHandler.enabled = true
+	player.current_gun.equip_active()
 	player.stat_ui.show_all_ui()
 	#boss_trigger.queue_free()
 

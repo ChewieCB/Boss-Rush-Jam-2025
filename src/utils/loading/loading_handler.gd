@@ -22,7 +22,7 @@ enum LEVELS {
 }
 
 const level_paths: Array[String] = [
-	"res://src/maps/tutorial/TutorialBoss.tscn",
+	"res://src/maps/tutorial/TutorialBossNew.tscn",
 	"res://src/maps/tutorial/TutorialBossOnly.tscn",
 	"res://src/maps/backroom/Backroom.tscn",
 	"res://src/maps/lobby/Lobby.tscn",

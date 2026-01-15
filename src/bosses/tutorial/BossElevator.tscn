@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://0u431kpfno53" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing.mp3" id="3_5w7aw"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_irtaj"]
 [ext_resource type="PackedScene" uid="uid://ponw4bhivvke" path="res://src/bosses/base/attacks/ranged/NailProjectile.tscn" id="3_v4gcb"]
-[ext_resource type="AudioStream" uid="uid://dbakj03xx5r3j" path="res://src/bosses/tutorial/assets/sfx/Tutorial Boss Landing.mp3" id="3_y4npe"]
+[ext_resource type="AudioStream" uid="uid://dbakj03xx5r3j" path="res://src/bosses/base/assets/sfx/Tutorial Boss Landing.mp3" id="3_y4npe"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fo57y"]
 [ext_resource type="PackedScene" uid="uid://byharrqwvi4cp" path="res://src/bosses/base/attacks/ranged/LaserAoE.tscn" id="4_hx1ss"]
 [ext_resource type="AudioStream" uid="uid://cqq422lmo5d7s" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing 2.mp3" id="4_pthoc"]

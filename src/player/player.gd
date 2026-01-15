@@ -1118,7 +1118,7 @@ func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
 		await camera_tween.finished
 	
 	player_camera.camera.current = true
-	gun_container.visible = false
+	gun_container.visible = true
 
 
 func change_near_enemy_radius(new_radius: float) -> void:
