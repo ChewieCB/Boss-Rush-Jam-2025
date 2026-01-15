@@ -33,6 +33,9 @@ var spin_warning_trigger_active: bool = false
 @export var sub_elevator_doors: Array[SlidingDoor]
 @export var sub_elevator_lights: Array[Node3D]
 
+@export var arena_2_floor_parent: Node3D
+@export var arena_2_floor_mesh: MeshInstance3D
+
 var current_trigger_actions: Array[String] = []
 
 # MUSIC
@@ -45,14 +48,20 @@ func _ready() -> void:
 	# FIXME - workaround
 	is_tutorial = true
 	elevator_doors = lobby_entry_elevator
-
+	
+	# Generate the navigation for the two walkable areas
+	generate_navigation()
+	floor_parent = arena_2_floor_parent
+	floor_mesh = arena_2_floor_mesh
 	super()
+	
 	if GameManager.cached_player_rotation:
 		player.global_position = elevator_doors.global_position - Vector3(0, 0, 1.5)
 		player.global_rotation.y = PI
 
 	if boss_doors:
 		boss_doors.close()
+	
 	#exit_elevator_button.pushed.connect(_on_level_select)
 	#for i in range(chiplings_to_spawn_1):
 		#spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)

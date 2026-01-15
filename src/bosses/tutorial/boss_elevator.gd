@@ -90,7 +90,7 @@ var laser_target_pos: Vector3
 
 
 func _ready() -> void:
-	super ()
+	super()
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 
@@ -129,19 +129,19 @@ func select_attack_phase_1() -> void:
 	# attack tokens left pick another ranged attack. Otherwise teleport to an elevator
 	# and exit with a melee attack.
 	
-	if previous_phase == "start_melee_combo_attack":
-		if melee_phase_count < max_sequential_melee_phases:
-			new_phase = "start_melee_combo_attack"
-		else:
-			melee_phase_count = 0
-			new_phase = "start_smokescreen"
-	
-	elif previous_phase == "start_smokescreen":
-		if ranged_phase_count < max_sequential_ranged_phases:
-			new_phase = "start_smokescreen"
-		else:
-			ranged_phase_count = 0
-			new_phase = "start_melee_combo_attack"
+	#if previous_phase == "start_melee_combo_attack":
+		#if melee_phase_count < max_sequential_melee_phases:
+			#new_phase = "start_melee_combo_attack"
+		#else:
+			#melee_phase_count = 0
+			#new_phase = "start_smokescreen"
+	#
+	#elif previous_phase == "start_smokescreen":
+		#if ranged_phase_count < max_sequential_ranged_phases:
+			#new_phase = "start_smokescreen"
+		#else:
+			#ranged_phase_count = 0
+	new_phase = "start_melee_combo_attack"
 	
 	previous_phase = new_phase
 	state_chart.send_event(new_phase)
@@ -1006,7 +1006,7 @@ func _on_intro_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 	
-	if self.global_position.y <= -4:
+	if self.global_position.y <= -1:
 		intro_drop_landed.emit()
 
 

@@ -15,6 +15,7 @@ var nav_region: NavigationRegion3D
 @onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: SlidingDoor = find_children("*", "ElevatorDoors").front()
+#@onready var nav_meshes := find_children("*", "NavBody3D")
 
 @export_group("UI")
 @export var win_subtext: Array[String] = [""]
@@ -93,6 +94,7 @@ func generate_navigation() -> void:
 	floor_parent.remove_child(floor_mesh)
 	nav_region.add_child(floor_mesh)
 	nav_region.move_child(floor_mesh, 0)
+	floor_mesh.global_transform = floor_parent.global_transform
 	
 	_rebake_nav()
 	# Switch the parse type to colliders after the initial bake 
