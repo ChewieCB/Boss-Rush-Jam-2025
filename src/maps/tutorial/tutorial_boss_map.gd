@@ -73,6 +73,10 @@ func _ready() -> void:
 	#$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
 	
 	music_playback = music_player.get_stream_playback()
+	
+	$AnimationPlayer.play("pit_boss_shove")
+	await $AnimationPlayer.animation_finished
+	_on_boss_trigger_volume_body_entered(player)
 
 	#boss.boss_origin = boss_origin[0]
 	#boss.elevator_spawns = elevator_spawns
@@ -155,21 +159,21 @@ func _trigger_spin_tutorial() -> void:
 			spin_warning_trigger_active = true
 
 
-func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
-	if body is Player:
-		music_playback.switch_to_clip(1)
-		exit_doors.close()
-		if boss_doors:
-			boss_doors.is_autodoor = false
-			boss_doors.close()
-		boss_trigger.queue_free()
-		
-		$AnimationPlayer.play("mechanic_enter")
-		await $AnimationPlayer.animation_finished
-		
-		boss.activate()
-		LuckHandler.enabled = true
-		#boss_trigger.queue_free()
+func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
+	music_playback.switch_to_clip(1)
+	exit_doors.close()
+	if boss_doors:
+		boss_doors.is_autodoor = false
+		boss_doors.close()
+	boss_trigger.queue_free()
+	
+	$AnimationPlayer.play("mechanic_enter")
+	await $AnimationPlayer.animation_finished
+	
+	boss.activate()
+	LuckHandler.enabled = true
+	player.stat_ui.show_all_ui()
+	#boss_trigger.queue_free()
 
 
 func _on_debug_boss_trigger_body_entered(body: Node3D) -> void:

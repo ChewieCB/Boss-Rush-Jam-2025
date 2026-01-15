@@ -66,7 +66,8 @@ func _ready() -> void:
 		player.rotation = GameManager.cached_player_rotation
 		player.player_camera.rotation = GameManager.cached_camera_rotation
 	
-	player.stat_ui.show_all_ui()
+	# TODO - manually trigger in levels
+	#player.stat_ui.show_all_ui()
 	
 	await get_tree().physics_frame
 	generate_navigation()
