@@ -5180,8 +5180,8 @@ tracks/17/use_blend = true
 
 [sub_resource type="Animation" id="Animation_xlg8b"]
 resource_name = "mechanic_enter"
-length = 6.0
-step = 0.0333
+length = 6.5
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -5212,10 +5212,10 @@ tracks/2/path = NodePath("FuncGodotMap/group_7833_HiddenVendorDoor/entity_14_fun
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.0333333),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.0333333, 0.45, 0.5),
+"transitions": PackedFloat32Array(1, 1, 2, 1),
 "update": 0,
-"values": [Vector3(-23.25, 2.875, 15.875), Vector3(-23.25, -3, 15.875)]
+"values": [Vector3(-23.25, 2.875, 15.875), Vector3(-23.25, -3, 15.875), Vector3(-23.25, -3, 15.875), Vector3(-23.25, 2.875, 15.875)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -5270,7 +5270,7 @@ tracks/7/path = NodePath("CutsceneCamera:current")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 5.5),
+"times": PackedFloat32Array(0, 6.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -5282,7 +5282,7 @@ tracks/8/path = NodePath("CutsceneCamera:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.6, 0.9, 1.16667, 1.5, 5.5, 6),
+"times": PackedFloat32Array(0, 0.6, 0.9, 1.16667, 1.5, 5.5, 6.5),
 "transitions": PackedFloat32Array(0.378929, 2.54912, 1, 0.435275, 1, 0.406126, 0.378929),
 "update": 0,
 "values": [Vector3(-26.6, 1.1, 29.5), Vector3(-39, -0.2, 29.5), Vector3(-37.8, 1.2, 29.5), Vector3(-37.8, 1.2, 29.5), Vector3(-41.1808, 2.55098, 30.2407), Vector3(-41.181, 2.551, 29.318), Vector3(-26.6, 1.1, 29.5)]
@@ -5294,7 +5294,7 @@ tracks/9/path = NodePath("CutsceneCamera:rotation")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.6, 0.9, 1.16667, 5.5, 6),
+"times": PackedFloat32Array(0, 0.6, 0.9, 1.16667, 5.5, 6.5),
 "transitions": PackedFloat32Array(0.378929, 2.54912, 1, 1, 0.406126, 0.378929),
 "update": 0,
 "values": [Vector3(0, 1.5708, 0), Vector3(0.261799, 1.5708, 1.17124e-08), Vector3(0.0872665, 1.5708, 4.09303e-09), Vector3(0.0872665, 1.5708, 4.09303e-09), Vector3(0.00902757, 1.5708, 4.23417e-10), Vector3(0, 1.5708, 0)]
@@ -5306,7 +5306,7 @@ tracks/10/path = NodePath("FuncGodotMap/entity_11_PlayerRef")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0, 6),
+"times": PackedFloat32Array(0, 6.5),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
@@ -5383,7 +5383,7 @@ tracks/16/path = NodePath("FuncGodotMap/entity_11_PlayerRef:visible")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(0, 6),
+"times": PackedFloat32Array(0, 6.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -5489,7 +5489,7 @@ tracks/23/path = NodePath("CutsceneSFXPlayer6:volume_db")
 tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
-"times": PackedFloat32Array(0, 0.025, 5.425, 5.925),
+"times": PackedFloat32Array(0, 0.025, 5.425, 6.425),
 "transitions": PackedFloat32Array(0.170755, 1, 10.1965, 1),
 "update": 0,
 "values": [-80.0, 0.0, 0.0, -80.0]
@@ -8590,6 +8590,7 @@ metadata/func_godot_mesh_data = {}
 mesh = SubResource("ArrayMesh_x6ij4")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="15"]
+process_mode = 1
 libraries = {
 "": SubResource("AnimationLibrary_fd4ep")
 }
@@ -8601,7 +8602,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.4788, 0.144639, 29.5743)
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-4.37114e-08, 0, -0.999962, 0, 0.999962, 0, 1, 0, -4.37097e-08, -44.769, 0.145, 29.574)
+transform = Transform3D(-4.37114e-08, 0, -0.99996, 0, 0.99996, 0, 1, 0, -4.37097e-08, -44.769, 0.145, 29.574)
 loop = false
 tilt_enabled = false
 
