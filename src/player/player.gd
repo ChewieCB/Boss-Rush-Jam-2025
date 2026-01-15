@@ -1087,6 +1087,40 @@ func _disable_freecam() -> void:
 	Engine.time_scale = 1.0
 
 
+func _enable_cutscene_cam() -> void:
+	controls_disabled = true
+	dash_disabled = true
+	player_camera.camera.current = false
+	gun_container.visible = false
+
+
+func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
+	controls_disabled = false
+	dash_disabled = false
+	
+	if lerp_to_player_cam:
+		var active_camera: Camera3D = get_viewport().get_camera_3d()
+		var camera_tween := get_tree().create_tween()
+		camera_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+		camera_tween.set_parallel(true)
+		camera_tween.tween_property(
+			active_camera,
+			"global_rotation",
+			player_camera.global_rotation,
+			0.8
+		)
+		camera_tween.tween_property(
+			active_camera,
+			"global_position",
+			self.global_position,
+			0.8
+		)
+		await camera_tween.finished
+	
+	player_camera.camera.current = true
+	gun_container.visible = false
+
+
 func change_near_enemy_radius(new_radius: float) -> void:
 	var coll_shape: CollisionShape3D = near_enemy_area.get_node("CollisionShape3D")
 	coll_shape.shape.radius = new_radius

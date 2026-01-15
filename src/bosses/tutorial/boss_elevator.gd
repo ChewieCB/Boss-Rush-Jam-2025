@@ -98,7 +98,9 @@ func _ready() -> void:
 
 func activate() -> void:
 	super ()
+	#state_chart.send_event("start_intro")
 	state_chart.send_event("start_intro")
+	state_chart.send_event("start_tutorial_arena_1")
 
 
 func _physics_process(_delta: float) -> void:
@@ -317,7 +319,32 @@ func _on_melee_combo_leap_back_state_entered() -> void:
 	var goal_pos = self.global_position + self.basis.z * 5.0
 	var nav_pos = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, goal_pos)
 	
-	var jump_results = charge_back_jump(nav_pos, 1.6)
+	await jump_to_pos(nav_pos, 1.6)
+	#var jump_results = charge_back_jump(nav_pos, 1.6)
+	#
+	#var sfx_player = get_available_sfx_player()
+	#if sfx_player:
+		#sfx_player.stream = sfx_jump.pick_random()
+		#sfx_player.play()
+	#anim_player.play("elevator_boss/slam_jump_up")
+	##await anim_player.animation_finished
+	#vel_vertical = 0
+	#self.velocity = jump_results[0]
+	#var time_up = jump_results[1]
+	#var time_down = jump_results[2]
+	#
+	#await get_tree().create_timer(time_up).timeout
+	## Subtract the time the jump down animation lasts so we can sync the impact
+	#var hangtime: float = time_down - 0.15
+	#await get_tree().create_timer(hangtime).timeout
+	#anim_player.play("elevator_boss/slam_jump_down")
+	#await anim_player.animation_finished
+	
+	state_chart.send_event("melee_line")
+
+
+func jump_to_pos(pos: Vector3, height: float = 20.0, debug: bool = false) -> void:
+	var jump_results = charge_back_jump(pos, height, debug)
 	
 	var sfx_player = get_available_sfx_player()
 	if sfx_player:
@@ -336,8 +363,7 @@ func _on_melee_combo_leap_back_state_entered() -> void:
 	await get_tree().create_timer(hangtime).timeout
 	anim_player.play("elevator_boss/slam_jump_down")
 	await anim_player.animation_finished
-	
-	state_chart.send_event("melee_line")
+	return
 
 
 func _on_melee_combo_leap_back_state_physics_processing(delta: float) -> void:
@@ -1021,3 +1047,12 @@ func _on_intro_state_physics_processing(delta: float) -> void:
 
 func _on_phase_1_state_entered() -> void:
 	select_attack()
+
+
+func _on_arena_1_cutscene_state_entered() -> void:
+	pass # Replace with function body.
+
+
+func _on_arena_1_cutscene_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()

@@ -163,9 +163,13 @@ func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
 			boss_doors.is_autodoor = false
 			boss_doors.close()
 		boss_trigger.queue_free()
+		
+		$AnimationPlayer.play("mechanic_enter")
+		await $AnimationPlayer.animation_finished
+		
 		boss.activate()
 		LuckHandler.enabled = true
-		boss_trigger.queue_free()
+		#boss_trigger.queue_free()
 
 
 func _on_debug_boss_trigger_body_entered(body: Node3D) -> void:
