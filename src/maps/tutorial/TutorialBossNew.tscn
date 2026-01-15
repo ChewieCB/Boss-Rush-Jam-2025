@@ -5169,7 +5169,7 @@ tracks/16/keys = {
 tracks/17/type = "audio"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("CustceneSFXPlayer")
+tracks/17/path = NodePath("CutsceneSFXPlayer1")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
@@ -5177,23 +5177,11 @@ tracks/17/keys = {
 "times": PackedFloat32Array()
 }
 tracks/17/use_blend = true
-tracks/18/type = "value"
-tracks/18/imported = false
-tracks/18/enabled = true
-tracks/18/path = NodePath("CustceneSFXPlayer:volume_db")
-tracks/18/interp = 1
-tracks/18/loop_wrap = true
-tracks/18/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
 
 [sub_resource type="Animation" id="Animation_xlg8b"]
 resource_name = "mechanic_enter"
 length = 6.0
-step = 0.025
+step = 0.0333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -5403,7 +5391,7 @@ tracks/16/keys = {
 tracks/17/type = "audio"
 tracks/17/imported = false
 tracks/17/enabled = true
-tracks/17/path = NodePath("CustceneSFXPlayer")
+tracks/17/path = NodePath("CutsceneSFXPlayer1")
 tracks/17/interp = 1
 tracks/17/loop_wrap = true
 tracks/17/keys = {
@@ -5422,7 +5410,7 @@ tracks/17/use_blend = true
 tracks/18/type = "audio"
 tracks/18/imported = false
 tracks/18/enabled = true
-tracks/18/path = NodePath("CustceneSFXPlayer")
+tracks/18/path = NodePath("CutsceneSFXPlayer2")
 tracks/18/interp = 1
 tracks/18/loop_wrap = true
 tracks/18/keys = {
@@ -5437,7 +5425,7 @@ tracks/18/use_blend = true
 tracks/19/type = "audio"
 tracks/19/imported = false
 tracks/19/enabled = true
-tracks/19/path = NodePath("CustceneSFXPlayer")
+tracks/19/path = NodePath("CutsceneSFXPlayer3")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
@@ -5452,7 +5440,7 @@ tracks/19/use_blend = true
 tracks/20/type = "audio"
 tracks/20/imported = false
 tracks/20/enabled = true
-tracks/20/path = NodePath("CustceneSFXPlayer")
+tracks/20/path = NodePath("CutsceneSFXPlayer4")
 tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
@@ -5467,7 +5455,7 @@ tracks/20/use_blend = true
 tracks/21/type = "audio"
 tracks/21/imported = false
 tracks/21/enabled = true
-tracks/21/path = NodePath("CustceneSFXPlayer")
+tracks/21/path = NodePath("CutsceneSFXPlayer5")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
@@ -5482,7 +5470,7 @@ tracks/21/use_blend = true
 tracks/22/type = "audio"
 tracks/22/imported = false
 tracks/22/enabled = true
-tracks/22/path = NodePath("CustceneSFXPlayer")
+tracks/22/path = NodePath("CutsceneSFXPlayer6")
 tracks/22/interp = 1
 tracks/22/loop_wrap = true
 tracks/22/keys = {
@@ -5497,11 +5485,11 @@ tracks/22/use_blend = true
 tracks/23/type = "value"
 tracks/23/imported = false
 tracks/23/enabled = true
-tracks/23/path = NodePath("CustceneSFXPlayer:volume_db")
-tracks/23/interp = 2
+tracks/23/path = NodePath("CutsceneSFXPlayer6:volume_db")
+tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
-"times": PackedFloat32Array(0.075, 0.1, 5.5, 6),
+"times": PackedFloat32Array(0, 0.025, 5.425, 5.925),
 "transitions": PackedFloat32Array(0.170755, 1, 10.1965, 1),
 "update": 0,
 "values": [-80.0, 0.0, 0.0, -80.0]
@@ -5612,7 +5600,7 @@ tracks/7/keys = {
 tracks/8/type = "audio"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("CustceneSFXPlayer")
+tracks/8/path = NodePath("CutsceneSFXPlayer1")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -5627,7 +5615,7 @@ tracks/8/use_blend = true
 tracks/9/type = "audio"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("CustceneSFXPlayer")
+tracks/9/path = NodePath("CutsceneSFXPlayer2")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -5642,7 +5630,7 @@ tracks/9/use_blend = true
 tracks/10/type = "audio"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("CustceneSFXPlayer")
+tracks/10/path = NodePath("CutsceneSFXPlayer3")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -8613,7 +8601,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.4788, 0.144639, 29.5743)
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-1.7321e-07, -0.877205, -0.480037, -5.96046e-08, 0.480037, -0.877205, 1, -1.23328e-07, -1.35433e-07, -51.478, 0.145, 29.574)
+transform = Transform3D(-4.37114e-08, 0, -0.999962, 0, 0.999962, 0, 1, 0, -4.37097e-08, -44.769, 0.145, 29.574)
 loop = false
 tilt_enabled = false
 
@@ -8629,11 +8617,25 @@ transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 
 transform = Transform3D(7.16629e-08, -0.222536, -0.974925, 1.6801e-08, 0.974925, -0.222536, 1, -4.32124e-10, 7.36048e-08, -24.1585, 1.74925, 29.5983)
 current = true
 
-[node name="CustceneSFXPlayer" type="AudioStreamPlayer" parent="." index="19"]
-max_polyphony = 8
+[node name="CutsceneSFXPlayer1" type="AudioStreamPlayer" parent="." index="19"]
 bus = &"SFX"
 
-[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="20"]
+[node name="CutsceneSFXPlayer2" type="AudioStreamPlayer" parent="." index="20"]
+bus = &"SFX"
+
+[node name="CutsceneSFXPlayer3" type="AudioStreamPlayer" parent="." index="21"]
+bus = &"SFX"
+
+[node name="CutsceneSFXPlayer4" type="AudioStreamPlayer" parent="." index="22"]
+bus = &"SFX"
+
+[node name="CutsceneSFXPlayer5" type="AudioStreamPlayer" parent="." index="23"]
+bus = &"SFX"
+
+[node name="CutsceneSFXPlayer6" type="AudioStreamPlayer" parent="." index="24"]
+bus = &"SFX"
+
+[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="25"]
 layer = 3
 visible = false
 
@@ -8700,7 +8702,7 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PitBossIntro" type="Sprite3D" parent="." index="21"]
+[node name="PitBossIntro" type="Sprite3D" parent="." index="26"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -23, 1.5, 29.5)
 billboard = 2
 texture = ExtResource("63_30qyb")
