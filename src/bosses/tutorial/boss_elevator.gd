@@ -23,6 +23,8 @@ var previous_phase: String = "start_melee_combo_attack"
 
 var melee_phase_count: int = 0
 
+var intro_drop_landed_y: float = 0.0
+@export var intro_height_margin: float = 0.2
 @export var intro_spawn_marker: Marker3D
 @export var laser_spawn_markers: Array[Marker3D]
 
@@ -984,6 +986,13 @@ func trigger_pushback(
 
 
 func _on_intro_state_entered() -> void:
+	var space_state := get_world_3d().direct_space_state
+	var ray_query := PhysicsRayQueryParameters3D.create(self.global_position, self.global_position + Vector3.DOWN * 20.0)
+	var result = space_state.intersect_ray(ray_query)
+	if result:
+		intro_drop_landed_y = result.position.y
+		#draw_debug_sphere(result.position, 0.5, Color.RED)
+	
 	_intro_drop()
 	await intro_drop_landed
 	
@@ -1006,7 +1015,7 @@ func _on_intro_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 	
-	if self.global_position.y <= -1:
+	if self.global_position.y <= intro_drop_landed_y + intro_height_margin:
 		intro_drop_landed.emit()
 
 
