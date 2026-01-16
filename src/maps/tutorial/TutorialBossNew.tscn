@@ -1,8 +1,7 @@
-[gd_scene load_steps=668 format=4 uid="uid://b50odhnpvpy07"]
+[gd_scene load_steps=667 format=4 uid="uid://b50odhnpvpy07"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
-[ext_resource type="PackedScene" uid="uid://cirwjooirf3y0" path="res://src/bosses/tutorial/minions/Chipling.tscn" id="3_8ii3y"]
 [ext_resource type="PackedScene" uid="uid://c2b8d2f8w0t0g" path="res://src/ui/common/info_text/PromptBoxUI.tscn" id="4_q736q"]
 [ext_resource type="LightmapGIData" uid="uid://d1yjl64sdc5ps" path="res://src/maps/tutorial/TutorialBoss.lmbake" id="5_k4gaf"]
 [ext_resource type="PackedScene" uid="uid://t2n4jn1pgkyt" path="res://src/maps/tutorial/triggers/TutorialInfoTrigger.tscn" id="13_gatet"]
@@ -5671,13 +5670,11 @@ _data = {
 }
 point_count = 2
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "intro_boss_path", "intro_boss_path_follow", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "intro_boss_path", "intro_boss_path_follow", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
 script = ExtResource("2_twxne")
 boss_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_188_ElevatorDoors")
 exit_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_188_ElevatorDoors")
-chipling_prefab = ExtResource("3_8ii3y")
-chiplings_to_spawn_1 = 5
-chiplings_to_spawn_2 = 8
+arena_1_center = NodePath("Arena1Center")
 info_ui_prefab = ExtResource("4_q736q")
 boss_intro_spawn = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_186_BossPositionMarker")
 boss_laser_spawn_markers = [null, null]
@@ -8619,16 +8616,17 @@ curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
 transform = Transform3D(-4.37114e-08, 0, -0.99996, 0, 0.99996, 0, 1, 0, -4.37096e-08, -44.769, 0.145, 29.574)
+progress = 10.773
 loop = false
 tilt_enabled = false
 
 [node name="entity_187_TutorialBoss" parent="Path3D/PathFollow3D" index="0" node_paths=PackedStringArray("intro_spawn_marker", "target") instance=ExtResource("88_ijdgk")]
 transform = Transform3D(1, -5.96047e-08, 3.04345e-07, -2.3837e-07, 0.480057, 0.877241, -1.9839e-07, -0.877241, 0.480057, -36.0784, -1.20733, -32.3512)
 intro_spawn_marker = NodePath("../../../FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_186_BossPositionMarker")
+tutorial_melee_distance = 3.0
+tutorial_melee_radius = 3.0
 target = NodePath("../../../FuncGodotMap/entity_11_PlayerRef")
-
-[node name="DebugAnimPivot" parent="Path3D/PathFollow3D/entity_187_TutorialBoss" index="1"]
-transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
+orbit_radius = 200.0
 
 [node name="CutsceneCamera" type="Camera3D" parent="." index="18"]
 transform = Transform3D(-3.62383e-06, -0.222535, -0.974925, 1.6801e-08, 0.974925, -0.222535, 1, -8.22808e-07, -3.52922e-06, -24.1585, 1.74925, 29.5983)
@@ -8671,7 +8669,7 @@ custom_minimum_size = Vector2(0, 200)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 200.0
+offset_top = -200.0
 grow_horizontal = 2
 color = Color(0, 0, 0, 1)
 
@@ -8682,7 +8680,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -200.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 0
@@ -8694,8 +8692,9 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
+offset_left = -1330.0
 offset_top = -155.0
-offset_right = -0.00012207
+offset_right = -1330.0
 offset_bottom = 155.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -8724,6 +8723,9 @@ grow_vertical = 2
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -23, 1.5, 29.5)
 billboard = 2
 texture = ExtResource("63_30qyb")
+
+[node name="Arena1Center" type="Marker3D" parent="." index="27"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.7, -0.9, 29.6)
 
 [connection signal="activate" from="TutorialInfoTrigger6" to="." method="show_tutorial_panel"]
 [connection signal="body_entered" from="TutorialInfoTrigger6" to="TutorialInfoTrigger6" method="_on_body_entered"]
