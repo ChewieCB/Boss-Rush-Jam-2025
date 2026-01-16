@@ -117,6 +117,7 @@ var cached_reload_start_ammo: int = magazine_ammo_left
 var reload_interrupt: bool = false
 var can_fire: bool = true
 var is_reloading: bool = false
+var is_reload_disabled: bool = false
 var is_spinning: bool = false
 var is_jammed: bool = false
 var time_since_last_shot: float = 0.0
@@ -301,7 +302,8 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	
 	if magazine_ammo_left <= 0:
 		play_failed_shoot_sfx()
-		reload()
+		if not is_reload_disabled:
+			reload()
 		return false
 	
 	for barrel in installed_barrels:
@@ -645,6 +647,8 @@ func cancel_reload() -> void:
 
 func reload(already_spin_barrel = false):
 	# TODO - make this more generic and less tied to spinning barrels so we can call it elsewhere
+	if is_reload_disabled:
+		return
 	if is_reloading:
 		return
 	if is_jammed:

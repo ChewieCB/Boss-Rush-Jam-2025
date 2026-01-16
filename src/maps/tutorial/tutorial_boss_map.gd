@@ -32,6 +32,8 @@ var spin_warning_trigger_active: bool = false
 @export var arena_2_floor_mesh: MeshInstance3D
 
 var current_trigger_actions: Array[String] = []
+var current_close_trigger_max: int = 1
+var current_close_trigger_count: int = 0
 
 # MUSIC
 @onready var music_player: AudioStreamPlayer = $InteractiveMusicPlayer
@@ -40,6 +42,13 @@ var music_playback: AudioStreamPlaybackInteractive
 # Intro cutscene
 @export var intro_boss_path: Path3D
 @export var intro_boss_path_follow: PathFollow3D
+
+# Tutorial prompt triggers
+@export_group("Tutorial UI Triggers")
+@export var tutorial_1_trigger_shoot: TutorialPopupResource
+@export var tutorial_2_trigger_reload: TutorialPopupResource
+var reload_tutorial_shown: bool = false
+
 
 func _ready() -> void:
 	#GameManager.equipped_barrels = []
@@ -57,6 +66,10 @@ func _ready() -> void:
 	if GameManager.cached_player_rotation:
 		player.global_position = elevator_doors.global_position - Vector3(0, 0, 1.5)
 		player.global_rotation.y = PI
+	
+	# Disable auto-reloading for reload tutorial, re-enabling it once the prompt is complete
+	player.current_gun.is_reload_disabled = true
+	player.current_gun.gun_shot.connect(_check_for_reload_tutorial)
 
 	if boss_doors:
 		boss_doors.close()
@@ -96,8 +109,16 @@ func _input(event: InputEvent) -> void:
 			if event is InputEventJoypadMotion:
 				if abs(event.axis_value) < 0.075:
 					continue
-			ui_accept.emit()
-			current_trigger_actions = []
+			
+			current_close_trigger_count += 1
+			
+			# Handle held inputs
+			get_tree().create_timer(0.5).timeout.connect(_check_close_trigger_action_held.bind(action_str))
+			
+			if current_close_trigger_count == current_close_trigger_max:
+				ui_accept.emit()
+				current_trigger_actions = []
+				current_close_trigger_count = 0
 
 	if Input.is_action_just_pressed("spin_barrels"):
 		if GameManager.player_currency < GameManager.reroll_cost:
@@ -105,17 +126,18 @@ func _input(event: InputEvent) -> void:
 				spin_warning_prompt._on_body_entered(player)
 
 
-func show_tutorial_panel(prompt_elements: Array[String], close_trigger_actions: Array[String], timeout: float = 0.0) -> void:
+func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 	ui_accept.emit()
 	var new_panel: Control = info_ui_prefab.instantiate()
-	new_panel.elements = prompt_elements
-	current_trigger_actions = close_trigger_actions
+	new_panel.elements = resource.body_items
+	current_trigger_actions = resource.close_trigger_actions
+	current_close_trigger_max = resource.close_trigger_count
 	$UI.add_child(new_panel)
 	new_panel.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 1.0), 0.4)
-	if timeout > 0.0:
-		await get_tree().create_timer(timeout).timeout
+	if resource.timeout > 0.0:
+		await get_tree().create_timer(resource.timeout).timeout
 	else:
 		await ui_accept
 	if tween.is_running():
@@ -154,6 +176,7 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	player.stat_ui.show_all_ui()
 	#boss_trigger.queue_free()
 	boss.state_chart.send_event("start_phase_1")
+	show_tutorial_panel(tutorial_1_trigger_shoot)
 
 
 func _remove_boss_from_intro_path() -> void:
@@ -208,3 +231,18 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	# TODO - re-apply this when we re-visit the tutorial boss
 	#reward_bet_money()
 	#show_end_panel()
+
+
+func _check_for_reload_tutorial() -> void:
+	if player.current_gun.magazine_ammo_left == 0:
+		if not reload_tutorial_shown:
+			player.current_gun.is_reload_disabled = false
+			player.current_gun.can_fire = false
+			show_tutorial_panel(tutorial_2_trigger_reload)
+			reload_tutorial_shown = true
+
+
+func _check_close_trigger_action_held(action: String) -> void:
+	if Input.is_action_pressed(action):
+		if action in current_trigger_actions and current_close_trigger_count < current_close_trigger_max:
+			current_close_trigger_count += 1
