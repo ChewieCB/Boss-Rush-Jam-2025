@@ -42,6 +42,10 @@ var current_trigger_actions: Array[String] = []
 @onready var music_player: AudioStreamPlayer = $InteractiveMusicPlayer
 var music_playback: AudioStreamPlaybackInteractive
 
+# Intro cutscene
+@export var intro_boss_path: Path3D
+@export var intro_boss_path_follow: PathFollow3D
+
 func _ready() -> void:
 	#GameManager.equipped_barrels = []
 	#player.gun.reinstall_barrels()
@@ -176,6 +180,16 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	player.current_gun.equip_active()
 	player.stat_ui.show_all_ui()
 	#boss_trigger.queue_free()
+
+
+func _remove_boss_from_intro_path() -> void:
+	var cached_transform: Transform3D = boss.global_transform
+	intro_boss_path_follow.remove_child(boss)
+	add_child(boss)
+	boss.global_transform = cached_transform
+	boss.scene_root = self
+	intro_boss_path.queue_free()
+	
 
 
 func _on_debug_boss_trigger_body_entered(body: Node3D) -> void:

@@ -5494,6 +5494,20 @@ tracks/23/keys = {
 "update": 0,
 "values": [-80.0, 0.0, 0.0, -80.0]
 }
+tracks/24/type = "method"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath(".")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(6.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_remove_boss_from_intro_path"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_yuyap"]
 resource_name = "pit_boss_shove"
@@ -5657,7 +5671,7 @@ _data = {
 }
 point_count = 2
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "intro_boss_path", "intro_boss_path_follow", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
 script = ExtResource("2_twxne")
 boss_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_188_ElevatorDoors")
 exit_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_188_ElevatorDoors")
@@ -5671,6 +5685,8 @@ sub_elevator_doors = [null, null, null, null]
 sub_elevator_lights = [null, null, null, null]
 arena_2_floor_parent = NodePath("FuncGodotMap/group_7916_FloorWalkableArena2/entity_145_func_geo")
 arena_2_floor_mesh = NodePath("FuncGodotMap/group_7916_FloorWalkableArena2/entity_145_func_geo/entity_145_mesh_instance")
+intro_boss_path = NodePath("Path3D")
+intro_boss_path_follow = NodePath("Path3D/PathFollow3D")
 nav_parent = NodePath("FuncGodotMap/group_7915_FloorWalkableArena1")
 floor_parent = NodePath("FuncGodotMap/group_7915_FloorWalkableArena1/entity_133_func_geo")
 floor_mesh = NodePath("FuncGodotMap/group_7915_FloorWalkableArena1/entity_133_func_geo/entity_133_mesh_instance")
@@ -8602,7 +8618,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.4788, 0.144639, 29.5743)
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-4.37114e-08, 0, -0.99996, 0, 0.99996, 0, 1, 0, -4.37097e-08, -44.769, 0.145, 29.574)
+transform = Transform3D(-4.37114e-08, 0, -0.99996, 0, 0.99996, 0, 1, 0, -4.37096e-08, -44.769, 0.145, 29.574)
 loop = false
 tilt_enabled = false
 
@@ -8615,7 +8631,7 @@ target = NodePath("../../../FuncGodotMap/entity_11_PlayerRef")
 transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
 
 [node name="CutsceneCamera" type="Camera3D" parent="." index="18"]
-transform = Transform3D(7.16629e-08, -0.222536, -0.974925, 1.6801e-08, 0.974925, -0.222536, 1, -4.32124e-10, 7.36048e-08, -24.1585, 1.74925, 29.5983)
+transform = Transform3D(-3.62383e-06, -0.222535, -0.974925, 1.6801e-08, 0.974925, -0.222535, 1, -8.22808e-07, -3.52922e-06, -24.1585, 1.74925, 29.5983)
 current = true
 
 [node name="CutsceneSFXPlayer1" type="AudioStreamPlayer" parent="." index="19"]
@@ -8634,6 +8650,7 @@ bus = &"SFX"
 bus = &"SFX"
 
 [node name="CutsceneSFXPlayer6" type="AudioStreamPlayer" parent="." index="24"]
+volume_db = -80.0
 bus = &"SFX"
 
 [node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="25"]
