@@ -83,17 +83,19 @@ header_text = ""
 body_items = Array[String](["[shoot]", "shoot"])
 close_trigger_actions = Array[String](["shoot"])
 close_trigger_count = 3
-timeout = 0.0
+timeout = 1.0
+timeout_on_close = true
 
 [sub_resource type="Resource" id="Resource_3guvm"]
 script = ExtResource("4_mh6ps")
 trigger_on_spawn = false
-one_shot = true
+one_shot = false
 header_text = ""
 body_items = Array[String](["[spin_reload]", "reload"])
 close_trigger_actions = Array[String](["spin_reload"])
-close_trigger_count = 2
-timeout = 0.0
+close_trigger_count = 1
+timeout = 2.0
+timeout_on_close = true
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jn3i3"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -6787,6 +6789,7 @@ transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -25.625,
 
 [node name="entity_12_SlidingDoor" parent="FuncGodotMap" index="7" instance=ExtResource("86_1uyek")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -24.75, 0, 29.5)
+is_autodoor = false
 
 [node name="group_7833_HiddenVendorDoor" type="Node3D" parent="FuncGodotMap" index="8"]
 metadata/_tb_type = "_tb_group"
@@ -8395,8 +8398,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.4788, 0.144639, 29.5743)
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-4.37114e-08, 0, -0.99996, 0, 0.99996, 0, 1, 0, -4.37096e-08, -44.769, 0.145, 29.574)
-progress = 10.773
+transform = Transform3D(-1.7321e-07, -0.877203, -0.480036, -5.96047e-08, 0.480036, -0.877203, 1, -1.23328e-07, -1.35433e-07, -51.478, 0.145, 29.574)
 loop = false
 tilt_enabled = false
 
@@ -8449,7 +8451,7 @@ custom_minimum_size = Vector2(0, 200)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = -200.0
+offset_bottom = 200.0
 grow_horizontal = 2
 color = Color(0, 0, 0, 1)
 
@@ -8460,7 +8462,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = 200.0
+offset_top = -200.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 0
@@ -8472,9 +8474,7 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -1330.0
 offset_top = -155.0
-offset_right = -1330.0
 offset_bottom = 155.0
 grow_horizontal = 2
 grow_vertical = 2

@@ -110,12 +110,16 @@ func _input(event: InputEvent) -> void:
 				if abs(event.axis_value) < 0.075:
 					continue
 			
+			if action_str == "spin_reload" and reload_tutorial_shown and \
+			player.current_gun.is_reload_disabled:
+				player.current_gun.is_reload_disabled = false
+			
 			current_close_trigger_count += 1
 			
 			# Handle held inputs
 			get_tree().create_timer(0.5).timeout.connect(_check_close_trigger_action_held.bind(action_str))
 			
-			if current_close_trigger_count == current_close_trigger_max:
+			if current_close_trigger_count >= current_close_trigger_max:
 				ui_accept.emit()
 				current_trigger_actions = []
 				current_close_trigger_count = 0
@@ -134,14 +138,21 @@ func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 	current_close_trigger_max = resource.close_trigger_count
 	$UI.add_child(new_panel)
 	new_panel.visible = true
+	
 	var tween = get_tree().create_tween()
 	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 1.0), 0.4)
-	if resource.timeout > 0.0:
+	
+	if resource.timeout > 0.0 and not resource.timeout_on_close:
 		await get_tree().create_timer(resource.timeout).timeout
 	else:
 		await ui_accept
+	
 	if tween.is_running():
 		tween.kill()
+	
+	if resource.timeout_on_close:
+		await get_tree().create_timer(resource.timeout).timeout
+	
 	tween = get_tree().create_tween()
 	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 0.0), 0.2)
 
@@ -236,7 +247,6 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 func _check_for_reload_tutorial() -> void:
 	if player.current_gun.magazine_ammo_left == 0:
 		if not reload_tutorial_shown:
-			player.current_gun.is_reload_disabled = false
 			player.current_gun.can_fire = false
 			show_tutorial_panel(tutorial_2_trigger_reload)
 			reload_tutorial_shown = true

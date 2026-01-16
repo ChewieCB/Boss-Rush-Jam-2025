@@ -8,3 +8,4 @@ class_name TutorialPopupResource
 @export var close_trigger_actions: Array[String]
 @export var close_trigger_count: int = 1
 @export var timeout: float = 0.0
+@export var timeout_on_close: bool = false

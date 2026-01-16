@@ -2,6 +2,9 @@ extends BossCore
 
 signal intro_drop_landed
 
+@export var arena_1_center: Marker3D
+@export var arena_2_center: Marker3D
+
 @export_category("Movement")
 @export var MOVE_SPEED: float = 6
 @onready var move_speed: float = MOVE_SPEED:
@@ -39,6 +42,12 @@ var prev_attack: String = ""
 @export var hurtbox_range_far: float = 3.8
 @export var max_sequential_melee_phases: int = 3
 @export var max_sequential_ranged_phases: int = 3
+#
+@export var tutorial_melee_distance: float = 3.0
+@export var tutorial_melee_radius: float = 3.0
+@export var melee_distance: float = 5.0
+@export var melee_radius: float = 5.0
+
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 14.0
 # SFX
@@ -72,6 +81,9 @@ var prev_attack: String = ""
 @export var shots_per_burst: int = 12
 @export var delay_between_burst: float = 0.5
 @export var nail_damage: float = 7.0
+#
+@export var tutorial_strafe_distance: float = 12.0
+@export var tutorial_strafe_radius: float = 12.0
 # SFX
 @export var sfx_nail_equip: Array[AudioStream]
 @export var sfx_nail_shot: Array[AudioStream]
@@ -473,15 +485,19 @@ func _on_ranged_nails_targeting_state_physics_processing(_delta: float) -> void:
 
 func _on_ranged_nails_shooting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Shooting"
-	
 	await _telegraph_attack()
+	await shoot_nail_projectile(num_bursts, shots_per_burst, delay_per_projectile, delay_between_burst)
 	
-	for i in num_bursts:
-		for j in shots_per_burst:
+	state_chart.send_event("stop_shooting")
+
+
+func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: float, delay_per_burst: float) -> void:
+	for i in range(bursts):
+		for j in range(shot_per_burst):
 			# Catch to stop projectiles firing if the boss is killed mid-attack
 			if self.health_component.current_health == 0:
 				return
-			await get_tree().create_timer(delay_per_projectile).timeout
+			await get_tree().create_timer(delay_per_proj).timeout
 			# Alternate firing between each gun
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
 			var anim_name = "elevator_boss/ranged_shoot_%s" % ["l" if j % 2 == 0 else "r"]
@@ -492,9 +508,7 @@ func _on_ranged_nails_shooting_state_entered() -> void:
 				sfx_player.stream = sfx_nail_shot.pick_random()
 				sfx_player.play()
 			proj.init(nail_damage * GameManager.get_risk_dmg_mult())
-		await get_tree().create_timer(delay_between_burst).timeout
-	
-	state_chart.send_event("stop_shooting")
+		await get_tree().create_timer(delay_per_burst).timeout
 
 
 func _on_ranged_nails_shooting_state_physics_processing(_delta: float) -> void:
@@ -1056,3 +1070,112 @@ func _on_arena_1_cutscene_state_entered() -> void:
 func _on_arena_1_cutscene_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+
+### =============================================================
+### TUTORIAL PHASES
+### =============================================================
+## The tutorial fight has sequential phases to ease the player into the mechanics
+## Start with a simple ranged strafe
+## When the player has done some damage trigger the electric floor aoe
+## Then move on to the melee combo
+##
+## PHASE 1 - BASIC COMBAT
+func _on_tutorial_phase_1_state_entered() -> void:
+	# Start with a ranged attack, then alternate taunt and ranged attack until a health threshold is reached
+	# TODO - update health bar/audio triggers
+	pass
+
+
+# TAUNT
+func _on_tutorial_phase_1_taunt_idle_state_entered() -> void:
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("start_taunt")
+
+
+func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
+	anim_player.speed_scale = 0.5
+	anim_player.play("elevator_boss/taunt")
+	await anim_player.animation_finished
+	anim_player.speed_scale = 1.0
+	
+	state_chart.send_event("end_taunt")
+
+func _on_tutorial_phase_1_taunt_taunting_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
+func _on_tutorial_phase_1_taunt_recover_state_entered() -> void:
+	state_chart.send_event("attack_end")
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("cooldown_end")
+	state_chart.send_event("start_ranged_naiils_strafe")
+	# Reset the current state to Targeting
+	state_chart.send_event("end_recovery")
+
+
+# NAILS
+func _on_tutorial_phase_1_strafing_nails_targeting_state_entered() -> void:
+	debug_state_label.text = "Strafing Nailguns | Targeting"
+	
+	desired_distance = tutorial_strafe_distance
+	orbit_radius = tutorial_strafe_radius
+	
+	navigation_component.follow_target = false
+	state_chart.send_event("start_moving")
+	#state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_nail_equip.pick_random()
+		sfx_player.play()
+	anim_player.play("elevator_boss/ranged_arm")
+	await anim_player.animation_finished
+	
+	# TODO - tweak/increase the strafing time depending on tutorial progress/difficulty
+	await get_tree().create_timer(1.2).timeout
+	state_chart.send_event("start_shooting")
+
+
+func _on_tutorial_phase_1_strafing_nails_targeting_state_physics_processing(delta: float) -> void:
+	orbit_pos(arena_1_center.global_position, delta, true)
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
+func _on_tutorial_phase_1_strafing_nails_shooting_state_entered() -> void:
+	debug_state_label.text = "Dual Nailguns | Shooting"
+	await _telegraph_attack()
+	# TODO - replace magic numbers with export vars
+	await shoot_nail_projectile(1, 6, 0.5, 1.6)
+	
+	state_chart.send_event("stop_shooting")
+
+
+func _on_tutorial_phase_1_strafing_nails_shooting_state_physics_processing(delta: float) -> void:
+	orbit_pos(arena_1_center.global_position, delta, true)
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
+func _on_tutorial_phase_1_strafing_nails_recover_state_entered() -> void:
+	debug_state_label.text = "Dual Nailguns | Recovering"
+	
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_end")
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_nail_unequip.pick_random()
+		sfx_player.play()
+	anim_player.play("elevator_boss/ranged_disarm")
+	
+	await get_tree().create_timer(1.0).timeout
+	anim_player.play("RESET")
+	state_chart.send_event("cooldown_end")
+	
+	desired_distance = DESIRED_DISTANCE
+	
+	state_chart.send_event("start_taunt_attack")
+	state_chart.send_event("end_recovery")
