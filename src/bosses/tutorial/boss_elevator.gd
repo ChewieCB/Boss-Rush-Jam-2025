@@ -102,6 +102,9 @@ var laser_target_pos: Vector3
 @export var sfx_laser_shoot: Array[AudioStream]
 @export var sfx_laser_disarm: Array[AudioStream]
 
+@export_subgroup("Electrify Floor")
+@export var shockable_floor_mesh: MeshInstance3D
+
 
 func _ready() -> void:
 	super()
@@ -113,6 +116,12 @@ func activate() -> void:
 	#state_chart.send_event("start_intro")
 	state_chart.send_event("start_intro")
 	state_chart.send_event("start_tutorial_arena_1")
+
+
+func _on_health_changed(new_health: float, prev_health: float) -> void:
+	super(new_health, prev_health)
+	if new_health < 3000:
+		state_chart.send_event("start_tutorial_phase_2")
 
 
 func _physics_process(_delta: float) -> void:
@@ -1179,3 +1188,70 @@ func _on_tutorial_phase_1_strafing_nails_recover_state_entered() -> void:
 	
 	state_chart.send_event("start_taunt_attack")
 	state_chart.send_event("end_recovery")
+
+
+## PHASE 2 - JUMPING
+func _on_tutorial_phase_2_taunt_recover_state_entered() -> void:
+	state_chart.send_event("attack_end")
+	await get_tree().create_timer(attack_recovery_time).timeout
+	
+	state_chart.send_event("cooldown_end")
+	
+	# If the player is on the electrified floor, move to shock
+	if false:
+		state_chart.send_event("start_electrify_floor")
+	# Otherwise melee attack
+	else:
+		state_chart.send_event("start_melee_combo")
+	# Reset the current state to Targeting
+	state_chart.send_event("end_recovery")
+
+
+#
+func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
+	state_chart.send_event("start_moving")
+	# Pick a point on the lower floor mesh to move to
+	var center_pos: Vector3 = arena_1_center.global_position
+	var dir_from_center: Vector3 = center_pos.direction_to(self.global_position)
+	# Optional - jitter the direction a bit so it isn't always a straight line path
+	dir_from_center.rotated(Vector3.UP, randf_range(-PI/32, PI/32))
+	var max_dist: float = 6.0  # Use this to keep the position tied to the center of the room
+	var goal_pos: Vector3 = center_pos + dir_from_center * max_dist
+	
+	draw_debug_sphere(goal_pos, 1.0, Color.PURPLE)
+	
+	navigation_component.set_nav_target_position(goal_pos)
+
+
+func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+	
+	if self.global_position.distance_to(navigation_component.nav_agent.target_position) < 2.0:
+		state_chart.send_event("start_slam")
+
+
+func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
+	anim_player.play("elevator_boss/impact_no_slam")
+	await anim_player.animation_finished
+	anim_player.play("elevator_boss/impact_no_slam")
+	await anim_player.animation_finished
+	anim_player.play("elevator_boss/impact_no_slam")
+	await anim_player.animation_finished
+
+
+func _on_tutorial_phase_2_electrify_floor_slamming_state_physics_processing(delta: float) -> void:
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
+func _on_tutorial_phase_2_electrify_floor_shocking_state_entered() -> void:
+	pass # Replace with function body.
+
+
+func _on_tutorial_phase_2_electrify_floor_shocking_state_physics_processing(delta: float) -> void:
+	pass # Replace with function body.
+
+
+func _on_tutorial_phase_2_electrify_floor_recover_state_entered() -> void:
+	pass # Replace with function body.

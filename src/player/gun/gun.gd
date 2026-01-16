@@ -693,6 +693,7 @@ func reload(already_spin_barrel = false):
 			#else:
 				#post_reload_state = "" # "shotgun_pump_no_shell" - do we want to pump after reload? 
 			reload_count = modified_magazine_size - magazine_ammo_left
+			reload_timescale * 2.0
 		#GunFrameResource.GunFrameIdEnum.SMG:
 		"smg_idle":
 			anim_library_prefix = "smg/"

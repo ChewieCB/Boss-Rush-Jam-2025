@@ -30,6 +30,7 @@ var spin_warning_trigger_active: bool = false
 
 @export var arena_2_floor_parent: Node3D
 @export var arena_2_floor_mesh: MeshInstance3D
+@export var arena_1_floor_shockable_mesh: MeshInstance3D
 
 var current_trigger_actions: Array[String] = []
 var current_close_trigger_max: int = 1
@@ -48,6 +49,8 @@ var music_playback: AudioStreamPlaybackInteractive
 @export var tutorial_1_trigger_shoot: TutorialPopupResource
 @export var tutorial_2_trigger_reload: TutorialPopupResource
 var reload_tutorial_shown: bool = false
+var tutorial_panel_tween: Tween
+var active_tutorial_panel: Control
 
 
 func _ready() -> void:
@@ -63,29 +66,19 @@ func _ready() -> void:
 	floor_mesh = arena_2_floor_mesh
 	super()
 	
+	boss.shockable_floor_mesh = arena_1_floor_shockable_mesh
+	#
+	
 	if GameManager.cached_player_rotation:
 		player.global_position = elevator_doors.global_position - Vector3(0, 0, 1.5)
 		player.global_rotation.y = PI
-	
-	# Disable auto-reloading for reload tutorial, re-enabling it once the prompt is complete
-	player.current_gun.is_reload_disabled = true
-	player.current_gun.gun_shot.connect(_check_for_reload_tutorial)
 
 	if boss_doors:
 		boss_doors.close()
 	
-	#exit_elevator_button.pushed.connect(_on_level_select)
-	#for i in range(chiplings_to_spawn_1):
-		#spawn_chipling(1, chipling_spawns_1, chipling_wander_points_1)
-
-	# Trigger tutorial popup when barrel purchased
-	#$Vendor1.shop_ui.inventory_closed.connect(_on_barrel_purchased)
-
-	# Trigger spin tutorial popup when barrel effect trigger first hit
-	#$BarrelEffectTrigger.triggered.connect(_trigger_spin_tutorial)
-	
 	music_playback = music_player.get_stream_playback()
 	
+	player.stat_ui.hide_all_ui()
 	await ScreenTransition.transition_finished
 	$AnimationPlayer.play("pit_boss_shove")
 	await $AnimationPlayer.animation_finished
@@ -139,22 +132,37 @@ func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 	$UI.add_child(new_panel)
 	new_panel.visible = true
 	
-	var tween = get_tree().create_tween()
-	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 1.0), 0.4)
+	# If we already have an active tutorial popup, get rid of it before adding a new one
+	if active_tutorial_panel:
+		if tutorial_panel_tween.is_running():
+			tutorial_panel_tween.kill()
+			
+		tutorial_panel_tween = get_tree().create_tween()
+		tutorial_panel_tween.tween_property(active_tutorial_panel, "modulate", Color(Color.WHITE, 0.0), 0.2)
+		
+		await tutorial_panel_tween.finished
+		
+		active_tutorial_panel = null
+	
+	active_tutorial_panel = new_panel
+	tutorial_panel_tween = get_tree().create_tween()
+	tutorial_panel_tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 1.0), 0.4)
 	
 	if resource.timeout > 0.0 and not resource.timeout_on_close:
 		await get_tree().create_timer(resource.timeout).timeout
 	else:
 		await ui_accept
 	
-	if tween.is_running():
-		tween.kill()
+	if tutorial_panel_tween.is_running():
+		tutorial_panel_tween.kill()
 	
 	if resource.timeout_on_close:
 		await get_tree().create_timer(resource.timeout).timeout
 	
-	tween = get_tree().create_tween()
-	tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 0.0), 0.2)
+	tutorial_panel_tween = get_tree().create_tween()
+	tutorial_panel_tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 0.0), 0.2)
+	await tutorial_panel_tween.finished
+	active_tutorial_panel = null
 
 
 func _on_barrel_purchased() -> void:
@@ -183,10 +191,16 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	await $AnimationPlayer.animation_finished
 	
 	LuckHandler.enabled = true
+	# We need to set these player vars AFTER the cutscene cam exits so they don't get re-set 
+	# Disable auto-reloading for reload tutorial, re-enabling it once the prompt is complete
+	player.current_gun.is_reload_disabled = true
+	player.current_gun.gun_shot.connect(_check_for_reload_tutorial)
+	player.dash_disabled = true
+	player.max_air_jump = 0
 	player.current_gun.equip_active()
 	player.stat_ui.show_all_ui()
 	#boss_trigger.queue_free()
-	boss.state_chart.send_event("start_phase_1")
+	boss.state_chart.send_event("start_tutorial_phase_1")
 	show_tutorial_panel(tutorial_1_trigger_shoot)
 
 

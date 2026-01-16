@@ -667,6 +667,9 @@ func _on_dash_duration_timeout() -> void:
 
 func _on_grounded_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
+		# Allows us to disable jumping
+		if max_air_jump < 1:
+			return
 		jump()
 
 func _on_grounded_state_physics_processing(_delta: float):
@@ -679,6 +682,9 @@ func _on_grounded_state_physics_processing(_delta: float):
 
 func _on_airborne_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
+		# Allows us to disable jumping
+		if max_air_jump < 1:
+			return
 		if can_coyote_jump and not jumped:
 			jump()
 		elif current_air_jump_count < max_air_jump:
@@ -1060,7 +1066,6 @@ func _on_check_standing_collision_body_entered(_body: Node3D) -> void:
 
 func _enable_freecam() -> void:
 	controls_disabled = true
-	dash_disabled = true
 	player_camera.camera.current = false
 	gun_container.visible = false
 
@@ -1077,7 +1082,6 @@ func _enable_freecam() -> void:
 
 func _disable_freecam() -> void:
 	controls_disabled = false
-	dash_disabled = false
 	gun_container.visible = true
 	player_camera.camera.current = true
 
@@ -1089,14 +1093,12 @@ func _disable_freecam() -> void:
 
 func _enable_cutscene_cam() -> void:
 	controls_disabled = true
-	dash_disabled = true
 	player_camera.camera.current = false
 	gun_container.visible = false
 
 
 func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
 	controls_disabled = false
-	dash_disabled = false
 	
 	if lerp_to_player_cam:
 		var active_camera: Camera3D = get_viewport().get_camera_3d()
