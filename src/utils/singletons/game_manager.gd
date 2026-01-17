@@ -328,6 +328,8 @@ func show_boss_special_dialog(content: String, duration: float):
 func load_new_save_data():
 	tutorial_completed = false
 	
+	equipped_gun_frame = starting_gun_frame
+	
 	# Generate reload-spin threshold values for all barrels on save game creation
 	randomize()
 	for barrel_data in barrel_database:
