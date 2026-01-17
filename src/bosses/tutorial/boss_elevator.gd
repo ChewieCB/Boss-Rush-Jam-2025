@@ -1,6 +1,9 @@
 extends BossCore
 
 signal intro_drop_landed
+signal tutorial_phase_1_started
+signal tutorial_phase_2_started
+signal tutorial_phase_3_started
 
 @export var arena_1_center: Marker3D
 @export var arena_2_center: Marker3D
@@ -103,7 +106,11 @@ var laser_target_pos: Vector3
 @export var sfx_laser_disarm: Array[AudioStream]
 
 @export_subgroup("Electrify Floor")
-@export var shockable_floor_mesh: MeshInstance3D
+@export var shock_floor_hazard: Node3D
+@export var shock_damage: float = 20.0
+@export var shock_duration: float = 1.4
+
+var attack_interrupt: bool = false  # Flag to interrupt loop-based attacks like the nailgun shots
 
 
 func _ready() -> void:
@@ -121,6 +128,10 @@ func activate() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
 	if new_health < 3000:
+		# TODO - cancel current phase if active and trigger hurt pose
+		attack_interrupt = true
+		_on_stagger()
+		await get_tree().create_timer(hurt_frame_window)
 		state_chart.send_event("start_tutorial_phase_2")
 
 
@@ -505,6 +516,9 @@ func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: flo
 		for j in range(shot_per_burst):
 			# Catch to stop projectiles firing if the boss is killed mid-attack
 			if self.health_component.current_health == 0:
+				return
+			if attack_interrupt == true:
+				attack_interrupt = false
 				return
 			await get_tree().create_timer(delay_per_proj).timeout
 			# Alternate firing between each gun
@@ -1232,17 +1246,28 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(del
 
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
-	anim_player.play("elevator_boss/impact_no_slam")
+	anim_player.play("elevator_boss/shock_slam_start")
 	await anim_player.animation_finished
-	anim_player.play("elevator_boss/impact_no_slam")
+	
+	await get_tree().create_timer(shock_duration, false).timeout
+	
+	anim_player.play("elevator_boss/shock_slam_end")
 	await anim_player.animation_finished
-	anim_player.play("elevator_boss/impact_no_slam")
-	await anim_player.animation_finished
+	
+	# TODO - select attack function for tutorial phase 2
 
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+
+
+func start_floor_shock() -> void:
+	shock_floor_hazard.is_active = true
+
+
+func end_floor_shock() -> void:
+	shock_floor_hazard.is_active = false
 
 
 func _on_tutorial_phase_2_electrify_floor_shocking_state_entered() -> void:
@@ -1255,3 +1280,8 @@ func _on_tutorial_phase_2_electrify_floor_shocking_state_physics_processing(delt
 
 func _on_tutorial_phase_2_electrify_floor_recover_state_entered() -> void:
 	pass # Replace with function body.
+
+
+func _on_tutorial_phase_2_state_entered() -> void:
+	tutorial_phase_2_started.emit()
+	state_chart.send_event("start_electrify_floor")

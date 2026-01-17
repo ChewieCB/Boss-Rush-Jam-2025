@@ -30,7 +30,7 @@ var spin_warning_trigger_active: bool = false
 
 @export var arena_2_floor_parent: Node3D
 @export var arena_2_floor_mesh: MeshInstance3D
-@export var arena_1_floor_shockable_mesh: MeshInstance3D
+@export var arena_1_floor_shock_hazard: Node3D
 
 var current_trigger_actions: Array[String] = []
 var current_close_trigger_max: int = 1
@@ -48,6 +48,7 @@ var music_playback: AudioStreamPlaybackInteractive
 @export_group("Tutorial UI Triggers")
 @export var tutorial_1_trigger_shoot: TutorialPopupResource
 @export var tutorial_2_trigger_reload: TutorialPopupResource
+@export var tutorial_3_trigger_jump: TutorialPopupResource
 var reload_tutorial_shown: bool = false
 var tutorial_panel_tween: Tween
 var active_tutorial_panel: Control
@@ -66,7 +67,8 @@ func _ready() -> void:
 	floor_mesh = arena_2_floor_mesh
 	super()
 	
-	boss.shockable_floor_mesh = arena_1_floor_shockable_mesh
+	boss.tutorial_phase_2_started.connect(_on_tutorial_phase_2_started)
+	boss.shock_floor_hazard = arena_1_floor_shock_hazard
 	#
 	
 	if GameManager.cached_player_rotation:
@@ -235,6 +237,11 @@ func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
 	dash_tutorial_trigger._on_body_entered(body)
 	await get_tree().create_timer(0.1).timeout
 	sfx_smoke_loop.play()
+
+
+func _on_tutorial_phase_2_started() -> void:
+	player.max_air_jump = 2
+	show_tutorial_panel(tutorial_3_trigger_jump)
 
 
 func _on_boss_died(_boss: BossCore = boss) -> void:

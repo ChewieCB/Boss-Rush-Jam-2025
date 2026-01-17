@@ -1,4 +1,4 @@
-[gd_scene load_steps=669 format=4 uid="uid://b50odhnpvpy07"]
+[gd_scene load_steps=671 format=4 uid="uid://b50odhnpvpy07"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -58,6 +58,7 @@
 [ext_resource type="Material" uid="uid://bt8sgbg77a1nw" path="res://assets/textures/placeholder/texture_green_green_green_10.tres" id="72_ka5wf"]
 [ext_resource type="Material" uid="uid://cw84j8uef55sq" path="res://assets/textures/walls/painting_decal.tres" id="73_xo6rn"]
 [ext_resource type="Material" uid="uid://oioorwq5iec4" path="res://assets/textures/walls/dutch_wall_3.tres" id="74_bjkup"]
+[ext_resource type="PackedScene" uid="uid://du7niw4p1wqq6" path="res://src/bosses/tutorial/FloorShockHazard.tscn" id="75_byjbj"]
 [ext_resource type="Material" uid="uid://cyn8dlvnmoe00" path="res://assets/textures/posters/crapshoot_logo.tres" id="75_vc447"]
 [ext_resource type="Material" uid="uid://f1owxp1fp5iw" path="res://assets/textures/placeholder/texture_red_09.tres" id="76_i1p5s"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="77_xj60c"]
@@ -95,6 +96,17 @@ body_items = Array[String](["[spin_reload]", "reload"])
 close_trigger_actions = Array[String](["spin_reload"])
 close_trigger_count = 1
 timeout = 5.0
+timeout_on_close = true
+
+[sub_resource type="Resource" id="Resource_m1p8q"]
+script = ExtResource("4_mh6ps")
+trigger_on_spawn = false
+one_shot = false
+header_text = ""
+body_items = Array[String](["[jump]", "jump"])
+close_trigger_actions = Array[String](["jump"])
+close_trigger_count = 3
+timeout = 2.0
 timeout_on_close = true
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jn3i3"]
@@ -5628,7 +5640,7 @@ _data = {
 }
 point_count = 2
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "intro_boss_path", "intro_boss_path_follow", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "intro_boss_path", "intro_boss_path_follow", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
 script = ExtResource("2_twxne")
 boss_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_189_ElevatorDoors")
 exit_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_189_ElevatorDoors")
@@ -5640,10 +5652,12 @@ sub_elevator_doors = [null, null, null, null]
 sub_elevator_lights = [null, null, null, null]
 arena_2_floor_parent = NodePath("FuncGodotMap/group_7916_FloorWalkableArena2/entity_147_func_geo")
 arena_2_floor_mesh = NodePath("FuncGodotMap/group_7916_FloorWalkableArena2/entity_147_func_geo/entity_147_mesh_instance")
+arena_1_floor_shock_hazard = NodePath("ElectricHazardArea")
 intro_boss_path = NodePath("Path3D")
 intro_boss_path_follow = NodePath("Path3D/PathFollow3D")
 tutorial_1_trigger_shoot = SubResource("Resource_41ph2")
 tutorial_2_trigger_reload = SubResource("Resource_3guvm")
+tutorial_3_trigger_jump = SubResource("Resource_m1p8q")
 nav_parent = NodePath("FuncGodotMap/group_7915_FloorWalkableArena1")
 floor_parent = NodePath("FuncGodotMap/group_7915_FloorWalkableArena1/entity_133_func_geo")
 floor_mesh = NodePath("FuncGodotMap/group_7915_FloorWalkableArena1/entity_133_func_geo/entity_133_mesh_instance")
@@ -8572,7 +8586,7 @@ transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -25.625,
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-4.37114e-08, 0, -0.99996, 0, 0.99996, 0, 1, 0, -4.37096e-08, -44.769, 0.145, 29.574)
+transform = Transform3D(-1.7321e-07, -0.877203, -0.480036, -5.96047e-08, 0.480036, -0.877203, 1, -1.23328e-07, -1.35433e-07, -51.478, 0.145, 29.574)
 loop = false
 tilt_enabled = false
 
@@ -8580,6 +8594,9 @@ tilt_enabled = false
 transform = Transform3D(1, -5.96047e-08, 3.04345e-07, -2.3837e-07, 0.480057, 0.877241, -1.9839e-07, -0.877241, 0.480057, -36.0784, -1.20733, -32.3512)
 target = NodePath("../../../entity_11_PlayerRef")
 orbit_radius = 200.0
+
+[node name="WrenchParticleSpawn" parent="Path3D/PathFollow3D/entity_187_TutorialBoss/DebugAnimPivot" index="1"]
+visible = false
 
 [node name="CutsceneCamera" type="Camera3D" parent="." index="18"]
 transform = Transform3D(-3.62383e-06, -0.222535, -0.974925, 1.6801e-08, 0.974925, -0.222535, 1, -8.22808e-07, -3.52922e-06, -24.1585, 1.74925, 29.5983)
@@ -8677,5 +8694,9 @@ texture = ExtResource("63_30qyb")
 
 [node name="Arena1Center" type="Marker3D" parent="." index="27"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.7, -0.9, 29.6)
+
+[node name="ElectricHazardArea" parent="." index="28" instance=ExtResource("75_byjbj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5227, -1.2, 19.7469)
+visible = false
 
 [editable path="Path3D/PathFollow3D/entity_187_TutorialBoss"]
