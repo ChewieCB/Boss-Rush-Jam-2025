@@ -49,6 +49,10 @@ var music_playback: AudioStreamPlaybackInteractive
 @export var tutorial_1_trigger_shoot: TutorialPopupResource
 @export var tutorial_2_trigger_reload: TutorialPopupResource
 @export var tutorial_3_trigger_jump: TutorialPopupResource
+@export var tutorial_4_trigger_dash: TutorialPopupResource
+@export var tutorial_5_trigger_barrel_detail: TutorialPopupResource
+@export var tutorial_6_trigger_spin: TutorialPopupResource
+
 var reload_tutorial_shown: bool = false
 var tutorial_panel_tween: Tween
 var active_tutorial_panel: Control
@@ -68,6 +72,7 @@ func _ready() -> void:
 	super()
 	
 	boss.tutorial_phase_2_started.connect(_on_tutorial_phase_2_started)
+	boss.tutorial_phase_3_started.connect(_on_tutorial_phase_3_started)
 	boss.shock_floor_hazard = arena_1_floor_shock_hazard
 	#
 	
@@ -211,6 +216,8 @@ func _remove_boss_from_intro_path() -> void:
 	intro_boss_path_follow.remove_child(boss)
 	add_child(boss)
 	boss.global_transform = cached_transform
+	boss.global_rotation.x = 0.0
+	boss.global_rotation.z = 0.0
 	boss.scene_root = self
 	intro_boss_path.queue_free()
 
@@ -242,6 +249,11 @@ func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
 func _on_tutorial_phase_2_started() -> void:
 	player.max_air_jump = 2
 	show_tutorial_panel(tutorial_3_trigger_jump)
+
+
+func _on_tutorial_phase_3_started() -> void:
+	player.dash_disabled = false
+	show_tutorial_panel(tutorial_4_trigger_dash)
 
 
 func _on_boss_died(_boss: BossCore = boss) -> void:

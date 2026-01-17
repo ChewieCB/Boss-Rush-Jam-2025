@@ -1,4 +1,4 @@
-[gd_scene load_steps=671 format=4 uid="uid://b50odhnpvpy07"]
+[gd_scene load_steps=674 format=4 uid="uid://b50odhnpvpy07"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -103,10 +103,43 @@ script = ExtResource("4_mh6ps")
 trigger_on_spawn = false
 one_shot = false
 header_text = ""
-body_items = Array[String](["[jump]", "jump"])
+body_items = Array[String](["[jump]", "jump", "\\n[jump]", " + ", "[jump]", "double jump"])
 close_trigger_actions = Array[String](["jump"])
 close_trigger_count = 3
 timeout = 2.0
+timeout_on_close = true
+
+[sub_resource type="Resource" id="Resource_3epwp"]
+script = ExtResource("4_mh6ps")
+trigger_on_spawn = false
+one_shot = false
+header_text = ""
+body_items = Array[String](["[dash]", "dash"])
+close_trigger_actions = Array[String](["dash"])
+close_trigger_count = 2
+timeout = 2.0
+timeout_on_close = true
+
+[sub_resource type="Resource" id="Resource_faiyk"]
+script = ExtResource("4_mh6ps")
+trigger_on_spawn = false
+one_shot = false
+header_text = ""
+body_items = Array[String](["[show_detail]", "check rollers"])
+close_trigger_actions = Array[String](["show_detail"])
+close_trigger_count = 1
+timeout = 3.0
+timeout_on_close = true
+
+[sub_resource type="Resource" id="Resource_1jw3o"]
+script = ExtResource("4_mh6ps")
+trigger_on_spawn = false
+one_shot = false
+header_text = ""
+body_items = Array[String](["[spin_barrels]", "spin"])
+close_trigger_actions = Array[String](["spin_barrels"])
+close_trigger_count = 1
+timeout = 4.0
 timeout_on_close = true
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jn3i3"]
@@ -5293,7 +5326,7 @@ tracks/7/keys = {
 "times": PackedFloat32Array(0, 0.6, 0.9, 1.16667, 1.5, 5.5, 6.5),
 "transitions": PackedFloat32Array(0.378929, 2.54912, 1, 0.435275, 1, 0.406126, 0.378929),
 "update": 0,
-"values": [Vector3(-26.6, 1.1, 29.5), Vector3(-39, -0.2, 29.5), Vector3(-37.8, 1.2, 29.5), Vector3(-37.8, 1.2, 29.5), Vector3(-41.1808, 2.55098, 30.2407), Vector3(-41.181, 2.551, 29.318), Vector3(-26.6, 1.1, 29.5)]
+"values": [Vector3(-26.6, 1.1, 29.5), Vector3(-39, -0.2, 29.5), Vector3(-37.8, 1.2, 29.5), Vector3(-37.8, 1.2, 29.5), Vector3(-42.616, 3.676, 30.241), Vector3(-42.616, 3.676, 29.318), Vector3(-26.6, 1.1, 29.5)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -5658,6 +5691,9 @@ intro_boss_path_follow = NodePath("Path3D/PathFollow3D")
 tutorial_1_trigger_shoot = SubResource("Resource_41ph2")
 tutorial_2_trigger_reload = SubResource("Resource_3guvm")
 tutorial_3_trigger_jump = SubResource("Resource_m1p8q")
+tutorial_4_trigger_dash = SubResource("Resource_3epwp")
+tutorial_5_trigger_barrel_detail = SubResource("Resource_faiyk")
+tutorial_6_trigger_spin = SubResource("Resource_1jw3o")
 nav_parent = NodePath("FuncGodotMap/group_7915_FloorWalkableArena1")
 floor_parent = NodePath("FuncGodotMap/group_7915_FloorWalkableArena1/entity_133_func_geo")
 floor_mesh = NodePath("FuncGodotMap/group_7915_FloorWalkableArena1/entity_133_func_geo/entity_133_mesh_instance")
@@ -8586,17 +8622,15 @@ transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -25.625,
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-1.7321e-07, -0.877203, -0.480036, -5.96047e-08, 0.480036, -0.877203, 1, -1.23328e-07, -1.35433e-07, -51.478, 0.145, 29.574)
+transform = Transform3D(-4.37114e-08, 0, -0.999956, 0, 0.999956, 0, 1, 0, -4.37095e-08, -44.769, 0.145, 29.574)
+progress = 10.773
 loop = false
 tilt_enabled = false
 
 [node name="entity_187_TutorialBoss" parent="Path3D/PathFollow3D" index="0" node_paths=PackedStringArray("target") instance=ExtResource("88_ijdgk")]
-transform = Transform3D(1, -5.96047e-08, 3.04345e-07, -2.3837e-07, 0.480057, 0.877241, -1.9839e-07, -0.877241, 0.480057, -36.0784, -1.20733, -32.3512)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.0784, -1.20733, -32.3512)
 target = NodePath("../../../entity_11_PlayerRef")
 orbit_radius = 200.0
-
-[node name="WrenchParticleSpawn" parent="Path3D/PathFollow3D/entity_187_TutorialBoss/DebugAnimPivot" index="1"]
-visible = false
 
 [node name="CutsceneCamera" type="Camera3D" parent="." index="18"]
 transform = Transform3D(-3.62383e-06, -0.222535, -0.974925, 1.6801e-08, 0.974925, -0.222535, 1, -8.22808e-07, -3.52922e-06, -24.1585, 1.74925, 29.5983)
@@ -8639,7 +8673,7 @@ custom_minimum_size = Vector2(0, 200)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 200.0
+offset_top = -200.0
 grow_horizontal = 2
 color = Color(0, 0, 0, 1)
 
@@ -8650,7 +8684,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -200.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 0
@@ -8662,7 +8696,9 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
+offset_left = -1330.0
 offset_top = -155.0
+offset_right = -1330.0
 offset_bottom = 155.0
 grow_horizontal = 2
 grow_vertical = 2
