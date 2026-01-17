@@ -43,6 +43,7 @@ var prev_attack: String = ""
 @onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @export var hurtbox_range_close: float = 2.0
 @export var hurtbox_range_far: float = 3.8
+@export var hurtbox_range_tutorial: float = 5.0
 @export var max_sequential_melee_phases: int = 3
 @export var max_sequential_ranged_phases: int = 3
 #
@@ -107,8 +108,8 @@ var laser_target_pos: Vector3
 
 @export_subgroup("Electrify Floor")
 @export var shock_floor_hazard: Node3D
-@export var shock_damage: float = 20.0
-@export var shock_duration: float = 1.4
+@export var shock_damage: float = 10.0
+@export var shock_duration: float = 1.1
 
 var attack_interrupt: bool = false  # Flag to interrupt loop-based attacks like the nailgun shots
 
@@ -127,12 +128,24 @@ func activate() -> void:
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
-	if new_health < 3000:
-		# TODO - cancel current phase if active and trigger hurt pose
+	if new_health <= 3000:
+		# Cancel current phase if active and trigger hurt pose
 		attack_interrupt = true
 		_on_stagger()
 		await get_tree().create_timer(hurt_frame_window)
 		state_chart.send_event("start_tutorial_phase_2")
+	elif new_health <= 2000:
+		# Cancel current phase if active and trigger hurt pose
+		attack_interrupt = true
+		_on_stagger()
+		await get_tree().create_timer(hurt_frame_window)
+		state_chart.send_event("start_tutorial_phase_3")
+
+
+func _on_stagger() -> void:
+	if current_phase == 1:
+		return
+	super()
 
 
 func _physics_process(_delta: float) -> void:
@@ -140,6 +153,23 @@ func _physics_process(_delta: float) -> void:
 	return
 
 
+func select_attack() -> void:
+	match current_phase:
+		1:
+			select_attack_phase_1_tutorial()
+		2:
+			select_attack_phase_2_tutorial()
+		3:
+			select_attack_phase_3_tutorial()
+		4:
+			select_attack_phase_4()
+		5:
+			select_attack_phase_5()
+		_:
+			push_error("Invalid phase %s" % current_phase)
+
+
+## OLD - DEPRECATED DO NOT USE
 func select_attack_phase_1() -> void:
 	var new_phase: String
 	
@@ -181,6 +211,40 @@ func select_attack_phase_1() -> void:
 	
 	previous_phase = new_phase
 	state_chart.send_event(new_phase)
+
+
+## TUTORIAL PHASES
+
+func select_attack_phase_1_tutorial() -> void:
+	# Alternate between strafing nail gun and taunt
+	match prev_attack:
+		"strafing_nails":
+			state_chart.send_event("start_taunt_attack")
+		"taunt":
+			state_chart.send_event("start_ranged_naiils_strafe")
+
+
+func select_attack_phase_2_tutorial() -> void:
+	# If the player is in range of the shock area, electrify floor, otherwise basic melee combo
+	if shock_floor_hazard.damage_area.overlaps_body(target):
+		#if randf() < 0.80:
+		state_chart.send_event("start_electrify_floor")
+		#else:
+			#state_chart.send_event("start_melee_combo")
+	else:
+		state_chart.send_event("start_melee_combo")
+
+
+func select_attack_phase_3_tutorial() -> void:
+	pass
+
+## STANDARD FIGHT PHASES
+
+func select_attack_phase_4() -> void:
+	pass
+
+func select_attack_phase_5() -> void:
+	pass
 
 
 func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
@@ -233,6 +297,7 @@ func backswipe() -> void:
 func _on_melee_combo_targeting_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Targeting"
 	melee_phase_count += 1
+	navigation_component.follow_target = true
 	
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
@@ -352,25 +417,6 @@ func _on_melee_combo_leap_back_state_entered() -> void:
 	var nav_pos = NavigationServer3D.map_get_closest_point(navigation_component.nav_map_rid, goal_pos)
 	
 	await jump_to_pos(nav_pos, 1.6)
-	#var jump_results = charge_back_jump(nav_pos, 1.6)
-	#
-	#var sfx_player = get_available_sfx_player()
-	#if sfx_player:
-		#sfx_player.stream = sfx_jump.pick_random()
-		#sfx_player.play()
-	#anim_player.play("elevator_boss/slam_jump_up")
-	##await anim_player.animation_finished
-	#vel_vertical = 0
-	#self.velocity = jump_results[0]
-	#var time_up = jump_results[1]
-	#var time_down = jump_results[2]
-	#
-	#await get_tree().create_timer(time_up).timeout
-	## Subtract the time the jump down animation lasts so we can sync the impact
-	#var hangtime: float = time_down - 0.15
-	#await get_tree().create_timer(hangtime).timeout
-	#anim_player.play("elevator_boss/slam_jump_down")
-	#await anim_player.animation_finished
 	
 	state_chart.send_event("melee_line")
 
@@ -426,6 +472,7 @@ func _on_melee_combo_recover_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Recovery"
 	
 	prev_attack = "melee_combo"
+	navigation_component.follow_target = false
 	
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 	state_chart.send_event("stop_moving")
@@ -435,6 +482,7 @@ func _on_melee_combo_recover_state_entered() -> void:
 	select_attack()
 	
 	state_chart.send_event("end_recovery")
+
 
 func _on_melee_combo_recover_state_physics_processing(delta: float) -> void:
 	orbit_player(delta)
@@ -511,7 +559,7 @@ func _on_ranged_nails_shooting_state_entered() -> void:
 	state_chart.send_event("stop_shooting")
 
 
-func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: float, delay_per_burst: float) -> void:
+func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: float, delay_per_burst: float, shot_speed: float = 50.0) -> void:
 	for i in range(bursts):
 		for j in range(shot_per_burst):
 			# Catch to stop projectiles firing if the boss is killed mid-attack
@@ -526,6 +574,7 @@ func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: flo
 			var anim_name = "elevator_boss/ranged_shoot_%s" % ["l" if j % 2 == 0 else "r"]
 			anim_player.play(anim_name)
 			var proj = fire_projectile(nail_projectile, spawn_marker.global_position, sfx_nail_shot)
+			proj.projectile_speed = shot_speed
 			var sfx_player = get_available_sfx_player()
 			if sfx_player:
 				sfx_player.stream = sfx_nail_shot.pick_random()
@@ -1112,6 +1161,7 @@ func _on_tutorial_phase_1_state_entered() -> void:
 # TAUNT
 func _on_tutorial_phase_1_taunt_idle_state_entered() -> void:
 	state_chart.send_event("start_targeting")
+	prev_attack = "taunt"
 	state_chart.send_event("start_taunt")
 
 
@@ -1126,16 +1176,6 @@ func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
 func _on_tutorial_phase_1_taunt_taunting_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
-
-
-func _on_tutorial_phase_1_taunt_recover_state_entered() -> void:
-	state_chart.send_event("attack_end")
-	await get_tree().create_timer(attack_recovery_time).timeout
-	
-	state_chart.send_event("cooldown_end")
-	state_chart.send_event("start_ranged_naiils_strafe")
-	# Reset the current state to Targeting
-	state_chart.send_event("end_recovery")
 
 
 # NAILS
@@ -1172,7 +1212,7 @@ func _on_tutorial_phase_1_strafing_nails_shooting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Shooting"
 	await _telegraph_attack()
 	# TODO - replace magic numbers with export vars
-	await shoot_nail_projectile(1, 6, 0.5, 1.6)
+	await shoot_nail_projectile(1, 6, 0.5, 1.6, 30)
 	
 	state_chart.send_event("stop_shooting")
 
@@ -1184,27 +1224,20 @@ func _on_tutorial_phase_1_strafing_nails_shooting_state_physics_processing(delta
 
 
 func _on_tutorial_phase_1_strafing_nails_recover_state_entered() -> void:
-	debug_state_label.text = "Dual Nailguns | Recovering"
-	
+	prev_attack = "strafing_nails"
 	state_chart.send_event("start_targeting")
-	state_chart.send_event("attack_end")
-	var sfx_player = get_available_sfx_player()
-	if sfx_player:
-		sfx_player.stream = sfx_nail_unequip.pick_random()
-		sfx_player.play()
-	anim_player.play("elevator_boss/ranged_disarm")
-	
-	await get_tree().create_timer(1.0).timeout
-	anim_player.play("RESET")
-	state_chart.send_event("cooldown_end")
-	
-	desired_distance = DESIRED_DISTANCE
-	
-	state_chart.send_event("start_taunt_attack")
-	state_chart.send_event("end_recovery")
+	_on_ranged_nails_recover_state_entered()
 
 
 ## PHASE 2 - JUMPING
+
+func _on_tutorial_phase_2_state_entered() -> void:
+	current_phase = 2
+	tutorial_phase_2_started.emit()
+	move_speed = MOVE_SPEED / 2
+	state_chart.send_event("start_electrify_floor")
+
+
 func _on_tutorial_phase_2_taunt_recover_state_entered() -> void:
 	state_chart.send_event("attack_end")
 	await get_tree().create_timer(attack_recovery_time).timeout
@@ -1223,29 +1256,43 @@ func _on_tutorial_phase_2_taunt_recover_state_entered() -> void:
 
 #
 func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
+	navigation_component.follow_target = false
 	state_chart.send_event("start_moving")
+	shock_floor_hazard.damage_per_tick = shock_damage
+	prev_attack = "electrify_floor"
+	
+	#if shock_floor_hazard.damage_area.overlaps_body(self):
+		#await get_tree().create_timer(1.0).timeout
+		#state_chart.send_event("start_slam")
+	
 	# Pick a point on the lower floor mesh to move to
 	var center_pos: Vector3 = arena_1_center.global_position
-	var dir_from_center: Vector3 = center_pos.direction_to(self.global_position)
-	# Optional - jitter the direction a bit so it isn't always a straight line path
-	dir_from_center.rotated(Vector3.UP, randf_range(-PI/32, PI/32))
-	var max_dist: float = 6.0  # Use this to keep the position tied to the center of the room
-	var goal_pos: Vector3 = center_pos + dir_from_center * max_dist
+	#var dir_from_center: Vector3 = center_pos.direction_to(self.global_position)
+	## Optional - jitter the direction a bit so it isn't always a straight line path
+	##dir_from_center.rotated(Vector3.UP, randf_range(-PI/32, PI/32))
+	#var max_dist: float = 3  # Use this to keep the position tied to the center of the room
+	#var goal_pos: Vector3 = center_pos + dir_from_center * max_dist
 	
-	draw_debug_sphere(goal_pos, 1.0, Color.PURPLE)
-	
-	navigation_component.set_nav_target_position(goal_pos)
+	navigation_component.set_nav_target_position(center_pos)
 
 
 func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(delta: float) -> void:
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 	
-	if self.global_position.distance_to(navigation_component.nav_agent.target_position) < 2.0:
+	if shock_floor_hazard.damage_area.overlaps_body(self):
 		state_chart.send_event("start_slam")
 
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
+	await get_tree().create_timer(0.6, false).timeout
+	anim_player.play("elevator_boss/shock_slam_telegraph_start")
+	await anim_player.animation_finished
+	anim_player.play("elevator_boss/shock_slam_telegraph_loop")
+	await anim_player.animation_finished
+	#await get_tree().create_timer(0.3, false).timeout
+	await _telegraph_attack()
+	
 	anim_player.play("elevator_boss/shock_slam_start")
 	await anim_player.animation_finished
 	
@@ -1253,8 +1300,7 @@ func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
 	
 	anim_player.play("elevator_boss/shock_slam_end")
 	await anim_player.animation_finished
-	
-	# TODO - select attack function for tutorial phase 2
+	state_chart.send_event("end_shock")
 
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_physics_processing(delta: float) -> void:
@@ -1270,18 +1316,64 @@ func end_floor_shock() -> void:
 	shock_floor_hazard.is_active = false
 
 
-func _on_tutorial_phase_2_electrify_floor_shocking_state_entered() -> void:
-	pass # Replace with function body.
+func _on_tutorial_phase_2_melee_combo_swipe_state_entered() -> void:
+	debug_state_label.text = "Melee Combo | Swipe"
+	hurtbox.set_deferred("monitoring", true)
+	
+	state_chart.send_event("start_targeting")
+	
+	await _telegraph_attack()
+	#sfx_player.stream = sfx_melee.pick_random()
+	#sfx_player.play()
+	anim_player.play("elevator_boss/swipe")
+	await anim_player.animation_finished
+	
+	hurtbox_collider.shape.size.z = hurtbox_range_tutorial
+	
+	if target in hurtbox.get_overlapping_bodies():
+		state_chart.send_event("melee_attack")
+	else:
+		anim_player.play("elevator_boss/swipe_end")
+		await anim_player.animation_finished
+		state_chart.send_event("combo_end")
 
 
-func _on_tutorial_phase_2_electrify_floor_shocking_state_physics_processing(delta: float) -> void:
-	pass # Replace with function body.
+func _on_tutorial_phase_2_melee_combo_hook_state_entered() -> void:
+	debug_state_label.text = "Melee Combo | Hook"
+	hurtbox.set_deferred("monitoring", true)
+	
+	state_chart.send_event("start_targeting")
+	
+	await _telegraph_attack()
+	#sfx_player.stream = sfx_melee.pick_random()
+	#sfx_player.play()
+	anim_player.play("elevator_boss/kick")
+	await anim_player.animation_finished
+	
+	
+	if target in hurtbox.get_overlapping_bodies():
+		state_chart.send_event("melee_backswing")
+	else:
+		anim_player.play("elevator_boss/kick_end")
+		await anim_player.animation_finished
+		state_chart.send_event("combo_end")
 
 
-func _on_tutorial_phase_2_electrify_floor_recover_state_entered() -> void:
-	pass # Replace with function body.
+func _on_tutorial_phase_2_melee_combo_backswing_state_entered() -> void:
+	debug_state_label.text = "Melee Combo | Backswing"
+	hurtbox.set_deferred("monitoring", true)
+	
+	state_chart.send_event("start_targeting")
+	
+	await _telegraph_attack()
+	#sfx_player.stream = sfx_melee.pick_random()
+	#sfx_player.play()
+	anim_player.play("elevator_boss/backswipe")
+	await anim_player.animation_finished
+	
+	state_chart.send_event("combo_end")
 
 
-func _on_tutorial_phase_2_state_entered() -> void:
-	tutorial_phase_2_started.emit()
-	state_chart.send_event("start_electrify_floor")
+func _on_tutorial_phase_3_state_entered() -> void:
+	current_phase = 3
+	tutorial_phase_3_started.emit()

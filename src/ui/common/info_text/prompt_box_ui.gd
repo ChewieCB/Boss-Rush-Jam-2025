@@ -7,7 +7,6 @@ class_name PromptInfoBox
 @onready var panel_container = $PanelContainer
 @onready var content_container = $PanelContainer/MarginContainer/VBoxContainer
 @onready var prompt_line_container = $PanelContainer/MarginContainer/VBoxContainer
-#@onready var prompt_container = $PanelContainer/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer
 
 @export var line_container: PackedScene
 @export var active_line_container: MarginContainer
@@ -15,7 +14,6 @@ class_name PromptInfoBox
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# TODO - make this more robust, allow for [prompt] text [prompt] formats, newline prompts, etc.
 	for element in elements:
 		var node: Control
 		

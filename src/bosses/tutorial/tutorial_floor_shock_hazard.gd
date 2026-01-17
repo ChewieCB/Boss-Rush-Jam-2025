@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var damage_per_tick: int = 5
+@export var damage_per_tick: float = 5.0
 @export var duration: float = 5
 @export var slow_perc: float = 0
 @export var puddle_decal: Decal
@@ -9,6 +9,8 @@ extends Node3D
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 @export var particle_effects: Array[GPUParticles3D] = []
+@export var damage_area: Area3D
+@export var immune_bodies: Array[Node3D]
 
 @export var pe_expire_time = 2
 @onready var light: OmniLight3D = $OmniLight3D
@@ -18,6 +20,9 @@ var is_active = false:
 	set(value):
 		is_active = value
 		self.visible = is_active
+		if is_active:
+			trigger_effect()
+		
 var stopped_moving = false
 
 var dash_speed_buff_icon = preload("res://assets/sprite/status_icon/dash_speed_down.png")
@@ -35,11 +40,17 @@ func _ready() -> void:
 func _on_damage_timer_timeout() -> void:
 	if not is_active:
 		return
+	
+	trigger_effect()
 
+
+func trigger_effect() -> void:
 	for body in bodies_inside:
+		if body in immune_bodies:
+			continue
 		if damage_per_tick > 0:
-			body.get_node("HealthComponent").damage(damage_per_tick)
-
+			body.health_component.damage(damage_per_tick)
+		
 		if body is Player and slow_perc > 0:
 			var run_debuff = create_slow_run_debuff(1)
 			body.add_status_effect(run_debuff)
@@ -67,6 +78,8 @@ func _on_life_timer_timeout() -> void:
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body.get_node("HealthComponent"):
 		bodies_inside.append(body)
+		if is_active:
+			trigger_effect()
 
 
 func _on_area_3d_body_exited(body: Node3D) -> void:

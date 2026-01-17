@@ -387,9 +387,8 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_fhfql"]
-height = 0.25
-radius = 2.0
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_w2617"]
+points = PackedVector3Array(-21.75, -0.000216961, 3.50454, -7.25226, 0.499802, 15.9943, -8.75369, 0.499802, 17.9956, -12.2532, -0.99996, -9.49262, -12.2532, 0.499802, -6.49544, -18.249, -0.000216961, 20, -21.75, 0.499802, 15.9943, -16.7504, -0.99996, -11.995, -7.25226, -0.000216961, 15.9943, -16.7504, 0.499802, -6.49544, -7.25226, 0.499802, 3.50454, -21.75, -0.000216961, 15.9943, -12.2532, -0.499795, -11.995, -10.7532, -0.000216961, 20, -21.75, 0.499802, 3.50454, -7.25226, -0.000216961, 3.50454, -18.249, 0.499802, 20, -16.7504, -0.000216961, -9.99371, -16.7504, -0.99996, -9.49262, -12.2532, -0.99996, -11.995, -16.7504, -0.499795, -11.995, -10.7532, 0.499802, 20, -12.2532, -0.000216961, -9.99371, -19.7476, -0.000216961, 18.4998, -8.75369, -0.000216961, 17.9956, -19.7476, 0.499802, 18.4998)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_kfwek"]
 _surfaces = [{
@@ -406,8 +405,9 @@ _surfaces = [{
 "vertex_data": PackedByteArray("/P/vwAAAgD78/4dA/P/vwAAAgD7+/3NB//+rwQAAgD7+/3NB//+rwQAAgD78/4dA/v8vwQAAgD7+/3NB/v8vwQAAgD7//51B//+PwQAAgD7//51B//+PwQAAgD7+/3NB//+rwQAAgD7+/3NB//+PwQAAgD7+/3NB//+PwQAAgD4BAJ5B/P/vwAAAgD7+/3NB/v8vwQAAgD7//51B/v8vwQAAgD7+/3NBAQCswQAAgD74/4dA//+DwQAAgD4QAOC///+DwQAAgD78/4dA/v9HwQAAgD4QAOC//v9HwQAAgD78/4dA//+DwQAAgD78/4dA//+DwQAAgD4QAOC/+P/vwAAAgD74/4dA/v9HwQAAgD78/4dA/v9HwQAAgD4QAOC//v9HwQAAgD4O15HA/v9HwQAAgD4QAOC///+DwQAAgD4QAOC///+DwQAAgD4O15HA/v9HwQQAQL+H6zvB/v9Hwfj/fz4O15HA//+Dwfj/fz4O15HA//+DwQQAQL+H6zvB/3//////AAD/f/////8AAP9//////wAA/3//////AAD/f/////8AAP9//////wAA/3//////AAD/f/////8AAP9//////////3//////////f/////////9//////wAA/3//////AAD/f/////8AAP9//////wAA/3//////AAD/f/////8AAP9//////wAA/3//////AAD/f/////8AAP9//////wAA/3//////////f/////////9//////////3//////AAD/f/////8AAP9//////wAA/3//////AAChj/////8AAKGP/////wAAoY//////AAChj/////8AAA==")
 }]
 
-[node name="ElectricHazardArea" type="Node3D"]
+[node name="ElectricHazardArea" type="Node3D" node_paths=PackedStringArray("damage_area")]
 script = ExtResource("1_kh2ow")
+damage_area = NodePath("Area3D")
 
 [node name="ElectricSpark" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.696933, 0.25, 0.94174)
@@ -461,15 +461,13 @@ omni_range = 10.0
 
 [node name="Area3D" type="Area3D" parent="."]
 collision_layer = 0
-collision_mask = 70
-monitoring = false
+collision_mask = 6
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0)
-shape = SubResource("CylinderShape3D_fhfql")
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.699844, 0)
+shape = SubResource("ConvexPolygonShape3D_w2617")
 
 [node name="DoTTimer" type="Timer" parent="."]
-wait_time = 0.5
 autostart = true
 
 [node name="LifeTimer" type="Timer" parent="."]
