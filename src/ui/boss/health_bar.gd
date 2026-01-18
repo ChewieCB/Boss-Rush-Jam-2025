@@ -16,7 +16,6 @@ signal hide
 @export var damage_bar: TextureProgressBar
 @export var health_label: Label
 
-
 func _ready() -> void:
 	await get_owner().ready
 	#if show_on_ready:

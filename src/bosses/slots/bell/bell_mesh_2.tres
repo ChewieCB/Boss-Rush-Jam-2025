@@ -2,8 +2,7 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vss0d"]
 resource_name = "Bell"
-transparency = 1
-albedo_color = Color(0.69, 0.507495, 0.2139, 0)
+albedo_color = Color(0.690196, 0.505882, 0.215686, 1)
 metallic = 0.4
 roughness = 0.415087
 

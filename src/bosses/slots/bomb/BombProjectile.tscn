@@ -1,8 +1,7 @@
-[gd_scene load_steps=29 format=3 uid="uid://yw8o87v7ydx1"]
+[gd_scene load_steps=32 format=3 uid="uid://yw8o87v7ydx1"]
 
 [ext_resource type="Script" path="res://src/bosses/slots/bomb/bomb_projectile.gd" id="1_4scaw"]
 [ext_resource type="ArrayMesh" uid="uid://d5m2g14coy2c" path="res://src/bosses/slots/bell/bomb_mesh.tres" id="1_pne0t"]
-[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="2_gd1st"]
 [ext_resource type="AudioStream" uid="uid://dsk2dfx34iy6m" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 1.mp3" id="2_tkyk2"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="3_e47h8"]
 [ext_resource type="AudioStream" uid="uid://b1h5uugbn6oed" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB LAUNCH 2.mp3" id="3_l4xhx"]
@@ -25,14 +24,30 @@
 [ext_resource type="AudioStream" uid="uid://p38ber7fs63l" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 2.mp3" id="20_q6g5x"]
 [ext_resource type="AudioStream" uid="uid://b6hry7fd6c60y" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 3.mp3" id="21_0y8q4"]
 [ext_resource type="AudioStream" uid="uid://jqugutq06ydl" path="res://src/bosses/slots/assets/sfx/BOMBS/SLOT BOSS CHERRY BOMB EXPLOSION 4.mp3" id="22_omxju"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="23_f32ey"]
+[ext_resource type="PackedScene" uid="uid://c54o67tient15" path="res://src/player/gun/vfx/elemental/fire/ProjectileBurnEmit.tscn" id="26_ke4ar"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pl4mw"]
 bounce = 0.7
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_cjnpl"]
-radius = 1.2
+radius = 0.8
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_2sd2v"]
+radius = 6.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2khc6"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(1, 0.008, 0, 0.02)
+
+[sub_resource type="SphereMesh" id="SphereMesh_bid7b"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_2khc6")
+radius = 1.0
+height = 2.0
+radial_segments = 24
 
 [node name="BombProjectile" type="RigidBody3D"]
 collision_layer = 64
@@ -43,14 +58,15 @@ can_sleep = false
 contact_monitor = true
 max_contacts_reported = 10
 script = ExtResource("1_4scaw")
+explosion_radius = 6.0
 sfx_bomb_launch = Array[AudioStream]([ExtResource("2_tkyk2"), ExtResource("3_l4xhx"), ExtResource("4_h1b8m"), ExtResource("5_ykxuv"), ExtResource("6_iciou")])
 sfx_bomb_bounce = Array[AudioStream]([ExtResource("7_h1v2i"), ExtResource("8_6no0s"), ExtResource("9_abp3y"), ExtResource("10_aajbu"), ExtResource("11_d5xn8"), ExtResource("12_hrolw"), ExtResource("13_abko1"), ExtResource("14_r2i30"), ExtResource("15_enqup"), ExtResource("16_52daq"), ExtResource("17_p4xef"), ExtResource("18_pi0rb")])
 sfx_bomb_explode = Array[AudioStream]([ExtResource("19_kam7q"), ExtResource("20_q6g5x"), ExtResource("21_0y8q4"), ExtResource("22_omxju")])
-explosion_scene = ExtResource("2_gd1st")
+explosion_prefab = ExtResource("23_f32ey")
 spark_scene = ExtResource("3_e47h8")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0.358207, 0)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 mesh = ExtResource("1_pne0t")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -67,9 +83,25 @@ monitoring = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ExplosionArea"]
 shape = SubResource("SphereShape3D_2sd2v")
 
+[node name="ExplosionRangeIndicator" type="MeshInstance3D" parent="."]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
+mesh = SubResource("SphereMesh_bid7b")
+
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+volume_db = 9.0
 bus = &"SFX"
+
+[node name="ProjectileBurnEmit" parent="." instance=ExtResource("26_ke4ar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15806, 0.924809, 0)
+autostart = true
+time_until_queue_free = 5.0
+
+[node name="LifetimeTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="ExplosionArea" to="." method="_on_explosion_area_body_entered"]
+[connection signal="timeout" from="LifetimeTimer" to="." method="_on_lifetime_timer_timeout"]

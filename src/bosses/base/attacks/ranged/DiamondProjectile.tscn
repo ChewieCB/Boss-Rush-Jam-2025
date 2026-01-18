@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://40024fnpmf14"]
+[gd_scene load_steps=12 format=3 uid="uid://40024fnpmf14"]
 
 [ext_resource type="Script" path="res://src/bosses/base/attacks/ranged/diamond_projectile.gd" id="1_ifpu3"]
 [ext_resource type="Texture2D" uid="uid://btm33u0b7ner2" path="res://src/bosses/base/attacks/ranged/tileBlue_64.png" id="1_tb6pl"]
@@ -20,6 +20,44 @@ emission = Color(0.57644, 0.921828, 1, 1)
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="Animation" id="Animation_sw8va"]
+resource_name = "spin"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 1.5708), Vector3(0, 0, 3.14159), Vector3(0, 0, 4.71239), Vector3(0, 0, 6.26573)]
+}
+
+[sub_resource type="Animation" id="Animation_tj7u5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_i6qei"]
+_data = {
+"RESET": SubResource("Animation_tj7u5"),
+"spin": SubResource("Animation_sw8va")
+}
+
 [node name="DiamondProjectile" type="Area3D"]
 collision_layer = 8
 collision_mask = 3
@@ -28,7 +66,6 @@ spark_effect = ExtResource("2_64cb7")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
-billboard = 1
 texture = ExtResource("1_tb6pl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -47,6 +84,7 @@ material_override = SubResource("StandardMaterial3D_usbrc")
 mesh = SubResource("ImmediateMesh_4htjv")
 script = ExtResource("2_11y2m")
 segments = 10
+lifetime = 1.0
 base_width = 0.1
 width_profile = SubResource("Curve_ierie")
 
@@ -61,7 +99,13 @@ autostart = true
 [node name="RayCast3D" type="RayCast3D" parent="."]
 target_position = Vector3(0, 0, -100)
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_i6qei")
+}
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="HomingDelay" to="." method="_on_homing_delay_timeout"]
+[connection signal="timeout" from="HomingTimer" to="." method="_on_homing_timer_timeout"]
