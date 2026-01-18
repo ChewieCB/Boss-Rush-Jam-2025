@@ -32,8 +32,7 @@ func set_barrel_data_resource(_barrel_data: BarrelDataResource) -> void:
 func refresh_ui() -> void:
 	for child in circle_ring.get_children():
 		child.queue_free()
-		
-
+	
 	# Spawn barrel prefab to get its data
 	var barrel_inst: SpinBarrel = barrel_data.barrel_prefab.instantiate()
 	add_child(barrel_inst)
@@ -71,7 +70,8 @@ func refresh_ui() -> void:
 		"is_archetype": false,
 		"positive_desc": [],
 		"negative_desc": [],
-		"icon_id": - 2 # Since -1 is the default icon for barrel effect that doesn't have custom one.
+		"icon_id": - 2,  # Since -1 is the default icon for barrel effect that doesn't have custom one.
+		"reloads_before_spin": barrel_data.reloads_before_spin
 	}
 	panel_bg_icon.texture = barrel_data.barrel_image
 	center_inst.set_barrel_roll_data(general_barrel_data)

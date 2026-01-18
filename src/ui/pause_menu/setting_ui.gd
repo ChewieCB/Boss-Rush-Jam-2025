@@ -63,6 +63,7 @@ signal setting_back_button_pressed
 @onready var demo_mode_time: SpinBox = $TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox
 @onready var always_inventory_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle
 @onready var boss_one_shot_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle
+@onready var barrel_spin_mode_dropdown: OptionButton = $TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown
 @onready var freecam_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle
 @onready var timescale_slider: HSlider = $TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider
 @onready var timescale_value: Label = $TabContainer/DEBUG/VBoxContainer/Timescale/Value
@@ -409,6 +410,7 @@ func refresh_setting_value():
 	demo_mode_time.value = GameManager.CHEAT_demomode_timeout
 	always_inventory_toggle.set_pressed_no_signal(GameManager.CHEAT_always_inventory)
 	boss_one_shot_toggle.set_pressed_no_signal(GameManager.CHEAT_oneshot)
+	barrel_spin_mode_dropdown.selected = GameManager.CHEAT_spin_mode
 	freecam_toggle.set_pressed_no_signal(GameManager.CHEAT_freecam)
 	
 	timescale_slider.value = Engine.time_scale
@@ -516,3 +518,6 @@ func _on_always_inventory_toggle_toggled(toggled_on: bool) -> void:
 
 func _on_demo_timeout_value_changed(value: float) -> void:
 	GameManager.CHEAT_demomode_timeout = clamp(value, 0, 60 * 5)
+
+func _on_barrel_spin_mode_dropdown_item_selected(index: int) -> void:
+	GameManager.CHEAT_spin_mode = index

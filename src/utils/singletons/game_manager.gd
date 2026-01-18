@@ -53,7 +53,6 @@ var equipped_gun_frame: Resource = starting_gun_frame
 var inventory_gun_frames: Array[Resource] = []
 @onready var shop_gun_frames: Array[Resource] = starting_shop_gun_frame
 
-
 # Re-rolls
 @export var initial_reroll_cost: int = 100
 @export var reroll_cost_mult: float = 1.2
@@ -159,6 +158,12 @@ var aim_assist_strength: float = 0.5
 # DEBUG CHEATS
 var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
+enum DebugSpinMode {
+	ON_RELOAD,
+	MANUAL_SPIN,
+	SEEDED_AUTO_SPIN,
+}
+var CHEAT_spin_mode: int = DebugSpinMode.SEEDED_AUTO_SPIN
 var CHEAT_freecam: bool = true
 var CHEAT_always_inventory: bool = false
 var CHEAT_demomode: bool = true
@@ -235,7 +240,7 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading:
 		return "Can not change barrel while reloading"
 	if len(equipped_barrels) >= player.current_gun.max_barrels:
-		return "Can not equip more barrel"
+		return "Can not equip more barrels"
 	var found_data: BarrelDataResource = null
 	for data in inventory_barrels:
 		if data.barrel_id == search_barrel_id:
@@ -244,13 +249,13 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 		# Check if already equipped archetype
 		for barrel in equipped_barrels:
 			if barrel.is_archetype_barrel and found_data.is_archetype_barrel:
-				return "Can only equip max 1 archetype barrel"
+				return "Can only equip 1 archetype barrel"
 		inventory_barrels.erase(found_data)
 		equipped_barrels.append(found_data)
 		refresh_shop_ui.emit()
-		GameManager.player.current_gun.install_barrel(found_data.barrel_prefab)
-		if found_data.is_archetype_barrel and equipped_barrels.size() != 1:
-			return "Warning: archetype barrel isn't installed in first slot"
+		GameManager.player.current_gun.install_barrel(found_data)
+		#if found_data.is_archetype_barrel and equipped_barrels.size() != 1:
+			#return "Warning: archetype barrel isn't installed in first slot"
 	return ""
 
 
@@ -328,12 +333,28 @@ func reset_reroll_cost() -> void:
 #region Save helper
 func load_new_save_data():
 	tutorial_completed = false
+	
+	# Generate reload-spin threshold values for all barrels on save game creation
+	randomize()
+	for barrel_data in barrel_database:
+		# Weight the ranges so we get more middle of the road values
+		var range_weight: float = randf()
+		if range_weight < 0.25:
+			barrel_data.reloads_before_spin = randi_range(1, 2)
+		elif range_weight < 0.8:
+			barrel_data.reloads_before_spin = randi_range(3, 5)
+		else:
+			barrel_data.reloads_before_spin = randi_range(6, 7)
+	
 	for data in starting_barrels:
+		var idx: int = barrel_database.find(data)
+		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
 		if data not in equipped_barrels:
 			equipped_barrels.append(data)
 	for data in starting_shop_barrels:
+		var idx: int = barrel_database.find(data)
+		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
 		shop_barrels.append(data)
-	
 
 func reset_current_save_data():
 	equipped_barrels = []
@@ -482,7 +503,8 @@ func update_fmod_bgm_volume_from_setting() -> void:
 	main_bgm_emitter.volume = BASE_FMOD_VOLUME * (GameManager.master_audio / 100.0) * (GameManager.bgm_audio / 100.0)
 
 func create_and_add_status_effect(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
-	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, is_bad_effect: bool = false, show_duration_ui = false, status_icon: Texture2D = null, ):
+	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, is_bad_effect: bool = false,
+	show_duration_ui = false, status_icon: Texture2D = null, is_luck_buff: bool = false):
 	var status_effect = StatusEffect.new()
 	status_effect.display_name = display_name
 	status_effect.status_code = status_code
@@ -494,5 +516,7 @@ func create_and_add_status_effect(display_name: String, status_code: String, mod
 	status_effect.show_duration_ui = show_duration_ui
 	status_effect.show_value_on_ui = false
 	status_effect.status_icon = status_icon
+	status_effect.is_luck_buff = is_luck_buff
+	
 	player.add_status_effect(status_effect)
 #endregion

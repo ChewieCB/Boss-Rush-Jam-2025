@@ -27,6 +27,7 @@ signal reset_barrel_info
 @onready var inventory_gun_frame_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer/GridContainer
 @onready var inventory_normal_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer
 @onready var current_gun_frame_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/CurrentGunFrame
+@export var current_gun_frame_icon: TextureRect
 
 @onready var shop_bg: Control = $ShopBG
 @onready var shop_tab_btn: Button = $TitleRegion/HBoxContainer/ShopTab/ShopTabButton
@@ -124,6 +125,8 @@ func full_refresh_ui(forced = false):
 		item_inst.init(gun_frame_data, false, true)
 		item_inst.select_gun_frame.connect(_on_gun_frame_item_ui_select)
 		item_inst.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
+	
+	current_gun_frame_icon.texture = GameManager.equipped_gun_frame.shop_ui_sprite
 
 
 	# SHOP STUFF
@@ -251,6 +254,7 @@ func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: Gun
 		var warning_text = GameManager.equip_gun_frame(data.frame_id)
 		show_warning(warning_text)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
+		current_gun_frame_icon.texture = data.shop_ui_sprite
 	full_refresh_ui()
 	get_first_item_for_focus()
 

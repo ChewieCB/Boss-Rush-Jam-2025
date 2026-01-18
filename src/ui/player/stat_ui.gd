@@ -12,17 +12,26 @@ signal hide
 @export var hide_ui_on_death: bool = true
 @export var status_duration_ui_prefab: PackedScene
 
-@onready var health_ui: Control = $PlayerHealthBarUI
-@onready var luck_bar_ui: LuckBar = $PlayerLuckUI/PlayerLuckBarUI
-@onready var luck_buffs_ui: Control = $PlayerLuckUI/LuckBuffsUI
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
-@onready var current_ammo_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/CurrentAmmo
-@onready var magazine_size_label: Label = $PlayerConsumables/ConsumableUI/HBoxContainer/MagazineSize
-@onready var status_ui_container: GridContainer = $PlayerHealthBarUI/VBoxContainer/StatusUIContainer
+@export var health_ui: Control
+@export var luck_bar_ui: Control
+@export var luck_buffs_ui: Control
+@export var anim_player: AnimationPlayer
+@export var status_ui_container: Container
+
+@export var spin_ability_ui: TextureProgressBar
+@export var fill_time: float = 0.1
+@export var roll_left_label: Label
+var out_of_reroll = false
+
+@export var radial_ui_center_node: Control
+@export var currency_ui: Control
+
 
 func _ready() -> void:
-	# Await player ready
-	await get_owner().ready
+	# Await player ready 
+	if get_owner():
+		await get_owner().ready
+	
 	health_ui.health_component = health_component
 	luck_bar_ui.luck_component = luck_component
 	if health_component:
@@ -32,10 +41,69 @@ func _ready() -> void:
 		luck_bar_ui.init_luck_ui(luck_component.current_luck, luck_component.max_luck)
 		luck_component.luck_changed.connect(luck_bar_ui._on_luck_changed)
 		luck_component.luck_maxed.connect(luck_bar_ui._on_luck_maxed)
-	#if show_on_ready:
-		#show_ui()
-	GameManager.player.new_status_effect_added.connect(add_refresh_status_ui)
-	GameManager.player.status_effect_removed.connect(remove_status_ui)
+		luck_component.high_luck_entered.connect(luck_bar_ui._on_high_luck_entered)
+		luck_component.high_luck_exited.connect(luck_bar_ui._on_high_luck_exited)
+	# FIXME - remove conditional after debugging?
+	if GameManager.player:
+		GameManager.player.new_status_effect_added.connect(add_refresh_status_ui)
+		GameManager.player.status_effect_removed.connect(remove_status_ui)
+	
+	#hide_all_ui()
+	
+	# Spin abiltiy UI
+	_update_reroll_max(int(GameManager.reroll_cost * GameManager.get_risk_spin_cost_mult()))
+	GameManager.currency_changed.connect(_on_currency_changed)
+	GameManager.reroll_cost_changed.connect(_update_reroll_max)
+	GameManager.free_rerolls.connect(_update_reroll_max.bind(spin_ability_ui.max_value))
+	#_update_roll_left_label()
+
+
+func _on_spin_ability_progress_changed(value: float) -> void:
+	var progress_mat: ShaderMaterial = spin_ability_ui.material
+	progress_mat.set_shader_parameter("progress", value)
+	
+	if out_of_reroll:
+		spin_ability_ui.tint_progress = Color.GRAY
+		spin_ability_ui.material.set_shader_parameter("fill_colour", Color.GRAY)
+		#progress_label.text = "Limited"
+		#anim_player.stop()
+		return
+		
+	if value >= spin_ability_ui.max_value:
+		spin_ability_ui.tint_progress = Color.GOLD
+		spin_ability_ui.material.set_shader_parameter("fill_colour", Color.GOLD)
+		#progress_label.modulate = Color.GOLD
+		#anim_player.play("spin")
+	else:
+		spin_ability_ui.tint_progress = Color.LIGHT_GREEN
+		spin_ability_ui.material.set_shader_parameter("fill_colour", Color.LIGHT_GREEN)
+		#progress_label.modulate = Color.GRAY
+		#anim_player.stop()
+
+
+func _on_currency_changed(new_value: int) -> void:
+	var fill_time: float = 0.5
+	var progress_tween: Tween = get_tree().create_tween()
+	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+	progress_tween.tween_property(spin_ability_ui, "value", new_value, fill_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+
+
+func _update_reroll_max(new_max: int) -> void:
+	spin_ability_ui.max_value = float(new_max)
+	spin_ability_ui.material.set_shader_parameter("max_value", new_max)
+	
+	var new_value: int
+	if not GameManager.is_free_reroll:
+		new_value = min(GameManager.player_currency, spin_ability_ui.max_value)
+		#progress_label.text = "%s" % new_max
+	else:
+		new_value = int(spin_ability_ui.max_value)
+		#progress_label.text = "Free"
+	var progress_tween: Tween = get_tree().create_tween()
+	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+	progress_tween.tween_property(spin_ability_ui, "value", 0, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	progress_tween.chain().tween_property(spin_ability_ui, "value", new_value, fill_time * 4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	#_update_roll_left_label()
 
 
 ## Only for adding or refreshing status UI. UI usually be removed by the
@@ -43,21 +111,27 @@ func _ready() -> void:
 func add_refresh_status_ui(new_status: StatusEffect):
 	if not new_status.show_duration_ui:
 		return
+	
+	var _status_container = luck_buffs_ui if new_status.is_luck_buff else status_ui_container
+	
 	# Check if it already exist, then refresh it
-	for child in status_ui_container.get_children():
+	for child in _status_container.get_children():
 		if child.status_effect.status_code == new_status.status_code:
 			child.refresh(new_status)
 			return
 	# Else, add new status UI item
 	var ui_inst = status_duration_ui_prefab.instantiate()
-	status_ui_container.add_child(ui_inst)
+	_status_container.add_child(ui_inst)
 	ui_inst.init(new_status)
 
+
 ## Usually used for infinite duration status
-func remove_status_ui(status_code: String):
-	for child in status_ui_container.get_children():
-		if child.status_effect.status_code == status_code:
+func remove_status_ui(status_to_remove: StatusEffect):
+	var _status_container = luck_buffs_ui if status_to_remove.is_luck_buff else status_ui_container
+	for child in _status_container.get_children():
+		if child.status_effect == status_to_remove:
 			child.remove()
+
 
 func show_health_ui() -> void:
 	_animate_ui_element("health")

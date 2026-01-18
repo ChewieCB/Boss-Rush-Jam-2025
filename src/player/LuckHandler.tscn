@@ -6,6 +6,8 @@
 script = ExtResource("1_718cx")
 
 [node name="LuckDecayTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.06
 autostart = true
 
 [node name="DPSWindowTimer" type="Timer" parent="."]

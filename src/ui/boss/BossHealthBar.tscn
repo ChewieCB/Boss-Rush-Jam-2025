@@ -149,7 +149,7 @@ _data = {
 "visible": SubResource("Animation_rstvx")
 }
 
-[node name="BossHealthBarUI" type="MarginContainer"]
+[node name="BossHealthBarUI" type="MarginContainer" node_paths=PackedStringArray("timer", "heath_bar", "damage_bar", "health_label")]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 5
 anchor_left = 0.5
@@ -164,6 +164,10 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 script = ExtResource("1_8ja47")
+timer = NodePath("VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer")
+heath_bar = NodePath("VBoxContainer/MarginContainer2/MarginContainer/HealthBar")
+damage_bar = NodePath("VBoxContainer/MarginContainer2/MarginContainer/HealthBar/DamageBar")
+health_label = NodePath("VBoxContainer/MarginContainer2/MarginContainer/Label")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
