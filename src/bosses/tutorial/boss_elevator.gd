@@ -458,7 +458,7 @@ func _on_ranged_nails_shooting_state_entered() -> void:
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
 			var anim_name = "elevator_boss/ranged_shoot_%s" % ["l" if j % 2 == 0 else "r"]
 			anim_player.play(anim_name)
-			var proj = fire_projectile(nail_projectile, spawn_marker.global_position, sfx_nail_shot)
+			var proj = fire_projectile(nail_projectile, spawn_marker.global_position, 0, sfx_nail_shot)
 			var sfx_player = get_available_sfx_player()
 			if sfx_player:
 				sfx_player.stream = sfx_nail_shot.pick_random()

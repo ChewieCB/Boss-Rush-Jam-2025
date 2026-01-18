@@ -164,29 +164,21 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 script = ExtResource("1_8ja47")
-timer = NodePath("VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer")
-heath_bar = NodePath("VBoxContainer/MarginContainer2/MarginContainer/HealthBar")
-damage_bar = NodePath("VBoxContainer/MarginContainer2/MarginContainer/HealthBar/DamageBar")
-health_label = NodePath("VBoxContainer/MarginContainer2/MarginContainer/Label")
+timer = NodePath("VBoxContainer/MarginContainer/HealthBar/Timer")
+heath_bar = NodePath("VBoxContainer/MarginContainer/HealthBar")
+damage_bar = NodePath("VBoxContainer/MarginContainer/HealthBar/DamageBar")
+health_label = NodePath("VBoxContainer/MarginContainer/Label")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer2"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/MarginContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer"]
 z_index = 1
 layout_mode = 2
 size_flags_horizontal = 4
@@ -198,7 +190,7 @@ text = "10,000/10,000"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HealthBar" type="TextureProgressBar" parent="VBoxContainer/MarginContainer2/MarginContainer"]
+[node name="HealthBar" type="TextureProgressBar" parent="VBoxContainer/MarginContainer"]
 custom_minimum_size = Vector2(240, 20)
 layout_mode = 2
 size_flags_vertical = 4
@@ -213,7 +205,7 @@ texture_over = ExtResource("1_ef7fu")
 texture_progress = ExtResource("2_wavg1")
 tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
 
-[node name="DamageBar" type="TextureProgressBar" parent="VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
+[node name="DamageBar" type="TextureProgressBar" parent="VBoxContainer/MarginContainer/HealthBar"]
 z_index = -1
 layout_mode = 1
 anchors_preset = 15
@@ -233,28 +225,29 @@ texture_progress = ExtResource("3_cwsn4")
 tint_under = Color(0.113725, 0.113725, 0.113725, 1)
 tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 
-[node name="Timer" type="Timer" parent="VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
+[node name="Timer" type="Timer" parent="VBoxContainer/MarginContainer/HealthBar"]
 wait_time = 0.4
 one_shot = true
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 64
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2"]
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer2/HBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
@@ -262,13 +255,13 @@ texture = ExtResource("6_62y4p")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_right = 32
 
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer2"]
+[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/HBoxContainer/MarginContainer2"]
 layout_mode = 2
 theme = SubResource("Theme_gqrbp")
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -278,13 +271,13 @@ text = "TEST BOSS NAME GOES HERE LALALA"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="VBoxContainer/MarginContainer2/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer/HBoxContainer/MarginContainer3"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/MarginContainer2/HBoxContainer/MarginContainer3"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
@@ -414,4 +407,4 @@ libraries = {
 "": SubResource("AnimationLibrary_shbci")
 }
 
-[connection signal="timeout" from="VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="VBoxContainer/MarginContainer/HealthBar/Timer" to="." method="_on_timer_timeout"]

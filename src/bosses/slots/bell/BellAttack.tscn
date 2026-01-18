@@ -2,8 +2,7 @@
 
 [ext_resource type="Script" path="res://src/bosses/slots/bell/bell.gd" id="1_c4e2b"]
 [ext_resource type="ArrayMesh" uid="uid://dq3mrfaleu5xm" path="res://src/bosses/slots/bell/bell_mesh_2.tres" id="1_qcd24"]
-[ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="2_m8nuh"]
-[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="3_hwuru"]
+[ext_resource type="PackedScene" uid="uid://bc8ha8vf7ole0" path="res://src/bosses/slots/BellDustCloudImpact.tscn" id="3_b5qoa"]
 [ext_resource type="AudioStream" uid="uid://d3j52wm5b02hi" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK 1.mp3" id="4_da17a"]
 [ext_resource type="AudioStream" uid="uid://dj3qqiciyxwmv" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 1.mp3" id="4_l0yln"]
 [ext_resource type="AudioStream" uid="uid://c7r6nnc2fe4fv" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK 2.mp3" id="5_74oj1"]
@@ -13,6 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://di0dji8wpexg6" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 1.mp3" id="7_p75bb"]
 [ext_resource type="AudioStream" uid="uid://boyjiwip3m72n" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 2.mp3" id="8_ud1vu"]
 [ext_resource type="AudioStream" uid="uid://pib154j0akr3" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 3.mp3" id="9_cf6nm"]
+[ext_resource type="PackedScene" uid="uid://ddl2u52th0ebh" path="res://addons/EffectBlocks/assets/ExplosionPoly.tscn" id="13_nnfih"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_3xt22"]
 radius = 1.0
@@ -21,15 +21,14 @@ radius = 1.0
 collision_layer = 0
 collision_mask = 78
 script = ExtResource("1_c4e2b")
-explosion_scene = ExtResource("2_m8nuh")
-spark_scene = ExtResource("3_hwuru")
+explosion_prefab = ExtResource("13_nnfih")
+dust_cloud_prefab = ExtResource("3_b5qoa")
 sfx_bell_full = Array[AudioStream]([ExtResource("4_da17a"), ExtResource("5_74oj1"), ExtResource("6_22c5s")])
 sfx_bell_windup = Array[AudioStream]([ExtResource("4_l0yln"), ExtResource("5_82x1c"), ExtResource("6_xmavy")])
 sfx_bell_impact = Array[AudioStream]([ExtResource("7_p75bb"), ExtResource("8_ud1vu"), ExtResource("9_cf6nm")])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(312, 0, 0, 0, -1.3638e-05, 312, 0, -312, -1.3638e-05, 0, 0, 0)
-visible = false
 mesh = ExtResource("1_qcd24")
 
 [node name="Hurtbox" type="Area3D" parent="."]
@@ -47,5 +46,8 @@ shape = SubResource("CylinderShape3D_3xt22")
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
 unit_size = 25.0
 bus = &"SFX"
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, -100, 0)
 
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]

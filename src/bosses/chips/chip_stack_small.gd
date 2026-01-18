@@ -333,7 +333,7 @@ func _on_small_blind_shooting_state_entered() -> void:
 			sfx_player.stream = sfx_shoot.pick_random()
 			sfx_player.play()
 			#
-			fire_projectile(chip_projectile, projectile_spawn_marker.global_position, sfx_chip_shot)
+			fire_projectile(chip_projectile, projectile_spawn_marker.global_position, 0, sfx_chip_shot)
 			face_tween.chain().tween_property(face_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.1).set_ease(Tween.EASE_IN)
 			face_tween.tween_callback(func(): face_sprite.visible = false)
 

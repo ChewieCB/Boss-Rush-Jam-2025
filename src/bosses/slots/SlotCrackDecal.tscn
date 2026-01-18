@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://kgfil7qdus8b"]
+
+[ext_resource type="Texture2D" uid="uid://d2l1fbl34us3d" path="res://assets/sprite/misc/decal_crack_1.png" id="1_a4q8e"]
+[ext_resource type="Script" path="res://src/bosses/base/crack_decal.gd" id="2_2ulva"]
+
+[node name="SlotCrackDecal" type="Decal"]
+size = Vector3(8, 4, 8)
+texture_albedo = ExtResource("1_a4q8e")
+texture_emission = ExtResource("1_a4q8e")
+emission_energy = 8.0
+modulate = Color(0.277344, 0.0469134, 0, 1)
+upper_fade = 1e+06
+script = ExtResource("2_2ulva")
+fade_speed = 0.3
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
