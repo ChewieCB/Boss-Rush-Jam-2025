@@ -1,4 +1,4 @@
-[gd_scene load_steps=196 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=200 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -8,11 +8,14 @@
 [ext_resource type="AudioStream" uid="uid://dbakj03xx5r3j" path="res://src/bosses/tutorial/assets/sfx/Tutorial Boss Landing.mp3" id="3_y4npe"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fo57y"]
 [ext_resource type="PackedScene" uid="uid://byharrqwvi4cp" path="res://src/bosses/base/attacks/ranged/LaserAoE.tscn" id="4_hx1ss"]
+[ext_resource type="AudioStream" uid="uid://d2jess8av6ue7" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-1-1-come-on.mp3" id="4_n2q7l"]
 [ext_resource type="AudioStream" uid="uid://cqq422lmo5d7s" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing 2.mp3" id="4_pthoc"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
 [ext_resource type="AudioStream" uid="uid://7v0fx558pjwl" path="res://src/bosses/tutorial/assets/sfx/Tutorial Kick 1.mp3" id="5_fu4i0"]
 [ext_resource type="AudioStream" uid="uid://dvsl5y8e4n4hr" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing and leap back.mp3" id="5_iynxh"]
+[ext_resource type="AudioStream" uid="uid://dhoa5p3lowhw1" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-2-1-put-your-back-into-it.mp3" id="5_l2bm8"]
 [ext_resource type="Texture2D" uid="uid://bunn8a0pce2b2" path="res://assets/sprite/aoe_markers/laser_aoe_warn.png" id="5_pbhfx"]
+[ext_resource type="AudioStream" uid="uid://cfqi470hfedob" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-3-1-roaches-tougher.mp3" id="6_7upxy"]
 [ext_resource type="AudioStream" uid="uid://due6c1u7ljts1" path="res://src/bosses/tutorial/assets/sfx/Wrench Ground Pound.mp3" id="6_elwvg"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="6_fqvnt"]
 [ext_resource type="AudioStream" uid="uid://btjwaw66o42jf" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing Miss 2.mp3" id="6_h17j0"]
@@ -22,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="7_6pf3s"]
 [ext_resource type="AudioStream" uid="uid://b1svhegbdr27d" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing Miss.mp3" id="7_cxehy"]
 [ext_resource type="AudioStream" uid="uid://dxj2f1psc0yqw" path="res://src/bosses/tutorial/assets/sfx/Tutorial Kick 3.mp3" id="7_ob3ew"]
+[ext_resource type="AudioStream" uid="uid://r4f5jbjqjiqw" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-4-1-all-they-got.mp3" id="7_vulif"]
 [ext_resource type="AudioStream" uid="uid://cj0y3jud36wc4" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Loop.mp3" id="7_xo7jb"]
 [ext_resource type="AudioStream" uid="uid://dcshtq5yyxdk1" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Impact.mp3" id="8_pvhqe"]
 [ext_resource type="AudioStream" uid="uid://rftdmhx827li" path="res://src/bosses/tutorial/assets/sfx/Nail Gun Activation.mp3" id="10_u246n"]
@@ -2001,6 +2005,7 @@ tutorial_melee_radius = 3.0
 melee_distance = 5.0
 melee_radius = 5.0
 melee_max_chase_distance = 9.0
+sfx_taunt = Array[AudioStream]([ExtResource("4_n2q7l"), ExtResource("5_l2bm8"), ExtResource("6_7upxy"), ExtResource("7_vulif")])
 swipe_damage = 14.0
 sfx_swipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
 sfx_swipe_miss = Array[AudioStream]([ExtResource("6_h17j0"), ExtResource("7_cxehy")])

@@ -53,6 +53,9 @@ var prev_attack: String = ""
 @export var melee_radius: float = 5.0
 @export var melee_max_chase_distance: float = 9.0
 
+@export_subgroup("Taunt")
+@export var sfx_taunt: Array[AudioStream]
+
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 14.0
 # SFX
@@ -1167,7 +1170,11 @@ func _on_tutorial_phase_1_taunt_idle_state_entered() -> void:
 
 
 func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
-	anim_player.speed_scale = 0.5
+	# Pick a random taunt sound
+	var taunt_stream: AudioStream = sfx_taunt.pick_random()
+	# Scale the animation length to the sound
+	anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / taunt_stream.get_length()
+	SoundManager.play_sound(taunt_stream, "SFX")
 	anim_player.play("elevator_boss/taunt")
 	await anim_player.animation_finished
 	anim_player.speed_scale = 1.0
