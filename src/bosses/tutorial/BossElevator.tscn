@@ -1,4 +1,4 @@
-[gd_scene load_steps=200 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=206 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -28,7 +28,10 @@
 [ext_resource type="AudioStream" uid="uid://r4f5jbjqjiqw" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-4-1-all-they-got.mp3" id="7_vulif"]
 [ext_resource type="AudioStream" uid="uid://cj0y3jud36wc4" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Loop.mp3" id="7_xo7jb"]
 [ext_resource type="AudioStream" uid="uid://dcshtq5yyxdk1" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Impact.mp3" id="8_pvhqe"]
+[ext_resource type="AudioStream" uid="uid://cunssdaa7vwlu" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-5-1-tune-up.mp3" id="8_tpccx"]
+[ext_resource type="AudioStream" uid="uid://doxsouaexqy47" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-6-1-i-wont-fix-you.mp3" id="9_s2jdf"]
 [ext_resource type="AudioStream" uid="uid://rftdmhx827li" path="res://src/bosses/tutorial/assets/sfx/Nail Gun Activation.mp3" id="10_u246n"]
+[ext_resource type="AudioStream" uid="uid://bn7i578i12xkd" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-7-1-out-of-order.mp3" id="10_v3isi"]
 [ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="11_1crh5"]
 [ext_resource type="AudioStream" uid="uid://37k158pyjqtf" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 1 V2.mp3" id="11_8tgau"]
 [ext_resource type="AudioStream" uid="uid://cus1umlbiwd56" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 2 V2.mp3" id="12_bt5kx"]
@@ -82,9 +85,21 @@
 [ext_resource type="Texture2D" uid="uid://5ks3pvvqxv7y" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_8.png" id="39_gab4h"]
 [ext_resource type="Texture2D" uid="uid://b50hajeka4cfw" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_1.png" id="43_r6ljj"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_klk0f"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ulqwk"]
 transparency = 1
-albedo_color = Color(0.894, 0.361, 0.141, 0.643)
+cull_mode = 2
+albedo_color = Color(0.71, 0.271575, 0.0355, 0.486275)
+emission_enabled = true
+emission = Color(0.85, 0.00849999, 0.00849999, 1)
+emission_energy_multiplier = 10.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_muhix"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.709804, 0.270588, 0.0352941, 0.486275)
+emission_enabled = true
+emission = Color(0.85, 0.00849999, 0.00849999, 1)
+emission_energy_multiplier = 10.0
 
 [sub_resource type="Curve" id="Curve_hy86r"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -873,6 +888,116 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("16_e0muj"), ExtResource("17_dmhhe"), ExtResource("18_lwmyv"), ExtResource("19_3rgkr"), ExtResource("20_7eher"), ExtResource("21_dj0x0"), ExtResource("16_ukgug")]
+}
+
+[sub_resource type="Animation" id="Animation_ajs76"]
+resource_name = "dash_wave"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.62451),
+"update": 0,
+"values": [Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.075, 0.125, 0.175, 0.25, 0.325, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("17_cu5tl"), ExtResource("18_22flk"), ExtResource("19_xriv7"), ExtResource("20_5ckod"), ExtResource("21_yqrf4"), ExtResource("18_22flk"), ExtResource("17_cu5tl"), ExtResource("16_ukgug")]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.175),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [1.5, 12.0, 8.0],
+"method": &"slam_wall"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DebugAnimPivot/SlamSpawn:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.175),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, -0.5, -0.199999)]
+}
+
+[sub_resource type="Animation" id="Animation_p7vy0"]
+resource_name = "dash_wave_2"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.62451),
+"update": 0,
+"values": [Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.075, 0.125, 0.175, 0.25, 0.325, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("28_i0kuu"), ExtResource("29_16jht"), ExtResource("18_lwmyv"), ExtResource("19_3rgkr"), ExtResource("20_7eher"), ExtResource("21_dj0x0"), ExtResource("18_22flk"), ExtResource("16_ukgug")]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [Vector3(0, 0, 0), 30.0, 12.0, 0.0],
+"method": &"slam_line"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DebugAnimPivot/SlamSpawn:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.125),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, -0.5, -0.199999)]
 }
 
 [sub_resource type="Animation" id="Animation_f2hbb"]
@@ -1959,6 +2084,8 @@ tracks/2/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
 _data = {
 "backswipe": SubResource("Animation_85u7l"),
+"dash_wave": SubResource("Animation_ajs76"),
+"dash_wave_2": SubResource("Animation_p7vy0"),
 "idle": SubResource("Animation_f2hbb"),
 "impact_no_slam": SubResource("Animation_jt2i0"),
 "intro": SubResource("Animation_cijff"),
@@ -2005,7 +2132,9 @@ tutorial_melee_radius = 3.0
 melee_distance = 5.0
 melee_radius = 5.0
 melee_max_chase_distance = 9.0
-sfx_taunt = Array[AudioStream]([ExtResource("4_n2q7l"), ExtResource("5_l2bm8"), ExtResource("6_7upxy"), ExtResource("7_vulif")])
+sfx_taunt_phase_1 = Array[AudioStream]([ExtResource("4_n2q7l"), ExtResource("5_l2bm8"), ExtResource("6_7upxy"), ExtResource("7_vulif")])
+sfx_taunt_phase_2 = Array[AudioStream]([ExtResource("10_v3isi"), ExtResource("8_tpccx"), ExtResource("9_s2jdf")])
+sfx_taunt_phase_3 = Array[AudioStream]([ExtResource("8_tpccx"), ExtResource("9_s2jdf"), ExtResource("10_v3isi"), ExtResource("4_n2q7l"), ExtResource("5_l2bm8"), ExtResource("6_7upxy"), ExtResource("7_vulif")])
 swipe_damage = 14.0
 sfx_swipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
 sfx_swipe_miss = Array[AudioStream]([ExtResource("6_h17j0"), ExtResource("7_cxehy")])
@@ -2017,8 +2146,9 @@ slam_damage = 26.0
 slam_delay = 0.3
 slam_time = 0.9
 slam_particles = NodePath("DebugAnimPivot/SlamSpawn/SlamParticles")
-slam_wave_material = SubResource("StandardMaterial3D_klk0f")
+line_material = SubResource("StandardMaterial3D_ulqwk")
 slam_spawn_marker = NodePath("DebugAnimPivot/SlamSpawn")
+wave_material = SubResource("StandardMaterial3D_muhix")
 sfx_jump = Array[AudioStream]([ExtResource("5_iynxh")])
 sfx_slam = Array[AudioStream]([ExtResource("6_elwvg")])
 sfx_wave_loop = Array[AudioStream]([ExtResource("7_xo7jb")])
@@ -2188,7 +2318,6 @@ boss_name = "The Mechanic"
 
 [node name="StateChartDebugger" parent="DebugUI" index="0"]
 offset_top = 27.0
-enabled = true
 
 [node name="toTutorialArena1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("5_7kc6y")
@@ -2403,6 +2532,13 @@ event = &"start_melee_combo"
 guard = SubResource("Resource_4xor2")
 delay_in_seconds = "0.0"
 
+[node name="toTaunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/ElectrifyFloor" index="4"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Taunt")
+event = &"start_taunt_attack"
+guard = SubResource("Resource_4xor2")
+delay_in_seconds = "0.0"
+
 [node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial" index="2"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Targeting")
@@ -2485,9 +2621,16 @@ event = &"start_electrify_floor"
 guard = SubResource("Resource_4xor2")
 delay_in_seconds = "0.0"
 
+[node name="toTaunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo" index="6"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Taunt")
+event = &"start_taunt_attack"
+guard = SubResource("Resource_4xor2")
+delay_in_seconds = "0.0"
+
 [node name="toPhase3" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial" index="3"]
 script = ExtResource("5_7kc6y")
-to = NodePath("..")
+to = NodePath("../../Phase3_DashTutorial")
 event = &"start_tutorial_phase_3"
 delay_in_seconds = "0.0"
 
@@ -2502,11 +2645,45 @@ initial_state = NodePath("Idle")
 [node name="Idle" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt" index="0"]
 script = ExtResource("4_fo57y")
 
-[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt" index="1"]
+[node name="toTaunting" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt/Idle" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Taunting")
+event = &"start_taunt"
+guard = ExtResource("15_c0skh")
+delay_in_seconds = "0.0"
+
+[node name="Taunting" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt" index="1"]
+script = ExtResource("4_fo57y")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt/Taunting" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"end_taunt"
+guard = ExtResource("15_c0skh")
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt" index="2"]
+script = ExtResource("4_fo57y")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt/Recover" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Idle")
+event = &"end_recovery"
+guard = ExtResource("15_c0skh")
+delay_in_seconds = "0.0"
+
+[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MeleeCombo")
-event = &"start_melee_combo_attack"
-guard = ExtResource("15_c0skh")
+event = &"start_melee_combo"
+guard = SubResource("Resource_4xor2")
+delay_in_seconds = "0.0"
+
+[node name="toDashWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt" index="4"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../DashWave")
+event = &"start_dash_wave"
+guard = SubResource("Resource_4xor2")
 delay_in_seconds = "0.0"
 
 [node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="1"]
@@ -2632,25 +2809,18 @@ event = &"end_recovery"
 guard = SubResource("Resource_v875p")
 delay_in_seconds = "0.0"
 
-[node name="toDualNails" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="7"]
+[node name="toTaunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="7"]
 script = ExtResource("5_7kc6y")
-to = NodePath("../../DualNailsRanged")
-event = &"start_dual_nails_attack"
-guard = ExtResource("15_c0skh")
+to = NodePath("../../Taunt")
+event = &"start_taunt_attack"
+guard = SubResource("Resource_4xor2")
 delay_in_seconds = "0.0"
 
-[node name="toLaserAoE" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="8"]
+[node name="toDashWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="8"]
 script = ExtResource("5_7kc6y")
-to = NodePath("../../LaserAoE")
-event = &"start_laser_aoe_attack"
-guard = ExtResource("15_c0skh")
-delay_in_seconds = "0.0"
-
-[node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="9"]
-script = ExtResource("5_7kc6y")
-to = NodePath("../../Smokescreen")
-event = &"start_smokescreen"
-guard = ExtResource("15_c0skh")
+to = NodePath("../../DashWave")
+event = &"start_dash_wave"
+guard = SubResource("Resource_4xor2")
 delay_in_seconds = "0.0"
 
 [node name="DashWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="2"]
@@ -2659,6 +2829,59 @@ initial_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="0"]
 script = ExtResource("4_fo57y")
+
+[node name="toSwipeWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Idle" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../SwipeWave")
+event = &"start_wave"
+delay_in_seconds = "0.0"
+
+[node name="SwipeWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="1"]
+script = ExtResource("4_fo57y")
+
+[node name="toBackswipeWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/SwipeWave" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../BackswipeWave")
+event = &"wave_combo"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/SwipeWave" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"end_wave"
+delay_in_seconds = "0.0"
+
+[node name="BackswipeWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="2"]
+script = ExtResource("4_fo57y")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/BackswipeWave" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"end_wave"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="3"]
+script = ExtResource("4_fo57y")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Recover" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Idle")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toTaunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="4"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Taunt")
+event = &"start_taunt_attack"
+guard = SubResource("Resource_4xor2")
+delay_in_seconds = "0.0"
+
+[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="5"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../MeleeCombo")
+event = &"start_melee_combo"
+guard = SubResource("Resource_4xor2")
+delay_in_seconds = "0.0"
 
 [node name="toTransition" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="3"]
 script = ExtResource("5_7kc6y")
@@ -3129,6 +3352,10 @@ bus = &"SFX"
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo/Recover" to="." method="_on_melee_combo_recover_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo/Recover" to="." method="_on_melee_combo_recover_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" to="." method="_on_tutorial_phase_3_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt/Idle" to="." method="_on_tutorial_phase_1_taunt_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt/Taunting" to="." method="_on_tutorial_phase_1_taunt_taunting_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt/Taunting" to="." method="_on_tutorial_phase_1_taunt_taunting_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt/Recover" to="." method="_recover_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Targeting" to="." method="_on_melee_combo_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Targeting" to="." method="_on_melee_combo_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Swipe" to="." method="_on_melee_combo_swipe_state_entered"]
@@ -3143,6 +3370,12 @@ bus = &"SFX"
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/SlamLine" to="." method="_on_melee_combo_slam_line_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Recover" to="." method="_on_melee_combo_recover_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Recover" to="." method="_on_melee_combo_recover_state_physics_processing"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" to="." method="_on_tutorial_phase_3_dash_wave_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Idle" to="." method="_on_tutorial_phase_3_dash_wave_idle_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Idle" to="." method="_on_tutorial_phase_3_dash_wave_idle_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/SwipeWave" to="." method="_on_tutorial_phase_3_dash_wave_swipe_wave_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/BackswipeWave" to="." method="_on_tutorial_phase_3_dash_wave_backswipe_wave_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Recover" to="." method="_recover_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/Smokescreen/Idle" to="." method="_on_smokescreen_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/Smokescreen/Smoke" to="." method="_on_smokescreen_smoke_state_entered"]

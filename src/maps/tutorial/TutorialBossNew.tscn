@@ -1,4 +1,4 @@
-[gd_scene load_steps=677 format=4 uid="uid://b50odhnpvpy07"]
+[gd_scene load_steps=678 format=4 uid="uid://b50odhnpvpy07"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -66,6 +66,7 @@
 [ext_resource type="Material" uid="uid://f1owxp1fp5iw" path="res://assets/textures/placeholder/texture_red_09.tres" id="76_i1p5s"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="77_xj60c"]
 [ext_resource type="Material" uid="uid://cvvjnot2ikmgg" path="res://assets/textures/floor/wrad_metal1.tres" id="78_72a70"]
+[ext_resource type="PackedScene" uid="uid://cdjkynfg25alo" path="res://src/player/gun/vfx/SmokeVFX3D.tscn" id="79_hbkuw"]
 [ext_resource type="Material" uid="uid://ddqkn38etnjr1" path="res://assets/textures/posters/bigboss.tres" id="79_qa2kr"]
 [ext_resource type="Material" uid="uid://dxuto5h6uh22o" path="res://assets/textures/posters/pitboss.tres" id="80_q7tk3"]
 [ext_resource type="Material" uid="uid://chfbuquwjmmvs" path="res://assets/textures/posters/megacasino.tres" id="81_ojd6u"]
@@ -5723,7 +5724,7 @@ _data = {
 }
 point_count = 2
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "intro_boss_path", "intro_boss_path_follow", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "intro_boss_path", "intro_boss_path_follow", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
 script = ExtResource("2_twxne")
 boss_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_189_ElevatorDoors")
 exit_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_189_ElevatorDoors")
@@ -5736,6 +5737,7 @@ sub_elevator_lights = [null, null, null, null]
 arena_2_floor_parent = NodePath("FuncGodotMap/group_7916_FloorWalkableArena2/entity_147_func_geo")
 arena_2_floor_mesh = NodePath("FuncGodotMap/group_7916_FloorWalkableArena2/entity_147_func_geo/entity_147_mesh_instance")
 arena_1_floor_shock_hazard = NodePath("ElectricHazardArea")
+pipe_particle_emitters = [NodePath("SmokeParticles"), NodePath("SmokeParticles2"), NodePath("SmokeParticles3"), NodePath("SmokeParticles4"), NodePath("SmokeParticles5")]
 intro_boss_path = NodePath("Path3D")
 intro_boss_path_follow = NodePath("Path3D/PathFollow3D")
 tutorial_1_trigger_shoot = SubResource("Resource_41ph2")
@@ -7051,6 +7053,7 @@ shape = SubResource("ConcavePolygonShape3D_4owsd")
 
 [node name="entity_12_SlidingDoor" parent="FuncGodotMap" index="6" instance=ExtResource("86_1uyek")]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -24.75, 0, 29.5)
+is_autodoor = false
 
 [node name="group_7833_HiddenVendorDoor" type="Node3D" parent="FuncGodotMap" index="7"]
 metadata/_tb_type = "_tb_group"
@@ -8679,7 +8682,6 @@ tilt_enabled = false
 [node name="entity_187_TutorialBoss" parent="Path3D/PathFollow3D" index="0" node_paths=PackedStringArray("target") instance=ExtResource("88_ijdgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.0784, -1.20733, -32.3512)
 target = NodePath("../../../entity_11_PlayerRef")
-current_phase = 2
 orbit_radius = 200.0
 
 [node name="DebugAnimPivot" parent="Path3D/PathFollow3D/entity_187_TutorialBoss" index="1"]
@@ -8783,5 +8785,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.7, -0.9, 29.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5227, -1.2, 19.7469)
 visible = false
 immune_bodies = [NodePath("../Path3D/PathFollow3D/entity_187_TutorialBoss")]
+
+[node name="SmokeParticles" parent="." index="30" instance=ExtResource("79_hbkuw")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -34.8023, 7, 29.5)
+
+[node name="SmokeParticles2" parent="." index="31" instance=ExtResource("79_hbkuw")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -40.3023, 7, 39.6)
+
+[node name="SmokeParticles3" parent="." index="32" instance=ExtResource("79_hbkuw")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -28.9023, 7, 36)
+
+[node name="SmokeParticles4" parent="." index="33" instance=ExtResource("79_hbkuw")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -28.9023, 7, 23.2)
+
+[node name="SmokeParticles5" parent="." index="34" instance=ExtResource("79_hbkuw")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -40.4023, 7, 20.4)
 
 [editable path="Path3D/PathFollow3D/entity_187_TutorialBoss"]

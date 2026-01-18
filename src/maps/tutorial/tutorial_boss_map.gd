@@ -9,14 +9,7 @@ signal ui_accept
 
 @export var info_ui_prefab: PackedScene
 
-@onready var smoke_start_trigger: Area3D = $SmokeStartTrigger
-@onready var smoke_particles: GPUParticles3D = $SmokeParticles
-@onready var smoke_hurt_area: Area3D = $SmokeHurtArea
-@onready var sfx_smoke_burst: AudioStreamPlayer3D = $SteamBurstPlayer
-@onready var sfx_smoke_loop: AudioStreamPlayer3D = $SteamLoopPlayer
-@onready var dash_tutorial_trigger: Area3D = $TutorialInfoTrigger3
-@onready var spin_warning_prompt: Area3D = $SpinTooExpensiveWarning
-var spin_warning_trigger_active: bool = false
+#@onready var sfx_smoke_loop: AudioStreamPlayer3D = $SteamLoopPlayer
 
 @export var exit_elevator_button: Area3D
 @export var lobby_entry_elevator: Node3D
@@ -31,6 +24,10 @@ var spin_warning_trigger_active: bool = false
 @export var arena_2_floor_parent: Node3D
 @export var arena_2_floor_mesh: MeshInstance3D
 @export var arena_1_floor_shock_hazard: Node3D
+
+# SMOKE 
+@export var pipe_particle_emitters: Array[GPUParticles3D]
+var active_emitters: Array[GPUParticles3D] = []
 
 var current_trigger_actions: Array[String] = []
 var current_close_trigger_max: int = 1
@@ -75,6 +72,8 @@ func _ready() -> void:
 	boss.tutorial_phase_1_started.connect(_on_tutorial_phase_1_started)
 	boss.tutorial_phase_2_started.connect(_on_tutorial_phase_2_started)
 	boss.tutorial_phase_3_started.connect(_on_tutorial_phase_3_started)
+	boss.trigger_smoke.connect(_on_boss_trigger_smoke)
+	boss.end_smoke.connect(stop_all_pipe_emitters)
 	boss.shock_floor_hazard = arena_1_floor_shock_hazard
 	#
 	
@@ -126,11 +125,6 @@ func _input(event: InputEvent) -> void:
 				current_trigger_actions = []
 				current_close_trigger_count = 0
 
-	if Input.is_action_just_pressed("spin_barrels"):
-		if GameManager.player_currency < GameManager.reroll_cost:
-			if spin_warning_trigger_active:
-				spin_warning_prompt._on_body_entered(player)
-
 
 func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 	ui_accept.emit()
@@ -172,18 +166,6 @@ func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 	tutorial_panel_tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 0.0), 0.2)
 	await tutorial_panel_tween.finished
 	active_tutorial_panel = null
-
-
-func _on_barrel_purchased() -> void:
-	if $TutorialInfoTrigger7:
-		if GameManager.equipped_barrels.size() > 0:
-			$TutorialInfoTrigger7._on_body_entered(player)
-
-func _trigger_spin_tutorial() -> void:
-	if $TutorialInfoTrigger6:
-		if $BarrelEffectTrigger.applied_effects.size() == 1:
-			$TutorialInfoTrigger6._on_body_entered(player)
-			spin_warning_trigger_active = true
 
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
@@ -241,19 +223,6 @@ func _on_level_select(level_path: String, loading_name: String = "") -> void:
 	super(level_path, "Lobby")
 
 
-func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
-	sfx_smoke_burst.play()
-	smoke_particles.emitting = true
-	smoke_hurt_area._on_body_entered(body)
-	smoke_hurt_area.monitoring = true
-	smoke_start_trigger.monitoring = false
-	smoke_start_trigger.queue_free()
-	# Trigger dash tutorial
-	dash_tutorial_trigger._on_body_entered(body)
-	await get_tree().create_timer(0.1).timeout
-	sfx_smoke_loop.play()
-
-
 func _on_tutorial_phase_1_started() -> void:
 	show_tutorial_panel(tutorial_1_trigger_shoot)
 
@@ -266,6 +235,45 @@ func _on_tutorial_phase_2_started() -> void:
 func _on_tutorial_phase_3_started() -> void:
 	player.dash_disabled = false
 	show_tutorial_panel(tutorial_4_trigger_dash)
+	trigger_pipe_emitter()
+
+
+
+func _on_boss_trigger_smoke(count: int) -> void:
+	for i in range(count):
+		trigger_pipe_emitter()
+
+
+func trigger_pipe_emitter(idx: int = -1) -> int:
+	var emitter: GPUParticles3D
+	if idx >= 0:
+		emitter = pipe_particle_emitters.pop_at(idx)
+	else:
+		emitter = pipe_particle_emitters.pop_at(randi_range(0, pipe_particle_emitters.size() - 1))
+	
+	if not emitter:
+		return -1
+	
+	active_emitters.push_back(emitter)
+	await emitter.spark()
+	await emitter.start_smoke()
+	
+	return idx
+
+
+func stop_pipe_emitter(idx: int) -> void:
+	var emitter: GPUParticles3D = pipe_particle_emitters[idx]
+	active_emitters.pop_at(active_emitters.find(emitter))
+	pipe_particle_emitters.push_back(emitter)
+	
+	await emitter.end_smoke()
+
+
+func stop_all_pipe_emitters() -> void:
+	for i in range(active_emitters.size() - 1):
+		var _emitter = active_emitters.pop_front()
+		_emitter.end_smoke()
+		pipe_particle_emitters.push_back(_emitter)
 
 
 func _on_boss_died(_boss: BossCore = boss) -> void:
