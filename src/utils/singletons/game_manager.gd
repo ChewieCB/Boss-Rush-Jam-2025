@@ -204,7 +204,7 @@ func _unhandled_input(_event: InputEvent) -> void:
 	elif Input.is_action_just_pressed("debug_decrease_timescale"):
 		if Engine.time_scale >= 0.1:
 			Engine.time_scale -= 0.1
-	
+
 	if Input.is_action_just_pressed("screenshot"):
 		var screen_cap := get_viewport().get_texture().get_image()
 		var dir := DirAccess.open("user://")
@@ -333,7 +333,7 @@ func reset_reroll_cost() -> void:
 #region Save helper
 func load_new_save_data():
 	tutorial_completed = false
-	
+
 	# Generate reload-spin threshold values for all barrels on save game creation
 	randomize()
 	for barrel_data in barrel_database:
@@ -345,7 +345,7 @@ func load_new_save_data():
 			barrel_data.reloads_before_spin = randi_range(3, 5)
 		else:
 			barrel_data.reloads_before_spin = randi_range(6, 7)
-	
+
 	for data in starting_barrels:
 		var idx: int = barrel_database.find(data)
 		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
@@ -517,6 +517,6 @@ func create_and_add_status_effect(display_name: String, status_code: String, mod
 	status_effect.show_value_on_ui = false
 	status_effect.status_icon = status_icon
 	status_effect.is_luck_buff = is_luck_buff
-	
+
 	player.add_status_effect(status_effect)
 #endregion

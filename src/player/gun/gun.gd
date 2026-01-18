@@ -946,17 +946,11 @@ func recheck_installed_barrels():
 		var barrel = barrel_container.get_child(i)
 		barrel.owner_gun = self
 		installed_barrels.append(barrel)
-<< << << < HEAD
-		_set_barrel_effect_label(barrel, barrel.get_active_effect())
-
-== == == =
 		#_set_barrel_effect_label(barrel, barrel.get_active_effect())
 		var barrel_label: Label3D = barrel_labels[i]
 		barrel_label.text = "[%s]" % [
 			barrel.reloads_before_spin - barrel.reload_count
 		]
-	
->> >> >> > testing
 	barrel_count = installed_barrels.size()
 
 	for i in barrel_sprites.size():
