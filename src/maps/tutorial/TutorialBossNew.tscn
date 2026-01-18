@@ -103,7 +103,7 @@ script = ExtResource("4_mh6ps")
 trigger_on_spawn = false
 one_shot = false
 header_text = ""
-body_items = Array[String](["[jump]", "jump", "\\n[jump]", " + ", "[jump]", "double jump"])
+body_items = Array[String](["[jump]", "jump", "\\n[jump]", "+", "[jump]", "double jump"])
 close_trigger_actions = Array[String](["jump"])
 close_trigger_count = 3
 timeout = 2.0
@@ -8623,7 +8623,6 @@ curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
 transform = Transform3D(-4.37114e-08, 0, -0.999956, 0, 0.999956, 0, 1, 0, -4.37095e-08, -44.769, 0.145, 29.574)
-progress = 10.773
 loop = false
 tilt_enabled = false
 
@@ -8631,6 +8630,9 @@ tilt_enabled = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.0784, -1.20733, -32.3512)
 target = NodePath("../../../entity_11_PlayerRef")
 orbit_radius = 200.0
+
+[node name="DebugAnimPivot" parent="Path3D/PathFollow3D/entity_187_TutorialBoss" index="1"]
+transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
 
 [node name="CutsceneCamera" type="Camera3D" parent="." index="18"]
 transform = Transform3D(-3.62383e-06, -0.222535, -0.974925, 1.6801e-08, 0.974925, -0.222535, 1, -8.22808e-07, -3.52922e-06, -24.1585, 1.74925, 29.5983)
@@ -8673,7 +8675,7 @@ custom_minimum_size = Vector2(0, 200)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = -200.0
+offset_bottom = 200.0
 grow_horizontal = 2
 color = Color(0, 0, 0, 1)
 
@@ -8684,7 +8686,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = 200.0
+offset_top = -200.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 0
@@ -8696,9 +8698,7 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -1330.0
 offset_top = -155.0
-offset_right = -1330.0
 offset_bottom = 155.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -8731,8 +8731,9 @@ texture = ExtResource("63_30qyb")
 [node name="Arena1Center" type="Marker3D" parent="." index="27"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.7, -0.9, 29.6)
 
-[node name="ElectricHazardArea" parent="." index="28" instance=ExtResource("75_byjbj")]
+[node name="ElectricHazardArea" parent="." index="28" node_paths=PackedStringArray("immune_bodies") instance=ExtResource("75_byjbj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5227, -1.2, 19.7469)
 visible = false
+immune_bodies = [NodePath("../Path3D/PathFollow3D/entity_187_TutorialBoss")]
 
 [editable path="Path3D/PathFollow3D/entity_187_TutorialBoss"]
