@@ -58,6 +58,7 @@ func update_level_up_button_text():
 	var next_level_cost = GameManager.player_level * GameManager.CHIP_COST_PER_LEVEL_UP
 	level_up_button.text = "Level up to {0} ({1} chips)".format([GameManager.player_level + 1, next_level_cost])
 
+
 func refresh_all_items():
 	level_up_btn_clicked_once = false
 	reset_btn_clicked_once = false
@@ -68,9 +69,11 @@ func refresh_all_items():
 	reset_button.text = "Reset all skills"
 	ui_opened.emit()
 
+
 func update_description(title: String, description: String):
 	skill_title_label.text = title
 	skill_description_label.text = description
+
 
 func reset_skill_points():
 	var allocated_points = 0
@@ -79,10 +82,11 @@ func reset_skill_points():
 	GameManager.player_skill_points += allocated_points
 	GameManager.player_skill_dict = {}
 	refresh_all_items()
+	GameManager.player.luck_component.decrease_luck(100.0)
 	GameManager.player.check_permanent_buffs()
 	GameManager.player.luck_component.check_for_high_luck_buffs()
 
-	
+
 func get_first_item_for_focus():
 	await get_tree().create_timer(0.02).timeout
 	first_item_focus.button.grab_focus()
@@ -99,6 +103,7 @@ func _on_reset_button_pressed() -> void:
 		reset_skill_points()
 		refresh_all_items()
 		reset_timer.stop()
+
 
 func _on_return_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()

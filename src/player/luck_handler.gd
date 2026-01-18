@@ -11,7 +11,7 @@ signal modifier_message(text: String, is_gain: bool)
 @export_group("Luck Loss Over Time")
 @export_subgroup("Luck Decay")
 @export var luck_decay_enabled: bool = true
-@export var luck_decay: float = 0.05
+@export var luck_decay: float = 0.15
 @export var max_luck_decay_buffer_time: float = 2.0
 @onready var luck_decay_timer: Timer = $LuckDecayTimer
 #

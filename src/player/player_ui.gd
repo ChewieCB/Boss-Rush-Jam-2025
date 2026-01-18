@@ -8,6 +8,7 @@ class_name PlayerUI
 @onready var interact_ui = $InteractUI
 @onready var gun_ui = $GunUI
 
+
 func _ready() -> void:
 	SaveManager.started_saving.connect(func(): saving_indicator.visible = true)
 	SaveManager.finished_saving.connect(hide_saving_indicator)

@@ -223,6 +223,7 @@ func _ready():
 
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
+	current_gun.full_clip_reload_started.connect(full_reload_ammo_counter_ui)
 	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
 	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_spin_stopped.connect(update_ammo_counter_ui.unbind(2))
@@ -472,8 +473,13 @@ func _physics_process(delta):
 
 
 func update_ammo_counter_ui() -> void:
-	stat_ui.current_ammo_label.text = "{0}".format([current_gun.magazine_ammo_left])
-	stat_ui.magazine_size_label.text = "/{0}".format([current_gun.modified_magazine_size])
+	stat_ui.radial_ui_center_node.update(current_gun.magazine_ammo_left, current_gun.modified_magazine_size)
+	#stat_ui.radial_ui_center_node.max_radial_segment_count = current_gun.modified_magazine_size
+	#stat_ui.radial_ui_center_node.active_radial_segment_count = current_gun.magazine_ammo_left
+
+
+func full_reload_ammo_counter_ui() -> void:
+	stat_ui.radial_ui_center_node.animate_full_reload(current_gun.current_reload_anim_time)
 
 
 func show_barrel_effect_ui() -> void:
@@ -816,7 +822,7 @@ func add_status_effect(new_status: StatusEffect):
 
 func remove_status_effect(status: StatusEffect):
 	status_effect_list.erase(status)
-	status_effect_removed.emit(status.status_code)
+	status_effect_removed.emit(status)
 	apply_status_effects()
 
 

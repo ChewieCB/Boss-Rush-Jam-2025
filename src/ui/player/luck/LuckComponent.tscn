@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8fqj7i2fkcnf"]
+[gd_scene load_steps=5 format=3 uid="uid://c8fqj7i2fkcnf"]
 
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_component.gd" id="1_li3ya"]
+[ext_resource type="Texture2D" uid="uid://co107hhrp2wur" path="res://assets/sprite/skilltree_icon/hot_hand.png" id="2_i6huj"]
+[ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="3_gxjje"]
+[ext_resource type="Texture2D" uid="uid://dx4pm7e2prfc1" path="res://assets/sprite/skilltree_icon/plot_armor.png" id="4_j75v8"]
 
 [node name="LuckComponent" type="Node"]
 script = ExtResource("1_li3ya")
+hot_hand_icon = ExtResource("2_i6huj")
+lucky_shot_icon = ExtResource("3_gxjje")
+blindspot_icon = ExtResource("4_j75v8")

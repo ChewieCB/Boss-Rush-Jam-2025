@@ -397,7 +397,8 @@ func _on_controller_connection(_device: int, connected: bool):
 	is_controller_connected = connected
 
 func create_and_add_status_effect(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
-	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, is_bad_effect: bool = false, show_duration_ui = false, status_icon: Texture2D = null, ):
+	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, is_bad_effect: bool = false, 
+	show_duration_ui = false, status_icon: Texture2D = null, is_luck_buff: bool = false):
 	var status_effect = StatusEffect.new()
 	status_effect.display_name = display_name
 	status_effect.status_code = status_code
@@ -409,6 +410,8 @@ func create_and_add_status_effect(display_name: String, status_code: String, mod
 	status_effect.show_duration_ui = show_duration_ui
 	status_effect.show_value_on_ui = false
 	status_effect.status_icon = status_icon
+	status_effect.is_luck_buff = is_luck_buff
+	
 	player.add_status_effect(status_effect)
 
 
