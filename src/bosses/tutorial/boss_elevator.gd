@@ -51,6 +51,7 @@ var prev_attack: String = ""
 @export var tutorial_melee_radius: float = 3.0
 @export var melee_distance: float = 5.0
 @export var melee_radius: float = 5.0
+@export var melee_max_chase_distance: float = 9.0
 
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 14.0
@@ -86,8 +87,8 @@ var prev_attack: String = ""
 @export var delay_between_burst: float = 0.5
 @export var nail_damage: float = 7.0
 #
-@export var tutorial_strafe_distance: float = 12.0
-@export var tutorial_strafe_radius: float = 12.0
+@export var tutorial_strafe_distance: float = 10.0
+@export var tutorial_strafe_radius: float = 10.0
 # SFX
 @export var sfx_nail_equip: Array[AudioStream]
 @export var sfx_nail_shot: Array[AudioStream]
@@ -109,7 +110,7 @@ var laser_target_pos: Vector3
 @export_subgroup("Electrify Floor")
 @export var shock_floor_hazard: Node3D
 @export var shock_damage: float = 10.0
-@export var shock_duration: float = 1.1
+@export var shock_duration: float = 0.6
 
 var attack_interrupt: bool = false  # Flag to interrupt loop-based attacks like the nailgun shots
 
@@ -485,7 +486,7 @@ func _on_melee_combo_recover_state_entered() -> void:
 
 
 func _on_melee_combo_recover_state_physics_processing(delta: float) -> void:
-	orbit_player(delta)
+	#orbit_player(delta)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 
@@ -1304,6 +1305,7 @@ func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
 
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_physics_processing(delta: float) -> void:
+	velocity = Vector3.ZERO
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 
@@ -1377,3 +1379,14 @@ func _on_tutorial_phase_2_melee_combo_backswing_state_entered() -> void:
 func _on_tutorial_phase_3_state_entered() -> void:
 	current_phase = 3
 	tutorial_phase_3_started.emit()
+
+
+func _on_tutorial_phase_2_melee_combo_state_physics_processing(delta: float) -> void:
+	# If the player is far away and on the shockable area, stop chasing and trigger the shock
+	if shock_floor_hazard.damage_area.overlaps_body(target) and \
+	target.global_position.distance_to(self.global_position) >= melee_max_chase_distance:
+		self.velocity = Vector3.ZERO
+		state_chart.send_event("stop_moving")
+		state_chart.send_event("start_targeting")
+		state_chart.send_event("combo_end")
+		state_chart.send_event("start_electrify_floor")

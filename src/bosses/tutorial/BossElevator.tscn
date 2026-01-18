@@ -457,11 +457,11 @@ guard = SubResource("Resource_lhjct")
 script = ExtResource("14_kbpeg")
 guard = SubResource("Resource_lhjct")
 
-[sub_resource type="Resource" id="Resource_8uqbu"]
+[sub_resource type="Resource" id="Resource_n3lag"]
 script = ExtResource("14_kbpeg")
 guard = SubResource("Resource_lhjct")
 
-[sub_resource type="Resource" id="Resource_n3lag"]
+[sub_resource type="Resource" id="Resource_8uqbu"]
 script = ExtResource("14_kbpeg")
 guard = SubResource("Resource_lhjct")
 
@@ -2000,6 +2000,7 @@ tutorial_melee_distance = 3.0
 tutorial_melee_radius = 3.0
 melee_distance = 5.0
 melee_radius = 5.0
+melee_max_chase_distance = 9.0
 swipe_damage = 14.0
 sfx_swipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
 sfx_swipe_miss = Array[AudioStream]([ExtResource("6_h17j0"), ExtResource("7_cxehy")])
@@ -2024,8 +2025,8 @@ num_bursts = 1
 shots_per_burst = 12
 delay_between_burst = 0.5
 nail_damage = 7.0
-tutorial_strafe_distance = 12.0
-tutorial_strafe_radius = 12.0
+tutorial_strafe_distance = 10.0
+tutorial_strafe_radius = 10.0
 sfx_nail_equip = Array[AudioStream]([ExtResource("10_u246n")])
 sfx_nail_shot = Array[AudioStream]([ExtResource("11_8tgau"), ExtResource("12_bt5kx"), ExtResource("13_qjtrx"), ExtResource("14_l34ga")])
 sfx_nail_unequip = Array[AudioStream]([ExtResource("21_4s6ft")])
@@ -2038,7 +2039,7 @@ sfx_laser_charging = Array[AudioStream]([ExtResource("17_mkqio")])
 sfx_laser_shoot = Array[AudioStream]([ExtResource("18_5elni"), ExtResource("19_upudo"), ExtResource("20_dvqnx")])
 sfx_laser_disarm = []
 shock_damage = 10.0
-shock_duration = 1.1
+shock_duration = 0.6
 boss_id = 6
 barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8")]
@@ -2398,6 +2399,13 @@ event = &"start_attack"
 guard = SubResource("Resource_0qfiu")
 delay_in_seconds = "0.0"
 
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo/Targeting" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"combo_end"
+guard = SubResource("Resource_n3lag")
+delay_in_seconds = "0.0"
+
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo" index="1"]
 script = ExtResource("4_fo57y")
 
@@ -2459,17 +2467,10 @@ event = &"start_electrify_floor"
 guard = SubResource("Resource_4xor2")
 delay_in_seconds = "0.0"
 
-[node name="DashWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial" index="3"]
-script = ExtResource("3_irtaj")
-initial_state = NodePath("Idle")
-
-[node name="Idle" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/DashWave" index="0"]
-script = ExtResource("4_fo57y")
-
-[node name="toTransition" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial" index="4"]
+[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial" index="3"]
 script = ExtResource("5_7kc6y")
-to = NodePath("../../Arena1Transition")
-event = &"start_arena_1_transition"
+to = NodePath("..")
+event = &"start_tutorial_phase_3"
 delay_in_seconds = "0.0"
 
 [node name="Phase3_DashTutorial" type="Node" parent="StateChart/Root/Phase/TutorialArena1" index="3"]
@@ -2490,14 +2491,7 @@ event = &"start_melee_combo_attack"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="StrafingNails" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="1"]
-script = ExtResource("3_irtaj")
-initial_state = NodePath("Idle")
-
-[node name="Idle" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/StrafingNails" index="0"]
-script = ExtResource("4_fo57y")
-
-[node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="2"]
+[node name="MeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="1"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Targeting")
 
@@ -2641,21 +2635,14 @@ event = &"start_smokescreen"
 guard = ExtResource("15_c0skh")
 delay_in_seconds = "0.0"
 
-[node name="ShockFloor" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="3"]
-script = ExtResource("3_irtaj")
-initial_state = NodePath("Idle")
-
-[node name="Idle" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/ShockFloor" index="0"]
-script = ExtResource("4_fo57y")
-
-[node name="DashWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="4"]
+[node name="DashWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="2"]
 script = ExtResource("3_irtaj")
 initial_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="0"]
 script = ExtResource("4_fo57y")
 
-[node name="toTransition" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="5"]
+[node name="toTransition" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Arena1Transition")
 event = &"start_arena_1_transition"
@@ -3057,9 +3044,6 @@ script = ExtResource("5_7kc6y")
 event = &"start_intro"
 delay_in_seconds = "0.0"
 
-[node name="NavigationAgent3D" parent="." index="13"]
-debug_enabled = true
-
 [node name="AnimationPlayer" parent="." index="23"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
@@ -3115,6 +3099,7 @@ bus = &"SFX"
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/ElectrifyFloor/Shocking" to="." method="_on_tutorial_phase_2_electrify_floor_slamming_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/ElectrifyFloor/Shocking" to="." method="_on_tutorial_phase_2_electrify_floor_slamming_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/ElectrifyFloor/Recover" to="." method="_recover_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo" to="." method="_on_tutorial_phase_2_melee_combo_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo/Targeting" to="." method="_on_melee_combo_targeting_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo/Targeting" to="." method="_on_melee_combo_targeting_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo/Swipe" to="." method="_on_tutorial_phase_2_melee_combo_swipe_state_entered"]
