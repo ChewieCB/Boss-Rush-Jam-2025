@@ -43,6 +43,7 @@ var music_playback: AudioStreamPlaybackInteractive
 # Intro cutscene
 @export var intro_boss_path: Path3D
 @export var intro_boss_path_follow: PathFollow3D
+@export var cutscene_subtitle_label: Label
 
 # Tutorial prompt triggers
 @export_group("Tutorial UI Triggers")
@@ -289,3 +290,7 @@ func _check_close_trigger_action_held(action: String) -> void:
 	if Input.is_action_pressed(action):
 		if action in current_trigger_actions and current_close_trigger_count < current_close_trigger_max:
 			current_close_trigger_count += 1
+
+
+func _set_subtitle(text: String) -> void:
+	cutscene_subtitle_label.text = text

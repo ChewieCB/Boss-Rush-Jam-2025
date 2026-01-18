@@ -1,4 +1,4 @@
-[gd_scene load_steps=674 format=4 uid="uid://b50odhnpvpy07"]
+[gd_scene load_steps=677 format=4 uid="uid://b50odhnpvpy07"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -50,11 +50,14 @@
 [ext_resource type="AudioStream" uid="uid://due6c1u7ljts1" path="res://src/bosses/tutorial/assets/sfx/Wrench Ground Pound.mp3" id="66_y5gs4"]
 [ext_resource type="AudioStream" uid="uid://dcshtq5yyxdk1" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Impact.mp3" id="67_er3ko"]
 [ext_resource type="Material" uid="uid://cf2bxlb0jp4xo" path="res://assets/textures/walls/green_tiled_trim.tres" id="69_gk1uq"]
+[ext_resource type="AudioStream" uid="uid://cf5ftsbtinsr1" path="res://src/maps/tutorial/assets/cutscene/vo/mechanic-tutorial-intro-1-1.mp3" id="69_gnhos"]
 [ext_resource type="AudioStream" uid="uid://b7nfp4x27l0np" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 1.mp3" id="69_hm453"]
 [ext_resource type="AudioStream" uid="uid://itnieslv461" path="res://src/player/assets/sfx/VOICE LINES/URGH 4.mp3" id="70_kla1o"]
 [ext_resource type="AudioStream" uid="uid://ds7xvkwqd62rm" path="res://assets/music/PissbotAmbience.mp3" id="70_qjou6"]
+[ext_resource type="AudioStream" uid="uid://c1x6us2ydrmlw" path="res://src/maps/tutorial/assets/cutscene/vo/mechanic-tutorial-intro-5-no-fortune-1.mp3" id="70_sgwop"]
 [ext_resource type="Material" uid="uid://cggtlusxv65jc" path="res://assets/textures/walls/concrete-paint-dark-gold.tres" id="71_bmqcg"]
 [ext_resource type="AudioStream" uid="uid://bm0hm1pxy0o7a" path="res://src/maps/lobby/assets/Lift Door Shut Foley 1.mp3" id="71_ghqpp"]
+[ext_resource type="AudioStream" uid="uid://bnnj4bxoydm6e" path="res://src/maps/tutorial/assets/cutscene/vo/mechanic-tutorial-intro-5-only-pain-1.mp3" id="71_nv42o"]
 [ext_resource type="Material" uid="uid://bt8sgbg77a1nw" path="res://assets/textures/placeholder/texture_green_green_green_10.tres" id="72_ka5wf"]
 [ext_resource type="Material" uid="uid://cw84j8uef55sq" path="res://assets/textures/walls/painting_decal.tres" id="73_xo6rn"]
 [ext_resource type="Material" uid="uid://oioorwq5iec4" path="res://assets/textures/walls/dutch_wall_3.tres" id="74_bjkup"]
@@ -5163,77 +5166,89 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("IntroCutsceneLayer/Control/Label:modulate")
+tracks/10/path = NodePath("PitBossIntro:texture")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
+"update": 1,
+"values": [ExtResource("63_30qyb")]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("IntroCutsceneLayer/Control/Label:position")
+tracks/11/path = NodePath("PitBossIntro:position")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 385)]
+"values": [Vector3(-23, 1.5, 29.5)]
 }
-tracks/12/type = "value"
+tracks/12/type = "audio"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("PitBossIntro:texture")
+tracks/12/path = NodePath("CutsceneSFXPlayer1")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("63_30qyb")]
-}
-tracks/13/type = "value"
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/path = NodePath("PitBossIntro:position")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(-23, 1.5, 29.5)]
-}
-tracks/14/type = "audio"
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/path = NodePath("CutsceneSFXPlayer1")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/keys = {
 "clips": [],
 "times": PackedFloat32Array()
 }
-tracks/14/use_blend = true
-tracks/15/type = "method"
-tracks/15/imported = false
-tracks/15/enabled = true
-tracks/15/path = NodePath("entity_11_PlayerRef")
-tracks/15/interp = 1
-tracks/15/loop_wrap = true
-tracks/15/keys = {
+tracks/12/use_blend = true
+tracks/13/type = "method"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("entity_11_PlayerRef")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
 "times": PackedFloat32Array(),
 "transitions": PackedFloat32Array(),
 "values": []
 }
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLabel:text")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [""]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLabel:visible_ratio")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLabel:modulate")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_xlg8b"]
 resource_name = "mechanic_enter"
-length = 6.5
+length = 9.4
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -5311,7 +5326,7 @@ tracks/6/path = NodePath("CutsceneCamera:current")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 6.5),
+"times": PackedFloat32Array(0, 9.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -5323,10 +5338,10 @@ tracks/7/path = NodePath("CutsceneCamera:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.6, 0.9, 1.16667, 1.5, 5.5, 6.5),
-"transitions": PackedFloat32Array(0.378929, 2.54912, 1, 0.435275, 1, 0.406126, 0.378929),
+"times": PackedFloat32Array(0, 0.6, 0.9, 1.16667, 1.5, 4.9, 8.6, 9.4),
+"transitions": PackedFloat32Array(0.378929, 2.54912, 1, 0.435275, 1, 0.517632, 1, 0.378929),
 "update": 0,
-"values": [Vector3(-26.6, 1.1, 29.5), Vector3(-39, -0.2, 29.5), Vector3(-37.8, 1.2, 29.5), Vector3(-37.8, 1.2, 29.5), Vector3(-42.616, 3.676, 30.241), Vector3(-42.616, 3.676, 29.318), Vector3(-26.6, 1.1, 29.5)]
+"values": [Vector3(-26.6, 1.1, 29.5), Vector3(-39, -0.2, 29.5), Vector3(-37.8, 1.2, 29.5), Vector3(-37.8, 1.2, 29.5), Vector3(-42.616, 3.676, 30.241), Vector3(-42.1, 3.676, 29.318), Vector3(-42.6, 3.176, 29.698), Vector3(-26.6, 1.1, 29.5)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -5335,10 +5350,10 @@ tracks/8/path = NodePath("CutsceneCamera:rotation")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.6, 0.9, 1.16667, 5.5, 6.5),
-"transitions": PackedFloat32Array(0.378929, 2.54912, 1, 1, 0.406126, 0.378929),
+"times": PackedFloat32Array(0, 0.6, 0.9, 1.16667, 4.9, 8.6, 9.4),
+"transitions": PackedFloat32Array(0.378929, 2.54912, 1, 1, 0.517632, 0.406126, 0.378929),
 "update": 0,
-"values": [Vector3(0, 1.5708, 0), Vector3(0.261799, 1.5708, 1.17124e-08), Vector3(0.0872665, 1.5708, 4.09303e-09), Vector3(0.0872665, 1.5708, 4.09303e-09), Vector3(0.00902757, 1.5708, 4.23417e-10), Vector3(0, 1.5708, 0)]
+"values": [Vector3(0, 1.5708, 0), Vector3(0.261799, 1.5708, 1.17124e-08), Vector3(0.0872665, 1.5708, 4.09303e-09), Vector3(0.0872665, 1.5708, 4.09303e-09), Vector3(0.0482582, 1.5708, 2.26344e-09), Vector3(0.1309, 1.5708, 0), Vector3(0, 1.5708, 0)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -5347,7 +5362,7 @@ tracks/9/path = NodePath("IntroCutsceneLayer:visible")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 1.15, 5.5),
+"times": PackedFloat32Array(0, 1.15, 9.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [false, true, false]
@@ -5359,8 +5374,8 @@ tracks/10/path = NodePath("IntroCutsceneLayer/Control/LetterboxTop:position")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(1.15, 1.5, 5, 5.5),
-"transitions": PackedFloat32Array(3.24901, 1, 2.46229, 3.24901),
+"times": PackedFloat32Array(1.15, 1.5, 8.6, 9.1),
+"transitions": PackedFloat32Array(3.24901, 1, 0.496, 3.24901),
 "update": 0,
 "values": [Vector2(0, -200), Vector2(0, 0), Vector2(0, 0), Vector2(0, -200)]
 }
@@ -5371,42 +5386,18 @@ tracks/11/path = NodePath("IntroCutsceneLayer/Control/LetterboxBottom:position")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(1.15, 1.5, 5, 5.5),
-"transitions": PackedFloat32Array(3.24901, 1, 2.46229, 3.24901),
+"times": PackedFloat32Array(1.15, 1.5, 8.6, 9.1),
+"transitions": PackedFloat32Array(3.24901, 1, 0.496, 3.24901),
 "update": 0,
 "values": [Vector2(0, 1080), Vector2(0, 880), Vector2(0, 880), Vector2(0, 1080)]
 }
-tracks/12/type = "value"
+tracks/12/type = "audio"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("IntroCutsceneLayer/Control/Label:modulate")
+tracks/12/path = NodePath("CutsceneSFXPlayer1")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0, 1.55, 1.65, 4.9, 5.1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/13/type = "value"
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/path = NodePath("IntroCutsceneLayer/Control/Label:position")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/keys = {
-"times": PackedFloat32Array(1.65, 5.1),
-"transitions": PackedFloat32Array(-0.233258, 1),
-"update": 0,
-"values": [Vector2(1330, 385), Vector2(-1330, 385)]
-}
-tracks/14/type = "audio"
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/path = NodePath("CutsceneSFXPlayer1")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
@@ -5418,14 +5409,14 @@ tracks/14/keys = {
 }],
 "times": PackedFloat32Array(0.1, 0.55)
 }
-tracks/14/use_blend = true
-tracks/15/type = "audio"
-tracks/15/imported = false
-tracks/15/enabled = true
-tracks/15/path = NodePath("CutsceneSFXPlayer2")
-tracks/15/interp = 1
-tracks/15/loop_wrap = true
-tracks/15/keys = {
+tracks/12/use_blend = true
+tracks/13/type = "audio"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("CutsceneSFXPlayer2")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.3161,
@@ -5433,14 +5424,14 @@ tracks/15/keys = {
 }],
 "times": PackedFloat32Array(0)
 }
-tracks/15/use_blend = true
-tracks/16/type = "audio"
-tracks/16/imported = false
-tracks/16/enabled = true
-tracks/16/path = NodePath("CutsceneSFXPlayer3")
-tracks/16/interp = 1
-tracks/16/loop_wrap = true
-tracks/16/keys = {
+tracks/13/use_blend = true
+tracks/14/type = "audio"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("CutsceneSFXPlayer3")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
@@ -5448,14 +5439,14 @@ tracks/16/keys = {
 }],
 "times": PackedFloat32Array(0.466667)
 }
-tracks/16/use_blend = true
-tracks/17/type = "audio"
-tracks/17/imported = false
-tracks/17/enabled = true
-tracks/17/path = NodePath("CutsceneSFXPlayer4")
-tracks/17/interp = 1
-tracks/17/loop_wrap = true
-tracks/17/keys = {
+tracks/14/use_blend = true
+tracks/15/type = "audio"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("CutsceneSFXPlayer4")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
@@ -5463,14 +5454,14 @@ tracks/17/keys = {
 }],
 "times": PackedFloat32Array(0.533333)
 }
-tracks/17/use_blend = true
-tracks/18/type = "audio"
-tracks/18/imported = false
-tracks/18/enabled = true
-tracks/18/path = NodePath("CutsceneSFXPlayer5")
-tracks/18/interp = 1
-tracks/18/loop_wrap = true
-tracks/18/keys = {
+tracks/15/use_blend = true
+tracks/16/type = "audio"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("CutsceneSFXPlayer5")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
@@ -5478,14 +5469,14 @@ tracks/18/keys = {
 }],
 "times": PackedFloat32Array(0.05)
 }
-tracks/18/use_blend = true
-tracks/19/type = "audio"
-tracks/19/imported = false
-tracks/19/enabled = true
-tracks/19/path = NodePath("CutsceneSFXPlayer6")
-tracks/19/interp = 1
-tracks/19/loop_wrap = true
-tracks/19/keys = {
+tracks/16/use_blend = true
+tracks/17/type = "audio"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("CutsceneSFXPlayer6")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
@@ -5493,46 +5484,105 @@ tracks/19/keys = {
 }],
 "times": PackedFloat32Array(1.175)
 }
-tracks/19/use_blend = true
-tracks/20/type = "value"
-tracks/20/imported = false
-tracks/20/enabled = true
-tracks/20/path = NodePath("CutsceneSFXPlayer6:volume_db")
-tracks/20/interp = 1
-tracks/20/loop_wrap = true
-tracks/20/keys = {
-"times": PackedFloat32Array(0, 0.025, 5.425, 6.425),
+tracks/17/use_blend = true
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("CutsceneSFXPlayer6:volume_db")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0, 0.025, 7.725, 9.325),
 "transitions": PackedFloat32Array(0.170755, 1, 10.1965, 1),
 "update": 0,
 "values": [-80.0, 0.0, 0.0, -80.0]
 }
-tracks/21/type = "method"
-tracks/21/imported = false
-tracks/21/enabled = true
-tracks/21/path = NodePath(".")
-tracks/21/interp = 1
-tracks/21/loop_wrap = true
-tracks/21/keys = {
-"times": PackedFloat32Array(6.5),
+tracks/19/type = "method"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath(".")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(9.4),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
 "method": &"_remove_boss_from_intro_path"
 }]
 }
-tracks/22/type = "method"
-tracks/22/imported = false
-tracks/22/enabled = true
-tracks/22/path = NodePath("entity_11_PlayerRef")
-tracks/22/interp = 1
-tracks/22/loop_wrap = true
-tracks/22/keys = {
-"times": PackedFloat32Array(6.5),
+tracks/20/type = "method"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("entity_11_PlayerRef")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(9.4),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [false],
 "method": &"_disable_cutscene_cam"
 }]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLabel:text")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(2.15, 4.8, 7.15),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": ["They always send me the failures.", "You'll find no fortune here.", "Only pain."]
+}
+tracks/22/type = "audio"
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/path = NodePath("CutsceneVOPlayer")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("69_gnhos")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("70_sgwop")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("71_nv42o")
+}],
+"times": PackedFloat32Array(2.15, 4.85, 7.1)
+}
+tracks/22/use_blend = true
+tracks/23/type = "value"
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLabel:visible_ratio")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/keys = {
+"times": PackedFloat32Array(2.15, 3.7, 4.75, 4.8, 6.25, 7.05, 7.1, 8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]
+}
+tracks/24/type = "value"
+tracks/24/imported = false
+tracks/24/enabled = true
+tracks/24/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLabel:modulate")
+tracks/24/interp = 1
+tracks/24/loop_wrap = true
+tracks/24/keys = {
+"times": PackedFloat32Array(2.15, 4.55, 4.8, 4.95, 6.85, 7.05, 7.2, 8.35, 8.6),
+"transitions": PackedFloat32Array(1, 2.54912, 1, 2.54912, 2.54912, 1, 2.54912, 2.54912, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_yuyap"]
@@ -8622,7 +8672,7 @@ transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -25.625,
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-4.37114e-08, 0, -0.999956, 0, 0.999956, 0, 1, 0, -4.37095e-08, -44.769, 0.145, 29.574)
+transform = Transform3D(-4.37114e-08, 0, -0.999946, 0, 0.999946, 0, 1, 0, -4.3709e-08, -44.769, 0.145, 29.574)
 loop = false
 tilt_enabled = false
 
@@ -8657,7 +8707,10 @@ bus = &"SFX"
 volume_db = -80.0
 bus = &"SFX"
 
-[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="25"]
+[node name="CutsceneVOPlayer" type="AudioStreamPlayer" parent="." index="25"]
+bus = &"SFX"
+
+[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="26"]
 layer = 3
 visible = false
 
@@ -8692,46 +8745,40 @@ grow_vertical = 0
 size_flags_vertical = 0
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="IntroCutsceneLayer/Control" index="2"]
+[node name="SubtitleMargin" type="MarginContainer" parent="IntroCutsceneLayer/Control" index="2"]
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -155.0
-offset_bottom = 155.0
+anchor_bottom = 1.0
+offset_top = 832.0
+offset_bottom = 832.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 12
-theme_override_constants/shadow_outline_size = 24
-theme_override_font_sizes/font_size = 128
-text = "The Mechanic"
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 48
+
+[node name="SubtitleLabel" type="Label" parent="IntroCutsceneLayer/Control/SubtitleMargin" index="0"]
+custom_minimum_size = Vector2(800, 200)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 32
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
+visible_characters = 0
+visible_ratio = 0.0
 
-[node name="Panel" type="Panel" parent="IntroCutsceneLayer/Control/Label" index="0"]
-z_index = -1
-custom_minimum_size = Vector2(800, 200)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PitBossIntro" type="Sprite3D" parent="." index="26"]
+[node name="PitBossIntro" type="Sprite3D" parent="." index="27"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -23, 1.5, 29.5)
 billboard = 2
 texture = ExtResource("63_30qyb")
 
-[node name="Arena1Center" type="Marker3D" parent="." index="27"]
+[node name="Arena1Center" type="Marker3D" parent="." index="28"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.7, -0.9, 29.6)
 
-[node name="ElectricHazardArea" parent="." index="28" node_paths=PackedStringArray("immune_bodies") instance=ExtResource("75_byjbj")]
+[node name="ElectricHazardArea" parent="." index="29" node_paths=PackedStringArray("immune_bodies") instance=ExtResource("75_byjbj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5227, -1.2, 19.7469)
 visible = false
 immune_bodies = [NodePath("../Path3D/PathFollow3D/entity_187_TutorialBoss")]
