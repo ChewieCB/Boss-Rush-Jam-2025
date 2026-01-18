@@ -3,16 +3,18 @@
 [ext_resource type="AudioStream" uid="uid://edneq2x4wm78" path="res://src/player/gun/assets/sfx/reloading/railgun/railgun_reload_1.mp3" id="1_be3d7"]
 [ext_resource type="Script" path="res://src/player/gun/gun_frame/gun_frame_resource.gd" id="1_ggs7f"]
 [ext_resource type="AudioStream" uid="uid://dqr1710c1o8py" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 1.mp3" id="3_bu3dw"]
-[ext_resource type="Texture2D" uid="uid://eo0lldpw8no2" path="res://src/ui/player/inventory/assets/frames/frame_sideview_rifle.png" id="3_jvlc6"]
 [ext_resource type="AudioStream" uid="uid://i3coc5gtyk0w" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 2.mp3" id="4_3u0xo"]
 [ext_resource type="AudioStream" uid="uid://bjp2ylixw7dhg" path="res://src/player/gun/assets/sfx/shot/railgun/SNIPER SHOT 3.mp3" id="5_0xt74"]
+
+[sub_resource type="Resource" id="Resource_sy351"]
+metadata/__load_path__ = "res://src/ui/player/inventory/assets/frames/frame_sideview_rifle.png"
 
 [resource]
 script = ExtResource("1_ggs7f")
 frame_name = "Sniper"
 frame_id = 4
 frame_description = "High damage per shot but low firerate. Take aim carefullly."
-shop_ui_sprite = ExtResource("3_jvlc6")
+shop_ui_sprite = SubResource("Resource_sy351")
 reload_sfx = Array[AudioStream]([ExtResource("1_be3d7")])
 shot_sfx = Array[AudioStream]([ExtResource("3_bu3dw"), ExtResource("4_3u0xo"), ExtResource("5_0xt74")])
 frame_cost = 100

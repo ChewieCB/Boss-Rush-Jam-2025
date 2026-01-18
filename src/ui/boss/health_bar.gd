@@ -37,7 +37,7 @@ func init_health_ui(_health) -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	if new_health < prev_health:
 		heath_bar.value = new_health
-		health_timer.start()
+		timer.start()
 	else:
 		damage_bar.value = new_health
 		await get_tree().create_timer(0.3).timeout
