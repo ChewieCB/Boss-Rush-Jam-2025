@@ -10,7 +10,7 @@ signal desired_height_reached
 # -Coin Spray: Fire in a burst-of-5, with higher firerate, speed, and recoil. Maybe let the coin ricochet once at higher difficulty. DONE
 # -Pinball: Add charge up timer and laser indicator to telegraph. Pinball speed is now hitscan.
 # -Bell of Fortune: Add 3D VFX indicator to better telegraph. Add screenshake and dust cloud on impact. DONE
-# -Charge: Add ground decal effect on charge path to show its power. Add speedline. DONE
+# -Charge: Add ground decal effect on charge path to show its power. Add speedline. DONE  Shake and push player if connect.
 # -Cherry Bomb: Add burning wick. Add explosion range indicator. Improve sfx. DONE
 # -General: Add dust particle below to show that he's hovering. DONE
 
@@ -842,9 +842,14 @@ func _on_charge_charging_state_entered() -> void:
 
 
 func _on_charge_collision(body: Node3D) -> void:
+	const CHARGE_TREMOR_INTENSITY = 0.5
+	const CHARGE_PUSH_FORCE_MULT = 3.0
 	if body == target:
 		velocity = Vector3.ZERO
 		body.health_component.damage(charge_damage * GameManager.get_risk_dmg_mult())
+		if body is Player:
+			body.player_camera.add_trauma(CHARGE_TREMOR_INTENSITY)
+			body.apply_impulse_to_player(global_position.direction_to(body.global_position) * charge_damage * CHARGE_PUSH_FORCE_MULT)
 		hurtbox.body_entered.disconnect(_on_charge_collision)
 		hurtbox.set_deferred("monitoring", false)
 

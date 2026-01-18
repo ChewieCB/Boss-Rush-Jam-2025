@@ -93,6 +93,7 @@ bus = &"SFX"
 
 [node name="ProjectileBurnEmit" parent="." instance=ExtResource("26_ke4ar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15806, 0.924809, 0)
+autostart = true
 time_until_queue_free = 5.0
 
 [node name="LifetimeTimer" type="Timer" parent="."]

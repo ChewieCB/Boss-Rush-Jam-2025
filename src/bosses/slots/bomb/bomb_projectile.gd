@@ -33,7 +33,6 @@ func _ready() -> void:
 	var tween = get_tree().create_tween()
 	explosion_range_indicator.scale = Vector3.ONE * explosion_radius
 	tween.tween_property(mesh.mesh.surface_get_material(0), "albedo_color:r", 1.0, fuse_time)
-	burn_vfx.activate()
 
 func init(_damage: float, _fuse_time: float):
 	explosion_damage = _damage
@@ -78,7 +77,7 @@ func destroy(explode: bool = true) -> void:
 		await sfx_player.finished
 	else:
 		await tween.finished
-	queue_free()
+	queue_free() 
 
 func _integrate_forces(state):
 	body_state = state
