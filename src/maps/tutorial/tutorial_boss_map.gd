@@ -72,6 +72,7 @@ func _ready() -> void:
 	floor_mesh = arena_2_floor_mesh
 	super()
 	
+	boss.tutorial_phase_1_started.connect(_on_tutorial_phase_1_started)
 	boss.tutorial_phase_2_started.connect(_on_tutorial_phase_2_started)
 	boss.tutorial_phase_3_started.connect(_on_tutorial_phase_3_started)
 	boss.shock_floor_hazard = arena_1_floor_shock_hazard
@@ -207,9 +208,15 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	player.max_air_jump = 0
 	player.current_gun.equip_active()
 	player.stat_ui.show_all_ui()
-	#boss_trigger.queue_free()
-	boss.state_chart.send_event("start_tutorial_phase_1")
-	show_tutorial_panel(tutorial_1_trigger_shoot)
+	
+	boss.state_chart.send_event("start_tutorial_arena_1")
+	match boss.current_phase:
+		1:
+			boss.state_chart.send_event("start_tutorial_phase_1")
+		2:
+			boss.state_chart.send_event("start_tutorial_phase_2")
+		3:
+			boss.state_chart.send_event("start_tutorial_phase_3")
 
 
 func _remove_boss_from_intro_path() -> void:
@@ -245,6 +252,10 @@ func _on_smoke_start_trigger_body_entered(body: Node3D) -> void:
 	dash_tutorial_trigger._on_body_entered(body)
 	await get_tree().create_timer(0.1).timeout
 	sfx_smoke_loop.play()
+
+
+func _on_tutorial_phase_1_started() -> void:
+	show_tutorial_panel(tutorial_1_trigger_shoot)
 
 
 func _on_tutorial_phase_2_started() -> void:

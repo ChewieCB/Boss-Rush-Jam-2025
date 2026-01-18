@@ -127,7 +127,6 @@ func activate() -> void:
 	super ()
 	#state_chart.send_event("start_intro")
 	state_chart.send_event("start_intro")
-	state_chart.send_event("start_tutorial_arena_1")
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
@@ -1159,7 +1158,7 @@ func _on_arena_1_cutscene_state_physics_processing(delta: float) -> void:
 func _on_tutorial_phase_1_state_entered() -> void:
 	# Start with a ranged attack, then alternate taunt and ranged attack until a health threshold is reached
 	# TODO - update health bar/audio triggers
-	pass
+	tutorial_phase_1_started.emit()
 
 
 # TAUNT
@@ -1293,6 +1292,7 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(del
 
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
+	state_chart.send_event("start_targeting")
 	await get_tree().create_timer(0.6, false).timeout
 	anim_player.play("elevator_boss/shock_slam_telegraph_start")
 	await anim_player.animation_finished

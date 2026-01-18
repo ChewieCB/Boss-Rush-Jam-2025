@@ -1468,7 +1468,7 @@ tracks/4/keys = {
 
 [sub_resource type="Animation" id="Animation_gmqna"]
 resource_name = "shock_slam_start"
-length = 0.125
+length = 0.175
 step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -1489,7 +1489,7 @@ tracks/1/path = NodePath("Sprite3D:texture")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.125),
+"times": PackedFloat32Array(0, 0.1, 0.175),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [ExtResource("33_1fje0"), ExtResource("38_x4twh"), ExtResource("39_gab4h")]
@@ -1501,7 +1501,7 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.125),
+"times": PackedFloat32Array(0.175),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -1515,7 +1515,7 @@ tracks/3/path = NodePath("DebugAnimPivot/WrenchParticleSpawn:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.05),
+"times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector3(2, 0.3, -1.4), Vector3(2, -2, 0.4)]
@@ -1527,7 +1527,7 @@ tracks/4/path = NodePath("DebugAnimPivot/WrenchParticleSpawn:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.05),
+"times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -2063,7 +2063,7 @@ offset = Vector2(0, 256)
 texture = ExtResource("16_ukgug")
 
 [node name="DebugAnimPivot" type="Marker3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
 
 [node name="SlamSpawn" type="Marker3D" parent="DebugAnimPivot" index="0"]
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, -0.8, -1.9, 0.800001)
@@ -2188,6 +2188,7 @@ boss_name = "The Mechanic"
 
 [node name="StateChartDebugger" parent="DebugUI" index="0"]
 offset_top = 27.0
+enabled = true
 
 [node name="toTutorialArena1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
 script = ExtResource("5_7kc6y")
@@ -2206,6 +2207,18 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Phase1_BasicCombatTutorial")
 event = &"start_tutorial_phase_1"
+delay_in_seconds = "0.0"
+
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Phase2_JumpTutorial")
+event = &"start_tutorial_phase_2"
+delay_in_seconds = "0.0"
+
+[node name="toPhase3" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" index="2"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Phase3_DashTutorial")
+event = &"start_tutorial_phase_3"
 delay_in_seconds = "0.0"
 
 [node name="Phase1_BasicCombatTutorial" type="Node" parent="StateChart/Root/Phase/TutorialArena1" index="1"]

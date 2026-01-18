@@ -8672,13 +8672,14 @@ transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -25.625,
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-4.37114e-08, 0, -0.999946, 0, 0.999946, 0, 1, 0, -4.3709e-08, -44.769, 0.145, 29.574)
+transform = Transform3D(-1.7321e-07, -0.877191, -0.48003, -5.96047e-08, 0.48003, -0.877191, 1, -1.23327e-07, -1.35431e-07, -51.478, 0.145, 29.574)
 loop = false
 tilt_enabled = false
 
 [node name="entity_187_TutorialBoss" parent="Path3D/PathFollow3D" index="0" node_paths=PackedStringArray("target") instance=ExtResource("88_ijdgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.0784, -1.20733, -32.3512)
 target = NodePath("../../../entity_11_PlayerRef")
+current_phase = 2
 orbit_radius = 200.0
 
 [node name="DebugAnimPivot" parent="Path3D/PathFollow3D/entity_187_TutorialBoss" index="1"]
