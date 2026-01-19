@@ -259,7 +259,7 @@ func select_attack_phase_3_tutorial() -> void:
 		#state_chart.send_event("start_taunt_attack")
 		#return
 	
-	if randf() < 0.7:
+	if randf() < 0.6:
 		state_chart.send_event("start_dash_wave")
 	else:
 		state_chart.send_event("start_melee_combo")
@@ -998,15 +998,14 @@ func slam_line(_spawn_pos: Vector3, _range: float = 30.0, _width: float = 4.0, _
 	)
 
 
-func slam_wall(_time: float = slam_time, _width: float = 4.0, _height: float = 0.6, _thickness: float = 0.25, _damage: float = slam_damage) -> void:
+func slam_wall(max_range: float, speed: float, _width: float = 4.0, _height: float = 0.6, _thickness: float = 0.25, _damage: float = slam_damage) -> void:
 	# Spawn wave aoe
 	spawn_aoe_wall(
-		self.global_position.distance_to(target.global_position) + 5.0,
+		max_range,
+		speed,
 		_width, _height, _thickness,
-		_damage, _time,
-		slam_spawn_marker.global_position,
-		0.2, false,
-		state_chart.send_event.bind("combo_end")
+		_damage,
+		slam_spawn_marker.global_position
 	)
 
 
@@ -1104,11 +1103,11 @@ func spawn_aoe_line(
 
 func spawn_aoe_wall(
 	max_range: float,
+	speed: float,
 	width: float,
 	height: float = 2.0,
 	thickness: float = 0.5,
 	damage: float = 10.0,
-	spawned_wave_time: float = 1.0,
 	area_pos: Vector3 = self.global_position,
 	# pushback_source: Node3D = self,
 	_spawned_wave_height: float = 0.3,
@@ -1151,16 +1150,38 @@ func spawn_aoe_wall(
 	mesh.material = line_material
 	
 	# Spawn moving wave particles that stay at end of line
-	slam_spawn_marker.remove_child(slam_wall_particles)
-	scene_root.add_child(slam_wall_particles)
+	
+	if not slam_wall_particles in scene_root.get_children():
+		slam_wall_particles.get_parent().remove_child(slam_wall_particles)
+		scene_root.add_child(slam_wall_particles)
 	slam_wall_particles.global_position = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * 0.1
-	slam_wall_particles.global_position.y -= mesh.size.y / 2
+	#slam_wall_particles.global_position.y -= mesh.size.y / 2
 	slam_wall_particles.global_rotation = self.global_rotation + Vector3(0, PI, 0)
 	slam_wall_particles.visible = true
 	slam_wall_particles.emitting = true
 	slam_wall_particles.is_on_floor = true
 	
+	# Explode on impact
+	area_collider.body_entered.connect(
+		func():
+			var dissolve_tween: Tween = get_tree().create_tween()
+			dissolve_tween.tween_method(
+				_change_slam_wall_progress.bind(mesh),
+				0.665,
+				1.0,
+				0.4
+			)
+			dissolve_tween.chain().tween_method(
+				_change_slam_wall_color.bind(mesh),
+				"#ff9e5480",
+				"#ff9e5400",
+				0.2
+			)
+	)
+	
 	# Animate the visual
+	
+	var spawned_wave_time: float = max_range / speed
 	
 	# TODO - SFX
 	var slam_sfx_player := AudioStreamPlayer3D.new()
@@ -1204,13 +1225,12 @@ func _on_wave_collision(
 	pushback_radius: float = pushback_source.collider.shape.radius
 ) -> void:
 	if body == target:
-		SoundManager.play_sound(sfx_wave_impact.pick_random(), "SFX")
-		InputHelper.rumble_medium()
-		
 		if body is Player:
 			if body.is_dashing:
 				return
 		
+		SoundManager.play_sound(sfx_wave_impact.pick_random(), "SFX")
+		InputHelper.rumble_medium()
 		body.health_component.damage(aoe_damage)
 		trigger_pushback(10.0, pushback_source, pushback_radius)
 
@@ -1551,27 +1571,40 @@ func _on_tutorial_phase_3_dash_wave_idle_state_physics_processing(delta: float) 
 
 func _on_tutorial_phase_3_dash_wave_swipe_wave_state_entered() -> void:
 	state_chart.send_event("start_targeting")
+	
+	await get_tree().create_timer(0.6, false).timeout
+	await _telegraph_attack()
+	
 	anim_player.play("elevator_boss/dash_wave")
 	await anim_player.animation_finished
 	
-	await get_tree().create_timer(0.4, false).timeout
-	
-	if randf() < 0.5:
-		state_chart.send_event("wave_combo")
-	else:
-		state_chart.send_event("end_wave")
-
-
-func _on_tutorial_phase_3_dash_wave_backswipe_wave_state_entered() -> void:
-	anim_player.play("elevator_boss/dash_wave")
-	await anim_player.animation_finished
-	
-	await get_tree().create_timer(0.55, false).timeout
+	await get_tree().create_timer(1.0, false).timeout
 	
 	state_chart.send_event("end_wave")
+
+
+# TODO - backswipe wave on tutoral is too harsh, re-add this in later non-tutorial phases
+#func _on_tutorial_phase_3_dash_wave_backswipe_wave_state_entered() -> void:
+	#anim_player.play("elevator_boss/dash_wave")
+	#await anim_player.animation_finished
+	#
+	#await get_tree().create_timer(1.2, false).timeout
+	#
+	#state_chart.send_event("end_wave")
 
 
 func _on_tutorial_phase_3_dash_wave_state_physics_processing(delta: float) -> void:
 	velocity = Vector3.ZERO
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
+
+
+func _change_slam_wall_progress(mesh: MeshInstance3D, progress: float) -> void:
+	var mat: ShaderMaterial = mesh.get_active_material(0)
+	mat.set_shader_parameter("rise_progress", progress)
+
+
+func _change_slam_wall_color(mesh: MeshInstance3D, color: Color) -> void:
+	var mat: ShaderMaterial = mesh.get_active_material(0)
+	mat.set_shader_parameter("color", color)
+	mat.set_shader_parameter("color_edge", color)

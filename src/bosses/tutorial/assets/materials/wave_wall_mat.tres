@@ -15,8 +15,8 @@ noise = SubResource("FastNoiseLite_eviow")
 [resource]
 render_priority = 1
 shader = ExtResource("1_7fq12")
-shader_parameter/color = Color(1, 0.620333, 0.33, 0.501961)
-shader_parameter/color_edge = Color(0.69, 0.370875, 0.1725, 0.560784)
+shader_parameter/color = Color(1, 0.619608, 0.329412, 0.376471)
+shader_parameter/color_edge = Color(0.69, 0.370875, 0.1725, 0.470588)
 shader_parameter/emission_strength = 0.954
 shader_parameter/rise_progress = 0.665
 shader_parameter/edge_width = 0.129

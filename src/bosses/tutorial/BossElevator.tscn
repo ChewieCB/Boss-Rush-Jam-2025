@@ -1,4 +1,4 @@
-[gd_scene load_steps=207 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=206 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -914,7 +914,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0.175),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [1.5, 12.0, 8.0],
+"args": [30.0, 4.0, 12.0, 8.0],
 "method": &"slam_wall"
 }]
 }
@@ -966,11 +966,11 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.1),
+"times": PackedFloat32Array(0.125),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [Vector3(0, 0, 0), 30.0, 12.0, 0.0],
-"method": &"slam_line"
+"args": [30.0, 4.0, 12.0, 8.0],
+"method": &"slam_wall"
 }]
 }
 tracks/3/type = "value"
@@ -2099,10 +2099,6 @@ _data = {
 "taunt": SubResource("Animation_50rbb")
 }
 
-[sub_resource type="BoxMesh" id="BoxMesh_ldgc7"]
-material = ExtResource("85_4771x")
-size = Vector3(12, 8, 1)
-
 [node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_particles", "slam_wall_particles", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "sfx_players") instance=ExtResource("1_7pmj2")]
 collision_mask = 11
 script = ExtResource("2_6u4e1")
@@ -2631,7 +2627,7 @@ delay_in_seconds = "0.0"
 
 [node name="Phase3_DashTutorial" type="Node" parent="StateChart/Root/Phase/TutorialArena1" index="3"]
 script = ExtResource("3_irtaj")
-initial_state = NodePath("Taunt")
+initial_state = NodePath("DashWave")
 
 [node name="Taunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="0"]
 script = ExtResource("3_irtaj")
@@ -2834,28 +2830,13 @@ delay_in_seconds = "0.0"
 [node name="SwipeWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="1"]
 script = ExtResource("4_fo57y")
 
-[node name="toBackswipeWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/SwipeWave" index="0"]
-script = ExtResource("5_7kc6y")
-to = NodePath("../../BackswipeWave")
-event = &"wave_combo"
-delay_in_seconds = "0.0"
-
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/SwipeWave" index="1"]
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/SwipeWave" index="0"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_wave"
 delay_in_seconds = "0.0"
 
-[node name="BackswipeWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="2"]
-script = ExtResource("4_fo57y")
-
-[node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/BackswipeWave" index="0"]
-script = ExtResource("5_7kc6y")
-to = NodePath("../../Recover")
-event = &"end_wave"
-delay_in_seconds = "0.0"
-
-[node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="3"]
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="2"]
 script = ExtResource("4_fo57y")
 
 [node name="toIdle" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Recover" index="0"]
@@ -2864,14 +2845,14 @@ to = NodePath("../../Idle")
 event = &"end_recovery"
 delay_in_seconds = "0.0"
 
-[node name="toTaunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="4"]
+[node name="toTaunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Taunt")
 event = &"start_taunt_attack"
 guard = SubResource("Resource_4xor2")
 delay_in_seconds = "0.0"
 
-[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="5"]
+[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="4"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MeleeCombo")
 event = &"start_melee_combo"
@@ -3280,6 +3261,66 @@ script = ExtResource("5_7kc6y")
 event = &"start_intro"
 delay_in_seconds = "0.0"
 
+[node name="DashWave" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE" index="5"]
+script = ExtResource("3_irtaj")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave" index="0"]
+script = ExtResource("4_fo57y")
+
+[node name="toSwipeWave" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave/Idle" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../SwipeWave")
+event = &"start_wave"
+delay_in_seconds = "0.0"
+
+[node name="SwipeWave" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave" index="1"]
+script = ExtResource("4_fo57y")
+
+[node name="toBackswipeWave" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave/SwipeWave" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../BackswipeWave")
+event = &"wave_combo"
+delay_in_seconds = "0.0"
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave/SwipeWave" index="1"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"end_wave"
+delay_in_seconds = "0.0"
+
+[node name="BackswipeWave" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave" index="2"]
+script = ExtResource("4_fo57y")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave/BackswipeWave" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Recover")
+event = &"end_wave"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave" index="3"]
+script = ExtResource("4_fo57y")
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave/Recover" index="0"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Idle")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toTaunt" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave" index="4"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Taunt")
+event = &"start_taunt_attack"
+guard = SubResource("Resource_4xor2")
+delay_in_seconds = "0.0"
+
+[node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave" index="5"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../MeleeCombo")
+event = &"start_melee_combo"
+guard = SubResource("Resource_4xor2")
+delay_in_seconds = "0.0"
+
 [node name="AnimationPlayer" parent="." index="23"]
 libraries = {
 "": SubResource("AnimationLibrary_3pryd"),
@@ -3312,10 +3353,6 @@ bus = &"SFX"
 
 [node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="34"]
 bus = &"SFX"
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="35"]
-transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0)
-mesh = SubResource("BoxMesh_ldgc7")
 
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" to="." method="_on_arena_1_cutscene_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" to="." method="_on_arena_1_cutscene_state_physics_processing"]
@@ -3373,7 +3410,6 @@ mesh = SubResource("BoxMesh_ldgc7")
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Idle" to="." method="_on_tutorial_phase_3_dash_wave_idle_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Idle" to="." method="_on_tutorial_phase_3_dash_wave_idle_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/SwipeWave" to="." method="_on_tutorial_phase_3_dash_wave_swipe_wave_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/BackswipeWave" to="." method="_on_tutorial_phase_3_dash_wave_backswipe_wave_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave/Recover" to="." method="_recover_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE" to="." method="_on_phase_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/Smokescreen/Idle" to="." method="_on_smokescreen_idle_state_entered"]
@@ -3406,3 +3442,9 @@ mesh = SubResource("BoxMesh_ldgc7")
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/LaserAoE/Charging" to="." method="_on_laser_aoe_charging_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/LaserAoE/Firing" to="." method="_on_laser_aoe_firing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/LaserAoE/Recover" to="." method="_on_laser_aoe_recover_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave" to="." method="_on_tutorial_phase_3_dash_wave_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave/Idle" to="." method="_on_tutorial_phase_3_dash_wave_idle_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave/Idle" to="." method="_on_tutorial_phase_3_dash_wave_idle_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave/SwipeWave" to="." method="_on_tutorial_phase_3_dash_wave_swipe_wave_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave/BackswipeWave" to="." method="_on_tutorial_phase_3_dash_wave_backswipe_wave_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1-OLD-DO-NOT-USE/DashWave/Recover" to="." method="_recover_entered"]
