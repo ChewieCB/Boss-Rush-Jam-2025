@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://v6u7isrgig0w"]
+
+[ext_resource type="Script" path="res://src/bosses/tutorial/slam_particles.gd" id="1_dku8c"]
+
+[sub_resource type="Curve" id="Curve_2p841"]
+_data = [Vector2(0, 0.549451), 0.0, 0.0, 0, 0, Vector2(0.241803, 1), 0.70225, 0.70225, 0, 0, Vector2(0.372951, 0.681319), 0.0, 0.0, 0, 0, Vector2(0.934426, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_4f8b1"]
+curve = SubResource("Curve_2p841")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fo67x"]
+emission_shape_scale = Vector3(12, 1, 0.1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+angle_min = 1.07288e-05
+angle_max = 360.0
+direction = Vector3(0, 30, 23.385)
+spread = 80.0
+initial_velocity_min = 1.0
+initial_velocity_max = 1.0
+gravity = Vector3(0, 20, -5)
+scale_min = 0.7
+scale_max = 1.95
+scale_curve = SubResource("CurveTexture_4f8b1")
+turbulence_enabled = true
+turbulence_noise_strength = 20.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jqltw"]
+transparency = 1
+albedo_color = Color(0.895992, 0.360171, 0.14045, 0.980392)
+emission_enabled = true
+emission = Color(0.894118, 0.360784, 0.141176, 1)
+emission_energy_multiplier = 10.0
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_ipksg"]
+material = SubResource("StandardMaterial3D_jqltw")
+size = Vector2(0.3, 0.3)
+
+[sub_resource type="PrismMesh" id="PrismMesh_orci3"]
+size = Vector3(1, 0.5, 0)
+
+[node name="SlamWallParticles" type="GPUParticles3D"]
+amount = 500
+lifetime = 0.6
+process_material = SubResource("ParticleProcessMaterial_fo67x")
+draw_pass_1 = SubResource("QuadMesh_ipksg")
+script = ExtResource("1_dku8c")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.2)
+visible = false
+mesh = SubResource("PrismMesh_orci3")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]

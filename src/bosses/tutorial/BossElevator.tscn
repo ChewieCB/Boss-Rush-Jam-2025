@@ -1,4 +1,4 @@
-[gd_scene load_steps=206 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=207 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -84,22 +84,8 @@
 [ext_resource type="Texture2D" uid="uid://c52mo1qekknqm" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_7.png" id="38_x4twh"]
 [ext_resource type="Texture2D" uid="uid://5ks3pvvqxv7y" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_8.png" id="39_gab4h"]
 [ext_resource type="Texture2D" uid="uid://b50hajeka4cfw" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_1.png" id="43_r6ljj"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ulqwk"]
-transparency = 1
-cull_mode = 2
-albedo_color = Color(0.71, 0.271575, 0.0355, 0.486275)
-emission_enabled = true
-emission = Color(0.85, 0.00849999, 0.00849999, 1)
-emission_energy_multiplier = 10.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_muhix"]
-transparency = 1
-cull_mode = 2
-albedo_color = Color(0.709804, 0.270588, 0.0352941, 0.486275)
-emission_enabled = true
-emission = Color(0.85, 0.00849999, 0.00849999, 1)
-emission_energy_multiplier = 10.0
+[ext_resource type="PackedScene" uid="uid://v6u7isrgig0w" path="res://src/bosses/tutorial/SlamWallParticles.tscn" id="44_go0kb"]
+[ext_resource type="Material" uid="uid://dtya4iffmvt1m" path="res://src/bosses/tutorial/assets/materials/wave_wall_mat.tres" id="85_4771x"]
 
 [sub_resource type="Curve" id="Curve_hy86r"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -2113,7 +2099,11 @@ _data = {
 "taunt": SubResource("Animation_50rbb")
 }
 
-[node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_particles", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "sfx_players") instance=ExtResource("1_7pmj2")]
+[sub_resource type="BoxMesh" id="BoxMesh_ldgc7"]
+material = ExtResource("85_4771x")
+size = Vector3(12, 8, 1)
+
+[node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_particles", "slam_wall_particles", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "sfx_players") instance=ExtResource("1_7pmj2")]
 collision_mask = 11
 script = ExtResource("2_6u4e1")
 MOVE_SPEED = 6.0
@@ -2146,9 +2136,10 @@ slam_damage = 26.0
 slam_delay = 0.3
 slam_time = 0.9
 slam_particles = NodePath("DebugAnimPivot/SlamSpawn/SlamParticles")
-line_material = SubResource("StandardMaterial3D_ulqwk")
+slam_wall_particles = NodePath("DebugAnimPivot/SlamSpawn/SlamWallParticles")
+line_material = ExtResource("85_4771x")
 slam_spawn_marker = NodePath("DebugAnimPivot/SlamSpawn")
-wave_material = SubResource("StandardMaterial3D_muhix")
+wave_material = ExtResource("85_4771x")
 sfx_jump = Array[AudioStream]([ExtResource("5_iynxh")])
 sfx_slam = Array[AudioStream]([ExtResource("6_elwvg")])
 sfx_wave_loop = Array[AudioStream]([ExtResource("7_xo7jb")])
@@ -2181,6 +2172,7 @@ sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlaye
 sfx_hit = Array[AudioStream]([ExtResource("28_6ig1p"), ExtResource("29_d21ab"), ExtResource("30_jv36d"), ExtResource("31_t81ll"), ExtResource("32_qvwbi")])
 base_sprite = ExtResource("16_ukgug")
 hurt_sprite = ExtResource("34_3f23y")
+current_phase = 3
 attack_recovery_time = 0.5
 telegraph_time = 0.6
 projectile_scene = null
@@ -2199,6 +2191,9 @@ transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 
 transform = Transform3D(1, 0, 1.49012e-08, 0, 1, 0, -1.49012e-08, 0, 1, -0.8, -1.9, 0.800001)
 
 [node name="SlamParticles" parent="DebugAnimPivot/SlamSpawn" index="0" instance=ExtResource("7_2uohy")]
+visible = false
+
+[node name="SlamWallParticles" parent="DebugAnimPivot/SlamSpawn" index="1" instance=ExtResource("44_go0kb")]
 visible = false
 
 [node name="WrenchParticleSpawn" type="Marker3D" parent="DebugAnimPivot" index="1"]
@@ -3317,6 +3312,10 @@ bus = &"SFX"
 
 [node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="34"]
 bus = &"SFX"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="35"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0)
+mesh = SubResource("BoxMesh_ldgc7")
 
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" to="." method="_on_arena_1_cutscene_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" to="." method="_on_arena_1_cutscene_state_physics_processing"]

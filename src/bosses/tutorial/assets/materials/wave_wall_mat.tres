@@ -1,0 +1,33 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://dtya4iffmvt1m"]
+
+[ext_resource type="Shader" path="res://src/bosses/tutorial/slash_shader.gdshader" id="1_7fq12"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_eviow"]
+noise_type = 2
+seed = 450
+frequency = 0.0174
+fractal_octaves = 8
+fractal_gain = 0.575
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3h1fl"]
+noise = SubResource("FastNoiseLite_eviow")
+
+[resource]
+render_priority = 1
+shader = ExtResource("1_7fq12")
+shader_parameter/color = Color(1, 0.620333, 0.33, 0.501961)
+shader_parameter/color_edge = Color(0.69, 0.370875, 0.1725, 0.560784)
+shader_parameter/emission_strength = 0.954
+shader_parameter/rise_progress = 0.665
+shader_parameter/edge_width = 0.129
+shader_parameter/noise_scale = 2.256
+shader_parameter/noise_strength = 0.256
+shader_parameter/time_speed = 2.817
+shader_parameter/fade_softness = 0.086
+shader_parameter/top_fade_start = 0.0
+shader_parameter/top_fade_power = 0.887
+shader_parameter/invert_top_fade = true
+shader_parameter/wave_transparency = 0.711
+shader_parameter/wave_frequency = 3.066
+shader_parameter/wave_speed = 0.0
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_3h1fl")
