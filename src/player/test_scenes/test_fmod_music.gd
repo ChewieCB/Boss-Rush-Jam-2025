@@ -1,7 +1,7 @@
 extends Node2D
 
 
-@export var music_state_list = ["Menu", "Lobby", "Slotty", "Roulette", "Bartender", "GenericBossAftermath", "PitbossHallway",
+@export var music_state_list: Array[String] = ["Menu", "Lobby", "Slotty", "Roulette", "Bartender", "GenericBossAftermath", "PitbossHallway",
 	"PitbossMainfight", "ChipbossInt", "ChipbossStart", "BlackjackStart", "TutorialBossfight", "Tutorial1", "Tutorial2"]
 @export var log_line_prefab: PackedScene
 
