@@ -225,6 +225,9 @@ func _ready() -> void:
 	if GameManager.CHEAT_oneshot:
 		health_component.max_health = 1
 		health_component.current_health = 1
+	
+	health_ui.clear_sub_health_bars()
+	health_ui.init_boss_health_ui(health_component.max_health, 1)
 
 	if owner:
 		await owner.ready

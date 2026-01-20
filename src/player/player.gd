@@ -806,6 +806,15 @@ func _on_health_dead_state_entered() -> void:
 	hurt_overlay.dead()
 	stat_ui.hide_all_ui()
 
+func _on_health_dead_state_exited() -> void:
+	hurt_overlay.revive()
+	stat_ui.show_all_ui()
+	var neck_tween = get_tree().create_tween()
+	neck_tween.parallel().tween_property(neck, "rotation:z", deg_to_rad(0), 0.3)
+	neck_tween.parallel().tween_property(neck, "rotation:y", deg_to_rad(0), 0.3)
+	controls_disabled = false
+	
+
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
 	neck.position.y = lerp(neck.position.y, -1.0, delta * 5)

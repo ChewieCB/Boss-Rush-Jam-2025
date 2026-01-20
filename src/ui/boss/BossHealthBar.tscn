@@ -1,10 +1,7 @@
-[gd_scene load_steps=21 format=3 uid="uid://bwei3cifjg1sq"]
+[gd_scene load_steps=17 format=3 uid="uid://bwei3cifjg1sq"]
 
 [ext_resource type="Script" path="res://src/ui/boss/boss_health_bar.gd" id="1_8ja47"]
-[ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="1_ef7fu"]
-[ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="2_wavg1"]
-[ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="3_cwsn4"]
-[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="5_wos4h"]
+[ext_resource type="PackedScene" uid="uid://chk3b5cantnsw" path="res://src/ui/boss/BossHealthBarInstance.tscn" id="2_7ucem"]
 [ext_resource type="Texture2D" uid="uid://jgscawd6skc" path="res://src/ui/common/assets/kenney_borders/default/Divider Fade/divider-fade-001.png" id="6_62y4p"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="7_bj4c4"]
 [ext_resource type="Texture2D" uid="uid://bfki3npylok25" path="res://assets/sprite/status_icon/burning.png" id="8_oo5ks"]
@@ -12,9 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://dn3l76qv0r61l" path="res://assets/sprite/status_icon/frozen.png" id="10_e2145"]
 [ext_resource type="Texture2D" uid="uid://b20sq43ynvj8c" path="res://assets/sprite/status_icon/shocked.png" id="11_4baf2"]
 [ext_resource type="Texture2D" uid="uid://bae10gvdt7y0t" path="res://assets/sprite/status_icon/bleeding.png" id="12_eavam"]
-
-[sub_resource type="Theme" id="Theme_y0f30"]
-default_font = ExtResource("5_wos4h")
 
 [sub_resource type="Theme" id="Theme_gqrbp"]
 default_font = ExtResource("7_bj4c4")
@@ -149,7 +143,7 @@ _data = {
 "visible": SubResource("Animation_rstvx")
 }
 
-[node name="BossHealthBarUI" type="MarginContainer" node_paths=PackedStringArray("timer", "heath_bar", "damage_bar", "health_label")]
+[node name="BossHealthBarUI" type="MarginContainer" node_paths=PackedStringArray("sub_health_bars_container", "timer")]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 5
 anchor_left = 0.5
@@ -164,10 +158,9 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 script = ExtResource("1_8ja47")
-timer = NodePath("VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer")
-heath_bar = NodePath("VBoxContainer/MarginContainer2/MarginContainer/HealthBar")
-damage_bar = NodePath("VBoxContainer/MarginContainer2/MarginContainer/HealthBar/DamageBar")
-health_label = NodePath("VBoxContainer/MarginContainer2/MarginContainer/Label")
+sub_health_bars_container = NodePath("VBoxContainer/MarginContainer2/HBoxContainer")
+sub_health_bar_prefab = ExtResource("2_7ucem")
+timer = NodePath("Timer")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -178,64 +171,9 @@ theme_override_constants/separation = 0
 layout_mode = 2
 mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer2"]
 layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="Label" type="Label" parent="VBoxContainer/MarginContainer2/MarginContainer"]
-z_index = 1
-layout_mode = 2
-size_flags_horizontal = 4
-theme = SubResource("Theme_y0f30")
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-text = "10,000/10,000"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HealthBar" type="TextureProgressBar" parent="VBoxContainer/MarginContainer2/MarginContainer"]
-custom_minimum_size = Vector2(240, 20)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-value = 40.0
-nine_patch_stretch = true
-stretch_margin_left = 20
-stretch_margin_top = 20
-stretch_margin_right = 20
-stretch_margin_bottom = 20
-texture_over = ExtResource("1_ef7fu")
-texture_progress = ExtResource("2_wavg1")
-tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
-
-[node name="DamageBar" type="TextureProgressBar" parent="VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
-z_index = -1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-value = 60.0
-nine_patch_stretch = true
-stretch_margin_left = 20
-stretch_margin_top = 20
-stretch_margin_right = 20
-stretch_margin_bottom = 20
-texture_under = ExtResource("3_cwsn4")
-texture_progress = ExtResource("3_cwsn4")
-tint_under = Color(0.113725, 0.113725, 0.113725, 1)
-tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
-
-[node name="Timer" type="Timer" parent="VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
-wait_time = 0.4
-one_shot = true
+theme_override_constants/separation = -12
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -414,4 +352,8 @@ libraries = {
 "": SubResource("AnimationLibrary_shbci")
 }
 
-[connection signal="timeout" from="VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer" to="." method="_on_timer_timeout"]
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

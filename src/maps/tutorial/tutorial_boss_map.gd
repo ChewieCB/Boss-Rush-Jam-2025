@@ -70,19 +70,16 @@ func _ready() -> void:
 	generate_navigation()
 	floor_parent = arena_2_floor_parent
 	floor_mesh = arena_2_floor_mesh
+	
 	super()
 	
 	boss.tutorial_phase_1_started.connect(_on_tutorial_phase_1_started)
 	boss.tutorial_phase_2_started.connect(_on_tutorial_phase_2_started)
 	boss.tutorial_phase_3_started.connect(_on_tutorial_phase_3_started)
+	boss.tutorial_phases_finished.connect(_on_tutorial_finished)
 	boss.trigger_smoke.connect(_on_boss_trigger_smoke)
 	boss.end_smoke.connect(stop_all_pipe_emitters)
 	boss.shock_floor_hazard = arena_1_floor_shock_hazard
-	#
-	
-	if GameManager.cached_player_rotation:
-		player.global_position = elevator_doors.global_position - Vector3(0, 0, 1.5)
-		player.global_rotation.y = PI
 
 	if boss_doors:
 		boss_doors.close()
@@ -259,6 +256,19 @@ func _on_tutorial_phase_3_started() -> void:
 	trigger_pipe_emitter()
 
 
+func _on_tutorial_finished() -> void:
+	# Move boss to doorway - dynamic cutscene tween
+	
+	# Play fixed cutscene
+	
+	# Throw barrel to player
+	
+	# Move through doors, locking doors behind
+	
+	# Spark the electrical box
+	return
+
+
 
 func _on_boss_trigger_smoke(count: int) -> void:
 	for i in range(count):
@@ -304,6 +314,8 @@ func _on_player_death() -> void:
 	else:
 		# Put the boss in a passive state while we play the tutorial
 		boss.state_chart.send_event("player_defeated_reset")
+		
+		await get_tree().create_timer(0.6).timeout
 		
 		# Move cutscene camera to match player's camera
 		cutscene_camera.global_transform = player.player_camera.global_transform
@@ -354,6 +366,8 @@ func _on_player_death() -> void:
 		$AnimationPlayer.play("cutscene_letterbox_end")
 		await camera_tween.finished
 		player._disable_cutscene_cam()
+		
+		await get_tree().create_timer(0.4).timeout
 		
 		# Give the player their health back
 		player.health_component.heal(player.health_component.max_health)

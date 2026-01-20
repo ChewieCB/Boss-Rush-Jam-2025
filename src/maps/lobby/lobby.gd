@@ -70,6 +70,7 @@ func _ready() -> void:
 			GameManager.victory_ui_shown = true
 	
 	player.stat_ui.show_all_ui()
+	player.controls_disabled = false
 
 
 func _input(event: InputEvent) -> void:

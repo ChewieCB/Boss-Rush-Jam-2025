@@ -119,6 +119,11 @@ func start_game():
 	#if not SaveManager.save_data_is_loaded:
 	SaveManager.load_game(GameManager.chosen_slot_id)
 	
+	# Zero any stored positions when moving between saves
+	GameManager.cached_player_pos_relative_to_elevator_doors = Vector3.ZERO
+	GameManager.cached_player_rotation = Vector3.ZERO
+	GameManager.cached_camera_rotation = Vector3.ZERO
+	
 	if not GameManager.tutorial_completed:
 		LoadingHandler.start_loading(
 			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL], 

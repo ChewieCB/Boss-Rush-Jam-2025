@@ -12,6 +12,14 @@ signal end_smoke
 @export var arena_1_center: Marker3D
 @export var arena_2_center: Marker3D
 
+@export_category("Health Phases")
+@export var tutorial_health: int = 3000
+@export var phase_1_health: int = 1000
+@export var phase_2_health: int = 1000
+@export var phase_3_health: int = 1000
+var tutorial_phase_2_health_threshold: int = tutorial_health - phase_1_health
+var tutorial_phase_3_health_threshold: int = tutorial_health - phase_1_health - phase_2_health
+
 @export_category("Movement")
 @export var MOVE_SPEED: float = 6
 @onready var move_speed: float = MOVE_SPEED:
@@ -102,8 +110,8 @@ var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + 
 @export var delay_between_burst: float = 0.5
 @export var nail_damage: float = 7.0
 #
-@export var tutorial_strafe_distance: float = 10.0
-@export var tutorial_strafe_radius: float = 10.0
+@export var tutorial_strafe_distance: float = 9.0
+@export var tutorial_strafe_radius: float = 9.0
 # SFX
 @export var sfx_nail_equip: Array[AudioStream]
 @export var sfx_nail_shot: Array[AudioStream]
@@ -132,6 +140,10 @@ var attack_interrupt: bool = false  # Flag to interrupt loop-based attacks like 
 
 func _ready() -> void:
 	super()
+	health_component.max_health = tutorial_health
+	health_component.initialize_health()
+	health_ui.clear_sub_health_bars()
+	health_ui.init_boss_health_ui(health_component.max_health, 3)
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 
 
@@ -143,18 +155,19 @@ func activate() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
 	# TODO - proper phased health trigger implementation
-	if new_health <= 2000:
-		# Cancel current phase if active and trigger hurt pose
-		attack_interrupt = true
-		_on_stagger()
-		await get_tree().create_timer(hurt_frame_window, false)
-		state_chart.send_event("start_tutorial_phase_3")
-	elif new_health <= 3000:
-		# Cancel current phase if active and trigger hurt pose
-		attack_interrupt = true
-		_on_stagger()
-		await get_tree().create_timer(hurt_frame_window, false)
-		state_chart.send_event("start_tutorial_phase_2")
+	if current_phase < 4:
+		if new_health <= tutorial_phase_3_health_threshold:
+			# Cancel current phase if active and trigger hurt pose
+			attack_interrupt = true
+			_on_stagger()
+			await get_tree().create_timer(hurt_frame_window, false)
+			state_chart.send_event("start_tutorial_phase_3")
+		elif new_health <= tutorial_phase_2_health_threshold:
+			# Cancel current phase if active and trigger hurt pose
+			attack_interrupt = true
+			_on_stagger()
+			await get_tree().create_timer(hurt_frame_window, false)
+			state_chart.send_event("start_tutorial_phase_2")
 
 
 func _on_stagger() -> void:
@@ -168,6 +181,7 @@ func _on_died() -> void:
 		# Tutorial win cutscene trigger
 		state_chart.send_event("stop_moving")
 		tutorial_phases_finished.emit()
+		state_chart.send_event("tutorial_arena_1_finished")
 		# TODO - toss out a barrel for the player mid-cutscene, leverage drop_barrel()?
 		#
 		# TODO - 
@@ -1311,8 +1325,9 @@ func _on_phase_1_state_entered() -> void:
 	select_attack()
 
 
-func _on_arena_1_cutscene_state_entered() -> void:
+func _on_arena_1_cutscene_state_egntered() -> void:
 	attack_interrupt = true
+	anim_player.play("RESET")
 
 
 func _on_arena_1_cutscene_state_physics_processing(delta: float) -> void:
