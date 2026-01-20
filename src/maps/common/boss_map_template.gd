@@ -1,8 +1,6 @@
 extends Node3D
 class_name BossMap
 
-@export var bgm: AudioStream
-
 ## World Geometry & Navigation
 @onready var func_godot_parent: FuncGodotMap = $FuncGodotMap
 @onready var worldspawn_mesh: StaticBody3D = func_godot_parent.find_child("entity_0_worldspawn")
@@ -41,9 +39,6 @@ func _ready() -> void:
 					print("!! Unset or invalid export: ", prop.name)
 				else:
 					print(prop.name, " → ", value)
-	
-	if bgm:
-		SoundManager.play_music(bgm, 0.5, "BGM")
 	
 	# Pre-load the lobby scene for faster level transitions
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"

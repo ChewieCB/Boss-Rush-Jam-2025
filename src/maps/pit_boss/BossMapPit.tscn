@@ -1,11 +1,9 @@
-[gd_scene load_steps=443 format=4 uid="uid://c2tfsc1tlxlpk"]
+[gd_scene load_steps=437 format=4 uid="uid://c2tfsc1tlxlpk"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_mky1f"]
 [ext_resource type="Script" path="res://src/maps/pit_boss/boss_pit.gd" id="2_6oq1m"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="2_fby76"]
-[ext_resource type="AudioStream" uid="uid://yq2sk127dfov" path="res://assets/music/Remix R1.mp3" id="3_51kcm"]
 [ext_resource type="Material" uid="uid://bc40wnkmbkgcl" path="res://assets/textures/floor/carpet-blue.tres" id="3_kobi6"]
-[ext_resource type="AudioStream" uid="uid://ds7xvkwqd62rm" path="res://assets/music/PissbotAmbience.mp3" id="4_ce2q6"]
 [ext_resource type="PackedScene" uid="uid://2ss8hk0shm7i" path="res://src/bosses/pit/cover/CoverSpawnPoint.tscn" id="4_i1jcx"]
 [ext_resource type="Material" uid="uid://c162u3li2i84m" path="res://assets/textures/walls/wallpaper_0.tres" id="4_ro2xq"]
 [ext_resource type="Material" uid="uid://c7spfpeimpdf3" path="res://assets/textures/floor/black-tiles.tres" id="5_nx41u"]
@@ -47,10 +45,6 @@
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="33_6f4v2"]
 [ext_resource type="PackedScene" uid="uid://dsipuwmnkxl5" path="res://src/env/lighting/ChandellierLight2.tscn" id="34_um28q"]
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="35_4vv5w"]
-[ext_resource type="AudioStream" uid="uid://cm318neelgc3w" path="res://src/bosses/pit/assets/sfx/Placeholder Gambling Arcade ambience shorter 1.mp3" id="48_n2kod"]
-[ext_resource type="AudioStream" uid="uid://dpjwcgxle5fsi" path="res://src/bosses/pit/assets/sfx/Placeholder Gambling Arcade ambience shorter 2.mp3" id="49_tv2p8"]
-[ext_resource type="AudioStream" uid="uid://chjwa0b2ebojp" path="res://src/bosses/pit/assets/sfx/Placeholder Gambling Arcade ambience shorter 3.mp3" id="50_r8qb3"]
-[ext_resource type="AudioStream" uid="uid://d2dupge042jnt" path="res://src/bosses/pit/assets/sfx/Placeholder Gambling Arcade ambience shorter 4.mp3" id="51_v0u31"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kn00t"]
 resource_local_to_scene = true
@@ -1624,56 +1618,30 @@ _surfaces = [{
 
 [node name="BossMapPit" node_paths=PackedStringArray("nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_mky1f")]
 script = ExtResource("2_6oq1m")
-active_bgm = ExtResource("3_51kcm")
 phase_2_stance_time = 14.0
 phase_2_health_percentage_trigger = 0.7
 phase_3_health_percentage_trigger = 0.35
 cover_spawn_scene = ExtResource("4_i1jcx")
-bgm = ExtResource("4_ce2q6")
 nav_parent = NodePath("FuncGodotMap")
 floor_parent = NodePath("FuncGodotMap/entity_0_worldspawn")
 floor_mesh = NodePath("FuncGodotMap/entity_0_worldspawn/entity_0_mesh_instance")
 
-[node name="BossTriggerVolume" parent="." index="6"]
+[node name="BossTriggerVolume" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 26)
 
 [node name="CollisionShape3D" parent="BossTriggerVolume" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("BoxShape3D_kn00t")
 
-[node name="StanceTimer" type="Timer" parent="." index="7"]
-
-[node name="AmbiencePlayer1" type="AudioStreamPlayer3D" parent="." index="8"]
-transform = Transform3D(0.995186, 0, 0.0979998, 0, 1, 0, -0.0979998, 0, 0.995186, -24.7499, 4.87477, 0.333623)
-stream = ExtResource("48_n2kod")
-autoplay = true
-bus = &"Ambience"
-
-[node name="AmbiencePlayer2" type="AudioStreamPlayer3D" parent="." index="9"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.41746, 13.8617)
-stream = ExtResource("49_tv2p8")
-autoplay = true
-bus = &"Ambience"
-
-[node name="AmbiencePlayer3" type="AudioStreamPlayer3D" parent="." index="10"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.03, 6.26975, 0)
-stream = ExtResource("50_r8qb3")
-autoplay = true
-bus = &"Ambience"
-
-[node name="AmbiencePlayer4" type="AudioStreamPlayer3D" parent="." index="11"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.22864, -13.9532)
-stream = ExtResource("51_v0u31")
-autoplay = true
-bus = &"Ambience"
-
-[node name="SpinTriggerVolume" parent="." index="12"]
+[node name="SpinTriggerVolume" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50.661)
 
 [node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
 shape = SubResource("BoxShape3D_b8nxk")
 
-[node name="FuncGodotMap" parent="." index="13"]
+[node name="StanceTimer" type="Timer" parent="." index="7"]
+
+[node name="FuncGodotMap" parent="." index="8"]
 local_map_file = "res://src/maps/pit_boss/pit.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]

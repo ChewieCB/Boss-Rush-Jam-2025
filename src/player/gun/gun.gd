@@ -386,7 +386,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 
 
 func _play_anim_cancel(
-	anim_suffix: String, 
+	anim_suffix: String,
 	frame_id: int = GameManager.equipped_gun_frame.frame_id,
 	callback: Callable = Callable(),
 ) -> void:
@@ -438,7 +438,7 @@ func play_post_shot_anim() -> bool:
 	#var reload_timescale: float = 1.35 / modified_reload_time
 	#anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
 	
-	if post_shot_state: 
+	if post_shot_state:
 		idle_frame_state.travel(post_shot_state)
 		await post_reload_anim_end
 		
@@ -543,7 +543,7 @@ func spin_all_barrels() -> void:
 
 	# TODO - add catch for HELD barrels
 	await get_tree().physics_frame
-	barrels_to_spin = installed_barrels.size()  # Check again to prevent bug
+	barrels_to_spin = installed_barrels.size() # Check again to prevent bug
 	for i in barrels_to_spin:
 		if i > barrels_to_spin:
 			break
@@ -574,7 +574,7 @@ func _spin_barrel(barrel_idx: int) -> void:
 	barrel.reload_count = 0
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	# Spin the effect mesh UV
-	# TODO 
+	# TODO
 	# If we don't have an effect equipped,
 	# travel straight to the spin anim without the decal start anim
 	state_machine.travel("spin_start")
@@ -602,7 +602,7 @@ func _stop_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_stop_spin()
 	var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(barrel_idx + 1)])
 	state_machine.travel("idle")
-	
+
 	SoundManager.stop_sound(TEMP_sfx_spin)
 	barrel.get_active_effect().on_effect_set()
 	magazine_ammo_left = clamp(magazine_ammo_left, 0, modified_magazine_size)
@@ -616,15 +616,15 @@ func _stop_barrel(barrel_idx: int) -> void:
 
 func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
 	var barrel_mesh: MeshInstance3D = barrel_icon_meshes[barrel_idx]
-	
+
 	var mat: StandardMaterial3D = barrel_mesh.get_surface_override_material(0)
 	if mat == null:
 		mat = default_barrel_icon_mat
 	var new_mat: StandardMaterial3D = mat.duplicate()
-	
+
 	var icon_sprite_path := "res://assets/sprite/effect_icons/%s.png" % [icon_id]
 	var icon_texture: CompressedTexture2D = load(icon_sprite_path)
-	
+
 	new_mat.albedo_color = Color.WHITE
 	new_mat.albedo_texture = icon_texture
 	barrel_mesh.set_surface_override_material(0, new_mat)
@@ -667,7 +667,7 @@ func reload(already_spin_barrel = false):
 	var reload_anim: String = "reload"
 	var post_reload_state: String = ""
 	var post_reload_anim: String = ""
-	var reload_count: int = 1  # Used to reload per-shot in the case of the shotgun
+	var reload_count: int = 1 # Used to reload per-shot in the case of the shotgun
 	
 	var idle_state: String = idle_frame_state.get_current_node()
 	if not idle_state.ends_with("idle"):
@@ -743,7 +743,7 @@ func reload(already_spin_barrel = false):
 				barrel.reload_count += 1
 				var barrel_label: Label3D = barrel_labels[i]
 				barrel_label.text = "[%s]" % [
-					barrel.reloads_before_spin -barrel.reload_count
+					barrel.reloads_before_spin - barrel.reload_count
 				]
 				if barrel.reload_count == barrel.reloads_before_spin:
 					barrels_to_auto_spin.append(barrel)
@@ -762,7 +762,7 @@ func reload(already_spin_barrel = false):
 						continue
 					_spin_barrel(i)
 					get_tree().create_timer(base_spin_time).timeout.connect(
-						func(): 
+						func():
 							_stop_barrel(i)
 							can_fire = true
 					)
@@ -772,7 +772,6 @@ func reload(already_spin_barrel = false):
 
 func reload_no_anim() -> void:
 	#reset_modifier(true)
-	
 	for barrel in installed_barrels:
 		if is_instance_valid(barrel):
 			barrel.get_active_effect().on_reload_end()
@@ -910,11 +909,11 @@ func _on_barrel_effect_changed(barrel: SpinBarrel, effect: BaseBarrelEffect) -> 
 	barrel_effect_set.emit(barrel, effect)
 	# Update the gun frame if we're using the archetype barrel
 	match effect.icon_id:
-		0:  # Rifle
+		0: # Rifle
 			set_frame_art(GunFrameResource.GunFrameIdEnum.SNIPER, true)
-		1:  # Shotgun
+		1: # Shotgun
 			set_frame_art(GunFrameResource.GunFrameIdEnum.SHOTGUN, true)
-		2:  # SMG
+		2: # SMG
 			set_frame_art(GunFrameResource.GunFrameIdEnum.SMG, true)
 
 
@@ -927,9 +926,9 @@ func remove_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_barrel_remove()
 	barrel_unequipped.emit(barrel, barrel_idx)
 	barrel.queue_free()
-	
+
 	barrel_icon_meshes[barrel_idx].set_surface_override_material(0, default_barrel_icon_mat)
-	
+
 	recheck_installed_barrels()
 	
 	# Re-apply the effects of the currently equipped barrels
@@ -950,9 +949,8 @@ func recheck_installed_barrels():
 		#_set_barrel_effect_label(barrel, barrel.get_active_effect())
 		var barrel_label: Label3D = barrel_labels[i]
 		barrel_label.text = "[%s]" % [
-			barrel.reloads_before_spin -barrel.reload_count
+			barrel.reloads_before_spin - barrel.reload_count
 		]
-	
 	barrel_count = installed_barrels.size()
 
 	for i in barrel_sprites.size():

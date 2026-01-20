@@ -238,7 +238,7 @@ func _on_master_slider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_db(0, linear_to_db(value / 100.0))
 	master_value.text = "{0}".format([value])
 	GameManager.master_audio = value
-
+	
 func _on_ui_slider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_db(3, linear_to_db(value / 100.0))
 	ui_value.text = "{0}".format([value])
@@ -517,8 +517,7 @@ func _on_always_inventory_toggle_toggled(toggled_on: bool) -> void:
 
 
 func _on_demo_timeout_value_changed(value: float) -> void:
-	GameManager.CHEAT_demomode_timeout = clamp(value, 0, 60*5)
-
+	GameManager.CHEAT_demomode_timeout = clamp(value, 0, 60 * 5)
 
 func _on_barrel_spin_mode_dropdown_item_selected(index: int) -> void:
 	GameManager.CHEAT_spin_mode = index

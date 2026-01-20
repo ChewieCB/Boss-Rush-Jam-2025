@@ -52,6 +52,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func toggle_pause_menu() -> void:
 	is_paused = not is_paused
+	GameManager.change_fmod_bgm_menu_is_up(is_paused)
 	
 	get_tree().paused = is_paused
 	self.visible = is_paused
@@ -89,10 +90,11 @@ func _on_setting_button_pressed() -> void:
 
 func _on_lobby_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
-	
+	GameManager.change_fmod_bgm_menu_is_up(false)
+
 	if not GameManager.tutorial_completed:
 		LoadingHandler.start_loading(
-			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL], 
+			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL],
 			"Tutorial"
 		)
 	else:
@@ -109,6 +111,7 @@ func _on_lobby_button_pressed() -> void:
 
 func _on_main_menu_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
+	GameManager.change_fmod_bgm_menu_is_up(false)
 	
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
@@ -126,6 +129,7 @@ func _on_main_menu_button_pressed() -> void:
 
 func _on_quit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
+	GameManager.change_fmod_bgm_menu_is_up(false)
 	if GameManager.chosen_slot_id != -1:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)

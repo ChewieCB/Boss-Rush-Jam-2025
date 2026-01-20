@@ -169,6 +169,7 @@ func toggle():
 		open()
 
 func open():
+	GameManager.change_fmod_bgm_menu_is_up(true)
 	full_refresh_ui(true)
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
@@ -178,6 +179,7 @@ func open():
 
 
 func close():
+	GameManager.change_fmod_bgm_menu_is_up(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	GameManager.player.is_in_menu = false
 	if visible:

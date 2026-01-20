@@ -1,8 +1,6 @@
 extends Control
 class_name MainMenu
 
-@export var bgm: AudioStream
-var bgm_player: AudioStreamPlayer
 @export var button_sfx: Array[AudioStream]
 @export var start_game_sfx: AudioStream
 @export var lobby_scene: PackedScene
@@ -28,7 +26,6 @@ func _ready() -> void:
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
-	bgm_player = SoundManager.play_music(bgm, 0.2, "BGM")
 	get_tree().paused = false
 	
 	ScreenTransition.transition_in()
@@ -37,7 +34,6 @@ func _ready() -> void:
 	save_ui.visible = false
 	for button in buttons:
 		button.pressed.connect(_play_button_sfx)
-
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -110,18 +106,11 @@ func _on_credit_button_pressed() -> void:
 
 
 func start_game():
-	var current_beat_time = bgm.get_bpm() * bgm_player.get_playback_position() / 120.0
-	var next_beat_time = ceilf(current_beat_time)
-	await get_tree().create_timer(next_beat_time - current_beat_time).timeout
-	bgm_player.stop()
-	SoundManager.play_ui_sound(start_game_sfx, "UI")
-	
-	#if not SaveManager.save_data_is_loaded:
+	# SoundManager.play_ui_sound(start_game_sfx, "UI")
 	SaveManager.load_game(GameManager.chosen_slot_id)
-	
 	if not GameManager.tutorial_completed:
 		LoadingHandler.start_loading(
-			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL], 
+			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL],
 			"Tutorial"
 		)
 	else:
