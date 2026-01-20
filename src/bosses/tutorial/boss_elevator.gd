@@ -259,10 +259,11 @@ func select_attack_phase_3_tutorial() -> void:
 		#state_chart.send_event("start_taunt_attack")
 		#return
 	
-	if randf() < 0.6:
-		state_chart.send_event("start_dash_wave")
-	else:
+	if target.global_position.distance_to(self.global_position) < 8.5:
 		state_chart.send_event("start_melee_combo")
+		
+	else:
+		state_chart.send_event("start_dash_wave")
 
 ## STANDARD FIGHT PHASES
 

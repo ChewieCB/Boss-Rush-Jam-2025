@@ -2168,7 +2168,6 @@ sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlaye
 sfx_hit = Array[AudioStream]([ExtResource("28_6ig1p"), ExtResource("29_d21ab"), ExtResource("30_jv36d"), ExtResource("31_t81ll"), ExtResource("32_qvwbi")])
 base_sprite = ExtResource("16_ukgug")
 hurt_sprite = ExtResource("34_3f23y")
-current_phase = 3
 attack_recovery_time = 0.5
 telegraph_time = 0.6
 projectile_scene = null
