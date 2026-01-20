@@ -41,6 +41,7 @@ var music_playback: AudioStreamPlaybackInteractive
 @export var intro_boss_path: Path3D
 @export var intro_boss_path_follow: PathFollow3D
 @export var cutscene_subtitle_label: Label
+var is_cutscene_active: bool = true
 
 # Tutorial prompt triggers
 @export_group("Tutorial UI Triggers")
@@ -104,6 +105,11 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if is_cutscene_active:
+			if not event.is_action("ui_cancel"):
+				skip_cutscene()
+	
 	for action_str in current_trigger_actions:
 		if event.is_action(action_str):
 			# Prevents stick drift/tiny stick movements from closing the popup
@@ -177,9 +183,9 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	boss_trigger.queue_free()
 	
 	boss.activate()
-	
-	$AnimationPlayer.play("mechanic_enter")
-	await $AnimationPlayer.animation_finished
+	if is_cutscene_active:
+		$AnimationPlayer.play("mechanic_enter")
+		await $AnimationPlayer.animation_finished
 	
 	LuckHandler.enabled = true
 	# We need to set these player vars AFTER the cutscene cam exits so they don't get re-set 
@@ -201,7 +207,19 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 			boss.state_chart.send_event("start_tutorial_phase_3")
 
 
+func skip_cutscene() -> void:
+	is_cutscene_active = false
+	$AnimationPlayer.advance(10000)
+	$AnimationPlayer.stop()
+	$AnimationPlayer.play("cutscene_skip")
+	await $AnimationPlayer.animation_finished
+
+
 func _remove_boss_from_intro_path() -> void:
+	if not is_instance_valid(intro_boss_path_follow):
+		return
+	if boss.get_parent() != intro_boss_path_follow:
+		return
 	var cached_transform: Transform3D = boss.global_transform
 	intro_boss_path_follow.remove_child(boss)
 	add_child(boss)

@@ -72,6 +72,7 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	generate_navigation()
 	
+	player.controls_disabled = false
 	if elevator_doors:
 		elevator_doors.open()
 

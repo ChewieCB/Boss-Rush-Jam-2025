@@ -147,7 +147,7 @@ var last_dashed_timestamp
 var current_air_jump_count: int = 0
 var slide_dir = Vector2(0, 0)
 
-var controls_disabled: bool = false
+var controls_disabled: bool = true
 var dash_disabled: bool = false
 
 var gun_container_original_pos: Vector3
@@ -625,6 +625,8 @@ func handle_controller_look(_delta):
 
 
 func rotate_player(x: float, y: float):
+	if controls_disabled:
+		return
 	rotate(Vector3(0, -1, 0), x * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotate_x(-y * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotation.y = 0
@@ -633,6 +635,8 @@ func rotate_player(x: float, y: float):
 
 
 func camera_control(delta):
+	if controls_disabled:
+		return
 	# Tilt camera
 	if GameManager.camera_tilt:
 		if raw_input_dir.x < 0:
