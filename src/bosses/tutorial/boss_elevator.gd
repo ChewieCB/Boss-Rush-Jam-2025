@@ -4,6 +4,7 @@ signal intro_drop_landed
 signal tutorial_phase_1_started
 signal tutorial_phase_2_started
 signal tutorial_phase_3_started
+signal tutorial_phases_finished
 
 signal trigger_smoke(count: int)
 signal end_smoke
@@ -61,6 +62,9 @@ var prev_attack: String = ""
 @export var sfx_taunt_phase_2: Array[AudioStream]
 @export var sfx_taunt_phase_3: Array[AudioStream]
 var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + sfx_taunt_phase_3
+# TODO - combine these in a resource class
+@export var sfx_player_defeated_taunt: Array[AudioStream]
+@export var player_defeated_taunt_captions: Array[String]
 
 @export_subgroup("Swipe")
 @export var swipe_damage: float = 14.0
@@ -159,6 +163,26 @@ func _on_stagger() -> void:
 	super()
 
 
+func _on_died() -> void:
+	if current_phase < 4:
+		# Tutorial win cutscene trigger
+		state_chart.send_event("stop_moving")
+		tutorial_phases_finished.emit()
+		# TODO - toss out a barrel for the player mid-cutscene, leverage drop_barrel()?
+		#
+		# TODO - 
+		# TODO - move to transition state, triggering stage 4 when player enters new arena
+		# state_chart.send_event("start_transition_phase")
+	else:
+		died.emit()
+		state_chart.send_event("death")
+		state_chart.send_event("stop_moving")
+		state_chart.send_event("deactivate")
+		await death_anim_finished
+		drop_barrel()
+		await boss_death_slow_mo()
+
+
 func _physics_process(_delta: float) -> void:
 	#super(delta)
 	return
@@ -237,9 +261,9 @@ func select_attack_phase_1_tutorial() -> void:
 
 func select_attack_phase_2_tutorial() -> void:
 	# If the player is in range of the shock area, electrify floor, otherwise basic melee combo
-	if randf() < 0.2:
-		state_chart.send_event("start_taunt_attack")
-		return
+	#if randf() < 0.2:
+		#state_chart.send_event("start_taunt_attack")
+		#return
 	
 	if shock_floor_hazard.damage_area.overlaps_body(target):
 		state_chart.send_event("start_electrify_floor")
@@ -1148,7 +1172,7 @@ func spawn_aoe_wall(
 	debug_mesh_instance.scale.y = -1
 	
 	mesh.size = Vector3(width, height, thickness)
-	mesh.material = line_material
+	mesh.material = wave_material
 	
 	# Spawn moving wave particles that stay at end of line
 	
@@ -1283,11 +1307,12 @@ func _on_intro_state_physics_processing(delta: float) -> void:
 
 
 func _on_phase_1_state_entered() -> void:
+	attack_interrupt = false
 	select_attack()
 
 
 func _on_arena_1_cutscene_state_entered() -> void:
-	pass # Replace with function body.
+	attack_interrupt = true
 
 
 func _on_arena_1_cutscene_state_physics_processing(delta: float) -> void:
@@ -1396,8 +1421,10 @@ func _on_tutorial_phase_1_strafing_nails_recover_state_entered() -> void:
 ## PHASE 2 - JUMPING
 
 func _on_tutorial_phase_2_state_entered() -> void:
+	attack_interrupt = false
 	current_phase = 2
 	tutorial_phase_2_started.emit()
+	SoundManager.play_sound(sfx_taunt_phase_2.pick_random(), "SFX")
 
 
 func _on_tutorial_phase_2_taunt_recover_state_entered() -> void:
@@ -1418,7 +1445,7 @@ func _on_tutorial_phase_2_taunt_recover_state_entered() -> void:
 
 #
 func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
-	navigation_component.follow_target = false
+	navigation_component.follow_target = true
 	state_chart.send_event("start_moving")
 	shock_floor_hazard.damage_per_tick = shock_damage
 	prev_attack = "electrify_floor"
@@ -1428,14 +1455,15 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
 		#state_chart.send_event("start_slam")
 	
 	# Pick a point on the lower floor mesh to move to
-	var center_pos: Vector3 = arena_1_center.global_position
+	#var center_pos: Vector3 = arena_1_center.global_position
 	#var dir_from_center: Vector3 = center_pos.direction_to(self.global_position)
 	## Optional - jitter the direction a bit so it isn't always a straight line path
 	##dir_from_center.rotated(Vector3.UP, randf_range(-PI/32, PI/32))
 	#var max_dist: float = 3  # Use this to keep the position tied to the center of the room
 	#var goal_pos: Vector3 = center_pos + dir_from_center * max_dist
 	
-	navigation_component.set_nav_target_position(center_pos)
+	#navigation_component.set_nav_target_position(center_pos)
+	#draw_debug_sphere(center_pos, 0.5, Color.PURPLE)
 
 
 func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(delta: float) -> void:
@@ -1540,8 +1568,10 @@ func _on_tutorial_phase_2_melee_combo_backswing_state_entered() -> void:
 
 
 func _on_tutorial_phase_3_state_entered() -> void:
+	attack_interrupt = false
 	current_phase = 3
 	tutorial_phase_3_started.emit()
+	SoundManager.play_sound(sfx_taunt_phase_3.pick_random(), "SFX")
 
 
 func _on_tutorial_phase_2_melee_combo_state_physics_processing(delta: float) -> void:

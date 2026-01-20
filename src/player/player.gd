@@ -624,6 +624,11 @@ func handle_controller_look(_delta):
 		rotate_player(look_x * sensitivity, look_y * sensitivity)
 
 
+func _reset_camera_look() -> void:
+	player_camera.rotation = Vector3.ZERO
+	neck.rotation = Vector3.ZERO
+
+
 func rotate_player(x: float, y: float):
 	if controls_disabled:
 		return

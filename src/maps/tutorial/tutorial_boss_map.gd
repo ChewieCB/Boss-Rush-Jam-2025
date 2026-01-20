@@ -105,10 +105,11 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		if is_cutscene_active:
-			if not event.is_action("ui_cancel"):
-				skip_cutscene()
+	# FIXME - buggy, disabling for now
+	#if event is InputEventKey:
+		#if is_cutscene_active:
+			#if not event.is_action("ui_cancel"):
+				#skip_cutscene()
 	
 	for action_str in current_trigger_actions:
 		if event.is_action(action_str):

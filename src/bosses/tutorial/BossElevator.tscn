@@ -1,4 +1,4 @@
-[gd_scene load_steps=206 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=214 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -34,19 +34,27 @@
 [ext_resource type="AudioStream" uid="uid://bn7i578i12xkd" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-7-1-out-of-order.mp3" id="10_v3isi"]
 [ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="11_1crh5"]
 [ext_resource type="AudioStream" uid="uid://37k158pyjqtf" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 1 V2.mp3" id="11_8tgau"]
+[ext_resource type="AudioStream" uid="uid://cac6ll44h0rxk" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-1-1-pathetic.mp3" id="11_k8ri3"]
 [ext_resource type="AudioStream" uid="uid://cus1umlbiwd56" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 2 V2.mp3" id="12_bt5kx"]
+[ext_resource type="AudioStream" uid="uid://bipulifptivua" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-2-1-not-quick-enough.mp3" id="12_q8miw"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="13_k65oo"]
+[ext_resource type="AudioStream" uid="uid://c6rttgfvk5a2x" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-3-1-aint-done-with-you.mp3" id="13_kff1c"]
 [ext_resource type="AudioStream" uid="uid://do4mm41k5wg0i" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 3 V2.mp3" id="13_qjtrx"]
+[ext_resource type="AudioStream" uid="uid://c686u8r2ghs4h" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-4-1-you-have-to-do-better.mp3" id="14_hmhx2"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="14_kbpeg"]
 [ext_resource type="AudioStream" uid="uid://bj5hdchtswx3f" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 4 V2.mp3" id="14_l34ga"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="15_c0skh"]
+[ext_resource type="AudioStream" uid="uid://cy7c4d1fjogls" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-5-1-degenerates-never-fail-to-dissapoint.mp3" id="15_ixxt2"]
 [ext_resource type="Texture2D" uid="uid://du746aotdbnq4" path="res://src/bosses/tutorial/assets/sprites/3_HIT_1.png" id="16_e0muj"]
+[ext_resource type="AudioStream" uid="uid://d3oy07t4o7fx7" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-6-1-another-sore-loser.mp3" id="16_m7v53"]
 [ext_resource type="Texture2D" uid="uid://d1fy72k7lk74w" path="res://src/bosses/tutorial/assets/sprites/IDLE.png" id="16_ukgug"]
 [ext_resource type="Texture2D" uid="uid://c5qw83v0dnuq3" path="res://src/bosses/tutorial/assets/sprites/1_HIT_1.png" id="17_cu5tl"]
 [ext_resource type="Texture2D" uid="uid://cvr3a7aipo7m6" path="res://src/bosses/tutorial/assets/sprites/3_HIT_2.png" id="17_dmhhe"]
+[ext_resource type="AudioStream" uid="uid://bpuiglrtb7737" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-7-1-oil-and-ash.mp3" id="17_mbktf"]
 [ext_resource type="AudioStream" uid="uid://ds224hyodfrif" path="res://src/bosses/tutorial/assets/sfx/Laser Charge Shepard Tone.mp3" id="17_mkqio"]
 [ext_resource type="AudioStream" uid="uid://dw60ntjht2e6" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 1.mp3" id="18_5elni"]
 [ext_resource type="Texture2D" uid="uid://de0va8w8bfuxl" path="res://src/bosses/tutorial/assets/sprites/1_HIT_2.png" id="18_22flk"]
+[ext_resource type="Material" uid="uid://ikjycfpkgv3n" path="res://src/bosses/chips/AoeMat.tres" id="18_g7ktc"]
 [ext_resource type="Texture2D" uid="uid://dv40bv156cgd1" path="res://src/bosses/tutorial/assets/sprites/3_HIT_3.png" id="18_lwmyv"]
 [ext_resource type="Texture2D" uid="uid://c7sifgttsfnh6" path="res://src/bosses/tutorial/assets/sprites/3_HIT_4.png" id="19_3rgkr"]
 [ext_resource type="AudioStream" uid="uid://dfqd3mr6bdaj4" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 2.mp3" id="19_upudo"]
@@ -2121,6 +2129,8 @@ melee_max_chase_distance = 9.0
 sfx_taunt_phase_1 = Array[AudioStream]([ExtResource("4_n2q7l"), ExtResource("5_l2bm8"), ExtResource("6_7upxy"), ExtResource("7_vulif")])
 sfx_taunt_phase_2 = Array[AudioStream]([ExtResource("10_v3isi"), ExtResource("8_tpccx"), ExtResource("9_s2jdf")])
 sfx_taunt_phase_3 = Array[AudioStream]([ExtResource("8_tpccx"), ExtResource("9_s2jdf"), ExtResource("10_v3isi"), ExtResource("4_n2q7l"), ExtResource("5_l2bm8"), ExtResource("6_7upxy"), ExtResource("7_vulif")])
+sfx_player_defeated_taunt = Array[AudioStream]([ExtResource("11_k8ri3"), ExtResource("12_q8miw"), ExtResource("13_kff1c"), ExtResource("14_hmhx2"), ExtResource("15_ixxt2"), ExtResource("16_m7v53"), ExtResource("17_mbktf")])
+player_defeated_taunt_captions = Array[String](["Pathetic.", "Not quick enough, weakling.", "I ain't done with you yet.", "You'll have to do better than that!", "Degenerates never fail to dissapoint.", "Another sore loser that can't back it up.", "Oil and ash, cheater. Just another stain on the wall."])
 swipe_damage = 14.0
 sfx_swipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
 sfx_swipe_miss = Array[AudioStream]([ExtResource("6_h17j0"), ExtResource("7_cxehy")])
@@ -2133,7 +2143,7 @@ slam_delay = 0.3
 slam_time = 0.9
 slam_particles = NodePath("DebugAnimPivot/SlamSpawn/SlamParticles")
 slam_wall_particles = NodePath("DebugAnimPivot/SlamSpawn/SlamWallParticles")
-line_material = ExtResource("85_4771x")
+line_material = ExtResource("18_g7ktc")
 slam_spawn_marker = NodePath("DebugAnimPivot/SlamSpawn")
 wave_material = ExtResource("85_4771x")
 sfx_jump = Array[AudioStream]([ExtResource("5_iynxh")])
@@ -2432,9 +2442,15 @@ to = NodePath("../../Phase2_JumpTutorial")
 event = &"start_tutorial_phase_2"
 delay_in_seconds = "0.0"
 
+[node name="toArena1Cutscene" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase1_BasicCombatTutorial" index="3"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Arena1Cutscene")
+event = &"player_defeated_reset"
+delay_in_seconds = "0.0"
+
 [node name="Phase2_JumpTutorial" type="Node" parent="StateChart/Root/Phase/TutorialArena1" index="2"]
 script = ExtResource("3_irtaj")
-initial_state = NodePath("Taunt")
+initial_state = NodePath("ElectrifyFloor")
 
 [node name="Taunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial" index="0"]
 script = ExtResource("3_irtaj")
@@ -2622,6 +2638,12 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Phase3_DashTutorial")
 event = &"start_tutorial_phase_3"
+delay_in_seconds = "0.0"
+
+[node name="toArena1Cutscene" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial" index="4"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Arena1Cutscene")
+event = &"player_defeated_reset"
 delay_in_seconds = "0.0"
 
 [node name="Phase3_DashTutorial" type="Node" parent="StateChart/Root/Phase/TutorialArena1" index="3"]
@@ -2862,6 +2884,12 @@ delay_in_seconds = "0.0"
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Arena1Transition")
 event = &"start_arena_1_transition"
+delay_in_seconds = "0.0"
+
+[node name="toArena1Cutscene" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial" index="4"]
+script = ExtResource("5_7kc6y")
+to = NodePath("../../Arena1Cutscene")
+event = &"player_defeated_reset"
 delay_in_seconds = "0.0"
 
 [node name="Arena1Transition" type="Node" parent="StateChart/Root/Phase/TutorialArena1" index="4"]
