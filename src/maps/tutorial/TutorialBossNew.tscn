@@ -1,4 +1,4 @@
-[gd_scene load_steps=679 format=4 uid="uid://b50odhnpvpy07"]
+[gd_scene load_steps=681 format=4 uid="uid://b50odhnpvpy07"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -5804,10 +5804,10 @@ tracks/21/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLab
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
-"times": PackedFloat32Array(2.15, 4.8, 7.15),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(2.15, 4.8, 7.15, 9.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": ["They always send me the failures.", "You'll find no fortune here.", "Only pain."]
+"values": ["They always send me the failures.", "You'll find no fortune here.", "Only pain.", ""]
 }
 tracks/22/type = "audio"
 tracks/22/imported = false
@@ -5984,9 +5984,117 @@ tracks/8/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_xg0b5"]
+resource_name = "cutscene_letterbox_start"
+length = 0.7
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("IntroCutsceneLayer:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("IntroCutsceneLayer/Control/LetterboxTop:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(3.24901, 1),
+"update": 0,
+"values": [Vector2(0, -200), Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("IntroCutsceneLayer/Control/LetterboxBottom:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(3.24901, 1),
+"update": 0,
+"values": [Vector2(0, 1080), Vector2(0, 880)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLabel:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.7),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_x0ons"]
+resource_name = "cutscene_letterbox_end"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("IntroCutsceneLayer:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("IntroCutsceneLayer/Control/LetterboxTop:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.329877, 3.24901),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -200)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("IntroCutsceneLayer/Control/LetterboxBottom:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.329877, 3.24901),
+"update": 0,
+"values": [Vector2(0, 880), Vector2(0, 1080)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLabel:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(5.96046e-08, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fd4ep"]
 _data = {
 "RESET": SubResource("Animation_ujlpi"),
+"cutscene_letterbox_end": SubResource("Animation_x0ons"),
+"cutscene_letterbox_start": SubResource("Animation_xg0b5"),
 "cutscene_skip": SubResource("Animation_s71cf"),
 "mechanic_enter": SubResource("Animation_xlg8b"),
 "pit_boss_shove": SubResource("Animation_yuyap")
@@ -5999,7 +6107,7 @@ _data = {
 }
 point_count = 2
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "intro_boss_path", "intro_boss_path_follow", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "intro_boss_path", "intro_boss_path_follow", "cutscene_subtitle_label", "cutscene_camera", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
 script = ExtResource("2_twxne")
 boss_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_189_ElevatorDoors")
 exit_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_189_ElevatorDoors")
@@ -6015,6 +6123,8 @@ arena_1_floor_shock_hazard = NodePath("ElectricHazardArea")
 pipe_particle_emitters = [NodePath("SmokeParticles"), NodePath("SmokeParticles2"), NodePath("SmokeParticles3"), NodePath("SmokeParticles4"), NodePath("SmokeParticles5")]
 intro_boss_path = NodePath("Path3D")
 intro_boss_path_follow = NodePath("Path3D/PathFollow3D")
+cutscene_subtitle_label = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLabel")
+cutscene_camera = NodePath("CutsceneCamera")
 tutorial_1_trigger_shoot = SubResource("Resource_41ph2")
 tutorial_2_trigger_reload = SubResource("Resource_3guvm")
 tutorial_3_trigger_jump = SubResource("Resource_m1p8q")
@@ -8950,7 +9060,7 @@ transform = Transform3D(1.94707e-07, 0, 1, 0, 1, 0, -1, 0, 1.94707e-07, -25.625,
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-1.7321e-07, -0.877191, -0.48003, -5.96047e-08, 0.48003, -0.877191, 1, -1.23327e-07, -1.35431e-07, -51.478, 0.145, 29.574)
+transform = Transform3D(-4.37114e-08, 0, -0.999946, 0, 0.999946, 0, 1, 0, -4.3709e-08, -44.769, 0.145, 29.574)
 loop = false
 tilt_enabled = false
 
@@ -8960,6 +9070,9 @@ orbit_radius = 200.0
 
 [node name="DebugAnimPivot" parent="Path3D/PathFollow3D/entity_187_TutorialBoss" index="1"]
 transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
+
+[node name="NavigationAgent3D" parent="Path3D/PathFollow3D/entity_187_TutorialBoss" index="13"]
+debug_enabled = true
 
 [node name="CutsceneCamera" type="Camera3D" parent="." index="18"]
 transform = Transform3D(-3.62383e-06, -0.222535, -0.974925, 1.6801e-08, 0.974925, -0.222535, 1, -8.22808e-07, -3.52922e-06, -24.1585, 1.74925, 29.5983)

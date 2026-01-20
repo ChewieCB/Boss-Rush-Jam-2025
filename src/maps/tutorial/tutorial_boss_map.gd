@@ -41,6 +41,7 @@ var music_playback: AudioStreamPlaybackInteractive
 @export var intro_boss_path: Path3D
 @export var intro_boss_path_follow: PathFollow3D
 @export var cutscene_subtitle_label: Label
+@export var cutscene_camera: Camera3D
 var is_cutscene_active: bool = true
 
 # Tutorial prompt triggers
@@ -55,6 +56,7 @@ var is_cutscene_active: bool = true
 var reload_tutorial_shown: bool = false
 var tutorial_panel_tween: Tween
 var active_tutorial_panel: Control
+var is_tutorial_finished: bool = false
 
 
 func _ready() -> void:
@@ -293,6 +295,98 @@ func stop_all_pipe_emitters() -> void:
 		var _emitter = active_emitters.pop_front()
 		_emitter.end_smoke()
 		pipe_particle_emitters.push_back(_emitter)
+
+
+func _on_player_death() -> void:
+	if is_tutorial_finished:
+		win_ui.lose(lose_tips.pick_random())
+		show_end_panel()
+	else:
+		# Put the boss in a passive state while we play the tutorial
+		boss.state_chart.send_event("player_defeated_reset")
+		
+		# Move cutscene camera to match player's camera
+		cutscene_camera.global_transform = player.player_camera.global_transform
+		player._enable_cutscene_cam()
+		
+		# Lerp cutscene camera to boss
+		var camera_tween: Tween = get_tree().create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+		var final_transform = cutscene_camera.global_transform.looking_at(boss.global_position, Vector3.UP)
+		var boss_pos_start: Vector3 = boss.global_position - boss.global_basis.z * 5.0 + Vector3(0, 2.8, 0)
+		var boss_pos_end: Vector3 = boss.global_position - boss.global_basis.z * 3.0 + Vector3(0, 3.2, 0)
+		camera_tween.tween_property(
+			cutscene_camera, "global_transform", final_transform, 0.7
+		)
+		camera_tween.tween_property(
+			cutscene_camera, "global_position", boss_pos_start, 0.7
+		)
+		
+		# Play letterbox animation for subtitles
+		$AnimationPlayer.play("cutscene_letterbox_start")
+		await camera_tween.finished
+		
+		# Play sound
+		# TODO - replace with paired resource class of audio & captions
+		var defeat_sfx: AudioStream = boss.sfx_player_defeated_taunt.pick_random()
+		var sfx_idx: int = boss.sfx_player_defeated_taunt.find(defeat_sfx)
+		var defeat_text: String = boss.player_defeated_taunt_captions[sfx_idx]
+		SoundManager.play_sound(defeat_sfx)
+		camera_tween = get_tree().create_tween().set_parallel(true)
+		#camera_tween.tween_property(cutscene_camera, "fov", 90, defeat_sfx.get_length())
+		camera_tween.tween_property(cutscene_camera, "global_position", boss_pos_end, defeat_sfx.get_length())
+		camera_tween.tween_property(cutscene_camera, "global_rotation:x", cutscene_camera.global_rotation.x + deg_to_rad(10), defeat_sfx.get_length())
+		# Tween the subtitle text
+		cutscene_subtitle_label.visible_ratio = 0.0
+		# TODO - assign subtitles to each audio sample and show them here
+		cutscene_subtitle_label.text = defeat_text
+		camera_tween.tween_property(cutscene_subtitle_label, "visible_ratio", 1.0, defeat_sfx.get_length())
+		await camera_tween.finished
+		
+		await get_tree().create_timer(0.4).timeout
+		cutscene_subtitle_label.text = ""
+		
+		# Tween the camera back
+		camera_tween = get_tree().create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+		camera_tween.tween_property(
+			cutscene_camera, "global_transform", player.player_camera.global_transform, 0.4
+		)
+		camera_tween.tween_property(cutscene_camera, "fov", 75, 0.4)
+		$AnimationPlayer.play("cutscene_letterbox_end")
+		await camera_tween.finished
+		player._disable_cutscene_cam()
+		
+		# Give the player their health back
+		player.health_component.heal(player.health_component.max_health)
+		player.state_chart.send_event("revive")
+		
+		# Restart the current phase
+		match boss.current_phase:
+			1:
+				boss.state_chart.send_event("start_tutorial_phase_1")
+			2:
+				boss.state_chart.send_event("start_tutorial_phase_2")
+			3:
+				boss.state_chart.send_event("start_tutorial_phase_3")
+
+
+func show_end_panel() -> void:
+	LuckHandler.enabled = false
+	win_ui.visible = true
+	var tween = get_tree().create_tween()
+	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
+	await tween.finished
+	await get_tree().create_timer(2.5).timeout
+	tween = get_tree().create_tween()
+	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
+	await tween.finished
+	
+	# TODO - have the player respawn at the boss fight, maybe load TUTORIAL_BOSS_ONLY instead?
+	LoadingHandler.start_loading(
+		LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL],
+		"Tutorial"
+	)
+	await ScreenTransition.transition_finished
+	LoadingHandler.load_scene_transition()
 
 
 func _on_boss_died(_boss: BossCore = boss) -> void:
