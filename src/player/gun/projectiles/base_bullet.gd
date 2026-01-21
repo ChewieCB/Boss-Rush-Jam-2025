@@ -158,6 +158,7 @@ func get_damage_variance_modifier(_damage: int) -> int:
 	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE] - 1
 	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
+## Avoid using this unles last resort, very laggy
 func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	var new_inst: BaseBullet = self.duplicate()
 	new_inst.owner_gun = owner_gun
