@@ -1180,114 +1180,125 @@ func spawn_aoe_wall(
 	_telegraph: bool = false,
 	callback: Callable = func(): pass ,
 ) -> void:
-	# Generate a collider
-	var area_collider := Area3D.new()
-	var area_collider_shape := CollisionShape3D.new()
-	var collider_shape := BoxShape3D.new()
-	collider_shape.size = Vector3(width, height, 0.1)
-	area_collider_shape.shape = collider_shape
-	area_collider.add_child(area_collider_shape)
-	area_collider.collision_layer = int(pow(2, 7))
-	area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
-	area_collider.monitoring = true
+	var tween: Tween
+	var debug_mesh_instance: MeshInstance3D
+	var area_collider: Area3D
+	while not attack_interrupt:
+		# Generate a collider
+		area_collider = Area3D.new()
+		var area_collider_shape := CollisionShape3D.new()
+		var collider_shape := BoxShape3D.new()
+		collider_shape.size = Vector3(width, height, 0.1)
+		area_collider_shape.shape = collider_shape
+		area_collider.add_child(area_collider_shape)
+		area_collider.collision_layer = int(pow(2, 7))
+		area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
+		area_collider.monitoring = true
+		
+		scene_root.add_child(area_collider)
+		
+		area_collider.global_position = area_pos
+		area_collider.global_rotation = self.global_rotation
+		area_collider.body_entered.connect(_on_wave_collision.bind(damage, area_collider, max_range))
+		#area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
+		
+		debug_mesh_instance = MeshInstance3D.new()
+		var mesh = BoxMesh.new()
+		
+		spawned_area_objects.append([area_collider, debug_mesh_instance])
+		
+		# Generate a visual
+		scene_root.add_child(debug_mesh_instance)
+		
+		debug_mesh_instance.mesh = mesh
+		#debug_mesh_instance.cast_shadow = false
+		debug_mesh_instance.global_position = area_pos
+		debug_mesh_instance.global_rotation = self.global_rotation
+		debug_mesh_instance.scale.y = -1
+		
+		mesh.size = Vector3(width, height, thickness)
+		mesh.material = wave_material
+		
+		# Spawn moving wave particles that stay at end of line
+		
+		if not slam_wall_particles in scene_root.get_children():
+			slam_wall_particles.get_parent().remove_child(slam_wall_particles)
+			scene_root.add_child(slam_wall_particles)
+		slam_wall_particles.global_position = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * 0.1
+		#slam_wall_particles.global_position.y -= mesh.size.y / 2
+		slam_wall_particles.global_rotation = self.global_rotation + Vector3(0, PI, 0)
+		slam_wall_particles.visible = true
+		slam_wall_particles.emitting = true
+		slam_wall_particles.is_on_floor = true
+		
+		# Explode on impact
+		area_collider.body_entered.connect(
+			func(_body):
+				debug_mesh_instance.queue_free()
+				area_collider.queue_free()
+		)
+		# FIXME
+		#area_collider.body_entered.connect(
+			#func():
+				#var dissolve_tween: Tween = get_tree().create_tween()
+				#dissolve_tween.tween_method(
+					#_change_slam_wall_progress.bind(mesh),
+					#0.665,
+					#1.0,
+					#0.4
+				#)
+				#dissolve_tween.chain().tween_method(
+					#_change_slam_wall_color.bind(mesh),
+					#"#ff9e5480",
+					#"#ff9e5400",
+					#0.2
+				#)
+		#)
+		
+		# Animate the visual
+		
+		var spawned_wave_time: float = max_range / speed
+		
+		# TODO - SFX
+		var slam_sfx_player := AudioStreamPlayer3D.new()
+		scene_root.add_child(slam_sfx_player)
+		slam_sfx_player.global_position = slam_wall_particles.global_position
+		slam_sfx_player.stream = sfx_wave_loop.pick_random()
+		slam_sfx_player.play()
+		tween = get_tree().create_tween()
+		var end_pos: Vector3 = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * (max_range + 0.1)
+		#tween.tween_property(mesh, "position:z", max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(debug_mesh_instance, "global_position", debug_mesh_instance.global_position - debug_mesh_instance.basis.z * max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		#tween.parallel().tween_property(area_collider_shape, "shape:size:z", max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(area_collider, "global_position", debug_mesh_instance.global_position - debug_mesh_instance.basis.z * max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(slam_wall_particles, "global_position", end_pos, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(slam_sfx_player, "global_position", end_pos, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+		tween.tween_callback(debug_mesh_instance.queue_free)
+		tween.tween_callback(area_collider.queue_free)
+		tween.tween_callback(
+			func():
+				slam_sfx_player.stop()
+				slam_sfx_player.queue_free()
+				slam_wall_particles.emitting = false
+				await slam_wall_particles.finished
+				slam_wall_particles.visible = false
+				slam_wall_particles.is_on_floor = false
+				slam_spawn_marker.add_child(slam_wall_particles)
+				slam_wall_particles.position = Vector3.ZERO
+				slam_wall_particles.rotation = Vector3.ZERO
+		)
+		tween.tween_callback(callback)
+		
+		await tween.finished
+		
+		return
 	
-	scene_root.add_child(area_collider)
-	
-	area_collider.global_position = area_pos
-	area_collider.global_rotation = self.global_rotation
-	area_collider.body_entered.connect(_on_wave_collision.bind(damage, area_collider, max_range))
-	#area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
-	
-	var debug_mesh_instance = MeshInstance3D.new()
-	var mesh = BoxMesh.new()
-	
-	spawned_area_objects.append([area_collider, debug_mesh_instance])
-	
-	# Generate a visual
-	scene_root.add_child(debug_mesh_instance)
-	
-	debug_mesh_instance.mesh = mesh
-	debug_mesh_instance.cast_shadow = false
-	debug_mesh_instance.global_position = area_pos
-	debug_mesh_instance.global_rotation = self.global_rotation
-	debug_mesh_instance.scale.y = -1
-	
-	mesh.size = Vector3(width, height, thickness)
-	mesh.material = wave_material
-	
-	# Spawn moving wave particles that stay at end of line
-	
-	if not slam_wall_particles in scene_root.get_children():
-		slam_wall_particles.get_parent().remove_child(slam_wall_particles)
-		scene_root.add_child(slam_wall_particles)
-	slam_wall_particles.global_position = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * 0.1
-	#slam_wall_particles.global_position.y -= mesh.size.y / 2
-	slam_wall_particles.global_rotation = self.global_rotation + Vector3(0, PI, 0)
-	slam_wall_particles.visible = true
-	slam_wall_particles.emitting = true
-	slam_wall_particles.is_on_floor = true
-	
-	# Explode on impact
-	area_collider.body_entered.connect(
-		func(_body):
-			debug_mesh_instance.queue_free()
-			area_collider.queue_free()
-	)
-	# FIXME
-	#area_collider.body_entered.connect(
-		#func():
-			#var dissolve_tween: Tween = get_tree().create_tween()
-			#dissolve_tween.tween_method(
-				#_change_slam_wall_progress.bind(mesh),
-				#0.665,
-				#1.0,
-				#0.4
-			#)
-			#dissolve_tween.chain().tween_method(
-				#_change_slam_wall_color.bind(mesh),
-				#"#ff9e5480",
-				#"#ff9e5400",
-				#0.2
-			#)
-	#)
-	
-	# Animate the visual
-	
-	var spawned_wave_time: float = max_range / speed
-	
-	# TODO - SFX
-	var slam_sfx_player := AudioStreamPlayer3D.new()
-	scene_root.add_child(slam_sfx_player)
-	slam_sfx_player.global_position = slam_wall_particles.global_position
-	slam_sfx_player.stream = sfx_wave_loop.pick_random()
-	slam_sfx_player.play()
-	var tween = get_tree().create_tween()
-	var end_pos: Vector3 = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * (max_range + 0.1)
-	#tween.tween_property(mesh, "position:z", max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(debug_mesh_instance, "global_position", debug_mesh_instance.global_position - debug_mesh_instance.basis.z * max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	#tween.parallel().tween_property(area_collider_shape, "shape:size:z", max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(area_collider, "global_position", debug_mesh_instance.global_position - debug_mesh_instance.basis.z * max_range, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(slam_wall_particles, "global_position", end_pos, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(slam_sfx_player, "global_position", end_pos, spawned_wave_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-	tween.tween_callback(debug_mesh_instance.queue_free)
-	tween.tween_callback(area_collider.queue_free)
-	tween.tween_callback(
-		func():
-			slam_sfx_player.stop()
-			slam_sfx_player.queue_free()
-			slam_wall_particles.emitting = false
-			await slam_wall_particles.finished
-			slam_wall_particles.visible = false
-			slam_wall_particles.is_on_floor = false
-			slam_spawn_marker.add_child(slam_wall_particles)
-			slam_wall_particles.position = Vector3.ZERO
-			slam_wall_particles.rotation = Vector3.ZERO
-	)
-	tween.tween_callback(callback)
-	
-	await tween.finished
-	
-	return
+	if tween:
+		tween.kill()
+	if debug_mesh_instance:
+		debug_mesh_instance.queue_free()
+	if area_collider:
+		area_collider.queue_free()
 
 
 func _on_wave_collision(
@@ -1655,14 +1666,20 @@ func _on_tutorial_phase_3_dash_wave_idle_state_physics_processing(delta: float) 
 func _on_tutorial_phase_3_dash_wave_swipe_wave_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	
-	await get_tree().create_timer(0.6, false).timeout
-	await _telegraph_attack()
+	while not attack_interrupt:
+		await get_tree().create_timer(0.6, false).timeout
+		await _telegraph_attack()
+		
+		anim_player.play("elevator_boss/dash_wave")
+		await anim_player.animation_finished
+		
+		await get_tree().create_timer(1.0, false).timeout
+		
+		state_chart.send_event("end_wave")
+		return
 	
-	anim_player.play("elevator_boss/dash_wave")
-	await anim_player.animation_finished
-	
-	await get_tree().create_timer(1.0, false).timeout
-	
+	anim_player.stop()
+	anim_player.play("idle")
 	state_chart.send_event("end_wave")
 
 
