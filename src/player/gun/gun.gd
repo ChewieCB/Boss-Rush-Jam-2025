@@ -34,7 +34,6 @@ var muzzle_flash_sprite: Sprite3D
 @export var rifle_flash_sprite: Sprite3D
 @export var rifle_shell_particles: GPUParticles3D
 
-@onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
 @onready var barrel_1_label: Label3D = $SpriteParent/Barrel1Sprite/Label3D
@@ -187,11 +186,6 @@ func _process(delta: float) -> void:
 	#if Input.is_action_just_released("spin_barrels"):
 		#var state_machine = anim_tree.get("parameters/spin_state/playback")
 		#state_machine.travel("released")
-	
-	# DEBUG
-	#print("=========== ANIM TREE DEBUG ===========")
-	#print(" > idle state: %s" % idle_frame_state.get_current_node())
-	#print(" > reload state: %s" % reload_frame_state.get_current_node())
 
 
 func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip_animation: bool = false) -> void:
@@ -281,7 +275,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	if is_reloading or is_spinning or is_jammed:
 		if is_reloading and \
 		idle_frame_state.get_current_node().begins_with("shotgun") and \
-		#GameManager.equipped_gun_frame.frame_id == GunFrameResource.GunFrameIdEnum.SHOTGUN and \
 		reload_interrupt == false:
 			# When the player tries to shoot during a shotgun reload,
 			# finish the current shell loading anim and interrupt the reload,
@@ -733,6 +726,7 @@ func reload(already_spin_barrel = false):
 		idle_frame_state.travel(post_reload_state)
 		await post_reload_anim_end
 	
+	reload_interrupt = false
 	is_reloading = false
 	can_fire = true
 	anim_tree.set("parameters/reload_timescale/scale", 1.0)
