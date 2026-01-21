@@ -558,6 +558,8 @@ libraries = {
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(960, 540)
 
+[connection signal="timeout" from="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer/HealthBar/Timer" to="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer" method="_on_timer_timeout"]
+[connection signal="timeout" from="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/Timer" to="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer" method="_on_timer_timeout"]
 [connection signal="value_changed" from="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI" to="." method="_on_spin_ability_progress_changed"]
 
 [editable path="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI"]

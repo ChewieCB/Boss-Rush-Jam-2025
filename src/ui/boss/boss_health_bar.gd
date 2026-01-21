@@ -101,6 +101,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 						overspill -= child.health_bar.value
 						child.health_bar.value = 0.0
 						continue
+			else:
+				child.damage_bar.value = child.health_bar.value
 		timer.start()
 	else:
 		for child in health_bars:
@@ -116,6 +118,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 				tween.tween_property(child.heath_bar, "value", new_health, 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 				await tween.finished
 				child.heath_bar.value = new_health
+			else:
+				child.damage_bar.value = child.health_bar.value
 
 
 func _on_timer_timeout():
