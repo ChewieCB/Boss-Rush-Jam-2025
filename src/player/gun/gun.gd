@@ -63,6 +63,9 @@ var muzzle_flash_sprite: Sprite3D
 @export var TEMP_sfx_click: AudioStream
 @export var TEMP_regain_ammo: AudioStream
 @export var TEMP_crit: AudioStream
+#
+@export_subgroup("Shotgun")
+@export var sfx_shotgun_shell_reload: Array[AudioStream]
 
 # Init gun stat values
 const BASE_DAMAGE: int = 20
@@ -866,6 +869,10 @@ func play_failed_shoot_sfx():
 	if failed_shoot_sfx_timer.is_stopped():
 		SoundManager.play_sound(TEMP_sfx_dry, "Gun")
 		failed_shoot_sfx_timer.start()
+
+
+func play_shotgun_shell_load_sfx():
+	SoundManager.play_sound(sfx_shotgun_shell_reload.pick_random(), "Gun")
 
 
 func install_barrel(barrel_data: BarrelDataResource) -> void:
