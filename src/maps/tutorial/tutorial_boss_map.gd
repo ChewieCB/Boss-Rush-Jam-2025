@@ -40,6 +40,7 @@ var music_playback: AudioStreamPlaybackInteractive
 # Intro cutscene
 @export var intro_boss_path: Path3D
 @export var intro_boss_path_follow: PathFollow3D
+@export var tutorial_end_boss_marker: Marker3D
 @export var cutscene_subtitle_label: Label
 @export var cutscene_camera: Camera3D
 var is_cutscene_active: bool = true
@@ -77,6 +78,7 @@ func _ready() -> void:
 	boss.tutorial_phase_2_started.connect(_on_tutorial_phase_2_started)
 	boss.tutorial_phase_3_started.connect(_on_tutorial_phase_3_started)
 	boss.tutorial_phases_finished.connect(_on_tutorial_finished)
+	boss.tutorial_barrel_collected.connect(_on_tutorial_barrel_collected)
 	boss.trigger_smoke.connect(_on_boss_trigger_smoke)
 	boss.end_smoke.connect(stop_all_pipe_emitters)
 	boss.shock_floor_hazard = arena_1_floor_shock_hazard
@@ -87,6 +89,7 @@ func _ready() -> void:
 	music_playback = music_player.get_stream_playback()
 	
 	player.stat_ui.hide_all_ui()
+	
 	await ScreenTransition.transition_finished
 	$AnimationPlayer.play("pit_boss_shove")
 	await $AnimationPlayer.animation_finished
@@ -101,6 +104,7 @@ func _ready() -> void:
 	#boss.intro_spawn_marker = boss_intro_spawn
 	#boss.laser_spawn_markers = boss_laser_spawn_markers
 	#boss.global_position = boss_intro_spawn.global_position
+	#remove_child(boss)
 
 
 func _input(event: InputEvent) -> void:
@@ -124,7 +128,7 @@ func _input(event: InputEvent) -> void:
 			current_close_trigger_count += 1
 			
 			# Handle held inputs
-			get_tree().create_timer(0.5).timeout.connect(_check_close_trigger_action_held.bind(action_str))
+			get_tree().create_timer(0.5, false).timeout.connect(_check_close_trigger_action_held.bind(action_str))
 			
 			if current_close_trigger_count >= current_close_trigger_max:
 				ui_accept.emit()
@@ -158,7 +162,7 @@ func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 	tutorial_panel_tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 1.0), 0.4)
 	
 	if resource.timeout > 0.0 and not resource.timeout_on_close:
-		await get_tree().create_timer(resource.timeout).timeout
+		await get_tree().create_timer(resource.timeout, false).timeout
 	else:
 		await ui_accept
 	
@@ -166,7 +170,7 @@ func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 		tutorial_panel_tween.kill()
 	
 	if resource.timeout_on_close:
-		await get_tree().create_timer(resource.timeout).timeout
+		await get_tree().create_timer(resource.timeout, false).timeout
 	
 	tutorial_panel_tween = get_tree().create_tween()
 	tutorial_panel_tween.tween_property(new_panel, "modulate", Color(Color.WHITE, 0.0), 0.2)
@@ -215,6 +219,14 @@ func skip_cutscene() -> void:
 	await $AnimationPlayer.animation_finished
 
 
+func _add_boss_to_intro_path() -> void:
+	if not is_instance_valid(intro_boss_path_follow):
+		return
+	boss.get_parent().remove_child(boss)
+	intro_boss_path_follow.add_child(boss)
+	boss.position = Vector3.ZERO
+
+
 func _remove_boss_from_intro_path() -> void:
 	if not is_instance_valid(intro_boss_path_follow):
 		return
@@ -228,6 +240,8 @@ func _remove_boss_from_intro_path() -> void:
 	boss.global_rotation.z = 0.0
 	boss.scene_root = self
 	intro_boss_path.queue_free()
+	# Should stop the animations breaking since we've changed the node order, we forcibly update the animation path
+	$AnimationPlayer.get_animation("tutorial_end_3").track_set_path(0, "entity_187_TutorialBoss")
 
 
 func _on_level_select(level_path: String, loading_name: String = "") -> void:
@@ -257,16 +271,78 @@ func _on_tutorial_phase_3_started() -> void:
 
 
 func _on_tutorial_finished() -> void:
+	# Move cutscene camera to match player's camera
+	cutscene_camera.global_transform = player.player_camera.global_transform
+	player._enable_cutscene_cam()
+	
 	# Move boss to doorway - dynamic cutscene tween
+	var move_pos: Vector3 = tutorial_end_boss_marker.global_position
+	var move_time: float = boss.global_position.distance_to(move_pos) / boss.MAX_SPEED
+	var camera_goal_pos := Vector3(-36.2, 2.6, 20.4)
+	var camera_goal_rot := Vector3(-2.1, 0, 0)
+	#var final_transform = cutscene_camera.global_transform.looking_at(camera_goal_pos, Vector3.UP)
+	var boss_move_tween: Tween = get_tree().create_tween()
+	boss_move_tween.set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+	boss_move_tween.tween_property(
+		boss, "global_position", move_pos, move_time
+	)
+	boss_move_tween.tween_property(
+		cutscene_camera, "global_rotation_degrees", camera_goal_rot, move_time
+	)
+	boss_move_tween.tween_property(
+		cutscene_camera, "global_position", camera_goal_pos, move_time
+	)
+	
+	await boss_move_tween.finished
 	
 	# Play fixed cutscene
+	$AnimationPlayer.play("tutorial_end_1")
+	await $AnimationPlayer.animation_finished
+	
+	# Play dialogue line
+	var dialogue_idx: int = randi_range(0, boss.sfx_tutorial_end_taunts.size() - 2)
+	var taunt_sfx = boss.sfx_tutorial_end_taunts[dialogue_idx]
+	await play_vo_with_captions(taunt_sfx, boss.tutorial_end_taunt_captions[dialogue_idx])
+	await get_tree().create_timer(0.4, false).timeout
+	await play_vo_with_captions(boss.sfx_tutorial_end_taunts[-1], boss.tutorial_end_taunt_captions[-1])
+	# TODO - move camera using taunt_sfx.get_length
 	
 	# Throw barrel to player
+	$AnimationPlayer.play("tutorial_end_2")
+	await $AnimationPlayer.animation_finished
+	
+	await play_vo_with_captions(boss.sfx_tutorial_barrel[0], boss.tutorial_barrel_captions[0])
+	await get_tree().create_timer(0.3, false).timeout
+	await play_vo_with_captions(boss.sfx_tutorial_barrel[1], boss.tutorial_barrel_captions[1])
 	
 	# Move through doors, locking doors behind
+	$AnimationPlayer.play("tutorial_end_3")
+	await $AnimationPlayer.animation_finished
+	
+	# Tween the camera back
+	var camera_tween = get_tree().create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	camera_tween.tween_property(
+		cutscene_camera, "global_transform", player.player_camera.global_transform, 0.4
+	)
+	$AnimationPlayer.play("cutscene_letterbox_end")
+	await camera_tween.finished
+	player._disable_cutscene_cam()
+
+
+func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
+	# Auto-equip the barrel onto the gun
+	GameManager.equip_barrel(barrel_data.barrel_id)
+	await get_tree().create_timer(0.8, false).timeout
+	
+	show_tutorial_panel(tutorial_5_trigger_barrel_detail)
 	
 	# Spark the electrical box
-	return
+	#
+	# Highlight electrical box to shoot
+	#
+	# Trigger spin tutorial prompt
+	#
+	pass
 
 
 
@@ -315,7 +391,7 @@ func _on_player_death() -> void:
 		# Put the boss in a passive state while we play the tutorial
 		boss.state_chart.send_event("player_defeated_reset")
 		
-		await get_tree().create_timer(0.6).timeout
+		await get_tree().create_timer(0.6, false).timeout
 		
 		# Move cutscene camera to match player's camera
 		cutscene_camera.global_transform = player.player_camera.global_transform
@@ -354,7 +430,7 @@ func _on_player_death() -> void:
 		camera_tween.tween_property(cutscene_subtitle_label, "visible_ratio", 1.0, defeat_sfx.get_length())
 		await camera_tween.finished
 		
-		await get_tree().create_timer(0.4).timeout
+		await get_tree().create_timer(0.4, false).timeout
 		cutscene_subtitle_label.text = ""
 		
 		# Tween the camera back
@@ -367,7 +443,7 @@ func _on_player_death() -> void:
 		await camera_tween.finished
 		player._disable_cutscene_cam()
 		
-		await get_tree().create_timer(0.4).timeout
+		await get_tree().create_timer(0.4, false).timeout
 		
 		# Give the player their health back
 		player.health_component.heal(player.health_component.max_health)
@@ -383,13 +459,30 @@ func _on_player_death() -> void:
 				boss.state_chart.send_event("start_tutorial_phase_3")
 
 
+func play_vo_with_captions(sfx_stream: AudioStream, caption_text: String) -> void:
+	SoundManager.play_sound(sfx_stream)
+	var cutscene_length: float = sfx_stream.get_length()
+	var tween = get_tree().create_tween().set_parallel(true)
+	# Tween the subtitle text
+	cutscene_subtitle_label.visible_ratio = 0.0
+	# TODO - assign subtitles to each audio sample and show them here
+	cutscene_subtitle_label.text = caption_text
+	tween.tween_property(cutscene_subtitle_label, "visible_ratio", 1.0, cutscene_length)
+	await tween.finished
+	
+	await get_tree().create_timer(0.4, false).timeout
+	
+	cutscene_subtitle_label.text = ""
+	return
+
+
 func show_end_panel() -> void:
 	LuckHandler.enabled = false
 	win_ui.visible = true
 	var tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 1.0), 1.0)
 	await tween.finished
-	await get_tree().create_timer(2.5).timeout
+	await get_tree().create_timer(2.5, false).timeout
 	tween = get_tree().create_tween()
 	tween.tween_property(win_ui, "modulate", Color(Color.WHITE, 0.0), 1.0)
 	await tween.finished

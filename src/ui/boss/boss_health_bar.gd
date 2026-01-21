@@ -25,7 +25,7 @@ class_name BossHealthBar
 # once a health bar is depleted, it can't be re-filled by healing the boss, so the max health is reduced after each phase
 
 func _ready() -> void:
-	super ()
+	super()
 	name_label.text = boss_name
 	if health_component:
 		#init_health_ui(health_component.current_health)
@@ -62,6 +62,8 @@ func add_sub_health_bar(_health: float) -> BossSubHealthBar:
 func clear_sub_health_bars() -> void:
 	for child in sub_health_bars_container.get_children():
 		child.queue_free()
+		sub_health_bars_container.remove_child(child)
+		
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
@@ -73,6 +75,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	
 	if new_health < prev_health:
 		for child in health_bars:
+			if child == null:
+				continue
 			# If we have health left on the bar
 			if child.health_bar.value > 0:
 				# Figure out how much health we can take
@@ -100,6 +104,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		timer.start()
 	else:
 		for child in health_bars:
+			if child == null:
+				continue
 			# If we have health left on the bar, update it
 			if child.health_bar.value > 0:
 				if child.health_bar.value >= new_health:

@@ -1,26 +1,31 @@
-[gd_scene load_steps=214 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=221 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
 [ext_resource type="AudioStream" uid="uid://0u431kpfno53" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing.mp3" id="3_5w7aw"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_irtaj"]
+[ext_resource type="AudioStream" uid="uid://dhbnqqrs8dfs" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena-1-complete-1-1-almost-broke-a-sweat.mp3" id="3_ut2n1"]
 [ext_resource type="PackedScene" uid="uid://ponw4bhivvke" path="res://src/bosses/base/attacks/ranged/NailProjectile.tscn" id="3_v4gcb"]
 [ext_resource type="AudioStream" uid="uid://dbakj03xx5r3j" path="res://src/bosses/tutorial/assets/sfx/Tutorial Boss Landing.mp3" id="3_y4npe"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fo57y"]
 [ext_resource type="PackedScene" uid="uid://byharrqwvi4cp" path="res://src/bosses/base/attacks/ranged/LaserAoE.tscn" id="4_hx1ss"]
 [ext_resource type="AudioStream" uid="uid://d2jess8av6ue7" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-1-1-come-on.mp3" id="4_n2q7l"]
 [ext_resource type="AudioStream" uid="uid://cqq422lmo5d7s" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing 2.mp3" id="4_pthoc"]
+[ext_resource type="AudioStream" uid="uid://c83uijbq6d0wi" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena-1-complete-2-1-luckier-than-you-loo.mp3" id="4_tw5wi"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
 [ext_resource type="AudioStream" uid="uid://7v0fx558pjwl" path="res://src/bosses/tutorial/assets/sfx/Tutorial Kick 1.mp3" id="5_fu4i0"]
 [ext_resource type="AudioStream" uid="uid://dvsl5y8e4n4hr" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing and leap back.mp3" id="5_iynxh"]
 [ext_resource type="AudioStream" uid="uid://dhoa5p3lowhw1" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-2-1-put-your-back-into-it.mp3" id="5_l2bm8"]
+[ext_resource type="AudioStream" uid="uid://cy3ppx8tr0nmg" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena-1-complete-3-1-not-quite-the-dreg.mp3" id="5_ldvni"]
 [ext_resource type="Texture2D" uid="uid://bunn8a0pce2b2" path="res://assets/sprite/aoe_markers/laser_aoe_warn.png" id="5_pbhfx"]
 [ext_resource type="AudioStream" uid="uid://cfqi470hfedob" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-3-1-roaches-tougher.mp3" id="6_7upxy"]
 [ext_resource type="AudioStream" uid="uid://due6c1u7ljts1" path="res://src/bosses/tutorial/assets/sfx/Wrench Ground Pound.mp3" id="6_elwvg"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="6_fqvnt"]
 [ext_resource type="AudioStream" uid="uid://btjwaw66o42jf" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing Miss 2.mp3" id="6_h17j0"]
 [ext_resource type="AudioStream" uid="uid://ufohavydweo4" path="res://src/bosses/tutorial/assets/sfx/Tutorial Kick 2.mp3" id="6_oht30"]
+[ext_resource type="AudioStream" uid="uid://28p21meq544o" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena-1-complete-4-1-youve-more-brawn.mp3" id="6_rh2bn"]
 [ext_resource type="Texture2D" uid="uid://bp7hure6j5kgv" path="res://src/bosses/tutorial/assets/sprites/STARTING_POSE.png" id="6_yp5yq"]
+[ext_resource type="AudioStream" uid="uid://bti07v6t6qrwu" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena-1-complete-6-1-maybe-ill-stop-pulling-my-punches.mp3" id="7_2tadf"]
 [ext_resource type="PackedScene" uid="uid://dl8cnd88fnws2" path="res://src/bosses/tutorial/SlamParticles.tscn" id="7_2uohy"]
 [ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="7_6pf3s"]
 [ext_resource type="AudioStream" uid="uid://b1svhegbdr27d" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing Miss.mp3" id="7_cxehy"]
@@ -28,8 +33,10 @@
 [ext_resource type="AudioStream" uid="uid://r4f5jbjqjiqw" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-4-1-all-they-got.mp3" id="7_vulif"]
 [ext_resource type="AudioStream" uid="uid://cj0y3jud36wc4" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Loop.mp3" id="7_xo7jb"]
 [ext_resource type="AudioStream" uid="uid://dcshtq5yyxdk1" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Impact.mp3" id="8_pvhqe"]
+[ext_resource type="AudioStream" uid="uid://dcinu4qhgtfin" path="res://src/bosses/tutorial/assets/sfx/boss_vo/drop-roller-1-1-youll-need-all-the-help.mp3" id="8_r10k4"]
 [ext_resource type="AudioStream" uid="uid://cunssdaa7vwlu" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-5-1-tune-up.mp3" id="8_tpccx"]
 [ext_resource type="AudioStream" uid="uid://doxsouaexqy47" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-6-1-i-wont-fix-you.mp3" id="9_s2jdf"]
+[ext_resource type="AudioStream" uid="uid://cshaqmebw7172" path="res://src/bosses/tutorial/assets/sfx/boss_vo/drop-roller-2-1-it-aint-gonna-save-you.mp3" id="9_xehab"]
 [ext_resource type="AudioStream" uid="uid://rftdmhx827li" path="res://src/bosses/tutorial/assets/sfx/Nail Gun Activation.mp3" id="10_u246n"]
 [ext_resource type="AudioStream" uid="uid://bn7i578i12xkd" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-7-1-out-of-order.mp3" id="10_v3isi"]
 [ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="11_1crh5"]
@@ -2119,6 +2126,10 @@ wave_amplitude = 7.0
 wave_frequency = 5.0
 intro_height_margin = 0.2
 laser_spawn_markers = []
+sfx_tutorial_end_taunts = Array[AudioStream]([ExtResource("3_ut2n1"), ExtResource("4_tw5wi"), ExtResource("5_ldvni"), ExtResource("6_rh2bn"), ExtResource("7_2tadf")])
+tutorial_end_taunt_captions = Array[String](["Heh. Almost broke a sweat.", "Luckier than you look!", "Not quite the dreg I took ya for, huh?", "You've more brawn than most of the cheaters that come through here.", "Maybe I'll stop pulling my punches."])
+sfx_tutorial_barrel = Array[AudioStream]([ExtResource("8_r10k4"), ExtResource("9_xehab")])
+tutorial_barrel_captions = Array[String](["Here. You'll need all the help you can get.", "It ain't gonna save you cheater."])
 sfx_intro_land = Array[AudioStream]([ExtResource("3_y4npe")])
 hurtbox_range_close = 6.0
 hurtbox_range_far = 7.5
@@ -2310,9 +2321,6 @@ mesh = SubResource("BoxMesh_holc6")
 
 [node name="CollisionShape3D" parent="Hurtbox" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -2.5)
-
-[node name="HealthComponent" parent="." index="8"]
-max_health = 4000.0
 
 [node name="NavigationComponent" parent="." index="9"]
 current_speed = 6.0

@@ -5,6 +5,7 @@ signal tutorial_phase_1_started
 signal tutorial_phase_2_started
 signal tutorial_phase_3_started
 signal tutorial_phases_finished
+signal tutorial_barrel_collected(barrel_data: BarrelDataResource)
 
 signal trigger_smoke(count: int)
 signal end_smoke
@@ -17,8 +18,8 @@ signal end_smoke
 @export var phase_1_health: int = 1000
 @export var phase_2_health: int = 1000
 @export var phase_3_health: int = 1000
-var tutorial_phase_2_health_threshold: int = tutorial_health - phase_1_health
-var tutorial_phase_3_health_threshold: int = tutorial_health - phase_1_health - phase_2_health
+@onready var tutorial_phase_2_health_threshold: int = tutorial_health - phase_1_health
+@onready var tutorial_phase_3_health_threshold: int = tutorial_health - phase_1_health - phase_2_health
 
 @export_category("Movement")
 @export var MOVE_SPEED: float = 6
@@ -45,6 +46,13 @@ var intro_drop_landed_y: float = 0.0
 @export var intro_height_margin: float = 0.2
 @export var intro_spawn_marker: Marker3D
 @export var laser_spawn_markers: Array[Marker3D]
+
+# TODO - combine these in a resource class
+@export var sfx_tutorial_end_taunts: Array[AudioStream]
+@export var tutorial_end_taunt_captions: Array[String]
+#
+@export var sfx_tutorial_barrel: Array[AudioStream]
+@export var tutorial_barrel_captions: Array[String]
 
 var next_attack: String = ""
 var prev_attack: String = ""
@@ -148,7 +156,8 @@ func _ready() -> void:
 
 
 func activate() -> void:
-	super()
+	print_debug("BossCore activate called")
+	SoundManager.play_sound(sfx_awaken, "SFX")
 	state_chart.send_event("start_intro")
 
 
@@ -195,6 +204,17 @@ func _on_died() -> void:
 		await death_anim_finished
 		drop_barrel()
 		await boss_death_slow_mo()
+
+
+func _on_barrel_collected(data: BarrelDataResource) -> void:
+	if current_phase < 4:
+		tutorial_barrel_collected.emit(data)
+	else:
+		# TODO - show UI with new barrel effects
+		#
+		# Wait for player to click continue
+		#
+		defeated.emit(self)
 
 
 func _physics_process(_delta: float) -> void:
@@ -1103,6 +1123,13 @@ func spawn_aoe_line(
 	slam_particles.emitting = true
 	slam_particles.is_on_floor = true
 	
+	# Explode on impact
+	area_collider.body_entered.connect(
+		func(_body):
+			debug_mesh_instance.queue_free()
+			area_collider.queue_free()
+	)
+	
 	# Animate the visual
 	
 	# TODO - SFX
@@ -1202,21 +1229,27 @@ func spawn_aoe_wall(
 	
 	# Explode on impact
 	area_collider.body_entered.connect(
-		func():
-			var dissolve_tween: Tween = get_tree().create_tween()
-			dissolve_tween.tween_method(
-				_change_slam_wall_progress.bind(mesh),
-				0.665,
-				1.0,
-				0.4
-			)
-			dissolve_tween.chain().tween_method(
-				_change_slam_wall_color.bind(mesh),
-				"#ff9e5480",
-				"#ff9e5400",
-				0.2
-			)
+		func(_body):
+			debug_mesh_instance.queue_free()
+			area_collider.queue_free()
 	)
+	# FIXME
+	#area_collider.body_entered.connect(
+		#func():
+			#var dissolve_tween: Tween = get_tree().create_tween()
+			#dissolve_tween.tween_method(
+				#_change_slam_wall_progress.bind(mesh),
+				#0.665,
+				#1.0,
+				#0.4
+			#)
+			#dissolve_tween.chain().tween_method(
+				#_change_slam_wall_color.bind(mesh),
+				#"#ff9e5480",
+				#"#ff9e5400",
+				#0.2
+			#)
+	#)
 	
 	# Animate the visual
 	
@@ -1325,14 +1358,17 @@ func _on_phase_1_state_entered() -> void:
 	select_attack()
 
 
-func _on_arena_1_cutscene_state_egntered() -> void:
+func _on_arena_1_cutscene_state_entered() -> void:
 	attack_interrupt = true
-	anim_player.play("RESET")
+	state_chart.send_event("stop_moving")
+	velocity = Vector3.ZERO
+	anim_player.play("elevator_boss/intro")
 
 
 func _on_arena_1_cutscene_state_physics_processing(delta: float) -> void:
-	velocity.y -= GRAVITY * delta
-	move_and_slide()
+	pass
+	#velocity.y -= GRAVITY * delta
+	#move_and_slide()
 
 ### =============================================================
 ### TUTORIAL PHASES
@@ -1346,6 +1382,7 @@ func _on_arena_1_cutscene_state_physics_processing(delta: float) -> void:
 func _on_tutorial_phase_1_state_entered() -> void:
 	# Start with a ranged attack, then alternate taunt and ranged attack until a health threshold is reached
 	# TODO - update health bar/audio triggers
+	show_health()
 	tutorial_phase_1_started.emit()
 
 

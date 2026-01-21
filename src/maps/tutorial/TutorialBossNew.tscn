@@ -1,4 +1,4 @@
-[gd_scene load_steps=681 format=4 uid="uid://b50odhnpvpy07"]
+[gd_scene load_steps=686 format=4 uid="uid://b50odhnpvpy07"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -66,7 +66,9 @@
 [ext_resource type="Material" uid="uid://f1owxp1fp5iw" path="res://assets/textures/placeholder/texture_red_09.tres" id="76_i1p5s"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="77_xj60c"]
 [ext_resource type="Material" uid="uid://cvvjnot2ikmgg" path="res://assets/textures/floor/wrad_metal1.tres" id="78_72a70"]
+[ext_resource type="Resource" uid="uid://cl8gwigkfvwca" path="res://src/player/barrel/resource/elemental_infusion_barrel_data.tres" id="78_iprpn"]
 [ext_resource type="PackedScene" uid="uid://cdjkynfg25alo" path="res://src/player/gun/vfx/SmokeVFX3D.tscn" id="79_hbkuw"]
+[ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="79_jne3r"]
 [ext_resource type="Material" uid="uid://ddqkn38etnjr1" path="res://assets/textures/posters/bigboss.tres" id="79_qa2kr"]
 [ext_resource type="Material" uid="uid://dxuto5h6uh22o" path="res://assets/textures/posters/pitboss.tres" id="80_q7tk3"]
 [ext_resource type="Material" uid="uid://chfbuquwjmmvs" path="res://assets/textures/posters/megacasino.tres" id="81_ojd6u"]
@@ -5047,7 +5049,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss:position")
+tracks/0/path = NodePath("entity_187_TutorialBoss:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -5059,7 +5061,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss:collision_mask")
+tracks/1/path = NodePath("entity_187_TutorialBoss:collision_mask")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -5071,7 +5073,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss:collision_layer")
+tracks/2/path = NodePath("entity_187_TutorialBoss:collision_layer")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -5138,7 +5140,7 @@ tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -5150,7 +5152,7 @@ tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(0, -200)]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -5162,7 +5164,7 @@ tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 880)]
+"values": [Vector2(0, 1080)]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
@@ -5258,6 +5260,18 @@ tracks/17/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("entity_187_TutorialBoss:scale")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 0.999946, 0.999946)]
+}
 
 [sub_resource type="Animation" id="Animation_x0ons"]
 resource_name = "cutscene_letterbox_end"
@@ -5265,7 +5279,7 @@ length = 0.4
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = true
+tracks/0/enabled = false
 tracks/0/path = NodePath("IntroCutsceneLayer:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
@@ -5318,7 +5332,7 @@ length = 0.7
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
-tracks/0/enabled = true
+tracks/0/enabled = false
 tracks/0/path = NodePath("IntroCutsceneLayer:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
@@ -5347,7 +5361,7 @@ tracks/2/path = NodePath("IntroCutsceneLayer/Control/LetterboxBottom:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.7),
+"times": PackedFloat32Array(-0.05, 0.7),
 "transitions": PackedFloat32Array(3.24901, 1),
 "update": 0,
 "values": [Vector2(0, 1080), Vector2(0, 880)]
@@ -5372,7 +5386,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss:position")
+tracks/0/path = NodePath("entity_187_TutorialBoss:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -5384,7 +5398,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss:collision_mask")
+tracks/1/path = NodePath("entity_187_TutorialBoss:collision_mask")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -5396,7 +5410,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss:collision_layer")
+tracks/2/path = NodePath("entity_187_TutorialBoss:collision_layer")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -5616,7 +5630,7 @@ tracks/19/keys = {
 tracks/20/type = "animation"
 tracks/20/imported = false
 tracks/20/enabled = true
-tracks/20/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss/AnimationPlayer")
+tracks/20/path = NodePath("entity_187_TutorialBoss/AnimationPlayer")
 tracks/20/interp = 1
 tracks/20/loop_wrap = true
 tracks/20/keys = {
@@ -5631,11 +5645,11 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss:position")
+tracks/0/path = NodePath("entity_187_TutorialBoss:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.05),
+"times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
@@ -5643,7 +5657,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = false
-tracks/1/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss")
+tracks/1/path = NodePath("entity_187_TutorialBoss")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -5654,7 +5668,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss:collision_mask")
+tracks/2/path = NodePath("entity_187_TutorialBoss:collision_mask")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -5666,7 +5680,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss:collision_layer")
+tracks/3/path = NodePath("entity_187_TutorialBoss:collision_layer")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -5690,7 +5704,7 @@ tracks/4/keys = {
 tracks/5/type = "animation"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Path3D/PathFollow3D/entity_187_TutorialBoss/AnimationPlayer")
+tracks/5/path = NodePath("entity_187_TutorialBoss/AnimationPlayer")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -5735,15 +5749,15 @@ tracks/8/keys = {
 }
 tracks/9/type = "value"
 tracks/9/imported = false
-tracks/9/enabled = true
+tracks/9/enabled = false
 tracks/9/path = NodePath("IntroCutsceneLayer:visible")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 1.15, 9.4),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false, true, false]
+"values": [true]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
@@ -5882,9 +5896,12 @@ tracks/19/path = NodePath(".")
 tracks/19/interp = 1
 tracks/19/loop_wrap = true
 tracks/19/keys = {
-"times": PackedFloat32Array(9.4),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 9.4),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
+"args": [],
+"method": &"_add_boss_to_intro_path"
+}, {
 "args": [],
 "method": &"_remove_boss_from_intro_path"
 }]
@@ -5910,7 +5927,7 @@ tracks/21/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLab
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
-"times": PackedFloat32Array(2.15, 4.8, 7.15, 9.4),
+"times": PackedFloat32Array(2.15, 4.8, 7.15, 9.1),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": ["They always send me the failures.", "You'll find no fortune here.", "Only pain.", ""]
@@ -5957,10 +5974,10 @@ tracks/24/path = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLab
 tracks/24/interp = 1
 tracks/24/loop_wrap = true
 tracks/24/keys = {
-"times": PackedFloat32Array(2.15, 4.55, 4.8, 4.95, 6.85, 7.05, 7.2, 8.35, 8.6),
-"transitions": PackedFloat32Array(1, 2.54912, 1, 2.54912, 2.54912, 1, 2.54912, 2.54912, 1),
+"times": PackedFloat32Array(2.15, 4.55, 4.8, 4.95, 6.85, 7.05, 7.2, 8.35, 8.6, 9.3, 9.4),
+"transitions": PackedFloat32Array(1, 2.54912, 1, 2.54912, 2.54912, 1, 2.54912, 2.54912, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_yuyap"]
@@ -6090,6 +6107,342 @@ tracks/8/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_syptn"]
+resource_name = "tutorial_end_1"
+length = 1.15
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("entity_187_TutorialBoss")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Path3D/PathFollow3D:progress_ratio")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 1.0]
+}
+tracks/2/type = "animation"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("entity_187_TutorialBoss/AnimationPlayer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": PackedStringArray("elevator_boss/intro"),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CutsceneCamera:current")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 9.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CutsceneCamera:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.15, 9.4),
+"transitions": PackedFloat32Array(0.25, 1, 0.378929),
+"update": 0,
+"values": [Vector3(-36.2, 2.6, 20.4), Vector3(-36.2, 2.21656, 18.6471), Vector3(-26.6, 1.1, 29.5)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("CutsceneCamera:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 1.15, 9.4),
+"transitions": PackedFloat32Array(0.25, 1, 0.378929),
+"update": 0,
+"values": [Vector3(-0.0366519, 0, 0), Vector3(-0.00267036, 0, 0), Vector3(0, 1.5708, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("IntroCutsceneLayer:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("IntroCutsceneLayer/Control/LetterboxTop:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.75, 1.1, 8.6, 9.1),
+"transitions": PackedFloat32Array(3.24901, 1, 0.496, 3.24901),
+"update": 0,
+"values": [Vector2(0, -200), Vector2(0, 0), Vector2(0, 0), Vector2(0, -200)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("IntroCutsceneLayer/Control/LetterboxBottom:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.75, 1.1),
+"transitions": PackedFloat32Array(3.24901, 1),
+"update": 0,
+"values": [Vector2(0, 1080), Vector2(0, 880)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("entity_187_TutorialBoss:position")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-36.204, -0.8, 15.574)]
+}
+
+[sub_resource type="Animation" id="Animation_w1jya"]
+resource_name = "tutorial_end_2"
+length = 0.85
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("entity_187_TutorialBoss")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [Vector3(-35.9, 0, 20.7)],
+"method": &"drop_barrel"
+}]
+}
+tracks/1/type = "animation"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("entity_187_TutorialBoss/AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"clips": PackedStringArray("elevator_boss/intro"),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CutsceneCamera:current")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CutsceneCamera:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.85, 9.4),
+"transitions": PackedFloat32Array(0.392292, 1, 0.378929),
+"update": 0,
+"values": [Vector3(-36.2, 2.21656, 18.6471), Vector3(-36.2, 0.816562, 26.3471), Vector3(-26.6, 1.1, 29.5)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CutsceneCamera:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.85, 9.4),
+"transitions": PackedFloat32Array(0.392292, 1, 0.378929),
+"update": 0,
+"values": [Vector3(-0.00267036, 0, 0), Vector3(-0.00267036, 0, 0), Vector3(0, 1.5708, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("IntroCutsceneLayer:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("entity_11_PlayerRef")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("entity_187_TutorialBoss:position")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-36.204, -0.8, 15.574)]
+}
+
+[sub_resource type="Animation" id="Animation_ywajm"]
+resource_name = "tutorial_end_3"
+length = 1.4
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("entity_187_TutorialBoss")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/1/type = "animation"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("entity_187_TutorialBoss/AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"clips": PackedStringArray("elevator_boss/intro", "elevator_boss/idle", "elevator_boss/impact_no_slam", "elevator_boss/intro"),
+"times": PackedFloat32Array(0, 0.0001, 0.6, 1.15)
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CutsceneCamera:current")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CutsceneCamera:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 9.4),
+"transitions": PackedFloat32Array(1, 0.378929),
+"update": 0,
+"values": [Vector3(-36.2, 0.816562, 26.3471), Vector3(-26.6, 1.1, 29.5)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CutsceneCamera:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 9.4),
+"transitions": PackedFloat32Array(1, 0.378929),
+"update": 0,
+"values": [Vector3(-0.00267036, 0, 0), Vector3(0, 1.5708, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("entity_187_TutorialBoss:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.65, 0.85, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-36.204, -0.945, 15.574), Vector3(-36.204, -2, 8.674), Vector3(-36.204, -2, 6.674), Vector3(-36.204, -2, -11.926)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("entity_187_TutorialBoss:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.5, 0.75, 1.1),
+"transitions": PackedFloat32Array(0.34151, 0.297302, 1),
+"update": 0,
+"values": [Vector3(1, 0.999946, 0.999946), Vector3(1, 0.8, 1), Vector3(1, 0.999946, 0.999946)]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("FuncGodotMap/entity_131_ElevatorDoors")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.05, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"open"
+}, {
+"args": [],
+"method": &"close"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fd4ep"]
 _data = {
 "RESET": SubResource("Animation_ujlpi"),
@@ -6097,17 +6450,20 @@ _data = {
 "cutscene_letterbox_start": SubResource("Animation_xg0b5"),
 "cutscene_skip": SubResource("Animation_s71cf"),
 "mechanic_enter": SubResource("Animation_xlg8b"),
-"pit_boss_shove": SubResource("Animation_yuyap")
+"pit_boss_shove": SubResource("Animation_yuyap"),
+"tutorial_end_1": SubResource("Animation_syptn"),
+"tutorial_end_2": SubResource("Animation_w1jya"),
+"tutorial_end_3": SubResource("Animation_ywajm")
 }
 
 [sub_resource type="Curve3D" id="Curve3D_uri17"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 4.75, 8.68, 0, -51.478, 0.145, 29.574, 0, 0, 0, -1.54, 8.41, 0, -44.769, 0.145, 29.574),
+"points": PackedVector3Array(0, 0, 0, 4.75, 8.68, 0, -51.478, 0.145, 29.574, 0, 0, 0, -1.54, 8.41, 0, -44.769, 0, 29.574),
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "intro_boss_path", "intro_boss_path_follow", "cutscene_subtitle_label", "cutscene_camera", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_intro_spawn", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "intro_boss_path", "intro_boss_path_follow", "tutorial_end_boss_marker", "cutscene_subtitle_label", "cutscene_camera", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
 script = ExtResource("2_twxne")
 boss_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_189_ElevatorDoors")
 exit_doors = NodePath("FuncGodotMap/layer_0_deco/group_7862_Arena2Geom/group_7853_Arena2/group_7858_Arena2Walls/entity_189_ElevatorDoors")
@@ -6123,6 +6479,7 @@ arena_1_floor_shock_hazard = NodePath("ElectricHazardArea")
 pipe_particle_emitters = [NodePath("SmokeParticles"), NodePath("SmokeParticles2"), NodePath("SmokeParticles3"), NodePath("SmokeParticles4"), NodePath("SmokeParticles5")]
 intro_boss_path = NodePath("Path3D")
 intro_boss_path_follow = NodePath("Path3D/PathFollow3D")
+tutorial_end_boss_marker = NodePath("TutorialEndCutscenePosMarker")
 cutscene_subtitle_label = NodePath("IntroCutsceneLayer/Control/SubtitleMargin/SubtitleLabel")
 cutscene_camera = NodePath("CutsceneCamera")
 tutorial_1_trigger_shoot = SubResource("Resource_41ph2")
@@ -9053,58 +9410,68 @@ libraries = {
 [node name="Marker3D" type="Marker3D" parent="." index="15"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.4788, 0.144639, 29.5743)
 
-[node name="entity_11_PlayerRef" parent="." index="16" instance=ExtResource("84_udjkb")]
+[node name="TutorialEndCutscenePosMarker" type="Marker3D" parent="." index="16"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.8788, -0.555361, 15.5743)
+
+[node name="entity_11_PlayerRef" parent="." index="17" instance=ExtResource("84_udjkb")]
 transform = Transform3D(1.94707e-07, 0, 1, 0, 1, 0, -1, 0, 1.94707e-07, -25.625, 1, 29.5)
 
-[node name="Path3D" type="Path3D" parent="." index="17"]
+[node name="entity_187_TutorialBoss" parent="." index="18" node_paths=PackedStringArray("target") instance=ExtResource("88_ijdgk")]
+transform = Transform3D(-4.87885e-08, 0.0685849, 0.997591, -3.88497e-07, -0.997591, 0.0685849, 1, -3.84215e-07, 7.5316e-08, 0, 0, 0)
+tutorial_health = 600
+phase_1_health = 200
+phase_2_health = 200
+phase_3_health = 200
+target = NodePath("../entity_11_PlayerRef")
+barrel_to_drop = ExtResource("78_iprpn")
+barrel_pickup_scene = ExtResource("79_jne3r")
+orbit_radius = 200.0
+
+[node name="DebugAnimPivot" parent="entity_187_TutorialBoss" index="1"]
+transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
+
+[node name="HealthComponent" parent="entity_187_TutorialBoss" index="8"]
+max_health = 500.0
+
+[node name="NavigationAgent3D" parent="entity_187_TutorialBoss" index="13"]
+debug_enabled = true
+
+[node name="Path3D" type="Path3D" parent="." index="19"]
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-4.37114e-08, 0, -0.999946, 0, 0.999946, 0, 1, 0, -4.3709e-08, -44.769, 0.145, 29.574)
+transform = Transform3D(-4.37315e-08, 0.0216063, -0.999701, -9.31323e-10, 0.999701, 0.0216063, 1, 1.87592e-09, -4.36983e-08, -44.769, 7.45058e-09, 29.574)
 loop = false
 tilt_enabled = false
 
-[node name="entity_187_TutorialBoss" parent="Path3D/PathFollow3D" index="0" node_paths=PackedStringArray("target") instance=ExtResource("88_ijdgk")]
-tutorial_strafe_distance = 9.0
-tutorial_strafe_radius = 9.0
-target = NodePath("../../../entity_11_PlayerRef")
-orbit_radius = 200.0
-
-[node name="DebugAnimPivot" parent="Path3D/PathFollow3D/entity_187_TutorialBoss" index="1"]
-transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
-
-[node name="NavigationAgent3D" parent="Path3D/PathFollow3D/entity_187_TutorialBoss" index="13"]
-debug_enabled = true
-
-[node name="CutsceneCamera" type="Camera3D" parent="." index="18"]
+[node name="CutsceneCamera" type="Camera3D" parent="." index="20"]
 transform = Transform3D(-3.62383e-06, -0.222535, -0.974925, 1.6801e-08, 0.974925, -0.222535, 1, -8.22808e-07, -3.52922e-06, -24.1585, 1.74925, 29.5983)
 current = true
 
-[node name="CutsceneSFXPlayer1" type="AudioStreamPlayer" parent="." index="19"]
+[node name="CutsceneSFXPlayer1" type="AudioStreamPlayer" parent="." index="21"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer2" type="AudioStreamPlayer" parent="." index="20"]
+[node name="CutsceneSFXPlayer2" type="AudioStreamPlayer" parent="." index="22"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer3" type="AudioStreamPlayer" parent="." index="21"]
+[node name="CutsceneSFXPlayer3" type="AudioStreamPlayer" parent="." index="23"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer4" type="AudioStreamPlayer" parent="." index="22"]
+[node name="CutsceneSFXPlayer4" type="AudioStreamPlayer" parent="." index="24"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer5" type="AudioStreamPlayer" parent="." index="23"]
+[node name="CutsceneSFXPlayer5" type="AudioStreamPlayer" parent="." index="25"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer6" type="AudioStreamPlayer" parent="." index="24"]
-volume_db = -80.0
+[node name="CutsceneSFXPlayer6" type="AudioStreamPlayer" parent="." index="26"]
+volume_db = -49.0334
 bus = &"SFX"
 
-[node name="CutsceneVOPlayer" type="AudioStreamPlayer" parent="." index="25"]
+[node name="CutsceneVOPlayer" type="AudioStreamPlayer" parent="." index="27"]
 bus = &"SFX"
 
-[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="26"]
+[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="28"]
 layer = 3
-visible = false
 
 [node name="Control" type="Control" parent="IntroCutsceneLayer" index="0"]
 layout_mode = 3
@@ -9114,14 +9481,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(1500, 540)
+mouse_filter = 2
 
 [node name="LetterboxTop" type="ColorRect" parent="IntroCutsceneLayer/Control" index="0"]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 200.0
+offset_top = -200.0
 grow_horizontal = 2
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="LetterboxBottom" type="ColorRect" parent="IntroCutsceneLayer/Control" index="1"]
@@ -9131,10 +9500,11 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -200.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 0
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="SubtitleMargin" type="MarginContainer" parent="IntroCutsceneLayer/Control" index="2"]
@@ -9146,6 +9516,7 @@ offset_top = 832.0
 offset_bottom = 832.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 128
 theme_override_constants/margin_top = 48
 theme_override_constants/margin_right = 128
@@ -9162,32 +9533,32 @@ autowrap_mode = 3
 visible_characters = 0
 visible_ratio = 0.0
 
-[node name="PitBossIntro" type="Sprite3D" parent="." index="27"]
+[node name="PitBossIntro" type="Sprite3D" parent="." index="29"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -23, 1.5, 29.5)
 billboard = 2
 texture = ExtResource("63_30qyb")
 
-[node name="Arena1Center" type="Marker3D" parent="." index="28"]
+[node name="Arena1Center" type="Marker3D" parent="." index="30"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.7, 5.96046e-08, 29.6)
 
-[node name="ElectricHazardArea" parent="." index="29" node_paths=PackedStringArray("immune_bodies") instance=ExtResource("75_byjbj")]
+[node name="ElectricHazardArea" parent="." index="31" node_paths=PackedStringArray("immune_bodies") instance=ExtResource("75_byjbj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5227, -1.2, 19.7469)
 visible = false
-immune_bodies = [NodePath("../Path3D/PathFollow3D/entity_187_TutorialBoss")]
+immune_bodies = [NodePath("../entity_187_TutorialBoss")]
 
-[node name="SmokeParticles" parent="." index="30" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles" parent="." index="32" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -34.8023, 7, 29.5)
 
-[node name="SmokeParticles2" parent="." index="31" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles2" parent="." index="33" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -40.3023, 7, 39.6)
 
-[node name="SmokeParticles3" parent="." index="32" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles3" parent="." index="34" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -28.9023, 7, 36)
 
-[node name="SmokeParticles4" parent="." index="33" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles4" parent="." index="35" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -28.9023, 7, 23.2)
 
-[node name="SmokeParticles5" parent="." index="34" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles5" parent="." index="36" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -40.4023, 7, 20.4)
 
-[editable path="Path3D/PathFollow3D/entity_187_TutorialBoss"]
+[editable path="entity_187_TutorialBoss"]
