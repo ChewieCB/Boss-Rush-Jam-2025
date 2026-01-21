@@ -383,6 +383,10 @@ func stop_all_pipe_emitters() -> void:
 		pipe_particle_emitters.push_back(_emitter)
 
 
+func _align_player_camera_to_cutscene_camera() -> void:
+	player.player_camera.global_rotation = cutscene_camera.global_rotation
+
+
 func _on_player_death() -> void:
 	if is_tutorial_finished:
 		win_ui.lose(lose_tips.pick_random())

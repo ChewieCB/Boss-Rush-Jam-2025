@@ -1125,14 +1125,8 @@ func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
 		camera_tween.set_parallel(true)
 		camera_tween.tween_property(
 			active_camera,
-			"global_rotation",
-			player_camera.global_rotation,
-			0.8
-		)
-		camera_tween.tween_property(
-			active_camera,
-			"global_position",
-			self.global_position,
+			"global_transform",
+			player_camera.global_transform,
 			0.8
 		)
 		await camera_tween.finished
