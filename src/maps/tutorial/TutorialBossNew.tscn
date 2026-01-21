@@ -9435,89 +9435,9 @@ transform = Transform3D(1.94707e-07, 0, 1, 0, 1, 0, -1, 0, 1.94707e-07, -25.625,
 
 [node name="entity_187_TutorialBoss" parent="." index="18" node_paths=PackedStringArray("target") instance=ExtResource("88_ijdgk")]
 transform = Transform3D(-4.87885e-08, 0.0685849, 0.997591, -3.88497e-07, -0.997591, 0.0685849, 1, -3.84215e-07, 7.5316e-08, 0, 0, 0)
-tutorial_health = 600
-phase_1_health = 200
-phase_2_health = 200
-phase_3_health = 200
-MOVE_SPEED = 6.0
-wave_amplitude = 7.0
-wave_frequency = 5.0
-intro_height_margin = 0.2
-hurtbox_range_tutorial = 5.0
-max_sequential_ranged_phases = 3
-tutorial_melee_distance = 3.0
-tutorial_melee_radius = 3.0
-melee_distance = 5.0
-melee_radius = 5.0
-melee_max_chase_distance = 9.0
-swipe_damage = 14.0
-hook_damage = 12.0
-backswipe_damage = 16.0
-slam_damage = 26.0
-slam_delay = 0.3
-slam_time = 0.9
-num_bursts = 1
-shots_per_burst = 12
-delay_between_burst = 0.5
-nail_damage = 7.0
-tutorial_strafe_distance = 9.0
-tutorial_strafe_radius = 9.0
-laser_damage = 40.0
-sfx_laser_disarm = Array[AudioStream]([])
-shock_damage = 10.0
-shock_duration = 0.6
 target = NodePath("../entity_11_PlayerRef")
-chip_spawn_chance = 0.4
-chip_spawn_force = 700.0
-chip_spawn_dps_threshold = 25.0
-chip_spawn_mult_cap = 3
-status_resist = {
-1: 1000,
-2: 1000,
-3: 1000,
-4: 1000,
-5: 1000
-}
-status_duration = {
-1: 10,
-2: 10,
-3: 10,
-4: 10,
-5: 1
-}
-increased_status_tolerance = {
-1: 500,
-2: 500,
-3: 500,
-4: 500,
-5: 1000
-}
-dps_dealt_window = 1.8
 barrel_to_drop = ExtResource("78_iprpn")
 barrel_pickup_scene = ExtResource("79_jne3r")
-death_sprites = Array[AudioStream]([])
-hurt_frame_window = 0.6
-hurt_frame_cooldown = 1.5
-current_phase = 1
-attack_targeting_time = 0.5
-attack_recovery_time = 0.5
-charge_force = 8.0
-projectiles_per_phase = 5
-max_projectile_rounds = 2
-area_damage = 25.0
-areas_per_phase = 6
-area_spawn_time = 1.5
-delay_per_area = 0.0
-max_area_rounds = 2
-area_size = 16.0
-area_rings = 1
-MAX_SPEED = 5.0
-FRICTION = 1.0
-TURN_SPEED_FAST = 7.5
-TURN_SPEED_SLOW = 5.0
-GRAVITY = 14.0
-DESIRED_DISTANCE = 10.0
-orbit_angle = 0.0
 orbit_radius = 200.0
 
 [node name="DebugAnimPivot" parent="entity_187_TutorialBoss" index="1"]
@@ -9534,7 +9454,6 @@ curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
 transform = Transform3D(-4.37315e-08, 0.0216063, -0.999701, -9.31323e-10, 0.999701, 0.0216063, 1, 1.87592e-09, -4.36983e-08, -44.769, 7.45058e-09, 29.574)
-progress = 10.8339
 loop = false
 tilt_enabled = false
 
