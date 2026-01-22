@@ -11,18 +11,18 @@ var drunk_tween: Tween
 
 
 func _ready() -> void:
-	GameManager.setting_changed.connect(_on_setting_changed)
+	GameManager.setting_ui.setting_changed.connect(_on_setting_changed)
 
 
 func _on_setting_changed() -> void:
-	if GameManager.drunk_blur_disabled:
+	if GameManager.drunk_blur_enabled:
 		rect.color.a = 0.0
 	else:
 		rect.color.a = 1.0
 
 
 func start_drunk() -> void:
-	if GameManager.drunk_blur_disabled:
+	if GameManager.drunk_blur_enabled:
 		return
 	# Toggle low pass filter for BGM
 	# FIXME

@@ -11,7 +11,6 @@ signal gun_frame_too_expensive(gun_frame_data: GunFrameResource)
 signal reroll_cost_changed(new_cost: int)
 signal free_rerolls
 signal refresh_shop_ui
-signal setting_changed
 signal risk_level_changed
 signal demo_time_changed
 
@@ -139,8 +138,8 @@ var hide_ui = false
 var hide_hurt_overlay = false
 var hide_damage_number = false
 # Accessibility setting flags
-var screen_shake_disabled: bool = false
-var drunk_blur_disabled: bool = false
+var screen_shake_enabled: bool = true
+var drunk_blur_enabled: bool = true
 
 @export_range(0, 100, 0.1) var master_audio: float = 80:
 	set(value):

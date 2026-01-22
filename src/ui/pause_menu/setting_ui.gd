@@ -238,7 +238,7 @@ func _on_master_slider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_db(0, linear_to_db(value / 100.0))
 	master_value.text = "{0}".format([value])
 	GameManager.master_audio = value
-	
+
 func _on_ui_slider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_db(3, linear_to_db(value / 100.0))
 	ui_value.text = "{0}".format([value])
@@ -345,16 +345,14 @@ func _on_hide_damage_number_toggle_toggled(toggled_on: bool) -> void:
 
 func _on_screen_shake_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
-	GameManager.screen_shake_disabled = !toggled_on
+	GameManager.screen_shake_enabled = toggled_on
 	setting_changed.emit()
-	GameManager.setting_changed.emit()
 
 
 func _on_drunk_blur_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
-	GameManager.drunk_blur_disabled = !toggled_on
+	GameManager.drunk_blur_enabled = toggled_on
 	setting_changed.emit()
-	GameManager.setting_changed.emit()
 
 
 func refresh_setting_value():
@@ -371,8 +369,8 @@ func refresh_setting_value():
 	hide_ui_toggle.set_pressed_no_signal(GameManager.hide_ui)
 	hide_hurt_overlay_toggle.set_pressed_no_signal(GameManager.hide_hurt_overlay)
 	hide_damage_number_toggle.set_pressed_no_signal(GameManager.hide_damage_number)
-	screen_shake_toggle.set_pressed_no_signal(!GameManager.screen_shake_disabled)
-	drunk_blur_toggle.set_pressed_no_signal(!GameManager.drunk_blur_disabled)
+	screen_shake_toggle.set_pressed_no_signal(GameManager.screen_shake_enabled)
+	drunk_blur_toggle.set_pressed_no_signal(GameManager.drunk_blur_enabled)
 
 	Engine.max_fps = GameManager.FPS_LIMIT_ARRAY[GameManager.fps_limit_index]
 	fps_limit_option_button.selected = GameManager.fps_limit_index
@@ -403,7 +401,7 @@ func refresh_setting_value():
 	sfx_value.text = "{0}".format([GameManager.sfx_audio])
 	ui_slider.value = GameManager.ui_audio
 	ui_value.text = "{0}".format([GameManager.ui_audio])
-	
+
 	# DEBUG
 	god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_godmode)
 	demo_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_demomode)
@@ -412,7 +410,7 @@ func refresh_setting_value():
 	boss_one_shot_toggle.set_pressed_no_signal(GameManager.CHEAT_oneshot)
 	barrel_spin_mode_dropdown.selected = GameManager.CHEAT_spin_mode
 	freecam_toggle.set_pressed_no_signal(GameManager.CHEAT_freecam)
-	
+
 	timescale_slider.value = Engine.time_scale
 	timescale_value.text = "{0}".format([Engine.time_scale])
 
