@@ -16,19 +16,25 @@ func _ready() -> void:
 
 func _on_setting_changed() -> void:
 	if GameManager.drunk_blur_enabled:
-		rect.color.a = 0.0
+		visible = true
 	else:
-		rect.color.a = 1.0
+		visible = false
+
+
+## DEBUG, REMOVE LATER
+# func _input(event: InputEvent) -> void:
+# 	if event is InputEventKey and event.pressed:
+# 		if event.keycode == KEY_O:
+# 			start_drunk()
+# 		elif event.keycode == KEY_P:
+# 			end_drunk()
 
 
 func start_drunk() -> void:
-	if GameManager.drunk_blur_enabled:
-		return
 	# Toggle low pass filter for BGM
 	# FIXME
 	#AudioServer.set_bus_effect_enabled(1, 1, true)
 	#AudioServer.set_bus_effect_enabled(2, 0, true)
-	
 	# Setup tween
 	drunk_tween = create_tween()
 	drunk_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
