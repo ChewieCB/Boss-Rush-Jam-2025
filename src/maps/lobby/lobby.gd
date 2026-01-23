@@ -36,6 +36,7 @@ func _ready() -> void:
 	get_tree().paused = false
 	
 	GameManager.current_boss_map = self
+	GameManager.change_fmod_bgm_music_state("Lobby")
 	
 	# Save and load check
 	if SaveManager.save_data_is_loaded:
@@ -120,7 +121,7 @@ func find_and_load_boss_bgm() -> void:
 		BossCore.BossIdEnum.ROULETTE:
 			GameManager.change_fmod_bgm_music_state("Roulette")
 		BossCore.BossIdEnum.CHIPS:
-			GameManager.change_fmod_bgm_music_state("ChipbossInt")
+			GameManager.change_fmod_bgm_music_state("ChipbossStart")
 		BossCore.BossIdEnum.BLACKJACK:
 			GameManager.change_fmod_bgm_music_state("BlackjackStart")
 		BossCore.BossIdEnum.ELEVATOR:

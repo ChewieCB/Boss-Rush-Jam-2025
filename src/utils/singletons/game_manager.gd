@@ -488,7 +488,7 @@ func _on_controller_connection(_device: int, connected: bool):
 	is_controller_connected = connected
 
 ## Level can be Menu, Lobby, Roulette, Slotty, Bartender, GenericBossAftermath, PitbossHallway,
-## PitbossMainfight, ChipbossInt, ChipbossStart, BlackjackStart, TutorialBossfight, Tutorial1, Tutorial2,
+## PitbossMainfight, ChipbossStart, ChipbossInt , BlackjackStart, TutorialBossfight, Tutorial1, Tutorial2,
 func change_fmod_bgm_music_state(music_state: String) -> void:
 	main_bgm_emitter.set_parameter("MusicState", music_state)
 
