@@ -41,15 +41,16 @@ const DRUNK_DURATION = 5.0
 
 
 func _ready() -> void:
-	super ()
-	boss.flood_chamber.connect(raise_water)
-	boss.drain_chamber.connect(lower_water)
-	boss.break_floor.connect(break_floor)
-	
-	boss.chiptopede_spawns = chiptopede_spawns
-	boss.chiptopede_snake_spawns = chiptopede_snake_spawns
-	boss.chiptopede_snake_path_points = chiptopede_snake_path_points
-	boss.chiptopede_shoot_spawns = chiptopede_shoot_spawns
+	super()
+	if boss:
+		boss.flood_chamber.connect(raise_water)
+		boss.drain_chamber.connect(lower_water)
+		boss.break_floor.connect(break_floor)
+		
+		boss.chiptopede_spawns = chiptopede_spawns
+		boss.chiptopede_snake_spawns = chiptopede_snake_spawns
+		boss.chiptopede_snake_path_points = chiptopede_snake_path_points
+		boss.chiptopede_shoot_spawns = chiptopede_shoot_spawns
 
 	waterfalls.visible = false
 	for mesh in waterfall_meshses_vertical:
@@ -63,6 +64,8 @@ func _ready() -> void:
 
 
 func _process(delta) -> void:
+	if Input.is_action_just_pressed("input_1"):
+		break_floor()
 	if waterfalls.visible:
 		for mesh in waterfall_meshes:
 			mesh.mesh.surface_get_material(0).uv1_offset.x -= delta * waterfall_speed
@@ -153,7 +156,7 @@ func raise_water() -> void:
 			1.0,
 			water_raise_time / 3
 		)
-		get_node("WaterfallArea").set_deferred("monitoring", true)
+		mesh.get_node("WaterfallArea").set_deferred("monitoring", true)
 	water_tween.chain().tween_property(water_surface, "global_position:y", upper_water_level, water_raise_time)
 	
 	for platform in rising_platforms:
