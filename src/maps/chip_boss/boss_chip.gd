@@ -15,7 +15,7 @@ extends BossMap
 @export var waterfall_meshes: Array[Node3D]
 @export var waterfall_meshses_vertical: Array[Node3D]
 @onready var water_surface: MeshInstance3D = $WaterSurfaceMesh
-@onready var rising_platforms: Array[Node] = get_tree().get_nodes_in_group("rising_platforms")
+var rising_platforms: Array[Node]
 
 @onready var SFXBeerPlayer: AudioStreamPlayer3D = $SFXBeerPlayer
 @onready var SFXBeerPlayer2: AudioStreamPlayer3D = $SFXBeerPlayer2
@@ -56,6 +56,10 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 5:
 		water_damage_enabled = true
 
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	rising_platforms = get_tree().get_nodes_in_group("chip_boss_rising_platforms")
 
 func _process(delta) -> void:
 	if waterfalls.visible:

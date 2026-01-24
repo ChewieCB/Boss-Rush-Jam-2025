@@ -65,12 +65,12 @@ var charge_target_pos: Vector3
 @export var sfx_merge_telegraph: Array[AudioStream]
 #
 @export_subgroup("Place Your Bets")
-@onready var aoe_markers: Array[Node]
 @export var marker_target_idx: int
 @export var jump_height: float = 9.0
 @export var jump_time: float = 0.8
 @export var jump_hang_time: float = 1.2
 @export var drop_time: float = 0.3
+var aoe_markers: Array[Node]
 # SFX
 @export var sfx_jump: Array[AudioStream]
 @export var sfx_slam: Array[AudioStream]

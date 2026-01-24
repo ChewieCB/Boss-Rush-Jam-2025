@@ -265,10 +265,14 @@ func _ready() -> void:
 	leap_finished.connect(_on_chiptopede_leap_impact)
 	chiptopede_max_health *= GameManager.get_risk_max_hp_mult()
 
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	aoe_markers = get_tree().get_nodes_in_group("chip_boss_aoe_marker")
 
 func activate() -> void:
 	print_debug("BossChips activate called")
-	super()
+	super ()
 	navigation_component.follow_target = false
 	navigation_component.enable()
 	if not self.is_node_ready():
@@ -1058,7 +1062,6 @@ func _on_phase_2_state_entered() -> void:
 
 	# Update the center position to account for the platform
 	center_pos.y = 2.0
-	aoe_markers = get_tree().get_nodes_in_group("boss_aoe_marker")
 
 	_cleanup_backspin_chip()
 	_on_chip_sweep_state_exited()
@@ -1616,6 +1619,9 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 		small_stack_inst.group_idx = i
 		small_stack_inst.center_pos = center_pos
 		small_stack_inst.aoe_markers = aoe_markers
+		if len(aoe_markers) == 0:
+			print_debug("boss chip aoe_markers is empty")
+			breakpoint
 		if current_phase == 2:
 			small_stack_inst.navigation_component.disable()
 
