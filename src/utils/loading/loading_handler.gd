@@ -84,6 +84,7 @@ func initial_load() -> void:
 
 
 func start_loading(scene_path: String, scene_name: String = "", transition_out: bool = true) -> void:
+	ScreenTransition.set_loading_detail_text(scene_name)
 	if transition_out:
 		ScreenTransition.transition_out()
 		await ScreenTransition.transition_finished
@@ -99,8 +100,7 @@ func start_loading(scene_path: String, scene_name: String = "", transition_out: 
 		initial_load()
 		await materials_compiled
 	
-	await Engine.get_main_loop().process_frame
-	ScreenTransition.set_loading_detail_text(scene_name)
+	#await Engine.get_main_loop().process_frame
 
 
 func load_scene_transition() -> void:

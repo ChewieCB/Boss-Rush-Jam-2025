@@ -19,6 +19,10 @@ var bgm_player: AudioStreamPlayer
 var started_loading = false
 
 func _ready() -> void:
+	if not LoadingHandler.is_materials_compiled:
+		LoadingHandler.initial_load()
+		await LoadingHandler.materials_compiled
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	
