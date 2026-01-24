@@ -28,7 +28,7 @@ var rising_platforms: Array[Node]
 @export var water_damage_tick: float = 1.0
 @export var water_damage_amount: float = 2.0
 var water_damage_enabled = false
-const DRUNK_DURATION = 5.0
+const DRUNK_DURATION = 4.0
 @export var splash_particle_prefab: PackedScene
 @export var sfx_splash: Array[AudioStream]
 
