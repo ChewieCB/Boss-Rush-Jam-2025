@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://3ldvxjt8q5gk" path="res://src/ui/player/inventory/ShopGunFrameItemUI.tscn" id="5_fojg4"]
 [ext_resource type="AudioStream" uid="uid://ubpvgr5xq1jm" path="res://src/ui/common/assets/sfx/Open the shop 2.mp3" id="5_q6fhm"]
 [ext_resource type="AudioStream" uid="uid://b367lg4wac2xl" path="res://src/ui/common/assets/sfx/VENDOR UI CLICK.mp3" id="6_i05nn"]
-[ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/assets/frames/shotgun_frame_sideview.png" id="6_tkikf"]
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_modify_ui.gd" id="6_yuo0o"]
 [ext_resource type="AudioStream" uid="uid://bleu7jgamqfoj" path="res://src/ui/common/assets/sfx/COINS SOUND FOR VENDOR.mp3" id="7_1f1kf"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="7_78f5u"]
@@ -22,6 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="16_1lncy"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="17_l7b4t"]
 [ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="17_tev6s"]
+[ext_resource type="Texture2D" uid="uid://5a51ghh4cpmw" path="res://src/ui/player/inventory/assets/frames/frame_sideview_shotgun.png" id="18_xnq3r"]
 [ext_resource type="PackedScene" uid="uid://cireewkvow2ct" path="res://src/ui/player/inventory/GunFrameItemUI.tscn" id="19_p3q3v"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="21_dravj"]
 
@@ -272,7 +272,7 @@ offset_left = 168.0
 offset_top = 8.0
 offset_right = 788.0
 offset_bottom = 228.0
-texture = ExtResource("6_tkikf")
+texture = ExtResource("18_xnq3r")
 
 [node name="Line2D" type="Line2D" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
 points = PackedVector2Array(208, 88, 152, 248)

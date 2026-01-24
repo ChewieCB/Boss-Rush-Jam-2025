@@ -48,7 +48,7 @@ var shop_barrels: Array[Resource] = []
 @export var starting_gun_frame: Resource
 @export var starting_shop_gun_frame: Array[Resource]
 @export var gun_frame_database: Array[Resource]
-var equipped_gun_frame: Resource = starting_gun_frame
+var equipped_gun_frame: Resource
 var inventory_gun_frames: Array[Resource] = []
 @onready var shop_gun_frames: Array[Resource] = starting_shop_gun_frame
 
@@ -180,6 +180,7 @@ var CHEAT_demomode_timeout: int = 60:
 
 
 func _ready() -> void:
+	equipped_gun_frame = starting_gun_frame
 	barrel_database.append_array(debug_barrel_database)
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -187,7 +188,6 @@ func _ready() -> void:
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	main_bgm_emitter.volume = BASE_FMOD_VOLUME
-	main_bgm_emitter.play()
 
 func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):

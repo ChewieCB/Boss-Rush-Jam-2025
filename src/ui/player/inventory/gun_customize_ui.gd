@@ -125,7 +125,7 @@ func full_refresh_ui(forced = false):
 		item_inst.init(gun_frame_data, false, true)
 		item_inst.select_gun_frame.connect(_on_gun_frame_item_ui_select)
 		item_inst.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
-	
+
 	current_gun_frame_icon.texture = GameManager.equipped_gun_frame.shop_ui_sprite
 
 
@@ -154,7 +154,7 @@ func full_refresh_ui(forced = false):
 		shop_item_inst.init(gun_frame_data)
 		shop_item_inst.gun_frame_item_ui.select_gun_frame.connect(_on_gun_frame_item_ui_select)
 		shop_item_inst.gun_frame_item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
-	
+
 	if GameManager.equipped_gun_frame:
 		current_gun_frame_label.text = "Current frame: {0}".format([GameManager.equipped_gun_frame.frame_name])
 

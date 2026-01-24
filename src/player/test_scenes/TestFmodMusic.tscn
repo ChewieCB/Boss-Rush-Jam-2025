@@ -221,7 +221,6 @@ layout_mode = 2
 libraries = {
 "": SubResource("AnimationLibrary_m4ydu")
 }
-autoplay = "spin_disc"
 
 [connection signal="pressed" from="CanvasLayer/StartControl/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/StartControl/StopButton" to="." method="_on_stop_button_pressed"]
