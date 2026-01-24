@@ -1216,9 +1216,10 @@ func spawn_aoe_wall(
 	
 	mesh.size = Vector3(width, height, thickness)
 	mesh.material = wave_material
+	_change_slam_wall_progress(0.665, debug_mesh_instance)
+	_change_slam_wall_color(Color("#ff9e5480"), debug_mesh_instance)
 	
 	# Spawn moving wave particles that stay at end of line
-	
 	if not slam_wall_particles in scene_root.get_children():
 		slam_wall_particles.get_parent().remove_child(slam_wall_particles)
 		scene_root.add_child(slam_wall_particles)
@@ -1253,18 +1254,18 @@ func spawn_aoe_wall(
 		slam_sfx_player.stop()
 		slam_sfx_player.queue_free()
 		
-		# FIXME - dissolve animation
+		# Dissolve animation
 		var dissolve_tween: Tween = get_tree().create_tween()
 		dissolve_tween.tween_method(
-			_change_slam_wall_progress.bind(mesh),
+			_change_slam_wall_progress.bind(debug_mesh_instance),
 			0.665,
 			1.0,
 			0.4
 		)
 		dissolve_tween.chain().tween_method(
-			_change_slam_wall_color.bind(mesh),
-			"#ff9e5480",
-			"#ff9e5400",
+			_change_slam_wall_color.bind(debug_mesh_instance),
+			Color("#ff9e5480"),
+			Color("#ff9e5400"),
 			0.2
 		)
 		await dissolve_tween.finished
@@ -1692,12 +1693,12 @@ func _on_tutorial_phase_3_dash_wave_state_physics_processing(delta: float) -> vo
 	move_and_slide()
 
 
-func _change_slam_wall_progress(mesh: MeshInstance3D, progress: float) -> void:
+func _change_slam_wall_progress(progress: float, mesh: MeshInstance3D) -> void:
 	var mat: ShaderMaterial = mesh.get_active_material(0)
 	mat.set_shader_parameter("rise_progress", progress)
 
 
-func _change_slam_wall_color(mesh: MeshInstance3D, color: Color) -> void:
+func _change_slam_wall_color(color: Color, mesh: MeshInstance3D) -> void:
 	var mat: ShaderMaterial = mesh.get_active_material(0)
 	mat.set_shader_parameter("color", color)
 	mat.set_shader_parameter("color_edge", color)
