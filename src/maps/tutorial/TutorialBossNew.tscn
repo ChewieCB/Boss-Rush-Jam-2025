@@ -7438,10 +7438,8 @@ transform = Transform3D(-4.87885e-08, 0.0685849, 0.997591, -3.88497e-07, -0.9975
 target = NodePath("../entity_11_PlayerRef")
 barrel_to_drop = ExtResource("78_iprpn")
 barrel_pickup_scene = ExtResource("79_jne3r")
+current_phase = 3
 orbit_radius = 200.0
-
-[node name="DebugAnimPivot" parent="entity_187_TutorialBoss" index="1"]
-transform = Transform3D(0.258816, 0, 0.965927, 0, 1, 0, -0.965927, 0, 0.258816, 0, 2, 0)
 
 [node name="HealthComponent" parent="entity_187_TutorialBoss" index="8"]
 max_health = 500.0
