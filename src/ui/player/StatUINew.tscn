@@ -462,7 +462,6 @@ tint_under = Color(0.306923, 0.306923, 0.306923, 1)
 tint_progress = Color(0.461167, 1, 0.39, 1)
 
 [node name="RadialDrawCenter" type="Control" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI"]
-z_index = 3
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -558,6 +557,7 @@ libraries = {
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(960, 540)
 
+[connection signal="timeout" from="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer/HealthBar/Timer" to="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer" method="_on_timer_timeout"]
 [connection signal="value_changed" from="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI" to="." method="_on_spin_ability_progress_changed"]
 
 [editable path="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI"]

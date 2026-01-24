@@ -333,9 +333,11 @@ vertical_alignment = 1
 layout_mode = 2
 assigned_action = "interact"
 
-[node name="StatUI" parent="UI" instance=ExtResource("51_vst8k")]
+[node name="StatUI" parent="UI" node_paths=PackedStringArray("health_component", "luck_component") instance=ExtResource("51_vst8k")]
 offset_left = 1156.0
 offset_top = 816.0
+health_component = NodePath("../../HealthComponent")
+luck_component = NodePath("../../LuckComponent")
 
 [node name="GunUI" type="Control" parent="UI"]
 layout_mode = 3
