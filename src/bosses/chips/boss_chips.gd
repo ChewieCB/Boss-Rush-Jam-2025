@@ -1658,7 +1658,8 @@ func despawn_stacks(_despawn_time: float = stack_spawn_time) -> void:
 
 		await stack_spawn_tween.finished
 
-		stack.queue_free()
+		if is_instance_valid(stack):
+			stack.queue_free()
 
 	if unstable_split_enabled:
 		unstable_split_timer.stop()
