@@ -110,6 +110,11 @@ var aoe_tween: Tween
 @export var sfx_slam: Array[AudioStream]
 @export var sfx_wave_loop: Array[AudioStream]
 @export var sfx_wave_impact: Array[AudioStream]
+# Dash wave
+@export var sfx_flame_wall: Array[AudioStream]
+@export var sfx_flame_wall_hit: Array[AudioStream]
+@export var sfx_flame_wall_dashed: Array[AudioStream]
+
 @export_subgroup("Nailguns")
 @export var nail_projectile: PackedScene
 @export var proj_spawn_l: Marker3D
@@ -125,6 +130,7 @@ var aoe_tween: Tween
 @export var sfx_nail_equip: Array[AudioStream]
 @export var sfx_nail_shot: Array[AudioStream]
 @export var sfx_nail_unequip: Array[AudioStream]
+
 @export_subgroup("Laser AoE")
 @export var laser_aoe: PackedScene
 @export var laser_spawn: Marker3D
@@ -143,6 +149,12 @@ var laser_target_pos: Vector3
 @export var shock_floor_hazard: Node3D
 @export var shock_damage: float = 10.0
 @export var shock_duration: float = 0.6
+# SFX
+@export var sfx_electric_slam_buildup: Array[AudioStream]
+@export var sfx_electric_slam_telegraph: Array[AudioStream]
+@export var sfx_electric_slam_impact: Array[AudioStream]
+@export var sfx_electric_loop: Array[AudioStream]
+@export var sfx_electric_fadeout: Array[AudioStream]
 
 var attack_interrupt: bool = false  # Flag to interrupt loop-based attacks like the nailgun shots
 
@@ -1181,6 +1193,7 @@ func spawn_aoe_wall(
 	_telegraph: bool = false,
 	callback: Callable = func(): pass ,
 ) -> void:
+	slam_wall_particles.visible = false
 	var debug_mesh_instance: MeshInstance3D
 	var area_collider: Area3D
 	# Generate a collider
@@ -1237,8 +1250,7 @@ func spawn_aoe_wall(
 	var slam_sfx_player := AudioStreamPlayer3D.new()
 	scene_root.add_child(slam_sfx_player)
 	slam_sfx_player.global_position = slam_wall_particles.global_position
-	slam_sfx_player.stream = sfx_wave_loop.pick_random()
-	slam_sfx_player.volume_db = -8.0
+	slam_sfx_player.stream = sfx_flame_wall.pick_random()
 	slam_sfx_player.play()
 	
 	# Declare a callable we can use to cleanup the 
@@ -1306,7 +1318,11 @@ func _on_wave_collision(
 	if body == target:
 		if body is Player:
 			if body.is_dashing:
+				SoundManager.play_sound(sfx_flame_wall_dashed.pick_random(), "SFX")
 				return
+			else:
+				SoundManager.play_sound(sfx_flame_wall_hit.pick_random(), "SFX")
+
 		
 		SoundManager.play_sound(sfx_wave_impact.pick_random(), "SFX")
 		InputHelper.rumble_medium()
@@ -1538,12 +1554,18 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(del
 
 func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
 	state_chart.send_event("start_targeting")
+	var sfx_player: AudioStreamPlayer3D = get_available_sfx_player()
 	await get_tree().create_timer(0.6, false).timeout
+	
+	sfx_player.stream = sfx_electric_slam_buildup.pick_random()
+	sfx_player.play()
 	anim_player.play("elevator_boss/shock_slam_telegraph_start")
 	await anim_player.animation_finished
 	anim_player.play("elevator_boss/shock_slam_telegraph_loop")
 	await anim_player.animation_finished
 	#await get_tree().create_timer(0.3, false).timeout
+	#sfx_player.stream = sfx_electric_slam_telegraph.pick_random()
+	#sfx_player.play()
 	await _telegraph_attack()
 	
 	anim_player.play("elevator_boss/shock_slam_start")
@@ -1562,8 +1584,17 @@ func _on_tutorial_phase_2_electrify_floor_slamming_state_physics_processing(delt
 	move_and_slide()
 
 
+func _play_shock_impact_sfx() -> void:
+	var sfx_player: AudioStreamPlayer3D = get_available_sfx_player()
+	sfx_player.stream = sfx_electric_slam_impact.pick_random()
+	sfx_player.play()
+
+
 func start_floor_shock() -> void:
 	shock_floor_hazard.is_active = true
+	var sfx_player: AudioStreamPlayer3D = get_available_sfx_player()
+	sfx_player.stream = sfx_electric_fadeout.pick_random()
+	sfx_player.play()
 
 
 func end_floor_shock() -> void:

@@ -22,6 +22,8 @@ var is_active = false:
 		self.visible = is_active
 		if is_active:
 			trigger_effect()
+		else:
+			sfx_player.stop()
 		
 var stopped_moving = false
 
@@ -30,11 +32,12 @@ var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_dow
 
 func _ready() -> void:
 	#is_active = true
-	if sfx_effect:
-		if sfx_player.playing:
-			await sfx_player.finished
-		sfx_player.stream = sfx_effect.pick_random()
-		sfx_player.play()
+	pass
+	#if sfx_effect:
+		#if sfx_player.playing:
+			#await sfx_player.finished
+		#sfx_player.stream = sfx_effect.pick_random()
+		#sfx_player.play()
 
 
 func _on_damage_timer_timeout() -> void:
@@ -45,6 +48,10 @@ func _on_damage_timer_timeout() -> void:
 
 
 func trigger_effect() -> void:
+	if sfx_effect:
+		sfx_player.stream = sfx_effect.pick_random()
+		sfx_player.play()
+	
 	for body in bodies_inside:
 		if body in immune_bodies:
 			continue
