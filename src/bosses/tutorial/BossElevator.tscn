@@ -2517,6 +2517,7 @@ boss_name = "The Mechanic"
 
 [node name="StateChartDebugger" parent="DebugUI" index="0"]
 offset_top = 27.0
+enabled = true
 metadata/_edit_group_ = true
 
 [node name="toTutorialArena1" type="Node" parent="StateChart/Root/Phase/Inactive" index="0"]
@@ -4328,9 +4329,8 @@ delay_in_seconds = "0.0"
 
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DashWave" index="5"]
 script = ExtResource("5_7kc6y")
-to = NodePath("../../../Phase4/MeleeCombo")
+to = NodePath("../../MeleeCombo")
 event = &"start_melee_combo"
-guard = SubResource("Resource_4xor2")
 delay_in_seconds = "0.0"
 
 [node name="toDualNails" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DashWave" index="6"]

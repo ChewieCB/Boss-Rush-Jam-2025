@@ -391,7 +391,7 @@ func select_attack_phase_5() -> void:
 	# use previous_phase and new_phase to track mele/ranged.
 	# Use new_attack to store the attack transition we sent to state chart.
 	var new_attack: String
-	var melee_attacks = ["start_melee_combo_attack", "start_dash_wave"]
+	var melee_attacks = ["start_melee_combo", "start_dash_wave"]
 	
 	match previous_phase:
 		"melee_phase":
@@ -649,7 +649,7 @@ func _on_melee_combo_slam_line_state_physics_processing(delta: float) -> void:
 func _on_melee_combo_recover_state_entered() -> void:
 	debug_state_label.text = "Melee Combo | Recovery"
 	
-	prev_attack = "melee_combo"
+	prev_attack = "start_melee_combo"
 	navigation_component.follow_target = false
 	
 	hurtbox_collider.shape.size.z = hurtbox_range_close
@@ -1961,6 +1961,7 @@ func _on_tutorial_phase_4_strafing_nails_targeting_state_entered() -> void:
 	
 	desired_distance = strafe_distance
 	orbit_radius = strafe_radius
+	move_speed = MOVE_SPEED
 	
 	navigation_component.follow_target = false
 	state_chart.send_event("start_moving")
@@ -1989,7 +1990,7 @@ func _on_tutorial_phase_4_strafing_nails_shooting_state_entered() -> void:
 	debug_state_label.text = "Dual Nailguns | Shooting"
 	await _telegraph_attack()
 	# TODO - replace magic numbers with export vars
-	await shoot_nail_projectile(2, 8, 0.2, 0.6, 55)
+	await shoot_nail_projectile(2, 8, 0.35, 0.6, 55)
 	
 	state_chart.send_event("stop_shooting")
 
@@ -2013,13 +2014,15 @@ func _on_tutorial_phase_4_dash_wave_idle_state_entered() -> void:
 	desired_distance = strafe_distance
 	move_speed = MAX_SPEED * 1.6
 	melee_phase_count += 1
+	prev_attack = "start_dash_wave"
 	state_chart.send_event("start_moving")
 
 
 func _on_tutorial_phase_4_dash_wave_idle_state_physics_processing(delta: float) -> void:
 	orbit_player(delta)
 	
-	if self.global_position.distance_to(target.global_position) > 8.0:
+	if self.global_position.distance_to(target.global_position) > 8.0 and\
+	self.global_position.distance_to(target.global_position) < 20.0:
 		state_chart.send_event("start_wave")
 
 
@@ -2043,7 +2046,6 @@ func _on_tutorial_phase_4_dash_wave_swipe_wave_state_entered() -> void:
 	anim_player.play("elevator_boss/dash_wave_fast")
 	await anim_player.animation_finished
 	
-	await get_tree().create_timer(0.5, false).timeout
 	state_chart.send_event("end_wave")
 
 
