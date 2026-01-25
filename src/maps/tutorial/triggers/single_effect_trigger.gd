@@ -19,6 +19,7 @@ func hit_with_effect(installed_barrels: Array[SpinBarrel]) -> void:
 			if current_effect.icon_id == target_effect_id:
 				triggered.emit()
 				activate()
+				active = false
 
 
 func activate() -> void:

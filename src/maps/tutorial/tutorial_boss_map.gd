@@ -60,6 +60,10 @@ var is_cutscene_active: bool = true
 
 # 
 @export var electric_box_trigger: StaticBody3D
+@export var spark_sfx_player: AudioStreamPlayer3D
+@export var sfx_door_spark: Array[AudioStream]
+@export var door_spark_emitter: GPUParticles3D
+@export var door_trigger_highlight_mesh: MeshInstance3D
 
 var reload_tutorial_shown: bool = false
 var tutorial_panel_tween: Tween
@@ -267,7 +271,7 @@ func _on_tutorial_phase_1_started() -> void:
 
 
 func _on_tutorial_phase_2_started() -> void:
-	player.max_air_jump = 2
+	player.max_air_jump = 1
 	show_tutorial_panel(tutorial_3_trigger_jump)
 
 
@@ -346,16 +350,46 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	GameManager.equip_barrel(barrel_data.barrel_id)
 	await get_tree().create_timer(0.8, false).timeout
 	
-	show_tutorial_panel(tutorial_5_trigger_barrel_detail)
+	await show_tutorial_panel(tutorial_5_trigger_barrel_detail)
 	
 	# Spark the electrical box
-	#
+	door_spark_emitter.emitting = true
+	spark_sfx_player.stream = sfx_door_spark.pick_random()
+	spark_sfx_player.play()
 	# Highlight electrical box to shoot
+	# TODO - modulate coloured mesh around box
 	#
 	# Trigger spin tutorial prompt
-	#
-	pass
+	GameManager.is_free_reroll = true
+	show_tutorial_panel(tutorial_6_trigger_spin)
+	
+	while electric_box_trigger.active:
+		await get_tree().create_timer(randf_range(1.0, 1.8)).timeout
+		# Spark the electrical box
+		door_spark_emitter.emitting = true
+		spark_sfx_player.stream = sfx_door_spark.pick_random()
+		spark_sfx_player.play()
+		#
+		var highlight_tween: Tween = get_tree().create_tween()
+		highlight_tween.tween_method(
+			_update_shield_mat_colour.bind(door_trigger_highlight_mesh),
+			Color("d9002b00"),
+			Color("d9002b"),
+			0.6
+		).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+		highlight_tween.chain().tween_method(
+			_update_shield_mat_colour.bind(door_trigger_highlight_mesh),
+			Color("d9002b"),
+			Color("d9002b00"),
+			0.4
+		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
+	
+	GameManager.is_free_reroll = false
 
+
+func _update_shield_mat_colour(color: Color, mesh: MeshInstance3D) -> void:
+	var mat: ShaderMaterial = mesh.get_active_material(0)
+	mat.set_shader_parameter("color", color)
 
 
 func _on_boss_trigger_smoke(count: int) -> void:

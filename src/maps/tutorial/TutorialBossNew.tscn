@@ -1,4 +1,4 @@
-[gd_scene load_steps=372 format=4 uid="uid://b50odhnpvpy07"]
+[gd_scene load_steps=393 format=4 uid="uid://b50odhnpvpy07"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -8,6 +8,13 @@
 [ext_resource type="AudioStream" uid="uid://drkkvy77c58t6" path="res://src/bosses/tutorial/assets/sfx/PIPE CREAK 2.mp3" id="5_bhynr"]
 [ext_resource type="LightmapGIData" uid="uid://d1yjl64sdc5ps" path="res://src/maps/tutorial/TutorialBoss.lmbake" id="5_k4gaf"]
 [ext_resource type="AudioStream" uid="uid://chl4kfxabg06s" path="res://src/maps/tutorial/assets/sfx/Pipe Burst Steam Loop.wav" id="6_wvupw"]
+[ext_resource type="AudioStream" uid="uid://dpklxcihbchwu" path="res://src/bosses/tutorial/assets/sfx/SPARKING ONE-SHOT 1.mp3" id="8_jg5dj"]
+[ext_resource type="AudioStream" uid="uid://cmc2fq8oj7ig7" path="res://src/bosses/tutorial/assets/sfx/SPARKING ONE-SHOT 2.mp3" id="9_uk1ct"]
+[ext_resource type="AudioStream" uid="uid://uxpffhk4tx41" path="res://src/bosses/tutorial/assets/sfx/SPARKING ONE-SHOT 3.mp3" id="10_wu64w"]
+[ext_resource type="AudioStream" uid="uid://6reby3haev5b" path="res://src/bosses/tutorial/assets/sfx/SPARKING ONE-SHOT 4.mp3" id="11_jwj5c"]
+[ext_resource type="AudioStream" uid="uid://dixuiqdd3kpve" path="res://src/bosses/tutorial/assets/sfx/SPARKING ONE-SHOT 5.mp3" id="12_y1s5q"]
+[ext_resource type="AudioStream" uid="uid://by8wyrov240j5" path="res://src/bosses/tutorial/assets/sfx/SPARKING ONE-SHOT 6.mp3" id="13_f4ngt"]
+[ext_resource type="AudioStream" uid="uid://b7wi6h83bxn13" path="res://src/bosses/tutorial/assets/sfx/SPARKING ONE-SHOT 7.mp3" id="14_iamu4"]
 [ext_resource type="AudioStream" uid="uid://c4spsehf6gge0" path="res://assets/music/Tutorial-Main-Gamayo.mp3" id="16_ewlpx"]
 [ext_resource type="AudioStream" uid="uid://co1mvp8o4tkos" path="res://assets/music/TutorialBoss-Gamayo V2.mp3" id="17_g8hxf"]
 [ext_resource type="PackedScene" uid="uid://bu43hcl2orkct" path="res://src/env/lighting/Chandellier1.tscn" id="22_ko0h3"]
@@ -75,6 +82,7 @@
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="84_udjkb"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_position_marker.gd" id="85_mbuj2"]
 [ext_resource type="PackedScene" uid="uid://b4jtd8erp77w7" path="res://src/maps/lobby/SlidingDoor.tscn" id="86_1uyek"]
+[ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="87_3tg1k"]
 [ext_resource type="PackedScene" uid="uid://bbqw4deyycof" path="res://src/bosses/tutorial/BossElevator.tscn" id="88_ijdgk"]
 [ext_resource type="Material" uid="uid://2ctjkms0hgma" path="res://assets/textures/floor/tiles-black-white.tres" id="89_8uu8f"]
 [ext_resource type="PackedScene" uid="uid://d28beg1mj2x4j" path="res://src/maps/tutorial/SubElevatorDoor.tscn" id="91_eyg8d"]
@@ -4935,7 +4943,87 @@ _data = {
 }
 point_count = 2
 
-[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "intro_boss_path", "intro_boss_path_follow", "tutorial_end_boss_marker", "cutscene_subtitle_label", "cutscene_camera", "electric_box_trigger", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
+[sub_resource type="Curve" id="Curve_njk43"]
+_data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_d4j1u"]
+curve = SubResource("Curve_njk43")
+
+[sub_resource type="Gradient" id="Gradient_asjt4"]
+colors = PackedColorArray(1, 0.996535, 0.943663, 1, 1, 0.936585, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_esbg8"]
+gradient = SubResource("Gradient_asjt4")
+
+[sub_resource type="Curve" id="Curve_68lka"]
+max_value = 5.0
+_data = [Vector2(0.164179, 5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5sre3"]
+curve = SubResource("Curve_68lka")
+
+[sub_resource type="Curve" id="Curve_bv5x3"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.141791, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_7o6wu"]
+curve = SubResource("Curve_bv5x3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qukb5"]
+lifetime_randomness = 0.4
+particle_flag_align_y = true
+velocity_pivot = Vector3(1, 1, 1)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 8.0
+gravity = Vector3(0, -0.5, 0)
+damping_min = 2.0
+damping_max = 5.0
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_7o6wu")
+color = Color(1, 0.976476, 0.651139, 1)
+color_initial_ramp = SubResource("GradientTexture1D_esbg8")
+alpha_curve = SubResource("CurveTexture_d4j1u")
+emission_curve = SubResource("CurveTexture_5sre3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0isau"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_q87lk"]
+resource_name = "cylinder_Cylinder"
+_surfaces = [{
+"aabb": AABB(-0.0402224, -0.702579, -0.0464448, 0.0804447, 0.739765, 0.0696672),
+"attribute_data": PackedByteArray("qar//1TV////////qar/f1TV/3//f/9///+2jv9/to5U1baOqaq2jg=="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BgAIAAQACAAJAAMACQAHAAUAAAAHAAkAAQAJAAgAAgAIAAYA"),
+"material": SubResource("StandardMaterial3D_0isau"),
+"primitive": 3,
+"uv_scale": Vector4(2, 1, 0, 0),
+"vertex_count": 10,
+"vertex_data": PackedByteArray("/38AAKmqjOL/fwAAqar/v/9/AACpqozi/3///6mq/7//f///qaqM4v9///+pqozi/3+j6wAA5P3/f6PrAADk/f//o+v//3uwAACj6///mKypMVLjAAD/f1NjVU7///9/Vc6sHKucqbEsoPET8ZPS33SpEgFvtADe")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e5s8d"]
+render_priority = 0
+shader = ExtResource("87_3tg1k")
+shader_parameter/color = Color(0.85, 0, 0.17, 0)
+shader_parameter/fresnel_sharpness = 0.27
+shader_parameter/extend_distance = 0.0
+shader_parameter/impact_points = null
+shader_parameter/impact_size = 0.25
+shader_parameter/impact_falloff_sharpness = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_3mncg"]
+material = SubResource("ShaderMaterial_e5s8d")
+size = Vector3(2.05, 1.2, 0.6)
+
+[node name="TutorialMap" node_paths=PackedStringArray("boss_doors", "exit_doors", "arena_1_center", "boss_laser_spawn_markers", "sub_elevator_doors", "sub_elevator_lights", "arena_2_floor_parent", "arena_2_floor_mesh", "arena_1_floor_shock_hazard", "pipe_particle_emitters", "intro_boss_path", "intro_boss_path_follow", "tutorial_end_boss_marker", "cutscene_subtitle_label", "cutscene_camera", "electric_box_trigger", "spark_sfx_player", "door_spark_emitter", "door_trigger_highlight_mesh", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_6qvhe")]
 script = ExtResource("2_twxne")
 boss_doors = NodePath("FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors")
 exit_doors = NodePath("FuncGodotMap/layer_4_doors/group_7926_Arena1Door/entity_181_ElevatorDoors")
@@ -4962,6 +5050,10 @@ tutorial_4_trigger_dash = SubResource("Resource_3epwp")
 tutorial_5_trigger_barrel_detail = SubResource("Resource_faiyk")
 tutorial_6_trigger_spin = SubResource("Resource_1jw3o")
 electric_box_trigger = NodePath("SingleEffectTrigger")
+spark_sfx_player = NodePath("SingleEffectTrigger/SparkSFXPlayer")
+sfx_door_spark = Array[AudioStream]([ExtResource("8_jg5dj"), ExtResource("9_uk1ct"), ExtResource("10_wu64w"), ExtResource("11_jwj5c"), ExtResource("12_y1s5q"), ExtResource("13_f4ngt"), ExtResource("14_iamu4")])
+door_spark_emitter = NodePath("SingleEffectTrigger/ElectricSpark2")
+door_trigger_highlight_mesh = NodePath("SingleEffectTrigger/GlowingRedMesh")
 nav_parent = NodePath("FuncGodotMap/layer_0_arena_1/group_7928_Arena1/group_7915_FloorWalkableArena1")
 floor_parent = NodePath("FuncGodotMap/layer_0_arena_1/group_7928_Arena1/group_7915_FloorWalkableArena1/entity_7_func_geo")
 floor_mesh = NodePath("FuncGodotMap/layer_0_arena_1/group_7928_Arena1/group_7915_FloorWalkableArena1/entity_7_func_geo/entity_7_mesh_instance")
@@ -7670,6 +7762,26 @@ active = false
 
 [node name="CollisionShape3D" parent="SingleEffectTrigger" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.172108, 2.85222, -1.65)
+
+[node name="SparkSFXPlayer" type="AudioStreamPlayer3D" parent="SingleEffectTrigger" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, -1.1)
+
+[node name="ElectricSpark2" type="GPUParticles3D" parent="SingleEffectTrigger" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.300003, 3, -1.6)
+sorting_offset = 1.0
+emitting = false
+amount = 64
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.84
+randomness = 1.0
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_qukb5")
+draw_pass_1 = SubResource("ArrayMesh_q87lk")
+
+[node name="GlowingRedMesh" type="MeshInstance3D" parent="SingleEffectTrigger" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12561, 2.86448, -1.74026)
+mesh = SubResource("BoxMesh_3mncg")
 
 [editable path="entity_187_TutorialBoss"]
 [editable path="SingleEffectTrigger"]
