@@ -44,7 +44,7 @@ var active_spawn: Node
 var active_sub_door: SlidingDoor
 var active_sub_light: Node3D
 
-#var previous_phase: String = "start_melee_combo_attack"
+var previous_phase: String = "ranged_phase"
 
 var melee_phase_count: int = 0
 
@@ -391,22 +391,23 @@ func select_attack_phase_5() -> void:
 	# attack tokens left pick another ranged attack. Otherwise teleport to an elevator
 	# and exit with a melee attack.
 	var melee_attacks = ["start_melee_combo_attack", "start_dash_wave"]
-	var ranged_attacks = ["start_dual_nails_attack", "start_laser_aoe_attack"]
-	
-	if prev_attack in melee_attacks:
+	if previous_phase == "melee_phase":
 		melee_attacks.erase(prev_attack)
 		if melee_phase_count < max_sequential_melee_phases:
 			new_attack = melee_attacks.pick_random()
+			previous_phase = "melee_phase"
 		else:
 			melee_phase_count = 0
+			previous_phase = "ranged_phase"
 			new_attack = "start_smokescreen"
 	
-	elif prev_attack in ranged_attacks:
-		ranged_attacks.erase(prev_attack)
+	elif previous_phase == "ranged_phase":
 		if ranged_phase_count < max_sequential_ranged_phases:
-			new_attack = ranged_attacks.pick_random()
+			previous_phase = "ranged_phase"
+			new_attack = "start_smokescreen"
 		else:
 			ranged_phase_count = 0
+			previous_phase = "melee_phase"
 			new_attack = "start_melee_combo_attack"
 	
 	prev_attack = new_attack
