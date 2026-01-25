@@ -129,7 +129,7 @@ header_text = ""
 body_items = Array[String](["[dash]", "dash"])
 close_trigger_actions = Array[String](["dash"])
 close_trigger_count = 2
-timeout = 2.0
+timeout = 1.0
 timeout_on_close = true
 
 [sub_resource type="Resource" id="Resource_faiyk"]
@@ -7596,10 +7596,6 @@ transform = Transform3D(1.94707e-07, 0, 1, 0, 1, 0, -1, 0, 1.94707e-07, -25.625,
 transform = Transform3D(-4.87885e-08, 0.0685851, 0.997591, -3.88497e-07, -0.997591, 0.0685851, 1, -3.84215e-07, 7.5316e-08, 0, 0, 0)
 arena_1_center = NodePath("../Arena1Center")
 arena_2_center = NodePath("../Arena2Center")
-tutorial_health = 3400
-phase_1_health = 1200
-phase_2_health = 1200
-phase_3_health = 1200
 main_health = 4000
 phase_4_health = 2000
 phase_5_health = 2000

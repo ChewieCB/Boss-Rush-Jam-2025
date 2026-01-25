@@ -2338,10 +2338,10 @@ emission_curve = SubResource("CurveTexture_jtqpf")
 [node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_particles", "slam_wall_particles", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "sfx_players") instance=ExtResource("1_7pmj2")]
 collision_mask = 11
 script = ExtResource("2_6u4e1")
-tutorial_health = 3000
-phase_1_health = 1000
-phase_2_health = 1000
-phase_3_health = 1000
+tutorial_health = 3600
+phase_1_health = 1200
+phase_2_health = 1200
+phase_3_health = 1200
 main_health = 5000
 phase_4_health = 2500
 phase_5_health = 2500

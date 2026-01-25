@@ -42,7 +42,7 @@ func _process(_delta: float) -> void:
 		child.label.text = "%s/%s" % [child.health_bar.value, child.health_bar.max_value]
 
 
-func init_boss_health_ui(max_health: int, sub_health_bars: float) -> void:
+func init_boss_health_ui(max_health: int, sub_health_bars: int) -> void:
 	total_health = max_health
 	sub_bar_count = sub_health_bars
 	for i in range(sub_health_bars):
