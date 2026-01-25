@@ -1351,8 +1351,9 @@ func spawn_aoe_wall(
 			aoe_tween.kill()
 		
 		# TODO - dissolve/burnout sfx hooks before we queue free the 3d sfx player
-		slam_sfx_player.stop()
-		slam_sfx_player.queue_free()
+		if slam_sfx_player:
+			slam_sfx_player.stop()
+			slam_sfx_player.queue_free()
 		
 		# Dissolve animation
 		var dissolve_tween: Tween = get_tree().create_tween()
