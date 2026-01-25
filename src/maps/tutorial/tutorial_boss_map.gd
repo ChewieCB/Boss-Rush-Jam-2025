@@ -68,14 +68,15 @@ var is_cutscene_active: bool = true
 var reload_tutorial_shown: bool = false
 var tutorial_panel_tween: Tween
 var active_tutorial_panel: Control
-var is_tutorial_finished: bool = false
 
 
 func _ready() -> void:
-	#GameManager.equipped_barrels = []
-	#player.gun.reinstall_barrels()
+	if not GameManager.tutorial_completed:
+		GameManager.equipped_barrels = []
+		GameManager.inventory_barrels = []
+		player.gun.reinstall_barrels()
+	
 	# FIXME - workaround
-	is_tutorial = true
 	elevator_doors = lobby_entry_elevator
 	
 	# Generate the navigation for the two walkable areas
@@ -375,7 +376,6 @@ func _on_tutorial_finished() -> void:
 	# FIXME - camera is inverted (transform mismatch?) until player moves camera
 	
 	electric_box_trigger.active = true
-	GameManager.tutorial_completed = true
 	boss.state_chart.send_event("start_main_fight")
 	boss.current_phase = 4
 
@@ -383,6 +383,12 @@ func _on_tutorial_finished() -> void:
 func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	# Auto-equip the barrel onto the gun
 	GameManager.equip_barrel(barrel_data.barrel_id)
+	
+	# Force effect to non-electric and 1st spin to electric
+	await player.current_gun.recheck_installed_barrels()
+	player.current_gun.set_barrel_to_effect(0, 48)  # 48 = fire
+	player.current_gun.force_barrel_next_spin(0, 50)  # 50 = electric
+	
 	await get_tree().create_timer(0.8, false).timeout
 	
 	await show_tutorial_panel(tutorial_5_trigger_barrel_detail)
@@ -492,6 +498,11 @@ func _on_player_death() -> void:
 	else:
 		# Put the boss in a passive state while we play the tutorial
 		boss.state_chart.send_event("player_defeated_reset")
+		
+		if boss.current_phase > 3:
+			GameManager.tutorial_completed = true
+			_on_player_death()
+			return
 		
 		await get_tree().create_timer(0.6, false).timeout
 		
@@ -603,6 +614,8 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 
 
 func _on_boss_defeated(_boss: BossCore) -> void:
+	GameManager.tutorial_completed = true
+	
 	collect_all_chips()
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 	

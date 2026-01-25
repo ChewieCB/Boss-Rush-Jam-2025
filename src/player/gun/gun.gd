@@ -560,6 +560,25 @@ func spin_all_barrels() -> void:
 	#reload(true)
 
 
+func _get_barrel_effect_idx_by_id(barrel: SpinBarrel, effect_id: int) -> int:	
+	for i in range(barrel.effect_list.size() - 1):
+		var _effect = barrel.effect_list[i]
+		if _effect.icon_id == effect_id:
+			return i
+	return -1
+
+
+func set_barrel_to_effect(barrel_idx: int, effect_id: int) -> void:
+	var barrel: SpinBarrel = installed_barrels[barrel_idx]
+	barrel.chosen_id = _get_barrel_effect_idx_by_id(barrel, effect_id)
+	set_barrel_icon(barrel_idx, effect_id)
+
+
+func force_barrel_next_spin(barrel_idx: int, effect_id: int) -> void:
+	var barrel: SpinBarrel = installed_barrels[barrel_idx]
+	barrel.force_next_spin_id = _get_barrel_effect_idx_by_id(barrel, effect_id)
+
+
 func _spin_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	barrel.get_active_effect().on_barrel_start_spin()

@@ -15,6 +15,7 @@ var chosen_id: int:
 	set(value):
 		chosen_id = value
 		barrel_effect_changed.emit(self, effect_list[chosen_id])
+var force_next_spin_id: int = -1
 var is_equipped = false
 var last_chosen_queue = []
 
@@ -42,7 +43,11 @@ func start_spin():
 func stop_spin():
 	is_spinning = false
 	#prevent_roll_same_effect()
-	chosen_id = get_less_used_effects()
+	if force_next_spin_id >= 0:
+		chosen_id = force_next_spin_id
+		force_next_spin_id = -1
+	else:
+		chosen_id = get_less_used_effects()
 	# When we pick a new effect, move it to the front of the last used queue
 	# so we can deprioritise it next spin
 	if chosen_id in last_chosen_queue:
