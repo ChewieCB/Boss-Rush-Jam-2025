@@ -1,53 +1,9 @@
-[gd_scene load_steps=37 format=4 uid="uid://cdjkynfg25alo"]
+[gd_scene load_steps=30 format=4 uid="uid://cdjkynfg25alo"]
 
-[ext_resource type="Texture2D" uid="uid://mxi66dpdoty1" path="res://src/player/gun/assets/sprite/smoke1.png" id="1_brvjf"]
+[ext_resource type="Material" uid="uid://b0u5v6rv1kk61" path="res://src/player/gun/vfx/SmokeVFX3DParticlrMat.tres" id="1_0fpmm"]
+[ext_resource type="QuadMesh" uid="uid://drafkfnascb3r" path="res://src/player/gun/vfx/SmokeVFX3D.tres" id="2_rtn4r"]
 [ext_resource type="Material" uid="uid://ks1kly3dfqvc" path="res://addons/EffectBlocks/source_files/materials/smoke_billboard.material" id="2_ugvb3"]
 [ext_resource type="Script" path="res://src/player/gun/vfx/pipe_smoke_particles.gd" id="2_yv87l"]
-
-[sub_resource type="Gradient" id="Gradient_7j0py"]
-offsets = PackedFloat32Array(0.0629139, 0.884106, 1)
-colors = PackedColorArray(0.188235, 0.188235, 0.188235, 0.87451, 0, 0, 0, 0.513726, 0, 0, 0, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_s3blp"]
-gradient = SubResource("Gradient_7j0py")
-
-[sub_resource type="CurveTexture" id="CurveTexture_ll0d6"]
-
-[sub_resource type="Curve" id="Curve_p1lei"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.253012, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_74a0h"]
-curve = SubResource("Curve_p1lei")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vvjrk"]
-emission_shape = 1
-emission_sphere_radius = 0.5
-angle_min = 1.07288e-05
-angle_max = 360.0
-direction = Vector3(0, 0, 1)
-spread = 10.0
-initial_velocity_min = -10.0
-initial_velocity_max = -10.0
-gravity = Vector3(0, 0, 0)
-scale_max = 5.0
-scale_curve = SubResource("CurveTexture_74a0h")
-color = Color(0.999643, 0.944103, 0.863035, 1)
-color_ramp = SubResource("GradientTexture1D_s3blp")
-emission_curve = SubResource("CurveTexture_ll0d6")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kenne"]
-transparency = 1
-albedo_color = Color(1, 1, 1, 0.266667)
-albedo_texture = ExtResource("1_brvjf")
-billboard_mode = 3
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
-
-[sub_resource type="QuadMesh" id="QuadMesh_lttii"]
-material = SubResource("StandardMaterial3D_kenne")
-size = Vector2(2.5, 2.5)
 
 [sub_resource type="Curve" id="Curve_awedl"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -403,8 +359,8 @@ lifetime = 2.0
 randomness = 0.15
 fixed_fps = 60
 visibility_aabb = AABB(-4.965, -2.365, -8.558, 9.453, 5.961, 8.533)
-process_material = SubResource("ParticleProcessMaterial_vvjrk")
-draw_pass_1 = SubResource("QuadMesh_lttii")
+process_material = ExtResource("1_0fpmm")
+draw_pass_1 = ExtResource("2_rtn4r")
 script = ExtResource("2_yv87l")
 anim_player = NodePath("AnimationPlayer")
 

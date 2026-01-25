@@ -92,7 +92,14 @@ func _ready() -> void:
 	boss.tutorial_barrel_collected.connect(_on_tutorial_barrel_collected)
 	boss.trigger_smoke.connect(_on_boss_trigger_smoke)
 	boss.end_smoke.connect(stop_all_pipe_emitters)
-	boss.shock_floor_hazard = arena_1_floor_shock_hazard
+	boss.shock_floor_hazard_tutorial = arena_1_floor_shock_hazard
+	boss.arena_1_center = arena_1_center
+	boss.arena_2_center = arena_2_center
+	boss.sub_elevator_doors = sub_elevator_doors
+	boss.sub_elevator_lights = sub_elevator_lights
+	boss.elevator_spawns = elevator_spawns
+	boss.intro_spawn_marker = boss_intro_spawn
+	boss.laser_spawn_markers = boss_laser_spawn_markers
 
 	if boss_doors:
 		boss_doors.close()
@@ -104,18 +111,13 @@ func _ready() -> void:
 	await ScreenTransition.transition_finished
 	$AnimationPlayer.play("pit_boss_shove")
 	await $AnimationPlayer.animation_finished
-	_on_boss_trigger_volume_body_entered(player)
-
-	boss.arena_1_center = arena_1_center
-	boss.arena_2_center = arena_2_center
-	#boss.boss_origin = boss_origin[0]
-	#boss.elevator_spawns = elevator_spawns
-	#boss.sub_elevator_doors = sub_elevator_doors
-	#boss.sub_elevator_lights = sub_elevator_lights
-	#boss.intro_spawn_marker = boss_intro_spawn
-	#boss.laser_spawn_markers = boss_laser_spawn_markers
-	#boss.global_position = boss_intro_spawn.global_position
-	#remove_child(boss)
+	
+	if boss.current_phase < 4:
+		_on_boss_trigger_volume_body_entered_tutorial(player)
+	else:
+		player._disable_cutscene_cam()
+		electric_box_trigger.active = true
+		electric_box_trigger.activate()
 
 
 func _input(event: InputEvent) -> void:
@@ -189,13 +191,13 @@ func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 	active_tutorial_panel = null
 
 
-func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
+func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
 	music_playback.switch_to_clip(1)
 	exit_doors.close()
 	if boss_doors:
 		boss_doors.is_autodoor = false
 		boss_doors.close()
-	boss_trigger.queue_free()
+	#boss_trigger.queue_free()
 	
 	boss.activate()
 	if is_cutscene_active:
@@ -220,6 +222,23 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 			boss.state_chart.send_event("start_tutorial_phase_2")
 		3:
 			boss.state_chart.send_event("start_tutorial_phase_3")
+
+
+func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
+	music_playback.switch_to_clip(1)
+	exit_doors.close()
+	if boss_doors:
+		boss_doors.is_autodoor = false
+		boss_doors.close()
+	boss_trigger.queue_free()
+	
+	# TODO - re-enable when we have a main fight intro 
+	#boss.activate()
+	match boss.current_phase:
+		4:
+			boss.state_chart.send_event("start_tutorial_phase_4")
+		5:
+			boss.state_chart.send_event("start_tutorial_phase_5")
 
 
 func skip_cutscene() -> void:
@@ -343,6 +362,7 @@ func _on_tutorial_finished() -> void:
 	# FIXME - camera is inverted (transform mismatch?) until player moves camera
 	
 	electric_box_trigger.active = true
+	boss.state_chart.send_event("start_main_fight")
 
 
 func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:

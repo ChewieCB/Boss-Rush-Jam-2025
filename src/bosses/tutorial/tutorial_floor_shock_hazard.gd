@@ -1,4 +1,7 @@
 extends Node3D
+class_name ElevatorShockHazard
+
+signal finished
 
 @export var damage_per_tick: float = 5.0
 @export var duration: float = 5
@@ -6,7 +9,7 @@ extends Node3D
 @export var puddle_decal: Decal
 
 @export var sfx_effect: Array[AudioStream]
-@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
+@export var sfx_player: AudioStreamPlayer3D
 
 @export var particle_effects: Array[GPUParticles3D] = []
 @export var damage_area: Area3D
@@ -14,17 +17,14 @@ extends Node3D
 
 @export var pe_expire_time = 2
 @onready var light: OmniLight3D = $OmniLight3D
+@onready var life_timer: Timer = $LifeTimer
+
 
 var bodies_inside = []
 var is_active = false:
 	set(value):
 		is_active = value
 		self.visible = is_active
-		if is_active:
-			trigger_effect()
-		else:
-			sfx_player.stop()
-		
 var stopped_moving = false
 
 var dash_speed_buff_icon = preload("res://assets/sprite/status_icon/dash_speed_down.png")
@@ -48,34 +48,48 @@ func _on_damage_timer_timeout() -> void:
 
 
 func trigger_effect() -> void:
+	if is_active:
+		for body in bodies_inside:
+			if body in immune_bodies:
+				continue
+			if damage_per_tick > 0:
+				body.health_component.damage(damage_per_tick)
+			
+			if body is Player and slow_perc > 0:
+				var run_debuff = create_slow_run_debuff(1)
+				body.add_status_effect(run_debuff)
+				var dash_debuff = create_slow_dash_debuff(1)
+				body.add_status_effect(dash_debuff)
+
+
+func start_hazard() -> void:
+	is_active = true
+	life_timer.start(duration)
 	if sfx_effect:
 		sfx_player.stream = sfx_effect.pick_random()
 		sfx_player.play()
-	
-	for body in bodies_inside:
-		if body in immune_bodies:
-			continue
-		if damage_per_tick > 0:
-			body.health_component.damage(damage_per_tick)
-		
-		if body is Player and slow_perc > 0:
-			var run_debuff = create_slow_run_debuff(1)
-			body.add_status_effect(run_debuff)
-			var dash_debuff = create_slow_dash_debuff(1)
-			body.add_status_effect(dash_debuff)
+	trigger_effect()
 
 
 func clear_hazard():
+	if sfx_player:
+		sfx_player.stop()
+		
 	is_active = false
+	
 	for pe in particle_effects:
 		pe.emitting = false
+		
 	if puddle_decal:
 		var tween = self.create_tween()
 		tween.tween_property(puddle_decal, "modulate:a", 0, 2.0)
 	var tween2 = self.create_tween()
 	tween2.tween_property(light, "light_energy", 0, 2.0)
+	
 	# Wait until all particles expired
 	await get_tree().create_timer(pe_expire_time).timeout
+	
+	finished.emit()
 
 
 func _on_life_timer_timeout() -> void:

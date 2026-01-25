@@ -114,6 +114,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 					continue
 				child.damage_bar.value = new_health
 				await get_tree().create_timer(0.3).timeout
+				if child == null:
+					continue
 				var tween: Tween = get_tree().create_tween()
 				tween.tween_property(child.heath_bar, "value", new_health, 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 				await tween.finished

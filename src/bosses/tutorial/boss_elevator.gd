@@ -5,6 +5,8 @@ signal tutorial_phase_1_started
 signal tutorial_phase_2_started
 signal tutorial_phase_3_started
 signal tutorial_phases_finished
+signal phase_4_started
+signal phase_5_started
 signal tutorial_barrel_collected(barrel_data: BarrelDataResource)
 
 signal trigger_smoke(count: int)
@@ -18,8 +20,12 @@ signal end_smoke
 @export var phase_1_health: int = 1000
 @export var phase_2_health: int = 1000
 @export var phase_3_health: int = 1000
+@export var main_health: int = 5000
+@export var phase_4_health: int = 2500
+@export var phase_5_health: int = 2500
 @onready var tutorial_phase_2_health_threshold: int = tutorial_health - phase_1_health
 @onready var tutorial_phase_3_health_threshold: int = tutorial_health - phase_1_health - phase_2_health
+@onready var phase_5_health_threshold: int = main_health - phase_4_health
 
 @export_category("Movement")
 @export var MOVE_SPEED: float = 6
@@ -38,7 +44,7 @@ var active_spawn: Node
 var active_sub_door: SlidingDoor
 var active_sub_light: Node3D
 
-var previous_phase: String = "start_melee_combo_attack"
+#var previous_phase: String = "start_melee_combo_attack"
 
 var melee_phase_count: int = 0
 
@@ -80,7 +86,11 @@ var sfx_taunt_phase_1_active: Array[AudioStream] = sfx_taunt_phase_1
 var sfx_taunt_phase_2_active: Array[AudioStream] = sfx_taunt_phase_2
 @export var sfx_taunt_phase_3: Array[AudioStream]
 var sfx_taunt_phase_3_active: Array[AudioStream] = sfx_taunt_phase_3
-var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + sfx_taunt_phase_3
+@export var sfx_taunt_phase_4: Array[AudioStream]
+var sfx_taunt_phase_4_active: Array[AudioStream] = sfx_taunt_phase_4
+@export var sfx_taunt_phase_5: Array[AudioStream]
+var sfx_taunt_phase_5_active: Array[AudioStream] = sfx_taunt_phase_5
+var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + sfx_taunt_phase_3 + sfx_taunt_phase_4 + sfx_taunt_phase_5
 # TODO - combine these in a resource class
 @export var sfx_player_defeated_taunt: Array[AudioStream]
 @export var player_defeated_taunt_captions: Array[String]
@@ -129,6 +139,9 @@ var aoe_tween: Tween
 #
 @export var tutorial_strafe_distance: float = 9.0
 @export var tutorial_strafe_radius: float = 9.0
+#
+@export var strafe_distance: float = 12.0
+@export var strafe_radius: float = 12.0
 # SFX
 @export var sfx_nail_equip: Array[AudioStream]
 @export var sfx_nail_shot: Array[AudioStream]
@@ -149,9 +162,17 @@ var laser_target_pos: Vector3
 @export var sfx_laser_disarm: Array[AudioStream]
 
 @export_subgroup("Electrify Floor")
-@export var shock_floor_hazard: Node3D
-@export var shock_damage: float = 10.0
-@export var shock_duration: float = 0.6
+# Tutorial
+@export var shock_floor_hazard_tutorial: ElevatorShockHazard
+@export var shock_damage_tutorial: float = 10.0
+@export var shock_duration_tutorial: float = 0.6
+# Main
+@export var shock_floor_hazard_prefab: PackedScene 
+var shock_hazard_pool: Array[ElevatorShockHazard] = []
+
+@export var shock_damage: float = 15.0
+@export var shock_duration: float = 1.6
+@export var shock_target_distance: float = 8.0
 # SFX
 @export var sfx_electric_slam_buildup: Array[AudioStream]
 @export var sfx_electric_slam_telegraph: Array[AudioStream]
@@ -167,12 +188,22 @@ func _ready() -> void:
 	health_component.max_health = tutorial_health
 	health_component.initialize_health()
 	health_ui.clear_sub_health_bars()
-	health_ui.init_boss_health_ui(health_component.max_health, 3)
+	health_ui.init_boss_health_ui(tutorial_health, 3)
 	hurtbox_collider.shape.size.z = hurtbox_range_close
 	#
 	sfx_taunt_phase_1_active.shuffle()
 	sfx_taunt_phase_2_active.shuffle()
 	sfx_taunt_phase_3_active.shuffle()
+	#
+	for i in range(3):
+		var _hazard = shock_floor_hazard_prefab.instantiate()
+		scene_root.add_child(_hazard)
+		_hazard.finished.connect(stop_floor_shock.bind(_hazard))
+		shock_hazard_pool.append(_hazard)
+	
+	await get_tree().physics_frame
+	if current_phase > 3:
+		state_chart.send_event("start_main_fight")
 
 
 func activate() -> void:
@@ -184,6 +215,11 @@ func activate() -> void:
 func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super(new_health, prev_health)
 	# TODO - proper phased health trigger implementation
+	
+	# Can't heal your way into a previous phase
+	if new_health > prev_health:
+		return
+	
 	if current_phase < 4:
 		if new_health <= tutorial_phase_3_health_threshold:
 			if current_phase != 3:
@@ -199,11 +235,19 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 				_on_stagger()
 				await get_tree().create_timer(hurt_frame_window, false)
 				state_chart.send_event("start_tutorial_phase_2")
+	else:
+		if new_health <= phase_5_health_threshold:
+			if current_phase != 5:
+				# Cancel current phase if active and trigger hurt pose
+				attack_interrupt = true
+				_on_stagger()
+				await get_tree().create_timer(hurt_frame_window, false)
+				state_chart.send_event("start_tutorial_phase_5")
 
 
 func _on_stagger() -> void:
-	if current_phase < 4:
-		return
+	#if current_phase < 4:
+		#return
 	super()
 
 
@@ -212,6 +256,7 @@ func _on_died() -> void:
 	
 	if current_phase < 4:
 		# Tutorial win cutscene trigger
+		health_ui.hide_ui()
 		state_chart.send_event("stop_moving")
 		tutorial_phases_finished.emit()
 		state_chart.send_event("tutorial_arena_1_finished")
@@ -226,7 +271,7 @@ func _on_died() -> void:
 
 
 func _on_barrel_collected(data: BarrelDataResource) -> void:
-	if current_phase < 4:
+	if current_phase < 5:
 		tutorial_barrel_collected.emit(data)
 	else:
 		# TODO - show UI with new barrel effects
@@ -257,50 +302,6 @@ func select_attack() -> void:
 			push_error("Invalid phase %s" % current_phase)
 
 
-## OLD - DEPRECATED DO NOT USE
-func select_attack_phase_1() -> void:
-	var new_phase: String
-	
-	# If we've just done a melee attack, keep doing melee attacks until we
-	# run out of sequential attacks tokens
-	#
-	# When we run out, trigger a smokescreen
-	#
-	# When the boss is smokescreened away, pick either the nailgun or laser
-	# attack.
-	#
-	# If the nailgun attack is chosen, teleport the boss to an elevator, open it,
-	# and trigger the nailgun attack.
-	#
-	# At the end of the nailgun attack, if we have ranged attack tokens left
-	# return to the elevator and pick another ranged attack. Otherwise exit the
-	# elevator with a melee attack.
-	#
-	# If the laser attack is chosen, teleport to a laser spawn point, and trigger
-	# the laser attack.
-	#
-	# At the end of the laser attack, retreat into the ceiling, if we have ranged
-	# attack tokens left pick another ranged attack. Otherwise teleport to an elevator
-	# and exit with a melee attack.
-	
-	#if previous_phase == "start_melee_combo_attack":
-		#if melee_phase_count < max_sequential_melee_phases:
-			#new_phase = "start_melee_combo_attack"
-		#else:
-			#melee_phase_count = 0
-			#new_phase = "start_smokescreen"
-	#
-	#elif previous_phase == "start_smokescreen":
-		#if ranged_phase_count < max_sequential_ranged_phases:
-			#new_phase = "start_smokescreen"
-		#else:
-			#ranged_phase_count = 0
-	new_phase = "start_melee_combo_attack"
-	
-	previous_phase = new_phase
-	state_chart.send_event(new_phase)
-
-
 ## TUTORIAL PHASES
 
 func select_attack_phase_1_tutorial() -> void:
@@ -317,8 +318,9 @@ func select_attack_phase_2_tutorial() -> void:
 	#if randf() < 0.2:
 		#state_chart.send_event("start_taunt_attack")
 		#return
+	attack_interrupt = false
 	
-	if shock_floor_hazard.damage_area.overlaps_body(target):
+	if shock_floor_hazard_tutorial.damage_area.overlaps_body(target):
 		state_chart.send_event("start_electrify_floor")
 	else:
 		state_chart.send_event("start_melee_combo")
@@ -346,10 +348,69 @@ func select_attack_phase_3_tutorial() -> void:
 ## STANDARD FIGHT PHASES
 
 func select_attack_phase_4() -> void:
-	pass
+	attack_interrupt = false
+	
+	var dist_to_player: float = self.global_position.distance_to(target.global_position)
+	
+	if dist_to_player <= shock_target_distance:
+		if shock_hazard_pool.size() > 0:
+			state_chart.send_event("start_electrify_floor")
+		else:
+			state_chart.send_event("start_melee_combo")
+	else:
+		var chance: float = randf()
+		if chance < 0.33:
+			state_chart.send_event("start_melee_combo")
+		elif chance < 0.66:
+			state_chart.send_event("start_dash_wave")
+		else:
+			state_chart.send_event("start_ranged_naiils_strafe")
+
 
 func select_attack_phase_5() -> void:
-	pass
+	var new_attack: String
+	# If we've just done a melee attack, keep doing melee attacks until we
+	# run out of sequential attacks tokens
+	#
+	# When we run out, trigger a smokescreen
+	#
+	# When the boss is smokescreened away, pick either the nailgun or laser
+	# attack.
+	#
+	# If the nailgun attack is chosen, teleport the boss to an elevator, open it,
+	# and trigger the nailgun attack.
+	#
+	# At the end of the nailgun attack, if we have ranged attack tokens left
+	# return to the elevator and pick another ranged attack. Otherwise exit the
+	# elevator with a melee attack.
+	#
+	# If the laser attack is chosen, teleport to a laser spawn point, and trigger
+	# the laser attack.
+	#
+	# At the end of the laser attack, retreat into the ceiling, if we have ranged
+	# attack tokens left pick another ranged attack. Otherwise teleport to an elevator
+	# and exit with a melee attack.
+	var melee_attacks = ["start_melee_combo_attack", "start_dash_wave"]
+	var ranged_attacks = ["start_dual_nails_attack", "start_laser_aoe_attack"]
+	
+	if prev_attack in melee_attacks:
+		melee_attacks.erase(prev_attack)
+		if melee_phase_count < max_sequential_melee_phases:
+			new_attack = melee_attacks.pick_random()
+		else:
+			melee_phase_count = 0
+			new_attack = "start_smokescreen"
+	
+	elif prev_attack in ranged_attacks:
+		ranged_attacks.erase(prev_attack)
+		if ranged_phase_count < max_sequential_ranged_phases:
+			new_attack = ranged_attacks.pick_random()
+		else:
+			ranged_phase_count = 0
+			new_attack = "start_melee_combo_attack"
+	
+	prev_attack = new_attack
+	state_chart.send_event(new_attack)
 
 
 func damage_in_hurtbox(damage: float, stun: bool = false) -> void:
@@ -875,7 +936,7 @@ func _on_smokescreen_idle_state_entered() -> void:
 	
 	var ranged_attacks = [
 		"start_dual_nails_attack",
-		"start_laser_aoe_attack"
+		"start_laser_aoe_attack",
 	]
 	
 	if prev_attack:
@@ -1391,7 +1452,7 @@ func _on_phase_1_state_entered() -> void:
 
 func _on_arena_1_cutscene_state_entered() -> void:
 	attack_interrupt = true
-	shock_floor_hazard.is_active = false
+	shock_floor_hazard_tutorial.is_active = false
 	state_chart.send_event("stop_moving")
 	velocity = Vector3.ZERO
 	anim_player.play("elevator_boss/intro")
@@ -1523,7 +1584,7 @@ func _on_tutorial_phase_1_strafing_nails_recover_state_entered() -> void:
 
 func _on_tutorial_phase_2_state_entered() -> void:
 	attack_interrupt = false
-	shock_floor_hazard.is_active = false
+	shock_floor_hazard_tutorial.is_active = false
 	current_phase = 2
 	tutorial_phase_2_started.emit()
 	SoundManager.play_sound(sfx_taunt_phase_2.pick_random(), "SFX")
@@ -1546,10 +1607,14 @@ func _on_tutorial_phase_2_taunt_recover_state_entered() -> void:
 
 
 #
+func _on_tutorial_phase_2_electrify_floor_state_exited() -> void:
+	shock_floor_hazard_tutorial.is_active = false
+
+#
 func _on_tutorial_phase_2_electrify_floor_targeting_state_entered() -> void:
 	navigation_component.follow_target = true
 	state_chart.send_event("start_moving")
-	shock_floor_hazard.damage_per_tick = shock_damage
+	shock_floor_hazard_tutorial.damage_per_tick = shock_damage_tutorial
 	prev_attack = "electrify_floor"
 	
 	#if shock_floor_hazard.damage_area.overlaps_body(self):
@@ -1572,7 +1637,7 @@ func _on_tutorial_phase_2_electrify_floor_targeting_state_physics_processing(del
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 	
-	if shock_floor_hazard.damage_area.overlaps_body(self):
+	if shock_floor_hazard_tutorial.damage_area.overlaps_body(self):
 		await get_tree().create_timer(0.4, false).timeout
 		state_chart.send_event("start_slam")
 
@@ -1596,7 +1661,7 @@ func _on_tutorial_phase_2_electrify_floor_slamming_state_entered() -> void:
 	anim_player.play("elevator_boss/shock_slam_start")
 	await anim_player.animation_finished
 	
-	await get_tree().create_timer(shock_duration, false).timeout
+	await get_tree().create_timer(shock_duration_tutorial, false).timeout
 	
 	anim_player.play("elevator_boss/shock_slam_end")
 	await anim_player.animation_finished
@@ -1616,14 +1681,39 @@ func _play_shock_impact_sfx() -> void:
 
 
 func start_floor_shock() -> void:
-	shock_floor_hazard.is_active = true
+	shock_floor_hazard_tutorial.is_active = true
 	var sfx_player: AudioStreamPlayer3D = get_available_sfx_player()
 	sfx_player.stream = sfx_electric_fadeout.pick_random()
 	sfx_player.play()
 
 
 func end_floor_shock() -> void:
-	shock_floor_hazard.is_active = false
+	shock_floor_hazard_tutorial.is_active = false
+
+
+func place_floor_shock() -> ElevatorShockHazard:
+	if shock_hazard_pool.size() == 0:
+		return
+	
+	var hazard: ElevatorShockHazard = shock_hazard_pool.pop_front()
+	hazard.global_position = slam_spawn_marker.global_position
+	var space_state := get_world_3d().direct_space_state
+	var ray_query := PhysicsRayQueryParameters3D.create(hazard.global_position + Vector3.UP * 3.0, hazard.global_position + Vector3.DOWN * 20.0)
+	var result = space_state.intersect_ray(ray_query)
+	if result:
+		hazard.global_position.y = result.position.y
+	
+	hazard.duration = shock_duration
+	hazard.damage_per_tick = shock_damage
+	hazard.immune_bodies = [self]
+	hazard.start_hazard()
+	
+	return hazard
+
+
+func stop_floor_shock(hazard: ElevatorShockHazard) -> void:
+	hazard.clear_hazard()
+	shock_hazard_pool.push_back(hazard)
 
 
 func _on_tutorial_phase_2_melee_combo_swipe_state_entered() -> void:
@@ -1686,7 +1776,7 @@ func _on_tutorial_phase_2_melee_combo_backswing_state_entered() -> void:
 
 func _on_tutorial_phase_3_state_entered() -> void:
 	attack_interrupt = false
-	shock_floor_hazard.is_active = false
+	shock_floor_hazard_tutorial.is_active = false
 	current_phase = 3
 	tutorial_phase_3_started.emit()
 	SoundManager.play_sound(sfx_taunt_phase_3.pick_random(), "SFX")
@@ -1694,7 +1784,7 @@ func _on_tutorial_phase_3_state_entered() -> void:
 
 func _on_tutorial_phase_2_melee_combo_state_physics_processing(delta: float) -> void:
 	# If the player is far away and on the shockable area, stop chasing and trigger the shock
-	if shock_floor_hazard.damage_area.overlaps_body(target) and \
+	if shock_floor_hazard_tutorial.damage_area.overlaps_body(target) and \
 	target.global_position.distance_to(self.global_position) >= melee_max_chase_distance:
 		self.velocity = Vector3.ZERO
 		state_chart.send_event("stop_moving")
@@ -1769,5 +1859,192 @@ func _change_slam_wall_color(color: Color, mesh: MeshInstance3D) -> void:
 	mat.set_shader_parameter("color_edge", color)
 
 
-func _on_tutorial_phase_2_electrify_floor_state_exited() -> void:
-	shock_floor_hazard.is_active = false
+## PHASE 4
+
+func _on_phase_4_state_entered() -> void:
+	# TODO - move this to intro state
+	health_component.max_health = main_health
+	health_component.initialize_health()
+	health_ui.clear_sub_health_bars()
+	health_ui.init_boss_health_ui(main_health, 2)
+	health_ui.show_ui()
+	
+	attack_interrupt = false
+	shock_floor_hazard_tutorial.is_active = false
+	current_phase = 4
+	phase_4_started.emit()
+	SoundManager.play_sound(sfx_taunt_phase_4.pick_random(), "SFX")
+	
+	select_attack()
+
+
+func _on_tutorial_phase_4_electrify_floor_targeting_state_entered() -> void:
+	navigation_component.follow_target = true
+	state_chart.send_event("start_moving")
+	prev_attack = "electrify_floor"
+
+
+func _on_tutorial_phase_4_electrify_floor_targeting_state_physics_processing(delta: float) -> void:
+	# Chase the player, get in range and wait for a couple of seconds before slamming
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+	
+	if target.global_position.distance_to(self.global_position) <= shock_target_distance:
+		await get_tree().create_timer(0.4, false).timeout
+		if not attack_interrupt:
+			state_chart.send_event("start_slam")
+
+
+func _on_tutorial_phase_4_electrify_floor_slamming_state_entered() -> void:
+	state_chart.send_event("start_targeting")
+	var sfx_player: AudioStreamPlayer3D = get_available_sfx_player()
+	await get_tree().create_timer(0.6, false).timeout
+	
+	# TODO - slam then move, repeat 2-3 times
+	var slam_count: int = randi_range(1, shock_hazard_pool.size())
+	for i in range(slam_count):
+		sfx_player.stream = sfx_electric_slam_buildup.pick_random()
+		sfx_player.play()
+		anim_player.play("elevator_boss/shock_slam_telegraph_start")
+		await anim_player.animation_finished
+		for j in randi_range(1, 3):
+			if attack_interrupt:
+				state_chart.send_event("end_shock")
+				return
+			anim_player.play("elevator_boss/shock_slam_telegraph_loop")
+			await anim_player.animation_finished
+		#await get_tree().create_timer(0.3, false).timeout
+		#sfx_player.stream = sfx_electric_slam_telegraph.pick_random()
+		#sfx_player.play()
+		if attack_interrupt:
+			state_chart.send_event("end_shock")
+			return
+		
+		await _telegraph_attack()
+		
+		anim_player.play("elevator_boss/shock_slam_start_main")
+		await anim_player.animation_finished
+		
+		#await get_tree().create_timer(shock_duration, false).timeout
+		
+		anim_player.play("elevator_boss/shock_slam_end")
+		await anim_player.animation_finished
+		
+		if attack_interrupt:
+			state_chart.send_event("end_shock")
+			return
+		
+		if i < slam_count - 1:
+			state_chart.send_event("start_next_slam_target")
+	
+	state_chart.send_event("end_shock")
+
+
+func _on_main_fight_state_entered() -> void:
+	current_phase = 4
+	#self.global_position = arena_2_center.global_position
+	anim_player.play("elevator_boss/intro")
+
+
+func _on_tutorial_phase_4_strafing_nails_targeting_state_entered() -> void:
+	debug_state_label.text = "Strafing Nailguns | Targeting"
+	
+	desired_distance = strafe_distance
+	orbit_radius = strafe_radius
+	
+	navigation_component.follow_target = false
+	state_chart.send_event("start_moving")
+	#state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_buildup")
+	
+	var sfx_player = get_available_sfx_player()
+	if sfx_player:
+		sfx_player.stream = sfx_nail_equip.pick_random()
+		sfx_player.play()
+	anim_player.play("elevator_boss/ranged_arm")
+	await anim_player.animation_finished
+	
+	# TODO - tweak/increase the strafing time depending on tutorial progress/difficulty
+	await get_tree().create_timer(0.6, false).timeout
+	state_chart.send_event("start_shooting")
+
+
+func _on_tutorial_phase_4_strafing_nails_targeting_state_physics_processing(delta: float) -> void:
+	orbit_pos(arena_2_center.global_position, delta, true)
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
+func _on_tutorial_phase_4_strafing_nails_shooting_state_entered() -> void:
+	debug_state_label.text = "Dual Nailguns | Shooting"
+	await _telegraph_attack()
+	# TODO - replace magic numbers with export vars
+	await shoot_nail_projectile(2, 8, 0.2, 0.6, 55)
+	
+	state_chart.send_event("stop_shooting")
+
+
+func _on_tutorial_phase_4_strafing_nails_shooting_state_physics_processing(delta: float) -> void:
+	orbit_pos(arena_2_center.global_position, delta, true)
+	velocity.y -= GRAVITY * delta
+	move_and_slide()
+
+
+func _on_tutorial_phase_4_strafing_nails_recover_state_entered() -> void:
+	prev_attack = "strafing_nails"
+	state_chart.send_event("start_targeting")
+	_on_ranged_nails_recover_state_entered()
+
+##
+
+func _on_tutorial_phase_4_dash_wave_idle_state_entered() -> void:
+	# Get some distance from the player
+	navigation_component.follow_target = false
+	desired_distance = strafe_distance
+	move_speed = MAX_SPEED * 1.6
+	melee_phase_count += 1
+	state_chart.send_event("start_moving")
+
+
+func _on_tutorial_phase_4_dash_wave_idle_state_physics_processing(delta: float) -> void:
+	orbit_player(delta)
+	
+	if self.global_position.distance_to(target.global_position) > 8.0:
+		state_chart.send_event("start_wave")
+
+
+func _on_tutorial_phase_4_dash_wave_swipe_wave_state_entered() -> void:
+	state_chart.send_event("start_targeting")
+	
+	await get_tree().create_timer(0.3, false).timeout
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		state_chart.send_event("end_wave")
+		return
+	
+	await _telegraph_attack()
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		state_chart.send_event("end_wave")
+		return
+	
+	anim_player.play("elevator_boss/dash_wave")
+	await anim_player.animation_finished
+	
+	await get_tree().create_timer(0.5, false).timeout
+	state_chart.send_event("end_wave")
+
+
+func _on_phase_5_state_entered() -> void:
+	shock_floor_hazard_tutorial.is_active = false
+	current_phase = 5
+	melee_phase_count = 0
+	ranged_phase_count = 0
+	prev_attack = "start_smokescreen"
+	attack_interrupt = false
+	phase_5_started.emit()
+	SoundManager.play_sound(sfx_taunt_phase_5.pick_random(), "SFX")
+	
+	select_attack()
