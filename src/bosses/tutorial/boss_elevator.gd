@@ -75,8 +75,11 @@ var prev_attack: String = ""
 
 @export_subgroup("Taunt")
 @export var sfx_taunt_phase_1: Array[AudioStream]
+var sfx_taunt_phase_1_active: Array[AudioStream] = sfx_taunt_phase_1
 @export var sfx_taunt_phase_2: Array[AudioStream]
+var sfx_taunt_phase_2_active: Array[AudioStream] = sfx_taunt_phase_2
 @export var sfx_taunt_phase_3: Array[AudioStream]
+var sfx_taunt_phase_3_active: Array[AudioStream] = sfx_taunt_phase_3
 var sfx_taunt_all: Array[AudioStream] = sfx_taunt_phase_1 + sfx_taunt_phase_2 + sfx_taunt_phase_3
 # TODO - combine these in a resource class
 @export var sfx_player_defeated_taunt: Array[AudioStream]
@@ -166,6 +169,10 @@ func _ready() -> void:
 	health_ui.clear_sub_health_bars()
 	health_ui.init_boss_health_ui(health_component.max_health, 3)
 	hurtbox_collider.shape.size.z = hurtbox_range_close
+	#
+	sfx_taunt_phase_1_active.shuffle()
+	sfx_taunt_phase_2_active.shuffle()
+	sfx_taunt_phase_3_active.shuffle()
 
 
 func activate() -> void:
@@ -179,17 +186,19 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	# TODO - proper phased health trigger implementation
 	if current_phase < 4:
 		if new_health <= tutorial_phase_3_health_threshold:
-			# Cancel current phase if active and trigger hurt pose
-			attack_interrupt = true
-			_on_stagger()
-			await get_tree().create_timer(hurt_frame_window, false)
-			state_chart.send_event("start_tutorial_phase_3")
+			if current_phase != 3:
+				# Cancel current phase if active and trigger hurt pose
+				attack_interrupt = true
+				_on_stagger()
+				await get_tree().create_timer(hurt_frame_window, false)
+				state_chart.send_event("start_tutorial_phase_3")
 		elif new_health <= tutorial_phase_2_health_threshold:
-			# Cancel current phase if active and trigger hurt pose
-			attack_interrupt = true
-			_on_stagger()
-			await get_tree().create_timer(hurt_frame_window, false)
-			state_chart.send_event("start_tutorial_phase_2")
+			if current_phase != 2:
+				# Cancel current phase if active and trigger hurt pose
+				attack_interrupt = true
+				_on_stagger()
+				await get_tree().create_timer(hurt_frame_window, false)
+				state_chart.send_event("start_tutorial_phase_2")
 
 
 func _on_stagger() -> void:
@@ -199,16 +208,13 @@ func _on_stagger() -> void:
 
 
 func _on_died() -> void:
+	attack_interrupt = true
+	
 	if current_phase < 4:
 		# Tutorial win cutscene trigger
 		state_chart.send_event("stop_moving")
 		tutorial_phases_finished.emit()
 		state_chart.send_event("tutorial_arena_1_finished")
-		# TODO - toss out a barrel for the player mid-cutscene, leverage drop_barrel()?
-		#
-		# TODO - 
-		# TODO - move to transition state, triggering stage 4 when player enters new arena
-		# state_chart.send_event("start_transition_phase")
 	else:
 		died.emit()
 		state_chart.send_event("death")
@@ -319,6 +325,7 @@ func select_attack_phase_2_tutorial() -> void:
 
 
 func select_attack_phase_3_tutorial() -> void:
+	attack_interrupt = false
 	# TODO - design a better smoke trigger system, make it an AoE attack?
 	if randf() < 0.3:
 		if randf() < 0.2:
@@ -1287,6 +1294,7 @@ func spawn_aoe_wall(
 		
 		slam_wall_particles.emitting = false
 		slam_wall_particles.is_on_floor = false
+		slam_wall_particles.get_parent().remove_child(slam_wall_particles)
 		slam_spawn_marker.add_child(slam_wall_particles)
 		slam_wall_particles.position = Vector3.ZERO
 		slam_wall_particles.rotation = Vector3.ZERO
@@ -1419,19 +1427,36 @@ func _on_tutorial_phase_1_taunt_idle_state_entered() -> void:
 
 func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
 	# Pick a random taunt sound
-	var taunt_stream: AudioStream
+	var taunt_sfx: AudioStream
 	match current_phase:
 		1: 
-			taunt_stream = sfx_taunt_phase_1.pick_random()
+			if sfx_taunt_phase_1_active:
+				taunt_sfx = sfx_taunt_phase_1_active.pop_front()
+			else:
+				sfx_taunt_phase_1_active = sfx_taunt_phase_1
+				sfx_taunt_phase_1_active.shuffle()
+				taunt_sfx = sfx_taunt_phase_1_active.pop_front()
+				
 		2: 
-			taunt_stream = sfx_taunt_phase_2.pick_random()
+			if sfx_taunt_phase_2_active:
+				taunt_sfx = sfx_taunt_phase_2_active.pop_front()
+			else:
+				sfx_taunt_phase_2_active = sfx_taunt_phase_2
+				sfx_taunt_phase_2_active.shuffle()
+				taunt_sfx = sfx_taunt_phase_2_active.pop_front()
 		3: 
-			taunt_stream = sfx_taunt_phase_3.pick_random()
+			if sfx_taunt_phase_3_active:
+				taunt_sfx = sfx_taunt_phase_3_active.pop_front()
+			else:
+				sfx_taunt_phase_3_active = sfx_taunt_phase_3
+				sfx_taunt_phase_3_active.shuffle()
+				taunt_sfx = sfx_taunt_phase_3_active.pop_front()
 		_:
-			taunt_stream = sfx_taunt_all.pick_random()
+			taunt_sfx = sfx_taunt_all.pick_random()
+	
 	# Scale the animation length to the sound
-	anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / taunt_stream.get_length()
-	SoundManager.play_sound(taunt_stream, "SFX")
+	anim_player.speed_scale = anim_player.get_animation("elevator_boss/taunt").length / taunt_sfx.get_length()
+	SoundManager.play_sound(taunt_sfx, "SFX")
 	anim_player.play("elevator_boss/taunt")
 	await anim_player.animation_finished
 	anim_player.speed_scale = 1.0
@@ -1697,12 +1722,21 @@ func _on_tutorial_phase_3_dash_wave_swipe_wave_state_entered() -> void:
 	state_chart.send_event("start_targeting")
 	
 	await get_tree().create_timer(0.6, false).timeout
-	if not attack_interrupt:
-		await _telegraph_attack()
-		if not attack_interrupt:
-			anim_player.play("elevator_boss/dash_wave")
-			await anim_player.animation_finished
 	
+	if attack_interrupt:
+		attack_interrupt = false
+		state_chart.send_event("end_wave")
+		return
+	
+	await _telegraph_attack()
+	
+	if attack_interrupt:
+		attack_interrupt = false
+		state_chart.send_event("end_wave")
+		return
+	
+	anim_player.play("elevator_boss/dash_wave")
+	await anim_player.animation_finished
 	await get_tree().create_timer(1.0, false).timeout
 	
 	state_chart.send_event("end_wave")

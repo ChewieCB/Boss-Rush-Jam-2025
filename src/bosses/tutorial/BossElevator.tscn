@@ -1,4 +1,4 @@
-[gd_scene load_steps=236 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=237 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -89,7 +89,6 @@
 [ext_resource type="Texture2D" uid="uid://0sts3t50hpk5" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_1.png" id="32_i0wff"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="32_qvwbi"]
 [ext_resource type="Texture2D" uid="uid://nufbjd0mupin" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_2.png" id="33_1fje0"]
-[ext_resource type="Texture2D" uid="uid://bjj6clrs7cpj1" path="res://src/bosses/tutorial/assets/sprites/temp_HURT.png" id="34_3f23y"]
 [ext_resource type="Texture2D" uid="uid://bk3514x2lemcq" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_3.png" id="34_mllv3"]
 [ext_resource type="Texture2D" uid="uid://cqpxq5rp4qp4a" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_4.png" id="35_aa4xm"]
 [ext_resource type="Material" uid="uid://ks1kly3dfqvc" path="res://addons/EffectBlocks/source_files/materials/smoke_billboard.material" id="35_b2vr1"]
@@ -115,6 +114,8 @@
 [ext_resource type="AudioStream" uid="uid://b6ikk8mk25h5k" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC SOUND 2.mp3" id="63_vxl2l"]
 [ext_resource type="AudioStream" uid="uid://cmanomwk2mgku" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC FADE OUT 1.mp3" id="64_ys6fd"]
 [ext_resource type="AudioStream" uid="uid://1e1weuy8thr8" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC FADE OUT 2.mp3" id="65_a5wdl"]
+[ext_resource type="Texture2D" uid="uid://c0cp3nl4mbhh6" path="res://src/bosses/tutorial/assets/sprites/Hurt.png" id="72_gxdkx"]
+[ext_resource type="Texture2D" uid="uid://bj8k78u0u8oyo" path="res://src/bosses/tutorial/assets/sprites/Death.png" id="73_0d1k8"]
 [ext_resource type="Material" uid="uid://dtya4iffmvt1m" path="res://src/bosses/tutorial/assets/materials/wave_wall_mat.tres" id="85_4771x"]
 
 [sub_resource type="Curve" id="Curve_hy86r"]
@@ -2218,7 +2219,8 @@ barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8")]
 sfx_hit = Array[AudioStream]([ExtResource("28_6ig1p"), ExtResource("29_d21ab"), ExtResource("30_jv36d"), ExtResource("31_t81ll"), ExtResource("32_qvwbi")])
 base_sprite = ExtResource("16_ukgug")
-hurt_sprite = ExtResource("34_3f23y")
+hurt_sprite = ExtResource("72_gxdkx")
+death_sprites = Array[CompressedTexture2D]([ExtResource("73_0d1k8")])
 attack_recovery_time = 0.5
 telegraph_time = 0.6
 projectile_scene = null

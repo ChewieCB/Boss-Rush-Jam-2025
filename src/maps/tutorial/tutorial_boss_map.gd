@@ -27,7 +27,11 @@ signal ui_accept
 
 # SMOKE 
 @export var pipe_particle_emitters: Array[GPUParticles3D]
-var active_emitters: Array[GPUParticles3D] = []
+var inactive_pipe_emitters: Array[GPUParticles3D] = pipe_particle_emitters
+var active_pipe_emitters: Array[GPUParticles3D] = []
+#
+@export var sfx_pipe_creak_sfx: Array[AudioStream]
+@export var sfx_pipe_steam_sfx: Array[AudioStream]
 
 var current_trigger_actions: Array[String] = []
 var current_close_trigger_max: int = 1
@@ -271,6 +275,8 @@ func _on_tutorial_phase_3_started() -> void:
 
 
 func _on_tutorial_finished() -> void:
+	stop_all_pipe_emitters()
+	
 	# Move cutscene camera to match player's camera
 	cutscene_camera.global_transform = player.player_camera.global_transform
 	player._enable_cutscene_cam()
@@ -327,6 +333,7 @@ func _on_tutorial_finished() -> void:
 	$AnimationPlayer.play("cutscene_letterbox_end")
 	await camera_tween.finished
 	player._disable_cutscene_cam()
+	# FIXME - camera is inverted (transform mismatch?) until player moves camera
 
 
 func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
@@ -351,36 +358,50 @@ func _on_boss_trigger_smoke(count: int) -> void:
 		trigger_pipe_emitter()
 
 
-func trigger_pipe_emitter(idx: int = -1) -> int:
-	var emitter: GPUParticles3D
-	if idx >= 0:
-		emitter = pipe_particle_emitters.pop_at(idx)
-	else:
-		emitter = pipe_particle_emitters.pop_at(randi_range(0, pipe_particle_emitters.size() - 1))
+func trigger_pipe_emitter(idx: int = -1) -> void:
+	if idx < 0:
+		idx = randi_range(0, pipe_particle_emitters.size() - 1)
 	
-	if not emitter:
-		return -1
+	var emitter: GPUParticles3D = pipe_particle_emitters[idx]
+	if emitter in active_pipe_emitters:
+		return
 	
-	active_emitters.push_back(emitter)
+	var inactive_idx: int = inactive_pipe_emitters.find(emitter)
+	inactive_pipe_emitters.pop_at(inactive_idx)
+	active_pipe_emitters.push_back(emitter)
+	#
+	var emitter_sfx_player: AudioStreamPlayer3D = emitter.get_node("AudioStreamPlayer3D")
+	emitter_sfx_player.stream = sfx_pipe_creak_sfx.pick_random()
+	emitter_sfx_player.play()
 	await emitter.spark()
+	await emitter_sfx_player.finished
+	#
+	emitter_sfx_player.stream = sfx_pipe_steam_sfx.pick_random()
+	emitter_sfx_player.play()
 	await emitter.start_smoke()
-	
-	return idx
 
 
 func stop_pipe_emitter(idx: int) -> void:
+	if idx < 0:
+		idx = randi_range(0, pipe_particle_emitters.size() - 1)
+	
 	var emitter: GPUParticles3D = pipe_particle_emitters[idx]
-	active_emitters.pop_at(active_emitters.find(emitter))
-	pipe_particle_emitters.push_back(emitter)
+	if emitter in inactive_pipe_emitters:
+		return
+	
+	var active_idx: int = active_pipe_emitters.find(emitter)
+	active_pipe_emitters.pop_at(active_idx)
+	inactive_pipe_emitters.push_back(emitter)
+	
+	var emitter_sfx_player: AudioStreamPlayer3D = emitter.get_node("AudioStreamPlayer3D")
+	emitter_sfx_player.stop()
 	
 	await emitter.end_smoke()
 
 
 func stop_all_pipe_emitters() -> void:
-	for i in range(active_emitters.size() - 1):
-		var _emitter = active_emitters.pop_front()
-		_emitter.end_smoke()
-		pipe_particle_emitters.push_back(_emitter)
+	for i in range(pipe_particle_emitters.size() - 1):
+		stop_pipe_emitter(i)
 
 
 func _align_player_camera_to_cutscene_camera() -> void:

@@ -1113,6 +1113,8 @@ func _enable_cutscene_cam() -> void:
 	controls_disabled = true
 	player_camera.camera.current = false
 	gun_container.visible = false
+	if movement_sfx_player:
+		movement_sfx_player.stop()
 
 
 func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
