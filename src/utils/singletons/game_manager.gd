@@ -11,9 +11,9 @@ signal gun_frame_too_expensive(gun_frame_data: GunFrameResource)
 signal reroll_cost_changed(new_cost: int)
 signal free_rerolls
 signal refresh_shop_ui
-signal setting_changed
 signal risk_level_changed
 signal demo_time_changed
+signal player_level_up
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -49,7 +49,7 @@ var shop_barrels: Array[Resource] = []
 @export var starting_gun_frame: Resource
 @export var starting_shop_gun_frame: Array[Resource]
 @export var gun_frame_database: Array[Resource]
-var equipped_gun_frame: Resource = starting_gun_frame
+var equipped_gun_frame: Resource
 var inventory_gun_frames: Array[Resource] = []
 @onready var shop_gun_frames: Array[Resource] = starting_shop_gun_frame
 
@@ -69,7 +69,11 @@ var reroll_time = 0
 		player_currency = max(0, value)
 		currency_changed.emit(player_currency)
 
-var player_level = 1
+var player_level = 1:
+	set(value):
+		if value > player_level:
+			player_level_up.emit()
+		player_level = value
 var player_skill_dict = {}
 var player_skill_points = 0
 
@@ -139,8 +143,8 @@ var hide_ui = false
 var hide_hurt_overlay = false
 var hide_damage_number = false
 # Accessibility setting flags
-var screen_shake_disabled: bool = false
-var drunk_blur_disabled: bool = false
+var screen_shake_enabled: bool = true
+var drunk_blur_enabled: bool = true
 
 @export_range(0, 100, 0.1) var master_audio: float = 80:
 	set(value):
@@ -181,6 +185,7 @@ var CHEAT_demomode_timeout: int = 60:
 
 
 func _ready() -> void:
+	equipped_gun_frame = starting_gun_frame
 	barrel_database.append_array(debug_barrel_database)
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -188,7 +193,6 @@ func _ready() -> void:
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	main_bgm_emitter.volume = BASE_FMOD_VOLUME
-	main_bgm_emitter.play()
 
 func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):
@@ -489,7 +493,7 @@ func _on_controller_connection(_device: int, connected: bool):
 	is_controller_connected = connected
 
 ## Level can be Menu, Lobby, Roulette, Slotty, Bartender, GenericBossAftermath, PitbossHallway,
-## PitbossMainfight, ChipbossInt, ChipbossStart, BlackjackStart, TutorialBossfight, Tutorial1, Tutorial2,
+## PitbossMainfight, ChipbossStart, ChipbossInt , BlackjackStart, TutorialBossfight, Tutorial1, Tutorial2,
 func change_fmod_bgm_music_state(music_state: String) -> void:
 	main_bgm_emitter.set_parameter("MusicState", music_state)
 

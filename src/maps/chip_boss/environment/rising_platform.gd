@@ -4,12 +4,6 @@ class_name RisingPlatform
 
 @onready var marker: Marker3D = $Marker3D
 
-
-func _ready() -> void:
-	add_to_group("rising_platforms")
-	marker.add_to_group("boss_aoe_marker")
-
-
 func raise(height: float, time: float) -> void:
 	await change_height(height, time)
 

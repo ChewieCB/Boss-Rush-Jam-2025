@@ -1,8 +1,5 @@
 extends BossMap
 
-@onready var music_player: AudioStreamPlayer = $InteractiveMusicPlayer
-var music_playback: AudioStreamPlaybackInteractive
-#
 @onready var chiptopede_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_worm_spawn_marker")
 @onready var chiptopede_snake_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_snake_spawn_marker")
 @onready var chiptopede_snake_path_points: Array[Node] = get_tree().get_nodes_in_group("boss_snake_path_marker")
@@ -18,7 +15,7 @@ var music_playback: AudioStreamPlaybackInteractive
 @export var waterfall_meshes: Array[Node3D]
 @export var waterfall_meshses_vertical: Array[Node3D]
 @onready var water_surface: MeshInstance3D = $WaterSurfaceMesh
-@onready var rising_platforms: Array[Node] = get_tree().get_nodes_in_group("rising_platforms")
+var rising_platforms: Array[Node]
 
 @onready var SFXBeerPlayer: AudioStreamPlayer3D = $SFXBeerPlayer
 @onready var SFXBeerPlayer2: AudioStreamPlayer3D = $SFXBeerPlayer2
@@ -31,7 +28,7 @@ var music_playback: AudioStreamPlaybackInteractive
 @export var water_damage_tick: float = 1.0
 @export var water_damage_amount: float = 2.0
 var water_damage_enabled = false
-const DRUNK_DURATION = 5.0
+const DRUNK_DURATION = 4.0
 @export var splash_particle_prefab: PackedScene
 @export var sfx_splash: Array[AudioStream]
 
@@ -56,11 +53,13 @@ func _ready() -> void:
 		mesh.scale.x = 0
 	water_surface.global_position.y = lower_water_level
 	
-	music_playback = music_player.get_stream_playback()
-
 	if GameManager.boss_ante >= 5:
 		water_damage_enabled = true
 
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	rising_platforms = get_tree().get_nodes_in_group("chip_boss_rising_platforms")
 
 func _process(delta) -> void:
 	if waterfalls.visible:
@@ -69,7 +68,7 @@ func _process(delta) -> void:
 
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
-	music_playback.switch_to_clip(1)
+	# music_playback.switch_to_clip(1)
 	super (_body)
 
 
@@ -81,7 +80,7 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 		# TODO
 		boss.state_chart.send_event("start_phase_3")
 		await boss.chiptopede_emerges
-		music_playback.switch_to_clip(3)
+		# music_playback.switch_to_clip(3)
 	else:
 		win_ui.show_text("Floor Cleared", win_subtext.pick_random())
 		print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
@@ -97,7 +96,8 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 
 func _on_boss_died(_boss: BossCore = boss) -> void:
 	if boss.current_phase != 3:
-		music_playback.switch_to_clip(2)
+		# music_playback.switch_to_clip(2)
+		GameManager.change_fmod_bgm_music_state("ChipbossInt")
 		return
 	super (_boss)
 
@@ -191,7 +191,6 @@ func _on_water_damage_area_body_entered(body: Node3D) -> void:
 		splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
 	splash.emitting = true
 	
-	# Add drunk effect instead of damage
 	# TODO - apply by building up a threshold instead of on/off
 	if body is Player:
 		player.apply_drunk_status(DRUNK_DURATION)
@@ -211,6 +210,9 @@ func _on_water_damage_area_area_entered(area: Area3D) -> void:
 	splash.global_position.y = water_surface.global_position.y
 	splash.emitting = true
 
+func _on_water_damage_area_body_exited(body: Node3D) -> void:
+	if body is Player:
+		water_damage_timer.stop()
 
 func _on_waterfall_body_entered(body: Node3D) -> void:
 	# Add splash at location
@@ -228,15 +230,6 @@ func _on_waterfall_body_entered(body: Node3D) -> void:
 		splash.amount = 32
 		splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
 	splash.emitting = true
-	
-	# Add drunk effect instead of damage
-	# TODO - apply by building up a threshold instead of on/off
-	if body is Player:
-		player.apply_drunk_status(DRUNK_DURATION)
-		water_damage_timer.start(water_damage_tick)
-		if water_damage_enabled:
-			player.health_component.damage(water_damage_amount)
-		
 	await splash.finished
 	splash.queue_free()
 
@@ -246,11 +239,6 @@ func _on_waterfall_area_entered(area: Area3D) -> void:
 	add_child(splash)
 	splash.global_position = area.global_position
 	splash.emitting = true
-
-
-func _on_water_damage_area_body_exited(body: Node3D) -> void:
-	if body is Player:
-		water_damage_timer.stop()
 
 
 func _on_water_damage_timer_timeout() -> void:

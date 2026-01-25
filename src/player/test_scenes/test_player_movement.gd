@@ -13,3 +13,9 @@ func _ready() -> void:
 
 	GameManager.reset_reroll_cost()
 	GameManager.is_free_reroll = true
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_P:
+			GameManager.player.apply_drunk_status(5)

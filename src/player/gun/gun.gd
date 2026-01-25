@@ -34,7 +34,7 @@ var muzzle_flash_sprite: Sprite3D
 @export var rifle_flash_sprite: Sprite3D
 @export var rifle_shell_particles: GPUParticles3D
 
-@onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
+# @onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
 @onready var barrel_1_label: Label3D = $SpriteParent/Barrel1Sprite/Label3D
@@ -875,6 +875,8 @@ func install_barrel(barrel_data: BarrelDataResource) -> void:
 	var barrel_inst = barrel_data.barrel_prefab.instantiate()
 	#barrel_inst.barrel_effect_changed.connect(_set_barrel_effect_label)
 	barrel_inst.barrel_effect_changed.connect(_on_barrel_effect_changed)
+	barrel_inst.owner_gun = self
+
 	barrel_container.add_child(barrel_inst)
 	#_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
 
@@ -883,7 +885,6 @@ func install_barrel(barrel_data: BarrelDataResource) -> void:
 	barrel_count = barrel_container.get_child_count()
 	var barrel_idx: int = barrel_count - 1 if barrel_count > 0 else 0
 
-	barrel_inst.owner_gun = self
 	barrel_inst.reloads_before_spin = barrel_data.reloads_before_spin
 	installed_barrels.append(barrel_inst)
 	barrel_count = installed_barrels.size()

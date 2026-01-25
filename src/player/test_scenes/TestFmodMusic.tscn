@@ -44,7 +44,7 @@ _data = {
 
 [node name="TestFmodMusic" type="Node2D"]
 script = ExtResource("1_npb0c")
-music_state_list = ["Menu", "Lobby", "Slotty", "Roulette", "Bartender", "GenericBossAftermath", "PitbossHallway", "PitbossMainfight", "ChipbossInt", "ChipbossStart", "BlackjackStart", "Blackjack2", "TutorialBossfight", "Tutorial1", "Tutorial2"]
+music_state_list = Array[String](["Menu", "Lobby", "Slotty", "Roulette", "Bartender", "GenericBossAftermath", "PitbossHallway", "PitbossMainfight", "ChipbossInt", "ChipbossStart", "BlackjackStart", "Blackjack2", "TutorialBossfight", "Tutorial1", "Tutorial2"])
 log_line_prefab = ExtResource("2_bkrtf")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -221,7 +221,6 @@ layout_mode = 2
 libraries = {
 "": SubResource("AnimationLibrary_m4ydu")
 }
-autoplay = "spin_disc"
 
 [connection signal="pressed" from="CanvasLayer/StartControl/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/StartControl/StopButton" to="." method="_on_stop_button_pressed"]

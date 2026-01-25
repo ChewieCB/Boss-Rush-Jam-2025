@@ -55,12 +55,12 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var laser_guide_ray: RayCast3D = $Neck/ShakeCameraWrapper/Camera3D/LaserGuideRayCast
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
-@onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 
 @onready var ui_parent = $UI
 @onready var barrel_effect_ui = $UI/GunUI
 @onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
 @onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
+@onready var hitmarker: TextureRect = $UI/GunUI/HitMarker
 @onready var barrel_ui_tween: Tween = null
 var barrel_ui_active: bool = false
 

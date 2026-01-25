@@ -43,7 +43,7 @@ outline_size = 24
 max_health = 1e+07
 
 [node name="InteractArea" type="Area3D" parent="."]
-collision_layer = 64
+collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractArea"]
