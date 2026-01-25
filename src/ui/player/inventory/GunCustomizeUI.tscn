@@ -424,6 +424,7 @@ offset_top = 16.0
 offset_right = 44.0
 offset_bottom = 65.0
 grow_horizontal = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
 text = "Current frame: Shotgun"
 horizontal_alignment = 2
