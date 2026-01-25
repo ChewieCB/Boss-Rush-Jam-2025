@@ -34,7 +34,7 @@ var muzzle_flash_sprite: Sprite3D
 @export var rifle_flash_sprite: Sprite3D
 @export var rifle_shell_particles: GPUParticles3D
 
-@onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
+# @onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
 @onready var barrel_1_label: Label3D = $SpriteParent/Barrel1Sprite/Label3D
