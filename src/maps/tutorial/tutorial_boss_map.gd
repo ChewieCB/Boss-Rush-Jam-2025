@@ -115,6 +115,10 @@ func _ready() -> void:
 	if boss.current_phase < 4:
 		_on_boss_trigger_volume_body_entered_tutorial(player)
 	else:
+		_add_boss_to_intro_path()
+		_remove_boss_from_intro_path()
+		boss.global_position = arena_2_center.global_position
+		boss.state_chart.send_event("start_main_fight")
 		player._disable_cutscene_cam()
 		electric_box_trigger.active = true
 		electric_box_trigger.activate()
@@ -234,11 +238,17 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	
 	# TODO - re-enable when we have a main fight intro 
 	#boss.activate()
+	
+	boss.health_ui.clear_sub_health_bars()
 	match boss.current_phase:
 		4:
+			boss.health_ui.init_boss_health_ui(boss.phase_4_health, 1)
 			boss.state_chart.send_event("start_tutorial_phase_4")
 		5:
+			boss.health_ui.init_boss_health_ui(boss.phase_5_health, 1)
 			boss.state_chart.send_event("start_tutorial_phase_5")
+	
+	boss.health_ui.show_ui()
 
 
 func skip_cutscene() -> void:

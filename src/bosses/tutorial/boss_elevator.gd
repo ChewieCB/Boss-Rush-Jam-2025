@@ -200,10 +200,6 @@ func _ready() -> void:
 		scene_root.add_child(_hazard)
 		_hazard.finished.connect(stop_floor_shock.bind(_hazard))
 		shock_hazard_pool.append(_hazard)
-	
-	await get_tree().physics_frame
-	if current_phase > 3:
-		state_chart.send_event("start_main_fight")
 
 
 func activate() -> void:
@@ -423,6 +419,7 @@ func select_attack_phase_5() -> void:
 				ranged_phase_count = 0
 				# We move into the melee phase, so trigger a random melee attack
 				# TODO - intro slam state to handle dropping from high up
+				previous_phase = "melee_phase"
 				new_attack = melee_attacks.pick_random()
 	
 	state_chart.send_event(new_attack)
@@ -1956,8 +1953,6 @@ func _on_tutorial_phase_4_electrify_floor_slamming_state_entered() -> void:
 
 
 func _on_main_fight_state_entered() -> void:
-	current_phase = 4
-	#self.global_position = arena_2_center.global_position
 	anim_player.play("elevator_boss/intro")
 
 
@@ -2045,7 +2040,7 @@ func _on_tutorial_phase_4_dash_wave_swipe_wave_state_entered() -> void:
 		state_chart.send_event("end_wave")
 		return
 	
-	anim_player.play("elevator_boss/dash_wave")
+	anim_player.play("elevator_boss/dash_wave_fast")
 	await anim_player.animation_finished
 	
 	await get_tree().create_timer(0.5, false).timeout
@@ -2057,7 +2052,6 @@ func _on_phase_5_state_entered() -> void:
 	current_phase = 5
 	melee_phase_count = 0
 	ranged_phase_count = 0
-	prev_attack = "start_smokescreen"
 	attack_interrupt = false
 	phase_5_started.emit()
 	SoundManager.play_sound(sfx_taunt_phase_5.pick_random(), "SFX")
