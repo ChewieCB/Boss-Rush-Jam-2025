@@ -368,7 +368,6 @@ func select_attack_phase_4() -> void:
 
 
 func select_attack_phase_5() -> void:
-	var new_attack: String
 	# If we've just done a melee attack, keep doing melee attacks until we
 	# run out of sequential attacks tokens
 	#
@@ -390,27 +389,42 @@ func select_attack_phase_5() -> void:
 	# At the end of the laser attack, retreat into the ceiling, if we have ranged
 	# attack tokens left pick another ranged attack. Otherwise teleport to an elevator
 	# and exit with a melee attack.
+	
+	##
+	# We don't want to switch melee/ranged phase using prev_attack,
+	# use previous_phase and new_phase to track mele/ranged.
+	# Use new_attack to store the attack transition we sent to state chart.
+	var new_attack: String
 	var melee_attacks = ["start_melee_combo_attack", "start_dash_wave"]
-	if previous_phase == "melee_phase":
-		melee_attacks.erase(prev_attack)
-		if melee_phase_count < max_sequential_melee_phases:
-			new_attack = melee_attacks.pick_random()
-			previous_phase = "melee_phase"
-		else:
-			melee_phase_count = 0
-			previous_phase = "ranged_phase"
-			new_attack = "start_smokescreen"
 	
-	elif previous_phase == "ranged_phase":
-		if ranged_phase_count < max_sequential_ranged_phases:
-			previous_phase = "ranged_phase"
-			new_attack = "start_smokescreen"
-		else:
-			ranged_phase_count = 0
-			previous_phase = "melee_phase"
-			new_attack = "start_melee_combo_attack"
+	match previous_phase:
+		"melee_phase":
+			# If we haven't hit the sequential melee attack limit, pick a 
+			# random attack from the possible melee attacks this phase ignoring 
+			# the last attack we did, prev_attack, for variety. 
+			if melee_phase_count < max_sequential_melee_phases:
+				melee_attacks.erase(prev_attack)
+				new_attack = melee_attacks.pick_random()
+				# Don't update the previous phase and stay in melee
+			else:
+				# Reset the melee attack counter
+				melee_phase_count = 0
+				# We move into the ranged phase, so trigger the smokescreen attack
+				previous_phase = "ranged_phase"
+				new_attack = "start_smokescreen"
+		"ranged_phase":
+			# If we haven't hit the sequential ranged attack limit, trigger 
+			# the smokescreen attack again.
+			if ranged_phase_count < max_sequential_ranged_phases:
+				new_attack = "start_smokescreen"
+				# Don't update the previous phase and stay in ranged
+			else:
+				# Reset the ranged attack counter
+				ranged_phase_count = 0
+				# We move into the melee phase, so trigger a random melee attack
+				# TODO - intro slam state to handle dropping from high up
+				new_attack = melee_attacks.pick_random()
 	
-	prev_attack = new_attack
 	state_chart.send_event(new_attack)
 
 
@@ -469,7 +483,7 @@ func _on_melee_combo_targeting_state_entered() -> void:
 	hurtbox.set_deferred("monitoring", true)
 	state_chart.send_event("start_moving")
 	
-	if active_sub_door:
+	if current_phase > 3 and active_sub_door:
 		await get_tree().create_timer(1.6, false).timeout
 		active_sub_light.yellow()
 		active_sub_door.close()
