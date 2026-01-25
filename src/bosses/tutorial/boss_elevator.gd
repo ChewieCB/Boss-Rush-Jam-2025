@@ -252,6 +252,8 @@ func _on_died() -> void:
 		state_chart.send_event("tutorial_arena_1_finished")
 	else:
 		died.emit()
+		for hazard in shock_hazard_pool:
+			hazard.queue_free()
 		state_chart.send_event("death")
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
