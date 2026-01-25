@@ -13,6 +13,7 @@ signal free_rerolls
 signal refresh_shop_ui
 signal risk_level_changed
 signal demo_time_changed
+signal player_level_up
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -68,7 +69,11 @@ var reroll_time = 0
 		player_currency = max(0, value)
 		currency_changed.emit(player_currency)
 
-var player_level = 1
+var player_level = 1:
+	set(value):
+		if value > player_level:
+			player_level_up.emit()
+		player_level = value
 var player_skill_dict = {}
 var player_skill_points = 0
 

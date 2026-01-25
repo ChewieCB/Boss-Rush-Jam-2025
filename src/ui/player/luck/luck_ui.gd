@@ -22,6 +22,7 @@ func _ready() -> void:
 	await get_owner().ready
 	#LuckHandler.modifier_message.connect(show_luck_modifier)
 	_set_high_luck_glow_progress(0.0)
+	GameManager.player_level_up.connect(update_high_luck_indicator)
 
 
 func _set_high_luck_glow_progress(progress: float) -> void:
@@ -34,13 +35,18 @@ func init_luck_ui(_luck, _max_luck) -> void:
 	luck_bar.value = _luck
 	luck_gain_bar.max_value = _max_luck
 	luck_gain_bar.value = _luck
-	
+	# Wait to make sure the luckbar UI rescale properly
+	await get_tree().process_frame
+	await get_tree().process_frame
+	update_high_luck_indicator()
+
+func update_high_luck_indicator() -> void:
 	# Map max luck to vertical line margin to indicate max luck left -> right
 	var high_luck_threshold: float = luck_component.get_high_luck_threshold()
 	high_luck_mark_margin_ui.get_node("HighLuckIndicator/MarginContainer/Label").text = "{0}%".format([high_luck_threshold * 100])
 	var high_margin_l: float = high_luck_mark_margin_ui.size.x
 	var high_luck_margin: float = remap(high_luck_threshold, 1.0, 0.0, 0.0, high_margin_l)
-	high_luck_mark_margin_ui.add_theme_constant_override("margin_left", high_luck_margin * 2)
+	high_luck_mark_margin_ui.add_theme_constant_override("margin_left", int(high_luck_margin))
 
 
 #func show_luck_modifier(text: String, is_gain: bool = true) -> void:
@@ -51,7 +57,7 @@ func init_luck_ui(_luck, _max_luck) -> void:
 	#luck_modifier_label.text = ""
 
 
-func _on_luck_changed(new_luck: float, prev_luck: float) -> void:	
+func _on_luck_changed(new_luck: float, prev_luck: float) -> void:
 	if new_luck < prev_luck:
 		luck_bar.value = new_luck
 	else:
