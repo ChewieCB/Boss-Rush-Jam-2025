@@ -1767,3 +1767,7 @@ func _change_slam_wall_color(color: Color, mesh: MeshInstance3D) -> void:
 	var mat: ShaderMaterial = mesh.get_active_material(0)
 	mat.set_shader_parameter("color", color)
 	mat.set_shader_parameter("color_edge", color)
+
+
+func _on_tutorial_phase_2_electrify_floor_state_exited() -> void:
+	shock_floor_hazard.is_active = false

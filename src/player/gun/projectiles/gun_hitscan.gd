@@ -87,12 +87,12 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		hitscan_col_normal = raycast.get_collision_normal()
 		end_pos = hitscan_col_point
 		travelled_distance += start_pos.distance_to(end_pos)
-		
+
 		if target is BlockingDetectionArea:
 			var buffered_hit_pos: Vector3 = target._raycast_hit(self, end_pos)
 			end_pos_set.emit(buffered_hit_pos)
 			create_spark(buffered_hit_pos, hitscan_col_normal)
-			
+
 			var distance_to_hit_pos = start_pos.distance_to(buffered_hit_pos)
 			position += current_dir * (distance_to_hit_pos / 2.0)
 			mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance_to_hit_pos)
@@ -106,7 +106,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 				mesh.mesh.material.set_shader_parameter("origin_position", start_pos)
 			visible = true
 			return
-		
+
 		impacted.emit(self, true, hitscan_col_point)
 		var calculated_damage = calculate_bullet_damage()
 		if target is CharacterBody3D:
@@ -120,7 +120,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			if "health_component" in target:
 				if target is Shield:
 					target.impact(self.global_position)
-				elif target is BarrelEffectTrigger:
+				elif target is BarrelEffectTrigger or target is SingleEffectTrigger:
 					target.hit_with_effect(self.owner_gun.installed_barrels)
 				apply_damage_to_health_component(target.health_component, calculated_damage)
 				damage_applied.emit(calculated_damage, true, global_position)
@@ -133,9 +133,9 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			ricochet()
 	else:
 		end_pos = start_pos + current_dir * BEAM_RANGE_IF_NOT_COLLIDE
-	
+
 	end_pos_set.emit(end_pos)
-	
+
 	var distance = start_pos.distance_to(end_pos)
 	position += current_dir * (distance / 2.0)
 	mesh.scale = Vector3(0.01 * thickness, 0.01 * thickness, distance)

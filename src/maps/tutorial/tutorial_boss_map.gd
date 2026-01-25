@@ -58,6 +58,9 @@ var is_cutscene_active: bool = true
 @export var tutorial_5_trigger_barrel_detail: TutorialPopupResource
 @export var tutorial_6_trigger_spin: TutorialPopupResource
 
+# 
+@export var electric_box_trigger: StaticBody3D
+
 var reload_tutorial_shown: bool = false
 var tutorial_panel_tween: Tween
 var active_tutorial_panel: Control
@@ -334,6 +337,8 @@ func _on_tutorial_finished() -> void:
 	await camera_tween.finished
 	player._disable_cutscene_cam()
 	# FIXME - camera is inverted (transform mismatch?) until player moves camera
+	
+	electric_box_trigger.active = true
 
 
 func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:

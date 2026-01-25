@@ -121,7 +121,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		if "health_component" in body:
 			if body is Shield:
 				body.impact(self.global_position)
-			elif body is BarrelEffectTrigger:
+			elif body is BarrelEffectTrigger or body is SingleEffectTrigger:
 				body.hit_with_effect(self.owner_gun.installed_barrels)
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
