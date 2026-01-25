@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://1t3ui8wme31d"]
+[gd_scene load_steps=34 format=3 uid="uid://1t3ui8wme31d"]
 
 [ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
 [ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
@@ -24,7 +24,10 @@
 [ext_resource type="PackedScene" uid="uid://biqm56x6ewbmo" path="res://src/ui/pause_menu/SettingUI.tscn" id="23_8rbfy"]
 [ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="24_prxld"]
 [ext_resource type="PackedScene" uid="uid://dif5ua57y8udh" path="res://src/ui/main_menu/SaveSlotItem.tscn" id="24_re1j0"]
+[ext_resource type="Texture2D" uid="uid://dyiwffcyvqrg7" path="res://src/ui/main_menu/assets/storyboards/crapshoot_panels_chair.png" id="25_adb1y"]
 [ext_resource type="PackedScene" uid="uid://dijn1g2vmnb8g" path="res://src/utils/singletons/IdleDetector.tscn" id="25_bigae"]
+[ext_resource type="Texture2D" uid="uid://ba7r4wqd3fv6b" path="res://src/ui/main_menu/assets/storyboards/crapshoot_screens.png" id="26_3vbxm"]
+[ext_resource type="Texture2D" uid="uid://qsade1me113u" path="res://src/ui/main_menu/assets/storyboards/crapshoot_intro_panel_gun.png" id="27_otgtb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2x62q"]
 shader = ExtResource("1_jqa14")
@@ -225,7 +228,7 @@ offset_bottom = -115.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 20
-text = "v0.8"
+text = "v0.10 (Yorkshire Games Fest)"
 horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -594,6 +597,7 @@ grow_vertical = 2
 layout_mode = 2
 
 [node name="Title" type="RichTextLabel" parent="StoryUI/TabContainer/Control"]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -613,13 +617,75 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 36.0
-offset_top = 127.0
+offset_top = 58.0
 offset_right = -40.0
 offset_bottom = -55.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="StoryUI/TabContainer/Control/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="StoryUI/TabContainer/Control/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 80
+
+[node name="MarginContainer3" type="MarginContainer" parent="StoryUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="StoryUI/TabContainer/Control/ScrollContainer/VBoxContainer/MarginContainer3"]
+custom_minimum_size = Vector2(440, 100)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/normal_font = ExtResource("24_prxld")
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 28
+theme_override_font_sizes/mono_font_size = 32
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 36
+bbcode_enabled = true
+text = "You are a professional card cheat, caught red-handed in the towering mega-casino owned by the enigmatic [b][color=gold]Mr. Big[/color][/b]. "
+fit_content = true
+
+[node name="MarginContainer" type="MarginContainer" parent="StoryUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 458
+theme_override_constants/margin_top = 5
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="StoryUI/TabContainer/Control/ScrollContainer/VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("24_prxld")
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 28
+theme_override_font_sizes/mono_font_size = 32
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 36
+bbcode_enabled = true
+text = "Forced to enter a [color=red]deadly game of chance[/color] — fighting against each of Mr. Big’s henchmen, all under the bleary-eyed gaze of an audience of gamblers placing bets on the [color=red]bloodsport[/color]. "
+fit_content = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="StoryUI/TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = -51
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="StoryUI/TabContainer/Control/ScrollContainer/VBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(440, 100)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("24_prxld")
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 28
+theme_override_font_sizes/mono_font_size = 32
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 36
+bbcode_enabled = true
+text = "Armed with a unique weapon whose [b][color=dark_turquoise]interchangeable barrels[/color][/b] spin random effects on each reload, you must acquire new barrels from every boss you defeat to build a weapon that can [b][color=lawn_green]change your odds[/color][/b]. "
+fit_content = true
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="StoryUI/TabContainer/Control/ScrollContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -639,6 +705,36 @@ Armed with a unique weapon whose [b][color=dark_turquoise]interchangeable barrel
 
 [center][i]Gamble everything for your freedom.[/i][/center]"
 fit_content = true
+
+[node name="TextureRect" type="TextureRect" parent="StoryUI/TabContainer/Control"]
+layout_mode = 0
+offset_left = 464.0
+offset_top = 31.0
+offset_right = 1020.0
+offset_bottom = 262.0
+texture = ExtResource("25_adb1y")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="TextureRect2" type="TextureRect" parent="StoryUI/TabContainer/Control"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 303.0
+offset_right = 586.0
+offset_bottom = 534.0
+texture = ExtResource("26_3vbxm")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="TextureRect3" type="TextureRect" parent="StoryUI/TabContainer/Control"]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 572.0
+offset_right = 1032.0
+offset_bottom = 803.0
+texture = ExtResource("27_otgtb")
+expand_mode = 3
+stretch_mode = 4
 
 [node name="NinePatchRect" type="NinePatchRect" parent="StoryUI"]
 self_modulate = Color(0.902344, 0.776165, 0, 1)
