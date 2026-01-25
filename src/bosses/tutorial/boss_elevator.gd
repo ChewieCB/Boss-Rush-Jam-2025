@@ -198,6 +198,7 @@ func _ready() -> void:
 	for i in range(3):
 		var _hazard = shock_floor_hazard_prefab.instantiate()
 		scene_root.add_child(_hazard)
+		_hazard.global_position = Vector3(-100, -100, -100)
 		_hazard.finished.connect(stop_floor_shock.bind(_hazard))
 		shock_hazard_pool.append(_hazard)
 
@@ -252,14 +253,17 @@ func _on_died() -> void:
 		state_chart.send_event("tutorial_arena_1_finished")
 	else:
 		died.emit()
-		for hazard in shock_hazard_pool:
-			hazard.queue_free()
 		state_chart.send_event("death")
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
 		await death_anim_finished
 		drop_barrel()
 		await boss_death_slow_mo()
+
+
+func cleanup_shock_hazards() -> void:
+	for hazard in shock_hazard_pool:
+		hazard.queue_free()
 
 
 func _on_barrel_collected(data: BarrelDataResource) -> void:

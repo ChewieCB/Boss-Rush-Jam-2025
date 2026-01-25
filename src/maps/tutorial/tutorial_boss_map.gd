@@ -486,6 +486,7 @@ func _on_player_death() -> void:
 	if GameManager.tutorial_completed:
 		# TODO - play kicked back to lobby cutscene with boss VO
 		#
+		boss.cleanup_shock_hazards()
 		win_ui.lose()
 		show_end_panel()
 	else:
@@ -604,6 +605,8 @@ func _on_boss_died(_boss: BossCore = boss) -> void:
 func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
+	
+	boss.cleanup_shock_hazards()
 
 	#exit_elevator_button.disabled = false
 	#exit_doors.open()
