@@ -42,14 +42,14 @@ func _process(_delta: float) -> void:
 		child.label.text = "%s/%s" % [child.health_bar.value, child.health_bar.max_value]
 
 
-func init_boss_health_ui(max_health: float, sub_health_bars: float) -> void:
+func init_boss_health_ui(max_health: int, sub_health_bars: float) -> void:
 	total_health = max_health
 	sub_bar_count = sub_health_bars
 	for i in range(sub_health_bars):
 		add_sub_health_bar(max_health / sub_bar_count)
 
 
-func add_sub_health_bar(_health: float) -> BossSubHealthBar:
+func add_sub_health_bar(_health: int) -> BossSubHealthBar:
 	var _bar = sub_health_bar_prefab.instantiate()
 	sub_health_bars_container.add_child(_bar)
 	#sub_health_bars_container.move_child(_bar, 0)
@@ -110,16 +110,16 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 				continue
 			# If we have health left on the bar, update it
 			if child.health_bar.value > 0:
-				if child.health_bar.value >= new_health:
+				if child.health_bar.value >= int(new_health):
 					continue
-				child.damage_bar.value = new_health
+				child.damage_bar.value = int(new_health)
 				await get_tree().create_timer(0.3).timeout
 				if child == null:
 					continue
 				var tween: Tween = get_tree().create_tween()
-				tween.tween_property(child.heath_bar, "value", new_health, 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+				tween.tween_property(child.heath_bar, "value", int(new_health), 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 				await tween.finished
-				child.heath_bar.value = new_health
+				child.heath_bar.value = int(new_health)
 			else:
 				child.damage_bar.value = child.health_bar.value
 
@@ -135,9 +135,9 @@ func _on_timer_timeout():
 
 
 func _on_max_health_changed(new_max_health: float, _prev_max_health: float) -> void:
-	total_health = new_max_health
+	total_health = int(new_max_health)
 	clear_sub_health_bars()
-	init_boss_health_ui(new_max_health, sub_bar_count)
+	init_boss_health_ui(int(new_max_health), sub_bar_count)
 
 
 func check_after_setting_changed():

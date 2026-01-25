@@ -241,12 +241,6 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 				state_chart.send_event("start_tutorial_phase_5")
 
 
-func _on_stagger() -> void:
-	#if current_phase < 4:
-		#return
-	super()
-
-
 func _on_died() -> void:
 	attack_interrupt = true
 	
@@ -348,19 +342,20 @@ func select_attack_phase_4() -> void:
 	
 	var dist_to_player: float = self.global_position.distance_to(target.global_position)
 	
-	if dist_to_player <= shock_target_distance:
-		if shock_hazard_pool.size() > 0:
-			state_chart.send_event("start_electrify_floor")
-		else:
-			state_chart.send_event("start_melee_combo")
+	# FIXME - electrify floor is busted
+	#if dist_to_player <= shock_target_distance:
+		#if shock_hazard_pool.size() > 0:
+			#state_chart.send_event("start_electrify_floor")
+		#else:
+			#state_chart.send_event("start_melee_combo")
+	#else:
+	var chance: float = randf()
+	if chance < 0.33:
+		state_chart.send_event("start_melee_combo")
+	elif chance < 0.66:
+		state_chart.send_event("start_dash_wave")
 	else:
-		var chance: float = randf()
-		if chance < 0.33:
-			state_chart.send_event("start_melee_combo")
-		elif chance < 0.66:
-			state_chart.send_event("start_dash_wave")
-		else:
-			state_chart.send_event("start_ranged_naiils_strafe")
+		state_chart.send_event("start_ranged_naiils_strafe")
 
 
 func select_attack_phase_5() -> void:
@@ -740,6 +735,9 @@ func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: flo
 				return
 			await get_tree().create_timer(delay_per_proj, false).timeout
 			# Alternate firing between each gun
+			if attack_interrupt == true:
+				attack_interrupt = false
+				return
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
 			var anim_name = "elevator_boss/ranged_shoot_%s" % ["l" if j % 2 == 0 else "r"]
 			anim_player.play(anim_name)
@@ -810,6 +808,7 @@ func _on_laser_aoe_targeting_state_entered() -> void:
 		sfx_player.play()
 	
 	anim_player.play("RESET")
+	sprite.visible = true
 	sprite.modulate.a = 1.0
 	anim_player.play("elevator_boss/laser_arm")
 	
@@ -838,11 +837,11 @@ func _on_laser_aoe_charging_state_entered() -> void:
 	aoe_warn_decal.texture_albedo = laser_aoe_marker
 	aoe_warn_decal.cull_mask = int(pow(2, 1 - 1))
 	aoe_warn_decal.size = Vector3(4, 4, 1)
-	get_parent().get_parent().add_child(aoe_warn_decal)
+	scene_root.add_child(aoe_warn_decal)
 	aoe_warn_decal.global_position = laser_spawn.global_position
 	aoe_warn_decal.global_rotation = laser_spawn.global_rotation
-	aoe_warn_decal.global_position.y = -4.6
-	aoe_warn_decal.global_position.x -= 2.0
+	aoe_warn_decal.global_position.y = -1.8
+	#aoe_warn_decal.global_position.x -= 2.0
 	
 	# laser_aoe_marker
 	var warn_tween := get_tree().create_tween()
@@ -900,7 +899,7 @@ func _on_laser_aoe_firing_state_entered() -> void:
 	get_parent().add_child(laser_instance)
 	laser_instance.global_position = laser_spawn.global_position
 	laser_instance.global_position.y -= 2
-	laser_instance.global_position.x -= 2
+	#laser_instance.global_position.x -= 2
 	laser_instance.global_rotation.y = self.global_rotation.y
 	
 	await anim_player.animation_finished
@@ -922,6 +921,7 @@ func _on_laser_aoe_recover_state_entered() -> void:
 	sprite.visible = false
 	
 	await get_tree().create_timer(attack_recovery_time, false).timeout
+	$LaserCollider.disabled = true
 	anim_player.play("RESET")
 	sprite.visible = true
 	state_chart.send_event("cooldown_end")
@@ -986,6 +986,7 @@ func _on_smokescreen_smoke_state_entered() -> void:
 		"start_laser_aoe_attack":
 			new_spawn = get_furthest_laser_spawn()
 			state_event = "start_no_smoke"
+			sprite.visible = false
 	
 	# Move the boss to a new spawn point and turn to face the player
 	self.global_position = new_spawn.global_position
@@ -1027,6 +1028,7 @@ func _on_smokescreen_move_no_smoke_state_entered() -> void:
 		
 		"start_laser_aoe_attack":
 			active_spawn = get_furthest_laser_spawn()
+			sprite.visible = false
 			self.global_position = active_spawn.global_position
 			prev_attack = next_attack
 			state_chart.send_event(next_attack)

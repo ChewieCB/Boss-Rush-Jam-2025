@@ -108,20 +108,24 @@ func _ready() -> void:
 	
 	player.stat_ui.hide_all_ui()
 	
-	await ScreenTransition.transition_finished
-	$AnimationPlayer.play("pit_boss_shove")
-	await $AnimationPlayer.animation_finished
+	if GameManager.tutorial_completed:
+		boss.current_phase = 4
 	
 	if boss.current_phase < 4:
+		await ScreenTransition.transition_finished
+		$AnimationPlayer.play("pit_boss_shove")
+		await $AnimationPlayer.animation_finished
 		_on_boss_trigger_volume_body_entered_tutorial(player)
 	else:
 		_add_boss_to_intro_path()
 		_remove_boss_from_intro_path()
 		boss.global_position = arena_2_center.global_position
-		boss.state_chart.send_event("start_main_fight")
-		player._disable_cutscene_cam()
 		electric_box_trigger.active = true
 		electric_box_trigger.activate()
+		player._disable_cutscene_cam()
+		await ScreenTransition.transition_finished
+		boss.state_chart.send_event("start_main_fight")
+		player.stat_ui.show_all_ui()
 
 
 func _input(event: InputEvent) -> void:
@@ -201,7 +205,6 @@ func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
 	if boss_doors:
 		boss_doors.is_autodoor = false
 		boss_doors.close()
-	#boss_trigger.queue_free()
 	
 	boss.activate()
 	if is_cutscene_active:
@@ -242,7 +245,7 @@ func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	boss.health_ui.clear_sub_health_bars()
 	match boss.current_phase:
 		4:
-			boss.health_ui.init_boss_health_ui(boss.phase_4_health, 1)
+			boss.health_ui.init_boss_health_ui(boss.main_health, 2)
 			boss.state_chart.send_event("start_tutorial_phase_4")
 		5:
 			boss.health_ui.init_boss_health_ui(boss.phase_5_health, 1)
@@ -372,7 +375,9 @@ func _on_tutorial_finished() -> void:
 	# FIXME - camera is inverted (transform mismatch?) until player moves camera
 	
 	electric_box_trigger.active = true
+	GameManager.tutorial_completed = true
 	boss.state_chart.send_event("start_main_fight")
+	boss.current_phase = 4
 
 
 func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
@@ -478,8 +483,10 @@ func _align_player_camera_to_cutscene_camera() -> void:
 
 
 func _on_player_death() -> void:
-	if is_tutorial_finished:
-		win_ui.lose(lose_tips.pick_random())
+	if GameManager.tutorial_completed:
+		# TODO - play kicked back to lobby cutscene with boss VO
+		#
+		win_ui.lose()
 		show_end_panel()
 	else:
 		# Put the boss in a passive state while we play the tutorial
@@ -583,8 +590,8 @@ func show_end_panel() -> void:
 	
 	# TODO - have the player respawn at the boss fight, maybe load TUTORIAL_BOSS_ONLY instead?
 	LoadingHandler.start_loading(
-		LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL],
-		"Tutorial"
+		LoadingHandler.level_paths[LoadingHandler.LEVELS.LOBBY],
+		"Lobby"
 	)
 	await ScreenTransition.transition_finished
 	LoadingHandler.load_scene_transition()
@@ -598,17 +605,17 @@ func _on_boss_defeated(_boss: BossCore) -> void:
 	collect_all_chips()
 	print("Chips dropped: %s | Total chip value: %s" % [chips_dropped, chip_value_collected])
 
-	exit_elevator_button.disabled = false
-	exit_doors.open()
+	#exit_elevator_button.disabled = false
+	#exit_doors.open()
 
 	if not boss.boss_id in GameManager.bosses_defeated:
 		GameManager.bosses_defeated.append(boss.boss_id)
 		print(GameManager.bosses_defeated)
 		GameManager.all_bosses_defeated = GameManager.bosses_defeated.size() == BossCore.BossIdEnum.size() - 1
-
+	
 	# TODO - re-apply this when we re-visit the tutorial boss
 	#reward_bet_money()
-	#show_end_panel()
+	show_end_panel()
 
 
 func _check_for_reload_tutorial() -> void:
