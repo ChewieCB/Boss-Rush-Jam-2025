@@ -366,15 +366,20 @@ func _on_tutorial_finished() -> void:
 	await $AnimationPlayer.animation_finished
 	
 	# Tween the camera back
+	player.player_camera.rotation.y = 0
+	player.player_camera.rotation.z = 0
 	var camera_tween = get_tree().create_tween().set_parallel(true).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 	camera_tween.tween_property(
 		cutscene_camera, "global_transform", player.player_camera.global_transform, 0.4
 	)
+	#camera_tween.tween_property(
+		#cutscene_camera, "rotation", player.player_camera.rotation, 0.4
+	#)
 	$AnimationPlayer.play("cutscene_letterbox_end")
-	await camera_tween.finished
-	player._disable_cutscene_cam()
-	# FIXME - camera is inverted (transform mismatch?) until player moves camera
 	
+	await camera_tween.finished
+	
+	player._disable_cutscene_cam()
 	electric_box_trigger.active = true
 	boss.state_chart.send_event("start_main_fight")
 	boss.current_phase = 4
