@@ -42,6 +42,9 @@ var difficulty_menu: DifficultyMenu
 var object_pooling_manager: ObjectPoolingManager
 var current_boss_map: Node3D
 
+# Temporary singleton
+var gun_customize_ui: GunCustomizationUI
+
 @onready var main_bgm_emitter: MainBGMEmitter = $MainBGMEmitter
 
 # Inventory

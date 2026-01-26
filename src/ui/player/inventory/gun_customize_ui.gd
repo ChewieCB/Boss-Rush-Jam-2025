@@ -18,23 +18,25 @@ signal reset_barrel_info
 @export var sfx_purchase: AudioStream
 @export var sfx_too_expensive: AudioStream
 @export var sfx_barrel_equip: AudioStream
+@export var current_gun_frame_icon: TextureRect
 
 @onready var warning_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/WarningLabel
 @onready var modify_bg: Control = $ModifyBG
 @onready var modify_tab_btn: Button = $TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton
 @onready var barrel_modify_ui: Control = $MainRegion/BarrelModifyUI
 @onready var equip_barrel_container: HBoxContainer = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer
-@onready var inventory_gun_frame_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer/GridContainer
-@onready var inventory_normal_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer
+@onready var inventory_gun_frame_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer
+@onready var inventory_normal_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer
 @onready var current_gun_frame_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/CurrentGunFrame
-@export var current_gun_frame_icon: TextureRect
+@onready var inventory_scroll_container: ScrollContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer
 
 @onready var shop_bg: Control = $ShopBG
 @onready var shop_tab_btn: Button = $TitleRegion/HBoxContainer/ShopTab/ShopTabButton
 @onready var barrel_shop_ui: Control = $MainRegion/BarrelShopUI
-@onready var shop_gun_frame_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer/GridContainer
-@onready var shop_normal_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer
+@onready var shop_gun_frame_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer
+@onready var shop_normal_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer
 @onready var shopkeeper_chat: RichTextLabel = $MainRegion/BarrelShopUI/RightRegion/VendorAvatar/Chatbox/RichTextLabel
+@onready var shop_scroll_container: ScrollContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer
 
 const SHOPKEEPER_CHAT_TEXT_SPEED = 1.0
 
@@ -182,6 +184,7 @@ func toggle():
 		open()
 
 func open():
+	GameManager.gun_customize_ui = self
 	GameManager.change_fmod_bgm_menu_is_up(true)
 	full_refresh_ui(true)
 	visible = true
@@ -192,6 +195,7 @@ func open():
 
 
 func close():
+	GameManager.gun_customize_ui = null
 	GameManager.change_fmod_bgm_menu_is_up(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	GameManager.player.is_in_menu = false
@@ -319,6 +323,13 @@ func _on_shop_tab_button_pressed() -> void:
 	barrel_modify_ui.visible = false
 	shop_tab_btn.grab_focus()
 	ui_transitioning = false
+
+
+func get_current_scroll_container() -> ScrollContainer:
+	if modify_bg.visible:
+		return inventory_scroll_container
+	else:
+		return shop_scroll_container
 
 
 func play_hover_sfx():
