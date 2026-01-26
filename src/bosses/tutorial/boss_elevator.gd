@@ -167,7 +167,7 @@ var laser_target_pos: Vector3
 @export var shock_damage_tutorial: float = 10.0
 @export var shock_duration_tutorial: float = 0.6
 # Main
-@export var shock_floor_hazard_prefab: PackedScene 
+@export var shock_floor_hazard_prefab: PackedScene
 var shock_hazard_pool: Array[ElevatorShockHazard] = []
 
 @export var shock_damage: float = 15.0
@@ -180,11 +180,11 @@ var shock_hazard_pool: Array[ElevatorShockHazard] = []
 @export var sfx_electric_loop: Array[AudioStream]
 @export var sfx_electric_fadeout: Array[AudioStream]
 
-var attack_interrupt: bool = false  # Flag to interrupt loop-based attacks like the nailgun shots
+var attack_interrupt: bool = false # Flag to interrupt loop-based attacks like the nailgun shots
 
 
 func _ready() -> void:
-	super()
+	super ()
 	health_component.max_health = tutorial_health
 	health_component.initialize_health()
 	health_ui.clear_sub_health_bars()
@@ -210,7 +210,7 @@ func activate() -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	super(new_health, prev_health)
+	super (new_health, prev_health)
 	# TODO - proper phased health trigger implementation
 	
 	# Can't heal your way into a previous phase
@@ -247,7 +247,7 @@ func _on_stagger() -> void:
 		return
 	if next_attack == "start_laser_aoe_attack":
 		return
-	super()
+	super ()
 
 
 func force_stagger() -> void:
@@ -363,7 +363,7 @@ func select_attack_phase_3_tutorial() -> void:
 func select_attack_phase_4() -> void:
 	attack_interrupt = false
 	
-	var dist_to_player: float = self.global_position.distance_to(target.global_position)
+	var _dist_to_player: float = self.global_position.distance_to(target.global_position)
 	
 	# FIXME - electrify floor is busted
 	#if dist_to_player <= shock_target_distance:
@@ -403,7 +403,6 @@ func select_attack_phase_5() -> void:
 	# At the end of the laser attack, retreat into the ceiling, if we have ranged
 	# attack tokens left pick another ranged attack. Otherwise teleport to an elevator
 	# and exit with a melee attack.
-	
 	##
 	# We don't want to switch melee/ranged phase using prev_attack,
 	# use previous_phase and new_phase to track mele/ranged.
@@ -1497,7 +1496,7 @@ func _on_arena_1_cutscene_state_entered() -> void:
 	anim_player.play("elevator_boss/intro")
 
 
-func _on_arena_1_cutscene_state_physics_processing(delta: float) -> void:
+func _on_arena_1_cutscene_state_physics_processing(_delta: float) -> void:
 	pass
 	#velocity.y -= GRAVITY * delta
 	#move_and_slide()
@@ -1529,7 +1528,7 @@ func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
 	# Pick a random taunt sound
 	var taunt_sfx: AudioStream
 	match current_phase:
-		1: 
+		1:
 			if sfx_taunt_phase_1_active:
 				taunt_sfx = sfx_taunt_phase_1_active.pop_front()
 			else:
@@ -1537,14 +1536,14 @@ func _on_tutorial_phase_1_taunt_taunting_state_entered() -> void:
 				sfx_taunt_phase_1_active.shuffle()
 				taunt_sfx = sfx_taunt_phase_1_active.pop_front()
 				
-		2: 
+		2:
 			if sfx_taunt_phase_2_active:
 				taunt_sfx = sfx_taunt_phase_2_active.pop_front()
 			else:
 				sfx_taunt_phase_2_active = sfx_taunt_phase_2
 				sfx_taunt_phase_2_active.shuffle()
 				taunt_sfx = sfx_taunt_phase_2_active.pop_front()
-		3: 
+		3:
 			if sfx_taunt_phase_3_active:
 				taunt_sfx = sfx_taunt_phase_3_active.pop_front()
 			else:
@@ -1593,7 +1592,7 @@ func _on_tutorial_phase_1_strafing_nails_targeting_state_entered() -> void:
 
 
 func _on_tutorial_phase_1_strafing_nails_targeting_state_physics_processing(delta: float) -> void:
-	orbit_pos(arena_1_center.global_position, delta, true)
+	orbit_around_position(arena_1_center.global_position, delta, true)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 
@@ -1608,7 +1607,7 @@ func _on_tutorial_phase_1_strafing_nails_shooting_state_entered() -> void:
 
 
 func _on_tutorial_phase_1_strafing_nails_shooting_state_physics_processing(delta: float) -> void:
-	orbit_pos(arena_1_center.global_position, delta, true)
+	orbit_around_position(arena_1_center.global_position, delta, true)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 
@@ -1821,7 +1820,7 @@ func _on_tutorial_phase_3_state_entered() -> void:
 	SoundManager.play_sound(sfx_taunt_phase_3.pick_random(), "SFX")
 
 
-func _on_tutorial_phase_2_melee_combo_state_physics_processing(delta: float) -> void:
+func _on_tutorial_phase_2_melee_combo_state_physics_processing(_delta: float) -> void:
 	# If the player is far away and on the shockable area, stop chasing and trigger the shock
 	if shock_floor_hazard_tutorial.damage_area.overlaps_body(target) and \
 	target.global_position.distance_to(self.global_position) >= melee_max_chase_distance:
@@ -2008,7 +2007,7 @@ func _on_tutorial_phase_4_strafing_nails_targeting_state_entered() -> void:
 
 
 func _on_tutorial_phase_4_strafing_nails_targeting_state_physics_processing(delta: float) -> void:
-	orbit_pos(arena_2_center.global_position, delta, true)
+	orbit_around_position(arena_2_center.global_position, delta, true)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 
@@ -2023,7 +2022,7 @@ func _on_tutorial_phase_4_strafing_nails_shooting_state_entered() -> void:
 
 
 func _on_tutorial_phase_4_strafing_nails_shooting_state_physics_processing(delta: float) -> void:
-	orbit_pos(arena_2_center.global_position, delta, true)
+	orbit_around_position(arena_2_center.global_position, delta, true)
 	velocity.y -= GRAVITY * delta
 	move_and_slide()
 
@@ -2048,7 +2047,7 @@ func _on_tutorial_phase_4_dash_wave_idle_state_entered() -> void:
 func _on_tutorial_phase_4_dash_wave_idle_state_physics_processing(delta: float) -> void:
 	orbit_player(delta)
 	
-	if self.global_position.distance_to(target.global_position) > 8.0 and\
+	if self.global_position.distance_to(target.global_position) > 8.0 and \
 	self.global_position.distance_to(target.global_position) < 20.0:
 		state_chart.send_event("start_wave")
 

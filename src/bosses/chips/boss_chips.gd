@@ -253,7 +253,7 @@ func _ready() -> void:
 	
 	health_component.initialize_health()
 	health_ui.clear_sub_health_bars()
-	health_ui.init_boss_health_ui(health_component.max_health, 2)
+	health_ui.init_boss_health_ui(int(health_component.max_health), 2)
 	
 	if GameManager.boss_ante >= 1:
 		place_your_bet_attack_enabled = true
@@ -1290,7 +1290,7 @@ func activate_chiptopede() -> void:
 	health_component.received_dmg_multiplier = 0.5
 	#health_ui.init_health_ui(chiptopede_max_health)
 	health_ui.clear_sub_health_bars()
-	health_ui.init_boss_health_ui(chiptopede_max_health, 1)
+	health_ui.init_boss_health_ui(int(chiptopede_max_health), 1)
 	health_ui.boss_name = "Chiptopede"
 	health_ui.show_ui()
 

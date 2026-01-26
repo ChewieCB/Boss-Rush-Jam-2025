@@ -95,7 +95,8 @@ func _on_button_focus_entered() -> void:
 		else:
 			grab_focus() # This wont show the chip cost, but at least it wont crash
 	else:
-		grab_focus()
+		if GameManager.gun_customize_ui:
+			GameManager.gun_customize_ui.get_current_scroll_container().ensure_control_visible(self)
 
 func _on_button_focus_exited() -> void:
 	return_button_size()

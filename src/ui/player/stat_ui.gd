@@ -82,10 +82,10 @@ func _on_spin_ability_progress_changed(value: float) -> void:
 
 
 func _on_currency_changed(new_value: int) -> void:
-	var fill_time: float = 0.5
+	var current_changed_fill_time: float = 0.5
 	var progress_tween: Tween = get_tree().create_tween()
 	progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
-	progress_tween.tween_property(spin_ability_ui, "value", new_value, fill_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	progress_tween.tween_property(spin_ability_ui, "value", new_value, current_changed_fill_time).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 
 
 func _update_reroll_max(new_max: int) -> void:
