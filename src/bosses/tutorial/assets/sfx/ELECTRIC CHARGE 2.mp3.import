@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://basa3mcnvcbcf"
+path="res://.godot/imported/ELECTRIC CHARGE 2.mp3-6c93da96df6f8c5c1714c5ce661c0657.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/ELECTRIC CHARGE 2.mp3"
+dest_files=["res://.godot/imported/ELECTRIC CHARGE 2.mp3-6c93da96df6f8c5c1714c5ce661c0657.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -125,8 +125,11 @@ func full_refresh_ui(forced = false):
 		item_inst.init(gun_frame_data, false, true)
 		item_inst.select_gun_frame.connect(_on_gun_frame_item_ui_select)
 		item_inst.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
-
-	current_gun_frame_icon.texture = GameManager.equipped_gun_frame.shop_ui_sprite
+	
+	if GameManager.equipped_gun_frame:
+		current_gun_frame_icon.texture = GameManager.equipped_gun_frame.shop_ui_sprite
+	else:
+		current_gun_frame_icon.texture = GameManager.starting_gun_frame.shop_ui_sprite
 
 
 	# SHOP STUFF

@@ -22,7 +22,7 @@ enum LEVELS {
 }
 
 const level_paths: Array[String] = [
-	"res://src/maps/tutorial/TutorialBoss.tscn",
+	"res://src/maps/tutorial/TutorialBossNew.tscn",
 	"res://src/maps/tutorial/TutorialBossOnly.tscn",
 	"res://src/maps/backroom/Backroom.tscn",
 	"res://src/maps/lobby/Lobby.tscn",
@@ -84,6 +84,7 @@ func initial_load() -> void:
 
 
 func start_loading(scene_path: String, scene_name: String = "", transition_out: bool = true) -> void:
+	ScreenTransition.set_loading_detail_text(scene_name)
 	find_and_load_scene_bgm(scene_name)
 	if transition_out:
 		ScreenTransition.transition_out()
@@ -100,8 +101,7 @@ func start_loading(scene_path: String, scene_name: String = "", transition_out: 
 		initial_load()
 		await materials_compiled
 	
-	await Engine.get_main_loop().process_frame
-	ScreenTransition.set_loading_detail_text(scene_name)
+	#await Engine.get_main_loop().process_frame
 
 
 func load_scene_transition() -> void:
@@ -129,7 +129,7 @@ func find_and_load_scene_bgm(scene_name: String = "") -> void:
 		"Lobby":
 			music_state = "Lobby"
 		"Tutorial":
-			music_state = "Tutorial"
+			music_state = "TutorialStart"
 
 	if music_state != "":
 		GameManager.change_fmod_bgm_music_state(music_state)
@@ -243,7 +243,10 @@ func compile_materials() -> void:
 
 func _compile_material(scene_path: String) -> void:
 	print("Precompile shader materials in %s" % scene_path)
-	var scene = ResourceLoader.load(scene_path).instantiate()
+	var scene_resource := ResourceLoader.load(scene_path)
+	if not scene_resource:
+		return
+	var scene = scene_resource.instantiate()
 
 	if scene is GPUParticles3D:
 		_compile_particles_node(scene)

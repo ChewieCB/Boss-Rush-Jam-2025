@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cgh3x4wiq7agd"]
+[gd_scene load_steps=7 format=3 uid="uid://prtflf5tamwr"]
 
 [ext_resource type="Script" path="res://src/player/test_scenes/test_fmod_music.gd" id="1_npb0c"]
 [ext_resource type="PackedScene" uid="uid://dvaqw2d36ik5y" path="res://src/player/test_scenes/RichTextLogLine.tscn" id="2_bkrtf"]
@@ -44,7 +44,7 @@ _data = {
 
 [node name="TestFmodMusic" type="Node2D"]
 script = ExtResource("1_npb0c")
-music_state_list = Array[String](["Menu", "Lobby", "Slotty", "Roulette", "Bartender", "GenericBossAftermath", "PitbossHallway", "PitbossMainfight", "ChipbossInt", "ChipbossStart", "BlackjackStart", "Blackjack2", "TutorialBossfight", "Tutorial1", "Tutorial2"])
+music_state_list = Array[String](["Menu", "Lobby", "Slotty", "Roulette", "Bartender", "GenericBossAftermath", "PitbossHallway", "PitbossMainfight", "ChipbossInt", "ChipbossStart", "BlackjackStart", "Blackjack2", "TutorialStart", "TutorialInterlude", "TutorialBossfight"])
 log_line_prefab = ExtResource("2_bkrtf")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

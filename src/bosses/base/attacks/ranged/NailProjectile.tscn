@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="3_cik5l"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_so2kb"]
-radius = 0.4
+radius = 0.650744
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mcyja"]
 transparency = 1

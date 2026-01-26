@@ -57,7 +57,7 @@
 }
 // entity 2
 {
-"classname" "ShowLights"
+"classname" "func_detail"
 "_tb_group" "7822"
 // brush 0
 {

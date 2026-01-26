@@ -148,7 +148,7 @@ var last_dashed_timestamp
 var current_air_jump_count: int = 0
 var slide_dir = Vector2(0, 0)
 
-var controls_disabled: bool = false
+var controls_disabled: bool = true
 var dash_disabled: bool = false
 
 var gun_container_original_pos: Vector3
@@ -636,7 +636,14 @@ func handle_controller_look(_delta):
 		rotate_player(look_x * sensitivity, look_y * sensitivity)
 
 
+func _reset_camera_look() -> void:
+	player_camera.rotation = Vector3.ZERO
+	neck.rotation = Vector3.ZERO
+
+
 func rotate_player(x: float, y: float):
+	if controls_disabled:
+		return
 	rotate(Vector3(0, -1, 0), x * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotate_x(-y * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotation.y = 0
@@ -645,6 +652,8 @@ func rotate_player(x: float, y: float):
 
 
 func camera_control(delta):
+	if controls_disabled:
+		return
 	# Tilt camera
 	if GameManager.camera_tilt:
 		if raw_input_dir.x < 0:
@@ -679,6 +688,9 @@ func _on_dash_duration_timeout() -> void:
 
 func _on_grounded_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
+		# Allows us to disable jumping
+		if max_air_jump < 1:
+			return
 		jump()
 
 func _on_grounded_state_physics_processing(_delta: float):
@@ -691,6 +703,9 @@ func _on_grounded_state_physics_processing(_delta: float):
 
 func _on_airborne_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
+		# Allows us to disable jumping
+		if max_air_jump < 1:
+			return
 		if can_coyote_jump and not jumped:
 			jump()
 		elif current_air_jump_count < max_air_jump:
@@ -802,6 +817,15 @@ func _on_health_dead_state_entered() -> void:
 	controls_disabled = true
 	hurt_overlay.dead()
 	stat_ui.hide_all_ui()
+
+func _on_health_dead_state_exited() -> void:
+	hurt_overlay.revive()
+	stat_ui.show_all_ui()
+	var neck_tween = get_tree().create_tween()
+	neck_tween.parallel().tween_property(neck, "rotation:z", deg_to_rad(0), 0.3)
+	neck_tween.parallel().tween_property(neck, "rotation:y", deg_to_rad(0), 0.3)
+	controls_disabled = false
+	
 
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
@@ -1072,7 +1096,6 @@ func _on_check_standing_collision_body_entered(_body: Node3D) -> void:
 
 func _enable_freecam() -> void:
 	controls_disabled = true
-	dash_disabled = true
 	player_camera.camera.current = false
 	gun_container.visible = false
 
@@ -1089,7 +1112,6 @@ func _enable_freecam() -> void:
 
 func _disable_freecam() -> void:
 	controls_disabled = false
-	dash_disabled = false
 	gun_container.visible = true
 	player_camera.camera.current = true
 
@@ -1097,6 +1119,34 @@ func _disable_freecam() -> void:
 	freecam = null
 
 	Engine.time_scale = 1.0
+
+
+func _enable_cutscene_cam() -> void:
+	controls_disabled = true
+	player_camera.camera.current = false
+	gun_container.visible = false
+	if movement_sfx_player:
+		movement_sfx_player.stop()
+
+
+func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
+	controls_disabled = false
+	
+	if lerp_to_player_cam:
+		var active_camera: Camera3D = get_viewport().get_camera_3d()
+		var camera_tween := get_tree().create_tween()
+		camera_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+		camera_tween.set_parallel(true)
+		camera_tween.tween_property(
+			active_camera,
+			"global_transform",
+			player_camera.global_transform,
+			0.8
+		)
+		await camera_tween.finished
+	
+	player_camera.camera.current = true
+	gun_container.visible = true
 
 
 func change_near_enemy_radius(new_radius: float) -> void:

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://drkkvy77c58t6"
+path="res://.godot/imported/PIPE CREAK 2.mp3-292e25db77837a5cc1d597380e060369.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/PIPE CREAK 2.mp3"
+dest_files=["res://.godot/imported/PIPE CREAK 2.mp3-292e25db77837a5cc1d597380e060369.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

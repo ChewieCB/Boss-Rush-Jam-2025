@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bgxc0ipaah2x3"
+path="res://.godot/imported/ELECTRIC IMPACT 2.mp3-6bd3d03e762f5e6edc58bd8e766e5bc5.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/ELECTRIC IMPACT 2.mp3"
+dest_files=["res://.godot/imported/ELECTRIC IMPACT 2.mp3-6bd3d03e762f5e6edc58bd8e766e5bc5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

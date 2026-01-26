@@ -1,4 +1,4 @@
-[gd_scene load_steps=107 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=108 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://d3psu8yx8uldk" path="res://src/player/gun/assets/sfx/temp/Shotgun_Cock_only.mp3" id="5_cutjd"]
 [ext_resource type="AudioStream" uid="uid://csslo4nsdbmmp" path="res://src/player/gun/assets/sfx/temp/Recover_ammp.mp3" id="6_j7hjd"]
 [ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="7_dh421"]
+[ext_resource type="AudioStream" uid="uid://5yfh4jsmb3db" path="res://src/player/gun/assets/sfx/reloading/shotgun/SHOTGUN SHELL LOAD 1.mp3" id="8_47oxl"]
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="8_trw5g"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="9_hhraw"]
 [ext_resource type="PackedScene" uid="uid://tviraxqs4fj2" path="res://src/player/gun/vfx/muzzle_flash/MuzzleSmoke.tscn" id="10_ipycd"]
@@ -2418,7 +2419,7 @@ tracks/5/keys = {
 
 [sub_resource type="Animation" id="Animation_ik8rl"]
 resource_name = "reload"
-length = 0.75
+length = 0.25
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -2451,11 +2452,14 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.3, 0.75),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.1, 0.1001, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"_emit_reloaded_signal"
+}, {
+"args": [],
+"method": &"play_shotgun_shell_load_sfx"
 }, {
 "args": [],
 "method": &"_end_reload_anim"
@@ -2480,7 +2484,7 @@ tracks/4/path = NodePath("SpriteParent/ArmSpriteR:texture")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.35, 0.65),
+"times": PackedFloat32Array(0, 0.05, 0.15, 0.25),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("33_u6v0u"), ExtResource("34_e26bd"), ExtResource("33_u6v0u"), null]
@@ -2492,7 +2496,7 @@ tracks/5/path = NodePath("SpriteParent/ArmSpriteR:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.65),
+"times": PackedFloat32Array(0, 0.1, 0.25),
 "transitions": PackedFloat32Array(0.258816, 2.63902, 1),
 "update": 0,
 "values": [Vector3(3.6, -3.3, 0), Vector3(0, 0, 0), Vector3(3.6, -3.3, 0)]
@@ -2504,7 +2508,7 @@ tracks/6/path = NodePath("SpriteParent/ArmSpriteR:render_priority")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.65),
+"times": PackedFloat32Array(0, 0.25),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [1, 2]
@@ -3230,6 +3234,7 @@ TEMP_sfx_spin = ExtResource("4_jq6y4")
 TEMP_sfx_click = ExtResource("5_cutjd")
 TEMP_regain_ammo = ExtResource("6_j7hjd")
 TEMP_crit = ExtResource("7_dh421")
+sfx_shotgun_shell_reload = Array[AudioStream]([ExtResource("8_47oxl")])
 hitscan_prefab = ExtResource("8_trw5g")
 projectile_prefab = ExtResource("9_hhraw")
 muzzle_smoke_prefab = ExtResource("10_ipycd")

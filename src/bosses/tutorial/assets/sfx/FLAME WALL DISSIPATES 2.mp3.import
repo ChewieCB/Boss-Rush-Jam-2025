@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://qg61conv8q8a"
+path="res://.godot/imported/FLAME WALL DISSIPATES 2.mp3-9fe9dc6698f8559c3c76cfdb8b0da339.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 2.mp3"
+dest_files=["res://.godot/imported/FLAME WALL DISSIPATES 2.mp3-9fe9dc6698f8559c3c76cfdb8b0da339.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

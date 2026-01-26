@@ -10,7 +10,9 @@ signal transition_finished
 
 
 func _ready() -> void:
-	transition_in(0.0)
+	pass
+	#_fill_screen()
+	#transition_in(0.0)
 
 
 func update_progress_bar(value: float) -> void:

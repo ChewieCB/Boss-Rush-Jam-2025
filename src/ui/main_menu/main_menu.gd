@@ -17,6 +17,10 @@ class_name MainMenu
 var started_loading = false
 
 func _ready() -> void:
+	if not LoadingHandler.is_materials_compiled:
+		LoadingHandler.initial_load()
+		await LoadingHandler.materials_compiled
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	
@@ -110,6 +114,12 @@ func _on_credit_button_pressed() -> void:
 func start_game():
 	# SoundManager.play_ui_sound(start_game_sfx, "UI")
 	SaveManager.load_game(GameManager.chosen_slot_id)
+	
+	# Zero any stored positions when moving between saves
+	GameManager.cached_player_pos_relative_to_elevator_doors = Vector3.ZERO
+	GameManager.cached_player_rotation = Vector3.ZERO
+	GameManager.cached_camera_rotation = Vector3.ZERO
+	
 	if not GameManager.tutorial_completed:
 		LoadingHandler.start_loading(
 			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL],

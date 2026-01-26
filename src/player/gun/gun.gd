@@ -34,7 +34,6 @@ var muzzle_flash_sprite: Sprite3D
 @export var rifle_flash_sprite: Sprite3D
 @export var rifle_shell_particles: GPUParticles3D
 
-# @onready var foregrip_sprite: Sprite3D = $SpriteParent/ForegripSprite
 @onready var arm_sprite: Sprite3D = $SpriteParent/ArmSprite
 @onready var barrel_1_sprite: Sprite3D = $SpriteParent/Barrel1Sprite
 @onready var barrel_1_label: Label3D = $SpriteParent/Barrel1Sprite/Label3D
@@ -64,6 +63,9 @@ var muzzle_flash_sprite: Sprite3D
 @export var TEMP_sfx_click: AudioStream
 @export var TEMP_regain_ammo: AudioStream
 @export var TEMP_crit: AudioStream
+#
+@export_subgroup("Shotgun")
+@export var sfx_shotgun_shell_reload: Array[AudioStream]
 
 # Init gun stat values
 const BASE_DAMAGE: int = 20
@@ -117,6 +119,7 @@ var cached_reload_start_ammo: int = magazine_ammo_left
 var reload_interrupt: bool = false
 var can_fire: bool = true
 var is_reloading: bool = false
+var is_reload_disabled: bool = false
 var is_spinning: bool = false
 var is_jammed: bool = false
 var time_since_last_shot: float = 0.0
@@ -186,11 +189,6 @@ func _process(delta: float) -> void:
 	#if Input.is_action_just_released("spin_barrels"):
 		#var state_machine = anim_tree.get("parameters/spin_state/playback")
 		#state_machine.travel("released")
-	
-	# DEBUG
-	#print("=========== ANIM TREE DEBUG ===========")
-	#print(" > idle state: %s" % idle_frame_state.get_current_node())
-	#print(" > reload state: %s" % reload_frame_state.get_current_node())
 
 
 func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip_animation: bool = false) -> void:
@@ -280,7 +278,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	if is_reloading or is_spinning or is_jammed:
 		if is_reloading and \
 		idle_frame_state.get_current_node().begins_with("shotgun") and \
-		#GameManager.equipped_gun_frame.frame_id == GunFrameResource.GunFrameIdEnum.SHOTGUN and \
 		reload_interrupt == false:
 			# When the player tries to shoot during a shotgun reload,
 			# finish the current shell loading anim and interrupt the reload,
@@ -301,7 +298,8 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	
 	if magazine_ammo_left <= 0:
 		play_failed_shoot_sfx()
-		reload()
+		if not is_reload_disabled:
+			reload()
 		return false
 	
 	for barrel in installed_barrels:
@@ -562,6 +560,25 @@ func spin_all_barrels() -> void:
 	#reload(true)
 
 
+func _get_barrel_effect_idx_by_id(barrel: SpinBarrel, effect_id: int) -> int:	
+	for i in range(barrel.effect_list.size() - 1):
+		var _effect = barrel.effect_list[i]
+		if _effect.icon_id == effect_id:
+			return i
+	return -1
+
+
+func set_barrel_to_effect(barrel_idx: int, effect_id: int) -> void:
+	var barrel: SpinBarrel = installed_barrels[barrel_idx]
+	barrel.chosen_id = _get_barrel_effect_idx_by_id(barrel, effect_id)
+	set_barrel_icon(barrel_idx, effect_id)
+
+
+func force_barrel_next_spin(barrel_idx: int, effect_id: int) -> void:
+	var barrel: SpinBarrel = installed_barrels[barrel_idx]
+	barrel.force_next_spin_id = _get_barrel_effect_idx_by_id(barrel, effect_id)
+
+
 func _spin_barrel(barrel_idx: int) -> void:
 	var barrel = installed_barrels[barrel_idx]
 	barrel.get_active_effect().on_barrel_start_spin()
@@ -645,6 +662,8 @@ func cancel_reload() -> void:
 
 func reload(already_spin_barrel = false):
 	# TODO - make this more generic and less tied to spinning barrels so we can call it elsewhere
+	if is_reload_disabled:
+		return
 	if is_reloading:
 		return
 	if is_jammed:
@@ -689,6 +708,7 @@ func reload(already_spin_barrel = false):
 			#else:
 				#post_reload_state = "" # "shotgun_pump_no_shell" - do we want to pump after reload? 
 			reload_count = modified_magazine_size - magazine_ammo_left
+			reload_timescale * 2.0
 		#GunFrameResource.GunFrameIdEnum.SMG:
 		"smg_idle":
 			anim_library_prefix = "smg/"
@@ -728,6 +748,7 @@ func reload(already_spin_barrel = false):
 		idle_frame_state.travel(post_reload_state)
 		await post_reload_anim_end
 	
+	reload_interrupt = false
 	is_reloading = false
 	can_fire = true
 	anim_tree.set("parameters/reload_timescale/scale", 1.0)
@@ -866,6 +887,10 @@ func play_failed_shoot_sfx():
 	if failed_shoot_sfx_timer.is_stopped():
 		SoundManager.play_sound(TEMP_sfx_dry, "Gun")
 		failed_shoot_sfx_timer.start()
+
+
+func play_shotgun_shell_load_sfx():
+	SoundManager.play_sound(sfx_shotgun_shell_reload.pick_random(), "Gun")
 
 
 func install_barrel(barrel_data: BarrelDataResource) -> void:

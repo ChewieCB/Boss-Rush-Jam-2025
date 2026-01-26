@@ -13,6 +13,7 @@ var nav_region: NavigationRegion3D
 @onready var boss: BossCore = find_children("*", "BossCore").front()
 @onready var player: Player = find_children("*", "Player").front()
 @onready var elevator_doors: SlidingDoor = find_children("*", "ElevatorDoors").front()
+#@onready var nav_meshes := find_children("*", "NavBody3D")
 
 @export_group("UI")
 @export var win_subtext: Array[String] = [""]
@@ -60,11 +61,13 @@ func _ready() -> void:
 		player.rotation = GameManager.cached_player_rotation
 		player.player_camera.rotation = GameManager.cached_camera_rotation
 	
-	player.stat_ui.show_all_ui()
+	# TODO - manually trigger in levels
+	#player.stat_ui.show_all_ui()
 	
 	await get_tree().physics_frame
 	generate_navigation()
 	
+	player.controls_disabled = false
 	if elevator_doors:
 		elevator_doors.open()
 
@@ -88,6 +91,7 @@ func generate_navigation() -> void:
 	floor_parent.remove_child(floor_mesh)
 	nav_region.add_child(floor_mesh)
 	nav_region.move_child(floor_mesh, 0)
+	floor_mesh.global_transform = floor_parent.global_transform
 	
 	_rebake_nav()
 	# Switch the parse type to colliders after the initial bake 
@@ -158,13 +162,14 @@ func _on_player_death() -> void:
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
 	print_debug("Boss trigger volume activated")
-	boss.activate()
-	print_debug("Boss activate method called")
-	LuckHandler.enabled = true
-	if elevator_doors:
-		elevator_doors.close()
-	print_debug("Elevator doors closed, freeing trigger volume")
-	boss_trigger.queue_free()
+	if boss:
+		boss.activate()
+		print_debug("Boss activate method called")
+		LuckHandler.enabled = true
+		if elevator_doors:
+			elevator_doors.close()
+		print_debug("Elevator doors closed, freeing trigger volume")
+		boss_trigger.queue_free()
 
 
 func _on_spin_trigger_body_entered(body: Node3D) -> void:
