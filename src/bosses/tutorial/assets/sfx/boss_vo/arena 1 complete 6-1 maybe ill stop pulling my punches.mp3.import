@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cqbaml4h6vhve"
+path="res://.godot/imported/arena 1 complete 6-1 maybe ill stop pulling my punches.mp3-081c5268265cf20351780446a140a7db.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/arena 1 complete 6-1 maybe ill stop pulling my punches.mp3"
+dest_files=["res://.godot/imported/arena 1 complete 6-1 maybe ill stop pulling my punches.mp3-081c5268265cf20351780446a140a7db.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b3oaq8tb6jmua"
+path="res://.godot/imported/player defeated 3-1 aint done with you.mp3-e9302b4075a3468ee52affc4e6280cfe.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/player defeated 3-1 aint done with you.mp3"
+dest_files=["res://.godot/imported/player defeated 3-1 aint done with you.mp3-e9302b4075a3468ee52affc4e6280cfe.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://chmnwoa6yea8j"
+path="res://.godot/imported/attack taunt 9-1 you gotta do more than that.mp3-363015ebf83aa1cade585b644af25708.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 9-1 you gotta do more than that.mp3"
+dest_files=["res://.godot/imported/attack taunt 9-1 you gotta do more than that.mp3-363015ebf83aa1cade585b644af25708.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

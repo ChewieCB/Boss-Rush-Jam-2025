@@ -45,6 +45,10 @@ window/stretch/mode="canvas_items"
 
 enabled=PackedStringArray("res://addons/SyncDeck/plugin.cfg", "res://addons/func_godot/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/input_helper/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
 
+[filesystem]
+
+import/blender/enabled=false
+
 [global_group]
 
 AimAssistBubble=""

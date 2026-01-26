@@ -1,4 +1,4 @@
-[gd_scene load_steps=393 format=4 uid="uid://b50odhnpvpy07"]
+[gd_scene load_steps=396 format=4 uid="uid://b50odhnpvpy07"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_6qvhe"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_map.gd" id="2_twxne"]
@@ -78,8 +78,11 @@
 [ext_resource type="PackedScene" uid="uid://cstu4hay3iips" path="res://src/maps/tutorial/triggers/SingleEffectTrigger.tscn" id="79_wgc81"]
 [ext_resource type="Material" uid="uid://dxuto5h6uh22o" path="res://assets/textures/posters/pitboss.tres" id="80_q7tk3"]
 [ext_resource type="Material" uid="uid://chfbuquwjmmvs" path="res://assets/textures/posters/megacasino.tres" id="81_ojd6u"]
+[ext_resource type="AudioStream" uid="uid://q3rx1vut6mbt" path="res://src/bosses/tutorial/assets/sfx/Laser Armed.mp3" id="82_od2sk"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="83_53s23"]
+[ext_resource type="AudioStream" uid="uid://dbcg2so3iy86c" path="res://src/bosses/tutorial/assets/sfx/Laser Charging.mp3" id="83_84pvg"]
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="84_udjkb"]
+[ext_resource type="AudioStream" uid="uid://crmuqk0xvt1ak" path="res://src/bosses/tutorial/assets/sfx/LASER DISARMED.mp3" id="84_xwlu4"]
 [ext_resource type="Script" path="res://src/bosses/base/boss_position_marker.gd" id="85_mbuj2"]
 [ext_resource type="PackedScene" uid="uid://b4jtd8erp77w7" path="res://src/maps/lobby/SlidingDoor.tscn" id="86_1uyek"]
 [ext_resource type="Shader" path="res://src/bosses/roulette/assets/shaders/shield_impacts.gdshader" id="87_3tg1k"]
@@ -7600,6 +7603,9 @@ tutorial_health = 30
 phase_1_health = 10
 phase_2_health = 10
 phase_3_health = 10
+sfx_laser_arm = Array[AudioStream]([ExtResource("82_od2sk")])
+sfx_laser_charging = Array[AudioStream]([ExtResource("83_84pvg")])
+sfx_laser_disarm = Array[AudioStream]([ExtResource("84_xwlu4")])
 target = NodePath("../entity_11_PlayerRef")
 barrel_to_drop = ExtResource("78_iprpn")
 barrel_pickup_scene = ExtResource("79_jne3r")
@@ -7609,7 +7615,7 @@ orbit_radius = 200.0
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
-transform = Transform3D(-1.7321e-07, -0.87718, -0.480024, -5.96047e-08, 0.480024, -0.87718, 1, -1.23325e-07, -1.35429e-07, -51.478, 0.145, 29.574)
+transform = Transform3D(-1.7321e-07, -0.87718, -0.480024, -5.96046e-08, 0.480024, -0.87718, 1, -1.23325e-07, -1.35429e-07, -51.478, 0.145, 29.574)
 loop = false
 tilt_enabled = false
 

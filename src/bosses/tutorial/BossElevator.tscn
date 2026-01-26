@@ -1,98 +1,98 @@
-[gd_scene load_steps=258 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=262 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
 [ext_resource type="AudioStream" uid="uid://0u431kpfno53" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing.mp3" id="3_5w7aw"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_irtaj"]
-[ext_resource type="AudioStream" uid="uid://dhbnqqrs8dfs" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena-1-complete-1-1-almost-broke-a-sweat.mp3" id="3_ut2n1"]
+[ext_resource type="AudioStream" uid="uid://bgp7uqjwdvr0p" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena 1 complete 1-1 almost broke a sweat.mp3" id="3_ux7dg"]
 [ext_resource type="PackedScene" uid="uid://ponw4bhivvke" path="res://src/bosses/base/attacks/ranged/NailProjectile.tscn" id="3_v4gcb"]
 [ext_resource type="AudioStream" uid="uid://dbakj03xx5r3j" path="res://src/bosses/tutorial/assets/sfx/Tutorial Boss Landing.mp3" id="3_y4npe"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_fo57y"]
 [ext_resource type="PackedScene" uid="uid://byharrqwvi4cp" path="res://src/bosses/base/attacks/ranged/LaserAoE.tscn" id="4_hx1ss"]
-[ext_resource type="AudioStream" uid="uid://d2jess8av6ue7" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-1-1-come-on.mp3" id="4_n2q7l"]
 [ext_resource type="AudioStream" uid="uid://cqq422lmo5d7s" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing 2.mp3" id="4_pthoc"]
-[ext_resource type="AudioStream" uid="uid://c83uijbq6d0wi" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena-1-complete-2-1-luckier-than-you-loo.mp3" id="4_tw5wi"]
+[ext_resource type="AudioStream" uid="uid://c60dn16l8an00" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena 1 complete 2-1 luckier than you look.mp3" id="4_q4oau"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_7kc6y"]
 [ext_resource type="AudioStream" uid="uid://7v0fx558pjwl" path="res://src/bosses/tutorial/assets/sfx/Tutorial Kick 1.mp3" id="5_fu4i0"]
+[ext_resource type="AudioStream" uid="uid://dix5r0va8qt6h" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena 1 complete 3-1 not quite the dreg.mp3" id="5_hw1ty"]
 [ext_resource type="AudioStream" uid="uid://dvsl5y8e4n4hr" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing and leap back.mp3" id="5_iynxh"]
-[ext_resource type="AudioStream" uid="uid://dhoa5p3lowhw1" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-2-1-put-your-back-into-it.mp3" id="5_l2bm8"]
-[ext_resource type="AudioStream" uid="uid://cy3ppx8tr0nmg" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena-1-complete-3-1-not-quite-the-dreg.mp3" id="5_ldvni"]
 [ext_resource type="Texture2D" uid="uid://bunn8a0pce2b2" path="res://assets/sprite/aoe_markers/laser_aoe_warn.png" id="5_pbhfx"]
-[ext_resource type="AudioStream" uid="uid://cfqi470hfedob" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-3-1-roaches-tougher.mp3" id="6_7upxy"]
+[ext_resource type="AudioStream" uid="uid://dv4rconk2r5r" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena 1 complete 4-1 youve more brawn.mp3" id="6_6cufj"]
 [ext_resource type="AudioStream" uid="uid://due6c1u7ljts1" path="res://src/bosses/tutorial/assets/sfx/Wrench Ground Pound.mp3" id="6_elwvg"]
 [ext_resource type="PackedScene" uid="uid://cujv5cr6ya7gg" path="res://src/bosses/pit/surveillance/LaserEndParticles.tscn" id="6_fqvnt"]
 [ext_resource type="AudioStream" uid="uid://btjwaw66o42jf" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing Miss 2.mp3" id="6_h17j0"]
 [ext_resource type="AudioStream" uid="uid://ufohavydweo4" path="res://src/bosses/tutorial/assets/sfx/Tutorial Kick 2.mp3" id="6_oht30"]
-[ext_resource type="AudioStream" uid="uid://28p21meq544o" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena-1-complete-4-1-youve-more-brawn.mp3" id="6_rh2bn"]
 [ext_resource type="Texture2D" uid="uid://bp7hure6j5kgv" path="res://src/bosses/tutorial/assets/sprites/STARTING_POSE.png" id="6_yp5yq"]
-[ext_resource type="AudioStream" uid="uid://bti07v6t6qrwu" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena-1-complete-6-1-maybe-ill-stop-pulling-my-punches.mp3" id="7_2tadf"]
 [ext_resource type="PackedScene" uid="uid://dl8cnd88fnws2" path="res://src/bosses/tutorial/SlamParticles.tscn" id="7_2uohy"]
 [ext_resource type="Texture2D" uid="uid://748svw3mdr8o" path="res://src/bosses/base/attacks/ranged/star_09.png" id="7_6pf3s"]
+[ext_resource type="AudioStream" uid="uid://cqbaml4h6vhve" path="res://src/bosses/tutorial/assets/sfx/boss_vo/arena 1 complete 6-1 maybe ill stop pulling my punches.mp3" id="7_cdb7f"]
 [ext_resource type="AudioStream" uid="uid://b1svhegbdr27d" path="res://src/bosses/tutorial/assets/sfx/Wrench Swing Miss.mp3" id="7_cxehy"]
 [ext_resource type="AudioStream" uid="uid://dxj2f1psc0yqw" path="res://src/bosses/tutorial/assets/sfx/Tutorial Kick 3.mp3" id="7_ob3ew"]
-[ext_resource type="AudioStream" uid="uid://r4f5jbjqjiqw" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt-4-1-all-they-got.mp3" id="7_vulif"]
 [ext_resource type="AudioStream" uid="uid://cj0y3jud36wc4" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Loop.mp3" id="7_xo7jb"]
+[ext_resource type="AudioStream" uid="uid://csmy4eykgbts5" path="res://src/bosses/tutorial/assets/sfx/boss_vo/drop roller 1-1 it youll need all the help.mp3" id="8_e8ppr"]
 [ext_resource type="AudioStream" uid="uid://dcshtq5yyxdk1" path="res://src/bosses/tutorial/assets/sfx/Wrench Slam AOE Impact.mp3" id="8_pvhqe"]
-[ext_resource type="AudioStream" uid="uid://dcinu4qhgtfin" path="res://src/bosses/tutorial/assets/sfx/boss_vo/drop-roller-1-1-youll-need-all-the-help.mp3" id="8_r10k4"]
-[ext_resource type="AudioStream" uid="uid://cunssdaa7vwlu" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-5-1-tune-up.mp3" id="8_tpccx"]
-[ext_resource type="AudioStream" uid="uid://doxsouaexqy47" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-6-1-i-wont-fix-you.mp3" id="9_s2jdf"]
-[ext_resource type="AudioStream" uid="uid://cshaqmebw7172" path="res://src/bosses/tutorial/assets/sfx/boss_vo/drop-roller-2-1-it-aint-gonna-save-you.mp3" id="9_xehab"]
+[ext_resource type="AudioStream" uid="uid://dy383g3lt7ne7" path="res://src/bosses/tutorial/assets/sfx/boss_vo/drop roller 2-1 it aint gonna save you.mp3" id="9_t4ju7"]
 [ext_resource type="AudioStream" uid="uid://rftdmhx827li" path="res://src/bosses/tutorial/assets/sfx/Nail Gun Activation.mp3" id="10_u246n"]
-[ext_resource type="AudioStream" uid="uid://bn7i578i12xkd" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-7-1-out-of-order.mp3" id="10_v3isi"]
 [ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="11_1crh5"]
 [ext_resource type="AudioStream" uid="uid://37k158pyjqtf" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 1 V2.mp3" id="11_8tgau"]
-[ext_resource type="AudioStream" uid="uid://cac6ll44h0rxk" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-1-1-pathetic.mp3" id="11_k8ri3"]
+[ext_resource type="AudioStream" uid="uid://b71lrf1517fp8" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 1-1 come on.mp3" id="11_fobd3"]
+[ext_resource type="AudioStream" uid="uid://y41k7fwr4l4w" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 2-1 put your back into it.mp3" id="12_22t0e"]
 [ext_resource type="AudioStream" uid="uid://cus1umlbiwd56" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 2 V2.mp3" id="12_bt5kx"]
-[ext_resource type="AudioStream" uid="uid://bipulifptivua" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-2-1-not-quick-enough.mp3" id="12_q8miw"]
+[ext_resource type="AudioStream" uid="uid://de300cuhe5k4k" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 3-1 roaches tougher.mp3" id="13_b8a3y"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="13_k65oo"]
-[ext_resource type="AudioStream" uid="uid://c6rttgfvk5a2x" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-3-1-aint-done-with-you.mp3" id="13_kff1c"]
 [ext_resource type="AudioStream" uid="uid://do4mm41k5wg0i" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 3 V2.mp3" id="13_qjtrx"]
-[ext_resource type="AudioStream" uid="uid://c686u8r2ghs4h" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-4-1-you-have-to-do-better.mp3" id="14_hmhx2"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="14_kbpeg"]
 [ext_resource type="AudioStream" uid="uid://bj5hdchtswx3f" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 4 V2.mp3" id="14_l34ga"]
+[ext_resource type="AudioStream" uid="uid://elck08i3k1l2" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 4-1 all they got.mp3" id="14_xtwbu"]
+[ext_resource type="AudioStream" uid="uid://03r152lhfvql" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 7-1 out of order.mp3" id="15_bsimv"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="15_c0skh"]
-[ext_resource type="AudioStream" uid="uid://cy7c4d1fjogls" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-5-1-degenerates-never-fail-to-dissapoint.mp3" id="15_ixxt2"]
 [ext_resource type="Texture2D" uid="uid://du746aotdbnq4" path="res://src/bosses/tutorial/assets/sprites/3_HIT_1.png" id="16_e0muj"]
-[ext_resource type="AudioStream" uid="uid://d3oy07t4o7fx7" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-6-1-another-sore-loser.mp3" id="16_m7v53"]
 [ext_resource type="Texture2D" uid="uid://d1fy72k7lk74w" path="res://src/bosses/tutorial/assets/sprites/IDLE.png" id="16_ukgug"]
+[ext_resource type="AudioStream" uid="uid://dwa32tweg7pnk" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 5-1 tune up.mp3" id="16_yk562"]
 [ext_resource type="Texture2D" uid="uid://c5qw83v0dnuq3" path="res://src/bosses/tutorial/assets/sprites/1_HIT_1.png" id="17_cu5tl"]
 [ext_resource type="Texture2D" uid="uid://cvr3a7aipo7m6" path="res://src/bosses/tutorial/assets/sprites/3_HIT_2.png" id="17_dmhhe"]
-[ext_resource type="AudioStream" uid="uid://bpuiglrtb7737" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player-defeated-7-1-oil-and-ash.mp3" id="17_mbktf"]
+[ext_resource type="AudioStream" uid="uid://nc8efuucqwef" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 6-1 I won't fix you.mp3" id="17_kr1cs"]
 [ext_resource type="AudioStream" uid="uid://ds224hyodfrif" path="res://src/bosses/tutorial/assets/sfx/Laser Charge Shepard Tone.mp3" id="17_mkqio"]
 [ext_resource type="AudioStream" uid="uid://dw60ntjht2e6" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 1.mp3" id="18_5elni"]
 [ext_resource type="Texture2D" uid="uid://de0va8w8bfuxl" path="res://src/bosses/tutorial/assets/sprites/1_HIT_2.png" id="18_22flk"]
 [ext_resource type="Material" uid="uid://ikjycfpkgv3n" path="res://src/bosses/chips/AoeMat.tres" id="18_g7ktc"]
-[ext_resource type="AudioStream" uid="uid://curp1tocqbe1e" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-8-1-show-me-somethin.mp3" id="18_gupmd"]
 [ext_resource type="Texture2D" uid="uid://dv40bv156cgd1" path="res://src/bosses/tutorial/assets/sprites/3_HIT_3.png" id="18_lwmyv"]
+[ext_resource type="AudioStream" uid="uid://7354rx1g75ec" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 8-1 show me somethin.mp3" id="18_ybn3j"]
 [ext_resource type="Texture2D" uid="uid://c7sifgttsfnh6" path="res://src/bosses/tutorial/assets/sprites/3_HIT_4.png" id="19_3rgkr"]
-[ext_resource type="AudioStream" uid="uid://vrmgpx17ijno" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-9-1-you-gotta-do-more-than-that.mp3" id="19_j15wq"]
+[ext_resource type="AudioStream" uid="uid://chmnwoa6yea8j" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 9-1 you gotta do more than that.mp3" id="19_8hxb3"]
 [ext_resource type="AudioStream" uid="uid://dfqd3mr6bdaj4" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 2.mp3" id="19_upudo"]
 [ext_resource type="Texture2D" uid="uid://c4pai2cb140fx" path="res://src/bosses/tutorial/assets/sprites/1_HIT_3.png" id="19_xriv7"]
 [ext_resource type="Texture2D" uid="uid://ble8jl11xasb5" path="res://src/bosses/tutorial/assets/sprites/1_HIT_4.png" id="20_5ckod"]
 [ext_resource type="Texture2D" uid="uid://b8g53jvhe8v7v" path="res://src/bosses/tutorial/assets/sprites/3_HIT_5.png" id="20_7eher"]
-[ext_resource type="AudioStream" uid="uid://bsn77op328yoa" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-10-1-you-cheaters-aint-nothin.mp3" id="20_22c71"]
 [ext_resource type="AudioStream" uid="uid://btioybgukily3" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 3.mp3" id="20_dvqnx"]
+[ext_resource type="AudioStream" uid="uid://b66b4e5dge5wb" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 10-1 you cheater.mp3" id="20_xgklq"]
 [ext_resource type="AudioStream" uid="uid://cbate11bgay6b" path="res://src/bosses/tutorial/assets/sfx/Nail Gun Deactivation.mp3" id="21_4s6ft"]
-[ext_resource type="AudioStream" uid="uid://b1jruso1rxs0h" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-11-1-useless-like-the-rest.mp3" id="21_48ep2"]
 [ext_resource type="Texture2D" uid="uid://dtj5yqywecnt" path="res://src/bosses/tutorial/assets/sprites/3_HIT_6.png" id="21_dj0x0"]
+[ext_resource type="AudioStream" uid="uid://btaowfhyqxw3m" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 11-1 unless you like the rest.mp3" id="21_u66vn"]
 [ext_resource type="Texture2D" uid="uid://dji3qkffxpmm3" path="res://src/bosses/tutorial/assets/sprites/1_HIT_5.png" id="21_yqrf4"]
-[ext_resource type="AudioStream" uid="uid://ciulyqn4lqjx" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-12-1-no-discipline.mp3" id="22_y5nt4"]
+[ext_resource type="AudioStream" uid="uid://yblih3q14qku" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 12-1 no discipline.mp3" id="22_qulmj"]
+[ext_resource type="AudioStream" uid="uid://dp87b0efsfkvb" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 13-1 is that all you got .mp3" id="23_17nhe"]
 [ext_resource type="Texture2D" uid="uid://ktyfbh7u0l3q" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_2.png" id="23_m0iiy"]
 [ext_resource type="Texture2D" uid="uid://mj1luucsg1dc" path="res://src/bosses/tutorial/assets/sprites/LAZER_1.png" id="23_td4gs"]
-[ext_resource type="AudioStream" uid="uid://6b8g0shdybni" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-13-1-is-that-all-you-got.mp3" id="23_ynwrc"]
-[ext_resource type="AudioStream" uid="uid://djw6jr8qyhxfl" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack-taunt-14-1-youre-wasting-my-time.mp3" id="24_3kr5b"]
+[ext_resource type="AudioStream" uid="uid://c8t7wq0ookess" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 14-1 youre wasting my time .mp3" id="24_1roa2"]
 [ext_resource type="Texture2D" uid="uid://c2v0864bob7l3" path="res://src/bosses/tutorial/assets/sprites/LAZER_3.png" id="24_fp842"]
 [ext_resource type="Texture2D" uid="uid://ckaeoogplp7ij" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_3.png" id="24_hgqui"]
 [ext_resource type="Texture2D" uid="uid://0jl8svyfknfu" path="res://src/bosses/tutorial/assets/sprites/LAZER_2.png" id="25_8helj"]
+[ext_resource type="AudioStream" uid="uid://cuywmreo7qi54" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player defeated 1-1 pathetic.mp3" id="25_bkqgv"]
 [ext_resource type="Texture2D" uid="uid://binuip83g50yf" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_4.png" id="25_pns3b"]
+[ext_resource type="AudioStream" uid="uid://ck6nihturr67o" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player defeated 2-1 not quick enough.mp3" id="26_x0wxk"]
+[ext_resource type="AudioStream" uid="uid://b3oaq8tb6jmua" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player defeated 3-1 aint done with you.mp3" id="27_beqjm"]
 [ext_resource type="AudioStream" uid="uid://bpjefcq47oyr3" path="res://src/bosses/base/assets/sfx/temp/Hit 2.mp3" id="28_6ig1p"]
 [ext_resource type="Texture2D" uid="uid://dcac7a1w25lkr" path="res://src/bosses/tutorial/assets/sprites/2_HIT_1.png" id="28_i0kuu"]
+[ext_resource type="AudioStream" uid="uid://q5g1m4yhfuiy" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player 4-1 you have to do better.mp3" id="28_kc6if"]
+[ext_resource type="AudioStream" uid="uid://dpc3uqvmt0xdp" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player 5-1 degenerates never fail to dissapoint.mp3" id="29_0mcru"]
 [ext_resource type="Texture2D" uid="uid://bgn83r6cstnhv" path="res://src/bosses/tutorial/assets/sprites/2_HIT_2.png" id="29_16jht"]
 [ext_resource type="AudioStream" uid="uid://ch0bkn7t2rb4i" path="res://src/bosses/base/assets/sfx/temp/Hit 3.mp3" id="29_d21ab"]
 [ext_resource type="Texture2D" uid="uid://dlkgunqq0nnd2" path="res://src/bosses/tutorial/assets/sprites/2_HIT_3.png" id="30_1gnvj"]
 [ext_resource type="AudioStream" uid="uid://cxfsy7voeb8e7" path="res://src/bosses/base/assets/sfx/temp/Hit 4.mp3" id="30_jv36d"]
+[ext_resource type="AudioStream" uid="uid://cdvcaq3eeiv02" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player defeated 6-1 another sore loser.mp3" id="30_nc3s2"]
 [ext_resource type="Texture2D" uid="uid://3u0myth3mg26" path="res://src/bosses/tutorial/assets/sprites/2_HIT_4_HOLD_THIS_FRAME_FOR_EXTRA.png" id="31_6s54o"]
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="31_t81ll"]
+[ext_resource type="AudioStream" uid="uid://bx4gw8qlomoqe" path="res://src/bosses/tutorial/assets/sfx/boss_vo/player defeated 7-1 oil and ash.mp3" id="31_w4244"]
 [ext_resource type="Texture2D" uid="uid://0sts3t50hpk5" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_1.png" id="32_i0wff"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="32_qvwbi"]
 [ext_resource type="Texture2D" uid="uid://nufbjd0mupin" path="res://src/bosses/tutorial/assets/sprites/JUMP_SLAM_2.png" id="33_1fje0"]
@@ -112,6 +112,10 @@
 [ext_resource type="AudioStream" uid="uid://0qoqwlp6f05d" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 2.mp3" id="43_04ooh"]
 [ext_resource type="Texture2D" uid="uid://b50hajeka4cfw" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_1.png" id="43_r6ljj"]
 [ext_resource type="PackedScene" uid="uid://v6u7isrgig0w" path="res://src/bosses/tutorial/SlamWallParticles.tscn" id="44_go0kb"]
+[ext_resource type="AudioStream" uid="uid://cokhf6uo2u3p1" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 1 V3.mp3" id="53_vhfhh"]
+[ext_resource type="AudioStream" uid="uid://hg0ps0ucdseu" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 2 V3.mp3" id="54_hfxh4"]
+[ext_resource type="AudioStream" uid="uid://djcacot1ktwg4" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 3 V3.mp3" id="55_nk5pw"]
+[ext_resource type="AudioStream" uid="uid://c288kg8477e8e" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 4 V3.mp3" id="56_alhnw"]
 [ext_resource type="AudioStream" uid="uid://bgoy8pw7mpqrb" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC CHARGE 1.mp3" id="57_175j4"]
 [ext_resource type="PackedScene" uid="uid://2jk0hjat1df7" path="res://src/bosses/tutorial/Arena2FloorShockHazard.tscn" id="57_j5jra"]
 [ext_resource type="AudioStream" uid="uid://basa3mcnvcbcf" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC CHARGE 2.mp3" id="58_d6h0r"]
@@ -2350,9 +2354,9 @@ wave_amplitude = 7.0
 wave_frequency = 5.0
 intro_height_margin = 0.2
 laser_spawn_markers = []
-sfx_tutorial_end_taunts = Array[AudioStream]([ExtResource("3_ut2n1"), ExtResource("4_tw5wi"), ExtResource("5_ldvni"), ExtResource("6_rh2bn"), ExtResource("7_2tadf")])
+sfx_tutorial_end_taunts = Array[AudioStream]([ExtResource("3_ux7dg"), ExtResource("4_q4oau"), ExtResource("5_hw1ty"), ExtResource("6_6cufj"), ExtResource("7_cdb7f")])
 tutorial_end_taunt_captions = Array[String](["Heh. Almost broke a sweat.", "Luckier than you look!", "Not quite the dreg I took ya for, huh?", "You've more brawn than most of the cheaters that come through here.", "Maybe I'll stop pulling my punches."])
-sfx_tutorial_barrel = Array[AudioStream]([ExtResource("8_r10k4"), ExtResource("9_xehab")])
+sfx_tutorial_barrel = Array[AudioStream]([ExtResource("8_e8ppr"), ExtResource("9_t4ju7")])
 tutorial_barrel_captions = Array[String](["Here. You'll need all the help you can get.", "It ain't gonna save you cheater."])
 sfx_intro_land = Array[AudioStream]([ExtResource("3_y4npe")])
 hurtbox_range_close = 6.0
@@ -2365,12 +2369,12 @@ tutorial_melee_radius = 3.0
 melee_distance = 5.0
 melee_radius = 5.0
 melee_max_chase_distance = 9.0
-sfx_taunt_phase_1 = Array[AudioStream]([ExtResource("4_n2q7l"), ExtResource("5_l2bm8"), ExtResource("6_7upxy"), ExtResource("7_vulif")])
-sfx_taunt_phase_2 = Array[AudioStream]([ExtResource("10_v3isi"), ExtResource("8_tpccx"), ExtResource("9_s2jdf")])
-sfx_taunt_phase_3 = Array[AudioStream]([ExtResource("8_tpccx"), ExtResource("9_s2jdf"), ExtResource("10_v3isi"), ExtResource("4_n2q7l"), ExtResource("5_l2bm8"), ExtResource("6_7upxy"), ExtResource("7_vulif")])
-sfx_taunt_phase_4 = Array[AudioStream]([ExtResource("18_gupmd"), ExtResource("19_j15wq"), ExtResource("20_22c71"), ExtResource("21_48ep2"), ExtResource("22_y5nt4"), ExtResource("23_ynwrc"), ExtResource("24_3kr5b")])
-sfx_taunt_phase_5 = Array[AudioStream]([ExtResource("18_gupmd"), ExtResource("19_j15wq"), ExtResource("20_22c71"), ExtResource("21_48ep2"), ExtResource("22_y5nt4"), ExtResource("23_ynwrc"), ExtResource("24_3kr5b")])
-sfx_player_defeated_taunt = Array[AudioStream]([ExtResource("11_k8ri3"), ExtResource("12_q8miw"), ExtResource("13_kff1c"), ExtResource("14_hmhx2"), ExtResource("15_ixxt2"), ExtResource("16_m7v53"), ExtResource("17_mbktf")])
+sfx_taunt_phase_1 = Array[AudioStream]([ExtResource("11_fobd3"), ExtResource("12_22t0e"), ExtResource("13_b8a3y"), ExtResource("14_xtwbu")])
+sfx_taunt_phase_2 = Array[AudioStream]([ExtResource("15_bsimv"), ExtResource("16_yk562"), ExtResource("17_kr1cs")])
+sfx_taunt_phase_3 = Array[AudioStream]([ExtResource("16_yk562"), ExtResource("17_kr1cs"), ExtResource("15_bsimv"), ExtResource("11_fobd3"), ExtResource("12_22t0e"), ExtResource("13_b8a3y"), ExtResource("14_xtwbu")])
+sfx_taunt_phase_4 = Array[AudioStream]([ExtResource("18_ybn3j"), ExtResource("19_8hxb3"), ExtResource("20_xgklq"), ExtResource("21_u66vn"), ExtResource("22_qulmj"), ExtResource("23_17nhe"), ExtResource("24_1roa2")])
+sfx_taunt_phase_5 = Array[AudioStream]([ExtResource("18_ybn3j"), ExtResource("19_8hxb3"), ExtResource("20_xgklq"), ExtResource("21_u66vn"), ExtResource("22_qulmj"), ExtResource("23_17nhe"), ExtResource("24_1roa2")])
+sfx_player_defeated_taunt = Array[AudioStream]([ExtResource("25_bkqgv"), ExtResource("26_x0wxk"), ExtResource("27_beqjm"), ExtResource("28_kc6if"), ExtResource("29_0mcru"), ExtResource("30_nc3s2"), ExtResource("31_w4244")])
 player_defeated_taunt_captions = Array[String](["Pathetic.", "Not quick enough, weakling.", "I ain't done with you yet.", "You'll have to do better than that!", "Degenerates never fail to dissapoint.", "Another sore loser that can't back it up.", "Oil and ash, cheater. Just another stain on the wall."])
 swipe_damage = 14.0
 sfx_swipe = Array[AudioStream]([ExtResource("3_5w7aw"), ExtResource("4_pthoc")])
@@ -2406,7 +2410,7 @@ tutorial_strafe_radius = 9.0
 strafe_distance = 12.0
 strafe_radius = 12.0
 sfx_nail_equip = Array[AudioStream]([ExtResource("10_u246n")])
-sfx_nail_shot = Array[AudioStream]([ExtResource("11_8tgau"), ExtResource("12_bt5kx"), ExtResource("13_qjtrx"), ExtResource("14_l34ga")])
+sfx_nail_shot = Array[AudioStream]([ExtResource("53_vhfhh"), ExtResource("54_hfxh4"), ExtResource("55_nk5pw"), ExtResource("56_alhnw")])
 sfx_nail_unequip = Array[AudioStream]([ExtResource("21_4s6ft")])
 laser_aoe = ExtResource("4_hx1ss")
 laser_spawn = NodePath("LaserSpawn")
@@ -4422,27 +4426,43 @@ process_material = SubResource("ParticleProcessMaterial_h7k5q")
 draw_pass_1 = ExtResource("126_5vgui")
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="27"]
+unit_size = 30.0
+max_db = -2.0
 bus = &"SFX"
 
 [node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="28"]
+unit_size = 30.0
+max_db = -2.0
 bus = &"SFX"
 
 [node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="29"]
+unit_size = 30.0
+max_db = -2.0
 bus = &"SFX"
 
 [node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="30"]
+unit_size = 30.0
+max_db = -2.0
 bus = &"SFX"
 
 [node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="31"]
+unit_size = 30.0
+max_db = -2.0
 bus = &"SFX"
 
 [node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="32"]
+unit_size = 30.0
+max_db = -2.0
 bus = &"SFX"
 
 [node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="33"]
+unit_size = 30.0
+max_db = -2.0
 bus = &"SFX"
 
 [node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="34"]
+unit_size = 30.0
+max_db = -2.0
 bus = &"SFX"
 
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" to="." method="_on_arena_1_cutscene_state_entered"]

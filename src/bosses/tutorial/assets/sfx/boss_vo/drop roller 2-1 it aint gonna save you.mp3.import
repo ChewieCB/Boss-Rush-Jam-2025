@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dy383g3lt7ne7"
+path="res://.godot/imported/drop roller 2-1 it aint gonna save you.mp3-609bfe1cde2c320e2c5253038b3bf52e.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/drop roller 2-1 it aint gonna save you.mp3"
+dest_files=["res://.godot/imported/drop roller 2-1 it aint gonna save you.mp3-609bfe1cde2c320e2c5253038b3bf52e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
