@@ -223,14 +223,14 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
 				force_stagger()
-				await get_tree().create_timer(hurt_frame_window, false)
+				await get_tree().create_timer(hurt_frame_window, false).timeout
 				state_chart.send_event("start_tutorial_phase_3")
 		elif new_health <= tutorial_phase_2_health_threshold:
 			if current_phase != 2:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
 				force_stagger()
-				await get_tree().create_timer(hurt_frame_window, false)
+				await get_tree().create_timer(hurt_frame_window, false).timeout
 				state_chart.send_event("start_tutorial_phase_2")
 	else:
 		if new_health <= phase_5_health_threshold:
@@ -238,7 +238,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
 				force_stagger()
-				await get_tree().create_timer(hurt_frame_window, false)
+				await get_tree().create_timer(hurt_frame_window, false).timeout
 				state_chart.send_event("start_tutorial_phase_5")
 
 
@@ -339,6 +339,7 @@ func select_attack_phase_2_tutorial() -> void:
 
 
 func select_attack_phase_3_tutorial() -> void:
+	end_floor_shock()
 	attack_interrupt = false
 	# TODO - design a better smoke trigger system, make it an AoE attack?
 	if randf() < 0.3:
@@ -1387,8 +1388,9 @@ func spawn_aoe_wall(
 		)
 		await dissolve_tween.finished
 		
-		debug_mesh_instance.queue_free()
-		area_collider.queue_free()
+		for entity in [debug_mesh_instance, area_collider]:
+			if is_instance_valid(entity):
+				entity.queue_free()
 		
 		slam_wall_particles.emitting = false
 		slam_wall_particles.is_on_floor = false
