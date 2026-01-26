@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://src/ui/main_menu/main_menu.gd" id="1_bnujd"]
 [ext_resource type="Texture2D" uid="uid://bpluj7r4kbdwe" path="res://src/ui/main_menu/bg_game.png" id="1_gnvwu"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/gaussian_blur.gdshader" id="1_jqa14"]
-[ext_resource type="AudioStream" uid="uid://dxqp4ee1u27bd" path="res://src/ui/main_menu/assets/sfx/MenuLoop.mp3" id="2_ef670"]
 [ext_resource type="AudioStream" uid="uid://bjjecuxqteiru" path="res://src/ui/main_menu/assets/sfx/drumMenu1.mp3" id="3_7ak47"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="3_j6oww"]
 [ext_resource type="Texture2D" uid="uid://ccn08me1il1m4" path="res://src/ui/main_menu/bg2.png" id="4_5npb2"]
@@ -93,7 +92,6 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_bnujd")
-bgm = ExtResource("2_ef670")
 button_sfx = Array[AudioStream]([ExtResource("3_7ak47"), ExtResource("4_oermb"), ExtResource("5_7tag1"), ExtResource("6_hri1i"), ExtResource("7_bs3mo")])
 start_game_sfx = ExtResource("8_e8blx")
 lobby_scene = ExtResource("9_ioe07")

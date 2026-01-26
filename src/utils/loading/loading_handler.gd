@@ -85,6 +85,7 @@ func initial_load() -> void:
 
 func start_loading(scene_path: String, scene_name: String = "", transition_out: bool = true) -> void:
 	ScreenTransition.set_loading_detail_text(scene_name)
+	find_and_load_scene_bgm(scene_name)
 	if transition_out:
 		ScreenTransition.transition_out()
 		await ScreenTransition.transition_finished
@@ -116,6 +117,22 @@ func load_scene_transition() -> void:
 	ScreenTransition.transition_in()
 	await ScreenTransition.transition_finished
 
+
+func find_and_load_scene_bgm(scene_name: String = "") -> void:
+	if scene_name == "":
+		return
+
+	var music_state = ""
+	match scene_name:
+		"Main Menu":
+			music_state = "Menu"
+		"Lobby":
+			music_state = "Lobby"
+		"Tutorial":
+			music_state = "Tutorial"
+
+	if music_state != "":
+		GameManager.change_fmod_bgm_music_state(music_state)
 
 func load_scene_seamless() -> void:
 	if not is_materials_compiled:

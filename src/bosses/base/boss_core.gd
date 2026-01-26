@@ -121,12 +121,16 @@ var debug_trajectory_mesh: MeshInstance3D
 @export var base_sprite: CompressedTexture2D
 @export var hurt_sprite: CompressedTexture2D
 @export var death_sprites: Array[CompressedTexture2D]
+# const HIT_EFFECT_INITIAL_VALUE = 0.4
+# const HIT_EFFECT_FADE_SPEED = 1.5
 @export_subgroup("Hurt Frame")
 # TODO - make this an actual stagger that delays/interrupts attacks?
 @export var hurt_frame_window: float = 0.6
 @export var hurt_frame_cooldown: float = 1.5
 @onready var hurt_frame_timer: Timer = $HurtFrameTimer
 @onready var hurt_frame_cooldown_timer: Timer = $HurtFrameCooldownTimer
+## So hurt frame doesnt override telegraph frames
+var block_hurt_frame = false
 
 @export_group("Phase")
 @export var current_phase: int = 1
@@ -196,15 +200,23 @@ const JUMP_FORCE: float = 8
 @export var angle_speed: float = 1.0 # radians/second
 @export var orbit_angle: float = 0.0 # track this over time
 @export var orbit_radius: float = 20.0
-var time_elapsed: float = 0
-
-var vel_vertical: float = 0
 
 @onready var scene_root = get_parent().get_parent()
 
+var time_elapsed: float = 0
+var vel_vertical: float = 0
+
+# Hit effect
+var hit_effect_shake_strength = 0.08
+var hit_effect_shake_duration = 0.12
+var hit_effect_flash_duration = 0.08
+var _original_sprite_position: Vector3
+var _original_sprite_modulate: Color
 
 func _ready() -> void:
 	print_debug("BossCore ready")
+	_original_sprite_position = sprite.position
+	_original_sprite_modulate = sprite.modulate
 	randomize()
 	apply_risk_modifier()
 	# If the player has beaten all bosses, buff them for the replay value
@@ -232,8 +244,15 @@ func _ready() -> void:
 	if owner:
 		await owner.ready
 	print_debug("BossCore ready end")
-	
 
+
+# func _process(delta: float) -> void:
+# 	var current_sprite_shader_hit_effect = sprite.material_override.get_shader_parameter("hit_effect")
+# 	if current_sprite_shader_hit_effect > 0:
+# 		current_sprite_shader_hit_effect -= HIT_EFFECT_FADE_SPEED * delta
+# 		sprite.material_override.set_shader_parameter("hit_effect", current_sprite_shader_hit_effect)
+
+	
 func _physics_process(delta: float) -> void:
 	vel_vertical -= GRAVITY * delta
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
@@ -308,19 +327,15 @@ func orbit_towards_player(
 	navigation_component.set_nav_target_position(orbit_pos)
 
 
-func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, sfx_arr: Array = []) -> Area3D:
-	var _sfx_player = get_available_sfx_player()
-	if not _sfx_player:
-		# TODO - error handling
-		pass
-	if sfx_arr:
-		_sfx_player.stream = sfx_arr.pick_random()
-		_sfx_player.play()
-	# TODO - pool this
+	if len(sfx_arr) > 0:
+		play_positional_sound(sfx_arr.pick_random())
+func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
 	var projectile := _projectile_prefab.instantiate()
 	scene_root.add_child(projectile)
 	projectile.global_position = spawn_pos
-	projectile.look_at(target.global_position, Vector3.UP)
+	var dir_to_target = spawn_pos.direction_to(target.global_position)
+	var spreaded_direction = GunUtils.get_spread_direction(dir_to_target, spread)
+	projectile.look_at(spawn_pos + spreaded_direction, Vector3.UP)
 	return projectile
 
 
@@ -604,7 +619,39 @@ func _on_movement_jumping_state_physics_processing(_delta: float) -> void:
 
 ### HEALTH --------------------------------
 #### HIT
+func hit_effect_sprite_shake():
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_OUT)
+	var shake_time = 6
+	for i in range(shake_time):
+		var offset = Vector3(
+			randf_range(-hit_effect_shake_strength, hit_effect_shake_strength),
+			randf_range(-hit_effect_shake_strength, hit_effect_shake_strength),
+			0
+		)
+		tween.tween_property(
+			sprite,
+			"position",
+			_original_sprite_position + offset,
+			hit_effect_shake_duration / shake_time
+		)
+	tween.tween_property(self, "position", _original_sprite_position, hit_effect_shake_duration / shake_time)
+
+func hit_effect_sprite_flash():
+	var tween = create_tween()
+	tween.tween_property(sprite, "modulate", Color.RED, hit_effect_flash_duration)
+	tween.tween_property(sprite, "modulate", _original_sprite_modulate, hit_effect_flash_duration)
+
+func play_sprite_hit_effect() -> void:
+	# TODO: Add a SpriteHolder so we can modify sprite position and scale without
+	# affecting AnimationPlayer.
+	# hit_effect_sprite_shake()
+	# hit_effect_sprite_flash()
+	pass
+
 func _on_health_hit_state_entered() -> void:
+	play_sprite_hit_effect()
 	sprite.modulate = Color.RED
 	await get_tree().create_timer(0.05).timeout
 	state_chart.send_event("end_damage")
@@ -639,13 +686,17 @@ func _on_attack_telegraph_state_exited() -> void:
 	sprite.modulate = Color.WHITE
 
 
+func toggle_block_hurt_frame(_enabled: bool) -> void:
+	block_hurt_frame = _enabled
+
+
 ## ======== Signal Callback Methods ========
 
 func _on_stagger() -> void:
 	# Play a hurt frame when we do enough DPS
 	# TODO - let this interrupt/restart the attack telegraph for some attacks
 	if hurt_sprite:
-		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
+		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped() and not block_hurt_frame:
 			sprite.texture = hurt_sprite
 			hurt_frame_timer.start(hurt_frame_window)
 

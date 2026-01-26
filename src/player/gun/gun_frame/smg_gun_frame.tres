@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/player/gun/gun_frame/gun_frame_resource.gd" id="1_5wboq"]
 [ext_resource type="AudioStream" uid="uid://cte0yqejjtu7j" path="res://src/player/gun/assets/sfx/reloading/smg/smg_reload_1.mp3" id="1_oojbr"]
 [ext_resource type="AudioStream" uid="uid://rnvaed2fw52c" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 1.mp3" id="3_4iupf"]
-[ext_resource type="Texture2D" uid="uid://c0ti6xwwr8jy0" path="res://src/ui/player/inventory/assets/frames/frame_sideview_smg.png" id="3_l6gkd"]
+[ext_resource type="Texture2D" uid="uid://c0ti6xwwr8jy0" path="res://src/ui/player/inventory/assets/frames/frame_sideview_smg.png" id="3_ncans"]
 [ext_resource type="AudioStream" uid="uid://bwt0j4ufx16nk" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 2.mp3" id="4_m3iwu"]
 [ext_resource type="AudioStream" uid="uid://c5lvfmhodm8vx" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 3.mp3" id="5_tm3bo"]
 [ext_resource type="AudioStream" uid="uid://cf460otm0xrf3" path="res://src/player/gun/assets/sfx/shot/smg/SMG SHOT INDIVIDUAL 4.mp3" id="6_qvmpc"]
@@ -20,7 +20,7 @@ script = ExtResource("1_5wboq")
 frame_name = "SMG"
 frame_id = 3
 frame_description = "High firerate and magazine size. Best at mid-range."
-shop_ui_sprite = ExtResource("3_l6gkd")
+shop_ui_sprite = ExtResource("3_ncans")
 reload_sfx = Array[AudioStream]([ExtResource("1_oojbr")])
 shot_sfx = Array[AudioStream]([ExtResource("3_4iupf"), ExtResource("4_m3iwu"), ExtResource("5_tm3bo"), ExtResource("6_qvmpc"), ExtResource("7_8e13u"), ExtResource("8_lcm6t"), ExtResource("9_hxrfg"), ExtResource("10_3yad0"), ExtResource("11_jjqlq"), ExtResource("12_mrmu3"), ExtResource("13_cuh1m")])
 frame_cost = 100

@@ -65,12 +65,12 @@ var charge_target_pos: Vector3
 @export var sfx_merge_telegraph: Array[AudioStream]
 #
 @export_subgroup("Place Your Bets")
-@onready var aoe_markers: Array[Node]
 @export var marker_target_idx: int
 @export var jump_height: float = 9.0
 @export var jump_time: float = 0.8
 @export var jump_hang_time: float = 1.2
 @export var drop_time: float = 0.3
+var aoe_markers: Array[Node]
 # SFX
 @export var sfx_jump: Array[AudioStream]
 @export var sfx_slam: Array[AudioStream]
@@ -333,7 +333,7 @@ func _on_small_blind_shooting_state_entered() -> void:
 			sfx_player.stream = sfx_shoot.pick_random()
 			sfx_player.play()
 			#
-			fire_projectile(chip_projectile, projectile_spawn_marker.global_position, sfx_chip_shot)
+			fire_projectile(chip_projectile, projectile_spawn_marker.global_position, 0, sfx_chip_shot)
 			face_tween.chain().tween_property(face_sprite, "scale", Vector3(1.0, 1.0, 1.0), 0.1).set_ease(Tween.EASE_IN)
 			face_tween.tween_callback(func(): face_sprite.visible = false)
 

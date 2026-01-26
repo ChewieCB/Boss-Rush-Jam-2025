@@ -1,7 +1,6 @@
 extends Node3D
 
-@export var bgm: AudioStream
-@onready var lobby_music_player: AudioStreamPlayer3D = $LobbyMusicPlayer
+# @onready var lobby_music_player: AudioStreamPlayer3D = $LobbyMusicPlayer
 
 signal ui_accept
 
@@ -24,7 +23,7 @@ var display_barrels: Array = []
 var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
 
 
-func _ready() -> void:	
+func _ready() -> void:
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
@@ -37,9 +36,8 @@ func _ready() -> void:
 	get_tree().paused = false
 	
 	GameManager.current_boss_map = self
+	GameManager.change_fmod_bgm_music_state("Lobby")
 	
-	lobby_music_player.play()
-
 	# Save and load check
 	if SaveManager.save_data_is_loaded:
 		GameManager.update_total_playtime()
@@ -97,8 +95,8 @@ func _on_level_select(level_path: String) -> void:
 
 
 func load_selected_level():
+	find_and_load_boss_bgm()
 	LoadingHandler.start_loading(GameManager.selected_level_path, "", false)
-	
 	sfx_door_close.play()
 	elevator_doors.close()
 	await elevator_doors.anim_player.animation_finished
@@ -110,9 +108,25 @@ func load_selected_level():
 	GameManager.cached_player_rotation = GameManager.player.rotation
 	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
 	GameManager.is_free_reroll = false
-	lobby_music_player.stop()
-	
 	LoadingHandler.load_scene_seamless()
+
+
+func find_and_load_boss_bgm() -> void:
+	match GameManager.selected_boss_id:
+		BossCore.BossIdEnum.SLOTS:
+			GameManager.change_fmod_bgm_music_state("Slotty")
+		BossCore.BossIdEnum.BARTENDER:
+			GameManager.change_fmod_bgm_music_state("Bartender")
+		BossCore.BossIdEnum.PIT:
+			GameManager.change_fmod_bgm_music_state("PitbossHallway")
+		BossCore.BossIdEnum.ROULETTE:
+			GameManager.change_fmod_bgm_music_state("Roulette")
+		BossCore.BossIdEnum.CHIPS:
+			GameManager.change_fmod_bgm_music_state("ChipbossStart")
+		BossCore.BossIdEnum.BLACKJACK:
+			GameManager.change_fmod_bgm_music_state("BlackjackStart")
+		BossCore.BossIdEnum.ELEVATOR:
+			GameManager.change_fmod_bgm_music_state("TutorialBossfight")
 
 
 func _on_door_transition_area_body_entered(body: Node3D) -> void:

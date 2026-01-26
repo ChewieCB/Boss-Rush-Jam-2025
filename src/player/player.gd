@@ -24,6 +24,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var dash_cd: float = 1
 @export var angular_momentum_multiplier = 0.4
 @export var speedline_vfx_prefab: PackedScene
+@export var jump_dust_ring_prefab: PackedScene
 
 @export_category("Prefabs")
 @export var health_component: HealthComponent
@@ -54,12 +55,12 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var laser_guide_ray: RayCast3D = $Neck/ShakeCameraWrapper/Camera3D/LaserGuideRayCast
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
-@onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 
 @onready var ui_parent = $UI
 @onready var barrel_effect_ui = $UI/GunUI
 @onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
 @onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
+@onready var hitmarker: TextureRect = $UI/GunUI/HitMarker
 @onready var barrel_ui_tween: Tween = null
 var barrel_ui_active: bool = false
 
@@ -395,7 +396,7 @@ func _physics_process(delta):
 		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
-	# Let the player ignore the wheelspin if they are moving
+	# Let the player ignore the wheelspin in Roulette boss if they are moving
 	var floor_velocity = get_platform_velocity()
 	if floor_velocity: # and input_dir != Vector2.ZERO:
 		var dir_weight = input_dir.dot(Vector2(
@@ -419,6 +420,7 @@ func _physics_process(delta):
 				player_camera.add_trauma(HEAVY_FALL_SHAKE_TRAUMA)
 			jumped = false
 			vel_vertical = 0
+			create_jump_dust_ring()
 	else:
 		state_chart.send_event("airborne")
 
@@ -455,9 +457,12 @@ func _physics_process(delta):
 	move_and_slide()
 
 	#show_debug_label()
+	# Gun sway when moving effect
 	var gun_sway_velocity = velocity * transform.basis
 	if not is_swapping_gun:
-		gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
+		var target_gun_container_pos = gun_container_original_pos - (gun_sway_velocity / 500)
+		target_gun_container_pos.y = clamp(target_gun_container_pos.y, gun_container_original_pos.y - 0.05, gun_container_original_pos.y + 0.05)
+		gun_container.position = lerp(gun_container.position, target_gun_container_pos, delta * 10)
 		if is_dashing:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z - (gun_sway_velocity.x / 250), delta * 10)
 		else:
@@ -533,7 +538,7 @@ func update_barrel_effect_ui() -> void:
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
-			
+
 			if _effect.icon_id != -1:
 				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
 			else:
@@ -584,6 +589,8 @@ func jump(local_multiplier = 1.0):
 	is_dashing = false
 	is_crouching = false
 
+	create_jump_dust_ring()
+
 	if is_on_floor():
 		SoundManager.play_sound_with_pitch(
 			sfx_jump_ground.pick_random(), randf_range(0.8, 1.1), "SFX"
@@ -593,6 +600,11 @@ func jump(local_multiplier = 1.0):
 			sfx_jump_air.pick_random(), randf_range(0.8, 1.1), "SFX"
 		)
 
+
+func create_jump_dust_ring():
+	var dust_ring_inst = jump_dust_ring_prefab.instantiate()
+	get_tree().get_root().add_child(dust_ring_inst)
+	dust_ring_inst.global_position = global_position - Vector3(0, 1, 0)
 
 func stun(time: float) -> void:
 	max_speed = MAX_SPEED / 4

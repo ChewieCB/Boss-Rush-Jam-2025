@@ -1,17 +1,13 @@
-[gd_scene load_steps=336 format=4 uid="uid://j3lttghifqbk"]
+[gd_scene load_steps=2866 format=4 uid="uid://j3lttghifqbk"]
 
 [ext_resource type="Script" path="res://src/maps/chip_boss/boss_chip.gd" id="1_cxln3"]
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_nl1so"]
-[ext_resource type="AudioStream" uid="uid://dmjrbqg4nt4iu" path="res://src/bosses/chips/assets/music/chipboss 1.0 intro.mp3" id="3_o1kga"]
-[ext_resource type="AudioStream" uid="uid://clkw1art1521l" path="res://src/bosses/chips/assets/music/chipboss 1.0 loop1.mp3" id="4_7stor"]
 [ext_resource type="Texture2D" uid="uid://56x7mbx3rau" path="res://assets/shaders/beer_texture.png" id="4_8y43x"]
 [ext_resource type="AudioStream" uid="uid://2qxonkb1ix4f" path="res://src/bosses/chips/assets/sfx/Splash 1.mp3" id="4_gn0x6"]
 [ext_resource type="Shader" path="res://src/maps/roulette_boss/void_shader.gdshader" id="4_s1yua"]
 [ext_resource type="AudioStream" uid="uid://dec8hls5taqdg" path="res://src/bosses/chips/assets/sfx/Splash 2.mp3" id="5_4famm"]
-[ext_resource type="AudioStream" uid="uid://dy5atfpqsfst5" path="res://src/bosses/chips/assets/music/chipboss 1.0 interlude(half).mp3" id="5_ywsal"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="6_atw6v"]
 [ext_resource type="AudioStream" uid="uid://bbi1ey84g3etm" path="res://src/bosses/chips/assets/sfx/Splash 3.mp3" id="6_kphpv"]
-[ext_resource type="AudioStream" uid="uid://cm8wrtvi82w4h" path="res://src/bosses/chips/assets/music/chipboss 1.0 loop2.mp3" id="6_lo0hh"]
 [ext_resource type="PackedScene" uid="uid://vkr6i7lrqkbi" path="res://src/bosses/chips/assets/particles/SplashParticles.tscn" id="6_oymvw"]
 [ext_resource type="Material" uid="uid://ccmdt3ckaom3q" path="res://assets/textures/walls/stone_2_tone.tres" id="7_2pufq"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="7_68uxx"]
@@ -55,9 +51,6 @@
 [ext_resource type="AudioStream" uid="uid://dghbmgcqlpg8a" path="res://src/bosses/chips/assets/sfx/Bursting Out Ground Through Chips.mp3" id="46_76fvv"]
 [ext_resource type="PackedScene" uid="uid://ckss0n4oolai5" path="res://src/bosses/chips/BossChips.tscn" id="51_my10v"]
 
-[sub_resource type="Resource" id="Resource_46ogb"]
-metadata/__load_path__ = "res://src/bosses/chips/assets/music/CHIPBOSS v0.9 INTRO.mp3"
-
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lu8ju"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -80,6 +73,10 @@ volumetric_fog_emission_energy = 0.3
 [sub_resource type="BoxShape3D" id="BoxShape3D_4k5xf"]
 resource_local_to_scene = true
 size = Vector3(10, 10, 8.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n0386"]
+resource_local_to_scene = true
+size = Vector3(5.4, 10, 6)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j15xy"]
 render_priority = 0
@@ -180,31 +177,6 @@ size = Vector2(3, 3.65)
 radius = 1.0
 height = 2.0
 
-[sub_resource type="AudioStreamInteractive" id="AudioStreamInteractive_p8wbu"]
-clip_count = 4
-clip_0/name = &"intro"
-clip_0/stream = ExtResource("3_o1kga")
-clip_0/auto_advance = 1
-clip_0/next_clip = 1
-clip_1/name = &"form_1"
-clip_1/stream = ExtResource("4_7stor")
-clip_1/auto_advance = 0
-clip_2/name = &"interlude"
-clip_2/stream = ExtResource("5_ywsal")
-clip_2/auto_advance = 1
-clip_2/next_clip = 3
-clip_3/name = &"form_2"
-clip_3/stream = ExtResource("6_lo0hh")
-clip_3/auto_advance = 0
-_transitions = {
-Vector2i(1, 2): {
-"fade_beats": 1,
-"fade_mode": 4,
-"from_time": 1,
-"to_time": 1
-}
-}
-
 [sub_resource type="Gradient" id="Gradient_iq1fk"]
 offsets = PackedFloat32Array(0, 0.628289, 1)
 colors = PackedColorArray(0.188235, 0.188235, 0.188235, 0.87451, 0, 0, 0, 0.513726, 0, 0, 0, 0)
@@ -290,11 +262,8 @@ material = SubResource("StandardMaterial3D_rb41m")
 radius = 1.0
 height = 2.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_n0386"]
-resource_local_to_scene = true
-size = Vector3(5.4, 10, 6)
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_2vp6b"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_8prfq"]
+lightmap_size_hint = Vector2i(7118, 7102)
 _surfaces = [{
 "aabb": AABB(-2.5, -0.25, 19.4688, 5, 3.375, 4.53125),
 "attribute_data": PackedByteArray("AoWbwAAAiL4ChZHAAACIvgKFkcAAABC/AoWbwAAAEL8ChZvAAACLPwKFkcAAAIs/AoWRwAAASj8ChZvAAABKP0dwU8AAAAi/R3BTwAAAIL6XwF7AAAAgvpfAXsAAAAi/AACwwAAAAL8AALDAAAAAPwAAusAAAAA/AAC6wAAAAL91zVlAAAAYv3XNWUAAAAC9tf5iQAAAAL21/mJAAAAYvwCAAb8AADC/AIAbvwAAML8AgBu/AAAgPgCAAb8AACA+dc1ZwAAAGL+1/mLAAAAYv7X+YsAAAAC9dc1ZwAAAAL0AAKTAAABAPgAApMAAAAA/AACwwAAAAD8AALDAAABAPgAAmsAAAAC/AACawAAAAD8AAKTAAAAAPwAApMAAAAC/AIAbvwAAML8AgAG/AAAwvwCAAb8AACA+AIAbvwAAID5GcFPAAAAIv5bAXsAAAAi/lsBewAAAIL5GcFPAAAAgvgAApMAAAAC/AACkwAAAQL4AALDAAABAvgAAsMAAAAC/"),
@@ -2397,26 +2366,32 @@ water_damage_tick = 1.0
 water_damage_amount = 2.0
 splash_particle_prefab = ExtResource("6_oymvw")
 sfx_splash = Array[AudioStream]([ExtResource("4_gn0x6"), ExtResource("5_4famm"), ExtResource("6_kphpv"), ExtResource("7_epts1"), ExtResource("8_n81gx"), ExtResource("9_01hs4"), ExtResource("10_2kpw8")])
-breakable_floor = NodePath("FuncGodotMap/layer_0_main_arena/group_762_FloorBreakable")
-bgm = SubResource("Resource_46ogb")
-nav_parent = NodePath("FuncGodotMap/layer_0_main_arena/group_762_FloorBreakable")
-floor_parent = NodePath("FuncGodotMap/layer_0_main_arena/group_762_FloorBreakable/entity_44_func_geo")
-floor_mesh = NodePath("FuncGodotMap/layer_0_main_arena/group_762_FloorBreakable/entity_44_func_geo/entity_44_mesh_instance")
+breakable_floor = NodePath("FuncGodotMap/group_635_FloorTop")
+nav_parent = NodePath("FuncGodotMap/group_635_FloorTop/entity_4_FloorBreakable")
+floor_parent = NodePath("FuncGodotMap/group_635_FloorTop/entity_4_FloorBreakable")
+floor_mesh = NodePath("FuncGodotMap/group_635_FloorTop/entity_4_FloorBreakable/entity_4_mesh_instance")
 
-[node name="WorldEnvironment" parent="." index="2"]
+[node name="WorldEnvironment" parent="." index="1"]
 environment = SubResource("Environment_yv34j")
 
-[node name="LightmapGI" parent="." index="4"]
+[node name="LightmapGI" parent="." index="3"]
 quality = 0
 light_data = ExtResource("7_jtxsk")
 
-[node name="BossTriggerVolume" parent="." index="6"]
+[node name="BossTriggerVolume" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15.1)
 visible = false
 
 [node name="CollisionShape3D" parent="BossTriggerVolume" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.799999)
 shape = SubResource("BoxShape3D_4k5xf")
+
+[node name="SpinTriggerVolume" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 21.4)
+
+[node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38419e-07, 0, 0.599998)
+shape = SubResource("BoxShape3D_n0386")
 
 [node name="WaterSurfaceMesh" type="MeshInstance3D" parent="." index="7"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
@@ -2770,12 +2745,7 @@ volume_db = 8.0
 unit_size = 30.0
 bus = &"SFX"
 
-[node name="InteractiveMusicPlayer" type="AudioStreamPlayer" parent="." index="17"]
-stream = SubResource("AudioStreamInteractive_p8wbu")
-autoplay = true
-bus = &"BGM"
-
-[node name="FloorCollapseSmoke" type="GPUParticles3D" parent="." index="18"]
+[node name="FloorCollapseSmoke" type="GPUParticles3D" parent="." index="17"]
 emitting = false
 amount = 1024
 lifetime = 2.0
@@ -2786,7 +2756,7 @@ visibility_aabb = AABB(-4.965, -2.365, -3.673, 9.453, 10, 8.533)
 process_material = SubResource("ParticleProcessMaterial_bwysu")
 draw_pass_1 = SubResource("SphereMesh_tjl7o")
 
-[node name="FloorCollapseFire" type="GPUParticles3D" parent="." index="19"]
+[node name="FloorCollapseFire" type="GPUParticles3D" parent="." index="18"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.2)
 emitting = false
 amount = 512
@@ -2796,15 +2766,7 @@ visibility_aabb = AABB(-4.96533, -2.36527, -3.67267, 9.45307, 5.961, 8.53309)
 process_material = SubResource("ParticleProcessMaterial_ro0fx")
 draw_pass_1 = SubResource("SphereMesh_v2cve")
 
-[node name="SpinTriggerVolume" parent="." index="20"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 21.4)
-visible = false
-
-[node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38419e-07, 0, 0.599998)
-shape = SubResource("BoxShape3D_n0386")
-
-[node name="FuncGodotMap" parent="." index="21"]
+[node name="FuncGodotMap" parent="." index="19"]
 local_map_file = "res://src/maps/chip_boss/ChipBoss.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]
@@ -4588,8 +4550,9 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -0.
 
 [connection signal="area_entered" from="WaterSurfaceMesh/WaterDamageArea" to="." method="_on_water_damage_area_area_entered"]
 [connection signal="body_entered" from="WaterSurfaceMesh/WaterDamageArea" to="." method="_on_water_damage_area_body_entered"]
+[connection signal="body_exited" from="WaterSurfaceMesh/WaterDamageArea" to="." method="_on_water_damage_area_body_exited"]
 [connection signal="area_entered" from="Waterfalls/Waterfall1/MeshInstance3D/WaterfallArea" to="." method="_on_waterfall_area_entered"]
 [connection signal="body_entered" from="Waterfalls/Waterfall1/MeshInstance3D/WaterfallArea" to="." method="_on_waterfall_body_entered"]
-[connection signal="area_entered" from="Waterfalls/Waterfall2/MeshInstance3D/WaterfallArea2" to="." method="_on_water_damage_area_area_entered"]
-[connection signal="body_entered" from="Waterfalls/Waterfall2/MeshInstance3D/WaterfallArea2" to="." method="_on_water_damage_area_body_entered"]
+[connection signal="area_entered" from="Waterfalls/Waterfall2/MeshInstance3D/WaterfallArea2" to="." method="_on_waterfall_area_entered"]
+[connection signal="body_entered" from="Waterfalls/Waterfall2/MeshInstance3D/WaterfallArea2" to="." method="_on_waterfall_body_entered"]
 [connection signal="timeout" from="WaterDamageTimer" to="." method="_on_water_damage_timer_timeout"]

@@ -25,6 +25,9 @@ var reload_count: int = 0
 
 
 func _ready() -> void:
+	if owner_gun == null:
+		return
+
 	for child in effect_container.get_children():
 		# This help with debugging, you can show/hide barrel effect to avoid
 		# spamming spin barrel when testing it
