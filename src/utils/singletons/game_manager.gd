@@ -42,6 +42,9 @@ var difficulty_menu: DifficultyMenu
 var object_pooling_manager: ObjectPoolingManager
 var current_boss_map: Node3D
 
+# Temporary singleton
+var gun_customize_ui: GunCustomizationUI
+
 @onready var main_bgm_emitter: MainBGMEmitter = $MainBGMEmitter
 
 # Inventory
@@ -131,6 +134,7 @@ var cached_camera_rotation: Vector3
 
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
+@export_range(0, 1, 0.01) var controller_deadzone: float = 0.1
 @export_range(60, 120, 1.0) var camera_fov: float = 90:
 	set(value):
 		if value != camera_fov && player:

@@ -284,7 +284,7 @@ func _remove_boss_from_intro_path() -> void:
 	$AnimationPlayer.get_animation("tutorial_end_3").track_set_path(0, "entity_187_TutorialBoss")
 
 
-func _on_level_select(level_path: String, loading_name: String = "") -> void:
+func _on_level_select(level_path: String, _loading_name: String = "") -> void:
 	GameManager.tutorial_completed = true
 	GameManager.player_currency = 0
 	

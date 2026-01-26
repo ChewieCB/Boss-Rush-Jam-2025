@@ -239,7 +239,7 @@ func _ready() -> void:
 		health_component.current_health = 1
 	
 	health_ui.clear_sub_health_bars()
-	health_ui.init_boss_health_ui(health_component.max_health, 1)
+	health_ui.init_boss_health_ui(int(health_component.max_health), 1)
 
 	if owner:
 		await owner.ready
@@ -291,17 +291,17 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 
 
 func orbit_player(delta: float) -> void:
-	orbit_pos(target.global_position, delta)
+	orbit_around_position(target.global_position, delta)
 
 
-func orbit_pos(pos: Vector3, delta: float, invert: bool = false) -> void:
+func orbit_around_position(pos: Vector3, delta: float, invert: bool = false) -> void:
 	orbit_angle += angle_speed * delta
 	# offset in XZ-plane
 	var offset_x: float
 	var offset_z: float
 	if invert:
-		offset_x = -cos(orbit_angle) * desired_distance
-		offset_z = -sin(orbit_angle) * desired_distance
+		offset_x = - cos(orbit_angle) * desired_distance
+		offset_z = - sin(orbit_angle) * desired_distance
 	else:
 		offset_x = cos(orbit_angle) * desired_distance
 		offset_z = sin(orbit_angle) * desired_distance

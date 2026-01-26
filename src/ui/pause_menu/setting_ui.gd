@@ -16,6 +16,8 @@ signal setting_back_button_pressed
 
 @onready var mouse_sen_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/MouseSenSlider
 @onready var mouse_sen_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/Value
+@onready var controller_deadzone_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerDeadzone/ControlerDeadzoneSlider
+@onready var controller_deadzone_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerDeadzone/Value
 @onready var aim_assist_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/AimAssistSlider
 @onready var aim_assist_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/Value
 @onready var fov_slider: HSlider = $TabContainer/Graphic/VBoxContainer/FOV/FOVSlider
@@ -206,6 +208,10 @@ func _on_mouse_sen_slider_value_changed(value: float) -> void:
 	GameManager.mouse_sensitivity = value
 	mouse_sen_value.text = "{0}".format([value])
 
+func _on_controler_deadzone_slider_value_changed(value: float) -> void:
+	GameManager.controller_deadzone = value
+	controller_deadzone_value.text = "{0}".format([value])
+
 func _on_aim_assist_slider_value_changed(value: float) -> void:
 	GameManager.aim_assist_strength = value / 100.0
 	aim_assist_value.text = "{0}".format([value])
@@ -358,6 +364,9 @@ func _on_drunk_blur_toggle_toggled(toggled_on: bool) -> void:
 func refresh_setting_value():
 	mouse_sen_slider.value = GameManager.mouse_sensitivity
 	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
+
+	controller_deadzone_slider.value = GameManager.controller_deadzone
+	controller_deadzone_value.text = "{0}".format([GameManager.controller_deadzone])
 
 	aim_assist_slider.value = GameManager.aim_assist_strength * 100
 	aim_assist_value.text = "{0}".format([GameManager.aim_assist_strength * 100])

@@ -143,6 +143,7 @@ func save_setting_config():
 	var serialized_keybinding_data: String = InputHelper.serialize_inputs_for_actions()
 
 	config.set_value("Control", "mouse_sensitivity", GameManager.mouse_sensitivity)
+	config.set_value("Control", "controller_deadzone", GameManager.controller_deadzone)
 	config.set_value("Control", "aim_assist_strength", GameManager.aim_assist_strength)
 	config.set_value("Control", "keybinding", serialized_keybinding_data)
 	config.set_value("Graphic", "camera_fov", GameManager.camera_fov)
@@ -184,6 +185,7 @@ func load_setting_config():
 		InputHelper.deserialize_inputs_for_actions(serialized_keybinding_data)
 
 	GameManager.mouse_sensitivity = config.get_value("Control", "mouse_sensitivity", 50.0)
+	GameManager.controller_deadzone = config.get_value("Control", "controller_deadzone", 0.1)
 	GameManager.aim_assist_strength = config.get_value("Control", "aim_assist_strength", 0.5)
 	GameManager.camera_fov = config.get_value("Graphic", "camera_fov", 90)
 	GameManager.camera_tilt = config.get_value("Graphic", "camera_tilt", true)

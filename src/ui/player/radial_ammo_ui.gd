@@ -70,7 +70,7 @@ func _draw_radial_segments(segment_count: int, max_segment_count: int, thickness
 		)
 
 
-func _draw_radial_icons(active_segment_count: int, max_segment_count: int, thickness: float, segment_padding: float, is_ccw: bool = false) -> void:
+func _draw_radial_icons(active_segment_count: int, max_segment_count: int, _thickness: float, segment_padding: float, is_ccw: bool = false) -> void:
 	var segment_angle: float = (TAU / float(max_segment_count))
 	var init_angle: float = 0.75 * PI
 	var dir: float = 1.0 if is_ccw else -1.0
@@ -91,7 +91,7 @@ func _draw_radial_icons(active_segment_count: int, max_segment_count: int, thick
 		)
 		draw_texture(
 			ammo_single_texture,
-			-ammo_single_texture.get_size() * 0.5
+			- ammo_single_texture.get_size() * 0.5
 		)
 
 
@@ -110,7 +110,7 @@ func animate_full_reload(reload_time: float) -> void:
 	var reload_time_padding: float = 0.07
 	var reload_time_per_segment: float = (reload_time - reload_time_padding) / (segments_to_reload + segments_to_unload)
 	
-	await get_tree().create_timer(reload_time_padding/2, false).timeout
+	await get_tree().create_timer(reload_time_padding / 2, false).timeout
 	# Unload before we reload
 	#while active_radial_segment_count > 0:
 	for i in range(segments_to_unload):
@@ -121,7 +121,7 @@ func animate_full_reload(reload_time: float) -> void:
 		active_radial_segment_count += 1
 		await get_tree().create_timer(reload_time_per_segment, false).timeout
 	
-	await get_tree().create_timer(reload_time_padding/2, false).timeout
+	await get_tree().create_timer(reload_time_padding / 2, false).timeout
 	
 	is_reload_ui_anim_active = false
 	reload_ui_animation_finished.emit()

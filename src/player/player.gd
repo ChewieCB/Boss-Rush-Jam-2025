@@ -393,7 +393,7 @@ func _physics_process(delta):
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
 	if not is_dashing and not is_in_menu:
-		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down", GameManager.controller_deadzone)
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
 	# Let the player ignore the wheelspin in Roulette boss if they are moving
@@ -467,7 +467,7 @@ func _physics_process(delta):
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z - (gun_sway_velocity.x / 250), delta * 10)
 		else:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
-	camera_control(delta)
+	special_camera_control(delta)
 	if GameManager.is_controller_connected:
 		aim_assist(delta)
 
@@ -628,7 +628,7 @@ func handle_controller_look(_delta):
 	var look_x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
 	var look_y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
 
-	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
+	if abs(look_x) > GameManager.controller_deadzone or abs(look_y) > GameManager.controller_deadzone:
 		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
 		if aim_assist_target:
 			var modifier = AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT * GameManager.aim_assist_strength
@@ -651,23 +651,28 @@ func rotate_player(x: float, y: float):
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
 
-func camera_control(delta):
+func special_camera_control(delta):
 	if controls_disabled:
 		return
+		
 	# Tilt camera
+	const MIN_DIR_TO_TILT = 0.1
+	const TILT_AMOUNT = 3.0
+	const TILT_TIME = 5.0
+
 	if GameManager.camera_tilt:
-		if raw_input_dir.x < 0:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(3.0), delta * 5)
-		elif raw_input_dir.x > 0:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
+		if raw_input_dir.x < -MIN_DIR_TO_TILT:
+			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(TILT_AMOUNT * abs(raw_input_dir.x)), delta * TILT_TIME)
+		elif raw_input_dir.x > MIN_DIR_TO_TILT:
+			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-TILT_AMOUNT * abs(raw_input_dir.x)), delta * TILT_TIME)
 		else:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
+			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * TILT_TIME)
 
 	# Lower camera
 	if is_crouching:
-		neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
+		neck.position.y = lerp(neck.position.y, -1.0, delta * TILT_TIME)
 	else:
-		neck.position.y = lerp(neck.position.y, 0.0, delta * 5)
+		neck.position.y = lerp(neck.position.y, 0.0, delta * TILT_TIME)
 
 
 func ground_slam():

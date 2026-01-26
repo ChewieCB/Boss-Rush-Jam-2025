@@ -353,7 +353,6 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		if magazine_ammo_left <= 0 and i < n_shot_repeat - 1:
 			break
 		
-		var test0 = idle_frame_state.get_current_node()
 		if idle_frame_state.get_current_node().begins_with("smg"):
 			smg_shell_particles.emitting = true
 			smg_shell_particles.restart()
@@ -560,7 +559,7 @@ func spin_all_barrels() -> void:
 	#reload(true)
 
 
-func _get_barrel_effect_idx_by_id(barrel: SpinBarrel, effect_id: int) -> int:	
+func _get_barrel_effect_idx_by_id(barrel: SpinBarrel, effect_id: int) -> int:
 	for i in range(barrel.effect_list.size() - 1):
 		var _effect = barrel.effect_list[i]
 		if _effect.icon_id == effect_id:
@@ -660,7 +659,7 @@ func cancel_reload() -> void:
 			idle_frame_state.travel("rifle_idle")
 
 
-func reload(already_spin_barrel = false):
+func reload(_already_spin_barrel = false):
 	# TODO - make this more generic and less tied to spinning barrels so we can call it elsewhere
 	if is_reload_disabled:
 		return
@@ -708,7 +707,7 @@ func reload(already_spin_barrel = false):
 			#else:
 				#post_reload_state = "" # "shotgun_pump_no_shell" - do we want to pump after reload? 
 			reload_count = modified_magazine_size - magazine_ammo_left
-			reload_timescale * 2.0
+			reload_timescale = reload_timescale * 2.0
 		#GunFrameResource.GunFrameIdEnum.SMG:
 		"smg_idle":
 			anim_library_prefix = "smg/"

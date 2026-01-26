@@ -18,29 +18,32 @@ signal reset_barrel_info
 @export var sfx_purchase: AudioStream
 @export var sfx_too_expensive: AudioStream
 @export var sfx_barrel_equip: AudioStream
+@export var current_gun_frame_icon: TextureRect
 
 @onready var warning_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/WarningLabel
 @onready var modify_bg: Control = $ModifyBG
 @onready var modify_tab_btn: Button = $TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton
 @onready var barrel_modify_ui: Control = $MainRegion/BarrelModifyUI
 @onready var equip_barrel_container: HBoxContainer = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer
-@onready var inventory_gun_frame_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer/GridContainer
-@onready var inventory_normal_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer
+@onready var inventory_gun_frame_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer
+@onready var inventory_normal_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer
 @onready var current_gun_frame_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/CurrentGunFrame
-@export var current_gun_frame_icon: TextureRect
+@onready var inventory_scroll_container: ScrollContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer
 
 @onready var shop_bg: Control = $ShopBG
 @onready var shop_tab_btn: Button = $TitleRegion/HBoxContainer/ShopTab/ShopTabButton
 @onready var barrel_shop_ui: Control = $MainRegion/BarrelShopUI
-@onready var shop_gun_frame_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/GunFrameContainer/GridContainer
-@onready var shop_normal_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/InventoryBarrelSection/VBoxContainer/NormalContainer/GridContainer
+@onready var shop_gun_frame_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer
+@onready var shop_normal_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer
 @onready var shopkeeper_chat: RichTextLabel = $MainRegion/BarrelShopUI/RightRegion/VendorAvatar/Chatbox/RichTextLabel
+@onready var shop_scroll_container: ScrollContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer
 
 const SHOPKEEPER_CHAT_TEXT_SPEED = 1.0
+const CONTROLLER_SCROLL_SPEED_COOEFFICIENT = 3.0
 
 var current_selected_item_ui = null
 var barrel_info_region: BarrelInfoRegion = null
-
+var ui_transitioning = false
 
 func _ready() -> void:
 	warning_label.visible = false
@@ -77,14 +80,35 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if not visible:
+		return
+
 	if shopkeeper_chat.visible_ratio < 1.0:
 		shopkeeper_chat.visible_ratio += delta * SHOPKEEPER_CHAT_TEXT_SPEED
+
+	# Scrolling the ScrollContainer for controller
+	var controller_scroll_y = Input.get_axis("controller_scroll_up", "controller_scroll_down")
+	if abs(controller_scroll_y) < GameManager.controller_deadzone:
+		return
+	else:
+		var scroll_container = get_current_scroll_container()
+		scroll_container.scroll_vertical += controller_scroll_y * CONTROLLER_SCROLL_SPEED_COOEFFICIENT
+		scroll_container.scroll_vertical = clamp(scroll_container.scroll_vertical, 0, scroll_container.get_v_scroll_bar().max_value)
 
 func _input(event: InputEvent) -> void:
 	if visible:
 		if event.is_action_pressed("interact") or event.is_action_pressed("ui_cancel"):
 			close()
 			get_viewport().set_input_as_handled()
+			return
+		if event.is_action_pressed("switch_tab_left"):
+			if shop_bg.visible:
+				_on_modify_tab_button_pressed()
+			return
+		if event.is_action_pressed("switch_tab_right"):
+			if modify_bg.visible:
+				_on_shop_tab_button_pressed()
+			return
 
 func full_refresh_ui(forced = false):
 	if not visible and not forced:
@@ -172,6 +196,8 @@ func toggle():
 		open()
 
 func open():
+	GameManager.player.controls_disabled = true
+	GameManager.gun_customize_ui = self
 	GameManager.change_fmod_bgm_menu_is_up(true)
 	full_refresh_ui(true)
 	visible = true
@@ -182,6 +208,8 @@ func open():
 
 
 func close():
+	GameManager.player.controls_disabled = false
+	GameManager.gun_customize_ui = null
 	GameManager.change_fmod_bgm_menu_is_up(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	GameManager.player.is_in_menu = false
@@ -236,7 +264,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	get_first_item_for_focus()
 
 
-func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, data: GunFrameResource) -> void:
+func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
 	if (current_selected_item_ui != null):
 		current_selected_item_ui.unselected()
 	current_selected_item_ui = gun_frame_item_ui
@@ -262,6 +290,9 @@ func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: Gun
 	get_first_item_for_focus()
 
 func _on_modify_tab_button_pressed() -> void:
+	if ui_transitioning:
+		return
+	ui_transitioning = true
 	SoundManager.play_ui_sound(sfx_click, "UI")
 	barrel_info_region = get_node("MainRegion/BarrelModifyUI/LeftRegion/BarrelInfoRegion")
 	barrel_info_region.reset_ui()
@@ -280,8 +311,12 @@ func _on_modify_tab_button_pressed() -> void:
 	await tween2.finished
 	barrel_shop_ui.visible = false
 	modify_tab_btn.grab_focus()
+	ui_transitioning = false
 
 func _on_shop_tab_button_pressed() -> void:
+	if ui_transitioning:
+		return
+	ui_transitioning = true
 	SoundManager.play_ui_sound(sfx_click, "UI")
 	shopkeeper_chat.visible_ratio = 0
 	barrel_info_region = get_node("MainRegion/BarrelShopUI/RightRegion/BarrelInfoRegion")
@@ -301,6 +336,14 @@ func _on_shop_tab_button_pressed() -> void:
 	await tween.finished
 	barrel_modify_ui.visible = false
 	shop_tab_btn.grab_focus()
+	ui_transitioning = false
+
+
+func get_current_scroll_container() -> ScrollContainer:
+	if modify_bg.visible:
+		return inventory_scroll_container
+	else:
+		return shop_scroll_container
 
 
 func play_hover_sfx():

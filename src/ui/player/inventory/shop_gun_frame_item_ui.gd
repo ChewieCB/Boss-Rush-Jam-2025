@@ -9,6 +9,7 @@ var button: Button
 
 func _ready() -> void:
 	button = gun_frame_item_ui.button
+	gun_frame_item_ui.is_shop_item_ui = true
 
 func init(_data: GunFrameResource, _is_purchased = false):
 	gun_frame_item_ui.init(_data, false, _is_purchased)

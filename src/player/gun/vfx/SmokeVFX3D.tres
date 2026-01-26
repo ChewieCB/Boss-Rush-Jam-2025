@@ -1,4 +1,4 @@
-[gd_resource type="QuadMesh" load_steps=3 format=3 uid="uid://drafkfnascb3r"]
+[gd_resource type="QuadMesh" load_steps=3 format=3 uid="uid://cp64o1nv3l2q6"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_c1yvf"]
 load_path = "res://.godot/imported/smoke1.png-32e0cc0b7a1c1bc0776b4ae43dbadf9c.s3tc.ctex"

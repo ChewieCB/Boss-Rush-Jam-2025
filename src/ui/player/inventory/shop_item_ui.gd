@@ -8,6 +8,8 @@ var button: Button
 
 func _ready() -> void:
 	button = item_ui.button
+	item_ui.is_shop_item_ui = true
+
 
 func init(_data: BarrelDataResource, _is_purchased = false):
 	item_ui.init(_data, false, _is_purchased)
