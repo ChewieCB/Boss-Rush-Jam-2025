@@ -40,7 +40,7 @@ const SHOPKEEPER_CHAT_TEXT_SPEED = 1.0
 
 var current_selected_item_ui = null
 var barrel_info_region: BarrelInfoRegion = null
-
+var ui_transitioning = false
 
 func _ready() -> void:
 	warning_label.visible = false
@@ -269,6 +269,9 @@ func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: Gun
 	get_first_item_for_focus()
 
 func _on_modify_tab_button_pressed() -> void:
+	if ui_transitioning:
+		return
+	ui_transitioning = true
 	SoundManager.play_ui_sound(sfx_click, "UI")
 	barrel_info_region = get_node("MainRegion/BarrelModifyUI/LeftRegion/BarrelInfoRegion")
 	barrel_info_region.reset_ui()
@@ -287,8 +290,12 @@ func _on_modify_tab_button_pressed() -> void:
 	await tween2.finished
 	barrel_shop_ui.visible = false
 	modify_tab_btn.grab_focus()
+	ui_transitioning = false
 
 func _on_shop_tab_button_pressed() -> void:
+	if ui_transitioning:
+		return
+	ui_transitioning = true
 	SoundManager.play_ui_sound(sfx_click, "UI")
 	shopkeeper_chat.visible_ratio = 0
 	barrel_info_region = get_node("MainRegion/BarrelShopUI/RightRegion/BarrelInfoRegion")
@@ -308,6 +315,7 @@ func _on_shop_tab_button_pressed() -> void:
 	await tween.finished
 	barrel_modify_ui.visible = false
 	shop_tab_btn.grab_focus()
+	ui_transitioning = false
 
 
 func play_hover_sfx():
