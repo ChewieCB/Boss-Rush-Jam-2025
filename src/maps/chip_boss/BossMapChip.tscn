@@ -1,4 +1,4 @@
-[gd_scene load_steps=2866 format=4 uid="uid://j3lttghifqbk"]
+[gd_scene load_steps=330 format=4 uid="uid://j3lttghifqbk"]
 
 [ext_resource type="Script" path="res://src/maps/chip_boss/boss_chip.gd" id="1_cxln3"]
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_nl1so"]
@@ -2353,7 +2353,7 @@ data = PackedVector3Array(-2.25, 1.6875, 9, -2.25, -1.6875, 9, -1.75, -1.6875, 9
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_1mknm"]
 data = PackedVector3Array(-2.5, 0.140625, 9, -2.5, -0.390625, 9, 2.5, -0.390625, 9, -2.5, 0.140625, 9, 2.5, -0.390625, 9, 2.5, 0.140625, 9, -2.5, 0.140625, 9, -2.5, 0.140625, 9.5, -2.5, -0.390625, 9.5, -2.5, 0.140625, 9, -2.5, -0.390625, 9.5, -2.5, -0.390625, 9, 2.5, -0.390625, 9, -2.5, -0.390625, 9, -2.5, -0.390625, 9.5, 2.5, -0.390625, 9, -2.5, -0.390625, 9.5, 2.5, -0.390625, 9.5, 2.5, 0.140625, 9, 2.5, 0.140625, 9.5, -2.5, 0.140625, 9.5, 2.5, 0.140625, 9, -2.5, 0.140625, 9.5, -2.5, 0.140625, 9, 2.5, 0.140625, 9, 2.5, -0.390625, 9, 2.5, -0.390625, 9.5, 2.5, 0.140625, 9, 2.5, -0.390625, 9.5, 2.5, 0.140625, 9.5, -2.5, 0.140625, 9.5, 2.5, 0.140625, 9.5, 2.5, -0.390625, 9.5, -2.5, 0.140625, 9.5, 2.5, -0.390625, 9.5, -2.5, -0.390625, 9.5)
 
-[node name="BossMapChip" node_paths=PackedStringArray("waterfall_meshes", "waterfall_meshses_vertical", "breakable_floor", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_nl1so")]
+[node name="BossMapChip" node_paths=PackedStringArray("waterfall_meshes", "waterfall_meshses_vertical") instance=ExtResource("1_nl1so")]
 script = ExtResource("1_cxln3")
 lower_water_level = -1.0
 upper_water_level = 0.5
@@ -2366,10 +2366,6 @@ water_damage_tick = 1.0
 water_damage_amount = 2.0
 splash_particle_prefab = ExtResource("6_oymvw")
 sfx_splash = Array[AudioStream]([ExtResource("4_gn0x6"), ExtResource("5_4famm"), ExtResource("6_kphpv"), ExtResource("7_epts1"), ExtResource("8_n81gx"), ExtResource("9_01hs4"), ExtResource("10_2kpw8")])
-breakable_floor = NodePath("FuncGodotMap/group_635_FloorTop")
-nav_parent = NodePath("FuncGodotMap/group_635_FloorTop/entity_4_FloorBreakable")
-floor_parent = NodePath("FuncGodotMap/group_635_FloorTop/entity_4_FloorBreakable")
-floor_mesh = NodePath("FuncGodotMap/group_635_FloorTop/entity_4_FloorBreakable/entity_4_mesh_instance")
 
 [node name="WorldEnvironment" parent="." index="1"]
 environment = SubResource("Environment_yv34j")
@@ -2773,7 +2769,7 @@ local_map_file = "res://src/maps/chip_boss/ChipBoss.map"
 collision_mask = 0
 
 [node name="entity_0_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_0_worldspawn" index="0"]
-mesh = SubResource("ArrayMesh_2vp6b")
+mesh = SubResource("ArrayMesh_8prfq")
 
 [node name="entity_0_occluder_instance" type="OccluderInstance3D" parent="FuncGodotMap/entity_0_worldspawn" index="1"]
 occluder = SubResource("ArrayOccluder3D_7fki1")
