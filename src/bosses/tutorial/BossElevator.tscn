@@ -1,4 +1,4 @@
-[gd_scene load_steps=258 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=279 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -474,6 +474,90 @@ size = Vector3(6, 11.6, 6)
 [sub_resource type="BoxMesh" id="BoxMesh_holc6"]
 size = Vector3(2.5, 3.756, 2.5)
 
+[sub_resource type="Resource" id="Resource_q401s"]
+script = ExtResource("13_k65oo")
+state = NodePath("../../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_q7uvn"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_q401s")
+
+[sub_resource type="Resource" id="Resource_sc735"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_q401s")
+
+[sub_resource type="Resource" id="Resource_opw06"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_q401s")
+
+[sub_resource type="Resource" id="Resource_teeod"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_q401s")
+
+[sub_resource type="Resource" id="Resource_bngve"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_q401s")
+
+[sub_resource type="Resource" id="Resource_0cy1u"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_q401s")
+
+[sub_resource type="Resource" id="Resource_ru4vs"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_q401s")
+
+[sub_resource type="Resource" id="Resource_m0ajg"]
+script = ExtResource("13_k65oo")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_0g5uk"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_m0ajg")
+
+[sub_resource type="Resource" id="Resource_7ocdp"]
+script = ExtResource("13_k65oo")
+state = NodePath("../../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_53am4"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_7ocdp")
+
+[sub_resource type="Resource" id="Resource_v6fxx"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_7ocdp")
+
+[sub_resource type="Resource" id="Resource_od8c5"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_7ocdp")
+
+[sub_resource type="Resource" id="Resource_lnkhb"]
+script = ExtResource("13_k65oo")
+state = NodePath("../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_3v08r"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lnkhb")
+
+[sub_resource type="Resource" id="Resource_il0my"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lnkhb")
+
+[sub_resource type="Resource" id="Resource_dryy1"]
+script = ExtResource("13_k65oo")
+state = NodePath("../../../../../../Health/Dead")
+
+[sub_resource type="Resource" id="Resource_3b05m"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_dryy1")
+
+[sub_resource type="Resource" id="Resource_jwi0g"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_dryy1")
+
+[sub_resource type="Resource" id="Resource_wtxhu"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_dryy1")
+
 [sub_resource type="Resource" id="Resource_fic2b"]
 script = ExtResource("13_k65oo")
 state = NodePath("../../../../../Health/Dead")
@@ -485,62 +569,6 @@ guard = SubResource("Resource_fic2b")
 [sub_resource type="Resource" id="Resource_lhjct"]
 script = ExtResource("13_k65oo")
 state = NodePath("../../../../../Health/Dead")
-
-[sub_resource type="Resource" id="Resource_bpbv3"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_2bu4d"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_cf6gn"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_0qfiu"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_n3lag"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_8uqbu"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_w0wob"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_6d0vi"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_v875p"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_m4yva"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_ko7r0"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_abs5n"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_fgsnr"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
-
-[sub_resource type="Resource" id="Resource_72tnq"]
-script = ExtResource("14_kbpeg")
-guard = SubResource("Resource_lhjct")
 
 [sub_resource type="Resource" id="Resource_r3txr"]
 script = ExtResource("14_kbpeg")
@@ -562,6 +590,50 @@ guard = SubResource("Resource_lhjct")
 script = ExtResource("14_kbpeg")
 guard = SubResource("Resource_lhjct")
 
+[sub_resource type="Resource" id="Resource_0qfiu"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_8uqbu"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_n3lag"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_m4yva"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_ko7r0"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_w0wob"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_abs5n"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_6d0vi"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_fgsnr"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_72tnq"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_v875p"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
 [sub_resource type="Resource" id="Resource_jkctx"]
 script = ExtResource("14_kbpeg")
 guard = SubResource("Resource_lhjct")
@@ -571,6 +643,18 @@ script = ExtResource("14_kbpeg")
 guard = SubResource("Resource_lhjct")
 
 [sub_resource type="Resource" id="Resource_up65n"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_bpbv3"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_2bu4d"]
+script = ExtResource("14_kbpeg")
+guard = SubResource("Resource_lhjct")
+
+[sub_resource type="Resource" id="Resource_cf6gn"]
 script = ExtResource("14_kbpeg")
 guard = SubResource("Resource_lhjct")
 
@@ -799,7 +883,20 @@ tracks/16/keys = {
 
 [sub_resource type="Animation" id="Animation_dshkv"]
 resource_name = "death"
-length = 0.1
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-7.45058e-09, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("35_aa4xm"), ExtResource("39_gab4h"), ExtResource("73_0d1k8")]
+}
 
 [sub_resource type="Animation" id="Animation_ffby2"]
 resource_name = "drop_smoke"
@@ -2335,7 +2432,7 @@ color = Color(0.999643, 0.944103, 0.863035, 1)
 color_ramp = SubResource("GradientTexture1D_57j0g")
 emission_curve = SubResource("CurveTexture_jtqpf")
 
-[node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_particles", "slam_wall_particles", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "sfx_players") instance=ExtResource("1_7pmj2")]
+[node name="BossElevator" node_paths=PackedStringArray("laser_spawn_markers", "slam_particles", "slam_wall_particles", "slam_spawn_marker", "proj_spawn_l", "proj_spawn_r", "laser_spawn", "elemental_emitting_vfx", "sfx_players") instance=ExtResource("1_7pmj2")]
 collision_mask = 11
 script = ExtResource("2_6u4e1")
 tutorial_health = 3600
@@ -2428,6 +2525,7 @@ sfx_electric_slam_impact = Array[AudioStream]([ExtResource("60_uh4d7"), ExtResou
 sfx_electric_loop = Array[AudioStream]([ExtResource("62_qwveb"), ExtResource("63_vxl2l")])
 sfx_electric_fadeout = Array[AudioStream]([ExtResource("64_ys6fd"), ExtResource("65_a5wdl")])
 boss_id = 6
+elemental_emitting_vfx = [null, null, null, null, null]
 barrel_pickup_scene = null
 sfx_players = [NodePath("SFXPlayer"), NodePath("SFXPlayer2"), NodePath("SFXPlayer3"), NodePath("SFXPlayer4"), NodePath("SFXPlayer5"), NodePath("SFXPlayer6"), NodePath("SFXPlayer7"), NodePath("SFXPlayer8")]
 sfx_hit = Array[AudioStream]([ExtResource("28_6ig1p"), ExtResource("29_d21ab"), ExtResource("30_jv36d"), ExtResource("31_t81ll"), ExtResource("32_qvwbi")])
@@ -2625,7 +2723,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Taunting")
 event = &"start_taunt"
-guard = ExtResource("15_c0skh")
+guard = SubResource("Resource_q7uvn")
 delay_in_seconds = "0.0"
 
 [node name="Taunting" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase1_BasicCombatTutorial/Taunt" index="1"]
@@ -2635,7 +2733,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_taunt"
-guard = ExtResource("15_c0skh")
+guard = SubResource("Resource_sc735")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase1_BasicCombatTutorial/Taunt" index="2"]
@@ -2645,14 +2743,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Idle")
 event = &"end_recovery"
-guard = ExtResource("15_c0skh")
+guard = SubResource("Resource_opw06")
 delay_in_seconds = "0.0"
 
 [node name="toStrafingNails" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase1_BasicCombatTutorial/Taunt" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../StrafingNails")
 event = &"start_ranged_naiils_strafe"
-guard = SubResource("Resource_4xor2")
+guard = SubResource("Resource_teeod")
 delay_in_seconds = "0.0"
 
 [node name="StrafingNails" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase1_BasicCombatTutorial" index="1"]
@@ -2666,7 +2764,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Shooting")
 event = &"start_shooting"
-guard = SubResource("Resource_bpbv3")
+guard = SubResource("Resource_bngve")
 delay_in_seconds = "0.0"
 
 [node name="Shooting" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase1_BasicCombatTutorial/StrafingNails" index="1"]
@@ -2676,7 +2774,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"stop_shooting"
-guard = SubResource("Resource_2bu4d")
+guard = SubResource("Resource_0cy1u")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase1_BasicCombatTutorial/StrafingNails" index="2"]
@@ -2686,14 +2784,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
-guard = SubResource("Resource_cf6gn")
+guard = SubResource("Resource_ru4vs")
 delay_in_seconds = "0.0"
 
 [node name="toTaunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase1_BasicCombatTutorial/StrafingNails" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Taunt")
 event = &"start_taunt_attack"
-guard = SubResource("Resource_4xor2")
+guard = SubResource("Resource_0g5uk")
 delay_in_seconds = "0.0"
 
 [node name="toPhase2" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase1_BasicCombatTutorial" index="2"]
@@ -2723,7 +2821,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Taunting")
 event = &"start_taunt"
-guard = ExtResource("15_c0skh")
+guard = SubResource("Resource_53am4")
 delay_in_seconds = "0.0"
 
 [node name="Taunting" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/Taunt" index="1"]
@@ -2733,7 +2831,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_taunt"
-guard = ExtResource("15_c0skh")
+guard = SubResource("Resource_v6fxx")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/Taunt" index="2"]
@@ -2743,21 +2841,21 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Idle")
 event = &"end_recovery"
-guard = ExtResource("15_c0skh")
+guard = SubResource("Resource_od8c5")
 delay_in_seconds = "0.0"
 
 [node name="toElectrifyFloor" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/Taunt" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../ElectrifyFloor")
 event = &"start_electrify_floor"
-guard = SubResource("Resource_4xor2")
+guard = SubResource("Resource_3v08r")
 delay_in_seconds = "0.0"
 
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/Taunt" index="4"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MeleeCombo")
 event = &"start_melee_combo"
-guard = SubResource("Resource_4xor2")
+guard = SubResource("Resource_il0my")
 delay_in_seconds = "0.0"
 
 [node name="ElectrifyFloor" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial" index="1"]
@@ -2771,6 +2869,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Shocking")
 event = &"start_slam"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Shocking" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/ElectrifyFloor" index="1"]
@@ -2780,6 +2879,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_shock"
+guard = SubResource("Resource_jwi0g")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/ElectrifyFloor" index="2"]
@@ -2789,6 +2889,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
+guard = SubResource("Resource_wtxhu")
 delay_in_seconds = "0.0"
 
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/ElectrifyFloor" index="3"]
@@ -2816,14 +2917,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Swipe")
 event = &"start_attack"
-guard = SubResource("Resource_0qfiu")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo/Targeting" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_n3lag")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo" index="1"]
@@ -2833,14 +2934,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Hook")
 event = &"melee_attack"
-guard = SubResource("Resource_8uqbu")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo/Swipe" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_n3lag")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Hook" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo" index="2"]
@@ -2850,14 +2951,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Backswing")
 event = &"melee_backswing"
-guard = SubResource("Resource_w0wob")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo/Hook" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_6d0vi")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Backswing" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo" index="3"]
@@ -2867,7 +2968,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_6d0vi")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo" index="4"]
@@ -2877,7 +2978,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
-guard = SubResource("Resource_v875p")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toElectrifyFloor" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase2_JumpTutorial/MeleeCombo" index="5"]
@@ -2921,7 +3022,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Taunting")
 event = &"start_taunt"
-guard = ExtResource("15_c0skh")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Taunting" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt" index="1"]
@@ -2931,7 +3032,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_taunt"
-guard = ExtResource("15_c0skh")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt" index="2"]
@@ -2941,7 +3042,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Idle")
 event = &"end_recovery"
-guard = ExtResource("15_c0skh")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/Taunt" index="3"]
@@ -2969,7 +3070,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Swipe")
 event = &"start_attack"
-guard = SubResource("Resource_0qfiu")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="1"]
@@ -2979,28 +3080,28 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Hook")
 event = &"melee_attack"
-guard = SubResource("Resource_8uqbu")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Swipe" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_n3lag")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toSlamLine" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Swipe" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
-guard = SubResource("Resource_m4yva")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Swipe" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
-guard = SubResource("Resource_ko7r0")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Hook" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="2"]
@@ -3010,28 +3111,28 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
-guard = SubResource("Resource_w0wob")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toBackswing" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Hook" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Backswing")
 event = &"melee_backswing"
-guard = SubResource("Resource_w0wob")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Hook" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
-guard = SubResource("Resource_abs5n")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Hook" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_6d0vi")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Backswing" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="3"]
@@ -3041,14 +3142,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
-guard = SubResource("Resource_abs5n")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo/Backswing" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_6d0vi")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="LeapBack" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="4"]
@@ -3058,7 +3159,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
-guard = SubResource("Resource_fgsnr")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="SlamLine" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="5"]
@@ -3068,7 +3169,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_72tnq")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="6"]
@@ -3078,7 +3179,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
-guard = SubResource("Resource_v875p")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toTaunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/MeleeCombo" index="7"]
@@ -3106,6 +3207,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SwipeWave")
 event = &"start_wave"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="SwipeWave" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="1"]
@@ -3115,6 +3217,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_wave"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="2"]
@@ -3124,6 +3227,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Idle")
 event = &"end_recovery"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toTaunt" type="Node" parent="StateChart/Root/Phase/TutorialArena1/Phase3_DashTutorial/DashWave" index="3"]
@@ -3669,7 +3773,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Swipe")
 event = &"start_attack"
-guard = SubResource("Resource_0qfiu")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo" index="1"]
@@ -3679,28 +3783,28 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Hook")
 event = &"melee_attack"
-guard = SubResource("Resource_8uqbu")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo/Swipe" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_n3lag")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toSlamLine" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo/Swipe" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
-guard = SubResource("Resource_m4yva")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo/Swipe" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
-guard = SubResource("Resource_ko7r0")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Hook" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo" index="2"]
@@ -3710,28 +3814,28 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
-guard = SubResource("Resource_w0wob")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toBackswing" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo/Hook" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Backswing")
 event = &"melee_backswing"
-guard = SubResource("Resource_w0wob")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo/Hook" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
-guard = SubResource("Resource_abs5n")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo/Hook" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_6d0vi")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Backswing" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo" index="3"]
@@ -3741,14 +3845,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
-guard = SubResource("Resource_abs5n")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo/Backswing" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_6d0vi")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="LeapBack" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo" index="4"]
@@ -3758,7 +3862,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
-guard = SubResource("Resource_fgsnr")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="SlamLine" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo" index="5"]
@@ -3768,7 +3872,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_72tnq")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo" index="6"]
@@ -3778,7 +3882,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
-guard = SubResource("Resource_v875p")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toElectrifyFloor" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/MeleeCombo" index="7"]
@@ -3806,6 +3910,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Shocking")
 event = &"start_slam"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Shocking" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/ElectrifyFloor" index="1"]
@@ -3815,12 +3920,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_shock"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toTargeting" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/ElectrifyFloor/Shocking" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"start_next_slam_target"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/ElectrifyFloor" index="2"]
@@ -3830,6 +3937,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/ElectrifyFloor" index="3"]
@@ -3864,7 +3972,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Slam")
 event = &"start_slam"
-guard = SubResource("Resource_jkctx")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Slam" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/LineSlam" index="1"]
@@ -3874,7 +3982,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_slam"
-guard = SubResource("Resource_3isg2")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/LineSlam" index="2"]
@@ -3884,7 +3992,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
-guard = SubResource("Resource_up65n")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toSmokescreen" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/LineSlam" index="3"]
@@ -3912,7 +4020,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Shooting")
 event = &"start_shooting"
-guard = SubResource("Resource_bpbv3")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Shooting" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/StrafingNails" index="1"]
@@ -3922,7 +4030,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"stop_shooting"
-guard = SubResource("Resource_2bu4d")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/StrafingNails" index="2"]
@@ -3932,7 +4040,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
-guard = SubResource("Resource_cf6gn")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toTaunt" type="Node" parent="StateChart/Root/Phase/MainFight/Phase4/StrafingNails" index="3"]
@@ -3977,14 +4085,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Smoke")
 event = &"start_smoke"
-guard = SubResource("Resource_r3txr")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toMoveNoSmoke" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/Smokescreen/Idle" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MoveNoSmoke")
 event = &"start_no_smoke"
-guard = SubResource("Resource_cyxlj")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Smoke" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/Smokescreen" index="1"]
@@ -3994,14 +4102,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../OpenDoors")
 event = &"open_doors"
-guard = SubResource("Resource_8gf5u")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toMoveNoSmoke" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/Smokescreen/Smoke" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../MoveNoSmoke")
 event = &"start_no_smoke"
-guard = SubResource("Resource_cyxlj")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="MoveNoSmoke" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/Smokescreen" index="2"]
@@ -4011,14 +4119,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../OpenDoors")
 event = &"open_doors"
-guard = SubResource("Resource_5ojvj")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toIdle" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/Smokescreen/MoveNoSmoke" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Idle")
 event = &"end_smoke"
-guard = SubResource("Resource_hr1gt")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="OpenDoors" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/Smokescreen" index="3"]
@@ -4056,7 +4164,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Swipe")
 event = &"start_attack"
-guard = SubResource("Resource_0qfiu")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Swipe" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo" index="1"]
@@ -4066,28 +4174,28 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Hook")
 event = &"melee_attack"
-guard = SubResource("Resource_8uqbu")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo/Swipe" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_n3lag")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toSlamLine" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo/Swipe" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
-guard = SubResource("Resource_m4yva")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo/Swipe" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
-guard = SubResource("Resource_ko7r0")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Hook" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo" index="2"]
@@ -4097,28 +4205,28 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
-guard = SubResource("Resource_w0wob")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toBackswing" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo/Hook" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Backswing")
 event = &"melee_backswing"
-guard = SubResource("Resource_w0wob")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toLeapBack" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo/Hook" index="2"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
-guard = SubResource("Resource_abs5n")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo/Hook" index="3"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_6d0vi")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Backswing" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo" index="3"]
@@ -4128,14 +4236,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../LeapBack")
 event = &"melee_backstep"
-guard = SubResource("Resource_abs5n")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toRecover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo/Backswing" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_6d0vi")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="LeapBack" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo" index="4"]
@@ -4145,7 +4253,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SlamLine")
 event = &"melee_line"
-guard = SubResource("Resource_fgsnr")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="SlamLine" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo" index="5"]
@@ -4155,7 +4263,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"combo_end"
-guard = SubResource("Resource_72tnq")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo" index="6"]
@@ -4165,7 +4273,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
-guard = SubResource("Resource_v875p")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toDashWave" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/MeleeCombo" index="7"]
@@ -4206,7 +4314,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Shooting")
 event = &"start_shooting"
-guard = SubResource("Resource_bpbv3")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Shooting" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DualNailsRanged" index="1"]
@@ -4216,7 +4324,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"stop_shooting"
-guard = SubResource("Resource_2bu4d")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DualNailsRanged" index="2"]
@@ -4226,7 +4334,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
-guard = SubResource("Resource_cf6gn")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toMeleeCombo" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DualNailsRanged" index="3"]
@@ -4267,7 +4375,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Charging")
 event = &"charge_laser"
-guard = SubResource("Resource_ihpl0")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Charging" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="1"]
@@ -4277,7 +4385,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Firing")
 event = &"start_firing"
-guard = SubResource("Resource_8wahv")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Firing" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="2"]
@@ -4287,7 +4395,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"stop_firing"
-guard = SubResource("Resource_b70vm")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="3"]
@@ -4297,7 +4405,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Targeting")
 event = &"end_recovery"
-guard = SubResource("Resource_t0e48")
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toDualNails" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/LaserAoE" index="4"]
@@ -4338,6 +4446,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../SwipeWave")
 event = &"start_wave"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="SwipeWave" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DashWave" index="1"]
@@ -4347,12 +4456,14 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_wave"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toBackSwipeWave" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DashWave/SwipeWave" index="1"]
 script = ExtResource("5_7kc6y")
 to = NodePath("../../BackswipeWave")
 event = &"start_backswipe_wave"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="BackswipeWave" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DashWave" index="2"]
@@ -4362,6 +4473,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Recover")
 event = &"end_wave"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="Recover" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DashWave" index="3"]
@@ -4371,6 +4483,7 @@ script = ExtResource("4_fo57y")
 script = ExtResource("5_7kc6y")
 to = NodePath("../../Idle")
 event = &"end_recovery"
+guard = SubResource("Resource_3b05m")
 delay_in_seconds = "0.0"
 
 [node name="toTaunt" type="Node" parent="StateChart/Root/Phase/MainFight/Phase5/DashWave" index="4"]

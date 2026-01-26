@@ -38,8 +38,8 @@ var current_close_trigger_max: int = 1
 var current_close_trigger_count: int = 0
 
 # MUSIC
-@onready var music_player: AudioStreamPlayer = $InteractiveMusicPlayer
-var music_playback: AudioStreamPlaybackInteractive
+#@onready var music_player: AudioStreamPlayer = $InteractiveMusicPlayer
+#var music_playback: AudioStreamPlaybackInteractive
 
 # Intro cutscene
 @export var intro_boss_path: Path3D
@@ -76,6 +76,9 @@ func _ready() -> void:
 		GameManager.inventory_barrels = []
 		player.gun.reinstall_barrels()
 	
+	GameManager.current_boss_map = self
+	GameManager.change_fmod_bgm_music_state("TutorialBossfight")
+	
 	# FIXME - workaround
 	elevator_doors = lobby_entry_elevator
 	
@@ -105,7 +108,7 @@ func _ready() -> void:
 	if boss_doors:
 		boss_doors.close()
 	
-	music_playback = music_player.get_stream_playback()
+	#music_playback = music_player.get_stream_playback()
 	
 	player.stat_ui.hide_all_ui()
 	
@@ -201,7 +204,7 @@ func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 
 
 func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
-	music_playback.switch_to_clip(1)
+	#music_playback.switch_to_clip(1)
 	exit_doors.close()
 	if boss_doors:
 		boss_doors.is_autodoor = false
@@ -233,7 +236,7 @@ func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
 
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
-	music_playback.switch_to_clip(1)
+	#music_playback.switch_to_clip(1)
 	exit_doors.close()
 	if boss_doors:
 		boss_doors.is_autodoor = false

@@ -243,7 +243,10 @@ func compile_materials() -> void:
 
 func _compile_material(scene_path: String) -> void:
 	print("Precompile shader materials in %s" % scene_path)
-	var scene = ResourceLoader.load(scene_path).instantiate()
+	var scene_resource := ResourceLoader.load(scene_path)
+	if not scene_resource:
+		return
+	var scene = scene_resource.instantiate()
 
 	if scene is GPUParticles3D:
 		_compile_particles_node(scene)

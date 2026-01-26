@@ -245,6 +245,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 func _on_stagger() -> void:
 	if current_phase < 4:
 		return
+	if next_attack == "start_laser_aoe_attack":
+		return
 	super()
 
 
@@ -266,6 +268,7 @@ func _on_died() -> void:
 		state_chart.send_event("tutorial_arena_1_finished")
 	else:
 		died.emit()
+		anim_player.play("RESET")
 		state_chart.send_event("death")
 		state_chart.send_event("stop_moving")
 		state_chart.send_event("deactivate")
@@ -760,7 +763,7 @@ func shoot_nail_projectile(bursts: int, shot_per_burst: int, delay_per_proj: flo
 			var spawn_marker = proj_spawn_l if j % 2 == 0 else proj_spawn_r
 			var anim_name = "elevator_boss/ranged_shoot_%s" % ["l" if j % 2 == 0 else "r"]
 			anim_player.play(anim_name)
-			var proj = fire_projectile(nail_projectile, spawn_marker.global_position, sfx_nail_shot)
+			var proj = fire_projectile(nail_projectile, spawn_marker.global_position, 0, sfx_nail_shot)
 			proj.projectile_speed = shot_speed
 			var sfx_player = get_available_sfx_player()
 			if sfx_player:
@@ -1229,7 +1232,7 @@ func spawn_aoe_line(
 	mesh.material = line_material
 	
 	# Spawn moving wave particles that stay at end of line
-	slam_spawn_marker.remove_child(slam_particles)
+	slam_particles.get_parent().remove_child(slam_particles)
 	scene_root.add_child(slam_particles)
 	slam_particles.global_position = debug_mesh_instance.global_position - debug_mesh_instance.basis.z * 0.1
 	slam_particles.global_rotation = self.global_rotation + Vector3(0, PI, 0)

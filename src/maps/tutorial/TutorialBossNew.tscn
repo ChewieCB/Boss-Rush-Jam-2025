@@ -60,7 +60,6 @@
 [ext_resource type="AudioStream" uid="uid://cf5ftsbtinsr1" path="res://src/maps/tutorial/assets/cutscene/vo/mechanic-tutorial-intro-1-1.mp3" id="69_gnhos"]
 [ext_resource type="AudioStream" uid="uid://b7nfp4x27l0np" path="res://src/bosses/pit/assets/sfx/PIT BOSS HITS YOU 1.mp3" id="69_hm453"]
 [ext_resource type="AudioStream" uid="uid://itnieslv461" path="res://src/player/assets/sfx/VOICE LINES/URGH 4.mp3" id="70_kla1o"]
-[ext_resource type="AudioStream" uid="uid://ds7xvkwqd62rm" path="res://assets/music/PissbotAmbience.mp3" id="70_qjou6"]
 [ext_resource type="AudioStream" uid="uid://c1x6us2ydrmlw" path="res://src/maps/tutorial/assets/cutscene/vo/mechanic-tutorial-intro-5-no-fortune-1.mp3" id="70_sgwop"]
 [ext_resource type="Material" uid="uid://cggtlusxv65jc" path="res://assets/textures/walls/concrete-paint-dark-gold.tres" id="71_bmqcg"]
 [ext_resource type="AudioStream" uid="uid://bm0hm1pxy0o7a" path="res://src/maps/lobby/assets/Lift Door Shut Foley 1.mp3" id="71_ghqpp"]
@@ -181,6 +180,10 @@ volumetric_fog_emission_energy = 0.3
 resource_local_to_scene = true
 size = Vector3(10.8, 10, 16)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_cogpl"]
+resource_local_to_scene = true
+size = Vector3(10, 10, 10)
+
 [sub_resource type="AudioStreamInteractive" id="AudioStreamInteractive_mgcyh"]
 clip_count = 2
 clip_0/name = &"tutorial"
@@ -203,10 +206,6 @@ density = 0.015
 
 [sub_resource type="FogMaterial" id="FogMaterial_brnbk"]
 density = 0.02
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_cogpl"]
-resource_local_to_scene = true
-size = Vector3(10, 10, 10)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_u50qs"]
 _surfaces = [{
@@ -4072,6 +4071,9 @@ tracks/20/keys = {
 "times": PackedFloat32Array(0)
 }
 
+[sub_resource type="Resource" id="Resource_vaovv"]
+metadata/__load_path__ = "res://assets/music/PissbotAmbience.mp3"
+
 [sub_resource type="Animation" id="Animation_xlg8b"]
 resource_name = "mechanic_enter"
 length = 9.4
@@ -4306,7 +4308,7 @@ tracks/17/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
-"stream": ExtResource("70_qjou6")
+"stream": SubResource("Resource_vaovv")
 }],
 "times": PackedFloat32Array(1.175)
 }
@@ -5060,22 +5062,28 @@ nav_parent = NodePath("FuncGodotMap/layer_0_arena_1/group_7928_Arena1/group_7915
 floor_parent = NodePath("FuncGodotMap/layer_0_arena_1/group_7928_Arena1/group_7915_FloorWalkableArena1/entity_7_func_geo")
 floor_mesh = NodePath("FuncGodotMap/layer_0_arena_1/group_7928_Arena1/group_7915_FloorWalkableArena1/entity_7_func_geo/entity_7_mesh_instance")
 
-[node name="WorldEnvironment" parent="." index="2"]
+[node name="WorldEnvironment" parent="." index="1"]
 environment = SubResource("Environment_vv125")
 
-[node name="DirectionalLight3D" parent="." index="3"]
+[node name="DirectionalLight3D" parent="." index="2"]
 visible = false
 light_bake_mode = 1
 
-[node name="LightmapGI" parent="." index="4"]
+[node name="LightmapGI" parent="." index="3"]
 light_data = ExtResource("5_k4gaf")
 
-[node name="BossTriggerVolume" parent="." index="6"]
+[node name="BossTriggerVolume" parent="." index="5"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -27.6286, -0.428299, -24.159)
 
 [node name="CollisionShape3D" parent="BossTriggerVolume" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, -8.40001)
 shape = SubResource("BoxShape3D_vb4tn")
+
+[node name="SpinTriggerVolume" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25.362, 0)
+
+[node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
+shape = SubResource("BoxShape3D_cogpl")
 
 [node name="InteractiveMusicPlayer" type="AudioStreamPlayer" parent="." index="7"]
 process_mode = 3
@@ -5399,13 +5407,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 3.95, 29.8)
 size = Vector3(23, 9.7, 31)
 material = SubResource("FogMaterial_brnbk")
 
-[node name="SpinTriggerVolume" parent="." index="12"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25.362, 0)
-
-[node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
-shape = SubResource("BoxShape3D_cogpl")
-
-[node name="FuncGodotMap" parent="." index="13"]
+[node name="FuncGodotMap" parent="." index="12"]
 local_map_file = "res://src/maps/tutorial/tutorial.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]
@@ -7577,35 +7579,31 @@ collision_mask = 0
 [node name="entity_364_collision_shape" type="CollisionShape3D" parent="FuncGodotMap/layer_6_collision/entity_364_func_geo" index="0"]
 shape = SubResource("ConcavePolygonShape3D_fpd6f")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="14"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="13"]
 process_mode = 1
 libraries = {
 "": SubResource("AnimationLibrary_fd4ep")
 }
 
-[node name="Marker3D" type="Marker3D" parent="." index="15"]
+[node name="Marker3D" type="Marker3D" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.4788, 0.144639, 29.5743)
 
-[node name="TutorialEndCutscenePosMarker" type="Marker3D" parent="." index="16"]
+[node name="TutorialEndCutscenePosMarker" type="Marker3D" parent="." index="15"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.8788, -0.555361, 15.5743)
 
-[node name="entity_11_PlayerRef" parent="." index="17" instance=ExtResource("84_udjkb")]
+[node name="entity_11_PlayerRef" parent="." index="16" instance=ExtResource("84_udjkb")]
 transform = Transform3D(1.94707e-07, 0, 1, 0, 1, 0, -1, 0, 1.94707e-07, -25.625, 1, 29.5)
 
-[node name="entity_187_TutorialBoss" parent="." index="18" node_paths=PackedStringArray("arena_1_center", "arena_2_center", "target") instance=ExtResource("88_ijdgk")]
+[node name="entity_187_TutorialBoss" parent="." index="17" node_paths=PackedStringArray("arena_1_center", "arena_2_center", "target") instance=ExtResource("88_ijdgk")]
 transform = Transform3D(-4.87884e-08, 0.0685851, 0.997591, -3.88497e-07, -0.997591, 0.0685851, 1, -3.84215e-07, 7.5316e-08, 0, 0, 0)
 arena_1_center = NodePath("../Arena1Center")
 arena_2_center = NodePath("../Arena2Center")
-tutorial_health = 30
-phase_1_health = 10
-phase_2_health = 10
-phase_3_health = 10
 target = NodePath("../entity_11_PlayerRef")
 barrel_to_drop = ExtResource("78_iprpn")
 barrel_pickup_scene = ExtResource("79_jne3r")
 orbit_radius = 200.0
 
-[node name="Path3D" type="Path3D" parent="." index="19"]
+[node name="Path3D" type="Path3D" parent="." index="18"]
 curve = SubResource("Curve3D_uri17")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" index="0"]
@@ -7613,32 +7611,32 @@ transform = Transform3D(-1.7321e-07, -0.87718, -0.480024, -5.96047e-08, 0.480024
 loop = false
 tilt_enabled = false
 
-[node name="CutsceneCamera" type="Camera3D" parent="." index="20"]
+[node name="CutsceneCamera" type="Camera3D" parent="." index="19"]
 transform = Transform3D(-3.62383e-06, -0.222535, -0.974925, 1.6801e-08, 0.974925, -0.222535, 1, -8.22808e-07, -3.52922e-06, -24.1585, 1.74925, 29.5983)
 current = true
 
-[node name="CutsceneSFXPlayer1" type="AudioStreamPlayer" parent="." index="21"]
+[node name="CutsceneSFXPlayer1" type="AudioStreamPlayer" parent="." index="20"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer2" type="AudioStreamPlayer" parent="." index="22"]
+[node name="CutsceneSFXPlayer2" type="AudioStreamPlayer" parent="." index="21"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer3" type="AudioStreamPlayer" parent="." index="23"]
+[node name="CutsceneSFXPlayer3" type="AudioStreamPlayer" parent="." index="22"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer4" type="AudioStreamPlayer" parent="." index="24"]
+[node name="CutsceneSFXPlayer4" type="AudioStreamPlayer" parent="." index="23"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer5" type="AudioStreamPlayer" parent="." index="25"]
+[node name="CutsceneSFXPlayer5" type="AudioStreamPlayer" parent="." index="24"]
 bus = &"SFX"
 
-[node name="CutsceneSFXPlayer6" type="AudioStreamPlayer" parent="." index="26"]
+[node name="CutsceneSFXPlayer6" type="AudioStreamPlayer" parent="." index="25"]
 bus = &"SFX"
 
-[node name="CutsceneVOPlayer" type="AudioStreamPlayer" parent="." index="27"]
+[node name="CutsceneVOPlayer" type="AudioStreamPlayer" parent="." index="26"]
 bus = &"SFX"
 
-[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="28"]
+[node name="IntroCutsceneLayer" type="CanvasLayer" parent="." index="27"]
 layer = 3
 
 [node name="Control" type="Control" parent="IntroCutsceneLayer" index="0"]
@@ -7701,67 +7699,67 @@ autowrap_mode = 3
 visible_characters = 0
 visible_ratio = 0.0
 
-[node name="PitBossIntro" type="Sprite3D" parent="." index="29"]
+[node name="PitBossIntro" type="Sprite3D" parent="." index="28"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -23, 1.5, 29.5)
 billboard = 2
 texture = ExtResource("63_30qyb")
 
-[node name="Arena1Center" type="Marker3D" parent="." index="30"]
+[node name="Arena1Center" type="Marker3D" parent="." index="29"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.7, 5.96046e-08, 29.6)
 
-[node name="Arena2Center" type="Marker3D" parent="." index="31"]
+[node name="Arena2Center" type="Marker3D" parent="." index="30"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.1, -0.8, -32.4)
 
-[node name="Arena2IntroSpawn" type="Marker3D" parent="." index="32"]
+[node name="Arena2IntroSpawn" type="Marker3D" parent="." index="31"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.1, 9.98676, -32.4)
 
-[node name="LaserSpawn1" type="Marker3D" parent="." index="33"]
+[node name="LaserSpawn1" type="Marker3D" parent="." index="32"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.1978, 2.72115, -32.4)
 
-[node name="LaserSpawn2" type="Marker3D" parent="." index="34"]
+[node name="LaserSpawn2" type="Marker3D" parent="." index="33"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.2206, 2.72115, -32.4)
 
-[node name="ElectricHazardArea" parent="." index="35" node_paths=PackedStringArray("immune_bodies") instance=ExtResource("75_byjbj")]
+[node name="ElectricHazardArea" parent="." index="34" node_paths=PackedStringArray("immune_bodies") instance=ExtResource("75_byjbj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5227, -1.2, 19.7469)
 visible = false
 immune_bodies = [NodePath("../entity_187_TutorialBoss")]
 
-[node name="SmokeParticles" parent="." index="36" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles" parent="." index="35" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -34.8023, 7, 29.5)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SmokeParticles" index="4"]
 volume_db = -6.0
 unit_size = 5.0
 
-[node name="SmokeParticles2" parent="." index="37" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles2" parent="." index="36" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -40.3023, 7, 39.6)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SmokeParticles2" index="4"]
 volume_db = -6.0
 unit_size = 5.0
 
-[node name="SmokeParticles3" parent="." index="38" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles3" parent="." index="37" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -28.9023, 7, 36)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SmokeParticles3" index="4"]
 volume_db = -6.0
 unit_size = 5.0
 
-[node name="SmokeParticles4" parent="." index="39" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles4" parent="." index="38" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -28.9023, 7, 23.2)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SmokeParticles4" index="4"]
 volume_db = -6.0
 unit_size = 5.0
 
-[node name="SmokeParticles5" parent="." index="40" instance=ExtResource("79_hbkuw")]
+[node name="SmokeParticles5" parent="." index="39" instance=ExtResource("79_hbkuw")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -40.4023, 7, 20.4)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="SmokeParticles5" index="4"]
 volume_db = -6.0
 unit_size = 5.0
 
-[node name="SingleEffectTrigger" parent="." index="41" node_paths=PackedStringArray("connected_object") instance=ExtResource("79_wgc81")]
+[node name="SingleEffectTrigger" parent="." index="40" node_paths=PackedStringArray("connected_object") instance=ExtResource("79_wgc81")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 0, 10)
 target_effect = ExtResource("78_iprpn")
 target_effect_id = 50

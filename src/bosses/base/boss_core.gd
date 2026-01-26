@@ -326,10 +326,10 @@ func orbit_towards_player(
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
 
-
+func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
 	if len(sfx_arr) > 0:
 		play_positional_sound(sfx_arr.pick_random())
-func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
+	
 	var projectile := _projectile_prefab.instantiate()
 	scene_root.add_child(projectile)
 	projectile.global_position = spawn_pos
