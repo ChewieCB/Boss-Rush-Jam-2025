@@ -237,6 +237,9 @@ func _ready() -> void:
 	if GameManager.CHEAT_oneshot:
 		health_component.max_health = 1
 		health_component.current_health = 1
+	
+	health_ui.clear_sub_health_bars()
+	health_ui.init_boss_health_ui(health_component.max_health, 1)
 
 	if owner:
 		await owner.ready
@@ -288,11 +291,21 @@ func _turn_towards_target(speed: float, delta: float) -> void:
 
 
 func orbit_player(delta: float) -> void:
+	orbit_pos(target.global_position, delta)
+
+
+func orbit_pos(pos: Vector3, delta: float, invert: bool = false) -> void:
 	orbit_angle += angle_speed * delta
 	# offset in XZ-plane
-	var offset_x = cos(orbit_angle) * desired_distance
-	var offset_z = sin(orbit_angle) * desired_distance
-	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
+	var offset_x: float
+	var offset_z: float
+	if invert:
+		offset_x = -cos(orbit_angle) * desired_distance
+		offset_z = -sin(orbit_angle) * desired_distance
+	else:
+		offset_x = cos(orbit_angle) * desired_distance
+		offset_z = sin(orbit_angle) * desired_distance
+	var orbit_pos = pos + Vector3(offset_x, 0, offset_z)
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
 
@@ -313,10 +326,10 @@ func orbit_towards_player(
 	# Pathfind to orbit_pos
 	navigation_component.set_nav_target_position(orbit_pos)
 
-
 func fire_projectile(_projectile_prefab: PackedScene, spawn_pos: Vector3, spread: float = 0, sfx_arr: Array = []) -> Area3D:
 	if len(sfx_arr) > 0:
 		play_positional_sound(sfx_arr.pick_random())
+	
 	var projectile := _projectile_prefab.instantiate()
 	scene_root.add_child(projectile)
 	projectile.global_position = spawn_pos

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://cstu4hay3iips"]
+
+[ext_resource type="Script" path="res://src/maps/tutorial/triggers/single_effect_trigger.gd" id="1_p75px"]
+[ext_resource type="PackedScene" uid="uid://cbxu7ttnfnrmt" path="res://src/components/health/HealthComponent.tscn" id="2_p0ky7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1h0ur"]
+size = Vector3(2.4, 1.4, 0.7)
+
+[node name="SingleEffectTrigger" type="StaticBody3D" node_paths=PackedStringArray("health_component")]
+collision_layer = 32
+collision_mask = 8
+script = ExtResource("1_p75px")
+health_component = NodePath("HealthComponent")
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_p0ky7")]
+max_health = 1e+15
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_1h0ur")

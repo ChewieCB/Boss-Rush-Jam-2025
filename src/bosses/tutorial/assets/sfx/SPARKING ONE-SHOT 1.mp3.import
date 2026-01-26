@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dpklxcihbchwu"
+path="res://.godot/imported/SPARKING ONE-SHOT 1.mp3-7d1298ce2f6e35aa7815a39e2ebad7e9.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/SPARKING ONE-SHOT 1.mp3"
+dest_files=["res://.godot/imported/SPARKING ONE-SHOT 1.mp3-7d1298ce2f6e35aa7815a39e2ebad7e9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

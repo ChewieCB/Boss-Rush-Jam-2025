@@ -22,7 +22,7 @@ var current_effect_hit_count: int = 0:
 
 
 func _ready() -> void:
-	super ()
+	super()
 	current_effect_hit_count = 0
 
 
@@ -44,7 +44,7 @@ func _on_health_diff(_diff: float) -> void:
 
 
 func activate() -> void:
-	super ()
+	super()
 
 
 func _on_dps_window_timer_timeout() -> void:

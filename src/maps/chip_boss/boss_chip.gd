@@ -5,8 +5,11 @@ extends BossMap
 @onready var chiptopede_snake_path_points: Array[Node] = get_tree().get_nodes_in_group("boss_snake_path_marker")
 @onready var chiptopede_shoot_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_shoot_spawn_marker")
 
+# Hack to manually enable/disable lower arena for performance
+@export var chiptopede_arena: Node3D
+
 # Flooding/Draining levels
-@export var lower_water_level: float = -0.1
+@export var lower_water_level: float = -5.0
 @export var upper_water_level: float = 1.3
 @export var platform_level: float = 2.0
 @export var water_raise_time: float = 4.0
@@ -38,15 +41,18 @@ const DRUNK_DURATION = 4.0
 
 
 func _ready() -> void:
-	super ()
-	boss.flood_chamber.connect(raise_water)
-	boss.drain_chamber.connect(lower_water)
-	boss.break_floor.connect(break_floor)
+	super()
+	chiptopede_arena.visible = false
 	
-	boss.chiptopede_spawns = chiptopede_spawns
-	boss.chiptopede_snake_spawns = chiptopede_snake_spawns
-	boss.chiptopede_snake_path_points = chiptopede_snake_path_points
-	boss.chiptopede_shoot_spawns = chiptopede_shoot_spawns
+	if boss:
+		boss.flood_chamber.connect(raise_water)
+		boss.drain_chamber.connect(lower_water)
+		boss.break_floor.connect(break_floor)
+		
+		boss.chiptopede_spawns = chiptopede_spawns
+		boss.chiptopede_snake_spawns = chiptopede_snake_spawns
+		boss.chiptopede_snake_path_points = chiptopede_snake_path_points
+		boss.chiptopede_shoot_spawns = chiptopede_shoot_spawns
 
 	waterfalls.visible = false
 	for mesh in waterfall_meshses_vertical:
@@ -62,6 +68,8 @@ func _ready() -> void:
 	rising_platforms = get_tree().get_nodes_in_group("chip_boss_rising_platforms")
 
 func _process(delta) -> void:
+	if Input.is_action_just_pressed("input_1"):
+		break_floor()
 	if waterfalls.visible:
 		for mesh in waterfall_meshes:
 			mesh.mesh.surface_get_material(0).uv1_offset.x -= delta * waterfall_speed
@@ -127,6 +135,7 @@ func break_floor() -> void:
 	
 	water_surface.visible = true
 	water_surface.global_position.y = -20
+	chiptopede_arena.visible = true
 	if breakable_floor:
 		breakable_floor.queue_free()
 	for platform in rising_platforms:
@@ -153,7 +162,7 @@ func raise_water() -> void:
 			1.0,
 			water_raise_time / 3
 		)
-		get_node("WaterfallArea").set_deferred("monitoring", true)
+		mesh.get_node("WaterfallArea").set_deferred("monitoring", true)
 	water_tween.chain().tween_property(water_surface, "global_position:y", upper_water_level, water_raise_time)
 	
 	for platform in rising_platforms:

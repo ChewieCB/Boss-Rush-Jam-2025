@@ -19,6 +19,9 @@ var pulse_scale: float = 1.05 # max scale factor
 var pulse_duration: float = 0.1 # how fast pulse animates (seconds)
 
 func _ready() -> void:
+	ScreenTransition.transition_in()
+	await ScreenTransition.transition_finished
+	
 	for elem in music_state_list:
 		music_state_option_button.add_item(elem)
 	original_disc_scale = disc_image.scale

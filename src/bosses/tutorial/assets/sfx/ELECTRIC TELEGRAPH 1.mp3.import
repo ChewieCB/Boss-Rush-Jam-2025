@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cm7latp88qj1y"
+path="res://.godot/imported/ELECTRIC TELEGRAPH 1.mp3-54a0f583a5aaa93a064af64153017479.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/ELECTRIC TELEGRAPH 1.mp3"
+dest_files=["res://.godot/imported/ELECTRIC TELEGRAPH 1.mp3-54a0f583a5aaa93a064af64153017479.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

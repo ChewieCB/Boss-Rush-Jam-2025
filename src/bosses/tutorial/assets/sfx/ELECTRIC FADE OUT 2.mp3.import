@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://1e1weuy8thr8"
+path="res://.godot/imported/ELECTRIC FADE OUT 2.mp3-280876537a84971f94c44d26855ac0e6.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/ELECTRIC FADE OUT 2.mp3"
+dest_files=["res://.godot/imported/ELECTRIC FADE OUT 2.mp3-280876537a84971f94c44d26855ac0e6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
