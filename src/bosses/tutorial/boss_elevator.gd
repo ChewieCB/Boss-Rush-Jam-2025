@@ -222,14 +222,14 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			if current_phase != 3:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
-				_on_stagger()
+				force_stagger()
 				await get_tree().create_timer(hurt_frame_window, false)
 				state_chart.send_event("start_tutorial_phase_3")
 		elif new_health <= tutorial_phase_2_health_threshold:
 			if current_phase != 2:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
-				_on_stagger()
+				force_stagger()
 				await get_tree().create_timer(hurt_frame_window, false)
 				state_chart.send_event("start_tutorial_phase_2")
 	else:
@@ -237,9 +237,22 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 			if current_phase != 5:
 				# Cancel current phase if active and trigger hurt pose
 				attack_interrupt = true
-				_on_stagger()
+				force_stagger()
 				await get_tree().create_timer(hurt_frame_window, false)
 				state_chart.send_event("start_tutorial_phase_5")
+
+
+func _on_stagger() -> void:
+	if current_phase < 4:
+		return
+	super()
+
+
+func force_stagger() -> void:
+	if hurt_sprite:
+		if hurt_frame_timer.is_stopped() and hurt_frame_cooldown_timer.is_stopped():
+			sprite.texture = hurt_sprite
+			hurt_frame_timer.start(hurt_frame_window)
 
 
 func _on_died() -> void:

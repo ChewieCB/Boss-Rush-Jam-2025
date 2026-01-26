@@ -1026,6 +1026,61 @@ tracks/3/keys = {
 "values": [Vector3(-0.8, -0.5, -0.199999)]
 }
 
+[sub_resource type="Animation" id="Animation_sp153"]
+resource_name = "dash_wave_fast"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DebugAnimPivot:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.62451),
+"update": 0,
+"values": [Vector3(0, 1.309, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.075, 0.125, 0.175, 0.25, 0.325, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("17_cu5tl"), ExtResource("18_22flk"), ExtResource("19_xriv7"), ExtResource("20_5ckod"), ExtResource("21_yqrf4"), ExtResource("18_22flk"), ExtResource("17_cu5tl"), ExtResource("16_ukgug")]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.175),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [60.0, 10.0, 12.0, 8.0],
+"method": &"slam_wall"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("DebugAnimPivot/SlamSpawn:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.175),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.8, -0.5, -0.199999)]
+}
+
 [sub_resource type="Animation" id="Animation_f2hbb"]
 resource_name = "idle"
 length = 0.01
@@ -2190,61 +2245,6 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(0.233258, 2.46229, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 0.86, 0.7, 1), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_sp153"]
-resource_name = "dash_wave_fast"
-length = 0.4
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DebugAnimPivot:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1.62451),
-"update": 0,
-"values": [Vector3(0, 1.309, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite3D:texture")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.075, 0.125, 0.175, 0.25, 0.325, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("17_cu5tl"), ExtResource("18_22flk"), ExtResource("19_xriv7"), ExtResource("20_5ckod"), ExtResource("21_yqrf4"), ExtResource("18_22flk"), ExtResource("17_cu5tl"), ExtResource("16_ukgug")]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.175),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [60.0, 10.0, 12.0, 8.0],
-"method": &"slam_wall"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("DebugAnimPivot/SlamSpawn:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.175),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(-0.8, -0.5, -0.199999)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1cydh"]
