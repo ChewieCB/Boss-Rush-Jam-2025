@@ -39,6 +39,7 @@ signal reset_barrel_info
 @onready var shop_scroll_container: ScrollContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer
 
 const SHOPKEEPER_CHAT_TEXT_SPEED = 1.0
+const CONTROLLER_SCROLL_SPEED_COOEFFICIENT = 3.0
 
 var current_selected_item_ui = null
 var barrel_info_region: BarrelInfoRegion = null
@@ -79,8 +80,20 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if not visible:
+		return
+
 	if shopkeeper_chat.visible_ratio < 1.0:
 		shopkeeper_chat.visible_ratio += delta * SHOPKEEPER_CHAT_TEXT_SPEED
+
+	# Scrolling the ScrollContainer for controller
+	var controller_scroll_y = Input.get_axis("controller_scroll_up", "controller_scroll_down")
+	if abs(controller_scroll_y) < GameManager.controller_deadzone:
+		return
+	else:
+		var scroll_container = get_current_scroll_container()
+		scroll_container.scroll_vertical += controller_scroll_y * CONTROLLER_SCROLL_SPEED_COOEFFICIENT
+		scroll_container.scroll_vertical = clamp(scroll_container.scroll_vertical, 0, scroll_container.get_v_scroll_bar().max_value)
 
 func _input(event: InputEvent) -> void:
 	if visible:
