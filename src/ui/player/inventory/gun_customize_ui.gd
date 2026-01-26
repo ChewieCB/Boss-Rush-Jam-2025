@@ -109,7 +109,6 @@ func _input(event: InputEvent) -> void:
 			if modify_bg.visible:
 				_on_shop_tab_button_pressed()
 			return
-		
 
 func full_refresh_ui(forced = false):
 	if not visible and not forced:
@@ -197,6 +196,7 @@ func toggle():
 		open()
 
 func open():
+	GameManager.player.controls_disabled = true
 	GameManager.gun_customize_ui = self
 	GameManager.change_fmod_bgm_menu_is_up(true)
 	full_refresh_ui(true)
@@ -208,6 +208,7 @@ func open():
 
 
 func close():
+	GameManager.player.controls_disabled = false
 	GameManager.gun_customize_ui = null
 	GameManager.change_fmod_bgm_menu_is_up(false)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

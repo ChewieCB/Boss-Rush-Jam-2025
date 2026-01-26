@@ -467,7 +467,7 @@ func _physics_process(delta):
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z - (gun_sway_velocity.x / 250), delta * 10)
 		else:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
-	camera_control(delta)
+	special_camera_control(delta)
 	if GameManager.is_controller_connected:
 		aim_assist(delta)
 
@@ -651,13 +651,15 @@ func rotate_player(x: float, y: float):
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
 
-func camera_control(delta):
+func special_camera_control(delta):
 	if controls_disabled:
 		return
+		
 	# Tilt camera
 	const MIN_DIR_TO_TILT = 0.1
 	const TILT_AMOUNT = 3.0
 	const TILT_TIME = 5.0
+
 	if GameManager.camera_tilt:
 		if raw_input_dir.x < -MIN_DIR_TO_TILT:
 			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(TILT_AMOUNT * abs(raw_input_dir.x)), delta * TILT_TIME)

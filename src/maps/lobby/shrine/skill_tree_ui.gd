@@ -37,6 +37,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 func open():
+	GameManager.player.controls_disabled = true
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	GameManager.player.is_in_menu = true
@@ -49,6 +50,7 @@ func open():
 
 
 func close():
+	GameManager.player.controls_disabled = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	GameManager.player.is_in_menu = false
 	visible = false
