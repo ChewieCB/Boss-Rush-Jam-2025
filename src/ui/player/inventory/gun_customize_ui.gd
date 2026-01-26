@@ -85,6 +85,16 @@ func _input(event: InputEvent) -> void:
 		if event.is_action_pressed("interact") or event.is_action_pressed("ui_cancel"):
 			close()
 			get_viewport().set_input_as_handled()
+			return
+		if event.is_action_pressed("switch_tab_left"):
+			if shop_bg.visible:
+				_on_modify_tab_button_pressed()
+			return
+		if event.is_action_pressed("switch_tab_right"):
+			if modify_bg.visible:
+				_on_shop_tab_button_pressed()
+			return
+		
 
 func full_refresh_ui(forced = false):
 	if not visible and not forced:
@@ -233,7 +243,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	get_first_item_for_focus()
 
 
-func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, data: GunFrameResource) -> void:
+func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
 	if (current_selected_item_ui != null):
 		current_selected_item_ui.unselected()
 	current_selected_item_ui = gun_frame_item_ui
