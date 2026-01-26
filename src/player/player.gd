@@ -819,11 +819,13 @@ func _on_health_hurt_state_entered() -> void:
 
 
 func _on_health_dead_state_entered() -> void:
+	GameManager.change_fmod_bgm_player_is_dead(true)
 	controls_disabled = true
 	hurt_overlay.dead()
 	stat_ui.hide_all_ui()
 
 func _on_health_dead_state_exited() -> void:
+	GameManager.change_fmod_bgm_player_is_dead(false)
 	hurt_overlay.revive()
 	stat_ui.show_all_ui()
 	var neck_tween = get_tree().create_tween()

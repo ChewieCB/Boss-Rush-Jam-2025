@@ -4,6 +4,7 @@ class_name BossCore
 ## Emit when boss HP drop to 0.
 signal died
 signal death_anim_finished
+signal inactive_loaded
 ## Emit after collected the barrel,
 ## Emit after collected the barrel,
 ## or same time as `died` signal if already collected.

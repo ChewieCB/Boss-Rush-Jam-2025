@@ -71,9 +71,10 @@ func _ready() -> void:
 		GameManager.equipped_barrels = []
 		GameManager.inventory_barrels = []
 		player.gun.reinstall_barrels()
+	GameManager.change_fmod_bgm_music_state("TutorialStart")
 	
 	GameManager.current_boss_map = self
-	GameManager.change_fmod_bgm_music_state("TutorialStart")
+	
 	
 	# FIXME - workaround
 	elevator_doors = lobby_entry_elevator
@@ -83,7 +84,7 @@ func _ready() -> void:
 	floor_parent = arena_2_floor_parent
 	floor_mesh = arena_2_floor_mesh
 	
-	super ()
+	super()
 	
 	boss.tutorial_phase_1_started.connect(_on_tutorial_phase_1_started)
 	boss.tutorial_phase_2_started.connect(_on_tutorial_phase_2_started)
@@ -118,11 +119,12 @@ func _ready() -> void:
 		_add_boss_to_intro_path()
 		_remove_boss_from_intro_path()
 		boss.global_position = arena_2_center.global_position
+		await boss.inactive_loaded
+		boss.state_chart.send_event("start_main_fight")
 		electric_box_trigger.active = true
 		electric_box_trigger.activate()
 		player._disable_cutscene_cam()
-		await ScreenTransition.transition_finished
-		boss.state_chart.send_event("start_main_fight")
+		#await ScreenTransition.transition_finished
 		player.stat_ui.show_all_ui()
 
 
@@ -228,6 +230,7 @@ func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
 
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
+	GameManager.change_fmod_bgm_music_state("TutorialInterlude")
 	GameManager.change_fmod_bgm_music_state("TutorialBossfight")
 	
 	exit_doors.close()
