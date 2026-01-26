@@ -41,7 +41,6 @@ func init(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: 
 func _ready() -> void:
 	if data:
 		button.text = data.barrel_name
-
 	button.mouse_entered.connect(play_button_hover_sfx)
 	button.mouse_entered.connect(expand_button_size)
 	button.mouse_exited.connect(return_button_size)
