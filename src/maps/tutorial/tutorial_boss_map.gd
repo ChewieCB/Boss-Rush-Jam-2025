@@ -77,7 +77,7 @@ func _ready() -> void:
 		player.gun.reinstall_barrels()
 	
 	GameManager.current_boss_map = self
-	GameManager.change_fmod_bgm_music_state("TutorialBossfight")
+	GameManager.change_fmod_bgm_music_state("TutorialStart")
 	
 	# FIXME - workaround
 	elevator_doors = lobby_entry_elevator
@@ -236,7 +236,8 @@ func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
 
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
-	#music_playback.switch_to_clip(1)
+	GameManager.change_fmod_bgm_music_state("TutorialBossFight")
+	
 	exit_doors.close()
 	if boss_doors:
 		boss_doors.is_autodoor = false
@@ -320,6 +321,7 @@ func _on_tutorial_phase_3_started() -> void:
 func _on_tutorial_finished() -> void:
 	stop_all_pipe_emitters()
 	
+	GameManager.change_fmod_bgm_music_state("TutorialInterlude")
 	# Move cutscene camera to match player's camera
 	cutscene_camera.global_transform = player.player_camera.global_transform
 	player._enable_cutscene_cam()
