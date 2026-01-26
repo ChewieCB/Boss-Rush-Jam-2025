@@ -129,7 +129,7 @@ func find_and_load_scene_bgm(scene_name: String = "") -> void:
 		"Lobby":
 			music_state = "Lobby"
 		"Tutorial":
-			music_state = "Tutorial"
+			music_state = "TutorialStart"
 
 	if music_state != "":
 		GameManager.change_fmod_bgm_music_state(music_state)

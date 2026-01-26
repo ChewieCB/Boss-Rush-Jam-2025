@@ -15,6 +15,13 @@ signal risk_level_changed
 signal demo_time_changed
 signal player_level_up
 
+# TODO: Use Fmod enum to change music state to avoid mismatched name
+enum FmodMusicState {
+	NONE,
+	MENU,
+	LOBBY,
+}
+
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
 	Vector2i(2560, 1440), Vector2i(1920, 1080), Vector2i(1440, 900),
@@ -495,7 +502,7 @@ func _on_controller_connection(_device: int, connected: bool):
 	is_controller_connected = connected
 
 ## Level can be Menu, Lobby, Roulette, Slotty, Bartender, GenericBossAftermath, PitbossHallway,
-## PitbossMainfight, ChipbossStart, ChipbossInt , BlackjackStart, TutorialBossfight, Tutorial1, Tutorial2,
+## PitbossMainfight, ChipbossStart, ChipbossInt , BlackjackStart, TutorialStart, TutorialInterlude, TutorialBossfight
 func change_fmod_bgm_music_state(music_state: String) -> void:
 	main_bgm_emitter.set_parameter("MusicState", music_state)
 

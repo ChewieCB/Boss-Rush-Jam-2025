@@ -37,10 +37,6 @@ var current_trigger_actions: Array[String] = []
 var current_close_trigger_max: int = 1
 var current_close_trigger_count: int = 0
 
-# MUSIC
-#@onready var music_player: AudioStreamPlayer = $InteractiveMusicPlayer
-#var music_playback: AudioStreamPlaybackInteractive
-
 # Intro cutscene
 @export var intro_boss_path: Path3D
 @export var intro_boss_path_follow: PathFollow3D
@@ -87,7 +83,7 @@ func _ready() -> void:
 	floor_parent = arena_2_floor_parent
 	floor_mesh = arena_2_floor_mesh
 	
-	super()
+	super ()
 	
 	boss.tutorial_phase_1_started.connect(_on_tutorial_phase_1_started)
 	boss.tutorial_phase_2_started.connect(_on_tutorial_phase_2_started)
@@ -107,8 +103,6 @@ func _ready() -> void:
 
 	if boss_doors:
 		boss_doors.close()
-	
-	#music_playback = music_player.get_stream_playback()
 	
 	player.stat_ui.hide_all_ui()
 	
@@ -138,7 +132,6 @@ func _input(event: InputEvent) -> void:
 		#if is_cutscene_active:
 			#if not event.is_action("ui_cancel"):
 				#skip_cutscene()
-	
 	for action_str in current_trigger_actions:
 		if event.is_action(action_str):
 			# Prevents stick drift/tiny stick movements from closing the popup
@@ -204,7 +197,6 @@ func show_tutorial_panel(resource: TutorialPopupResource) -> void:
 
 
 func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
-	#music_playback.switch_to_clip(1)
 	exit_doors.close()
 	if boss_doors:
 		boss_doors.is_autodoor = false
@@ -236,7 +228,7 @@ func _on_boss_trigger_volume_body_entered_tutorial(_body: Node3D) -> void:
 
 
 func _on_boss_trigger_volume_body_entered(_body: Node3D) -> void:
-	GameManager.change_fmod_bgm_music_state("TutorialBossFight")
+	GameManager.change_fmod_bgm_music_state("TutorialBossfight")
 	
 	exit_doors.close()
 	if boss_doors:
@@ -300,7 +292,7 @@ func _on_level_select(level_path: String, loading_name: String = "") -> void:
 		GameManager.update_total_playtime()
 		await SaveManager.save_game(GameManager.chosen_slot_id)
 
-	super(level_path, "Lobby")
+	super (level_path, "Lobby")
 
 
 func _on_tutorial_phase_1_started() -> void:
@@ -396,8 +388,8 @@ func _on_tutorial_barrel_collected(barrel_data: BarrelDataResource) -> void:
 	
 	# Force effect to non-electric and 1st spin to electric
 	await player.current_gun.recheck_installed_barrels()
-	player.current_gun.set_barrel_to_effect(0, 48)  # 48 = fire
-	player.current_gun.force_barrel_next_spin(0, 50)  # 50 = electric
+	player.current_gun.set_barrel_to_effect(0, 48) # 48 = fire
+	player.current_gun.force_barrel_next_spin(0, 50) # 50 = electric
 	
 	await get_tree().create_timer(0.8, false).timeout
 	
