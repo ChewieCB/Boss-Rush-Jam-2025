@@ -250,6 +250,11 @@ func _ready() -> void:
 				else:
 					print(prop.name, " → ", value)
 	super ()
+	
+	health_component.initialize_health()
+	health_ui.clear_sub_health_bars()
+	health_ui.init_boss_health_ui(health_component.max_health, 2)
+	
 	if GameManager.boss_ante >= 1:
 		place_your_bet_attack_enabled = true
 	if GameManager.boss_ante >= 2:
@@ -296,6 +301,7 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 	super (new_health, prev_health)
 	if new_health < health_component.max_health * phase_2_health_percentage_trigger:
 		if current_phase == 1:
+			current_phase = 2
 			state_chart.send_event("start_phase_2")
 
 
@@ -1282,7 +1288,9 @@ func activate_chiptopede() -> void:
 	health_component.max_health = chiptopede_max_health
 	health_component.current_health = chiptopede_max_health
 	health_component.received_dmg_multiplier = 0.5
-	health_ui.init_health_ui(chiptopede_max_health)
+	#health_ui.init_health_ui(chiptopede_max_health)
+	health_ui.clear_sub_health_bars()
+	health_ui.init_boss_health_ui(chiptopede_max_health, 1)
 	health_ui.boss_name = "Chiptopede"
 	health_ui.show_ui()
 

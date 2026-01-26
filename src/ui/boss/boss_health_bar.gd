@@ -116,10 +116,11 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 				await get_tree().create_timer(0.3).timeout
 				if child == null:
 					continue
-				var tween: Tween = get_tree().create_tween()
-				tween.tween_property(child.heath_bar, "value", int(new_health), 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
-				await tween.finished
-				child.heath_bar.value = int(new_health)
+				if "health_bar" in child:
+					var tween: Tween = get_tree().create_tween()
+					tween.tween_property(child.heath_bar, "value", int(new_health), 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+					await tween.finished
+					child.heath_bar.value = int(new_health)
 			else:
 				child.damage_bar.value = child.health_bar.value
 

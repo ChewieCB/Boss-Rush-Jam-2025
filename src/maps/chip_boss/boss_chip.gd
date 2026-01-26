@@ -5,8 +5,11 @@ extends BossMap
 @onready var chiptopede_snake_path_points: Array[Node] = get_tree().get_nodes_in_group("boss_snake_path_marker")
 @onready var chiptopede_shoot_spawns: Array[Node] = get_tree().get_nodes_in_group("boss_shoot_spawn_marker")
 
+# Hack to manually enable/disable lower arena for performance
+@export var chiptopede_arena: Node3D
+
 # Flooding/Draining levels
-@export var lower_water_level: float = -0.1
+@export var lower_water_level: float = -5.0
 @export var upper_water_level: float = 1.3
 @export var platform_level: float = 2.0
 @export var water_raise_time: float = 4.0
@@ -39,6 +42,8 @@ const DRUNK_DURATION = 4.0
 
 func _ready() -> void:
 	super()
+	chiptopede_arena.visible = false
+	
 	if boss:
 		boss.flood_chamber.connect(raise_water)
 		boss.drain_chamber.connect(lower_water)
@@ -130,6 +135,7 @@ func break_floor() -> void:
 	
 	water_surface.visible = true
 	water_surface.global_position.y = -20
+	chiptopede_arena.visible = true
 	if breakable_floor:
 		breakable_floor.queue_free()
 	for platform in rising_platforms:
