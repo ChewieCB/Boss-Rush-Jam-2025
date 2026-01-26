@@ -78,10 +78,10 @@ func _play_button_sfx() -> void:
 
 func _on_start_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
-	save_ui.visible = true
 	story_ui.visible = false
 	credits_ui.visible = false
 	settings_ui.close_menu()
+	save_ui.visible = true
 
 	# Grab focus the first save button
 	var first_save_button: SaveSlotItem = save_slot_items[0]
@@ -100,13 +100,12 @@ func _on_option_button_pressed() -> void:
 	save_ui.visible = false
 	settings_ui.open_menu()
 
-
 func _on_credit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
-	credits_ui.visible = true
 	story_ui.visible = false
 	save_ui.visible = false
 	settings_ui.close_menu()
+	credits_ui.visible = true
 	for child in buttons_container.get_children():
 		child.release_focus()
 
