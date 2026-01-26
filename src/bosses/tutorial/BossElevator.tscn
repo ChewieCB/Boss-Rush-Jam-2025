@@ -125,7 +125,7 @@
 [ext_resource type="Texture2D" uid="uid://c0cp3nl4mbhh6" path="res://src/bosses/tutorial/assets/sprites/Hurt.png" id="72_gxdkx"]
 [ext_resource type="Texture2D" uid="uid://bj8k78u0u8oyo" path="res://src/bosses/tutorial/assets/sprites/Death.png" id="73_0d1k8"]
 [ext_resource type="Material" uid="uid://dtya4iffmvt1m" path="res://src/bosses/tutorial/assets/materials/wave_wall_mat.tres" id="85_4771x"]
-[ext_resource type="QuadMesh" uid="uid://drafkfnascb3r" path="res://src/player/gun/vfx/SmokeVFX3D.tres" id="126_5vgui"]
+[ext_resource type="QuadMesh" uid="uid://cp64o1nv3l2q6" path="res://src/player/gun/vfx/SmokeVFX3D.tres" id="126_5vgui"]
 
 [sub_resource type="Curve" id="Curve_hy86r"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -4558,6 +4558,7 @@ bus = &"SFX"
 [node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="34"]
 bus = &"SFX"
 
+[connection signal="state_entered" from="StateChart/Root/Phase/Inactive" to="." method="_on_inactive_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" to="." method="_on_arena_1_cutscene_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" to="." method="_on_arena_1_cutscene_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Phase1_BasicCombatTutorial" to="." method="_on_tutorial_phase_1_state_entered"]

@@ -314,6 +314,10 @@ func select_attack() -> void:
 			push_error("Invalid phase %s" % current_phase)
 
 
+func _on_inactive_state_entered() -> void:
+	inactive_loaded.emit()
+
+
 ## TUTORIAL PHASES
 
 func select_attack_phase_1_tutorial() -> void:

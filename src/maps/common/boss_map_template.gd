@@ -56,10 +56,11 @@ func _ready() -> void:
 	player.health_component.died.connect(_on_player_death)
 	# Sync the player's location in the elevator from the lobby
 	if GameManager.cached_player_pos_relative_to_elevator_doors:
-		var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
-		player.global_position = player_start_pos
-		player.rotation = GameManager.cached_player_rotation
-		player.player_camera.rotation = GameManager.cached_camera_rotation
+		if elevator_doors:
+			var player_start_pos: Vector3 = elevator_doors.global_position - GameManager.cached_player_pos_relative_to_elevator_doors
+			player.global_position = player_start_pos
+			player.rotation = GameManager.cached_player_rotation
+			player.player_camera.rotation = GameManager.cached_camera_rotation
 	
 	# TODO - manually trigger in levels
 	#player.stat_ui.show_all_ui()
