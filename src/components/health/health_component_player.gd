@@ -2,9 +2,7 @@ extends HealthComponent
 
 
 func _ready() -> void:
-	super ()
-	GameManager.change_fmod_bgm_player_is_dead(false)
-	died.connect(func(): GameManager.change_fmod_bgm_player_is_dead(true))
+	super()
 
 
 func damage(_damage: float, _color: Color = Color.WHITE, _text_scale_pop: float = 1.3) -> void:
