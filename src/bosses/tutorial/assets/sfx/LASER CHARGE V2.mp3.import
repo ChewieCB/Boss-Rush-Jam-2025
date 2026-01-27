@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ckccqh5v6i2kv"
+path="res://.godot/imported/LASER CHARGE V2.mp3-82a59a91471c9f5717837cdfe184cc3d.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/LASER CHARGE V2.mp3"
+dest_files=["res://.godot/imported/LASER CHARGE V2.mp3-82a59a91471c9f5717837cdfe184cc3d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

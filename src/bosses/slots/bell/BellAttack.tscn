@@ -4,11 +4,11 @@
 [ext_resource type="ArrayMesh" uid="uid://dq3mrfaleu5xm" path="res://src/bosses/slots/bell/bell_mesh_2.tres" id="1_qcd24"]
 [ext_resource type="PackedScene" uid="uid://b3qmxcwnu2wu0" path="res://src/player/gun/vfx/explosion/ExplosionVFX2D.tscn" id="2_m8nuh"]
 [ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="3_hwuru"]
-[ext_resource type="AudioStream" uid="uid://d3j52wm5b02hi" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK 1.mp3" id="4_da17a"]
+[ext_resource type="AudioStream" uid="uid://it6dpesk4yyq" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 1 NORMALISED.mp3" id="4_08v08"]
 [ext_resource type="AudioStream" uid="uid://dj3qqiciyxwmv" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 1.mp3" id="4_l0yln"]
-[ext_resource type="AudioStream" uid="uid://c7r6nnc2fe4fv" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK 2.mp3" id="5_74oj1"]
 [ext_resource type="AudioStream" uid="uid://ddhs0duid8pk8" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 2.mp3" id="5_82x1c"]
-[ext_resource type="AudioStream" uid="uid://c003li8p5v5fl" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK 3.mp3" id="6_22c5s"]
+[ext_resource type="AudioStream" uid="uid://crbhefd2ymwdt" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 2 NORMALISED.mp3" id="5_a5p0u"]
+[ext_resource type="AudioStream" uid="uid://c5knvsvfj0lby" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 3 NORMALISED.mp3" id="6_8jqsu"]
 [ext_resource type="AudioStream" uid="uid://xuyc45uopqlk" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 3.mp3" id="6_xmavy"]
 [ext_resource type="AudioStream" uid="uid://di0dji8wpexg6" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 1.mp3" id="7_p75bb"]
 [ext_resource type="AudioStream" uid="uid://boyjiwip3m72n" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 2.mp3" id="8_ud1vu"]
@@ -23,7 +23,7 @@ collision_mask = 78
 script = ExtResource("1_c4e2b")
 explosion_scene = ExtResource("2_m8nuh")
 spark_scene = ExtResource("3_hwuru")
-sfx_bell_full = Array[AudioStream]([ExtResource("4_da17a"), ExtResource("5_74oj1"), ExtResource("6_22c5s")])
+sfx_bell_full = Array[AudioStream]([ExtResource("4_08v08"), ExtResource("5_a5p0u"), ExtResource("6_8jqsu")])
 sfx_bell_windup = Array[AudioStream]([ExtResource("4_l0yln"), ExtResource("5_82x1c"), ExtResource("6_xmavy")])
 sfx_bell_impact = Array[AudioStream]([ExtResource("7_p75bb"), ExtResource("8_ud1vu"), ExtResource("9_cf6nm")])
 

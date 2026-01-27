@@ -1241,73 +1241,73 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, 0)
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="14"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="15"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="16"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="17"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="18"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="19"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="20"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="21"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer9" type="AudioStreamPlayer3D" parent="." index="22"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer10" type="AudioStreamPlayer3D" parent="." index="23"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer11" type="AudioStreamPlayer3D" parent="." index="24"]
 volume_db = 2.0
-unit_size = 25.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 
 [node name="SFXPlayer12" type="AudioStreamPlayer3D" parent="." index="25"]
 volume_db = 2.0
-unit_size = 20.0
+unit_size = 30.0
 max_polyphony = 10
 bus = &"SFX"
 

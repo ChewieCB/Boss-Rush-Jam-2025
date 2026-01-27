@@ -68,6 +68,11 @@ monitoring = false
 shape = SubResource("SphereShape3D_2sd2v")
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
+attenuation_model = 3
+volume_db = 2.0
+unit_size = 35.0
+max_db = 4.0
+max_polyphony = 50
 bus = &"SFX"
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

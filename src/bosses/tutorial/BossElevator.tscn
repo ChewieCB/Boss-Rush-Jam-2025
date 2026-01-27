@@ -1,4 +1,4 @@
-[gd_scene load_steps=262 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=260 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -33,15 +33,11 @@
 [ext_resource type="AudioStream" uid="uid://dy383g3lt7ne7" path="res://src/bosses/tutorial/assets/sfx/boss_vo/drop roller 2-1 it aint gonna save you.mp3" id="9_t4ju7"]
 [ext_resource type="AudioStream" uid="uid://rftdmhx827li" path="res://src/bosses/tutorial/assets/sfx/Nail Gun Activation.mp3" id="10_u246n"]
 [ext_resource type="PackedScene" uid="uid://bhimnenvo0scq" path="res://src/player/gun/vfx/SmokebombParticles.tscn" id="11_1crh5"]
-[ext_resource type="AudioStream" uid="uid://37k158pyjqtf" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 1 V2.mp3" id="11_8tgau"]
 [ext_resource type="AudioStream" uid="uid://b71lrf1517fp8" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 1-1 come on.mp3" id="11_fobd3"]
 [ext_resource type="AudioStream" uid="uid://y41k7fwr4l4w" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 2-1 put your back into it.mp3" id="12_22t0e"]
-[ext_resource type="AudioStream" uid="uid://cus1umlbiwd56" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 2 V2.mp3" id="12_bt5kx"]
 [ext_resource type="AudioStream" uid="uid://de300cuhe5k4k" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 3-1 roaches tougher.mp3" id="13_b8a3y"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="13_k65oo"]
-[ext_resource type="AudioStream" uid="uid://do4mm41k5wg0i" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 3 V2.mp3" id="13_qjtrx"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="14_kbpeg"]
-[ext_resource type="AudioStream" uid="uid://bj5hdchtswx3f" path="res://src/bosses/tutorial/assets/sfx/Nail Gun 4 V2.mp3" id="14_l34ga"]
 [ext_resource type="AudioStream" uid="uid://elck08i3k1l2" path="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 4-1 all they got.mp3" id="14_xtwbu"]
 [ext_resource type="AudioStream" uid="uid://03r152lhfvql" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 7-1 out of order.mp3" id="15_bsimv"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="15_c0skh"]
@@ -51,7 +47,6 @@
 [ext_resource type="Texture2D" uid="uid://c5qw83v0dnuq3" path="res://src/bosses/tutorial/assets/sprites/1_HIT_1.png" id="17_cu5tl"]
 [ext_resource type="Texture2D" uid="uid://cvr3a7aipo7m6" path="res://src/bosses/tutorial/assets/sprites/3_HIT_2.png" id="17_dmhhe"]
 [ext_resource type="AudioStream" uid="uid://nc8efuucqwef" path="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 6-1 I won't fix you.mp3" id="17_kr1cs"]
-[ext_resource type="AudioStream" uid="uid://ds224hyodfrif" path="res://src/bosses/tutorial/assets/sfx/Laser Charge Shepard Tone.mp3" id="17_mkqio"]
 [ext_resource type="AudioStream" uid="uid://dw60ntjht2e6" path="res://src/bosses/tutorial/assets/sfx/Laser Fire 1.mp3" id="18_5elni"]
 [ext_resource type="Texture2D" uid="uid://de0va8w8bfuxl" path="res://src/bosses/tutorial/assets/sprites/1_HIT_2.png" id="18_22flk"]
 [ext_resource type="Material" uid="uid://ikjycfpkgv3n" path="res://src/bosses/chips/AoeMat.tres" id="18_g7ktc"]
@@ -117,19 +112,22 @@
 [ext_resource type="AudioStream" uid="uid://djcacot1ktwg4" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 3 V3.mp3" id="55_nk5pw"]
 [ext_resource type="AudioStream" uid="uid://c288kg8477e8e" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 4 V3.mp3" id="56_alhnw"]
 [ext_resource type="AudioStream" uid="uid://bgoy8pw7mpqrb" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC CHARGE 1.mp3" id="57_175j4"]
-[ext_resource type="PackedScene" uid="uid://2jk0hjat1df7" path="res://src/bosses/tutorial/Arena2FloorShockHazard.tscn" id="57_j5jra"]
+[ext_resource type="PackedScene" path="res://src/bosses/tutorial/Arena2FloorShockHazard.tscn" id="57_j5jra"]
 [ext_resource type="AudioStream" uid="uid://basa3mcnvcbcf" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC CHARGE 2.mp3" id="58_d6h0r"]
 [ext_resource type="AudioStream" uid="uid://cm7latp88qj1y" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC TELEGRAPH 1.mp3" id="59_ch6tw"]
+[ext_resource type="AudioStream" uid="uid://q3rx1vut6mbt" path="res://src/bosses/tutorial/assets/sfx/Laser Armed.mp3" id="60_ic00a"]
 [ext_resource type="AudioStream" uid="uid://bm0x2177w485e" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC IMPACT 1.mp3" id="60_uh4d7"]
+[ext_resource type="AudioStream" uid="uid://ckccqh5v6i2kv" path="res://src/bosses/tutorial/assets/sfx/LASER CHARGE V2.mp3" id="61_ohmwg"]
 [ext_resource type="AudioStream" uid="uid://bgxc0ipaah2x3" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC IMPACT 2.mp3" id="61_w4w1d"]
 [ext_resource type="AudioStream" uid="uid://b8pue08ndpbtc" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC SOUND 1.mp3" id="62_qwveb"]
 [ext_resource type="AudioStream" uid="uid://b6ikk8mk25h5k" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC SOUND 2.mp3" id="63_vxl2l"]
 [ext_resource type="AudioStream" uid="uid://cmanomwk2mgku" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC FADE OUT 1.mp3" id="64_ys6fd"]
 [ext_resource type="AudioStream" uid="uid://1e1weuy8thr8" path="res://src/bosses/tutorial/assets/sfx/ELECTRIC FADE OUT 2.mp3" id="65_a5wdl"]
+[ext_resource type="AudioStream" uid="uid://crmuqk0xvt1ak" path="res://src/bosses/tutorial/assets/sfx/LASER DISARMED.mp3" id="65_sxuab"]
 [ext_resource type="Texture2D" uid="uid://c0cp3nl4mbhh6" path="res://src/bosses/tutorial/assets/sprites/Hurt.png" id="72_gxdkx"]
 [ext_resource type="Texture2D" uid="uid://bj8k78u0u8oyo" path="res://src/bosses/tutorial/assets/sprites/Death.png" id="73_0d1k8"]
 [ext_resource type="Material" uid="uid://dtya4iffmvt1m" path="res://src/bosses/tutorial/assets/materials/wave_wall_mat.tres" id="85_4771x"]
-[ext_resource type="QuadMesh" uid="uid://drafkfnascb3r" path="res://src/player/gun/vfx/SmokeVFX3D.tres" id="126_5vgui"]
+[ext_resource type="QuadMesh" uid="uid://b4t1mndhwcofs" path="res://src/player/gun/vfx/SmokeVFX3D.tres" id="126_5vgui"]
 
 [sub_resource type="Curve" id="Curve_hy86r"]
 _data = [Vector2(0.102612, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -2416,10 +2414,10 @@ laser_aoe = ExtResource("4_hx1ss")
 laser_spawn = NodePath("LaserSpawn")
 laser_damage = 40.0
 laser_aoe_marker = ExtResource("5_pbhfx")
-sfx_laser_arm = Array[AudioStream]([ExtResource("11_8tgau"), ExtResource("12_bt5kx"), ExtResource("13_qjtrx"), ExtResource("14_l34ga")])
-sfx_laser_charging = Array[AudioStream]([ExtResource("17_mkqio")])
+sfx_laser_arm = Array[AudioStream]([ExtResource("60_ic00a")])
+sfx_laser_charging = Array[AudioStream]([ExtResource("61_ohmwg")])
 sfx_laser_shoot = Array[AudioStream]([ExtResource("18_5elni"), ExtResource("19_upudo"), ExtResource("20_dvqnx")])
-sfx_laser_disarm = []
+sfx_laser_disarm = Array[AudioStream]([ExtResource("65_sxuab")])
 shock_damage_tutorial = 10.0
 shock_duration_tutorial = 0.6
 shock_floor_hazard_prefab = ExtResource("57_j5jra")
@@ -4426,43 +4424,35 @@ process_material = SubResource("ParticleProcessMaterial_h7k5q")
 draw_pass_1 = ExtResource("126_5vgui")
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="." index="27"]
-unit_size = 30.0
-max_db = -2.0
+unit_size = 35.0
 bus = &"SFX"
 
 [node name="SFXPlayer2" type="AudioStreamPlayer3D" parent="." index="28"]
-unit_size = 30.0
-max_db = -2.0
+unit_size = 35.0
 bus = &"SFX"
 
 [node name="SFXPlayer3" type="AudioStreamPlayer3D" parent="." index="29"]
-unit_size = 30.0
-max_db = -2.0
+unit_size = 35.0
 bus = &"SFX"
 
 [node name="SFXPlayer4" type="AudioStreamPlayer3D" parent="." index="30"]
-unit_size = 30.0
-max_db = -2.0
+unit_size = 35.0
 bus = &"SFX"
 
 [node name="SFXPlayer5" type="AudioStreamPlayer3D" parent="." index="31"]
-unit_size = 30.0
-max_db = -2.0
+unit_size = 35.0
 bus = &"SFX"
 
 [node name="SFXPlayer6" type="AudioStreamPlayer3D" parent="." index="32"]
-unit_size = 30.0
-max_db = -2.0
+unit_size = 35.0
 bus = &"SFX"
 
 [node name="SFXPlayer7" type="AudioStreamPlayer3D" parent="." index="33"]
-unit_size = 30.0
-max_db = -2.0
+unit_size = 35.0
 bus = &"SFX"
 
 [node name="SFXPlayer8" type="AudioStreamPlayer3D" parent="." index="34"]
-unit_size = 30.0
-max_db = -2.0
+unit_size = 35.0
 bus = &"SFX"
 
 [connection signal="state_entered" from="StateChart/Root/Phase/TutorialArena1/Arena1Cutscene" to="." method="_on_arena_1_cutscene_state_entered"]
