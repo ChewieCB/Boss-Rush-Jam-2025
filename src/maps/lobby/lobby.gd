@@ -17,7 +17,6 @@ signal ui_accept
 
 @onready var vendors: Array[Node] = find_children("*", "Vendor")
 
-var is_tutorial: bool = false
 var display_barrels: Array = []
 
 var no_difficulty_bosses: Array[int] = [BossCore.BossIdEnum.BLACKJACK, BossCore.BossIdEnum.ELEVATOR]
@@ -51,6 +50,9 @@ func _ready() -> void:
 	GameManager.is_free_reroll = true
 	GameManager.bet_value = 0
 	GameManager.reward_value = 0
+	
+	# HACK for backroom load
+	await ScreenTransition.transition_in()
 	
 	# HACK
 	if GameManager.player_gained_first_barrel:
@@ -99,16 +101,17 @@ func load_selected_level():
 	LoadingHandler.start_loading(GameManager.selected_level_path, "", false)
 	sfx_door_close.play()
 	elevator_doors.close()
-	await elevator_doors.anim_player.animation_finished
+	#await elevator_doors.anim_player.animation_finished
 	
 	# Set the skip equip anim flag for seamless transition
-	LoadingHandler.skip_equip_anim = true
-	# Get the player's position relative to the elevator doors
-	GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
-	GameManager.cached_player_rotation = GameManager.player.rotation
-	GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
-	GameManager.is_free_reroll = false
-	LoadingHandler.load_scene_seamless()
+	LoadingHandler.skip_equip_anim = false
+	## Get the player's position relative to the elevator doors
+	#GameManager.cached_player_pos_relative_to_elevator_doors = elevator_doors.global_position - GameManager.player.global_position
+	#GameManager.cached_player_rotation = GameManager.player.rotation
+	#GameManager.cached_camera_rotation = GameManager.player.player_camera.rotation
+	#GameManager.is_free_reroll = false
+	#LoadingHandler.load_scene_seamless()
+	LoadingHandler.load_scene_transition()
 
 
 func find_and_load_boss_bgm() -> void:
