@@ -29,7 +29,7 @@ func _ready() -> void:
 	
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
-	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
+	LoadingHandler.current_scene_path = LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM]
 	get_tree().paused = false
 	
 	ScreenTransition.transition_in()
@@ -126,8 +126,8 @@ func start_game():
 		)
 	else:
 		LoadingHandler.start_loading(
-			LoadingHandler.level_paths[LoadingHandler.LEVELS.LOBBY],
-			"Lobby"
+			LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
+			"Back Room"
 		)
 	
 	await ScreenTransition.transition_finished

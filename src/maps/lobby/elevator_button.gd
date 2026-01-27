@@ -2,7 +2,7 @@
 extends Area3D
 class_name ElevatorButton
 
-signal pushed(level_path: String)
+signal pushed(level_path: String, elevator_doors: ElevatorDoors, respawn_marker: Marker3D)
 
 @export var entProperties: Dictionary = {
 	"linked_level": "",
@@ -17,6 +17,8 @@ var boss_name: String
 @onready var label: Label3D = $Label3D
 @onready var SFXButtonPress: AudioStreamPlayer3D = $SFXButtonPress
 @export var disabled: bool = false
+@export var linked_elevator_doors: ElevatorDoors
+@export var hub_respawn_marker: Marker3D
 
 
 func _ready() -> void:
@@ -32,7 +34,7 @@ func interact() -> void:
 	anim_player.play("push")
 	GameManager.selected_boss_id = boss_id
 	if linked_level:
-		pushed.emit(linked_level)
+		pushed.emit(linked_level, linked_elevator_doors, hub_respawn_marker)
 		SFXButtonPress.play()
 
 

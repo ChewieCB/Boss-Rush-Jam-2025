@@ -1,4 +1,4 @@
-[gd_scene load_steps=614 format=4 uid="uid://bcpcv8dc854s7"]
+[gd_scene load_steps=616 format=4 uid="uid://bcpcv8dc854s7"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_3dpme"]
 [ext_resource type="PackedScene" uid="uid://dijn1g2vmnb8g" path="res://src/utils/singletons/IdleDetector.tscn" id="3_b8esj"]
@@ -17,6 +17,8 @@
 [ext_resource type="Material" uid="uid://c0mwfj7g1eaav" path="res://assets/textures/walls/peeling_plaster_wall.tres" id="14_5u73f"]
 [ext_resource type="Material" uid="uid://cuh405ors6lok" path="res://assets/textures/placeholder/texture_red_07.tres" id="14_bpg32"]
 [ext_resource type="Material" uid="uid://dtl8ybjw5mgl5" path="res://assets/textures/posters/surveillance_poster.tres" id="14_fxap3"]
+[ext_resource type="AudioStream" uid="uid://cuge1lwxr3m82" path="res://src/maps/lobby/assets/Lift Door Open.mp3" id="14_m3wbt"]
+[ext_resource type="AudioStream" uid="uid://brxmaksjy6431" path="res://src/maps/lobby/assets/Lift Door Close.mp3" id="15_iwsk0"]
 [ext_resource type="Material" uid="uid://boe1pn246iwrh" path="res://assets/textures/posters/grand_opening_scuffed.tres" id="16_g8lwn"]
 [ext_resource type="Material" uid="uid://dr3hgrw1wdh3v" path="res://assets/textures/walls/column_trim_1.tres" id="17_rveo5"]
 [ext_resource type="Material" uid="uid://bn5vjofuqcp4r" path="res://assets/textures/walls/green_tile_jank.tres" id="18_4d0om"]
@@ -7245,8 +7247,11 @@ _surfaces = [{
 "vertex_data": PackedByteArray("AAAQwQAAAD4AAAXBAAAAwQAAAD4AAAXBAAAAwQAAQL8AAAXBAAAQwQAAQL8AAAXB/3//fwAA/z//f/9/AAD/P/9//38AAP8//3//fwAA/z8=")
 }]
 
-[node name="Backroom" type="Node3D"]
+[node name="Backroom" type="Node3D" node_paths=PackedStringArray("player", "elevator_buttons", "vendors")]
 script = ExtResource("1_3dpme")
+player = NodePath("FuncGodotMap/entity_1_PlayerRef")
+elevator_buttons = [NodePath("FuncGodotMap/entity_112_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/group_7945_Elevator/entity_201_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/group_7957_Elevator/entity_239_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/group_10058_Elevator/entity_315_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/group_9045_Elevator/entity_277_ElevatorButton")]
+vendors = [NodePath("Vendor")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.70711, 0.612371, -0.353551, -1.49013e-08, 0.499998, 0.866027, 0.707104, 0.612376, -0.353553, 0, 0, 0)
@@ -7936,6 +7941,32 @@ omni_attenuation = 2.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 6.55, -0.5)
 size = Vector3(32, 7, 27)
 material = SubResource("FogMaterial_44vgd")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(1920, 1080)
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+stream = ExtResource("61_pviw6")
+volume_db = -80.0
+autoplay = true
+loop = true
+bus = &"Ambience"
+
+[node name="SFXDoorOpen" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.808648, 0.588293, 0, -0.588293, 0.808648, -0.0256858, 0.632339, 8.23853)
+stream = ExtResource("14_m3wbt")
+volume_db = -5.0
+unit_size = 2.0
+bus = &"SFX"
+
+[node name="SFXDoorClose" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.808648, 0.588293, 0, -0.588293, 0.808648, -0.0256858, 0.632339, 8.23853)
+stream = ExtResource("15_iwsk0")
+volume_db = -5.0
+unit_size = 2.0
+bus = &"SFX"
 
 [node name="FuncGodotMap" type="Node3D" parent="."]
 script = ExtResource("23_o3u5f")
@@ -9462,7 +9493,7 @@ metadata/func_godot_mesh_data = {}
 [node name="entity_111_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/entity_111_func_detail_illusionary"]
 mesh = SubResource("ArrayMesh_le3wg")
 
-[node name="entity_112_ElevatorButton" parent="FuncGodotMap" instance=ExtResource("36_653qc")]
+[node name="entity_112_ElevatorButton" parent="FuncGodotMap" node_paths=PackedStringArray("hub_respawn_marker") instance=ExtResource("36_653qc")]
 transform = Transform3D(1.39071e-07, 0, 1, 0, 1, 0, -1, 0, 1.39071e-07, -26.7657, 8.40625, -2.71875)
 entProperties = {
 "angle": "270",
@@ -9472,6 +9503,7 @@ entProperties = {
 "origin": "-87 -856.501 269"
 }
 boss_id = 7
+hub_respawn_marker = NodePath("../../TutorialBossRespawnPoint")
 
 [node name="group_7821_CashDeskRoof" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
@@ -10036,7 +10068,7 @@ metadata/func_godot_mesh_data = {}
 [node name="entity_200_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/layer_0_Elevators/group_7945_Elevator/group_10820_FrameDeco/group_10819_PaintingDeco/entity_200_func_detail_illusionary"]
 mesh = SubResource("ArrayMesh_kobxd")
 
-[node name="entity_201_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators/group_7945_Elevator" instance=ExtResource("36_653qc")]
+[node name="entity_201_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators/group_7945_Elevator" node_paths=PackedStringArray("linked_elevator_doors", "hub_respawn_marker") instance=ExtResource("36_653qc")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -9.12972, 1.03125, -14.7523)
 entProperties = {
 "_tb_group": "7945",
@@ -10047,6 +10079,8 @@ entProperties = {
 "origin": "-472.075 -292.151 33"
 }
 boss_id = 6
+linked_elevator_doors = NodePath("../group_10818_Elevator/group_10817_Elevator/entity_168_ElevatorDoors")
+hub_respawn_marker = NodePath("../../../../TutorialBossRespawnPoint")
 
 [node name="group_7957_Elevator" type="Node3D" parent="FuncGodotMap/layer_0_Elevators"]
 metadata/_tb_type = "_tb_group"
@@ -10259,7 +10293,7 @@ metadata/func_godot_mesh_data = {}
 [node name="entity_238_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/layer_0_Elevators/group_7957_Elevator/group_10717_FrameDeco/group_10716_PaintingDeco/entity_238_func_detail_illusionary"]
 mesh = SubResource("ArrayMesh_huklo")
 
-[node name="entity_239_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators/group_7957_Elevator" instance=ExtResource("36_653qc")]
+[node name="entity_239_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators/group_7957_Elevator" node_paths=PackedStringArray("linked_elevator_doors", "hub_respawn_marker") instance=ExtResource("36_653qc")]
 transform = Transform3D(0.0174524, 0, 0.999848, 0, 1, 0, -0.999848, 0, 0.0174524, -31.7822, -1.96875, -2.0749)
 entProperties = {
 "_tb_group": "7957",
@@ -10270,6 +10304,8 @@ entProperties = {
 "origin": "-66.3969 -1017.03 -63"
 }
 boss_id = 1
+linked_elevator_doors = NodePath("../group_10715_Elevator/group_10714_Elevator/entity_206_ElevatorDoors")
+hub_respawn_marker = NodePath("../../../../SlotBossRespawnPoint")
 
 [node name="group_9045_Elevator" type="Node3D" parent="FuncGodotMap/layer_0_Elevators"]
 metadata/_tb_type = "_tb_group"
@@ -10482,7 +10518,7 @@ metadata/func_godot_mesh_data = {}
 [node name="entity_276_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/layer_0_Elevators/group_9045_Elevator/group_10840_FrameDeco/group_10839_PaintingDeco/entity_276_func_detail_illusionary"]
 mesh = SubResource("ArrayMesh_0dgbe")
 
-[node name="entity_277_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators/group_9045_Elevator" instance=ExtResource("36_653qc")]
+[node name="entity_277_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators/group_9045_Elevator" node_paths=PackedStringArray("linked_elevator_doors", "hub_respawn_marker") instance=ExtResource("36_653qc")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, -1.78525, 1.03125, 14.5738)
 entProperties = {
 "_tb_group": "9045",
@@ -10493,6 +10529,8 @@ entProperties = {
 "origin": "466.363 -57.1279 33"
 }
 boss_id = 5
+linked_elevator_doors = NodePath("../group_10838_Elevator/group_10837_Elevator/entity_244_ElevatorDoors")
+hub_respawn_marker = NodePath("../../../../ChipBossRespawnPoint")
 
 [node name="group_10058_Elevator" type="Node3D" parent="FuncGodotMap/layer_0_Elevators"]
 metadata/_tb_type = "_tb_group"
@@ -10717,17 +10755,14 @@ entProperties = {
 }
 disabled = true
 
-[node name="SubViewport" type="SubViewport" parent="."]
-size = Vector2i(1920, 1080)
+[node name="TutorialBossRespawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -7.38144, 1, -13.0161)
 
-[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="SubViewport"]
-offset_right = 40.0
-offset_bottom = 40.0
-stream = ExtResource("61_pviw6")
-volume_db = -80.0
-autoplay = true
-loop = true
-bus = &"Ambience"
+[node name="ChipBossRespawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -3.05219, 1, 12.3897)
+
+[node name="SlotBossRespawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -29.3426, -2, -2.02695)
 
 [editable path="DecoSprites/ShopBarrels/BarrelItemPickup"]
 [editable path="DecoSprites/ShopBarrels/BarrelItemPickup2"]

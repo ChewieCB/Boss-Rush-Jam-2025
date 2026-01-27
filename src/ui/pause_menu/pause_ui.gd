@@ -99,8 +99,8 @@ func _on_lobby_button_pressed() -> void:
 		)
 	else:
 		LoadingHandler.start_loading(
-			LoadingHandler.level_paths[LoadingHandler.LEVELS.LOBBY],
-			"Lobby"
+			LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
+			"Back Room"
 		)
 	
 	# Toggle low pass filter for BGM

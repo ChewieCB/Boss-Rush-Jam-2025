@@ -607,8 +607,8 @@ func show_end_panel() -> void:
 	
 	# TODO - have the player respawn at the boss fight, maybe load TUTORIAL_BOSS_ONLY instead?
 	LoadingHandler.start_loading(
-		LoadingHandler.level_paths[LoadingHandler.LEVELS.LOBBY],
-		"Lobby"
+		LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
+		"Back Room"
 	)
 	await ScreenTransition.transition_finished
 	LoadingHandler.load_scene_transition()

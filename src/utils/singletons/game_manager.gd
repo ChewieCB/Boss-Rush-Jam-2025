@@ -131,6 +131,7 @@ var risk_level = 0:
 var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3
 var cached_camera_rotation: Vector3
+var elevator_respawn_transform: Transform3D
 
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
@@ -324,7 +325,7 @@ func equip_gun_frame(search_frame_id: GunFrameResource.GunFrameIdEnum) -> String
 func purchase_reroll() -> bool:
 	if reroll_time == 0:
 		reroll_cost = int(reroll_cost * get_risk_spin_cost_mult())
-	if GameManager.current_boss_map and GameManager.current_boss_map.is_tutorial:
+	if current_boss_map and tutorial_completed:
 		reroll_cost = 100
 	if (player_currency >= reroll_cost and reroll_time < get_risk_limit_spin_amount()) or is_free_reroll:
 		if not is_free_reroll:
