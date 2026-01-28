@@ -8,7 +8,7 @@ signal destroyed(bell: Bell)
 @export var dust_cloud_prefab: PackedScene
 @export_group("SFX")
 @export var sfx_bell_full: Array[AudioStream]
-@export var sfx_bell_windup: Array[AudioStream]
+@export var sfx_bell_land: Array[AudioStream]
 @export var sfx_bell_impact: Array[AudioStream]
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
@@ -50,6 +50,8 @@ func destroy() -> void:
 	var dust_cloud_vfx = dust_cloud_prefab.instantiate()
 	get_tree().get_root().add_child(dust_cloud_vfx)
 	dust_cloud_vfx.global_position = global_position + Vector3(0, 1, 0)
+	sfx_player.stream = sfx_bell_land.pick_random()
+	sfx_player.play()
 	# If player near, shake their camera stronger
 	var player_distance_to_bell = GameManager.player.global_position.distance_to(global_position)
 	if player_distance_to_bell < CLOSE_TREMOR_DISTANCE:
