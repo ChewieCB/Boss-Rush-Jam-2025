@@ -215,20 +215,17 @@ surface_material_override/0 = null
 [node name="HealthComponent" parent="." index="5"]
 max_health = 10000.0
 
-[node name="StatusLabelParent" parent="." index="12"]
+[node name="StatusLabelParent" parent="." index="13"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.327, 0)
 
-[node name="DamageTextMarker" parent="." index="13"]
+[node name="DamageTextMarker" parent="." index="14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0112, 0)
 
-[node name="BodyCenter" parent="." index="14"]
+[node name="BodyCenter" parent="." index="15"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0190299, 0)
 
 [node name="CollisionShape3D" parent="AimAssistBubble" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05396, 0)
-
-[node name="HurtSFXPlayer" parent="." index="20"]
-unit_size = 20.0
 
 [node name="SplashParticles" type="GPUParticles3D" parent="." index="21"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
@@ -247,3 +244,6 @@ amount = 4
 one_shot = true
 process_material = SubResource("ParticleProcessMaterial_tgibn")
 draw_pass_1 = SubResource("QuadMesh_0et82")
+
+[node name="HurtSFXPlayer" parent="." index="22"]
+unit_size = 20.0

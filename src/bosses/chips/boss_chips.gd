@@ -249,7 +249,7 @@ func _ready() -> void:
 					print("!! Unset or invalid export: ", prop.name)
 				else:
 					print(prop.name, " → ", value)
-	super ()
+	super()
 	
 	health_component.initialize_health()
 	health_ui.clear_sub_health_bars()
@@ -267,8 +267,12 @@ func _ready() -> void:
 		small_stack_count = 5
 	if GameManager.boss_ante >= 5:
 		pass # In boss_chip map script
+	
+	# Chiptopede
 	leap_finished.connect(_on_chiptopede_leap_impact)
 	chiptopede_max_health *= GameManager.get_risk_max_hp_mult()
+	_create_segment_cache()
+	generate_snake_graph()
 
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -1270,10 +1274,7 @@ func _on_phase_3_state_entered() -> void:
 
 	#
 	self.global_position = despawned_pos
-	_create_segment_cache()
-	generate_snake_graph()
-
-	# TODO - screen shake, particles, polish, etc.
+	
 	break_floor.emit()
 	# 6.5s  delay
 	await get_tree().create_timer(3.8).timeout
@@ -1281,6 +1282,10 @@ func _on_phase_3_state_entered() -> void:
 
 
 func activate_chiptopede() -> void:
+	# Play awakening sound from below
+	chiptopede_sfx_player.stream = sfx_chiptopede_awaken
+	chiptopede_sfx_player.play()
+	
 	# Re-fill health bar, change name, and show
 	health_component.has_died = false
 	if GameManager.CHEAT_oneshot:
@@ -1614,6 +1619,7 @@ func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Arra
 
 		var small_stack_inst: CharacterBody3D = small_stack_prefab.instantiate()
 		get_parent().add_child(small_stack_inst)
+		small_stack_inst.big_stack = self
 		small_stack_inst.global_transform = self.global_transform
 		small_stack_inst.scale = Vector3(0, 1, 0)
 
@@ -1844,15 +1850,13 @@ func _create_segment_cache() -> Node3D:
 	for idx in range(chiptopede_segments):
 		var segment = chiptopede_segment_prefab.instantiate()
 		segment.health_component.health_diff.connect(_on_chiptopede_hurt)
+		segment.big_stack = self
 		cache_segment(segment)
-
+	
 	# Setup sfx player at head segment
 	var chiptopede_head = segment_cache_parent.get_child(0)
 	chiptopede_head.add_child(chiptopede_sfx_player)
-	# Play awakening sound from below
-	chiptopede_sfx_player.stream = sfx_chiptopede_awaken
-	chiptopede_sfx_player.play()
-
+	
 	return segment_cache_parent
 
 
