@@ -71,7 +71,9 @@ func _ready() -> void:
 		GameManager.equipped_barrels = []
 		GameManager.inventory_barrels = []
 		player.gun.reinstall_barrels()
-	GameManager.change_fmod_bgm_music_state("TutorialStart")
+		GameManager.change_fmod_bgm_music_state("TutorialStart")
+	else:
+		GameManager.change_fmod_bgm_music_state("TutorialInterlude")
 	
 	GameManager.current_boss_map = self
 	
@@ -84,7 +86,7 @@ func _ready() -> void:
 	floor_parent = arena_2_floor_parent
 	floor_mesh = arena_2_floor_mesh
 	
-	super()
+	super ()
 	
 	boss.tutorial_phase_1_started.connect(_on_tutorial_phase_1_started)
 	boss.tutorial_phase_2_started.connect(_on_tutorial_phase_2_started)

@@ -35,7 +35,7 @@ func _ready() -> void:
 	get_tree().paused = false
 	
 	GameManager.current_boss_map = self
-	GameManager.change_fmod_bgm_music_state("Lobby")
+	GameManager.change_fmod_bgm_music_state("Backroom") # Backroom is the new Lobby
 	
 	# Save and load check
 	if SaveManager.save_data_is_loaded:
