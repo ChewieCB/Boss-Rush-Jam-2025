@@ -59,9 +59,6 @@ func _ready() -> void:
 	shop_tab_btn.disabled = show_shop_first
 	shop_tab_btn.get_node("Border").visible = show_shop_first
 
-	barrel_info_region = get_node("MainRegion/BarrelModifyUI/LeftRegion/BarrelInfoRegion")
-	barrel_info_region.reset_ui()
-
 	modify_tab_btn.mouse_entered.connect(_on_modify_tab_button_focus_entered)
 	modify_tab_btn.focus_entered.connect(_on_modify_tab_button_focus_entered)
 	modify_tab_btn.mouse_exited.connect(_on_modify_tab_button_focus_exited)
@@ -74,8 +71,16 @@ func _ready() -> void:
 
 	await get_tree().process_frame
 	await get_tree().process_frame
+	
+	# HACK - 40 mins before submission deadline get it done
+	var inventory_info = get_node("MainRegion/BarrelModifyUI/LeftRegion/BarrelInfoRegion")
+	var shop_info = get_node("MainRegion/BarrelShopUI/RightRegion/BarrelInfoRegion")
+	for info_region in [inventory_info, shop_info]:
+		info_region.reset_ui()
+	barrel_info_region = shop_info
 
 	full_refresh_ui(true)
+	
 	modify_tab_btn.grab_focus()
 
 
