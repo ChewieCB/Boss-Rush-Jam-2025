@@ -1,14 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://bacaewb7dl2l6"]
+[gd_scene load_steps=12 format=3 uid="uid://bacaewb7dl2l6"]
 
 [ext_resource type="Script" path="res://src/bosses/slots/bell/bell.gd" id="1_c4e2b"]
 [ext_resource type="ArrayMesh" uid="uid://dq3mrfaleu5xm" path="res://src/bosses/slots/bell/bell_mesh_2.tres" id="1_qcd24"]
-[ext_resource type="PackedScene" uid="uid://bc8ha8vf7ole0" path="res://src/bosses/slots/BellDustCloudImpact.tscn" id="3_b5qoa"]
-[ext_resource type="AudioStream" uid="uid://it6dpesk4yyq" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 1 NORMALISED.mp3" id="4_08v08"]
-[ext_resource type="AudioStream" uid="uid://dj3qqiciyxwmv" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 1.mp3" id="4_l0yln"]
-[ext_resource type="AudioStream" uid="uid://ddhs0duid8pk8" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 2.mp3" id="5_82x1c"]
-[ext_resource type="AudioStream" uid="uid://crbhefd2ymwdt" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 2 NORMALISED.mp3" id="5_a5p0u"]
-[ext_resource type="AudioStream" uid="uid://c5knvsvfj0lby" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 3 NORMALISED.mp3" id="6_8jqsu"]
-[ext_resource type="AudioStream" uid="uid://xuyc45uopqlk" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE WINDUP 3.mp3" id="6_xmavy"]
+[ext_resource type="PackedScene" path="res://src/bosses/slots/BellDustCloudImpact.tscn" id="3_b5qoa"]
+[ext_resource type="AudioStream" uid="uid://cux3tve04kgw5" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 1 NORMALISED.mp3" id="4_08v08"]
+[ext_resource type="AudioStream" uid="uid://dg0p2003kj0gx" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 2 NORMALISED.mp3" id="5_a5p0u"]
+[ext_resource type="AudioStream" uid="uid://bglonoosxqakl" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 3 NORMALISED.mp3" id="6_8jqsu"]
 [ext_resource type="AudioStream" uid="uid://di0dji8wpexg6" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 1.mp3" id="7_p75bb"]
 [ext_resource type="AudioStream" uid="uid://boyjiwip3m72n" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 2.mp3" id="8_ud1vu"]
 [ext_resource type="AudioStream" uid="uid://pib154j0akr3" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BOSS BELL ATTACK SEPARATE IMPACT 3.mp3" id="9_cf6nm"]
@@ -24,7 +21,6 @@ script = ExtResource("1_c4e2b")
 explosion_prefab = ExtResource("13_nnfih")
 dust_cloud_prefab = ExtResource("3_b5qoa")
 sfx_bell_full = Array[AudioStream]([ExtResource("4_08v08"), ExtResource("5_a5p0u"), ExtResource("6_8jqsu")])
-sfx_bell_windup = Array[AudioStream]([ExtResource("4_l0yln"), ExtResource("5_82x1c"), ExtResource("6_xmavy")])
 sfx_bell_impact = Array[AudioStream]([ExtResource("7_p75bb"), ExtResource("8_ud1vu"), ExtResource("9_cf6nm")])
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

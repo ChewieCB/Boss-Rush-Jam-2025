@@ -1,4 +1,4 @@
-[gd_scene load_steps=279 format=4 uid="uid://bbqw4deyycof"]
+[gd_scene load_steps=281 format=4 uid="uid://bbqw4deyycof"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_7pmj2"]
 [ext_resource type="Script" path="res://src/bosses/tutorial/boss_elevator.gd" id="2_6u4e1"]
@@ -106,7 +106,7 @@
 [ext_resource type="AudioStream" uid="uid://cg2blsh10wqvv" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 1.mp3" id="42_gym33"]
 [ext_resource type="AudioStream" uid="uid://0qoqwlp6f05d" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DASHED THROUGH 2.mp3" id="43_04ooh"]
 [ext_resource type="Texture2D" uid="uid://b50hajeka4cfw" path="res://src/bosses/tutorial/assets/sprites/NAIL_GUN_1.png" id="43_r6ljj"]
-[ext_resource type="PackedScene" uid="uid://v6u7isrgig0w" path="res://src/bosses/tutorial/SlamWallParticles.tscn" id="44_go0kb"]
+[ext_resource type="PackedScene" path="res://src/bosses/tutorial/SlamWallParticles.tscn" id="44_go0kb"]
 [ext_resource type="AudioStream" uid="uid://cokhf6uo2u3p1" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 1 V3.mp3" id="53_vhfhh"]
 [ext_resource type="AudioStream" uid="uid://hg0ps0ucdseu" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 2 V3.mp3" id="54_hfxh4"]
 [ext_resource type="AudioStream" uid="uid://djcacot1ktwg4" path="res://src/bosses/tutorial/assets/sfx/NAIL GUN 3 V3.mp3" id="55_nk5pw"]
