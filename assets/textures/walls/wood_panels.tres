@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://d0dxh6wtjlcc"]
+
+[ext_resource type="Texture2D" uid="uid://b1sv4j7b5670b" path="res://assets/textures/walls/wood_panels.jpg" id="1_bcuku"]
+
+[resource]
+albedo_texture = ExtResource("1_bcuku")
+metallic_specular = 0.0
+texture_filter = 2

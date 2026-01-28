@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bpgfiiea6g0sf"]
+
+[ext_resource type="Texture2D" uid="uid://dt1j06ge183lg" path="res://assets/textures/walls/frosted_window_original.png" id="1_1p2jn"]
+
+[resource]
+albedo_texture = ExtResource("1_1p2jn")
+metallic_specular = 0.0
+texture_filter = 2

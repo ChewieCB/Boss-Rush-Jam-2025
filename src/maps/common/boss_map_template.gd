@@ -122,8 +122,8 @@ func show_end_panel() -> void:
 	await tween.finished
 	
 	LoadingHandler.start_loading(
-		LoadingHandler.level_paths[LoadingHandler.LEVELS.LOBBY],
-		"Lobby"
+		LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
+		"Back Room"
 	)
 	await ScreenTransition.transition_finished
 	LoadingHandler.load_scene_transition()

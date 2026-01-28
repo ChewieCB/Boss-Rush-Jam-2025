@@ -4,9 +4,11 @@
 [ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_info_icon_text.gd" id="1_vilip"]
 [ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="2_1gdb5"]
 
-[node name="EffectInfoIconText" type="HBoxContainer"]
+[node name="EffectInfoIconText" type="HBoxContainer" node_paths=PackedStringArray("icon", "label")]
 mouse_filter = 2
 script = ExtResource("1_vilip")
+icon = NodePath("TextureRect")
+label = NodePath("RichTextLabel")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 modulate = Color(0.1886, 0.82, 0.230693, 1)
