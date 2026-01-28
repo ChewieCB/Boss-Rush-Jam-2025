@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b66b4e5dge5wb"
+path="res://.godot/imported/attack taunt 10-1 you cheater.mp3-7418e529f6ba505a13209dba202887fd.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 10-1 you cheater.mp3"
+dest_files=["res://.godot/imported/attack taunt 10-1 you cheater.mp3-7418e529f6ba505a13209dba202887fd.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dpc3uqvmt0xdp"
+path="res://.godot/imported/player 5-1 degenerates never fail to dissapoint.mp3-76eaee15a8ce213eb49add93f0784e27.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/player 5-1 degenerates never fail to dissapoint.mp3"
+dest_files=["res://.godot/imported/player 5-1 degenerates never fail to dissapoint.mp3-76eaee15a8ce213eb49add93f0784e27.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

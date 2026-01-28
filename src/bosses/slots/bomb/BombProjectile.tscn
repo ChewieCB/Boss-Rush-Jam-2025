@@ -88,8 +88,11 @@ transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
 mesh = SubResource("SphereMesh_bid7b")
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
-volume_db = 9.0
-unit_size = 25.16
+attenuation_model = 3
+volume_db = 2.0
+unit_size = 35.0
+max_db = 4.0
+max_polyphony = 50
 bus = &"SFX"
 
 [node name="ProjectileBurnEmit" parent="." instance=ExtResource("26_ke4ar")]
