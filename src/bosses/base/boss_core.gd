@@ -282,13 +282,14 @@ func hide_health() -> void:
 
 
 func _turn_towards_target(speed: float, delta: float) -> void:
-	var direction: Vector3 = self.global_position.direction_to(target.global_position)
-	self.rotation.y = lerp_angle(
-		self.rotation.y, atan2(
-			- direction.x, -direction.z
-		),
-		delta * speed
-	)
+	if target:
+		var direction: Vector3 = self.global_position.direction_to(target.global_position)
+		self.rotation.y = lerp_angle(
+			self.rotation.y, atan2(
+				- direction.x, -direction.z
+			),
+			delta * speed
+		)
 
 
 func orbit_player(delta: float) -> void:

@@ -128,6 +128,8 @@ func find_and_load_scene_bgm(scene_name: String = "") -> void:
 			music_state = "Menu"
 		"Lobby":
 			music_state = "Lobby"
+		"Backroom":
+			music_state = "Backroom"
 		"Tutorial":
 			music_state = "TutorialStart"
 

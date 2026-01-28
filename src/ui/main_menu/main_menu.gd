@@ -127,7 +127,7 @@ func start_game():
 	else:
 		LoadingHandler.start_loading(
 			LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
-			"Back Room"
+			"Backroom"
 		)
 	
 	await ScreenTransition.transition_finished
