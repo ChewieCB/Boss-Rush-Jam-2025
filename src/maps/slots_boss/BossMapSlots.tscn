@@ -1,8 +1,7 @@
-[gd_scene load_steps=256 format=4 uid="uid://fccl23tqjubn"]
+[gd_scene load_steps=255 format=4 uid="uid://fccl23tqjubn"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_e32ik"]
 [ext_resource type="Script" path="res://src/maps/slots_boss/boss_map_slots.gd" id="1_wilwm"]
-[ext_resource type="AudioStream" uid="uid://iuxwxuvd05wd" path="res://assets/music/Tank R1.mp3" id="3_2l212"]
 [ext_resource type="LightmapGIData" uid="uid://cmiruh4eutw2x" path="res://src/maps/slots_boss/BossMapSlots.lmbake" id="4_cib3u"]
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="7_fn066"]
 [ext_resource type="Material" uid="uid://c21k5cw2fd0br" path="res://assets/textures/walls/paint-red.tres" id="8_2qnm2"]
@@ -993,31 +992,30 @@ data = PackedVector3Array(31.125, 0.175, -12.05, 31.125, 0.175, 11.95, -31.375, 
 
 [node name="BossMapSlots" node_paths=PackedStringArray("nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_e32ik")]
 script = ExtResource("1_wilwm")
-bgm = ExtResource("3_2l212")
 nav_parent = NodePath("FuncGodotMap")
 floor_parent = NodePath("FuncGodotMap/group_660_Floor/entity_28_nav_floor")
 floor_mesh = NodePath("FuncGodotMap/group_660_Floor/entity_28_nav_floor/entity_28_mesh_instance")
 
-[node name="LightmapGI" parent="." index="4"]
+[node name="LightmapGI" parent="." index="3"]
 light_data = ExtResource("4_cib3u")
 
-[node name="BossTriggerVolume" parent="." index="6"]
+[node name="BossTriggerVolume" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13, 0)
 
 [node name="CollisionShape3D" parent="BossTriggerVolume" index="0"]
 shape = SubResource("BoxShape3D_kuy5n")
 
-[node name="Decal" type="Decal" parent="." index="7"]
-transform = Transform3D(0.996204, 0, 0.0870514, 0.0870514, -4.37114e-08, -0.996204, 3.80514e-09, 1, -4.35455e-08, 0, 44.382, -1.7)
-texture_albedo = ExtResource("35_icct7")
-
-[node name="SpinTriggerVolume" parent="." index="8"]
+[node name="SpinTriggerVolume" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42.2, -0.5)
 
 [node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
 shape = SubResource("BoxShape3D_vt4q5")
 
-[node name="FuncGodotMap" parent="." index="9"]
+[node name="Decal" type="Decal" parent="." index="7"]
+transform = Transform3D(0.996204, 0, 0.0870514, 0.0870514, -4.37114e-08, -0.996204, 3.80514e-09, 1, -4.35455e-08, 0, 44.382, -1.7)
+texture_albedo = ExtResource("35_icct7")
+
+[node name="FuncGodotMap" parent="." index="8"]
 local_map_file = "res://src/maps/slots_boss/slots_boss_arena.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]
