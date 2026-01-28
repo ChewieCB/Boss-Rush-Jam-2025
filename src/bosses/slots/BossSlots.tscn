@@ -1,4 +1,4 @@
-[gd_scene load_steps=133 format=4 uid="uid://dhnc4yyqwf2fa"]
+[gd_scene load_steps=136 format=4 uid="uid://dhnc4yyqwf2fa"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_qxyx0"]
 [ext_resource type="Script" path="res://src/bosses/slots/boss_slots.gd" id="2_b0b3s"]
@@ -83,7 +83,10 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/not_guard.gd" id="67_h7fvy"]
 [ext_resource type="AudioStream" uid="uid://brfh1b3jim3qo" path="res://src/bosses/slots/assets/sfx/SLOT BOSS DIES.mp3" id="67_pi67a"]
 [ext_resource type="Texture2D" uid="uid://c40sn6u84htf2" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_No_Gun.png" id="74_lmlvi"]
+[ext_resource type="Texture2D" uid="uid://c3hh12ccy487b" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_1.png" id="83_kw510"]
 [ext_resource type="PackedScene" path="res://src/bosses/slots/SlotDustHover.tscn" id="84_3o44s"]
+[ext_resource type="Texture2D" uid="uid://cplijr7fp5qxw" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_2.png" id="84_u1il2"]
+[ext_resource type="Texture2D" uid="uid://dhy746cu4huwq" path="res://src/bosses/slots/assets/Boss_Rush_Slot_Boss_Punch_3.png" id="85_a6fyt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o7nhx"]
 render_priority = 0
@@ -307,10 +310,10 @@ tracks/0/path = NodePath("Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [ExtResource("5_wqq5t")]
+"values": [ExtResource("83_kw510"), ExtResource("84_u1il2"), ExtResource("85_a6fyt")]
 }
 tracks/1/type = "method"
 tracks/1/imported = false

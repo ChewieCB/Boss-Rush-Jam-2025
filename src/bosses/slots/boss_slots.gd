@@ -279,7 +279,7 @@ func _on_died() -> void:
 	anim_player.stop()
 	set_physics_process(false)
 	var tween = get_tree().create_tween()
-	tween.tween_property(self, "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(self , "global_position:y", -0.3, 1.3).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
 
 	await tween.finished
 
@@ -792,7 +792,6 @@ func _on_charge_targeting_state_entered() -> void:
 	state_chart.send_event("attack_telegraph")
 	anim_player.play("charge_telegraph")
 	await anim_player.animation_finished
-	anim_player.play("RESET")
 	# await get_tree().create_timer(telegraph_time * 2, false).timeout
 	state_chart.send_event("start_charge_attack")
 
@@ -872,6 +871,7 @@ func _on_charge_charging_state_physics_processing(delta: float) -> void:
 
 
 func _on_charge_recover_state_entered() -> void:
+	anim_player.play("RESET")
 	debug_state_label.text = "Charge | Recovering"
 	state_chart.send_event("attack_end")
 	navigation_component.enable()
