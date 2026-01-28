@@ -89,6 +89,7 @@ mesh = SubResource("SphereMesh_bid7b")
 
 [node name="SFXPlayer" type="AudioStreamPlayer3D" parent="."]
 volume_db = 9.0
+unit_size = 25.16
 bus = &"SFX"
 
 [node name="ProjectileBurnEmit" parent="." instance=ExtResource("26_ke4ar")]

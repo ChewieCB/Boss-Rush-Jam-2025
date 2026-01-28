@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ymnvpp6omvor"
+path="res://.godot/imported/HURT SCREAM 1 NORMALISED.mp3-cf4632dc5713a28c08baa0ab9caa76a4.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/chips/assets/sfx/HURT SCREAM 1 NORMALISED.mp3"
+dest_files=["res://.godot/imported/HURT SCREAM 1 NORMALISED.mp3-cf4632dc5713a28c08baa0ab9caa76a4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

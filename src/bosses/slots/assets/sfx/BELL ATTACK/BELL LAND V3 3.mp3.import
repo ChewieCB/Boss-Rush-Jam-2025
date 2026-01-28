@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bktc7gf2nddms"
+path="res://.godot/imported/BELL LAND V3 3.mp3-5d954816cd9ede88eccef379ff558c83.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/BELL ATTACK/BELL LAND V3 3.mp3"
+dest_files=["res://.godot/imported/BELL LAND V3 3.mp3-5d954816cd9ede88eccef379ff558c83.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
