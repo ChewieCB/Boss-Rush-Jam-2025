@@ -1,4 +1,4 @@
-[gd_scene load_steps=616 format=4 uid="uid://bcpcv8dc854s7"]
+[gd_scene load_steps=617 format=4 uid="uid://bcpcv8dc854s7"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/lobby.gd" id="1_3dpme"]
 [ext_resource type="PackedScene" uid="uid://dijn1g2vmnb8g" path="res://src/utils/singletons/IdleDetector.tscn" id="3_b8esj"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://dl65xxjqpf0o7" path="res://src/env/decor/assets/trash_can_art_deco_1.png" id="10_xmlee"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="11_8t7u0"]
 [ext_resource type="Material" uid="uid://d0lnpev1a8x7j" path="res://assets/textures/placeholder/texture_green_green_green_02.tres" id="12_8t61t"]
+[ext_resource type="Texture2D" uid="uid://cvn6igtej4xxb" path="res://assets/textures/posters/grand_opening_scuffed.png" id="12_p4val"]
 [ext_resource type="Material" uid="uid://bjalp3vgrdgfn" path="res://assets/textures/walls/red_floor_tiles.tres" id="13_tgkfd"]
 [ext_resource type="Material" uid="uid://cf17nn7fy22gn" path="res://assets/textures/placeholder/texture_orange_08.tres" id="13_x660r"]
 [ext_resource type="Material" uid="uid://c0mwfj7g1eaav" path="res://assets/textures/walls/peeling_plaster_wall.tres" id="14_5u73f"]
@@ -7385,18 +7386,22 @@ shaded = true
 texture = ExtResource("9_oxvqi")
 
 [node name="TrashCan1" type="Sprite3D" parent="DecoSprites"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.45, -5.96046e-08, 5.95)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.45, -0.105, 5.95)
 offset = Vector2(0, 253.435)
 billboard = 2
 shaded = true
 texture = ExtResource("10_xmlee")
+region_enabled = true
+region_rect = Rect2(0, 44.6073, 512, 467.393)
 
 [node name="TrashCan2" type="Sprite3D" parent="DecoSprites"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -20.35, -3, -10.1)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -20.35, -3.105, -10.1)
 offset = Vector2(0, 253.435)
 billboard = 2
 shaded = true
 texture = ExtResource("10_xmlee")
+region_enabled = true
+region_rect = Rect2(0, 44.6073, 512, 467.393)
 
 [node name="ShopBarrels" type="Node3D" parent="DecoSprites"]
 
@@ -7843,6 +7848,13 @@ monitorable = false
 disabled = true
 
 [node name="Decals" type="Node3D" parent="."]
+
+[node name="Decal" type="Decal" parent="Decals"]
+transform = Transform3D(0.996195, 0, -0.0871557, -0.0871557, -4.37114e-08, -0.996195, -3.8097e-09, 1, -4.35451e-08, -17.5633, -1.80872, -11.8672)
+size = Vector3(2, 1.26416, 3)
+texture_albedo = ExtResource("12_p4val")
+upper_fade = 3.73213e-05
+lower_fade = 1.03526e-05
 
 [node name="Lighting" type="Node3D" parent="."]
 
@@ -10546,6 +10558,7 @@ transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.6094
 
 [node name="entity_282_ElevatorDoors" parent="FuncGodotMap/layer_0_Elevators/group_10058_Elevator/group_10828_Elevator/group_10827_Elevator" instance=ExtResource("67_ruh50")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.5904, -3.0625, -11.4742)
+is_autodoor = false
 
 [node name="group_10821_ElevatorRailing" type="Node3D" parent="FuncGodotMap/layer_0_Elevators/group_10058_Elevator/group_10828_Elevator/group_10827_Elevator"]
 metadata/_tb_type = "_tb_group"
