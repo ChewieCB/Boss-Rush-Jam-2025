@@ -70,7 +70,7 @@ func refresh_ui() -> void:
 		"is_archetype": false,
 		"positive_desc": [],
 		"negative_desc": [],
-		"icon_id": - 2,  # Since -1 is the default icon for barrel effect that doesn't have custom one.
+		"icon_id": - 2, # Since -1 is the default icon for barrel effect that doesn't have custom one.
 		"reloads_before_spin": barrel_data.reloads_before_spin
 	}
 	panel_bg_icon.texture = barrel_data.barrel_image
@@ -116,6 +116,10 @@ func reset_ui():
 	panel_bg_icon.texture = null
 	for child in circle_ring.get_children():
 		child.queue_free()
+
+func show_barrel_locked():
+	reset_ui()
+	set_description_content("[center]Not available in demo[/center]")
 
 
 func unfocus_other_barrel_info_icon():

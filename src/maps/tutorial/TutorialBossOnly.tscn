@@ -1,9 +1,8 @@
-[gd_scene load_steps=367 format=4 uid="uid://dsfonwuoyi3xe"]
+[gd_scene load_steps=366 format=4 uid="uid://by5wuel1opaql"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_7h51g"]
 [ext_resource type="Script" path="res://src/maps/tutorial/tutorial_boss_only.gd" id="2_dq0en"]
 [ext_resource type="LightmapGIData" uid="uid://d1yjl64sdc5ps" path="res://src/maps/tutorial/TutorialBoss.lmbake" id="5_65on5"]
-[ext_resource type="AudioStream" uid="uid://co1mvp8o4tkos" path="res://assets/music/TutorialBoss-Gamayo V2.mp3" id="17_v8doo"]
 [ext_resource type="PackedScene" uid="uid://bu43hcl2orkct" path="res://src/env/lighting/Chandellier1.tscn" id="22_2su1u"]
 [ext_resource type="PackedScene" uid="uid://n0jp5tbddwfx" path="res://src/env/lighting/WallLight1.tscn" id="23_8i5kx"]
 [ext_resource type="PackedScene" uid="uid://bnro5qxjcbkx0" path="res://src/env/lighting/StandingLight.tscn" id="24_1o0hl"]
@@ -64,15 +63,15 @@ volumetric_fog_emission_energy = 0.3
 resource_local_to_scene = true
 size = Vector3(19, 10, 27.6)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_cogpl"]
+resource_local_to_scene = true
+size = Vector3(10, 10, 10)
+
 [sub_resource type="FogMaterial" id="FogMaterial_7oy35"]
 density = 0.015
 
 [sub_resource type="FogMaterial" id="FogMaterial_brnbk"]
 density = 0.02
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_cogpl"]
-resource_local_to_scene = true
-size = Vector3(10, 10, 10)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_fn0oh"]
 lightmap_size_hint = Vector2i(1662, 1658)
@@ -1397,28 +1396,33 @@ boss_intro_spawn = NodePath("BossIntroSpawn")
 boss_laser_spawn_markers = [NodePath("BossLaserSpawn"), NodePath("BossLaserSpawn2")]
 sub_elevator_doors = [NodePath("FuncGodotMap/group_865_BossElevatorSub/entity_22_SubElevatorDoors"), NodePath("FuncGodotMap/group_1685_BossElevatorSub/entity_27_SubElevatorDoors"), NodePath("FuncGodotMap/group_7754_BossElevatorSub/entity_32_SubElevatorDoors"), NodePath("FuncGodotMap/group_7752_BossElevatorSub/entity_39_SubElevatorDoors")]
 sub_elevator_lights = [NodePath("FuncGodotMap/group_865_BossElevatorSub/entity_23_ElevatorLight"), NodePath("FuncGodotMap/group_1685_BossElevatorSub/entity_28_ElevatorLight"), NodePath("FuncGodotMap/group_7754_BossElevatorSub/entity_33_ElevatorLight"), NodePath("FuncGodotMap/group_7752_BossElevatorSub/entity_40_ElevatorLight")]
-bgm = ExtResource("17_v8doo")
 nav_parent = NodePath("FuncGodotMap/entity_10_floor_walkable_1a")
 floor_parent = NodePath("FuncGodotMap/entity_10_floor_walkable_1a")
 floor_mesh = NodePath("FuncGodotMap/entity_10_floor_walkable_1a/entity_10_mesh_instance")
 
-[node name="WorldEnvironment" parent="." index="2"]
+[node name="WorldEnvironment" parent="." index="1"]
 environment = SubResource("Environment_vv125")
 
-[node name="DirectionalLight3D" parent="." index="3"]
+[node name="DirectionalLight3D" parent="." index="2"]
 visible = false
 light_bake_mode = 1
 
-[node name="LightmapGI" parent="." index="4"]
+[node name="LightmapGI" parent="." index="3"]
 light_data = ExtResource("5_65on5")
 
-[node name="BossTriggerVolume" parent="." index="6"]
+[node name="BossTriggerVolume" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.98993, -0.428299, -23.5213)
 monitorable = false
 
 [node name="CollisionShape3D" parent="BossTriggerVolume" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, -8.2)
 shape = SubResource("BoxShape3D_vb4tn")
+
+[node name="SpinTriggerVolume" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25.362, 0)
+
+[node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
+shape = SubResource("BoxShape3D_cogpl")
 
 [node name="BossLaserSpawn" type="Marker3D" parent="." index="7"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 3.5, -31.6)
@@ -1881,13 +1885,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5, 3.95, 29.8)
 size = Vector3(23, 9.7, 31)
 material = SubResource("FogMaterial_brnbk")
 
-[node name="SpinTriggerVolume" parent="." index="13"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25.362, 0)
-
-[node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
-shape = SubResource("BoxShape3D_cogpl")
-
-[node name="FuncGodotMap" parent="." index="14"]
+[node name="FuncGodotMap" parent="." index="13"]
 local_map_file = "res://src/maps/tutorial/tutorial_boss_only.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]
@@ -3047,7 +3045,7 @@ cast_shadow = 2
 gi_mode = 0
 mesh = SubResource("ArrayMesh_li36s")
 
-[node name="Player" parent="." index="15" instance=ExtResource("84_gvs6f")]
+[node name="Player" parent="." index="14" instance=ExtResource("84_gvs6f")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10.1, -3.5, -47.2)
 
 [editable path="Lights/WallLight"]

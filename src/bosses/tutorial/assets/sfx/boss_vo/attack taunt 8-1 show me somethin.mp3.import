@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://7354rx1g75ec"
+path="res://.godot/imported/attack taunt 8-1 show me somethin.mp3-c95731e2b6c0711806e9db759bcda22e.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/attack taunt 8-1 show me somethin.mp3"
+dest_files=["res://.godot/imported/attack taunt 8-1 show me somethin.mp3-c95731e2b6c0711806e9db759bcda22e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

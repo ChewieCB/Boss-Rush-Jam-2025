@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dix5r0va8qt6h"
+path="res://.godot/imported/arena 1 complete 3-1 not quite the dreg.mp3-d2790c5e588c09cdb0c73bae077576b2.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/arena 1 complete 3-1 not quite the dreg.mp3"
+dest_files=["res://.godot/imported/arena 1 complete 3-1 not quite the dreg.mp3-d2790c5e588c09cdb0c73bae077576b2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

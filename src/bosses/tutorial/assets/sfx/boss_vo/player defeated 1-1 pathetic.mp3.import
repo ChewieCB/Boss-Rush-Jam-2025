@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cuywmreo7qi54"
+path="res://.godot/imported/player defeated 1-1 pathetic.mp3-2f379d2a5b742ffe940a85dcbd480e8c.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/player defeated 1-1 pathetic.mp3"
+dest_files=["res://.godot/imported/player defeated 1-1 pathetic.mp3-2f379d2a5b742ffe940a85dcbd480e8c.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
