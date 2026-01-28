@@ -97,3 +97,4 @@ enum BarrelIdEnum {
 @export var barrel_prefab: PackedScene
 @export var is_archetype_barrel: bool = false
 @export var reloads_before_spin: int = 3
+@export var locked_for_demo: bool = false

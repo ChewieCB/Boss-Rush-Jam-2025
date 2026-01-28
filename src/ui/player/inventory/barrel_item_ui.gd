@@ -8,6 +8,7 @@ signal show_warning(warning_text: String)
 @onready var button: Button = $Button
 @onready var border_selected = $BorderSelected
 @onready var spin_value_label: RichTextLabel = $CenterContainer/ReloadSpinValueLabel
+@onready var locked_panel: Control = $LockedPanel
 
 var data: BarrelDataResource
 var clicked_once = false
@@ -22,10 +23,12 @@ var is_disabled: bool = false:
 	set(value):
 		is_disabled = value
 		self.modulate = Color.DIM_GRAY if is_disabled else Color.WHITE
+var is_locked: bool = false
 var warning_text = ""
 
 
 func init(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: bool = false):
+	locked_panel.visible = false
 	data = _data
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
@@ -37,6 +40,9 @@ func init(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: 
 	else:
 		spin_value_label.visible = false
 
+	if data.locked_for_demo:
+		is_locked = true
+		locked_panel.visible = true
 
 func _ready() -> void:
 	if data:
@@ -48,8 +54,10 @@ func _ready() -> void:
 
 func _on_button_pressed() -> void:
 	if not clicked_once:
-		select_item.emit(self, data)
-		if not is_purchased:
+		select_item.emit(self , data)
+		if is_locked:
+			pass
+		elif not is_purchased:
 			if is_disabled:
 				button.text = "Not enough\nchips!"
 			else:
@@ -61,7 +69,7 @@ func _on_button_pressed() -> void:
 		clicked_once = true
 		border_selected.visible = true
 	else:
-		interact_item.emit(self, data)
+		interact_item.emit(self , data)
 
 
 func unselected():
@@ -77,12 +85,12 @@ func expand_button_size():
 	if button.disabled:
 		return
 	var tween = self.create_tween()
-	tween.tween_property(self, "scale", Vector2(scale_factor, scale_factor), 0.1)
+	tween.tween_property(self , "scale", Vector2(scale_factor, scale_factor), 0.1)
 
 func return_button_size():
 	pivot_offset = size / 2
 	var tween = self.create_tween()
-	tween.tween_property(self, "scale", Vector2(1, 1), 0.1)
+	tween.tween_property(self , "scale", Vector2(1, 1), 0.1)
 
 
 func _on_button_focus_entered() -> void:
@@ -96,7 +104,7 @@ func _on_button_focus_entered() -> void:
 			grab_focus() # This wont show the chip cost, but at least it wont crash
 	else:
 		if GameManager.gun_customize_ui:
-			GameManager.gun_customize_ui.get_current_scroll_container().ensure_control_visible(self)
+			GameManager.gun_customize_ui.get_current_scroll_container().ensure_control_visible(self )
 
 func _on_button_focus_exited() -> void:
 	return_button_size()

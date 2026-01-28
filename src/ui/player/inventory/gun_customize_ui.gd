@@ -237,14 +237,21 @@ func get_first_item_for_focus() -> void:
 		modify_tab_btn.grab_focus()
 
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
+	SoundManager.play_ui_sound(sfx_click, "UI")
 	if (current_selected_item_ui != null):
 		current_selected_item_ui.unselected()
 	current_selected_item_ui = item_ui
+	if item_ui.is_locked:
+		barrel_info_region.show_barrel_locked()
+		return
 	barrel_info_region.set_barrel_data_resource(data)
-	SoundManager.play_ui_sound(sfx_click, "UI")
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
+	if item_ui.is_locked:
+		show_warning("Not available in demo")
+		return
+
 	if not item_ui.is_purchased:
 		item_ui.is_purchased = GameManager.purchase_barrel(data)
 		if item_ui.is_purchased:
