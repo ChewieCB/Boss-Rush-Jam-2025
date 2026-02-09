@@ -1,0 +1,566 @@
+[gd_scene load_steps=34 format=3 uid="uid://d2m0w0bro5j5l"]
+
+[ext_resource type="Script" path="res://src/ui/player/radial_ammo_ui.gd" id="1_awes1"]
+[ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_f4uki"]
+[ext_resource type="Script" path="res://src/ui/boss/health_bar.gd" id="2_5adv1"]
+[ext_resource type="PackedScene" uid="uid://q6qasacer4wj" path="res://src/ui/player/StatusDurationUI.tscn" id="2_7qugk"]
+[ext_resource type="Texture2D" uid="uid://dwyt08w82u6ne" path="res://assets/sprite/placeholder/health.png" id="3_khwir"]
+[ext_resource type="FontFile" uid="uid://cqaodfj46ewtr" path="res://assets/fonts/Hunterz-Regular.otf" id="4_6gcbv"]
+[ext_resource type="Texture2D" uid="uid://xkx1ip8tjxwr" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-000.png" id="5_2xecb"]
+[ext_resource type="Texture2D" uid="uid://dvyn7sanewney" path="res://src/ui/common/assets/kenney_borders/default/Transparent border/panel-transparent-border-000.png" id="6_es2ki"]
+[ext_resource type="Material" uid="uid://xk3ab4luhvq" path="res://src/ui/player/SkewedTextureProgressBar.tres" id="6_uywjm"]
+[ext_resource type="Texture2D" uid="uid://dt8xa2wogq2ro" path="res://src/ui/common/assets/kenney_borders/default/Panel/panel-000.png" id="7_w71kr"]
+[ext_resource type="Texture2D" uid="uid://c42mlytv8sdoj" path="res://assets/sprite/skilltree_icon/lucky_shot.png" id="8_kblky"]
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_ui.gd" id="9_7pd86"]
+[ext_resource type="Texture2D" uid="uid://d2hifp16c0ssf" path="res://src/player/assets/ammo_single.png" id="9_ua0m7"]
+[ext_resource type="Shader" path="res://src/ui/player/spin_ability_wave.gdshader" id="11_xew03"]
+[ext_resource type="Shader" path="res://src/ui/player/luck_glow.gdshader" id="12_bmj6s"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="12_o6f4s"]
+[ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="13_ey5n2"]
+[ext_resource type="Texture2D" uid="uid://cx26td1agki7o" path="res://assets/sprite/placeholder/rounded-square-gradient.png" id="13_fidr8"]
+[ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="14_oh4g2"]
+
+[sub_resource type="Theme" id="Theme_sph0g"]
+default_font = ExtResource("4_6gcbv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ielym"]
+shader = ExtResource("12_bmj6s")
+shader_parameter/scale_mult = Vector2(1, 1)
+shader_parameter/aura_progress = 0.0
+shader_parameter/aura_colour = Color(1, 0.75, 0, 1)
+shader_parameter/texture_load_mult = 8.0
+shader_parameter/tiling = 1.71
+shader_parameter/movment_dir_speed = Vector2(-1.8, 3)
+shader_parameter/movment_dir_speed2 = Vector2(1.8, 3)
+shader_parameter/noise_seed = Vector2(1, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_iadbw"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+grow_end = 2.0
+thickness = 4
+vertical = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rh6ui"]
+shader = ExtResource("11_xew03")
+shader_parameter/speed = 2.305
+shader_parameter/frequency = 9.99
+shader_parameter/amplitude = 0.03
+shader_parameter/progress = 114.605
+shader_parameter/max_value = 200.0
+shader_parameter/fill_colour = Color(0.462745, 1, 0.388235, 1)
+
+[sub_resource type="Animation" id="Animation_kjov7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4ce41"]
+resource_name = "hide_all"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_8ow1x"]
+resource_name = "hide_health"
+length = 0.1
+step = 0.05
+
+[sub_resource type="Animation" id="Animation_jk0qx"]
+resource_name = "hide_luck"
+length = 0.1
+step = 0.05
+
+[sub_resource type="Animation" id="Animation_kr8h7"]
+resource_name = "hide_non_luck"
+length = 0.1
+step = 0.05
+
+[sub_resource type="Animation" id="Animation_oj1x5"]
+resource_name = "show_all"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xq8g0"]
+resource_name = "show_health"
+length = 0.3
+step = 0.05
+
+[sub_resource type="Animation" id="Animation_2wuw4"]
+resource_name = "show_luck"
+length = 0.3
+step = 0.05
+
+[sub_resource type="Animation" id="Animation_pwctn"]
+resource_name = "show_non_luck"
+length = 0.3
+step = 0.05
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2600x"]
+_data = {
+"RESET": SubResource("Animation_kjov7"),
+"hide_all": SubResource("Animation_4ce41"),
+"hide_health": SubResource("Animation_8ow1x"),
+"hide_luck": SubResource("Animation_jk0qx"),
+"hide_non_luck": SubResource("Animation_kr8h7"),
+"show_all": SubResource("Animation_oj1x5"),
+"show_health": SubResource("Animation_xq8g0"),
+"show_luck": SubResource("Animation_2wuw4"),
+"show_non_luck": SubResource("Animation_pwctn")
+}
+
+[node name="StatUI" type="Control" node_paths=PackedStringArray("health_ui", "luck_bar_ui", "luck_buffs_ui", "anim_player", "status_ui_container", "spin_ability_ui", "radial_ui_center_node", "currency_ui")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_f4uki")
+status_duration_ui_prefab = ExtResource("2_7qugk")
+health_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer")
+luck_bar_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer")
+luck_buffs_ui = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/ActiveLuckBuffsRow/ActiveLuckBuffs")
+anim_player = NodePath("AnimationPlayer")
+status_ui_container = NodePath("MarginContainer/HBoxContainer/ProgressBars/BarsVBox/StatusIconsRow/StatusIcons")
+spin_ability_ui = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI")
+radial_ui_center_node = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter")
+currency_ui = NodePath("MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -206.0
+offset_top = -40.0
+offset_right = 322.0
+offset_bottom = 176.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="ProgressBars" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="BarsVBox" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars"]
+layout_mode = 2
+
+[node name="StatusIconsRow" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 148
+
+[node name="StatusIcons" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/StatusIconsRow"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="HealthContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_right = -16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer"]
+layout_mode = 2
+
+[node name="MainRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HealthIconContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow"]
+layout_mode = 2
+theme_override_constants/margin_right = 16
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthIconContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("3_khwir")
+expand_mode = 3
+
+[node name="HealthBarContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow" node_paths=PackedStringArray("timer", "heath_bar", "damage_bar", "health_label")]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+script = ExtResource("2_5adv1")
+timer = NodePath("HealthBar/Timer")
+heath_bar = NodePath("HealthBar")
+damage_bar = NodePath("HealthBar/DamageBar")
+health_label = NodePath("Label")
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer"]
+visible = false
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_sph0g")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "10,000/10,000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer"]
+material = ExtResource("6_uywjm")
+custom_minimum_size = Vector2(304, 20)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+value = 40.0
+fill_mode = 1
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_over = ExtResource("5_2xecb")
+texture_progress = ExtResource("6_es2ki")
+tint_over = Color(0.901961, 0.776471, 0, 1)
+tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
+
+[node name="DamageBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer/HealthBar"]
+z_index = -1
+material = ExtResource("6_uywjm")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+value = 60.0
+fill_mode = 1
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 20
+texture_under = ExtResource("7_w71kr")
+texture_progress = ExtResource("7_w71kr")
+tint_under = Color(0.113725, 0.113725, 0.113725, 1)
+tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
+
+[node name="Timer" type="Timer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer/HealthBar"]
+wait_time = 0.4
+one_shot = true
+
+[node name="LuckContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox" node_paths=PackedStringArray("timer", "luck_bar", "luck_gain_bar", "high_luck_mark_margin_ui", "high_luck_glow", "luck_buff_container")]
+layout_mode = 2
+theme_override_constants/margin_right = -36
+script = ExtResource("9_7pd86")
+timer = NodePath("MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/Timer")
+luck_bar = NodePath("MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar")
+luck_gain_bar = NodePath("MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/LuckGainBar")
+high_luck_mark_margin_ui = NodePath("MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin")
+high_luck_glow = NodePath("HighLuckGlowMargin/HighLuckGlow")
+luck_buff_container = NodePath("MarginContainer/VBoxContainer/ActiveLuckBuffsRow/ActiveLuckBuffs")
+
+[node name="HighLuckGlowMargin" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer"]
+z_index = -2
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_top = -14
+theme_override_constants/margin_right = -64
+theme_override_constants/margin_bottom = -48
+
+[node name="HighLuckGlow" type="TextureRect" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/HighLuckGlowMargin"]
+material = SubResource("ShaderMaterial_ielym")
+custom_minimum_size = Vector2(512, 32)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = ExtResource("13_fidr8")
+expand_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="MainRow" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LuckIconContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow"]
+layout_mode = 2
+theme_override_constants/margin_right = 16
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckIconContainer"]
+visible = false
+layout_mode = 2
+texture = ExtResource("8_kblky")
+expand_mode = 3
+
+[node name="LuckBarContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer"]
+visible = false
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+theme = SubResource("Theme_sph0g")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+text = "10,000/10,000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LuckBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer"]
+material = ExtResource("6_uywjm")
+custom_minimum_size = Vector2(240, 20)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+value = 40.0
+fill_mode = 1
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 15
+texture_over = ExtResource("5_2xecb")
+texture_progress = ExtResource("6_es2ki")
+tint_over = Color(0.901961, 0.776471, 0, 1)
+tint_progress = Color(1, 0.74902, 0, 1)
+
+[node name="LuckGainBar" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
+z_index = -1
+material = ExtResource("6_uywjm")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+value = 60.0
+fill_mode = 1
+nine_patch_stretch = true
+stretch_margin_left = 20
+stretch_margin_top = 20
+stretch_margin_right = 20
+stretch_margin_bottom = 15
+texture_under = ExtResource("7_w71kr")
+texture_progress = ExtResource("7_w71kr")
+tint_under = Color(0.113725, 0.113725, 0.113725, 1)
+tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
+
+[node name="Timer" type="Timer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
+wait_time = 0.4
+one_shot = true
+
+[node name="HighLuckBarMargin" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_right = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 7
+
+[node name="HighLuckIndicator" type="VSeparator" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin"]
+modulate = Color(0.989911, 0.852883, 1.92523e-06, 1)
+material = ExtResource("6_uywjm")
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/separator = SubResource("StyleBoxLine_iadbw")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin/HighLuckIndicator"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_constants/margin_top = -64
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/HighLuckBarMargin/HighLuckIndicator/MarginContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+text = "100%"
+horizontal_alignment = 1
+
+[node name="ActiveLuckBuffsRow" type="MarginContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/margin_left = 56
+
+[node name="ActiveLuckBuffs" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/ActiveLuckBuffsRow"]
+layout_mode = 2
+
+[node name="CircularUIContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -24
+theme_override_constants/margin_top = -106
+
+[node name="SpinAbilityUI" type="TextureProgressBar" parent="MarginContainer/HBoxContainer/CircularUIContainer"]
+process_mode = 1
+material = SubResource("ShaderMaterial_rh6ui")
+custom_minimum_size = Vector2(132, 132)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+max_value = 200.0
+value = 98.0
+fill_mode = 3
+nine_patch_stretch = true
+texture_under = ExtResource("12_o6f4s")
+texture_progress = ExtResource("12_o6f4s")
+tint_under = Color(0.306923, 0.306923, 0.306923, 1)
+tint_progress = Color(0.461167, 1, 0.39, 1)
+
+[node name="RadialDrawCenter" type="Control" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_awes1")
+ammo_single_texture = ExtResource("9_ua0m7")
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -51.0
+offset_top = -22.0
+offset_right = 51.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CurrencyUI" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer" instance=ExtResource("13_ey5n2")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="MarginContainer" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI" index="0"]
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer" index="0"]
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer" index="0"]
+custom_minimum_size = Vector2(0, 0)
+
+[node name="RerollUI" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer" index="0"]
+visible = false
+
+[node name="StaticChipIcon" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer" index="1"]
+visible = true
+custom_minimum_size = Vector2(32, 32)
+size_flags_horizontal = 8
+size_flags_vertical = 4
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer2" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer" index="1"]
+size_flags_horizontal = 0
+theme_override_constants/margin_top = -12
+theme_override_constants/margin_bottom = -16
+
+[node name="CurrencyLabel" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer2" index="0"]
+custom_minimum_size = Vector2(64, 64)
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 22
+text = "99,999"
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI"]
+modulate = Color(0.22538, 0.180709, 0.151444, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -92.5
+offset_top = -92.5
+offset_right = 92.5
+offset_bottom = 92.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_oh4g2")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_2600x")
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(960, 540)
+
+[connection signal="timeout" from="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer/HealthBar/Timer" to="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/HealthContainer/VBoxContainer/MainRow/HealthBarContainer" method="_on_timer_timeout"]
+[connection signal="timeout" from="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer/MarginContainer/VBoxContainer/MainRow/LuckBarContainer/LuckBar/Timer" to="MarginContainer/HBoxContainer/ProgressBars/BarsVBox/LuckContainer" method="_on_timer_timeout"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI" to="." method="_on_spin_ability_progress_changed"]
+
+[editable path="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI"]
+[editable path="MarginContainer/HBoxContainer/CircularUIContainer/SpinAbilityUI/RadialDrawCenter/PanelContainer/CurrencyUI/MarginContainer/HBoxContainer/MarginContainer/RerollUI"]

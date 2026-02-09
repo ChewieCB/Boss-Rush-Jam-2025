@@ -30,3 +30,9 @@ func dead() -> void:
 	if GameManager.hide_hurt_overlay:
 		return
 	anim_player.play("dead")
+
+
+func revive() -> void:
+	if GameManager.hide_hurt_overlay:
+		return
+	anim_player.play("revive")

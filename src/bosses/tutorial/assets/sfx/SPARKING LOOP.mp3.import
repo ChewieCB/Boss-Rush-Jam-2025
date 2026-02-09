@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ci1xnb6j60iw0"
+path="res://.godot/imported/SPARKING LOOP.mp3-361bc550398f6d8ad1331c81f0aaba89.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/SPARKING LOOP.mp3"
+dest_files=["res://.godot/imported/SPARKING LOOP.mp3-361bc550398f6d8ad1331c81f0aaba89.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

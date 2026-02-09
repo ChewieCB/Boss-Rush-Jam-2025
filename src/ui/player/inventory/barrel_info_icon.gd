@@ -3,8 +3,10 @@ class_name BarrelInfoIcon
 
 @onready var texture_rect: TextureRect = $TextureRect
 @onready var border_focus: Control = $BorderFocus
+@onready var spin_value_label: RichTextLabel = $CenterContainer/ReloadSpinValueLabel
 @export var pulse_speed: float = 5 # How fast the pulse happens
 @export var pulse_strength: float = 0.3 # How bright/dark it changes (0–1 range)
+
 
 signal display_description(content)
 
@@ -42,6 +44,14 @@ func set_barrel_roll_data(_data) -> void:
 	if _data["icon_id"] > -2:
 		var icon_texture = load("res://assets/sprite/effect_icons/%s.png" % _data["icon_id"])
 		texture_rect.texture = icon_texture
+	if _data.has("reloads_before_spin"):
+		if _data["reloads_before_spin"] > 0:
+			spin_value_label.text = "[center][b](%s)[/b][/center]" % [_data["reloads_before_spin"]]
+			spin_value_label.visible = true
+		else:
+			spin_value_label.visible = false
+	else:
+		spin_value_label.visible = false
 
 
 func expand_button_size():

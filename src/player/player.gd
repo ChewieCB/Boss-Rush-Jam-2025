@@ -24,6 +24,7 @@ var movement_sfx_player: AudioStreamPlayer
 @export var dash_cd: float = 1
 @export var angular_momentum_multiplier = 0.4
 @export var speedline_vfx_prefab: PackedScene
+@export var jump_dust_ring_prefab: PackedScene
 
 @export_category("Prefabs")
 @export var health_component: HealthComponent
@@ -54,16 +55,16 @@ var movement_sfx_player: AudioStreamPlayer
 @onready var laser_guide_ray: RayCast3D = $Neck/ShakeCameraWrapper/Camera3D/LaserGuideRayCast
 @onready var aim_assist_ray: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycast
 @onready var aim_assist_ray_boss_check: RayCast3D = $Neck/ShakeCameraWrapper/AimAssistRaycastBossCheck
-@onready var hitmarker: TextureRect = $Neck/ShakeCameraWrapper/HitMarker
 
 @onready var ui_parent = $UI
 @onready var barrel_effect_ui = $UI/GunUI
 @onready var barrel_detail_dimmer = $UI/GunUI/DimScreen
 @onready var barrel_detail_ui = $UI/GunUI/BarrelEffectsUI
+@onready var hitmarker: TextureRect = $UI/GunUI/HitMarker
 @onready var barrel_ui_tween: Tween = null
 var barrel_ui_active: bool = false
 
-@onready var debug_inventory_ui = $UI/InventoryUI
+@onready var debug_inventory_ui = $UI/DebugInventoryUI
 
 @onready var stat_ui: StatUI = $UI/StatUI
 @onready var health_ui = stat_ui.health_ui
@@ -147,7 +148,7 @@ var last_dashed_timestamp
 var current_air_jump_count: int = 0
 var slide_dir = Vector2(0, 0)
 
-var controls_disabled: bool = false
+var controls_disabled: bool = true
 var dash_disabled: bool = false
 
 var gun_container_original_pos: Vector3
@@ -161,9 +162,9 @@ var is_in_menu = false:
 	set(value):
 		is_in_menu = value
 		if is_in_menu:
-			stat_ui.hide_non_luck_ui()
+			stat_ui.hide_all_ui()
 		else:
-			stat_ui.show_non_luck_ui()
+			stat_ui.show_all_ui()
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
@@ -196,6 +197,7 @@ var freecam: FreeCam
 
 
 func _ready():
+	GameManager.change_fmod_bgm_player_is_dead(false)
 	GameManager.player = self
 	for mesh in debug_meshes.get_children():
 		mesh.visible = false
@@ -222,10 +224,14 @@ func _ready():
 
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
+	current_gun.full_clip_reload_started.connect(full_reload_ammo_counter_ui)
 	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
 	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_spin_stopped.connect(update_ammo_counter_ui.unbind(2))
 	current_gun.barrel_equipped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
+	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
 	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
@@ -241,8 +247,8 @@ func _ready():
 	if GameManager.CHEAT_godmode:
 		health_component.is_invincible = true
 
-	debug_inventory_ui.has_custom_inventory = true
-	debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
+	#debug_inventory_ui.has_custom_inventory = true
+	#debug_inventory_ui.current_inventory = GameManager.debug_barrel_database
 
 
 func _unhandled_input(event):
@@ -270,15 +276,17 @@ func _unhandled_input(event):
 	if event.is_action_pressed("spin_reload"):
 		no_spin_reload()
 	elif event.is_action_pressed("spin_barrels"):
-		spin_barrels()
+		if GameManager.CHEAT_spin_mode != GameManager.DebugSpinMode.ON_RELOAD:
+			spin_barrels()
 	# DEBUG
 	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
-	#elif event.is_action_pressed("input_2"):
+	elif event.is_action_pressed("input_1"):
+		LuckHandler.increase_luck(20.0)
 		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
-	elif event.is_action_pressed("input_3"):
-		health_component.damage(20)
+	#elif event.is_action_pressed("input_3"):
+		#health_component.damage(20)
 
 	if event.is_action_pressed("dash"):
 		if dash_disabled:
@@ -386,10 +394,10 @@ func _physics_process(delta):
 			input_dir = raw_input_dir.rotated(-rotation.y)
 
 	if not is_dashing and not is_in_menu:
-		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		raw_input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down", GameManager.controller_deadzone)
 		input_dir = raw_input_dir.rotated(-rotation.y)
 
-	# Let the player ignore the wheelspin if they are moving
+	# Let the player ignore the wheelspin in Roulette boss if they are moving
 	var floor_velocity = get_platform_velocity()
 	if floor_velocity: # and input_dir != Vector2.ZERO:
 		var dir_weight = input_dir.dot(Vector2(
@@ -413,6 +421,7 @@ func _physics_process(delta):
 				player_camera.add_trauma(HEAVY_FALL_SHAKE_TRAUMA)
 			jumped = false
 			vel_vertical = 0
+			create_jump_dust_ring()
 	else:
 		state_chart.send_event("airborne")
 
@@ -449,21 +458,29 @@ func _physics_process(delta):
 	move_and_slide()
 
 	#show_debug_label()
+	# Gun sway when moving effect
 	var gun_sway_velocity = velocity * transform.basis
 	if not is_swapping_gun:
-		gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
+		var target_gun_container_pos = gun_container_original_pos - (gun_sway_velocity / 500)
+		target_gun_container_pos.y = clamp(target_gun_container_pos.y, gun_container_original_pos.y - 0.05, gun_container_original_pos.y + 0.05)
+		gun_container.position = lerp(gun_container.position, target_gun_container_pos, delta * 10)
 		if is_dashing:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z - (gun_sway_velocity.x / 250), delta * 10)
 		else:
 			gun_container.rotation.z = lerp(gun_container.rotation.z, gun_container_original_rot.z, delta * 10)
-	camera_control(delta)
+	special_camera_control(delta)
 	if GameManager.is_controller_connected:
 		aim_assist(delta)
 
 
 func update_ammo_counter_ui() -> void:
-	stat_ui.current_ammo_label.text = "{0}".format([current_gun.magazine_ammo_left])
-	stat_ui.magazine_size_label.text = "/{0}".format([current_gun.modified_magazine_size])
+	stat_ui.radial_ui_center_node.update(current_gun.magazine_ammo_left, current_gun.modified_magazine_size)
+	#stat_ui.radial_ui_center_node.max_radial_segment_count = current_gun.modified_magazine_size
+	#stat_ui.radial_ui_center_node.active_radial_segment_count = current_gun.magazine_ammo_left
+
+
+func full_reload_ammo_counter_ui() -> void:
+	stat_ui.radial_ui_center_node.animate_full_reload(current_gun.current_reload_anim_time)
 
 
 func show_barrel_effect_ui() -> void:
@@ -522,7 +539,7 @@ func update_barrel_effect_ui() -> void:
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
-			#if barrel:
+
 			if _effect.icon_id != -1:
 				effect_ui.icon_rect.texture = load("res://assets/sprite/effect_icons/%s.png" % _effect.icon_id)
 			else:
@@ -573,6 +590,8 @@ func jump(local_multiplier = 1.0):
 	is_dashing = false
 	is_crouching = false
 
+	create_jump_dust_ring()
+
 	if is_on_floor():
 		SoundManager.play_sound_with_pitch(
 			sfx_jump_ground.pick_random(), randf_range(0.8, 1.1), "SFX"
@@ -582,6 +601,11 @@ func jump(local_multiplier = 1.0):
 			sfx_jump_air.pick_random(), randf_range(0.8, 1.1), "SFX"
 		)
 
+
+func create_jump_dust_ring():
+	var dust_ring_inst = jump_dust_ring_prefab.instantiate()
+	get_tree().get_root().add_child(dust_ring_inst)
+	dust_ring_inst.global_position = global_position - Vector3(0, 1, 0)
 
 func stun(time: float) -> void:
 	max_speed = MAX_SPEED / 4
@@ -605,7 +629,7 @@ func handle_controller_look(_delta):
 	var look_x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
 	var look_y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
 
-	if abs(look_x) > 0.01 or abs(look_y) > 0.01:
+	if abs(look_x) > GameManager.controller_deadzone or abs(look_y) > GameManager.controller_deadzone:
 		var sensitivity = GameManager.mouse_sensitivity / CONTROLLER_SENSITIVITY_COEEFICIENT
 		if aim_assist_target:
 			var modifier = AIM_ASSIST_CAMERA_REDUCTION_COEFFICIENT * GameManager.aim_assist_strength
@@ -613,7 +637,14 @@ func handle_controller_look(_delta):
 		rotate_player(look_x * sensitivity, look_y * sensitivity)
 
 
+func _reset_camera_look() -> void:
+	player_camera.rotation = Vector3.ZERO
+	neck.rotation = Vector3.ZERO
+
+
 func rotate_player(x: float, y: float):
+	if controls_disabled:
+		return
 	rotate(Vector3(0, -1, 0), x * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotate_x(-y * (GameManager.mouse_sensitivity / MOUSE_SENSITIVITY_COEEFICIENT))
 	player_camera.rotation.y = 0
@@ -621,21 +652,28 @@ func rotate_player(x: float, y: float):
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
 
-func camera_control(delta):
+func special_camera_control(delta):
+	if controls_disabled:
+		return
+		
 	# Tilt camera
+	const MIN_DIR_TO_TILT = 0.1
+	const TILT_AMOUNT = 3.0
+	const TILT_TIME = 5.0
+
 	if GameManager.camera_tilt:
-		if raw_input_dir.x < 0:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(3.0), delta * 5)
-		elif raw_input_dir.x > 0:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
+		if raw_input_dir.x < -MIN_DIR_TO_TILT:
+			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(TILT_AMOUNT * abs(raw_input_dir.x)), delta * TILT_TIME)
+		elif raw_input_dir.x > MIN_DIR_TO_TILT:
+			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-TILT_AMOUNT * abs(raw_input_dir.x)), delta * TILT_TIME)
 		else:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
+			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * TILT_TIME)
 
 	# Lower camera
 	if is_crouching:
-		neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
+		neck.position.y = lerp(neck.position.y, -1.0, delta * TILT_TIME)
 	else:
-		neck.position.y = lerp(neck.position.y, 0.0, delta * 5)
+		neck.position.y = lerp(neck.position.y, 0.0, delta * TILT_TIME)
 
 
 func ground_slam():
@@ -656,6 +694,9 @@ func _on_dash_duration_timeout() -> void:
 
 func _on_grounded_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
+		# Allows us to disable jumping
+		if max_air_jump < 1:
+			return
 		jump()
 
 func _on_grounded_state_physics_processing(_delta: float):
@@ -668,6 +709,9 @@ func _on_grounded_state_physics_processing(_delta: float):
 
 func _on_airborne_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
+		# Allows us to disable jumping
+		if max_air_jump < 1:
+			return
 		if can_coyote_jump and not jumped:
 			jump()
 		elif current_air_jump_count < max_air_jump:
@@ -776,9 +820,20 @@ func _on_health_hurt_state_entered() -> void:
 
 
 func _on_health_dead_state_entered() -> void:
+	GameManager.change_fmod_bgm_player_is_dead(true)
 	controls_disabled = true
 	hurt_overlay.dead()
 	stat_ui.hide_all_ui()
+
+func _on_health_dead_state_exited() -> void:
+	GameManager.change_fmod_bgm_player_is_dead(false)
+	hurt_overlay.revive()
+	stat_ui.show_all_ui()
+	var neck_tween = get_tree().create_tween()
+	neck_tween.parallel().tween_property(neck, "rotation:z", deg_to_rad(0), 0.3)
+	neck_tween.parallel().tween_property(neck, "rotation:y", deg_to_rad(0), 0.3)
+	controls_disabled = false
+	
 
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
@@ -799,7 +854,7 @@ func add_status_effect(new_status: StatusEffect):
 
 func remove_status_effect(status: StatusEffect):
 	status_effect_list.erase(status)
-	status_effect_removed.emit(status.status_code)
+	status_effect_removed.emit(status)
 	apply_status_effects()
 
 
@@ -1049,7 +1104,6 @@ func _on_check_standing_collision_body_entered(_body: Node3D) -> void:
 
 func _enable_freecam() -> void:
 	controls_disabled = true
-	dash_disabled = true
 	player_camera.camera.current = false
 	gun_container.visible = false
 
@@ -1066,7 +1120,6 @@ func _enable_freecam() -> void:
 
 func _disable_freecam() -> void:
 	controls_disabled = false
-	dash_disabled = false
 	gun_container.visible = true
 	player_camera.camera.current = true
 
@@ -1074,6 +1127,34 @@ func _disable_freecam() -> void:
 	freecam = null
 
 	Engine.time_scale = 1.0
+
+
+func _enable_cutscene_cam() -> void:
+	controls_disabled = true
+	player_camera.camera.current = false
+	gun_container.visible = false
+	if movement_sfx_player:
+		movement_sfx_player.stop()
+
+
+func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
+	controls_disabled = false
+	
+	if lerp_to_player_cam:
+		var active_camera: Camera3D = get_viewport().get_camera_3d()
+		var camera_tween := get_tree().create_tween()
+		camera_tween.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CIRC)
+		camera_tween.set_parallel(true)
+		camera_tween.tween_property(
+			active_camera,
+			"global_transform",
+			player_camera.global_transform,
+			0.8
+		)
+		await camera_tween.finished
+	
+	player_camera.camera.current = true
+	gun_container.visible = true
 
 
 func change_near_enemy_radius(new_radius: float) -> void:

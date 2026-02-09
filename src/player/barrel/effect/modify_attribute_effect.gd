@@ -6,7 +6,7 @@ extends BaseBarrelEffect
 @export var is_perc: bool
 
 func on_effect_set():
-	super ()
+	super()
 	match attribute:
 		AttributeNameEnum.FIRERATE:
 			owner_barrel.owner_gun.modified_firerate = calculate_new_value(
@@ -53,14 +53,14 @@ func on_effect_set():
 				owner_barrel.owner_gun.modified_screenshake, modify_value, is_perc, false)
 
 func on_fire_rate_check():
-	super ()
-	match attribute:
-		AttributeNameEnum.FIRERATE:
-			owner_barrel.owner_gun.modified_firerate = calculate_new_value(
-				owner_barrel.owner_gun.modified_firerate, modify_value, is_perc, false)
+	super()
+	#match attribute:
+		#AttributeNameEnum.FIRERATE:
+			#owner_barrel.owner_gun.modified_firerate = calculate_new_value(
+				#owner_barrel.owner_gun.modified_firerate, modify_value, is_perc, false)
 
 func on_prepare_to_fire():
-	super ()
+	super()
 	match attribute:
 		AttributeNameEnum.DAMAGE:
 			owner_barrel.owner_gun.modified_damage = calculate_new_value(
@@ -99,15 +99,18 @@ func on_prepare_to_fire():
 
 
 func on_reload_start():
-	super ()
-	match attribute:
-		AttributeNameEnum.RELOAD_TIME:
-			owner_barrel.owner_gun.modified_reload_time = calculate_new_value(
-				owner_barrel.owner_gun.modified_reload_time, modify_value, is_perc, false)
+	super()
+	#match attribute:
+		#AttributeNameEnum.MAGAZINE_SIZE:
+			#owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(
+				#owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc, true)
+		#AttributeNameEnum.RELOAD_TIME:
+			#owner_barrel.owner_gun.modified_reload_time = calculate_new_value(
+				#owner_barrel.owner_gun.modified_reload_time, modify_value, is_perc, false)
 
 func on_reload_end():
-	super ()
-	match attribute:
-		AttributeNameEnum.MAGAZINE_SIZE:
-			owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(
-				owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc, true)
+	super()
+	#match attribute:
+		#AttributeNameEnum.MAGAZINE_SIZE:
+			#owner_barrel.owner_gun.modified_magazine_size = calculate_new_value(
+				#owner_barrel.owner_gun.modified_magazine_size, modify_value, is_perc, true)

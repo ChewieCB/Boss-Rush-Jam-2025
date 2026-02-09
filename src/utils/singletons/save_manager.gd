@@ -39,6 +39,8 @@ func delete_save_file(slot_id: int):
 func save_game(slot_id):
 	is_saving = true
 	started_saving.emit()
+	if not GameManager.equipped_gun_frame:
+		GameManager.equipped_gun_frame = GameManager.starting_gun_frame
 	var save_dict = {
 		# Stats
 		"player_currency": GameManager.player_currency,
@@ -51,7 +53,7 @@ func save_game(slot_id):
 		"equipped_barrels": convert_resources_to_ids(GameManager.equipped_barrels, ResourceTypeEnum.BARREL),
 		"inventory_barrels": convert_resources_to_ids(GameManager.inventory_barrels, ResourceTypeEnum.BARREL),
 		"shop_barrels": convert_resources_to_ids(GameManager.shop_barrels, ResourceTypeEnum.BARREL),
-		"equipped_gun_frame": convert_resources_to_ids([GameManager.equipped_gun_frame], ResourceTypeEnum.GUN_FRAME)[0], # Since it's an int
+		"equipped_gun_frame": convert_resources_to_ids([GameManager.equipped_gun_frame], ResourceTypeEnum.GUN_FRAME).front(),
 		"inventory_gun_frames": convert_resources_to_ids(GameManager.inventory_gun_frames, ResourceTypeEnum.GUN_FRAME),
 		"shop_gun_frames": convert_resources_to_ids(GameManager.shop_gun_frames, ResourceTypeEnum.GUN_FRAME),
 
@@ -113,7 +115,7 @@ func load_game(slot_id):
 	GameManager.equipped_barrels = convert_ids_to_resources(save_data["equipped_barrels"], ResourceTypeEnum.BARREL)
 	GameManager.inventory_barrels = convert_ids_to_resources(save_data["inventory_barrels"], ResourceTypeEnum.BARREL)
 	GameManager.shop_barrels = convert_ids_to_resources(save_data["shop_barrels"], ResourceTypeEnum.BARREL)
-	GameManager.equipped_gun_frame = convert_ids_to_resources([save_data["equipped_gun_frame"]], ResourceTypeEnum.GUN_FRAME)[0] # Since it's an int
+	GameManager.equipped_gun_frame = convert_ids_to_resources([save_data["equipped_gun_frame"]], ResourceTypeEnum.GUN_FRAME).front()
 	GameManager.inventory_gun_frames = convert_ids_to_resources(save_data["inventory_gun_frames"], ResourceTypeEnum.GUN_FRAME)
 	GameManager.shop_gun_frames = convert_ids_to_resources(save_data["shop_gun_frames"], ResourceTypeEnum.GUN_FRAME)
 
@@ -141,6 +143,7 @@ func save_setting_config():
 	var serialized_keybinding_data: String = InputHelper.serialize_inputs_for_actions()
 
 	config.set_value("Control", "mouse_sensitivity", GameManager.mouse_sensitivity)
+	config.set_value("Control", "controller_deadzone", GameManager.controller_deadzone)
 	config.set_value("Control", "aim_assist_strength", GameManager.aim_assist_strength)
 	config.set_value("Control", "keybinding", serialized_keybinding_data)
 	config.set_value("Graphic", "camera_fov", GameManager.camera_fov)
@@ -152,8 +155,8 @@ func save_setting_config():
 	config.set_value("Graphic", "hide_ui", GameManager.hide_ui)
 	config.set_value("Graphic", "hide_damage_number", GameManager.hide_damage_number)
 	config.set_value("Graphic", "hide_hurt_overlay", GameManager.hide_hurt_overlay)
-	config.set_value("Graphic", "screen_shake_disabled", GameManager.screen_shake_disabled)
-	config.set_value("Graphic", "drunk_blur_disabled", GameManager.drunk_blur_disabled)
+	config.set_value("Graphic", "screen_shake_enabled", GameManager.screen_shake_enabled)
+	config.set_value("Graphic", "drunk_blur_enabled", GameManager.drunk_blur_enabled)
 	config.set_value("Audio", "master_audio", GameManager.master_audio)
 	config.set_value("Audio", "bgm_audio", GameManager.bgm_audio)
 	config.set_value("Audio", "sfx_audio", GameManager.sfx_audio)
@@ -182,6 +185,7 @@ func load_setting_config():
 		InputHelper.deserialize_inputs_for_actions(serialized_keybinding_data)
 
 	GameManager.mouse_sensitivity = config.get_value("Control", "mouse_sensitivity", 50.0)
+	GameManager.controller_deadzone = config.get_value("Control", "controller_deadzone", 0.1)
 	GameManager.aim_assist_strength = config.get_value("Control", "aim_assist_strength", 0.5)
 	GameManager.camera_fov = config.get_value("Graphic", "camera_fov", 90)
 	GameManager.camera_tilt = config.get_value("Graphic", "camera_tilt", true)
@@ -189,8 +193,8 @@ func load_setting_config():
 	GameManager.resolution_index = config.get_value("Graphic", "resolution_index", 1)
 	GameManager.window_mode_index = config.get_value("Graphic", "window_mode_index", 1)
 	GameManager.scaling_3d = config.get_value("Graphic", "scaling_3d", 100.0)
-	GameManager.screen_shake_disabled = !config.get_value("Graphic", "screen_shake_disabled", false)
-	GameManager.drunk_blur_disabled = !config.get_value("Graphic", "drunk_blur_disabled", false)
+	GameManager.screen_shake_enabled = config.get_value("Graphic", "screen_shake_enabled", true)
+	GameManager.drunk_blur_enabled = config.get_value("Graphic", "drunk_blur_enabled", true)
 	GameManager.master_audio = config.get_value("Audio", "master_audio", 80)
 	GameManager.bgm_audio = config.get_value("Audio", "bgm_audio", 100)
 	GameManager.sfx_audio = config.get_value("Audio", "sfx_audio", 100)

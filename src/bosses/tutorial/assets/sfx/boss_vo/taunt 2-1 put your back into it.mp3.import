@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://y41k7fwr4l4w"
+path="res://.godot/imported/taunt 2-1 put your back into it.mp3-8c1247cdacb4452a326e1b1768d81ce1.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 2-1 put your back into it.mp3"
+dest_files=["res://.godot/imported/taunt 2-1 put your back into it.mp3-8c1247cdacb4452a326e1b1768d81ce1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

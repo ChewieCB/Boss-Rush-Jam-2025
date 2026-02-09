@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ckcq10n734itb"
+path="res://.godot/imported/TUTORIAL POP UP MOST SUBTLE.mp3-0024d02c67cbe7b857c91e58cc8409dc.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/TUTORIAL POP UP MOST SUBTLE.mp3"
+dest_files=["res://.godot/imported/TUTORIAL POP UP MOST SUBTLE.mp3-0024d02c67cbe7b857c91e58cc8409dc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

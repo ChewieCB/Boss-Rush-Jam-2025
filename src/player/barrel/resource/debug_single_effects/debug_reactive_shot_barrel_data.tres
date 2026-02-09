@@ -9,6 +9,7 @@ script = ExtResource("4_hlh17")
 barrel_id = 58
 barrel_name = "ReactiveShot"
 barrel_desc = "Payback time!"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_3fs1y")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_6trcl")

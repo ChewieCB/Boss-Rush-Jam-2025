@@ -14,12 +14,20 @@ var is_spinning = false
 var chosen_id: int:
 	set(value):
 		chosen_id = value
-		barrel_effect_changed.emit(self, effect_list[chosen_id])
+		barrel_effect_changed.emit(self , effect_list[chosen_id])
+var force_next_spin_id: int = -1
 var is_equipped = false
 var last_chosen_queue = []
 
+# TODO - reloads before spin for each barrel should be generated on save file creation, seeded
+var reloads_before_spin: int
+var reload_count: int = 0
+
 
 func _ready() -> void:
+	if owner_gun == null:
+		return
+
 	for child in effect_container.get_children():
 		# This help with debugging, you can show/hide barrel effect to avoid
 		# spamming spin barrel when testing it
@@ -38,12 +46,17 @@ func start_spin():
 func stop_spin():
 	is_spinning = false
 	#prevent_roll_same_effect()
-	chosen_id = get_less_used_effects()
+	if force_next_spin_id >= 0:
+		chosen_id = force_next_spin_id
+		force_next_spin_id = -1
+	else:
+		chosen_id = get_less_used_effects()
 	# When we pick a new effect, move it to the front of the last used queue
 	# so we can deprioritise it next spin
 	if chosen_id in last_chosen_queue:
 		last_chosen_queue.pop_at(last_chosen_queue.find(chosen_id))
 	last_chosen_queue.push_front(chosen_id)
+
 
 func _process(delta: float) -> void:
 	if not is_spinning:
@@ -57,9 +70,10 @@ func _process(delta: float) -> void:
 
 func instant_spin():
 	chosen_id = randi_range(0, len(effect_list) - 1)
+	get_active_effect().on_effect_set()
 
 
-func get_active_effect():
+func get_active_effect() -> BaseBarrelEffect:
 	return effect_list[chosen_id]
 
 
@@ -77,7 +91,7 @@ func get_less_used_effects() -> int:
 			# If we have chosen all effects previously, 50% pick least recent, 50% pick randomly
 			effect_size:
 				var same_barrel_chance = 0.5
-				if is_instance_valid(GameManager.current_boss_map) and GameManager.current_boss_map.is_tutorial:
+				if GameManager.current_boss_map and not GameManager.tutorial_completed:
 					same_barrel_chance = -100
 				if chance <= same_barrel_chance:
 					effect_id = randi_range(0, effect_size - 1)
@@ -87,8 +101,8 @@ func get_less_used_effects() -> int:
 			_:
 				# 20% chance to get same barrel, unless it tutorial room
 				var same_barrel_chance = 0.2
-				if is_instance_valid(GameManager.current_boss_map):
-					if GameManager.current_boss_map.is_tutorial:
+				if GameManager.current_boss_map:
+					if GameManager.tutorial_completed:
 						same_barrel_chance = -100
 
 				if chance <= same_barrel_chance:
@@ -119,6 +133,6 @@ func get_barrel_effect_data_at(index: int) -> Dictionary:
 		"is_archetype": is_archetype,
 		"positive_desc": barrel_effect.positive_desc,
 		"negative_desc": barrel_effect.negative_desc,
-		"icon_id": barrel_effect.icon_id
+		"icon_id": barrel_effect.icon_id,
 	 }
 	return res

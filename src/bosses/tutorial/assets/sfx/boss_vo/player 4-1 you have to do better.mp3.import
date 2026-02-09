@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://q5g1m4yhfuiy"
+path="res://.godot/imported/player 4-1 you have to do better.mp3-c73580a0082f23c7a4db27b38a6369cd.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/player 4-1 you have to do better.mp3"
+dest_files=["res://.godot/imported/player 4-1 you have to do better.mp3-c73580a0082f23c7a4db27b38a6369cd.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

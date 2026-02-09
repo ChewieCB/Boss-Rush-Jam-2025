@@ -1,8 +1,6 @@
 extends Control
 class_name MainMenu
 
-@export var bgm: AudioStream
-var bgm_player: AudioStreamPlayer
 @export var button_sfx: Array[AudioStream]
 @export var start_game_sfx: AudioStream
 @export var lobby_scene: PackedScene
@@ -19,6 +17,10 @@ var bgm_player: AudioStreamPlayer
 var started_loading = false
 
 func _ready() -> void:
+	if not LoadingHandler.is_materials_compiled:
+		LoadingHandler.initial_load()
+		await LoadingHandler.materials_compiled
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	
@@ -27,8 +29,7 @@ func _ready() -> void:
 	
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
-	LoadingHandler.current_scene_path = "res://src/maps/lobby/Lobby.tscn"
-	bgm_player = SoundManager.play_music(bgm, 0.2, "BGM")
+	LoadingHandler.current_scene_path = LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM]
 	get_tree().paused = false
 	
 	ScreenTransition.transition_in()
@@ -38,6 +39,7 @@ func _ready() -> void:
 	for button in buttons:
 		button.pressed.connect(_play_button_sfx)
 
+	GameManager.main_bgm_emitter.play()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -76,10 +78,10 @@ func _play_button_sfx() -> void:
 
 func _on_start_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
-	save_ui.visible = true
 	story_ui.visible = false
 	credits_ui.visible = false
 	settings_ui.close_menu()
+	save_ui.visible = true
 
 	# Grab focus the first save button
 	var first_save_button: SaveSlotItem = save_slot_items[0]
@@ -98,31 +100,38 @@ func _on_option_button_pressed() -> void:
 	save_ui.visible = false
 	settings_ui.open_menu()
 
-
 func _on_credit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
-	credits_ui.visible = true
 	story_ui.visible = false
 	save_ui.visible = false
 	settings_ui.close_menu()
+	credits_ui.visible = true
 	for child in buttons_container.get_children():
 		child.release_focus()
 
 
 func start_game():
-	var current_beat_time = bgm.get_bpm() * bgm_player.get_playback_position() / 120.0
-	var next_beat_time = ceilf(current_beat_time)
-	await get_tree().create_timer(next_beat_time - current_beat_time).timeout
-	bgm_player.stop()
-	SoundManager.play_ui_sound(start_game_sfx, "UI")
+	# SoundManager.play_ui_sound(start_game_sfx, "UI")
+	SaveManager.load_game(GameManager.chosen_slot_id)
 	
-	if not SaveManager.save_data_is_loaded:
-		SaveManager.load_game(GameManager.chosen_slot_id)
+	# Zero any stored positions when moving between saves
+	GameManager.cached_player_pos_relative_to_elevator_doors = Vector3.ZERO
+	GameManager.cached_player_rotation = Vector3.ZERO
+	GameManager.cached_camera_rotation = Vector3.ZERO
+	
 	if not GameManager.tutorial_completed:
-		LoadingHandler.current_scene_path = "res://src/maps/tutorial/TutorialBoss.tscn"
-		LoadingHandler.start_loading("Tutorial")
+		LoadingHandler.start_loading(
+			LoadingHandler.level_paths[LoadingHandler.LEVELS.TUTORIAL],
+			"Tutorial"
+		)
 	else:
-		LoadingHandler.start_loading("Lobby")
+		LoadingHandler.start_loading(
+			LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM],
+			"Backroom"
+		)
+	
+	await ScreenTransition.transition_finished
+	LoadingHandler.load_scene_transition()
 
 
 func play_button_hover_sfx():

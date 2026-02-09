@@ -1,16 +1,17 @@
 [gd_resource type="Resource" script_class="GunFrameResource" load_steps=3 format=3 uid="uid://cid07th4gi8ov"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun_frame/gun_frame_resource.gd" id="1_1b7fk"]
-[ext_resource type="Texture2D" uid="uid://dkk2usr4k2bhb" path="res://src/ui/player/inventory/gun-sideview.png" id="2_xsjhn"]
+[ext_resource type="Texture2D" uid="uid://5a51ghh4cpmw" path="res://src/ui/player/inventory/assets/frames/frame_sideview_shotgun.png" id="2_rsk2q"]
 
 [resource]
 script = ExtResource("1_1b7fk")
 frame_name = "Default"
 frame_id = 1
 frame_description = "You should't see this. Don't use it."
-shop_ui_sprite = ExtResource("2_xsjhn")
+shop_ui_sprite = ExtResource("2_rsk2q")
 reload_sfx = Array[AudioStream]([])
 shot_sfx = Array[AudioStream]([])
+frame_cost = 100
 base_damage = 20
 base_projectile_amount = 1
 base_firerate = 2.0

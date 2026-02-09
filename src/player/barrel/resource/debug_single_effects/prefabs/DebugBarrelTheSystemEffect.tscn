@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8lsn3v54a27x"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_w3dqm"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_e1xe4"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/card_counting_system_effect.gd" id="3_c1rdr"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_7xcny"]
+
+[node name="DebugBarrelTheSystemEffect" type="Node3D"]
+script = ExtResource("1_w3dqm")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="TheSystemEffect" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_e1xe4")
+display_text_title = "The System"
+display_text_tag = "Trust me brother"
+display_text_desc = "+10% damage for each missed bullet
+Projectile count set to 1
+Reset on reload"
+positive_desc = Array[String](["+10% damage for each missed bullet"])
+negative_desc = Array[String](["Projectile count set to 1", "Reset bonus on reload"])
+icon_id = 52
+
+[node name="CardCountingEffect" type="Node3D" parent="EffectContainer/TheSystemEffect"]
+script = ExtResource("3_c1rdr")
+
+[node name="SetProjectileCountTo1" type="Node3D" parent="EffectContainer/TheSystemEffect"]
+script = ExtResource("4_7xcny")
+attribute = 2
+new_value = 1.0

@@ -2,7 +2,7 @@ extends Node
 
 
 @export var default_busses := []
-@export var default_pool_size := 8
+@export var default_pool_size := 12
 
 
 var available_players: Array[AudioStreamPlayer] = []

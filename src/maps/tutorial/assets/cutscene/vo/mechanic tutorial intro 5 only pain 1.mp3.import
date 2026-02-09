@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c3cd530s3xecl"
+path="res://.godot/imported/mechanic tutorial intro 5 only pain 1.mp3-fcffaebaf5537bf5051e6bc243c18efb.mp3str"
+
+[deps]
+
+source_file="res://src/maps/tutorial/assets/cutscene/vo/mechanic tutorial intro 5 only pain 1.mp3"
+dest_files=["res://.godot/imported/mechanic tutorial intro 5 only pain 1.mp3-fcffaebaf5537bf5051e6bc243c18efb.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

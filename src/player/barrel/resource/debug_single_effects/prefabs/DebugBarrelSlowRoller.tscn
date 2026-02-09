@@ -17,7 +17,7 @@ display_text_tag = "Oh, the anticipation!"
 display_text_desc = "More damage with bullet flight time
 -50% projectile speed"
 positive_desc = Array[String](["Damage increases the longer the round is in-flight"])
-negative_desc = Array[String](["Slower projectile speed"])
+negative_desc = Array[String](["-50% projectile speed"])
 icon_id = 29
 
 [node name="SlowRollerEffect" type="Node3D" parent="EffectContainer/SlowRoller"]

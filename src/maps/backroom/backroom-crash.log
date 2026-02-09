@@ -1,0 +1,105 @@
+Renderer info: NVIDIA GeForce RTX 3060/PCIe/SSE2 version 4.6.0 NVIDIA 580.82.09 from NVIDIA Corporation
+Depth buffer bits: 24
+Multisampling enabled
+Adding file system path "/tmp/.mount_Trenchi8AykJ/usr/bin/../share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/"
+Creating new document
+Found 0 shaders
+Loaded entity definition file FuncGodot.fgd
+Found 0 shaders
+Adding file system path "/tmp/.mount_Trenchi8AykJ/usr/bin/../share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/assets"
+Reloading material collections
+Found 0 shaders
+Reloading entity definitions
+Loaded entity definition file FuncGodot.fgd
+Failed to load entity model 'BossChips.glb': assets/trenchbroom/models/BossChips.glb not found
+Failed to load entity model 'BossSlots.glb': assets/trenchbroom/models/BossSlots.glb not found
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossTest.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossBlackjack.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/BossSurveillance.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/BossSurveillance.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/BossRoulette.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/BossSurveillance.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/BossSurveillance.glb', loading fallback texture
+Failed to load entity model 'Chandellier1.glb': Model has no vertices. (So no valid bounding box.)
+Failed to load entity model 'Chandellier1LightOnly.glb': Model has no vertices. (So no valid bounding box.)
+Failed to load entity model 'Chandellier2.glb': Model has no vertices. (So no valid bounding box.)
+Failed to load entity model 'Chandellier2LightOnly.glb': Model has no vertices. (So no valid bounding box.)
+Failed to load entity model 'CoverSpawnPoint.glb': Model has no vertices. (So no valid bounding box.)
+Failed to load entity model 'ElevatorLight.glb': assets/trenchbroom/models/ElevatorLight.glb not found
+No diffuse textures found for material 4 of model 'assets/trenchbroom/models/BossSurveillance.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/PitBoss.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/PitBoss.glb', loading fallback texture
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/RouletteBall.glb', loading fallback texture
+Failed to load entity model 'RisingPlatform.glb': assets/trenchbroom/models/RisingPlatform.glb not found
+Failed to load entity model 'SlidingDoor.glb': assets/trenchbroom/models/SlidingDoor.glb not found
+Failed to load entity model 'SlotRollerDecal.glb': assets/trenchbroom/models/SlotRollerDecal.glb not found
+Failed to load entity model 'StandingLamp.glb': assets/trenchbroom/models/StandingLamp.glb not found
+Failed to load entity model 'SubElevatorDoors.glb': assets/trenchbroom/models/SubElevatorDoors.glb not found
+Failed to load entity model 'TurretSpawnPoint.glb': Model has no vertices. (So no valid bounding box.)
+Failed to load entity model 'TutorialBoss.glb': assets/trenchbroom/models/TutorialBoss.glb not found
+Failed to load entity model 'WallLight.glb': assets/trenchbroom/models/WallLight.glb not found
+Renderer info: NVIDIA GeForce RTX 3060/PCIe/SSE2 version 4.6.0 NVIDIA 580.82.09 from NVIDIA Corporation
+Depth buffer bits: 24
+Multisampling enabled
+Adding file system path "/tmp/.mount_Trenchi8AykJ/usr/bin/../share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/"
+Loading document from /home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/lobby/lobby.map
+Found 0 shaders
+Adding file system path "/tmp/.mount_Trenchi8AykJ/usr/bin/../share/TrenchBroom/defaults/assets"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/"
+Adding file system path "/home/jackm/Documents/Godot4/boss-rush-jam-2025/assets"
+Loaded entity definition file FuncGodot.fgd
+Found 0 shaders
+Loaded "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/lobby/lobby.map" in 46ms
+No diffuse textures found for material 0 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 1 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 2 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+No diffuse textures found for material 3 of model 'assets/trenchbroom/models/PlayerRef.glb', loading fallback texture
+Failed to load entity model 'SlidingDoor.glb': assets/trenchbroom/models/SlidingDoor.glb not found
+Failed to load entity model 'Chandellier2LightOnly.glb': Model has no vertices. (So no valid bounding box.)
+Failed to load entity model 'Chandellier1.glb': Model has no vertices. (So no valid bounding box.)
+Failed to load entity model 'Chandellier1LightOnly.glb': Model has no vertices. (So no valid bounding box.)
+Parsed successfully as Valve entities (unknown location)
+Could not resize brush: Brush is empty
+Couldn't parse as Valve entities: At line 1, column 1: Expected end of file or '{', but got '(' (raw data: '(') (unknown location)
+Couldn't parse as Valve brushes: At line 1, column 1: Expected end of file or '{', but got '(' (raw data: '(') (unknown location)
+Couldn't parse as Standard entities: At line 1, column 1: Expected end of file or '{', but got '(' (raw data: '(') (unknown location)
+Couldn't parse as Standard brushes: At line 1, column 1: Expected end of file or '{', but got '(' (raw data: '(') (unknown location)
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 6ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 1ms
+Created autosave backup at "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/autosave/backroom.1.map"
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 2ms
+Could not resize brush: Brush is empty
+Could not resize brush: Brush is empty
+Could not resize brush: Brush is empty
+Could not resize brush: Brush is empty
+Could not resize brush: Brush is empty
+Could not resize brush: Brush is empty
+Could not resize brush: Brush is empty
+Could not resize brush: Brush is empty
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 1ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 1ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 1ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 1ms
+Could not clip brush: Brush is empty
+Could not clip brush: Brush is empty
+Created autosave backup at "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/autosave/backroom.2.map"
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 1ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 1ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 1ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 1ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 2ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 1ms
+Saved "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/backroom/backroom.map" in 2ms
+Parsed successfully as Valve entities (unknown location)

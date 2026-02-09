@@ -129,7 +129,7 @@ text = "Settings"
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Return to 
-Lobby"
+Hub"
 
 [node name="MainMenuButton" parent="PauseOptionBG/VBoxContainer" instance=ExtResource("6_vrelk")]
 layout_mode = 2

@@ -1,0 +1,26 @@
+[remap]
+
+importer="2d_array_texture"
+type="CompressedTexture2DArray"
+uid="uid://bm5jl6uw56ja4"
+path="res://.godot/imported/Backroom.exr-a8c17bb391ff1601bc5651174cce0238.ctexarray"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://src/maps/backroom/Backroom.exr"
+dest_files=["res://.godot/imported/Backroom.exr-a8c17bb391ff1601bc5651174cce0238.ctexarray"]
+
+[params]
+
+compress/mode=3
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/channel_pack=1
+mipmaps/generate=false
+mipmaps/limit=-1
+slices/horizontal=1
+slices/vertical=4

@@ -1,0 +1,91 @@
+[gd_scene load_steps=12 format=4 uid="uid://bc8ha8vf7ole0"]
+
+[ext_resource type="Script" path="res://src/player/gun/vfx/self_destruct_3dparticle.gd" id="1_p6lua"]
+
+[sub_resource type="Curve" id="Curve_iomt8"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.255172, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_xtseb"]
+curve = SubResource("Curve_iomt8")
+
+[sub_resource type="Gradient" id="Gradient_8dfwg"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_oxunn"]
+gradient = SubResource("Gradient_8dfwg")
+
+[sub_resource type="Curve" id="Curve_vxkna"]
+_data = [Vector2(0, 1), 0.0, -1.32864, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ys4ma"]
+curve = SubResource("Curve_vxkna")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gw7if"]
+emission_shape_scale = Vector3(6, 0.1, 6)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+direction = Vector3(0, 0, 1)
+spread = 180.0
+flatness = 1.0
+radial_velocity_min = 9.99998
+radial_velocity_max = 15.0
+radial_velocity_curve = SubResource("CurveTexture_ys4ma")
+gravity = Vector3(0, -0.5, 0)
+scale_min = 3.0
+scale_max = 6.0
+color = Color(0.390625, 0.390625, 0.390625, 0.486275)
+color_initial_ramp = SubResource("GradientTexture1D_oxunn")
+alpha_curve = SubResource("CurveTexture_xtseb")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_os5jf"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.239216, 0.239216, 0.239216, 0.0980392)
+emission_enabled = true
+emission = Color(0.480469, 0.480469, 0.480469, 1)
+billboard_keep_scale = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_0jw7t"]
+_surfaces = [{
+"aabb": AABB(-0.154951, -0.163546, -0.146853, 0.306201, 0.326742, 0.295014),
+"format": 34896613377,
+"index_count": 60,
+"index_data": PackedByteArray("AAACAAEAAQAFAAAAAAADAAIAAAAEAAMAAAAFAAQAAQAKAAUAAgAGAAEAAwAHAAIABAAIAAMABQAJAAQAAQAGAAoAAgAHAAYAAwAIAAcABAAJAAgABQAKAAkABgALAAoABwALAAYACAALAAcACQALAAgACgALAAkA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("OYMAADl+AAD75xNIrtYAAOVh/UP//wAAAABMRQB3AABzVMxBAAAAAHLeQ03eNwAAbKI4sqT3AACWHA+6r8kAANkfrsCPNgAAh6f8uJYDAAD//2e4JYwAAHKC///LfwAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_cd7d2"]
+resource_name = "icosphere_Icosphere"
+_surfaces = [{
+"aabb": AABB(-0.154951, -0.163546, -0.146853, 0.306201, 0.326742, 0.295014),
+"attribute_data": PackedByteArray("iy7//xZd//+ii///Lbr//7no///RRa/XRRev1///r9dz0a/X6KKv11x0r9eLLmCvAABgr7noYK8tumCvootgrxZdYK9FFxGH0UURh1x0EYfoohGHc9ERhw=="),
+"format": 34896613399,
+"index_count": 60,
+"index_data": PackedByteArray("AAAGAAUABQAKAAEABAAIAAcAAwAJAAgAAgAKAAkABQAQAAoABgALAAUACAANAAcACQAOAAgACgAPAAkABQALABAABgAMAAsACAAOAA0ACQAPAA4ACgAQAA8ACwASABAADAARAAsADgAVAA0ADwAUAA4AEAATAA8A"),
+"material": SubResource("StandardMaterial3D_os5jf"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 22,
+"vertex_data": PackedByteArray("OYMAADl+S8E5gwAAOX4e1jmDAAA5fjT0OYMAADl+8+Y5gwAAOX6fyfvnE0iu1p2p5WH9Q///jJblYf1D///RmgAATEUAd7/Cc1TMQQAA2fNy3kNN3jeR2myiOLKk9wmWlhwPuq/JLKmWHA+6r8mArdkfrsCPNtnah6f8uJYDePL//2e4JYwSwHKC///Lf0PAcoL//8t/oMVygv//y39z43KC///Lf5T2coL//8t/2tWzHFZvdlf6Uih2KURpMhPlrx6cv6lb5DKrNm+lXSjz0SFYOuyfY3L7EHYYIPrW/UywsgbOmZcOxxKNRdpdmsYCWKkyFIXgd44t4S9DZc05GsWK0bkIqgOq")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_0jw7t")
+
+[node name="BellDustCloudImpact" type="GPUParticles3D"]
+emitting = false
+amount = 256
+lifetime = 2.0
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_gw7if")
+draw_pass_1 = SubResource("ArrayMesh_cd7d2")
+script = ExtResource("1_p6lua")

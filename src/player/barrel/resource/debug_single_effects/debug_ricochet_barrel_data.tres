@@ -9,6 +9,7 @@ script = ExtResource("3_wt5ok")
 barrel_id = 30
 barrel_name = "Ricochet"
 barrel_desc = "Make stylish shot"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_l0yhl")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_miduu")

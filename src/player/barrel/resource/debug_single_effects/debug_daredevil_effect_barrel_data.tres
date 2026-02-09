@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://ytv2ogsj2tpr"]
+
+[ext_resource type="Texture2D" uid="uid://c6ivkqgtoit0f" path="res://assets/sprite/effect_icons/60.png" id="1_dcmdj"]
+[ext_resource type="PackedScene" uid="uid://0kc5x1lgn5qp" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelDaredevilEffect.tscn" id="2_pa230"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_4at16"]
+
+[resource]
+script = ExtResource("3_4at16")
+barrel_id = -1
+barrel_name = "DaredevilEffect"
+barrel_desc = "Stick close to the enemy"
+barrel_info_summary = ""
+barrel_image = ExtResource("1_dcmdj")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_pa230")
+is_archetype_barrel = false

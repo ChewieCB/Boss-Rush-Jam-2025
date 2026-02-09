@@ -1,5 +1,8 @@
 extends Node
 
+# FMOD guide https://fmod-gdextension.readthedocs.io/en/latest/user-guide/4-loading-banks/
+#            https://www.youtube.com/watch?v=7kD7Q3O5P-s
+
 signal currency_changed(new_currency: int)
 signal barrel_purchased(barrel_data: BarrelDataResource)
 signal gun_frame_purchased(gun_frame_data: GunFrameResource)
@@ -8,9 +11,16 @@ signal gun_frame_too_expensive(gun_frame_data: GunFrameResource)
 signal reroll_cost_changed(new_cost: int)
 signal free_rerolls
 signal refresh_shop_ui
-signal setting_changed
 signal risk_level_changed
 signal demo_time_changed
+signal player_level_up
+
+# TODO: Use Fmod enum to change music state to avoid mismatched name
+enum FmodMusicState {
+	NONE,
+	MENU,
+	LOBBY,
+}
 
 const FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
 const RESOLUTION_ARRAY = [
@@ -23,13 +33,19 @@ const BASE_PLAYER_LUCK_THRESHOLD = 0.95
 const PLOT_ARMOR_DAMAGE_ABSORB_PERC = 0.25 # Perc of damage taken by player will be absorbed by luck
 const PLOT_ARMOR_LUCK_DAMAGE_MULTIPLIER = 4.0 # Luck needed to absorb damage will multiplied by this
 const HIGH_ROLLER_BONUS_HEAL_PER_REROLL_TIME = 5
+const BASE_FMOD_VOLUME = 5
 
 var pause_ui: PauseUI
 var setting_ui: SettingUI
 var player: Player
 var difficulty_menu: DifficultyMenu
 var object_pooling_manager: ObjectPoolingManager
-var current_boss_map: BossMap
+var current_boss_map: Node3D
+
+# Temporary singleton
+var gun_customize_ui: GunCustomizationUI
+
+@onready var main_bgm_emitter: MainBGMEmitter = $MainBGMEmitter
 
 # Inventory
 @export var starting_barrels: Array[Resource]
@@ -43,10 +59,9 @@ var shop_barrels: Array[Resource] = []
 @export var starting_gun_frame: Resource
 @export var starting_shop_gun_frame: Array[Resource]
 @export var gun_frame_database: Array[Resource]
-var equipped_gun_frame: Resource = null
+@export var equipped_gun_frame: Resource = starting_gun_frame
 var inventory_gun_frames: Array[Resource] = []
-var shop_gun_frames: Array[Resource] = []
-
+@onready var shop_gun_frames: Array[Resource] = starting_shop_gun_frame
 
 # Re-rolls
 @export var initial_reroll_cost: int = 100
@@ -64,7 +79,11 @@ var reroll_time = 0
 		player_currency = max(0, value)
 		currency_changed.emit(player_currency)
 
-var player_level = 1
+var player_level = 1:
+	set(value):
+		if value > player_level:
+			player_level_up.emit()
+		player_level = value
 var player_skill_dict = {}
 var player_skill_points = 0
 
@@ -112,9 +131,11 @@ var risk_level = 0:
 var cached_player_pos_relative_to_elevator_doors: Vector3
 var cached_player_rotation: Vector3
 var cached_camera_rotation: Vector3
+var elevator_respawn_transform: Transform3D
 
 # Setting
 @export_range(1.0, 100.0, 0.1) var mouse_sensitivity: float = 50.0
+@export_range(0, 1, 0.01) var controller_deadzone: float = 0.1
 @export_range(60, 120, 1.0) var camera_fov: float = 90:
 	set(value):
 		if value != camera_fov && player:
@@ -134,11 +155,17 @@ var hide_ui = false
 var hide_hurt_overlay = false
 var hide_damage_number = false
 # Accessibility setting flags
-var screen_shake_disabled: bool = false
-var drunk_blur_disabled: bool = false
+var screen_shake_enabled: bool = true
+var drunk_blur_enabled: bool = true
 
-@export_range(0, 100, 0.1) var master_audio: float = 80
-@export_range(0, 100, 0.1) var bgm_audio: float = 100
+@export_range(0, 100, 0.1) var master_audio: float = 80:
+	set(value):
+		master_audio = value
+		update_fmod_bgm_volume_from_setting()
+@export_range(0, 100, 0.1) var bgm_audio: float = 100:
+	set(value):
+		bgm_audio = value
+		update_fmod_bgm_volume_from_setting()
 @export_range(0, 100, 0.1) var sfx_audio: float = 100
 @export_range(0, 100, 0.1) var ui_audio: float = 100
 var is_controller_connected: bool = false
@@ -147,10 +174,16 @@ var aim_assist_strength: float = 0.5
 # DEBUG CHEATS
 var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
+enum DebugSpinMode {
+	ON_RELOAD,
+	MANUAL_SPIN,
+	SEEDED_AUTO_SPIN,
+}
+var CHEAT_spin_mode: int = DebugSpinMode.SEEDED_AUTO_SPIN
 var CHEAT_freecam: bool = true
 var CHEAT_always_inventory: bool = false
 var CHEAT_demomode: bool = true
-var CHEAT_demomode_timeout: int = 10:
+var CHEAT_demomode_timeout: int = 60:
 	set(value):
 		CHEAT_demomode_timeout = value
 		demo_time_changed.emit(CHEAT_demomode_timeout)
@@ -164,12 +197,14 @@ var CHEAT_demomode_timeout: int = 10:
 
 
 func _ready() -> void:
+	equipped_gun_frame = starting_gun_frame
 	barrel_database.append_array(debug_barrel_database)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	SaveManager.load_setting_config()
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
+	main_bgm_emitter.volume = BASE_FMOD_VOLUME
 
 func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_freecam"):
@@ -185,7 +220,7 @@ func _unhandled_input(_event: InputEvent) -> void:
 	elif Input.is_action_just_pressed("debug_decrease_timescale"):
 		if Engine.time_scale >= 0.1:
 			Engine.time_scale -= 0.1
-	
+
 	if Input.is_action_just_pressed("screenshot"):
 		var screen_cap := get_viewport().get_texture().get_image()
 		var dir := DirAccess.open("user://")
@@ -196,7 +231,7 @@ func _unhandled_input(_event: InputEvent) -> void:
 		print("Screenshot captured at %s" % filename)
 		SoundManager.play_ui_sound(sfx_screenshot)
 
-
+#region Gun and Barrel
 func add_barrel_to_inventory(data: BarrelDataResource):
 	if data in inventory_barrels:
 		push_warning("Barrel [%s] already collected!" % data.barrel_name)
@@ -221,7 +256,7 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading:
 		return "Can not change barrel while reloading"
 	if len(equipped_barrels) >= player.current_gun.max_barrels:
-		return "Can not equip more barrel"
+		return "Can not equip more barrels"
 	var found_data: BarrelDataResource = null
 	for data in inventory_barrels:
 		if data.barrel_id == search_barrel_id:
@@ -230,13 +265,13 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 		# Check if already equipped archetype
 		for barrel in equipped_barrels:
 			if barrel.is_archetype_barrel and found_data.is_archetype_barrel:
-				return "Can only equip max 1 archetype barrel"
+				return "Can only equip 1 archetype barrel"
 		inventory_barrels.erase(found_data)
 		equipped_barrels.append(found_data)
 		refresh_shop_ui.emit()
-		GameManager.player.current_gun.install_barrel(found_data.barrel_prefab)
-		if found_data.is_archetype_barrel and equipped_barrels.size() != 1:
-			return "Warning: archetype barrel isn't installed in first slot"
+		GameManager.player.current_gun.install_barrel(found_data)
+		#if found_data.is_archetype_barrel and equipped_barrels.size() != 1:
+			#return "Warning: archetype barrel isn't installed in first slot"
 	return ""
 
 
@@ -270,6 +305,7 @@ func purchase_gun_frame(data: GunFrameResource) -> bool:
 	gun_frame_too_expensive.emit(data)
 	return false
 
+
 func equip_gun_frame(search_frame_id: GunFrameResource.GunFrameIdEnum) -> String:
 	if player.current_gun.is_reloading:
 		return "Can not change gun frame while reloading"
@@ -285,10 +321,11 @@ func equip_gun_frame(search_frame_id: GunFrameResource.GunFrameIdEnum) -> String
 		refresh_shop_ui.emit()
 	return ""
 
+
 func purchase_reroll() -> bool:
 	if reroll_time == 0:
 		reroll_cost = int(reroll_cost * get_risk_spin_cost_mult())
-	if is_instance_valid(GameManager.current_boss_map) and GameManager.current_boss_map.is_tutorial:
+	if current_boss_map and tutorial_completed:
 		reroll_cost = 100
 	if (player_currency >= reroll_cost and reroll_time < get_risk_limit_spin_amount()) or is_free_reroll:
 		if not is_free_reroll:
@@ -302,49 +339,40 @@ func purchase_reroll() -> bool:
 		return true
 	return false
 
+
 func reset_reroll_cost() -> void:
 	reroll_cost = initial_reroll_cost
 	reroll_cost_changed.emit(reroll_cost)
 	reroll_time = 0
+#endregion
 
-
-func show_boss_special_dialog(content: String, duration: float):
-	var original_sm_process_mode = SoundManager.process_mode
-	SoundManager.process_mode = Node.PROCESS_MODE_ALWAYS
-	get_tree().paused = true
-	GameManager.player.boss_special_dialog_label.text = content
-	GameManager.player.boss_special_dialog.visible = true
-	await get_tree().create_timer(duration).timeout
-	GameManager.player.boss_special_dialog.visible = false
-	get_tree().paused = false
-	SoundManager.process_mode = original_sm_process_mode
-
-
+#region Save helper
 func load_new_save_data():
 	tutorial_completed = false
+	
+	equipped_gun_frame = starting_gun_frame
+	
+	# Generate reload-spin threshold values for all barrels on save game creation
+	randomize()
+	for barrel_data in barrel_database:
+		# Weight the ranges so we get more middle of the road values
+		var range_weight: float = randf()
+		if range_weight < 0.25:
+			barrel_data.reloads_before_spin = randi_range(1, 2)
+		elif range_weight < 0.8:
+			barrel_data.reloads_before_spin = randi_range(3, 5)
+		else:
+			barrel_data.reloads_before_spin = randi_range(6, 7)
+
 	for data in starting_barrels:
+		var idx: int = barrel_database.find(data)
+		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
 		if data not in equipped_barrels:
 			equipped_barrels.append(data)
 	for data in starting_shop_barrels:
+		var idx: int = barrel_database.find(data)
+		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
 		shop_barrels.append(data)
-	
-
-func reset_difficulty_modifier():
-	risk_modifier_level_dict = {
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
-		RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
-		RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
-		RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
-		RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
-		RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
-		RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
-	}
-	risk_level = 0
-	boss_ante = 0
-	bet_value = 0
-	reward_value = 0
 
 func reset_current_save_data():
 	equipped_barrels = []
@@ -370,25 +398,19 @@ func update_total_playtime():
 	var current_time = Time.get_ticks_msec()
 	var played_time = current_time - start_record_timestamp
 	total_playtime += played_time
+#endregion
 
-
-func _on_controller_connection(_device: int, connected: bool):
-	is_controller_connected = connected
-
-func create_and_add_status_effect(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
-	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, is_bad_effect: bool = false, show_duration_ui = false, status_icon: Texture2D = null, ):
-	var status_effect = StatusEffect.new()
-	status_effect.display_name = display_name
-	status_effect.status_code = status_code
-	status_effect.modified_stat = modified_stat
-	status_effect.value = value
-	status_effect.modify_type = modify_type
-	status_effect.duration = duration
-	status_effect.is_bad_effect = is_bad_effect
-	status_effect.show_duration_ui = show_duration_ui
-	status_effect.show_value_on_ui = false
-	status_effect.status_icon = status_icon
-	player.add_status_effect(status_effect)
+#region Boss stuff
+func show_boss_special_dialog(content: String, duration: float):
+	var original_sm_process_mode = SoundManager.process_mode
+	SoundManager.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().paused = true
+	GameManager.player.boss_special_dialog_label.text = content
+	GameManager.player.boss_special_dialog.visible = true
+	await get_tree().create_timer(duration).timeout
+	GameManager.player.boss_special_dialog.visible = false
+	get_tree().paused = false
+	SoundManager.process_mode = original_sm_process_mode
 
 
 # Boss telegraph time can be modified by difficulty or Poker Face skill
@@ -416,7 +438,25 @@ func get_boss_chip_amount_drop_multiplier() -> float:
 			4:
 				mult -= 0.4
 	return mult
+#endregion
 
+#region Risk modifier
+func reset_difficulty_modifier():
+	risk_modifier_level_dict = {
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_HP: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_DMG: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_MOVE_ATK_SPEED: 0,
+		RiskItem.RiskModifierEnum.INCREASE_BOSS_STATUS_RESIST: 0,
+		RiskItem.RiskModifierEnum.INCREASE_PLAYER_SPIN_COST: 0,
+		RiskItem.RiskModifierEnum.REDUCE_PLAYER_HEALING: 0,
+		RiskItem.RiskModifierEnum.REDUCE_PLAYER_LUCK_BUILD_UP: 0,
+		RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT: 0,
+		RiskItem.RiskModifierEnum.LIMIT_FIGHT_TIME: 0
+	}
+	risk_level = 0
+	boss_ante = 0
+	bet_value = 0
+	reward_value = 0
 
 func get_risk_max_hp_mult() -> float:
 	var value = 1 + GameManager.risk_modifier_level_dict[RiskItem.RiskModifierEnum.INCREASE_BOSS_HP] * \
@@ -460,3 +500,41 @@ func get_risk_limit_spin_amount() -> int:
 			((risk_modifier_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT] - 1) * \
 			RiskItem.risk_value_per_level_dict[RiskItem.RiskModifierEnum.LIMIT_PLAYER_SPIN_AMOUNT])
 	return value
+#endregion
+
+#region Other
+func _on_controller_connection(_device: int, connected: bool):
+	is_controller_connected = connected
+
+## Level can be Menu, Lobby, Roulette, Slotty, Bartender, GenericBossAftermath, PitbossHallway,
+## PitbossMainfight, ChipbossStart, ChipbossInt , BlackjackStart, TutorialStart, TutorialInterlude, TutorialBossfight
+func change_fmod_bgm_music_state(music_state: String) -> void:
+	main_bgm_emitter.set_parameter("MusicState", music_state)
+
+func change_fmod_bgm_player_is_dead(dead: bool) -> void:
+	main_bgm_emitter.set_parameter("playerIsDead", 1 if dead else 0)
+
+func change_fmod_bgm_menu_is_up(menu_up: bool) -> void:
+	main_bgm_emitter.set_parameter("menuIsUp", 1 if menu_up else 0)
+
+func update_fmod_bgm_volume_from_setting() -> void:
+	main_bgm_emitter.volume = BASE_FMOD_VOLUME * (GameManager.master_audio / 100.0) * (GameManager.bgm_audio / 100.0)
+
+func create_and_add_status_effect(display_name: String, status_code: String, modified_stat: StatusEffect.PlayerStatEnum,
+	value: float, modify_type: StatusEffect.ModifyType, duration: float = StatusEffect.INFINITE_DURATION, is_bad_effect: bool = false,
+	show_duration_ui = false, status_icon: Texture2D = null, is_luck_buff: bool = false):
+	var status_effect = StatusEffect.new()
+	status_effect.display_name = display_name
+	status_effect.status_code = status_code
+	status_effect.modified_stat = modified_stat
+	status_effect.value = value
+	status_effect.modify_type = modify_type
+	status_effect.duration = duration
+	status_effect.is_bad_effect = is_bad_effect
+	status_effect.show_duration_ui = show_duration_ui
+	status_effect.show_value_on_ui = false
+	status_effect.status_icon = status_icon
+	status_effect.is_luck_buff = is_luck_buff
+
+	player.add_status_effect(status_effect)
+#endregion

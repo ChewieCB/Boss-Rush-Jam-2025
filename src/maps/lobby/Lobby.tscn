@@ -2321,7 +2321,6 @@ _surfaces = [{
 
 [node name="Lobby" type="Node3D"]
 script = ExtResource("1_ywg7j")
-bgm = ExtResource("2_ho2it")
 
 [node name="IdleDetector" parent="." instance=ExtResource("3_26j5i")]
 
@@ -2333,7 +2332,6 @@ environment = SubResource("Environment_oh44f")
 [node name="LightmapGI" type="LightmapGI" parent="."]
 quality = 2
 bounces = 4
-interior = true
 light_data = ExtResource("2_wjq6h")
 
 [node name="DoorTransitionArea" type="Area3D" parent="."]
@@ -4427,17 +4425,6 @@ mesh = SubResource("ArrayMesh_bg74o")
 [node name="group_673_Elevator" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
 
-[node name="entity_17_ElevatorButton" parent="FuncGodotMap/group_673_Elevator" instance=ExtResource("15_4ent0")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.34375, 0.1875, 13)
-entProperties = {
-"_tb_group": "673",
-"boss_name": "Call of the Void",
-"classname": "ElevatorButton",
-"linked_level": "res://src/maps/blackjack_boss/BossMapBlackjack.tscn",
-"origin": "416 11 6"
-}
-boss_id = 7
-
 [node name="entity_18_ElevatorButton" parent="FuncGodotMap/group_673_Elevator" instance=ExtResource("15_4ent0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.46875, 0.4375, 13)
 entProperties = {
@@ -4449,49 +4436,16 @@ entProperties = {
 }
 boss_id = 5
 
-[node name="entity_19_ElevatorButton" parent="FuncGodotMap/group_673_Elevator" instance=ExtResource("15_4ent0")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.46875, 0.9375, 13)
-entProperties = {
-"_tb_group": "673",
-"boss_name": "Last Orders",
-"classname": "ElevatorButton",
-"linked_level": "res://src/maps/bartender_boss/BossMapBartender.tscn",
-"origin": "416 -15 30"
-}
-boss_id = 3
-
 [node name="entity_20_ElevatorButton" parent="FuncGodotMap/group_673_Elevator" instance=ExtResource("15_4ent0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.34375, 0.9375, 13)
 entProperties = {
 "_tb_group": "673",
 "boss_name": "The Mechanic",
 "classname": "ElevatorButton",
-"linked_level": "res://src/maps/tutorial/TutorialBossOnly.tscn",
+"linked_level": "/home/jackm/Documents/Godot4/boss-rush-jam-2025/src/maps/tutorial/TutorialBossNew.tscn",
 "origin": "416 11 30"
 }
 boss_id = 6
-
-[node name="entity_21_ElevatorButton" parent="FuncGodotMap/group_673_Elevator" instance=ExtResource("15_4ent0")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.34375, 0.4375, 13)
-entProperties = {
-"_tb_group": "673",
-"boss_name": "Roulette Dares",
-"classname": "ElevatorButton",
-"linked_level": "res://src/maps/roulette_boss/BossMapRoulette.tscn",
-"origin": "416 11 14"
-}
-boss_id = 2
-
-[node name="entity_22_ElevatorButton" parent="FuncGodotMap/group_673_Elevator" instance=ExtResource("15_4ent0")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.46875, 0.6875, 13)
-entProperties = {
-"_tb_group": "673",
-"boss_name": "Open This Pit Up!",
-"classname": "ElevatorButton",
-"linked_level": "res://src/maps/pit_boss/BossMapPit.tscn",
-"origin": "416 -15 22"
-}
-boss_id = 4
 
 [node name="entity_23_ElevatorButton" parent="FuncGodotMap/group_673_Elevator" instance=ExtResource("15_4ent0")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.34375, 0.6875, 13)

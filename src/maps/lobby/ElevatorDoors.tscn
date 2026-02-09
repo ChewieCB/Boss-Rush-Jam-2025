@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://c1douwk7psgv6"]
+[gd_scene load_steps=20 format=4 uid="uid://c1douwk7psgv6"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/elevator_doors.gd" id="1_b0055"]
 [ext_resource type="AudioStream" uid="uid://bk06a712d0650" path="res://src/maps/lobby/assets/Lift Door Open Foley 1.mp3" id="2_dbifp"]
@@ -153,6 +153,9 @@ _data = {
 "open": SubResource("Animation_61vb7")
 }
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ajqnm"]
+size = Vector3(5, 4, 5)
+
 [node name="ElevatorDoors" type="Node3D"]
 script = ExtResource("1_b0055")
 TEMP_sfx_open = SubResource("AudioStreamRandomizer_boip8")
@@ -195,3 +198,14 @@ shape = SubResource("ConcavePolygonShape3D_sy4bh")
 libraries = {
 "": SubResource("AnimationLibrary_hc167")
 }
+
+[node name="DoorTriggerArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorTriggerArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_ajqnm")
+
+[connection signal="body_entered" from="DoorTriggerArea" to="." method="_on_door_trigger_area_body_entered"]
+[connection signal="body_exited" from="DoorTriggerArea" to="." method="_on_door_trigger_area_body_exited"]

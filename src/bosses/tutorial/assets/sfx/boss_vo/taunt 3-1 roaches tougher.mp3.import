@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://de300cuhe5k4k"
+path="res://.godot/imported/taunt 3-1 roaches tougher.mp3-449d01ef3bedd2387692822bc2d70a0d.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/tutorial/assets/sfx/boss_vo/taunt 3-1 roaches tougher.mp3"
+dest_files=["res://.godot/imported/taunt 3-1 roaches tougher.mp3-449d01ef3bedd2387692822bc2d70a0d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -9,6 +9,7 @@ script = ExtResource("6_uhy65")
 barrel_id = 53
 barrel_name = "PoisonInfusion"
 barrel_desc = "With Iocane powder"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_bhwk6")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_5mrie")

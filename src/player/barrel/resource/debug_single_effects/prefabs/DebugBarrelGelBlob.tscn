@@ -32,7 +32,7 @@ archetype_shot_sfx = Array[AudioStream]([ExtResource("5_jbkim"), ExtResource("6_
 display_text_title = "Archetype: Gel blob"
 display_text_tag = "Single, big, sticky projectile"
 positive_desc = Array[String](["Sticky projectile", "Projectile sticks around for a long time"])
-negative_desc = Array[String](["Fires one projectile"])
+negative_desc = Array[String](["Low damage and magazine size"])
 icon_id = 7
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/GelBlob"]

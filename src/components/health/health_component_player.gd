@@ -1,5 +1,10 @@
 extends HealthComponent
 
+
+func _ready() -> void:
+	super()
+
+
 func damage(_damage: float, _color: Color = Color.WHITE, _text_scale_pop: float = 1.3) -> void:
 	_damage = round(_damage * received_dmg_multiplier)
 

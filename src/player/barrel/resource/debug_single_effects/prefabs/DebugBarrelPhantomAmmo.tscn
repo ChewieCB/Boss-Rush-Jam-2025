@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwk4lnrjudf5d"]
+
+[ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_4p2rm"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="2_jmk3e"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="3_tcgi0"]
+[ext_resource type="Script" path="res://src/player/barrel/effect/phantom_ammo_effect.gd" id="4_st6cb"]
+
+[node name="DebugBarrelPhantomAmmo" type="Node3D"]
+script = ExtResource("1_4p2rm")
+
+[node name="EffectContainer" type="Node3D" parent="."]
+
+[node name="PhantomAmmo" type="Node3D" parent="EffectContainer"]
+script = ExtResource("2_jmk3e")
+display_text_title = "Phantom Ammo"
+display_text_tag = "You have unlimited ammo! (with tradeoff)"
+positive_desc = Array[String](["Unlimited ammo"])
+negative_desc = Array[String](["-20% damage", "Firerate and accuracy keep getting worse as you shoot, until you reload"])
+icon_id = 58
+
+[node name="ReduceDamage" type="Node3D" parent="EffectContainer/PhantomAmmo"]
+script = ExtResource("3_tcgi0")
+attribute = 1
+modify_value = -20.0
+is_perc = true
+
+[node name="PhantomAmmoEffect" type="Node3D" parent="EffectContainer/PhantomAmmo"]
+script = ExtResource("4_st6cb")

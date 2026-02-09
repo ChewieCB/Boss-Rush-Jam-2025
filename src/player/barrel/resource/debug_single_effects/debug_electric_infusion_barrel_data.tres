@@ -9,6 +9,7 @@ script = ExtResource("6_qpe74")
 barrel_id = 51
 barrel_name = "ElectricInfusion"
 barrel_desc = "...and his music was..."
+barrel_info_summary = ""
 barrel_image = ExtResource("1_i3qdd")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_y726k")

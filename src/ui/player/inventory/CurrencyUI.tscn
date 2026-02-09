@@ -27,7 +27,11 @@ size_flags_vertical = 4
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 
+[node name="ProgressBar" parent="MarginContainer/HBoxContainer/MarginContainer/RerollUI" index="0"]
+pivot_offset = Vector2(32, 32)
+
 [node name="StaticChipIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer"]
+visible = false
 layout_mode = 2
 texture = ExtResource("3_g1ig1")
 
@@ -45,3 +49,5 @@ theme_override_constants/shadow_outline_size = 6
 theme_override_font_sizes/font_size = 40
 text = "00000000"
 vertical_alignment = 1
+
+[editable path="MarginContainer/HBoxContainer/MarginContainer/RerollUI"]

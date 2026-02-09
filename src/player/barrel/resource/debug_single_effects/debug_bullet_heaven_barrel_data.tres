@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BarrelDataResource" load_steps=4 format=3 uid="uid://bjvajpruct6yh"]
+
+[ext_resource type="Texture2D" uid="uid://b7leq4ajnjvq4" path="res://assets/sprite/effect_icons/-1.png" id="1_8hpri"]
+[ext_resource type="PackedScene" uid="uid://o1t5gn5ms5e5" path="res://src/player/barrel/resource/debug_single_effects/prefabs/DebugBarrelBulletHeaven.tscn" id="2_4vw7c"]
+[ext_resource type="Script" path="res://src/player/barrel/resource/barrel_data_resource.gd" id="3_bg8gy"]
+
+[resource]
+script = ExtResource("3_bg8gy")
+barrel_id = -1
+barrel_name = "BulletHeaven"
+barrel_desc = "No need to aim"
+barrel_info_summary = ""
+barrel_image = ExtResource("1_8hpri")
+barrel_cost = 0
+barrel_prefab = ExtResource("2_4vw7c")
+is_archetype_barrel = false

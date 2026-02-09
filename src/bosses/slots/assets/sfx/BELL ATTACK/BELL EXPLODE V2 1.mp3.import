@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://1sdemv7p8jse"
+path="res://.godot/imported/BELL EXPLODE V2 1.mp3-82165b9c5a03d7dd8fdc6adacdb7413a.mp3str"
+
+[deps]
+
+source_file="res://src/bosses/slots/assets/sfx/BELL ATTACK/BELL EXPLODE V2 1.mp3"
+dest_files=["res://.godot/imported/BELL EXPLODE V2 1.mp3-82165b9c5a03d7dd8fdc6adacdb7413a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

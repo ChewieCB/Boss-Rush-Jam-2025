@@ -1,7 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dtf2h2dydbopt"]
+[gd_scene load_steps=10 format=3 uid="uid://dtf2h2dydbopt"]
 
 [ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="1_1gwnq"]
 [ext_resource type="Script" path="res://src/player/gun/projectiles/gun_hitscan.gd" id="1_uqjuh"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_bqde1"]
+[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/decal/BulletDecal.tscn" id="2_nh8tt"]
+[ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_ajvft"]
 [ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="3_d15wr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ch4f"]
@@ -27,6 +30,9 @@ radius = 500.0
 
 [node name="GunHitscan" type="Node3D"]
 script = ExtResource("1_uqjuh")
+spark_effect = ExtResource("2_bqde1")
+generic_blood_splatter = ExtResource("3_ajvft")
+bullet_decal_prefab = ExtResource("2_nh8tt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
@@ -44,7 +50,7 @@ texture = ExtResource("3_d15wr")
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
 target_position = Vector3(0, 0, -100)
-collision_mask = 101
+collision_mask = 69
 collide_with_areas = true
 
 [node name="NearbyEnemyCheckArea3D" type="Area3D" parent="."]

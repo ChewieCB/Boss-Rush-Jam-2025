@@ -9,10 +9,15 @@ signal setting_back_button_pressed
 @export var is_at_main_menu = false
 @export var keybind_button_prefab: PackedScene
 
+# Mac specific race condition bodge
+@export var mac_display_wait: float = 2.0
+
 @onready var tab_container: TabContainer = $TabContainer
 
 @onready var mouse_sen_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/MouseSenSlider
 @onready var mouse_sen_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/MouseSens/Value
+@onready var controller_deadzone_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerDeadzone/ControlerDeadzoneSlider
+@onready var controller_deadzone_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerDeadzone/Value
 @onready var aim_assist_slider: HSlider = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/AimAssistSlider
 @onready var aim_assist_value: Label = $TabContainer/Control/ScrollContainer/VBoxContainer/ParentSection/ControllerAimAssistSens/Value
 @onready var fov_slider: HSlider = $TabContainer/Graphic/VBoxContainer/FOV/FOVSlider
@@ -60,6 +65,7 @@ signal setting_back_button_pressed
 @onready var demo_mode_time: SpinBox = $TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox
 @onready var always_inventory_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle
 @onready var boss_one_shot_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle
+@onready var barrel_spin_mode_dropdown: OptionButton = $TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown
 @onready var freecam_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle
 @onready var timescale_slider: HSlider = $TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider
 @onready var timescale_value: Label = $TabContainer/DEBUG/VBoxContainer/Timescale/Value
@@ -202,6 +208,10 @@ func _on_mouse_sen_slider_value_changed(value: float) -> void:
 	GameManager.mouse_sensitivity = value
 	mouse_sen_value.text = "{0}".format([value])
 
+func _on_controler_deadzone_slider_value_changed(value: float) -> void:
+	GameManager.controller_deadzone = value
+	controller_deadzone_value.text = "{0}".format([value])
+
 func _on_aim_assist_slider_value_changed(value: float) -> void:
 	GameManager.aim_assist_strength = value / 100.0
 	aim_assist_value.text = "{0}".format([value])
@@ -255,9 +265,11 @@ func play_button_hover_sfx():
 
 func set_window_mode(index: int) -> void:
 	# Hack workaround to fix crash on mac, figure out a better solution maybe
+	#if OS.get_name() == "macOS":
+		#if index == 2:
+			#index = 1
 	if OS.get_name() == "macOS":
-		if index == 2:
-			index = 1
+		await get_tree().create_timer(mac_display_wait).timeout
 	match index:
 		0: # Fullscreen
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
@@ -339,21 +351,22 @@ func _on_hide_damage_number_toggle_toggled(toggled_on: bool) -> void:
 
 func _on_screen_shake_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
-	GameManager.screen_shake_disabled = !toggled_on
+	GameManager.screen_shake_enabled = toggled_on
 	setting_changed.emit()
-	GameManager.setting_changed.emit()
 
 
 func _on_drunk_blur_toggle_toggled(toggled_on: bool) -> void:
 	SoundManager.play_button_click_sfx()
-	GameManager.drunk_blur_disabled = !toggled_on
+	GameManager.drunk_blur_enabled = toggled_on
 	setting_changed.emit()
-	GameManager.setting_changed.emit()
 
 
 func refresh_setting_value():
 	mouse_sen_slider.value = GameManager.mouse_sensitivity
 	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
+
+	controller_deadzone_slider.value = GameManager.controller_deadzone
+	controller_deadzone_value.text = "{0}".format([GameManager.controller_deadzone])
 
 	aim_assist_slider.value = GameManager.aim_assist_strength * 100
 	aim_assist_value.text = "{0}".format([GameManager.aim_assist_strength * 100])
@@ -365,8 +378,8 @@ func refresh_setting_value():
 	hide_ui_toggle.set_pressed_no_signal(GameManager.hide_ui)
 	hide_hurt_overlay_toggle.set_pressed_no_signal(GameManager.hide_hurt_overlay)
 	hide_damage_number_toggle.set_pressed_no_signal(GameManager.hide_damage_number)
-	screen_shake_toggle.set_pressed_no_signal(!GameManager.screen_shake_disabled)
-	drunk_blur_toggle.set_pressed_no_signal(!GameManager.drunk_blur_disabled)
+	screen_shake_toggle.set_pressed_no_signal(GameManager.screen_shake_enabled)
+	drunk_blur_toggle.set_pressed_no_signal(GameManager.drunk_blur_enabled)
 
 	Engine.max_fps = GameManager.FPS_LIMIT_ARRAY[GameManager.fps_limit_index]
 	fps_limit_option_button.selected = GameManager.fps_limit_index
@@ -397,15 +410,16 @@ func refresh_setting_value():
 	sfx_value.text = "{0}".format([GameManager.sfx_audio])
 	ui_slider.value = GameManager.ui_audio
 	ui_value.text = "{0}".format([GameManager.ui_audio])
-	
+
 	# DEBUG
 	god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_godmode)
 	demo_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_demomode)
 	demo_mode_time.value = GameManager.CHEAT_demomode_timeout
 	always_inventory_toggle.set_pressed_no_signal(GameManager.CHEAT_always_inventory)
 	boss_one_shot_toggle.set_pressed_no_signal(GameManager.CHEAT_oneshot)
+	barrel_spin_mode_dropdown.selected = GameManager.CHEAT_spin_mode
 	freecam_toggle.set_pressed_no_signal(GameManager.CHEAT_freecam)
-	
+
 	timescale_slider.value = Engine.time_scale
 	timescale_value.text = "{0}".format([Engine.time_scale])
 
@@ -510,4 +524,7 @@ func _on_always_inventory_toggle_toggled(toggled_on: bool) -> void:
 
 
 func _on_demo_timeout_value_changed(value: float) -> void:
-	GameManager.CHEAT_demomode_timeout = clamp(value, 0, 60*5)
+	GameManager.CHEAT_demomode_timeout = clamp(value, 0, 60 * 5)
+
+func _on_barrel_spin_mode_dropdown_item_selected(index: int) -> void:
+	GameManager.CHEAT_spin_mode = index

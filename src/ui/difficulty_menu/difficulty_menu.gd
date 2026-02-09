@@ -59,6 +59,7 @@ func _input(event: InputEvent) -> void:
 func show_menu():
 	if locked:
 		return
+	GameManager.player.controls_disabled = true
 	visible = true
 	GameManager.player.is_in_menu = true
 	if not is_controller_connected:
@@ -71,6 +72,7 @@ func show_menu():
 
 
 func hide_menu():
+	GameManager.player.controls_disabled = false
 	visible = false
 	GameManager.player.is_in_menu = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

@@ -8,6 +8,24 @@
 
 config_version=5
 
+[Fmod]
+
+General/auto_initialize=true
+General/channel_count=1024
+General/is_live_update_enabled=true
+General/is_memory_tracking_enabled=false
+"Software Format/sample_rate"=48000
+"Software Format/speaker_mode"=3
+"Software Format/raw_speaker_count"=0
+General/default_listener_count=1
+DSP/dsp_buffer_size=512
+DSP/dsp_buffer_count=4
+"3D Settings/doppler_scale"=1.0
+"3D Settings/distance_factor"=1.0
+"3D Settings/rolloff_scale"=1.0
+General/banks_path="res://assets/fmod_banks"
+General/should_load_by_name=false
+
 [application]
 
 config/name="Crapshoot"
@@ -28,6 +46,7 @@ GunUtils="*res://src/utils/gun_utils.gd"
 ScreenTransition="*res://src/ui/common/screen_transition/ScreenTransitionUI.tscn"
 LoadingHandler="*res://src/utils/loading/LoadingHandler.tscn"
 LuckHandler="*res://src/player/LuckHandler.tscn"
+FmodManager="*res://addons/fmod/FmodManager.gd"
 
 [debug]
 
@@ -43,7 +62,11 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/SyncDeck/plugin.cfg", "res://addons/func_godot/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/input_helper/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
+enabled=PackedStringArray("res://addons/SyncDeck/plugin.cfg", "res://addons/fmod/plugin.cfg", "res://addons/func_godot/plugin.cfg", "res://addons/godot_state_charts/plugin.cfg", "res://addons/input_helper/plugin.cfg", "res://addons/sound_manager/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
 
 [global_group]
 
@@ -230,6 +253,26 @@ debug_decrease_timescale={
 screenshot={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194343,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+switch_tab_left={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":4,"axis_value":1.0,"script":null)
+]
+}
+switch_tab_right={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":5,"axis_value":1.0,"script":null)
+]
+}
+controller_scroll_up={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":-1.0,"script":null)
+]
+}
+controller_scroll_down={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":1.0,"script":null)
 ]
 }
 

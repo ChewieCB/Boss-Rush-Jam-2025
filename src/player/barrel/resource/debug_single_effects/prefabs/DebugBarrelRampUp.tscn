@@ -18,5 +18,4 @@ display_text_tag = "Keep shooting"
 display_text_desc = "+5% firerate per 0.2s
 non-stop shooting"
 positive_desc = Array[String](["Firerate increases as you keep firing"])
-negative_desc = Array[String](["Burns through ammo faster"])
 icon_id = 24

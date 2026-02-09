@@ -9,12 +9,9 @@ script = ExtResource("1_21vja")
 [node name="EffectContainer" type="Node3D" parent="."]
 
 [node name="MedicalPayout" type="Node3D" parent="EffectContainer"]
-visible = false
 script = ExtResource("2_wdtcq")
 display_text_title = "Medical Payout"
 display_text_tag = "Hurt others to heal yourself"
-display_text_desc = "Store 1 HP every 100 damage dealt
-Recover HP on reload"
-positive_desc = Array[String](["Convert damage dealt into health on reload."])
-negative_desc = Array[String](["TODO: add a drawback"])
+positive_desc = Array[String](["Store 1 HP every 100 damage dealt", "Recover stored HP on reload"])
+negative_desc = Array[String](["Reload cost chip based on your current health"])
 icon_id = 20

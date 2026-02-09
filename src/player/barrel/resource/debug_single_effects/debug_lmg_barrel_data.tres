@@ -9,6 +9,7 @@ script = ExtResource("17_4wh2y")
 barrel_id = 72
 barrel_name = "LMG"
 barrel_desc = "Dakka forever"
+barrel_info_summary = ""
 barrel_image = ExtResource("1_74hrd")
 barrel_cost = 0
 barrel_prefab = ExtResource("2_8hmpy")

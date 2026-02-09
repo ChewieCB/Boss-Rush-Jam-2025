@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://crvu72pwcnneq"]
+[gd_scene load_steps=23 format=3 uid="uid://crvu72pwcnneq"]
 
 [ext_resource type="Script" path="res://src/ui/player/stat_ui.gd" id="1_ct6da"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="1_v8jbf"]
@@ -11,7 +11,6 @@
 [ext_resource type="Script" path="res://src/ui/player/luck/luck_ui.gd" id="8_12af2"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="8_esel0"]
 [ext_resource type="Texture2D" uid="uid://dktkrabxua7mo" path="res://src/player/assets/ammo.png" id="9_8qhrl"]
-[ext_resource type="PackedScene" uid="uid://bicxns6d0ciub" path="res://src/ui/player/reroll/RerollUI.tscn" id="10_tkawr"]
 
 [sub_resource type="Theme" id="Theme_y0f30"]
 default_font = ExtResource("4_tew2m")
@@ -21,7 +20,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerHealthBarUI:modulate")
+tracks/0/path = NodePath("MarginContainer/VBoxContainer/PlayerHealthBarUI:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -33,14 +32,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("PlayerLuckUI:modulate")
+tracks/1/path = NodePath("MarginContainer/VBoxContainer/PlayerLuckUI:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -57,22 +56,10 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("RerollUI:modulate")
+tracks/3/path = NodePath(".:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".:modulate")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -103,7 +90,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerHealthBarUI:modulate")
+tracks/0/path = NodePath("MarginContainer/VBoxContainer/PlayerHealthBarUI:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -120,7 +107,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerLuckUI:modulate")
+tracks/0/path = NodePath("MarginContainer/VBoxContainer/PlayerLuckUI:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -137,7 +124,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerHealthBarUI:modulate")
+tracks/0/path = NodePath("MarginContainer/VBoxContainer/PlayerHealthBarUI:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -155,18 +142,6 @@ tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(0.392292, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("RerollUI:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
@@ -195,7 +170,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerHealthBarUI:modulate")
+tracks/0/path = NodePath("MarginContainer/VBoxContainer/PlayerHealthBarUI:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -212,7 +187,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerLuckUI:modulate")
+tracks/0/path = NodePath("MarginContainer/VBoxContainer/PlayerLuckUI:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -229,7 +204,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerHealthBarUI:modulate")
+tracks/0/path = NodePath("MarginContainer/VBoxContainer/PlayerHealthBarUI:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -250,18 +225,6 @@ tracks/1/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("RerollUI:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2600x"]
 _data = {
@@ -276,7 +239,7 @@ _data = {
 "show_non_luck": SubResource("Animation_pwctn")
 }
 
-[node name="StatUI" type="Control"]
+[node name="StatUI" type="Control" node_paths=PackedStringArray("health_ui", "luck_bar_ui", "luck_buffs_ui", "anim_player", "status_ui_container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -286,43 +249,55 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_ct6da")
 status_duration_ui_prefab = ExtResource("3_ovi2h")
+health_ui = NodePath("MarginContainer/VBoxContainer/PlayerHealthBarUI")
+luck_bar_ui = NodePath("MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI")
+luck_buffs_ui = NodePath("MarginContainer/VBoxContainer/PlayerLuckUI/LuckBuffsUI")
+anim_player = NodePath("AnimationPlayer")
+status_ui_container = NodePath("MarginContainer/VBoxContainer/PlayerHealthBarUI/VBoxContainer/StatusUIContainer")
 
-[node name="PlayerHealthBarUI" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 2
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 64.0
-offset_top = -96.0
-offset_right = 440.0
-offset_bottom = -56.0
+offset_left = -963.0
+offset_top = -123.0
+offset_right = -75.0
+grow_horizontal = 0
 grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
 size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="PlayerHealthBarUI" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 script = ExtResource("3_yk5mo")
 animate_show_hide = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerHealthBarUI"]
+[node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PlayerHealthBarUI"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="StatusUIContainer" type="GridContainer" parent="PlayerHealthBarUI/VBoxContainer"]
+[node name="StatusUIContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PlayerHealthBarUI/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+mouse_filter = 2
+alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PlayerHealthBarUI/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
-columns = 5
+theme_override_constants/margin_left = 8
 
-[node name="MarginContainer2" type="MarginContainer" parent="PlayerHealthBarUI/VBoxContainer"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_top = 10
-
-[node name="MarginContainer" type="MarginContainer" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2"]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="Label" type="Label" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PlayerHealthBarUI/VBoxContainer/MarginContainer"]
 visible = false
 z_index = 1
 layout_mode = 2
@@ -335,7 +310,7 @@ text = "10,000/10,000"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HealthBar" type="TextureProgressBar" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
+[node name="HealthBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/PlayerHealthBarUI/VBoxContainer/MarginContainer"]
 custom_minimum_size = Vector2(240, 20)
 layout_mode = 2
 size_flags_vertical = 4
@@ -351,7 +326,7 @@ texture_progress = ExtResource("6_g72qs")
 tint_over = Color(0.901961, 0.776471, 0, 1)
 tint_progress = Color(0.678431, 0.196078, 0.196078, 1)
 
-[node name="DamageBar" type="TextureProgressBar" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
+[node name="DamageBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/PlayerHealthBarUI/VBoxContainer/MarginContainer/HealthBar"]
 z_index = -1
 layout_mode = 1
 anchors_preset = 15
@@ -371,43 +346,34 @@ texture_progress = ExtResource("7_x1uxm")
 tint_under = Color(0.113725, 0.113725, 0.113725, 1)
 tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 
-[node name="Timer" type="Timer" parent="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar"]
+[node name="Timer" type="Timer" parent="MarginContainer/VBoxContainer/PlayerHealthBarUI/VBoxContainer/MarginContainer/HealthBar"]
 wait_time = 0.4
 one_shot = true
 
-[node name="PlayerLuckUI" type="VBoxContainer" parent="."]
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -440.0
-offset_top = -96.0
-offset_right = -64.0
-offset_bottom = -56.0
-grow_horizontal = 0
-grow_vertical = 0
+[node name="PlayerLuckUI" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
 
-[node name="PlayerLuckBarUI" type="MarginContainer" parent="PlayerLuckUI"]
+[node name="PlayerLuckBarUI" type="MarginContainer" parent="MarginContainer/VBoxContainer/PlayerLuckUI" node_paths=PackedStringArray("timer", "luck_bar", "luck_gain_bar")]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 script = ExtResource("8_12af2")
+timer = NodePath("VBoxContainer/MarginContainer2/MarginContainer/LuckBar/Timer")
+luck_bar = NodePath("VBoxContainer/MarginContainer2/MarginContainer/LuckBar")
+luck_gain_bar = NodePath("VBoxContainer/MarginContainer2/MarginContainer/LuckBar/LuckGain")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerLuckUI/PlayerLuckBarUI"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI"]
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2"]
 custom_minimum_size = Vector2(376, 16)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
 visible = false
 z_index = 1
 layout_mode = 2
@@ -420,7 +386,7 @@ text = "10,000/10,000"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LuckBar" type="TextureProgressBar" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
+[node name="LuckBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer"]
 layout_mode = 2
 value = 41.0
 nine_patch_stretch = true
@@ -433,7 +399,7 @@ texture_progress = ExtResource("6_g72qs")
 tint_over = Color(0.901961, 0.776471, 0, 1)
 tint_progress = Color(1, 0.74902, 0, 1)
 
-[node name="LuckGain" type="TextureProgressBar" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar"]
+[node name="LuckGain" type="TextureProgressBar" parent="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar"]
 z_index = -1
 custom_minimum_size = Vector2(376, 16)
 layout_mode = 1
@@ -453,15 +419,16 @@ texture_progress = ExtResource("7_x1uxm")
 tint_under = Color(0.113725, 0.113725, 0.113725, 1)
 tint_progress = Color(0.960784, 0.941176, 0.941176, 1)
 
-[node name="Timer" type="Timer" parent="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar"]
-wait_time = 0.4
+[node name="Timer" type="Timer" parent="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar"]
+process_callback = 0
+wait_time = 0.05
 one_shot = true
 
-[node name="LuckBuffsUI" type="MarginContainer" parent="PlayerLuckUI"]
+[node name="LuckBuffsUI" type="MarginContainer" parent="MarginContainer/VBoxContainer/PlayerLuckUI"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PlayerLuckUI/LuckBuffsUI"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PlayerLuckUI/LuckBuffsUI"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
@@ -473,10 +440,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -543.0
-offset_top = -160.0
-offset_right = 52.0
-offset_bottom = -64.0
+offset_left = -583.0
+offset_top = -199.0
+offset_right = 52.0001
+offset_bottom = -103.0
 grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.8, 0.8)
@@ -534,23 +501,12 @@ custom_minimum_size = Vector2(200, 96)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
-
-[node name="RerollUI" parent="." instance=ExtResource("10_tkawr")]
-process_mode = 1
-layout_mode = 1
-anchors_preset = 7
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 792.0
-offset_top = -240.0
-offset_right = 888.0
-offset_bottom = -144.0
-grow_vertical = 0
+is_static = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_2600x")
 }
 
-[connection signal="timeout" from="PlayerHealthBarUI/VBoxContainer/MarginContainer2/MarginContainer/HealthBar/Timer" to="PlayerHealthBarUI" method="_on_timer_timeout"]
-[connection signal="timeout" from="PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar/Timer" to="PlayerLuckUI/PlayerLuckBarUI" method="_on_timer_timeout"]
+[connection signal="timeout" from="MarginContainer/VBoxContainer/PlayerHealthBarUI/VBoxContainer/MarginContainer/HealthBar/Timer" to="MarginContainer/VBoxContainer/PlayerHealthBarUI" method="_on_timer_timeout"]
+[connection signal="timeout" from="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI/VBoxContainer/MarginContainer2/MarginContainer/LuckBar/Timer" to="MarginContainer/VBoxContainer/PlayerLuckUI/PlayerLuckBarUI" method="_on_timer_timeout"]

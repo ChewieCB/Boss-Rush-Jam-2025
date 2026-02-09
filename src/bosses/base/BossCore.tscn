@@ -583,6 +583,8 @@ visible = false
 [node name="ProjectileBleedEmitBoss" parent="StatusEffectVFX" instance=ExtResource("24_om1v8")]
 visible = false
 
+[node name="Node3D" type="Node3D" parent="."]
+
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]
 [connection signal="state_entered" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Movement/Idle" to="." method="_on_movement_idle_state_physics_processing"]

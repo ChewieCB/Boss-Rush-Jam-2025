@@ -17,7 +17,7 @@ display_text_title = "Long Shot"
 display_text_tag = "Oh, the separation!"
 display_text_desc = "More damage with distance
 -50% spread"
-positive_desc = Array[String](["Shots from further away do more damage", "Tighter spread"])
+positive_desc = Array[String](["Shots from further away do more damage", "-50% bullets spread"])
 negative_desc = Array[String](["Close range shots do less damage"])
 icon_id = 28
 

@@ -1,0 +1,2 @@
+extends FmodEventEmitter3D
+class_name MainBGMEmitter

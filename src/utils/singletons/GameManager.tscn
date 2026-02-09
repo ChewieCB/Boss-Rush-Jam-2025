@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=3 uid="uid://bf0e8h28gl1ae"]
+[gd_scene load_steps=82 format=3 uid="uid://bf0e8h28gl1ae"]
 
 [ext_resource type="Script" path="res://src/utils/singletons/game_manager.gd" id="1_rn441"]
 [ext_resource type="Resource" uid="uid://cv1x4twce7wtu" path="res://src/player/barrel/resource/archetype_barrel_data.tres" id="3_23s84"]
@@ -80,14 +80,33 @@
 [ext_resource type="Resource" uid="uid://dl715empacnm0" path="res://src/player/gun/gun_frame/smg_gun_frame.tres" id="77_6d5uj"]
 [ext_resource type="Resource" uid="uid://geogstu8o3bh" path="res://src/player/gun/gun_frame/sniper_gun_frame.tres" id="78_tmpnu"]
 [ext_resource type="Resource" uid="uid://cid07th4gi8ov" path="res://src/player/gun/gun_frame/default_frame.tres" id="79_sm3w3"]
+[ext_resource type="Script" path="res://src/maps/common/main_bgm_emitter.gd" id="81_rhasn"]
 
 [node name="GameManager" type="Node"]
 process_mode = 3
 script = ExtResource("1_rn441")
-starting_shop_barrels = Array[Resource]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2"), ExtResource("10_ol55s"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg"), ExtResource("14_wr4dx"), ExtResource("13_upi04"), ExtResource("14_mh44r"), ExtResource("15_wuaj1"), ExtResource("16_lqj5q"), ExtResource("17_4ra48")])
+starting_shop_barrels = Array[Resource]([ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("6_pgp6q"), ExtResource("7_upwdb"), ExtResource("8_fntlm"), ExtResource("9_juqu2"), ExtResource("10_ol55s"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg"), ExtResource("13_upi04"), ExtResource("14_mh44r"), ExtResource("15_wuaj1"), ExtResource("16_lqj5q"), ExtResource("17_4ra48"), ExtResource("3_23s84")])
 barrel_database = Array[Resource]([ExtResource("6_pgp6q"), ExtResource("3_23s84"), ExtResource("8_fntlm"), ExtResource("7_upwdb"), ExtResource("10_83sf6"), ExtResource("9_juqu2"), ExtResource("4_ds0rn"), ExtResource("5_bj40w"), ExtResource("11_pbpm2"), ExtResource("12_b3bxi"), ExtResource("13_iyynv"), ExtResource("14_lbyk3"), ExtResource("10_ol55s"), ExtResource("16_lo202"), ExtResource("17_7q02m"), ExtResource("12_046jp"), ExtResource("13_aamrg"), ExtResource("14_wr4dx"), ExtResource("13_upi04"), ExtResource("14_mh44r"), ExtResource("15_wuaj1"), ExtResource("16_lqj5q"), ExtResource("17_4ra48")])
 debug_barrel_database = Array[Resource]([ExtResource("21_dy2lq"), ExtResource("22_r8wv5"), ExtResource("23_mry17"), ExtResource("24_tee28"), ExtResource("25_8xie0"), ExtResource("26_erbl1"), ExtResource("27_3dtem"), ExtResource("28_n6pyt"), ExtResource("29_jpg2o"), ExtResource("30_r0bwp"), ExtResource("31_drjkx"), ExtResource("32_378g5"), ExtResource("33_ax5nr"), ExtResource("34_daf8h"), ExtResource("35_pgpli"), ExtResource("36_fn4xt"), ExtResource("37_tpmbh"), ExtResource("38_arukk"), ExtResource("39_1b1fs"), ExtResource("40_m1s6w"), ExtResource("41_aeicd"), ExtResource("42_274ba"), ExtResource("43_285vf"), ExtResource("44_ubr3c"), ExtResource("45_nqgbh"), ExtResource("46_s8t28"), ExtResource("47_kjs1t"), ExtResource("48_f2x0g"), ExtResource("49_a46ix"), ExtResource("50_6viqg"), ExtResource("51_rqc8k"), ExtResource("52_rg6km"), ExtResource("53_8vpt8"), ExtResource("54_lykad"), ExtResource("55_bdo5j"), ExtResource("56_g6fhg"), ExtResource("57_sathf"), ExtResource("58_xd2cs"), ExtResource("59_fli8u"), ExtResource("60_mk8gw"), ExtResource("61_oflg1"), ExtResource("62_we1pc"), ExtResource("63_vkhvr"), ExtResource("64_pyj56"), ExtResource("65_8eyr3"), ExtResource("66_0pt10"), ExtResource("67_f23p7"), ExtResource("68_5ki4i"), ExtResource("69_6g2h4"), ExtResource("70_y5ila"), ExtResource("71_vh7ih")])
 starting_gun_frame = ExtResource("76_i6j6r")
 starting_shop_gun_frame = Array[Resource]([ExtResource("77_6d5uj"), ExtResource("78_tmpnu")])
 gun_frame_database = Array[Resource]([ExtResource("79_sm3w3"), ExtResource("76_i6j6r"), ExtResource("77_6d5uj"), ExtResource("78_tmpnu")])
 sfx_screenshot = ExtResource("45_64xou")
+
+[node name="FmodBankLoader" type="FmodBankLoader" parent="."]
+bank_paths = ["res://assets/fmod_banks/Master.strings.bank", "res://assets/fmod_banks/Master.bank"]
+
+[node name="MainBGMEmitter" type="FmodEventEmitter3D" parent="."]
+event_name = "event:/Maingame"
+event_guid = "{b4fc8925-f21b-42e6-8fb6-c4f87d7d05cd}"
+fmod_parameters/MusicState/id = -6754846447219950286
+fmod_parameters/MusicState = "Menu"
+fmod_parameters/MusicState/labels = PackedStringArray("Menu", "Roulette", "Lobby", "Slotty", "Roulette", "PitbossHallway", "PitbossMainfight", "Bartender", "ChipbossStart", "ChipbossInt", "BlackjackStart", "Tutorial1", "Tutorial2", "TutorialBossfight", "GenericBossAftermath")
+fmod_parameters/MusicState/variant_type = 4
+fmod_parameters/playerIsDead/id = 4284843263952535423
+fmod_parameters/playerIsDead = 0.0
+fmod_parameters/playerIsDead/variant_type = 3
+fmod_parameters/menuIsUp/id = 1961036125644975886
+fmod_parameters/menuIsUp = 0.0
+fmod_parameters/menuIsUp/variant_type = 3
+script = ExtResource("81_rhasn")
