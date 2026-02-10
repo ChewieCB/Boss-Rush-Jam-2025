@@ -10,9 +10,9 @@ class_name BartenderBottle
 @onready var life_timer: Timer = $LifeTimer
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
-var damage
+var damage = 1
 var projectile_speed = 100
-var current_dir
+var current_dir = Vector3.ZERO
 var bartender_owner: BossCore
 
 func init(start_pos: Vector3, dir: Vector3, _damage: int, _speed: float):
@@ -62,7 +62,8 @@ func spawn_break_effect():
 	# Spawn in world environment
 	GameManager.player.get_parent().add_child(inst)
 	inst.position = global_position - current_dir
-	bartender_owner.health_component.died.connect(inst.queue_free)
+	if bartender_owner:
+		bartender_owner.health_component.died.connect(inst.queue_free)
 
 func create_spark(pos: Vector3, normal: Vector3):
 	if spark_effect == null:

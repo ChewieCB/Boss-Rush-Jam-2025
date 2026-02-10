@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=45 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -33,6 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://cm1sitbvy6aye" path="res://src/maps/lobby/shrine/SkillShrine.tscn" id="25_janht"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="27_x0fgt"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="29_o1a3k"]
+[ext_resource type="PackedScene" uid="uid://bkbyk7x5yc34u" path="res://src/bosses/bartender/projectiles/BartenderMolotov.tscn" id="34_dva2u"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -312,3 +313,6 @@ mesh = SubResource("CylinderMesh_oe1jg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WallStuff/StaticBody3D"]
 shape = SubResource("CylinderShape3D_63wrj")
+
+[node name="BartenderMolotov" parent="." instance=ExtResource("34_dva2u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.04005, -7.72414)

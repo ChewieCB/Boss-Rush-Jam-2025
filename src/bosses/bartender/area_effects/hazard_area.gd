@@ -1,6 +1,7 @@
 extends Node3D
 class_name HazardArea
 
+@export var autostart = true
 @export var damage_per_tick: int = 5
 @export var duration: float = 5
 @export var slow_perc: float = 0
@@ -27,7 +28,8 @@ var dash_speed_buff_icon = preload("res://assets/sprite/status_icon/dash_speed_d
 var run_speed_buff_icon = preload("res://assets/sprite/status_icon/run_speed_down.png")
 
 func _ready() -> void:
-	pass
+	if autostart:
+		start_hazard()
 
 
 func start_hazard() -> void:
@@ -64,8 +66,10 @@ func _on_damage_timer_timeout() -> void:
 		return
 
 	for body in bodies_inside:
+		print("TICK DMG on ", body.name)
 		if damage_per_tick > 0:
-			body.get_node("HealthComponent").damage(damage_per_tick)
+			if body.has_node("HealthComponent"):
+				body.get_node("HealthComponent").damage(damage_per_tick)
 
 		if body is Player and slow_perc > 0:
 			var run_debuff = create_slow_run_debuff(1)
@@ -85,19 +89,19 @@ func clear_hazard():
 	tween2.tween_property(light, "light_energy", 0, 2.0)
 	# Wait until all particles expired
 	await get_tree().create_timer(pe_expire_time).timeout
-	#call_deferred("queue_free")
+	call_deferred("queue_free")
 
 
 func _on_life_timer_timeout() -> void:
 	clear_hazard()
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
-	if body.get_node("HealthComponent"):
+	if body.has_node("HealthComponent"):
 		bodies_inside.append(body)
 
 
 func _on_area_3d_body_exited(body: Node3D) -> void:
-	if body.get_node("HealthComponent") and body in bodies_inside:
+	if body.has_node("HealthComponent") and body in bodies_inside:
 		bodies_inside.erase(body)
 
 func create_slow_run_debuff(debuff_duration: float = 1) -> StatusEffect:

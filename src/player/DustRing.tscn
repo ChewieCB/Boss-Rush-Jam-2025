@@ -77,3 +77,5 @@ fixed_fps = 60
 process_material = SubResource("ParticleProcessMaterial_ym1ah")
 draw_pass_1 = SubResource("ArrayMesh_bde6a")
 script = ExtResource("1_i4laa")
+
+[connection signal="finished" from="." to="." method="_on_finished"]
