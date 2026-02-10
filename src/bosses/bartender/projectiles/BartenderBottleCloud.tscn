@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://c6a4cgkhgrqnc"]
+
+[ext_resource type="Script" path="res://src/bosses/bartender/projectiles/bartender_bottle_cloud.gd" id="1_25phv"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pqyln"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_pdyft"]
+
+[node name="BartenderBottleCloud" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_25phv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_pqyln")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_pdyft")
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]

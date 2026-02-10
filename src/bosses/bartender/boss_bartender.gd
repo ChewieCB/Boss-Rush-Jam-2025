@@ -17,15 +17,24 @@ extends BossCore
 #
 # New move: Dragon Breath Shell: Load an orange Dragon breath shell that has high projectile count and spread.
 #
-# Modify move: Drink powerup, but the drink should be much stronger, and longer channel time, and can be cancelled by player shooting the bottle/glass.
-#              Remove Defense buff (since it no fun), just Strength (for barrels) and Speed buff (for faster attacks)
+# New move: Duck: Bartender duck behind a cover between attacks, or after take a certain amount of damage.__draw
+#
+# New move: Dodge: Give bartender a small chance to dodge attack by quickly move sideway. Programming-wise, he can dodge attack
+# by reading player input (player press shoot when aim ray intersect with his hitbox).
+#
+# New move: Flaming wall: Use several molotovs to create a flaming wall that block LoS (but he can shoot since he an AI and dont have
+# such weakness).
 #
 # Modify move: Barrel (which only used in Str buff) should be explosive by default.
+#
+# Modify move: Thrown bottle should create small clouds that spread outward, make it bullet hell-ish
 #
 # Map edit: Clear out some table in the map, and raise the ceiling. Maybe add 2nd floor balconny for improved phase 3.
 #
 # Map edit: Table should be its own scene, not stucked to map. And can be kicked (by pressing Interact probably) to work as cover. It will fall back
 #           after some time. Use this to counter Shotgun Volley.
+#
+# New phase: Drinking buff should be its own phase so it can have more different attacks. Jekyll/Hyde style.
 #
 # Improved phase 3: Bartender moved to second floor balcony and vertical play / shoot from above the player.
 
@@ -640,14 +649,14 @@ func jump_to(target_position: Vector3, jump_height: float = 5, jump_time: float 
 	end_position.y = 0
 	sfx_player.stream = sfx_jump.pick_random()
 	sfx_player.play()
-	tween.tween_property(self, "global_position", end_position, jump_time).set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property(self , "global_position", end_position, jump_time).set_trans(Tween.TRANS_LINEAR)
 
 	# Step 2: Animate Y movement with a parabola
 	var mid_time = jump_time / 2 # Midpoint of the jump
 	var peak_height = global_position.y + jump_height # Peak height
 
-	tween2.tween_property(self, "position:y", peak_height, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween2.tween_property(self, "position:y", target_position.y, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween2.tween_property(self , "position:y", peak_height, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween2.tween_property(self , "position:y", target_position.y, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 	await tween.finished
 
