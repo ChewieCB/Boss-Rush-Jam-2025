@@ -31,7 +31,7 @@ emission_sphere_radius = 0.2
 angle_max = 90.0
 direction = Vector3(0, 0, 0)
 spread = 0.0
-gravity = Vector3(0, 0, 0)
+gravity = Vector3(0, 2, 0)
 scale_min = 0.3
 scale_max = 0.4
 scale_curve = SubResource("CurveTexture_isle6")
@@ -170,7 +170,6 @@ draw_pass_1 = SubResource("ArrayMesh_w051w")
 
 [node name="Smoke" type="GPUParticles3D" parent="ProjectileGasEmit" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189266, 0)
-amount = 16
 explosiveness = 0.1
 visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
 local_coords = true
