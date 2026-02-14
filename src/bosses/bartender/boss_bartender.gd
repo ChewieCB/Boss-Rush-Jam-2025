@@ -112,10 +112,10 @@ enum BottleAttack {
 var current_bottle_type: BottleAttack
 var last_bottle_attack: BottleAttack
 var special_bottle_enabled = true
-@export var min_n_bottle_per_attack: int = 2
-@export var max_n_bottle_per_attack: int = 4
-@export var min_bottles_spread: float = 10
-@export var max_bottles_spread: float = 20
+@export var min_n_bottle_per_attack: int = 1
+@export var max_n_bottle_per_attack: int = 2
+@export var min_bottles_spread: float = 30
+@export var max_bottles_spread: float = 60
 @export var empty_bottle_prefab: PackedScene
 @export var molotov_prefab: PackedScene
 @export var poison_bottle_prefab: PackedScene

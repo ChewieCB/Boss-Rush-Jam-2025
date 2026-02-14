@@ -10743,17 +10743,19 @@ metadata/func_godot_mesh_data = {}
 [node name="entity_314_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/layer_0_Elevators/group_10058_Elevator/group_10830_FrameDeco/group_10829_PaintingDeco/entity_314_func_detail_illusionary"]
 mesh = SubResource("ArrayMesh_tfopd")
 
-[node name="entity_315_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators/group_10058_Elevator" instance=ExtResource("36_653qc")]
+[node name="entity_315_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators/group_10058_Elevator" node_paths=PackedStringArray("linked_elevator_doors", "hub_respawn_marker") instance=ExtResource("36_653qc")]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, -17.5932, -1.96875, -16.4857)
 entProperties = {
 "_tb_group": "10058",
 "angle": "180",
-"boss_name": "Out of Order!",
+"boss_name": "Last Order",
 "classname": "ElevatorButton",
-"linked_level": "",
+"linked_level": "res://src/maps/bartender_boss/BossMapBartender.tscn",
 "origin": "-527.542 -562.983 -63"
 }
-disabled = true
+boss_id = 3
+linked_elevator_doors = NodePath("../group_10828_Elevator/group_10827_Elevator/entity_282_ElevatorDoors")
+hub_respawn_marker = NodePath("../../../../BartenderBossRespawnPoint")
 
 [node name="TutorialBossRespawnPoint" type="Marker3D" parent="."]
 transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -7.38144, 1, -13.0161)
@@ -10763,6 +10765,9 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -3.05219, 
 
 [node name="SlotBossRespawnPoint" type="Marker3D" parent="."]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -29.3426, -2, -2.02695)
+
+[node name="BartenderBossRespawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -17.2125, -2, -13.389)
 
 [editable path="DecoSprites/ShopBarrels/BarrelItemPickup"]
 [editable path="DecoSprites/ShopBarrels/BarrelItemPickup2"]
