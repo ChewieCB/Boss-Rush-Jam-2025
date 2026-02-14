@@ -7,6 +7,7 @@ class_name GPUParticleController
 @export var self_destroy_after_time = -1
 @export var gpu_particles: Array[GPUParticles3D]
 @export var lights: Array[Light3D]
+## Time has to passed before queue_free actually called when we remove the node
 @export var time_until_queue_free: float = 1
 
 const LIGHT_FADE_SPEED = 1
@@ -25,7 +26,7 @@ func _ready() -> void:
 	
 	if self_destroy_after_time > 0:
 		await get_tree().create_timer(self_destroy_after_time).timeout
-		queue_free()
+		queue_free_after_time()
 
 
 func _process(delta: float) -> void:

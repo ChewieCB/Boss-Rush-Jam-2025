@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bkbyk7x5yc34u"]
+[gd_scene load_steps=7 format=3 uid="uid://bkbyk7x5yc34u"]
 
 [ext_resource type="PackedScene" uid="uid://bwmyhssb82fyu" path="res://src/bosses/bartender/projectiles/BartenderBottle.tscn" id="1_13d0f"]
 [ext_resource type="PackedScene" uid="uid://ovfcjowsr7df" path="res://src/bosses/bartender/area_effects/FireHazardArea.tscn" id="2_vptrv"]
 [ext_resource type="Texture2D" uid="uid://bnss5kdp8bdsp" path="res://src/bosses/bartender/assets/molotov_bottle.png" id="3_2hvxt"]
+[ext_resource type="PackedScene" uid="uid://7ysqewwrfga1" path="res://BartenderBottleFireCloud.tscn" id="3_y66k5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k16ha"]
 transparency = 1
@@ -14,6 +15,7 @@ emission = Color(1, 0.589733, 0.30724, 1)
 
 [node name="BartenderMolotov" instance=ExtResource("1_13d0f")]
 break_effect_prefab = ExtResource("2_vptrv")
+damage_cloud_prefab = ExtResource("3_y66k5")
 
 [node name="Sprite3D" parent="." index="0"]
 texture = ExtResource("3_2hvxt")

@@ -592,11 +592,8 @@ func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle 
 		var spread_direction = GunUtils.get_spread_direction(aim_direction, spread_angle, 1.0)
 		var bottle_inst = prefab.instantiate()
 		bottle_inst.bartender_owner = self
-
 		get_parent().add_child(bottle_inst)
-
 		bottle_inst.init(modified_spawn_pos, spread_direction, proj_damage, throw_force)
-
 		if bottle_inst is BartenderBarrel:
 			sfx_player.stream = sfx_barrel_throw.pick_random()
 		else:

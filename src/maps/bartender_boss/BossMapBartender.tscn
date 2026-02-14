@@ -1,8 +1,7 @@
-[gd_scene load_steps=248 format=4 uid="uid://cgk2mraaxwvxd"]
+[gd_scene load_steps=247 format=4 uid="uid://cgk2mraaxwvxd"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_vcodf"]
 [ext_resource type="Script" path="res://src/maps/bartender_boss/boss_bartender_map.gd" id="2_ikfam"]
-[ext_resource type="AudioStream" uid="uid://c5fve5riow6qd" path="res://assets/music/Danceparty R1.mp3" id="2_pyfw2"]
 [ext_resource type="Material" uid="uid://cpmnrcuro67h8" path="res://assets/textures/walls/paint-green.tres" id="3_7q842"]
 [ext_resource type="AudioStream" uid="uid://bdcqmijgrl2cc" path="res://src/bosses/bartender/assets/sfx/BARTENDER BOSS SETS ROOM ON FIRE (TRIGGER JUST BEFORE FIRE LOOP).mp3" id="3_qvoi0"]
 [ext_resource type="Material" uid="uid://c162u3li2i84m" path="res://assets/textures/walls/wallpaper_0.tres" id="4_rdf0i"]
@@ -912,18 +911,21 @@ points = PackedVector3Array(0.946931, 1.22226, 2.0865, 0.943972, 1.22522, 2.0876
 script = ExtResource("2_ikfam")
 sfx_fire_start = ExtResource("3_qvoi0")
 sfx_fire_loop = ExtResource("4_w5yjf")
-bgm = ExtResource("2_pyfw2")
 nav_parent = NodePath("FuncGodotMap")
 
-[node name="LightmapGI" parent="." index="4"]
+[node name="LightmapGI" parent="." index="3"]
 light_data = ExtResource("6_4rrpe")
 
-[node name="BossTriggerVolume" parent="." index="6"]
+[node name="BossTriggerVolume" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -20)
 
 [node name="CollisionShape3D" parent="BossTriggerVolume" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 shape = SubResource("BoxShape3D_gki5r")
+
+[node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.44824, -4.5)
+shape = SubResource("BoxShape3D_bavf7")
 
 [node name="BossMarker" type="Node3D" parent="." index="7"]
 
@@ -964,11 +966,7 @@ boss_jump_phase3_marker = NodePath("../BossMarker/BossJumpPhase3Marker")
 target = NodePath("../FuncGodotMap/entity_29_PlayerRef")
 elemental_emitting_vfx = [NodePath("StatusEffectVFX/ProjectileBurnEmitBoss"), NodePath("StatusEffectVFX/ProjectilePoisonEmitBoss"), NodePath("StatusEffectVFX/ProjectileFreezeEmitBoss"), NodePath("StatusEffectVFX/ProjectileShockEmitBoss"), null]
 
-[node name="CollisionShape3D" parent="SpinTriggerVolume" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.44824, -4.5)
-shape = SubResource("BoxShape3D_bavf7")
-
-[node name="FuncGodotMap" parent="." index="11"]
+[node name="FuncGodotMap" parent="." index="10"]
 local_map_file = "res://src/maps/bartender_boss/bartender.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]
@@ -1702,7 +1700,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3.75,
 [node name="entity_31_Chandellier2" parent="FuncGodotMap" index="24" instance=ExtResource("14_qwtwc")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3.75, 18.75, -30)
 
-[node name="TableHolder" type="Node3D" parent="." index="12"]
+[node name="TableHolder" type="Node3D" parent="." index="11"]
 
 [node name="BarTable" parent="TableHolder" index="0" instance=ExtResource("33_gfr6u")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -5.79791, 0.897496, -26.8239)

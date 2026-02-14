@@ -1,7 +1,11 @@
 extends RigidBody3D
 class_name BartenderBottle
 
+
+## Puddle
 @export var break_effect_prefab: PackedScene
+@export var damage_cloud_prefab: PackedScene
+@export var cloud_count: int = 8
 @export var spark_effect: PackedScene
 @export var break_on_contact = true
 @export var sfx_break: Array[AudioStream]
@@ -56,14 +60,29 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		sfx_player.play()
 
 func spawn_break_effect():
-	if break_effect_prefab == null:
-		return
-	var inst = break_effect_prefab.instantiate()
-	# Spawn in world environment
-	GameManager.player.get_parent().add_child(inst)
-	inst.position = global_position - current_dir
-	if bartender_owner:
-		bartender_owner.health_component.died.connect(inst.queue_free)
+	if break_effect_prefab != null:
+		var inst = break_effect_prefab.instantiate()
+		# Spawn in world environment
+		GameManager.player.get_parent().add_child(inst)
+		inst.global_position = global_position - current_dir
+		if bartender_owner:
+			bartender_owner.health_component.died.connect(inst.queue_free)
+
+	const CLOUD_ANGLE_RAND = 0.2
+	const CLOUD_Y_OFFSET = 0.1
+
+	if damage_cloud_prefab != null:
+		for i in range(cloud_count):
+			var inst = damage_cloud_prefab.instantiate()
+			# Spawn in world environment
+			GameManager.player.get_parent().add_child(inst)
+			if bartender_owner:
+				bartender_owner.health_component.died.connect(inst.queue_free)
+			var angle = TAU * i / cloud_count
+			angle += randf_range(-CLOUD_ANGLE_RAND, CLOUD_ANGLE_RAND)
+			var pos = global_position - current_dir + Vector3(0, CLOUD_Y_OFFSET, 0)
+			var dir = Vector3(cos(angle), 0, sin(angle))
+			inst.init(pos, dir.normalized())
 
 func create_spark(pos: Vector3, normal: Vector3):
 	if spark_effect == null:

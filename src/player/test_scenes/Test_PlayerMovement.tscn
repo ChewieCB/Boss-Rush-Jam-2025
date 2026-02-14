@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://d0eiwkymrgejx"]
+[gd_scene load_steps=46 format=3 uid="uid://d0eiwkymrgejx"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://src/player/Player.tscn" id="1_h4pew"]
 [ext_resource type="Script" path="res://src/player/test_scenes/test_player_movement.gd" id="1_ky5mp"]
@@ -34,6 +34,7 @@
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="27_x0fgt"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="29_o1a3k"]
 [ext_resource type="PackedScene" uid="uid://bkbyk7x5yc34u" path="res://src/bosses/bartender/projectiles/BartenderMolotov.tscn" id="34_dva2u"]
+[ext_resource type="PackedScene" uid="uid://cujkupeiuhqjh" path="res://src/bosses/bartender/projectiles/BartenderPoisonBottle.tscn" id="35_ailla"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -316,3 +317,6 @@ shape = SubResource("CylinderShape3D_63wrj")
 
 [node name="BartenderMolotov" parent="." instance=ExtResource("34_dva2u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.04005, -7.72414)
+
+[node name="BartenderPoisonBottle" parent="." instance=ExtResource("35_ailla")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.55211, 18.4979, -7.51731)
