@@ -66,7 +66,6 @@ func _on_damage_timer_timeout() -> void:
 		return
 
 	for body in bodies_inside:
-		print("TICK DMG on ", body.name)
 		if damage_per_tick > 0:
 			if body.has_node("HealthComponent"):
 				body.get_node("HealthComponent").damage(damage_per_tick)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dqw4c2ldowow3"]
+[gd_scene load_steps=24 format=4 uid="uid://dqw4c2ldowow3"]
 
 [ext_resource type="Script" path="res://src/bosses/bartender/area_effects/hazard_area.gd" id="1_rl1eo"]
 [ext_resource type="AudioStream" uid="uid://ic7baok7nfh4" path="res://src/bosses/bartender/assets/sfx/BARTENDER POISON PUDDLE LOOP.mp3" id="2_uibxr"]
@@ -49,6 +49,85 @@ particles_anim_loop = false
 [sub_resource type="QuadMesh" id="QuadMesh_odgr1"]
 material = SubResource("StandardMaterial3D_re01x")
 
+[sub_resource type="Gradient" id="Gradient_p1ak3"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_h68oq"]
+gradient = SubResource("Gradient_p1ak3")
+
+[sub_resource type="Curve" id="Curve_nwpni"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 1), 0.0, 0.0, 0, 0, Vector2(0.587329, 0.501806), -3.14482, -3.14482, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_jfvem"]
+curve = SubResource("Curve_nwpni")
+
+[sub_resource type="Curve" id="Curve_qloc4"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_nsinq"]
+curve = SubResource("Curve_qloc4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_06x7c"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 3.0
+emission_ring_inner_radius = 0.0
+angle_max = 90.0
+direction = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 2, 0)
+scale_min = 0.5
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_jfvem")
+color = Color(0.429, 1, 0.42, 0.476)
+color_ramp = SubResource("GradientTexture1D_h68oq")
+turbulence_enabled = true
+turbulence_noise_strength = 0.5
+turbulence_noise_scale = 5.0
+turbulence_influence_over_life = SubResource("CurveTexture_nsinq")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_srckm"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_phj76"]
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cCAAAnQ/fuugIAAAAAzYBJAQAAFSTpJFoAAADqoQAAAAAAAPbrpTbZAAAA///keh8BAAAa8Oq7TgEAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_3ywtb"]
+resource_name = "particle_circle_particle_circle"
+_surfaces = [{
+"aabb": AABB(-1.15811, -1.02635, -4.7252e-08, 2.17129, 2.09224, 1.00998e-05),
+"attribute_data": PackedByteArray("AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BAABAAcAAAAHAAEAAQADAAIABAADAAEABAAGAAUABgAEAAcA"),
+"material": SubResource("StandardMaterial3D_srckm"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("apP+/4cC/n8nQ/fuugL+fwAAzYBJAf5/FSTpJFoA/n/qoQAAAAD+f/brpTbZAP5////keh8B/n8a8Oq7TgH+f/9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_phj76")
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_x1b5n"]
 radius = 4.0
 
@@ -58,16 +137,25 @@ damage_per_tick = 7
 duration = 25.0
 puddle_decal = NodePath("Decal")
 sfx_effect = Array[AudioStream]([ExtResource("2_uibxr")])
-particle_effects = [NodePath("PoisonCloud")]
+particle_effects = [NodePath("PoisonCloud"), NodePath("Smoke")]
 
 [node name="PoisonCloud" type="GPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3607, 0)
+visible = false
 amount = 30
 lifetime = 2.0
 explosiveness = 0.2
 visibility_aabb = AABB(-100, -100, -100, 200, 200, 200)
 process_material = SubResource("ParticleProcessMaterial_87i5c")
 draw_pass_1 = SubResource("QuadMesh_odgr1")
+
+[node name="Smoke" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.312395, 0)
+amount = 256
+lifetime = 3.0
+visibility_aabb = AABB(-10000, -10000, -10000, 20000, 20000, 20000)
+process_material = SubResource("ParticleProcessMaterial_06x7c")
+draw_pass_1 = SubResource("ArrayMesh_3ywtb")
 
 [node name="Decal" type="Decal" parent="."]
 size = Vector3(8, 4, 8)
