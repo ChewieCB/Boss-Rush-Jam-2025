@@ -53,7 +53,7 @@ func _on_Button_pressed():
 func start_copying():
 	if sound_button.button_pressed:
 		$Sending.play()
-	pid = OS.create_process("scp", [source.text, user.text+"@"+ip.text+":"+destination.text], true)
+	pid = OS.create_process("scp", ["-r", source.text, user.text+"@"+ip.text+":"+destination.text], true)
 
 func load_data(url):
 	if url == null: return {}
