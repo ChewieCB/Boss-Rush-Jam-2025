@@ -27,12 +27,12 @@ extends BossCore
 #
 # Modify move: Barrel (which only used in Str buff) should be explosive by default.
 #
-# Modify move: Thrown bottle should create small clouds that spread outward, make it bullet hell-ish
+# Modify move (DONE): Thrown bottle should create small clouds that spread outward, make it bullet hell-ish
 #
-# Map edit: Clear out some table in the map, and raise the ceiling. Maybe add 2nd floor balconny for improved phase 3.
+# Map edit (DONE): Clear out some table in the map, and raise the ceiling. Maybe add 2nd floor balconny for improved phase 3.
 #
-# Map edit: Table should be its own scene, not stucked to map. And can be kicked (by pressing Interact probably) to work as cover. It will fall back
-#           after some time. Use this to counter Shotgun Volley.
+# Map edit (DONE): Table should be its own scene, not stucked to map. And can be kicked (by pressing Interact probably) to work as cover. 
+# It will fall back after some time. Use this to counter Shotgun Volley.
 #
 # New phase: Drinking buff should be its own phase so it can have more different attacks. Jekyll/Hyde style.
 #

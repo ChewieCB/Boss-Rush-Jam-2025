@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cge1b58nvlmda"
+uid="uid://dwvxgvu8puqoi"
 path.s3tc="res://.godot/imported/chinese_hand_fan_2.png-0407f40aa8c7fc2e2c15246d123baf1a.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "7e275c850661885af6533ca0eca709b1"
 }
 
 [deps]

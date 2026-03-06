@@ -213,7 +213,7 @@ shape = SubResource("CapsuleShape3D_ujv4f")
 [node name="CheckStandingCollision" type="Area3D" parent="."]
 collision_layer = 0
 
-[node name="CollisionCrouching" type="CollisionShape3D" parent="CheckStandingCollision"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CheckStandingCollision"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CapsuleShape3D_ujv4f")
 

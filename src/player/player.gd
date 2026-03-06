@@ -354,6 +354,7 @@ func _process(delta):
 		var interact_collider = aim_ray.get_collider()
 		if interact_collider and \
 			interact_collider.has_method("interact") and \
+			((not 'interact_disabled' in interact_collider) or (not interact_collider.interact_disabled)) and \
 			interact_collider.global_position.distance_to(global_position) <= INTERACT_DISTANCE:
 			object_to_be_interacted = interact_collider
 			interact_ui.visible = true

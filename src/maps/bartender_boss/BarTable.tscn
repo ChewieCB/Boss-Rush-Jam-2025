@@ -1,68 +1,182 @@
-[gd_scene load_steps=7 format=3 uid="uid://dn3eeknqbnsed"]
+[gd_scene load_steps=13 format=3 uid="uid://dn3eeknqbnsed"]
 
+[ext_resource type="Script" path="res://src/maps/bartender_boss/bar_table.gd" id="1_1ryjy"]
 [ext_resource type="Texture2D" uid="uid://ben1bmsxy5j8x" path="res://assets/textures/floor/wood_0.png" id="1_24sik"]
+[ext_resource type="AudioStream" uid="uid://ssvhvr652nl6" path="res://src/bosses/bartender/assets/sfx/misc/398257__vataaa__hit-the-table.mp3" id="3_e3h8g"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eov4s"]
 albedo_texture = ExtResource("1_24sik")
 
 [sub_resource type="BoxMesh" id="BoxMesh_kib6y"]
 material = SubResource("StandardMaterial3D_eov4s")
-size = Vector3(3, 0.2, 2)
+size = Vector3(3, 0.1, 2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7qdo7"]
-size = Vector3(3, 0.2, 2)
+size = Vector3(3, 0.1, 2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_7hvbq"]
 material = SubResource("StandardMaterial3D_eov4s")
-size = Vector3(0.2, 1, 0.2)
+size = Vector3(0.2, 1.1, 0.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nmxo7"]
-size = Vector3(0.2, 1, 0.2)
+size = Vector3(0.2, 1.1, 0.2)
 
-[node name="BarTable" type="StaticBody3D"]
+[sub_resource type="Animation" id="Animation_abtqq"]
+resource_name = "flip_front"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.366667, 0.5),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.91986, 0, 0), Vector3(-2.00713, 0, 0), Vector3(-1.5708, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 1.23772, -1.29121), Vector3(0, 0.978104, -1.92868)]
+}
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[sub_resource type="Animation" id="Animation_3vgit"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kgdwx"]
+resource_name = "flip_back"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.366667, 0.5),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1.91986, 0, 0), Vector3(2.00713, 0, 0), Vector3(1.5708, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 1.238, 1.291), Vector3(0, 0.978, 1.929)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_db2rv"]
+_data = {
+"RESET": SubResource("Animation_3vgit"),
+"flip_back": SubResource("Animation_kgdwx"),
+"flip_front": SubResource("Animation_abtqq")
+}
+
+[node name="BarTable" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 33
+collision_mask = 3
+script = ExtResource("1_1ryjy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
 mesh = SubResource("BoxMesh_kib6y")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
 shape = SubResource("BoxShape3D_7qdo7")
 
-[node name="Leg" type="StaticBody3D" parent="."]
+[node name="Leg" type="StaticBody3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, -0.5, 0.8)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Leg"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/Leg"]
 mesh = SubResource("BoxMesh_7hvbq")
 skeleton = NodePath("../..")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Leg"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D/Leg"]
 shape = SubResource("BoxShape3D_nmxo7")
 
-[node name="Leg2" type="StaticBody3D" parent="."]
+[node name="Leg2" type="StaticBody3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, -0.5, 0.8)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Leg2"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/Leg2"]
 mesh = SubResource("BoxMesh_7hvbq")
 skeleton = NodePath("../..")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Leg2"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D/Leg2"]
 shape = SubResource("BoxShape3D_nmxo7")
 
-[node name="Leg3" type="StaticBody3D" parent="."]
+[node name="Leg3" type="StaticBody3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, -0.5, -0.8)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Leg3"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/Leg3"]
 mesh = SubResource("BoxMesh_7hvbq")
 skeleton = NodePath("../..")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Leg3"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D/Leg3"]
 shape = SubResource("BoxShape3D_nmxo7")
 
-[node name="Leg4" type="StaticBody3D" parent="."]
+[node name="Leg4" type="StaticBody3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, -0.5, -0.8)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Leg4"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/Leg4"]
 mesh = SubResource("BoxMesh_7hvbq")
 skeleton = NodePath("../..")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Leg4"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D/Leg4"]
 shape = SubResource("BoxShape3D_nmxo7")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="StaticBody3D"]
+libraries = {
+"": SubResource("AnimationLibrary_db2rv")
+}
+
+[node name="ResetTimer" type="Timer" parent="StaticBody3D"]
+wait_time = 30.0
+one_shot = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="StaticBody3D"]
+stream = ExtResource("3_e3h8g")
+bus = &"SFX"
+
+[connection signal="timeout" from="StaticBody3D/ResetTimer" to="StaticBody3D" method="_on_reset_timer_timeout"]

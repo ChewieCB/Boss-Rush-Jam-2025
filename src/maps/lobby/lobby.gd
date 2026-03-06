@@ -133,6 +133,7 @@ func find_and_load_boss_bgm() -> void:
 		BossCore.BossIdEnum.SLOTS:
 			GameManager.change_fmod_bgm_music_state("Slotty")
 		BossCore.BossIdEnum.BARTENDER:
+			# TODO: Update fmod transistion from Backroom to Bartender
 			GameManager.change_fmod_bgm_music_state("Bartender")
 		BossCore.BossIdEnum.PIT:
 			GameManager.change_fmod_bgm_music_state("PitbossHallway")
