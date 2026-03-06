@@ -17,7 +17,7 @@ extends BossCore
 #
 # New move: Dragon Breath Shell: Load an orange Dragon breath shell that has high projectile count and spread.
 #
-# New move: Duck: Bartender duck behind a cover between attacks, or after take a certain amount of damage.__draw
+# New move: Duck: Bartender duck behind a cover between attacks, or after take a certain amount of damage.
 #
 # New move: Dodge: Give bartender a small chance to dodge attack by quickly move sideway. Programming-wise, he can dodge attack
 # by reading player input (player press shoot when aim ray intersect with his hitbox).
