@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://xom5yc1hof6t"]
+
+[ext_resource type="Texture2D" uid="uid://dg6rdq1urkteq" path="res://assets/textures/floor/grate-transparent-trans.png" id="1_yx383"]
+
+[resource]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_yx383")
+metallic_specular = 0.0
+texture_filter = 2
