@@ -32,6 +32,7 @@ texture = ExtResource("2_ut4j6")
 
 [node name="Label3D" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 0)
+visible = false
 billboard = 1
 no_depth_test = true
 render_priority = 2

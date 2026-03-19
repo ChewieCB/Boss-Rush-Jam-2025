@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://da5ntwnd8vq6t"]
+
+[ext_resource type="Texture2D" uid="uid://ckfftsd2tsksn" path="res://assets/textures/walls/sunk_window.jpg" id="1_ucj5i"]
+
+[resource]
+albedo_texture = ExtResource("1_ucj5i")
+metallic_specular = 0.0
+texture_filter = 2

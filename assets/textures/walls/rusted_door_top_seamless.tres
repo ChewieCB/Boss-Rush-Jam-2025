@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b866btxbrgu0c"]
+
+[ext_resource type="Texture2D" uid="uid://dqxbnknk7l8gp" path="res://assets/textures/walls/rusted_door_top_seamless.png" id="1_dwf6a"]
+
+[resource]
+albedo_texture = ExtResource("1_dwf6a")
+metallic_specular = 0.0
+texture_filter = 2

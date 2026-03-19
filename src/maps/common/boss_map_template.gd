@@ -8,6 +8,7 @@ var nav_region: NavigationRegion3D
 @export var nav_parent: Node3D
 @export var floor_parent: Node3D
 @export var floor_mesh: MeshInstance3D
+@export var remove_mesh_after_baking: bool = false
 
 @export_group("Actors")
 @onready var boss: BossCore = find_children("*", "BossCore").front()
@@ -95,6 +96,8 @@ func generate_navigation() -> void:
 	floor_mesh.global_transform = floor_parent.global_transform
 	
 	_rebake_nav()
+	if remove_mesh_after_baking:
+		floor_mesh.queue_free()
 	# Switch the parse type to colliders after the initial bake 
 	# to reduce performance impact of runtime rebaking
 	#

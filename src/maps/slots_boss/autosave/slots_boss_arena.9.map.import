@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://bmx21msfkrjx7"
+path="res://.godot/imported/slots_boss_arena.9.map-07635d05a4217ee60e1d17c3273c141a.tres"
+
+[deps]
+
+source_file="res://src/maps/slots_boss/autosave/slots_boss_arena.9.map"
+dest_files=["res://.godot/imported/slots_boss_arena.9.map-07635d05a4217ee60e1d17c3273c141a.tres"]
+
+[params]
+
