@@ -180,9 +180,9 @@ enum DebugSpinMode {
 	SEEDED_AUTO_SPIN,
 }
 var CHEAT_spin_mode: int = DebugSpinMode.SEEDED_AUTO_SPIN
-var CHEAT_freecam: bool = true
+var CHEAT_freecam: bool = false
 var CHEAT_always_inventory: bool = false
-var CHEAT_demomode: bool = true
+var CHEAT_demomode: bool = false
 var CHEAT_demomode_timeout: int = 60:
 	set(value):
 		CHEAT_demomode_timeout = value

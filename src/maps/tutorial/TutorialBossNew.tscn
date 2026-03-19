@@ -64,7 +64,7 @@
 [ext_resource type="AudioStream" uid="uid://bnnj4bxoydm6e" path="res://src/maps/tutorial/assets/cutscene/vo/mechanic-tutorial-intro-5-only-pain-1.mp3" id="71_nv42o"]
 [ext_resource type="Material" uid="uid://cw84j8uef55sq" path="res://assets/textures/walls/painting_decal.tres" id="73_xo6rn"]
 [ext_resource type="Material" uid="uid://oioorwq5iec4" path="res://assets/textures/walls/dutch_wall_3.tres" id="74_bjkup"]
-[ext_resource type="PackedScene" path="res://src/bosses/tutorial/FloorShockHazard.tscn" id="75_byjbj"]
+[ext_resource type="PackedScene" uid="uid://du7niw4p1wqq6" path="res://src/bosses/tutorial/FloorShockHazard.tscn" id="75_byjbj"]
 [ext_resource type="Material" uid="uid://cyn8dlvnmoe00" path="res://assets/textures/posters/crapshoot_logo.tres" id="75_vc447"]
 [ext_resource type="Material" uid="uid://bslp5gtsyqeee" path="res://assets/textures/placeholder/texture_light_07.tres" id="77_xj60c"]
 [ext_resource type="Material" uid="uid://cvvjnot2ikmgg" path="res://assets/textures/floor/wrad_metal1.tres" id="78_72a70"]
@@ -72,7 +72,7 @@
 [ext_resource type="PackedScene" uid="uid://cdjkynfg25alo" path="res://src/player/gun/vfx/SmokeVFX3D.tscn" id="79_hbkuw"]
 [ext_resource type="PackedScene" uid="uid://b2ciesqygpo5a" path="res://src/player/barrel/item_pickup/BarrelItemPickup.tscn" id="79_jne3r"]
 [ext_resource type="Material" uid="uid://ddqkn38etnjr1" path="res://assets/textures/posters/bigboss.tres" id="79_qa2kr"]
-[ext_resource type="PackedScene" path="res://src/maps/tutorial/triggers/SingleEffectTrigger.tscn" id="79_wgc81"]
+[ext_resource type="PackedScene" uid="uid://cstu4hay3iips" path="res://src/maps/tutorial/triggers/SingleEffectTrigger.tscn" id="79_wgc81"]
 [ext_resource type="Material" uid="uid://dxuto5h6uh22o" path="res://assets/textures/posters/pitboss.tres" id="80_q7tk3"]
 [ext_resource type="Material" uid="uid://chfbuquwjmmvs" path="res://assets/textures/posters/megacasino.tres" id="81_ojd6u"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="83_53s23"]
@@ -135,7 +135,7 @@ script = ExtResource("4_mh6ps")
 trigger_on_spawn = false
 one_shot = false
 header_text = ""
-body_items = Array[String](["[show_detail]", "check rollers"])
+body_items = Array[String](["Hold", "[show_detail]", "check rollers"])
 close_trigger_actions = Array[String](["show_detail"])
 close_trigger_count = 1
 timeout = 1.0

@@ -24,4 +24,4 @@ barrel_cost = 1650
 barrel_prefab = ExtResource("2_wlqqv")
 is_archetype_barrel = false
 reloads_before_spin = 3
-locked_for_demo = false
+locked_for_demo = true

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/bosses/slots/bell/bell.gd" id="1_c4e2b"]
 [ext_resource type="ArrayMesh" uid="uid://dq3mrfaleu5xm" path="res://src/bosses/slots/bell/bell_mesh_2.tres" id="1_qcd24"]
-[ext_resource type="PackedScene" path="res://src/bosses/slots/BellDustCloudImpact.tscn" id="3_b5qoa"]
+[ext_resource type="PackedScene" uid="uid://bc8ha8vf7ole0" path="res://src/bosses/slots/BellDustCloudImpact.tscn" id="3_b5qoa"]
 [ext_resource type="AudioStream" uid="uid://cux3tve04kgw5" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 1 NORMALISED.mp3" id="4_rg3bq"]
 [ext_resource type="AudioStream" uid="uid://dg0p2003kj0gx" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 2 NORMALISED.mp3" id="5_0pq2n"]
 [ext_resource type="AudioStream" uid="uid://bglonoosxqakl" path="res://src/bosses/slots/assets/sfx/BELL ATTACK/SLOT BELL WINDUP 3 NORMALISED.mp3" id="6_erite"]

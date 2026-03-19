@@ -226,7 +226,7 @@ offset_bottom = -115.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 20
-text = "v0.10 (Yorkshire Games Fest)"
+text = "v0.10.2 (Backroom collision rework)"
 horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

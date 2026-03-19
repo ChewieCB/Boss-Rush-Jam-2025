@@ -15,3 +15,5 @@ barrel_image = ExtResource("1_sic7u")
 barrel_cost = 1500
 barrel_prefab = ExtResource("2_8d67m")
 is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = true
