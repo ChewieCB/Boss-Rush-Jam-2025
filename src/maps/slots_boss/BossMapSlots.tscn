@@ -1,4 +1,4 @@
-[gd_scene load_steps=564 format=4 uid="uid://fccl23tqjubn"]
+[gd_scene load_steps=565 format=4 uid="uid://fccl23tqjubn"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_e32ik"]
 [ext_resource type="Script" path="res://src/maps/slots_boss/boss_map_slots.gd" id="1_wilwm"]
@@ -10,6 +10,7 @@
 [ext_resource type="Material" uid="uid://bucuh5hpwiyar" path="res://assets/textures/walls/grunge-concrete-dark.tres" id="7_fn066"]
 [ext_resource type="Material" uid="uid://b866btxbrgu0c" path="res://assets/textures/walls/rusted_door_top_seamless.tres" id="8_rdn7n"]
 [ext_resource type="Texture2D" uid="uid://buglbt62muqk7" path="res://assets/textures/walls/door_stain_glass_only_emission.png" id="8_utf8f"]
+[ext_resource type="Texture2D" uid="uid://c13mv8nmfmjfu" path="res://assets/textures/posters/turn_your_life_around_poster.png" id="8_xtfgm"]
 [ext_resource type="Material" uid="uid://bf1b16o6btq8d" path="res://assets/textures/placeholder/texture_dark_07.tres" id="10_547ao"]
 [ext_resource type="Material" uid="uid://ha0xas6i35jb" path="res://assets/textures/walls/vertical_industrial_wall.tres" id="10_fb4if"]
 [ext_resource type="Material" uid="uid://xom5yc1hof6t" path="res://assets/textures/floor/grate-transparent-trans.tres" id="11_f7dkl"]
@@ -9416,9 +9417,9 @@ size = Vector3(5, 4, 9)
 texture_albedo = ExtResource("6_xtkbg")
 
 [node name="Decal4" type="Decal" parent="Decals" index="3"]
-transform = Transform3D(1.32267e-07, -1, -4.15388e-08, 0.0263863, 4.50144e-08, -0.999652, 0.999652, 1.31124e-07, 0.0263863, 27.5, 8.05567, 12.2805)
-size = Vector3(5, 4, 9)
-texture_albedo = ExtResource("6_xtkbg")
+transform = Transform3D(1.32267e-07, -1, -4.15388e-08, 0.0263863, 4.50144e-08, -0.999652, 0.999652, 1.31124e-07, 0.0263863, 27.5, 8.75543, 12.262)
+size = Vector3(5, 4, 7.6)
+texture_albedo = ExtResource("8_xtfgm")
 
 [node name="StainGlassEmission1" type="Node3D" parent="Decals" index="4"]
 
