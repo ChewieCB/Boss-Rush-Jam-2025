@@ -327,7 +327,9 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		barrel.get_active_effect().on_gun_damage_calculation()
 
 	for i in range(n_shot_repeat):
-		if len(GameManager.equipped_gun_frame.shot_sfx) > 0:
+		if check_if_archetype_barrel_installed():
+			pass
+		elif len(GameManager.equipped_gun_frame.shot_sfx) > 0:
 			SoundManager.play_sound_with_pitch(GameManager.equipped_gun_frame.shot_sfx.pick_random(), randf_range(0.85, 1.15), "Gun")
 		else:
 			SoundManager.play_sound_with_pitch(TEMP_sfx_shoot, randf_range(0.85, 1.15), "Gun")

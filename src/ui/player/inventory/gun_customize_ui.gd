@@ -140,13 +140,12 @@ func full_refresh_ui(forced = false):
 	for child in inventory_normal_barrel_container.get_children():
 		child.queue_free()
 	for barrel_data in GameManager.inventory_barrels:
-		if not barrel_data.is_archetype_barrel:
-			var item_inst: ItemUI = barrel_item_ui_prefab.instantiate()
-			inventory_normal_barrel_container.add_child(item_inst)
-			item_inst.init(barrel_data, false, true)
-			item_inst.select_item.connect(_on_item_ui_select)
-			item_inst.interact_item.connect(_on_item_ui_interact)
-			item_inst.show_warning.connect(show_warning)
+		var item_inst: ItemUI = barrel_item_ui_prefab.instantiate()
+		inventory_normal_barrel_container.add_child(item_inst)
+		item_inst.init(barrel_data, false, true)
+		item_inst.select_item.connect(_on_item_ui_select)
+		item_inst.interact_item.connect(_on_item_ui_interact)
+		item_inst.show_warning.connect(show_warning)
 
 	for gun_frame_data in GameManager.inventory_gun_frames:
 		var item_inst: GunFrameItemUI = gun_frame_item_ui_prefab.instantiate()
@@ -172,13 +171,12 @@ func full_refresh_ui(forced = false):
 		if barrel_data in GameManager.inventory_barrels:
 			current_inventory.erase(barrel_data)
 			continue
-		if not barrel_data.is_archetype_barrel:
-			var shop_item_inst = shop_barrel_item_ui_prefab.instantiate()
-			shop_normal_barrel_container.add_child(shop_item_inst)
-			shop_item_inst.init(barrel_data)
-			shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
-			shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
-			shop_item_inst.item_ui.show_warning.connect(show_warning)
+		var shop_item_inst = shop_barrel_item_ui_prefab.instantiate()
+		shop_normal_barrel_container.add_child(shop_item_inst)
+		shop_item_inst.init(barrel_data)
+		shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
+		shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
+		shop_item_inst.item_ui.show_warning.connect(show_warning)
 
 	for gun_frame_data in GameManager.shop_gun_frames:
 		var shop_item_inst = shop_gun_frame_item_ui_prefab.instantiate()

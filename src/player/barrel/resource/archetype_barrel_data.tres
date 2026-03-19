@@ -21,6 +21,6 @@ barrel_info_summary = "Change the innate nature of the gun."
 barrel_image = ExtResource("1_1q24l")
 barrel_cost = 2200
 barrel_prefab = ExtResource("2_6yxa3")
-is_archetype_barrel = false
+is_archetype_barrel = true
 reloads_before_spin = 3
 locked_for_demo = false
