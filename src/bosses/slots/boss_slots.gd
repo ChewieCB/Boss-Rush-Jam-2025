@@ -4,6 +4,7 @@ class_name BossSlots
 signal charge_lined_up
 signal desired_height_reached
 signal slot_icon_chosen(slot_icon_idx: int)
+signal start_slots_spin
 
 
 # Juice TODO:
@@ -348,6 +349,7 @@ func _on_spin_slots_state_physics_processing(delta: float) -> void:
 	orbit_player(delta)
 
 func _on_spin_slots_targeting_state_entered() -> void:
+	start_slots_spin.emit()
 	debug_state_label.text = "Spin Slots | Targeting"
 	block_hurt_frame = true
 	sprite.texture = pulled_lever_sprite
@@ -516,8 +518,7 @@ func spawn_bell(pos: Vector3, size: float) -> Bell:
 		int(pow(2, 1 - 1)),
 	)
 	var result = space_state.intersect_ray(query)
-	if result:
-		pos.y = result.position.y
+	pos.y = result.position.y if result else 50.0
 
 	var bell: Bell = bell_scene.instantiate()
 	get_tree().root.get_child(7).add_child(bell)
