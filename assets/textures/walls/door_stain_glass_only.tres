@@ -1,8 +1,18 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://d12eg5gv8jgdq"]
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://d12eg5gv8jgdq"]
 
 [ext_resource type="Texture2D" uid="uid://b7tx2dpgmr7qw" path="res://assets/textures/walls/door_stain_glass_only.png" id="1_t2wfo"]
+[ext_resource type="Texture2D" uid="uid://buglbt62muqk7" path="res://assets/textures/walls/door_stain_glass_only_emission.png" id="2_pp356"]
 
 [resource]
+transparency = 1
 albedo_texture = ExtResource("1_t2wfo")
 metallic_specular = 0.0
+emission = Color(0.768627, 0.580392, 0.0156863, 1)
+emission_energy_multiplier = 2.69
+emission_texture = ExtResource("2_pp356")
+rim_tint = 0.23
+backlight = Color(0.789724, 0.824649, 0.493509, 1)
+backlight_texture = ExtResource("2_pp356")
+detail_mask = ExtResource("2_pp356")
+detail_blend_mode = 1
 texture_filter = 2

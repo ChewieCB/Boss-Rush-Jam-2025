@@ -23,16 +23,14 @@ add_face_position_metadata = false
 add_face_normal_metadata = false
 add_collision_shape_face_range_metadata = false
 classname = "func_moving_illusionary"
-description = "Geometry intended to be moved/rotated but without collision for performance. Builds a MovingIllusionaryBody3D with a MeshInstance3D."
+description = "Geometry intended to be moved/rotated but without collision for performance. Builds a AnimatableBody3D with a MeshInstance3D."
 func_godot_internal = false
 base_classes = Array[Resource]([ExtResource("1_4euqc")])
-class_properties = {
-"sync_to_physics": false
-}
+class_properties = {}
 class_property_descriptions = {}
 auto_apply_to_matching_node_properties = false
 meta_properties = {
 "color": Color(0.8, 0.8, 0.8, 1)
 }
-node_class = "MovingIllusionaryBody3D"
+node_class = "AnimatableBody3D"
 name_property = ""

@@ -3,6 +3,7 @@ class_name BossSlots
 
 signal charge_lined_up
 signal desired_height_reached
+signal slot_icon_chosen(slot_icon_idx: int)
 
 
 # Juice TODO:
@@ -382,7 +383,8 @@ func _on_spin_slots_spinning_state_entered() -> void:
 				var sprite_idx: int = slot_icons.find(slot_sprite.texture) + 1
 				var new_idx: int = wrapi(sprite_idx, 0, slot_icons.size())
 				slot_sprite.texture = slot_icons[new_idx]
-
+	
+	slot_icon_chosen.emit(next_attack_idx)
 	sfx_player.stop()
 	var choice_sfx: AudioStream = sfx_slot_picks[next_attack_idx]
 	sfx_player.stream = choice_sfx
