@@ -1,5 +1,7 @@
 extends BossMap
 
+@export var falling_particles: GPUParticles3D
+
 @export var fan_blades: AnimatableBody3D
 @export var slot_rollers: Array[AnimatableBody3D]
 @export var slot_roller_base_mat: StandardMaterial3D
@@ -22,6 +24,11 @@ func _ready() -> void:
 	super()
 	boss.slot_icon_chosen.connect(_on_boss_attack_chosen)
 	boss.start_slots_spin.connect(_on_boss_slots_spin)
+
+
+func _on_boss_trigger_volume_body_entered(body: Node3D) -> void:
+	falling_particles.queue_free()
+	super(body)
 
 
 func _physics_process(delta: float) -> void:

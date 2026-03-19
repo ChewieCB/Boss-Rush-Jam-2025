@@ -1,4 +1,4 @@
-[gd_scene load_steps=557 format=4 uid="uid://fccl23tqjubn"]
+[gd_scene load_steps=564 format=4 uid="uid://fccl23tqjubn"]
 
 [ext_resource type="PackedScene" uid="uid://b1aj8e7ult44k" path="res://src/maps/common/BossMapTemplate.tscn" id="1_e32ik"]
 [ext_resource type="Script" path="res://src/maps/slots_boss/boss_map_slots.gd" id="1_wilwm"]
@@ -84,6 +84,46 @@ size = Vector3(66, 26, 61)
 [sub_resource type="BoxShape3D" id="BoxShape3D_vt4q5"]
 resource_local_to_scene = true
 size = Vector3(10, 7.56494, 4.79053)
+
+[sub_resource type="Curve" id="Curve_17dup"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.577947, 0.00708663), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_r7on8"]
+curve = SubResource("Curve_17dup")
+
+[sub_resource type="Curve" id="Curve_mj0bq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.74, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_m84xj"]
+curve = SubResource("Curve_mj0bq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vvggk"]
+emission_shape = 3
+emission_box_extents = Vector3(10, 8, 8)
+angle_min = 1.07288e-05
+angle_max = 1.07288e-05
+spread = 0.0
+initial_velocity_min = 40.0
+initial_velocity_max = 60.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_m84xj")
+color = Color(1, 1, 1, 0.172549)
+alpha_curve = SubResource("CurveTexture_r7on8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sdugu"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.6, 0.378, 0.24, 0.427451)
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_mn6cm"]
+material = SubResource("StandardMaterial3D_sdugu")
+size = Vector2(5, 0.1)
+orientation = 1
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_w3526"]
 lightmap_size_hint = Vector2i(266, 266)
@@ -9325,8 +9365,9 @@ albedo = Color(0, 0, 0, 1)
 height_falloff = 1e-05
 edge_fade = 4.52548
 
-[node name="BossMapSlots" node_paths=PackedStringArray("fan_blades", "slot_rollers", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_e32ik")]
+[node name="BossMapSlots" node_paths=PackedStringArray("falling_particles", "fan_blades", "slot_rollers", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_e32ik")]
 script = ExtResource("1_wilwm")
+falling_particles = NodePath("FallingSpeedlineParticles")
 fan_blades = NodePath("FuncGodotMap/group_7991_FanBlades/entity_492_func_moving_illusionary")
 slot_rollers = [NodePath("FuncGodotMap/group_7854_DiagWallDeco/group_7853_SlotRollerWall/entity_80_func_moving_illusionary"), NodePath("FuncGodotMap/group_7854_DiagWallDeco/group_7853_SlotRollerWall/entity_81_func_moving_illusionary"), NodePath("FuncGodotMap/group_7854_DiagWallDeco/group_7853_SlotRollerWall/entity_82_func_moving_illusionary"), NodePath("FuncGodotMap/group_7856_DiagWallDeco/group_7855_SlotRollerWall/entity_88_func_moving_illusionary"), NodePath("FuncGodotMap/group_7856_DiagWallDeco/group_7855_SlotRollerWall/entity_89_func_moving_illusionary"), NodePath("FuncGodotMap/group_7856_DiagWallDeco/group_7855_SlotRollerWall/entity_90_func_moving_illusionary"), NodePath("FuncGodotMap/group_7858_DiagWallDeco/group_7857_SlotRollerWall/entity_96_func_moving_illusionary"), NodePath("FuncGodotMap/group_7858_DiagWallDeco/group_7857_SlotRollerWall/entity_97_func_moving_illusionary"), NodePath("FuncGodotMap/group_7858_DiagWallDeco/group_7857_SlotRollerWall/entity_98_func_moving_illusionary"), NodePath("FuncGodotMap/group_10260_DiagWallDeco/group_10259_SlotRollerWall/entity_504_func_moving_illusionary"), NodePath("FuncGodotMap/group_10260_DiagWallDeco/group_10259_SlotRollerWall/entity_505_func_moving_illusionary"), NodePath("FuncGodotMap/group_10260_DiagWallDeco/group_10259_SlotRollerWall/entity_506_func_moving_illusionary")]
 slot_roller_base_mat = ExtResource("3_2oa5o")
@@ -9570,7 +9611,15 @@ light_volumetric_fog_energy = 1.356
 light_bake_mode = 1
 omni_range = 10.0
 
-[node name="FuncGodotMap" parent="." index="8"]
+[node name="FallingSpeedlineParticles" type="GPUParticles3D" parent="." index="8"]
+transform = Transform3D(0, 2.18557e-07, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -2.18557e-07, -4.5, 54.3691, 2.875)
+amount = 600
+lifetime = 0.8
+visibility_aabb = AABB(-12.881, -12.9978, -12.8083, 41.2467, 25.9639, 25.7844)
+process_material = SubResource("ParticleProcessMaterial_vvggk")
+draw_pass_1 = SubResource("QuadMesh_mn6cm")
+
+[node name="FuncGodotMap" parent="." index="9"]
 local_map_file = "res://src/maps/slots_boss/slots_boss_arena.map"
 
 [node name="entity_0_worldspawn" type="StaticBody3D" parent="FuncGodotMap" index="0"]
@@ -13126,12 +13175,12 @@ metadata/func_godot_mesh_data = {}
 [node name="entity_548_mesh_instance" type="MeshInstance3D" parent="FuncGodotMap/layer_1_Navigation/group_7993_FloorNav/entity_548_func_detail_illusionary" index="0"]
 mesh = SubResource("ArrayMesh_1106r")
 
-[node name="LowerFog" type="FogVolume" parent="." index="9"]
+[node name="LowerFog" type="FogVolume" parent="." index="10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, -25.0751, 2.5)
 size = Vector3(66, 29, 64)
 material = SubResource("FogMaterial_6gtir")
 
-[node name="UpperFog" type="FogVolume" parent="." index="10"]
+[node name="UpperFog" type="FogVolume" parent="." index="11"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 48.5, 5)
 size = Vector3(41, 21, 42)
 material = SubResource("FogMaterial_sd7jr")
@@ -13143,7 +13192,7 @@ light_bake_mode = 1
 omni_range = 36.0
 omni_attenuation = 1.211
 
-[node name="Lights" type="Node3D" parent="." index="11"]
+[node name="Lights" type="Node3D" parent="." index="12"]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Lights" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3, 68, 3.17178)
