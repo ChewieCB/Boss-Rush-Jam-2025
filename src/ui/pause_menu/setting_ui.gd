@@ -528,3 +528,24 @@ func _on_demo_timeout_value_changed(value: float) -> void:
 
 func _on_barrel_spin_mode_dropdown_item_selected(index: int) -> void:
 	GameManager.CHEAT_spin_mode = index
+
+
+func _on_boss_teleport_dropdown_item_selected(index: int) -> void:
+	if index == 0:
+		return
+
+	var boss_id: BossCore.BossIdEnum = BossCore.BossIdEnum.BASE
+	var level_path = ""
+
+	match index:
+		1:
+			boss_id = BossCore.BossIdEnum.BARTENDER
+			level_path = "res://src/maps/bartender_boss/BossMapBartender.tscn"
+
+	if boss_id == BossCore.BossIdEnum.BASE:
+		return
+
+	GameManager.selected_boss_id = boss_id
+	GameManager.selected_level_path = level_path
+	GameManager.pause_ui.toggle_pause_menu()
+	GameManager.difficulty_menu.show_menu()

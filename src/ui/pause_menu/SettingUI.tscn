@@ -1115,6 +1115,27 @@ grow_vertical = 2
 text = "1.0"
 horizontal_alignment = 1
 
+[node name="BossTeleport" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/BossTeleport"]
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Boss Teleport"
+
+[node name="BossTeleportDropdown" type="OptionButton" parent="TabContainer/DEBUG/VBoxContainer/BossTeleport"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 504.0
+offset_bottom = 38.0
+selected = 0
+item_count = 2
+popup/item_0/text = "None"
+popup/item_1/text = "Bartender"
+popup/item_1/id = 1
+
 [node name="SettingUIBorder" type="NinePatchRect" parent="."]
 self_modulate = Color(0.902344, 0.776165, 0, 1)
 layout_mode = 1
@@ -1124,9 +1145,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -416.0
-offset_top = -404.0
+offset_top = -420.0
 offset_right = 416.0
-offset_bottom = 372.0
+offset_bottom = 356.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_1sxb2")
@@ -1219,11 +1240,11 @@ text = "Back"
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BossOneShot/BossOneShotToggle" to="." method="_on_boss_one_shot_toggle_toggled"]
 [connection signal="item_selected" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_barrel_spin_mode_dropdown_item_selected"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="play_button_hover_sfx"]
-[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/BarrelSpinMode/BarrelSpinModeDropdown" to="." method="_on_boss_one_shot_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/Freecam/FreecamToggle" to="." method="_on_freecam_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/DEBUG/VBoxContainer/Timescale/TimescaleSlider" to="." method="_on_timescale_slider_value_changed"]
+[connection signal="item_selected" from="TabContainer/DEBUG/VBoxContainer/BossTeleport/BossTeleportDropdown" to="." method="_on_boss_teleport_dropdown_item_selected"]
 [connection signal="mouse_entered" from="BackButton" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="timeout" from="KeybindTimer" to="." method="_on_keybind_timer_timeout"]
