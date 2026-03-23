@@ -925,11 +925,13 @@ size = Vector3(0.2, 1.1, 0.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_nmxo7"]
 size = Vector3(0.2, 1.1, 0.2)
 
-[node name="BossMapBartender" node_paths=PackedStringArray("nav_parent") instance=ExtResource("1_vcodf")]
+[node name="BossMapBartender" node_paths=PackedStringArray("nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_vcodf")]
 script = ExtResource("2_ikfam")
 sfx_fire_start = ExtResource("3_qvoi0")
 sfx_fire_loop = ExtResource("4_w5yjf")
 nav_parent = NodePath("FuncGodotMap")
+floor_parent = NodePath("FuncGodotMap/entity_0_worldspawn")
+floor_mesh = NodePath("FuncGodotMap/entity_0_worldspawn/entity_0_mesh_instance")
 
 [node name="LightmapGI" parent="." index="3"]
 light_data = ExtResource("6_4rrpe")

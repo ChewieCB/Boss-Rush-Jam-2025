@@ -2012,6 +2012,13 @@ event = &"start_shotgun_blast"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
+[node name="toShotgunVolley" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="4"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ShotgunVolley")
+event = &"start_shotgun_volley"
+guard = ExtResource("28_8rmxp")
+delay_in_seconds = "0.0"
+
 [node name="ThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
 script = ExtResource("5_2jcim")
 initial_state = NodePath("Targeting")
@@ -2273,6 +2280,49 @@ guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
 [node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunBlast" index="6"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"reposition"
+delay_in_seconds = "0.0"
+
+[node name="ShotgunVolley" type="Node" parent="StateChart/Root/Phase/Phase2" index="7"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunVolley" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toBursting" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunVolley/Targeting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Bursting")
+event = &"start_bursting"
+delay_in_seconds = "0.0"
+
+[node name="Bursting" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunVolley" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunVolley/Bursting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Recover")
+event = &"end_bursting"
+delay_in_seconds = "0.0"
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunVolley/Bursting" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"next_burst"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunVolley" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunVolley/Recover" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunVolley" index="3"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Idle")
 event = &"reposition"
@@ -2629,12 +2679,16 @@ one_shot = true
 [node name="ShotgunTimer" type="Timer" parent="." index="24"]
 one_shot = true
 
-[node name="AnimationPlayer" parent="." index="26"]
+[node name="ShotgunVolleyTimer" type="Timer" parent="." index="25"]
+wait_time = 0.35
+one_shot = true
+
+[node name="AnimationPlayer" parent="." index="27"]
 libraries = {
 "": SubResource("AnimationLibrary_k4utu")
 }
 
-[node name="SleightOfHandTimer" type="Timer" parent="." index="28"]
+[node name="SleightOfHandTimer" type="Timer" parent="." index="29"]
 wait_time = 3.0
 
 [connection signal="state_entered" from="StateChart/Root/Status/BrewBuffs/NoBuff" to="." method="_on_no_buff_state_entered"]
@@ -2676,6 +2730,10 @@ wait_time = 3.0
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ShotgunBlast/Targeting" to="." method="_on_shotgun_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ShotgunBlast/Shooting" to="." method="_on_shotgun_shooting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ShotgunBlast/Recover" to="." method="_on_shotgun_recover_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase2/ShotgunVolley" to="." method="_on_shotgun_volley_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ShotgunVolley/Targeting" to="." method="_on_shotgun_volley_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ShotgunVolley/Bursting" to="." method="_on_shotgun_volley_bursting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ShotgunVolley/Recover" to="." method="_on_shotgun_volley_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/Idle" to="." method="_on_phase_1_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ThrowBrokenBottle/Targeting" to="." method="_on_throw_broken_bottle_targeting_state_entered"]
@@ -2698,4 +2756,5 @@ wait_time = 3.0
 [connection signal="body_exited" from="ShotgunTriggerArea" to="." method="_on_shotgun_trigger_area_body_exited"]
 [connection signal="timeout" from="BuffExpireTimer" to="." method="_on_buff_expire_timer_timeout"]
 [connection signal="timeout" from="ShotgunTimer" to="." method="_on_shotgun_timer_timeout"]
+[connection signal="timeout" from="ShotgunVolleyTimer" to="." method="_on_shotgun_volley_timer_timeout"]
 [connection signal="timeout" from="SleightOfHandTimer" to="." method="_on_sleight_of_hand_timer_timeout"]

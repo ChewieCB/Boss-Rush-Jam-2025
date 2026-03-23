@@ -95,6 +95,7 @@ const SHOTGUN_SHOTS_TO_FIRE_PHASE_3 = 2
 @export_subgroup("Shotgun Volley")
 @export var min_shotgun_volley_burst: int = 2
 @export var max_shotgun_volley_burst: int = 4
+@onready var shotgun_volley_timer: Timer = $ShotgunVolleyTimer
 const SHOT_PER_BURST = 2
 var shotgun_volley_enabled = false
 var burst_to_fire = 0
@@ -292,69 +293,66 @@ func select_attack_phase_2() -> void:
 	var attack_str: String = ""
 	var attack_roll: int = randi_range(0, 99)
 
-	if not brew_cooldown_timer.is_stopped():
-		if $StateChart/Root/Status/BrewBuffs/NoBuff.active:
-			# No buffs, Buff on cooldown:
-			#
-			# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
-			# 5% chance of broken bottle
-			# 10% chance of molotov/tar/poison
-			# 85% chance of shotgun blast
-			if attack_roll < 5:
-				attack_str = "start_throw_broken_bottle"
-			elif attack_roll < 15:
-				attack_str = "start_throw_drink"
-			else:
-				attack_str = "start_shotgun_blast"
-		elif $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
-			# Strength buff, Buff on cooldown:
-			#
-			# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
-			# 30% chance of shotgun blast
-			# 70% chance of broken bottle/keg
-			if attack_roll < 30:
-				attack_str = "start_shotgun_blast"
-			else:
-				attack_str = "start_throw_drink"
-		elif $StateChart/Root/Status/BrewBuffs/DefenceBuff.active:
-			# Defense buff, Buff on cooldown:
-			#
-			# Focus on elemental bottle attacks, occasionally shotgun blasts and broken bottle attacks
-			# 10% chance of broken bottle
-			# 25% chance of shotgun blast
-			# 65% chance of molotov/tar/poison
-			if attack_roll < 10:
-				attack_str = "start_throw_broken_bottle"
-			elif attack_roll < 35:
-				attack_str = "start_shotgun_blast"
-			else:
-				attack_str = "start_throw_drink"
-		elif $StateChart/Root/Status/BrewBuffs/SpeedBuff.active:
-			# Speed buff, Buff on cooldown:
-			#
-			# Focus on shotgun blasts, broken bottle attacks, and occasional elemental bottle attacks
-			# 10% chance of molotov/tar/poison
-			# 15% chance of broken bottle
-			# 75% chance of shotgun blast
-			if attack_roll < 10:
-				attack_str = "start_throw_drink"
-			elif attack_roll < 25:
-				attack_str = "start_throw_broken_bottle"
-			else:
-				attack_str = "start_shotgun_blast"
+	# if not brew_cooldown_timer.is_stopped():
+	# 	if $StateChart/Root/Status/BrewBuffs/NoBuff.active:
+	# 		# No buffs, Buff on cooldown:
+	# 		#
+	# 		# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
+	# 		# 5% chance of broken bottle
+	# 		# 10% chance of molotov/tar/poison
+	# 		# 85% chance of shotgun blast
+	# 		if attack_roll < 5:
+	# 			attack_str = "start_throw_broken_bottle"
+	# 		elif attack_roll < 15:
+	# 			attack_str = "start_throw_drink"
+	# 		else:
+	# 			attack_str = "start_shotgun_blast"
+	# 	elif $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
+	# 		# Strength buff, Buff on cooldown:
+	# 		#
+	# 		# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
+	# 		# 30% chance of shotgun blast
+	# 		# 70% chance of broken bottle/keg
+	# 		if attack_roll < 30:
+	# 			attack_str = "start_shotgun_blast"
+	# 		else:
+	# 			attack_str = "start_throw_drink"
+	# 	elif $StateChart/Root/Status/BrewBuffs/DefenceBuff.active:
+	# 		# Defense buff, Buff on cooldown:
+	# 		#
+	# 		# Focus on elemental bottle attacks, occasionally shotgun blasts and broken bottle attacks
+	# 		# 10% chance of broken bottle
+	# 		# 25% chance of shotgun blast
+	# 		# 65% chance of molotov/tar/poison
+	# 		if attack_roll < 10:
+	# 			attack_str = "start_throw_broken_bottle"
+	# 		elif attack_roll < 35:
+	# 			attack_str = "start_shotgun_blast"
+	# 		else:
+	# 			attack_str = "start_throw_drink"
+	# 	elif $StateChart/Root/Status/BrewBuffs/SpeedBuff.active:
+	# 		# Speed buff, Buff on cooldown:
+	# 		#
+	# 		# Focus on shotgun blasts, broken bottle attacks, and occasional elemental bottle attacks
+	# 		# 10% chance of molotov/tar/poison
+	# 		# 15% chance of broken bottle
+	# 		# 75% chance of shotgun blast
+	# 		if attack_roll < 10:
+	# 			attack_str = "start_throw_drink"
+	# 		elif attack_roll < 25:
+	# 			attack_str = "start_throw_broken_bottle"
+	# 		else:
+	# 			attack_str = "start_shotgun_blast"
+	# else:
+
+	if attack_roll < 20:
+		attack_str = "start_shotgun_blast"
+	if attack_roll < 40:
+		attack_str = "start_shotgun_volley"
+	elif attack_roll < 60:
+		attack_str = "start_throw_broken_bottle"
 	else:
-		# Buff ready to brew:
-		#
-		# Focus on brewing, minor chances for shotgun and elemental bottle attacks
-		# 5% chance of shotgun blast
-		# 5% chance of molotov/tar/poison
-		# 90% chance of brew drink
-		if attack_roll < 5:
-			attack_str = "start_shotgun_blast"
-		elif attack_roll < 10:
-			attack_str = "start_throw_drink"
-		else:
-			attack_str = "start_brew_drink"
+		attack_str = "start_throw_drink"
 
 	state_chart.send_event(attack_str)
 
@@ -691,9 +689,7 @@ func _on_shotgun_blast_state_exited() -> void:
 
 
 func _on_shotgun_timer_timeout() -> void:
-	# We use the same timer for 2 similar attacks
 	state_chart.send_event("start_shooting")
-	state_chart.send_event("start_bursting")
 
 #endregion
 
@@ -705,7 +701,7 @@ func _on_shotgun_volley_targeting_state_entered() -> void:
 	state_chart.send_event("attack_telegraph")
 	anim_player.play("shotgun_telegraph")
 	await anim_player.animation_finished
-	shotgun_timer.start(telegraph_time)
+	shotgun_volley_timer.start(telegraph_time)
 	burst_to_fire = randi_range(2, 4)
 
 func _on_shotgun_volley_bursting_state_entered() -> void:
@@ -726,7 +722,11 @@ func _on_shotgun_volley_recover_state_entered() -> void:
 	state_chart.send_event("reposition")
 
 func _on_shotgun_volley_state_exited() -> void:
-	shotgun_timer.stop()
+	shotgun_volley_timer.stop()
+
+func _on_shotgun_volley_timer_timeout() -> void:
+	state_chart.send_event("start_bursting")
+
 
 #endregion
 
