@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://caig5lob5gwoh"
+path="res://.godot/imported/slots_boss_arena.7.map-4cd14e7a116f4d74c4cd4088351424ba.tres"
+
+[deps]
+
+source_file="res://src/maps/slots_boss/autosave/slots_boss_arena.7.map"
+dest_files=["res://.godot/imported/slots_boss_arena.7.map-4cd14e7a116f4d74c4cd4088351424ba.tres"]
+
+[params]
+
