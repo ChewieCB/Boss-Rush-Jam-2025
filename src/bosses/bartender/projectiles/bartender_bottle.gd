@@ -18,9 +18,11 @@ var damage = 1
 var projectile_speed = 100
 var current_dir = Vector3.ZERO
 var bartender_owner: BossCore
+var start_pos: Vector3
 
-func init(start_pos: Vector3, dir: Vector3, _damage: int, _speed: float):
+func init(_start_pos: Vector3, dir: Vector3, _damage: int, _speed: float):
 	life_timer.start()
+	start_pos = _start_pos
 	projectile_speed = _speed
 	damage = _damage
 	current_dir = dir.normalized()
@@ -64,9 +66,12 @@ func spawn_break_effect():
 		var inst = break_effect_prefab.instantiate()
 		# Spawn in world environment
 		GameManager.player.get_parent().add_child(inst)
-		inst.global_position = global_position - current_dir
+		inst.global_position = global_position - current_dir # Avoid clipping
 		if bartender_owner:
 			bartender_owner.health_component.died.connect(inst.queue_free)
+			var thrown_dir = global_position - bartender_owner.global_position
+			thrown_dir.y = 0
+			inst.look_at(global_position + thrown_dir.normalized())
 
 	const CLOUD_ANGLE_RAND = 0.2
 	const CLOUD_Y_OFFSET = 0.1

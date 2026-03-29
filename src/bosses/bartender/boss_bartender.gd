@@ -336,9 +336,9 @@ func select_attack_phase_2() -> void:
 
 	if attack_roll < 20:
 		attack_str = "start_shotgun_blast"
-	if attack_roll < 40:
+	if attack_roll < 30:
 		attack_str = "start_shotgun_volley"
-	elif attack_roll < 60:
+	elif attack_roll < 40:
 		attack_str = "start_throw_broken_bottle"
 	else:
 		attack_str = "start_throw_drink"
@@ -404,7 +404,7 @@ func select_attack_phase_3() -> void:
 	# 			attack_str = "start_shotgun_blast"
 	# else:
 
-	if attack_roll < 45:
+	if attack_roll < 25:
 		attack_str = "start_shotgun_volley"
 	else:
 		attack_str = "start_throw_drink"
@@ -559,7 +559,7 @@ func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle 
 	var throw_force = proj_spawn_marker.global_position.distance_to(target.global_position)
 	# Magic number that make bartender throw better
 	if throw_force >= 30:
-		throw_force *= 0.7
+		throw_force *= 0.5
 	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
 		throw_force *= 2
 	else:
@@ -756,6 +756,7 @@ func _on_throw_drink_targeting_state_entered() -> void:
 		bottle_types_no_barrel.remove_at(BottleAttack.BARREL)
 		if special_bottle_enabled:
 			current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack) as BottleAttack
+			current_bottle_type = BottleAttack.FIRE # DEBUG
 		else:
 			current_bottle_type = BottleAttack.EMPTY
 	await get_tree().create_timer(0.2 * delay_modifier, false).timeout
