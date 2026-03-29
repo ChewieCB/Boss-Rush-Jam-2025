@@ -22,8 +22,12 @@ extends BossCore
 # New move: Dodge: Give bartender a small chance to dodge attack by quickly move sideway. Programming-wise, he can dodge attack
 # by reading player input (player press shoot when aim ray intersect with his hitbox).
 #
-# New move: Flaming wall: Use several molotovs to create a flaming wall that block LoS (but he can shoot since he an AI and dont have
-# such weakness).
+# New move (DONE): Flaming wall: Use several molotovs to create a flaming wall that block LoS (but he can shoot since he an AI and dont have
+# such weakness) and prevent movement.
+#
+# New move: Infernal Countertop: Lit the whole counter top on fire, block vision.
+#
+# New move: Drunken Bullet Dance: Jump to the center and shoot randomly in 360 degree (like Katarina Ultimate)
 #
 # Modify move: Barrel (which only used in Str buff) should be explosive by default.
 #
@@ -860,6 +864,12 @@ func _on_brew_drink_recover_state_entered() -> void:
 
 #endregion
 
+
+#region Countertop Flame
+func set_countertop_on_fire():
+	boss_map.create_countertop_firewall()
+
+#endregion
 
 # TODO - should probably be a global utility function
 func get_random_enum_key(enum_keys: Array, previous_key: int = -1) -> int:

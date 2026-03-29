@@ -32,6 +32,7 @@ enum BossStatusEffect {
 	BLEEDING # Take damage based on their movement
 }
 
+var boss_map: BossMap
 @export var target: Node3D:
 	set(value):
 		target = value
@@ -443,12 +444,12 @@ func drop_barrel(target_pos: Vector3 = target.global_position) -> void:
 	if barrel_to_drop in GameManager.inventory_barrels or barrel_to_drop in GameManager.equipped_barrels:
 		push_warning("Barrel [%s] already collected, exiting level." % barrel_to_drop.barrel_name)
 		# If we don't have a barrel to spawn, emit the signal to end the level
-		defeated.emit(self)
+		defeated.emit(self )
 		return
 
 	if barrel_pickup_scene == null:
 		push_warning("No barrel to spawn.")
-		defeated.emit(self)
+		defeated.emit(self )
 		return
 
 	# Instance a pickup object with the barrel data
@@ -517,7 +518,7 @@ func _on_barrel_collected(_data: BarrelDataResource) -> void:
 	#
 	# Wait for player to click continue
 	#
-	defeated.emit(self)
+	defeated.emit(self )
 
 
 func select_attack() -> void:
@@ -638,7 +639,7 @@ func hit_effect_sprite_shake():
 			_original_sprite_position + offset,
 			hit_effect_shake_duration / shake_time
 		)
-	tween.tween_property(self, "position", _original_sprite_position, hit_effect_shake_duration / shake_time)
+	tween.tween_property(self , "position", _original_sprite_position, hit_effect_shake_duration / shake_time)
 
 func hit_effect_sprite_flash():
 	var tween = create_tween()

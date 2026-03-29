@@ -6,6 +6,7 @@ class_name HazardArea
 @export var duration: float = 5
 @export var slow_perc: float = 0
 @export var puddle_decal: Decal
+@export var gravity_enabled = true
 
 @export var sfx_break: Array[AudioStream]
 @export var sfx_effect: Array[AudioStream]
@@ -54,7 +55,8 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if not raycast.is_colliding():
-		global_position += Vector3(0, -9.8, 0) * delta
+		if gravity_enabled:
+			global_position += Vector3(0, -9.8, 0) * delta
 	else:
 		stopped_moving = true
 		var col_point = raycast.get_collision_point()

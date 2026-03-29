@@ -1,5 +1,15 @@
 extends BossMap
 
+@export_group("Flame Countertop")
+@export var first_countertop_flame_marker: Marker3D
+@export var countertop_flame_prefab: PackedScene
+@export var countertop_flame_duration = 15
+var countertop_is_on_fire = false
+const COUNTERTOP_FIRE_DISTANCE = 3.5
+const COUNTERTOP_FIRE_COUNT = 10
+const TIME_BETWEEN_COUTNERTOP_FIRE_SPAWN = 0.2
+@onready var countertop_fire_holder: Node3D = $CountertopFlamingWallHolder
+@onready var countertop_fire_timer: Timer = $CountertopFlamingWallHolder/CountertopFlameTimer
 @export_group("SFX")
 @export var sfx_fire_start: AudioStream
 @export var sfx_fire_loop: AudioStream
@@ -7,7 +17,9 @@ extends BossMap
 
 func _ready() -> void:
 	boss.fire_started.connect(_on_fire_started)
-	super()
+	boss.boss_map = self
+	super ()
+	create_countertop_firewall()
 
 
 func _on_fire_started() -> void:
@@ -19,9 +31,28 @@ func _on_fire_started() -> void:
 
 func _on_player_death() -> void:
 	SoundManager.stop_ambient_sound(sfx_fire_loop, 0.5)
-	super()
+	super ()
 
 
 func _on_boss_defeated(_boss: BossCore) -> void:
 	SoundManager.stop_ambient_sound(sfx_fire_loop, 0.5)
-	super(_boss)
+	super (_boss)
+
+
+func create_countertop_firewall() -> void:
+	if countertop_is_on_fire:
+		return
+	for i in range(COUNTERTOP_FIRE_COUNT):
+		var inst: HazardArea = countertop_flame_prefab.instantiate()
+		inst.duration = countertop_flame_duration
+		countertop_fire_holder.add_child(inst)
+		if i == 0:
+			inst.global_position = first_countertop_flame_marker.global_position
+		else:
+			inst.global_position = first_countertop_flame_marker.global_position + Vector3((COUNTERTOP_FIRE_DISTANCE * i), 0, 0)
+		await get_tree().create_timer(TIME_BETWEEN_COUTNERTOP_FIRE_SPAWN).timeout
+	countertop_is_on_fire = true
+	countertop_fire_timer.start(countertop_flame_duration)
+
+func _on_countertop_flame_timer_timeout() -> void:
+	countertop_is_on_fire = false
