@@ -108,7 +108,7 @@ var base_custom_projectile_prefab: PackedScene = BASE_CUSTOM_PROJECTILE_PREFAB
 @onready var barrel_container = $BarrelContainer
 #@onready var gun_status_label: Label3D = $PlaceholderUI/StatusLabel
 @onready var bullet_spawn_marker = $BulletStartPos
-@onready var jam_timer: Timer = $JamTimer
+#@onready var jam_timer: Timer = $JamTimer
 @onready var failed_shoot_sfx_timer: Timer = $FailToShootSFXTimer
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var muzzle_flash_light: OmniLight3D = $BulletStartPos/MuzzleFlashLight
@@ -846,10 +846,10 @@ func reset_modifier(reload_reset = false):
 		projectile_prefab_can_be_pooled = false
 
 
-func jam_the_gun(duration: float = 1.0):
-	#show_gun_status("Jammed...", Color.DIM_GRAY, duration)
-	jam_timer.start(duration)
-	is_jammed = true
+#func jam_the_gun(duration: float = 1.0):
+	##show_gun_status("Jammed...", Color.DIM_GRAY, duration)
+	#jam_timer.start(duration)
+	#is_jammed = true
 
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
@@ -877,9 +877,9 @@ func crit_damage(_damage: int) -> void:
 	##tween.tween_property(gun_status_label, "modulate:a", 0, 1.0)
 
 
-func _on_jam_timer_timeout() -> void:
-	is_jammed = false
-	#gun_status_label.visible = false
+#func _on_jam_timer_timeout() -> void:
+	#is_jammed = false
+	##gun_status_label.visible = false
 
 
 func play_failed_shoot_sfx():
@@ -1079,6 +1079,50 @@ func _on_archetype_unequipped(barrel: SpinBarrel, _barrel_idx: int) -> void:
 	if barrel:
 		if barrel.get_active_effect().is_archetype:
 			set_stat_from_gun_frame()
+
+
+## Gun JAM
+func set_barrels_jammed() -> void:
+	for i in range(installed_barrels.size()):
+		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
+		state_machine.travel("jam")
+		# TODO - SFX
+		#SoundManager.play_sound(TEMP_sfx_spin, "Gun")
+
+
+func set_barrels_unjammed() -> void:
+	for i in range(installed_barrels.size()):
+		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
+		state_machine.travel("idle")
+		# TODO - SFX
+		#SoundManager.play_sound(TEMP_sfx_spin, "Gun")
+
+func jam_gun(pre_anim_delay: float = 1.0) -> void:
+	is_jammed = true
+	set_barrels_jammed()
+	
+	await get_tree().create_timer(pre_anim_delay, false).timeout
+	
+	var idle_state: String = idle_frame_state.get_current_node()
+	if not idle_state.ends_with("idle"):
+		await post_reload_anim_end
+		idle_state = idle_frame_state.get_current_node()
+		
+	var anim_library_prefix: String = ""
+	var jam_state: String = ""
+	match idle_state:
+		"shotgun_idle":
+			jam_state = "shotgun_jam"
+		"smg_idle":
+			jam_state = "smg_jam"
+		"rifle_idle":
+			jam_state = "rifle_jam"
+	
+	idle_frame_state.start(jam_state)
+
+
+func clear_jam() -> void:
+	is_jammed = false
 
 
 func _debug_anim_tree_state_trace(state_name: String, transition: String) -> void:

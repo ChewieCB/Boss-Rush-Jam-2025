@@ -25,7 +25,8 @@ icon_id = 25
 [node name="GamblersPrecision" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_s01a7")
 crit_chance = 25.0
-jam_chance_if_missed = 20.0
+jam_chance_if_missed = 100.0
+jam_anim_delay = 1.2
 display_text_title = "Gambler's Precision"
 display_text_tag = "Are you feeling lucky?"
 positive_desc = Array[String](["25% chance to crit on hit"])

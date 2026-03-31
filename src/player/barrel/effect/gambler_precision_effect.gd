@@ -7,6 +7,7 @@ extends BaseBarrelEffect
 @export var crit_chance: float
 ## In %, so 50 = 50%
 @export var jam_chance_if_missed: float
+@export var jam_anim_delay: float = 1.0
 
 var hit_count = 0
 var projectile_count = 0
@@ -26,7 +27,7 @@ func on_projectile_destroyed(_hit_boss: bool):
 		if hit_count <= 0:
 			var roll = randi_range(1, 100)
 			if roll <= jam_chance_if_missed:
-				owner_barrel.owner_gun.jam_the_gun(2)
+				owner_barrel.owner_gun.jam_gun(jam_anim_delay)
 
 
 func on_projectile_spawn(projectile: BaseBullet):
