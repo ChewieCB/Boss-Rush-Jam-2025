@@ -1,7 +1,8 @@
-[gd_scene load_steps=151 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=152 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
+[ext_resource type="Material" uid="uid://bn1et3wcl7y4t" path="res://src/player/gun/assets/material/barrel_jam_overlay_mat.tres" id="2_sh3u0"]
 [ext_resource type="AudioStream" uid="uid://bxq16mdpw6cvr" path="res://src/player/gun/assets/sfx/temp/Shotgun_Dry_Fire.mp3" id="3_doij6"]
 [ext_resource type="AudioStream" uid="uid://cqdjicto0uwp2" path="res://src/player/gun/assets/sfx/reloading/slot_roller.mp3" id="4_jq6y4"]
 [ext_resource type="AudioStream" uid="uid://d3psu8yx8uldk" path="res://src/player/gun/assets/sfx/temp/Shotgun_Cock_only.mp3" id="5_cutjd"]
@@ -3801,7 +3802,7 @@ color = Color(1, 1, 1, 0.552941)
 alpha_curve = SubResource("CurveTexture_g6igg")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7xhdi"]
-render_priority = 1
+render_priority = 2
 transparency = 1
 vertex_color_use_as_albedo = true
 albedo_color = Color(0.1, 0.1, 0.1, 0.745098)
@@ -3852,6 +3853,7 @@ smg_flash_sprite = NodePath("SpriteParent/FramesParent/SMGFrame/SMGSprite/Muzzle
 smg_shell_particles = NodePath("SpriteParent/FramesParent/SMGFrame/SMGSprite/ShellSpawnPos/GPUParticles3D")
 rifle_flare_sprite = NodePath("SpriteParent/FramesParent/RifleFrame/RifleSprite/MuzzleflareLightSprite")
 rifle_flash_sprite = NodePath("SpriteParent/FramesParent/RifleFrame/RifleSprite/MuzzleflareLightSprite/MuzzleFlashSprite")
+barrel_jam_mat = ExtResource("2_sh3u0")
 TEMP_sfx_shoot = SubResource("AudioStreamRandomizer_wqldo")
 TEMP_sfx_dry = ExtResource("3_doij6")
 TEMP_sfx_spin = ExtResource("4_jq6y4")

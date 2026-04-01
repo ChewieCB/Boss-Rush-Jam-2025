@@ -51,7 +51,13 @@ var muzzle_flash_sprite: Sprite3D
 @onready var barrel_spark_2: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel2Icon/JamSpark
 @onready var barrel_spark_3: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel3Icon/JamSpark
 @onready var barrel_sparks: Array[GPUParticles3D] = [barrel_spark_1, barrel_spark_2, barrel_spark_3]
+# Jams
 @onready var jam_dust_particles: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/JamDust
+@export var barrel_jam_mat: StandardMaterial3D
+@export var jam_time: float = 0.6
+var barrel_cached_materials: Array[StandardMaterial3D] = []
+
+
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
 
 @onready var anim_tree: AnimationTree = $AnimationTree
@@ -1092,13 +1098,25 @@ func _on_archetype_unequipped(barrel: SpinBarrel, _barrel_idx: int) -> void:
 
 ## Gun JAM
 func set_barrels_jammed() -> void:
-	for i in range(installed_barrels.size()):
+	barrel_cached_materials = []
+	var num_barrels: int = installed_barrels.size()
+	
+	for i in range(num_barrels):
+		barrel_cached_materials.append(
+			barrel_icon_meshes[i].get_surface_override_material(0)
+		)
+	
+	var shuffled_barrel_idxs = range(num_barrels)
+	shuffled_barrel_idxs.shuffle()
+	for i in shuffled_barrel_idxs:
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		state_machine.travel("jam")
+		# Add red X overlay to indicate jam
+		_flash_icon(i)
+		await get_tree().create_timer(0.05, false).timeout
 		#barrel_sparks[i].restart()
 		# TODO - SFX
 		#SoundManager.play_sound(TEMP_sfx_spin, "Gun")
-
 
 func set_barrels_unjammed() -> void:
 	jam_dust_particles.emitting = false
@@ -1106,8 +1124,10 @@ func set_barrels_unjammed() -> void:
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		state_machine.travel("idle")
 		barrel_sparks[i].restart()
+		_remove_icon_jam_overlay(i)
 		# TODO - SFX
 		#SoundManager.play_sound(TEMP_sfx_spin, "Gun")
+
 
 func jam_gun(pre_anim_delay: float = 1.0) -> void:
 	is_jammed = true
@@ -1133,9 +1153,31 @@ func jam_gun(pre_anim_delay: float = 1.0) -> void:
 	
 	idle_frame_state.start(jam_state)
 
-
 func clear_jam() -> void:
 	is_jammed = false
+
+
+func _add_icon_jam_overlay(idx: int) -> StandardMaterial3D:
+	var _cached_mat = barrel_icon_meshes[idx].get_surface_override_material(0)
+	var _temp_mat = _cached_mat.duplicate()
+	_temp_mat.next_pass = barrel_jam_mat
+	
+	barrel_icon_meshes[idx].set_surface_override_material(0, _temp_mat)
+	return _cached_mat
+
+func _remove_icon_jam_overlay(idx: int) -> void:
+	var _cached_mat = barrel_cached_materials[idx]
+	barrel_icon_meshes[idx].set_surface_override_material(0, _cached_mat)
+
+
+func _flash_icon(i: int, flash_time: float = 0.08, flashes: int = 3, hold_on_finish: bool = true) -> void:
+	for j in range(flashes ):
+		barrel_cached_materials[i] = _add_icon_jam_overlay(i)
+		await get_tree().create_timer(flash_time/2, false).timeout
+		_remove_icon_jam_overlay(i)
+		await get_tree().create_timer(flash_time/2, false).timeout
+	if hold_on_finish:
+		barrel_cached_materials[i] = _add_icon_jam_overlay(i)
 
 
 func _debug_anim_tree_state_trace(state_name: String, transition: String) -> void:
