@@ -47,6 +47,10 @@ var muzzle_flash_sprite: Sprite3D
 @onready var barrel_icon_mesh_2: MeshInstance3D = $EffectIconsViewport/EffectIconsParent/Barrel2Icon
 @onready var barrel_icon_mesh_3: MeshInstance3D = $EffectIconsViewport/EffectIconsParent/Barrel3Icon
 @onready var barrel_icon_meshes: Array[MeshInstance3D] = [barrel_icon_mesh_1, barrel_icon_mesh_2, barrel_icon_mesh_3]
+@onready var barrel_spark_1: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel1Icon/BulletSpark
+@onready var barrel_spark_2: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel2Icon/BulletSpark
+@onready var barrel_spark_3: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel3Icon/BulletSpark
+@onready var barrel_sparks: Array[GPUParticles3D] = [barrel_spark_1, barrel_spark_2, barrel_spark_3]
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
 
 @onready var anim_tree: AnimationTree = $AnimationTree
@@ -1086,6 +1090,7 @@ func set_barrels_jammed() -> void:
 	for i in range(installed_barrels.size()):
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		state_machine.travel("jam")
+		barrel_sparks[i].restart()
 		# TODO - SFX
 		#SoundManager.play_sound(TEMP_sfx_spin, "Gun")
 
@@ -1094,6 +1099,7 @@ func set_barrels_unjammed() -> void:
 	for i in range(installed_barrels.size()):
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		state_machine.travel("idle")
+		barrel_sparks[i].restart()
 		# TODO - SFX
 		#SoundManager.play_sound(TEMP_sfx_spin, "Gun")
 

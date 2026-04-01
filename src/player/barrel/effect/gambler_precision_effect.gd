@@ -18,7 +18,7 @@ func on_prepare_to_fire():
 	projectile_count = 0
 
 func on_projectile_destroyed(_hit_boss: bool):
-	super (_hit_boss)
+	super(_hit_boss)
 	projectile_count += 1
 	# print("projectile_count {0}, modified_projectile_amount{1}".format([projectile_count, owner_barrel.owner_gun.modified_projectile_amount]))'
 	
@@ -34,5 +34,5 @@ func on_projectile_spawn(projectile: BaseBullet):
 	projectile.crit_chance += (crit_chance / 100.0)
 
 func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
-	super (_damage, _has_pos, _pos)
+	super(_damage, _has_pos, _pos)
 	hit_count += 1
