@@ -1,4 +1,4 @@
-[gd_scene load_steps=141 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=151 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -3759,6 +3759,86 @@ scale_max = 1.75
 scale_curve = SubResource("CurveTexture_48q55")
 color_ramp = SubResource("GradientTexture1D_roarm")
 
+[sub_resource type="Curve" id="Curve_p3e31"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.255172, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_g6igg"]
+curve = SubResource("Curve_p3e31")
+
+[sub_resource type="Curve" id="Curve_brelc"]
+_data = [Vector2(0, 1), 0.0, -1.32864, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_kdkhl"]
+curve = SubResource("Curve_brelc")
+
+[sub_resource type="Curve" id="Curve_j6hp2"]
+max_value = 3.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5cmlm"]
+curve = SubResource("Curve_j6hp2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_w3pqk"]
+emission_shape_scale = Vector3(0.3, 1, 0.3)
+emission_shape = 3
+emission_box_extents = Vector3(0.56, 1, 1)
+direction = Vector3(0, 2, -1)
+spread = 84.194
+flatness = 1.0
+radial_velocity_min = 7.99998
+radial_velocity_max = 12.0
+radial_velocity_curve = SubResource("CurveTexture_kdkhl")
+gravity = Vector3(0, 4.16, -3.185)
+scale_min = 2.0
+scale_max = 6.0
+scale_over_velocity_min = 1.0
+scale_over_velocity_max = 6.0
+scale_over_velocity_curve = SubResource("CurveTexture_5cmlm")
+color = Color(1, 1, 1, 0.552941)
+alpha_curve = SubResource("CurveTexture_g6igg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7xhdi"]
+render_priority = 1
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.1, 0.1, 0.1, 0.745098)
+emission_enabled = true
+emission = Color(0.61, 0.61, 0.61, 1)
+billboard_keep_scale = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_oc1xa"]
+_surfaces = [{
+"aabb": AABB(-0.154951, -0.163546, -0.146853, 0.306201, 0.326742, 0.295014),
+"format": 34896613377,
+"index_count": 60,
+"index_data": PackedByteArray("AAACAAEAAQAFAAAAAAADAAIAAAAEAAMAAAAFAAQAAQAKAAUAAgAGAAEAAwAHAAIABAAIAAMABQAJAAQAAQAGAAoAAgAHAAYAAwAIAAcABAAJAAgABQAKAAkABgALAAoABwALAAYACAALAAcACQALAAgACgALAAkA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("OYMAADl+AAD75xNIrtYAAOVh/UP//wAAAABMRQB3AABzVMxBAAAAAHLeQ03eNwAAbKI4sqT3AACWHA+6r8kAANkfrsCPNgAAh6f8uJYDAAD//2e4JYwAAHKC///LfwAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_vivks"]
+resource_name = "icosphere_Icosphere"
+_surfaces = [{
+"aabb": AABB(-0.154951, -0.163546, -0.146853, 0.306201, 0.326742, 0.295014),
+"attribute_data": PackedByteArray("iy7//xZd//+ii///Lbr//7no///RRa/XRRev1///r9dz0a/X6KKv11x0r9eLLmCvAABgr7noYK8tumCvootgrxZdYK9FFxGH0UURh1x0EYfoohGHc9ERhw=="),
+"format": 34896613399,
+"index_count": 60,
+"index_data": PackedByteArray("AAAGAAUABQAKAAEABAAIAAcAAwAJAAgAAgAKAAkABQAQAAoABgALAAUACAANAAcACQAOAAgACgAPAAkABQALABAABgAMAAsACAAOAA0ACQAPAA4ACgAQAA8ACwASABAADAARAAsADgAVAA0ADwAUAA4AEAATAA8A"),
+"material": SubResource("StandardMaterial3D_7xhdi"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 22,
+"vertex_data": PackedByteArray("OYMAADl+S8E5gwAAOX4e1jmDAAA5fjT0OYMAADl+8+Y5gwAAOX6fyfvnE0iu1p2p5WH9Q///jJblYf1D///RmgAATEUAd7/Cc1TMQQAA2fNy3kNN3jeR2myiOLKk9wmWlhwPuq/JLKmWHA+6r8mArdkfrsCPNtnah6f8uJYDePL//2e4JYwSwHKC///Lf0PAcoL//8t/oMVygv//y39z43KC///Lf5T2coL//8t/2tWzHFZvdlf6Uih2KURpMhPlrx6cv6lb5DKrNm+lXSjz0SFYOuyfY3L7EHYYIPrW/UywsgbOmZcOxxKNRdpdmsYCWKkyFIXgd44t4S9DZc05GsWK0bkIqgOq")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_oc1xa")
+
 [node name="BlankGun" type="Node3D" node_paths=PackedStringArray("shotgun_flare_sprite", "shotgun_flash_sprite", "shotgun_shell_particles", "smg_flare_sprite", "smg_flash_sprite", "smg_shell_particles", "rifle_flare_sprite", "rifle_flash_sprite")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.664934, 0.729413, -6.51926e-09)
 script = ExtResource("1_ferpt")
@@ -4037,7 +4117,7 @@ mesh = SubResource("ArrayMesh_fw2vn")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("34_tk7r4")
 
-[node name="BulletSpark" type="GPUParticles3D" parent="EffectIconsViewport/EffectIconsParent/Barrel3Icon"]
+[node name="JamSpark" type="GPUParticles3D" parent="EffectIconsViewport/EffectIconsParent/Barrel3Icon"]
 transform = Transform3D(0.737772, -0.67505, 0, -2.95074e-08, -3.22491e-08, 1, -0.67505, -0.737772, -4.37114e-08, -0.0562858, -3.72515e-05, 0.0187715)
 emitting = false
 amount = 36
@@ -4054,7 +4134,7 @@ mesh = SubResource("ArrayMesh_l1gaq")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("34_tk7r4")
 
-[node name="BulletSpark" type="GPUParticles3D" parent="EffectIconsViewport/EffectIconsParent/Barrel2Icon"]
+[node name="JamSpark" type="GPUParticles3D" parent="EffectIconsViewport/EffectIconsParent/Barrel2Icon"]
 transform = Transform3D(0.698335, -0.714687, 0.0394038, -0.0058733, 0.0493274, 0.998765, -0.715748, -0.697704, 0.0302495, 3.32643, -1.35076, 0.304621)
 emitting = false
 amount = 36
@@ -4071,7 +4151,7 @@ mesh = SubResource("ArrayMesh_eevs2")
 skeleton = NodePath("")
 surface_material_override/0 = ExtResource("34_tk7r4")
 
-[node name="BulletSpark" type="GPUParticles3D" parent="EffectIconsViewport/EffectIconsParent/Barrel1Icon"]
+[node name="JamSpark" type="GPUParticles3D" parent="EffectIconsViewport/EffectIconsParent/Barrel1Icon"]
 transform = Transform3D(0.66503, 0.0399557, 0.745747, -0.00522971, 0.998793, -0.0488498, -0.746798, 0.0285865, 0.664436, 3.896, -1.361, 1.476)
 emitting = false
 amount = 36
@@ -4082,9 +4162,19 @@ visibility_aabb = AABB(-2.09474, -3.78992, -3.45481, 4.16517, 4.57921, 3.65482)
 process_material = SubResource("ParticleProcessMaterial_fd2rg")
 draw_pass_1 = SubResource("QuadMesh_dbfeo")
 
+[node name="JamDust" type="GPUParticles3D" parent="EffectIconsViewport/EffectIconsParent"]
+transform = Transform3D(0.15735, -7.45058e-09, 0.0496577, 0.0284825, 0.13516, -0.0902525, -0.0406771, 0.0946401, 0.128894, -0.118624, -0.663313, 0.569513)
+emitting = false
+amount = 90
+lifetime = 1.3
+randomness = 0.14
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_w3pqk")
+draw_pass_1 = SubResource("ArrayMesh_vivks")
+
 [node name="Particles" type="Node3D" parent="."]
 
 [connection signal="timeout" from="JamTimer" to="." method="_on_jam_timer_timeout"]
-[connection signal="finished" from="EffectIconsViewport/EffectIconsParent/Barrel3Icon/BulletSpark" to="EffectIconsViewport/EffectIconsParent/Barrel3Icon/BulletSpark" method="_on_finished"]
-[connection signal="finished" from="EffectIconsViewport/EffectIconsParent/Barrel2Icon/BulletSpark" to="EffectIconsViewport/EffectIconsParent/Barrel2Icon/BulletSpark" method="_on_finished"]
-[connection signal="finished" from="EffectIconsViewport/EffectIconsParent/Barrel1Icon/BulletSpark" to="EffectIconsViewport/EffectIconsParent/Barrel1Icon/BulletSpark" method="_on_finished"]
+[connection signal="finished" from="EffectIconsViewport/EffectIconsParent/Barrel3Icon/JamSpark" to="EffectIconsViewport/EffectIconsParent/Barrel3Icon/JamSpark" method="_on_finished"]
+[connection signal="finished" from="EffectIconsViewport/EffectIconsParent/Barrel2Icon/JamSpark" to="EffectIconsViewport/EffectIconsParent/Barrel2Icon/JamSpark" method="_on_finished"]
+[connection signal="finished" from="EffectIconsViewport/EffectIconsParent/Barrel1Icon/JamSpark" to="EffectIconsViewport/EffectIconsParent/Barrel1Icon/JamSpark" method="_on_finished"]

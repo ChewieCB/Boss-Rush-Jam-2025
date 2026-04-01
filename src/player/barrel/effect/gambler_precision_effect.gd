@@ -13,7 +13,7 @@ var hit_count = 0
 var projectile_count = 0
 
 func on_prepare_to_fire():
-	super ()
+	super()
 	hit_count = 0
 	projectile_count = 0
 

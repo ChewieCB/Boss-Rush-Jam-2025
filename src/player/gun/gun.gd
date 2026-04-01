@@ -47,10 +47,11 @@ var muzzle_flash_sprite: Sprite3D
 @onready var barrel_icon_mesh_2: MeshInstance3D = $EffectIconsViewport/EffectIconsParent/Barrel2Icon
 @onready var barrel_icon_mesh_3: MeshInstance3D = $EffectIconsViewport/EffectIconsParent/Barrel3Icon
 @onready var barrel_icon_meshes: Array[MeshInstance3D] = [barrel_icon_mesh_1, barrel_icon_mesh_2, barrel_icon_mesh_3]
-@onready var barrel_spark_1: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel1Icon/BulletSpark
-@onready var barrel_spark_2: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel2Icon/BulletSpark
-@onready var barrel_spark_3: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel3Icon/BulletSpark
+@onready var barrel_spark_1: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel1Icon/JamSpark
+@onready var barrel_spark_2: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel2Icon/JamSpark
+@onready var barrel_spark_3: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/Barrel3Icon/JamSpark
 @onready var barrel_sparks: Array[GPUParticles3D] = [barrel_spark_1, barrel_spark_2, barrel_spark_3]
+@onready var jam_dust_particles: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/JamDust
 @onready var default_barrel_icon_mat: StandardMaterial3D = load("res://src/player/gun/assets/material/default_effect_icon_mat.tres")
 
 @onready var anim_tree: AnimationTree = $AnimationTree
@@ -523,6 +524,10 @@ func release_trigger():
 
 
 func spin_all_barrels() -> void:
+	if is_jammed:
+		play_failed_shoot_sfx()
+		return
+	
 	if is_reloading:
 		await gun_reloaded
 	
@@ -1090,12 +1095,13 @@ func set_barrels_jammed() -> void:
 	for i in range(installed_barrels.size()):
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		state_machine.travel("jam")
-		barrel_sparks[i].restart()
+		#barrel_sparks[i].restart()
 		# TODO - SFX
 		#SoundManager.play_sound(TEMP_sfx_spin, "Gun")
 
 
 func set_barrels_unjammed() -> void:
+	jam_dust_particles.emitting = false
 	for i in range(installed_barrels.size()):
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
 		state_machine.travel("idle")
@@ -1105,6 +1111,7 @@ func set_barrels_unjammed() -> void:
 
 func jam_gun(pre_anim_delay: float = 1.0) -> void:
 	is_jammed = true
+	jam_dust_particles.emitting = true
 	set_barrels_jammed()
 	
 	await get_tree().create_timer(pre_anim_delay, false).timeout
