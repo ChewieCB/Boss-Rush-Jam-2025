@@ -53,6 +53,7 @@ var muzzle_flash_sprite: Sprite3D
 @onready var barrel_sparks: Array[GPUParticles3D] = [barrel_spark_1, barrel_spark_2, barrel_spark_3]
 # Jams
 @onready var jam_dust_particles: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/JamDust
+@onready var jam_spring_particles: GPUParticles3D = $EffectIconsViewport/EffectIconsParent/JamSprings
 @export var barrel_jam_mat: StandardMaterial3D
 @export var jam_time: float = 0.6
 var barrel_cached_materials: Array[StandardMaterial3D] = []
@@ -1132,6 +1133,7 @@ func set_barrels_unjammed() -> void:
 func jam_gun(pre_anim_delay: float = 1.0) -> void:
 	is_jammed = true
 	jam_dust_particles.emitting = true
+	jam_spring_particles.restart()
 	set_barrels_jammed()
 	
 	await get_tree().create_timer(pre_anim_delay, false).timeout

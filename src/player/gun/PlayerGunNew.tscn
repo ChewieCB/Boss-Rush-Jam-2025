@@ -1,4 +1,4 @@
-[gd_scene load_steps=152 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=158 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -54,6 +54,7 @@
 [ext_resource type="Texture2D" uid="uid://cg8a37tjdby84" path="res://src/player/gun/assets/sprite/hand/jam/jam_hand_frame_3_ROUGH.png" id="44_yrcdt"]
 [ext_resource type="Texture2D" uid="uid://bq3sedlc8twsm" path="res://src/player/gun/assets/sprite/hand/jam/jam_hand_frame_2_ROUGH.png" id="45_301na"]
 [ext_resource type="Texture2D" uid="uid://2ef1q43deta1" path="res://src/player/gun/assets/sprite/hand/jam/jam_hand_frame_5_ROUGH.png" id="46_bhy7f"]
+[ext_resource type="Texture2D" uid="uid://n3evsy846arq" path="res://assets/sprite/particles/springs/springs_&_gears_sheet.png" id="55_18u8p"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wqldo"]
 random_pitch = 1.19
@@ -3760,6 +3761,56 @@ scale_max = 1.75
 scale_curve = SubResource("CurveTexture_48q55")
 color_ramp = SubResource("GradientTexture1D_roarm")
 
+[sub_resource type="Curve" id="Curve_irki5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.755556, 0.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_g4orw"]
+curve = SubResource("Curve_irki5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5etcb"]
+lifetime_randomness = 0.3
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(1.91, 0.94, -1.25)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1.92)
+angle_min = -360.0
+angle_max = 360.0
+direction = Vector3(20, -66.345, 0)
+spread = 37.97
+flatness = 0.243
+initial_velocity_min = 60.0
+initial_velocity_max = 75.0
+angular_velocity_min = -360.0
+angular_velocity_max = 360.0
+orbit_velocity_min = 9.49949e-08
+orbit_velocity_max = 9.49949e-08
+radial_velocity_min = 4.34998
+radial_velocity_max = 4.89998
+linear_accel_min = -5.0
+linear_accel_max = -5.0
+radial_accel_min = 4.0
+radial_accel_max = 8.0
+scale_min = 0.9
+scale_max = 1.4
+scale_curve = SubResource("CurveTexture_g4orw")
+anim_offset_max = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kf6kd"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("55_18u8p")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 6
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_q462a"]
+material = SubResource("StandardMaterial3D_kf6kd")
+size = Vector2(4, 4)
+
 [sub_resource type="Curve" id="Curve_p3e31"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.255172, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
@@ -4164,6 +4215,17 @@ visibility_aabb = AABB(-2.09474, -3.78992, -3.45481, 4.16517, 4.57921, 3.65482)
 process_material = SubResource("ParticleProcessMaterial_fd2rg")
 draw_pass_1 = SubResource("QuadMesh_dbfeo")
 
+[node name="JamSprings" type="GPUParticles3D" parent="EffectIconsViewport/EffectIconsParent"]
+transform = Transform3D(0.806566, 0.481312, -0.240511, 0.089153, -0.467153, -0.853316, -0.584109, 0.591555, -0.461664, 0.700162, -1.34602, 0.759389)
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.89
+randomness = 0.26
+visibility_aabb = AABB(-2.09474, -3.78992, -3.45481, 4.16517, 4.57921, 3.65482)
+process_material = SubResource("ParticleProcessMaterial_5etcb")
+draw_pass_1 = SubResource("QuadMesh_q462a")
+
 [node name="JamDust" type="GPUParticles3D" parent="EffectIconsViewport/EffectIconsParent"]
 transform = Transform3D(0.15735, -7.45058e-09, 0.0496577, 0.0284825, 0.13516, -0.0902525, -0.0406771, 0.0946401, 0.128894, -0.118624, -0.663313, 0.569513)
 emitting = false
@@ -4180,3 +4242,4 @@ draw_pass_1 = SubResource("ArrayMesh_vivks")
 [connection signal="finished" from="EffectIconsViewport/EffectIconsParent/Barrel3Icon/JamSpark" to="EffectIconsViewport/EffectIconsParent/Barrel3Icon/JamSpark" method="_on_finished"]
 [connection signal="finished" from="EffectIconsViewport/EffectIconsParent/Barrel2Icon/JamSpark" to="EffectIconsViewport/EffectIconsParent/Barrel2Icon/JamSpark" method="_on_finished"]
 [connection signal="finished" from="EffectIconsViewport/EffectIconsParent/Barrel1Icon/JamSpark" to="EffectIconsViewport/EffectIconsParent/Barrel1Icon/JamSpark" method="_on_finished"]
+[connection signal="finished" from="EffectIconsViewport/EffectIconsParent/JamSprings" to="EffectIconsViewport/EffectIconsParent/JamSprings" method="_on_finished"]
