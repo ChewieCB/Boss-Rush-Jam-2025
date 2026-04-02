@@ -9,7 +9,7 @@ extends BaseBarrelEffect
 @export var jam_chance_if_missed: float
 @export var jam_anim_delay: float = 1.0
 # Luck gain values
-@export var luck_gain_on_crit: float = 2.5
+@export var luck_gain_on_crit: float = 4
 #
 @export var luck_trigger_consecutive_shots: int = 4
 @export var luck_gain_consecutive_shot: float = 25.0
@@ -29,7 +29,7 @@ func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
 	# Minor luck gain on crit
 	if projectile.is_crit:
 		# TODO - think of a better message for this
-		LuckHandler.increase_luck(luck_gain_on_crit, "Lucky shot!")
+		LuckHandler.increase_luck(luck_gain_on_crit, "+4 Lucky shot!")
 
 func on_projectile_destroyed(_hit_boss: bool):
 	super(_hit_boss)
@@ -45,7 +45,7 @@ func on_projectile_destroyed(_hit_boss: bool):
 		
 		consecutive_hit_count += 1
 		if consecutive_hit_count >= luck_trigger_consecutive_shots:
-			LuckHandler.increase_luck(luck_gain_consecutive_shot, "Let it ride!")
+			LuckHandler.increase_luck(luck_gain_consecutive_shot, "+25 Let it ride!")
 			consecutive_hit_count = 0
 
 
