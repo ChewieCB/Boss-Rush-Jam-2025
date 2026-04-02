@@ -39,12 +39,20 @@ var dps_accumulated_in_window: float = 0.0:
 
 
 ## Modify luck
-func increase_luck(amount: float) -> void:
+func increase_luck(amount: float, message: String = "") -> void:
 	amount *= GameManager.get_risk_luck_buildup_mult()
 	luck_increased.emit(amount)
+	modifier_message.emit(
+		message,
+		true
+	)
 
-func decrease_luck(amount: float) -> void:
+func decrease_luck(amount: float, message: String = "") -> void:
 	luck_decreased.emit(amount)
+	modifier_message.emit(
+		message,
+		false
+	)
 
 
 func _physics_process(delta: float) -> void:
@@ -52,7 +60,8 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	# TODO - store all per-physics-tick luck trigger checks as an array of callables to be called here
-	track_no_damage_taken(delta)
+	# TODO - move this to a specific barrel, a healing/defensive one
+	#track_no_damage_taken(delta)
 
 
 ##
@@ -71,14 +80,12 @@ func track_no_damage_taken(delta: float) -> void:
 
 func gain_no_damage_taken(threshold_mult: int) -> void:
 	# Gain luck from not taking damage in the last X seconds
-	increase_luck(no_damage_taken_luck_gain * threshold_mult)
-	modifier_message.emit(
+	increase_luck(
+		no_damage_taken_luck_gain * threshold_mult,
 		"No damage taken for %s seconds!" % [
 			no_damage_taken_threshold * threshold_mult
 		],
-		true
 	)
-
 
 ##
 ## LUCK TRIGGER: Deal at least X damage in Y seconds
@@ -93,13 +100,12 @@ func gain_dps_dealt(dps_dealt: float) -> void:
 	var mult = int(dps_dealt / dps_dealt_threshold)
 	if mult > dps_dealt_mult_cap:
 		mult = dps_dealt_mult_cap
-	increase_luck(dps_dealt_luck_gain * mult)
-	modifier_message.emit(
+	increase_luck(
+		dps_dealt_luck_gain * mult,
 		"%s damage in %s seconds!" % [
 			dps_dealt,
 			dps_dealt_threshold
 		],
-		true
 	)
 	print("Gained %s luck, did %s damage in %s seconds!" % [
 		dps_dealt_luck_gain * mult,
@@ -127,6 +133,7 @@ func _on_dps_dealt_window_timer_timeout() -> void:
 	if not enabled:
 		dps_accumulated_in_window = 0.0
 		return
-	if dps_accumulated_in_window > dps_dealt_threshold:
-		gain_dps_dealt(dps_accumulated_in_window)
-	dps_accumulated_in_window = 0.0
+	# TODO - move this to a barrel
+	#if dps_accumulated_in_window > dps_dealt_threshold:
+		#gain_dps_dealt(dps_accumulated_in_window)
+	#dps_accumulated_in_window = 0.0

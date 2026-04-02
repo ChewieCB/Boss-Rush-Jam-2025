@@ -339,6 +339,28 @@ offset_top = 816.0
 health_component = NodePath("../../HealthComponent")
 luck_component = NodePath("../../LuckComponent")
 
+[node name="LuckModifierText" type="Label" parent="UI"]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -302.0
+offset_top = 82.0
+offset_right = 303.0
+offset_bottom = 271.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0.8275, 0.31, 1)
+theme_override_colors/font_shadow_color = Color(0.417881, 0.305385, 2.88785e-07, 1)
+theme_override_colors/font_outline_color = Color(0.76, 0.5548, 0.1444, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 7
+theme_override_constants/shadow_outline_size = 16
+theme_override_font_sizes/font_size = 48
+text = "Lady luck let it ride!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="GunUI" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 15

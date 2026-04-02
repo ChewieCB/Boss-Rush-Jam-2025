@@ -1,4 +1,4 @@
-[gd_scene load_steps=158 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=159 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -1093,6 +1093,47 @@ tracks/2/keys = {
 "values": [Vector3(0, 0, 0.261799), Vector3(0, 0, -0.0872665), Vector3(0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_fa7ie"]
+resource_name = "failed_shot"
+length = 0.12
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SpriteParent/ArmSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06, 0.12),
+"transitions": PackedFloat32Array(0.450625, 3.03143, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.132063, -0.188663, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SpriteParent:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12),
+"transitions": PackedFloat32Array(0.594604, 1.31951, 0.594604, 1.6245, 1.1487),
+"update": 0,
+"values": [Vector3(0.364854, -0.394036, 0), Vector3(0.358628, -0.406488, 0), Vector3(0.364854, -0.394036, 0), Vector3(0.389758, -0.397149, 0), Vector3(0.364854, -0.394036, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpriteParent:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.03, 0.06, 0.09, 0.12),
+"transitions": PackedFloat32Array(0.594604, 1.31951, 0.594604, 1.6245, 1.1487),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.0532849), Vector3(0, 0, 0), Vector3(0, 0, -0.0378736), Vector3(0, 0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_pwnrm"]
 resource_name = "idle"
 length = 0.1
@@ -1477,6 +1518,7 @@ _data = {
 "barrel_3_spin_start": SubResource("Animation_wc336"),
 "barrel_3_unequipped": SubResource("Animation_vooid"),
 "equip": SubResource("Animation_4s64o"),
+"failed_shot": SubResource("Animation_fa7ie"),
 "idle": SubResource("Animation_pwnrm"),
 "reload": SubResource("Animation_3r35k"),
 "start_spin": SubResource("Animation_n22ld"),
@@ -4140,6 +4182,9 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/barrel_1+2/add_amount = 1.0
 parameters/barrel_12+3/add_amount = 1.0
 parameters/barrels+reload/add_amount = 1.0
+parameters/jam_shot/active = false
+parameters/jam_shot/internal_active = false
+parameters/jam_shot/request = 0
 parameters/reload_timescale/scale = 1.0
 parameters/spin_shot/active = false
 parameters/spin_shot/internal_active = false
