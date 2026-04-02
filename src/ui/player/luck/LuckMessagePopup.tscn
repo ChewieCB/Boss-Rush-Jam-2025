@@ -128,7 +128,7 @@ _data = {
 "show": SubResource("Animation_4ak8f")
 }
 
-[node name="Control" type="MarginContainer"]
+[node name="Control" type="MarginContainer" node_paths=PackedStringArray("timer")]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -139,6 +139,7 @@ grow_horizontal = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
 script = ExtResource("1_pp2aj")
+timer = NodePath("Timer")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 2
@@ -170,3 +171,7 @@ vertical_alignment = 1
 libraries = {
 "": SubResource("AnimationLibrary_hqp6s")
 }
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
