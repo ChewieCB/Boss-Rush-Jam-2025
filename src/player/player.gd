@@ -179,7 +179,7 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
 	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # In decimal, so 0.8 = 80%
 	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
-	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0, # In decimal, so 0.5 = 50%
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0.05, # In decimal, so 0.5 = 50%
 	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0, # In decimal
 	StatusEffect.PlayerStatEnum.DODGE_CHANCE: 0, # In decimal
 	StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER: 1.0,
