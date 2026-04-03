@@ -6,6 +6,7 @@ class_name LuckTriggerInfo
 enum LuckTriggerIdEnum {
 	GAMBLERS_PRECISION__LUCKY_SHOT,
 	GAMBLERS_PRECISION__LET_IT_RIDE,
+	EXPLOSIVE_BULLET__BADA_BING_BADA_BOOM,
 }
 
 @export var id: LuckTriggerIdEnum

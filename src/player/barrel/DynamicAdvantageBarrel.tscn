@@ -45,12 +45,19 @@ attribute = 8
 modify_value = 150.0
 is_perc = true
 
-[node name="ExplosiveBullet" type="Node3D" parent="EffectContainer"]
+[node name="ExplosiveBullet" type="Node3D" parent="EffectContainer" node_paths=PackedStringArray("dps_dealt_window_timer")]
 script = ExtResource("6_ayuco")
-damage = 10
+damage = 30
+range = 2.5
+dps_dealt_window_timer = NodePath("DPSWindowTImer")
 display_text_title = "Explosive bullet"
 display_text_tag = "Don't hurt yourself!"
 display_text_desc = "Make bullets go boom"
 positive_desc = Array[String](["Rounds explode on impact, deal flat 10 damage"])
 negative_desc = Array[String](["Explosive damage hurts you too"])
 icon_id = 22
+luck_triggers = Array[int]([2])
+
+[node name="DPSWindowTImer" type="Timer" parent="EffectContainer/ExplosiveBullet"]
+
+[connection signal="timeout" from="EffectContainer/ExplosiveBullet/DPSWindowTImer" to="EffectContainer/ExplosiveBullet" method="_on_dps_dealt_window_timer_timeout"]
