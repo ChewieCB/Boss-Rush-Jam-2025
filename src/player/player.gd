@@ -179,7 +179,7 @@ var base_stats = {
 	StatusEffect.PlayerStatEnum.CHIP_DROPRATE_MULTIPLIER: 1,
 	StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE: 0.8, # In decimal, so 0.8 = 80%
 	StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE: 1.2, # 1.2 = 120%
-	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0, # In decimal, so 0.5 = 50%
+	StatusEffect.PlayerStatEnum.CRITICAL_HIT_CHANCE: 0.05, # In decimal, so 0.5 = 50%
 	StatusEffect.PlayerStatEnum.CRITICAL_HIT_DAMAGE_MULTIPLIER: 2.0, # In decimal
 	StatusEffect.PlayerStatEnum.DODGE_CHANCE: 0, # In decimal
 	StatusEffect.PlayerStatEnum.FLOOR_FRICTION_MODIFIER: 1.0,
@@ -232,6 +232,7 @@ func _ready():
 	current_gun.barrel_unequipped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_effect_set.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_effect_set.connect(update_ammo_counter_ui.unbind(2))
+	LuckHandler.trigger_discovered.connect(update_barrel_effect_ui)
 	update_barrel_effect_ui()
 	movement_dashed.connect(current_gun.check_barrel_effect_on_dash_movement)
 	health_component.hurt.connect(current_gun.check_barrel_effect_on_player_damaged)
@@ -281,8 +282,10 @@ func _unhandled_input(event):
 	# DEBUG
 	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
+	# DEBUG INPUT FOR TESTING
 	elif event.is_action_pressed("input_1"):
-		LuckHandler.increase_luck(20.0)
+		LuckHandler.reset_luck_triggers()
+		#LuckHandler.increase_luck(20.0)
 		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
 	#elif event.is_action_pressed("input_3"):
@@ -499,8 +502,7 @@ func show_barrel_effect_ui() -> void:
 	barrel_ui_tween = get_tree().create_tween()
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
 	for i in range(current_gun.max_barrels):
-		var effect_ui_idx: int = i
-		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		var effect_ui = barrel_detail_ui.effect_boxes[i]
 		if i < current_gun.barrel_container.get_child_count():
 			barrel_ui_tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
 	await barrel_ui_tween.finished
@@ -522,8 +524,7 @@ func hide_barrel_effect_ui() -> void:
 
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.0, 0.1)
 	for i in range(current_gun.max_barrels):
-		var effect_ui_idx: int = i
-		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		var effect_ui = barrel_detail_ui.effect_boxes[i]
 		if i < current_gun.barrel_container.get_child_count():
 			barrel_ui_tween.parallel().tween_property(effect_ui, "modulate:a", 0.0, 0.1)
 	barrel_ui_tween.tween_callback(func(): barrel_ui_active = false)
@@ -532,8 +533,7 @@ func hide_barrel_effect_ui() -> void:
 
 func update_barrel_effect_ui() -> void:
 	for i in range(current_gun.max_barrels):
-		var effect_ui_idx: int = i
-		var effect_ui = barrel_detail_ui.effect_boxes[effect_ui_idx]
+		var effect_ui = barrel_detail_ui.effect_boxes[i]
 		if i < current_gun.barrel_container.get_child_count():
 			#effect_ui.modulate.a = 1.0
 		#if current_gun.barrel_container.get_child_count() > 0:
@@ -551,12 +551,19 @@ func update_barrel_effect_ui() -> void:
 				container.queue_free()
 			for container in effect_ui.negatives_container.get_children():
 				container.queue_free()
-
-			for text in _effect.positive_desc:
-				effect_ui.add_positive(text)
-			for text in _effect.negative_desc:
-				effect_ui.add_negative(text)
-
+			effect_ui.clear_luck_triggers()
+			
+			effect_ui.add_neutral(_effect.display_text_desc)
+			#for text in _effect.positive_desc:
+				#effect_ui.add_positive(text)
+			#for text in _effect.negative_desc:
+				#effect_ui.add_negative(text)
+			for trigger_id in _effect.luck_triggers:
+				var trigger_info: LuckTriggerInfo = LuckHandler.luck_triggers[trigger_id]
+				var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger_id]
+				var is_discovered: bool = LuckHandler.luck_trigger_dict[enum_str]
+				effect_ui.add_luck_trigger(trigger_info.name, trigger_info.desc, is_discovered)
+		
 		else:
 			effect_ui.modulate.a = 0.0
 			effect_ui.name_label.text = ""

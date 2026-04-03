@@ -6,15 +6,24 @@ class_name EffectInfoUI
 @onready var desc_label: RichTextLabel = $MarginContainer/VBoxContainer/HeaderContainer/HBoxContainer/HeaderTextContainer/DescriptionContainer/RichTextLabel
 @onready var positives_container: Control = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/PositivesContainer
 @onready var negatives_container: Control = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/NegativesContainer
+@onready var luck_trigger_container: Control = $MarginContainer/VBoxContainer/BodyContainer/VBoxContainer/LuckTriggersContainer
 
 @export var positive_icon: Texture2D
 @export var negative_icon: Texture2D
 @export var effect_info_textbox: PackedScene
+@export var luck_trigger_info: PackedScene
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	self.modulate.a = 0.0
+
+
+func add_neutral(text: String) -> void:
+	var textbox = effect_info_textbox.instantiate()
+	positives_container.add_child(textbox)
+	textbox.icon.texture = null
+	textbox.label.text = text
 
 
 func add_positive(text: String) -> void:
@@ -31,3 +40,14 @@ func add_negative(text: String) -> void:
 	textbox.icon.texture = negative_icon
 	textbox.icon.modulate = Color.RED
 	textbox.label.text = text
+
+
+func add_luck_trigger(trigger_name: String, trigger_desc: String, trigger_discovered: bool) -> void:
+	var infobox = luck_trigger_info.instantiate()
+	luck_trigger_container.add_child(infobox)
+	infobox.set_info(trigger_name, trigger_desc, trigger_discovered)
+
+
+func clear_luck_triggers() -> void:
+	for trigger_info in luck_trigger_container.get_children():
+		trigger_info.queue_free()

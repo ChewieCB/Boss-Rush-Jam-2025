@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://brkrjtogbrksh"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_8p4n0"]
+
+[resource]
+script = ExtResource("1_8p4n0")
+id = 2
+name = "Bada Bing, Bada Boom!"
+desc = "+20 luck when dealing a lot of explosive damage"
+message = ""

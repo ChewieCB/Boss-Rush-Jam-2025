@@ -1,9 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://dyak3rklcc1gg"]
+[gd_scene load_steps=6 format=3 uid="uid://dyak3rklcc1gg"]
 
 [ext_resource type="Script" path="res://src/player/luck_handler.gd" id="1_718cx"]
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="2_0f31e"]
+[ext_resource type="Resource" uid="uid://cktfqbe0gvy72" path="res://src/ui/player/luck/luck_trigger_data/GamblersPrecision_LuckyShot.tres" id="3_45r3b"]
+[ext_resource type="Resource" uid="uid://c5un1ai2pgdpo" path="res://src/ui/player/luck/luck_trigger_data/GamblersPrecision_LetItRide.tres" id="4_awui0"]
+[ext_resource type="Resource" uid="uid://brkrjtogbrksh" path="res://src/ui/player/luck/luck_trigger_data/ExplosiveBullet_BadaBingBadaBoom.tres" id="5_67a7k"]
 
 [node name="LuckHandler" type="Node"]
 script = ExtResource("1_718cx")
+luck_triggers = Array[ExtResource("2_0f31e")]([ExtResource("3_45r3b"), ExtResource("4_awui0"), ExtResource("5_67a7k")])
 
 [node name="LuckDecayTimer" type="Timer" parent="."]
 process_callback = 0

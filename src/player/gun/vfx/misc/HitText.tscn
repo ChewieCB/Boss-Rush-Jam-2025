@@ -5,6 +5,8 @@
 [node name="HitText" type="Label3D"]
 billboard = 1
 no_depth_test = true
+render_priority = 4
+outline_render_priority = 3
 modulate = Color(0.993466, 1, 0.7693, 1)
 text = "TEST TEXT"
 font_size = 128

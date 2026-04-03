@@ -1,4 +1,4 @@
-[gd_scene load_steps=130 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=131 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -60,6 +60,7 @@
 [ext_resource type="PackedScene" uid="uid://bqgedwbxkh8xa" path="res://src/ui/player/barrel_detail/BarrelDetailUI.tscn" id="48_6dr3i"]
 [ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_detail_ui.gd" id="48_8tfyi"]
 [ext_resource type="Script" path="res://src/player/interact_ui.gd" id="48_hxlt6"]
+[ext_resource type="PackedScene" uid="uid://dymal26tqayfd" path="res://src/ui/player/luck/LuckMessageUI.tscn" id="49_7wxbq"]
 [ext_resource type="PackedScene" uid="uid://d2m0w0bro5j5l" path="res://src/ui/player/StatUINew.tscn" id="51_vst8k"]
 [ext_resource type="PackedScene" uid="uid://dj22bp2g01voq" path="res://src/player/SpeedlineVFX.tscn" id="55_pporq"]
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
@@ -338,6 +339,14 @@ offset_left = 1156.0
 offset_top = 816.0
 health_component = NodePath("../../HealthComponent")
 luck_component = NodePath("../../LuckComponent")
+
+[node name="LuckMessageUI" parent="UI" instance=ExtResource("49_7wxbq")]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 1247.0
+offset_top = -362.0
+offset_bottom = -150.0
 
 [node name="GunUI" type="Control" parent="UI"]
 layout_mode = 3

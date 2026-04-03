@@ -1,6 +1,8 @@
 extends Area3D
 class_name ExplosionDamageArea
 
+signal explosive_damage(damage: float, target: CharacterBody3D)
+
 @onready var explosion_vfx: ExplosionParticles = $ExplosionVFX
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 
@@ -9,6 +11,7 @@ const LINGERING_DURATION = 0.1
 var active = false
 var damage = 0
 var damage_disabled = true
+@export var damage_variance: float = 11.0
 
 
 func _ready():
@@ -33,6 +36,7 @@ func set_damage_radius(radius: float) -> void:
 	var new_shape := SphereShape3D.new()
 	new_shape.radius = radius
 	collision_shape.shape = new_shape
+	explosion_vfx.scale_factor = radius / 1.2  # Magic number - default area radius
 
 
 func deactivate() -> void:
@@ -53,6 +57,7 @@ func explode():
 func _on_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D and not damage_disabled:
 		body.health_component.damage(damage, Color.ORANGE)
+		explosive_damage.emit(damage, body)
 		if body is Player:
 			body.apply_impulse_to_player(global_position.direction_to(body.global_position) * damage)
 			# TODO - negative luck from getting hit by your own AoE
