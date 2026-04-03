@@ -48,7 +48,10 @@ func save_game(slot_id):
 		"bosses_defeated": GameManager.bosses_defeated,
 		"player_skill_points": GameManager.player_skill_points,
 		"player_skill_dict": GameManager.player_skill_dict,
-
+		
+		# Luck
+		"luck_trigger_dict": LuckHandler.luck_trigger_dict,
+		
 		# Inventory & Shop
 		"equipped_barrels": convert_resources_to_ids(GameManager.equipped_barrels, ResourceTypeEnum.BARREL),
 		"inventory_barrels": convert_resources_to_ids(GameManager.inventory_barrels, ResourceTypeEnum.BARREL),
@@ -109,7 +112,12 @@ func load_game(slot_id):
 	GameManager.player_skill_points = save_data.get("player_skill_points", 0)
 	GameManager.player_skill_dict = convert_id_to_skill_enum(save_data.get("player_skill_dict", {}))
 	GameManager.bosses_defeated = convert_id_to_boss_enum(save_data.get("bosses_defeated", []))
-
+	
+	# Luck
+	LuckHandler.luck_trigger_dict = save_data.get("luck_trigger_dict", {})
+	if LuckHandler.luck_trigger_dict == {}:
+		LuckHandler.reset_luck_triggers()
+	
 	# Inventory & Shop
 	# These don't use save_data.get() since if it corrupted, it better to know about the error right away and not overwrite the save
 	GameManager.equipped_barrels = convert_ids_to_resources(save_data["equipped_barrels"], ResourceTypeEnum.BARREL)

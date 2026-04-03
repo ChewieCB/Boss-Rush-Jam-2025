@@ -373,6 +373,9 @@ func load_new_save_data():
 		var idx: int = barrel_database.find(data)
 		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
 		shop_barrels.append(data)
+	
+	LuckHandler.reset_luck_triggers()
+
 
 func reset_current_save_data():
 	equipped_barrels = []

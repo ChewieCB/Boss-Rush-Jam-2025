@@ -1,0 +1,96 @@
+[gd_scene load_steps=5 format=3 uid="uid://bjfuty8vqwssh"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_ui.gd" id="1_fgnps"]
+[ext_resource type="Script" path="res://src/ui/player/barrel_detail/effect_info_icon_text.gd" id="1_wlehn"]
+[ext_resource type="Texture2D" uid="uid://hlmpugiovdle" path="res://assets/sprite/placeholder/circle_hires.png" id="2_me5s8"]
+[ext_resource type="FontFile" uid="uid://c8454pml2ns3l" path="res://assets/fonts/engebrechtre/engebrechtre.rg-regular.otf" id="3_ahmst"]
+
+[node name="LuckTriggerInfoUI" type="MarginContainer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -108.5
+offset_top = -28.0
+offset_right = 108.5
+offset_bottom = 28.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+script = ExtResource("1_fgnps")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." node_paths=PackedStringArray("label")]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 11
+script = ExtResource("1_wlehn")
+label = NodePath("MarginContainer/VBoxContainer/LuckTriggerNameLabel")
+
+[node name="IconContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="ActiveIcon" type="TextureRect" parent="HBoxContainer/IconContainer"]
+modulate = Color(0.830356, 0.719323, 0.0427644, 1)
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("2_me5s8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ActiveIconOutline" type="TextureRect" parent="HBoxContainer/IconContainer"]
+modulate = Color(0.547302, 0.457218, 0.187511, 1)
+z_index = -1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("2_me5s8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/separation = -8
+
+[node name="LuckTriggerNameLabel" type="RichTextLabel" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_vertical = 6
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("3_ahmst")
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "Lucky Shot"
+fit_content = true
+scroll_active = false
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+
+[node name="LuckTriggerDescLabel" type="RichTextLabel" parent="HBoxContainer/MarginContainer/VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_vertical = 6
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.497474, 0.497474, 0.497474, 1)
+theme_override_fonts/normal_font = ExtResource("3_ahmst")
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "Gain 4 luck on a crit "
+fit_content = true
+scroll_active = false

@@ -31,6 +31,7 @@ display_text_title = "Gambler's Precision"
 display_text_tag = "Are you feeling lucky?"
 display_text_desc = "+25% crit chance, 50% chance to jam on miss"
 icon_id = 27
+luck_triggers = Array[int]([0, 1])
 
 [node name="Hyperfocus" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_xsmdb")

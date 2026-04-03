@@ -1,6 +1,5 @@
 extends BaseBarrelEffect
 
-
 # TODO: Possible rework into roll a dice from 1 to 6 and do something with crit dmg with it
 
 ## In %, so 50 = 50%
@@ -28,7 +27,14 @@ func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
 	super(enemy, projectile)
 	# Minor luck gain on crit
 	if projectile.is_crit:
-		# TODO - think of a better message for this
+		# Mark the luck trigger as discovered if we haven't triggered it before
+		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[
+			LuckTriggerInfo.LuckTriggerIdEnum.GAMBLERS_PRECISION__LUCKY_SHOT
+		]
+		if LuckHandler.luck_trigger_dict[enum_str] == false:
+			LuckHandler.luck_trigger_dict[enum_str] = true
+			LuckHandler.trigger_discovered.emit()
+		
 		LuckHandler.increase_luck(luck_gain_on_crit, "+4 Lucky shot!")
 
 func on_projectile_destroyed(_hit_boss: bool):
@@ -45,6 +51,14 @@ func on_projectile_destroyed(_hit_boss: bool):
 		
 		consecutive_hit_count += 1
 		if consecutive_hit_count >= luck_trigger_consecutive_shots:
+			# Mark the luck trigger as discovered if we haven't triggered it before
+			var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[
+				LuckTriggerInfo.LuckTriggerIdEnum.GAMBLERS_PRECISION__LET_IT_RIDE
+			]
+			if LuckHandler.luck_trigger_dict[enum_str] == false:
+				LuckHandler.luck_trigger_dict[enum_str] = true
+				LuckHandler.trigger_discovered.emit()
+			
 			LuckHandler.increase_luck(luck_gain_consecutive_shot, "+25 Let it ride!")
 			consecutive_hit_count = 0
 

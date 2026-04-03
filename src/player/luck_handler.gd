@@ -3,6 +3,11 @@ extends Node
 signal luck_increased(value: float)
 signal luck_decreased(value: float)
 signal modifier_message(text: String, is_gain: bool)
+signal trigger_discovered()
+
+# Populate a dict of luck triggers, tracking the ID, name, description, message, and is_discovered values
+@export var luck_triggers: Array[LuckTriggerInfo] = []
+var luck_trigger_dict: Dictionary = {}
 
 # TODO - default to false and enable on the boss trigger
 @export var enabled: bool = false
@@ -36,6 +41,13 @@ var dps_accumulated_in_window: float = 0.0:
 		dps_accumulated_in_window = value
 		if dps_dealt_window_timer.is_stopped():
 			dps_dealt_window_timer.start(dps_dealt_window)
+
+
+func reset_luck_triggers() -> void:
+	for trigger in luck_triggers:
+		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger.id]
+		luck_trigger_dict[enum_str] = false
+	trigger_discovered.emit()
 
 
 ## Modify luck
