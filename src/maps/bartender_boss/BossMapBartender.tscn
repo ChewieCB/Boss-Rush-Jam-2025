@@ -912,7 +912,6 @@ points = PackedVector3Array(0.946931, 1.22226, 2.0865, 0.943972, 1.22522, 2.0876
 script = ExtResource("2_ikfam")
 first_countertop_flame_marker = NodePath("CountertopFlamingWallHolder/FirstCountertopFlameMarker")
 countertop_flame_prefab = ExtResource("33_byrwp")
-countertop_flame_duration = 15
 sfx_fire_start = ExtResource("3_qvoi0")
 sfx_fire_loop = ExtResource("4_w5yjf")
 nav_parent = NodePath("FuncGodotMap")

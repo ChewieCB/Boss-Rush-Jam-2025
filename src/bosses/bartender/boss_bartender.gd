@@ -105,6 +105,10 @@ const SHOT_PER_BURST = 2
 var shotgun_volley_enabled = false
 var burst_to_fire = 0
 var burst_fired = 0
+@export_subgroup("Countertop Flame")
+@export var countertop_flame_duration = 10
+@export var countertop_flame_cd = 30
+@onready var countertop_flame_cd_timer: Timer = $CountertopFlameTimer
 @export_subgroup("Throw Drink")
 @export var bottle_damage = 10
 enum BottleAttack {
@@ -258,21 +262,23 @@ func select_attack_phase_1() -> void:
 
 	if player_is_near:
 		# Close range:
-		if attack_roll < 15:
-			attack_str = "start_throw_drink"
-		elif attack_roll < 35:
+		if attack_roll < 25:
 			attack_str = "start_throw_broken_bottle"
-		elif attack_roll < 55:
+		elif attack_roll < 50:
 			attack_str = "start_shotgun_volley"
+		elif attack_roll < 75 and countertop_flame_cd_timer.is_stopped():
+			attack_str = "start_countertop_flame"
 		else:
 			attack_str = "start_shotgun_blast"
 	else:
 		# Mid/Far range:
-		if attack_roll < 25:
+		if attack_roll < 15:
 			attack_str = "start_throw_broken_bottle"
-		elif attack_roll < 65:
+		elif attack_roll < 45:
 			attack_str = "start_throw_drink"
-		elif attack_roll < 90:
+		elif attack_roll < 65 and countertop_flame_cd_timer.is_stopped():
+			attack_str = "start_countertop_flame"
+		elif attack_roll < 80:
 			attack_str = "start_shotgun_volley"
 		else:
 			attack_str = "start_shotgun_blast"
@@ -866,8 +872,26 @@ func _on_brew_drink_recover_state_entered() -> void:
 
 
 #region Countertop Flame
+func _on_countertop_flame_moving_state_entered() -> void:
+	debug_state_label.text = "Countertop Flame | Moving"
+	set_countertop_on_fire()
+	state_chart.send_event("to_recover")
+
+
+func _on_countertop_flame_recover_state_entered() -> void:
+	debug_state_label.text = "Countertop Flame | Recover"
+	anim_player.play("RESET")
+	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
+	state_chart.send_event("reposition")
+
+
 func set_countertop_on_fire():
-	boss_map.create_countertop_firewall()
+	anim_player.play("lit_match")
+	await anim_player.animation_finished
+	anim_player.play("RESET")
+	if countertop_flame_cd_timer.is_stopped():
+		boss_map.create_countertop_flame_wall(countertop_flame_duration)
+		countertop_flame_cd_timer.start(countertop_flame_cd)
 
 #endregion
 
