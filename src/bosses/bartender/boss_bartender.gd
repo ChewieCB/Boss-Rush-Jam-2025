@@ -416,6 +416,8 @@ func select_attack_phase_3() -> void:
 
 	if attack_roll < 25:
 		attack_str = "start_shotgun_volley"
+	elif attack_roll < 40 and countertop_flame_cd_timer.is_stopped():
+		attack_str = "start_countertop_flame"
 	else:
 		attack_str = "start_throw_drink"
 

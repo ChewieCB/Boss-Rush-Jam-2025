@@ -2509,6 +2509,13 @@ event = &"start_shotgun_volley"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
+[node name="toCountertopFlame" type="Node" parent="StateChart/Root/Phase/Phase3/Idle" index="5"]
+script = ExtResource("4_dheml")
+to = NodePath("../../CountertopFlame")
+event = &"start_countertop_flame"
+guard = ExtResource("28_8rmxp")
+delay_in_seconds = "0.0"
+
 [node name="ThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase3" index="2"]
 script = ExtResource("5_2jcim")
 initial_state = NodePath("Targeting")
@@ -2817,6 +2824,34 @@ to = NodePath("../../Idle")
 event = &"reposition"
 delay_in_seconds = "0.0"
 
+[node name="CountertopFlame" type="Node" parent="StateChart/Root/Phase/Phase3" index="7"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Moving")
+
+[node name="Moving" type="Node" parent="StateChart/Root/Phase/Phase3/CountertopFlame" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase3/CountertopFlame/Moving" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Recover")
+event = &"to_recover"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase3/CountertopFlame" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toMoving" type="Node" parent="StateChart/Root/Phase/Phase3/CountertopFlame/Recover" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Moving")
+event = &"to_moving"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase3/CountertopFlame" index="2"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"reposition"
+delay_in_seconds = "0.0"
+
 [node name="NavigationAgent3D" parent="." index="9"]
 target_desired_distance = 1.0
 radius = 1.0
@@ -2944,6 +2979,8 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ShotgunVolley/Targeting" to="." method="_on_shotgun_volley_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ShotgunVolley/Bursting" to="." method="_on_shotgun_volley_bursting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ShotgunVolley/Recover" to="." method="_on_shotgun_volley_recover_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/CountertopFlame/Moving" to="." method="_on_countertop_flame_moving_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase3/CountertopFlame/Recover" to="." method="_on_countertop_flame_recover_state_entered"]
 [connection signal="body_entered" from="ShotgunTriggerArea" to="." method="_on_shotgun_trigger_area_body_entered"]
 [connection signal="body_exited" from="ShotgunTriggerArea" to="." method="_on_shotgun_trigger_area_body_exited"]
 [connection signal="timeout" from="BuffExpireTimer" to="." method="_on_buff_expire_timer_timeout"]
