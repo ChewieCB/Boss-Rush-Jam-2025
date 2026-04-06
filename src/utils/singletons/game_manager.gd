@@ -145,9 +145,9 @@ var elevator_respawn_transform: Transform3D
 		camera_fov = value
 var camera_tilt: bool = true
 
-@export_range(0, 5, 1) var fps_limit_index: int = 2 # Refer to EnumAutoload.FPS_LIMIT_ARRAY
+@export_range(0, 5, 1) var fps_limit_index: int = 5 # Refer to EnumAutoload.FPS_LIMIT_ARRAY
 @export_range(0, 6, 1) var resolution_index: int = 1 # Refer to EnumAutoload.RESOLUTION_ARRAY. Not used in FULL_SCREEN
-var vsync_option_index: int = 1
+var vsync_option_index: int = 0
 @export_range(0, 2, 1) var window_mode_index: int = 1 # From 0 to 2
 var scaling_3d: float = 100.0
 var enable_elemental_vfx = true # : TODO
