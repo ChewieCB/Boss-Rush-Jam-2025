@@ -204,6 +204,10 @@ func _ready() -> void:
 	SaveManager.load_setting_config()
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
+	if InputHelper.device == InputHelper.DEVICE_STEAMDECK_CONTROLLER:
+		if scaling_3d > 90.0:
+			scaling_3d = 90.0
+			get_viewport().set_scaling_3d_scale(90 / 100.0)
 	main_bgm_emitter.volume = BASE_FMOD_VOLUME
 
 func _unhandled_input(_event: InputEvent) -> void:
