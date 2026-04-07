@@ -1,8 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://dn3eeknqbnsed"]
+[gd_scene load_steps=14 format=3 uid="uid://dn3eeknqbnsed"]
 
-[ext_resource type="Script" path="res://src/maps/bartender_boss/bar_table.gd" id="1_1ryjy"]
+[ext_resource type="Script" path="res://src/maps/bartender_boss/bar_table/bar_table.gd" id="1_1ryjy"]
 [ext_resource type="Texture2D" uid="uid://ben1bmsxy5j8x" path="res://assets/textures/floor/wood_0.png" id="1_24sik"]
-[ext_resource type="AudioStream" uid="uid://ssvhvr652nl6" path="res://src/bosses/bartender/assets/sfx/misc/398257__vataaa__hit-the-table.mp3" id="3_e3h8g"]
+[ext_resource type="AudioStream" uid="uid://ssvhvr652nl6" path="res://src/maps/bartender_boss/bar_table/398257__vataaa__hit-the-table.mp3" id="3_e3h8g"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eov4s"]
 albedo_texture = ExtResource("1_24sik")
@@ -20,34 +20,6 @@ size = Vector3(0.2, 1.1, 0.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nmxo7"]
 size = Vector3(0.2, 1.1, 0.2)
-
-[sub_resource type="Animation" id="Animation_abtqq"]
-resource_name = "flip_front"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.366667, 0.5),
-"transitions": PackedFloat32Array(0.5, 2, 0.5, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(-1.91986, 0, 0), Vector3(-2.00713, 0, 0), Vector3(-1.5708, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 1, 0), Vector3(0, 1.23772, -1.29121), Vector3(0, 0.978104, -1.92868)]
-}
 
 [sub_resource type="Animation" id="Animation_3vgit"]
 length = 0.001
@@ -74,6 +46,20 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 1, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"set_parrying_state"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_kgdwx"]
@@ -102,6 +88,74 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector3(0, 1, 0), Vector3(0, 1.238, 1.291), Vector3(0, 0.978, 1.929)]
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [false],
+"method": &"set_parrying_state"
+}, {
+"args": [true],
+"method": &"set_parrying_state"
+}, {
+"args": [false],
+"method": &"set_parrying_state"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_abtqq"]
+resource_name = "flip_front"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.366667, 0.5),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.91986, 0, 0), Vector3(-2.00713, 0, 0), Vector3(-1.5708, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 1, 0), Vector3(0, 1.23772, -1.29121), Vector3(0, 0.978104, -1.92868)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [false],
+"method": &"set_parrying_state"
+}, {
+"args": [true],
+"method": &"set_parrying_state"
+}, {
+"args": [false],
+"method": &"set_parrying_state"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_db2rv"]
 _data = {
@@ -109,6 +163,9 @@ _data = {
 "flip_back": SubResource("Animation_kgdwx"),
 "flip_front": SubResource("Animation_abtqq")
 }
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8vgnp"]
+size = Vector3(3.5, 0.5, 2.5)
 
 [node name="BarTable" type="Node3D"]
 
@@ -175,8 +232,21 @@ libraries = {
 wait_time = 30.0
 one_shot = true
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="StaticBody3D"]
+[node name="KickTableSFX" type="AudioStreamPlayer3D" parent="StaticBody3D"]
 stream = ExtResource("3_e3h8g")
 bus = &"SFX"
 
+[node name="ParryArea" type="Area3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D/ParryArea"]
+shape = SubResource("BoxShape3D_8vgnp")
+
+[node name="ParryLight" type="OmniLight3D" parent="StaticBody3D/ParryArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.324798, 0)
+
 [connection signal="timeout" from="StaticBody3D/ResetTimer" to="StaticBody3D" method="_on_reset_timer_timeout"]
+[connection signal="area_entered" from="StaticBody3D/ParryArea" to="StaticBody3D" method="_on_parry_area_area_entered"]
+[connection signal="body_entered" from="StaticBody3D/ParryArea" to="StaticBody3D" method="_on_parry_area_body_entered"]

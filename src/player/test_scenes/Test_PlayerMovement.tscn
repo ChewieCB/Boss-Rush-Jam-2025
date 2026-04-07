@@ -33,7 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://cm1sitbvy6aye" path="res://src/maps/lobby/shrine/SkillShrine.tscn" id="25_janht"]
 [ext_resource type="PackedScene" uid="uid://d2el785lqsvuu" path="res://src/maps/lobby/ElevatorButton.tscn" id="27_x0fgt"]
 [ext_resource type="PackedScene" uid="uid://c1douwk7psgv6" path="res://src/maps/lobby/ElevatorDoors.tscn" id="29_o1a3k"]
-[ext_resource type="PackedScene" uid="uid://dn3eeknqbnsed" path="res://src/maps/bartender_boss/BarTable.tscn" id="36_5ouhm"]
+[ext_resource type="PackedScene" uid="uid://dn3eeknqbnsed" path="res://src/maps/bartender_boss/bar_table/BarTable.tscn" id="36_5ouhm"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j6bgd"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)

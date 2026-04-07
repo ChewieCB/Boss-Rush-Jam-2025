@@ -32,7 +32,7 @@
 [ext_resource type="Texture2D" uid="uid://b0jvmdu1nkww5" path="res://src/env/decor/assets/dart_board.png" id="21_4yyfc"]
 [ext_resource type="PackedScene" uid="uid://uwn1wb0neu46" path="res://src/bosses/bartender/BossBartender.tscn" id="31_p2107"]
 [ext_resource type="PackedScene" uid="uid://bt53n4vndbmpk" path="res://src/bosses/bartender/area_effects/CountertopFlamingWall.tscn" id="33_byrwp"]
-[ext_resource type="PackedScene" uid="uid://dn3eeknqbnsed" path="res://src/maps/bartender_boss/BarTable.tscn" id="33_gfr6u"]
+[ext_resource type="PackedScene" uid="uid://dn3eeknqbnsed" path="res://src/maps/bartender_boss/bar_table/BarTable.tscn" id="33_gfr6u"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gki5r"]
 resource_local_to_scene = true

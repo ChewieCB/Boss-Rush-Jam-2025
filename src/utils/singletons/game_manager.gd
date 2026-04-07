@@ -38,6 +38,7 @@ const BASE_FMOD_VOLUME = 5
 var pause_ui: PauseUI
 var setting_ui: SettingUI
 var player: Player
+var player_ui: PlayerUI
 var difficulty_menu: DifficultyMenu
 var object_pooling_manager: ObjectPoolingManager
 var current_boss_map: Node3D

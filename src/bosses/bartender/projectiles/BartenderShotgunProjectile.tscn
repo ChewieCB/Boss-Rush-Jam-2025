@@ -32,7 +32,7 @@ generic_blood_splatter = ExtResource("3_wgkqq")
 mesh = SubResource("BoxMesh_r4rf5")
 
 [node name="Area3D" type="Area3D" parent="."]
-collision_layer = 0
+collision_layer = 8
 collision_mask = 27
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]

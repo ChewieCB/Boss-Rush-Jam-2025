@@ -187,7 +187,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		new_pos = _pos
 
 	for i in range(split_count):
-		if not is_instance_valid(self):
+		if not is_instance_valid(self ):
 			return
 		var new_inst = create_duplication()
 		get_tree().get_root().add_child(new_inst)
@@ -227,3 +227,7 @@ func apply_damage_to_health_component(health_component: HealthComponent, damage_
 		health_component.damage(damage_value, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP)
 	else:
 		health_component.damage(damage_value)
+
+
+func parried() -> void:
+	return

@@ -4,12 +4,13 @@ class_name BartenderShotgunProjectile
 @onready var push_force = 20
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var life_timer: Timer = $LifeTimer
+@onready var hit_area: Area3D = $Area3D
 
 func _physics_process(delta: float) -> void:
 	global_position -= transform.basis.z * projectile_speed * delta
 
 
-func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float=500):
+func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _speed: float, _max_range: float = 500):
 	life_timer.start()
 	projectile_speed = _speed
 	damage = _damage
@@ -57,3 +58,16 @@ func ricochet():
 	is_ricochet_shot = true
 	init(global_position, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, projectile_speed)
 	raycast.rotation = Vector3.ZERO
+	life_timer.start()
+
+
+func parried():
+	super ()
+	const PARRIED_DMG_MULT = 10
+	const PARRIED_SPD_MULT = 2
+	damage = damage * PARRIED_DMG_MULT
+	projectile_speed = projectile_speed * PARRIED_SPD_MULT
+	hit_area.set_collision_mask_value(3, true)
+	current_dir = - current_dir
+	look_at(global_position + current_dir, Vector3.UP)
+	life_timer.start()
