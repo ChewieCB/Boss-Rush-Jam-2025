@@ -25,7 +25,7 @@ extends BossCore
 # New move (DONE): Flaming wall: Use several molotovs to create a flaming wall that block LoS (but he can shoot since he an AI and dont have
 # such weakness) and prevent movement.
 #
-# New move: Infernal Countertop: Lit the whole counter top on fire, block vision.
+# New move: (DONE) Infernal Countertop: Lit the whole counter top on fire, block vision.
 #
 # New move: Drunken Bullet Dance: Jump to the center and shoot randomly in 360 degree (like Katarina Ultimate)
 #
@@ -292,58 +292,6 @@ func select_attack_phase_2() -> void:
 	var attack_str: String = ""
 	var attack_roll: int = randi_range(0, 99)
 
-	# if not brew_cooldown_timer.is_stopped():
-	# 	if $StateChart/Root/Status/BrewBuffs/NoBuff.active:
-	# 		# No buffs, Buff on cooldown:
-	# 		#
-	# 		# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
-	# 		# 5% chance of broken bottle
-	# 		# 10% chance of molotov/tar/poison
-	# 		# 85% chance of shotgun blast
-	# 		if attack_roll < 5:
-	# 			attack_str = "start_throw_broken_bottle"
-	# 		elif attack_roll < 15:
-	# 			attack_str = "start_throw_drink"
-	# 		else:
-	# 			attack_str = "start_shotgun_blast"
-	# 	elif $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
-	# 		# Strength buff, Buff on cooldown:
-	# 		#
-	# 		# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
-	# 		# 30% chance of shotgun blast
-	# 		# 70% chance of broken bottle/keg
-	# 		if attack_roll < 30:
-	# 			attack_str = "start_shotgun_blast"
-	# 		else:
-	# 			attack_str = "start_throw_drink"
-	# 	elif $StateChart/Root/Status/BrewBuffs/DefenceBuff.active:
-	# 		# Defense buff, Buff on cooldown:
-	# 		#
-	# 		# Focus on elemental bottle attacks, occasionally shotgun blasts and broken bottle attacks
-	# 		# 10% chance of broken bottle
-	# 		# 25% chance of shotgun blast
-	# 		# 65% chance of molotov/tar/poison
-	# 		if attack_roll < 10:
-	# 			attack_str = "start_throw_broken_bottle"
-	# 		elif attack_roll < 35:
-	# 			attack_str = "start_shotgun_blast"
-	# 		else:
-	# 			attack_str = "start_throw_drink"
-	# 	elif $StateChart/Root/Status/BrewBuffs/SpeedBuff.active:
-	# 		# Speed buff, Buff on cooldown:
-	# 		#
-	# 		# Focus on shotgun blasts, broken bottle attacks, and occasional elemental bottle attacks
-	# 		# 10% chance of molotov/tar/poison
-	# 		# 15% chance of broken bottle
-	# 		# 75% chance of shotgun blast
-	# 		if attack_roll < 10:
-	# 			attack_str = "start_throw_drink"
-	# 		elif attack_roll < 25:
-	# 			attack_str = "start_throw_broken_bottle"
-	# 		else:
-	# 			attack_str = "start_shotgun_blast"
-	# else:
-
 	if attack_roll < 20:
 		attack_str = "start_shotgun_blast"
 	if attack_roll < 30:
@@ -361,58 +309,6 @@ func select_attack_phase_3() -> void:
 	#
 	var attack_str: String = ""
 	var attack_roll: int = randi_range(0, 99)
-
-	# if not brew_cooldown_timer.is_stopped():
-	# 	if $StateChart/Root/Status/BrewBuffs/NoBuff.active:
-	# 		# No buffs, Buff on cooldown:
-	# 		#
-	# 		# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
-	# 		# 15% chance of broken bottle
-	# 		# 30% chance of molotov/tar/poison
-	# 		# 55% chance of shotgun blast
-	# 		if attack_roll < 15:
-	# 			attack_str = "start_throw_broken_bottle"
-	# 		elif attack_roll < 45:
-	# 			attack_str = "start_throw_drink"
-	# 		else:
-	# 			attack_str = "start_shotgun_blast"
-	# 	elif $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
-	# 		# Strength buff, Buff on cooldown:
-	# 		#
-	# 		# Focus on elemental bottle attacks, shotgun blasts, and the occastional broken bottle attack
-	# 		# 30% chance of shotgun blast
-	# 		# 70% chance of broken bottle/keg
-	# 		if attack_roll < 30:
-	# 			attack_str = "start_shotgun_blast"
-	# 		else:
-	# 			attack_str = "start_throw_drink"
-	# 	elif $StateChart/Root/Status/BrewBuffs/DefenceBuff.active:
-	# 		# Defense buff, Buff on cooldown:
-	# 		#
-	# 		# Focus on elemental bottle attacks, occasionally shotgun blasts and broken bottle attacks
-	# 		# 10% chance of broken bottle
-	# 		# 40% chance of shotgun blast
-	# 		# 50% chance of molotov/tar/poison
-	# 		if attack_roll < 10:
-	# 			attack_str = "start_throw_broken_bottle"
-	# 		elif attack_roll < 50:
-	# 			attack_str = "start_shotgun_blast"
-	# 		else:
-	# 			attack_str = "start_throw_drink"
-	# 	elif $StateChart/Root/Status/BrewBuffs/SpeedBuff.active:
-	# 		# Speed buff, Buff on cooldown:
-	# 		#
-	# 		# Focus on shotgun blasts, broken bottle attacks, and occasional elemental bottle attacks
-	# 		# 10% chance of molotov/tar/poison
-	# 		# 15% chance of broken bottle
-	# 		# 75% chance of shotgun blast
-	# 		if attack_roll < 10:
-	# 			attack_str = "start_throw_drink"
-	# 		elif attack_roll < 25:
-	# 			attack_str = "start_throw_broken_bottle"
-	# 		else:
-	# 			attack_str = "start_shotgun_blast"
-	# else:
 
 	if attack_roll < 25:
 		attack_str = "start_shotgun_volley"
@@ -448,22 +344,6 @@ func _on_died() -> void:
 func _on_attack_telegraph_state_entered() -> void:
 	pass
 
-#### Any Phase
-
-func fire_shotgun():
-	var proj_damage = shotgun_proj_damage * damage_modifier
-	# var delay_between_burst = 0.5 * delay_modifier
-	# TODO - this needs to be cancellable for when the boss dies mid attack
-	# Make this function shoot once and then we can call it 3 times and allow
-	# an interrupt for death after each shot.
-	sfx_player.stream = sfx_shotgun.pick_random()
-	sfx_player.play()
-	for j in range(shotgun_proj_amount):
-		var aim_direction = shotgun_spawn_pos.global_position.direction_to(target.global_position)
-		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, shotgun_spread_angle)
-		var bullet_inst: BartenderShotgunProjectile = chosen_shotgun_proj_prefab.instantiate()
-		get_parent().add_child(bullet_inst)
-		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, shotgun_ricochet_count, shotgun_proj_speed)
 
 #### Phase 1
 
@@ -536,61 +416,6 @@ func _on_phase_3_state_entered() -> void:
 		floor_fire_hazard = floor_fire_hazard_prefab.instantiate()
 		floor_fize_hazard_marker.add_child(floor_fire_hazard)
 		floor_fire_hazard.position = Vector3.ZERO
-
-
-func throw_projectile(throw_barrel: bool = false) -> void:
-	if throw_barrel:
-		current_bottle_type = BottleAttack.BARREL
-		_throw_bottle(current_bottle_type, 1, 1, barrel_damage)
-	else:
-		var n_bottle = randi_range(min_n_bottle_per_attack, max_n_bottle_per_attack)
-		var spread = randf_range(min_bottles_spread, max_bottles_spread)
-		_throw_bottle(current_bottle_type, n_bottle, spread, bottle_damage)
-
-
-func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> void:
-	proj_damage *= damage_modifier
-	var prefab: PackedScene
-	match bottle_type:
-		BottleAttack.EMPTY:
-			prefab = empty_bottle_prefab
-		BottleAttack.FIRE:
-			prefab = molotov_prefab
-		BottleAttack.POISON:
-			prefab = poison_bottle_prefab
-		BottleAttack.SLOW:
-			prefab = slow_bottle_prefab
-		# BottleAttack.HEAL:
-		# 	prefab = empty_bottle_prefab
-		BottleAttack.BARREL:
-			prefab = beer_barrel_prefab
-		_:
-			return
-
-	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
-	var throw_force = proj_spawn_marker.global_position.distance_to(target.global_position)
-	# Magic number that make bartender throw better
-	if throw_force >= 30:
-		throw_force *= 0.5
-	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
-		throw_force *= 2
-	else:
-		aim_direction += Vector3(0, 0.3, 0) # Make it arc upwards a bit
-	aim_direction = aim_direction.normalized()
-
-	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
-
-	for i in range(n_bottle_repeat):
-		var spread_direction = GunUtils.get_spread_direction(aim_direction, spread_angle, 1.0)
-		var bottle_inst = prefab.instantiate()
-		bottle_inst.bartender_owner = self
-		get_parent().add_child(bottle_inst)
-		bottle_inst.init(modified_spawn_pos, spread_direction, proj_damage, throw_force)
-		if bottle_inst is BartenderBarrel:
-			sfx_player.stream = sfx_barrel_throw.pick_random()
-		else:
-			sfx_player.stream = sfx_bottle_throw.pick_random()
-		sfx_player.play()
 
 
 ## Choose a random drink to brew and buff.
@@ -685,6 +510,21 @@ func _on_shotgun_blast_state_exited() -> void:
 func _on_shotgun_timer_timeout() -> void:
 	state_chart.send_event("start_shooting")
 
+func fire_shotgun():
+	var proj_damage = shotgun_proj_damage * damage_modifier
+	# var delay_between_burst = 0.5 * delay_modifier
+	# TODO - this needs to be cancellable for when the boss dies mid attack
+	# Make this function shoot once and then we can call it 3 times and allow
+	# an interrupt for death after each shot.
+	sfx_player.stream = sfx_shotgun.pick_random()
+	sfx_player.play()
+	for j in range(shotgun_proj_amount):
+		var aim_direction = shotgun_spawn_pos.global_position.direction_to(target.global_position)
+		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, shotgun_spread_angle)
+		var bullet_inst: BartenderShotgunProjectile = chosen_shotgun_proj_prefab.instantiate()
+		get_parent().add_child(bullet_inst)
+		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, shotgun_ricochet_count, shotgun_proj_speed)
+
 #endregion
 
 
@@ -752,6 +592,61 @@ func _on_throw_broken_bottle_recover_state_entered() -> void:
 	await get_tree().create_timer(attack_recovery_time * delay_modifier, false).timeout
 	state_chart.send_event("reposition")
 
+
+func throw_projectile(throw_barrel: bool = false) -> void:
+	if throw_barrel:
+		current_bottle_type = BottleAttack.BARREL
+		_throw_bottle(current_bottle_type, 1, 1, barrel_damage)
+	else:
+		var n_bottle = randi_range(min_n_bottle_per_attack, max_n_bottle_per_attack)
+		var spread = randf_range(min_bottles_spread, max_bottles_spread)
+		_throw_bottle(current_bottle_type, n_bottle, spread, bottle_damage)
+
+
+func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> void:
+	proj_damage *= damage_modifier
+	var prefab: PackedScene
+	match bottle_type:
+		BottleAttack.EMPTY:
+			prefab = empty_bottle_prefab
+		BottleAttack.FIRE:
+			prefab = molotov_prefab
+		BottleAttack.POISON:
+			prefab = poison_bottle_prefab
+		BottleAttack.SLOW:
+			prefab = slow_bottle_prefab
+		# BottleAttack.HEAL:
+		# 	prefab = empty_bottle_prefab
+		BottleAttack.BARREL:
+			prefab = beer_barrel_prefab
+		_:
+			return
+
+	var aim_direction = proj_spawn_marker.global_position.direction_to(target.global_position)
+	var throw_force = proj_spawn_marker.global_position.distance_to(target.global_position)
+	# Magic number that make bartender throw better
+	if throw_force >= 30:
+		throw_force *= 0.5
+	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
+		throw_force *= 2
+	else:
+		aim_direction += Vector3(0, 0.3, 0) # Make it arc upwards a bit
+	aim_direction = aim_direction.normalized()
+
+	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
+
+	for i in range(n_bottle_repeat):
+		var spread_direction = GunUtils.get_spread_direction(aim_direction, spread_angle, 1.0)
+		var bottle_inst = prefab.instantiate()
+		bottle_inst.bartender_owner = self
+		get_parent().add_child(bottle_inst)
+		bottle_inst.init(modified_spawn_pos, spread_direction, proj_damage, throw_force)
+		if bottle_inst is BartenderBarrel:
+			sfx_player.stream = sfx_barrel_throw.pick_random()
+		else:
+			sfx_player.stream = sfx_bottle_throw.pick_random()
+		sfx_player.play()
+
 #endregion
 
 
@@ -768,7 +663,6 @@ func _on_throw_drink_targeting_state_entered() -> void:
 		bottle_types_no_barrel.remove_at(BottleAttack.BARREL)
 		if special_bottle_enabled:
 			current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack) as BottleAttack
-			current_bottle_type = BottleAttack.FIRE # DEBUG
 		else:
 			current_bottle_type = BottleAttack.EMPTY
 	await get_tree().create_timer(0.2 * delay_modifier, false).timeout
