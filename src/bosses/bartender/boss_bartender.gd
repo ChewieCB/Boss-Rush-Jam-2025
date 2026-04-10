@@ -603,7 +603,9 @@ func throw_projectile(throw_barrel: bool = false) -> void:
 		_throw_bottle(current_bottle_type, n_bottle, spread, bottle_damage)
 
 
-func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle = 0, proj_damage = 10) -> void:
+func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, _spread_angle = 0, proj_damage = 10) -> void:
+	const BOTTLE_PEAK_HEIGHT = 5
+
 	proj_damage *= damage_modifier
 	var prefab: PackedScene
 	match bottle_type:
@@ -636,16 +638,17 @@ func _throw_bottle(bottle_type: BottleAttack, n_bottle_repeat = 1, spread_angle 
 	var modified_spawn_pos = proj_spawn_marker.global_position + aim_direction # Avoid stuck inside boss body
 
 	for i in range(n_bottle_repeat):
-		var spread_direction = GunUtils.get_spread_direction(aim_direction, spread_angle, 1.0)
-		var bottle_inst = prefab.instantiate()
+		var bottle_inst: BartenderBottle = prefab.instantiate()
 		bottle_inst.bartender_owner = self
 		get_parent().add_child(bottle_inst)
-		bottle_inst.init(modified_spawn_pos, spread_direction, proj_damage, throw_force)
+		var end_pos = GameManager.player.global_position
+		bottle_inst.init_tween(modified_spawn_pos, end_pos, proj_damage, BOTTLE_PEAK_HEIGHT)
 		if bottle_inst is BartenderBarrel:
 			sfx_player.stream = sfx_barrel_throw.pick_random()
 		else:
 			sfx_player.stream = sfx_bottle_throw.pick_random()
 		sfx_player.play()
+		await get_tree().create_timer(0.5, false).timeout
 
 #endregion
 
