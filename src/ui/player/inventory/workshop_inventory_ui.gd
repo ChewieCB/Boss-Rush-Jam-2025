@@ -111,6 +111,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 	
 	full_refresh_ui()
+	await get_tree().process_frame
 	get_first_item_for_focus().grab_focus.call_deferred() 
 
 
@@ -130,4 +131,5 @@ func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: Gun
 	current_gun_frame_icon.texture = data.shop_ui_sprite
 	
 	full_refresh_ui()
+	await get_tree().process_frame
 	get_first_item_for_focus().grab_focus.call_deferred()

@@ -85,14 +85,16 @@ func _on_button_focus_entered() -> void:
 	play_button_hover_sfx()
 	expand_button_size()
 	# We do this for shop item UI so it can show the price at the bottom
-	if is_shop_item_ui:
-		if GameManager.gun_customize_ui:
-			GameManager.gun_customize_ui.get_current_scroll_container().ensure_control_visible(get_parent())
+	if parent_inventory_ui:
+		if is_shop_item_ui:
+			if parent_inventory_ui.visible:
+				parent_inventory_ui.scroll_container.ensure_control_visible(get_parent())
+			else:
+				grab_focus()  # This wont show the chip cost, but at least it wont crash
 		else:
-			grab_focus() # This wont show the chip cost, but at least it wont crash
-	else:
-		if GameManager.gun_customize_ui:
-			GameManager.gun_customize_ui.get_current_scroll_container().ensure_control_visible(self)
+			if parent_inventory_ui.visible:
+				parent_inventory_ui.scroll_container.ensure_control_visible(self)
+
 
 func _on_button_focus_exited() -> void:
 	return_button_size()

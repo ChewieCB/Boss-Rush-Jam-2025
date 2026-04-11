@@ -32,7 +32,6 @@ func _ready() -> void:
 	
 	barrel_info_region.reset_ui()
 	full_refresh_ui(true)
-	get_first_item_for_focus().grab_focus.call_deferred()
 
 
 func _input(event: InputEvent) -> void:
@@ -53,7 +52,7 @@ func _process(delta: float) -> void:
 
 func toggle():
 	SoundManager.play_sound(sfx_open, "SFX")
-	close() if visible else open()
+	await close() if visible else await open()
 
 
 func open():
@@ -66,8 +65,11 @@ func open():
 	
 	_on_controller_connection(0, GameManager.is_controller_connected)
 	GameManager.player.is_in_menu = true
-	get_first_item_for_focus().grab_focus.call_deferred()
 	inventory_opened.emit()
+	
+	# We need to wait a frame so the button doesn't drop focus
+	await get_tree().process_frame
+	get_first_item_for_focus().grab_focus.call_deferred()
 
 
 func close():
