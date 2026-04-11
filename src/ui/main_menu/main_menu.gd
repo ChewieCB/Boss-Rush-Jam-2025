@@ -18,13 +18,11 @@ var started_loading = false
 
 
 func _ready() -> void:
-	_on_controller_connection(0, GameManager.is_controller_connected)
-	
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	if not LoadingHandler.is_materials_compiled:
 		LoadingHandler.initial_load()
 		await LoadingHandler.materials_compiled
 	
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	for slot: SaveSlotItem in save_slot_items:
 		slot.save_deleted.connect(_on_save_deleted)
@@ -35,6 +33,8 @@ func _ready() -> void:
 	SoundManager.stop_music(0.1)
 	LoadingHandler.current_scene_path = LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM]
 	get_tree().paused = false
+	
+	_on_controller_connection(0, GameManager.is_controller_connected)
 	
 	ScreenTransition.transition_in()
 	await ScreenTransition.transition_finished
