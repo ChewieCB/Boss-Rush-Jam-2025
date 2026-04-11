@@ -104,14 +104,14 @@ func _input(event: InputEvent) -> void:
 			close()
 			get_viewport().set_input_as_handled()
 			return
-		if event.is_action_pressed("switch_tab_left"):
-			if shop_bg.visible:
-				_on_modify_tab_button_pressed()
-			return
-		if event.is_action_pressed("switch_tab_right"):
-			if modify_bg.visible:
-				_on_shop_tab_button_pressed()
-			return
+		#if event.is_action_pressed("switch_tab_left"):
+			#if shop_bg.visible:
+				#_on_modify_tab_button_pressed()
+			#return
+		#if event.is_action_pressed("switch_tab_right"):
+			#if modify_bg.visible:
+				#_on_shop_tab_button_pressed()
+			#return
 
 func full_refresh_ui(forced = false):
 	if not visible and not forced:
