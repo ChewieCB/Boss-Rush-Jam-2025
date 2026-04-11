@@ -257,6 +257,7 @@ mesh = SubResource("QuadMesh_bbump")
 
 [node name="AimRay" parent="Neck/ShakeCameraWrapper/Camera3D" instance=ExtResource("5_dqbuo")]
 collision_mask = 125
+hit_from_inside = true
 collide_with_areas = true
 
 [node name="LaserGuideRayCast" type="RayCast3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
