@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://dxui67spyijhu"]
+[gd_scene load_steps=33 format=3 uid="uid://dxui67spyijhu"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/gun_customize_ui.gd" id="1_g1lei"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="1_o6gc7"]
@@ -16,7 +16,6 @@
 [ext_resource type="AudioStream" uid="uid://dfn156jmlg3ho" path="res://src/ui/common/assets/sfx/NOT ENOUGH CHIPS.mp3" id="8_b21fk"]
 [ext_resource type="AudioStream" uid="uid://v51pe0t4hgki" path="res://src/ui/common/assets/sfx/EQUIP BARREL.mp3" id="9_mbb0v"]
 [ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="9_wboqf"]
-[ext_resource type="Texture2D" uid="uid://nvouyvq10qte" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-026.png" id="14_ynme0"]
 [ext_resource type="PackedScene" uid="uid://bxk2wvkyky01p" path="res://src/ui/player/inventory/CurrencyUI.tscn" id="15_ici8l"]
 [ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="16_1lncy"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="17_l7b4t"]
@@ -154,95 +153,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_1ywl0")
 
-[node name="TitleRegion" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 128.0
-grow_horizontal = 2
-color = Color(0, 0, 0, 1)
-
-[node name="HBoxContainer" type="HBoxContainer" parent="TitleRegion"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-
-[node name="ShopTab" type="ColorRect" parent="TitleRegion/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(0.392157, 0.349384, 0.0134799, 1)
-
-[node name="ShopTabButton" type="Button" parent="TitleRegion/HBoxContainer/ShopTab"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 60
-text = "Shop"
-
-[node name="Border" type="NinePatchRect" parent="TitleRegion/HBoxContainer/ShopTab/ShopTabButton"]
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("14_ynme0")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="ModifyTab" type="ColorRect" parent="TitleRegion/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(0.464844, 0.0511328, 0, 1)
-
-[node name="ModifyTabButton" type="Button" parent="TitleRegion/HBoxContainer/ModifyTab"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 60
-text = "Modify"
-
-[node name="Border" type="NinePatchRect" parent="TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton"]
-visible = false
-self_modulate = Color(0.901961, 0.776471, 0, 1)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("14_ynme0")
-patch_margin_left = 20
-patch_margin_top = 20
-patch_margin_right = 20
-patch_margin_bottom = 20
-
-[node name="MainRegion" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -952.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="FadeDarkBG" type="TextureRect" parent="MainRegion"]
+[node name="FadeDarkBG" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -250,6 +161,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_cxwao")
+
+[node name="MainRegion" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 83.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="BarrelShopUI" type="Control" parent="MainRegion"]
 layout_mode = 1
@@ -798,7 +719,8 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -56.0
+offset_top = -85.0
+offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -834,6 +756,3 @@ text = "return"
 [node name="DeviceInputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("21_dravj")]
 layout_mode = 2
 assigned_action = "interact"
-
-[connection signal="pressed" from="TitleRegion/HBoxContainer/ShopTab/ShopTabButton" to="." method="_on_shop_tab_button_pressed"]
-[connection signal="pressed" from="TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton" to="." method="_on_modify_tab_button_pressed"]

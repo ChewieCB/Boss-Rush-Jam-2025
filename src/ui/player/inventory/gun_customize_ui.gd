@@ -22,7 +22,6 @@ signal reset_barrel_info
 
 @onready var warning_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/WarningLabel
 @onready var modify_bg: Control = $ModifyBG
-@onready var modify_tab_btn: Button = $TitleRegion/HBoxContainer/ModifyTab/ModifyTabButton
 @onready var barrel_modify_ui: Control = $MainRegion/BarrelModifyUI
 @onready var equip_barrel_container: HBoxContainer = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer
 @onready var inventory_gun_frame_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer
@@ -31,7 +30,6 @@ signal reset_barrel_info
 @onready var inventory_scroll_container: ScrollContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer
 
 @onready var shop_bg: Control = $ShopBG
-@onready var shop_tab_btn: Button = $TitleRegion/HBoxContainer/ShopTab/ShopTabButton
 @onready var barrel_shop_ui: Control = $MainRegion/BarrelShopUI
 @onready var shop_gun_frame_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer
 @onready var shop_normal_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer
@@ -52,22 +50,22 @@ func _ready() -> void:
 
 	modify_bg.visible = not show_shop_first
 	barrel_modify_ui.visible = not show_shop_first
-	modify_tab_btn.disabled = not show_shop_first
-	modify_tab_btn.get_node("Border").visible = not show_shop_first
+	#modify_tab_btn.disabled = not show_shop_first
+	#modify_tab_btn.get_node("Border").visible = not show_shop_first
 	shop_bg.visible = show_shop_first
 	barrel_shop_ui.visible = show_shop_first
-	shop_tab_btn.disabled = show_shop_first
-	shop_tab_btn.get_node("Border").visible = show_shop_first
+	#shop_tab_btn.disabled = show_shop_first
+	#shop_tab_btn.get_node("Border").visible = show_shop_first
 
-	modify_tab_btn.mouse_entered.connect(_on_modify_tab_button_focus_entered)
-	modify_tab_btn.focus_entered.connect(_on_modify_tab_button_focus_entered)
-	modify_tab_btn.mouse_exited.connect(_on_modify_tab_button_focus_exited)
-	modify_tab_btn.focus_exited.connect(_on_modify_tab_button_focus_exited)
+	#modify_tab_btn.mouse_entered.connect(_on_modify_tab_button_focus_entered)
+	#modify_tab_btn.focus_entered.connect(_on_modify_tab_button_focus_entered)
+	#modify_tab_btn.mouse_exited.connect(_on_modify_tab_button_focus_exited)
+	#modify_tab_btn.focus_exited.connect(_on_modify_tab_button_focus_exited)
 
-	shop_tab_btn.mouse_entered.connect(_on_shop_tab_button_focus_entered)
-	shop_tab_btn.focus_entered.connect(_on_shop_tab_button_focus_entered)
-	shop_tab_btn.mouse_exited.connect(_on_shop_tab_button_focus_exited)
-	shop_tab_btn.focus_exited.connect(_on_shop_tab_button_focus_exited)
+	#shop_tab_btn.mouse_entered.connect(_on_shop_tab_button_focus_entered)
+	#shop_tab_btn.focus_entered.connect(_on_shop_tab_button_focus_entered)
+	#shop_tab_btn.mouse_exited.connect(_on_shop_tab_button_focus_exited)
+	#shop_tab_btn.focus_exited.connect(_on_shop_tab_button_focus_exited)
 
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -81,7 +79,7 @@ func _ready() -> void:
 
 	full_refresh_ui(true)
 	
-	modify_tab_btn.grab_focus()
+	#modify_tab_btn.grab_focus()
 
 
 func _process(delta: float) -> void:
@@ -236,10 +234,11 @@ func set_shopkeeper_chat(content: String) -> void:
 
 
 func get_first_item_for_focus() -> void:
-	if show_shop_first:
-		shop_tab_btn.grab_focus()
-	else:
-		modify_tab_btn.grab_focus()
+	pass
+	#if show_shop_first:
+		#shop_tab_btn.grab_focus()
+	#else:
+		#modify_tab_btn.grab_focus()
 
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	SoundManager.play_ui_sound(sfx_click, "UI")
@@ -309,11 +308,11 @@ func _on_modify_tab_button_pressed() -> void:
 	barrel_info_region = get_node("MainRegion/BarrelModifyUI/LeftRegion/BarrelInfoRegion")
 	barrel_info_region.reset_ui()
 	modify_bg.visible = true
-	modify_tab_btn.get_node("Border").visible = true
-	modify_tab_btn.disabled = true
+	#modify_tab_btn.get_node("Border").visible = true
+	#modify_tab_btn.disabled = true
 	shop_bg.visible = false
-	shop_tab_btn.get_node("Border").visible = false
-	shop_tab_btn.disabled = false
+	#shop_tab_btn.get_node("Border").visible = false
+	#shop_tab_btn.disabled = false
 	barrel_modify_ui.modulate.a = 0
 	barrel_modify_ui.visible = true
 	var tween = self.create_tween()
@@ -322,7 +321,7 @@ func _on_modify_tab_button_pressed() -> void:
 	tween2.tween_property(barrel_shop_ui, "modulate:a", 0, 0.25)
 	await tween2.finished
 	barrel_shop_ui.visible = false
-	modify_tab_btn.grab_focus()
+	#modify_tab_btn.grab_focus()
 	ui_transitioning = false
 
 func _on_shop_tab_button_pressed() -> void:
@@ -334,11 +333,11 @@ func _on_shop_tab_button_pressed() -> void:
 	barrel_info_region = get_node("MainRegion/BarrelShopUI/RightRegion/BarrelInfoRegion")
 	barrel_info_region.reset_ui()
 	modify_bg.visible = false
-	modify_tab_btn.get_node("Border").visible = false
-	modify_tab_btn.disabled = false
+	#modify_tab_btn.get_node("Border").visible = false
+	#modify_tab_btn.disabled = false
 	shop_bg.visible = true
-	shop_tab_btn.get_node("Border").visible = true
-	shop_tab_btn.disabled = true
+	#shop_tab_btn.get_node("Border").visible = true
+	#shop_tab_btn.disabled = true
 	barrel_shop_ui.modulate.a = 0
 	barrel_shop_ui.visible = true
 	var tween = self.create_tween()
@@ -347,7 +346,7 @@ func _on_shop_tab_button_pressed() -> void:
 	tween2.tween_property(barrel_shop_ui, "modulate:a", 1, 0.25)
 	await tween.finished
 	barrel_modify_ui.visible = false
-	shop_tab_btn.grab_focus()
+	#shop_tab_btn.grab_focus()
 	ui_transitioning = false
 
 
@@ -362,16 +361,16 @@ func play_hover_sfx():
 	SoundManager.play_button_hover_sfx()
 
 
-func _on_modify_tab_button_focus_entered() -> void:
-	play_hover_sfx()
-	modify_tab_btn.text = "* Modify *"
+#func _on_modify_tab_button_focus_entered() -> void:
+	#play_hover_sfx()
+	#modify_tab_btn.text = "* Modify *"
 
-func _on_shop_tab_button_focus_entered() -> void:
-	play_hover_sfx()
-	shop_tab_btn.text = "* Shop *"
-
-func _on_modify_tab_button_focus_exited() -> void:
-	modify_tab_btn.text = "Modify"
-
-func _on_shop_tab_button_focus_exited() -> void:
-	shop_tab_btn.text = "Shop"
+#func _on_shop_tab_button_focus_entered() -> void:
+	#play_hover_sfx()
+	#shop_tab_btn.text = "* Shop *"
+#
+#func _on_modify_tab_button_focus_exited() -> void:
+	#modify_tab_btn.text = "Modify"
+#
+#func _on_shop_tab_button_focus_exited() -> void:
+	#shop_tab_btn.text = "Shop"

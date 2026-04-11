@@ -26,7 +26,8 @@ func _ready() -> void:
 	Engine.time_scale = 1
 	#SoundManager.stop_music(0.1)
 	for button in elevator_buttons:
-		button.pushed.connect(_on_level_select)
+		if button:
+			button.pushed.connect(_on_level_select)
 	difficulty_menu.bet_started.connect(load_selected_level) # Start load the boss level
 	for vendor in vendors:
 		vendor.inventory_opened.connect(player.current_gun.play_unequip_anim)
