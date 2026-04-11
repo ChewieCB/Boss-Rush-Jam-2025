@@ -43,7 +43,7 @@ var object_pooling_manager: ObjectPoolingManager
 var current_boss_map: Node3D
 
 # Temporary singleton
-var gun_customize_ui: GunCustomizationUI
+var gun_customize_ui: InventoryUI
 
 @onready var main_bgm_emitter: MainBGMEmitter = $MainBGMEmitter
 
@@ -199,8 +199,8 @@ var CHEAT_demomode_timeout: int = 60:
 func _ready() -> void:
 	equipped_gun_frame = starting_gun_frame
 	barrel_database.append_array(debug_barrel_database)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	#await get_tree().process_frame
+	#await get_tree().process_frame
 	SaveManager.load_setting_config()
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)

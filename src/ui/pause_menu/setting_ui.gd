@@ -93,6 +93,7 @@ var action_to_remap = null
 var remapping_button: KeybindButton = null
 var keybind_timer_timeleft = 0
 
+
 func _ready() -> void:
 	GameManager.setting_ui = self
 	refresh_setting_value()
@@ -103,6 +104,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_on_controller_connection(0, GameManager.is_controller_connected)
+
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -397,11 +399,10 @@ func refresh_setting_value():
 	scaling_3d_slider.value = GameManager.scaling_3d
 	scaling_3d_value.text = "{0}%".format([GameManager.scaling_3d])
 
-	# TODO - update these to use the more recent SoundManager version (or downgrade SoundManager)
-	#SoundManager.set_master_volume(GameManager.master_audio / 100.0)
-	#SoundManager.set_music_volume(GameManager.bgm_audio / 100.0)
-	#SoundManager.set_sound_volume(GameManager.sfx_audio / 100.0)
-	#SoundManager.set_ui_sound_volume(GameManager.ui_audio / 100.0)
+	_on_master_slider_value_changed(GameManager.master_audio)
+	_on_bgm_slider_value_changed(GameManager.bgm_audio)
+	_on_sfx_slider_value_changed(GameManager.sfx_audio)
+	_on_ui_slider_value_changed(GameManager.ui_audio)
 	master_slider.value = GameManager.master_audio
 	master_value.text = "{0}".format([GameManager.master_audio])
 	bgm_slider.value = GameManager.bgm_audio

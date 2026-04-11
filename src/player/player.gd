@@ -162,9 +162,9 @@ var is_in_menu = false:
 	set(value):
 		is_in_menu = value
 		if is_in_menu:
-			stat_ui.hide_all_ui()
+			stat_ui.hide_all_ui(true)
 		else:
-			stat_ui.show_all_ui()
+			stat_ui.show_all_ui(true)
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
@@ -571,6 +571,10 @@ func update_barrel_effect_ui() -> void:
 			effect_ui.modulate.a = 0.0
 			effect_ui.name_label.text = ""
 			effect_ui.desc_label.text = ""
+
+
+func toggle_anim_reticle(is_visible: bool) -> void:
+	ui_parent.toggle_aim_reticle(is_visible)
 
 
 func show_debug_label():

@@ -10,6 +10,8 @@ signal show_warning(warning_text: String)
 @onready var spin_value_label: RichTextLabel = $CenterContainer/ReloadSpinValueLabel
 @onready var locked_panel: Control = $LockedPanel
 
+var parent_inventory_ui: Control
+
 var data: BarrelDataResource
 var clicked_once = false
 var scale_factor = 1.1
@@ -27,9 +29,10 @@ var is_locked: bool = false
 var warning_text = ""
 
 
-func init(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: bool = false):
+func init(_data: BarrelDataResource, _parent_ui: Control, _is_equipped: bool = false, _is_purchased: bool = false):
 	locked_panel.visible = false
 	data = _data
+	parent_inventory_ui = _parent_ui
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
 	texture = data.barrel_image
@@ -43,6 +46,7 @@ func init(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: 
 	if data.locked_for_demo:
 		is_locked = true
 		locked_panel.visible = true
+
 
 func _ready() -> void:
 	if data:
@@ -97,14 +101,17 @@ func _on_button_focus_entered() -> void:
 	play_button_hover_sfx()
 	expand_button_size()
 	# We do this for shop item UI so it can show the price at the bottom
-	if is_shop_item_ui:
-		if GameManager.gun_customize_ui:
-			GameManager.gun_customize_ui.get_current_scroll_container().ensure_control_visible(get_parent())
+	if parent_inventory_ui:
+		if is_shop_item_ui:
+			if parent_inventory_ui.visible:
+				parent_inventory_ui.scroll_container.ensure_control_visible(get_parent())
+			else:
+				grab_focus()  # This wont show the chip cost, but at least it wont crash
 		else:
-			grab_focus() # This wont show the chip cost, but at least it wont crash
-	else:
-		if GameManager.gun_customize_ui:
-			GameManager.gun_customize_ui.get_current_scroll_container().ensure_control_visible(self )
+			if parent_inventory_ui.visible:
+				parent_inventory_ui.scroll_container.ensure_control_visible(self)
+
 
 func _on_button_focus_exited() -> void:
+	var test0 = get_viewport().gui_get_focus_owner()
 	return_button_size()

@@ -7,6 +7,8 @@ signal interact_gun_frame(item_ui: GunFrameItemUI, data: GunFrameResource)
 @onready var button: Button = $Button
 @onready var border_selected = $BorderSelected
 
+var parent_inventory_ui: Control
+
 var data: GunFrameResource
 var clicked_once = false
 var scale_factor = 1.1
@@ -22,8 +24,9 @@ var is_disabled: bool = false:
 		self.modulate = Color.DIM_GRAY if is_disabled else Color.WHITE
 var warning_text = ""
 
-func init(_data: GunFrameResource, _is_equipped: bool = false, _is_purchased: bool = false):
+func init(_data: GunFrameResource, _parent_ui: Control, _is_equipped: bool = false, _is_purchased: bool = false):
 	data = _data
+	parent_inventory_ui = _parent_ui
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
 	if data:

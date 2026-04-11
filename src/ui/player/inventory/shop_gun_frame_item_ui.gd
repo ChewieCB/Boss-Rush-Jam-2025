@@ -7,12 +7,14 @@ extends VBoxContainer
 
 var button: Button
 
+
 func _ready() -> void:
 	button = gun_frame_item_ui.button
 	gun_frame_item_ui.is_shop_item_ui = true
 
-func init(_data: GunFrameResource, _is_purchased = false):
-	gun_frame_item_ui.init(_data, false, _is_purchased)
+
+func init(_data: GunFrameResource, _parent_ui: InventoryUI, _is_purchased = false):
+	gun_frame_item_ui.init(_data, _parent_ui, false, _is_purchased)
 	price_label.text = str(_data.frame_cost)
 	if _data.frame_cost > GameManager.player_currency:
 		gun_frame_item_ui.is_disabled = true

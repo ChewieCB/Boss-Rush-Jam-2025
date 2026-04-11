@@ -4,7 +4,7 @@ class_name Workbench
 signal inventory_opened
 signal inventory_closed
 
-@onready var shop_ui: GunCustomizationUI = $UI/GunCustomizeUI
+@onready var shop_ui: WorkshopInventoryUI = $UI/WorkshopInventoryUI
 @export var interact_dist: float = 2.5
 
 

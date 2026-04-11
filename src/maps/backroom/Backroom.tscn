@@ -7441,7 +7441,6 @@ omni_range = 10.0
 omni_attenuation = 2.0
 
 [node name="Vendor" parent="." instance=ExtResource("8_0ncek")]
-interact_text = "Shop"
 
 [node name="Workbench" parent="." instance=ExtResource("18_dv650")]
 transform = Transform3D(0.999939, 0, 0.0110477, 0, 1, 0, -0.0110477, 0, 0.999939, -1.29724, -0.00194609, 6.53804)
@@ -8096,7 +8095,6 @@ entProperties = {
 "linked_level": "res://src/maps/blackjack_boss/BossMapBlackjack.tscn",
 "origin": "-87 -856.501 269"
 }
-interact_dist = null
 
 [node name="group_7863_Shelves" type="Node3D" parent="FuncGodotMap"]
 metadata/_tb_type = "_tb_group"
@@ -9614,7 +9612,6 @@ entProperties = {
 "linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
 "origin": "-472.075 -292.151 33"
 }
-interact_dist = null
 
 [node name="entity_286_ElevatorDoors" parent="FuncGodotMap/layer_0_Elevators" instance=ExtResource("67_ruh50")]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5.58406, -0.0625, -11.2107)
@@ -9638,7 +9635,6 @@ entProperties = {
 "linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
 "origin": "-527.542 -562.983 -63"
 }
-interact_dist = null
 
 [node name="entity_291_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators" instance=ExtResource("36_653qc")]
 transform = Transform3D(-0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866025, -1.78525, 1.03125, 14.5738)
@@ -9650,7 +9646,6 @@ entProperties = {
 "linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
 "origin": "466.363 -57.1279 33"
 }
-interact_dist = null
 
 [node name="entity_292_ElevatorButton" parent="FuncGodotMap/layer_0_Elevators" instance=ExtResource("36_653qc")]
 transform = Transform3D(0.0174524, 0, 0.999848, 0, 1, 0, -0.999848, 0, 0.0174524, -31.7822, -1.96875, -2.0749)
@@ -9662,7 +9657,6 @@ entProperties = {
 "linked_level": "res://src/maps/slots_boss/BossMapSlots.tscn",
 "origin": "-66.3967 -1017.03 -63"
 }
-interact_dist = null
 
 [node name="entity_293_func_geo" type="StaticBody3D" parent="FuncGodotMap/layer_0_Elevators"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0466, -1.51989, 4.46469)
