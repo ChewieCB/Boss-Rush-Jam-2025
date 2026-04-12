@@ -69,7 +69,7 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	SoundManager.play_ui_sound(sfx_click, "UI")
 	
 	if (current_selected_item_ui != null):
-		current_selected_item_ui.unselected()
+		current_selected_item_ui.deselect()
 	current_selected_item_ui = item_ui
 	
 	if item_ui.is_locked:
@@ -88,7 +88,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		item_ui.is_purchased = GameManager.purchase_barrel(data)
 		if item_ui.is_purchased:
 			SoundManager.play_ui_sound(sfx_purchase, "UI")
-			item_ui.unselected()
+			item_ui.deselect()
 		else:
 			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
 	elif item_ui.is_equipped:
@@ -107,7 +107,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 
 func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
 	if (current_selected_item_ui != null):
-		current_selected_item_ui.unselected()
+		current_selected_item_ui.deselect()
 	
 	current_selected_item_ui = gun_frame_item_ui
 	# TODO: Add UI show gun frame stat
@@ -120,7 +120,7 @@ func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: Gun
 		gun_frame_item_ui.is_purchased = GameManager.purchase_gun_frame(data)
 		if gun_frame_item_ui.is_purchased:
 			SoundManager.play_ui_sound(sfx_purchase, "UI")
-			gun_frame_item_ui.unselected()
+			gun_frame_item_ui.deselect()
 		else:
 			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
 	else:

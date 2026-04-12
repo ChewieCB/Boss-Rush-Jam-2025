@@ -26,26 +26,8 @@ var is_disabled: bool = false:
 		is_disabled = value
 		self.modulate = Color.DIM_GRAY if is_disabled else Color.WHITE
 var is_locked: bool = false
+var is_empty: bool = true
 var warning_text = ""
-
-
-func init(_data: BarrelDataResource, _parent_ui: Control, _is_equipped: bool = false, _is_purchased: bool = false):
-	locked_panel.visible = false
-	data = _data
-	parent_inventory_ui = _parent_ui
-	is_equipped = _is_equipped
-	is_purchased = _is_purchased
-	texture = data.barrel_image
-	button.text = data.barrel_name
-	if data.reloads_before_spin > 0:
-		spin_value_label.text = "[center][b](%s)[/b][/center]" % [data.reloads_before_spin]
-		spin_value_label.visible = true
-	else:
-		spin_value_label.visible = false
-
-	if data.locked_for_demo:
-		is_locked = true
-		locked_panel.visible = true
 
 
 func _ready() -> void:
@@ -56,40 +38,58 @@ func _ready() -> void:
 	button.mouse_exited.connect(return_button_size)
 
 
-func _on_button_pressed() -> void:
-	if not clicked_once:
-		select_item.emit(self , data)
-		if is_locked:
-			pass
-		elif not is_purchased:
-			if is_disabled:
-				button.text = "Not enough\nchips!"
-			else:
-				button.text = "Purchase?"
-		elif is_equipped:
-			button.text = "Remove?"
-		else:
-			button.text = "Equip?"
-		clicked_once = true
-		border_selected.visible = true
+func init(_parent_ui: Control) -> void:
+	parent_inventory_ui = _parent_ui
+
+
+func empty_slot() -> void:
+	data = null
+	texture = null
+	button.text = "Equip Roller"
+	spin_value_label.text = ""
+	spin_value_label.visible = false
+	
+	is_locked = false
+	locked_panel.visible = false
+	is_equipped = false
+	is_purchased = false
+
+
+func set_barrel_data(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: bool = false) -> void:
+	data = _data
+	texture = data.barrel_image
+	button.text = data.barrel_name
+	if data.reloads_before_spin > 0:
+		spin_value_label.text = "[center][b](%s)[/b][/center]" % [data.reloads_before_spin]
+		spin_value_label.visible = true
 	else:
-		interact_item.emit(self , data)
+		spin_value_label.visible = false
+	
+	is_locked = data.locked_for_demo
+	locked_panel.visible = data.locked_for_demo
+	is_equipped = _is_equipped
+	is_purchased = _is_purchased
 
 
-func unselected():
+func deselect():
 	clicked_once = false
 	border_selected.visible = false
-	button.text = data.barrel_name
+	button.text = data.barrel_name if data else "Equip Roller"
+
+
+#### Audio/Visual polish helpers
 
 func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()
 
+
 func expand_button_size():
-	pivot_offset = size / 2
 	if button.disabled:
 		return
+	pivot_offset = size / 2
 	var tween = self.create_tween()
 	tween.tween_property(self , "scale", Vector2(scale_factor, scale_factor), 0.1)
+
 
 func return_button_size():
 	pivot_offset = size / 2
@@ -113,5 +113,24 @@ func _on_button_focus_entered() -> void:
 
 
 func _on_button_focus_exited() -> void:
-	var test0 = get_viewport().gui_get_focus_owner()
 	return_button_size()
+
+
+func _on_button_pressed() -> void:
+	if not clicked_once:
+		select_item.emit(self , data)
+		if is_locked:
+			pass
+		elif not is_purchased:
+			if is_disabled:
+				button.text = "Not enough\nchips!"
+			else:
+				button.text = "Purchase?"
+		elif is_equipped:
+			button.text = "Remove?"
+		else:
+			button.text = "Equip?"
+		clicked_once = true
+		border_selected.visible = true
+	else:
+		interact_item.emit(self , data)

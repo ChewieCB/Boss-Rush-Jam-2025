@@ -7,23 +7,38 @@ class_name WorkshopInventoryUI
 @onready var current_gun_frame_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/CurrentGunFrame
 
 
+func _ready() -> void:
+	super()
+	for slot in equip_barrel_container.get_children():
+		var item_ui = slot.get_child(0)
+		item_ui.select_item.connect(_on_item_ui_select)
+		item_ui.interact_item.connect(_on_item_ui_interact)
+
+
 func full_refresh_ui(forced: bool = false):
 	if not visible and not forced:
 		return
-
+	
+	# Instead of removing and re-instancing each equipped barrel, 
+	# we clear and set the properties
 	# EQUIPPED BARRELS
-	for barrel_slot in equip_barrel_container.get_children():
-		var container = barrel_slot.get_node("HBoxContainer")
-		for child in container.get_children():
-			child.queue_free()
-	var index = 2
-	for barrel_data in GameManager.equipped_barrels:
-		var item_inst = barrel_item_ui_prefab.instantiate()
-		equip_barrel_container.get_child(index).get_node("HBoxContainer").add_child(item_inst)
-		index -= 1
-		item_inst.init(barrel_data, self, true, true)
-		item_inst.select_item.connect(_on_item_ui_select)
-		item_inst.interact_item.connect(_on_item_ui_interact)
+	var equipped_barrels := GameManager.equipped_barrels
+	var equipped_barrels_count: int = equipped_barrels.size()
+	var barrel_slots = equip_barrel_container.get_children()
+	var barrel_idx: int = 0
+	for i in range(barrel_slots.size() - 1, -1, -1):
+		var barrel_slot = barrel_slots[i]
+		var barrel_item: ItemUI = barrel_slot.get_node("BarrelItemUI")
+		# Barrels we have data for
+		if barrel_idx < equipped_barrels_count:
+			var barrel_data: BarrelDataResource = equipped_barrels[barrel_idx]
+			barrel_item.focus_mode = FocusMode.FOCUS_NONE
+			barrel_item.set_barrel_data(barrel_data, true, true)
+			barrel_idx += 1
+		# Empty barrel slots
+		else:
+			barrel_item.focus_mode = FocusMode.FOCUS_ALL
+			barrel_item.empty_slot()
 	
 	# INVENTORY STUFF
 	for child in inventory_gun_frame_container.get_children():
@@ -34,7 +49,8 @@ func full_refresh_ui(forced: bool = false):
 		if not barrel_data.is_archetype_barrel:
 			var item_inst: ItemUI = barrel_item_ui_prefab.instantiate()
 			inventory_normal_barrel_container.add_child(item_inst)
-			item_inst.init(barrel_data, self, false, true)
+			item_inst.init(self)
+			item_inst.set_barrel_data(barrel_data, false, true)
 			item_inst.select_item.connect(_on_item_ui_select)
 			item_inst.interact_item.connect(_on_item_ui_interact)
 	
@@ -60,14 +76,15 @@ func get_first_item_for_focus() -> Control:
 	var leftmost_barrel: Control = null
 	for i in range(barrel_slots.size() - 1, 0, -1):
 		var slot = barrel_slots[i]
-		var container = slot.get_node("HBoxContainer")
-		var barrel = container.get_child(0)
+		var barrel = slot.get_child(0)
 		if barrel:
 			leftmost_barrel = barrel
 		continue
 	
+	# FIXME - what do we focus on when there are no barrels equipped?
+	#  Will likely solve itself when we move to selecting empty barrel slots
 	if not leftmost_barrel:
-		first_item = barrel_slots[-1].button
+		first_item = barrel_slots[-1].get_child(0).button
 	else:
 		first_item = leftmost_barrel.button
 	
@@ -79,14 +96,15 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	SoundManager.play_ui_sound(sfx_click, "UI")
 	
 	if (current_selected_item_ui != null):
-		current_selected_item_ui.unselected()
+		current_selected_item_ui.deselect()
 	current_selected_item_ui = item_ui
 	
 	if item_ui.is_locked:
 		barrel_info_region.show_barrel_locked()
 		return
 	
-	barrel_info_region.set_barrel_data_resource(data)
+	if data:
+		barrel_info_region.set_barrel_data_resource(data)
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
@@ -98,12 +116,13 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		item_ui.is_purchased = GameManager.purchase_barrel(data)
 		if item_ui.is_purchased:
 			SoundManager.play_ui_sound(sfx_purchase, "UI")
-			item_ui.unselected()
+			item_ui.deselect()
 		else:
 			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
 	elif item_ui.is_equipped:
 		var warning_text = GameManager.remove_barrel(data.barrel_id)
 		show_warning(warning_text)
+		item_ui.empty_slot()
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 	else:
 		var warning_text = GameManager.equip_barrel(data.barrel_id)
@@ -117,7 +136,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 
 func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
 	if (current_selected_item_ui != null):
-		current_selected_item_ui.unselected()
+		current_selected_item_ui.deselect()
 	
 	current_selected_item_ui = gun_frame_item_ui
 	# TODO: Add UI element to show gun frame stat
