@@ -24,7 +24,7 @@ func _process(delta: float) -> void:
 		shopkeeper_chat.visible_ratio += delta * SHOPKEEPER_CHAT_TEXT_SPEED
 
 
-func full_refresh_ui(forced = false):
+func full_refresh_ui(focus_area_callable: Callable, forced = false):
 	if not visible and not forced:
 		return
 	
@@ -53,6 +53,10 @@ func full_refresh_ui(forced = false):
 		shop_item_inst.init(gun_frame_data, self)
 		shop_item_inst.gun_frame_item_ui.select_gun_frame.connect(_on_gun_frame_item_ui_select)
 		shop_item_inst.gun_frame_item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
+		
+		var focus_area: Control = focus_area_callable.call()
+		await get_tree().process_frame
+		focus_area.grab_focus.call_deferred()
 
 
 func set_shopkeeper_chat(content: String) -> void:
@@ -100,9 +104,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		show_warning(warning_text)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 	
-	full_refresh_ui()
-	await get_tree().process_frame
-	get_first_item_for_focus().grab_focus.call_deferred()
+	full_refresh_ui(get_first_item_for_focus)
 
 
 func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
@@ -129,6 +131,4 @@ func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: Gun
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 		current_gun_frame_icon.texture = data.shop_ui_sprite
 	
-	full_refresh_ui()
-	await get_tree().process_frame
-	get_first_item_for_focus().grab_focus.call_deferred()
+	full_refresh_ui(get_first_item_for_focus)

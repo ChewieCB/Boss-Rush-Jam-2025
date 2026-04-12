@@ -53,6 +53,7 @@ func empty_slot() -> void:
 	locked_panel.visible = false
 	is_equipped = false
 	is_purchased = false
+	is_empty = true
 
 
 func set_barrel_data(_data: BarrelDataResource, _is_equipped: bool = false, _is_purchased: bool = false) -> void:
@@ -69,6 +70,7 @@ func set_barrel_data(_data: BarrelDataResource, _is_equipped: bool = false, _is_
 	locked_panel.visible = data.locked_for_demo
 	is_equipped = _is_equipped
 	is_purchased = _is_purchased
+	is_empty = false
 
 
 func deselect():
@@ -117,6 +119,10 @@ func _on_button_focus_exited() -> void:
 
 
 func _on_button_pressed() -> void:
+	if is_empty:
+		interact_item.emit(self, data)
+		return
+	
 	if not clicked_once:
 		select_item.emit(self , data)
 		if is_locked:

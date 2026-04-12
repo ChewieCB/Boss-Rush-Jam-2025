@@ -31,7 +31,7 @@ func _ready() -> void:
 	Input.joy_connection_changed.connect(_on_controller_connection)
 	
 	barrel_info_region.reset_ui()
-	full_refresh_ui(true)
+	#full_refresh_ui(get_first_item_for_focus(), true)
 
 
 func _input(event: InputEvent) -> void:
@@ -60,7 +60,7 @@ func open():
 	GameManager.change_fmod_bgm_menu_is_up(true)
 	GameManager.player.toggle_anim_reticle(false)
 	GameManager.gun_customize_ui = self
-	full_refresh_ui(true)
+	full_refresh_ui(get_first_item_for_focus, true)
 	visible = true
 	
 	_on_controller_connection(0, GameManager.is_controller_connected)
@@ -94,7 +94,7 @@ func show_warning(content: String, color: Color = Color.RED) -> void:
 	#warning_label.visible = true
 
 
-func full_refresh_ui(forced: bool = false) -> void:
+func full_refresh_ui(focus_area_callable: Callable, forced: bool = false) -> void:
 	push_error("method not overriden")
 
 
