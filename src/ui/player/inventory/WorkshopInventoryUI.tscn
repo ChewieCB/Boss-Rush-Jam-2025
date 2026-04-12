@@ -198,6 +198,7 @@ offset_left = 10.0
 offset_top = 10.0
 offset_right = 110.0
 offset_bottom = 110.0
+focus_neighbor_right = NodePath("../../BarrelSlot/BarrelItemUI")
 
 [node name="BorderNormal" type="NinePatchRect" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer/BarrelSlot3"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)

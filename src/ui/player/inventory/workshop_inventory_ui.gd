@@ -9,10 +9,25 @@ class_name WorkshopInventoryUI
 
 func _ready() -> void:
 	super()
-	for slot in equip_barrel_container.get_children():
-		var item_ui = slot.get_child(0)
+	var barrel_container_count: int = equip_barrel_container.get_child_count()
+	
+	for i in range(barrel_container_count):
+		var slot = equip_barrel_container.get_child(i)
+		var item_ui: Control = slot.get_node("BarrelItemUI")
 		item_ui.select_item.connect(_on_item_ui_select)
 		item_ui.interact_item.connect(_on_item_ui_interact)
+		
+		var prev_slot_idx: int = wrapi(i - 1, 0, barrel_container_count)
+		var prev_slot: Control = equip_barrel_container.get_child(prev_slot_idx).get_child(0)
+		var next_slot_idx: int = wrapi(i + 1, 0, barrel_container_count)
+		var next_slot: Control = equip_barrel_container.get_child(next_slot_idx).get_child(0)
+		var test0 = item_ui.button
+		var test1 = prev_slot.button
+		var test2 = next_slot.button
+		item_ui.button.focus_neighbor_left = prev_slot.button.get_path()
+		item_ui.button.focus_neighbor_right = next_slot.button.get_path()
+	
+	get_viewport().gui_focus_changed.connect(_on_focus_changed)
 
 
 func full_refresh_ui(forced: bool = false):
@@ -32,12 +47,10 @@ func full_refresh_ui(forced: bool = false):
 		# Barrels we have data for
 		if barrel_idx < equipped_barrels_count:
 			var barrel_data: BarrelDataResource = equipped_barrels[barrel_idx]
-			barrel_item.focus_mode = FocusMode.FOCUS_NONE
 			barrel_item.set_barrel_data(barrel_data, true, true)
 			barrel_idx += 1
 		# Empty barrel slots
 		else:
-			barrel_item.focus_mode = FocusMode.FOCUS_ALL
 			barrel_item.empty_slot()
 	
 	# INVENTORY STUFF
@@ -152,3 +165,7 @@ func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: Gun
 	full_refresh_ui()
 	await get_tree().process_frame
 	get_first_item_for_focus().grab_focus.call_deferred()
+
+
+func _on_focus_changed(node: Control) -> void:
+	print("Gained focus: %s" % [node.name])

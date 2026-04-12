@@ -5,10 +5,10 @@ signal select_item(item_ui: ItemUI, data: BarrelDataResource)
 signal interact_item(item_ui: ItemUI, data: BarrelDataResource)
 signal show_warning(warning_text: String)
 
-@onready var button: Button = $Button
-@onready var border_selected = $BorderSelected
-@onready var spin_value_label: RichTextLabel = $CenterContainer/ReloadSpinValueLabel
-@onready var locked_panel: Control = $LockedPanel
+@export var button: Button
+@export var border_selected: NinePatchRect
+@export var spin_value_label: RichTextLabel
+@export var locked_panel: Control
 
 var parent_inventory_ui: Control
 
@@ -133,4 +133,4 @@ func _on_button_pressed() -> void:
 		clicked_once = true
 		border_selected.visible = true
 	else:
-		interact_item.emit(self , data)
+		interact_item.emit(self, data)
