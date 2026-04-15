@@ -52,7 +52,7 @@ var gun_customize_ui: InventoryUI
 @export var starting_shop_barrels: Array[Resource]
 @export var barrel_database: Array[Resource]
 @export var debug_barrel_database: Array[Resource]
-var equipped_barrels: Array[Resource] = []
+var equipped_barrels: Array[Resource] = [null, null, null]
 var inventory_barrels: Array[Resource] = []
 var shop_barrels: Array[Resource] = []
 
@@ -256,11 +256,18 @@ func purchase_barrel(data: BarrelDataResource) -> bool:
 
 
 ## Return error string if cant equipped
-func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
+func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum, slot_idx: int = -1) -> String:
 	if player.current_gun.is_reloading:
 		return "Can not change barrel while reloading"
-	if len(equipped_barrels) >= player.current_gun.max_barrels:
+	
+	var equipped_count: int = 0
+	for elem in equipped_barrels:
+		if elem != null:
+			equipped_count += 1
+	
+	if equipped_count >= player.current_gun.max_barrels:
 		return "Can not equip more barrels"
+		
 	var found_data: BarrelDataResource = null
 	for data in inventory_barrels:
 		if data.barrel_id == search_barrel_id:
@@ -268,12 +275,15 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if found_data:
 		# Check if already equipped archetype
 		for barrel in equipped_barrels:
+			if barrel == null:
+				continue
 			if barrel.is_archetype_barrel and found_data.is_archetype_barrel:
 				return "Can only equip 1 archetype barrel"
+		
 		inventory_barrels.erase(found_data)
-		equipped_barrels.append(found_data)
+		equipped_barrels[slot_idx] = found_data
 		refresh_shop_ui.emit()
-		GameManager.player.current_gun.install_barrel(found_data)
+		GameManager.player.current_gun.install_barrel(found_data, slot_idx)
 		#if found_data.is_archetype_barrel and equipped_barrels.size() != 1:
 			#return "Warning: archetype barrel isn't installed in first slot"
 	return ""
@@ -282,16 +292,21 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading or player.current_gun.is_spinning:
 		return "Can not change barrel while reloading"
+	
 	var found_data: BarrelDataResource = null
 	var barrel_idx: int = -1
 	for i in range(equipped_barrels.size()):
-		var data = equipped_barrels[i]
-		if data.barrel_id == search_barrel_id:
-			found_data = data
-			barrel_idx = i
-			break
+		var barrel = equipped_barrels[i]
+		if barrel == null:
+			continue
+		else:
+			if barrel.barrel_id == search_barrel_id:
+				found_data = barrel
+				barrel_idx = i
+				break
+	
 	if found_data:
-		equipped_barrels.erase(found_data)
+		equipped_barrels[barrel_idx] = null
 		inventory_barrels.append(found_data)
 		refresh_shop_ui.emit()
 		GameManager.player.current_gun.remove_barrel(barrel_idx)
@@ -368,11 +383,13 @@ func load_new_save_data():
 		else:
 			barrel_data.reloads_before_spin = randi_range(6, 7)
 
+	var slot_idx: int = 0
 	for data in starting_barrels:
 		var idx: int = barrel_database.find(data)
 		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
 		if data not in equipped_barrels:
-			equipped_barrels.append(data)
+			equipped_barrels[slot_idx] = data
+			slot_idx += 1
 	for data in starting_shop_barrels:
 		var idx: int = barrel_database.find(data)
 		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
@@ -382,7 +399,7 @@ func load_new_save_data():
 
 
 func reset_current_save_data():
-	equipped_barrels = []
+	equipped_barrels = [null, null, null]
 	inventory_barrels = []
 	shop_barrels = []
 	player_currency = 0

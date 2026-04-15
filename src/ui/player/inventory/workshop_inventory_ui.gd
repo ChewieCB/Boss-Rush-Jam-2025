@@ -6,6 +6,8 @@ class_name WorkshopInventoryUI
 @onready var inventory_normal_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer
 @onready var current_gun_frame_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/CurrentGunFrame
 
+var active_equip_slot: int = -1
+
 
 func _ready() -> void:
 	super()
@@ -44,21 +46,19 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 	# we clear and set the properties
 	# EQUIPPED BARRELS
 	var equipped_barrels := GameManager.equipped_barrels
-	var equipped_barrels_count: int = equipped_barrels.size()
 	var barrel_slots = equip_barrel_container.get_children()
 	var barrel_idx: int = 0
 	for i in range(barrel_slots.size() - 1, -1, -1):
 		var barrel_slot = barrel_slots[i]
 		var barrel_item: ItemUI = barrel_slot.get_node("BarrelItemUI")
 		# Barrels we have data for
-		if barrel_idx < equipped_barrels_count:
-			var barrel_data: BarrelDataResource = equipped_barrels[barrel_idx]
-			barrel_item.set_barrel_data(barrel_data, true, true)
-			barrel_idx += 1
-		# Empty barrel slots
-		else:
+		var barrel_data: BarrelDataResource = equipped_barrels[barrel_idx]
+		if barrel_data == null:
 			barrel_item.empty_slot()
-	
+		else:
+			barrel_item.set_barrel_data(barrel_data, true, true)
+		barrel_idx += 1
+		# Empty barrel slots
 	# INVENTORY STUFF
 	for child in inventory_gun_frame_container.get_children():
 		child.queue_free()
@@ -146,6 +146,7 @@ func get_inventory_focus() -> Control:
 	for item in inventory_barrel_items:
 		item.focus_mode = FocusMode.FOCUS_ALL
 	
+	# FIXME - add fallback when no barrels in inventory
 	return inventory_barrel_items[0].button
 
 
@@ -171,11 +172,14 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		return
 	
 	var focus_area_callable: Callable = get_first_item_for_focus
+	var item_slots = equip_barrel_container.get_children()
+	var item_slot_idx: int = item_slots.size() - 1 - item_slots.find(item_ui.get_parent())
 	
 	if not item_ui.is_purchased:
 		if item_ui.is_empty:
 			# Change focus to inventory barrels
 			focus_area_callable = get_inventory_focus
+			active_equip_slot = item_slot_idx
 			# TODO - make cancel change focus back to equip focus
 		else:
 			item_ui.is_purchased = GameManager.purchase_barrel(data)
@@ -185,15 +189,17 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 			else:
 				SoundManager.play_ui_sound(sfx_too_expensive, "UI")
 	elif item_ui.is_equipped:
+		active_equip_slot = item_slot_idx
 		var warning_text = GameManager.remove_barrel(data.barrel_id)
 		show_warning(warning_text)
 		item_ui.empty_slot()
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 		focus_area_callable = get_equip_slot_focus
 	else:
-		var warning_text = GameManager.equip_barrel(data.barrel_id)
+		var warning_text = GameManager.equip_barrel(data.barrel_id, active_equip_slot)
 		show_warning(warning_text)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
+		active_equip_slot = -1
 	
 	full_refresh_ui(focus_area_callable)
 	
