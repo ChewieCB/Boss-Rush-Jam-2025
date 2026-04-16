@@ -590,6 +590,7 @@ func spin_all_barrels() -> void:
 	var spin_idx: int = 0
 	for barrel in installed_barrels:
 		if barrel == null:
+			spin_idx += 1
 			continue
 		# Optional delay between each barrel spinning
 		#await get_tree().create_timer(0.05).timeout
