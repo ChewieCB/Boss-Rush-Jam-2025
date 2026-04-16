@@ -1,4 +1,4 @@
-[gd_scene load_steps=99 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=102 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -50,6 +50,7 @@
 [ext_resource type="AudioStream" uid="uid://b0lrgqd1i5edq" path="res://src/bosses/base/assets/sfx/temp/Hit 5.mp3" id="34_nkrfy"]
 [ext_resource type="AudioStream" uid="uid://bphlypt3a331o" path="res://src/bosses/base/assets/sfx/temp/Hit 6.mp3" id="35_efay1"]
 [ext_resource type="Texture2D" uid="uid://fhaaebf6bamn" path="res://src/bosses/bartender/assets/Bartender_base_open_hand.png" id="46_ulosq"]
+[ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="46_xoaw5"]
 [ext_resource type="Texture2D" uid="uid://dmibr0fgehn7l" path="res://src/bosses/bartender/assets/Bartender_base_open_hand_turned.png" id="47_tp2kw"]
 [ext_resource type="Texture2D" uid="uid://711teiotxavy" path="res://src/bosses/bartender/assets/empty_bottle.png" id="48_mdqxm"]
 [ext_resource type="Texture2D" uid="uid://q1tk7jybvho" path="res://src/bosses/bartender/assets/Bartender_Brew_nohand.png" id="49_b51rj"]
@@ -68,6 +69,7 @@
 [ext_resource type="Texture2D" uid="uid://dy6pwm2pvkfkh" path="res://src/bosses/bartender/assets/beer_barrel.png" id="60_eutt6"]
 [ext_resource type="Texture2D" uid="uid://dh0wkrk3w47v5" path="res://src/bosses/bartender/assets/Bartender_Brew_hand_lit_match.png" id="67_bb0i7"]
 [ext_resource type="AudioStream" uid="uid://cyyb005whj0j2" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 1.mp3" id="68_thbyd"]
+[ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="70_v4vda"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_dpsmo"]
 size = Vector3(1, 1, 2)
@@ -196,6 +198,78 @@ tracks/7/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0, 0, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Sprite3D/MuzzleFlashSprite:texture")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("46_xoaw5")]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Sprite3D/MuzzleFlashSprite:rotation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Sprite3D/MuzzleFlashSprite:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Sprite3D/MuzzleFlashSprite:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("SFXPlayer:stream")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("SFXPlayer:playing")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_3xb07"]
@@ -1535,6 +1609,109 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_njnqa"]
+resource_name = "shotgun_fire_hitscan"
+length = 1.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("4_8vk3k"), ExtResource("4_8vk3k"), ExtResource("23_33lgi")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"fire_shotgun_hitscan"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D/MuzzleFlashSprite:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("46_xoaw5")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D/MuzzleFlashSprite:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite3D/MuzzleFlashSprite:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 1.5708), Vector3(0, 0, 3.14159)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D/MuzzleFlashSprite:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.1, 0.1, 0.1), Vector3(0.3, 0.3, 0.3), Vector3(0.6, 0.6, 0.6), Vector3(0.3, 0.3, 0.3)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SFXPlayer:stream")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("70_v4vda")]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("SFXPlayer:playing")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
 [sub_resource type="Animation" id="Animation_6h31p"]
 resource_name = "shotgun_telegraph"
 length = 0.3
@@ -1574,6 +1751,7 @@ _data = {
 "lit_match": SubResource("Animation_fplua"),
 "shotgun_burst": SubResource("Animation_bdvkb"),
 "shotgun_fire": SubResource("Animation_oo8q7"),
+"shotgun_fire_hitscan": SubResource("Animation_njnqa"),
 "shotgun_telegraph": SubResource("Animation_6h31p")
 }
 
@@ -1598,6 +1776,7 @@ sfx_shotgun = Array[AudioStream]([ExtResource("9_pkguc"), ExtResource("10_awx3m"
 min_shotgun_volley_burst = 2
 max_shotgun_volley_burst = 4
 time_between_shotgun_burst = 0.1
+shotgun_hitscan_damage = 20
 countertop_flame_duration = 10
 countertop_flame_cd = 30
 bottle_damage = 6
@@ -1680,6 +1859,14 @@ skeleton = NodePath("../../../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.320448, 0.9, 0)
 
 [node name="ArmSprite" type="Sprite3D" parent="Sprite3D" index="2"]
+
+[node name="MuzzleFlashSprite" type="Sprite3D" parent="Sprite3D" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.414816, 0.948151, 0)
+visible = false
+modulate = Color(1, 0.63286, 0, 1)
+no_depth_test = true
+render_priority = 1
+texture = ExtResource("46_xoaw5")
 
 [node name="CollisionShape3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
@@ -1831,14 +2018,21 @@ event = &"start_shotgun_blast"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toShotgunVolley" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="3"]
+[node name="toShotgunHitscan" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="3"]
+script = ExtResource("4_dheml")
+to = NodePath("../../ShotgunHitscan")
+event = &"start_shotgun_hitscan"
+guard = ExtResource("28_8rmxp")
+delay_in_seconds = "0.0"
+
+[node name="toShotgunVolley" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="4"]
 script = ExtResource("4_dheml")
 to = NodePath("../../ShotgunVolley")
 event = &"start_shotgun_volley"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
-[node name="toCountertopFlame" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="4"]
+[node name="toCountertopFlame" type="Node" parent="StateChart/Root/Phase/Phase1/Idle" index="5"]
 script = ExtResource("4_dheml")
 to = NodePath("../../CountertopFlame")
 event = &"start_countertop_flame"
@@ -2013,7 +2207,50 @@ to = NodePath("../../Idle")
 event = &"reposition"
 delay_in_seconds = "0.0"
 
-[node name="ShotgunVolley" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+[node name="ShotgunHitscan" type="Node" parent="StateChart/Root/Phase/Phase1" index="4"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunHitscan" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toShooting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunHitscan/Targeting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Shooting")
+event = &"start_shooting"
+delay_in_seconds = "0.0"
+
+[node name="Shooting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunHitscan" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunHitscan/Shooting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Recover")
+event = &"end_shooting"
+delay_in_seconds = "0.0"
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunHitscan/Shooting" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"next_shot"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunHitscan" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunHitscan/Recover" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase1/ShotgunHitscan" index="3"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"reposition"
+delay_in_seconds = "0.0"
+
+[node name="ShotgunVolley" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
 script = ExtResource("5_2jcim")
 initial_state = NodePath("Targeting")
 
@@ -2056,7 +2293,7 @@ to = NodePath("../../Idle")
 event = &"reposition"
 delay_in_seconds = "0.0"
 
-[node name="CountertopFlame" type="Node" parent="StateChart/Root/Phase/Phase1" index="5"]
+[node name="CountertopFlame" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
 script = ExtResource("5_2jcim")
 initial_state = NodePath("Moving")
 
@@ -2084,13 +2321,13 @@ to = NodePath("../../Idle")
 event = &"reposition"
 delay_in_seconds = "0.0"
 
-[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="6"]
+[node name="toInactive" type="Node" parent="StateChart/Root/Phase/Phase1" index="7"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Inactive")
 event = &"deactivate"
 delay_in_seconds = "0.0"
 
-[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="7"]
+[node name="toPhase2" type="Node" parent="StateChart/Root/Phase/Phase1" index="8"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Phase2")
 event = &"start_phase_2"
@@ -2929,6 +3166,10 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunBlast/Targeting" to="." method="_on_shotgun_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunBlast/Shooting" to="." method="_on_shotgun_shooting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunBlast/Recover" to="." method="_on_shotgun_recover_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase1/ShotgunHitscan" to="." method="_on_shotgun_hitscan_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunHitscan/Targeting" to="." method="_on_shotgun_hitscan_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunHitscan/Shooting" to="." method="_on_shotgun_hitscan_shooting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunHitscan/Recover" to="." method="_on_shotgun_hitscan_recover_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Phase/Phase1/ShotgunVolley" to="." method="_on_shotgun_volley_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunVolley/Targeting" to="." method="_on_shotgun_volley_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase1/ShotgunVolley/Bursting" to="." method="_on_shotgun_volley_bursting_state_entered"]

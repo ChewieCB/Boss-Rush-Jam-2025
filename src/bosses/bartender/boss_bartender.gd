@@ -65,6 +65,7 @@ signal fire_started
 @export var sfx_tape: AudioStream
 
 @export_group("Attacks")
+var prev_attack
 const BASE_DAMAGE_MODIFIER: float = 1.0
 const BASE_RESISTANCE_MODIFIER: float = 1.0
 const BASE_SPEED_MODIFIER: float = 1.0
@@ -81,7 +82,7 @@ var delay_modifier: float = BASE_DELAY_MODIFIER:
 
 @export_subgroup("Shotgun")
 @export var shotgun_proj_amount: int = 8
-@export var shotgun_proj_damage: int = 3
+@export var shotgun_proj_damage: int = 4
 @export var shotgun_proj_speed: float = 40 # Based on ante 4
 @export var shotgun_spread_angle: float = 6
 var shotgun_ricochet_count = 0 # Based on ante 4
@@ -105,6 +106,10 @@ const SHOT_PER_BURST = 2
 var shotgun_volley_enabled = false
 var burst_to_fire = 0
 var burst_fired = 0
+
+@export_subgroup("Shotgun Hitscan")
+@export var shotgun_hitscan_damage: int = 25
+
 @export_subgroup("Countertop Flame")
 @export var countertop_flame_duration = 10
 @export var countertop_flame_cd = 30
@@ -266,8 +271,11 @@ func select_attack_phase_1() -> void:
 			attack_str = "start_throw_broken_bottle"
 		elif attack_roll < 50:
 			attack_str = "start_shotgun_volley"
-		elif attack_roll < 75 and countertop_flame_cd_timer.is_stopped():
-			attack_str = "start_countertop_flame"
+		elif attack_roll < 75:
+			if countertop_flame_cd_timer.is_stopped():
+				attack_str = "start_countertop_flame"
+			else:
+				attack_str = "start_shotgun_blast"
 		else:
 			attack_str = "start_shotgun_blast"
 	else:
@@ -276,12 +284,15 @@ func select_attack_phase_1() -> void:
 			attack_str = "start_throw_broken_bottle"
 		elif attack_roll < 45:
 			attack_str = "start_throw_drink"
-		elif attack_roll < 65 and countertop_flame_cd_timer.is_stopped():
-			attack_str = "start_countertop_flame"
-		elif attack_roll < 80:
+		elif attack_roll < 60:
+			if countertop_flame_cd_timer.is_stopped():
+				attack_str = "start_countertop_flame"
+			else:
+				attack_str = "start_shotgun_blast"
+		elif attack_roll < 75:
 			attack_str = "start_shotgun_volley"
 		else:
-			attack_str = "start_shotgun_blast"
+			attack_str = "start_shotgun_hitscan"
 
 	state_chart.send_event(attack_str)
 
@@ -485,6 +496,7 @@ func _on_shotgun_targeting_state_entered() -> void:
 
 
 func _on_shotgun_shooting_state_entered() -> void:
+	debug_state_label.text = "Shotgun Blast | Shooting"
 	state_chart.send_event("attack_start")
 	anim_player.play("shotgun_fire")
 	await anim_player.animation_finished
@@ -497,6 +509,7 @@ func _on_shotgun_shooting_state_entered() -> void:
 
 
 func _on_shotgun_recover_state_entered() -> void:
+	debug_state_label.text = "Shotgun Blast | Recovering"
 	shots_fired = 0
 	anim_player.play("RESET")
 	await get_tree().create_timer(attack_recovery_time, false).timeout
@@ -525,6 +538,47 @@ func fire_shotgun():
 		get_parent().add_child(bullet_inst)
 		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, shotgun_ricochet_count, shotgun_proj_speed)
 
+#endregion
+
+#region Shotgun hitscan
+func fire_shotgun_hitscan():
+	# TODO: Change to hitscan
+	var htscan_damage = shotgun_hitscan_damage * damage_modifier
+	sfx_player.stream = sfx_shotgun.pick_random()
+	sfx_player.play()
+	var aim_direction = shotgun_spawn_pos.global_position.direction_to(target.global_position)
+	var hitscan_inst: BartenderShotgunProjectile = chosen_shotgun_proj_prefab.instantiate()
+	get_parent().add_child(hitscan_inst)
+	hitscan_inst.init(shotgun_spawn_pos.global_position, aim_direction, htscan_damage, shotgun_ricochet_count, shotgun_proj_speed * 5)
+
+
+func _on_shotgun_hitscan_targeting_state_entered() -> void:
+	debug_state_label.text = "Shotgun Hitscan | Targeting"
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_telegraph")
+	anim_player.play("shotgun_telegraph")
+	await anim_player.animation_finished
+	shotgun_timer.start(telegraph_time)
+
+
+func _on_shotgun_hitscan_shooting_state_entered() -> void:
+	debug_state_label.text = "Shotgun Hitscan | Shooting"
+	state_chart.send_event("attack_start")
+	anim_player.play("shotgun_fire_hitscan")
+	await anim_player.animation_finished
+	state_chart.send_event("end_shooting")
+
+
+func _on_shotgun_hitscan_recover_state_entered() -> void:
+	debug_state_label.text = "Shotgun Hitscan | Recovering"
+	anim_player.play("RESET")
+	await get_tree().create_timer(attack_recovery_time, false).timeout
+	state_chart.send_event("reposition")
+
+
+func _on_shotgun_hitscan_state_exited() -> void:
+	shotgun_timer.stop()
+			
 #endregion
 
 
@@ -561,9 +615,7 @@ func _on_shotgun_volley_state_exited() -> void:
 func _on_shotgun_volley_timer_timeout() -> void:
 	state_chart.send_event("start_bursting")
 
-
 #endregion
-
 
 #region Throw broken bottle
 func _on_throw_broken_bottle_targeting_state_entered() -> void:

@@ -32,7 +32,6 @@ signal start_slots_spin
 @onready var slot_icons_parent: Node3D = $Sprite3D/SlotIcons
 @onready var explode_vfx: ExplosionParticles = $MarkerPivot/ProjectileSpawnMarker/ExplosionPoly
 
-var prev_phase
 @export_group("Phase")
 @export var phase_2_health_percentage_trigger: float = 0.5
 @onready var phase_2_smoke_effect: GPUParticles3D = $Phase2Smoke
@@ -47,6 +46,7 @@ var desired_height: float = DESIRED_HEIGHT
 var drop_factor: float = DROP_FACTOR
 
 @export_group("Attacks")
+var prev_attack
 @export_subgroup("Spin Slots")
 var next_attack: String
 var next_attack_idx: int
@@ -232,24 +232,24 @@ func _physics_process(delta: float) -> void:
 
 
 func select_attack_phase_1() -> void:
-	var possible_phases = [
+	var possible_attacks = [
 		# Tuples of event string and icon index
 		["start_coin_attack", 0],
 		["start_bell_attack", 1],
 		["start_charge_attack", 2],
 	]
-	if prev_phase:
-		possible_phases.erase(prev_phase)
+	if prev_attack:
+		possible_attacks.erase(prev_attack)
 	# TODO - add random weighting
-	var new_phase = possible_phases.pick_random()
-	prev_phase = new_phase
-	next_attack = new_phase[0]
-	next_attack_idx = new_phase[1]
+	var new_attack = possible_attacks.pick_random()
+	next_attack = new_attack[0]
+	next_attack_idx = new_attack[1]
 	state_chart.send_event("start_spin_slots")
+	prev_attack = new_attack
 
 
 func select_attack_phase_2() -> void:
-	var possible_phases = [
+	var possible_attacks = [
 		# Tuples of event string and icon index
 		["start_coin_attack", 0],
 		["start_bell_attack", 1],
@@ -258,15 +258,15 @@ func select_attack_phase_2() -> void:
 		["start_bomb_attack", 4],
 	]
 	if pinball_enabled:
-		possible_phases.append(["start_pinball_attack", 5])
-	if prev_phase:
-		possible_phases.erase(prev_phase)
+		possible_attacks.append(["start_pinball_attack", 5])
+	if prev_attack:
+		possible_attacks.erase(prev_attack)
 	# TODO - add random weighting
-	var new_phase = possible_phases.pick_random()
-	prev_phase = new_phase
-	next_attack = new_phase[0]
-	next_attack_idx = new_phase[1]
+	var new_attack = possible_attacks.pick_random()
+	next_attack = new_attack[0]
+	next_attack_idx = new_attack[1]
 	state_chart.send_event("start_spin_slots")
+	prev_attack = new_attack
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
