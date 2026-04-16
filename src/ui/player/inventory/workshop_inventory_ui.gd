@@ -146,8 +146,9 @@ func get_inventory_focus() -> Control:
 	for item in inventory_barrel_items:
 		item.focus_mode = FocusMode.FOCUS_ALL
 	
-	# FIXME - add fallback when no barrels in inventory
-	return inventory_barrel_items[0].button
+	# Fallback when no barrels in inventory
+	return inventory_barrel_items[0].button if inventory_barrel_items[0] \
+	else get_equip_slot_focus()
 
 
 #### 
