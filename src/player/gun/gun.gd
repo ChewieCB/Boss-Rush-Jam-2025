@@ -180,7 +180,7 @@ func _ready() -> void:
 	barrel_equipped.connect(_on_archetype_equipped)
 	barrel_unequipped.connect(_on_archetype_unequipped)
 	
-	for i in range(max_barrels):
+	for i in range(max_barrels + 1):
 		var _null_barrel: NullBarrel = null_barrel_prefab.instantiate()
 		null_barrel_pool.push_back(_null_barrel)
 	
@@ -568,6 +568,9 @@ func release_trigger():
 func spin_all_barrels() -> void:
 	if is_jammed:
 		play_failed_shoot_sfx()
+		return
+	
+	if installed_barrels == [null, null, null]:
 		return
 	
 	if is_reloading:
