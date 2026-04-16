@@ -572,15 +572,6 @@ func spin_all_barrels() -> void:
 	
 	if is_reloading:
 		await gun_reloaded
-	
-	var barrels_to_spin: int = 0
-	for barrel in installed_barrels:
-		if barrel == null:
-			continue
-		barrels_to_spin += 1
-	if barrels_to_spin == 0:
-		#reload()
-		return
 
 	release_trigger()
 	
@@ -598,8 +589,6 @@ func spin_all_barrels() -> void:
 	#barrels_to_spin = installed_barrels.size() # Check again to prevent bug
 	var spin_idx: int = 0
 	for barrel in installed_barrels:
-		if spin_idx >= barrels_to_spin:
-			break
 		if barrel == null:
 			continue
 		# Optional delay between each barrel spinning
@@ -1005,7 +994,7 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 	if barrel_idx == -1:
 		barrel_idx = barrel_count - 1 if barrel_count > 0 else 0
 	
-	if barrel_inst is not NullBarrel:
+	if barrel_inst is not NullBarrel and barrel_inst != null:
 		barrel_inst.reloads_before_spin = barrel_data.reloads_before_spin
 		installed_barrels[barrel_idx] = barrel_inst
 		
