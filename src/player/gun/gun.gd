@@ -964,6 +964,11 @@ func play_shotgun_shell_load_sfx():
 
 
 func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) -> void:
+	barrel_count = 0
+	for barrel in barrel_container.get_children():
+		if barrel is not NullBarrel:
+			barrel_count += 1
+	
 	var barrel_inst: SpinBarrel
 	if barrel_data == null:
 		barrel_inst = null_barrel_pool.pop_front()
@@ -977,22 +982,17 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 		barrel_container.remove_child(_null)
 		null_barrel_pool.push_back(_null)
 	
-	barrel_container.add_child(barrel_inst)
-	barrel_container.move_child(barrel_inst, slot_idx)
-	
 	#_set_barrel_effect_label(barrel_inst, barrel_inst.get_active_effect())
 
 	magazine_ammo_left = 0
-
-	barrel_count = 0
-	for barrel in barrel_container.get_children():
-		if barrel is not NullBarrel:
-			barrel_count += 1
 	
 	var barrel_idx: int = slot_idx
 	# Get first available slot if none specified
 	if barrel_idx == -1:
-		barrel_idx = barrel_count - 1 if barrel_count > 0 else 0
+		barrel_idx = barrel_count
+	
+	barrel_container.add_child(barrel_inst)
+	barrel_container.move_child(barrel_inst, barrel_idx)
 	
 	if barrel_inst is not NullBarrel and barrel_inst != null:
 		barrel_inst.reloads_before_spin = barrel_data.reloads_before_spin
