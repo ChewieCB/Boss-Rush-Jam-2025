@@ -1,4 +1,4 @@
-[gd_scene load_steps=159 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=160 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://ngmk0hmjnikh" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1_spin_1.png" id="14_rhmcq"]
 [ext_resource type="Texture2D" uid="uid://mxvqdioov5rq" path="res://src/player/gun/assets/sprite/frames/shotgun/reload/shotgun_shell.png" id="15_5xjsj"]
 [ext_resource type="Texture2D" uid="uid://tpbqrtskhc32" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_1.png" id="15_a1yho"]
+[ext_resource type="PackedScene" uid="uid://d2guvc1i31xs2" path="res://src/player/barrel/_NullBarrel.tscn" id="15_doci0"]
 [ext_resource type="Texture2D" uid="uid://drrr4aotn87ol" path="res://src/player/gun/assets/sprite/rescale/idle/arm_idle.png" id="15_x3kbv"]
 [ext_resource type="Texture2D" uid="uid://dbjgf5actedu7" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_2.png" id="16_5bgyl"]
 [ext_resource type="Texture2D" uid="uid://b0magitfwgp0" path="res://src/player/gun/assets/sprite/frames/smg/gun_frame_smg_grip.png" id="17_rwkjl"]
@@ -3957,6 +3958,7 @@ sfx_shotgun_shell_reload = Array[AudioStream]([ExtResource("8_47oxl"), ExtResour
 hitscan_prefab = ExtResource("8_trw5g")
 projectile_prefab = ExtResource("9_hhraw")
 muzzle_smoke_prefab = ExtResource("10_ipycd")
+null_barrel_prefab = ExtResource("15_doci0")
 
 [node name="SpriteParent" type="Node3D" parent="."]
 transform = Transform3D(0.159378, -0.0427051, 0, 0.0427051, 0.159378, 0, 0, 0, 0.165, 0.0612581, -1.08924, 0)

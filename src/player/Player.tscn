@@ -137,20 +137,12 @@ sfx_dash_floor = Array[AudioStream]([ExtResource("30_bfwyi")])
 sfx_dash_air = Array[AudioStream]([ExtResource("30_bfwyi")])
 sfx_purchase = ExtResource("31_uqkio")
 sfx_too_expensive = ExtResource("32_vsild")
-can_wall_jump = null
-can_wall_cling = null
 max_air_jump = 1
-dash_cd = null
-angular_momentum_multiplier = null
 speedline_vfx_prefab = ExtResource("55_pporq")
 jump_dust_ring_prefab = ExtResource("34_ph8h0")
 health_component = NodePath("HealthComponent")
 luck_component = NodePath("LuckComponent")
 freecam_prefab = ExtResource("34_kq3ih")
-luck_redeem_time = null
-reroll_heal_value = null
-drunk_movement_drift = null
-drunk_movement_drift_change_interval = null
 
 [node name="HealthComponent" type="Node3D" parent="."]
 script = ExtResource("34_6waar")

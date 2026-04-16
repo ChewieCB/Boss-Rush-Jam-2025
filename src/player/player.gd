@@ -541,6 +541,8 @@ func update_barrel_effect_ui() -> void:
 			#effect_ui.modulate.a = 1.0
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
+			if barrel is NullBarrel:
+				continue
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
 
 			if _effect.icon_id != -1:
