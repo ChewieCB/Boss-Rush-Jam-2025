@@ -11,7 +11,7 @@ class_name GunCustomizationUI
 @onready var shop_bg: Control = $ShopBG
 @onready var barrel_shop_ui: Control = $MainRegion/BarrelShopUI
 @onready var shop_gun_frame_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer
-@onready var shop_normal_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer
+@onready var shop_barrel_container: GridContainer = $MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer
 @onready var shopkeeper_chat: RichTextLabel = $MainRegion/BarrelShopUI/RightRegion/VendorAvatar/Chatbox/RichTextLabel
 
 const SHOPKEEPER_CHAT_TEXT_SPEED = 1.0
@@ -30,23 +30,42 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 	
 	for child in shop_gun_frame_container.get_children():
 		child.queue_free()
-	for child in shop_normal_barrel_container.get_children():
+	for child in shop_barrel_container.get_children():
 		child.queue_free()
 	
 	if not has_custom_inventory:
 		current_inventory = GameManager.shop_barrels
+	# TODO - build focus neighbors for cycling inventory selection like modify inventory
 	for barrel_data in current_inventory:
 		if barrel_data in GameManager.inventory_barrels:
 			current_inventory.erase(barrel_data)
 			continue
 		if not barrel_data.is_archetype_barrel:
 			var shop_item_inst = shop_barrel_item_ui_prefab.instantiate()
-			shop_normal_barrel_container.add_child(shop_item_inst)
+			shop_barrel_container.add_child(shop_item_inst)
 			shop_item_inst.init(barrel_data, self)
 			shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
 			shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
 			shop_item_inst.item_ui.show_warning.connect(show_warning)
-
+	
+	var inv_container_count: int = shop_barrel_container.get_child_count()
+	var cols: int = shop_barrel_container.columns
+	for i in range(inv_container_count):
+		var inv_ui = shop_barrel_container.get_child(i)
+		var prev_inv_idx: int = wrapi(i - 1, 0, inv_container_count)
+		var prev_inv: Control = shop_barrel_container.get_child(prev_inv_idx)
+		var next_inv_idx: int = wrapi(i + 1, 0, inv_container_count)
+		var next_inv: Control = shop_barrel_container.get_child(next_inv_idx)
+		var up_inv_idx = wrapi(i - cols, 0, inv_container_count)
+		var up_inv: Control = shop_barrel_container.get_child(up_inv_idx)
+		var down_inv_idx = wrapi(i + cols, 0, inv_container_count)
+		var down_inv: Control = shop_barrel_container.get_child(down_inv_idx)
+		inv_ui.button.focus_neighbor_left = prev_inv.button.get_path()
+		inv_ui.button.focus_neighbor_right = next_inv.button.get_path()
+		inv_ui.button.focus_neighbor_top = up_inv.button.get_path()
+		inv_ui.button.focus_neighbor_bottom = down_inv.button.get_path()
+		
+	 # TODO - add focus neighbours between topmost barrels in inventory and gun frames
 	for gun_frame_data in GameManager.shop_gun_frames:
 		var shop_item_inst = shop_gun_frame_item_ui_prefab.instantiate()
 		shop_gun_frame_container.add_child(shop_item_inst)
@@ -55,7 +74,8 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 		shop_item_inst.gun_frame_item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
 		
 		var focus_area: Control = focus_area_callable.call()
-		await get_tree().process_frame
+		# TODO - might not need this await
+		#await get_tree().process_frame
 		focus_area.grab_focus.call_deferred()
 
 
@@ -65,8 +85,41 @@ func set_shopkeeper_chat(content: String) -> void:
 
 
 func get_first_item_for_focus() -> Control:
-	var first_item: Control = shop_normal_barrel_container.get_child(0).button
-	return first_item
+	return get_inventory_focus()
+
+
+func get_gun_frame_inventory_focus() -> Control:
+	var gun_frame_items = shop_gun_frame_container.get_children()
+	for item in gun_frame_items:
+		item.focus_mode = FocusMode.FOCUS_ALL
+	# TODO - defocus detail ui
+	
+	if gun_frame_items:
+		return gun_frame_items[0].button
+	# Fallback to inventory barrels if no frames available
+	else:
+		return get_inventory_focus()
+
+
+func get_inventory_focus() -> Control:
+	# Update focus area modes
+	var inventory_barrel_items = shop_barrel_container.get_children()
+	# TODO - defocus detail ui
+	#for slot in equip_barrel_container.get_children():
+	#	slot.focus_mode = FocusMode.FOCUS_NONE
+	for item in inventory_barrel_items:
+		item.focus_mode = FocusMode.FOCUS_ALL
+	
+	# Fallback when no barrels in inventory
+	if inventory_barrel_items:
+		return inventory_barrel_items[0].button
+	#TODO
+	else:
+		return
+
+
+func get_barrel_detail_focus() -> Control:
+	return
 
 
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:

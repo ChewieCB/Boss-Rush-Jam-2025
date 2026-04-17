@@ -120,6 +120,7 @@ func get_equip_slot_focus() -> Control:
 	for item in inventory_normal_barrel_container.get_children():
 		item.focus_mode = FocusMode.FOCUS_NONE
 	
+	# FIXME - focus defaults to index 1 when empty
 	# Focus on leftmost equipped barrel, or the rightmost empty slot if no
 	# barrels are equipped.
 	var leftmost_barrel: Control = null

@@ -1,6 +1,6 @@
 [gd_scene load_steps=30 format=3 uid="uid://dxui67spyijhu"]
 
-[ext_resource type="Script" path="res://src/ui/player/inventory/gun_customize_ui.gd" id="1_g1lei"]
+[ext_resource type="Script" path="res://src/ui/player/inventory/shop_ui.gd" id="1_g1lei"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="1_o6gc7"]
 [ext_resource type="Texture2D" uid="uid://dj6ce7qdoeue" path="res://src/ui/player/inventory/inventory-background.png" id="2_jffbc"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="3_1ywl0"]
@@ -98,11 +98,15 @@ _data = {
 "shopkeeper_idle": SubResource("Animation_dro8h")
 }
 
-[node name="GunCustomizeUI" type="Control" node_paths=PackedStringArray("warning_label", "scroll_container", "barrel_info_region")]
+[node name="Shop" type="Control" node_paths=PackedStringArray("warning_label", "scroll_container", "barrel_info_region")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 1.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_g1lei")
