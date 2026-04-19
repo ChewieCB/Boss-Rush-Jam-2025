@@ -365,6 +365,7 @@ func _on_phase_1_state_entered() -> void:
 	#SoundManager.play_sound(sfx_tape, "SFX")
 	shots_to_fire = 1
 	GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
+	sprite.shaded = false
 	#SoundManager.stop_sound(sfx_tape)
 
 

@@ -908,10 +908,11 @@ points = PackedVector3Array(0.75, 3.8125, -0.75, 0.75, 2.875, -0.75, 2, 2.875, -
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_eqirt"]
 points = PackedVector3Array(0.946931, 1.22226, 2.0865, 0.943972, 1.22522, 2.08762, 0.899778, 1.18103, 2.08762, 0.902737, 1.17807, 2.0865, 0.941012, 1.13979, 2.11775, 0.985206, 1.18399, 2.11775, 0.949099, 1.13171, 2.16043, 0.993293, 1.1759, 2.16043, 0.899778, 1.18103, 2.22488, 0.927, 1.15381, 2.21456, 0.943972, 1.22522, 2.22488, 0.971194, 1.198, 2.21456)
 
-[node name="BossMapBartender" node_paths=PackedStringArray("first_countertop_flame_marker", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_vcodf")]
+[node name="BossMapBartender" node_paths=PackedStringArray("first_countertop_flame_marker", "chandellier_lights", "nav_parent", "floor_parent", "floor_mesh") instance=ExtResource("1_vcodf")]
 script = ExtResource("2_ikfam")
 first_countertop_flame_marker = NodePath("CountertopFlamingWallHolder/FirstCountertopFlameMarker")
 countertop_flame_prefab = ExtResource("33_byrwp")
+chandellier_lights = [NodePath("FuncGodotMap/entity_15_Chandellier2"), NodePath("FuncGodotMap/entity_16_Chandellier2"), NodePath("FuncGodotMap/entity_17_Chandellier2"), NodePath("FuncGodotMap/entity_18_Chandellier2"), NodePath("FuncGodotMap/entity_19_Chandellier2"), NodePath("FuncGodotMap/entity_20_Chandellier2"), NodePath("FuncGodotMap/entity_30_Chandellier2"), NodePath("FuncGodotMap/entity_31_Chandellier2")]
 sfx_fire_start = ExtResource("3_qvoi0")
 sfx_fire_loop = ExtResource("4_w5yjf")
 nav_parent = NodePath("FuncGodotMap")
