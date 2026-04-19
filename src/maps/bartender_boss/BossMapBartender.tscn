@@ -964,7 +964,6 @@ texture_albedo = ExtResource("21_4yyfc")
 
 [node name="BossBartender" parent="." index="9" node_paths=PackedStringArray("floor_fize_hazard_marker", "behind_bar_move_points", "boss_jump_phase2_marker", "boss_jump_phase3_marker", "target", "elemental_emitting_vfx") instance=ExtResource("31_p2107")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -45.0618)
-shotgun_hitscan_damage = 20
 floor_fize_hazard_marker = NodePath("../BossMarker/FloorFireHazard")
 behind_bar_move_points = [NodePath("../BossMarker/BossMoveMarker"), NodePath("../BossMarker/BossMoveMarker2"), NodePath("../BossMarker/BossMoveMarker3"), NodePath("../BossMarker/BossMoveMarker4"), NodePath("../BossMarker/BossMoveMarker5")]
 boss_jump_phase2_marker = NodePath("../BossMarker/BossJumpPhase2Marker")

@@ -35,7 +35,7 @@ extends BossCore
 #
 # Map edit (DONE): Clear out some table in the map, and raise the ceiling. Maybe add 2nd floor balconny for improved phase 3.
 #
-# Map edit (DONE): Table should be its own scene, not stucked to map. And can be kicked (by pressing Interact probably) to work as cover. 
+# Map edit (DONE): Table should be its own scene, not stucked to map. And can be kicked (by pressing Interact probably) to work as cover.
 # It will fall back after some time. Use this to counter Shotgun Volley.
 #
 # New phase: Drinking buff should be its own phase so it can have more different attacks. Jekyll/Hyde style.
@@ -109,6 +109,8 @@ var burst_fired = 0
 
 @export_subgroup("Shotgun Hitscan")
 @export var shotgun_hitscan_damage: int = 25
+@export var shotgun_hitscan_prefab: PackedScene
+const HITSCAN_MAX_RANGE = 500
 
 @export_subgroup("Countertop Flame")
 @export var countertop_flame_duration = 10
@@ -542,14 +544,13 @@ func fire_shotgun():
 
 #region Shotgun hitscan
 func fire_shotgun_hitscan():
-	# TODO: Change to hitscan
-	var htscan_damage = shotgun_hitscan_damage * damage_modifier
+	var hitscan_damage = shotgun_hitscan_damage * damage_modifier
 	sfx_player.stream = sfx_shotgun.pick_random()
 	sfx_player.play()
 	var aim_direction = shotgun_spawn_pos.global_position.direction_to(target.global_position)
-	var hitscan_inst: BartenderShotgunProjectile = chosen_shotgun_proj_prefab.instantiate()
+	var hitscan_inst: BartenderShotgunHitscan = shotgun_hitscan_prefab.instantiate()
 	get_parent().add_child(hitscan_inst)
-	hitscan_inst.init(shotgun_spawn_pos.global_position, aim_direction, htscan_damage, shotgun_ricochet_count, shotgun_proj_speed * 5)
+	hitscan_inst.init(shotgun_spawn_pos.global_position, aim_direction, hitscan_damage, shotgun_ricochet_count, shotgun_proj_speed, HITSCAN_MAX_RANGE)
 
 
 func _on_shotgun_hitscan_targeting_state_entered() -> void:
@@ -578,7 +579,7 @@ func _on_shotgun_hitscan_recover_state_entered() -> void:
 
 func _on_shotgun_hitscan_state_exited() -> void:
 	shotgun_timer.stop()
-			
+
 #endregion
 
 

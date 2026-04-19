@@ -1,0 +1,72 @@
+[gd_scene load_steps=12 format=3 uid="uid://xv2guauhe3iv"]
+
+[ext_resource type="Script" path="res://src/bosses/bartender/projectiles/bartender_shotgun_hitscan.gd" id="1_rnwct"]
+[ext_resource type="PackedScene" uid="uid://i7pid4y24r8b" path="res://src/player/gun/vfx/BulletSpark.tscn" id="2_bdr6w"]
+[ext_resource type="PackedScene" uid="uid://ckx3wbokfgki3" path="res://src/player/gun/vfx/GenericBloodSplatter.tscn" id="3_huqsg"]
+[ext_resource type="PackedScene" uid="uid://okcqj4inb2gf" path="res://src/player/gun/decal/BulletDecal.tscn" id="4_avu1r"]
+[ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="4_dmaeq"]
+[ext_resource type="Script" path="res://src/player/gun/vfx/trail_3d.gd" id="4_e2jb4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oc2f2"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_dmaeq")
+shader_parameter/enable_fade = true
+shader_parameter/enable_taper = true
+shader_parameter/origin_position = null
+shader_parameter/fade_distance = 3.0
+shader_parameter/fade_multiplier = 1.0
+shader_parameter/color = Color(1, 0.128811, 0, 1)
+shader_parameter/taper_amount = -2.0
+shader_parameter/emission_color = Color(1, 0.222252, 0, 1)
+shader_parameter/emission_intensity = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_be51v"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_oc2f2")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c8gkq"]
+albedo_color = Color(0.884935, 0.465512, 0.128773, 1)
+emission_enabled = true
+emission = Color(1, 0.286275, 0.129412, 1)
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_810gr"]
+
+[sub_resource type="Curve" id="Curve_inxyf"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="BartenderHitscanProjectile" type="Node3D"]
+script = ExtResource("1_rnwct")
+fade_speed = 1.5
+spark_effect = ExtResource("2_bdr6w")
+generic_blood_splatter = ExtResource("3_huqsg")
+bullet_decal_prefab = ExtResource("4_avu1r")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 15, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_be51v")
+
+[node name="LifeTimer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.610737)
+target_position = Vector3(0, 0, -100)
+collision_mask = 3
+
+[node name="Trail" type="Node3D" parent="."]
+
+[node name="Trail3D" type="MeshInstance3D" parent="Trail"]
+top_level = true
+material_override = SubResource("StandardMaterial3D_c8gkq")
+mesh = SubResource("ImmediateMesh_810gr")
+skeleton = NodePath("")
+script = ExtResource("4_e2jb4")
+segments = 10
+base_width = 0.1
+width_profile = SubResource("Curve_inxyf")
+
+[connection signal="timeout" from="LifeTimer" to="." method="_on_life_timer_timeout"]
