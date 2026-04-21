@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=3 uid="uid://uwn1wb0neu46"]
+[gd_scene load_steps=105 format=3 uid="uid://uwn1wb0neu46"]
 
 [ext_resource type="PackedScene" uid="uid://ii5ocgeg86yx" path="res://src/bosses/base/BossCore.tscn" id="1_bp57a"]
 [ext_resource type="Script" path="res://src/bosses/bartender/boss_bartender.gd" id="2_ns3xp"]
@@ -71,6 +71,7 @@
 [ext_resource type="Texture2D" uid="uid://dh0wkrk3w47v5" path="res://src/bosses/bartender/assets/Bartender_Brew_hand_lit_match.png" id="67_bb0i7"]
 [ext_resource type="AudioStream" uid="uid://cyyb005whj0j2" path="res://src/bosses/tutorial/assets/sfx/FLAME WALL DISSIPATES 1.mp3" id="68_thbyd"]
 [ext_resource type="AudioStream" uid="uid://cetjq74amshhj" path="res://src/bosses/slots/assets/sfx/COIN SHOT/Coin Shot Bigger 1.mp3" id="70_v4vda"]
+[ext_resource type="Texture2D" uid="uid://yie7xy3572of" path="res://src/bosses/bartender/assets/Bartender_Spin.png" id="72_4xlif"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_dpsmo"]
 size = Vector3(1, 1, 2)
@@ -271,6 +272,30 @@ tracks/13/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Sprite3D:rotation")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Sprite3D:billboard")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
 }
 
 [sub_resource type="Animation" id="Animation_3xb07"]
@@ -783,6 +808,64 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector3(0.661986, 0.651659, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_pc74n"]
+resource_name = "bullet_dance"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("72_4xlif")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"fire_shotgun"
+}, {
+"args": [],
+"method": &"fire_shotgun"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 3.14159, 0), Vector3(0, 6.28319, 0), Vector3(0, 9.42478, 0), Vector3(0, 12.5664, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite3D:billboard")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_l43ek"]
@@ -1740,6 +1823,7 @@ _data = {
 "bottle_throw_fire": SubResource("Animation_nvstt"),
 "bottle_throw_poison": SubResource("Animation_4sfhc"),
 "bottle_throw_tar": SubResource("Animation_xmupu"),
+"bullet_dance": SubResource("Animation_pc74n"),
 "death": SubResource("Animation_l43ek"),
 "drink_brew": SubResource("Animation_drylh"),
 "drink_consume": SubResource("Animation_8nivd"),
@@ -2392,6 +2476,13 @@ event = &"start_shotgun_volley"
 guard = ExtResource("28_8rmxp")
 delay_in_seconds = "0.0"
 
+[node name="toBulletDance" type="Node" parent="StateChart/Root/Phase/Phase2/Idle" index="5"]
+script = ExtResource("4_dheml")
+to = NodePath("../../BulletDance")
+event = &"start_bullet_dance"
+guard = ExtResource("28_8rmxp")
+delay_in_seconds = "0.0"
+
 [node name="ThrowBrokenBottle" type="Node" parent="StateChart/Root/Phase/Phase2" index="3"]
 script = ExtResource("5_2jcim")
 initial_state = NodePath("Targeting")
@@ -2696,6 +2787,49 @@ event = &"end_recovery"
 delay_in_seconds = "0.0"
 
 [node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase2/ShotgunVolley" index="3"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Idle")
+event = &"reposition"
+delay_in_seconds = "0.0"
+
+[node name="BulletDance" type="Node" parent="StateChart/Root/Phase/Phase2" index="8"]
+script = ExtResource("5_2jcim")
+initial_state = NodePath("Targeting")
+
+[node name="Targeting" type="Node" parent="StateChart/Root/Phase/Phase2/BulletDance" index="0"]
+script = ExtResource("6_kkb22")
+
+[node name="toDancing" type="Node" parent="StateChart/Root/Phase/Phase2/BulletDance/Targeting" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Dancing")
+event = &"start_dancing"
+delay_in_seconds = "0.0"
+
+[node name="Dancing" type="Node" parent="StateChart/Root/Phase/Phase2/BulletDance" index="1"]
+script = ExtResource("6_kkb22")
+
+[node name="toRecover" type="Node" parent="StateChart/Root/Phase/Phase2/BulletDance/Dancing" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Recover")
+event = &"end_dancing"
+delay_in_seconds = "0.0"
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/BulletDance/Dancing" index="1"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"next_dance"
+delay_in_seconds = "0.0"
+
+[node name="Recover" type="Node" parent="StateChart/Root/Phase/Phase2/BulletDance" index="2"]
+script = ExtResource("6_kkb22")
+
+[node name="toTargeting" type="Node" parent="StateChart/Root/Phase/Phase2/BulletDance/Recover" index="0"]
+script = ExtResource("4_dheml")
+to = NodePath("../../Targeting")
+event = &"end_recovery"
+delay_in_seconds = "0.0"
+
+[node name="toIdle" type="Node" parent="StateChart/Root/Phase/Phase2/BulletDance" index="3"]
 script = ExtResource("4_dheml")
 to = NodePath("../../Idle")
 event = &"reposition"
@@ -3201,6 +3335,10 @@ one_shot = true
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ShotgunVolley/Targeting" to="." method="_on_shotgun_volley_targeting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ShotgunVolley/Bursting" to="." method="_on_shotgun_volley_bursting_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase2/ShotgunVolley/Recover" to="." method="_on_shotgun_volley_recover_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Phase/Phase2/BulletDance" to="." method="_on_bullet_dance_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BulletDance/Targeting" to="." method="_on_bullet_dance_targeting_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BulletDance/Dancing" to="." method="_on_bullet_dance_dancing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Phase/Phase2/BulletDance/Recover" to="." method="_on_bullet_dance_recover_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3" to="." method="_on_phase_3_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/Idle" to="." method="_on_phase_1_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Phase/Phase3/ThrowBrokenBottle/Targeting" to="." method="_on_throw_broken_bottle_targeting_state_entered"]

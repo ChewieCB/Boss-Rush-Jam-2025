@@ -401,7 +401,7 @@ func _on_phase_2_state_entered() -> void:
 	#await get_tree().create_timer(1, false).timeout
 	#SoundManager.stop_sound(sfx_tape)
 	jump_to(boss_jump_phase2_marker.global_position)
-	state_chart.send_event("start_brew_drink")
+	state_chart.send_event("start_bullet_dance")
 
 
 func _on_phase_2_idle_state_entered() -> void:
@@ -541,8 +541,8 @@ func fire_shotgun():
 	# an interrupt for death after each shot.
 	sfx_player.stream = sfx_shotgun.pick_random()
 	sfx_player.play()
+	var aim_direction = shotgun_spawn_pos.global_position.direction_to(target.global_position)
 	for j in range(shotgun_proj_amount):
-		var aim_direction = shotgun_spawn_pos.global_position.direction_to(target.global_position)
 		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, shotgun_spread_angle)
 		var bullet_inst: BartenderShotgunProjectile = chosen_shotgun_proj_prefab.instantiate()
 		get_parent().add_child(bullet_inst)
@@ -596,7 +596,7 @@ func _on_shotgun_volley_targeting_state_entered() -> void:
 	debug_state_label.text = "Shotgun Volley | Targeting"
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_telegraph")
-	anim_player.play("shotgun_telegraph") # Delay between burst
+	anim_player.play("shotgun_telegraph") # Also delay between burst
 	await anim_player.animation_finished
 	shotgun_volley_timer.start(time_between_shotgun_burst)
 	burst_to_fire = randi_range(2, 4)
@@ -623,6 +623,61 @@ func _on_shotgun_volley_state_exited() -> void:
 
 func _on_shotgun_volley_timer_timeout() -> void:
 	state_chart.send_event("start_bursting")
+
+#endregion
+
+#region Bullet dance
+
+func _on_bullet_dance_targeting_state_entered() -> void:
+	debug_state_label.text = "Bullet Dancing | Targeting"
+	boss_map_bartender.toggle_light(false)
+	boss_map_bartender.toggle_spotlight(true)
+	state_chart.send_event("start_targeting")
+	state_chart.send_event("attack_telegraph")
+	anim_player.play("shotgun_telegraph")
+	await anim_player.animation_finished
+	state_chart.send_event("start_dancing")
+
+func _on_bullet_dance_dancing_state_entered() -> void:
+	debug_state_label.text = "Bullet Dancing | Targeting"
+	const BULLET_DANCE_SHOT_COUNT = 10
+	for i in range(BULLET_DANCE_SHOT_COUNT):
+		anim_player.play("bullet_dance")
+		await anim_player.animation_finished
+	state_chart.send_event("end_dancing")
+
+
+func _on_bullet_dance_recover_state_entered() -> void:
+	anim_player.play("RESET")
+	await get_tree().create_timer(attack_recovery_time, false).timeout
+	state_chart.send_event("reposition")
+
+
+func _on_bullet_dance_state_exited() -> void:
+	boss_map_bartender.toggle_light(true)
+	boss_map_bartender.toggle_spotlight(false)
+
+
+func fire_shotgun_randomly():
+	var proj_damage = shotgun_proj_damage * damage_modifier
+	sfx_player.stream = sfx_shotgun.pick_random()
+	sfx_player.play()
+
+	var max_pitch_deg := 20.0
+	var yaw = randf_range(0.0, TAU)
+	var pitch = deg_to_rad(randf_range(-max_pitch_deg, max_pitch_deg))
+	var aim_direction = Vector3.FORWARD
+	aim_direction = aim_direction.rotated(Vector3.UP, yaw)
+	# get proper right axis for pitch
+	var right_axis = aim_direction.cross(Vector3.UP).normalized()
+	aim_direction = aim_direction.rotated(right_axis, pitch)
+	aim_direction = aim_direction.normalized()
+
+	for j in range(shotgun_proj_amount):
+		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, shotgun_spread_angle)
+		var bullet_inst: BartenderShotgunProjectile = chosen_shotgun_proj_prefab.instantiate()
+		get_parent().add_child(bullet_inst)
+		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, shotgun_ricochet_count, shotgun_proj_speed)
 
 #endregion
 
