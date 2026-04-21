@@ -12,7 +12,7 @@ var is_parrying = false
 const TABLE_PARRY_TIMESTOP_DURATION = 0.2
 
 func _ready() -> void:
-	parry_light.light_energy = 0
+	parry_light.visible = false
 
 func interact():
 	if interact_disabled:
@@ -46,9 +46,9 @@ func _on_reset_timer_timeout() -> void:
 
 
 func play_table_parry_effect():
-	parry_light.light_energy = 5
+	parry_light.visible = true
 	GameManager.player_ui.play_parried_effect(TABLE_PARRY_TIMESTOP_DURATION)
-	parry_light.light_energy = 0
+	parry_light.visible = false
 
 func _on_parry_area_area_entered(area: Area3D) -> void:
 	if not is_parrying:

@@ -1,4 +1,5 @@
 extends BossMap
+class_name BossMapBartender
 
 @export_group("Flame Countertop")
 @export var first_countertop_flame_marker: Marker3D
@@ -6,6 +7,7 @@ extends BossMap
 @onready var countertop_flame_holder: Node3D = $CountertopFlamingWallHolder
 @onready var countertop_flame_duration_timer: Timer = $CountertopFlamingWallHolder/CountertopFlameTimer
 @export_group("Stage Light")
+@export var center_stage_spot_light: SpotLight3D
 @export var chandellier_lights: Array[StaticBody3D] = []
 @export_group("SFX")
 @export var sfx_fire_start: AudioStream
@@ -20,11 +22,13 @@ func _ready() -> void:
 	boss.fire_started.connect(_on_fire_started)
 	boss.boss_map = self
 	super ()
+	center_stage_spot_light.visible = false
 	toggle_light(false)
-	await get_tree().create_timer(5).timeout
-	toggle_light(true)
-	await get_tree().create_timer(5).timeout
-	toggle_light(false)
+
+
+func _process(_delta: float) -> void:
+	update_spotlight_rotation()
+
 
 func create_countertop_flame_wall(duration = 10) -> void:
 	if countertop_is_on_fire:
@@ -47,6 +51,15 @@ func toggle_light(is_on: bool):
 	for item in chandellier_lights:
 		if item.has_method("toggle_light"):
 			item.toggle_light(is_on)
+
+
+func toggle_spotlight(is_on: bool) -> void:
+	center_stage_spot_light.visible = is_on
+
+func update_spotlight_rotation() -> void:
+	if center_stage_spot_light == null or boss == null:
+		return
+	center_stage_spot_light.look_at(boss.global_position, Vector3.UP)
 
 
 func _on_fire_started() -> void:

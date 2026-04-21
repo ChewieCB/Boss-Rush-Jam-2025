@@ -246,6 +246,8 @@ shape = SubResource("BoxShape3D_8vgnp")
 
 [node name="ParryLight" type="OmniLight3D" parent="StaticBody3D/ParryArea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.324798, 0)
+visible = false
+light_energy = 5.0
 
 [connection signal="timeout" from="StaticBody3D/ResetTimer" to="StaticBody3D" method="_on_reset_timer_timeout"]
 [connection signal="area_entered" from="StaticBody3D/ParryArea" to="StaticBody3D" method="_on_parry_area_area_entered"]

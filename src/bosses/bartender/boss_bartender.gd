@@ -202,6 +202,8 @@ var fire_sfx: AudioStreamPlayer = null
 
 const MIN_ACTION_BEFORE_HEAL = 8
 
+var boss_map_bartender: BossMapBartender
+
 
 func _ready() -> void:
 	super ()
@@ -229,6 +231,13 @@ func _process(delta: float) -> void:
 
 func activate() -> void:
 	super ()
+	boss_map_bartender = boss_map as BossMapBartender
+	boss_map_bartender.toggle_spotlight(true)
+	await get_tree().create_timer(0.5).timeout
+	GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
+	boss_map_bartender.toggle_light(true)
+	boss_map_bartender.toggle_spotlight(false)
+	sprite.shaded = false
 	change_phase(1)
 
 
@@ -364,8 +373,6 @@ func _on_phase_1_state_entered() -> void:
 	anim_player.play("RESET")
 	#SoundManager.play_sound(sfx_tape, "SFX")
 	shots_to_fire = 1
-	GameManager.show_boss_special_dialog("Welcome to MY Bar!", 1.5)
-	sprite.shaded = false
 	#SoundManager.stop_sound(sfx_tape)
 
 
@@ -843,7 +850,7 @@ func set_countertop_on_fire():
 	await anim_player.animation_finished
 	anim_player.play("RESET")
 	if countertop_flame_cd_timer.is_stopped():
-		boss_map.create_countertop_flame_wall(countertop_flame_duration)
+		boss_map_bartender.create_countertop_flame_wall(countertop_flame_duration)
 		countertop_flame_cd_timer.start(countertop_flame_cd)
 
 #endregion
