@@ -17,6 +17,12 @@ class_name GunCustomizationUI
 const SHOPKEEPER_CHAT_TEXT_SPEED = 1.0
 
 
+func _ready() -> void:
+	super()
+	get_viewport().gui_focus_changed.connect(_on_focus_changed)
+	shop_barrel_container.get_child(0).focus_exited.connect(_on_first_focus_exited)
+
+
 func _process(delta: float) -> void:
 	super(delta)
 	
@@ -29,13 +35,15 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 		return
 	
 	for child in shop_gun_frame_container.get_children():
+		shop_gun_frame_container.remove_child(child)
 		child.queue_free()
 	for child in shop_barrel_container.get_children():
+		shop_barrel_container.remove_child(child)
 		child.queue_free()
 	
 	if not has_custom_inventory:
 		current_inventory = GameManager.shop_barrels
-	# TODO - build focus neighbors for cycling inventory selection like modify inventory
+	
 	for barrel_data in current_inventory:
 		if barrel_data in GameManager.inventory_barrels:
 			current_inventory.erase(barrel_data)
@@ -48,23 +56,6 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 			shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
 			shop_item_inst.item_ui.show_warning.connect(show_warning)
 	
-	var inv_container_count: int = shop_barrel_container.get_child_count()
-	var cols: int = shop_barrel_container.columns
-	for i in range(inv_container_count):
-		var inv_ui = shop_barrel_container.get_child(i)
-		var prev_inv_idx: int = wrapi(i - 1, 0, inv_container_count)
-		var prev_inv: Control = shop_barrel_container.get_child(prev_inv_idx)
-		var next_inv_idx: int = wrapi(i + 1, 0, inv_container_count)
-		var next_inv: Control = shop_barrel_container.get_child(next_inv_idx)
-		var up_inv_idx = wrapi(i - cols, 0, inv_container_count)
-		var up_inv: Control = shop_barrel_container.get_child(up_inv_idx)
-		var down_inv_idx = wrapi(i + cols, 0, inv_container_count)
-		var down_inv: Control = shop_barrel_container.get_child(down_inv_idx)
-		inv_ui.button.focus_neighbor_left = prev_inv.button.get_path()
-		inv_ui.button.focus_neighbor_right = next_inv.button.get_path()
-		inv_ui.button.focus_neighbor_top = up_inv.button.get_path()
-		inv_ui.button.focus_neighbor_bottom = down_inv.button.get_path()
-		
 	 # TODO - add focus neighbours between topmost barrels in inventory and gun frames
 	for gun_frame_data in GameManager.shop_gun_frames:
 		var shop_item_inst = shop_gun_frame_item_ui_prefab.instantiate()
@@ -72,11 +63,14 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 		shop_item_inst.init(gun_frame_data, self)
 		shop_item_inst.gun_frame_item_ui.select_gun_frame.connect(_on_gun_frame_item_ui_select)
 		shop_item_inst.gun_frame_item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
-		
-		var focus_area: Control = focus_area_callable.call()
-		# TODO - might not need this await
-		#await get_tree().process_frame
-		focus_area.grab_focus.call_deferred()
+	
+	set_focus_neighbour_wrapping(shop_barrel_container)
+	set_focus_neighbour_wrapping(shop_gun_frame_container)
+	set_region_focus_neighbor(shop_barrel_container, shop_gun_frame_container, Side.SIDE_TOP)
+	
+	await get_tree().process_frame
+	var focus_area: Control = focus_area_callable.call()
+	focus_area.grab_focus.call_deferred()
 
 
 func set_shopkeeper_chat(content: String) -> void:
@@ -105,8 +99,8 @@ func get_inventory_focus() -> Control:
 	# Update focus area modes
 	var inventory_barrel_items = shop_barrel_container.get_children()
 	# TODO - defocus detail ui
-	#for slot in equip_barrel_container.get_children():
-	#	slot.focus_mode = FocusMode.FOCUS_NONE
+	for item in shop_gun_frame_container.get_children():
+		item.focus_mode = FocusMode.FOCUS_NONE
 	for item in inventory_barrel_items:
 		item.focus_mode = FocusMode.FOCUS_ALL
 	

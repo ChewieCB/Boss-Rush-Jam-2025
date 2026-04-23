@@ -115,6 +115,47 @@ func handle_controller_scrolling() -> void:
 	)
 
 
+func set_focus_neighbour_wrapping(ui_container: Control) -> void:
+	var inv_container_count: int = ui_container.get_child_count()
+	var _wrap_focus = func(x: int): return wrapi(x, 0, inv_container_count)
+	var cols: int = ui_container.columns
+	
+	for i in range(inv_container_count):
+		var inv_ui: Control = ui_container.get_child(i)
+		var prev_inv_idx: int = _wrap_focus.call(i - 1)
+		var prev_inv: Control = ui_container.get_child(prev_inv_idx)
+		var next_inv_idx: int = _wrap_focus.call(i + 1)
+		var next_inv: Control = ui_container.get_child(next_inv_idx)
+		var up_inv_idx = _wrap_focus.call(i - cols)
+		var up_inv: Control = ui_container.get_child(up_inv_idx)
+		var down_inv_idx = _wrap_focus.call(i + cols)
+		var down_inv: Control = ui_container.get_child(down_inv_idx)
+		inv_ui.button.focus_neighbor_left = prev_inv.button.get_path()
+		inv_ui.button.focus_neighbor_right = next_inv.button.get_path()
+		inv_ui.button.focus_neighbor_top = up_inv.button.get_path()
+		inv_ui.button.focus_neighbor_bottom = down_inv.button.get_path()
+
+
+func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool = false) -> void:
+	match side:
+		Side.SIDE_TOP:
+			for i in range(0, a.columns):
+				var top_ui: Control = a.get_child(i)
+				var focus_neighbor: NodePath = b.get_child(0).button.get_path()
+				top_ui.button.focus_neighbor_top = focus_neighbor
+				
+				if not one_way:
+					set_region_focus_neighbor(b, a, Side.SIDE_BOTTOM, true)
+		Side.SIDE_BOTTOM:
+			for i in range(-1, -a.columns - 1, -1):
+				var bottom_ui: Control = a.get_child(i)
+				var focus_neighbor: NodePath = b.get_child(0).button.get_path()
+				bottom_ui.button.focus_neighbor_bottom = focus_neighbor
+				
+				if not one_way:
+					set_region_focus_neighbor(b, a, Side.SIDE_TOP, true)
+
+
 #### 
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	push_error("method not overriden")

@@ -59,11 +59,15 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 			barrel_item.set_barrel_data(barrel_data, true, true)
 		barrel_idx += 1
 		# Empty barrel slots
+	
 	# INVENTORY STUFF
 	for child in inventory_gun_frame_container.get_children():
+		inventory_gun_frame_container.remove_child(child)
 		child.queue_free()
 	for child in inventory_normal_barrel_container.get_children():
+		inventory_normal_barrel_container.remove_child(child)
 		child.queue_free()
+	
 	for barrel_data in GameManager.inventory_barrels:
 		if not barrel_data.is_archetype_barrel:
 			var item_inst: ItemUI = barrel_item_ui_prefab.instantiate()
@@ -73,29 +77,15 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 			item_inst.select_item.connect(_on_item_ui_select)
 			item_inst.interact_item.connect(_on_item_ui_interact)
 	
-	var inv_container_count: int = inventory_normal_barrel_container.get_child_count()
-	var cols: int = inventory_normal_barrel_container.columns
-	for i in range(inv_container_count):
-		var inv_ui = inventory_normal_barrel_container.get_child(i)
-		var prev_inv_idx: int = wrapi(i - 1, 0, inv_container_count)
-		var prev_inv: Control = inventory_normal_barrel_container.get_child(prev_inv_idx)
-		var next_inv_idx: int = wrapi(i + 1, 0, inv_container_count)
-		var next_inv: Control = inventory_normal_barrel_container.get_child(next_inv_idx)
-		var up_inv_idx = wrapi(i - cols, 0, inv_container_count)
-		var up_inv: Control = inventory_normal_barrel_container.get_child(up_inv_idx)
-		var down_inv_idx = wrapi(i + cols, 0, inv_container_count)
-		var down_inv: Control = inventory_normal_barrel_container.get_child(down_inv_idx)
-		inv_ui.button.focus_neighbor_left = prev_inv.button.get_path()
-		inv_ui.button.focus_neighbor_right = next_inv.button.get_path()
-		inv_ui.button.focus_neighbor_top = up_inv.button.get_path()
-		inv_ui.button.focus_neighbor_bottom = down_inv.button.get_path()
-	
 	for gun_frame_data in GameManager.inventory_gun_frames:
 		var item_inst: GunFrameItemUI = gun_frame_item_ui_prefab.instantiate()
 		inventory_gun_frame_container.add_child(item_inst)
 		item_inst.init(gun_frame_data, self, false, true)
 		item_inst.select_gun_frame.connect(_on_gun_frame_item_ui_select)
 		item_inst.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
+	
+	set_focus_neighbour_wrapping(inventory_normal_barrel_container)
+	set_focus_neighbour_wrapping(inventory_gun_frame_container)
 	
 	if GameManager.equipped_gun_frame:
 		current_gun_frame_icon.texture = GameManager.equipped_gun_frame.shop_ui_sprite
