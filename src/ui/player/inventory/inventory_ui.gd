@@ -167,6 +167,12 @@ func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool
 					set_region_focus_neighbor(b, a, Side.SIDE_TOP, true)
 
 
+func clear_item_ui_highlight(ui: Control) -> void:
+	ui.is_active_equip = false
+	ui.deselect()
+	ui.button.remove_theme_stylebox_override("normal")
+
+
 #### 
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	push_error("method not overriden")

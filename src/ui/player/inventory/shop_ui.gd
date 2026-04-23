@@ -16,12 +16,42 @@ class_name GunCustomizationUI
 
 const SHOPKEEPER_CHAT_TEXT_SPEED = 1.0
 
+var active_ui_idx: int = -1
+
 
 func _process(delta: float) -> void:
 	super(delta)
 	
 	if shopkeeper_chat.visible_ratio < 1.0:
 		shopkeeper_chat.visible_ratio += delta * SHOPKEEPER_CHAT_TEXT_SPEED
+
+
+func _input(event: InputEvent) -> void:
+	if visible:
+		if event.is_action_pressed("ui_cancel"):
+			# TODO - back out of inventory or detail focus instead of closing
+			#if current_focus_area == inventory_normal_barrel_container:
+				#var cancel_focus: Control = get_equip_slot_focus()
+				#var equip_ui = equip_barrel_container.get_child(active_ui_idx).get_child(0)
+				#clear_item_ui_highlight(equip_ui)
+				#active_ui_idx = -1
+				#cancel_focus.grab_focus.call_deferred()
+				#full_refresh_ui(get_equip_slot_focus)
+			if active_ui_idx != -1:
+				var cancel_focus_callable: Callable
+				cancel_focus_callable = get_gun_frame_inventory_focus if \
+				current_focus_area == shop_gun_frame_container else get_inventory_focus
+				var active_ui = current_focus_area.get_child(active_ui_idx).get_child(0)
+				active_ui.clicked_once = false
+				for i in range(current_focus_area.get_child_count()):
+					var ui = current_focus_area.get_child(i).get_child(0)
+					clear_item_ui_highlight(ui)
+				active_ui_idx = -1
+				full_refresh_ui(cancel_focus_callable)
+			else:
+				close()
+			
+			get_viewport().set_input_as_handled()
 
 
 func full_refresh_ui(focus_area_callable: Callable, forced = false):
@@ -49,6 +79,9 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 			shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
 			shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
 			shop_item_inst.item_ui.show_warning.connect(show_warning)
+			shop_item_inst.item_ui.button.pressed.connect(
+				_on_item_ui_button_pressed.bind(shop_item_inst.item_ui)
+			)
 	
 	 # TODO - add focus neighbours between topmost barrels in inventory and gun frames
 	for gun_frame_data in GameManager.shop_gun_frames:
@@ -57,6 +90,9 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 		shop_item_inst.init(gun_frame_data, self)
 		shop_item_inst.gun_frame_item_ui.select_gun_frame.connect(_on_gun_frame_item_ui_select)
 		shop_item_inst.gun_frame_item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
+		shop_item_inst.gun_frame_item_ui.button.pressed.connect(
+			_on_item_ui_button_pressed.bind(shop_item_inst.gun_frame_item_ui)
+		)
 	
 	set_focus_neighbour_wrapping(shop_barrel_container)
 	set_focus_neighbour_wrapping(shop_gun_frame_container)
@@ -77,6 +113,7 @@ func get_first_item_for_focus() -> Control:
 
 
 func get_gun_frame_inventory_focus() -> Control:
+	current_focus_area = shop_gun_frame_container
 	var gun_frame_items = shop_gun_frame_container.get_children()
 	for item in gun_frame_items:
 		item.focus_mode = FocusMode.FOCUS_ALL
@@ -90,6 +127,7 @@ func get_gun_frame_inventory_focus() -> Control:
 
 
 func get_inventory_focus() -> Control:
+	current_focus_area = shop_barrel_container
 	# Update focus area modes
 	var inventory_barrel_items = shop_barrel_container.get_children()
 	# TODO - defocus detail ui
@@ -122,6 +160,11 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		return
 	
 	barrel_info_region.set_barrel_data_resource(data)
+
+
+func _on_item_ui_button_pressed(ui: Control) -> void:
+	if ui.clicked_once:
+		active_ui_idx = ui.get_index()
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
