@@ -20,6 +20,7 @@ signal reset_barrel_info
 
 const CONTROLLER_SCROLL_SPEED_COOEFFICIENT = 3.0
 
+var current_focus_area: Control = null
 var current_selected_item_ui: Control = null
 @export var barrel_info_region: BarrelInfoRegion = null
 var ui_transitioning: bool = false

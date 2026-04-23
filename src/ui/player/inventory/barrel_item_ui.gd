@@ -18,6 +18,7 @@ var scale_factor = 1.1
 var is_shop_item_ui = false
 
 var is_equipped = false
+var is_active_equip: bool = false
 var is_purchased: bool = false:
 	set(value):
 		is_purchased = value
@@ -115,7 +116,8 @@ func _on_button_focus_entered() -> void:
 
 
 func _on_button_focus_exited() -> void:
-	return_button_size()
+	if not is_active_equip:
+		return_button_size()
 
 
 func _on_button_pressed() -> void:

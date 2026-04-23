@@ -7,6 +7,7 @@ class_name WorkshopInventoryUI
 @onready var current_gun_frame_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/CurrentGunFrame
 
 var active_equip_slot: int = -1
+var active_equip_ui: Control
 
 
 func _ready() -> void:
@@ -18,6 +19,7 @@ func _ready() -> void:
 		var item_ui: Control = slot.get_node("BarrelItemUI")
 		item_ui.select_item.connect(_on_item_ui_select)
 		item_ui.interact_item.connect(_on_item_ui_interact)
+		item_ui.button.pressed.connect(_on_item_ui_button_pressed.bind(item_ui))
 		
 		var prev_slot_idx: int = wrapi(i - 1, 0, barrel_container_count)
 		var prev_slot: Control = equip_barrel_container.get_child(prev_slot_idx).get_child(0)
@@ -25,17 +27,40 @@ func _ready() -> void:
 		var next_slot: Control = equip_barrel_container.get_child(next_slot_idx).get_child(0)
 		item_ui.button.focus_neighbor_left = prev_slot.button.get_path()
 		item_ui.button.focus_neighbor_right = next_slot.button.get_path()
-	
-	get_viewport().gui_focus_changed.connect(_on_focus_changed)
 
 
 func _input(event: InputEvent) -> void:
 	if visible:
 		if event.is_action_pressed("ui_cancel"):
 			# TODO - back out of inventory or detail focus instead of closing
-			close()
+			if current_focus_area == inventory_normal_barrel_container:
+				var cancel_focus: Control = get_equip_slot_focus()
+				var equip_ui = equip_barrel_container.get_child(active_equip_slot).get_child(0)
+				clear_item_ui_highlight(equip_ui)
+				active_equip_slot = -1
+				cancel_focus.grab_focus.call_deferred()
+				full_refresh_ui(get_equip_slot_focus)
+			elif active_equip_slot != -1:
+				var cancel_focus: Control = get_equip_slot_focus()
+				var active_equip_ui = equip_barrel_container.get_child(active_equip_slot).get_child(0)
+				active_equip_ui.clicked_once = false
+				for i in range(equip_barrel_container.get_child_count()):
+					var equip_ui = equip_barrel_container.get_child(i).get_child(0)
+					clear_item_ui_highlight(equip_ui)
+				active_equip_slot = -1
+				cancel_focus.grab_focus.call_deferred()
+				full_refresh_ui(get_equip_slot_focus)
+			else:
+				close()
+			
 			get_viewport().set_input_as_handled()
-			return
+
+
+func close() -> void:
+	for i in range(equip_barrel_container.get_child_count()):
+		var equip_ui = equip_barrel_container.get_child(i).get_child(0)
+		clear_item_ui_highlight(equip_ui)
+	super()
 
 
 func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
@@ -103,6 +128,7 @@ func get_first_item_for_focus() -> Control:
 
 
 func get_equip_slot_focus() -> Control:
+	current_focus_area = equip_barrel_container
 	# Update focus area modes
 	var barrel_slots = equip_barrel_container.get_children()
 	for slot in barrel_slots:
@@ -130,6 +156,7 @@ func get_equip_slot_focus() -> Control:
 
 
 func get_inventory_focus() -> Control:
+	current_focus_area = inventory_normal_barrel_container
 	# Update focus area modes
 	var inventory_barrel_items = inventory_normal_barrel_container.get_children()
 	for slot in equip_barrel_container.get_children():
@@ -160,6 +187,11 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		barrel_info_region.set_barrel_data_resource(data)
 
 
+func _on_item_ui_button_pressed(ui: Control) -> void:
+	if ui.clicked_once:
+		active_equip_slot = ui.get_index()
+
+
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	if item_ui.is_locked:
 		show_warning("Not available in demo")
@@ -174,6 +206,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 			# Change focus to inventory barrels
 			focus_area_callable = get_inventory_focus
 			active_equip_slot = item_slot_idx
+			persist_item_ui_highlight(item_ui)
 			# TODO - make cancel change focus back to equip focus
 		else:
 			item_ui.is_purchased = GameManager.purchase_barrel(data)
@@ -182,17 +215,20 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 				item_ui.deselect()
 			else:
 				SoundManager.play_ui_sound(sfx_too_expensive, "UI")
+			active_equip_slot = -1
 	elif item_ui.is_equipped:
-		active_equip_slot = item_slot_idx
 		var warning_text = GameManager.remove_barrel(data.barrel_id)
 		show_warning(warning_text)
 		item_ui.empty_slot()
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 		focus_area_callable = get_equip_slot_focus
+		active_equip_slot = -1
 	else:
 		var warning_text = GameManager.equip_barrel(data.barrel_id, active_equip_slot)
 		show_warning(warning_text)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
+		var equip_ui = equip_barrel_container.get_child(active_equip_slot).get_child(0)
+		clear_item_ui_highlight(equip_ui)
 		active_equip_slot = -1
 	
 	full_refresh_ui(focus_area_callable)
@@ -203,6 +239,21 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 			#get_inventory_focus().grab_focus.call_deferred()
 	#else:
 		#get_equip_slot_focus().grab_focus.call_deferred()
+
+
+func persist_item_ui_highlight(ui: Control) -> void:
+	ui.is_active_equip = true
+	ui.border_selected.visible = true
+	ui.button.add_theme_stylebox_override(
+		"normal",
+		ui.button.get_theme_stylebox("focus", "Button")
+	)
+
+
+func clear_item_ui_highlight(ui: Control) -> void:
+	ui.is_active_equip = false
+	ui.deselect()
+	ui.button.remove_theme_stylebox_override("normal")
 
 
 func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
@@ -222,6 +273,3 @@ func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: Gun
 	current_gun_frame_icon.texture = data.shop_ui_sprite
 	
 	full_refresh_ui(focus_area_callable)
-
-func _on_focus_changed(node: Control) -> void:
-	print("Gained focus: %s" % [node.name])
