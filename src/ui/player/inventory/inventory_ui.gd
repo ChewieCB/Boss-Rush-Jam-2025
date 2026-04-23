@@ -122,18 +122,28 @@ func set_focus_neighbour_wrapping(ui_container: Control) -> void:
 	
 	for i in range(inv_container_count):
 		var inv_ui: Control = ui_container.get_child(i)
+		# LEFT
 		var prev_inv_idx: int = _wrap_focus.call(i - 1)
 		var prev_inv: Control = ui_container.get_child(prev_inv_idx)
+		inv_ui.button.focus_neighbor_left = prev_inv.button.get_path()
+		# RIGHT
 		var next_inv_idx: int = _wrap_focus.call(i + 1)
 		var next_inv: Control = ui_container.get_child(next_inv_idx)
-		var up_inv_idx = _wrap_focus.call(i - cols)
-		var up_inv: Control = ui_container.get_child(up_inv_idx)
-		var down_inv_idx = _wrap_focus.call(i + cols)
-		var down_inv: Control = ui_container.get_child(down_inv_idx)
-		inv_ui.button.focus_neighbor_left = prev_inv.button.get_path()
 		inv_ui.button.focus_neighbor_right = next_inv.button.get_path()
-		inv_ui.button.focus_neighbor_top = up_inv.button.get_path()
-		inv_ui.button.focus_neighbor_bottom = down_inv.button.get_path()
+		# UP
+		var up_inv_idx = _wrap_focus.call(i - cols)
+		if abs(up_inv_idx - i) == cols:
+			var up_inv: Control = ui_container.get_child(up_inv_idx)
+			inv_ui.button.focus_neighbor_top = up_inv.button.get_path()
+		else:
+			inv_ui.button.focus_neighbor_top = inv_ui.button.get_path()
+		# DOWN
+		var down_inv_idx = _wrap_focus.call(i + cols)
+		if abs(down_inv_idx - i) == cols:
+			var down_inv: Control = ui_container.get_child(down_inv_idx)
+			inv_ui.button.focus_neighbor_bottom = down_inv.button.get_path()
+		else:
+			inv_ui.button.focus_neighbor_bottom = inv_ui.button.get_path()
 
 
 func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool = false) -> void:

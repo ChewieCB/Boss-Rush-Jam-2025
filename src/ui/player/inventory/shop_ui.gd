@@ -17,12 +17,6 @@ class_name GunCustomizationUI
 const SHOPKEEPER_CHAT_TEXT_SPEED = 1.0
 
 
-func _ready() -> void:
-	super()
-	get_viewport().gui_focus_changed.connect(_on_focus_changed)
-	shop_barrel_container.get_child(0).focus_exited.connect(_on_first_focus_exited)
-
-
 func _process(delta: float) -> void:
 	super(delta)
 	
