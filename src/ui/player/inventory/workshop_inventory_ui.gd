@@ -34,7 +34,8 @@ func _input(event: InputEvent) -> void:
 		if event.is_action_pressed("ui_cancel"):
 			# Back out of inventory or detail focus instead of closing
 			if current_focus_area == inventory_normal_barrel_container or active_equip_idx != -1:
-				var cancel_focus: Callable = get_equip_slot_focus.bind(active_equip_idx, true)
+				var reverse_order: bool = current_focus_area == inventory_normal_barrel_container
+				var cancel_focus: Callable = get_equip_slot_focus.bind(active_equip_idx, reverse_order)
 				for i in range(equip_barrel_container.get_child_count()):
 					var equip_ui = equip_barrel_container.get_child(i).get_child(0)
 					clear_item_ui_highlight(equip_ui)
@@ -184,7 +185,7 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 
 func _on_item_ui_button_pressed(ui: Control) -> void:
 	if ui.clicked_once:
-		active_equip_idx = ui.get_index()
+		active_equip_idx = ui.get_parent().get_index()
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
