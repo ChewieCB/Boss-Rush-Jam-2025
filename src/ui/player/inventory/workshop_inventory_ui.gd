@@ -132,11 +132,12 @@ func get_equip_slot_focus(slot_idx: int = -1, reverse_order: bool = false) -> Co
 		# Focus on leftmost equipped barrel, or the rightmost empty slot if no
 		# barrels are equipped.
 		var leftmost_barrel: Control = null
-		for i in range(slot_count, 0, -1):
+		for i in range(slot_count):
 			var slot = barrel_slots[i]
 			var barrel = slot.get_child(0)
-			if barrel:
+			if not barrel.is_empty:
 				leftmost_barrel = barrel
+				break
 			continue
 		
 		# FIXME - what do we focus on when there are no barrels equipped?
