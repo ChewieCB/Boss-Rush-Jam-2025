@@ -32,24 +32,14 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if visible:
 		if event.is_action_pressed("ui_cancel"):
-			# TODO - back out of inventory or detail focus instead of closing
-			if current_focus_area == inventory_normal_barrel_container:
-				var cancel_focus: Control = get_equip_slot_focus()
-				var equip_ui = equip_barrel_container.get_child(active_equip_idx).get_child(0)
-				clear_item_ui_highlight(equip_ui)
-				active_equip_idx = -1
-				cancel_focus.grab_focus.call_deferred()
-				full_refresh_ui(get_equip_slot_focus)
-			elif active_equip_idx != -1:
-				var cancel_focus: Control = get_equip_slot_focus()
-				var active_equip_ui = equip_barrel_container.get_child(active_equip_idx).get_child(0)
-				active_equip_ui.clicked_once = false
+			# Back out of inventory or detail focus instead of closing
+			if current_focus_area == inventory_normal_barrel_container or active_equip_idx != -1:
+				var cancel_focus: Callable = get_equip_slot_focus.bind(active_equip_idx, true)
 				for i in range(equip_barrel_container.get_child_count()):
 					var equip_ui = equip_barrel_container.get_child(i).get_child(0)
 					clear_item_ui_highlight(equip_ui)
 				active_equip_idx = -1
-				cancel_focus.grab_focus.call_deferred()
-				full_refresh_ui(get_equip_slot_focus)
+				full_refresh_ui(cancel_focus)
 			else:
 				close()
 			
@@ -83,7 +73,6 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 		else:
 			barrel_item.set_barrel_data(barrel_data, true, true)
 		barrel_idx += 1
-		# Empty barrel slots
 	
 	# INVENTORY STUFF
 	for child in inventory_gun_frame_container.get_children():
@@ -123,36 +112,42 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 	focus_area.grab_focus.call_deferred()
 
 
-func get_first_item_for_focus() -> Control:
-	return get_equip_slot_focus()
+func get_first_item_for_focus(slot_idx: int = -1) -> Control:
+	return get_equip_slot_focus(slot_idx, true)
 
 
-func get_equip_slot_focus() -> Control:
+func get_equip_slot_focus(slot_idx: int = -1, reverse_order: bool = false) -> Control:
 	current_focus_area = equip_barrel_container
 	# Update focus area modes
 	var barrel_slots = equip_barrel_container.get_children()
+	var slot_count: int = equip_barrel_container.get_child_count() - 1
 	for slot in barrel_slots:
 		slot.focus_mode = FocusMode.FOCUS_ALL
 	for item in inventory_normal_barrel_container.get_children():
 		item.focus_mode = FocusMode.FOCUS_NONE
 	
 	# FIXME - focus defaults to index 1 when empty
-	# Focus on leftmost equipped barrel, or the rightmost empty slot if no
-	# barrels are equipped.
-	var leftmost_barrel: Control = null
-	for i in range(barrel_slots.size() - 1, 0, -1):
-		var slot = barrel_slots[i]
-		var barrel = slot.get_child(0)
-		if barrel:
-			leftmost_barrel = barrel
-		continue
-	
-	# FIXME - what do we focus on when there are no barrels equipped?
-	#  Will likely solve itself when we move to selecting empty barrel slots
-	if not leftmost_barrel:
-		return barrel_slots[-1].get_child(0).button
+	if slot_idx == -1:
+		# Focus on leftmost equipped barrel, or the rightmost empty slot if no
+		# barrels are equipped.
+		var leftmost_barrel: Control = null
+		for i in range(slot_count, 0, -1):
+			var slot = barrel_slots[i]
+			var barrel = slot.get_child(0)
+			if barrel:
+				leftmost_barrel = barrel
+			continue
+		
+		# FIXME - what do we focus on when there are no barrels equipped?
+		#  Will likely solve itself when we move to selecting empty barrel slots
+		if not leftmost_barrel:
+			return barrel_slots[-1].get_child(0).button
+		else:
+			return leftmost_barrel.button
 	else:
-		return leftmost_barrel.button
+		if reverse_order:
+			slot_idx = remap(slot_idx, 0, slot_count, slot_count, 0)
+		return barrel_slots[slot_idx].get_child(0).button
 
 
 func get_inventory_focus() -> Control:
@@ -168,7 +163,7 @@ func get_inventory_focus() -> Control:
 	if inventory_barrel_items:
 		return inventory_barrel_items[0].button
 	else:
-		return get_equip_slot_focus()
+		return get_equip_slot_focus(active_equip_idx, true)
 
 
 #### 
@@ -197,9 +192,16 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		show_warning("Not available in demo")
 		return
 	
-	var focus_area_callable: Callable = get_first_item_for_focus
 	var item_slots = equip_barrel_container.get_children()
-	var item_slot_idx: int = item_slots.size() - 1 - item_slots.find(item_ui.get_parent())
+	var item_slot_idx: int = item_slots.size() - 1
+	var equip_slot_idx = item_slots.find(item_ui.get_parent())
+	
+	if equip_slot_idx != -1:
+		item_slot_idx -= equip_slot_idx
+		#var max_slots: int = equip_barrel_container.get_child_count() - 1 
+		#active_equip_idx = remap(item_slot_idx, 0, max_slots, max_slots, 0)
+	
+	var focus_area_callable: Callable = get_first_item_for_focus.bind(item_slot_idx)
 	
 	if not item_ui.is_purchased:
 		if item_ui.is_empty:
@@ -221,14 +223,23 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		show_warning(warning_text)
 		item_ui.empty_slot()
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
-		focus_area_callable = get_equip_slot_focus
+		
+		for i in range(equip_barrel_container.get_child_count()):
+			var equip_ui = equip_barrel_container.get_child(i).get_child(0)
+			clear_item_ui_highlight(equip_ui)
+		focus_area_callable = get_equip_slot_focus.bind(active_equip_idx, false)
+		
 		active_equip_idx = -1
 	else:
 		var warning_text = GameManager.equip_barrel(data.barrel_id, active_equip_idx)
 		show_warning(warning_text)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
-		var equip_ui = equip_barrel_container.get_child(active_equip_idx).get_child(0)
-		clear_item_ui_highlight(equip_ui)
+		
+		for i in range(equip_barrel_container.get_child_count()):
+			var equip_ui = equip_barrel_container.get_child(i).get_child(0)
+			clear_item_ui_highlight(equip_ui)
+		focus_area_callable = get_equip_slot_focus.bind(active_equip_idx, true)
+		
 		active_equip_idx = -1
 	
 	full_refresh_ui(focus_area_callable)

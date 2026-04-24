@@ -169,7 +169,9 @@ func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool
 
 func clear_item_ui_highlight(ui: Control) -> void:
 	ui.is_active_equip = false
+	ui.clicked_once = false
 	ui.deselect()
+	ui.return_button_size()
 	ui.button.remove_theme_stylebox_override("normal")
 
 
