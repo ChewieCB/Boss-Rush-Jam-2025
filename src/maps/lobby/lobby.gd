@@ -31,12 +31,12 @@ func _ready() -> void:
 	for vendor in vendors:
 		vendor.inventory_opened.connect(player.current_gun.play_unequip_anim)
 		vendor.inventory_closed.connect(player.current_gun.play_equip_anim)
-	
+
 	get_tree().paused = false
-	
+
 	GameManager.current_boss_map = self
 	GameManager.change_fmod_bgm_music_state("Backroom") # Backroom is the new Lobby
-	
+
 	# Save and load check
 	if SaveManager.save_data_is_loaded:
 		GameManager.update_total_playtime()
@@ -45,18 +45,18 @@ func _ready() -> void:
 		# First time get to lobby, load data from save file
 		GameManager.start_record_playtime()
 		SaveManager.load_game(GameManager.chosen_slot_id)
-	
+
 	GameManager.reset_reroll_cost()
 	GameManager.is_free_reroll = true
 	GameManager.bet_value = 0
 	GameManager.reward_value = 0
-	
+
 	if GameManager.elevator_respawn_transform:
 		player.global_transform = GameManager.elevator_respawn_transform
-	
+
 	# HACK for backroom load
 	await ScreenTransition.transition_in()
-	
+
 	# HACK
 	if GameManager.player_gained_first_barrel:
 		if not GameManager.barrel_tutorial_shown:
@@ -66,12 +66,12 @@ func _ready() -> void:
 			)
 			show_panel(info_ui)
 			GameManager.barrel_tutorial_shown = true
-	
+
 	if GameManager.all_bosses_defeated:
 		if not GameManager.victory_ui_shown:
 			show_panel(game_win_ui)
 			GameManager.victory_ui_shown = true
-	
+
 	player.stat_ui.show_all_ui()
 	player.controls_disabled = false
 
@@ -104,11 +104,11 @@ func load_selected_level(_elevator_doors: ElevatorDoors = null):
 	find_and_load_boss_bgm()
 	await LoadingHandler.start_loading(GameManager.selected_level_path, "", true)
 	sfx_door_close.play()
-	
+
 	if _elevator_doors:
 		_elevator_doors.close()
 		#await elevator_doors.anim_player.animation_finished
-		
+
 		# Set the skip equip anim flag for seamless transition
 		LoadingHandler.skip_equip_anim = false
 		## Get the player's position relative to the elevator doors
@@ -121,9 +121,9 @@ func load_selected_level(_elevator_doors: ElevatorDoors = null):
 		#GameManager.cached_player_rotation = Vector3.ZERO
 		#GameManager.cached_camera_rotation = Vector3.ZERO
 		#GameManager.elevator_respawn_rotation = Vector3.ZERO
-	
+
 	GameManager.is_free_reroll = false
-	
+
 	#LoadingHandler.load_scene_seamless()
 	LoadingHandler.load_scene_transition()
 

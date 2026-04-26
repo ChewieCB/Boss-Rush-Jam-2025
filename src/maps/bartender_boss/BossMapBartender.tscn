@@ -914,6 +914,7 @@ first_countertop_flame_marker = NodePath("CountertopFlamingWallHolder/FirstCount
 countertop_flame_prefab = ExtResource("33_byrwp")
 center_stage_spot_light = NodePath("CenterStageSpotLight")
 chandellier_lights = [NodePath("FuncGodotMap/entity_15_Chandellier2"), NodePath("FuncGodotMap/entity_16_Chandellier2"), NodePath("FuncGodotMap/entity_17_Chandellier2"), NodePath("FuncGodotMap/entity_18_Chandellier2"), NodePath("FuncGodotMap/entity_19_Chandellier2"), NodePath("FuncGodotMap/entity_20_Chandellier2"), NodePath("FuncGodotMap/entity_30_Chandellier2"), NodePath("FuncGodotMap/entity_31_Chandellier2")]
+light_transition_duration = 1.0
 sfx_fire_start = ExtResource("3_qvoi0")
 sfx_fire_loop = ExtResource("4_w5yjf")
 nav_parent = NodePath("FuncGodotMap")

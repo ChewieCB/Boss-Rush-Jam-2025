@@ -9,14 +9,19 @@ class_name BossMapBartender
 @export_group("Stage Light")
 @export var center_stage_spot_light: SpotLight3D
 @export var chandellier_lights: Array[StaticBody3D] = []
+@export var light_transition_duration: float = 1.0
 @export_group("SFX")
 @export var sfx_fire_start: AudioStream
 @export var sfx_fire_loop: AudioStream
+
 
 var countertop_is_on_fire = false
 const COUNTERTOP_FLAME_DISTANCE = 3.5
 const COUNTERTOP_FLAME_COUNT = 10
 const TIME_BETWEEN_COUTNERTOP_FIRE_SPAWN = 0.2
+
+var original_directional_light_energy: float = 1
+var _light_tween: Tween
 
 func _ready() -> void:
 	boss.fire_started.connect(_on_fire_started)
@@ -47,10 +52,27 @@ func create_countertop_flame_wall(duration = 10) -> void:
 
 
 func toggle_light(is_on: bool):
-	directional_light.visible = is_on
+	if _light_tween:
+		_light_tween.kill()
+	
+	_light_tween = create_tween()
+	_light_tween.set_parallel(true)
+	
+	if is_on:
+		directional_light.visible = true
+		directional_light.light_energy = 0.0
+		_light_tween.tween_property(directional_light, "light_energy", original_directional_light_energy, light_transition_duration).set_trans(Tween.TRANS_SINE)
+	else:
+		_light_tween.tween_property(directional_light, "light_energy", 0.0, light_transition_duration).set_trans(Tween.TRANS_SINE)
+		_light_tween.tween_callback(_set_directional_light_visible_false)
+	
 	for item in chandellier_lights:
 		if item.has_method("toggle_light"):
 			item.toggle_light(is_on)
+
+
+func _set_directional_light_visible_false() -> void:
+	directional_light.visible = false
 
 
 func toggle_spotlight(is_on: bool) -> void:
