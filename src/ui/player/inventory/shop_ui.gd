@@ -50,7 +50,9 @@ func _input(event: InputEvent) -> void:
 				full_refresh_ui(cancel_focus_callable)
 			else:
 				close()
-			
+				get_viewport().set_input_as_handled()
+		elif event.is_action_pressed("interact"):
+			close()
 			get_viewport().set_input_as_handled()
 
 
