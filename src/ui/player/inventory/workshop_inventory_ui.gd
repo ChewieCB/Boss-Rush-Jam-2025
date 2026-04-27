@@ -20,6 +20,7 @@ func _ready() -> void:
 		item_ui.select_item.connect(_on_item_ui_select)
 		item_ui.interact_item.connect(_on_item_ui_interact)
 		item_ui.button.pressed.connect(_on_item_ui_button_pressed.bind(item_ui))
+		item_ui.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(item_ui.button))
 		
 		var prev_slot_idx: int = wrapi(i - 1, 0, barrel_container_count)
 		var prev_slot: Control = equip_barrel_container.get_child(prev_slot_idx).get_child(0)
@@ -41,12 +42,28 @@ func _input(event: InputEvent) -> void:
 					clear_item_ui_highlight(equip_ui)
 				active_equip_idx = -1
 				full_refresh_ui(cancel_focus)
+			# TODO - back out to inventory focus if we cancel a once-clicked inventory barrel
+			#
 			else:
 				close()
 				get_viewport().set_input_as_handled()
 		elif event.is_action_pressed("interact"):
 			close()
 			get_viewport().set_input_as_handled()
+		# FIXME - moving equipped barrels left/right
+		elif event.is_action_pressed("ui_tab_left"):
+			move_equip_slot(active_equip_idx, -1)
+		elif event.is_action_pressed("ui_tab_right"):
+			move_equip_slot(active_equip_idx, 1)
+		#elif event is InputEventJoypadButton:
+			#if event.is_pressed():
+				#match event.button_index:
+					#9:
+						#move_equip_slot(active_equip_idx, -1)
+					#10:
+						#move_equip_slot(active_equip_idx, 1)
+					#_:
+						#return
 
 
 func close() -> void:
@@ -170,7 +187,47 @@ func get_inventory_focus() -> Control:
 		return get_equip_slot_focus(active_equip_idx, true)
 
 
+func get_barrel_detail_focus() -> Control:
+	# TODO
+	return null
+
 #### 
+
+
+func move_equip_slot(current_idx: int, idx_diff: int) -> void:
+	var equip_slots = equip_barrel_container.get_children()
+	var slots_count = equip_barrel_container.get_child_count()
+	
+	#var equip_idx: int = remap(active_equip_idx, 0, slots_count - 1, slots_count - 1, 0)
+	var _slot = equip_barrel_container.get_child(active_equip_idx).get_child(0)
+	if active_equip_idx == -1 or _slot.is_empty:
+		get_viewport().set_input_as_handled()
+		return
+	
+	var new_idx = wrapi(current_idx + idx_diff, 0, slots_count)
+	active_equip_idx = new_idx
+	
+	if (current_selected_item_ui != null):
+		current_selected_item_ui.deselect()
+	
+	# Invert the ordering for the UI
+	new_idx = remap(new_idx, 0, slots_count - 1, slots_count - 1, 0)
+	current_idx = remap(current_idx, 0, slots_count - 1, slots_count - 1, 0)
+	
+	var _current_idx_barrel = GameManager.equipped_barrels[current_idx]
+	var _new_idx_barrel = GameManager.equipped_barrels[new_idx]
+	GameManager.equipped_barrels[current_idx] = _new_idx_barrel
+	GameManager.equipped_barrels[new_idx] = _current_idx_barrel
+	
+	full_refresh_ui(get_first_item_for_focus)
+	get_viewport().set_input_as_handled()
+
+
+func clear_item_ui_highlight(ui: Control) -> void:
+	super(ui)
+	toggle_ui_focus_neighbors(ui.button, true)
+
+
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	SoundManager.play_ui_sound(sfx_click, "UI")
 	
@@ -189,6 +246,20 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 func _on_item_ui_button_pressed(ui: Control) -> void:
 	if ui.clicked_once:
 		active_equip_idx = ui.get_parent().get_index()
+		toggle_ui_focus_neighbors(ui.button, false)
+
+
+func _on_item_ui_button_focus_lost(button: Button) -> void:
+	toggle_ui_focus_neighbors(button, true)
+
+
+func toggle_ui_focus_neighbors(ui: Control, is_enabled: bool = true) -> void:
+	# TODO - is this neccesary? We should just shift focus area to detail when the barrel is clicked once
+	# and return to the original focus area on cancel or accept
+	for neighbor in [ui.focus_neighbor_left, ui.focus_neighbor_right, ui.focus_neighbor_top, ui.focus_neighbor_bottom]:
+		var node = get_node(neighbor)
+		if node:
+			node.focus_mode = FocusMode.FOCUS_ALL if is_enabled else FocusMode.FOCUS_NONE
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
