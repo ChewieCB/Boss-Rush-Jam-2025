@@ -24,7 +24,7 @@ func _input(event: InputEvent) -> void:
 		var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx)
 		if event.is_action_pressed("ui_cancel"):
 			# Back out of inventory or detail focus instead of closing
-			var cancel_focus: Callable
+			var cancel_focus: Callable = get_first_item_for_focus.bind(active_focus_idx)
 			# Inventory item cancel
 			if focused_ui is ItemUI:
 				# Clicked Inventory UI -> Same Inventory UI
@@ -44,6 +44,15 @@ func _input(event: InputEvent) -> void:
 				# Hovered Equip Slot -> Close UI
 				else:
 					close()
+			elif focused_ui is GunFrameItemUI:
+				# Clicked Frame UI -> Same Frame UI
+				if focused_ui.clicked_once:
+					cancel_focus = get_gun_frame_focus.bind(active_focus_idx)
+				# Hovered Frame UI -> Active Equip Slot
+				else:
+					cancel_focus = get_equip_slot_focus.bind(active_equip_idx)
+					active_focus_idx = active_equip_idx
+					clear_item_ui_highlight(equipped_ui.item_ui)
 			
 			get_viewport().set_input_as_handled()
 			full_refresh_ui(cancel_focus)
@@ -55,6 +64,11 @@ func _input(event: InputEvent) -> void:
 		elif event.is_action_pressed("ui_tab_right"):
 			get_viewport().set_input_as_handled()
 			move_equip_slot(active_equip_idx, 1)
+		
+		elif event.is_action_pressed("ui_change_gun_frame"):
+			get_viewport().set_input_as_handled()
+			var focus_area: Control = get_gun_frame_focus()
+			focus_area.grab_focus.call_deferred()
 		
 		elif event.is_action_pressed("interact"):
 			close()
@@ -187,6 +201,26 @@ func get_inventory_focus(idx: int = -1) -> Control:
 		return get_equip_slot_focus(active_equip_idx)
 
 
+func get_gun_frame_focus(idx: int = -1) -> Control:
+	current_focus_area = inventory_gun_frame_container
+	
+	# Update focus area modes
+	var inventory_gun_frame_items = inventory_gun_frame_container.get_children()
+	for slot in equip_barrel_container.get_children():
+		slot.focus_mode = FocusMode.FOCUS_NONE
+	for item in inventory_gun_frame_items:
+		item.focus_mode = FocusMode.FOCUS_ALL
+	
+	# Fallback when no barrels in inventory
+	if inventory_gun_frame_items:
+		if idx != -1:
+			return inventory_gun_frame_items[idx].button
+		else:
+			return inventory_gun_frame_items[0].button
+	else:
+		return get_equip_slot_focus(active_equip_idx)
+
+
 func get_barrel_detail_focus() -> Control:
 	# TODO
 	return null
@@ -279,6 +313,7 @@ func _on_item_ui_select(ui: ItemUI, data: BarrelDataResource) -> void:
 	if current_selected_item_ui != null:
 		current_selected_item_ui.deselect()
 	current_selected_item_ui = ui
+	
 	active_focus_idx = ui.get_index()
 	
 	if ui.is_locked:
@@ -342,11 +377,13 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	full_refresh_ui(focus_area_callable)
 
 
-func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
+func _on_gun_frame_item_ui_select(ui: GunFrameItemUI, _data: GunFrameResource) -> void:
 	if (current_selected_item_ui != null):
 		current_selected_item_ui.deselect()
 	
-	current_selected_item_ui = gun_frame_item_ui
+	current_selected_item_ui = ui
+	
+	active_focus_idx = ui.get_index()
 	# TODO: Add UI element to show gun frame stat
 	SoundManager.play_ui_sound(sfx_click, "UI")
 

@@ -152,6 +152,8 @@ func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool
 		Side.SIDE_TOP:
 			for i in range(0, a.columns):
 				var top_ui: Control = a.get_child(i)
+				if not top_ui:
+					continue
 				var focus_neighbor: NodePath = b.get_child(0).button.get_path()
 				top_ui.button.focus_neighbor_top = focus_neighbor
 				
@@ -160,6 +162,8 @@ func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool
 		Side.SIDE_BOTTOM:
 			for i in range(-1, -a.columns - 1, -1):
 				var bottom_ui: Control = a.get_child(i)
+				if not bottom_ui:
+					continue
 				var focus_neighbor: NodePath = b.get_child(0).button.get_path()
 				bottom_ui.button.focus_neighbor_bottom = focus_neighbor
 				

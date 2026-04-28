@@ -60,7 +60,7 @@ func _on_button_pressed() -> void:
 		interact_gun_frame.emit(self, data)
 
 
-func unselected():
+func deselect():
 	clicked_once = false
 	border_selected.visible = false
 	button.text = data.frame_name
