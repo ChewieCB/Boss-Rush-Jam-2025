@@ -10,12 +10,8 @@ var active_equip_idx: int = -1
 var active_focus_idx: int = -1
 
 
-# FIXME:
-# - Remove reverse sorting complexity from equip slot UI code
-# - Differentiate clearly between active equip slot and active focus slot:
-#       active equip slot can be null, 0, 1, 2 in the equip container
-#       active focus slot can be any ItemUI node by can't be null, we fallback to a default given in get_focus
-# - Cleanly handle Equip Slot UI nodes (slot as object with ItemUI as child) and Inventory Slot UI nodes (ItemUI as object) 
+# FIXME: Invert the equip slot UI order to match the gun barrels, do this at the end
+# and avoid tangling any of the rest of this code up in it to prevent confusion.
 
 func _ready() -> void:
 	super()
@@ -24,10 +20,10 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if visible:
+		var focused_ui: Control = current_focus_area.get_child(active_focus_idx)
+		var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx)
 		if event.is_action_pressed("ui_cancel"):
 			# Back out of inventory or detail focus instead of closing
-			var focused_ui: Control = current_focus_area.get_child(active_focus_idx)
-			var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx)
 			var cancel_focus: Callable
 			# Inventory item cancel
 			if focused_ui is ItemUI:
@@ -52,14 +48,17 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			full_refresh_ui(cancel_focus)
 		
+		elif event.is_action_pressed("ui_tab_left"):
+			get_viewport().set_input_as_handled()
+			move_equip_slot(active_equip_idx, -1)
+		
+		elif event.is_action_pressed("ui_tab_right"):
+			get_viewport().set_input_as_handled()
+			move_equip_slot(active_equip_idx, 1)
+		
 		elif event.is_action_pressed("interact"):
 			close()
 			get_viewport().set_input_as_handled()
-		# FIXME - moving equipped barrels left/right
-		elif event.is_action_pressed("ui_tab_left"):
-			move_equip_slot(active_equip_idx, -1)
-		elif event.is_action_pressed("ui_tab_right"):
-			move_equip_slot(active_equip_idx, 1)
 
 
 func close() -> void:
