@@ -306,10 +306,10 @@ func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 				break
 	
 	if found_data:
+		GameManager.player.current_gun.remove_barrel(barrel_idx)
 		equipped_barrels[barrel_idx] = null
 		inventory_barrels.append(found_data)
 		refresh_shop_ui.emit()
-		GameManager.player.current_gun.remove_barrel(barrel_idx)
 	return ""
 
 

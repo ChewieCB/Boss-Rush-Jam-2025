@@ -19,7 +19,7 @@ func _ready() -> void:
 		var item_ui: Control = slot.get_node("BarrelItemUI")
 		item_ui.select_item.connect(_on_item_ui_select)
 		item_ui.interact_item.connect(_on_item_ui_interact)
-		item_ui.button.pressed.connect(_on_item_ui_button_pressed.bind(item_ui, true))
+		item_ui.button.pressed.connect(_on_item_ui_button_pressed.bind(item_ui))
 		item_ui.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(item_ui.button))
 		
 		var prev_slot_idx: int = wrapi(i - 1, 0, barrel_container_count)
@@ -34,20 +34,24 @@ func _input(event: InputEvent) -> void:
 	if visible:
 		if event.is_action_pressed("ui_cancel"):
 			# Back out of inventory or detail focus instead of closing
+			var _focused_slot: Control = current_focus_area.get_child(active_focus_idx)
+			# Fallback for equip slots
+			# TODO: refactor a better solution to the equip slot/inventory slot disparity
+			if _focused_slot is not ItemUI:
+				_focused_slot = _focused_slot.get_child(0)
 			if current_focus_area == inventory_normal_barrel_container or active_equip_idx != -1:
 				var cancel_focus: Callable
-				if active_focus_idx != -1 and \
-				inventory_normal_barrel_container.get_child(active_focus_idx).clicked_once:
+				if active_focus_idx != -1 and _focused_slot.clicked_once:
 					cancel_focus = get_inventory_focus.bind(active_focus_idx)
+					active_focus_idx = -1
 				else:
-					var reverse_order: bool = current_focus_area == inventory_normal_barrel_container
+					var reverse_order: bool = current_focus_area == inventory_normal_barrel_container or _focused_slot.is_equipped
 					cancel_focus = get_equip_slot_focus.bind(active_equip_idx, reverse_order)
 					
 					for i in range(equip_barrel_container.get_child_count()):
 						var equip_ui = equip_barrel_container.get_child(i).get_child(0)
 						clear_item_ui_highlight(equip_ui)
 					active_equip_idx = -1
-					active_focus_idx = -1
 				full_refresh_ui(cancel_focus)
 			# TODO - back out to inventory focus if we cancel a once-clicked inventory barrel
 			#
@@ -216,19 +220,30 @@ func move_equip_slot(current_idx: int, idx_diff: int) -> void:
 		return
 	
 	var new_idx = wrapi(current_idx + idx_diff, 0, slots_count)
-	active_equip_idx = new_idx
+	#active_equip_idx = new_idx
 	
 	if (current_selected_item_ui != null):
 		current_selected_item_ui.deselect()
 	
 	# Invert the ordering for the UI
+	active_focus_idx = new_idx
 	new_idx = remap(new_idx, 0, slots_count - 1, slots_count - 1, 0)
+	active_equip_idx = new_idx
 	current_idx = remap(current_idx, 0, slots_count - 1, slots_count - 1, 0)
 	
 	var _current_idx_barrel = GameManager.equipped_barrels[current_idx]
 	var _new_idx_barrel = GameManager.equipped_barrels[new_idx]
-	GameManager.equipped_barrels[current_idx] = _new_idx_barrel
-	GameManager.equipped_barrels[new_idx] = _current_idx_barrel
+	#GameManager.equipped_barrels[current_idx] = _new_idx_barrel
+	#GameManager.equipped_barrels[new_idx] = _current_idx_barrel
+	var selected_barrel_id: int = _current_idx_barrel.barrel_id
+	GameManager.remove_barrel(selected_barrel_id)
+	
+	if _new_idx_barrel:
+		var affected_barrel_id: int = _new_idx_barrel.barrel_id
+		GameManager.remove_barrel(affected_barrel_id)
+		GameManager.equip_barrel(affected_barrel_id, current_idx)
+	
+	GameManager.equip_barrel(selected_barrel_id, new_idx)
 	
 	full_refresh_ui(get_first_item_for_focus)
 	get_viewport().set_input_as_handled()
@@ -242,7 +257,7 @@ func clear_item_ui_highlight(ui: Control) -> void:
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	SoundManager.play_ui_sound(sfx_click, "UI")
 	
-	if (current_selected_item_ui != null):
+	if current_selected_item_ui != null:
 		current_selected_item_ui.deselect()
 	current_selected_item_ui = item_ui
 	
@@ -254,13 +269,15 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		barrel_info_region.set_barrel_data_resource(data)
 
 
-func _on_item_ui_button_pressed(ui: Control, is_slot: bool = false) -> void:
+func _on_item_ui_button_pressed(ui: Control) -> void:
+	var idx: int
 	if ui.clicked_once:
-		if is_slot:
+		active_focus_idx = ui.get_index()
+		if ui.is_equipped:
 			active_equip_idx = ui.get_parent().get_index()
-		else:
-			active_focus_idx = ui.get_index()
-		toggle_ui_focus_neighbors(ui.button, false)
+			#active_equip_idx = ui.get_index()
+		
+		#toggle_ui_focus_neighbors(ui.button, false)
 
 
 func _on_item_ui_button_focus_lost(button: Button) -> void:
