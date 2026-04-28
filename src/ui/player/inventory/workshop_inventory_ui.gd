@@ -258,9 +258,9 @@ func _on_item_ui_button_pressed(ui: Control, is_slot: bool = false) -> void:
 	if ui.clicked_once:
 		if is_slot:
 			active_equip_idx = ui.get_parent().get_index()
-			toggle_ui_focus_neighbors(ui.button, false)
 		else:
 			active_focus_idx = ui.get_index()
+		toggle_ui_focus_neighbors(ui.button, false)
 
 
 func _on_item_ui_button_focus_lost(button: Button) -> void:
