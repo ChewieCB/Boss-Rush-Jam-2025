@@ -271,8 +271,8 @@ func toggle_ui_focus_neighbors(ui: Control, is_enabled: bool = true) -> void:
 	# TODO - is this neccesary? We should just shift focus area to detail when the barrel is clicked once
 	# and return to the original focus area on cancel or accept
 	for neighbor in [ui.focus_neighbor_left, ui.focus_neighbor_right, ui.focus_neighbor_top, ui.focus_neighbor_bottom]:
-		var node = get_node(neighbor)
-		if node:
+		if neighbor:
+			var node = get_node(neighbor)
 			node.focus_mode = FocusMode.FOCUS_ALL if is_enabled else FocusMode.FOCUS_NONE
 
 
