@@ -23,49 +23,18 @@ func _input(event: InputEvent) -> void:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx)
 		var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx)
 		if event.is_action_pressed("ui_cancel"):
-			# Back out of inventory or detail focus instead of closing
-			var cancel_focus: Callable = get_first_item_for_focus.bind(active_focus_idx)
-			# Inventory item cancel
-			if focused_ui is ItemUI:
-				# Clicked Inventory UI -> Same Inventory UI
-				if focused_ui.clicked_once:
-					cancel_focus = get_inventory_focus.bind(active_focus_idx)
-				# Hovered Inventory UI -> Active Equip Slot
-				else:
-					cancel_focus = get_equip_slot_focus.bind(active_equip_idx)
-					active_focus_idx = active_equip_idx
-					clear_item_ui_highlight(equipped_ui.item_ui)
-			elif focused_ui is BarrelEquipSlotUI:
-				# Clicked Equip Slot -> Same Equip Slot
-				if equipped_ui.item_ui.clicked_once:
-					cancel_focus = get_equip_slot_focus.bind(active_equip_idx)
-					active_focus_idx = active_equip_idx
-					clear_item_ui_highlight(equipped_ui.item_ui)
-				# Hovered Equip Slot -> Close UI
-				else:
-					close()
-			elif focused_ui is GunFrameItemUI:
-				# Clicked Frame UI -> Same Frame UI
-				if focused_ui.clicked_once:
-					cancel_focus = get_gun_frame_focus.bind(active_focus_idx)
-				# Hovered Frame UI -> Active Equip Slot
-				else:
-					cancel_focus = get_equip_slot_focus.bind(active_equip_idx)
-					active_focus_idx = active_equip_idx
-					clear_item_ui_highlight(equipped_ui.item_ui)
+			contextual_cancel(focused_ui, equipped_ui)
+		
+		if equipped_ui.item_ui.clicked_once:
+			if event.is_action_pressed("inv_ui_tab_left"):
+				get_viewport().set_input_as_handled()
+				move_equip_slot(active_equip_idx, -1)
 			
-			get_viewport().set_input_as_handled()
-			full_refresh_ui(cancel_focus)
+			elif event.is_action_pressed("inv_ui_tab_right"):
+				get_viewport().set_input_as_handled()
+				move_equip_slot(active_equip_idx, 1)
 		
-		elif event.is_action_pressed("ui_tab_left"):
-			get_viewport().set_input_as_handled()
-			move_equip_slot(active_equip_idx, -1)
-		
-		elif event.is_action_pressed("ui_tab_right"):
-			get_viewport().set_input_as_handled()
-			move_equip_slot(active_equip_idx, 1)
-		
-		elif event.is_action_pressed("ui_change_gun_frame"):
+		elif event.is_action_pressed("inv_ui_change_gun_frame"):
 			get_viewport().set_input_as_handled()
 			var focus_area: Control = get_gun_frame_focus()
 			focus_area.grab_focus.call_deferred()
@@ -143,6 +112,47 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 	
 	var focus_area: Control = focus_area_callable.call()
 	focus_area.grab_focus.call_deferred()
+
+
+### CONTEXTUAL HELPERS
+
+func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
+	# Back out of inventory or detail focus instead of closing
+	var cancel_focus: Callable = get_first_item_for_focus.bind(active_focus_idx)
+	
+	# Inventory item cancel
+	if focused_ui is ItemUI:
+		# Clicked Inventory UI -> Same Inventory UI
+		if focused_ui.clicked_once:
+			cancel_focus = get_inventory_focus.bind(active_focus_idx)
+		# Hovered Inventory UI -> Active Equip Slot
+		else:
+			cancel_focus = get_equip_slot_focus.bind(active_equip_idx)
+			active_focus_idx = active_equip_idx
+			clear_item_ui_highlight(equipped_ui.item_ui)
+	
+	elif focused_ui is BarrelEquipSlotUI:
+		# Clicked Equip Slot -> Same Equip Slot
+		if equipped_ui.item_ui.clicked_once:
+			cancel_focus = get_equip_slot_focus.bind(active_equip_idx)
+			active_focus_idx = active_equip_idx
+			clear_item_ui_highlight(equipped_ui.item_ui)
+		# Hovered Equip Slot -> Close UI
+		else:
+			close()
+	
+	elif focused_ui is GunFrameItemUI:
+		# Clicked Frame UI -> Same Frame UI
+		if focused_ui.clicked_once:
+			cancel_focus = get_gun_frame_focus.bind(active_focus_idx)
+		# Hovered Frame UI -> Active Equip Slot
+		else:
+			cancel_focus = get_equip_slot_focus.bind(active_equip_idx)
+			active_focus_idx = active_equip_idx
+			clear_item_ui_highlight(equipped_ui.item_ui)
+	
+	get_viewport().set_input_as_handled()
+	full_refresh_ui(cancel_focus)
 
 ### FOCUS METHODS
 
@@ -277,6 +287,8 @@ func move_equip_slot(prev_idx: int, idx_diff: int) -> void:
 	GameManager.equip_barrel(selected_barrel_id, new_idx)
 	
 	full_refresh_ui(get_first_item_for_focus)
+	# Re-trigger the pressed state
+	equip_barrel_container.get_child(active_equip_idx).item_ui._on_button_pressed()
 	get_viewport().set_input_as_handled()
 
 
