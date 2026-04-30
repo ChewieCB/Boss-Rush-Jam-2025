@@ -1,10 +1,10 @@
 extends InventoryUI
 class_name WorkshopInventoryUI
 
-@onready var equip_barrel_container: HBoxContainer = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer
-@onready var inventory_gun_frame_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer
-@onready var inventory_normal_barrel_container: GridContainer = $MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer
-@onready var current_gun_frame_label: Label = $MainRegion/BarrelModifyUI/LeftRegion/GunSideview/CurrentGunFrame
+@export var equip_barrel_container: HBoxContainer
+@export var inventory_gun_frame_container: GridContainer 
+@export var inventory_normal_barrel_container: GridContainer
+@export var current_gun_frame_label: Label
 
 var active_equip_idx: int = -1
 var active_focus_idx: int = -1
@@ -21,7 +21,9 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if visible:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx)
-		var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx)
+		var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx) \
+		if active_equip_idx < equip_barrel_container.get_child_count() else null
+		
 		if event.is_action_pressed("ui_cancel"):
 			contextual_cancel(focused_ui, equipped_ui)
 		
@@ -33,6 +35,15 @@ func _input(event: InputEvent) -> void:
 			elif event.is_action_pressed("inv_ui_tab_right"):
 				get_viewport().set_input_as_handled()
 				move_equip_slot(active_equip_idx, 1)
+		
+		#if not (focused_ui.is_empty if focused_ui is ItemUI else focused_ui.item_ui.is_empty):
+		if event.is_action_pressed("inv_ui_barrel_detail"):
+			barrel_info_region.show_effect_detail()
+			var data = focused_ui.data if focused_ui is ItemUI else focused_ui.item_ui.data
+			if data:
+				barrel_info_region.populate_detail_circle_ui(data)
+		elif event.is_action_released("inv_ui_barrel_detail"):
+			barrel_info_region.show_barrel_overview()
 		
 		elif event.is_action_pressed("inv_ui_change_gun_frame"):
 			get_viewport().set_input_as_handled()
@@ -91,6 +102,8 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 			item_inst.select_item.connect(_on_item_ui_select)
 			item_inst.interact_item.connect(_on_item_ui_interact)
 			item_inst.button.pressed.connect(_on_item_ui_button_pressed.bind(item_inst))
+			item_inst.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(item_inst))
+			item_inst.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(item_inst.button))
 	
 	for gun_frame_data in GameManager.inventory_gun_frames:
 		var item_inst: GunFrameItemUI = gun_frame_item_ui_prefab.instantiate()
@@ -246,6 +259,7 @@ func init_equip_barrels() -> void:
 		item_ui.select_item.connect(_on_item_ui_select)
 		item_ui.interact_item.connect(_on_item_ui_interact)
 		item_ui.button.pressed.connect(_on_item_ui_button_pressed.bind(item_ui))
+		item_ui.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(item_ui))
 		item_ui.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(item_ui.button))
 		# Setup wrapping focus
 		var prev_slot_idx: int = wrapi(i - 1, 0, barrel_container_count)
@@ -331,9 +345,6 @@ func _on_item_ui_select(ui: ItemUI, data: BarrelDataResource) -> void:
 	if ui.is_locked:
 		barrel_info_region.show_barrel_locked()
 		return
-	
-	if data:
-		barrel_info_region.set_barrel_data_resource(data)
 
 
 func _on_item_ui_button_pressed(ui: Control) -> void:
@@ -341,6 +352,19 @@ func _on_item_ui_button_pressed(ui: Control) -> void:
 		active_focus_idx = ui.get_index()
 	if ui.is_equipped or ui.is_empty:
 		active_equip_idx = ui.get_parent().get_index()
+
+
+func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
+	var _parent: Control = ui.get_parent()
+	current_focus_area = equip_barrel_container if _parent is BarrelEquipSlotUI else _parent
+	
+	if ui.data:
+		barrel_info_region.set_barrel_overview_data(ui.data)
+		barrel_info_region.populate_detail_circle_ui(ui.data)
+		if Input.is_action_pressed("inv_ui_barrel_detail"):
+			barrel_info_region.show_effect_detail()
+		else:
+			barrel_info_region.show_barrel_overview()
 
 
 func _on_item_ui_button_focus_lost(button: Button) -> void:

@@ -126,7 +126,7 @@ func _on_button_pressed() -> void:
 		return
 	
 	if not clicked_once:
-		select_item.emit(self , data)
+		select_item.emit(self, data)
 		if is_locked:
 			pass
 		elif not is_purchased:

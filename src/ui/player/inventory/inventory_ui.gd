@@ -30,9 +30,6 @@ func _ready() -> void:
 	GameManager.currency_changed.connect(full_refresh_ui.unbind(1))
 	GameManager.refresh_shop_ui.connect(full_refresh_ui)
 	Input.joy_connection_changed.connect(_on_controller_connection)
-	
-	barrel_info_region.reset_ui()
-	#full_refresh_ui(get_first_item_for_focus(), true)
 
 
 func _input(event: InputEvent) -> void:

@@ -1,13 +1,15 @@
-[gd_scene load_steps=14 format=3 uid="uid://cu1jrlwvdnnl"]
+[gd_scene load_steps=16 format=3 uid="uid://cu1jrlwvdnnl"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/workshop_inventory_ui.gd" id="1_nmgbf"]
 [ext_resource type="PackedScene" uid="uid://cireewkvow2ct" path="res://src/ui/player/inventory/GunFrameItemUI.tscn" id="2_0be23"]
 [ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_qu664"]
 [ext_resource type="PackedScene" uid="uid://dhx5vqirejsxe" path="res://src/ui/shop/BarrelSlotUI.tscn" id="8_3rosm"]
+[ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="9_mcm64"]
+[ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="10_uxdru"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="12_8bjyn"]
+[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="12_uoa4s"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="14_uy6vt"]
 [ext_resource type="Texture2D" uid="uid://dj6ce7qdoeue" path="res://src/ui/player/inventory/inventory-background.png" id="15_fsv8b"]
-[ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="19_tqddy"]
 [ext_resource type="Texture2D" uid="uid://5a51ghh4cpmw" path="res://src/ui/player/inventory/assets/frames/frame_sideview_shotgun.png" id="20_lo7ua"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="22_6d28q"]
 
@@ -28,7 +30,7 @@ gradient = SubResource("Gradient_gcfb7")
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.504274, 1)
 
-[node name="WorkshopInventoryUI" type="Control" node_paths=PackedStringArray("current_gun_frame_icon", "warning_label", "scroll_container", "barrel_info_region")]
+[node name="WorkshopInventoryUI" type="Control" node_paths=PackedStringArray("equip_barrel_container", "inventory_gun_frame_container", "inventory_normal_barrel_container", "current_gun_frame_label", "current_gun_frame_icon", "warning_label", "scroll_container", "barrel_info_region")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,12 +38,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nmgbf")
+equip_barrel_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview/EquippedBarrelContainer")
+inventory_gun_frame_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/GunFrameContainer/GridContainer")
+inventory_normal_barrel_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer")
+current_gun_frame_label = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview/CurrentGunFrame")
 barrel_item_ui_prefab = ExtResource("2_qu664")
 gun_frame_item_ui_prefab = ExtResource("2_0be23")
-current_gun_frame_icon = NodePath("MainRegion/BarrelModifyUI/LeftRegion/GunSideview")
-warning_label = NodePath("MainRegion/BarrelModifyUI/LeftRegion/WarningLabel")
-scroll_container = NodePath("MainRegion/BarrelModifyUI/RightRegion/ScrollContainer")
-barrel_info_region = NodePath("MainRegion/BarrelModifyUI/LeftRegion/BarrelInfoRegion")
+current_gun_frame_icon = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview")
+warning_label = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/WarningLabel")
+scroll_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer")
+barrel_info_region = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer/BarrelInfoRegion")
 
 [node name="ModifyBG" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_yd8qc")
@@ -77,146 +83,203 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 83.0
-offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BarrelModifyUI" type="Control" parent="MainRegion"]
+[node name="BarrelModifyUI" type="MarginContainer" parent="MainRegion"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
 
-[node name="LeftRegion" type="Control" parent="MainRegion/BarrelModifyUI"]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 960.0
-grow_vertical = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI"]
+layout_mode = 2
 
-[node name="GunSideview" type="TextureRect" parent="MainRegion/BarrelModifyUI/LeftRegion"]
-layout_mode = 0
-offset_left = 168.0
-offset_top = 8.0
-offset_right = 788.0
-offset_bottom = 228.0
+[node name="UpperRegion" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 364)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_bottom = 64
+
+[node name="GunSideview" type="TextureRect" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
 texture = ExtResource("20_lo7ua")
 
-[node name="Line2D" type="Line2D" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+[node name="Line2D" type="Line2D" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview"]
 points = PackedVector2Array(208, 88, 152, 248)
 
-[node name="Line2D2" type="Line2D" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+[node name="Line2D2" type="Line2D" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview"]
 position = Vector2(72, 0)
 points = PackedVector2Array(200, 88, 200, 248)
 
-[node name="Line2D3" type="Line2D" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+[node name="Line2D3" type="Line2D" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview"]
 position = Vector2(168, 8)
 points = PackedVector2Array(192, 96, 224, 248)
 
-[node name="EquippedBarrelContainer" type="HBoxContainer" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+[node name="EquippedBarrelContainer" type="HBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -206.0
-offset_top = 106.0
-offset_right = 134.0
-offset_bottom = 206.0
+offset_left = -236.0
+offset_top = 96.0
+offset_right = 164.0
+offset_bottom = 216.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="BarrelSlot" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer" instance=ExtResource("8_3rosm")]
+[node name="BarrelSlot" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview/EquippedBarrelContainer" instance=ExtResource("8_3rosm")]
 layout_mode = 2
 
-[node name="BarrelSlot2" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer" instance=ExtResource("8_3rosm")]
+[node name="BarrelSlot2" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview/EquippedBarrelContainer" instance=ExtResource("8_3rosm")]
 layout_mode = 2
 
-[node name="BarrelSlot3" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview/EquippedBarrelContainer" instance=ExtResource("8_3rosm")]
+[node name="BarrelSlot3" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview/EquippedBarrelContainer" instance=ExtResource("8_3rosm")]
 layout_mode = 2
 
-[node name="CurrentGunFrame" type="Label" parent="MainRegion/BarrelModifyUI/LeftRegion/GunSideview"]
+[node name="CurrentGunFrame" type="Label" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/GunSideview"]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -476.0
-offset_top = 16.0
-offset_right = 44.0
-offset_bottom = 65.0
-grow_horizontal = 0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -260.0
+offset_right = 260.0
+offset_bottom = 49.0
+grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
-text = "Current frame: Shotgun"
-horizontal_alignment = 2
+text = "Shotgun"
+horizontal_alignment = 1
 
-[node name="BarrelInfoRegion" parent="MainRegion/BarrelModifyUI/LeftRegion" instance=ExtResource("19_tqddy")]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -448.0
-offset_top = -520.0
-offset_right = 448.0
-offset_bottom = -32.0
-grow_horizontal = 2
-
-[node name="WarningLabel" type="Label" parent="MainRegion/BarrelModifyUI/LeftRegion"]
+[node name="WarningLabel" type="Label" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion"]
+visible = false
 self_modulate = Color(1, 0, 0.168627, 1)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -214.0
-offset_top = -100.0
-offset_right = 214.0
-offset_bottom = -56.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
+size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 36
 text = "Can only equip 1 archetype barrel"
 
-[node name="RightRegion" type="Control" parent="MainRegion/BarrelModifyUI"]
-layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -960.0
-grow_horizontal = 0
-grow_vertical = 2
+[node name="LowerRegion" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MainRegion/BarrelModifyUI/RightRegion"]
+[node name="HSeparator" type="NinePatchRect" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion"]
+modulate = Color(0.902281, 0.776745, 0, 1)
+custom_minimum_size = Vector2(1672, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("9_mcm64")
+region_rect = Rect2(0, 0, 92.6855, 22)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion"]
+custom_minimum_size = Vector2(1824, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 192
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 32
+
+[node name="NormalLabel" type="Label" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1
+
+[node name="BarrelInfoRegion" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer" instance=ExtResource("10_uxdru")]
+custom_minimum_size = Vector2(902, 364)
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="InventoryRegion" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/margin_right = 80
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 32
+
+[node name="NormalLabel" type="Label" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "Inventory"
+horizontal_alignment = 1
+
+[node name="PanelDescription" type="ColorRect" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer"]
+custom_minimum_size = Vector2(640, 364)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+color = Color(0, 0, 0, 1)
+
+[node name="Border" type="NinePatchRect" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 32.0
-offset_top = 64.0
-offset_right = -24.0
-offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_vertical = 3
+texture = ExtResource("12_uoa4s")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription"]
+custom_minimum_size = Vector2(640, 364)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
 follow_focus = true
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="GunFrameLabel" type="Label" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer"]
+[node name="GunFrameLabel" type="Label" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -224,86 +287,73 @@ theme_override_font_sizes/font_size = 48
 text = "Gun Frames"
 horizontal_alignment = 1
 
-[node name="GunFrameContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer"]
+[node name="GunFrameContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/GunFrameContainer"]
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/GunFrameContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 2
 
-[node name="GunFrameItemUI" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer" instance=ExtResource("2_0be23")]
+[node name="GunFrameItemUI" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/GunFrameContainer/GridContainer" instance=ExtResource("2_0be23")]
 layout_mode = 2
 
-[node name="Spacer" type="Control" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
+[node name="NormalContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 6
 
-[node name="NormalLabel" type="Label" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
-theme_override_font_sizes/font_size = 48
-text = "Normal Barrels"
-horizontal_alignment = 1
-
-[node name="NormalContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
-columns = 7
+columns = 5
 
-[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI2" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI2" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI3" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI3" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI4" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI4" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI5" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI5" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI6" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI6" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI7" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI7" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI8" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI8" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI9" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI9" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI10" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI10" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI11" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI11" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI12" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI12" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
-[node name="BarrelItemUI13" parent="MainRegion/BarrelModifyUI/RightRegion/ScrollContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+[node name="BarrelItemUI13" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
 layout_mode = 2
 
 [node name="ControlHelp" type="ColorRect" parent="."]
@@ -349,3 +399,5 @@ text = "return"
 [node name="DeviceInputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("22_6d28q")]
 layout_mode = 2
 assigned_action = "interact"
+
+[editable path="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer/BarrelInfoRegion"]

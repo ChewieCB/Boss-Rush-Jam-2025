@@ -14,6 +14,7 @@ const SCALE_FACTOR = 1.2
 var barrel_info_region: BarrelInfoRegion = null
 var barrel_roll_data: Dictionary = {
 	"title": "",
+	"flavour_text": "",
 	"description": "",
 	"is_archetype": false,
 	"positive_desc": [],
