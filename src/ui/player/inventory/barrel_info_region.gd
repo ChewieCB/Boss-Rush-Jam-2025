@@ -65,6 +65,7 @@ func _show_ui(show_circle: bool, show_barrel: bool, show_effect: bool) -> void:
 func show_barrel_overview(show_content: bool = true) -> void:
 	_show_ui(false, true, false)
 	barrel_overview_detail.visible = show_content
+	select_icon_line.visible = false
 
 
 func set_barrel_overview_data(data: BarrelDataResource) -> void:
@@ -77,17 +78,24 @@ func set_barrel_overview_data(data: BarrelDataResource) -> void:
 
 func show_effect_detail(show_content: bool = true) -> void:
 	_show_ui(true, false, true)
-	# Auto-focus to first element in detail circle to populate effect detail UI
-	set_effect_detail_data(0)
 
 
 func set_effect_detail_data(idx: int) -> void:
-	var data = barrel_info_icon_effect_pool[idx].barrel_roll_data
-	#effect_panel_barrel_icon.texture = data.texture_rect.texture
+	var effect: BarrelInfoIcon = barrel_info_icon_effect_pool[idx]
+	var data: Dictionary = effect.barrel_roll_data
+	effect_panel_barrel_icon.texture = effect.texture_rect.texture
 	effect_name_label.text = "[b]%s[/b]" % [data.title]
 	effect_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.flavour_text]
 	effect_desc_label.text = data.description
-	#show_barrel_overview()
+	
+	select_icon_line.visible = true
+	select_icon_line.points[1] = effect.position + effect.size
+	barrel_info_icon_effect_pool[idx].grab_focus.call_deferred()
+
+
+func grab_detail_focus(idx: int) -> void:
+	var effect: BarrelInfoIcon = barrel_info_icon_effect_pool[idx]
+	effect.grab_focus.call_deferred()
 
 
 func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:

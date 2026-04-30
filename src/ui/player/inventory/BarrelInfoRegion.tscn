@@ -148,7 +148,6 @@ text = "[indent][i][color=gray]Effect flavour text. Quisque a odio elementum, di
 fit_content = true
 
 [node name="EffectIcon" type="TextureRect" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader"]
-self_modulate = Color(1, 1, 1, 0.2)
 layout_mode = 2
 texture = ExtResource("7_ggvao")
 expand_mode = 3
@@ -273,7 +272,6 @@ text = "Effect description text. Etiam quam sem, iaculis et libero eget, aliquam
 fit_content = true
 
 [node name="BarrelIcon" type="TextureRect" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer"]
-self_modulate = Color(1, 1, 1, 0.2)
 custom_minimum_size = Vector2(256, 256)
 layout_mode = 2
 size_flags_horizontal = 8

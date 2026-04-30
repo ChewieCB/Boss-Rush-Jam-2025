@@ -8,6 +8,7 @@ class_name WorkshopInventoryUI
 
 var active_equip_idx: int = -1
 var active_focus_idx: int = -1
+var active_effect_detail_idx: int = -1
 
 
 # FIXME: Invert the equip slot UI order to match the gun barrels, do this at the end
@@ -16,6 +17,9 @@ var active_focus_idx: int = -1
 func _ready() -> void:
 	super()
 	init_equip_barrels()
+	for ui: BarrelInfoIcon in barrel_info_region.barrel_info_icon_effect_pool:
+		ui.focus_entered.connect(_on_effect_detail_focus_gained.bind(ui))
+		#active_effect_detail_idx
 
 
 func _input(event: InputEvent) -> void:
@@ -39,11 +43,20 @@ func _input(event: InputEvent) -> void:
 		#if not (focused_ui.is_empty if focused_ui is ItemUI else focused_ui.item_ui.is_empty):
 		if event.is_action_pressed("inv_ui_barrel_detail"):
 			barrel_info_region.show_effect_detail()
-			var data = focused_ui.data if focused_ui is ItemUI else focused_ui.item_ui.data
+			var data: BarrelDataResource
+			if focused_ui is ItemUI:
+				data = focused_ui.data
+			elif focused_ui is BarrelEquipSlotUI:
+				data = focused_ui.item_ui.data
+			
 			if data:
 				barrel_info_region.populate_detail_circle_ui(data)
+				barrel_info_region.set_effect_detail_data(0)
+				var detail_focus: Control = get_barrel_detail_focus()
+				detail_focus.grab_focus.call_deferred()
 		elif event.is_action_released("inv_ui_barrel_detail"):
 			barrel_info_region.show_barrel_overview()
+			active_effect_detail_idx = -1
 		
 		elif event.is_action_pressed("inv_ui_change_gun_frame"):
 			get_viewport().set_input_as_handled()
@@ -244,9 +257,27 @@ func get_gun_frame_focus(idx: int = -1) -> Control:
 		return get_equip_slot_focus(active_equip_idx)
 
 
-func get_barrel_detail_focus() -> Control:
-	# TODO
-	return null
+func get_barrel_detail_focus(idx: int = -1) -> Control:
+	current_focus_area = barrel_info_region.circle_ring
+	var effect_detail_items = current_focus_area.get_children()
+	effect_detail_items.pop_front()  # Remove the circle itself
+	
+	# Update focus area modes
+	var inventory_gun_frame_items = inventory_gun_frame_container.get_children()
+	for slot in equip_barrel_container.get_children():
+		slot.focus_mode = FocusMode.FOCUS_NONE
+	for item in inventory_gun_frame_container.get_children():
+		item.focus_mode = FocusMode.FOCUS_NONE
+	for item in effect_detail_items:
+		item.focus_mode = FocusMode.FOCUS_ALL
+	
+	if effect_detail_items:
+		if idx != -1:
+			return effect_detail_items[idx]
+		else:
+			return effect_detail_items[0]
+	else:
+		return get_equip_slot_focus(active_equip_idx)
 
 
 #### Equip Barrel Helpers
@@ -363,6 +394,7 @@ func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
 		barrel_info_region.populate_detail_circle_ui(ui.data)
 		if Input.is_action_pressed("inv_ui_barrel_detail"):
 			barrel_info_region.show_effect_detail()
+			barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
 		else:
 			barrel_info_region.show_barrel_overview()
 
@@ -432,3 +464,8 @@ func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: Gun
 	current_gun_frame_icon.texture = data.shop_ui_sprite
 	
 	full_refresh_ui(focus_area_callable)
+
+
+func _on_effect_detail_focus_gained(ui: BarrelInfoIcon) -> void:
+	active_effect_detail_idx = ui.get_index() - 1  # Offset since the circle texture is a sibling node
+	barrel_info_region.set_effect_detail_data(active_effect_detail_idx)

@@ -40,6 +40,7 @@ func _process(delta: float) -> void:
 	color = _base_color * brightness
 	color.a = 1
 
+
 func set_barrel_roll_data(_data) -> void:
 	barrel_roll_data = _data
 	if _data["icon_id"] > -2:
@@ -77,7 +78,7 @@ func _on_focus_exited() -> void:
 
 
 func _on_focus_entered() -> void:
-	barrel_info_region.unfocus_other_barrel_info_icon()
+	#barrel_info_region.unfocus_other_barrel_info_icon()
 	expand_button_size()
 	play_button_hover_sfx()
 	border_focus.visible = true
@@ -96,6 +97,6 @@ func _on_focus_entered() -> void:
 		for line in barrel_roll_data["negative_desc"]:
 			content += "- " + line + "\n"
 		content += "[/color]"
-	barrel_info_region.set_description_content(content)
+	
 	barrel_info_region.select_icon_line.visible = true
 	barrel_info_region.select_icon_line.points[1] = position + size
