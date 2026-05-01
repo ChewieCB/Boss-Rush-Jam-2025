@@ -108,7 +108,8 @@ func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 	var roll_effect_count: int = barrel_inst.get_number_of_barrel_effect()
 	var ui_positions_arr: Array[Vector2] = get_circle_positions(roll_effect_count)
 	var _wrap_focus = func(x: int): return wrapi(x, 0, roll_effect_count)
-	var effect_icon_nodes = circle_ring.get_children().slice(1)
+	var effect_icon_nodes = circle_ring.get_children()
+	effect_icon_nodes = effect_icon_nodes.slice(0, roll_effect_count)
 	for i in range(MAX_EFFECT_COUNT):
 		var ui: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
 		if i >= roll_effect_count:
@@ -206,7 +207,7 @@ func set_barrel_locked():
 	#reset_ui()
 	override_description_content("[center]Not available in demo[/center]")
 
-
-func unfocus_other_barrel_info_icon():
-	for child: BarrelInfoIcon in circle_ring.get_children():
-		child.focus_exited.emit()
+#
+#func unfocus_other_barrel_info_icon():
+	#for child: BarrelInfoIcon in circle_ring.get_children():
+		#child.focus_exited.emit()
