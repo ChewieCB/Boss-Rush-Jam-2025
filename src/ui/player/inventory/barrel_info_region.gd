@@ -39,6 +39,8 @@ func _ready() -> void:
 	select_icon_line.visible = false
 	circle_ring_center_pos = circle_ring_centerpoint.position
 	circle_ring_radius = -(circle_ring.size.x / 2) - CIRCLE_RING_RADIUS_OFFSET
+	circle_ring_centerpoint.queue_free()
+	circle_ring.remove_child(circle_ring_centerpoint)
 	
 	_init_barrel_effect_ui()
 	show_barrel_overview(false)
@@ -90,7 +92,7 @@ func set_effect_detail_data(idx: int) -> void:
 	
 	select_icon_line.visible = true
 	select_icon_line.points[1] = effect.position + effect.size
-	barrel_info_icon_effect_pool[idx].grab_focus.call_deferred()
+	#barrel_info_icon_effect_pool[idx].grab_focus.call_deferred()
 
 
 func grab_detail_focus(idx: int) -> void:
@@ -105,7 +107,8 @@ func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 	# Regen the barrel roll effects around the circle using the barrel data
 	var roll_effect_count: int = barrel_inst.get_number_of_barrel_effect()
 	var ui_positions_arr: Array[Vector2] = get_circle_positions(roll_effect_count)
-	#barrel_info_icon_effect_angles = []
+	var _wrap_focus = func(x: int): return wrapi(x, 0, roll_effect_count)
+	var effect_icon_nodes = circle_ring.get_children().slice(1)
 	for i in range(MAX_EFFECT_COUNT):
 		var ui: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
 		if i >= roll_effect_count:
@@ -119,6 +122,15 @@ func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 		# Store each icon's starting angle
 		var angle = (TAU / roll_effect_count) * i
 		barrel_info_icon_effect_angles[i] = angle
+		
+		# LEFT
+		var prev_inv_idx: int = _wrap_focus.call(i - 1)
+		var prev_inv: Control = effect_icon_nodes[prev_inv_idx]
+		ui.focus_neighbor_left = prev_inv.get_path()
+		# RIGHT
+		var next_inv_idx: int = _wrap_focus.call(i + 1)
+		var next_inv: Control = effect_icon_nodes[next_inv_idx]
+		ui.focus_neighbor_right = next_inv.get_path()
 	
 	barrel_inst.queue_free()
 
@@ -148,7 +160,6 @@ func refresh_ui() -> void:
 	#barrel_inst.queue_free()
 
 	# Update Barrel Info Summary UI
-
 
 
 func _process(delta: float) -> void:
