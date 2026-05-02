@@ -110,7 +110,7 @@ func _input(event: InputEvent) -> void:
 
 func close() -> void:
 	for i in range(equip_barrel_container.get_child_count()):
-		var equip_ui = equip_barrel_container.get_child(i).get_child(0)
+		var equip_ui = equip_barrel_container.get_child(i).item_ui
 		clear_item_ui_highlight(equip_ui)
 	super()
 
@@ -384,7 +384,7 @@ func move_equip_slot(prev_idx: int, idx_diff: int) -> void:
 
 #### Highlight/Focus helpers
 
-func clear_item_ui_highlight(ui: Control) -> void:
+func clear_item_ui_highlight(ui: ItemUI) -> void:
 	super(ui)
 	toggle_ui_focus_neighbors(ui.button, true)
 
@@ -447,6 +447,8 @@ func _on_item_ui_select(ui: ItemUI, data: BarrelDataResource) -> void:
 	
 	active_focus_idx = ui.get_index()
 	
+	_desaturate_siblings(ui)
+	
 	if ui.is_locked:
 		barrel_info_region.show_barrel_locked()
 		return
@@ -459,8 +461,6 @@ func _on_item_ui_button_pressed(ui: Control) -> void:
 		active_equip_idx = ui.get_parent().get_index()
 	# Remove focus neighbors
 	toggle_ui_focus_neighbors(ui, false)
-	# FIXME - Inventory UI node is freed on purchase so we have no siblings to work with anymore
-	_desaturate_siblings(ui)
 
 
 func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
@@ -505,12 +505,8 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		# install an inventory barrel if we want.
 		# Otherwise we can cancel to go back.
 		var equip_ui: ItemUI = equip_barrel_container.get_child(active_equip_idx).item_ui
-		#clear_item_ui_highlight(equip_ui)
-		#_reset_sibling_saturation(equip_ui)
-		#active_equip_idx = -1
 		active_focus_idx = active_equip_idx
 		clear_item_ui_highlight(equip_ui)
-		_reset_sibling_saturation(equip_ui)
 		current_selected_item_ui = null
 	
 	# Empty equip slot UI

@@ -170,7 +170,7 @@ func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool
 					set_region_focus_neighbor(b, a, Side.SIDE_TOP, true)
 
 
-func clear_item_ui_highlight(ui: Control) -> void:
+func clear_item_ui_highlight(ui: ItemUI) -> void:
 	ui.is_active_equip = false
 	ui.clicked_once = false
 	ui.deselect()
