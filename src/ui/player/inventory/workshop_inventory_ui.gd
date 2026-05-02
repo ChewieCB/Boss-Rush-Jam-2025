@@ -24,7 +24,8 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if visible:
-		var focused_ui: Control = current_focus_area.get_child(active_focus_idx)
+		# FIXME - cleaner fix for this race condition whne the current_focus_area is null
+		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
 		var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx) \
 		if active_equip_idx < equip_barrel_container.get_child_count() else null
 		
