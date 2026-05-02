@@ -145,6 +145,8 @@ func set_focus_neighbour_wrapping(ui_container: Control) -> void:
 
 
 func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool = false) -> void:
+	if a.get_child_count() == 0 or b.get_child_count() == 0:
+		return
 	match side:
 		Side.SIDE_TOP:
 			for i in range(0, a.columns):
