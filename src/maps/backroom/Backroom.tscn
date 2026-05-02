@@ -7441,13 +7441,17 @@ omni_range = 10.0
 omni_attenuation = 2.0
 
 [node name="Vendor" parent="." instance=ExtResource("8_0ncek")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.623195, 0, -2.3356)
 
 [node name="Workbench" parent="." instance=ExtResource("18_dv650")]
-transform = Transform3D(0.999939, 0, 0.0110477, 0, 1, 0, -0.0110477, 0, 0.999939, -1.29724, -0.00194609, 6.53804)
+transform = Transform3D(-0.556629, 0, 0.830761, 0, 1, 0, -0.830761, 0, -0.556629, -0.0977012, -0.00194585, 2.12347)
 
 [node name="CollisionShape3D" parent="Workbench" index="0"]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -0.0866022, 0.75, -0.0500002)
 shape = SubResource("BoxShape3D_x3k1o")
+
+[node name="Sprite3D" parent="Workbench" index="3"]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.16, 1.44, 0.116325)
 
 [node name="FogVolume" type="FogVolume" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 6.55, -0.5)

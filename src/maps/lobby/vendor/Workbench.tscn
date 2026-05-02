@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://cdkpo8wgm1k46"]
+[gd_scene load_steps=12 format=4 uid="uid://cdkpo8wgm1k46"]
 
 [ext_resource type="Script" path="res://src/maps/lobby/vendor/workbench.gd" id="1_ew1jd"]
 [ext_resource type="Material" uid="uid://c65h2gsvws5dr" path="res://assets/textures/skip.tres" id="1_ff2y4"]
@@ -6,6 +6,7 @@
 [ext_resource type="Material" uid="uid://dnec80oxomllt" path="res://assets/textures/wrad_metal2.tres" id="3_xtmmg"]
 [ext_resource type="Material" uid="uid://cggtlusxv65jc" path="res://assets/textures/walls/concrete-paint-dark-gold.tres" id="4_wnh86"]
 [ext_resource type="PackedScene" uid="uid://cu1jrlwvdnnl" path="res://src/ui/player/inventory/WorkshopInventoryUI.tscn" id="6_4ujuh"]
+[ext_resource type="Texture2D" uid="uid://cmtvvc1rlibf2" path="res://src/maps/lobby/vendor/Shopkeeper-alt.png" id="7_v2bpr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wdsry"]
 size = Vector3(4, 3.3, 4)
@@ -96,12 +97,14 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 0, 0, 0)
 collision_layer = 32
 collision_mask = 2
 script = ExtResource("1_ew1jd")
+interact_dist = 5.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 1.65, 0.0499998)
 shape = SubResource("BoxShape3D_wdsry")
 
 [node name="Collider" type="StaticBody3D" parent="."]
+visible = false
 collision_mask = 2
 
 [node name="entity_76_mesh_instance" type="MeshInstance3D" parent="Collider"]
@@ -121,3 +124,10 @@ shape = SubResource("ConcavePolygonShape3D_lkq4k")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="WorkshopInventoryUI" parent="UI" instance=ExtResource("6_4ujuh")]
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.16, 1.44, 0)
+flip_h = true
+billboard = 2
+render_priority = -1
+texture = ExtResource("7_v2bpr")
