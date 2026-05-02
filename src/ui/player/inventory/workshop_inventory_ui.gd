@@ -56,6 +56,8 @@ func _input(event: InputEvent) -> void:
 			elif focused_ui is BarrelEquipSlotUI:
 				data = focused_ui.item_ui.data
 				_ui = focused_ui.item_ui
+			elif focused_ui is GunFrameItemUI:
+				return
 			
 			if _ui.is_empty:
 				return
@@ -71,7 +73,11 @@ func _input(event: InputEvent) -> void:
 				barrel_info_region.populate_detail_circle_ui(data)
 				barrel_info_region.set_effect_detail_data(0)
 				persist_item_ui_highlight(_ui)
-				_desaturate_siblings(focused_ui)
+				# FIXME - clean this up
+				if focused_ui is BarrelEquipSlotUI:
+					_desaturate_siblings(focused_ui.item_ui)
+				else:
+					_desaturate_siblings(focused_ui)
 				toggle_ui_focus_neighbors(_ui.button, false)
 				var detail_focus: Control = get_barrel_detail_focus(active_effect_detail_idx)
 				detail_focus.grab_focus.call_deferred()
