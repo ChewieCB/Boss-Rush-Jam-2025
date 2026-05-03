@@ -1,0 +1,83 @@
+[gd_scene load_steps=6 format=3 uid="uid://bagau1537wut2"]
+
+[ext_resource type="Script" path="res://src/ui/player/inventory/equipped_frame_side_view.gd" id="1_liic0"]
+[ext_resource type="Shader" path="res://src/ui/player/inventory/double_sided_transparent_fade.gdshader" id="1_o44u6"]
+[ext_resource type="Texture2D" uid="uid://5a51ghh4cpmw" path="res://src/ui/player/inventory/assets/frames/frame_sideview_shotgun.png" id="1_x84nb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d6g0p"]
+shader = ExtResource("1_o44u6")
+shader_parameter/divide = 0.12
+shader_parameter/blur = 0.295
+shader_parameter/fade_width = 0.665
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ys12d"]
+viewport_path = NodePath("SubViewport")
+
+[node name="EquippedFrameSideView" type="Control" node_paths=PackedStringArray("frame_carousel", "frame_ui_center", "frame_ui_left", "frame_ui_right", "current_frame_label")]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 225.0
+grow_horizontal = 2
+script = ExtResource("1_liic0")
+frame_carousel = NodePath("TextureRect")
+frame_ui_center = NodePath("SubViewport/HBoxContainer/GunSideview2")
+frame_ui_left = NodePath("SubViewport/HBoxContainer/GunSideview")
+frame_ui_right = NodePath("SubViewport/HBoxContainer/GunSideview3")
+current_frame_label = NodePath("CurrentGunFrame")
+
+[node name="CurrentGunFrame" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -52.0
+offset_right = 52.0
+offset_bottom = 44.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "Shotgun"
+horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_d6g0p")
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 220.0
+grow_horizontal = 2
+texture = SubResource("ViewportTexture_ys12d")
+stretch_mode = 5
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1958, 220)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="GunSideview" type="TextureRect" parent="SubViewport/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_x84nb")
+
+[node name="GunSideview2" type="TextureRect" parent="SubViewport/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_x84nb")
+
+[node name="GunSideview3" type="TextureRect" parent="SubViewport/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_x84nb")

@@ -388,10 +388,17 @@ speed_scale = 0.5
 
 [node name="BarrelInfoRegion" parent="MainRegion/BarrelShopUI/RightRegion" instance=ExtResource("9_wboqf")]
 layout_mode = 1
-offset_left = 32.0
-offset_top = -520.0
-offset_right = 928.0
-offset_bottom = -32.0
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1048.0
+offset_top = -552.0
+offset_right = -24.0
+offset_bottom = -64.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="ControlHelp" type="ColorRect" parent="."]
 layout_mode = 1

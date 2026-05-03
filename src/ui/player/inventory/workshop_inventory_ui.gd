@@ -2,9 +2,8 @@ extends InventoryUI
 class_name WorkshopInventoryUI
 
 @export var equip_barrel_container: HBoxContainer
-@export var inventory_gun_frame_container: GridContainer 
+@export var inventory_gun_frame_container: EquippedFrameSideViewUI 
 @export var inventory_normal_barrel_container: GridContainer
-@export var current_gun_frame_label: Label
 
 var active_equip_idx: int = -1
 var active_focus_idx: int = -1
@@ -98,10 +97,10 @@ func _input(event: InputEvent) -> void:
 				inventory_normal_barrel_container:
 					get_inventory_focus(active_focus_idx).grab_focus.call_deferred()
 		
+		# TODO - rework to cycle frames left/right
 		elif event.is_action_pressed("inv_ui_change_gun_frame"):
 			get_viewport().set_input_as_handled()
-			var focus_area: Control = get_gun_frame_focus()
-			focus_area.grab_focus.call_deferred()
+			pass
 		
 		elif event.is_action_pressed("interact"):
 			close()
@@ -139,9 +138,6 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 		#barrel_idx += 1
 	
 	# INVENTORY STUFF
-	for child in inventory_gun_frame_container.get_children():
-		inventory_gun_frame_container.remove_child(child)
-		child.queue_free()
 	for child in inventory_normal_barrel_container.get_children():
 		inventory_normal_barrel_container.remove_child(child)
 		child.queue_free()
@@ -158,21 +154,15 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 			item_inst.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(item_inst))
 			item_inst.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(item_inst.button))
 	
-	for gun_frame_data in GameManager.inventory_gun_frames:
-		var item_inst: GunFrameItemUI = gun_frame_item_ui_prefab.instantiate()
-		inventory_gun_frame_container.add_child(item_inst)
-		item_inst.init(gun_frame_data, self, false, true)
-		item_inst.select_gun_frame.connect(_on_gun_frame_item_ui_select)
-		item_inst.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
+	# TODO - rewrite to work with new carousel
+	var available_gun_frames: Array = [GameManager.equipped_gun_frame] + \
+		GameManager.inventory_gun_frames
+	inventory_gun_frame_container.set_frame_icons(
+		GameManager.equipped_gun_frame, 
+		available_gun_frames
+	)
 	
 	set_focus_neighbour_wrapping(inventory_normal_barrel_container)
-	set_focus_neighbour_wrapping(inventory_gun_frame_container)
-	
-	if GameManager.equipped_gun_frame:
-		current_gun_frame_icon.texture = GameManager.equipped_gun_frame.shop_ui_sprite
-		current_gun_frame_label.text = "Current frame: {0}".format([GameManager.equipped_gun_frame.frame_name])
-	else:
-		current_gun_frame_icon.texture = GameManager.starting_gun_frame.shop_ui_sprite
 	
 	await get_tree().process_frame
 	
@@ -210,17 +200,6 @@ func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 		# Hovered Equip Slot -> Close UI
 		else:
 			close()
-	
-	elif focused_ui is GunFrameItemUI:
-		# Clicked Frame UI -> Same Frame UI
-		if focused_ui.clicked_once:
-			cancel_focus = get_gun_frame_focus.bind(active_focus_idx)
-		# Hovered Frame UI -> Active Equip Slot
-		else:
-			cancel_focus = get_equip_slot_focus.bind(active_equip_idx)
-			active_focus_idx = active_equip_idx
-			clear_item_ui_highlight(equipped_ui.item_ui)
-			_reset_sibling_saturation(equipped_ui)
 	
 	get_viewport().set_input_as_handled()
 	full_refresh_ui(cancel_focus)
@@ -282,37 +261,14 @@ func get_inventory_focus(idx: int = -1) -> Control:
 		return get_equip_slot_focus(active_equip_idx)
 
 
-func get_gun_frame_focus(idx: int = -1) -> Control:
-	current_focus_area = inventory_gun_frame_container
-	
-	# Update focus area modes
-	var inventory_gun_frame_items = inventory_gun_frame_container.get_children()
-	for slot in equip_barrel_container.get_children():
-		slot.item_ui.button.focus_mode = FocusMode.FOCUS_NONE
-	for item in inventory_gun_frame_items:
-		item.button.focus_mode = FocusMode.FOCUS_ALL
-	
-	# Fallback when no barrels in inventory
-	if inventory_gun_frame_items:
-		if idx != -1:
-			return inventory_gun_frame_items[idx].button
-		else:
-			return inventory_gun_frame_items[0].button
-	else:
-		return get_equip_slot_focus(active_equip_idx)
-
-
 func get_barrel_detail_focus(idx: int = -1) -> Control:
 	#current_focus_area = barrel_info_region.circle_ring
 	var effect_detail_items = barrel_info_region.circle_ring.get_children()
 	effect_detail_items.pop_front()  # Remove the circle itself
 	
 	# Update focus area modes
-	var inventory_gun_frame_items = inventory_gun_frame_container.get_children()
 	for slot in equip_barrel_container.get_children():
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_NONE
-	for item in inventory_gun_frame_container.get_children():
-		item.button.focus_mode = FocusMode.FOCUS_NONE
 	for item in effect_detail_items:
 		item.focus_mode = FocusMode.FOCUS_ALL
 	
@@ -528,27 +484,6 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		clear_item_ui_highlight(equip_ui)
 		_reset_sibling_saturation(equip_ui)
 		active_equip_idx = -1
-	
-	full_refresh_ui(focus_area_callable)
-
-
-func _on_gun_frame_item_ui_select(ui: GunFrameItemUI, _data: GunFrameResource) -> void:
-	if (current_selected_item_ui != null):
-		current_selected_item_ui.deselect()
-	
-	current_selected_item_ui = ui
-	
-	active_focus_idx = ui.get_index()
-	# TODO: Add UI element to show gun frame stat
-	SoundManager.play_ui_sound(sfx_click, "UI")
-
-
-func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: GunFrameResource) -> void:
-	var focus_area_callable: Callable = get_first_item_for_focus
-	var warning_text = GameManager.equip_gun_frame(data.frame_id)
-	show_warning(warning_text)
-	SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
-	current_gun_frame_icon.texture = data.shop_ui_sprite
 	
 	full_refresh_ui(focus_area_callable)
 
