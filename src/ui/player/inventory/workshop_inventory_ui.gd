@@ -9,6 +9,8 @@ var active_equip_idx: int = -1
 var active_focus_idx: int = -1
 var active_effect_detail_idx: int = -1
 
+var available_gun_frames: Array
+
 
 # FIXME: Invert the equip slot UI order to match the gun barrels, do this at the end
 # and avoid tangling any of the rest of this code up in it to prevent confusion.
@@ -19,6 +21,8 @@ func _ready() -> void:
 	for ui: BarrelInfoIcon in barrel_info_region.barrel_info_icon_effect_pool:
 		ui.focus_entered.connect(_on_effect_detail_focus_gained.bind(ui))
 		#active_effect_detail_idx
+	available_gun_frames = [GameManager.equipped_gun_frame] + \
+		GameManager.inventory_gun_frames
 
 
 func _input(event: InputEvent) -> void:
@@ -36,14 +40,23 @@ func _input(event: InputEvent) -> void:
 				if event.is_action(ui_action):
 					get_viewport().set_input_as_handled()
 		
-		if equipped_ui.item_ui.clicked_once:
-			if event.is_action_pressed("inv_ui_tab_left"):
-				get_viewport().set_input_as_handled()
+		if event.is_action_pressed("inv_ui_tab_left"):
+			get_viewport().set_input_as_handled()
+			if equipped_ui.item_ui.clicked_once:
 				move_equip_slot(active_equip_idx, -1)
+			else:
+				change_gun_frame(-1)
+				var focus_area = get_equip_slot_focus.bind(active_focus_idx)
+				full_refresh_ui(focus_area)
 			
-			elif event.is_action_pressed("inv_ui_tab_right"):
-				get_viewport().set_input_as_handled()
+		elif event.is_action_pressed("inv_ui_tab_right"):
+			get_viewport().set_input_as_handled()
+			if equipped_ui.item_ui.clicked_once:
 				move_equip_slot(active_equip_idx, 1)
+			else:
+				change_gun_frame(1)
+				var focus_area = get_equip_slot_focus.bind(active_focus_idx)
+				full_refresh_ui(focus_area)
 		
 		# TODO - these two should have dedicated functions for ease of debugging
 		if event.is_action_pressed("inv_show_barrel_detail"):
@@ -107,6 +120,12 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 
+func open() -> void:
+	available_gun_frames = [GameManager.equipped_gun_frame] + \
+		GameManager.inventory_gun_frames
+	super()
+
+
 func close() -> void:
 	for i in range(equip_barrel_container.get_child_count()):
 		var equip_ui = equip_barrel_container.get_child(i).item_ui
@@ -155,8 +174,6 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 			item_inst.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(item_inst.button))
 	
 	# TODO - rewrite to work with new carousel
-	var available_gun_frames: Array = [GameManager.equipped_gun_frame] + \
-		GameManager.inventory_gun_frames
 	inventory_gun_frame_container.set_frame_icons(
 		GameManager.equipped_gun_frame, 
 		available_gun_frames
@@ -338,6 +355,15 @@ func move_equip_slot(prev_idx: int, idx_diff: int) -> void:
 	get_viewport().set_input_as_handled()
 
 
+func change_gun_frame(idx_diff: int) -> void:
+	var current_idx: int = available_gun_frames.find(GameManager.equipped_gun_frame)
+	var new_idx: int = wrapi(current_idx + idx_diff, 0, available_gun_frames.size())
+	var new_frame = available_gun_frames[new_idx]
+	var warning_text = GameManager.equip_gun_frame(new_frame.frame_id)
+	show_warning(warning_text)
+	SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
+
+
 #### Highlight/Focus helpers
 
 func clear_item_ui_highlight(ui: ItemUI) -> void:
@@ -491,3 +517,4 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 func _on_effect_detail_focus_gained(ui: BarrelInfoIcon) -> void:
 	active_effect_detail_idx = ui.get_index()  # - 1  # Offset since the circle texture is a sibling node
 	barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
+ 

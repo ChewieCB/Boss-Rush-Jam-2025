@@ -109,15 +109,15 @@ theme_override_constants/margin_bottom = 64
 layout_mode = 2
 
 [node name="Line2D4" type="Line2D" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView"]
-position = Vector2(624, 0)
+position = Vector2(624, 72)
 points = PackedVector2Array(208, 88, 152, 248)
 
 [node name="Line2D5" type="Line2D" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView"]
-position = Vector2(696, 0)
+position = Vector2(696, 72)
 points = PackedVector2Array(200, 88, 200, 248)
 
 [node name="Line2D6" type="Line2D" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView"]
-position = Vector2(792, 8)
+position = Vector2(792, 80)
 points = PackedVector2Array(192, 96, 224, 248)
 
 [node name="EquippedBarrelContainer" type="HBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView"]
@@ -128,9 +128,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -236.0
-offset_top = 96.0
+offset_top = 168.0
 offset_right = 164.0
-offset_bottom = 216.0
+offset_bottom = 288.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
@@ -163,8 +163,9 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="HSeparator" type="NinePatchRect" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion"]
+visible = false
 modulate = Color(0.902281, 0.776745, 0, 1)
-custom_minimum_size = Vector2(1672, 32)
+custom_minimum_size = Vector2(1672.03, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
