@@ -4,6 +4,6 @@
 
 [resource]
 transparency = 1
-albedo_color = Color(1, 1, 1, 0)
 albedo_texture = ExtResource("1_bf7yh")
+emission = Color(1, 0, 0, 1)
 texture_repeat = false

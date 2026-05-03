@@ -25,12 +25,13 @@ icon_id = 25
 [node name="GamblersPrecision" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_s01a7")
 crit_chance = 25.0
-jam_chance_if_missed = 20.0
+jam_chance_if_missed = 50.0
+jam_anim_delay = 1.5
 display_text_title = "Gambler's Precision"
 display_text_tag = "Are you feeling lucky?"
-positive_desc = Array[String](["25% chance to crit on hit"])
-negative_desc = Array[String](["20% chance to jam gun on miss"])
+display_text_desc = "+25% crit chance, 50% chance to jam on miss"
 icon_id = 27
+luck_triggers = Array[int]([0, 1])
 
 [node name="Hyperfocus" type="Node3D" parent="EffectContainer"]
 script = ExtResource("4_xsmdb")

@@ -180,7 +180,7 @@ enum DebugSpinMode {
 	MANUAL_SPIN,
 	SEEDED_AUTO_SPIN,
 }
-var CHEAT_spin_mode: int = DebugSpinMode.SEEDED_AUTO_SPIN
+var CHEAT_spin_mode: int = DebugSpinMode.MANUAL_SPIN
 var CHEAT_freecam: bool = false
 var CHEAT_always_inventory: bool = false
 var CHEAT_demomode: bool = false
@@ -374,6 +374,9 @@ func load_new_save_data():
 		var idx: int = barrel_database.find(data)
 		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
 		shop_barrels.append(data)
+	
+	LuckHandler.reset_luck_triggers()
+
 
 func reset_current_save_data():
 	equipped_barrels = []

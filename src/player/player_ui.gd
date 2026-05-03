@@ -16,11 +16,21 @@ func _ready() -> void:
 	GameManager.player_ui = self
 	SaveManager.started_saving.connect(func(): saving_indicator.visible = true)
 	SaveManager.finished_saving.connect(hide_saving_indicator)
+	#LuckHandler.modifier_message.connect(update_luck_modifier_text)
 	pause_ui.setting_ui.setting_changed.connect(refresh_after_setting_changed)
 	refresh_after_setting_changed()
 
 
-func hide_saving_indicator() -> void:
+#func update_luck_modifier_text(text: String, is_gain: bool) -> void:
+	#luck_modifier_text.text = text
+	#luck_modifier_text.visible = true
+	## TODO - add configurable timing and animation
+	#await get_tree().create_timer(1.0, false).timeout
+	#luck_modifier_text.text = ""
+	#luck_modifier_text.visible = false
+
+
+func hide_saving_indicator():
 	await get_tree().create_timer(0.5).timeout
 	saving_indicator.visible = false
 

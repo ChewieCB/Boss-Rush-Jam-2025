@@ -49,7 +49,7 @@ func _ready() -> void:
 	initialize_health()
 
 
-func damage(_damage: float, color: Color = Color.WHITE, text_scale_pop: float = 1.3) -> void:
+func damage(_damage: float, color: Color = Color.WHITE, text_scale_pop: float = 1.3, detail_text: String = "") -> void:
 	_damage = round(_damage * received_dmg_multiplier)
 	if enabled:
 		if not is_invincible:
@@ -57,10 +57,15 @@ func damage(_damage: float, color: Color = Color.WHITE, text_scale_pop: float = 
 		if show_damage_text and not is_invincible:
 			if not text_effect:
 				return
+			
+			var text_str: String = str(_damage)
+			if detail_text:
+				text_str = detail_text + "\n" + text_str
+			
 			if text_effect_location:
-				create_text(text_effect_location.global_position, str(_damage), color, text_scale_pop)
+				create_text(text_effect_location.global_position, text_str, color, text_scale_pop)
 			else:
-				create_text(self.global_position, str(_damage), color, text_scale_pop)
+				create_text(self.global_position, text_str, color, text_scale_pop)
 
 func heal(health: float, color: Color = Color.GREEN, text_scale_pop: float = 1.3) -> void:
 	if enabled:

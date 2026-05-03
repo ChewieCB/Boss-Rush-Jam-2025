@@ -137,6 +137,7 @@ func create_status_effect_impact(pos: Vector3, normal: Vector3):
 				impact_inst.rotate_object_local(Vector3(1, 0, 0), 90)
 
 func calculate_bullet_damage(reroll_crit = true):
+	# FIXME - this resets crit damage 
 	var rand_damage_mod = get_damage_variance_modifier(damage)
 	var calculated_damage = damage + rand_damage_mod
 	# Crit
@@ -154,8 +155,8 @@ func ricochet():
 
 ## This will be added to normal damage
 func get_damage_variance_modifier(_damage: int) -> int:
-	var min_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE] - 1
-	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE] - 1
+	var min_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MIN_DAMAGE_VARIANCE]
+	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE]
 	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
 ## Avoid using this unles last resort, very laggy
@@ -221,10 +222,10 @@ func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 
 
 func apply_damage_to_health_component(health_component: HealthComponent, damage_value: int):
-	const CRIT_TEXT_SCALE_POP = 2.0
-	const CRIT_TEXT_COLOR = Color(1, 0.4, 0)
+	const CRIT_TEXT_SCALE_POP = 2.8
+	const CRIT_TEXT_COLOR = Color(1, 0.24, 0) 
 	if is_crit:
-		health_component.damage(damage_value, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP)
+		health_component.damage(damage_value, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP, "CRIT!")
 	else:
 		health_component.damage(damage_value)
 
