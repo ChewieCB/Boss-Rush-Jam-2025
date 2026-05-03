@@ -634,7 +634,7 @@ func _on_bullet_dance_targeting_state_entered() -> void:
 	boss_map_bartender.toggle_spotlight(true)
 	state_chart.send_event("start_targeting")
 	state_chart.send_event("attack_telegraph")
-	anim_player.play("shotgun_telegraph")
+	anim_player.play("bullet_dance_telegraph")
 	await anim_player.animation_finished
 	state_chart.send_event("start_dancing")
 
@@ -650,7 +650,7 @@ func _on_bullet_dance_dancing_state_entered() -> void:
 func _on_bullet_dance_recover_state_entered() -> void:
 	anim_player.play("RESET")
 	await get_tree().create_timer(attack_recovery_time, false).timeout
-	state_chart.send_event("reposition")
+	state_chart.send_event("exit_bullet_dance") # use reposition make the skill sometime cancelled early
 
 
 func _on_bullet_dance_state_exited() -> void:
@@ -663,7 +663,7 @@ func fire_shotgun_randomly():
 	sfx_player.stream = sfx_shotgun.pick_random()
 	sfx_player.play()
 
-	var max_pitch_deg := 20.0
+	var max_pitch_deg := 10.0
 	var yaw = randf_range(0.0, TAU)
 	var pitch = deg_to_rad(randf_range(-max_pitch_deg, max_pitch_deg))
 	var aim_direction = Vector3.FORWARD
@@ -673,11 +673,12 @@ func fire_shotgun_randomly():
 	aim_direction = aim_direction.rotated(right_axis, pitch)
 	aim_direction = aim_direction.normalized()
 
+	# Randomly shot will have higher spread, damage and ricochet + 1
 	for j in range(shotgun_proj_amount):
-		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, shotgun_spread_angle)
+		var spreaded_direction = GunUtils.get_spread_direction(aim_direction, shotgun_spread_angle * 2)
 		var bullet_inst: BartenderShotgunProjectile = chosen_shotgun_proj_prefab.instantiate()
 		get_parent().add_child(bullet_inst)
-		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage, shotgun_ricochet_count, shotgun_proj_speed)
+		bullet_inst.init(shotgun_spawn_pos.global_position, spreaded_direction, proj_damage * 2, shotgun_ricochet_count + 1, shotgun_proj_speed)
 
 #endregion
 
@@ -778,10 +779,8 @@ func _on_throw_drink_targeting_state_entered() -> void:
 	if $StateChart/Root/Status/BrewBuffs/StrengthBuff.active:
 		current_bottle_type = BottleAttack.BARREL
 	else:
-		var bottle_types_no_barrel = BottleAttack.keys().duplicate()
-		bottle_types_no_barrel.remove_at(BottleAttack.BARREL)
 		if special_bottle_enabled:
-			current_bottle_type = get_random_enum_key(bottle_types_no_barrel, last_bottle_attack) as BottleAttack
+			current_bottle_type = get_random_enum_key(BottleAttack.keys(), last_bottle_attack) as BottleAttack
 		else:
 			current_bottle_type = BottleAttack.EMPTY
 	await get_tree().create_timer(0.2 * delay_modifier, false).timeout
