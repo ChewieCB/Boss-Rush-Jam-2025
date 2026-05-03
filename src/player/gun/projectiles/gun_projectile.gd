@@ -96,6 +96,7 @@ func _on_life_timer_timeout() -> void:
 
 func ricochet():
 	super ()
+	collider.set_collision_mask_value(2, true)
 	gravity_free_timer = 0
 	found_hitscal_col = false
 	is_ricochet_shot = true
@@ -107,7 +108,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
-			before_damage_applied.emit(body, self)
+			before_damage_applied.emit(body, self )
 			#calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, global_position)
@@ -132,7 +133,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		else:
 			create_spark(global_position, Vector3.UP)
 			create_bullet_decal(global_position, Vector3.UP)
-	impacted.emit(self, true, global_position)
+	impacted.emit(self , true, global_position)
 
 	if ricochet_count_left > 0 and found_hitscal_col:
 		ricochet()

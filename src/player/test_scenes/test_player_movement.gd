@@ -13,6 +13,7 @@ func _ready() -> void:
 
 	GameManager.reset_reroll_cost()
 	GameManager.is_free_reroll = true
+	GameManager.player.controls_disabled = false
 
 
 func _input(event: InputEvent) -> void:

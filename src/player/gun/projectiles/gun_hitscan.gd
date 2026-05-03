@@ -89,7 +89,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		travelled_distance += start_pos.distance_to(end_pos)
 
 		if target is BlockingDetectionArea:
-			var buffered_hit_pos: Vector3 = target._raycast_hit(self, end_pos)
+			var buffered_hit_pos: Vector3 = target._raycast_hit(self , end_pos)
 			end_pos_set.emit(buffered_hit_pos)
 			create_spark(buffered_hit_pos, hitscan_col_normal)
 
@@ -107,10 +107,10 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			visible = true
 			return
 
-		impacted.emit(self, true, hitscan_col_point)
+		impacted.emit(self , true, hitscan_col_point)
 		var calculated_damage = calculate_bullet_damage()
 		if target is CharacterBody3D:
-			before_damage_applied.emit(target, self)
+			before_damage_applied.emit(target, self )
 			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(target.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, target.global_position)
@@ -152,6 +152,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 func ricochet():
 	super ()
+	raycast.set_collision_mask_value(2, true)
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	found_hitscal_col = false
 	var new_hitscan_inst: GunHitscan = create_duplication()
@@ -195,7 +196,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		new_pos = _pos
 
 	for i in range(split_count):
-		if not is_instance_valid(self):
+		if not is_instance_valid(self ):
 			return
 		var new_inst = create_duplication()
 		get_tree().get_root().add_child(new_inst)
