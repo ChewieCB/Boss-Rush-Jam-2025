@@ -36,7 +36,7 @@ func _physics_process(delta: float) -> void:
 		if not homing_target:
 			return
 		var target_pos = homing_target.global_position
-		if homing_target.get_node("BodyCenter"):
+		if homing_target.has_node("BodyCenter"):
 			target_pos = homing_target.get_node("BodyCenter").global_position
 		var dir_to_target = global_position.direction_to(target_pos)
 		look_at(global_position + dir_to_target)

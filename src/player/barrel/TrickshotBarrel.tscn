@@ -21,6 +21,7 @@ display_text_desc = "+3 richochet count"
 positive_desc = Array[String](["Shots bounce off of surfaces"])
 negative_desc = Array[String](["Ricochet shots can hurt you too"])
 icon_id = 45
+luck_triggers = Array[int]([3])
 
 [node name="Homing" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_khhtx")

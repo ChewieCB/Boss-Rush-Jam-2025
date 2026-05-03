@@ -18,32 +18,26 @@ var projectile_count = 0
 var consecutive_hit_count: int = 0
 
 func on_prepare_to_fire():
-	super()
+	super ()
 	hit_count = 0
 	projectile_count = 0
 
 
 func on_before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet):
-	super(enemy, projectile)
+	super (enemy, projectile)
 	# Minor luck gain on crit
 	if projectile.is_crit:
 		# Mark the luck trigger as discovered if we haven't triggered it before
-		var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[
-			LuckTriggerInfo.LuckTriggerIdEnum.GAMBLERS_PRECISION__LUCKY_SHOT
-		]
-		if LuckHandler.luck_trigger_dict[enum_str] == false:
-			LuckHandler.luck_trigger_dict[enum_str] = true
-			LuckHandler.trigger_discovered.emit()
-		
+		LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.GAMBLERS_PRECISION__LUCKY_SHOT)
 		LuckHandler.increase_luck(luck_gain_on_crit, "+4 Lucky shot!")
 
 func on_projectile_destroyed(_hit_boss: bool):
-	super(_hit_boss)
+	super (_hit_boss)
 	projectile_count += 1
 	
 	# We only check for missed after all projectiles destroyed
 	if projectile_count == owner_barrel.owner_gun.modified_projectile_amount:
-		if hit_count <= 0:  # Only trigger the jam if ALL projectiles have missed
+		if hit_count <= 0: # Only trigger the jam if ALL projectiles have missed
 			consecutive_hit_count = 0
 			var roll = randi_range(1, 100)
 			if roll <= jam_chance_if_missed:
@@ -52,13 +46,7 @@ func on_projectile_destroyed(_hit_boss: bool):
 		consecutive_hit_count += 1
 		if consecutive_hit_count >= luck_trigger_consecutive_shots:
 			# Mark the luck trigger as discovered if we haven't triggered it before
-			var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[
-				LuckTriggerInfo.LuckTriggerIdEnum.GAMBLERS_PRECISION__LET_IT_RIDE
-			]
-			if LuckHandler.luck_trigger_dict[enum_str] == false:
-				LuckHandler.luck_trigger_dict[enum_str] = true
-				LuckHandler.trigger_discovered.emit()
-			
+			LuckHandler.check_discover_luck_trigger(LuckTriggerInfo.LuckTriggerIdEnum.GAMBLERS_PRECISION__LET_IT_RIDE)
 			LuckHandler.increase_luck(luck_gain_consecutive_shot, "+25 Let it ride!")
 			consecutive_hit_count = 0
 
@@ -68,5 +56,5 @@ func on_projectile_spawn(projectile: BaseBullet):
 
 
 func on_damage_applied(_damage: float, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
-	super(_damage, _has_pos, _pos)
+	super (_damage, _has_pos, _pos)
 	hit_count += 1
