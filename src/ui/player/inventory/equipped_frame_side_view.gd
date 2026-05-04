@@ -35,7 +35,7 @@ func anim_frame_icon_slide(icon: TextureRect, dir: Vector2, offset: float) -> vo
 	#tween.chain().tween_property(icon , "scale", Vector2(1, 1), 0.15)
 
 
-func set_frame_icons(active_frame: GunFrameResource, available_frames: Array, move_dir: Vector2) -> void:
+func set_frame_icons(active_frame: GunFrameResource, available_frames: Array, move_dir: Vector2 = Vector2.ZERO) -> void:
 	# Change center frame to active frame
 	frame_ui_center.texture = active_frame.shop_ui_sprite
 	current_frame_label.text = active_frame.frame_name
@@ -51,7 +51,11 @@ func set_frame_icons(active_frame: GunFrameResource, available_frames: Array, mo
 	frame_ui_right.texture = available_frames[right_idx].shop_ui_sprite
 	frame_ui_right.modulate.a = 0.0 if right_idx == active_idx else 1.0
 	
+	if move_dir == Vector2.ZERO:     
+		return
+	
 	anim_frame_icon_size(frame_ui_center)
+	
 	anim_frame_icon_slide(
 		frame_ui_left, 
 		move_dir, 

@@ -133,6 +133,10 @@ func _input(event: InputEvent) -> void:
 func open() -> void:
 	available_gun_frames = [GameManager.equipped_gun_frame] + \
 		GameManager.inventory_gun_frames
+	inventory_gun_frame_container.set_frame_icons(
+		GameManager.equipped_gun_frame, 
+		available_gun_frames,
+	)
 	super()
 
 
