@@ -345,7 +345,10 @@ func move_equip_slot(prev_idx: int, idx_diff: int) -> void:
 	
 	full_refresh_ui(get_first_item_for_focus)
 	# Re-trigger the pressed state
-	equip_barrel_container.get_child(active_equip_idx).item_ui._on_button_pressed()
+	var new_active_slot: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx)
+	new_active_slot.item_ui._on_button_pressed()
+	_reset_sibling_saturation(new_active_slot.item_ui)
+	_desaturate_siblings(new_active_slot.item_ui)
 	get_viewport().set_input_as_handled()
 
 
@@ -353,9 +356,18 @@ func change_gun_frame(idx_diff: int) -> void:
 	var current_idx: int = available_gun_frames.find(GameManager.equipped_gun_frame)
 	var new_idx: int = wrapi(current_idx + idx_diff, 0, available_gun_frames.size())
 	var new_frame = available_gun_frames[new_idx]
+	
 	var warning_text = GameManager.equip_gun_frame(new_frame.frame_id)
 	show_warning(warning_text)
 	SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
+	
+	var focus_area = get_equip_slot_focus.bind(active_focus_idx)
+	full_refresh_ui(focus_area)
+	inventory_gun_frame_container.set_frame_icons(
+		GameManager.equipped_gun_frame, 
+		available_gun_frames,
+		Vector2.LEFT if idx_diff < 0 else Vector2.RIGHT
+	)
 
 
 #### Highlight/Focus helpers
