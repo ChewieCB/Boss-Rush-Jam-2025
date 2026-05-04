@@ -61,7 +61,7 @@ var shop_barrels: Array[Resource] = []
 @export var gun_frame_database: Array[Resource]
 @export var equipped_gun_frame: Resource = starting_gun_frame
 var inventory_gun_frames: Array[Resource] = []
-@onready var shop_gun_frames: Array[Resource] = starting_shop_gun_frame
+@onready var shop_gun_frames: Array[Resource] = starting_shop_gun_frame.duplicate(true)
 
 # Re-rolls
 @export var initial_reroll_cost: int = 100
@@ -371,6 +371,8 @@ func load_new_save_data():
 	tutorial_completed = CHEAT_skip_tutorial_on_new_game
 	
 	equipped_gun_frame = starting_gun_frame
+	inventory_gun_frames = []
+	shop_gun_frames = starting_shop_gun_frame.duplicate(true)
 	
 	# Generate reload-spin threshold values for all barrels on save game creation
 	randomize()
@@ -403,6 +405,8 @@ func reset_current_save_data():
 	equipped_barrels = [null, null, null]
 	inventory_barrels = []
 	shop_barrels = []
+	inventory_gun_frames = []
+	shop_gun_frames = starting_shop_gun_frame.duplicate(true)
 	player_currency = 0
 	player_gained_first_barrel = false
 	barrel_tutorial_shown = false

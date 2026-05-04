@@ -76,6 +76,7 @@ func save_game(slot_id):
 	is_saving = false
 	finished_saving.emit()
 
+
 func load_data_only(slot_id: int) -> Dictionary:
 	var save_data: Dictionary = {}
 	if not FileAccess.file_exists(get_savefile_name(slot_id)):
@@ -140,6 +141,7 @@ func load_game(slot_id):
 	check_for_new_update_barrels()
 	
 	savefile_loaded.emit()
+
 
 func get_savefile_name(slot_id: int) -> String:
 	return "user://savegame_slot{0}.save".format([slot_id])
