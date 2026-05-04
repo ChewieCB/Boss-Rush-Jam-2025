@@ -40,33 +40,19 @@ func _input(event: InputEvent) -> void:
 				if event.is_action(ui_action):
 					get_viewport().set_input_as_handled()
 		
-		if event.is_action_pressed("inv_ui_tab_left"):
-			get_viewport().set_input_as_handled()
-			if equipped_ui.item_ui.clicked_once:
-				move_equip_slot(active_equip_idx, -1)
-			else:
-				change_gun_frame(-1)
-				var focus_area = get_equip_slot_focus.bind(active_focus_idx)
-				full_refresh_ui(focus_area)
-				inventory_gun_frame_container.set_frame_icons(
-					GameManager.equipped_gun_frame, 
-					available_gun_frames,
-					Vector2.LEFT 
-				)
+		if event.is_action("inv_ui_tab_left") or event.is_action("inv_ui_tab_right"):
+			if not event.is_pressed():
+				return
+				
+			var dir: int = round(Input.get_axis("inv_ui_tab_left", "inv_ui_tab_right"))
+			if dir == 0:
+				return
 			
-		elif event.is_action_pressed("inv_ui_tab_right"):
 			get_viewport().set_input_as_handled()
 			if equipped_ui.item_ui.clicked_once:
-				move_equip_slot(active_equip_idx, 1)
+				move_equip_slot(active_equip_idx, dir)
 			else:
-				change_gun_frame(1)
-				var focus_area = get_equip_slot_focus.bind(active_focus_idx)
-				full_refresh_ui(focus_area)
-				inventory_gun_frame_container.set_frame_icons(
-					GameManager.equipped_gun_frame, 
-					available_gun_frames,
-					Vector2.RIGHT 
-				)
+				change_gun_frame(dir)
 		
 		# TODO - these two should have dedicated functions for ease of debugging
 		if event.is_action_pressed("inv_show_barrel_detail"):
