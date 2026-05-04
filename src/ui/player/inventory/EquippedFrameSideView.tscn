@@ -15,7 +15,7 @@ shader_parameter/fade_width = 0.665
 [sub_resource type="ViewportTexture" id="ViewportTexture_ys12d"]
 viewport_path = NodePath("SubViewport")
 
-[node name="EquippedFrameSideView" type="Control" node_paths=PackedStringArray("frame_carousel", "frame_ui_center", "frame_ui_left", "frame_ui_right", "current_frame_label")]
+[node name="EquippedFrameSideView" type="Control" node_paths=PackedStringArray("frame_carousel", "frame_ui_center", "frame_ui_left", "frame_ui_right", "current_frame_label", "current_frame_panel")]
 layout_mode = 3
 anchors_preset = 10
 anchor_right = 1.0
@@ -27,6 +27,7 @@ frame_ui_center = NodePath("SubViewport/HBoxContainer/GunSideview2")
 frame_ui_left = NodePath("SubViewport/HBoxContainer/GunSideview")
 frame_ui_right = NodePath("SubViewport/HBoxContainer/GunSideview3")
 current_frame_label = NodePath("CurrentGunFrame")
+current_frame_panel = NodePath("SubViewport/CenterContainer/PanelDescription")
 
 [node name="CurrentGunFrame" type="Label" parent="."]
 z_index = 1
@@ -186,22 +187,29 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 texture = ExtResource("1_x84nb")
 
-[node name="PanelDescription" type="ColorRect" parent="SubViewport/HBoxContainer/GunSideview2"]
-z_index = -1
-custom_minimum_size = Vector2(640, 364)
-layout_mode = 1
+[node name="GunSideview3" type="TextureRect" parent="SubViewport/HBoxContainer"]
+modulate = Color(0.5, 0.5, 0.5, 1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_x84nb")
+
+[node name="CenterContainer" type="CenterContainer" parent="SubViewport"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -72.0
-offset_bottom = 72.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PanelDescription" type="ColorRect" parent="SubViewport/CenterContainer"]
+z_index = -1
+custom_minimum_size = Vector2(640, 364)
+layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
 color = Color(0, 0, 0, 1)
 
-[node name="Border" type="NinePatchRect" parent="SubViewport/HBoxContainer/GunSideview2/PanelDescription"]
+[node name="Border" type="NinePatchRect" parent="SubViewport/CenterContainer/PanelDescription"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 custom_minimum_size = Vector2(650, 220)
 layout_mode = 1
@@ -221,10 +229,3 @@ patch_margin_left = 20
 patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
-
-[node name="GunSideview3" type="TextureRect" parent="SubViewport/HBoxContainer"]
-modulate = Color(0.5, 0.5, 0.5, 1)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-texture = ExtResource("1_x84nb")

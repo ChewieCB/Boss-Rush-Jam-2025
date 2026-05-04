@@ -48,6 +48,11 @@ func _input(event: InputEvent) -> void:
 				change_gun_frame(-1)
 				var focus_area = get_equip_slot_focus.bind(active_focus_idx)
 				full_refresh_ui(focus_area)
+				inventory_gun_frame_container.set_frame_icons(
+					GameManager.equipped_gun_frame, 
+					available_gun_frames,
+					Vector2.LEFT 
+				)
 			
 		elif event.is_action_pressed("inv_ui_tab_right"):
 			get_viewport().set_input_as_handled()
@@ -57,6 +62,11 @@ func _input(event: InputEvent) -> void:
 				change_gun_frame(1)
 				var focus_area = get_equip_slot_focus.bind(active_focus_idx)
 				full_refresh_ui(focus_area)
+				inventory_gun_frame_container.set_frame_icons(
+					GameManager.equipped_gun_frame, 
+					available_gun_frames,
+					Vector2.RIGHT 
+				)
 		
 		# TODO - these two should have dedicated functions for ease of debugging
 		if event.is_action_pressed("inv_show_barrel_detail"):
@@ -172,12 +182,6 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 			item_inst.button.pressed.connect(_on_item_ui_button_pressed.bind(item_inst))
 			item_inst.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(item_inst))
 			item_inst.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(item_inst.button))
-	
-	# TODO - rewrite to work with new carousel
-	inventory_gun_frame_container.set_frame_icons(
-		GameManager.equipped_gun_frame, 
-		available_gun_frames
-	)
 	
 	set_focus_neighbour_wrapping(inventory_normal_barrel_container)
 	
