@@ -1037,6 +1037,8 @@ func remove_barrel(barrel_idx: int) -> void:
 		return
 
 	var barrel: SpinBarrel = barrel_container.get_child(barrel_idx)
+	if barrel == null:
+		return
 	barrel_container.remove_child(barrel)
 	if barrel is NullBarrel:
 		null_barrel_pool.push_back(barrel)
