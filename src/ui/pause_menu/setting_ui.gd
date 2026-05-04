@@ -61,6 +61,7 @@ signal setting_back_button_pressed
 # DEBUG
 @export var sfx_free_money: AudioStream
 @onready var god_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle
+@onready var skip_tutorial_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/SkipTutorial/SkipTutorialToggle
 @onready var demo_mode_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle
 @onready var demo_mode_time: SpinBox = $TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox
 @onready var always_inventory_toggle: CheckButton = $TabContainer/DEBUG/VBoxContainer/AlwaysInventory/AlwaysInventoryToggle
@@ -414,6 +415,7 @@ func refresh_setting_value():
 
 	# DEBUG
 	god_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_godmode)
+	skip_tutorial_toggle.set_pressed_no_signal(GameManager.CHEAT_skip_tutorial_on_new_game)
 	demo_mode_toggle.set_pressed_no_signal(GameManager.CHEAT_demomode)
 	demo_mode_time.value = GameManager.CHEAT_demomode_timeout
 	always_inventory_toggle.set_pressed_no_signal(GameManager.CHEAT_always_inventory)
@@ -527,5 +529,11 @@ func _on_always_inventory_toggle_toggled(toggled_on: bool) -> void:
 func _on_demo_timeout_value_changed(value: float) -> void:
 	GameManager.CHEAT_demomode_timeout = clamp(value, 0, 60 * 5)
 
+
 func _on_barrel_spin_mode_dropdown_item_selected(index: int) -> void:
 	GameManager.CHEAT_spin_mode = index
+
+
+func _on_skip_tutorial_toggle_toggled(toggled_on: bool) -> void:
+	SoundManager.play_button_click_sfx()
+	GameManager.CHEAT_skip_tutorial_on_new_game = toggled_on

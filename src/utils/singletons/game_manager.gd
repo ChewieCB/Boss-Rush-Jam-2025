@@ -174,6 +174,7 @@ var aim_assist_strength: float = 0.5
 # DEBUG CHEATS
 var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
+var CHEAT_skip_tutorial_on_new_game: bool = false
 enum DebugSpinMode {
 	ON_RELOAD,
 	MANUAL_SPIN,
@@ -367,7 +368,7 @@ func reset_reroll_cost() -> void:
 
 #region Save helper
 func load_new_save_data():
-	tutorial_completed = false
+	tutorial_completed = CHEAT_skip_tutorial_on_new_game
 	
 	equipped_gun_frame = starting_gun_frame
 	

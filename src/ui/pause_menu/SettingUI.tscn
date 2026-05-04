@@ -920,6 +920,25 @@ offset_right = 332.0
 offset_bottom = 30.0
 text = "Toggle"
 
+[node name="SkipTutorial" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/DEBUG/VBoxContainer/SkipTutorial"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Skip Tutorial"
+
+[node name="SkipTutorialToggle" type="CheckButton" parent="TabContainer/DEBUG/VBoxContainer/SkipTutorial"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
 [node name="DemoMode" type="Control" parent="TabContainer/DEBUG/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -1209,6 +1228,8 @@ text = "Back"
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/GodMode/GodeModeToggle" to="." method="_on_gode_mode_toggle_toggled"]
+[connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/SkipTutorial/SkipTutorialToggle" to="." method="play_button_hover_sfx"]
+[connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/SkipTutorial/SkipTutorialToggle" to="." method="_on_skip_tutorial_toggle_toggled"]
 [connection signal="mouse_entered" from="TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle" to="." method="play_button_hover_sfx"]
 [connection signal="toggled" from="TabContainer/DEBUG/VBoxContainer/DemoMode/GodeModeToggle" to="." method="_on_demo_mode_toggle_toggled"]
 [connection signal="value_changed" from="TabContainer/DEBUG/VBoxContainer/DemoModeTimeout/SpinBox" to="." method="_on_demo_timeout_value_changed"]
