@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bdotmbmcpnnup"]
+[gd_scene load_steps=10 format=3 uid="uid://bdotmbmcpnnup"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_info_region.gd" id="1_4g30l"]
 [ext_resource type="Texture2D" uid="uid://rgiumjfjwf7y" path="res://assets/sprite/placeholder/circle-ring.png" id="2_3m8fx"]
@@ -8,8 +8,9 @@
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="8_c2skj"]
 [ext_resource type="PackedScene" uid="uid://bjfuty8vqwssh" path="res://src/ui/player/luck/LuckTriggerInfoUI.tscn" id="8_ffmvd"]
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="9_d8lkm"]
+[ext_resource type="PackedScene" uid="uid://dhwkpguamgubg" path="res://src/ui/player/inventory/EffectInfoLine.tscn" id="9_xao3k"]
 
-[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "select_icon_line", "circle_ring", "circle_ring_centerpoint", "barrel_overview_detail", "single_effect_detail")]
+[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "select_icon_line", "circle_ring", "circle_ring_centerpoint", "barrel_overview_detail", "single_effect_detail")]
 custom_minimum_size = Vector2(838, 364)
 pivot_offset = Vector2(245.01, 190.39)
 size_flags_horizontal = 2
@@ -17,14 +18,18 @@ size_flags_vertical = 4
 theme_override_constants/margin_left = 64
 script = ExtResource("1_4g30l")
 barrel_info_icon_prefab = ExtResource("3_6lcb6")
-barrel_name_label = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelName/RichTextLabel")
-barrel_flavour_label = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelFlavourText/RichTextLabel")
-barrel_desc_label = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelDetailHeader/BarrelDescription/RichTextLabel")
-barrel_panel_barrel_icon = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelIcon")
+barrel_name_label = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelName/RichTextLabel")
+barrel_flavour_label = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelFlavourText/RichTextLabel")
+barrel_desc_label = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/BarrelDescription/RichTextLabel")
+barrel_panel_barrel_icon = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelIcon")
 effect_name_label = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/HeaderText/EffectName/RichTextLabel")
 effect_flavour_label = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/HeaderText/EffectFlavourText/RichTextLabel")
 effect_desc_label = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDescription/RichTextLabel")
 effect_panel_barrel_icon = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/EffectIcon")
+barrel_effect_list_label_1 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine")
+barrel_effect_list_label_2 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine2")
+barrel_effect_list_label_3 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine3")
+barrel_effect_list_label_4 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine4")
 select_icon_line = NodePath("SelectIconLine")
 circle_ring = NodePath("HBoxContainer/CircleRing")
 circle_ring_centerpoint = NodePath("HBoxContainer/CircleRing/CircleCenter")
@@ -42,6 +47,7 @@ layout_mode = 2
 theme_override_constants/separation = 48
 
 [node name="CircleRing" type="TextureRect" parent="HBoxContainer"]
+visible = false
 self_modulate = Color(1, 1, 1, 0.47)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -84,6 +90,7 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [node name="SingleEffectDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -187,7 +194,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="BarrelOverviewDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -200,21 +206,25 @@ grow_horizontal = 2
 grow_vertical = 2
 follow_focus = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="BarrelDetailHeader" type="VBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BarrelDetailHeader" type="VBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HeaderText" type="VBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelDetailHeader"]
+[node name="HeaderText" type="VBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BarrelName" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelDetailHeader/HeaderText"]
+[node name="BarrelName" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -223,7 +233,7 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelName"]
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelName"]
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("8_c2skj")
 theme_override_fonts/bold_font = ExtResource("9_d8lkm")
@@ -233,7 +243,7 @@ bbcode_enabled = true
 text = "[b]Effect Name[/b]"
 fit_content = true
 
-[node name="BarrelFlavourText" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelDetailHeader/HeaderText"]
+[node name="BarrelFlavourText" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -242,7 +252,7 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelFlavourText"]
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelFlavourText"]
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("8_c2skj")
 theme_override_fonts/bold_font = ExtResource("9_d8lkm")
@@ -252,7 +262,7 @@ bbcode_enabled = true
 text = "[indent][i][color=gray]Effect flavour text. Quisque a odio elementum, dignissim neque sed, bibendum elit. [/color][/i][/indent]"
 fit_content = true
 
-[node name="BarrelDescription" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelDetailHeader"]
+[node name="BarrelDescription" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -261,7 +271,7 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 4
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer/BarrelDetailHeader/BarrelDescription"]
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/BarrelDescription"]
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("8_c2skj")
 theme_override_fonts/bold_font = ExtResource("9_d8lkm")
@@ -271,11 +281,41 @@ bbcode_enabled = true
 text = "Effect description text. Etiam quam sem, iaculis et libero eget, aliquam pretium lacus. Mauris maximus pharetra arcu. "
 fit_content = true
 
-[node name="BarrelIcon" type="TextureRect" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/HBoxContainer"]
-custom_minimum_size = Vector2(256, 256)
+[node name="BarrelIcon" type="TextureRect" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 texture = ExtResource("7_ggvao")
 expand_mode = 3
 stretch_mode = 5
+
+[node name="EffectList" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = -8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="GridContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList"]
+layout_mode = 2
+theme_override_constants/h_separation = -148
+columns = 2
+
+[node name="DescriptionEffectLine" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer" instance=ExtResource("9_xao3k")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="DescriptionEffectLine2" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer" instance=ExtResource("9_xao3k")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="DescriptionEffectLine3" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer" instance=ExtResource("9_xao3k")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="DescriptionEffectLine4" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer" instance=ExtResource("9_xao3k")]
+layout_mode = 2
+size_flags_horizontal = 2

@@ -23,6 +23,10 @@ func _ready() -> void:
 		#active_effect_detail_idx
 	available_gun_frames = [GameManager.equipped_gun_frame] + \
 		GameManager.inventory_gun_frames
+	
+	var focused_ui: Control = get_first_item_for_focus().get_child(0)
+	if focused_ui:
+		hide_effect_detail_view(focused_ui)
 
 
 func _input(event: InputEvent) -> void:
@@ -472,6 +476,9 @@ func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
 	if ui.data:
 		barrel_info_region.set_barrel_overview_data(ui.data)
 		barrel_info_region.populate_detail_circle_ui(ui.data)
+		barrel_info_region.show_barrel_overview()
+	else:
+		barrel_info_region.show_barrel_overview(false)
 
 
 func _on_item_ui_button_focus_lost(button: Button) -> void:

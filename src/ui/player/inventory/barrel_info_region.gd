@@ -4,7 +4,6 @@ class_name BarrelInfoRegion
 @export var barrel_info_icon_prefab: PackedScene
 @export var rotation_speed: float = 0.2  # Radians per second
 
-
 @export var barrel_name_label: RichTextLabel
 @export var barrel_flavour_label: RichTextLabel
 @export var barrel_desc_label: RichTextLabel
@@ -15,6 +14,11 @@ class_name BarrelInfoRegion
 @export var effect_desc_label: RichTextLabel
 @export var effect_panel_barrel_icon: TextureRect
 
+@export var barrel_effect_list_label_1: EffectInfoListUI
+@export var barrel_effect_list_label_2: EffectInfoListUI
+@export var barrel_effect_list_label_3: EffectInfoListUI
+@export var barrel_effect_list_label_4: EffectInfoListUI
+@onready var barrel_effect_list_labels = [barrel_effect_list_label_1, barrel_effect_list_label_2, barrel_effect_list_label_3, barrel_effect_list_label_4]
 
 @export var select_icon_line: Line2D
 
@@ -75,7 +79,18 @@ func set_barrel_overview_data(data: BarrelDataResource) -> void:
 	barrel_name_label.text = "[b]%s[/b]" % [data.barrel_name]
 	barrel_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.barrel_info_summary]
 	barrel_desc_label.text = data.barrel_desc
-	#show_barrel_overview()
+	
+	for i in range(barrel_info_icon_effect_pool.size()):
+		var effect_info: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
+		var detail_label: EffectInfoListUI = barrel_effect_list_labels[i]
+		
+		if not effect_info.visible:
+			detail_label.visible = false
+			continue
+		
+		detail_label.visible = true
+		detail_label.icon.texture = effect_info.texture_rect.texture
+		detail_label.label.text = "[b]%s[/b]" % [effect_info.barrel_roll_data.title]
 
 
 func show_effect_detail(show_content: bool = true) -> void:

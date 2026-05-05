@@ -1,0 +1,74 @@
+[gd_scene load_steps=6 format=3 uid="uid://dhwkpguamgubg"]
+
+[ext_resource type="Script" path="res://src/ui/player/inventory/effect_info_line.gd" id="1_2l8tf"]
+[ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="1_7ndok"]
+[ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="2_j8crc"]
+[ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="3_rgjlf"]
+[ext_resource type="Texture2D" uid="uid://cqr406ahpjdl8" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-015.png" id="3_sr4vg"]
+
+[node name="DescriptionEffectLine" type="HBoxContainer" node_paths=PackedStringArray("icon", "label")]
+offset_right = 172.0
+offset_bottom = 32.0
+script = ExtResource("1_2l8tf")
+icon = NodePath("BarrelInfoIcon/EffectIcon")
+label = NodePath("MarginContainer/EffectNameLabel")
+
+[node name="BarrelInfoIcon" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+color = Color(0, 0, 0, 1)
+
+[node name="BorderNormal" type="NinePatchRect" parent="BarrelInfoIcon"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_sr4vg")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="EffectIcon" type="TextureRect" parent="BarrelInfoIcon"]
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+texture = ExtResource("1_7ndok")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 16
+
+[node name="EffectNameLabel" type="RichTextLabel" parent="MarginContainer"]
+custom_minimum_size = Vector2(240, 32)
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_fonts/normal_font = ExtResource("2_j8crc")
+theme_override_fonts/bold_font = ExtResource("3_rgjlf")
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "Go Big or Go Home"
+fit_content = true
