@@ -54,57 +54,15 @@ func _input(event: InputEvent) -> void:
 			else:
 				change_gun_frame(dir)
 		
-		# TODO - these two should have dedicated functions for ease of debugging
-		if event.is_action_pressed("inv_show_barrel_detail"):
-			var data: BarrelDataResource
-			var _ui: ItemUI
-			if focused_ui is ItemUI:
-				data = focused_ui.data
-				_ui = focused_ui
-			elif focused_ui is BarrelEquipSlotUI:
-				data = focused_ui.item_ui.data
-				_ui = focused_ui.item_ui
-			elif focused_ui is GunFrameItemUI:
+		if event.is_action("inv_show_barrel_detail"):
+			if not event.is_pressed():
 				return
 			
-			if _ui.is_empty:
-				return
-			
-			barrel_info_region.show_effect_detail()
-			
-			if focused_ui.get_parent() is BarrelEquipSlotUI:
-				active_focus_idx = focused_ui.get_parent().get_index()
+			get_viewport().set_input_as_handled()
+			if barrel_info_region.barrel_overview_detail.visible:
+				show_effect_detail_view(focused_ui)
 			else:
-				active_focus_idx = focused_ui.get_index()
-			
-			if data:
-				barrel_info_region.populate_detail_circle_ui(data)
-				barrel_info_region.set_effect_detail_data(0)
-				persist_item_ui_highlight(_ui)
-				# FIXME - clean this up
-				if focused_ui is BarrelEquipSlotUI:
-					_desaturate_siblings(focused_ui.item_ui)
-				else:
-					_desaturate_siblings(focused_ui)
-				toggle_ui_focus_neighbors(_ui.button, false)
-				var detail_focus: Control = get_barrel_detail_focus(active_effect_detail_idx)
-				detail_focus.grab_focus.call_deferred()
-				
-		elif event.is_action_released("inv_show_barrel_detail"):
-			var _ui: ItemUI = focused_ui.item_ui if focused_ui is BarrelEquipSlotUI else focused_ui
-			if _ui.is_empty:
-				return
-			
-			barrel_info_region.show_barrel_overview()
-			active_effect_detail_idx = -1
-			clear_item_ui_highlight(_ui)
-			_reset_sibling_saturation(focused_ui)
-			toggle_ui_focus_neighbors(_ui.button, true)
-			match current_focus_area:
-				equip_barrel_container:
-					get_equip_slot_focus(active_focus_idx).grab_focus.call_deferred()
-				inventory_normal_barrel_container:
-					get_inventory_focus(active_focus_idx).grab_focus.call_deferred()
+				hide_effect_detail_view(focused_ui)
 		
 		# TODO - rework to cycle frames left/right
 		elif event.is_action_pressed("inv_ui_change_gun_frame"):
@@ -215,6 +173,61 @@ func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 	get_viewport().set_input_as_handled()
 	full_refresh_ui(cancel_focus)
 
+
+func show_effect_detail_view(focused_ui: Control) -> void:
+	var data: BarrelDataResource
+	var _ui: ItemUI
+	if focused_ui is ItemUI:
+		data = focused_ui.data
+		_ui = focused_ui
+	elif focused_ui is BarrelEquipSlotUI:
+		data = focused_ui.item_ui.data
+		_ui = focused_ui.item_ui
+	elif focused_ui is GunFrameItemUI:
+		return
+	
+	if _ui.is_empty:
+		return
+	
+	barrel_info_region.show_effect_detail()
+	
+	if focused_ui.get_parent() is BarrelEquipSlotUI:
+		active_focus_idx = focused_ui.get_parent().get_index()
+	else:
+		active_focus_idx = focused_ui.get_index()
+	
+	if data:
+		barrel_info_region.populate_detail_circle_ui(data)
+		barrel_info_region.set_effect_detail_data(0)
+		persist_item_ui_highlight(_ui)
+		# FIXME - clean this up
+		if focused_ui is BarrelEquipSlotUI:
+			_desaturate_siblings(focused_ui.item_ui)
+		else:
+			_desaturate_siblings(focused_ui)
+		toggle_ui_focus_neighbors(_ui.button, false)
+		var detail_focus: Control = get_barrel_detail_focus(active_effect_detail_idx)
+		detail_focus.grab_focus.call_deferred()
+
+
+func hide_effect_detail_view(focused_ui: Control) -> void:
+	var _ui: ItemUI = focused_ui.item_ui if focused_ui is BarrelEquipSlotUI else focused_ui
+	if _ui.is_empty:
+		return
+	
+	barrel_info_region.show_barrel_overview()
+	active_effect_detail_idx = -1
+	clear_item_ui_highlight(_ui)
+	_reset_sibling_saturation(focused_ui)
+	toggle_ui_focus_neighbors(_ui.button, true)
+	var focus_control: Control
+	match current_focus_area:
+		equip_barrel_container:
+			focus_control = get_equip_slot_focus(active_focus_idx)
+		inventory_normal_barrel_container:
+			focus_control = get_inventory_focus(active_focus_idx)
+	focus_control.grab_focus.call_deferred()
+
 ### FOCUS METHODS
 
 func get_first_item_for_focus(slot_idx: int = -1) -> Control:
@@ -285,7 +298,7 @@ func get_barrel_detail_focus(idx: int = -1) -> Control:
 	
 	if effect_detail_items:
 		if idx != -1:
-			return effect_detail_items[idx + 1]
+			return effect_detail_items[idx]
 		else:
 			return effect_detail_items[1]
 	else:
@@ -459,11 +472,6 @@ func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
 	if ui.data:
 		barrel_info_region.set_barrel_overview_data(ui.data)
 		barrel_info_region.populate_detail_circle_ui(ui.data)
-		if Input.is_action_pressed("inv_show_barrel_detail"):
-			barrel_info_region.show_effect_detail()
-			barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
-		else:
-			barrel_info_region.show_barrel_overview()
 
 
 func _on_item_ui_button_focus_lost(button: Button) -> void:
