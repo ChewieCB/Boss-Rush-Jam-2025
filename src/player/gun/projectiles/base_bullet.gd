@@ -159,7 +159,7 @@ func get_damage_variance_modifier(_damage: int) -> int:
 	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE]
 	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
-## Avoid using this unles last resort, very laggy
+## Avoid using this unless last resort, very laggy
 func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	var new_inst: BaseBullet = self.duplicate()
 	new_inst.owner_gun = owner_gun
@@ -179,6 +179,8 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	if splitted:
 		return
+	if not is_instance_valid(self ):
+		return
 
 	var center_dir = - current_dir
 	var new_pos = global_position
@@ -188,8 +190,6 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		new_pos = _pos
 
 	for i in range(split_count):
-		if not is_instance_valid(self):
-			return
 		var new_inst = create_duplication()
 		get_tree().get_root().add_child(new_inst)
 		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
@@ -223,7 +223,7 @@ func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 
 func apply_damage_to_health_component(health_component: HealthComponent, damage_value: int):
 	const CRIT_TEXT_SCALE_POP = 2.8
-	const CRIT_TEXT_COLOR = Color(1, 0.24, 0) 
+	const CRIT_TEXT_COLOR = Color(1, 0.24, 0)
 	if is_crit:
 		health_component.damage(damage_value, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP, "CRIT!")
 	else:
