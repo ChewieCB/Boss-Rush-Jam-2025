@@ -248,7 +248,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
+theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
@@ -256,6 +256,7 @@ theme_override_constants/margin_bottom = 4
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("8_c2skj")
 theme_override_fonts/bold_font = ExtResource("9_d8lkm")
+theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 26
 bbcode_enabled = true
@@ -267,7 +268,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 32
+theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 4
 
@@ -295,7 +296,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = -8
+theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 4
 

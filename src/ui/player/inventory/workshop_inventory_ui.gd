@@ -474,8 +474,8 @@ func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
 	active_focus_idx = _parent.get_index() if _parent is BarrelEquipSlotUI else ui.get_index()
 	
 	if ui.data:
-		barrel_info_region.set_barrel_overview_data(ui.data)
 		barrel_info_region.populate_detail_circle_ui(ui.data)
+		barrel_info_region.set_barrel_overview_data(ui.data)
 		barrel_info_region.show_barrel_overview()
 	else:
 		barrel_info_region.show_barrel_overview(false)
@@ -503,6 +503,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		show_warning(warning_text)
 		
 		item_ui.empty_slot()
+		barrel_info_region.show_barrel_overview(false)
 		
 		# After removing barrel, keep equip idx the same so we can immediately
 		# install an inventory barrel if we want.

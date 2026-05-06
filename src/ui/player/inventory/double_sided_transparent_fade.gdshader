@@ -2,9 +2,9 @@ shader_type canvas_item;
 
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 
-uniform float divide = 0.065;      
-uniform float blur = 0.385;        
-uniform float fade_width = 0.995;  
+uniform float divide = 0.065;
+uniform float blur = 0.385;
+uniform float fade_width = 0.995;
 
 void fragment() {
     float left_fade_edge = fade_width;
@@ -23,7 +23,7 @@ void fragment() {
         float px = (1.0 - UV.x) / fade_width; // mirrored
         rightFade = smoothstep(divide, divide + blur, px);
     }
-	
+
 	COLOR = texture(TEXTURE, UV);
     COLOR.a *= min(leftFade, rightFade);
 }
