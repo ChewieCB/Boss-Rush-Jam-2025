@@ -160,7 +160,8 @@ text = "Can only equip 1 archetype barrel"
 
 [node name="LowerRegion" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 10
+theme_override_constants/margin_bottom = 96
 
 [node name="HSeparator" type="NinePatchRect" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion"]
 visible = false
@@ -176,6 +177,7 @@ region_rect = Rect2(0, 0, 92.6855, 22)
 custom_minimum_size = Vector2(1824, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 theme_override_constants/separation = 192
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer"]
