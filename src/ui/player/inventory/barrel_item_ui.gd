@@ -34,9 +34,8 @@ var warning_text = ""
 func _ready() -> void:
 	if data:
 		button.text = data.barrel_name
-	button.mouse_entered.connect(play_button_hover_sfx)
-	button.mouse_entered.connect(expand_button_size)
-	button.mouse_exited.connect(return_button_size)
+	button.mouse_entered.connect(_on_button_mouse_hover_entered)
+	button.mouse_exited.connect(_on_button_mouse_hover_exited)
 
 
 func init(_parent_ui: Control) -> void:
@@ -100,7 +99,18 @@ func return_button_size():
 	tween.tween_property(self , "scale", Vector2(1, 1), 0.1)
 
 
-func _on_button_focus_entered() -> void:
+func _on_button_mouse_hover_entered() -> void:
+	button.focus_entered.emit()
+	_on_button_focus_entered(false)
+
+
+func _on_button_mouse_hover_exited() -> void:
+	if not is_active_equip:
+		button.focus_exited.emit()
+		_on_button_focus_exited()
+
+
+func _on_button_focus_entered(grab_focus: bool = true) -> void:
 	play_button_hover_sfx()
 	expand_button_size()
 	# We do this for shop item UI so it can show the price at the bottom
@@ -109,7 +119,8 @@ func _on_button_focus_entered() -> void:
 			if parent_inventory_ui.visible:
 				parent_inventory_ui.scroll_container.ensure_control_visible(get_parent())
 			else:
-				grab_focus()  # This wont show the chip cost, but at least it wont crash
+				if grab_focus:
+					grab_focus()  # This wont show the chip cost, but at least it wont crash
 		else:
 			if parent_inventory_ui.visible:
 				parent_inventory_ui.scroll_container.ensure_control_visible(self)
