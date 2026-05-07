@@ -24,6 +24,7 @@ func _ready() -> void:
 	available_gun_frames = [GameManager.equipped_gun_frame] + \
 		GameManager.inventory_gun_frames
 	
+	barrel_info_region.show_barrel_overview()
 	var focused_ui: Control = get_first_item_for_focus().get_child(0)
 	if focused_ui:
 		hide_effect_detail_view(focused_ui)
@@ -63,10 +64,10 @@ func _input(event: InputEvent) -> void:
 				return
 			
 			get_viewport().set_input_as_handled()
-			if barrel_info_region.barrel_overview_detail.visible:
-				show_effect_detail_view(focused_ui)
-			else:
+			if barrel_info_region.single_effect_detail.visible:
 				hide_effect_detail_view(focused_ui)
+			elif barrel_info_region.barrel_overview_detail.visible:
+				show_effect_detail_view(focused_ui)
 		
 		# TODO - rework to cycle frames left/right
 		elif event.is_action_pressed("inv_ui_change_gun_frame"):
@@ -248,7 +249,6 @@ func get_equip_slot_focus(slot_idx: int = -1) -> Control:
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_ALL
 	for item in inventory_normal_barrel_container.get_children():
 		item.button.focus_mode = FocusMode.FOCUS_NONE
-	
 	if slot_idx == -1:
 		# Focus on leftmost equipped barrel, 
 		# or the rightmost empty slot if no barrels are equipped.
@@ -292,7 +292,6 @@ func get_inventory_focus(idx: int = -1) -> Control:
 func get_barrel_detail_focus(idx: int = -1) -> Control:
 	#current_focus_area = barrel_info_region.circle_ring
 	var effect_detail_items = barrel_info_region.circle_ring.get_children()
-	effect_detail_items.pop_front()  # Remove the circle itself
 	
 	# Update focus area modes
 	for slot in equip_barrel_container.get_children():
@@ -410,6 +409,8 @@ func _desaturate_siblings(ui: Control) -> void:
 	if parent is BarrelEquipSlotUI:
 		parent = parent.get_parent()
 	
+	ui.modulate = Color("#ffffff")
+	
 	for item in parent.get_children():
 		if item is BarrelEquipSlotUI:
 			if item.item_ui == ui:
@@ -475,13 +476,36 @@ func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
 	
 	if ui.data:
 		barrel_info_region.populate_detail_circle_ui(ui.data)
+		barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
 		barrel_info_region.set_barrel_overview_data(ui.data)
-		barrel_info_region.show_barrel_overview()
+		
+		if barrel_info_region.single_effect_detail.visible:
+			barrel_info_region.show_effect_detail()
+		else:
+			barrel_info_region.show_barrel_overview()
 	else:
+		if current_selected_item_ui:
+			return
 		barrel_info_region.show_barrel_overview(false)
 
 
 func _on_item_ui_button_focus_lost(button: Button) -> void:
+	var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
+	var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx) \
+		if active_equip_idx < equip_barrel_container.get_child_count() else null
+	# When the mouse leaves an ItemUI:
+	#  - if nothing is currently selected in the equip or inventory areas, 
+	#      show an empty barrel overview.
+	if current_selected_item_ui == null or current_selected_item_ui.is_empty:
+		barrel_info_region.show_barrel_overview(false)
+	#  - if an ItemUI is selected and not empty, change the data to the 
+	#       ItemUI barrel and keep showing either the overview or the effect detail
+	#       - whichever is already open.
+	elif not current_selected_item_ui.is_empty:
+		barrel_info_region.populate_detail_circle_ui(current_selected_item_ui.data)
+		barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
+		barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data)
+	
 	toggle_ui_focus_neighbors(button, true)
 
 
@@ -523,12 +547,17 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	
 	# Inventory slot UI
 	else:
+		# Check we're not overwriting an existing barrel
+		var equip_ui: ItemUI = equip_barrel_container.get_child(active_equip_idx).item_ui
+		if not equip_ui.is_empty:
+			GameManager.remove_barrel(equip_ui.data.barrel_id)
+		
 		var warning_text = GameManager.equip_barrel(data.barrel_id, active_equip_idx)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 		show_warning(warning_text)
 		
 		# After installing a barrel, remove equip idx so we can move between equip slots
-		var equip_ui: ItemUI = equip_barrel_container.get_child(active_equip_idx).item_ui
+		equip_ui = equip_barrel_container.get_child(active_equip_idx).item_ui
 		clear_item_ui_highlight(equip_ui)
 		_reset_sibling_saturation(equip_ui)
 		active_equip_idx = -1
@@ -537,6 +566,6 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 
 
 func _on_effect_detail_focus_gained(ui: BarrelInfoIcon) -> void:
-	active_effect_detail_idx = ui.get_index()  # - 1  # Offset since the circle texture is a sibling node
+	active_effect_detail_idx = ui.get_index()
 	barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
  
