@@ -8,8 +8,7 @@
 script = ExtResource("3_d7woh")
 barrel_id = 78
 barrel_name = "Pure Gamble"
-barrel_desc = "[b]Pure Gamble Barrel[/b]
-When you really believe in luck over skill."
+barrel_desc = "When you really believe in luck over skill."
 barrel_info_summary = "When you really believe in luck over skill."
 barrel_image = ExtResource("1_sic7u")
 barrel_cost = 1500
