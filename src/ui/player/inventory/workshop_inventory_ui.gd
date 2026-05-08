@@ -150,7 +150,6 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 	# Back out of inventory or detail focus instead of closing
 	var cancel_focus: Callable = get_first_item_for_focus.bind(active_focus_idx)
-	_reset_sibling_saturation(focused_ui)
 	# Inventory item cancel
 	if focused_ui is ItemUI:
 		# Clicked Inventory UI -> Same Inventory UI
@@ -162,6 +161,7 @@ func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 			active_focus_idx = active_equip_idx
 			clear_item_ui_highlight(equipped_ui.item_ui)
 			_reset_sibling_saturation(equipped_ui.item_ui)
+			current_selected_item_ui = null
 	
 	elif focused_ui is BarrelEquipSlotUI:
 		# Clicked Equip Slot -> Same Equip Slot
@@ -175,6 +175,7 @@ func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 		else:
 			close()
 	
+	_reset_sibling_saturation(focused_ui)
 	get_viewport().set_input_as_handled()
 	full_refresh_ui(cancel_focus)
 
@@ -198,18 +199,19 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 	
 	if focused_ui.get_parent() is BarrelEquipSlotUI:
 		active_focus_idx = focused_ui.get_parent().get_index()
+		active_equip_idx = active_focus_idx
 	else:
 		active_focus_idx = focused_ui.get_index()
+	if focused_ui is BarrelEquipSlotUI:
+		active_equip_idx = focused_ui.get_index()
+	
+	current_selected_item_ui = focused_ui if focused_ui is ItemUI else focused_ui.item_ui
 	
 	if data:
 		barrel_info_region.populate_detail_circle_ui(data)
 		barrel_info_region.set_effect_detail_data(0)
 		persist_item_ui_highlight(_ui)
-		# FIXME - clean this up
-		if focused_ui is BarrelEquipSlotUI:
-			_desaturate_siblings(focused_ui.item_ui)
-		else:
-			_desaturate_siblings(focused_ui)
+		_desaturate_siblings(_ui)
 		toggle_ui_focus_neighbors(_ui.button, false)
 		var detail_focus: Control = get_barrel_detail_focus(active_effect_detail_idx)
 		detail_focus.grab_focus.call_deferred()
@@ -224,6 +226,15 @@ func hide_effect_detail_view(focused_ui: Control) -> void:
 	active_effect_detail_idx = -1
 	clear_item_ui_highlight(_ui)
 	_reset_sibling_saturation(focused_ui)
+	# Clear the inventory highlighting if we have an inventory slot selected
+	# but this method is called on an equip slot
+	# TODO - add a conditional to trigger this
+	for item in inventory_normal_barrel_container.get_children():
+		if item == focused_ui:
+			continue
+		item.modulate = Color("#ffffff")
+		clear_item_ui_highlight(item)
+	current_selected_item_ui = null
 	toggle_ui_focus_neighbors(_ui.button, true)
 	var focus_control: Control
 	match current_focus_area:
@@ -416,10 +427,12 @@ func _desaturate_siblings(ui: Control) -> void:
 			if item.item_ui == ui:
 				continue
 			item.item_ui.modulate = Color("#4d4d4d")
-		else:
+			clear_item_ui_highlight(item.item_ui)
+		elif item is ItemUI:
 			if item == ui:
 				continue
 			item.modulate = Color("#4d4d4d")
+			clear_item_ui_highlight(item)
 
 
 func _reset_sibling_saturation(ui: Control) -> void:
@@ -430,8 +443,10 @@ func _reset_sibling_saturation(ui: Control) -> void:
 	for item in parent.get_children():
 		if item is BarrelEquipSlotUI:
 			item.item_ui.modulate = Color("#ffffff")
-		else:
+			clear_item_ui_highlight(item.item_ui)
+		elif item is ItemUI:
 			item.modulate = Color("#ffffff")
+			clear_item_ui_highlight(item)
 
 
 func toggle_ui_focus_neighbors(ui: Control, is_enabled: bool = true) -> void:
@@ -461,10 +476,11 @@ func _on_item_ui_select(ui: ItemUI, data: BarrelDataResource) -> void:
 
 
 func _on_item_ui_button_pressed(ui: Control) -> void:
+	var parent: Control = ui.get_parent()
 	if ui.clicked_once:
-		active_focus_idx = ui.get_index()
+		active_focus_idx = parent.get_index() if parent is BarrelEquipSlotUI else ui.get_index()
 	if ui.is_equipped or ui.is_empty:
-		active_equip_idx = ui.get_parent().get_index()
+		active_equip_idx = parent.get_index()
 	# Remove focus neighbors
 	toggle_ui_focus_neighbors(ui, false)
 
