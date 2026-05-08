@@ -27,7 +27,7 @@ func play_3d(resource: AudioStream, position: Vector3, override_bus: String = ""
 	player.volume_db = linear_to_db(1.0)
 	player.pitch_scale = 1
 	player.global_position = position
-	
+
 	player.call_deferred("play")
 	return player
 
