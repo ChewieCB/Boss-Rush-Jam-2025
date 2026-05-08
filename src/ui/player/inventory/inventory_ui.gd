@@ -25,6 +25,9 @@ var current_selected_item_ui: Control = null
 @export var barrel_info_region: BarrelInfoRegion = null
 var ui_transitioning: bool = false
 
+var active_focus_idx: int = -1
+var active_effect_detail_idx: int = -1
+
 
 func _ready() -> void:
 	GameManager.currency_changed.connect(full_refresh_ui.unbind(1))
@@ -113,6 +116,8 @@ func handle_controller_scrolling() -> void:
 	)
 
 
+## FOCUS HELPERS
+
 func set_focus_neighbour_wrapping(ui_container: Control) -> void:
 	var inv_container_count: int = ui_container.get_child_count()
 	var _wrap_focus = func(x: int): return wrapi(x, 0, inv_container_count)
@@ -170,21 +175,148 @@ func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool
 					set_region_focus_neighbor(b, a, Side.SIDE_TOP, true)
 
 
+func toggle_ui_focus_neighbors(ui: Control, is_enabled: bool = true) -> void:
+	for neighbor in [ui.focus_neighbor_left, ui.focus_neighbor_right, ui.focus_neighbor_top, ui.focus_neighbor_bottom]:
+		if neighbor:
+			var node = get_node(neighbor)
+			if node:
+				node.focus_mode = FocusMode.FOCUS_ALL if is_enabled else FocusMode.FOCUS_NONE
+
+
+## VISUAL MODIFIERS
+
 func clear_item_ui_highlight(ui: ItemUI) -> void:
 	ui.is_active_equip = false
 	ui.clicked_once = false
 	ui.deselect()
 	ui.return_button_size()
 	ui.button.remove_theme_stylebox_override("normal")
+	toggle_ui_focus_neighbors(ui.button, true)
 
 
-#### 
+func persist_item_ui_highlight(ui: Control) -> void:
+	ui.is_active_equip = true
+	ui.border_selected.visible = true
+	ui.button.add_theme_stylebox_override(
+		"normal",
+		ui.button.get_theme_stylebox("focus", "Button")
+	)
+
+
+func _desaturate_siblings(ui: Control) -> void:
+	var parent = ui.get_parent()
+	if not parent:
+		return
+	if parent is BarrelEquipSlotUI:
+		parent = parent.get_parent()
+	
+	ui.modulate = Color("#ffffff")
+	
+	for item in parent.get_children():
+		if item is BarrelEquipSlotUI:
+			if item.item_ui == ui:
+				continue
+			item.item_ui.modulate = Color("#4d4d4d")
+			clear_item_ui_highlight(item.item_ui)
+		elif item is ItemUI:
+			if item == ui:
+				continue
+			item.modulate = Color("#4d4d4d")
+			clear_item_ui_highlight(item)
+
+
+func _reset_sibling_saturation(ui: Control) -> void:
+	var parent = ui.get_parent()
+	if parent is BarrelEquipSlotUI:
+		parent = parent.get_parent()
+	
+	for item in parent.get_children():
+		if item is BarrelEquipSlotUI:
+			item.item_ui.modulate = Color("#ffffff")
+			clear_item_ui_highlight(item.item_ui)
+		elif item is ItemUI:
+			item.modulate = Color("#ffffff")
+			clear_item_ui_highlight(item)
+
+
+#### ITEM UI Callbacks
+
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
+	SoundManager.play_ui_sound(sfx_click, "UI")
+	
+	if current_selected_item_ui != null:
+		current_selected_item_ui.deselect()
+	current_selected_item_ui = item_ui
+	
+	active_focus_idx = item_ui.get_index()
+	
+	_desaturate_siblings(item_ui)
+	
+	if item_ui.is_locked:
+		barrel_info_region.show_barrel_locked()
+		return
+
+
+func _on_item_ui_button_pressed(ui: Control) -> void:
 	push_error("method not overriden")
+
+
+func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
+	# Farm these out so we can override the sub-methods in child classes
+	current_focus_area = _get_current_focus_area_on_button_focus(ui)
+	active_focus_idx = _get_active_focus_idx_on_button_focus(ui)
+	update_barrel_info(ui.data)
+
+func _get_active_focus_idx_on_button_focus(ui: ItemUI) -> int:
+	return ui.get_parent().get_index()
+
+func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
+	return ui.get_parent()
+
+func update_barrel_info(data: BarrelDataResource = null) -> void:
+	if data:
+		barrel_info_region.populate_detail_circle_ui(data)
+		barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
+		barrel_info_region.set_barrel_overview_data(data)
+		
+		if barrel_info_region.single_effect_detail.visible:
+			barrel_info_region.show_effect_detail()
+		else:
+			barrel_info_region.show_barrel_overview()
+	else:
+		if current_selected_item_ui:
+			return
+		barrel_info_region.show_barrel_overview(false)
+
+
+func _on_item_ui_button_focus_lost(button: Button) -> void:
+	var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
+	# When the mouse leaves an ItemUI:
+	#  - if nothing is currently selected in the equip or inventory areas, 
+	#      show an empty barrel overview.
+	if current_selected_item_ui == null or current_selected_item_ui.is_empty:
+		barrel_info_region.show_barrel_overview(false)
+	#  - if an ItemUI is selected and not empty, change the data to the 
+	#       ItemUI barrel and keep showing either the overview or the effect detail
+	#       - whichever is already open.
+	elif not current_selected_item_ui.is_empty:
+		barrel_info_region.populate_detail_circle_ui(current_selected_item_ui.data)
+		barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
+		barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data)
+	
+	toggle_ui_focus_neighbors(button, true)
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
-	push_error("method not overriden")
+	current_selected_item_ui = null
+	
+	_reset_sibling_saturation(item_ui)
+	
+	if item_ui.is_locked:
+		show_warning("Not available in demo")
+		return
+	
+	# Classes should extend from here
 
 
 func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:

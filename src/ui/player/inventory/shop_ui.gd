@@ -150,29 +150,16 @@ func get_barrel_detail_focus() -> Control:
 	return
 
 
-func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
-	SoundManager.play_ui_sound(sfx_click, "UI")
-	
-	if (current_selected_item_ui != null):
-		current_selected_item_ui.deselect()
-	current_selected_item_ui = item_ui
-	
-	if item_ui.is_locked:
-		barrel_info_region.show_barrel_locked()
-		return
-	
-	barrel_info_region.set_barrel_data_resource(data)
-
-
 func _on_item_ui_button_pressed(ui: Control) -> void:
+	var parent: Control = ui.get_parent()
 	if ui.clicked_once:
-		active_ui_idx = ui.get_index()
+		active_focus_idx = parent.get_index()
+	# Remove focus neighbors
+	toggle_ui_focus_neighbors(ui, false)
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
-	if item_ui.is_locked:
-		show_warning("Not available in demo")
-		return
+	super(item_ui, data)
 
 	if not item_ui.is_purchased:
 		item_ui.is_purchased = GameManager.purchase_barrel(data)
@@ -181,14 +168,6 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 			item_ui.deselect()
 		else:
 			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
-	elif item_ui.is_equipped:
-		var warning_text = GameManager.remove_barrel(data.barrel_id)
-		show_warning(warning_text)
-		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
-	else:
-		var warning_text = GameManager.equip_barrel(data.barrel_id)
-		show_warning(warning_text)
-		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 	
 	full_refresh_ui(get_first_item_for_focus)
 
@@ -211,10 +190,5 @@ func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: Gun
 			gun_frame_item_ui.deselect()
 		else:
 			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
-	else:
-		var warning_text = GameManager.equip_gun_frame(data.frame_id)
-		show_warning(warning_text)
-		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
-		current_gun_frame_icon.texture = data.shop_ui_sprite
-	
-	full_refresh_ui(get_first_item_for_focus)
+		
+		full_refresh_ui(get_first_item_for_focus)

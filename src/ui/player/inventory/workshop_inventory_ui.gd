@@ -6,8 +6,6 @@ class_name WorkshopInventoryUI
 @export var inventory_normal_barrel_container: GridContainer
 
 var active_equip_idx: int = -1
-var active_focus_idx: int = -1
-var active_effect_detail_idx: int = -1
 
 var available_gun_frames: Array
 
@@ -402,80 +400,29 @@ func change_gun_frame(idx_diff: int) -> void:
 
 #### Highlight/Focus helpers
 
-func clear_item_ui_highlight(ui: ItemUI) -> void:
-	super(ui)
-	toggle_ui_focus_neighbors(ui.button, true)
+#func clear_item_ui_highlight(ui: ItemUI) -> void:
+	#super(ui)
+	#toggle_ui_focus_neighbors(ui.button, true)
+#
+#
+#func persist_item_ui_highlight(ui: Control) -> void:
+	#ui.is_active_equip = true
+	#ui.border_selected.visible = true
+	#ui.button.add_theme_stylebox_override(
+		#"normal",
+		#ui.button.get_theme_stylebox("focus", "Button")
+	#)
 
 
-func persist_item_ui_highlight(ui: Control) -> void:
-	ui.is_active_equip = true
-	ui.border_selected.visible = true
-	ui.button.add_theme_stylebox_override(
-		"normal",
-		ui.button.get_theme_stylebox("focus", "Button")
-	)
-
-
-func _desaturate_siblings(ui: Control) -> void:
-	var parent = ui.get_parent()
-	if not parent:
-		return
-	if parent is BarrelEquipSlotUI:
-		parent = parent.get_parent()
-	
-	ui.modulate = Color("#ffffff")
-	
-	for item in parent.get_children():
-		if item is BarrelEquipSlotUI:
-			if item.item_ui == ui:
-				continue
-			item.item_ui.modulate = Color("#4d4d4d")
-			clear_item_ui_highlight(item.item_ui)
-		elif item is ItemUI:
-			if item == ui:
-				continue
-			item.modulate = Color("#4d4d4d")
-			clear_item_ui_highlight(item)
-
-
-func _reset_sibling_saturation(ui: Control) -> void:
-	var parent = ui.get_parent()
-	if parent is BarrelEquipSlotUI:
-		parent = parent.get_parent()
-	
-	for item in parent.get_children():
-		if item is BarrelEquipSlotUI:
-			item.item_ui.modulate = Color("#ffffff")
-			clear_item_ui_highlight(item.item_ui)
-		elif item is ItemUI:
-			item.modulate = Color("#ffffff")
-			clear_item_ui_highlight(item)
-
-
-func toggle_ui_focus_neighbors(ui: Control, is_enabled: bool = true) -> void:
-	for neighbor in [ui.focus_neighbor_left, ui.focus_neighbor_right, ui.focus_neighbor_top, ui.focus_neighbor_bottom]:
-		if neighbor:
-			var node = get_node(neighbor)
-			if node:
-				node.focus_mode = FocusMode.FOCUS_ALL if is_enabled else FocusMode.FOCUS_NONE
+#func toggle_ui_focus_neighbors(ui: Control, is_enabled: bool = true) -> void:
+	#for neighbor in [ui.focus_neighbor_left, ui.focus_neighbor_right, ui.focus_neighbor_top, ui.focus_neighbor_bottom]:
+		#if neighbor:
+			#var node = get_node(neighbor)
+			#if node:
+				#node.focus_mode = FocusMode.FOCUS_ALL if is_enabled else FocusMode.FOCUS_NONE
 
 
 #### Signal Callbacks
-
-func _on_item_ui_select(ui: ItemUI, data: BarrelDataResource) -> void:
-	SoundManager.play_ui_sound(sfx_click, "UI")
-	
-	if current_selected_item_ui != null:
-		current_selected_item_ui.deselect()
-	current_selected_item_ui = ui
-	
-	active_focus_idx = ui.get_index()
-	
-	_desaturate_siblings(ui)
-	
-	if ui.is_locked:
-		barrel_info_region.show_barrel_locked()
-		return
 
 
 func _on_item_ui_button_pressed(ui: Control) -> void:
@@ -488,54 +435,17 @@ func _on_item_ui_button_pressed(ui: Control) -> void:
 	toggle_ui_focus_neighbors(ui, false)
 
 
-func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
+func _get_active_focus_idx_on_button_focus(ui: ItemUI) -> int:
 	var _parent: Control = ui.get_parent()
-	current_focus_area = equip_barrel_container if _parent is BarrelEquipSlotUI else _parent
-	active_focus_idx = _parent.get_index() if _parent is BarrelEquipSlotUI else ui.get_index()
-	
-	if ui.data:
-		barrel_info_region.populate_detail_circle_ui(ui.data)
-		barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
-		barrel_info_region.set_barrel_overview_data(ui.data)
-		
-		if barrel_info_region.single_effect_detail.visible:
-			barrel_info_region.show_effect_detail()
-		else:
-			barrel_info_region.show_barrel_overview()
-	else:
-		if current_selected_item_ui:
-			return
-		barrel_info_region.show_barrel_overview(false)
+	return _parent.get_index() if _parent is BarrelEquipSlotUI else ui.get_index()
 
-
-func _on_item_ui_button_focus_lost(button: Button) -> void:
-	var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
-	var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx) \
-		if active_equip_idx < equip_barrel_container.get_child_count() else null
-	# When the mouse leaves an ItemUI:
-	#  - if nothing is currently selected in the equip or inventory areas, 
-	#      show an empty barrel overview.
-	if current_selected_item_ui == null or current_selected_item_ui.is_empty:
-		barrel_info_region.show_barrel_overview(false)
-	#  - if an ItemUI is selected and not empty, change the data to the 
-	#       ItemUI barrel and keep showing either the overview or the effect detail
-	#       - whichever is already open.
-	elif not current_selected_item_ui.is_empty:
-		barrel_info_region.populate_detail_circle_ui(current_selected_item_ui.data)
-		barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
-		barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data)
-	
-	toggle_ui_focus_neighbors(button, true)
+func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
+	var _parent: Control = ui.get_parent()
+	return equip_barrel_container if _parent is BarrelEquipSlotUI else _parent
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
-	current_selected_item_ui = null
-	
-	_reset_sibling_saturation(item_ui)
-	
-	if item_ui.is_locked:
-		show_warning("Not available in demo")
-		return
+	super(item_ui, data)
 	
 	var focus_area_callable: Callable = get_equip_slot_focus.bind(active_equip_idx)
 	
