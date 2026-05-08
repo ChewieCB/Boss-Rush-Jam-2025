@@ -152,14 +152,22 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 func ricochet():
 	super ()
-	raycast.set_collision_mask_value(2, true)
+	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	found_hitscal_col = false
 	var new_hitscan_inst: GunHitscan = create_duplication()
 	get_tree().get_root().add_child(new_hitscan_inst)
 	var new_dir = current_dir.bounce(hitscan_col_normal)
+	
+	# Add slight homing toward last look enemy target if available
+	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
+		var target = GameManager.player.last_look_enemy_target
+		var dir_to_target = global_position.direction_to(target.global_position)
+		# Blend bounce direction with target direction (small homing factor). Bonus for hitscan because i like it
+		new_dir = new_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
+	
 	# Offset a bit to prevent stuck inside collision body
-	var new_start_pos = hitscan_col_point - current_dir * RICO_START_POS_OFFSET_MODIFIER
+	var new_start_pos = hitscan_col_point - new_dir * RICO_START_POS_OFFSET_MODIFIER
 	new_hitscan_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 func get_projectile_color() -> Color:

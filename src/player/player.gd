@@ -192,6 +192,7 @@ var double_down_icon = preload("res://assets/sprite/skilltree_icon/double_down.p
 
 var aim_assist_target: Node3D = null
 var cheat_death_triggered = false
+var last_look_enemy_target: Node3D = null
 
 var freecam: FreeCam
 
@@ -475,6 +476,9 @@ func _physics_process(delta):
 	if GameManager.is_controller_connected:
 		aim_assist(delta)
 
+	if aim_assist_ray_boss_check.is_colliding():
+		last_look_enemy_target = aim_assist_ray_boss_check.get_collider()
+	
 
 func update_ammo_counter_ui() -> void:
 	stat_ui.radial_ui_center_node.update(current_gun.magazine_ammo_left, current_gun.modified_magazine_size)

@@ -90,7 +90,18 @@ func ricochet():
 	area.set_collision_mask_value(2, true)
 	found_hitscal_col = false
 	is_ricochet_shot = true
-	init(global_position, current_dir.bounce(hitscan_col_normal), damage, ricochet_count_left - 1, projectile_speed, max_range)
+	
+	# Calculate bounce direction
+	var bounce_dir = current_dir.bounce(hitscan_col_normal)
+	
+	# Add slight homing toward last look enemy target if available
+	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
+		var target = GameManager.player.last_look_enemy_target
+		var dir_to_target = global_position.direction_to(target.global_position)
+		# Blend bounce direction with target direction (small homing factor)
+		bounce_dir = bounce_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
+	
+	init(global_position, bounce_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	if splitted:
