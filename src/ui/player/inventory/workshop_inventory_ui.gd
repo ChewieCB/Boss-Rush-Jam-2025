@@ -183,12 +183,23 @@ func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 func show_effect_detail_view(focused_ui: Control) -> void:
 	var data: BarrelDataResource
 	var _ui: ItemUI
+	var _parent: Control = focused_ui.get_parent()
+	var ui_idx: int = focused_ui.get_index()
+	var parent_idx: int = _parent.get_index()
+	
 	if focused_ui is ItemUI:
 		data = focused_ui.data
 		_ui = focused_ui
+		
+		active_focus_idx = ui_idx
+		if _parent is BarrelEquipSlotUI:
+			active_focus_idx = parent_idx
+			active_equip_idx = parent_idx
 	elif focused_ui is BarrelEquipSlotUI:
 		data = focused_ui.item_ui.data
 		_ui = focused_ui.item_ui
+		
+		active_equip_idx = ui_idx
 	elif focused_ui is GunFrameItemUI:
 		return
 	
@@ -196,14 +207,6 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 		return
 	
 	barrel_info_region.show_effect_detail()
-	
-	if focused_ui.get_parent() is BarrelEquipSlotUI:
-		active_focus_idx = focused_ui.get_parent().get_index()
-		active_equip_idx = active_focus_idx
-	else:
-		active_focus_idx = focused_ui.get_index()
-	if focused_ui is BarrelEquipSlotUI:
-		active_equip_idx = focused_ui.get_index()
 	
 	current_selected_item_ui = focused_ui if focused_ui is ItemUI else focused_ui.item_ui
 	
