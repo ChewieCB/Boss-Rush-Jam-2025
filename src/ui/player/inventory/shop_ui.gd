@@ -42,9 +42,9 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			
 			if barrel_info_region.single_effect_detail.visible:
-				hide_effect_detail_view(focused_ui)
+				hide_effect_detail_view(focused_ui.item_ui)
 			elif barrel_info_region.barrel_overview_detail.visible:
-				show_effect_detail_view(focused_ui)
+				show_effect_detail_view(focused_ui.item_ui)
 
 
 func full_refresh_ui(focus_area_callable: Callable, forced = false):
@@ -83,7 +83,7 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 		shop_item_inst.init(self, gun_frame_data)
 		shop_item_inst.item_ui.select_item.connect(_on_gun_frame_item_ui_select)
 		shop_item_inst.item_ui.interact_item.connect(_on_gun_frame_item_ui_interact)
-		shop_item_inst.item_ui.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst))
+		shop_item_inst.item_ui.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst.item_ui))
 		shop_item_inst.item_ui.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(shop_item_inst.button))
 		shop_item_inst.item_ui.button.pressed.connect(
 			_on_item_ui_button_pressed.bind(shop_item_inst.item_ui)
@@ -136,7 +136,7 @@ func get_first_item_for_focus() -> Control:
 	return get_inventory_focus()
 
 
-func get_gun_frame_inventory_focus() -> Control:
+func get_gun_frame_inventory_focus(focus_idx: int = 0) -> Control:
 	current_focus_area = shop_gun_frame_container
 	
 	var gun_frame_items = shop_gun_frame_container.get_children()
@@ -148,8 +148,8 @@ func get_gun_frame_inventory_focus() -> Control:
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_ALL
 	# TODO - defocus detail ui
 	
-	if gun_frame_items:
-		return gun_frame_items[0].button
+	if gun_frame_items.size() > 0:
+		return gun_frame_items[focus_idx].button
 	# Fallback to inventory barrels if no frames available
 	else:
 		return get_inventory_focus()
@@ -168,7 +168,7 @@ func get_inventory_focus(focus_idx: int = 0) -> Control:
 	
 	# Fallback when no barrels in inventory
 	if inventory_barrel_items:
-		return inventory_barrel_items[0].button
+		return inventory_barrel_items[focus_idx].button
 	#TODO
 	else:
 		return
@@ -274,16 +274,33 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	
 	if item_ui.is_locked:
 		return
+	
+	var focus_area_callable: Callable = get_inventory_focus
 
 	if not item_ui.is_purchased:
 		item_ui.is_purchased = GameManager.purchase_barrel(data)
 		if item_ui.is_purchased:
 			SoundManager.play_ui_sound(sfx_purchase, "UI")
 			item_ui.deselect()
+			
+			var available_slots: int = current_focus_area.get_child_count() - 1
+			# If there are no more valid slots, focus on the other area
+			if available_slots == 0:
+				focus_area_callable = get_gun_frame_inventory_focus
+				var next_available_slots: int = shop_gun_frame_container.get_child_count()
+				if next_available_slots != 0:
+					focus_area_callable = focus_area_callable.bind(0)
+			# Move focus to the closest avaialble slot
+			elif available_slots <= active_focus_idx:
+				focus_area_callable = focus_area_callable.bind(-1)
+			# Move focus the new UI in the same slot
+			else:
+				focus_area_callable = focus_area_callable.bind(active_focus_idx)
 		else:
 			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
+			focus_area_callable = focus_area_callable.bind(active_focus_idx)
 	
-	full_refresh_ui(get_first_item_for_focus)
+	full_refresh_ui(focus_area_callable)
 
 
 func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
@@ -297,12 +314,29 @@ func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunF
 
 
 func _on_gun_frame_item_ui_interact(gun_frame_item_ui: GunFrameItemUI, data: GunFrameResource) -> void:
+	var focus_area_callable: Callable = get_gun_frame_inventory_focus
+	
 	if not gun_frame_item_ui.is_purchased:
 		gun_frame_item_ui.is_purchased = GameManager.purchase_gun_frame(data)
 		if gun_frame_item_ui.is_purchased:
 			SoundManager.play_ui_sound(sfx_purchase, "UI")
 			gun_frame_item_ui.deselect()
+			
+			var available_slots: int = current_focus_area.get_child_count() - 1
+			# If there are no more valid slots, focus on the other area
+			if available_slots == 0:
+				focus_area_callable = get_inventory_focus
+				var next_available_slots: int = shop_barrel_container.get_child_count()
+				if next_available_slots != 0:
+					focus_area_callable = focus_area_callable.bind(0)
+			# Move focus to the closest avaialble slot
+			elif available_slots <= active_focus_idx:
+				focus_area_callable = focus_area_callable.bind(-1)
+			# Move focus the new UI in the same slot
+			else:
+				focus_area_callable = focus_area_callable.bind(active_focus_idx)
 		else:
 			SoundManager.play_ui_sound(sfx_too_expensive, "UI")
+			focus_area_callable = focus_area_callable.bind(active_focus_idx)
 		
-		full_refresh_ui(get_first_item_for_focus)
+		full_refresh_ui(focus_area_callable)

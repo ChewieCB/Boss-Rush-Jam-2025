@@ -255,7 +255,11 @@ func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
 	# Farm these out so we can override the sub-methods in child classes
 	current_focus_area = _get_current_focus_area_on_button_focus(ui)
 	active_focus_idx = _get_active_focus_idx_on_button_focus(ui)
-	update_barrel_info(ui.data, ui.is_locked)
+	if ui is BarrelItemUI:
+		update_barrel_info(ui.data, ui.is_locked)
+	elif ui is GunFrameItemUI:
+		# TODO
+		pass
 
 func _get_active_focus_idx_on_button_focus(ui: ItemUI) -> int:
 	return ui.get_index()
@@ -287,6 +291,7 @@ func _on_item_ui_button_focus_lost(button: Button) -> void:
 	#      show an empty barrel overview.
 	if current_selected_item_ui == null or current_selected_item_ui.is_empty:
 		if lost_focus_parent is BarrelItemUI:
+			# TODO - track last detail/overview toggle state so we can keep on the detail view between items
 			barrel_info_region.show_barrel_overview(false)
 		elif lost_focus_parent is GunFrameItemUI:
 			# TODO - gun frame overview

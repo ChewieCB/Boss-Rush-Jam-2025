@@ -67,11 +67,6 @@ func _input(event: InputEvent) -> void:
 			elif barrel_info_region.barrel_overview_detail.visible:
 				show_effect_detail_view(focused_ui)
 		
-		# TODO - rework to cycle frames left/right
-		elif event.is_action_pressed("inv_ui_change_gun_frame"):
-			get_viewport().set_input_as_handled()
-			pass
-		
 		elif event.is_action_pressed("interact"):
 			close()
 			get_viewport().set_input_as_handled()
@@ -139,8 +134,9 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 	await get_tree().process_frame
 	
 	var focus_area: Control = focus_area_callable.call()
-	_reset_sibling_saturation(focus_area)
-	focus_area.grab_focus.call_deferred()
+	if focus_area != null:
+		_reset_sibling_saturation(focus_area)
+		focus_area.grab_focus.call_deferred()
 
 
 ### CONTEXTUAL HELPERS
