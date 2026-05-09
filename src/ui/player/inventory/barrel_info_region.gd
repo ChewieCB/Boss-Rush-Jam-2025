@@ -36,6 +36,7 @@ var circle_ring_radius: float
 var barrel_data: BarrelDataResource = null
 
 const MAX_EFFECT_COUNT: int = 4
+var current_effect_count: int
 var barrel_info_icon_effect_pool: Array[BarrelInfoIcon] = []
 var barrel_info_icon_effect_angles: Array[float] = []
 
@@ -58,6 +59,7 @@ func _init_barrel_effect_ui() -> void:
 		var effect_info_ui: BarrelInfoIcon = barrel_info_icon_prefab.instantiate()
 		circle_ring.add_child(effect_info_ui)
 		effect_info_ui.barrel_info_region = self
+		effect_info_ui.focus_mode = Control.FOCUS_NONE
 		barrel_info_icon_effect_pool.append(effect_info_ui)
 		barrel_info_icon_effect_angles.append(0)
 
@@ -126,14 +128,14 @@ func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 	add_child(barrel_inst)
 	
 	# Regen the barrel roll effects around the circle using the barrel data
-	var roll_effect_count: int = barrel_inst.get_number_of_barrel_effect()
-	var ui_positions_arr: Array[Vector2] = get_circle_positions(roll_effect_count)
-	var _wrap_focus = func(x: int): return wrapi(x, 0, roll_effect_count)
+	current_effect_count = barrel_inst.get_number_of_barrel_effect()
+	var ui_positions_arr: Array[Vector2] = get_circle_positions(current_effect_count)
+	var _wrap_focus = func(x: int): return wrapi(x, 0, current_effect_count)
 	var effect_icon_nodes = circle_ring.get_children()
-	effect_icon_nodes = effect_icon_nodes.slice(0, roll_effect_count)
+	effect_icon_nodes = effect_icon_nodes.slice(0, current_effect_count)
 	for i in range(MAX_EFFECT_COUNT):
 		var ui: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
-		if i >= roll_effect_count:
+		if i >= current_effect_count:
 			ui.visible = false
 			continue
 		var barrel_roll_data: Dictionary = barrel_inst.get_barrel_effect_data_at(i)
@@ -142,17 +144,19 @@ func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 		ui.visible = true
 
 		# Store each icon's starting angle
-		var angle = (TAU / roll_effect_count) * i
+		var angle = (TAU / current_effect_count) * i
 		barrel_info_icon_effect_angles[i] = angle
 		
+		# TODO - click rotation focus instead of ui inputs
+		
 		# LEFT
-		var prev_inv_idx: int = _wrap_focus.call(i - 1)
-		var prev_inv: Control = effect_icon_nodes[prev_inv_idx]
-		ui.focus_neighbor_left = prev_inv.get_path()
-		# RIGHT
-		var next_inv_idx: int = _wrap_focus.call(i + 1)
-		var next_inv: Control = effect_icon_nodes[next_inv_idx]
-		ui.focus_neighbor_right = next_inv.get_path()
+		#var prev_inv_idx: int = _wrap_focus.call(i - 1)
+		#var prev_inv: Control = effect_icon_nodes[prev_inv_idx]
+		#ui.focus_neighbor_left = prev_inv.get_path()
+		## RIGHT
+		#var next_inv_idx: int = _wrap_focus.call(i + 1)
+		#var next_inv: Control = effect_icon_nodes[next_inv_idx]
+		#ui.focus_neighbor_right = next_inv.get_path()
 	
 	barrel_inst.queue_free()
 

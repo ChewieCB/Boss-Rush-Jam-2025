@@ -25,8 +25,9 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	super(event)
+	
 	if visible:
-		# FIXME - cleaner fix for this race condition whne the current_focus_area is null
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
 		var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx) \
 		if active_equip_idx < equip_barrel_container.get_child_count() else null
@@ -52,16 +53,6 @@ func _input(event: InputEvent) -> void:
 				move_equip_slot(active_equip_idx, dir)
 			else:
 				change_gun_frame(dir)
-		
-		if event.is_action("inv_show_barrel_detail"):
-			if not event.is_pressed():
-				return
-			
-			get_viewport().set_input_as_handled()
-			if barrel_info_region.single_effect_detail.visible:
-				hide_effect_detail_view(focused_ui)
-			elif barrel_info_region.barrel_overview_detail.visible:
-				show_effect_detail_view(focused_ui)
 		
 		elif event.is_action_pressed("interact"):
 			close()

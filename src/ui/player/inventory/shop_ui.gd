@@ -25,26 +25,11 @@ func _process(delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	super(event)
 	if visible:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
-		
 		if event.is_action_pressed("ui_cancel"):
 			contextual_cancel(focused_ui.item_ui)
-		
-		elif event.is_action_pressed("interact"):
-			close()
-			get_viewport().set_input_as_handled()
-		
-		elif event.is_action("inv_show_barrel_detail"):
-			if not event.is_pressed():
-				return
-			
-			get_viewport().set_input_as_handled()
-			
-			if barrel_info_region.single_effect_detail.visible:
-				hide_effect_detail_view(focused_ui.item_ui)
-			elif barrel_info_region.barrel_overview_detail.visible:
-				show_effect_detail_view(focused_ui.item_ui)
 
 
 func full_refresh_ui(focus_area_callable: Callable, forced = false):
@@ -132,8 +117,8 @@ func set_shopkeeper_chat(content: String) -> void:
 	shopkeeper_chat.visible_ratio = 0
 
 
-func get_first_item_for_focus() -> Control:
-	return get_inventory_focus()
+func get_first_item_for_focus(idx: int = 0) -> Control:
+	return get_inventory_focus(idx)
 
 
 func get_gun_frame_inventory_focus(focus_idx: int = 0) -> Control:

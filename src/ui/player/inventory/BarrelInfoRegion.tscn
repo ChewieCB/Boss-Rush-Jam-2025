@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://bdotmbmcpnnup"]
+[gd_scene load_steps=12 format=3 uid="uid://bdotmbmcpnnup"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_info_region.gd" id="1_4g30l"]
 [ext_resource type="Texture2D" uid="uid://rgiumjfjwf7y" path="res://assets/sprite/placeholder/circle-ring.png" id="2_3m8fx"]
 [ext_resource type="PackedScene" uid="uid://bl1msq3x8c3ar" path="res://src/ui/player/inventory/BarrelInfoIcon.tscn" id="3_6lcb6"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="4_iqan4"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="6_lxvge"]
 [ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="7_ggvao"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="8_c2skj"]
@@ -32,8 +33,8 @@ barrel_effect_list_label_2 = NodePath("HBoxContainer/PanelDescription/BarrelOver
 barrel_effect_list_label_3 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine3")
 barrel_effect_list_label_4 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine4")
 select_icon_line = NodePath("SelectIconLine")
-circle_ring = NodePath("HBoxContainer/CircleRing")
-circle_ring_centerpoint = NodePath("HBoxContainer/CircleRing/CircleCenter")
+circle_ring = NodePath("HBoxContainer/MarginContainer/CircleRing")
+circle_ring_centerpoint = NodePath("HBoxContainer/MarginContainer/CircleRing/CircleCenter")
 barrel_overview_detail = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail")
 single_effect_detail = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail")
 locked_barrel_overlay = NodePath("HBoxContainer/PanelDescription/LockedBarrelOverlay")
@@ -48,8 +49,10 @@ default_color = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 2
 theme_override_constants/separation = 48
 
-[node name="CircleRing" type="TextureRect" parent="HBoxContainer"]
-visible = false
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="CircleRing" type="TextureRect" parent="HBoxContainer/MarginContainer"]
 self_modulate = Color(1, 1, 1, 0.47)
 layout_mode = 2
 size_flags_horizontal = 6
@@ -57,7 +60,7 @@ texture = ExtResource("2_3m8fx")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="CircleCenter" type="Control" parent="HBoxContainer/CircleRing"]
+[node name="CircleCenter" type="Control" parent="HBoxContainer/MarginContainer/CircleRing"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -70,6 +73,11 @@ offset_right = 0.5
 offset_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="DeviceInputPrompt" parent="HBoxContainer/MarginContainer" instance=ExtResource("4_iqan4")]
+layout_mode = 2
+size_flags_horizontal = 4
+assigned_action = "spin_barrels"
 
 [node name="PanelDescription" type="ColorRect" parent="HBoxContainer"]
 custom_minimum_size = Vector2(424, 364)
@@ -92,7 +100,6 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [node name="SingleEffectDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -196,6 +203,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="BarrelOverviewDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

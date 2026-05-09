@@ -40,11 +40,31 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if visible:
-		if event.is_action_pressed("interact") or \
-		event.is_action_pressed("ui_cancel"):
+		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
+		
+		if event.is_action_pressed("interact"):
 			close()
 			get_viewport().set_input_as_handled()
-			return
+		
+		elif event.is_action("inv_show_barrel_detail"):
+			if not event.is_pressed():
+				return
+			
+			get_viewport().set_input_as_handled()
+			
+			if barrel_info_region.single_effect_detail.visible:
+				hide_effect_detail_view(focused_ui.item_ui)
+			elif barrel_info_region.barrel_overview_detail.visible:
+				show_effect_detail_view(focused_ui.item_ui)
+	
+		elif event.is_action_pressed("spin_barrels"):
+			if barrel_info_region.single_effect_detail.visible:
+				active_effect_detail_idx = wrapi(
+					active_effect_detail_idx + 1, 
+					0, 
+					barrel_info_region.current_effect_count
+				)
+				barrel_info_region.grab_detail_focus(active_effect_detail_idx)
 
 
 func _process(delta: float) -> void:
@@ -90,6 +110,14 @@ func close():
 
 
 func full_refresh_ui(focus_area_callable: Callable, forced: bool = false) -> void:
+	push_error("method not overriden")
+
+
+func show_effect_detail_view(focused_ui: Control) -> void:
+	push_error("method not overriden")
+
+
+func hide_effect_detail_view(focused_ui: Control) -> void:
 	push_error("method not overriden")
 
 
