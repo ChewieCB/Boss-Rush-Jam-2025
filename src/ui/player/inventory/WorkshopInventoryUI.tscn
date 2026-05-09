@@ -30,7 +30,7 @@ gradient = SubResource("Gradient_gcfb7")
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.504274, 1)
 
-[node name="WorkshopInventoryUI" type="Control" node_paths=PackedStringArray("equip_barrel_container", "inventory_gun_frame_container", "inventory_normal_barrel_container", "warning_label", "scroll_container", "barrel_info_region")]
+[node name="WorkshopInventoryUI" type="Control" node_paths=PackedStringArray("equip_barrel_container", "inventory_gun_frame_container", "inventory_normal_barrel_container", "scroll_container", "barrel_info_region")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,7 +43,6 @@ inventory_gun_frame_container = NodePath("MainRegion/BarrelModifyUI/VBoxContaine
 inventory_normal_barrel_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer")
 barrel_item_ui_prefab = ExtResource("2_qu664")
 gun_frame_item_ui_prefab = ExtResource("2_0be23")
-warning_label = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/WarningLabel")
 scroll_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer")
 barrel_info_region = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer/BarrelInfoRegion")
 
@@ -149,14 +148,6 @@ layout_mode = 2
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
-
-[node name="WarningLabel" type="Label" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion"]
-visible = false
-self_modulate = Color(1, 0, 0.168627, 1)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 36
-text = "Can only equip 1 archetype barrel"
 
 [node name="LowerRegion" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer"]
 layout_mode = 2

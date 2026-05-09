@@ -98,7 +98,7 @@ _data = {
 "shopkeeper_idle": SubResource("Animation_dro8h")
 }
 
-[node name="Shop" type="Control" node_paths=PackedStringArray("warning_label", "scroll_container", "barrel_info_region")]
+[node name="Shop" type="Control" node_paths=PackedStringArray("scroll_container", "barrel_info_region")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -121,7 +121,6 @@ sfx_click = ExtResource("6_i05nn")
 sfx_purchase = ExtResource("7_1f1kf")
 sfx_too_expensive = ExtResource("8_b21fk")
 sfx_barrel_equip = ExtResource("9_mbb0v")
-warning_label = NodePath("MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/WarningLabel")
 scroll_container = NodePath("MainRegion/BarrelShopUI/LeftRegion/ScrollContainer")
 barrel_info_region = NodePath("MainRegion/BarrelShopUI/RightRegion/BarrelInfoRegion")
 
@@ -236,13 +235,6 @@ columns = 2
 
 [node name="ShopGunFrameItemUI" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer/GunFrameContainer/GridContainer" instance=ExtResource("5_fojg4")]
 layout_mode = 2
-
-[node name="WarningLabel" type="Label" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer"]
-self_modulate = Color(1, 0, 0.168627, 1)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 36
-text = "Can only equip 1 archetype barrel"
 
 [node name="Spacer" type="Control" parent="MainRegion/BarrelShopUI/LeftRegion/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 30)

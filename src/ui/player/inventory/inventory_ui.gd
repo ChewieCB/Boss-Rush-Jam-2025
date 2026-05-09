@@ -15,7 +15,6 @@ signal reset_barrel_info
 @export var sfx_barrel_equip: AudioStream
 @export var current_gun_frame_icon: TextureRect
 #
-@export var warning_label: Label
 @export var scroll_container: ScrollContainer
 
 const CONTROLLER_SCROLL_SPEED_COOEFFICIENT = 3.0
@@ -84,15 +83,6 @@ func close():
 	visible = false
 	
 	inventory_closed.emit()
-
-
-func show_warning(content: String, color: Color = Color.RED) -> void:
-	if content.contains("Warning"):
-		color = Color.YELLOW
-	# FIXME - reimplement warning label UI
-	#warning_label.self_modulate = color
-	#warning_label.text = content
-	#warning_label.visible = true
 
 
 func full_refresh_ui(focus_area_callable: Callable, forced: bool = false) -> void:

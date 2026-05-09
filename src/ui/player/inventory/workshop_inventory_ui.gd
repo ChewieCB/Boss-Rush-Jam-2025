@@ -385,8 +385,7 @@ func change_gun_frame(idx_diff: int) -> void:
 	var new_idx: int = wrapi(current_idx + idx_diff, 0, available_gun_frames.size())
 	var new_frame = available_gun_frames[new_idx]
 	
-	var warning_text = GameManager.equip_gun_frame(new_frame.frame_id)
-	show_warning(warning_text)
+	var _warning_text = GameManager.equip_gun_frame(new_frame.frame_id)
 	SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 	
 	var focus_area = get_equip_slot_focus.bind(active_focus_idx)
@@ -454,9 +453,8 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	
 	# Equipped barrel slot UI
 	if item_ui.is_equipped:
-		var warning_text = GameManager.remove_barrel(data.barrel_id)
+		var _warning_text = GameManager.remove_barrel(data.barrel_id)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
-		show_warning(warning_text)
 		
 		item_ui.empty_slot()
 		barrel_info_region.show_barrel_overview(false)
@@ -484,9 +482,8 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		if not equip_ui.is_empty:
 			GameManager.remove_barrel(equip_ui.data.barrel_id)
 		
-		var warning_text = GameManager.equip_barrel(data.barrel_id, active_equip_idx)
+		var _warning_text = GameManager.equip_barrel(data.barrel_id, active_equip_idx)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
-		show_warning(warning_text)
 		
 		# After installing a barrel, remove equip idx so we can move between equip slots
 		equip_ui = equip_barrel_container.get_child(active_equip_idx).item_ui

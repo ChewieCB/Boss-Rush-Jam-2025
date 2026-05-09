@@ -89,7 +89,6 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 			shop_item_inst.init(barrel_data, self)
 			shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
 			shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
-			shop_item_inst.item_ui.show_warning.connect(show_warning)
 			shop_item_inst.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst.item_ui))
 			shop_item_inst.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(shop_item_inst.button))
 			shop_item_inst.item_ui.button.pressed.connect(
