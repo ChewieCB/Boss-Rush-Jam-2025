@@ -1,4 +1,4 @@
-extends Resource
+extends BaseDataResource
 class_name GunFrameResource
 
 enum GunFrameIdEnum {

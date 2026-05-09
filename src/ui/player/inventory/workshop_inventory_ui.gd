@@ -126,7 +126,7 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 		if not barrel_data.is_archetype_barrel:
 			var item_inst: ItemUI = barrel_item_ui_prefab.instantiate()
 			inventory_normal_barrel_container.add_child(item_inst)
-			item_inst.init(self)
+			item_inst.init(self, barrel_data)
 			item_inst.set_barrel_data(barrel_data, false, true)
 			item_inst.select_item.connect(_on_item_ui_select)
 			item_inst.interact_item.connect(_on_item_ui_interact)

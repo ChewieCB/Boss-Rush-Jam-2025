@@ -12,8 +12,8 @@ func _ready() -> void:
 	item_ui.is_shop_item_ui = true
 
 
-func init(_data: GunFrameResource, _parent_ui: InventoryUI, _is_purchased = false):
-	item_ui.init(_data, _parent_ui, false, _is_purchased)
+func init(_parent_ui: InventoryUI, _data: BaseDataResource, _is_equipped: bool = false, _is_purchased = false):
+	item_ui.init(_parent_ui, _data, false, _is_purchased)
 	price_label.text = str(_data.frame_cost)
 	if _data.frame_cost > GameManager.player_currency:
 		item_ui.is_disabled = true

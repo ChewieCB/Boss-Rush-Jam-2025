@@ -68,7 +68,7 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 		if not barrel_data.is_archetype_barrel:
 			var shop_item_inst = shop_barrel_item_ui_prefab.instantiate()
 			shop_barrel_container.add_child(shop_item_inst)
-			shop_item_inst.init(barrel_data, self)
+			shop_item_inst.init(self, barrel_data)
 			shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
 			shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
 			shop_item_inst.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst.item_ui))
@@ -80,9 +80,9 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 	for gun_frame_data in GameManager.shop_gun_frames:
 		var shop_item_inst = shop_gun_frame_item_ui_prefab.instantiate()
 		shop_gun_frame_container.add_child(shop_item_inst)
-		shop_item_inst.init(gun_frame_data, self)
-		shop_item_inst.item_ui.select_gun_frame.connect(_on_gun_frame_item_ui_select)
-		shop_item_inst.item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
+		shop_item_inst.init(self, gun_frame_data)
+		shop_item_inst.item_ui.select_item.connect(_on_gun_frame_item_ui_select)
+		shop_item_inst.item_ui.interact_item.connect(_on_gun_frame_item_ui_interact)
 		shop_item_inst.item_ui.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst))
 		shop_item_inst.item_ui.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(shop_item_inst.button))
 		shop_item_inst.item_ui.button.pressed.connect(

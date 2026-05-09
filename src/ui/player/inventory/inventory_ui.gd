@@ -280,20 +280,30 @@ func update_barrel_info(data: BarrelDataResource = null, is_locked: bool = false
 
 
 func _on_item_ui_button_focus_lost(button: Button) -> void:
+	var lost_focus_parent: Control = button.get_parent()
 	var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
 	# When the mouse leaves an ItemUI:
 	#  - if nothing is currently selected in the equip or inventory areas, 
 	#      show an empty barrel overview.
 	if current_selected_item_ui == null or current_selected_item_ui.is_empty:
-		barrel_info_region.show_barrel_overview(false)
+		if lost_focus_parent is BarrelItemUI:
+			barrel_info_region.show_barrel_overview(false)
+		elif lost_focus_parent is GunFrameItemUI:
+			# TODO - gun frame overview
+			pass
 	#  - if an ItemUI is selected and not empty, change the data to the 
 	#       ItemUI barrel and keep showing either the overview or the effect detail
 	#       - whichever is already open.
 	elif not current_selected_item_ui.is_empty:
-		barrel_info_region.populate_detail_circle_ui(current_selected_item_ui.data)
-		barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
-		barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data, current_selected_item_ui.is_locked)
-		barrel_info_region.show_barrel_overview(true, current_selected_item_ui.is_locked)
+		# FIXME - add better handling for BarrelItemUI vs GunFrameItemUI overview display
+		if lost_focus_parent is BarrelItemUI and current_selected_item_ui is not GunFrameItemUI:
+			barrel_info_region.populate_detail_circle_ui(current_selected_item_ui.data)
+			barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
+			barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data, current_selected_item_ui.is_locked)
+			barrel_info_region.show_barrel_overview(true, current_selected_item_ui.is_locked)
+		elif lost_focus_parent is GunFrameItemUI:
+			# TODO - gun frame overview
+			pass
 	
 	toggle_ui_focus_neighbors(button, true)
 
