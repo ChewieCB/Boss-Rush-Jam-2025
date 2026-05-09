@@ -379,16 +379,17 @@ autoplay = "shopkeeper_idle"
 speed_scale = 0.5
 
 [node name="BarrelInfoRegion" parent="MainRegion/BarrelShopUI/RightRegion" instance=ExtResource("9_wboqf")]
+custom_minimum_size = Vector2(902, 364)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1048.0
-offset_top = -552.0
-offset_right = -24.0
-offset_bottom = -64.0
+offset_left = -959.0
+offset_top = -492.0
+offset_right = -57.0
+offset_bottom = -128.0
 grow_horizontal = 0
 grow_vertical = 0
 
