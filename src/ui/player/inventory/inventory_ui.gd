@@ -185,7 +185,7 @@ func toggle_ui_focus_neighbors(ui: Control, is_enabled: bool = true) -> void:
 
 ## VISUAL MODIFIERS
 
-func clear_item_ui_highlight(ui: ItemUI) -> void:
+func clear_item_ui_highlight(ui: Control) -> void:
 	ui.is_active_equip = false
 	ui.clicked_once = false
 	ui.deselect()
@@ -253,7 +253,7 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	_desaturate_siblings(item_ui)
 	
 	if item_ui.is_locked:
-		barrel_info_region.show_barrel_locked()
+		barrel_info_region.set_barrel_overview_data(data, true)
 		return
 
 
@@ -265,28 +265,28 @@ func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
 	# Farm these out so we can override the sub-methods in child classes
 	current_focus_area = _get_current_focus_area_on_button_focus(ui)
 	active_focus_idx = _get_active_focus_idx_on_button_focus(ui)
-	update_barrel_info(ui.data)
+	update_barrel_info(ui.data, ui.is_locked)
 
 func _get_active_focus_idx_on_button_focus(ui: ItemUI) -> int:
-	return ui.get_parent().get_index()
+	return ui.get_index()
 
 func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
 	return ui.get_parent()
 
-func update_barrel_info(data: BarrelDataResource = null) -> void:
+func update_barrel_info(data: BarrelDataResource = null, is_locked: bool = false) -> void:
 	if data:
 		barrel_info_region.populate_detail_circle_ui(data)
 		barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
-		barrel_info_region.set_barrel_overview_data(data)
+		barrel_info_region.set_barrel_overview_data(data, is_locked)
 		
-		if barrel_info_region.single_effect_detail.visible:
+		if barrel_info_region.single_effect_detail.visible and not is_locked:
 			barrel_info_region.show_effect_detail()
 		else:
-			barrel_info_region.show_barrel_overview()
+			barrel_info_region.show_barrel_overview(true, is_locked)
 	else:
 		if current_selected_item_ui:
 			return
-		barrel_info_region.show_barrel_overview(false)
+		barrel_info_region.show_barrel_overview(false, is_locked)
 
 
 func _on_item_ui_button_focus_lost(button: Button) -> void:
@@ -302,22 +302,14 @@ func _on_item_ui_button_focus_lost(button: Button) -> void:
 	elif not current_selected_item_ui.is_empty:
 		barrel_info_region.populate_detail_circle_ui(current_selected_item_ui.data)
 		barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
-		barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data)
+		barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data, current_selected_item_ui.is_locked)
 	
 	toggle_ui_focus_neighbors(button, true)
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	current_selected_item_ui = null
-	
 	_reset_sibling_saturation(item_ui)
-	
-	if item_ui.is_locked:
-		show_warning("Not available in demo")
-		return
-	
-	# Classes should extend from here
-
 
 func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
 	push_error("method not overriden")

@@ -201,7 +201,7 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 	elif focused_ui is GunFrameItemUI:
 		return
 	
-	if _ui.is_empty:
+	if _ui.is_empty or _ui.is_locked:
 		return
 	
 	barrel_info_region.show_effect_detail()
@@ -446,6 +446,9 @@ func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	super(item_ui, data)
+	
+	if item_ui.is_locked:
+		return
 	
 	var focus_area_callable: Callable = get_equip_slot_focus.bind(active_equip_idx)
 	

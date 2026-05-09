@@ -30,6 +30,7 @@ var circle_ring_radius: float
 
 @export var barrel_overview_detail: ScrollContainer
 @export var single_effect_detail: ScrollContainer
+@export var locked_barrel_overlay: MarginContainer
 
 
 var barrel_data: BarrelDataResource = null
@@ -68,17 +69,23 @@ func _show_ui(show_circle: bool, show_barrel: bool, show_effect: bool) -> void:
 	refresh_ui()
 
 
-func show_barrel_overview(show_content: bool = true) -> void:
+func show_barrel_overview(show_content: bool = true, is_locked: bool = false) -> void:
 	_show_ui(false, true, false)
 	barrel_overview_detail.visible = show_content
+	locked_barrel_overlay.visible = is_locked
 	select_icon_line.visible = false
 
 
-func set_barrel_overview_data(data: BarrelDataResource) -> void:
+func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false) -> void:
 	barrel_panel_barrel_icon.texture = data.barrel_image
 	barrel_name_label.text = "[b]%s[/b]" % [data.barrel_name]
 	barrel_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.barrel_info_summary]
-	barrel_desc_label.text = data.barrel_desc
+	barrel_desc_label.text = "[color=gray]Not available in demo.[/color]" if is_locked else data.barrel_desc
+	
+	#locked_barrel_overlay.visible = is_locked
+	if is_locked:
+		show_barrel_overview(true, true)
+		return
 	
 	for i in range(barrel_info_icon_effect_pool.size()):
 		var effect_info: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
