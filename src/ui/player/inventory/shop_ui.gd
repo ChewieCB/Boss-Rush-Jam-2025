@@ -27,38 +27,20 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if visible:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
+		
 		if event.is_action_pressed("ui_cancel"):
-			# TODO - back out of inventory or detail focus instead of closing
-			#if current_focus_area == inventory_normal_barrel_container:
-				#var cancel_focus: Control = get_equip_slot_focus()
-				#var equip_ui = equip_barrel_container.get_child(active_ui_idx).get_child(0)
-				#clear_item_ui_highlight(equip_ui)
-				#active_ui_idx = -1
-				#cancel_focus.grab_focus.call_deferred()
-				#full_refresh_ui(get_equip_slot_focus)
-			if active_focus_idx != -1:
-				var cancel_focus_callable: Callable
-				cancel_focus_callable = get_gun_frame_inventory_focus if \
-				current_focus_area == shop_gun_frame_container else get_inventory_focus
-				var active_ui = current_focus_area.get_child(active_focus_idx).item_ui
-				active_ui.clicked_once = false
-				for i in range(current_focus_area.get_child_count()):
-					var ui = current_focus_area.get_child(i).item_ui
-					clear_item_ui_highlight(ui)
-				active_focus_idx = -1
-				full_refresh_ui(cancel_focus_callable)
-			else:
-				close()
-				get_viewport().set_input_as_handled()
+			contextual_cancel(focused_ui.item_ui)
+		
 		elif event.is_action_pressed("interact"):
 			close()
 			get_viewport().set_input_as_handled()
 		
-		if event.is_action("inv_show_barrel_detail"):
+		elif event.is_action("inv_show_barrel_detail"):
 			if not event.is_pressed():
 				return
 			
 			get_viewport().set_input_as_handled()
+			
 			if barrel_info_region.single_effect_detail.visible:
 				hide_effect_detail_view(focused_ui)
 			elif barrel_info_region.barrel_overview_detail.visible:
@@ -99,12 +81,12 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 		var shop_item_inst = shop_gun_frame_item_ui_prefab.instantiate()
 		shop_gun_frame_container.add_child(shop_item_inst)
 		shop_item_inst.init(gun_frame_data, self)
-		shop_item_inst.gun_frame_item_ui.select_gun_frame.connect(_on_gun_frame_item_ui_select)
-		shop_item_inst.gun_frame_item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
-		shop_item_inst.gun_frame_item_ui.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst))
-		shop_item_inst.gun_frame_item_ui.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(shop_item_inst.button))
-		shop_item_inst.gun_frame_item_ui.button.pressed.connect(
-			_on_item_ui_button_pressed.bind(shop_item_inst.gun_frame_item_ui)
+		shop_item_inst.item_ui.select_gun_frame.connect(_on_gun_frame_item_ui_select)
+		shop_item_inst.item_ui.interact_gun_frame.connect(_on_gun_frame_item_ui_interact)
+		shop_item_inst.item_ui.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst))
+		shop_item_inst.item_ui.button.focus_exited.connect(_on_item_ui_button_focus_lost.bind(shop_item_inst.button))
+		shop_item_inst.item_ui.button.pressed.connect(
+			_on_item_ui_button_pressed.bind(shop_item_inst.item_ui)
 		)
 	
 	set_focus_neighbour_wrapping(shop_barrel_container)
@@ -114,6 +96,35 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 	await get_tree().process_frame
 	var focus_area: Control = focus_area_callable.call()
 	focus_area.grab_focus.call_deferred()
+
+
+func contextual_cancel(focused_ui: Control) -> void:
+	# Back out of inventory or detail focus instead of closing
+	var cancel_focus: Callable = get_first_item_for_focus.bind(active_focus_idx)
+	# Inventory item cancel
+	if focused_ui is ItemUI:
+		# Clicked Inventory UI -> Same Inventory UI
+		if focused_ui.clicked_once:
+			cancel_focus = get_inventory_focus.bind(active_focus_idx)
+			clear_item_ui_highlight(focused_ui)
+			_reset_sibling_saturation(focused_ui)
+		# Hovered Inventory UI -> Active Inventory Slot
+		else:
+			close()
+	elif focused_ui is GunFrameItemUI:
+		# Clicked Inventory UI -> Same Inventory UI
+		if focused_ui.clicked_once:
+			cancel_focus = get_gun_frame_inventory_focus.bind(active_focus_idx)
+			clear_item_ui_highlight(focused_ui)
+			_reset_sibling_saturation(focused_ui)
+		# Hovered Inventory UI -> Active Inventory Slot
+		else:
+			close()
+	
+	# TODO - handle gun frame ui
+	
+	get_viewport().set_input_as_handled()
+	full_refresh_ui(cancel_focus)
 
 
 func set_shopkeeper_chat(content: String) -> void:
@@ -134,7 +145,7 @@ func get_gun_frame_inventory_focus() -> Control:
 	for slot in shop_barrel_container.get_children():
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_NONE
 	for slot in gun_frame_items:
-		slot.gun_frame_item_ui.button.focus_mode = FocusMode.FOCUS_ALL
+		slot.item_ui.button.focus_mode = FocusMode.FOCUS_ALL
 	# TODO - defocus detail ui
 	
 	if gun_frame_items:
@@ -149,7 +160,7 @@ func get_inventory_focus(focus_idx: int = 0) -> Control:
 	# Update focus area modes
 	var inventory_barrel_items = shop_barrel_container.get_children()
 	for slot in shop_gun_frame_container.get_children():
-		slot.gun_frame_item_ui.button.focus_mode = FocusMode.FOCUS_NONE
+		slot.item_ui.button.focus_mode = FocusMode.FOCUS_NONE
 	for slot in inventory_barrel_items:
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_ALL
 	for item in barrel_info_region.circle_ring.get_children():
@@ -169,7 +180,7 @@ func get_barrel_detail_focus(idx: int = -1) -> Control:
 	for slot in shop_barrel_container.get_children():
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_NONE
 	for slot in shop_gun_frame_container.get_children():
-		slot.gun_frame_item_ui.button.focus_mode = FocusMode.FOCUS_NONE
+		slot.item_ui.button.focus_mode = FocusMode.FOCUS_NONE
 	for item in effect_detail_items:
 		item.focus_mode = FocusMode.FOCUS_ALL
 	
@@ -248,6 +259,14 @@ func _on_item_ui_button_pressed(ui: Control) -> void:
 		active_focus_idx = parent.get_index()
 	# Remove focus neighbors
 	toggle_ui_focus_neighbors(ui, false)
+
+func _get_active_focus_idx_on_button_focus(ui: ItemUI) -> int:
+	# Shop ItemUI objects are wrapped in a ShopItemUI node
+	return ui.get_parent().get_index()
+
+func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
+	# Shop ItemUI objects are wrapped in a ShopItemUI node
+	return ui.get_parent().get_parent()
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
