@@ -82,7 +82,6 @@ func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false)
 	barrel_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.barrel_info_summary]
 	barrel_desc_label.text = "[color=gray]Not available in demo.[/color]" if is_locked else data.barrel_desc
 	
-	#locked_barrel_overlay.visible = is_locked
 	if is_locked:
 		show_barrel_overview(true, true)
 		return

@@ -293,6 +293,7 @@ func _on_item_ui_button_focus_lost(button: Button) -> void:
 		barrel_info_region.populate_detail_circle_ui(current_selected_item_ui.data)
 		barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
 		barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data, current_selected_item_ui.is_locked)
+		barrel_info_region.show_barrel_overview(true, current_selected_item_ui.is_locked)
 	
 	toggle_ui_focus_neighbors(button, true)
 
