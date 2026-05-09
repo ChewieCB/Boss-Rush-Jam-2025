@@ -32,6 +32,10 @@ func _ready() -> void:
 	GameManager.currency_changed.connect(full_refresh_ui.unbind(1))
 	GameManager.refresh_shop_ui.connect(full_refresh_ui)
 	Input.joy_connection_changed.connect(_on_controller_connection)
+	
+	for ui: BarrelInfoIcon in barrel_info_region.barrel_info_icon_effect_pool:
+		ui.focus_entered.connect(_on_effect_detail_focus_gained.bind(ui))
+	barrel_info_region.show_barrel_overview()
 
 
 func _input(event: InputEvent) -> void:
@@ -305,7 +309,7 @@ func _on_item_ui_button_focus_lost(button: Button) -> void:
 			barrel_info_region.populate_detail_circle_ui(current_selected_item_ui.data)
 			barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
 			barrel_info_region.set_barrel_overview_data(current_selected_item_ui.data, current_selected_item_ui.is_locked)
-			barrel_info_region.show_barrel_overview(true, current_selected_item_ui.is_locked)
+			barrel_info_region.locked_barrel_overlay.visible = current_selected_item_ui.is_locked
 		elif lost_focus_parent is GunFrameItemUI:
 			# TODO - gun frame overview
 			pass
@@ -339,3 +343,8 @@ func _on_controller_connection(_device: int, connected: bool):
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+
+
+func _on_effect_detail_focus_gained(ui: BarrelInfoIcon) -> void:
+	active_effect_detail_idx = ui.get_index()
+	barrel_info_region.set_effect_detail_data(active_effect_detail_idx)

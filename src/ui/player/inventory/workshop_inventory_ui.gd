@@ -16,13 +16,9 @@ var available_gun_frames: Array
 func _ready() -> void:
 	super()
 	init_equip_barrels()
-	for ui: BarrelInfoIcon in barrel_info_region.barrel_info_icon_effect_pool:
-		ui.focus_entered.connect(_on_effect_detail_focus_gained.bind(ui))
-		#active_effect_detail_idx
 	available_gun_frames = [GameManager.equipped_gun_frame] + \
 		GameManager.inventory_gun_frames
 	
-	barrel_info_region.show_barrel_overview()
 	var focused_ui: Control = get_first_item_for_focus().get_child(0)
 	if focused_ui:
 		hide_effect_detail_view(focused_ui)
@@ -488,9 +484,4 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		active_equip_idx = -1
 	
 	full_refresh_ui(focus_area_callable)
-
-
-func _on_effect_detail_focus_gained(ui: BarrelInfoIcon) -> void:
-	active_effect_detail_idx = ui.get_index()
-	barrel_info_region.set_effect_detail_data(active_effect_detail_idx)
  
