@@ -36,16 +36,23 @@ func get_available_player_3d() -> AudioStreamPlayer3D:
 	if available_players_3d.size() == 0:
 		increase_pool_3d()
 	var player = available_players_3d.pop_front()
+	while not is_instance_valid(player):
+		increase_pool_3d(true)
+		if available_players_3d.size() == 0:
+			push_error("Failed to create valid 3D audio player")
+			return null
+		player = available_players_3d.pop_front()
 	busy_players_3d.append(player)
 	return player
 
 
-func increase_pool_3d() -> void:
+func increase_pool_3d(force = false) -> void:
 	# See if we can reclaim a rogue busy player
-	for player in busy_players_3d:
-		if not player.playing:
-			mark_player_as_available_3d(player)
-			return
+	if not force:
+		for player in busy_players_3d:
+			if not player.playing:
+				mark_player_as_available_3d(player)
+				return
 
 	# Otherwise, add a new player
 	var player := AudioStreamPlayer3D.new()

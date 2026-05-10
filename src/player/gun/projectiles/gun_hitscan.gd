@@ -30,6 +30,8 @@ func _ready():
 		var rotate_amount = randi_range(0, 90)
 		shot_flash_start.rotate_z(rotate_amount)
 		shot_flash_start.modulate = mesh.mesh.material.get_shader_parameter("color")
+	# if is_ricochet_shot:
+	# 	redshift_bullet()
 
 func _process(delta):
 	super (delta)
@@ -155,8 +157,9 @@ func ricochet():
 	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	found_hitscal_col = false
-	var new_hitscan_inst: GunHitscan = create_duplication()
-	get_tree().get_root().add_child(new_hitscan_inst)
+	var new_inst: GunHitscan = create_duplication(true) # Also set is_ricochet
+	get_tree().get_root().add_child(new_inst)
+	new_inst.mesh.mesh.material = mesh.mesh.material.duplicate()
 	var new_dir = current_dir.bounce(hitscan_col_normal)
 	
 	# Add slight homing toward last look enemy target if available
@@ -168,8 +171,9 @@ func ricochet():
 	
 	# Offset a bit to prevent stuck inside collision body
 	var new_start_pos = hitscan_col_point - new_dir * RICO_START_POS_OFFSET_MODIFIER
-	new_hitscan_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
-
+	new_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
+	# Redshift the bullet color after ricochet. Only do it once.
+		
 func get_projectile_color() -> Color:
 	return mesh.mesh.material.get_shader_parameter("color")
 
@@ -225,3 +229,14 @@ func change_bullet_color(_new_color: Color):
 	else:
 		mesh.mesh.material.set_shader_parameter("color", _new_color)
 		mesh.mesh.material.set_shader_parameter("emission_color", Color(_new_color.r, _new_color.g, _new_color.b, 0.7))
+
+
+# func redshift_bullet():
+# 	var current_color = mesh.mesh.material.get_shader_parameter("emission_color")
+# 	var redshifted_color = Color(
+# 		current_color.r + (1.0 - current_color.r) * 0.5, # Shift red towards 1.0
+# 		current_color.g * 0.7, # Reduce green
+# 		current_color.b * 0.3, # Reduce blue significantly
+# 		current_color.a
+# 	)
+# 	change_bullet_color(redshifted_color)

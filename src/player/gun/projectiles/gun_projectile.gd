@@ -99,7 +99,10 @@ func ricochet():
 	collider.set_collision_mask_value(2, true)
 	gravity_free_timer = 0
 	found_hitscal_col = false
-	is_ricochet_shot = true
+	# Redshift the bullet color after ricochet. Only do it once.
+	if is_ricochet_shot == false:
+		redshift_bullet()
+		is_ricochet_shot = true
 	
 	# Calculate bounce direction
 	var bounce_dir = current_dir.bounce(hitscan_col_normal)
@@ -173,3 +176,13 @@ func change_bullet_color(_new_color: Color):
 		mesh.mesh.material.emission = _new_color
 		trail.material_override.albedo_color = Color(_new_color.r, _new_color.g, _new_color.b, 0.7)
 		trail.material_override.emission = _new_color
+
+func redshift_bullet():
+	var current_color = mesh.mesh.material.albedo_color
+	var redshifted_color = Color(
+		current_color.r + (1.0 - current_color.r) * 0.5, # Shift red towards 1.0
+		current_color.g * 0.7, # Reduce green
+		current_color.b * 0.3, # Reduce blue significantly
+		current_color.a
+	)
+	change_bullet_color(redshifted_color)
