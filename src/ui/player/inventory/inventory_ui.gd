@@ -60,10 +60,11 @@ func _input(event: InputEvent) -> void:
 		elif event.is_action_pressed("spin_barrels"):
 			if barrel_info_region.single_effect_detail.visible:
 				active_effect_detail_idx = wrapi(
-					active_effect_detail_idx + 1, 
+					active_effect_detail_idx - 1, 
 					0, 
 					barrel_info_region.current_effect_count
 				)
+				await barrel_info_region.rotate_circle_one_slot()
 				barrel_info_region.grab_detail_focus(active_effect_detail_idx)
 
 

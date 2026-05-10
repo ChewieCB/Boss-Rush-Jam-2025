@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://bdotmbmcpnnup"]
+[gd_scene load_steps=13 format=3 uid="uid://bdotmbmcpnnup"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_info_region.gd" id="1_4g30l"]
 [ext_resource type="Texture2D" uid="uid://rgiumjfjwf7y" path="res://assets/sprite/placeholder/circle-ring.png" id="2_3m8fx"]
 [ext_resource type="PackedScene" uid="uid://bl1msq3x8c3ar" path="res://src/ui/player/inventory/BarrelInfoIcon.tscn" id="3_6lcb6"]
 [ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="4_iqan4"]
+[ext_resource type="Texture2D" uid="uid://cwcqma7xn6wie" path="res://assets/sprite/game_icon/clockwise-rotation.png" id="5_53o4x"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="6_lxvge"]
 [ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="7_ggvao"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="8_c2skj"]
@@ -12,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dhwkpguamgubg" path="res://src/ui/player/inventory/EffectInfoLine.tscn" id="9_xao3k"]
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="10_xfxnq"]
 
-[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "select_icon_line", "circle_ring", "circle_ring_centerpoint", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
+[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "select_icon_line", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
 custom_minimum_size = Vector2(838, 364)
 pivot_offset = Vector2(245.01, 190.39)
 size_flags_horizontal = 2
@@ -35,13 +36,13 @@ barrel_effect_list_label_4 = NodePath("HBoxContainer/PanelDescription/BarrelOver
 select_icon_line = NodePath("SelectIconLine")
 circle_ring = NodePath("HBoxContainer/MarginContainer/CircleRing")
 circle_ring_centerpoint = NodePath("HBoxContainer/MarginContainer/CircleRing/CircleCenter")
+circle_arrow_icon = NodePath("HBoxContainer/MarginContainer/CircleRing/ClockwiseArrow")
 barrel_overview_detail = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail")
 single_effect_detail = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail")
 locked_barrel_overlay = NodePath("HBoxContainer/PanelDescription/LockedBarrelOverlay")
 
 [node name="SelectIconLine" type="Line2D" parent="."]
-visible = false
-points = PackedVector2Array(504, 232, 224, 96)
+points = PackedVector2Array(476, 182, 0, 182)
 width = 5.0
 default_color = Color(0.901961, 0.776471, 0, 1)
 
@@ -67,12 +68,29 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -0.5
-offset_top = -0.5
-offset_right = 0.5
-offset_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ClockwiseArrow" type="TextureRect" parent="HBoxContainer/MarginContainer/CircleRing"]
+modulate = Color(0.63, 0.63, 0.63, 1)
+custom_minimum_size = Vector2(144, 144)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -72.0
+offset_right = 72.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(72, 72)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("5_53o4x")
+expand_mode = 3
 
 [node name="DeviceInputPrompt" parent="HBoxContainer/MarginContainer" instance=ExtResource("4_iqan4")]
 layout_mode = 2

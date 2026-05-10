@@ -286,7 +286,7 @@ func get_inventory_focus(idx: int = -1) -> Control:
 
 func get_barrel_detail_focus(idx: int = -1) -> Control:
 	#current_focus_area = barrel_info_region.circle_ring
-	var effect_detail_items = barrel_info_region.circle_ring.get_children()
+	var effect_detail_items = barrel_info_region.barrel_info_icon_effect_pool
 	
 	# Update focus area modes
 	for slot in equip_barrel_container.get_children():

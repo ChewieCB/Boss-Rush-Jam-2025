@@ -7,14 +7,35 @@
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="5_eetko"]
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="6_0cpi1"]
 
-[node name="BarrelInfoIcon" type="ColorRect"]
-custom_minimum_size = Vector2(64, 64)
-offset_right = 100.0
-offset_bottom = 100.0
-focus_mode = 2
+[node name="BarrelInfoIcon" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_01pn5")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="BarrelInfoIcon" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(50, 50)
+focus_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="BarrelInfoIcon"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,7 +45,7 @@ grow_vertical = 2
 texture = ExtResource("2_k6234")
 expand_mode = 1
 
-[node name="BorderNormal" type="NinePatchRect" parent="."]
+[node name="BorderNormal" type="NinePatchRect" parent="BarrelInfoIcon"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -38,7 +59,7 @@ patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
-[node name="BorderFocus" type="NinePatchRect" parent="."]
+[node name="BorderFocus" type="NinePatchRect" parent="BarrelInfoIcon"]
 visible = false
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
@@ -53,7 +74,7 @@ patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="BarrelInfoIcon"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -66,7 +87,7 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="ReloadSpinValueLabel" type="RichTextLabel" parent="CenterContainer"]
+[node name="ReloadSpinValueLabel" type="RichTextLabel" parent="BarrelInfoIcon/CenterContainer"]
 clip_contents = false
 layout_mode = 2
 mouse_filter = 2

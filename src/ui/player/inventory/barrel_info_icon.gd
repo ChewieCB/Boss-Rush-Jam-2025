@@ -1,9 +1,10 @@
-extends ColorRect
+extends Control
 class_name BarrelInfoIcon
 
-@onready var texture_rect: TextureRect = $TextureRect
-@onready var border_focus: Control = $BorderFocus
-@onready var spin_value_label: RichTextLabel = $CenterContainer/ReloadSpinValueLabel
+@onready var colour_rect: ColorRect = $BarrelInfoIcon
+@onready var texture_rect: TextureRect = $BarrelInfoIcon/TextureRect
+@onready var border_focus: Control = $BarrelInfoIcon/BorderFocus
+@onready var spin_value_label: RichTextLabel = $BarrelInfoIcon/CenterContainer/ReloadSpinValueLabel
 @export var pulse_speed: float = 5 # How fast the pulse happens
 @export var pulse_strength: float = 0.3 # How bright/dark it changes (0–1 range)
 
@@ -25,9 +26,11 @@ var _base_color: Color
 var _time: float = 0.0
 var is_expanded = false # Also can be used as a more consistent is_focused
 
+
 func _ready() -> void:
-	self_modulate = Color(0.5, 0.5, 0.5)
-	_base_color = color
+	colour_rect.self_modulate = Color(0.5, 0.5, 0.5)
+	_base_color = colour_rect.color
+
 
 func _process(delta: float) -> void:
 	if is_expanded:
@@ -37,8 +40,8 @@ func _process(delta: float) -> void:
 	var pulse = sin(_time) * 0.5 + 0.5 # normalized to 0..1
 	# Adjust brightness based on pulse_strength
 	var brightness = 1.0 - pulse_strength + pulse * pulse_strength * 2.0
-	color = _base_color * brightness
-	color.a = 1
+	colour_rect.color = _base_color * brightness
+	colour_rect.color.a = 1
 
 
 func set_barrel_roll_data(_data) -> void:
@@ -58,22 +61,25 @@ func set_barrel_roll_data(_data) -> void:
 
 func expand_button_size():
 	is_expanded = true
-	pivot_offset = size / 2
+	colour_rect.pivot_offset = size / 2
 	var tween = self.create_tween()
 	tween.tween_property(self, "scale", Vector2(SCALE_FACTOR, SCALE_FACTOR), 0.1)
 
+
 func return_button_size():
 	is_expanded = false
-	pivot_offset = size / 2
+	colour_rect.pivot_offset = size / 2
 	var tween = self.create_tween()
 	tween.tween_property(self, "scale", Vector2(1, 1), 0.1)
+
 
 func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()
 
+
 func _on_focus_exited() -> void:
 	border_focus.visible = false
-	self_modulate = Color(0.5, 0.5, 0.5)
+	colour_rect.self_modulate = Color(0.5, 0.5, 0.5)
 	return_button_size()
 
 
@@ -82,7 +88,7 @@ func _on_focus_entered() -> void:
 	expand_button_size()
 	play_button_hover_sfx()
 	border_focus.visible = true
-	self_modulate = Color(1, 1, 1)
+	colour_rect.self_modulate = Color(1, 1, 1)
 	var content = "[center]{0}[/center]\n\n{1}\n".format([
 		barrel_roll_data["title"],
 		barrel_roll_data["description"]]

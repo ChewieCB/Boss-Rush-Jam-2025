@@ -161,7 +161,7 @@ func get_inventory_focus(focus_idx: int = 0) -> Control:
 
 func get_barrel_detail_focus(idx: int = -1) -> Control:	
 	# Update focus area modes
-	var effect_detail_items = barrel_info_region.circle_ring.get_children()
+	var effect_detail_items = barrel_info_region.barrel_info_icon_effect_pool
 	for slot in shop_barrel_container.get_children():
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_NONE
 	for slot in shop_gun_frame_container.get_children():

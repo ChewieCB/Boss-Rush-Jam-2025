@@ -27,6 +27,7 @@ class_name BarrelInfoRegion
 const CIRCLE_RING_RADIUS_OFFSET = 166
 var circle_ring_center_pos: Vector2
 var circle_ring_radius: float
+@export var circle_arrow_icon: TextureRect
 
 @export var barrel_overview_detail: ScrollContainer
 @export var single_effect_detail: ScrollContainer
@@ -45,23 +46,11 @@ func _ready() -> void:
 	select_icon_line.visible = false
 	circle_ring_center_pos = circle_ring_centerpoint.position
 	circle_ring_radius = -(circle_ring.size.x / 2) - CIRCLE_RING_RADIUS_OFFSET
-	circle_ring_centerpoint.queue_free()
-	circle_ring.remove_child(circle_ring_centerpoint)
+	#circle_ring_centerpoint.queue_free()
+	#circle_ring.remove_child(circle_ring_centerpoint)
 	
 	_init_barrel_effect_ui()
 	show_barrel_overview(false)
-
-
-func _init_barrel_effect_ui() -> void:
-	# Instantiate 4 barrel effect info objects to update as needed
-	barrel_info_icon_effect_angles = []
-	for i in range(MAX_EFFECT_COUNT):
-		var effect_info_ui: BarrelInfoIcon = barrel_info_icon_prefab.instantiate()
-		circle_ring.add_child(effect_info_ui)
-		effect_info_ui.barrel_info_region = self
-		effect_info_ui.focus_mode = Control.FOCUS_NONE
-		barrel_info_icon_effect_pool.append(effect_info_ui)
-		barrel_info_icon_effect_angles.append(0)
 
 
 func _show_ui(show_circle: bool, show_barrel: bool, show_effect: bool) -> void:
@@ -123,42 +112,68 @@ func grab_detail_focus(idx: int) -> void:
 	effect.grab_focus.call_deferred()
 
 
+func _init_barrel_effect_ui() -> void:
+	# Instantiate 4 barrel effect info objects to update as needed
+	for i in range(MAX_EFFECT_COUNT):
+		var effect_info_ui: BarrelInfoIcon = barrel_info_icon_prefab.instantiate()
+		circle_ring_centerpoint.add_child(effect_info_ui)
+		effect_info_ui.barrel_info_region = self
+		effect_info_ui.focus_mode = Control.FOCUS_NONE
+		barrel_info_icon_effect_pool.append(effect_info_ui)
+
+
 func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 	var barrel_inst: SpinBarrel = barrel_data.barrel_prefab.instantiate()
 	add_child(barrel_inst)
 	
 	# Regen the barrel roll effects around the circle using the barrel data
 	current_effect_count = barrel_inst.get_number_of_barrel_effect()
-	var ui_positions_arr: Array[Vector2] = get_circle_positions(current_effect_count)
 	var _wrap_focus = func(x: int): return wrapi(x, 0, current_effect_count)
-	var effect_icon_nodes = circle_ring.get_children()
+	var effect_icon_nodes = barrel_info_icon_effect_pool.duplicate()
 	effect_icon_nodes = effect_icon_nodes.slice(0, current_effect_count)
+	
+	# Instead of storing the positions of each node, place the first node at the top 
+	# of the circle - Vector2(0, RADIUS) - and then rotate this vector by ROTATION_STEP for
+	# each following node
+	var rotation_step: float = 2 * PI / current_effect_count
 	for i in range(MAX_EFFECT_COUNT):
 		var ui: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
+		# Hide any unused efffect icon nodes
 		if i >= current_effect_count:
 			ui.visible = false
 			continue
+		
 		var barrel_roll_data: Dictionary = barrel_inst.get_barrel_effect_data_at(i)
-		ui.position = ui_positions_arr[i] - (ui.size / 2)
+		ui.global_position = circle_ring_centerpoint.global_position + Vector2(circle_ring_radius, 0).rotated(rotation_step * i)
 		ui.set_barrel_roll_data(barrel_roll_data)
 		ui.visible = true
-
-		# Store each icon's starting angle
-		var angle = (TAU / current_effect_count) * i
-		barrel_info_icon_effect_angles[i] = angle
-		
-		# TODO - click rotation focus instead of ui inputs
-		
-		# LEFT
-		#var prev_inv_idx: int = _wrap_focus.call(i - 1)
-		#var prev_inv: Control = effect_icon_nodes[prev_inv_idx]
-		#ui.focus_neighbor_left = prev_inv.get_path()
-		## RIGHT
-		#var next_inv_idx: int = _wrap_focus.call(i + 1)
-		#var next_inv: Control = effect_icon_nodes[next_inv_idx]
-		#ui.focus_neighbor_right = next_inv.get_path()
 	
 	barrel_inst.queue_free()
+
+
+func rotate_circle_one_slot() -> void:
+	# Rotate all visible detail UI objects
+	var rotation_step = 2 * PI / current_effect_count
+	
+	var spin_tween: Tween = get_tree().create_tween()
+	spin_tween.set_parallel(true)#.set_trans(Tween.TRANS_BOUNCE)#.set_ease(Tween.EASE_IN_OUT)
+	spin_tween.tween_property(circle_ring_centerpoint, "rotation", circle_ring_centerpoint.rotation + rotation_step, 0.23)
+	spin_tween.tween_property(circle_arrow_icon, "rotation", circle_arrow_icon.rotation + 2*PI, 0.23).set_ease(Tween.EASE_OUT)
+
+	for i in range(MAX_EFFECT_COUNT):
+		var barrel_info_icon: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
+		if not barrel_info_icon.visible:
+			continue
+		# TODO - tween the rotation with some bounce
+		#barrel_info_icon_effect_angles[i] += rotation_rad
+		#barrel_info_icon.position = Vector2(new_x, new_y) - (barrel_info_icon.size / 2)
+		spin_tween.tween_property(barrel_info_icon, "rotation", - (circle_ring_centerpoint.rotation + rotation_step), 0.23)
+		if select_icon_line.visible and barrel_info_icon.is_expanded:
+			var circ_center_pos: Vector2 = circle_ring.position + Vector2(circle_ring.size.x, -circle_ring.size.y) / 2
+			select_icon_line.points[1] = circ_center_pos + barrel_info_icon.position
+	
+	await spin_tween.finished
+	return
 
 
 # When barrel is focused in Inventory/Shop, show the barrel overview details
@@ -196,10 +211,10 @@ func _process(delta: float) -> void:
 		var barrel_info_icon: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
 		if not barrel_info_icon.visible:
 			continue
-		barrel_info_icon_effect_angles[i] += rotation_speed * delta
-		var new_x = circle_ring_center_pos.x + (circle_ring.size.x / 2) + circle_ring_radius * cos(barrel_info_icon_effect_angles[i])
-		var new_y = circle_ring_center_pos.y + (circle_ring.size.x / 2) + circle_ring_radius * sin(barrel_info_icon_effect_angles[i])
-		barrel_info_icon.position = Vector2(new_x, new_y) - (barrel_info_icon.size / 2)
+		#barrel_info_icon_effect_angles[i] += rotation_speed * delta
+		#var new_x = circle_ring_center_pos.x + (circle_ring.size.x / 2) + circle_ring_radius * cos(barrel_info_icon_effect_angles[i])
+		#var new_y = circle_ring_center_pos.y + (circle_ring.size.x / 2) + circle_ring_radius * sin(barrel_info_icon_effect_angles[i])
+		#barrel_info_icon.position = Vector2(new_x, new_y) - (barrel_info_icon.size / 2)
 		if select_icon_line.visible and barrel_info_icon.is_expanded:
 			select_icon_line.points[1] = barrel_info_icon.position + barrel_info_icon.size
 
