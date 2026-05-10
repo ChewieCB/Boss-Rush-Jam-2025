@@ -138,7 +138,7 @@ func create_status_effect_impact(pos: Vector3, normal: Vector3):
 				impact_inst.rotate_object_local(Vector3(1, 0, 0), 90)
 
 func calculate_bullet_damage(reroll_crit = true):
-	# FIXME - this resets crit damage 
+	# FIXME - this resets crit damage
 	var rand_damage_mod = get_damage_variance_modifier(damage)
 	var calculated_damage = damage + rand_damage_mod
 	# Crit
@@ -229,3 +229,6 @@ func apply_damage_to_health_component(health_component: HealthComponent, damage_
 		health_component.damage(damage_value, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP, "CRIT!")
 	else:
 		health_component.damage(damage_value)
+
+func switch_to_slowmo_bullet_trail():
+	return

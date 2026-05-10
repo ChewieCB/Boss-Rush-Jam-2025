@@ -52,6 +52,7 @@ func on_effect_set():
 			owner_barrel.owner_gun.modified_screenshake = calculate_new_value(
 				owner_barrel.owner_gun.modified_screenshake, modify_value, is_perc, false)
 
+
 func on_fire_rate_check():
 	super ()
 	#match attribute:

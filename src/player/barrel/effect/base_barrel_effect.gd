@@ -16,12 +16,12 @@ enum AttributeNameEnum {
 	HOMING_STRENGTH,
 	RECOIL,
 	SCREENSHAKE,
-	SPREAD_HORIZONTAL_BIAS
+	SPREAD_HORIZONTAL_BIAS,
+	LIFETIME
 }
 
 @export_multiline var display_text_title: String
 @export_multiline var display_text_tag: String
-@export_multiline var display_text_desc: String
 @export var positive_desc: Array[String]
 @export var negative_desc: Array[String]
 @export var icon_id: int = -1

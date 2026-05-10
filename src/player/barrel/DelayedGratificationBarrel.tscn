@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://c7jc72exa8eg2"]
+[gd_scene load_steps=9 format=3 uid="uid://c7jc72exa8eg2"]
 
 [ext_resource type="Script" path="res://src/player/barrel/spin_barrel.gd" id="1_2a2qf"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/compound_effect.gd" id="3_q7s8s"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_attribute_effect.gd" id="4_duuhv"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/modify_attribute_effect.gd" id="5_307l2"]
+[ext_resource type="Script" path="res://src/player/barrel/slow_mo_effect.gd" id="5_td3bf"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/set_projectile_prefab.gd" id="6_j8ucp"]
 [ext_resource type="PackedScene" uid="uid://35lbaqwytewn" path="res://src/player/gun/projectiles/StickyBombProjectile.tscn" id="7_2jtxl"]
 [ext_resource type="Script" path="res://src/player/barrel/effect/medical_payout_effect.gd" id="8_0by4g"]
@@ -17,10 +18,8 @@ script = ExtResource("1_2a2qf")
 script = ExtResource("3_q7s8s")
 display_text_title = "Bullet Time"
 display_text_tag = "You are not N*o though"
-display_text_desc = "-50% projectile speed
-+25% damage"
-positive_desc = Array[String](["+25% damage"])
-negative_desc = Array[String](["-50% projectile speed"])
+positive_desc = Array[String](["+35% damage"])
+negative_desc = Array[String](["-80% projectile speed"])
 icon_id = 19
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/BulletTime"]
@@ -36,16 +35,16 @@ is_perc = true
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("5_307l2")
 attribute = 1
-modify_value = 25.0
+modify_value = 35.0
 is_perc = true
+
+[node name="SlowMoEffect" type="Node3D" parent="EffectContainer/BulletTime"]
+script = ExtResource("5_td3bf")
 
 [node name="StickyBomb" type="Node3D" parent="EffectContainer"]
 script = ExtResource("3_q7s8s")
 display_text_title = "Sticky Bomb"
 display_text_tag = "Keep your distance"
-display_text_desc = "+30% damage
--50% firerate
- Bullets stick to enemies and detonate after 2 seconds."
 positive_desc = Array[String](["+30% damage", "Rounds stick and explode after 2s"])
 negative_desc = Array[String](["-50% firerate", "The explosion hurt you too"])
 icon_id = 21

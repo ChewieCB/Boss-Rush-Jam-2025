@@ -8,6 +8,8 @@ class_name GunProjectile
 @onready var life_timer: Timer = $LifeTimer
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var trail: Trail3D = $Trail/Trail3D
+@onready var slowmo_trail: Trail3D = $Trail/Trail3DBulletTime
+
 
 @onready var homing_area: Area3D = $HomingArea3D
 @onready var homing_collision_shape: CollisionShape3D = $HomingArea3D/CollisionShape3D
@@ -186,3 +188,9 @@ func redshift_bullet():
 		current_color.a
 	)
 	change_bullet_color(redshifted_color)
+
+func switch_to_slowmo_bullet_trail():
+	super ()
+	# Better optimization is instantiate and add the slowmo later?
+	trail.visible = false
+	slowmo_trail.visible = true
