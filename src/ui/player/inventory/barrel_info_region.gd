@@ -41,6 +41,8 @@ var current_effect_count: int
 var barrel_info_icon_effect_pool: Array[BarrelInfoIcon] = []
 var barrel_info_icon_effect_angles: Array[float] = []
 
+var spin_tween: Tween
+
 
 func _ready() -> void:
 	select_icon_line.visible = false
@@ -155,7 +157,7 @@ func rotate_circle_one_slot() -> void:
 	# Rotate all visible detail UI objects
 	var rotation_step = 2 * PI / current_effect_count
 	
-	var spin_tween: Tween = get_tree().create_tween()
+	spin_tween = get_tree().create_tween()
 	spin_tween.set_parallel(true)#.set_trans(Tween.TRANS_BOUNCE)#.set_ease(Tween.EASE_IN_OUT)
 	spin_tween.tween_property(circle_ring_centerpoint, "rotation", circle_ring_centerpoint.rotation + rotation_step, 0.23)
 	spin_tween.tween_property(circle_arrow_icon, "rotation", circle_arrow_icon.rotation + 2*PI, 0.23).set_ease(Tween.EASE_OUT)
@@ -173,6 +175,7 @@ func rotate_circle_one_slot() -> void:
 			select_icon_line.points[1] = circ_center_pos + barrel_info_icon.position
 	
 	await spin_tween.finished
+	spin_tween = null
 	return
 
 
