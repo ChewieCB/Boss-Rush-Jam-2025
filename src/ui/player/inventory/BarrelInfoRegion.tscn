@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dhwkpguamgubg" path="res://src/ui/player/inventory/EffectInfoLine.tscn" id="9_xao3k"]
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="10_xfxnq"]
 
-[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "select_icon_line", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
+[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "select_icon_line", "effect_detail_wheel", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
 custom_minimum_size = Vector2(838, 364)
 pivot_offset = Vector2(245.01, 190.39)
 size_flags_horizontal = 2
@@ -34,6 +34,7 @@ barrel_effect_list_label_2 = NodePath("HBoxContainer/PanelDescription/BarrelOver
 barrel_effect_list_label_3 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine3")
 barrel_effect_list_label_4 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine4")
 select_icon_line = NodePath("SelectIconLine")
+effect_detail_wheel = NodePath("HBoxContainer/MarginContainer")
 circle_ring = NodePath("HBoxContainer/MarginContainer/CircleRing")
 circle_ring_centerpoint = NodePath("HBoxContainer/MarginContainer/CircleRing/CircleCenter")
 circle_arrow_icon = NodePath("HBoxContainer/MarginContainer/CircleRing/ClockwiseArrow")

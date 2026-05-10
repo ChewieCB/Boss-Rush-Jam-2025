@@ -22,6 +22,7 @@ class_name BarrelInfoRegion
 
 @export var select_icon_line: Line2D
 
+@export var effect_detail_wheel: MarginContainer
 @export var circle_ring: Control
 @export var circle_ring_centerpoint: Control
 const CIRCLE_RING_RADIUS_OFFSET = 166
@@ -56,6 +57,7 @@ func _ready() -> void:
 
 
 func _show_ui(show_circle: bool, show_barrel: bool, show_effect: bool) -> void:
+	effect_detail_wheel.visible = show_circle
 	circle_ring.visible = show_circle
 	barrel_overview_detail.visible = show_barrel
 	single_effect_detail.visible = show_effect
