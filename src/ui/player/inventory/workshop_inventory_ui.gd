@@ -38,6 +38,9 @@ func _input(event: InputEvent) -> void:
 		if current_selected_item_ui != null:
 			for ui_action in ["ui_left", "ui_right", "ui_up", "ui_down"]:
 				if event.is_action(ui_action):
+					# TODO - If we've got the detail view up, change the barrel focus
+					#if barrel_info_region.single_effect_detail.visible:
+						#
 					get_viewport().set_input_as_handled()
 		
 		if event.is_action("inv_ui_tab_left") or event.is_action("inv_ui_tab_right"):

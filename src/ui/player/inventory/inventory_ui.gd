@@ -52,6 +52,7 @@ func _input(event: InputEvent) -> void:
 			
 			get_viewport().set_input_as_handled()
 			
+			# FIXME - add better handling for type edge cases here, inventory barrels do
 			if barrel_info_region.single_effect_detail.visible:
 				hide_effect_detail_view(focused_ui.item_ui)
 			elif barrel_info_region.barrel_overview_detail.visible:
@@ -63,13 +64,15 @@ func _input(event: InputEvent) -> void:
 				if is_instance_valid(barrel_info_region.spin_tween):
 					return
 				
+				# Null active icon to disable the line during spin
+				barrel_info_region.active_detail_icon = null
 				active_effect_detail_idx = wrapi(
 					active_effect_detail_idx - 1, 
 					0, 
 					barrel_info_region.current_effect_count
 				)
-				barrel_info_region.grab_detail_focus(active_effect_detail_idx)
 				await barrel_info_region.rotate_circle_one_slot()
+				barrel_info_region.grab_detail_focus(active_effect_detail_idx)
 
 
 func _process(delta: float) -> void:
@@ -110,6 +113,10 @@ func close():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 	visible = false
+	
+	var focused_ui: Control = get_first_item_for_focus().get_parent()
+	if focused_ui:
+		hide_effect_detail_view(focused_ui)
 	
 	inventory_closed.emit()
 
