@@ -104,5 +104,4 @@ func _on_focus_entered() -> void:
 			content += "- " + line + "\n"
 		content += "[/color]"
 	
-	barrel_info_region.select_icon_line.visible = true
-	barrel_info_region.select_icon_line.points[1] = position + size
+	barrel_info_region.active_detail_icon = self

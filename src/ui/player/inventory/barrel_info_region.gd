@@ -4,6 +4,8 @@ class_name BarrelInfoRegion
 @export var barrel_info_icon_prefab: PackedScene
 @export var rotation_speed: float = 0.2  # Radians per second
 
+@export var info_panel: ColorRect
+
 @export var barrel_name_label: RichTextLabel
 @export var barrel_flavour_label: RichTextLabel
 @export var barrel_desc_label: RichTextLabel
@@ -19,8 +21,6 @@ class_name BarrelInfoRegion
 @export var barrel_effect_list_label_3: EffectInfoListUI
 @export var barrel_effect_list_label_4: EffectInfoListUI
 @onready var barrel_effect_list_labels = [barrel_effect_list_label_1, barrel_effect_list_label_2, barrel_effect_list_label_3, barrel_effect_list_label_4]
-
-@export var select_icon_line: Line2D
 
 @export var effect_detail_wheel: MarginContainer
 @export var circle_ring: Control
@@ -41,19 +41,27 @@ const MAX_EFFECT_COUNT: int = 4
 var current_effect_count: int
 var barrel_info_icon_effect_pool: Array[BarrelInfoIcon] = []
 var barrel_info_icon_effect_angles: Array[float] = []
+var active_detail_icon: BarrelInfoIcon
 
 var spin_tween: Tween
 
 
 func _ready() -> void:
-	select_icon_line.visible = false
 	circle_ring_center_pos = circle_ring_centerpoint.position
 	circle_ring_radius = -(circle_ring.size.x / 2) - CIRCLE_RING_RADIUS_OFFSET
-	#circle_ring_centerpoint.queue_free()
-	#circle_ring.remove_child(circle_ring_centerpoint)
 	
 	_init_barrel_effect_ui()
 	show_barrel_overview(false)
+
+
+func _draw() -> void:
+	if circle_ring.visible:
+		if active_detail_icon:
+			var start_global = info_panel.get_global_rect().get_center()
+			var end_global = active_detail_icon.get_global_rect().get_center()
+			var start_pos = get_global_transform().affine_inverse() * start_global
+			var end_pos = get_global_transform().affine_inverse() * end_global
+			draw_line(start_pos, end_pos, Color("#e6c600"), 5.0)
 
 
 func _show_ui(show_circle: bool, show_barrel: bool, show_effect: bool) -> void:
@@ -68,7 +76,7 @@ func show_barrel_overview(show_content: bool = true, is_locked: bool = false) ->
 	_show_ui(false, true, false)
 	barrel_overview_detail.visible = show_content
 	locked_barrel_overlay.visible = is_locked
-	select_icon_line.visible = false
+	active_detail_icon = null
 
 
 func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false) -> void:
@@ -105,10 +113,6 @@ func set_effect_detail_data(idx: int) -> void:
 	effect_name_label.text = "[b]%s[/b]" % [data.title]
 	effect_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.flavour_text]
 	effect_desc_label.text = data.description
-	
-	select_icon_line.visible = true
-	select_icon_line.points[1] = effect.position + effect.size
-	#barrel_info_icon_effect_pool[idx].grab_focus.call_deferred()
 
 
 func grab_detail_focus(idx: int) -> void:
@@ -169,12 +173,7 @@ func rotate_circle_one_slot() -> void:
 		if not barrel_info_icon.visible:
 			continue
 		# TODO - tween the rotation with some bounce
-		#barrel_info_icon_effect_angles[i] += rotation_rad
-		#barrel_info_icon.position = Vector2(new_x, new_y) - (barrel_info_icon.size / 2)
 		spin_tween.tween_property(barrel_info_icon, "rotation", - (circle_ring_centerpoint.rotation + rotation_step), 0.23)
-		if select_icon_line.visible and barrel_info_icon.is_expanded:
-			var circ_center_pos: Vector2 = circle_ring.position + Vector2(circle_ring.size.x, -circle_ring.size.y) / 2
-			select_icon_line.points[1] = circ_center_pos + barrel_info_icon.position
 	
 	await spin_tween.finished
 	spin_tween = null
@@ -209,19 +208,7 @@ func refresh_ui() -> void:
 
 
 func _process(delta: float) -> void:
-	if not single_effect_detail.visible:
-		return
-
-	for i in range(MAX_EFFECT_COUNT):
-		var barrel_info_icon: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
-		if not barrel_info_icon.visible:
-			continue
-		#barrel_info_icon_effect_angles[i] += rotation_speed * delta
-		#var new_x = circle_ring_center_pos.x + (circle_ring.size.x / 2) + circle_ring_radius * cos(barrel_info_icon_effect_angles[i])
-		#var new_y = circle_ring_center_pos.y + (circle_ring.size.x / 2) + circle_ring_radius * sin(barrel_info_icon_effect_angles[i])
-		#barrel_info_icon.position = Vector2(new_x, new_y) - (barrel_info_icon.size / 2)
-		if select_icon_line.visible and barrel_info_icon.is_expanded:
-			select_icon_line.points[1] = barrel_info_icon.position + barrel_info_icon.size
+	queue_redraw()
 
 
 func get_circle_positions(count: int) -> Array[Vector2]:
@@ -237,8 +224,6 @@ func get_circle_positions(count: int) -> Array[Vector2]:
 
 func override_description_content(content: String):
 	barrel_desc_label.text = content
-	if content == "":
-		select_icon_line.visible = false
 
 
 #func reset_ui():

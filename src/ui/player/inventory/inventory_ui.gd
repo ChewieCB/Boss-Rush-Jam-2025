@@ -62,13 +62,14 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 				if is_instance_valid(barrel_info_region.spin_tween):
 					return
-				await barrel_info_region.rotate_circle_one_slot()
+				
 				active_effect_detail_idx = wrapi(
 					active_effect_detail_idx - 1, 
 					0, 
 					barrel_info_region.current_effect_count
 				)
 				barrel_info_region.grab_detail_focus(active_effect_detail_idx)
+				await barrel_info_region.rotate_circle_one_slot()
 
 
 func _process(delta: float) -> void:
