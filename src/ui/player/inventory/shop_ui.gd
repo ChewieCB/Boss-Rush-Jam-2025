@@ -213,7 +213,7 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 		persist_item_ui_highlight(_ui)
 		_desaturate_siblings(_ui)
 		toggle_ui_focus_neighbors(_ui.button, false)
-		var detail_focus: Control = get_barrel_detail_focus(active_effect_detail_idx)
+		var detail_focus: Control = get_barrel_detail_focus(0)
 		detail_focus.grab_focus.call_deferred()
 
 
@@ -223,7 +223,6 @@ func hide_effect_detail_view(focused_ui: Control) -> void:
 		return
 	
 	barrel_info_region.show_barrel_overview()
-	active_effect_detail_idx = -1
 	clear_item_ui_highlight(_ui)
 	_reset_sibling_saturation(focused_ui)
 	# Clear the inventory highlighting if we have an inventory slot selected

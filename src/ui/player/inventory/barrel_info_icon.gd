@@ -99,8 +99,9 @@ func _on_barrel_info_icon_mouse_entered() -> void:
 
 
 func _on_barrel_info_icon_mouse_exited() -> void:
-	if barrel_info_region.active_detail_icon == self:
+	if barrel_info_region.active_effect_detail_idx == get_index():
 		return
+	
 	focus_exited.emit()
 	_on_focus_exited()
 

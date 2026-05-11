@@ -45,6 +45,8 @@ var active_detail_icon: BarrelInfoIcon
 
 var spin_tween: Tween
 
+var active_effect_detail_idx: int = 0
+
 
 func _ready() -> void:
 	circle_ring_center_pos = circle_ring_centerpoint.position
@@ -77,6 +79,7 @@ func show_barrel_overview(show_content: bool = true, is_locked: bool = false) ->
 	barrel_overview_detail.visible = show_content
 	locked_barrel_overlay.visible = is_locked
 	active_detail_icon = null
+	active_effect_detail_idx = 0
 
 
 func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false) -> void:
@@ -125,11 +128,13 @@ func grab_detail_focus(idx: int) -> void:
 func _init_barrel_effect_ui() -> void:
 	# Instantiate 4 barrel effect info objects to update as needed
 	for i in range(MAX_EFFECT_COUNT):
-		var effect_info_ui: BarrelInfoIcon = barrel_info_icon_prefab.instantiate()
-		circle_ring_centerpoint.add_child(effect_info_ui)
-		effect_info_ui.barrel_info_region = self
-		effect_info_ui.focus_mode = Control.FOCUS_CLICK
-		barrel_info_icon_effect_pool.append(effect_info_ui)
+		var ui: BarrelInfoIcon = barrel_info_icon_prefab.instantiate()
+		circle_ring_centerpoint.add_child(ui)
+		ui.barrel_info_region = self
+		ui.focus_mode = Control.FOCUS_CLICK
+		ui.focus_entered.connect(_on_effect_detail_focus_gained.bind(ui))
+		ui.focus_exited.connect(_on_effect_detail_focus_lost.bind(ui))
+		barrel_info_icon_effect_pool.append(ui)
 
 
 func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
@@ -159,6 +164,23 @@ func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 		ui.visible = true
 	
 	barrel_inst.queue_free()
+
+
+func cycle_effect_detail() -> void:
+	if is_instance_valid(spin_tween):
+		return
+	
+	# Null active icon to disable the line during spin
+	active_detail_icon = null
+	active_effect_detail_idx = wrapi(
+		active_effect_detail_idx - 1, 
+		0, 
+		current_effect_count
+	)
+	
+	await rotate_circle_one_slot()
+	
+	grab_detail_focus(active_effect_detail_idx)
 
 
 func rotate_circle_one_slot() -> void:
@@ -243,3 +265,21 @@ func set_barrel_locked():
 #func unfocus_other_barrel_info_icon():
 	#for child: BarrelInfoIcon in circle_ring.get_children():
 		#child.focus_exited.emit()
+
+func _on_effect_detail_focus_gained(ui: BarrelInfoIcon) -> void:
+	if ui.get_index() == active_effect_detail_idx:
+		ui.play_button_hover_sfx()
+		return
+	
+	active_detail_icon._on_focus_exited()
+	active_detail_icon = ui
+	set_effect_detail_data(ui.get_index())
+
+
+func _on_effect_detail_focus_lost(ui: BarrelInfoIcon) -> void:
+	if ui.get_index() == active_effect_detail_idx:
+		return
+	
+	active_detail_icon = barrel_info_icon_effect_pool[active_effect_detail_idx]
+	active_detail_icon._on_focus_entered()
+	set_effect_detail_data(active_effect_detail_idx)
