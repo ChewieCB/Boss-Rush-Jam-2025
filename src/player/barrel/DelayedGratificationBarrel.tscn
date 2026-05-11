@@ -18,9 +18,12 @@ script = ExtResource("1_2a2qf")
 script = ExtResource("3_q7s8s")
 display_text_title = "Bullet Time"
 display_text_tag = "You are not N*o though"
+display_text_desc = "-80% projectile speed
++35% damage"
 positive_desc = Array[String](["+35% damage"])
 negative_desc = Array[String](["-80% projectile speed"])
 icon_id = 19
+luck_triggers = Array[int]([4, 5])
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("4_duuhv")

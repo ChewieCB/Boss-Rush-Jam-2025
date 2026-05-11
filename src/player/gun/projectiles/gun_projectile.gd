@@ -98,7 +98,6 @@ func _on_life_timer_timeout() -> void:
 
 func ricochet():
 	super ()
-	collider.set_collision_mask_value(2, true)
 	gravity_free_timer = 0
 	found_hitscal_col = false
 	# Redshift the bullet color after ricochet. Only do it once.
@@ -121,6 +120,10 @@ func ricochet():
 	gravity_accel = 0
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
+	if body is Player and time_ricochetted == 0:
+		# TODO: FIX THIS
+		on_player_contact.emit(self )
+		return
 	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):

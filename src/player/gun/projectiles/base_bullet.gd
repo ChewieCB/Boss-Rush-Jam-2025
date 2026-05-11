@@ -8,6 +8,7 @@ class_name BaseBullet
 @export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
 
+signal on_player_contact(projectile: BaseBullet)
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
 signal impacted(projectile: BaseBullet, has_pos: bool, pos: Vector3)
@@ -22,6 +23,7 @@ var damage = 1
 ## In decimal
 var crit_chance = 0
 var ricochet_count_left = 0
+var time_ricochetted = 0
 var owner_gun: Gun
 var is_ricochet_shot = false
 var homing_strength = 0 # radius to search for enemy
@@ -152,6 +154,7 @@ func calculate_bullet_damage(reroll_crit = true):
 	return calculated_damage
 
 func ricochet():
+	time_ricochetted += 1
 	return
 
 ## This will be added to normal damage
@@ -169,6 +172,8 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	new_inst.spawn_pos = spawn_pos
 	new_inst.life_time = life_time
 	new_inst.travelled_distance = travelled_distance
+	new_inst.time_ricochetted = time_ricochetted
+	new_inst.on_player_contact.connect(owner_gun.check_barrel_effect_on_player_contact)
 	new_inst.before_damage_applied.connect(owner_gun.check_barrel_effect_on_before_damage_applied)
 	new_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
 	new_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))

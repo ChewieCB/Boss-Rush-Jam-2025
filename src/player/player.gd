@@ -478,7 +478,7 @@ func _physics_process(delta):
 
 	if aim_assist_ray_boss_check.is_colliding():
 		last_look_enemy_target = aim_assist_ray_boss_check.get_collider()
-	
+
 
 func update_ammo_counter_ui() -> void:
 	stat_ui.radial_ui_center_node.update(current_gun.magazine_ammo_left, current_gun.modified_magazine_size)

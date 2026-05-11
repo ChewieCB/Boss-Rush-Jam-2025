@@ -22,6 +22,7 @@ enum AttributeNameEnum {
 
 @export_multiline var display_text_title: String
 @export_multiline var display_text_tag: String
+@export_multiline var display_text_desc: String
 @export var positive_desc: Array[String]
 @export var negative_desc: Array[String]
 @export var icon_id: int = -1
@@ -128,6 +129,10 @@ func on_projectile_destroyed(_hit_boss: bool):
 
 ## Before bullet go out of barrel. Not take into account bullet effect yet.
 func on_gun_damage_calculation():
+	return
+
+## When bullet hit its own player
+func on_player_contact(_projectile: BaseBullet):
 	return
 
 ## When bullet hit enemy but JUST before applied damage (but after normal damage calculation).
