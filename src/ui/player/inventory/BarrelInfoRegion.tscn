@@ -66,6 +66,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="ClockwiseArrow" type="TextureRect" parent="HBoxContainer/MarginContainer/CircleRing"]
 modulate = Color(0.63, 0.63, 0.63, 1)
@@ -85,6 +86,7 @@ grow_vertical = 2
 pivot_offset = Vector2(72, 72)
 size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
 texture = ExtResource("5_53o4x")
 expand_mode = 3
 

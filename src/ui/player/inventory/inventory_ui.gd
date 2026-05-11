@@ -25,7 +25,7 @@ var current_selected_item_ui: Control = null
 var ui_transitioning: bool = false
 
 var active_focus_idx: int = -1
-var active_effect_detail_idx: int = -1
+var active_effect_detail_idx: int = 0
 
 
 func _ready() -> void:
@@ -35,8 +35,8 @@ func _ready() -> void:
 	
 	for ui: BarrelInfoIcon in barrel_info_region.barrel_info_icon_effect_pool:
 		ui.focus_entered.connect(_on_effect_detail_focus_gained.bind(ui))
+		ui.focus_exited.connect(_on_effect_detail_focus_lost.bind(ui))
 	barrel_info_region.show_barrel_overview()
-
 
 func _input(event: InputEvent) -> void:
 	if visible:
@@ -59,6 +59,7 @@ func _input(event: InputEvent) -> void:
 				show_effect_detail_view(focused_ui.item_ui)
 	
 		elif event.is_action_pressed("spin_barrels"):
+			# TODO - move this into the info region code
 			if barrel_info_region.single_effect_detail.visible:
 				get_viewport().set_input_as_handled()
 				if is_instance_valid(barrel_info_region.spin_tween):
@@ -386,5 +387,17 @@ func _on_controller_connection(_device: int, connected: bool):
 
 
 func _on_effect_detail_focus_gained(ui: BarrelInfoIcon) -> void:
-	active_effect_detail_idx = ui.get_index()
+	if ui == barrel_info_region.active_detail_icon:
+		ui.play_button_hover_sfx()
+		return
+	
+	barrel_info_region.active_detail_icon._on_focus_exited()
+	barrel_info_region.set_effect_detail_data(ui.get_index())
+
+
+func _on_effect_detail_focus_lost(ui: BarrelInfoIcon) -> void:
+	if ui == barrel_info_region.active_detail_icon:
+		return
+	
+	barrel_info_region.active_detail_icon._on_focus_entered()
 	barrel_info_region.set_effect_detail_data(active_effect_detail_idx)

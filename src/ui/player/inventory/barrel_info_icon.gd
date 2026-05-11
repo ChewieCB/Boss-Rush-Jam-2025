@@ -10,6 +10,7 @@ class_name BarrelInfoIcon
 
 
 signal display_description(content)
+signal clicked(effect_detail: BarrelInfoIcon)
 
 const SCALE_FACTOR = 1.2
 var barrel_info_region: BarrelInfoRegion = null
@@ -77,31 +78,32 @@ func play_button_hover_sfx():
 	SoundManager.play_button_hover_sfx()
 
 
+func _on_focus_entered(grab_focus: bool = true) -> void:
+	expand_button_size()
+	play_button_hover_sfx()
+	
+	if grab_focus:
+		border_focus.visible = true
+		colour_rect.self_modulate = Color(1, 1, 1)
+
+
 func _on_focus_exited() -> void:
 	border_focus.visible = false
 	colour_rect.self_modulate = Color(0.5, 0.5, 0.5)
 	return_button_size()
 
 
-func _on_focus_entered() -> void:
-	#barrel_info_region.unfocus_other_barrel_info_icon()
-	expand_button_size()
-	play_button_hover_sfx()
-	border_focus.visible = true
-	colour_rect.self_modulate = Color(1, 1, 1)
-	var content = "[center]{0}[/center]\n\n{1}\n".format([
-		barrel_roll_data["title"],
-		barrel_roll_data["description"]]
-	)
-	if len(barrel_roll_data["positive_desc"]) > 0:
-		content += "[color=green]\n"
-		for line in barrel_roll_data["positive_desc"]:
-			content += "+ " + line + "\n"
-		content += "[/color]"
-	if len(barrel_roll_data["negative_desc"]) > 0:
-		content += "[color=red]\n"
-		for line in barrel_roll_data["negative_desc"]:
-			content += "- " + line + "\n"
-		content += "[/color]"
-	
-	barrel_info_region.active_detail_icon = self
+func _on_barrel_info_icon_mouse_entered() -> void:
+	focus_entered.emit()
+	_on_focus_entered(false)
+
+
+func _on_barrel_info_icon_mouse_exited() -> void:
+	if barrel_info_region.active_detail_icon == self:
+		return
+	focus_exited.emit()
+	_on_focus_exited()
+
+
+func _on_button_pressed() -> void:
+	clicked.emit(self)

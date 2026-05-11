@@ -175,7 +175,7 @@ func get_barrel_detail_focus(idx: int = -1) -> Control:
 	for slot in shop_gun_frame_container.get_children():
 		slot.item_ui.button.focus_mode = FocusMode.FOCUS_NONE
 	for item in effect_detail_items:
-		item.focus_mode = FocusMode.FOCUS_ALL
+		item.focus_mode = FocusMode.FOCUS_CLICK
 	
 	if effect_detail_items:
 		if idx != -1:

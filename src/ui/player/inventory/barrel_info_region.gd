@@ -104,6 +104,7 @@ func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false)
 
 func show_effect_detail(show_content: bool = true) -> void:
 	_show_ui(true, false, true)
+	grab_detail_focus(0)
 
 
 func set_effect_detail_data(idx: int) -> void:
@@ -117,6 +118,7 @@ func set_effect_detail_data(idx: int) -> void:
 
 func grab_detail_focus(idx: int) -> void:
 	var effect: BarrelInfoIcon = barrel_info_icon_effect_pool[idx]
+	active_detail_icon = effect
 	effect.grab_focus.call_deferred()
 
 
@@ -126,7 +128,7 @@ func _init_barrel_effect_ui() -> void:
 		var effect_info_ui: BarrelInfoIcon = barrel_info_icon_prefab.instantiate()
 		circle_ring_centerpoint.add_child(effect_info_ui)
 		effect_info_ui.barrel_info_region = self
-		effect_info_ui.focus_mode = Control.FOCUS_NONE
+		effect_info_ui.focus_mode = Control.FOCUS_CLICK
 		barrel_info_icon_effect_pool.append(effect_info_ui)
 
 
@@ -152,7 +154,7 @@ func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 			continue
 		
 		var barrel_roll_data: Dictionary = barrel_inst.get_barrel_effect_data_at(i)
-		ui.global_position = circle_ring_centerpoint.global_position + Vector2(circle_ring_radius, 0).rotated(rotation_step * i)
+		ui.global_position = circle_ring_centerpoint.global_position + Vector2(circle_ring_radius, 0).rotated(PI/2 + (rotation_step * i))
 		ui.set_barrel_roll_data(barrel_roll_data)
 		ui.visible = true
 	

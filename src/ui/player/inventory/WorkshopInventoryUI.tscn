@@ -353,5 +353,3 @@ text = "return"
 [node name="DeviceInputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("22_6d28q")]
 layout_mode = 2
 assigned_action = "interact"
-
-[editable path="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer/BarrelInfoRegion"]
