@@ -134,6 +134,7 @@ func _init_barrel_effect_ui() -> void:
 		ui.focus_mode = Control.FOCUS_CLICK
 		ui.focus_entered.connect(_on_effect_detail_focus_gained.bind(ui))
 		ui.focus_exited.connect(_on_effect_detail_focus_lost.bind(ui))
+		ui.clicked.connect(_on_effect_detail_clicked)
 		barrel_info_icon_effect_pool.append(ui)
 
 
@@ -166,12 +167,14 @@ func populate_detail_circle_ui(barrel_data: BarrelDataResource) -> void:
 	barrel_inst.queue_free()
 
 
-func cycle_effect_detail() -> void:
+func cycle_effect_detail(hide_line: bool = false) -> void:
 	if is_instance_valid(spin_tween):
 		return
 	
 	# Null active icon to disable the line during spin
-	active_detail_icon = null
+	if not hide_line:
+		active_detail_icon = null
+	
 	active_effect_detail_idx = wrapi(
 		active_effect_detail_idx - 1, 
 		0, 
@@ -191,7 +194,7 @@ func rotate_circle_one_slot() -> void:
 	spin_tween.set_parallel(true)#.set_trans(Tween.TRANS_BOUNCE)#.set_ease(Tween.EASE_IN_OUT)
 	spin_tween.tween_property(circle_ring_centerpoint, "rotation", circle_ring_centerpoint.rotation + rotation_step, 0.23)
 	spin_tween.tween_property(circle_arrow_icon, "rotation", circle_arrow_icon.rotation + 2*PI, 0.23).set_ease(Tween.EASE_OUT)
-
+	
 	for i in range(MAX_EFFECT_COUNT):
 		var barrel_info_icon: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
 		if not barrel_info_icon.visible:
@@ -267,13 +270,15 @@ func set_barrel_locked():
 		#child.focus_exited.emit()
 
 func _on_effect_detail_focus_gained(ui: BarrelInfoIcon) -> void:
-	if ui.get_index() == active_effect_detail_idx:
+	var ui_idx: int = ui.get_index()
+	if ui_idx == active_effect_detail_idx:
 		ui.play_button_hover_sfx()
 		return
 	
+	# FIXME - hovering over a new slot and cycling will set active icon to idx
 	active_detail_icon._on_focus_exited()
 	active_detail_icon = ui
-	set_effect_detail_data(ui.get_index())
+	set_effect_detail_data(ui_idx)
 
 
 func _on_effect_detail_focus_lost(ui: BarrelInfoIcon) -> void:
@@ -283,3 +288,18 @@ func _on_effect_detail_focus_lost(ui: BarrelInfoIcon) -> void:
 	active_detail_icon = barrel_info_icon_effect_pool[active_effect_detail_idx]
 	active_detail_icon._on_focus_entered()
 	set_effect_detail_data(active_effect_detail_idx)
+
+
+func _on_effect_detail_clicked(ui: BarrelInfoIcon) -> void:
+	var ui_idx: int = ui.get_index()
+	if ui_idx == active_effect_detail_idx:
+		return
+	
+	var rotations: int = wrapi(
+		active_effect_detail_idx - ui_idx,
+		0,
+		current_effect_count
+	)
+	
+	for i in range(rotations):
+		await cycle_effect_detail(true)

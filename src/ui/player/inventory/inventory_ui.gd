@@ -54,7 +54,6 @@ func _input(event: InputEvent) -> void:
 				show_effect_detail_view(item_ui)
 	
 		elif event.is_action_pressed("spin_barrels"):
-			# TODO - move this into the info region code
 			if barrel_info_region.single_effect_detail.visible:
 				get_viewport().set_input_as_handled()
 				barrel_info_region.cycle_effect_detail()
