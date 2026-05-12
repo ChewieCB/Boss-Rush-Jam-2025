@@ -12,7 +12,9 @@ class_name UIInputPrompt
 
 
 func animate() -> void:
-	await input_prompt.animate()
+	if input_prompt.anim_tween:
+		input_prompt.anim_tween.kill()
+	input_prompt.animate()
 
 
 func update_text(new_text: String) -> void:

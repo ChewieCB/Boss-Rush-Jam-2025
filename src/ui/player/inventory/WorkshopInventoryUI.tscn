@@ -30,7 +30,7 @@ gradient = SubResource("Gradient_gcfb7")
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.504274, 1)
 
-[node name="WorkshopInventoryUI" type="Control" node_paths=PackedStringArray("equip_barrel_container", "inventory_gun_frame_container", "inventory_normal_barrel_container", "scroll_container", "input_prompt_accept", "input_prompt_cancel", "input_prompt_detail", "input_prompt_tab_left", "input_prompt_tab_right", "barrel_info_region")]
+[node name="WorkshopInventoryUI" type="Control" node_paths=PackedStringArray("equip_barrel_container", "inventory_gun_frame_container", "inventory_normal_barrel_container", "scroll_container", "input_prompt_navigate", "input_prompt_accept", "input_prompt_cancel", "input_prompt_detail", "input_prompt_tab_left", "input_prompt_tab_right", "barrel_info_region")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -44,6 +44,7 @@ inventory_normal_barrel_container = NodePath("MainRegion/BarrelModifyUI/VBoxCont
 barrel_item_ui_prefab = ExtResource("2_qu664")
 gun_frame_item_ui_prefab = ExtResource("2_0be23")
 scroll_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer")
+input_prompt_navigate = NodePath("ControlHelp/HBoxContainer/InputPrompt1")
 input_prompt_accept = NodePath("ControlHelp/HBoxContainer/InputPrompt2")
 input_prompt_cancel = NodePath("ControlHelp/HBoxContainer/InputPrompt3")
 input_prompt_detail = NodePath("ControlHelp/HBoxContainer/InputPrompt4")

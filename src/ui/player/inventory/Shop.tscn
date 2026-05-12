@@ -98,7 +98,7 @@ _data = {
 "shopkeeper_idle": SubResource("Animation_dro8h")
 }
 
-[node name="Shop" type="Control" node_paths=PackedStringArray("scroll_container", "input_prompt_accept", "input_prompt_cancel", "input_prompt_detail", "barrel_info_region")]
+[node name="Shop" type="Control" node_paths=PackedStringArray("scroll_container", "input_prompt_navigate", "input_prompt_accept", "input_prompt_cancel", "input_prompt_detail", "barrel_info_region")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -122,6 +122,7 @@ sfx_purchase = ExtResource("7_1f1kf")
 sfx_too_expensive = ExtResource("8_b21fk")
 sfx_barrel_equip = ExtResource("9_mbb0v")
 scroll_container = NodePath("MainRegion/BarrelShopUI/LeftRegion/ScrollContainer")
+input_prompt_navigate = NodePath("ControlHelp/HBoxContainer/InputPrompt1")
 input_prompt_accept = NodePath("ControlHelp/HBoxContainer/InputPrompt2")
 input_prompt_cancel = NodePath("ControlHelp/HBoxContainer/InputPrompt3")
 input_prompt_detail = NodePath("ControlHelp/HBoxContainer/InputPrompt4")

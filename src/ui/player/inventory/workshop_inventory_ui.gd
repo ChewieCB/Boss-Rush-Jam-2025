@@ -370,10 +370,12 @@ func move_equip_slot(prev_idx: int, idx_diff: int) -> void:
 	full_refresh_ui(get_first_item_for_focus)
 	# Re-trigger the pressed state
 	var new_active_slot: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx)
-	new_active_slot.item_ui._on_button_pressed()
 	_reset_sibling_saturation(new_active_slot.item_ui)
-	_desaturate_siblings(new_active_slot.item_ui)
-	get_viewport().set_input_as_handled()
+	#new_active_slot.item_ui._on_button_pressed()
+	new_active_slot.button.grab_focus.call_deferred()
+	current_selected_item_ui = null
+	#_desaturate_siblings(new_active_slot.item_ui)
+	#get_viewport().set_input_as_handled()
 
 
 func change_gun_frame(idx_diff: int) -> void:

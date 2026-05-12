@@ -17,6 +17,7 @@ signal reset_barrel_info
 #
 @export var scroll_container: ScrollContainer
 
+@export var input_prompt_navigate: UIInputPrompt
 @export var input_prompt_accept: UIInputPrompt
 @export var input_prompt_cancel: UIInputPrompt
 @export var input_prompt_detail: UIInputPrompt
@@ -67,11 +68,14 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 				barrel_info_region.cycle_effect_detail()
 		
-		elif current_selected_item_ui != null:
-			for ui_action in ["ui_left", "ui_right", "ui_up", "ui_down"]:
-				if event.is_action(ui_action):
-					# TODO - If we've got the detail view up, change the barrel focus
-					get_viewport().set_input_as_handled()
+		for ui_action in ["ui_left", "ui_right", "ui_up", "ui_down"]:
+			if event.is_action(ui_action):
+				if current_selected_item_ui != null:
+					if event.is_action(ui_action):
+						# TODO - If we've got the detail view up, change the barrel focus
+						get_viewport().set_input_as_handled()
+						return
+				input_prompt_navigate.animate()
 
 
 func _process(delta: float) -> void:
