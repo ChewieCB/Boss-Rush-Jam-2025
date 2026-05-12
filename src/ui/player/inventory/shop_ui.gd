@@ -30,14 +30,6 @@ func _input(event: InputEvent) -> void:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
 		if event.is_action_pressed("ui_cancel"):
 			contextual_cancel(focused_ui.item_ui)
-		
-		if current_selected_item_ui != null:
-			for ui_action in ["ui_left", "ui_right", "ui_up", "ui_down"]:
-				if event.is_action(ui_action):
-					# TODO - If we've got the detail view up, change the barrel focus
-					#if barrel_info_region.single_effect_detail.visible:
-						#
-					get_viewport().set_input_as_handled()
 
 
 func full_refresh_ui(focus_area_callable: Callable, forced = false):
