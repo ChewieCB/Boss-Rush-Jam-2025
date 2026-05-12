@@ -38,3 +38,16 @@ func get_player_aiming_position() -> Vector3:
 		var hit_position: Vector3 = laser_guide_ray.get_collision_point()
 		return hit_position
 	return laser_guide_ray.to_global(laser_guide_ray.target_position)
+
+func angle_between_vectors(vec1: Vector3, vec2: Vector3) -> float:
+	# Normalize the vectors
+	var vec1_normalized = vec1.normalized()
+	var vec2_normalized = vec2.normalized()
+	# Calculate the dot product
+	var dot_product = vec1_normalized.dot(vec2_normalized)
+	# Clamp the dot product to avoid floating-point errors (to keep it between -1 and 1)
+	dot_product = clamp(dot_product, -1.0, 1.0)
+	# Calculate the angle in radians
+	var angle_radians = acos(dot_product)
+	# Convert the angle to degrees
+	return rad_to_deg(angle_radians)

@@ -59,7 +59,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 				target_pos = body.get_node("BodyCenter").global_position
 			test_dist = start_pos.distance_to(target_pos)
 			test_dir = start_pos.direction_to(target_pos)
-			var deg_diff = angle_between_vectors(dir, test_dir)
+			var deg_diff = GunUtils.angle_between_vectors(dir, test_dir)
 			if test_dist < min_distance and deg_diff < homing_strength * HITSCAN_HOMING_STRENTH_MODIFIER:
 				homing_target = body
 				min_distance = test_dist
@@ -180,21 +180,6 @@ func get_projectile_color() -> Color:
 func _on_timer_timeout():
 	destroyed.emit(hit_boss)
 	queue_free()
-
-
-func angle_between_vectors(vec1: Vector3, vec2: Vector3) -> float:
-	# Normalize the vectors
-	var vec1_normalized = vec1.normalized()
-	var vec2_normalized = vec2.normalized()
-	# Calculate the dot product
-	var dot_product = vec1_normalized.dot(vec2_normalized)
-	# Clamp the dot product to avoid floating-point errors (to keep it between -1 and 1)
-	dot_product = clamp(dot_product, -1.0, 1.0)
-	# Calculate the angle in radians
-	var angle_radians = acos(dot_product)
-	# Convert the angle to degrees
-	return rad_to_deg(angle_radians)
-
 
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	if splitted:

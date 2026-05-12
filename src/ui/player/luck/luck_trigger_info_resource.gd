@@ -10,6 +10,7 @@ enum LuckTriggerIdEnum {
 	RICOCHET__RICOSHOT,
 	BULLET_TIME__PASSTHROUGH,
 	BULLET_TIME__FORESIGHT,
+	LASER_GUIDED__ELABORATED_ANGLE,
 }
 
 @export var id: LuckTriggerIdEnum
