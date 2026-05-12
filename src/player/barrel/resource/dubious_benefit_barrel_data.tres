@@ -8,9 +8,8 @@
 script = ExtResource("3_wnvbw")
 barrel_id = 75
 barrel_name = "Dubious Benefit"
-barrel_desc = "[b]Dubious Benefit Barrel[/b]
-Has really good effect, on paper. You may need to think carefully whether it worth it or not."
-barrel_info_summary = "Has really good effect (at first glance). You may need to think carefully whether it worth it or not. Or need to get a bit creative."
+barrel_desc = "Has really good effect, on paper. You may need to think carefully whether it worth it or not."
+barrel_info_summary = "Has really good effect (at first glance). You may need to think carefully whether it worth it or not."
 barrel_image = ExtResource("1_3y0af")
 barrel_cost = 1500
 barrel_prefab = ExtResource("2_rptnp")

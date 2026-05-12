@@ -8,10 +8,11 @@
 script = ExtResource("3_ygt4e")
 barrel_id = 77
 barrel_name = "Controlled Risk"
-barrel_desc = "[b]Controlled Risk Barrel[/b]
-Powerful. Potential. Risky. But as long as you stay aware and mindful of the negative effects, things should be (mostly) fine."
+barrel_desc = "Powerful. Potential. Risky. But as long as you stay aware and mindful of the negative effects, things should be (mostly) fine."
 barrel_info_summary = "Powerful. Potential. Risky. But as long as you stay aware and mindful of the negative effects, things should be (mostly) fine."
 barrel_image = ExtResource("1_jsx7m")
 barrel_cost = 1500
 barrel_prefab = ExtResource("2_4d1x3")
 is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = false

@@ -157,12 +157,18 @@ func hide_non_luck_ui() -> void:
 	_animate_ui_element("non_luck", false)
 
 
-func show_all_ui() -> void:
-	_animate_ui_element("all")
+func show_all_ui(is_instant: bool = false) -> void:
+	if is_instant:
+		self.modulate.a = 1.0
+	else:
+		_animate_ui_element("all")
 
 
-func hide_all_ui() -> void:
-	_animate_ui_element("all", false)
+func hide_all_ui(is_instant: bool = false) -> void:
+	if is_instant:
+		self.modulate.a = 0.0
+	else:
+		_animate_ui_element("all", false)
 
 
 func _animate_ui_element(element: String, _show: bool = true) -> void:

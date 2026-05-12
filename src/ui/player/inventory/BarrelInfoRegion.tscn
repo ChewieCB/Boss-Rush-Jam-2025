@@ -1,58 +1,112 @@
-[gd_scene load_steps=8 format=3 uid="uid://bdotmbmcpnnup"]
+[gd_scene load_steps=14 format=3 uid="uid://bdotmbmcpnnup"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_info_region.gd" id="1_4g30l"]
 [ext_resource type="Texture2D" uid="uid://rgiumjfjwf7y" path="res://assets/sprite/placeholder/circle-ring.png" id="2_3m8fx"]
 [ext_resource type="PackedScene" uid="uid://bl1msq3x8c3ar" path="res://src/ui/player/inventory/BarrelInfoIcon.tscn" id="3_6lcb6"]
+[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="4_iqan4"]
+[ext_resource type="Texture2D" uid="uid://cwcqma7xn6wie" path="res://assets/sprite/game_icon/clockwise-rotation.png" id="5_53o4x"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="6_lxvge"]
 [ext_resource type="Texture2D" uid="uid://bqbehc2aep0kj" path="res://src/player/barrel/resource/sprite/trickshot.png" id="7_ggvao"]
 [ext_resource type="FontFile" uid="uid://6jstxey5seid" path="res://assets/fonts/Semplicita/Semplicita Medium.otf" id="8_c2skj"]
+[ext_resource type="PackedScene" uid="uid://bjfuty8vqwssh" path="res://src/ui/player/luck/LuckTriggerInfoUI.tscn" id="8_ffmvd"]
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="9_d8lkm"]
+[ext_resource type="PackedScene" uid="uid://dhwkpguamgubg" path="res://src/ui/player/inventory/EffectInfoLine.tscn" id="9_xao3k"]
+[ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="10_xfxnq"]
+[ext_resource type="Texture2D" uid="uid://eo0lldpw8no2" path="res://src/ui/player/inventory/assets/frames/frame_sideview_rifle.png" id="12_nehlt"]
 
-[node name="BarrelInfoRegion" type="Control"]
-layout_mode = 3
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -1080.0
-offset_right = 896.0
-offset_bottom = -592.0
-grow_vertical = 0
+[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("info_panel", "barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "gun_frame_icon_container", "gun_frame_icon", "effect_detail_wheel", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "effect_detail_spin_prompt", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
+custom_minimum_size = Vector2(838, 364)
+pivot_offset = Vector2(245.01, 190.39)
+size_flags_horizontal = 2
+size_flags_vertical = 4
+theme_override_constants/margin_left = 64
 script = ExtResource("1_4g30l")
 barrel_info_icon_prefab = ExtResource("3_6lcb6")
+info_panel = NodePath("HBoxContainer/PanelDescription")
+barrel_name_label = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelName/RichTextLabel")
+barrel_flavour_label = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelFlavourText/RichTextLabel")
+barrel_desc_label = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/BarrelDescription/RichTextLabel")
+barrel_panel_barrel_icon = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelIcon")
+effect_name_label = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/HeaderText/EffectName/RichTextLabel")
+effect_flavour_label = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/HeaderText/EffectFlavourText/RichTextLabel")
+effect_desc_label = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDescription/RichTextLabel")
+effect_panel_barrel_icon = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/EffectIcon")
+barrel_effect_list_label_1 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine")
+barrel_effect_list_label_2 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine2")
+barrel_effect_list_label_3 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine3")
+barrel_effect_list_label_4 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine4")
+gun_frame_icon_container = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/GunFrameIconContainer")
+gun_frame_icon = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/GunFrameIconContainer/FrameIcon")
+effect_detail_wheel = NodePath("HBoxContainer/MarginContainer")
+circle_ring = NodePath("HBoxContainer/MarginContainer/CircleRing")
+circle_ring_centerpoint = NodePath("HBoxContainer/MarginContainer/CircleRing/CircleCenter")
+circle_arrow_icon = NodePath("HBoxContainer/MarginContainer/CircleRing/ClockwiseArrow")
+effect_detail_spin_prompt = NodePath("HBoxContainer/MarginContainer/DeviceInputPrompt")
+barrel_overview_detail = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail")
+single_effect_detail = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail")
+locked_barrel_overlay = NodePath("HBoxContainer/PanelDescription/LockedBarrelOverlay")
 
-[node name="SelectIconLine" type="Line2D" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 48
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
 visible = false
-points = PackedVector2Array(504, 232, 224, 96)
-width = 5.0
-default_color = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 2
 
-[node name="CircleRing" type="TextureRect" parent="."]
+[node name="CircleRing" type="TextureRect" parent="HBoxContainer/MarginContainer"]
 self_modulate = Color(1, 1, 1, 0.47)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 48.0
-offset_top = -188.0
-offset_right = 432.0
-offset_bottom = 196.0
-grow_vertical = 2
+layout_mode = 2
+size_flags_horizontal = 6
 texture = ExtResource("2_3m8fx")
 expand_mode = 3
+stretch_mode = 5
 
-[node name="PanelDescription" type="ColorRect" parent="."]
+[node name="CircleCenter" type="Control" parent="HBoxContainer/MarginContainer/CircleRing"]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 488.0
-offset_top = -408.0
-offset_right = 888.0
-offset_bottom = -88.0
-grow_vertical = 0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="ClockwiseArrow" type="TextureRect" parent="HBoxContainer/MarginContainer/CircleRing"]
+modulate = Color(0.63, 0.63, 0.63, 1)
+custom_minimum_size = Vector2(144, 144)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -72.0
+offset_right = 72.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(72, 72)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("5_53o4x")
+expand_mode = 3
+
+[node name="DeviceInputPrompt" parent="HBoxContainer/MarginContainer" instance=ExtResource("4_iqan4")]
+layout_mode = 2
+size_flags_horizontal = 4
+assigned_action = "spin_barrels"
+
+[node name="PanelDescription" type="ColorRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(424, 364)
+layout_mode = 2
+size_flags_horizontal = 3
 color = Color(0, 0, 0, 1)
 
-[node name="Border" type="NinePatchRect" parent="PanelDescription"]
+[node name="Border" type="NinePatchRect" parent="HBoxContainer/PanelDescription"]
 self_modulate = Color(0.901961, 0.776471, 0, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -66,23 +120,8 @@ patch_margin_top = 20
 patch_margin_right = 20
 patch_margin_bottom = 20
 
-[node name="PanelBGIcon" type="TextureRect" parent="PanelDescription"]
-self_modulate = Color(1, 1, 1, 0.2)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -124.0
-offset_top = -124.0
-offset_right = 124.0
-offset_bottom = 124.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("7_ggvao")
-
-[node name="ScrollContainer" type="ScrollContainer" parent="PanelDescription"]
+[node name="SingleEffectDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -95,26 +134,308 @@ grow_horizontal = 2
 grow_vertical = 2
 follow_focus = true
 
-[node name="VBoxContainer" type="MarginContainer" parent="PanelDescription/ScrollContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/PanelDescription/SingleEffectDetail"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="EffectDetailHeader" type="HBoxContainer" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2"]
+layout_mode = 2
 size_flags_vertical = 3
 
-[node name="RichTextLabel" type="RichTextLabel" parent="PanelDescription/ScrollContainer/VBoxContainer"]
+[node name="HeaderText" type="VBoxContainer" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EffectName" type="MarginContainer" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/HeaderText"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/HeaderText/EffectName"]
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("8_c2skj")
 theme_override_fonts/bold_font = ExtResource("9_d8lkm")
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 26
 bbcode_enabled = true
-text = "[b]Effect Name[/b]
-
-Sed excepturi dolores similique asperiores ut.
-[color=green]
-+ positive
-+ positive
-[/color][color=red]
-- negative
--negative
-[/color]"
+text = "[b]Effect Name[/b]"
 fit_content = true
+
+[node name="EffectFlavourText" type="MarginContainer" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/HeaderText"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader/HeaderText/EffectFlavourText"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("8_c2skj")
+theme_override_fonts/bold_font = ExtResource("9_d8lkm")
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "[indent][i][color=gray]Effect flavour text. Quisque a odio elementum, dignissim neque sed, bibendum elit. [/color][/i][/indent]"
+fit_content = true
+
+[node name="EffectIcon" type="TextureRect" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDetailHeader"]
+layout_mode = 2
+texture = ExtResource("7_ggvao")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="EffectDescription" type="MarginContainer" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/EffectDescription"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("8_c2skj")
+theme_override_fonts/bold_font = ExtResource("9_d8lkm")
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "Effect description text. Etiam quam sem, iaculis et libero eget, aliquam pretium lacus. Mauris maximus pharetra arcu. "
+fit_content = true
+
+[node name="LuckTriggers" type="MarginContainer" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/LuckTriggers"]
+layout_mode = 2
+
+[node name="LuckTriggerInfoUI" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/LuckTriggers/HBoxContainer" instance=ExtResource("8_ffmvd")]
+layout_mode = 2
+
+[node name="LuckTriggerInfoUI2" parent="HBoxContainer/PanelDescription/SingleEffectDetail/VBoxContainer2/LuckTriggers/HBoxContainer" instance=ExtResource("8_ffmvd")]
+layout_mode = 2
+
+[node name="BarrelOverviewDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BarrelDetailHeader" type="VBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HeaderText" type="VBoxContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BarrelName" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelName"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("8_c2skj")
+theme_override_fonts/bold_font = ExtResource("9_d8lkm")
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "[b]Effect Name[/b]"
+fit_content = true
+
+[node name="BarrelFlavourText" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/HeaderText/BarrelFlavourText"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("8_c2skj")
+theme_override_fonts/bold_font = ExtResource("9_d8lkm")
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "[indent][i][color=gray]Effect flavour text. Quisque a odio elementum, dignissim neque sed, bibendum elit. [/color][/i][/indent]"
+fit_content = true
+
+[node name="BarrelDescription" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer/BarrelDetailHeader/BarrelDescription"]
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("8_c2skj")
+theme_override_fonts/bold_font = ExtResource("9_d8lkm")
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 26
+bbcode_enabled = true
+text = "Effect description text. Etiam quam sem, iaculis et libero eget, aliquam pretium lacus. Mauris maximus pharetra arcu. "
+fit_content = true
+
+[node name="BarrelIcon" type="TextureRect" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture = ExtResource("7_ggvao")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EffectList" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="GridContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList"]
+layout_mode = 2
+theme_override_constants/h_separation = -148
+columns = 2
+
+[node name="DescriptionEffectLine" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer" instance=ExtResource("9_xao3k")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="DescriptionEffectLine2" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer" instance=ExtResource("9_xao3k")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="DescriptionEffectLine3" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer" instance=ExtResource("9_xao3k")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="DescriptionEffectLine4" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer" instance=ExtResource("9_xao3k")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="GunFrameIconContainer" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="FrameIcon" type="TextureRect" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/GunFrameIconContainer"]
+custom_minimum_size = Vector2(112, 112)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_nehlt")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="LockedBarrelOverlay" type="MarginContainer" parent="HBoxContainer/PanelDescription"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="PanelFadeout" type="ColorRect" parent="HBoxContainer/PanelDescription/LockedBarrelOverlay"]
+layout_mode = 2
+color = Color(0, 0, 0, 0.517647)
+
+[node name="LockedPanel" type="ColorRect" parent="HBoxContainer/PanelDescription/LockedBarrelOverlay/PanelFadeout"]
+custom_minimum_size = Vector2(448, 192)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -224.0
+offset_top = -97.0
+offset_right = 224.0
+offset_bottom = 95.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.08, 0.08, 0.831373)
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelDescription/LockedBarrelOverlay/PanelFadeout/LockedPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelDescription/LockedBarrelOverlay/PanelFadeout/LockedPanel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/PanelDescription/LockedBarrelOverlay/PanelFadeout/LockedPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(1, 0.866667, 0, 1)
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/shadow_offset_x = -2
+theme_override_font_sizes/normal_font_size = 48
+theme_override_font_sizes/bold_font_size = 48
+bbcode_enabled = true
+text = "[center][b]Not Available In Demo[/b][/center]"
+fit_content = true
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/PanelDescription/LockedBarrelOverlay/PanelFadeout/LockedPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("10_xfxnq")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Border" type="NinePatchRect" parent="HBoxContainer/PanelDescription/LockedBarrelOverlay/PanelFadeout/LockedPanel/MarginContainer"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 2
+texture = ExtResource("6_lxvge")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20

@@ -8,10 +8,11 @@
 script = ExtResource("3_gceaa")
 barrel_id = 76
 barrel_name = "Careful Marskman"
-barrel_desc = "[b]Careful Marksman Barrel[/b]
-When you like to take it slow and avoid risk. Slow is smooth, and smooth is fast."
+barrel_desc = "When you like to take it slow and avoid risk. Slow is smooth, and smooth is fast."
 barrel_info_summary = "When you like to take it slow and avoid risk. Slow is smooth, and smooth is fast."
 barrel_image = ExtResource("1_7xvkd")
 barrel_cost = 1500
 barrel_prefab = ExtResource("1_et1i6")
 is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = false

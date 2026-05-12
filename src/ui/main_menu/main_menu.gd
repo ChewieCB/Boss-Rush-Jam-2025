@@ -16,30 +16,33 @@ class_name MainMenu
 
 var started_loading = false
 
+
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	if not LoadingHandler.is_materials_compiled:
 		LoadingHandler.initial_load()
 		await LoadingHandler.materials_compiled
 	
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	Input.joy_connection_changed.connect(_on_controller_connection)
-	
 	for slot: SaveSlotItem in save_slot_items:
 		slot.save_deleted.connect(_on_save_deleted)
+	for button in buttons:
+		button.pressed.connect(_play_button_sfx)
 	
 	Engine.time_scale = 1
 	SoundManager.stop_music(0.1)
 	LoadingHandler.current_scene_path = LoadingHandler.level_paths[LoadingHandler.LEVELS.BACKROOM]
 	get_tree().paused = false
 	
+	_on_controller_connection(0, GameManager.is_controller_connected)
+	
 	ScreenTransition.transition_in()
 	await ScreenTransition.transition_finished
 	
 	save_ui.visible = false
-	for button in buttons:
-		button.pressed.connect(_play_button_sfx)
-
+	
 	GameManager.main_bgm_emitter.play()
+
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):
@@ -86,7 +89,7 @@ func _on_start_button_pressed() -> void:
 	# Grab focus the first save button
 	var first_save_button: SaveSlotItem = save_slot_items[0]
 	first_save_button.main_button.grab_focus()
-	
+
 
 func _on_quit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
@@ -99,6 +102,7 @@ func _on_option_button_pressed() -> void:
 	story_ui.visible = false
 	save_ui.visible = false
 	settings_ui.open_menu()
+
 
 func _on_credit_button_pressed() -> void:
 	SoundManager.play_button_click_sfx()
@@ -147,16 +151,14 @@ func _on_setting_ui_setting_back_button_pressed() -> void:
 	buttons_container.get_child(0).grab_focus()
 
 
-func _on_grab_focus_timer_timeout() -> void:
-	buttons_container.get_child(0).grab_focus()
-
-
 func _on_controller_connection(_device: int, connected: bool) -> void:
 	if connected:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		get_window().grab_focus()
+		buttons_container.get_child(0).grab_focus()
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
 
 func _on_save_deleted(save_slot: SaveSlotItem) -> void:
 	var slot_idx = save_slot_items.find(save_slot)

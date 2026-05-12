@@ -100,8 +100,8 @@ const HEAVY_FALL_SHAKE_TRAUMA: float = 0.4
 const SLIDE_SHAKE_TRAUMA: float = 0.1
 const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
-const BULLET_SPAWN_POS_VARIATION: float = 10
-const INTERACT_DISTANCE = 5
+const BULLET_SPAWN_POS_VARIATION: float = 10.0
+const INTERACT_DISTANCE: float = 3.0
 
 const MOUSE_SENSITIVITY_COEEFICIENT = 10000
 const CONTROLLER_SENSITIVITY_COEEFICIENT = 10
@@ -162,9 +162,9 @@ var is_in_menu = false:
 	set(value):
 		is_in_menu = value
 		if is_in_menu:
-			stat_ui.hide_all_ui()
+			stat_ui.hide_all_ui(true)
 		else:
-			stat_ui.show_all_ui()
+			stat_ui.show_all_ui(true)
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
@@ -261,12 +261,19 @@ func _unhandled_input(event):
 
 	if is_in_menu:
 		return
+	
+	# Ignore touchpad / gyro events
+	if event is InputEventScreenTouch \
+	or event is InputEventScreenDrag \
+	or event is InputEventPanGesture \
+	or event is InputEventMagnifyGesture:
+		return
 
 	if event is InputEventMouseMotion:
 		# If we have a controller connected, ignore mouse events
 		# (this prevents the PS4 trackpad from triggering aim)
-		# if Input.get_connected_joypads():
-		# 	return
+		if Input.get_connected_joypads():
+			return
 		rotate_player(event.relative.x, event.relative.y)
 	elif event is InputEventJoypadMotion:
 		if not InputHelper.get_label_for_input(event).to_lower().contains("trigger"):
@@ -352,24 +359,27 @@ func _process(delta):
 			status.duration -= delta
 			if status.duration <= 0:
 				remove_status_effect(status)
-
+	
+	object_to_be_interacted = null
+	interact_ui.visible = false
+	#
 	if aim_ray.is_colliding() and not is_in_menu:
-		var interact_collider = aim_ray.get_collider()
-		if interact_collider and \
-			interact_collider.has_method("interact") and \
-			interact_collider.global_position.distance_to(global_position) <= INTERACT_DISTANCE:
-			object_to_be_interacted = interact_collider
-			interact_ui.visible = true
-			if interact_collider.has_method("get_interact_text"):
-				interact_ui.show_custom_text(interact_collider.get_interact_text())
-			else:
-				interact_ui.show_default_text()
-		else:
-			object_to_be_interacted = null
-			interact_ui.visible = false
-	else:
-		object_to_be_interacted = null
-		interact_ui.visible = false
+		# TODO - refactor the interactible system to have an inheritable 
+		# template class with these methods/features for consistency.
+		# https://gnarled-hand.codecks.io/card/2xo-refactor-the-interactible-system-to-have-an-inheritable-template-class-with
+		var interact_col = aim_ray.get_collider()
+		if interact_col:
+			var _dist = interact_col.interact_dist if "interact_dist" in interact_col else INTERACT_DISTANCE
+			if interact_col and \
+			interact_col.has_method("interact") and \
+			interact_col.global_position.distance_to(global_position) <= _dist:
+				object_to_be_interacted = interact_col
+				interact_ui.visible = true
+					
+				if interact_col.has_method("get_interact_text"):
+					interact_ui.show_custom_text(interact_col.get_interact_text())
+				else:
+					interact_ui.show_default_text()
 
 
 	if controls_disabled or is_in_menu:
@@ -538,6 +548,8 @@ func update_barrel_effect_ui() -> void:
 			#effect_ui.modulate.a = 1.0
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
+			if barrel is NullBarrel:
+				continue
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
 
 			if _effect.icon_id != -1:
@@ -568,6 +580,10 @@ func update_barrel_effect_ui() -> void:
 			effect_ui.modulate.a = 0.0
 			effect_ui.name_label.text = ""
 			effect_ui.desc_label.text = ""
+
+
+func toggle_anim_reticle(is_visible: bool) -> void:
+	ui_parent.toggle_aim_reticle(is_visible)
 
 
 func show_debug_label():
