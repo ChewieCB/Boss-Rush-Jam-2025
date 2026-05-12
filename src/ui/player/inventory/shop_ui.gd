@@ -239,6 +239,8 @@ func hide_effect_detail_view(focused_ui: Control) -> void:
 	match current_focus_area:
 		shop_barrel_container:
 			focus_control = get_inventory_focus(active_focus_idx)
+		shop_gun_frame_container:
+			focus_control = get_gun_frame_inventory_focus(active_focus_idx)
 	focus_control.grab_focus.call_deferred()
 
 
