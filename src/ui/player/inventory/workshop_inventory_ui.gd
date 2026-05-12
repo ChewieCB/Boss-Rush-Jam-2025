@@ -165,7 +165,7 @@ func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 
 func show_effect_detail_view(focused_ui: Control) -> void:
 	var data: BarrelDataResource
-	var _ui: ItemUI
+	var _ui: ItemUI = focused_ui if focused_ui is ItemUI else focused_ui.item_ui
 	var _parent: Control = focused_ui.get_parent()
 	var ui_idx: int = focused_ui.get_index()
 	var parent_idx: int = _parent.get_index()
@@ -204,7 +204,7 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 
 
 func hide_effect_detail_view(focused_ui: Control) -> void:
-	var _ui: ItemUI = focused_ui.item_ui if focused_ui is BarrelEquipSlotUI else focused_ui
+	var _ui: ItemUI = focused_ui if focused_ui is ItemUI else focused_ui.item_ui
 	if _ui.is_empty:
 		return
 	

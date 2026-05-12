@@ -189,17 +189,16 @@ func get_barrel_detail_focus(idx: int = -1) -> Control:
 
 func show_effect_detail_view(focused_ui: Control) -> void:
 	var data: BarrelDataResource
-	var _ui: ItemUI
+	var _ui: ItemUI = focused_ui if focused_ui is ItemUI else focused_ui.item_ui
 	var _parent: Control = focused_ui.get_parent()
 	var ui_idx: int = focused_ui.get_index()
 	var parent_idx: int = _parent.get_index()
 	
-	if focused_ui is GunFrameItemUI:
+	if _ui is GunFrameItemUI:
 		return
 	
-	if focused_ui is ItemUI:
-		data = focused_ui.data
-		_ui = focused_ui
+	if _ui is ItemUI:
+		data = _ui.data
 		active_focus_idx = ui_idx
 	
 	if _ui.is_empty or _ui.is_locked:
@@ -207,7 +206,7 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 	
 	barrel_info_region.show_effect_detail()
 	
-	current_selected_item_ui = focused_ui if focused_ui is ItemUI else focused_ui.item_ui
+	current_selected_item_ui = _ui
 	
 	if data:
 		barrel_info_region.populate_detail_circle_ui(data)
@@ -220,7 +219,7 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 
 
 func hide_effect_detail_view(focused_ui: Control) -> void:
-	var _ui: ItemUI = focused_ui.item_ui if focused_ui is BarrelEquipSlotUI else focused_ui
+	var _ui: ItemUI = focused_ui if focused_ui is ItemUI else focused_ui.item_ui
 	if _ui.is_empty:
 		return
 	

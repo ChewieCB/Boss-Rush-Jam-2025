@@ -47,11 +47,10 @@ func _input(event: InputEvent) -> void:
 			
 			get_viewport().set_input_as_handled()
 			
-			var item_ui: ItemUI = focused_ui if focused_ui is ItemUI else focused_ui.item_ui
 			if barrel_info_region.single_effect_detail.visible:
-				hide_effect_detail_view(item_ui)
+				hide_effect_detail_view(focused_ui)
 			elif barrel_info_region.barrel_overview_detail.visible:
-				show_effect_detail_view(item_ui)
+				show_effect_detail_view(focused_ui)
 	
 		elif event.is_action_pressed("spin_barrels"):
 			if barrel_info_region.single_effect_detail.visible:
