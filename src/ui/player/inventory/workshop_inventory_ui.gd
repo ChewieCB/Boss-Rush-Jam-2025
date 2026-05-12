@@ -125,8 +125,16 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 	# Back out of inventory or detail focus instead of closing
 	var cancel_focus: Callable = get_first_item_for_focus.bind(active_focus_idx)
+	
+	if barrel_info_region.effect_detail_wheel.visible:
+		hide_effect_detail_view(focused_ui)
+		if focused_ui is ItemUI:
+			cancel_focus = get_inventory_focus.bind(active_focus_idx)
+		elif focused_ui is BarrelEquipSlotUI:
+			cancel_focus = get_equip_slot_focus.bind(active_equip_idx)
+	
 	# Inventory item cancel
-	if focused_ui is ItemUI:
+	elif focused_ui is ItemUI:
 		# Clicked Inventory UI -> Same Inventory UI
 		if focused_ui.clicked_once:
 			cancel_focus = get_inventory_focus.bind(active_focus_idx)
