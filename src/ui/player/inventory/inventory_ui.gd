@@ -286,14 +286,14 @@ func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
 	if ui is BarrelItemUI:
 		update_barrel_info(ui.data, ui.is_locked)
 	elif ui is GunFrameItemUI:
-		# TODO
-		pass
+		update_gun_frame_info(ui.data, ui.is_locked)
 
 func _get_active_focus_idx_on_button_focus(ui: ItemUI) -> int:
 	return ui.get_index()
 
 func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
 	return ui.get_parent()
+
 
 func update_barrel_info(data: BarrelDataResource = null, is_locked: bool = false) -> void:
 	if data:
@@ -311,6 +311,16 @@ func update_barrel_info(data: BarrelDataResource = null, is_locked: bool = false
 		barrel_info_region.show_barrel_overview(false, is_locked)
 
 
+func update_gun_frame_info(data: GunFrameResource = null, is_locked: bool = false) -> void:
+	if data:
+		barrel_info_region.set_gun_frame_overview_data(data, is_locked)
+		barrel_info_region.show_barrel_overview(true, is_locked)
+	else:
+		if current_selected_item_ui:
+			return
+		barrel_info_region.show_barrel_overview(false, is_locked)
+
+
 func _on_item_ui_button_focus_lost(button: Button) -> void:
 	var lost_focus_parent: Control = button.get_parent()
 	var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
@@ -322,8 +332,7 @@ func _on_item_ui_button_focus_lost(button: Button) -> void:
 			# TODO - track last detail/overview toggle state so we can keep on the detail view between items
 			barrel_info_region.show_barrel_overview(false)
 		elif lost_focus_parent is GunFrameItemUI:
-			# TODO - gun frame overview
-			pass
+			barrel_info_region.show_barrel_overview(false)
 	#  - if an ItemUI is selected and not empty, change the data to the 
 	#       ItemUI barrel and keep showing either the overview or the effect detail
 	#       - whichever is already open.

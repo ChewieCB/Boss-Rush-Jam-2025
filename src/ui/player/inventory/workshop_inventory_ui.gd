@@ -18,7 +18,6 @@ func _ready() -> void:
 	init_equip_barrels()
 	available_gun_frames = [GameManager.equipped_gun_frame] + \
 		GameManager.inventory_gun_frames
-	
 	var focused_ui: Control = get_first_item_for_focus().get_child(0)
 	if focused_ui:
 		hide_effect_detail_view(focused_ui)
@@ -477,4 +476,5 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		active_equip_idx = -1
 	
 	full_refresh_ui(focus_area_callable)
+
  

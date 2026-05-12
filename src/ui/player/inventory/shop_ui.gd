@@ -194,10 +194,12 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 	var ui_idx: int = focused_ui.get_index()
 	var parent_idx: int = _parent.get_index()
 	
-	if focused_ui is ItemUI or focused_ui is GunFrameItemUI:
+	if focused_ui is GunFrameItemUI:
+		return
+	
+	if focused_ui is ItemUI:
 		data = focused_ui.data
 		_ui = focused_ui
-		
 		active_focus_idx = ui_idx
 	
 	if _ui.is_empty or _ui.is_locked:

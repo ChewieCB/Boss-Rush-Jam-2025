@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bdotmbmcpnnup"]
+[gd_scene load_steps=14 format=3 uid="uid://bdotmbmcpnnup"]
 
 [ext_resource type="Script" path="res://src/ui/player/inventory/barrel_info_region.gd" id="1_4g30l"]
 [ext_resource type="Texture2D" uid="uid://rgiumjfjwf7y" path="res://assets/sprite/placeholder/circle-ring.png" id="2_3m8fx"]
@@ -12,8 +12,9 @@
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="9_d8lkm"]
 [ext_resource type="PackedScene" uid="uid://dhwkpguamgubg" path="res://src/ui/player/inventory/EffectInfoLine.tscn" id="9_xao3k"]
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="10_xfxnq"]
+[ext_resource type="Texture2D" uid="uid://eo0lldpw8no2" path="res://src/ui/player/inventory/assets/frames/frame_sideview_rifle.png" id="12_nehlt"]
 
-[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("info_panel", "barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "effect_detail_wheel", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
+[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("info_panel", "barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "gun_frame_icon_container", "gun_frame_icon", "effect_detail_wheel", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
 custom_minimum_size = Vector2(838, 364)
 pivot_offset = Vector2(245.01, 190.39)
 size_flags_horizontal = 2
@@ -34,6 +35,8 @@ barrel_effect_list_label_1 = NodePath("HBoxContainer/PanelDescription/BarrelOver
 barrel_effect_list_label_2 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine2")
 barrel_effect_list_label_3 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine3")
 barrel_effect_list_label_4 = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer/DescriptionEffectLine4")
+gun_frame_icon_container = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/GunFrameIconContainer")
+gun_frame_icon = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/GunFrameIconContainer/FrameIcon")
 effect_detail_wheel = NodePath("HBoxContainer/MarginContainer")
 circle_ring = NodePath("HBoxContainer/MarginContainer/CircleRing")
 circle_ring_centerpoint = NodePath("HBoxContainer/MarginContainer/CircleRing/CircleCenter")
@@ -47,6 +50,7 @@ layout_mode = 2
 theme_override_constants/separation = 48
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="CircleRing" type="TextureRect" parent="HBoxContainer/MarginContainer"]
@@ -116,6 +120,7 @@ patch_margin_right = 20
 patch_margin_bottom = 20
 
 [node name="SingleEffectDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -219,7 +224,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="BarrelOverviewDetail" type="ScrollContainer" parent="HBoxContainer/PanelDescription"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -314,7 +318,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 texture = ExtResource("7_ggvao")
-expand_mode = 3
+expand_mode = 1
 stretch_mode = 5
 
 [node name="EffectList" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer"]
@@ -346,6 +350,21 @@ size_flags_horizontal = 2
 [node name="DescriptionEffectLine4" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/EffectList/VBoxContainer" instance=ExtResource("9_xao3k")]
 layout_mode = 2
 size_flags_horizontal = 2
+
+[node name="GunFrameIconContainer" type="MarginContainer" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="FrameIcon" type="TextureRect" parent="HBoxContainer/PanelDescription/BarrelOverviewDetail/VBoxContainer/GunFrameIconContainer"]
+custom_minimum_size = Vector2(112, 112)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_nehlt")
+expand_mode = 3
+stretch_mode = 5
 
 [node name="LockedBarrelOverlay" type="MarginContainer" parent="HBoxContainer/PanelDescription"]
 visible = false

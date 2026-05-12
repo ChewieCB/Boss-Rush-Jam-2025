@@ -22,6 +22,9 @@ class_name BarrelInfoRegion
 @export var barrel_effect_list_label_4: EffectInfoListUI
 @onready var barrel_effect_list_labels = [barrel_effect_list_label_1, barrel_effect_list_label_2, barrel_effect_list_label_3, barrel_effect_list_label_4]
 
+@export var gun_frame_icon_container: MarginContainer
+@export var gun_frame_icon: TextureRect
+
 @export var effect_detail_wheel: MarginContainer
 @export var circle_ring: Control
 @export var circle_ring_centerpoint: Control
@@ -88,6 +91,8 @@ func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false)
 	barrel_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.barrel_info_summary]
 	barrel_desc_label.text = "[color=gray]Not available in demo.[/color]" if is_locked else data.barrel_desc
 	
+	gun_frame_icon_container.visible = false
+	
 	if is_locked:
 		show_barrel_overview(true, true)
 		return
@@ -105,7 +110,25 @@ func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false)
 		detail_label.label.text = "[b]%s[/b]" % [effect_info.barrel_roll_data.title]
 
 
+func set_gun_frame_overview_data(data: GunFrameResource, is_locked: bool = false) -> void:
+	barrel_panel_barrel_icon.texture = null
+	gun_frame_icon.texture = data.shop_ui_sprite
+	barrel_name_label.text = "[b]%s[/b]" % [data.frame_name]
+	barrel_flavour_label.text = "[indent][i][color=gray]%s[/color][/i][/indent]" % [data.flavour_text]
+	barrel_desc_label.text = "[color=gray]Not available in demo.[/color]" if is_locked else data.frame_description
+	
+	gun_frame_icon_container.visible = true
+	
+	for detail_label: EffectInfoListUI in barrel_effect_list_labels:
+		detail_label.visible = false
+	
+	if is_locked:
+		show_barrel_overview(true, true)
+		return
+
+
 func show_effect_detail(show_content: bool = true) -> void:
+	gun_frame_icon_container.visible = false
 	_show_ui(true, false, true)
 	grab_detail_focus(0)
 
