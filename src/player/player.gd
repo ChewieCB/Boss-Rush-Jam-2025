@@ -557,11 +557,11 @@ func update_barrel_effect_ui() -> void:
 				container.queue_free()
 			effect_ui.clear_luck_triggers()
 
-			effect_ui.add_neutral(_effect.display_text_desc)
-			#for text in _effect.positive_desc:
-				#effect_ui.add_positive(text)
-			#for text in _effect.negative_desc:
-				#effect_ui.add_negative(text)
+			# effect_ui.add_neutral(_effect.display_text_desc)
+			for text in _effect.positive_desc:
+				effect_ui.add_positive(text)
+			for text in _effect.negative_desc:
+				effect_ui.add_negative(text)
 			for trigger_id in _effect.luck_triggers:
 				var trigger_info: LuckTriggerInfo = LuckHandler.luck_triggers[trigger_id]
 				var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger_id]
