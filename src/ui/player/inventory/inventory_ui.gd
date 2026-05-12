@@ -41,6 +41,21 @@ func _ready() -> void:
 	barrel_info_region.show_barrel_overview()
 
 func _input(event: InputEvent) -> void:
+	# Ignore touchpad / gyro events
+	if event is InputEventScreenTouch \
+	or event is InputEventScreenDrag \
+	or event is InputEventPanGesture \
+	or event is InputEventMagnifyGesture:
+		return
+	
+	if event is InputEventJoypadMotion:
+		if event.axis not in [
+			JOY_AXIS_LEFT_X, JOY_AXIS_LEFT_Y,
+			JOY_AXIS_RIGHT_X, JOY_AXIS_RIGHT_Y,
+			JOY_AXIS_TRIGGER_LEFT, JOY_AXIS_TRIGGER_RIGHT
+		]:
+			return
+	
 	if visible:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
 		
@@ -75,6 +90,11 @@ func _input(event: InputEvent) -> void:
 						# TODO - If we've got the detail view up, change the barrel focus
 						get_viewport().set_input_as_handled()
 						return
+				
+				if event is InputEventJoypadMotion:
+					if abs(event.axis_value) <= 0.2:
+						return
+				
 				input_prompt_navigate.animate()
 
 

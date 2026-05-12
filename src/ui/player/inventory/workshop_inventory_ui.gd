@@ -39,6 +39,9 @@ func _input(event: InputEvent) -> void:
 			if not event.is_action_pressed("inv_ui_tab_left") \
 			and not event.is_action_pressed("inv_ui_tab_right"):
 				return
+			
+			if barrel_info_region.effect_detail_wheel.visible:
+				return
 				
 			var dir: int = round(Input.get_axis("inv_ui_tab_left", "inv_ui_tab_right"))
 			if dir == 0:
@@ -202,6 +205,9 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 		return
 	
 	barrel_info_region.show_effect_detail()
+	input_prompt_tab_left.modulate = Color("#4d4d4d")
+	input_prompt_tab_right.modulate = Color("#4d4d4d")
+	input_prompt_detail.update_text("Overview")
 	
 	current_selected_item_ui = focused_ui if focused_ui is ItemUI else focused_ui.item_ui
 	
@@ -233,6 +239,11 @@ func hide_effect_detail_view(focused_ui: Control) -> void:
 		clear_item_ui_highlight(item)
 	current_selected_item_ui = null
 	toggle_ui_focus_neighbors(_ui.button, true)
+	
+	input_prompt_tab_left.modulate = Color("#ffffff")
+	input_prompt_tab_right.modulate = Color("#ffffff")
+	input_prompt_detail.update_text("Detail")
+	
 	var focus_control: Control
 	match current_focus_area:
 		equip_barrel_container:

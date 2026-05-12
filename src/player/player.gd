@@ -261,12 +261,19 @@ func _unhandled_input(event):
 
 	if is_in_menu:
 		return
+	
+	# Ignore touchpad / gyro events
+	if event is InputEventScreenTouch \
+	or event is InputEventScreenDrag \
+	or event is InputEventPanGesture \
+	or event is InputEventMagnifyGesture:
+		return
 
 	if event is InputEventMouseMotion:
 		# If we have a controller connected, ignore mouse events
 		# (this prevents the PS4 trackpad from triggering aim)
-		# if Input.get_connected_joypads():
-		# 	return
+		if Input.get_connected_joypads():
+			return
 		rotate_player(event.relative.x, event.relative.y)
 	elif event is InputEventJoypadMotion:
 		if not InputHelper.get_label_for_input(event).to_lower().contains("trigger"):
