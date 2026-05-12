@@ -121,7 +121,6 @@ func ricochet():
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is Player and time_ricochetted == 0:
-		# TODO: FIX THIS
 		on_player_contact.emit(self )
 		return
 	var calculated_damage = calculate_bullet_damage()

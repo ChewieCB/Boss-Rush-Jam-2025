@@ -52,7 +52,7 @@ var spawn_pos = Vector3.ZERO
 var travelled_distance = 0
 var hit_boss = false
 var is_crit = false
-
+var misc_data = {}
 
 func _ready() -> void:
 	spawn_pos = global_position
