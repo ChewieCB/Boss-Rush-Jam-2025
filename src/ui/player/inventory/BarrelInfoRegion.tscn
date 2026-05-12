@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="10_xfxnq"]
 [ext_resource type="Texture2D" uid="uid://eo0lldpw8no2" path="res://src/ui/player/inventory/assets/frames/frame_sideview_rifle.png" id="12_nehlt"]
 
-[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("info_panel", "barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "gun_frame_icon_container", "gun_frame_icon", "effect_detail_wheel", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
+[node name="BarrelInfoRegion" type="MarginContainer" node_paths=PackedStringArray("info_panel", "barrel_name_label", "barrel_flavour_label", "barrel_desc_label", "barrel_panel_barrel_icon", "effect_name_label", "effect_flavour_label", "effect_desc_label", "effect_panel_barrel_icon", "barrel_effect_list_label_1", "barrel_effect_list_label_2", "barrel_effect_list_label_3", "barrel_effect_list_label_4", "gun_frame_icon_container", "gun_frame_icon", "effect_detail_wheel", "circle_ring", "circle_ring_centerpoint", "circle_arrow_icon", "effect_detail_spin_prompt", "barrel_overview_detail", "single_effect_detail", "locked_barrel_overlay")]
 custom_minimum_size = Vector2(838, 364)
 pivot_offset = Vector2(245.01, 190.39)
 size_flags_horizontal = 2
@@ -41,6 +41,7 @@ effect_detail_wheel = NodePath("HBoxContainer/MarginContainer")
 circle_ring = NodePath("HBoxContainer/MarginContainer/CircleRing")
 circle_ring_centerpoint = NodePath("HBoxContainer/MarginContainer/CircleRing/CircleCenter")
 circle_arrow_icon = NodePath("HBoxContainer/MarginContainer/CircleRing/ClockwiseArrow")
+effect_detail_spin_prompt = NodePath("HBoxContainer/MarginContainer/DeviceInputPrompt")
 barrel_overview_detail = NodePath("HBoxContainer/PanelDescription/BarrelOverviewDetail")
 single_effect_detail = NodePath("HBoxContainer/PanelDescription/SingleEffectDetail")
 locked_barrel_overlay = NodePath("HBoxContainer/PanelDescription/LockedBarrelOverlay")

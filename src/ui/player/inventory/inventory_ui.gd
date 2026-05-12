@@ -17,6 +17,12 @@ signal reset_barrel_info
 #
 @export var scroll_container: ScrollContainer
 
+@export var input_prompt_accept: UIInputPrompt
+@export var input_prompt_cancel: UIInputPrompt
+@export var input_prompt_detail: UIInputPrompt
+@export var input_prompt_tab_left: UIInputPrompt
+@export var input_prompt_tab_right: UIInputPrompt
+
 const CONTROLLER_SCROLL_SPEED_COOEFFICIENT = 3.0
 
 var current_focus_area: Control = null
@@ -41,11 +47,15 @@ func _input(event: InputEvent) -> void:
 			close()
 			get_viewport().set_input_as_handled()
 		
+		elif event.is_action_pressed("ui_accept"):
+			input_prompt_accept.animate()
+		
 		elif event.is_action("inv_show_barrel_detail"):
 			if not event.is_pressed():
 				return
 			
 			get_viewport().set_input_as_handled()
+			input_prompt_detail.animate()
 			
 			if barrel_info_region.single_effect_detail.visible:
 				hide_effect_detail_view(focused_ui)
@@ -267,6 +277,11 @@ func _reset_sibling_saturation(ui: Control) -> void:
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	SoundManager.play_ui_sound(sfx_click, "UI")
 	
+	if item_ui.is_locked:
+		barrel_info_region.set_barrel_overview_data(data, true)
+		input_prompt_accept.modulate = Color("#4d4d4d")
+		return
+	
 	if current_selected_item_ui != null:
 		current_selected_item_ui.deselect()
 	current_selected_item_ui = item_ui
@@ -275,9 +290,9 @@ func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	
 	_desaturate_siblings(item_ui)
 	
-	if item_ui.is_locked:
-		barrel_info_region.set_barrel_overview_data(data, true)
-		return
+	if not item_ui.is_disabled:
+		input_prompt_accept.update_text("Confirm")
+	input_prompt_cancel.update_text("Cancel")
 
 
 func _on_item_ui_button_pressed(ui: Control) -> void:
@@ -292,6 +307,18 @@ func _on_item_ui_button_focus_gained(ui: ItemUI) -> void:
 		update_barrel_info(ui.data, ui.is_locked)
 	elif ui is GunFrameItemUI:
 		update_gun_frame_info(ui.data, ui.is_locked)
+	
+	if not ui.is_purchased:
+		if ui.is_empty:
+			input_prompt_accept.update_text("Equip")
+		else:
+			input_prompt_accept.update_text("Purchase")
+		if ui.is_disabled:
+			input_prompt_accept.modulate = Color("#4d4d4d")
+	elif ui.is_equipped:
+		input_prompt_accept.update_text("Unequip")
+	else:
+		input_prompt_accept.update_text("Equip")
 
 func _get_active_focus_idx_on_button_focus(ui: ItemUI) -> int:
 	return ui.get_index()
@@ -353,11 +380,16 @@ func _on_item_ui_button_focus_lost(button: Button) -> void:
 			pass
 	
 	toggle_ui_focus_neighbors(button, true)
+	input_prompt_accept.modulate = Color("#ffffff")
+	if input_prompt_tab_right:
+		input_prompt_tab_right.update_text("Change Frame")
 
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	current_selected_item_ui = null
 	_reset_sibling_saturation(item_ui)
+	input_prompt_accept.update_text("Select")
+	input_prompt_cancel.update_text("Exit")
 
 func _on_gun_frame_item_ui_select(gun_frame_item_ui: GunFrameItemUI, _data: GunFrameResource) -> void:
 	push_error("method not overriden")

@@ -8,6 +8,9 @@ class_name EquippedFrameSideViewUI
 @export var current_frame_label: Label
 @export var current_frame_panel: ColorRect
 
+@export var input_prompt_left: DeviceInputPrompt
+@export var input_prompt_right: DeviceInputPrompt
+
 
 const FrameEnum := GunFrameResource.GunFrameIdEnum
 

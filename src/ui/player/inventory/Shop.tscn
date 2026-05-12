@@ -19,7 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://tvxvtu6hrux5" path="res://src/ui/player/inventory/vendor-background.png" id="16_1lncy"]
 [ext_resource type="Texture2D" uid="uid://cddduxnvdb8m1" path="res://src/maps/lobby/vendor/Shopkeeper.png" id="17_l7b4t"]
 [ext_resource type="PackedScene" uid="uid://cireewkvow2ct" path="res://src/ui/player/inventory/GunFrameItemUI.tscn" id="19_p3q3v"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="21_dravj"]
+[ext_resource type="PackedScene" uid="uid://c243t2tftr4xy" path="res://src/ui/common/device_input_prompt/UIInputPrompt.tscn" id="20_lp84q"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_bfj2n"]
 random_pitch = 1.36
@@ -98,7 +98,7 @@ _data = {
 "shopkeeper_idle": SubResource("Animation_dro8h")
 }
 
-[node name="Shop" type="Control" node_paths=PackedStringArray("scroll_container", "barrel_info_region")]
+[node name="Shop" type="Control" node_paths=PackedStringArray("scroll_container", "input_prompt_accept", "input_prompt_cancel", "input_prompt_detail", "barrel_info_region")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -122,6 +122,9 @@ sfx_purchase = ExtResource("7_1f1kf")
 sfx_too_expensive = ExtResource("8_b21fk")
 sfx_barrel_equip = ExtResource("9_mbb0v")
 scroll_container = NodePath("MainRegion/BarrelShopUI/LeftRegion/ScrollContainer")
+input_prompt_accept = NodePath("ControlHelp/HBoxContainer/InputPrompt2")
+input_prompt_cancel = NodePath("ControlHelp/HBoxContainer/InputPrompt3")
+input_prompt_detail = NodePath("ControlHelp/HBoxContainer/InputPrompt4")
 barrel_info_region = NodePath("MainRegion/BarrelShopUI/RightRegion/BarrelInfoRegion")
 
 [node name="ShopBG" type="TextureRect" parent="."]
@@ -408,31 +411,35 @@ color = Color(0, 0, 0, 0)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ControlHelp"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -233.5
+offset_top = -24.0
+offset_right = 233.5
+offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="ControlHelp/HBoxContainer"]
+[node name="InputPrompt1" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_lp84q")]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "Select"
+input_action = "move_generic"
+prompt_text = "Navigate"
 
-[node name="DeviceInputPrompt" parent="ControlHelp/HBoxContainer" instance=ExtResource("21_dravj")]
+[node name="InputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_lp84q")]
 layout_mode = 2
-assigned_action = "ui_select"
+input_action = "ui_accept"
+prompt_text = "Select"
 
-[node name="Spacer" type="Control" parent="ControlHelp/HBoxContainer"]
-custom_minimum_size = Vector2(40, 0)
+[node name="InputPrompt3" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_lp84q")]
 layout_mode = 2
+input_action = "ui_cancel"
+prompt_text = "Exit"
 
-[node name="Label2" type="Label" parent="ControlHelp/HBoxContainer"]
+[node name="InputPrompt4" parent="ControlHelp/HBoxContainer" instance=ExtResource("20_lp84q")]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "return"
-
-[node name="DeviceInputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("21_dravj")]
-layout_mode = 2
-assigned_action = "interact"
+input_action = "inv_show_barrel_detail"
+prompt_text = "Detail"

@@ -98,6 +98,9 @@ func _on_button_focus_exited() -> void:
 
 
 func _on_button_pressed() -> void:
+	if is_locked:
+		return
+	
 	if is_empty:
 		interact_item.emit(self, data)
 		return

@@ -33,18 +33,26 @@ func _input(event: InputEvent) -> void:
 		
 		if event.is_action_pressed("ui_cancel"):
 			contextual_cancel(focused_ui, equipped_ui)
+			input_prompt_cancel.animate()
 		
 		if event.is_action("inv_ui_tab_left") or event.is_action("inv_ui_tab_right"):
-			if not event.is_pressed():
+			if not event.is_action_pressed("inv_ui_tab_left") \
+			and not event.is_action_pressed("inv_ui_tab_right"):
 				return
 				
 			var dir: int = round(Input.get_axis("inv_ui_tab_left", "inv_ui_tab_right"))
 			if dir == 0:
 				return
 			
+			var input_prompt = input_prompt_tab_left if dir < 0 else input_prompt_tab_right
+			var input_prompt_extra = inventory_gun_frame_container.input_prompt_left if dir < 0 else inventory_gun_frame_container.input_prompt_right
+			input_prompt.animate()
+			input_prompt_extra.animate()
+			
 			get_viewport().set_input_as_handled()
 			if equipped_ui.item_ui.clicked_once:
 				move_equip_slot(active_equip_idx, dir)
+				input_prompt_tab_right.update_text("Change Frame")
 			else:
 				change_gun_frame(dir)
 		
@@ -145,6 +153,7 @@ func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 			clear_item_ui_highlight(equipped_ui.item_ui)
 			_reset_sibling_saturation(equipped_ui.item_ui)
 			current_selected_item_ui = null
+			input_prompt_cancel.update_text("Exit")
 	
 	elif focused_ui is BarrelEquipSlotUI:
 		# Clicked Equip Slot -> Same Equip Slot
@@ -154,10 +163,13 @@ func contextual_cancel(focused_ui: Control, equipped_ui: Control) -> void:
 			clear_item_ui_highlight(equipped_ui.item_ui)
 			_reset_sibling_saturation(equipped_ui.item_ui)
 			current_selected_item_ui = null
+			input_prompt_cancel.update_text("Exit")
 		# Hovered Equip Slot -> Close UI
 		else:
 			close()
 	
+	input_prompt_detail.update_text("Detail")
+	input_prompt_tab_right.update_text("Change Frame")
 	_reset_sibling_saturation(focused_ui)
 	get_viewport().set_input_as_handled()
 	full_refresh_ui(cancel_focus)
@@ -427,6 +439,13 @@ func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
 	return equip_barrel_container if _parent is BarrelEquipSlotUI else _parent
 
 
+func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
+	super(item_ui, data)
+	if item_ui.get_parent() is BarrelEquipSlotUI:
+		input_prompt_tab_right.update_text("Move Barrel")
+	
+
+
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	super(item_ui, data)
 	
@@ -450,6 +469,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		active_focus_idx = active_equip_idx
 		clear_item_ui_highlight(equip_ui)
 		current_selected_item_ui = null
+		input_prompt_accept.update_text("Equip")
 	
 	# Empty equip slot UI
 	elif item_ui.is_empty:
@@ -458,6 +478,8 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		active_equip_idx = item_ui.get_parent().get_index()
 		persist_item_ui_highlight(item_ui)
 		_desaturate_siblings(item_ui)
+		input_prompt_accept.update_text("Select")
+		input_prompt_cancel.update_text("Cancel")
 	
 	# Inventory slot UI
 	else:

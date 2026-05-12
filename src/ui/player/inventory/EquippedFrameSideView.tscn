@@ -15,7 +15,7 @@ shader_parameter/fade_width = 0.665
 [sub_resource type="ViewportTexture" id="ViewportTexture_ys12d"]
 viewport_path = NodePath("SubViewport")
 
-[node name="EquippedFrameSideView" type="Control" node_paths=PackedStringArray("frame_carousel", "frame_ui_center", "frame_ui_left", "frame_ui_right", "current_frame_label", "current_frame_panel")]
+[node name="EquippedFrameSideView" type="Control" node_paths=PackedStringArray("frame_carousel", "frame_ui_center", "frame_ui_left", "frame_ui_right", "current_frame_label", "current_frame_panel", "input_prompt_left", "input_prompt_right")]
 layout_mode = 3
 anchors_preset = 10
 anchor_right = 1.0
@@ -28,6 +28,8 @@ frame_ui_left = NodePath("SubViewport/HBoxContainer/GunSideview")
 frame_ui_right = NodePath("SubViewport/HBoxContainer/GunSideview3")
 current_frame_label = NodePath("CurrentGunFrame")
 current_frame_panel = NodePath("SubViewport/CenterContainer/PanelDescription")
+input_prompt_left = NodePath("TextureRect/MarginContainer2/DeviceInputPrompt")
+input_prompt_right = NodePath("TextureRect/MarginContainer/DeviceInputPrompt")
 
 [node name="CurrentGunFrame" type="Label" parent="."]
 z_index = 1

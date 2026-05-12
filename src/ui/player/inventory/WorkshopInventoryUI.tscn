@@ -8,10 +8,10 @@
 [ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="9_mcm64"]
 [ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="10_uxdru"]
 [ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="12_8bjyn"]
+[ext_resource type="PackedScene" uid="uid://c243t2tftr4xy" path="res://src/ui/common/device_input_prompt/UIInputPrompt.tscn" id="12_qx4wp"]
 [ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="12_uoa4s"]
 [ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="14_uy6vt"]
 [ext_resource type="Texture2D" uid="uid://dj6ce7qdoeue" path="res://src/ui/player/inventory/inventory-background.png" id="15_fsv8b"]
-[ext_resource type="PackedScene" uid="uid://cb0lkvkyvsu81" path="res://src/ui/common/DeviceInputPrompt.tscn" id="22_6d28q"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yd8qc"]
 shader = ExtResource("12_8bjyn")
@@ -30,7 +30,7 @@ gradient = SubResource("Gradient_gcfb7")
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.504274, 1)
 
-[node name="WorkshopInventoryUI" type="Control" node_paths=PackedStringArray("equip_barrel_container", "inventory_gun_frame_container", "inventory_normal_barrel_container", "scroll_container", "barrel_info_region")]
+[node name="WorkshopInventoryUI" type="Control" node_paths=PackedStringArray("equip_barrel_container", "inventory_gun_frame_container", "inventory_normal_barrel_container", "scroll_container", "input_prompt_accept", "input_prompt_cancel", "input_prompt_detail", "input_prompt_tab_left", "input_prompt_tab_right", "barrel_info_region")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -44,6 +44,11 @@ inventory_normal_barrel_container = NodePath("MainRegion/BarrelModifyUI/VBoxCont
 barrel_item_ui_prefab = ExtResource("2_qu664")
 gun_frame_item_ui_prefab = ExtResource("2_0be23")
 scroll_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer")
+input_prompt_accept = NodePath("ControlHelp/HBoxContainer/InputPrompt2")
+input_prompt_cancel = NodePath("ControlHelp/HBoxContainer/InputPrompt3")
+input_prompt_detail = NodePath("ControlHelp/HBoxContainer/InputPrompt4")
+input_prompt_tab_left = NodePath("ControlHelp/HBoxContainer/InputPrompt5/HBoxContainer/InputPromptSlotL")
+input_prompt_tab_right = NodePath("ControlHelp/HBoxContainer/InputPrompt5/HBoxContainer/InputPromptSlotR")
 barrel_info_region = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer/BarrelInfoRegion")
 
 [node name="ModifyBG" type="TextureRect" parent="."]
@@ -325,31 +330,67 @@ color = Color(0, 0, 0, 0)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ControlHelp"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -115.0
+offset_top = -24.0
+offset_right = 115.0
+offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="ControlHelp/HBoxContainer"]
+[node name="InputPrompt1" parent="ControlHelp/HBoxContainer" instance=ExtResource("12_qx4wp")]
 layout_mode = 2
+size_flags_horizontal = 6
+input_action = "move_generic"
+prompt_text = "Navigate"
+
+[node name="InputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("12_qx4wp")]
+layout_mode = 2
+size_flags_horizontal = 6
+input_action = "ui_accept"
+prompt_text = "Select"
+
+[node name="InputPrompt3" parent="ControlHelp/HBoxContainer" instance=ExtResource("12_qx4wp")]
+layout_mode = 2
+size_flags_horizontal = 6
+input_action = "ui_cancel"
+prompt_text = "Exit"
+
+[node name="InputPrompt4" parent="ControlHelp/HBoxContainer" instance=ExtResource("12_qx4wp")]
+layout_mode = 2
+size_flags_horizontal = 6
+input_action = "inv_show_barrel_detail"
+prompt_text = "Detail"
+
+[node name="InputPrompt5" type="MarginContainer" parent="ControlHelp/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ControlHelp/HBoxContainer/InputPrompt5"]
+layout_mode = 2
+
+[node name="InputPromptSlotL" parent="ControlHelp/HBoxContainer/InputPrompt5/HBoxContainer" instance=ExtResource("12_qx4wp")]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+input_action = "inv_ui_tab_left"
+
+[node name="Label2" type="Label" parent="ControlHelp/HBoxContainer/InputPrompt5/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 28
-text = "Select"
+text = "/"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="DeviceInputPrompt" parent="ControlHelp/HBoxContainer" instance=ExtResource("22_6d28q")]
+[node name="InputPromptSlotR" parent="ControlHelp/HBoxContainer/InputPrompt5/HBoxContainer" instance=ExtResource("12_qx4wp")]
 layout_mode = 2
-assigned_action = "ui_select"
-
-[node name="Spacer" type="Control" parent="ControlHelp/HBoxContainer"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-
-[node name="Label2" type="Label" parent="ControlHelp/HBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "return"
-
-[node name="DeviceInputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("22_6d28q")]
-layout_mode = 2
-assigned_action = "interact"
+input_action = "inv_ui_tab_right"
+prompt_text = "Change Slot"

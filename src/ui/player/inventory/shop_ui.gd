@@ -30,6 +30,7 @@ func _input(event: InputEvent) -> void:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
 		if event.is_action_pressed("ui_cancel"):
 			contextual_cancel(focused_ui.item_ui)
+			await input_prompt_cancel.animate()
 
 
 func full_refresh_ui(focus_area_callable: Callable, forced = false):
@@ -111,8 +112,8 @@ func contextual_cancel(focused_ui: Control) -> void:
 		else:
 			close()
 	
-	# TODO - handle gun frame ui
-	
+	input_prompt_cancel.update_text("Exit")
+	input_prompt_detail.update_text("Detail")
 	get_viewport().set_input_as_handled()
 	full_refresh_ui(cancel_focus)
 
@@ -213,6 +214,10 @@ func show_effect_detail_view(focused_ui: Control) -> void:
 		toggle_ui_focus_neighbors(_ui.button, false)
 		var detail_focus: Control = get_barrel_detail_focus(0)
 		detail_focus.grab_focus.call_deferred()
+	
+	input_prompt_accept.modulate = Color("#4d4d4d")
+	input_prompt_cancel.update_text("Cancel")
+	input_prompt_detail.update_text("Overview")
 
 
 func hide_effect_detail_view(focused_ui: Control) -> void:
@@ -240,12 +245,19 @@ func hide_effect_detail_view(focused_ui: Control) -> void:
 		shop_gun_frame_container:
 			focus_control = get_gun_frame_inventory_focus(active_focus_idx)
 	focus_control.grab_focus.call_deferred()
-
+	
+	input_prompt_accept.modulate = Color("#ffffff")
+	input_prompt_cancel.update_text("Exit")
+	input_prompt_detail.update_text("Detail")
+	input_prompt_detail.animate()
 
 
 ###
 
 func _on_item_ui_button_pressed(ui: Control) -> void:
+	if ui.is_locked:
+		return
+	
 	var parent: Control = ui.get_parent()
 	if ui.clicked_once:
 		active_focus_idx = parent.get_index()

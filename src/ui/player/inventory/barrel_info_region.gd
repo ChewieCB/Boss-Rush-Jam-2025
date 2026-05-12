@@ -32,6 +32,7 @@ const CIRCLE_RING_RADIUS_OFFSET = 166
 var circle_ring_center_pos: Vector2
 var circle_ring_radius: float
 @export var circle_arrow_icon: TextureRect
+@export var effect_detail_spin_prompt: DeviceInputPrompt
 
 @export var barrel_overview_detail: ScrollContainer
 @export var single_effect_detail: ScrollContainer
@@ -210,6 +211,7 @@ func cycle_effect_detail(hide_line: bool = false) -> void:
 
 
 func rotate_circle_one_slot() -> void:
+	effect_detail_spin_prompt.animate()
 	# Rotate all visible detail UI objects
 	var rotation_step = 2 * PI / current_effect_count
 	
@@ -217,6 +219,12 @@ func rotate_circle_one_slot() -> void:
 	spin_tween.set_parallel(true)#.set_trans(Tween.TRANS_BOUNCE)#.set_ease(Tween.EASE_IN_OUT)
 	spin_tween.tween_property(circle_ring_centerpoint, "rotation", circle_ring_centerpoint.rotation + rotation_step, 0.23)
 	spin_tween.tween_property(circle_arrow_icon, "rotation", circle_arrow_icon.rotation + 2*PI, 0.23).set_ease(Tween.EASE_OUT)
+	
+	var scale_tween = self.create_tween()
+	scale_tween.set_parallel(false)
+	scale_tween.tween_property(circle_arrow_icon , "scale", Vector2(0.8, 0.8), 0.1)
+	scale_tween.tween_property(circle_arrow_icon , "scale", Vector2(1.1, 1.1), 0.12).set_ease(Tween.EASE_IN)
+	scale_tween.tween_property(circle_arrow_icon , "scale", Vector2(1.0, 1.0), 0.16).set_ease(Tween.EASE_OUT)
 	
 	for i in range(MAX_EFFECT_COUNT):
 		var barrel_info_icon: BarrelInfoIcon = barrel_info_icon_effect_pool[i]
