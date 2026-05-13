@@ -207,6 +207,8 @@ func cycle_effect_detail(hide_line: bool = false) -> void:
 	
 	await rotate_circle_one_slot()
 	
+	active_detail_icon = barrel_info_icon_effect_pool[active_effect_detail_idx]
+	set_effect_detail_data(active_effect_detail_idx)
 	grab_detail_focus(active_effect_detail_idx)
 
 
