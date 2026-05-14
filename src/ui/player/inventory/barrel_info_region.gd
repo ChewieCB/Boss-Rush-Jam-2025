@@ -95,6 +95,8 @@ func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false)
 	gun_frame_icon_container.visible = false
 	
 	if is_locked:
+		for label in barrel_effect_list_labels:
+			label.visible = false
 		show_barrel_overview(true, true)
 		return
 	
