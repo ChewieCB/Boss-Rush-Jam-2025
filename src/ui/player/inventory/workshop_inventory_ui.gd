@@ -363,18 +363,24 @@ func move_equip_slot(prev_idx: int, idx_diff: int) -> void:
 	active_focus_idx = new_idx
 	active_equip_idx = new_idx
 	
-	var _prev_idx_barrel = GameManager.equipped_barrels[prev_idx]
-	var _new_idx_barrel = GameManager.equipped_barrels[new_idx]
+	# Reverse the equipped_barrels data arr locally to match the UI ordering
+	var equipped_barrels = GameManager.equipped_barrels.duplicate()
+	equipped_barrels.reverse()
+	var _prev_idx_barrel = equipped_barrels[prev_idx]
+	var _new_idx_barrel = equipped_barrels[new_idx]
 	var selected_barrel_id: int = _prev_idx_barrel.barrel_id
 	
 	GameManager.remove_barrel(selected_barrel_id)
 	
+	var prev_idx_rev: int = remap(prev_idx, 0, 2, 2, 0)
+	var new_idx_rev: int = remap(new_idx, 0, 2, 2, 0)
+	
 	if _new_idx_barrel:
 		var affected_barrel_id: int = _new_idx_barrel.barrel_id
 		GameManager.remove_barrel(affected_barrel_id)
-		GameManager.equip_barrel(affected_barrel_id, prev_idx)
+		GameManager.equip_barrel(affected_barrel_id, prev_idx_rev)
 	
-	GameManager.equip_barrel(selected_barrel_id, new_idx)
+	GameManager.equip_barrel(selected_barrel_id, new_idx_rev)
 	
 	full_refresh_ui(get_first_item_for_focus)
 	# Re-trigger the pressed state
