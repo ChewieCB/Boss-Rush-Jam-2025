@@ -66,9 +66,8 @@ var barrel_cached_materials: Array[StandardMaterial3D] = []
 @onready var idle_frame_state = anim_tree.get("parameters/idle_frame_state/playback")
 @onready var reload_frame_state = anim_tree.get("parameters/reload_frame_state/playback")
 
-@export_group("SFX")
+@export_group("SFX | TEMP")
 ## TEMP SFX PLS CHANGE
-@export_subgroup("TEMP")
 @export var TEMP_sfx_shoot: AudioStream
 @export var TEMP_sfx_dry: AudioStream
 @export var TEMP_sfx_spin: AudioStream
@@ -77,11 +76,15 @@ var barrel_cached_materials: Array[StandardMaterial3D] = []
 @export var TEMP_regain_ammo: AudioStream
 @export var TEMP_crit: AudioStream
 #
-@export_subgroup("Barrel Effects")
+@export_group("SFX | Barrel Effects")
+@export_subgroup("Gambler's Precision")
 @export var sfx_gp_jam: Array[AudioStream]
 @export var sfx_gp_clear: Array[AudioStream]
 @export var sfx_gp_crit: Array[AudioStream]
+@export_subgroup("Explosive Shot")
+#@export var sfx_es_boom: Array[AudioStream]  - this is handled in the explosion area scene
 #
+@export_group("SFX | Frames")
 @export_subgroup("Shotgun")
 @export var sfx_shotgun_shell_reload: Array[AudioStream]
 @export_subgroup("SMG")
