@@ -511,10 +511,14 @@ func show_barrel_effect_ui() -> void:
 
 	barrel_ui_tween = get_tree().create_tween()
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
+	
 	for i in range(current_gun.max_barrels):
 		var effect_ui = barrel_detail_ui.effect_boxes[i]
-		if i < current_gun.barrel_container.get_child_count():
+		if current_gun.barrel_container.get_child(i) is not NullBarrel:
 			barrel_ui_tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
+		else:
+			# Fallback
+			effect_ui.modulate.a = 0.0
 	await barrel_ui_tween.finished
 
 	Engine.time_scale = 0.1
@@ -537,6 +541,9 @@ func hide_barrel_effect_ui() -> void:
 		var effect_ui = barrel_detail_ui.effect_boxes[i]
 		if i < current_gun.barrel_container.get_child_count():
 			barrel_ui_tween.parallel().tween_property(effect_ui, "modulate:a", 0.0, 0.1)
+		else:
+			# Fallback
+			effect_ui.modulate.a = 0.0
 	barrel_ui_tween.tween_callback(func(): barrel_ui_active = false)
 	await barrel_ui_tween.finished
 
@@ -549,6 +556,9 @@ func update_barrel_effect_ui() -> void:
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			if barrel is NullBarrel:
+				effect_ui.modulate.a = 0.0
+				effect_ui.name_label.text = ""
+				effect_ui.desc_label.text = ""
 				continue
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
 
