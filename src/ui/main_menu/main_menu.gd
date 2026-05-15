@@ -14,7 +14,8 @@ class_name MainMenu
 @onready var save_slot_items: Array[Node] = $SaveUI/VBoxContainer.get_children()
 @onready var title_column = $TitleColumn
 
-var started_loading = false
+var started_loading: bool = false
+var input_disabled: bool = true
 
 
 func _ready() -> void:
@@ -39,12 +40,15 @@ func _ready() -> void:
 	ScreenTransition.transition_in()
 	await ScreenTransition.transition_finished
 	
-	save_ui.visible = false
+	input_disabled = false
 	
 	GameManager.main_bgm_emitter.play()
 
 
 func _input(event: InputEvent) -> void:
+	if input_disabled:
+		return
+	
 	if event.is_action_pressed("ui_cancel"):
 		if save_ui.visible:
 			save_ui.visible = false
@@ -115,6 +119,8 @@ func _on_credit_button_pressed() -> void:
 
 
 func start_game():
+	input_disabled = true
+	started_loading = true
 	# SoundManager.play_ui_sound(start_game_sfx, "UI")
 	SaveManager.load_game(GameManager.chosen_slot_id)
 	
@@ -136,6 +142,7 @@ func start_game():
 	
 	await ScreenTransition.transition_finished
 	LoadingHandler.load_scene_transition()
+	save_ui.visible = false
 
 
 func play_button_hover_sfx():

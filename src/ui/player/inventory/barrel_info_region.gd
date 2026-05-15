@@ -95,6 +95,8 @@ func set_barrel_overview_data(data: BarrelDataResource, is_locked: bool = false)
 	gun_frame_icon_container.visible = false
 	
 	if is_locked:
+		for label in barrel_effect_list_labels:
+			label.visible = false
 		show_barrel_overview(true, true)
 		return
 	
@@ -207,6 +209,8 @@ func cycle_effect_detail(hide_line: bool = false) -> void:
 	
 	await rotate_circle_one_slot()
 	
+	active_detail_icon = barrel_info_icon_effect_pool[active_effect_detail_idx]
+	set_effect_detail_data(active_effect_detail_idx)
 	grab_detail_focus(active_effect_detail_idx)
 
 

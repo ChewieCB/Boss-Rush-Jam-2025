@@ -290,8 +290,8 @@ func _unhandled_input(event):
 	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
 	# DEBUG INPUT FOR TESTING
-	elif event.is_action_pressed("input_1"):
-		LuckHandler.reset_luck_triggers()
+	#elif event.is_action_pressed("input_1"):
+		#LuckHandler.reset_luck_triggers()
 		#LuckHandler.increase_luck(20.0)
 		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
@@ -511,10 +511,14 @@ func show_barrel_effect_ui() -> void:
 
 	barrel_ui_tween = get_tree().create_tween()
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
+	
 	for i in range(current_gun.max_barrels):
 		var effect_ui = barrel_detail_ui.effect_boxes[i]
-		if i < current_gun.barrel_container.get_child_count():
+		if current_gun.barrel_container.get_child(i) is not NullBarrel:
 			barrel_ui_tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
+		else:
+			# Fallback
+			effect_ui.modulate.a = 0.0
 	await barrel_ui_tween.finished
 
 	Engine.time_scale = 0.1
@@ -537,6 +541,9 @@ func hide_barrel_effect_ui() -> void:
 		var effect_ui = barrel_detail_ui.effect_boxes[i]
 		if i < current_gun.barrel_container.get_child_count():
 			barrel_ui_tween.parallel().tween_property(effect_ui, "modulate:a", 0.0, 0.1)
+		else:
+			# Fallback
+			effect_ui.modulate.a = 0.0
 	barrel_ui_tween.tween_callback(func(): barrel_ui_active = false)
 	await barrel_ui_tween.finished
 
@@ -549,6 +556,9 @@ func update_barrel_effect_ui() -> void:
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
 			if barrel is NullBarrel:
+				effect_ui.modulate.a = 0.0
+				effect_ui.name_label.text = ""
+				effect_ui.desc_label.text = ""
 				continue
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
 
@@ -845,6 +855,8 @@ func _on_health_hurt_state_entered() -> void:
 func _on_health_dead_state_entered() -> void:
 	GameManager.change_fmod_bgm_player_is_dead(true)
 	controls_disabled = true
+	Engine.time_scale = 1.0
+	hide_barrel_effect_ui()
 	hurt_overlay.dead()
 	stat_ui.hide_all_ui()
 

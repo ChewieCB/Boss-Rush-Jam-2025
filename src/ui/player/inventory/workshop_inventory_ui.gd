@@ -88,11 +88,10 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 	# Instead of removing and re-instancing each equipped barrel, 
 	# we clear and set the properties
 	# EQUIPPED BARRELS
-	var equipped_barrels := GameManager.equipped_barrels
+	var equipped_barrels := GameManager.equipped_barrels.duplicate()
+	equipped_barrels.reverse()
 	var barrel_slots = equip_barrel_container.get_children()
 	var slots_count: int = equip_barrel_container.get_child_count()
-	#var barrel_idx: int = 0
-	#for i in range(barrel_slots.size() - 1, -1, -1):
 	for i in range(slots_count):
 		var barrel_slot: BarrelEquipSlotUI = barrel_slots[i]
 		var barrel_item: ItemUI = barrel_slot.item_ui
@@ -102,7 +101,6 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 			barrel_item.empty_slot()
 		else:
 			barrel_item.set_barrel_data(barrel_data, true, true)
-		#barrel_idx += 1
 	
 	# INVENTORY STUFF
 	for child in inventory_normal_barrel_container.get_children():
@@ -365,18 +363,24 @@ func move_equip_slot(prev_idx: int, idx_diff: int) -> void:
 	active_focus_idx = new_idx
 	active_equip_idx = new_idx
 	
-	var _prev_idx_barrel = GameManager.equipped_barrels[prev_idx]
-	var _new_idx_barrel = GameManager.equipped_barrels[new_idx]
+	# Reverse the equipped_barrels data arr locally to match the UI ordering
+	var equipped_barrels = GameManager.equipped_barrels.duplicate()
+	equipped_barrels.reverse()
+	var _prev_idx_barrel = equipped_barrels[prev_idx]
+	var _new_idx_barrel = equipped_barrels[new_idx]
 	var selected_barrel_id: int = _prev_idx_barrel.barrel_id
 	
 	GameManager.remove_barrel(selected_barrel_id)
 	
+	var prev_idx_rev: int = remap(prev_idx, 0, 2, 2, 0)
+	var new_idx_rev: int = remap(new_idx, 0, 2, 2, 0)
+	
 	if _new_idx_barrel:
 		var affected_barrel_id: int = _new_idx_barrel.barrel_id
 		GameManager.remove_barrel(affected_barrel_id)
-		GameManager.equip_barrel(affected_barrel_id, prev_idx)
+		GameManager.equip_barrel(affected_barrel_id, prev_idx_rev)
 	
-	GameManager.equip_barrel(selected_barrel_id, new_idx)
+	GameManager.equip_barrel(selected_barrel_id, new_idx_rev)
 	
 	full_refresh_ui(get_first_item_for_focus)
 	# Re-trigger the pressed state
@@ -496,12 +500,16 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	
 	# Inventory slot UI
 	else:
+		# FIXME - reverse barrel order when dealing with GameManager
 		# Check we're not overwriting an existing barrel
-		var equip_ui: ItemUI = equip_barrel_container.get_child(active_equip_idx).item_ui
-		if not equip_ui.is_empty:
-			GameManager.remove_barrel(equip_ui.data.barrel_id)
+		var equip_slots = equip_barrel_container.get_children()
+		var equip_ui: ItemUI = equip_slots[active_equip_idx].item_ui
 		
-		var _warning_text = GameManager.equip_barrel(data.barrel_id, active_equip_idx)
+		if not equip_ui.is_empty:
+			GameManager.remove_barrel(data.barrel_id)
+		
+		var equip_idx_rev: int = remap(active_equip_idx, 0, 2, 2, 0)
+		var _warning_text = GameManager.equip_barrel(data.barrel_id, equip_idx_rev)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 		
 		# After installing a barrel, remove equip idx so we can move between equip slots

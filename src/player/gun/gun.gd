@@ -191,6 +191,8 @@ func _ready() -> void:
 		_on_savefile_loaded()
 	else:
 		await reinstall_barrels()
+	
+	is_jammed = false
 
 
 func equip_active() -> void:
