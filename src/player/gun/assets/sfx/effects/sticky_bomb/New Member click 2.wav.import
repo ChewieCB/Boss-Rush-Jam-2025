@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b0v564xfqjxwy"
+path="res://.godot/imported/New Member click 2.wav-776cf803c64469451ddd96c5a84a13d2.sample"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/effects/sticky_bomb/New Member click 2.wav"
+dest_files=["res://.godot/imported/New Member click 2.wav-776cf803c64469451ddd96c5a84a13d2.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
