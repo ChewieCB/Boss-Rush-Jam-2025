@@ -948,9 +948,11 @@ func regain_ammo(_ammo: int) -> void:
 
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
+# Possibly deprecated since we trigger crit effects in base_bullet.gd now
 func crit_damage(_damage: int) -> void:
+	pass
 	#show_gun_status("CRIT! %s damage" % [damage], Color.RED)
-	SoundManager.play_sound(TEMP_crit, "Gun")
+	#SoundManager.play_sound(TEMP_crit, "Gun")
 
 
 #func show_gun_status(text: String, color: Color = Color.WHITE, duration: float = 0.4) -> void:

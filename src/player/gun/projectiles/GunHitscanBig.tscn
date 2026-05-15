@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://06y3ehv3d68n"]
+[gd_scene load_steps=6 format=3 uid="uid://06y3ehv3d68n"]
 
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="1_rd7nx"]
 [ext_resource type="Shader" path="res://src/player/gun/projectiles/fade_hitscan_ray.gdshader" id="2_2nkc8"]
+[ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="2_rqsvu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u0e6q"]
 resource_local_to_scene = true
@@ -24,6 +25,7 @@ material = SubResource("ShaderMaterial_u0e6q")
 [node name="GunHitscanBig" instance=ExtResource("1_rd7nx")]
 thickness = 15
 fade_speed = 1.0
+sfx_crit = Array[AudioStream]([ExtResource("2_rqsvu")])
 
 [node name="MeshInstance3D" parent="." index="0"]
 mesh = SubResource("BoxMesh_ilak6")
