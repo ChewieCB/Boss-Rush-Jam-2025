@@ -8,6 +8,9 @@ class_name BaseBullet
 @export var elemental_emitting_vfx: Array[Node3D] = [null, null, null, null, null] # VFX that emit as long as bullet/ray persist
 @export var elemental_impact_vfx: Array[PackedScene] = [null, null, null, null, null] # VFX that trigger upon impact
 
+@export_group("SFX")
+@export var sfx_crit: Array[AudioStream]
+
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
 signal impacted(projectile: BaseBullet, has_pos: bool, pos: Vector3)
@@ -225,6 +228,7 @@ func apply_damage_to_health_component(health_component: HealthComponent, damage_
 	const CRIT_TEXT_SCALE_POP = 2.8
 	const CRIT_TEXT_COLOR = Color(1, 0.24, 0) 
 	if is_crit:
+		SoundManager.play_sound(sfx_crit.pick_random(), "Gun")
 		health_component.damage(damage_value, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP, "CRIT!")
 	else:
 		health_component.damage(damage_value)

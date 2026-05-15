@@ -66,7 +66,7 @@ var barrel_cached_materials: Array[StandardMaterial3D] = []
 @onready var idle_frame_state = anim_tree.get("parameters/idle_frame_state/playback")
 @onready var reload_frame_state = anim_tree.get("parameters/reload_frame_state/playback")
 
-@export_group("SFX")
+@export_group("SFX | TEMP")
 ## TEMP SFX PLS CHANGE
 @export var TEMP_sfx_shoot: AudioStream
 @export var TEMP_sfx_dry: AudioStream
@@ -76,8 +76,20 @@ var barrel_cached_materials: Array[StandardMaterial3D] = []
 @export var TEMP_regain_ammo: AudioStream
 @export var TEMP_crit: AudioStream
 #
+@export_group("SFX | Barrel Effects")
+@export_subgroup("Gambler's Precision")
+@export var sfx_gp_jam: Array[AudioStream]
+@export var sfx_gp_clear: Array[AudioStream]
+@export var sfx_gp_crit: Array[AudioStream]
+@export_subgroup("Explosive Shot")
+#@export var sfx_es_boom: Array[AudioStream]  - this is handled in the explosion area scene
+#
+@export_group("SFX | Frames")
 @export_subgroup("Shotgun")
 @export var sfx_shotgun_shell_reload: Array[AudioStream]
+@export_subgroup("SMG")
+@export_subgroup("Rifle")
+
 
 # Init gun stat values
 const BASE_DAMAGE: int = 20
@@ -936,9 +948,11 @@ func regain_ammo(_ammo: int) -> void:
 
 
 # TODO - debug use only: make better, more interesting UI effects and hooks for this
+# Possibly deprecated since we trigger crit effects in base_bullet.gd now
 func crit_damage(_damage: int) -> void:
+	pass
 	#show_gun_status("CRIT! %s damage" % [damage], Color.RED)
-	SoundManager.play_sound(TEMP_crit, "Gun")
+	#SoundManager.play_sound(TEMP_crit, "Gun")
 
 
 #func show_gun_status(text: String, color: Color = Color.WHITE, duration: float = 0.4) -> void:
@@ -1200,6 +1214,8 @@ func set_barrels_jammed() -> void:
 		)
 		shuffled_barrel_idxs.append(i)
 	
+	SoundManager.play_sound(sfx_gp_jam.pick_random(), "Gun")
+	
 	shuffled_barrel_idxs.shuffle()
 	for i in shuffled_barrel_idxs:
 		var state_machine = anim_tree.get("parameters/barrel_%s_state/playback" % [(i + 1)])
@@ -1208,8 +1224,8 @@ func set_barrels_jammed() -> void:
 		_flash_icon(i)
 		await get_tree().create_timer(0.05, false).timeout
 		#barrel_sparks[i].restart()
-		# TODO - SFX
-		#SoundManager.play_sound(TEMP_sfx_spin, "Gun")
+		# TODO - per-slot SFX?
+		#
 
 func set_barrels_unjammed() -> void:
 	jam_dust_particles.emitting = false
@@ -1221,8 +1237,7 @@ func set_barrels_unjammed() -> void:
 		state_machine.travel("idle")
 		barrel_sparks[i].restart()
 		_remove_icon_jam_overlay(i)
-		# TODO - SFX
-		#SoundManager.play_sound(TEMP_sfx_spin, "Gun")
+		SoundManager.play_sound(sfx_gp_clear.pick_random(), "Gun")
 
 
 func jam_gun(pre_anim_delay: float = 1.0) -> void:
@@ -1249,6 +1264,7 @@ func jam_gun(pre_anim_delay: float = 1.0) -> void:
 			jam_state = "rifle_jam"
 	
 	idle_frame_state.start(jam_state)
+
 
 func clear_jam() -> void:
 	is_jammed = false
