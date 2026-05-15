@@ -22,13 +22,16 @@ var dps_accumulated_in_window: float = 0.0:
 
 func on_projectile_impact(_projectile: BaseBullet, _has_pos: bool = false, _pos: Vector3 = Vector3.ZERO):
 	if (_has_pos):
-		create_explosion(_pos)
+		create_explosion(_pos, _projectile.infused_status_effect)
 
 
-func create_explosion(pos: Vector3):
+func create_explosion(pos: Vector3, status_effects: Array):
 	randomize()
 	var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
 	explosion_inst.init(damage + randf_range(-damage_variance, damage_variance))
+	#for i in range(status_effects.size()):
+		#if status_effects[i]:
+			#explosion_inst.add_status_effect(i + 1)
 	explosion_inst.explosive_damage.connect(_on_explosive_damage)
 	explosion_inst.set_damage_radius(range)
 	explosion_inst.activate(pos)

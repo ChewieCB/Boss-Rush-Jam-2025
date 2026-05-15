@@ -14,6 +14,8 @@ var damage = 0
 var damage_disabled = true
 @export var damage_variance: float = 11.0
 
+var infused_status_effects: Array[BossCore.BossStatusEffect] = []
+
 
 func _ready():
 	explosion_vfx.finished.connect(deactivate)
@@ -40,6 +42,11 @@ func set_damage_radius(radius: float) -> void:
 	explosion_vfx.scale_factor = radius / 1.2  # Magic number - default area radius
 
 
+func add_status_effect(status_effect: BossCore.BossStatusEffect) -> void:
+	if not status_effect in infused_status_effects:
+		infused_status_effects.append(status_effect)
+
+
 func deactivate() -> void:
 	if sfx_player.is_playing():
 		await sfx_player.finished
@@ -56,14 +63,46 @@ func explode():
 		push_warning("Explosion VFX visible duration is less than damage hitbox duration!")
 	
 	sfx_player.play()
+	if infused_status_effects:
+		match infused_status_effects[-1]:
+			BossCore.BossStatusEffect.BURNING:
+				explosion_vfx.set_colour(Color.TOMATO)
+			BossCore.BossStatusEffect.POISONED:
+				explosion_vfx.set_colour(Color.DARK_GREEN)
+			BossCore.BossStatusEffect.FROZEN:
+				explosion_vfx.set_colour(Color.AQUA)
+			BossCore.BossStatusEffect.SHOCKED:
+				explosion_vfx.set_colour(Color.LIGHT_GOLDENROD)
+			BossCore.BossStatusEffect.BLEEDING:
+				explosion_vfx.set_colour(Color.DARK_RED)
+	
 	explosion_vfx.explode()
 	get_tree().create_timer(LINGERING_DURATION).timeout.connect(func(): damage_disabled = true)
 
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D and not damage_disabled:
-		body.health_component.damage(damage, Color.ORANGE)
+		# Colour the damage text based on any elemental effects
+		var text_colour: Color = Color.ORANGE
+		for status_effect in infused_status_effects:
+			match status_effect:
+				BossCore.BossStatusEffect.BURNING:
+					text_colour = Color.DARK_ORANGE
+				BossCore.BossStatusEffect.POISONED:
+					text_colour = Color.DARK_GREEN
+				BossCore.BossStatusEffect.FROZEN:
+					text_colour = Color.AQUA
+				BossCore.BossStatusEffect.SHOCKED:
+					text_colour = Color.YELLOW
+				BossCore.BossStatusEffect.BLEEDING:
+					text_colour = Color.DARK_RED
+			
+			if body.has_method("apply_status_buildup"):
+				body.apply_status_buildup(status_effect, 10000)
+		
+		body.health_component.damage(damage, text_colour)
 		explosive_damage.emit(damage, body)
+		
 		if body is Player:
 			body.apply_impulse_to_player(global_position.direction_to(body.global_position) * damage)
 			# TODO - negative luck from getting hit by your own AoE

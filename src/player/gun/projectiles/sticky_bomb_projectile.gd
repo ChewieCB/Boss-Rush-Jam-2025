@@ -150,11 +150,31 @@ func _on_explode_timer_timeout() -> void:
 	var calculated_explosion_damage = calculate_explosion_damage()
 	inst.init(calculated_explosion_damage)
 	get_parent().add_child(inst)
+	for i in range(infused_status_effect.size()):
+		if infused_status_effect[i]:
+			inst.add_status_effect(i + 1)  # Offset for the None enum value
 	inst.activate(global_position)
 
 	var vfx = explosion_vfx.instantiate()
+	var vfx_color: Color = Color.ORANGE
+	var most_recent_status: int = -1
+	for i in range(infused_status_effect.size()):
+		if infused_status_effect[i]:
+			most_recent_status = i + 1
+	match most_recent_status:
+		BossCore.BossStatusEffect.BURNING:
+			vfx_color = Color.TOMATO
+		BossCore.BossStatusEffect.POISONED:
+			vfx_color = Color.DARK_GREEN
+		BossCore.BossStatusEffect.FROZEN:
+			vfx_color = Color.AQUA
+		BossCore.BossStatusEffect.SHOCKED:
+			vfx_color = Color.LIGHT_GOLDENROD
+		BossCore.BossStatusEffect.BLEEDING:
+			vfx_color = Color.DARK_RED
 	get_parent().add_child(vfx)
 	vfx.global_position = global_position
+	vfx.set_colour(vfx_color)
 
 	if ricochet_count_left > 0 and found_hitscal_col:
 		sticked = false
@@ -166,8 +186,9 @@ func _on_explode_timer_timeout() -> void:
 		stop_elemental_particles()
 		call_deferred("queue_free")
 
+
 func change_bullet_color(_new_color: Color):
-	super (_new_color)
+	super(_new_color)
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)

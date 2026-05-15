@@ -150,7 +150,7 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 		homing_area.set_deferred("monitoring", false)
 
 func change_bullet_color(_new_color: Color):
-	super (_new_color)
+	super(_new_color)
 	if color_changed_count > 1:
 		mesh.mesh.material.albedo_color = mesh.mesh.material.albedo_color.lerp(_new_color, 0.5)
 		mesh.mesh.material.emission = mesh.mesh.material.emission.lerp(_new_color, 0.5)
