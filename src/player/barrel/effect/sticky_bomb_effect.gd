@@ -3,8 +3,8 @@ extends CompoundEffect
 
 @export_group("Luck Triggers")
 @export_subgroup("Cluster Bomb")
-@export var luck_trigger_sticky_threshold: int = 5
-@export var luck_gain_sticky: float = 30.0
+@export var luck_trigger_sticky_threshold: int = 20
+@export var luck_gain_sticky: float = 25.0
 #
 # Track how many sticky bomb projectiles have hit the target - have a callback to update this on proj impact.
 # From the first hit, track when the first sticky proj detonates and cap the window there, checking against the luck trigger and resetting the counter
@@ -14,7 +14,7 @@ var sticky_hits: int = 0
 @export var luck_trigger_indirect_damage_threshold: float = 100.0
 @export var luck_gain_indirect_damage: float = 20.0
 #
-@export var explosive_dps_dealt_window: float = 1.8
+@export var explosive_dps_dealt_window: float = 2.4 
 @export var explosive_dps_dealt_window_timer: Timer
 var explosive_dps_accumulated_in_window: float = 0.0:
 	set(value):
@@ -27,13 +27,15 @@ var explosive_dps_accumulated_in_window: float = 0.0:
 func on_projectile_spawn(_projectile: BaseBullet):
 	super(_projectile)
 	_projectile.before_damage_applied.connect(_update_sticky_hit_tracker)
-	_projectile.explosion_inst.explosive_damage.connect(_on_explosive_damage)
+	_projectile.explosion_inst.explosive_damage.connect(_on_explosive_damage.bind(_projectile))
 
 
-func _on_explosive_damage(damage: float, body: CharacterBody3D) -> void:
+func _on_explosive_damage(damage: float, body: CharacterBody3D, _projectile: StickyBombProjectile) -> void:
+	# Don't trigger luck buff if we damage outselves
 	if body is not Player:
-		# Don't trigger luck buff if we damage outselves
-		accumulate_dps_dealt(damage)
+		# Only count damage from bombs NOT stuck to enemy
+		if not _projectile.get_parent() is CharacterBody3D:
+			accumulate_dps_dealt(damage)
 
 ## Cluster Bomb Luck Trigger
 
@@ -53,7 +55,7 @@ func _on_first_proj_in_window_destroyed(_hit_boss: bool) -> void:
 			LuckHandler.luck_trigger_dict[enum_str] = true
 			LuckHandler.trigger_discovered.emit()
 		
-		LuckHandler.increase_luck(luck_gain_sticky, "+30 Cluster Bomb!")
+		LuckHandler.increase_luck(luck_gain_sticky, "+25 Cluster Bomb!")
 	
 	sticky_hits = 0
 
