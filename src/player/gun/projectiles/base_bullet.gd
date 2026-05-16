@@ -143,7 +143,9 @@ func create_status_effect_impact(pos: Vector3, normal: Vector3):
 				impact_inst.rotate_object_local(Vector3(1, 0, 0), 90)
 
 func calculate_bullet_damage(reroll_crit = true):
-	# FIXME - this resets crit damage
+	# FIXME - this resets crit damage 
+	if not is_instance_valid(owner_gun):
+		return null
 	var rand_damage_mod = get_damage_variance_modifier(damage)
 	var calculated_damage = damage + rand_damage_mod
 	# Crit

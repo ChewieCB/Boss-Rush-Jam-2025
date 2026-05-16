@@ -7432,7 +7432,7 @@ data = PackedVector3Array(-3.46875, -1.75, 5.87811, -3.46875, -5.125, 5.87811, -
 [node name="Backroom" type="Node3D" node_paths=PackedStringArray("player", "elevator_buttons", "vendors")]
 script = ExtResource("1_3dpme")
 player = NodePath("FuncGodotMap/entity_1_PlayerRef")
-elevator_buttons = [NodePath("FuncGodotMap/layer_0_Elevators/entity_287_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_292_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_293_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_294_ElevatorButton")]
+elevator_buttons = [NodePath("FuncGodotMap/layer_0_Elevators/entity_287_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_292_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_293_ElevatorButton"), NodePath("FuncGodotMap/layer_0_Elevators/entity_294_ElevatorButton"), NodePath("FuncGodotMap/entity_38_ElevatorButton")]
 vendors = [NodePath("Vendor"), NodePath("Workbench")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]

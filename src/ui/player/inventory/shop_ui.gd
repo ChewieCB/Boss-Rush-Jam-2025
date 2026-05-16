@@ -1,5 +1,5 @@
 extends InventoryUI
-class_name GunCustomizationUI
+class_name ShopUI
 
 @export var shop_title: String
 @export var shop_barrel_item_ui_prefab: PackedScene
@@ -25,12 +25,15 @@ func _process(delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	super(event)
+	super (event)
 	if visible:
-		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
+		var focused_ui: Control = null
+		if active_focus_idx >= 0 and current_focus_area:
+			focused_ui = current_focus_area.get_child(active_focus_idx)
 		if event.is_action_pressed("ui_cancel"):
-			contextual_cancel(focused_ui.item_ui)
-			await input_prompt_cancel.animate()
+			if focused_ui:
+				contextual_cancel(focused_ui.item_ui)
+			input_prompt_cancel.animate()
 
 
 func full_refresh_ui(focus_area_callable: Callable, forced = false):
@@ -54,7 +57,7 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 		if not barrel_data.is_archetype_barrel:
 			var shop_item_inst = shop_barrel_item_ui_prefab.instantiate()
 			shop_barrel_container.add_child(shop_item_inst)
-			shop_item_inst.init(self, barrel_data)
+			shop_item_inst.init(self , barrel_data)
 			shop_item_inst.item_ui.select_item.connect(_on_item_ui_select)
 			shop_item_inst.item_ui.interact_item.connect(_on_item_ui_interact)
 			shop_item_inst.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst.item_ui))
@@ -66,7 +69,7 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 	for gun_frame_data in GameManager.shop_gun_frames:
 		var shop_item_inst = shop_gun_frame_item_ui_prefab.instantiate()
 		shop_gun_frame_container.add_child(shop_item_inst)
-		shop_item_inst.init(self, gun_frame_data)
+		shop_item_inst.init(self , gun_frame_data)
 		shop_item_inst.item_ui.select_item.connect(_on_gun_frame_item_ui_select)
 		shop_item_inst.item_ui.interact_item.connect(_on_gun_frame_item_ui_interact)
 		shop_item_inst.item_ui.button.focus_entered.connect(_on_item_ui_button_focus_gained.bind(shop_item_inst.item_ui))
@@ -81,7 +84,8 @@ func full_refresh_ui(focus_area_callable: Callable, forced = false):
 	
 	await get_tree().process_frame
 	var focus_area: Control = focus_area_callable.call()
-	focus_area.grab_focus.call_deferred()
+	if focus_area:
+		focus_area.grab_focus.call_deferred()
 
 
 func contextual_cancel(focused_ui: Control) -> void:

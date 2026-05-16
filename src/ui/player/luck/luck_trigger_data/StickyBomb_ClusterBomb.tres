@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://2fdmjkfh05mw"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_icq2u"]
+
+[resource]
+script = ExtResource("1_icq2u")
+id = 7
+name = "Cluster Bomb"
+desc = "+25 luck for sticking lots of sticky bombs to an enemy"
+message = ""

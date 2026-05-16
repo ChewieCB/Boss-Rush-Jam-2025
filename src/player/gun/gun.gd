@@ -528,6 +528,8 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 
 func check_barrel_effect_on_player_contact(_projectile: BaseBullet):
 	for barrel in installed_barrels:
+		if barrel == null:
+			continue
 		barrel.get_active_effect().on_player_contact(_projectile)
 
 func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
