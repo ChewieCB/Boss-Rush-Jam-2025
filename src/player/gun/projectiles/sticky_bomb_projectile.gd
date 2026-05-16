@@ -169,8 +169,21 @@ func _on_explode_timer_timeout() -> void:
 		if infused_status_effect[i]:
 			explosion_inst.add_status_effect(i + 1)  # Offset for the None enum value
 	explosion_inst.call_deferred("activate", global_position)
+	call_deferred("create_explosion")
 
-	var vfx = explosion_vfx.call_deferred("instantiate")
+	if ricochet_count_left > 0 and found_hitscal_col:
+		sticked = false
+		self.reparent.call_deferred(get_tree().get_root())
+		ricochet()
+	else:
+		await get_tree().create_timer(0.25).timeout
+		destroyed.emit(hit_boss)
+		stop_elemental_particles()
+		call_deferred("queue_free")
+
+
+func create_explosion() -> void:
+	var vfx = explosion_vfx.instantiate()
 	var vfx_color: Color = Color.ORANGE
 	var most_recent_status: int = -1
 	for i in range(infused_status_effect.size()):
@@ -191,16 +204,6 @@ func _on_explode_timer_timeout() -> void:
 	vfx.global_position = global_position
 	vfx.set_colour(vfx_color)
 
-	if ricochet_count_left > 0 and found_hitscal_col:
-		sticked = false
-		self.reparent.call_deferred(get_tree().get_root())
-		ricochet()
-	else:
-		await get_tree().create_timer(0.25).timeout
-		destroyed.emit(hit_boss)
-		stop_elemental_particles()
-		call_deferred("queue_free")
-
 
 func change_bullet_color(_new_color: Color):
 	super(_new_color)
@@ -217,6 +220,8 @@ func change_bullet_color(_new_color: Color):
 
 
 func calculate_explosion_damage():
+	if not is_instance_valid(owner_gun):
+		return
 	var rand_damage_mod = get_damage_variance_modifier(explosion_damage)
 	var calculated_damage = explosion_damage + rand_damage_mod
 	# Crit
