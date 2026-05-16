@@ -27,9 +27,12 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	super (event)
 	if visible:
-		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
+		var focused_ui: Control = null
+		if active_focus_idx >= 0 and current_focus_area:
+			focused_ui = current_focus_area.get_child(active_focus_idx)
 		if event.is_action_pressed("ui_cancel"):
-			contextual_cancel(focused_ui.item_ui)
+			if focused_ui:
+				contextual_cancel(focused_ui.item_ui)
 			input_prompt_cancel.animate()
 
 
