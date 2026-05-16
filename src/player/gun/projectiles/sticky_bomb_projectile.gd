@@ -168,9 +168,9 @@ func _on_explode_timer_timeout() -> void:
 	for i in range(infused_status_effect.size()):
 		if infused_status_effect[i]:
 			explosion_inst.add_status_effect(i + 1)  # Offset for the None enum value
-	explosion_inst.activate(global_position)
+	explosion_inst.call_deferred("activate", global_position)
 
-	var vfx = explosion_vfx.instantiate()
+	var vfx = explosion_vfx.call_deferred("instantiate")
 	var vfx_color: Color = Color.ORANGE
 	var most_recent_status: int = -1
 	for i in range(infused_status_effect.size()):

@@ -117,7 +117,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			apply_damage_to_health_component(target.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, target.global_position)
 			hit_boss = true
-			create_blood_splatter(hitscan_col_point, hitscan_col_normal)
+			call_deferred("create_blood_splatter", hitscan_col_point, hitscan_col_normal)
 		else:
 			if "health_component" in target:
 				if target is Shield:
@@ -129,8 +129,8 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 				hit_boss = true
 			elif target is BartenderBottle:
 				target.call_deferred("queue_free")
-			create_spark(hitscan_col_point, hitscan_col_normal)
-			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
+			call_deferred("create_spark", hitscan_col_point, hitscan_col_normal)
+			call_deferred("create_bullet_decal", hitscan_col_point, hitscan_col_normal)
 		if ricochet_count_left > 0:
 			ricochet()
 	else:

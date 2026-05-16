@@ -121,9 +121,11 @@ func ricochet():
 
 func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body is Player and time_ricochetted == 0:
-		on_player_contact.emit(self )
+		on_player_contact.emit(self)
 		return
+	
 	var calculated_damage = calculate_bullet_damage()
+	
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
 			before_damage_applied.emit(body, self )
@@ -146,11 +148,11 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 			damage_applied.emit(calculated_damage, true, global_position)
 			hit_boss = true
 		if found_hitscal_col and gravity_accel == 0:
-			create_spark(hitscan_col_point, hitscan_col_normal)
-			create_bullet_decal(hitscan_col_point, hitscan_col_normal)
+			call_deferred("create_spark", hitscan_col_point, hitscan_col_normal)
+			call_deferred("create_bullet_decal", hitscan_col_point, hitscan_col_normal)
 		else:
-			create_spark(global_position, Vector3.UP)
-			create_bullet_decal(global_position, Vector3.UP)
+			call_deferred("create_spark", global_position, Vector3.UP)
+			call_deferred("create_bullet_decal", global_position, Vector3.UP)
 	impacted.emit(self , true, global_position)
 
 	if ricochet_count_left > 0 and found_hitscal_col:
