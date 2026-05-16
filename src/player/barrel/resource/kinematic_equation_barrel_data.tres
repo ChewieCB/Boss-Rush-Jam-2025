@@ -8,16 +8,7 @@
 script = ExtResource("3_15ils")
 barrel_id = 45
 barrel_name = "Kinematic Equation"
-barrel_desc = "[b]Kinematic Equation Barrel[/b]
-Keep your distance and pick your placements.
-
-Possible rolls:
-[ul]
-Slow Roller: Bullets move slower, but damage increases the further they travel.
-Long Shot: Bullets are more accurate, and deal more damage the further away they are fired from their target.
-Snap Call: Bullets move faster, and deal more damage the higher their speed is. Minimal benefit for hitscan weapons.
-[/ul]
-"
+barrel_desc = "Keep your distance and pick your placements."
 barrel_info_summary = "Inspired by a classic physic formula."
 barrel_image = ExtResource("1_k28iw")
 barrel_cost = 1850

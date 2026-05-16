@@ -15,6 +15,8 @@ var applied_effects = []
 func hit_with_effect(installed_barrels: Array[SpinBarrel]) -> void:
 	if active:
 		for barrel in installed_barrels:
+			if barrel == null:
+				continue
 			var current_effect = barrel.get_active_effect()
 			if current_effect.icon_id == target_effect_id:
 				triggered.emit()

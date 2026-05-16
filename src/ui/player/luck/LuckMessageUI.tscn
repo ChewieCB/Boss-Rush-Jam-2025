@@ -11,6 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_8xsgs")
 luck_popup_ui = ExtResource("2_w1fj2")
 
@@ -23,3 +24,4 @@ offset_left = -20.0
 offset_right = 20.0
 offset_bottom = 40.0
 grow_horizontal = 2
+mouse_filter = 2

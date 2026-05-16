@@ -9,7 +9,7 @@ extends BaseBarrelEffect
 @export var luck_trigger_indirect_damage_threshold: float = 100.0
 @export var luck_gain_indirect_damage: float = 20.0
 
-@export_group("Explsoive DPS Dealt In Last X Seconds")
+@export_group("Explsive DPS Dealt In Last X Seconds")
 @export var dps_dealt_window: float = 1.8
 @export var dps_dealt_window_timer: Timer
 var dps_accumulated_in_window: float = 0.0:

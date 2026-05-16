@@ -13,6 +13,7 @@ var save_data = null
 var main_menu: MainMenu
 var confirm_delete = false
 
+
 func _ready() -> void:
 	confirm_delete = false
 	main_menu = get_parent().get_parent().get_parent()

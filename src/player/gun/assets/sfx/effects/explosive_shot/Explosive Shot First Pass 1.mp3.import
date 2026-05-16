@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://7bu6ed4y3gho"
+path="res://.godot/imported/Explosive Shot First Pass 1.mp3-956b1defa474ac143f916ca28b0ac4e9.mp3str"
+
+[deps]
+
+source_file="res://src/player/gun/assets/sfx/effects/explosive_shot/Explosive Shot First Pass 1.mp3"
+dest_files=["res://.godot/imported/Explosive Shot First Pass 1.mp3-956b1defa474ac143f916ca28b0ac4e9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

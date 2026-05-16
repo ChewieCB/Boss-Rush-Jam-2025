@@ -1,4 +1,4 @@
-extends Resource
+extends BaseDataResource
 class_name BarrelDataResource
 
 ## Keep adding new item at the bottom, dont add at the middle of list

@@ -1,4 +1,4 @@
-extends Resource
+extends BaseDataResource
 class_name GunFrameResource
 
 enum GunFrameIdEnum {
@@ -12,6 +12,7 @@ enum GunFrameIdEnum {
 @export var frame_name: String
 @export var frame_id: GunFrameIdEnum
 @export_multiline var frame_description: String
+@export_multiline var flavour_text: String
 @export var shop_ui_sprite: Texture2D
 @export var reload_sfx: Array[AudioStream] = []
 @export var shot_sfx: Array[AudioStream] = []

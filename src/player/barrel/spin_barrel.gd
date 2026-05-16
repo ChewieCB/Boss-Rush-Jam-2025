@@ -129,7 +129,8 @@ func get_barrel_effect_data_at(index: int) -> Dictionary:
 		is_archetype = true
 	var res = {
 		"title": barrel_effect.display_text_title,
-		"description": barrel_effect.display_text_tag,
+		"flavour_text": barrel_effect.display_text_tag,
+		"description": barrel_effect.display_text_desc,
 		"is_archetype": is_archetype,
 		"positive_desc": barrel_effect.positive_desc,
 		"negative_desc": barrel_effect.negative_desc,

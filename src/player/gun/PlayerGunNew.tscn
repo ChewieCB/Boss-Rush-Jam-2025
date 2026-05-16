@@ -1,4 +1,4 @@
-[gd_scene load_steps=159 format=4 uid="uid://beunw631r018y"]
+[gd_scene load_steps=169 format=4 uid="uid://beunw631r018y"]
 
 [ext_resource type="Script" path="res://src/player/gun/gun.gd" id="1_ferpt"]
 [ext_resource type="AudioStream" uid="uid://bbki3e1tb76yc" path="res://src/player/gun/assets/sfx/temp/Shotgun_blast_only.mp3" id="2_3jkil"]
@@ -12,19 +12,26 @@
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://src/player/gun/projectiles/GunHitscan.tscn" id="8_trw5g"]
 [ext_resource type="AudioStream" uid="uid://jpjr5oivr7p6" path="res://src/player/gun/assets/sfx/reloading/shotgun/SHOTGUN SHELL LOAD 2.mp3" id="9_6pmsn"]
 [ext_resource type="PackedScene" uid="uid://guegep2ueo26" path="res://src/player/gun/projectiles/GunProjectile.tscn" id="9_hhraw"]
+[ext_resource type="AudioStream" uid="uid://dgh4s42lj5po3" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/jam/Gun Jam test pass 1.mp3" id="9_jq4c3"]
 [ext_resource type="AudioStream" uid="uid://b4auq2gsiqpqr" path="res://src/player/gun/assets/sfx/reloading/shotgun/SHOTGUN SHELL LOAD 3.mp3" id="10_2xpsl"]
+[ext_resource type="AudioStream" uid="uid://tdkxwv7lhygy" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/jam/Gun Jam test pass 2.mp3" id="10_aq7qw"]
 [ext_resource type="PackedScene" uid="uid://tviraxqs4fj2" path="res://src/player/gun/vfx/muzzle_flash/MuzzleSmoke.tscn" id="10_ipycd"]
 [ext_resource type="Texture2D" uid="uid://dh6t8spyrx65x" path="res://src/player/gun/assets/sprite/rescale/idle/gun_barrel_firing.png" id="11_cwod4"]
+[ext_resource type="AudioStream" uid="uid://bh1q6va06hgg4" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/jam/Gun Jam test pass 3.mp3" id="11_fneb4"]
 [ext_resource type="Texture2D" uid="uid://tfuumqiincn8" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1.png" id="11_hubp1"]
 [ext_resource type="Texture2D" uid="uid://bk7e38ein08kl" path="res://src/player/gun/assets/sprite/rescale/gun_frame_nolever.png" id="11_n85hu"]
+[ext_resource type="AudioStream" uid="uid://dldyyea7roxs4" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/jam/Gun Jam test pass 4.mp3" id="12_7h58j"]
 [ext_resource type="Texture2D" uid="uid://fnlwhdnqu56f" path="res://src/player/gun/assets/sprite/rescale/idle/muzzle_flash.png" id="12_fgtrf"]
 [ext_resource type="Texture2D" uid="uid://b7act70bpswy0" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_2.png" id="12_vi2pp"]
+[ext_resource type="AudioStream" uid="uid://c77bk4kh8c44y" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/clear/Gun Jam Clear temp 1.mp3" id="13_iya78"]
 [ext_resource type="Texture2D" uid="uid://bbg2tgpr0qgk" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3.png" id="13_u0vae"]
 [ext_resource type="Texture2D" uid="uid://ciovo216nkk7n" path="res://src/player/gun/assets/sprite/rescale/idle/gun_foregrip_idle.png" id="14_8rp44"]
 [ext_resource type="Texture2D" uid="uid://cnwnxmug0heye" path="res://src/player/gun/assets/sprite/gun_silhouette.png" id="14_qn47w"]
 [ext_resource type="Texture2D" uid="uid://ngmk0hmjnikh" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_1_spin_1.png" id="14_rhmcq"]
+[ext_resource type="AudioStream" uid="uid://dwxhbmvh0vgko" path="res://src/player/gun/assets/sfx/effects/gamblers_precision/clear/Gun Jam Clear temp 2.mp3" id="14_xihvl"]
 [ext_resource type="Texture2D" uid="uid://mxvqdioov5rq" path="res://src/player/gun/assets/sprite/frames/shotgun/reload/shotgun_shell.png" id="15_5xjsj"]
 [ext_resource type="Texture2D" uid="uid://tpbqrtskhc32" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_1.png" id="15_a1yho"]
+[ext_resource type="PackedScene" uid="uid://d2guvc1i31xs2" path="res://src/player/barrel/_NullBarrel.tscn" id="15_doci0"]
 [ext_resource type="Texture2D" uid="uid://drrr4aotn87ol" path="res://src/player/gun/assets/sprite/rescale/idle/arm_idle.png" id="15_x3kbv"]
 [ext_resource type="Texture2D" uid="uid://dbjgf5actedu7" path="res://src/player/gun/assets/sprite/rescale/idle/barrel_3_spin_2.png" id="16_5bgyl"]
 [ext_resource type="Texture2D" uid="uid://b0magitfwgp0" path="res://src/player/gun/assets/sprite/frames/smg/gun_frame_smg_grip.png" id="17_rwkjl"]
@@ -49,11 +56,14 @@
 [ext_resource type="Texture2D" uid="uid://cnat6ccrdw3a5" path="res://src/player/gun/assets/sprite/frames/smg/smg_idle_hand.png" id="38_ew4gs"]
 [ext_resource type="Texture2D" uid="uid://cjc6l0p8c4720" path="res://src/player/gun/assets/sprite/rescale/jam/1_barrel_jam_0.png" id="39_br3nd"]
 [ext_resource type="Texture2D" uid="uid://cakvrwlj2seao" path="res://src/player/gun/assets/sprite/rescale/jam/2_barrel_jam_0.png" id="40_kpqpn"]
-[ext_resource type="Texture2D" uid="uid://d32ln175nao3a" path="res://src/player/gun/assets/sprite/hand/jam/jam_hand_frame_0_ROUGH.png" id="42_2j00y"]
-[ext_resource type="Texture2D" uid="uid://dx6g0fcok6cju" path="res://src/player/gun/assets/sprite/hand/jam/jam_hand_frame_1_ROUGH.png" id="43_4bj0s"]
-[ext_resource type="Texture2D" uid="uid://cg8a37tjdby84" path="res://src/player/gun/assets/sprite/hand/jam/jam_hand_frame_3_ROUGH.png" id="44_yrcdt"]
-[ext_resource type="Texture2D" uid="uid://bq3sedlc8twsm" path="res://src/player/gun/assets/sprite/hand/jam/jam_hand_frame_2_ROUGH.png" id="45_301na"]
-[ext_resource type="Texture2D" uid="uid://2ef1q43deta1" path="res://src/player/gun/assets/sprite/hand/jam/jam_hand_frame_5_ROUGH.png" id="46_bhy7f"]
+[ext_resource type="Texture2D" uid="uid://dsvduyuup1tyr" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_000.png" id="43_nrwcm"]
+[ext_resource type="Texture2D" uid="uid://bdqts008mm68v" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_002.png" id="44_kke66"]
+[ext_resource type="Texture2D" uid="uid://cpdkp1jdb31rp" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_003.png" id="45_mkuwl"]
+[ext_resource type="Texture2D" uid="uid://gxrbgeiyaqvf" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_004.png" id="46_5pojg"]
+[ext_resource type="Texture2D" uid="uid://bfqiog4bk6fdr" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_005.png" id="47_t3fma"]
+[ext_resource type="Texture2D" uid="uid://c0oit75a4whng" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_006.png" id="48_5i6iq"]
+[ext_resource type="Texture2D" uid="uid://mc8iiclya1ts" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_007.png" id="49_q0xdi"]
+[ext_resource type="Texture2D" uid="uid://dlf1viimbfv7j" path="res://src/player/gun/assets/sprite/hand/jam/off-hand-slam-gp_009.png" id="50_v5jxa"]
 [ext_resource type="Texture2D" uid="uid://n3evsy846arq" path="res://assets/sprite/particles/springs/springs_&_gears_sheet.png" id="55_18u8p"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_wqldo"]
@@ -1837,7 +1847,7 @@ tracks/3/keys = {
 [sub_resource type="Animation" id="Animation_23m4y"]
 resource_name = "jam"
 length = 0.6
-step = 0.05
+step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1860,7 +1870,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(2.37841, 0.353554, 1, 0.5, 1.31951, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(-0.524753, -0.34109, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(-0.5, -0.8, 0), Vector3(0, 0, 0)]
+"values": [Vector3(0, 0, 0), Vector3(-0.524753, -0.34109, 0), Vector3(0.3, -0.3, 0), Vector3(0, 0, 0), Vector3(-0.5, -0.8, 0), Vector3(0, 0, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1893,10 +1903,10 @@ tracks/4/path = NodePath("SpriteParent/ArmSprite:texture")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 0.353554, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 0.353554, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("15_x3kbv"), ExtResource("42_2j00y"), ExtResource("43_4bj0s"), ExtResource("44_yrcdt"), ExtResource("45_301na"), ExtResource("46_bhy7f"), ExtResource("15_x3kbv")]
+"values": [ExtResource("43_nrwcm"), ExtResource("44_kke66"), ExtResource("45_mkuwl"), ExtResource("46_5pojg"), ExtResource("47_t3fma"), ExtResource("48_5i6iq"), ExtResource("49_q0xdi"), ExtResource("50_v5jxa")]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -2590,10 +2600,10 @@ tracks/5/path = NodePath("SpriteParent/ArmSprite:texture")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 0.353554, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 0.353554, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("15_x3kbv"), ExtResource("42_2j00y"), ExtResource("43_4bj0s"), ExtResource("44_yrcdt"), ExtResource("45_301na"), ExtResource("46_bhy7f"), ExtResource("15_x3kbv")]
+"values": [ExtResource("43_nrwcm"), ExtResource("44_kke66"), ExtResource("45_mkuwl"), ExtResource("46_5pojg"), ExtResource("47_t3fma"), ExtResource("48_5i6iq"), ExtResource("49_q0xdi"), ExtResource("50_v5jxa")]
 }
 tracks/6/type = "method"
 tracks/6/imported = false
@@ -3370,10 +3380,10 @@ tracks/4/path = NodePath("SpriteParent/ArmSprite:texture")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 0.353554, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 0.353554, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("15_x3kbv"), ExtResource("42_2j00y"), ExtResource("43_4bj0s"), ExtResource("44_yrcdt"), ExtResource("45_301na"), ExtResource("46_bhy7f"), ExtResource("15_x3kbv")]
+"values": [ExtResource("43_nrwcm"), ExtResource("44_kke66"), ExtResource("45_mkuwl"), ExtResource("46_5pojg"), ExtResource("47_t3fma"), ExtResource("48_5i6iq"), ExtResource("49_q0xdi"), ExtResource("50_v5jxa")]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -3953,10 +3963,13 @@ TEMP_sfx_spin = ExtResource("4_jq6y4")
 TEMP_sfx_click = ExtResource("5_cutjd")
 TEMP_regain_ammo = ExtResource("6_j7hjd")
 TEMP_crit = ExtResource("7_dh421")
+sfx_gp_jam = Array[AudioStream]([ExtResource("9_jq4c3"), ExtResource("10_aq7qw"), ExtResource("11_fneb4"), ExtResource("12_7h58j")])
+sfx_gp_clear = Array[AudioStream]([ExtResource("13_iya78"), ExtResource("14_xihvl")])
 sfx_shotgun_shell_reload = Array[AudioStream]([ExtResource("8_47oxl"), ExtResource("9_6pmsn"), ExtResource("10_2xpsl")])
 hitscan_prefab = ExtResource("8_trw5g")
 projectile_prefab = ExtResource("9_hhraw")
 muzzle_smoke_prefab = ExtResource("10_ipycd")
+null_barrel_prefab = ExtResource("15_doci0")
 
 [node name="SpriteParent" type="Node3D" parent="."]
 transform = Transform3D(0.159378, -0.0427051, 0, 0.0427051, 0.159378, 0, 0, 0, 0.165, 0.0612581, -1.08924, 0)

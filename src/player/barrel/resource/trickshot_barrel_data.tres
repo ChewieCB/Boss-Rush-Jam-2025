@@ -8,18 +8,11 @@
 script = ExtResource("3_curd4")
 barrel_id = 6
 barrel_name = "Trickshot"
-barrel_desc = "[b]Trickshot Barrel[/b]
-Cover all the angles.
-
-Possible rolls:
-[ul]
-Ricochet Bullet: Bullets bounce of walls and enemies.
-Homing Bullet: Bullets homing toward enemies, but significantly reduced damage.
-Split Bullet: Bullets split into 3 on impact, which deal reduced damage.
-[/ul]
-"
-barrel_info_summary = "Bullets fly in all kinds of ways, covering every angle. Taken from The Slot."
+barrel_desc = "Bullets fly in all kinds of ways, covering every angle. Taken from The Slot."
+barrel_info_summary = "Cover all the angles."
 barrel_image = ExtResource("1_qqx0r")
 barrel_cost = 200
 barrel_prefab = ExtResource("2_pg4nx")
 is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = false

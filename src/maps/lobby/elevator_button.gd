@@ -20,6 +20,8 @@ var boss_name: String
 @export var linked_elevator_doors: ElevatorDoors
 @export var hub_respawn_marker: Marker3D
 
+@export var interact_dist: float = 2.5
+
 
 func _ready() -> void:
 	linked_level = entProperties["linked_level"]

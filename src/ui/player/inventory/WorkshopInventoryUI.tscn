@@ -1,0 +1,397 @@
+[gd_scene load_steps=16 format=3 uid="uid://cu1jrlwvdnnl"]
+
+[ext_resource type="Script" path="res://src/ui/player/inventory/workshop_inventory_ui.gd" id="1_nmgbf"]
+[ext_resource type="PackedScene" uid="uid://cireewkvow2ct" path="res://src/ui/player/inventory/GunFrameItemUI.tscn" id="2_0be23"]
+[ext_resource type="PackedScene" uid="uid://dpyj480amlor7" path="res://src/ui/player/inventory/BarrelItemUI.tscn" id="2_qu664"]
+[ext_resource type="PackedScene" uid="uid://bagau1537wut2" path="res://src/ui/player/inventory/EquippedFrameSideView.tscn" id="7_skhd5"]
+[ext_resource type="PackedScene" uid="uid://dhx5vqirejsxe" path="res://src/ui/shop/BarrelSlotUI.tscn" id="8_3rosm"]
+[ext_resource type="Texture2D" uid="uid://3hjcx2edn8ep" path="res://src/ui/common/assets/kenney_borders/default/Divider/divider-001.png" id="9_mcm64"]
+[ext_resource type="PackedScene" uid="uid://bdotmbmcpnnup" path="res://src/ui/player/inventory/BarrelInfoRegion.tscn" id="10_uxdru"]
+[ext_resource type="Shader" path="res://src/ui/main_menu/scrolling_background.gdshader" id="12_8bjyn"]
+[ext_resource type="PackedScene" uid="uid://c243t2tftr4xy" path="res://src/ui/common/device_input_prompt/UIInputPrompt.tscn" id="12_qx4wp"]
+[ext_resource type="Texture2D" uid="uid://buij7cq2iihvp" path="res://src/ui/common/assets/kenney_borders/default/Border/panel-border-013.png" id="12_uoa4s"]
+[ext_resource type="Texture2D" uid="uid://cfqbqk3lshl2m" path="res://assets/sprite/placeholder/square.png" id="14_uy6vt"]
+[ext_resource type="Texture2D" uid="uid://dj6ce7qdoeue" path="res://src/ui/player/inventory/inventory-background.png" id="15_fsv8b"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yd8qc"]
+shader = ExtResource("12_8bjyn")
+shader_parameter/scroll_speed = 0.02
+shader_parameter/angle_degrees = 45.0
+shader_parameter/repeat_x = 14.2
+shader_parameter/repeat_y = 8.0
+shader_parameter/row_offset = 0.65
+shader_parameter/texture_to_scroll = ExtResource("15_fsv8b")
+
+[sub_resource type="Gradient" id="Gradient_gcfb7"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cxwao"]
+gradient = SubResource("Gradient_gcfb7")
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.504274, 1)
+
+[node name="WorkshopInventoryUI" type="Control" node_paths=PackedStringArray("equip_barrel_container", "inventory_gun_frame_container", "inventory_normal_barrel_container", "scroll_container", "input_prompt_navigate", "input_prompt_accept", "input_prompt_cancel", "input_prompt_detail", "input_prompt_tab_left", "input_prompt_tab_right", "barrel_info_region")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nmgbf")
+equip_barrel_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView/EquippedBarrelContainer")
+inventory_gun_frame_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView")
+inventory_normal_barrel_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer")
+barrel_item_ui_prefab = ExtResource("2_qu664")
+gun_frame_item_ui_prefab = ExtResource("2_0be23")
+scroll_container = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer")
+input_prompt_navigate = NodePath("ControlHelp/HBoxContainer/InputPrompt1")
+input_prompt_accept = NodePath("ControlHelp/HBoxContainer/InputPrompt2")
+input_prompt_cancel = NodePath("ControlHelp/HBoxContainer/InputPrompt3")
+input_prompt_detail = NodePath("ControlHelp/HBoxContainer/InputPrompt4")
+input_prompt_tab_left = NodePath("ControlHelp/HBoxContainer/InputPrompt5/HBoxContainer/InputPromptSlotL")
+input_prompt_tab_right = NodePath("ControlHelp/HBoxContainer/InputPrompt5/HBoxContainer/InputPromptSlotR")
+barrel_info_region = NodePath("MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer/BarrelInfoRegion")
+
+[node name="ModifyBG" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_yd8qc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_uy6vt")
+
+[node name="DarkenOverlay" type="TextureRect" parent="."]
+self_modulate = Color(0, 0, 0, 0.708)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_uy6vt")
+
+[node name="FadeDarkBG" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_cxwao")
+
+[node name="MainRegion" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BarrelModifyUI" type="MarginContainer" parent="MainRegion"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI"]
+layout_mode = 2
+
+[node name="UpperRegion" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 364)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_bottom = 64
+
+[node name="EquippedFrameSideView" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion" instance=ExtResource("7_skhd5")]
+layout_mode = 2
+
+[node name="Line2D4" type="Line2D" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView"]
+position = Vector2(624, 72)
+points = PackedVector2Array(208, 88, 152, 248)
+
+[node name="Line2D5" type="Line2D" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView"]
+position = Vector2(696, 72)
+points = PackedVector2Array(200, 88, 200, 248)
+
+[node name="Line2D6" type="Line2D" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView"]
+position = Vector2(792, 80)
+points = PackedVector2Array(192, 96, 224, 248)
+
+[node name="EquippedBarrelContainer" type="HBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -236.0
+offset_top = 168.0
+offset_right = 164.0
+offset_bottom = 288.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="BarrelSlot" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView/EquippedBarrelContainer" instance=ExtResource("8_3rosm")]
+layout_mode = 2
+
+[node name="BarrelSlot2" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView/EquippedBarrelContainer" instance=ExtResource("8_3rosm")]
+layout_mode = 2
+
+[node name="BarrelSlot3" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView/EquippedBarrelContainer" instance=ExtResource("8_3rosm")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/UpperRegion/EquippedFrameSideView"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LowerRegion" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_constants/margin_bottom = 96
+
+[node name="HSeparator" type="NinePatchRect" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion"]
+visible = false
+modulate = Color(0.902281, 0.776745, 0, 1)
+custom_minimum_size = Vector2(1672.03, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("9_mcm64")
+region_rect = Rect2(0, 0, 92.6855, 22)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion"]
+custom_minimum_size = Vector2(1824, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+theme_override_constants/separation = 192
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 32
+
+[node name="NormalLabel" type="Label" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+horizontal_alignment = 1
+
+[node name="BarrelInfoRegion" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/VBoxContainer" instance=ExtResource("10_uxdru")]
+custom_minimum_size = Vector2(902, 364)
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="InventoryRegion" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/margin_right = 80
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 32
+
+[node name="NormalLabel" type="Label" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "Inventory"
+horizontal_alignment = 1
+
+[node name="PanelDescription" type="ColorRect" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer"]
+custom_minimum_size = Vector2(640, 364)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+color = Color(0, 0, 0, 1)
+
+[node name="Border" type="NinePatchRect" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription"]
+self_modulate = Color(0.901961, 0.776471, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_uoa4s")
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription"]
+custom_minimum_size = Vector2(640, 364)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="NormalContainer" type="MarginContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="GridContainer" type="GridContainer" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 5
+
+[node name="BarrelItemUI" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI2" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI3" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI4" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI5" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI6" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI7" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI8" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI9" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI10" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI11" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI12" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="BarrelItemUI13" parent="MainRegion/BarrelModifyUI/VBoxContainer/LowerRegion/HBoxContainer/InventoryRegion/VBoxContainer/PanelDescription/ScrollContainer/MarginContainer/VBoxContainer/NormalContainer/GridContainer" instance=ExtResource("2_qu664")]
+layout_mode = 2
+
+[node name="ControlHelp" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -85.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ControlHelp"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -115.0
+offset_top = -24.0
+offset_right = 115.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="InputPrompt1" parent="ControlHelp/HBoxContainer" instance=ExtResource("12_qx4wp")]
+layout_mode = 2
+size_flags_horizontal = 6
+input_action = "move_generic"
+prompt_text = "Navigate"
+
+[node name="InputPrompt2" parent="ControlHelp/HBoxContainer" instance=ExtResource("12_qx4wp")]
+layout_mode = 2
+size_flags_horizontal = 6
+input_action = "ui_accept"
+prompt_text = "Select"
+
+[node name="InputPrompt3" parent="ControlHelp/HBoxContainer" instance=ExtResource("12_qx4wp")]
+layout_mode = 2
+size_flags_horizontal = 6
+input_action = "ui_cancel"
+prompt_text = "Exit"
+
+[node name="InputPrompt4" parent="ControlHelp/HBoxContainer" instance=ExtResource("12_qx4wp")]
+layout_mode = 2
+size_flags_horizontal = 6
+input_action = "inv_show_barrel_detail"
+prompt_text = "Detail"
+
+[node name="InputPrompt5" type="MarginContainer" parent="ControlHelp/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ControlHelp/HBoxContainer/InputPrompt5"]
+layout_mode = 2
+
+[node name="InputPromptSlotL" parent="ControlHelp/HBoxContainer/InputPrompt5/HBoxContainer" instance=ExtResource("12_qx4wp")]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+input_action = "inv_ui_tab_left"
+
+[node name="Label2" type="Label" parent="ControlHelp/HBoxContainer/InputPrompt5/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 28
+text = "/"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InputPromptSlotR" parent="ControlHelp/HBoxContainer/InputPrompt5/HBoxContainer" instance=ExtResource("12_qx4wp")]
+layout_mode = 2
+input_action = "inv_ui_tab_right"
+prompt_text = "Change Slot"

@@ -8,18 +8,11 @@
 script = ExtResource("3_3se0o")
 barrel_id = 43
 barrel_name = "Reckless Abandon"
-barrel_desc = "[b]Reckless Abandon Barrel[/b]
-I'm all in!
-
-Possible rolls:
-[ul]
-Glass Cannon: Deal and take increased damage.
-Executioner Round: Deal more damage to enemies under 50% HP, but reduced damage otherwise.
-Reactive Shot: Significantly increases bullet damage for a short time after taking damage.
-[/ul]
-"
-barrel_info_summary = "Reward reckless and aggressive playstyle. You won't live long like that though."
+barrel_desc = "Reward reckless and aggressive playstyle. You won't live long like that though."
+barrel_info_summary = "I'm all in!"
 barrel_image = ExtResource("1_tng3t")
 barrel_cost = 1400
 barrel_prefab = ExtResource("2_dpmig")
 is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = false

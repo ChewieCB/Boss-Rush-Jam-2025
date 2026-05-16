@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2guvc1i31xs2"]
+
+[ext_resource type="Script" path="res://src/player/barrel/_null_barrel.gd" id="1_f0d5f"]
+
+[node name="NullBarrel" type="Node3D"]
+script = ExtResource("1_f0d5f")
