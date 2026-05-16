@@ -183,6 +183,7 @@ var spawned_area_objects = []
 
 @onready var collider: CollisionShape3D = $CollisionShape3D
 @onready var hurtbox: Area3D = $Hurtbox
+@onready var hurtbox_collider: CollisionShape3D = $Hurtbox/CollisionShape3D
 @onready var health_ui: BossHealthBar = $UI/HealthUI/BossHealthContainer
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 

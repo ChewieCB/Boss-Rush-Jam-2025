@@ -206,11 +206,13 @@ max_health = 1e+07
 follow_target = false
 
 [node name="HealthUI" parent="UI" index="0"]
+process_mode = 4
 visible = false
 
 [node name="BossHealthContainer" parent="UI/HealthUI" index="0"]
 visible = false
 boss_name = "MINION DO NOT USE"
+sub_bar_count = 0
 
 [node name="Phase" parent="StateChart/Root" index="4"]
 initial_state = NodePath("Idle")

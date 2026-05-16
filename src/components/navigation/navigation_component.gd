@@ -38,6 +38,8 @@ var group_idx: int = -1
 
 const TARGET_POS_UPDATE_THRESHOLD: float = 0.25
 
+var _is_initialized: bool = false
+
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
@@ -45,6 +47,9 @@ func _ready() -> void:
 
 
 func _wait_for_navigation_setup() -> void:
+	if _is_initialized:
+		return
+	_is_initialized = true
 	# Build the target query
 	query = PhysicsShapeQueryParameters3D.new()
 	query.collide_with_bodies = true
@@ -122,3 +127,16 @@ func _on_velocity_computed(safe_velocity: Vector3) -> void:
 	if is_enabled():
 		entity.velocity = entity.velocity.move_toward(safe_velocity, 0.25)
 		entity.move_and_slide()
+
+
+func disable_for_pool() -> void:
+	if nav_agent_rid.is_valid():
+		NavigationServer3D.agent_set_avoidance_callback(nav_agent_rid, Callable())
+	nav_agent.set_velocity(Vector3.ZERO)
+	process_mode = Node.PROCESS_MODE_DISABLED
+
+
+func enable_for_pool() -> void:
+	if nav_agent_rid.is_valid():
+		NavigationServer3D.agent_set_avoidance_callback(nav_agent_rid, self._on_velocity_computed)
+	process_mode = Node.PROCESS_MODE_INHERIT

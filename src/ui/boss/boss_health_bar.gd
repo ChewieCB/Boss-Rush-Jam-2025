@@ -108,6 +108,8 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 		for child in health_bars:
 			if child == null:
 				continue
+			if not child is BossSubHealthBar:
+				continue
 			# If we have health left on the bar, update it
 			if child.health_bar.value > 0:
 				if child.health_bar.value >= int(new_health):
@@ -117,10 +119,12 @@ func _on_health_changed(new_health: float, prev_health: float) -> void:
 				if child == null:
 					continue
 				if "health_bar" in child:
+					if child.health_bar == null:
+						continue
 					var tween: Tween = get_tree().create_tween()
-					tween.tween_property(child.heath_bar, "value", int(new_health), 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+					tween.tween_property(child.health_bar, "value", int(new_health), 0.4).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 					await tween.finished
-					child.heath_bar.value = int(new_health)
+					child.health_bar.value = int(new_health)
 			else:
 				child.damage_bar.value = child.health_bar.value
 

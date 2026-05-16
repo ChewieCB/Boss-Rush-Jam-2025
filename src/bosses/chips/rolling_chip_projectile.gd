@@ -51,7 +51,10 @@ func get_point_before_wall() -> Vector3:
 		query_end,
 		int(pow(2, 1 - 1))
 	)
-	var arena_wall_pos = space_state.intersect_ray(query)["position"]
+	var arena_wall_pos = query_end
+	var result = space_state.intersect_ray(query)
+	if result:
+		arena_wall_pos = result["position"]
 	var target_point = arena_wall_pos + Vector3(0, 0, spin_forward_buffer).rotated(Vector3.UP, self.rotation.y)
 	
 	# Debug

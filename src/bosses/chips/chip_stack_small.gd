@@ -801,14 +801,11 @@ func spark(spark_pos: Vector3) -> void:
 
 
 func _on_health_changed(new_health: float, prev_health: float) -> void:
-	if not $StateChart/Root/Phase/SmallBlindProjectile.active or $StateChart/Root/Phase/SmallBlindProjectilePhase2.active:
-		super (new_health, prev_health)
-	else:
-		if new_health < prev_health:
-			state_chart.send_event("start_damage")
-			hurt_sfx_player.stream = sfx_hit.pick_random()
-			hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
-			hurt_sfx_player.play()
+	if new_health < prev_health:
+		state_chart.send_event("start_damage")
+		hurt_sfx_player.stream = sfx_hit.pick_random()
+		hurt_sfx_player.pitch_scale = randf_range(0.7, 1.2)
+		hurt_sfx_player.play()
 
 
 # TODO - have elemental effects carry between small stacks and big stacks
