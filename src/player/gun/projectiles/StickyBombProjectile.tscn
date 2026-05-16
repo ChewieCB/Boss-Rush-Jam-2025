@@ -45,11 +45,10 @@ point_count = 2
 [sub_resource type="SphereShape3D" id="SphereShape3D_m0ts0"]
 radius = 1.0
 
-[node name="StickyBombProjectile" type="Node3D" node_paths=PackedStringArray("elemental_emitting_vfx")]
+[node name="StickyBombProjectile" type="Node3D"]
 script = ExtResource("1_oktax")
 explosion_prefab = ExtResource("2_c01wk")
 explosion_vfx = ExtResource("3_h00rf")
-elemental_emitting_vfx = [NodePath("ElementalVFX/ProjectileBurnEmitSmall"), NodePath("ElementalVFX/ProjectilePoisonEmitSmall"), NodePath("ElementalVFX/ProjectileFreezeEmitSmall"), NodePath("ElementalVFX/ProjectileShockEmitSmall"), NodePath("ElementalVFX/ProjectileBleedEmitSmall")]
 elemental_impact_vfx = Array[PackedScene]([ExtResource("4_mp8wv"), ExtResource("5_8l5x6"), ExtResource("6_e5scs"), ExtResource("6_farcl"), ExtResource("8_dkvnk")])
 sfx_crit = Array[AudioStream]([ExtResource("9_ttjlc")])
 

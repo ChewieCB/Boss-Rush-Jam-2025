@@ -373,7 +373,7 @@ func _process(delta):
 			var _dist = interact_col.interact_dist if "interact_dist" in interact_col else INTERACT_DISTANCE
 			if interact_col and \
 			interact_col.has_method("interact") and \
-			((not 'interact_disabled' in interact_collider) or (not interact_collider.interact_disabled)) and \
+			((not 'interact_disabled' in interact_col) or (not interact_col.interact_disabled)) and \
 			interact_col.global_position.distance_to(global_position) <= _dist:
 				object_to_be_interacted = interact_col
 				interact_ui.visible = true

@@ -241,10 +241,8 @@ func apply_damage_to_health_component(health_component: HealthComponent, damage_
 	else:
 		health_component.damage(damage_value)
 
-<< << << < HEAD
-
 func parried() -> void:
-== == == =
+	return
+	
 func switch_to_slowmo_bullet_trail():
->> >> >> > testing
 	return
