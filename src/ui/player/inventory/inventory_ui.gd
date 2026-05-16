@@ -168,7 +168,7 @@ func handle_controller_scrolling() -> void:
 	
 	scroll_container.scroll_vertical += controller_scroll_y * CONTROLLER_SCROLL_SPEED_COOEFFICIENT
 	scroll_container.scroll_vertical = clamp(
-		scroll_container.scroll_vertical, 0, 
+		scroll_container.scroll_vertical, 0,
 		scroll_container.get_v_scroll_bar().max_value
 	)
 
