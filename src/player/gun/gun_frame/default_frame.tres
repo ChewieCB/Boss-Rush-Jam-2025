@@ -8,6 +8,7 @@ script = ExtResource("1_1b7fk")
 frame_name = "Default"
 frame_id = 1
 frame_description = "You should't see this. Don't use it."
+flavour_text = "How did we get here?"
 shop_ui_sprite = ExtResource("2_rsk2q")
 reload_sfx = Array[AudioStream]([])
 shot_sfx = Array[AudioStream]([])

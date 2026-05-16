@@ -8,17 +8,11 @@
 script = ExtResource("1_wmb4n")
 barrel_id = 3
 barrel_name = "Dynamic Advantage"
-barrel_desc = "[b]Dynamic Advantage[/b]
-Change things up to keep the odds in your favour.
-
-Possible rolls:
-[ul]
-Ramp Up: Shoot faster as you shoot continuously.
-Extended Drum: Increased magazine size and reload time.
-Explosive Bullet: Explosive bullets.
-[/ul]"
-barrel_info_summary = "A weird mix of effects. Change things up to keep the odds in your favour."
+barrel_desc = "A weird mix of effects. Change things up to keep the odds in your favour."
+barrel_info_summary = "Change things up to keep the odds in your favour."
 barrel_image = ExtResource("1_vp1f6")
 barrel_cost = 630
 barrel_prefab = ExtResource("1_nrto8")
 is_archetype_barrel = false
+reloads_before_spin = 3
+locked_for_demo = false

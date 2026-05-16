@@ -13,6 +13,7 @@ script = ExtResource("1_212x6")
 frame_name = "Shotgun"
 frame_id = 2
 frame_description = "Has high projectile count. Strong at close range."
+flavour_text = "This, is my boomstick!"
 shop_ui_sprite = ExtResource("4_hu574")
 reload_sfx = Array[AudioStream]([ExtResource("1_4uh2v"), ExtResource("2_epain")])
 shot_sfx = Array[AudioStream]([ExtResource("5_ifvns"), ExtResource("6_e4xa0"), ExtResource("7_2iyb7")])

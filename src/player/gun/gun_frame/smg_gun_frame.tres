@@ -20,6 +20,7 @@ script = ExtResource("1_5wboq")
 frame_name = "SMG"
 frame_id = 3
 frame_description = "High firerate and magazine size. Best at mid-range."
+flavour_text = "Rattle 'em boys!"
 shop_ui_sprite = ExtResource("3_ncans")
 reload_sfx = Array[AudioStream]([ExtResource("1_oojbr")])
 shot_sfx = Array[AudioStream]([ExtResource("3_4iupf"), ExtResource("4_m3iwu"), ExtResource("5_tm3bo"), ExtResource("6_qvmpc"), ExtResource("7_8e13u"), ExtResource("8_lcm6t"), ExtResource("9_hxrfg"), ExtResource("10_3yad0"), ExtResource("11_jjqlq"), ExtResource("12_mrmu3"), ExtResource("13_cuh1m")])

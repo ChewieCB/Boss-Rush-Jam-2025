@@ -44,7 +44,7 @@ var object_pooling_manager: ObjectPoolingManager
 var current_boss_map: Node3D
 
 # Temporary singleton
-var gun_customize_ui: GunCustomizationUI
+var gun_customize_ui: InventoryUI
 
 @onready var main_bgm_emitter: MainBGMEmitter = $MainBGMEmitter
 
@@ -53,7 +53,7 @@ var gun_customize_ui: GunCustomizationUI
 @export var starting_shop_barrels: Array[Resource]
 @export var barrel_database: Array[Resource]
 @export var debug_barrel_database: Array[Resource]
-var equipped_barrels: Array[Resource] = []
+var equipped_barrels: Array[Resource] = [null, null, null]
 var inventory_barrels: Array[Resource] = []
 var shop_barrels: Array[Resource] = []
 
@@ -62,7 +62,7 @@ var shop_barrels: Array[Resource] = []
 @export var gun_frame_database: Array[Resource]
 @export var equipped_gun_frame: Resource = starting_gun_frame
 var inventory_gun_frames: Array[Resource] = []
-@onready var shop_gun_frames: Array[Resource] = starting_shop_gun_frame
+@onready var shop_gun_frames: Array[Resource] = starting_shop_gun_frame.duplicate(true)
 
 # Re-rolls
 @export var initial_reroll_cost: int = 100
@@ -146,9 +146,9 @@ var elevator_respawn_transform: Transform3D
 		camera_fov = value
 var camera_tilt: bool = true
 
-@export_range(0, 5, 1) var fps_limit_index: int = 2 # Refer to EnumAutoload.FPS_LIMIT_ARRAY
+@export_range(0, 5, 1) var fps_limit_index: int = 5 # Refer to EnumAutoload.FPS_LIMIT_ARRAY
 @export_range(0, 6, 1) var resolution_index: int = 1 # Refer to EnumAutoload.RESOLUTION_ARRAY. Not used in FULL_SCREEN
-var vsync_option_index: int = 1
+var vsync_option_index: int = 0
 @export_range(0, 2, 1) var window_mode_index: int = 1 # From 0 to 2
 var scaling_3d: float = 100.0
 var enable_elemental_vfx = true # : TODO
@@ -175,6 +175,7 @@ var aim_assist_strength: float = 0.5
 # DEBUG CHEATS
 var CHEAT_oneshot: bool = false
 var CHEAT_godmode: bool = false
+var CHEAT_skip_tutorial_on_new_game: bool = false
 enum DebugSpinMode {
 	ON_RELOAD,
 	MANUAL_SPIN,
@@ -200,11 +201,15 @@ var CHEAT_demomode_timeout: int = 60:
 func _ready() -> void:
 	equipped_gun_frame = starting_gun_frame
 	barrel_database.append_array(debug_barrel_database)
-	await get_tree().process_frame
-	await get_tree().process_frame
+	#await get_tree().process_frame
+	#await get_tree().process_frame
 	SaveManager.load_setting_config()
 	is_controller_connected = Input.get_connected_joypads() != []
 	Input.joy_connection_changed.connect(_on_controller_connection)
+	if InputHelper.device == InputHelper.DEVICE_STEAMDECK_CONTROLLER:
+		if scaling_3d > 90.0:
+			scaling_3d = 90.0
+			get_viewport().set_scaling_3d_scale(90 / 100.0)
 	main_bgm_emitter.volume = BASE_FMOD_VOLUME
 
 func _unhandled_input(_event: InputEvent) -> void:
@@ -253,11 +258,18 @@ func purchase_barrel(data: BarrelDataResource) -> bool:
 
 
 ## Return error string if cant equipped
-func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
+func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum, slot_idx: int = -1) -> String:
 	if player.current_gun.is_reloading:
 		return "Can not change barrel while reloading"
-	if len(equipped_barrels) >= player.current_gun.max_barrels:
+	
+	var equipped_count: int = 0
+	for elem in equipped_barrels:
+		if elem != null:
+			equipped_count += 1
+	
+	if equipped_count >= player.current_gun.max_barrels:
 		return "Can not equip more barrels"
+		
 	var found_data: BarrelDataResource = null
 	for data in inventory_barrels:
 		if data.barrel_id == search_barrel_id:
@@ -265,12 +277,15 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if found_data:
 		# Check if already equipped archetype
 		for barrel in equipped_barrels:
+			if barrel == null:
+				continue
 			if barrel.is_archetype_barrel and found_data.is_archetype_barrel:
 				return "Can only equip 1 archetype barrel"
+		
 		inventory_barrels.erase(found_data)
-		equipped_barrels.append(found_data)
+		equipped_barrels[slot_idx] = found_data
 		refresh_shop_ui.emit()
-		GameManager.player.current_gun.install_barrel(found_data)
+		GameManager.player.current_gun.install_barrel(found_data, slot_idx)
 		#if found_data.is_archetype_barrel and equipped_barrels.size() != 1:
 			#return "Warning: archetype barrel isn't installed in first slot"
 	return ""
@@ -279,19 +294,24 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
 	if player.current_gun.is_reloading or player.current_gun.is_spinning:
 		return "Can not change barrel while reloading"
+	
 	var found_data: BarrelDataResource = null
 	var barrel_idx: int = -1
 	for i in range(equipped_barrels.size()):
-		var data = equipped_barrels[i]
-		if data.barrel_id == search_barrel_id:
-			found_data = data
-			barrel_idx = i
-			break
+		var barrel = equipped_barrels[i]
+		if barrel == null:
+			continue
+		else:
+			if barrel.barrel_id == search_barrel_id:
+				found_data = barrel
+				barrel_idx = i
+				break
+	
 	if found_data:
-		equipped_barrels.erase(found_data)
+		GameManager.player.current_gun.remove_barrel(barrel_idx)
+		equipped_barrels[barrel_idx] = null
 		inventory_barrels.append(found_data)
 		refresh_shop_ui.emit()
-		GameManager.player.current_gun.remove_barrel(barrel_idx)
 	return ""
 
 
@@ -349,9 +369,11 @@ func reset_reroll_cost() -> void:
 
 #region Save helper
 func load_new_save_data():
-	tutorial_completed = false
+	tutorial_completed = CHEAT_skip_tutorial_on_new_game
 	
 	equipped_gun_frame = starting_gun_frame
+	inventory_gun_frames = []
+	shop_gun_frames = starting_shop_gun_frame.duplicate(true)
 	
 	# Generate reload-spin threshold values for all barrels on save game creation
 	randomize()
@@ -365,11 +387,13 @@ func load_new_save_data():
 		else:
 			barrel_data.reloads_before_spin = randi_range(6, 7)
 
+	var slot_idx: int = 0
 	for data in starting_barrels:
 		var idx: int = barrel_database.find(data)
 		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
 		if data not in equipped_barrels:
-			equipped_barrels.append(data)
+			equipped_barrels[slot_idx] = data
+			slot_idx += 1
 	for data in starting_shop_barrels:
 		var idx: int = barrel_database.find(data)
 		data.reloads_before_spin = barrel_database[idx].reloads_before_spin
@@ -379,9 +403,11 @@ func load_new_save_data():
 
 
 func reset_current_save_data():
-	equipped_barrels = []
+	equipped_barrels = [null, null, null]
 	inventory_barrels = []
 	shop_barrels = []
+	inventory_gun_frames = []
+	shop_gun_frames = starting_shop_gun_frame.duplicate(true)
 	player_currency = 0
 	player_gained_first_barrel = false
 	barrel_tutorial_shown = false

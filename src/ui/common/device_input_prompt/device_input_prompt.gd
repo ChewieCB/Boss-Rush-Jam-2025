@@ -17,6 +17,8 @@ enum DeviceType {
 # Force only show input type that is not KB/M. Aka it will show Xbox if no other controller detected.
 @export var force_non_kbm = false
 
+var anim_tween: Tween
+
 var kbm_input_icon_mapping = {
 	"device_icon": "keyboard",
 	"mouse left button": "mouse_left",
@@ -229,3 +231,16 @@ func get_image_for_controller_input(device: String, action: String):
 	else:
 		push_warning("Failed to load texture at: %s" % controller_icon_path)
 	return icon_texture
+
+
+func animate() -> void:
+	pivot_offset = size / 2
+	anim_tween = self.create_tween()
+	anim_tween.set_parallel(false)
+	anim_tween.tween_property(self , "scale", Vector2(0.8, 0.8), 0.05)
+	anim_tween.tween_property(self , "scale", Vector2(1.1, 1.1), 0.06).set_ease(Tween.EASE_IN)
+	anim_tween.tween_property(self , "scale", Vector2(1.0, 1.0), 0.08).set_ease(Tween.EASE_OUT)
+	
+	await anim_tween.finished
+	
+	return

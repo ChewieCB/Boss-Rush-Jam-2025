@@ -8,17 +8,8 @@
 script = ExtResource("3_567sj")
 barrel_id = 44
 barrel_name = "Leg Eye Coordinate"
-barrel_desc = "[b]Flight or Fight Barrel[/b]
-Focus on your movement and verticality.
-
-Possible rolls:
-[ul]
-Trigger Leg: You can only shoot when you dash. Your dash is longer. Increased damage and critical hit chance
-Springy Feet: You can only shoot while you are midair. You jump higher. Reduce spread and recoil.
-Flexible Knee: You can only shoot while you are crouching. Your crouch can let you dodge if you time it right. Increased fire rate and magazine size.
-[/ul]
-"
-barrel_info_summary = "Effects focus on your movement and verticality."
+barrel_desc = "Effects focus on your movement and verticality."
+barrel_info_summary = "Focus on your movement and verticality."
 barrel_image = ExtResource("1_khihb")
 barrel_cost = 1650
 barrel_prefab = ExtResource("2_wlqqv")

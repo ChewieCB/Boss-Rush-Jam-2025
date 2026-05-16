@@ -5,6 +5,7 @@ signal explosive_damage(damage: float, target: CharacterBody3D)
 
 @onready var explosion_vfx: ExplosionParticles = $ExplosionVFX
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
+@onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 
 const LINGERING_DURATION = 0.1
 
@@ -40,6 +41,9 @@ func set_damage_radius(radius: float) -> void:
 
 
 func deactivate() -> void:
+	if sfx_player.is_playing():
+		await sfx_player.finished
+	
 	visible = false
 	active = false
 	damage_disabled = true
@@ -50,9 +54,11 @@ func deactivate() -> void:
 func explode():
 	if explosion_vfx.time_until_queue_free < LINGERING_DURATION:
 		push_warning("Explosion VFX visible duration is less than damage hitbox duration!")
-
+	
+	sfx_player.play()
 	explosion_vfx.explode()
 	get_tree().create_timer(LINGERING_DURATION).timeout.connect(func(): damage_disabled = true)
+
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is CharacterBody3D and not damage_disabled:

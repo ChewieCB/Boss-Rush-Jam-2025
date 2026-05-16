@@ -16,7 +16,8 @@ enum AttributeNameEnum {
 	HOMING_STRENGTH,
 	RECOIL,
 	SCREENSHAKE,
-	SPREAD_HORIZONTAL_BIAS
+	SPREAD_HORIZONTAL_BIAS,
+	LIFETIME
 }
 
 @export_multiline var display_text_title: String
@@ -128,6 +129,10 @@ func on_projectile_destroyed(_hit_boss: bool):
 
 ## Before bullet go out of barrel. Not take into account bullet effect yet.
 func on_gun_damage_calculation():
+	return
+
+## When bullet hit its own player
+func on_player_contact(_projectile: BaseBullet):
 	return
 
 ## When bullet hit enemy but JUST before applied damage (but after normal damage calculation).

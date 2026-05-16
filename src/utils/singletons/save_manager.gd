@@ -76,6 +76,7 @@ func save_game(slot_id):
 	is_saving = false
 	finished_saving.emit()
 
+
 func load_data_only(slot_id: int) -> Dictionary:
 	var save_data: Dictionary = {}
 	if not FileAccess.file_exists(get_savefile_name(slot_id)):
@@ -140,6 +141,7 @@ func load_game(slot_id):
 	check_for_new_update_barrels()
 	
 	savefile_loaded.emit()
+
 
 func get_savefile_name(slot_id: int) -> String:
 	return "user://savegame_slot{0}.save".format([slot_id])
@@ -232,9 +234,12 @@ func convert_resources_to_ids(array_resource: Array[Resource], resource_type: Re
 	match resource_type:
 		ResourceTypeEnum.BARREL:
 			for elem in array_resource:
-				if not elem.barrel_name.to_lower().contains("debug"):
-					var barrel: BarrelDataResource = elem as BarrelDataResource
-					result.append(barrel.barrel_id)
+				if elem == null:
+					result.append(-1)
+				else:
+					if not elem.barrel_name.to_lower().contains("debug"):
+						var barrel: BarrelDataResource = elem as BarrelDataResource
+						result.append(barrel.barrel_id)
 		ResourceTypeEnum.GUN_FRAME:
 			for elem in array_resource:
 				var gun_frame: GunFrameResource = elem as GunFrameResource
@@ -249,10 +254,14 @@ func convert_ids_to_resources(array_id: Array, resource_type: ResourceTypeEnum) 
 			if len(GameManager.barrel_database) == 0:
 				push_warning("GameManger.barrel_database is empty / not loaded yet!")
 			for elem in array_id:
-				for item in GameManager.barrel_database:
-					var barrel_data_item: BarrelDataResource = item as BarrelDataResource
-					if barrel_data_item.barrel_id == elem:
-						result.append(item)
+				if elem == -1:
+					result.append(null)
+				else:
+					# FIXME - do something less brute force than this search
+					for item in GameManager.barrel_database:
+						var barrel_data_item: BarrelDataResource = item as BarrelDataResource
+						if barrel_data_item.barrel_id == elem:
+							result.append(item)
 		ResourceTypeEnum.GUN_FRAME:
 			if len(GameManager.gun_frame_database) == 0:
 				push_warning("GameManger.gun_frame_database is empty / not loaded yet!")

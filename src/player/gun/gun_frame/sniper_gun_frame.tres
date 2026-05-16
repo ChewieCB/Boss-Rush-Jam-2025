@@ -12,6 +12,7 @@ script = ExtResource("1_ggs7f")
 frame_name = "Sniper"
 frame_id = 4
 frame_description = "High damage per shot but low firerate. Take aim carefullly."
+flavour_text = "One shot, one kill."
 shop_ui_sprite = ExtResource("3_47nfg")
 reload_sfx = Array[AudioStream]([ExtResource("1_be3d7")])
 shot_sfx = Array[AudioStream]([ExtResource("3_bu3dw"), ExtResource("4_3u0xo"), ExtResource("5_0xt74")])

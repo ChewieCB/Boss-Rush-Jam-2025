@@ -6,6 +6,8 @@ class_name PlayerUI
 @onready var stat_ui: StatUI = $StatUI
 @onready var interact_ui = $InteractUI
 @onready var gun_ui = $GunUI
+@onready var reticle_ui_1 = $GunUI/AimRecticle
+@onready var reticle_ui_2 = $GunUI/AimRecticle2
 
 @onready var parry_flash: ColorRect = $OtherEffectUI/ParryFlash
 @onready var parry_flash_cd_timer: Timer = $OtherEffectUI/ParryFlashCDTimer
@@ -28,6 +30,11 @@ func _ready() -> void:
 	#await get_tree().create_timer(1.0, false).timeout
 	#luck_modifier_text.text = ""
 	#luck_modifier_text.visible = false
+
+
+func toggle_aim_reticle(is_visible: bool) -> void:
+	for ui in [reticle_ui_1, reticle_ui_2]:
+		ui.visible = is_visible
 
 
 func hide_saving_indicator():

@@ -30,6 +30,8 @@ func _ready():
 		var rotate_amount = randi_range(0, 90)
 		shot_flash_start.rotate_z(rotate_amount)
 		shot_flash_start.modulate = mesh.mesh.material.get_shader_parameter("color")
+	# if is_ricochet_shot:
+	# 	redshift_bullet()
 
 func _process(delta):
 	super (delta)
@@ -57,7 +59,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 				target_pos = body.get_node("BodyCenter").global_position
 			test_dist = start_pos.distance_to(target_pos)
 			test_dir = start_pos.direction_to(target_pos)
-			var deg_diff = angle_between_vectors(dir, test_dir)
+			var deg_diff = GunUtils.angle_between_vectors(dir, test_dir)
 			if test_dist < min_distance and deg_diff < homing_strength * HITSCAN_HOMING_STRENTH_MODIFIER:
 				homing_target = body
 				min_distance = test_dist
@@ -89,7 +91,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		travelled_distance += start_pos.distance_to(end_pos)
 
 		if target is BlockingDetectionArea:
-			var buffered_hit_pos: Vector3 = target._raycast_hit(self, end_pos)
+			var buffered_hit_pos: Vector3 = target._raycast_hit(self , end_pos)
 			end_pos_set.emit(buffered_hit_pos)
 			create_spark(buffered_hit_pos, hitscan_col_normal)
 
@@ -107,10 +109,10 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 			visible = true
 			return
 
-		impacted.emit(self, true, hitscan_col_point)
+		impacted.emit(self , true, hitscan_col_point)
 		var calculated_damage = calculate_bullet_damage()
 		if target is CharacterBody3D:
-			before_damage_applied.emit(target, self)
+			before_damage_applied.emit(target, self )
 			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(target.health_component, calculated_damage)
 			damage_applied.emit(calculated_damage, true, target.global_position)
@@ -152,36 +154,32 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 
 func ricochet():
 	super ()
+	raycast.set_collision_mask_value(2, true) # Dmg player
 	await get_tree().create_timer(DELAY_BETWEEN_RICO).timeout
 	found_hitscal_col = false
-	var new_hitscan_inst: GunHitscan = create_duplication()
-	get_tree().get_root().add_child(new_hitscan_inst)
+	var new_inst: GunHitscan = create_duplication(true) # Also set is_ricochet
+	get_tree().get_root().add_child(new_inst)
+	new_inst.mesh.mesh.material = mesh.mesh.material.duplicate()
 	var new_dir = current_dir.bounce(hitscan_col_normal)
+	
+	# Add slight homing toward last look enemy target if available
+	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
+		var target = GameManager.player.last_look_enemy_target
+		var dir_to_target = global_position.direction_to(target.global_position)
+		# Blend bounce direction with target direction (small homing factor). Bonus for hitscan because i like it
+		new_dir = new_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
+	
 	# Offset a bit to prevent stuck inside collision body
-	var new_start_pos = hitscan_col_point - current_dir * RICO_START_POS_OFFSET_MODIFIER
-	new_hitscan_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
-
+	var new_start_pos = hitscan_col_point - new_dir * RICO_START_POS_OFFSET_MODIFIER
+	new_inst.init(new_start_pos, new_dir, damage, ricochet_count_left - 1, projectile_speed, max_range)
+	# Redshift the bullet color after ricochet. Only do it once.
+		
 func get_projectile_color() -> Color:
 	return mesh.mesh.material.get_shader_parameter("color")
 
 func _on_timer_timeout():
 	destroyed.emit(hit_boss)
 	queue_free()
-
-
-func angle_between_vectors(vec1: Vector3, vec2: Vector3) -> float:
-	# Normalize the vectors
-	var vec1_normalized = vec1.normalized()
-	var vec2_normalized = vec2.normalized()
-	# Calculate the dot product
-	var dot_product = vec1_normalized.dot(vec2_normalized)
-	# Clamp the dot product to avoid floating-point errors (to keep it between -1 and 1)
-	dot_product = clamp(dot_product, -1.0, 1.0)
-	# Calculate the angle in radians
-	var angle_radians = acos(dot_product)
-	# Convert the angle to degrees
-	return rad_to_deg(angle_radians)
-
 
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	if splitted:
@@ -195,7 +193,7 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		new_pos = _pos
 
 	for i in range(split_count):
-		if not is_instance_valid(self):
+		if not is_instance_valid(self ):
 			return
 		var new_inst = create_duplication()
 		get_tree().get_root().add_child(new_inst)
@@ -216,3 +214,14 @@ func change_bullet_color(_new_color: Color):
 	else:
 		mesh.mesh.material.set_shader_parameter("color", _new_color)
 		mesh.mesh.material.set_shader_parameter("emission_color", Color(_new_color.r, _new_color.g, _new_color.b, 0.7))
+
+
+# func redshift_bullet():
+# 	var current_color = mesh.mesh.material.get_shader_parameter("emission_color")
+# 	var redshifted_color = Color(
+# 		current_color.r + (1.0 - current_color.r) * 0.5, # Shift red towards 1.0
+# 		current_color.g * 0.7, # Reduce green
+# 		current_color.b * 0.3, # Reduce blue significantly
+# 		current_color.a
+# 	)
+# 	change_bullet_color(redshifted_color)

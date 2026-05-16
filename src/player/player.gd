@@ -100,8 +100,8 @@ const HEAVY_FALL_SHAKE_TRAUMA: float = 0.4
 const SLIDE_SHAKE_TRAUMA: float = 0.1
 const MIN_HEIGHT_TO_SLAM: float = 1.5
 const SWAP_GUN_TIME: float = 0.3
-const BULLET_SPAWN_POS_VARIATION: float = 10
-const INTERACT_DISTANCE = 5
+const BULLET_SPAWN_POS_VARIATION: float = 10.0
+const INTERACT_DISTANCE: float = 3.0
 
 const MOUSE_SENSITIVITY_COEEFICIENT = 10000
 const CONTROLLER_SENSITIVITY_COEEFICIENT = 10
@@ -162,9 +162,9 @@ var is_in_menu = false:
 	set(value):
 		is_in_menu = value
 		if is_in_menu:
-			stat_ui.hide_all_ui()
+			stat_ui.hide_all_ui(true)
 		else:
-			stat_ui.show_all_ui()
+			stat_ui.show_all_ui(true)
 var object_to_be_interacted = null
 
 var status_effect_list: Array[StatusEffect] = []
@@ -192,6 +192,7 @@ var double_down_icon = preload("res://assets/sprite/skilltree_icon/double_down.p
 
 var aim_assist_target: Node3D = null
 var cheat_death_triggered = false
+var last_look_enemy_target: Node3D = null
 
 var freecam: FreeCam
 
@@ -261,12 +262,19 @@ func _unhandled_input(event):
 
 	if is_in_menu:
 		return
+	
+	# Ignore touchpad / gyro events
+	if event is InputEventScreenTouch \
+	or event is InputEventScreenDrag \
+	or event is InputEventPanGesture \
+	or event is InputEventMagnifyGesture:
+		return
 
 	if event is InputEventMouseMotion:
 		# If we have a controller connected, ignore mouse events
 		# (this prevents the PS4 trackpad from triggering aim)
-		# if Input.get_connected_joypads():
-		# 	return
+		if Input.get_connected_joypads():
+			return
 		rotate_player(event.relative.x, event.relative.y)
 	elif event is InputEventJoypadMotion:
 		if not InputHelper.get_label_for_input(event).to_lower().contains("trigger"):
@@ -283,8 +291,8 @@ func _unhandled_input(event):
 	#elif event.is_aend_event("add_status_drunk")
 		#current_gun.spin_single_barrel(0)
 	# DEBUG INPUT FOR TESTING
-	elif event.is_action_pressed("input_1"):
-		LuckHandler.reset_luck_triggers()
+	#elif event.is_action_pressed("input_1"):
+		#LuckHandler.reset_luck_triggers()
 		#LuckHandler.increase_luck(20.0)
 		#state_chart.send_event("remove_status_drunk")
 		#current_gun.spin_single_barrel(1)
@@ -352,25 +360,28 @@ func _process(delta):
 			status.duration -= delta
 			if status.duration <= 0:
 				remove_status_effect(status)
-
+	
+	object_to_be_interacted = null
+	interact_ui.visible = false
+	#
 	if aim_ray.is_colliding() and not is_in_menu:
-		var interact_collider = aim_ray.get_collider()
-		if interact_collider and \
-			interact_collider.has_method("interact") and \
+		# TODO - refactor the interactible system to have an inheritable 
+		# template class with these methods/features for consistency.
+		# https://gnarled-hand.codecks.io/card/2xo-refactor-the-interactible-system-to-have-an-inheritable-template-class-with
+		var interact_col = aim_ray.get_collider()
+		if interact_col:
+			var _dist = interact_col.interact_dist if "interact_dist" in interact_col else INTERACT_DISTANCE
+			if interact_col and \
+			interact_col.has_method("interact") and \
 			((not 'interact_disabled' in interact_collider) or (not interact_collider.interact_disabled)) and \
-			interact_collider.global_position.distance_to(global_position) <= INTERACT_DISTANCE:
-			object_to_be_interacted = interact_collider
-			interact_ui.visible = true
-			if interact_collider.has_method("get_interact_text"):
-				interact_ui.show_custom_text(interact_collider.get_interact_text())
-			else:
-				interact_ui.show_default_text()
-		else:
-			object_to_be_interacted = null
-			interact_ui.visible = false
-	else:
-		object_to_be_interacted = null
-		interact_ui.visible = false
+			interact_col.global_position.distance_to(global_position) <= _dist:
+				object_to_be_interacted = interact_col
+				interact_ui.visible = true
+					
+				if interact_col.has_method("get_interact_text"):
+					interact_ui.show_custom_text(interact_col.get_interact_text())
+				else:
+					interact_ui.show_default_text()
 
 
 	if controls_disabled or is_in_menu:
@@ -476,6 +487,9 @@ func _physics_process(delta):
 	if GameManager.is_controller_connected:
 		aim_assist(delta)
 
+	if aim_assist_ray_boss_check.is_colliding():
+		last_look_enemy_target = aim_assist_ray_boss_check.get_collider()
+
 
 func update_ammo_counter_ui() -> void:
 	stat_ui.radial_ui_center_node.update(current_gun.magazine_ammo_left, current_gun.modified_magazine_size)
@@ -502,10 +516,14 @@ func show_barrel_effect_ui() -> void:
 
 	barrel_ui_tween = get_tree().create_tween()
 	barrel_ui_tween.tween_property(barrel_detail_dimmer, "color:a", 0.65, 0.1)
+	
 	for i in range(current_gun.max_barrels):
 		var effect_ui = barrel_detail_ui.effect_boxes[i]
-		if i < current_gun.barrel_container.get_child_count():
+		if current_gun.barrel_container.get_child(i) is not NullBarrel:
 			barrel_ui_tween.chain().tween_property(effect_ui, "modulate:a", 1.0, 0.05)
+		else:
+			# Fallback
+			effect_ui.modulate.a = 0.0
 	await barrel_ui_tween.finished
 
 	Engine.time_scale = 0.1
@@ -528,6 +546,9 @@ func hide_barrel_effect_ui() -> void:
 		var effect_ui = barrel_detail_ui.effect_boxes[i]
 		if i < current_gun.barrel_container.get_child_count():
 			barrel_ui_tween.parallel().tween_property(effect_ui, "modulate:a", 0.0, 0.1)
+		else:
+			# Fallback
+			effect_ui.modulate.a = 0.0
 	barrel_ui_tween.tween_callback(func(): barrel_ui_active = false)
 	await barrel_ui_tween.finished
 
@@ -539,6 +560,11 @@ func update_barrel_effect_ui() -> void:
 			#effect_ui.modulate.a = 1.0
 		#if current_gun.barrel_container.get_child_count() > 0:
 			var barrel: SpinBarrel = current_gun.barrel_container.get_child(i)
+			if barrel is NullBarrel:
+				effect_ui.modulate.a = 0.0
+				effect_ui.name_label.text = ""
+				effect_ui.desc_label.text = ""
+				continue
 			var _effect: BaseBarrelEffect = barrel.get_active_effect()
 
 			if _effect.icon_id != -1:
@@ -553,22 +579,26 @@ func update_barrel_effect_ui() -> void:
 			for container in effect_ui.negatives_container.get_children():
 				container.queue_free()
 			effect_ui.clear_luck_triggers()
-			
-			effect_ui.add_neutral(_effect.display_text_desc)
-			#for text in _effect.positive_desc:
-				#effect_ui.add_positive(text)
-			#for text in _effect.negative_desc:
-				#effect_ui.add_negative(text)
+
+			# effect_ui.add_neutral(_effect.display_text_desc)
+			for text in _effect.positive_desc:
+				effect_ui.add_positive(text)
+			for text in _effect.negative_desc:
+				effect_ui.add_negative(text)
 			for trigger_id in _effect.luck_triggers:
 				var trigger_info: LuckTriggerInfo = LuckHandler.luck_triggers[trigger_id]
 				var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger_id]
 				var is_discovered: bool = LuckHandler.luck_trigger_dict[enum_str]
 				effect_ui.add_luck_trigger(trigger_info.name, trigger_info.desc, is_discovered)
-		
+
 		else:
 			effect_ui.modulate.a = 0.0
 			effect_ui.name_label.text = ""
 			effect_ui.desc_label.text = ""
+
+
+func toggle_anim_reticle(is_visible: bool) -> void:
+	ui_parent.toggle_aim_reticle(is_visible)
 
 
 func show_debug_label():
@@ -663,7 +693,7 @@ func rotate_player(x: float, y: float):
 func special_camera_control(delta):
 	if controls_disabled:
 		return
-		
+
 	# Tilt camera
 	const MIN_DIR_TO_TILT = 0.1
 	const TILT_AMOUNT = 3.0
@@ -830,6 +860,8 @@ func _on_health_hurt_state_entered() -> void:
 func _on_health_dead_state_entered() -> void:
 	GameManager.change_fmod_bgm_player_is_dead(true)
 	controls_disabled = true
+	Engine.time_scale = 1.0
+	hide_barrel_effect_ui()
 	hurt_overlay.dead()
 	stat_ui.hide_all_ui()
 
@@ -841,7 +873,7 @@ func _on_health_dead_state_exited() -> void:
 	neck_tween.parallel().tween_property(neck, "rotation:z", deg_to_rad(0), 0.3)
 	neck_tween.parallel().tween_property(neck, "rotation:y", deg_to_rad(0), 0.3)
 	controls_disabled = false
-	
+
 
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
@@ -1147,7 +1179,7 @@ func _enable_cutscene_cam() -> void:
 
 func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
 	controls_disabled = false
-	
+
 	if lerp_to_player_cam:
 		var active_camera: Camera3D = get_viewport().get_camera_3d()
 		var camera_tween := get_tree().create_tween()
@@ -1160,7 +1192,7 @@ func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
 			0.8
 		)
 		await camera_tween.finished
-	
+
 	player_camera.camera.current = true
 	gun_container.visible = true
 

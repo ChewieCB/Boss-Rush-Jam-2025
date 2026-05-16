@@ -39,8 +39,6 @@ TEMP_sfx_reload = ExtResource("4_okctn")
 TEMP_sfx_click = ExtResource("5_4dvs2")
 TEMP_regain_ammo = ExtResource("6_ursny")
 TEMP_crit = ExtResource("7_8iawc")
-base_projectile_amount = 8
-base_magazine_size = 5
 projectile_prefab = ExtResource("3_wypyb")
 
 [node name="BaseGunModel" type="Node3D" parent="."]

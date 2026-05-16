@@ -67,13 +67,22 @@ func decrease_luck(amount: float, message: String = "") -> void:
 	)
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if not enabled:
 		return
-	
+
 	# TODO - store all per-physics-tick luck trigger checks as an array of callables to be called here
 	# TODO - move this to a specific barrel, a healing/defensive one
 	#track_no_damage_taken(delta)
+
+
+func check_discover_luck_trigger(luck_trigger_id: LuckTriggerInfo.LuckTriggerIdEnum):
+	var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[
+		luck_trigger_id
+	]
+	if luck_trigger_dict[enum_str] == false:
+		luck_trigger_dict[enum_str] = true
+		trigger_discovered.emit()
 
 
 ##
@@ -81,10 +90,10 @@ func _physics_process(delta: float) -> void:
 ##
 func track_no_damage_taken(delta: float) -> void:
 	time_since_last_hurt += delta
-	
+
 	# var threshold = no_damage_taken_threshold
 	var current_mult = int(time_since_last_hurt / no_damage_taken_threshold)
-	
+
 	if current_mult > last_hurt_mult and current_mult <= no_damage_taken_mult_cap:
 		LuckHandler.gain_no_damage_taken(current_mult)
 		last_hurt_mult = current_mult
@@ -127,7 +136,7 @@ func gain_dps_dealt(dps_dealt: float) -> void:
 
 
 func max_luck_decay_buffer() -> void:
-	# When we max out luck, stop the decay for a short time 
+	# When we max out luck, stop the decay for a short time
 	# to make sure we can cash it in.
 	luck_decay_timer.stop()
 	await get_tree().create_timer(max_luck_decay_buffer_time).timeout

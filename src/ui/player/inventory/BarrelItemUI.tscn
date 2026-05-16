@@ -8,7 +8,7 @@
 [ext_resource type="FontFile" uid="uid://bvbfh6nb26b4y" path="res://assets/fonts/Semplicita/Semplicita Bold.otf" id="6_01o4k"]
 [ext_resource type="Texture2D" uid="uid://cla4a70g84q2q" path="res://assets/sprite/game_icon/locked.png" id="7_67n3m"]
 
-[node name="BarrelItemUI" type="TextureRect"]
+[node name="BarrelItemUI" type="TextureRect" node_paths=PackedStringArray("spin_value_label", "locked_panel", "button", "border_selected")]
 custom_minimum_size = Vector2(100, 100)
 offset_right = 100.0
 offset_bottom = 100.0
@@ -17,6 +17,10 @@ size_flags_vertical = 4
 texture = ExtResource("1_tbrlo")
 expand_mode = 1
 script = ExtResource("2_2nkrm")
+spin_value_label = NodePath("CenterContainer/ReloadSpinValueLabel")
+locked_panel = NodePath("LockedPanel")
+button = NodePath("Button")
+border_selected = NodePath("BorderSelected")
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 1
