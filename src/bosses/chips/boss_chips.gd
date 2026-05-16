@@ -602,30 +602,45 @@ func big_stack_slam(target_pos: Vector3, time: float = drop_time) -> void:
 
 ##
 func show_big_stack() -> void:
-	sprite.visible = true
-	#debug_mesh.visible = true
-	health_component.show_damage_text = true
-
 	# Re-enable collision
 	await get_tree().create_timer(0.1).timeout
 	# Catch and handle a mid-await state change
 	if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
 		return 
-
+	
 	self.collision_layer = 4
 	self.collision_mask = int(pow(2, 1 - 1) + pow(2, 2 - 1) + pow(2, 4 - 1))
-
+	collider.set_deferred("disabled", false)
+	hurtbox_collider.set_deferred("disabled", false)
+	get_node("AimAssistBubble/CollisionShape3D").set_deferred("disabled", false)
+	
+	sprite.visible = true
+	sprite.layers = 2
+	#debug_mesh.visible = true
+	health_component.show_damage_text = true
+	
+	set_physics_process(true)
+	set_process(true)
+	navigation_component.enable()
+	
 	return
 
+
 func hide_big_stack() -> void:
+	set_physics_process(false)
+	set_process(false)
+	navigation_component.disable()
+	
 	sprite.visible = false
+	sprite.layers = 0
 	#debug_mesh.visible = false
 	health_component.show_damage_text = false
-
-	# Disable player and projectile collisions
-	self.collision_layer = 0 # None
-	self.collision_mask = 1 # World only
-	hurtbox.set_deferred("monitoring", false)
+	
+	collision_layer = 0
+	collision_mask = 1
+	collider.set_deferred("disabled", true)
+	hurtbox_collider.set_deferred("disabled", true)
+	get_node("AimAssistBubble/CollisionShape3D").set_deferred("disabled", true)
 
 ##
 func _disable_gravity() -> void:
@@ -1710,6 +1725,8 @@ func _activate_stack(stack: ChipBossSubStack, idx: int, count: int) -> void:
 	stack.health_component.initialize_health()
 	
 	stack.process_mode = Node.PROCESS_MODE_INHERIT
+	stack.set_physics_process(true)
+	stack.set_process(true)
 	stack.navigation_component.enable_for_pool()
 	
 	stack.show()
@@ -1719,6 +1736,8 @@ func _activate_stack(stack: ChipBossSubStack, idx: int, count: int) -> void:
 
 func _deactivate_stack(stack: ChipBossSubStack) -> void:
 	stack.process_mode = Node.PROCESS_MODE_DISABLED
+	stack.set_physics_process(false)
+	stack.set_process(false)
 	stack.navigation_component.disable_for_pool()
 	stack.navigation_component.disable()
 	
