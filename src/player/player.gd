@@ -226,6 +226,7 @@ func _ready():
 	current_gun = gun_container.get_child(0)
 	current_gun.gun_shot.connect(update_ammo_counter_ui)
 	current_gun.full_clip_reload_started.connect(full_reload_ammo_counter_ui)
+	current_gun.magazine_size_changed.connect(stat_ui.radial_ui_center_node.update)
 	current_gun.gun_reloaded.connect(update_ammo_counter_ui)
 	current_gun.barrel_spin_stopped.connect(update_barrel_effect_ui.unbind(2))
 	current_gun.barrel_spin_stopped.connect(update_ammo_counter_ui.unbind(2))
