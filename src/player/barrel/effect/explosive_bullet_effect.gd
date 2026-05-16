@@ -29,9 +29,9 @@ func create_explosion(pos: Vector3, status_effects: Array):
 	randomize()
 	var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
 	explosion_inst.init(damage + randf_range(-damage_variance, damage_variance))
-	#for i in range(status_effects.size()):
-		#if status_effects[i]:
-			#explosion_inst.add_status_effect(i + 1)
+	for i in range(status_effects.size()):
+		if status_effects[i]:
+			explosion_inst.add_status_effect(i + 1)
 	explosion_inst.explosive_damage.connect(_on_explosive_damage)
 	explosion_inst.set_damage_radius(range)
 	explosion_inst.activate(pos)

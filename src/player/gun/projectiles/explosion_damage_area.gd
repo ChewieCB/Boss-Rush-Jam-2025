@@ -51,6 +51,8 @@ func deactivate() -> void:
 	if sfx_player.is_playing():
 		await sfx_player.finished
 	
+	infused_status_effects = []
+	explosion_vfx.reset_color()
 	visible = false
 	active = false
 	damage_disabled = true
@@ -77,7 +79,10 @@ func explode():
 				explosion_vfx.set_colour(Color.DARK_RED)
 	
 	explosion_vfx.explode()
-	get_tree().create_timer(LINGERING_DURATION).timeout.connect(func(): damage_disabled = true)
+	get_tree().create_timer(LINGERING_DURATION).timeout.connect(
+		func(): 
+			damage_disabled = true
+	)
 
 
 func _on_body_entered(body: Node3D) -> void:

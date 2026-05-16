@@ -56,7 +56,7 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		homing_area.monitoring = true
 		homing_collision_shape.shape.radius = homing_strength
 	life_timer.start()
-	
+
 	projectile_speed = _speed
 	max_range = _max_range
 	damage = CONTACT_DAMAGE
@@ -72,22 +72,22 @@ func init(start_pos: Vector3, dir: Vector3, _damage: int, ricochet_count: int, _
 		hitscan_col_point = raycast.get_collision_point()
 		hitscan_col_normal = raycast.get_collision_normal()
 		found_hitscal_col = true
-	
+
 	# We want each tick to get faster
 	var ticks: int = 6
 	var tick_times: Array[float] = []
 	var k: float = 2.5  # Acceleration intensity
-	
+
 	for i in range(ticks):
 		var x = float(i) / float(ticks - 1)
 		var t = (delay_explosion_time) * ((exp(k * x) - 1.0) / (exp(k) - 1.0))
 		tick_times.append(t)
-	
+
 	var tick_durations: Array[float] = []
 	for i in range(ticks - 1):
 		tick_durations.append(tick_times[i + 1] - tick_times[i])
 	tick_durations.reverse()
-	
+
 	tick_sfx_player.volume_db = -6
 	var start_colour := Color("#f70000")
 	var end_colour := Color("#ba2f20")
@@ -150,6 +150,7 @@ func _on_explode_timer_timeout() -> void:
 	var calculated_explosion_damage = calculate_explosion_damage()
 	inst.init(calculated_explosion_damage)
 	get_parent().add_child(inst)
+
 	for i in range(infused_status_effect.size()):
 		if infused_status_effect[i]:
 			inst.add_status_effect(i + 1)  # Offset for the None enum value
@@ -225,9 +226,9 @@ func anim_countdown_tick(tick_time: float, scale_mod: float, colour: Color) -> v
 	tween.tween_callback(tick_sfx_player.play)
 	tween.tween_property(mesh, "scale", Vector3(reset_scale, reset_scale, reset_scale), tick_time * 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	tween.parallel().tween_property(mesh.mesh.material, "albedo_color", colour, tick_time * 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	
+
 	await tween.finished
-	
+
 	return
 
 
@@ -243,5 +244,5 @@ func anim_countdown_final_tick(tick_time: float, scale_mod: float, colour: Color
 	tween.tween_property(mesh, "scale", Vector3(0.1, 0.1, 0.1), tick_time * 0.5).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 
 	await tween.finished
-	
+
 	return
