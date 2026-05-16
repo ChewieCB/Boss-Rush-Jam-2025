@@ -5,7 +5,7 @@ signal inventory_opened
 signal inventory_closed
 
 @onready var dialogue_label: Label3D = $Label3D
-@onready var shop_ui: GunCustomizationUI = $UI/GunCustomizeUI
+@onready var shop_ui: ShopUI = $UI/ShopUI
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var interact_area: Area3D = $InteractArea
 
