@@ -96,6 +96,10 @@ func on_gun_damage_calculation():
 	for child in child_effects:
 		child.on_gun_damage_calculation()
 
+func on_player_contact(_projectile: BaseBullet):
+	for child in child_effects:
+		child.on_player_contact(_projectile)
+
 func on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	for child in child_effects:
 		child.on_before_damage_applied(_enemy, _projectile)

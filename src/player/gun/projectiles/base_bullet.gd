@@ -11,6 +11,7 @@ class_name BaseBullet
 @export_group("SFX")
 @export var sfx_crit: Array[AudioStream]
 
+signal on_player_contact(projectile: BaseBullet)
 signal before_damage_applied(enemy: CharacterBody3D, projectile: BaseBullet)
 signal damage_applied(damage: float, has_pos: bool, pos: Vector3)
 signal impacted(projectile: BaseBullet, has_pos: bool, pos: Vector3)
@@ -18,12 +19,14 @@ signal destroyed(hit_boss: bool)
 
 const DAMAGE_VARIANCE = 0.2
 const GRAVITY_FORCE = -9.8
+const RICOCHET_HOMING_STRENGTH = 0.4
 
 ## Base damage / initial damage
 var damage = 1
 ## In decimal
 var crit_chance = 0
 var ricochet_count_left = 0
+var time_ricochetted = 0
 var owner_gun: Gun
 var is_ricochet_shot = false
 var homing_strength = 0 # radius to search for enemy
@@ -52,7 +55,7 @@ var spawn_pos = Vector3.ZERO
 var travelled_distance = 0
 var hit_boss = false
 var is_crit = false
-
+var misc_data = {}
 
 func _ready() -> void:
 	spawn_pos = global_position
@@ -140,7 +143,7 @@ func create_status_effect_impact(pos: Vector3, normal: Vector3):
 				impact_inst.rotate_object_local(Vector3(1, 0, 0), 90)
 
 func calculate_bullet_damage(reroll_crit = true):
-	# FIXME - this resets crit damage 
+	# FIXME - this resets crit damage
 	var rand_damage_mod = get_damage_variance_modifier(damage)
 	var calculated_damage = damage + rand_damage_mod
 	# Crit
@@ -154,6 +157,7 @@ func calculate_bullet_damage(reroll_crit = true):
 	return calculated_damage
 
 func ricochet():
+	time_ricochetted += 1
 	return
 
 ## This will be added to normal damage
@@ -162,7 +166,7 @@ func get_damage_variance_modifier(_damage: int) -> int:
 	var max_variance = GameManager.player.current_stats[StatusEffect.PlayerStatEnum.MAX_DAMAGE_VARIANCE]
 	return int(randf_range(_damage * min_variance, _damage * max_variance))
 
-## Avoid using this unles last resort, very laggy
+## Avoid using this unless last resort, very laggy
 func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	var new_inst: BaseBullet = self.duplicate()
 	new_inst.owner_gun = owner_gun
@@ -171,6 +175,8 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 	new_inst.spawn_pos = spawn_pos
 	new_inst.life_time = life_time
 	new_inst.travelled_distance = travelled_distance
+	new_inst.time_ricochetted = time_ricochetted
+	new_inst.on_player_contact.connect(owner_gun.check_barrel_effect_on_player_contact)
 	new_inst.before_damage_applied.connect(owner_gun.check_barrel_effect_on_before_damage_applied)
 	new_inst.damage_applied.connect(owner_gun.check_barrel_effect_on_damage_applied)
 	new_inst.damage_applied.connect(LuckHandler.accumulate_dps_dealt.unbind(2))
@@ -182,6 +188,8 @@ func create_duplication(is_ricochet: bool = true) -> BaseBullet:
 func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: Vector3):
 	if splitted:
 		return
+	if not is_instance_valid(self ):
+		return
 
 	var center_dir = - current_dir
 	var new_pos = global_position
@@ -191,8 +199,6 @@ func split(split_count: int, split_spread_radius: float, _has_pos: bool, _pos: V
 		new_pos = _pos
 
 	for i in range(split_count):
-		if not is_instance_valid(self):
-			return
 		var new_inst = create_duplication()
 		get_tree().get_root().add_child(new_inst)
 		var new_dir = GunUtils.get_spread_direction(center_dir, split_spread_radius)
@@ -226,9 +232,12 @@ func applied_emitting_elemental_vfx(status_effect: BossCore.BossStatusEffect):
 
 func apply_damage_to_health_component(health_component: HealthComponent, damage_value: int):
 	const CRIT_TEXT_SCALE_POP = 2.8
-	const CRIT_TEXT_COLOR = Color(1, 0.24, 0) 
+	const CRIT_TEXT_COLOR = Color(1, 0.24, 0)
 	if is_crit:
 		SoundManager.play_sound(sfx_crit.pick_random(), "Gun")
 		health_component.damage(damage_value, CRIT_TEXT_COLOR, CRIT_TEXT_SCALE_POP, "CRIT!")
 	else:
 		health_component.damage(damage_value)
+
+func switch_to_slowmo_bullet_trail():
+	return

@@ -198,7 +198,7 @@ func _ready() -> void:
 	
 	reset_modifier(true)
 	idle_frame_state.start("RESET")
-	
+
 	if SaveManager.save_data_is_loaded:
 		_on_savefile_loaded()
 	else:
@@ -224,7 +224,7 @@ func _process(delta: float) -> void:
 
 
 func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip_animation: bool = false) -> void:
-	# DEBUG: 
+	# DEBUG:
 	# enum GunFrameIdEnum {
 	#	NONE,
 	#	DEFAULT,
@@ -236,10 +236,10 @@ func set_frame_art(frame_id: int = GunFrameResource.GunFrameIdEnum.DEFAULT, skip
 	var flash_sprites = [null, null, shotgun_flash_sprite, smg_flash_sprite, rifle_flash_sprite]
 	barrel_flare_sprite = flare_sprites[frame_id]
 	muzzle_flash_sprite = flash_sprites[frame_id]
-	
+
 	var frame_prefixes = ["", "", "shotgun_idle", "smg_idle", "rifle_idle"]
 	var idle_state = frame_prefixes[frame_id]
-	
+
 	if skip_animation:
 		idle_frame_state.start(idle_state)
 	else:
@@ -250,7 +250,7 @@ func set_stat_from_gun_frame() -> void:
 	var current_frame: GunFrameResource = GameManager.equipped_gun_frame
 	if current_frame.frame_id == GunFrameResource.GunFrameIdEnum.NONE:
 		return
-	
+
 	base_damage = current_frame.base_damage
 	base_projectile_amount = current_frame.base_projectile_amount
 	base_firerate = current_frame.base_firerate
@@ -271,7 +271,7 @@ func set_stat_from_gun_frame() -> void:
 			barrel.get_active_effect().on_effect_set()
 	reload_no_anim()
 	set_frame_art(current_frame.frame_id)
-	
+
 	if current_frame.frame_id != GunFrameResource.GunFrameIdEnum.NONE:
 		if LoadingHandler.skip_equip_anim:
 			play_equip_anim(current_frame.frame_id)
@@ -279,7 +279,7 @@ func set_stat_from_gun_frame() -> void:
 			#play_active_anim(current_frame.frame_id)
 		else:
 			play_equip_anim(current_frame.frame_id)
-	
+
 	LoadingHandler.skip_equip_anim = false
 
 
@@ -307,7 +307,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		return false
 	if GameManager.equipped_gun_frame.frame_id == GunFrameResource.GunFrameIdEnum.NONE:
 		return false
-	
+
 	if is_reloading or is_spinning or is_jammed:
 		if is_reloading and \
 		idle_frame_state.get_current_node().begins_with("shotgun") and \
@@ -318,7 +318,7 @@ func shoot(aim_ray: RayCast3D) -> bool:
 			reload_interrupt = true
 			idle_frame_state.travel("shotgun_idle")
 			await reload_anim_end
-			
+
 			# Play the post-reload pump to chamber a round if we started reloading from empty
 			if cached_reload_start_ammo == 0:
 				idle_frame_state.travel("shotgun_pump_no_shell")
@@ -326,15 +326,15 @@ func shoot(aim_ray: RayCast3D) -> bool:
 		else:
 			play_failed_shoot_sfx()
 			return false
-	
+
 	reload_interrupt = false
-	
+
 	if magazine_ammo_left <= 0:
 		play_failed_shoot_sfx()
 		if not is_reload_disabled:
 			reload()
 		return false
-	
+
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
@@ -342,23 +342,23 @@ func shoot(aim_ray: RayCast3D) -> bool:
 	if not can_fire:
 		play_failed_shoot_sfx()
 		return false
-	
+
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
 		barrel.get_active_effect().on_fire_rate_check()
-	
+
 	var time_until_next_shot = 1.0 / modified_firerate
 	if time_until_next_shot > time_since_last_shot:
 		return false
-	
+
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
 		barrel.get_active_effect().on_prepare_to_fire()
-	
+
 	can_fire = false
-	
+
 	GameManager.player.player_camera.set_recoil_power(modified_recoil)
 	GameManager.player.player_camera.add_trauma(modified_screenshake)
 
@@ -395,13 +395,13 @@ func shoot(aim_ray: RayCast3D) -> bool:
 			barrel.get_active_effect().on_ammo_consumed()
 		if magazine_ammo_left <= 0 and i < n_shot_repeat - 1:
 			break
-		
+
 		if idle_frame_state.get_current_node().begins_with("smg"):
 			smg_shell_particles.emitting = true
 			smg_shell_particles.restart()
-		
+
 		gun_shot.emit()
-		
+
 		if n_shot_repeat > 1 and i < n_shot_repeat - 1:
 			barrel_flare_sprite.visible = true
 			await get_tree().create_timer(MIN_DELAY_BETWEEN_SHOT_IN_BURST).timeout
@@ -411,17 +411,17 @@ func shoot(aim_ray: RayCast3D) -> bool:
 			for j in range(muzzle_flash_hold_frames):
 				await get_tree().physics_frame
 			barrel_flare_sprite.visible = false
-	
+
 	# Create muzzle smoke effect
 	create_muzzle_smoke(aim_ray)
 	create_muzzle_flash_light()
-	
+
 	## POST-SHOT animations
 	await play_post_shot_anim()
-	
+
 	reset_modifier()
 	can_fire = true
-	
+
 	return true
 
 
@@ -441,13 +441,13 @@ func _play_anim_cancel(
 		GunFrameResource.GunFrameIdEnum.SNIPER:
 			anim_state += "rifle"
 	anim_state += "_" + anim_suffix
-	
+
 	# Teleport to the equip anim state
 	idle_frame_state.start(anim_state)
-	
+
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	
+
 	if callback:
 		callback.call()
 
@@ -473,22 +473,22 @@ func play_post_shot_anim() -> bool:
 			pass
 		"rifle_idle":
 			post_shot_state = "rifle_rack"
-	
+
 	anim_tree.set("parameters/reload_timescale/scale", 1.0)
 	#var reload_timescale: float = 1.35 / modified_reload_time
 	#anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
-	
+
 	if post_shot_state:
 		idle_frame_state.travel(post_shot_state)
 		await post_reload_anim_end
-		
+
 	#anim_tree.set("parameters/reload_timescale/scale", 1.0)
-	
+
 	if magazine_ammo_left <= 0:
 		reload()
-	
+
 	idle_frame_state.travel(idle_state)
-	
+
 	return true
 
 
@@ -500,9 +500,12 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 	else:
 		bullet_inst = bullet_prefab.instantiate()
 		get_tree().get_root().add_child(bullet_inst)
-	
+
 	bullet_inst.owner_gun = self
 	bullet_inst.homing_strength = modified_homing_strength
+
+	if not bullet_inst.is_connected("on_player_contact", check_barrel_effect_on_player_contact):
+		bullet_inst.on_player_contact.connect(check_barrel_effect_on_player_contact)
 
 	if not bullet_inst.is_connected("before_damage_applied", check_barrel_effect_on_before_damage_applied):
 		bullet_inst.before_damage_applied.connect(check_barrel_effect_on_before_damage_applied)
@@ -522,6 +525,10 @@ func create_gun_attack(bullet_prefab: PackedScene, start_pos: Vector3, direction
 		barrel.get_active_effect().on_projectile_spawn(bullet_inst)
 
 	bullet_inst.init(start_pos, direction, damage, modified_ricochet_count, proj_speed, max_range)
+
+func check_barrel_effect_on_player_contact(_projectile: BaseBullet):
+	for barrel in installed_barrels:
+		barrel.get_active_effect().on_player_contact(_projectile)
 
 func check_barrel_effect_on_before_damage_applied(_enemy: CharacterBody3D, _projectile: BaseBullet):
 	for barrel in installed_barrels:
@@ -591,7 +598,7 @@ func spin_all_barrels() -> void:
 		await gun_reloaded
 
 	release_trigger()
-	
+
 	is_spinning = true
 
 	# EXPERIMENTAL for hold/release spinning
@@ -699,7 +706,7 @@ func _stop_barrel(barrel_idx: int) -> void:
 	barrel.get_active_effect().on_effect_set()
 	magazine_ammo_left = clamp(magazine_ammo_left, 0, modified_magazine_size)
 	barrel_spin_stopped.emit(barrel, barrel_idx)
-	
+
 	var barrel_label: Label3D = barrel_labels[barrel_idx]
 	barrel_label.text = "[%s]" % [
 		barrel.reloads_before_spin - barrel.reload_count
@@ -725,7 +732,7 @@ func set_barrel_icon(barrel_idx: int, icon_id: int) -> void:
 func cancel_reload() -> void:
 	is_reloading = false
 	is_jammed = false
-	
+
 	match idle_frame_state.get_current_node():
 		"shotgun_reload":
 			idle_frame_state.travel("shotgun_idle")
@@ -749,14 +756,14 @@ func reload(_already_spin_barrel = false):
 
 	#if not already_spin_barrel:
 		#reset_modifier(true)
-	
+
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
 		barrel.get_active_effect().on_reload_start()
 
 	is_reloading = true
-	
+
 	cached_reload_start_ammo = magazine_ammo_left
 	var reload_timescale: float = 1.5 / modified_reload_time
 	var reload_state: String = ""
@@ -764,12 +771,12 @@ func reload(_already_spin_barrel = false):
 	var post_reload_state: String = ""
 	var post_reload_anim: String = ""
 	var reload_count: int = 1 # Used to reload per-shot in the case of the shotgun
-	
+
 	var idle_state: String = idle_frame_state.get_current_node()
 	if not idle_state.ends_with("idle"):
 		await post_reload_anim_end
 		idle_state = idle_frame_state.get_current_node()
-		
+
 	var anim_library_prefix: String = ""
 	match idle_state:
 	#match GameManager.equipped_gun_frame.frame_id:
@@ -781,9 +788,9 @@ func reload(_already_spin_barrel = false):
 				post_reload_state = "shotgun_pump_no_shell"
 				post_reload_anim = "pump_no_shell"
 			#if cached_reload_start_ammo == modified_magazine_size:
-				#post_reload_state = ""  # "shotgun_pump" - do we want to pump after reload? 
+				#post_reload_state = ""  # "shotgun_pump" - do we want to pump after reload?
 			#else:
-				#post_reload_state = "" # "shotgun_pump_no_shell" - do we want to pump after reload? 
+				#post_reload_state = "" # "shotgun_pump_no_shell" - do we want to pump after reload?
 			reload_count = modified_magazine_size - magazine_ammo_left
 			reload_timescale = reload_timescale * 2.0
 		#GunFrameResource.GunFrameIdEnum.SMG:
@@ -796,19 +803,19 @@ func reload(_already_spin_barrel = false):
 			reload_state = "rifle_reload"
 			post_reload_state = "rifle_rack"
 			post_reload_anim = "rack"
-	
+
 	anim_tree.set("parameters/reload_timescale/scale", reload_timescale) # FIXME: Need to do sth with base_reload_time here
-	
+
 	var reload_anim_time: float = anim_player.get_animation(anim_library_prefix + reload_anim).length
 	var post_reload_anim_time: float = 0.0
 	if post_reload_anim:
 		post_reload_anim_time = anim_player.get_animation(anim_library_prefix + post_reload_anim).length
-	
+
 	current_reload_anim_time = (reload_anim_time * reload_timescale) + post_reload_anim_time
-	
+
 	if idle_state in ["smg_idle", "rifle_idle"]:
 		full_clip_reload_started.emit()
-	
+
 	for i in range(reload_count):
 		if reload_interrupt:
 			break
@@ -820,21 +827,21 @@ func reload(_already_spin_barrel = false):
 			_:
 				magazine_ammo_left = cached_reload_start_ammo + i + 1
 		await reload_anim_end
-	
+
 	if post_reload_state:
 		idle_frame_state.travel(post_reload_state)
 		await post_reload_anim_end
-	
+
 	reload_interrupt = false
 	is_reloading = false
 	can_fire = true
 	anim_tree.set("parameters/reload_timescale/scale", 1.0)
-	
+
 	for barrel in installed_barrels:
 		if barrel == null:
 			continue
 		barrel.get_active_effect().on_reload_end()
-	
+
 	match GameManager.CHEAT_spin_mode:
 		GameManager.DebugSpinMode.SEEDED_AUTO_SPIN:
 			var barrels_to_auto_spin := []
@@ -849,7 +856,7 @@ func reload(_already_spin_barrel = false):
 				]
 				if barrel.reload_count == barrel.reloads_before_spin:
 					barrels_to_auto_spin.append(barrel)
-			
+
 			# Decrease luck for each barrel triggering auto-spin
 			LuckHandler.decrease_luck(
 				LuckHandler.luck_cost_per_auto_spin * len(barrels_to_auto_spin)
@@ -884,7 +891,7 @@ func reload_no_anim() -> void:
 			continue
 		if is_instance_valid(barrel):
 			barrel.get_active_effect().on_reload_end()
-	
+
 	magazine_ammo_left = modified_magazine_size
 	is_reloading = false
 	reload_anim_end.emit()
@@ -893,7 +900,7 @@ func reload_no_anim() -> void:
 
 
 func _shotgun_eject_shell() -> void:
-	# TODO - pool/instance individual particle emitters per-shell so we 
+	# TODO - pool/instance individual particle emitters per-shell so we
 	# can have them bouncing around? Then create a decal on particle end.
 	pass
 
@@ -1023,10 +1030,10 @@ func install_barrel(barrel_data: BarrelDataResource = null, slot_idx: int = -1) 
 		barrel_equipped.emit(barrel_inst, barrel_idx)
 
 	recheck_installed_barrels()
-	
+
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	
+
 	# Re-apply the effects of the currently equipped barrels
 	reset_modifier(true)
 	for barrel in barrel_container.get_children():
@@ -1070,7 +1077,7 @@ func remove_barrel(barrel_idx: int) -> void:
 	barrel_icon_meshes[barrel_idx].set_surface_override_material(0, default_barrel_icon_mat)
 
 	recheck_installed_barrels()
-	
+
 	# Re-apply the effects of the currently equipped barrels
 	reset_modifier(true)
 	for _barrel in barrel_container.get_children():
@@ -1245,14 +1252,14 @@ func jam_gun(pre_anim_delay: float = 1.0) -> void:
 	jam_dust_particles.emitting = true
 	jam_spring_particles.restart()
 	set_barrels_jammed()
-	
+
 	await get_tree().create_timer(pre_anim_delay, false).timeout
-	
+
 	var idle_state: String = idle_frame_state.get_current_node()
 	if not idle_state.ends_with("idle"):
 		await post_reload_anim_end
 		idle_state = idle_frame_state.get_current_node()
-		
+
 	var anim_library_prefix: String = ""
 	var jam_state: String = ""
 	match idle_state:
@@ -1262,7 +1269,7 @@ func jam_gun(pre_anim_delay: float = 1.0) -> void:
 			jam_state = "smg_jam"
 		"rifle_idle":
 			jam_state = "rifle_jam"
-	
+
 	idle_frame_state.start(jam_state)
 
 
@@ -1274,7 +1281,7 @@ func _add_icon_jam_overlay(idx: int) -> StandardMaterial3D:
 	var _cached_mat = barrel_icon_meshes[idx].get_surface_override_material(0)
 	var _temp_mat = _cached_mat.duplicate()
 	_temp_mat.next_pass = barrel_jam_mat
-	
+
 	barrel_icon_meshes[idx].set_surface_override_material(0, _temp_mat)
 	return _cached_mat
 
@@ -1284,11 +1291,11 @@ func _remove_icon_jam_overlay(idx: int) -> void:
 
 
 func _flash_icon(i: int, flash_time: float = 0.08, flashes: int = 3, hold_on_finish: bool = true) -> void:
-	for j in range(flashes ):
+	for j in range(flashes):
 		barrel_cached_materials[i] = _add_icon_jam_overlay(i)
-		await get_tree().create_timer(flash_time/2, false).timeout
+		await get_tree().create_timer(flash_time / 2, false).timeout
 		_remove_icon_jam_overlay(i)
-		await get_tree().create_timer(flash_time/2, false).timeout
+		await get_tree().create_timer(flash_time / 2, false).timeout
 	if hold_on_finish:
 		barrel_cached_materials[i] = _add_icon_jam_overlay(i)
 
