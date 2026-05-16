@@ -1610,6 +1610,9 @@ func _on_chiptopede_hurt(health_diff: float) -> void:
 
 
 #### SPLIT STACK HELPER METHODS
+
+# FIXME - re-write these spawn/despawn methods to move and enable/disable a pool of stacks we load
+# at the start of the fight, instead of spawning/despawning which is much more intensive
 func spawn_stacks(stack_count: int, spawn_distance: float, spawn_positions: Array = []) -> Array:
 	var spawned_stacks = []
 	# Spawn small stacks from the center point of the big stack and space them out

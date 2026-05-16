@@ -132,7 +132,8 @@ func orbit_target_in_group(delta: float) -> void:
 	var offset_z = sin(current_angle) * desired_distance
 	var orbit_pos = target.global_position + Vector3(offset_x, 0, offset_z)
 	# Pathfind to orbit_pos
-	navigation_component.set_nav_target_position(orbit_pos)
+	if orbit_pos.distance_squared_to(navigation_component.nav_agent.target_position) > navigation_component.TARGET_POS_UPDATE_THRESHOLD:
+		navigation_component.set_nav_target_position(orbit_pos)
 
 
 func melee_approach(delta: float) -> void:
@@ -174,7 +175,8 @@ func orbit_center_in_group(delta: float, is_evasive: bool = false) -> void:
 		orbit_pos += wave_offset
 
 	# Pathfind to orbit_pos
-	navigation_component.set_nav_target_position(orbit_pos)
+	if orbit_pos.distance_squared_to(navigation_component.nav_agent.target_position) > navigation_component.TARGET_POS_UPDATE_THRESHOLD:
+		navigation_component.set_nav_target_position(orbit_pos)
 
 ## MOVEMENT UTILS
 #
