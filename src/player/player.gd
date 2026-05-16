@@ -192,6 +192,7 @@ var double_down_icon = preload("res://assets/sprite/skilltree_icon/double_down.p
 
 var aim_assist_target: Node3D = null
 var cheat_death_triggered = false
+var last_look_enemy_target: Node3D = null
 
 var freecam: FreeCam
 
@@ -485,6 +486,9 @@ func _physics_process(delta):
 	if GameManager.is_controller_connected:
 		aim_assist(delta)
 
+	if aim_assist_ray_boss_check.is_colliding():
+		last_look_enemy_target = aim_assist_ray_boss_check.get_collider()
+
 
 func update_ammo_counter_ui() -> void:
 	stat_ui.radial_ui_center_node.update(current_gun.magazine_ammo_left, current_gun.modified_magazine_size)
@@ -574,18 +578,18 @@ func update_barrel_effect_ui() -> void:
 			for container in effect_ui.negatives_container.get_children():
 				container.queue_free()
 			effect_ui.clear_luck_triggers()
-			
-			effect_ui.add_neutral(_effect.display_text_desc)
-			#for text in _effect.positive_desc:
-				#effect_ui.add_positive(text)
-			#for text in _effect.negative_desc:
-				#effect_ui.add_negative(text)
+
+			# effect_ui.add_neutral(_effect.display_text_desc)
+			for text in _effect.positive_desc:
+				effect_ui.add_positive(text)
+			for text in _effect.negative_desc:
+				effect_ui.add_negative(text)
 			for trigger_id in _effect.luck_triggers:
 				var trigger_info: LuckTriggerInfo = LuckHandler.luck_triggers[trigger_id]
 				var enum_str: String = LuckTriggerInfo.LuckTriggerIdEnum.keys()[trigger_id]
 				var is_discovered: bool = LuckHandler.luck_trigger_dict[enum_str]
 				effect_ui.add_luck_trigger(trigger_info.name, trigger_info.desc, is_discovered)
-		
+
 		else:
 			effect_ui.modulate.a = 0.0
 			effect_ui.name_label.text = ""
@@ -688,7 +692,7 @@ func rotate_player(x: float, y: float):
 func special_camera_control(delta):
 	if controls_disabled:
 		return
-		
+
 	# Tilt camera
 	const MIN_DIR_TO_TILT = 0.1
 	const TILT_AMOUNT = 3.0
@@ -868,7 +872,7 @@ func _on_health_dead_state_exited() -> void:
 	neck_tween.parallel().tween_property(neck, "rotation:z", deg_to_rad(0), 0.3)
 	neck_tween.parallel().tween_property(neck, "rotation:y", deg_to_rad(0), 0.3)
 	controls_disabled = false
-	
+
 
 func _on_health_dead_state_physics_processing(delta: float) -> void:
 	neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
@@ -1174,7 +1178,7 @@ func _enable_cutscene_cam() -> void:
 
 func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
 	controls_disabled = false
-	
+
 	if lerp_to_player_cam:
 		var active_camera: Camera3D = get_viewport().get_camera_3d()
 		var camera_tween := get_tree().create_tween()
@@ -1187,7 +1191,7 @@ func _disable_cutscene_cam(lerp_to_player_cam: bool = false) -> void:
 			0.8
 		)
 		await camera_tween.finished
-	
+
 	player_camera.camera.current = true
 	gun_container.visible = true
 

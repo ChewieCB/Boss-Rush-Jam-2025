@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_cytgi")
-id = 4
+id = 8
 name = "Danger Close"
 desc = "+20 luck when dealing a lot of indirect explosive damage"
 message = ""

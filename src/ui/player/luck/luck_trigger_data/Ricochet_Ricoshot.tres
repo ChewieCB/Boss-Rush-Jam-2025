@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://w0dskmn55fpr"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_ngid4"]
+
+[resource]
+script = ExtResource("1_ngid4")
+id = 3
+name = "Ricoshot"
+desc = "+3 luck on a ricocheted hit"
+message = ""

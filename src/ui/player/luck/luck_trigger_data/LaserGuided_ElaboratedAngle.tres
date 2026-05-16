@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://b5l2mghk3fls4"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_6kgrn"]
+
+[resource]
+script = ExtResource("1_6kgrn")
+id = 6
+name = "Elaborated Angle"
+desc = "+10 luck on hitting enemies with 90 degree different from when you shoot"
+message = ""

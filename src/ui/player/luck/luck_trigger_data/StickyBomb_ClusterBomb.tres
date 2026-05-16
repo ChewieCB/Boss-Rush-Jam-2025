@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_icq2u")
-id = 3
+id = 7
 name = "Cluster Bomb"
 desc = "+25 luck for sticking lots of sticky bombs to an enemy"
 message = ""

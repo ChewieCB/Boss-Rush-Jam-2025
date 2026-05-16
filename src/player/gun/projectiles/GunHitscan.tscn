@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b35xae4md3nm4" path="res://src/player/gun/projectiles/start_flash.png" id="3_d15wr"]
 [ext_resource type="AudioStream" uid="uid://b8451e0rga8of" path="res://src/player/gun/assets/sfx/temp/Crit.mp3" id="5_4jihr"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ch4f"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_voy5t"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_1gwnq")
@@ -24,7 +24,7 @@ shader_parameter/emission_intensity = 1.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_yehfg"]
 resource_local_to_scene = true
-material = SubResource("ShaderMaterial_3ch4f")
+material = SubResource("ShaderMaterial_voy5t")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_kk8sx"]
 radius = 500.0

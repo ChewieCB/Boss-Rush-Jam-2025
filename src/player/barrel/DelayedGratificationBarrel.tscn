@@ -18,11 +18,12 @@ script = ExtResource("1_2a2qf")
 script = ExtResource("3_q7s8s")
 display_text_title = "Bullet Time"
 display_text_tag = "You are not N*o though"
-display_text_desc = "-50% projectile speed
-+25% damage"
-positive_desc = Array[String](["+25% damage"])
-negative_desc = Array[String](["-50% projectile speed"])
+display_text_desc = "-80% projectile speed
++35% damage"
+positive_desc = Array[String](["+35% damage"])
+negative_desc = Array[String](["-80% projectile speed"])
 icon_id = 19
+luck_triggers = Array[int]([4, 5])
 
 [node name="SetHitscan" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("4_duuhv")
@@ -37,7 +38,7 @@ is_perc = true
 [node name="ModifyDamage" type="Node3D" parent="EffectContainer/BulletTime"]
 script = ExtResource("5_307l2")
 attribute = 1
-modify_value = 25.0
+modify_value = 35.0
 is_perc = true
 
 [node name="StickyBomb" type="Node3D" parent="EffectContainer" node_paths=PackedStringArray("explosive_dps_dealt_window_timer")]
@@ -47,7 +48,7 @@ display_text_title = "Sticky Bomb"
 display_text_tag = "Keep Your Distance!"
 display_text_desc = "Bullets stick to enemies, then detonate after 2 seconds."
 icon_id = 21
-luck_triggers = Array[int]([3, 4])
+luck_triggers = Array[int]([7, 7])
 
 [node name="SetProjectilePrefab" type="Node3D" parent="EffectContainer/StickyBomb"]
 script = ExtResource("6_j8ucp")

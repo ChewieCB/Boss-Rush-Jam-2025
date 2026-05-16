@@ -106,7 +106,18 @@ func ricochet():
 	super ()
 	found_hitscal_col = false
 	is_ricochet_shot = true
-	init(global_position, current_dir.bounce(hitscan_col_normal), explosion_damage, ricochet_count_left - 1, projectile_speed, max_range)
+	
+	# Calculate bounce direction
+	var bounce_dir = current_dir.bounce(hitscan_col_normal)
+	
+	# Add slight homing toward last look enemy target if available
+	if GameManager.player and is_instance_valid(GameManager.player.last_look_enemy_target):
+		var target = GameManager.player.last_look_enemy_target
+		var dir_to_target = global_position.direction_to(target.global_position)
+		# Blend bounce direction with target direction (small homing factor)
+		bounce_dir = bounce_dir.lerp(dir_to_target, RICOCHET_HOMING_STRENGTH).normalized()
+	
+	init(global_position, bounce_dir, explosion_damage, ricochet_count_left - 1, projectile_speed, max_range)
 
 
 func _on_life_timer_timeout() -> void:
@@ -120,7 +131,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	var calculated_damage = calculate_bullet_damage()
 	if body is CharacterBody3D:
 		if is_instance_valid(body):
-			before_damage_applied.emit(body, self)
+			before_damage_applied.emit(body, self )
 			calculated_damage = calculate_bullet_damage(false) # Recalculate damage after before_damage_applied effect
 			apply_damage_to_health_component(body.health_component, calculated_damage)
 			damage_applied.emit(damage, true, global_position)
@@ -137,7 +148,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	sticked = true
 	life_timer.stop()
 	explode_timer.start()
-	impacted.emit(self, true, global_position)
+	impacted.emit(self , true, global_position)
 
 
 func _on_homing_area_3d_body_entered(body: Node3D) -> void:
@@ -148,6 +159,8 @@ func _on_homing_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_explode_timer_timeout() -> void:
+	if not is_instance_valid(explosion_inst):
+		return
 	var calculated_explosion_damage = calculate_explosion_damage()
 	explosion_inst.init(calculated_explosion_damage)
 	get_parent().add_child(explosion_inst)

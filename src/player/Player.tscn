@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=82 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_rl0vi"]
 [ext_resource type="AudioStream" uid="uid://cnges1rstqrb2" path="res://src/player/assets/sfx/RUNNING/Running Loop.mp3" id="2_5ndff"]
@@ -66,6 +66,8 @@
 [ext_resource type="PackedScene" uid="uid://c8fqj7i2fkcnf" path="res://src/ui/player/luck/LuckComponent.tscn" id="57_0cid7"]
 [ext_resource type="Resource" uid="uid://cc1k5wphwlecg" path="res://src/bosses/NotDeadGuard.tres" id="57_sguas"]
 [ext_resource type="PackedScene" uid="uid://cu1jrlwvdnnl" path="res://src/ui/player/inventory/WorkshopInventoryUI.tscn" id="60_44qli"]
+[ext_resource type="Script" path="res://src/player/bullet_whizz_radius.gd" id="119_e0qef"]
+[ext_resource type="AudioStream" uid="uid://cw6g68pny04lp" path="res://src/player/assets/sfx/677373__robinhood76__12012-bullet-whizz.wav" id="120_wa66r"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_le58x"]
 
@@ -117,6 +119,9 @@ shader_parameter/distortionTexture = SubResource("NoiseTexture2D_7pe4k")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_q6pr3"]
 radius = 5.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dxvay"]
+radius = 2.0
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("health_component", "luck_component")]
 collision_layer = 2
@@ -210,7 +215,7 @@ collide_with_areas = true
 
 [node name="LaserGuideRayCast" type="RayCast3D" parent="Neck/ShakeCameraWrapper/Camera3D"]
 target_position = Vector3(0, 0, -100)
-collision_mask = 5
+collision_mask = 69
 
 [node name="GunContainer" type="Node3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(0.249049, 0, 0.0217889, 0, 0.25, 0, -0.0217889, 0, 0.249049, 0.096, -0.1, -0.185)
@@ -228,7 +233,7 @@ collide_with_bodies = false
 [node name="AimAssistRaycastBossCheck" type="RayCast3D" parent="Neck/ShakeCameraWrapper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
 target_position = Vector3(0, 0, -500)
-collision_mask = 4
+collision_mask = 68
 
 [node name="DebugLabel" type="Label" parent="Neck/ShakeCameraWrapper"]
 visible = false
@@ -618,6 +623,17 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NearEnemyRadius"]
 shape = SubResource("SphereShape3D_q6pr3")
 
+[node name="BulletWhizzRadius" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.544568, 0)
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+script = ExtResource("119_e0qef")
+bullet_whizz_sfx = ExtResource("120_wa66r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BulletWhizzRadius"]
+shape = SubResource("SphereShape3D_dxvay")
+
 [connection signal="body_entered" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_entered"]
 [connection signal="body_exited" from="CheckStandingCollision" to="." method="_on_check_standing_collision_body_exited"]
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
@@ -637,5 +653,6 @@ shape = SubResource("SphereShape3D_q6pr3")
 [connection signal="timeout" from="StateChart/Root/Status/Drunk/DrunkTimer" to="." method="_on_drunk_timer_timeout"]
 [connection signal="body_entered" from="NearEnemyRadius" to="." method="_on_near_enemy_radius_body_entered"]
 [connection signal="body_exited" from="NearEnemyRadius" to="." method="_on_near_enemy_radius_body_exited"]
+[connection signal="area_entered" from="BulletWhizzRadius" to="BulletWhizzRadius" method="_on_area_entered"]
 
 [editable path="UI/HurtOverlay"]
