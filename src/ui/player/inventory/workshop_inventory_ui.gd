@@ -14,17 +14,19 @@ var available_gun_frames: Array
 # and avoid tangling any of the rest of this code up in it to prevent confusion.
 
 func _ready() -> void:
-	super()
+	super ()
 	init_equip_barrels()
 	available_gun_frames = [GameManager.equipped_gun_frame] + \
 		GameManager.inventory_gun_frames
-	var focused_ui: Control = get_first_item_for_focus().get_child(0)
-	if focused_ui:
-		hide_effect_detail_view(focused_ui)
+	var first_item_focus = get_first_item_for_focus()
+	if first_item_focus:
+		var focused_ui: Control = first_item_focus.get_child(0)
+		if focused_ui:
+			hide_effect_detail_view(focused_ui)
 
 
 func _input(event: InputEvent) -> void:
-	super(event)
+	super (event)
 
 	if visible:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
@@ -71,14 +73,14 @@ func open() -> void:
 		GameManager.equipped_gun_frame,
 		available_gun_frames,
 	)
-	super()
+	super ()
 
 
 func close() -> void:
 	for i in range(equip_barrel_container.get_child_count()):
 		var equip_ui = equip_barrel_container.get_child(i).item_ui
 		clear_item_ui_highlight(equip_ui)
-	super()
+	super ()
 
 
 func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
@@ -111,7 +113,7 @@ func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
 		if not barrel_data.is_archetype_barrel:
 			var item_inst: ItemUI = barrel_item_ui_prefab.instantiate()
 			inventory_normal_barrel_container.add_child(item_inst)
-			item_inst.init(self, barrel_data)
+			item_inst.init(self , barrel_data)
 			item_inst.set_barrel_data(barrel_data, false, true)
 			item_inst.select_item.connect(_on_item_ui_select)
 			item_inst.interact_item.connect(_on_item_ui_interact)
@@ -457,14 +459,13 @@ func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
 
 
 func _on_item_ui_select(item_ui: ItemUI, data: BarrelDataResource) -> void:
-	super(item_ui, data)
+	super (item_ui, data)
 	if item_ui.get_parent() is BarrelEquipSlotUI:
 		input_prompt_tab_right.update_text("Move Barrel")
 
 
-
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
-	super(item_ui, data)
+	super (item_ui, data)
 
 	if item_ui.is_locked:
 		return
