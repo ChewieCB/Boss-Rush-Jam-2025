@@ -47,7 +47,7 @@
 [ext_resource type="AudioStream" uid="uid://l15tyg18m35p" path="res://src/bosses/chips/assets/sfx/Burst ground and scream 1.mp3" id="26_66jo0"]
 [ext_resource type="PackedScene" uid="uid://cd30ihwhltreb" path="res://src/bosses/chips/assets/particles/ChipPileEruptParticles.tscn" id="26_n12sa"]
 [ext_resource type="AudioStream" uid="uid://6qe1hg4wkjwf" path="res://src/bosses/chips/assets/sfx/Burst ground and scream 2.mp3" id="27_16l83"]
-[ext_resource type="PackedScene" path="res://src/bosses/chips/minions/ChiptopedeSegmentNew.tscn" id="27_naryd"]
+[ext_resource type="PackedScene" uid="uid://3iflumjk8msc" path="res://src/bosses/chips/minions/ChiptopedeSegmentNew.tscn" id="27_naryd"]
 [ext_resource type="Resource" uid="uid://c8ry7fnsoeioj" path="res://src/player/barrel/resource/kinematic_equation_barrel_data.tres" id="28_a82g3"]
 [ext_resource type="AudioStream" uid="uid://d1wulb8onnxen" path="res://src/bosses/chips/assets/sfx/Leap Impact 1.mp3" id="28_crvab"]
 [ext_resource type="AudioStream" uid="uid://ctv7ibuj4uds3" path="res://src/bosses/chips/assets/sfx/Tunneling around better 1.mp3" id="29_76lxc"]

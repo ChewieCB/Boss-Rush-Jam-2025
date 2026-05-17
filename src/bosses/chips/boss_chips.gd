@@ -589,9 +589,6 @@ func big_stack_jump(goal_pos: Vector3, _height: float = jump_height, hover: bool
 	).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 
 	await jump_tween.finished
-	# Catch and handle a mid-await state change
-	if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
-		return 
 	
 	anim_player.play("big_stack/jump_apex")
 
@@ -775,10 +772,7 @@ func _on_big_stack_state_entered_phase_2() -> void:
 	# If we already have the Big Stack form before we call _reset_to_big_stack(),
 	# this is the first transition from Phase1 -> Phase2 so do the AoE Merge
 	if current_form == ChipBossForms.BIG_STACK:
-		await big_stack_jump_to_center(jump_height, false)
-		# Catch and handle a mid-await state change
-		if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
-			return 
+		await big_stack_jump_to_center(jump_height, false) 
 		state_chart.send_event("start_merge_aoe_finisher")
 		return
 
