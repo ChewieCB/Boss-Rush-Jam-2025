@@ -8,6 +8,7 @@ signal ui_accept
 #@onready var elevator_doors: SlidingDoor = find_children("*", "ElevatorDoors").front()
 @export var elevator_buttons: Array[ElevatorButton]
 
+@onready var ui_layer: CanvasLayer = $UI
 @onready var info_ui: Control = $UI/InfoBoxUI
 @onready var game_win_ui: Control = $UI/GameWinUI
 @onready var difficulty_menu: DifficultyMenu = $UI/DifficultyMenu
@@ -32,6 +33,9 @@ func _ready() -> void:
 	for vendor in vendors:
 		vendor.inventory_opened.connect(player.current_gun.play_unequip_anim)
 		vendor.inventory_closed.connect(player.current_gun.play_equip_anim)
+	
+	ui_layer.visible = false
+	ui_layer.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	get_tree().paused = false
 	
@@ -83,13 +87,20 @@ func _input(event: InputEvent) -> void:
 
 
 func show_panel(panel: Control) -> void:
+	ui_layer.visible = true
+	ui_layer.process_mode = Node.PROCESS_MODE_INHERIT
 	panel.visible = true
+	
 	var tween = get_tree().create_tween()
 	tween.tween_property(panel, "modulate", Color(Color.WHITE, 1.0), 1.0)
 	await tween.finished
 	await ui_accept
 	tween = get_tree().create_tween()
 	tween.tween_property(panel, "modulate", Color(Color.WHITE, 0.0), 1.0)
+	await tween.finished
+	
+	ui_layer.visible = false
+	ui_layer.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func _on_level_select(level_path: String, _elevator_doors: ElevatorDoors, _respawn_marker: Marker3D) -> void:

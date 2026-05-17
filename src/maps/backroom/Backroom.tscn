@@ -88,15 +88,14 @@ ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 sky_material = SubResource("ProceduralSkyMaterial_uf8kn")
 
 [sub_resource type="Environment" id="Environment_oh44f"]
-background_color = Color(0.061499, 0.138682, 0.128917, 1)
+background_color = Color(0.0253492, 0.0758112, 0.0692059, 1)
 sky = SubResource("Sky_4ufux")
 ambient_light_source = 2
-ambient_light_color = Color(0.522215, 0.347133, 0.136741, 1)
-ambient_light_energy = 3.0
+ambient_light_color = Color(0.339766, 0.219336, 0.0740279, 1)
+ambient_light_energy = 2.0
 tonemap_mode = 2
-tonemap_exposure = 1.4
-ssil_enabled = true
-sdfgi_enabled = true
+tonemap_exposure = 0.8
+sdfgi_use_occlusion = true
 glow_enabled = true
 fog_mode = 1
 fog_light_color = Color(0.317647, 0.203922, 0.0666667, 1)
@@ -7455,6 +7454,8 @@ interior = true
 light_data = ExtResource("3_qbe7n")
 
 [node name="UI" type="CanvasLayer" parent="."]
+process_mode = 4
+visible = false
 
 [node name="InfoBoxUI" parent="UI" instance=ExtResource("6_e5lbx")]
 visible = false
@@ -7736,12 +7737,18 @@ omni_attenuation = 2.0
 [node name="Vendor" parent="." instance=ExtResource("8_0ncek")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.623195, 0, -2.3356)
 
+[node name="UI" parent="Vendor" index="5"]
+process_mode = 4
+
 [node name="Workbench" parent="." instance=ExtResource("18_dv650")]
 transform = Transform3D(-0.556629, 0, 0.830761, 0, 1, 0, -0.830761, 0, -0.556629, -0.0977012, -0.00194585, 2.12347)
 
 [node name="CollisionShape3D" parent="Workbench" index="0"]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -0.0866022, 0.75, -0.0500002)
 shape = SubResource("BoxShape3D_x3k1o")
+
+[node name="UI" parent="Workbench" index="2"]
+process_mode = 4
 
 [node name="Sprite3D" parent="Workbench" index="3"]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.16, 1.44, 0.116325)
@@ -10431,4 +10438,5 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -3.05219, 
 [node name="ChipBossRespawnPoint" type="Marker3D" parent="."]
 transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -29.3426, -2, -2.02695)
 
+[editable path="Vendor"]
 [editable path="Workbench"]
