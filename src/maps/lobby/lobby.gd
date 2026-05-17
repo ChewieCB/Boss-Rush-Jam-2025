@@ -30,6 +30,11 @@ func _ready() -> void:
 		if button:
 			button.pushed.connect(_on_level_select)
 	difficulty_menu.bet_started.connect(load_selected_level) # Start load the boss level
+	difficulty_menu.bet_cancelled.connect(
+		func():
+			ui_layer.visible = false
+			ui_layer.process_mode = Node.PROCESS_MODE_DISABLED
+	)
 	for vendor in vendors:
 		vendor.inventory_opened.connect(player.current_gun.play_unequip_anim)
 		vendor.inventory_closed.connect(player.current_gun.play_equip_anim)
@@ -109,6 +114,8 @@ func _on_level_select(level_path: String, _elevator_doors: ElevatorDoors, _respa
 	if GameManager.selected_boss_id in no_difficulty_bosses:
 		load_selected_level(_elevator_doors)
 	else:
+		ui_layer.visible = true
+		ui_layer.process_mode = Node.PROCESS_MODE_INHERIT
 		difficulty_menu.show_menu()
 
 

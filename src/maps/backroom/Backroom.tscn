@@ -7454,7 +7454,6 @@ interior = true
 light_data = ExtResource("3_qbe7n")
 
 [node name="UI" type="CanvasLayer" parent="."]
-process_mode = 4
 visible = false
 
 [node name="InfoBoxUI" parent="UI" instance=ExtResource("6_e5lbx")]
