@@ -725,6 +725,7 @@ func _spawn_stacks_on_platforms() -> void:
 
 # Merging
 func merge_stacks() -> void:
+	finished_stacks = []
 	await despawn_stacks()
 	trigger_pushback()
 	await show_big_stack()
@@ -1050,6 +1051,7 @@ func _on_stack_slam_slam_state_entered() -> void:
 # we direct them here from the hidden big stack.
 #
 func trigger_substack_attack(attack_event: String, stack_delay: float = 0.0) -> void:
+	finished_stacks = []
 	for stack in active_stacks:
 		stack.state_chart.send_event(attack_event)
 		if stack_delay:
@@ -1072,6 +1074,7 @@ func cancel_substack_attacks() -> void:
 
 
 func trigger_sequential_substack_attacks(activate_event: String, attack_event: String) -> void:
+	finished_stacks = []
 	for stack in active_stacks:
 		stack.state_chart.send_event(activate_event)
 	for stack in active_stacks:
@@ -1866,9 +1869,12 @@ func _on_substack_charge_set(pos: Vector3) -> void:
 	self.global_position = pos
 
 func _substack_finished(stack: ChipBossSubStack) -> void:
+	if finished_stacks.has(stack):
+		return
+	
 	finished_stacks.append(stack)
 	substack_attack_finished.emit()
-	if finished_stacks.size() == active_stacks.size():
+	if finished_stacks.size() >= active_stacks.size():
 		last_stack = stack
 		substack_all_attacks_finished.emit()
 		finished_stacks = []
@@ -1878,8 +1884,8 @@ func _small_stack_hurt(health_diff: float) -> void:
 		health_component.damage(abs(health_diff))
 
 func _small_stack_dead(stack: CharacterBody3D) -> void:
-	_substack_finished(stack)
 	_deactivate_stack(stack)
+	_substack_finished(stack)
 
 
 #### CHIPTOPEDE HELPER METHODS

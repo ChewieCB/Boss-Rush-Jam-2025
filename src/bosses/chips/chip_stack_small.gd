@@ -359,9 +359,6 @@ func _recover_state_entered() -> void:
 	anim_player.play("substack/RESET")
 	await get_tree().create_timer(attack_recovery_time).timeout
 	state_chart.send_event("cooldown_end")
-
-	#navigation_component.enable()
-
 	state_chart.send_event("end_recovery")
 
 
@@ -579,8 +576,6 @@ func merge_to_pos(pos: Vector3, time: float, destroy_on_merge: bool = true) -> v
 func _on_split_rush_recover_state_entered() -> void:
 	debug_state_label.text = "Split Rush | Recovering"
 	desired_distance = DESIRED_DISTANCE
-	health_component.died.emit()
-	health_component.has_died = true
 	state_chart.send_event("end_recovery")
 
 
@@ -613,13 +608,6 @@ func _on_place_your_bets_recover_state_entered() -> void:
 	await return_split_stack_to_center()
 	self.collision_layer = 4
 	state_chart.send_event("end_recovery")
-
-
-func _on_died() -> void:
-	state_chart.send_event("death")
-	state_chart.send_event("stop_moving")
-	state_chart.send_event("deactivate")
-	return
 
 
 func _on_melee_targeting_timer_timeout() -> void:
