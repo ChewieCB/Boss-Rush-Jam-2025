@@ -192,6 +192,7 @@ func _ready() -> void:
 	barrel_equipped.connect(_on_archetype_equipped)
 	barrel_unequipped.connect(_on_archetype_unequipped)
 	
+	# We have 1 more just in case
 	for i in range(max_barrels + 1):
 		var _null_barrel: NullBarrel = null_barrel_prefab.instantiate()
 		null_barrel_pool.push_back(_null_barrel)
