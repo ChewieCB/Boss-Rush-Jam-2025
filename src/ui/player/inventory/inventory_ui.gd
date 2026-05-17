@@ -155,7 +155,10 @@ func close():
 	inventory_closed.emit()
 
 
-func full_refresh_ui(_focus_area_callable: Callable, _forced: bool = false) -> void:
+func placeholder_func() -> void:
+	return
+
+func full_refresh_ui(_focus_area_callable: Callable = placeholder_func, _forced: bool = false) -> void:
 	push_error("method not overriden")
 
 

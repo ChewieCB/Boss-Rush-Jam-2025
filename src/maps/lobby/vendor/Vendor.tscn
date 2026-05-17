@@ -50,6 +50,8 @@ shape = SubResource("SphereShape3D_rsf6f")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="ShopUI" parent="UI" instance=ExtResource("5_68842")]
+has_custom_inventory = null
+current_inventory = null
 metadata/_edit_use_anchors_ = true
 
 [connection signal="body_entered" from="InteractArea" to="." method="_on_body_entered"]

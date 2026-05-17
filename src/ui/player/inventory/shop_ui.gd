@@ -19,7 +19,7 @@ const SHOPKEEPER_CHAT_TEXT_SPEED = 1.0
 
 func _process(delta: float) -> void:
 	super (delta)
-	
+
 	if shopkeeper_chat.visible_ratio < 1.0:
 		shopkeeper_chat.visible_ratio += delta * SHOPKEEPER_CHAT_TEXT_SPEED
 
@@ -36,7 +36,7 @@ func _input(event: InputEvent) -> void:
 			input_prompt_cancel.animate()
 
 
-func full_refresh_ui(focus_area_callable: Callable, forced = false):
+func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced = false):
 	if not visible and not forced:
 		return
 
@@ -279,7 +279,7 @@ func _get_current_focus_area_on_button_focus(ui: ItemUI) -> Control:
 
 func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 	super (item_ui, data)
-	
+
 	if item_ui.is_locked:
 		return
 

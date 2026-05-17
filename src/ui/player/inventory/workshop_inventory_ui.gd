@@ -19,7 +19,7 @@ func _ready() -> void:
 	available_gun_frames = [GameManager.equipped_gun_frame] + \
 		GameManager.inventory_gun_frames
 	var first_item_focus = get_first_item_for_focus()
-	if first_item_focus:
+	if first_item_focus and first_item_focus.get_child_count() > 0:
 		var focused_ui: Control = first_item_focus.get_child(0)
 		if focused_ui:
 			hide_effect_detail_view(focused_ui)
@@ -83,7 +83,7 @@ func close() -> void:
 	super ()
 
 
-func full_refresh_ui(focus_area_callable: Callable, forced: bool = false):
+func full_refresh_ui(focus_area_callable: Callable = placeholder_func, forced: bool = false):
 	if not visible and not forced:
 		return
 
@@ -510,6 +510,7 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 			GameManager.remove_barrel(data.barrel_id)
 
 		var equip_idx_rev: int = remap(active_equip_idx, 0, 2, 2, 0)
+		# FIX: active_equip_idx can be -1 if no focus item set
 		var _warning_text = GameManager.equip_barrel(data.barrel_id, equip_idx_rev)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 
