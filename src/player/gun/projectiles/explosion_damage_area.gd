@@ -85,8 +85,8 @@ func explode():
 	)
 
 
-func _on_body_entered(body: Node3D) -> void:
-	if body is CharacterBody3D and not damage_disabled:
+func _on_body_entered(body: Node3D, is_disabled: bool = damage_disabled) -> void:
+	if body is CharacterBody3D and not is_disabled:
 		# Colour the damage text based on any elemental effects
 		var text_colour: Color = Color.ORANGE
 		for status_effect in infused_status_effects:
@@ -113,3 +113,10 @@ func _on_body_entered(body: Node3D) -> void:
 			# TODO - negative luck from getting hit by your own AoE
 		else:
 			LuckHandler.accumulate_dps_dealt(damage)
+
+
+func _on_area_entered(area: Area3D) -> void:
+	var _parent = area.get_parent()
+	if _parent is CharacterBody3D:
+		_on_body_entered(_parent)
+		

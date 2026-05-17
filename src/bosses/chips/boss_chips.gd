@@ -8,8 +8,8 @@ class_name BossChips
 #               Chip Sweep can now do volley of 3 per repeat / Shockwave apply long slow debuff / Backspin create 3 chips
 # Ante 4 (new): Five of a kind - Spawn 5 substack instead of 3
 # Ante 5 (new): Spiked Beer - Beer will deal hp damage and slow
-# TODO: Beer drunk effect seem to be bugged
-# TODO: The collision to detect player in Beer liquid is weird, fix it
+
+# TODO - Add intro cutscene of swarm of chips coming out of drains and forming the big stack
 
 signal substack_attack_finished
 signal substack_all_attacks_finished
@@ -18,6 +18,7 @@ signal drain_chamber
 signal break_floor
 signal chiptopede_emerges
 signal leap_finished(head_segment: Node)
+signal segment_deactivated(segment: ChiptopedeSegment)
 
 ## Phase transitions
 @export_group("Phases")
@@ -154,6 +155,11 @@ var chiptopede_snake_path_points: Array[Node]
 var chiptopede_shoot_spawns: Array[Node]
 var last_spawn: Node
 var last_leap_end_pos := Vector3.ZERO
+# Segment collision
+@onready var segment_hit_area: Area3D = $ChiptopedeSegmentHitArea
+var _segment_col_shapes: Array[CollisionShape3D] = []
+var _segment_health: Array[int] = []
+const SEGMENT_COLLISION_RADIUS: float = 4.0  # Aligns to ChiptopedeSegment mesh radius
 # Segment caching
 var despawned_pos := Vector3(0, -50, 0)
 var cached_segments: Array = []
@@ -204,7 +210,7 @@ var snake_distance: float
 #
 @export_subgroup("Spit Projectiles")
 @export var shooting_stance_prefab: PackedScene
-var stance_path: Path3D
+var shooting_stance_path: Path3D
 var emerge_speed: float = 10.0
 var emerge_distance: float
 
@@ -276,9 +282,11 @@ func _ready() -> void:
 		await _parent.ready
 	_init_stack_pool()
 	
-	# Chiptopede
+	# Chiptopede init
 	leap_finished.connect(_on_chiptopede_leap_impact)
 	chiptopede_max_health *= GameManager.get_risk_max_hp_mult()
+	shooting_stance_path = shooting_stance_prefab.instantiate()
+	get_parent().add_child(shooting_stance_path)
 	_create_segment_cache()
 	generate_snake_graph()
 
@@ -301,6 +309,30 @@ func activate() -> void:
 			state_chart.send_event("start_phase_2")
 		3:
 			state_chart.send_event("start_phase_3")
+
+
+func _physics_process(delta: float) -> void:
+	# Disable big stack processing while hidden but keep ticking the chiptopede
+	if sprite.visible:
+		super(delta)
+	_tick_segments(delta)
+
+
+func _tick_segments(delta: float) -> void:
+	for i in range(follow_nodes.size()):
+		var path_follow: PathFollow3D = follow_nodes[i]
+		if not path_follow or path_follow.get_child_count() == 0:
+			continue
+		
+		var segment: ChiptopedeSegment = path_follow.get_child(0)
+		
+		# Rotate visual mesh
+		segment.tick(delta)
+		# Update collision shape position
+		if i < _segment_col_shapes.size():
+			var col_shape: CollisionShape3D = _segment_col_shapes[i]
+			col_shape.disabled = false
+			col_shape.global_position = segment.global_position
 
 
 func _exit_tree() -> void:
@@ -619,7 +651,7 @@ func show_big_stack() -> void:
 	#debug_mesh.visible = true
 	health_component.show_damage_text = true
 	
-	set_physics_process(true)
+	#set_physics_process(true)
 	set_process(true)
 	navigation_component.enable()
 	
@@ -627,7 +659,7 @@ func show_big_stack() -> void:
 
 
 func hide_big_stack() -> void:
-	set_physics_process(false)
+	#set_physics_process(false)
 	set_process(false)
 	navigation_component.disable()
 	
@@ -1435,7 +1467,7 @@ func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
 func _on_chiptopede_leap_leaping_state_exited() -> void:
 	if not persist_segements:
 		_cleanup_segment_arrays()
-		leap_path.queue_free()
+		leap_path.queue_free.call_deferred()
 	leap_damage_timer.stop()
 	chiptopede_sfx_player.stop()
 	chiptopede_sfx_player.stream = null
@@ -1558,7 +1590,7 @@ func _on_chiptopede_snake_moving_state_exited() -> void:
 	if not persist_segements:
 		_cleanup_segment_arrays()
 		snake_path = []
-		snake_path_3d.queue_free()
+		snake_path_3d.global_position = despawned_pos
 	chiptopede_sfx_player.stop()
 	chiptopede_sfx_player.stream = null
 
@@ -1586,16 +1618,17 @@ func _on_chiptopede_shoot_emerging_state_entered() -> void:
 	# Get the player's current position as the target point
 	var spawn_pos: Vector3 = self.global_position
 	spawn_pos.y = -21
-	stance_path = create_premade_path(spawn_pos, shooting_stance_prefab)
+	shooting_stance_path = use_premade_path(spawn_pos, shooting_stance_path)
 
 	#
 	chiptopede_sfx_player.stream = sfx_chiptopede_emerge.pick_random()
 	chiptopede_sfx_player.play()
 	#
-	follow_nodes = spawn_segments(stance_path)
+	follow_nodes = spawn_segments(shooting_stance_path)
 
-	emerge_distance = stance_path.curve.get_baked_length()
-
+	emerge_distance = shooting_stance_path.curve.get_baked_length()
+	
+	# TOOD - replace instancing/freeing with particle effect pool
 	var splash = splash_particle_prefab.instantiate()
 	scene_root.add_child(splash)
 	splash.global_position = follow_nodes[0].get_child(0).global_position
@@ -1605,11 +1638,11 @@ func _on_chiptopede_shoot_emerging_state_entered() -> void:
 	splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
 	splash.emitting = true
 	await splash.finished
-	splash.queue_free()
+	splash.queue_free.call_deferred()
 
 
 func _on_chiptopede_shoot_emerging_state_physics_processing(delta: float) -> void:
-	turn_towards_target(stance_path, chiptopede_targeting_speed, delta)
+	turn_towards_target(shooting_stance_path, chiptopede_targeting_speed, delta)
 
 	# Animate the chiptopede up it as it rears up
 	move_segments_along_path(
@@ -1625,7 +1658,7 @@ func _on_chiptopede_shoot_targeting_state_entered() -> void:
 
 
 func _on_chiptopede_shoot_targeting_state_physics_processing(delta: float) -> void:
-	turn_towards_target(stance_path, chiptopede_targeting_speed, delta)
+	turn_towards_target(shooting_stance_path, chiptopede_targeting_speed, delta)
 
 
 func _on_chiptopede_shoot_shooting_state_entered() -> void:
@@ -1646,7 +1679,7 @@ func _on_chiptopede_shoot_shooting_state_entered() -> void:
 
 
 func _on_chiptopede_shoot_shooting_state_physics_processing(delta: float) -> void:
-	turn_towards_target(stance_path, chiptopede_targeting_speed, delta)
+	turn_towards_target(shooting_stance_path, chiptopede_targeting_speed, delta)
 
 
 func _on_chiptopede_shoot_retreat_state_entered() -> void:
@@ -1676,10 +1709,10 @@ func _on_chiptopede_shoot_recovering_state_entered() -> void:
 
 	if not persist_segements:
 		_cleanup_segment_arrays()
-		stance_path.queue_free()
+		shooting_stance_path.global_position = despawned_pos
 
 	await splash.finished
-	splash.queue_free()
+	splash.queue_free.call_deferred()
 
 	_recover_entered()
 
@@ -1845,6 +1878,7 @@ func _small_stack_dead(stack: CharacterBody3D) -> void:
 
 
 #### CHIPTOPEDE HELPER METHODS
+
 func get_chiptopede_spawn_pos(
 	spawn_marker_group: Array[Node],
 	_min_spawn_distance: float = 0.0,
@@ -1918,14 +1952,12 @@ func get_chiptopede_spawn_pos(
 	return last_spawn
 
 
-func create_premade_path(start_pos: Vector3, prefab: PackedScene) -> Path3D:
-	# Instance the shooting stance path
-	var path: Path3D = prefab.instantiate()
-	scene_root.add_child(path)
+# PATH GENERATION
+
+func use_premade_path(start_pos: Vector3, path: Path3D) -> Path3D:
 	path.global_position = start_pos
 
 	return path
-
 
 func create_curve_path(start_pos: Vector3, goal_pos: Vector3, follow_path: Array, curve_constructor: Callable) -> Path3D:
 	var path := Path3D.new()
@@ -1936,7 +1968,6 @@ func create_curve_path(start_pos: Vector3, goal_pos: Vector3, follow_path: Array
 	scene_root.add_child(path)
 
 	return path
-
 
 func _create_leap_path(start_pos: Vector3, goal_pos: Vector3, _follow_path: Array) -> Curve3D:
 	var curve = Curve3D.new()
@@ -1949,7 +1980,6 @@ func _create_leap_path(start_pos: Vector3, goal_pos: Vector3, _follow_path: Arra
 	curve.add_point(goal_pos, in_1, Vector3.ZERO)
 
 	return curve
-
 
 func _create_snake_path(_start_pos: Vector3, _goal_pos: Vector3, _follow_path: Array) -> Curve3D:
 	var curve = Curve3D.new()
@@ -1968,29 +1998,45 @@ func _create_snake_path(_start_pos: Vector3, _goal_pos: Vector3, _follow_path: A
 
 	return curve
 
+func generate_snake_graph() -> void:
+	var all_points = chiptopede_snake_spawns + chiptopede_snake_path_points
+	for i in range(all_points.size()):
+		var point = all_points[i]
+		astar.add_point(i, point.global_position)
+		all_points.append(point)
+	for point in all_points:
+		var point_idx: int = all_points.find(point)
+		for connection in point.connected_points:
+			var connection_idx: int = all_points.find(connection)
+			astar.connect_points(point_idx, connection_idx)
 
-func _cleanup_segment_arrays() -> void:
-	for node in follow_nodes:
-		if is_instance_valid(node):
-			var segment = node.get_child(0)
-			if segment:
-				segment.splash_particles.emitting = false
-				segment.splash_ring_particles.emitting = false
-				cache_segment(segment, node)
-	follow_nodes = []
-	completed_nodes = []
-	chiptopede_head_offset = 0.0
+# FIXME - double-backing in places
+func calculate_snake_path(start_pos: Vector3, target_pos: Vector3) -> void:
+	snake_path += astar.get_point_path(
+		astar.get_closest_point(start_pos),
+		astar.get_closest_point(target_pos)
+	)
 
+## Segment Handlers
 
 func _create_segment_cache() -> Node3D:
 	segment_cache_parent = Node3D.new()
 	get_tree().root.get_children()[8].add_child(segment_cache_parent)
 	segment_cache_parent.global_position = despawned_pos
+	_segment_col_shapes.clear()
 
 	for idx in range(chiptopede_segments):
 		var segment = chiptopede_segment_prefab.instantiate()
-		segment.health_component.health_diff.connect(_on_chiptopede_hurt)
 		segment.big_stack = self
+		# Collision
+		var shape := CollisionShape3D.new()
+		var sphere := SphereShape3D.new()
+		sphere.radius = SEGMENT_COLLISION_RADIUS
+		shape.shape = sphere
+		shape.disabled = true  # Disable until we activate the segment
+		segment_hit_area.add_child(shape)
+		_segment_col_shapes.append(shape)
+		
 		cache_segment(segment)
 	
 	# Setup sfx player at head segment
@@ -2001,8 +2047,14 @@ func _create_segment_cache() -> Node3D:
 
 
 func cache_segment(segment: ChiptopedeSegment, segment_parent: Node3D = null) -> void:
+	var idx: int = segment.segment_idx
+	if idx >= 0 and idx < _segment_col_shapes.size():
+		_segment_col_shapes[idx].disabled = true
+		segment_deactivated.emit(segment)
+	
 	if segment_parent:
 		segment_parent.remove_child(segment)
+	
 	segment_cache_parent.add_child(segment)
 	segment.global_position = despawned_pos
 	cached_segments.append(segment)
@@ -2024,17 +2076,12 @@ func spawn_segments(path: Path3D) -> Array:
 	if cached_segments.size() == 0:
 		_cleanup_segment_arrays()
 
-	for segment_idx in chiptopede_segments:
-		var path_follow = PathFollow3D.new()
+	for idx in chiptopede_segments:
+		var path_follow := PathFollow3D.new()
 		path.add_child(path_follow)
 
 		var new_segment: ChiptopedeSegment = get_segment_from_cache()
-		# If there are segments in the cache, grab one
-		#if segment_idx < cached_segments.size():
-			#new_segment = get_segment_from_cache()
-		## Otherwise, instantiate a new segment
-		#else:
-			#new_segment = chiptopede_segment_prefab.instantiate()
+		new_segment.segment_idx = idx
 
 		# Moving segments
 		path_follow.add_child(new_segment)
@@ -2042,6 +2089,10 @@ func spawn_segments(path: Path3D) -> Array:
 		new_segment.visible = true
 		new_segment.splash_particles.emitting = false
 		new_segment.splash_ring_particles.emitting = false
+		
+		# Enable collision
+		if idx < _segment_col_shapes.size():
+			_segment_col_shapes[idx].disabled = false
 
 		path_follow_nodes.append(path_follow)
 
@@ -2083,25 +2134,17 @@ func move_segments_along_path(
 			completed_nodes.append(i)
 
 
-func generate_snake_graph() -> void:
-	var all_points = chiptopede_snake_spawns + chiptopede_snake_path_points
-	for i in range(all_points.size()):
-		var point = all_points[i]
-		astar.add_point(i, point.global_position)
-		all_points.append(point)
-	for point in all_points:
-		var point_idx: int = all_points.find(point)
-		for connection in point.connected_points:
-			var connection_idx: int = all_points.find(connection)
-			astar.connect_points(point_idx, connection_idx)
-
-
-# FIXME - double-backing in places
-func calculate_snake_path(start_pos: Vector3, target_pos: Vector3) -> void:
-	snake_path += astar.get_point_path(
-		astar.get_closest_point(start_pos),
-		astar.get_closest_point(target_pos)
-	)
+func _cleanup_segment_arrays() -> void:
+	for node in follow_nodes:
+		if is_instance_valid(node):
+			var segment = node.get_child(0)
+			if segment:
+				segment.splash_particles.emitting = false
+				segment.splash_ring_particles.emitting = false
+				cache_segment(segment, node)
+	follow_nodes = []
+	completed_nodes = []
+	chiptopede_head_offset = 0.0
 
 
 #### CHIP MINES
@@ -2342,7 +2385,8 @@ func _on_chiptopede_death_exploding_state_entered() -> void:
 		if is_instance_valid(node):
 			var segment = node.get_child(0)
 			if segment:
-				segment.queue_free()
+				segment.visible = false
+				segment.process_mode = PROCESS_MODE_DISABLED
 				# If the segment is below the waterline just free it and move on
 				if segment.global_position.y < -20.0:
 					continue
@@ -2394,8 +2438,34 @@ func rolling_chip_get_angles(n: int, spread: float) -> Array[float]:
 
 func _on_unstable_split_timer_timeout() -> void:
 	for stack in active_stacks:
-		var chosen_hazard_prefab: PackedScene = possible_hazards.pick_random()
-		var hazard_inst: HazardArea = chosen_hazard_prefab.instantiate()
-		get_tree().get_root().add_child(hazard_inst)
-		hazard_inst.global_position = stack.global_position
-		hazard_inst.set_duration_and_restart_timer(hazard_duration)
+		var chosen_hazard_s
+
+
+func _on_chiptopede_segment_hit_area_area_entered(area: Area3D) -> void:
+	var _parent = area.get_parent()
+	if _parent is BaseBullet:
+		if _parent is StickyBombProjectile:
+			return
+		_parent._on_area_3d_body_entered(self)
+	
+	# TODO - add small chip burst particles on hit 
+
+func _on_chiptopede_segment_hit_area_area_shape_entered(area_rid: RID, area: Area3D, area_shape_idx: int, local_shape_idx: int) -> void:
+	var _parent = area.get_parent()
+	if _parent is StickyBombProjectile:
+		if _parent.sticked:
+			return
+		# Get the segment node and stick the bullet to that
+		var _segment = follow_nodes[local_shape_idx].get_child(0)
+		_parent.damage_body(self)
+		_parent.stick_bullet(_segment)
+		_parent.exploded.connect(_on_sticky_bomb_detonate_segment.bind(local_shape_idx))
+		_parent.start_countdown()
+
+
+func _on_sticky_bomb_detonate_segment(explosion_inst: ExplosionDamageArea, segment_idx: int) -> void:
+	var segment_col: CollisionShape3D = _segment_col_shapes[segment_idx]
+	# If the segment is off screen the explosion should still do damage
+	if segment_col.disabled:
+		explosion_inst._on_body_entered(self, false)
+		
