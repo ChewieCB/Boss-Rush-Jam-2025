@@ -543,6 +543,7 @@ func _exit_tree() -> void:
 			if is_instance_valid(node):
 				node.queue_free()
 
+
 func boss_death_slow_mo() -> bool:
 	SoundManager.play_sound(sfx_slowmo, "SFX")
 	var original_time_scale = Engine.time_scale

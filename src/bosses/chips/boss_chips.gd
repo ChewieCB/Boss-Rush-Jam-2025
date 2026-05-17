@@ -44,6 +44,8 @@ var center_pos := Vector3(0, 0, -2)
 @export_group("Attacks | General")
 @export var explosion_scene: PackedScene
 @export var pushback_force: float = 20.0
+var aoe_wave_pool: Array = []
+var aoe_bubble_pool: Array = []
 # SFX
 @export var sfx_jump: Array[AudioStream]
 @export var sfx_hurt_scream: Array[AudioStream]
@@ -144,6 +146,7 @@ var last_stack: ChipBossSubStack
 var chip_mine_spawn_points: Array
 var active_mines: Array = []
 # SFX
+
 #
 ## CHIPTOPEDE
 @export_group("Attacks | Chiptopede")
@@ -276,6 +279,9 @@ func _ready() -> void:
 	if GameManager.boss_ante >= 5:
 		pass # In boss_chip map script
 	
+	for i in range(slam_count + 1):
+		_init_aoe_wave()
+	
 	# Stack pool init
 	var _parent = get_parent()
 	if not _parent.is_node_ready():
@@ -285,10 +291,10 @@ func _ready() -> void:
 	# Chiptopede init
 	leap_finished.connect(_on_chiptopede_leap_impact)
 	chiptopede_max_health *= GameManager.get_risk_max_hp_mult()
-	shooting_stance_path = shooting_stance_prefab.instantiate()
-	get_parent().add_child(shooting_stance_path)
 	_create_segment_cache()
 	generate_snake_graph()
+	for i in range(5):
+		_init_aoe_bubble()
 
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -1590,7 +1596,7 @@ func _on_chiptopede_snake_moving_state_exited() -> void:
 	if not persist_segements:
 		_cleanup_segment_arrays()
 		snake_path = []
-		snake_path_3d.global_position = despawned_pos
+		snake_path_3d.queue_free.call_deferred()
 	chiptopede_sfx_player.stop()
 	chiptopede_sfx_player.stream = null
 
@@ -1618,7 +1624,7 @@ func _on_chiptopede_shoot_emerging_state_entered() -> void:
 	# Get the player's current position as the target point
 	var spawn_pos: Vector3 = self.global_position
 	spawn_pos.y = -21
-	shooting_stance_path = use_premade_path(spawn_pos, shooting_stance_path)
+	shooting_stance_path = create_premade_path(spawn_pos, shooting_stance_prefab)
 
 	#
 	chiptopede_sfx_player.stream = sfx_chiptopede_emerge.pick_random()
@@ -1709,7 +1715,7 @@ func _on_chiptopede_shoot_recovering_state_entered() -> void:
 
 	if not persist_segements:
 		_cleanup_segment_arrays()
-		shooting_stance_path.global_position = despawned_pos
+		shooting_stance_path.queue_free.call_deferred()
 
 	await splash.finished
 	splash.queue_free.call_deferred()
@@ -1724,8 +1730,6 @@ func _on_chiptopede_hurt(health_diff: float) -> void:
 
 #### SPLIT STACK HELPER METHODS
 
-# FIXME - re-write these spawn/despawn methods to move and enable/disable a pool of stacks we load
-# at the start of the fight, instead of spawning/despawning which is much more intensive
 func _init_stack_pool() -> void:
 	for i in range(small_stack_count):
 		var stack: ChipBossSubStack = small_stack_prefab.instantiate()
@@ -1954,10 +1958,14 @@ func get_chiptopede_spawn_pos(
 
 # PATH GENERATION
 
-func use_premade_path(start_pos: Vector3, path: Path3D) -> Path3D:
+func create_premade_path(start_pos: Vector3, prefab: PackedScene) -> Path3D:
+	# Instance the shooting stance path
+	var path: Path3D = prefab.instantiate()
+	scene_root.add_child(path)
 	path.global_position = start_pos
 
 	return path
+
 
 func create_curve_path(start_pos: Vector3, goal_pos: Vector3, follow_path: Array, curve_constructor: Callable) -> Path3D:
 	var path := Path3D.new()
@@ -2137,6 +2145,8 @@ func move_segments_along_path(
 func _cleanup_segment_arrays() -> void:
 	for node in follow_nodes:
 		if is_instance_valid(node):
+			if node.get_child_count() == 0:
+				continue
 			var segment = node.get_child(0)
 			if segment:
 				segment.splash_particles.emitting = false
@@ -2256,6 +2266,39 @@ func _map_marker_to_position(marker: Node3D) -> Vector3:
 
 ## AREA OF EFFECT HELPERS
 
+func _init_aoe_wave() -> void:
+	# Generate a collider
+	var wave := Node3D.new()
+	var area_collider := Area3D.new()
+	var area_collider_shape := CollisionShape3D.new()
+	var collider_shape := CylinderShape3D.new()
+	collider_shape.radius = 0.01
+	area_collider_shape.shape = collider_shape
+	area_collider.add_child(area_collider_shape)
+	area_collider.collision_layer = int(pow(2, 7))
+	area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
+	area_collider_shape.disabled = true
+	
+	# Generate a visual
+	var wave_mesh := MeshInstance3D.new()
+	var mesh := CylinderMesh.new()
+	wave_mesh.mesh = mesh
+	wave_mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	
+	mesh.bottom_radius = 0.0
+	mesh.top_radius = 0.0
+	mesh.material = wave_material
+	
+	wave.add_child(wave_mesh)
+	wave.add_child(area_collider)
+	scene_root.add_child(wave)
+	wave.global_position = despawned_pos
+	wave.visible = false
+	
+	spawned_area_objects.append([area_collider, wave_mesh])
+	aoe_wave_pool.push_back(wave)
+
+
 func spawn_aoe_wave(
 	max_radius: float,
 	damage: float = 10.0,
@@ -2263,97 +2306,76 @@ func spawn_aoe_wave(
 	area_pos: Vector3 = self.global_position,
 	_pushback_source: Node3D = self,
 	spawned_wave_height: float = 0.3,
-	_telegraph: bool = false,
 	callback: Callable = func(): pass ,
 ) -> void:
-	# Generate a collider
-	var area_collider := Area3D.new()
-	var area_collider_shape := CollisionShape3D.new()
-	var collider_shape := CylinderShape3D.new()
-	collider_shape.radius = 0.01
-	collider_shape.height = spawned_wave_height
-	area_collider_shape.shape = collider_shape
-	area_collider.add_child(area_collider_shape)
-	area_collider.collision_layer = int(pow(2, 7))
-	area_collider.collision_mask = int(pow(2, 2 - 1) + pow(2, 7 - 1)) # Player & Cover
-	area_collider.monitoring = true
-
-	scene_root.add_child(area_collider)
-
-	area_collider.global_position = area_pos
-	area_collider.body_entered.connect(_on_wave_collision.bind(damage, area_collider, max_radius))
-	#area_collider.body_entered.connect(area_collider.queue_free.unbind(1))
-
-	var debug_mesh_instance = MeshInstance3D.new()
-	var mesh = CylinderMesh.new()
-
-	spawned_area_objects.append([area_collider, debug_mesh_instance])
-
-	# Generate a visual
-	scene_root.add_child(debug_mesh_instance)
-
-	debug_mesh_instance.mesh = mesh
-	debug_mesh_instance.cast_shadow = false
-	debug_mesh_instance.global_position = area_pos
-
-	mesh.bottom_radius = 0.0
-	mesh.top_radius = 0.0
-	mesh.height = spawned_wave_height
-	mesh.material = wave_material
-
-	#if telegraph:
-		#var telegraph_tween = get_tree().create_tween()
-		#var mesh_color: Color = debug_mesh_instance.mesh.material.get("shader_parameter/color")
-		#
-		#telegraph_tween.tween_property(debug_mesh_instance, "mesh:bottom_radius", 6.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
-		#telegraph_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", 6.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
-		##telegraph_tween.parallel().tween_method(material_glow.bind(debug_mesh_instance.mesh.material, Color.RED), 0, 1, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CIRC)
-		#telegraph_tween.parallel().tween_callback(func(): state_chart.send_event("attack_telegraph")).set_delay(0)
-		#telegraph_tween.chain().tween_property(debug_mesh_instance, "mesh:bottom_radius", 1.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
-		#telegraph_tween.parallel().tween_property(debug_mesh_instance, "mesh:top_radius", 1.0, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
-		##telegraph_tween.parallel().tween_method(material_glow.bind(debug_mesh_instance.mesh.material, mesh_color), 0, 1, telegraph_time).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_EXPO)
-		#
-		#await telegraph_tween.finished
-
-	#state_chart.send_event("attack_start")
+	var wave = aoe_wave_pool.pop_front()
+	var wave_mesh: MeshInstance3D = wave.get_child(0)
+	wave_mesh.mesh.height = spawned_wave_height
+	var area: Area3D = wave.get_child(1)
+	var area_col: CollisionShape3D = area.get_child(0)
+	area_col.shape.radius = 0.01
+	area_col.shape.height = spawned_wave_height
+	area_col.disabled = false
+	area.body_entered.connect(_on_wave_collision.bind(damage, area, max_radius))
+	
+	wave.global_position = area_pos
+	wave.visible = true
 
 	# Animate the visual
-	# TODO - SFX
-	#sfx_player.stream = sfx_ground_pound.pick_random()
-	#sfx_player.play()
+	# TODO - SFX)
 	var tween = get_tree().create_tween()
-	tween.tween_property(mesh, "bottom_radius", max_radius, spawned_wave_time)
-	tween.parallel().tween_property(mesh, "top_radius", max_radius, spawned_wave_time)
-	tween.parallel().tween_property(area_collider_shape.shape, "radius", max_radius, spawned_wave_time)
-	tween.tween_callback(debug_mesh_instance.queue_free)
-	tween.tween_callback(area_collider.queue_free)
+	tween.tween_property(wave_mesh.mesh, "bottom_radius", max_radius, spawned_wave_time)
+	tween.parallel().tween_property(wave_mesh.mesh, "top_radius", max_radius, spawned_wave_time)
+	tween.parallel().tween_property(area_col.shape, "radius", max_radius, spawned_wave_time)
+	tween.tween_callback(
+		func():
+			area_col.body_entered.disconnect(_on_wave_collision)
+			wave.visible = false
+			aoe_wave_pool.push_back(wave)
+	)
 	tween.tween_callback(callback)
-
+	
 	await tween.finished
-
+	
 	return
 
 
-func spawn_aoe_bubble(radius: float, damage: float, spawn_pos: Vector3, duration: float, pushback_source: Node3D = self) -> void:
+func _init_aoe_bubble() -> void:
+	var bubble := Node3D.new()
 	# Generate a collider
 	var area_collider := Area3D.new()
 	var area_collider_shape := CollisionShape3D.new()
 	var collider_shape := SphereShape3D.new()
-	collider_shape.radius = radius
+	collider_shape.radius = 0.01
 	area_collider_shape.shape = collider_shape
 	area_collider.add_child(area_collider_shape)
 	area_collider.collision_layer = int(pow(2, 7))
 	area_collider.collision_mask = int(pow(2, 2 - 1))
-	area_collider.monitoring = true
+	area_collider_shape.disabled = true
 
-	scene_root.add_child(area_collider)
+	bubble.add_child(area_collider)
+	scene_root.add_child(bubble)
+	bubble.global_position = despawned_pos
+	bubble.visible = false
+	
+	spawned_area_objects.append([area_collider])
+	aoe_bubble_pool.push_back(bubble)
 
-	area_collider.global_position = spawn_pos
-	area_collider.body_entered.connect(_on_wave_collision.bind(damage, pushback_source, radius))
 
+func spawn_aoe_bubble(radius: float, damage: float, spawn_pos: Vector3, duration: float, pushback_source: Node3D = self) -> void:
+	var bubble = aoe_bubble_pool.pop_front()
+	var area: Area3D = bubble.get_child(0)
+	var area_col: CollisionShape3D = area.get_child(0)
+	area_col.shape.radius = radius
+	area_col.disabled = false
+	area.body_entered.connect(_on_wave_collision.bind(damage, pushback_source, radius))
+	
+	bubble.global_position = spawn_pos
+	
 	await get_tree().create_timer(duration).timeout
-
-	area_collider.queue_free()
+	
+	area_col.shape.disabled = true
+	aoe_bubble_pool.push_back(bubble)
 
 
 func _on_wave_collision(
