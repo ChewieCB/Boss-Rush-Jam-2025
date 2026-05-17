@@ -130,13 +130,8 @@ func _on_velocity_computed(safe_velocity: Vector3) -> void:
 
 
 func disable_for_pool() -> void:
-	if nav_agent_rid.is_valid():
-		NavigationServer3D.agent_set_avoidance_callback(nav_agent_rid, Callable())
-	nav_agent.set_velocity(Vector3.ZERO)
 	process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func enable_for_pool() -> void:
-	if nav_agent_rid.is_valid():
-		NavigationServer3D.agent_set_avoidance_callback(nav_agent_rid, self._on_velocity_computed)
 	process_mode = Node.PROCESS_MODE_INHERIT
