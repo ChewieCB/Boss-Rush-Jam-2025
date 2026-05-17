@@ -1765,6 +1765,7 @@ func _activate_stack(stack: ChipBossSubStack, idx: int, count: int) -> void:
 	stack.set_physics_process(true)
 	stack.set_process(true)
 	stack.navigation_component.enable_for_pool()
+	stack.navigation_component.enable()
 	
 	stack.show()
 	stack.sprite.layers = 2
@@ -2329,7 +2330,7 @@ func spawn_aoe_wave(
 	tween.parallel().tween_property(area_col.shape, "radius", max_radius, spawned_wave_time)
 	tween.tween_callback(
 		func():
-			area_col.body_entered.disconnect(_on_wave_collision)
+			area.body_entered.disconnect(_on_wave_collision)
 			wave.visible = false
 			aoe_wave_pool.push_back(wave)
 	)
@@ -2374,7 +2375,7 @@ func spawn_aoe_bubble(radius: float, damage: float, spawn_pos: Vector3, duration
 	
 	await get_tree().create_timer(duration).timeout
 	
-	area_col.shape.disabled = true
+	area_col.disabled = true
 	aoe_bubble_pool.push_back(bubble)
 
 
