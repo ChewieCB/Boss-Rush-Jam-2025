@@ -1,4 +1,5 @@
 extends BaseBarrelEffect
+class_name CompoundEffect
 
 @export var archetype_reload_sfx: Array[AudioStream]
 @export var archetype_shot_sfx: Array[AudioStream]
@@ -13,6 +14,8 @@ func _ready() -> void:
 	await get_tree().physics_frame
 
 	for child in get_children():
+		if not child is BaseBarrelEffect:
+			continue
 		var barrel = child as BaseBarrelEffect
 		barrel.owner_barrel = owner_barrel
 		child_effects.append(barrel)

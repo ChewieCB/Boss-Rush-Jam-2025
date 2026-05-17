@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LuckTriggerInfo" load_steps=2 format=3 uid="uid://jx3qhymvhjim"]
+
+[ext_resource type="Script" path="res://src/ui/player/luck/luck_trigger_info_resource.gd" id="1_cytgi"]
+
+[resource]
+script = ExtResource("1_cytgi")
+id = 8
+name = "Danger Close"
+desc = "+20 luck when dealing a lot of indirect explosive damage"
+message = ""

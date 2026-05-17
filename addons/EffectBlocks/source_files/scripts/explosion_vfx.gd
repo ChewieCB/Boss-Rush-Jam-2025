@@ -21,12 +21,37 @@ class_name ExplosionParticles
 		emitting = false
 
 @export var time_until_queue_free: float = 2.0
-
 signal finished
+
 
 func _ready() -> void:
 	if explode_on_spawn:
 		explode()
+
+
+func set_colour(colour: Color) -> void:
+	for elem in gpu_particles_arr.slice(0, 2):
+		elem.process_material.color = colour
+		
+		var hue: float = colour.h
+		var gradient: Gradient = elem.process_material.color_ramp.gradient
+		for i in range(gradient.get_point_count()):
+			var _colour: Color = gradient.get_color(i)
+			_colour.h = hue
+			elem.process_material.color_ramp.gradient.set_color(i, _colour)
+
+
+func reset_color() -> void:
+	var elem = gpu_particles_arr.slice(0, 2)
+	# Fire
+	elem[0].process_material.color = Color("#ff9900")
+	var gradient: Gradient = elem[0].process_material.color_ramp.gradient
+	elem[0].process_material.color_ramp.gradient.set_color(0, Color("#ff9900"))
+	# Sparks
+	elem[1].process_material.color = Color("#ff7427")
+	gradient = elem[1].process_material.color_ramp.gradient
+	elem[1].process_material.color_ramp.gradient.set_color(0, Color("#e55800"))
+	elem[1].process_material.color_ramp.gradient.set_color(1, Color("#ffff00"))
 
 
 func explode():
