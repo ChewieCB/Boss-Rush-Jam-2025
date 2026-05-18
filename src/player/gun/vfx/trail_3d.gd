@@ -139,7 +139,6 @@ func _render_geometry(source: Array) -> void:
 				var travel = (to_be_rendered[i - 1].transform.origin - to_be_rendered[i].transform.origin).length()
 				u += travel / base_width
 				factor = u
-
 		
 		mesh.surface_set_uv(Vector2(factor, 0))
 		mesh.surface_add_vertex(vertices[0])
