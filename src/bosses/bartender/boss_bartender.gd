@@ -631,14 +631,14 @@ func jump_to(target_position: Vector3, jump_height: float = 5, jump_time: float 
 	end_position.y = 0
 	sfx_player.stream = sfx_jump.pick_random()
 	sfx_player.play()
-	tween.tween_property(self, "global_position", end_position, jump_time).set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property(self , "global_position", end_position, jump_time).set_trans(Tween.TRANS_LINEAR)
 
 	# Step 2: Animate Y movement with a parabola
 	var mid_time = jump_time / 2 # Midpoint of the jump
 	var peak_height = global_position.y + jump_height # Peak height
 
-	tween2.tween_property(self, "position:y", peak_height, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween2.tween_property(self, "position:y", target_position.y, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween2.tween_property(self , "position:y", peak_height, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween2.tween_property(self , "position:y", target_position.y, mid_time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 	await tween.finished
 
