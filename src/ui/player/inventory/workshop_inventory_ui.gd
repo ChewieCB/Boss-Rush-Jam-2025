@@ -30,8 +30,11 @@ func _input(event: InputEvent) -> void:
 
 	if visible:
 		var focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
-		var equipped_ui: BarrelEquipSlotUI = equip_barrel_container.get_child(active_equip_idx) \
-		if active_equip_idx < equip_barrel_container.get_child_count() else null
+		var equipped_ui: BarrelEquipSlotUI = null
+		if active_equip_idx < equip_barrel_container.get_child_count():
+			equipped_ui = equip_barrel_container.get_child(active_equip_idx)
+		else:
+			equipped_ui = null
 
 		if event.is_action_pressed("ui_cancel"):
 			contextual_cancel(focused_ui, equipped_ui)
@@ -276,11 +279,14 @@ func get_equip_slot_focus(slot_idx: int = -1) -> Control:
 			var slot: BarrelEquipSlotUI = barrel_slots[i]
 			var barrel: ItemUI = slot.item_ui
 			if not barrel.is_empty:
+				active_equip_idx = i
+				print("active_equip_idx ", i)
 				leftmost_barrel = barrel
 				break
 			continue
 
 		if not leftmost_barrel:
+			active_equip_idx = 2
 			return barrel_slots[-1].item_ui.button
 		else:
 			return leftmost_barrel.button
@@ -504,20 +510,17 @@ func _on_item_ui_interact(item_ui: ItemUI, data: BarrelDataResource) -> void:
 		# FIXME - reverse barrel order when dealing with GameManager
 		# Check we're not overwriting an existing barrel
 		var equip_slots = equip_barrel_container.get_children()
-		var equip_ui: ItemUI = equip_slots[active_equip_idx].item_ui
+		var equip_item_ui: ItemUI = equip_slots[active_equip_idx].item_ui
+		if not equip_item_ui.is_empty:
+			GameManager.remove_barrel(equip_item_ui.data.barrel_id)
 
-		if not equip_ui.is_empty:
-			GameManager.remove_barrel(data.barrel_id)
-
-		var equip_idx_rev: int = remap(active_equip_idx, 0, 2, 2, 0)
-		# FIX: active_equip_idx can be -1 if no focus item set
+		var equip_idx_rev: int = int(remap(active_equip_idx, 0, 2, 2, 0))
 		var _warning_text = GameManager.equip_barrel(data.barrel_id, equip_idx_rev)
 		SoundManager.play_ui_sound(sfx_barrel_equip, "UI")
 
-		# After installing a barrel, remove equip idx so we can move between equip slots
-		equip_ui = equip_barrel_container.get_child(active_equip_idx).item_ui
-		clear_item_ui_highlight(equip_ui)
-		_reset_sibling_saturation(equip_ui)
-		active_equip_idx = -1
+		equip_item_ui = equip_barrel_container.get_child(active_equip_idx).item_ui
+		clear_item_ui_highlight(equip_item_ui)
+		_reset_sibling_saturation(equip_item_ui)
+		get_equip_slot_focus()
 
 	full_refresh_ui(focus_area_callable)

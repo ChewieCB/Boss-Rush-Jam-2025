@@ -291,6 +291,7 @@ func equip_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum, slot_idx: i
 
 
 func remove_barrel(search_barrel_id: BarrelDataResource.BarrelIdEnum) -> String:
+	print("search_barrel_id ", search_barrel_id)
 	if player.current_gun.is_reloading or player.current_gun.is_spinning:
 		return "Can not change barrel while reloading"
 
