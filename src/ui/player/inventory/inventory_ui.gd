@@ -248,7 +248,7 @@ func set_region_focus_neighbor(a: Control, b: Control, side: Side, one_way: bool
 
 func toggle_ui_focus_neighbors(ui: Control, is_enabled: bool = true) -> void:
 	for neighbor in [ui.focus_neighbor_left, ui.focus_neighbor_right, ui.focus_neighbor_top, ui.focus_neighbor_bottom]:
-		if neighbor:
+		if neighbor and has_node(neighbor):
 			var node = get_node(neighbor)
 			if node:
 				node.focus_mode = FocusMode.FOCUS_ALL if is_enabled else FocusMode.FOCUS_NONE
@@ -393,7 +393,6 @@ func update_gun_frame_info(data: GunFrameResource = null, is_locked: bool = fals
 
 func _on_item_ui_button_focus_lost(button: Button) -> void:
 	var lost_focus_parent: Control = button.get_parent()
-	var _focused_ui: Control = current_focus_area.get_child(active_focus_idx) if current_focus_area else null
 	# When the mouse leaves an ItemUI:
 	#  - if nothing is currently selected in the equip or inventory areas, 
 	#      show an empty barrel overview.

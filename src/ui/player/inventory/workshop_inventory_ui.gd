@@ -280,7 +280,6 @@ func get_equip_slot_focus(slot_idx: int = -1) -> Control:
 			var barrel: ItemUI = slot.item_ui
 			if not barrel.is_empty:
 				active_equip_idx = i
-				print("active_equip_idx ", i)
 				leftmost_barrel = barrel
 				break
 			continue
