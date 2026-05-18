@@ -20,10 +20,14 @@ var current_radius: float = 0.0
 
 func _ready() -> void:
 	self.visible = false
+	collider.disabled = true
 
 
 func start_shockwave(wipe_arc: bool = false) -> void:
 	self.visible = true
+	self.process_mode = Node.PROCESS_MODE_INHERIT
+	collider.disabled = false
+	
 	mesh.mesh.inner_radius = 0.0
 	mesh.mesh.outer_radius = 0.1
 	collider.shape.radius = 0.0
@@ -43,6 +47,7 @@ func start_shockwave(wipe_arc: bool = false) -> void:
 	await tween.finished
 	
 	self.visible = false
+	collider.disabled = true
 	mesh.mesh.inner_radius = 0.0
 	mesh.mesh.outer_radius = 0.1
 	collider.shape.radius = 0.0
@@ -53,6 +58,8 @@ func start_shockwave(wipe_arc: bool = false) -> void:
 	
 	if free_on_finished:
 		self.queue_free()
+	
+	self.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func _set_arc_angle(angle: float) -> void:

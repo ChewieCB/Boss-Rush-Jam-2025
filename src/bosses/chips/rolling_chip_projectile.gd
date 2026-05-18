@@ -1,9 +1,8 @@
-extends CharacterBody3D
+extends CharacterBody3D  # TODO - does this need to be a character body?
 class_name RollingChip
 
 signal spin_finished
 
-@export var health_component: HealthComponent
 @export_group("Damage")
 @export var damage: float = 15.0
 @export var damage_cooldown: float = 0.1
@@ -20,8 +19,10 @@ signal spin_finished
 
 @onready var mesh_pivot: Node3D = $MeshPivot
 @onready var mesh: MeshInstance3D = $MeshPivot/MeshInstance3D
+@onready var col: CollisionShape3D = $CollisionShape3D
 @onready var raycast: RayCast3D = $RayCast3D
 @onready var hurtbox: Area3D = $MeshPivot/Hurtbox
+@onready var hurtbox_col: CollisionShape3D = $MeshPivot/Hurtbox/CollisionShape3D
 @onready var hit_timer: Timer = $HitTImer
 @onready var sfx_player: AudioStreamPlayer3D = $SFXPlayer
 @onready var sfx_player_loop: AudioStreamPlayer3D = $SFXPlayerLoop
@@ -134,3 +135,11 @@ func _on_hurtbox_body_entered(body: Node3D) -> void:
 		sfx_player.play()
 		body.health_component.damage(damage)
 		hit_timer.start(damage_cooldown)
+
+
+func activate() -> void:
+	pass
+
+
+func deactivate() -> void:
+	pass

@@ -66,6 +66,7 @@ var _spawn_tweens: Array[Tween] = []
 @export_subgroup("Backspin Chip")
 @export var rolling_chip_damage: float = 15
 @export var rolling_chip_projectile: PackedScene
+var rolling_chip_pool: Array
 @export var n_chips_per_roll: int = 1 # Based on ante 3
 @export var rolling_chip_repeat_per_attack: int = 2
 var chips_fired: int = 0
@@ -87,6 +88,7 @@ var chip_sweep_instances: Array = []
 #
 @export_subgroup("Stack Slam")
 @export var slam_shockwave_prefab: PackedScene
+var slam_shockwave_pool: Array = []
 @export var slam_count: int = 3
 @export var slam_damage: float = 10.0
 @export var slam_wave_speed: float = 2.1
@@ -281,6 +283,9 @@ func _ready() -> void:
 	
 	for i in range(slam_count + 1):
 		_init_aoe_wave()
+		_init_slam_shockwave()
+	for i in range(n_chips_per_roll):
+		_init_backspin_chip()
 	
 	# Stack pool init
 	var _parent = get_parent()
@@ -381,15 +386,13 @@ func _on_health_dead_state_entered() -> void:
 	chip_death_particles.emitting = false
 	anim_player.process_mode = Node.PROCESS_MODE_DISABLED
 	# Hide the sprite and explode into chips
-	# TODO - make this area damage explosion a generic method we can re-use
-	# Create an explosion
 	sprite.render_priority = -1
 	SoundManager.play_sound(sfx_chiptopede_impact.pick_random(), "SFX")
 	
 	var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
 	explosion_inst.init(0)
 	explosion_inst.set_damage_radius(8.0)
-	explosion_inst.activate(self.global_position)
+	explosion_inst.activate(self.global_position + Vector3(0, 1.4, 0))
 
 	death_anim_finished.emit()
 
@@ -431,12 +434,6 @@ func select_attack_phase_1() -> void:
 				big_stack_sfx_player.play()
 				state_chart.send_event("change_form_split")
 				return
-
-			# TODO - move mines to phase 2? Or maybe launch mines and have small stacks move but not attack
-			# If we haven't spawned mines in a while, spawn some
-			#if chip_mine_spawn_timer.is_stopped():
-				#attack_str = "start_chip_mines"
-			#else:
 			# Focus on backspin chip, occasional slams and sweeps
 			# 45% chance of chip sweep
 			# 60% chance of backspin chip
@@ -464,10 +461,9 @@ func select_attack_phase_1() -> void:
 					#attack_str = "start_split_stack_arc_attack"  # Move arc attack to phase 2, short range projectile attack
 				else:
 					attack_str = "start_split_stack_projectiles"
-
+			
 			small_attacks_performed += 1
-	# TODO
-
+	
 	state_chart.send_event(attack_str)
 
 
@@ -482,18 +478,11 @@ func select_attack_phase_2() -> void:
 		ChipBossForms.BIG_STACK:
 			# Transition between big and small forms:
 			if big_attacks_performed >= max_big_attacks:
-				# TODO - split with attack
-				#state_chart.send_event("change_form_split_aoe")
 				big_stack_sfx_player.stream = sfx_stack_split.pick_random()
 				big_stack_sfx_player.play()
 				state_chart.send_event("change_form_split")
 				return
-
-			# TODO - move mines to phase 2? Or maybe launch mines and have small stacks move but not attack
-			# If we haven't spawned mines in a while, spawn some
-			#if chip_mine_spawn_timer.is_stopped():
-				#attack_str = "start_chip_mines"
-			#else:
+			
 			if place_your_bet_attack_enabled:
 				if attack_roll < 25:
 					attack_str = "start_chip_sweep"
@@ -515,24 +504,18 @@ func select_attack_phase_2() -> void:
 		ChipBossForms.SPLIT_STACKS:
 			# Transition between big and small forms:
 			if small_attacks_performed >= max_small_attacks:
-				# FIXME - radial attack with reform
-				#state_chart.send_event("change_form_big_aoe_merge")
 				state_chart.send_event("change_form_big")
 				return
 			else:
-				#if attack_roll < 20:
-					## TODO - chip mines defensive attack
-					#attack_str = "start_split_stack_ projectiles"
 				if attack_roll < 45:
 					attack_str = "start_split_stack_arc_attack"
 				elif attack_roll < 65:
 					attack_str = "start_split_stack_projectiles"
 				else:
 					attack_str = "start_split_stack_aoe_attack"
-
+			
 			small_attacks_performed += 1
-	# TODO
-
+	
 	state_chart.send_event(attack_str)
 
 
@@ -727,8 +710,7 @@ func merge_stacks() -> void:
 	await show_big_stack()
 	big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
 	big_stack_sfx_player.play()
-
-	# TODO - move this to the actual state trigger func
+	
 	state_chart.send_event("end_merge")
 
 
@@ -774,22 +756,21 @@ func _on_big_stack_state_entered_phase_2() -> void:
 		await big_stack_jump_to_center(jump_height, false) 
 		state_chart.send_event("start_merge_aoe_finisher")
 		return
-
+	
 	_reset_to_big_stack()
 	await big_stack_jump_to_center(jump_height, false)
 	# Catch and handle a mid-await state change
 	if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
 		return 
-
-	# TODO - make this area damage explosion a generic method we can re-use
+	
 	# Create an explosion
 	var explosion_inst = GameManager.object_pooling_manager.get_pooled_object(ObjectPoolingManager.PooledObjectEnum.EXPLOSION)
 	explosion_inst.init(0)
 	explosion_inst.set_damage_radius(14.0)
 	explosion_inst.activate(self.global_position)
-
+	
 	merge_stacks()
-
+	
 	state_chart.send_event("start_merge_aoe_finisher")
 
 
@@ -808,6 +789,15 @@ func _on_phase_1_state_exited() -> void:
 
 ### BIG STACK ATTACKS
 #
+func _init_backspin_chip() -> void:
+	var chip_inst: RollingChip = rolling_chip_projectile.instantiate()
+	chip_inst.init(rolling_chip_damage * GameManager.get_risk_dmg_mult())
+	chip_inst.deactivate()
+	scene_root.add_child.call_deferred(chip_inst)
+	chip_inst.global_position = despawned_pos
+	
+	rolling_chip_pool.push_back(chip_inst)
+
 ## BACKSPIN CHIP
 # Big stack fires a spinning chip that rolls back the way it came
 func _on_backspin_chip_targeting_state_entered() -> void:
@@ -822,17 +812,16 @@ func _on_backspin_chip_forward_spin_state_entered() -> void:
 	var rotate_deg_per_chip_idx = rolling_chip_get_angles(n_chips_per_roll, rolling_chip_spread_deg)
 	for i in range(n_chips_per_roll):
 		# Instance a chip projectile
-		var chip_inst: RollingChip = rolling_chip_projectile.instantiate()
-		chip_inst.init(rolling_chip_damage * GameManager.get_risk_dmg_mult())
+		var chip_inst: RollingChip = rolling_chip_pool.pop_front()
 		active_rolling_chips.append(chip_inst)
-		scene_root.add_child(chip_inst)
 		chip_inst.global_transform = self.global_transform
+		chip_inst.activate()
 		chip_inst.rotate_y(deg_to_rad(rotate_deg_per_chip_idx[i]))
-
+		
 		# Send it towards the player
 		var forward_target: Vector3 = chip_inst.get_point_before_wall()
 		chip_inst.roll_to_point(forward_target, 0.8)
-
+	
 	big_stack_sfx_player.stream = sfx_chip_fire.pick_random()
 	big_stack_sfx_player.play()
 
@@ -840,7 +829,7 @@ func _on_backspin_chip_forward_spin_state_entered() -> void:
 	# Catch and handle a mid-await state change
 	if not is_instance_valid(self) or process_mode == Node.PROCESS_MODE_DISABLED:
 		return 
-
+	
 	state_chart.send_event("reverse_spin")
 
 
@@ -885,9 +874,10 @@ func _on_backspin_chip_recover_state_entered() -> void:
 
 func _cleanup_backspin_chip() -> void:
 	for chip in active_rolling_chips:
-		if is_instance_valid(chip):
-			chip.queue_free()
-
+		chip.deactivate()
+		chip.global_position = despawned_pos
+		rolling_chip_pool.push_back(chip)
+	
 	active_rolling_chips = []
 
 
@@ -961,6 +951,19 @@ func _on_chip_sweep_state_exited() -> void:
 
 
 ## Stack Slam
+
+func _init_slam_shockwave() -> void:
+	var _shockwave = slam_shockwave_prefab.instantiate()
+	_shockwave.finished.connect(
+		func(): 
+			slam_shockwave_pool.push_back(_shockwave)
+			_shockwave.process_mode = Node.PROCESS_MODE_DISABLED
+	)
+	_shockwave.process_mode = Node.PROCESS_MODE_DISABLED
+	_shockwave.free_on_finished = false
+	scene_root.add_child.call_deferred(_shockwave)
+	slam_shockwave_pool.push_back(_shockwave)
+
 #
 func _on_stack_slam_targeting_state_entered() -> void:
 	await return_big_stack_to_center()
@@ -990,19 +993,16 @@ func _on_stack_slam_jump_state_entered() -> void:
 
 
 func _on_stack_slam_slam_state_entered() -> void:
-	# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
-	var shockwave = slam_shockwave_prefab.instantiate()
-	scene_root.add_child(shockwave)
-
+	var shockwave = slam_shockwave_pool.pop_front()
 	shockwave.global_transform = self.global_transform
 	shockwave.global_position.y = aoe_floor
 	shockwave.max_radius = slam_wave_radius
 	shockwave.damage = slam_damage * GameManager.get_risk_dmg_mult()
 	shockwave.wave_time = slam_wave_speed
 	shockwave.start_shockwave()
-
+	
 	completed_slams += 1
-
+	
 	# Apply player slow
 	if shockwave_apply_slow_enabled:
 		GameManager.create_and_add_status_effect("Run speed down",
@@ -1111,9 +1111,9 @@ func _on_ss_orbiting_projectiles_targeting_state_entered_phase_2() -> void:
 func _on_ss_orbiting_projectiles_attacking_state_entered() -> void:
 	match current_phase:
 		1:
-			trigger_substack_attack("start_small_projectile_attack")
+			trigger_substack_attack("start_small_projectile_attack", 0.2)
 		2:
-			trigger_substack_attack("start_small_projectile_attack_phase_2")
+			trigger_substack_attack("start_small_projectile_attack_phase_2", 0.2)
 
 ## SPLIT STACK SOLO CHARGE
 #
@@ -1150,7 +1150,7 @@ func _on_ss_charge_merging_state_entered() -> void:
 	area_collider.collision_mask = int(pow(2, 2 - 1)) # Player
 	area_collider.monitoring = true
 
-	scene_root.add_child(area_collider)
+	scene_root.add_child.call_deferred(area_collider)
 
 	area_collider.global_position = self.global_position
 	area_collider.body_entered.connect(_on_wave_collision.bind(split_rush_damage * GameManager.get_risk_dmg_mult()))
@@ -1221,12 +1221,8 @@ func _on_merge_aoe_targeting_state_entered() -> void:
 
 func _on_merge_aoe_slam_state_entered() -> void:
 	# Slam down and generate a radial wave AoE on impact
-	# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
-	var shockwave = slam_shockwave_prefab.instantiate()
-	scene_root.add_child(shockwave)
-
+	var shockwave = slam_shockwave_pool.pop_front()
 	shockwave.global_transform = self.global_transform
-	#shockwave.global_position.y += 0.4
 	shockwave.max_radius = slam_wave_radius
 	shockwave.arc_angle = 360
 	shockwave.arc_thickness_ratio = 0.7
@@ -1270,21 +1266,21 @@ func _on_place_your_bets_jumping_state_entered() -> void:
 
 func _on_place_your_bets_crashing_state_entered() -> void:
 	debug_state_label.text = "Place Your Bets | Crashing"
-
+	
 	var closest_targets = aoe_markers.duplicate()
 	closest_targets.sort_custom(
 		_sort_by_distance_to_target.bind(true)
 	)
 	var target_pos: Vector3 = closest_targets.front().global_position
-
+	
 	await _telegraph_attack()
 	await big_stack_slam(target_pos)
 	await spawn_aoe_wave(aoe_radius, drop_damage * GameManager.get_risk_dmg_mult(), 0.1)
-	# TODO - destroy platform
+	# TODO - destroy/sink platform
 	#
 	# Re-enable collision after pushback to avoid clipping
 	self.collision_layer = 4
-
+	
 	state_chart.send_event("end_aoe_attack")
 
 ### SPLIT STACKS
@@ -1511,7 +1507,6 @@ func _on_chiptopede_leap_impact(segment: Node) -> void:
 					#await chip_particles.finished
 					#chip_particles.queue_free()
 					is_leap_first_impact = false
-
 		#
 		chiptopede_sfx_player.stream = sfx_chiptopede_impact.pick_random()
 		chiptopede_sfx_player.play()
@@ -1975,7 +1970,7 @@ func get_chiptopede_spawn_pos(
 func create_premade_path(start_pos: Vector3, prefab: PackedScene) -> Path3D:
 	# Instance the shooting stance path
 	var path: Path3D = prefab.instantiate()
-	scene_root.add_child(path)
+	scene_root.add_child.call_deferred(path)
 	path.global_position = start_pos
 
 	return path
@@ -1987,7 +1982,7 @@ func create_curve_path(start_pos: Vector3, goal_pos: Vector3, follow_path: Array
 	path.curve = curve
 
 	# Add the path to the scene
-	scene_root.add_child(path)
+	scene_root.add_child.call_deferred(path)
 
 	return path
 
@@ -2000,6 +1995,9 @@ func _create_leap_path(start_pos: Vector3, goal_pos: Vector3, _follow_path: Arra
 	var in_1 = (mid_point - goal_pos) * leap_in_ratio # 0.6667
 	curve.add_point(start_pos, Vector3.ZERO, out_0)
 	curve.add_point(goal_pos, in_1, Vector3.ZERO)
+	
+	# TODO - make leap path extend further below ground so we dont see
+	# segments disappear
 
 	return curve
 
@@ -2368,7 +2366,7 @@ func _init_aoe_bubble() -> void:
 	area_collider_shape.disabled = true
 
 	bubble.add_child(area_collider)
-	scene_root.add_child(bubble)
+	scene_root.add_child.call_deferred(bubble)
 	bubble.global_position = despawned_pos
 	bubble.visible = false
 	
