@@ -187,6 +187,8 @@ var persist_segements: bool = false
 @onready var leap_damage_timer: Timer = $StateChart/Root/Phase/Phase3/ChiptopedeLeap/LeapDamageTimer
 @export var chip_stack_particles_prefab: PackedScene
 @export var splash_particle_prefab: PackedScene
+var chip_particles_pool: Array = []
+var splash_particles_pool: Array = []
 # Leap curve attributes
 @export var leap_height: float = 16.0
 @export var leap_out_ratio: float = 0.6667
@@ -288,6 +290,9 @@ func _ready() -> void:
 		_init_backspin_chip()
 	for i in range(n_chips_per_sweep_volley * chip_sweep_repeat):
 		_init_chip_sweep()
+	for i in range(chiptopede_segments):
+		_init_splash_particle()
+		_init_chip_particle()
 	
 	# Stack pool init
 	var _parent = get_parent()
@@ -1234,17 +1239,17 @@ func _on_merge_aoe_slam_state_entered() -> void:
 	shockwave.damage = slam_damage * GameManager.get_risk_dmg_mult()
 	shockwave.wave_time = 1.4
 	shockwave.start_shockwave()
-
+	
 	big_stack_sfx_player.stream = sfx_stack_merge.pick_random()
 	big_stack_sfx_player.play()
-
+	
 	# Add pushback if player is in big stack collider
 	trigger_pushback()
-
+	
 	await get_tree().create_timer(slam_delay).timeout
-
+	
 	_enable_gravity()
-
+	
 	state_chart.send_event("end_slam")
 
 ### BIG STACK
@@ -1422,6 +1427,26 @@ func activate_chiptopede() -> void:
 
 
 ## LEAP
+
+func _init_splash_particle() -> void:
+	var splash = splash_particle_prefab.instantiate()
+	scene_root.add_child.call_deferred(splash)
+	splash.global_position = despawned_pos
+	splash.emitting = false
+	splash.process_mode = Node.PROCESS_MODE_DISABLED
+	splash_particles_pool.push_back(splash)
+
+
+func _init_chip_particle() -> void:
+	var chip_particles = chip_stack_particles_prefab.instantiate()
+	scene_root.add_child.call_deferred(chip_particles)
+	chip_particles.global_position = despawned_pos
+	chip_particles.process_material.emission_shape_scale = Vector3(1.5, 1.5, 1.5)
+	chip_particles.emitting = false
+	chip_particles.process_mode = Node.PROCESS_MODE_DISABLED
+	chip_particles_pool.push_back(chip_particles)
+
+
 #
 func _on_chiptopede_leap_targeting_state_entered() -> void:
 	# Move chiptopede to new spawn location
@@ -1431,36 +1456,29 @@ func _on_chiptopede_leap_targeting_state_entered() -> void:
 		0.0,
 		last_leap_end_pos
 	).global_position
-
+	
 	# Get the player's current position as the target point
 	var start_pos: Vector3 = self.global_position
 	#print("Start pos dist to target: %s | Min spawn dist: %s" % [start_pos.distance_to(target.global_position), min_spawn_distance])
 	var goal_pos: Vector3 = target.global_position
 	goal_pos.y = -19
 	leap_path = create_curve_path(start_pos, goal_pos, [], _create_leap_path)
-
+	
 	follow_nodes = spawn_segments(leap_path)
-
+	
 	leap_distance = leap_path.curve.get_baked_length()
 	leap_speed = leap_distance / leap_time
-
+	
 	state_chart.send_event("start_leap")
 
 
 func _on_chiptopede_leap_leaping_state_entered() -> void:
 	chiptopede_head_offset = 0.0
-
+	
 	chiptopede_sfx_player.stream = sfx_chiptopede_leap.pick_random()
 	chiptopede_sfx_player.play()
 	
-	# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
-	var chip_particles = chip_stack_particles_prefab.instantiate()
-	scene_root.add_child(chip_particles)
-	chip_particles.global_position = self.global_position
-	chip_particles.process_material.emission_shape_scale = Vector3(3, 3, 3)
-	chip_particles.emitting = true
-	await chip_particles.finished
-	chip_particles.queue_free()
+	_spawn_chip_particles(self.global_position)
 
 
 func _on_chiptopede_leapleaping_state_physics_processing(delta: float) -> void:
@@ -1492,25 +1510,10 @@ func _on_chiptopede_leap_impact(segment: Node) -> void:
 		var result = space_state.intersect_ray(query)
 		if result:
 			if result.collider is Area3D:
-				# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
-				var splash = splash_particle_prefab.instantiate()
-				scene_root.add_child(splash)
-				splash.global_position = result.collider.global_position
-				# Scale up the splash particles
-				splash.draw_pass_1.size = Vector2(7, 7)
-				splash.amount = 32
-				splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
-				splash.emitting = true
+				_spawn_splash_particles(result.collider.global_position)
 			else:
 				if is_leap_first_impact:
-					# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
-					var chip_particles = chip_stack_particles_prefab.instantiate()
-					scene_root.add_child(chip_particles)
-					chip_particles.global_position = segment.global_position
-					chip_particles.process_material.emission_shape_scale = Vector3(1.5, 1.5, 1.5)
-					chip_particles.emitting = true
-					#await chip_particles.finished
-					#chip_particles.queue_free()
+					_spawn_chip_particles(self.global_position)
 					is_leap_first_impact = false
 		#
 		chiptopede_sfx_player.stream = sfx_chiptopede_impact.pick_random()
@@ -1526,6 +1529,41 @@ func _on_chiptopede_leap_impact(segment: Node) -> void:
 		
 		last_leap_end_pos = segment.global_position
 		leap_damage_timer.start(leap_damage_cooldown)
+
+
+func _spawn_chip_particles(pos: Vector3) -> void:
+	var chip_particles: GPUParticles3D = chip_particles_pool.pop_front()
+	chip_particles.global_position = pos
+	chip_particles.process_material.emission_shape_scale = Vector3(3, 3, 3)
+	chip_particles.process_mode = Node.PROCESS_MODE_INHERIT
+	chip_particles.visible = true
+	chip_particles.emitting = true
+	
+	await chip_particles.finished
+	
+	chip_particles.emitting = false
+	chip_particles.visible = false
+	chip_particles.process_mode = Node.PROCESS_MODE_DISABLED
+	chip_particles_pool.push_back(chip_particles)
+
+
+func _spawn_splash_particles(pos: Vector3) -> void:
+	var splash: GPUParticles3D = splash_particles_pool.pop_front()
+	splash.global_position = pos
+	# Scale up the splash particles
+	splash.draw_pass_1.size = Vector2(7, 7)
+	splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
+	splash.amount = 32
+	splash.process_mode = Node.PROCESS_MODE_INHERIT
+	splash.visible = true
+	splash.emitting = true
+	
+	await splash.finished
+	
+	splash.emitting = false
+	splash.visible = false
+	splash.process_mode = Node.PROCESS_MODE_DISABLED
+	splash_particles_pool.push_back(splash)
 
 
 ## Snake
@@ -1625,31 +1663,34 @@ func _on_chiptopede_shoot_emerging_state_entered() -> void:
 	var spawn_pos: Vector3 = self.global_position
 	spawn_pos.y = -21
 	shooting_stance_path = create_premade_path(spawn_pos, shooting_stance_prefab)
-
-	#
+	
 	chiptopede_sfx_player.stream = sfx_chiptopede_emerge.pick_random()
 	chiptopede_sfx_player.play()
-	#
+	
 	follow_nodes = spawn_segments(shooting_stance_path)
-
+	
 	emerge_distance = shooting_stance_path.curve.get_baked_length()
 	
 	# TOOD - replace instancing/freeing with particle effect pool
-	var splash = splash_particle_prefab.instantiate()
-	scene_root.add_child(splash)
-	splash.global_position = follow_nodes[0].get_child(0).global_position
-	# Scale up the splash particles
-	splash.draw_pass_1.size = Vector2(7, 7)
-	splash.amount = 32
-	splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
-	splash.emitting = true
-	await splash.finished
-	splash.queue_free.call_deferred()
+	var splash_pos: Vector3 = follow_nodes[0].global_position
+	_spawn_splash_particles(splash_pos)
+	
+	#var splash = splash_particle_prefab.instantiate()
+	#scene_root.add_child(splash)
+	## FIXME - follow_nodes[0] can be inconsistent - add fallbacks and better handling for this pos
+	#splash.global_position = follow_nodes[0].get_child(0).global_position
+	## Scale up the splash particles
+	#splash.draw_pass_1.size = Vector2(7, 7)
+	#splash.amount = 32
+	#splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
+	#splash.emitting = true
+	#await splash.finished
+	#splash.queue_free.call_deferred()
 
 
 func _on_chiptopede_shoot_emerging_state_physics_processing(delta: float) -> void:
 	turn_towards_target(shooting_stance_path, chiptopede_targeting_speed, delta)
-
+	
 	# Animate the chiptopede up it as it rears up
 	move_segments_along_path(
 		"end_emerge", emerge_speed, emerge_distance, delta,
@@ -1705,22 +1746,13 @@ func _on_chiptopede_shoot_retreat_state_physics_processing(delta: float) -> void
 
 func _on_chiptopede_shoot_recovering_state_entered() -> void:
 	# TODO - replace insantiated shockwaves with a pool of pre-instanced ones
-	var splash = splash_particle_prefab.instantiate()
-	scene_root.add_child(splash)
-	splash.global_position = follow_nodes[0].global_position
-	# Scale up the splash particles
-	splash.draw_pass_1.size = Vector2(7, 7)
-	splash.amount = 32
-	splash.get_child(0).draw_pass_1.size = Vector2(7, 7)
-	splash.emitting = true
-
+	var splash_pos: Vector3 = follow_nodes[0].global_position
+	_spawn_splash_particles(splash_pos)
+	
 	if not persist_segements:
 		_cleanup_segment_arrays()
 		shooting_stance_path.queue_free.call_deferred()
-
-	await splash.finished
-	splash.queue_free.call_deferred()
-
+	
 	_recover_entered()
 
 

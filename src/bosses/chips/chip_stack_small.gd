@@ -340,10 +340,10 @@ func _on_small_blind_shooting_state_entered() -> void:
 
 	for i in num_bursts:
 		for j in chip_shots_per_burst:
+			await get_tree().create_timer(delay_per_projectile).timeout
 			# HACK - break out of this loop if we've exited the state
 			if not $StateChart/Root/Phase/SmallBlindProjectile.active and not $StateChart/Root/Phase/SmallBlindProjectilePhase2.active:
 				return
-			await get_tree().create_timer(delay_per_projectile).timeout
 			# Animate shot
 			face_sprite.visible = true
 			var face_tween: Tween = get_tree().create_tween()
@@ -383,7 +383,7 @@ func _recover_state_entered() -> void:
 
 func _init_swipe_projectiles() -> void:
 	swipe_proj_pool.clear()
-	for i in range(num_swipes * 4):
+	for i in range(num_swipes * 8):
 		var _proj = swipe_prefab.instantiate()
 		scene_root.add_child.call_deferred(_proj)
 		await get_tree().physics_frame
