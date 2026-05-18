@@ -24,7 +24,9 @@ var gravity_accel = 0
 var gravity_free_timer = 0.2
 
 func _ready() -> void:
-	super ()
+	super()
+	slowmo_trail.visible = false
+	slowmo_trail.process_mode = Node.PROCESS_MODE_DISABLED
 
 func _process(delta: float) -> void:
 	super (delta)
@@ -194,7 +196,9 @@ func redshift_bullet():
 	change_bullet_color(redshifted_color)
 
 func switch_to_slowmo_bullet_trail():
-	super ()
+	super()
 	# Better optimization is instantiate and add the slowmo later?
 	trail.visible = false
+	trail.process_mode = Node.PROCESS_MODE_DISABLED
 	slowmo_trail.visible = true
+	slowmo_trail.process_mode = Node.PROCESS_MODE_INHERIT
