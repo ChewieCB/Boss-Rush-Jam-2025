@@ -38,6 +38,13 @@ var _points := []
 var _cached_cam_pos: Vector3
 var _cached_cam_valid: bool = false
 
+var _array_mesh: ArrayMesh
+var _mesh_arrays: Array = []
+var _vertex_array: PackedVector3Array
+var _uv_array: PackedVector2Array
+var _max_vertices: int
+
+
 class Point:
 	var transform: Transform3D
 	var age: float = 0.0
@@ -112,6 +119,12 @@ func _render_geometry(source: Array) -> void:
 	var points_count = source.size()
 	if points_count < 2:
 		return
+	
+	# Cache camera pos
+	var cam = get_viewport().get_camera_3d()
+	_cached_cam_valid = cam != null
+	if _cached_cam_valid:
+		_cached_cam_pos = cam.global_transform.origin
 
 	# The following section is a hack to make orientation "view" work.
 	# but it may cause an artifact at the end of the trail.
@@ -123,14 +136,12 @@ func _render_geometry(source: Array) -> void:
 	var to_be_rendered = [point] + source
 	points_count += 1
 
+	var vert_count: int = 0
 	var half_width: float = base_width / 2.0
 	var u := 0.0
 
-	mesh.clear_surfaces()
-	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, null)
 	for i in range(1, points_count):
 		var factor: float = float(i) / (points_count - 1)
-
 		var vertices = _prepare_geometry(to_be_rendered[i - 1], to_be_rendered[i], half_width, 1.0 - factor)
 		if tiled_texture:
 			if tiling > 0:
@@ -140,18 +151,17 @@ func _render_geometry(source: Array) -> void:
 				u += travel / base_width
 				factor = u
 		
-		mesh.surface_set_uv(Vector2(factor, 0))
-		mesh.surface_add_vertex(vertices[0])
-		mesh.surface_set_uv(Vector2(factor, 1))
-		mesh.surface_add_vertex(vertices[1])
-
-
-	mesh.surface_end()
-	# Cache camera pos
-	var cam = get_viewport().get_camera_3d()
-	_cached_cam_valid = cam != null
-	if _cached_cam_valid:
-		_cached_cam_pos = cam.global_transform.origin
+		_vertex_array[vert_count] = vertices[0]
+		_vertex_array[vert_count + 1] = vertices[1]
+		_uv_array[vert_count] = Vector2(factor, 0)
+		_uv_array[vert_count + 1] - Vector2(factor, 1)
+		vert_count += 2
+	
+	_mesh_arrays[Mesh.ARRAY_VERTEX] = _vertex_array.slice(0, vert_count)
+	_mesh_arrays[Mesh.ARRAY_TEX_UV] = _uv_array.slice(0, vert_count)
+	
+	_array_mesh.clear_surfaces()
+	_array_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, _mesh_arrays)
 
 
 func _update_points() -> void:
@@ -259,9 +269,19 @@ func _emit(delta) -> void:
 
 
 func _ready() -> void:
-	mesh = ImmediateMesh.new()
 	_target = get_parent()
 	top_level = true
+	# Generate array mesh to render
+	var size_multiplier = [1, 2, 4, 6][smoothing_iterations]
+	_max_vertices = (segments * size_multiplier + 2) * 2
+	_vertex_array = PackedVector3Array()
+	_vertex_array.resize(_max_vertices)
+	_uv_array = PackedVector2Array()
+	_uv_array.resize(_max_vertices)
+	_mesh_arrays = []
+	_mesh_arrays.resize(Mesh.ARRAY_MAX)
+	_array_mesh = ArrayMesh.new()
+	mesh = _array_mesh
 
 
 func _process(delta) -> void:
